@@ -35,17 +35,11 @@ public interface BossOrdersMapper {
 
     BossOrdersVo queryOrderParticulars(Integer ordernumber);
 
-    List<Integer> findAllProvince();
-    List<Province> findAllProvinceName(Integer id);
-    Integer findAllProvinceByNum();
+    List<Province> findAllProvinceName();//查询省名
 
-    List<Integer> findAllCity();
     List<City> findAllCityName(Integer id);
-    Integer findAllCityByNum();
 
-    List<Integer> findAllArea();
     List<Area> findAllAreaName(Integer id);
-    Integer findAllAreaByNum();
 
     Integer findAllBoss();
 

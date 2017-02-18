@@ -190,11 +190,11 @@ public class OrdersListController {
     }
 
     /**
-     * 三级联动
+     * 查询省名
      *
      * @return
      */
-    @ApiOperation(value = "三级联动", notes = "三级联动", response = Response.class)
+    @ApiOperation(value = "查询省名", notes = "查询省名", response = Response.class)
     @RequestMapping(value = "/query_list_province_type", method = RequestMethod.POST)
     public Response queryPostProvince() {
         Response response = new Response();
@@ -206,6 +206,41 @@ public class OrdersListController {
         return response;
     }
 
+    /**
+     * 查询市名
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "查询市名", notes = "查询市名", response = Response.class)
+    @RequestMapping(value = "/query_list_city_type", method = RequestMethod.POST)
+    public Response queryOrderCity(@ApiParam(value = "省code") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        Map<String, Object> map = orderFacade.queryOrderCity(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 查询区名
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "查询区名", notes = "查询区名", response = Response.class)
+    @RequestMapping(value = "/query_list_area_type", method = RequestMethod.POST)
+    public Response queryOrderArea(@ApiParam(value = "市code") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        Map<String, Object> map = orderFacade.queryOrderArea(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
+    }
     /**
      * 订单管理--修改发票
      *

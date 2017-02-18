@@ -188,43 +188,42 @@ public class OrderFacade {
     }
 
     /**
-     * 三级联动
+     * 查询省名
      *
      * @return
      */
     public Map<String, Object> queryPostProvince() {
         Map<String, Object> map = new HashedMap();
-        List<Integer> list = bossOrderService.queryPostProvince();
-        List<Integer> listcity = bossOrderService.queryPostCity();
-        List<Integer> listarea = bossOrderService.queryPostArea();
-        List<List<Province>> proname = new ArrayList<>();
-        List<List<City>> cityname = new ArrayList<>();
-        List<List<Area>> areaname = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            List<Province> province = bossOrderService.queryPostProvinceName(list.get(i));
-            proname.add(province);
-            for (int j = 0; j < listcity.size(); j++) {
-                List<City> city = bossOrderService.queryPostCityName(list.get(i));
-                cityname.add(city);
-                for (int k = 0; k < listarea.size(); k++) {
-                    List<Area> area = bossOrderService.queryPostAreaName(listcity.get(i));
-                    areaname.add(area);
-                }
-            }
-        }
-        Integer pronum = bossOrderService.queryPostProvinceNum();
-        Integer citynum = bossOrderService.queryPostCityNum();
-        Integer areanum = bossOrderService.queryPostAreaNum();
-        map.put("proname", proname);
-        map.put("cityname", cityname);
-        map.put("areaname", areaname);
-        map.put("pronum", pronum);
-        map.put("citynum", citynum);
-        map.put("areanum", areanum);
+        List<Province> province = bossOrderService.queryPostProvinceName();
+        map.put("proname", province);
         return map;
     }
 
+    /**
+     * 查询区名
+     *
+     * @param id
+     * @return
+     */
+    public Map<String, Object> queryOrderArea(Integer id) {
+        Map<String, Object> map = new HashedMap();
+        List<Area> list = bossOrderService.queryPostAreaName(id);
+        map.put("list", list);
+        return map;
+    }
 
+    /**
+     * 查询市名
+     *
+     * @param id
+     * @return
+     */
+    public Map<String, Object> queryOrderCity(Integer id) {
+        Map<String, Object> map = new HashedMap();
+        List<City> list = bossOrderService.queryPostCityName(id);
+        map.put("list", list);
+        return map;
+    }
     /**
      * 订单管理--订单详情
      *

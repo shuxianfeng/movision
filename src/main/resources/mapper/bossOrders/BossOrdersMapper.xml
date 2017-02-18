@@ -459,38 +459,24 @@ SELECT
         </if>
 
      </select>
-    <select id="findAllProvince" resultType="java.lang.Integer">
-         SELECT DISTINCT code FROM yw_province ORDER BY code
-    </select>
+
     <select id="findAllProvinceName" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.province.entity.Province">
-        SELECT code,name FROM yw_province WHERE code=#{id,jdbcType=INTEGER}
-    </select>
-    <select id="findAllProvinceByNum" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM yw_province
+        SELECT code,name FROM yw_province
     </select>
 
-    <select id="findAllCity" resultType="java.lang.Integer">
-        SELECT DISTINCT code FROM yw_city ORDER BY code
-    </select>
+
     <select id="findAllCityName" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.city.entity.City">
        SELECT code,name,provincecode FROM yw_city  WHERE provincecode=#{id,jdbcType=INTEGER}
     </select>
-    <select id="findAllCityByNum" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM yw_city
-    </select>
 
-    <select id="findAllArea" resultType="java.lang.Integer">
-        SELECT DISTINCT code FROM yw_area ORDER BY code
-    </select>
+
     <select id="findAllAreaName" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.area.entity.Area">
         SELECT id,code,name,citycode FROM yw_area WHERE citycode=#{id,jdbcType=INTEGER}
     </select>
-    <select id="findAllAreaByNum" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM yw_area
-    </select>
+
 
     <update id="deleteOrder" parameterType="java.lang.Integer">
         UPDATE yw_orders

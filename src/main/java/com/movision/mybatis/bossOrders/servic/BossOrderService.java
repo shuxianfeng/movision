@@ -242,47 +242,8 @@ public class BossOrderService {
         }
     }
 
-    /**
-     * 后台管理--三级联动--省市区
-     * @return
-     */
-    public  List<Integer> queryPostProvince(){
-        try{
 
-            loger.info("查询省");
-            return bossOrdersMapper.findAllProvince();
-        }catch(Exception e){
-            loger.error("查询省失败");
-            throw  e;
-        }
-    }
-    /**
-     * 后台管理--三级联动--省市区
-     * @return
-     */
-    public  List<Integer> queryPostCity(){
-        try{
 
-            loger.info("查询市");
-            return bossOrdersMapper.findAllCity();
-        }catch(Exception e){
-            loger.error("查询市失败");
-            throw  e;
-        }
-    }   /**
-     * 后台管理--三级联动--省市区
-     * @return
-     */
-    public  List<Integer> queryPostArea(){
-        try{
-
-            loger.info("查询区");
-            return bossOrdersMapper.findAllArea();
-        }catch(Exception e){
-            loger.error("查询区失败");
-            throw  e;
-        }
-    }
     /**
      * 后台管理-查询市名
      * @param id
@@ -319,13 +280,13 @@ public class BossOrderService {
     }
     /**
      * 后台管理-查询省名
-     * @param id
+     * @param
      * @return
      */
-    public List<Province> queryPostProvinceName(Integer id){
+    public List<Province> queryPostProvinceName() {
         try{
             loger.error("查询省名成功");
-            return  bossOrdersMapper.findAllProvinceName(id);
+            return bossOrdersMapper.findAllProvinceName();
         }catch (Exception e){
 
             loger.error("查询省名失败");
@@ -334,48 +295,7 @@ public class BossOrderService {
 
 
     }
-    /**
-     * 后台管理-查询省数量
-     * @return
-     */
-    public Integer queryPostProvinceNum(){
-        try{
-            loger.error("查询省数量");
-            return  bossOrdersMapper.findAllProvinceByNum();
-        }catch (Exception e){
 
-            loger.error("查询省数量失败");
-            throw e;
-        }
-    }
-    /**
-     * 后台管理-查询市数量
-     * @return
-     */
-    public Integer queryPostCityNum(){
-        try{
-            loger.error("查询省数量");
-            return  bossOrdersMapper.findAllCityByNum();
-        }catch (Exception e){
-
-            loger.error("查询省数量失败");
-            throw e;
-        }
-    }
-    /**
-     * 后台管理-查询区数量
-     * @return
-     */
-    public Integer queryPostAreaNum(){
-        try{
-            loger.error("查询省数量");
-            return  bossOrdersMapper.findAllAreaByNum();
-        }catch (Exception e){
-
-            loger.error("查询省数量失败");
-            throw e;
-        }
-    }
     public BossOrdersVo queryOrderParticulars(Integer ordernumber) {
         try {
             if (loger.isDebugEnabled()) {
