@@ -82,9 +82,10 @@ public class OrdersListController {
                                               @ApiParam(value = "订单状态（0待付款1待发货2待收货4待评价）") @RequestParam(required = false) String status,
                                               @ApiParam(value = "订单类型（0 租赁 1 购买）") @RequestParam(required = false) String position,
                                               @ApiParam(value = "物流单号") @RequestParam(required = false) String logisticid,
-                                              @ApiParam(value = "订单时间") @RequestParam(required = false) String intime) {
+                                              @ApiParam(value = "订单最大时间") @RequestParam(required = false) String mintime,
+                                              @ApiParam(value = "订单最小时间") @RequestParam(required = false) String maxtime) {
         Response response = new Response();
-        List<BossOrdersVo> list = orderFacade.queryOrderByCondition(ordernumber, name, status, position, logisticid, intime);
+        List<BossOrdersVo> list = orderFacade.queryOrderByCondition(ordernumber, name, status, position, logisticid, mintime, maxtime);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

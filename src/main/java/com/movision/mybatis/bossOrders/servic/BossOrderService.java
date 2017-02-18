@@ -86,7 +86,7 @@ public class BossOrderService {
      * @param id
      * @return
      */
-    public List<BossOrders> queryOrderGetInfo(Integer id) {
+    public List<Address> queryOrderGetInfo(Integer id) {
         try {
             loger.info("查询收货人信息");
             return bossOrdersMapper.findAllGetInfo(id);

@@ -365,7 +365,7 @@
              AND d.logisticsid=#{logisticid,jdbcType=VARCHAR}
          </if>
          <if test="intime!=null and intime!=''">
-             AND o.intime=#{intime,jdbcType=DATE}
+             AND o.intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
          </if>
     </select>
     <!-- 暂时不做-->
@@ -497,7 +497,7 @@ SELECT
         SET isdel=1
         WHERE id=#{id,jdbcType=INTEGER}
     </update>
-    <select id="findAllGetInfo" resultType="com.movision.mybatis.bossOrders.entity.BossOrders"
+    <select id="findAllGetInfo" resultType="com.movision.mybatis.address.entity.Address"
             parameterType="java.lang.Integer">
         SELECT a.phone,a.name,u.email,a.province,a.city,a.district,a.street FROM yw_address a LEFT JOIN yw_user u ON
         u.id=a.userid WHERE a.userid=(SELECT s.userid FROM yw_orders s WHERE s.id=#{id,jdbcType=INTEGER} )
@@ -557,4 +557,5 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         SELECT  s.`name`,s.protype,s.origprice,s.price,c.num,s.id,s.attribute FROM yw_goods s LEFT JOIN yw_cart c ON c.goodsid=s.id
         WHERE c.userid=(SELECT s.userid FROM yw_orders s WHERE s.id=#{id,jdbcType=INTEGER} )
     </select>
+
 </mapper>
