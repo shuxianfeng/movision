@@ -176,7 +176,6 @@ public class CircleService {
     /**
      * 查询圈子列表
      *
-     * @param pager
      * @return
      */
     public List<CircleVo> queryCircleByList(Integer category) {
@@ -387,6 +386,21 @@ public class CircleService {
             return circleMapper.queryListByCircleList(in);
         } catch (Exception e) {
             log.error("查询圈子所有名称异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询发现页排序
+     *
+     * @return
+     */
+    public List<Circle> addDiscoverList() {
+        try {
+            log.info("查询发现页排序");
+            return circleMapper.addDiscoverList();
+        } catch (Exception e) {
+            log.error("查询发现页排序异常");
             throw e;
         }
     }

@@ -42,64 +42,6 @@ public class CircleFacade {
 
     @Autowired
     AccusationService accusationService;
-    /**
-     * 后台管理-圈子列表
-     *
-     * @param pager
-     * @return
-     */
-    /*public List<CircleVo> queryCircleByList1(Paging<CircleVo> pager) {
-        //List<CircleVo> list = circleService.queryCircleByList();//获取圈子列表的部分数据
-        List<CircleVo> circleVoslist = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            CircleVo vo = new CircleVo();
-            Integer circleid = list.get(i).getId();
-            String circlemaster = circleService.queryCircleBycirclemaster(list.get(i).getPhone());//查询圈主
-            List<User> users = userService.queryCircleManagerList(circleid);//查询出圈子管理员列表
-            for (int j = 0; j < users.size(); j++) {
-                if (users.get(i).getNickname() == null) {
-                    users.get(i).setNickname("用户" + users.get(i).getPhone().substring(7));
-                }
-            }
-            Integer followsum = circleService.queryFollowSum(circleid);//查询圈子关注数
-            PostNum postnumandisessencesum = postService.queryPostNumAndisessenceByCircleid(circleid);//查询圈子下的所有帖子数
-            Integer postsum = 0;
-            Integer isessencesum = 0;
-            if (postnumandisessencesum.getPostnum() != null) {
-                postsum = postnumandisessencesum.getPostnum();//圈子中帖子数
-            }
-            if (postnumandisessencesum.getIsessence() != null) {
-                isessencesum = postnumandisessencesum.getIsessence();//圈子中精贴数
-            }
-            vo.setId(list.get(i).getId());//圈子id
-            if (list.get(i).getName() != null) {
-                vo.setName(list.get(i).getName());//圈子名称
-            }
-            if (list.get(i).getCategory() != null) {
-                vo.setCategory(list.get(i).getCategory());//圈子分类
-            }
-            if (circlemaster != null) {
-                vo.setCategoryname(circlemaster);//圈主
-            }
-            if (users != null) {
-                vo.setCirclemanagerlist(users);//圈子管理员列表
-            }
-            if (followsum != null) {
-                vo.setIsfollow(followsum);//圈子关注数量
-            }
-            vo.setPostnum(postsum);
-            vo.setIsessencenum(isessencesum);
-            if (list.get(i).getSupportnum() != null) {
-                vo.setSupportnum(list.get(i).getSupportnum());//支持数
-            }
-            if (list.get(i).getStatus() != null) {
-                vo.setStatus(list.get(i).getStatus());
-            }
-            vo.setCreatetime(list.get(i).getCreatetime());//圈子创建时间
-            circleVoslist.add(vo);
-        }
-        return circleVoslist;
-    }*/
 
     /**
      * 圈子首页列表查询
@@ -155,17 +97,15 @@ public class CircleFacade {
                     vo.setFollownum(followNumt.getNum());//关注数
                     vo.setFollownewnum(followNumt.getNewnum());//今日新增关注数
                 }
-                Integer postsum = 0;
-                Integer isessencesum = 0;
                 vo.setId(listt.get(e).getId());//圈子id
                 vo.setName(listt.get(e).getName());//圈子名称
                 vo.setCategory(listt.get(e).getCategory());//圈子分类
                 vo.setCategoryname(circlemasterlist);//圈主
                 vo.setCirclemanagerlist(users);//圈子管理员列表
-                vo.setPostnum(postsum);
-                vo.setIsessencenum(isessencesum);
                 vo.setSupportnum(listt.get(e).getSupportnum());//支持数
-                vo.setStatus(listt.get(e).getStatus());
+                vo.setStatus(listt.get(e).getStatus());//圈子状态：0 待审核 1 审核通过 2 审核不通过
+                vo.setIsrecommend(listt.get(e).getIsrecommend());//推荐
+                vo.setIsdiscover(listt.get(e).getIsdiscover());//首页
                 vo.setCreatetime(listt.get(e).getCreatetime());//圈子创建时间
                 circleVoslist.add(vo);
             }
@@ -206,6 +146,12 @@ public class CircleFacade {
             rewardeds.add(postList);
         }
         return rewardeds;
+    }
+
+
+    public Map<String, Object> addDiscoverList() {
+        List<Circle> list = circleService.addDiscoverList();
+        return null;
     }
 
 

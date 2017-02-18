@@ -413,4 +413,8 @@
         SELECT SUM(supportnum) AS supportnum,(SELECT intime from yw_circle_category WHERE id=0) AS intime FROM yw_circle
         WHERE category=#{categoryid,jdbcType=INTEGER}
     </select>
+
+    <select id="addDiscoverList" resultType="com.movision.mybatis.circle.entity.Circle">
+
+    </select>
 </mapper>

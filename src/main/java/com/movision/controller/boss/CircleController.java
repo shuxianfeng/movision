@@ -29,6 +29,11 @@ public class CircleController {
     @Autowired
     CircleFacade circleFacade;
 
+    /**
+     * 后台管理-查询圈子列表
+     *
+     * @return
+     */
     @ApiOperation(value = "查询圈子列表", notes = "用于查询圈子列表接口", response = Response.class)
     @RequestMapping(value = "/circle_list", method = RequestMethod.POST)
     public Response circleByList() {
@@ -59,6 +64,23 @@ public class CircleController {
         }
         pager.result(list);
         response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 后台管理-查询发现页排序
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询发现页排序", notes = "用于查询发现页排序接口", response = Response.class)
+    @RequestMapping(value = "add_discover_list", method = RequestMethod.POST)
+    public Response addDiscoverList() {
+        Response response = new Response();
+        Map<String, Object> map = circleFacade.addDiscoverList();
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
         return response;
     }
 

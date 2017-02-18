@@ -35,7 +35,7 @@ public class CircleVo {
 
     private Integer permission;
 
-    private Integer isrecommend;
+    private Integer isrecommend;//推荐
 
     private String maylikeimg;
 
@@ -45,7 +45,7 @@ public class CircleVo {
 
     private Integer supportnum;//支持数
 
-    private Integer isdiscover;
+    private Integer isdiscover;//首页
 
     private Integer orderid;
 

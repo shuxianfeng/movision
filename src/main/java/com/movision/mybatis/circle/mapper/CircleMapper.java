@@ -75,4 +75,6 @@ public interface CircleMapper {
 
     CircleVo queryCircleSupportnum(Integer categoryid);
 
+    List<Circle> addDiscoverList();
+
 }
