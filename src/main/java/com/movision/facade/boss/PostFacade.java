@@ -523,8 +523,11 @@ public class PostFacade {
                 Long da = Long.parseLong(time);
                 isessencetime = new Date(da);
             }*/
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date d = df.parse(time);
+            Date d = null;
+            if (time != null) {
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                d = df.parse(time);
+            }
             post.setEssencedate(d);
 
             post.setUserid(Integer.parseInt(userid));
