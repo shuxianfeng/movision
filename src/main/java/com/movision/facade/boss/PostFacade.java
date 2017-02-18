@@ -488,13 +488,9 @@ public class PostFacade {
                 post.setOrderid(0);
             }
             Date isessencetime = null;//加精时间
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
             if (time != null) {
-                try {
-                    isessencetime = format.parse(time);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                Long da = Long.parseLong(time);
+                isessencetime = new Date(da);
             }
             post.setEssencedate(isessencetime);
             post.setUserid(Integer.parseInt(userid));
@@ -628,18 +624,14 @@ public class PostFacade {
         Post p = new Post();
         if (Integer.parseInt(orderid) != 0) {//加精动作
             p.setId(Integer.parseInt(postid));
-            Date date = null;
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+            Date isessencetime = null;//加精时间
             if (essencedate != null) {
-                try {
-                    date = format.parse(essencedate);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                Long da = Long.parseLong(essencedate);
+                isessencetime = new Date(da);
             } else {
-                date = new Date();//当前时间
+                isessencetime = new Date();//当前时间
                 }
-            p.setEssencedate(date);//精选日期
+            p.setEssencedate(isessencetime);//精选日期
             p.setOrderid(Integer.parseInt(orderid));
             Integer result = postService.addPostChoiceness(p);
             map.put("result", result);
@@ -654,18 +646,20 @@ public class PostFacade {
     /**
      * 查询加精排序
      *
-     * @param postid
      * @return
      */
-    public Map<String, Object> queryPostChoiceness(String postid) {
+    public Map<String, Object> queryPostChoiceness() {
         Map<String, Object> map = new HashedMap();
-        List<Post> posts = postService.queryPostChoiceness(Integer.parseInt(postid));//返回当天有几条加精
+        List<Post> posts = postService.queryPostChoiceness();//返回当天有几条加精
         if (posts.size() <= 5) {//判断当天是否还可以加精
             List<Integer> lou = new ArrayList();
+            for (int e = 1; e < 6; e++) {//赋值一个的集合，用于返回排序
+                lou.add(e);
+            }
             for (int i = 0; i < posts.size(); i++) {
-                for (int j = 1; j < 6; j++) {
-                    if (posts.get(i).getOrderid() != j) {
-                        lou.add(i);
+                for (int j = 0; j < lou.size(); j++) {
+                    if (posts.get(i).getOrderid() == lou.get(j)) {
+                        lou.remove(j);
                     }
                 }
             }
@@ -821,13 +815,9 @@ public class PostFacade {
                 post.setOrderid(Integer.parseInt(orderid));
             }
             Date isessencetime = null;//加精时间
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
             if (time != null) {
-                try {
-                    isessencetime = format.parse(time);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                Long da = Long.parseLong(time);
+                isessencetime = new Date(da);
             }
             post.setEssencedate(isessencetime);
             post.setUserid(Integer.parseInt(userid));

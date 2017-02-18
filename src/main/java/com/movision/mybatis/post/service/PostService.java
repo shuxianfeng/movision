@@ -485,13 +485,12 @@ public class PostService {
     /**
      * 查询帖子是否加精
      *
-     * @param postid
      * @return
      */
-    public List<Post> queryPostChoiceness(Integer postid) {
+    public List<Post> queryPostChoiceness() {
         try {
             log.info("查询帖子是否加精");
-            return postMapper.queryPostChoiceness(postid);
+            return postMapper.queryPostChoiceness();
         } catch (Exception e) {
             log.error("查询帖子是否加精异常");
             throw e;

@@ -785,9 +785,9 @@
     </select>
 
 
-    <select id="queryPostChoiceness" resultType="com.movision.mybatis.post.entity.Post"
-            parameterType="java.lang.Integer">
-        SELECT orderid,intime FROM yw_post WHERE date(intime) = curdate() AND orderid BETWEEN 1 AND 5 GROUP BY orderid
+    <select id="queryPostChoiceness" resultType="com.movision.mybatis.post.entity.Post">
+        SELECT orderid,essencedate FROM yw_post WHERE date(essencedate) = curdate() AND orderid BETWEEN 1 AND 5 GROUP BY
+        orderid
     </select>
 
     <select id="deletePostChoiceness" parameterType="java.lang.Integer">
