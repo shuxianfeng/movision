@@ -788,16 +788,20 @@ public class PostFacade {
      * @param time
      * @return
      */
-    public Map<String, Integer> updatePostById(HttpServletRequest request, String postid, String title, String subtitle, String type, String userid, String circleid, MultipartFile vid, MultipartFile bannerimgurl,
+    public Map<String, Integer> updatePostById(HttpServletRequest request, String id, String title, String subtitle, String type, String userid, String circleid, MultipartFile vid, MultipartFile bannerimgurl,
                                                MultipartFile coverimg, String postcontent, String isessence, String ishot, String orderid, String time) {
         Post post = new Post();
         Map<String, Integer> map = new HashedMap();
         try {
-            post.setId(Integer.parseInt(postid));//帖子id
+            post.setId(Integer.parseInt(id));//帖子id
             post.setTitle(title);//帖子标题
             post.setSubtitle(subtitle);//帖子副标题
-            post.setType(Integer.parseInt(type));//帖子类型
-            post.setCircleid(Integer.parseInt(circleid));//圈子id
+            if (type != null) {
+                post.setType(Integer.parseInt(type));//帖子类型
+            }
+            if (circleid != null) {
+                post.setCircleid(Integer.parseInt(circleid));//圈子id
+            }
             // post.setCoverimg(coverimg);//帖子封面
             //上传图片到本地服务器
             String savedFileName = "";
@@ -870,7 +874,9 @@ public class PostFacade {
             String voidurl = imgdomain + savedVideo;//拼接视频文件url
             String bannervoidurl = imgdomain + savedbannerimgurl;//拼接视频图片url
             Video vide = new Video();
-            vide.setPostid(Integer.parseInt(postid));
+            if (id != null) {
+                vide.setPostid(Integer.parseInt(id));
+            }
             vide.setVideourl(voidurl);
             vide.setBannerimgurl(bannervoidurl);
             vide.setIntime(new Date());
@@ -914,22 +920,48 @@ public class PostFacade {
      * 帖子按条件查询
      * @param title
      * @param circleid
-     * @param name
-     * @param date
      * @return
      */
-    public List<Object> postSearch(String title, String circleid, String name, String date, String pageNo, String pageSize) {
-        if (title!=null&&circleid!=null&&name!=null&&date!=null){//当没有添加条件的情况下执行全部搜索
+    public List<PostList> postSearch(String title, String circleid, String nickname, String postcontent, String endtime, String begintime, String essencedate, Paging<PostList> pager) {
             Map<String ,Object> map=new HashedMap();
-            map.put("title",title);
-            map.put("circleid",circleid);
-            map.put("name",name);
-            map.put("date",date);
-            return postService.postSearch(map);
-        }else{
-            //return queryPostByList(pageNo,pageSize);
-            return null;
+        map.put("title", title);//帖子标题
+        map.put("circleid", circleid);//圈子id
+        map.put("nickname", nickname);//发帖人
+        map.put("postcontent", postcontent);//帖子内容
+        Date end = null;
+        Date begin = null;
+        Date es = null;
+        //开始时间
+        if (endtime != null) {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                end = df.parse(endtime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            map.put("endtime", end);
         }
+        //结束时间
+        if (begintime != null) {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                begin = df.parse(begintime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            map.put("begintime", begin);
+        }
+        //精选时间
+        if (essencedate != null) {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                es = df.parse(essencedate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            map.put("essencedate", es);
+        }
+        return postService.postSearch(map, pager);
 
     }
 

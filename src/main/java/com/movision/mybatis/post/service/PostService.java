@@ -540,10 +540,10 @@ public class PostService {
      * @param map
      * @return
      */
-    public List<Object> postSearch(Map<String,Object> map){
+    public List<PostList> postSearch(Map<String, Object> map, Paging<PostList> pager) {
         try {
             log.info("帖子条件查询");
-            return postMapper.postSearch(map);
+            return postMapper.findAllpostSearch(map, pager.getRowBounds());
         } catch (Exception e) {
             log.error("帖子条件查询异常");
             throw e;

@@ -499,7 +499,7 @@ public class PostController {
     @ApiOperation(value = "编辑帖子", notes = "用于帖子编辑接口", response = Response.class)
     @RequestMapping(value = "update_post", method = RequestMethod.POST)
     public Response updatePostById(HttpServletRequest request,
-                                   @ApiParam(value = "帖子id（必填）") @RequestParam String postid,
+                                   @ApiParam(value = "帖子id（必填）") @RequestParam String id,
                                    @ApiParam(value = "帖子标题") @RequestParam(required = false) String title,//帖子标题
                                    @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,//帖子副标题
                                    @ApiParam(value = "帖子类型 0 普通帖 1 原生视频帖") @RequestParam(required = false) String type,//帖子类型
@@ -514,7 +514,7 @@ public class PostController {
                                    @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,//精选排序
                                    @ApiParam(value = "精选日期 yyyyMMddHHmmss") @RequestParam(required = false) String time) {
         Response response = new Response();
-        Map<String, Integer> map = postFacade.updatePostById(request, postid, title, subtitle, type, userid, circleid, vid, bannerimgurl, coverimg, postcontent, isessence, ishot, orderid, time);
+        Map<String, Integer> map = postFacade.updatePostById(request, id, title, subtitle, type, userid, circleid, vid, bannerimgurl, coverimg, postcontent, isessence, ishot, orderid, time);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -530,8 +530,6 @@ public class PostController {
      * @param pageSize
      * @param title
      * @param circleid
-     * @param name
-     * @param date
      * @return
      */
     @ApiOperation(value = "帖子搜索",notes = "帖子搜索",response = Response.class)
@@ -540,14 +538,19 @@ public class PostController {
                                @RequestParam(required = false) String pageSize,
                                @ApiParam(value = "帖子标题")@RequestParam(required = false) String title,
                                @ApiParam(value = "圈子id")@RequestParam(required = false) String circleid,
-                               @ApiParam(value = "发帖人")@RequestParam(required = false) String name,
-                               @ApiParam(value = "精选日期") @RequestParam(required = false) String date) {
+                               @ApiParam(value = "发帖人") @RequestParam(required = false) String nickname,
+                               @ApiParam(value = "帖子内容") @RequestParam(required = false) String postcontent,
+                               @ApiParam(value = "开始时间") @RequestParam(required = false) String endtime,
+                               @ApiParam(value = "结束时间") @RequestParam(required = false) String begintime,
+                               @ApiParam(value = "精选日期") @RequestParam(required = false) String essencedate) {
         Response response=new Response();
-        List<Object> list=postFacade.postSearch(title,circleid,name,date,pageNo,pageSize);
+        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostList> list = postFacade.postSearch(title, circleid, nickname, postcontent, endtime, begintime, essencedate, pager);
         if (response.getCode()==200){
             response.setMessage("查询成功");
         }
-        response.setData(list);
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 

@@ -38,11 +38,19 @@ public class PostCompile {
 
     private Integer isessence;//首页加精
 
-    private Date essencedate;//精选日期
+    private Date time;//精选日期
 
     private Integer orderid;//精选排序
 
     private String postcontent;//帖子内容
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
 
     public String getBannerimgurl() {
         return bannerimgurl;
@@ -154,14 +162,6 @@ public class PostCompile {
 
     public void setIsessence(Integer isessence) {
         this.isessence = isessence;
-    }
-
-    public Date getEssencedate() {
-        return essencedate;
-    }
-
-    public void setEssencedate(Date essencedate) {
-        this.essencedate = essencedate;
     }
 
     public Integer getOrderid() {
