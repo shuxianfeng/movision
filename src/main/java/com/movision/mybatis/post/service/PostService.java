@@ -539,7 +539,7 @@ public class PostService {
      * 帖子按条件查询
      * @param map
      * @return
-     *//*
+     */
     public List<Object> postSearch(Map<String,Object> map){
         try {
             log.info("帖子条件查询");
@@ -548,6 +548,6 @@ public class PostService {
             log.error("帖子条件查询异常");
             throw e;
         }
-    }*/
+    }
 
 }

@@ -910,17 +910,15 @@ public class PostFacade {
     }
 
 
-
-
-/*    *//**
+    /**
      * 帖子按条件查询
      * @param title
      * @param circleid
      * @param name
      * @param date
      * @return
-     *//*
-    public List<Object> postSearch(String title, String circleid, String name, Date date,String pageNo,String pageSize){
+     */
+    public List<Object> postSearch(String title, String circleid, String name, String date, String pageNo, String pageSize) {
         if (title!=null&&circleid!=null&&name!=null&&date!=null){//当没有添加条件的情况下执行全部搜索
             Map<String ,Object> map=new HashedMap();
             map.put("title",title);
@@ -929,9 +927,10 @@ public class PostFacade {
             map.put("date",date);
             return postService.postSearch(map);
         }else{
-            return queryPostByList(pageNo,pageSize);
+            //return queryPostByList(pageNo,pageSize);
+            return null;
         }
 
-    }*/
+    }
 
 }

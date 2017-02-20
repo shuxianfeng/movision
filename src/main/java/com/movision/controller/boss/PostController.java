@@ -541,7 +541,7 @@ public class PostController {
                                @ApiParam(value = "帖子标题")@RequestParam(required = false) String title,
                                @ApiParam(value = "圈子id")@RequestParam(required = false) String circleid,
                                @ApiParam(value = "发帖人")@RequestParam(required = false) String name,
-                               @ApiParam(value = "精选日期")@RequestParam(required = false) Date date){
+                               @ApiParam(value = "精选日期") @RequestParam(required = false) String date) {
         Response response=new Response();
         List<Object> list=postFacade.postSearch(title,circleid,name,date,pageNo,pageSize);
         if (response.getCode()==200){

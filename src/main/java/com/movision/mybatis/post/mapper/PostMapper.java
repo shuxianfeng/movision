@@ -115,5 +115,6 @@ public interface PostMapper {
     PostCompile queryPostByIdEcho(Integer postid);
 
     Integer updateByPrimaryKeySelectiveById(Post post);
-    /*List postSearch(Map map);*/
+
+    List postSearch(Map map);
 }
