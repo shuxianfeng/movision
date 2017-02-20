@@ -8,6 +8,7 @@ import com.movision.mybatis.bossOrders.mapper.BossOrdersMapper;
 import com.movision.mybatis.city.entity.City;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.invoice.entity.Invoice;
+import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.province.entity.Province;
 import com.movision.mybatis.user.entity.User;
@@ -146,6 +147,21 @@ public class BossOrderService {
     }
 
     /**
+     * 订单管理-编辑费用信息
+     * @param orders
+     * @return
+     */
+    public int updateOrderMoney(Orders orders) {
+        try {
+            loger.info("编辑费用信息成功");
+            return bossOrdersMapper.updateOrdersMoney(orders);
+        } catch (Exception e) {
+            loger.error("编辑费用信息失败");
+            throw e;
+        }
+    }
+
+    /**
      * 修改邮箱
      *
      * @param user
@@ -224,6 +240,21 @@ public class BossOrderService {
         }
     }
 
+    /**
+     * 订单管理*--查询费用信息
+     *
+     * @param id
+     * @return
+     */
+    public List<Orders> queryOrderMoney(Integer id) {
+        try {
+            loger.info("查询费用信息成功");
+            return bossOrdersMapper.queryMoney(id);
+        } catch (Exception e) {
+            loger.error("查询费用信息失败");
+            throw e;
+        }
+    }
     /**
      * 精确查询订单
      *

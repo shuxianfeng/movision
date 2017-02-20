@@ -8,6 +8,7 @@ import com.movision.mybatis.bossOrders.servic.BossOrderService;
 import com.movision.mybatis.city.entity.City;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.invoice.entity.Invoice;
+import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.province.entity.Province;
 import com.movision.mybatis.user.entity.User;
@@ -250,11 +251,13 @@ public class OrderFacade {
         }
         good.setMoney(money);
         good.setSummoney(summoney);
+        List<Orders> orderses = bossOrderService.queryOrderMoney(id);
         map.put("invoice", invoice);
         map.put("bossOrders", bossOrders);
         map.put("bossOrdersGet", bossOrdersGet);
         map.put("goods", goods);
         map.put("good", good);
+        map.put("orderses", orderses);
         return map;
     }
 
@@ -324,6 +327,29 @@ public class OrderFacade {
             invoice.setRigphone(rigphone);
         }
         int result = bossOrderService.updateOrderInvoice(invoice);
+        map.put("result", result);
+        return map;
+    }
+
+    /**
+     * 订单管理--编辑费用
+     *
+     * @param id
+     * @param discouponmoney
+     * @param dispointmoney
+     * @param
+     * @param sendmoney
+     * @param
+     * @return
+     */
+    public Map<String, Integer> updateOrderMoney(String id, String discouponmoney, String dispointmoney, String sendmoney) {
+        Map<String, Integer> map = new HashedMap();
+        Orders orders = new Orders();
+        orders.setId(Integer.parseInt(id));
+        orders.setDiscouponmoney(Double.parseDouble(discouponmoney));
+        orders.setDispointmoney(Double.parseDouble(dispointmoney));
+        orders.setSendmoney(Double.parseDouble(sendmoney));
+        int result = bossOrderService.updateOrderMoney(orders);
         map.put("result", result);
         return map;
     }

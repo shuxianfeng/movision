@@ -324,4 +324,33 @@ public class OrdersListController {
         response.setData(map);
         return response;
     }
+
+    /**
+     * 订单管理---编辑费用
+     *
+     * @param orderid
+     * @param discouponmoney
+     * @param dispointmoney
+     * @param
+     * @param sendmoney
+     * @param
+     * @return
+     */
+    @ApiOperation(value = "编辑费用", notes = "编辑费用", response = Response.class)
+    @RequestMapping(value = "update_order_money", method = RequestMethod.POST)
+    public Response updateOrderMoney(@ApiParam(value = "订单id") @RequestParam(required = false) String orderid,
+                                     @ApiParam(value = "优惠金额") @RequestParam(required = false) String discouponmoney,
+                                     @ApiParam(value = "积分") @RequestParam(required = false) String dispointmoney,
+                                     // @ApiParam(value = "发票税额") @RequestParam(required = false) String invoice,
+                                     // @ApiParam(value = "手续费") @RequestParam(required = false) String  poundage,
+                                     @ApiParam(value = "物流费") @RequestParam(required = false) String sendmoney
+    ) {
+        Response response = new Response();
+        Map<String, Integer> map = orderFacade.updateOrderMoney(orderid, discouponmoney, dispointmoney, sendmoney);
+        if (response.getCode() == 200) {
+            response.setMessage("编辑成功");
+        }
+        response.setData(map);
+        return response;
+    }
 }
