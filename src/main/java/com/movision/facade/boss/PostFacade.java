@@ -56,6 +56,12 @@ public class PostFacade {
     @Value("#{configProperties['img.domain']}")
     private String imgdomain;
 
+    @Value("#{configProperties['vidfeld.domain']}")
+    private String viddomain;
+
+    @Value("#{configProperties['vidbnner.domain']}")
+    private String vidbannerdomain;
+
     @Autowired
     private PostService postService;
 
@@ -480,7 +486,7 @@ public class PostFacade {
                         vid.transferTo(savedFile);  //转存文件
                     }
                 }
-                voidurl = imgdomain + savedVideo;
+                voidurl = viddomain + savedVideo;
             }
 
             if (bannerimgurl != null && isMultipart) {
@@ -502,7 +508,7 @@ public class PostFacade {
                         bannerimgurl.transferTo(savedFile);  //转存文件
                     }
                 }
-                bannervoidurl = imgdomain + savedbannerimgurl;
+                bannervoidurl = vidbannerdomain + savedbannerimgurl;
             }
             post.setCoverimg(imgurl);//添加帖子封面
             post.setIsactive(0);//设置状态为帖子
@@ -520,7 +526,7 @@ public class PostFacade {
                 }
                 Date d = null;
                 if (time != null || time != "") {
-                    DateFormat df = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
                     d = df.parse(time);
                 } else {
                     d = new Date();
@@ -849,7 +855,7 @@ public class PostFacade {
                         vid.transferTo(savedFile);  //转存文件
                     }
                 }
-                voidurl = imgdomain + savedVideo;
+                voidurl = viddomain + savedVideo;
             }
 
             if (bannerimgurl != null && isMultipart) {
@@ -871,7 +877,7 @@ public class PostFacade {
                         bannerimgurl.transferTo(savedFile);  //转存文件
                     }
                 }
-                bannervoidurl = imgdomain + savedbannerimgurl;
+                bannervoidurl = vidbannerdomain + savedbannerimgurl;
             }
             //String voidurl = imgdomain + savedVideo;//拼接视频文件url
             //String bannervoidurl = imgdomain + savedbannerimgurl;//拼接视频图片url
@@ -899,7 +905,7 @@ public class PostFacade {
             }
             Date d = null;
             if (time != null) {
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 try {
                     d = df.parse(time);
                 } catch (ParseException e) {
@@ -935,7 +941,7 @@ public class PostFacade {
         Date es = null;
         //开始时间
         if (endtime != null) {
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 end = df.parse(endtime);
             } catch (ParseException e) {
@@ -945,7 +951,7 @@ public class PostFacade {
         }
         //结束时间
         if (begintime != null) {
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 begin = df.parse(begintime);
             } catch (ParseException e) {
@@ -955,7 +961,7 @@ public class PostFacade {
         }
         //精选时间
         if (essencedate != null) {
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 es = df.parse(essencedate);
             } catch (ParseException e) {

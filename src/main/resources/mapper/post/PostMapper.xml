@@ -951,4 +951,8 @@
         FROM yw_post as p LEFT JOIN yw_video as v ON p.id=v.postid WHERE p.id=#{postid,jdbcType=INTEGER}
     </select>
 
+    <select id="findAllpostSearch" parameterType="java.util.Map" resultType="com.movision.mybatis.post.entity.PostList">
+
+    </select>
+
 </mapper>
