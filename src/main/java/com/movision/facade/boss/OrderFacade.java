@@ -289,17 +289,16 @@ public class OrderFacade {
      * @param province
      * @param city
      * @param district
-     * @param street
+     * @param
      * @return
      */
-    public Map<String, Integer> updateOrderAddress(String orderid, String phone, String name, String email, String province, String city, String district, String street) {
+    public Map<String, Integer> updateOrderAddress(String orderid, String phone, String name, String email, String province, String city, String district) {
         Address address = new Address();
         Map<String, Integer> map = new HashedMap();
         address.setCity(city);
         address.setDistrict(district);
         address.setOrderid(Integer.parseInt(orderid));
         address.setProvince(province);
-        address.setStreet(street);
         address.setPhone(phone);
         address.setName(name);
         int result = bossOrderService.updateOrderGet(address);

@@ -107,7 +107,7 @@ public class OrdersListController {
      * @param province
      * @param city
      * @param district
-     * @param street
+     * @param
      * @return
      */
     @ApiOperation(value = "编辑收货人地址", notes = "编辑收货人地址", response = Response.class)
@@ -118,10 +118,10 @@ public class OrdersListController {
                                        @ApiParam(value = "邮箱") @RequestParam(required = false) String email,
                                        @ApiParam(value = "省") @RequestParam(required = false) String province,
                                        @ApiParam(value = "市") @RequestParam(required = false) String city,
-                                       @ApiParam(value = "区") @RequestParam(required = false) String district,
-                                       @ApiParam(value = "街道") @RequestParam(required = false) String street) {
+                                       @ApiParam(value = "区") @RequestParam(required = false) String district
+    ) {
         Response response = new Response();
-        Map<String, Integer> map = orderFacade.updateOrderAddress(orderid, phone, name, email, province, city, district, street);
+        Map<String, Integer> map = orderFacade.updateOrderAddress(orderid, phone, name, email, province, city, district);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
