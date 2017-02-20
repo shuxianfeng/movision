@@ -287,7 +287,22 @@ public class BossOrderService {
         }
     }
 
+    /**
+     * 订单管理--设为未付款
+     *
+     * @param orderid
+     * @return
+     */
+    public int updateOrderOperation(Integer orderid) {
+        try {
 
+            loger.info("设为未付款成功");
+            return bossOrdersMapper.updateOrderOperation(orderid);
+        } catch (Exception e) {
+            loger.error("设为未付款失败");
+            throw e;
+        }
+    }
 
     /**
      * 后台管理-查询市名

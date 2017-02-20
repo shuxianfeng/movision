@@ -71,4 +71,9 @@ public interface BossOrdersMapper {
 
     List<Orderoperation> queryOrderOperation(Integer id);//查看操作信息
 
+    int updateOrderOperation(int orderid);//设为未付款
+
+
+
+
 }
