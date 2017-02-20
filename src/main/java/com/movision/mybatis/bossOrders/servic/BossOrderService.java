@@ -8,6 +8,7 @@ import com.movision.mybatis.bossOrders.mapper.BossOrdersMapper;
 import com.movision.mybatis.city.entity.City;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.invoice.entity.Invoice;
+import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.province.entity.Province;
@@ -208,6 +209,21 @@ public class BossOrderService {
     }
 
     /**
+     * 订单管理--查看操作信息
+     * @param id
+     * @return
+     */
+    public List<Orderoperation> queryOrderoperation(Integer id) {
+        try {
+            loger.info("查看操作信息");
+            return bossOrdersMapper.queryOrderOperation(id);
+        } catch (Exception e) {
+            loger.error("查看操作信息失败");
+            throw e;
+        }
+    }
+
+    /**
      * 订单管理*--删除订单
      * @param id
      * @return
@@ -263,9 +279,7 @@ public class BossOrderService {
      */
     public List<BossOrdersVo> queryAccuracyConditionByOrder(Map map) {
         try {
-            if (loger.isDebugEnabled()) {
-                loger.debug("精确查找订单");
-            }
+            loger.info("精确查询订单");
             return bossOrdersMapper.findAllAccuracyConditionByOrder(map);
         } catch (Exception e) {
             loger.error("精确查询订单异常");

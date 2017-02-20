@@ -426,9 +426,9 @@ SELECT
         u.nickname
     FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id LEFT  JOIN yw_sub_order s ON s.porderid=o.id
    LEFT JOIN yw_coupon c ON c.id=o.couponsid LEFT  JOIN yw_order_sub_logistics  d ON d.logisticsid=o.logisticsid LEFT JOIN yw_user u ON u.id=o.userid
-        WHERE o.isdel=0 AND 1=1
+        WHERE o.isdel=0
          <if test="ordernumber!=null">
-            AND  ordernumber=#{ordernumber,jdbcType=VARCHAR}
+             AND o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
          </if>
         <if test="province!=null">
             AND  a.province=#{province,jdbcType=VARCHAR}
@@ -440,22 +440,22 @@ SELECT
             AND  a.district=#{district,jdbcType=VARCHAR}
         </if>
         <if test="phone!=null">
-            AND  phone=#{phone,jdbcType=VARCHAR}
+            AND a.phone=#{phone,jdbcType=VARCHAR}
         </if>
         <if test="email!=null">
-            AND  email=#{email,jdbcType=VARCHAR}
+            AND u.email=#{email,jdbcType=VARCHAR}
         </if>
         <if test="name!=null">
-            AND  a.name LIKE  concat(concat('%',#{name,jdbcType=VARCHAR}),'%')
+            AND a.name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
         <if test="paytype!=null">
-            AND  paytype=#{paytype,jdbcType=INTEGER}
+            AND o.paytype=#{paytype,jdbcType=INTEGER}
         </if>
         <if test="takeway!=null">
-            AND  takeway=#{takeway,jdbcType=INTEGER}
+            AND o.takeway=#{takeway,jdbcType=INTEGER}
         </if>
         <if test="intime!=null">
-            AND  intime BETWEEN #{mintime,jdbcType=DATE}  AND #{maxtime,jdbcType=DATE}
+            AND o.intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
         </if>
 
      </select>
@@ -594,4 +594,8 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         </set>
         where id=#{id,jdbcType=INTEGER}
     </update>
+    <select id="queryOrderOperation" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.orderoperation.entity.Orderoperation">
+        SELECT * from yw_orderoperation WHERE orderid=#{id,jdbcType=INTEGER}
+    </select>
 </mapper>

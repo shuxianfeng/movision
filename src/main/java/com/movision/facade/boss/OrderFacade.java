@@ -8,6 +8,7 @@ import com.movision.mybatis.bossOrders.servic.BossOrderService;
 import com.movision.mybatis.city.entity.City;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.invoice.entity.Invoice;
+import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.province.entity.Province;
@@ -138,7 +139,9 @@ public class OrderFacade {
                                                             String maxtime, String email, String name, String phone, String paytype) {
 
         Map<String, Object> map = new HashedMap();
-        map.put("ordernumber", ordernumber);
+        if (ordernumber != null) {
+            map.put("ordernumber", ordernumber);
+        }
         if (province != null) {
             map.put("province", province);
         }
@@ -200,6 +203,7 @@ public class OrderFacade {
         return map;
     }
 
+
     /**
      * 查询区名
      *
@@ -252,12 +256,14 @@ public class OrderFacade {
         good.setMoney(money);
         good.setSummoney(summoney);
         List<Orders> orderses = bossOrderService.queryOrderMoney(id);
+        List<Orderoperation> orderoperationrs = bossOrderService.queryOrderoperation(id);
         map.put("invoice", invoice);
         map.put("bossOrders", bossOrders);
         map.put("bossOrdersGet", bossOrdersGet);
         map.put("goods", goods);
         map.put("good", good);
         map.put("orderses", orderses);
+        map.put("orderoperationrs", orderoperationrs);
         return map;
     }
 
