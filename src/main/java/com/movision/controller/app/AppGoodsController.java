@@ -91,7 +91,7 @@ public class AppGoodsController {
     }
 
     /**
-     * 租用的商品加入购物车接口(临时屏蔽，租用的商品不允许加入购物车)
+     * 租用的商品加入购物车接口(临时屏蔽，租用的商品和出售的商品加入购物车公用接口)
      */
 //    @ApiOperation(value = "租用的商品加入购物车接口", notes = "用户租用商品时，点击加入购物车或立即租用之前选择租用日期和套餐类型等的选择数据返回", response = Response.class)
 //    @RequestMapping(value = "rentGoodsCart", method = RequestMethod.POST)
@@ -134,23 +134,6 @@ public class AppGoodsController {
         Response response = new Response();
 
         Map<String, Object> map = couponFacade.choiceCoupon(userid);
-
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
-        }
-        response.setData(map);
-        return response;
-    }
-
-    /**
-     * 购买的商品加入购物车接口
-     */
-    @ApiOperation(value = "购买的商品加入购物车接口", notes = "用户租用商品时，点击加入购物车或立即租用之前选择租用日期和套餐类型等的选择数据返回", response = Response.class)
-    @RequestMapping(value = "buyGoodsCart", method = RequestMethod.POST)
-    public Response buyGoodsCart(@ApiParam(value = "商品id") @RequestParam String goodsid) {
-        Response response = new Response();
-
-        Map<String, Object> map = new HashMap<>();
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");

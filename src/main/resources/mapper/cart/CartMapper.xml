@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.cart.mapper.CartMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.cart.entity.Cart">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="goodsid" property="goodsid" jdbcType="INTEGER"/>
+        <result column="goodsname" property="goodsname" jdbcType="VARCHAR"/>
+        <result column="combotype" property="combotype" jdbcType="INTEGER"/>
+        <result column="rom" property="rom" jdbcType="INTEGER"/>
+        <result column="num" property="num" jdbcType="INTEGER"/>
+        <result column="takeway" property="takeway" jdbcType="INTEGER"/>
+        <result column="isdebug" property="isdebug" jdbcType="INTEGER"/>
+        <result column="debugid" property="debugid" jdbcType="INTEGER"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="protype" property="protype" jdbcType="INTEGER"/>
+        <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, userid, goodsid, goodsname, combotype, rom, num, takeway, isdebug, debugid, intime, 
+    protype, isdel, type
+  </sql>
+
+    <!--普通查询语句-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_cart
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!--查询该用户购物车中存不存在该商品-->
+    <select id="queryIsHave" parameterType="java.util.Map" resultType="java.lang.Integer">
+    SELECT count(*) FROM yw_cart WHERE userid = #{userid,jdbcType=INTEGER} AND goodsid = #{goodsid,jdbcType=INTEGER}
+  </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_cart
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.cart.entity.Cart">
+    insert into yw_cart (id, userid, goodsid, 
+      goodsname, combotype, rom, 
+      num, takeway, isdebug, 
+      debugid, intime, protype, 
+      isdel, type)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{goodsid,jdbcType=INTEGER}, 
+      #{goodsname,jdbcType=VARCHAR}, #{combotype,jdbcType=INTEGER}, #{rom,jdbcType=INTEGER}, 
+      #{num,jdbcType=INTEGER}, #{takeway,jdbcType=INTEGER}, #{isdebug,jdbcType=INTEGER}, 
+      #{debugid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}, #{protype,jdbcType=INTEGER}, 
+      #{isdel,jdbcType=INTEGER}, #{type,jdbcType=INTEGER})
+  </insert>
+
+    <!--商品加入购物车-->
+    <insert id="addGoodsCart" parameterType="java.util.Map">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO yw_cart(userid, goodsid,
+        goodsname, combotype, num, isdebug,
+        intime, isdel, type
+        )
+        VALUES (#{userid,jdbcType=INTEGER}, #{goodsid,jdbcType=INTEGER},
+        (SELECT name FROM yw_goods WHERE id = #{goodsid,jdbcType=INTEGER}), #{comboid,jdbcType=INTEGER},
+        #{sum,jdbcType=INTEGER}, #{isdebug,jdbcType=INTEGER},
+        #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <!--租赁商品加入购物车批量插入租赁日期-->
+    <insert id="addRentDate" parameterType="java.util.List">
+        INSERT INTO yw_rentdate (
+        cartid, rentdate, intime
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.cartid,jdbcType=INTEGER}, #{item.rentdate,jdbcType=DATE}, #{item.intime,jdbcType=DATE})
+        </foreach>
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.movision.mybatis.cart.entity.Cart">
+        insert into yw_cart
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="goodsid != null">
+                goodsid,
+            </if>
+            <if test="goodsname != null">
+                goodsname,
+            </if>
+            <if test="combotype != null">
+                combotype,
+            </if>
+            <if test="rom != null">
+                rom,
+            </if>
+            <if test="num != null">
+                num,
+            </if>
+            <if test="takeway != null">
+                takeway,
+            </if>
+            <if test="isdebug != null">
+                isdebug,
+            </if>
+            <if test="debugid != null">
+                debugid,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="protype != null">
+                protype,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsid != null">
+                #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsname != null">
+                #{goodsname,jdbcType=VARCHAR},
+            </if>
+            <if test="combotype != null">
+                #{combotype,jdbcType=INTEGER},
+            </if>
+            <if test="rom != null">
+                #{rom,jdbcType=INTEGER},
+            </if>
+            <if test="num != null">
+                #{num,jdbcType=INTEGER},
+            </if>
+            <if test="takeway != null">
+                #{takeway,jdbcType=INTEGER},
+            </if>
+            <if test="isdebug != null">
+                #{isdebug,jdbcType=INTEGER},
+            </if>
+            <if test="debugid != null">
+                #{debugid,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="protype != null">
+                #{protype,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.cart.entity.Cart">
+        update yw_cart
+        <set>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsid != null">
+                goodsid = #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsname != null">
+                goodsname = #{goodsname,jdbcType=VARCHAR},
+            </if>
+            <if test="combotype != null">
+                combotype = #{combotype,jdbcType=INTEGER},
+            </if>
+            <if test="rom != null">
+                rom = #{rom,jdbcType=INTEGER},
+            </if>
+            <if test="num != null">
+                num = #{num,jdbcType=INTEGER},
+            </if>
+            <if test="takeway != null">
+                takeway = #{takeway,jdbcType=INTEGER},
+            </if>
+            <if test="isdebug != null">
+                isdebug = #{isdebug,jdbcType=INTEGER},
+            </if>
+            <if test="debugid != null">
+                debugid = #{debugid,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="protype != null">
+                protype = #{protype,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.cart.entity.Cart">
+    update yw_cart
+    set userid = #{userid,jdbcType=INTEGER},
+      goodsid = #{goodsid,jdbcType=INTEGER},
+      goodsname = #{goodsname,jdbcType=VARCHAR},
+      combotype = #{combotype,jdbcType=INTEGER},
+      rom = #{rom,jdbcType=INTEGER},
+      num = #{num,jdbcType=INTEGER},
+      takeway = #{takeway,jdbcType=INTEGER},
+      isdebug = #{isdebug,jdbcType=INTEGER},
+      debugid = #{debugid,jdbcType=INTEGER},
+      intime = #{intime,jdbcType=TIMESTAMP},
+      protype = #{protype,jdbcType=INTEGER},
+      isdel = #{isdel,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!--累加购物车中的商品数量-->
+    <update id="addSum" parameterType="java.util.Map">
+    UPDATE yw_cart
+    SET num = num + #{sum,jdbcType=INTEGER}
+      WHERE userid = #{userid,jdbcType=INTEGER}
+        AND goodsid = #{goodsid,jdbcType=INTEGER}
+  </update>
+</mapper>
