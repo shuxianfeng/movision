@@ -3,6 +3,16 @@ package com.movision.mybatis.orderoperation.entity;
 import java.util.Date;
 
 public class Orderoperation {
+    private Integer id;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     private String orderoperation;
 
     private Date orderoperationtime;
