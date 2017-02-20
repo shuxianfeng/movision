@@ -432,10 +432,14 @@ public class PostFacade {
             String savedFileName = "";
             String savedVideo = "";
             String savedbannerimgurl = "";
+            String imgurl = "";
+            String voidurl = "";
+            String bannervoidurl = "";
             /*boolean isMultipart = ServletFileUpload.isMultipartContent(request);
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;*/
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if (coverimg != null || !coverimg.isEmpty()) {
+            if (coverimg != null && isMultipart) {
+                if (!coverimg.isEmpty()) {
                     String fileRealName = coverimg.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
                     String fileSuffix = fileRealName.substring(pointIndex);
@@ -453,9 +457,12 @@ public class PostFacade {
                     if (isCreateSuccess) {
                         coverimg.transferTo(savedFile);  //转存文件
                     }
+                }
+                imgurl = imgdomain + savedFileName;
             }
 
-            if (vid != null || !vid.isEmpty()) {
+            if (vid != null && isMultipart) {
+                if (!vid.isEmpty()) {
                     String fileRealName = vid.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
                     String fileSuffix = fileRealName.substring(pointIndex);
@@ -472,10 +479,12 @@ public class PostFacade {
                     if (isCreateSuccess) {
                         vid.transferTo(savedFile);  //转存文件
                     }
-
+                }
+                voidurl = imgdomain + savedVideo;
             }
 
-            if (bannerimgurl != null || !bannerimgurl.isEmpty()) {
+            if (bannerimgurl != null && isMultipart) {
+                if (!bannerimgurl.isEmpty()) {
                     String fileRealName = bannerimgurl.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
                     String fileSuffix = fileRealName.substring(pointIndex);
@@ -492,19 +501,17 @@ public class PostFacade {
                     if (isCreateSuccess) {
                         bannerimgurl.transferTo(savedFile);  //转存文件
                     }
+                }
+                bannervoidurl = imgdomain + savedbannerimgurl;
             }
-
-            String voidurl = imgdomain + savedVideo;
-            String bannervoidurl = imgdomain + savedbannerimgurl;
-            String imgurl = imgdomain + savedFileName;
             post.setCoverimg(imgurl);//添加帖子封面
             post.setIsactive(0);//设置状态为帖子
             post.setPostcontent(postcontent);//帖子内容
             post.setIntime(new Date());//插入时间
-            if (ishot != null) {
+            if (ishot != null || ishot != "") {
                 post.setIshot(Integer.parseInt(ishot));//是否为圈子精选
             }
-            if (!isessence.isEmpty() || isessence != " " || isessence != "null") {
+            if (!isessence.isEmpty() || isessence != null) {
                 post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
                 if (!orderid.isEmpty()) {
                     post.setOrderid(Integer.parseInt(orderid));
@@ -512,8 +519,8 @@ public class PostFacade {
                     post.setOrderid(0);
                 }
                 Date d = null;
-                if (time != null) {
-                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                if (time != null || time != "") {
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
                     d = df.parse(time);
                 } else {
                     d = new Date();
@@ -796,10 +803,13 @@ public class PostFacade {
             String savedFileName = "";
             String savedVideo = "";
             String savedbannerimgurl = "";
+            String imgurl = "";
+            String voidurl = "";
+            String bannervoidurl = "";
             boolean isMultipart = ServletFileUpload.isMultipartContent(request);
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
             if (coverimg != null && isMultipart) {
-                if (!coverimg.isEmpty() || coverimg != null) {
+                if (!coverimg.isEmpty()) {
                     String fileRealName = coverimg.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
                     String fileSuffix = fileRealName.substring(pointIndex);
@@ -817,9 +827,10 @@ public class PostFacade {
                         coverimg.transferTo(savedFile);  //转存文件
                     }
                 }
+                imgurl = imgdomain + savedFileName;
             }
 
-            if (vid != null || !vid.isEmpty()) {
+            if (vid != null && isMultipart) {
                 if (!vid.isEmpty()) {
                     String fileRealName = vid.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
@@ -838,9 +849,10 @@ public class PostFacade {
                         vid.transferTo(savedFile);  //转存文件
                     }
                 }
+                voidurl = imgdomain + savedVideo;
             }
 
-            if (bannerimgurl != null || !bannerimgurl.isEmpty()) {
+            if (bannerimgurl != null && isMultipart) {
                 if (!bannerimgurl.isEmpty()) {
                     String fileRealName = bannerimgurl.getOriginalFilename();
                     int pointIndex = fileRealName.indexOf(".");
@@ -859,9 +871,10 @@ public class PostFacade {
                         bannerimgurl.transferTo(savedFile);  //转存文件
                     }
                 }
+                bannervoidurl = imgdomain + savedbannerimgurl;
             }
-            String voidurl = imgdomain + savedVideo;//拼接视频文件url
-            String bannervoidurl = imgdomain + savedbannerimgurl;//拼接视频图片url
+            //String voidurl = imgdomain + savedVideo;//拼接视频文件url
+            //String bannervoidurl = imgdomain + savedbannerimgurl;//拼接视频图片url
             Video vide = new Video();
             if (id != null) {
                 vide.setPostid(Integer.parseInt(id));
@@ -870,31 +883,31 @@ public class PostFacade {
             vide.setBannerimgurl(bannervoidurl);
             vide.setIntime(new Date());
             Integer in = videoService.updateVideoById(vide);
-            String img = imgdomain + savedFileName;//拼接首页图片url
-            post.setCoverimg(img);//添加帖子封面
+            //String img = imgdomain + savedFileName;//拼接首页图片url
+            post.setCoverimg(imgurl);//添加帖子封面
             post.setIsactive(0);//设置状态为帖子
             post.setPostcontent(postcontent);//帖子内容
-            post.setIntime(new Date());//插入时间
-            if (ishot != null || !ishot.isEmpty()) {
+            if (isessence != null) {
+                post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+            }
+            if (ishot != null) {
                 post.setIshot(Integer.parseInt(ishot));//是否为圈子精选
             }
-            if (isessence != null || !isessence.isEmpty()) {
-                post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
-
-                if (orderid != null || !orderid.isEmpty()) {
-                    post.setOrderid(Integer.parseInt(orderid));
-                }
-                Date d = null;
-                if (time != null || !time.isEmpty()) {
-                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    try {
-                        d = df.parse(time);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    post.setEssencedate(d);
-                }
+            post.setIntime(new Date());
+            if (orderid != null) {
+                post.setOrderid(Integer.parseInt(orderid));
             }
+            Date d = null;
+            if (time != null) {
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    d = df.parse(time);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                post.setEssencedate(d);
+            }
+            post.setEssencedate(d);
             post.setUserid(Integer.parseInt(userid));
             int result = postService.updatePostById(post);//编辑帖子
             map.put("result", result);
