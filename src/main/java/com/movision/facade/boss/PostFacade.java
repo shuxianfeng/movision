@@ -867,15 +867,15 @@ public class PostFacade {
                     }
                 }
             }
-            String voidurl = imgdomain + savedVideo;
-            String bannervoidurl = imgdomain + savedbannerimgurl;
+            String voidurl = imgdomain + savedVideo;//拼接视频文件url
+            String bannervoidurl = imgdomain + savedbannerimgurl;//拼接视频图片url
             Video vide = new Video();
             vide.setPostid(Integer.parseInt(postid));
             vide.setVideourl(voidurl);
             vide.setBannerimgurl(bannervoidurl);
             vide.setIntime(new Date());
             Integer in = videoService.updateVideoById(vide);
-            String img = imgdomain + savedFileName;
+            String img = imgdomain + savedFileName;//拼接首页图片url
             post.setCoverimg(img);//添加帖子封面
             post.setIsactive(0);//设置状态为帖子
             post.setPostcontent(postcontent);//帖子内容

@@ -30,9 +30,11 @@ public class PostCompile {
 
     private String nickname;//发帖人名
 
-    private String coverimg;//图片
+    private String coverimg;//首页图片
 
-    private String vid;//视频地址
+    private String vid;//视频文件
+
+    private String bannerimgurl;//视频图片url
 
     private Integer isessence;//首页加精
 
@@ -41,6 +43,14 @@ public class PostCompile {
     private Integer orderid;//精选排序
 
     private String postcontent;//帖子内容
+
+    public String getBannerimgurl() {
+        return bannerimgurl;
+    }
+
+    public void setBannerimgurl(String bannerimgurl) {
+        this.bannerimgurl = bannerimgurl;
+    }
 
     public String getVid() {
         return vid;

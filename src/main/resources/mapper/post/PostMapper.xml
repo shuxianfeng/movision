@@ -946,10 +946,9 @@
         SELECT p.id,p.title,p.subtitle,p.type,p.circleid,
         (SELECT name FROM yw_circle WHERE id=p.circleid) as circleidCN,
         (SELECT category FROM yw_circle WHERE id=p.circleid)as category,p.ishot,p.userid,
-       (SELECT nickname FROM yw_user WHERE id=p.userid) as nickname,p.coverimg,
-        (SELECT videourl FROM yw_video WHERE postid=#{postid,jdbcType=INTEGER}) AS
-        vid,p.isessence,p.essencedate,p.orderid,p.postcontent FROM
-        yw_post as p WHERE id=#{postid,jdbcType=INTEGER}
+        (SELECT nickname FROM yw_user WHERE id=p.userid) as nickname,p.coverimg,
+        p.isessence,p.essencedate,p.orderid,p.postcontent,v.videourl,v.bannerimgurl
+        FROM yw_post as p LEFT JOIN yw_video as v ON p.id=v.postid WHERE p.id=#{postid,jdbcType=INTEGER}
     </select>
 
 </mapper>
