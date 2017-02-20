@@ -37,11 +37,11 @@ public interface BossOrdersMapper {
 
     List<Province> findAllProvinceName();//查询省名
 
-    List<City> findAllCityName(Integer id);
+    List<City> findAllCityName(Integer id);//查询市名
 
-    List<Area> findAllAreaName(Integer id);
+    List<Area> findAllAreaName(Integer id);//查询区名
 
-    Integer findAllBoss();
+    Integer findAllBoss();//查询所有订单
 
     BossOrders findAllPerInfo(Integer id);//基本信息
 
