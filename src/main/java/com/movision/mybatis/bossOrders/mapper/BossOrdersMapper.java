@@ -49,7 +49,7 @@ public interface BossOrdersMapper {
 
     Invoice findAllInvoiceInfo(Integer id);//发票信息
 
-    List<Address> findAllGetInfo(Integer id);//收货人信息
+    Address findAllGetInfo(Integer id);//收货人信息
 
     int deleteOrder(Integer id);//删除订单
 

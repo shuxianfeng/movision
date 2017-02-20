@@ -486,7 +486,7 @@ SELECT
     <select id="findAllGetInfo" resultType="com.movision.mybatis.address.entity.Address"
             parameterType="java.lang.Integer">
         SELECT a.phone,a.name,u.email,a.province,a.city,a.district,a.street FROM yw_address a LEFT JOIN yw_user u ON
-        u.id=a.userid WHERE a.userid=(SELECT s.userid FROM yw_orders s WHERE s.id=#{id,jdbcType=INTEGER} )
+        u.id=a.userid WHERE a.id=(SELECT s.addressid FROM yw_orders s WHERE s.id=#{id,jdbcType=INTEGER} )
     </select>
     <select id="findAllInvoiceInfo" resultType="com.movision.mybatis.invoice.entity.Invoice"
             parameterType="java.lang.Integer">

@@ -239,7 +239,7 @@ public class OrderFacade {
         Map<String, Object> map = new HashedMap();
         Invoice invoice = bossOrderService.queryOrderInvoiceInfo(id);//查询发票信息
         BossOrders bossOrders = bossOrderService.queryOrderInfo(id);//查询基本信息(包含其他信息)
-        List<Address> bossOrdersGet = bossOrderService.queryOrderGetInfo(id);//查询收货人信息
+        Address bossOrdersGet = bossOrderService.queryOrderGetInfo(id);//查询收货人信息
         List<Goods> goods = bossOrderService.queryOrderGoods(id);//查询商品信息
         Double money = 0.0;//小计
         Double summoney = 0.0;//总价
