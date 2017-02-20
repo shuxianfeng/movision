@@ -2,6 +2,7 @@ package com.movision.facade.Goods;
 
 import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.combo.entity.Combo;
+import com.movision.mybatis.combo.entity.ComboVo;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsDetail;
 import com.movision.mybatis.goods.entity.GoodsImg;
@@ -107,7 +108,13 @@ public class GoodsFacade {
         //查询该商品有无库存
         int storenum = goodsService.queryStore(Integer.parseInt(goodsid));
         if (storenum > 0) {
-            List<Combo> comboList = goodsService.queryCombo(Integer.parseInt(goodsid));
+            List<ComboVo> comboList = goodsService.queryCombo(Integer.parseInt(goodsid));
+            //再查询套餐剩余库存(取套餐中商品库存的最小值)
+            for (int i = 0; i < comboList.size(); i++) {
+                //套餐库存
+                int stork = goodsService.queryComboStork(comboList.get(i).getComboid());
+                comboList.get(i).setStock(stork);
+            }
             map.put("comboList", comboList);
         }
         map.put("storenum", storenum);

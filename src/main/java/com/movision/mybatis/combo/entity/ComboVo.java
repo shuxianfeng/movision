@@ -1,6 +1,11 @@
 package com.movision.mybatis.combo.entity;
 
-public class Combo {
+/**
+ * @Author shuxf
+ * @Date 2017/2/20 19:01
+ */
+public class ComboVo {
+
     private Integer id;
 
     private Integer comboid;
@@ -8,6 +13,10 @@ public class Combo {
     private String comboname;
 
     private Double combodiscountprice;//套餐折后总价
+
+    private String imgurl;//商品小方图
+
+    private Integer stock;//套餐剩余库存
 
     public Integer getId() {
         return id;
@@ -30,7 +39,23 @@ public class Combo {
     }
 
     public void setComboname(String comboname) {
-        this.comboname = comboname == null ? null : comboname.trim();
+        this.comboname = comboname;
+    }
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 
     public Double getCombodiscountprice() {

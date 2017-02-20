@@ -1,6 +1,7 @@
 package com.movision.mybatis.combo.mapper;
 
 import com.movision.mybatis.combo.entity.Combo;
+import com.movision.mybatis.combo.entity.ComboVo;
 
 import java.util.List;
 
@@ -13,7 +14,9 @@ public interface ComboMapper {
 
     Combo selectByPrimaryKey(Integer id);
 
-    List<Combo> queryCombo(int goodsid);
+    List<ComboVo> queryCombo(int goodsid);
+
+    int queryComboStork(int comboid);
 
     int updateByPrimaryKeySelective(Combo record);
 
