@@ -795,9 +795,9 @@
         SELECT id,subtitle,essencedate FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
 
-    <select id="deletePostChoiceness" parameterType="java.lang.Integer">
+    <update id="deletePostChoiceness" parameterType="java.lang.Integer">
         UPDATE yw_post SET isessence=0,essencedate=null,orderid=0 WHERE id=#{postid,jdbcType=INTEGER}
-    </select>
+    </update>
 
 
     <select id="findAllActivefee" resultType="java.lang.Double" parameterType="java.lang.Integer">
@@ -952,7 +952,25 @@
     </select>
 
     <select id="findAllpostSearch" parameterType="java.util.Map" resultType="com.movision.mybatis.post.entity.PostList">
-
+        SELECT * FROM yw_post WHERE 1
+        <if test="title!=null">
+            AND title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="userid!=null">
+            AND userid=#{userid,jdbcType=VARCHAR}
+        </if>
+        <if test="postcontent!=null">
+            AND postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="circleid!=null">
+            AND circleid=#{circleid,jdbcType=VARCHAR}
+        </if>
+        <if test="endtime!=null, begintime!=null">
+            AND intime BETWEEN #{bigentime,jdbcType=VARCHAR} AND #{endtime,jdbcType=VARCHAR}
+        </if>
+        <if test="essencedate!=null">
+            AND essencedate=#{essencedate.jdbcType=VARCHAR}
+        </if>
     </select>
 
 </mapper>

@@ -668,7 +668,7 @@ public class PostFacade {
             p.setId(Integer.parseInt(postid));
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date d = null;
-            if (essencedate != null) {
+            if (essencedate != null || essencedate != "") {
                 try {
                     d = df.parse(essencedate);
                 } catch (ParseException e) {
@@ -677,14 +677,19 @@ public class PostFacade {
             } else {
                 d = new Date();
             }
-            p.setEssencedate(d);//精选日期
+            if (d != null || !d.equals("")) {
+                p.setEssencedate(d);//精选日期
+            }
             p.setOrderid(Integer.parseInt(orderid));
             Integer result = postService.addPostChoiceness(p);
             map.put("result", result);
             return map;
         } else {//取消加精
-            postService.deletePostChoiceness(Integer.parseInt(postid));
-            map.put("result", 2);
+            int i = postService.deletePostChoiceness(Integer.parseInt(postid));
+            if (i == 1) {
+                Integer t = 2;
+                map.put("result", t);
+            }
             return map;
         }
     }
@@ -930,17 +935,25 @@ public class PostFacade {
      * @param circleid
      * @return
      */
-    public List<PostList> postSearch(String title, String circleid, String nickname, String postcontent, String endtime, String begintime, String essencedate, Paging<PostList> pager) {
+    public List<PostList> postSearch(String title, String circleid, String userid, String postcontent, String endtime, String begintime, String essencedate, Paging<PostList> pager) {
             Map<String ,Object> map=new HashedMap();
-        map.put("title", title);//帖子标题
-        map.put("circleid", circleid);//圈子id
-        map.put("nickname", nickname);//发帖人
-        map.put("postcontent", postcontent);//帖子内容
+        if (title != null || !title.equals("")) {
+            map.put("title", title);//帖子标题
+        }
+        if (circleid != null || !circleid.equals("")) {
+            map.put("circleid", circleid);//圈子id
+        }
+        if (userid != null || !userid.equals("")) {
+            map.put("userid", userid);//发帖人
+        }
+        if (postcontent != null || !postcontent.equals("")) {
+            map.put("postcontent", postcontent);//帖子内容
+        }
         Date end = null;
         Date begin = null;
         Date es = null;
-        //开始时间
-        if (endtime != null) {
+        //结束时间
+        if (endtime != null || endtime.isEmpty()) {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 end = df.parse(endtime);
@@ -949,8 +962,8 @@ public class PostFacade {
             }
             map.put("endtime", end);
         }
-        //结束时间
-        if (begintime != null) {
+        //开始时间
+        if (begintime != null || begintime.isEmpty()) {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 begin = df.parse(begintime);
@@ -960,7 +973,7 @@ public class PostFacade {
             map.put("begintime", begin);
         }
         //精选时间
-        if (essencedate != null) {
+        if (essencedate != null || essencedate.isEmpty()) {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 es = df.parse(essencedate);
@@ -969,8 +982,33 @@ public class PostFacade {
             }
             map.put("essencedate", es);
         }
-        return postService.postSearch(map, pager);
-
+        List<PostList> list = postService.postSearch(map, pager);
+        List<PostList> rewardeds = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            PostList postList = new PostList();
+            Integer id = list.get(i).getId();
+            Integer cid = list.get(i).getCircleid();//获取到圈子id
+            String nickname = userService.queryUserByNickname(list.get(i).getUserid());//获取发帖人
+            Integer share = sharesService.querysum(id);//获取分享数
+            Integer rewarded = rewardedService.queryRewardedBySum(id);//获取打赏积分
+            Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举报次数
+            Circle circlename = circleService.queryCircleByName(cid);//获取圈子名称
+            postList.setId(list.get(i).getId());
+            postList.setTitle(list.get(i).getTitle());
+            postList.setNickname(nickname);
+            postList.setCollectsum(list.get(i).getCollectsum());
+            postList.setShare(share);
+            postList.setCommentsum(list.get(i).getCommentsum());
+            postList.setZansum(list.get(i).getZansum());
+            postList.setRewarded(rewarded);
+            postList.setAccusation(accusation);
+            postList.setIshot(list.get(i).getIshot());
+            postList.setCirclename(circlename.getName());//帖子所属圈子
+            postList.setOrderid(list.get(i).getOrderid());//获取排序
+            postList.setEssencedate(list.get(i).getEssencedate());//获取精选日期
+            rewardeds.add(postList);
+        }
+        return rewardeds;
     }
 
 }

@@ -372,7 +372,7 @@ public class PostController {
     @ApiOperation(value = "帖子加精", notes = "用于帖子加精接口", response = Response.class)
     @RequestMapping(value = "/add_post_choiceness", method = RequestMethod.POST)
     public Response addPostChoiceness(@ApiParam(value = "帖子id") @RequestParam String postid,
-                                      @ApiParam(value = "精选日期(默认当前时间)") @RequestParam(required = false) String essencedate,
+                                      @ApiParam(value = "精选日期(加精时填)") @RequestParam(required = false) String essencedate,
                                       @ApiParam(value = "精选排序") @RequestParam String orderid) {
         Response response = new Response();
         Map<String, Integer> result = postFacade.addPostChoiceness(postid, essencedate, orderid);
@@ -481,7 +481,6 @@ public class PostController {
     /**
      * 后台管理-帖子编辑
      * @param request
-     * @param postid
      * @param title
      * @param subtitle
      * @param type
