@@ -951,6 +951,23 @@
         FROM yw_post as p LEFT JOIN yw_video as v ON p.id=v.postid WHERE p.id=#{postid,jdbcType=INTEGER}
     </select>
 
+    <!--   SELECT
+       p.title title,
+       u.nickname nickname,
+       COUNT(c.id) collectsum,
+       COUNT(s.id) share,
+       COUNT(com.id) commentsum,
+       p.zansum zansum,
+       SUM(r.points) rewarded,
+       COUNT(ac.id) accusation,
+       cir.name circlename,
+       p.orderid orderid,
+       p.isessence isessence,
+       p.essencedate essencedate
+       FROM yw_post AS p LEFT JOIN yw_user AS u ON p.userid=u.id LEFT JOIN yw_collection AS c ON p.id=c.postid LEFT JOIN yw_post_share s ON p.id=s.postid
+       LEFT JOIN yw_post_comment com ON p.id=com.postid LEFT JOIN yw_post_rewarded r ON r.postid=p.id LEFT JOIN yw_post_accusation ac ON ac.postid=p.id
+       LEFT JOIN yw_circle cir ON p.circleid=cir.id
+       WHERE 1-->
     <select id="findAllpostSearch" parameterType="java.util.Map" resultType="com.movision.mybatis.post.entity.PostList">
         SELECT * FROM yw_post WHERE 1
         <if test="title!=null">
@@ -969,8 +986,10 @@
             AND intime BETWEEN #{bigentime,jdbcType=VARCHAR} AND #{endtime,jdbcType=VARCHAR}
         </if>
         <if test="essencedate!=null">
-            AND essencedate=#{essencedate.jdbcType=VARCHAR}
+            AND essencedate=#{essencedate.jdbcType=V
+            ARCHAR}
         </if>
+        ORDER BY intime DESC
     </select>
 
 </mapper>

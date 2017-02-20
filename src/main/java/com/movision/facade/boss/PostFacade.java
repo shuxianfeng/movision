@@ -518,20 +518,22 @@ public class PostFacade {
                 post.setIshot(Integer.parseInt(ishot));//是否为圈子精选
             }
             if (!isessence.isEmpty() || isessence != null) {
-                post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
-                if (!orderid.isEmpty()) {
-                    post.setOrderid(Integer.parseInt(orderid));
-                } else {
-                    post.setOrderid(0);
+                if (Integer.parseInt(isessence) != 0) {//判断是否为加精
+                    post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+                    if (!orderid.isEmpty()) {
+                        post.setOrderid(Integer.parseInt(orderid));
+                    } else {
+                        post.setOrderid(0);
+                    }
+                    Date d = null;
+                    if (time != null || time != "") {
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+                        d = df.parse(time);
+                    } else {
+                        d = new Date();
+                    }
+                    post.setEssencedate(d);
                 }
-                Date d = null;
-                if (time != null || time != "") {
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
-                    d = df.parse(time);
-                } else {
-                    d = new Date();
-                }
-                post.setEssencedate(d);
             }
 
             post.setUserid(Integer.parseInt(userid));
@@ -929,31 +931,39 @@ public class PostFacade {
     }
 
 
-    /**
-     * 帖子按条件查询
+    /**帖子按条件查询
+     *
      * @param title
      * @param circleid
+     * @param userid
+     * @param postcontent
+     * @param endtime
+     * @param begintime
+     * @param essencedate
+     * @param pager
      * @return
      */
-    public List<PostList> postSearch(String title, String circleid, String userid, String postcontent, String endtime, String begintime, String essencedate, Paging<PostList> pager) {
+    public List<PostList> postSearch(String title, String circleid,
+                                     String userid, String postcontent, String endtime,
+                                     String begintime, String essencedate, Paging<PostList> pager) {
             Map<String ,Object> map=new HashedMap();
-        if (title != null || !title.equals("")) {
+        if (title != null) {
             map.put("title", title);//帖子标题
-        }
-        if (circleid != null || !circleid.equals("")) {
+            }
+        if (circleid != null) {
             map.put("circleid", circleid);//圈子id
-        }
-        if (userid != null || !userid.equals("")) {
+            }
+        if (userid != null) {
             map.put("userid", userid);//发帖人
-        }
-        if (postcontent != null || !postcontent.equals("")) {
+            }
+        if (postcontent != null) {
             map.put("postcontent", postcontent);//帖子内容
         }
         Date end = null;
         Date begin = null;
         Date es = null;
         //结束时间
-        if (endtime != null || endtime.isEmpty()) {
+        if (endtime != null) {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 end = df.parse(endtime);
@@ -963,7 +973,7 @@ public class PostFacade {
             map.put("endtime", end);
         }
         //开始时间
-        if (begintime != null || begintime.isEmpty()) {
+        if (begintime != null) {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 begin = df.parse(begintime);
@@ -973,7 +983,7 @@ public class PostFacade {
             map.put("begintime", begin);
         }
         //精选时间
-        if (essencedate != null || essencedate.isEmpty()) {
+        if (essencedate != null) {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 es = df.parse(essencedate);
@@ -988,6 +998,7 @@ public class PostFacade {
             PostList postList = new PostList();
             Integer id = list.get(i).getId();
             Integer cid = list.get(i).getCircleid();//获取到圈子id
+            System.out.println(list.get(i).getUserid());
             String nickname = userService.queryUserByNickname(list.get(i).getUserid());//获取发帖人
             Integer share = sharesService.querysum(id);//获取分享数
             Integer rewarded = rewardedService.queryRewardedBySum(id);//获取打赏积分
@@ -1002,7 +1013,7 @@ public class PostFacade {
             postList.setZansum(list.get(i).getZansum());
             postList.setRewarded(rewarded);
             postList.setAccusation(accusation);
-            postList.setIshot(list.get(i).getIshot());
+            postList.setIsessence(list.get(i).getIsessence());
             postList.setCirclename(circlename.getName());//帖子所属圈子
             postList.setOrderid(list.get(i).getOrderid());//获取排序
             postList.setEssencedate(list.get(i).getEssencedate());//获取精选日期

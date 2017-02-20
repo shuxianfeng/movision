@@ -531,10 +531,10 @@ public class PostController {
      * @param circleid
      * @return
      */
-    @ApiOperation(value = "帖子搜索",notes = "帖子搜索",response = Response.class)
+    @ApiOperation(value = "帖子联合条件搜索", notes = "用于精确查找帖子搜索接口", response = Response.class)
     @RequestMapping(value = "/post_search",method = RequestMethod.POST)
-    public Response postSearch(@RequestParam(required = false) String pageNo,
-                               @RequestParam(required = false) String pageSize,
+    public Response postSearch(@ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                               @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize,
                                @ApiParam(value = "帖子标题")@RequestParam(required = false) String title,
                                @ApiParam(value = "圈子id")@RequestParam(required = false) String circleid,
                                @ApiParam(value = "发帖人") @RequestParam(required = false) String nickname,
