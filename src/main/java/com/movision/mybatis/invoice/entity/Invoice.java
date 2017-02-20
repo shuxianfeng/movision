@@ -25,6 +25,16 @@ public class Invoice {
 
     private String province;
 
+    private Integer takeway;
+
+    public Integer getTakeway() {
+        return takeway;
+    }
+
+    public void setTakeway(Integer takeway) {
+        this.takeway = takeway;
+    }
+
     private String city;
     private Integer logisticid;
     private Date intime;
