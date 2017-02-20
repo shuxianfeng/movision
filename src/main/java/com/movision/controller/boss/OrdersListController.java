@@ -325,23 +325,7 @@ public class OrdersListController {
         return response;
     }
 
-    /**
-     * 订单管理--设置未付款
-     *
-     * @param orderid
-     * @return
-     */
-    @ApiOperation(value = "设置未付款", notes = "设置未付款", response = Response.class)
-    @RequestMapping(value = "update_order_paystatue", method = RequestMethod.POST)
-    public Response updateOrderOperation(@ApiParam(value = "订单id") @RequestParam(required = false) Integer orderid) {
-        Response response = new Response();
-        int result = orderFacade.updateOrderOperation(orderid);
-        if (response.getCode() == 200) {
-            response.setMessage("设置成功");
-        }
-        response.setData(result);
-        return response;
-    }
+
     /**
      * 订单管理---编辑费用
      *

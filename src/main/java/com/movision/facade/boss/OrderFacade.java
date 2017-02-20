@@ -269,15 +269,6 @@ public class OrderFacade {
         return map;
     }
 
-    /**
-     * 订单管理--设为未付款
-     *
-     * @param orderid
-     * @return
-     */
-    public int updateOrderOperation(Integer orderid) {
-        return bossOrderService.updateOrderOperation(orderid);
-    }
 
     /**
      * 修改收货地址

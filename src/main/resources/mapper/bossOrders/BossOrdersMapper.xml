@@ -598,10 +598,4 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
             resultType="com.movision.mybatis.orderoperation.entity.Orderoperation">
         SELECT * from yw_orderoperation WHERE orderid=#{id,jdbcType=INTEGER}
     </select>
-
-    <update id="updateOrderOperation" parameterType="java.lang.Integer">
-        UPDATE  yw_orderoperation
-        SET paystatue=1
-        where orderid=#{orderid,jdbcType=INTEGER}
-    </update>
 </mapper>
