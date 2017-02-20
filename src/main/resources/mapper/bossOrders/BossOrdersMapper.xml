@@ -358,8 +358,8 @@
         <if test="name!=null and name!=''">
             AND a.`name` LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
-        <if test="takeway!=null and takeway!=''">
-            AND o.takeway=#{takeway,jdbcType=VARCHAR}
+        <if test="position!=null and position!=''">
+            AND o.position=#{position,jdbcType=INTEGER}
         </if>
          <if test="logisticid!=null and logisticid!=''">
              AND d.logisticsid=#{logisticid,jdbcType=VARCHAR}

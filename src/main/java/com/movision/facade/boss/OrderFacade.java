@@ -89,7 +89,7 @@ public class OrderFacade {
             map.put("status", status);
         }
         if (position != null) {
-            map.put("takeway", position);
+            map.put("position", position);
         }
         if (logisticid != null) {
             map.put("logisticid", logisticid);
