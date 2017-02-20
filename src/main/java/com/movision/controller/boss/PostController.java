@@ -523,15 +523,17 @@ public class PostController {
     }
 
 
-/*
-    *//**
-     * 帖子按条件查询
+    /**
+     * 帖子模糊查询
+     *
+     * @param pageNo
+     * @param pageSize
      * @param title
      * @param circleid
      * @param name
      * @param date
      * @return
-     *//*
+     */
     @ApiOperation(value = "帖子搜索",notes = "帖子搜索",response = Response.class)
     @RequestMapping(value = "/post_search",method = RequestMethod.POST)
     public Response postSearch(@RequestParam(required = false) String pageNo,
@@ -547,7 +549,7 @@ public class PostController {
         }
         response.setData(list);
         return response;
-    }*/
+    }
 
 
 }

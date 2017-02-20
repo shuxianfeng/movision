@@ -538,7 +538,7 @@ public class PostFacade {
             Video vide = new Video();
             vide.setPostid(pid);
             vide.setVideourl(voidurl);
-            vide.setVideourl(bannervoidurl);
+            vide.setBannerimgurl(bannervoidurl);
             vide.setIntime(new Date());
             Integer in = videoService.insertVideoById(vide);//添加视频表
             map.put("result", result);
@@ -872,7 +872,7 @@ public class PostFacade {
             Video vide = new Video();
             vide.setPostid(Integer.parseInt(postid));
             vide.setVideourl(voidurl);
-            vide.setVideourl(bannervoidurl);
+            vide.setBannerimgurl(bannervoidurl);
             vide.setIntime(new Date());
             Integer in = videoService.updateVideoById(vide);
             String img = imgdomain + savedFileName;
