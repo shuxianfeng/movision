@@ -121,7 +121,7 @@ public class PostFacade {
                 postList.setZansum(list.get(i).getZansum());
                 postList.setRewarded(rewarded);
                 postList.setAccusation(accusation);
-            postList.setIshot(list.get(i).getIshot());
+            postList.setIsessence(list.get(i).getIsessence());
             postList.setCirclename(circlename.getName());//帖子所属圈子
             postList.setOrderid(list.get(i).getOrderid());//获取排序
             postList.setEssencedate(list.get(i).getEssencedate());//获取精选日期
