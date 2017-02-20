@@ -18,6 +18,16 @@ public class Address {
 
     private String street;
 
+    private Integer takeway;
+
+    public Integer getTakeway() {
+        return takeway;
+    }
+
+    public void setTakeway(Integer takeway) {
+        this.takeway = takeway;
+    }
+
     private Integer isdefault;
 
     private Date updatetime;
