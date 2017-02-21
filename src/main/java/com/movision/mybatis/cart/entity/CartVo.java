@@ -52,6 +52,8 @@ public class CartVo {
 
     private Double comboprice;//套餐折后价
 
+    private Integer online;//商品在线状态 0 上架 1 下架
+
     public Integer getId() {
         return id;
     }
@@ -218,5 +220,13 @@ public class CartVo {
 
     public void setRentDateList(List<Rentdate> rentDateList) {
         this.rentDateList = rentDateList;
+    }
+
+    public Integer getOnline() {
+        return online;
+    }
+
+    public void setOnline(Integer online) {
+        this.online = online;
     }
 }
