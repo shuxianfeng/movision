@@ -16,4 +16,6 @@ public interface CollectionMapper {
     int updateByPrimaryKey(Collection record);
 
     int collectionPost(Collection collection);
+
+    void addCollectionSum(int postid);
 }

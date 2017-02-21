@@ -22,7 +22,8 @@ public class CollectionFacade {
         collection.setUserid(Integer.parseInt(userid));
         collection.setPostid(Integer.parseInt(postid));
         collection.setType(Integer.parseInt(type));
-
+        //该帖子的被收藏次数+1
+        collectionService.addCollectionSum(Integer.parseInt(postid));
         return collectionService.collectionPost(collection);
     }
 

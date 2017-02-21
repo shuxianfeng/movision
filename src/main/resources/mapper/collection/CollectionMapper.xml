@@ -102,4 +102,11 @@
       type = #{type,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <!--被收藏的帖子被收藏数+1-->
+    <update id="addCollectionSum" parameterType="java.lang.Integer">
+        UPDATE yw_post
+        SET collectsum = collectsum + 1
+        WHERE id = #{postid,jdbcType=INTEGER}
+    </update>
 </mapper>

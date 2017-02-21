@@ -25,7 +25,7 @@ public class AppCollectionController {
     @RequestMapping(value = "collectionPost", method = RequestMethod.POST)
     public Response collectionPost(@ApiParam(value = "当前浏览的帖子id") @RequestParam String postid,
                                    @ApiParam(value = "当前登录的用户id") @RequestParam String userid,
-                                   @ApiParam(value = "打赏类型：0 帖子 1 商品") @RequestParam String type) {
+                                   @ApiParam(value = "收藏类型：0 帖子 1 商品") @RequestParam String type) {
         Response response = new Response();
 
         int count = collectionFacade.collectionPost(postid, userid, type);

@@ -31,8 +31,16 @@ public class CollectionService {
 
             log.error("用户访问帖子内容时收藏帖子失败");
             throw e;
-
         }
+    }
 
+    public void addCollectionSum(int postid) {
+        try {
+            log.info("被收藏的帖子收藏数+1");
+            collectionMapper.addCollectionSum(postid);
+        } catch (Exception e) {
+            log.error("被收藏的帖子收藏数+1失败");
+            throw e;
+        }
     }
 }
