@@ -395,12 +395,27 @@ public class CircleService {
      *
      * @return
      */
-    public List<Circle> addDiscoverList() {
+    public List<Circle> queryDiscoverList() {
         try {
             log.info("查询发现页排序");
-            return circleMapper.addDiscoverList();
+            return circleMapper.queryDiscoverList();
         } catch (Exception e) {
             log.error("查询发现页排序异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 圈子推荐发现页
+     *
+     * @return
+     */
+    public int updateDiscover(Map<String, Integer> map) {
+        try {
+            log.info("圈子推荐到发现页");
+            return circleMapper.updateDiscover(map);
+        } catch (Exception e) {
+            log.error("圈子推荐到发现页异常");
             throw e;
         }
     }
