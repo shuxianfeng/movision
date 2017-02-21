@@ -947,7 +947,7 @@ public class PostFacade {
      */
     public List<PostList> postSearch(String title, String circleid,
                                      String nickname, String postcontent, String endtime,
-                                     String begintime, String essencedate, Paging<PostList> pager) {
+                                     String begintime, String pai, String essencedate, Paging<PostList> pager) {
         PostSpread postSpread = new PostSpread();
         if (title != null) {
             postSpread.setTitle(title);//帖子标题
@@ -983,6 +983,9 @@ public class PostFacade {
                 e.printStackTrace();
             }
             postSpread.setBegintime(begin);
+        }
+        if (pai != null) {
+            postSpread.setPai(Integer.parseInt(pai));
         }
         //精选时间
         if (essencedate != null) {

@@ -1003,7 +1003,12 @@
         <if test="essencedate!=null">
             AND essencedate=#{essencedate,jdbcType=DATE}
         </if>
-        ORDER BY intime DESC
+        <if test="pai==0">
+            ORDER BY intime DESC
+        </if>
+        <if test="pai==1">
+            ORDER BY totalpoint DESC
+        </if>
     </select>
 
 </mapper>

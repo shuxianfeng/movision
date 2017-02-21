@@ -14,6 +14,15 @@ public class PostSpread {
     private Date endtime;//结束时间
     private Date begintime;//开始时间
     private Date essencedate;//加精时间
+    private Integer pai;//排序
+
+    public Integer getPai() {
+        return pai;
+    }
+
+    public void setPai(Integer pai) {
+        this.pai = pai;
+    }
 
     public String getTitle() {
         return title;
