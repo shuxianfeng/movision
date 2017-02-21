@@ -142,7 +142,7 @@
                 /rest/** = anon
                 /app/** = anon
                 /boss/login = anon
-                /boss/** = authc
+                /boss/** = anon
                 /logout = logout
                 /swagger/** = anon
 

@@ -1,5 +1,6 @@
 package com.movision.mybatis.combo.mapper;
 
+import com.movision.mybatis.cart.entity.CartVo;
 import com.movision.mybatis.combo.entity.Combo;
 import com.movision.mybatis.combo.entity.ComboVo;
 
@@ -15,6 +16,8 @@ public interface ComboMapper {
     Combo selectByPrimaryKey(Integer id);
 
     List<ComboVo> queryCombo(int goodsid);
+
+    CartVo queryNamePrice(int comboid);
 
     int queryComboStork(int comboid);
 

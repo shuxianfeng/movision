@@ -1,7 +1,9 @@
 package com.movision.facade.cart;
 
+import com.movision.mybatis.cart.entity.CartVo;
 import com.movision.mybatis.cart.service.CartService;
 import com.movision.mybatis.rentdate.entity.Rentdate;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ public class CartFacade {
     @Autowired
     private CartService cartService;
 
+    //商品加入购物车
     public int addGoodsCart(String userid, String goodsid, String comboid, String isdebug, String sum, String type, String rentdate) throws ParseException {
 
         int flag = 0;
@@ -27,7 +30,9 @@ public class CartFacade {
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("userid", Integer.parseInt(userid));
         parammap.put("goodsid", Integer.parseInt(goodsid));
-        parammap.put("comboid", Integer.parseInt(comboid));
+        if (!StringUtils.isEmpty(comboid)) {
+            parammap.put("comboid", Integer.parseInt(comboid));
+        }
         parammap.put("isdebug", Integer.parseInt(isdebug));
         parammap.put("sum", Integer.parseInt(sum));
         parammap.put("intime", new Date());
@@ -71,5 +76,29 @@ public class CartFacade {
 
 
         return flag;
+    }
+
+    //查询用户的购物车中所有商品
+    public List<CartVo> queryCartByUser(String userid) {
+
+        //一次查询所有商品（不分页且全部为自营商品）
+        List<CartVo> cartList = cartService.queryCartByUser(Integer.parseInt(userid));
+
+        //遍历购物车所有商品，当套餐id不为空时，需要查询套餐名称和套餐折后价，set到list中的对象里
+        for (int i = 0; i < cartList.size(); i++) {
+            if (cartList.get(i).getCombotype() != null) {
+                //查询套餐名称和套餐折后价
+                CartVo vo = cartService.queryNamePrice(cartList.get(i).getCombotype());
+                cartList.get(i).setComboname(vo.getComboname());
+                cartList.get(i).setComboprice(vo.getComboprice());
+            }
+            if (cartList.get(i).getType() == 0) {
+                //如果是租赁的商品，需要将商品的租赁日期列表取出
+                List<Rentdate> rentdateList = cartService.queryRentDateList(cartList.get(i).getId());
+                cartList.get(i).setRentDateList(rentdateList);
+            }
+        }
+
+        return cartList;
     }
 }
