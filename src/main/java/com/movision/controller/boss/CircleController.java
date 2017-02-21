@@ -74,13 +74,31 @@ public class CircleController {
      */
     @ApiOperation(value = "查询发现页排序", notes = "用于查询圈子可推荐到发现页的排序接口", response = Response.class)
     @RequestMapping(value = "add_discover_list", method = RequestMethod.POST)
-    public Response addDiscoverList() {
+    public Response queryDiscoverList() {
         Response response = new Response();
-        Map<String, List> map = circleFacade.addDiscoverList();
+        Map<String, List> map = circleFacade.queryDiscoverList();
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
         response.setData(map);
+        return response;
+    }
+
+    /**
+     * 后台管理-修改圈子发现页排序
+     *
+     * @return
+     */
+    @ApiOperation(value = "圈子推荐到发现页", notes = "用于把圈子推荐到发现页排序的接口", response = Response.class)
+    @RequestMapping(value = "update_circle_orderid", method = RequestMethod.POST)
+    public Response updateDiscover(@ApiParam(value = "圈子id") @RequestParam String circleid,
+                                   @ApiParam(value = "排序id") @RequestParam String orderid) {
+        Response response = new Response();
+        circleFacade.updateDiscover(circleid, orderid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData("");
         return response;
     }
 

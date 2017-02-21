@@ -154,8 +154,8 @@ public class CircleFacade {
      *
      * @return
      */
-    public Map<String, List> addDiscoverList() {
-        List<Circle> list = circleService.addDiscoverList();
+    public Map<String, List> queryDiscoverList() {
+        List<Circle> list = circleService.queryDiscoverList();
         List<Integer> tem = new ArrayList<>();
         Map<String, List> map = new HashedMap();
         for (int i = 1; i < 10; i++) {
@@ -169,6 +169,22 @@ public class CircleFacade {
             }
         }
         map.put("resault", tem);
+        return map;
+    }
+
+    /**
+     * 圈子推荐到发现页排序
+     *
+     * @param circleid
+     * @return
+     */
+    public Map<String, Integer> updateDiscover(String circleid, String orderid) {
+        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> spread = new HashedMap();
+        spread.put("circleid", Integer.parseInt(circleid));
+        spread.put("orderid", Integer.parseInt(orderid));
+        Integer i = circleService.updateDiscover(spread);
+        map.put("resault", i);
         return map;
     }
 

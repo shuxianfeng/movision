@@ -34,6 +34,12 @@
           )
     </select>
 
+    <!--根据套餐id查询套餐名称和套餐折后价-->
+    <select id="queryNamePrice" parameterType="java.lang.Integer" resultType="com.movision.mybatis.cart.entity.CartVo">
+        SELECT comboname AS comboname, combodiscountprice AS comboprice
+        FROM yw_combo WHERE comboid = #{comboid,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_combo
     where id = #{id,jdbcType=INTEGER}

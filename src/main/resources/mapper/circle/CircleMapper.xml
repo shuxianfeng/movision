@@ -414,7 +414,11 @@
         WHERE category=#{categoryid,jdbcType=INTEGER}
     </select>
 
-    <select id="addDiscoverList" resultType="com.movision.mybatis.circle.entity.Circle">
+    <select id="queryDiscoverList" resultType="com.movision.mybatis.circle.entity.Circle">
         SELECT orderid FROM yw_circle WHERE 1 GROUP BY orderid
     </select>
+
+    <update id="updateDiscover" parameterType="java.util.Map">
+        UPDATE yw_circle SET orderid=3,isrecommend=1 WHERE id=#{circleid,jdbcType=INTEGER}
+    </update>
 </mapper>
