@@ -293,8 +293,11 @@ public class PostFacade {
      * @param pager
      * @return
      */
-    public List<CommentVo> queryPostByCommentParticulars(String commentid, Paging<CommentVo> pager) {
-        List<CommentVo> list = commentService.queryPostByCommentParticulars(Integer.parseInt(commentid), pager);
+    public List<CommentVo> queryPostByCommentParticulars(String commentid, String postid, Paging<CommentVo> pager) {
+        Map<String, Integer> map = new HashedMap();
+        map.put("commentid", Integer.parseInt(commentid));
+        map.put("postid", Integer.parseInt(postid));
+        List<CommentVo> list = commentService.queryPostByCommentParticulars(map, pager);
         return list;
     }
 

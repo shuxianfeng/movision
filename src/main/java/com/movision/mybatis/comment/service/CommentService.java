@@ -41,14 +41,13 @@ public class CommentService {
     /**
      * 查询评论详情
      *
-     * @param postid
      * @param pager
      * @return
      */
-    public List<CommentVo> queryPostByCommentParticulars(Integer ommentid, Paging<CommentVo> pager) {
+    public List<CommentVo> queryPostByCommentParticulars(Map<String, Integer> map, Paging<CommentVo> pager) {
         try {
             log.info("查询评论详情");
-            return commentMapper.findAllQueryPostByCommentParticulars(ommentid, pager.getRowBounds());
+            return commentMapper.findAllQueryPostByCommentParticulars(map, pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询评论详情异常");
             throw e;

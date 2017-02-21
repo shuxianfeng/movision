@@ -144,13 +144,13 @@
     WHERE id=#{id,jdbcType=INTEGER}
   </update>
 
-  <select id="findAllQueryPostByCommentParticulars" parameterType="java.lang.Integer"
+  <select id="findAllQueryPostByCommentParticulars" parameterType="java.util.Map"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.*,u.phone,u.photo,u.nickname
     FROM yw_post_comment c
     LEFT JOIN yw_user u
     ON c.userid=u.id
-    WHERE c.postid= 1 AND isdel=0 AND c.pid=#{commentid,jdbcType=INTEGER}
+    WHERE c.postid= #{postid,jdbcType=INTEGER} AND isdel=0 AND c.pid=#{commentid,jdbcType=INTEGER}
     ORDER BY c.intime DESC
   </select>
 </mapper>

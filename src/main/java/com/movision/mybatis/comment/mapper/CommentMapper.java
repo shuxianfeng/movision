@@ -5,6 +5,7 @@ import com.movision.mybatis.comment.entity.CommentVo;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CommentMapper {
     int deleteByPrimaryKey(Integer id);
@@ -21,7 +22,7 @@ public interface CommentMapper {
 
     List<CommentVo> findAllqueryCommentsByLsit(Integer postid, RowBounds rowBounds);
 
-    List<CommentVo> findAllQueryPostByCommentParticulars(Integer ommentid, RowBounds rowBounds);
+    List<CommentVo> findAllQueryPostByCommentParticulars(Map<String, Integer> map, RowBounds rowBounds);
 
     CommentVo queryChildrenComment(int id);
 

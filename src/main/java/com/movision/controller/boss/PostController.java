@@ -173,11 +173,12 @@ public class PostController {
     @ApiOperation(value = "查询帖子评论详情", notes = "用于查询帖子评论详情接口", response = Response.class)
     @RequestMapping(value = "/query_post_comment_particulars", method = RequestMethod.POST)
     public Response queryPostByCommentParticulars(@ApiParam(value = "评论id") @RequestParam String commentid,
+                                                  @ApiParam(value = "帖子id") @RequestParam String postid,
                                                   @RequestParam(required = false, defaultValue = "1") String pageNo,
                                                   @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<CommentVo> pager = new Paging<CommentVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<CommentVo> list = postFacade.queryPostByCommentParticulars(commentid, pager);
+        List<CommentVo> list = postFacade.queryPostByCommentParticulars(commentid, postid, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
