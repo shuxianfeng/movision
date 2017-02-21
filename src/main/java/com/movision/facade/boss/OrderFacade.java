@@ -387,9 +387,18 @@ public class OrderFacade {
      * @param id
      * @return
      */
-    public Address queryOrderByAddress(Integer id) {
-        Address address = bossOrderService.queryOrdersByAddress(id);
-        return address;
+    public Map<String, Object> queryOrderByAddress(Integer id) {
+        Map<String, Object> map = new HashedMap();
+        List<Province> province = null;
+        Address address = null;
+        if (id == null) {
+            province = bossOrderService.queryPostProvinceName();
+        } else {
+            address = bossOrderService.queryOrdersByAddress(id);
+        }
+        map.put("proname", province);
+        map.put("address", address);
+        return map;
     }
 }
 
