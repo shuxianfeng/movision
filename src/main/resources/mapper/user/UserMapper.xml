@@ -67,7 +67,13 @@
 
     <!--查询个人主页中的个人信息-->
     <select id="queryUserInfo" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.UserVo">
-        SELECT t.photo, t.level, t.nickname, t.sign FROM yw_user t WHERE t.id = #{userid,jdbcType=INTEGER}
+        SELECT t.photo, t.level, t.nickname, t.sign,(
+        SELECT sum(collectsum) FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER}
+        ) AS becollectsum,
+        (
+        SELECT sum(forwardsum) FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER}
+        ) AS besharesum
+        FROM yw_user t WHERE t.id = #{userid,jdbcType=INTEGER}
     </select>
 
     <!--查询圈子的所属圈主-->
