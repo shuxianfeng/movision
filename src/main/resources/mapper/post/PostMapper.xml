@@ -778,8 +778,8 @@
 
     <update id="addPostChoiceness" parameterType="com.movision.mybatis.post.entity.Post">
         UPDATE yw_post SET
-        <if test="essencedate!=null">
-            essencedate=#{essencedate,jdbcType=DATE},
+        <if test="essencedate != null">
+            essencedate = #{essencedate,jdbcType=DATE},
         </if>
         <if test="subtitle!=null">
             subtitle=#{subtitle,jdbcType=VARCHAR},

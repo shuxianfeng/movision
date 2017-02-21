@@ -663,12 +663,12 @@ public class PostFacade {
      * @param postid
      * @return
      */
-    public Map<String, Integer> addPostChoiceness(String postid, String essencedate, String subtitle, String orderid) {
+    public Map<String, Integer> addPostChoiceness(String postid, String subtitle, String essencedate, String orderid) {
         Map<String, Integer> map = new HashedMap();
         Post p = new Post();
         if (Integer.parseInt(orderid) != 0 || orderid != null) {//加精动作
             p.setId(Integer.parseInt(postid));
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             Date d = null;
             if (essencedate != null) {
                 try {
