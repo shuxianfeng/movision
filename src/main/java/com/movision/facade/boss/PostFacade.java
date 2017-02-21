@@ -949,7 +949,7 @@ public class PostFacade {
      * @return
      */
     public List<PostList> postSearch(String title, String circleid,
-                                     String nickname, String postcontent, String endtime,
+                                     String userid, String postcontent, String endtime,
                                      String begintime, String pai, String essencedate, Paging<PostList> pager) {
         PostSpread postSpread = new PostSpread();
         if (title != null) {
@@ -958,8 +958,8 @@ public class PostFacade {
         if (circleid != null) {
             postSpread.setCircleid(Integer.parseInt(circleid));//圈子id
             }
-        if (nickname != null) {
-            postSpread.setNickname(nickname);//发帖人
+        if (userid != null) {
+            postSpread.setUserid(Integer.parseInt(userid));//发帖人id
             }
         if (postcontent != null) {
             postSpread.setPostcontent(postcontent);//帖子内容
