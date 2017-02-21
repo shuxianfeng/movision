@@ -20,7 +20,6 @@ public class OrRolesAuthorizationFilter extends AuthorizationFilter {
 	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws IOException {
         //获取当前对象
         Subject subject = getSubject(request, response);
-
         //获取角色数组
         String[] rolesArray = (String[]) mappedValue;
 

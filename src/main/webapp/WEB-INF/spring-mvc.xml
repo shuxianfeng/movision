@@ -164,8 +164,8 @@
 
     <mvc:interceptors>
         <!--<bean class="com.movisionaop.TimeoutInterceptor"/>-->
-        <bean class="com.movision.aop.InitLogonMemberInterceptor"/>
-        <bean class="com.movision.aop.UserAccessInterceptor"/>
+        <bean class="com.movision.aop.InitLoginMemberInterceptor"/>
+        <!--<bean class="com.movision.aop.UserAccessInterceptor"/>-->
     </mvc:interceptors>
 
 

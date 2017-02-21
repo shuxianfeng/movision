@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.google.gson.Gson;
+import com.movision.common.constant.SessionConstant;
 import com.movision.common.constant.UserConstants;
 import com.movision.facade.user.BossUserFacade;
 import com.movision.facade.user.UserFacade;
@@ -35,42 +36,15 @@ public class ShiroRealm extends AuthorizingRealm {
     private UserFacade userFacade;
 
     /**
-     * 表示根据用户身份获取授权信息
-     */
-    @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-
-        //  获取当前登录对象
-        Subject subject = SecurityUtils.getSubject();
-        ShiroUser member = (ShiroUser) subject.getSession(false).getAttribute("appuser");
-        if (null != member) {
-            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-
-            String status = String.valueOf(member.getStatus());
-            if (StringUtils.isEmpty(status) || UserConstants.USER_STATUS.disable.toString().equals(status)) {
-                return null;
-            }
-            //获取用户的角色
-            LoginUser loginUser = userFacade.getLoginUserByPhone(member.getPhone());
-            String role = loginUser.getRole();
-            log.debug("当前登录对象的角色,role=" + role);
-            info.addRole(role);
-
-            return info;
-        }
-        return null;
-    }
-
-    /**
      * 表示获取身份验证信息
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        log.info("登录认证");
+        log.info("APP登录认证");
         String loginPhone = (String) token.getPrincipal();
         // 1 获取当前登录的用户信息
         LoginUser loginUser = userFacade.getLoginUserByPhone(loginPhone);
-        log.debug("当前登录的用户信息，LoginUser = " + loginUser.toString());
+        log.debug("当前登录APP的用户信息，LoginUser = " + loginUser.toString());
 
         if (loginUser != null) {
             if (1 == loginUser.getStatus()) {
@@ -106,6 +80,36 @@ public class ShiroRealm extends AuthorizingRealm {
     }
 
     /**
+     * 表示根据用户身份获取授权信息
+     */
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        log.info("清除App用户授权信息缓存");
+        this.clearCachedAuthorizationInfo(principals);
+        //  获取当前登录对象
+        Subject subject = SecurityUtils.getSubject();
+        ShiroUser member = (ShiroUser) subject.getSession(false).getAttribute(SessionConstant.APP_USER);
+        if (null != member) {
+
+            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+
+            String status = String.valueOf(member.getStatus());
+            if (StringUtils.isEmpty(status) || UserConstants.USER_STATUS.disable.toString().equals(status)) {
+                return null;
+            }
+            //获取用户的角色
+            LoginUser loginUser = userFacade.getLoginUserByPhone(member.getPhone());
+            String role = loginUser.getRole();
+            log.debug("当前登录对象的角色,role=" + role);
+            info.addRole(role);
+
+            return info;
+        }
+        return null;
+    }
+
+
+    /**
      * 更新用户授权信息缓存.
      */
     public void clearCachedAuthorizationInfo(Object principal) {
@@ -123,14 +127,14 @@ public class ShiroRealm extends AuthorizingRealm {
     /**
      * 清除所有用户授权信息缓存.
      */
-    public void clearAllCachedAuthorizationInfo() {
+    /*public void clearAllCachedAuthorizationInfo() {
         Cache<Object, AuthorizationInfo> cache = getAuthorizationCache();
         if (cache != null) {
             for (Object key : cache.keys()) {
                 cache.remove(key);
             }
         }
-    }
+    }*/
 
     /**
      * 自定义Authentication对象，使得Subject除了携带用户的登录名外还可以携带更多信息.
@@ -169,8 +173,6 @@ public class ShiroRealm extends AuthorizingRealm {
 
             return token;
         }
-
-
 
         public void setId(int id) {
             this.id = id;
@@ -272,7 +274,21 @@ public class ShiroRealm extends AuthorizingRealm {
             return false;
         }
 
-
+        @Override
+        public String toString() {
+            return "ShiroUser{" +
+                    "id=" + id +
+                    ", account='" + account + '\'' +
+                    ", status=" + status +
+                    ", role='" + role + '\'' +
+                    ", registerTime=" + registerTime +
+                    ", photo='" + photo + '\'' +
+                    ", nickname='" + nickname + '\'' +
+                    ", level=" + level +
+                    ", phone='" + phone + '\'' +
+                    ", token='" + token + '\'' +
+                    '}';
+        }
     }
 
 }

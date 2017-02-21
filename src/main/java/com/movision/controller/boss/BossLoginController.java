@@ -1,12 +1,13 @@
 package com.movision.controller.boss;
 
 import com.movision.common.Response;
+import com.movision.common.constant.SessionConstant;
+import com.movision.common.util.ShiroUtil;
 import com.movision.facade.user.BossUserFacade;
+import com.movision.facade.user.MenuFacade;
 import com.movision.mybatis.bossUser.entity.BossUser;
-import com.movision.security.EncodeUtil;
 import com.movision.shiro.realm.BossRealm;
 import com.movision.utils.JsonUtils;
-import com.movision.utils.MD5Util;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
@@ -24,9 +25,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhuangyuhao
@@ -40,11 +42,13 @@ public class BossLoginController {
     @Autowired
     private BossUserFacade bossUserFacade;
 
+    @Autowired
+    private MenuFacade menuFacade;
+
     @RequestMapping(value = "/boss/login", method = RequestMethod.POST)
     @ApiOperation(value = "运营登录", notes = "运营登录", response = Response.class)
     public Response login(@ApiParam(value = "用户名") @RequestParam String username,
-                          @ApiParam(value = "密码") @RequestParam String password,
-                          HttpServletRequest req) throws IOException {
+                          @ApiParam(value = "密码") @RequestParam String password) throws IOException {
         log.info("boss login post 登录校验");
         Response jsonResult = new Response();
         Subject currentUser = SecurityUtils.getSubject();
@@ -70,9 +74,9 @@ public class BossLoginController {
         if (currentUser.isAuthenticated()) {
             Session session = currentUser.getSession();
             BossUser record = new BossUser();
-            //当前shiro对象中的用户
-            BossUser bossUser = (BossUser) currentUser.getPrincipal();
-            record.setId(bossUser.getId());
+            //当前principle
+            BossRealm.ShiroBossUser shiroBossUser = (BossRealm.ShiroBossUser) currentUser.getPrincipal();
+            record.setId(shiroBossUser.getId());
             //更新Boss用户信息
             if (bossUserFacade.updateLoginInfo(record)) {
                 log.info("更新Boss用户登录信息成功");
@@ -81,7 +85,13 @@ public class BossLoginController {
             }
 
             //session中存入当前用户信息
-            session.setAttribute("bossuser", currentUser.getPrincipal());
+            session.setAttribute(SessionConstant.BOSS_USER, currentUser.getPrincipal());
+            session.removeAttribute(SessionConstant.APP_USER);
+
+            //session中存入该用户所属的角色所对应的菜单信息
+            List<Map<String, Object>> menuList = menuFacade.getAuthroizeMenu(shiroBossUser.getRole());
+            session.setAttribute(SessionConstant.ACCESS_MENU, menuList);
+
             System.out.println("boss 用户[" + username + "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
         } else {
             token.clear();
@@ -96,6 +106,14 @@ public class BossLoginController {
         Response jsonResult = new Response();
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+
+    @ApiOperation(value = "测试获取当前登录人信息", notes = "测试获取当前登录人信息", response = Response.class)
+    @RequestMapping(value = "/boss/test/test_query_current_login_user", method = RequestMethod.GET)
+    public Response testQueryCurrentLoginUser() {
+        Response response = new Response();
+        response.setData(ShiroUtil.getBossUser());
+        return response;
     }
 
 }

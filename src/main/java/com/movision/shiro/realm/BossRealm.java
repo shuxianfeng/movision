@@ -1,5 +1,6 @@
 package com.movision.shiro.realm;
 
+import com.movision.common.constant.SessionConstant;
 import com.movision.common.constant.UserConstants;
 import com.movision.facade.user.BossUserFacade;
 import com.movision.facade.user.UserRoleRelationFacade;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -26,40 +28,10 @@ import java.io.Serializable;
  */
 public class BossRealm extends AuthorizingRealm {
     private static final Logger log = LoggerFactory.getLogger(BossRealm.class);
-
     @Autowired
     private UserRoleRelationFacade userRoleRelationFacade;
-
     @Autowired
     private BossUserFacade bossUserFacade;
-
-    /**
-     * 授权查询回调函数, 进行鉴权， 当缓存中无用户的授权信息时调用.
-     */
-    @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(
-            PrincipalCollection principals) {
-        //  获取当前登录对象
-        Subject subject = SecurityUtils.getSubject();
-        BossUser bossUser = (BossUser) subject.getSession(false).getAttribute("bossuser");
-        if (null != bossUser) {
-            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-            // 判断状态 ，账号状态: 0 正常 1 冻结
-            String status = String.valueOf(bossUser.getStatus());
-            if (StringUtils.isEmpty(status) || UserConstants.USER_STATUS.disable.toString().equals(status)) {
-                return null;
-            }
-
-            // 获取用户的角色
-            int roleid = userRoleRelationFacade.getRoleidByUserid(bossUser.getId());
-            log.debug("当前用户的角色：role=" + roleid);
-            // 添加用户角色到授权信息
-            info.addRole(String.valueOf(roleid));
-
-            return info;
-        }
-        return null;
-    }
 
     /**
      * 认证回调函数,登录时调用.
@@ -73,17 +45,59 @@ public class BossRealm extends AuthorizingRealm {
         if (bossUser != null) {
             log.info("该用户存在");
         }  else{
-            throw new UnknownAccountException();    //  用户名不存在
+            //  用户名不存在
+            throw new UnknownAccountException();
         }
+        // 获取用户的角色
+        int roleid = userRoleRelationFacade.getRoleidByUserid(bossUser.getId());
 
-        // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
-        return new SimpleAuthenticationInfo(
-                bossUser, // 用户实体
+        //封装自定义principle对象
+        ShiroBossUser shiroBossUser = new ShiroBossUser(bossUser.getId(), bossUser.getName(), bossUser.getPhone(), bossUser.getUsername(),
+                bossUser.getPassword(), bossUser.getIssuper(), bossUser.getStatus(), bossUser.getIsdel(), bossUser.getCreatetime(),
+                bossUser.getAfterlogintime(), bossUser.getBeforelogintime(), roleid);
+
+        AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
+                shiroBossUser, // 自定义principle对象
                 bossUser.getPassword(), // 密码，这里密码是加密的
                 getName() // realm name
         );
 
+        // 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
+        return authenticationInfo;
+
     }
+
+    /**
+     * 授权，只有成功通过doGetAuthenticationInfo方法的认证后才会执行。
+     * 查询回调函数, 进行鉴权， 当缓存中无用户的授权信息时调用，否则从缓存中调用
+     */
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(
+            PrincipalCollection principals) {
+
+        this.clearCachedAuthorizationInfo(principals);
+        log.info("清除Boss用户授权信息缓存");
+        //  获取当前登录principle
+        Subject subject = SecurityUtils.getSubject();
+        ShiroBossUser shiroBossUser = (ShiroBossUser) subject.getSession(false).getAttribute(SessionConstant.BOSS_USER);
+        if (null != shiroBossUser) {
+            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+            // 判断账号状态 : 0 正常 1 冻结
+            String status = String.valueOf(shiroBossUser.getStatus());
+            if (StringUtils.isEmpty(status) || UserConstants.USER_STATUS.disable.toString().equals(status)) {
+                log.error("账号状态异常");
+                return null;
+            }
+            int roleid = shiroBossUser.getRole();
+            log.debug("当前用户的角色 ：role=" + roleid);
+            // 添加用户角色到授权信息
+            info.addRole(String.valueOf(roleid));
+            return info;
+        }
+        return null;
+    }
+
+
 
 
     /**
@@ -95,39 +109,173 @@ public class BossRealm extends AuthorizingRealm {
         clearCachedAuthorizationInfo(principals);
     }
 
+    // 登陆成功后强制加载shiro权限缓存 避免懒加载 先清除
+    public void forceShiroToReloadUserAuthorityCache() {
+        this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipal());
+        // this.isPermitted(SecurityUtils.getSubject().getPrincipals(),
+        // "强制加载缓存，避免懒加载" + System.currentTimeMillis());
+    }
+
 
     /**
      * 自定义Authentication对象，使得Subject除了携带用户的登录名外还可以携带更多信息.
      */
-    /*public static class ShiroOmsUser implements Serializable {
+    public static class ShiroBossUser implements Serializable {
         private static final long serialVersionUID = -1373760761780840081L;
         private Integer id;
-        private String account;
-
-        public ShiroOmsUser(Integer id, String account) {
-            this.id = id;
-            this.account = account;
-        }
-
-        public String getAccount() {
-            return account;
-        }
-
-        public void setAccount(String account) {
-            this.account = account;
-        }
-
-		public Integer getId() {
-            return id;
-        }
+        private String name;
+        private String phone;
+        private String username;
+        private String password;
+        private Integer issuper;
+        private Integer status;
+        private Integer isdel;
+        private Date createtime;
+        private Date afterlogintime;
+        private Date beforelogintime;
+        //对应的角色
+        private Integer role;
 
         public void setId(Integer id) {
             this.id = id;
         }
 
-        *//**
-         * 重载equals,只计算id+account;
-     *//*
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public void setIssuper(Integer issuper) {
+            this.issuper = issuper;
+        }
+
+        public void setStatus(Integer status) {
+            this.status = status;
+        }
+
+        public void setIsdel(Integer isdel) {
+            this.isdel = isdel;
+        }
+
+        public void setCreatetime(Date createtime) {
+            this.createtime = createtime;
+        }
+
+        public void setAfterlogintime(Date afterlogintime) {
+            this.afterlogintime = afterlogintime;
+        }
+
+        public void setBeforelogintime(Date beforelogintime) {
+            this.beforelogintime = beforelogintime;
+        }
+
+        public void setRole(Integer role) {
+            this.role = role;
+        }
+
+        public static long getSerialVersionUID() {
+
+            return serialVersionUID;
+        }
+
+        public Integer getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getPhone() {
+            return phone;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public Integer getIssuper() {
+            return issuper;
+        }
+
+        public Integer getStatus() {
+            return status;
+        }
+
+        public Integer getIsdel() {
+            return isdel;
+        }
+
+        public Date getCreatetime() {
+            return createtime;
+        }
+
+        public Date getAfterlogintime() {
+            return afterlogintime;
+        }
+
+        public Date getBeforelogintime() {
+            return beforelogintime;
+        }
+
+        public Integer getRole() {
+            return role;
+        }
+
+        public ShiroBossUser(Integer id, String name, String phone, String username, String password, Integer issuper, Integer status, Integer isdel, Date createtime, Date afterlogintime, Date beforelogintime, Integer role) {
+            this.id = id;
+            this.name = name;
+            this.phone = phone;
+            this.username = username;
+            this.password = password;
+            this.issuper = issuper;
+            this.status = status;
+            this.isdel = isdel;
+            this.createtime = createtime;
+            this.afterlogintime = afterlogintime;
+            this.beforelogintime = beforelogintime;
+            this.role = role;
+        }
+
+        @Override
+        public String toString() {
+            return "ShiroBossUser{" +
+                    "id=" + id +
+                    ", name='" + name + '\'' +
+                    ", phone='" + phone + '\'' +
+                    ", username='" + username + '\'' +
+                    ", password='" + password + '\'' +
+                    ", issuper=" + issuper +
+                    ", status=" + status +
+                    ", isdel=" + isdel +
+                    ", createtime=" + createtime +
+                    ", afterlogintime=" + afterlogintime +
+                    ", beforelogintime=" + beforelogintime +
+                    ", role=" + role +
+                    '}';
+        }
+
+        /**
+         * 根据手机号+id 判断是否是同一个boss用户
+         *
+         * @param obj
+         * @return
+         */
         @Override
         public boolean equals(Object obj) {
             if (this == obj)
@@ -136,16 +284,16 @@ public class BossRealm extends AuthorizingRealm {
                 return false;
             if (getClass() != obj.getClass())
                 return false;
-            ShiroOmsUser other = (ShiroOmsUser) obj;
+            ShiroBossUser other = (ShiroBossUser) obj;
 
-            if (id == null || account == null) {
+            if (id == null || phone == null) {
                 return false;
             } else if (id.equals(other.id)
-                    && account.equals(other.account))
+                    && phone.equals(other.phone))
                 return true;
             return false;
         }
 
-    }*/
+    }
 
 }

@@ -28,8 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 public class AspectLog {
     private static final Logger log = LoggerFactory.getLogger(AspectLog.class);
 
-
-
     ThreadLocal<Long> time = new ThreadLocal<Long>();
 
     @Around("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
@@ -42,7 +40,7 @@ public class AspectLog {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (null != session) {
-            ShiroUser principal = (ShiroUser) session.getAttribute("member");
+            ShiroUser principal = (ShiroUser) session.getAttribute("appuser");
             if (null != principal) {
                 memberId = principal.getId();
             }

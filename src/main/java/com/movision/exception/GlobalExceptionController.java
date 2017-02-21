@@ -2,10 +2,12 @@ package com.movision.exception;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.movision.facade.boss.BossLoginFacade;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.movision.common.Response;
 import com.movision.utils.JsonUtils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/rest/exception")
 //@Api(value="HttpRequestExceptionHandler", description="400,403,404,405,500异常返回json数据")
 public class GlobalExceptionController {
+
+    @Autowired
+    private BossLoginFacade bossLoginFacade;
 
     /**
      * 页面请求400错误
@@ -42,12 +47,7 @@ public class GlobalExceptionController {
     @RequestMapping(value = "/error_401", produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "请求401错误", response = Response.class, notes = "401错误", httpMethod = "GET")
     public void error_401(HttpServletResponse response) throws Exception {
-        Response result = new Response();
-        result.setCode(401);
-        result.setMessage("请求无权限！");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.setContentType("application/json;charset=utf-8");
-        response.getWriter().write(JsonUtils.getJsonStringFromObj(result));
+        bossLoginFacade.handleNoPermission(response);
     }
 
     /**

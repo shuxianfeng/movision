@@ -33,7 +33,9 @@
 
     <!--  session失效时间： (12h)43200000 | (6h)21600000 | *(3h)10800000* | (10m)600000-->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <!-- session的失效时长，单位毫秒 -->
         <property name="globalSessionTimeout" value="10800000"/>
+        <!-- 删除失效的session -->
         <property name="deleteInvalidSessions" value="true"/>
         <property name="sessionValidationSchedulerEnabled" value="true"/>
         <property name="sessionDAO" ref="redisSessionDAO"/>
@@ -71,7 +73,9 @@
                 <ref bean="omsRealm"/>
             </list>
         </property>
+        <!-- 注入session管理器 -->
         <property name="sessionManager" ref="sessionManager"/>
+        <!-- 注入缓存管理器 -->
         <property name="cacheManager" ref="cacheManager"/>
     </bean>
 
@@ -100,8 +104,11 @@
     <!-- 基于Form表单的身份验证过滤器 -->
     <bean id="formAuthenticationFilter"
           class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter">
+        <!-- 表单中账号的input名称,默认为username -->
         <property name="usernameParam" value="username"/>
+        <!-- 表单中密码的input名称,默认为password -->
         <property name="passwordParam" value="password"/>
+        <!-- 记住我input的名称,默认为rememberMe -->
         <property name="rememberMeParam" value="rememberMe"/>
         <property name="loginUrl" value="/auth/login.html"/>
     </bean>
@@ -111,32 +118,31 @@
     <bean id="orPermissionsAuthorizationFilter"
           class="com.movision.shiro.filter.OrPermissionsAuthorizationFilter">
     </bean>
-    <!-- shiro定义 -->
+    <!-- web.xml中shiro的filter对应的bean -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!-- 管理器，必须设置 -->
         <property name="securityManager" ref="securityManager"/>
+        <!-- 拦截到，跳转到的地址,通过此地址去认证 -->
         <property name="loginUrl" value="/rest/exception/error_401"/>
+        <!-- 认证成功统一跳转到/admin/index.do，建议不配置，shiro认证成功自动到上一个请求路径 -->
         <property name="successUrl" value="/index.html"/>
+        <!-- 自定义filter，可用来更改默认的表单名称配置 -->
         <property name="filters">
             <util:map>
                 <!--需要登录-->
                 <entry key="authc" value-ref="formAuthenticationFilter"/>
-
-                <entry key="orroles" value-ref="orRolesAuthorizationFilter"/>
+                <!--<entry key="orroles" value-ref="orRolesAuthorizationFilter"/>-->
                 <!--<entry key="orperms" value-ref="orPermissionsAuthorizationFilter"/>-->
             </util:map>
         </property>
         <property name="filterChainDefinitions">
             <value>
                 <!--url = orroles[role]
-                role:角色 1：Boss管理员 2：Boss普通用户 3:App管理员 4:App普通用户-->
-
+                role:对应角色表中的角色   .100:App管理员  200:App普通用户-->
                 /rest/** = anon
-                <!--/app/circle/** = orroles["3"]
-                /app/index/** = orroles["4"]-->
                 /app/** = anon
-                <!--/boss/menu/** = authc,orroles["1"]
-                /boss/role/** = authc,orroles["2"]-->
-                /boss/** = anon
+                /boss/login = anon
+                /boss/** = authc
                 /logout = logout
                 /swagger/** = anon
 

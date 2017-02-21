@@ -1,11 +1,13 @@
 package com.movision.mybatis.bossMenu.entity;
 
 
+import java.io.Serializable;
+
 /**
  * @Author zhuangyuhao
  * @Date 2017/2/13 16:22
  */
-public class AuthMenu {
+public class AuthMenu implements Serializable {
     private Integer id;
     private String menuname;
 
@@ -17,6 +19,17 @@ public class AuthMenu {
 
     private String remark;
     private Boolean isAuthroize;
+
+    private String url;
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUrl() {
+
+        return url;
+    }
 
     public void setId(Integer id) {
         this.id = id;
@@ -85,6 +98,7 @@ public class AuthMenu {
                 ", isdel=" + isdel +
                 ", remark='" + remark + '\'' +
                 ", isAuthroize=" + isAuthroize +
+                ", url='" + url + '\'' +
                 '}';
     }
 }

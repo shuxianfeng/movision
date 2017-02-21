@@ -87,6 +87,11 @@ public class MenuFacade {
     }
 
 
+    /**
+     * 获取所有菜单
+     *
+     * @return
+     */
     public List<Map<String, Object>> getAllMenu() {
         List<AuthMenu> allParentMenuList = menuService.getAllParentMenu();
         List<AuthMenu> allChildrenMenuList = menuService.getAllChildrenMenu();

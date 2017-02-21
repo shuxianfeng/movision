@@ -4,11 +4,16 @@ import com.google.gson.Gson;
 import com.movision.common.Response;
 import com.movision.common.constant.Constants;
 import com.movision.common.constant.MsgCodeConstant;
+import com.movision.common.constant.SessionConstant;
+import com.movision.common.util.ShiroUtil;
+import com.movision.controller.boss.BossAuthenticationController;
 import com.movision.facade.user.AppRegisterFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
+import com.movision.shiro.realm.BossRealm;
+import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
 import com.movision.utils.MsgPropertiesUtils;
 import com.movision.utils.VerifyCodeUtils;
@@ -32,9 +37,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author zhuangyuhao
@@ -51,6 +54,7 @@ public class AppLoginController {
 
     @Autowired
     private UserFacade userFacade;
+
 
     /**
      * 手机注册账号时发送的验证码
@@ -155,7 +159,9 @@ public class AppLoginController {
                     if (currentUser.isAuthenticated()) {
                         //5 验证通过则在session中缓存登录用户信息
                         Session session = currentUser.getSession();
-                        session.setAttribute("appuser", currentUser.getPrincipal());
+                        session.setAttribute(SessionConstant.APP_USER, currentUser.getPrincipal());
+                        session.removeAttribute(SessionConstant.BOSS_USER);
+
                     } else {
                         token.clear();
                     }
@@ -167,7 +173,45 @@ public class AppLoginController {
             throw e;
         }
         return response;
+    }
 
+    @ApiOperation(value = "判断app用户是否已经登录", notes = "判断app用户是否已经登录", response = Response.class)
+    @RequestMapping(value = "/authc", method = RequestMethod.GET)
+    public Response isLogin() throws IOException {
+        Subject subject = SecurityUtils.getSubject();
+        Session session = subject.getSession(false);
+        Response response = new Response();
+        response.setCode(200);
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        if (null == session) {
+            response.setMsgCode(0);
+            response.setMessage("you are rejected!");
+            map.put("authorized", false);
+        } else {
+            ShiroRealm.ShiroUser appuser = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
+            if (null == appuser) {
+                response.setMsgCode(0);
+                response.setMessage("you are rejected!");
+                map.put("authorized", false);
+            } else {
+                response.setMsgCode(1);
+                response.setMessage("welcome you!");
+                map.put("authorized", true);
+                map.put("user", appuser);
+            }
+        }
+        response.setData(map);
+        log.debug("/app/login/authc is called,msgcode=[" + response.getMsgCode() + "],Message=[" + response.getMessage() + "].");
+        return response;
+    }
+
+    @ApiOperation(value = "testGetAppUserInfo", notes = "testGetAppUserInfo", response = Response.class)
+    @RequestMapping(value = {"/testGetAppUserInfo"}, method = RequestMethod.POST)
+    public Response testGetAppUserInfo() {
+        Response response = new Response();
+        response.setData(ShiroUtil.getAppUser());
+        return response;
     }
 
     private void shiroLogin(@ApiParam(value = "手机号") @RequestParam String phone, Response response, Subject currentUser, UsernamePasswordToken token) {

@@ -1,6 +1,7 @@
 package com.movision.controller.boss;
 
 import com.movision.common.Response;
+import com.movision.common.constant.SessionConstant;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.security.resubmit.TokenHelper;
 import com.movision.shiro.realm.BossRealm;
@@ -43,7 +44,7 @@ public class BossAuthenticationController {
             response.setMessage("you are rejected!");
             map.put("authorized", false);
         } else {
-            BossUser bossUser = (BossUser) session.getAttribute("bossuser");
+            BossRealm.ShiroBossUser bossUser = (BossRealm.ShiroBossUser) session.getAttribute(SessionConstant.BOSS_USER);
             if (null == bossUser) {
                 response.setMsgCode(0);
                 response.setMessage("you are rejected!");
@@ -63,7 +64,6 @@ public class BossAuthenticationController {
 
         log.debug("/rest/boss/authc is called,msgcode=[" + response.getMsgCode() + "],Message=[" + response.getMessage() + "].");
         return response;
-
     }
 
 

@@ -122,12 +122,4 @@ public class MenuController {
     }
 
 
-    /*@ApiOperation(value = "测试获取当前登录人信息", notes = "测试获取当前登录人信息", response = Response.class)
-    @RequestMapping(value = "test_query_current_login_user", method = RequestMethod.GET)
-    public Response testQueryCurrentLoginUser() {
-        Response response = new Response();
-        response.setData(ShiroUtil.getBossUserID());
-        return response;
-    }*/
-
 }

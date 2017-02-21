@@ -77,7 +77,9 @@
 
     <filter-mapping>
         <filter-name>shiroFilter</filter-name>
+        <!-- Filter负责拦截的URL 全部以/的请求,如果<url-pattern>/*.action </>,将会以拦截*.action的请求-->
         <url-pattern>/*</url-pattern>
+        <!--过滤器将会作用于直接从客户端发过来的以/*…开始的请求-->
         <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
 
