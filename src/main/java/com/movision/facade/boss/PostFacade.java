@@ -938,7 +938,6 @@ public class PostFacade {
      *
      * @param title
      * @param circleid
-     * @param userid
      * @param postcontent
      * @param endtime
      * @param begintime
@@ -947,7 +946,7 @@ public class PostFacade {
      * @return
      */
     public List<PostList> postSearch(String title, String circleid,
-                                     String userid, String postcontent, String endtime,
+                                     String nickname, String postcontent, String endtime,
                                      String begintime, String essencedate, Paging<PostList> pager) {
         PostSpread postSpread = new PostSpread();
         if (title != null) {
@@ -956,8 +955,8 @@ public class PostFacade {
         if (circleid != null) {
             postSpread.setCircleid(Integer.parseInt(circleid));//圈子id
             }
-        if (userid != null) {
-            postSpread.setUserid(Integer.parseInt(userid));//发帖人
+        if (nickname != null) {
+            postSpread.setNickname(nickname);//发帖人
             }
         if (postcontent != null) {
             postSpread.setPostcontent(postcontent);//帖子内容
@@ -1002,14 +1001,14 @@ public class PostFacade {
             Integer id = list.get(i).getId();
             Integer cid = list.get(i).getCircleid();//获取到圈子id
             System.out.println(list.get(i).getUserid());
-            String nickname = userService.queryUserByNickname(list.get(i).getUserid());//获取发帖人
+            String name = userService.queryUserByNickname(list.get(i).getUserid());//获取发帖人
             Integer share = sharesService.querysum(id);//获取分享数
             Integer rewarded = rewardedService.queryRewardedBySum(id);//获取打赏积分
             Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举报次数
             Circle circlename = circleService.queryCircleByName(cid);//获取圈子名称
             postList.setId(list.get(i).getId());
             postList.setTitle(list.get(i).getTitle());
-            postList.setNickname(nickname);
+            postList.setNickname(name);
             postList.setCollectsum(list.get(i).getCollectsum());
             postList.setShare(share);
             postList.setCommentsum(list.get(i).getCommentsum());

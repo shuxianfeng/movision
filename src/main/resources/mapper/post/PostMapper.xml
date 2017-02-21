@@ -988,8 +988,8 @@
         <if test="title!=null">
             AND title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
         </if>
-        <if test="userid!=null">
-            AND userid=#{userid,jdbcType=INTEGER}
+        <if test="nickname!=null">
+            AND userid IN (SELECT id FROM yw_user WHERE nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%'))
         </if>
         <if test="postcontent!=null">
             AND postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
