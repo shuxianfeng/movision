@@ -777,7 +777,16 @@
     </select>
 
     <update id="addPostChoiceness" parameterType="com.movision.mybatis.post.entity.Post">
-        UPDATE yw_post SET isessence=1,essencedate=#{essencedate,jdbcType=DATE},orderid=#{orderid,jdbcType=INTEGER}
+        UPDATE yw_post SET isessence=1
+        <if test="essencedate!=null">
+            ,essencedate=#{essencedate,jdbcType=DATE},
+        </if>
+        <if test="subtitle!=null">
+            ,subtitle=#{subtitle,jdbcType=VARCHAR},
+        </if>
+        <if test="orderid!=null">
+            ,orderid=#{orderid,jdbcType=INTEGER},
+        </if>
         WHERE id=#{id,jdbcType=INTEGER} AND isessence=0
     </update>
     <select id="findAllPerson" resultType="java.lang.Integer" parameterType="java.lang.Integer">
@@ -785,14 +794,18 @@
     </select>
 
 
-    <select id="queryPostChoicenesslist" resultType="com.movision.mybatis.post.entity.Post">
-        SELECT orderid,essencedate FROM yw_post WHERE date(essencedate) = curdate() AND orderid BETWEEN 1 AND 5 GROUP BY
-        orderid
+    <select id="queryPostChoicenesslist" resultType="com.movision.mybatis.post.entity.Post"
+            parameterType="java.util.Date">
+        SELECT orderid,essencedate FROM yw_post WHERE essencedate=#{essencedate,jdbcType=DATE} AND isessence=1 GROUP BY orderid
+    </select>
+
+    <select id="queryPostIsessence" resultType="com.movision.mybatis.post.entity.Post">
+        SELECT orderid FROM yw_post WHERE DATE(intime)=CURDATE() AND isessence=1 GROUP BY orderid DESC
     </select>
 
     <select id="queryPostChoiceness" resultType="com.movision.mybatis.post.entity.PostChoiceness"
             parameterType="java.lang.Integer">
-        SELECT id,subtitle,essencedate FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
+        SELECT id,subtitle,essencedate,orderid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
 
     <update id="deletePostChoiceness" parameterType="java.lang.Integer">

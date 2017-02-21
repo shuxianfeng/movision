@@ -372,10 +372,11 @@ public class PostController {
     @ApiOperation(value = "帖子加精", notes = "用于帖子加精接口", response = Response.class)
     @RequestMapping(value = "/add_post_choiceness", method = RequestMethod.POST)
     public Response addPostChoiceness(@ApiParam(value = "帖子id") @RequestParam String postid,
+                                      @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,
                                       @ApiParam(value = "精选日期(加精时填)") @RequestParam(required = false) String essencedate,
                                       @ApiParam(value = "精选排序") @RequestParam String orderid) {
         Response response = new Response();
-        Map<String, Integer> result = postFacade.addPostChoiceness(postid, essencedate, orderid);
+        Map<String, Integer> result = postFacade.addPostChoiceness(postid, subtitle, essencedate, orderid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -383,11 +384,19 @@ public class PostController {
         return response;
     }
 
+
+    /**
+     * 帖子加精数据回显
+     *
+     * @param postid
+     * @return
+     */
     @ApiOperation(value = "帖子加精数据回显", notes = "用于帖子加精时，数据回填接口", response = Response.class)
     @RequestMapping(value = "/query_post_choiceness", method = RequestMethod.POST)
-    public Response queryPostChoiceness(@ApiParam(value = "帖子id") @RequestParam String postid) {
+    public Response queryPostChoiceness(@ApiParam(value = "精选日期") @RequestParam String essencedate,
+                                        @ApiParam(value = "帖子id") @RequestParam String postid) {
         Response response = new Response();
-        PostChoiceness list = postFacade.queryPostChoiceness(postid);
+        PostChoiceness list = postFacade.queryPostChoiceness(postid, essencedate);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

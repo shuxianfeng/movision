@@ -487,12 +487,27 @@ public class PostService {
      *
      * @return
      */
-    public List<Post> queryPostChoicenesslist() {
+    public List<Post> queryPostChoicenesslist(Date essencedate) {
         try {
             log.info("查询当日帖子加精排序列表");
-            return postMapper.queryPostChoicenesslist();
+            return postMapper.queryPostChoicenesslist(essencedate);
         } catch (Exception e) {
             log.error("查询当日帖子加精排序列表异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询今日加精
+     *
+     * @return
+     */
+    public List<Post> queryPostIsessence() {
+        try {
+            log.info("添加编辑时查询今日可加精排序");
+            return postMapper.queryPostIsessence();
+        } catch (Exception e) {
+            log.error("添加编辑时查询今日可加精排序异常");
             throw e;
         }
     }

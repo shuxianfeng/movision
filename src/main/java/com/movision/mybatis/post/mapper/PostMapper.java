@@ -7,6 +7,7 @@ import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import org.apache.ibatis.session.RowBounds;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -97,7 +98,9 @@ public interface PostMapper {
 
     int addPostChoiceness(Post postid);
 
-    List<Post> queryPostChoicenesslist();
+    List<Post> queryPostChoicenesslist(Date essencedate);
+
+    List<Post> queryPostIsessence();
 
     PostChoiceness queryPostChoiceness(Integer postid);
 

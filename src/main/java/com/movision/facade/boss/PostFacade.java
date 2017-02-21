@@ -663,14 +663,14 @@ public class PostFacade {
      * @param postid
      * @return
      */
-    public Map<String, Integer> addPostChoiceness(String postid, String essencedate, String orderid) {
+    public Map<String, Integer> addPostChoiceness(String postid, String essencedate, String subtitle, String orderid) {
         Map<String, Integer> map = new HashedMap();
         Post p = new Post();
-        if (Integer.parseInt(orderid) != 0) {//加精动作
+        if (Integer.parseInt(orderid) != 0 || orderid != null) {//加精动作
             p.setId(Integer.parseInt(postid));
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date d = null;
-            if (essencedate != null || essencedate != "") {
+            if (essencedate != null) {
                 try {
                     d = df.parse(essencedate);
                 } catch (ParseException e) {
@@ -679,10 +679,11 @@ public class PostFacade {
             } else {
                 d = new Date();
             }
-            if (d != null || !d.equals("")) {
+            if (d != null) {
                 p.setEssencedate(d);//精选日期
             }
             p.setOrderid(Integer.parseInt(orderid));
+            p.setSubtitle(subtitle);
             Integer result = postService.addPostChoiceness(p);
             map.put("result", result);
             return map;
@@ -696,36 +697,38 @@ public class PostFacade {
         }
     }
 
+
     /**
      * 查询加精排序
      *
      * @return
      */
-    public PostChoiceness queryPostChoiceness(String postid) {
-        Map<String, Object> map = new HashedMap();
+    public PostChoiceness queryPostChoiceness(String postid, String essencedate) {
+        Map<String, List> map = new HashedMap();
         PostChoiceness postChoiceness = new PostChoiceness();
-        List<Post> posts = postService.queryPostChoicenesslist();//返回当天有几条加精
-        if (posts.size() <= 5) {//判断当天是否还可以加精
-            List<Integer> lou = new ArrayList();
-            for (int e = 1; e < 6; e++) {//赋值一个的集合，用于返回排序
-                lou.add(e);
-            }
-            for (int i = 0; i < posts.size(); i++) {
-                for (int j = 0; j < lou.size(); j++) {
-                    if (posts.get(i).getOrderid() == lou.get(j)) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date esdate = null;
+        try {
+            esdate = format.parse(essencedate);
+        } catch (ParseException e) {
+            log.error("时间格式转换异常", e);
+        }
+        List<Post> posts = postService.queryPostChoicenesslist(esdate);//返回加精日期内有几条加精
+        postChoiceness = postService.queryPostChoiceness(Integer.parseInt(postid));
+        List<Integer> lou = new ArrayList();
+        for (int e = 1; e < 6; e++) {//赋值一个的集合，用于返回排序
+            lou.add(e);
+        }
+        for (int i = 0; i < posts.size(); i++) {
+            for (int j = 0; j < lou.size(); j++) {
+                if (posts.get(i).getOrderid() == lou.get(j)) {
+                    if (lou.get(j) != postChoiceness.getOrderid())
                         lou.remove(j);
+                }
                     }
                 }
-            }
-            map.put("result", lou);
-            /*return map;*/
-        } else {
-            Integer ty = 0;
-            map.put("result", ty);
-            /*return map;//当天加精已达上限*/
-        }
-        postChoiceness = postService.queryPostChoiceness(Integer.parseInt(postid));
-        postChoiceness.setOrderid(map);
+        map.put("result", lou);
+        postChoiceness.setOrderids(map);
         return postChoiceness;
     }
 

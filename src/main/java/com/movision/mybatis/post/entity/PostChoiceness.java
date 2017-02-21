@@ -17,7 +17,9 @@ public class PostChoiceness {
 
     private Date essencedate;//精选日期
 
-    private Map<String, Object> orderid;//精选排序
+    private Integer orderid;//精选排序
+
+    private Map<String, List> orderids;//精选排序集合
 
     public Integer getId() {
         return id;
@@ -43,11 +45,19 @@ public class PostChoiceness {
         this.essencedate = essencedate;
     }
 
-    public Map<String, Object> getOrderid() {
+    public Integer getOrderid() {
         return orderid;
     }
 
-    public void setOrderid(Map<String, Object> orderid) {
+    public void setOrderid(Integer orderid) {
         this.orderid = orderid;
+    }
+
+    public Map<String, List> getOrderids() {
+        return orderids;
+    }
+
+    public void setOrderids(Map<String, List> orderids) {
+        this.orderids = orderids;
     }
 }
