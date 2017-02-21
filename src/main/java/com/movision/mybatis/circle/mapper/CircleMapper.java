@@ -79,4 +79,6 @@ public interface CircleMapper {
 
     Integer updateDiscover(Map<String, Integer> map);
 
+    Integer updateCircleIndex(Integer circleid);
+
 }

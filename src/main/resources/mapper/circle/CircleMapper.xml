@@ -419,6 +419,10 @@
     </select>
 
     <update id="updateDiscover" parameterType="java.util.Map">
-        UPDATE yw_circle SET orderid=3,isrecommend=1 WHERE id=#{circleid,jdbcType=INTEGER}
+        UPDATE yw_circle SET orderid=#{orderid,jdbcType=INTEGER},isrecommend=1 WHERE id=#{circleid,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateCircleIndex" parameterType="java.lang.Integer">
+        UPDATE yw_circle SET isdiscover=1 WHERE id={circleid,jdbcType=INTEGER}
     </update>
 </mapper>

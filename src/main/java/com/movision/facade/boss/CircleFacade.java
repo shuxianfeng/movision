@@ -173,7 +173,7 @@ public class CircleFacade {
     }
 
     /**
-     * 圈子推荐到发现页排序
+     * 圈子推荐到发现页
      *
      * @param circleid
      * @return
@@ -185,6 +185,13 @@ public class CircleFacade {
         spread.put("orderid", Integer.parseInt(orderid));
         Integer i = circleService.updateDiscover(spread);
         map.put("resault", i);
+        return map;
+    }
+
+    public Map<String, Integer> updateCircleIndex(String circleid) {
+        Map<String, Integer> map = new HashedMap();
+        Integer l = circleService.updateCircleIndex(Integer.parseInt(circleid));
+        map.put("resault", l);
         return map;
     }
 

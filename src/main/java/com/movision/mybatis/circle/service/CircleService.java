@@ -420,4 +420,20 @@ public class CircleService {
         }
     }
 
+    /**
+     * 圈子推荐到首页
+     *
+     * @param circleid
+     * @return
+     */
+    public int updateCircleIndex(Integer circleid) {
+        try {
+            log.info("圈子推荐到首页");
+            return circleMapper.updateCircleIndex(circleid);
+        } catch (Exception e) {
+            log.error("圈子推荐到首页异常");
+            throw e;
+        }
+    }
+
 }

@@ -94,11 +94,21 @@ public class CircleController {
     public Response updateDiscover(@ApiParam(value = "圈子id") @RequestParam String circleid,
                                    @ApiParam(value = "排序id") @RequestParam String orderid) {
         Response response = new Response();
-        circleFacade.updateDiscover(circleid, orderid);
+        Map<String, Integer> map = circleFacade.updateDiscover(circleid, orderid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData("");
+        response.setData(map);
+        return response;
+    }
+
+    public Response updateCircleIndex(@ApiParam(value = "圈子id") @RequestParam String circleid) {
+        Response response = new Response();
+        Map<String, Integer> map = circleFacade.updateCircleIndex(circleid);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
         return response;
     }
 
