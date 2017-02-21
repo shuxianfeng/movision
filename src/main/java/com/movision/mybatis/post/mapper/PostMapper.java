@@ -119,5 +119,5 @@ public interface PostMapper {
 
     Integer updateByPrimaryKeySelectiveById(Post post);
 
-    List findAllpostSearch(Map map, RowBounds rowBounds);
+    List<PostList> findAllpostSearch(PostSpread spread, RowBounds rowBounds);
 }

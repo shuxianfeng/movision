@@ -548,8 +548,8 @@ public class PostController {
                                @ApiParam(value = "圈子id")@RequestParam(required = false) String circleid,
                                @ApiParam(value = "发帖人") @RequestParam(required = false) String nickname,
                                @ApiParam(value = "帖子内容") @RequestParam(required = false) String postcontent,
-                               @ApiParam(value = "开始时间") @RequestParam(required = false) String endtime,
-                               @ApiParam(value = "结束时间") @RequestParam(required = false) String begintime,
+                               @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,
+                               @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
                                @ApiParam(value = "精选日期") @RequestParam(required = false) String essencedate) {
         Response response=new Response();
         Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));

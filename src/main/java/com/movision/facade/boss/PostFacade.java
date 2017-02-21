@@ -949,18 +949,18 @@ public class PostFacade {
     public List<PostList> postSearch(String title, String circleid,
                                      String userid, String postcontent, String endtime,
                                      String begintime, String essencedate, Paging<PostList> pager) {
-            Map<String ,Object> map=new HashedMap();
+        PostSpread postSpread = new PostSpread();
         if (title != null) {
-            map.put("title", title);//帖子标题
+            postSpread.setTitle(title);//帖子标题
             }
         if (circleid != null) {
-            map.put("circleid", circleid);//圈子id
+            postSpread.setCircleid(Integer.parseInt(circleid));//圈子id
             }
         if (userid != null) {
-            map.put("userid", userid);//发帖人
+            postSpread.setUserid(Integer.parseInt(userid));//发帖人
             }
         if (postcontent != null) {
-            map.put("postcontent", postcontent);//帖子内容
+            postSpread.setPostcontent(postcontent);//帖子内容
         }
         Date end = null;
         Date begin = null;
@@ -973,7 +973,7 @@ public class PostFacade {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            map.put("endtime", end);
+            postSpread.setEndtime(end);
         }
         //开始时间
         if (begintime != null) {
@@ -983,19 +983,19 @@ public class PostFacade {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            map.put("begintime", begin);
+            postSpread.setBegintime(begin);
         }
         //精选时间
         if (essencedate != null) {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 es = df.parse(essencedate);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            map.put("essencedate", es);
+            postSpread.setEssencedate(es);
         }
-        List<PostList> list = postService.postSearch(map, pager);
+        List<PostList> list = postService.postSearch(postSpread, pager);
         List<PostList> rewardeds = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             PostList postList = new PostList();

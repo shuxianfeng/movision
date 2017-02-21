@@ -777,16 +777,17 @@
     </select>
 
     <update id="addPostChoiceness" parameterType="com.movision.mybatis.post.entity.Post">
-        UPDATE yw_post SET isessence=1
+        UPDATE yw_post SET
         <if test="essencedate!=null">
-            ,essencedate=#{essencedate,jdbcType=DATE},
+            essencedate=#{essencedate,jdbcType=DATE},
         </if>
         <if test="subtitle!=null">
-            ,subtitle=#{subtitle,jdbcType=VARCHAR},
+            subtitle=#{subtitle,jdbcType=VARCHAR},
         </if>
         <if test="orderid!=null">
-            ,orderid=#{orderid,jdbcType=INTEGER},
+            orderid=#{orderid,jdbcType=INTEGER},
         </if>
+        isessence=1
         WHERE id=#{id,jdbcType=INTEGER} AND isessence=0
     </update>
     <select id="findAllPerson" resultType="java.lang.Integer" parameterType="java.lang.Integer">
@@ -981,13 +982,14 @@
        LEFT JOIN yw_post_comment com ON p.id=com.postid LEFT JOIN yw_post_rewarded r ON r.postid=p.id LEFT JOIN yw_post_accusation ac ON ac.postid=p.id
        LEFT JOIN yw_circle cir ON p.circleid=cir.id
        WHERE 1-->
-    <select id="findAllpostSearch" parameterType="java.util.Map" resultType="com.movision.mybatis.post.entity.PostList">
+    <select id="findAllpostSearch" parameterType="com.movision.mybatis.post.entity.PostSpread"
+            resultType="com.movision.mybatis.post.entity.PostList">
         SELECT * FROM yw_post WHERE 1
         <if test="title!=null">
             AND title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
         </if>
         <if test="userid!=null">
-            AND userid=#{userid,jdbcType=VARCHAR}
+            AND userid=#{userid,jdbcType=INTEGER}
         </if>
         <if test="postcontent!=null">
             AND postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
@@ -995,12 +997,11 @@
         <if test="circleid!=null">
             AND circleid=#{circleid,jdbcType=VARCHAR}
         </if>
-        <if test="endtime!=null, begintime!=null">
-            AND intime BETWEEN #{bigentime,jdbcType=VARCHAR} AND #{endtime,jdbcType=VARCHAR}
+        <if test="endtime!=null and begintime!=null">
+            AND intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
         </if>
         <if test="essencedate!=null">
-            AND essencedate=#{essencedate.jdbcType=V
-            ARCHAR}
+            AND essencedate=#{essencedate,jdbcType=DATE}
         </if>
         ORDER BY intime DESC
     </select>
