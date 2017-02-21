@@ -6,6 +6,7 @@ import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.invoice.entity.Invoice;
+import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -365,7 +366,7 @@ public class OrdersListController {
     @RequestMapping(value = "query_byaddress", method = RequestMethod.POST)
     public Response queryOrderByAddress(@ApiParam(value = "地址id") @RequestParam(required = false) Integer id) {
         Response response = new Response();
-        Address address = orderFacade.queryOrderByAddress(id);
+        Map<String, Object> address = orderFacade.queryOrderByAddress(id);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
