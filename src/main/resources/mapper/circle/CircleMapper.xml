@@ -415,6 +415,6 @@
     </select>
 
     <select id="addDiscoverList" resultType="com.movision.mybatis.circle.entity.Circle">
-
+        SELECT orderid FROM yw_circle WHERE 1 GROUP BY orderid
     </select>
 </mapper>

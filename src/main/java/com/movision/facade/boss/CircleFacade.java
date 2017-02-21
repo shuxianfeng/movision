@@ -149,9 +149,27 @@ public class CircleFacade {
     }
 
 
-    public Map<String, Object> addDiscoverList() {
+    /**
+     * 后台管理-圈子列表-查询圈子可推荐到发现页的排序
+     *
+     * @return
+     */
+    public Map<String, List> addDiscoverList() {
         List<Circle> list = circleService.addDiscoverList();
-        return null;
+        List<Integer> tem = new ArrayList<>();
+        Map<String, List> map = new HashedMap();
+        for (int i = 1; i < 10; i++) {
+            tem.add(i);
+        }
+        for (int k = 0; k < list.size(); k++) {//用于返回推荐页排序的剩余位置
+            for (int l = 0; l < tem.size(); l++) {
+                if (list.get(k).getOrderid() == tem.get(l)) {
+                    tem.remove(l);
+                }
+            }
+        }
+        map.put("resault", tem);
+        return map;
     }
 
 

@@ -72,11 +72,11 @@ public class CircleController {
      *
      * @return
      */
-    @ApiOperation(value = "查询发现页排序", notes = "用于查询发现页排序接口", response = Response.class)
+    @ApiOperation(value = "查询发现页排序", notes = "用于查询圈子可推荐到发现页的排序接口", response = Response.class)
     @RequestMapping(value = "add_discover_list", method = RequestMethod.POST)
     public Response addDiscoverList() {
         Response response = new Response();
-        Map<String, Object> map = circleFacade.addDiscoverList();
+        Map<String, List> map = circleFacade.addDiscoverList();
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
