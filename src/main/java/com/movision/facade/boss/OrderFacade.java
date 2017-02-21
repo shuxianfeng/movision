@@ -243,7 +243,7 @@ public class OrderFacade {
         List<Goods> goods = bossOrderService.queryOrderGoods(id);//查询商品信息
         Double money = 0.0;//小计
         Double summoney = 0.0;//总价
-        //Goods good = new Goods();
+        Goods good = new Goods();
         for (int i = 0; i < goods.size(); i++) {
             Double price = goods.get(i).getPrice();//折后价
             Double origprice = goods.get(i).getOrigprice();//原价
@@ -253,17 +253,15 @@ public class OrderFacade {
             }
             summoney += money;//总价
             goods.get(i).setMoney(money);
-            goods.get(i).setSummoney(summoney);
         }
-
-
+        good.setSummoney(summoney);
         List<Orders> orderses = bossOrderService.queryOrderMoney(id);//查询费用信息
         List<Orderoperation> orderoperationrs = bossOrderService.queryOrderoperation(id);//查询操作信息
         map.put("invoice", invoice);
         map.put("bossOrders", bossOrders);
         map.put("bossOrdersGet", bossOrdersGet);
         map.put("goods", goods);
-        //map.put("good", good);
+        map.put("good", good);
         map.put("orderses", orderses);
         map.put("orderoperationrs", orderoperationrs);
         return map;
