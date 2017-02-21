@@ -1,6 +1,7 @@
 package com.movision.mybatis.cart.mapper;
 
 import com.movision.mybatis.cart.entity.Cart;
+import com.movision.mybatis.cart.entity.CartVo;
 import com.movision.mybatis.rentdate.entity.Rentdate;
 
 import java.util.List;
@@ -20,6 +21,10 @@ public interface CartMapper {
     int queryIsHave(Map<String, Object> parammap);
 
     void addSum(Map<String, Object> parammap);
+
+    List<CartVo> queryCartByUser(int userid);
+
+    List<Rentdate> queryRentDateList(int cartid);
 
     int addGoodsCart(Map<String, Object> parammap);
 

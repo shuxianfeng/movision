@@ -18,9 +18,9 @@
         <result column="type" property="type" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, userid, goodsid, goodsname, combotype, rom, num, takeway, isdebug, debugid, intime, 
-    protype, isdel, type
-  </sql>
+        id, userid, goodsid, goodsname, combotype, rom, num, takeway, isdebug, debugid, intime,
+        protype, isdel, type
+    </sql>
 
     <!--普通查询语句-->
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -32,13 +32,37 @@
 
     <!--查询该用户购物车中存不存在该商品-->
     <select id="queryIsHave" parameterType="java.util.Map" resultType="java.lang.Integer">
-    SELECT count(*) FROM yw_cart WHERE userid = #{userid,jdbcType=INTEGER} AND goodsid = #{goodsid,jdbcType=INTEGER}
-  </select>
+        SELECT count(*) FROM yw_cart
+        WHERE userid = #{userid,jdbcType=INTEGER}
+        AND goodsid = #{goodsid,jdbcType=INTEGER}
+        <if test="comboid != null and comboid != ''">
+            AND combotype = #{comboid,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <!--查询该用户购物车中的所有商品-->
+    <select id="queryCartByUser" parameterType="java.lang.Integer" resultType="com.movision.mybatis.cart.entity.CartVo">
+        SELECT * FROM (
+            SELECT t1.*,t2.img_url AS imgurl,t3.price AS goodsprice,t3.isself
+            FROM yw_cart t1
+            LEFT JOIN (SELECT * FROM yw_goods_img WHERE type='2') t2
+            ON t1.goodsid = t2.goodsid
+            LEFT JOIN yw_goods t3
+            ON t1.goodsid = t3.id
+        ) t
+        WHERE t.userid = #{userid,jdbcType=INTEGER}
+    </select>
+
+    <!--根据购物车id查询租赁商品的租赁日期列表-->
+    <select id="queryRentDateList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.rentdate.entity.Rentdate">
+        SELECT rentdate FROM yw_rentdate WHERE cartid = #{cartid,jdbcType=INTEGER}
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from yw_cart
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
+        delete from yw_cart
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
     <insert id="insert" parameterType="com.movision.mybatis.cart.entity.Cart">
     insert into yw_cart (id, userid, goodsid, 
       goodsname, combotype, rom, 
@@ -239,5 +263,8 @@
     SET num = num + #{sum,jdbcType=INTEGER}
       WHERE userid = #{userid,jdbcType=INTEGER}
         AND goodsid = #{goodsid,jdbcType=INTEGER}
+        <if test="comboid != null and comboid != ''">
+            AND combotype = #{comboid,jdbcType=INTEGER}
+        </if>
   </update>
 </mapper>
