@@ -1,9 +1,6 @@
 package com.movision.mybatis.circle.mapper;
 
-import com.movision.mybatis.circle.entity.Circle;
-import com.movision.mybatis.circle.entity.CircleFollowNum;
-import com.movision.mybatis.circle.entity.CirclePostNum;
-import com.movision.mybatis.circle.entity.CircleVo;
+import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.user.entity.User;
 import org.apache.ibatis.session.RowBounds;
 
@@ -80,5 +77,7 @@ public interface CircleMapper {
     Integer updateDiscover(Map<String, Integer> map);
 
     Integer updateCircleIndex(Integer circleid);
+
+    CircleDetails quryCircleDetails(Integer circleid);
 
 }

@@ -423,6 +423,17 @@
     </update>
 
     <update id="updateCircleIndex" parameterType="java.lang.Integer">
-        UPDATE yw_circle SET isdiscover=1 WHERE id={circleid,jdbcType=INTEGER}
+        UPDATE yw_circle SET isdiscover=1 WHERE id=#{circleid,jdbcType=INTEGER} AND isdiscover=0
     </update>
+
+    <select id="quryCircleDetails" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.circle.entity.CircleDetails">
+        SELECT c.*,
+        u.nickname,
+        cat.categoryname
+        FROM yw_circle as c
+        LEFT JOIN yw_user as u ON c.phone=u.phone
+        LEFT JOIN yw_circle_category as cat ON cat.id=c.category
+        WHERE c.id=#{circleid.jdbcType=INTEGER}
+    </select>
 </mapper>

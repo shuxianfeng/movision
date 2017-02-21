@@ -1,9 +1,6 @@
 package com.movision.mybatis.circle.service;
 
-import com.movision.mybatis.circle.entity.Circle;
-import com.movision.mybatis.circle.entity.CircleFollowNum;
-import com.movision.mybatis.circle.entity.CirclePostNum;
-import com.movision.mybatis.circle.entity.CircleVo;
+import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.circle.mapper.CircleMapper;
 import com.movision.mybatis.followCircle.mapper.FollowCircleMapper;
 import com.movision.mybatis.user.entity.User;
@@ -432,6 +429,16 @@ public class CircleService {
             return circleMapper.updateCircleIndex(circleid);
         } catch (Exception e) {
             log.error("圈子推荐到首页异常");
+            throw e;
+        }
+    }
+
+    public CircleDetails quryCircleDetails(Integer circleid) {
+        try {
+            log.info("查看圈子详情");
+            return circleMapper.quryCircleDetails(circleid);
+        } catch (Exception e) {
+            log.error("圈子详情异常");
             throw e;
         }
     }

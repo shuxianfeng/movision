@@ -195,5 +195,8 @@ public class CircleFacade {
         return map;
     }
 
+    public CircleDetails quryCircleDetails(String circleid) {
+        return circleService.quryCircleDetails(Integer.parseInt(circleid));
+    }
 
 }

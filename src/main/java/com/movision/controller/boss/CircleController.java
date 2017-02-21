@@ -3,6 +3,7 @@ package com.movision.controller.boss;
 import com.movision.common.Response;
 import com.movision.facade.boss.CircleFacade;
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.circle.entity.CircleDetails;
 import com.movision.mybatis.circle.entity.CircleIndexList;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostList;
@@ -102,6 +103,14 @@ public class CircleController {
         return response;
     }
 
+    /**
+     * 后台管理-圈子推荐到首页
+     *
+     * @param circleid
+     * @return
+     */
+    @ApiOperation(value = "圈子推荐首页", notes = "用于圈子推荐到首页的接口", response = Response.class)
+    @RequestMapping(value = "update_circle_index", method = RequestMethod.POST)
     public Response updateCircleIndex(@ApiParam(value = "圈子id") @RequestParam String circleid) {
         Response response = new Response();
         Map<String, Integer> map = circleFacade.updateCircleIndex(circleid);
@@ -112,4 +121,22 @@ public class CircleController {
         return response;
     }
 
+
+    /**
+     * 后台管理-查看圈子详情
+     *
+     * @param circleid
+     * @return
+     */
+    @ApiOperation(value = "查看圈子详情", notes = "用于查看圈子详情接口", response = Response.class)
+    @RequestMapping(value = "query_circle_details", method = RequestMethod.POST)
+    public Response queryCircleDetails(@ApiParam(value = "圈子id") @RequestParam String circleid) {
+        Response response = new Response();
+        CircleDetails circle = circleFacade.quryCircleDetails(circleid);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(circle);
+        return response;
+    }
 }
