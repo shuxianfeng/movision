@@ -537,7 +537,8 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
     </select>
     <select id="queryAddress" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.address.entity.Address">
-       SELECT s.province,s.city,s.district,s.street FROM yw_address s WHERE s.userid=(SELECT s.userid FROM yw_orders s WHERE s.id=#{orderid,jdbcType=INTEGER})
+        SELECT s.id, s.province,s.city,s.district,s.street FROM yw_address s WHERE s.userid=(SELECT s.userid FROM
+        yw_orders s WHERE s.id=#{orderid,jdbcType=INTEGER})
     </select>
     <select id="queryGoods" parameterType="java.lang.Integer" resultType="com.movision.mybatis.goods.entity.Goods">
         SELECT  s.`name`,s.protype,s.origprice,s.price,c.num,s.id,s.attribute FROM yw_goods s LEFT JOIN yw_cart c ON c.goodsid=s.id
@@ -597,5 +598,10 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
     <select id="queryOrderOperation" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.orderoperation.entity.Orderoperation">
         SELECT * from yw_orderoperation WHERE orderid=#{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryByAddress" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.address.entity.Address">
+        SELECT s.id, s.province,s.city,s.district,s.street FROM yw_address s WHERE s.id=#{id,jdbcType=INTEGER}
     </select>
 </mapper>

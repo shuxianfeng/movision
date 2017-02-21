@@ -354,4 +354,22 @@ public class OrdersListController {
         response.setData(map);
         return response;
     }
+
+    /**
+     * 返回地址
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "返回地址", notes = "返回地址", response = Response.class)
+    @RequestMapping(value = "query_byaddress", method = RequestMethod.POST)
+    public Response queryOrderByAddress(@ApiParam(value = "地址id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        Address address = orderFacade.queryOrderByAddress(id);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(address);
+        return response;
+    }
 }

@@ -70,6 +70,21 @@ public class BossOrderService {
     }
 
     /**
+     * 订单管理--返回地址
+     * @param id
+     * @return
+     */
+    public Address queryOrdersByAddress(Integer id) {
+        try {
+            loger.info("返回地址");
+            return bossOrdersMapper.queryByAddress(id);
+        } catch (Exception e) {
+            loger.error("返回地址失败");
+            throw e;
+        }
+    }
+
+    /**
      * 所有订单
      *
      * @return

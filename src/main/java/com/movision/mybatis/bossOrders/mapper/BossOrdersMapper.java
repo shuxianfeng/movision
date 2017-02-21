@@ -71,8 +71,6 @@ public interface BossOrdersMapper {
 
     List<Orderoperation> queryOrderOperation(Integer id);//查看操作信息
 
-
-
-
+    Address queryByAddress(Integer id);//返回地址
 
 }

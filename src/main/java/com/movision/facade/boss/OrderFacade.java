@@ -381,5 +381,15 @@ public class OrderFacade {
         return list;
     }
 
+    /**
+     * 返回地址
+     *
+     * @param id
+     * @return
+     */
+    public Address queryOrderByAddress(Integer id) {
+        Address address = bossOrderService.queryOrdersByAddress(id);
+        return address;
+    }
 }
 
