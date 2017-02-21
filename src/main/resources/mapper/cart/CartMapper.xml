@@ -51,6 +51,7 @@
             ON t1.goodsid = t3.id
         ) t
         WHERE t.userid = #{userid,jdbcType=INTEGER}
+        AND t.isdel = '0'
     </select>
 
     <!--根据购物车id查询租赁商品的租赁日期列表-->
