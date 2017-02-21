@@ -100,10 +100,12 @@
         SELECT a.*,b.img_url AS imgurl
         FROM (SELECT t1.id, t1.name, t1.price, t1.origprice
         FROM yw_goods t1
-        WHERE t1.id NOT IN
-        <foreach collection="ids" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
+        <if test="ids.length != 0">
+            WHERE t1.id NOT IN
+            <foreach collection="ids" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
         ) a
         LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
