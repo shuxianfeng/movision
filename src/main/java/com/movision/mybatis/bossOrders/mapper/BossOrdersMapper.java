@@ -59,7 +59,7 @@ public interface BossOrdersMapper {
 
     int updateAddress(Address address);//编辑收货人信息
 
-    List<Orders> queryMoney(Integer id);//费用信息
+    Orders queryMoney(Integer id);//费用信息
 
     int updateOrdersMoney(Orders orders);//编辑费用信息
 

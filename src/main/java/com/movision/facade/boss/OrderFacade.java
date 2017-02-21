@@ -18,6 +18,7 @@ import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -255,7 +256,7 @@ public class OrderFacade {
             goods.get(i).setMoney(money);
         }
         good.setSummoney(summoney);
-        List<Orders> orderses = bossOrderService.queryOrderMoney(id);//查询费用信息
+        Orders orderses = bossOrderService.queryOrderMoney(id);//查询费用信息
         List<Orderoperation> orderoperationrs = bossOrderService.queryOrderoperation(id);//查询操作信息
         map.put("invoice", invoice);
         map.put("bossOrders", bossOrders);

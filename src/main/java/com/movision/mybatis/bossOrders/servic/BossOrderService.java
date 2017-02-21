@@ -262,7 +262,7 @@ public class BossOrderService {
      * @param id
      * @return
      */
-    public List<Orders> queryOrderMoney(Integer id) {
+    public Orders queryOrderMoney(Integer id) {
         try {
             loger.info("查询费用信息成功");
             return bossOrdersMapper.queryMoney(id);
