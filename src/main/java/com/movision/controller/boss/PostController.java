@@ -173,11 +173,12 @@ public class PostController {
     @ApiOperation(value = "查询帖子评论详情", notes = "用于查询帖子评论详情接口", response = Response.class)
     @RequestMapping(value = "/query_post_comment_particulars", method = RequestMethod.POST)
     public Response queryPostByCommentParticulars(@ApiParam(value = "评论id") @RequestParam String commentid,
+                                                  @ApiParam(value = "帖子id") @RequestParam String postid,
                                                   @RequestParam(required = false, defaultValue = "1") String pageNo,
                                                   @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<CommentVo> pager = new Paging<CommentVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<CommentVo> list = postFacade.queryPostByCommentParticulars(commentid, pager);
+        List<CommentVo> list = postFacade.queryPostByCommentParticulars(commentid, postid, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -546,7 +547,7 @@ public class PostController {
                                @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize,
                                @ApiParam(value = "帖子标题")@RequestParam(required = false) String title,
                                @ApiParam(value = "圈子id")@RequestParam(required = false) String circleid,
-                               @ApiParam(value = "发帖人") @RequestParam(required = false) String nickname,
+                               @ApiParam(value = "发帖人") @RequestParam(required = false) String userid,
                                @ApiParam(value = "帖子内容") @RequestParam(required = false) String postcontent,
                                @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,
                                @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
@@ -554,7 +555,7 @@ public class PostController {
                                @ApiParam(value = "精选日期") @RequestParam(required = false) String essencedate) {
         Response response=new Response();
         Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostList> list = postFacade.postSearch(title, circleid, nickname, postcontent, endtime, begintime, pai, essencedate, pager);
+        List<PostList> list = postFacade.postSearch(title, circleid, userid, postcontent, endtime, begintime, pai, essencedate, pager);
         if (response.getCode()==200){
             response.setMessage("查询成功");
         }

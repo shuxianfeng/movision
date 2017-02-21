@@ -982,14 +982,15 @@
        LEFT JOIN yw_post_comment com ON p.id=com.postid LEFT JOIN yw_post_rewarded r ON r.postid=p.id LEFT JOIN yw_post_accusation ac ON ac.postid=p.id
        LEFT JOIN yw_circle cir ON p.circleid=cir.id
        WHERE 1-->
+    <!-- AND userid IN (SELECT id FROM yw_user WHERE nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%'))-->
     <select id="findAllpostSearch" parameterType="com.movision.mybatis.post.entity.PostSpread"
             resultType="com.movision.mybatis.post.entity.PostList">
         SELECT * FROM yw_post WHERE 1
         <if test="title!=null">
             AND title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
         </if>
-        <if test="nickname!=null">
-            AND userid IN (SELECT id FROM yw_user WHERE nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%'))
+        <if test="userid!=null">
+            AND userid=#{userid,jdbcType=INTEGER}
         </if>
         <if test="postcontent!=null">
             AND postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')

@@ -9,7 +9,7 @@ import java.util.Date;
 public class PostSpread {
     private String title;//帖子标题
     private Integer circleid;//圈子id
-    private String nickname;//用户id
+    private Integer userid;//用户id
     private String postcontent;//评论内容
     private Date endtime;//结束时间
     private Date begintime;//开始时间
@@ -40,12 +40,12 @@ public class PostSpread {
         this.circleid = circleid;
     }
 
-    public String getNickname() {
-        return nickname;
+    public Integer getUserid() {
+        return userid;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setUserid(Integer userid) {
+        this.userid = userid;
     }
 
     public String getPostcontent() {

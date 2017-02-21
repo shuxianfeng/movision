@@ -552,7 +552,7 @@ public class PostService {
 
     /**
      * 帖子按条件查询
-     * @param map
+     * @param
      * @return
      */
     public List<PostList> postSearch(PostSpread spread, Paging<PostList> pager) {
