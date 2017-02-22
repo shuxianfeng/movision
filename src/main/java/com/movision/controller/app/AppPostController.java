@@ -129,8 +129,8 @@ public class AppPostController {
     @ApiOperation(value = "发帖选择推荐商品接口", notes = "APP发布普通帖选择推荐商品时调用此接口，选择收藏的商品列表和全部商品列表", response = Response.class)
     @RequestMapping(value = "recommendGoodsList", method = RequestMethod.POST)
     public Response recommendGoodsList(@ApiParam(value = "用户id(如果调用该接口，说明已经登录，如果未登录是不会调转到发帖编辑页的，所以必填)") @RequestParam String userid,
-                                       @ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
-                                       @ApiParam(value = "每页条数") @RequestParam(required = false) String pageSize) {
+                                       @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                       @ApiParam(value = "每页条数") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
 
         Map<String, Object> map = facadePost.queryRecommendGoodsList(userid, pageNo, pageSize);

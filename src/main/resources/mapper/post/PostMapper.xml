@@ -275,7 +275,7 @@
     </select>
 
     <!--userid为空时查询所有商品列表-->
-    <select id="queryAllGoodsList" resultType="com.movision.mybatis.goods.entity.Goods">
+    <select id="findAllGoodsList" resultType="com.movision.mybatis.goods.entity.Goods">
         SELECT t1.*, t2.img_url FROM (
         SELECT id, name FROM yw_goods
         ) t1 LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') t2

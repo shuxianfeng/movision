@@ -71,9 +71,9 @@ public interface PostMapper {
 
     void insertPostShareGoods(List<PostShareGoods> postShareGoodsList);
 
-    List<Goods> queryCollectGoodsList(RowBounds rowBounds, int userid);
+    List<Goods> queryCollectGoodsList(int userid);
 
-    List<Goods> queryAllGoodsList(RowBounds rowBounds);
+    List<Goods> findAllGoodsList(RowBounds rowBounds);
 
     int updatePostByZanSum(int id);
 

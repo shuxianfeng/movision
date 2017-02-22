@@ -231,22 +231,19 @@ public class FacadePost {
     }
 
     public Map<String, Object> queryRecommendGoodsList(String userid, String pageNo, String pageSize) {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<Goods> pager = new Paging<Goods>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+
+        Paging<Goods> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
 
         Map<String, Object> map = new HashMap<>();
 
-        //查询用户收藏的商品
-        List<Goods> collectGoodsList = postService.queryCollectGoodsList(pager, Integer.parseInt(userid));
-        //用户id为空时，默认查询所有商品
+        //查询用户收藏的商品(不做分页)
+        List<Goods> collectGoodsList = postService.queryCollectGoodsList(Integer.parseInt(userid));
+        //用户id为空时，默认查询所有商品（有分页）
         List<Goods> allGoodsList = postService.queryAllGoodsList(pager);
+
+        pager.result(allGoodsList);
         map.put("collectGoodsList", collectGoodsList);
-        map.put("allGoodsList", allGoodsList);
+        map.put("allGoodsList", pager);
         return map;
     }
 

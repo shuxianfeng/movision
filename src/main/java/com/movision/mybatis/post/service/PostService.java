@@ -196,10 +196,10 @@ public class PostService {
     }
 
     //根据userid查询用户收藏的所有商品列表
-    public List<Goods> queryCollectGoodsList(Paging<Goods> pager, int userid) {
+    public List<Goods> queryCollectGoodsList(int userid) {
         try {
             log.info("根据userid查询用户所有收藏的商品列表");
-            return postMapper.queryCollectGoodsList(pager.getRowBounds(), userid);
+            return postMapper.queryCollectGoodsList(userid);
         } catch (Exception e) {
             log.error("根据userid查询用户所有收藏的商品列表失败");
             throw e;
@@ -210,7 +210,7 @@ public class PostService {
     public List<Goods> queryAllGoodsList(Paging<Goods> pager) {
         try {
             log.info("userid为空时查询所有商品列表");
-            return postMapper.queryAllGoodsList(pager.getRowBounds());
+            return postMapper.findAllGoodsList(pager.getRowBounds());
         } catch (Exception e) {
             log.error("userid为空时查询所有商品列表失败");
             throw e;
