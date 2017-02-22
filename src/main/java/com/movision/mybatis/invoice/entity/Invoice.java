@@ -11,6 +11,16 @@ public class Invoice {
 
     private Integer addressid;
 
+    private Integer onlystatue;
+
+    public Integer getOnlystatue() {
+        return onlystatue;
+    }
+
+    public void setOnlystatue(Integer onlystatue) {
+        this.onlystatue = onlystatue;
+    }
+
     private Integer phone;
 
     private Double money;

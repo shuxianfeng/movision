@@ -17,9 +17,11 @@
         <result column="bank" property="bank" jdbcType="VARCHAR"/>
         <result column="banknum" property="banknum" jdbcType="VARCHAR"/>
         <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="onlystatue" property="onlystatue" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, orderid, head, addressid, phone, money, name, kind,content,companyname,rigaddress,rigphone,bank,banknum,code
+        id, orderid, head, addressid, phone, money, name,
+        kind,content,companyname,rigaddress,rigphone,bank,banknum,code,onlystatue
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -34,12 +36,12 @@
     <insert id="insert" parameterType="com.movision.mybatis.invoice.entity.Invoice">
         insert into yw_invoice (id, orderid, head,
         addressid, phone, money,
-        name, kind,content,companyname,rigaddress,rigphone,bank,banknum,code)
+        name, kind,content,companyname,rigaddress,rigphone,bank,banknum,code,onlystatue)
         values (#{id,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER}, #{head,jdbcType=VARCHAR},
         #{addressid,jdbcType=INTEGER}, #{phone,jdbcType=INTEGER}, #{money,jdbcType=DOUBLE},
         #{name,jdbcType=VARCHAR},
         #{kind,jdbcType=INTEGER},#{content,jdbcType=VARCHAR},#{companyname,jdbcType=VARCHAR},#{rigaddress,jdbcType=VARCHAR},#{rigphone,jdbcType=VARCHAR},
-        #{bank,jdbcType=VARCHAR},#{banknum,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR})
+        #{bank,jdbcType=VARCHAR},#{banknum,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{onlystatue,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.invoice.entity.Invoice">
         insert into yw_invoice
@@ -89,6 +91,9 @@
             <if test="code != null">
                 code,
             </if>
+            <if test="onlystatue != null">
+                onlystatue,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -135,6 +140,9 @@
             </if>
             <if test="code != null">
                 #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="onlystatue != null">
+                #{onlystatue,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -183,6 +191,9 @@
             <if test="code != null">
                 code = #{code,jdbcType=VARCHAR},
             </if>
+            <if test="onlystatue != null">
+                onlystatue = #{code,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -201,7 +212,8 @@
         rigphone = #{rigphone,jdbcType=VARCHAR},
         bank = #{bank,jdbcType=VARCHAR},
         banknum = #{banknum,jdbcType=VARCHAR},
-        code = #{code,jdbcType=VARCHAR}
+        code = #{code,jdbcType=VARCHAR},
+        onlystatue = #{onlystatue,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

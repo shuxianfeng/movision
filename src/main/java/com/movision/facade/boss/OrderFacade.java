@@ -312,7 +312,7 @@ public class OrderFacade {
      * @param
      * @return
      */
-    public Map<String, Integer> updateOrderInvoice(String head, String kind, String content, String orderid, String companyname, String rigaddress, String rigphone, String bank, String banknum, String code) {
+    public Map<String, Integer> updateOrderInvoice(String head, String kind, String content, String orderid, String companyname, String rigaddress, String rigphone, String bank, String banknum, String code, String onlystatue) {
         Invoice invoice = new Invoice();
         Map<String, Integer> map = new HashedMap();
         int kinds = Integer.parseInt(kind);
@@ -321,6 +321,7 @@ public class OrderFacade {
             invoice.setOrderid(Integer.parseInt(orderid));
             invoice.setContent(content);
             invoice.setHead(head);
+            invoice.setOnlystatue(Integer.parseInt(onlystatue));
         }
         if (kinds == 2) {
             invoice.setOrderid(Integer.parseInt(orderid));
