@@ -585,45 +585,58 @@ public class PostFacade {
                 post.setActivefee(Double.parseDouble(money));//金额
             }
 
+            //上传图片到本地服务器
             String savedFileName = "";
-            if (!coverimg.isEmpty()) {
-                String fileRealName = coverimg.getOriginalFilename();
-                int pointIndex = fileRealName.indexOf(".");
-                String fileSuffix = fileRealName.substring(pointIndex);
-                UUID FileId = UUID.randomUUID();
-                savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
-//                    String savedDir = request.getSession().getServletContext().getRealPath("/images/post/coverimg");
-                String savedDir = request.getSession().getServletContext().getRealPath("/");
-
-                //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision-1.0.0后缀movision-1.0.0去除
-                //不保存到项目中,防止部包把图片覆盖掉了
-                String path = savedDir.substring(0, savedDir.length() - 9);
-
-                //这里组合出真实的图片存储路径
-                String combinpath = path + "/images/post/coverimg";
-
-                File savedFile = new File(combinpath, savedFileName);
-                boolean isCreateSuccess = savedFile.createNewFile();
-                if (isCreateSuccess) {
-                    coverimg.transferTo(savedFile);  //转存文件
+            String imgurl = "";
+             /*boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;*/
+            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+            if (coverimg != null && isMultipart) {
+                if (!coverimg.isEmpty()) {
+                    String fileRealName = coverimg.getOriginalFilename();
+                    int pointIndex = fileRealName.indexOf(".");
+                    String fileSuffix = fileRealName.substring(pointIndex);
+                    UUID FileId = UUID.randomUUID();
+                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
+                    String savedDir = request.getSession().getServletContext().getRealPath("");
+                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
+                    //不保存到项目中,防止部包把图片覆盖掉了
+                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    //这里组合出真实的图片存储路径
+                    String combinpath = path + "/images/post/coverimg/";
+                    File savedFile = new File(combinpath, savedFileName);
+                    System.out.println("文件url：" + combinpath + "" + savedFileName);
+                    boolean isCreateSuccess = savedFile.createNewFile();
+                    if (isCreateSuccess) {
+                        coverimg.transferTo(savedFile);  //转存文件
+                    }
                 }
+                imgurl = imgdomain + savedFileName;
             }
-
-            post.setCoverimg(savedFileName);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+            post.setCoverimg(imgurl);
             post.setPostcontent(postcontent);//帖子内容
-            if (isessence != null) {
-                post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
-            }
-            post.setIntime(new Date());
-            Date isessencetime = null;//加精时间
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-            if (time != null) {
-                try {
-                    isessencetime = format.parse(time);
-                } catch (ParseException e) {
-                    e.printStackTrace();
+            if (!isessence.isEmpty() || isessence != null) {
+                if (Integer.parseInt(isessence) != 0) {//判断是否为加精
+                    post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+                    if (!orderid.isEmpty()) {
+                        post.setOrderid(Integer.parseInt(orderid));
+                    } else {
+                        post.setOrderid(0);
+                    }
+                    Date d = null;
+                    if (time != null || time != "") {
+                        d = format.parse(time);
+                    } else {
+                        d = new Date();
+                    }
+                    post.setEssencedate(d);
                 }
             }
+
+            post.setIntime(new Date());
+
+
             Date begin = null;//开始时间
             if (begintime != null) {
                 try {
@@ -640,7 +653,6 @@ public class PostFacade {
                     e.printStackTrace();
                 }
             }
-            post.setEssencedate(isessencetime);
             if (orderid != null) {
                 post.setOrderid(Integer.parseInt(orderid));//排序精选
             }
@@ -655,8 +667,8 @@ public class PostFacade {
             int r = postService.addPostPeriod(period);
             map.put("result", result);
             map.put("result", r);
-        }catch (IOException e){
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("活动帖子添加异常", e);
         }
         return map;
     }

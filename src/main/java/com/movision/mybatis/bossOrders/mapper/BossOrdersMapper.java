@@ -73,4 +73,6 @@ public interface BossOrdersMapper {
 
     Address queryByAddress(Integer id);//返回地址
 
+    List<Address> findAllAfterService(RowBounds rowBounds);//售后服务
+
 }

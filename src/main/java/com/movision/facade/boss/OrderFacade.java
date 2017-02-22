@@ -282,13 +282,14 @@ public class OrderFacade {
      * @param
      * @return
      */
-    public Map<String, Integer> updateOrderAddress(String orderid, String phone, String name, String email, String province, String city, String district) {
+    public Map<String, Integer> updateOrderAddress(String orderid, String phone, String name, String email, String province, String city, String district, String street) {
         Address address = new Address();
         Map<String, Integer> map = new HashedMap();
         address.setCity(city);
         address.setDistrict(district);
         address.setOrderid(Integer.parseInt(orderid));
         address.setProvince(province);
+        address.setStreet(street);
         address.setPhone(phone);
         address.setName(name);
         int result = bossOrderService.updateOrderGet(address);
@@ -389,14 +390,7 @@ public class OrderFacade {
      */
     public Map<String, Object> queryOrderByAddress(Integer id) {
         Map<String, Object> map = new HashedMap();
-        List<Province> province = null;
-        Address address = null;
-        if (id == null) {
-            province = bossOrderService.queryPostProvinceName();
-        } else {
-            address = bossOrderService.queryOrdersByAddress(id);
-        }
-        map.put("proname", province);
+        Address address = bossOrderService.queryOrdersByAddress(id);
         map.put("address", address);
         return map;
     }

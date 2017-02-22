@@ -566,7 +566,7 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
                 street = #{street,jdbcType=VARCHAR},
             </if>
         </set>
-        where userid=(SELECT userid FROM yw_orders WHERE id=#{orderid,jdbcType=INTEGER})
+        where id=(SELECT addressid FROM yw_orders WHERE id=#{orderid,jdbcType=INTEGER})
     </update>
     <update id="updateEmail" parameterType="com.movision.mybatis.user.entity.User">
         update yw_user
