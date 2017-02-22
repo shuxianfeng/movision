@@ -62,9 +62,9 @@ public class PostList {
 
     private String hotimgurl;
 
-    private Date intime;
+    private Date intime;//帖子添加时间
 
-    private Integer totalpoint;
+    private Integer totalpoint;//帖子综合评分
 
     private Integer isdel;
 

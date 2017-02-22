@@ -121,6 +121,8 @@ public class PostFacade {
                 postList.setZansum(list.get(i).getZansum());
                 postList.setRewarded(rewarded);
                 postList.setAccusation(accusation);
+            postList.setIntime(list.get(i).getIntime());//帖子发布时间
+            postList.setTotalpoint(list.get(i).getTotalpoint());//帖子综合评分
             postList.setIsessence(list.get(i).getIsessence());
             postList.setCirclename(circlename.getName());//帖子所属圈子
             postList.setOrderid(list.get(i).getOrderid());//获取排序
