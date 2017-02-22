@@ -459,5 +459,58 @@ public class OrderFacade {
         Afterservice afterservice = bossOrderService.queryAfterServiceById(id);
         return afterservice;
     }
+
+    /**
+     * 售后管理--根据条件查询
+     *
+     * @param ordernumber
+     * @param name
+     * @param aftersalestatus
+     * @param afterstatue
+     * @param processingstatus
+     * @param mintime
+     * @param maxtime
+     * @param pager
+     * @return
+     */
+    public List<Afterservice> queryOrderByConditionAfterService(String ordernumber, String name, String aftersalestatus, String afterstatue, String processingstatus, String mintime, String maxtime, Paging<Afterservice> pager) {
+        Map<String, Object> map = new HashedMap();
+        if (ordernumber != null) {
+            map.put("ordernumber", ordernumber);
+        }
+        if (name != null) {
+            map.put("name", name);
+        }
+        if (aftersalestatus != null) {
+            map.put("aftersalestatus", aftersalestatus);
+        }
+        if (afterstatue != null) {
+            map.put("afterstatue", afterstatue);
+        }
+        if (processingstatus != null) {
+            map.put("processingstatus", processingstatus);
+        }
+        Date isessencetime = null;//开始时间
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        if (mintime != null) {
+            try {
+                isessencetime = format.parse(mintime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("mintime", isessencetime);
+        Date max = null;//最大时间
+        if (maxtime != null) {
+            try {
+                max = format.parse(maxtime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("maxtime", max);
+        return bossOrderService.queryOrderByConditionAfterService(map, pager);
+    }
+
 }
 

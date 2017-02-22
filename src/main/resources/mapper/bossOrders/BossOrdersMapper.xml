@@ -634,4 +634,32 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
 SELECT f.id,o.ordernumber,u.nickname,f.proposertime,f.processingpeople,f.processingtime,a.name,a.province,a.city,a.district,a.street,s.`name` AS sname,s.protype,f.afterstatue,f.amountdue,f.refundamount,f.aftersalestatus,f.processingstatus,o.takeway,l.intime,l.logisticsid FROM yw_afterservice f LEFT JOIN yw_address a ON a.id=f.addressid
      LEFT JOIN yw_goods s ON s.id=f.goodsid LEFT JOIN yw_orders o ON o.id=f.orderid LEFT JOIN yw_user u ON u.id=f.userid LEFT JOIN yw_order_sub_logistics l ON l.logisticsid=o.logisticsid WHERE f.id=#{id,jdbcType=INTEGER}
     </select>
+
+    <select id="findAllOrderByConditionAfterService" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.afterservice.entity.Afterservice">
+        SELECT
+        f.id,o.ordernumber,u.nickname,f.proposertime,f.processingpeople,f.processingtime,a.name,a.province,a.city,a.district,a.street,s.`name`
+        AS sname,f.afterstatue,f.amountdue,f.refundamount,f.aftersalestatus,f.processingstatus FROM yw_afterservice f
+        LEFT JOIN yw_address a ON a.id=f.addressid
+        LEFT JOIN yw_goods s ON s.id=f.goodsid LEFT JOIN yw_orders o ON o.id=f.orderid LEFT JOIN yw_user u ON
+        u.id=f.userid WHERE f.isdel=1
+        <if test="ordernumber!=null and ordernumber!=''">
+            AND o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
+        </if>
+        <if test="name!=null and name!=''">
+            AND a.`name` LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="aftersalestatus!=null and aftersalestatus!=''">
+            AND f.aftersalestatus=#{aftersalestatus,jdbcType=INTEGER}
+        </if>
+        <if test="afterstatue!=null and afterstatue!=''">
+            AND f.afterstatue=#{afterstatue,jdbcType=INTEGER}
+        </if>
+        <if test="processingstatus!=null and processingstatus!=''">
+            AND f.processingstatus=#{processingstatus,jdbcType=INTEGER}
+        </if>
+        <if test="intime!=null and intime!=''">
+            AND o.intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
+        </if>
+    </select>
 </mapper>

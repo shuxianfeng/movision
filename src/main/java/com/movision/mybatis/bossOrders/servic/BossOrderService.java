@@ -291,6 +291,22 @@ public class BossOrderService {
     }
 
     /**
+     * 售后管理--根据条件查询
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<Afterservice> queryOrderByConditionAfterService(Map map, Paging<Afterservice> pager) {
+        try {
+            loger.info("根据条件查询列表");
+            return bossOrdersMapper.findAllOrderByConditionAfterService(map, pager.getRowBounds());
+        } catch (Exception e) {
+            loger.error("根据条件查询列表失败");
+            throw e;
+        }
+    }
+
+    /**
      * 订单管理*--查询费用信息
      *
      * @param id
