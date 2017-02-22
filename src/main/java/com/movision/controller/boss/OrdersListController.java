@@ -282,9 +282,10 @@ public class OrdersListController {
             @ApiParam(value = "注册电话") @RequestParam(required = false) String rigphone,
             @ApiParam(value = "开户银行") @RequestParam(required = false) String bank,
             @ApiParam(value = "银行账户") @RequestParam(required = false) String banknum,
-            @ApiParam(value = "纳税人识别码") @RequestParam(required = false) String code) {
+            @ApiParam(value = "纳税人识别码") @RequestParam(required = false) String code,
+            @ApiParam(value = "状态") @RequestParam(required = false) String onlystatue) {
         Response response = new Response();
-        Map<String, Integer> map = orderFacade.updateOrderInvoice(head, kind, content, orderid, companyname, rigaddress, rigphone, bank, banknum, code);
+        Map<String, Integer> map = orderFacade.updateOrderInvoice(head, kind, content, orderid, companyname, rigaddress, rigphone, bank, banknum, code, onlystatue);
         if (response.getCode() == 200) {
             response.setMessage("编辑发票");
         }
