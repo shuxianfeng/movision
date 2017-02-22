@@ -53,7 +53,7 @@ public interface PostMapper {
 
     List<PostVo> findAllPostList(RowBounds rowBounds, int circleid);
 
-    List<PostVo> pastHotPostList(RowBounds rowBounds, int circleid);
+    List<PostVo> findAllPastHotPostList(RowBounds rowBounds, int circleid);
 
     List<PostVo> queryAllActive(RowBounds rowBounds);
 

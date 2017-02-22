@@ -159,7 +159,7 @@
     </select>
 
     <!--查询圈子中推荐的往期所有热帖列表-->
-    <select id="pastHotPostList" parameterType="java.lang.Integer"
+    <select id="findAllPastHotPostList" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT t1.*,t2.category AS category, t2.code AS code FROM yw_post t1
         LEFT JOIN yw_circle t2 ON

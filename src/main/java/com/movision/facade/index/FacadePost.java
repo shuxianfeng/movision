@@ -131,14 +131,7 @@ public class FacadePost {
         return map;
     }
 
-    public List<PostVo> pastHotPostList(String circleid, String pageNo, String pageSize) {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+    public List<PostVo> pastHotPostList(Paging<PostVo> pager, String circleid) {
 
         return postService.pastHotPostList(pager, Integer.parseInt(circleid));
     }

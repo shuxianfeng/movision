@@ -7,6 +7,7 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
+import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,16 +84,18 @@ public class AppPostController {
     @ApiOperation(value = "查询某个圈子往期所有热帖列表", notes = "从圈子中点击“最受欢迎的内容”查询该圈子往期所有的热门帖子列表")
     @RequestMapping(value = "pastHotPostList", method = RequestMethod.POST)
     public Response pastHotPostList(@ApiParam(value = "圈子id") @RequestParam String circleid,
-                                    @ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
-                                    @ApiParam(value = "每页多少条") @RequestParam(required = false) String pageSize) {
+                                    @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                    @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
 
-        List<PostVo> postlist = facadePost.pastHotPostList(circleid, pageNo, pageSize);
+        Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<PostVo> postlist = facadePost.pastHotPostList(pager, circleid);
+        pager.result(postlist);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(postlist);
+        response.setData(pager);
         return response;
     }
 
