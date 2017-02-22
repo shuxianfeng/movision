@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.afterservice.mapper.AfterserviceMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.afterservice.entity.Afterservice">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="orderid" property="orderid" jdbcType="INTEGER"/>
+        <result column="addressid" property="addressid" jdbcType="INTEGER"/>
+        <result column="goodsid" property="goodsid" jdbcType="INTEGER"/>
+        <result column="afterstatue" property="afterstatue" jdbcType="INTEGER"/>
+        <result column="aftersalestatus" property="aftersalestatus" jdbcType="INTEGER"/>
+        <result column="processingstatus" property="processingstatus" jdbcType="INTEGER"/>
+        <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+        <result column="refundamount" property="refundamount" jdbcType="DOUBLE"/>
+        <result column="processingpeople" property="processingpeople" jdbcType="VARCHAR"/>
+        <result column="processingtime" property="processingtime" jdbcType="TIMESTAMP"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="proposertime" property="proposertime" jdbcType="TIMESTAMP"/>
+        <result column="amountdue" property="amountdue" jdbcType="DOUBLE"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, orderid, addressid, goodsid, afterstatue, aftersalestatus, processingstatus,
+        isdel, refundamount, processingpeople, processingtime, userid, proposertime, amountdue
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_afterservice
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from yw_afterservice
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.afterservice.entity.Afterservice">
+        insert into yw_afterservice (id, orderid, addressid,
+        goodsid, afterstatue, aftersalestatus,
+        processingstatus, isdel, refundamount,
+        processingpeople, processingtime, userid,
+        proposertime, amountdue)
+        values (#{id,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER}, #{addressid,jdbcType=INTEGER},
+        #{goodsid,jdbcType=INTEGER}, #{afterstatue,jdbcType=INTEGER}, #{aftersalestatus,jdbcType=INTEGER},
+        #{processingstatus,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER}, #{refundamount,jdbcType=DOUBLE},
+        #{processingpeople,jdbcType=VARCHAR}, #{processingtime,jdbcType=TIMESTAMP}, #{userid,jdbcType=INTEGER},
+        #{proposertime,jdbcType=TIMESTAMP}, #{amountdue,jdbcType=DOUBLE})
+    </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.afterservice.entity.Afterservice">
+        insert into yw_afterservice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="orderid != null">
+                orderid,
+            </if>
+            <if test="addressid != null">
+                addressid,
+            </if>
+            <if test="goodsid != null">
+                goodsid,
+            </if>
+            <if test="afterstatue != null">
+                afterstatue,
+            </if>
+            <if test="aftersalestatus != null">
+                aftersalestatus,
+            </if>
+            <if test="processingstatus != null">
+                processingstatus,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+            <if test="refundamount != null">
+                refundamount,
+            </if>
+            <if test="processingpeople != null">
+                processingpeople,
+            </if>
+            <if test="processingtime != null">
+                processingtime,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="proposertime != null">
+                proposertime,
+            </if>
+            <if test="amountdue != null">
+                amountdue,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="addressid != null">
+                #{addressid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsid != null">
+                #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="afterstatue != null">
+                #{afterstatue,jdbcType=INTEGER},
+            </if>
+            <if test="aftersalestatus != null">
+                #{aftersalestatus,jdbcType=INTEGER},
+            </if>
+            <if test="processingstatus != null">
+                #{processingstatus,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="refundamount != null">
+                #{refundamount,jdbcType=DOUBLE},
+            </if>
+            <if test="processingpeople != null">
+                #{processingpeople,jdbcType=VARCHAR},
+            </if>
+            <if test="processingtime != null">
+                #{processingtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="proposertime != null">
+                #{proposertime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="amountdue != null">
+                #{amountdue,jdbcType=DOUBLE},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.afterservice.entity.Afterservice">
+        update yw_afterservice
+        <set>
+            <if test="orderid != null">
+                orderid = #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="addressid != null">
+                addressid = #{addressid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsid != null">
+                goodsid = #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="afterstatue != null">
+                afterstatue = #{afterstatue,jdbcType=INTEGER},
+            </if>
+            <if test="aftersalestatus != null">
+                aftersalestatus = #{aftersalestatus,jdbcType=INTEGER},
+            </if>
+            <if test="processingstatus != null">
+                processingstatus = #{processingstatus,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="refundamount != null">
+                refundamount = #{refundamount,jdbcType=DOUBLE},
+            </if>
+            <if test="processingpeople != null">
+                processingpeople = #{processingpeople,jdbcType=VARCHAR},
+            </if>
+            <if test="processingtime != null">
+                processingtime = #{processingtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="proposertime != null">
+                proposertime = #{proposertime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="amountdue != null">
+                amountdue = #{amountdue,jdbcType=DOUBLE},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.afterservice.entity.Afterservice">
+        update yw_afterservice
+        set orderid = #{orderid,jdbcType=INTEGER},
+        addressid = #{addressid,jdbcType=INTEGER},
+        goodsid = #{goodsid,jdbcType=INTEGER},
+        afterstatue = #{afterstatue,jdbcType=INTEGER},
+        aftersalestatus = #{aftersalestatus,jdbcType=INTEGER},
+        processingstatus = #{processingstatus,jdbcType=INTEGER},
+        isdel = #{isdel,jdbcType=INTEGER},
+        refundamount = #{refundamount,jdbcType=DOUBLE},
+        processingpeople = #{processingpeople,jdbcType=VARCHAR},
+        processingtime = #{processingtime,jdbcType=TIMESTAMP},
+        userid = #{userid,jdbcType=INTEGER},
+        proposertime = #{proposertime,jdbcType=TIMESTAMP},
+        amountdue = #{amountdue,jdbcType=DOUBLE}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>
