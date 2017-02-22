@@ -62,6 +62,16 @@ public class CommentService {
         }
     }
 
+    public void insertCommentZanRecord(Map<String, Object> parammap) {
+        try {
+            log.info("插入一条评论点赞记录");
+            commentMapper.insertCommentZanRecord(parammap);
+        } catch (Exception e) {
+            log.error("插入一条评论点赞记录失败");
+            throw e;
+        }
+    }
+
     public int updateCommentZanSum(int id) {
         try {
             log.info("更新评论点赞次数");

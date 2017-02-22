@@ -26,6 +26,8 @@ public interface CommentMapper {
 
     CommentVo queryChildrenComment(int id);
 
+    void insertCommentZanRecord(Map<String, Object> parammap);
+
     int updateCommentZanSum(int id);
 
     int queryCommentZanSum(int id);

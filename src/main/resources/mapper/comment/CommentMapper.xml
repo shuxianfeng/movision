@@ -32,6 +32,17 @@
       #{content,jdbcType=VARCHAR}, #{intime,jdbcType=TIMESTAMP}, #{zansum,jdbcType=INTEGER}
       )
   </insert>
+
+  <!--插入用户点赞评论的记录到记录表里-->
+  <insert id="insertCommentZanRecord" parameterType="java.util.Map">
+      INSERT INTO yw_post_comment_zan_record (
+          userid, commentid, intime
+      )
+      VALUES (
+          #{userid,jdbcType=INTEGER}, #{commentid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
   <insert id="insertSelective" parameterType="com.movision.mybatis.comment.entity.CommentVo" >
     insert into yw_post_comment
     <trim prefix="(" suffix=")" suffixOverrides="," >

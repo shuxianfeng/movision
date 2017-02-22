@@ -45,9 +45,10 @@ public class CommentController {
 
     @ApiOperation(value = "评论点赞接口", notes = "返回评论的点赞次数", response = Response.class)
     @RequestMapping(value = "/CommentZanSum", method = RequestMethod.POST)
-    public Response updateCommentZanSum(@ApiParam(value = "评论id") @RequestParam String commenid) {
+    public Response updateCommentZanSum(@ApiParam(value = "评论id") @RequestParam String commentid,
+                                        @ApiParam(value = "用户id") @RequestParam String userid) {
         Response response = new Response();
-        int zansum = facadeComments.updateCommentZanSum(commenid);
+        int zansum = facadeComments.updateCommentZanSum(commentid, userid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

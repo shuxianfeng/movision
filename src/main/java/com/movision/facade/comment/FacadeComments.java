@@ -10,10 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author zhurui
@@ -54,9 +51,14 @@ public class FacadeComments {
         return vo;
     }
 
-    public int updateCommentZanSum(String id) {
-        CommentService.updateCommentZanSum(Integer.parseInt(id));//更新评论点赞次数
-        int sum = CommentService.queryCommentZanSum(Integer.parseInt(id));//查询点赞次数
+    public int updateCommentZanSum(String commentid, String userid) {
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("userid", Integer.parseInt(userid));
+        parammap.put("commentid", Integer.parseInt(commentid));
+        parammap.put("intime", new Date());
+        CommentService.insertCommentZanRecord(parammap);
+        CommentService.updateCommentZanSum(Integer.parseInt(commentid));//更新评论点赞次数
+        int sum = CommentService.queryCommentZanSum(Integer.parseInt(commentid));//查询点赞次数
         return sum;
     }
 
