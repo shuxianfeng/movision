@@ -189,15 +189,18 @@ public class AppPostController {
      */
     @ApiOperation(value = "查看全部活动", notes = "用于返回发现页热门活动————查看全部活动接口(enddays为-1活动还未开始 为0活动已结束 为其他时为距离结束的剩余天数)", response = Response.class)
     @RequestMapping(value = "queryAllActive", method = RequestMethod.POST)
-    public Response queryAllActive(@ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
-                                   @ApiParam(value = "每页多少条") @RequestParam(required = false) String pageSize) {
+    public Response queryAllActive(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                   @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        List<PostVo> activeList = facadePost.queryAllActive(pageNo, pageSize);
+
+        Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<PostVo> activeList = facadePost.queryAllActive(pager);
+        pager.result(activeList);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(activeList);
+        response.setData(pager);
 
         return response;
     }

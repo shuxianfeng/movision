@@ -183,7 +183,7 @@
     </select>
 
     <!--查询所有活动列表-->
-    <select id="queryAllActive" resultType="com.movision.mybatis.post.entity.PostVo">
+    <select id="findAllActive" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT t.* FROM (
         SELECT t1.id, t1.title, t1.subtitle, t1.postcontent, t1.zansum, t1.commentsum, t1.forwardsum, t1.collectsum,
         t1.isactive, t1.activetype, t1.activefee, t1.ishot, t1.isessence, t1.isessencepool, t1.orderid, t1.coverimg,

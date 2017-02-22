@@ -109,10 +109,10 @@ public class PostService {
         }
     }
 
-    public List<PostVo> queryAllActive(Paging<Post> pager) {
+    public List<PostVo> queryAllActive(Paging<PostVo> pager) {
         try {
             log.info("查询所有活动列表");
-            return postMapper.queryAllActive(pager.getRowBounds());
+            return postMapper.findAllActive(pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询所有活动列表失败");
             throw e;

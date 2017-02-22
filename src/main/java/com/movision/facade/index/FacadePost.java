@@ -288,14 +288,7 @@ public class FacadePost {
         }
     }
 
-    public List<PostVo> queryAllActive(String pageNo, String pageSize) {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<Post> pager = new Paging<Post>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+    public List<PostVo> queryAllActive(Paging<PostVo> pager) {
 
         List<PostVo> activeList = postService.queryAllActive(pager);
 
