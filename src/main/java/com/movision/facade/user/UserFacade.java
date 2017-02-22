@@ -61,14 +61,7 @@ public class UserFacade {
         return userService.queryUserInfo(Integer.parseInt(userid));
     }
 
-    public List<PostVo> personPost(String userid, String pageNo, String pageSize) {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+    public List<PostVo> personPost(Paging<PostVo> pager, String userid) {
         return userService.personPost(pager, Integer.parseInt(userid));
     }
 

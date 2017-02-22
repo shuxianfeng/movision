@@ -222,7 +222,8 @@
     </select>
 
     <!--查询用户发布的历史帖子和用户分享出去的历史帖子(这里取的是分享时间)-->
-    <select id="personPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+    <select id="findAllPersonPost" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT a.*,b.name AS circlename FROM (
             (
                 SELECT id, circleid, title, subtitle, coverimg, intime

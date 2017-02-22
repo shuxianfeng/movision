@@ -46,16 +46,18 @@ public class AppUserController {
     @ApiOperation(value = "个人主页--帖子（发布的帖子和分享的帖子）", notes = "用于返回个人主页中帖子页签中个人发布的历史帖子和分享过的历史帖子", response = Response.class)
     @RequestMapping(value = "personPost", method = RequestMethod.POST)
     public Response personPost(@ApiParam(value = "用户id") @RequestParam String userid,
-                               @ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
-                               @ApiParam(value = "每页多少条") @RequestParam(required = false) String pageSize) {
+                               @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                               @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
 
-        List<PostVo> personPostList = userFacade.personPost(userid, pageNo, pageSize);
+        Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<PostVo> personPostList = userFacade.personPost(pager, userid);
+        pager.result(personPostList);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(personPostList);
+        response.setData(pager);
         return response;
     }
 

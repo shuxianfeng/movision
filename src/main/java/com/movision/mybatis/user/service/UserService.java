@@ -126,7 +126,7 @@ public class UserService {
     public List<PostVo> personPost(Paging<PostVo> pager, int userid) {
         try {
             log.info("查询个人主页中用户发布的历史帖子和用户分享的历史帖子");
-            return postMapper.personPost(pager.getRowBounds(), userid);
+            return postMapper.findAllPersonPost(pager.getRowBounds(), userid);
         } catch (Exception e) {
             log.error("查询个人主页中用户发布的历史帖子和用户分享的历史帖子失败");
             throw e;

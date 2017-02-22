@@ -39,7 +39,7 @@ public interface PostMapper {
 
     List<Post> queryCircleSubPost(Map<String, Object> map);
 
-    List<PostVo> personPost(RowBounds rowBounds, int userid);
+    List<PostVo> findAllPersonPost(RowBounds rowBounds, int userid);
 
     List<ActiveVo> findAllPersonActive(RowBounds rowBounds, int userid);
 
