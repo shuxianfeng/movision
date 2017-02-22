@@ -52,10 +52,10 @@ public class GoodsService {
     @Autowired
     private AddressMapper addressMapper;
 
-    public List<GoodsVo> queryActiveGoods(Paging<Goods> pager, String postid) {
+    public List<GoodsVo> queryActiveGoods(String postid) {
         try {
             log.info("查询商城促销类商品列表");
-            return goodsMapper.queryActiveGoods(pager.getRowBounds(), Integer.parseInt(postid));
+            return goodsMapper.queryActiveGoods(Integer.parseInt(postid));
         } catch (Exception e) {
             log.error("查询商城促销类商品列表失败");
             throw e;

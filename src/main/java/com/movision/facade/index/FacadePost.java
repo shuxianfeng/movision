@@ -72,7 +72,7 @@ public class FacadePost {
         return vo;
     }
 
-    public ActiveVo queryActiveDetail(String postid, String activetype, String pageNo, String pageSize) {
+    public ActiveVo queryActiveDetail(String postid, String activetype) {
 
         //告知类活动
         ActiveVo active = postService.queryNoticeActive(postid);
@@ -91,15 +91,7 @@ public class FacadePost {
         //如果为商城促销类活动，需要在此基础上增加促销类商品列表
         if (activetype.equals("1")) {
 
-            if (StringUtils.isEmpty(pageNo)) {
-                pageNo = "1";
-            }
-            if (StringUtils.isEmpty(pageSize)) {
-                pageSize = "10";
-            }
-            Paging<Goods> pager = new Paging<Goods>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-
-            List<GoodsVo> goodsList = goodsService.queryActiveGoods(pager, postid);
+            List<GoodsVo> goodsList = goodsService.queryActiveGoods(postid);
             active.setPromotionGoodsList(goodsList);
 
         }

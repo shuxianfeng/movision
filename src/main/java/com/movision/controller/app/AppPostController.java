@@ -51,13 +51,11 @@ public class AppPostController {
     @ApiOperation(value = "活动详情数据返回接口", notes = "用于返回请求活动详情内容", response = Response.class)
     @RequestMapping(value = "activeDetail", method = RequestMethod.POST)
     public Response queryActiveDetail(@ApiParam(value = "活动id") @RequestParam String postid,
-                                      @ApiParam(value = "活动类型:0 告知类活动 1 商城促销类活动") @RequestParam String activetype,
-                                      @ApiParam(value = "第几页（为商城促销类）") @RequestParam(required = false) String pageNo,
-                                      @ApiParam(value = "每页条数") @RequestParam(required = false) String pageSize) {
+                                      @ApiParam(value = "活动类型:0 告知类活动 1 商城促销类活动") @RequestParam String activetype) {
 
         Response response = new Response();
 
-        ActiveVo active = facadePost.queryActiveDetail(postid, activetype, pageNo, pageSize);
+        ActiveVo active = facadePost.queryActiveDetail(postid, activetype);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");

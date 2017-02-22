@@ -18,7 +18,7 @@ public interface GoodsMapper {
 
     Goods selectByPrimaryKey(Integer id);
 
-    List<GoodsVo> queryActiveGoods(RowBounds rowBounds, int postid);
+    List<GoodsVo> queryActiveGoods(int postid);
 
     List<GoodsVo> queryMonthHot();
 
