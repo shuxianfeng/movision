@@ -512,5 +512,16 @@ public class OrderFacade {
         return bossOrderService.queryOrderByConditionAfterService(map, pager);
     }
 
+
+    /**
+     * 售后管理*--留言
+     *
+     * @param id
+     * @return
+     */
+    public Afterservice queryRemark(Integer id) {
+        Afterservice afterservice = bossOrderService.queryRemark(id);
+        return afterservice;
+    }
 }
 

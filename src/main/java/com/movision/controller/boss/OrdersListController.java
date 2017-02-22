@@ -492,4 +492,22 @@ public class OrdersListController {
         return response;
     }
 
+    /**
+     * 售后管理-查询留言
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "查询留言", notes = "查询留言", response = Response.class)
+    @RequestMapping(value = "query_remark", method = RequestMethod.POST)
+    public Response queryRemark(@ApiParam(value = "售后id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        Afterservice afterservice = orderFacade.queryRemark(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(afterservice);
+        return response;
+    }
+
 }

@@ -31,6 +31,16 @@ public class Afterservice {
 
     private Double amountdue;
 
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     private Date intime;//发货时间
     private Integer logisticsid;//发货单号
     private String nickname;//昵称

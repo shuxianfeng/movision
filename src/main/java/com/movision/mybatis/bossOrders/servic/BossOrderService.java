@@ -465,4 +465,20 @@ public class BossOrderService {
         }
     }
 
+    /**
+     * 售后管理--查询留言
+     *
+     * @param id
+     * @return
+     */
+    public Afterservice queryRemark(Integer id) {
+        try {
+            loger.info("查询留言成功");
+            return bossOrdersMapper.queryRemark(id);
+        } catch (Exception e) {
+            loger.error("查询留言失败");
+            throw e;
+        }
+    }
+
 }

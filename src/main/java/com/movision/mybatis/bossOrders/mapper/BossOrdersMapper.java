@@ -84,4 +84,6 @@ public interface BossOrdersMapper {
 
     List<Afterservice> findAllOrderByConditionAfterService(Map map, RowBounds rowBounds);//售后按条件查询
 
+    Afterservice queryRemark(Integer id);//查询留言
+
 }
