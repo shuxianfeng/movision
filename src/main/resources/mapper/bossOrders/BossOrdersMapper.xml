@@ -606,14 +606,27 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
     </select>
     <select id="findAllAfterService" resultType="com.movision.mybatis.afterservice.entity.Afterservice">
         SELECT
-        f.id,o.ordernumber,f.userid,f.proposertime,f.processingpeople,f.processingtime,a.name,a.province,a.city,a.district,a.street,s.`name`
+        f.id,o.ordernumber,u.nickname,f.proposertime,f.processingpeople,f.processingtime,a.name,a.province,a.city,a.district,a.street,s.`name`
         AS sname,f.afterstatue,f.amountdue,f.refundamount,f.aftersalestatus,f.processingstatus FROM yw_afterservice f
         LEFT JOIN yw_address a ON a.id=f.addressid
-        LEFT JOIN yw_goods s ON s.id=f.goodsid LEFT JOIN yw_orders o ON o.id=f.orderid WHERE f.isdel=1
+        LEFT JOIN yw_goods s ON s.id=f.goodsid LEFT JOIN yw_orders o ON o.id=f.orderid LEFT JOIN yw_user u ON
+        u.id=f.userid WHERE f.isdel=1
     </select>
     <select id="queryAfterService" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.afterservice.entity.Afterservice">
         SELECT g.name,a.afterstatue,a.aftersalestatus,a.amountdue,a.refundamount,a.processingstatus FROM yw_afterservice
         a LEFT JOIN yw_goods g ON g.id=a.goodsid WHERE a.id=#{id,jdbcType=INTEGER}
     </select>
+    <update id="updateAfterService" parameterType="com.movision.mybatis.afterservice.entity.Afterservice">
+        update yw_afterservice
+        <set>
+            <if test="processingstatus != null">
+                processingstatus = #{processingstatus,jdbcType=INTEGER},
+            </if>
+            <if test="refundamount != null">
+                refundamount = #{refundamount,jdbcType=DOUBLE},
+            </if>
+        </set>
+        where id=#{id,jdbcType=INTEGER}
+    </update>
 </mapper>

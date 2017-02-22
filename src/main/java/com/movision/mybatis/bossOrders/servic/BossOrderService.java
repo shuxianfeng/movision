@@ -18,6 +18,7 @@ import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ListOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -412,6 +413,22 @@ public class BossOrderService {
             return bossOrdersMapper.queryAfterService(id);
         } catch (Exception e) {
             loger.error("根据id查售后信息失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 售后管理--修改售后信息
+     *
+     * @param afterservice
+     * @return
+     */
+    public int updateAfterService(Afterservice afterservice) {
+        try {
+            loger.info("修改售后信息");
+            return bossOrdersMapper.updateAfterService(afterservice);
+        } catch (Exception e) {
+            loger.error("修改售后信息失败");
             throw e;
         }
     }

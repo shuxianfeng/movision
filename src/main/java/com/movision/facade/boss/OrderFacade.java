@@ -427,5 +427,26 @@ public class OrderFacade {
         Afterservice afterservice = bossOrderService.queryAfterServiceById(id);
         return afterservice;
     }
+
+    /**
+     * 售后管理--修改售后信息
+     *
+     * @param processingstatus
+     * @param refundamount
+     * @param id
+     * @return
+     */
+    public Map<String, Integer> updateAfterService(String processingstatus, String refundamount, String id) {
+        Map<String, Integer> map = new HashedMap();
+        Afterservice afterservice = new Afterservice();
+        afterservice.setId(Integer.parseInt(id));
+        afterservice.setProcessingstatus(Integer.parseInt(processingstatus));
+        if (refundamount != null) {
+            afterservice.setRefundamount(Double.parseDouble(refundamount));
+        }
+        int result = bossOrderService.updateAfterService(afterservice);
+        map.put("result", result);
+        return map;
+    }
 }
 
