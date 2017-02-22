@@ -433,12 +433,34 @@ public class CircleService {
         }
     }
 
+    /**
+     * 查看圈子详情
+     *
+     * @param circleid
+     * @return
+     */
     public CircleDetails quryCircleDetails(Integer circleid) {
         try {
             log.info("查看圈子详情");
             return circleMapper.quryCircleDetails(circleid);
         } catch (Exception e) {
             log.error("圈子详情异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 编辑圈子
+     *
+     * @param circleDetails
+     * @return
+     */
+    public int updateCircle(CircleDetails circleDetails) {
+        try {
+            log.info("编辑圈子");
+            return circleMapper.updateCircle(circleDetails);
+        } catch (Exception e) {
+            log.error("编辑圈子异常");
             throw e;
         }
     }

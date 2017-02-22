@@ -1,6 +1,7 @@
 package com.movision.mybatis.circle.entity;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author zhurui
@@ -45,9 +46,39 @@ public class CircleDetails {
 
     private Integer isdel;//是否逻辑删除
 
-    private String nickname;//圈主
+    private Integer userid;//圈主
 
     private String categroyname;//圈子所属类型
+
+    private List<Object> admin;//管理员列表
+
+    private String newname;//创建人
+
+    private String erweima;//二维码
+
+    public String getErweima() {
+        return erweima;
+    }
+
+    public void setErweima(String erweima) {
+        this.erweima = erweima;
+    }
+
+    public String getNewname() {
+        return newname;
+    }
+
+    public void setNewname(String newname) {
+        this.newname = newname;
+    }
+
+    public List<Object> getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(List<Object> admin) {
+        this.admin = admin;
+    }
 
     public Integer getId() {
         return id;
@@ -201,12 +232,12 @@ public class CircleDetails {
         this.isdel = isdel;
     }
 
-    public String getNickname() {
-        return nickname;
+    public Integer getUserid() {
+        return userid;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setUserid(Integer userid) {
+        this.userid = userid;
     }
 
     public String getCategroyname() {

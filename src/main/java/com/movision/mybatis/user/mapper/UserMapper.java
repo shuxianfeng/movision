@@ -59,4 +59,6 @@ public interface UserMapper {
     int queryUserPoint(int userid);
 
     User findAllUser(int id);
+
+    String queryUserbyPhoneByUserid(Integer userid);
 }

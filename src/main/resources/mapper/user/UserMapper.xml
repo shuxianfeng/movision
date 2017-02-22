@@ -452,4 +452,8 @@
         SELECT u.nickname,u.id FROM yw_user u WHERE nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
     </select>
 
+    <select id="queryUserbyPhoneByUserid" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT phone FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
+    </select>
+
 </mapper>

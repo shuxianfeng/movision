@@ -265,4 +265,14 @@ public class UserService {
             throw e;
         }
     }
+
+    public String queryUserbyPhoneByUserid(Integer userid) {
+        try {
+            log.info("根据用户id查询用户手机号");
+            return userMapper.queryUserbyPhoneByUserid(userid);
+        } catch (Exception e) {
+            log.error("根据用户id查询用户手机号异常");
+            throw e;
+        }
+    }
 }

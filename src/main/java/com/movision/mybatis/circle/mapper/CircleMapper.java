@@ -80,4 +80,6 @@ public interface CircleMapper {
 
     CircleDetails quryCircleDetails(Integer circleid);
 
+    int updateCircle(CircleDetails circleDetails);
+
 }

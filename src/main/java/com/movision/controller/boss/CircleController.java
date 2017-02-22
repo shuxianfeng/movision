@@ -7,6 +7,7 @@ import com.movision.mybatis.circle.entity.CircleDetails;
 import com.movision.mybatis.circle.entity.CircleIndexList;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostList;
+import com.movision.mybatis.video.entity.Video;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -137,6 +140,66 @@ public class CircleController {
             response.setMessage("操作成功");
         }
         response.setData(circle);
+        return response;
+    }
+
+    /**
+     * 圈子类型
+     *
+     * @param circleid
+     * @return
+     */
+    public Response queryCircletype(@ApiParam(value = "圈子id") @RequestParam String circleid) {
+        Response response = new Response();
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData("");
+        return response;
+    }
+
+    /**
+     * 编辑帖子
+     *
+     * @param id
+     * @param name
+     * @param category
+     * @param nickname
+     * @param admin
+     * @param newname
+     * @param createtime
+     * @param photo
+     * @param introduction
+     * @param erweima
+     * @param status
+     * @param isdiscover
+     * @param orderid
+     * @param permission
+     * @return
+     */
+    @ApiOperation(value = "圈子编辑", notes = "用于圈子编辑接口", response = Response.class)
+    @RequestMapping(value = "update_circle", method = RequestMethod.POST)
+    public Response updateCircle(HttpServletRequest request,
+                                 @ApiParam(value = "圈子id") @RequestParam String id,
+                                 @ApiParam(value = "圈子名称") @RequestParam String name,
+                                 @ApiParam(value = "圈子类型") @RequestParam String category,
+                                 @ApiParam(value = "圈主") @RequestParam String nickname,
+                                 @ApiParam(value = "管理员列表") @RequestParam String admin,
+                                 @ApiParam(value = "创建人") @RequestParam String newname,
+                                 @ApiParam(value = "创建时间") @RequestParam String createtime,
+                                 @ApiParam(value = "圈子否封面") @RequestParam MultipartFile photo,
+                                 @ApiParam(value = "圈子简介") @RequestParam String introduction,
+                                 @ApiParam(value = "圈子二维码") @RequestParam(required = false) String erweima,
+                                 @ApiParam(value = "审核状态") @RequestParam(required = false) String status,
+                                 @ApiParam(value = "推荐到首页") @RequestParam(required = false) String isdiscover,
+                                 @ApiParam(value = "推荐排序") @RequestParam(required = false) String orderid,
+                                 @ApiParam(value = "发帖权限") @RequestParam(required = false) String permission) {
+        Response response = new Response();
+        Map<String, Integer> map = circleFacade.updateCircle(request, id, name, category, nickname, admin, newname, createtime, photo, introduction, erweima, status, isdiscover, orderid, permission);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
         return response;
     }
 }

@@ -436,4 +436,43 @@
         LEFT JOIN yw_circle_category as cat ON cat.id=c.category
         WHERE c.id=#{circleid.jdbcType=INTEGER}
     </select>
+
+    <update id="updateCircle" parameterType="com.movision.mybatis.circle.entity.CircleDetails">
+        update yw_circle
+        <set>
+            <if test="phone!=null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="photo!=null">
+                photo = #{photo,jdbcType=VARCHAR},
+            </if>
+            <if test="category!=null">
+                category = #{category,jdbcType=INTEGER},
+            </if>
+            <if test="name!=null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="introduction!=null">
+                introduction = #{introduction,jdbcType=VARCHAR},
+            </if>
+            <if test="permission!=null">
+                permission = #{permission,jdbcType=INTEGER},
+            </if>
+            <if test="createtime!=null">
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status!=null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="isdiscover!=null">
+                isdiscover = #{isdiscover,jdbcType=INTEGER},
+            </if>
+            <if test="orderid!=null">
+                orderid = #{orderid,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+
 </mapper>

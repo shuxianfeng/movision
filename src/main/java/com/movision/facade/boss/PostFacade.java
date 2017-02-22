@@ -723,10 +723,12 @@ public class PostFacade {
         PostChoiceness postChoiceness = new PostChoiceness();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date esdate = null;
-        try {
-            esdate = format.parse(essencedate);
-        } catch (ParseException e) {
-            log.error("时间格式转换异常", e);
+        if (essencedate != null) {
+            try {
+                esdate = format.parse(essencedate);
+            } catch (ParseException e) {
+                log.error("时间格式转换异常", e);
+            }
         }
         List<Post> posts = postService.queryPostChoicenesslist(esdate);//返回加精日期内有几条加精
         if (postid != null) {
