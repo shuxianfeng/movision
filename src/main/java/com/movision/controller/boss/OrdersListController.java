@@ -25,7 +25,7 @@ import java.util.Map;
  * @Date 2017/2/6 10:17
  */
 @RestController
-@RequestMapping("/boos/order")
+@RequestMapping("/boss/order")
 public class OrdersListController {
     @Autowired
     OrderFacade orderFacade = new OrderFacade();
