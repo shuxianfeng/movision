@@ -605,7 +605,15 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         SELECT s.id, s.province,s.city,s.district,s.street FROM yw_address s WHERE s.id=#{id,jdbcType=INTEGER}
     </select>
     <select id="findAllAfterService" resultType="com.movision.mybatis.afterservice.entity.Afterservice">
-        SELECT f.id,f.orderid,f.userid,f.proposertime,f.processingpeople,f.processingtime,a.name,a.province,a.city,a.district,a.street,s.`name` AS sname,f.afterstatue,f.amountdue,f.refundamount,f.aftersalestatus,f.processingstatus FROM yw_afterservice f LEFT JOIN yw_address a ON a.id=f.addressid
-        LEFT JOIN yw_goods s ON s.id=f.goodsid WHERE f.isdel=1
+        SELECT
+        f.id,o.ordernumber,f.userid,f.proposertime,f.processingpeople,f.processingtime,a.name,a.province,a.city,a.district,a.street,s.`name`
+        AS sname,f.afterstatue,f.amountdue,f.refundamount,f.aftersalestatus,f.processingstatus FROM yw_afterservice f
+        LEFT JOIN yw_address a ON a.id=f.addressid
+        LEFT JOIN yw_goods s ON s.id=f.goodsid LEFT JOIN yw_orders o ON o.id=f.orderid WHERE f.isdel=1
+    </select>
+    <select id="queryAfterService" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.afterservice.entity.Afterservice">
+        SELECT g.name,a.afterstatue,a.aftersalestatus,a.amountdue,a.refundamount,a.processingstatus FROM yw_afterservice
+        a LEFT JOIN yw_goods g ON g.id=a.goodsid WHERE a.id=#{id,jdbcType=INTEGER}
     </select>
 </mapper>

@@ -3,6 +3,7 @@ package com.movision.controller.boss;
 import com.movision.common.Response;
 import com.movision.facade.boss.OrderFacade;
 import com.movision.mybatis.address.entity.Address;
+import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.invoice.entity.Invoice;
@@ -395,5 +396,23 @@ public class OrdersListController {
         return response;
     }
 
+
+    /**
+     * 售后管理--根据id查询售后信息
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "根据id查询售后信息", notes = "根据id查询售后信息", response = Response.class)
+    @RequestMapping(value = "query_byid_afterservice", method = RequestMethod.POST)
+    public Response queryAfterServiceById(@ApiParam(value = "售后id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        Afterservice afterservice = orderFacade.queryAfterServiceById(id);
+        if (response.getCode() == 200) {
+            response.setMessage("根据id查询售后信息");
+        }
+        response.setData(afterservice);
+        return response;
+    }
 
 }

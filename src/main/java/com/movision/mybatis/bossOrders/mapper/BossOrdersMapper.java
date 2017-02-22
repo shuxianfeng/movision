@@ -76,4 +76,6 @@ public interface BossOrdersMapper {
 
     List<Afterservice> findAllAfterService(RowBounds rowBounds);//售后服务
 
+    Afterservice queryAfterService(Integer id);//售后处理
+
 }

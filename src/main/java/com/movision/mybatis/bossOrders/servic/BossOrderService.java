@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @Author zhurui
@@ -395,6 +396,22 @@ public class BossOrderService {
             return bossOrdersMapper.queryGoods(id);
         } catch (Exception e) {
             loger.error("查询商品信息失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 售后管理--根据id查询
+     *
+     * @param id
+     * @return
+     */
+    public Afterservice queryAfterServiceById(Integer id) {
+        try {
+            loger.info("根据id查售后信息");
+            return bossOrdersMapper.queryAfterService(id);
+        } catch (Exception e) {
+            loger.error("根据id查售后信息失败");
             throw e;
         }
     }
