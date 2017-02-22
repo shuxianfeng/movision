@@ -1,9 +1,7 @@
 package com.movision.mybatis.comment.service;
 
-import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.mapper.CommentMapper;
-import com.movision.mybatis.rewarded.entity.Rewarded;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +25,11 @@ public class CommentService {
     @Autowired
     public CommentMapper commentMapper;
 
-    public List<CommentVo> queryCommentsByLsit(String postid, Paging<CommentVo> pager){
+    public List<CommentVo> queryCommentsByLsit(Paging<CommentVo> pager, String postid) {
 
         try {
             log.info("查询某个帖子的评论列表");
-            return commentMapper.findAllqueryCommentsByLsit(Integer.parseInt(postid), pager.getRowBounds());
+            return commentMapper.findAllqueryCommentsByLsit(pager.getRowBounds(), Integer.parseInt(postid));
         } catch (Exception e) {
             log.error("查询帖子评论列表失败");
             throw e;

@@ -282,8 +282,7 @@ public class PostFacade {
      * @return
      */
     public List<CommentVo> queryPostAppraise(String postid, Paging<CommentVo> pager) {
-        List<CommentVo> list = commentService.queryCommentsByLsit(postid, pager);
-        return list;
+        return commentService.queryCommentsByLsit(pager, postid);
     }
 
     /**

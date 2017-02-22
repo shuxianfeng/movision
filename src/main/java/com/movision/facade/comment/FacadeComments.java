@@ -32,20 +32,12 @@ public class FacadeComments {
     /**
      * 帖子评论列表（二级）
      *
-     * @param pageNo
-     * @param pageSize
      * @param postid
      * @return
      */
-    public List<CommentVo> queryCommentsByLsit(String pageNo, String pageSize, String postid){
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<CommentVo> pager = new Paging<CommentVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List<CommentVo> vo=CommentService.queryCommentsByLsit(postid,pager);
+    public List<CommentVo> queryCommentsByLsit(Paging<CommentVo> pager, String postid) {
+
+        List<CommentVo> vo = CommentService.queryCommentsByLsit(pager, postid);
         List<CommentVo> resaultvo=new ArrayList();
         for (int i=0;i<vo.size();i++){//遍历所有帖子
             if (vo.get(i).getPid() == null) {//当评论没有子评论的时候（父评论）
