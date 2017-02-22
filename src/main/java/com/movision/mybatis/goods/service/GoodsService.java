@@ -186,7 +186,7 @@ public class GoodsService {
     public List<GoodsAssessmentVo> queryGoodsAssessment(Paging<GoodsAssessmentVo> pager, int goodsid) {
         try {
             log.info("根据商品id查询所有商品评论");
-            return goodsAssessmentMapper.queryGoodsAssessment(pager.getRowBounds(), goodsid);
+            return goodsAssessmentMapper.findAllGoodsAssessment(pager.getRowBounds(), goodsid);
         } catch (Exception e) {
             log.error("根据商品id查询所有商品评论失败");
             throw e;
@@ -196,7 +196,7 @@ public class GoodsService {
     public List<GoodsAssessmentVo> queryImgGoodsAssessment(Paging<GoodsAssessmentVo> pager, int goodsid) {
         try {
             log.info("根据商品id查询所有有图评论");
-            return goodsAssessmentMapper.queryImgGoodsAssessment(pager.getRowBounds(), goodsid);
+            return goodsAssessmentMapper.findAllImgGoodsAssessment(pager.getRowBounds(), goodsid);
         } catch (Exception e) {
             log.error("根据商品id查询所有有图评论失败");
             throw e;
@@ -206,7 +206,7 @@ public class GoodsService {
     public List<GoodsAssessmentVo> queryQualityGoodsAssessment(Paging<GoodsAssessmentVo> pager, int goodsid) {
         try {
             log.info("根据商品id查询所有质量好的评论");
-            return goodsAssessmentMapper.queryQualityGoodsAssessment(pager.getRowBounds(), goodsid);
+            return goodsAssessmentMapper.findAllQualityGoodsAssessment(pager.getRowBounds(), goodsid);
         } catch (Exception e) {
             log.error("根据商品id查询所有质量好的评论失败");
             throw e;
@@ -216,7 +216,7 @@ public class GoodsService {
     public List<GoodsAssessmentVo> queryFastGoodsAssessment(Paging<GoodsAssessmentVo> pager, int goodsid) {
         try {
             log.info("根据商品id查询送货快的评论");
-            return goodsAssessmentMapper.queryFastGoodsAssessment(pager.getRowBounds(), goodsid);
+            return goodsAssessmentMapper.findAllFastGoodsAssessment(pager.getRowBounds(), goodsid);
         } catch (Exception e) {
             log.error("根据商品id查询送货快的评论失败");
             throw e;
@@ -226,7 +226,7 @@ public class GoodsService {
     public List<GoodsAssessmentVo> queryAttitudeGoodsAssessment(Paging<GoodsAssessmentVo> pager, int goodsid) {
         try {
             log.info("根据商品id查询态度好的评论");
-            return goodsAssessmentMapper.queryAttitudeGoodsAssessment(pager.getRowBounds(), goodsid);
+            return goodsAssessmentMapper.findAllAttitudeGoodsAssessment(pager.getRowBounds(), goodsid);
         } catch (Exception e) {
             log.error("根据商品id查询态度好的评论失败");
             throw e;
@@ -236,7 +236,7 @@ public class GoodsService {
     public List<GoodsAssessmentVo> queryQualityGeneral(Paging<GoodsAssessmentVo> pager, int goodsid) {
         try {
             log.info("根据商品id查询质量一般的评论");
-            return goodsAssessmentMapper.queryQualityGeneral(pager.getRowBounds(), goodsid);
+            return goodsAssessmentMapper.findAllQualityGeneral(pager.getRowBounds(), goodsid);
         } catch (Exception e) {
             log.error("根据商品id查询质量一般的评论失败");
             throw e;

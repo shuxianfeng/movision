@@ -29,7 +29,7 @@
     </select>
 
     <!--根据商品id查询商品的所有评论-->
-    <select id="queryGoodsAssessment" parameterType="java.lang.Integer"
+    <select id="findAllGoodsAssessment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
     SELECT t.* FROM (
       SELECT t1.*, t2.nickname, t2.phone
@@ -41,7 +41,7 @@
   </select>
 
     <!--根据商品id查询所有有图评论-->
-    <select id="queryImgGoodsAssessment" parameterType="java.lang.Integer"
+    <select id="findAllImgGoodsAssessment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
         SELECT t.* FROM (
           SELECT t1.*, t2.nickname, t2.phone
@@ -54,7 +54,7 @@
     </select>
 
     <!--根据商品id查询所有质量好的评论-->
-    <select id="queryQualityGoodsAssessment" parameterType="java.lang.Integer"
+    <select id="findAllQualityGoodsAssessment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
         SELECT t.* FROM (
           SELECT t1.*, t2.nickname, t2.phone
@@ -67,7 +67,7 @@
     </select>
 
     <!--根据商品id查询所有送货快的评论-->
-    <select id="queryFastGoodsAssessment" parameterType="java.lang.Integer"
+    <select id="findAllFastGoodsAssessment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
         SELECT t.* FROM (
           SELECT t1.*, t2.nickname, t2.phone
@@ -80,7 +80,7 @@
     </select>
 
     <!--根据商品id查询所有态度好的评论-->
-    <select id="queryAttitudeGoodsAssessment" parameterType="java.lang.Integer"
+    <select id="findAllAttitudeGoodsAssessment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
         SELECT t.* FROM (
           SELECT t1.*, t2.nickname, t2.phone
@@ -93,7 +93,7 @@
     </select>
 
     <!--根据商品id查询所有质量一般的评论-->
-    <select id="queryQualityGeneral" parameterType="java.lang.Integer"
+    <select id="findAllQualityGeneral" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
         SELECT t.* FROM (
           SELECT t1.*, t2.nickname, t2.phone

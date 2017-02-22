@@ -56,13 +56,8 @@ public class GoodsFacade {
     }
 
     public Map<String, Object> queryGoodsAssessment(String pageNo, String pageSize, String goodsid, String type) {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<GoodsAssessmentVo> pager = new Paging<GoodsAssessmentVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+
+        Paging<GoodsAssessmentVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
 
         Map<String, Object> map = new HashMap();
 
@@ -81,6 +76,7 @@ public class GoodsFacade {
         } else if (type.equals("5")) {//查询质量一般的评论
             goodsAssessmentList = goodsService.queryQualityGeneral(pager, Integer.parseInt(goodsid));
         }
+        pager.result(goodsAssessmentList);
 
         for (int i = 0; i < goodsAssessmentList.size(); i++) {
             //如果官方评论是针对某个评论回复的，查询父评论信息
@@ -97,7 +93,7 @@ public class GoodsFacade {
         //查询各类评论的数量
         GoodsAssessmentCategery goodsAssessmentCategery = goodsService.queryAssessmentCategorySum(Integer.parseInt(goodsid));
 
-        map.put("goodsAssessmentList", goodsAssessmentList);
+        map.put("goodsAssessmentList", pager);
         map.put("goodsAssessmentCategery", goodsAssessmentCategery);
 
         return map;

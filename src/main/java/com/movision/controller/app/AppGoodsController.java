@@ -51,14 +51,14 @@ public class AppGoodsController {
     }
 
     /**
-     * 商品评论接口
+     * 查询商品评论列表接口
      */
-    @ApiOperation(value = "商品评论接口", notes = "用户点击商品缩略图进入商品详情页面，详情数据返回接口", response = Response.class)
+    @ApiOperation(value = "查询商品评论列表接口", notes = "用户点击商品评价，返回用户查询的评论分页列表", response = Response.class)
     @RequestMapping(value = "goodAssessment", method = RequestMethod.POST)
     public Response queryGoodAssessment(@ApiParam(value = "商品id") @RequestParam String goodsid,
                                         @ApiParam(value = "评论类型(0全部 1有图 2质量好 3送货快 4态度不错 5质量一般)") @RequestParam String type,
-                                        @ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
-                                        @ApiParam(value = "每页几条") @RequestParam(required = false) String pageSize) {
+                                        @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                        @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
 
         Map<String, Object> map = goodsFacade.queryGoodsAssessment(pageNo, pageSize, goodsid, type);

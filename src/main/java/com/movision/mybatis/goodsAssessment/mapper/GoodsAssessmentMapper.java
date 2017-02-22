@@ -17,17 +17,17 @@ public interface GoodsAssessmentMapper {
 
     GoodsAssessment selectByPrimaryKey(Integer id);
 
-    List<GoodsAssessmentVo> queryGoodsAssessment(RowBounds rowBounds, int goodsid);
+    List<GoodsAssessmentVo> findAllGoodsAssessment(RowBounds rowBounds, int goodsid);
 
-    List<GoodsAssessmentVo> queryImgGoodsAssessment(RowBounds rowBounds, int goodsid);
+    List<GoodsAssessmentVo> findAllImgGoodsAssessment(RowBounds rowBounds, int goodsid);
 
-    List<GoodsAssessmentVo> queryQualityGoodsAssessment(RowBounds rowBounds, int goodsid);
+    List<GoodsAssessmentVo> findAllQualityGoodsAssessment(RowBounds rowBounds, int goodsid);
 
-    List<GoodsAssessmentVo> queryFastGoodsAssessment(RowBounds rowBounds, int goodsid);
+    List<GoodsAssessmentVo> findAllFastGoodsAssessment(RowBounds rowBounds, int goodsid);
 
-    List<GoodsAssessmentVo> queryAttitudeGoodsAssessment(RowBounds rowBounds, int goodsid);
+    List<GoodsAssessmentVo> findAllAttitudeGoodsAssessment(RowBounds rowBounds, int goodsid);
 
-    List<GoodsAssessmentVo> queryQualityGeneral(RowBounds rowBounds, int goodsid);
+    List<GoodsAssessmentVo> findAllQualityGeneral(RowBounds rowBounds, int goodsid);
 
     GoodsAssessmentVo queryPassessment(int pid);
 
