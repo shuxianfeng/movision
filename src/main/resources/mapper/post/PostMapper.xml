@@ -119,10 +119,16 @@
         <if test="userid != null">
             (SELECT count(*) FROM yw_follow_circle
             WHERE userid = #{userid,jdbcType=INTEGER}
-            AND circleid = (SELECT circleid FROM yw_post WHERE id = #{postid,jdbcType=INTEGER})) AS isfollow
+            AND circleid = (SELECT circleid FROM yw_post WHERE id = #{postid,jdbcType=INTEGER})) AS isfollow,
+            (SELECT count(*) FROM yw_collection WHERE userid = #{userid,jdbcType=INTEGER} AND postid =
+            #{postid,jdbcType=INTEGER} AND type = '0') AS isCollect,
+            (SELECT count(*) FROM yw_post_zan_record WHERE userid = #{userid,jdbcType=INTEGER} AND postid =
+            #{postid,jdbcType=INTEGER}) AS isZan
         </if>
         <if test="userid == null">
-            0 AS isfollow
+            0 AS isfollow,
+            0 AS isCollect,
+            0 AS isZan
         </if>
         FROM yw_post t1,yw_circle t2
         WHERE t1.id = #{postid,jdbcType=INTEGER}

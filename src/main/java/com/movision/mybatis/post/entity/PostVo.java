@@ -79,6 +79,10 @@ public class PostVo {
 
     private Integer userid;//用户id
 
+    private Integer isCollect;//该用户是否已收藏该帖子/活动 0 否 1 是
+
+    private Integer isZan;//该用户是否已赞该帖子/活动 0 否 1 是
+
     public Integer getUserid() {
         return userid;
     }
@@ -349,5 +353,21 @@ public class PostVo {
 
     public void setEssencedate(Date essencedate) {
         this.essencedate = essencedate;
+    }
+
+    public Integer getIsCollect() {
+        return isCollect;
+    }
+
+    public void setIsCollect(Integer isCollect) {
+        this.isCollect = isCollect;
+    }
+
+    public Integer getIsZan() {
+        return isZan;
+    }
+
+    public void setIsZan(Integer isZan) {
+        this.isZan = isZan;
     }
 }
