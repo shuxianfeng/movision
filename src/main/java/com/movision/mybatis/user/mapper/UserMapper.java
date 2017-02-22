@@ -1,5 +1,6 @@
 package com.movision.mybatis.user.mapper;
 
+import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.user.entity.*;
 import org.apache.ibatis.annotations.Param;
 import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
@@ -61,4 +62,6 @@ public interface UserMapper {
     User findAllUser(int id);
 
     String queryUserbyPhoneByUserid(Integer userid);
+
+    List<BossUser> queryUserByAdministratorList(Integer circleid);
 }

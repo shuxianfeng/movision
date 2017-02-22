@@ -465,4 +465,35 @@ public class CircleService {
         }
     }
 
+    /**
+     * 编辑圈子数据回显
+     *
+     * @param circleid
+     * @return
+     */
+    public CircleDetails queryCircleByShow(Integer circleid) {
+        try {
+            log.info("编辑圈子数据回显");
+            return circleMapper.queryCircleByShow(circleid);
+        } catch (Exception e) {
+            log.error("编辑圈子数据回显");
+            throw e;
+        }
+    }
+
+    /**
+     * 圈子推荐到发现页排序
+     *
+     * @return
+     */
+    public List<Integer> queryCircleByOrderidList() {
+        try {
+            log.info("查询圈子推荐发现页排序");
+            return circleMapper.queryCircleByOrderidList();
+        } catch (Exception e) {
+            log.error("查询圈子推荐发现页排序异常");
+            throw e;
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.movision.facade.boss;
 
 import com.movision.mybatis.accusation.service.AccusationService;
+import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.manager.service.ManagerServcie;
@@ -338,6 +339,28 @@ public class CircleFacade {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return map;
+    }
+
+    public Map<String, CircleDetails> queryCircleByShow(String circleid) {
+        Map<String, CircleDetails> map = new HashedMap();
+        CircleDetails circleDetails = circleService.queryCircleByShow(Integer.parseInt(circleid));//查询出圈子信息
+        List<BossUser> list = userService.queryUserByAdministratorList(Integer.parseInt(circleid));//查询出圈子管理员列表
+        circleDetails.setAdmin(list);
+        List<Integer> ords = circleService.queryCircleByOrderidList();
+        List<Integer> h = new ArrayList<>();
+        for (int k = 1; k < 10; k++) {
+            h.add(k);
+        }
+        for (int i = 0; i < ords.size(); i++) {
+            for (int j = 0; j < h.size(); j++) {
+                if (ords.get(i) == h.get(j) && h.get(j) != circleDetails.getOrderid()) {//比较排序并返回空余排序位置
+                    h.remove(j);
+                }
+            }
+            circleDetails.setOrderids(h);
+        }
+        map.put("resault", circleDetails);
         return map;
     }
 

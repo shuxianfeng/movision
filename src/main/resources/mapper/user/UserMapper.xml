@@ -456,4 +456,9 @@
         SELECT phone FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
     </select>
 
+    <select id="queryUserByAdministratorList" resultType="com.movision.mybatis.bossUser.entity.BossUser"
+            parameterType="java.lang.Integer">
+        SELECT * FROM yw_admin_user ad WHERE ad.id IN (SELECT m.userid FROM yw_circle_manager AS m WHERE m.circleid=#{circleid,jdbcType=INTEGER})
+    </select>
+
 </mapper>

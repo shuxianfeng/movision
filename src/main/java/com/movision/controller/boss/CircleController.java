@@ -159,7 +159,7 @@ public class CircleController {
     }
 
     /**
-     * 编辑帖子
+     * 编辑圈子
      *
      * @param id
      * @param name
@@ -196,6 +196,24 @@ public class CircleController {
                                  @ApiParam(value = "发帖权限") @RequestParam(required = false) String permission) {
         Response response = new Response();
         Map<String, Integer> map = circleFacade.updateCircle(request, id, name, category, nickname, admin, newname, createtime, photo, introduction, erweima, status, isdiscover, orderid, permission);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 圈子编辑时数据回显
+     *
+     * @param circleid
+     * @return
+     */
+    @ApiOperation(value = "编辑圈子数据回显", notes = "用于编辑帖子时数据回显", response = Response.class)
+    @RequestMapping(value = "query_circle_show", method = RequestMethod.POST)
+    public Response queryCircleByShow(@ApiParam(value = "圈子id") @RequestParam String circleid) {
+        Response response = new Response();
+        Map<String, CircleDetails> map = circleFacade.queryCircleByShow(circleid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

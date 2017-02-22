@@ -474,5 +474,13 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
+    <select id="queryCircleByShow" resultType="com.movision.mybatis.circle.entity.CircleDetails">
+        SELECT * FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryCircleByOrderidList" resultType="java.lang.Integer">
+        SELECT orderid FROM yw_circle WHERE orderid BETWEEN 1 AND 9 AND isdiscover=1 ORDER BY orderid DESC
+    </select>
+
 
 </mapper>

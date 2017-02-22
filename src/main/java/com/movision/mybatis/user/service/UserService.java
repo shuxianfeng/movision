@@ -1,5 +1,6 @@
 package com.movision.mybatis.user.service;
 
+import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
@@ -266,12 +267,34 @@ public class UserService {
         }
     }
 
+    /**
+     * 根据用户id查询手机号
+     *
+     * @param userid
+     * @return
+     */
     public String queryUserbyPhoneByUserid(Integer userid) {
         try {
             log.info("根据用户id查询用户手机号");
             return userMapper.queryUserbyPhoneByUserid(userid);
         } catch (Exception e) {
             log.error("根据用户id查询用户手机号异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询圈子管理员列表
+     *
+     * @param circleid
+     * @return
+     */
+    public List<BossUser> queryUserByAdministratorList(Integer circleid) {
+        try {
+            log.info("查询圈子管理员列表");
+            return userMapper.queryUserByAdministratorList(circleid);
+        } catch (Exception e) {
+            log.error("查询圈子管理员列表异常");
             throw e;
         }
     }

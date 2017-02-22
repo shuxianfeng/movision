@@ -1,5 +1,8 @@
 package com.movision.mybatis.circle.entity;
 
+import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.user.entity.User;
+
 import java.util.Date;
 import java.util.List;
 
@@ -44,17 +47,27 @@ public class CircleDetails {
 
     private Integer orderid;//排序
 
+    private List<Integer> orderids;//排序列表
+
     private Integer isdel;//是否逻辑删除
 
     private Integer userid;//圈主
 
     private String categroyname;//圈子所属类型
 
-    private List<Object> admin;//管理员列表
+    private List<BossUser> admin;//管理员列表
 
     private String newname;//创建人
 
     private String erweima;//二维码
+
+    public List<Integer> getOrderids() {
+        return orderids;
+    }
+
+    public void setOrderids(List<Integer> orderids) {
+        this.orderids = orderids;
+    }
 
     public String getErweima() {
         return erweima;
@@ -72,11 +85,11 @@ public class CircleDetails {
         this.newname = newname;
     }
 
-    public List<Object> getAdmin() {
+    public List<BossUser> getAdmin() {
         return admin;
     }
 
-    public void setAdmin(List<Object> admin) {
+    public void setAdmin(List<BossUser> admin) {
         this.admin = admin;
     }
 
