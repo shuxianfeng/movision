@@ -89,10 +89,10 @@ public class PostService {
         return postMapper.queryPastPostList(parammap);
     }
 
-    public List<PostVo> queryPostList(Paging<Post> pager, String circleid) {
+    public List<PostVo> queryPostList(Paging<PostVo> pager, String circleid) {
         try {
             log.info("查询某个圈子发出的所有帖子列表");
-            return postMapper.queryPostList(pager.getRowBounds(), Integer.parseInt(circleid));
+            return postMapper.findAllPostList(pager.getRowBounds(), Integer.parseInt(circleid));
         } catch (Exception e) {
             log.error("查询帖子列表失败");
             throw e;

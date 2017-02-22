@@ -51,7 +51,7 @@ public interface PostMapper {
 
     List<PostVo> queryPastPostList(Map<String, Object> parammap);
 
-    List<PostVo> queryPostList(RowBounds rowBounds, int circleid);
+    List<PostVo> findAllPostList(RowBounds rowBounds, int circleid);
 
     List<PostVo> pastHotPostList(RowBounds rowBounds, int circleid);
 

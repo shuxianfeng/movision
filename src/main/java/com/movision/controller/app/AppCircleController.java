@@ -6,7 +6,9 @@ import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.circleCategory.entity.CircleCategoryVo;
+import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
+import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,16 +51,17 @@ public class AppCircleController {
     @ApiOperation(value = "圈子详情页2", notes = "用户返回圈子详情页下半版数据，圈子首页下半部分内容的所有帖子（含分页）", response = Response.class)
     @RequestMapping(value = "index2", method = RequestMethod.POST)
     public Response queryCircleIndex2(@ApiParam(value = "圈子id") @RequestParam String circleid,
-                                      @ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
-                                      @ApiParam(value = "多少条数据") @RequestParam(required = false) String pageSize) {
+                                      @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                      @ApiParam(value = "多少条数据") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-
-        List<PostVo> postlist = facadePost.queryCircleIndex2(pageNo, pageSize, circleid);
+        Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<PostVo> postlist = facadePost.queryCircleIndex2(pager, circleid);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(postlist);
+        pager.result(postlist);
+        response.setData(pager);
         return response;
     }
 

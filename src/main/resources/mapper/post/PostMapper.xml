@@ -148,7 +148,7 @@
           AND t2.status = '1'
     </select>
 
-    <select id="queryPostList" parameterType="java.lang.Integer"
+    <select id="findAllPostList" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT t1.*,t2.category AS category, t2.code AS code FROM yw_post t1
         LEFT JOIN yw_circle t2 ON
