@@ -530,7 +530,7 @@ public class PostFacade {
                     }
                     Date d = null;
                     if (time != null || time != "") {
-                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                         d = df.parse(time);
                     } else {
                         d = new Date();
@@ -937,7 +937,7 @@ public class PostFacade {
             }
             Date d = null;
             if (time != null) {
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 try {
                     d = df.parse(time);
                 } catch (ParseException e) {
