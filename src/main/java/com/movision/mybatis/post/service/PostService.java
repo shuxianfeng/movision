@@ -217,6 +217,17 @@ public class PostService {
         }
     }
 
+    //插入一条用户点赞帖子的记录
+    public void insertZanRecord(Map<String, Object> parammap) {
+        try {
+            log.info("插入一条用户点赞帖子的记录");
+            postMapper.insertZanRecord(parammap);
+        } catch (Exception e) {
+            log.error("插入一条用户点赞帖子的记录失败");
+            throw e;
+        }
+    }
+
     //跟新帖子点赞次数
     public int updatePostByZanSum(int id) {
         try {

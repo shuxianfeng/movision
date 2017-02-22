@@ -353,6 +353,16 @@
         </foreach>
     </insert>
 
+    <!--插入一条用户点赞帖子的记录-->
+    <insert id="insertZanRecord" parameterType="java.util.Map">
+      INSERT INTO yw_post_zan_record (
+        userid, postid, intime
+      )
+      VALUES (
+        #{userid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}
+      )
+    </insert>
+
     <insert id="addPost" parameterType="java.util.Map">
         INSERT INTO yw_post(
         <if test="title != null">

@@ -247,7 +247,12 @@ public class FacadePost {
         return map;
     }
 
-    public int updatePostByZanSum(String id) {
+    public int updatePostByZanSum(String id, String userid) {
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("postid", Integer.parseInt(id));
+        parammap.put("userid", Integer.parseInt(userid));
+        parammap.put("intime", new Date());
+        postService.insertZanRecord(parammap);
         int type = postService.updatePostByZanSum(Integer.parseInt(id));
         if (type == 1) {
             return postService.queryPostByZanSum(Integer.parseInt(id));

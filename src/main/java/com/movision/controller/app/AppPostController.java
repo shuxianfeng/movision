@@ -150,9 +150,10 @@ public class AppPostController {
      */
     @ApiOperation(value = "更新帖子点赞次数", notes = "用于帖子点赞接口", response = Response.class)
     @RequestMapping(value = "updateZan", method = RequestMethod.POST)
-    public Response updatePostByZanSum(@ApiParam(value = "帖子id") @RequestParam String id) {
+    public Response updatePostByZanSum(@ApiParam(value = "帖子id") @RequestParam String id,
+                                       @ApiParam(value = "用户id") @RequestParam String userid) {
         Response response = new Response();
-        int sum = facadePost.updatePostByZanSum(id);
+        int sum = facadePost.updatePostByZanSum(id, userid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
