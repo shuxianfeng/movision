@@ -120,7 +120,7 @@ public class OrdersListController {
                                        @ApiParam(value = "省") @RequestParam(required = false) String province,
                                        @ApiParam(value = "市") @RequestParam(required = false) String city,
                                        @ApiParam(value = "区") @RequestParam(required = false) String district,
-                                       @ApiParam(value = "区") @RequestParam(required = false) String street
+                                       @ApiParam(value = "街道") @RequestParam(required = false) String street
     ) {
         Response response = new Response();
         Map<String, Integer> map = orderFacade.updateOrderAddress(orderid, phone, name, email, province, city, district, street);
