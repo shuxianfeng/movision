@@ -433,4 +433,20 @@ public class BossOrderService {
         }
     }
 
+    /**
+     * 售后管理*--售后预览
+     *
+     * @param id
+     * @return
+     */
+    public Afterservice queryByIdAfterService(Integer id) {
+        try {
+            loger.info("售后预览");
+            return bossOrdersMapper.queryByIdAfterService(id);
+        } catch (Exception e) {
+            loger.error("售后预览失败");
+            throw e;
+        }
+    }
+
 }

@@ -629,4 +629,9 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         </set>
         where id=#{id,jdbcType=INTEGER}
     </update>
+    <select id="queryByIdAfterService" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.afterservice.entity.Afterservice">
+SELECT f.id,o.ordernumber,u.nickname,f.proposertime,f.processingpeople,f.processingtime,a.name,a.province,a.city,a.district,a.street,s.`name` AS sname,s.protype,f.afterstatue,f.amountdue,f.refundamount,f.aftersalestatus,f.processingstatus,o.takeway,l.intime,l.logisticsid FROM yw_afterservice f LEFT JOIN yw_address a ON a.id=f.addressid
+     LEFT JOIN yw_goods s ON s.id=f.goodsid LEFT JOIN yw_orders o ON o.id=f.orderid LEFT JOIN yw_user u ON u.id=f.userid LEFT JOIN yw_order_sub_logistics l ON l.logisticsid=o.logisticsid WHERE f.id=#{id,jdbcType=INTEGER}
+    </select>
 </mapper>

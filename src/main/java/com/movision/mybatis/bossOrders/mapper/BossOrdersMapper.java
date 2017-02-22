@@ -80,4 +80,6 @@ public interface BossOrdersMapper {
 
     int updateAfterService(Afterservice afterservice);//修改售后
 
+    Afterservice queryByIdAfterService(Integer id);//售后预览
+
 }

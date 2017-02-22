@@ -448,5 +448,16 @@ public class OrderFacade {
         map.put("result", result);
         return map;
     }
+
+    /**
+     * 售后管理--售后预览
+     *
+     * @param id
+     * @return
+     */
+    public Afterservice queryByIdAfterService(Integer id) {
+        Afterservice afterservice = bossOrderService.queryAfterServiceById(id);
+        return afterservice;
+    }
 }
 

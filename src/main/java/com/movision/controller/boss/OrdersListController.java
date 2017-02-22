@@ -439,4 +439,22 @@ public class OrdersListController {
     }
 
 
+    /**
+     * 售后管理-售后预览
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "售后预览", notes = "售后预览", response = Response.class)
+    @RequestMapping(value = "query_afterservice", method = RequestMethod.POST)
+    public Response queryByIdAfterService(@ApiParam(value = "售后id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        Afterservice afterservice = orderFacade.queryByIdAfterService(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(afterservice);
+        return response;
+    }
+
 }
