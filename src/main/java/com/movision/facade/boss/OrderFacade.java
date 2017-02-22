@@ -456,7 +456,7 @@ public class OrderFacade {
      * @return
      */
     public Afterservice queryByIdAfterService(Integer id) {
-        Afterservice afterservice = bossOrderService.queryAfterServiceById(id);
+        Afterservice afterservice = bossOrderService.queryByIdAfterService(id);
         return afterservice;
     }
 
