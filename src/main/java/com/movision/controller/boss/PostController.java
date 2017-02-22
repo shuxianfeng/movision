@@ -395,7 +395,7 @@ public class PostController {
     @ApiOperation(value = "帖子加精数据回显", notes = "用于帖子加精时，数据回填接口", response = Response.class)
     @RequestMapping(value = "/query_post_choiceness", method = RequestMethod.POST)
     public Response queryPostChoiceness(@ApiParam(value = "精选日期") @RequestParam String essencedate,
-                                        @ApiParam(value = "帖子id") @RequestParam String postid) {
+                                        @ApiParam(value = "帖子id") @RequestParam(required = false) String postid) {
         Response response = new Response();
         PostChoiceness list = postFacade.queryPostChoiceness(postid, essencedate);
         if (response.getCode() == 200) {

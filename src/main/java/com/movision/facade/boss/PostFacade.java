@@ -717,7 +717,9 @@ public class PostFacade {
             log.error("时间格式转换异常", e);
         }
         List<Post> posts = postService.queryPostChoicenesslist(esdate);//返回加精日期内有几条加精
-        postChoiceness = postService.queryPostChoiceness(Integer.parseInt(postid));
+        if (postid != null) {
+            postChoiceness = postService.queryPostChoiceness(Integer.parseInt(postid));
+        }
         List<Integer> lou = new ArrayList();
         for (int e = 1; e < 6; e++) {//赋值一个的集合，用于返回排序
             lou.add(e);
@@ -725,11 +727,16 @@ public class PostFacade {
         for (int i = 0; i < posts.size(); i++) {
             for (int j = 0; j < lou.size(); j++) {
                 if (posts.get(i).getOrderid() == lou.get(j)) {
-                    if (lou.get(j) != postChoiceness.getOrderid())
+                    if (postid != null) {
+                        if (lou.get(j) != postChoiceness.getOrderid()) {
+                            lou.remove(j);
+                        }
+                    } else {
                         lou.remove(j);
-                }
                     }
                 }
+            }
+        }
         map.put("result", lou);
         postChoiceness.setOrderids(map);
         return postChoiceness;
