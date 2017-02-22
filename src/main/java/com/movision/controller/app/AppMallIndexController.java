@@ -5,6 +5,7 @@ import com.movision.facade.mall.MallIndexFacade;
 import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
+import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,16 +92,18 @@ public class AppMallIndexController {
      */
     @ApiOperation(value = "商城首页月度热销榜单--点击“查看全部”接口", notes = "点击查看全部跳转到全部月度热销榜单分页列表", response = Response.class)
     @RequestMapping(value = "allMonthHot", method = RequestMethod.POST)
-    public Response queryAllMonthHot(@ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
-                                     @ApiParam(value = "每页多少条") @RequestParam(required = false) String pageSize) {
+    public Response queryAllMonthHot(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                     @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
 
-        List<GoodsVo> allMonthHotList = mallIndexFacade.queryAllMonthHot(pageNo, pageSize);
+        Paging<GoodsVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<GoodsVo> allMonthHotList = mallIndexFacade.queryAllMonthHot(pager);
+        pager.result(allMonthHotList);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(allMonthHotList);
+        response.setData(pager);
         return response;
     }
 
@@ -111,16 +114,18 @@ public class AppMallIndexController {
      */
     @ApiOperation(value = "商城首页一周热销榜单--点击“查看全部”接口", notes = "点击查看全部跳转到全部一周热销榜单分页列表", response = Response.class)
     @RequestMapping(value = "allWeekHot", method = RequestMethod.POST)
-    public Response queryAllWeekHot(@ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
-                                    @ApiParam(value = "每页多少条") @RequestParam(required = false) String pageSize) {
+    public Response queryAllWeekHot(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                    @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
 
-        List<GoodsVo> allWeekHotList = mallIndexFacade.queryAllWeekHot(pageNo, pageSize);
+        Paging<GoodsVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<GoodsVo> allWeekHotList = mallIndexFacade.queryAllWeekHot(pager);
+        pager.result(allWeekHotList);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(allWeekHotList);
+        response.setData(pager);
         return response;
     }
 
@@ -131,16 +136,18 @@ public class AppMallIndexController {
      */
     @ApiOperation(value = "商城首页--往期推荐的所有神器列表", notes = "用户点击商城首页中每日神器推荐中的“查看全部”返回的数据接口")
     @RequestMapping(value = "allGodRecommend", method = RequestMethod.POST)
-    public Response queryAllGodRecommend(@ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
-                                         @ApiParam(value = "每页多少条") @RequestParam(required = false) String pageSize) {
+    public Response queryAllGodRecommend(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                         @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
 
-        List<GoodsVo> allGodRecommendList = mallIndexFacade.queryAllGodRecommend(pageNo, pageSize);
+        Paging<GoodsVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<GoodsVo> allGodRecommendList = mallIndexFacade.queryAllGodRecommend(pager);
+        pager.result(allGodRecommendList);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(allGodRecommendList);
+        response.setData(pager);
         return response;
     }
 

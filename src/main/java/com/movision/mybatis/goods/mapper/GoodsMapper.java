@@ -26,13 +26,13 @@ public interface GoodsMapper {
 
     List<GoodsVo> queryWeekHot();
 
-    List<GoodsVo> queryAllMonthHot(RowBounds rowBounds);
+    List<GoodsVo> findAllMonthHot(RowBounds rowBounds);
 
-    List<GoodsVo> queryAllWeekHot(RowBounds rowBounds);
+    List<GoodsVo> findAllWeekHot(RowBounds rowBounds);
 
     List<GoodsVo> queryLastDayGodList();
 
-    List<GoodsVo> queryAllGodRecommend(RowBounds rowBounds);
+    List<GoodsVo> findAllGodRecommend(RowBounds rowBounds);
 
     List<GoodsVo> queryEssenceGoods();
 

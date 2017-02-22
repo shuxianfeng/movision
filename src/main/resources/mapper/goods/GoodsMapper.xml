@@ -77,7 +77,7 @@
     </select>
 
     <!--查询月度热销-点击查看全部查询所有月度热销商品列表-->
-    <select id="queryAllMonthHot" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+    <select id="findAllMonthHot" resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT a.*,b.img_url AS imgurl
         FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t2.vol
                 FROM yw_goods t1,(
@@ -133,7 +133,7 @@
     </select>
 
     <!--查询一周热销-点击查看全部查询所有一周热销商品列表-->
-    <select id="queryAllWeekHot" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+    <select id="findAllWeekHot" resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT a.*,b.img_url AS imgurl
         FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t2.vol
                 FROM yw_goods t1,(
@@ -166,7 +166,7 @@
     </select>
 
     <!--查询往期每日神器推荐列表-->
-    <select id="queryAllGodRecommend" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+    <select id="findAllGodRecommend" resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT a.*,b.img_url AS imgurl
         FROM (SELECT t1.id, t1.name, t1.price, t1.origprice
                 FROM yw_goods t1

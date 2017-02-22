@@ -96,7 +96,7 @@ public class GoodsService {
     public List<GoodsVo> queryAllMonthHot(Paging<GoodsVo> pager) {
         try {
             log.info("月度热销商品--点击查看全部接口返回列表");
-            return goodsMapper.queryAllMonthHot(pager.getRowBounds());
+            return goodsMapper.findAllMonthHot(pager.getRowBounds());
         } catch (Exception e) {
             log.error("月度热销商品--点击查看全部接口返回列表失败");
             throw e;
@@ -106,7 +106,7 @@ public class GoodsService {
     public List<GoodsVo> queryAllWeekHot(Paging<GoodsVo> pager) {
         try {
             log.info("一周热销商品--点击查看全部接口返回列表");
-            return goodsMapper.queryAllWeekHot(pager.getRowBounds());
+            return goodsMapper.findAllWeekHot(pager.getRowBounds());
         } catch (Exception e) {
             log.error("一周热销商品--点击查看全部接口返回列表失败");
             throw e;
@@ -126,7 +126,7 @@ public class GoodsService {
     public List<GoodsVo> queryAllGodRecommend(Paging<GoodsVo> pager) {
         try {
             log.info("查询往期每日神器推荐列表");
-            return goodsMapper.queryAllGodRecommend(pager.getRowBounds());
+            return goodsMapper.findAllGodRecommend(pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询往期每日神器推荐列表失败");
             throw e;

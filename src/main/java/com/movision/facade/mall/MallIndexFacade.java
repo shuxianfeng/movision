@@ -91,19 +91,9 @@ public class MallIndexFacade {
     /**
      * 查询所有月度热销商品列表
      *
-     * @param pageNo
-     * @param pageSize
      * @return
      */
-    public List<GoodsVo> queryAllMonthHot(String pageNo, String pageSize) {
-
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<GoodsVo> pager = new Paging<GoodsVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+    public List<GoodsVo> queryAllMonthHot(Paging<GoodsVo> pager) {
 
         List<GoodsVo> allMonthHotList = goodsService.queryAllMonthHot(pager);
 
@@ -113,18 +103,9 @@ public class MallIndexFacade {
     /**
      * 查询所有一周热销商品列表
      *
-     * @param pageNo
-     * @param pageSize
      * @return
      */
-    public List<GoodsVo> queryAllWeekHot(String pageNo, String pageSize) {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<GoodsVo> pager = new Paging<GoodsVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+    public List<GoodsVo> queryAllWeekHot(Paging<GoodsVo> pager) {
 
         List<GoodsVo> allWeekHotList = goodsService.queryAllWeekHot(pager);
 
@@ -134,14 +115,7 @@ public class MallIndexFacade {
     /**
      * 查询往期所有每日神器推荐列表
      */
-    public List<GoodsVo> queryAllGodRecommend(String pageNo, String pageSize) {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<GoodsVo> pager = new Paging<GoodsVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+    public List<GoodsVo> queryAllGodRecommend(Paging<GoodsVo> pager) {
 
         List<GoodsVo> dayGodRecommendList = goodsService.queryAllGodRecommend(pager);
 
