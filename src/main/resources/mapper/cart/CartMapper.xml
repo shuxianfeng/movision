@@ -268,4 +268,15 @@
             AND combotype = #{comboid,jdbcType=INTEGER}
         </if>
   </update>
+
+    <!--批量删除购物车商品-->
+    <update id="deleteCartGoods" parameterType="java.util.Map">
+        UPDATE yw_cart
+        SET isdel = '1'
+        WHERE userid = #{userid,jdbcType=INTEGER}
+        AND id IN
+        <foreach collection="cartid" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 </mapper>

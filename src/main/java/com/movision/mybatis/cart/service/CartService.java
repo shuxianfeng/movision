@@ -96,4 +96,14 @@ public class CartService {
             throw e;
         }
     }
+
+    public void deleteCartGoods(Map<String, Object> parammap) {
+        try {
+            log.info("删除购物车中的商品");
+            cartMapper.deleteCartGoods(parammap);
+        } catch (Exception e) {
+            log.error("删除购物车中的商品失败");
+            throw e;
+        }
+    }
 }

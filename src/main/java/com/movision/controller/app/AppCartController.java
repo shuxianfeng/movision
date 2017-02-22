@@ -68,4 +68,21 @@ public class AppCartController {
         response.setData(cartList);
         return response;
     }
+
+    /**
+     * 购物车删除接口（批量删除和单个删除）
+     */
+    @ApiOperation(value = "购物车删除接口（批量删除和单个删除）", notes = "用于用户购物车中的商品批量删除和单个删除的接口", response = Response.class)
+    @RequestMapping(value = "deleteCartGoods", method = RequestMethod.POST)
+    public Response deleteCartGoods(@ApiParam(value = "用户id") @RequestParam String userid,
+                                    @ApiParam(value = "购物车id字符串（多个用英文逗号隔开）") @RequestParam String cartids) {
+        Response response = new Response();
+
+        cartFacade.deleteCartGoods(userid, cartids);
+
+        if (response.getCode() == 200) {
+            response.setMessage("删除成功");
+        }
+        return response;
+    }
 }

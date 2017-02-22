@@ -101,4 +101,18 @@ public class CartFacade {
 
         return cartList;
     }
+
+    //用户删除购物车中的商品
+    public void deleteCartGoods(String userid, String cartids) {
+        //分割购物车id
+        String[] cartidstr = cartids.split(",");
+        int[] cartid = new int[cartidstr.length];
+        for (int i = 0; i < cartidstr.length; i++) {
+            cartid[i] = Integer.parseInt(cartidstr[i]);
+        }
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("userid", Integer.parseInt(userid));
+        parammap.put("cartid", cartid);
+        cartService.deleteCartGoods(parammap);
+    }
 }

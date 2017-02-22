@@ -26,6 +26,8 @@ public interface CartMapper {
 
     List<Rentdate> queryRentDateList(int cartid);
 
+    void deleteCartGoods(Map<String, Object> parammap);
+
     int addGoodsCart(Map<String, Object> parammap);
 
     int updateByPrimaryKeySelective(Cart record);
