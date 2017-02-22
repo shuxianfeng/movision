@@ -72,14 +72,8 @@ public class UserFacade {
         return userService.personPost(pager, Integer.parseInt(userid));
     }
 
-    public List<ActiveVo> personActive(String userid, String pageNo, String pageSize) {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Paging<ActiveVo> pager = new Paging<ActiveVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+    public List<ActiveVo> personActive(Paging<ActiveVo> pager, String userid) {
+
         List<ActiveVo> activeVoList = userService.personActive(pager, Integer.parseInt(userid));
 
         for (int i = 0; i < activeVoList.size(); i++) {

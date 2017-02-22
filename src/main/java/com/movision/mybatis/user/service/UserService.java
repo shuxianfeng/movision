@@ -136,7 +136,7 @@ public class UserService {
     public List<ActiveVo> personActive(Paging<ActiveVo> pager, int userid) {
         try {
             log.info("查询个人主页中用户曾经参与过的所有活动列表");
-            return postMapper.personActive(pager.getRowBounds(), userid);
+            return postMapper.findAllPersonActive(pager.getRowBounds(), userid);
         } catch (Exception e) {
             log.error("查询个人主页中用户曾经参与过的所有活动列表失败");
             throw e;

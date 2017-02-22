@@ -251,7 +251,8 @@
     </select>
 
     <!--查询用户参与过的历史活动列表-->
-    <select id="personActive" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.ActiveVo">
+    <select id="findAllPersonActive" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.ActiveVo">
         SELECT * FROM (
             SELECT t1.id, t1.title, t1.subtitle, t1.coverimg, t2.begintime, t2.endtime
             FROM yw_post t1
