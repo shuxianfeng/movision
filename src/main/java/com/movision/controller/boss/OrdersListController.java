@@ -52,6 +52,26 @@ public class OrdersListController {
 
 
     /**
+     * 售后列表
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "售后列表（分页）", notes = "售后列表（分页）", response = Response.class)
+    @RequestMapping(value = "/query_afterservice_list", method = RequestMethod.POST)
+    public Response queryAfterService(@RequestParam(required = false) String pageNo,
+                                      @RequestParam(required = false) String pageSize) {
+        Response response = new Response();
+        Map<String, Object> map = orderFacade.queryAfterService(pageNo, pageSize);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+
+    /**
      * 删除订单
      * @param id
      * @return
@@ -374,4 +394,6 @@ public class OrdersListController {
         response.setData(address);
         return response;
     }
+
+
 }

@@ -1,6 +1,7 @@
 package com.movision.facade.boss;
 
 import com.movision.mybatis.address.entity.Address;
+import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.area.entity.Area;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
@@ -392,6 +393,26 @@ public class OrderFacade {
         Map<String, Object> map = new HashedMap();
         Address address = bossOrderService.queryOrdersByAddress(id);
         map.put("address", address);
+        return map;
+    }
+
+    /**
+     * 售后列表
+     *
+     * @param
+     * @return
+     */
+    public Map<String, Object> queryAfterService(String pageNo, String pageSize) {
+        if (StringUtils.isEmpty(pageNo)) {
+            pageNo = "1";
+        }
+        if (StringUtils.isEmpty(pageSize)) {
+            pageSize = "10";
+        }
+        Map<String, Object> map = new HashedMap();
+        Paging<Afterservice> pager = new Paging<Afterservice>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<Afterservice> afterservices = bossOrderService.queryAfterSevice(pager);
+        map.put("afterservices", afterservices);
         return map;
     }
 }

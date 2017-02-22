@@ -1,6 +1,7 @@
 package com.movision.mybatis.bossOrders.servic;
 
 import com.movision.mybatis.address.entity.Address;
+import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.area.entity.Area;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
@@ -162,6 +163,22 @@ public class BossOrderService {
         }
     }
 
+    /**
+     * 售后列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<Afterservice> queryAfterSevice(Paging<Afterservice> pager) {
+        try {
+
+            loger.info("售后列表");
+            return bossOrdersMapper.findAllAfterService(pager.getRowBounds());
+        } catch (Exception e) {
+            loger.error("售后列表失败");
+            throw e;
+        }
+    }
     /**
      * 订单管理-编辑费用信息
      * @param orders
