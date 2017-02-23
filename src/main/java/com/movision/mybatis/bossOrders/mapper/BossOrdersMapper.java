@@ -34,7 +34,7 @@ public interface BossOrdersMapper {
 
     List<BossOrdersVo> findAllOrderByCondition(Map map, RowBounds rowBounds);
 
-    List<BossOrdersVo> findAllAccuracyConditionByOrder(Map map);
+    List<BossOrdersVo> findAllAccuracyConditionByOrder(Map map, RowBounds rowBounds);
 
     BossOrdersVo queryOrderParticulars(Integer ordernumber);
 

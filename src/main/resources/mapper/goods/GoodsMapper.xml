@@ -543,4 +543,10 @@
         isessence = #{isessence,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <update id="deleteGoods" parameterType="java.lang.Integer">
+    UPDATE yw_goods SET isdel=1 WHERE id=#{id,jdbcType=INTEGER}
+</update>
+    <select id="findAllGoodsList" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT id,name,protype,brandid,origprice,price,stock,sales,ishot,isessence from yw_goods
+    </select>
 </mapper>

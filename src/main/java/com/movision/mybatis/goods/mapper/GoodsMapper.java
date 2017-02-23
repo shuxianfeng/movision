@@ -49,4 +49,8 @@ public interface GoodsMapper {
     int updateByPrimaryKeySelective(Goods record);
 
     int updateByPrimaryKey(Goods record);
+
+    List<GoodsVo> findAllGoodsList(RowBounds rowBounds);//查询商品列表
+
+    int deleteGoods(Integer id);
 }

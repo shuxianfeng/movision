@@ -20,8 +20,10 @@ import com.movision.utils.pagination.util.StringUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -136,52 +138,58 @@ public class OrderFacade {
      * @param paytype
      * @return
      */
-    public List<BossOrdersVo> queryAccuracyConditionByOrder(String ordernumber,
+    public List<BossOrdersVo> queryAccuracyConditionByOrder(HttpServletRequest request, String ordernumber,
                                                             String province, String city, String district, String takeway, String mintime,
-                                                            String maxtime, String email, String name, String phone, String paytype) {
-
+                                                            String maxtime, String email, String name, String phone, String paytype, Paging<BossOrdersVo> pager) {
         Map<String, Object> map = new HashedMap();
-        if (ordernumber != null) {
-            map.put("ordernumber", ordernumber);
-        }
-        if (province != null) {
-            map.put("province", province);
-        }
-        if (city != null) {
-            map.put("city", city);
-        }
-        if (district != null) {
-            map.put("district", district);
-        }
-        if (takeway != null) {
-            map.put("takeway", takeway);
-        }
-        Date isessencetime = null;//开始时间
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-        if (mintime != null) {
-            try {
-                isessencetime = format.parse(mintime);
-            } catch (ParseException e) {
-                e.printStackTrace();
+        try {
+            request.setCharacterEncoding("utf-8");
+
+            if (ordernumber != null) {
+                map.put("ordernumber", ordernumber);
             }
-        }
-        map.put("mintime", isessencetime);
-        Date max = null;//最大时间
-        if (maxtime != null) {
-            try {
-                max = format.parse(maxtime);
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if (province != null) {
+                map.put("province", province);
             }
+            if (city != null) {
+                map.put("city", city);
+            }
+            if (district != null) {
+                map.put("district", district);
+            }
+            if (takeway != null) {
+                map.put("takeway", takeway);
+            }
+            Date isessencetime = null;//开始时间
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+            if (mintime != null) {
+                try {
+                    isessencetime = format.parse(mintime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            map.put("mintime", isessencetime);
+            Date max = null;//最大时间
+            if (maxtime != null) {
+                try {
+                    max = format.parse(maxtime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            map.put("maxtime", max);
+            map.put("email", email);
+            map.put("name", name);
+            map.put("phone", phone);
+            if (paytype != null) {
+                map.put("paytype", paytype);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        map.put("maxtime", max);
-        map.put("email", email);
-        map.put("name", name);
-        map.put("phone", phone);
-        if (paytype != null) {
-            map.put("paytype", paytype);
-        }
-        return bossOrderService.queryAccuracyConditionByOrder(map);
+
+        return bossOrderService.queryAccuracyConditionByOrder(map, pager);
 
     }
 

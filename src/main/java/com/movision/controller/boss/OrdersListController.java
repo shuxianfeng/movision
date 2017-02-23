@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -171,8 +172,8 @@ public class OrdersListController {
      */
     @ApiOperation(value = "精准搜索订单", notes = "精准搜索订单", response = Response.class)
     @RequestMapping(value = "/query_order_accuracy", method = RequestMethod.POST)
-    public Response queryAccuracyConditionByOrder(@ApiParam(value = "订单编号") @RequestParam(required = false) String ordernumber,//订单号
-                                                   @ApiParam(value = "省") @RequestParam(required = false) String province,//省
+    public Response queryAccuracyConditionByOrder(HttpServletRequest request, @ApiParam(value = "订单编号") @RequestParam(required = false) String ordernumber,//订单号
+                                                  @ApiParam(value = "省") @RequestParam(required = false) String province,//省
                                                   @ApiParam(value = "市") @RequestParam(required = false) String city,//市
                                                   @ApiParam(value = "县") @RequestParam(required = false) String district,//县
                                                   @ApiParam(value = "配送方式") @RequestParam(required = false) String takeway,//配送方式
@@ -181,16 +182,20 @@ public class OrdersListController {
                                                   @ApiParam(value = "邮箱") @RequestParam(required = false) String email,//
                                                   @ApiParam(value = "收货人") @RequestParam(required = false) String name,//收货人
                                                   @ApiParam(value = "手机号") @RequestParam(required = false) String phone,//手机号
-                                                  @ApiParam(value = "支付方式") @RequestParam(required = false) String paytype//支付方式
+                                                  @ApiParam(value = "支付方式") @RequestParam(required = false) String paytype,//支付方式
+                                                  @RequestParam(required = false) String pageNo,
+                                                  @RequestParam(required = false) String pageSize
     ) {
         Response response = new Response();
-        List<BossOrdersVo> list = orderFacade.queryAccuracyConditionByOrder(ordernumber
+        Paging<BossOrdersVo> pager = new Paging<BossOrdersVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<BossOrdersVo> list = orderFacade.queryAccuracyConditionByOrder(request, ordernumber
                  , province, city, district, takeway, mintime,
-                maxtime, email, name, phone, paytype);
+                maxtime, email, name, phone, paytype, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(list);
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 

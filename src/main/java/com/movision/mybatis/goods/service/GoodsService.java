@@ -322,4 +322,37 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 商品管理--查询商品列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<GoodsVo> queryGoodsList(Paging<GoodsVo> pager) {
+        try {
+            log.info("查询商品列表");
+            return goodsMapper.findAllGoodsList(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询商品列表失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 商品管理--删除商品
+     *
+     * @param id
+     * @return
+     */
+    public int deleteGoods(Integer id) {
+        try {
+            log.info("删除商品");
+            return goodsMapper.deleteGoods(id);
+        } catch (Exception e) {
+            log.error("删除商品失败");
+            throw e;
+        }
+    }
+
 }

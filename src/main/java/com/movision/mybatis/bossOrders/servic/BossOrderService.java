@@ -327,10 +327,10 @@ public class BossOrderService {
      * @param map
      * @return
      */
-    public List<BossOrdersVo> queryAccuracyConditionByOrder(Map map) {
+    public List<BossOrdersVo> queryAccuracyConditionByOrder(Map map, Paging<BossOrdersVo> pager) {
         try {
             loger.info("精确查询订单");
-            return bossOrdersMapper.findAllAccuracyConditionByOrder(map);
+            return bossOrdersMapper.findAllAccuracyConditionByOrder(map, pager.getRowBounds());
         } catch (Exception e) {
             loger.error("精确查询订单异常");
             throw e;
