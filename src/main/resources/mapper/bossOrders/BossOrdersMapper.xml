@@ -448,11 +448,11 @@ SELECT
         <if test="name!=null">
             AND a.name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
-        <if test="paytype!=null">
-            AND o.paytype=#{paytype,jdbcType=INTEGER}
-        </if>
         <if test="takeway!=null">
-            AND o.takeway=#{takeway,jdbcType=INTEGER}
+            AND o.takeway=#{takeway,jdbcType=VARCHAR}
+        </if>
+        <if test="paytype!=null">
+            AND o.paytype=#{paytype,jdbcType=VARCHAR}
         </if>
         <if test="intime!=null">
             AND o.intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
