@@ -15,6 +15,16 @@ public class SharesVo {
 
     private String source;
 
+    private String channel;
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
     public String getSource() {
         return source;
     }

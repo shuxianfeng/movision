@@ -7,9 +7,10 @@
         <result column="postid" jdbcType="INTEGER" property="postid"/>
         <result column="intime" jdbcType="TIMESTAMP" property="intime"/>
         <result column="source" jdbcType="VARCHAR" property="source"/>
+        <result column="channel" jdbcType="VARCHAR" property="channel"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, userid, postid, intime,source
+        id, userid, postid, intime,source,channel
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -45,6 +46,9 @@
             <if test="source !=null">
                 source,
             </if>
+            <if test="channel != null">
+                channel,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -62,6 +66,9 @@
             <if test="source!=null">
                 #{source.jdbcType=VARCHAR},
             </if>
+            <if test="channel !=null">
+                #{channel,jdbcType=VARCHARs}
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.share.entity.Shares">
@@ -78,6 +85,9 @@
             </if>
             <if test="source!=null">
                 source=#{source,jdbcType=VARCHAR},
+            </if>
+            <if test="channel !=null ">
+                channel=#{channel,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
