@@ -86,4 +86,6 @@ public interface CircleMapper {
     CircleDetails queryCircleByShow(Integer circleid);
 
     List<Integer> queryCircleByOrderidList();
+
+    int insertCircle(CircleDetails circleDetails);
 }

@@ -25,7 +25,6 @@ public class GoodsListFacade {
      * @return
      */
     public List<GoodsVo> queryGoodsList(Paging<GoodsVo> pager) {
-
         List<GoodsVo> list = goodsService.queryGoodsList(pager);
         return list;
     }

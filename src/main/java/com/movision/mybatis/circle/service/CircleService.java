@@ -496,4 +496,20 @@ public class CircleService {
             throw e;
         }
     }
+
+    /**
+     * 添加圈子
+     *
+     * @param circleDetails
+     * @return
+     */
+    public int insertCircle(CircleDetails circleDetails) {
+        try {
+            log.info("添加圈子");
+            return circleMapper.insertCircle(circleDetails);
+        } catch (Exception e) {
+            log.error("添加圈子异常");
+            throw e;
+        }
+    }
 }

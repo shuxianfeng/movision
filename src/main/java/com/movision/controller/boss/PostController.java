@@ -453,11 +453,11 @@ public class PostController {
     }
 
     /**
-     * 选择圈子类型
+     * 选择圈子
      *
      * @return
      */
-    @ApiOperation(value = "选择圈子类型", notes = "用于选择圈子类型接口", response = Response.class)
+    @ApiOperation(value = "选择圈子", notes = "用于选择圈子接口", response = Response.class)
     @RequestMapping(value = "/query_list_circle_type", method = RequestMethod.POST)
     public Response queryListByCircleType() {
         Response response = new Response();

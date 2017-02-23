@@ -111,4 +111,8 @@
       imgurl = #{imgurl,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <select id="queryCircleTypeList" resultType="com.movision.mybatis.category.entity.Category">
+        SELECT id,categoryname FROM yw_circle_category
+    </select>
 </mapper>
