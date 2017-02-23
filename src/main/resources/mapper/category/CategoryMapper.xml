@@ -115,4 +115,31 @@
     <select id="queryCircleTypeList" resultType="com.movision.mybatis.category.entity.Category">
         SELECT id,categoryname FROM yw_circle_category
     </select>
+
+    <insert id="addCircleType" parameterType="java.util.Map">
+        insert into yw_circle_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="categoryname != null">
+                categoryname,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="categoryname != null">
+                #{categoryname,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+
+        </trim>
+    </insert>
 </mapper>

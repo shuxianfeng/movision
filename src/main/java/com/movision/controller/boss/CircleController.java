@@ -236,7 +236,7 @@ public class CircleController {
      * @param orderid
      * @return
      */
-    @ApiOperation(value = "圈子", notes = "用于圈子编辑接口", response = Response.class)
+    @ApiOperation(value = "圈子添加", notes = "用于圈子添加接口", response = Response.class)
     @RequestMapping(value = "add_circle", method = RequestMethod.POST)
     public Response addCircle(HttpServletRequest request,
                               @ApiParam(value = "圈子名称") @RequestParam String name,
@@ -269,6 +269,24 @@ public class CircleController {
     public Response queryCircleTypeList() {
         List<Category> map = circleFacade.queryCircleTypeList();
         Response response = new Response();
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 添加圈子分类
+     *
+     * @param typename
+     * @return
+     */
+    @ApiOperation(value = "添加圈子分类", notes = "用于添加圈子分类接口", response = Response.class)
+    @RequestMapping(value = "add_circle_type", method = RequestMethod.POST)
+    public Response addCircleType(@ApiParam(value = "圈子名称") @RequestParam String typename) {
+        Response response = new Response();
+        Map<String, Integer> map = circleFacade.addCircleType(typename);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

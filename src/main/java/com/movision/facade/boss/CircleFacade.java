@@ -496,4 +496,20 @@ public class CircleFacade {
         return list;
     }
 
+    /**
+     * 添加圈子分类
+     *
+     * @param typename
+     * @return
+     */
+    public Map<String, Integer> addCircleType(String typename) {
+        Map<String, Integer> map = new HashedMap();
+        Map packaging = new HashedMap();
+        packaging.put("categoryname", typename);
+        packaging.put("intime", new Date());
+        int i = categoryService.addCircleType(packaging);
+        map.put("resault", i);
+        return map;
+    }
+
 }

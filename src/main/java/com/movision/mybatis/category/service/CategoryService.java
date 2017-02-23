@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -30,6 +31,22 @@ public class CategoryService {
             return categoryMapper.queryCircleTypeList();
         } catch (Exception e) {
             logger.error("查询圈子分类列表异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 添加圈子分类
+     *
+     * @param map
+     * @return
+     */
+    public int addCircleType(Map map) {
+        try {
+            logger.info("添加圈子分类");
+            return categoryMapper.addCircleType(map);
+        } catch (Exception e) {
+            logger.error("添加圈子分类异常");
             throw e;
         }
     }

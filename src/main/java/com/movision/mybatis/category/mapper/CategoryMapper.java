@@ -3,6 +3,7 @@ package com.movision.mybatis.category.mapper;
 import com.movision.mybatis.category.entity.Category;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CategoryMapper {
     int deleteByPrimaryKey(Integer id);
@@ -20,4 +21,6 @@ public interface CategoryMapper {
     List<Category> queryGoodsCategory();
 
     List<Category> queryCircleTypeList();
+
+    int addCircleType(Map map);
 }
