@@ -7,6 +7,42 @@ import java.util.Date;
  * @Date 2017/2/11 9:39
  */
 public class PostActiveList {
+    private Integer zansum;
+    private Integer commentsum;
+    private Integer forwardsum;
+    private Integer collectsum;
+
+    public Integer getZansum() {
+        return zansum;
+    }
+
+    public void setZansum(Integer zansum) {
+        this.zansum = zansum;
+    }
+
+    public Integer getCommentsum() {
+        return commentsum;
+    }
+
+    public void setCommentsum(Integer commentsum) {
+        this.commentsum = commentsum;
+    }
+
+    public Integer getForwardsum() {
+        return forwardsum;
+    }
+
+    public void setForwardsum(Integer forwardsum) {
+        this.forwardsum = forwardsum;
+    }
+
+    public Integer getCollectsum() {
+        return collectsum;
+    }
+
+    public void setCollectsum(Integer collectsum) {
+        this.collectsum = collectsum;
+    }
 
     private Integer id;//帖子id
     private Integer circleid;

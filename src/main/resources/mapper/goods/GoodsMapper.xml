@@ -547,6 +547,49 @@
     UPDATE yw_goods SET isdel=1 WHERE id=#{id,jdbcType=INTEGER}
 </update>
     <select id="findAllGoodsList" resultType="com.movision.mybatis.goods.entity.GoodsVo">
-        SELECT id,name,protype,brandid,origprice,price,stock,sales,ishot,isessence from yw_goods
+        SELECT
+        s.id,s.name,s.protype,d.brandname,s.origprice,s.price,s.stock,s.sales,s.ishomepage,s.recommenddate,s.isdel,s.ishot,s.isessence,COUNT(c.goodsid)
+        AS collect from yw_goods s
+        LEFT JOIN yw_brand d ON d.brandid=s.brandid LEFT JOIN yw_collection c ON c.goodsid=s.id
+        GROUP BY s.id
+    </select>
+    <select id="findAllGoodsCondition" parameterType="com.movision.mybatis.goods.entity.GoodsVo"
+            resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT
+        s.id,s.name,s.protype,d.brandname,s.origprice,s.price,s.stock,s.sales,s.ishomepage,s.recommenddate,s.isdel,s.ishot,s.isessence,COUNT(c.goodsid)
+        AS collect from yw_goods s
+        LEFT JOIN yw_brand d ON d.brandid=s.brandid LEFT JOIN yw_collection c ON c.goodsid=s.id
+        GROUP BY s.id
+        <if test="name!=null and name!=''">
+            AND s.name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="attribute!=null and attribute!=''">
+            AND s.attribute=#{producttags,jdbcType=INTEGER}
+        </if>
+        <if test="brandname!=null and brandname!=''">
+            AND s.brandname=#{brand,jdbcType=VARCHAR}
+        </if>
+        <if test="protype!=null and protype!=''">
+            AND s.protype=#{protype,jdbcType=INTEGER}
+        </if>
+        <if test="isdel!=null and isdel!=''">
+            AND s.isdel=#{isdel,jdbcType=INTEGER}
+        </if>
+        <if test="price!=null and price!=''">
+            AND s.price BETWEEN #{minprice,jdbcType=DOUBLE} AND #{maxprice,jdbcType=DOUBLE}
+        </if>
+        <if test="origprice!=null and origprice!=''">
+            AND s.origprice BETWEEN #{minorigprice,jdbcType=DOUBLE} AND #{maxorigprice,jdbcType=DOUBLE}
+        </if>
+        <if test="stock!=null and stock!=''">
+            AND s.stock BETWEEN #{minstock,jdbcType=INTEGER} AND #{maxstock,jdbcType=INTEGER}
+        </if>
+        <if test="sales!=null and sales!=''">
+            AND s.sales BETWEEN #{minsales,jdbcType=INTEGER} AND #{maxsales,jdbcType=INTEGER}
+        </if>
+        <if test="collect!=null and collect!=''">
+            AND s.collect BETWEEN #{mincollect,jdbcType=INTEGER} AND #{maxcollect,jdbcType=INTEGER}
+        </if>
+
     </select>
 </mapper>

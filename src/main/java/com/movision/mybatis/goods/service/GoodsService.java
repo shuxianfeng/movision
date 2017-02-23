@@ -355,4 +355,20 @@ public class GoodsService {
         }
     }
 
+    /**
+     * 商品管理--条件查询
+     *
+     * @param pager
+     * @return
+     */
+    public List<GoodsVo> queryGoodsCondition(Map map, Paging<GoodsVo> pager) {
+        try {
+            log.info("条件查询");
+            return goodsMapper.findAllGoodsCondition(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("条件查询失败");
+            throw e;
+        }
+    }
+
 }

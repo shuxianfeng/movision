@@ -25,6 +25,16 @@ public class GoodsVo {
 
     private Integer isself;
 
+    private Integer collect;//收藏
+
+    public Integer getCollect() {
+        return collect;
+    }
+
+    public void setCollect(Integer collect) {
+        this.collect = collect;
+    }
+
     private Integer isdamage;
 
     private Integer isquality;

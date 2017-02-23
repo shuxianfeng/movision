@@ -200,6 +200,10 @@ public class PostFacade {
                       }
                   }
              postList.setActivestatue(activeStatue);//活动状态
+                  postList.setZansum(list.get(i).getZansum());
+                  postList.setCollectsum(list.get(i).getCollectsum());
+                  postList.setCommentsum(list.get(i).getCommentsum());
+                  postList.setForwardsum(list.get(i).getForwardsum());
              rewardeds.add(postList);
          }
         return rewardeds;

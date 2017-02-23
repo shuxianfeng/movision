@@ -64,4 +64,60 @@ public class GoodsController {
         return response;
     }
 
+    /**
+     * 商品管理---条件查询
+     *
+     * @param name
+     * @param producttags
+     * @param brand
+     * @param protype
+     * @param isdel
+     * @param allstatue
+     * @param minorigprice
+     * @param maxorigprice
+     * @param minprice
+     * @param maxprice
+     * @param minstock
+     * @param maxstock
+     * @param minsales
+     * @param maxsales
+     * @param mincollect
+     * @param maxcollect
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "条件查询", notes = "条件查询", response = Response.class)
+    @RequestMapping(value = "query_goods_condition", method = RequestMethod.POST)
+    public Response queryGoodsCondtion(@ApiParam(value = "商品名称") @RequestParam(required = false) String name,
+                                       @ApiParam(value = "商品标签") @RequestParam(required = false) String producttags,
+                                       @ApiParam(value = "商品品牌") @RequestParam(required = false) String brand,
+                                       @ApiParam(value = "商品分类") @RequestParam(required = false) String protype,
+                                       @ApiParam(value = "商品状态") @RequestParam(required = false) String isdel,
+                                       @ApiParam(value = "商品类型") @RequestParam(required = false) String allstatue,
+                                       @ApiParam(value = "最小原价") @RequestParam(required = false) String minorigprice,
+                                       @ApiParam(value = "最大原价") @RequestParam(required = false) String maxorigprice,
+                                       @ApiParam(value = "最小折扣价") @RequestParam(required = false) String minprice,
+                                       @ApiParam(value = "最大折扣价") @RequestParam(required = false) String maxprice,
+                                       @ApiParam(value = "最小库存") @RequestParam(required = false) String minstock,
+                                       @ApiParam(value = "最大库存") @RequestParam(required = false) String maxstock,
+                                       @ApiParam(value = "最小销售量") @RequestParam(required = false) String minsales,
+                                       @ApiParam(value = "最大销售量") @RequestParam(required = false) String maxsales,
+                                       @ApiParam(value = "最小收藏") @RequestParam(required = false) String mincollect,
+                                       @ApiParam(value = "最大收藏") @RequestParam(required = false) String maxcollect,
+                                       @RequestParam(required = false) String pageNo,
+                                       @RequestParam(required = false) String pageSize
+    ) {
+        Response response = new Response();
+        Paging<GoodsVo> pager = new Paging<GoodsVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<GoodsVo> list = goodsFacade.queryGoodsCondition(name, producttags, brand, protype, isdel, allstatue, minorigprice, maxorigprice, minprice, maxprice, minstock, maxstock, minsales, maxsales, mincollect, maxcollect, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+
+    }
+
 }
