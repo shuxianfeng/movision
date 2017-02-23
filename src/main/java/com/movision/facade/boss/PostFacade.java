@@ -346,6 +346,25 @@ public class PostFacade {
     }
 
     /**
+     * 后台管理-帖子列表-评论列表-编辑评论
+     *
+     * @param commentid
+     * @param content
+     * @param userid
+     * @return
+     */
+    public Map updatePostComment(String commentid, String content, String userid) {
+        Map chuan = new HashedMap();
+        Map map = new HashedMap();
+        chuan.put("commentid", commentid);
+        chuan.put("content", content);
+        chuan.put("userid", userid);
+        int i = commentService.updatePostComment(chuan);
+        map.put("resault", i);
+        return map;
+    }
+
+    /**
      * 后台管理-帖子列表-帖子打赏列表
      *
      * @param postid

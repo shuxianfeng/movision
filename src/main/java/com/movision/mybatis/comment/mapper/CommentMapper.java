@@ -38,6 +38,8 @@ public interface CommentMapper {
 
     int deletePostAppraise(int id);
 
+    int updatePostComment(Map map);
+
     List<CommentVo> commentZanSork(Integer postid, RowBounds rowBounds);
 
 }

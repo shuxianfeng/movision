@@ -155,6 +155,22 @@ public class CommentService {
     }
 
     /**
+     * 编辑帖子评论
+     *
+     * @param map
+     * @return
+     */
+    public int updatePostComment(Map map) {
+        try {
+            log.info("编辑帖子评论");
+            return commentMapper.updatePostComment(map);
+        } catch (Exception e) {
+            log.error("编辑帖子评论异常");
+            throw e;
+        }
+    }
+
+    /**
      * 根据点赞排序评论列表
      *
      * @param postid

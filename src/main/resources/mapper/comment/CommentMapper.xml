@@ -182,4 +182,17 @@
     SELECT c.content,u.nickname FROM yw_post_comment as c LEFT JOIN yw_user as u ON c.userid=u.id
     WHERE c.postid=#{postid,jdbcType=INTEGER} AND c.id=#{commentid,jdbcType=INTEGER}
   </select>
+
+  <update id="updatePostComment" parameterType="java.util.Map">
+    update yw_post_comment
+    <set>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{commentid,jdbcType=INTEGER} AND userid=#{userid,jdbcType=INTEGER}
+  </update>
 </mapper>
