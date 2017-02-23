@@ -371,4 +371,20 @@ public class GoodsService {
         }
     }
 
+    /**
+     * 商品管理*--上架
+     *
+     * @param id
+     * @return
+     */
+    public int queryByGoods(Integer id) {
+        try {
+            log.info("上架");
+            return goodsMapper.AddToGoods(id);
+        } catch (Exception e) {
+            log.error("上架失败");
+            throw e;
+        }
+    }
+
 }

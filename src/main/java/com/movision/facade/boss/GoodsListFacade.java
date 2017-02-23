@@ -42,6 +42,15 @@ public class GoodsListFacade {
         return goodsService.deleteGoods(id);
     }
 
+    /**
+     * 商品管理--上架
+     *
+     * @param id
+     * @return
+     */
+    public int queryByGoods(Integer id) {
+        return goodsService.queryByGoods(id);
+    }
 
     /**
      * 商品管理--条件查询

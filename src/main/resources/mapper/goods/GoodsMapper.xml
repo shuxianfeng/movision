@@ -592,4 +592,7 @@
         </if>
 
     </select>
+    <update id="AddToGoods" parameterType="java.lang.Integer">
+         UPDATE yw_goods SET isdel=0 WHERE id=#{id,jdbcType=INTEGER}
+    </update>
 </mapper>

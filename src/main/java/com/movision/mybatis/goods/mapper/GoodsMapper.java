@@ -52,7 +52,9 @@ public interface GoodsMapper {
 
     List<GoodsVo> findAllGoodsList(RowBounds rowBounds);//查询商品列表
 
-    int deleteGoods(Integer id);//删除商品
+    int deleteGoods(Integer id);//删除商品（下架）
+
+    int AddToGoods(Integer id);//上架
 
     List<GoodsVo> findAllGoodsCondition(Map map, RowBounds rowBounds);//条件查询
 }

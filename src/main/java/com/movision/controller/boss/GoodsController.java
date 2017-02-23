@@ -120,4 +120,21 @@ public class GoodsController {
 
     }
 
+    /**
+     * 商品管理--上架
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "上架", notes = "上架", response = Response.class)
+    @RequestMapping(value = "grounding_goods", method = RequestMethod.POST)
+    public Response queryByGoods(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        int result = goodsFacade.queryByGoods(id);
+        if (response.getCode() == 200) {
+            response.setMessage("上架成功");
+        }
+        response.setData(result);
+        return response;
+    }
 }
