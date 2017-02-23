@@ -154,7 +154,7 @@ public class OrderFacade {
             map.put("district", district);
         }
         if (takeway != null) {
-            map.put("takeway", Integer.parseInt(takeway));
+            map.put("takeway", takeway);
         }
         Date isessencetime = null;//开始时间
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -179,7 +179,7 @@ public class OrderFacade {
         map.put("name", name);
         map.put("phone", phone);
         if (paytype != null) {
-            map.put("paytype", Integer.parseInt(paytype));
+            map.put("paytype", paytype);
         }
         return bossOrderService.queryAccuracyConditionByOrder(map);
 
