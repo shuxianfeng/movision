@@ -214,7 +214,7 @@
             #{postid,jdbcType=INTEGER}) AS isZan
         </if>
         <if test="userid == null">
-            0 AS isCollect,
+            ,0 AS isCollect,
             0 AS isZan
         </if>
         FROM yw_post t1
