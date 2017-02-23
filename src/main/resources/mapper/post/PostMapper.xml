@@ -596,6 +596,162 @@
         </trim>
     </insert>
 
+    <!--基础插入语句（选择性插入）-->
+    <insert id="insertSelectivet" parameterType="com.movision.mybatis.post.entity.PostTo">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into yw_post
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="circleid != null">
+                circleid,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="subtitle != null">
+                subtitle,
+            </if>
+            <if test="postcontent != null">
+                postcontent,
+            </if>
+            <if test="zansum != null">
+                zansum,
+            </if>
+            <if test="commentsum != null">
+                commentsum,
+            </if>
+            <if test="forwardsum != null">
+                forwardsum,
+            </if>
+            <if test="collectsum != null">
+                collectsum,
+            </if>
+            <if test="isactive != null">
+                isactive,
+            </if>
+            <if test="activetype != null">
+                activetype,
+            </if>
+            <if test="activefee != null">
+                activefee,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="ishot != null">
+                ishot,
+            </if>
+            <if test="orderid != null">
+                orderid,
+            </if>
+            <if test="isessence != null">
+                isessence,
+            </if>
+            <if test="isessencepool != null">
+                isessencepool,
+            </if>
+            <if test="coverimg != null">
+                coverimg,
+            </if>
+            <if test="hotimgurl != null">
+                hotimgurl,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="totalpoint != null">
+                totalpoint,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+            <if test="essencedate != null">
+                essencedate,
+            </if>
+            <if test="userid !=null">
+                userid
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="circleid != null">
+                #{circleid,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="subtitle != null">
+                #{subtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="postcontent != null">
+                #{postcontent,jdbcType=VARCHAR},
+            </if>
+            <if test="zansum != null">
+                #{zansum,jdbcType=INTEGER},
+            </if>
+            <if test="commentsum != null">
+                #{commentsum,jdbcType=INTEGER},
+            </if>
+            <if test="forwardsum != null">
+                #{forwardsum,jdbcType=INTEGER},
+            </if>
+            <if test="collectsum != null">
+                #{collectsum,jdbcType=INTEGER},
+            </if>
+            <if test="isactive != null">
+                #{isactive,jdbcType=INTEGER},
+            </if>
+            <if test="activetype != null">
+                #{activetype,jdbcType=INTEGER},
+            </if>
+            <if test="activefee != null">
+                #{activefee,jdbcType=DOUBLE},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="ishot != null">
+                #{ishot,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="isessence != null">
+                #{isessence,jdbcType=INTEGER},
+            </if>
+            <if test="isessencepool != null">
+                #{isessencepool,jdbcType=INTEGER},
+            </if>
+            <if test="coverimg != null">
+                #{coverimg,jdbcType=VARCHAR},
+            </if>
+            <if test="hotimgurl != null">
+                #{hotimgurl,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="totalpoint != null">
+                #{totalpoint,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="essencedate != null">
+                #{essencedate,jdbcType=DATE},
+            </if>
+            <if test="userid!=null">
+                #{userid,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </insert>
+
     <!--基础update语句（有判断）-->
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.post.entity.Post">
         update yw_post
@@ -673,7 +829,7 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <update id="updateByPrimaryKeySelectiveById" parameterType="com.movision.mybatis.post.entity.Post">
+    <update id="updateByPrimaryKeySelectiveById" parameterType="com.movision.mybatis.post.entity.PostTo">
         update yw_post
         <set>
             <if test="circleid != null">
@@ -804,7 +960,7 @@
         FROM yw_post WHERE circleid=#{circleid,jdbcType=INTEGER}
     </select>
 
-    <update id="addPostChoiceness" parameterType="com.movision.mybatis.post.entity.Post">
+    <update id="addPostChoiceness" parameterType="com.movision.mybatis.post.entity.PostTo">
         UPDATE yw_post SET
         <if test="essencedate != null">
             essencedate = #{essencedate,jdbcType=DATE},
@@ -937,6 +1093,105 @@
                 #{intime,jdbcType=TIMESTAMP},
             </if>
               <if test="essencedate != null">
+                  #{essencedate,jdbcType=DATE},
+              </if>
+            <if test="userid!=null">
+                #{userid,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </insert>
+
+    <!--基础插入语句（选择性插入）-->
+    <insert id="insertActivet" parameterType="com.movision.mybatis.post.entity.PostTo">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into yw_post
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="subtitle != null">
+                subtitle,
+            </if>
+            <if test="postcontent != null">
+                postcontent,
+            </if>
+
+            <if test="isactive != null">
+                isactive,
+            </if>
+            <if test="activetype != null">
+                activetype,
+            </if>
+            <if test="activefee != null">
+                activefee,
+            </if>
+            <if test="orderid != null">
+                orderid,
+            </if>
+            <if test="isessence != null">
+                isessence,
+            </if>
+            <if test="coverimg != null">
+                coverimg,
+            </if>
+            <if test="hotimgurl != null">
+                hotimgurl,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="essencedate != null">
+                essencedate,
+            </if>
+            <if test="userid !=null">
+                userid
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="subtitle != null">
+                #{subtitle,jdbcType=VARCHAR},
+            </if>
+
+            <if test="postcontent != null">
+                #{postcontent,jdbcType=VARCHAR},
+            </if>
+            <if test="isactive != null">
+                #{isactive,jdbcType=INTEGER},
+            </if>
+            <if test="activetype != null">
+                #{activetype,jdbcType=INTEGER},
+            </if>
+            <if test="activefee != null">
+                #{activefee,jdbcType=DOUBLE},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="isessence != null">
+                #{isessence,jdbcType=INTEGER},
+            </if>
+            <if test="coverimg != null">
+                #{coverimg,jdbcType=VARCHAR},
+            </if>
+            <if test="hotimgurl != null">
+                #{hotimgurl,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="essencedate != null">
                 #{essencedate,jdbcType=DATE},
             </if>
             <if test="userid!=null">

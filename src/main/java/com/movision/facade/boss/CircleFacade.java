@@ -460,7 +460,7 @@ public class CircleFacade {
                 circleDetails.setOrderid(Integer.parseInt(orderid));
             }
             if (scope != null) {
-                circleDetails.setPermission(Integer.parseInt(scope));
+                circleDetails.setScope(Integer.parseInt(scope));
             }
             Integer s = circleService.insertCircle(circleDetails);
             Integer cirid = circleDetails.getId();
@@ -486,8 +486,12 @@ public class CircleFacade {
         return map;
     }
 
+    /**
+     * 查询圈子分类
+     *
+     * @return
+     */
     public List<Category> queryCircleTypeList() {
-        Map<String, Category> map = new HashedMap();
         List<Category> list = categoryService.queryCircleTypeList();
         return list;
     }

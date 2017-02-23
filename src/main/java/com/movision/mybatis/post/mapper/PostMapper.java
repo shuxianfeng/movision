@@ -17,8 +17,12 @@ public interface PostMapper {
     int insert(Post record);
 
     int insertActive(Post post);//新增活动
+
+    int insertActivet(PostTo post);//新增活动
     int insertPerid(Period period);//新增活动周期
     int insertSelective(Post record);
+
+    int insertSelectivet(PostTo record);
 
 
     Post selectByPrimaryKey(Integer id);
@@ -98,7 +102,7 @@ public interface PostMapper {
 
     PostNum queryPostNumAndisessenceByCircleid(Integer circleid);
 
-    int addPostChoiceness(Post postid);
+    int addPostChoiceness(PostTo postid);
 
     List<Post> queryPostChoicenesslist(Date essencedate);
 
@@ -119,7 +123,7 @@ public interface PostMapper {
 
     PostCompile queryPostByIdEcho(Integer postid);
 
-    Integer updateByPrimaryKeySelectiveById(Post post);
+    Integer updateByPrimaryKeySelectiveById(PostTo post);
 
     List<PostList> findAllpostSearch(PostSpread spread, RowBounds rowBounds);
 }

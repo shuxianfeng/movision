@@ -430,13 +430,13 @@ public class PostFacade {
      */
     public Map<String, Integer> addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid, MultipartFile vid, MultipartFile bannerimgurl,
                                         String userid, MultipartFile coverimg, String postcontent, String isessence, String ishot, String orderid, String time) {
-        Post post = new Post();
+        PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
         try {
         post.setTitle(title);//帖子标题
         post.setSubtitle(subtitle);//帖子副标题
-        post.setType(Integer.parseInt(type));//帖子类型
-        post.setCircleid(Integer.parseInt(circleid));//圈子id
+            post.setType(type);//帖子类型
+            post.setCircleid(circleid);//圈子id
             // post.setCoverimg(coverimg);//帖子封面
             //上传图片到本地服务器
             String savedFileName = "";
@@ -515,19 +515,19 @@ public class PostFacade {
                 bannervoidurl = vidbannerdomain + savedbannerimgurl;
             }
             post.setCoverimg(imgurl);//添加帖子封面
-            post.setIsactive(0);//设置状态为帖子
+            post.setIsactive("0");//设置状态为帖子
             post.setPostcontent(postcontent);//帖子内容
             post.setIntime(new Date());//插入时间
             if (ishot != null || ishot != "") {
-                post.setIshot(Integer.parseInt(ishot));//是否为圈子精选
+                post.setIshot(ishot);//是否为圈子精选
             }
             if (!isessence.isEmpty() || isessence != null) {
                 if (Integer.parseInt(isessence) != 0) {//判断是否为加精
-                    post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+                    post.setIsessence(isessence);//是否为首页精选
                     if (!orderid.isEmpty()) {
-                        post.setOrderid(Integer.parseInt(orderid));
+                        post.setOrderid(orderid);
                     } else {
-                        post.setOrderid(0);
+                        post.setOrderid("0");
                     }
                     Date d = null;
                     if (time != null || time != "") {
@@ -540,7 +540,7 @@ public class PostFacade {
                 }
             }
 
-            post.setUserid(Integer.parseInt(userid));
+            post.setUserid(userid);
             int result = postService.addPost(post);//添加帖子
             Integer pid = post.getId();//获取到刚刚添加的帖子id
             Video vide = new Video();
@@ -575,13 +575,13 @@ public class PostFacade {
      */
     public Map<String ,Integer> addPostActive(HttpServletRequest request,String title, String subtitle, String type,String money,
                                               MultipartFile coverimg, String postcontent, String isessence,String orderid, String time,String begintime,String endtime,String userid ){
-        Post post = new Post();
+        PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
         try {
             post.setTitle(title);//帖子标题
             post.setSubtitle(subtitle);//帖子副标题
             Integer typee = Integer.parseInt(type);
-            post.setActivetype(typee);
+            post.setActivetype(type);
             if (typee == 0) {
                 post.setActivefee(Double.parseDouble(money));//金额
             }
@@ -619,11 +619,11 @@ public class PostFacade {
             post.setPostcontent(postcontent);//帖子内容
             if (!isessence.isEmpty() || isessence != null) {
                 if (Integer.parseInt(isessence) != 0) {//判断是否为加精
-                    post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+                    post.setIsessence(isessence);//是否为首页精选
                     if (!orderid.isEmpty()) {
-                        post.setOrderid(Integer.parseInt(orderid));
+                        post.setOrderid(orderid);
                     } else {
-                        post.setOrderid(0);
+                        post.setOrderid("0");
                     }
                     Date d = null;
                     if (time != null || time != "") {
@@ -655,10 +655,10 @@ public class PostFacade {
                 }
             }
             if (orderid != null) {
-                post.setOrderid(Integer.parseInt(orderid));//排序精选
+                post.setOrderid(orderid);//排序精选
             }
-            post.setUserid(Integer.parseInt(userid));//发帖人
-            post.setIsactive(1);
+            post.setUserid(userid);//发帖人
+            post.setIsactive("1");
             int result = postService.addPostActiveList(post);//添加帖子
             Period period = new Period();
             period.setBegintime(begin);
@@ -681,7 +681,7 @@ public class PostFacade {
      */
     public Map<String, Integer> addPostChoiceness(String postid, String subtitle, String essencedate, String orderid) {
         Map<String, Integer> map = new HashedMap();
-        Post p = new Post();
+        PostTo p = new PostTo();
         if (Integer.parseInt(orderid) > 0) {//加精动作
             p.setId(Integer.parseInt(postid));
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -698,7 +698,7 @@ public class PostFacade {
             if (d != null) {
                 p.setEssencedate(d);//精选日期
             }
-            p.setOrderid(Integer.parseInt(orderid));
+            p.setOrderid(orderid);
             p.setSubtitle(subtitle);
             Integer result = postService.addPostChoiceness(p);
             map.put("result", result);
@@ -827,17 +827,17 @@ public class PostFacade {
      */
     public Map<String, Integer> updatePostById(HttpServletRequest request, String id, String title, String subtitle, String type, String userid, String circleid, MultipartFile vid, MultipartFile bannerimgurl,
                                                MultipartFile coverimg, String postcontent, String isessence, String ishot, String orderid, String time) {
-        Post post = new Post();
+        PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
         try {
             post.setId(Integer.parseInt(id));//帖子id
             post.setTitle(title);//帖子标题
             post.setSubtitle(subtitle);//帖子副标题
             if (type != null) {
-                post.setType(Integer.parseInt(type));//帖子类型
+                post.setType(type);//帖子类型
             }
             if (circleid != null) {
-                post.setCircleid(Integer.parseInt(circleid));//圈子id
+                post.setCircleid(circleid);//圈子id
             }
             // post.setCoverimg(coverimg);//帖子封面
             //上传图片到本地服务器
@@ -926,17 +926,17 @@ public class PostFacade {
             Integer in = videoService.updateVideoById(vide);
             //String img = imgdomain + savedFileName;//拼接首页图片url
             post.setCoverimg(imgurl);//添加帖子封面
-            post.setIsactive(0);//设置状态为帖子
+            post.setIsactive("0");//设置状态为帖子
             post.setPostcontent(postcontent);//帖子内容
             if (isessence != null) {
-                post.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+                post.setIsessence(isessence);//是否为首页精选
             }
             if (ishot != null) {
-                post.setIshot(Integer.parseInt(ishot));//是否为圈子精选
+                post.setIshot(ishot);//是否为圈子精选
             }
             post.setIntime(new Date());
             if (orderid != null) {
-                post.setOrderid(Integer.parseInt(orderid));
+                post.setOrderid(orderid);
             }
             Date d = null;
             if (time != null) {
@@ -949,7 +949,7 @@ public class PostFacade {
                 post.setEssencedate(d);
             }
             post.setEssencedate(d);
-            post.setUserid(Integer.parseInt(userid));
+            post.setUserid(userid);
             int result = postService.updatePostById(post);//编辑帖子
             map.put("result", result);
         } catch (IOException e) {
@@ -974,23 +974,23 @@ public class PostFacade {
                                      String userid, String postcontent, String endtime,
                                      String begintime, String pai, String essencedate, Paging<PostList> pager) {
         PostSpread postSpread = new PostSpread();
-        if (title != null || title != "") {
+        if (title != null) {
             postSpread.setTitle(title);//帖子标题
             }
-        if (circleid != null || circleid != "") {
-            postSpread.setCircleid(Integer.parseInt(circleid));//圈子id
+        if (circleid != null) {
+            postSpread.setCircleid(circleid);//圈子id
             }
-        if (userid != null || userid != null) {
-            postSpread.setUserid(Integer.parseInt(userid));//发帖人id
+        if (userid != null) {
+            postSpread.setUserid(userid);//发帖人id
             }
-        if (postcontent != null || postcontent != "") {
+        if (postcontent != null) {
             postSpread.setPostcontent(postcontent);//帖子内容
         }
         Date end = null;
         Date begin = null;
         Date es = null;
         //结束时间
-        if (endtime != null || endtime != "") {
+        if (endtime != null) {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 end = df.parse(endtime);
@@ -1000,7 +1000,7 @@ public class PostFacade {
             postSpread.setEndtime(end);
         }
         //开始时间
-        if (begintime != null || begintime != "") {
+        if (begintime != null) {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 begin = df.parse(begintime);
@@ -1009,11 +1009,11 @@ public class PostFacade {
             }
             postSpread.setBegintime(begin);
         }
-        if (pai != null || pai != "") {
-            postSpread.setPai(Integer.parseInt(pai));
+        if (pai != null) {
+            postSpread.setPai(pai);
         }
         //精选时间
-        if (essencedate != null || essencedate != "") {
+        if (essencedate != null) {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 es = df.parse(essencedate);

@@ -372,10 +372,10 @@ public class PostService {
      * @param post
      * @return
      */
-    public int addPostActiveList(Post post){
+    public int addPostActiveList(PostTo post) {
         try{
             log.info("增加活动成功");
-            return postMapper.insertActive(post);
+            return postMapper.insertActivet(post);
         }catch (Exception e){
             log.error("增加活动失败");
             throw e;
@@ -435,10 +435,10 @@ public class PostService {
      * @param map
      * @return
      */
-    public int addPost(Post map) {
+     public int addPost(PostTo map) {
         try {
             log.info("添加帖子");
-            return postMapper.insertSelective(map);
+            return postMapper.insertSelectivet(map);
         } catch (Exception e) {
             log.error("添加帖子异常");
             throw e;
@@ -467,7 +467,7 @@ public class PostService {
      * @param postid
      * @return
      */
-    public int addPostChoiceness(Post postid) {
+    public int addPostChoiceness(PostTo postid) {
         try {
             log.info("帖子添加精选");
             return postMapper.addPostChoiceness(postid);
@@ -555,7 +555,7 @@ public class PostService {
         }
     }
 
-    public Integer updatePostById(Post post) {
+    public Integer updatePostById(PostTo post) {
         return postMapper.updateByPrimaryKeySelectiveById(post);
     }
 
