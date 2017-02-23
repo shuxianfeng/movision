@@ -137,4 +137,20 @@ public class CommentService {
             throw e;
         }
     }
+
+    /**
+     * 根据点赞排序评论列表
+     *
+     * @param postid
+     * @return
+     */
+    public List<CommentVo> commentZanSork(Integer postid, Paging<CommentVo> pager) {
+        try {
+            log.info("根据点赞排序评论列表");
+            return commentMapper.commentZanSork(postid, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据点赞排序评论列表异常");
+            throw e;
+        }
+    }
 }

@@ -564,5 +564,27 @@ public class PostController {
         return response;
     }
 
+    /**
+     * 评论列表根据点赞人气排序
+     *
+     * @param postid
+     * @return
+     */
+    @ApiOperation(value = "评论点赞排序", notes = "用于查询评论根据点赞人气排序接口", response = Response.class)
+    @RequestMapping(value = "comment_zan_sork", method = RequestMethod.POST)
+    public Response commentZanSork(@ApiParam(value = "帖子id") @RequestParam String postid,
+                                   @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                   @RequestParam(required = false, defaultValue = "10") String pageSiz) {
+        Response response = new Response();
+        Paging<CommentVo> pager = new Paging<CommentVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSiz));
+        List<CommentVo> list = postFacade.commentZanSork(postid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
 
 }

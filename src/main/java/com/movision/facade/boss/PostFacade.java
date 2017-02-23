@@ -1052,4 +1052,15 @@ public class PostFacade {
         return rewardeds;
     }
 
+
+    /**
+     * 评论列表根据点赞人气排序
+     *
+     * @param postid
+     * @return
+     */
+    public List<CommentVo> commentZanSork(String postid, Paging<CommentVo> pager) {
+        return commentService.commentZanSork(Integer.parseInt(postid), pager);
+    }
+
 }

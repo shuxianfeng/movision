@@ -171,4 +171,9 @@
     WHERE c.postid= #{postid,jdbcType=INTEGER} AND isdel=0 AND c.pid=#{commentid,jdbcType=INTEGER}
     ORDER BY c.intime DESC
   </select>
+
+  <select id="commentZanSork" parameterType="java.lang.Integer"
+          resultType="com.movision.mybatis.comment.entity.CommentVo">
+    SELECT * FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER} AND isdel=0 ORDER BY zansum DESC
+  </select>
 </mapper>
