@@ -51,11 +51,12 @@ public class AppPostController {
     @ApiOperation(value = "活动详情数据返回接口", notes = "用于返回请求活动详情内容", response = Response.class)
     @RequestMapping(value = "activeDetail", method = RequestMethod.POST)
     public Response queryActiveDetail(@ApiParam(value = "活动id") @RequestParam String postid,
+                                      @ApiParam(value = "用户id") @RequestParam String userid,
                                       @ApiParam(value = "活动类型:0 告知类活动 1 商城促销类活动") @RequestParam String activetype) {
 
         Response response = new Response();
 
-        ActiveVo active = facadePost.queryActiveDetail(postid, activetype);
+        ActiveVo active = facadePost.queryActiveDetail(postid, userid, activetype);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");

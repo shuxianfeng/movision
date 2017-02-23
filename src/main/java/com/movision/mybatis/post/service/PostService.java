@@ -150,10 +150,10 @@ public class PostService {
         }
     }
 
-    public ActiveVo queryNoticeActive(String postid) {
+    public ActiveVo queryNoticeActive(Map<String, Object> parammap) {
         try {
             log.info("查询告知类活动详情");
-            return postMapper.queryNoticeActive(Integer.parseInt(postid));
+            return postMapper.queryNoticeActive(parammap);
         } catch (Exception e) {
             log.error("查询告知类活动详情失败");
             throw e;

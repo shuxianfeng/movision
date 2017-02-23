@@ -72,10 +72,15 @@ public class FacadePost {
         return vo;
     }
 
-    public ActiveVo queryActiveDetail(String postid, String activetype) {
+    public ActiveVo queryActiveDetail(String postid, String userid, String activetype) {
 
         //告知类活动
-        ActiveVo active = postService.queryNoticeActive(postid);
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("postid", Integer.parseInt(postid));
+        if (!StringUtils.isEmpty(userid)) {
+            parammap.put("userid", Integer.parseInt(userid));
+        }
+        ActiveVo active = postService.queryNoticeActive(parammap);
 
         //计算距离结束时间
         Date begin = active.getBegintime();

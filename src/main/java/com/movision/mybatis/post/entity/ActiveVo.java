@@ -68,6 +68,10 @@ public class ActiveVo {
 
     private Integer partsum;//活动参与总人数
 
+    private Integer isCollect;//该用户是否已收藏该帖子/活动 0 否 1 是
+
+    private Integer isZan;//该用户是否已赞该帖子/活动 0 否 1 是
+
     public Integer getId() {
         return id;
     }
@@ -298,5 +302,21 @@ public class ActiveVo {
 
     public void setUserid(Integer userid) {
         this.userid = userid;
+    }
+
+    public Integer getIsCollect() {
+        return isCollect;
+    }
+
+    public void setIsCollect(Integer isCollect) {
+        this.isCollect = isCollect;
+    }
+
+    public Integer getIsZan() {
+        return isZan;
+    }
+
+    public void setIsZan(Integer isZan) {
+        this.isZan = isZan;
     }
 }

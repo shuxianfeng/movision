@@ -63,7 +63,7 @@ public interface PostMapper {
 
     int saveActiveRecord(Map<String, Object> parammap);
 
-    ActiveVo queryNoticeActive(int postid);
+    ActiveVo queryNoticeActive(Map<String, Object> parammap);
 
     int queryPostByCircleid(int id);
 
