@@ -126,4 +126,24 @@ public class CartService {
             throw e;
         }
     }
+
+    public void deleteCartGoodsRentDate(Map<String, Object> parammap) {
+        try {
+            log.info("删除该租用商品的历史租用日期");
+            cartMapper.deleteCartGoodsRentDate(parammap);
+        } catch (Exception e) {
+            log.error("删除该租用商品的历史租用日期失败");
+            throw e;
+        }
+    }
+
+    public void updateCartGoodsRentDate(Map<String, Object> parammap) {
+        try {
+            log.info("插入修改后的商品租用日期");
+            cartMapper.updateCartGoodsRentDate(parammap);
+        } catch (Exception e) {
+            log.error("插入修改后的商品租用日期失败");
+            throw e;
+        }
+    }
 }

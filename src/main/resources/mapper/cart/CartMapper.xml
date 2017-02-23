@@ -69,6 +69,24 @@
         delete from yw_cart
         where id = #{id,jdbcType=INTEGER}
     </delete>
+
+    <!--删除购物车中原有的商品租用日期-->
+    <delete id="deleteCartGoodsRentDate" parameterType="java.util.Map">
+        DELETE FROM yw_rentdate
+        WHERE cartid = #{cartid,jdbcType=INTEGER}
+    </delete>
+
+    <!--插入新的商品租赁日期-->
+    <insert id="updateCartGoodsRentDate" parameterType="java.util.Map">
+        INSERT INTO yw_rentdate (
+        cartid, rentdate, intime
+        )
+        VALUES
+        <foreach collection="rds" item="item" index="index" separator=",">
+            (#{cartid,jdbcType=INTEGER}, #{item,jdbcType=DATE}, #{intime,jdbcType=TIMESTAMP})
+        </foreach>
+    </insert>
+
     <insert id="insert" parameterType="com.movision.mybatis.cart.entity.Cart">
     insert into yw_cart (id, userid, goodsid, 
       goodsname, combotype, rom, 
@@ -105,7 +123,7 @@
         )
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.cartid,jdbcType=INTEGER}, #{item.rentdate,jdbcType=DATE}, #{item.intime,jdbcType=DATE})
+            (#{item.cartid,jdbcType=INTEGER}, #{item.rentdate,jdbcType=DATE}, #{item.intime,jdbcType=TIMESTAMP})
         </foreach>
     </insert>
 

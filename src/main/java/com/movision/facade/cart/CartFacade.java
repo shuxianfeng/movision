@@ -128,4 +128,25 @@ public class CartFacade {
         int sum = cartService.queryGoodsSum(Integer.parseInt(cartid));
         return sum;
     }
+
+    //修改购物车中单个商品的租赁日期
+    public void updateCartGoodsRentDate(String cartid, String rentdate) throws ParseException {
+
+        String[] rentdateArr = rentdate.split(",");
+        Date[] rds = new Date[rentdateArr.length];
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (int i = 0; i < rentdateArr.length; i++) {
+            rds[i] = sdf.parse(rentdateArr[i]);
+        }
+
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("cartid", Integer.parseInt(cartid));
+        parammap.put("rds", rds);
+        parammap.put("intime", new Date());
+        //先删除
+        cartService.deleteCartGoodsRentDate(parammap);
+        //再插入
+        cartService.updateCartGoodsRentDate(parammap);
+    }
 }
