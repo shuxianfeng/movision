@@ -365,6 +365,27 @@ public class PostFacade {
     }
 
     /**
+     * 回复帖子评论
+     *
+     * @param pid
+     * @param content
+     * @param userid
+     * @return
+     */
+    public Map replyPostComment(String pid, String content, String postid, String userid) {
+        Map chuan = new HashedMap();
+        Map map = new HashedMap();
+        chuan.put("pid", pid);
+        chuan.put("content", content);
+        chuan.put("userid", userid);
+        chuan.put("postid", postid);
+        chuan.put("intime", new Date());
+        int i = commentService.replyPostComment(chuan);
+        map.put("resault", i);
+        return map;
+    }
+
+    /**
      * 后台管理-帖子列表-帖子打赏列表
      *
      * @param postid

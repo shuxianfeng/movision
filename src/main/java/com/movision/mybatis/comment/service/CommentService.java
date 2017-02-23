@@ -171,6 +171,21 @@ public class CommentService {
     }
 
     /**
+     * 回复帖子评论
+     *
+     * @return
+     */
+    public int replyPostComment(Map map) {
+        try {
+            log.info("回复帖子评论");
+            return commentMapper.replyPostComment(map);
+        } catch (Exception e) {
+            log.error("回复帖子评论异常");
+            throw e;
+        }
+    }
+
+    /**
      * 根据点赞排序评论列表
      *
      * @param postid

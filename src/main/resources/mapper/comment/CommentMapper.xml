@@ -195,4 +195,48 @@
     </set>
     where id = #{commentid,jdbcType=INTEGER} AND userid=#{userid,jdbcType=INTEGER}
   </update>
+
+  <insert id="replyPostComment" parameterType="java.util.Map">
+    insert into yw_post_comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="postid != null">
+        postid,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="intime != null">
+        intime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="postid != null">
+        #{postid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="intime != null">
+        #{intime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
 </mapper>

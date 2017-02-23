@@ -40,6 +40,8 @@ public interface CommentMapper {
 
     int updatePostComment(Map map);
 
+    int replyPostComment(Map map);
+
     List<CommentVo> commentZanSork(Integer postid, RowBounds rowBounds);
 
 }

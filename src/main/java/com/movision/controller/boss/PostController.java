@@ -248,6 +248,29 @@ public class PostController {
     }
 
     /**
+     * 回复评论
+     *
+     * @param pid
+     * @param content
+     * @param userid
+     * @return
+     */
+    @ApiOperation(value = "回复帖子评论", notes = "用于回复帖子评论接口", response = Response.class)
+    @RequestMapping(value = "/reply_post_comment", method = RequestMethod.POST)
+    public Response replyPostComment(@ApiParam(value = "父评论的id") @RequestParam String pid,
+                                     @ApiParam(value = "评论内容") @RequestParam String content,
+                                     @ApiParam(value = "评论的帖子id") @RequestParam String postid,
+                                     @ApiParam(value = "回复评论者id") @RequestParam String userid) {
+        Response response = new Response();
+        Map map = postFacade.replyPostComment(pid, content, postid, userid);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
      * 后台管理-帖子列表-帖子打赏
      *
      * @param postid
