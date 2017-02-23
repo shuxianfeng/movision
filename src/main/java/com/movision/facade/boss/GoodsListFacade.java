@@ -53,6 +53,25 @@ public class GoodsListFacade {
     }
 
     /**
+     * 商品管理--推荐到热门
+     * @param id
+     * @return
+     */
+    public int queryHot(Integer id) {
+        return goodsService.queryHot(id);
+    }
+
+    /**
+     * 商品管理--推荐到精选
+     *
+     * @param id
+     * @return
+     */
+    public int queryisessence(Integer id) {
+        return goodsService.queryisessence(id);
+    }
+
+    /**
      * 商品管理--条件查询
      *
      * @param name

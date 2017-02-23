@@ -137,4 +137,40 @@ public class GoodsController {
         response.setData(result);
         return response;
     }
+
+    /**
+     * 商品管理--推荐到热门
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "推荐到热门", notes = "推荐到热门", response = Response.class)
+    @RequestMapping(value = "recommend_ishot", method = RequestMethod.POST)
+    public Response recommendishot(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        int result = goodsFacade.queryHot(id);
+        if (response.getCode() == 200) {
+            response.setMessage("上架成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
+    /**
+     * 商品管理--推荐到精选
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "推荐到精选", notes = "推荐到精选", response = Response.class)
+    @RequestMapping(value = "recommend_isessence", method = RequestMethod.POST)
+    public Response recommendisessence(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        int result = goodsFacade.queryisessence(id);
+        if (response.getCode() == 200) {
+            response.setMessage("上架成功");
+        }
+        response.setData(result);
+        return response;
+    }
 }

@@ -387,4 +387,36 @@ public class GoodsService {
         }
     }
 
+    /**
+     * 商品管理-推荐到热门
+     *
+     * @param id
+     * @return
+     */
+    public int queryHot(Integer id) {
+        try {
+            log.info("推荐到热门");
+            return goodsMapper.recommendHot(id);
+        } catch (Exception e) {
+            log.error("推荐到热门失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 商品管理-推荐到精选
+     *
+     * @param id
+     * @return
+     */
+    public int queryisessence(Integer id) {
+        try {
+            log.info("推荐到精选");
+            return goodsMapper.recommendisessence(id);
+        } catch (Exception e) {
+            log.error("推荐到精选失败");
+            throw e;
+        }
+    }
+
 }
