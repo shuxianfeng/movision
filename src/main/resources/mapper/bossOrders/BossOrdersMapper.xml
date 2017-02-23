@@ -426,35 +426,35 @@ SELECT
         u.nickname
     FROM yw_orders o LEFT JOIN yw_address a ON o.addressid=a.id LEFT  JOIN yw_sub_order s ON s.porderid=o.id
    LEFT JOIN yw_coupon c ON c.id=o.couponsid LEFT  JOIN yw_order_sub_logistics  d ON d.logisticsid=o.logisticsid LEFT JOIN yw_user u ON u.id=o.userid
-        WHERE o.isdel=0
-         <if test="ordernumber!=null">
+        WHERE o.isdel=0 AND 1
+        <if test="ordernumber!=null and ordernumber!=''">
              AND o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
          </if>
-        <if test="province!=null">
+        <if test="province!=null and province!=''">
             AND  a.province=#{province,jdbcType=VARCHAR}
         </if>
-        <if test="city!=null">
+        <if test="city!=null and city!=''">
             AND  a.city=#{city,jdbcType=VARCHAR}
         </if>
-        <if test="district!=null">
+        <if test="district!=null and district!=''">
             AND  a.district=#{district,jdbcType=VARCHAR}
         </if>
-        <if test="phone!=null">
+        <if test="phone!=null and phone!=''">
             AND a.phone=#{phone,jdbcType=VARCHAR}
         </if>
-        <if test="email!=null">
+        <if test="email!=null and email!=''">
             AND u.email=#{email,jdbcType=VARCHAR}
         </if>
-        <if test="name!=null">
+        <if test="name!=null and name!=''">
             AND a.name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
-        <if test="takeway!=null">
+        <if test="takeway!=null and takeway!=''">
             AND o.takeway=#{takeway,jdbcType=VARCHAR}
         </if>
-        <if test="paytype!=null">
+        <if test="paytype!=null and paytype!=''">
             AND o.paytype=#{paytype,jdbcType=VARCHAR}
         </if>
-        <if test="intime!=null">
+        <if test="intime!=null and intime!=''">
             AND o.intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
         </if>
 
