@@ -533,14 +533,10 @@ public class PostFacade {
                     } else {
                         post.setOrderid("0");
                     }
-                    Date d = null;
                     if (time != null || time != "") {
-                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                        d = df.parse(time);
-                    } else {
-                        d = new Date();
+                        post.setEssencedate(time);
                     }
-                    post.setEssencedate(d);
+
                 }
             }
 
@@ -631,11 +627,8 @@ public class PostFacade {
                     }
                     Date d = null;
                     if (time != null || time != "") {
-                        d = format.parse(time);
-                    } else {
-                        d = new Date();
+                        post.setEssencedate(time);
                     }
-                    post.setEssencedate(d);
                 }
             }
 
@@ -688,19 +681,8 @@ public class PostFacade {
         PostTo p = new PostTo();
         if (Integer.parseInt(orderid) > 0) {//加精动作
             p.setId(Integer.parseInt(postid));
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            Date d = null;
             if (essencedate != null) {
-                try {
-                    d = df.parse(essencedate);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                d = new Date();
-            }
-            if (d != null) {
-                p.setEssencedate(d);//精选日期
+                p.setEssencedate(essencedate);//精选日期
             }
             p.setOrderid(orderid);
             p.setSubtitle(subtitle);
@@ -942,17 +924,9 @@ public class PostFacade {
             if (orderid != null) {
                 post.setOrderid(orderid);
             }
-            Date d = null;
             if (time != null) {
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                try {
-                    d = df.parse(time);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                post.setEssencedate(d);
+                post.setEssencedate(time);
             }
-            post.setEssencedate(d);
             post.setUserid(userid);
             int result = postService.updatePostById(post);//编辑帖子
             map.put("result", result);
@@ -990,41 +964,21 @@ public class PostFacade {
         if (postcontent != null) {
             postSpread.setPostcontent(postcontent);//帖子内容
         }
-        Date end = null;
-        Date begin = null;
-        Date es = null;
+
         //结束时间
         if (endtime != null) {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            try {
-                end = df.parse(endtime);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            postSpread.setEndtime(end);
+            postSpread.setEndtime(endtime);
         }
         //开始时间
         if (begintime != null) {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            try {
-                begin = df.parse(begintime);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            postSpread.setBegintime(begin);
+            postSpread.setBegintime(begintime);
         }
         if (pai != null) {
             postSpread.setPai(pai);
         }
         //精选时间
         if (essencedate != null) {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                es = df.parse(essencedate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            postSpread.setEssencedate(es);
+            postSpread.setEssencedate(essencedate);
         }
         List<PostList> list = postService.postSearch(postSpread, pager);
         List<PostList> rewardeds = new ArrayList<>();

@@ -11,9 +11,9 @@ public class PostSpread {
     private String circleid;//圈子id
     private String userid;//用户id
     private String postcontent;//评论内容
-    private Date endtime;//结束时间
-    private Date begintime;//开始时间
-    private Date essencedate;//加精时间
+    private String endtime;//结束时间
+    private String begintime;//开始时间
+    private String essencedate;//加精时间
     private String pai;//排序
 
     public String getTitle() {
@@ -48,27 +48,27 @@ public class PostSpread {
         this.postcontent = postcontent;
     }
 
-    public Date getEndtime() {
+    public String getEndtime() {
         return endtime;
     }
 
-    public void setEndtime(Date endtime) {
+    public void setEndtime(String endtime) {
         this.endtime = endtime;
     }
 
-    public Date getBegintime() {
+    public String getBegintime() {
         return begintime;
     }
 
-    public void setBegintime(Date begintime) {
+    public void setBegintime(String begintime) {
         this.begintime = begintime;
     }
 
-    public Date getEssencedate() {
+    public String getEssencedate() {
         return essencedate;
     }
 
-    public void setEssencedate(Date essencedate) {
+    public void setEssencedate(String essencedate) {
         this.essencedate = essencedate;
     }
 
