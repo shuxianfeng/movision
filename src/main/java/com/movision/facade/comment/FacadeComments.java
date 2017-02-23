@@ -32,11 +32,19 @@ public class FacadeComments {
      * @param postid
      * @return
      */
-    public List<CommentVo> queryCommentsByLsit(Paging<CommentVo> pager, String postid) {
+    public List<CommentVo> queryCommentsByLsit(Paging<CommentVo> pager, String postid, String userid) {
 
         List<CommentVo> vo = CommentService.queryCommentsByLsit(pager, postid);
         List<CommentVo> resaultvo=new ArrayList();
         for (int i=0;i<vo.size();i++){//遍历所有帖子
+            //查询该用户有没有点赞该评论
+            Map<String, Object> parammap = new HashMap<>();
+            parammap.put("userid", Integer.parseInt(userid));
+            parammap.put("commentid", vo.get(i).getId());
+            int sum = CommentService.queryIsZan(parammap);
+            vo.get(i).setIsZan(sum);
+
+            //遍历所有评论获取父评论
             if (vo.get(i).getPid() == null) {//当评论没有子评论的时候（父评论）
                  for(int j=0;j<vo.size();j++) {//遍历所有帖子
                     if (vo.get(i).getId()==vo.get(j).getPid()){//当子评论id和父评论的id相等时，表示该子评论是这个父评论的

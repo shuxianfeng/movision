@@ -26,6 +26,8 @@ public class CommentVo {
 
     private String isdel;
 
+    private Integer isZan;//该用户是否已赞该帖子/活动 0 否 1 是
+
     public String getIsdel() {
         return isdel;
     }
@@ -122,5 +124,13 @@ public class CommentVo {
 
     public List<CommentVo> getVo(){
         return vo;
+    }
+
+    public Integer getIsZan() {
+        return isZan;
+    }
+
+    public void setIsZan(Integer isZan) {
+        this.isZan = isZan;
     }
 }

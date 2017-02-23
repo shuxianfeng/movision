@@ -22,6 +22,8 @@ public interface CommentMapper {
 
     List<CommentVo> findAllqueryCommentsByLsit(RowBounds rowBounds, Integer postid);
 
+    int queryIsZan(Map<String, Object> parammap);
+
     List<CommentVo> findAllQueryPostByCommentParticulars(Map<String, Integer> map, RowBounds rowBounds);
 
     CommentVo queryChildrenComment(int id);

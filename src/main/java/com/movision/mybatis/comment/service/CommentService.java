@@ -36,6 +36,16 @@ public class CommentService {
         }
     }
 
+    public int queryIsZan(Map<String, Object> parammap) {
+        try {
+            log.info("查询该用户是否点赞过该评论");
+            return commentMapper.queryIsZan(parammap);
+        } catch (Exception e) {
+            log.error("查询该用户是否点赞过该评论失败");
+            throw e;
+        }
+    }
+
     /**
      * 查询评论详情
      *

@@ -137,6 +137,13 @@
     ORDER BY c.intime DESC
   </select>
 
+  <!--查询该用户有没有点赞该评论-->
+  <select id="queryIsZan" parameterType="java.util.Map" resultType="java.lang.Integer">
+    SELECT count(*) FROM yw_post_comment_zan_record
+    WHERE userid = #{userid,jdbcType=INTEGER}
+      AND commentid = #{commentid,jdbcType=INTEGER}
+  </select>
+
   <update id="updateCommentZanSum" parameterType="java.lang.Integer">
     UPDATE yw_post_comment
     SET zansum = zansum+1
