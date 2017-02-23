@@ -1,7 +1,5 @@
 package com.movision.mybatis.post.entity;
 
-import com.movision.mybatis.period.entity.Period;
-
 import java.util.Date;
 
 public class Post {
@@ -28,6 +26,8 @@ public class Post {
     private Integer activetype;
 
     private Double activefee;
+
+    private Integer iscontribute;//是否需要投稿：0 不投稿 1 投稿
 
     private Integer type;
 
@@ -272,5 +272,13 @@ public class Post {
 
     public void setEssencedate(Date essencedate) {
         this.essencedate = essencedate;
+    }
+
+    public Integer getIscontribute() {
+        return iscontribute;
+    }
+
+    public void setIscontribute(Integer iscontribute) {
+        this.iscontribute = iscontribute;
     }
 }
