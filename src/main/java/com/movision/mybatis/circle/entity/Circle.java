@@ -41,6 +41,16 @@ public class Circle {
 
     private Integer isdel;
 
+    private Integer userid;
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
+
     public Integer getIsdel() {
         return isdel;
     }

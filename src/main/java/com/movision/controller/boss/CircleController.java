@@ -2,6 +2,7 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.CircleFacade;
+import com.movision.mybatis.category.entity.CategoryVo;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleDetails;
 import com.movision.mybatis.circle.entity.CircleIndexList;
@@ -164,9 +165,7 @@ public class CircleController {
      * @param id
      * @param name
      * @param category
-     * @param nickname
      * @param admin
-     * @param newname
      * @param createtime
      * @param photo
      * @param introduction
@@ -183,11 +182,10 @@ public class CircleController {
                                  @ApiParam(value = "圈子id") @RequestParam String id,
                                  @ApiParam(value = "圈子名称") @RequestParam String name,
                                  @ApiParam(value = "圈子类型") @RequestParam String category,
-                                 @ApiParam(value = "圈主") @RequestParam String nickname,
+                                 @ApiParam(value = "圈主id") @RequestParam String userid,
                                  @ApiParam(value = "管理员列表") @RequestParam String admin,
-                                 @ApiParam(value = "创建人") @RequestParam String newname,
                                  @ApiParam(value = "创建时间") @RequestParam String createtime,
-                                 @ApiParam(value = "圈子否封面") @RequestParam MultipartFile photo,
+                                 @ApiParam(value = "圈子否封面") @RequestParam(required = false) MultipartFile photo,
                                  @ApiParam(value = "圈子简介") @RequestParam String introduction,
                                  @ApiParam(value = "圈子二维码") @RequestParam(required = false) String erweima,
                                  @ApiParam(value = "审核状态") @RequestParam(required = false) String status,
@@ -195,7 +193,7 @@ public class CircleController {
                                  @ApiParam(value = "推荐排序") @RequestParam(required = false) String orderid,
                                  @ApiParam(value = "发帖权限") @RequestParam(required = false) String permission) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.updateCircle(request, id, name, category, nickname, admin, newname, createtime, photo, introduction, erweima, status, isdiscover, orderid, permission);
+        Map<String, Integer> map = circleFacade.updateCircle(request, id, name, category, userid, admin, createtime, photo, introduction, erweima, status, isdiscover, orderid, permission);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

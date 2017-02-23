@@ -21,10 +21,11 @@
         <result column="isdiscover" property="isdiscover" jdbcType="INTEGER"/>
         <result column="orderid" property="orderid" jdbcType="INTEGER"/>
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, isofficial, scope, phone, photo, category, code, name, introduction, notice,
-        permission, isrecommend, maylikeimg, createtime, status, supportnum, isdiscover, orderid, isdel
+        permission, isrecommend, maylikeimg, createtime, status, supportnum, isdiscover, orderid, isdel,userid
     </sql>
 
     <!--基础查询语句-->
@@ -119,14 +120,14 @@
         code, name, introduction,
       notice, permission, isrecommend, maylikeimg,
         createtime, status, supportnum, isdiscover,
-      orderid)
+        orderid,userid)
         values (#{id,jdbcType=INTEGER}, #{isofficial,jdbcType=INTEGER}, #{scope,jdbcType=INTEGER},
         #{phone,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{category,jdbcType=INTEGER},
         #{code,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR},
       #{notice,jdbcType=VARCHAR}, #{permission,jdbcType=INTEGER}, #{isrecommend,jdbcType=INTEGER}, #{maylikeimg,jdbcType=INTEGER},
         #{createtime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{supportnum,jdbcType=INTEGER},
         #{isdiscover,jdbcType=INTEGER},
-      #{orderid,jdbcType=INTEGER})
+        #{orderid,jdbcType=INTEGER},#{userid,jdbcType=INTEGER})
   </insert>
 
     <!--新增一条该用户支持该圈子的记录-->
@@ -192,6 +193,9 @@
             <if test="orderid != null">
                 orderid,
             </if>
+            <if test="userid != null">
+                userid,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -247,6 +251,9 @@
             </if>
             <if test="orderid != null">
                 #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER}
             </if>
         </trim>
     </insert>
@@ -304,6 +311,9 @@
             <if test="orderid != null">
                 orderid = #{orderid,jdbcType=INTEGER},
             </if>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -325,7 +335,8 @@
         status = #{status,jdbcType=INTEGER},
         supportnum = #{supportnum,jdbcType=INTEGER},
         isdiscover = #{isdiscover,jdbcType=INTEGER},
-        orderid = #{orderid,jdbcType=INTEGER}
+        orderid = #{orderid,jdbcType=INTEGER},
+        userid = #{userid,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -475,7 +486,10 @@
     </update>
 
     <select id="queryCircleByShow" resultType="com.movision.mybatis.circle.entity.CircleDetails">
-        SELECT * FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER}
+        SELECT c.*,u.id as circlemanid,u.nickname as nickname,ue.nickname as username
+        FROM yw_circle AS c LEFT JOIN yw_user AS u ON u.phone=c.phone
+        LEFT JOIN yw_user ue ON c.userid=ue.id
+        WHERE c.id=#{circleid,jdbcType=INTEGER}
     </select>
 
     <select id="queryCircleByOrderidList" resultType="java.lang.Integer">

@@ -51,47 +51,19 @@ public class CircleDetails {
 
     private Integer isdel;//是否逻辑删除
 
-    private Integer userid;//圈主
+    private Integer circlemanid;//圈主
+
+    private String nickname;//圈主名
 
     private String categroyname;//圈子所属类型
 
-    private List<BossUser> admin;//管理员列表
+    private List<User> admin;//管理员列表
 
-    private String newname;//创建人
+    private Integer userid;//创建人id
+
+    private String username;//创建人名称
 
     private String erweima;//二维码
-
-    public List<Integer> getOrderids() {
-        return orderids;
-    }
-
-    public void setOrderids(List<Integer> orderids) {
-        this.orderids = orderids;
-    }
-
-    public String getErweima() {
-        return erweima;
-    }
-
-    public void setErweima(String erweima) {
-        this.erweima = erweima;
-    }
-
-    public String getNewname() {
-        return newname;
-    }
-
-    public void setNewname(String newname) {
-        this.newname = newname;
-    }
-
-    public List<BossUser> getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(List<BossUser> admin) {
-        this.admin = admin;
-    }
 
     public Integer getId() {
         return id;
@@ -237,12 +209,52 @@ public class CircleDetails {
         this.orderid = orderid;
     }
 
+    public List<Integer> getOrderids() {
+        return orderids;
+    }
+
+    public void setOrderids(List<Integer> orderids) {
+        this.orderids = orderids;
+    }
+
     public Integer getIsdel() {
         return isdel;
     }
 
     public void setIsdel(Integer isdel) {
         this.isdel = isdel;
+    }
+
+    public Integer getCirclemanid() {
+        return circlemanid;
+    }
+
+    public void setCirclemanid(Integer circlemanid) {
+        this.circlemanid = circlemanid;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getCategroyname() {
+        return categroyname;
+    }
+
+    public void setCategroyname(String categroyname) {
+        this.categroyname = categroyname;
+    }
+
+    public List<User> getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(List<User> admin) {
+        this.admin = admin;
     }
 
     public Integer getUserid() {
@@ -253,11 +265,19 @@ public class CircleDetails {
         this.userid = userid;
     }
 
-    public String getCategroyname() {
-        return categroyname;
+    public String getUsername() {
+        return username;
     }
 
-    public void setCategroyname(String categroyname) {
-        this.categroyname = categroyname;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getErweima() {
+        return erweima;
+    }
+
+    public void setErweima(String erweima) {
+        this.erweima = erweima;
     }
 }

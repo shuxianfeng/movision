@@ -1,5 +1,6 @@
 package com.movision.mybatis.circle.service;
 
+import com.movision.mybatis.category.entity.CircleAndCircle;
 import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.circle.mapper.CircleMapper;
 import com.movision.mybatis.followCircle.mapper.FollowCircleMapper;
@@ -495,5 +496,4 @@ public class CircleService {
             throw e;
         }
     }
-
 }

@@ -974,23 +974,23 @@ public class PostFacade {
                                      String userid, String postcontent, String endtime,
                                      String begintime, String pai, String essencedate, Paging<PostList> pager) {
         PostSpread postSpread = new PostSpread();
-        if (title != null) {
+        if (title != null || title != "") {
             postSpread.setTitle(title);//帖子标题
             }
-        if (circleid != null) {
+        if (circleid != null || circleid != "") {
             postSpread.setCircleid(Integer.parseInt(circleid));//圈子id
             }
-        if (userid != null) {
+        if (userid != null || userid != null) {
             postSpread.setUserid(Integer.parseInt(userid));//发帖人id
             }
-        if (postcontent != null) {
+        if (postcontent != null || postcontent != "") {
             postSpread.setPostcontent(postcontent);//帖子内容
         }
         Date end = null;
         Date begin = null;
         Date es = null;
         //结束时间
-        if (endtime != null) {
+        if (endtime != null || endtime != "") {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 end = df.parse(endtime);
@@ -1000,7 +1000,7 @@ public class PostFacade {
             postSpread.setEndtime(end);
         }
         //开始时间
-        if (begintime != null) {
+        if (begintime != null || begintime != "") {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 begin = df.parse(begintime);
@@ -1009,11 +1009,11 @@ public class PostFacade {
             }
             postSpread.setBegintime(begin);
         }
-        if (pai != null) {
+        if (pai != null || pai != "") {
             postSpread.setPai(Integer.parseInt(pai));
         }
         //精选时间
-        if (essencedate != null) {
+        if (essencedate != null || essencedate != "") {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 es = df.parse(essencedate);

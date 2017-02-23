@@ -5,15 +5,11 @@ import java.util.Date;
 public class Category {
     private Integer id;
 
-    private Integer protype;
-
-    private String typename;
-
-    private String subtitle;
+    private String categoryname;
 
     private Date intime;
 
-    private String imgurl;
+    private String discoverpageurl;
 
     public Integer getId() {
         return id;
@@ -23,28 +19,12 @@ public class Category {
         this.id = id;
     }
 
-    public Integer getProtype() {
-        return protype;
+    public String getCategoryname() {
+        return categoryname;
     }
 
-    public void setProtype(Integer protype) {
-        this.protype = protype;
-    }
-
-    public String getTypename() {
-        return typename;
-    }
-
-    public void setTypename(String typename) {
-        this.typename = typename == null ? null : typename.trim();
-    }
-
-    public String getSubtitle() {
-        return subtitle;
-    }
-
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle == null ? null : subtitle.trim();
+    public void setCategoryname(String categoryname) {
+        this.categoryname = categoryname == null ? null : categoryname.trim();
     }
 
     public Date getIntime() {
@@ -55,11 +35,11 @@ public class Category {
         this.intime = intime;
     }
 
-    public String getImgurl() {
-        return imgurl;
+    public String getDiscoverpageurl() {
+        return discoverpageurl;
     }
 
-    public void setImgurl(String imgurl) {
-        this.imgurl = imgurl == null ? null : imgurl.trim();
+    public void setDiscoverpageurl(String discoverpageurl) {
+        this.discoverpageurl = discoverpageurl == null ? null : discoverpageurl.trim();
     }
 }

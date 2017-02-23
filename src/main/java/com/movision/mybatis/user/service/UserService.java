@@ -289,7 +289,7 @@ public class UserService {
      * @param circleid
      * @return
      */
-    public List<BossUser> queryUserByAdministratorList(Integer circleid) {
+    public List<User> queryUserByAdministratorList(Integer circleid) {
         try {
             log.info("查询圈子管理员列表");
             return userMapper.queryUserByAdministratorList(circleid);

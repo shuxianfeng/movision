@@ -2,6 +2,10 @@ package com.movision.facade.boss;
 
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.category.entity.Category;
+import com.movision.mybatis.category.entity.CategoryVo;
+import com.movision.mybatis.category.entity.CircleAndCircle;
+import com.movision.mybatis.category.service.CategoryService;
 import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.manager.service.ManagerServcie;
@@ -51,6 +55,9 @@ public class CircleFacade {
 
     @Autowired
     ManagerServcie managerService;
+
+    @Autowired
+    CategoryService categoryService;
 
     /**
      * 圈子首页列表查询
@@ -227,9 +234,7 @@ public class CircleFacade {
      * @param id
      * @param name
      * @param category
-     * @param userid
      * @param admin
-     * @param newname
      * @param createtime
      * @param photo
      * @param introduction
@@ -240,8 +245,8 @@ public class CircleFacade {
      * @param permission
      * @return
      */
-    public Map<String, Integer> updateCircle(HttpServletRequest request, String id, String name, String category, String userid, String admin,
-                                             String newname, String createtime, MultipartFile photo, String introduction,
+    public Map<String, Integer> updateCircle(HttpServletRequest request, String id, String name, String category, String circlemanid, String admin,
+                                             String createtime, MultipartFile photo, String introduction,
                                              String erweima, String status, String isdiscover, String orderid, String permission) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
@@ -257,11 +262,6 @@ public class CircleFacade {
             if (category != null) {
                 circleDetails.setCategory(Integer.parseInt(category));
             }
-            if (userid != null) {
-                Integer uid = Integer.parseInt(userid);
-                String pon = userService.queryUserbyPhoneByUserid(uid);
-                circleDetails.setPhone(pon);
-            }
             if (admin != null) {//管理员列表
                 //待定
                 String[] ary = admin.split(",");//以逗号分隔接收数据
@@ -273,8 +273,10 @@ public class CircleFacade {
                     managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
                 }
             }
-            if (newname != null) {
-                circleDetails.setNewname(newname);
+            if (circlemanid != null) {
+                //查询圈主
+                String pon = userService.queryUserbyPhoneByUserid(Integer.parseInt(circlemanid));
+                circleDetails.setPhone(pon);
             }
             Date time = null;
             if (createtime != null) {
@@ -342,10 +344,16 @@ public class CircleFacade {
         return map;
     }
 
+    /**
+     * 圈子编辑时数据回显
+     *
+     * @param circleid
+     * @return
+     */
     public Map<String, CircleDetails> queryCircleByShow(String circleid) {
         Map<String, CircleDetails> map = new HashedMap();
         CircleDetails circleDetails = circleService.queryCircleByShow(Integer.parseInt(circleid));//查询出圈子信息
-        List<BossUser> list = userService.queryUserByAdministratorList(Integer.parseInt(circleid));//查询出圈子管理员列表
+        List<User> list = userService.queryUserByAdministratorList(Integer.parseInt(circleid));//查询出圈子管理员列表
         circleDetails.setAdmin(list);
         List<Integer> ords = circleService.queryCircleByOrderidList();
         List<Integer> h = new ArrayList<>();

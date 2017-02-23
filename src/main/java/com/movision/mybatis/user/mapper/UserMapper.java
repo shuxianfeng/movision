@@ -63,5 +63,5 @@ public interface UserMapper {
 
     String queryUserbyPhoneByUserid(Integer userid);
 
-    List<BossUser> queryUserByAdministratorList(Integer circleid);
+    List<User> queryUserByAdministratorList(Integer circleid);
 }
