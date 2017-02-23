@@ -496,5 +496,130 @@
         SELECT orderid FROM yw_circle WHERE orderid BETWEEN 1 AND 9 AND isdiscover=1 ORDER BY orderid DESC
     </select>
 
+    <insert id="insertCircle" parameterType="com.movision.mybatis.circle.entity.CircleDetails">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into yw_circle
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="isofficial != null">
+                isofficial,
+            </if>
+            <if test="scope != null">
+                scope,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="photo != null">
+                photo,
+            </if>
+            <if test="category != null">
+                category,
+            </if>
+            <if test="code != null">
+                code,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="introduction != null">
+                introduction,
+            </if>
+            <if test="notice != null">
+                notice,
+            </if>
+            <if test="permission != null">
+                permission,
+            </if>
+            <if test="isrecommend != null">
+                isrecommend,
+            </if>
+            <if test="maylikeimg != null">
+                maylikeimg,
+            </if>
+            <if test="createtime != null">
+                createtime,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="supportnum != null">
+                supportnum,
+            </if>
+            <if test="isdiscover != null">
+                isdiscover,
+            </if>
+            <if test="orderid != null">
+                orderid,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="isofficial != null">
+                #{isofficial,jdbcType=INTEGER},
+            </if>
+            <if test="scope != null">
+                #{scope,jdbcType=INTEGER},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="photo != null">
+                #{photo,jdbcType=VARCHAR},
+            </if>
+            <if test="category != null">
+                #{category,jdbcType=INTEGER},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="introduction != null">
+                #{introduction,jdbcType=VARCHAR},
+            </if>
+            <if test="notice != null">
+                #{notice,jdbcType=VARCHAR},
+            </if>
+            <if test="permission != null">
+                #{permission,jdbcType=INTEGER},
+            </if>
+            <if test="isrecommend != null">
+                #{isrecommend,jdbcType=INTEGER},
+            </if>
+            <if test="maylikeimg != null">
+                #{maylikeimg,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null">
+                #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="supportnum != null">
+                #{supportnum,jdbcType=INTEGER},
+            </if>
+            <if test="isdiscover != null">
+                #{isdiscover,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </insert>
+
 
 </mapper>

@@ -1,5 +1,6 @@
 package com.movision.facade.boss;
 
+import com.movision.common.Response;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.category.entity.Category;
@@ -8,6 +9,7 @@ import com.movision.mybatis.category.entity.CircleAndCircle;
 import com.movision.mybatis.category.service.CategoryService;
 import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.circle.service.CircleService;
+import com.movision.mybatis.manager.entity.Manager;
 import com.movision.mybatis.manager.service.ManagerServcie;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.post.service.PostService;
@@ -16,10 +18,13 @@ import com.movision.mybatis.share.service.SharesService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
+import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -370,6 +375,121 @@ public class CircleFacade {
         }
         map.put("resault", circleDetails);
         return map;
+    }
+
+
+    /**
+     * 圈子添加
+     *
+     * @param request
+     * @param name
+     * @param category
+     * @param userid
+     * @param admin
+     * @param circlemanid
+     * @param photo
+     * @param introduction
+     * @param erweima
+     * @param status
+     * @param isdiscover
+     * @param orderid
+     * @return
+     */
+    public Map<String, Integer> addCircle(HttpServletRequest request, String name, String category, String userid, String admin,
+                                          String circlemanid, MultipartFile photo, String introduction,
+                                          String erweima, String status, String isdiscover, String orderid, String scope) {
+        CircleDetails circleDetails = new CircleDetails();
+        Map<String, Integer> map = new HashedMap();
+        Integer circleid = null;
+        try {
+
+            if (name != null) {
+                circleDetails.setName(name);
+            }
+            if (category != null) {
+                circleDetails.setCategory(Integer.parseInt(category));
+            }
+
+            if (circlemanid != null) {
+
+            }
+            if (userid != null) {
+                //查询圈主手机号
+                String pon = userService.queryUserbyPhoneByUserid(Integer.parseInt(userid));
+                circleDetails.setPhone(pon);//设置圈主手机号
+            }
+            circleDetails.setCreatetime(new Date());
+            String savedFileName = "";
+            String imgurl = "";
+            if (photo != null) {
+                if (!photo.isEmpty()) {
+                    String fileRealName = photo.getOriginalFilename();
+                    int pointIndex = fileRealName.indexOf(".");
+                    String fileSuffix = fileRealName.substring(pointIndex);
+                    UUID FileId = UUID.randomUUID();
+                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
+                    String savedDir = request.getSession().getServletContext().getRealPath("");
+                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
+                    //不保存到项目中,防止部包把图片覆盖掉了
+                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    //这里组合出真实的图片存储路径
+                    String combinpath = path + "/images/circle/banner/";
+                    File savedFile = new File(combinpath, savedFileName);
+                    System.out.println("文件url：" + combinpath + "" + savedFileName);
+                    boolean isCreateSuccess = savedFile.createNewFile();
+                    if (isCreateSuccess) {
+                        photo.transferTo(savedFile);  //转存文件
+                    }
+                }
+                imgurl = imgdomain + savedFileName;
+                circleDetails.setPhoto(imgurl);
+            }
+            if (introduction != null) {
+                circleDetails.setIntroduction(introduction);
+            }
+            if (erweima != null) {
+                circleDetails.setErweima(erweima);
+            }
+            if (status != null) {
+                circleDetails.setStatus(Integer.parseInt(status));
+            }
+            if (isdiscover != null) {
+                circleDetails.setIsdiscover(Integer.parseInt(isdiscover));
+            }
+            if (orderid != null) {
+                circleDetails.setOrderid(Integer.parseInt(orderid));
+            }
+            if (scope != null) {
+                circleDetails.setPermission(Integer.parseInt(scope));
+            }
+            Integer s = circleService.insertCircle(circleDetails);
+            Integer cirid = circleDetails.getId();
+            if (admin != null) {//管理员列表
+                //待定
+                String[] ary = admin.split(",");//以逗号分隔接收数据
+                for (String itm : ary) {//循环添加
+                    Map<String, Integer> mapd = new HashedMap();
+                    mapd.put("circleid", cirid);
+                    mapd.put("userid", Integer.parseInt(itm));
+                    managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
+                }
+            }
+            if (s == 1) {
+                map.put("resault", s);
+            } else {
+                Integer t = 0;
+                map.put("resault", t);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+
+    public List<Category> queryCircleTypeList() {
+        Map<String, Category> map = new HashedMap();
+        List<Category> list = categoryService.queryCircleTypeList();
+        return list;
     }
 
 }

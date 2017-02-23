@@ -18,4 +18,6 @@ public interface CategoryMapper {
     int updateByPrimaryKey(Category record);
 
     List<Category> queryGoodsCategory();
+
+    List<Category> queryCircleTypeList();
 }

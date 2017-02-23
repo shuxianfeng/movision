@@ -2,6 +2,7 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.CircleFacade;
+import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.category.entity.CategoryVo;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleDetails;
@@ -218,4 +219,63 @@ public class CircleController {
         response.setData(map);
         return response;
     }
+
+    /**
+     * 添加圈子
+     *
+     * @param request
+     * @param name
+     * @param category
+     * @param userid
+     * @param admin
+     * @param criclemanid
+     * @param photo
+     * @param introduction
+     * @param erweima
+     * @param status
+     * @param isdiscover
+     * @param orderid
+     * @return
+     */
+    @ApiOperation(value = "添加圈子", notes = "用于圈子添加接口", response = Response.class)
+    @RequestMapping(value = "add_circle", method = RequestMethod.POST)
+    public Response addCircle(HttpServletRequest request,
+                              @ApiParam(value = "圈子名称") @RequestParam String name,
+                              @ApiParam(value = "圈子类型0 科技 1 交友 2 摄影 3 影视 4 达人秀") @RequestParam String category,
+                              @ApiParam(value = "圈主id") @RequestParam String userid,
+                              @ApiParam(value = "管理员列表，以逗号分隔") @RequestParam String admin,
+                              @ApiParam(value = "创建人") @RequestParam String criclemanid,
+                              @ApiParam(value = "圈子否封面") @RequestParam(required = false) MultipartFile photo,
+                              @ApiParam(value = "圈子简介") @RequestParam String introduction,
+                              @ApiParam(value = "圈子二维码") @RequestParam(required = false) String erweima,
+                              @ApiParam(value = "审核状态0 待审核 1 审核通过 2 审核不通过") @RequestParam(required = false) String status,
+                              @ApiParam(value = "推荐到首页") @RequestParam(required = false) String isdiscover,
+                              @ApiParam(value = "推荐排序0-9") @RequestParam(required = false) String orderid,
+                              @ApiParam(value = "发帖权限：0 所有者可发 1 所有者和大V可发 2 所有人均可发") @RequestParam(required = false) String scope) {
+        Response response = new Response();
+        Map<String, Integer> map = circleFacade.addCircle(request, name, category, userid, admin, criclemanid, photo, introduction, erweima, status, isdiscover, orderid, scope);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 查询圈子分类
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询圈子分类", notes = "用于查询圈子分类接口", response = Response.class)
+    @RequestMapping(value = "query_circle_type_list", method = RequestMethod.POST)
+    public Response queryCircleTypeList() {
+        List<Category> map = circleFacade.queryCircleTypeList();
+        Response response = new Response();
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
 }
