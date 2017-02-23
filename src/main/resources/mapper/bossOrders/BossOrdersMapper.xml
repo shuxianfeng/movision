@@ -527,6 +527,9 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
             <if test="code != null">
                 code = #{code,jdbcType=VARCHAR},
             </if>
+            <if test="onlystatue != null">
+                onlystatue = #{onlystatue,jdbcType=VARCHAR},
+            </if>
         </set>
         where orderid = #{orderid,jdbcType=INTEGER}
     </update>
