@@ -60,6 +60,11 @@
         SELECT rentdate FROM yw_rentdate WHERE cartid = #{cartid,jdbcType=INTEGER}
     </select>
 
+    <!--查询购物车中单个商品的数量-->
+    <select id="queryGoodsSum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT num FROM yw_cart WHERE id = #{cartid,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_cart
         where id = #{id,jdbcType=INTEGER}
@@ -278,5 +283,17 @@
         <foreach collection="cartid" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
+    </update>
+
+    <!--修改购物车中商品的数量-->
+    <update id="updateCartGoodsSum" parameterType="java.util.Map">
+        UPDATE yw_cart
+        <if test="type == 0">
+            SET num = num - 1
+        </if>
+        <if test="type == 1">
+            SET num = num + 1
+        </if>
+        WHERE id = #{cartid,jdbcType=INTEGER}
     </update>
 </mapper>

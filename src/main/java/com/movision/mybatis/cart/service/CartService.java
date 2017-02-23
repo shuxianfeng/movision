@@ -106,4 +106,24 @@ public class CartService {
             throw e;
         }
     }
+
+    public void updateCartGoodsSum(Map<String, Object> parammap) {
+        try {
+            log.info("修改购物车中商品的数量");
+            cartMapper.updateCartGoodsSum(parammap);
+        } catch (Exception e) {
+            log.error("修改购物车中商品的数量失败");
+            throw e;
+        }
+    }
+
+    public int queryGoodsSum(int cartid) {
+        try {
+            log.info("查询该商品在购物车中的数量");
+            return cartMapper.queryGoodsSum(cartid);
+        } catch (Exception e) {
+            log.error("查询该商品在购物车中的数量失败");
+            throw e;
+        }
+    }
 }

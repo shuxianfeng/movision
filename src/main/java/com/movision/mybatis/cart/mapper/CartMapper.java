@@ -28,6 +28,10 @@ public interface CartMapper {
 
     void deleteCartGoods(Map<String, Object> parammap);
 
+    void updateCartGoodsSum(Map<String, Object> parammap);
+
+    int queryGoodsSum(int cartid);
+
     int addGoodsCart(Map<String, Object> parammap);
 
     int updateByPrimaryKeySelective(Cart record);

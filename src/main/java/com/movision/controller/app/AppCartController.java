@@ -85,4 +85,23 @@ public class AppCartController {
         }
         return response;
     }
+
+    /**
+     * 购物车商品————修改商品数量接口
+     */
+    @ApiOperation(value = "购物车商品————修改商品数量接口", notes = "用于用户在购物车中直接对单个商品的数量进行修改", response = Response.class)
+    @RequestMapping(value = "updateCartGoodsSum", method = RequestMethod.POST)
+    public Response updateCartGoodsSum(@ApiParam(value = "购物车id") @RequestParam String cartid,
+                                       @ApiParam(value = "修改类型：0 减 1 加") @RequestParam String type
+    ) {
+        Response response = new Response();
+
+        int sum = cartFacade.updateCartGoodsSum(cartid, type);//返回修改后的商品数量
+
+        if (response.getCode() == 200) {
+            response.setMessage("修改成功");
+        }
+        response.setData(sum);
+        return response;
+    }
 }
