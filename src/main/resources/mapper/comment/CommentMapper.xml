@@ -176,4 +176,10 @@
           resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT * FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER} AND isdel=0 ORDER BY zansum DESC
   </select>
+
+  <select id="queryCommentById" resultType="com.movision.mybatis.comment.entity.CommentVo"
+          parameterType="java.util.Map">
+    SELECT c.content,u.nickname FROM yw_post_comment as c LEFT JOIN yw_user as u ON c.userid=u.id
+    WHERE c.postid=#{postid,jdbcType=INTEGER} AND c.id=#{commentid,jdbcType=INTEGER}
+  </select>
 </mapper>

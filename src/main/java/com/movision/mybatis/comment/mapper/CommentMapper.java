@@ -26,6 +26,8 @@ public interface CommentMapper {
 
     List<CommentVo> findAllQueryPostByCommentParticulars(Map<String, Integer> map, RowBounds rowBounds);
 
+    CommentVo queryCommentById(Map map);
+
     CommentVo queryChildrenComment(int id);
 
     void insertCommentZanRecord(Map<String, Object> parammap);

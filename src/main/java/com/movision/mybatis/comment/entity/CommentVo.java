@@ -28,6 +28,16 @@ public class CommentVo {
 
     private Integer isZan;//该用户是否已赞该帖子/活动 0 否 1 是
 
+    private List<CommentVo> soncomment;
+
+    public List<CommentVo> getSoncomment() {
+        return soncomment;
+    }
+
+    public void setSoncomment(List<CommentVo> soncomment) {
+        this.soncomment = soncomment;
+    }
+
     public String getIsdel() {
         return isdel;
     }

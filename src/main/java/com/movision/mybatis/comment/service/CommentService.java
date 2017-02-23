@@ -62,6 +62,22 @@ public class CommentService {
         }
     }
 
+    /**
+     * 查询评论
+     *
+     * @param map
+     * @return
+     */
+    public CommentVo queryCommentById(Map map) {
+        try {
+            log.info("查询评论");
+            return commentMapper.queryCommentById(map);
+        } catch (Exception e) {
+            log.error("查询评论异常");
+            throw e;
+        }
+    }
+
     public CommentVo queryChildrenComment(int id){
         try {
             log.info("查询子评论");

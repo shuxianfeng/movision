@@ -296,10 +296,14 @@ public class PostFacade {
      */
     public List<CommentVo> queryPostByCommentParticulars(String commentid, String postid, Paging<CommentVo> pager) {
         Map<String, Integer> map = new HashedMap();
+        List<CommentVo> resautl = new ArrayList<>();
         map.put("commentid", Integer.parseInt(commentid));
         map.put("postid", Integer.parseInt(postid));
+        CommentVo com = commentService.queryCommentById(map);
         List<CommentVo> list = commentService.queryPostByCommentParticulars(map, pager);
-        return list;
+        com.setSoncomment(list);
+        resautl.add(com);
+        return resautl;
     }
 
     /**
