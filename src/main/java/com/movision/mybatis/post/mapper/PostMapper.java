@@ -127,5 +127,5 @@ public interface PostMapper {
 
     List<PostList> findAllpostSearch(PostSpread spread, RowBounds rowBounds);
 
-    List<PostList> findAllQueryCircleByPostList(String circleid, RowBounds rowBounds);
+    List<PostList> findAllQueryCircleByPostList(Map map, RowBounds rowBounds);
 }

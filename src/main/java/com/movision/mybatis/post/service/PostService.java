@@ -579,14 +579,14 @@ public class PostService {
     /**
      * 查询圈子下的帖子列表
      *
-     * @param circleid
+     * @param map
      * @param pager
      * @return
      */
-    public List<PostList> findAllQueryCircleByPostList(String circleid, Paging<PostList> pager) {
+    public List<PostList> findAllQueryCircleByPostList(Map map, Paging<PostList> pager) {
         try {
             log.info("查询圈子下的帖子列表");
-            return postMapper.findAllQueryCircleByPostList(circleid, pager.getRowBounds());
+            return postMapper.findAllQueryCircleByPostList(map, pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询圈子下的帖子列表异常");
             throw e;

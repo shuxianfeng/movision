@@ -519,8 +519,11 @@ public class CircleFacade {
      * @param pager
      * @return
      */
-    public List<PostList> findAllQueryCircleByPostList(String circleid, Paging<PostList> pager) {
-        return postService.findAllQueryCircleByPostList(circleid, pager);
+    public List<PostList> findAllQueryCircleByPostList(String circleid, String type, Paging<PostList> pager) {
+        Map map = new HashedMap();
+        map.put("circleid", circleid);
+        map.put("type", type);
+        return postService.findAllQueryCircleByPostList(map, pager);
     }
 
 }
