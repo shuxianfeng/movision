@@ -1314,4 +1314,16 @@
         </if>
     </select>
 
+    <select id="findAllQueryCircleByPostList" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.post.entity.PostList">
+        SELECT p.title,u.nickname,p.collectsum,
+        (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid=p.id) AS share,
+        (SELECT COUNT(1) FROM yw_post_comment c WHERE c.postid=p.id) AS commentsum,p.zansum,
+        (SELECT SUM(points) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
+        (SELECT COUNT(1) FROM yw_post_accusation a WHERE a.postid=p.id) AS accusation,cir.name AS circlename,
+        p.orderid,p.essencedate
+        FROM yw_post AS p LEFT JOIN yw_user as u ON u.id=p.userid LEFT JOIN yw_circle cir ON cir.id=p.circleid
+        WHERE circleid=#{circleid,jdbcType=INTEGER}
+    </select>
+
 </mapper>

@@ -512,4 +512,15 @@ public class CircleFacade {
         return map;
     }
 
+    /**
+     * 查询圈子下的帖子列表
+     *
+     * @param circleid
+     * @param pager
+     * @return
+     */
+    public List<PostList> findAllQueryCircleByPostList(String circleid, Paging<PostList> pager) {
+        return postService.findAllQueryCircleByPostList(circleid, pager);
+    }
+
 }

@@ -294,4 +294,20 @@ public class CircleController {
         return response;
     }
 
+    @ApiOperation(value = "查看圈子帖子列表", notes = "用于查看圈子中帖子列表接口", response = Response.class)
+    @RequestMapping(value = "query_circle_post_list", method = RequestMethod.POST)
+    public Response queryCircleByPostList(@ApiParam(value = "圈子id") @RequestParam String circleid,
+                                          @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                          @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostList> list = circleFacade.findAllQueryCircleByPostList(circleid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
 }

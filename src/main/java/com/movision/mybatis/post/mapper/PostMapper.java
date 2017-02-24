@@ -126,4 +126,6 @@ public interface PostMapper {
     Integer updateByPrimaryKeySelectiveById(PostTo post);
 
     List<PostList> findAllpostSearch(PostSpread spread, RowBounds rowBounds);
+
+    List<PostList> findAllQueryCircleByPostList(String circleid, RowBounds rowBounds);
 }
