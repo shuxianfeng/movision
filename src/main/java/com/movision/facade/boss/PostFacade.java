@@ -1114,7 +1114,7 @@ public class PostFacade {
      * @param pager
      * @return
      */
-    public List<PostList> queryAllActivePostCondition(String title, String name, String pai, String content, String mintime, String maxtime, String statue, Paging<PostList> pager) {
+    public List<PostList> queryAllActivePostCondition(String title, String name, String content, String mintime, String maxtime, String statue, Paging<PostList> pager) {
 
         Map<String, Object> map = new HashedMap();
         if (title != null) {
@@ -1125,9 +1125,6 @@ public class PostFacade {
         }
         if (content != null) {
             map.put("content", content);
-        }
-        if (pai != null) {
-            map.put("pai", pai);
         }
         if (statue != null) {
             map.put("statue", statue);

@@ -103,8 +103,8 @@ public class CircleFacade {
                 String circlemasterlist = circleService.queryCircleBycirclemaster(listt.get(e).getPhone());//查询圈主
                 List<User> userslist = userService.queryCircleManagerList(circleid);//查询出圈子管理员列表
                 for (int j = 0; j < userslist.size(); j++) {
-                    if (userslist.get(e).getNickname() == null) {
-                        userslist.get(e).setNickname("用户" + userslist.get(e).getPhone().substring(7));
+                    if (userslist.get(j).getNickname() == null) {
+                        userslist.get(j).setNickname("用户" + userslist.get(j).getPhone().substring(7));
                     }
                 }
                 CircleFollowNum followNumt = circleService.queryFollowAndNewNumt(circleid);//返回关注数,今日新增关注人数
