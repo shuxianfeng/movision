@@ -73,6 +73,16 @@ public class GoodsVo {
 
     private String imgurl;//商品缩略小方图
 
+    private String brandname;//品牌名称
+
+    public String getBrandname() {
+        return brandname;
+    }
+
+    public void setBrandname(String brandname) {
+        this.brandname = brandname;
+    }
+
     public Integer getId() {
         return id;
     }

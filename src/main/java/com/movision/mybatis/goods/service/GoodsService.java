@@ -435,4 +435,20 @@ public class GoodsService {
         }
     }
 
+    /**
+     * 用于查询商品列表（帖子使用）
+     *
+     * @param pager
+     * @return
+     */
+    public List<GoodsVo> queryPostByGoodsList(Paging<GoodsVo> pager) {
+        try {
+            log.info("查询商品列表");
+            return goodsMapper.findAllQueryPostByGoodsList(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询商品列表异常");
+            throw e;
+        }
+    }
+
 }

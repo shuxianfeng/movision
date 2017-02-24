@@ -6,6 +6,7 @@ import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.share.entity.SharesVo;
@@ -688,6 +689,28 @@ public class PostController {
         Response response = new Response();
         Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<PostList> list = postFacade.queryAllActivePostCondition(title, name, content, mintime, maxtime, statue, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 查询商品列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查询商品列表", notes = "用于帖子选择商品接口", response = Response.class)
+    @RequestMapping(value = "query_post_goods_list", method = RequestMethod.POST)
+    public Response queryPostByGoodsList(@ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                         @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<GoodsVo> pager = new Paging<GoodsVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<GoodsVo> list = postFacade.queryPostByGoodsList(pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

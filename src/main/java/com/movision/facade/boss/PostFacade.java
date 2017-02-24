@@ -10,6 +10,8 @@ import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
+import com.movision.mybatis.goods.entity.GoodsVo;
+import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.period.service.PeriodService;
 import com.movision.mybatis.post.entity.*;
@@ -91,6 +93,9 @@ public class PostFacade {
 
     @Autowired
     private VideoService videoService;
+
+    @Autowired
+    private GoodsService goodsService;
 
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
@@ -1149,6 +1154,12 @@ public class PostFacade {
         }
         map.put("maxtime", max);
         return postService.queryAllActivePostCondition(map, pager);
+    }
+
+
+    public List<GoodsVo> queryPostByGoodsList(Paging<GoodsVo> pager) {
+        List<GoodsVo> goodsVos = goodsService.queryPostByGoodsList(pager);
+        return null;
     }
 
 }

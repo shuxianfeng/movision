@@ -63,4 +63,6 @@ public interface GoodsMapper {
     int recommendisessence(Integer id);//推荐到精选
 
     int updateDate(GoodsVo goodsVo);//修改推荐日期
+
+    List<GoodsVo> findAllQueryPostByGoodsList(RowBounds rowBounds);//查询商品列表（帖子使用）
 }

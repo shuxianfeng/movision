@@ -611,4 +611,11 @@
         </set>
         where id=#{id,jdbcType=INTEGER}
     </update>
+
+    <select id="findAllQueryPostByGoodsList" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT g.id,
+        (SELECT brandname FROM yw_brand b WHERE b.brandid=g.brandid) AS brandname,
+        g.protype,g.isdel,g.origprice,g.price,g.sales,g.stock,g.attribute
+        FROM yw_goods g
+    </select>
 </mapper>
