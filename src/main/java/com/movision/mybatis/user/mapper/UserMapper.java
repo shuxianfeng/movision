@@ -64,4 +64,8 @@ public interface UserMapper {
     String queryUserbyPhoneByUserid(Integer userid);
 
     List<User> queryUserByAdministratorList(Integer circleid);
+
+    List<Integer> findAllqueryUsers(RowBounds rowBounds);
+
+    UserVo queryApplyVipList(Integer userid);
 }

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -297,5 +298,25 @@ public class UserService {
             log.error("查询圈子管理员列表异常");
             throw e;
         }
+    }
+
+    /**
+     * 查询所有申请加v用户
+     *
+     * @param pager
+     * @return
+     */
+    public List<Integer> findAllqueryUsers(Paging<UserVo> pager) {
+        return userMapper.findAllqueryUsers(pager.getRowBounds());
+    }
+
+    /**
+     * 查看vip申请列表
+     *
+     * @param userid
+     * @return
+     */
+    public UserVo queryApplyVipList(Integer userid) {
+        return userMapper.queryApplyVipList(userid);
     }
 }

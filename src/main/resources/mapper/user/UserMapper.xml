@@ -25,6 +25,7 @@
         <result column="growth" property="growth" jdbcType="INTEGER"/>
         <result column="level" property="level" jdbcType="INTEGER"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="applydate" property="applydate" jdbcType="DATE"/>
     </resultMap>
 
     <resultMap id="loginUserMap" type="com.movision.mybatis.user.entity.LoginUser">
@@ -56,7 +57,7 @@
 
     <sql id="Base_Column_List">
         id, openid, qq, sina, phone, email, token, invitecode, referrals, nickname, sign, attention, fans,
-        points, photo, sex, birthday, province, city, intime, growth, level, status
+        points, photo, sex, birthday, province, city, intime, growth, level, status, applydate
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -107,7 +108,7 @@
         fans, points, photo,
         sex, birthday, province,
         city, intime, growth,
-        level, status)
+        level, status,applydate)
         values (#{id,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR},
         #{sina,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},
         #{token,jdbcType=VARCHAR}, #{invitecode,jdbcType=VARCHAR}, #{referrals,jdbcType=VARCHAR},
@@ -115,7 +116,7 @@
         #{fans,jdbcType=INTEGER}, #{points,jdbcType=INTEGER}, #{photo,jdbcType=VARCHAR},
         #{sex,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}, #{province,jdbcType=VARCHAR},
         #{city,jdbcType=VARCHAR}, #{intime,jdbcType=TIMESTAMP}, #{growth,jdbcType=INTEGER},
-        #{level,jdbcType=INTEGER}, #{status,jdbcType=INTEGER})
+        #{level,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{applydate,jdbcType=DATE})
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.user.entity.User">
         insert into yw_user
@@ -189,6 +190,9 @@
             <if test="status != null">
                 status,
             </if>
+            <if test="applydate!=null">
+                applydate,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -260,6 +264,9 @@
             <if test="status != null">
                 #{status,jdbcType=INTEGER},
             </if>
+            <if test="applydate!=null">
+                #{applydate,jdbcType=DATE},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.user.entity.User">
@@ -330,6 +337,9 @@
             </if>
             <if test="status != null">
                 status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="applydate!=null">
+                applydate=#{applydate,jdbcType=DATE},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -462,4 +472,19 @@
         m.circleid=#{circleid,jdbcType=INTEGER})
     </select>
 
+    <select id="findAllqueryUsers" resultType="java.lang.Integer">
+        SELECT id FROM yw_user WHERE applydate IS NOT NULL ORDER BY intime
+    </select>
+    <select id="queryApplyVipList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,
+            (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
+            (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
+            (SELECT SUM(points) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE p1.userid=#{userid,jdbcType=INTEGER} AND p1.isdel=0)) AS exceptional,
+            (SELECT SUM(collectsum) FROM yw_post p2 WHERE p2.userid=#{userid,jdbcType=INTEGER} AND p2.isdel=0) AS becollectsum,
+            (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid IN (SELECT p5.id FROM yw_post p5 WHERE p5.userid=#{userid,jdbcType=INTEGER} AND p5.isdel=0)) AS besharesum,
+            (SELECT SUM(commentsum) FROM  yw_post p3 WHERE p3.userid=#{userid,jdbcType=INTEGER} AND p3.isdel=0) AS commentsum,
+            (SELECT SUM(zansum) FROM yw_post p4 WHERE p4.userid=#{userid,jdbcType=INTEGER} AND p4.isdel=0) AS zansum,u.fans,u.applydate
+        FROM yw_user u WHERE u.id=#{userid,jdbcType=INTEGER}
+    </select>
 </mapper>

@@ -60,7 +60,13 @@ public class LoginUser implements Serializable {
 
     private Integer status;
 
+    private Date applydate;
+
     private String role;    //角色
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public void setId(Integer id) {
         this.id = id;

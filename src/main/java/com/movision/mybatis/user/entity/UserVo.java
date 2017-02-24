@@ -63,6 +63,66 @@ public class UserVo {
 
     private Integer befollowsum;//被关注的次数（粉丝数）
 
+    private Integer postsum;//帖子数量
+
+    private Integer isessencesum;//精贴数量
+
+    private Integer exceptional;//被打赏积分
+
+    private Date applydate;//申请时间
+
+    private Integer commentsum;//被评论数
+
+    private Integer zansum;//被点赞数
+
+    public Integer getZansum() {
+        return zansum;
+    }
+
+    public void setZansum(Integer zansum) {
+        this.zansum = zansum;
+    }
+
+    public Integer getCommentsum() {
+        return commentsum;
+    }
+
+    public void setCommentsum(Integer commentsum) {
+        this.commentsum = commentsum;
+    }
+
+    public Integer getExceptional() {
+        return exceptional;
+    }
+
+    public void setExceptional(Integer exceptional) {
+        this.exceptional = exceptional;
+    }
+
+    public Integer getIsessencesum() {
+        return isessencesum;
+    }
+
+    public void setIsessencesum(Integer isessencesum) {
+        this.isessencesum = isessencesum;
+    }
+
+    public Date getApplydate() {
+        return applydate;
+    }
+
+    public Integer getPostsum() {
+        return postsum;
+    }
+
+    public void setPostsum(Integer postsum) {
+        this.postsum = postsum;
+    }
+
+    public void setApplydate(Date applydate) {
+        this.applydate = applydate;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -61,6 +61,16 @@ public class User implements Serializable {
 
     private Integer status;
 
+    private Date applydate;
+
+    public Date getApplydate() {
+        return applydate;
+    }
+
+    public void setApplydate(Date applydate) {
+        this.applydate = applydate;
+    }
+
     public Integer getId() {
         return id;
     }
