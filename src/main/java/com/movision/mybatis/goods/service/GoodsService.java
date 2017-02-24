@@ -419,4 +419,20 @@ public class GoodsService {
         }
     }
 
+    /**
+     * 商品管理--修改推荐日期
+     *
+     * @param goodsVo
+     * @return
+     */
+    public int updateDate(GoodsVo goodsVo) {
+        try {
+            log.info("修改推荐日期");
+            return goodsMapper.updateDate(goodsVo);
+        } catch (Exception e) {
+            log.error("修改推荐日期失败");
+            throw e;
+        }
+    }
+
 }

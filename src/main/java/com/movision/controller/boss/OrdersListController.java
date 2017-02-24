@@ -61,14 +61,16 @@ public class OrdersListController {
      */
     @ApiOperation(value = "售后列表（分页）", notes = "售后列表（分页）", response = Response.class)
     @RequestMapping(value = "/query_afterservice_list", method = RequestMethod.POST)
-    public Response queryAfterService(@RequestParam(required = false) String pageNo,
-                                      @RequestParam(required = false) String pageSize) {
+    public Response queryAfterService(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                      @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Map<String, Object> map = orderFacade.queryAfterService(pageNo, pageSize);
+        Paging<Afterservice> pager = new Paging<Afterservice>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Afterservice> list = orderFacade.queryAfterService(pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(map);
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 

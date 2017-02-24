@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhanglei
@@ -171,6 +172,26 @@ public class GoodsController {
             response.setMessage("上架成功");
         }
         response.setData(result);
+        return response;
+    }
+
+    /**
+     * 商品管理*--修改推荐日期
+     *
+     * @param id
+     * @param recommenddate
+     * @return
+     */
+    @ApiOperation(value = "修改推荐日期", notes = "修改推荐日期", response = Response.class)
+    @RequestMapping(value = "update_recommenddate", method = RequestMethod.POST)
+    public Response updateDate(@ApiParam(value = "商品id") @RequestParam(required = false) String id,
+                               @ApiParam(value = "推荐日期") @RequestParam(required = false) String recommenddate) {
+        Response response = new Response();
+        Map<String, Integer> map = goodsFacade.updateDate(id, recommenddate);
+        if (response.getCode() == 200) {
+            response.setMessage("修改成功");
+        }
+        response.setData(map);
         return response;
     }
 }

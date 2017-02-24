@@ -61,4 +61,6 @@ public interface GoodsMapper {
     int recommendHot(Integer id);//推荐到热门
 
     int recommendisessence(Integer id);//推荐到精选
+
+    int updateDate(GoodsVo goodsVo);//修改推荐日期
 }

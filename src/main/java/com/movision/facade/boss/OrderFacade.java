@@ -411,18 +411,8 @@ public class OrderFacade {
      * @param
      * @return
      */
-    public Map<String, Object> queryAfterService(String pageNo, String pageSize) {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Map<String, Object> map = new HashedMap();
-        Paging<Afterservice> pager = new Paging<Afterservice>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List<Afterservice> afterservices = bossOrderService.queryAfterSevice(pager);
-        map.put("afterservices", afterservices);
-        return map;
+    public List<Afterservice> queryAfterService(Paging<Afterservice> pager) {
+        return bossOrderService.queryAfterSevice(pager);
     }
 
 

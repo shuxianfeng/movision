@@ -1,5 +1,7 @@
 package com.movision.facade.boss;
 
+import com.ibm.icu.text.SimpleDateFormat;
+import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.utils.pagination.model.Paging;
@@ -7,6 +9,8 @@ import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -145,5 +149,31 @@ public class GoodsListFacade {
             map.put("maxcollect", maxcollect);
         }
         return goodsService.queryGoodsCondition(map, pager);
+    }
+
+    /**
+     * 商品管理--修改推荐日期
+     *
+     * @param id
+     * @param recommenddate
+     * @return
+     */
+    public Map<String, Integer> updateDate(String id, String recommenddate) {
+        Map<String, Integer> map = new HashedMap();
+        GoodsVo goodsVo = new GoodsVo();
+        goodsVo.setId(Integer.parseInt(id));
+        Date date = null;
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyyMMddHHmmss");
+        if (recommenddate != null) {
+            try {
+                date = format.parse(recommenddate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        goodsVo.setRecommenddate(date);
+        int result = goodsService.updateDate(goodsVo);
+        map.put("result", result);
+        return map;
     }
 }
