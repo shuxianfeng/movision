@@ -101,7 +101,7 @@ public class OrderFacade {
             map.put("logisticid", logisticid);
         }
         Date isessencetime = null;//开始时间
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (mintime != null) {
             try {
                 isessencetime = format.parse(mintime);
@@ -161,7 +161,7 @@ public class OrderFacade {
                 map.put("takeway", takeway);
             }
             Date isessencetime = null;//开始时间
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             if (mintime != null) {
                 try {
                     isessencetime = format.parse(mintime);
@@ -490,7 +490,7 @@ public class OrderFacade {
             map.put("processingstatus", processingstatus);
         }
         Date isessencetime = null;//开始时间
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (mintime != null) {
             try {
                 isessencetime = format.parse(mintime);
