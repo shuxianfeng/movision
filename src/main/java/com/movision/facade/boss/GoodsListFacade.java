@@ -163,7 +163,7 @@ public class GoodsListFacade {
         GoodsVo goodsVo = new GoodsVo();
         goodsVo.setId(Integer.parseInt(id));
         Date date = null;
-        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyyMMddHHmmss");
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
         if (recommenddate != null) {
             try {
                 date = format.parse(recommenddate);
