@@ -807,8 +807,11 @@ public class PostFacade {
      * @param pager
      * @return
      */
-    public List<SharesVo> queryPostShareList(String postid, Paging<SharesVo> pager) {
-        return sharesService.queryPostShareList(pager, Integer.parseInt(postid));
+    public List<SharesVo> queryPostShareList(String postid, String type, Paging<SharesVo> pager) {
+        Map map = new HashedMap();
+        map.put("postid", postid);
+        map.put("type", type);
+        return sharesService.queryPostShareList(pager, map);
     }
 
     /**

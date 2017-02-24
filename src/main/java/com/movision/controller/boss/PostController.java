@@ -459,11 +459,12 @@ public class PostController {
     @ApiOperation(value = "帖子分享列表", notes = "用于帖子分享列表展示接口", response = Response.class)
     @RequestMapping(value = "/query_post_share_list", method = RequestMethod.POST)
     public Response queryPostShareList(@ApiParam(value = "帖子id") @RequestParam String postid,
+                                       @ApiParam(value = "排序方式，0升序1降序") @RequestParam String type,
                                        @RequestParam(required = false, defaultValue = "1") String pageNo,
                                        @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<SharesVo> pager = new Paging<SharesVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<SharesVo> list = postFacade.queryPostShareList(postid, pager);
+        List<SharesVo> list = postFacade.queryPostShareList(postid, type, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -637,7 +638,6 @@ public class PostController {
      * @param pageSize
      * @param content
      * @param words
-     * @param time
      * @return
      */
     @ApiOperation(value = "敏感字模糊搜索评论列表", notes = "用于搜索含有敏感字的评论", response = Response.class)

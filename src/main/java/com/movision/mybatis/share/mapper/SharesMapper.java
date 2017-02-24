@@ -5,6 +5,7 @@ import com.movision.mybatis.share.entity.SharesVo;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SharesMapper {
     int deleteByPrimaryKey(Integer id);
@@ -21,5 +22,5 @@ public interface SharesMapper {
 
     Integer querysum(Integer postid);
 
-    List<SharesVo> findAllQueryPostShareList(RowBounds rowBounds, Integer postid);
+    List<SharesVo> findAllQueryPostShareList(RowBounds rowBounds, Map map);
 }

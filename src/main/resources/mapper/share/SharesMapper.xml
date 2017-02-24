@@ -99,6 +99,14 @@
 
     <select id="findAllQueryPostShareList" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.share.entity.SharesVo">
-        SELECT s.*,u.nickname FROM yw_post_share s LEFT JOIN yw_user u ON s.userid=u.id WHERE s.postid=#{postid,jdbcType=INTEGER}
+        SELECT s.*,u.nickname
+        FROM yw_post_share s LEFT JOIN yw_user u ON s.userid=u.id
+        WHERE s.postid=#{postid,jdbcType=INTEGER}
+        <if test="type==0">
+            ORDER BY intime DESC
+        </if>
+        <if test="type==1">
+            ORDER BY intime ASC
+        </if>
     </select>
 </mapper>

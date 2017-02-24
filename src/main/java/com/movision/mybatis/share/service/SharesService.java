@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -45,10 +46,10 @@ public class SharesService {
      * @param postid
      * @return
      */
-    public List<SharesVo> queryPostShareList(Paging<SharesVo> pager, Integer postid) {
+    public List<SharesVo> queryPostShareList(Paging<SharesVo> pager, Map map) {
         try {
             log.info("查询帖子分享列表");
-            return sharesMapper.findAllQueryPostShareList(pager.getRowBounds(), postid);
+            return sharesMapper.findAllQueryPostShareList(pager.getRowBounds(), map);
         } catch (Exception e) {
             log.error("查询帖子分享列表异常");
             throw e;
