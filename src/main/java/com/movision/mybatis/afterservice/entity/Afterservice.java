@@ -53,6 +53,24 @@ public class Afterservice {
     private Integer takeway;//收货方式
     private Integer protype;//商品类型
     private String sname;//商品名称
+    private String mintime;
+    private String maxtime;
+
+    public String getMintime() {
+        return mintime;
+    }
+
+    public void setMintime(String mintime) {
+        this.mintime = mintime;
+    }
+
+    public String getMaxtime() {
+        return maxtime;
+    }
+
+    public void setMaxtime(String maxtime) {
+        this.maxtime = maxtime;
+    }
 
     public Date getIntime() {
         return intime;

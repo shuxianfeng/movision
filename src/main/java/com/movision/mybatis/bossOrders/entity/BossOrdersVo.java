@@ -6,6 +6,24 @@ public class BossOrdersVo {
     private Integer id;
 
     private String ordernumber;
+    private String mintime;
+    private String maxtime;
+
+    public String getMintime() {
+        return mintime;
+    }
+
+    public void setMintime(String mintime) {
+        this.mintime = mintime;
+    }
+
+    public String getMaxtime() {
+        return maxtime;
+    }
+
+    public void setMaxtime(String maxtime) {
+        this.maxtime = maxtime;
+    }
 
     private Integer userid;
 

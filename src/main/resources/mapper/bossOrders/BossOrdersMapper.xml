@@ -364,7 +364,7 @@
          <if test="logisticid!=null and logisticid!=''">
              AND d.logisticsid=#{logisticid,jdbcType=VARCHAR}
          </if>
-         <if test="intime!=null and intime!=''">
+        <if test="mintime!=null and maxtime!=null">
              AND o.intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
          </if>
     </select>
@@ -454,7 +454,7 @@ SELECT
         <if test="paytype!=null and paytype!=''">
             AND o.paytype=#{paytype,jdbcType=VARCHAR}
         </if>
-        <if test="intime!=null and intime!=''">
+        <if test="mintime!=null and maxtime!=null">
             AND o.intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
         </if>
 
@@ -668,8 +668,8 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         <if test="processingstatus!=null and processingstatus!=''">
             AND f.processingstatus=#{processingstatus,jdbcType=INTEGER}
         </if>
-        <if test="intime!=null and intime!=''">
-            AND o.intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
+        <if test="mintime!=null and maxtime!=null">
+            AND f.proposertime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
         </if>
     </select>
     <select id="queryRemark" parameterType="java.lang.Integer"

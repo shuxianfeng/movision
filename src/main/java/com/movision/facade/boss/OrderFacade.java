@@ -160,7 +160,7 @@ public class OrderFacade {
             if (takeway != null) {
                 map.put("takeway", takeway);
             }
-            Date isessencetime = null;//开始时间
+            /**Date isessencetime = null;//开始时间
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             if (mintime != null) {
                 try {
@@ -168,17 +168,17 @@ public class OrderFacade {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-            }
-            map.put("mintime", isessencetime);
-            Date max = null;//最大时间
+             }*/
+            map.put("mintime", mintime);
+            /** Date max = null;//最大时间
             if (maxtime != null) {
                 try {
                     max = format.parse(maxtime);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-            }
-            map.put("maxtime", max);
+             }*/
+            map.put("maxtime", maxtime);
             map.put("email", email);
             map.put("name", name);
             map.put("phone", phone);
@@ -489,7 +489,7 @@ public class OrderFacade {
         if (processingstatus != null) {
             map.put("processingstatus", processingstatus);
         }
-        Date isessencetime = null;//开始时间
+        /** Date isessencetime = null;//开始时间
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (mintime != null) {
             try {
@@ -497,17 +497,22 @@ public class OrderFacade {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }
-        map.put("mintime", isessencetime);
-        Date max = null;//最大时间
+         }*/
+
+        map.put("mintime", mintime);
+
+
+        /**  Date max = null;//最大时间
         if (maxtime != null) {
             try {
                 max = format.parse(maxtime);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }
-        map.put("maxtime", max);
+         }*/
+
+        map.put("maxtime", maxtime);
+
         return bossOrderService.queryOrderByConditionAfterService(map, pager);
     }
 
