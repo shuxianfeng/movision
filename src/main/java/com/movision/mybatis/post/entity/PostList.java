@@ -12,6 +12,16 @@ public class PostList {
 
     private Integer id;//帖子id
 
+    private String pai;
+
+    public String getPai() {
+        return pai;
+    }
+
+    public void setPai(String pai) {
+        this.pai = pai;
+    }
+
     private String title;//标题
 
     private String nickname;//发帖人
@@ -19,6 +29,25 @@ public class PostList {
     private Integer collectsum;//收藏数
 
     private Integer share;//分享数
+
+    private String mintime;
+    private String maxtime;
+
+    public String getMintime() {
+        return mintime;
+    }
+
+    public void setMintime(String mintime) {
+        this.mintime = mintime;
+    }
+
+    public String getMaxtime() {
+        return maxtime;
+    }
+
+    public void setMaxtime(String maxtime) {
+        this.maxtime = maxtime;
+    }
 
     private Integer commentsum;//评论数
 

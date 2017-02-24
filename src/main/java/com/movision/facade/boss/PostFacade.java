@@ -216,6 +216,7 @@ public class PostFacade {
                   postList.setCollectsum(list.get(i).getCollectsum());
                   postList.setCommentsum(list.get(i).getCommentsum());
                   postList.setForwardsum(list.get(i).getForwardsum());
+                  postList.setIntime(list.get(i).getIntime());
              rewardeds.add(postList);
          }
         return rewardeds;
@@ -1085,7 +1086,7 @@ public class PostFacade {
      *
      * @param content
      * @param words
-     * @param time
+     * @param
      * @return
      */
     public List<CommentVo> queryCommentSensitiveWords(String content, String words, String begintime, String endtime, Paging<CommentVo> pager) {
@@ -1096,6 +1097,58 @@ public class PostFacade {
         map.put("endtime", endtime);
         List<CommentVo> list = commentService.queryCommentSensitiveWords(map, pager);
         return list;
+    }
+
+    /**
+     * 条件查询
+     *
+     * @param title
+     * @param name
+     * @param content
+     * @param mintime
+     * @param maxtime
+     * @param statue
+     * @param pager
+     * @return
+     */
+    public List<PostList> queryAllActivePostCondition(String title, String name, String pai, String content, String mintime, String maxtime, String statue, Paging<PostList> pager) {
+
+        Map<String, Object> map = new HashedMap();
+        if (title != null) {
+            map.put("title", title);
+        }
+        if (name != null) {
+            map.put("name", name);
+        }
+        if (content != null) {
+            map.put("content", content);
+        }
+        if (pai != null) {
+            map.put("pai", pai);
+        }
+        if (statue != null) {
+            map.put("statue", statue);
+        }
+        Date isessencetime = null;//开始时间
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        if (mintime != null) {
+            try {
+                isessencetime = format.parse(mintime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("mintime", isessencetime);
+        Date max = null;//最大时间
+        if (maxtime != null) {
+            try {
+                max = format.parse(maxtime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("maxtime", max);
+        return postService.queryAllActivePostCondition(map, pager);
     }
 
 }

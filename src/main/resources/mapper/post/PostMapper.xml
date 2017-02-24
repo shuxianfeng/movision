@@ -1332,5 +1332,30 @@
         </if>
         ORDER BY p.intime DESC
     </select>
+    <select id="findAllActivePostCondition" resultType="com.movision.mybatis.post.entity.PostList"
+            parameterType="com.movision.mybatis.post.entity.PostList">
+        SELECT * FROM yw_post WHERE isdel=0 AND isactive=1 ORDER BY intime DESC WHERE 1
+        <if test="title!=null">
+            AND title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="name!=null">
+            AND userid=#{userid,jdbcType=INTEGER}
+        </if>
+        <if test="content!=null">
+            AND postcontent LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="mintime!=null and maxtime!=null">
+            AND intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
+        </if>
+        <if test="statue!=null">
+            AND activestatue=#{activestatue,jdbcType=VARCHAR}
+        </if>
+        <if test="pai==0">
+            ORDER BY intime DESC
+        </if>
+        <if test="pai==1">
+            ORDER BY totalpoint DESC
+        </if>
 
+    </select>
 </mapper>

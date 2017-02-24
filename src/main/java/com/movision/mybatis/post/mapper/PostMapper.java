@@ -128,4 +128,6 @@ public interface PostMapper {
     List<PostList> findAllpostSearch(PostSpread spread, RowBounds rowBounds);
 
     List<PostList> findAllQueryCircleByPostList(Map map, RowBounds rowBounds);
+
+    List<PostList> findAllActivePostCondition(Map map, RowBounds rowBounds);
 }

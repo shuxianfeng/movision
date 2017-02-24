@@ -638,6 +638,7 @@ public class PostController {
      * @param pageSize
      * @param content
      * @param words
+     * @param
      * @return
      */
     @ApiOperation(value = "敏感字模糊搜索评论列表", notes = "用于搜索含有敏感字的评论", response = Response.class)
@@ -659,5 +660,40 @@ public class PostController {
         return response;
     }
 
+
+    /**
+     * 活动条件搜索
+     *
+     * @param title
+     * @param name
+     * @param content
+     * @param mintime
+     * @param maxtime
+     * @param statue
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "活动条件搜索", notes = "活动条件搜索", response = Response.class)
+    @RequestMapping(value = "query_activepost_condition", method = RequestMethod.POST)
+    public Response queryAllActivePostCondition(@ApiParam(value = "标题") @RequestParam(required = false) String title,
+                                                @ApiParam(value = "发帖人") @RequestParam(required = false) String name,
+                                                @ApiParam(value = "内容") @RequestParam(required = false) String content,
+                                                @ApiParam(value = "活动开始日期") @RequestParam(required = false) String mintime,
+                                                @ApiParam(value = "活动结束日期") @RequestParam(required = false) String maxtime,
+                                                @ApiParam(value = "活动状态") @RequestParam(required = false) String statue,
+                                                @RequestParam(required = false) String pageNo,
+                                                @RequestParam(required = false) String pageSize) {
+        Response response = new Response();
+        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostList> list = postFacade.queryAllActivePostCondition(title, name, content, mintime, maxtime, statue, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
 
 }

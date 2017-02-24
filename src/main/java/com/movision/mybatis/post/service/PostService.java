@@ -593,4 +593,21 @@ public class PostService {
         }
     }
 
+    /**
+     * 条件查询
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<PostList> queryAllActivePostCondition(Map map, Paging<PostList> pager) {
+        try {
+            log.info("条件查询成功");
+            return postMapper.findAllActivePostCondition(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("条件查询失败");
+            throw e;
+        }
+    }
+
 }
