@@ -200,4 +200,20 @@ public class CommentService {
             throw e;
         }
     }
+
+    /**
+     * 查询含有敏感字的帖子
+     *
+     * @param pager
+     * @return
+     */
+    public List<CommentVo> queryCommentSensitiveWords(Map map, Paging<CommentVo> pager) {
+        try {
+            log.info("查询含有敏感字的帖子");
+            return commentMapper.findAllQueryCommentSensitiveWords(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询含有敏感字的帖子异常");
+            throw e;
+        }
+    }
 }

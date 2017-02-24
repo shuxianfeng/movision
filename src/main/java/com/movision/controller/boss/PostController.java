@@ -630,5 +630,34 @@ public class PostController {
         return response;
     }
 
+    /**
+     * 敏感字搜索评论
+     *
+     * @param pageNo
+     * @param pageSize
+     * @param content
+     * @param words
+     * @param time
+     * @return
+     */
+    @ApiOperation(value = "敏感字模糊搜索评论列表", notes = "用于搜索含有敏感字的评论", response = Response.class)
+    @RequestMapping(value = "query_comment_sensitive_words", method = RequestMethod.POST)
+    public Response queryCommentSensitiveWords(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                               @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                               @ApiParam(value = "评论内容") @RequestParam(required = false) String content,
+                                               @ApiParam(value = "敏感字") @RequestParam(required = false) String words,
+                                               @ApiParam(value = "评论结束时间") @RequestParam(required = false) String endtime,
+                                               @ApiParam(value = "评论开始时间") @RequestParam(required = false) String begintime) {
+        Response response = new Response();
+        Paging<CommentVo> pager = new Paging<CommentVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<CommentVo> list = postFacade.queryCommentSensitiveWords(content, words, begintime, endtime, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
 
 }

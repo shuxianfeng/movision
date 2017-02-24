@@ -113,14 +113,26 @@ public class PostFacade {
             Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举报次数
             Circle circlename = circleService.queryCircleByName(circleid);//获取圈子名称
             postList.setId(list.get(i).getId());
-                postList.setTitle(list.get(i).getTitle());
-                postList.setNickname(nickname);
-                postList.setCollectsum(list.get(i).getCollectsum());
+            postList.setTitle(list.get(i).getTitle());
+            postList.setNickname(nickname);
+            postList.setCollectsum(list.get(i).getCollectsum());
+            if (share != null) {
                 postList.setShare(share);
-                postList.setCommentsum(list.get(i).getCommentsum());
-                postList.setZansum(list.get(i).getZansum());
-                postList.setRewarded(rewarded);
-                postList.setAccusation(accusation);
+            } else {
+                postList.setShare(0);
+            }
+            postList.setCommentsum(list.get(i).getCommentsum());
+            postList.setZansum(list.get(i).getZansum());//点赞
+            if (rewarded != null) {
+                postList.setRewarded(rewarded);//打赏积分
+            } else {
+                postList.setRewarded(0);
+            }
+            if (accusation != null) {
+                postList.setAccusation(accusation);//举报
+            } else {
+                postList.setAccusation(0);
+            }
             postList.setIntime(list.get(i).getIntime());//帖子发布时间
             postList.setTotalpoint(list.get(i).getTotalpoint());//帖子综合评分
             postList.setIsessence(list.get(i).getIsessence());
@@ -1063,6 +1075,24 @@ public class PostFacade {
      */
     public List<CommentVo> commentZanSork(String postid, Paging<CommentVo> pager) {
         return commentService.commentZanSork(Integer.parseInt(postid), pager);
+    }
+
+    /**
+     * 搜索含有敏感字的评论
+     *
+     * @param content
+     * @param words
+     * @param time
+     * @return
+     */
+    public List<CommentVo> queryCommentSensitiveWords(String content, String words, String begintime, String endtime, Paging<CommentVo> pager) {
+        Map map = new HashedMap();
+        map.put("content", content);
+        map.put("words", words);
+        map.put("begintime", begintime);
+        map.put("endtime", endtime);
+        List<CommentVo> list = commentService.queryCommentSensitiveWords(map, pager);
+        return list;
     }
 
 }

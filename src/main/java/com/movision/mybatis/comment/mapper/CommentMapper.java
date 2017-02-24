@@ -2,6 +2,7 @@ package com.movision.mybatis.comment.mapper;
 
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -43,5 +44,7 @@ public interface CommentMapper {
     int replyPostComment(Map map);
 
     List<CommentVo> commentZanSork(Integer postid, RowBounds rowBounds);
+
+    List<CommentVo> findAllQueryCommentSensitiveWords(Map map, RowBounds rowBounds);
 
 }

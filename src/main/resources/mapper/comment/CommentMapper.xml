@@ -239,4 +239,23 @@
       </if>
     </trim>
   </insert>
+
+  <select id="findAllQueryCommentSensitiveWords" parameterType="java.util.Map"
+          resultType="com.movision.mybatis.comment.entity.CommentVo">
+    SELECT c.*,u.phone,u.photo,u.nickname
+    FROM yw_post_comment c
+    LEFT JOIN yw_user u
+    ON c.userid=u.id
+    WHERE isdel=0
+    <if test="content!=null">
+      AND c.content LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="words!=null">
+      AND c.content LIKE concat('%',#{words,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="time!=null">
+      AND c.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+    </if>
+    ORDER BY c.intime DESC
+  </select>
 </mapper>
