@@ -483,8 +483,8 @@ public class OrdersListController {
     @RequestMapping(value = "query_afterservice_condition", method = RequestMethod.POST)
     public Response queryOrderByConditionAfterService(@ApiParam(value = "订单号") @RequestParam(required = false) String ordernumber,
                                                       @ApiParam(value = "收货人") @RequestParam(required = false) String name,
-                                                      @ApiParam(value = "售后类型") @RequestParam(required = false) String aftersalestatus,
-                                                      @ApiParam(value = "售后状态") @RequestParam(required = false) String afterstatue,
+                                                      @ApiParam(value = "售后状态") @RequestParam(required = false) String aftersalestatus,
+                                                      @ApiParam(value = "售后类型") @RequestParam(required = false) String afterstatue,
                                                       @ApiParam(value = "处理状态") @RequestParam(required = false) String processingstatus,
                                                       @ApiParam(value = "最小时间") @RequestParam(required = false) String mintime,
                                                       @ApiParam(value = "最大时间") @RequestParam(required = false) String maxtime,
