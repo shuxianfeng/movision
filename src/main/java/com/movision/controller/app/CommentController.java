@@ -29,12 +29,13 @@ public class CommentController {
     @RequestMapping(value = "commentLsit", method = RequestMethod.POST)
     public Response queryCommentLsit(@ApiParam(value = "帖子id") @RequestParam String postid,
                                      @ApiParam(value = "用户id") @RequestParam String userid,
+                                     @ApiParam(value = "排序") @RequestParam(required = false) String type,
                                      @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                      @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
 
         Paging<CommentVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List<CommentVo> commentVo = facadeComments.queryCommentsByLsit(pager, postid, userid);
+        List<CommentVo> commentVo = facadeComments.queryCommentsByLsit(pager, postid, type, userid);
         pager.result(commentVo);
 
         if (response.getCode() == 200) {

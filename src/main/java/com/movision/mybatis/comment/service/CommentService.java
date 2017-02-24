@@ -25,11 +25,11 @@ public class CommentService {
     @Autowired
     public CommentMapper commentMapper;
 
-    public List<CommentVo> queryCommentsByLsit(Paging<CommentVo> pager, String postid) {
+    public List<CommentVo> queryCommentsByLsit(Paging<CommentVo> pager, Map map) {
 
         try {
             log.info("查询某个帖子的评论列表");
-            return commentMapper.findAllqueryCommentsByLsit(pager.getRowBounds(), Integer.parseInt(postid));
+            return commentMapper.findAllqueryCommentsByLsit(pager.getRowBounds(), map);
         } catch (Exception e) {
             log.error("查询帖子评论列表失败");
             throw e;

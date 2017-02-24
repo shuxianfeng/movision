@@ -300,8 +300,11 @@ public class PostFacade {
      * @param pager
      * @return
      */
-    public List<CommentVo> queryPostAppraise(String postid, Paging<CommentVo> pager) {
-        return commentService.queryCommentsByLsit(pager, postid);
+    public List<CommentVo> queryPostAppraise(String postid, String type, Paging<CommentVo> pager) {
+        Map map = new HashedMap();
+        map.put("postid", postid);
+        map.put("type", type);
+        return commentService.queryCommentsByLsit(pager, map);
     }
 
     /**

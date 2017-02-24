@@ -134,7 +134,12 @@
     LEFT JOIN yw_user u
     ON c.userid=u.id
     WHERE c.postid= #{postid,jdbcType=INTEGER} AND isdel=0 and pid is NULL
-    ORDER BY c.intime DESC
+    <if test="type==0">
+      ORDER BY c.intime ASC
+    </if>
+    <if test="type==null">
+      ORDER BY c.intime DESC
+    </if>
   </select>
 
   <!--查询该用户有没有点赞该评论-->

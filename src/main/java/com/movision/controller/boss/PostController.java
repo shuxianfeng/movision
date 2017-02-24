@@ -149,11 +149,12 @@ public class PostController {
     @ApiOperation(value = "查看帖子评论", notes = "查看帖子评论", response = Response.class)
     @RequestMapping(value = "/query_post_appraise", method = RequestMethod.POST)
     public Response queryPostAppraise(@ApiParam(value = "帖子id") @RequestParam String postid,
+                                      @ApiParam(value = "排序方式 默认降序  0升序（非必传字段）") @RequestParam(required = false) String type,
                                       @RequestParam(required = false, defaultValue = "1") String pageNo,
                                       @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<CommentVo> pager = new Paging<CommentVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<CommentVo> list = postFacade.queryPostAppraise(postid, pager);
+        List<CommentVo> list = postFacade.queryPostAppraise(postid, type, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

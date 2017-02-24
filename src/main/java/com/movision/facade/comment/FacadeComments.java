@@ -32,9 +32,11 @@ public class FacadeComments {
      * @param postid
      * @return
      */
-    public List<CommentVo> queryCommentsByLsit(Paging<CommentVo> pager, String postid, String userid) {
-
-        List<CommentVo> vo = CommentService.queryCommentsByLsit(pager, postid);
+    public List<CommentVo> queryCommentsByLsit(Paging<CommentVo> pager, String postid, String type, String userid) {
+        Map map = new HashedMap();
+        map.put("postid", postid);
+        map.put("type", type);
+        List<CommentVo> vo = CommentService.queryCommentsByLsit(pager, map);
         List<CommentVo> resaultvo=new ArrayList();
         for (int i=0;i<vo.size();i++){//遍历所有帖子
             //查询该用户有没有点赞该评论

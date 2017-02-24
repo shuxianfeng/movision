@@ -21,7 +21,7 @@ public interface CommentMapper {
 
     int updateByPrimaryKey(Comment record);
 
-    List<CommentVo> findAllqueryCommentsByLsit(RowBounds rowBounds, Integer postid);
+    List<CommentVo> findAllqueryCommentsByLsit(RowBounds rowBounds, Map map);
 
     int queryIsZan(Map<String, Object> parammap);
 
