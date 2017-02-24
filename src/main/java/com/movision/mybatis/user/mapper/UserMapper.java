@@ -21,6 +21,8 @@ public interface UserMapper {
 
     int updateByPrimaryKeySelective(User record);
 
+    int updateRegisterUser(RegisterUser registerUser);
+
     int updateByPrimaryKey(User record);
 
     User selectByPhone(User user);

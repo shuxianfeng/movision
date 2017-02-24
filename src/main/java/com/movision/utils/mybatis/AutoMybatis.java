@@ -56,10 +56,8 @@ public class AutoMybatis {
 			}
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (XMLParserException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

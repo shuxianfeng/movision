@@ -101,6 +101,7 @@ public class BossLoginController {
     }
 
     @RequestMapping(value = "/boss/logout", method = RequestMethod.GET)
+    @ApiOperation(value = "登出", notes = "登出", response = Response.class)
     public void logout(HttpServletResponse response) throws IOException {
         SecurityUtils.getSubject().logout();
         Response jsonResult = new Response();

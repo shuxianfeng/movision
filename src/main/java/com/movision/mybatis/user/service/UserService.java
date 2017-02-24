@@ -101,14 +101,14 @@ public class UserService {
         }
     }
 
-    public int isExistAccount(String phone) {
-        int result = 0;
+    public String isExistAccount(String phone) {
         try {
-            result = userMapper.isExistAccount(phone);
+            int n = userMapper.isExistAccount(phone);
+            return n >= 1 ? "isExist" : "";
         } catch (Exception e) {
             log.error("is exist account ", e);
         }
-        return result;
+        return null;
     }
 
     public int registerAccount(RegisterUser registerUser) {
@@ -299,6 +299,17 @@ public class UserService {
             throw e;
         }
     }
+
+    public int updateRegisterUser(RegisterUser registerUser) {
+        try {
+            log.info("修改app用户token");
+            return userMapper.updateRegisterUser(registerUser);
+        } catch (Exception e) {
+            log.error("修改app用户token异常", e);
+            throw e;
+        }
+    }
+
 
     /**
      * 查询所有申请加v用户

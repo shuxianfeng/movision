@@ -47,14 +47,17 @@ public class UserFacade {
     private PostService postService;
 
 
-    @Cacheable(value = "is_exist_account", key = "'login_'+#phone")
-    public int isExistAccount(String phone) {
+    public String isExistAccount(String phone) {
         return userService.isExistAccount(phone);
     }
 
 
     public int registerAccount(RegisterUser registerUser) {
         return userService.registerAccount(registerUser);
+    }
+
+    public int updateAccount(RegisterUser registerUser) {
+        return userService.updateRegisterUser(registerUser);
     }
 
     public UserVo queryUserInfo(String userid) {
@@ -84,7 +87,6 @@ public class UserFacade {
         return activeVoList;
     }
 
-    @Cacheable(value = "app_account", key = "'login_'+#phone")
     public User queryUserByPhone(String phone) {
         return userService.queryUserByPhone(phone);
     }
@@ -95,7 +97,6 @@ public class UserFacade {
      * @param phone
      * @return
      */
-    @Cacheable(value = "app_login_user", key = "'login_user_'+#phone")
     public LoginUser getLoginUserByPhone(String phone) {
 
         LoginUser loginUser = userService.queryLoginUserByPhone(phone);

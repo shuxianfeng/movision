@@ -20,6 +20,7 @@ import com.movision.utils.VerifyCodeUtils;
 import com.taobao.api.ApiException;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -35,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
@@ -117,9 +119,16 @@ public class AppLoginController {
             //校验手机验证码是否正确
             if (user.getMobileCheckCode() != null) {
                 Validateinfo validateinfo = (Validateinfo) session.getAttribute("r" + user.getPhone());
+                if (null == validateinfo) {
+                    response.setCode(400);
+                    response.setMessage("session中无当前用户");
+                }
                 //业务操作
-                UsernamePasswordToken token = appRegisterFacade.validateLoginUser(user, validateinfo, session);
-                response.setData(token);
+                Map result = appRegisterFacade.validateLoginUser(user, validateinfo, session);
+                response.setData(result);
+            } else {
+                response.setCode(400);
+                response.setMessage("请输入手机验证码");
             }
         } catch (Exception e) {
             log.error("注册操作失败>>>", e);
@@ -129,6 +138,21 @@ public class AppLoginController {
         return response;
     }
 
+    /**
+     * 该接口用于app端的自动登录，打开app第一个调的接口就是这个
+     * 1 若app用户未注册，则会报异常：请发送短信验证码登录
+     * 2 若app用户已注册，即已存在，则开始比较appToken和serverToken,若相同，则进入shiro的认证流程,
+     * 若认证成功， 则在session中缓存当前app用户，并且删除session中的boss用户，
+     * <p>
+     * PS：（这里逻辑有点问题，如果一个用户既登录app，又登录boss，怎么办？
+     * --其实他们的session不同，所以逻辑没有问题，
+     * 因为同一个session当前登录人只能是app用户或者是boss用户的一个。）
+     *
+     * @param phone
+     * @param appToken
+     * @return
+     * @throws Exception
+     */
     @ApiOperation(value = "APP登录", notes = "APP登录", response = Response.class)
     @RequestMapping(value = {"/auto_login"}, method = RequestMethod.POST)
     public Response applogin(@ApiParam(value = "手机号") @RequestParam String phone,
@@ -139,8 +163,10 @@ public class AppLoginController {
             User user = userFacade.queryUserByPhone(phone);
             if (null == user) {
                 //库中无该用户，需要发送短信验证码
+                log.warn("用户名不存在,请发送短信验证码登录");
+
                 response.setCode(400);
-                response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.app_user_not_exist)));
+                response.setMessage("用户名不存在,请发送短信验证码登录");
                 response.setMsgCode(MsgCodeConstant.app_user_not_exist);
             } else {
                 //存在该用户
@@ -165,6 +191,11 @@ public class AppLoginController {
                     } else {
                         token.clear();
                     }
+                } else {
+                    log.warn("appToken和serverToken不相等");
+                    response.setCode(400);
+                    response.setMessage("appToken和serverToken不相等");
+                    response.setMsgCode(MsgCodeConstant.app_token_not_equal_server_token);
                 }
             }
 
@@ -206,41 +237,52 @@ public class AppLoginController {
         return response;
     }
 
-    @ApiOperation(value = "testGetAppUserInfo", notes = "testGetAppUserInfo", response = Response.class)
+    @ApiOperation(value = "测试用-获取当前登录人信息", notes = "测试用-获取当前登录人信息", response = Response.class)
     @RequestMapping(value = {"/testGetAppUserInfo"}, method = RequestMethod.POST)
-    public Response testGetAppUserInfo() {
+    public Response testGetAppUserInfo(@ApiParam @RequestParam String phone) {
         Response response = new Response();
-        response.setData(ShiroUtil.getAppUser());
+        response.setData(userFacade.getLoginUserByPhone(phone));
         return response;
     }
+
+
 
     private void shiroLogin(@ApiParam(value = "手机号") @RequestParam String phone, Response response, Subject currentUser, UsernamePasswordToken token) {
         try {
             //登录，即身份验证 , 开始进入shiro的认证流程
             currentUser.login(token);
-            // 登录成功
+            log.debug("登录成功");
             response.setMessage("登录成功");
             response.setData(phone);
         } catch (UnknownAccountException e) {
-            //用户名不存在
+            log.warn("用户名不存在");
             response.setCode(400);
             response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.app_user_not_exist)));
             response.setMsgCode(MsgCodeConstant.app_user_not_exist);
         } catch (LockedAccountException e) {
-            //帐户状态异常
+            log.warn("帐户状态异常");
             response.setCode(400);
             response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.app_account_status_error)));
             response.setMsgCode(MsgCodeConstant.app_account_status_error);
         } catch (AuthenticationException e) {
-            //用户名或密码错误
+            log.warn("用户名或验证码错误");
             response.setCode(400);
             response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.app_account_name_error)));
             response.setMsgCode(MsgCodeConstant.app_account_name_error);
         }
     }
 
+    /**
+     * 校验app_token和Server_token是否都存在
+     *
+     * @param appToken
+     * @param response
+     * @param user
+     * @return
+     */
     private String validateAppTokenAndServerToken(@ApiParam(value = "token") @RequestParam String appToken, Response response, User user) {
         if (StringUtils.isEmpty(appToken)) {
+            log.warn("app本地的token丢失");
             response.setCode(400);
             response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.app_token_missing)));
             response.setMsgCode(MsgCodeConstant.app_token_missing);
@@ -248,6 +290,7 @@ public class AppLoginController {
 
         String serverToken = user.getToken();
         if (StringUtils.isEmpty(serverToken)) {
+            log.warn("服务器存储的token丢失");
             response.setCode(400);
             response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.server_token_missing)));
             response.setMsgCode(MsgCodeConstant.server_token_missing);

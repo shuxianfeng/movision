@@ -87,9 +87,9 @@ public class DistributedLock implements Lock, Watcher {
         if (States.CONNECTING == zooKeeper.getState()) {  
             try {
                 /**
-                 *  TODO 目前问题：由于States == CONNECTING， 而不是CONNECTED，
+                 *  目前问题：由于States == CONNECTING， 而不是CONNECTED，
+                 *  该问题的原因是，本地的zookeeper服务未启动！！！
                  *  所以程序会一直停留在这一步，进行等待
-                 *
                  */
                 connectedLatch.await(Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")), TimeUnit.MILLISECONDS);
                 

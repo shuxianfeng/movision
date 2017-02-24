@@ -124,16 +124,16 @@
         <property name="poolConfig" ref="poolConfig"/>
     </bean>
 
-    <!--<bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
-    <bean id="jdkRedisSerializer" class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>-->
+    <bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+    <bean id="jdkRedisSerializer" class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
 
     <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
         <property name="connectionFactory" ref="jedisConnectionFactory"/>
-        <!-- 序列化方式 建议key/hashKey采用StringRedisSerializer。 -->
-        <!--<property name="keySerializer" ref="stringRedisSerializer" />
+        <!--序列化方式 建议key/hashKey采用StringRedisSerializer。-->
+        <property name="keySerializer" ref="stringRedisSerializer"/>
         <property name="hashKeySerializer" ref="stringRedisSerializer" />
         <property name="valueSerializer" ref="jdkRedisSerializer"/>
-        <property name="hashValueSerializer" ref="jdkRedisSerializer"/>-->
+        <property name="hashValueSerializer" ref="jdkRedisSerializer"/>
     </bean>
 
     <bean id="redisCacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">

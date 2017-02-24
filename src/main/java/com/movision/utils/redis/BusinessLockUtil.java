@@ -51,7 +51,7 @@ public class BusinessLockUtil {
   
         try {  
             //获取jedis实例 
-            jedis = redisUtil.getJedis();  
+            jedis = RedisUtil.getJedis();
             long nano = System.nanoTime();  
             do {  
                 log.debug("try lock key: " + key);  
@@ -115,8 +115,8 @@ public class BusinessLockUtil {
           
         String key = mutex.getType() + mutex.getBusinessNo();  
           
-        try {  
-            jedis = redisUtil.getJedis();  
+        try {
+            jedis = RedisUtil.getJedis();
               
             jedis.del(key);  
             log.debug("release lock, key :" + key);  
@@ -141,9 +141,9 @@ public class BusinessLockUtil {
     	
         boolean result = lock(mutex,  0);  
         //加锁成功  
-        if (result) {  
-        	//TODO 业务处理
-        	System.out.println(1);
+        if (result) {
+            // 业务处理
+            System.out.println(1);
         }  
         //解锁  
         unlock(mutex);  

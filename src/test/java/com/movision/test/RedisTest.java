@@ -35,12 +35,12 @@ public class RedisTest extends SpringTestCase {
         System.out.println(userFacade.getUserByID(11));
         System.out.println("===============================");
 
-        ValueOperations<String, Object> opsForValue = redisTemplate.opsForValue();
-        System.out.println("set前：" + opsForValue.get("user"));
-        opsForValue.set("user", user);
-        System.out.println("set后：" + opsForValue.get("user"));
-        redisTemplate.delete("user");
-        System.out.println("delete后：" + opsForValue.get("user"));
+//        ValueOperations<String, Object> opsForValue = redisTemplate.opsForValue();
+//        System.out.println("set前：" + opsForValue.get("user"));
+//        opsForValue.set("user", user);
+//        System.out.println("set后：" + opsForValue.get("user"));
+//        redisTemplate.delete("user");
+//        System.out.println("delete后：" + opsForValue.get("user"));
 
 
     }

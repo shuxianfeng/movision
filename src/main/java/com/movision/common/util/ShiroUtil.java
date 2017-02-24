@@ -15,6 +15,13 @@ import org.slf4j.LoggerFactory;
 import com.movision.shiro.realm.BossRealm;
 import com.movision.shiro.realm.ShiroRealm;
 
+/**
+ * shiro工具类
+ * 用于获取当前登录人的信息，如id，手机号等
+ *
+ * @Author zhuangyuhao
+ * @Date 2017/2/24 10:01
+ */
 public class ShiroUtil {
     private static Logger log = LoggerFactory.getLogger(ShiroUtil.class);
 

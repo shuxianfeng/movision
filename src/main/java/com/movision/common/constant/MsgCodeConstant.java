@@ -53,8 +53,8 @@ public interface MsgCodeConstant {
 	int app_account_status_error = 10011;
 
 	/**
-	 * 用户名或密码错误
-	 */
+     * 用户名或验证码错误
+     */
 	int app_account_name_error = 10012;
 
 
@@ -73,6 +73,11 @@ public interface MsgCodeConstant {
 	 */
 	int server_token_missing = 10015;
 
+
+    /**
+     * apptoken和服务器token不相等
+     */
+    int app_token_not_equal_server_token = 10016;
 
 	/**
 	 * 文件不存在

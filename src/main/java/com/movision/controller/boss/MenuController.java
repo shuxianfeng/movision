@@ -8,6 +8,7 @@ import com.movision.facade.user.RoleMenuRelationFacade;
 import com.movision.mybatis.bossMenu.entity.Menu;
 import com.movision.mybatis.bossMenu.entity.MenuDetail;
 import com.movision.mybatis.role.entity.Role;
+import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,7 @@ public class MenuController {
         response.setData(menu);
         return response;
     }
+
 
     /*@ApiOperation(value = "查询菜单列表（分页）", notes = "查询菜单列表（分页）", response = Response.class)
     @RequestMapping(value = "query_menu_list", method = RequestMethod.GET)

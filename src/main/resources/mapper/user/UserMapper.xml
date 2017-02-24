@@ -462,6 +462,12 @@
         SELECT u.nickname,u.id FROM yw_user u WHERE nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
     </select>
 
+    <update id="updateRegisterUser" parameterType="com.movision.mybatis.user.entity.RegisterUser">
+        update yw_user
+        SET token = #{token}
+        WHERE phone = #{phone}
+    </update>
+
     <select id="queryUserbyPhoneByUserid" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT phone FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
     </select>

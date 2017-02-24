@@ -690,7 +690,6 @@ public class PostController {
         List<PostList> list = postFacade.queryAllActivePostCondition(title, name, content, mintime, maxtime, statue, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
-
         }
         pager.result(list);
         response.setData(pager);

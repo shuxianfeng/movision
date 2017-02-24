@@ -254,4 +254,34 @@ public class User implements Serializable {
     public void setStatus(Integer status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", openid='" + openid + '\'' +
+                ", qq='" + qq + '\'' +
+                ", sina='" + sina + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", orderid=" + orderid +
+                ", token='" + token + '\'' +
+                ", invitecode='" + invitecode + '\'' +
+                ", referrals='" + referrals + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", sign='" + sign + '\'' +
+                ", attention=" + attention +
+                ", fans=" + fans +
+                ", points=" + points +
+                ", photo='" + photo + '\'' +
+                ", sex=" + sex +
+                ", birthday=" + birthday +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", intime=" + intime +
+                ", growth=" + growth +
+                ", level=" + level +
+                ", status=" + status +
+                '}';
+    }
 }

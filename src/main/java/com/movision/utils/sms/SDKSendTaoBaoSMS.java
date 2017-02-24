@@ -9,6 +9,9 @@ import com.taobao.api.TaobaoClient;
 import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
 import com.taobao.api.response.AlibabaAliqinFcSmsNumSendResponse;
 
+/**
+ * 淘宝阿里大于短信继集成类
+ */
 public class SDKSendTaoBaoSMS {
 
     private static Logger log = LoggerFactory.getLogger(SDKSendTaoBaoSMS.class);

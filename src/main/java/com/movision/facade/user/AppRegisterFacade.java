@@ -8,6 +8,7 @@ import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.utils.DateUtils;
 import com.movision.utils.MsgPropertiesUtils;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @Author zhuangyuhao
@@ -29,7 +31,18 @@ public class AppRegisterFacade {
     @Autowired
     private UserFacade userFacade;
 
-    public UsernamePasswordToken validateLoginUser(RegisterUser member, Validateinfo validateinfo, Session session) {
+    /**
+     * 校验登录用户信息：手机号+短信验证码
+     * 若用户不存在，则新增用户信息；
+     * 若用户存在，则更新用户token
+     * 登录成功，则清除session中的验证码，
+     *
+     * @param member
+     * @param validateinfo
+     * @param session
+     * @return
+     */
+    public Map<String, Object> validateLoginUser(RegisterUser member, Validateinfo validateinfo, Session session) {
         String phone = member.getPhone();
         String verifyCode = validateinfo.getCheckCode();
         String mobileCheckCode = member.getMobileCheckCode();
@@ -46,29 +59,34 @@ public class AppRegisterFacade {
                     //1 生成token
                     UsernamePasswordToken newToken = new UsernamePasswordToken(phone, verifyCode.toCharArray());
                     //校验是否手机号存在
-                    int isExist = userFacade.isExistAccount(phone);
-                    if (isExist == 0) { //手机号不存在
+                    Map<String, Object> result = new HashedMap();
+                    //2 注册用户，并把token入库, 放入缓存
+                    Gson gson = new Gson();
+                    String json = gson.toJson(newToken);
+                    member.setToken(json);
 
-                        //2 注册用户，并把token入库, 放入缓存
-                        Gson gson = new Gson();
-                        String json = gson.toJson(newToken);
-                        member.setToken(json);
-                        this.registerMember(member);
-                        //3 清除session中验证码的信息
-                        session.removeAttribute("r" + validateinfo.getAccount());
-                        //4 返回token（后期可加密）
-                        return newToken;
-
+                    String isExist = userFacade.isExistAccount(phone);
+                    if (isExist.equals("isExist")) {
+                        //存在该用户,则更新token
+                        this.updateAppRegisterUser(member);
                     } else {
-                        //存在该用户
-                        throw new BusinessException(MsgCodeConstant.member_mcode_account_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_account_exist)));
+                        //手机号不存在,则新增用户，并且新增token
+                        this.registerMember(member);
                     }
+                    //3 登录成功则清除session中验证码的信息
+                    session.removeAttribute("r" + validateinfo.getAccount());
+                    //4 返回token（后期可加密）
+                    result.put("token_detail", newToken);
+                    result.put("token", json);
+                    return result;
+
                 } else {
-                    throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
+                    //不需要清除验证码
+                    throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, "手机验证码不正确");
                 }
 
             } else {
-                //超过短信验证码有效期则清除session信息
+                //超过短信验证码有效期，则清除session信息
                 session.removeAttribute("r" + validateinfo.getAccount());
                 throw new BusinessException(MsgCodeConstant.member_mcode_sms_timeout, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_sms_timeout)));
             }
@@ -79,7 +97,7 @@ public class AppRegisterFacade {
     }
 
     /**
-     * 注册用户
+     * 注册用户，新增用户信息
      */
     public int registerMember(RegisterUser member) {
         log.debug("注册会员");
@@ -102,4 +120,20 @@ public class AppRegisterFacade {
         return memberId;
     }
 
+    /**
+     * 修改app注册用户的token
+     *
+     * @param member
+     */
+    public void updateAppRegisterUser(RegisterUser member) {
+        log.debug("修改会员token");
+        try {
+            if (member != null) {
+                userFacade.updateAccount(member);
+            }
+        } catch (Exception e) {
+            log.error("register member error", e);
+        }
+    }
 }
+
