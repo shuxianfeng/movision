@@ -169,7 +169,9 @@ public class OrderFacade {
                     e.printStackTrace();
                 }
              }*/
-            map.put("mintime", mintime);
+            if (mintime != null) {
+                map.put("mintime", mintime);
+            }
             /** Date max = null;//最大时间
             if (maxtime != null) {
                 try {
@@ -178,7 +180,9 @@ public class OrderFacade {
                     e.printStackTrace();
                 }
              }*/
-            map.put("maxtime", maxtime);
+            if (maxtime != null) {
+                map.put("maxtime", maxtime);
+            }
             map.put("email", email);
             map.put("name", name);
             map.put("phone", phone);
@@ -498,9 +502,9 @@ public class OrderFacade {
                 e.printStackTrace();
             }
          }*/
-
-        map.put("mintime", mintime);
-
+        if (mintime != null) {
+            map.put("mintime", mintime);
+        }
 
         /**  Date max = null;//最大时间
         if (maxtime != null) {
@@ -510,9 +514,9 @@ public class OrderFacade {
                 e.printStackTrace();
             }
          }*/
-
+        if (maxtime != null) {
         map.put("maxtime", maxtime);
-
+        }
         return bossOrderService.queryOrderByConditionAfterService(map, pager);
     }
 
