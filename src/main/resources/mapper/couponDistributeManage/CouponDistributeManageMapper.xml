@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.couponDistributeManage.mapper.CouponDistributeManageMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="startdate" property="startdate" jdbcType="DATE"/>
+        <result column="enddate" property="enddate" jdbcType="DATE"/>
+        <result column="amount" property="amount" jdbcType="DOUBLE"/>
+        <result column="fullamount" property="fullamount" jdbcType="DOUBLE"/>
+        <result column="scope" property="scope" jdbcType="INTEGER"/>
+        <result column="shopid" property="shopid" jdbcType="INTEGER"/>
+        <result column="channel" property="channel" jdbcType="INTEGER"/>
+        <result column="singlesharenum" property="singlesharenum" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="putnum" property="putnum" jdbcType="INTEGER"/>
+        <result column="totalamount" property="totalamount" jdbcType="DOUBLE"/>
+        <result column="receivednum" property="receivednum" jdbcType="INTEGER"/>
+        <result column="restnum" property="restnum" jdbcType="INTEGER"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, title, content, startdate, enddate, amount, fullamount, scope, shopid, channel, 
+    singlesharenum, type, putnum, totalamount, receivednum, restnum, intime, isdel
+  </sql>
+
+    <!--基础查询语句-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_coupon_distribute_manage
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!--查询当前可领取的优惠券列表-->
+    <select id="queryCurReceiveCoupon"
+            resultType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo">
+    SELECT id, title, content, startdate, enddate, amount, fullamount, scope, channel, type
+    FROM yw_coupon_distribute_manage
+    WHERE channel = '0'
+      AND isdel = '0'
+      AND (scope = '0' OR scope = '1')
+  </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_coupon_distribute_manage
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage">
+    insert into yw_coupon_distribute_manage (id, title, content, 
+      startdate, enddate, amount, 
+      fullamount, scope, shopid, 
+      channel, singlesharenum, type, 
+      putnum, totalamount, receivednum, 
+      restnum, intime, isdel
+      )
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{startdate,jdbcType=DATE}, #{enddate,jdbcType=DATE}, #{amount,jdbcType=DOUBLE}, 
+      #{fullamount,jdbcType=DOUBLE}, #{scope,jdbcType=INTEGER}, #{shopid,jdbcType=INTEGER}, 
+      #{channel,jdbcType=INTEGER}, #{singlesharenum,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 
+      #{putnum,jdbcType=INTEGER}, #{totalamount,jdbcType=DOUBLE}, #{receivednum,jdbcType=INTEGER}, 
+      #{restnum,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER}
+      )
+  </insert>
+    <insert id="insertSelective"
+            parameterType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage">
+        insert into yw_coupon_distribute_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="startdate != null">
+                startdate,
+            </if>
+            <if test="enddate != null">
+                enddate,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="fullamount != null">
+                fullamount,
+            </if>
+            <if test="scope != null">
+                scope,
+            </if>
+            <if test="shopid != null">
+                shopid,
+            </if>
+            <if test="channel != null">
+                channel,
+            </if>
+            <if test="singlesharenum != null">
+                singlesharenum,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="putnum != null">
+                putnum,
+            </if>
+            <if test="totalamount != null">
+                totalamount,
+            </if>
+            <if test="receivednum != null">
+                receivednum,
+            </if>
+            <if test="restnum != null">
+                restnum,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="startdate != null">
+                #{startdate,jdbcType=DATE},
+            </if>
+            <if test="enddate != null">
+                #{enddate,jdbcType=DATE},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=DOUBLE},
+            </if>
+            <if test="fullamount != null">
+                #{fullamount,jdbcType=DOUBLE},
+            </if>
+            <if test="scope != null">
+                #{scope,jdbcType=INTEGER},
+            </if>
+            <if test="shopid != null">
+                #{shopid,jdbcType=INTEGER},
+            </if>
+            <if test="channel != null">
+                #{channel,jdbcType=INTEGER},
+            </if>
+            <if test="singlesharenum != null">
+                #{singlesharenum,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="putnum != null">
+                #{putnum,jdbcType=INTEGER},
+            </if>
+            <if test="totalamount != null">
+                #{totalamount,jdbcType=DOUBLE},
+            </if>
+            <if test="receivednum != null">
+                #{receivednum,jdbcType=INTEGER},
+            </if>
+            <if test="restnum != null">
+                #{restnum,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage">
+        update yw_coupon_distribute_manage
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="startdate != null">
+                startdate = #{startdate,jdbcType=DATE},
+            </if>
+            <if test="enddate != null">
+                enddate = #{enddate,jdbcType=DATE},
+            </if>
+            <if test="amount != null">
+                amount = #{amount,jdbcType=DOUBLE},
+            </if>
+            <if test="fullamount != null">
+                fullamount = #{fullamount,jdbcType=DOUBLE},
+            </if>
+            <if test="scope != null">
+                scope = #{scope,jdbcType=INTEGER},
+            </if>
+            <if test="shopid != null">
+                shopid = #{shopid,jdbcType=INTEGER},
+            </if>
+            <if test="channel != null">
+                channel = #{channel,jdbcType=INTEGER},
+            </if>
+            <if test="singlesharenum != null">
+                singlesharenum = #{singlesharenum,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="putnum != null">
+                putnum = #{putnum,jdbcType=INTEGER},
+            </if>
+            <if test="totalamount != null">
+                totalamount = #{totalamount,jdbcType=DOUBLE},
+            </if>
+            <if test="receivednum != null">
+                receivednum = #{receivednum,jdbcType=INTEGER},
+            </if>
+            <if test="restnum != null">
+                restnum = #{restnum,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey"
+            parameterType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage">
+    update yw_coupon_distribute_manage
+    set title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      startdate = #{startdate,jdbcType=DATE},
+      enddate = #{enddate,jdbcType=DATE},
+      amount = #{amount,jdbcType=DOUBLE},
+      fullamount = #{fullamount,jdbcType=DOUBLE},
+      scope = #{scope,jdbcType=INTEGER},
+      shopid = #{shopid,jdbcType=INTEGER},
+      channel = #{channel,jdbcType=INTEGER},
+      singlesharenum = #{singlesharenum,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      putnum = #{putnum,jdbcType=INTEGER},
+      totalamount = #{totalamount,jdbcType=DOUBLE},
+      receivednum = #{receivednum,jdbcType=INTEGER},
+      restnum = #{restnum,jdbcType=INTEGER},
+      intime = #{intime,jdbcType=TIMESTAMP},
+      isdel = #{isdel,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

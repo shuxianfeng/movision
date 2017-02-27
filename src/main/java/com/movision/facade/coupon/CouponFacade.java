@@ -2,9 +2,12 @@ package com.movision.facade.coupon;
 
 import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.coupon.service.CouponService;
+import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage;
+import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,5 +37,21 @@ public class CouponFacade {
         map.put("beUsedCouponList", beUsedCouponList);
         map.put("haveOverdueCouponList", haveOverdueCouponList);
         return map;
+    }
+
+    public List<CouponDistributeManageVo> queryCurReceiveCoupon(String isself, String shopid) {
+        //查询当前可以领取的优惠券列表
+        List<CouponDistributeManageVo> couponDistributeManageVoList = new ArrayList<>();
+        Map<String, Object> parammap = new HashMap<>();
+
+        if (isself.equals("1")) {//自营
+            couponDistributeManageVoList = couponService.queryCurReceiveCoupon();
+
+        }
+//        else if (isself.equals("0")){//第三方（2.0预留）
+//            parammap.put("shopid", shopid);
+//            couponDistributeManageVoList = couponService.queryCurReceiveCouponByShop(parammap);
+//        }
+        return couponDistributeManageVoList;
     }
 }

@@ -2,12 +2,16 @@ package com.movision.mybatis.coupon.service;
 
 import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.coupon.mapper.CouponMapper;
+import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage;
+import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
+import com.movision.mybatis.couponDistributeManage.mapper.CouponDistributeManageMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author shuxf
@@ -18,6 +22,9 @@ public class CouponService {
 
     @Autowired
     private CouponMapper couponMapper;
+
+    @Autowired
+    private CouponDistributeManageMapper couponDistributeManageMapper;
 
     private Logger log = LoggerFactory.getLogger(CouponService.class);
 
@@ -47,6 +54,16 @@ public class CouponService {
             return couponMapper.queryHaveOverdueCoupon(userid);
         } catch (Exception e) {
             log.error("根据用户id查询用户名下所有过期失效的优惠券列表失败");
+            throw e;
+        }
+    }
+
+    public List<CouponDistributeManageVo> queryCurReceiveCoupon() {
+        try {
+            log.info("查询当前可领取的优惠券列表");
+            return couponDistributeManageMapper.queryCurReceiveCoupon();
+        } catch (Exception e) {
+            log.error("查询当前可领取的优惠券列表失败");
             throw e;
         }
     }
