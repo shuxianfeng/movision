@@ -734,8 +734,8 @@ public class PostController {
     public Response findAllQueryLikeGoods(@ApiParam(value = "产品名称") @RequestParam(required = false) String name,
                                           @ApiParam(value = "品牌名称") @RequestParam(required = false) String brandname,
                                           @ApiParam(value = "产品分类") @RequestParam(required = false) String protype,
-                                          @ApiParam(value = "当前页") @RequestParam(required = false) String pageNo,
-                                          @ApiParam(value = "每页几条") @RequestParam(required = false) String pageSize) {
+                                          @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                          @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<GoodsVo> pager = new Paging<GoodsVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<GoodsVo> list = postFacade.findAllQueryLikeGoods(name, brandname, protype, pager);
