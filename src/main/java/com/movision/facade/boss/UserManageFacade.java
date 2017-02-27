@@ -33,4 +33,15 @@ public class UserManageFacade {
         }
         return resault;
     }
+
+    /**
+     * 查询所有VIP用户
+     *
+     * @param pager
+     * @return
+     */
+    public List<UserVo> queryVipList(Paging<UserVo> pager) {
+        List<UserVo> users = userService.findAllqueryVipList(pager);//查询所有VIP用户
+        return users;
+    }
 }

@@ -318,7 +318,30 @@ public class UserService {
      * @return
      */
     public List<Integer> findAllqueryUsers(Paging<UserVo> pager) {
-        return userMapper.findAllqueryUsers(pager.getRowBounds());
+        try {
+            log.info("查询所有申请加V用户");
+            return userMapper.findAllqueryUsers(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询所有申请加V用户异常");
+            throw e;
+        }
+    }
+
+
+    /**
+     * 查询所有VIP用户列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<UserVo> findAllqueryVipList(Paging<UserVo> pager) {
+        try {
+            log.info("查询所有VIP用户列表");
+            return userMapper.findAllqueryVipList(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询所有VIP用户列表异常");
+            throw e;
+        }
     }
 
     /**

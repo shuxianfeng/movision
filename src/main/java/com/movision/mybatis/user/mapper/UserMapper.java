@@ -69,5 +69,7 @@ public interface UserMapper {
 
     List<Integer> findAllqueryUsers(RowBounds rowBounds);
 
+    List<UserVo> findAllqueryVipList(RowBounds rowBounds);
+
     UserVo queryApplyVipList(Integer userid);
 }

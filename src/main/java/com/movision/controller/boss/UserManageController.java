@@ -48,4 +48,26 @@ public class UserManageController {
         return response;
 
     }
+
+    /**
+     * 查看vip列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查看VIP列表", notes = "用于查看VIP用户列表", response = Response.class)
+    @RequestMapping(value = "query_vip_list", method = RequestMethod.POST)
+    public Response queryVipList(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                 @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<UserVo> pager = new Paging<UserVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<UserVo> list = userManageFacade.queryVipList(pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
 }
