@@ -44,7 +44,7 @@ public class UploadFacade {
              */
             String saveDirectory;
             int maxPostSize;
-            String imgDomain = PropertiesUtils.getValue("img.domain");
+            String imgDomain = PropertiesUtils.getValue("upload.img.domain");
 //            String docDomain = PropertiesUtils.getValue("doc.domain");
             String fileName = FileUtil.renameFile(file.getOriginalFilename());
             String data;
