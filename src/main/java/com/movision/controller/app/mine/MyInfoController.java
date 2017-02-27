@@ -3,6 +3,7 @@ package com.movision.controller.app.mine;
 import com.movision.common.Response;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.Goods.GoodsFacade;
+import com.movision.facade.address.AddressFacade;
 import com.movision.facade.boss.PostFacade;
 import com.movision.facade.circle.CircleAppFacade;
 import com.movision.facade.coupon.CouponFacade;
@@ -163,8 +164,6 @@ public class MyInfoController {
         map.put("name", FileUtil.getFileNameByUrl(url));
         return new Response(map);
     }
-
-
 
 
 }

@@ -3,6 +3,7 @@ package com.movision.mybatis.address.mapper;
 import com.movision.mybatis.address.entity.Address;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AddressMapper {
     int deleteByPrimaryKey(Integer id);
@@ -18,4 +19,6 @@ public interface AddressMapper {
     int updateByPrimaryKeySelective(Address record);
 
     int updateByPrimaryKey(Address record);
+
+    List<Map<String, Object>> queryMyAddressList(Map map);
 }
