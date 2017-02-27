@@ -19,6 +19,16 @@ public class Afterservice {
 
     private Integer isdel;
 
+    private String imgurl;
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
+    }
+
     private Double refundamount;
 
     private String processingpeople;
