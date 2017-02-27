@@ -625,8 +625,9 @@
         LEFT JOIN yw_collection c ON g.id = c.goodsid
         where c.type = 1
         <if test="userid!=null and userid!='' ">
-            c.userid = #{userid}
+            AND c.userid = #{userid}
         </if>
+        order by c.collect_time DESC
     </select>
 
     <select id="findAllQueryLikeGoods" parameterType="java.util.Map"

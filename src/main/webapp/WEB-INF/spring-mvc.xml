@@ -162,11 +162,11 @@
         <bean class="com.movisionsecurity.resubmit.AvoidDuplicateSubmissionInterceptor"/>
     </mvc:interceptors>-->
 
-    <!--<mvc:interceptors>
-        &lt;!&ndash;<bean class="com.movisionaop.TimeoutInterceptor"/>&ndash;&gt;
-        &lt;!&ndash;<bean class="com.movision.aop.InitLoginMemberInterceptor"/>&ndash;&gt;
-        &lt;!&ndash;<bean class="com.movision.aop.UserAccessInterceptor"/>&ndash;&gt;
-    </mvc:interceptors>-->
+    <mvc:interceptors>
+        <!--<bean class="com.movisionaop.TimeoutInterceptor"/>-->
+        <bean class="com.movision.aop.InitLoginMemberInterceptor"/>
+        <!--<bean class="com.movision.aop.UserAccessInterceptor"/>-->
+    </mvc:interceptors>
 
 
     <!--AOP-->

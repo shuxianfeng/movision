@@ -140,6 +140,7 @@
                 <!--url = orroles[role]
                 role:对应角色表中的角色   .100:App管理员  200:App普通用户-->
                 /rest/** = anon
+                /app/mine/**=authc
                 /app/** = anon
                 /boss/login = anon
                 /boss/** = anon

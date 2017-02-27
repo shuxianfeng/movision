@@ -1184,4 +1184,10 @@ public class PostFacade {
         return goodsService.findAllQueryLikeGoods(map, pager);
     }
 
+    public List<Post> findAllMyCollectPostList(Paging<Post> paging, int userid) {
+        Map map = new HashedMap();
+        map.put("userid", userid);
+        return postService.findAllMyCollectPost(paging, map);
+    }
+
 }

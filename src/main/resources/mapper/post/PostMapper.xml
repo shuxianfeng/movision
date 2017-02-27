@@ -1361,4 +1361,16 @@
         ORDER BY intime DESC
 
     </select>
+
+    <select id="findAllMyCollectPost" resultType="com.movision.mybatis.post.entity.Post">
+        SELECT p.*
+        FROM yw_post p
+        LEFT JOIN yw_collection c on p.id = c.postid
+        where c.type = 0
+        <if test="userid!=null and userid!=''">
+            AND c.userid = #{userid}
+        </if>
+        ORDER BY c.collect_time DESC
+    </select>
+
 </mapper>

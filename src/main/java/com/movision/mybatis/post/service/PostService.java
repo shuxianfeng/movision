@@ -610,4 +610,21 @@ public class PostService {
         }
     }
 
+    /**
+     * 查询我收藏的帖子/活动列表
+     *
+     * @param paging
+     * @param map
+     * @return
+     */
+    public List<Post> findAllMyCollectPost(Paging<Post> paging, Map map) {
+        try {
+            log.info("查询我收藏的帖子/活动列表");
+            return postMapper.findAllMyCollectPost(paging.getRowBounds(), map);
+        } catch (Exception e) {
+            log.error("查询我收藏的帖子/活动列表失败", e);
+            throw e;
+        }
+    }
+
 }
