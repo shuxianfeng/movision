@@ -39,4 +39,22 @@ public class AppCouponController {
         response.setData(couponDistributeManageList);
         return response;
     }
+
+    @ApiOperation(value = "用户领取优惠券", notes = "用户在商品详情页面，点击立即领取，领取优惠券", response = Response.class)
+    @RequestMapping(value = "getCoupon", method = RequestMethod.POST)
+    public Response getCoupon(@ApiParam(value = "用户id") @RequestParam String userid,
+                              @ApiParam(value = "优惠券id（分发id）") @RequestParam String id) throws Exception {
+        Response response = new Response();
+
+        int flag = couponFacade.getCoupon(userid, id);
+
+        if (flag == 1) {
+            response.setCode(200);
+            response.setMessage("领取成功");
+        } else if (flag == 0) {
+            response.setCode(300);
+            response.setMessage("该优惠券不可领取（已结束已抢光或未开始）");
+        }
+        return response;
+    }
 }

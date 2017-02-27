@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +68,52 @@ public class CouponService {
             return couponDistributeManageMapper.queryCurReceiveCoupon();
         } catch (Exception e) {
             log.error("查询当前可领取的优惠券列表失败");
+            throw e;
+        }
+    }
+
+    public int checkCoupon(int id) {
+        try {
+            log.info("检查是否有合法的可领取优惠券");
+            return couponDistributeManageMapper.checkCoupon(id);
+        } catch (Exception e) {
+            log.error("检查是否有合法的可领取优惠券失败");
+            throw e;
+        }
+    }
+
+    @Transactional
+    public void getCoupon(Map<String, Object> parammap) throws Exception {
+        try {
+            log.info("用户领取优惠券");
+            //首先扣减系统优惠券的剩余张数和已领张数
+            couponDistributeManageMapper.deductCoupon(parammap);
+
+            //给用户表里增加一条优惠券
+            CouponDistributeManage couponDistributeManage = couponDistributeManageMapper.selectByPrimaryKey((int) parammap.get("id"));
+            Coupon coupon = new Coupon();
+            coupon.setUserid((int) parammap.get("userid"));
+            coupon.setTitle(couponDistributeManage.getTitle());
+            coupon.setContent(couponDistributeManage.getContent());
+            coupon.setType(couponDistributeManage.getScope());
+            coupon.setShopid(couponDistributeManage.getShopid());
+            coupon.setCategory(-1);
+            coupon.setStatue(0);
+            coupon.setBegintime(couponDistributeManage.getStartdate());
+            coupon.setEndtime(couponDistributeManage.getEnddate());
+            coupon.setIntime(new Date());
+            coupon.setTmoney(couponDistributeManage.getAmount());
+            coupon.setUsemoney(couponDistributeManage.getFullamount());
+            coupon.setIsdel(0);
+            couponMapper.insertSelective(coupon);
+
+            //记录一条用户的领取记录
+            parammap.put("intime", new Date());
+            couponDistributeManageMapper.insertGetRecord(parammap);
+
+//            throw new RuntimeException("抛出个运行时异常！");//经测试抛运行时异常，事务能够正常全部回滚
+        } catch (Exception e) {
+            log.error("用户领取优惠券失败");
             throw e;
         }
     }

@@ -44,6 +44,15 @@
       AND (scope = '0' OR scope = '1')
   </select>
 
+    <!--检查当前领取的优惠券是否合法-->
+    <select id="checkCoupon" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_coupon_distribute_manage
+        WHERE id = #{id,jdbcType=INTEGER}
+        AND restnum > 0
+        AND NOW() > startdate
+        AND enddate > NOW()
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_coupon_distribute_manage
     where id = #{id,jdbcType=INTEGER}
@@ -180,6 +189,17 @@
             </if>
         </trim>
     </insert>
+
+    <!--向优惠券领取记录表中记录一条领取记录-->
+    <insert id="insertGetRecord" parameterType="java.util.Map">
+        INSERT INTO yw_coupon_receive_record(
+        userid, distributeid, intime
+        )
+        VALUES (
+        #{userid,jdbcType=INTEGER}, #{id,jdbcType=INTEGER}, #{intime,jdbcType=INTEGER}
+        )
+    </insert>
+
     <update id="updateByPrimaryKeySelective"
             parameterType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage">
         update yw_coupon_distribute_manage
@@ -260,4 +280,12 @@
       isdel = #{isdel,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <!--扣减系统中优惠券的总金额和总张数-->
+    <update id="deductCoupon" parameterType="java.util.Map">
+        UPDATE yw_coupon_distribute_manage
+        SET receivednum = receivednum + 1,
+        restnum = restnum - 1
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>
