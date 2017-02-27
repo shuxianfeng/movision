@@ -216,14 +216,14 @@ public class PostFacade {
                           activeStatue = "已结束";
                       }
                   }
-             postList.setActivestatue(activeStatue);//活动状态
+                  postList.setActivestatue(activeStatue);//活动状态
                   postList.setZansum(list.get(i).getZansum());
                   postList.setCollectsum(list.get(i).getCollectsum());
                   postList.setCommentsum(list.get(i).getCommentsum());
                   postList.setForwardsum(list.get(i).getForwardsum());
                   postList.setIntime(list.get(i).getIntime());
-             rewardeds.add(postList);
-         }
+                  rewardeds.add(postList);
+              }
         return rewardeds;
      }
 
@@ -1120,7 +1120,6 @@ public class PostFacade {
      * @return
      */
     public List<PostList> queryAllActivePostCondition(String title, String name, String content, String mintime, String maxtime, String statue, Paging<PostList> pager) {
-
         Map<String, Object> map = new HashedMap();
         if (title != null) {
             map.put("title", title);
@@ -1131,6 +1130,7 @@ public class PostFacade {
         if (content != null) {
             map.put("content", content);
         }
+
         if (statue != null) {
             map.put("statue", statue);
         }
@@ -1153,6 +1153,8 @@ public class PostFacade {
             }
         }
         map.put("maxtime", max);
+
+        map.put("statue", statue);
         return postService.queryAllActivePostCondition(map, pager);
     }
 

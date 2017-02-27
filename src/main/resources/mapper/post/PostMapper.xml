@@ -1334,12 +1334,13 @@
     </select>
     <select id="findAllActivePostCondition" resultType="com.movision.mybatis.post.entity.PostList"
             parameterType="com.movision.mybatis.post.entity.PostList">
-        SELECT * FROM yw_post WHERE isdel=0 AND isactive=1 ORDER BY intime DESC WHERE 1
+        SELECT p.*,a.begintime,a.endtime FROM yw_post p LEFT JOIN yw_active_period a ON a.postid=p.id WHERE p.isdel=0
+        AND p.isactive=1
         <if test="title!=null">
             AND title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
         </if>
         <if test="name!=null">
-            AND userid=#{userid,jdbcType=INTEGER}
+            AND nickname LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
         </if>
         <if test="content!=null">
             AND postcontent LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
@@ -1347,15 +1348,17 @@
         <if test="mintime!=null and maxtime!=null">
             AND intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
         </if>
-        <if test="statue!=null">
-            AND activestatue=#{activestatue,jdbcType=VARCHAR}
+        <if test="statue==0">
+            AND a.begintime
+            <![CDATA[>]]> NOW()
         </if>
-        <if test="pai==0">
-            ORDER BY intime DESC
+        <if test="statue==1">
+            AND a.endtime  <![CDATA[<]]> NOW()
         </if>
-        <if test="pai==1">
-            ORDER BY totalpoint DESC
+        <if test="statue==2">
+            AND NOW()  <![CDATA[>]]> a.begintime AND Now() <![CDATA[<]]> a.endtime
         </if>
+        ORDER BY intime DESC
 
     </select>
 </mapper>
