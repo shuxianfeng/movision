@@ -166,7 +166,7 @@ public class UserFacade {
 
     public void updatePersonInfo(PersonInfo personInfo) {
         User user = new User();
-        user.setId(ShiroUtil.getAppUserID());
+        user.setId(personInfo.getId());
         user.setNickname(personInfo.getNickname());
         user.setBirthday(personInfo.getBirthday());
         user.setPhoto(personInfo.getPhoto());

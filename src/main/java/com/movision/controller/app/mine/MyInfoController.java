@@ -147,6 +147,7 @@ public class MyInfoController {
     public Response updateMyInfo(@ApiParam @ModelAttribute PersonInfo personInfo) {
 
         Response response = new Response();
+        personInfo.setId(ShiroUtil.getAppUserID());
         userFacade.updatePersonInfo(personInfo);
         return response;
     }

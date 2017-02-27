@@ -4,13 +4,16 @@ import com.movision.common.util.ShiroUtil;
 import com.movision.facade.circle.CircleAppFacade;
 import com.movision.facade.coupon.CouponFacade;
 import com.movision.facade.order.OrderAppFacade;
+import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.coupon.entity.Coupon;
+import com.movision.mybatis.user.entity.PersonInfo;
 import com.movision.test.SpringTestCase;
 import com.movision.utils.pagination.model.Paging;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,6 +29,9 @@ public class MyInfoControllerTest extends SpringTestCase {
 
     @Autowired
     private CircleAppFacade circleAppFacade;
+
+    @Autowired
+    private UserFacade userFacade;
 
 /*
     @Test
@@ -47,12 +53,24 @@ public class MyInfoControllerTest extends SpringTestCase {
     }
 */
 
+    /*
+        @Test
+        public void getMyFollowCircleList() throws Exception {
+            Paging<Circle> paging = new Paging<Circle>(Integer.valueOf("1"), Integer.valueOf("10"));
+            List<Circle> circleList = circleAppFacade.findAllMyFollowCircleList(paging, 1);
+            paging.result(circleList);
+            System.out.println(paging);
+        }
+    */
     @Test
-    public void getMyFollowCircleList() throws Exception {
-        Paging<Circle> paging = new Paging<Circle>(Integer.valueOf("1"), Integer.valueOf("10"));
-        List<Circle> circleList = circleAppFacade.findAllMyFollowCircleList(paging, 1);
-        paging.result(circleList);
-        System.out.println(paging);
+    public void updateMyInfo() throws Exception {
+        PersonInfo personInfo = new PersonInfo();
+        personInfo.setId(10);
+        personInfo.setBirthday(new Date());
+        personInfo.setSign("我是一个小鸡鸡");
+        personInfo.setSex(0);
+        personInfo.setNickname("小鸡鸡JJ");
+        userFacade.updatePersonInfo(personInfo);
     }
 
 
