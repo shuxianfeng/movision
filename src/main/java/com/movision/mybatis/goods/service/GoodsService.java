@@ -17,6 +17,7 @@ import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentCategery;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.mybatis.goodsAssessment.mapper.GoodsAssessmentMapper;
 import com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg;
+import com.movision.mybatis.role.entity.Role;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -447,6 +448,22 @@ public class GoodsService {
             return goodsMapper.findAllQueryPostByGoodsList(pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询商品列表异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询我收藏的商品列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<Goods> findAllMyCollectGoodsList(Paging<Goods> pager, Map map) {
+        try {
+            log.info("查询我收藏的商品列表");
+            return goodsMapper.findAllMyCollectGoodsList(pager.getRowBounds(), map);
+        } catch (Exception e) {
+            log.error("查询我收藏的商品列表失败", e);
             throw e;
         }
     }

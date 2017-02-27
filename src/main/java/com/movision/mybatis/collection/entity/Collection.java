@@ -1,5 +1,7 @@
 package com.movision.mybatis.collection.entity;
 
+import java.util.Date;
+
 public class Collection {
     private Integer id;
 
@@ -10,6 +12,17 @@ public class Collection {
     private Integer goodsid;
 
     private Integer type;
+
+    private Date collectTime;
+
+    public void setCollectTime(Date collectTime) {
+        this.collectTime = collectTime;
+    }
+
+    public Date getCollectTime() {
+
+        return collectTime;
+    }
 
     public Integer getId() {
         return id;

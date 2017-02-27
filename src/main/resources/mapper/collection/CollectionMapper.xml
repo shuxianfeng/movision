@@ -7,9 +7,10 @@
         <result column="postid" property="postid" jdbcType="INTEGER"/>
         <result column="goodsid" property="goodsid" jdbcType="INTEGER"/>
         <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="collect_time" property="collectTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, userid, postid, goodsid, type
+        id, userid, postid, goodsid, type, collect_time
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -25,18 +26,18 @@
 
     <!--基础插入语句-->
     <insert id="insert" parameterType="com.movision.mybatis.collection.entity.Collection">
-    insert into yw_collection (id, userid, postid, 
-      goodsid, type)
-    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER}, 
-      #{goodsid,jdbcType=INTEGER}, #{type,jdbcType=INTEGER})
+    insert into yw_collection (id, userid, postid,
+        goodsid, type, collect_time)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER},
+        #{goodsid,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}), now()
   </insert>
 
     <!--收藏帖子sql-->
     <insert id="collectionPost" parameterType="com.movision.mybatis.collection.entity.Collection">
     INSERT INTO yw_collection (userid, postid,
-      goodsid, type)
+        goodsid, type, collect_time)
     VALUES (#{userid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER},
-      #{goodsid,jdbcType=INTEGER}, #{type,jdbcType=INTEGER})
+        #{goodsid,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}), now()
   </insert>
 
     <insert id="insertSelective" parameterType="com.movision.mybatis.collection.entity.Collection">
@@ -57,6 +58,7 @@
             <if test="type != null">
                 type,
             </if>
+            collect_time
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -74,6 +76,7 @@
             <if test="type != null">
                 #{type,jdbcType=INTEGER},
             </if>
+            now()
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.collection.entity.Collection">

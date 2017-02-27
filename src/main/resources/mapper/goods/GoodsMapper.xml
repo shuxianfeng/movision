@@ -619,6 +619,16 @@
         FROM yw_goods g
     </select>
 
+    <select id="findAllMyCollectGoodsList" resultType="com.movision.mybatis.goods.entity.Goods">
+        SELECT g.*
+        from yw_goods g
+        LEFT JOIN yw_collection c ON g.id = c.goodsid
+        where c.type = 1
+        <if test="userid!=null and userid!='' ">
+            c.userid = #{userid}
+        </if>
+    </select>
+
     <select id="findAllQueryLikeGoods" parameterType="java.util.Map"
             resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT g.id,
