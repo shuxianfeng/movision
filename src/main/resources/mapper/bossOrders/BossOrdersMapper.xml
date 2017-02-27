@@ -632,6 +632,9 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
             <if test="refundamount != null">
                 refundamount = #{refundamount,jdbcType=DOUBLE},
             </if>
+            <if test="aftersalestatus != null">
+                aftersalestatus = #{aftersalestatus,jdbcType=INTEGER},
+            </if>
         </set>
         where id=#{id,jdbcType=INTEGER}
     </update>
@@ -640,9 +643,12 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         SELECT
         f.id,f.orderid,o.ordernumber,u.nickname,f.proposertime,f.processingpeople,f.processingtime,a.name,a.province,a.city,a.district,a.street,s.`name`
         AS
-        sname,s.protype,f.afterstatue,f.amountdue,f.refundamount,f.aftersalestatus,f.processingstatus,o.takeway,l.intime,l.logisticsid
+        sname,s.protype,f.afterstatue,f.amountdue,f.refundamount,f.aftersalestatus,f.processingstatus,o.takeway,l.intime,l.logisticsid,g.img_url
         FROM yw_afterservice f LEFT JOIN yw_address a ON a.id=f.addressid
-     LEFT JOIN yw_goods s ON s.id=f.goodsid LEFT JOIN yw_orders o ON o.id=f.orderid LEFT JOIN yw_user u ON u.id=f.userid LEFT JOIN yw_order_sub_logistics l ON l.logisticsid=o.logisticsid WHERE f.id=#{id,jdbcType=INTEGER}
+        LEFT JOIN yw_goods s ON s.id=f.goodsid LEFT JOIN yw_orders o ON o.id=f.orderid LEFT JOIN yw_user u ON
+        u.id=f.userid LEFT JOIN yw_order_sub_logistics l ON l.logisticsid=o.logisticsid
+        LEFT JOIN yw_goods_img g ON g.goodsid=f.goodsid
+        WHERE f.id=1 AND g.type=2
     </select>
 
     <select id="findAllOrderByConditionAfterService" parameterType="java.util.Map"

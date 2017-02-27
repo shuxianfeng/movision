@@ -434,7 +434,7 @@ public class OrdersListController {
     @ApiOperation(value = "修改售后信息", notes = "修改售后信息", response = Response.class)
     @RequestMapping(value = "update_afterservice", method = RequestMethod.POST)
     public Response updateAfterService(@ApiParam(value = "售后id") @RequestParam String id,
-                                       @ApiParam(value = "处理") @RequestParam String processingstatus,
+                                       @ApiParam(value = "处理") @RequestParam(required = false) Integer processingstatus,
                                        @ApiParam(value = "实退金额") @RequestParam(required = false) String refundamount) {
 
         Response response = new Response();

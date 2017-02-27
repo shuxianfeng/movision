@@ -435,13 +435,21 @@ public class OrderFacade {
      * @param id
      * @return
      */
-    public Map<String, Integer> updateAfterService(String processingstatus, String refundamount, String id) {
+    public Map<String, Integer> updateAfterService(Integer processingstatus, String refundamount, String id) {
         Map<String, Integer> map = new HashedMap();
         Afterservice afterservice = new Afterservice();
         afterservice.setId(Integer.parseInt(id));
-        afterservice.setProcessingstatus(Integer.parseInt(processingstatus));
-        if (refundamount != null) {
-            afterservice.setRefundamount(Double.parseDouble(refundamount));
+        if (processingstatus == 1 && refundamount != null) {
+            afterservice.setProcessingstatus(1);
+            afterservice.setAftersalestatus(4);
+        }
+        if (processingstatus == 1 && refundamount == null) {
+            afterservice.setProcessingstatus(1);
+            afterservice.setAftersalestatus(3);
+        }
+        if (processingstatus == 2) {
+            afterservice.setProcessingstatus(1);
+            afterservice.setAftersalestatus(5);
         }
         int result = bossOrderService.updateAfterService(afterservice);
         map.put("result", result);
