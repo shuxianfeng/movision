@@ -498,7 +498,7 @@ public class PostFacade {
      * @return
      */
     public Map<String, Integer> addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid, MultipartFile vid, MultipartFile bannerimgurl,
-                                        String userid, MultipartFile coverimg, String postcontent, String isessence, String ishot, String orderid, String time) {
+                                        String userid, MultipartFile coverimg, String postcontent, String isessence, String ishot, String orderid, String time, String goodsids) {
         PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
         try {
@@ -614,6 +614,9 @@ public class PostFacade {
             vide.setBannerimgurl(bannervoidurl);
             vide.setIntime(new Date());
             Integer in = videoService.insertVideoById(vide);//添加视频表
+            if (goodsids != null) {//添加商品
+
+            }
             map.put("result", result);
         } catch (Exception e) {
             log.error("帖子添加异常", e);
