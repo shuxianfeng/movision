@@ -7,18 +7,28 @@ import com.movision.facade.boss.PostFacade;
 import com.movision.facade.circle.CircleAppFacade;
 import com.movision.facade.coupon.CouponFacade;
 import com.movision.facade.order.OrderAppFacade;
+import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.user.entity.PersonInfo;
 import com.movision.shiro.realm.ShiroRealm;
+import com.movision.utils.file.FileUtil;
+import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhuangyuhao
@@ -42,6 +52,12 @@ public class MyInfoController {
 
     @Autowired
     private CircleAppFacade circleAppFacade;
+
+    @Autowired
+    private UserFacade userFacade;
+
+    @Autowired
+    private MovisionOssClient movisionOssClient;
 
 
     @ApiOperation(value = "查询我的达人页信息:收藏商品", notes = "查询我的达人页信息:收藏商品", response = Response.class)
@@ -115,6 +131,36 @@ public class MyInfoController {
         paging.result(circleList);
         response.setData(paging);
         return response;
+    }
+
+    @ApiOperation(value = "查询我的积分页面数据", notes = "查询我的积分页面数据", response = Response.class)
+    @RequestMapping(value = {"/get_my_point_data"}, method = RequestMethod.GET)
+    public Response getMyPointData(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                   @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
+        Response response = new Response();
+        // TODO: 2017/2/27  需求未确定
+        return response;
+    }
+
+    @ApiOperation(value = "修改个人资料", notes = "修改个人资料", response = Response.class)
+    @RequestMapping(value = {"/update_my_info"}, method = RequestMethod.POST)
+    public Response updateMyInfo(@ApiParam @ModelAttribute PersonInfo personInfo) {
+
+        Response response = new Response();
+        userFacade.updatePersonInfo(personInfo);
+        return response;
+    }
+
+
+    @ApiOperation(value = "上传个人资料头像图片", notes = "上传个人资料头像图片", response = Response.class)
+    @RequestMapping(value = {"/upload_person_info_pic"}, method = RequestMethod.POST)
+    public Response updateMyInfo(@RequestParam(value = "file", required = false) MultipartFile file) {
+
+        String url = movisionOssClient.uploadObject(file, "img", "person");
+        Map<String, String> map = new HashMap<>();
+        map.put("url", url);
+        map.put("name", FileUtil.getFileNameByUrl(url));
+        return new Response(map);
     }
 
 

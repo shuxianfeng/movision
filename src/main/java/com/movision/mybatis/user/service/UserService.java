@@ -330,4 +330,14 @@ public class UserService {
     public UserVo queryApplyVipList(Integer userid) {
         return userMapper.queryApplyVipList(userid);
     }
+
+    public int updateByPrimaryKeySelective(User user) {
+        try {
+            log.info("修改个人资料");
+            return userMapper.updateByPrimaryKeySelective(user);
+        } catch (Exception e) {
+            log.error("修改个人资料失败", e);
+            throw e;
+        }
+    }
 }

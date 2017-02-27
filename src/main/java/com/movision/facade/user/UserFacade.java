@@ -2,16 +2,14 @@ package com.movision.facade.user;
 
 import com.movision.aop.UserSaveCache;
 import com.movision.common.constant.MsgCodeConstant;
+import com.movision.common.util.ShiroUtil;
 import com.movision.exception.AuthException;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
-import com.movision.mybatis.user.entity.LoginUser;
-import com.movision.mybatis.user.entity.RegisterUser;
-import com.movision.mybatis.user.entity.User;
-import com.movision.mybatis.user.entity.UserVo;
+import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
@@ -164,6 +162,18 @@ public class UserFacade {
             users.add(temp);
         }
         return users;
+    }
+
+    public void updatePersonInfo(PersonInfo personInfo) {
+        User user = new User();
+        user.setId(ShiroUtil.getAppUserID());
+        user.setNickname(personInfo.getNickname());
+        user.setBirthday(personInfo.getBirthday());
+        user.setPhoto(personInfo.getPhoto());
+        user.setSex(personInfo.getSex());
+        user.setSign(personInfo.getSign());
+
+        userService.updateByPrimaryKeySelective(user);
     }
 
 
