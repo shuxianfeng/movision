@@ -298,13 +298,13 @@ public class CircleController {
 
     @ApiOperation(value = "查看圈子帖子列表", notes = "用于查看圈子中帖子列表接口", response = Response.class)
     @RequestMapping(value = "query_circle_post_list", method = RequestMethod.POST)
-    public Response queryCircleByPostList(@ApiParam(value = "圈子id") @RequestParam String circleid,
-                                          @ApiParam(value = "如果查询当天帖子列表传一个参数 1，如果查询精贴数传 0 否则不传参数") @RequestParam(required = false) String type,
+    public Response queryCircleByPostList(@ApiParam(value = "圈子类型(查询圈子分类的帖子列表)") @RequestParam(required = false) String categoryid,
+                                          @ApiParam(value = "圈子id(查询单个圈子的帖子列表)") @RequestParam(required = false) String circleid,
                                           @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                           @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostList> list = circleFacade.findAllQueryCircleByPostList(circleid, type, pager);
+        List<PostList> list = circleFacade.findAllQueryCircleByPostList(categoryid, circleid, pager);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

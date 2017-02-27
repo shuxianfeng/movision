@@ -1324,21 +1324,22 @@
 
     <select id="findAllQueryCircleByPostList" parameterType="java.lang.String"
             resultType="com.movision.mybatis.post.entity.PostList">
-        SELECT p.id,p.title,u.nickname,p.collectsum,
+        SELECT p.circleid,p.id,p.title,u.nickname,p.collectsum,
         (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid=p.id) AS share,
         (SELECT COUNT(1) FROM yw_post_comment c WHERE c.postid=p.id) AS commentsum,p.zansum,
         (SELECT SUM(points) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
         (SELECT COUNT(1) FROM yw_post_accusation a WHERE a.postid=p.id) AS accusation,cir.name AS circlename,
         p.orderid,p.essencedate
         FROM yw_post AS p LEFT JOIN yw_user as u ON u.id=p.userid LEFT JOIN yw_circle cir ON cir.id=p.circleid
-        WHERE p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0
-        <if test="type==1">
-            AND date(p.intime) = curdate()
+        WHERE 1
+        <if test="categoryid!=null">
+            AND p.circleid IN (SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER})
         </if>
-        <if test="type==0">
-            AND p.isessence=1
+        <if test="circleid!=null">
+            AND p.circleid=#{circleid,jdbcType=INTEGER}
         </if>
-        ORDER BY p.intime DESC
+        AND p.isdel=0 ORDER BY p.intime DESC
+
     </select>
     <select id="findAllActivePostCondition" resultType="com.movision.mybatis.post.entity.PostList"
             parameterType="com.movision.mybatis.post.entity.PostList">
