@@ -618,4 +618,21 @@
         g.name,g.protype,g.isdel,g.origprice,g.price,g.sales,g.stock,g.attribute
         FROM yw_goods g
     </select>
+
+    <select id="findAllQueryLikeGoods" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT g.id,
+        b.brandname,
+        g.name,g.protype,g.isdel,g.origprice,g.price,g.sales,g.stock,g.attribute
+        FROM yw_goods g LEFT JOIN yw_brand b ON g.brandid=b.brandid WHERE 1
+        <if test="brandname!=null">
+            AND b.brandname=#{brandname,jdbcType=VARCHAR}
+        </if>
+        <if test="name!=null">
+            AND g.name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="protype!=null">
+            AND g.protype=#{protype,jdbcType=INTEGER}
+        </if>
+    </select>
 </mapper>

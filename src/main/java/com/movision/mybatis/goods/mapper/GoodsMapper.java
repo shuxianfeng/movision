@@ -65,4 +65,6 @@ public interface GoodsMapper {
     int updateDate(GoodsVo goodsVo);//修改推荐日期
 
     List<GoodsVo> findAllQueryPostByGoodsList(RowBounds rowBounds);//查询商品列表（帖子使用）
+
+    List<GoodsVo> findAllQueryLikeGoods(Map map, RowBounds rowBounds);//查询商品列表，联合搜索（帖子使用）
 }

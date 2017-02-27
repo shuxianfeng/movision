@@ -451,4 +451,21 @@ public class GoodsService {
         }
     }
 
+    /**
+     * 用于条件查询商品列表（帖子使用）
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<GoodsVo> findAllQueryLikeGoods(Map map, Paging<GoodsVo> pager) {
+        try {
+            log.info("根据条件查询商品列表");
+            return goodsMapper.findAllQueryLikeGoods(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据条件查询商品列表异常");
+            throw e;
+        }
+    }
+
 }

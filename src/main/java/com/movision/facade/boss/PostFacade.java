@@ -1161,7 +1161,24 @@ public class PostFacade {
 
     public List<GoodsVo> queryPostByGoodsList(Paging<GoodsVo> pager) {
         List<GoodsVo> goodsVos = goodsService.queryPostByGoodsList(pager);
-        return null;
+        return goodsVos;
+    }
+
+    /**
+     * 用于条件查询商品列表（帖子使用）
+     *
+     * @param name
+     * @param brandname
+     * @param protype
+     * @param pager
+     * @return
+     */
+    public List<GoodsVo> findAllQueryLikeGoods(String name, String brandname, String protype, Paging<GoodsVo> pager) {
+        Map map = new HashedMap();
+        map.put("name", name);
+        map.put("brandname", brandname);
+        map.put("protype", protype);
+        return goodsService.findAllQueryLikeGoods(map, pager);
     }
 
 }

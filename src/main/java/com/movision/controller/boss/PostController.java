@@ -719,4 +719,32 @@ public class PostController {
         return response;
     }
 
+    /**
+     * 条件查询商品列表
+     *
+     * @param name
+     * @param brandname
+     * @param protype
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "条件查询商品列表", notes = "用于条件搜索接口", response = Response.class)
+    @RequestMapping(value = "query_like_goods", method = RequestMethod.POST)
+    public Response findAllQueryLikeGoods(@ApiParam(value = "产品名称") @RequestParam(required = false) String name,
+                                          @ApiParam(value = "品牌名称") @RequestParam(required = false) String brandname,
+                                          @ApiParam(value = "产品分类") @RequestParam(required = false) String protype,
+                                          @ApiParam(value = "当前页") @RequestParam(required = false) String pageNo,
+                                          @ApiParam(value = "每页几条") @RequestParam(required = false) String pageSize) {
+        Response response = new Response();
+        Paging<GoodsVo> pager = new Paging<GoodsVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<GoodsVo> list = postFacade.findAllQueryLikeGoods(name, brandname, protype, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
 }
