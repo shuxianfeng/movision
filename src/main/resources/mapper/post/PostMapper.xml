@@ -1362,6 +1362,34 @@
 
     </select>
 
+    <insert id="insertGoods" parameterType="java.util.Map">
+        insert into yw_post_share_goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+
+            <if test="postid != null">
+                postid,
+            </if>
+            <if test="goodsid != null">
+                goodsid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+
+            <if test="postid != null">
+                #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsid != null">
+                #{goodsid,jdbcType=DATE},
+            </if>
+        </trim>
+    </insert>
+
     <select id="findAllMyCollectPost" resultType="com.movision.mybatis.post.entity.Post">
         SELECT p.*
         FROM yw_post p

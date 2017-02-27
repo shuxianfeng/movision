@@ -446,6 +446,21 @@ public class PostService {
     }
 
     /**
+     * 帖子添加商品
+     * @param typ
+     * @return
+     */
+    public int insertGoods(Map typ) {
+        try {
+            log.info("帖子添加商品");
+            return postMapper.insertGoods(typ);
+        } catch (Exception e) {
+            log.error("帖子添加商品异常");
+            throw e;
+        }
+    }
+
+    /**
      * 查询帖子的总和和精贴数量
      *
      * @param circleid

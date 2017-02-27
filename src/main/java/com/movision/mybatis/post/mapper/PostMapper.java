@@ -24,6 +24,8 @@ public interface PostMapper {
 
     int insertSelectivet(PostTo record);
 
+    int insertGoods(Map typ);
+
 
     Post selectByPrimaryKey(Integer id);
 
