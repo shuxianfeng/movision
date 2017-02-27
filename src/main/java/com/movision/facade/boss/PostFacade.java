@@ -497,8 +497,9 @@ public class PostFacade {
      * @param time
      * @return
      */
-    public Map<String, Integer> addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid, MultipartFile vid, MultipartFile bannerimgurl,
-                                        String userid, MultipartFile coverimg, String postcontent, String isessence, String ishot, String orderid, String time, String goodsid) {
+    public Map<String, Integer> addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid,
+                                        String userid, MultipartFile coverimg, MultipartFile vid, MultipartFile bannerimgurl,
+                                        String postcontent, String isessence, String ishot, String orderid, String time, String goodsid) {
         PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
         try {
@@ -587,18 +588,18 @@ public class PostFacade {
             post.setIsactive("0");//设置状态为帖子
             post.setPostcontent(postcontent);//帖子内容
             post.setIntime(new Date());//插入时间
-            if (ishot != null || ishot != "") {
+            if (ishot != null) {
                 post.setIshot(ishot);//是否为圈子精选
             }
-            if (!isessence.isEmpty() || isessence != null) {
-                if (Integer.parseInt(isessence) != 0) {//判断是否为加精
+            if (isessence != null) {
+                if (isessence != "0") {//判断是否为加精
                     post.setIsessence(isessence);//是否为首页精选
                     if (!orderid.isEmpty()) {
                         post.setOrderid(orderid);
                     } else {
                         post.setOrderid("0");
                     }
-                    if (time != null || time != "") {
+                    if (time != null) {
                         post.setEssencedate(time);
                     }
 
@@ -615,12 +616,11 @@ public class PostFacade {
             vide.setIntime(new Date());
             Integer in = videoService.insertVideoById(vide);//添加视频表
             if (goodsid != null) {//添加商品
-                String[] lg = null;
-                lg = goodsid.split(",");
+                String[] lg = goodsid.split(",");//以逗号分隔
                 for (int i = 0; i < lg.length; i++) {
                     Map addgoods = new HashedMap();
                     addgoods.put("postid", pid);
-                    addgoods.put("goodsid", i);
+                    addgoods.put("goodsid", lg[i]);
                     postService.insertGoods(addgoods);
                 }
             }

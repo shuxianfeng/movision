@@ -363,7 +363,8 @@ public class PostController {
                             @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String time,//精选日期
                             @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Integer> resaut = postFacade.addPost(request, title, subtitle, type, circleid, vid, bannerimgurl, userid, coverimg, postcontent, isessence, ishot, orderid, time, goodsid);
+        Map<String, Integer> resaut = postFacade.addPost(request, title, subtitle, type, circleid, userid, coverimg, vid, bannerimgurl, postcontent,
+                isessence, ishot, orderid, time, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
