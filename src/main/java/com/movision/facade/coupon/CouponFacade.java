@@ -74,7 +74,7 @@ public class CouponFacade {
                 flag = 1;
                 //向用户优惠券表中插入一条优惠券数据，扣减可领优惠券的总张数和总金额，并记录用户的领取记录
                 couponService.getCoupon(parammap);
-            } else if (num == 0) {//已领取过
+            } else if (num == 1) {//已领取过
                 flag = -1;
             }
         } else if (sum == 0) {//无可领优惠券
