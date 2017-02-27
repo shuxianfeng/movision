@@ -4,7 +4,9 @@ import com.movision.common.Response;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.Goods.GoodsFacade;
 import com.movision.facade.boss.PostFacade;
+import com.movision.facade.order.AppOrderFacade;
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.pagination.model.Paging;
@@ -30,15 +32,8 @@ public class MyInfoController {
     @Autowired
     private PostFacade postFacade;
 
-//    @ApiOperation(value = "获取登录人的个人信息", notes = "获取登录人的个人信息", response = Response.class)
-//    @RequestMapping(value = {"/get_login_user_info"}, method = RequestMethod.POST)
-//    public Response getMyPersonInfo(){
-//        Response response = new Response();
-//        //获取当前用户信息
-//        ShiroRealm.ShiroUser user = ShiroUtil.getAppUser();
-//        response.setData(user);
-//        return response;
-//    }
+    @Autowired
+    private AppOrderFacade orderFacade;
 
 
     @ApiOperation(value = "查询我的达人页信息:收藏商品", notes = "查询我的达人页信息:收藏商品", response = Response.class)
@@ -76,7 +71,29 @@ public class MyInfoController {
 
         response.setData(postPaging);
         return response;
+    }
 
+    @ApiOperation(value = "我的订单列表", notes = "我的订单列表", response = Response.class)
+    @RequestMapping(value = {"/get_my_order_list"}, method = RequestMethod.POST)
+    public Response getMyOrderList(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                   @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
+        Response response = new Response();
+        Paging<Orders> paging = new Paging<Orders>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Orders> ordersList = orderFacade.getMyOrderList(paging, ShiroUtil.getAppUserID());
+        paging.result(ordersList);
+        response.setData(paging);
+        return response;
+    }
+
+    @ApiOperation(value = "我的礼券列表", notes = "我的礼券列表", response = Response.class)
+    @RequestMapping(value = {"/get_my_coupon_list"}, method = RequestMethod.POST)
+    public Response getMyCouponList(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                    @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
+        Response response = new Response();
+        Paging<Orders> paging = new Paging<Orders>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+
+        response.setData(paging);
+        return response;
     }
 
 }

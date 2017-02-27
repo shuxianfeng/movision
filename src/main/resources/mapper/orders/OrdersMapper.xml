@@ -291,4 +291,13 @@
         logisticsid = #{logisticsid,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="findAllMyOrderList" resultType="com.movision.mybatis.orders.entity.Orders">
+        SELECT *
+        FROM yw_orders
+        where isdel = 0
+        <if test="userid!=null and userid!=''">
+            AND userid = #{userid}
+        </if>
+    </select>
 </mapper>

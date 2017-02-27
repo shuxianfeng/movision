@@ -35,10 +35,10 @@ import java.util.*;
 @Service
 public class OrderFacade {
     @Autowired
-    BossOrderService bossOrderService = new BossOrderService();
+    private BossOrderService bossOrderService;
 
     @Autowired
-    UserService userService = new UserService();
+    private UserService userService;
 
     /**
      * 查询订单列表
@@ -239,6 +239,7 @@ public class OrderFacade {
         map.put("list", list);
         return map;
     }
+
     /**
      * 订单管理--订单详情
      *
@@ -530,5 +531,7 @@ public class OrderFacade {
         Afterservice afterservice = bossOrderService.queryRemark(id);
         return afterservice;
     }
+
+
 }
 
