@@ -88,4 +88,6 @@ public interface CircleMapper {
     List<Integer> queryCircleByOrderidList();
 
     int insertCircle(CircleDetails circleDetails);
+
+    List<Circle> findAllMyFollowCircleList(RowBounds rowBounds, Map map);
 }

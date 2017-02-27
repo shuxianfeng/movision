@@ -15,7 +15,7 @@ import java.util.Map;
  * @Date 2017/2/27 14:11
  */
 @Service
-public class AppOrderFacade {
+public class OrderAppFacade {
     @Autowired
     private OrderService orderService;
 

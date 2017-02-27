@@ -512,4 +512,14 @@ public class CircleService {
             throw e;
         }
     }
+
+    public List<Circle> findAllMyFollowCircleList(Paging<Circle> paging, Map map) {
+        try {
+            log.info("查询我关注的圈子");
+            return circleMapper.findAllMyFollowCircleList(paging.getRowBounds(), map);
+        } catch (Exception e) {
+            log.error("查询我关注的圈子失败", e);
+            throw e;
+        }
+    }
 }

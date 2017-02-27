@@ -1,10 +1,11 @@
 package com.movision.controller.app.mine;
 
 import com.movision.common.util.ShiroUtil;
+import com.movision.facade.circle.CircleAppFacade;
 import com.movision.facade.coupon.CouponFacade;
-import com.movision.facade.order.AppOrderFacade;
+import com.movision.facade.order.OrderAppFacade;
+import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.coupon.entity.Coupon;
-import com.movision.mybatis.orders.entity.Orders;
 import com.movision.test.SpringTestCase;
 import com.movision.utils.pagination.model.Paging;
 import org.junit.Test;
@@ -12,18 +13,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 /**
  * @Author zhuangyuhao
  * @Date 2017/2/27 14:17
  */
 public class MyInfoControllerTest extends SpringTestCase {
     @Autowired
-    private AppOrderFacade orderFacade;
+    private OrderAppFacade orderFacade;
 
     @Autowired
     private CouponFacade couponFacade;
+
+    @Autowired
+    private CircleAppFacade circleAppFacade;
 
 /*
     @Test
@@ -35,6 +37,7 @@ public class MyInfoControllerTest extends SpringTestCase {
     }
 */
 
+/*
     @Test
     public void getMyCouponList() throws Exception {
         Paging<Coupon> paging = new Paging<Coupon>(Integer.valueOf("1"), Integer.valueOf("10"));
@@ -42,5 +45,15 @@ public class MyInfoControllerTest extends SpringTestCase {
         paging.result(couponList);
         System.out.println(paging);
     }
+*/
+
+    @Test
+    public void getMyFollowCircleList() throws Exception {
+        Paging<Circle> paging = new Paging<Circle>(Integer.valueOf("1"), Integer.valueOf("10"));
+        List<Circle> circleList = circleAppFacade.findAllMyFollowCircleList(paging, 1);
+        paging.result(circleList);
+        System.out.println(paging);
+    }
+
 
 }
