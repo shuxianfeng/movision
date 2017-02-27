@@ -9,10 +9,7 @@ import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author shuxf
@@ -41,14 +38,37 @@ public class CouponFacade {
         return map;
     }
 
-    public List<CouponDistributeManageVo> queryCurReceiveCoupon(String isself, String shopid) {
+    public List<CouponDistributeManageVo> queryCurReceiveCoupon(String userid, String isself, String shopid) {
         //查询当前可以领取的优惠券列表
         List<CouponDistributeManageVo> couponDistributeManageVoList = new ArrayList<>();
         Map<String, Object> parammap = new HashMap<>();
 
         if (isself.equals("1")) {//自营
             couponDistributeManageVoList = couponService.queryCurReceiveCoupon();
+            for (int i = 0; i < couponDistributeManageVoList.size(); i++) {
+                //查询用户是否领取过该优惠券
+                Map<String, Object> map = new HashMap<>();
+                map.put("userid", Integer.parseInt(userid));
+                map.put("id", couponDistributeManageVoList.get(i).getId());
+                int num = couponService.checkIsHaveGet(map);
+                couponDistributeManageVoList.get(i).setIsHaveGet(num);
 
+                //检查当前优惠券的状态
+                CouponDistributeManageVo vo = couponDistributeManageVoList.get(i);
+                Date startDate = vo.getStartdate();//优惠券生效时间
+                Date endDate = vo.getEnddate();//优惠券失效时间
+                int restnum = vo.getRestnum();//可领优惠券剩余数量
+                Date now = new Date();
+                if (now.after(startDate) && now.before(endDate) && restnum > 0) {
+                    couponDistributeManageVoList.get(i).setStatus(0);//可领取
+                } else if (now.after(startDate) && now.before(endDate) && restnum <= 0) {
+                    couponDistributeManageVoList.get(i).setStatus(3);//已抢光
+                } else if (now.before(startDate) && restnum > 0) {
+                    couponDistributeManageVoList.get(i).setStatus(1);//未开始
+                } else if (now.after(endDate)) {
+                    couponDistributeManageVoList.get(i).setStatus(2);//已结束
+                }
+            }
         }
 //        else if (isself.equals("0")){//第三方（2.0预留）
 //            parammap.put("shopid", shopid);

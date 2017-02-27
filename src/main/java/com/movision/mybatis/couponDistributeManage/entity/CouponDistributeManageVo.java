@@ -47,6 +47,8 @@ public class CouponDistributeManageVo {
 
     private String shopname;//店铺名称
 
+    private Integer isHaveGet;//用户是否已领取过：0 未领取 1 已领取
+
     public Integer getId() {
         return id;
     }
@@ -205,5 +207,13 @@ public class CouponDistributeManageVo {
 
     public void setShopname(String shopname) {
         this.shopname = shopname;
+    }
+
+    public Integer getIsHaveGet() {
+        return isHaveGet;
+    }
+
+    public void setIsHaveGet(Integer isHaveGet) {
+        this.isHaveGet = isHaveGet;
     }
 }
