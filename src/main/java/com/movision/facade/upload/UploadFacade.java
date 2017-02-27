@@ -54,13 +54,13 @@ public class UploadFacade {
                         saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/img";
                         maxPostSize = apiConstants.getUploadPicMaxPostSize();
                         /**
-                         * 其中data = //image.zhuhui8.com/upload/$chan/img/$filename
+                         * 其中data = http://120.77.214.187:8100/upload/$chan/img/$filename
                          */
-                        data = "//" + imgDomain + "/upload/" + chann + "/img/" + fileName;
+                        data = imgDomain + "/upload/" + chann + "/img/" + fileName;
                     } else {
                         saveDirectory = apiConstants.getUploadDir();
                         maxPostSize = apiConstants.getUploadPicMaxPostSize();
-                        data = "//" + imgDomain + "/upload/" + fileName;
+                        data = imgDomain + "/upload/" + fileName;
                     }
 
                     break;
