@@ -296,6 +296,22 @@ public class CircleService {
     }
 
     /**
+     * 根据所属圈子查询圈主
+     *
+     * @param categoryid
+     * @return
+     */
+    public List<User> queryCircleMan(Integer categoryid) {
+        try {
+            log.info("查询圈子分类圈主");
+            return circleMapper.queryCircleMan(categoryid);
+        } catch (Exception e) {
+            log.error("获取圈子分类圈主异常");
+            throw e;
+        }
+    }
+
+    /**
      * 查询关注数,今日新增关注人数
      *
      * @param categoryid

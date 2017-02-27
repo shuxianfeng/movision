@@ -388,6 +388,11 @@
         yw_circle WHERE category=#{categoryid,jdbcType=INTEGER}))
     </select>
 
+    <select id="queryCircleMan" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.User">
+        SELECT * FROM yw_user u WHERE u.phone IN (
+        SELECT c.phone FROM yw_circle c WHERE c.category =#{categoryid,jdbcType=INTEGER})
+    </select>
+
     <select id="queryFollowAndNewNum" resultType="com.movision.mybatis.circle.entity.CircleFollowNum"
             parameterType="java.lang.Integer">
         SELECT COUNT(1) AS num,

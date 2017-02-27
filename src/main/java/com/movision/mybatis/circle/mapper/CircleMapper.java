@@ -63,6 +63,8 @@ public interface CircleMapper {
 
     List<User> queryCircleUserList(Integer categoryid);
 
+    List<User> queryCircleMan(Integer categoryid);
+
     CircleFollowNum queryFollowAndNewNum(Integer categoryid);
 
     CircleFollowNum queryFollowAndNewNumt(Integer circleid);

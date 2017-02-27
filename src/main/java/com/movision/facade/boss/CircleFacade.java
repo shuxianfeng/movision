@@ -76,11 +76,11 @@ public class CircleFacade {
             CircleIndexList cir = new CircleIndexList();
             //查询，圈子分类，圈主，管理员列表，关注人数，今日关注人数，帖子数量，今日新增帖子，精贴数量，支持人数，创建日期
             List<User> users = circleService.queryCircleUserList(i);//查询管理员列表
-            List<User> circlemaster = users;//圈主
+            List<User> circlemaster = circleService.queryCircleMan(i);//圈主
             CircleFollowNum followNum = circleService.queryFollowAndNewNum(i);//返回关注数,今日新增关注人数
             CirclePostNum postnum = circleService.queryCirclePostNum(i);//返回帖子数量，今日新增帖子，精贴数
             CircleVo supportnum = circleService.queryCircleSupportnum(i);//返回圈子分类创建时间，支持人数
-            cir.setCirclemaster(circlemaster);//圈主列表和管理员相同
+            cir.setCirclemaster(circlemaster);//圈主列表
             cir.setCategory(i);//圈子分类
             cir.setCirclemanagerlist(users);//管理员列表
             if (postnum != null) {
