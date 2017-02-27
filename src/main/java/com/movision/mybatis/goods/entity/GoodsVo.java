@@ -7,17 +7,17 @@ import java.util.Date;
  * @Date 2017/2/13 11:35
  */
 public class GoodsVo {
-    private Integer id;
+    private Integer id;//商品编号
 
-    private String name;
+    private String name;//商品名称
 
     private String subname;
 
-    private Double price;
+    private Double price;//商品折后价
 
-    private Double origprice;
+    private Double origprice;//商品原价
 
-    private Integer attribute;
+    private Integer attribute;//商品标签
 
     private String provincecode;
 
@@ -41,15 +41,15 @@ public class GoodsVo {
 
     private String promotions;
 
-    private Integer protype;
+    private Integer protype;//商品分类
 
     private String brandid;
 
     private String brandsupple;
 
-    private Integer sales;
+    private Integer sales;//总销量
 
-    private Integer stock;
+    private Integer stock;//库存
 
     private Integer goodsposition;
 
@@ -65,7 +65,7 @@ public class GoodsVo {
 
     private Date onlinetime;
 
-    private Integer isdel;
+    private Integer isdel;//商品状态
 
     private Integer ishot;//是否为热门：0 否 1 是
 
