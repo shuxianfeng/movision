@@ -58,13 +58,15 @@ public class CircleController {
      * @param pageSize
      * @return
      */
-    @ApiOperation(value = "查询精贴列表", notes = "查询精贴列表", response = Response.class)
+    @ApiOperation(value = "查询圈子分类精贴列表", notes = "用于查询圈子分类中含有的精贴列表接口", response = Response.class)
     @RequestMapping(value="/Isessence_list",method = RequestMethod.POST)
-    public  Response queryPostIsessenceByList(@RequestParam(required = false,defaultValue = "1") String pageNo,
-                                              @RequestParam(required = false,defaultValue = "10") String pageSize){
+    public Response queryPostIsessenceByList(@ApiParam(value = "圈子分类(查询分类的使用)") @RequestParam(required = false) String categoryid,
+                                             @ApiParam(value = "圈子id(查询单个圈子使用)") @RequestParam(required = false) String circleid,
+                                             @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                             @RequestParam(required = false,defaultValue = "10") String pageSize){
         Response response= new Response();
         Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostList> list = circleFacade.queryPostIsessenceByList(pager);
+        List<PostList> list = circleFacade.queryPostIsessenceByList(circleid, categoryid, pager);
         if(response.getCode()==200){
             response.setMessage("查询成功");
         }

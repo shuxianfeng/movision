@@ -279,11 +279,11 @@ public class PostService {
      * @param pager
      * @return
      */
-    public List<PostList> queryPostIsessenceByList(Paging<PostList> pager){
+    public List<PostList> queryPostIsessenceByList(Map map, Paging<PostList> pager) {
 
         try{
             log.info("查询精贴列表");
-            return postMapper.findAllIsessenceByList(pager.getRowBounds());
+            return postMapper.findAllIsessenceByList(map, pager.getRowBounds());
 
         }catch (Exception e){
             log.error("查询精贴列表异常");
