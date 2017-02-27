@@ -1169,6 +1169,12 @@ public class PostFacade {
     }
 
 
+    /**
+     * 查询商品列表
+     *
+     * @param pager
+     * @return
+     */
     public List<GoodsVo> queryPostByGoodsList(Paging<GoodsVo> pager) {
         List<GoodsVo> goodsVos = goodsService.queryPostByGoodsList(pager);
         return goodsVos;

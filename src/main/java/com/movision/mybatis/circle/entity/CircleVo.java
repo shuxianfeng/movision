@@ -23,7 +23,9 @@ public class CircleVo {
 
     private Integer category;//圈子分类
 
-    private String categoryname;
+    private String categoryname;//圈主名称
+
+    private String categorylevel;//判断V
 
     private Integer code;
 
@@ -295,6 +297,14 @@ public class CircleVo {
 
     public void setCategoryname(String categoryname) {
         this.categoryname = categoryname;
+    }
+
+    public String getCategorylevel() {
+        return categorylevel;
+    }
+
+    public void setCategorylevel(String categorylevel) {
+        this.categorylevel = categorylevel;
     }
 
     public User getCirclemaster() {

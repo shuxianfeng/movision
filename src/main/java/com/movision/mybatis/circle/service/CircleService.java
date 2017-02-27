@@ -191,7 +191,7 @@ public class CircleService {
      * @param phone
      * @return
      */
-    public String queryCircleBycirclemaster(String phone) {
+    public User queryCircleBycirclemaster(String phone) {
         try {
             log.info("根据圈子id查询圈主");
             return circleMapper.queryCircleBycirclemaster(phone);

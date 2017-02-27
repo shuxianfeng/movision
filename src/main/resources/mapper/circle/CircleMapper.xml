@@ -351,8 +351,9 @@
         SELECT * FROM yw_circle WHERE category=#{category,jdbcType=INTEGER}
     </select>
 
-    <select id="queryCircleBycirclemaster" resultType="java.lang.String" parameterType="java.lang.String">
-        SELECT u.nickname FROM yw_user u WHERE u.phone=#{phone,jdbcType=VARCHAR}
+    <select id="queryCircleBycirclemaster" resultType="com.movision.mybatis.user.entity.User"
+            parameterType="java.lang.String">
+        SELECT u.level,u.nickname FROM yw_user u WHERE u.phone=#{phone,jdbcType=VARCHAR}
     </select>
 
     <select id="querycirclemanagerlist" resultType="java.util.List" parameterType="java.lang.Integer">

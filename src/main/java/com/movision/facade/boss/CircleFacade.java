@@ -100,7 +100,7 @@ public class CircleFacade {
             for (int e = 0; e < listt.size(); e++) {
                 CircleVo vo = new CircleVo();
                 Integer circleid = listt.get(e).getId();
-                String circlemasterlist = circleService.queryCircleBycirclemaster(listt.get(e).getPhone());//查询圈主
+                User circlemasterlist = circleService.queryCircleBycirclemaster(listt.get(e).getPhone());//查询圈主
                 List<User> userslist = userService.queryCircleManagerList(circleid);//查询出圈子管理员列表
                 for (int j = 0; j < userslist.size(); j++) {
                     if (userslist.get(j).getNickname() == null) {
@@ -121,7 +121,8 @@ public class CircleFacade {
                 vo.setId(listt.get(e).getId());//圈子id
                 vo.setName(listt.get(e).getName());//圈子名称
                 vo.setCategory(listt.get(e).getCategory());//圈子分类
-                vo.setCategoryname(circlemasterlist);//圈主
+                vo.setCategoryname(circlemasterlist.getNickname());//圈主
+                vo.setCategorylevel(circlemasterlist.getLevel().toString());//判断是否为大V
                 vo.setCirclemanagerlist(userslist);//圈子管理员列表
                 vo.setSupportnum(listt.get(e).getSupportnum());//支持数
                 vo.setStatus(listt.get(e).getStatus());//圈子状态：0 待审核 1 审核通过 2 审核不通过

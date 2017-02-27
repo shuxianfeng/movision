@@ -47,7 +47,7 @@ public interface CircleMapper {
 
     List<CircleVo> findAllqueryCircleByList(Integer category);
 
-    String queryCircleBycirclemaster(String phone);
+    User queryCircleBycirclemaster(String phone);
 
     List<Integer> querycirclemanagerlist(Integer circleid);
 
