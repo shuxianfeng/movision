@@ -63,14 +63,21 @@ public class CouponFacade {
         //首先校验领取的这个优惠券的领取权限
         int sum = couponService.checkCoupon(Integer.parseInt(id));
 
-        if (sum == 1) {
-            flag = 1;
-            //向用户优惠券表中插入一条优惠券数据，扣减可领优惠券的总张数和总金额，并记录用户的领取记录
-            Map<String, Object> parammap = new HashMap<>();
-            parammap.put("userid", Integer.parseInt(userid));
-            parammap.put("id", Integer.parseInt(id));
-            couponService.getCoupon(parammap);
-        } else if (sum == 0) {
+        //检查该用户有没领取过该优惠券
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("userid", Integer.parseInt(userid));
+        parammap.put("id", Integer.parseInt(id));
+        int num = couponService.checkIsHaveGet(parammap);
+
+        if (sum == 1) {//有可领优惠券
+            if (num == 0) {//未领取过
+                flag = 1;
+                //向用户优惠券表中插入一条优惠券数据，扣减可领优惠券的总张数和总金额，并记录用户的领取记录
+                couponService.getCoupon(parammap);
+            } else if (num == 0) {//已领取过
+                flag = -1;
+            }
+        } else if (sum == 0) {//无可领优惠券
             flag = 0;
         }
         return flag;

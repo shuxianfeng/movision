@@ -51,6 +51,9 @@ public class AppCouponController {
         if (flag == 1) {
             response.setCode(200);
             response.setMessage("领取成功");
+        } else if (flag == -1) {
+            response.setCode(201);
+            response.setMessage("已领取过该优惠券");
         } else if (flag == 0) {
             response.setCode(300);
             response.setMessage("该优惠券不可领取（已结束已抢光或未开始）");

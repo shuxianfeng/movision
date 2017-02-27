@@ -15,6 +15,8 @@ public interface CouponDistributeManageMapper {
 
     CouponDistributeManage selectByPrimaryKey(Integer id);
 
+    int checkIsHaveGet(Map<String, Object> parammap);
+
     void insertGetRecord(Map<String, Object> parammap);
 
     List<CouponDistributeManageVo> queryCurReceiveCoupon();

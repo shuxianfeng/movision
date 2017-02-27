@@ -53,6 +53,12 @@
         AND enddate > NOW()
     </select>
 
+    <!--检查该用户有没有领取过该优惠券-->
+    <select id="checkIsHaveGet" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_coupon_receive_record WHERE userid = #{userid,jdbcType=INTEGER} AND distributeid =
+        #{id,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_coupon_distribute_manage
     where id = #{id,jdbcType=INTEGER}

@@ -82,6 +82,16 @@ public class CouponService {
         }
     }
 
+    public int checkIsHaveGet(Map<String, Object> parammap) {
+        try {
+            log.info("检查该用户是不是已经领取过该优惠券");
+            return couponDistributeManageMapper.checkIsHaveGet(parammap);
+        } catch (Exception e) {
+            log.info("检查该用户是不是已经领取过该优惠券失败");
+            throw e;
+        }
+    }
+
     @Transactional
     public void getCoupon(Map<String, Object> parammap) throws Exception {
         try {
