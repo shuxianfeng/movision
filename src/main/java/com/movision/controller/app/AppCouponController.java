@@ -25,13 +25,14 @@ public class AppCouponController {
     @Autowired
     private CouponFacade couponFacade;
 
-    @ApiOperation(value = "查询当前可领优惠券列表", notes = "用户在商品详情页点击可领优惠券返回所有可领取的优惠券列表", response = Response.class)
+    @ApiOperation(value = "查询当前可领优惠券列表", notes = "用户在商品详情页点击可领优惠券返回所有可领取的优惠券列表(isHaveGet 0 可领取 1 已领取  status 优惠券状态：0 可领取 1 未开始 2 已结束 3 已抢光)", response = Response.class)
     @RequestMapping(value = "curReceiveCouponList", method = RequestMethod.POST)
-    public Response queryCurReceiveCoupon(@ApiParam(value = "是否为三元自营：1是(自营) 0否(三方)") @RequestParam String isself,
+    public Response queryCurReceiveCoupon(@ApiParam(value = "用户id") @RequestParam String userid,
+                                          @ApiParam(value = "是否为三元自营：1是(自营) 0否(三方)") @RequestParam String isself,
                                           @ApiParam(value = "店铺id（isself为0 三方店铺时不为空）") @RequestParam(required = false) String shopid) {
         Response response = new Response();
 
-        List<CouponDistributeManageVo> couponDistributeManageList = couponFacade.queryCurReceiveCoupon(isself, shopid);
+        List<CouponDistributeManageVo> couponDistributeManageList = couponFacade.queryCurReceiveCoupon(userid, isself, shopid);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");

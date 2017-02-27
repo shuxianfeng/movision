@@ -143,30 +143,52 @@ public class CircleFacade {
      * @param pager
      * @return
      */
-    public List<PostList> queryPostIsessenceByList(Paging<PostList> pager){
-        List<PostList> list=postService.queryPostIsessenceByList(pager);
+    public List<PostList> queryPostIsessenceByList(String cirid, String categoryid, Paging<PostList> pager) {
+        Map map = new HashedMap();
+        map.put("circleid", cirid);
+        map.put("categoryid", categoryid);
+        List<PostList> list = postService.queryPostIsessenceByList(map, pager);
         List<PostList> rewardeds = new ArrayList<>();
-        for (int i =0;i<list.size();i++){
+        for (int i = 0; i < list.size(); i++) {
             PostList postList = new PostList();
-            Integer id= list.get(i).getId();
-            Integer circleid=list.get(i).getCircleid();
-            String nickname=userService.queryUserByNickname(circleid);
+            Integer id = list.get(i).getId();
+            Integer circleid = list.get(i).getCircleid();//获取到圈子id
+            String nickname = userService.queryUserByNickname(list.get(i).getUserid());//获取发帖人
             Integer share = sharesService.querysum(id);//获取分享数
             Integer rewarded = rewardedService.queryRewardedBySum(id);//获取打赏积分
-            Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举 报次数
+            Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举报次数
+            Circle circlename = circleService.queryCircleByName(circleid);//获取圈子名称
             postList.setId(list.get(i).getId());
             postList.setTitle(list.get(i).getTitle());
             postList.setNickname(nickname);
             postList.setCollectsum(list.get(i).getCollectsum());
-            postList.setShare(share);
+            if (share != null) {
+                postList.setShare(share);
+            } else {
+                postList.setShare(0);
+            }
             postList.setCommentsum(list.get(i).getCommentsum());
-            postList.setZansum(list.get(i).getZansum());
-            postList.setRewarded(rewarded);
-            postList.setAccusation(accusation);
+            postList.setZansum(list.get(i).getZansum());//点赞
+            if (rewarded != null) {
+                postList.setRewarded(rewarded);//打赏积分
+            } else {
+                postList.setRewarded(0);
+            }
+            if (accusation != null) {
+                postList.setAccusation(accusation);//举报
+            } else {
+                postList.setAccusation(0);
+            }
+            postList.setIntime(list.get(i).getIntime());//帖子发布时间
+            postList.setTotalpoint(list.get(i).getTotalpoint());//帖子综合评分
             postList.setIsessence(list.get(i).getIsessence());
-            postList.setEssencedate(list.get(i).getEssencedate());
+            postList.setCirclename(circlename.getName());//帖子所属圈子
+            postList.setOrderid(list.get(i).getOrderid());//获取排序
+            postList.setEssencedate(list.get(i).getEssencedate());//获取精选日期
             rewardeds.add(postList);
         }
+
+
         return rewardeds;
     }
 

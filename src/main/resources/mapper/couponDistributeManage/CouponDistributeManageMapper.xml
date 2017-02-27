@@ -37,7 +37,7 @@
     <!--查询当前可领取的优惠券列表-->
     <select id="queryCurReceiveCoupon"
             resultType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo">
-    SELECT id, title, content, startdate, enddate, amount, fullamount, scope, channel, type
+        SELECT id, title, content, startdate, enddate, amount, fullamount, scope, channel, type, restnum
     FROM yw_coupon_distribute_manage
     WHERE channel = '0'
       AND isdel = '0'

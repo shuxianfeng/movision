@@ -938,8 +938,16 @@
     </select>
 
     <!--查询精贴列表-->
-    <select id="findAllIsessenceByList" resultType="com.movision.mybatis.post.entity.PostList">
-        SELECT * FROM yw_post WHERE isdel=0 AND isessence=1 ORDER  BY  intime DESC
+    <select id="findAllIsessenceByList" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.post.entity.PostList">
+        SELECT * FROM yw_post WHERE 1
+        <if test="circleid!=null">
+            AND circleid =#{circleid,jdbcType=INTEGER}
+        </if>
+        <if test="categoryid!=null">
+            AND circleid IN (SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER})
+        </if>
+        AND isessence=1 AND isdel=0 ORDER BY intime DESC
      </select>
 
     <select id="queryPostNum" resultType="java.lang.Integer">
