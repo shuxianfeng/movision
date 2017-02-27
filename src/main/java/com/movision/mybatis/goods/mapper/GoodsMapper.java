@@ -69,4 +69,6 @@ public interface GoodsMapper {
     List<Goods> findAllMyCollectGoodsList(RowBounds rowBounds, Map<String, Object> map);//查询我收藏的商品列表
 
     List<GoodsVo> findAllQueryLikeGoods(Map map, RowBounds rowBounds);//查询商品列表，联合搜索（帖子使用）
+
+    List<GoodsVo> findAllCombo(RowBounds rowBounds);//查询套餐列表
 }

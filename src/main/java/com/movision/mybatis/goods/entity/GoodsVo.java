@@ -17,6 +17,16 @@ public class GoodsVo {
 
     private Double origprice;//商品原价
 
+    private Double comprice;//套餐原价
+
+    public Double getComprice() {
+        return comprice;
+    }
+
+    public void setComprice(Double comprice) {
+        this.comprice = comprice;
+    }
+
     private Integer attribute;//商品标签
 
     private String provincecode;

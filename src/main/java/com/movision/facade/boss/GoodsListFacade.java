@@ -97,7 +97,7 @@ public class GoodsListFacade {
      * @return
      */
     public List<GoodsVo> queryGoodsCondition(String name, String producttags, String brand, String protype, String isdel, String allstatue, String minorigprice, String maxorigprice,
-                                             String minprice, String maxprice, String minstock, String maxstock, String minsales, String maxsales, String mincollect, String maxcollect, Paging<GoodsVo> pager) {
+                                             String minprice, String maxprice, String minstock, String pai, String maxstock, String minsales, String maxsales, String mincollect, String maxcollect, Paging<GoodsVo> pager) {
 
         Map<String, Object> map = new HashedMap();
         if (name != null) {
@@ -148,6 +148,9 @@ public class GoodsListFacade {
         if (maxcollect != null) {
             map.put("maxcollect", maxcollect);
         }
+        if (pai != null) {
+            map.put("pai", pai);
+        }
         return goodsService.queryGoodsCondition(map, pager);
     }
 
@@ -176,4 +179,6 @@ public class GoodsListFacade {
         map.put("result", result);
         return map;
     }
+
+
 }

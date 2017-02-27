@@ -648,7 +648,7 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         LEFT JOIN yw_goods s ON s.id=f.goodsid LEFT JOIN yw_orders o ON o.id=f.orderid LEFT JOIN yw_user u ON
         u.id=f.userid LEFT JOIN yw_order_sub_logistics l ON l.logisticsid=o.logisticsid
         LEFT JOIN yw_goods_img g ON g.goodsid=f.goodsid
-        WHERE f.id=1 AND g.type=2
+        WHERE f.id=1 AND g.type=2 AND f.id=#{id,jdbcType=INTEGER}
     </select>
 
     <select id="findAllOrderByConditionAfterService" parameterType="java.util.Map"

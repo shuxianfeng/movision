@@ -19,6 +19,7 @@ import com.movision.mybatis.goodsAssessment.mapper.GoodsAssessmentMapper;
 import com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg;
 import com.movision.mybatis.role.entity.Role;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -481,6 +482,22 @@ public class GoodsService {
             return goodsMapper.findAllQueryLikeGoods(map, pager.getRowBounds());
         } catch (Exception e) {
             log.error("根据条件查询商品列表异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询套餐列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<GoodsVo> findAllCombo(Paging<GoodsVo> pager) {
+        try {
+            log.info("查询套餐列表");
+            return goodsMapper.findAllCombo(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询套餐列表失败", e);
             throw e;
         }
     }
