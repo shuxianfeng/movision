@@ -5,10 +5,12 @@ import com.movision.mybatis.coupon.mapper.CouponMapper;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
 import com.movision.mybatis.couponDistributeManage.mapper.CouponDistributeManageMapper;
+import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,7 @@ import java.util.Map;
  * @Date 2017/2/18 11:11
  */
 @Service
+@Transactional
 public class CouponService {
 
     @Autowired
@@ -64,6 +67,16 @@ public class CouponService {
             return couponDistributeManageMapper.queryCurReceiveCoupon();
         } catch (Exception e) {
             log.error("查询当前可领取的优惠券列表失败");
+            throw e;
+        }
+    }
+
+    public List<Coupon> findAllMyCouponList(Paging<Coupon> paging, Map map) {
+        try {
+            log.info("查询我的优惠券列表");
+            return couponMapper.findAllMyCouponList(paging.getRowBounds(), map);
+        } catch (Exception e) {
+            log.error("查询我的优惠券列表失败", e);
             throw e;
         }
     }

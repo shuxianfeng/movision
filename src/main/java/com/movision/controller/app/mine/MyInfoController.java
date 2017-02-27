@@ -4,7 +4,9 @@ import com.movision.common.Response;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.Goods.GoodsFacade;
 import com.movision.facade.boss.PostFacade;
+import com.movision.facade.coupon.CouponFacade;
 import com.movision.facade.order.AppOrderFacade;
+import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.post.entity.Post;
@@ -34,6 +36,9 @@ public class MyInfoController {
 
     @Autowired
     private AppOrderFacade orderFacade;
+
+    @Autowired
+    private CouponFacade couponFacade;
 
 
     @ApiOperation(value = "查询我的达人页信息:收藏商品", notes = "查询我的达人页信息:收藏商品", response = Response.class)
@@ -90,10 +95,12 @@ public class MyInfoController {
     public Response getMyCouponList(@RequestParam(required = false, defaultValue = "1") String pageNo,
                                     @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
         Response response = new Response();
-        Paging<Orders> paging = new Paging<Orders>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-
+        Paging<Coupon> paging = new Paging<Coupon>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Coupon> couponList = couponFacade.findAllMyCouponList(paging, ShiroUtil.getAppUserID());
+        paging.result(couponList);
         response.setData(paging);
         return response;
     }
+
 
 }

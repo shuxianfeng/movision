@@ -4,6 +4,8 @@ import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.coupon.service.CouponService;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
+import com.movision.utils.pagination.model.Paging;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,4 +56,12 @@ public class CouponFacade {
 //        }
         return couponDistributeManageVoList;
     }
+
+    public List<Coupon> findAllMyCouponList(Paging<Coupon> paging, int userid) {
+        Map map = new HashedMap();
+        map.put("userid", userid);
+        return couponService.findAllMyCouponList(paging, map);
+    }
+
+
 }

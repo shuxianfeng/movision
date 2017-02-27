@@ -226,4 +226,13 @@
       isdel = #{isdel,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <select id="findAllMyCouponList" resultType="com.movision.mybatis.coupon.entity.Coupon">
+        SELECT *
+        FROM yw_coupon
+        where isdel = 0
+        <if test="userid!=null and userid!=''">
+            and userid = #{userid}
+        </if>
+    </select>
 </mapper>
