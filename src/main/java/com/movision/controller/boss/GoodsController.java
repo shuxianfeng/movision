@@ -250,5 +250,22 @@ public class GoodsController {
         return response;
     }
 
+    /**
+     * 取消今日推荐
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "取消今日推荐", notes = "取消今日推荐", response = Response.class)
+    @RequestMapping(value = "update_com", method = RequestMethod.POST)
+    public Response updateCom(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        int result = goodsFacade.updateCom(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(result);
+        return response;
+    }
 
 }

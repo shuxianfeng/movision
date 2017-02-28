@@ -543,9 +543,9 @@
         isessence = #{isessence,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-    <update id="deleteGoods" parameterType="java.lang.Integer">
-    UPDATE yw_goods SET isdel=1 WHERE id=#{id,jdbcType=INTEGER}
-</update>
+    <delete id="deleteGoods" parameterType="java.lang.Integer">
+    DELETE FROM  yw_goods  WHERE  id=#{id,jdbcType=INTEGER}
+</delete>
     <select id="findAllGoodsList" resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT
         s.id,s.name,s.protype,d.brandname,s.origprice,s.price,s.stock,s.sales,s.ishomepage,s.recommenddate,s.isdel,s.ishot,s.isessence,COUNT(c.goodsid)
@@ -743,5 +743,8 @@
             </if>
         </set>
         WHERE goodsid=(SELECT id FROM yw_goods WHERE id=#{id,jdbcType=INTEGER} )
+    </update>
+    <update id="updateCom" parameterType="java.lang.Integer">
+         update yw_goods SET ishomepage =0,recommenddate=NULL WHERE  id=#{id,jdbcType=INTEGER}
     </update>
 </mapper>

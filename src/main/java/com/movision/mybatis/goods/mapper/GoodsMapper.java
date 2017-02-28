@@ -52,7 +52,7 @@ public interface GoodsMapper {
 
     List<GoodsVo> findAllGoodsList(RowBounds rowBounds);//查询商品列表
 
-    int deleteGoods(Integer id);//删除商品（下架）
+    int deleteGoods(Integer id);//删除商品
 
     int AddToGoods(Integer id);//上架
 
@@ -81,5 +81,7 @@ public interface GoodsMapper {
     int updateGoods(GoodsVo goodsVo);//修改商品
 
     int updateImage(GoodsImg goodsImg);//修改图片
+
+    int updateCom(Integer id);//取消推荐
 
 }

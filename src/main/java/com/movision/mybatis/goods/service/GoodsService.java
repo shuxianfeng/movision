@@ -589,4 +589,20 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 取消今日推荐
+     *
+     * @param
+     * @return
+     */
+    public int updateCom(Integer id) {
+        try {
+            log.info("取消今日推荐");
+            return goodsMapper.updateCom(id);
+        } catch (Exception e) {
+            log.error("取消今日推荐", e);
+            throw e;
+        }
+    }
 }

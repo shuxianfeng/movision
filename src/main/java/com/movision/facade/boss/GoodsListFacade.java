@@ -301,4 +301,14 @@ public class GoodsListFacade {
         return map;
     }
 
+    /**
+     * 取消今日推荐
+     *
+     * @param id
+     * @return
+     */
+    public int updateCom(Integer id) {
+        return goodsService.updateCom(id);
+    }
+
 }
