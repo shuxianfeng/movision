@@ -576,19 +576,19 @@
         <if test="isdel!=null and isdel!=''">
             AND s.isdel=#{isdel,jdbcType=INTEGER}
         </if>
-        <if test="price!=null and price!=''">
+        <if test="allstatue==2 and price!=null and price!=''">
             AND s.price BETWEEN #{minprice,jdbcType=DOUBLE} AND #{maxprice,jdbcType=DOUBLE}
         </if>
-        <if test="origprice!=null and origprice!=''">
+        <if test="allstatue==1 and origprice!=null and origprice!=''">
             AND s.origprice BETWEEN #{minorigprice,jdbcType=DOUBLE} AND #{maxorigprice,jdbcType=DOUBLE}
         </if>
-        <if test="stock!=null and stock!=''">
+        <if test="allstatue==3 and stock!=null and stock!=''">
             AND s.stock BETWEEN #{minstock,jdbcType=INTEGER} AND #{maxstock,jdbcType=INTEGER}
         </if>
-        <if test="sales!=null and sales!=''">
+        <if test="allstatue==4 and sales!=null and sales!=''">
             AND s.sales BETWEEN #{minsales,jdbcType=INTEGER} AND #{maxsales,jdbcType=INTEGER}
         </if>
-        <if test="collect!=null and collect!=''">
+        <if test="allstatue==5 and collect!=null and collect!=''">
             AND s.collect BETWEEN #{mincollect,jdbcType=INTEGER} AND #{maxcollect,jdbcType=INTEGER}
         </if>
         <if test="onlinetime!=null and onlinetime!=''">
