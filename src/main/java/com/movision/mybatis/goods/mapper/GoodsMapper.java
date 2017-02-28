@@ -99,4 +99,6 @@ public interface GoodsMapper {
 
     List<GoodsImg> queryCommodityDescription(Integer id);//商品描述图
 
+    List<GoodsImg> queryblueprint(Integer id);//晒图
+
 }

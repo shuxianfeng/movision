@@ -403,4 +403,22 @@ public class GoodsController {
         response.setData(goodsImg);
         return response;
     }
+
+    /**
+     * 晒图
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "晒图", notes = "晒图", response = Response.class)
+    @RequestMapping(value = "query_blueprint_img", method = RequestMethod.POST)
+    public Response queryblueprint(@ApiParam(value = "评价id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        List<GoodsImg> goodsImg = goodsFacade.queryblueprint(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(goodsImg);
+        return response;
+    }
 }

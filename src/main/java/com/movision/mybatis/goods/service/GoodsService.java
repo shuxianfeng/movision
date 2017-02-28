@@ -720,4 +720,20 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 晒图
+     *
+     * @param id
+     * @return
+     */
+    public List<GoodsImg> queryblueprint(Integer id) {
+        try {
+            log.info("晒图");
+            return goodsMapper.queryblueprint(id);
+        } catch (Exception e) {
+            log.error("晒图失败", e);
+            throw e;
+        }
+    }
 }

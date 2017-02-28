@@ -410,4 +410,14 @@ public class GoodsListFacade {
     public List<GoodsImg> queryCommodityDescription(Integer id) {
         return goodsService.queryCommodityDescription(id);
     }
+
+    /**
+     * 晒图
+     *
+     * @param id
+     * @return
+     */
+    public List<GoodsImg> queryblueprint(Integer id) {
+        return goodsService.queryblueprint(id);
+    }
 }
