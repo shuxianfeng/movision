@@ -896,6 +896,113 @@ public class PostFacade {
     }
 
     /**
+     * 编辑活动帖子
+     *
+     * @param request
+     * @param id
+     * @param title
+     * @param subtitle
+     * @param activetype
+     * @param activefee
+     * @param userid
+     * @param coverimg
+     * @param begintime
+     * @param endtime
+     * @param isessence
+     * @param orderid
+     * @param postcontent
+     * @param essencedate
+     * @return
+     */
+    public Map<String, Integer> updateActivePostById(HttpServletRequest request, String id, String title, String subtitle, String activetype, String activefee, String userid, MultipartFile coverimg,
+                                                     String begintime, String endtime, String isessence, String orderid, String postcontent, String essencedate) {
+        PostActiveList postActiveList = new PostActiveList();
+        Map<String, Integer> map = new HashedMap();
+        try {
+            postActiveList.setId(Integer.parseInt(id));//帖子id
+            postActiveList.setTitle(title);//帖子标题
+            postActiveList.setSubtitle(subtitle);//帖子副标题
+            if (activetype != null) {
+                postActiveList.setActivetype(Integer.parseInt(activetype));
+            }
+            //上传图片到本地服务器
+            String savedFileName = "";
+            String imgurl = "";
+            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+            if (coverimg != null && isMultipart) {
+                if (!coverimg.isEmpty()) {
+                    String fileRealName = coverimg.getOriginalFilename();
+                    int pointIndex = fileRealName.indexOf(".");
+                    String fileSuffix = fileRealName.substring(pointIndex);
+                    UUID FileId = UUID.randomUUID();
+                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
+                    String savedDir = request.getSession().getServletContext().getRealPath("");
+                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
+                    //不保存到项目中,防止部包把图片覆盖掉了
+                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    //这里组合出真实的图片存储路径
+                    String combinpath = path + "/images/post/coverimg/";
+                    File savedFile = new File(combinpath, savedFileName);
+                    boolean isCreateSuccess = savedFile.createNewFile();
+                    if (isCreateSuccess) {
+                        coverimg.transferTo(savedFile);  //转存文件
+                    }
+                }
+                imgurl = imgdomain + savedFileName;
+            }
+            postActiveList.setCoverimg(imgurl);//帖子封面
+            if (activefee != null) {
+                postActiveList.setActivefee(Double.parseDouble(activefee));//费用
+            }
+            postActiveList.setUserid(Integer.parseInt(userid));
+            postActiveList.setPostcontent(postcontent);
+            if (isessence != null) {
+                postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+            }
+            if (orderid != null) {
+                postActiveList.setOrderid(Integer.parseInt(orderid));
+            }
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date estime = null;
+            if (essencedate != null) {
+                try {
+                    estime = format.parse(essencedate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                postActiveList.setEssencedate(estime);
+            }
+            int result = postService.updateActivePostById(postActiveList);//编辑帖子
+            Period period = new Period();
+            Date bstime = null;
+            if (begintime != null) {
+                try {
+                    bstime = format.parse(begintime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                period.setBegintime(bstime);
+            }
+            Date enstime = null;
+            if (endtime != null) {
+                try {
+                    enstime = format.parse(endtime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                period.setEndtime(enstime);
+            }
+            int res = postService.updateActivePostPerById(period);
+            map.put("result", result);
+            map.put("res", res);
+        } catch (Exception e) {
+            log.error("帖子添加异常", e);
+        }
+
+        return map;
+    }
+    /**
      * 编辑帖子
      *
      * @param request

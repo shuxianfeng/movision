@@ -135,4 +135,8 @@ public interface PostMapper {
     List<Post> findAllMyCollectPost(RowBounds rowBounds, Map map);
 
     List<Post> queryMyPostList(Map map);
+
+    Integer updateActiveById(PostActiveList postActiveList);//编辑活动帖子
+
+    Integer updateActiveByIdP(Period period);//编辑活动帖子
 }

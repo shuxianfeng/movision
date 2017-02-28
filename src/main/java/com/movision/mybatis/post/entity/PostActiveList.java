@@ -11,6 +11,15 @@ public class PostActiveList {
     private Integer commentsum;
     private Integer forwardsum;
     private Integer collectsum;
+    private String postcontent;
+
+    public String getPostcontent() {
+        return postcontent;
+    }
+
+    public void setPostcontent(String postcontent) {
+        this.postcontent = postcontent;
+    }
 
     public Integer getZansum() {
         return zansum;
@@ -226,6 +235,16 @@ public class PostActiveList {
         return begintime;
     }
 
+    private String coverimg;
+
+    public String getCoverimg() {
+        return coverimg;
+    }
+
+    public void setCoverimg(String coverimg) {
+        this.coverimg = coverimg;
+    }
+
     public void setBegintime(Date begintime) {
         this.begintime = begintime;
     }
@@ -249,6 +268,15 @@ public class PostActiveList {
     }
 
     private Integer isessence;
+    private String subtitle;
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
 
     public Integer getIsessence() {
         return isessence;

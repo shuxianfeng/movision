@@ -574,7 +574,25 @@ public class PostService {
         return postMapper.updateByPrimaryKeySelectiveById(post);
     }
 
+    /**
+     * 编辑活动帖子
+     *
+     * @param postActiveList
+     * @return
+     */
+    public Integer updateActivePostById(PostActiveList postActiveList) {
+        return postMapper.updateActiveById(postActiveList);
+    }
 
+    /**
+     * 编辑活动帖子
+     *
+     * @param period
+     * @return
+     */
+    public Integer updateActivePostPerById(Period period) {
+        return postMapper.updateActiveByIdP(period);
+    }
 
     /**
      * 帖子按条件查询

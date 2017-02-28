@@ -580,6 +580,50 @@ public class PostController {
         return response;
     }
 
+    /**
+     * 编辑活动
+     *
+     * @param request
+     * @param id
+     * @param title
+     * @param subtitle
+     * @param userid
+     * @param coverimg
+     * @param postcontent
+     * @param isessence
+     * @param orderid
+     * @param activefee
+     * @param activetype
+     * @param begintime
+     * @param endtime
+     * @param essencedate
+     * @return
+     */
+    @ApiOperation(value = "编辑活动", notes = "编辑活动", response = Response.class)
+    @RequestMapping(value = "update_activepost", method = RequestMethod.POST)
+    public Response updateActivePostById(HttpServletRequest request,
+                                         @ApiParam(value = "帖子id（必填）") @RequestParam String id,
+                                         @ApiParam(value = "帖子标题") @RequestParam(required = false) String title,
+                                         @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,
+                                         @ApiParam(value = "发帖人（必填且必须是管理员-1）") @RequestParam String userid,
+                                         @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam(required = false, value = "coverimg") MultipartFile coverimg,
+                                         @ApiParam(value = "帖子内容（必填）") @RequestParam String postcontent,
+                                         @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,
+                                         @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,
+                                         @ApiParam(value = "费用") @RequestParam(required = false) String activefee,
+                                         @ApiParam(value = "活动类型") @RequestParam(required = false) String activetype,
+                                         @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
+                                         @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,
+                                         @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String essencedate) {
+        Response response = new Response();
+        Map<String, Integer> map = postFacade.updateActivePostById(request, id, title, subtitle, userid, activefee, postcontent, coverimg, isessence, orderid, activetype, begintime, endtime, essencedate);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
 
     /**
      * 帖子模糊查询

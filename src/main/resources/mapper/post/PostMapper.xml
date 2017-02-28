@@ -840,7 +840,54 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-
+    <update id="updateActiveById" parameterType="com.movision.mybatis.post.entity.PostActiveList">
+        update yw_post
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="subtitle != null">
+                subtitle = #{subtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="postcontent != null">
+                postcontent = #{postcontent,jdbcType=VARCHAR},
+            </if>
+            <if test="activetype != null">
+                activetype = #{activetype,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                orderid=#{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="isessence != null">
+                isessence = #{isessence,jdbcType=INTEGER},
+            </if>
+            <if test="coverimg != null">
+                coverimg = #{coverimg,jdbcType=VARCHAR},
+            </if>
+            <if test="essencedate != null">
+                essencedate = #{essencedate,jdbcType=DATE},
+            </if>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="activefee != null">
+                activefee = #{activefee,jdbcType=DOUBLE},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateActiveByIdP" parameterType="com.movision.mybatis.period.entity.Period">
+        UPDATE yw_active_period
+        <set>
+            <if test="begintime != null">
+                begintime = #{begintime,jdbcType=DATE},
+            </if>
+            <if test="endtime != null">
+                endtime = #{endtime,jdbcType=DATE},
+            </if>
+        </set>
+        WHERE postid=#{id,jdbcType=INTEGER}
+    </update>
     <update id="updateByPrimaryKeySelectiveById" parameterType="com.movision.mybatis.post.entity.PostTo">
         update yw_post
         <set>
