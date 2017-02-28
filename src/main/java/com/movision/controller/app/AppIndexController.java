@@ -2,8 +2,6 @@ package com.movision.controller.app;
 
 import com.movision.common.Response;
 import com.movision.facade.index.FacadeIndex;
-import com.movision.facade.index.FacadeSuggestion;
-import com.movision.mybatis.submission.entity.Submission;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +23,7 @@ public class AppIndexController {
 
     @Autowired
     private FacadeIndex facadeIndex;
-    @Autowired
-    private FacadeSuggestion facadeSuggestion;
+
 
     @ApiOperation(value = "首页数据返回接口", notes = "用户返回首页整版数据", response = Response.class)
     @RequestMapping(value = "index", method = RequestMethod.POST)
@@ -42,7 +39,7 @@ public class AppIndexController {
         return response;
     }
 
-    @ApiOperation(value = "意见反馈接口", notes = "用户对平台的意见建议", response = Response.class)
+    /*@ApiOperation(value = "意见反馈接口", notes = "用户对平台的意见建议", response = Response.class)
     @RequestMapping(value = "suggestion", method = RequestMethod.POST)
     public Response insertSuggestion(@ApiParam(value = "用户id") @RequestParam String userid,
                                      @ApiParam(value = "选填手机号，qq号等") @RequestParam(required = false) String phone,
@@ -53,6 +50,6 @@ public class AppIndexController {
             response.setMessage("操作成功");
         }
         return response;
-    }
+    }*/
 
 }

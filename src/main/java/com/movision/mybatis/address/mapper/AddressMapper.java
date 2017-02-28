@@ -1,6 +1,7 @@
 package com.movision.mybatis.address.mapper;
 
 import com.movision.mybatis.address.entity.Address;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -21,4 +22,6 @@ public interface AddressMapper {
     int updateByPrimaryKey(Address record);
 
     List<Map<String, Object>> queryMyAddressList(Map map);
+
+    Map<String, Object> queryAddressDetail(@Param("id") Integer id);
 }

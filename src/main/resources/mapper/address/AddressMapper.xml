@@ -175,5 +175,19 @@
         ORDER BY isdefault desc, updatetime DESC
     </select>
 
+    <select id="queryAddressDetail" resultType="java.util.HashMap" parameterType="int">
+        SELECT a.id, a.name, a.userid, a.phone, a.street, a.isdefault,
+        a.province, p.name as provincename,
+        a.city, c.name as cityname,
+        a.district, area.name as districtname
+        FROM yw_address a
+        LEFT JOIN yw_province p ON a.province=p.code
+        LEFT JOIN yw_city c ON a.city=c.code
+        LEFT JOIN yw_area area ON a.district=area.code
+        <if test="id!=null and id!=''">
+            WHERE a.id = #{id}
+        </if>
+    </select>
+
 
 </mapper>

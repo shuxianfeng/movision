@@ -42,9 +42,7 @@
             <if test="content != null">
                 content,
             </if>
-            <if test="intime != null">
                 intime,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -59,9 +57,7 @@
             <if test="content != null">
                 #{content,jdbcType=VARCHAR},
             </if>
-            <if test="intime != null">
-                #{intime,jdbcType=TIMESTAMP},
-            </if>
+            now()
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.suggestion.entity.Suggestion">

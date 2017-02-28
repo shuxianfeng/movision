@@ -7,10 +7,7 @@ import com.movision.mybatis.address.entity.Address;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +17,7 @@ import java.util.Map;
  * @Date 2017/2/27 19:58
  */
 @RestController
-@RequestMapping("app/mine/")
+@RequestMapping("app/mine/address")
 public class AddressController {
 
     @Autowired
@@ -48,6 +45,15 @@ public class AddressController {
     public Response editMyAddress(@ApiParam @ModelAttribute Address address) {
         Response response = new Response();
         addressFacade.updateAddress(address);
+        return response;
+    }
+
+    @ApiOperation(value = "查询我的地址详情", notes = "查询我的地址详情", response = Response.class)
+    @RequestMapping(value = {"/query_my_address_detail"}, method = RequestMethod.GET)
+    public Response queryMyAddressDetail(@ApiParam(value = "地址id") @RequestParam String id) {
+        Response response = new Response();
+        Map map = addressFacade.queryAddressDetail(Integer.valueOf(id));
+        response.setData(map);
         return response;
     }
 

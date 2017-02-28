@@ -1,5 +1,6 @@
 package com.movision.facade.index;
 
+import com.movision.common.util.ShiroUtil;
 import com.movision.mybatis.suggestion.entity.Suggestion;
 import com.movision.mybatis.suggestion.service.SuggestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,24 +13,22 @@ import java.util.Date;
  * @Date 2017/1/26 9:41
  */
 @Service
-public class FacadeSuggestion {
+public class SuggestionFacade {
     @Autowired
     SuggestionService suggestionService;
 
     /**
-     * 用户信息反馈
+     * 提交用户反馈信息
      *
-     * @param userid
      * @param phone
      * @param content
      * @return
      */
-    public int insertSuggestion(String userid, String phone, String content) {
+    public int insertSuggestion(String phone, String content) {
         Suggestion suggestion = new Suggestion();
-        suggestion.setUserid(Integer.parseInt(userid));
+        suggestion.setUserid(ShiroUtil.getAppUserID());
         suggestion.setContent(content);
         suggestion.setPhone(phone);
-        suggestion.setIntime(new Date());
         return suggestionService.insertSuggestion(suggestion);//插入用户反馈信息数据
     }
 }

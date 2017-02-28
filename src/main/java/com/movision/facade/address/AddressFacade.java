@@ -39,5 +39,9 @@ public class AddressFacade {
         }
     }
 
+    public Map queryAddressDetail(int id) {
+        return addressService.queryAddressDetail(id);
+    }
+
 
 }

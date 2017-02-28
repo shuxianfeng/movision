@@ -53,5 +53,15 @@ public class AddressService {
         }
     }
 
+    public Map queryAddressDetail(int id) {
+        try {
+            log.info("查询地址详情");
+            return addressMapper.queryAddressDetail(id);
+        } catch (Exception e) {
+            log.error("查询地址详情失败", e);
+            throw e;
+        }
+    }
+
 
 }

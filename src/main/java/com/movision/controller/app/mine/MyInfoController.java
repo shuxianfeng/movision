@@ -3,10 +3,10 @@ package com.movision.controller.app.mine;
 import com.movision.common.Response;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.Goods.GoodsFacade;
-import com.movision.facade.address.AddressFacade;
 import com.movision.facade.boss.PostFacade;
 import com.movision.facade.circle.CircleAppFacade;
 import com.movision.facade.coupon.CouponFacade;
+import com.movision.facade.index.SuggestionFacade;
 import com.movision.facade.order.OrderAppFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.Circle;
@@ -19,8 +19,6 @@ import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +57,9 @@ public class MyInfoController {
 
     @Autowired
     private MovisionOssClient movisionOssClient;
+
+    @Autowired
+    private SuggestionFacade suggestionFacade;
 
 
     @ApiOperation(value = "查询我的达人页信息:收藏商品", notes = "查询我的达人页信息:收藏商品", response = Response.class)
@@ -163,6 +164,15 @@ public class MyInfoController {
         map.put("url", url);
         map.put("name", FileUtil.getFileNameByUrl(url));
         return new Response(map);
+    }
+
+    @ApiOperation(value = "提交意见反馈", notes = "提交意见反馈", response = Response.class)
+    @RequestMapping(value = "submit_suggestion", method = RequestMethod.POST)
+    public Response insertSuggestion(@ApiParam(value = "选填手机号，qq号等") @RequestParam(required = false) String phone,
+                                     @ApiParam(value = "反馈内容") @RequestParam String content) {
+        Response response = new Response();
+        suggestionFacade.insertSuggestion(phone, content);
+        return response;
     }
 
 
