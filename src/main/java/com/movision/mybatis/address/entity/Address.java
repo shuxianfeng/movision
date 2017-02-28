@@ -1,48 +1,32 @@
 package com.movision.mybatis.address.entity;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
+@Api("地址")
 public class Address {
     private Integer id;
     private Integer userid;
-
+    @ApiModelProperty(value = "收货人")
     private String name;
-
+    @ApiModelProperty(value = "收货人手机号")
     private String phone;
-
+    @ApiModelProperty(value = "省代码")
     private String province;
-
+    @ApiModelProperty(value = "市代码")
     private String city;
-
+    @ApiModelProperty(value = "区代码")
     private String district;
-
+    @ApiModelProperty(value = "街道详细地址")
     private String street;
-
+    @ApiModelProperty(value = "是否为默认收货地址：1是 0否")
     private Integer isdefault;
 
     private Date updatetime;
 
     private Integer isdel;
-
-    private String email;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Integer orderid;
-
-    public Integer getOrderid() {
-        return orderid;
-    }
-
-    public void setOrderid(Integer orderid) {
-        this.orderid = orderid;
-    }
 
     public Integer getId() {
         return id;

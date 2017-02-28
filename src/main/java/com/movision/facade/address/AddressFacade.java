@@ -1,5 +1,7 @@
 package com.movision.facade.address;
 
+import com.movision.common.util.ShiroUtil;
+import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.address.service.AddressService;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +23,10 @@ public class AddressFacade {
         Map map = new HashedMap();
         map.put("userid", userid);
         return addressService.queryMyAddressList(map);
+    }
+
+    public int addMyAddress(Address address) {
+        address.setUserid(ShiroUtil.getAppUserID());
+        return addressService.addAddress(address);
     }
 }

@@ -3,8 +3,11 @@ package com.movision.controller.app.mine;
 import com.movision.common.Response;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.address.AddressFacade;
+import com.movision.mybatis.address.entity.Address;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,4 +34,13 @@ public class AddressController {
         response.setData(list);
         return response;
     }
+
+    @ApiOperation(value = "添加我的收获地址", notes = "添加我的收获地址", response = Response.class)
+    @RequestMapping(value = {"/add_my_address"}, method = RequestMethod.POST)
+    public Response addMyAddress(@ApiParam @ModelAttribute Address address) {
+        Response response = new Response();
+        addressFacade.addMyAddress(address);
+        return response;
+    }
+
 }

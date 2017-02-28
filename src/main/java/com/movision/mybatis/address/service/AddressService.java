@@ -1,5 +1,6 @@
 package com.movision.mybatis.address.service;
 
+import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.address.mapper.AddressMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,16 @@ public class AddressService {
             return addressMapper.queryMyAddressList(map);
         } catch (Exception e) {
             log.error("查询我的地址列表失败", e);
+            throw e;
+        }
+    }
+
+    public int addAddress(Address address) {
+        try {
+            log.info("添加我的收获地址");
+            return addressMapper.insertSelective(address);
+        } catch (Exception e) {
+            log.error("添加我的收获地址失败", e);
             throw e;
         }
     }
