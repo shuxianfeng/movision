@@ -12,6 +12,8 @@ import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentCategery;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg;
+import com.movision.mybatis.goodsDiscount.entity.GoodsDiscountVo;
+import com.movision.mybatis.goodsDiscount.service.DiscountService;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
@@ -19,10 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author shuxf
@@ -36,6 +35,9 @@ public class GoodsFacade {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private DiscountService discountService;
 
     /**
      * 根据商品id查询商品详情
@@ -110,6 +112,8 @@ public class GoodsFacade {
         //查询该商品有无库存
         int storenum = goodsService.queryStore(Integer.parseInt(goodsid));
         if (storenum > 0) {
+
+            //查询套餐
             List<ComboVo> comboList = goodsService.queryCombo(Integer.parseInt(goodsid));
             //再查询套餐剩余库存(取套餐中商品库存的最小值)
             for (int i = 0; i < comboList.size(); i++) {
@@ -118,6 +122,25 @@ public class GoodsFacade {
                 comboList.get(i).setStock(stork);
             }
             map.put("comboList", comboList);
+
+            //查询活动
+            List<GoodsDiscountVo> goodsDiscountList = discountService.querygoodsDiscount();
+
+            for (int i = 0; i < goodsDiscountList.size(); i++) {
+
+                Date startTime = goodsDiscountList.get(i).getStartdate();
+                Date endTime = goodsDiscountList.get(i).getEnddate();
+                Date now = new Date();
+
+                if (now.after(startTime) && now.before(endTime)) {
+                    goodsDiscountList.get(i).setStatus(1);//进行中
+                } else if (now.before(startTime)) {
+                    goodsDiscountList.get(i).setStatus(0);//未开始
+                } else if (now.after(endTime)) {
+                    goodsDiscountList.get(i).setStatus(2);//已结束
+                }
+            }
+            map.put("goodsDiscountList", goodsDiscountList);
         }
         map.put("storenum", storenum);
         return map;

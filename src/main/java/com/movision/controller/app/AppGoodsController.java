@@ -71,16 +71,16 @@ public class AppGoodsController {
     }
 
     /**
-     * 商品租用配置和套餐选择接口
+     * 商品租用配置和套餐、活动选择接口
      */
-    @ApiOperation(value = "商品租赁日期和套餐选择接口", notes = "用户租用商品时，点击立即租用之前选择套餐类型枚举值数据返回。（返回200查询成功、返回300表示当前商品库存为0，日期选择页面不弹出并弱提示：您选择的商品已抢空）", response = Response.class)
+    @ApiOperation(value = "商品租赁日期和套餐、活动选择接口", notes = "用户租用商品时，点击立即租用之前选择套餐类型枚举值数据返回。（返回200查询成功、返回300表示当前商品库存为0，日期选择页面不弹出并弱提示：您选择的商品已抢空）", response = Response.class)
     @RequestMapping(value = "rentChoice", method = RequestMethod.POST)
     public Response queryRentChoice(@ApiParam(value = "商品id") @RequestParam String goodsid) {
         Response response = new Response();
 
         Map<String, Object> map = goodsFacade.queryCombo(goodsid);
         if ((int) map.get("storenum") > 0) {
-            response.setData(map.get("comboList"));
+            response.setData(map);
             response.setCode(200);
             response.setMessage("查询成功");
         } else {
