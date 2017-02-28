@@ -58,7 +58,7 @@ public class GoodsController {
      */
     @ApiOperation(value = "删除商品", notes = "删除商品", response = Response.class)
     @RequestMapping(value = "delete_goods", method = RequestMethod.POST)
-    public Response deleteGoods(@ApiParam(value = "商品编号") @RequestParam(required = false) Integer id) {
+    public Response deleteGoods(@ApiParam(value = "商品编号") @RequestParam Integer id) {
         Response response = new Response();
         int result = goodsFacade.deleteGoods(id);
         if (response.getCode() == 200) {
@@ -146,7 +146,7 @@ public class GoodsController {
      */
     @ApiOperation(value = "推荐到热门", notes = "推荐到热门", response = Response.class)
     @RequestMapping(value = "recommend_ishot", method = RequestMethod.POST)
-    public Response recommendishot(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
+    public Response recommendishot(@ApiParam(value = "商品id") @RequestParam Integer id) {
         Response response = new Response();
         int result = goodsFacade.queryHot(id);
         if (response.getCode() == 200) {
@@ -164,7 +164,7 @@ public class GoodsController {
      */
     @ApiOperation(value = "推荐到精选", notes = "推荐到精选", response = Response.class)
     @RequestMapping(value = "recommend_isessence", method = RequestMethod.POST)
-    public Response recommendisessence(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
+    public Response recommendisessence(@ApiParam(value = "商品id") @RequestParam Integer id) {
         Response response = new Response();
         int result = goodsFacade.queryisessence(id);
         if (response.getCode() == 200) {
@@ -183,7 +183,7 @@ public class GoodsController {
      */
     @ApiOperation(value = "修改推荐日期", notes = "修改推荐日期", response = Response.class)
     @RequestMapping(value = "update_recommenddate", method = RequestMethod.POST)
-    public Response updateDate(@ApiParam(value = "商品id") @RequestParam(required = false) String id,
+    public Response updateDate(@ApiParam(value = "商品id") @RequestParam String id,
                                @ApiParam(value = "推荐日期") @RequestParam(required = false) String recommenddate) {
         Response response = new Response();
         Map<String, Integer> map = goodsFacade.updateDate(id, recommenddate);
