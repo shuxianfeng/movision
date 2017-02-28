@@ -754,4 +754,24 @@
     <update id="todayCommend" parameterType="java.lang.Integer">
        UPDATE yw_goods SET ishomepage=1 WHERE id=#{id,jdbcType=INTEGER}
     </update>
+
+    <select id="findAllAssessment" resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
+        SELECT g.id,u.nickname,g.goodpoint,g.logisticpoint,g.servicepoint,g.content,g.isimage,g.createtime FROM yw_goods_assessment g
+        LEFT JOIN yw_user u on u.id=g.userid WHERE g.userid<![CDATA[<>]]>-1
+    </select>
+    <select id="findAllAssessmentCondition" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
+        SELECT g.id,u.nickname,g.goodpoint,g.logisticpoint,g.servicepoint,g.content,g.isimage,g.createtime FROM
+        yw_goods_assessment g
+        LEFT JOIN yw_user u on u.id=g.userid WHERE g.userid<![CDATA[<>]]>-1
+        <if test="nickname!=null and nickname!=''">
+            AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="content!=null and attribute!=''">
+            AND g.content LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="createtime!=null and createtime!=''">
+            AND g.createtime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
+        </if>
+    </select>
 </mapper>

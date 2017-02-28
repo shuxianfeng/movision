@@ -4,6 +4,7 @@ import com.movision.common.Response;
 import com.movision.facade.boss.GoodsListFacade;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
+import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -285,6 +286,56 @@ public class GoodsController {
             response.setMessage("查询成功");
         }
         response.setData(result);
+        return response;
+    }
+
+    /**
+     * 商品管理*--评价列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "评价列表（分页）", notes = "评价列表（分页）", response = Response.class)
+    @RequestMapping(value = "query_assessment_list", method = RequestMethod.POST)
+    public Response queryAllAssessment(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                       @RequestParam(required = false, defaultValue = "10") String pageSize
+    ) {
+        Response response = new Response();
+        Paging<GoodsAssessmentVo> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<GoodsAssessmentVo> list = goodsFacade.queryAllAssessment(pager);
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 根据条件查询
+     *
+     * @param pageNo
+     * @param pageSize
+     * @param nickname
+     * @param content
+     * @param mintime
+     * @param maxtime
+     * @return
+     */
+    @ApiOperation(value = "根据条件查询（分页）", notes = "根据条件查询（分页）", response = Response.class)
+    @RequestMapping(value = "query_assessmentcondition_list", method = RequestMethod.POST)
+    public Response queryAllAssessmentCondition(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                                @ApiParam(value = "昵称") @RequestParam(required = false) String nickname,
+                                                @ApiParam(value = "内容") @RequestParam(required = false) String content,
+                                                @ApiParam(value = "开始时间") @RequestParam(required = false) String mintime,
+                                                @ApiParam(value = "结束时间") @RequestParam(required = false) String maxtime) {
+        Response response = new Response();
+        Paging<GoodsAssessmentVo> pager = new Paging<GoodsAssessmentVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<GoodsAssessmentVo> list = goodsFacade.queryAllAssessmentCondition(nickname, content, mintime, maxtime, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 }

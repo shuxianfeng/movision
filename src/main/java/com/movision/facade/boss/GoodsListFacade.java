@@ -5,6 +5,8 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
+import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
+import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -338,6 +340,57 @@ public class GoodsListFacade {
      */
     public int todayCommend(Integer id) {
         return goodsService.todayCommend(id);
+    }
+
+    /**
+     * 评价列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<GoodsAssessmentVo> queryAllAssessment(Paging<GoodsAssessmentVo> pager) {
+        List<GoodsAssessmentVo> list = goodsService.queryAllAssessment(pager);
+        return list;
+    }
+
+    /**
+     * 条件查询
+     *
+     * @param nickname
+     * @param content
+     * @param mintime
+     * @param maxtime
+     * @return
+     */
+    public List<GoodsAssessmentVo> queryAllAssessmentCondition(String nickname, String content, String mintime, String maxtime, Paging<GoodsAssessmentVo> pager) {
+        Map<String, Object> map = new HashedMap();
+        if (nickname != null) {
+            map.put("nickname", nickname);
+        }
+        if (content != null) {
+            map.put("content", content);
+        }
+        Date isessencetime = null;//开始时间
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        if (mintime != null) {
+            try {
+                isessencetime = format.parse(mintime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("mintime", isessencetime);
+        Date max = null;//最大时间
+        if (maxtime != null) {
+            try {
+
+                max = format.parse(maxtime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("maxtime", max);
+        return goodsService.queryAllAssessmentCodition(map, pager);
     }
 
 }

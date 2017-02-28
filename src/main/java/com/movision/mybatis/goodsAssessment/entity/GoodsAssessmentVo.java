@@ -32,6 +32,25 @@ public class GoodsAssessmentVo {
 
     private Integer isanonymity;
 
+    private Date mintime;
+    private Date maxtime;
+
+    public Date getMintime() {
+        return mintime;
+    }
+
+    public void setMintime(Date mintime) {
+        this.mintime = mintime;
+    }
+
+    public Date getMaxtime() {
+        return maxtime;
+    }
+
+    public void setMaxtime(Date maxtime) {
+        this.maxtime = maxtime;
+    }
+
     private Date createtime;
 
     private String photo;//评论用户的头像图片url

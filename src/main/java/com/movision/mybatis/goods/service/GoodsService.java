@@ -621,4 +621,39 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 查询评价列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<GoodsAssessmentVo> queryAllAssessment(Paging<GoodsAssessmentVo> pager) {
+        try {
+
+            log.info("查询评价列表");
+            return goodsMapper.findAllAssessment(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询评价列表失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 条件查询评价列表
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<GoodsAssessmentVo> queryAllAssessmentCodition(Map map, Paging<GoodsAssessmentVo> pager) {
+        try {
+
+            log.info("条件查询评价列表");
+            return goodsMapper.findAllAssessmentCondition(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("条件查询评价列表失败", e);
+            throw e;
+        }
+    }
 }
