@@ -137,8 +137,7 @@
         </property>
         <property name="filterChainDefinitions">
             <value>
-                <!--url = orroles[role]
-                role:对应角色表中的角色   .100:App管理员  200:App普通用户-->
+                <!--role:对应角色表中的角色   100:App管理员  200:App普通用户-->
                 /rest/** = anon
                 /app/mine/**=authc
                 /app/** = anon
@@ -146,7 +145,7 @@
                 /boss/** = anon
                 /logout = logout
                 /swagger/** = anon
-
+                /static/**=anon
             </value>
         </property>
 
