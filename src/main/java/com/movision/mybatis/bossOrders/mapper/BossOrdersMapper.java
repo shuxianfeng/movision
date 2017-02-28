@@ -1,6 +1,7 @@
 package com.movision.mybatis.bossOrders.mapper;
 
 import com.movision.mybatis.address.entity.Address;
+import com.movision.mybatis.address.entity.AddressVo;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.area.entity.Area;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
@@ -58,7 +59,7 @@ public interface BossOrdersMapper {
 
     Invoice queryInvoice(Integer orderid);//返回发票信息
 
-    int updateAddress(Address address);//编辑收货人信息
+    int updateAddress(AddressVo address);//编辑收货人信息
 
     Orders queryMoney(Integer id);//费用信息
 

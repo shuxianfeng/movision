@@ -1,6 +1,7 @@
 package com.movision.mybatis.bossOrders.servic;
 
 import com.movision.mybatis.address.entity.Address;
+import com.movision.mybatis.address.entity.AddressVo;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.area.entity.Area;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
@@ -155,7 +156,7 @@ public class BossOrderService {
      * @param address
      * @return
      */
-    public int updateOrderGet(Address address) {
+    public int updateOrderGet(AddressVo address) {
         try {
             loger.info("编辑收货地址成功");
             return bossOrdersMapper.updateAddress(address);

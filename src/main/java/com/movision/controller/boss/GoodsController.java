@@ -249,4 +249,6 @@ public class GoodsController {
         response.setData(goodsVo);
         return response;
     }
+
+
 }

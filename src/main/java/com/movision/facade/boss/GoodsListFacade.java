@@ -260,7 +260,7 @@ public class GoodsListFacade {
         goodsVo.setRecommenddate(date);
         goodsVo.setIshot(Integer.parseInt(ishot));
         goodsVo.setIsessence(Integer.parseInt(isessence));
-
+        int result = goodsService.updateGoods(goodsVo);
         try {
             //上传图片到本地服务器
             String savedFileName = "";
@@ -292,11 +292,12 @@ public class GoodsListFacade {
             }
             GoodsImg img = new GoodsImg();
             img.setImgurl(imgurle);
-
+            int res = goodsService.updateImage(img);
+            map.put("result", result);
+            map.put("res", res);
         } catch (Exception e) {
             log.error("修改商品异常", e);
         }
-
         return map;
     }
 

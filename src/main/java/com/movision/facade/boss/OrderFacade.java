@@ -1,6 +1,7 @@
 package com.movision.facade.boss;
 
 import com.movision.mybatis.address.entity.Address;
+import com.movision.mybatis.address.entity.AddressVo;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.area.entity.Area;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
@@ -293,7 +294,7 @@ public class OrderFacade {
      * @return
      */
     public Map<String, Integer> updateOrderAddress(String orderid, String phone, String name, String email, String province, String city, String district, String street) {
-        Address address = new Address();
+        AddressVo address = new AddressVo();
         Map<String, Integer> map = new HashedMap();
         address.setCity(city);
         address.setDistrict(district);

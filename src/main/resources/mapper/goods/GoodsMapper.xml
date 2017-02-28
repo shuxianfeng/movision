@@ -723,6 +723,16 @@
                 recommenddate = #{recommenddate,jdbcType=DATE}
             </if>
         </set>
+        <set>
+            <if test="ishot != null">
+                ishot = #{ishot,jdbcType=INTEGER}
+            </if>
+        </set>
+        <set>
+            <if test="isessence != null">
+                isessence = #{isessence,jdbcType=INTEGER}
+            </if>
+        </set>
         where id=#{id,jdbcType=INTEGER}
     </update>
     <update id="updateImage" parameterType="com.movision.mybatis.goods.entity.GoodsImg">

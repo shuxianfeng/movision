@@ -550,7 +550,7 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         SELECT  s.`name`,s.protype,s.origprice,s.price,c.num,s.id,s.attribute FROM yw_goods s LEFT JOIN yw_cart c ON c.goodsid=s.id
         WHERE c.userid=(SELECT s.userid FROM yw_orders s WHERE s.id=#{id,jdbcType=INTEGER} )
     </select>
-    <update id="updateAddress" parameterType="com.movision.mybatis.address.entity.Address">
+    <update id="updateAddress" parameterType="com.movision.mybatis.address.entity.AddressVo">
         update yw_address
         <set>
             <if test="phone != null">
