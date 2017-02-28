@@ -58,6 +58,7 @@ public interface GoodsMapper {
 
     int AddToGoods(Integer id);//上架
 
+    int queryisdel(Integer id);
     int DownToGoods(Integer id);//下架
     List<GoodsVo> findAllGoodsCondition(Map map, RowBounds rowBounds);//条件查询
 

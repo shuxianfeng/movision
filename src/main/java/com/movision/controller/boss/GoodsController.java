@@ -125,35 +125,18 @@ public class GoodsController {
      * @param id
      * @return
      */
-    @ApiOperation(value = "上架", notes = "上架", response = Response.class)
+    @ApiOperation(value = "上架下架", notes = "上架下架", response = Response.class)
     @RequestMapping(value = "grounding_goods", method = RequestMethod.POST)
     public Response queryByGoods(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
         Response response = new Response();
         int result = goodsFacade.queryByGoods(id);
         if (response.getCode() == 200) {
-            response.setMessage("上架成功");
+            response.setMessage("上架下架成功");
         }
         response.setData(result);
         return response;
     }
 
-    /**
-     * 商品管理--下架
-     *
-     * @param id
-     * @return
-     */
-    @ApiOperation(value = "下架", notes = "下架", response = Response.class)
-    @RequestMapping(value = "down_goods", method = RequestMethod.POST)
-    public Response queryByGoodsDown(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
-        Response response = new Response();
-        int result = goodsFacade.queryByGoodsDown(id);
-        if (response.getCode() == 200) {
-            response.setMessage("下架成功");
-        }
-        response.setData(result);
-        return response;
-    }
 
     /**
      * 商品管理--推荐到热门

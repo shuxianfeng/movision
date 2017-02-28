@@ -65,18 +65,16 @@ public class GoodsListFacade {
      * @return
      */
     public int queryByGoods(Integer id) {
-        return goodsService.queryByGoods(id);
+        int isdel = goodsService.queryisdel(id);
+        int result = 0;
+        if (isdel == 1) {
+            result = goodsService.queryByGoods(id);
+        } else if (isdel == 0) {
+            result = goodsService.queryByGoodsDown(id);
+        }
+        return result;
     }
 
-    /**
-     * 商品管理--下架
-     *
-     * @param id
-     * @return
-     */
-    public int queryByGoodsDown(Integer id) {
-        return goodsService.queryByGoodsDown(id);
-    }
 
     /**
      * 商品管理--推荐到热门

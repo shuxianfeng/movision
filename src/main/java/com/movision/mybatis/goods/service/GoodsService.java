@@ -400,6 +400,21 @@ public class GoodsService {
     }
 
     /**
+     * 商品管理*--查询id
+     *
+     * @param id
+     * @return
+     */
+    public int queryisdel(Integer id) {
+        try {
+            log.info("上架");
+            return goodsMapper.queryisdel(id);
+        } catch (Exception e) {
+            log.error("上架失败");
+            throw e;
+        }
+    }
+    /**
      * 商品管理*--下架
      *
      * @param id
