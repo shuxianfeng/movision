@@ -59,6 +59,17 @@ public class GoodsListFacade {
     }
 
     /**
+     * 商品管理--删除评价
+     *
+     * @param id
+     * @return
+     */
+    public int deleteAssessment(Integer id) {
+        return goodsService.deleteAssessment(id);
+    }
+
+
+    /**
      * 商品管理--上架
      *
      * @param id

@@ -56,6 +56,7 @@ public interface GoodsMapper {
 
     int deleteGoods(Integer id);//删除商品
 
+    int deleteAssessment(Integer id);//删除评价
     int AddToGoods(Integer id);//上架
 
     int queryisdel(Integer id);

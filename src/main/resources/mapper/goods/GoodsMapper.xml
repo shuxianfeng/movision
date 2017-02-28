@@ -546,6 +546,9 @@
     <delete id="deleteGoods" parameterType="java.lang.Integer">
     DELETE FROM  yw_goods  WHERE  id=#{id,jdbcType=INTEGER}
 </delete>
+    <delete id="deleteAssessment" parameterType="java.lang.Integer">
+      DELETE FROM  yw_goods_assessment WHERE  id=#{id,jdbcType=INTEGER}
+    </delete>
     <select id="findAllGoodsList" resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT
         s.id,s.name,a.typename,d.brandname,s.origprice,s.price,s.stock,s.sales,s.ishomepage,s.recommenddate,s.isdel,s.ishot,s.isessence,COUNT(c.goodsid)

@@ -368,6 +368,21 @@ public class GoodsService {
     }
 
     /**
+     * 商品管理--删除评价
+     *
+     * @param id
+     * @return
+     */
+    public int deleteAssessment(Integer id) {
+        try {
+            log.info("删除商品");
+            return goodsMapper.deleteAssessment(id);
+        } catch (Exception e) {
+            log.error("删除商品失败");
+            throw e;
+        }
+    }
+    /**
      * 商品管理--条件查询
      *
      * @param pager

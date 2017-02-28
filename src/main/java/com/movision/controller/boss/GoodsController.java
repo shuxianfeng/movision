@@ -69,6 +69,23 @@ public class GoodsController {
     }
 
     /**
+     * 商品管理-删除评价
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "删除评价", notes = "删除评价", response = Response.class)
+    @RequestMapping(value = "delete_assesment", method = RequestMethod.POST)
+    public Response deleteAssessment(@ApiParam(value = "评价编号") @RequestParam Integer id) {
+        Response response = new Response();
+        int result = goodsFacade.deleteAssessment(id);
+        if (response.getCode() == 200) {
+            response.setMessage("删除成功");
+        }
+        response.setData(result);
+        return response;
+    }
+    /**
      * 商品管理---条件查询
      *
      * @param name
