@@ -201,4 +201,14 @@ public class GoodsListFacade {
         return goodsVo;
     }
 
+    /**
+     * 根据id查商品
+     *
+     * @param id
+     * @return
+     */
+    public GoodsVo queryGoodDetail(Integer id) {
+        return goodsService.findGoodDetail(id);
+    }
+
 }

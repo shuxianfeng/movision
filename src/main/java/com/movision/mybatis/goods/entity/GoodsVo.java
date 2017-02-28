@@ -63,6 +63,16 @@ public class GoodsVo {
 
     private Integer goodsposition;
 
+    private Integer assess;//评价
+
+    public Integer getAssess() {
+        return assess;
+    }
+
+    public void setAssess(Integer assess) {
+        this.assess = assess;
+    }
+
     private Integer iscombo;
 
     private Integer isspecial;
@@ -72,6 +82,15 @@ public class GoodsVo {
     private Integer ishomepage;//是否为推荐：0 否 1 是
 
     private Date recommenddate;//推荐日期
+    private String typename;//类别名
+
+    public String getTypename() {
+        return typename;
+    }
+
+    public void setTypename(String typename) {
+        this.typename = typename;
+    }
 
     private Date onlinetime;
 

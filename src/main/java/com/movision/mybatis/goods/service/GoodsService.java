@@ -541,4 +541,20 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 商品详情
+     *
+     * @param id
+     * @return
+     */
+    public GoodsVo findGoodDetail(Integer id) {
+        try {
+            log.info("商品详情");
+            return goodsMapper.findGoodDetail(id);
+        } catch (Exception e) {
+            log.error("商品详情失败", e);
+            throw e;
+        }
+    }
 }

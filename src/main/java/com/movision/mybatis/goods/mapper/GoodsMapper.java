@@ -75,4 +75,7 @@ public interface GoodsMapper {
     List<GoodsVo> findAllType();//查询商品分类
 
     List<GoodsVo> findAllBrand();//查看品牌
+
+    GoodsVo findGoodDetail(Integer id);//商品详情
+
 }

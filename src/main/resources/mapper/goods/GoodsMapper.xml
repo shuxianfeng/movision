@@ -673,4 +673,12 @@
     <select id="findAllType" resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT c.id,c.typename FROM yw_category c LEFT JOIN yw_goods g on g.protype=c.protype GROUP BY c.id
     </select>
+    <select id="findGoodDetail" resultType="com.movision.mybatis.goods.entity.GoodsVo"
+            parameterType="java.lang.Integer">
+        SELECT g.id,g.name,g.protype,b.brandname,g.price,g.origprice,g.sales,g.stock,
+        (SELECT COUNT(1) FROM yw_collection c WHERE c.goodsid=g.id)  AS collect,g.ishot,g.isessence,g.isdel,g.recommenddate,i.img_url,
+        (SELECT COUNT(1) FROM yw_goods_assessment a WHERE g.id=a.goodid  AND a.userid<![CDATA[<>]]>-1 ) AS assess,
+        g.onlinetime FROM yw_goods g LEFT JOIN yw_brand b ON b.brandid=g.brandid
+        LEFT JOIN yw_goods_img i ON i.goodsid=g.id WHERE g.id=#{id,jdbcType=INTEGER}  GROUP BY g.id
+    </select>
 </mapper>
