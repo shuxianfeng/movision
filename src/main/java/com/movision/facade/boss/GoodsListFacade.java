@@ -397,8 +397,17 @@ public class GoodsListFacade {
      * @param id
      * @return
      */
-    public GoodsImg queryImgGoods(Integer id) {
+    public List<GoodsImg> queryImgGoods(Integer id) {
         return goodsService.queryImgGoods(id);
     }
 
+    /**
+     * 商品描述图
+     *
+     * @param id
+     * @return
+     */
+    public List<GoodsImg> queryCommodityDescription(Integer id) {
+        return goodsService.queryCommodityDescription(id);
+    }
 }

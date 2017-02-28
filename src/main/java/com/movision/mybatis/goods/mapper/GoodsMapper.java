@@ -6,6 +6,7 @@ import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import org.apache.ibatis.session.RowBounds;
+import org.apache.taglibs.standard.lang.jstl.Literal;
 
 import java.util.List;
 import java.util.Map;
@@ -94,6 +95,8 @@ public interface GoodsMapper {
 
     GoodsAssessmentVo queryAssessmentRemark(Integer id);//评论详情
 
-    GoodsImg queryImgGoods(Integer id);//商品参数图
+    List<GoodsImg> queryImgGoods(Integer id);//商品参数图
+
+    List<GoodsImg> queryCommodityDescription(Integer id);//商品描述图
 
 }

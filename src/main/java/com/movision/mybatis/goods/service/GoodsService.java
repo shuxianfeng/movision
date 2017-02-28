@@ -695,12 +695,28 @@ public class GoodsService {
      * @param id
      * @return
      */
-    public GoodsImg queryImgGoods(Integer id) {
+    public List<GoodsImg> queryImgGoods(Integer id) {
         try {
             log.info("商品参数图");
             return goodsMapper.queryImgGoods(id);
         } catch (Exception e) {
             log.error("商品参数图失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 商品描述
+     *
+     * @param id
+     * @return
+     */
+    public List<GoodsImg> queryCommodityDescription(Integer id) {
+        try {
+            log.info("商品描述");
+            return goodsMapper.queryCommodityDescription(id);
+        } catch (Exception e) {
+            log.error("商品描述图失败", e);
             throw e;
         }
     }
