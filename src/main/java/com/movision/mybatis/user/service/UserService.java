@@ -5,6 +5,8 @@ import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.mapper.PostMapper;
+import com.movision.mybatis.submission.entity.Submission;
+import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.mapper.UserMapper;
 import com.movision.utils.pagination.model.Paging;
@@ -331,15 +333,31 @@ public class UserService {
     /**
      * 查询所有VIP用户列表
      *
+     * @param userid
+     * @return
+     */
+    public UserVo queryVipList(Integer userid) {
+        try {
+            log.info("查询所有VIP用户列表");
+            return userMapper.queryApplyVipList(userid);
+        } catch (Exception e) {
+            log.error("查询所有VIP用户列表异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询所有VIP用户
+     *
      * @param pager
      * @return
      */
-    public List<UserVo> findAllqueryVipList(Paging<UserVo> pager) {
+    public List<Integer> findAllqueryUserVIPByList(Paging<UserVo> pager) {
         try {
-            log.info("查询所有VIP用户列表");
-            return userMapper.findAllqueryVipList(pager.getRowBounds());
+            log.info("查询所有VIP用户");
+            return userMapper.findAllqueryUserVIPByList(pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询所有VIP用户列表异常");
+            log.error("查询所有VIP用户异常");
             throw e;
         }
     }

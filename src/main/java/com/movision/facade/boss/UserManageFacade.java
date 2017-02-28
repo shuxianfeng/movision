@@ -1,5 +1,7 @@
 package com.movision.facade.boss;
 
+import com.movision.mybatis.submission.entity.SubmissionVo;
+import com.movision.mybatis.submission.service.SubmissionService;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
@@ -16,7 +18,10 @@ import java.util.List;
 @Service
 public class UserManageFacade {
     @Autowired
-    UserService userService;
+    private UserService userService;
+
+    @Autowired
+    private SubmissionService submissionService;
 
     /**
      * 查看vip申请列表
@@ -41,7 +46,16 @@ public class UserManageFacade {
      * @return
      */
     public List<UserVo> queryVipList(Paging<UserVo> pager) {
-        List<UserVo> users = userService.findAllqueryVipList(pager);//查询所有VIP用户
-        return users;
+        List<UserVo> resault = new ArrayList<>();
+        List<Integer> users = userService.findAllqueryUserVIPByList(pager);//查询所有VIP用户
+        for (int i = 0; i < users.size(); i++) {
+            UserVo usermassage = userService.queryVipList(users.get(i));//查询VIP用户列表
+            resault.add(usermassage);
+        }
+        return resault;
+    }
+
+    public List<SubmissionVo> queryContributeList(Paging<SubmissionVo> pager) {
+        return submissionService.queryContributeList(pager);
     }
 }

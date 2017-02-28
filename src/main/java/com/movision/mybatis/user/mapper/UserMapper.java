@@ -1,6 +1,7 @@
 package com.movision.mybatis.user.mapper;
 
 import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.user.entity.*;
 import org.apache.ibatis.annotations.Param;
 import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
@@ -69,7 +70,7 @@ public interface UserMapper {
 
     List<Integer> findAllqueryUsers(RowBounds rowBounds);
 
-    List<UserVo> findAllqueryVipList(RowBounds rowBounds);
-
     UserVo queryApplyVipList(Integer userid);
+
+    List<Integer> findAllqueryUserVIPByList(RowBounds rowBounds);
 }

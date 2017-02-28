@@ -2,6 +2,7 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.UserManageFacade;
+import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
@@ -63,6 +64,27 @@ public class UserManageController {
         Response response = new Response();
         Paging<UserVo> pager = new Paging<UserVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<UserVo> list = userManageFacade.queryVipList(pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 查询投稿列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查询投稿列表", notes = "用于查询投稿列表接口", response = Response.class)
+    @RequestMapping(value = "query_contribute_list", method = RequestMethod.POST)
+    public Response queryContributeList(@RequestParam String pageNo, @RequestParam String pageSize) {
+        Response response = new Response();
+        Paging<SubmissionVo> pager = new Paging<SubmissionVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<SubmissionVo> list = userManageFacade.queryContributeList(pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
