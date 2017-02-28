@@ -234,7 +234,6 @@ public class CircleController {
      * @param photo
      * @param introduction
      * @param erweima
-     * @param status
      * @param isdiscover
      * @param orderid
      * @return
@@ -250,12 +249,11 @@ public class CircleController {
                               @ApiParam(value = "圈子否封面") @RequestParam(required = false) MultipartFile photo,
                               @ApiParam(value = "圈子简介") @RequestParam String introduction,
                               @ApiParam(value = "圈子二维码") @RequestParam(required = false) String erweima,
-                              @ApiParam(value = "审核状态") @RequestParam(required = false) String status,
                               @ApiParam(value = "推荐到首页") @RequestParam(required = false) String isdiscover,
                               @ApiParam(value = "推荐排序") @RequestParam(required = false) String orderid,
                               @ApiParam(value = "发帖权限") @RequestParam(required = false) String scope) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.addCircle(request, name, category, userid, admin, criclemanid, photo, introduction, erweima, status, isdiscover, orderid, scope);
+        Map<String, Integer> map = circleFacade.addCircle(request, name, category, userid, admin, criclemanid, photo, introduction, erweima, isdiscover, orderid, scope);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -333,4 +331,31 @@ public class CircleController {
         response.setData(pager);
         return response;
     }
+
+    /**
+     * 根据条件查询圈子列表
+     *
+     * @param name
+     * @param circleman
+     * @param type
+     * @param begintime
+     * @param endtime
+     * @return
+     */
+    @ApiOperation(value = "按条件搜索圈子列表", notes = "用于根据条件查询圈子列表", response = Response.class)
+    @RequestMapping(value = "query_circle_condition", method = RequestMethod.POST)
+    public Response queryCircleByCondition(@ApiParam(value = "圈子名称") @RequestParam(required = false) String name,
+                                           @ApiParam(value = "圈主") @RequestParam(required = false) String circleman,
+                                           @ApiParam(value = "圈子类型") @RequestParam(required = false) String type,
+                                           @ApiParam(value = "圈子创建开始时间") @RequestParam(required = false) String begintime,
+                                           @ApiParam(value = "圈子创建结束时间") @RequestParam(required = false) String endtime) {
+        Response response = new Response();
+        List<CircleIndexList> list = circleFacade.queryCircleByCondition(name, circleman, type, begintime, endtime);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
+        return response;
+    }
+
 }

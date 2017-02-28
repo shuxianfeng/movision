@@ -186,6 +186,23 @@ public class CircleService {
         }
     }
 
+
+    /**
+     * 根据条件查询圈子列表
+     *
+     * @param map
+     * @return
+     */
+    public List<CircleVo> queryCircleByLikeList(Map map) {
+        try {
+            log.info("根据条件查询圈子列表");
+            return circleMapper.queryCircleByLikeList(map);
+        } catch (Exception e) {
+            log.error("根据条件查询圈子列表");
+            throw e;
+        }
+    }
+
     /**
      * 查询圈主
      * @param phone

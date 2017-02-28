@@ -351,6 +351,23 @@
         SELECT * FROM yw_circle WHERE category=#{category,jdbcType=INTEGER}
     </select>
 
+    <select id="queryCircleByLikeList" resultType="com.movision.mybatis.circle.entity.CircleVo"
+            parameterType="java.util.Map">
+        SELECT * FROM yw_circle WHERE 1
+        <if test="type==null">
+            AND category=#{category,jdbcType=INTEGER}
+        </if>
+        <if test="type!=null">
+            AND category=#{type,jdbcType=INTEGER}
+        </if>
+        <if test="name!=null">
+            AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="begintime!=null and endtime!=null">
+            AND createtime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
+    </select>
+
     <select id="queryCircleBycirclemaster" resultType="com.movision.mybatis.user.entity.User"
             parameterType="java.lang.String">
         SELECT u.level,u.nickname FROM yw_user u WHERE u.phone=#{phone,jdbcType=VARCHAR}

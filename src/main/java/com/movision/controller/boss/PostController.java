@@ -418,12 +418,12 @@ public class PostController {
      * @param postid
      * @return
      */
-    @ApiOperation(value = "帖子加精", notes = "用于帖子加精接口", response = Response.class)
+    @ApiOperation(value = "帖子加精/取消加精", notes = "用于帖子加精接口", response = Response.class)
     @RequestMapping(value = "/add_post_choiceness", method = RequestMethod.POST)
     public Response addPostChoiceness(@ApiParam(value = "帖子id") @RequestParam String postid,
                                       @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,
                                       @ApiParam(value = "精选日期(加精时填)") @RequestParam(required = false) String essencedate,
-                                      @ApiParam(value = "精选排序") @RequestParam String orderid) {
+                                      @ApiParam(value = "精选排序（选择0时取消加精）") @RequestParam String orderid) {
         Response response = new Response();
         Map<String, Integer> result = postFacade.addPostChoiceness(postid, subtitle, essencedate, orderid);
         if (response.getCode() == 200) {

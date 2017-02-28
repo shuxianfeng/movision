@@ -47,13 +47,13 @@ public class PostTo {
 
     private String isdel;
 
-    private String essencedate;//精选日期
+    private Date essencedate;//精选日期
 
     private String userid;//用户id
 
-    private String begintime;
+    private Date begintime;
 
-    private String endtime;
+    private Date endtime;
 
     private String activestatue;
 
@@ -233,11 +233,11 @@ public class PostTo {
         this.isdel = isdel;
     }
 
-    public String getEssencedate() {
+    public Date getEssencedate() {
         return essencedate;
     }
 
-    public void setEssencedate(String essencedate) {
+    public void setEssencedate(Date essencedate) {
         this.essencedate = essencedate;
     }
 
@@ -249,19 +249,19 @@ public class PostTo {
         this.userid = userid;
     }
 
-    public String getBegintime() {
+    public Date getBegintime() {
         return begintime;
     }
 
-    public void setBegintime(String begintime) {
+    public void setBegintime(Date begintime) {
         this.begintime = begintime;
     }
 
-    public String getEndtime() {
+    public Date getEndtime() {
         return endtime;
     }
 
-    public void setEndtime(String endtime) {
+    public void setEndtime(Date endtime) {
         this.endtime = endtime;
     }
 
