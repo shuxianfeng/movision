@@ -610,10 +610,10 @@ public class PostController {
                                          @ApiParam(value = "帖子内容（必填）") @RequestParam String postcontent,
                                          @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,
                                          @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,
-                                         @ApiParam(value = "费用") @RequestParam(required = false) String activefee,
-                                         @ApiParam(value = "活动类型") @RequestParam(required = false) String activetype,
-                                         @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
-                                         @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,
+                                         @ApiParam(value = "费用") @RequestParam String activefee,
+                                         @ApiParam(value = "活动类型") @RequestParam String activetype,
+                                         @ApiParam(value = "开始时间") @RequestParam String begintime,
+                                         @ApiParam(value = "结束时间") @RequestParam String endtime,
                                          @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String essencedate) {
         Response response = new Response();
         Map<String, Integer> map = postFacade.updateActivePostById(request, id, title, subtitle, userid, activefee, postcontent, coverimg, isessence, orderid, activetype, begintime, endtime, essencedate);
