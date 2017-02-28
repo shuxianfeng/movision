@@ -84,4 +84,6 @@ public interface GoodsMapper {
 
     int updateCom(Integer id);//取消推荐
 
+    int todayCommend(Integer id);//今日推荐
+
 }

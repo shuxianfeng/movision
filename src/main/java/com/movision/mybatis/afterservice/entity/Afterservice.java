@@ -65,6 +65,15 @@ public class Afterservice {
     private String sname;//商品名称
     private String mintime;
     private String maxtime;
+    private String typename;
+
+    public String getTypename() {
+        return typename;
+    }
+
+    public void setTypename(String typename) {
+        this.typename = typename;
+    }
 
     public String getMintime() {
         return mintime;

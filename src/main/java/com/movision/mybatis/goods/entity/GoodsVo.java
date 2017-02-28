@@ -73,6 +73,7 @@ public class GoodsVo {
         this.assess = assess;
     }
 
+
     private Integer iscombo;
 
     private Integer isspecial;

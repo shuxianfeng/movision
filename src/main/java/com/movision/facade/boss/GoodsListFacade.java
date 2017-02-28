@@ -330,4 +330,14 @@ public class GoodsListFacade {
         return goodsService.updateCom(id);
     }
 
+    /**
+     * 今日推荐
+     *
+     * @param id
+     * @return
+     */
+    public int todayCommend(Integer id) {
+        return goodsService.todayCommend(id);
+    }
+
 }

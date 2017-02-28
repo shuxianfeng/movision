@@ -605,4 +605,20 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 今日推荐
+     *
+     * @param id
+     * @return
+     */
+    public int todayCommend(Integer id) {
+        try {
+            log.info("今日推荐");
+            return goodsMapper.todayCommend(id);
+        } catch (Exception e) {
+            log.error("今日推荐失败", e);
+            throw e;
+        }
+    }
 }

@@ -751,4 +751,7 @@
     <update id="updateCom" parameterType="java.lang.Integer">
          update yw_goods SET ishomepage =0,recommenddate=NULL WHERE  id=#{id,jdbcType=INTEGER}
     </update>
+    <update id="todayCommend" parameterType="java.lang.Integer">
+       UPDATE yw_goods SET ishomepage=1 WHERE id=#{id,jdbcType=INTEGER}
+    </update>
 </mapper>

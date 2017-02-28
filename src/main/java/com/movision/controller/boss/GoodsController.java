@@ -270,4 +270,21 @@ public class GoodsController {
         return response;
     }
 
+    /**
+     * 今日推荐
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "今日推荐", notes = "今日推荐", response = Response.class)
+    @RequestMapping(value = "update_todaycom", method = RequestMethod.POST)
+    public Response todayCommend(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        int result = goodsFacade.todayCommend(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(result);
+        return response;
+    }
 }

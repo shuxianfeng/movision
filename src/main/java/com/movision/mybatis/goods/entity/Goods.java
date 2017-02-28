@@ -15,6 +15,16 @@ public class Goods {
 
     private Integer num;//数量
 
+    private String typename;
+
+    public String getTypename() {
+        return typename;
+    }
+
+    public void setTypename(String typename) {
+        this.typename = typename;
+    }
+
     public Integer getNum() {
         return num;
     }
