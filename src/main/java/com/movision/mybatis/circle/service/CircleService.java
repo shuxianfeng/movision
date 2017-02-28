@@ -218,37 +218,6 @@ public class CircleService {
         }
     }
 
-    /**
-     * 查询圈子管理员列表
-     *
-     * @param circleid
-     * @return
-     */
-    public List<Integer> querycirclemanagerlist(Integer circleid) {
-        try {
-            log.info("查询圈子管理员");
-            return circleMapper.querycirclemanagerlist(circleid);
-        } catch (Exception e) {
-            log.error("圈子管理员查询异常");
-            throw e;
-        }
-    }
-
-    /**
-     * 查询圈子关注数量
-     *
-     * @param circleid
-     * @return
-     */
-    public Integer queryFollowSum(Integer circleid) {
-        try {
-            log.info("查询圈子关注数量");
-            return circleMapper.queryFollowSum(circleid);
-        } catch (Exception e) {
-            log.error("查询圈子关注数量失败");
-            throw e;
-        }
-    }
 
     /**
      * 查询圈子总数量
@@ -328,21 +297,6 @@ public class CircleService {
         }
     }
 
-    /**
-     * 查询关注数,今日新增关注人数
-     *
-     * @param categoryid
-     * @return
-     */
-    public CircleFollowNum queryFollowAndNewNum(Integer categoryid) {
-        try {
-            log.info("查询关注数,今日新增关注人数");
-            return circleMapper.queryFollowAndNewNum(categoryid);
-        } catch (Exception e) {
-            log.error("查询关注数,今日新增关注人数异常");
-            throw e;
-        }
-    }
 
     /**
      * 查询圈子帖子总数，精贴总数，关注总数，支持人数和时间
@@ -360,22 +314,6 @@ public class CircleService {
     }
 
 
-    /**
-     * 查询帖子数量，今日新增帖子，精贴数
-     *
-     * @param categoryid
-     * @return
-     */
-    public CirclePostNum queryCirclePostNum(Integer categoryid) {
-        try {
-            log.info("查询帖子数量，今日新增帖子，精贴数");
-            return circleMapper.queryCirclePostNum(categoryid);
-        } catch (Exception e) {
-            log.error("查询帖子数量，今日新增帖子，精贴数异常");
-            throw e;
-        }
-    }
-
 
     /**
      * 查询圈子帖子数，关注数
@@ -388,22 +326,6 @@ public class CircleService {
             return circleMapper.queryCircleSum(circleid);
         } catch (Exception e) {
             log.error("查询圈子帖子数，关注速异常");
-            throw e;
-        }
-    }
-
-    /**
-     * 查询分类创建时间及支持人数
-     *
-     * @param categoryid
-     * @return
-     */
-    public CircleVo queryCircleSupportnum(Integer categoryid) {
-        try {
-            log.info("查询分类创建时间及支持人数");
-            return circleMapper.queryCircleSupportnum(categoryid);
-        } catch (Exception e) {
-            log.error("查询分类创建时间及支持人数异常");
             throw e;
         }
     }
@@ -439,6 +361,22 @@ public class CircleService {
     }
 
     /**
+     * 查询圈子是否推荐发现页
+     *
+     * @param circleid
+     * @return
+     */
+    public int queryCircleDiscover(String circleid) {
+        try {
+            log.info("查询圈子是否推荐发现页");
+            return circleMapper.queryCircleDiscover(circleid);
+        } catch (Exception e) {
+            log.error("查询圈子是否推荐发现页异常");
+            throw e;
+        }
+    }
+
+    /**
      * 圈子推荐发现页
      *
      * @return
@@ -449,6 +387,38 @@ public class CircleService {
             return circleMapper.updateDiscover(map);
         } catch (Exception e) {
             log.error("圈子推荐到发现页异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 取消圈子推荐到发现页
+     *
+     * @param circleid
+     * @return
+     */
+    public int updateDiscoverDel(String circleid) {
+        try {
+            log.info("取消圈子推荐到发现页");
+            return circleMapper.updateDiscoverDel(circleid);
+        } catch (Exception e) {
+            log.error("取消圈子推荐到发现页异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询圈子是否推荐到首页
+     *
+     * @param circleid
+     * @return
+     */
+    public Integer queryCircleRecommendIndex(String circleid) {
+        try {
+            log.info("查询圈子是否推荐到首页");
+            return circleMapper.queryCircleRecommendIndex(circleid);
+        } catch (Exception e) {
+            log.error("查询圈子是否推荐到首页异常");
             throw e;
         }
     }
@@ -465,6 +435,22 @@ public class CircleService {
             return circleMapper.updateCircleIndex(circleid);
         } catch (Exception e) {
             log.error("圈子推荐到首页异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 解除圈子推荐到首页
+     *
+     * @param circleid
+     * @return
+     */
+    public int updateCircleIndexDel(String circleid) {
+        try {
+            log.info("解除圈子推荐到首页");
+            return circleMapper.updateCircleIndexDel(circleid);
+        } catch (Exception e) {
+            log.error("解除圈子推荐到首页异常");
             throw e;
         }
     }

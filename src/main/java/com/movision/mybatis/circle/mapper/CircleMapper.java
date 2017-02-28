@@ -51,10 +51,6 @@ public interface CircleMapper {
 
     User queryCircleBycirclemaster(String phone);
 
-    List<Integer> querycirclemanagerlist(Integer circleid);
-
-    Integer queryFollowSum(Integer circleid);
-
     Integer queryCircleByNum();
 
     Circle queryCircleByName(Integer circleid);
@@ -67,21 +63,23 @@ public interface CircleMapper {
 
     List<User> queryCircleMan(Integer categoryid);
 
-    CircleFollowNum queryFollowAndNewNum(Integer categoryid);
-
     CircleVo queryFollowAndNum(Integer categoryid);
-
-    CirclePostNum queryCirclePostNum(Integer categoryid);
 
     CircleVo queryCircleSum(Integer circleid);
 
-    CircleVo queryCircleSupportnum(Integer categoryid);
-
     List<Circle> queryDiscoverList();
+
+    Integer queryCircleDiscover(String circleid);
 
     Integer updateDiscover(Map<String, Integer> map);
 
+    Integer updateDiscoverDel(String circleid);
+
+    Integer queryCircleRecommendIndex(String circleid);
+
     Integer updateCircleIndex(Integer circleid);
+
+    Integer updateCircleIndexDel(String circleid);
 
     CircleDetails quryCircleDetails(Integer circleid);
 

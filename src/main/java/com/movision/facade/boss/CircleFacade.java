@@ -217,12 +217,18 @@ public class CircleFacade {
      * @return
      */
     public Map<String, Integer> updateDiscover(String circleid, String orderid) {
+        Integer discover = circleService.queryCircleDiscover(circleid);
         Map<String, Integer> map = new HashedMap();
         Map<String, Integer> spread = new HashedMap();
         spread.put("circleid", Integer.parseInt(circleid));
         spread.put("orderid", Integer.parseInt(orderid));
-        Integer i = circleService.updateDiscover(spread);
-        map.put("resault", i);
+        if (discover == 0) {
+            Integer i = circleService.updateDiscover(spread);
+            map.put("resault", i);
+        } else {
+            Integer n = circleService.updateDiscoverDel(circleid);
+            map.put("resault", n);
+        }
         return map;
     }
 
@@ -233,9 +239,15 @@ public class CircleFacade {
      * @return
      */
     public Map<String, Integer> updateCircleIndex(String circleid) {
+        Integer recommend = circleService.queryCircleRecommendIndex(circleid);
         Map<String, Integer> map = new HashedMap();
-        Integer l = circleService.updateCircleIndex(Integer.parseInt(circleid));
-        map.put("resault", l);
+        if (recommend == 0) {
+            Integer l = circleService.updateCircleIndex(Integer.parseInt(circleid));
+            map.put("resault", l);
+        } else {
+            Integer n = circleService.updateCircleIndexDel(circleid);
+            map.put("resault", 2);
+        }
         return map;
     }
 

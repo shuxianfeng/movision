@@ -463,12 +463,28 @@
         SELECT orderid FROM yw_circle WHERE 1 GROUP BY orderid
     </select>
 
+    <select id="queryCircleDiscover" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT isrecommend FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER}
+    </select>
+
     <update id="updateDiscover" parameterType="java.util.Map">
         UPDATE yw_circle SET orderid=#{orderid,jdbcType=INTEGER},isrecommend=1 WHERE id=#{circleid,jdbcType=INTEGER}
     </update>
 
+    <update id="updateDiscoverDel" parameterType="java.lang.String">
+        UPDATE yw_circle SET orderid=0,isrecommend=0 WHERE id=#{circleid,jdbcType=INTEGER}
+    </update>
+
+    <select id="queryCircleRecommendIndex" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT isdiscover FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER}
+    </select>
+
     <update id="updateCircleIndex" parameterType="java.lang.Integer">
         UPDATE yw_circle SET isdiscover=1 WHERE id=#{circleid,jdbcType=INTEGER} AND isdiscover=0
+    </update>
+
+    <update id="updateCircleIndexDel" parameterType="java.lang.String">
+        UPDATE yw_circle SET isdiscover=0 WHERE id=#{circleid,jdbcType=INTEGER} AND isdiscover=1
     </update>
 
     <select id="quryCircleDetails" parameterType="java.lang.Integer"
