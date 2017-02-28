@@ -334,7 +334,7 @@ public class GoodsListFacade {
      * @param id
      * @return
      */
-    public int todayCommend(Integer id) {
+    public Goods todayCommend(Integer id) {
         return goodsService.todayCommend(id);
     }
 

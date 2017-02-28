@@ -757,9 +757,9 @@
     <update id="updateCom" parameterType="java.lang.Integer">
          update yw_goods SET ishomepage =0,recommenddate=NULL WHERE  id=#{id,jdbcType=INTEGER}
     </update>
-    <update id="todayCommend" parameterType="java.lang.Integer">
-       UPDATE yw_goods SET ishomepage=1 WHERE id=#{id,jdbcType=INTEGER}
-    </update>
+    <select id="todayCommend" parameterType="java.lang.Integer" resultType="com.movision.mybatis.goods.entity.Goods">
+       SELECT recommenddate FROM  yw_goods WHERE id=#{id,jdbcType=INTEGER}
+    </select>
 
     <select id="findAllAssessment" resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
         SELECT g.id,u.nickname,g.goodpoint,g.logisticpoint,g.servicepoint,g.content,(SELECT COUNT(1) FROM

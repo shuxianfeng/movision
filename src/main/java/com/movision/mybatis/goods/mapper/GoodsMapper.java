@@ -89,7 +89,7 @@ public interface GoodsMapper {
 
     int updateCom(Integer id);//取消推荐
 
-    int todayCommend(Integer id);//今日推荐
+    Goods todayCommend(Integer id);//今日推荐
 
     List<GoodsAssessmentVo> findAllAssessment(RowBounds rowBounds);//查询评价列表
 

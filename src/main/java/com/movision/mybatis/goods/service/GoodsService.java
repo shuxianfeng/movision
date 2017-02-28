@@ -658,7 +658,7 @@ public class GoodsService {
      * @param id
      * @return
      */
-    public int todayCommend(Integer id) {
+    public Goods todayCommend(Integer id) {
         try {
             log.info("今日推荐");
             return goodsMapper.todayCommend(id);

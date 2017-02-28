@@ -292,7 +292,7 @@ public class GoodsController {
     @RequestMapping(value = "update_todaycom", method = RequestMethod.POST)
     public Response todayCommend(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
         Response response = new Response();
-        int result = goodsFacade.todayCommend(id);
+        Goods result = goodsFacade.todayCommend(id);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
