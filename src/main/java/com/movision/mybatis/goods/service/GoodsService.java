@@ -245,6 +245,16 @@ public class GoodsService {
         }
     }
 
+    public List<GoodsAssessmentVo> queryAllOfficialReply(int goodsid) {
+        try {
+            log.info("查询所有官方回复的信息");
+            return goodsAssessmentMapper.queryAllOfficialReply(goodsid);
+        } catch (Exception e) {
+            log.error("查询所有官方回复的信息失败");
+            throw e;
+        }
+    }
+
     public GoodsAssessmentVo queryPassessment(int pid) {
         try {
             log.info("根据父评论id查询父评论对象");

@@ -29,6 +29,8 @@ public interface GoodsAssessmentMapper {
 
     List<GoodsAssessmentVo> findAllQualityGeneral(RowBounds rowBounds, int goodsid);
 
+    List<GoodsAssessmentVo> queryAllOfficialReply(int goodsid);
+
     GoodsAssessmentVo queryPassessment(int pid);
 
     List<GoodsAssessmentImg> queryGoodsAssessmentImg(int assessmentid);

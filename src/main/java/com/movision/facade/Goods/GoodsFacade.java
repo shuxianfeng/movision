@@ -79,15 +79,25 @@ public class GoodsFacade {
         pager.result(goodsAssessmentList);
 
         for (int i = 0; i < goodsAssessmentList.size(); i++) {
-            //如果官方评论是针对某个评论回复的，查询父评论信息
-            if (goodsAssessmentList.get(i).getPid() != null) {
-                goodsAssessmentList.get(i).setGoodsAssessmentVo(goodsService.queryPassessment(goodsAssessmentList.get(i).getPid()));
-            }
             //如果评论是有图的，查询评价图片列表
             if (goodsAssessmentList.get(i).getIsimage() == 1) {
                 List<GoodsAssessmentImg> goodsAssessmentImgList = goodsService.queryGoodsAssessmentImg(goodsAssessmentList.get(i).getId());
                 goodsAssessmentList.get(i).setGoodsAssessmentImgList(goodsAssessmentImgList);
             }
+        }
+
+        //查询该商品所有的官方回复信息
+        List<GoodsAssessmentVo> officialReplyList = goodsService.queryAllOfficialReply(Integer.parseInt(goodsid));
+        for (int i = 0; i < officialReplyList.size(); i++) {
+
+//            if (goodsAssessmentList.get(i).getPid() != null) {
+//                goodsAssessmentList.get(i).setGoodsAssessmentVo(goodsService.queryPassessment(goodsAssessmentList.get(i).getPid()));
+            for (int j = 0; j < goodsAssessmentList.size(); j++) {
+                if (goodsAssessmentList.get(j).getId() == officialReplyList.get(i).getPid()) {
+                    goodsAssessmentList.get(j).setGoodsAssessmentVo(officialReplyList.get(i));
+                }
+            }
+//            }
         }
 
         //查询各类评论的数量

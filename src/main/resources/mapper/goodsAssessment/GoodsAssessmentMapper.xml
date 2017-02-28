@@ -32,84 +32,102 @@
     <select id="findAllGoodsAssessment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
     SELECT t.* FROM (
-      SELECT t1.*, t2.nickname, t2.phone
+        SELECT t1.*, t2.nickname, t2.phone, t2.photo
       FROM yw_goods_assessment t1
       LEFT JOIN yw_user t2
       ON t1.userid = t2.id
     ) t
     WHERE t.goodid = #{goodid,jdbcType=INTEGER}
+        AND t.pid IS Null
+        ORDER BY t.createtime DESC
   </select>
 
     <!--根据商品id查询所有有图评论-->
     <select id="findAllImgGoodsAssessment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
         SELECT t.* FROM (
-          SELECT t1.*, t2.nickname, t2.phone
+        SELECT t1.*, t2.nickname, t2.phone, t2.photo
           FROM yw_goods_assessment t1
           LEFT JOIN yw_user t2
           ON t1.userid = t2.id
         ) t
         WHERE t.goodid = #{goodid,jdbcType=INTEGER}
-        AND  t.isimage = '1'
+        AND t.isimage = '1'
+        AND t.pid IS Null
+        ORDER BY t.createtime DESC
     </select>
 
     <!--根据商品id查询所有质量好的评论-->
     <select id="findAllQualityGoodsAssessment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
         SELECT t.* FROM (
-          SELECT t1.*, t2.nickname, t2.phone
+        SELECT t1.*, t2.nickname, t2.phone, t2.photo
           FROM yw_goods_assessment t1
           LEFT JOIN yw_user t2
           ON t1.userid = t2.id
         ) t
         WHERE t.goodid = #{goodid,jdbcType=INTEGER}
         AND t.goodpoint >= '4'
+        AND t.pid IS Null
+        ORDER BY t.createtime DESC
     </select>
 
     <!--根据商品id查询所有送货快的评论-->
     <select id="findAllFastGoodsAssessment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
         SELECT t.* FROM (
-          SELECT t1.*, t2.nickname, t2.phone
+        SELECT t1.*, t2.nickname, t2.phone, t2.photo
           FROM yw_goods_assessment t1
           LEFT JOIN yw_user t2
           ON t1.userid = t2.id
         ) t
         WHERE t.goodid = #{goodid,jdbcType=INTEGER}
         AND t.logisticpoint >= '4'
+        AND t.pid IS Null
+        ORDER BY t.createtime DESC
     </select>
 
     <!--根据商品id查询所有态度好的评论-->
     <select id="findAllAttitudeGoodsAssessment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
         SELECT t.* FROM (
-          SELECT t1.*, t2.nickname, t2.phone
+        SELECT t1.*, t2.nickname, t2.phone, t2.photo
           FROM yw_goods_assessment t1
           LEFT JOIN yw_user t2
           ON t1.userid = t2.id
         ) t
         WHERE t.goodid = #{goodid,jdbcType=INTEGER}
         AND t.servicepoint >= '4'
+        AND t.pid IS Null
+        ORDER BY t.createtime DESC
     </select>
 
     <!--根据商品id查询所有质量一般的评论-->
     <select id="findAllQualityGeneral" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
         SELECT t.* FROM (
-          SELECT t1.*, t2.nickname, t2.phone
+        SELECT t1.*, t2.nickname, t2.phone, t2.photo
           FROM yw_goods_assessment t1
           LEFT JOIN yw_user t2
           ON t1.userid = t2.id
         ) t
         WHERE t.goodid = #{goodid,jdbcType=INTEGER}
         AND '4' > t.goodpoint
+        AND t.pid IS Null
+        ORDER BY t.createtime DESC
+    </select>
+
+    <!--查询该商品下所有官方回复的信息列表-->
+    <select id="queryAllOfficialReply" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
+        SELECT * FROM yw_goods_assessment WHERE goodid = #{goodid,jdbcType=INTEGER} AND userid = '-1'
     </select>
 
     <!--根据父评论id查询评论实体-->
     <select id="queryPassessment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
     SELECT t.* FROM (
-      SELECT t1.*, t2.nickname, t2.phone
+        SELECT t1.*, t2.nickname, t2.phone, t2.photo
       FROM yw_goods_assessment t1
       LEFT JOIN yw_user t2
       ON t1.userid = t2.id

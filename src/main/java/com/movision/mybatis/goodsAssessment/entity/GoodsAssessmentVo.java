@@ -34,6 +34,8 @@ public class GoodsAssessmentVo {
 
     private Date createtime;
 
+    private String photo;//评论用户的头像图片url
+
     private String nickname;//评价用户的昵称
 
     private String phone;//评价用户的手机号
@@ -168,5 +170,13 @@ public class GoodsAssessmentVo {
 
     public void setGoodsAssessmentImgList(List<GoodsAssessmentImg> goodsAssessmentImgList) {
         this.goodsAssessmentImgList = goodsAssessmentImgList;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }
