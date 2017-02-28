@@ -22,7 +22,7 @@ public class AppDiscountController {
     @Autowired
     private DiscountFacade discountFacade;
 
-    @ApiOperation(value = "查询商品所有优惠活动列表", notes = "用户在商品详情页点击活动公告返回商品所有优惠活动列表", response = Response.class)
+    @ApiOperation(value = "查询商品所有优惠活动列表", notes = "用户在商品详情页点击活动公告返回商品所有优惠活动列表（status 0 未开始 1 进行中 2 已结束）", response = Response.class)
     @RequestMapping(value = "queryGoodsDiscountList", method = RequestMethod.POST)
     public Response queryGoodsDiscountList() {
         Response response = new Response();
