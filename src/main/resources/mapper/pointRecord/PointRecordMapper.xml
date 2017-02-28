@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.pointRecord.mapper.PointRecordMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.pointRecord.entity.PointRecord">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="point" property="point" jdbcType="INTEGER"/>
+        <result column="isadd" property="isadd" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="orderid" property="orderid" jdbcType="INTEGER"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, userid, point, isadd, type, orderid, intime, isdel
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_points_record
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from yw_points_record
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.pointRecord.entity.PointRecord">
+        insert into yw_points_record (id, userid, point,
+        isadd, type, orderid,
+        intime, isdel)
+        values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{point,jdbcType=INTEGER},
+        #{isadd,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER},
+        #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.pointRecord.entity.PointRecord">
+        insert into yw_points_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="point != null">
+                point,
+            </if>
+            <if test="isadd != null">
+                isadd,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="orderid != null">
+                orderid,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="point != null">
+                #{point,jdbcType=INTEGER},
+            </if>
+            <if test="isadd != null">
+                #{isadd,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.pointRecord.entity.PointRecord">
+        update yw_points_record
+        <set>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="point != null">
+                point = #{point,jdbcType=INTEGER},
+            </if>
+            <if test="isadd != null">
+                isadd = #{isadd,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                orderid = #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.pointRecord.entity.PointRecord">
+        update yw_points_record
+        set userid = #{userid,jdbcType=INTEGER},
+        point = #{point,jdbcType=INTEGER},
+        isadd = #{isadd,jdbcType=INTEGER},
+        type = #{type,jdbcType=INTEGER},
+        orderid = #{orderid,jdbcType=INTEGER},
+        intime = #{intime,jdbcType=TIMESTAMP},
+        isdel = #{isdel,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>
