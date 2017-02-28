@@ -547,8 +547,10 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         yw_orders s WHERE s.id=#{orderid,jdbcType=INTEGER})
     </select>
     <select id="queryGoods" parameterType="java.lang.Integer" resultType="com.movision.mybatis.goods.entity.Goods">
-        SELECT  s.`name`,s.protype,s.origprice,s.price,c.num,s.id,s.attribute FROM yw_goods s LEFT JOIN yw_cart c ON c.goodsid=s.id
-        WHERE c.userid=(SELECT s.userid FROM yw_orders s WHERE s.id=#{id,jdbcType=INTEGER} )
+        SELECT s.`name`,a.typename,s.origprice,s.price,c.num,s.id,s.attribute FROM yw_goods s LEFT JOIN yw_cart c ON
+        c.goodsid=s.id
+        LEFT JOIN yw_category a on a.protype=s.protype
+        WHERE c.userid=(SELECT s.userid FROM yw_orders s WHERE s.id=#{id,jdbcType=INTEGER})
     </select>
     <update id="updateAddress" parameterType="com.movision.mybatis.address.entity.AddressVo">
         update yw_address
@@ -643,11 +645,11 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         SELECT
         f.id,f.orderid,o.ordernumber,u.nickname,f.proposertime,f.processingpeople,f.processingtime,a.name,a.province,a.city,a.district,a.street,s.`name`
         AS
-        sname,s.protype,f.afterstatue,f.amountdue,f.refundamount,f.aftersalestatus,f.processingstatus,o.takeway,l.intime,l.logisticsid,g.img_url
+        sname,e.typename,f.afterstatue,f.amountdue,f.refundamount,f.aftersalestatus,f.processingstatus,o.takeway,l.intime,l.logisticsid,g.img_url
         FROM yw_afterservice f LEFT JOIN yw_address a ON a.id=f.addressid
         LEFT JOIN yw_goods s ON s.id=f.goodsid LEFT JOIN yw_orders o ON o.id=f.orderid LEFT JOIN yw_user u ON
         u.id=f.userid LEFT JOIN yw_order_sub_logistics l ON l.logisticsid=o.logisticsid
-        LEFT JOIN yw_goods_img g ON g.goodsid=f.goodsid
+        LEFT JOIN yw_goods_img g ON g.goodsid=f.goodsid LEFT JOIN yw_category e on e.protype=s.protype
         WHERE f.id=1 AND g.type=2 AND f.id=#{id,jdbcType=INTEGER}
     </select>
 
