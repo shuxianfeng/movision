@@ -2,17 +2,26 @@ package com.movision.facade.boss;
 
 import com.ibm.icu.text.SimpleDateFormat;
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @Author zhanglei
@@ -22,8 +31,9 @@ import java.util.Map;
 public class GoodsListFacade {
     @Autowired
     GoodsService goodsService = new GoodsService();
-
-
+    private static Logger log = LoggerFactory.getLogger(GoodsListFacade.class);
+    @Value("#{configProperties['img.domain']}")
+    private String imgdomain;
     /**
      * 商品管理--查询商品
      *
@@ -209,6 +219,85 @@ public class GoodsListFacade {
      */
     public GoodsVo queryGoodDetail(Integer id) {
         return goodsService.findGoodDetail(id);
+    }
+
+    /**
+     * 修改商品
+     *
+     * @param imgurl
+     * @param name
+     * @param protype
+     * @param id
+     * @param price
+     * @param origprice
+     * @param stock
+     * @param isdel
+     * @param
+     * @param recommenddate
+     * @param brandid
+     * @return
+     */
+    public Map<String, Integer> queryGoods(HttpServletRequest request, MultipartFile imgurl, String name, String protype, String id, String price, String origprice, String stock, String isdel, String ishot, String recommenddate, String brandid, String isessence) {
+        GoodsVo goodsVo = new GoodsVo();
+        Map<String, Integer> map = new HashedMap();
+        goodsVo.setId(Integer.parseInt(id));
+        goodsVo.setName(name);
+        goodsVo.setProtype(Integer.parseInt(protype));
+        goodsVo.setOrigprice(Double.parseDouble(origprice));
+        goodsVo.setPrice(Double.parseDouble(price));
+        goodsVo.setStock(Integer.parseInt(stock));
+        goodsVo.setIsdel(Integer.parseInt(isdel));
+        goodsVo.setBrandid(brandid);
+        Date date = null;
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        if (recommenddate != null) {
+            try {
+                date = format.parse(recommenddate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        goodsVo.setRecommenddate(date);
+        goodsVo.setIshot(Integer.parseInt(ishot));
+        goodsVo.setIsessence(Integer.parseInt(isessence));
+
+        try {
+            //上传图片到本地服务器
+            String savedFileName = "";
+            String imgurle = "";
+             /*boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;*/
+            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+            if (imgurl != null && isMultipart) {
+                if (!imgurl.isEmpty()) {
+                    String fileRealName = imgurl.getOriginalFilename();
+                    int pointIndex = fileRealName.indexOf(".");
+                    String fileSuffix = fileRealName.substring(pointIndex);
+                    UUID FileId = UUID.randomUUID();
+                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
+                    String savedDir = request.getSession().getServletContext().getRealPath("");
+                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
+                    //不保存到项目中,防止部包把图片覆盖掉了
+                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    //这里组合出真实的图片存储路径
+                    String combinpath = path + "/images/goods/coverimg/";
+                    File savedFile = new File(combinpath, savedFileName);
+                    System.out.println("文件url：" + combinpath + "" + savedFileName);
+                    boolean isCreateSuccess = savedFile.createNewFile();
+                    if (isCreateSuccess) {
+                        imgurl.transferTo(savedFile);  //转存文件
+                    }
+                }
+                imgurle = imgdomain + savedFileName;
+            }
+            GoodsImg img = new GoodsImg();
+            img.setImgurl(imgurle);
+
+        } catch (Exception e) {
+            log.error("修改商品异常", e);
+        }
+
+        return map;
     }
 
 }

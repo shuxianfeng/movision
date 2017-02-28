@@ -247,4 +247,14 @@ public class PostActiveList {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    private Integer isessence;
+
+    public Integer getIsessence() {
+        return isessence;
+    }
+
+    public void setIsessence(Integer isessence) {
+        this.isessence = isessence;
+    }
 }

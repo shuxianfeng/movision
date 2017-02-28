@@ -78,4 +78,8 @@ public interface GoodsMapper {
 
     GoodsVo findGoodDetail(Integer id);//商品详情
 
+    int updateGoods(GoodsVo goodsVo);//修改商品
+
+    int updateImage(GoodsImg goodsImg);//修改图片
+
 }

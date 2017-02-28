@@ -681,4 +681,57 @@
         g.onlinetime FROM yw_goods g LEFT JOIN yw_brand b ON b.brandid=g.brandid
         LEFT JOIN yw_goods_img i ON i.goodsid=g.id WHERE g.id=#{id,jdbcType=INTEGER}  GROUP BY g.id
     </select>
+    <update id="updateGoods" parameterType="com.movision.mybatis.goods.entity.GoodsVo">
+        update yw_goods
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR}
+            </if>
+        </set>
+        <set>
+            <if test="protype != null">
+                protype = #{protype,jdbcType=INTEGER}
+            </if>
+        </set>
+        <set>
+            <if test="price != null">
+                price = #{price,jdbcType=DOUBLE}
+            </if>
+        </set>
+        <set>
+            <if test="origprice != null">
+                origprice = #{origprice,jdbcType=DOUBLE}
+            </if>
+        </set>
+        <set>
+            <if test="stock != null">
+                stock = #{stock,jdbcType=INTEGER}
+            </if>
+        </set>
+        <set>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER}
+            </if>
+        </set>
+        <set>
+            <if test="brandid != null">
+                brandid = #{brandid,jdbcType=INTEGER}
+            </if>
+        </set>
+        <set>
+            <if test="recommenddate != null">
+                recommenddate = #{recommenddate,jdbcType=DATE}
+            </if>
+        </set>
+        where id=#{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateImage" parameterType="com.movision.mybatis.goods.entity.GoodsImg">
+        update yw_goods_img
+        <set>
+            <if test="imgurl != null">
+                img_url = #{imgurl,jdbcType=MultipartHttpServletRequest}
+            </if>
+        </set>
+        WHERE goodsid=(SELECT id FROM yw_goods WHERE id=#{id,jdbcType=INTEGER} )
+    </update>
 </mapper>

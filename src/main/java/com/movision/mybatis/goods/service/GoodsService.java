@@ -557,4 +557,36 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 修改商品
+     *
+     * @param goodsVo
+     * @return
+     */
+    public int updateGoods(GoodsVo goodsVo) {
+        try {
+            log.info("修改商品");
+            return goodsMapper.updateGoods(goodsVo);
+        } catch (Exception e) {
+            log.error("修改商品失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 修改图片
+     *
+     * @param goodsImg
+     * @return
+     */
+    public int updateImage(GoodsImg goodsImg) {
+        try {
+            log.info("修改图片");
+            return goodsMapper.updateImage(goodsImg);
+        } catch (Exception e) {
+            log.error("修改图片失败", e);
+            throw e;
+        }
+    }
 }

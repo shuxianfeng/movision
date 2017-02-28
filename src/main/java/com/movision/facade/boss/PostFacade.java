@@ -194,6 +194,7 @@ public class PostFacade {
 
              Date begintime=periods.getBegintime();
              Date endtime=periods.getEndtime();
+                  postList.setId(list.get(i).getId());
              postList.setTitle(list.get(i).getTitle());//主题
              postList.setNickname(nickname);//昵称
              postList.setActivetype(list.get(i).getActivetype());//活动类型
