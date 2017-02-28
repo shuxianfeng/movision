@@ -57,6 +57,7 @@ public interface GoodsMapper {
 
     int AddToGoods(Integer id);//上架
 
+    int DownToGoods(Integer id);//下架
     List<GoodsVo> findAllGoodsCondition(Map map, RowBounds rowBounds);//条件查询
 
     int recommendHot(Integer id);//推荐到热门
@@ -93,5 +94,6 @@ public interface GoodsMapper {
 
     GoodsAssessmentVo queryAssessmentRemark(Integer id);//评论详情
 
+    GoodsImg queryImgGoods(Integer id);//商品参数图
 
 }

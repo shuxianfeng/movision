@@ -3,6 +3,7 @@ package com.movision.controller.boss;
 import com.movision.common.Response;
 import com.movision.facade.boss.GoodsListFacade;
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.utils.pagination.model.Paging;
@@ -78,14 +79,14 @@ public class GoodsController {
      * @param allstatue
      * @param minorigprice
      * @param maxorigprice
-     * @param minprice
-     * @param maxprice
-     * @param minstock
-     * @param maxstock
-     * @param minsales
-     * @param maxsales
-     * @param mincollect
-     * @param maxcollect
+     * @param
+     * @param
+     * @param
+     * @param
+     * @param
+     * @param
+     * @param
+     * @param
      * @param pageNo
      * @param pageSize
      * @return
@@ -131,6 +132,24 @@ public class GoodsController {
         int result = goodsFacade.queryByGoods(id);
         if (response.getCode() == 200) {
             response.setMessage("上架成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
+    /**
+     * 商品管理--下架
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "下架", notes = "下架", response = Response.class)
+    @RequestMapping(value = "down_goods", method = RequestMethod.POST)
+    public Response queryByGoodsDown(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        int result = goodsFacade.queryByGoodsDown(id);
+        if (response.getCode() == 200) {
+            response.setMessage("下架成功");
         }
         response.setData(result);
         return response;
@@ -349,4 +368,21 @@ public class GoodsController {
         return response;
     }
 
+    /**
+     * 商品参数图
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "商品参数图", notes = "商品参数图", response = Response.class)
+    @RequestMapping(value = "query_goods_img", method = RequestMethod.POST)
+    public Response queryImgGoods(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        GoodsImg goodsImg = goodsFacade.queryImgGoods(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(goodsImg);
+        return response;
+    }
 }

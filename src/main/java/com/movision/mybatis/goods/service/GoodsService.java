@@ -400,6 +400,22 @@ public class GoodsService {
     }
 
     /**
+     * 商品管理*--下架
+     *
+     * @param id
+     * @return
+     */
+    public int queryByGoodsDown(Integer id) {
+        try {
+            log.info("下架");
+            return goodsMapper.DownToGoods(id);
+        } catch (Exception e) {
+            log.error("下架失败");
+            throw e;
+        }
+    }
+
+    /**
      * 商品管理-推荐到热门
      *
      * @param id
@@ -669,6 +685,22 @@ public class GoodsService {
             return goodsMapper.queryAssessmentRemark(id);
         } catch (Exception e) {
             log.error("评价详情失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 商品参数图
+     *
+     * @param id
+     * @return
+     */
+    public GoodsImg queryImgGoods(Integer id) {
+        try {
+            log.info("商品参数图");
+            return goodsMapper.queryImgGoods(id);
+        } catch (Exception e) {
+            log.error("商品参数图失败", e);
             throw e;
         }
     }

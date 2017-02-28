@@ -69,6 +69,16 @@ public class GoodsListFacade {
     }
 
     /**
+     * 商品管理--下架
+     *
+     * @param id
+     * @return
+     */
+    public int queryByGoodsDown(Integer id) {
+        return goodsService.queryByGoodsDown(id);
+    }
+
+    /**
      * 商品管理--推荐到热门
      * @param id
      * @return
@@ -378,6 +388,17 @@ public class GoodsListFacade {
      */
     public GoodsAssessmentVo queryAssessmentRemark(Integer id) {
         return goodsService.queryAssessmentRemark(id);
+    }
+
+
+    /**
+     * 商品参数图
+     *
+     * @param id
+     * @return
+     */
+    public GoodsImg queryImgGoods(Integer id) {
+        return goodsService.queryImgGoods(id);
     }
 
 }
