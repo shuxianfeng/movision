@@ -107,7 +107,7 @@ public class GoodsListFacade {
      * @return
      */
     public List<GoodsVo> queryGoodsCondition(String name, String producttags, String brand, String protype, String isdel, String allstatue, String minorigprice, String maxorigprice,
-                                             String minprice, String maxprice, String minstock, String pai, String maxstock, String minsales, String maxsales, String mincollect, String maxcollect, Paging<GoodsVo> pager) {
+                                             String minprice, String maxprice, String minstock, String pai, String maxstock, String minsales, String maxsales, String mincollect, String maxcollect, String mintime, String maxtime, Paging<GoodsVo> pager) {
 
         Map<String, Object> map = new HashedMap();
         if (name != null) {
@@ -158,6 +158,25 @@ public class GoodsListFacade {
         if (maxcollect != null) {
             map.put("maxcollect", maxcollect);
         }
+        Date isessencetime = null;//开始时间
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        if (mintime != null) {
+            try {
+                isessencetime = format.parse(mintime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("mintime", isessencetime);
+        Date max = null;//最大时间
+        if (maxtime != null) {
+            try {
+                max = format.parse(maxtime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("maxtime", max);
         if (pai != null) {
             map.put("pai", pai);
         }

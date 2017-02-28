@@ -80,6 +80,24 @@ public class GoodsVo {
     private Integer isseckill;
 
     private Integer ishomepage;//是否为推荐：0 否 1 是
+    private Date mintime;
+    private Date maxtime;
+
+    public Date getMintime() {
+        return mintime;
+    }
+
+    public void setMintime(Date mintime) {
+        this.mintime = mintime;
+    }
+
+    public Date getMaxtime() {
+        return maxtime;
+    }
+
+    public void setMaxtime(Date maxtime) {
+        this.maxtime = maxtime;
+    }
 
     private Date recommenddate;//推荐日期
     private String typename;//类别名

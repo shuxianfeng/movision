@@ -591,6 +591,9 @@
         <if test="collect!=null and collect!=''">
             AND s.collect BETWEEN #{mincollect,jdbcType=INTEGER} AND #{maxcollect,jdbcType=INTEGER}
         </if>
+        <if test="onlinetime!=null and onlinetime!=''">
+            AND s.onlinetime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
+        </if>
         <if test="pai==0">
             ORDER BY s.sales DESC
         </if>
