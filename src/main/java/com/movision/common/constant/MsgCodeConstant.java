@@ -310,4 +310,9 @@ public interface MsgCodeConstant {
 	 */
 	int boss_username_is_exist = 10304;
 
+	/**
+	 * app用户编辑我的地址失败
+	 */
+	int app_edit_my_address_fail = 20000;
+
 }

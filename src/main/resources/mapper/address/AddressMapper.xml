@@ -137,9 +137,7 @@
             <if test="isdefault != null">
                 isdefault = #{isdefault,jdbcType=INTEGER},
             </if>
-            <if test="updatetime != null">
-                updatetime = #{updatetime,jdbcType=TIMESTAMP},
-            </if>
+            updatetime = now(),
             <if test="isdel != null">
                 isdel = #{isdel,jdbcType=INTEGER},
             </if>

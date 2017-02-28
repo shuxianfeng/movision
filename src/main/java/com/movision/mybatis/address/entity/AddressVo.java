@@ -22,6 +22,7 @@ public class AddressVo {
         this.orderid = orderid;
     }
 
+
     public String getPhone() {
         return phone;
     }

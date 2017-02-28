@@ -43,4 +43,12 @@ public class AddressController {
         return response;
     }
 
+    @ApiOperation(value = "编辑我的收获地址", notes = "编辑我的收获地址", response = Response.class)
+    @RequestMapping(value = {"/edit_my_address"}, method = RequestMethod.POST)
+    public Response editMyAddress(@ApiParam @ModelAttribute Address address) {
+        Response response = new Response();
+        addressFacade.updateAddress(address);
+        return response;
+    }
+
 }

@@ -43,5 +43,15 @@ public class AddressService {
         }
     }
 
+    public int updateAddress(Address address) {
+        try {
+            log.info("编辑我的收获地址");
+            return addressMapper.updateByPrimaryKeySelective(address);
+        } catch (Exception e) {
+            log.error("编辑我的收获地址失败", e);
+            throw e;
+        }
+    }
+
 
 }
