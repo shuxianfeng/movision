@@ -2,6 +2,7 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.GoodsListFacade;
+import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -193,6 +194,41 @@ public class GoodsController {
             response.setMessage("修改成功");
         }
         response.setData(map);
+        return response;
+    }
+
+
+    /**
+     * 查询品牌
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询品牌", notes = "查询品牌", response = Response.class)
+    @RequestMapping(value = "query_brand_list", method = RequestMethod.POST)
+    public Response queryAllBrand() {
+        Response response = new Response();
+        List<GoodsVo> goodsVo = goodsFacade.queryAllBrand();
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(goodsVo);
+        return response;
+    }
+
+    /**
+     * 查询类别
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询类别", notes = "查询类别", response = Response.class)
+    @RequestMapping(value = "query_type_list", method = RequestMethod.POST)
+    public Response queryAllType() {
+        Response response = new Response();
+        List<GoodsVo> goodsVo = goodsFacade.queryAllType();
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(goodsVo);
         return response;
     }
 }

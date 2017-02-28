@@ -6,6 +6,7 @@ import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
+import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.utils.pagination.model.Paging;
@@ -518,5 +519,6 @@ public class OrdersListController {
         response.setData(afterservice);
         return response;
     }
+
 
 }

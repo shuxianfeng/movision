@@ -181,4 +181,24 @@ public class GoodsListFacade {
     }
 
 
+    /**
+     * 查询所有品牌
+     *
+     * @return
+     */
+    public List<GoodsVo> queryAllBrand() {
+        List<GoodsVo> goodsVo = goodsService.findAllBrand();
+        return goodsVo;
+    }
+
+    /**
+     * 查询所有商品类别
+     *
+     * @return
+     */
+    public List<GoodsVo> queryAllType() {
+        List<GoodsVo> goodsVo = goodsService.findAllType();
+        return goodsVo;
+    }
+
 }

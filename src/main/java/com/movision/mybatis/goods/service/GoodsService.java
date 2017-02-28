@@ -502,4 +502,33 @@ public class GoodsService {
         }
     }
 
+    /**
+     * 查询商品分类
+     *
+     * @return
+     */
+    public List<GoodsVo> findAllType() {
+        try {
+            log.info("查询商品分类");
+            return goodsMapper.findAllType();
+        } catch (Exception e) {
+            log.info("查询商品分类失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询品牌
+     *
+     * @return
+     */
+    public List<GoodsVo> findAllBrand() {
+        try {
+            log.info("查询商品品牌");
+            return goodsMapper.findAllBrand();
+        } catch (Exception e) {
+            log.info("查询商品品牌失败", e);
+            throw e;
+        }
+    }
 }
