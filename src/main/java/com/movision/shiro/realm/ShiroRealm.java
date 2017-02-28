@@ -141,61 +141,26 @@ public class ShiroRealm extends AuthorizingRealm {
      */
     public static class ShiroUser implements Serializable {
         private static final long serialVersionUID = -1373760761780840081L;
-        private int id;
+        private Integer id;
         private String account; //账号(使用手机号)
-        private int status; //账号状态：默认 0 正常  1 异常封号
+        private Integer status; //账号状态：默认 0 正常  1 异常封号
         private String role;       //角色
         private Date registerTime;    //注册时间
         private String photo;    //头像url
         private String nickname;    //昵称
-        private int level;   //用户等级：0 普通用户  1 青铜  2 白银 3 黄金 4 白金 5 钻石 6 金钻石 7皇冠 8金皇冠
+        private Integer level;   //用户等级：0 普通用户  1 青铜  2 白银 3 黄金 4 白金 5 钻石 6 金钻石 7皇冠 8金皇冠
         private String phone;   //手机号
         private String token;
 
-        public ShiroUser(int id, String account, int status, String role, Date registerTime, String photo, String nickname, int level, String phone, String token) {
+        public void setId(Integer id) {
             this.id = id;
-            this.account = account;
-            this.status = status;
-            this.role = role;
-            this.registerTime = registerTime;
-            this.photo = photo;
-            this.nickname = nickname;
-            this.level = level;
-            this.phone = phone;
-            this.token = token;
-        }
-
-        public void setToken(String token) {
-            this.token = token;
-        }
-
-        public String getToken() {
-
-            return token;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public void setRegisterTime(Date registerTime) {
-            this.registerTime = registerTime;
-        }
-
-        public int getId() {
-
-            return id;
-        }
-
-        public Date getRegisterTime() {
-            return registerTime;
         }
 
         public void setAccount(String account) {
             this.account = account;
         }
 
-        public void setStatus(int status) {
+        public void setStatus(Integer status) {
             this.status = status;
         }
 
@@ -203,6 +168,9 @@ public class ShiroRealm extends AuthorizingRealm {
             this.role = role;
         }
 
+        public void setRegisterTime(Date registerTime) {
+            this.registerTime = registerTime;
+        }
 
         public void setPhoto(String photo) {
             this.photo = photo;
@@ -212,7 +180,7 @@ public class ShiroRealm extends AuthorizingRealm {
             this.nickname = nickname;
         }
 
-        public void setLevel(int level) {
+        public void setLevel(Integer level) {
             this.level = level;
         }
 
@@ -220,16 +188,19 @@ public class ShiroRealm extends AuthorizingRealm {
             this.phone = phone;
         }
 
-        public static long getSerialVersionUID() {
-            return serialVersionUID;
+        public void setToken(String token) {
+            this.token = token;
         }
 
+        public Integer getId() {
+            return id;
+        }
 
         public String getAccount() {
             return account;
         }
 
-        public int getStatus() {
+        public Integer getStatus() {
             return status;
         }
 
@@ -237,6 +208,9 @@ public class ShiroRealm extends AuthorizingRealm {
             return role;
         }
 
+        public Date getRegisterTime() {
+            return registerTime;
+        }
 
         public String getPhoto() {
             return photo;
@@ -246,12 +220,29 @@ public class ShiroRealm extends AuthorizingRealm {
             return nickname;
         }
 
-        public int getLevel() {
+        public Integer getLevel() {
             return level;
         }
 
         public String getPhone() {
             return phone;
+        }
+
+        public String getToken() {
+            return token;
+        }
+
+        public ShiroUser(Integer id, String account, Integer status, String role, Date registerTime, String photo, String nickname, Integer level, String phone, String token) {
+            this.id = id;
+            this.account = account;
+            this.status = status;
+            this.role = role;
+            this.registerTime = registerTime;
+            this.photo = photo;
+            this.nickname = nickname;
+            this.level = level;
+            this.phone = phone;
+            this.token = token;
         }
 
         /**

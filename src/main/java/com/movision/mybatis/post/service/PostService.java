@@ -642,4 +642,14 @@ public class PostService {
         }
     }
 
+    public List<Post> queryMyPostList(Map map) {
+        try {
+            log.info("查询我的全部帖子");
+            return postMapper.queryMyPostList(map);
+        } catch (Exception e) {
+            log.error("查询我的全部帖子失败", e);
+            throw e;
+        }
+    }
+
 }

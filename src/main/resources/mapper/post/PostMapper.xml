@@ -1410,4 +1410,13 @@
         ORDER BY c.collect_time DESC
     </select>
 
+    <select id="queryMyPostList" resultType="com.movision.mybatis.post.entity.Post">
+        SELECT *
+        FROM yw_post
+        WHERE isdel = 0
+        and userid = #{userid}
+        ORDER BY intime DESC
+    </select>
+
+
 </mapper>

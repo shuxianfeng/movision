@@ -19,13 +19,14 @@ public interface PostMapper {
     int insertActive(Post post);//新增活动
 
     int insertActivet(PostTo post);//新增活动
+
     int insertPerid(Period period);//新增活动周期
+
     int insertSelective(Post record);
 
     int insertSelectivet(PostTo record);
 
     int insertGoods(Map typ);
-
 
     Post selectByPrimaryKey(Integer id);
 
@@ -99,7 +100,6 @@ public interface PostMapper {
 
     PostList queryPostParticulars(Integer postid);
 
-
     int addPost(Map map);
 
     PostNum queryPostNumAndisessenceByCircleid(Integer circleid);
@@ -118,8 +118,7 @@ public interface PostMapper {
 
     List<PostActiveList> findAllActiveTOByList(RowBounds rowBounds);
 
-        int findAllPerson(Integer postid);//查询报名人数
-
+    int findAllPerson(Integer postid);//查询报名人数
 
     Double findAllActivefee(Integer postid);
 
@@ -134,4 +133,6 @@ public interface PostMapper {
     List<PostList> findAllActivePostCondition(Map map, RowBounds rowBounds);
 
     List<Post> findAllMyCollectPost(RowBounds rowBounds, Map map);
+
+    List<Post> queryMyPostList(Map map);
 }

@@ -176,5 +176,12 @@ public class UserFacade {
         userService.updateByPrimaryKeySelective(user);
     }
 
+    public void applyVip() {
+        User user = new User();
+        user.setId(ShiroUtil.getAppUserID());
+        user.setApplydate(new Date());
+
+        userService.updateByPrimaryKeySelective(user);
+    }
 
 }

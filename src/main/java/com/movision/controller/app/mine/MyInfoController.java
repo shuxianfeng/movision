@@ -67,8 +67,6 @@ public class MyInfoController {
     public Response getMyInfoGoods(@RequestParam(required = false, defaultValue = "1") String pageNo,
                                    @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
         Response response = new Response();
-        //获取当前用户信息
-        ShiroRealm.ShiroUser user = ShiroUtil.getAppUser();
         //获取当前用户id
         int userid = ShiroUtil.getAppUserID();
         //获取最喜欢的商品
@@ -85,11 +83,8 @@ public class MyInfoController {
     public Response getMyInfoPost(@RequestParam(required = false, defaultValue = "1") String pageNo,
                                   @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
         Response response = new Response();
-        //获取当前用户信息
-        ShiroRealm.ShiroUser user = ShiroUtil.getAppUser();
         //获取当前用户id
         int userid = ShiroUtil.getAppUserID();
-
         // 获取收藏的精选：帖子/活动
         Paging<Post> postPaging = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<Post> postList = postFacade.findAllMyCollectPostList(postPaging, userid);
