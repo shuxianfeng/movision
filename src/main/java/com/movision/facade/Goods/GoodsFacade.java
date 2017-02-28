@@ -89,15 +89,11 @@ public class GoodsFacade {
         //查询该商品所有的官方回复信息
         List<GoodsAssessmentVo> officialReplyList = goodsService.queryAllOfficialReply(Integer.parseInt(goodsid));
         for (int i = 0; i < officialReplyList.size(); i++) {
-
-//            if (goodsAssessmentList.get(i).getPid() != null) {
-//                goodsAssessmentList.get(i).setGoodsAssessmentVo(goodsService.queryPassessment(goodsAssessmentList.get(i).getPid()));
             for (int j = 0; j < goodsAssessmentList.size(); j++) {
                 if (goodsAssessmentList.get(j).getId() == officialReplyList.get(i).getPid()) {
                     goodsAssessmentList.get(j).setGoodsAssessmentVo(officialReplyList.get(i));
                 }
             }
-//            }
         }
 
         //查询各类评论的数量
