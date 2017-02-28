@@ -69,11 +69,11 @@ public interface CircleMapper {
 
     CircleFollowNum queryFollowAndNewNum(Integer categoryid);
 
-    CircleFollowNum queryFollowAndNewNumt(Integer circleid);
+    CircleVo queryFollowAndNum(Integer categoryid);
 
     CirclePostNum queryCirclePostNum(Integer categoryid);
 
-    CirclePostNum queryCirclePostNumt(Integer circleid);
+    CircleVo queryCircleSum(Integer circleid);
 
     CircleVo queryCircleSupportnum(Integer categoryid);
 

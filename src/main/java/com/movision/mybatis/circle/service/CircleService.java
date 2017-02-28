@@ -345,20 +345,20 @@ public class CircleService {
     }
 
     /**
-     * 查询关注数,今日新增关注人数
-     * queryCirclePostNumt
-     *
+     * 查询圈子帖子总数，精贴总数，关注总数，支持人数和时间
+     * @param categoryid
      * @return
      */
-    public CircleFollowNum queryFollowAndNewNumt(Integer circleid) {
+    public CircleVo queryFollowAndNum(Integer categoryid) {
         try {
-            log.info("查询关注数,今日新增关注人数");
-            return circleMapper.queryFollowAndNewNumt(circleid);
+            log.info("查询圈子帖子总数，精贴总数，关注总数，支持人数和时间");
+            return circleMapper.queryFollowAndNum(categoryid);
         } catch (Exception e) {
-            log.error("查询关注数,今日新增关注人数异常");
+            log.error("查询圈子帖子总数，精贴总数，关注总数，支持人数和时间异常");
             throw e;
         }
     }
+
 
     /**
      * 查询帖子数量，今日新增帖子，精贴数
@@ -376,16 +376,18 @@ public class CircleService {
         }
     }
 
+
     /**
-     * 查询帖子数量，今日新增帖子，精贴数
-     * * @return
+     * 查询圈子帖子数，关注数
+     * @param circleid
+     * @return
      */
-    public CirclePostNum queryCirclePostNumt(Integer circleid) {
+    public CircleVo queryCircleSum(Integer circleid) {
         try {
-            log.info("查询帖子数量，今日新增帖子，精贴数");
-            return circleMapper.queryCirclePostNumt(circleid);
+            log.info("查询圈子帖子数，关注数");
+            return circleMapper.queryCircleSum(circleid);
         } catch (Exception e) {
-            log.error("查询帖子数量，今日新增帖子，精贴数异常");
+            log.error("查询圈子帖子数，关注速异常");
             throw e;
         }
     }

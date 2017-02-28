@@ -23,7 +23,7 @@ public class CircleVo {
 
     private Integer category;//圈子分类
 
-    private String categoryname;//圈主名称
+    private String categoryname;//圈主分类名称
 
     private String categorylevel;//判断V
 
@@ -65,6 +65,8 @@ public class CircleVo {
 
     private User circlemaster;//圈主
 
+    private String circlename;//圈主名称
+
     private List<User> circlemanagerlist;//圈子管理员列表
 
     private Integer isessencenum;//圈子中精贴数
@@ -74,6 +76,14 @@ public class CircleVo {
     private Integer issupport;//是否可支持 0 可支持 1 已支持
 
     private Date intime;//时间
+
+    public String getCirclename() {
+        return circlename;
+    }
+
+    public void setCirclename(String circlename) {
+        this.circlename = circlename;
+    }
 
     public Date getIntime() {
         return intime;
