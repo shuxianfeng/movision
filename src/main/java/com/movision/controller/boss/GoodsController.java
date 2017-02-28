@@ -100,14 +100,6 @@ public class GoodsController {
                                        @ApiParam(value = "商品类型") @RequestParam(required = false) String allstatue,
                                        @ApiParam(value = "最小原价") @RequestParam(required = false) String minorigprice,
                                        @ApiParam(value = "最大原价") @RequestParam(required = false) String maxorigprice,
-                                       @ApiParam(value = "最小折扣价") @RequestParam(required = false) String minprice,
-                                       @ApiParam(value = "最大折扣价") @RequestParam(required = false) String maxprice,
-                                       @ApiParam(value = "最小库存") @RequestParam(required = false) String minstock,
-                                       @ApiParam(value = "最大库存") @RequestParam(required = false) String maxstock,
-                                       @ApiParam(value = "最小销售量") @RequestParam(required = false) String minsales,
-                                       @ApiParam(value = "最大销售量") @RequestParam(required = false) String maxsales,
-                                       @ApiParam(value = "最小收藏") @RequestParam(required = false) String mincollect,
-                                       @ApiParam(value = "最大收藏") @RequestParam(required = false) String maxcollect,
                                        @ApiParam(value = "开始时间") @RequestParam(required = false) String mintime,
                                        @ApiParam(value = "结束时间") @RequestParam(required = false) String maxtime,
                                        @ApiParam(value = "排序") @RequestParam(required = false) String pai,
@@ -116,7 +108,7 @@ public class GoodsController {
     ) {
         Response response = new Response();
         Paging<GoodsVo> pager = new Paging<GoodsVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<GoodsVo> list = goodsFacade.queryGoodsCondition(name, producttags, brand, protype, isdel, allstatue, minorigprice, maxorigprice, minprice, maxprice, minstock, maxstock, minsales, maxsales, mincollect, maxcollect, mintime, maxtime, pai, pager);
+        List<GoodsVo> list = goodsFacade.queryGoodsCondition(name, producttags, brand, protype, isdel, allstatue, minorigprice, maxorigprice, mintime, maxtime, pai, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -338,4 +330,23 @@ public class GoodsController {
         response.setData(pager);
         return response;
     }
+
+    /**
+     * 评价详情
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "评价详情", notes = "评价详情", response = Response.class)
+    @RequestMapping(value = "query_assessmentremark", method = RequestMethod.POST)
+    public Response queryAssessmentRemark(@ApiParam(value = "评价id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        GoodsAssessmentVo goodsAssessmentVo = goodsFacade.queryAssessmentRemark(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(goodsAssessmentVo);
+        return response;
+    }
+
 }

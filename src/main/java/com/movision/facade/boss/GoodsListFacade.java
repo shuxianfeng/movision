@@ -98,18 +98,18 @@ public class GoodsListFacade {
      * @param allstatue
      * @param minorigprice
      * @param maxorigprice
-     * @param minprice
-     * @param maxprice
-     * @param minstock
-     * @param maxstock
-     * @param minsales
-     * @param maxsales
-     * @param mincollect
-     * @param maxcollect
+     * @param
+     * @param
+     * @param
+     * @param
+     * @param
+     * @param
+     * @param
+     * @param
      * @return
      */
     public List<GoodsVo> queryGoodsCondition(String name, String producttags, String brand, String protype, String isdel, String allstatue, String minorigprice, String maxorigprice,
-                                             String minprice, String maxprice, String minstock, String pai, String maxstock, String minsales, String maxsales, String mincollect, String maxcollect, String mintime, String maxtime, Paging<GoodsVo> pager) {
+                                             String pai, String mintime, String maxtime, Paging<GoodsVo> pager) {
 
         Map<String, Object> map = new HashedMap();
         if (name != null) {
@@ -136,30 +136,7 @@ public class GoodsListFacade {
         if (maxorigprice != null) {
             map.put("maxorigprice", maxorigprice);
         }
-        if (minprice != null) {
-            map.put("minprice", minprice);
-        }
-        if (maxprice != null) {
-            map.put("maxprice", maxprice);
-        }
-        if (minstock != null) {
-            map.put("minstock", minstock);
-        }
-        if (maxstock != null) {
-            map.put("maxstock", maxstock);
-        }
-        if (minsales != null) {
-            map.put("minsales", minsales);
-        }
-        if (maxsales != null) {
-            map.put("maxsales", maxsales);
-        }
-        if (mincollect != null) {
-            map.put("mincollect", mincollect);
-        }
-        if (maxcollect != null) {
-            map.put("maxcollect", maxcollect);
-        }
+
         Date isessencetime = null;//开始时间
         java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
         if (mintime != null) {
@@ -391,6 +368,16 @@ public class GoodsListFacade {
         }
         map.put("maxtime", max);
         return goodsService.queryAllAssessmentCodition(map, pager);
+    }
+
+    /**
+     * 评价详情
+     *
+     * @param id
+     * @return
+     */
+    public GoodsAssessmentVo queryAssessmentRemark(Integer id) {
+        return goodsService.queryAssessmentRemark(id);
     }
 
 }

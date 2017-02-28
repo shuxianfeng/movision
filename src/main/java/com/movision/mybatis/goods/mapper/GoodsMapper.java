@@ -91,5 +91,7 @@ public interface GoodsMapper {
 
     List<GoodsAssessmentVo> findAllAssessmentCondition(Map map, RowBounds rowBounds);//条件查询商品
 
+    GoodsAssessmentVo queryAssessmentRemark(Integer id);//评论详情
+
 
 }

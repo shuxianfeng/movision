@@ -656,4 +656,20 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 评价详情
+     *
+     * @param id
+     * @return
+     */
+    public GoodsAssessmentVo queryAssessmentRemark(Integer id) {
+        try {
+            log.info("评价详情");
+            return goodsMapper.queryAssessmentRemark(id);
+        } catch (Exception e) {
+            log.error("评价详情失败", e);
+            throw e;
+        }
+    }
 }

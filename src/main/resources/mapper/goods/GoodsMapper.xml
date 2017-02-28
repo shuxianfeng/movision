@@ -577,19 +577,19 @@
             AND s.isdel=#{isdel,jdbcType=INTEGER}
         </if>
         <if test="allstatue==2 and price!=null and price!=''">
-            AND s.price BETWEEN #{minprice,jdbcType=DOUBLE} AND #{maxprice,jdbcType=DOUBLE}
+            AND s.price BETWEEN #{minorigprice,jdbcType=DOUBLE} AND #{maxorigprice,jdbcType=DOUBLE}
         </if>
         <if test="allstatue==1 and origprice!=null and origprice!=''">
             AND s.origprice BETWEEN #{minorigprice,jdbcType=DOUBLE} AND #{maxorigprice,jdbcType=DOUBLE}
         </if>
         <if test="allstatue==3 and stock!=null and stock!=''">
-            AND s.stock BETWEEN #{minstock,jdbcType=INTEGER} AND #{maxstock,jdbcType=INTEGER}
+            AND s.stock BETWEEN #{minorigprice,jdbcType=INTEGER} AND #{maxorigprice,jdbcType=INTEGER}
         </if>
         <if test="allstatue==4 and sales!=null and sales!=''">
-            AND s.sales BETWEEN #{minsales,jdbcType=INTEGER} AND #{maxsales,jdbcType=INTEGER}
+            AND s.sales BETWEEN #{minorigprice,jdbcType=INTEGER} AND #{maxorigprice,jdbcType=INTEGER}
         </if>
         <if test="allstatue==5 and collect!=null and collect!=''">
-            AND s.collect BETWEEN #{mincollect,jdbcType=INTEGER} AND #{maxcollect,jdbcType=INTEGER}
+            AND s.collect BETWEEN #{minorigprice,jdbcType=INTEGER} AND #{maxorigprice,jdbcType=INTEGER}
         </if>
         <if test="onlinetime!=null and onlinetime!=''">
             AND s.onlinetime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
