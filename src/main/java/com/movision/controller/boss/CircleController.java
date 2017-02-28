@@ -9,6 +9,7 @@ import com.movision.mybatis.circle.entity.CircleDetails;
 import com.movision.mybatis.circle.entity.CircleIndexList;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostList;
+import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -313,4 +314,23 @@ public class CircleController {
         return response;
     }
 
+    /**
+     * 查询圈子圈主
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询圈主和管理员", notes = "用于查询圈主列表和管理员列表接口", response = Response.class)
+    @RequestMapping(value = "query_circle", method = RequestMethod.POST)
+    public Response queryCircleManList(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                       @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<User> pager = new Paging<User>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<User> list = circleFacade.queryCircleManList(pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
 }

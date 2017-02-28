@@ -549,4 +549,14 @@ public class CircleFacade {
         return postService.findAllQueryCircleByPostList(map, pager);
     }
 
+    /**
+     * 查询圈主列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<User> queryCircleManList(Paging<User> pager) {
+        return userService.queryCircleManList(pager);
+    }
+
 }

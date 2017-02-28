@@ -497,4 +497,9 @@
     <select id="findAllqueryUserVIPByList" resultType="java.lang.Integer">
         SELECT id FROM yw_user WHERE level>0 AND status=0 ORDER BY intime
     </select>
+
+    <select id="findAllQueryCircleManList" resultType="com.movision.mybatis.user.entity.User">
+        SELECT nickname FROM yw_user WHERE status=0
+    </select>
+
 </mapper>

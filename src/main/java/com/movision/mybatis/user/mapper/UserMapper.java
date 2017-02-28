@@ -73,4 +73,6 @@ public interface UserMapper {
     UserVo queryApplyVipList(Integer userid);
 
     List<Integer> findAllqueryUserVIPByList(RowBounds rowBounds);
+
+    List<User> findAllQueryCircleManList(RowBounds rowBounds);
 }

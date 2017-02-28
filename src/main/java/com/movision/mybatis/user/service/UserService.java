@@ -381,4 +381,20 @@ public class UserService {
             throw e;
         }
     }
+
+    /**
+     * 查询圈主列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<User> queryCircleManList(Paging<User> pager) {
+        try {
+            log.info("查询圈主列表");
+            return userMapper.findAllQueryCircleManList(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询圈主列表异常");
+            throw e;
+        }
+    }
 }
