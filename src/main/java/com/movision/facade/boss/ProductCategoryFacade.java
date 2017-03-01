@@ -76,6 +76,19 @@ public class ProductCategoryFacade {
     }
 
     /**
+     * 条件搜索商品活动
+     *
+     * @param name
+     * @param pager
+     * @return
+     */
+    public List<GoodsDiscount> findAllCategoryCondition(String name, String isdel, Paging<GoodsDiscount> pager) {
+        Map<String, Object> map = new HashedMap();
+        map.put("name", name);
+        map.put("isdel", isdel);
+        return productCategoryService.findAllGoodsDiscountCondition(map, pager);
+    }
+    /**
      * 条件搜索商品品牌
      *
      * @param brandname

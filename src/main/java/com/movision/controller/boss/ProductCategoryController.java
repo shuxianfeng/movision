@@ -110,7 +110,27 @@ public class ProductCategoryController {
         return response;
     }
 
-
+    /**
+     * 商品管理*--商品活动列表搜索
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "商品活动列表搜索（分页）", notes = "商品活动列表搜索（分页）", response = Response.class)
+    @RequestMapping(value = "query_active_condition", method = RequestMethod.POST)
+    public Response findAllCategoryCondition(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                             @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                             @ApiParam(value = "活动名称") @RequestParam(required = false) String name,
+                                             @ApiParam(value = "是否启用") @RequestParam(required = false) String isdel
+    ) {
+        Response response = new Response();
+        Paging<GoodsDiscount> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<GoodsDiscount> list = productCategoryFacade.findAllCategoryCondition(name, isdel, pager);
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
     /**
      * 商品管理*--商品品牌列表搜索
      *

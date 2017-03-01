@@ -118,6 +118,19 @@
         </if>
         ORDER BY intime DESC
     </select>
+
+    <select id="findAllGoodsDiscountCondition" resultType="com.movision.mybatis.goodsDiscount.entity.GoodsDiscount">
+        SELECT id,name,isenrent,rentday,discount,content,orderid,isdel,startdate,enddate,intime from yw_goods_discount
+        WHERE 1
+        <if test="name!=null">
+            AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="isdel!=null">
+            AND isdel=#{id,jdbcType=INTEGER}
+        </if>
+        ORDER BY enddate DESC
+    </select>
+
     <select id="findAllBrandCondition" resultType="com.movision.mybatis.brand.entity.Brand">
         SELECT id,brandid,brandname,isdel,intime FROM yw_brand WHERE 1
         <if test="brandname!=null">

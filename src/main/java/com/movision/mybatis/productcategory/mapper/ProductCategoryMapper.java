@@ -26,6 +26,7 @@ public interface ProductCategoryMapper {
     List<GoodsDiscount> findAllGoodsDiscount(RowBounds rowBounds);//活动查询
     List<ProductCategory> findAllCategoryCondition(Map map, RowBounds rowBounds);//搜索
 
+    List<GoodsDiscount> findAllGoodsDiscountCondition(Map map, RowBounds rowBounds);//活动搜索
     int deleteCategory(Integer id);//删除分类
 
     int addCategory(ProductCategory productCategory);//添加商品分类

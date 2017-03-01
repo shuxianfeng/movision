@@ -95,6 +95,23 @@ public class ProductCategoryService {
     }
 
     /**
+     * 活动搜索
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<GoodsDiscount> findAllGoodsDiscountCondition(Map map, Paging<GoodsDiscount> pager) {
+        try {
+            log.info("活动搜索");
+            return productCategoryMapper.findAllGoodsDiscountCondition(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("活动搜索失败", e);
+            throw e;
+        }
+    }
+
+    /**
      * 品牌分类搜索
      *
      * @param map
