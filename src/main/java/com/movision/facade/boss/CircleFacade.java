@@ -119,8 +119,8 @@ public class CircleFacade {
                 vo.setCirclemanagerlist(userslist);//圈子管理员列表
                 vo.setSupportnum(listt.get(e).getSupportnum());//支持数
                 vo.setStatus(listt.get(e).getStatus());//圈子状态：0 待审核 1 审核通过 2 审核不通过
-                vo.setIsrecommend(listt.get(e).getIsrecommend());//推荐
-                vo.setIsdiscover(listt.get(e).getIsdiscover());//首页
+                vo.setIsrecommend(listt.get(e).getIsrecommend());//推荐首页
+                vo.setIsdiscover(listt.get(e).getIsdiscover());//推荐发现
                 vo.setCreatetime(listt.get(e).getCreatetime());//圈子创建时间
                 circleVoslist.add(vo);
             }
@@ -642,8 +642,8 @@ public class CircleFacade {
                     vo.setCirclemanagerlist(userslist);//圈子管理员列表
                     vo.setSupportnum(listt.get(e).getSupportnum());//支持数
                     vo.setStatus(listt.get(e).getStatus());//圈子状态：0 待审核 1 审核通过 2 审核不通过
-                    vo.setIsrecommend(listt.get(e).getIsrecommend());//推荐
-                    vo.setIsdiscover(listt.get(e).getIsdiscover());//首页
+                    vo.setIsrecommend(listt.get(e).getIsrecommend());//推荐首页
+                    vo.setIsdiscover(listt.get(e).getIsdiscover());//推荐发现
                     vo.setCreatetime(listt.get(e).getCreatetime());//圈子创建时间
                     circleVoslist.add(vo);
                 }
@@ -695,8 +695,8 @@ public class CircleFacade {
                 vo.setCirclemanagerlist(userslist);//圈子管理员列表
                 vo.setSupportnum(listt.get(e).getSupportnum());//支持数
                 vo.setStatus(listt.get(e).getStatus());//圈子状态：0 待审核 1 审核通过 2 审核不通过
-                vo.setIsrecommend(listt.get(e).getIsrecommend());//推荐
-                vo.setIsdiscover(listt.get(e).getIsdiscover());//首页
+                vo.setIsrecommend(listt.get(e).getIsrecommend());//推荐首页
+                vo.setIsdiscover(listt.get(e).getIsdiscover());//推荐发现
                 vo.setCreatetime(listt.get(e).getCreatetime());//圈子创建时间
                 circleVoslist.add(vo);
             }

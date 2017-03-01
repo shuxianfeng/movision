@@ -234,7 +234,7 @@ public class CircleController {
      * @param photo
      * @param introduction
      * @param erweima
-     * @param isdiscover
+     * @param isrecommend
      * @param orderid
      * @return
      */
