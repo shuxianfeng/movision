@@ -127,6 +127,21 @@ public class ProductCategoryService {
     }
 
     /**
+     * 添加品牌
+     *
+     * @param brand
+     * @return
+     */
+    public int addBrand(Brand brand) {
+        try {
+            log.info("添加添加品牌");
+            return productCategoryMapper.addBrand(brand);
+        } catch (Exception e) {
+            log.error("添加添加品牌失败", e);
+            throw e;
+        }
+    }
+    /**
      * 根据id查询
      *
      * @param id
@@ -142,6 +157,21 @@ public class ProductCategoryService {
         }
     }
 
+    /**
+     * 根据id查询
+     *
+     * @param id
+     * @return
+     */
+    public Brand queryBrand(Integer id) {
+        try {
+            log.info("根据id查询");
+            return productCategoryMapper.queryBrand(id);
+        } catch (Exception e) {
+            log.error("根据id查询失败", e);
+            throw e;
+        }
+    }
 
     /**
      * 编辑分类
@@ -159,6 +189,21 @@ public class ProductCategoryService {
         }
     }
 
+    /**
+     * 编辑品牌
+     *
+     * @param brand
+     * @return
+     */
+    public int updateBrand(Brand brand) {
+        try {
+            log.info("编辑品牌");
+            return productCategoryMapper.updateBrand(brand);
+        } catch (Exception e) {
+            log.error("编辑品牌失败", e);
+            throw e;
+        }
+    }
     /**
      * 停用
      *

@@ -149,6 +149,23 @@ public class ProductCategoryController {
     }
 
     /**
+     * 根据id查询
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "根据id查询", notes = "根据id查询", response = Response.class)
+    @RequestMapping(value = "query_brandbyid", method = RequestMethod.POST)
+    public Response queryBrand(@ApiParam(value = "品牌id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        Brand brand = productCategoryFacade.queryBrand(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(brand);
+        return response;
+    }
+    /**
      * 增加类别
      *
      * @param request
@@ -159,10 +176,32 @@ public class ProductCategoryController {
     @ApiOperation(value = "增加类别", notes = "增加类别", response = Response.class)
     @RequestMapping(value = "add_category", method = RequestMethod.POST)
     public Response addCategory(HttpServletRequest request,
-                                @ApiParam(value = "分类名称") @RequestParam(required = false) String typename,
-                                @ApiParam(value = "图片") @RequestParam(required = false) MultipartFile imgurl) {
+                                @ApiParam(value = "分类名称") @RequestParam String typename,
+                                @ApiParam(value = "图片") @RequestParam MultipartFile imgurl) {
         Response response = new Response();
         Map<String, Integer> map = productCategoryFacade.addCategory(request, typename, imgurl);
+        if (response.getCode() == 200) {
+            response.setMessage("增加成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 增加品牌
+     *
+     * @param brandname
+     * @param
+     * @param isdel
+     * @return
+     */
+    @ApiOperation(value = "增加品牌", notes = "增加品牌", response = Response.class)
+    @RequestMapping(value = "add_brand", method = RequestMethod.POST)
+    public Response addCategory(
+            @ApiParam(value = "品牌名称") @RequestParam String brandname,
+            @ApiParam(value = "是否启用") @RequestParam(required = false) String isdel) {
+        Response response = new Response();
+        Map<String, Integer> map = productCategoryFacade.addBrand(brandname, isdel);
         if (response.getCode() == 200) {
             response.setMessage("增加成功");
         }
@@ -193,6 +232,28 @@ public class ProductCategoryController {
         return response;
     }
 
+    /**
+     * 修改品牌
+     *
+     * @param
+     * @param brandname
+     * @param isdel
+     * @return
+     */
+    @ApiOperation(value = "修改品牌", notes = "修改品牌", response = Response.class)
+    @RequestMapping(value = "update_brand", method = RequestMethod.POST)
+    public Response updateBrand(
+            @ApiParam(value = "品牌名称") @RequestParam(required = false) String brandname,
+            @ApiParam(value = "是否启用") @RequestParam(required = false) String isdel,
+            @ApiParam(value = "品牌id") @RequestParam(required = false) String id) {
+        Response response = new Response();
+        Map<String, Integer> map = productCategoryFacade.updateBrand(brandname, id, isdel);
+        if (response.getCode() == 200) {
+            response.setMessage("修改成功");
+        }
+        response.setData(map);
+        return response;
+    }
     /**
      * 停用
      *
