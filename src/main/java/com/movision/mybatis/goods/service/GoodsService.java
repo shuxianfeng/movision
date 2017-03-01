@@ -766,4 +766,20 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 删除图片
+     *
+     * @param id
+     * @return
+     */
+    public int deleteGoodsPicture(Integer id) {
+        try {
+            log.info("删除图片");
+            return goodsMapper.deleteGoodsPicture(id);
+        } catch (Exception e) {
+            log.error("删除图片失败", e);
+            throw e;
+        }
+    }
 }

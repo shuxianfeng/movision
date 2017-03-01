@@ -429,4 +429,14 @@ public class GoodsListFacade {
     public List<GoodsImg> queryblueprint(Integer id) {
         return goodsService.queryblueprint(id);
     }
+
+    /**
+     * 删除图片
+     *
+     * @param id
+     * @return
+     */
+    public Integer deleteGoodsPicture(Integer id) {
+        return goodsService.deleteGoodsPicture(id);
+    }
 }

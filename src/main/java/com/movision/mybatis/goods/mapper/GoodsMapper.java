@@ -103,4 +103,6 @@ public interface GoodsMapper {
 
     List<GoodsImg> queryblueprint(Integer id);//晒图
 
+    int deleteGoodsPicture(Integer id);//删除图片
+
 }

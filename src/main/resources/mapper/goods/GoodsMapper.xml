@@ -797,4 +797,7 @@
     <select id="queryisdel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT isdel from yw_goods WHERE id=#{id,jdbcType=INTEGER}
     </select>
+    <delete id="deleteGoodsPicture" parameterType="java.lang.Integer">
+        DELETE FROM yw_goods_img WHERE  type=2 AND goodsid=#{id,jdbcType=INTEGER}
+    </delete>
 </mapper>

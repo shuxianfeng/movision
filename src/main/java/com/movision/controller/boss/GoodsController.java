@@ -421,4 +421,22 @@ public class GoodsController {
         response.setData(goodsImg);
         return response;
     }
+
+    /**
+     * 删除图片
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "删除图片", notes = "删除图片", response = Response.class)
+    @RequestMapping(value = "delete_goodspicture", method = RequestMethod.POST)
+    public Response deleteGoodsPicture(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        int result = goodsFacade.deleteGoodsPicture(id);
+        if (response.getCode() == 200) {
+            response.setMessage("删除成功");
+        }
+        response.setData(result);
+        return response;
+    }
 }
