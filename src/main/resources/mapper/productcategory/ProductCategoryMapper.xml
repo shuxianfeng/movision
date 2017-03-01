@@ -148,7 +148,10 @@
             resultType="com.movision.mybatis.productcategory.entity.ProductCategory">
         SELECT id,protype,typename,imgurl,intime FROM yw_category WHERE id=#{id,jdbcType=INTEGER}
     </select>
-
+    <select id="queryGoodsDiscount" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.goodsDiscount.entity.GoodsDiscount">
+        SELECT id,name,isenrent,rentday,discount,content,orderid,isdel,startdate,enddate,intime from yw_goods_discount WHERE id=#{id,jdbcType=INTEGER}
+    </select>
     <select id="queryBrand" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.brand.entity.Brand">
         SELECT id,brandid,brandname,isdel,intime FROM yw_brand WHERE id=#{id,jdbcType=INTEGER}

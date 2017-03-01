@@ -402,4 +402,22 @@ public class ProductCategoryController {
         response.setData(map);
         return response;
     }
+
+    /**
+     * 根据id查询
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "根据id查询", notes = "根据id查询", response = Response.class)
+    @RequestMapping(value = "query_activebyid", method = RequestMethod.POST)
+    public Response queryGoodsDiscount(@ApiParam(value = "活动id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        GoodsDiscount goodsDiscount = productCategoryFacade.queryGoodsDiscount(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(goodsDiscount);
+        return response;
+    }
 }

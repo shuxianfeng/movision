@@ -196,6 +196,22 @@ public class ProductCategoryService {
      * @param id
      * @return
      */
+    public GoodsDiscount queryGoodsDiscount(Integer id) {
+        try {
+            log.info("根据id查询");
+            return productCategoryMapper.queryGoodsDiscount(id);
+        } catch (Exception e) {
+            log.error("根据id查询失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据id查询
+     *
+     * @param id
+     * @return
+     */
     public Brand queryBrand(Integer id) {
         try {
             log.info("根据id查询");

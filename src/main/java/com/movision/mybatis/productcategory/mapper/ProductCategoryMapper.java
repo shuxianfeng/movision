@@ -35,6 +35,7 @@ public interface ProductCategoryMapper {
 
     ProductCategory queryCategory(Integer id);//根据id查询类别信息
 
+    GoodsDiscount queryGoodsDiscount(Integer id);//根据id查询活动信息
     Brand queryBrand(Integer id);//根据id查询类别信息
 
     int updateCategory(ProductCategory productCategory);//编辑分类

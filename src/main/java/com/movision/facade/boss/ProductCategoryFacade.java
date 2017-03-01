@@ -189,6 +189,16 @@ public class ProductCategoryFacade {
     public ProductCategory queryCategory(Integer id) {
         return productCategoryService.queryCategory(id);
     }
+
+    /**
+     * 根据id查询
+     *
+     * @param id
+     * @return
+     */
+    public GoodsDiscount queryGoodsDiscount(Integer id) {
+        return productCategoryService.queryGoodsDiscount(id);
+    }
     /**
      * 根据id查询
      *
