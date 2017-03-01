@@ -782,4 +782,20 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 回复评论
+     *
+     * @param goodsAssessment
+     * @return
+     */
+    public int addAssessment(GoodsAssessment goodsAssessment) {
+        try {
+            log.info("回复评论");
+            return goodsMapper.addAssessment(goodsAssessment);
+        } catch (Exception e) {
+            log.error("回复评论失败", e);
+            throw e;
+        }
+    }
 }

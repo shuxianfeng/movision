@@ -4,6 +4,7 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsDetail;
 import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
+import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.taglibs.standard.lang.jstl.Literal;
@@ -104,5 +105,7 @@ public interface GoodsMapper {
     List<GoodsImg> queryblueprint(Integer id);//晒图
 
     int deleteGoodsPicture(Integer id);//删除图片
+
+    int addAssessment(GoodsAssessment assessment);//回复评论
 
 }

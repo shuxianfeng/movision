@@ -439,4 +439,22 @@ public class GoodsListFacade {
     public Integer deleteGoodsPicture(Integer id) {
         return goodsService.deleteGoodsPicture(id);
     }
+
+    /**
+     * 回复评论
+     *
+     * @param content
+     * @param
+     * @param
+     * @return
+     */
+    public Map<String, Integer> addAssessment(String content) {
+        GoodsAssessment goodsAssessment = new GoodsAssessment();
+        Map<String, Integer> map = new HashedMap();
+        goodsAssessment.setUserid(-1);
+        goodsAssessment.setContent(content);
+        int result = goodsService.addAssessment(goodsAssessment);
+        map.put("result", result);
+        return map;
+    }
 }

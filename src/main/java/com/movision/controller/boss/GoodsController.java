@@ -118,15 +118,15 @@ public class GoodsController {
                                        @ApiParam(value = "商品类型") @RequestParam(required = false) String allstatue,
                                        @ApiParam(value = "最小原价") @RequestParam(required = false) String minorigprice,
                                        @ApiParam(value = "最大原价") @RequestParam(required = false) String maxorigprice,
+                                       @ApiParam(value = "排序") @RequestParam(required = false) String pai,
                                        @ApiParam(value = "开始时间") @RequestParam(required = false) String mintime,
                                        @ApiParam(value = "结束时间") @RequestParam(required = false) String maxtime,
-                                       @ApiParam(value = "排序") @RequestParam(required = false) String pai,
                                        @RequestParam(required = false) String pageNo,
                                        @RequestParam(required = false) String pageSize
     ) {
         Response response = new Response();
         Paging<GoodsVo> pager = new Paging<GoodsVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<GoodsVo> list = goodsFacade.queryGoodsCondition(name, producttags, brand, protype, isdel, allstatue, minorigprice, maxorigprice, mintime, maxtime, pai, pager);
+        List<GoodsVo> list = goodsFacade.queryGoodsCondition(name, producttags, brand, protype, isdel, allstatue, minorigprice, maxorigprice, pai, mintime, maxtime, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

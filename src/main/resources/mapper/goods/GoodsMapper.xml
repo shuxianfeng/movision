@@ -561,7 +561,7 @@
             resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT
         s.id,s.name,a.typename,d.brandname,s.origprice,s.price,s.stock,s.sales,s.ishomepage,s.recommenddate,s.isdel,s.ishot,s.isessence,COUNT(c.goodsid)
-        AS collect from yw_goods s
+        AS collect,s.onlinetime from yw_goods s
         LEFT JOIN yw_brand d ON d.brandid=s.brandid LEFT JOIN yw_collection c ON c.goodsid=s.id LEFT JOIN yw_category a
         ON a.protype=s.protype
         WHERE 1=1
@@ -598,6 +598,7 @@
         <if test="onlinetime!=null and onlinetime!=''">
             AND s.onlinetime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
         </if>
+        GROUP BY s.id
         <if test="pai==0">
             ORDER BY s.sales DESC
         </if>
@@ -608,9 +609,9 @@
             ORDER BY s.origprice DESC
         </if>
         <if test="pai==3">
-            ORDER BY s.collect DESC
+            ORDER BY collect DESC
         </if>
-        GROUP BY s.id
+
     </select>
     <update id="AddToGoods" parameterType="java.lang.Integer">
          UPDATE yw_goods SET isdel=0 WHERE id=#{id,jdbcType=INTEGER}
