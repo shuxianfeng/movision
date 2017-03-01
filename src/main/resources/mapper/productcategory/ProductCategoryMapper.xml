@@ -104,4 +104,7 @@
         imgurl = #{imgurl,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="findAllProductCategory" resultType="com.movision.mybatis.productcategory.entity.ProductCategory">
+        SELECT id,protype,typename,intime FROM yw_category
+    </select>
 </mapper>
