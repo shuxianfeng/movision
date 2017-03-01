@@ -146,4 +146,24 @@
     <select id="findAllQueryContributeList" resultType="com.movision.mybatis.submission.entity.SubmissionVo">
         SELECT s.*,u.nickname,u.level FROM yw_submission s LEFT JOIN yw_user u ON s.userid=u.id
     </select>
+
+    <select id="findAllqueryUniteConditionByContribute" resultType="com.movision.mybatis.submission.entity.SubmissionVo"
+            parameterType="java.util.Map">
+        SELECT s.*,u.nickname,u.level FROM yw_submission s LEFT JOIN yw_user u ON s.userid=u.id WHERE 1
+        <if test="nickname!=null">
+            AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="email">
+            AND s.email=#{email.jdbcType=VARCHAR}
+        </if>
+        <if test="type!=null">
+            AND s.status=#{type,jdbcType=INTEGER}
+        </if>
+        <if test="vip!=null">
+            AND u.level=#{vip,jdbcType=INTEGER}
+        </if>
+        <if test="begintime!=null and endtime!=null">
+            AND s.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
+    </select>
 </mapper>

@@ -103,4 +103,37 @@ public class UserManageFacade {
         map.put("endtime", end);
         return userService.queryUniteConditionByApply(map,pager);
     }
+
+    /**
+     * 条件查询投稿列表
+     *
+     * @param nickname
+     * @param email
+     * @param type
+     * @param vip
+     * @param begintime
+     * @param endtime
+     * @param pager
+     * @return
+     */
+    public List<SubmissionVo> queryUniteConditionByContribute(String nickname, String email, String type, String vip, String begintime, String endtime, Paging<SubmissionVo> pager) {
+        String beg = null;
+        String end = null;
+        //对时间做转换 毫秒转 日期类型
+        if (begintime != null && endtime != null) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Long l = new Long(begintime);
+            Long o = new Long(endtime);
+            beg = format.format(l);
+            end = format.format(o);
+        }
+        Map map = new HashedMap();
+        map.put("nickname", nickname);
+        map.put("email", email);
+        map.put("type", type);
+        map.put("vip", vip);
+        map.put("begintime", beg);
+        map.put("endtime", end);
+        return submissionService.queryUniteConditionByContribute(map, pager);
+    }
 }

@@ -50,4 +50,21 @@ public class SubmissionService {
             throw e;
         }
     }
+
+    /**
+     * 条件查询投稿列表
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<SubmissionVo> queryUniteConditionByContribute(Map map, Paging<SubmissionVo> pager) {
+        try {
+            log.info("条件查询投稿列表");
+            return submissionMapper.findAllqueryUniteConditionByContribute(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("条件查询投稿列表异常");
+            throw e;
+        }
+    }
 }
