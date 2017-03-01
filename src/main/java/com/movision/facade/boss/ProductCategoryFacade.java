@@ -50,4 +50,14 @@ public class ProductCategoryFacade {
         return productCategoryService.findAllCategoryCondition(map, pager);
     }
 
+
+    /**
+     * 删除分类
+     *
+     * @param id
+     * @return
+     */
+    public int deleteCategory(Integer id) {
+        return productCategoryService.deleteCategory(id);
+    }
 }

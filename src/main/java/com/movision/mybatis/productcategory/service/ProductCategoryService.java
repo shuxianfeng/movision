@@ -61,4 +61,20 @@ public class ProductCategoryService {
         }
     }
 
+    /**
+     * 删除分类
+     *
+     * @param id
+     * @return
+     */
+    public int deleteCategory(Integer id) {
+        try {
+            log.info("删除分类");
+            return productCategoryMapper.deleteCategory(id);
+        } catch (Exception e) {
+            log.error("删除分类失败");
+            throw e;
+        }
+    }
+
 }

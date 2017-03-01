@@ -23,4 +23,6 @@ public interface ProductCategoryMapper {
 
     List<ProductCategory> findAllCategoryCondition(Map map, RowBounds rowBounds);//搜索
 
+    int deleteCategory(Integer id);//删除分类
+
 }

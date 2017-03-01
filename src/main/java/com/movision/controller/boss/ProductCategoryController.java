@@ -67,4 +67,22 @@ public class ProductCategoryController {
         return response;
     }
 
+    /**
+     * 删除分类
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "删除分类", notes = "删除分类", response = Response.class)
+    @RequestMapping(value = "delete_category", method = RequestMethod.POST)
+    public Response deleteCategory(@ApiParam(value = "分类id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        int result = productCategoryFacade.deleteCategory(id);
+        if (response.getCode() == 200) {
+            response.setMessage("删除成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
 }
