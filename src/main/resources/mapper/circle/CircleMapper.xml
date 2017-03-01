@@ -353,9 +353,17 @@
 
     <select id="queryCircleByLikeList" resultType="com.movision.mybatis.circle.entity.CircleVo"
             parameterType="java.util.Map">
-        SELECT * FROM yw_circle WHERE 1
+        SELECT c.* ,
+        (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid=c.id) as follownum,
+        (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid=c.id) AS follownewnum,
+        (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id AND date(intime) = curdate()) AS postnewnum,
+        (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id AND isessence=1) AS isessencenum,
+        (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id) AS postnum,
+        (SELECT u.nickname FROM yw_user u WHERE id=c.userid) AS circlename,
+        (SELECT u.level FROM yw_user u WHERE id=c.userid) AS categorylevel
+        FROM yw_circle c WHERE isdel=0
         <if test="type==null">
-            AND category=#{category,jdbcType=INTEGER}
+            AND category=#{type,jdbcType=INTEGER}
         </if>
         <if test="type!=null">
             AND category=#{type,jdbcType=INTEGER}
@@ -365,6 +373,12 @@
         </if>
         <if test="begintime!=null and endtime!=null">
             AND createtime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
+        <if test="pai==null">
+            ORDER BY c.createtime DESC
+        </if>
+        <if test="pai==1">
+            ORDER BY follownum DESC
         </if>
     </select>
 
