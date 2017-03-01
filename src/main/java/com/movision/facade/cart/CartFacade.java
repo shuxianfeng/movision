@@ -3,6 +3,7 @@ package com.movision.facade.cart;
 import com.movision.mybatis.cart.entity.Cart;
 import com.movision.mybatis.cart.entity.CartVo;
 import com.movision.mybatis.cart.service.CartService;
+import com.movision.mybatis.goodsDiscount.service.DiscountService;
 import com.movision.mybatis.rentdate.entity.Rentdate;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class CartFacade {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private DiscountService discountService;
 
     //商品加入购物车
     public int addGoodsCart(String userid, String goodsid, String comboid, String discountid, String isdebug, String sum, String type, String rentdate) throws ParseException {
@@ -169,6 +173,14 @@ public class CartFacade {
                 CartVo vo = cartService.queryNamePrice(cartList.get(i).getCombotype());
                 cartList.get(i).setComboname(vo.getComboname());
                 cartList.get(i).setComboprice(vo.getComboprice());
+            }
+            if (cartList.get(i).getDiscountid() != null) {
+                //查询商品参加的活动名称和活动折扣百分比
+                CartVo ov = discountService.queryDiscountName(cartList.get(i).getDiscountid());
+                cartList.get(i).setDiscountname(ov.getDiscountname());
+                cartList.get(i).setDiscount(ov.getDiscount() + "%");
+                cartList.get(i).setIsenrent(ov.getIsenrent());
+                cartList.get(i).setRentday(ov.getRentday());
             }
             if (cartList.get(i).getType() == 0) {
                 //如果是租赁的商品，需要将商品的租赁日期列表取出

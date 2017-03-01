@@ -35,6 +35,13 @@
      ORDER BY intime DESC
   </select>
 
+    <!--根据优惠活动id查询活动名称和优惠折扣百分比-->
+    <select id="queryDiscountName" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.cart.entity.CartVo">
+        SELECT name AS discountname, discount AS discount, isenrent AS isenrent, rentday AS rentday
+        FROM yw_goods_discount WHERE id = #{discountid,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_goods_discount
     where id = #{id,jdbcType=INTEGER}

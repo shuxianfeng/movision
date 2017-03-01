@@ -50,11 +50,19 @@ public class CartVo {
 
     private String comboname;//套餐名称
 
+    private String discountname;//活动名称
+
+    private Integer isenrent;//是否为整租活动：0 是 1 否
+
+    private Integer rentday;//整租天数
+
     private Double goodsprice;//商品折后价
 
     private Double comboprice;//套餐折后价
 
     private Integer online;//商品在线状态 0 上架 1 下架
+
+    private String discount;//活动折扣百分比
 
     public Integer getId() {
         return id;
@@ -238,5 +246,37 @@ public class CartVo {
 
     public void setDiscountid(Integer discountid) {
         this.discountid = discountid;
+    }
+
+    public String getDiscountname() {
+        return discountname;
+    }
+
+    public void setDiscountname(String discountname) {
+        this.discountname = discountname;
+    }
+
+    public String getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(String discount) {
+        this.discount = discount;
+    }
+
+    public Integer getIsenrent() {
+        return isenrent;
+    }
+
+    public void setIsenrent(Integer isenrent) {
+        this.isenrent = isenrent;
+    }
+
+    public Integer getRentday() {
+        return rentday;
+    }
+
+    public void setRentday(Integer rentday) {
+        this.rentday = rentday;
     }
 }

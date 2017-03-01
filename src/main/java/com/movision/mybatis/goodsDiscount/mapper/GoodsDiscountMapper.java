@@ -1,5 +1,6 @@
 package com.movision.mybatis.goodsDiscount.mapper;
 
+import com.movision.mybatis.cart.entity.CartVo;
 import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.goodsDiscount.entity.GoodsDiscountVo;
 
@@ -13,6 +14,8 @@ public interface GoodsDiscountMapper {
     int insertSelective(GoodsDiscount record);
 
     GoodsDiscount selectByPrimaryKey(Integer id);
+
+    CartVo queryDiscountName(int discountid);
 
     List<GoodsDiscountVo> querygoodsDiscount();
 
