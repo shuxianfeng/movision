@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -20,8 +21,8 @@ public class GoodsFacadeTest extends SpringTestCase {
 
     @Test
     public void findAllMyCollectGoods() throws Exception {
-        Paging<Goods> paging = new Paging<>(Integer.valueOf(1), Integer.valueOf(10));
-        List<Goods> goodsList = goodsFacade.findAllMyCollectGoods(paging, 1);
+        Paging<Map> paging = new Paging<>(Integer.valueOf(1), Integer.valueOf(10));
+        List<Map> goodsList = goodsFacade.findAllMyCollectGoods(paging, 1);
         paging.result(goodsList);
         System.out.println(paging);
     }

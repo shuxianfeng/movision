@@ -643,8 +643,8 @@
         FROM yw_goods g
     </select>
 
-    <select id="findAllMyCollectGoodsList" resultType="com.movision.mybatis.goods.entity.Goods">
-        SELECT g.*
+    <select id="findAllMyCollectGoodsList" resultType="java.util.HashMap">
+        SELECT g.*, i.img_url
         from yw_goods g
         LEFT JOIN yw_collection c ON g.id = c.goodsid
         LEFT JOIN yw_goods_img i ON g.id = i.goodsid

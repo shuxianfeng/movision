@@ -516,7 +516,7 @@ public class GoodsService {
      * @param pager
      * @return
      */
-    public List<Goods> findAllMyCollectGoodsList(Paging<Goods> pager, Map map) {
+    public List<Map> findAllMyCollectGoodsList(Paging<Map> pager, Map map) {
         try {
             log.info("查询我收藏的商品列表");
             return goodsMapper.findAllMyCollectGoodsList(pager.getRowBounds(), map);

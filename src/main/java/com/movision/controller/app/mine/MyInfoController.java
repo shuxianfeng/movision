@@ -70,8 +70,8 @@ public class MyInfoController {
         //获取当前用户id
         int userid = ShiroUtil.getAppUserID();
         //获取最喜欢的商品
-        Paging<Goods> goodsPaging = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<Goods> goodsList = goodsFacade.findAllMyCollectGoods(goodsPaging, userid);
+        Paging<Map> goodsPaging = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Map> goodsList = goodsFacade.findAllMyCollectGoods(goodsPaging, userid);
         goodsPaging.result(goodsList);
 
         response.setData(goodsPaging);

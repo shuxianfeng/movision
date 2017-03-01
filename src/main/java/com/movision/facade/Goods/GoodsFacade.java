@@ -168,7 +168,7 @@ public class GoodsFacade {
         return map;
     }
 
-    public List<Goods> findAllMyCollectGoods(Paging<Goods> pager, int userid) {
+    public List<Map> findAllMyCollectGoods(Paging<Map> pager, int userid) {
         Map map = new HashedMap();
         map.put("userid", userid);
         return goodsService.findAllMyCollectGoodsList(pager, map);
