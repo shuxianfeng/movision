@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhanglei
@@ -103,5 +106,25 @@ public class ProductCategoryController {
         return response;
     }
 
-
+    /**
+     * 增加类别
+     *
+     * @param request
+     * @param typename
+     * @param imgurl
+     * @return
+     */
+    @ApiOperation(value = "增加类别", notes = "增加类别", response = Response.class)
+    @RequestMapping(value = "add_category", method = RequestMethod.POST)
+    public Response addCategory(HttpServletRequest request,
+                                @ApiParam(value = "分类名称") @RequestParam(required = false) String typename,
+                                @ApiParam(value = "图片") @RequestParam(required = false) MultipartFile imgurl) {
+        Response response = new Response();
+        Map<String, Integer> map = productCategoryFacade.addCategory(request, typename, imgurl);
+        if (response.getCode() == 200) {
+            response.setMessage("增加成功");
+        }
+        response.setData(map);
+        return response;
+    }
 }

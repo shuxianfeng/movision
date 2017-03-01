@@ -4,6 +4,7 @@ import com.movision.mybatis.productcategory.entity.ProductCategory;
 import com.movision.mybatis.productcategory.service.ProductCategoryService;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @Author zhanglei
@@ -70,8 +74,43 @@ public class ProductCategoryFacade {
      * @param imgurl
      * @return
      */
-    public Map<String, Integer> addCategory(String typename, MultipartFile imgurl) {
+    public Map<String, Integer> addCategory(HttpServletRequest request, String typename, MultipartFile imgurl) {
         Map<String, Integer> map = new HashedMap();
+        ProductCategory productCategory = new ProductCategory();
+        productCategory.setTypename(typename);
+        try {
+            //上传图片到本地服务器
+            String savedFileName = "";
+            String imgurle = "";
+            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+            if (imgurl != null && isMultipart) {
+                if (!imgurl.isEmpty()) {
+                    String fileRealName = imgurl.getOriginalFilename();
+                    int pointIndex = fileRealName.indexOf(".");
+                    String fileSuffix = fileRealName.substring(pointIndex);
+                    UUID FileId = UUID.randomUUID();
+                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
+                    String savedDir = request.getSession().getServletContext().getRealPath("");
+                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
+                    //不保存到项目中,防止部包把图片覆盖掉了
+                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    //这里组合出真实的图片存储路径
+                    String combinpath = path + "/images/goods/coverimg/";
+                    File savedFile = new File(combinpath, savedFileName);
+                    System.out.println("文件url：" + combinpath + "" + savedFileName);
+                    boolean isCreateSuccess = savedFile.createNewFile();
+                    if (isCreateSuccess) {
+                        imgurl.transferTo(savedFile);  //转存文件
+                    }
+                }
+                imgurle = imgdomain + savedFileName;
+            }
+            productCategory.setImgurl(imgurle);
+            int result = productCategoryService.addCategory(productCategory);
+            map.put("result", result);
+        } catch (Exception e) {
+            log.error("增加失败", e);
+        }
         return map;
     }
 

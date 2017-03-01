@@ -120,4 +120,29 @@
             resultType="com.movision.mybatis.productcategory.entity.ProductCategory">
         SELECT id,protype,typename,imgurl,intime FROM yw_category WHERE id=#{id,jdbcType=INTEGER}
     </select>
+    <insert id="addCategory" parameterType="com.movision.mybatis.productcategory.entity.ProductCategory">
+        insert into yw_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="typename != null">
+                typename,
+            </if>
+            <if test="imgurl != null">
+                imgurl,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="typename != null">
+                #{typename,jdbcType=VARCHAR},
+            </if>
+            <if test="imgurl != null">
+                #{imgurl,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 </mapper>
