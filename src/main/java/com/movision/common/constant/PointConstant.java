@@ -28,7 +28,7 @@ public class PointConstant {
         share(15),
         index_selected(16),
         circle_selected(17),
-        place_order(18);
+        place_order(18);    //下单
 
         public final int code;
 
@@ -45,6 +45,55 @@ public class PointConstant {
             return String.valueOf(this.code);
         }
     }
+
+    /**
+     * 增加积分
+     */
+    public static Integer POINT_ADD = 0;
+    /**
+     * 减少积分
+     */
+    public static Integer POINT_DECREASE = 1;
+
+    public enum POINT {
+        new_user_register(25),
+        finish_personal_data(15),
+        binding_phone(10),
+        first_focus(10),
+        first_collect(5),
+        first_share(20),
+        first_comment(10),
+        first_support(5),
+        first_post(20),
+        comment_app(100),
+        sign(5),
+        reward(5),
+        post(5),
+        comment(2),
+        share(5),
+        index_selected(40),
+        circle_selected(20);
+//        place_order();    //下单
+
+        public final int code;
+
+        POINT(int code) {
+            this.code = code;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
+
+
+
 
     public static void main(String[] args) {
         System.out.println(POINT_TYPE.binding_phone.getCode() == 3);

@@ -1,6 +1,7 @@
 package com.movision.controller.app.mine;
 
 import com.movision.common.Response;
+import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.Goods.GoodsFacade;
 import com.movision.facade.boss.PostFacade;
@@ -14,6 +15,7 @@ import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.orders.entity.Orders;
+import com.movision.mybatis.pointRecord.entity.PointRecord;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.user.entity.PersonInfo;
 import com.movision.shiro.realm.ShiroRealm;
@@ -22,6 +24,7 @@ import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -171,6 +174,38 @@ public class MyInfoController {
                                      @ApiParam(value = "反馈内容") @RequestParam String content) {
         Response response = new Response();
         suggestionFacade.insertSuggestion(phone, content);
+        return response;
+    }
+
+    @ApiOperation(value = "签到", notes = "签到", response = Response.class)
+    @RequestMapping(value = "sign", method = RequestMethod.POST)
+    public Response sign() {
+        Response response = new Response();
+        //签到送积分
+        pointRecordFacade.addPointRecord(PointConstant.POINT.sign.getCode(), PointConstant.POINT_ADD,
+                PointConstant.POINT_TYPE.sign.getCode(), null);
+        //给个人加积分
+        userFacade.addPoint(PointConstant.POINT.sign.getCode());
+        return response;
+    }
+
+    @ApiOperation(value = "查询是否签到", notes = "查询是否签到", response = Response.class)
+    @RequestMapping(value = "query_sign_or_not", method = RequestMethod.GET)
+    public Response querySignOrNot() {
+        Response response = new Response();
+        response.setData(pointRecordFacade.signToday());
+        return response;
+    }
+
+    @ApiOperation(value = "查询积分明细列表", notes = "查询积分明细列表", response = Response.class)
+    @RequestMapping(value = "query_point_record_list", method = RequestMethod.GET)
+    public Response queryPointRecordList(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                         @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<Map> paging = new Paging<Map>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Map> list = pointRecordFacade.findAllMyPointList(paging);
+        paging.result(list);
+        response.setData(paging);
         return response;
     }
 

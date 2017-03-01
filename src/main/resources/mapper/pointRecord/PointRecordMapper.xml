@@ -130,12 +130,36 @@
         AND userid = #{userid}
     </select>
 
+    <select id="findAllMyPointRecord" parameterType="java.util.Map"
+            resultType="java.util.Map">
+        SELECT r.id, r.point, r.isadd, r.orderid,
+        date_format(r.intime,'%Y-%m-%d %H:%i:%s') intime,
+        r.type, c.name as typename
+        FROM yw_points_record r
+        LEFT JOIN yw_type_constant c ON r.type = c.code
+        where r.isdel = 0
+        AND c.type = 1
+        AND r.userid = #{userid}
+        ORDER BY r.intime DESC
+    </select>
+
     <select id="queryMyTodayPoint" resultType="com.movision.mybatis.pointRecord.entity.PointRecord"
             parameterType="java.lang.Integer">
         SELECT *
         FROM yw_points_record
         WHERE isdel = 0
         and userid = #{userid}
+        <![CDATA[
+        AND TO_DAYS( NOW() ) - TO_DAYS(intime) = 0
+        ]]>
+    </select>
+
+    <select id="queryIsSignToday" resultType="int" parameterType="java.lang.Integer">
+        SELECT count(1)
+        FROM yw_points_record
+        WHERE isdel = 0
+        AND userid = #{userid}
+        AND type = 11
         <![CDATA[
         AND TO_DAYS( NOW() ) - TO_DAYS(intime) = 0
         ]]>

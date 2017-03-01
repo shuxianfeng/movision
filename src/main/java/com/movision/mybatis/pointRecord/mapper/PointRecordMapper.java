@@ -2,8 +2,10 @@ package com.movision.mybatis.pointRecord.mapper;
 
 import com.movision.mybatis.pointRecord.entity.PointRecord;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PointRecordMapper {
     int deleteByPrimaryKey(Integer id);
@@ -21,4 +23,8 @@ public interface PointRecordMapper {
     List<PointRecord> queryMyAllTypePoint(@Param("userid") Integer id);
 
     List<PointRecord> queryMyTodayPoint(@Param("userid") Integer id);
+
+    int queryIsSignToday(@Param("userid") Integer id);
+
+    List<Map> findAllMyPointRecord(RowBounds rowBounds, Map map);
 }

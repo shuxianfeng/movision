@@ -2,6 +2,7 @@ package com.movision.facade.user;
 
 import com.movision.aop.UserSaveCache;
 import com.movision.common.constant.MsgCodeConstant;
+import com.movision.common.constant.SessionConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.AuthException;
 import com.movision.mybatis.bossUser.entity.BossUser;
@@ -11,9 +12,13 @@ import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,12 +181,34 @@ public class UserFacade {
         userService.updateByPrimaryKeySelective(user);
     }
 
+    /**
+     * 记录申请vip的时间
+     */
     public void applyVip() {
         User user = new User();
         user.setId(ShiroUtil.getAppUserID());
         user.setApplydate(new Date());
 
         userService.updateByPrimaryKeySelective(user);
+    }
+
+    /**
+     * 新增个人积分
+     *
+     * @param point
+     */
+    public void addPoint(int point) {
+        ShiroRealm.ShiroUser shiroUser = ShiroUtil.getAppUser();
+        User user = new User();
+        user.setId(ShiroUtil.getAppUserID());
+        int personPoint = null == shiroUser.getPoints() ? 0 : shiroUser.getPoints();
+        int newPoint = personPoint + point;
+        user.setPoints(newPoint);
+        //1 变更用户表
+        userService.updateByPrimaryKeySelective(user);
+        //2 更新session中的缓存
+        ShiroUtil.updateShiroUser(newPoint);
+
     }
 
 }

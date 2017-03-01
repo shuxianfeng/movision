@@ -104,19 +104,14 @@ public class ShiroUtil {
     /**
      * 实时更新登录者在session中的信息
      * 
-     * @param status
-     * @param role
      */
-    public static void updateShiroUser(int status, String role, String headShot) {
+    public static void updateShiroUser(int point) {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (session != null) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
-            principal.setStatus(status);
-            principal.setRole(role);
-            if (StringUtils.isNotBlank(headShot)) {
-                principal.setPhoto(headShot);
-            }
+            //此处可以扩张需要的字段
+            principal.setPoints(point);
             session.setAttribute("appuser", principal);
         }
     }

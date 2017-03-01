@@ -7,7 +7,9 @@ import com.movision.mybatis.pointRecord.entity.NewTask;
 import com.movision.mybatis.pointRecord.entity.PointRecord;
 import com.movision.mybatis.pointRecord.service.PointRecordService;
 import com.movision.utils.ListUtil;
+import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,13 +34,13 @@ public class PointRecordFacade {
      * @param orderid 订单id--对应下单赚积分
      * @return
      */
-    public int addPointRecord(int point, int isadd, int type, int orderid) {
+    public int addPointRecord(int point, int isadd, int type, String orderid) {
         PointRecord pointRecord = new PointRecord();
         pointRecord.setUserid(ShiroUtil.getAppUserID());
         pointRecord.setIsadd(isadd);
         pointRecord.setPoint(point);
         pointRecord.setType(type);
-        pointRecord.setOrderid(orderid);
+        pointRecord.setOrderid(StringUtils.isEmpty(orderid) ? 0 : Integer.valueOf(orderid));
 
         return pointRecordService.addPointRecord(pointRecord);
     }
@@ -153,14 +155,16 @@ public class PointRecordFacade {
         return dailyTask;
     }
 
-    /**
-     * 获取新手任务的完成情况
-     *
-     * @param pointRecordList
-     * @param pointArray
-     * @param newTask
-     */
-    private void getNewTaskPoint(List<PointRecord> pointRecordList, int[] pointArray, NewTask newTask) {
-
+    public Boolean signToday() {
+        int count = pointRecordService.queryIsSignToday(ShiroUtil.getAppUserID());
+        return count == 1;
     }
+
+    public List<Map> findAllMyPointList(Paging<Map> paging) {
+        Map map = new HashedMap();
+        map.put("userid", ShiroUtil.getAppUserID());
+        return pointRecordService.findAllMyPointList(paging, map);
+    }
+
+
 }

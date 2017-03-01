@@ -66,10 +66,10 @@ public class ShiroRealm extends AuthorizingRealm {
         String pwd = new Md5Hash(password, null, 2).toString();
         log.debug("服务端的pwd," + password);
 
-        // 2 根据登录用户信息生成ShiroUser用户
+        // 2 根据登录用户信息生成ShiroUser用户，PS:这个ShiroUser就是session中存储的app用户对象
         ShiroUser shiroUser = new ShiroUser(loginUser.getId(), loginUser.getPhone(), loginUser.getStatus(), loginUser.getRole(),
                 loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(), loginUser.getPhone(),
-                loginUser.getToken());
+                loginUser.getToken(), loginUser.getPoints(), loginUser.getSex());
 
         // 3 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(shiroUser, // 用户
@@ -151,6 +151,26 @@ public class ShiroRealm extends AuthorizingRealm {
         private Integer level;   //用户等级：0 普通用户  1 青铜  2 白银 3 黄金 4 白金 5 钻石 6 金钻石 7皇冠 8金皇冠
         private String phone;   //手机号
         private String token;
+        private Integer points; //用户积分
+        private Integer sex;    //性别：1男 0女
+
+        public void setSex(Integer sex) {
+            this.sex = sex;
+        }
+
+        public Integer getSex() {
+
+            return sex;
+        }
+
+        public void setPoints(Integer points) {
+            this.points = points;
+        }
+
+        public Integer getPoints() {
+
+            return points;
+        }
 
         public void setId(Integer id) {
             this.id = id;
@@ -232,7 +252,7 @@ public class ShiroRealm extends AuthorizingRealm {
             return token;
         }
 
-        public ShiroUser(Integer id, String account, Integer status, String role, Date registerTime, String photo, String nickname, Integer level, String phone, String token) {
+        public ShiroUser(Integer id, String account, Integer status, String role, Date registerTime, String photo, String nickname, Integer level, String phone, String token, Integer points, Integer sex) {
             this.id = id;
             this.account = account;
             this.status = status;
@@ -243,6 +263,8 @@ public class ShiroRealm extends AuthorizingRealm {
             this.level = level;
             this.phone = phone;
             this.token = token;
+            this.points = points;
+            this.sex = sex;
         }
 
         /**
@@ -258,9 +280,9 @@ public class ShiroRealm extends AuthorizingRealm {
                 return false;
             ShiroUser other = (ShiroUser) obj;
 
-            if (id == 0 || account == null) {
+            if (id == 0 || phone == null) {
                 return false;
-            } else if (id == other.id && account.equals(other.account))
+            } else if (id == other.id && phone.equals(other.phone))
                 return true;
             return false;
         }
@@ -278,6 +300,8 @@ public class ShiroRealm extends AuthorizingRealm {
                     ", level=" + level +
                     ", phone='" + phone + '\'' +
                     ", token='" + token + '\'' +
+                    ", points=" + points +
+                    ", sex=" + sex +
                     '}';
         }
     }
