@@ -171,4 +171,10 @@
     <select id="findAllBrand" resultType="com.movision.mybatis.brand.entity.Brand">
       SELECT id,brandid,brandname,isdel,intime FROM yw_brand
     </select>
+    <update id="updateUp" parameterType="java.lang.Integer">
+        UPDATE yw_brand SET isdel=0 WHERE id=#{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateStop" parameterType="java.lang.Integer">
+        UPDATE yw_brand SET isdel=1 WHERE id=#{id,jdbcType=INTEGER}
+    </update>
 </mapper>

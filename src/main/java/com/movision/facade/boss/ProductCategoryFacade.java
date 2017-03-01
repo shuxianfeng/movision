@@ -196,4 +196,24 @@ public class ProductCategoryFacade {
         }
         return map;
     }
+
+    /**
+     * 停用
+     *
+     * @param id
+     * @return
+     */
+    public int updateDown(Integer id) {
+        return productCategoryService.updateDown(id);
+    }
+
+    /**
+     * 启用
+     *
+     * @param id
+     * @return
+     */
+    public int updateUp(Integer id) {
+        return productCategoryService.updateUp(id);
+    }
 }

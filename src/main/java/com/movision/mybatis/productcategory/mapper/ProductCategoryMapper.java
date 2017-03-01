@@ -36,4 +36,8 @@ public interface ProductCategoryMapper {
 
     List<Brand> findAllBrandCondition(Map map, RowBounds rowBounds);//品牌搜索
 
+    int updateStop(Integer id);//停用
+
+    int updateUp(Integer id);//启用
+
 }

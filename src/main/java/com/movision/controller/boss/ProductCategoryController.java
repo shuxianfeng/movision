@@ -192,4 +192,40 @@ public class ProductCategoryController {
         response.setData(map);
         return response;
     }
+
+    /**
+     * 停用
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "停用", notes = "停用", response = Response.class)
+    @RequestMapping(value = "update_down", method = RequestMethod.POST)
+    public Response updateDown(@ApiParam(value = "品牌id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        int result = productCategoryFacade.updateDown(id);
+        if (response.getCode() == 200) {
+            response.setMessage("删除成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
+    /**
+     * 启用
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "启用", notes = "启用", response = Response.class)
+    @RequestMapping(value = "update_up", method = RequestMethod.POST)
+    public Response updateUp(@ApiParam(value = "品牌id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        int result = productCategoryFacade.updateUp(id);
+        if (response.getCode() == 200) {
+            response.setMessage("删除成功");
+        }
+        response.setData(result);
+        return response;
+    }
 }
