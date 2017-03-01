@@ -751,10 +751,10 @@
         update yw_goods_img
         <set>
             <if test="imgurl != null">
-                img_url = #{imgurl,jdbcType=MultipartHttpServletRequest}
+                img_url = #{imgurl,jdbcType=VARCHAR}
             </if>
         </set>
-        WHERE goodsid=(SELECT id FROM yw_goods WHERE id=#{id,jdbcType=INTEGER} )
+        WHERE goodsid=#{id,jdbcType=INTEGER} AND type =2
     </update>
     <update id="updateCom" parameterType="java.lang.Integer">
          update yw_goods SET ishomepage =0,recommenddate=NULL WHERE  id=#{id,jdbcType=INTEGER}
@@ -832,4 +832,23 @@
             </if>
         </trim>
     </insert>
+    <update id="updateImgGoods" parameterType="com.movision.mybatis.goods.entity.GoodsImg">
+        update yw_goods_img
+        <set>
+            <if test="imgurl != null">
+                img_url = #{imgurl,jdbcType=VARCHAR}
+            </if>
+        </set>
+        WHERE goodsid= #{id,jdbcType=INTEGER} AND type=3
+    </update>
+    <update id="updateCommodityDescription" parameterType="com.movision.mybatis.goods.entity.GoodsImg">
+        update yw_goods_img
+        <set>
+            <if test="imgurl != null">
+                img_url = #{imgurl,jdbcType=VARCHAR}
+            </if>
+        </set>
+        WHERE goodsid= #{id,jdbcType=INTEGER} AND type=1
+
+    </update>
 </mapper>

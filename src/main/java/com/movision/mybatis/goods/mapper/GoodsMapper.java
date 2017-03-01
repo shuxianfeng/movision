@@ -108,4 +108,8 @@ public interface GoodsMapper {
 
     int addAssessment(GoodsAssessment assessment);//回复评论
 
+    int updateImgGoods(GoodsImg goodsImg);//修改参数图
+
+    int updateCommodityDescription(GoodsImg img);//修改描述图
+
 }

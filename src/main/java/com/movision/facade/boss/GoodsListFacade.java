@@ -458,4 +458,98 @@ public class GoodsListFacade {
         map.put("result", result);
         return map;
     }
+
+    /**
+     * 修改参数图
+     *
+     * @param id
+     * @param imgurl
+     * @return
+     */
+    public Map<String, Integer> updateImgGoods(HttpServletRequest request, String id, MultipartFile imgurl) {
+        Map<String, Integer> map = new HashedMap();
+        GoodsImg img = new GoodsImg();
+        img.setGoodsid(Integer.parseInt(id));
+        try {
+            //上传图片到本地服务器
+            String savedFileName = "";
+            String imgurle = "";
+            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+            if (imgurl != null && isMultipart) {
+                if (!imgurl.isEmpty()) {
+                    String fileRealName = imgurl.getOriginalFilename();
+                    int pointIndex = fileRealName.indexOf(".");
+                    String fileSuffix = fileRealName.substring(pointIndex);
+                    UUID FileId = UUID.randomUUID();
+                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
+                    String savedDir = request.getSession().getServletContext().getRealPath("");
+                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
+                    //不保存到项目中,防止部包把图片覆盖掉了
+                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    //这里组合出真实的图片存储路径
+                    String combinpath = path + "/images/goods/coverimg/";
+                    File savedFile = new File(combinpath, savedFileName);
+                    System.out.println("文件url：" + combinpath + "" + savedFileName);
+                    boolean isCreateSuccess = savedFile.createNewFile();
+                    if (isCreateSuccess) {
+                        imgurl.transferTo(savedFile);  //转存文件
+                    }
+                }
+                imgurle = imgdomain + savedFileName;
+            }
+            img.setImgurl(imgurle);
+            int result = goodsService.updateImgGoods(img);
+            map.put("result", result);
+        } catch (Exception e) {
+            log.error("修改失败", e);
+        }
+        return map;
+    }
+
+    /**
+     * 修改描述图
+     *
+     * @param id
+     * @param imgurl
+     * @return
+     */
+    public Map<String, Integer> updateCommodityDescription(HttpServletRequest request, String id, MultipartFile imgurl) {
+        Map<String, Integer> map = new HashedMap();
+        GoodsImg img = new GoodsImg();
+        img.setGoodsid(Integer.parseInt(id));
+        try {
+            //上传图片到本地服务器
+            String savedFileName = "";
+            String imgurle = "";
+            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+            if (imgurl != null && isMultipart) {
+                if (!imgurl.isEmpty()) {
+                    String fileRealName = imgurl.getOriginalFilename();
+                    int pointIndex = fileRealName.indexOf(".");
+                    String fileSuffix = fileRealName.substring(pointIndex);
+                    UUID FileId = UUID.randomUUID();
+                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
+                    String savedDir = request.getSession().getServletContext().getRealPath("");
+                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
+                    //不保存到项目中,防止部包把图片覆盖掉了
+                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    //这里组合出真实的图片存储路径
+                    String combinpath = path + "/images/goods/coverimg/";
+                    File savedFile = new File(combinpath, savedFileName);
+                    System.out.println("文件url：" + combinpath + "" + savedFileName);
+                    boolean isCreateSuccess = savedFile.createNewFile();
+                    if (isCreateSuccess) {
+                        imgurl.transferTo(savedFile);  //转存文件
+                    }
+                }
+                imgurle = imgdomain + savedFileName;
+            }
+            img.setImgurl(imgurle);
+            int result = goodsService.updateCommodityDescription(img);
+            map.put("result", result);
+        } catch (Exception e) {
+            log.error("修改失败", e);
+        }
+        return map;
+    }
 }

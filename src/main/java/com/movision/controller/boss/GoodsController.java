@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -457,6 +459,51 @@ public class GoodsController {
             response.setMessage("回复成功");
         }
         response.setData(goodsAssessment);
+        return response;
+    }
+
+
+    /**
+     * 修改参数图
+     *
+     * @param request
+     * @param id
+     * @param imgurl
+     * @return
+     */
+    @ApiOperation(value = "修改参数图", notes = "修改参数图", response = Response.class)
+    @RequestMapping(value = "update_cimg", method = RequestMethod.POST)
+    public Response updateImgGoods(HttpServletRequest request,
+                                   @ApiParam(value = "商品id") @RequestParam(required = false) String id,
+                                   @ApiParam(value = "地址") @RequestParam(required = false) MultipartFile imgurl) {
+        Response response = new Response();
+        Map<String, Integer> map = goodsFacade.updateImgGoods(request, id, imgurl);
+        if (response.getCode() == 200) {
+            response.setMessage("修改成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 修改描述图
+     *
+     * @param request
+     * @param id
+     * @param imgurl
+     * @return
+     */
+    @ApiOperation(value = "修改描述图", notes = "修改描述图", response = Response.class)
+    @RequestMapping(value = "update_CommodityDescription", method = RequestMethod.POST)
+    public Response updateCommodityDescription(HttpServletRequest request,
+                                               @ApiParam(value = "商品id") @RequestParam(required = false) String id,
+                                               @ApiParam(value = "地址") @RequestParam(required = false) MultipartFile imgurl) {
+        Response response = new Response();
+        Map<String, Integer> map = goodsFacade.updateCommodityDescription(request, id, imgurl);
+        if (response.getCode() == 200) {
+            response.setMessage("修改成功");
+        }
+        response.setData(map);
         return response;
     }
 }

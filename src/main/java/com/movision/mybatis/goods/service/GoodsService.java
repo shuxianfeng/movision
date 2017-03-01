@@ -798,4 +798,36 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 添加参数图
+     *
+     * @param goodsImg
+     * @return
+     */
+    public int updateImgGoods(GoodsImg goodsImg) {
+        try {
+            log.info("添加参数图");
+            return goodsMapper.updateImgGoods(goodsImg);
+        } catch (Exception e) {
+            log.error("添加参数图失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 添加描述图
+     *
+     * @param img
+     * @return
+     */
+    public int updateCommodityDescription(GoodsImg img) {
+        try {
+            log.info("添加描述图");
+            return goodsMapper.updateCommodityDescription(img);
+        } catch (Exception e) {
+            log.error("添加描述图失败", e);
+            throw e;
+        }
+    }
 }
