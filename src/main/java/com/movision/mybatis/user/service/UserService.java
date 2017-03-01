@@ -319,7 +319,7 @@ public class UserService {
      * @param pager
      * @return
      */
-    public List<Integer> findAllqueryUsers(Paging<UserVo> pager) {
+    public List<UserVo> findAllqueryUsers(Paging<UserVo> pager) {
         try {
             log.info("查询所有申请加V用户");
             return userMapper.findAllqueryUsers(pager.getRowBounds());
@@ -331,28 +331,12 @@ public class UserService {
 
 
     /**
-     * 查询所有VIP用户列表
-     *
-     * @param userid
-     * @return
-     */
-    public UserVo queryVipList(Integer userid) {
-        try {
-            log.info("查询所有VIP用户列表");
-            return userMapper.queryApplyVipList(userid);
-        } catch (Exception e) {
-            log.error("查询所有VIP用户列表异常");
-            throw e;
-        }
-    }
-
-    /**
      * 查询所有VIP用户
      *
      * @param pager
      * @return
      */
-    public List<Integer> findAllqueryUserVIPByList(Paging<UserVo> pager) {
+    public List<UserVo> findAllqueryUserVIPByList(Paging<UserVo> pager) {
         try {
             log.info("查询所有VIP用户");
             return userMapper.findAllqueryUserVIPByList(pager.getRowBounds());
@@ -360,16 +344,6 @@ public class UserService {
             log.error("查询所有VIP用户异常");
             throw e;
         }
-    }
-
-    /**
-     * 查看vip申请列表
-     *
-     * @param userid
-     * @return
-     */
-    public UserVo queryApplyVipList(Integer userid) {
-        return userMapper.queryApplyVipList(userid);
     }
 
     public int updateByPrimaryKeySelective(User user) {
@@ -394,6 +368,23 @@ public class UserService {
             return userMapper.findAllQueryCircleManList(pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询圈主列表异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 对VIP列表排序
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<UserVo> queryAddVSortUser(Map map, Paging<UserVo> pager) {
+        try {
+            log.info("对VIP列表排序");
+            return userMapper.findAllqueryAddVSortUser(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("对VIP列表排序异常");
             throw e;
         }
     }

@@ -5,11 +5,13 @@ import com.movision.mybatis.submission.service.SubmissionService;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -30,13 +32,8 @@ public class UserManageFacade {
      * @return
      */
     public List<UserVo> queryApplyVipList(Paging<UserVo> pager) {
-        List<UserVo> resault = new ArrayList<>();
-        List<Integer> users = userService.findAllqueryUsers(pager);//查询所有申请加v用户
-        for (int i = 0; i < users.size(); i++) {//查看vip申请列表
-            UserVo usermassage = userService.queryApplyVipList(users.get(i));
-            resault.add(usermassage);
-        }
-        return resault;
+        List<UserVo> users = userService.findAllqueryUsers(pager);//查询所有申请加v用户
+        return users;
     }
 
     /**
@@ -47,15 +44,26 @@ public class UserManageFacade {
      */
     public List<UserVo> queryVipList(Paging<UserVo> pager) {
         List<UserVo> resault = new ArrayList<>();
-        List<Integer> users = userService.findAllqueryUserVIPByList(pager);//查询所有VIP用户
-        for (int i = 0; i < users.size(); i++) {
-            UserVo usermassage = userService.queryVipList(users.get(i));//查询VIP用户列表
-            resault.add(usermassage);
-        }
-        return resault;
+        List<UserVo> users = userService.findAllqueryUserVIPByList(pager);//查询所有VIP用户
+        return users;
     }
 
     public List<SubmissionVo> queryContributeList(Paging<SubmissionVo> pager) {
         return submissionService.queryContributeList(pager);
+    }
+
+    /**
+     * 对VIP列表排序
+     *
+     * @param time
+     * @param grade
+     * @param pager
+     * @return
+     */
+    public List<UserVo> queryAddVSortUser(String time, String grade, Paging<UserVo> pager) {
+        Map map = new HashedMap();
+        map.put("time", time);
+        map.put("grade", grade);
+        return userService.queryAddVSortUser(map, pager);
     }
 }

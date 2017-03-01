@@ -7,6 +7,7 @@ import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -85,6 +86,33 @@ public class UserManageController {
         Response response = new Response();
         Paging<SubmissionVo> pager = new Paging<SubmissionVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<SubmissionVo> list = userManageFacade.queryContributeList(pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
+
+    /**
+     * 对VIP列表排序
+     *
+     * @param time
+     * @param grade
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "VIP用户列表排序", notes = "用于VIP用户列表按加V时间和会员等级排序", response = Response.class)
+    @RequestMapping(value = "query_add_v_sort", method = RequestMethod.POST)
+    public Response queryAddVSortUser(@ApiParam(value = "按加V时间(传数值1)") @RequestParam(required = false) String time,
+                                      @ApiParam(value = "按会员等级（传数值1）") @RequestParam(required = false) String grade,
+                                      @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                      @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<UserVo> pager = new Paging<UserVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<UserVo> list = userManageFacade.queryAddVSortUser(time, grade, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

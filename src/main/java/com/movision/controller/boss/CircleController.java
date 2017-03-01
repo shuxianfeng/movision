@@ -175,7 +175,6 @@ public class CircleController {
      * @param introduction
      * @param erweima
      * @param status
-     * @param isdiscover
      * @param orderid
      * @param permission
      * @return
@@ -251,7 +250,7 @@ public class CircleController {
                               @ApiParam(value = "圈子二维码") @RequestParam(required = false) String erweima,
                               @ApiParam(value = "推荐到首页") @RequestParam(required = false) String isrecommend,
                               @ApiParam(value = "推荐排序") @RequestParam(required = false) String orderid,
-                              @ApiParam(value = "发帖权限") @RequestParam(required = false) String scope) {
+                              @ApiParam(value = "发帖权限(0 所有者可发 1 所有者和大V可发 2 所有人均可发)") @RequestParam(required = false) String scope) {
         Response response = new Response();
         Map<String, Integer> map = circleFacade.addCircle(request, name, category, userid, admin, criclemanid, photo, introduction, erweima, isrecommend, orderid, scope);
         if (response.getCode() == 200) {

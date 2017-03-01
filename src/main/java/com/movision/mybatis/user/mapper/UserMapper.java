@@ -68,11 +68,11 @@ public interface UserMapper {
 
     List<User> queryUserByAdministratorList(Integer circleid);
 
-    List<Integer> findAllqueryUsers(RowBounds rowBounds);
+    List<UserVo> findAllqueryUsers(RowBounds rowBounds);
 
-    UserVo queryApplyVipList(Integer userid);
-
-    List<Integer> findAllqueryUserVIPByList(RowBounds rowBounds);
+    List<UserVo> findAllqueryUserVIPByList(RowBounds rowBounds);
 
     List<User> findAllQueryCircleManList(RowBounds rowBounds);
+
+    List<UserVo> findAllqueryAddVSortUser(Map map, RowBounds rowBounds);
 }

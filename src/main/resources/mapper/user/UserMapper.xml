@@ -478,28 +478,60 @@
         m.circleid=#{circleid,jdbcType=INTEGER})
     </select>
 
-    <select id="findAllqueryUsers" resultType="java.lang.Integer">
-        SELECT id FROM yw_user WHERE applydate IS NOT NULL AND level=0 AND status=0 ORDER BY intime
+    <select id="findAllqueryUsers" resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,
+        (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
+        (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
+        (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
+        p1.userid=vd.userid AND p1.isdel=0)) AS exceptional,
+        (SELECT COALESCE(SUM(collectsum),0) FROM yw_post p2 WHERE p2.userid=vd.userid AND p2.isdel=0) AS becollectsum,
+        (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid IN (SELECT p5.id FROM yw_post p5 WHERE p5.userid=vd.userid
+        AND p5.isdel=0)) AS besharesum,
+        (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
+        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
+        zansum,u.fans,u.applydate
+        FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE vd.userid=u.id
     </select>
-    <select id="queryApplyVipList" parameterType="java.lang.Integer"
-            resultType="com.movision.mybatis.user.entity.UserVo">
+
+    <select id="findAllqueryUserVIPByList" resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT u.id,u.nickname,u.phone,u.level,u.status,
             (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
             (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
-            (SELECT SUM(points) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE p1.userid=#{userid,jdbcType=INTEGER} AND p1.isdel=0)) AS exceptional,
-            (SELECT SUM(collectsum) FROM yw_post p2 WHERE p2.userid=#{userid,jdbcType=INTEGER} AND p2.isdel=0) AS becollectsum,
-            (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid IN (SELECT p5.id FROM yw_post p5 WHERE p5.userid=#{userid,jdbcType=INTEGER} AND p5.isdel=0)) AS besharesum,
-            (SELECT SUM(commentsum) FROM  yw_post p3 WHERE p3.userid=#{userid,jdbcType=INTEGER} AND p3.isdel=0) AS commentsum,
-            (SELECT SUM(zansum) FROM yw_post p4 WHERE p4.userid=#{userid,jdbcType=INTEGER} AND p4.isdel=0) AS zansum,u.fans,u.applydate
-        FROM yw_user u WHERE u.id=#{userid,jdbcType=INTEGER}
-    </select>
-
-    <select id="findAllqueryUserVIPByList" resultType="java.lang.Integer">
-        SELECT id FROM yw_user WHERE level>0 AND status=0 ORDER BY intime
+        (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
+        p1.userid=u.id AND p1.isdel=0)) AS exceptional,
+        (SELECT COALESCE(SUM(collectsum),0) FROM yw_post p2 WHERE p2.userid=u.id AND p2.isdel=0) AS becollectsum,
+        (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid IN (SELECT p5.id FROM yw_post p5 WHERE p5.userid=u.id AND
+        p5.isdel=0)) AS besharesum,
+        (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=u.id AND p3.isdel=0) AS commentsum,
+        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=u.id AND p4.isdel=0) AS
+        zansum,u.fans,u.applydate
+        FROM yw_user u WHERE level>0 AND status=0 ORDER BY intime
     </select>
 
     <select id="findAllQueryCircleManList" resultType="com.movision.mybatis.user.entity.User">
         SELECT nickname FROM yw_user WHERE status=0
+    </select>
+
+    <select id="findAllqueryAddVSortUser" resultType="com.movision.mybatis.user.entity.UserVo"
+            parameterType="java.util.Map">
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,
+        (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
+        (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
+        (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
+        p1.userid=u.id AND p1.isdel=0)) AS exceptional,
+        (SELECT COALESCE(SUM(collectsum),0) FROM yw_post p2 WHERE p2.userid=u.id AND p2.isdel=0) AS becollectsum,
+        (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid IN (SELECT p5.id FROM yw_post p5 WHERE p5.userid=u.id AND
+        p5.isdel=0)) AS besharesum,
+        (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=u.id AND p3.isdel=0) AS commentsum,
+        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=u.id AND p4.isdel=0) AS
+        zansum,u.fans,u.applydate
+        <if test="time!=null">
+            FROM yw_user u LEFT JOIN yw_audit_vip_detail vd ON vd.apply_userid=u.id WHERE u.level>0 AND u.status=0 AND
+            vd.status=0 ORDER BY vd.audit_time DESC
+        </if>
+        <if test="grade!=null">
+            FROM yw_user u WHERE u.level>0 AND u.status=0 ORDER BY u.level DESC
+        </if>
     </select>
 
 </mapper>
