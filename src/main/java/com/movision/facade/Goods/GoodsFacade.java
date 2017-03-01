@@ -107,7 +107,7 @@ public class GoodsFacade {
         return map;
     }
 
-    public Map<String, Object> queryCombo(String goodsid) {
+    public Map<String, Object> queryCombo(String goodsid, String goodsposition) {
         Map<String, Object> map = new HashMap<>();
         //查询该商品有无库存
         int storenum = goodsService.queryStore(Integer.parseInt(goodsid));
@@ -124,7 +124,9 @@ public class GoodsFacade {
             map.put("comboList", comboList);
 
             //查询活动
-            List<GoodsDiscountVo> goodsDiscountList = discountService.querygoodsDiscount();
+            Goods goods = new Goods();
+            goods.setGoodsposition(Integer.parseInt(goodsposition));
+            List<GoodsDiscountVo> goodsDiscountList = discountService.querygoodsDiscount(goods);
 
             for (int i = 0; i < goodsDiscountList.size(); i++) {
 

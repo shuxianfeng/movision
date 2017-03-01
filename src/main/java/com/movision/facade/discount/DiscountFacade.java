@@ -1,5 +1,6 @@
 package com.movision.facade.discount;
 
+import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goodsDiscount.entity.GoodsDiscountVo;
 import com.movision.mybatis.goodsDiscount.service.DiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,12 @@ public class DiscountFacade {
     @Autowired
     private DiscountService discountService;
 
-    public List<GoodsDiscountVo> querygoodsDiscount() {
+    public List<GoodsDiscountVo> querygoodsDiscount(String goodsposition) {
 
         //查询当前商品参与的所有活动列表
-        List<GoodsDiscountVo> goodsDiscountList = discountService.querygoodsDiscount();
+        Goods goods = new Goods();
+        goods.setGoodsposition(Integer.parseInt(goodsposition));
+        List<GoodsDiscountVo> goodsDiscountList = discountService.querygoodsDiscount(goods);
 
         for (int i = 0; i < goodsDiscountList.size(); i++) {
 
