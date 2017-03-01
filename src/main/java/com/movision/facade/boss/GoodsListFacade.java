@@ -254,7 +254,7 @@ public class GoodsListFacade {
      * @param brandid
      * @return
      */
-    public Map<String, Integer> queryGoods(HttpServletRequest request, MultipartFile imgurl, String name, String protype, String id, String price, String origprice, String stock, String isdel, String ishot, String recommenddate, String brandid, String isessence) {
+    public Map<String, Integer> updateGoods(HttpServletRequest request, MultipartFile imgurl, String name, String protype, String id, String price, String origprice, String stock, String isdel, String recommenddate, String brandid, String tuijian, String attribute) {
         GoodsVo goodsVo = new GoodsVo();
         Map<String, Integer> map = new HashedMap();
         goodsVo.setId(Integer.parseInt(id));
@@ -266,7 +266,7 @@ public class GoodsListFacade {
         goodsVo.setIsdel(Integer.parseInt(isdel));
         goodsVo.setBrandid(brandid);
         Date date = null;
-        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (recommenddate != null) {
             try {
                 date = format.parse(recommenddate);
@@ -275,8 +275,20 @@ public class GoodsListFacade {
             }
         }
         goodsVo.setRecommenddate(date);
-        goodsVo.setIshot(Integer.parseInt(ishot));
-        goodsVo.setIsessence(Integer.parseInt(isessence));
+        String ishot;
+        String productids[] = tuijian.split(",");
+        for (int i = 0; i < productids.length; i++) {
+            ishot = productids[i];
+            if (ishot == "0") {
+                goodsVo.setIshot(0);
+                goodsVo.setIsessence(0);
+            } else if (ishot == "1") {
+                goodsVo.setIshot(1);
+            } else if (ishot == "2") {
+                goodsVo.setIsessence(1);
+            }
+        }
+        goodsVo.setAttribute(attribute);
         int result = goodsService.updateGoods(goodsVo);
         try {
             //上传图片到本地服务器
@@ -309,6 +321,7 @@ public class GoodsListFacade {
             }
             GoodsImg img = new GoodsImg();
             img.setImgurl(imgurle);
+            img.setGoodsid(Integer.parseInt(id));
             int res = goodsService.updateImage(img);
             map.put("result", result);
             map.put("res", res);

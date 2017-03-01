@@ -728,23 +728,19 @@
             </if>
         </set>
         <set>
+            <if test="recommenddate != null">
+                recommenddate = #{recommenddate,jdbcType=DATE}
+            </if>
+        </set>
+
+        <set>
             <if test="brandid != null">
                 brandid = #{brandid,jdbcType=INTEGER}
             </if>
         </set>
         <set>
-            <if test="recommenddate != null">
-                recommenddate = #{recommenddate,jdbcType=DATE}
-            </if>
-        </set>
-        <set>
-            <if test="ishot != null">
-                ishot = #{ishot,jdbcType=INTEGER}
-            </if>
-        </set>
-        <set>
-            <if test="isessence != null">
-                isessence = #{isessence,jdbcType=INTEGER}
+            <if test="attribute != null">
+                attribute = #{attribute,jdbcType=VARCHAR}
             </if>
         </set>
         where id=#{id,jdbcType=INTEGER}

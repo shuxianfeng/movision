@@ -571,4 +571,49 @@ public class GoodsController {
         return response;
 
     }
+
+
+    /**
+     * 修改商品
+     *
+     * @param request
+     * @param imgurl
+     * @param name
+     * @param protype
+     * @param id
+     * @param price
+     * @param origprice
+     * @param stock
+     * @param isdel
+     * @param recommenddate
+     * @param brandid
+     * @param tuijian
+     * @param attribute
+     * @return
+     */
+    @ApiOperation(value = "修改商品", notes = "修改商品", response = Response.class)
+    @RequestMapping(value = "update_goods", method = RequestMethod.POST)
+    public Response updateGoods(HttpServletRequest request,
+                                @ApiParam(value = "图片地址") @RequestParam MultipartFile imgurl,
+                                @ApiParam(value = "商品名称") @RequestParam String name,
+                                @ApiParam(value = "商品类别") @RequestParam String protype,
+                                @ApiParam(value = "商品id") @RequestParam String id,
+                                @ApiParam(value = "折后价") @RequestParam String price,
+                                @ApiParam(value = "原价") @RequestParam String origprice,
+                                @ApiParam(value = "库存") @RequestParam String stock,
+                                @ApiParam(value = "是否上架") @RequestParam String isdel,
+                                @ApiParam(value = "推荐日期") @RequestParam(required = false) String recommenddate,
+                                @ApiParam(value = "品牌id") @RequestParam String brandid,
+                                @ApiParam(value = "推荐") @RequestParam String tuijian,
+                                @ApiParam(value = "商品标签") @RequestParam String attribute
+    ) {
+        Response response = new Response();
+        Map<String, Integer> map = goodsFacade.updateGoods(request, imgurl, name, protype, id, price, origprice, stock, isdel, recommenddate, brandid, tuijian, attribute);
+        if (response.getCode() == 200) {
+            response.setMessage("修改成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
 }
