@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.brand.mapper.BrandMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.brand.entity.Brand">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="protype" property="protype" jdbcType="INTEGER"/>
+        <result column="brandid" property="brandid" jdbcType="INTEGER"/>
+        <result column="brandname" property="brandname" jdbcType="VARCHAR"/>
+        <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, protype, brandid, brandname, isdel, intime
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_brand
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from yw_brand
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.brand.entity.Brand">
+        insert into yw_brand (id, protype, brandid,
+        brandname, isdel, intime
+        )
+        values (#{id,jdbcType=INTEGER}, #{protype,jdbcType=INTEGER}, #{brandid,jdbcType=INTEGER},
+        #{brandname,jdbcType=VARCHAR}, #{isdel,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.brand.entity.Brand">
+        insert into yw_brand
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="protype != null">
+                protype,
+            </if>
+            <if test="brandid != null">
+                brandid,
+            </if>
+            <if test="brandname != null">
+                brandname,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="protype != null">
+                #{protype,jdbcType=INTEGER},
+            </if>
+            <if test="brandid != null">
+                #{brandid,jdbcType=INTEGER},
+            </if>
+            <if test="brandname != null">
+                #{brandname,jdbcType=VARCHAR},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.brand.entity.Brand">
+        update yw_brand
+        <set>
+            <if test="protype != null">
+                protype = #{protype,jdbcType=INTEGER},
+            </if>
+            <if test="brandid != null">
+                brandid = #{brandid,jdbcType=INTEGER},
+            </if>
+            <if test="brandname != null">
+                brandname = #{brandname,jdbcType=VARCHAR},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.brand.entity.Brand">
+        update yw_brand
+        set protype = #{protype,jdbcType=INTEGER},
+        brandid = #{brandid,jdbcType=INTEGER},
+        brandname = #{brandname,jdbcType=VARCHAR},
+        isdel = #{isdel,jdbcType=INTEGER},
+        intime = #{intime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>
