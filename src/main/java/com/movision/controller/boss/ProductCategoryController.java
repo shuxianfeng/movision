@@ -127,4 +127,27 @@ public class ProductCategoryController {
         response.setData(map);
         return response;
     }
+
+    /**
+     * 修改类别
+     *
+     * @param request
+     * @param typename
+     * @param imgurl
+     * @return
+     */
+    @ApiOperation(value = "修改类别", notes = "修改类别", response = Response.class)
+    @RequestMapping(value = "update_category", method = RequestMethod.POST)
+    public Response updateCategory(HttpServletRequest request,
+                                   @ApiParam(value = "分类名称") @RequestParam(required = false) String typename,
+                                   @ApiParam(value = "图片") @RequestParam(required = false) MultipartFile imgurl,
+                                   @ApiParam(value = "分类id") @RequestParam(required = false) String id) {
+        Response response = new Response();
+        Map<String, Integer> map = productCategoryFacade.updateCategory(request, typename, id, imgurl);
+        if (response.getCode() == 200) {
+            response.setMessage("修改成功");
+        }
+        response.setData(map);
+        return response;
+    }
 }

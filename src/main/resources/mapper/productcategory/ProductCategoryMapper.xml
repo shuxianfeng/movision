@@ -145,4 +145,18 @@
             </if>
         </trim>
     </insert>
+
+    <update id="updateCategory"
+            parameterType="com.movision.mybatis.productcategory.entity.ProductCategory">
+        update yw_category
+        <set>
+            <if test="typename != null">
+                typename = #{typename,jdbcType=VARCHAR},
+            </if>
+            <if test="imgurl != null">
+                imgurl = #{imgurl,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

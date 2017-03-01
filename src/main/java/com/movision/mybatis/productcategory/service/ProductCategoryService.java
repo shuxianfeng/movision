@@ -109,4 +109,20 @@ public class ProductCategoryService {
         }
     }
 
+
+    /**
+     * 编辑分类
+     *
+     * @param productCategory
+     * @return
+     */
+    public int updateCategory(ProductCategory productCategory) {
+        try {
+            log.info("编辑分类");
+            return productCategoryMapper.updateCategory(productCategory);
+        } catch (Exception e) {
+            log.error("编辑分类失败", e);
+            throw e;
+        }
+    }
 }

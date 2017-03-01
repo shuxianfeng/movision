@@ -29,4 +29,6 @@ public interface ProductCategoryMapper {
 
     ProductCategory queryCategory(Integer id);//根据id查询类别信息
 
+    int updateCategory(ProductCategory productCategory);//编辑分类
+
 }
