@@ -79,6 +79,22 @@ public class ProductCategoryService {
     }
 
     /**
+     * 品牌分类搜索
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<Brand> findAllBrandCondition(Map map, Paging<Brand> pager) {
+        try {
+            log.info("品牌分类搜索");
+            return productCategoryMapper.findAllBrandCondition(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("品牌分类搜索失败", e);
+            throw e;
+        }
+    }
+    /**
      * 删除分类
      *
      * @param id

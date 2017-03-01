@@ -113,6 +113,15 @@
             AND typename LIKE concat('%',#{typename,jdbcType=VARCHAR},'%')
         </if>
     </select>
+    <select id="findAllBrandCondition" resultType="com.movision.mybatis.brand.entity.Brand">
+        SELECT id,brandid,brandname,isdel,intime FROM yw_brand WHERE 1
+        <if test="brandname!=null">
+            AND brandname LIKE concat('%',#{brandname,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="isdel!=null">
+            AND isdel=#{isdel,jdbcType=INTEGER}
+        </if>
+    </select>
     <delete id="deleteCategory" parameterType="java.lang.Integer">
         DELETE FROM yw_category WHERE id=#{id,jdbcType=INTEGER}
     </delete>

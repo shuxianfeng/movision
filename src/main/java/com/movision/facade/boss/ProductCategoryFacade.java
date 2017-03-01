@@ -65,6 +65,19 @@ public class ProductCategoryFacade {
         return productCategoryService.findAllCategoryCondition(map, pager);
     }
 
+    /**
+     * 条件搜索商品品牌
+     *
+     * @param brandname
+     * @param pager
+     * @return
+     */
+    public List<Brand> findAllBrandCondition(String brandname, String isdel, Paging<Brand> pager) {
+        Map<String, Object> map = new HashedMap();
+        map.put("typename", brandname);
+        map.put("isdel", isdel);
+        return productCategoryService.findAllBrandCondition(map, pager);
+    }
 
     /**
      * 删除分类

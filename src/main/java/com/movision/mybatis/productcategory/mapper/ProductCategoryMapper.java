@@ -34,4 +34,6 @@ public interface ProductCategoryMapper {
 
     List<Brand> findAllBrand(RowBounds rowBounds);//查询品牌列表
 
+    List<Brand> findAllBrandCondition(Map map, RowBounds rowBounds);//品牌搜索
+
 }

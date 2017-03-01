@@ -90,6 +90,28 @@ public class ProductCategoryController {
         return response;
     }
 
+
+    /**
+     * 商品管理*--商品品牌列表搜索
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "商品品牌列表搜索（分页）", notes = "商品品牌列表搜索（分页）", response = Response.class)
+    @RequestMapping(value = "query_brand_condition", method = RequestMethod.POST)
+    public Response queryCategoryCondition(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                           @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                           @ApiParam(value = "品牌名称") @RequestParam(required = false) String brandname,
+                                           @ApiParam(value = "是否启用") @RequestParam(required = false) String isdel
+    ) {
+        Response response = new Response();
+        Paging<Brand> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Brand> list = productCategoryFacade.findAllBrandCondition(brandname, isdel, pager);
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
     /**
      * 删除分类
      *
