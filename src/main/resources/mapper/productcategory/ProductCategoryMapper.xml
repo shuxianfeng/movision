@@ -112,6 +112,7 @@
         <if test="typename!=null">
             AND typename LIKE concat('%',#{typename,jdbcType=VARCHAR},'%')
         </if>
+        ORDER BY intime DESC
     </select>
     <select id="findAllBrandCondition" resultType="com.movision.mybatis.brand.entity.Brand">
         SELECT id,brandid,brandname,isdel,intime FROM yw_brand WHERE 1
@@ -121,6 +122,7 @@
         <if test="isdel!=null">
             AND isdel=#{isdel,jdbcType=INTEGER}
         </if>
+        ORDER BY intime DESC
     </select>
     <delete id="deleteCategory" parameterType="java.lang.Integer">
         DELETE FROM yw_category WHERE id=#{id,jdbcType=INTEGER}
