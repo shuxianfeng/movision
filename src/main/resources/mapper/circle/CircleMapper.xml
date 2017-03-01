@@ -478,7 +478,7 @@
     </select>
 
     <select id="queryCircleDiscover" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT isrecommend FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER}
+        SELECT isdiscover FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER}
     </select>
 
     <update id="updateDiscover" parameterType="java.util.Map">
