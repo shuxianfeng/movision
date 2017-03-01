@@ -16,6 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -300,6 +303,56 @@ public class ProductCategoryFacade {
         brand.setIsdel(Integer.parseInt(isdel));
         brand.setId(Integer.parseInt(id));
         int result = productCategoryService.updateBrand(brand);
+        map.put("result", result);
+        return map;
+    }
+
+    /**
+     * 编辑活动
+     *
+     * @param name
+     * @param discount
+     * @param content
+     * @param startdate
+     * @param enddate
+     * @param isenrent
+     * @param rentday
+     * @param orderid
+     * @param isdel
+     * @return
+     */
+    public Map<String, Integer> updateGoodsDis(String name, String id, String discount, String content, String startdate, String enddate, String isenrent, String rentday, String orderid, String isdel) {
+
+        Map<String, Integer> map = new HashedMap();
+        GoodsDiscount goodsDiscount = new GoodsDiscount();
+        goodsDiscount.setName(name);
+        goodsDiscount.setIsdel(Integer.parseInt(isdel));
+        goodsDiscount.setDiscount(Integer.parseInt(discount));
+        goodsDiscount.setContent(content);
+        goodsDiscount.setIsenrent(Integer.parseInt(isenrent));
+        goodsDiscount.setRentday(Integer.parseInt(rentday));
+        goodsDiscount.setOrderid(Integer.parseInt(orderid));
+        goodsDiscount.setId(Integer.parseInt(id));
+        Date isessencetime = null;//开始时间
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        if (startdate != null) {
+            try {
+                isessencetime = format.parse(startdate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        goodsDiscount.setStartdate(isessencetime);
+        Date max = null;//最大时间
+        if (enddate != null) {
+            try {
+                max = format.parse(enddate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        goodsDiscount.setEnddate(max);
+        int result = productCategoryService.updateDiscount(goodsDiscount);
         map.put("result", result);
         return map;
     }

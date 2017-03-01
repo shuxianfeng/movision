@@ -39,6 +39,7 @@ public interface ProductCategoryMapper {
 
     int updateCategory(ProductCategory productCategory);//编辑分类
 
+    int updateDiscount(GoodsDiscount goodsDiscount);//编辑活动
     int updateBrand(Brand brand);//编辑品牌
     List<Brand> findAllBrand(RowBounds rowBounds);//查询品牌列表
 

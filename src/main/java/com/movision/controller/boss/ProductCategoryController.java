@@ -365,4 +365,41 @@ public class ProductCategoryController {
         response.setData(result);
         return response;
     }
+
+    /**
+     * 编辑活动
+     *
+     * @param name
+     * @param id
+     * @param discount
+     * @param content
+     * @param startdate
+     * @param enddate
+     * @param isenrent
+     * @param rentday
+     * @param orderid
+     * @param isdel
+     * @return
+     */
+    @ApiOperation(value = "编辑活动", notes = "编辑活动", response = Response.class)
+    @RequestMapping(value = "update_active", method = RequestMethod.POST)
+    public Response updateGoodsDis(@ApiParam(value = "活动名称") @RequestParam(required = false) String name,
+                                   @ApiParam(value = "活动id") @RequestParam(required = false) String id,
+                                   @ApiParam(value = "活动折扣") @RequestParam(required = false) String discount,
+                                   @ApiParam(value = "活动内容") @RequestParam(required = false) String content,
+                                   @ApiParam(value = "活动开始时间") @RequestParam(required = false) String startdate,
+                                   @ApiParam(value = "活动结束时间") @RequestParam(required = false) String enddate,
+                                   @ApiParam(value = "是否为整租活动：0 是 1 否',") @RequestParam(required = false) String isenrent,
+                                   @ApiParam(value = "整租天数") @RequestParam(required = false) String rentday,
+                                   @ApiParam(value = "排序id") @RequestParam(required = false) String orderid,
+                                   @ApiParam(value = "是否启用") @RequestParam(required = false) String isdel
+    ) {
+        Response response = new Response();
+        Map<String, Integer> map = productCategoryFacade.updateGoodsDis(name, id, discount, content, startdate, enddate, isenrent, rentday, orderid, isdel);
+        if (response.getCode() == 200) {
+            response.setMessage("修改成功");
+        }
+        response.setData(map);
+        return response;
+    }
 }

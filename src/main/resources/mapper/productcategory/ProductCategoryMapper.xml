@@ -239,4 +239,39 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <update id="updateDiscount"
+            parameterType="com.movision.mybatis.goodsDiscount.entity.GoodsDiscount">
+        update yw_goods_discount
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="discount != null">
+                discount = #{discount,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="startdate != null">
+                startdate = #{startdate,jdbcType=DATE},
+            </if>
+            <if test="enddate != null">
+                enddate = #{enddate,jdbcType=DATE},
+            </if>
+            <if test="isenrent != null">
+                isenrent = #{isenrent,jdbcType=INTEGER},
+            </if>
+            <if test="rentday != null">
+                rentday = #{rentday,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                orderid = #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

@@ -223,6 +223,22 @@ public class ProductCategoryService {
     }
 
     /**
+     * 编辑活动
+     *
+     * @param goodsDiscount
+     * @return
+     */
+    public int updateDiscount(GoodsDiscount goodsDiscount) {
+        try {
+            log.info("编辑活动");
+            return productCategoryMapper.updateDiscount(goodsDiscount);
+        } catch (Exception e) {
+            log.error("编辑活动失败", e);
+            throw e;
+        }
+    }
+
+    /**
      * 编辑品牌
      *
      * @param brand
