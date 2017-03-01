@@ -539,8 +539,8 @@
             <if test="status!=null">
                 status = #{status,jdbcType=INTEGER},
             </if>
-            <if test="isdiscover!=null">
-                isdiscover = #{isdiscover,jdbcType=INTEGER},
+            <if test="isrecommend!=null">
+                isrecommend = #{isrecommend,jdbcType=INTEGER},
             </if>
             <if test="orderid!=null">
                 orderid = #{orderid,jdbcType=INTEGER},

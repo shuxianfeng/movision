@@ -216,7 +216,7 @@ public class CircleFacade {
      * @return
      */
     public Map<String, Integer> updateDiscover(String circleid, String orderid) {
-        Integer discover = circleService.queryCircleDiscover(circleid);
+        Integer discover = circleService.queryCircleDiscover(circleid);//查询圈子是否推荐发现页
         Map<String, Integer> map = new HashedMap();
         Map<String, Integer> spread = new HashedMap();
         spread.put("circleid", Integer.parseInt(circleid));
@@ -273,14 +273,14 @@ public class CircleFacade {
      * @param introduction
      * @param erweima
      * @param status
-     * @param isdiscover
+     * @param isrecommend
      * @param orderid
      * @param permission
      * @return
      */
     public Map<String, Integer> updateCircle(HttpServletRequest request, String id, String name, String category, String circlemanid, String admin,
                                              String createtime, MultipartFile photo, String introduction,
-                                             String erweima, String status, String isdiscover, String orderid, String permission) {
+                                             String erweima, String status, String isrecommend, String orderid, String permission) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
         Integer circleid = null;
@@ -355,8 +355,8 @@ public class CircleFacade {
             if (status != null) {
                 circleDetails.setStatus(Integer.parseInt(status));
             }
-            if (isdiscover != null) {
-                circleDetails.setIsdiscover(Integer.parseInt(isdiscover));
+            if (isrecommend != null) {
+                circleDetails.setIsrecommend(Integer.parseInt(isrecommend));
             }
             if (orderid != null) {
                 circleDetails.setOrderid(Integer.parseInt(orderid));
@@ -418,13 +418,13 @@ public class CircleFacade {
      * @param photo
      * @param introduction
      * @param erweima
-     * @param isdiscover
+     * @param isrecommend
      * @param orderid
      * @return
      */
     public Map<String, Integer> addCircle(HttpServletRequest request, String name, String category, String userid, String admin,
                                           String circlemanid, MultipartFile photo, String introduction,
-                                          String erweima, String isdiscover, String orderid, String scope) {
+                                          String erweima, String isrecommend, String orderid, String scope) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
         Integer circleid = null;
@@ -478,10 +478,11 @@ public class CircleFacade {
                 circleDetails.setErweima(erweima);
             }
             circleDetails.setStatus(0);//初始化审核状态
-            if (isdiscover != null) {
-                circleDetails.setIsdiscover(Integer.parseInt(isdiscover));
+            if (isrecommend != null) {
+                circleDetails.setIsrecommend(Integer.parseInt(isrecommend));
             }
             if (orderid != null) {
+                circleDetails.setIsdiscover(1);
                 circleDetails.setOrderid(Integer.parseInt(orderid));
             }
             if (scope != null) {
