@@ -19,6 +19,7 @@ import com.movision.mybatis.goodsAssessment.mapper.GoodsAssessmentMapper;
 import com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg;
 import com.movision.mybatis.role.entity.Role;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.ibatis.executor.ExecutorException;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -829,5 +830,22 @@ public class GoodsService {
             log.error("添加描述图失败", e);
             throw e;
         }
+    }
+
+    /**
+     * 增加商品图片
+     *
+     * @param goodsImg
+     * @return
+     */
+    public int addPicture(GoodsImg goodsImg) {
+        try {
+            log.info("增加商品图片");
+            return goodsMapper.addPicture(goodsImg);
+        } catch (Exception e) {
+            log.error("增加商品图片失败", e);
+            throw e;
+        }
+
     }
 }

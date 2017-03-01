@@ -460,6 +460,55 @@ public class GoodsListFacade {
     }
 
     /**
+     * 增加商品
+     *
+     * @param request
+     * @param id
+     * @param imgurl
+     * @return
+     */
+    public Map<String, Integer> addpicture(HttpServletRequest request, String id, MultipartFile imgurl) {
+        Map<String, Integer> map = new HashedMap();
+        GoodsImg goodsImg = new GoodsImg();
+        goodsImg.setType(2);
+        goodsImg.setGoodsid(Integer.parseInt(id));
+        try {
+            //上传图片到本地服务器
+            String savedFileName = "";
+            String imgurle = "";
+            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+            if (imgurl != null && isMultipart) {
+                if (!imgurl.isEmpty()) {
+                    String fileRealName = imgurl.getOriginalFilename();
+                    int pointIndex = fileRealName.indexOf(".");
+                    String fileSuffix = fileRealName.substring(pointIndex);
+                    UUID FileId = UUID.randomUUID();
+                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
+                    String savedDir = request.getSession().getServletContext().getRealPath("");
+                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
+                    //不保存到项目中,防止部包把图片覆盖掉了
+                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    //这里组合出真实的图片存储路径
+                    String combinpath = path + "/images/goods/coverimg/";
+                    File savedFile = new File(combinpath, savedFileName);
+                    System.out.println("文件url：" + combinpath + "" + savedFileName);
+                    boolean isCreateSuccess = savedFile.createNewFile();
+                    if (isCreateSuccess) {
+                        imgurl.transferTo(savedFile);  //转存文件
+                    }
+                }
+                imgurle = imgdomain + savedFileName;
+            }
+            goodsImg.setImgurl(imgurle);
+            int result = goodsService.addPicture(goodsImg);
+            map.put("result", result);
+        } catch (Exception e) {
+            log.error("添加异常", e);
+        }
+        return map;
+    }
+
+    /**
      * 修改参数图
      *
      * @param id

@@ -506,4 +506,26 @@ public class GoodsController {
         response.setData(map);
         return response;
     }
+
+    /**
+     * 增加商品图片
+     *
+     * @param request
+     * @param id
+     * @param imgurl
+     * @return
+     */
+    @ApiOperation(value = "增加商品图片", notes = "增加商品图片", response = Response.class)
+    @RequestMapping(value = "add_goodspicture", method = RequestMethod.POST)
+    public Response addpicture(HttpServletRequest request,
+                               @ApiParam(value = "商品id") @RequestParam(required = false) String id,
+                               @ApiParam(value = "地址") @RequestParam(required = false) MultipartFile imgurl) {
+        Response response = new Response();
+        Map<String, Integer> map = goodsFacade.addpicture(request, id, imgurl);
+        if (response.getCode() == 200) {
+            response.setMessage("增加成功");
+        }
+        response.setData(map);
+        return response;
+    }
 }

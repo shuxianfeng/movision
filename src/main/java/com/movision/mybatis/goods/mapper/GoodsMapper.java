@@ -112,4 +112,6 @@ public interface GoodsMapper {
 
     int updateCommodityDescription(GoodsImg img);//修改描述图
 
+    int addPicture(GoodsImg goodsImg);//增加图片
+
 }
