@@ -53,9 +53,7 @@
             <if test="orderid != null">
                 orderid,
             </if>
-            <if test="intime != null">
                 intime,
-            </if>
             <if test="isdel != null">
                 isdel,
             </if>
@@ -79,9 +77,7 @@
             <if test="orderid != null">
                 #{orderid,jdbcType=INTEGER},
             </if>
-            <if test="intime != null">
-                #{intime,jdbcType=TIMESTAMP},
-            </if>
+            now(),
             <if test="isdel != null">
                 #{isdel,jdbcType=INTEGER},
             </if>
@@ -125,4 +121,24 @@
         isdel = #{isdel,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="queryMyAllTypePoint" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.pointRecord.entity.PointRecord">
+        SELECT *
+        FROM yw_points_record
+        where isdel = 0
+        AND userid = #{userid}
+    </select>
+
+    <select id="queryMyTodayPoint" resultType="com.movision.mybatis.pointRecord.entity.PointRecord"
+            parameterType="java.lang.Integer">
+        SELECT *
+        FROM yw_points_record
+        WHERE isdel = 0
+        and userid = #{userid}
+        <![CDATA[
+        AND TO_DAYS( NOW() ) - TO_DAYS(intime) = 0
+        ]]>
+    </select>
+
 </mapper>

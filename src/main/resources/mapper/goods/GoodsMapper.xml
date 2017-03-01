@@ -647,7 +647,9 @@
         SELECT g.*
         from yw_goods g
         LEFT JOIN yw_collection c ON g.id = c.goodsid
+        LEFT JOIN yw_goods_img i ON g.id = i.goodsid
         where c.type = 1
+        and i.type = 2
         <if test="userid!=null and userid!='' ">
             AND c.userid = #{userid}
         </if>
