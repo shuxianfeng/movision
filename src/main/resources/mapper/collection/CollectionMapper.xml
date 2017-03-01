@@ -19,6 +19,24 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
+    <!--检查该用户是否收藏过该帖子-->
+    <select id="checkIsHave" parameterType="com.movision.mybatis.collection.entity.Collection"
+            resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_collection
+        WHERE userid = #{userid,jdbcType=INTEGER}
+          AND postid = #{postid,jdbcType=INTEGER}
+          AND type = #{type,jdbcType=INTEGER}
+    </select>
+
+    <!--检查该用户是否收藏过该商品-->
+    <select id="checkIsHaveGoods" parameterType="com.movision.mybatis.collection.entity.Collection"
+            resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_collection
+        WHERE userid = #{userid,jdbcType=INTEGER}
+          AND goodsid = #{goodsid,jdbcType=INTEGER}
+          AND type = #{type,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_collection
     where id = #{id,jdbcType=INTEGER}
@@ -29,7 +47,7 @@
     insert into yw_collection (id, userid, postid,
         goodsid, type, collect_time)
     values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER},
-        #{goodsid,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}), now()
+        #{goodsid,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, now())
   </insert>
 
     <!--收藏帖子sql-->
@@ -37,7 +55,7 @@
     INSERT INTO yw_collection (userid, postid,
         goodsid, type, collect_time)
     VALUES (#{userid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER},
-        #{goodsid,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}), now()
+        #{goodsid,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, now())
   </insert>
 
     <insert id="insertSelective" parameterType="com.movision.mybatis.collection.entity.Collection">

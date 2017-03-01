@@ -15,6 +15,10 @@ public interface CollectionMapper {
 
     int updateByPrimaryKey(Collection record);
 
+    int checkIsHave(Collection collection);
+
+    int checkIsHaveGoods(Collection collection);
+
     int collectionPost(Collection collection);
 
     void addCollectionSum(int postid);

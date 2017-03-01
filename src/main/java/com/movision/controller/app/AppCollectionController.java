@@ -30,8 +30,31 @@ public class AppCollectionController {
 
         int count = collectionFacade.collectionPost(postid, userid, type);
 
-        if (response.getCode() == 200 && count == 1) {
+        if (count == 1) {
+            response.setCode(200);
             response.setMessage("收藏成功");
+        } else if (count == -1) {
+            response.setCode(300);
+            response.setMessage("已收藏过该帖子");
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "收藏商品接口", notes = "用户在商品详情页面点击收藏时调用此接口进行收藏操作", response = Response.class)
+    @RequestMapping(value = "collectionGoods", method = RequestMethod.POST)
+    public Response collectionGoods(@ApiParam(value = "商品id") @RequestParam String goodsid,
+                                    @ApiParam(value = "当前登录的用户id") @RequestParam String userid,
+                                    @ApiParam(value = "收藏类型：0 帖子 1 商品") @RequestParam String type) {
+        Response response = new Response();
+
+        int count = collectionFacade.collectionGoods(goodsid, userid, type);
+
+        if (count == 1) {
+            response.setCode(200);
+            response.setMessage("收藏成功");
+        } else if (count == -1) {
+            response.setCode(300);
+            response.setMessage("已收藏过该商品");
         }
         return response;
     }

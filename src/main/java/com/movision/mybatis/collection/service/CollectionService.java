@@ -21,6 +21,26 @@ public class CollectionService {
     @Autowired
     private CollectionMapper collectionMapper;
 
+    public int checkIsHave(Collection collection) {
+        try {
+            log.info("检查该用户是否收藏过该帖子");
+            return collectionMapper.checkIsHave(collection);
+        } catch (Exception e) {
+            log.error("检查该用户是否收藏过该帖子失败");
+            throw e;
+        }
+    }
+
+    public int checkIsHaveGoods(Collection collection) {
+        try {
+            log.info("检查该用户是否收藏过该商品");
+            return collectionMapper.checkIsHaveGoods(collection);
+        } catch (Exception e) {
+            log.error("检查该用户是否收藏过该商品失败");
+            throw e;
+        }
+    }
+
     public int collectionPost(Collection collection) {
         try {
 
@@ -40,6 +60,16 @@ public class CollectionService {
             collectionMapper.addCollectionSum(postid);
         } catch (Exception e) {
             log.error("被收藏的帖子收藏数+1失败");
+            throw e;
+        }
+    }
+
+    public int collectionGoods(Collection record) {
+        try {
+            log.info("用户收藏商品");
+            return collectionMapper.insertSelective(record);
+        } catch (Exception e) {
+            log.error("用户收藏商品失败");
             throw e;
         }
     }
