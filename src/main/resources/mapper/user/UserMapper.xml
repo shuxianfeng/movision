@@ -478,6 +478,7 @@
         m.circleid=#{circleid,jdbcType=INTEGER})
     </select>
 
+    <!-- 查看VIP申请列表 -->
     <select id="findAllqueryUsers" resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT u.id,u.nickname,u.phone,u.level,u.status,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
@@ -493,10 +494,11 @@
         FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE vd.userid=u.id
     </select>
 
+    <!-- 查看VIP列表-->
     <select id="findAllqueryUserVIPByList" resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT u.id,u.nickname,u.phone,u.level,u.status,
-            (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
-            (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
+        (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
+        (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
         (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
         p1.userid=u.id AND p1.isdel=0)) AS exceptional,
         (SELECT COALESCE(SUM(collectsum),0) FROM yw_post p2 WHERE p2.userid=u.id AND p2.isdel=0) AS becollectsum,
@@ -534,4 +536,47 @@
         </if>
     </select>
 
+    <select id="">
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,
+        (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
+        (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
+        (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
+        p1.userid=vd.userid AND p1.isdel=0)) AS exceptional,
+        (SELECT COALESCE(SUM(collectsum),0) FROM yw_post p2 WHERE p2.userid=vd.userid AND p2.isdel=0) AS becollectsum,
+        (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid IN (SELECT p5.id FROM yw_post p5 WHERE p5.userid=vd.userid
+        AND p5.isdel=0)) AS besharesum,
+        (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
+        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
+        zansum,u.fans,u.applydate
+        FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE vd.userid=u.id
+        <if test="">
+            AND u.nickname LIKE concat('%',#{,jdbcType=VARCHAR},'%')
+        </if>
+    </select>
+
+    <!-- 条件查询VIP申请用户列表 -->
+    <select id="findAllQueryUniteConditionByApply" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,
+        (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
+        (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
+        (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
+        p1.userid=vd.userid AND p1.isdel=0)) AS exceptional,
+        (SELECT COALESCE(SUM(collectsum),0) FROM yw_post p2 WHERE p2.userid=vd.userid AND p2.isdel=0) AS becollectsum,
+        (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid IN (SELECT p5.id FROM yw_post p5 WHERE p5.userid=vd.userid
+        AND p5.isdel=0)) AS besharesum,
+        (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
+        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
+        zansum,u.fans,u.applydate
+        FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE vd.userid=u.id
+        <if test="username!=null">
+            AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="phone!=null">
+            AND u.phone=#{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="begintime!=null and endtime!=null">
+            AND vd.apply_time BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
+    </select>
 </mapper>

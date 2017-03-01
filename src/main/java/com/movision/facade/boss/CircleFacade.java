@@ -575,15 +575,13 @@ public class CircleFacade {
     public List<CircleIndexList> queryCircleByCondition(String pai, String intime, String popularity, String name, String circleman, String type, String begintime, String endtime) {
         Map map = new HashedMap();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date beg = null;
-        Date end = null;
+        String beg = null;
+        String end = null;
         if (begintime != null && endtime != null) {
-            try {
-                beg = format.parse(begintime);
-                end = format.parse(endtime);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            Long l = new Long(begintime);
+            Long o = new Long(endtime);
+            beg = format.format(l);
+            end = format.format(o);
         }
         map.put("pai", pai);
         map.put("intiem", intime);

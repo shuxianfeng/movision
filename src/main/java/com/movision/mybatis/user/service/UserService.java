@@ -388,4 +388,21 @@ public class UserService {
             throw e;
         }
     }
+
+    /**
+     * 条件查询VIP申请用户列表
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<UserVo> queryUniteConditionByApply(Map map, Paging<UserVo> pager) {
+        try {
+            log.info("条件查询VIP申请用户列表");
+            return userMapper.findAllQueryUniteConditionByApply(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("条件查询VIP申请用户列表异常");
+            throw e;
+        }
+    }
 }

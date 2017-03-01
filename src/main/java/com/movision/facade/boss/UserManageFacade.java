@@ -9,7 +9,10 @@ import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +51,12 @@ public class UserManageFacade {
         return users;
     }
 
+    /**
+     * 查询投稿列表
+     *
+     * @param pager
+     * @return
+     */
     public List<SubmissionVo> queryContributeList(Paging<SubmissionVo> pager) {
         return submissionService.queryContributeList(pager);
     }
@@ -65,5 +74,33 @@ public class UserManageFacade {
         map.put("time", time);
         map.put("grade", grade);
         return userService.queryAddVSortUser(map, pager);
+    }
+
+    /**
+     * 条件查询VIP申请用户列表
+     *
+     * @param username
+     * @param phone
+     * @param begintime
+     * @param endtime
+     * @param pager
+     * @return
+     */
+    public List<UserVo> queryUniteConditionByApply(String username, String phone, String begintime, String endtime, Paging<UserVo> pager) {
+        Map map = new HashedMap();
+        String beg = null;
+        String end = null;
+        if (begintime != null && endtime != null) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Long l = new Long(begintime);
+            Long o = new Long(endtime);
+            beg = format.format(l);
+            end = format.format(o);
+        }
+        map.put("username", username);
+        map.put("phone", phone);
+        map.put("begintime", beg);
+        map.put("endtime", end);
+        return userService.queryUniteConditionByApply(map,pager);
     }
 }

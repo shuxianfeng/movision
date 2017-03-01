@@ -120,4 +120,36 @@ public class UserManageController {
         response.setData(pager);
         return response;
     }
+
+
+    /**
+     * 条件查询VIP申请用户列表
+     *
+     * @param username
+     * @param phone
+     * @param begintime
+     * @param endtime
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "条件查询VIP申请用户列表", notes = "用于根据条件查询VIP申请用户列表接口", response = Response.class)
+    @RequestMapping(value = "query_unite_condition_apply", method = RequestMethod.POST)
+    public Response queryUniteConditionByApply(@ApiParam(value = "用户名") @RequestParam(required = false) String username,
+                                               @ApiParam(value = "手机号") @RequestParam(required = false) String phone,
+                                               @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
+                                               @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,
+                                               @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                               @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<UserVo> pager = new Paging<UserVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<UserVo> list = userManageFacade.queryUniteConditionByApply(username, phone, begintime, endtime, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
 }
