@@ -1,6 +1,7 @@
 package com.movision.mybatis.productcategory.mapper;
 
 import com.movision.mybatis.brand.entity.Brand;
+import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.productcategory.entity.ProductCategory;
 import org.apache.ibatis.session.RowBounds;
 
@@ -22,6 +23,7 @@ public interface ProductCategoryMapper {
 
     List<ProductCategory> findAllProductCategory(RowBounds rowBounds);//类别查询
 
+    List<GoodsDiscount> findAllGoodsDiscount(RowBounds rowBounds);//活动查询
     List<ProductCategory> findAllCategoryCondition(Map map, RowBounds rowBounds);//搜索
 
     int deleteCategory(Integer id);//删除分类

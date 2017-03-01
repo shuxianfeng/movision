@@ -107,6 +107,10 @@
     <select id="findAllProductCategory" resultType="com.movision.mybatis.productcategory.entity.ProductCategory">
         SELECT id,protype,typename,intime FROM yw_category
     </select>
+
+    <select id="findAllGoodsDiscount" resultType="com.movision.mybatis.goodsDiscount.entity.GoodsDiscount">
+    SELECT id,name,isenrent,rentday,discount,content,orderid,isdel,startdate,enddate,intime from  yw_goods_discount
+</select>
     <select id="findAllCategoryCondition" resultType="com.movision.mybatis.productcategory.entity.ProductCategory">
         SELECT id,protype,typename,intime FROM yw_category WHERE 1
         <if test="typename!=null">

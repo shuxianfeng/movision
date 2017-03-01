@@ -1,6 +1,7 @@
 package com.movision.facade.boss;
 
 import com.movision.mybatis.brand.entity.Brand;
+import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.productcategory.entity.ProductCategory;
 import com.movision.mybatis.productcategory.service.ProductCategoryService;
 import com.movision.utils.pagination.model.Paging;
@@ -42,6 +43,15 @@ public class ProductCategoryFacade {
         return productCategoryService.findAllCategory(pager);
     }
 
+    /**
+     * 查询活动列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<GoodsDiscount> findAllGoodsDiscount(Paging<GoodsDiscount> pager) {
+        return productCategoryService.findAllGoodsDiscount(pager);
+    }
     /**
      * 查询品牌列表
      *

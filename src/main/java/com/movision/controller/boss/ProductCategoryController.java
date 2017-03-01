@@ -3,6 +3,7 @@ package com.movision.controller.boss;
 import com.movision.common.Response;
 import com.movision.facade.boss.ProductCategoryFacade;
 import com.movision.mybatis.brand.entity.Brand;
+import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.productcategory.entity.ProductCategory;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -50,6 +51,25 @@ public class ProductCategoryController {
         return response;
     }
 
+    /**
+     * 商品管理*--商品活动列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "商品活动列表（分页）", notes = "商品活动列表（分页）", response = Response.class)
+    @RequestMapping(value = "query_active_list", method = RequestMethod.POST)
+    public Response findAllGoodsDiscount(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                         @RequestParam(required = false, defaultValue = "10") String pageSize
+    ) {
+        Response response = new Response();
+        Paging<GoodsDiscount> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<GoodsDiscount> list = productCategoryFacade.findAllGoodsDiscount(pager);
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
     /**
      * 商品管理*--商品品牌列表
      *

@@ -3,6 +3,7 @@ package com.movision.mybatis.productcategory.service;
 import com.movision.mybatis.brand.entity.Brand;
 import com.movision.mybatis.goods.mapper.GoodsMapper;
 import com.movision.mybatis.goods.service.GoodsService;
+import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.productcategory.entity.ProductCategory;
 import com.movision.mybatis.productcategory.mapper.ProductCategoryMapper;
 import com.movision.utils.pagination.model.Paging;
@@ -45,6 +46,21 @@ public class ProductCategoryService {
         }
     }
 
+    /**
+     * 查询活动列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<GoodsDiscount> findAllGoodsDiscount(Paging<GoodsDiscount> pager) {
+        try {
+            log.info("查询分类列表");
+            return productCategoryMapper.findAllGoodsDiscount(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询分类列表失败", e);
+            throw e;
+        }
+    }
     /**
      * 查询品牌列表
      *
