@@ -268,7 +268,6 @@ public class CircleFacade {
      * @param name
      * @param category
      * @param admin
-     * @param createtime
      * @param photo
      * @param introduction
      * @param erweima
@@ -278,8 +277,8 @@ public class CircleFacade {
      * @param permission
      * @return
      */
-    public Map<String, Integer> updateCircle(HttpServletRequest request, String id, String name, String category, String circlemanid, String admin,
-                                             String createtime, MultipartFile photo, String introduction,
+    public Map<String, Integer> updateCircle(HttpServletRequest request, String id, String name, String category, String circlemanid,
+                                             String admin, MultipartFile photo, String introduction,
                                              String erweima, String status, String isrecommend, String orderid, String permission) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
@@ -310,16 +309,6 @@ public class CircleFacade {
                 //查询圈主
                 String pon = userService.queryUserbyPhoneByUserid(Integer.parseInt(circlemanid));
                 circleDetails.setPhone(pon);
-            }
-            Date time = null;
-            if (createtime != null) {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                try {
-                    time = format.parse(createtime);
-                    circleDetails.setCreatetime(time);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
             }
             String savedFileName = "";
             String imgurl = "";

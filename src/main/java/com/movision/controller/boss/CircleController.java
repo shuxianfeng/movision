@@ -170,7 +170,6 @@ public class CircleController {
      * @param name
      * @param category
      * @param admin
-     * @param createtime
      * @param photo
      * @param introduction
      * @param erweima
@@ -187,7 +186,6 @@ public class CircleController {
                                  @ApiParam(value = "圈子类型") @RequestParam String category,
                                  @ApiParam(value = "圈主id") @RequestParam String userid,
                                  @ApiParam(value = "管理员列表") @RequestParam String admin,
-                                 @ApiParam(value = "创建时间") @RequestParam String createtime,
                                  @ApiParam(value = "圈子否封面") @RequestParam(required = false) MultipartFile photo,
                                  @ApiParam(value = "圈子简介") @RequestParam String introduction,
                                  @ApiParam(value = "圈子二维码") @RequestParam(required = false) String erweima,
@@ -196,7 +194,7 @@ public class CircleController {
                                  @ApiParam(value = "推荐排序") @RequestParam(required = false) String orderid,
                                  @ApiParam(value = "发帖权限") @RequestParam(required = false) String permission) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.updateCircle(request, id, name, category, userid, admin, createtime, photo, introduction, erweima, status, isrecommend, orderid, permission);
+        Map<String, Integer> map = circleFacade.updateCircle(request, id, name, category, userid, admin, photo, introduction, erweima, status, isrecommend, orderid, permission);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
