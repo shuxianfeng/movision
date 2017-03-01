@@ -159,4 +159,7 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="findAllBrand" resultType="com.movision.mybatis.brand.entity.Brand">
+      SELECT id,brandid,brandname,isdel,intime FROM yw_brand
+    </select>
 </mapper>

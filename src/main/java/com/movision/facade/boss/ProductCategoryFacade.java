@@ -1,5 +1,6 @@
 package com.movision.facade.boss;
 
+import com.movision.mybatis.brand.entity.Brand;
 import com.movision.mybatis.productcategory.entity.ProductCategory;
 import com.movision.mybatis.productcategory.service.ProductCategoryService;
 import com.movision.utils.pagination.model.Paging;
@@ -41,6 +42,15 @@ public class ProductCategoryFacade {
         return productCategoryService.findAllCategory(pager);
     }
 
+    /**
+     * 查询品牌列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<Brand> findAllBrand(Paging<Brand> pager) {
+        return productCategoryService.findAllBrand(pager);
+    }
     /**
      * 条件搜索商品分类
      *

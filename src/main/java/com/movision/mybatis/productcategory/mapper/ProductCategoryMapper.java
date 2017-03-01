@@ -1,5 +1,6 @@
 package com.movision.mybatis.productcategory.mapper;
 
+import com.movision.mybatis.brand.entity.Brand;
 import com.movision.mybatis.productcategory.entity.ProductCategory;
 import org.apache.ibatis.session.RowBounds;
 
@@ -30,5 +31,7 @@ public interface ProductCategoryMapper {
     ProductCategory queryCategory(Integer id);//根据id查询类别信息
 
     int updateCategory(ProductCategory productCategory);//编辑分类
+
+    List<Brand> findAllBrand(RowBounds rowBounds);//查询品牌列表
 
 }

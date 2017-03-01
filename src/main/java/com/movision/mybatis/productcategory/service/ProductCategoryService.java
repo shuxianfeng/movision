@@ -1,5 +1,6 @@
 package com.movision.mybatis.productcategory.service;
 
+import com.movision.mybatis.brand.entity.Brand;
 import com.movision.mybatis.goods.mapper.GoodsMapper;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.productcategory.entity.ProductCategory;
@@ -40,6 +41,22 @@ public class ProductCategoryService {
             return productCategoryMapper.findAllProductCategory(pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询分类列表失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询品牌列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<Brand> findAllBrand(Paging<Brand> pager) {
+        try {
+            log.info("查询品牌列表");
+            return productCategoryMapper.findAllBrand(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询品牌列表失败", e);
             throw e;
         }
     }
