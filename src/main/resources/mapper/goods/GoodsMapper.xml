@@ -802,4 +802,34 @@
     <delete id="deleteGoodsPicture" parameterType="java.lang.Integer">
         DELETE FROM yw_goods_img WHERE  type=2 AND goodsid=#{id,jdbcType=INTEGER}
     </delete>
+    <insert id="addAssessment" parameterType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessment">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into yw_goods_assessment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+
+            <if test="content != null">
+                content,
+            </if>
+            <if test="goodid != null">
+                goodid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="goodid != null">
+                #{goodid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 </mapper>

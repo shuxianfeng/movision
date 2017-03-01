@@ -5,6 +5,7 @@ import com.movision.facade.boss.GoodsListFacade;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
+import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -437,6 +438,25 @@ public class GoodsController {
             response.setMessage("删除成功");
         }
         response.setData(result);
+        return response;
+    }
+
+    /**
+     * 回复评论
+     *
+     * @param content
+     * @return
+     */
+    @ApiOperation(value = "回复评论", notes = "回复评论", response = Response.class)
+    @RequestMapping(value = "add_assessment", method = RequestMethod.POST)
+    public Response addAssessment(@ApiParam(value = "回复内容") @RequestParam(required = false) String content,
+                                  @ApiParam(value = "商品id") @RequestParam(required = false) String goodid) {
+        Response response = new Response();
+        Map<String, Integer> goodsAssessment = goodsFacade.addAssessment(content, goodid);
+        if (response.getCode() == 200) {
+            response.setMessage("回复成功");
+        }
+        response.setData(goodsAssessment);
         return response;
     }
 }

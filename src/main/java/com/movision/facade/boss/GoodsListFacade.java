@@ -448,11 +448,12 @@ public class GoodsListFacade {
      * @param
      * @return
      */
-    public Map<String, Integer> addAssessment(String content) {
+    public Map<String, Integer> addAssessment(String content, String goodid) {
         GoodsAssessment goodsAssessment = new GoodsAssessment();
         Map<String, Integer> map = new HashedMap();
         goodsAssessment.setUserid(-1);
         goodsAssessment.setContent(content);
+        goodsAssessment.setGoodid(Integer.parseInt(goodid));
         int result = goodsService.addAssessment(goodsAssessment);
         map.put("result", result);
         return map;
