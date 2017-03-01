@@ -306,7 +306,7 @@ public class ProductCategoryController {
         Response response = new Response();
         int result = productCategoryFacade.updateDown(id);
         if (response.getCode() == 200) {
-            response.setMessage("删除成功");
+            response.setMessage("停用成功");
         }
         response.setData(result);
         return response;
@@ -324,7 +324,43 @@ public class ProductCategoryController {
         Response response = new Response();
         int result = productCategoryFacade.updateUp(id);
         if (response.getCode() == 200) {
-            response.setMessage("删除成功");
+            response.setMessage("启用成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
+    /**
+     * 活动停用
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "活动停用", notes = "活动停用", response = Response.class)
+    @RequestMapping(value = "update_downD", method = RequestMethod.POST)
+    public Response updateDownD(@ApiParam(value = "活动id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        int result = productCategoryFacade.updateDownD(id);
+        if (response.getCode() == 200) {
+            response.setMessage("停用成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
+    /**
+     * 活动启用
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "活动启用", notes = "活动启用", response = Response.class)
+    @RequestMapping(value = "update_upD", method = RequestMethod.POST)
+    public Response updateUpD(@ApiParam(value = "活动id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        int result = productCategoryFacade.updateUpD(id);
+        if (response.getCode() == 200) {
+            response.setMessage("启用成功");
         }
         response.setData(result);
         return response;

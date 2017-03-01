@@ -267,6 +267,26 @@ public class ProductCategoryFacade {
     }
 
     /**
+     * 活动停用
+     *
+     * @param id
+     * @return
+     */
+    public int updateDownD(Integer id) {
+        return productCategoryService.updateDownD(id);
+    }
+
+    /**
+     * 活动启用
+     *
+     * @param id
+     * @return
+     */
+    public int updateUpD(Integer id) {
+        return productCategoryService.updateUpD(id);
+    }
+
+    /**
      * 修改品牌
      *
      * @param brandname

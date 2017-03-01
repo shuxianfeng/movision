@@ -268,4 +268,36 @@ public class ProductCategoryService {
             throw e;
         }
     }
+
+    /**
+     * 活动停用
+     *
+     * @param id
+     * @return
+     */
+    public int updateDownD(Integer id) {
+        try {
+            log.info("活动停用");
+            return productCategoryMapper.updateDownD(id);
+        } catch (Exception e) {
+            log.error("活动停用失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 活动启用
+     *
+     * @param id
+     * @return
+     */
+    public int updateUpD(Integer id) {
+        try {
+            log.info("活动启用");
+            return productCategoryMapper.updateUpD(id);
+        } catch (Exception e) {
+            log.error("活动启用失败", e);
+            throw e;
+        }
+    }
 }
