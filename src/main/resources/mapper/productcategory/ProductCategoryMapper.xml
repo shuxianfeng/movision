@@ -118,6 +118,6 @@
     </delete>
     <select id="queryCategory" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.productcategory.entity.ProductCategory">
-        SELECT id,protype,typename,imgurl FROM yw_category WHERE id=#{id,jdbcType=INTEGER}
+        SELECT id,protype,typename,imgurl,intime FROM yw_category WHERE id=#{id,jdbcType=INTEGER}
     </select>
 </mapper>
