@@ -131,6 +131,11 @@
             resultType="com.movision.mybatis.productcategory.entity.ProductCategory">
         SELECT id,protype,typename,imgurl,intime FROM yw_category WHERE id=#{id,jdbcType=INTEGER}
     </select>
+
+    <select id="queryBrand" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.brand.entity.Brand">
+        SELECT id,brandid,brandname,isdel,intime FROM yw_brand WHERE id=#{id,jdbcType=INTEGER}
+    </select>
     <insert id="addCategory" parameterType="com.movision.mybatis.productcategory.entity.ProductCategory">
         insert into yw_category
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -178,5 +183,43 @@
     </update>
     <update id="updateStop" parameterType="java.lang.Integer">
         UPDATE yw_brand SET isdel=1 WHERE id=#{id,jdbcType=INTEGER}
+    </update>
+    <insert id="addBrand" parameterType="com.movision.mybatis.brand.entity.Brand">
+        insert into yw_brand
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="brandname != null">
+                brandname,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="brandname != null">
+                #{brandname,jdbcType=VARCHAR},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateBrand"
+            parameterType="com.movision.mybatis.brand.entity.Brand">
+        update yw_brand
+        <set>
+            <if test="brandname != null">
+                brandname = #{brandname,jdbcType=VARCHAR},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>
