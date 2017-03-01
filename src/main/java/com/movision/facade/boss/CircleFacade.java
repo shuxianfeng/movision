@@ -348,6 +348,9 @@ public class CircleFacade {
                 circleDetails.setIsrecommend(Integer.parseInt(isrecommend));
             }
             if (orderid != null) {
+                if (Integer.parseInt(orderid) > 0) {
+                    circleDetails.setIsdiscover(1);
+                }
                 circleDetails.setOrderid(Integer.parseInt(orderid));
             }
             if (permission != null) {
@@ -471,7 +474,9 @@ public class CircleFacade {
                 circleDetails.setIsrecommend(Integer.parseInt(isrecommend));
             }
             if (orderid != null) {
-                circleDetails.setIsdiscover(1);
+                if (Integer.parseInt(orderid) > 0) {
+                    circleDetails.setIsdiscover(1);
+                }
                 circleDetails.setOrderid(Integer.parseInt(orderid));
             }
             if (scope != null) {
