@@ -145,6 +145,7 @@ public class PostFacade {
             postList.setIntime(list.get(i).getIntime());//帖子发布时间
             postList.setTotalpoint(list.get(i).getTotalpoint());//帖子综合评分
             postList.setIsessence(list.get(i).getIsessence());
+            postList.setUserid(list.get(i).getUserid());
             postList.setCirclename(circlename.getName());//帖子所属圈子
             postList.setOrderid(list.get(i).getOrderid());//获取排序
             postList.setEssencedate(list.get(i).getEssencedate());//获取精选日期
@@ -601,7 +602,7 @@ public class PostFacade {
                 post.setIshot(ishot);//是否为圈子精选
             }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date estime = null;
+            String estime = null;
             if (isessence != null) {
                 if (isessence != "0") {//判断是否为加精
                     post.setIsessence(isessence);//是否为首页精选
@@ -611,7 +612,8 @@ public class PostFacade {
                         post.setOrderid("0");
                     }
                     if (time != null) {
-                        estime = format.parse(time);
+                        Long l = new Long(time);
+                        estime = format.format(l);
                         post.setEssencedate(estime);
                     }
 
@@ -713,9 +715,10 @@ public class PostFacade {
                     } else {
                         post.setOrderid("0");
                     }
-                    Date d = null;
+                    String d = null;
                     if (time != null || time != "") {
-                        d = format.parse(time);
+                        Long l = new Long(time);
+                        d = format.format(l);
                         post.setEssencedate(d);
                     }
                 }
@@ -770,15 +773,12 @@ public class PostFacade {
         Map<String, Integer> map = new HashedMap();
         PostTo p = new PostTo();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date esdate = null;
+        String esdate = null;
         if (Integer.parseInt(orderid) > 0) {//加精动作
             p.setId(Integer.parseInt(postid));
             if (essencedate != null) {
-                try {
-                    esdate = format.parse(essencedate);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                Long l = new Long(essencedate);
+                esdate = format.format(l);
                 p.setEssencedate(esdate);//精选日期
             }
             p.setOrderid(orderid);
@@ -806,13 +806,10 @@ public class PostFacade {
         Map<String, List> map = new HashedMap();
         PostChoiceness postChoiceness = new PostChoiceness();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date esdate = null;
+        String esdate = null;
         if (essencedate != null) {
-            try {
-                esdate = format.parse(essencedate);
-            } catch (ParseException e) {
-                log.error("时间格式转换异常", e);
-            }
+            Long l = new Long(essencedate);
+            esdate = format.format(l);
         }
         List<Post> posts = postService.queryPostChoicenesslist(esdate);//返回加精日期内有几条加精
         if (postid != null) {
@@ -1133,13 +1130,10 @@ public class PostFacade {
                 post.setOrderid(orderid);
             }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date estime = null;
+            String estime = null;
             if (time != null) {
-                try {
-                    estime = format.parse(time);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                Long l = new Long(time);
+                estime = format.format(l);
                 post.setEssencedate(estime);
             }
             post.setUserid(userid);
@@ -1180,21 +1174,30 @@ public class PostFacade {
         if (postcontent != null) {
             postSpread.setPostcontent(postcontent);//帖子内容
         }
-
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String end = null;
+        String beg = null;
+        String ess = null;
         //结束时间
         if (endtime != null) {
-            postSpread.setEndtime(endtime);
+            Long l = new Long(endtime);
+            end = format.format(l);
+            postSpread.setEndtime(end);
         }
         //开始时间
         if (begintime != null) {
-            postSpread.setBegintime(begintime);
+            Long o = new Long(begintime);
+            beg = format.format(o);
+            postSpread.setBegintime(beg);
         }
         if (pai != null) {
             postSpread.setPai(pai);
         }
         //精选时间
         if (essencedate != null) {
-            postSpread.setEssencedate(essencedate);
+            Long n = new Long(essencedate);
+            ess = format.format(n);
+            postSpread.setEssencedate(ess);
         }
         List<PostList> list = postService.postSearch(postSpread, pager);
         List<PostList> rewardeds = new ArrayList<>();
@@ -1217,6 +1220,7 @@ public class PostFacade {
             postList.setZansum(list.get(i).getZansum());
             postList.setRewarded(rewarded);
             postList.setAccusation(accusation);
+            postList.setUserid(list.get(i).getUserid());
             postList.setIsessence(list.get(i).getIsessence());
             postList.setCirclename(circlename.getName());//帖子所属圈子
             postList.setOrderid(list.get(i).getOrderid());//获取排序
@@ -1246,11 +1250,20 @@ public class PostFacade {
      * @return
      */
     public List<CommentVo> queryCommentSensitiveWords(String content, String words, String begintime, String endtime, Paging<CommentVo> pager) {
+        String beg = null;
+        String end = null;
+        if (begintime != null && endtime != null) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Long l = new Long(begintime);
+            Long o = new Long(endtime);
+            beg = format.format(l);
+            end = format.format(o);
+        }
         Map map = new HashedMap();
         map.put("content", content);
         map.put("words", words);
-        map.put("begintime", begintime);
-        map.put("endtime", endtime);
+        map.put("begintime", beg);
+        map.put("endtime", end);
         List<CommentVo> list = commentService.queryCommentSensitiveWords(map, pager);
         return list;
     }
