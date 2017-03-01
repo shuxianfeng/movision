@@ -72,7 +72,39 @@ public class ProductCategoryService {
             log.info("删除分类");
             return productCategoryMapper.deleteCategory(id);
         } catch (Exception e) {
-            log.error("删除分类失败");
+            log.error("删除分类失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 添加商品分类
+     *
+     * @param productCategory
+     * @return
+     */
+    public int addCategory(ProductCategory productCategory) {
+        try {
+            log.info("添加商品分类");
+            return productCategoryMapper.addCategory(productCategory);
+        } catch (Exception e) {
+            log.error("添加商品分类失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据id查询
+     *
+     * @param id
+     * @return
+     */
+    public ProductCategory queryCategory(Integer id) {
+        try {
+            log.info("根据id查询");
+            return productCategoryMapper.queryCategory(id);
+        } catch (Exception e) {
+            log.error("根据id查询失败", e);
             throw e;
         }
     }

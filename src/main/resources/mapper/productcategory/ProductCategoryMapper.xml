@@ -114,6 +114,10 @@
         </if>
     </select>
     <delete id="deleteCategory" parameterType="java.lang.Integer">
-        DELETE  FROM  yw_category WHERE  id=#{id,jdbcType=Integer}
+        DELETE FROM yw_category WHERE id=#{id,jdbcType=INTEGER}
     </delete>
+    <select id="queryCategory" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.productcategory.entity.ProductCategory">
+        SELECT id,protype,typename,imgurl FROM yw_category WHERE id=#{id,jdbcType=INTEGER}
+    </select>
 </mapper>

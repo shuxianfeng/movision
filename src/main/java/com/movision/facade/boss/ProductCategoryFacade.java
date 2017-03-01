@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -59,5 +60,28 @@ public class ProductCategoryFacade {
      */
     public int deleteCategory(Integer id) {
         return productCategoryService.deleteCategory(id);
+    }
+
+
+    /**
+     * 增加商品类别
+     *
+     * @param typename
+     * @param imgurl
+     * @return
+     */
+    public Map<String, Integer> addCategory(String typename, MultipartFile imgurl) {
+        Map<String, Integer> map = new HashedMap();
+        return map;
+    }
+
+    /**
+     * 根据id查询
+     *
+     * @param id
+     * @return
+     */
+    public ProductCategory queryCategory(Integer id) {
+        return productCategoryService.queryCategory(id);
     }
 }

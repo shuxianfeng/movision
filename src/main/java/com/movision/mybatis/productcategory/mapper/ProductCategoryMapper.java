@@ -25,4 +25,8 @@ public interface ProductCategoryMapper {
 
     int deleteCategory(Integer id);//删除分类
 
+    int addCategory(ProductCategory productCategory);//添加商品分类
+
+    ProductCategory queryCategory(Integer id);//根据id查询类别信息
+
 }

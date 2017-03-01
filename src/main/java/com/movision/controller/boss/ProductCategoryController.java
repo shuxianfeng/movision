@@ -85,4 +85,23 @@ public class ProductCategoryController {
         return response;
     }
 
+    /**
+     * 根据id查询
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "根据id查询", notes = "根据id查询", response = Response.class)
+    @RequestMapping(value = "query_categorybyid", method = RequestMethod.POST)
+    public Response queryCategory(@ApiParam(value = "分类id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        ProductCategory productCategory = productCategoryFacade.queryCategory(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(productCategory);
+        return response;
+    }
+
+
 }
