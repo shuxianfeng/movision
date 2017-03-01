@@ -560,9 +560,10 @@
     <select id="findAllGoodsCondition" parameterType="com.movision.mybatis.goods.entity.GoodsVo"
             resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT
-        s.id,s.name,s.protype,d.brandname,s.origprice,s.price,s.stock,s.sales,s.ishomepage,s.recommenddate,s.isdel,s.ishot,s.isessence,COUNT(c.goodsid)
+        s.id,s.name,a.typename,d.brandname,s.origprice,s.price,s.stock,s.sales,s.ishomepage,s.recommenddate,s.isdel,s.ishot,s.isessence,COUNT(c.goodsid)
         AS collect from yw_goods s
-        LEFT JOIN yw_brand d ON d.brandid=s.brandid LEFT JOIN yw_collection c ON c.goodsid=s.id
+        LEFT JOIN yw_brand d ON d.brandid=s.brandid LEFT JOIN yw_collection c ON c.goodsid=s.id LEFT JOIN yw_category a
+        ON a.protype=s.protype
         WHERE 1=1
         <if test="name!=null and name!=''">
             AND s.name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
