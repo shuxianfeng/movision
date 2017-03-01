@@ -33,6 +33,7 @@ public interface ProductCategoryMapper {
 
     int addBrand(Brand brand);//添加品牌
 
+    int addGoodsDiscount(GoodsDiscount goodsDiscount);//添加商品活动
     ProductCategory queryCategory(Integer id);//根据id查询类别信息
 
     GoodsDiscount queryGoodsDiscount(Integer id);//根据id查询活动信息

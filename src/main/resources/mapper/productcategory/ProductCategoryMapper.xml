@@ -277,4 +277,73 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+
+    <insert id="addGoodsDiscount" parameterType="com.movision.mybatis.goodsDiscount.entity.GoodsDiscount">
+        insert into yw_goods_discount
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="discount != null">
+                discount,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="startdate != null">
+                startdate,
+            </if>
+            <if test="enddate != null">
+                enddate,
+            </if>
+            <if test="isenrent != null">
+                isenrent,
+            </if>
+            <if test="rentday != null">
+                rentday,
+            </if>
+            <if test="orderid != null">
+                orderid,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="discount != null">
+                #{discount,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="startdate != null">
+                #{startdate,jdbcType=DATE},
+            </if>
+            <if test="enddate != null">
+                #{enddate,jdbcType=DATE},
+            </if>
+            <if test="isenrent != null">
+                #{isenrent,jdbcType=INTEGER},
+            </if>
+            <if test="rentday != null">
+                #{rentday,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 </mapper>

@@ -181,6 +181,53 @@ public class ProductCategoryFacade {
     }
 
     /**
+     * 增加商品活动
+     * @param name
+     * @param discount
+     * @param content
+     * @param startdate
+     * @param enddate
+     * @param isenrent
+     * @param rentday
+     * @param orderid
+     * @param isdel
+     * @return
+     */
+    public Map<String, Integer> addGoodsDiscount(String name, String discount, String content, String startdate, String enddate, String isenrent, String rentday, String orderid, String isdel) {
+        Map<String, Integer> map = new HashedMap();
+        GoodsDiscount goodsDiscount = new GoodsDiscount();
+        goodsDiscount.setName(name);
+        goodsDiscount.setIsdel(Integer.parseInt(isdel));
+        goodsDiscount.setDiscount(Integer.parseInt(discount));
+        goodsDiscount.setContent(content);
+        goodsDiscount.setIsenrent(Integer.parseInt(isenrent));
+        goodsDiscount.setRentday(Integer.parseInt(rentday));
+        goodsDiscount.setOrderid(Integer.parseInt(orderid));
+        Date isessencetime = null;//开始时间
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        if (startdate != null) {
+            try {
+                isessencetime = format.parse(startdate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        goodsDiscount.setStartdate(isessencetime);
+        Date max = null;//最大时间
+        if (enddate != null) {
+            try {
+                max = format.parse(enddate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        goodsDiscount.setEnddate(max);
+        int result = productCategoryService.addGoodsDiscount(goodsDiscount);
+        map.put("result", result);
+        return map;
+    }
+
+    /**
      * 根据id查询
      *
      * @param id

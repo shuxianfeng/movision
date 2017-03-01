@@ -174,6 +174,22 @@ public class ProductCategoryService {
             throw e;
         }
     }
+
+    /**
+     * 添加活动
+     *
+     * @param goodsDiscount
+     * @return
+     */
+    public int addGoodsDiscount(GoodsDiscount goodsDiscount) {
+        try {
+            log.info("添加活动");
+            return productCategoryMapper.addGoodsDiscount(goodsDiscount);
+        } catch (Exception e) {
+            log.error("添加活动失败", e);
+            throw e;
+        }
+    }
     /**
      * 根据id查询
      *
