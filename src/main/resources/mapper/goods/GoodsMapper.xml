@@ -7,7 +7,7 @@
         <result column="subname" property="subname" jdbcType="VARCHAR"/>
         <result column="price" property="price" jdbcType="DOUBLE"/>
         <result column="origprice" property="origprice" jdbcType="DOUBLE"/>
-        <result column="attribute" property="attribute" jdbcType="INTEGER"/>
+        <result column="attribute" property="attribute" jdbcType="VARCHAR"/>
         <result column="provincecode" property="provincecode" jdbcType="VARCHAR"/>
         <result column="citycode" property="citycode" jdbcType="VARCHAR"/>
         <result column="isself" property="isself" jdbcType="INTEGER"/>
@@ -250,8 +250,8 @@
         iscombo, isspecial, isseckill,
         ishomepage, recommenddate, onlinetime,
         isdel, ishot, isessence)
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{subname,jdbcType=VARCHAR}, 
-      #{price,jdbcType=DOUBLE}, #{origprice,jdbcType=DOUBLE}, #{attribute,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{subname,jdbcType=VARCHAR},
+        #{price,jdbcType=DOUBLE}, #{origprice,jdbcType=DOUBLE}, #{attribute,jdbcType=VARCHAR},
       #{provincecode,jdbcType=VARCHAR}, #{citycode,jdbcType=VARCHAR}, #{isself,jdbcType=INTEGER}, 
       #{isdamage,jdbcType=INTEGER}, #{isquality,jdbcType=INTEGER}, #{promotions,jdbcType=VARCHAR}, 
       #{protype,jdbcType=INTEGER}, #{brandid,jdbcType=VARCHAR}, #{brandsupple,jdbcType=VARCHAR},
@@ -362,7 +362,7 @@
                 #{origprice,jdbcType=DOUBLE},
             </if>
             <if test="attribute != null">
-                #{attribute,jdbcType=INTEGER},
+                #{attribute,jdbcType=VARCHAR},
             </if>
             <if test="provincecode != null">
                 #{provincecode,jdbcType=VARCHAR},
@@ -445,7 +445,7 @@
                 origprice = #{origprice,jdbcType=DOUBLE},
             </if>
             <if test="attribute != null">
-                attribute = #{attribute,jdbcType=INTEGER},
+                attribute = #{attribute,jdbcType=VARCHAR},
             </if>
             <if test="provincecode != null">
                 provincecode = #{provincecode,jdbcType=VARCHAR},
@@ -519,7 +519,7 @@
       subname = #{subname,jdbcType=VARCHAR},
       price = #{price,jdbcType=DOUBLE},
       origprice = #{origprice,jdbcType=DOUBLE},
-      attribute = #{attribute,jdbcType=INTEGER},
+        attribute = #{attribute,jdbcType=VARCHAR},
       provincecode = #{provincecode,jdbcType=VARCHAR},
       citycode = #{citycode,jdbcType=VARCHAR},
       isself = #{isself,jdbcType=INTEGER},
@@ -569,7 +569,7 @@
             AND s.name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
         <if test="attribute!=null and attribute!=''">
-            AND s.attribute=#{producttags,jdbcType=INTEGER}
+            AND s.attribute=#{producttags,jdbcType=VARCHAR}
         </if>
         <if test="brandname!=null and brandname!=''">
             AND s.brandname=#{brand,jdbcType=VARCHAR}
@@ -776,7 +776,7 @@
         <if test="nickname!=null and nickname!=''">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>
-        <if test="content!=null and attribute!=''">
+        <if test="content!=null and content!=''">
             AND g.content LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
         </if>
         <if test="createtime!=null and createtime!=''">

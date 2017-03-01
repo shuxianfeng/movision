@@ -460,7 +460,7 @@ public class GoodsListFacade {
     }
 
     /**
-     * 增加商品
+     * 增加图片
      *
      * @param request
      * @param id
@@ -598,6 +598,80 @@ public class GoodsListFacade {
             map.put("result", result);
         } catch (Exception e) {
             log.error("修改失败", e);
+        }
+        return map;
+    }
+
+    public Map<String, Integer> addGoods(HttpServletRequest request, MultipartFile imgurl, String name, String id, String protype, String brandid, String price, String origprice, String sales, String stock, String isdel, String recommenddate, String attribute, String onlinetime) {
+        Map<String, Integer> map = new HashedMap();
+        GoodsVo goodsVo = new GoodsVo();
+        goodsVo.setId(Integer.parseInt(id));
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        if (recommenddate != null) {
+            try {
+                date = format.parse(recommenddate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        goodsVo.setRecommenddate(date);
+        Date ondate = null;
+        if (onlinetime != null) {
+            try {
+                ondate = format.parse(onlinetime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        goodsVo.setOnlinetime(ondate);
+        goodsVo.setBrandid(brandid);
+        goodsVo.setAttribute(attribute);
+        goodsVo.setProtype(Integer.parseInt(protype));
+        goodsVo.setPrice(Double.parseDouble(price));
+        goodsVo.setOrigprice(Double.parseDouble(origprice));
+        goodsVo.setName(name);
+        goodsVo.setIsdel(Integer.parseInt(isdel));
+        goodsVo.setStock(Integer.parseInt(stock));
+        goodsVo.setSales(Integer.parseInt(sales));
+
+        int res = goodsService.addGoods(goodsVo);
+        map.put("res", res);
+        GoodsImg img = new GoodsImg();
+        img.setGoodsid(Integer.parseInt(id));
+        img.setType(2);
+        try {
+            //上传图片到本地服务器
+            String savedFileName = "";
+            String imgurle = "";
+            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+            if (imgurl != null && isMultipart) {
+                if (!imgurl.isEmpty()) {
+                    String fileRealName = imgurl.getOriginalFilename();
+                    int pointIndex = fileRealName.indexOf(".");
+                    String fileSuffix = fileRealName.substring(pointIndex);
+                    UUID FileId = UUID.randomUUID();
+                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
+                    String savedDir = request.getSession().getServletContext().getRealPath("");
+                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
+                    //不保存到项目中,防止部包把图片覆盖掉了
+                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    //这里组合出真实的图片存储路径
+                    String combinpath = path + "/images/goods/coverimg/";
+                    File savedFile = new File(combinpath, savedFileName);
+                    System.out.println("文件url：" + combinpath + "" + savedFileName);
+                    boolean isCreateSuccess = savedFile.createNewFile();
+                    if (isCreateSuccess) {
+                        imgurl.transferTo(savedFile);  //转存文件
+                    }
+                }
+                imgurle = imgdomain + savedFileName;
+            }
+            img.setImgurl(imgurle);
+            int result = goodsService.addPicture(img);
+            map.put("result", result);
+        } catch (Exception e) {
+            log.error("增加失败", e);
         }
         return map;
     }

@@ -848,4 +848,20 @@ public class GoodsService {
         }
 
     }
+
+    /**
+     * 增加商品
+     *
+     * @param goodsVo
+     * @return
+     */
+    public int addGoods(GoodsVo goodsVo) {
+        try {
+            log.info("增加商品");
+            return goodsMapper.addGoods(goodsVo);
+        } catch (Exception e) {
+            log.error("增加商品失败");
+            throw e;
+        }
+    }
 }

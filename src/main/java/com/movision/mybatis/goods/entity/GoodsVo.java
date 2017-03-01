@@ -27,7 +27,15 @@ public class GoodsVo {
         this.comprice = comprice;
     }
 
-    private Integer attribute;//商品标签
+    public String getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
+    }
+
+    private String attribute;//商品标签
 
     private String provincecode;
 
@@ -171,13 +179,7 @@ public class GoodsVo {
         this.origprice = origprice;
     }
 
-    public Integer getAttribute() {
-        return attribute;
-    }
 
-    public void setAttribute(Integer attribute) {
-        this.attribute = attribute;
-    }
 
     public String getProvincecode() {
         return provincecode;

@@ -18,7 +18,7 @@ public class GoodsDetail {
 
     private Double origprice;
 
-    private Integer attribute;
+    private String attribute;
 
     private String provincecode;
 
@@ -108,11 +108,11 @@ public class GoodsDetail {
         this.origprice = origprice;
     }
 
-    public Integer getAttribute() {
+    public String getAttribute() {
         return attribute;
     }
 
-    public void setAttribute(Integer attribute) {
+    public void setAttribute(String attribute) {
         this.attribute = attribute;
     }
 

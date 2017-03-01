@@ -33,7 +33,7 @@ public class Goods {
         this.num = num;
     }
 
-    private Integer attribute;
+    private String attribute;
 
     private String provincecode;
 
@@ -137,11 +137,11 @@ public class Goods {
         this.origprice = origprice;
     }
 
-    public Integer getAttribute() {
+    public String getAttribute() {
         return attribute;
     }
 
-    public void setAttribute(Integer attribute) {
+    public void setAttribute(String attribute) {
         this.attribute = attribute;
     }
 
