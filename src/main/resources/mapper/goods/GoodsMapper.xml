@@ -561,7 +561,7 @@
             resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT
         s.id,s.name,a.typename,d.brandname,s.origprice,s.price,s.stock,s.sales,s.ishomepage,s.recommenddate,s.isdel,s.ishot,s.isessence,COUNT(c.goodsid)
-        AS collect,s.onlinetime from yw_goods s
+        AS collect,s.onlinetime,s.protype,s.brandid from yw_goods s
         LEFT JOIN yw_brand d ON d.brandid=s.brandid LEFT JOIN yw_collection c ON c.goodsid=s.id LEFT JOIN yw_category a
         ON a.protype=s.protype
         WHERE 1=1
@@ -571,8 +571,8 @@
         <if test="attribute!=null and attribute!=''">
             AND s.attribute=#{producttags,jdbcType=VARCHAR}
         </if>
-        <if test="brandname!=null and brandname!=''">
-            AND s.brandname=#{brand,jdbcType=VARCHAR}
+        <if test="brand!=null and brand!=''">
+            AND s.brandid=#{brand,jdbcType=INTEGER}
         </if>
         <if test="protype!=null and protype!=''">
             AND s.protype=#{protype,jdbcType=INTEGER}
