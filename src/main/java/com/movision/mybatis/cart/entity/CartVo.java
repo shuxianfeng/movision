@@ -20,6 +20,8 @@ public class CartVo {
 
     private Integer combotype;
 
+    private Integer discountid;
+
     private Integer rom;
 
     private Integer num;
@@ -228,5 +230,13 @@ public class CartVo {
 
     public void setOnline(Integer online) {
         this.online = online;
+    }
+
+    public Integer getDiscountid() {
+        return discountid;
+    }
+
+    public void setDiscountid(Integer discountid) {
+        this.discountid = discountid;
     }
 }

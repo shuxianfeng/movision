@@ -1,5 +1,6 @@
 package com.movision.facade.cart;
 
+import com.movision.mybatis.cart.entity.Cart;
 import com.movision.mybatis.cart.entity.CartVo;
 import com.movision.mybatis.cart.service.CartService;
 import com.movision.mybatis.rentdate.entity.Rentdate;
@@ -22,9 +23,12 @@ public class CartFacade {
     private CartService cartService;
 
     //商品加入购物车
-    public int addGoodsCart(String userid, String goodsid, String comboid, String isdebug, String sum, String type, String rentdate) throws ParseException {
+    public int addGoodsCart(String userid, String goodsid, String comboid, String discountid, String isdebug, String sum, String type, String rentdate) throws ParseException {
 
         int flag = 0;
+
+        int tag = 0;//用于区分购物车中租用的商品有没有增加过数量
+
         //首先需要检查用户选择的该套餐中包含的所有商品
 
         Map<String, Object> parammap = new HashMap<>();
@@ -32,6 +36,9 @@ public class CartFacade {
         parammap.put("goodsid", Integer.parseInt(goodsid));
         if (!StringUtils.isEmpty(comboid)) {
             parammap.put("comboid", Integer.parseInt(comboid));
+        }
+        if (!StringUtils.isEmpty(discountid)) {
+            parammap.put("discountid", Integer.parseInt(discountid));
         }
         parammap.put("isdebug", Integer.parseInt(isdebug));
         parammap.put("sum", Integer.parseInt(sum));
@@ -41,26 +48,99 @@ public class CartFacade {
 
         if (type.equals("0")) {
             //0 租赁
-            //租用的商品存在租用日期的选择，所以加入购物车的重复商品不进行合并
-            cartService.addGoodsCart(parammap);//商品加入购物车，返回主键-购物车id
-            int cartid = (int) parammap.get("id");
-
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String[] rentdates = rentdate.split(",");
-            List<Rentdate> prentDateList = new ArrayList<>();
-            for (int i = 0; i < rentdates.length; i++) {
-                Rentdate redate = new Rentdate();
-                redate.setCartid(cartid);
-                redate.setRentdate(sdf.parse(rentdates[i]));
-                redate.setIntime(new Date());
-                prentDateList.add(redate);
-            }
-            cartService.addRentDate(prentDateList);//批量插入租赁日期
 
-            if (cartid > 0)
-                flag = 1;
+            int mark = 0;//定义一个标志位，用于记录两组日期的比较结果
+
+            //首先检查购物车中有无该商品
+            int count = cartService.queryIsHaveRent(parammap);
+
+            int id = 0;//定义一个购物车id
+
+            if (count > 0) {
+                //如果有多个只是租赁日期不同的商品，取出所有购物车id
+                List<Cart> cartList = cartService.queryCartid(parammap);
+                for (int h = 0; h < cartList.size(); h++) {
+                    mark = 0;
+                    id = 0;
+                    //遍历出所有的购物车id
+                    int cartid = cartList.get(h).getId();
+                    //根据购物车id查询，该购物车商品对应的所有租赁日期
+                    List<Rentdate> rentdateList = cartService.queryDateList(cartid);
+
+                    //有相同商品时验证租赁日期是否相同
+//                    List<Rentdate> rentdateList = cartService.queryRentDate(parammap);
+                    if (rentdateList.size() == rentdates.length) {
+
+                        for (int i = 0; i < rentdateList.size(); i++) {
+                            for (int j = 0; j < rentdates.length; j++) {
+                                if (rentdateList.get(i).getRentdate().equals(sdf.parse(rentdates[j]))) {
+                                    mark = mark + 1;
+                                    System.out.println("打印mark>>>>>>>" + mark);
+                                    if (mark == rentdates.length) {
+                                        id = cartid;
+                                        System.out.println("打印id>>>>>>>" + id);
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+
+                    //如果有该商品且租赁日期一致，只累加商品数量
+                    if (id != 0) {//mark == rentdates.length
+
+                        //如果日期完全相同就累加商品数量
+                        parammap.put("id", id);
+                        cartService.addRentSum(parammap);//累加数量
+                        tag = 1;
+                        flag = 1;
+
+                    }
+                }
+
+                if (id == 0 && tag == 0) {//因为多次循环中有不满足该条件的：“rentdateList.size() == rentdates.length”,所以mark为0或小于rentdates.length   mark <= rentdates.length
+
+                    //如果选择的和购物车中已经存在的日期天数不同，直接新增商品
+                    cartService.addGoodsCart(parammap);//商品加入购物车，返回主键-购物车id
+                    int cartid2 = (int) parammap.get("id");
+
+                    List<Rentdate> prentDateList = new ArrayList<>();
+                    for (int i = 0; i < rentdates.length; i++) {
+                        Rentdate redate = new Rentdate();
+                        redate.setCartid(cartid2);
+                        redate.setRentdate(sdf.parse(rentdates[i]));
+                        redate.setIntime(new Date());
+                        prentDateList.add(redate);
+                    }
+                    cartService.addRentDate(prentDateList);//批量插入租赁日期
+
+                    if (cartid2 > 0)
+                        flag = 1;
+                }
+
+            } else {
+                //购物车中没有该商品，直接添加
+                cartService.addGoodsCart(parammap);//商品加入购物车，返回主键-购物车id
+                int cartid2 = (int) parammap.get("id");
+
+                List<Rentdate> prentDateList = new ArrayList<>();
+                for (int i = 0; i < rentdates.length; i++) {
+                    Rentdate redate = new Rentdate();
+                    redate.setCartid(cartid2);
+                    redate.setRentdate(sdf.parse(rentdates[i]));
+                    redate.setIntime(new Date());
+                    prentDateList.add(redate);
+                }
+                cartService.addRentDate(prentDateList);//批量插入租赁日期
+
+                if (cartid2 > 0)
+                    flag = 1;
+            }
 
         } else if (type.equals("1")) {
+
             //1 出售
             //首先检查购物车中有无该商品，如果有该商品合并，只累加商品数量
             int count = cartService.queryIsHave(parammap);
@@ -73,8 +153,6 @@ public class CartFacade {
 
             flag = 1;
         }
-
-
         return flag;
     }
 

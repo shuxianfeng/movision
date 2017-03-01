@@ -1,5 +1,6 @@
 package com.movision.mybatis.cart.service;
 
+import com.movision.mybatis.cart.entity.Cart;
 import com.movision.mybatis.cart.entity.CartVo;
 import com.movision.mybatis.cart.mapper.CartMapper;
 import com.movision.mybatis.combo.mapper.ComboMapper;
@@ -47,6 +48,16 @@ public class CartService {
         }
     }
 
+    public int queryIsHaveRent(Map<String, Object> parammap) {
+        try {
+            log.info("查询该用户购物车中有没有该租赁的商品");
+            return cartMapper.queryIsHaveRent(parammap);
+        } catch (Exception e) {
+            log.error("查询该用户购物车中有没有该租赁的商品失败");
+            throw e;
+        }
+    }
+
     public int queryIsHave(Map<String, Object> parammap) {
         try {
             log.info("查询该用户购物车中有没有该商品");
@@ -57,12 +68,52 @@ public class CartService {
         }
     }
 
+    public List<Cart> queryCartid(Map<String, Object> parammap) {
+        try {
+            log.info("如果购物车中有多个只有租赁日期不同的商品，取出所有的购物车id");
+            return cartMapper.queryCartid(parammap);
+        } catch (Exception e) {
+            log.error("如果购物车中有多个只有租赁日期不同的商品，取出所有的购物车id失败");
+            throw e;
+        }
+    }
+
+    public List<Rentdate> queryDateList(int cartid) {
+        try {
+            log.info("根据购物车id查询租赁日期列表");
+            return cartMapper.queryDateList(cartid);
+        } catch (Exception e) {
+            log.error("根据购物车id查询租赁日期列表失败");
+            throw e;
+        }
+    }
+
+    public List<Rentdate> queryRentDate(Map<String, Object> parammap) {
+        try {
+            log.info("查询当前添加的商品租赁日期和购物中的商品租赁日期是否相同");
+            return cartMapper.queryRentDate(parammap);
+        } catch (Exception e) {
+            log.error("查询当前添加的商品租赁日期和购物中的商品租赁日期是否相同失败");
+            throw e;
+        }
+    }
+
+    public void addRentSum(Map<String, Object> parammap) {
+        try {
+            log.info("添加购物车中租赁的商品的数量");
+            cartMapper.addRentSum(parammap);
+        } catch (Exception e) {
+            log.error("添加购物车中租赁的商品的数量失败");
+            throw e;
+        }
+    }
+
     public void addSum(Map<String, Object> parammap) {
         try {
-            log.info("添加购物车中商品的数量");
+            log.info("添加购物车中购买的商品的数量");
             cartMapper.addSum(parammap);
         } catch (Exception e) {
-            log.error("添加购物车中商品的数量失败");
+            log.error("添加购物车中购买的商品的数量失败");
             throw e;
         }
     }

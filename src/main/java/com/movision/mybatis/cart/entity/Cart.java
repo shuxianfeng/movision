@@ -13,6 +13,8 @@ public class Cart {
 
     private Integer combotype;
 
+    private Integer discountid;
+
     private Integer rom;
 
     private Integer num;
@@ -141,5 +143,13 @@ public class Cart {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public Integer getDiscountid() {
+        return discountid;
+    }
+
+    public void setDiscountid(Integer discountid) {
+        this.discountid = discountid;
     }
 }

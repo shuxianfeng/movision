@@ -7,6 +7,7 @@
         <result column="goodsid" property="goodsid" jdbcType="INTEGER"/>
         <result column="goodsname" property="goodsname" jdbcType="VARCHAR"/>
         <result column="combotype" property="combotype" jdbcType="INTEGER"/>
+        <result column="discountid" property="discountid" jdbcType="INTEGER"/>
         <result column="rom" property="rom" jdbcType="INTEGER"/>
         <result column="num" property="num" jdbcType="INTEGER"/>
         <result column="takeway" property="takeway" jdbcType="INTEGER"/>
@@ -18,7 +19,7 @@
         <result column="type" property="type" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, userid, goodsid, goodsname, combotype, rom, num, takeway, isdebug, debugid, intime,
+        id, userid, goodsid, goodsname, combotype, discountid, rom, num, takeway, isdebug, debugid, intime,
         protype, isdel, type
     </sql>
 
@@ -30,6 +31,27 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
+    <!--查询该用户购物车中有没有该租赁的商品-->
+    <select id="queryIsHaveRent" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_cart
+        WHERE userid = #{userid,jdbcType=INTEGER}
+        AND goodsid = #{goodsid,jdbcType=INTEGER}
+        <if test="comboid != null and comboid != ''">
+            AND combotype = #{comboid,jdbcType=INTEGER}
+        </if>
+        <if test="comboid == null or comboid == ''">
+            AND combotype IS NULL
+        </if>
+        <if test="discountid != null and discountid != ''">
+            AND discountid = #{discountid,jdbcType=INTEGER}
+        </if>
+        <if test="discountid == null or discountid == ''">
+            AND discountid IS NULL
+        </if>
+        AND isdebug = #{isdebug,jdbcType=INTEGER}
+        AND type = #{type,jdbcType=INTEGER}
+    </select>
+
     <!--查询该用户购物车中存不存在该商品-->
     <select id="queryIsHave" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT count(*) FROM yw_cart
@@ -38,6 +60,54 @@
         <if test="comboid != null and comboid != ''">
             AND combotype = #{comboid,jdbcType=INTEGER}
         </if>
+        <if test="discountid != null and discountid != ''">
+            AND discountid = #{discountid,jdbcType=INTEGER}
+        </if>
+        AND isdebug = #{isdebug,jdbcType=INTEGER}
+        AND type = #{type,jdbcType=INTEGER}
+    </select>
+
+    <!--租赁的商品在加入购物车前判断购物车中有没有一样的商品且租赁日期相同-->
+    <select id="queryRentDate" parameterType="java.util.Map" resultType="com.movision.mybatis.rentdate.entity.Rentdate">
+        SELECT rentdate FROM yw_rentdate
+        WHERE cartid = (
+        SELECT id FROM yw_cart
+        WHERE userid = #{userid,jdbcType=INTEGER}
+        AND goodsid = #{goodsid,jdbcType=INTEGER}
+        <if test="comboid != null and comboid != ''">
+            AND combotype = #{comboid,jdbcType=INTEGER}
+        </if>
+        <if test="discountid != null and discountid != ''">
+            AND discountid = #{discountid,jdbcType=INTEGER}
+        </if>
+        AND type = #{type,jdbcType=INTEGER}
+        ) ORDER BY rentdate
+    </select>
+
+    <!--如果购物车中有多个只有租赁日期不同的商品，取出所有的购物车id-->
+    <select id="queryCartid" parameterType="java.util.Map" resultType="com.movision.mybatis.cart.entity.Cart">
+        SELECT id FROM yw_cart
+        WHERE userid = #{userid,jdbcType=INTEGER}
+        AND goodsid = #{goodsid,jdbcType=INTEGER}
+        <if test="comboid != null and comboid != ''">
+            AND combotype = #{comboid,jdbcType=INTEGER}
+        </if>
+        <if test="comboid == null or comboid == ''">
+            AND combotype IS NULL
+        </if>
+        <if test="discountid != null and discountid != ''">
+            AND discountid = #{discountid,jdbcType=INTEGER}
+        </if>
+        <if test="discountid == null or discountid == ''">
+            AND discountid IS NULL
+        </if>
+        AND isdebug = #{isdebug,jdbcType=INTEGER}
+        AND type = #{type,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryDateList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.rentdate.entity.Rentdate">
+        SELECT rentdate FROM yw_rentdate WHERE cartid = #{cartid,jdbcType=INTEGER}
     </select>
 
     <!--查询该用户购物车中的所有商品-->
@@ -88,13 +158,14 @@
     </insert>
 
     <insert id="insert" parameterType="com.movision.mybatis.cart.entity.Cart">
-    insert into yw_cart (id, userid, goodsid, 
-      goodsname, combotype, rom, 
+    insert into yw_cart (id, userid, goodsid,
+        goodsname, combotype, discountid, rom,
       num, takeway, isdebug, 
       debugid, intime, protype, 
       isdel, type)
-    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{goodsid,jdbcType=INTEGER}, 
-      #{goodsname,jdbcType=VARCHAR}, #{combotype,jdbcType=INTEGER}, #{rom,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{goodsid,jdbcType=INTEGER},
+        #{goodsname,jdbcType=VARCHAR}, #{combotype,jdbcType=INTEGER}, #{discountid,jdbcType=INTEGER},
+        #{rom,jdbcType=INTEGER},
       #{num,jdbcType=INTEGER}, #{takeway,jdbcType=INTEGER}, #{isdebug,jdbcType=INTEGER}, 
       #{debugid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}, #{protype,jdbcType=INTEGER}, 
       #{isdel,jdbcType=INTEGER}, #{type,jdbcType=INTEGER})
@@ -106,12 +177,12 @@
             select LAST_INSERT_ID()
         </selectKey>
         INSERT INTO yw_cart(userid, goodsid,
-        goodsname, combotype, num, isdebug,
+        goodsname, combotype, discountid, num, isdebug,
         intime, isdel, type
         )
         VALUES (#{userid,jdbcType=INTEGER}, #{goodsid,jdbcType=INTEGER},
         (SELECT name FROM yw_goods WHERE id = #{goodsid,jdbcType=INTEGER}), #{comboid,jdbcType=INTEGER},
-        #{sum,jdbcType=INTEGER}, #{isdebug,jdbcType=INTEGER},
+        #{discountid,jdbcType=INTEGER}, #{sum,jdbcType=INTEGER}, #{isdebug,jdbcType=INTEGER},
         #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}
         )
     </insert>
@@ -144,6 +215,9 @@
             </if>
             <if test="combotype != null">
                 combotype,
+            </if>
+            <if test="discountid != null">
+                discountid,
             </if>
             <if test="rom != null">
                 rom,
@@ -189,6 +263,9 @@
             <if test="combotype != null">
                 #{combotype,jdbcType=INTEGER},
             </if>
+            <if test="discountid != null">
+                #{discountid,jdbcType=INTEGER},
+            </if>
             <if test="rom != null">
                 #{rom,jdbcType=INTEGER},
             </if>
@@ -233,6 +310,9 @@
             <if test="combotype != null">
                 combotype = #{combotype,jdbcType=INTEGER},
             </if>
+            <if test="discountid != null">
+                discountid = #{discountid,jdbcType=INTEGER},
+            </if>
             <if test="rom != null">
                 rom = #{rom,jdbcType=INTEGER},
             </if>
@@ -269,6 +349,7 @@
       goodsid = #{goodsid,jdbcType=INTEGER},
       goodsname = #{goodsname,jdbcType=VARCHAR},
       combotype = #{combotype,jdbcType=INTEGER},
+        discountid = #{discountid,jdbcType=INTEGER},
       rom = #{rom,jdbcType=INTEGER},
       num = #{num,jdbcType=INTEGER},
       takeway = #{takeway,jdbcType=INTEGER},
@@ -281,7 +362,14 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-    <!--累加购物车中的商品数量-->
+    <!--累加购物车中租赁的商品的数量-->
+    <update id="addRentSum" parameterType="java.util.Map">
+        UPDATE yw_cart
+        SET num = num + #{sum,jdbcType=INTEGER}
+         WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!--累加购物车中购买的商品的数量-->
     <update id="addSum" parameterType="java.util.Map">
     UPDATE yw_cart
     SET num = num + #{sum,jdbcType=INTEGER}
@@ -290,6 +378,11 @@
         <if test="comboid != null and comboid != ''">
             AND combotype = #{comboid,jdbcType=INTEGER}
         </if>
+        <if test="discountid != null and discountid != ''">
+            AND discountid = #{discountid,jdbcType=INTEGER}
+        </if>
+        AND isdebug = #{isdebug,jdbcType=INTEGER}
+        AND type = #{type,jdbcType=INTEGER}
   </update>
 
     <!--批量删除购物车商品-->

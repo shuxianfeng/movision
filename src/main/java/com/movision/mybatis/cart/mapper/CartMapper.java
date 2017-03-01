@@ -18,7 +18,17 @@ public interface CartMapper {
 
     void addRentDate(List<Rentdate> prentDateList);
 
+    int queryIsHaveRent(Map<String, Object> parammap);
+
     int queryIsHave(Map<String, Object> parammap);
+
+    List<Cart> queryCartid(Map<String, Object> parammap);
+
+    List<Rentdate> queryDateList(int cartid);
+
+    List<Rentdate> queryRentDate(Map<String, Object> parammap);
+
+    void addRentSum(Map<String, Object> parammap);
 
     void addSum(Map<String, Object> parammap);
 
