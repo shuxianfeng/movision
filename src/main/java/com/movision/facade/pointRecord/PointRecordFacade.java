@@ -44,25 +44,74 @@ public class PointRecordFacade {
     }
 
     /**
-     * 获取新手任务和每日任务的完成情况
+     * 获取新手任务、每日任务的完成情况
      *
      * @return
      */
     public Map<String, Object> getMyAllTypePoint() {
-        List<PointRecord> pointRecordList = pointRecordService.queryAllMyPointRecord(ShiroUtil.getAppUserID());
         Map map = new HashedMap();
-        int[] pointArray = new int[18]; //用来记录各种类型的积分分数
-        NewTask newTask = new NewTask(false, false, false, false, false, false, false, false, false, false);
 
-        if (ListUtil.isNotEmpty(pointRecordList)) {
-            //有积分流水
-            this.getNewTaskPoint(pointRecordList, pointArray, newTask);
-        }
+        NewTask newTask = getNewTask();
         map.put("newTask", newTask);
 
+        DailyTask dailyTask = getDailyTask();
+        map.put("dailyTask", dailyTask);
+        return map;
+    }
+
+    /**
+     * 获取新手任务的完成情况
+     *
+     * @return
+     */
+    private NewTask getNewTask() {
+        List<PointRecord> pointRecordList = pointRecordService.queryAllMyPointRecord(ShiroUtil.getAppUserID());
+        NewTask newTask = new NewTask(false, false, false, false, false, false, false, false, false, false);
+        if (ListUtil.isNotEmpty(pointRecordList)) {
+            //有积分流水
+            for (PointRecord pointRecord : pointRecordList) {
+                //获取积分的类型
+                int type = null == pointRecord.getType() ? 0 : pointRecord.getType();
+
+                if (type == PointConstant.POINT_TYPE.new_user_register.getCode()) {
+                    newTask.setRegister(true);
+                } else if (type == PointConstant.POINT_TYPE.finish_personal_data.getCode()) {
+                    newTask.setFinishPersonalData(true);
+                } else if (type == PointConstant.POINT_TYPE.binding_phone.getCode()) {
+                    newTask.setBindPhone(true);
+                } else if (type == PointConstant.POINT_TYPE.first_focus.getCode()) {
+                    newTask.setFirstFocus(true);
+                } else if (type == PointConstant.POINT_TYPE.first_collect.getCode()) {
+                    newTask.setFirstCollect(true);
+                } else if (type == PointConstant.POINT_TYPE.first_share.getCode()) {
+                    newTask.setFirstShare(true);
+                } else if (type == PointConstant.POINT_TYPE.first_comment.getCode()) {
+                    newTask.setFirstComment(true);
+                } else if (type == PointConstant.POINT_TYPE.first_support.getCode()) {
+                    newTask.setFirstSupport(true);
+                } else if (type == PointConstant.POINT_TYPE.first_post.getCode()) {
+                    newTask.setFirstPost(true);
+                } else if (type == PointConstant.POINT_TYPE.comment_app.getCode()) {
+                    newTask.setCommentApp(true);
+                } else {
+                    continue;
+                }
+            }
+        }
+        return newTask;
+    }
+
+    /**
+     * 获取每日任务的完成情况
+     *
+     * @return
+     */
+    private DailyTask getDailyTask() {
         DailyTask dailyTask = new DailyTask(0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false);
         List<PointRecord> todayPointList = pointRecordService.queryMyTodayPoint(ShiroUtil.getAppUserID());
         if (ListUtil.isNotEmpty(todayPointList)) {
+            //初始化计算值
+            int rewardCount = 0, postCount = 0, commentCount = 0, shareCount = 0;
             for (PointRecord pointRecord : todayPointList) {
                 int type = pointRecord.getType();
                 if (type == PointConstant.POINT_TYPE.sign.getCode()) {
@@ -75,12 +124,33 @@ public class PointRecordFacade {
                     dailyTask.setCircleSelected(true);
                     dailyTask.setCircleSelectedCount(1);
                 } else if (type == PointConstant.POINT_TYPE.reward.getCode()) {
+                    rewardCount++;
 
+                } else if (type == PointConstant.POINT_TYPE.post.getCode()) {
+                    postCount++;
+
+                } else if (type == PointConstant.POINT_TYPE.comment.getCode()) {
+                    commentCount++;
+
+                } else if (type == PointConstant.POINT_TYPE.share.getCode()) {
+                    shareCount++;
                 }
             }
+            //整理统计值
+            dailyTask.setRewardCount(rewardCount);
+            dailyTask.setReward(rewardCount >= 5);
+
+            dailyTask.setPostCount(postCount);
+            dailyTask.setPost(postCount >= 5);
+
+            dailyTask.setCommentCount(commentCount);
+            dailyTask.setComment(commentCount >= 10);
+
+            dailyTask.setShareCount(shareCount);
+            dailyTask.setShare(shareCount >= 10);
+
         }
-        map.put("dailyTask", dailyTask);
-        return map;
+        return dailyTask;
     }
 
     /**
@@ -91,44 +161,6 @@ public class PointRecordFacade {
      * @param newTask
      */
     private void getNewTaskPoint(List<PointRecord> pointRecordList, int[] pointArray, NewTask newTask) {
-        for (PointRecord pointRecord : pointRecordList) {
-            //获取积分的类型
-            int type = null == pointRecord.getType() ? 0 : pointRecord.getType();
 
-            if (type == PointConstant.POINT_TYPE.new_user_register.getCode()) {
-                pointArray[0] = 25;
-                newTask.setRegister(true);
-            } else if (type == PointConstant.POINT_TYPE.finish_personal_data.getCode()) {
-                pointArray[1] = 15;
-                newTask.setFinishPersonalData(true);
-            } else if (type == PointConstant.POINT_TYPE.binding_phone.getCode()) {
-                pointArray[2] = 10;
-                newTask.setBindPhone(true);
-            } else if (type == PointConstant.POINT_TYPE.first_focus.getCode()) {
-                pointArray[3] = 10;
-                newTask.setFirstFocus(true);
-            } else if (type == PointConstant.POINT_TYPE.first_collect.getCode()) {
-                pointArray[4] = 5;
-                newTask.setFirstCollect(true);
-            } else if (type == PointConstant.POINT_TYPE.first_share.getCode()) {
-                pointArray[5] = 20;
-                newTask.setFirstShare(true);
-            } else if (type == PointConstant.POINT_TYPE.first_comment.getCode()) {
-                pointArray[6] = 10;
-                newTask.setFirstComment(true);
-            } else if (type == PointConstant.POINT_TYPE.first_support.getCode()) {
-                pointArray[7] = 5;
-                newTask.setFirstSupport(true);
-            } else if (type == PointConstant.POINT_TYPE.first_post.getCode()) {
-                pointArray[8] = 20;
-                newTask.setFirstPost(true);
-            } else if (type == PointConstant.POINT_TYPE.comment_app.getCode()) {
-                pointArray[9] = 100;
-                newTask.setCommentApp(true);
-            } else {
-                continue;
-            }
-
-        }
     }
 }

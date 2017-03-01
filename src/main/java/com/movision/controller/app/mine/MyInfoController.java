@@ -8,6 +8,7 @@ import com.movision.facade.circle.CircleAppFacade;
 import com.movision.facade.coupon.CouponFacade;
 import com.movision.facade.index.SuggestionFacade;
 import com.movision.facade.order.OrderAppFacade;
+import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.coupon.entity.Coupon;
@@ -60,6 +61,9 @@ public class MyInfoController {
 
     @Autowired
     private SuggestionFacade suggestionFacade;
+
+    @Autowired
+    private PointRecordFacade pointRecordFacade;
 
 
     @ApiOperation(value = "查询我的达人页信息:收藏商品", notes = "查询我的达人页信息:收藏商品", response = Response.class)
@@ -130,12 +134,12 @@ public class MyInfoController {
         return response;
     }
 
-    @ApiOperation(value = "查询我的积分页面数据", notes = "查询我的积分页面数据", response = Response.class)
+    @ApiOperation(value = "查询我的积分页面:新手任务+每日任务", notes = "查询我的积分页面:新手任务+每日任务", response = Response.class)
     @RequestMapping(value = {"/get_my_point_data"}, method = RequestMethod.GET)
-    public Response getMyPointData(@RequestParam(required = false, defaultValue = "1") String pageNo,
-                                   @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
+    public Response getMyPointData() throws Exception {
         Response response = new Response();
-        // TODO: 2017/2/27  需求未确定
+        Map map = pointRecordFacade.getMyAllTypePoint();
+        response.setData(map);
         return response;
     }
 
