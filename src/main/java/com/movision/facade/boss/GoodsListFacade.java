@@ -602,11 +602,30 @@ public class GoodsListFacade {
         return map;
     }
 
-    public Map<String, Integer> addGoods(HttpServletRequest request, MultipartFile imgurl, String name, String id, String protype, String brandid, String price, String origprice, String sales, String stock, String isdel, String recommenddate, String attribute, String onlinetime) {
+    /**
+     * 商品添加
+     *
+     * @param request
+     * @param imgurl
+     * @param tuijian
+     * @param name
+     * @param
+     * @param protype
+     * @param brandid
+     * @param price
+     * @param origprice
+     * @param
+     * @param stock
+     * @param isdel
+     * @param recommenddate
+     * @param attribute
+     * @param onlinetime
+     * @return
+     */
+    public Map<String, Integer> addGoods(HttpServletRequest request, MultipartFile imgurl, String tuijian, String name, String protype, String brandid, String price, String origprice, String stock, String isdel, String recommenddate, String attribute, String onlinetime) {
         Map<String, Integer> map = new HashedMap();
         GoodsVo goodsVo = new GoodsVo();
-        goodsVo.setId(Integer.parseInt(id));
-        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
         if (recommenddate != null) {
             try {
@@ -626,19 +645,31 @@ public class GoodsListFacade {
         }
         goodsVo.setOnlinetime(ondate);
         goodsVo.setBrandid(brandid);
-        goodsVo.setAttribute(attribute);
         goodsVo.setProtype(Integer.parseInt(protype));
         goodsVo.setPrice(Double.parseDouble(price));
         goodsVo.setOrigprice(Double.parseDouble(origprice));
         goodsVo.setName(name);
         goodsVo.setIsdel(Integer.parseInt(isdel));
         goodsVo.setStock(Integer.parseInt(stock));
-        goodsVo.setSales(Integer.parseInt(sales));
-
+        String ishot;
+        String productids[] = tuijian.split(",");
+        for (int i = 0; i < productids.length; i++) {
+            ishot = productids[i];
+            if (ishot == "0") {
+                goodsVo.setIshot(0);
+                goodsVo.setIsessence(0);
+            } else if (ishot == "1") {
+                goodsVo.setIshot(1);
+            } else if (ishot == "2") {
+                goodsVo.setIsessence(1);
+            }
+        }
+        goodsVo.setAttribute(attribute);
         int res = goodsService.addGoods(goodsVo);
+        int id = goodsVo.getId();
         map.put("res", res);
         GoodsImg img = new GoodsImg();
-        img.setGoodsid(Integer.parseInt(id));
+        img.setGoodsid(id);
         img.setType(2);
         try {
             //上传图片到本地服务器
