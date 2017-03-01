@@ -550,18 +550,18 @@ public class GoodsController {
     @ApiOperation(value = "增加商品", notes = "增加商品", response = Response.class)
     @RequestMapping(value = "add_goods", method = RequestMethod.POST)
     public Response addGoods(HttpServletRequest request,
-                             @ApiParam(value = "图片地址") @RequestParam(required = false) MultipartFile imgurl,
-                             @ApiParam(value = "推荐") @RequestParam(required = false) String tuijian,
-                             @ApiParam(value = "商品名称") @RequestParam(required = false) String name,
-                             @ApiParam(value = "商品类别") @RequestParam(required = false) String protype,
-                             @ApiParam(value = "品牌id") @RequestParam(required = false) String brandid,
-                             @ApiParam(value = "折后价") @RequestParam(required = false) String price,
-                             @ApiParam(value = "原价") @RequestParam(required = false) String origprice,
-                             @ApiParam(value = "库存") @RequestParam(required = false) String stock,
-                             @ApiParam(value = "是否上架") @RequestParam(required = false) String isdel,
+                             @ApiParam(value = "图片地址") @RequestParam MultipartFile imgurl,
+                             @ApiParam(value = "推荐") @RequestParam String tuijian,
+                             @ApiParam(value = "商品名称") @RequestParam String name,
+                             @ApiParam(value = "商品类别") @RequestParam String protype,
+                             @ApiParam(value = "品牌id") @RequestParam String brandid,
+                             @ApiParam(value = "折后价") @RequestParam String price,
+                             @ApiParam(value = "原价") @RequestParam String origprice,
+                             @ApiParam(value = "库存") @RequestParam String stock,
+                             @ApiParam(value = "是否上架") @RequestParam String isdel,
                              @ApiParam(value = "推荐日期") @RequestParam(required = false) String recommenddate,
-                             @ApiParam(value = "商品标签") @RequestParam(required = false) String attribute,
-                             @ApiParam(value = "上架时间") @RequestParam(required = false) String onlinetime) {
+                             @ApiParam(value = "商品标签") @RequestParam String attribute,
+                             @ApiParam(value = "上架时间") @RequestParam String onlinetime) {
         Response response = new Response();
         Map<String, Integer> map = goodsFacade.addGoods(request, imgurl, tuijian, name, protype, brandid, price, origprice, stock, isdel, recommenddate, attribute, onlinetime);
         if (response.getCode() == 200) {
