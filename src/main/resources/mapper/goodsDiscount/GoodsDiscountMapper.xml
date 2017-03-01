@@ -27,12 +27,16 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
-    <!--查询当前商品的所有活动列表-->
-    <select id="querygoodsDiscount" resultType="com.movision.mybatis.goodsDiscount.entity.GoodsDiscountVo">
+    <!--查询当前商品的所有活动列表 (当前租赁的商品可查所有活动；出售的商品不能查询整租活动)-->
+    <select id="querygoodsDiscount" parameterType="com.movision.mybatis.goods.entity.Goods"
+            resultType="com.movision.mybatis.goodsDiscount.entity.GoodsDiscountVo">
     SELECT * FROM yw_goods_discount
     WHERE isdel = '0'
+        <if test="goodsposition == 1">
+            AND isenrent = '1'
+        </if>
       AND enddate > DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
-     ORDER BY intime DESC
+        ORDER BY orderid
   </select>
 
     <!--根据优惠活动id查询活动名称和优惠折扣百分比-->

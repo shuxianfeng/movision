@@ -1,6 +1,7 @@
 package com.movision.mybatis.goodsDiscount.service;
 
 import com.movision.mybatis.cart.entity.CartVo;
+import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goodsDiscount.entity.GoodsDiscountVo;
 import com.movision.mybatis.goodsDiscount.mapper.GoodsDiscountMapper;
 import org.slf4j.Logger;
@@ -22,10 +23,10 @@ public class DiscountService {
     @Autowired
     private GoodsDiscountMapper goodsDiscountMapper;
 
-    public List<GoodsDiscountVo> querygoodsDiscount() {
+    public List<GoodsDiscountVo> querygoodsDiscount(Goods goods) {
         try {
             log.info("查询当前商品的所有活动列表");
-            return goodsDiscountMapper.querygoodsDiscount();
+            return goodsDiscountMapper.querygoodsDiscount(goods);
         } catch (Exception e) {
             log.error("查询当前商品的所有活动列表失败");
             throw e;

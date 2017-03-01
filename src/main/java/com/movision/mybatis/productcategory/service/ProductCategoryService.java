@@ -3,6 +3,7 @@ package com.movision.mybatis.productcategory.service;
 import com.movision.mybatis.brand.entity.Brand;
 import com.movision.mybatis.goods.mapper.GoodsMapper;
 import com.movision.mybatis.goods.service.GoodsService;
+import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.productcategory.entity.ProductCategory;
 import com.movision.mybatis.productcategory.mapper.ProductCategoryMapper;
 import com.movision.utils.pagination.model.Paging;
@@ -46,6 +47,21 @@ public class ProductCategoryService {
     }
 
     /**
+     * 查询活动列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<GoodsDiscount> findAllGoodsDiscount(Paging<GoodsDiscount> pager) {
+        try {
+            log.info("查询分类列表");
+            return productCategoryMapper.findAllGoodsDiscount(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询分类列表失败", e);
+            throw e;
+        }
+    }
+    /**
      * 查询品牌列表
      *
      * @param pager
@@ -74,6 +90,23 @@ public class ProductCategoryService {
             return productCategoryMapper.findAllCategoryCondition(map, pager.getRowBounds());
         } catch (Exception e) {
             log.error("分类搜索失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 活动搜索
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<GoodsDiscount> findAllGoodsDiscountCondition(Map map, Paging<GoodsDiscount> pager) {
+        try {
+            log.info("活动搜索");
+            return productCategoryMapper.findAllGoodsDiscountCondition(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("活动搜索失败", e);
             throw e;
         }
     }
@@ -127,6 +160,21 @@ public class ProductCategoryService {
     }
 
     /**
+     * 添加品牌
+     *
+     * @param brand
+     * @return
+     */
+    public int addBrand(Brand brand) {
+        try {
+            log.info("添加添加品牌");
+            return productCategoryMapper.addBrand(brand);
+        } catch (Exception e) {
+            log.error("添加添加品牌失败", e);
+            throw e;
+        }
+    }
+    /**
      * 根据id查询
      *
      * @param id
@@ -142,6 +190,21 @@ public class ProductCategoryService {
         }
     }
 
+    /**
+     * 根据id查询
+     *
+     * @param id
+     * @return
+     */
+    public Brand queryBrand(Integer id) {
+        try {
+            log.info("根据id查询");
+            return productCategoryMapper.queryBrand(id);
+        } catch (Exception e) {
+            log.error("根据id查询失败", e);
+            throw e;
+        }
+    }
 
     /**
      * 编辑分类
@@ -159,6 +222,21 @@ public class ProductCategoryService {
         }
     }
 
+    /**
+     * 编辑品牌
+     *
+     * @param brand
+     * @return
+     */
+    public int updateBrand(Brand brand) {
+        try {
+            log.info("编辑品牌");
+            return productCategoryMapper.updateBrand(brand);
+        } catch (Exception e) {
+            log.error("编辑品牌失败", e);
+            throw e;
+        }
+    }
     /**
      * 停用
      *
@@ -187,6 +265,38 @@ public class ProductCategoryService {
             return productCategoryMapper.updateUp(id);
         } catch (Exception e) {
             log.error("启用失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 活动停用
+     *
+     * @param id
+     * @return
+     */
+    public int updateDownD(Integer id) {
+        try {
+            log.info("活动停用");
+            return productCategoryMapper.updateDownD(id);
+        } catch (Exception e) {
+            log.error("活动停用失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 活动启用
+     *
+     * @param id
+     * @return
+     */
+    public int updateUpD(Integer id) {
+        try {
+            log.info("活动启用");
+            return productCategoryMapper.updateUpD(id);
+        } catch (Exception e) {
+            log.error("活动启用失败", e);
             throw e;
         }
     }

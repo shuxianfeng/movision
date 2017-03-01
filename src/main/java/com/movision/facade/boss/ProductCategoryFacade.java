@@ -1,6 +1,7 @@
 package com.movision.facade.boss;
 
 import com.movision.mybatis.brand.entity.Brand;
+import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.productcategory.entity.ProductCategory;
 import com.movision.mybatis.productcategory.service.ProductCategoryService;
 import com.movision.utils.pagination.model.Paging;
@@ -43,6 +44,15 @@ public class ProductCategoryFacade {
     }
 
     /**
+     * 查询活动列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<GoodsDiscount> findAllGoodsDiscount(Paging<GoodsDiscount> pager) {
+        return productCategoryService.findAllGoodsDiscount(pager);
+    }
+    /**
      * 查询品牌列表
      *
      * @param pager
@@ -65,6 +75,19 @@ public class ProductCategoryFacade {
         return productCategoryService.findAllCategoryCondition(map, pager);
     }
 
+    /**
+     * 条件搜索商品活动
+     *
+     * @param name
+     * @param pager
+     * @return
+     */
+    public List<GoodsDiscount> findAllCategoryCondition(String name, String isdel, Paging<GoodsDiscount> pager) {
+        Map<String, Object> map = new HashedMap();
+        map.put("name", name);
+        map.put("isdel", isdel);
+        return productCategoryService.findAllGoodsDiscountCondition(map, pager);
+    }
     /**
      * 条件搜索商品品牌
      *
@@ -137,6 +160,23 @@ public class ProductCategoryFacade {
         return map;
     }
 
+
+    /**
+     * 增加品牌
+     * @param brandname
+     * @param isdel
+     * @return
+     */
+    public Map<String, Integer> addBrand(String brandname, String isdel) {
+        Map<String, Integer> map = new HashedMap();
+        Brand brand = new Brand();
+        brand.setBrandname(brandname);
+        brand.setIsdel(Integer.parseInt(isdel));
+        int result = productCategoryService.addBrand(brand);
+        map.put("result", result);
+        return map;
+    }
+
     /**
      * 根据id查询
      *
@@ -145,6 +185,15 @@ public class ProductCategoryFacade {
      */
     public ProductCategory queryCategory(Integer id) {
         return productCategoryService.queryCategory(id);
+    }
+    /**
+     * 根据id查询
+     *
+     * @param id
+     * @return
+     */
+    public Brand queryBrand(Integer id) {
+        return productCategoryService.queryBrand(id);
     }
 
     /**
@@ -215,5 +264,43 @@ public class ProductCategoryFacade {
      */
     public int updateUp(Integer id) {
         return productCategoryService.updateUp(id);
+    }
+
+    /**
+     * 活动停用
+     *
+     * @param id
+     * @return
+     */
+    public int updateDownD(Integer id) {
+        return productCategoryService.updateDownD(id);
+    }
+
+    /**
+     * 活动启用
+     *
+     * @param id
+     * @return
+     */
+    public int updateUpD(Integer id) {
+        return productCategoryService.updateUpD(id);
+    }
+
+    /**
+     * 修改品牌
+     *
+     * @param brandname
+     * @param isdel
+     * @return
+     */
+    public Map<String, Integer> updateBrand(String brandname, String isdel, String id) {
+        Map<String, Integer> map = new HashedMap();
+        Brand brand = new Brand();
+        brand.setBrandname(brandname);
+        brand.setIsdel(Integer.parseInt(isdel));
+        brand.setId(Integer.parseInt(id));
+        int result = productCategoryService.updateBrand(brand);
+        map.put("result", result);
+        return map;
     }
 }
