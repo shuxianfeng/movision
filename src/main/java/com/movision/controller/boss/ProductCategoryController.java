@@ -5,6 +5,7 @@ import com.movision.facade.boss.ProductCategoryFacade;
 import com.movision.mybatis.productcategory.entity.ProductCategory;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,8 +35,8 @@ public class ProductCategoryController {
      */
     @ApiOperation(value = "商品分类列表（分页）", notes = "商品分类列表（分页）", response = Response.class)
     @RequestMapping(value = "query_category_list", method = RequestMethod.POST)
-    public Response queryGoodsList(@RequestParam(required = false, defaultValue = "1") String pageNo,
-                                   @RequestParam(required = false, defaultValue = "10") String pageSize
+    public Response queryCategoryList(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                      @RequestParam(required = false, defaultValue = "10") String pageSize
     ) {
         Response response = new Response();
         Paging<ProductCategory> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
@@ -44,4 +45,26 @@ public class ProductCategoryController {
         response.setData(pager);
         return response;
     }
+
+    /**
+     * 商品管理*--商品分类列表搜索
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "商品分类列表搜索（分页）", notes = "商品分类列表搜索（分页）", response = Response.class)
+    @RequestMapping(value = "query_category_condition", method = RequestMethod.POST)
+    public Response queryCategoryCondition(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                           @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                           @ApiParam(value = "商品名称") @RequestParam(required = false) String typename
+    ) {
+        Response response = new Response();
+        Paging<ProductCategory> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<ProductCategory> list = productCategoryFacade.findAllCategoryCondition(typename, pager);
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
 }

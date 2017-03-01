@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhanglei
@@ -39,6 +40,23 @@ public class ProductCategoryService {
             return productCategoryMapper.findAllProductCategory(pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询分类列表失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 分类搜索
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<ProductCategory> findAllCategoryCondition(Map map, Paging<ProductCategory> pager) {
+        try {
+            log.info("分类搜索");
+            return productCategoryMapper.findAllCategoryCondition(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("分类搜索失败", e);
             throw e;
         }
     }

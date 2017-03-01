@@ -4,6 +4,7 @@ import com.movision.mybatis.productcategory.entity.ProductCategory;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProductCategoryMapper {
     int deleteByPrimaryKey(Integer id);
@@ -19,5 +20,7 @@ public interface ProductCategoryMapper {
     int updateByPrimaryKey(ProductCategory record);
 
     List<ProductCategory> findAllProductCategory(RowBounds rowBounds);//类别查询
+
+    List<ProductCategory> findAllCategoryCondition(Map map, RowBounds rowBounds);//搜索
 
 }

@@ -107,4 +107,10 @@
     <select id="findAllProductCategory" resultType="com.movision.mybatis.productcategory.entity.ProductCategory">
         SELECT id,protype,typename,intime FROM yw_category
     </select>
+    <select id="findAllCategoryCondition" resultType="com.movision.mybatis.productcategory.entity.ProductCategory">
+        SELECT id,protype,typename,intime FROM yw_category WHERE 1
+        <if test="typename!=null">
+            AND typename LIKE concat('%',#{typename,jdbcType=VARCHAR},'%')
+        </if>
+    </select>
 </mapper>
