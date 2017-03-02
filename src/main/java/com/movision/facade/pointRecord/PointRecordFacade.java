@@ -4,18 +4,24 @@ import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
+import com.movision.mybatis.orders.entity.Orders;
+import com.movision.mybatis.orders.service.OrderService;
 import com.movision.mybatis.pointRecord.entity.DailyTask;
 import com.movision.mybatis.pointRecord.entity.NewTask;
 import com.movision.mybatis.pointRecord.entity.PersonPointStatistics;
 import com.movision.mybatis.pointRecord.entity.PointRecord;
 import com.movision.mybatis.pointRecord.service.PointRecordService;
 import com.movision.utils.ListUtil;
+import com.movision.utils.MathUtil;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -25,12 +31,20 @@ import java.util.Map;
  */
 @Service
 public class PointRecordFacade {
+
+    private static Logger log = LoggerFactory.getLogger(PointRecordFacade.class);
+
     @Autowired
     private PointRecordService pointRecordService;
+
+    @Autowired
+    private OrderService orderService;
 
 
     /**
      * 获取个人积分统计
+     * rewardCount, postCount, commentCount, shareCount
+     * 打赏数量，发帖数量,评论数量，分享数量
      *
      * @param pointRecordList 个人积分数据列表：个人历史积分列表 or 个人今日积分列表
      * @return
@@ -66,7 +80,8 @@ public class PointRecordFacade {
      * 下面几种特殊情况，积分会不一样
      * 1 打赏 每日前5次，每次加5分
      * 2 发帖 每日前5次，每次加5分
-     * 3 评论 每日前10次，每次加2分
+     * 3 评论 每日前10次，每次加2分;
+     *          PS：若今日的第一次评论是首次评论，则积分=首次评论的积分+每日评论的积分（分享和发帖类似）
      * 4 分享，每日前10次，每次加5分
      * <p>
      * 其他情况正常加分
@@ -75,8 +90,9 @@ public class PointRecordFacade {
      * @param orderid 订单id--对应下单赚积分
      * @return
      */
-    public int addPointRecord(int type, String orderid) {
+    public int addPointRecord(int type, int orderid) {
 
+        log.info("调用【增加积分流水】接口，本次操作存在积分变动");
         //获取每日的积分数据
         List<PointRecord> todayList = pointRecordService.queryMyTodayPoint(ShiroUtil.getAppUserID());
         PersonPointStatistics todayStatistics = this.getMyTotalPointStatics(todayList);
@@ -84,14 +100,15 @@ public class PointRecordFacade {
         List<PointRecord> historyList = pointRecordService.queryAllMyPointRecord(ShiroUtil.getAppUserID());
         PersonPointStatistics historyStatistics = this.getMyTotalPointStatics(historyList);
 
-        int new_point = getPointByPointType(type, todayStatistics, historyStatistics);
+        int new_point = getPointByPointType(type, todayStatistics, historyStatistics, orderid);
+        log.info("【增加积分流水】该积分类型type=" + type + ", 该类型对应的积分是：" + new_point);
 
         PointRecord pointRecord = new PointRecord();
         pointRecord.setUserid(ShiroUtil.getAppUserID());
         pointRecord.setIsadd(PointConstant.POINT_ADD);
         pointRecord.setPoint(new_point);
         pointRecord.setType(type);
-        pointRecord.setOrderid(StringUtils.isEmpty(orderid) ? 0 : Integer.valueOf(orderid));
+        pointRecord.setOrderid(orderid);
 
         return pointRecordService.addPointRecord(pointRecord);
     }
@@ -100,20 +117,18 @@ public class PointRecordFacade {
      * 根据积分类型，分配对应的加分数值
      *
      * @param type
-
      * @return
      */
-    private int getPointByPointType(int type, PersonPointStatistics todayStatistics, PersonPointStatistics historyStatistics) {
+    private int getPointByPointType(int type, PersonPointStatistics todayStatistics, PersonPointStatistics historyStatistics, int orderid) {
         int new_point = 0;
         int rewardCount = todayStatistics.getRewardCount(),
-                postCount = todayStatistics.getPostCount(),
+                postCount = todayStatistics.getPostCount(), //今日发帖数
                 commentCount = todayStatistics.getCommentCount(),
                 shareCount = todayStatistics.getShareCount();
 
-//        int rewardCount = todayStatistics.getRewardCount(),
-//                postCount = todayStatistics.getPostCount(),
-//                commentCount = todayStatistics.getCommentCount(),
-//                shareCount = todayStatistics.getShareCount();
+        int historyPostCount = todayStatistics.getPostCount(),  //历史发帖数
+                historyCommentCount = todayStatistics.getCommentCount(),
+                historyShareCount = todayStatistics.getShareCount();
 
         /**
          * 根据积分类型，分配对应的加分数值
@@ -125,33 +140,76 @@ public class PointRecordFacade {
                 new_point = 0;
             }
 
+            /**
+             * 每日发帖的得分算法
+             */
         } else if (type == PointConstant.POINT_TYPE.post.getCode()) {
-
-            if (postCount == 0) {
-                new_point = PointConstant.POINT.first_post.getCode();
-            } else if (postCount >= 1 && postCount <= 4) {
-                new_point = PointConstant.POINT.post.getCode();
+            if (historyPostCount == 0) {
+                //历史上无发帖纪录
+                if (postCount == 0) {   //今日无发帖数
+                    //首次发帖=首次发帖积分+发帖积分
+                    new_point = PointConstant.POINT.first_post.getCode() + PointConstant.POINT.post.getCode();
+                } else if (postCount >= 1 && postCount <= 4) {
+                    //已经存在首次发帖，并且发帖数不超过4个，每日发帖拿积分的上限是5个，所以新的发帖可以拿到积分
+                    new_point = PointConstant.POINT.post.getCode();
+                } else {
+                    //每日发帖数已经超过了每日发帖拿积分的上限，即5个，所以新的发帖拿不到积分
+                    new_point = 0;
+                }
             } else {
-                new_point = 0;
+                //历史上存在发帖纪录
+                if (postCount >= 0 && postCount <= 4) {
+                    //每日发帖数不超过4个，而每日发帖拿积分的上限数是5个，所以新的发帖可以拿到积分
+                    new_point = PointConstant.POINT.post.getCode();
+                } else {
+                    //每日发帖数已经超过了每日发帖拿积分的上限，即5个，所以新的发帖拿不到积分
+                    new_point = 0;
+                }
             }
 
+            /**
+             * 每日评论和每日发帖同理
+             */
         } else if (type == PointConstant.POINT_TYPE.comment.getCode()) {
-            if (commentCount == 0) {
-                new_point = PointConstant.POINT.first_comment.getCode();
-            } else if (commentCount >= 1 && commentCount <= 4) {
-                new_point = PointConstant.POINT.comment.getCode();
+            if (historyCommentCount == 0) {
+                if (commentCount == 0) {
+                    //首次评论
+                    new_point = PointConstant.POINT.first_comment.getCode() + PointConstant.POINT.comment.getCode();
+                } else if (commentCount >= 1 && commentCount <= 4) {
+                    new_point = PointConstant.POINT.comment.getCode();
+                } else {
+                    new_point = 0;
+                }
             } else {
-                new_point = 0;
+                if (commentCount >= 0 && commentCount <= 4) {
+                    new_point = PointConstant.POINT.comment.getCode();
+                } else {
+                    new_point = 0;
+                }
             }
 
+
+            /**
+             *  每日分享和每日发帖同理
+             */
         } else if (type == PointConstant.POINT_TYPE.share.getCode()) {
-            if (shareCount == 0) {
-                new_point = PointConstant.POINT.first_share.getCode();
-            } else if (shareCount >= 1 && shareCount <= 4) {
-                new_point = PointConstant.POINT.share.getCode();
+            if (historyShareCount == 0) {
+                if (shareCount == 0) {
+                    //首次分享
+                    new_point = PointConstant.POINT.first_share.getCode() + PointConstant.POINT.share.getCode();
+                } else if (shareCount >= 1 && shareCount <= 4) {
+                    new_point = PointConstant.POINT.share.getCode();
+                } else {
+                    new_point = 0;
+                }
             } else {
-                new_point = 0;
+                if (shareCount >= 0 && shareCount <= 4) {
+                    new_point = PointConstant.POINT.share.getCode();
+                } else {
+                    new_point = 0;
+                }
             }
+
 
         } else if (type == PointConstant.POINT_TYPE.new_user_register.getCode()) {
             new_point = PointConstant.POINT.new_user_register.getCode();
@@ -183,6 +241,15 @@ public class PointRecordFacade {
         } else if (type == PointConstant.POINT_TYPE.circle_selected.getCode()) {
             new_point = PointConstant.POINT.circle_selected.getCode();
 
+        } else if (type == PointConstant.POINT_TYPE.place_order.getCode()) {
+            //订单赚积分，根据订单的消费总金额折算成积分，100元=1积分
+            Orders orders = orderService.getOrderById(orderid);
+            if (null == orders) {
+                throw new BusinessException(MsgCodeConstant.NOT_EXIST_ORDER, "不存在该订单");
+            }
+            double realMoney = null == orders.getRealmoney() ? 0.0 : orders.getRealmoney();
+            new_point = MathUtil.division100ToInteger(realMoney);
+
         } else {
             throw new BusinessException(MsgCodeConstant.app_point_type_not_exist, "积分类型不存在");
         }
@@ -212,38 +279,44 @@ public class PointRecordFacade {
      */
     private NewTask getNewTask() {
         List<PointRecord> pointRecordList = pointRecordService.queryAllMyPointRecord(ShiroUtil.getAppUserID());
+
         NewTask newTask = new NewTask(false, false, false, false, false, false, false, false, false, false);
         if (ListUtil.isNotEmpty(pointRecordList)) {
             //有积分流水 
-            // TODO: 2017/3/2
-//            for (PointRecord pointRecord : pointRecordList) {
-//                //获取积分的类型
-//                int type = null == pointRecord.getType() ? 0 : pointRecord.getType();
-//
-//                if (type == PointConstant.POINT_TYPE.new_user_register.getCode()) {
-//                    newTask.setRegister(true);
-//                } else if (type == PointConstant.POINT_TYPE.finish_personal_data.getCode()) {
-//                    newTask.setFinishPersonalData(true);
-//                } else if (type == PointConstant.POINT_TYPE.binding_phone.getCode()) {
-//                    newTask.setBindPhone(true);
-//                } else if (type == PointConstant.POINT_TYPE.first_focus.getCode()) {
-//                    newTask.setFirstFocus(true);
-//                } else if (type == PointConstant.POINT_TYPE.first_collect.getCode()) {
-//                    newTask.setFirstCollect(true);
-//                } else if (type == PointConstant.POINT_TYPE.first_share.getCode()) {
-//                    newTask.setFirstShare(true);
-//                } else if (type == PointConstant.POINT_TYPE.first_comment.getCode()) {
-//                    newTask.setFirstComment(true);
-//                } else if (type == PointConstant.POINT_TYPE.first_support.getCode()) {
-//                    newTask.setFirstSupport(true);
-//                } else if (type == PointConstant.POINT_TYPE.first_post.getCode()) {
-//                    newTask.setFirstPost(true);
-//                } else if (type == PointConstant.POINT_TYPE.comment_app.getCode()) {
-//                    newTask.setCommentApp(true);
-//                } else {
-//                    continue;
-//                }
-//            }
+            for (PointRecord pointRecord : pointRecordList) {
+                //获取积分的类型
+                int type = null == pointRecord.getType() ? 0 : pointRecord.getType();
+
+                if (type == PointConstant.POINT_TYPE.new_user_register.getCode()) {
+                    newTask.setRegister(true);
+                } else if (type == PointConstant.POINT_TYPE.finish_personal_data.getCode()) {
+                    newTask.setFinishPersonalData(true);
+                } else if (type == PointConstant.POINT_TYPE.binding_phone.getCode()) {
+                    newTask.setBindPhone(true);
+                } else if (type == PointConstant.POINT_TYPE.first_focus.getCode()) {
+                    newTask.setFirstFocus(true);
+                } else if (type == PointConstant.POINT_TYPE.first_collect.getCode()) {
+                    newTask.setFirstCollect(true);
+                } else if (type == PointConstant.POINT_TYPE.share.getCode()) {
+                    //只要是分享过，肯定存在首次分享
+                    newTask.setFirstShare(true);
+
+                } else if (type == PointConstant.POINT_TYPE.comment.getCode()) {
+                    //只要是评论过，肯定存在首次评论
+                    newTask.setFirstComment(true);
+
+                } else if (type == PointConstant.POINT_TYPE.first_support.getCode()) {
+                    newTask.setFirstSupport(true);
+                } else if (type == PointConstant.POINT_TYPE.post.getCode()) {
+                    //只要发帖，肯定存在首次发帖
+                    newTask.setFirstPost(true);
+
+                } else if (type == PointConstant.POINT_TYPE.comment_app.getCode()) {
+                    newTask.setCommentApp(true);
+                } else {
+                    continue;
+                }
+            }
         }
         return newTask;
     }

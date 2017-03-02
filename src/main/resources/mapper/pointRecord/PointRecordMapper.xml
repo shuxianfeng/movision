@@ -54,9 +54,7 @@
                 orderid,
             </if>
                 intime,
-            <if test="isdel != null">
                 isdel,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -78,9 +76,7 @@
                 #{orderid,jdbcType=INTEGER},
             </if>
             now(),
-            <if test="isdel != null">
-                #{isdel,jdbcType=INTEGER},
-            </if>
+            0,
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.pointRecord.entity.PointRecord">

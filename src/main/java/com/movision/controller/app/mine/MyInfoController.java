@@ -182,7 +182,7 @@ public class MyInfoController {
     public Response sign() {
         Response response = new Response();
         //签到送积分
-        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode(), null);
+        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode(), 0);
         //给个人加积分
         userFacade.addPoint(PointConstant.POINT.sign.getCode());
         return response;
@@ -208,5 +208,13 @@ public class MyInfoController {
         return response;
     }
 
+
+    @ApiOperation(value = "模拟评论赚积分", notes = "模拟评论赚积分", response = Response.class)
+    @RequestMapping(value = "test_add_point_record", method = RequestMethod.POST)
+    public Response testAddPointRecord() {
+        Response response = new Response();
+        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment.getCode(), 0);
+        return response;
+    }
 
 }

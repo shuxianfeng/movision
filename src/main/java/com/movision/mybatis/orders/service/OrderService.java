@@ -34,4 +34,14 @@ public class OrderService {
         }
     }
 
+    public Orders getOrderById(int id) {
+        try {
+            log.info("根据订单id获取订单");
+            return ordersMapper.selectByPrimaryKey(id);
+        } catch (Exception e) {
+            log.error("根据订单id获取订单失败", e);
+            throw e;
+        }
+    }
+
 }

@@ -92,9 +92,6 @@ public class PointConstant {
     }
 
 
-
-
-
     public static void main(String[] args) {
         System.out.println(POINT_TYPE.binding_phone.getCode() == 3);
     }
