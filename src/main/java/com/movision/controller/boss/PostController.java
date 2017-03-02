@@ -839,4 +839,21 @@ public class PostController {
         map.put("name", FileUtil.getFileNameByUrl(url));
         return new Response(map);
     }
+
+    /**
+     * 上传帖子相关图片
+     *
+     * @param file
+     * @return
+     */
+    @ApiOperation(value = "上传帖子相关图片", notes = "上传帖子相关图片", response = Response.class)
+    @RequestMapping(value = {"/upload_post_vid"}, method = RequestMethod.POST)
+    public Response updatePostVid(@RequestParam(value = "file", required = false) MultipartFile file) {
+
+        String url = movisionOssClient.uploadObject(file, "img", "post");
+        Map<String, String> map = new HashMap<>();
+        map.put("url", url);
+        map.put("name", FileUtil.getFileNameByUrl(url));
+        return new Response(map);
+    }
 }
