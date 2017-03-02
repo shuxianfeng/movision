@@ -28,4 +28,6 @@ public interface SubmissionMapper {
     Submission queryContributeBounce(String id);
 
     List<SubmissionVo> findAllqueryUniteConditionByContribute(Map map, RowBounds rowBounds);
+
+    int deleteContributeById(String id);
 }

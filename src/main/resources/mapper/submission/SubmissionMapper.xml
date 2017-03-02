@@ -172,4 +172,8 @@
         SELECT * FROM yw_submission WHERE id=#{id,jdbcType=INTEGER}
     </select>
 
+    <update id="deleteContributeById" parameterType="java.lang.String">
+        update yw_submission set status = 1 where id = #{id,jdbcType=INTEGER}
+    </update>
+
 </mapper>

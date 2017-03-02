@@ -85,4 +85,20 @@ public class SubmissionService {
         }
     }
 
+    /**
+     * 逻辑删除投稿
+     *
+     * @param id
+     * @return
+     */
+    public int deleteContributeById(String id) {
+        try {
+            log.info("逻辑删除投稿");
+            return submissionMapper.deleteContributeById(id);
+        } catch (Exception e) {
+            log.error("逻辑删除投稿异常");
+            throw e;
+        }
+    }
+
 }

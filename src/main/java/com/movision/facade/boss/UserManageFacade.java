@@ -149,6 +149,16 @@ public class UserManageFacade {
     }
 
     /**
+     * 逻辑删除投稿
+     *
+     * @param id
+     * @return
+     */
+    public int deleteContributeById(String id) {
+        return submissionService.deleteContributeById(id);
+    }
+
+    /**
      * 查询所有用户列表
      *
      * @param pager

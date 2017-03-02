@@ -208,6 +208,24 @@ public class UserManageController {
     }
 
     /**
+     * 逻辑删除投稿
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "逻辑删除投稿", notes = "用于删除投稿列表中指定投稿", response = Response.class)
+    @RequestMapping(value = "delete_contribute", method = RequestMethod.POST)
+    public Response deleteContributeById(@ApiParam(value = "投稿id") @RequestParam String id) {
+        Response response = new Response();
+        int i = userManageFacade.deleteContributeById(id);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(i);
+        return response;
+    }
+
+    /**
      * 查询所有用户列表
      *
      * @return
