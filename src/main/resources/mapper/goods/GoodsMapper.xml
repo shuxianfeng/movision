@@ -689,10 +689,10 @@
     </select>
     <select id="findGoodDetail" resultType="com.movision.mybatis.goods.entity.GoodsVo"
             parameterType="java.lang.Integer">
-        SELECT g.id,g.name,g.protype,b.brandname,g.price,g.origprice,g.sales,g.stock,
+        SELECT g.id,g.name,g.protype,g.brandid,g.price,g.origprice,g.sales,g.stock,
         (SELECT COUNT(1) FROM yw_collection c WHERE c.goodsid=g.id)  AS collect,g.ishot,g.isessence,g.isdel,g.recommenddate,i.img_url,
         (SELECT COUNT(1) FROM yw_goods_assessment a WHERE g.id=a.goodid  AND a.userid<![CDATA[<>]]>-1 ) AS assess,
-        g.onlinetime,g.attribute FROM yw_goods g LEFT JOIN yw_brand b ON b.brandid=g.brandid
+        g.onlinetime,g.attribute FROM yw_goods g
         LEFT JOIN yw_goods_img i ON i.goodsid=g.id WHERE g.id=#{id,jdbcType=INTEGER} GROUP BY g.id
     </select>
     <update id="updateGoods" parameterType="com.movision.mybatis.goods.entity.GoodsVo">
