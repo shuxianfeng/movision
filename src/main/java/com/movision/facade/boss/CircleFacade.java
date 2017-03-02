@@ -559,8 +559,9 @@ public class CircleFacade {
         return categoryService.queryCircleCategory(category);
     }
 
-    public Map updateCircleCategory(HttpServletRequest request, String category, MultipartFile discoverpageurl) {
+    public Map updateCircleCategory(HttpServletRequest request, String categoryid, String category, MultipartFile discoverpageurl) {
         Map map = new HashedMap();
+        map.put("categoryid", categoryid);
         map.put("categoryname", category);
         map.put("intime", new Date());
         String savedFileName = "";

@@ -276,9 +276,9 @@ public class CircleController {
      */
     @ApiOperation(value = "添加圈子分类", notes = "用于添加圈子分类接口", response = Response.class)
     @RequestMapping(value = "add_circle_type", method = RequestMethod.POST)
-    public Response addCircleType(HttpServletRequest request, @ApiParam(value = "圈子类型id") @RequestParam String categoryid,
+    public Response addCircleType(HttpServletRequest request,
                                   @ApiParam(value = "圈子类型名称") @RequestParam String typename,
-                                  @ApiParam(value = "圈子分类banner图") @RequestParam(required = false) MultipartFile discoverpageurl) {
+                                  @ApiParam(value = "圈子分类banner图") @RequestParam(required = false, value = "discoverpageurl") MultipartFile discoverpageurl) {
         Response response = new Response();
         Map<String, Integer> map = circleFacade.addCircleType(request, typename, discoverpageurl);
         if (response.getCode() == 200) {
@@ -319,7 +319,7 @@ public class CircleController {
                                          @ApiParam(value = "圈子类型名称") @RequestParam String category,
                                          @ApiParam(value = "圈子分类banner图") @RequestParam(required = false) MultipartFile discoverpageurl) {
         Response response = new Response();
-        Map map = circleFacade.updateCircleCategory(request, category, discoverpageurl);
+        Map map = circleFacade.updateCircleCategory(request, categoryid, category, discoverpageurl);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
