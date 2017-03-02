@@ -2,7 +2,9 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.UserManageFacade;
+import com.movision.mybatis.submission.entity.Submission;
 import com.movision.mybatis.submission.entity.SubmissionVo;
+import com.movision.mybatis.user.entity.UserAll;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
@@ -82,7 +84,8 @@ public class UserManageController {
      */
     @ApiOperation(value = "查询投稿列表", notes = "用于查询投稿列表接口", response = Response.class)
     @RequestMapping(value = "query_contribute_list", method = RequestMethod.POST)
-    public Response queryContributeList(@RequestParam String pageNo, @RequestParam String pageSize) {
+    public Response queryContributeList(@ApiParam(value = "当前第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                        @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<SubmissionVo> pager = new Paging<SubmissionVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<SubmissionVo> list = userManageFacade.queryContributeList(pager);
@@ -91,6 +94,24 @@ public class UserManageController {
         }
         pager.result(list);
         response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 投稿说明
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "投稿说明", notes = "用于投稿说明接口", response = Response.class)
+    @RequestMapping(value = "query_contribute_bounce", method = RequestMethod.POST)
+    public Response queryContributeBounce(@ApiParam(value = "投稿id") @RequestParam String id) {
+        Response response = new Response();
+        Submission sub = userManageFacade.queryContributeBounce(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(sub);
         return response;
     }
 
@@ -186,4 +207,27 @@ public class UserManageController {
         return response;
     }
 
+    /**
+     * 查询所有用户列表
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询所有用户列表", notes = "用于查询所有用户列表接口", response = Response.class)
+    @RequestMapping(value = "query_all_user", method = RequestMethod.POST)
+    public Response queryAllUserList(@ApiParam(value = "积分排序0升序1降序") @RequestParam(required = false) String pointsSort,
+                                     @ApiParam(value = "帖子数量排序0升序1降序") @RequestParam(required = false) String postsumSort,
+                                     @ApiParam(value = "精贴排序0升序1降序") @RequestParam(required = false) String isessenceSort,
+                                     @ApiParam(value = "关注排序0升序1降序") @RequestParam(required = false) String fansSort,
+                                     @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                     @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<UserAll> pager = new Paging<UserAll>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<UserAll> list = userManageFacade.queryAllUserList(pager, pointsSort, postsumSort, isessenceSort, fansSort);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
 }

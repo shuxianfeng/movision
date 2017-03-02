@@ -240,7 +240,7 @@ public class CircleController {
                               @ApiParam(value = "圈主id") @RequestParam String userid,
                               @ApiParam(value = "管理员列表") @RequestParam String admin,
                               @ApiParam(value = "创建人") @RequestParam String criclemanid,
-                              @ApiParam(value = "圈子否封面") @RequestParam MultipartFile photo,
+                              @ApiParam(value = "圈子否封面") @RequestParam(required = false, value = "photo") MultipartFile photo,
                               @ApiParam(value = "圈子简介") @RequestParam String introduction) {
         Response response = new Response();
         Map<String, Integer> map = circleFacade.addCircle(request, name, category, userid, admin, criclemanid, photo, introduction);

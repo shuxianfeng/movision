@@ -166,4 +166,10 @@
             AND s.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
         </if>
     </select>
+
+    <select id="queryContributeBounce" resultType="com.movision.mybatis.submission.entity.Submission"
+            parameterType="java.lang.String">
+        SELECT * FROM yw_submission WHERE id=#{id,jdbcType=INTEGER}
+    </select>
+
 </mapper>

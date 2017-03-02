@@ -421,4 +421,20 @@ public class UserService {
             throw e;
         }
     }
+
+    /**
+     * 查询所有用户列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<UserAll> queryAllUserList(Paging<UserAll> pager, Map map) {
+        try {
+            log.info("查询所有用户列表");
+            return userMapper.findAllqueryAllUserList(pager.getRowBounds(), map);
+        } catch (Exception e) {
+            log.error("查询所有用户列表异常");
+            throw e;
+        }
+    }
 }

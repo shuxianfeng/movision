@@ -79,4 +79,6 @@ public interface UserMapper {
     List<UserVo> findAllqueryAddVSortUser(Map map, RowBounds rowBounds);
 
     List<UserVo> findAllQueryUniteConditionByApply(Map map, RowBounds rowBounds);
+
+    List<UserAll> findAllqueryAllUserList(RowBounds rowBounds, Map map);
 }

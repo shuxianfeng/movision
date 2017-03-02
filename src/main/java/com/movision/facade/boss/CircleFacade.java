@@ -462,7 +462,9 @@ public class CircleFacade {
                     }
                 }
                 imgurl = imgdomain + savedFileName;
-                circleDetails.setPhoto(imgurl);
+                if (savedFileName != null) {
+                    circleDetails.setPhoto(imgurl);
+                }
             }
             if (introduction != null) {
                 circleDetails.setIntroduction(introduction);

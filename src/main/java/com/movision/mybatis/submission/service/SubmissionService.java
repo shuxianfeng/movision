@@ -1,7 +1,9 @@
 package com.movision.mybatis.submission.service;
 
+import com.movision.mybatis.submission.entity.Submission;
 import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.submission.mapper.SubmissionMapper;
+import com.movision.mybatis.user.entity.UserVo;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +54,21 @@ public class SubmissionService {
     }
 
     /**
+     * 查询投稿说明
+     * @param id
+     * @return
+     */
+    public Submission queryContributeBounce(String id) {
+        try {
+            log.info("查询投稿说明");
+            return submissionMapper.queryContributeBounce(id);
+        } catch (Exception e) {
+            log.error("查询投稿说明异常");
+            throw e;
+        }
+    }
+
+    /**
      * 条件查询投稿列表
      *
      * @param map
@@ -67,4 +84,5 @@ public class SubmissionService {
             throw e;
         }
     }
+
 }

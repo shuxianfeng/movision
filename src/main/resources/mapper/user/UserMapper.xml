@@ -583,4 +583,45 @@
     <select id="queryUserByNicknameByAdmin" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT name FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER}
     </select>
+
+    <select id="findAllqueryAllUserList" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.user.entity.UserAll">
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,u.points,u.fans,u.intime,
+        (SELECT COUNT(1) FROM yw_coupon WHERE isdel=0 AND userid=u.id) AS coupon,
+        (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id) AS postsum,
+        (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1) AS isessencesum
+        FROM yw_user u WHERE 1
+        <if test="pointsSort!=null">
+            <if test="pointsSort==0">
+                ORDER BY coupon ASC
+            </if>
+            <if test="pointsSort==1">
+                ORDER BY coupon DESC
+            </if>
+        </if>
+        <if test="postsumSort!=null">
+            <if test="postsumSort==0">
+                ORDER BY postsum ASC
+            </if>
+            <if test="postsumSort==1">
+                ORDER BY postsum DESC
+            </if>
+        </if>
+        <if test="isessenceSort!=null">
+            <if test="isessenceSort==0">
+                ORDER BY isessencesum ASC
+            </if>
+            <if test="isessenceSort==1">
+                ORDER BY isessencesum DESC
+            </if>
+        </if>
+        <if test="fans!=null">
+            <if test="fans==0">
+                ORDER BY fans ASC
+            </if>
+            <if test="fans==1">
+                ORDER BY fans DESC
+            </if>
+        </if>
+    </select>
 </mapper>

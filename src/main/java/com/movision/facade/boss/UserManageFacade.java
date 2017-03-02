@@ -1,7 +1,10 @@
 package com.movision.facade.boss;
 
+import com.movision.mybatis.submission.entity.Submission;
 import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.submission.service.SubmissionService;
+import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserAll;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
@@ -46,7 +49,6 @@ public class UserManageFacade {
      * @return
      */
     public List<UserVo> queryVipList(Paging<UserVo> pager) {
-        List<UserVo> resault = new ArrayList<>();
         List<UserVo> users = userService.findAllqueryUserVIPByList(pager);//查询所有VIP用户
         return users;
     }
@@ -59,6 +61,15 @@ public class UserManageFacade {
      */
     public List<SubmissionVo> queryContributeList(Paging<SubmissionVo> pager) {
         return submissionService.queryContributeList(pager);
+    }
+
+    /**
+     * 查询投稿说明
+     * @param id
+     * @return
+     */
+    public Submission queryContributeBounce(String id) {
+        return submissionService.queryContributeBounce(id);
     }
 
     /**
@@ -135,5 +146,20 @@ public class UserManageFacade {
         map.put("begintime", beg);
         map.put("endtime", end);
         return submissionService.queryUniteConditionByContribute(map, pager);
+    }
+
+    /**
+     * 查询所有用户列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<UserAll> queryAllUserList(Paging<UserAll> pager, String pointsSort, String postsumSort, String isessenceSort, String fansSort) {
+        Map map = new HashedMap();
+        map.put("pointsSort", pointsSort);//积分排序
+        map.put("postsumSort", postsumSort);//帖子排序
+        map.put("isessenceSort", isessenceSort);//精贴排序
+        map.put("fansSort", fansSort);//关注排序
+        return userService.queryAllUserList(pager, map);
     }
 }
