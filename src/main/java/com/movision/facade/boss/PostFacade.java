@@ -663,8 +663,8 @@ public class PostFacade {
      * @param userid
      * @return
      */
-    public Map<String, Integer> addPostActive(HttpServletRequest request, String title, String subtitle, String type, String money,
-                                              MultipartFile coverimg, String postcontent, String isessence, String orderid, String time, String begintime, String endtime, String userid) {
+    public Map<String, Integer> addPostActive(String title, String subtitle, String type, String money,
+                                              String coverimg, String postcontent, String isessence, String orderid, String time, String begintime, String endtime, String userid) {
         PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
         try {
@@ -676,36 +676,8 @@ public class PostFacade {
                 post.setActivefee(Double.parseDouble(money));//金额
             }
 
-            //上传图片到本地服务器
-            String savedFileName = "";
-            String imgurl = "";
-             /*boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;*/
-            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if (coverimg != null && isMultipart) {
-                if (!coverimg.isEmpty()) {
-                    String fileRealName = coverimg.getOriginalFilename();
-                    int pointIndex = fileRealName.indexOf(".");
-                    String fileSuffix = fileRealName.substring(pointIndex);
-                    UUID FileId = UUID.randomUUID();
-                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
-                    String savedDir = request.getSession().getServletContext().getRealPath("");
-                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
-                    //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 9);
-                    //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/post/coverimg/";
-                    File savedFile = new File(combinpath, savedFileName);
-                    System.out.println("文件url：" + combinpath + "" + savedFileName);
-                    boolean isCreateSuccess = savedFile.createNewFile();
-                    if (isCreateSuccess) {
-                        coverimg.transferTo(savedFile);  //转存文件
-                    }
-                }
-                imgurl = imgdomain + savedFileName;
-            }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            post.setCoverimg(imgurl);
+            post.setCoverimg(coverimg);
             post.setPostcontent(postcontent);//帖子内容
             if (!isessence.isEmpty() || isessence != null) {
                 if (Integer.parseInt(isessence) != 0) {//判断是否为加精
@@ -895,7 +867,7 @@ public class PostFacade {
     /**
      * 编辑活动帖子
      *
-     * @param request
+     * @param
      * @param id
      * @param title
      * @param subtitle

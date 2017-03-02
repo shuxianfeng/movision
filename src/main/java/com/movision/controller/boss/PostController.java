@@ -394,21 +394,21 @@ public class PostController {
      */
     @ApiOperation(value = "添加活动帖子", notes = "添加活动帖子", response = Response.class)
     @RequestMapping(value = "/add_active_post", method = RequestMethod.POST)
-    public Response addPostActiveList(HttpServletRequest request,
-                                      @ApiParam(value = "帖子标题") @RequestParam String title,
-                                      @ApiParam(value = "帖子副标题") @RequestParam String subtitle,
-                                      @ApiParam(value = "帖子类型") @RequestParam String type,
-                                      @ApiParam(value = "单价") @RequestParam String money,
-                                      @ApiParam(value = "帖子封面") @RequestParam(required = false) MultipartFile coverimg,
-                                      @ApiParam(value = "内容") @RequestParam String postcontent,
-                                      @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,
-                                      @ApiParam(value = "精选排序") @RequestParam(required = false) String orderid,
-                                      @ApiParam(value = "精选日期（毫秒值）") @RequestParam(required = false) String time,
-                                      @ApiParam(value = "活动开始日期（毫秒值）") @RequestParam String begintime,
-                                      @ApiParam(value = "活动结束日期（毫秒值）") @RequestParam String endtime,
-                                      @ApiParam(value = "发帖人") @RequestParam String userid){
+    public Response addPostActiveList(
+            @ApiParam(value = "帖子标题") @RequestParam String title,
+            @ApiParam(value = "帖子副标题") @RequestParam String subtitle,
+            @ApiParam(value = "帖子类型") @RequestParam String type,
+            @ApiParam(value = "单价") @RequestParam String money,
+            @ApiParam(value = "帖子封面") @RequestParam(required = false) String coverimg,
+            @ApiParam(value = "内容") @RequestParam String postcontent,
+            @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,
+            @ApiParam(value = "精选排序") @RequestParam(required = false) String orderid,
+            @ApiParam(value = "精选日期（毫秒值）") @RequestParam(required = false) String time,
+            @ApiParam(value = "活动开始日期（毫秒值）") @RequestParam String begintime,
+            @ApiParam(value = "活动结束日期（毫秒值）") @RequestParam String endtime,
+            @ApiParam(value = "发帖人") @RequestParam String userid){
         Response response = new Response();
-         Map<String,Integer> result= postFacade.addPostActive(request,title,subtitle,type,money,coverimg,postcontent,isessence,orderid,time,begintime,endtime,userid);
+        Map<String, Integer> result = postFacade.addPostActive(title, subtitle, type, money, coverimg, postcontent, isessence, orderid, time, begintime, endtime, userid);
         if(response.getCode()==200){
             response.setMessage("添加成功");
         }
