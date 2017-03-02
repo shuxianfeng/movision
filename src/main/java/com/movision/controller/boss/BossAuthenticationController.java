@@ -50,13 +50,10 @@ public class BossAuthenticationController {
                 response.setMessage("you are rejected!");
                 map.put("authorized", false);
             } else {
-                LoginUser user = new LoginUser();
-                user.setAccount(bossUser.getUsername());
-                user.setId(bossUser.getId());
                 response.setMsgCode(1);
                 response.setMessage("welcome you!");
                 map.put("authorized", true);
-                map.put("user", user);
+                map.put("user", bossUser);
             }
         }
 

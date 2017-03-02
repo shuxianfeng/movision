@@ -315,4 +315,9 @@ public interface MsgCodeConstant {
 	 */
 	int app_edit_my_address_fail = 20000;
 
+	/**
+	 * app积分类型不存在
+	 */
+	int app_point_type_not_exist = 30000;
+
 }

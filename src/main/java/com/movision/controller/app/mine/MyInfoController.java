@@ -182,8 +182,7 @@ public class MyInfoController {
     public Response sign() {
         Response response = new Response();
         //签到送积分
-        pointRecordFacade.addPointRecord(PointConstant.POINT.sign.getCode(), PointConstant.POINT_ADD,
-                PointConstant.POINT_TYPE.sign.getCode(), null);
+        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode(), null);
         //给个人加积分
         userFacade.addPoint(PointConstant.POINT.sign.getCode());
         return response;
