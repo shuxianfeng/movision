@@ -5,9 +5,10 @@
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="comboid" property="comboid" jdbcType="INTEGER"/>
         <result column="comboname" property="comboname" jdbcType="VARCHAR"/>
+        <result column="intime" property="intime" jdbcType="DATE"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, comboid, comboname
+        id, comboid, comboname,intime
   </sql>
 
     <!--基础查询语句-->
@@ -20,7 +21,7 @@
 
     <!--根据商品id查询套餐类别-->
     <select id="queryCombo" parameterType="java.lang.Integer" resultType="com.movision.mybatis.combo.entity.ComboVo">
-        SELECT id, comboid, comboname, combodiscountprice,
+        SELECT id, comboid, comboname, combodiscountprice
         (SELECT img_url FROM yw_goods_img WHERE goodsid = #{goodsid,jdbcType=INTEGER} AND type = '2') AS imgurl
         FROM yw_combo
     WHERE comboid in (SELECT comboid FROM yw_goods_combo WHERE goodsid = #{goodsid,jdbcType=INTEGER})
@@ -45,9 +46,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.combo.entity.Combo">
-    insert into yw_combo (id, comboid, comboname
+        insert into yw_combo (id, comboid, comboname,intime
       )
-    values (#{id,jdbcType=INTEGER}, #{comboid,jdbcType=INTEGER}, #{comboname,jdbcType=VARCHAR}
+        values (#{id,jdbcType=INTEGER}, #{comboid,jdbcType=INTEGER},
+        #{comboname,jdbcType=VARCHAR},#{intime,jdbcType=DATE}
       )
   </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.combo.entity.Combo">

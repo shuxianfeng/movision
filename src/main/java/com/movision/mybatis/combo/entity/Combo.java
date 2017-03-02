@@ -1,5 +1,7 @@
 package com.movision.mybatis.combo.entity;
 
+import java.util.Date;
+
 public class Combo {
     private Integer id;
 
@@ -8,6 +10,16 @@ public class Combo {
     private String comboname;
 
     private Double combodiscountprice;//套餐折后总价
+
+    private Date intime;
+
+    public Date getIntime() {
+        return intime;
+    }
+
+    public void setIntime(Date intime) {
+        this.intime = intime;
+    }
 
     public Integer getId() {
         return id;
