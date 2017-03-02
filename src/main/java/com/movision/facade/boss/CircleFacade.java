@@ -42,6 +42,10 @@ import java.util.*;
 public class CircleFacade {
     @Value("#{configProperties['bannerimg.domain']}")
     private String imgdomain;
+
+    @Value("#{configProperties['circlecategory.domain']}")
+    private String categoryurl;
+
     @Autowired
     CircleService circleService;
     @Autowired
@@ -409,14 +413,10 @@ public class CircleFacade {
      * @param circlemanid
      * @param photo
      * @param introduction
-     * @param erweima
-     * @param isrecommend
-     * @param orderid
      * @return
      */
     public Map<String, Integer> addCircle(HttpServletRequest request, String name, String category, String userid, String admin,
-                                          String circlemanid, MultipartFile photo, String introduction,
-                                          String erweima, String isrecommend, String orderid, String scope) {
+                                          String circlemanid, MultipartFile photo, String introduction) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
         Integer circleid = null;
@@ -466,22 +466,6 @@ public class CircleFacade {
             if (introduction != null) {
                 circleDetails.setIntroduction(introduction);
             }
-            if (erweima != null) {
-                circleDetails.setErweima(erweima);
-            }
-            circleDetails.setStatus(0);//初始化审核状态
-            if (isrecommend != null) {
-                circleDetails.setIsrecommend(Integer.parseInt(isrecommend));
-            }
-            if (orderid != null) {
-                if (Integer.parseInt(orderid) > 0) {
-                    circleDetails.setIsdiscover(1);
-                }
-                circleDetails.setOrderid(Integer.parseInt(orderid));
-            }
-            if (scope != null) {
-                circleDetails.setScope(Integer.parseInt(scope));
-            }
             Integer s = circleService.insertCircle(circleDetails);
             Integer cirid = circleDetails.getId();
             if (admin != null) {//管理员列表
@@ -520,13 +504,43 @@ public class CircleFacade {
      * 添加圈子分类
      *
      * @param typename
+     * @param discoverpageurl
      * @return
      */
-    public Map<String, Integer> addCircleType(String typename) {
+    public Map<String, Integer> addCircleType(HttpServletRequest request, String typename, MultipartFile discoverpageurl) {
         Map<String, Integer> map = new HashedMap();
         Map packaging = new HashedMap();
         packaging.put("categoryname", typename);
         packaging.put("intime", new Date());
+        String savedFileName = "";
+        String imgurl = "";
+        try {
+            if (discoverpageurl != null) {
+                if (!discoverpageurl.isEmpty()) {
+                    String fileRealName = discoverpageurl.getOriginalFilename();
+                    int pointIndex = fileRealName.indexOf(".");
+                    String fileSuffix = fileRealName.substring(pointIndex);
+                    UUID FileId = UUID.randomUUID();
+                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
+                    String savedDir = request.getSession().getServletContext().getRealPath("");
+                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
+                    //不保存到项目中,防止部包把图片覆盖掉了
+                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    //这里组合出真实的图片存储路径
+                    String combinpath = path + "/images/circle/coverimg/";
+                    File savedFile = new File(combinpath, savedFileName);
+                    System.out.println("文件url：" + combinpath + "" + savedFileName);
+                    boolean isCreateSuccess = savedFile.createNewFile();
+                    if (isCreateSuccess) {
+                        discoverpageurl.transferTo(savedFile);  //转存文件
+                    }
+                }
+                imgurl = categoryurl + savedFileName;
+                packaging.put("imgurl", imgurl);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         int i = categoryService.addCircleType(packaging);
         map.put("resault", i);
         return map;
