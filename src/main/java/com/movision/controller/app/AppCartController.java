@@ -98,10 +98,14 @@ public class AppCartController {
 
         int sum = cartFacade.updateCartGoodsSum(cartid, type);//返回修改后的商品数量
 
-        if (response.getCode() == 200) {
+        if (response.getCode() == 200 && sum > 0) {
             response.setMessage("修改成功");
+            response.setData(sum);
         }
-        response.setData(sum);
+        if (sum == -1) {
+            response.setMessage("无库存");
+            response.setData(sum);
+        }
         return response;
     }
 

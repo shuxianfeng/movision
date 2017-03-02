@@ -135,6 +135,13 @@
         SELECT num FROM yw_cart WHERE id = #{cartid,jdbcType=INTEGER}
     </select>
 
+    <!--在修改购物车商品的数量时校验该商品的库存-->
+    <select id="checkStore" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT stock FROM yw_goods WHERE id = (
+          SELECT goodsid FROM yw_cart WHERE id = #{cartid,jdbcType=INTEGER}
+        )
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_cart
         where id = #{id,jdbcType=INTEGER}

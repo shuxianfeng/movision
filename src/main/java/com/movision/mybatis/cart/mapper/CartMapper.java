@@ -38,6 +38,8 @@ public interface CartMapper {
 
     void deleteCartGoods(Map<String, Object> parammap);
 
+    int checkStore(int cartid);
+
     void updateCartGoodsSum(Map<String, Object> parammap);
 
     int queryGoodsSum(int cartid);

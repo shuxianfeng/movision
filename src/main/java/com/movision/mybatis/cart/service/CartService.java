@@ -158,6 +158,16 @@ public class CartService {
         }
     }
 
+    public int checkStore(int cartid) {
+        try {
+            log.info("校验购物车中该商品的库存");
+            return cartMapper.checkStore(cartid);
+        } catch (Exception e) {
+            log.error("校验购物车中该商品的库存失败");
+            throw e;
+        }
+    }
+
     public void updateCartGoodsSum(Map<String, Object> parammap) {
         try {
             log.info("修改购物车中商品的数量");

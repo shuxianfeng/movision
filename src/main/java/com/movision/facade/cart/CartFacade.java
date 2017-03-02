@@ -208,15 +208,21 @@ public class CartFacade {
 
     //用户修改购物车中的商品
     public int updateCartGoodsSum(String cartid, String type) {
-        //先修改商品数量
-        Map<String, Object> parammap = new HashMap<>();
-        parammap.put("cartid", Integer.parseInt(cartid));
-        parammap.put("type", Integer.parseInt(type));
-        cartService.updateCartGoodsSum(parammap);
+        //先做商品库存校验(检查是否有货)
+        int store = cartService.checkStore(Integer.parseInt(cartid));
+        if (store > 0) {
+            //先修改商品数量
+            Map<String, Object> parammap = new HashMap<>();
+            parammap.put("cartid", Integer.parseInt(cartid));
+            parammap.put("type", Integer.parseInt(type));
+            cartService.updateCartGoodsSum(parammap);
 
-        //再返回商品当前数
-        int sum = cartService.queryGoodsSum(Integer.parseInt(cartid));
-        return sum;
+            //再返回商品当前数
+            int sum = cartService.queryGoodsSum(Integer.parseInt(cartid));
+            return sum;
+        } else {
+            return -1;//无库存
+        }
     }
 
     //修改购物车中单个商品的租赁日期
