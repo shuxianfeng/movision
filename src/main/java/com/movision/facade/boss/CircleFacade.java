@@ -271,7 +271,6 @@ public class CircleFacade {
     /**
      * 圈子编辑
      *
-     * @param request
      * @param id
      * @param name
      * @param category
@@ -285,8 +284,8 @@ public class CircleFacade {
      * @param permission
      * @return
      */
-    public Map<String, Integer> updateCircle(HttpServletRequest request, String id, String name, String category, String circlemanid,
-                                             String admin, MultipartFile photo, String introduction,
+    public Map<String, Integer> updateCircle(String id, String name, String category, String circlemanid,
+                                             String admin, String photo, String introduction,
                                              String erweima, String status, String isrecommend, String orderid, String permission) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
@@ -317,10 +316,9 @@ public class CircleFacade {
                 String pon = userService.queryUserbyPhoneByUserid(Integer.parseInt(circlemanid));
                 circleDetails.setPhone(pon);
             }
-            String savedFileName = "";
             if (photo != null) {
-                savedFileName = movisionOssClient.uploadObject(photo, "img", "circle");
-                circleDetails.setPhoto(savedFileName);
+                //savedFileName = movisionOssClient.uploadObject(photo, "img", "circle");
+                circleDetails.setPhoto(photo);
             }
             if (introduction != null) {
                 circleDetails.setIntroduction(introduction);
@@ -387,7 +385,6 @@ public class CircleFacade {
     /**
      * 圈子添加
      *
-     * @param request
      * @param name
      * @param category
      * @param userid
@@ -397,8 +394,8 @@ public class CircleFacade {
      * @param introduction
      * @return
      */
-    public Map<String, Integer> addCircle(HttpServletRequest request, String name, String category, String userid, String admin,
-                                          String circlemanid, MultipartFile photo, String introduction) {
+    public Map<String, Integer> addCircle(String name, String category, String userid, String admin,
+                                          String circlemanid, String photo, String introduction) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
             if (name != null) {
@@ -417,10 +414,9 @@ public class CircleFacade {
                 circleDetails.setPhone(pon);//设置圈主手机号
             }
             circleDetails.setCreatetime(new Date());
-            String savedFileName = "";
             if (photo != null) {
-                savedFileName = movisionOssClient.uploadObject(photo, "img", "circle");
-                circleDetails.setPhoto(savedFileName);
+                //savedFileName = movisionOssClient.uploadObject(photo, "img", "circle");
+                circleDetails.setPhoto(photo);
             }
             if (introduction != null) {
                 circleDetails.setIntroduction(introduction);
@@ -463,40 +459,13 @@ public class CircleFacade {
      * @param discoverpageurl
      * @return
      */
-    public Map<String, Integer> addCircleType(HttpServletRequest request, String typename, MultipartFile discoverpageurl) {
+    public Map<String, Integer> addCircleType(String typename, String discoverpageurl) {
         Map<String, Integer> map = new HashedMap();
         Map packaging = new HashedMap();
         packaging.put("categoryname", typename);
         packaging.put("intime", new Date());
         String savedFileName = "";
-        String imgurl = "";
-        try {
-            if (discoverpageurl != null) {
-                if (!discoverpageurl.isEmpty()) {
-                    String fileRealName = discoverpageurl.getOriginalFilename();
-                    int pointIndex = fileRealName.indexOf(".");
-                    String fileSuffix = fileRealName.substring(pointIndex);
-                    UUID FileId = UUID.randomUUID();
-                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
-                    String savedDir = request.getSession().getServletContext().getRealPath("");
-                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
-                    //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 9);
-                    //这里组合出真实的图片存储路径
-                    String combinpath = path + "images/circle/category/banner/";
-                    File savedFile = new File(combinpath, savedFileName);
-                    System.out.println("文件url：" + combinpath + "" + savedFileName);
-                    boolean isCreateSuccess = savedFile.createNewFile();
-                    if (isCreateSuccess) {
-                        discoverpageurl.transferTo(savedFile);  //转存文件
-                    }
-                }
-                imgurl = categoryurl + savedFileName;
-                packaging.put("discoverpageurl", imgurl);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        packaging.put("discoverpageurl", discoverpageurl);
         int i = categoryService.addCircleType(packaging);
         map.put("resault", i);
         return map;
@@ -512,40 +481,20 @@ public class CircleFacade {
         return categoryService.queryCircleCategory(category);
     }
 
-    public Map updateCircleCategory(HttpServletRequest request, String categoryid, String category, MultipartFile discoverpageurl) {
+    /**
+     * 编辑圈子详情接口
+     *
+     * @param categoryid
+     * @param category
+     * @param discoverpageurl
+     * @return
+     */
+    public Map updateCircleCategory(String categoryid, String category, String discoverpageurl) {
         Map map = new HashedMap();
         map.put("categoryid", categoryid);
         map.put("categoryname", category);
         map.put("intime", new Date());
-        String savedFileName = "";
-        String imgurl = "";
-        try {
-            if (discoverpageurl != null) {
-                if (!discoverpageurl.isEmpty()) {
-                    String fileRealName = discoverpageurl.getOriginalFilename();
-                    int pointIndex = fileRealName.indexOf(".");
-                    String fileSuffix = fileRealName.substring(pointIndex);
-                    UUID FileId = UUID.randomUUID();
-                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
-                    String savedDir = request.getSession().getServletContext().getRealPath("");
-                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
-                    //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 9);
-                    //这里组合出真实的图片存储路径
-                    String combinpath = path + "images/circle/category/banner/";
-                    File savedFile = new File(combinpath, savedFileName);
-                    System.out.println("文件url：" + combinpath + "" + savedFileName);
-                    boolean isCreateSuccess = savedFile.createNewFile();
-                    if (isCreateSuccess) {
-                        discoverpageurl.transferTo(savedFile);  //转存文件
-                    }
-                }
-                imgurl = categoryurl + savedFileName;
-                map.put("imgurl", imgurl);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        map.put("imgurl", discoverpageurl);
         int i = categoryService.updateCircleCategory(map);
         Map m = new HashedMap();
         if (i == 1) {

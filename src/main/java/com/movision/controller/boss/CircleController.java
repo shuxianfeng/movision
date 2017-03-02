@@ -11,6 +11,8 @@ import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.video.entity.Video;
+import com.movision.utils.file.FileUtil;
+import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +38,8 @@ import java.util.Map;
 public class CircleController {
     @Autowired
     CircleFacade circleFacade;
+    @Autowired
+    MovisionOssClient movisionOssClient;
 
     /**
      * 后台管理-查询圈子列表
@@ -180,13 +185,12 @@ public class CircleController {
      */
     @ApiOperation(value = "圈子编辑", notes = "用于圈子编辑接口", response = Response.class)
     @RequestMapping(value = "update_circle", method = RequestMethod.POST)
-    public Response updateCircle(HttpServletRequest request,
-                                 @ApiParam(value = "圈子id") @RequestParam String id,
+    public Response updateCircle(@ApiParam(value = "圈子id") @RequestParam String id,
                                  @ApiParam(value = "圈子名称") @RequestParam String name,
                                  @ApiParam(value = "圈子类型") @RequestParam String category,
                                  @ApiParam(value = "圈主id") @RequestParam String userid,
                                  @ApiParam(value = "管理员列表") @RequestParam String admin,
-                                 @ApiParam(value = "圈子否封面") @RequestParam(required = false) MultipartFile photo,
+                                 @ApiParam(value = "圈子否封面") @RequestParam String photo,
                                  @ApiParam(value = "圈子简介") @RequestParam String introduction,
                                  @ApiParam(value = "圈子二维码") @RequestParam(required = false) String erweima,
                                  @ApiParam(value = "审核状态") @RequestParam(required = false) String status,
@@ -194,7 +198,7 @@ public class CircleController {
                                  @ApiParam(value = "推荐排序") @RequestParam(required = false) String orderid,
                                  @ApiParam(value = "发帖权限") @RequestParam(required = false) String permission) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.updateCircle(request, id, name, category, userid, admin, photo, introduction, erweima, status, isrecommend, orderid, permission);
+        Map<String, Integer> map = circleFacade.updateCircle(id, name, category, userid, admin, photo, introduction, erweima, status, isrecommend, orderid, permission);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -222,7 +226,6 @@ public class CircleController {
 
     /**
      * 添加圈子
-     * @param request
      * @param name
      * @param category
      * @param userid
@@ -234,16 +237,15 @@ public class CircleController {
      */
     @ApiOperation(value = "圈子添加", notes = "用于圈子添加接口", response = Response.class)
     @RequestMapping(value = "add_circle", method = RequestMethod.POST)
-    public Response addCircle(HttpServletRequest request,
-                              @ApiParam(value = "圈子名称") @RequestParam String name,
+    public Response addCircle(@ApiParam(value = "圈子名称") @RequestParam String name,
                               @ApiParam(value = "圈子类型0 科技 1 交友 2 摄影 3 影视 4 达人秀") @RequestParam String category,
                               @ApiParam(value = "圈主id") @RequestParam String userid,
                               @ApiParam(value = "管理员列表") @RequestParam String admin,
                               @ApiParam(value = "创建人") @RequestParam String criclemanid,
-                              @ApiParam(value = "圈子否封面") @RequestParam(required = false, value = "photo") MultipartFile photo,
+                              @ApiParam(value = "圈子否封面") @RequestParam String photo,
                               @ApiParam(value = "圈子简介") @RequestParam String introduction) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.addCircle(request, name, category, userid, admin, criclemanid, photo, introduction);
+        Map<String, Integer> map = circleFacade.addCircle(name, category, userid, admin, criclemanid, photo, introduction);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -276,11 +278,10 @@ public class CircleController {
      */
     @ApiOperation(value = "添加圈子分类", notes = "用于添加圈子分类接口", response = Response.class)
     @RequestMapping(value = "add_circle_type", method = RequestMethod.POST)
-    public Response addCircleType(HttpServletRequest request,
-                                  @ApiParam(value = "圈子类型名称") @RequestParam String typename,
-                                  @ApiParam(value = "圈子分类banner图") @RequestParam(required = false, value = "discoverpageurl") MultipartFile discoverpageurl) {
+    public Response addCircleType(@ApiParam(value = "圈子类型名称") @RequestParam String typename,
+                                  @ApiParam(value = "圈子分类banner图") @RequestParam String discoverpageurl) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.addCircleType(request, typename, discoverpageurl);
+        Map<String, Integer> map = circleFacade.addCircleType(typename, discoverpageurl);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -315,11 +316,11 @@ public class CircleController {
      */
     @ApiOperation(value = "编辑圈子详情", notes = "用于编辑圈子详情接口", response = Response.class)
     @RequestMapping(value = "update_circle_category", method = RequestMethod.POST)
-    public Response updateCircleCategory(HttpServletRequest request, @ApiParam(value = "圈子类型id") @RequestParam String categoryid,
+    public Response updateCircleCategory(@ApiParam(value = "圈子类型id") @RequestParam String categoryid,
                                          @ApiParam(value = "圈子类型名称") @RequestParam String category,
-                                         @ApiParam(value = "圈子分类banner图") @RequestParam(required = false) MultipartFile discoverpageurl) {
+                                         @ApiParam(value = "圈子分类banner图") @RequestParam String discoverpageurl) {
         Response response = new Response();
-        Map map = circleFacade.updateCircleCategory(request, categoryid, category, discoverpageurl);
+        Map map = circleFacade.updateCircleCategory(categoryid, category, discoverpageurl);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -400,6 +401,22 @@ public class CircleController {
         }
         response.setData(list);
         return response;
+    }
+
+    /**
+     * 图片上传接口
+     *
+     * @param file
+     * @return
+     */
+    @ApiOperation(value = "上传图片", notes = "用于上传圈子banner图等图片", response = Response.class)
+    @RequestMapping(value = {"/upload_circle_img"}, method = RequestMethod.POST)
+    public Response uploadImg(@RequestParam(value = "file", required = false) MultipartFile file) {
+        String url = movisionOssClient.uploadObject(file, "img", "circle");
+        Map<String, String> map = new HashMap<>();
+        map.put("url", url);
+        map.put("name", FileUtil.getFileNameByUrl(url));
+        return new Response(map);
     }
 
 }
