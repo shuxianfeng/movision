@@ -580,7 +580,7 @@ public class GoodsController {
     /**
      * 修改商品
      *
-     * @param request
+     * @param
      * @param imgurl
      * @param name
      * @param protype
