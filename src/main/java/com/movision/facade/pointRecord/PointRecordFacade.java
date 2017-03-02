@@ -15,13 +15,11 @@ import com.movision.utils.ListUtil;
 import com.movision.utils.MathUtil;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -373,11 +371,21 @@ public class PointRecordFacade {
         return dailyTask;
     }
 
+    /**
+     * 判断今天是否签到
+     *
+     * @return 签了：true
+     */
     public Boolean signToday() {
         int count = pointRecordService.queryIsSignToday(ShiroUtil.getAppUserID());
         return count == 1;
     }
 
+    /**
+     * 查找我的积分明细
+     * @param paging
+     * @return
+     */
     public List<Map> findAllMyPointList(Paging<Map> paging) {
         Map map = new HashedMap();
         map.put("userid", ShiroUtil.getAppUserID());

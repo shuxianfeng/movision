@@ -168,6 +168,7 @@ public class MyInfoController {
         return new Response(map);
     }
 
+
     @ApiOperation(value = "提交意见反馈", notes = "提交意见反馈", response = Response.class)
     @RequestMapping(value = "submit_suggestion", method = RequestMethod.POST)
     public Response insertSuggestion(@ApiParam(value = "选填手机号，qq号等") @RequestParam(required = false) String phone,

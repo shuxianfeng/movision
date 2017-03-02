@@ -106,6 +106,7 @@ public class UploadFacade {
 
 
             //目录不存在则创建
+            log.info("【saveDirectory】=" + saveDirectory);
             File dir = new File(saveDirectory);
             if (!dir.exists() && !dir.isDirectory()) {
                 dir.mkdirs();
