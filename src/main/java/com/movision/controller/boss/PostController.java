@@ -351,15 +351,14 @@ public class PostController {
      */
     @ApiOperation(value = "添加帖子", notes = "添加帖子", response = Response.class)
     @RequestMapping(value = "/add_post", method = RequestMethod.POST)
-    public Response addPost(HttpServletRequest request,
-                            @ApiParam(value = "帖子标题") @RequestParam String title,//帖子标题
+    public Response addPost(@ApiParam(value = "帖子标题") @RequestParam String title,//帖子标题
                             @ApiParam(value = "帖子副标题") @RequestParam String subtitle,//帖子副标题
                             @ApiParam(value = "帖子类型 0 普通帖 1 原生视频帖") @RequestParam String type,//帖子类型
                             @ApiParam(value = "圈子id") @RequestParam String circleid,//圈子id
                             @ApiParam(value = "发帖人") @RequestParam String userid,//发帖人
-                            @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam(required = false, value = "coverimg") MultipartFile coverimg,//帖子封面
-                            @ApiParam(value = "视频地址") @RequestParam(required = false, value = "vid") MultipartFile vid,//视频url
-                            @ApiParam(value = "视频文件") @RequestParam(required = false, value = "bannerimgurl") MultipartFile bannerimgurl,//视频图片
+                            @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam String coverimg,//帖子封面
+                            @ApiParam(value = "视频地址") @RequestParam(required = false) String vid,//视频url
+                            @ApiParam(value = "视频文件") @RequestParam(required = false) String bannerimgurl,//视频图片
                             @ApiParam(value = "帖子内容") @RequestParam String postcontent,//帖子内容
                             @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
                             @ApiParam(value = "圈子精选") @RequestParam(required = false) String ishot,//精选池中的帖子圈子精选贴
@@ -367,7 +366,7 @@ public class PostController {
                             @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String time,//精选日期
                             @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Integer> resaut = postFacade.addPost(request, title, subtitle, type, circleid, userid, coverimg, vid, bannerimgurl, postcontent,
+        Map<String, Integer> resaut = postFacade.addPost(title, subtitle, type, circleid, userid, coverimg, vid, bannerimgurl, postcontent,
                 isessence, ishot, orderid, time, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
@@ -543,7 +542,6 @@ public class PostController {
 
     /**
      * 后台管理-帖子编辑
-     * @param request
      * @param title
      * @param subtitle
      * @param type
@@ -560,23 +558,22 @@ public class PostController {
      */
     @ApiOperation(value = "编辑帖子", notes = "用于帖子编辑接口", response = Response.class)
     @RequestMapping(value = "update_post", method = RequestMethod.POST)
-    public Response updatePostById(HttpServletRequest request,
-                                   @ApiParam(value = "帖子id（必填）") @RequestParam String id,
+    public Response updatePostById(@ApiParam(value = "帖子id（必填）") @RequestParam String id,
                                    @ApiParam(value = "帖子标题") @RequestParam(required = false) String title,//帖子标题
                                    @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,//帖子副标题
                                    @ApiParam(value = "帖子类型 0 普通帖 1 原生视频帖") @RequestParam(required = false) String type,//帖子类型
                                    @ApiParam(value = "发帖人（必填且必须是管理员-1）") @RequestParam String userid,//发帖人
                                    @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,//圈子id
-                                   @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam(required = false, value = "coverimg") MultipartFile coverimg,//帖子封面
-                                   @ApiParam(value = "视频地址") @RequestParam(required = false, value = "vid") MultipartFile vid,//视频url
-                                   @ApiParam(value = "视频封面地址url") @RequestParam(required = false, value = "bannerimgurl") MultipartFile bannerimgurl,//视频封面url
+                                   @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam String coverimg,//帖子封面
+                                   @ApiParam(value = "视频地址") @RequestParam(required = false) String vid,//视频url
+                                   @ApiParam(value = "视频封面地址url") @RequestParam(required = false) String bannerimgurl,//视频封面url
                                    @ApiParam(value = "帖子内容（必填）") @RequestParam String postcontent,//帖子内容
                                    @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
                                    @ApiParam(value = "圈子精选") @RequestParam(required = false) String ishot,//本圈精华
                                    @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,//精选排序
                                    @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String time) {
         Response response = new Response();
-        Map<String, Integer> map = postFacade.updatePostById(request, id, title, subtitle, type, userid, circleid, vid, bannerimgurl, coverimg, postcontent, isessence, ishot, orderid, time);
+        Map<String, Integer> map = postFacade.updatePostById(id, title, subtitle, type, userid, circleid, vid, bannerimgurl, coverimg, postcontent, isessence, ishot, orderid, time);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -818,6 +815,23 @@ public class PostController {
     @ApiOperation(value = "上传活动图片", notes = "上传活动图片", response = Response.class)
     @RequestMapping(value = {"/upload_active_pic"}, method = RequestMethod.POST)
     public Response updateMyInfo(@RequestParam(value = "file", required = false) MultipartFile file) {
+
+        String url = movisionOssClient.uploadObject(file, "img", "post");
+        Map<String, String> map = new HashMap<>();
+        map.put("url", url);
+        map.put("name", FileUtil.getFileNameByUrl(url));
+        return new Response(map);
+    }
+
+    /**
+     * 上传帖子相关图片
+     *
+     * @param file
+     * @return
+     */
+    @ApiOperation(value = "上传帖子相关图片", notes = "上传帖子相关图片", response = Response.class)
+    @RequestMapping(value = {"/upload_post_img"}, method = RequestMethod.POST)
+    public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file) {
 
         String url = movisionOssClient.uploadObject(file, "img", "post");
         Map<String, String> map = new HashMap<>();
