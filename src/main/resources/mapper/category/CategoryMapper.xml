@@ -128,8 +128,8 @@
             <if test="intime != null">
                 intime,
             </if>
-            <if test="imgurl != null">
-                imgurl,
+            <if test="discoverpageurl != null">
+                discoverpageurl,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -142,14 +142,30 @@
             <if test="intime != null">
                 #{intime,jdbcType=TIMESTAMP},
             </if>
-            <if test="imgurl != null">
-                imgurl = #{imgurl,jdbcType=VARCHAR},
+            <if test="discoverpageurl != null">
+                discoverpageurl = #{discoverpageurl,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
 
     <select id="queryCircleCategory" parameterType="java.lang.String"
             resultType="com.movision.mybatis.category.entity.Category">
-        select * from yw_circle_category WHERE categoryname=#{category,jdbcType=VARCHAR}
+        select * from yw_circle_category WHERE id=#{categoryid,jdbcType=VARCHAR}
     </select>
+
+    <update id="updateCircleCategory" parameterType="java.util.Map">
+        update yw_circle_category
+        <set>
+            <if test="categoryname != null">
+                categoryname = #{categoryname,jdbcType=INTEGER},
+            </if>
+            <if test="discoverpageurl != null">
+                discoverpageurl = #{discoverpageurl,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{categoryid,jdbcType=INTEGER}
+    </update>
 </mapper>

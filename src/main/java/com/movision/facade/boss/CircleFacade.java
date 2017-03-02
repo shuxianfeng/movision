@@ -527,7 +527,7 @@ public class CircleFacade {
                     //不保存到项目中,防止部包把图片覆盖掉了
                     String path = savedDir.substring(0, savedDir.length() - 9);
                     //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/circle/coverimg/";
+                    String combinpath = path + "images/circle/category/banner/";
                     File savedFile = new File(combinpath, savedFileName);
                     System.out.println("文件url：" + combinpath + "" + savedFileName);
                     boolean isCreateSuccess = savedFile.createNewFile();
@@ -536,7 +536,7 @@ public class CircleFacade {
                     }
                 }
                 imgurl = categoryurl + savedFileName;
-                packaging.put("imgurl", imgurl);
+                packaging.put("discoverpageurl", imgurl);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -554,6 +554,50 @@ public class CircleFacade {
      */
     public Category queryCircleCategory(String category) {
         return categoryService.queryCircleCategory(category);
+    }
+
+    public Map updateCircleCategory(HttpServletRequest request, String category, MultipartFile discoverpageurl) {
+        Map map = new HashedMap();
+        map.put("categoryname", category);
+        map.put("intime", new Date());
+        String savedFileName = "";
+        String imgurl = "";
+        try {
+            if (discoverpageurl != null) {
+                if (!discoverpageurl.isEmpty()) {
+                    String fileRealName = discoverpageurl.getOriginalFilename();
+                    int pointIndex = fileRealName.indexOf(".");
+                    String fileSuffix = fileRealName.substring(pointIndex);
+                    UUID FileId = UUID.randomUUID();
+                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
+                    String savedDir = request.getSession().getServletContext().getRealPath("");
+                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
+                    //不保存到项目中,防止部包把图片覆盖掉了
+                    String path = savedDir.substring(0, savedDir.length() - 9);
+                    //这里组合出真实的图片存储路径
+                    String combinpath = path + "images/circle/category/banner/";
+                    File savedFile = new File(combinpath, savedFileName);
+                    System.out.println("文件url：" + combinpath + "" + savedFileName);
+                    boolean isCreateSuccess = savedFile.createNewFile();
+                    if (isCreateSuccess) {
+                        discoverpageurl.transferTo(savedFile);  //转存文件
+                    }
+                }
+                imgurl = categoryurl + savedFileName;
+                map.put("imgurl", imgurl);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int i = categoryService.updateCircleCategory(map);
+        Map m = new HashedMap();
+        if (i == 1) {
+            m.put("resault", i);
+            return m;
+        } else {
+            m.put("resault", 0);
+            return m;
+        }
     }
 
     /**

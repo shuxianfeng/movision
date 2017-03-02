@@ -276,8 +276,8 @@ public class CircleController {
      */
     @ApiOperation(value = "添加圈子分类", notes = "用于添加圈子分类接口", response = Response.class)
     @RequestMapping(value = "add_circle_type", method = RequestMethod.POST)
-    public Response addCircleType(HttpServletRequest request,
-                                  @ApiParam(value = "圈子名称") @RequestParam String typename,
+    public Response addCircleType(HttpServletRequest request, @ApiParam(value = "圈子类型id") @RequestParam String categoryid,
+                                  @ApiParam(value = "圈子类型名称") @RequestParam String typename,
                                   @ApiParam(value = "圈子分类banner图") @RequestParam(required = false) MultipartFile discoverpageurl) {
         Response response = new Response();
         Map<String, Integer> map = circleFacade.addCircleType(request, typename, discoverpageurl);
@@ -291,14 +291,14 @@ public class CircleController {
     /**
      * 回显圈子类型详情接口
      *
-     * @param category
+     * @param categoryid
      * @return
      */
     @ApiOperation(value = "查询圈子类型详情", notes = "用于查询圈子类型详情用作编辑前回显接口", response = Response.class)
     @RequestMapping(value = "query_circle_category", method = RequestMethod.POST)
-    public Response queryCircleCategory(@ApiParam(value = "圈子类型(传中文如：科技)") @RequestParam String category) {
+    public Response queryCircleCategory(@ApiParam(value = "圈子类型id") @RequestParam String categoryid) {
         Response response = new Response();
-        Category cate = circleFacade.queryCircleCategory(category);
+        Category cate = circleFacade.queryCircleCategory(categoryid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -306,6 +306,36 @@ public class CircleController {
         return response;
     }
 
+    /**
+     * 编辑圈子详情接口
+     *
+     * @param category
+     * @param discoverpageurl
+     * @return
+     */
+    @ApiOperation(value = "编辑圈子详情", notes = "用于编辑圈子详情接口", response = Response.class)
+    @RequestMapping(value = "update_circle_category", method = RequestMethod.POST)
+    public Response updateCircleCategory(HttpServletRequest request, @ApiParam(value = "圈子类型id") @RequestParam String categoryid,
+                                         @ApiParam(value = "圈子类型名称") @RequestParam String category,
+                                         @ApiParam(value = "圈子分类banner图") @RequestParam(required = false) MultipartFile discoverpageurl) {
+        Response response = new Response();
+        Map map = circleFacade.updateCircleCategory(request, category, discoverpageurl);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 查看圈子中帖子列表
+     *
+     * @param categoryid
+     * @param circleid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
     @ApiOperation(value = "查看圈子帖子列表", notes = "用于查看圈子中帖子列表接口", response = Response.class)
     @RequestMapping(value = "query_circle_post_list", method = RequestMethod.POST)
     public Response queryCircleByPostList(@ApiParam(value = "圈子类型(查询圈子分类的帖子列表)") @RequestParam(required = false) String categoryid,

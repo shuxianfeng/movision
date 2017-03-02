@@ -66,4 +66,20 @@ public class CategoryService {
             throw e;
         }
     }
+
+    /**
+     * 编辑圈子类型
+     *
+     * @param map
+     * @return
+     */
+    public int updateCircleCategory(Map map) {
+        try {
+            logger.info("编辑圈子类型");
+            return categoryMapper.updateCircleCategory(map);
+        } catch (Exception e) {
+            logger.error("编辑圈子类型异常");
+            throw e;
+        }
+    }
 }
