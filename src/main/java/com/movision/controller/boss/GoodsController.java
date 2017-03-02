@@ -597,8 +597,8 @@ public class GoodsController {
      */
     @ApiOperation(value = "修改商品", notes = "修改商品", response = Response.class)
     @RequestMapping(value = "update_goods", method = RequestMethod.POST)
-    public Response updateGoods(HttpServletRequest request,
-                                @ApiParam(value = "图片地址") @RequestParam MultipartFile imgurl,
+    public Response updateGoods(
+            @ApiParam(value = "图片地址") @RequestParam String imgurl,
                                 @ApiParam(value = "商品名称") @RequestParam String name,
                                 @ApiParam(value = "商品类别") @RequestParam String protype,
                                 @ApiParam(value = "商品id") @RequestParam String id,
@@ -612,7 +612,7 @@ public class GoodsController {
                                 @ApiParam(value = "商品标签") @RequestParam String attribute
     ) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.updateGoods(request, imgurl, name, protype, id, price, origprice, stock, isdel, recommenddate, brandid, tuijian, attribute);
+        Map<String, Integer> map = goodsFacade.updateGoods(imgurl, name, protype, id, price, origprice, stock, isdel, recommenddate, brandid, tuijian, attribute);
         if (response.getCode() == 200) {
             response.setMessage("修改成功");
         }
