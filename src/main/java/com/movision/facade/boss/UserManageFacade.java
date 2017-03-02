@@ -164,12 +164,34 @@ public class UserManageFacade {
      * @param pager
      * @return
      */
-    public List<UserAll> queryAllUserList(Paging<UserAll> pager, String pointsSort, String postsumSort, String isessenceSort, String fansSort) {
+    public List<UserAll> queryAllUserList(Paging<UserAll> pager, String nickname, String phone, String authentication, String vip, String seal,
+                                          String begintime, String endtime, String pointsSort, String postsumSort, String isessenceSort,
+                                          String fansSort, String conditionon, String conditiontwo, String price, String login) {
         Map map = new HashedMap();
+        String beg = null;
+        String end = null;
+        if (begintime != null && endtime != null) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Long l = new Long(begintime);
+            Long o = new Long(endtime);
+            beg = format.format(l);
+            end = format.format(o);
+        }
+        map.put("nickname", nickname);//用户名
+        map.put("phone", phone);//手机号
+        map.put("authentication", authentication);//实名认证
+        map.put("level", vip);//是否是VIP
+        map.put("status", seal);//是否封号
+        map.put("begintime", beg);//注册开始时间
+        map.put("endtime", end);//注册结束时间
         map.put("pointsSort", pointsSort);//积分排序
         map.put("postsumSort", postsumSort);//帖子排序
         map.put("isessenceSort", isessenceSort);//精贴排序
         map.put("fansSort", fansSort);//关注排序
+        map.put("conditionon", conditionon);//条件1
+        map.put("conditiontwo", conditiontwo);//条件2
+        map.put("price", price);//比较值
+        map.put("login", login);//登录状态
         return userService.queryAllUserList(pager, map);
     }
 

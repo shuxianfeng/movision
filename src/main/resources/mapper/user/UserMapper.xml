@@ -586,11 +586,101 @@
 
     <select id="findAllqueryAllUserList" parameterType="java.util.Map"
             resultType="com.movision.mybatis.user.entity.UserAll">
-        SELECT u.id,u.nickname,u.phone,u.level,u.status,u.points,u.fans,u.intime,
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,u.points,u.fans,u.intime,u.qq,u.sina,u.openid,aut.authstatus,
         (SELECT COUNT(1) FROM yw_coupon WHERE isdel=0 AND userid=u.id) AS coupon,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1) AS isessencesum
-        FROM yw_user u WHERE 1
+        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE 1
+
+        <if test="nickname!=null">
+            AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="phone!=null">
+            AND u.phone=#{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="authentication!=null">
+            AND authstatus=#{authentication,jdbcType=INTEGER}
+        </if>
+        <if test="level!=null">
+            AND level=#{level,jdbcType=INTEGER}
+        </if>
+        <if test="status!=null">
+            AND status=#{status,jdbcType=INTEGER}
+        </if>
+        <if test="begintime!=null and endtime!=null">
+            AND intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
+        <if test="price!=null and conditionon!=null and conditiontwo!=null">
+            <if test="conditionon==1">
+                <if test="conditiontwo==3">
+                    AND u.points &gt; #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==2">
+                    AND u.points = #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==1">
+                    AND u.points &lt; #{price,jdbcType=INTEGER}
+                </if>
+            </if>
+            <if test="conditionon==2">
+                <if test="conditiontwo==3">
+                    AND coupon &gt; #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==2">
+                    AND coupon=#{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==1">
+                    AND coupon &lt; #{price,jdbcType=INTEGER}
+                </if>
+            </if>
+            <if test="conditionon==3">
+                <if test="conditiontwo==3">
+                    AND postsum &gt; #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==2">
+                    AND postsum=#{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==1">
+                    AND postsum &lt; #{price,jdbcType=INTEGER}
+                </if>
+            </if>
+            <if test="conditionon==4">
+                <if test="conditiontwo==3">
+                    AND isessencesum &gt; #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==2">
+                    AND isessencesum=#{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==1">
+                    AND isessencesum &lt; #{price,jdbcType=INTEGER}
+                </if>
+            </if>
+            <if test="conditionon==5">
+                <if test="conditiontwo==3">
+                    AND u.fans &gt; #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==2">
+                    AND u.fans = #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==1">
+                    AND u.fans &lt; #{price,jdbcType=INTEGER}
+                </if>
+            </if>
+        </if>
+        <if test="login!=null">
+            <if test="login==1">
+                AND u.phone &lt;&gt; ''
+            </if>
+            <if test="login==2">
+                AND u.openid &lt;&gt; ''
+            </if>
+            <if test="login==3">
+                AND u.qq &lt;&gt; ''
+            </if>
+            <if test="login==4">
+                AND u.sina &lt;&gt; ''
+            </if>
+        </if>
         <if test="pointsSort!=null">
             <if test="pointsSort==0">
                 ORDER BY coupon ASC
@@ -615,11 +705,11 @@
                 ORDER BY isessencesum DESC
             </if>
         </if>
-        <if test="fans!=null">
-            <if test="fans==0">
+        <if test="fansSort!=null">
+            <if test="fansSort==0">
                 ORDER BY fans ASC
             </if>
-            <if test="fans==1">
+            <if test="fansSort==1">
                 ORDER BY fans DESC
             </if>
         </if>

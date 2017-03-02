@@ -31,6 +31,46 @@ public class UserAll {
 
     private Date applydate;//申请时间
 
+    private Integer authstatus;//实名认证
+
+    private String sina;//登录微博？
+
+    private String qq;//QQ登录
+
+    private String openid;//微信登录
+
+    public Integer getAuthstatus() {
+        return authstatus;
+    }
+
+    public void setAuthstatus(Integer authstatus) {
+        this.authstatus = authstatus;
+    }
+
+    public String getSina() {
+        return sina;
+    }
+
+    public void setSina(String sina) {
+        this.sina = sina;
+    }
+
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
+
     public Integer getId() {
         return id;
     }

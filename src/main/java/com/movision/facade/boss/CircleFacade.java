@@ -17,6 +17,7 @@ import com.movision.mybatis.rewarded.service.RewardedService;
 import com.movision.mybatis.share.service.SharesService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.map.HashedMap;
@@ -67,6 +68,9 @@ public class CircleFacade {
 
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    MovisionOssClient movisionOssClient;
 
     /**
      * 圈子首页列表查询
@@ -287,7 +291,6 @@ public class CircleFacade {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
         Integer circleid = null;
-        try {
             if (id != null) {
                 circleid = Integer.parseInt(id);
                 circleDetails.setId(Integer.parseInt(id));
@@ -315,29 +318,9 @@ public class CircleFacade {
                 circleDetails.setPhone(pon);
             }
             String savedFileName = "";
-            String imgurl = "";
             if (photo != null) {
-                if (!photo.isEmpty()) {
-                    String fileRealName = photo.getOriginalFilename();
-                    int pointIndex = fileRealName.indexOf(".");
-                    String fileSuffix = fileRealName.substring(pointIndex);
-                    UUID FileId = UUID.randomUUID();
-                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
-                    String savedDir = request.getSession().getServletContext().getRealPath("");
-                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
-                    //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 9);
-                    //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/circle/banner/";
-                    File savedFile = new File(combinpath, savedFileName);
-                    System.out.println("文件url：" + combinpath + "" + savedFileName);
-                    boolean isCreateSuccess = savedFile.createNewFile();
-                    if (isCreateSuccess) {
-                        photo.transferTo(savedFile);  //转存文件
-                    }
-                }
-                imgurl = imgdomain + savedFileName;
-                circleDetails.setPhoto(imgurl);
+                savedFileName = movisionOssClient.uploadObject(photo, "img", "circle");
+                circleDetails.setPhoto(savedFileName);
             }
             if (introduction != null) {
                 circleDetails.setIntroduction(introduction);
@@ -367,9 +350,6 @@ public class CircleFacade {
                 Integer t = 0;
                 map.put("resault", t);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return map;
     }
 
@@ -421,8 +401,6 @@ public class CircleFacade {
                                           String circlemanid, MultipartFile photo, String introduction) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
-        try {
-
             if (name != null) {
                 circleDetails.setName(name);
             }
@@ -440,31 +418,9 @@ public class CircleFacade {
             }
             circleDetails.setCreatetime(new Date());
             String savedFileName = "";
-            String imgurl = "";
             if (photo != null) {
-                if (!photo.isEmpty()) {
-                    String fileRealName = photo.getOriginalFilename();
-                    int pointIndex = fileRealName.indexOf(".");
-                    String fileSuffix = fileRealName.substring(pointIndex);
-                    UUID FileId = UUID.randomUUID();
-                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
-                    String savedDir = request.getSession().getServletContext().getRealPath("");
-                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
-                    //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 9);
-                    //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/circle/banner/";
-                    File savedFile = new File(combinpath, savedFileName);
-                    System.out.println("文件url：" + combinpath + "" + savedFileName);
-                    boolean isCreateSuccess = savedFile.createNewFile();
-                    if (isCreateSuccess) {
-                        photo.transferTo(savedFile);  //转存文件
-                    }
-                }
-                imgurl = imgdomain + savedFileName;
-                if (savedFileName != null) {
-                    circleDetails.setPhoto(imgurl);
-                }
+                savedFileName = movisionOssClient.uploadObject(photo, "img", "circle");
+                circleDetails.setPhoto(savedFileName);
             }
             if (introduction != null) {
                 circleDetails.setIntroduction(introduction);
@@ -487,9 +443,6 @@ public class CircleFacade {
                 Integer t = 0;
                 map.put("resault", t);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return map;
     }
 

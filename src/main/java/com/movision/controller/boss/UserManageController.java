@@ -232,15 +232,27 @@ public class UserManageController {
      */
     @ApiOperation(value = "查询所有用户列表", notes = "用于查询所有用户列表接口", response = Response.class)
     @RequestMapping(value = "query_all_user", method = RequestMethod.POST)
-    public Response queryAllUserList(@ApiParam(value = "积分排序0升序1降序") @RequestParam(required = false) String pointsSort,
+    public Response queryAllUserList(@ApiParam(value = "用户名") @RequestParam(required = false) String nickname,
+                                     @ApiParam(value = "手机号") @RequestParam(required = false) String phone,
+                                     @ApiParam(value = "实名认证") @RequestParam(required = false) String authentication,
+                                     @ApiParam(value = "是否是vip(1是0不是)") @RequestParam(required = false) String vip,
+                                     @ApiParam(value = "是否封号") @RequestParam(required = false) String seal,
+                                     @ApiParam(value = "注册开始时间") @RequestParam(required = false) String begintime,
+                                     @ApiParam(value = "注册结束时间") @RequestParam(required = false) String endtime,
+                                     @ApiParam(value = "积分排序0升序1降序") @RequestParam(required = false) String pointsSort,
                                      @ApiParam(value = "帖子数量排序0升序1降序") @RequestParam(required = false) String postsumSort,
                                      @ApiParam(value = "精贴排序0升序1降序") @RequestParam(required = false) String isessenceSort,
                                      @ApiParam(value = "关注排序0升序1降序") @RequestParam(required = false) String fansSort,
+                                     @ApiParam(value = "条件1(积分：1，优惠券2，帖子3，精贴4，关注5)") @RequestParam(required = false) String conditionon,
+                                     @ApiParam(value = "条件2(大于：3，等于：2，小于：1)") @RequestParam(required = false) String conditiontwo,
+                                     @ApiParam(value = "值") @RequestParam(required = false) String price,
+                                     @ApiParam(value = "登录方式") @RequestParam(required = false) String login,
                                      @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                      @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<UserAll> pager = new Paging<UserAll>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<UserAll> list = userManageFacade.queryAllUserList(pager, pointsSort, postsumSort, isessenceSort, fansSort);
+        List<UserAll> list = userManageFacade.queryAllUserList(pager, nickname, phone, authentication, vip, seal, begintime, endtime, pointsSort,
+                postsumSort, isessenceSort, fansSort, conditionon, conditiontwo, price, login);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
