@@ -59,7 +59,7 @@ public class CircleDetails {
 
     private List<User> admin;//管理员列表
 
-    private Integer userid;//创建人id
+    private String userid;//创建人id
 
     private String username;//创建人名称
 
@@ -257,11 +257,11 @@ public class CircleDetails {
         this.admin = admin;
     }
 
-    public Integer getUserid() {
+    public String getUserid() {
         return userid;
     }
 
-    public void setUserid(Integer userid) {
+    public void setUserid(String userid) {
         this.userid = userid;
     }
 

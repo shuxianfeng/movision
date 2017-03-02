@@ -384,7 +384,7 @@ public class CircleFacade {
         CircleDetails circleDetails = circleService.queryCircleByShow(Integer.parseInt(circleid));//查询出圈子信息
         List<User> list = userService.queryUserByAdministratorList(Integer.parseInt(circleid));//查询出圈子管理员列表
         circleDetails.setAdmin(list);
-        List<Integer> ords = circleService.queryCircleByOrderidList();
+        List<Integer> ords = circleService.queryCircleByOrderidList();//查询圈子推荐发现页排序
         List<Integer> h = new ArrayList<>();
         for (int k = 1; k < 10; k++) {
             h.add(k);
@@ -397,6 +397,8 @@ public class CircleFacade {
             }
             circleDetails.setOrderids(h);
         }
+        String nn = userService.queryUserByNicknameByAdmin(circleDetails.getUserid());
+        circleDetails.setNickname(nn);
         map.put("resault", circleDetails);
         return map;
     }
@@ -419,7 +421,6 @@ public class CircleFacade {
                                           String circlemanid, MultipartFile photo, String introduction) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
-        Integer circleid = null;
         try {
 
             if (name != null) {
@@ -429,8 +430,8 @@ public class CircleFacade {
                 circleDetails.setCategory(Integer.parseInt(category));
             }
 
-            if (circlemanid != null) {
-
+            if (circlemanid != null) {//添加创建人
+                circleDetails.setUserid(circlemanid);
             }
             if (userid != null) {
                 //查询圈主手机号

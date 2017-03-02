@@ -579,4 +579,8 @@
             AND vd.apply_time BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
         </if>
     </select>
+
+    <select id="queryUserByNicknameByAdmin" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT name FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER}
+    </select>
 </mapper>

@@ -302,6 +302,22 @@ public class UserService {
         }
     }
 
+    /**
+     * 查询圈子创建人名称
+     *
+     * @param userid
+     * @return
+     */
+    public String queryUserByNicknameByAdmin(String userid) {
+        try {
+            log.info("查询圈子创建人名称");
+            return userMapper.queryUserByNicknameByAdmin(userid);
+        } catch (Exception e) {
+            log.error("查询圈子创建人异常");
+            throw e;
+        }
+    }
+
     public int updateRegisterUser(RegisterUser registerUser) {
         try {
             log.info("修改app用户token");

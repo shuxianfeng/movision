@@ -68,6 +68,8 @@ public interface UserMapper {
 
     List<User> queryUserByAdministratorList(Integer circleid);
 
+    String queryUserByNicknameByAdmin(String userid);
+
     List<UserVo> findAllqueryUsers(RowBounds rowBounds);
 
     List<UserVo> findAllqueryUserVIPByList(RowBounds rowBounds);
