@@ -230,9 +230,6 @@ public class CircleController {
      * @param criclemanid
      * @param photo
      * @param introduction
-     * @param erweima
-     * @param isrecommend
-     * @param orderid
      * @return
      */
     @ApiOperation(value = "圈子添加", notes = "用于圈子添加接口", response = Response.class)
@@ -243,14 +240,10 @@ public class CircleController {
                               @ApiParam(value = "圈主id") @RequestParam String userid,
                               @ApiParam(value = "管理员列表") @RequestParam String admin,
                               @ApiParam(value = "创建人") @RequestParam String criclemanid,
-                              @ApiParam(value = "圈子否封面") @RequestParam(required = false) MultipartFile photo,
-                              @ApiParam(value = "圈子简介") @RequestParam String introduction,
-                              @ApiParam(value = "圈子二维码") @RequestParam(required = false) String erweima,
-                              @ApiParam(value = "推荐到首页") @RequestParam(required = false) String isrecommend,
-                              @ApiParam(value = "推荐排序") @RequestParam(required = false) String orderid,
-                              @ApiParam(value = "发帖权限(0 所有者可发 1 所有者和大V可发 2 所有人均可发)") @RequestParam(required = false) String scope) {
+                              @ApiParam(value = "圈子否封面") @RequestParam MultipartFile photo,
+                              @ApiParam(value = "圈子简介") @RequestParam String introduction) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.addCircle(request, name, category, userid, admin, criclemanid, photo, introduction, erweima, isrecommend, orderid, scope);
+        Map<String, Integer> map = circleFacade.addCircle(request, name, category, userid, admin, criclemanid, photo, introduction);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -278,13 +271,16 @@ public class CircleController {
      * 添加圈子分类
      *
      * @param typename
+     * @param discoverpageurl
      * @return
      */
     @ApiOperation(value = "添加圈子分类", notes = "用于添加圈子分类接口", response = Response.class)
     @RequestMapping(value = "add_circle_type", method = RequestMethod.POST)
-    public Response addCircleType(@ApiParam(value = "圈子名称") @RequestParam String typename) {
+    public Response addCircleType(HttpServletRequest request, @ApiParam(value = "圈子类型id") @RequestParam String categoryid,
+                                  @ApiParam(value = "圈子类型名称") @RequestParam String typename,
+                                  @ApiParam(value = "圈子分类banner图") @RequestParam(required = false) MultipartFile discoverpageurl) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.addCircleType(typename);
+        Map<String, Integer> map = circleFacade.addCircleType(request, typename, discoverpageurl);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -292,6 +288,54 @@ public class CircleController {
         return response;
     }
 
+    /**
+     * 回显圈子类型详情接口
+     *
+     * @param categoryid
+     * @return
+     */
+    @ApiOperation(value = "查询圈子类型详情", notes = "用于查询圈子类型详情用作编辑前回显接口", response = Response.class)
+    @RequestMapping(value = "query_circle_category", method = RequestMethod.POST)
+    public Response queryCircleCategory(@ApiParam(value = "圈子类型id") @RequestParam String categoryid) {
+        Response response = new Response();
+        Category cate = circleFacade.queryCircleCategory(categoryid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(cate);
+        return response;
+    }
+
+    /**
+     * 编辑圈子详情接口
+     *
+     * @param category
+     * @param discoverpageurl
+     * @return
+     */
+    @ApiOperation(value = "编辑圈子详情", notes = "用于编辑圈子详情接口", response = Response.class)
+    @RequestMapping(value = "update_circle_category", method = RequestMethod.POST)
+    public Response updateCircleCategory(HttpServletRequest request, @ApiParam(value = "圈子类型id") @RequestParam String categoryid,
+                                         @ApiParam(value = "圈子类型名称") @RequestParam String category,
+                                         @ApiParam(value = "圈子分类banner图") @RequestParam(required = false) MultipartFile discoverpageurl) {
+        Response response = new Response();
+        Map map = circleFacade.updateCircleCategory(request, category, discoverpageurl);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 查看圈子中帖子列表
+     *
+     * @param categoryid
+     * @param circleid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
     @ApiOperation(value = "查看圈子帖子列表", notes = "用于查看圈子中帖子列表接口", response = Response.class)
     @RequestMapping(value = "query_circle_post_list", method = RequestMethod.POST)
     public Response queryCircleByPostList(@ApiParam(value = "圈子类型(查询圈子分类的帖子列表)") @RequestParam(required = false) String categoryid,

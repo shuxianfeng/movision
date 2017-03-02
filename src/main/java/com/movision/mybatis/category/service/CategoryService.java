@@ -50,4 +50,36 @@ public class CategoryService {
             throw e;
         }
     }
+
+    /**
+     * 回显圈子类型详情接口
+     *
+     * @param category
+     * @return
+     */
+    public Category queryCircleCategory(String category) {
+        try {
+            logger.info("回显圈子类型详情接口");
+            return categoryMapper.queryCircleCategory(category);
+        } catch (Exception e) {
+            logger.error("回显圈子类型详情接口异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 编辑圈子类型
+     *
+     * @param map
+     * @return
+     */
+    public int updateCircleCategory(Map map) {
+        try {
+            logger.info("编辑圈子类型");
+            return categoryMapper.updateCircleCategory(map);
+        } catch (Exception e) {
+            logger.error("编辑圈子类型异常");
+            throw e;
+        }
+    }
 }

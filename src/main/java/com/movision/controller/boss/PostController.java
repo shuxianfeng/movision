@@ -793,4 +793,22 @@ public class PostController {
         return response;
     }
 
+    /**
+     * 根据id查询
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "根据id查询活动", notes = "根据id查询活动", response = Response.class)
+    @RequestMapping(value = "query_activeById", method = RequestMethod.POST)
+    public Response queryActiveById(@ApiParam(value = "活动id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        PostActiveList postActiveList = postFacade.queryActiveById(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(postActiveList);
+        return response;
+    }
+
 }

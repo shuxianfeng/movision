@@ -1392,4 +1392,13 @@ public class PostFacade {
         return result;
     }
 
+    /**
+     * 根机id查询出活动
+     *
+     * @param id
+     * @return
+     */
+    public PostActiveList queryActiveById(Integer id) {
+        return postService.queryActiveById(id);
+    }
 }
