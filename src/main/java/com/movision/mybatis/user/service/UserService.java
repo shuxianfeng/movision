@@ -441,13 +441,13 @@ public class UserService {
     /**
      * 对用户账号逻辑删除操作
      *
-     * @param userid
+     * @param map
      * @return
      */
-    public int deleteUserByid(String userid) {
+    public int deleteUserByid(Map map) {
         try {
             log.info("用户删除操作");
-            return userMapper.deleteUserByid(userid);
+            return userMapper.deleteUserByid(map);
         } catch (Exception e) {
             log.error("用户删除异常");
             throw e;

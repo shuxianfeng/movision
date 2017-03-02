@@ -255,11 +255,12 @@ public class UserManageController {
      * @param userid
      * @return
      */
-    @ApiOperation(value = "删除用户", notes = "用于对用户账号做封号处理", response = Response.class)
+    @ApiOperation(value = "账号封号/解封", notes = "用于对用户账号做封号处理", response = Response.class)
     @RequestMapping(value = "delete_user_id", method = RequestMethod.POST)
-    public Response deleteUserByid(@ApiParam(value = "用户id") @RequestParam String userid) {
+    public Response deleteUserByid(@ApiParam(value = "用户id") @RequestParam String userid,
+                                   @ApiParam(value = "(传1封号，0解封)") @RequestParam String type) {
         Response response = new Response();
-        int i = userManageFacade.deleteUserByid(userid);
+        int i = userManageFacade.deleteUserByid(userid, type);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

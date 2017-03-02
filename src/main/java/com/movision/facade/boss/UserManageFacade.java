@@ -177,9 +177,13 @@ public class UserManageFacade {
      * 对用户账户进行封号
      *
      * @param userid
+     * @param type
      * @return
      */
-    public int deleteUserByid(String userid) {
-        return userService.deleteUserByid(userid);
+    public int deleteUserByid(String userid, String type) {
+        Map map = new HashedMap();
+        map.put("userid", userid);
+        map.put("type", type);
+        return userService.deleteUserByid(map);
     }
 }

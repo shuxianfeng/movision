@@ -82,5 +82,5 @@ public interface UserMapper {
 
     List<UserAll> findAllqueryAllUserList(RowBounds rowBounds, Map map);
 
-    int deleteUserByid(String userid);
+    int deleteUserByid(Map map);
 }
