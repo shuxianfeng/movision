@@ -87,7 +87,7 @@ public class PointRecordFacade {
      * 其他情况正常加分
      *
      * @param type    积分类型
-     * @param orderid 订单id--对应下单赚积分
+     * @param orderid 订单id--对应下单赚积分，只要下单传积分需要传订单号，其他情况只需要传0即可
      * @return
      */
     public int addPointRecord(int type, int orderid) {
