@@ -125,4 +125,17 @@ public class AppCartController {
         }
         return response;
     }
+
+    /**
+     * 购物车商品————点击“去结算”————跳转订单确认页
+     */
+    @ApiOperation(value = "购物车商品————点击“去结算”————跳转订单确认页", notes = "用于用户在购物车中选择商品后结算操作，跳转订单确认页", response = Response.class)
+    @RequestMapping(value = "cartBilling", method = RequestMethod.POST)
+    public Response cartBilling(@ApiParam(value = "购物车id") @RequestParam String cartid,
+                                @ApiParam(value = "用户id") @RequestParam String userid) {
+        Response response = new Response();
+
+
+        return response;
+    }
 }

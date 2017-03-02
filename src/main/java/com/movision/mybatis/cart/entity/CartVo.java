@@ -26,6 +26,8 @@ public class CartVo {
 
     private Integer num;
 
+    private Integer stock;
+
     private Integer takeway;
 
     private Integer isdebug;
@@ -278,5 +280,13 @@ public class CartVo {
 
     public void setRentday(Integer rentday) {
         this.rentday = rentday;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 }

@@ -178,7 +178,7 @@ public class CartFacade {
                 //查询商品参加的活动名称和活动折扣百分比
                 CartVo ov = discountService.queryDiscountName(cartList.get(i).getDiscountid());
                 cartList.get(i).setDiscountname(ov.getDiscountname());
-                cartList.get(i).setDiscount(ov.getDiscount() + "%");
+                cartList.get(i).setDiscount("0." + ov.getDiscount());
                 cartList.get(i).setIsenrent(ov.getIsenrent());
                 cartList.get(i).setRentday(ov.getRentday());
             }
