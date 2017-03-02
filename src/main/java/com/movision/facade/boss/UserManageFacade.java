@@ -172,4 +172,14 @@ public class UserManageFacade {
         map.put("fansSort", fansSort);//关注排序
         return userService.queryAllUserList(pager, map);
     }
+
+    /**
+     * 对用户账户进行封号
+     *
+     * @param userid
+     * @return
+     */
+    public int deleteUserByid(String userid) {
+        return userService.deleteUserByid(userid);
+    }
 }

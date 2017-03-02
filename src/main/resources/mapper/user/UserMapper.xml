@@ -624,4 +624,8 @@
             </if>
         </if>
     </select>
+
+    <update id="deleteUserByid" parameterType="java.lang.String">
+        UPDATE yw_user SET status=1 WHERE id=#{userid,jdbcType=INTEGER}
+    </update>
 </mapper>

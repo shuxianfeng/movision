@@ -248,4 +248,22 @@ public class UserManageController {
         response.setData(pager);
         return response;
     }
+
+    /**
+     * 对用户进行封号处理
+     *
+     * @param userid
+     * @return
+     */
+    @ApiOperation(value = "删除用户", notes = "用于对用户账号做封号处理", response = Response.class)
+    @RequestMapping(value = "delete_user_id", method = RequestMethod.POST)
+    public Response deleteUserByid(@ApiParam(value = "用户id") @RequestParam String userid) {
+        Response response = new Response();
+        int i = userManageFacade.deleteUserByid(userid);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(i);
+        return response;
+    }
 }

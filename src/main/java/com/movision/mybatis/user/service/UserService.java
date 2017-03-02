@@ -437,4 +437,20 @@ public class UserService {
             throw e;
         }
     }
+
+    /**
+     * 对用户账号逻辑删除操作
+     *
+     * @param userid
+     * @return
+     */
+    public int deleteUserByid(String userid) {
+        try {
+            log.info("用户删除操作");
+            return userMapper.deleteUserByid(userid);
+        } catch (Exception e) {
+            log.error("用户删除异常");
+            throw e;
+        }
+    }
 }

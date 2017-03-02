@@ -81,4 +81,6 @@ public interface UserMapper {
     List<UserVo> findAllQueryUniteConditionByApply(Map map, RowBounds rowBounds);
 
     List<UserAll> findAllqueryAllUserList(RowBounds rowBounds, Map map);
+
+    int deleteUserByid(String userid);
 }
