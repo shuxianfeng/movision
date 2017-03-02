@@ -550,9 +550,9 @@
     </update>
 
     <select id="queryCircleByShow" resultType="com.movision.mybatis.circle.entity.CircleDetails">
-        SELECT c.*,u.id as circlemanid,u.nickname as nickname,ue.nickname as username
+        SELECT c.*,u.id as circlemanid,u.nickname as nickname,ue.username as username
         FROM yw_circle AS c LEFT JOIN yw_user AS u ON u.phone=c.phone
-        LEFT JOIN yw_user ue ON c.userid=ue.id
+        LEFT JOIN yw_admin_user ue ON c.userid=ue.id
         WHERE c.id=#{circleid,jdbcType=INTEGER}
     </select>
 

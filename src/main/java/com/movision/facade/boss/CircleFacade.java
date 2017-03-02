@@ -397,8 +397,8 @@ public class CircleFacade {
             }
             circleDetails.setOrderids(h);
         }
-        String nn = userService.queryUserByNicknameByAdmin(circleDetails.getUserid());
-        circleDetails.setNickname(nn);
+        /*String nn = userService.queryUserByNicknameByAdmin(circleDetails.getUserid());
+        circleDetails.setUsername(nn);*/
         map.put("resault", circleDetails);
         return map;
     }
