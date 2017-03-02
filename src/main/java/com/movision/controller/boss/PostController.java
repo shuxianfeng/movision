@@ -13,6 +13,8 @@ import com.movision.mybatis.share.entity.SharesVo;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.entity.Validateinfo;
+import com.movision.utils.file.FileUtil;
+import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -25,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +40,8 @@ import java.util.Map;
 public class PostController {
     @Autowired
     PostFacade postFacade;
-
+    @Autowired
+    private MovisionOssClient movisionOssClient;
     /**
      * 后台管理-查询帖子列表
      *
@@ -583,7 +587,7 @@ public class PostController {
     /**
      * 编辑活动
      *
-     * @param request
+     * @param
      * @param id
      * @param title
      * @param subtitle
@@ -601,22 +605,22 @@ public class PostController {
      */
     @ApiOperation(value = "编辑活动", notes = "编辑活动", response = Response.class)
     @RequestMapping(value = "update_activepost", method = RequestMethod.POST)
-    public Response updateActivePostById(HttpServletRequest request,
-                                         @ApiParam(value = "帖子id（必填）") @RequestParam String id,
-                                         @ApiParam(value = "帖子标题") @RequestParam(required = false) String title,
-                                         @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,
-                                         @ApiParam(value = "发帖人（必填且必须是管理员-1）") @RequestParam String userid,
-                                         @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam(required = false, value = "coverimg") MultipartFile coverimg,
-                                         @ApiParam(value = "帖子内容（必填）") @RequestParam String postcontent,
-                                         @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,
-                                         @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,
-                                         @ApiParam(value = "费用") @RequestParam String activefee,
-                                         @ApiParam(value = "活动类型") @RequestParam String activetype,
-                                         @ApiParam(value = "开始时间") @RequestParam String begintime,
-                                         @ApiParam(value = "结束时间") @RequestParam String endtime,
-                                         @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String essencedate) {
+    public Response updateActivePostById(
+            @ApiParam(value = "帖子id（必填）") @RequestParam String id,
+            @ApiParam(value = "帖子标题") @RequestParam(required = false) String title,
+            @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,
+            @ApiParam(value = "发帖人（必填且必须是管理员-1）") @RequestParam String userid,
+            @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam(required = false, value = "coverimg") String coverimg,
+            @ApiParam(value = "帖子内容（必填）") @RequestParam String postcontent,
+            @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,
+            @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,
+            @ApiParam(value = "费用") @RequestParam String activefee,
+            @ApiParam(value = "活动类型") @RequestParam String activetype,
+            @ApiParam(value = "开始时间") @RequestParam String begintime,
+            @ApiParam(value = "结束时间") @RequestParam String endtime,
+            @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String essencedate) {
         Response response = new Response();
-        Map<String, Integer> map = postFacade.updateActivePostById(request, id, title, subtitle, userid, activefee, postcontent, coverimg, isessence, orderid, activetype, begintime, endtime, essencedate);
+        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, userid, activefee, postcontent, coverimg, isessence, orderid, activetype, begintime, endtime, essencedate);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -811,4 +815,14 @@ public class PostController {
         return response;
     }
 
+    @ApiOperation(value = "上传活动图片", notes = "上传活动图片", response = Response.class)
+    @RequestMapping(value = {"/upload_active_pic"}, method = RequestMethod.POST)
+    public Response updateMyInfo(@RequestParam(value = "file", required = false) MultipartFile file) {
+
+        String url = movisionOssClient.uploadObject(file, "img", "post");
+        Map<String, String> map = new HashMap<>();
+        map.put("url", url);
+        map.put("name", FileUtil.getFileNameByUrl(url));
+        return new Response(map);
+    }
 }

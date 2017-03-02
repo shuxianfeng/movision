@@ -911,7 +911,7 @@ public class PostFacade {
      * @param essencedate
      * @return
      */
-    public Map<String, Integer> updateActivePostById(HttpServletRequest request, String id, String title, String subtitle, String activetype, String activefee, String userid, MultipartFile coverimg,
+    public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String activetype, String activefee, String userid, String coverimg,
                                                      String begintime, String endtime, String isessence, String orderid, String postcontent, String essencedate) {
         PostActiveList postActiveList = new PostActiveList();
         Map<String, Integer> map = new HashedMap();
@@ -922,33 +922,7 @@ public class PostFacade {
             if (activetype != null) {
                 postActiveList.setActivetype(Integer.parseInt(activetype));
             }
-            //上传图片到本地服务器
-            String savedFileName = "";
-            String imgurl = "";
-            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-            if (coverimg != null && isMultipart) {
-                if (!coverimg.isEmpty()) {
-                    String fileRealName = coverimg.getOriginalFilename();
-                    int pointIndex = fileRealName.indexOf(".");
-                    String fileSuffix = fileRealName.substring(pointIndex);
-                    UUID FileId = UUID.randomUUID();
-                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
-                    String savedDir = request.getSession().getServletContext().getRealPath("");
-                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
-                    //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 9);
-                    //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/post/coverimg/";
-                    File savedFile = new File(combinpath, savedFileName);
-                    boolean isCreateSuccess = savedFile.createNewFile();
-                    if (isCreateSuccess) {
-                        coverimg.transferTo(savedFile);  //转存文件
-                    }
-                }
-                imgurl = imgdomain + savedFileName;
-            }
-            postActiveList.setCoverimg(imgurl);//帖子封面
+            postActiveList.setCoverimg(coverimg);//帖子封面
             if (activefee != null) {
                 postActiveList.setActivefee(Double.parseDouble(activefee));//费用
             }
