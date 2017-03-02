@@ -1464,6 +1464,9 @@
         and userid = #{userid}
         ORDER BY intime DESC
     </select>
-
+    <select id="queryActiveById" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostActiveList">
+      SELECT p.*,a.begintime,a.endtime FROM yw_post p LEFT JOIN yw_active_period a ON a.postid=p.id WHERE p.isdel=0 AND p.isactive=1 AND  p.id=#{id,jdbcType=INTEGER}
+    </select>
 
 </mapper>

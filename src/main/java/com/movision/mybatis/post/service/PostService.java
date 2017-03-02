@@ -670,4 +670,20 @@ public class PostService {
         }
     }
 
+    /**
+     * 根据id查询活动帖子
+     *
+     * @param id
+     * @return
+     */
+    public PostActiveList queryActiveById(Integer id) {
+        try {
+            log.info("根据id查询活动帖子");
+            return postMapper.queryActiveById(id);
+        } catch (Exception e) {
+            log.error("根据id查询活动帖子失败", e);
+            throw e;
+        }
+    }
+
 }
