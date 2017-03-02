@@ -23,4 +23,6 @@ public interface CategoryMapper {
     List<Category> queryCircleTypeList();
 
     int addCircleType(Map map);
+
+    Category queryCircleCategory(String category);
 }

@@ -147,4 +147,9 @@
             </if>
         </trim>
     </insert>
+
+    <select id="queryCircleCategory" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.category.entity.Category">
+        select * from yw_circle_category WHERE categoryname=#{category,jdbcType=VARCHAR}
+    </select>
 </mapper>

@@ -288,6 +288,24 @@ public class CircleController {
         return response;
     }
 
+    /**
+     * 回显圈子类型详情接口
+     *
+     * @param category
+     * @return
+     */
+    @ApiOperation(value = "查询圈子类型详情", notes = "用于查询圈子类型详情用作编辑前回显接口", response = Response.class)
+    @RequestMapping(value = "query_circle_category", method = RequestMethod.POST)
+    public Response queryCircleCategory(@ApiParam(value = "圈子类型(传中文如：科技)") @RequestParam String category) {
+        Response response = new Response();
+        Category cate = circleFacade.queryCircleCategory(category);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(cate);
+        return response;
+    }
+
     @ApiOperation(value = "查看圈子帖子列表", notes = "用于查看圈子中帖子列表接口", response = Response.class)
     @RequestMapping(value = "query_circle_post_list", method = RequestMethod.POST)
     public Response queryCircleByPostList(@ApiParam(value = "圈子类型(查询圈子分类的帖子列表)") @RequestParam(required = false) String categoryid,

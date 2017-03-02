@@ -547,6 +547,16 @@ public class CircleFacade {
     }
 
     /**
+     * 回显圈子类型详情接口
+     *
+     * @param category
+     * @return
+     */
+    public Category queryCircleCategory(String category) {
+        return categoryService.queryCircleCategory(category);
+    }
+
+    /**
      * 查询圈子下的帖子列表
      *
      * @param circleid
