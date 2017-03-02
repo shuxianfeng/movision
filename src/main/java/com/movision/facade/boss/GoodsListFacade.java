@@ -688,15 +688,6 @@ public class GoodsListFacade {
         return map;
     }
 
-    public Map<String, Object> queryAllCombo(Paging<ComboVo> pager) {
-        List<ComboVo> list = goodsService.findAllCombo(pager);
-        Map<String, Object> map = new HashedMap();
-        ComboVo com = new ComboVo();
-        Integer id = com.getId();
-        List l = new ArrayList();
 
-        map.put("list", list);
-        return map;
-    }
 
 }

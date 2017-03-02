@@ -956,7 +956,4 @@
             </if>
         </trim>
     </insert>
-    <select id="findAllCombo" resultType="com.movision.mybatis.combo.entity.ComboVo">
-        SELECT c.id,c.comboid,c.comboname,c.combodiscountprice,c.intime FROM yw_combo c
-    </select>
 </mapper>
