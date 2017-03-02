@@ -7,6 +7,8 @@ import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
+import com.movision.utils.file.FileUtil;
+import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +34,8 @@ public class GoodsController {
 
     @Autowired
     GoodsListFacade goodsFacade = new GoodsListFacade();
-
+    @Autowired
+    private MovisionOssClient movisionOssClient;
 
     /**
      * 商品管理*--商品列表
@@ -616,4 +620,14 @@ public class GoodsController {
         return response;
     }
 
+    @ApiOperation(value = "上传商品图片", notes = "上传商品图片", response = Response.class)
+    @RequestMapping(value = {"/upload_good_pic"}, method = RequestMethod.POST)
+    public Response updateMyInfo(@RequestParam(value = "file", required = false) MultipartFile file) {
+
+        String url = movisionOssClient.uploadObject(file, "img", "good");
+        Map<String, String> map = new HashMap<>();
+        map.put("url", url);
+        map.put("name", FileUtil.getFileNameByUrl(url));
+        return new Response(map);
+    }
 }

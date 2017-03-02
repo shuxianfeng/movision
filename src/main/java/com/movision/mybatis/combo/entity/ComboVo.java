@@ -1,5 +1,7 @@
 package com.movision.mybatis.combo.entity;
 
+import java.util.Date;
+
 /**
  * @Author shuxf
  * @Date 2017/2/20 19:01
@@ -17,6 +19,16 @@ public class ComboVo {
     private String imgurl;//商品小方图
 
     private Integer stock;//套餐剩余库存
+
+    private Date intime;
+
+    public Date getIntime() {
+        return intime;
+    }
+
+    public void setIntime(Date intime) {
+        this.intime = intime;
+    }
 
     public Integer getId() {
         return id;

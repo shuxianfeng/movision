@@ -1,6 +1,7 @@
 package com.movision.facade.boss;
 
 import com.ibm.icu.text.SimpleDateFormat;
+import com.movision.mybatis.combo.entity.ComboVo;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
@@ -20,10 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @Author zhanglei
@@ -254,7 +252,7 @@ public class GoodsListFacade {
      * @param brandid
      * @return
      */
-    public Map<String, Integer> updateGoods(HttpServletRequest request, MultipartFile imgurl, String name, String protype, String id, String price, String origprice, String stock, String isdel, String recommenddate, String brandid, String tuijian, String attribute) {
+    public Map<String, Integer> updateGoods(String imgurl, String name, String protype, String id, String price, String origprice, String stock, String isdel, String recommenddate, String brandid, String tuijian, String attribute) {
         GoodsVo goodsVo = new GoodsVo();
         Map<String, Integer> map = new HashedMap();
         goodsVo.setId(Integer.parseInt(id));
@@ -290,44 +288,14 @@ public class GoodsListFacade {
         }
         goodsVo.setAttribute(attribute);
         int result = goodsService.updateGoods(goodsVo);
-        try {
-            //上传图片到本地服务器
-            String savedFileName = "";
-            String imgurle = "";
-             /*boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;*/
-            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if (imgurl != null && isMultipart) {
-                if (!imgurl.isEmpty()) {
-                    String fileRealName = imgurl.getOriginalFilename();
-                    int pointIndex = fileRealName.indexOf(".");
-                    String fileSuffix = fileRealName.substring(pointIndex);
-                    UUID FileId = UUID.randomUUID();
-                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
-                    String savedDir = request.getSession().getServletContext().getRealPath("");
-                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
-                    //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 9);
-                    //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/goods/coverimg/";
-                    File savedFile = new File(combinpath, savedFileName);
-                    System.out.println("文件url：" + combinpath + "" + savedFileName);
-                    boolean isCreateSuccess = savedFile.createNewFile();
-                    if (isCreateSuccess) {
-                        imgurl.transferTo(savedFile);  //转存文件
-                    }
-                }
-                imgurle = imgdomain + savedFileName;
-            }
+
             GoodsImg img = new GoodsImg();
-            img.setImgurl(imgurle);
+        img.setImgurl(imgurl);
             img.setGoodsid(Integer.parseInt(id));
             int res = goodsService.updateImage(img);
             map.put("result", result);
             map.put("res", res);
-        } catch (Exception e) {
-            log.error("修改商品异常", e);
-        }
+
         return map;
     }
 
@@ -719,4 +687,16 @@ public class GoodsListFacade {
         }
         return map;
     }
+
+    public Map<String, Object> queryAllCombo(Paging<ComboVo> pager) {
+        List<ComboVo> list = goodsService.findAllCombo(pager);
+        Map<String, Object> map = new HashedMap();
+        ComboVo com = new ComboVo();
+        Integer id = com.getId();
+        List l = new ArrayList();
+
+        map.put("list", list);
+        return map;
+    }
+
 }

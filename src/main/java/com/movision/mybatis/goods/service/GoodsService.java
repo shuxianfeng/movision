@@ -549,7 +549,7 @@ public class GoodsService {
      * @param pager
      * @return
      */
-    public List<GoodsVo> findAllCombo(Paging<GoodsVo> pager) {
+    public List<ComboVo> findAllCombo(Paging<ComboVo> pager) {
         try {
             log.info("查询套餐列表");
             return goodsMapper.findAllCombo(pager.getRowBounds());
