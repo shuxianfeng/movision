@@ -11,4 +11,14 @@ public class Constants {
      * 手机验证码的长度 6
      */
     public static final Integer CHECK_MOBILE_CODE_SIZE = 6;
+
+
+    /**
+     * 是默认地址
+     */
+    public static final Integer DEFAULT_ADDRESS = 1;
+    /**
+     * 不是默认地址
+     */
+    public static final Integer NOT_DEFAULT_ADDRESS = 0;
 }

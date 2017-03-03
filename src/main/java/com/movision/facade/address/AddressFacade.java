@@ -1,10 +1,12 @@
 package com.movision.facade.address;
 
+import com.movision.common.constant.Constants;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
 import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.address.service.AddressService;
+import com.movision.utils.ListUtil;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,13 @@ public class AddressFacade {
     }
 
     public int addMyAddress(Address address) {
+        //判断是否是第一次新增地址，如果是第一次，则默认设置为默认地址
+        List<Map<String, Object>> list = this.queryMyAddressList(ShiroUtil.getAppUserID());
+        if (ListUtil.isEmpty(list)) {
+            address.setIsdefault(Constants.DEFAULT_ADDRESS);
+        } else {
+            address.setIsdefault(Constants.NOT_DEFAULT_ADDRESS);
+        }
         address.setUserid(ShiroUtil.getAppUserID());
         return addressService.addAddress(address);
     }
