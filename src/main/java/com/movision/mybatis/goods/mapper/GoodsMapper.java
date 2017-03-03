@@ -7,6 +7,8 @@ import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
+import com.movision.mybatis.goodscombo.entity.GoodsCombo;
+import com.movision.mybatis.goodscombo.entity.GoodsComboDetail;
 import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.taglibs.standard.lang.jstl.Literal;
@@ -78,7 +80,7 @@ public interface GoodsMapper {
 
     List<GoodsVo> findAllQueryLikeGoods(Map map, RowBounds rowBounds);//查询商品列表，联合搜索（帖子使用）
 
-    List<GoodsComboVo> findAllCombo(RowBounds rowBounds);//查询套餐列表
+    List<GoodsComboVo> findAllComboT(RowBounds rowBounds);//查询套餐列表
 
     List<GoodsVo> findAllType();//查询商品分类
 
@@ -118,7 +120,7 @@ public interface GoodsMapper {
 
     int addGoods(GoodsVo goodsVo);//增加商品
 
-    GoodsComboVo findAllC(Integer id);
+    List<GoodsComboVo> findAllC(Integer comboid);
 
 
 }

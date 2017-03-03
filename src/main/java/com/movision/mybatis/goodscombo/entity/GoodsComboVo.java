@@ -10,13 +10,62 @@ import java.util.List;
 public class GoodsComboVo {
     private Integer id;
 
-    private Integer comboid;
 
     private String comboname;
     private Double combodiscountprice;
     private Integer sales;
     private Date intime;
+    private Integer comboid;
+    private Double sum;
 
+    public Double getSum() {
+        return sum;
+    }
+
+    public void setSum(Double sum) {
+        this.sum = sum;
+    }
+
+    private List<GoodsComboVo> list;
+    private String name;
+
+    private Double price;
+
+    public List<GoodsComboVo> getList() {
+        return list;
+    }
+
+    public Double getSumprice() {
+        return sumprice;
+    }
+
+    public void setSumprice(Double sumprice) {
+        this.sumprice = sumprice;
+    }
+
+    public Double getPrice() {
+
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public String getName() {
+
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setList(List<GoodsComboVo> list) {
+        this.list = list;
+    }
+
+    private Double sumprice;
     public String getComboname() {
         return comboname;
     }
@@ -75,43 +124,8 @@ public class GoodsComboVo {
         this.goodsid = goodsid;
     }
 
-    private String name;
 
-    private Double price;
 
-    private Double sumprice;
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public Double getSumprice() {
-        return sumprice;
-    }
-
-    public void setSumprice(Double sumprice) {
-        this.sumprice = sumprice;
-    }
-
-    public List<GoodsComboVo> getList() {
-        return list;
-    }
-
-    public void setList(List<GoodsComboVo> list) {
-        this.list = list;
-    }
-
-    private List<GoodsComboVo> list;
 }

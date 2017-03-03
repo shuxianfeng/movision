@@ -9,6 +9,8 @@ import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
+import com.movision.mybatis.goodscombo.entity.GoodsCombo;
+import com.movision.mybatis.goodscombo.entity.GoodsComboDetail;
 import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
@@ -588,18 +590,25 @@ public class GoodsListFacade {
     public List<GoodsComboVo> queryCom(Paging<GoodsComboVo> pager) {
         List<GoodsComboVo> list = goodsService.findAllCombo(pager);
         List<GoodsComboVo> comboVos = new ArrayList<>();
-        Double sum = 0.0;
+
+        Double price = 0.0;
         GoodsComboVo goodsComboVo = new GoodsComboVo();
         for (int i = 0; i < list.size(); i++) {
-            GoodsComboVo good = goodsService.findAllC(list.get(i).getId());
-            goodsComboVo.setName(good.getName());
-            Double price = good.getPrice();
-            goodsComboVo.setPrice(price);
-            sum += price;
+            Double sum = 0.0;
+            List<GoodsComboVo> good = goodsService.findAllC(list.get(i).getComboid());
+            for (int j = 0; j < good.size(); j++) {
+                goodsComboVo.setName(good.get(i).getName());
+                price = good.get(i).getPrice();
+               /* goodsComboVo.setPrice(price);*/
+                sum += price;
+            }
+           /* goodsComboVo.setList(good);
+            goodsComboVo.setSum(sum);*/
+            list.get(i).setList(good);
+            list.get(i).setSum(sum);
         }
-        goodsComboVo.setSumprice(sum);
-        comboVos.add(goodsComboVo);
-        return comboVos;
+        //goodsComboVo.setSumprice(sum);
+        return list;
     }
 
 }
