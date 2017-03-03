@@ -35,7 +35,20 @@ public class AddressFacade {
         if (ListUtil.isEmpty(list)) {
             address.setIsdefault(Constants.DEFAULT_ADDRESS);
         } else {
-            address.setIsdefault(Constants.NOT_DEFAULT_ADDRESS);
+            //获取设置：是否是默认地址
+            Integer isdefault = address.getIsdefault();
+            if (null == isdefault) {
+                //未设置默认地址
+                address.setIsdefault(Constants.NOT_DEFAULT_ADDRESS);
+            } else {
+                //1 设置了默认地址
+                address.setIsdefault(isdefault);
+                //2 同时取消原来的默认地址
+                Address defaultAddress = addressService.queryMyDefaultAddress(ShiroUtil.getAppUserID());
+                defaultAddress.setIsdefault(Constants.NOT_DEFAULT_ADDRESS);
+                addressService.updateAddress(defaultAddress);
+            }
+
         }
         address.setUserid(ShiroUtil.getAppUserID());
         return addressService.addAddress(address);

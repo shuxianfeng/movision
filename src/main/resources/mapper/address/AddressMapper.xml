@@ -34,7 +34,10 @@
     <!--根据用户id查询默认地址-->
     <select id="queryDefaultAddress" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.address.entity.Address">
-        SELECT * FROM yw_address WHERE userid = #{userid,jdbcType=INTEGER} AND isdefault = '1'
+        SELECT * FROM yw_address
+        WHERE userid = #{userid,jdbcType=INTEGER}
+        AND isdefault = 1
+        and isdel = 0
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
