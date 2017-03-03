@@ -546,7 +546,7 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         SELECT s.id, s.province,s.city,s.district,s.street FROM yw_address s WHERE s.userid=(SELECT s.userid FROM
         yw_orders s WHERE s.id=#{orderid,jdbcType=INTEGER})
     </select>
-    <select id="queryGoods" parameterType="java.lang.Integer" resultType="com.movision.mybatis.goods.entity.Goods">
+    <select id="queryGoods" parameterType="java.lang.Integer" resultType="com.movision.mybatis.goods.entity.GoodsTo">
         SELECT s.`name`,a.typename,s.origprice,s.price,c.num,s.id,s.attribute FROM yw_goods s LEFT JOIN yw_cart c ON
         c.goodsid=s.id
         LEFT JOIN yw_category a on a.protype=s.protype

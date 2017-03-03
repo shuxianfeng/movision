@@ -2,7 +2,11 @@ package com.movision.mybatis.goods.entity;
 
 import java.util.Date;
 
-public class Goods {
+/**
+ * @Author zhanglei
+ * @Date 2017/3/3 19:26
+ */
+public class GoodsTo {
     private Integer id;
 
     private String name;
@@ -12,6 +16,10 @@ public class Goods {
     private Double price;
 
     private Double origprice;
+
+    private Integer num;//数量
+    private Double summoney;//总价
+    private Double money;//小计
 
 
     private String typename;
@@ -24,6 +32,13 @@ public class Goods {
         this.typename = typename;
     }
 
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
 
     private String attribute;
 
@@ -70,6 +85,22 @@ public class Goods {
     private Integer isessence;//是否为精选：0 否 1 是
 
 
+    public Double getMoney() {
+        return money;
+    }
+
+    public void setMoney(Double money) {
+        this.money = money;
+    }
+
+    public Double getSummoney() {
+
+        return summoney;
+    }
+
+    public void setSummoney(Double summoney) {
+        this.summoney = summoney;
+    }
 
     public Integer getId() {
         return id;

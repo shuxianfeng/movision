@@ -10,6 +10,7 @@ import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.bossOrders.servic.BossOrderService;
 import com.movision.mybatis.city.entity.City;
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.goods.entity.GoodsTo;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
@@ -254,10 +255,10 @@ public class OrderFacade {
         InvoiceVo invoice = bossOrderService.queryOrderInvoiceInfo(id);//查询发票信息
         BossOrders bossOrders = bossOrderService.queryOrderInfo(id);//查询基本信息(包含其他信息)
         Address bossOrdersGet = bossOrderService.queryOrderGetInfo(id);//查询收货人信息
-        List<Goods> goods = bossOrderService.queryOrderGoods(id);//查询商品信息
+        List<GoodsTo> goods = bossOrderService.queryOrderGoods(id);//查询商品信息
         Double money = 0.0;//小计
         Double summoney = 0.0;//总价
-        Goods good = new Goods();
+        GoodsTo good = new GoodsTo();
         for (int i = 0; i < goods.size(); i++) {
             Double price = goods.get(i).getPrice();//折后价
             Double origprice = goods.get(i).getOrigprice();//原价

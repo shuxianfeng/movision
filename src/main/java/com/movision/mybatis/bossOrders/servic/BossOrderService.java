@@ -10,6 +10,7 @@ import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.bossOrders.mapper.BossOrdersMapper;
 import com.movision.mybatis.city.entity.City;
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.goods.entity.GoodsTo;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
@@ -410,7 +411,7 @@ public class BossOrderService {
      * @param id
      * @return
      */
-    public List<Goods> queryOrderGoods(Integer id) {
+    public List<GoodsTo> queryOrderGoods(Integer id) {
         try {
             loger.info("查询商品信息成功");
             return bossOrdersMapper.queryGoods(id);

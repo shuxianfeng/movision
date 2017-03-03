@@ -9,6 +9,7 @@ import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.city.entity.City;
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.goods.entity.GoodsTo;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
@@ -69,7 +70,7 @@ public interface BossOrdersMapper {
 
     List<Address> queryAddress(Integer orderid);//查询历史地址
 
-    List<Goods> queryGoods(Integer id);//查询商品信息
+    List<GoodsTo> queryGoods(Integer id);//查询商品信息
 
     int updateEmail(User user);//修改邮箱
 
