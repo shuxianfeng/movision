@@ -134,7 +134,7 @@ public class FacadePost {
     }
 
     public List<PostVo> queryCircleIndex2(Paging<PostVo> pager, String circleid) {
-
+        //优先按照用户最有操作时间排序，次之按照发帖时间排序
         return postService.queryPostList(pager, circleid);
     }
 

@@ -163,7 +163,7 @@
             t1.circleid = t2.id
         WHERE circleid = #{circleid,jdbcType=INTEGER}
         AND t1.isdel = '0'
-        ORDER BY intime DESC
+        ORDER BY oprtime DESC, intime DESC
     </select>
 
     <!--查询圈子中推荐的往期所有热帖列表-->
@@ -975,7 +975,8 @@
 
     <update id="updatePostBycommentsum" parameterType="java.lang.Integer">
         UPDATE yw_post
-        SET commentsum=commentsum+1
+        SET commentsum=commentsum+1,
+        oprtime = now()
         WHERE id=#{postid,jdbcType=INTEGER}
     </update>
 
