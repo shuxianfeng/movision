@@ -871,7 +871,7 @@ public class PostFacade {
     /**
      * 编辑帖子
      *
-     * @param request
+     * @param
      * @param title
      * @param subtitle
      * @param type

@@ -699,53 +699,42 @@
         update yw_goods
         <set>
             <if test="name != null">
-                name = #{name,jdbcType=VARCHAR}
+                name = #{name,jdbcType=VARCHAR},
             </if>
-        </set>
-        <set>
             <if test="protype != null">
-                protype = #{protype,jdbcType=INTEGER}
+                protype = #{protype,jdbcType=INTEGER},
             </if>
-        </set>
-        <set>
             <if test="price != null">
-                price = #{price,jdbcType=DOUBLE}
+                price = #{price,jdbcType=DOUBLE},
             </if>
-        </set>
-        <set>
             <if test="origprice != null">
-                origprice = #{origprice,jdbcType=DOUBLE}
+                origprice = #{origprice,jdbcType=DOUBLE},
             </if>
-        </set>
-        <set>
             <if test="stock != null">
-                stock = #{stock,jdbcType=INTEGER}
+                stock = #{stock,jdbcType=INTEGER},
             </if>
-        </set>
-        <set>
             <if test="isdel != null">
-                isdel = #{isdel,jdbcType=INTEGER}
+                isdel = #{isdel,jdbcType=INTEGER},
             </if>
-        </set>
-        <set>
             <if test="recommenddate != null">
-                recommenddate = #{recommenddate,jdbcType=DATE}
+                recommenddate = #{recommenddate,jdbcType=DATE},
             </if>
-        </set>
-
-        <set>
             <if test="brandid != null">
-                brandid = #{brandid,jdbcType=INTEGER}
+                brandid = #{brandid,jdbcType=INTEGER},
             </if>
-        </set>
-        <set>
+            <if test="ishot != null">
+                ishot = #{ishot,jdbcType=INTEGER},
+            </if>
+            <if test="isessence != null">
+                isessence = #{isessence,jdbcType=INTEGER},
+            </if>
             <if test="attribute != null">
-                attribute = #{attribute,jdbcType=VARCHAR}
+                attribute = #{attribute,jdbcType=VARCHAR},
             </if>
         </set>
         where id=#{id,jdbcType=INTEGER}
     </update>
-    <update id="updateImage" parameterType="com.movision.mybatis.goods.entity.GoodsImg">
+    <update id="updateImage" parameterType="java.util.Map">
         update yw_goods_img
         <set>
             <if test="imgurl != null">
@@ -837,7 +826,7 @@
                 img_url = #{imgurl,jdbcType=VARCHAR}
             </if>
         </set>
-        WHERE goodsid= #{id,jdbcType=INTEGER} AND type=3
+        WHERE goodsid= #{goodsid,jdbcType=INTEGER} AND type=3
     </update>
     <update id="updateCommodityDescription" parameterType="com.movision.mybatis.goods.entity.GoodsImg">
         update yw_goods_img
@@ -846,7 +835,7 @@
                 img_url = #{imgurl,jdbcType=VARCHAR}
             </if>
         </set>
-        WHERE goodsid= #{id,jdbcType=INTEGER} AND type=1
+        WHERE goodsid= #{goodsid,jdbcType=INTEGER} AND type=1
 
     </update>
     <insert id="addPicture" parameterType="com.movision.mybatis.goods.entity.GoodsImg">
@@ -855,27 +844,21 @@
         </selectKey>
         insert into yw_goods_img
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
+            <if test="goodsid != null">
+                goodsid,
             </if>
 
             <if test="imgurl != null">
                 img_url,
             </if>
-            <if test="goodid != null">
-                goodid,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=INTEGER},
-            </if>
 
             <if test="imgurl != null">
                 #{img_url,jdbcType=VARCHAR},
             </if>
-            <if test="goodid != null">
-                #{goodid,jdbcType=INTEGER},
+            <if test="goodsid != null">
+                #{goodsid,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -956,4 +939,6 @@
             </if>
         </trim>
     </insert>
+
+
 </mapper>

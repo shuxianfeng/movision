@@ -1,6 +1,7 @@
 package com.movision.facade.boss;
 
 import com.ibm.icu.text.SimpleDateFormat;
+import com.movision.mybatis.combo.entity.Combo;
 import com.movision.mybatis.combo.entity.ComboVo;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsImg;
@@ -8,6 +9,7 @@ import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
+import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -252,9 +254,9 @@ public class GoodsListFacade {
      * @param brandid
      * @return
      */
-    public Map<String, Integer> updateGoods(String imgurl, String name, String protype, String id, String price, String origprice, String stock, String isdel, String recommenddate, String brandid, String tuijian, String attribute) {
+    public Map<String, Object> updateGoods(String imgurl, String name, String protype, String id, String price, String origprice, String stock, String isdel, String recommenddate, String brandid, String ishot, String isessence, String attribute) {
         GoodsVo goodsVo = new GoodsVo();
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Object> map = new HashedMap();
         goodsVo.setId(Integer.parseInt(id));
         goodsVo.setName(name);
         goodsVo.setProtype(Integer.parseInt(protype));
@@ -264,7 +266,7 @@ public class GoodsListFacade {
         goodsVo.setIsdel(Integer.parseInt(isdel));
         goodsVo.setBrandid(brandid);
         Date date = null;
-        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (recommenddate != null) {
             try {
                 date = format.parse(recommenddate);
@@ -273,26 +275,27 @@ public class GoodsListFacade {
             }
         }
         goodsVo.setRecommenddate(date);
-        String ishot;
+        /**String ishot;
         String productids[] = tuijian.split(",");
         for (int i = 0; i < productids.length; i++) {
             ishot = productids[i];
-            if (ishot == "0") {
+         if (ishot.equals("")) {
                 goodsVo.setIshot(0);
                 goodsVo.setIsessence(0);
-            } else if (ishot == "1") {
+         } else if (ishot.equals("1")) {
                 goodsVo.setIshot(1);
-            } else if (ishot == "2") {
+         } else if (ishot.equals("2")) {
                 goodsVo.setIsessence(1);
             }
-        }
+         }*/
+        goodsVo.setIshot(Integer.parseInt(ishot));
+        goodsVo.setIsessence(Integer.parseInt(isessence));
         goodsVo.setAttribute(attribute);
+        GoodsImg img = new GoodsImg();
+        map.put("imgurl", imgurl);
+        map.put("id", id);
         int result = goodsService.updateGoods(goodsVo);
-
-            GoodsImg img = new GoodsImg();
-        img.setImgurl(imgurl);
-            img.setGoodsid(Integer.parseInt(id));
-            int res = goodsService.updateImage(img);
+        int res = goodsService.updateImage(map);
             map.put("result", result);
             map.put("res", res);
 
@@ -443,150 +446,66 @@ public class GoodsListFacade {
     /**
      * 增加图片
      *
-     * @param request
-     * @param id
+     * @param
+     * @param goodsid
      * @param imgurl
      * @return
      */
-    public Map<String, Integer> addpicture(HttpServletRequest request, String id, MultipartFile imgurl) {
+    public Map<String, Integer> addpicture(String goodsid, String imgurl) {
         Map<String, Integer> map = new HashedMap();
         GoodsImg goodsImg = new GoodsImg();
         goodsImg.setType(2);
-        goodsImg.setGoodsid(Integer.parseInt(id));
-        try {
-            //上传图片到本地服务器
-            String savedFileName = "";
-            String imgurle = "";
-            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if (imgurl != null && isMultipart) {
-                if (!imgurl.isEmpty()) {
-                    String fileRealName = imgurl.getOriginalFilename();
-                    int pointIndex = fileRealName.indexOf(".");
-                    String fileSuffix = fileRealName.substring(pointIndex);
-                    UUID FileId = UUID.randomUUID();
-                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
-                    String savedDir = request.getSession().getServletContext().getRealPath("");
-                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
-                    //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 9);
-                    //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/goods/coverimg/";
-                    File savedFile = new File(combinpath, savedFileName);
-                    System.out.println("文件url：" + combinpath + "" + savedFileName);
-                    boolean isCreateSuccess = savedFile.createNewFile();
-                    if (isCreateSuccess) {
-                        imgurl.transferTo(savedFile);  //转存文件
-                    }
-                }
-                imgurle = imgdomain + savedFileName;
-            }
-            goodsImg.setImgurl(imgurle);
+        goodsImg.setGoodsid(Integer.parseInt(goodsid));
+
+        goodsImg.setImgurl(imgurl);
             int result = goodsService.addPicture(goodsImg);
             map.put("result", result);
-        } catch (Exception e) {
-            log.error("添加异常", e);
-        }
+
         return map;
     }
 
     /**
      * 修改参数图
      *
-     * @param id
+     * @param goodsid
      * @param imgurl
      * @return
      */
-    public Map<String, Integer> updateImgGoods(HttpServletRequest request, String id, MultipartFile imgurl) {
+    public Map<String, Integer> updateImgGoods(String goodsid, String imgurl) {
         Map<String, Integer> map = new HashedMap();
         GoodsImg img = new GoodsImg();
-        img.setGoodsid(Integer.parseInt(id));
-        try {
-            //上传图片到本地服务器
-            String savedFileName = "";
-            String imgurle = "";
-            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if (imgurl != null && isMultipart) {
-                if (!imgurl.isEmpty()) {
-                    String fileRealName = imgurl.getOriginalFilename();
-                    int pointIndex = fileRealName.indexOf(".");
-                    String fileSuffix = fileRealName.substring(pointIndex);
-                    UUID FileId = UUID.randomUUID();
-                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
-                    String savedDir = request.getSession().getServletContext().getRealPath("");
-                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
-                    //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 9);
-                    //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/goods/coverimg/";
-                    File savedFile = new File(combinpath, savedFileName);
-                    System.out.println("文件url：" + combinpath + "" + savedFileName);
-                    boolean isCreateSuccess = savedFile.createNewFile();
-                    if (isCreateSuccess) {
-                        imgurl.transferTo(savedFile);  //转存文件
-                    }
-                }
-                imgurle = imgdomain + savedFileName;
-            }
-            img.setImgurl(imgurle);
+        img.setGoodsid(Integer.parseInt(goodsid));
+
+        img.setImgurl(imgurl);
             int result = goodsService.updateImgGoods(img);
             map.put("result", result);
-        } catch (Exception e) {
-            log.error("修改失败", e);
-        }
+
         return map;
     }
 
     /**
      * 修改描述图
      *
-     * @param id
+     * @param goodsid
      * @param imgurl
      * @return
      */
-    public Map<String, Integer> updateCommodityDescription(HttpServletRequest request, String id, MultipartFile imgurl) {
+    public Map<String, Integer> updateCommodityDescription(String goodsid, String imgurl) {
         Map<String, Integer> map = new HashedMap();
         GoodsImg img = new GoodsImg();
-        img.setGoodsid(Integer.parseInt(id));
-        try {
-            //上传图片到本地服务器
-            String savedFileName = "";
-            String imgurle = "";
-            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if (imgurl != null && isMultipart) {
-                if (!imgurl.isEmpty()) {
-                    String fileRealName = imgurl.getOriginalFilename();
-                    int pointIndex = fileRealName.indexOf(".");
-                    String fileSuffix = fileRealName.substring(pointIndex);
-                    UUID FileId = UUID.randomUUID();
-                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
-                    String savedDir = request.getSession().getServletContext().getRealPath("");
-                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
-                    //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 9);
-                    //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/goods/coverimg/";
-                    File savedFile = new File(combinpath, savedFileName);
-                    System.out.println("文件url：" + combinpath + "" + savedFileName);
-                    boolean isCreateSuccess = savedFile.createNewFile();
-                    if (isCreateSuccess) {
-                        imgurl.transferTo(savedFile);  //转存文件
-                    }
-                }
-                imgurle = imgdomain + savedFileName;
-            }
-            img.setImgurl(imgurle);
+        img.setGoodsid(Integer.parseInt(goodsid));
+
+        img.setImgurl(imgurl);
             int result = goodsService.updateCommodityDescription(img);
             map.put("result", result);
-        } catch (Exception e) {
-            log.error("修改失败", e);
-        }
+
         return map;
     }
 
     /**
      * 商品添加
      *
-     * @param request
+     * @param
      * @param imgurl
      * @param tuijian
      * @param name
@@ -603,10 +522,10 @@ public class GoodsListFacade {
      * @param onlinetime
      * @return
      */
-    public Map<String, Integer> addGoods(HttpServletRequest request, MultipartFile imgurl, String tuijian, String name, String protype, String brandid, String price, String origprice, String stock, String isdel, String recommenddate, String attribute, String onlinetime) {
+    public Map<String, Integer> addGoods(String imgurl, String tuijian, String name, String protype, String brandid, String price, String origprice, String stock, String isdel, String recommenddate, String attribute, String onlinetime) {
         Map<String, Integer> map = new HashedMap();
         GoodsVo goodsVo = new GoodsVo();
-        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
         if (recommenddate != null) {
             try {
@@ -652,46 +571,27 @@ public class GoodsListFacade {
         GoodsImg img = new GoodsImg();
         img.setGoodsid(id);
         img.setType(2);
-        try {
-            //上传图片到本地服务器
-            String savedFileName = "";
-            String imgurle = "";
-            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if (imgurl != null && isMultipart) {
-                if (!imgurl.isEmpty()) {
-                    String fileRealName = imgurl.getOriginalFilename();
-                    int pointIndex = fileRealName.indexOf(".");
-                    String fileSuffix = fileRealName.substring(pointIndex);
-                    UUID FileId = UUID.randomUUID();
-                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
-                    String savedDir = request.getSession().getServletContext().getRealPath("");
-                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
-                    //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 9);
-                    //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/goods/coverimg/";
-                    File savedFile = new File(combinpath, savedFileName);
-                    System.out.println("文件url：" + combinpath + "" + savedFileName);
-                    boolean isCreateSuccess = savedFile.createNewFile();
-                    if (isCreateSuccess) {
-                        imgurl.transferTo(savedFile);  //转存文件
-                    }
-                }
-                imgurle = imgdomain + savedFileName;
-            }
-            img.setImgurl(imgurle);
+
+        img.setImgurl(imgurl);
             int result = goodsService.addPicture(img);
             map.put("result", result);
-        } catch (Exception e) {
-            log.error("增加失败", e);
-        }
+
         return map;
     }
 
-    public List<Object> queryCom(Paging<ComboVo> pager) {
+    /**
+     * 套餐列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<ComboVo> queryCom(Paging<ComboVo> pager) {
+        List<ComboVo> list = goodsService.findAllCombo(pager);
+        List<GoodsComboVo> comboVos = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            GoodsComboVo goodsComboVo = new GoodsComboVo();
 
-        List list = new ArrayList();
-        list = goodsService.findAllCombo(pager);
+        }
         return list;
     }
 

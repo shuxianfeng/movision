@@ -1,6 +1,7 @@
 package com.movision.mybatis.combo.entity;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author shuxf

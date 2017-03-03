@@ -470,18 +470,18 @@ public class GoodsController {
     /**
      * 修改参数图
      *
-     * @param request
-     * @param id
+     * @param
+     * @param
      * @param imgurl
      * @return
      */
     @ApiOperation(value = "修改参数图", notes = "修改参数图", response = Response.class)
     @RequestMapping(value = "update_cimg", method = RequestMethod.POST)
-    public Response updateImgGoods(HttpServletRequest request,
-                                   @ApiParam(value = "商品id") @RequestParam(required = false) String id,
-                                   @ApiParam(value = "地址") @RequestParam(required = false) MultipartFile imgurl) {
+    public Response updateImgGoods(
+            @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
+            @ApiParam(value = "地址") @RequestParam(required = false) String imgurl) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.updateImgGoods(request, id, imgurl);
+        Map<String, Integer> map = goodsFacade.updateImgGoods(goodsid, imgurl);
         if (response.getCode() == 200) {
             response.setMessage("修改成功");
         }
@@ -492,18 +492,18 @@ public class GoodsController {
     /**
      * 修改描述图
      *
-     * @param request
-     * @param id
+     * @param
+     * @param
      * @param imgurl
      * @return
      */
     @ApiOperation(value = "修改描述图", notes = "修改描述图", response = Response.class)
     @RequestMapping(value = "update_CommodityDescription", method = RequestMethod.POST)
-    public Response updateCommodityDescription(HttpServletRequest request,
-                                               @ApiParam(value = "商品id") @RequestParam(required = false) String id,
-                                               @ApiParam(value = "地址") @RequestParam(required = false) MultipartFile imgurl) {
+    public Response updateCommodityDescription(
+            @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
+            @ApiParam(value = "地址") @RequestParam(required = false) String imgurl) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.updateCommodityDescription(request, id, imgurl);
+        Map<String, Integer> map = goodsFacade.updateCommodityDescription(goodsid, imgurl);
         if (response.getCode() == 200) {
             response.setMessage("修改成功");
         }
@@ -514,18 +514,18 @@ public class GoodsController {
     /**
      * 增加商品图片
      *
-     * @param request
-     * @param id
+     * @param
+     * @param
      * @param imgurl
      * @return
      */
     @ApiOperation(value = "增加商品图片", notes = "增加商品图片", response = Response.class)
     @RequestMapping(value = "add_goodspicture", method = RequestMethod.POST)
-    public Response addpicture(HttpServletRequest request,
-                               @ApiParam(value = "商品id") @RequestParam(required = false) String id,
-                               @ApiParam(value = "地址") @RequestParam(required = false) MultipartFile imgurl) {
+    public Response addpicture(
+            @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
+            @ApiParam(value = "地址") @RequestParam(required = false) String imgurl) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.addpicture(request, id, imgurl);
+        Map<String, Integer> map = goodsFacade.addpicture(goodsid, imgurl);
         if (response.getCode() == 200) {
             response.setMessage("增加成功");
         }
@@ -536,7 +536,7 @@ public class GoodsController {
     /**
      * 增加商品
      *
-     * @param request
+     * @param
      * @param imgurl
      * @param tuijian
      * @param name
@@ -553,8 +553,8 @@ public class GoodsController {
      */
     @ApiOperation(value = "增加商品", notes = "增加商品", response = Response.class)
     @RequestMapping(value = "add_goods", method = RequestMethod.POST)
-    public Response addGoods(HttpServletRequest request,
-                             @ApiParam(value = "图片地址") @RequestParam MultipartFile imgurl,
+    public Response addGoods(
+            @ApiParam(value = "图片地址") @RequestParam String imgurl,
                              @ApiParam(value = "推荐") @RequestParam String tuijian,
                              @ApiParam(value = "商品名称") @RequestParam String name,
                              @ApiParam(value = "商品类别") @RequestParam String protype,
@@ -567,7 +567,7 @@ public class GoodsController {
                              @ApiParam(value = "商品标签") @RequestParam String attribute,
                              @ApiParam(value = "上架时间") @RequestParam String onlinetime) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.addGoods(request, imgurl, tuijian, name, protype, brandid, price, origprice, stock, isdel, recommenddate, attribute, onlinetime);
+        Map<String, Integer> map = goodsFacade.addGoods(imgurl, tuijian, name, protype, brandid, price, origprice, stock, isdel, recommenddate, attribute, onlinetime);
         if (response.getCode() == 200) {
             response.setMessage("插入成功");
         }
@@ -591,7 +591,7 @@ public class GoodsController {
      * @param isdel
      * @param recommenddate
      * @param brandid
-     * @param tuijian
+     * @param
      * @param attribute
      * @return
      */
@@ -599,20 +599,21 @@ public class GoodsController {
     @RequestMapping(value = "update_goods", method = RequestMethod.POST)
     public Response updateGoods(
             @ApiParam(value = "图片地址") @RequestParam String imgurl,
-                                @ApiParam(value = "商品名称") @RequestParam String name,
-                                @ApiParam(value = "商品类别") @RequestParam String protype,
-                                @ApiParam(value = "商品id") @RequestParam String id,
-                                @ApiParam(value = "折后价") @RequestParam String price,
-                                @ApiParam(value = "原价") @RequestParam String origprice,
-                                @ApiParam(value = "库存") @RequestParam String stock,
-                                @ApiParam(value = "是否上架") @RequestParam String isdel,
-                                @ApiParam(value = "推荐日期") @RequestParam(required = false) String recommenddate,
-                                @ApiParam(value = "品牌id") @RequestParam String brandid,
-                                @ApiParam(value = "推荐") @RequestParam String tuijian,
-                                @ApiParam(value = "商品标签") @RequestParam String attribute
+            @ApiParam(value = "商品名称") @RequestParam String name,
+            @ApiParam(value = "商品类别") @RequestParam String protype,
+            @ApiParam(value = "商品id") @RequestParam String id,
+            @ApiParam(value = "折后价") @RequestParam String price,
+            @ApiParam(value = "原价") @RequestParam String origprice,
+            @ApiParam(value = "库存") @RequestParam String stock,
+            @ApiParam(value = "是否上架") @RequestParam String isdel,
+            @ApiParam(value = "推荐日期") @RequestParam(required = false) String recommenddate,
+            @ApiParam(value = "品牌id") @RequestParam String brandid,
+            @ApiParam(value = "热选") @RequestParam String ishot,
+            @ApiParam(value = "精选") @RequestParam String isessence,
+            @ApiParam(value = "商品标签") @RequestParam String attribute
     ) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.updateGoods(imgurl, name, protype, id, price, origprice, stock, isdel, recommenddate, brandid, tuijian, attribute);
+        Map<String, Object> map = goodsFacade.updateGoods(imgurl, name, protype, id, price, origprice, stock, isdel, recommenddate, brandid, ishot, isessence, attribute);
         if (response.getCode() == 200) {
             response.setMessage("修改成功");
         }
@@ -620,6 +621,12 @@ public class GoodsController {
         return response;
     }
 
+    /**
+     * 上传商品图片
+     *
+     * @param file
+     * @return
+     */
     @ApiOperation(value = "上传商品图片", notes = "上传商品图片", response = Response.class)
     @RequestMapping(value = {"/upload_good_pic"}, method = RequestMethod.POST)
     public Response updateMyInfo(@RequestParam(value = "file", required = false) MultipartFile file) {

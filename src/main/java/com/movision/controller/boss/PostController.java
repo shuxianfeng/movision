@@ -405,7 +405,7 @@ public class PostController {
             @ApiParam(value = "精选日期（毫秒值）") @RequestParam(required = false) String time,
             @ApiParam(value = "活动开始日期（毫秒值）") @RequestParam String begintime,
             @ApiParam(value = "活动结束日期（毫秒值）") @RequestParam String endtime,
-            @ApiParam(value = "发帖人") @RequestParam String userid){
+            @ApiParam(value = "发帖人") @RequestParam String userid) {
         Response response = new Response();
         Map<String, Integer> result = postFacade.addPostActive(title, subtitle, type, money, coverimg, postcontent, isessence, orderid, time, begintime, endtime, userid);
         if(response.getCode()==200){

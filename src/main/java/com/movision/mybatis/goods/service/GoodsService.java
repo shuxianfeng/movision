@@ -624,13 +624,13 @@ public class GoodsService {
     /**
      * 修改图片
      *
-     * @param goodsImg
+     * @param map
      * @return
      */
-    public int updateImage(GoodsImg goodsImg) {
+    public int updateImage(Map map) {
         try {
             log.info("修改图片");
-            return goodsMapper.updateImage(goodsImg);
+            return goodsMapper.updateImage(map);
         } catch (Exception e) {
             log.error("修改图片失败", e);
             throw e;

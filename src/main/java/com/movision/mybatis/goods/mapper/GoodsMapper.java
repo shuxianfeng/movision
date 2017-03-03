@@ -7,6 +7,7 @@ import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
+import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.taglibs.standard.lang.jstl.Literal;
 
@@ -87,7 +88,7 @@ public interface GoodsMapper {
 
     int updateGoods(GoodsVo goodsVo);//修改商品
 
-    int updateImage(GoodsImg goodsImg);//修改图片
+    int updateImage(Map map);//修改图片
 
     int updateCom(Integer id);//取消推荐
 
@@ -116,6 +117,8 @@ public interface GoodsMapper {
     int addPicture(GoodsImg goodsImg);//增加图片
 
     int addGoods(GoodsVo goodsVo);//增加商品
+
+    GoodsComboVo findAllC(Integer id);
 
 
 }
