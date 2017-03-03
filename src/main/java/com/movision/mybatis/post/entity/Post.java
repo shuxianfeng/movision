@@ -51,6 +51,8 @@ public class Post {
 
     private Date essencedate;//精选日期
 
+    private Date oprtime;//用户最后参与时间
+
     private  Date begintime;
     private  Date endtime;
     private String activestatue;
@@ -280,5 +282,13 @@ public class Post {
 
     public void setIscontribute(Integer iscontribute) {
         this.iscontribute = iscontribute;
+    }
+
+    public Date getOprtime() {
+        return oprtime;
+    }
+
+    public void setOprtime(Date oprtime) {
+        this.oprtime = oprtime;
     }
 }
