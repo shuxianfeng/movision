@@ -1,5 +1,6 @@
 package com.movision.mybatis.goodscombo.entity;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,6 +11,43 @@ public class GoodsComboVo {
     private Integer id;
 
     private Integer comboid;
+
+    private String comboname;
+    private Double combodiscountprice;
+    private Integer sales;
+    private Date intime;
+
+    public String getComboname() {
+        return comboname;
+    }
+
+    public void setComboname(String comboname) {
+        this.comboname = comboname;
+    }
+
+    public Double getCombodiscountprice() {
+        return combodiscountprice;
+    }
+
+    public void setCombodiscountprice(Double combodiscountprice) {
+        this.combodiscountprice = combodiscountprice;
+    }
+
+    public Integer getSales() {
+        return sales;
+    }
+
+    public void setSales(Integer sales) {
+        this.sales = sales;
+    }
+
+    public Date getIntime() {
+        return intime;
+    }
+
+    public void setIntime(Date intime) {
+        this.intime = intime;
+    }
 
     private Integer goodsid;
 

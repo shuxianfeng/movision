@@ -7,6 +7,7 @@ import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
+import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
@@ -637,4 +638,25 @@ public class GoodsController {
         map.put("name", FileUtil.getFileNameByUrl(url));
         return new Response(map);
     }
+
+    /**
+     * 商品管理*--套餐列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "套餐列表（分页）", notes = "套餐列表（分页）", response = Response.class)
+    @RequestMapping(value = "query_combo_list", method = RequestMethod.POST)
+    public Response queryComList(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                 @RequestParam(required = false, defaultValue = "10") String pageSize
+    ) {
+        Response response = new Response();
+        Paging<GoodsComboVo> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<GoodsComboVo> list = goodsFacade.queryCom(pager);
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
 }

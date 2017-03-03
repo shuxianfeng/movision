@@ -1191,36 +1191,32 @@
             <if test="subtitle != null">
                 subtitle,
             </if>
-            <if test="postcontent != null">
-                postcontent,
-            </if>
-
-            <if test="isactive != null">
-                isactive,
-            </if>
             <if test="activetype != null">
                 activetype,
             </if>
             <if test="activefee != null">
                 activefee,
             </if>
-            <if test="orderid != null">
-                orderid,
+            <if test="coverimg != null">
+                coverimg,
+            </if>
+            <if test="postcontent != null">
+                postcontent,
             </if>
             <if test="isessence != null">
                 isessence,
             </if>
-            <if test="coverimg != null">
-                coverimg,
-            </if>
-            <if test="hotimgurl != null">
-                hotimgurl,
-            </if>
-            <if test="intime != null">
-                intime,
+            <if test="orderid != null">
+                orderid,
             </if>
             <if test="essencedate != null">
                 essencedate,
+            </if>
+            <if test="isactive != null">
+                isactive,
+            </if>
+            <if test="intime != null">
+                intime,
             </if>
             <if test="userid !=null">
                 userid
@@ -1237,36 +1233,32 @@
             <if test="subtitle != null">
                 #{subtitle,jdbcType=VARCHAR},
             </if>
-
-            <if test="postcontent != null">
-                #{postcontent,jdbcType=VARCHAR},
-            </if>
-            <if test="isactive != null">
-                #{isactive,jdbcType=INTEGER},
-            </if>
             <if test="activetype != null">
                 #{activetype,jdbcType=INTEGER},
             </if>
             <if test="activefee != null">
                 #{activefee,jdbcType=DOUBLE},
             </if>
-            <if test="orderid != null">
-                #{orderid,jdbcType=INTEGER},
+            <if test="coverimg != null">
+                #{coverimg,jdbcType=VARCHAR},
+            </if>
+            <if test="postcontent != null">
+                #{postcontent,jdbcType=VARCHAR},
             </if>
             <if test="isessence != null">
                 #{isessence,jdbcType=INTEGER},
             </if>
-            <if test="coverimg != null">
-                #{coverimg,jdbcType=VARCHAR},
-            </if>
-            <if test="hotimgurl != null">
-                #{hotimgurl,jdbcType=VARCHAR},
-            </if>
-            <if test="intime != null">
-                #{intime,jdbcType=TIMESTAMP},
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
             </if>
             <if test="essencedate != null">
                 #{essencedate,jdbcType=DATE},
+            </if>
+            <if test="isactive != null">
+                #{isactive,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
             </if>
             <if test="userid!=null">
                 #{userid,jdbcType=INTEGER}

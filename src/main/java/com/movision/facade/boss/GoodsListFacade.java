@@ -585,14 +585,21 @@ public class GoodsListFacade {
      * @param pager
      * @return
      */
-    public List<ComboVo> queryCom(Paging<ComboVo> pager) {
-        List<ComboVo> list = goodsService.findAllCombo(pager);
+    public List<GoodsComboVo> queryCom(Paging<GoodsComboVo> pager) {
+        List<GoodsComboVo> list = goodsService.findAllCombo(pager);
         List<GoodsComboVo> comboVos = new ArrayList<>();
+        Double sum = 0.0;
+        GoodsComboVo goodsComboVo = new GoodsComboVo();
         for (int i = 0; i < list.size(); i++) {
-            GoodsComboVo goodsComboVo = new GoodsComboVo();
-
+            GoodsComboVo good = goodsService.findAllC(list.get(i).getId());
+            goodsComboVo.setName(good.getName());
+            Double price = good.getPrice();
+            goodsComboVo.setPrice(price);
+            sum += price;
         }
-        return list;
+        goodsComboVo.setSumprice(sum);
+        comboVos.add(goodsComboVo);
+        return comboVos;
     }
 
 }

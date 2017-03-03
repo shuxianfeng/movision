@@ -574,8 +574,8 @@ public class PostFacade {
      *
      * @param title
      * @param subtitle
-     * @param type
-     * @param money
+     * @param
+     * @param
      * @param coverimg
      * @param postcontent
      * @param isessence
@@ -586,17 +586,17 @@ public class PostFacade {
      * @param userid
      * @return
      */
-    public Map<String, Integer> addPostActive(String title, String subtitle, String type, String money,
+    public Map<String, Integer> addPostActive(String title, String subtitle, String activetype, String activefee,
                                               String coverimg, String postcontent, String isessence, String orderid, String time, String begintime, String endtime, String userid) {
         PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
-        try {
+
             post.setTitle(title);//帖子标题
             post.setSubtitle(subtitle);//帖子副标题
-            Integer typee = Integer.parseInt(type);
-            post.setActivetype(type);
+        Integer typee = Integer.parseInt(activetype);
+        post.setActivetype(activetype);
             if (typee == 0) {
-                post.setActivefee(Double.parseDouble(money));//金额
+                post.setActivefee(Double.parseDouble(activefee));//金额
             }
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -620,31 +620,29 @@ public class PostFacade {
             }
 
             post.setIntime(new Date());
-
-
-            Date begin = null;//开始时间
-            if (begintime != null) {
-                try {
-                    begin = format.parse(begintime);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            Date end = null;
-            if (endtime != null) {
-                try {
-                    end = format.parse(endtime);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (orderid != null) {
+        if (orderid != null) {
                 post.setOrderid(orderid);//排序精选
             }
             post.setUserid(userid);//发帖人
             post.setIsactive("1");
-            int result = postService.addPostActiveList(post);//添加帖子
+        int result = postService.addPostActiveList(post);//添加帖子
             Period period = new Period();
+        Date begin = null;//开始时间
+        if (begintime != null) {
+            try {
+                begin = format.parse(begintime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        Date end = null;
+        if (endtime != null) {
+            try {
+                end = format.parse(endtime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
             period.setBegintime(begin);
             period.setEndtime(end);
             Integer id = post.getId();
@@ -652,9 +650,7 @@ public class PostFacade {
             int r = postService.addPostPeriod(period);
             map.put("result", result);
             map.put("result", r);
-        } catch (Exception e) {
-            log.error("活动帖子添加异常", e);
-        }
+
         return map;
     }
 
