@@ -846,7 +846,7 @@ public class PostController {
      * @param file
      * @return
      */
-    @ApiOperation(value = "上传帖子相关图片", notes = "上传帖子相关图片", response = Response.class)
+    @ApiOperation(value = "上传帖子相关视频", notes = "上传帖子相关视频", response = Response.class)
     @RequestMapping(value = {"/upload_post_vid"}, method = RequestMethod.POST)
     public Response updatePostVid(@RequestParam(value = "file", required = false) MultipartFile file) {
 

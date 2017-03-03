@@ -982,7 +982,14 @@
 
     <!-- 查询帖子列表 -->
     <select id="findAllqueryPostByList" resultType="com.movision.mybatis.post.entity.PostList">
-        SELECT * FROM yw_post WHERE isdel=0 AND isactive=0 ORDER BY intime DESC
+        SELECT p.*,(SELECT u.nickname FROM yw_user u WHERE u.id=p.userid) as nickname,
+        (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
+        (SELECT SUM(r.points) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
+        (SELECT SUM(ac.num) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
+        (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid) AS circlename,
+        (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS category
+        FROM yw_post AS p
+        WHERE p.isdel=0 AND p.isactive=0 ORDER BY p.intime DESC
     </select>
 
     <!--查询精贴列表-->

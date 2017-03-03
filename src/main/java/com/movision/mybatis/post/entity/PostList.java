@@ -31,23 +31,8 @@ public class PostList {
     private Integer share;//分享数
 
     private String mintime;
+
     private String maxtime;
-
-    public String getMintime() {
-        return mintime;
-    }
-
-    public void setMintime(String mintime) {
-        this.mintime = mintime;
-    }
-
-    public String getMaxtime() {
-        return maxtime;
-    }
-
-    public void setMaxtime(String maxtime) {
-        this.maxtime = maxtime;
-    }
 
     private Integer commentsum;//评论数
 
@@ -105,6 +90,22 @@ public class PostList {
 
     private Integer persum;//报名人数
 
+
+    public String getMintime() {
+        return mintime;
+    }
+
+    public void setMintime(String mintime) {
+        this.mintime = mintime;
+    }
+
+    public String getMaxtime() {
+        return maxtime;
+    }
+
+    public void setMaxtime(String maxtime) {
+        this.maxtime = maxtime;
+    }
 
     public Integer getPersum() {
         return persum;
