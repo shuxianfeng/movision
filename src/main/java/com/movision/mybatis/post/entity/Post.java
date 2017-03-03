@@ -57,30 +57,6 @@ public class Post {
     private  Date endtime;
     private String activestatue;
 
-    public String getActivestatue() {
-        return activestatue;
-    }
-
-
-    public void setActivestatue(String activestatue) {
-        this.activestatue = activestatue;
-    }
-
-    public Date getBegintime() {
-        return begintime;
-    }
-
-    public void setBegintime(Date begintime) {
-        this.begintime = begintime;
-    }
-
-    public Date getEndtime() {
-        return endtime;
-    }
-
-    public void setEndtime(Date endtime) {
-        this.endtime = endtime;
-    }
 
     private Integer userid;//用户id
 

@@ -883,4 +883,20 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 根据id查询商品
+     *
+     * @param id
+     * @return
+     */
+    public GoodsComboVo queryName(Integer id) {
+        try {
+            log.info("根据id查询商品");
+            return goodsMapper.queryName(id);
+        } catch (Exception e) {
+            log.error("根据id查询商品失败", e);
+            throw e;
+        }
+    }
 }

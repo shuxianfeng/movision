@@ -661,4 +661,23 @@ public class GoodsController {
         return response;
     }
 
+
+    /**
+     * 根据id查询商品
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "根据id查询商品", notes = "根据id查询商品", response = Response.class)
+    @RequestMapping(value = "query_comboid_name", method = RequestMethod.POST)
+    public Response queryName(@ApiParam(value = "套餐id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        GoodsComboVo goodsComboVo = goodsFacade.queryName(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(goodsComboVo);
+        return response;
+    }
+
 }
