@@ -1,5 +1,6 @@
 package com.movision.facade.boss;
 
+import com.movision.mybatis.province.entity.ProvinceVo;
 import com.movision.mybatis.record.entity.RecordVo;
 import com.movision.mybatis.record.service.RecordService;
 import com.movision.mybatis.submission.entity.Submission;
@@ -7,6 +8,7 @@ import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.submission.service.SubmissionService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserAll;
+import com.movision.mybatis.user.entity.UserParticulars;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
@@ -222,5 +224,18 @@ public class UserManageFacade {
      */
     public List<RecordVo> queryIntegralList(String userid, Paging<RecordVo> pager) {
         return recordService.queryIntegralList(userid, pager);
+    }
+
+    /**
+     * 查询用户详情
+     *
+     * @param userid
+     * @return
+     */
+    public UserParticulars queryUserParticulars(String userid) {
+        UserParticulars userParticulars = userService.queryUserParticulars(userid);
+        List<ProvinceVo> provinceVos = userService.queryProvinces(userid);
+        userParticulars.setProvinces(provinceVos);
+        return userParticulars;
     }
 }

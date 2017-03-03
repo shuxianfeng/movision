@@ -1,6 +1,7 @@
 package com.movision.mybatis.user.mapper;
 
 import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.province.entity.ProvinceVo;
 import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.user.entity.*;
 import org.apache.ibatis.annotations.Param;
@@ -83,4 +84,8 @@ public interface UserMapper {
     List<UserAll> findAllqueryAllUserList(RowBounds rowBounds, Map map);
 
     int deleteUserByid(Map map);
+
+    UserParticulars queryUserParticulars(String userid);
+
+    List<ProvinceVo> queryProvinces(String userid);
 }

@@ -8,6 +8,7 @@ import com.movision.mybatis.record.entity.RecordVo;
 import com.movision.mybatis.submission.entity.Submission;
 import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.user.entity.UserAll;
+import com.movision.mybatis.user.entity.UserParticulars;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
@@ -330,6 +331,24 @@ public class UserManageController {
         }
         pager.result(list);
         response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 查询用户详情
+     *
+     * @param userid
+     * @return
+     */
+    @ApiOperation(value = "查询用户详情", notes = "用于插卡用户详情页面数据接口", response = Response.class)
+    @RequestMapping(value = "query_user_particulars", method = RequestMethod.POST)
+    public Response queryUserParticulars(@ApiParam(value = "用户id") @RequestParam String userid) {
+        Response response = new Response();
+        UserParticulars user = userManageFacade.queryUserParticulars(userid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(user);
         return response;
     }
 }

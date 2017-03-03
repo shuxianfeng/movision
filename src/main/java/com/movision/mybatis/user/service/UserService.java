@@ -5,6 +5,7 @@ import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.mapper.PostMapper;
+import com.movision.mybatis.province.entity.ProvinceVo;
 import com.movision.mybatis.submission.entity.Submission;
 import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.user.entity.*;
@@ -450,6 +451,38 @@ public class UserService {
             return userMapper.deleteUserByid(map);
         } catch (Exception e) {
             log.error("用户删除异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询用户详情
+     *
+     * @param userid
+     * @return
+     */
+    public UserParticulars queryUserParticulars(String userid) {
+        try {
+            log.info("查询用户详情");
+            return userMapper.queryUserParticulars(userid);
+        } catch (Exception e) {
+            log.error("查询用户详情异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询地址
+     *
+     * @param userid
+     * @return
+     */
+    public List<ProvinceVo> queryProvinces(String userid) {
+        try {
+            log.info("查询地址");
+            return userMapper.queryProvinces(userid);
+        } catch (Exception e) {
+            log.error("查询地址异常");
             throw e;
         }
     }
