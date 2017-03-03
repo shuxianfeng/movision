@@ -612,7 +612,7 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
             resultType="com.movision.mybatis.address.entity.Address">
         SELECT s.id, s.province,s.city,s.district,s.street FROM yw_address s WHERE s.id=#{id,jdbcType=INTEGER}
     </select>
-    <select id="findAllAfterService" resultType="com.movision.mybatis.afterservice.entity.Afterservice">
+    <select id="findAllAfterService" resultType="com.movision.mybatis.afterservice.entity.AfterServiceVo">
         SELECT
         f.id,f.orderid,o.ordernumber,u.nickname,f.proposertime,f.processingpeople,f.processingtime,a.name,a.province,a.city,a.district,a.street,s.`name`
         AS sname,f.afterstatue,f.amountdue,f.refundamount,f.aftersalestatus,f.processingstatus FROM yw_afterservice f
@@ -621,11 +621,11 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         u.id=f.userid WHERE f.isdel=1
     </select>
     <select id="queryAfterService" parameterType="java.lang.Integer"
-            resultType="com.movision.mybatis.afterservice.entity.Afterservice">
+            resultType="com.movision.mybatis.afterservice.entity.AfterServiceVo">
         SELECT g.name,a.afterstatue,a.aftersalestatus,a.amountdue,a.refundamount,a.processingstatus FROM yw_afterservice
         a LEFT JOIN yw_goods g ON g.id=a.goodsid WHERE a.id=#{id,jdbcType=INTEGER}
     </select>
-    <update id="updateAfterService" parameterType="com.movision.mybatis.afterservice.entity.Afterservice">
+    <update id="updateAfterService" parameterType="com.movision.mybatis.afterservice.entity.AfterServiceVo">
         update yw_afterservice
         <set>
             <if test="processingstatus != null">
@@ -641,7 +641,7 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         where id=#{id,jdbcType=INTEGER}
     </update>
     <select id="queryByIdAfterService" parameterType="java.lang.Integer"
-            resultType="com.movision.mybatis.afterservice.entity.Afterservice">
+            resultType="com.movision.mybatis.afterservice.entity.AfterServiceVo">
         SELECT
         f.id,f.orderid,o.ordernumber,u.nickname,f.proposertime,f.processingpeople,f.processingtime,a.name,a.province,a.city,a.district,a.street,s.`name`
         AS
@@ -654,7 +654,7 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
     </select>
 
     <select id="findAllOrderByConditionAfterService" parameterType="java.util.Map"
-            resultType="com.movision.mybatis.afterservice.entity.Afterservice">
+            resultType="com.movision.mybatis.afterservice.entity.AfterServiceVo">
         SELECT
         f.id,f.orderid,o.ordernumber,u.nickname,f.proposertime,f.processingpeople,f.processingtime,a.name,a.province,a.city,a.district,a.street,s.`name`
         AS sname,f.afterstatue,f.amountdue,f.refundamount,f.aftersalestatus,f.processingstatus FROM yw_afterservice f
@@ -681,7 +681,7 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         </if>
     </select>
     <select id="queryRemark" parameterType="java.lang.Integer"
-            resultType="com.movision.mybatis.afterservice.entity.Afterservice">
+            resultType="com.movision.mybatis.afterservice.entity.AfterServiceVo">
         SELECT remark,proposertime FROM yw_afterservice WHERE id=#{id,jdbcType=INTEGER}
     </select>
 </mapper>

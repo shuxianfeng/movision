@@ -2,6 +2,7 @@ package com.movision.mybatis.bossOrders.servic;
 
 import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.address.entity.AddressVo;
+import com.movision.mybatis.afterservice.entity.AfterServiceVo;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.area.entity.Area;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
@@ -172,7 +173,7 @@ public class BossOrderService {
      * @param pager
      * @return
      */
-    public List<Afterservice> queryAfterSevice(Paging<Afterservice> pager) {
+    public List<AfterServiceVo> queryAfterSevice(Paging<AfterServiceVo> pager) {
         try {
 
             loger.info("售后列表");
@@ -297,7 +298,7 @@ public class BossOrderService {
      * @param pager
      * @return
      */
-    public List<Afterservice> queryOrderByConditionAfterService(Map map, Paging<Afterservice> pager) {
+    public List<AfterServiceVo> queryOrderByConditionAfterService(Map map, Paging<AfterServiceVo> pager) {
         try {
             loger.info("根据条件查询列表");
             return bossOrdersMapper.findAllOrderByConditionAfterService(map, pager.getRowBounds());
@@ -424,7 +425,7 @@ public class BossOrderService {
      * @param id
      * @return
      */
-    public Afterservice queryAfterServiceById(Integer id) {
+    public AfterServiceVo queryAfterServiceById(Integer id) {
         try {
             loger.info("根据id查售后信息");
             return bossOrdersMapper.queryAfterService(id);
@@ -440,7 +441,7 @@ public class BossOrderService {
      * @param afterservice
      * @return
      */
-    public int updateAfterService(Afterservice afterservice) {
+    public int updateAfterService(AfterServiceVo afterservice) {
         try {
             loger.info("修改售后信息");
             return bossOrdersMapper.updateAfterService(afterservice);
@@ -456,7 +457,7 @@ public class BossOrderService {
      * @param id
      * @return
      */
-    public Afterservice queryByIdAfterService(Integer id) {
+    public AfterServiceVo queryByIdAfterService(Integer id) {
         try {
             loger.info("售后预览");
             return bossOrdersMapper.queryByIdAfterService(id);
@@ -472,7 +473,7 @@ public class BossOrderService {
      * @param id
      * @return
      */
-    public Afterservice queryRemark(Integer id) {
+    public AfterServiceVo queryRemark(Integer id) {
         try {
             loger.info("查询留言成功");
             return bossOrdersMapper.queryRemark(id);

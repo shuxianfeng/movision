@@ -53,10 +53,6 @@ public class Post {
 
     private Date oprtime;//用户最后参与时间
 
-    private  Date begintime;
-    private  Date endtime;
-    private String activestatue;
-
 
     private Integer userid;//用户id
 

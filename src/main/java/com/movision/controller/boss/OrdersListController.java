@@ -3,6 +3,7 @@ package com.movision.controller.boss;
 import com.movision.common.Response;
 import com.movision.facade.boss.OrderFacade;
 import com.movision.mybatis.address.entity.Address;
+import com.movision.mybatis.afterservice.entity.AfterServiceVo;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
@@ -65,8 +66,8 @@ public class OrdersListController {
     public Response queryAfterService(@RequestParam(required = false, defaultValue = "1") String pageNo,
                                       @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Paging<Afterservice> pager = new Paging<Afterservice>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<Afterservice> list = orderFacade.queryAfterService(pager);
+        Paging<AfterServiceVo> pager = new Paging<AfterServiceVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<AfterServiceVo> list = orderFacade.queryAfterService(pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -416,7 +417,7 @@ public class OrdersListController {
     @RequestMapping(value = "query_byid_afterservice", method = RequestMethod.POST)
     public Response queryAfterServiceById(@ApiParam(value = "售后id") @RequestParam(required = false) Integer id) {
         Response response = new Response();
-        Afterservice afterservice = orderFacade.queryAfterServiceById(id);
+        AfterServiceVo afterservice = orderFacade.queryAfterServiceById(id);
         if (response.getCode() == 200) {
             response.setMessage("根据id查询售后信息");
         }
@@ -458,7 +459,7 @@ public class OrdersListController {
     @RequestMapping(value = "query_afterservice", method = RequestMethod.POST)
     public Response queryByIdAfterService(@ApiParam(value = "售后id") @RequestParam(required = false) Integer id) {
         Response response = new Response();
-        Afterservice afterservice = orderFacade.queryByIdAfterService(id);
+        AfterServiceVo afterservice = orderFacade.queryByIdAfterService(id);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -492,8 +493,8 @@ public class OrdersListController {
                                                       @RequestParam(required = false) String pageNo,
                                                       @RequestParam(required = false) String pageSize) {
         Response response = new Response();
-        Paging<Afterservice> pager = new Paging<Afterservice>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List<Afterservice> list = orderFacade.queryOrderByConditionAfterService(ordernumber, name, aftersalestatus, afterstatue, processingstatus, mintime, maxtime, pager);
+        Paging<AfterServiceVo> pager = new Paging<AfterServiceVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<AfterServiceVo> list = orderFacade.queryOrderByConditionAfterService(ordernumber, name, aftersalestatus, afterstatue, processingstatus, mintime, maxtime, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -512,7 +513,7 @@ public class OrdersListController {
     @RequestMapping(value = "query_remark", method = RequestMethod.POST)
     public Response queryRemark(@ApiParam(value = "售后id") @RequestParam(required = false) Integer id) {
         Response response = new Response();
-        Afterservice afterservice = orderFacade.queryRemark(id);
+        AfterServiceVo afterservice = orderFacade.queryRemark(id);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

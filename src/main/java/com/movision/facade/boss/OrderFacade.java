@@ -2,6 +2,7 @@ package com.movision.facade.boss;
 
 import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.address.entity.AddressVo;
+import com.movision.mybatis.afterservice.entity.AfterServiceVo;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.area.entity.Area;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
@@ -413,7 +414,7 @@ public class OrderFacade {
      * @param
      * @return
      */
-    public List<Afterservice> queryAfterService(Paging<Afterservice> pager) {
+    public List<AfterServiceVo> queryAfterService(Paging<AfterServiceVo> pager) {
         return bossOrderService.queryAfterSevice(pager);
     }
 
@@ -424,8 +425,8 @@ public class OrderFacade {
      * @param id
      * @return
      */
-    public Afterservice queryAfterServiceById(Integer id) {
-        Afterservice afterservice = bossOrderService.queryAfterServiceById(id);
+    public AfterServiceVo queryAfterServiceById(Integer id) {
+        AfterServiceVo afterservice = bossOrderService.queryAfterServiceById(id);
         return afterservice;
     }
 
@@ -439,7 +440,7 @@ public class OrderFacade {
      */
     public Map<String, Integer> updateAfterService(Integer processingstatus, String refundamount, String id) {
         Map<String, Integer> map = new HashedMap();
-        Afterservice afterservice = new Afterservice();
+        AfterServiceVo afterservice = new AfterServiceVo();
         afterservice.setId(Integer.parseInt(id));
         if (processingstatus == 1 && refundamount != null) {
             afterservice.setProcessingstatus(1);
@@ -464,8 +465,8 @@ public class OrderFacade {
      * @param id
      * @return
      */
-    public Afterservice queryByIdAfterService(Integer id) {
-        Afterservice afterservice = bossOrderService.queryByIdAfterService(id);
+    public AfterServiceVo queryByIdAfterService(Integer id) {
+        AfterServiceVo afterservice = bossOrderService.queryByIdAfterService(id);
         return afterservice;
     }
 
@@ -482,7 +483,7 @@ public class OrderFacade {
      * @param pager
      * @return
      */
-    public List<Afterservice> queryOrderByConditionAfterService(String ordernumber, String name, String aftersalestatus, String afterstatue, String processingstatus, String mintime, String maxtime, Paging<Afterservice> pager) {
+    public List<AfterServiceVo> queryOrderByConditionAfterService(String ordernumber, String name, String aftersalestatus, String afterstatue, String processingstatus, String mintime, String maxtime, Paging<AfterServiceVo> pager) {
         Map<String, Object> map = new HashedMap();
         if (ordernumber != null) {
             map.put("ordernumber", ordernumber);
@@ -528,8 +529,8 @@ public class OrderFacade {
      * @param id
      * @return
      */
-    public Afterservice queryRemark(Integer id) {
-        Afterservice afterservice = bossOrderService.queryRemark(id);
+    public AfterServiceVo queryRemark(Integer id) {
+        AfterServiceVo afterservice = bossOrderService.queryRemark(id);
         return afterservice;
     }
 

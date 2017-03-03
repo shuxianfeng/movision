@@ -2,6 +2,7 @@ package com.movision.mybatis.bossOrders.mapper;
 
 import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.address.entity.AddressVo;
+import com.movision.mybatis.afterservice.entity.AfterServiceVo;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.area.entity.Area;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
@@ -75,16 +76,16 @@ public interface BossOrdersMapper {
 
     Address queryByAddress(Integer id);//返回地址
 
-    List<Afterservice> findAllAfterService(RowBounds rowBounds);//售后服务
+    List<AfterServiceVo> findAllAfterService(RowBounds rowBounds);//售后服务
 
-    Afterservice queryAfterService(Integer id);//售后处理
+    AfterServiceVo queryAfterService(Integer id);//售后处理
 
-    int updateAfterService(Afterservice afterservice);//修改售后
+    int updateAfterService(AfterServiceVo afterservice);//修改售后
 
-    Afterservice queryByIdAfterService(Integer id);//售后预览
+    AfterServiceVo queryByIdAfterService(Integer id);//售后预览
 
-    List<Afterservice> findAllOrderByConditionAfterService(Map map, RowBounds rowBounds);//售后按条件查询
+    List<AfterServiceVo> findAllOrderByConditionAfterService(Map map, RowBounds rowBounds);//售后按条件查询
 
-    Afterservice queryRemark(Integer id);//查询留言
+    AfterServiceVo queryRemark(Integer id);//查询留言
 
 }
