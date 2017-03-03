@@ -137,4 +137,21 @@ public class CouponService {
             throw e;
         }
     }
+
+    /**
+     * 查询用户优惠券列表
+     *
+     * @param userid
+     * @param pager
+     * @return
+     */
+    public List<Coupon> queryDiscountCouponList(String userid, Paging<Coupon> pager) {
+        try {
+            log.info("查询用户优惠券列表");
+            return couponMapper.queryDiscountCouponList(userid, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询用户优惠券列表异常");
+            throw e;
+        }
+    }
 }

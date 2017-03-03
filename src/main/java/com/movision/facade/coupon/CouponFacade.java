@@ -109,5 +109,15 @@ public class CouponFacade {
         return couponService.findAllMyCouponList(paging, map);
     }
 
+    /**
+     * 后台管理--查询用户优惠券列表
+     *
+     * @param pager
+     * @param userid
+     * @return
+     */
+    public List<Coupon> queryDiscountCouponList(String userid, Paging<Coupon> pager) {
+        return couponService.queryDiscountCouponList(userid, pager);
+    }
 
 }

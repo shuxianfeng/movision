@@ -26,4 +26,6 @@ public interface CouponMapper {
     int updateByPrimaryKey(Coupon record);
 
     List<Coupon> findAllMyCouponList(RowBounds rowBounds, Map map);
+
+    List<Coupon> queryDiscountCouponList(String userid, RowBounds rowBounds);
 }
