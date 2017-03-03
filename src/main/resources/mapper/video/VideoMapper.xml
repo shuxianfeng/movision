@@ -71,9 +71,7 @@
             <if test="orderid != null">
                 orderid,
             </if>
-            <if test="intime != null">
                 intime,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -106,9 +104,7 @@
             <if test="orderid != null">
                 #{orderid,jdbcType=INTEGER},
             </if>
-            <if test="intime != null">
-                #{intime,jdbcType=TIMESTAMP},
-            </if>
+            now(),
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.video.entity.Video">

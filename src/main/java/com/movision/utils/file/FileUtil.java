@@ -257,6 +257,9 @@ public class FileUtil {
 		}else if ("zip".equals(type)) {
 			String allowFileSuffix = PropertiesUtils.getValue("allowed.file.suffix");
 			return allowFileSuffix.split(",");
+		} else if ("video".equals(type)) {
+			String allowFileSuffix = PropertiesUtils.getValue("allowed.video.suffix");
+			return allowFileSuffix.split(",");
 		}
 		return null;
 	}

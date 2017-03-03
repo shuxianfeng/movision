@@ -32,7 +32,7 @@ public class MovisionOssClient {
      * 图片文件上传
      *
      * @param file  multipartfile
-     * @param type  img | doc
+     * @param type  img | doc | video
      * @param chann 频道类型  post | person | ....
      * @return url | filename
      */

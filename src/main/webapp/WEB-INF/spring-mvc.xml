@@ -96,6 +96,7 @@
         </property>
     </bean>
 
+    <!--用于上传文件-->
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
           p:maxUploadSize="104857600" p:maxInMemorySize="4096"

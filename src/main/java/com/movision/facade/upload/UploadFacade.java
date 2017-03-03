@@ -26,13 +26,13 @@ public class UploadFacade {
     private static final Logger log = LoggerFactory.getLogger(UploadFacade.class);
 
     @Autowired
-    ApiConstants apiConstants;
+    private ApiConstants apiConstants;
 
     /**
      * 图片|文件上传 (测试环境) commons-upload
      *
      * @param file
-     * @param type  目前支持三种：img/doc/zip
+     * @param type  目前支持三种：img/doc/video
      * @param chann 如：post，person
      * @return
      */
@@ -40,10 +40,11 @@ public class UploadFacade {
         Map<String, String> result = new HashMap<>();
         try {
             /**
-             * saveDirectory = /home/app/upload/$chan/img
+             * 这是测试环境上传的图片的路径
+             * saveDirectory = /WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/upload/$chan/img
              */
             String saveDirectory;
-            int maxPostSize;
+            long maxPostSize;
             String imgDomain = PropertiesUtils.getValue("upload.img.domain");
 //            String docDomain = PropertiesUtils.getValue("doc.domain");
             String fileName = FileUtil.renameFile(file.getOriginalFilename());
@@ -54,6 +55,7 @@ public class UploadFacade {
                         saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/img";
                         maxPostSize = apiConstants.getUploadPicMaxPostSize();
                         /**
+                         * 这是外界访问该图片的地址
                          * 其中data = http://120.77.214.187:8100/upload/$chan/img/$filename
                          */
                         data = imgDomain + "/upload/" + chann + "/img/" + fileName;
@@ -77,6 +79,22 @@ public class UploadFacade {
                     }
                     data = fileName;
                     break;
+                case "video":
+                    if (chann != null) {
+                        saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/video";
+                        maxPostSize = apiConstants.getUploadVideoMaxPostSize();
+                        /**
+                         * 这是外界访问该视频的地址
+                         * 其中data = http://120.77.214.187:8100/upload/$chan/video/$filename
+                         */
+                        data = imgDomain + "/upload/" + chann + "/video/" + fileName;
+                    } else {
+                        saveDirectory = apiConstants.getUploadDir();
+                        maxPostSize = apiConstants.getUploadVideoMaxPostSize();
+                        data = imgDomain + "/upload/" + fileName;
+                    }
+                    break;
+
                 //简历压缩包上传
                 /*case "zip":
                     if (chann != null && chann.equals("51job")){

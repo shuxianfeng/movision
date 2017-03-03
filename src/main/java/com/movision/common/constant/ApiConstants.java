@@ -20,9 +20,20 @@ public class ApiConstants {
     @Value("${uploadDocMaxPostSize}")
     private int uploadDocMaxPostSize;
 
+    @Value("${uploadVideoMaxPostSize}")
+    private Long uploadVideoMaxPostSize;
+
     @Value("${uploadTechMaxPostSize}")
     private Integer uploadTechMaxPostSize;
 
+    public void setUploadVideoMaxPostSize(Long uploadVideoMaxPostSize) {
+        this.uploadVideoMaxPostSize = uploadVideoMaxPostSize;
+    }
+
+    public Long getUploadVideoMaxPostSize() {
+
+        return uploadVideoMaxPostSize;
+    }
 
     public String getUploadDir() {
         return uploadDir;
