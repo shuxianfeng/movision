@@ -2,6 +2,7 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.UserManageFacade;
+import com.movision.mybatis.record.entity.RecordVo;
 import com.movision.mybatis.submission.entity.Submission;
 import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.user.entity.UserAll;
@@ -277,6 +278,28 @@ public class UserManageController {
             response.setMessage("操作成功");
         }
         response.setData(i);
+        return response;
+    }
+
+    /**
+     * 查询用户积分流水列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查询用户积分列表", notes = "用于查询用户积分记录列表接口", response = Response.class)
+    @RequestMapping(value = "query_integral_list", method = RequestMethod.POST)
+    public Response queryIntegralList(@ApiParam(value = "用户id") @RequestParam String userid, @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                      @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<RecordVo> pager = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<RecordVo> list = userManageFacade.queryIntegralList(userid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 }

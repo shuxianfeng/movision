@@ -1,5 +1,7 @@
 package com.movision.facade.boss;
 
+import com.movision.mybatis.record.entity.RecordVo;
+import com.movision.mybatis.record.service.RecordService;
 import com.movision.mybatis.submission.entity.Submission;
 import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.submission.service.SubmissionService;
@@ -30,6 +32,9 @@ public class UserManageFacade {
 
     @Autowired
     private SubmissionService submissionService;
+
+    @Autowired
+    private RecordService recordService;
 
     /**
      * 查看vip申请列表
@@ -207,5 +212,15 @@ public class UserManageFacade {
         map.put("userid", userid);
         map.put("type", type);
         return userService.deleteUserByid(map);
+    }
+
+    /**
+     * 查询用户积分流水列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<RecordVo> queryIntegralList(String userid, Paging<RecordVo> pager) {
+        return recordService.queryIntegralList(userid, pager);
     }
 }
