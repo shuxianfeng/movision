@@ -96,10 +96,12 @@
         </property>
     </bean>
 
-    <!--用于上传文件-->
+    <!--用于上传文件
+          maxUploadSize：设置允许上传的最大文件大小，以字节为单位计算
+          maxInMemorySize：设置在文件上传时允许写到内存中的最大值-->
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
-          p:maxUploadSize="104857600" p:maxInMemorySize="4096"
+          p:maxUploadSize="10485760000" p:maxInMemorySize="40960"
           p:defaultEncoding="UTF-8"/>
 
 
