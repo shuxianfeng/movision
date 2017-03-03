@@ -5,10 +5,11 @@
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="comboid" property="comboid" jdbcType="INTEGER"/>
         <result column="comboname" property="comboname" jdbcType="VARCHAR"/>
-        <result column="intime" property="intime" jdbcType="DATE"/>
+        <result column="combodiscountprice" property="combodiscountprice" jdbcType="DOUBLE"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, comboid, comboname,intime
+        id, comboid, comboname, combodiscountprice, intime
   </sql>
 
     <!--基础查询语句-->
@@ -21,7 +22,7 @@
 
     <!--根据商品id查询套餐类别-->
     <select id="queryCombo" parameterType="java.lang.Integer" resultType="com.movision.mybatis.combo.entity.ComboVo">
-        SELECT id, comboid, comboname, combodiscountprice
+        SELECT id, comboid, comboname, combodiscountprice,
         (SELECT img_url FROM yw_goods_img WHERE goodsid = #{goodsid,jdbcType=INTEGER} AND type = '2') AS imgurl
         FROM yw_combo
     WHERE comboid in (SELECT comboid FROM yw_goods_combo WHERE goodsid = #{goodsid,jdbcType=INTEGER})
@@ -41,15 +42,20 @@
         FROM yw_combo WHERE comboid = #{comboid,jdbcType=INTEGER}
     </select>
 
+    <!--根据套餐id查询套餐折后价-->
+    <select id="queryComboPrice" parameterType="java.lang.Integer" resultType="java.lang.Double">
+        SELECT combodiscountprice FROM yw_combo WHERE id = #{comboid,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_combo
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.combo.entity.Combo">
-        insert into yw_combo (id, comboid, comboname,intime
+        insert into yw_combo (id, comboid, comboname, combodiscountprice, intime
       )
-        values (#{id,jdbcType=INTEGER}, #{comboid,jdbcType=INTEGER},
-        #{comboname,jdbcType=VARCHAR},#{intime,jdbcType=DATE}
+        values (#{id,jdbcType=INTEGER}, #{comboid,jdbcType=INTEGER}, #{comboname,jdbcType=VARCHAR},
+        #{combodiscountprice,jdbcType=DOUBLE}, #{intime,jdbcType=TIMESTAMP}
       )
   </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.combo.entity.Combo">
@@ -64,6 +70,12 @@
             <if test="comboname != null">
                 comboname,
             </if>
+            <if test="combodiscountprice != null">
+                combodiscountprice,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -74,6 +86,12 @@
             </if>
             <if test="comboname != null">
                 #{comboname,jdbcType=VARCHAR},
+            </if>
+            <if test="combodiscountprice != null">
+                #{combodiscountprice,jdbcType=DOUBLE},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
@@ -86,13 +104,21 @@
             <if test="comboname != null">
                 comboname = #{comboname,jdbcType=VARCHAR},
             </if>
+            <if test="combodiscountprice != null">
+                combodiscountprice = #{combodiscountprice,jdbcType=DOUBLE},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.combo.entity.Combo">
     update yw_combo
     set comboid = #{comboid,jdbcType=INTEGER},
-      comboname = #{comboname,jdbcType=VARCHAR}
+        comboname = #{comboname,jdbcType=VARCHAR},
+        combodiscountprice = #{combodiscountprice,jdbcType=DOUBLE},
+        intime = #{intime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

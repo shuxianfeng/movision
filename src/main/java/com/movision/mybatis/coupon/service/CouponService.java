@@ -154,4 +154,14 @@ public class CouponService {
             throw e;
         }
     }
+
+    public List<Coupon> queryCouponList(int userid) {
+        try {
+            log.info("根据用户id查询所有可用优惠券");
+            return couponMapper.queryCouponList(userid);
+        } catch (Exception e) {
+            log.error("根据用户id查询所有可用优惠券失败");
+            throw e;
+        }
+    }
 }

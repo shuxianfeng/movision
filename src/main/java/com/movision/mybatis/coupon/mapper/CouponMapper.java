@@ -27,5 +27,7 @@ public interface CouponMapper {
 
     List<Coupon> findAllMyCouponList(RowBounds rowBounds, Map map);
 
+    List<Coupon> queryCouponList(int userid);
+
     List<Coupon> queryDiscountCouponList(String userid, RowBounds rowBounds);
 }

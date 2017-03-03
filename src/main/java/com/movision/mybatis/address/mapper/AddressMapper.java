@@ -13,6 +13,8 @@ public interface AddressMapper {
 
     int insertSelective(Address record);
 
+    Address queryDefaultAddress(int userid);
+
     Address selectByPrimaryKey(Integer id);
 
     List<Address> queryAddressList(int userid);

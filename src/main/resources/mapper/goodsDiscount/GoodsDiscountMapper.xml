@@ -42,8 +42,19 @@
     <!--根据优惠活动id查询活动名称和优惠折扣百分比-->
     <select id="queryDiscountName" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.cart.entity.CartVo">
-        SELECT name AS discountname, discount AS discount, isenrent AS isenrent, rentday AS rentday
+        SELECT name AS discountname, discount AS discount, isenrent AS isenrent, rentday AS enrentday
         FROM yw_goods_discount WHERE id = #{discountid,jdbcType=INTEGER}
+    </select>
+
+    <!--根据活动id查询活动的起止时间-->
+    <select id="queryGoodsDiscountById" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.goodsDiscount.entity.GoodsDiscount">
+        SELECT startdate, enddate FROM yw_goods_discount WHERE id = #{discountid,jdbcType=INTEGER}
+    </select>
+
+    <!--根据活动id查询活动折扣-->
+    <select id="queryDiscount" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT discount FROM yw_goods_discount WHERE id = #{discountid,jdbcType=INTEGER}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

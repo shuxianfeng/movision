@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author shuxf
@@ -131,11 +132,20 @@ public class AppCartController {
      */
     @ApiOperation(value = "购物车商品————点击“去结算”————跳转订单确认页", notes = "用于用户在购物车中选择商品后结算操作，跳转订单确认页", response = Response.class)
     @RequestMapping(value = "cartBilling", method = RequestMethod.POST)
-    public Response cartBilling(@ApiParam(value = "购物车id") @RequestParam String cartid,
-                                @ApiParam(value = "用户id") @RequestParam String userid) {
+    public Response cartBilling(@ApiParam(value = "购物车id(多件商品的购物车id用英文逗号','隔开)") @RequestParam String cartids,
+                                @ApiParam(value = "用户id") @RequestParam String userid,
+                                @ApiParam(value = "结算总价") @RequestParam String totalprice) {
         Response response = new Response();
 
+        Map<String, Object> map = cartFacade.cartBilling(cartids, userid, totalprice);
 
+        if ((int) map.get("code") == 200) {
+            response.setMessage("可结算");
+        } else if ((int) map.get("code") == -1) {
+            response.setCode(-1);
+            response.setMessage("不可结算");
+        }
+        response.setData(map);
         return response;
     }
 }

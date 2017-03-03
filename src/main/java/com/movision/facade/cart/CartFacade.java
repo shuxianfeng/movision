@@ -1,10 +1,19 @@
 package com.movision.facade.cart;
 
+import com.movision.mybatis.address.entity.Address;
+import com.movision.mybatis.address.service.AddressService;
 import com.movision.mybatis.cart.entity.Cart;
 import com.movision.mybatis.cart.entity.CartVo;
 import com.movision.mybatis.cart.service.CartService;
+import com.movision.mybatis.combo.service.ComboService;
+import com.movision.mybatis.coupon.entity.Coupon;
+import com.movision.mybatis.coupon.service.CouponService;
+import com.movision.mybatis.goods.entity.GoodsVo;
+import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.goodsDiscount.service.DiscountService;
 import com.movision.mybatis.rentdate.entity.Rentdate;
+import com.movision.mybatis.user.service.UserService;
+import org.apache.commons.beanutils.converters.DoubleConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +34,15 @@ public class CartFacade {
 
     @Autowired
     private DiscountService discountService;
+
+    @Autowired
+    private AddressService addressService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ComboService comboService;
 
     //商品加入购物车
     public int addGoodsCart(String userid, String goodsid, String comboid, String discountid, String isdebug, String sum, String type, String rentdate) throws ParseException {
@@ -179,12 +197,13 @@ public class CartFacade {
                 CartVo ov = discountService.queryDiscountName(cartList.get(i).getDiscountid());
                 cartList.get(i).setDiscountname(ov.getDiscountname());
                 cartList.get(i).setDiscount("0." + ov.getDiscount());
-                cartList.get(i).setIsenrent(ov.getIsenrent());
-                cartList.get(i).setRentday(ov.getRentday());
+                cartList.get(i).setIsenrent(ov.getIsenrent());//是否为整租
+                cartList.get(i).setEnrentday(ov.getEnrentday());//整租天数
             }
             if (cartList.get(i).getType() == 0) {
                 //如果是租赁的商品，需要将商品的租赁日期列表取出
                 List<Rentdate> rentdateList = cartService.queryRentDateList(cartList.get(i).getId());
+                cartList.get(i).setRentday(rentdateList.size());//租赁天数
                 cartList.get(i).setRentDateList(rentdateList);
             }
         }
@@ -244,5 +263,219 @@ public class CartFacade {
         cartService.deleteCartGoodsRentDate(parammap);
         //再插入
         cartService.updateCartGoodsRentDate(parammap);
+    }
+
+    //购物车结算校验和订单确认页数据返回
+    public Map<String, Object> cartBilling(String cartids, String userid, String totalprice) {
+        int flag = 0;
+        double totalamount = 0;//订单总金额(=订单中自营商品的总金额+订单中第三方商品的总金额)
+        double selfamount = 0;//订单中自营商品的总金额
+        double shopamount = 0;//订单中第三方商品的总金额
+
+        Map<String, Object> map = new HashMap<>();
+
+        //首先根据cartids取出用户需要结算的所有商品
+        String[] cartidarr = cartids.split(",");
+        int[] cartid = new int[cartidarr.length];
+        for (int i = 0; i < cartidarr.length; i++) {
+            cartid[i] = Integer.parseInt(cartidarr[i]);
+        }
+        List<CartVo> cartVoList = cartService.queryCartVoList(cartid);//查询需要结算的购物车所有商品
+
+        for (int i = 0; i < cartVoList.size(); i++) {
+
+            int id = cartVoList.get(i).getId();//购物车id
+
+            //1.校验所有商品库存
+            if (cartVoList.get(i).getStock() < cartVoList.get(i).getNum()) {
+                map.put("stockcode", -2);
+                map.put("stockcartid", id);
+                map.put("stockmsg", "商品库存不足");
+                flag = 1;
+            }
+
+            //2.校验租赁商品的租赁日期
+            if (cartVoList.get(i).getType() == 0) {//判断为租赁时才进行校验
+                List<Rentdate> rentdateList = cartService.queryRentDateList(cartVoList.get(i).getId());
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                Date now = new Date();
+                String nowString = formatter.format(now);
+                String rentdateString = formatter.format(rentdateList.get(i).getRentdate());
+                for (int j = 0; j < rentdateList.size(); j++) {
+                    if (now.after(rentdateList.get(i).getRentdate()) || nowString.equals(rentdateString)) {
+                        map.put("rentdatecode", -3);
+                        map.put("rentdatecartid", id);
+                        map.put("rentdatemsg", "商品租赁日期必须从次日起租");
+                        flag = 1;
+                    }
+                }
+            }
+
+            //3.校验商品套餐的库存
+            if (cartVoList.get(i).getCombotype() != null) {
+                //根据套餐id查询该套餐中所有的商品的库存
+                List<GoodsVo> goodsVos = cartService.queryGoodsByComboid(cartVoList.get(i).getCombotype());
+                for (int k = 0; k < goodsVos.size(); k++) {
+                    if (goodsVos.get(k).getStock() < cartVoList.get(i).getNum()) {
+                        map.put("combocode", -4);
+                        map.put("combocartid", id);
+                        map.put("combomsg", "该商品套餐中包含库存不足的商品");
+                        flag = 1;
+                    }
+                }
+            }
+
+            //4.校验商品活动的起止日期（分为整租活动和非整租活动）
+            if (cartVoList.get(i).getDiscountid() != null) {
+                //根据活动id查询活动的开始时间和结束时间
+                GoodsDiscount goodsDiscount = discountService.queryGoodsDiscountById(cartVoList.get(i).getDiscountid());
+                Date startdate = goodsDiscount.getStartdate();
+                Date enddate = goodsDiscount.getEnddate();
+                Date now = new Date();
+                if (now.before(startdate) || now.after(enddate)) {
+                    map.put("discountcode", -5);
+                    map.put("discountcartid", id);
+                    map.put("discountmsg", "该商品参与的优惠活动不在活动期间");
+                    flag = 1;
+                }
+            }
+
+            if (flag == 0) {//如果上面的校验全部通过，进行如下操作
+
+                //5.计算选择的结算商品的总价格（与APP入参核对）
+                if (cartVoList.get(i).getType() == 0) {//租赁
+                    //查询租赁日期列表
+                    List<Rentdate> rentdateList = cartService.queryRentDateList(id);
+
+                    if (cartVoList.get(i).getCombotype() != null) {//包含套餐
+                        //查询套餐的折后价
+                        double comboprice = comboService.queryComboPrice(cartVoList.get(i).getCombotype());
+                        if (cartVoList.get(i).getDiscountid() != null) {
+                            //查询购物车商品参加活动的活动折扣
+                            String discount = discountService.queryDiscount(cartVoList.get(i).getDiscountid());
+                            //单个套餐总价=套餐价*套餐件数*天数*活动百分比（有活动）
+                            double amount = comboprice * cartVoList.get(i).getNum() * rentdateList.size() * Integer.parseInt(discount) / 100;
+                            totalamount = totalamount + amount;
+
+                            if (cartVoList.get(i).getIsself() == 1) {//自营
+                                selfamount = selfamount + amount;
+                            } else {//三方
+                                shopamount = shopamount + amount;
+                            }
+
+                        } else {
+                            //单个套餐总价=套餐价*套餐件数*天数（无活动）
+                            double amount = comboprice * cartVoList.get(i).getNum() * rentdateList.size();
+                            totalamount = totalamount + amount;
+
+                            if (cartVoList.get(i).getIsself() == 1) {//自营
+                                selfamount = selfamount + amount;
+                            } else {//三方
+                                shopamount = shopamount + amount;
+                            }
+
+                        }
+                    } else {//不包含套餐
+                        if (cartVoList.get(i).getDiscountid() != null) {
+                            //单个商品总价=商品折后价*商品件数*天数*活动百分比（有活动）
+                            double amount = cartVoList.get(i).getGoodsprice() * cartVoList.get(i).getNum() * rentdateList.size() * Integer.parseInt(cartVoList.get(i).getDiscount()) / 100;
+                            totalamount = totalamount + amount;
+
+                            if (cartVoList.get(i).getIsself() == 1) {//自营
+                                selfamount = selfamount + amount;
+                            } else {//三方
+                                shopamount = shopamount + amount;
+                            }
+                        } else {
+                            //单个商品总价=商品折后价*商品件数*天数（无活动）
+                            double amount = cartVoList.get(i).getGoodsprice() * cartVoList.get(i).getNum() * rentdateList.size();
+                            totalamount = totalamount + amount;
+
+                            if (cartVoList.get(i).getIsself() == 1) {//自营
+                                selfamount = selfamount + amount;
+                            } else {//三方
+                                shopamount = shopamount + amount;
+                            }
+                        }
+                    }
+
+                } else if (cartVoList.get(i).getType() == 1) {
+                    //购买
+                    if (cartVoList.get(i).getCombotype() != null) {//包含套餐
+                        if (cartVoList.get(i).getDiscountid() != null) {
+                            //单个套餐总价=套餐价*套餐件数*活动百分比（有活动）
+                            double amount = cartVoList.get(i).getComboprice() * cartVoList.get(i).getNum() * Integer.parseInt(cartVoList.get(i).getDiscount()) / 100;
+                            totalamount = totalamount + amount;
+
+                            if (cartVoList.get(i).getIsself() == 1) {//自营
+                                selfamount = selfamount + amount;
+                            } else {//三方
+                                shopamount = shopamount + amount;
+                            }
+                        } else {
+                            //单个套餐总价=套餐价*套餐件数（无活动）
+                            double amount = cartVoList.get(i).getComboprice() * cartVoList.get(i).getNum();
+                            totalamount = totalamount + amount;
+
+                            if (cartVoList.get(i).getIsself() == 1) {//自营
+                                selfamount = selfamount + amount;
+                            } else {//三方
+                                shopamount = shopamount + amount;
+                            }
+                        }
+                    } else {//不包含套餐
+                        if (cartVoList.get(i).getDiscountid() != null) {//有活动
+                            //单个商品总价=商品折后价*商品件数*活动百分比（有活动）
+                            double amount = cartVoList.get(i).getGoodsprice() * cartVoList.get(i).getNum() * Integer.parseInt(cartVoList.get(i).getDiscount()) / 100;
+                            totalamount = totalamount + amount;
+
+                            if (cartVoList.get(i).getIsself() == 1) {//自营
+                                selfamount = selfamount + amount;
+                            } else {//三方
+                                shopamount = shopamount + amount;
+                            }
+                        } else {//无活动
+                            //单个商品总价=商品折后价*商品件数（无活动）
+                            double amount = cartVoList.get(i).getGoodsprice() * cartVoList.get(i).getNum();
+                            totalamount = totalamount + amount;
+
+                            if (cartVoList.get(i).getIsself() == 1) {//自营
+                                selfamount = selfamount + amount;
+                            } else {//三方
+                                shopamount = shopamount + amount;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        if (totalamount != Double.parseDouble(totalprice)) {
+            System.out.println("服务器计算的结算金额>>>>>>>>>>" + totalamount);
+            System.out.println("客户端提交的结算金额>>>>>>>>>>" + Double.parseDouble(totalprice));
+            map.put("code", -1);
+
+            map.put("msg", "你提交的结算总价和服务端校验的总价不一致");
+        } else {
+            //6.查询用户的默认地址
+            Address address = addressService.queryDefaultAddress(Integer.parseInt(userid));
+            map.put("address", address);
+
+            //7.按照最优算法，计算最佳优惠券（以折扣最多为最佳）
+            //**************************************计算过程过于复杂，1.0版本暂时不做最佳优惠券推荐************************************
+
+            //8.用户当前可用积分
+            int points = userService.queryUserByPoints(userid);
+            map.put("points", points);
+
+            map.put("selfamount", selfamount);//自营总额
+            map.put("shopamount", shopamount);//三方总额
+
+            map.put("code", 200);
+            map.put("msg", "您提交的购物车结算商品校验通过，可结算");
+        }
+
+        return map;
     }
 }

@@ -19,6 +19,8 @@ public interface ComboMapper {
 
     CartVo queryNamePrice(int comboid);
 
+    double queryComboPrice(int comboid);
+
     int queryComboStork(int comboid);
 
     int updateByPrimaryKeySelective(Combo record);

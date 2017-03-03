@@ -57,6 +57,17 @@
         AND now() > endtime
   </select>
 
+    <!--根据用户id查询所有可用的优惠券-->
+    <select id="queryCouponList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.coupon.entity.Coupon">
+        SELECT * FROM yw_coupon
+        WHERE userid = #{userid,jdbcType=INTEGER}
+        AND isdel = '0'
+        AND statue = '0'
+        AND now() > begintime
+        AND endtime > now()
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from yw_coupon
     where id = #{id,jdbcType=INTEGER}

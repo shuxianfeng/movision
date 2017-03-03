@@ -43,6 +43,16 @@ public class AddressService {
         }
     }
 
+    public Address queryDefaultAddress(int userid) {
+        try {
+            log.info("根据用户id查询默认地址");
+            return addressMapper.queryDefaultAddress(userid);
+        } catch (Exception e) {
+            log.error("根据用户id查询默认地址失败");
+            throw e;
+        }
+    }
+
     public int updateAddress(Address address) {
         try {
             log.info("编辑我的收获地址");

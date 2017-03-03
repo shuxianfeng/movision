@@ -56,7 +56,9 @@ public class CartVo {
 
     private Integer isenrent;//是否为整租活动：0 是 1 否
 
-    private Integer rentday;//整租天数
+    private Integer enrentday;//整租天数
+
+    private Integer rentday;//租赁天数
 
     private Double goodsprice;//商品折后价
 
@@ -288,5 +290,13 @@ public class CartVo {
 
     public void setStock(Integer stock) {
         this.stock = stock;
+    }
+
+    public Integer getEnrentday() {
+        return enrentday;
+    }
+
+    public void setEnrentday(Integer enrentday) {
+        this.enrentday = enrentday;
     }
 }

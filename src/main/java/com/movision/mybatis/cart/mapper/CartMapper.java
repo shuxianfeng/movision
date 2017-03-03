@@ -2,6 +2,7 @@ package com.movision.mybatis.cart.mapper;
 
 import com.movision.mybatis.cart.entity.Cart;
 import com.movision.mybatis.cart.entity.CartVo;
+import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.rentdate.entity.Rentdate;
 
 import java.util.List;
@@ -36,6 +37,8 @@ public interface CartMapper {
 
     List<Rentdate> queryRentDateList(int cartid);
 
+    List<GoodsVo> queryGoodsByComboid(int comboid);
+
     void deleteCartGoods(Map<String, Object> parammap);
 
     int checkStore(int cartid);
@@ -47,6 +50,8 @@ public interface CartMapper {
     void deleteCartGoodsRentDate(Map<String, Object> parammap);
 
     void updateCartGoodsRentDate(Map<String, Object> parammap);
+
+    List<CartVo> queryCartVoList(int[] cartid);
 
     int addGoodsCart(Map<String, Object> parammap);
 

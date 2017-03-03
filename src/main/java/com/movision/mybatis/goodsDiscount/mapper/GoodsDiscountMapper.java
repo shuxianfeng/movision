@@ -18,6 +18,10 @@ public interface GoodsDiscountMapper {
 
     CartVo queryDiscountName(int discountid);
 
+    GoodsDiscount queryGoodsDiscountById(int discountid);
+
+    String queryDiscount(int discountid);
+
     List<GoodsDiscountVo> querygoodsDiscount(Goods goods);
 
     int updateByPrimaryKeySelective(GoodsDiscount record);

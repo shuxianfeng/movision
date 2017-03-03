@@ -11,15 +11,7 @@ public class Combo {
 
     private Double combodiscountprice;//套餐折后总价
 
-    private Date intime;
-
-    public Date getIntime() {
-        return intime;
-    }
-
-    public void setIntime(Date intime) {
-        this.intime = intime;
-    }
+    private Date intime;//套餐添加时间
 
     public Integer getId() {
         return id;
@@ -51,5 +43,13 @@ public class Combo {
 
     public void setCombodiscountprice(Double combodiscountprice) {
         this.combodiscountprice = combodiscountprice;
+    }
+
+    public Date getIntime() {
+        return intime;
+    }
+
+    public void setIntime(Date intime) {
+        this.intime = intime;
     }
 }

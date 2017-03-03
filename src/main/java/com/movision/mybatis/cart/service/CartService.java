@@ -4,6 +4,7 @@ import com.movision.mybatis.cart.entity.Cart;
 import com.movision.mybatis.cart.entity.CartVo;
 import com.movision.mybatis.cart.mapper.CartMapper;
 import com.movision.mybatis.combo.mapper.ComboMapper;
+import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.rentdate.entity.Rentdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -148,6 +149,16 @@ public class CartService {
         }
     }
 
+    public List<GoodsVo> queryGoodsByComboid(int comboid) {
+        try {
+            log.info("根据套餐id查询套餐中所有的商品库存");
+            return cartMapper.queryGoodsByComboid(comboid);
+        } catch (Exception e) {
+            log.error("根据套餐id查询套餐中所有的商品库存失败");
+            throw e;
+        }
+    }
+
     public void deleteCartGoods(Map<String, Object> parammap) {
         try {
             log.info("删除购物车中的商品");
@@ -204,6 +215,16 @@ public class CartService {
             cartMapper.updateCartGoodsRentDate(parammap);
         } catch (Exception e) {
             log.error("插入修改后的商品租用日期失败");
+            throw e;
+        }
+    }
+
+    public List<CartVo> queryCartVoList(int[] cartid) {
+        try {
+            log.info("查询需要结算的购物车所有商品");
+            return cartMapper.queryCartVoList(cartid);
+        } catch (Exception e) {
+            log.error("查询需要结算的购物车所有商品失败");
             throw e;
         }
     }
