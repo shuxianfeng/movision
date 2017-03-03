@@ -2,7 +2,11 @@ package com.movision.mybatis.invoice.entity;
 
 import java.util.Date;
 
-public class Invoice {
+/**
+ * @Author zhanglei
+ * @Date 2017/3/3 19:06
+ */
+public class InvoiceVo {
     private Integer id;
 
     private Integer orderid;
@@ -26,13 +30,28 @@ public class Invoice {
     private Double money;
 
     private String name;
-    private String code;
-    private String bank;
-    private String banknum;
-    private String content;
 
     private Integer kind;
 
+    private String district;
+
+    private String street;
+
+    private String province;
+
+    private Integer takeway;
+
+    public Integer getTakeway() {
+        return takeway;
+    }
+
+    public void setTakeway(Integer takeway) {
+        this.takeway = takeway;
+    }
+
+    private String city;
+    private Integer logisticid;
+    private Date intime;
 
     private String companyname;
     private String rigaddress;
@@ -86,6 +105,10 @@ public class Invoice {
         this.banknum = banknum;
     }
 
+    private String code;
+    private String bank;
+    private String banknum;
+    private String content;
 
     public String getContent() {
         return content;
@@ -93,6 +116,54 @@ public class Invoice {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public Integer getLogisticid() {
+        return logisticid;
+    }
+
+    public void setLogisticid(Integer logisticid) {
+        this.logisticid = logisticid;
+    }
+
+    public Date getIntime() {
+        return intime;
+    }
+
+    public void setIntime(Date intime) {
+        this.intime = intime;
     }
 
     public Integer getId() {

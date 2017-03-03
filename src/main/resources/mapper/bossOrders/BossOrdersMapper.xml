@@ -488,7 +488,7 @@ SELECT
         SELECT a.phone,a.name,u.email,a.province,a.city,a.district,a.street FROM yw_address a LEFT JOIN yw_user u ON
         u.id=a.userid WHERE a.id=(SELECT s.addressid FROM yw_orders s WHERE s.id=#{id,jdbcType=INTEGER} )
     </select>
-    <select id="findAllInvoiceInfo" resultType="com.movision.mybatis.invoice.entity.Invoice"
+    <select id="findAllInvoiceInfo" resultType="com.movision.mybatis.invoice.entity.InvoiceVo"
             parameterType="java.lang.Integer">
         SELECT
         i.head,i.name,i.phone,i.kind,i.money,i.onlystatue,o.takeway,s.province,s.city,s.district,s.street,l.intime,l.logisticsid
@@ -497,7 +497,7 @@ LEFT JOIN yw_orders o ON o.id=i.orderid LEFT JOIN yw_address s ON s.id=i.address
 WHERE  o.id=#{id,jdbcType=INTEGER}
     </select>
 
-    <update id="updateInvoice" parameterType="com.movision.mybatis.invoice.entity.Invoice">
+    <update id="updateInvoice" parameterType="com.movision.mybatis.invoice.entity.InvoiceVo">
         update yw_invoice
         <set>
             <if test="head != null">
@@ -533,7 +533,7 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         </set>
         where orderid = #{orderid,jdbcType=INTEGER}
     </update>
-    <select id="queryInvoice" resultType="com.movision.mybatis.invoice.entity.Invoice"
+    <select id="queryInvoice" resultType="com.movision.mybatis.invoice.entity.InvoiceVo"
             parameterType="java.lang.Integer">
         SELECT head,kind,content,companyname,rigaddress,rigphone,bank,banknum,code,onlystatue FROM yw_invoice WHERE
         orderid=#{orderid,jdbcType=INTEGER}

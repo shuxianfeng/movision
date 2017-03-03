@@ -10,6 +10,7 @@ import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.city.entity.City;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.invoice.entity.Invoice;
+import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.province.entity.Province;
@@ -50,15 +51,15 @@ public interface BossOrdersMapper {
 
     BossOrders findAllPerInfo(Integer id);//基本信息
 
-    Invoice findAllInvoiceInfo(Integer id);//发票信息
+    InvoiceVo findAllInvoiceInfo(Integer id);//发票信息
 
     Address findAllGetInfo(Integer id);//收货人信息
 
     int deleteOrder(Integer id);//删除订单
 
-    int updateInvoice(Invoice invoice);//编辑发票
+    int updateInvoice(InvoiceVo invoice);//编辑发票
 
-    Invoice queryInvoice(Integer orderid);//返回发票信息
+    InvoiceVo queryInvoice(Integer orderid);//返回发票信息
 
     int updateAddress(AddressVo address);//编辑收货人信息
 

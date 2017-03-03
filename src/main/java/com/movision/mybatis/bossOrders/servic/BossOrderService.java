@@ -11,6 +11,7 @@ import com.movision.mybatis.bossOrders.mapper.BossOrdersMapper;
 import com.movision.mybatis.city.entity.City;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.invoice.entity.Invoice;
+import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.post.entity.Post;
@@ -125,7 +126,7 @@ public class BossOrderService {
      * @param orderid
      * @return
      */
-    public Invoice queryOrderInvoice(Integer orderid) {
+    public InvoiceVo queryOrderInvoice(Integer orderid) {
         try {
             loger.info("返回发票成功");
             return bossOrdersMapper.queryInvoice(orderid);
@@ -141,7 +142,7 @@ public class BossOrderService {
      * @param
      * @return
      */
-    public int updateOrderInvoice(Invoice invoice) {
+    public int updateOrderInvoice(InvoiceVo invoice) {
         try {
             loger.info("修改发票");
             return bossOrdersMapper.updateInvoice(invoice);
@@ -220,7 +221,7 @@ public class BossOrderService {
      * @param id
      * @return
      */
-    public Invoice queryOrderInvoiceInfo(Integer id) {
+    public InvoiceVo queryOrderInvoiceInfo(Integer id) {
         try {
             loger.info("查询发票");
             return bossOrdersMapper.findAllInvoiceInfo(id);

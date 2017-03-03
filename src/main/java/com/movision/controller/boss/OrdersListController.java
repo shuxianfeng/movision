@@ -9,6 +9,7 @@ import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.invoice.entity.Invoice;
+import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -312,7 +313,7 @@ public class OrdersListController {
     @RequestMapping(value = "/query_invoice", method = RequestMethod.POST)
     public Response queryOrderInvoice(@ApiParam(value = "订单id") @RequestParam(required = false) Integer orderid) {
         Response response = new Response();
-        Invoice invoice = orderFacade.queryOrderInvoice(orderid);
+        InvoiceVo invoice = orderFacade.queryOrderInvoice(orderid);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }

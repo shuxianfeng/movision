@@ -11,6 +11,7 @@ import com.movision.mybatis.bossOrders.servic.BossOrderService;
 import com.movision.mybatis.city.entity.City;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.invoice.entity.Invoice;
+import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.post.entity.Post;
@@ -250,7 +251,7 @@ public class OrderFacade {
      */
     public Map<String, Object> queryOrderDetail(Integer id) {
         Map<String, Object> map = new HashedMap();
-        Invoice invoice = bossOrderService.queryOrderInvoiceInfo(id);//查询发票信息
+        InvoiceVo invoice = bossOrderService.queryOrderInvoiceInfo(id);//查询发票信息
         BossOrders bossOrders = bossOrderService.queryOrderInfo(id);//查询基本信息(包含其他信息)
         Address bossOrdersGet = bossOrderService.queryOrderGetInfo(id);//查询收货人信息
         List<Goods> goods = bossOrderService.queryOrderGoods(id);//查询商品信息
@@ -324,7 +325,7 @@ public class OrderFacade {
      * @return
      */
     public Map<String, Integer> updateOrderInvoice(String head, String kind, String content, String orderid, String companyname, String rigaddress, String rigphone, String bank, String banknum, String code, String onlystatue) {
-        Invoice invoice = new Invoice();
+        InvoiceVo invoice = new InvoiceVo();
         Map<String, Integer> map = new HashedMap();
         int kinds = Integer.parseInt(kind);
         if (kinds == 1) {
@@ -380,7 +381,7 @@ public class OrderFacade {
      * @param orderid
      * @return
      */
-    public Invoice queryOrderInvoice(Integer orderid) {
+    public InvoiceVo queryOrderInvoice(Integer orderid) {
         return bossOrderService.queryOrderInvoice(orderid);
     }
 
