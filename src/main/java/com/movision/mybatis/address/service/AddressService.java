@@ -73,5 +73,14 @@ public class AddressService {
         }
     }
 
+    public Address queryMyDefaultAddress(int userid) {
+        try {
+            log.info("查询我的默认地址");
+            return addressMapper.queryDefaultAddress(userid);
+        } catch (Exception e) {
+            log.error("查询我的默认地址失败", e);
+            throw e;
+        }
+    }
 
 }

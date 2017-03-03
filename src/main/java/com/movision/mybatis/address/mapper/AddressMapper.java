@@ -26,4 +26,5 @@ public interface AddressMapper {
     List<Map<String, Object>> queryMyAddressList(Map map);
 
     Map<String, Object> queryAddressDetail(@Param("id") Integer id);
+
 }

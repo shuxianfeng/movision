@@ -942,8 +942,11 @@
     <select id="findAllC" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodscombo.entity.GoodsComboVo">
         SELECT g.comboid,g.goodsid,d.price,d.`name` FROM yw_goods_combo g
-        LEFT JOIN yw_goods d ON d.id=g.goodsid WHERE g.comboid=#{id,jdbcType=INTEGER}
+        LEFT JOIN yw_goods d ON d.id=g.goodsid WHERE g.comboid=#{comboid,jdbcType=INTEGER}
     </select>
-
-
+    <select id="findAllComboT" resultType="com.movision.mybatis.goodscombo.entity.GoodsComboVo">
+        SELECT c.id,c.comboid,c.comboname,c.combodiscountprice,c.intime,
+        (SELECT COUNT(1) FROM yw_sub_order o WHERE o.combotype=c.comboid ) AS sales
+        FROM yw_combo c  ORDER BY c.id
+    </select>
 </mapper>

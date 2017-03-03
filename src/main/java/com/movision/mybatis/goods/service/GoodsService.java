@@ -17,6 +17,8 @@ import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentCategery;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.mybatis.goodsAssessment.mapper.GoodsAssessmentMapper;
 import com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg;
+import com.movision.mybatis.goodscombo.entity.GoodsCombo;
+import com.movision.mybatis.goodscombo.entity.GoodsComboDetail;
 import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
 import com.movision.mybatis.role.entity.Role;
 import com.movision.utils.pagination.model.Paging;
@@ -553,7 +555,7 @@ public class GoodsService {
     public List<GoodsComboVo> findAllCombo(Paging<GoodsComboVo> pager) {
         try {
             log.info("查询套餐列表");
-            return goodsMapper.findAllCombo(pager.getRowBounds());
+            return goodsMapper.findAllComboT(pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询套餐列表失败", e);
             throw e;
@@ -869,13 +871,13 @@ public class GoodsService {
     /**
      * 根据id查询
      *
-     * @param id
+     * @param comboid
      * @return
      */
-    public GoodsComboVo findAllC(Integer id) {
+    public List<GoodsComboVo> findAllC(Integer comboid) {
         try {
             log.info("根据id查询");
-            return goodsMapper.findAllC(id);
+            return goodsMapper.findAllC(comboid);
         } catch (Exception e) {
             log.error("根据id查询失败", e);
             throw e;
