@@ -276,6 +276,10 @@ public class GoodsListFacade {
                 e.printStackTrace();
             }
         }
+        int re = 0;
+        if (recommenddate == null) {
+            re = goodsService.updateCom(Integer.parseInt(id));
+        }
         goodsVo.setRecommenddate(date);
         /**String ishot;
         String productids[] = tuijian.split(",");
@@ -300,7 +304,7 @@ public class GoodsListFacade {
         int res = goodsService.updateImage(map);
             map.put("result", result);
             map.put("res", res);
-
+        map.put("re", re);
         return map;
     }
 
