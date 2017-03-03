@@ -665,14 +665,14 @@ public class GoodsController {
     /**
      * 根据id查询商品
      *
-     * @param id
+     * @param comboid
      * @return
      */
     @ApiOperation(value = "根据id查询商品", notes = "根据id查询商品", response = Response.class)
     @RequestMapping(value = "query_comboid_name", method = RequestMethod.POST)
-    public Response queryName(@ApiParam(value = "套餐id") @RequestParam(required = false) Integer id) {
+    public Response queryName(@ApiParam(value = "套餐id") @RequestParam(required = false) Integer comboid) {
         Response response = new Response();
-        GoodsComboVo goodsComboVo = goodsFacade.queryName(id);
+        GoodsComboVo goodsComboVo = goodsFacade.queryName(comboid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -680,4 +680,21 @@ public class GoodsController {
         return response;
     }
 
+    /**
+     * 删除套餐
+     *
+     * @param comboid
+     * @return
+     */
+    @ApiOperation(value = "删除套餐", notes = "删除套餐", response = Response.class)
+    @RequestMapping(value = "delete_com", method = RequestMethod.POST)
+    public Response deleteComGoods(@ApiParam(value = "套餐id") @RequestParam(required = false) Integer comboid) {
+        Response response = new Response();
+        int res = goodsFacade.deleteComGoods(comboid);
+        if (response.getCode() == 200) {
+            response.setMessage("删除成功");
+        }
+        response.setData(res);
+        return response;
+    }
 }

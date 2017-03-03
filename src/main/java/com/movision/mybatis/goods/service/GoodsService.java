@@ -887,15 +887,47 @@ public class GoodsService {
     /**
      * 根据id查询商品
      *
-     * @param id
+     * @param comboid
      * @return
      */
-    public GoodsComboVo queryName(Integer id) {
+    public GoodsComboVo queryName(Integer comboid) {
         try {
             log.info("根据id查询商品");
-            return goodsMapper.queryName(id);
+            return goodsMapper.queryName(comboid);
         } catch (Exception e) {
             log.error("根据id查询商品失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 删除套餐
+     *
+     * @param comboid
+     * @return
+     */
+    public int deleteComGoods(Integer comboid) {
+        try {
+            log.info("删除套餐");
+            return goodsMapper.deleteComGoods(comboid);
+        } catch (Exception e) {
+            log.error("删除套餐失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据id查询套餐是否有商品
+     *
+     * @param comboid
+     * @return
+     */
+    public int queryByCom(Integer comboid) {
+        try {
+            log.info("根据id查询套餐是否有商品");
+            return goodsMapper.queryByCom(comboid);
+        } catch (Exception e) {
+            log.error("根据id查询套餐是否有商品失败");
             throw e;
         }
     }

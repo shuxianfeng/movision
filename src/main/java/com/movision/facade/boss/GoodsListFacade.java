@@ -619,10 +619,27 @@ public class GoodsListFacade {
     /**
      * 根据id查询商品
      *
-     * @param id
+     * @param comboid
      * @return
      */
-    public GoodsComboVo queryName(Integer id) {
-        return goodsService.queryName(id);
+    public GoodsComboVo queryName(Integer comboid) {
+        return goodsService.queryName(comboid);
+    }
+
+    /**
+     * 删除套餐
+     *
+     * @param comboid
+     * @return
+     */
+    public int deleteComGoods(Integer comboid) {
+        int result = goodsService.queryByCom(comboid);
+        int re = 0;
+        if (result >= 1) {
+            return re;
+        } else {
+            re = goodsService.deleteComGoods(comboid);
+        }
+        return re;
     }
 }

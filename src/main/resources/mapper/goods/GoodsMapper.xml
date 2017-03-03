@@ -949,5 +949,11 @@
         (SELECT COUNT(1) FROM yw_sub_order o WHERE o.combotype=c.comboid ) AS sales
         FROM yw_combo c  ORDER BY c.id
     </select>
-
+    <select id="queryByCom" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    SELECT COUNT(1) FROM yw_goods_combo WHERE comboid=#{comboid,jdbcType=INTEGER}
+    </select>
+    <select id="queryName" resultType="com.movision.mybatis.goodscombo.entity.GoodsComboVo"
+            parameterType="java.lang.Integer">
+        SELECT g.name FROM yw_goods_combo c LEFT JOIN yw_goods g ON g.id=c.goodsid WHERE c.comboid=#{comboid,jdbcType=INTEGER}
+    </select>
 </mapper>

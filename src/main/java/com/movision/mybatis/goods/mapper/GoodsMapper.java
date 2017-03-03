@@ -122,7 +122,10 @@ public interface GoodsMapper {
 
     List<GoodsComboVo> findAllC(Integer comboid);
 
-    GoodsComboVo queryName(Integer id);//根据id查询所有商品
+    GoodsComboVo queryName(Integer comboid);//根据id查询所有商品
 
+    int deleteComGoods(Integer comboid);//删除套餐
+
+    int queryByCom(Integer comboid);//根据id查询套餐内是否有商品
 
 }
