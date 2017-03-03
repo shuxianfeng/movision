@@ -525,7 +525,7 @@ public class PostFacade {
                 post.setIshot(ishot);//是否为圈子精选
             }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String estime = null;
+            Date d = null;
             if (isessence != null) {
                 if (isessence != "0") {//判断是否为加精
                     post.setIsessence(isessence);//是否为首页精选
@@ -535,9 +535,12 @@ public class PostFacade {
                         post.setOrderid("0");
                     }
                     if (time != null) {
-                        Long l = new Long(time);
-                        estime = format.format(l);
-                        post.setEssencedate(estime);
+                        try {
+                            d = format.parse(time);
+                            post.setEssencedate(d);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                 }
@@ -610,12 +613,17 @@ public class PostFacade {
                     } else {
                         post.setOrderid("0");
                     }
-                    String d = null;
+                    Date d = null;
                     if (time != null || time != "") {
-                        Long l = new Long(time);
-                        d = format.format(l);
-                        post.setEssencedate(d);
+                        try {
+                            d = format.parse(time);
+                            post.setEssencedate(d);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
                     }
+
                 }
             }
 
@@ -664,13 +672,16 @@ public class PostFacade {
         Map<String, Integer> map = new HashedMap();
         PostTo p = new PostTo();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String esdate = null;
+        Date esdate = null;
         if (Integer.parseInt(orderid) > 0) {//加精动作
             p.setId(Integer.parseInt(postid));
             if (essencedate != null) {
-                Long l = new Long(essencedate);
-                esdate = format.format(l);
-                p.setEssencedate(esdate);//精选日期
+                try {
+                    esdate = format.parse(essencedate);
+                    p.setEssencedate(esdate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
             p.setOrderid(orderid);
             p.setSubtitle(subtitle);
@@ -919,11 +930,14 @@ public class PostFacade {
                 post.setOrderid(orderid);
             }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String estime = null;
+            Date estime = null;
             if (time != null) {
-                Long l = new Long(time);
-                estime = format.format(l);
-                post.setEssencedate(estime);
+                try {
+                    estime = format.parse(time);
+                    post.setEssencedate(estime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
             post.setUserid(userid);
             int result = postService.updatePostById(post);//编辑帖子

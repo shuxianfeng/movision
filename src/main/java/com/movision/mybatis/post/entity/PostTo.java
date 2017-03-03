@@ -47,7 +47,7 @@ public class PostTo {
 
     private String isdel;
 
-    private String essencedate;//精选日期
+    private Date essencedate;//精选日期
 
     private String userid;//用户id
 
@@ -233,11 +233,11 @@ public class PostTo {
         this.isdel = isdel;
     }
 
-    public String getEssencedate() {
+    public Date getEssencedate() {
         return essencedate;
     }
 
-    public void setEssencedate(String essencedate) {
+    public void setEssencedate(Date essencedate) {
         this.essencedate = essencedate;
     }
 

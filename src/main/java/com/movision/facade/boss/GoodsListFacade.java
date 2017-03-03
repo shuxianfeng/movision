@@ -611,4 +611,14 @@ public class GoodsListFacade {
         return list;
     }
 
+
+    /**
+     * 根据id查询商品
+     *
+     * @param id
+     * @return
+     */
+    public GoodsComboVo queryName(Integer id) {
+        return goodsService.queryName(id);
+    }
 }

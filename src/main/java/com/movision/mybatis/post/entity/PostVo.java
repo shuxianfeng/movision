@@ -349,6 +349,16 @@ public class PostVo {
         this.circlename = circlename;
     }
 
+    private String activestatue;
+
+    public String getActivestatue() {
+        return activestatue;
+    }
+
+    public void setActivestatue(String activestatue) {
+        this.activestatue = activestatue;
+    }
+
     public Date getEssencedate() {
         return essencedate;
     }

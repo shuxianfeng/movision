@@ -949,4 +949,5 @@
         (SELECT COUNT(1) FROM yw_sub_order o WHERE o.combotype=c.comboid ) AS sales
         FROM yw_combo c  ORDER BY c.id
     </select>
+
 </mapper>

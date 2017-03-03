@@ -122,5 +122,7 @@ public interface GoodsMapper {
 
     List<GoodsComboVo> findAllC(Integer comboid);
 
+    GoodsComboVo queryName(Integer id);//根据id查询所有商品
+
 
 }
