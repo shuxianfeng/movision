@@ -1,6 +1,7 @@
 package com.movision.controller.boss;
 
 import com.movision.common.Response;
+import com.movision.facade.video.VideoFacade;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,13 +28,22 @@ public class VideoController {
     @Autowired
     private MovisionOssClient movisionOssClient;
 
+    @Autowired
+    private VideoFacade videoFacade;
+
     @ApiOperation(value = "上传视频", notes = "上传视频", response = Response.class)
     @RequestMapping(value = "boss/video/upload_video", method = RequestMethod.POST)
-    public Response queryApplyVipList(@RequestParam(value = "file", required = false) MultipartFile file) {
-        String url = movisionOssClient.uploadObject(file, "video", "test");
+    public Response queryApplyVipList(HttpServletRequest request) throws ServletException, IOException {
+        /*String url = movisionOssClient.uploadObject(file, "video", "test");
         Map<String, String> map = new HashMap<>();
         map.put("url", url);
         map.put("name", FileUtil.getFileNameByUrl(url));
+        return new Response(map);*/
+
+        Map map = videoFacade.uploadVideo(request, "video");
         return new Response(map);
+
     }
+
+
 }
