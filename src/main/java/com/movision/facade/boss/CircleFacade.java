@@ -531,7 +531,7 @@ public class CircleFacade {
      * @param endtime
      * @return
      */
-    public List<CircleIndexList> queryCircleByCondition(String pai, String intime, String popularity, String name, String circleman, String type, String begintime, String endtime) {
+    public List<CircleIndexList> queryCircleByCondition(String pai, String name, String circleman, String type, String begintime, String endtime) {
         Map map = new HashedMap();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date beg = null;
@@ -545,8 +545,6 @@ public class CircleFacade {
             }
         }
         map.put("pai", pai);
-        map.put("intiem", intime);
-        map.put("popularity", popularity);
         map.put("name", name);
         map.put("type", type);
         map.put("circleman", circleman);
