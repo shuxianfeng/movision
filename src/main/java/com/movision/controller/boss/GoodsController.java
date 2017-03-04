@@ -697,4 +697,45 @@ public class GoodsController {
         response.setData(res);
         return response;
     }
+
+    /**
+     * 套餐搜索
+     *
+     * @param comboname
+     * @param name
+     * @param allstatue
+     * @param comboid
+     * @param minrex
+     * @param maxrex
+     * @param mintime
+     * @param maxtime
+     * @param pai
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "套餐搜索", notes = "套餐搜索", response = Response.class)
+    @RequestMapping(value = "query_comcondition", method = RequestMethod.POST)
+    public Response findAllComCondition(@ApiParam(value = "套餐名称") @RequestParam(required = false) String comboname,
+                                        @ApiParam(value = "商品名称") @RequestParam(required = false) String name,
+                                        @ApiParam(value = "状态") @RequestParam(required = false) String allstatue,
+                                        @ApiParam(value = "套餐id") @RequestParam(required = false) String comboid,
+                                        @ApiParam(value = "最小值") @RequestParam(required = false) String minrex,
+                                        @ApiParam(value = "最大值") @RequestParam(required = false) String maxrex,
+                                        @ApiParam(value = "最小时间") @RequestParam(required = false) String mintime,
+                                        @ApiParam(value = "最大时间") @RequestParam(required = false) String maxtime,
+                                        @ApiParam(value = "排序") @RequestParam(required = false) String pai,
+                                        @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                        @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<GoodsComboVo> pager = new Paging<GoodsComboVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<GoodsComboVo> list = goodsFacade.findAllComCondition(comboname, name, allstatue, comboid, minrex, maxrex, mintime, maxtime, pai, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(pager);
+        pager.result(list);
+        return response;
+
+    }
 }

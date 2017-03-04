@@ -14,6 +14,16 @@ public class GoodsAssessmentVo {
 
     private Integer userid;
 
+    private Integer level;
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
     private Integer goodid;
 
     private Integer suborderid;

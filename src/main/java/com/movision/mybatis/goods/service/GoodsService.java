@@ -949,4 +949,20 @@ public class GoodsService {
 
         }
     }
+
+    /**
+     * 根据id查询详情
+     *
+     * @param comboid
+     * @return
+     */
+    public GoodsComboVo findByIdCom(Integer comboid) {
+        try {
+            log.info("根据id查询详情");
+            return goodsMapper.findByIdCom(comboid);
+        } catch (Exception e) {
+            log.error("根据id查询详情失败", e);
+            throw e;
+        }
+    }
 }

@@ -751,7 +751,7 @@
     </select>
 
     <select id="findAllAssessment" resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
-        SELECT g.id,u.nickname,g.goodpoint,g.logisticpoint,g.servicepoint,g.content,(SELECT COUNT(1) FROM
+        SELECT g.id,u.nickname,u.level,g.goodpoint,g.logisticpoint,g.servicepoint,g.content,(SELECT COUNT(1) FROM
         yw_goods_assessment_img i WHERE i.assessmentid=g.id) AS number,g.createtime FROM yw_goods_assessment g
         LEFT JOIN yw_user u on u.id=g.userid WHERE g.userid<![CDATA[<>]]>-1
     </select>
@@ -958,6 +958,39 @@
     </select>
     <select id="findAllComCondition" parameterType="java.util.Map"
             resultType="com.movision.mybatis.goodscombo.entity.GoodsComboVo">
-
+        SELECT c.id,c.comboid,c.comboname,c.combodiscountprice,c.intime,
+        (SELECT COUNT(1) FROM yw_sub_order o WHERE o.combotype=c.comboid ) AS sales
+        FROM yw_combo c WHERE 1=1
+        <if test="comboname!=null and comboname!=''">
+            AND c.comboname LIKE concat('%',#{comboname,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="allstatue==1 and combodiscountprice!=null and combodiscountprice!='' and allstatue!=null and allstatue!='' ">
+            AND c.combodiscountprice BETWEEN #{minrex,jdbcType=DOUBLE} AND #{maxrex,jdbcType=DOUBLE}
+        </if>
+        <if test="allstatue==2 and sales!=null and sales!='' and allstatue!=null and allstatue!=''">
+            AND (SELECT COUNT(1) FROM yw_sub_order o WHERE o.combotype=c.comboid ) BETWEEN #{minrex,jdbcType=INTEGER}
+            AND #{maxrex,jdbcType=INTEGER}
+        </if>
+        <if test="comboid!=null and comboid!=''">
+            AND c.comboid=#{comboid,jdbcType=INTEGER}
+        </if>
+        <if test="intime!=null and intime!='' and mintime!=null and maxtime!=null and maxtime!='' and mintime!='' ">
+            AND c.intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
+        </if>
+        <if test="allstatue==3 and price!=null and price!='' and allstatue!=null and allstatue!=''">
+            AND d.price BETWEEN #{minrex,jdbcType=DOUBLE} AND #{maxrex,jdbcType=DOUBLE}
+        </if>
+        <if test="name!=null and name!=''">
+            AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="pai==2">
+            ORDER BY d.price DESC
+        </if>
+        <if test="pai==0">
+            ORDER BY (SELECT COUNT(1) FROM yw_sub_order o WHERE o.combotype=c.comboid ) DESC
+        </if>
+        <if test="pai==1">
+            ORDER BY c.intime DESC
+        </if>
     </select>
 </mapper>

@@ -602,7 +602,7 @@ public class GoodsListFacade {
             List<GoodsComboVo> good = goodsService.findAllC(list.get(i).getComboid());
             for (int j = 0; j < good.size(); j++) {
                 //   goodsComboVo.setName(good.get(i).getName());
-                price = good.get(i).getPrice();
+                price = good.get(j).getPrice();
                /* goodsComboVo.setPrice(price);*/
                 sum += price;
             }
@@ -648,7 +648,7 @@ public class GoodsListFacade {
      * 条件搜索
      *
      * @param comboname
-     * @param goodsid
+     * @param name
      * @param allstatue
      * @param minrex
      * @param maxrex
@@ -657,17 +657,19 @@ public class GoodsListFacade {
      * @param pager
      * @return
      */
-    public List<GoodsComboVo> findAllComCondition(String comboname, String goodsid, String allstatue, String minrex, String maxrex, String mintime, String maxtime, String pai, Paging<GoodsComboVo> pager) {
-
+    public List<GoodsComboVo> findAllComCondition(String comboname, String name, String allstatue, String comboid, String minrex, String maxrex, String mintime, String maxtime, String pai, Paging<GoodsComboVo> pager) {
         Map<String, Object> map = new HashedMap();
         if (comboname != null) {
             map.put("comboname", comboname);
         }
-        if (goodsid != null) {
-            map.put("goodsid", goodsid);
+        if (name != null) {
+            map.put("name", name);
         }
-        if (allstatue != null) {
+
             map.put("allstatue", allstatue);
+
+        if (comboid != null) {
+            map.put("comboid", comboid);
         }
         if (minrex != null) {
             map.put("minrex", minrex);
@@ -697,7 +699,19 @@ public class GoodsListFacade {
         if (pai != null) {
             map.put("pai", pai);
         }
+        List<GoodsComboVo> list = goodsService.findAllComCondition(map, pager);
 
-        return goodsService.findAllComCondition(map, pager);
+        Double price = 0.0;
+        for (int i = 0; i < list.size(); i++) {
+            Double sum = 0.0;
+            List<GoodsComboVo> good = goodsService.findAllC(list.get(i).getComboid());
+            for (int j = 0; j < good.size(); j++) {
+                price = good.get(j).getPrice();
+                sum += price;
+            }
+            list.get(i).setList(good);
+            list.get(i).setSum(sum);
+        }
+        return list;
     }
 }

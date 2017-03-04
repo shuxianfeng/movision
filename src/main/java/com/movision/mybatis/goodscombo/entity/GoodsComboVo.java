@@ -18,6 +18,7 @@ public class GoodsComboVo {
     private Integer comboid;
     private Double sum;
 
+
     public Double getSum() {
         return sum;
     }
