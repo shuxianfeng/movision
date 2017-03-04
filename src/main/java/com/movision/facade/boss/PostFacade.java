@@ -624,7 +624,7 @@ public class PostFacade {
                     esdate = format.parse(essencedate);
                     p.setEssencedate(esdate);
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    logger.error("时间转换异常", e);
                 }
             }
             p.setOrderid(orderid);
