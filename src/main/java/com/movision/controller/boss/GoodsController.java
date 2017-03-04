@@ -503,7 +503,7 @@ public class GoodsController {
     @ApiOperation(value = "修改描述图", notes = "修改描述图", response = Response.class)
     @RequestMapping(value = "update_CommodityDescription", method = RequestMethod.POST)
     public Response updateCommodityDescription(
-            @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
+            @ApiParam(value = "商品id") @RequestParam String goodsid,
             @ApiParam(value = "地址") @RequestParam(required = false) String imgurl) {
         Response response = new Response();
         Map<String, Integer> map = goodsFacade.updateCommodityDescription(goodsid, imgurl);
