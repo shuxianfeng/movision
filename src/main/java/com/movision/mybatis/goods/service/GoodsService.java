@@ -726,13 +726,13 @@ public class GoodsService {
     /**
      * 商品参数图
      *
-     * @param id
+     * @param goodsid
      * @return
      */
-    public GoodsImg queryImgGoods(Integer id) {
+    public GoodsImg queryImgGoods(Integer goodsid) {
         try {
             log.info("商品参数图");
-            return goodsMapper.queryImgGoods(id);
+            return goodsMapper.queryImgGoods(goodsid);
         } catch (Exception e) {
             log.error("商品参数图失败", e);
             throw e;
@@ -742,13 +742,13 @@ public class GoodsService {
     /**
      * 商品描述
      *
-     * @param id
+     * @param goodsid
      * @return
      */
-    public GoodsImg queryCommodityDescription(Integer id) {
+    public GoodsImg queryCommodityDescription(Integer goodsid) {
         try {
             log.info("商品描述");
-            return goodsMapper.queryCommodityDescription(id);
+            return goodsMapper.queryCommodityDescription(goodsid);
         } catch (Exception e) {
             log.error("商品描述图失败", e);
             throw e;

@@ -104,9 +104,9 @@ public interface GoodsMapper {
 
     GoodsAssessmentVo queryAssessmentRemark(Integer id);//评论详情
 
-    GoodsImg queryImgGoods(Integer id);//商品参数图
+    GoodsImg queryImgGoods(Integer goodsid);//商品参数图
 
-    GoodsImg queryCommodityDescription(Integer id);//商品描述图
+    GoodsImg queryCommodityDescription(Integer goodsid);//商品描述图
 
     List<GoodsImg> queryblueprint(Integer id);//晒图
 

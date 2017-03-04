@@ -393,21 +393,21 @@ public class GoodsListFacade {
     /**
      * 商品参数图
      *
-     * @param id
+     * @param goodsid
      * @return
      */
-    public GoodsImg queryImgGoods(Integer id) {
-        return goodsService.queryImgGoods(id);
+    public GoodsImg queryImgGoods(Integer goodsid) {
+        return goodsService.queryImgGoods(goodsid);
     }
 
     /**
      * 商品描述图
      *
-     * @param id
+     * @param goodsid
      * @return
      */
-    public GoodsImg queryCommodityDescription(Integer id) {
-        return goodsService.queryCommodityDescription(id);
+    public GoodsImg queryCommodityDescription(Integer goodsid) {
+        return goodsService.queryCommodityDescription(goodsid);
     }
 
     /**

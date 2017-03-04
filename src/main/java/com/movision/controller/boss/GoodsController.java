@@ -381,14 +381,14 @@ public class GoodsController {
     /**
      * 商品参数图
      *
-     * @param id
+     * @param goodsid
      * @return
      */
     @ApiOperation(value = "商品参数图", notes = "商品参数图", response = Response.class)
     @RequestMapping(value = "query_goods_img", method = RequestMethod.POST)
-    public Response queryImgGoods(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
+    public Response queryImgGoods(@ApiParam(value = "商品id") @RequestParam(required = false) Integer goodsid) {
         Response response = new Response();
-        GoodsImg goodsImg = goodsFacade.queryImgGoods(id);
+        GoodsImg goodsImg = goodsFacade.queryImgGoods(goodsid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -399,14 +399,14 @@ public class GoodsController {
     /**
      * 商品描述图
      *
-     * @param id
+     * @param goodsid
      * @return
      */
     @ApiOperation(value = "商品描述图", notes = "商品描述图", response = Response.class)
     @RequestMapping(value = "query_commodityDescription_img", method = RequestMethod.POST)
-    public Response queryCommodityDescription(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
+    public Response queryCommodityDescription(@ApiParam(value = "商品id") @RequestParam(required = false) Integer goodsid) {
         Response response = new Response();
-        GoodsImg goodsImg = goodsFacade.queryCommodityDescription(id);
+        GoodsImg goodsImg = goodsFacade.queryCommodityDescription(goodsid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
