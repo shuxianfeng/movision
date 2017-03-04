@@ -1026,7 +1026,15 @@
 
     <select id="queryPostParticulars" resultType="com.movision.mybatis.post.entity.PostList"
             parameterType="java.lang.Integer">
-        SELECT * FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
+        SELECT p.*,
+        (SELECT COUNT(1) FROM yw_post_share WHERE postid=p.id) AS share,
+        (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded WHERE postid=p.id) AS rewarded,
+        (SELECT COALESCE(SUM(num),0) FROM yw_post_accusation WHERE postid =p.id) AS accusation,
+        (SELECT nickname FROM yw_user WHERE id=(SELECT id FROM yw_post WHERE id=p.id)) AS nickname,
+        (SELECT name FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id)) AS circlename,
+        (SELECT category FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id)) AS category
+        FROM yw_post p
+        WHERE id=#{postid,jdbcType=INTEGER}
     </select>
 
     <select id="queryPostNumAndisessenceByCircleid" parameterType="java.lang.Integer"

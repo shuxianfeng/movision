@@ -394,19 +394,6 @@ public class PostFacade {
      */
     public PostList queryPostParticulars(String postid) {
         PostList postList = postService.queryPostParticulars(Integer.parseInt(postid));
-        Integer circleid = postList.getCircleid();//获取到圈子id
-        Integer id = postList.getId();//获取帖子id
-        Integer share = sharesService.querysum(id);//获取分享数
-        Integer rewarded = rewardedService.queryRewardedBySum(id);//获取打赏积分
-        Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举报次数
-        String nickname = userService.queryUserByNickname(circleid);//获取发帖人
-        Circle circle = circleService.queryCircleByName(circleid);//获取圈子名称
-        postList.setNickname(nickname);
-        postList.setShare(share);//分享次数
-        postList.setRewarded(rewarded);//打赏积分
-        postList.setAccusation(accusation);//举报次数
-        postList.setCirclename(circle.getName());//帖子所属圈子
-        postList.setCategory(circle.getCategory());//
         return postList;
     }
 
