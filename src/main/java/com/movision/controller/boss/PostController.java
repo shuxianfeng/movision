@@ -617,7 +617,8 @@ public class PostController {
             @ApiParam(value = "结束时间") @RequestParam String endtime,
             @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String essencedate) {
         Response response = new Response();
-        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, userid, activefee, postcontent, coverimg, isessence, orderid, activetype, begintime, endtime, essencedate);
+
+        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, activetype, activefee, userid, coverimg, begintime, endtime, isessence, orderid, postcontent, essencedate);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
