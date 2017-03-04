@@ -106,7 +106,7 @@ public interface PostMapper {
 
     int addPostChoiceness(PostTo postid);
 
-    List<Post> queryPostChoicenesslist(Date essencedate);
+    List<PostTo> queryPostChoicenesslist(Map essencedate);
 
     List<Post> queryPostIsessence();
 

@@ -35,7 +35,7 @@ public class PostTo {
 
     private String isessencepool;
 
-    private String orderid;
+    private Integer orderid;
 
     private String coverimg;
 
@@ -185,11 +185,11 @@ public class PostTo {
         this.isessencepool = isessencepool;
     }
 
-    public String getOrderid() {
+    public Integer getOrderid() {
         return orderid;
     }
 
-    public void setOrderid(String orderid) {
+    public void setOrderid(Integer orderid) {
         this.orderid = orderid;
     }
 

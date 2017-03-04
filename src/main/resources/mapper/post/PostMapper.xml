@@ -1063,9 +1063,10 @@
     </select>
 
 
-    <select id="queryPostChoicenesslist" resultType="com.movision.mybatis.post.entity.Post"
-            parameterType="java.lang.String">
-        SELECT orderid,essencedate FROM yw_post WHERE essencedate=#{essencedate,jdbcType=DATE} AND isessence=1 GROUP BY orderid
+    <select id="queryPostChoicenesslist" resultType="com.movision.mybatis.post.entity.PostTo"
+            parameterType="java.util.Map">
+        SELECT orderid,essencedate FROM yw_post WHERE essencedate=#{esdate,jdbcType=DATE} AND isessence=1 GROUP BY
+        orderid
     </select>
 
     <select id="queryPostIsessence" resultType="com.movision.mybatis.post.entity.Post">

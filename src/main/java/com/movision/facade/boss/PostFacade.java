@@ -477,9 +477,9 @@ public class PostFacade {
                 if (isessence != "0") {//判断是否为加精
                     post.setIsessence(isessence);//是否为首页精选
                     if (!orderid.isEmpty()) {
-                        post.setOrderid(orderid);
+                        post.setOrderid(Integer.parseInt(orderid));
                     } else {
-                        post.setOrderid("0");
+                        post.setOrderid(0);
                     }
                     if (time != null) {
                         try {
@@ -553,9 +553,9 @@ public class PostFacade {
                 if (Integer.parseInt(isessence) != 0) {//判断是否为加精
                     post.setIsessence(isessence);//是否为首页精选
                     if (!orderid.isEmpty()) {
-                        post.setOrderid(orderid);
+                        post.setOrderid(Integer.parseInt(orderid));
                     } else {
-                        post.setOrderid("0");
+                        post.setOrderid(0);
                     }
                     Date d = null;
                     if (time != null || time != "") {
@@ -573,7 +573,7 @@ public class PostFacade {
 
             post.setIntime(new Date());
         if (orderid != null) {
-                post.setOrderid(orderid);//排序精选
+            post.setOrderid(Integer.parseInt(orderid));//排序精选
             }
             post.setUserid(userid);//发帖人
             post.setIsactive("1");
@@ -627,7 +627,9 @@ public class PostFacade {
                     logger.error("时间转换异常", e);
                 }
             }
-            p.setOrderid(orderid);
+            if (orderid != null) {
+                p.setOrderid(Integer.parseInt(orderid));
+            }
             p.setSubtitle(subtitle);
             Integer result = postService.addPostChoiceness(p);
             map.put("result", result);
@@ -652,7 +654,7 @@ public class PostFacade {
     public PostChoiceness queryPostChoiceness(String postid, String essencedate) {
         Map<String, List> map = new HashedMap();
         PostChoiceness postChoiceness = new PostChoiceness();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date esdate = null;
         if (essencedate != null) {
             try {
@@ -661,7 +663,9 @@ public class PostFacade {
                 logger.error("时间格式转换异常");
             }
         }
-        List<Post> posts = postService.queryPostChoicenesslist(esdate);//返回加精日期内有几条加精
+        Map m = new HashedMap();
+        m.put("esdate", esdate);
+        List<PostTo> posts = postService.queryPostChoicenesslist(m);//返回加精日期内有几条加精
         if (postid != null) {
             postChoiceness = postService.queryPostChoiceness(Integer.parseInt(postid));
         }
@@ -875,7 +879,7 @@ public class PostFacade {
             }
             post.setIntime(new Date());
             if (orderid != null) {
-                post.setOrderid(orderid);
+                post.setOrderid(Integer.parseInt(orderid));
             }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date estime = null;
