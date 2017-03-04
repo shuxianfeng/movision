@@ -404,8 +404,19 @@
         SELECT name,category FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER}
     </select>
 
-    <select id="queryListByCircleCategory" resultType="java.lang.Integer">
-        SELECT DISTINCT category FROM yw_circle ORDER BY category
+    <select id="queryListByCircleCategory" resultType="com.movision.mybatis.circle.entity.CircleIndexList">
+        SELECT c.id AS category,c.categoryname , c.intime,
+        (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN (SELECT id FROM yw_circle WHERE category=c.id)) as
+        follownum,
+        (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN(select circleid from yw_follow_circle where
+        date(intime) = curdate())) AS follownewnum ,
+        (SELECT COUNT(1) FROM yw_post WHERE circleid IN(SELECT id FROM yw_circle WHERE category=c.id) AND date(intime) =
+        curdate()) AS postnewnum,
+        (SELECT COUNT(1) FROM yw_post WHERE circleid IN(SELECT id FROM yw_circle WHERE category=c.id) AND isessence=1)
+        AS isessencenum,
+        (SELECT COUNT(1) FROM yw_post p WHERE p.circleid IN (SELECT id FROM yw_circle WHERE category=c.id)) AS postnum,
+        (SELECT SUM(supportnum) FROM yw_circle WHERE category=c.id) AS supportnum
+        FROM yw_circle_category c
     </select>
 
     <select id="queryListByCircleList" parameterType="java.lang.Integer"
@@ -459,7 +470,7 @@
         WHERE category=#{categoryid,jdbcType=INTEGER}
     </select>
 
-    <select id="queryFollowAndNum" resultType="com.movision.mybatis.circle.entity.CircleVo"
+    <select id="queryFollowAndNum" resultType="com.movision.mybatis.circle.entity.CircleIndexList"
             parameterType="java.lang.Integer">
          SELECT c.categoryname ,
         (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN (SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER})) as follownum,

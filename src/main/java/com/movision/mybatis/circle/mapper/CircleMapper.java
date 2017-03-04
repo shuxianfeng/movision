@@ -55,7 +55,7 @@ public interface CircleMapper {
 
     Circle queryCircleByName(Integer circleid);
 
-    List<Integer> queryListByCircleCategory();
+    List<CircleIndexList> queryListByCircleCategory();
 
     List<Circle> queryListByCircleList(Integer in);
 
@@ -63,7 +63,7 @@ public interface CircleMapper {
 
     List<User> queryCircleMan(Integer categoryid);
 
-    CircleVo queryFollowAndNum(Integer categoryid);
+    CircleIndexList queryFollowAndNum(Integer categoryid);
 
     CircleVo queryCircleSum(Integer circleid);
 

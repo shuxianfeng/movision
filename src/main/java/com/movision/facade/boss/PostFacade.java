@@ -7,6 +7,7 @@ import com.movision.mybatis.activePart.entity.ActivePart;
 import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.activePart.service.ActivePartService;
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.circle.entity.CircleIndexList;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
@@ -715,10 +716,10 @@ public class PostFacade {
      */
     public Map<String, Object> queryListByCircleType() {
         Map<String, Object> map = new HashedMap();
-        List<Integer> list = circleService.queryListByCircleCategory();//查询圈子所有的所属分类
+        List<CircleIndexList> list = circleService.queryListByCircleCategory();//查询圈子所有的所属分类
         List<List<Circle>> circlename = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {//根据圈子的所属分类添加二级菜单
-            List<Circle> circle = circleService.queryListByCircleList(list.get(i));//用于查询圈子名称
+            List<Circle> circle = circleService.queryListByCircleList(list.get(i).getCategory());//用于查询圈子名称
             circlename.add(circle);
         }
         Integer num = circleService.queryCircleByNum();

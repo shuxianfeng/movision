@@ -255,7 +255,7 @@ public class CircleService {
      *
      * @return
      */
-    public List<Integer> queryListByCircleCategory() {
+    public List<CircleIndexList> queryListByCircleCategory() {
         try {
             log.info("查询圈子中所有圈子所属分类");
             return circleMapper.queryListByCircleCategory();
@@ -303,7 +303,7 @@ public class CircleService {
      * @param categoryid
      * @return
      */
-    public CircleVo queryFollowAndNum(Integer categoryid) {
+    public CircleIndexList queryFollowAndNum(Integer categoryid) {
         try {
             log.info("查询圈子帖子总数，精贴总数，关注总数，支持人数和时间");
             return circleMapper.queryFollowAndNum(categoryid);
