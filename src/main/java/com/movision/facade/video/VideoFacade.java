@@ -14,6 +14,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletException;
@@ -32,6 +33,7 @@ import java.util.Map;
  * @Author zhuangyuhao
  * @Date 2017/3/3 9:45
  */
+@Service
 public class VideoFacade {
 
     private static Logger log = LoggerFactory.getLogger(VideoFacade.class);
