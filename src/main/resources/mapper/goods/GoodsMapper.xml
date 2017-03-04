@@ -1006,4 +1006,9 @@
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
         SELECT content FROM yw_goods_assessment WHERE id=#{id,jdbcType=INTEGER}
     </select>
+    <select id="findAllGoods" resultType="com.movision.mybatis.goods.entity.GoodsCom" parameterType="java.lang.Integer">
+             SELECT g.goodsid,d.price,d.`name` ,d.origprice,d.stock,d.sales,d.attribute,d.id ,d.isdel,c.typename,b.brandname  FROM yw_goods_combo g
+    LEFT JOIN yw_goods d ON d.id=g.goodsid  LEFT JOIN yw_category
+    c ON c.protype=d.protype LEFT JOIN yw_brand b ON b.brandid=d.brandid WHERE g.comboid=#{comboid,jdbcType=INTEGER}
+    </select>
 </mapper>

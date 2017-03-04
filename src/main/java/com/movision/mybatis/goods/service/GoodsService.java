@@ -7,10 +7,7 @@ import com.movision.mybatis.category.mapper.CategoryMapper;
 import com.movision.mybatis.combo.entity.Combo;
 import com.movision.mybatis.combo.entity.ComboVo;
 import com.movision.mybatis.combo.mapper.ComboMapper;
-import com.movision.mybatis.goods.entity.Goods;
-import com.movision.mybatis.goods.entity.GoodsDetail;
-import com.movision.mybatis.goods.entity.GoodsImg;
-import com.movision.mybatis.goods.entity.GoodsVo;
+import com.movision.mybatis.goods.entity.*;
 import com.movision.mybatis.goods.mapper.GoodsMapper;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentCategery;
@@ -962,6 +959,25 @@ public class GoodsService {
             return goodsMapper.findByIdCom(comboid);
         } catch (Exception e) {
             log.error("根据id查询详情失败", e);
+            throw e;
+        }
+    }
+
+
+    /**
+     * 根据id查询商品信息
+     *
+     * @param comboid
+     * @param pager
+     * @return
+     */
+    public List<GoodsCom> findAllGoods(Integer comboid, Paging<GoodsCom> pager) {
+
+        try {
+            log.info("根据id查询商品信息");
+            return goodsMapper.findAllGoods(comboid, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据id查询商品信息失败", e);
             throw e;
         }
     }

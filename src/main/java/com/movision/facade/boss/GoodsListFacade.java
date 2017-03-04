@@ -4,6 +4,7 @@ import com.ibm.icu.text.SimpleDateFormat;
 import com.movision.mybatis.combo.entity.Combo;
 import com.movision.mybatis.combo.entity.ComboVo;
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.goods.entity.GoodsCom;
 import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
@@ -738,5 +739,16 @@ public class GoodsListFacade {
             list.get(i).setSum(sum);
         }
         return list;
+    }
+
+    /**
+     * 根据套餐id查询商品
+     *
+     * @param comboid
+     * @param pager
+     * @return
+     */
+    public List<GoodsCom> findAllGoods(Integer comboid, Paging<GoodsCom> pager) {
+        return goodsService.findAllGoods(comboid, pager);
     }
 }

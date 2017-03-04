@@ -3,6 +3,7 @@ package com.movision.controller.boss;
 import com.movision.common.Response;
 import com.movision.facade.boss.GoodsListFacade;
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.goods.entity.GoodsCom;
 import com.movision.mybatis.goods.entity.GoodsImg;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
@@ -756,6 +757,30 @@ public class GoodsController {
             response.setMessage("查询成功");
         }
         response.setData(map);
+        return response;
+    }
+
+    /**
+     * 根据套餐id查询商品信息
+     *
+     * @param comboid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "根据套餐id查询商品信息", notes = "根据套餐id查询商品信息", response = Response.class)
+    @RequestMapping(value = "query_byid_com_good", method = RequestMethod.POST)
+    public Response findAllGoods(@ApiParam(value = "套餐id") @RequestParam(required = false) Integer comboid,
+                                 @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                 @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<GoodsCom> pager = new Paging<GoodsCom>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<GoodsCom> list = goodsFacade.findAllGoods(comboid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 }
