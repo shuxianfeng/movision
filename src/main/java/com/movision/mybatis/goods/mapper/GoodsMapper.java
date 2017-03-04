@@ -82,6 +82,8 @@ public interface GoodsMapper {
 
     List<GoodsComboVo> findAllComboT(RowBounds rowBounds);//查询套餐列表
 
+    List<GoodsComboVo> findAllComCondition(Map map, RowBounds rowBounds);//套餐条件搜索
+
     List<GoodsVo> findAllType();//查询商品分类
 
     List<GoodsVo> findAllBrand();//查看品牌
@@ -102,9 +104,9 @@ public interface GoodsMapper {
 
     GoodsAssessmentVo queryAssessmentRemark(Integer id);//评论详情
 
-    List<GoodsImg> queryImgGoods(Integer id);//商品参数图
+    GoodsImg queryImgGoods(Integer id);//商品参数图
 
-    List<GoodsImg> queryCommodityDescription(Integer id);//商品描述图
+    GoodsImg queryCommodityDescription(Integer id);//商品描述图
 
     List<GoodsImg> queryblueprint(Integer id);//晒图
 
@@ -127,5 +129,6 @@ public interface GoodsMapper {
     int deleteComGoods(Integer comboid);//删除套餐
 
     int queryByCom(Integer comboid);//根据id查询套餐内是否有商品
+
 
 }

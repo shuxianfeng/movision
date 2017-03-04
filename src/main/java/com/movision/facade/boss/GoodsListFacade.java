@@ -396,7 +396,7 @@ public class GoodsListFacade {
      * @param id
      * @return
      */
-    public List<GoodsImg> queryImgGoods(Integer id) {
+    public GoodsImg queryImgGoods(Integer id) {
         return goodsService.queryImgGoods(id);
     }
 
@@ -406,7 +406,7 @@ public class GoodsListFacade {
      * @param id
      * @return
      */
-    public List<GoodsImg> queryCommodityDescription(Integer id) {
+    public GoodsImg queryCommodityDescription(Integer id) {
         return goodsService.queryCommodityDescription(id);
     }
 
@@ -601,13 +601,14 @@ public class GoodsListFacade {
             Double sum = 0.0;
             List<GoodsComboVo> good = goodsService.findAllC(list.get(i).getComboid());
             for (int j = 0; j < good.size(); j++) {
-                goodsComboVo.setName(good.get(i).getName());
+                //   goodsComboVo.setName(good.get(i).getName());
                 price = good.get(i).getPrice();
                /* goodsComboVo.setPrice(price);*/
                 sum += price;
             }
            /* goodsComboVo.setList(good);
             goodsComboVo.setSum(sum);*/
+            // list.get(i).setName(good.get(i).getName());
             list.get(i).setList(good);
             list.get(i).setSum(sum);
         }
@@ -641,5 +642,62 @@ public class GoodsListFacade {
             re = goodsService.deleteComGoods(comboid);
         }
         return re;
+    }
+
+    /**
+     * 条件搜索
+     *
+     * @param comboname
+     * @param goodsid
+     * @param allstatue
+     * @param minrex
+     * @param maxrex
+     * @param mintime
+     * @param maxtime
+     * @param pager
+     * @return
+     */
+    public List<GoodsComboVo> findAllComCondition(String comboname, String goodsid, String allstatue, String minrex, String maxrex, String mintime, String maxtime, String pai, Paging<GoodsComboVo> pager) {
+
+        Map<String, Object> map = new HashedMap();
+        if (comboname != null) {
+            map.put("comboname", comboname);
+        }
+        if (goodsid != null) {
+            map.put("goodsid", goodsid);
+        }
+        if (allstatue != null) {
+            map.put("allstatue", allstatue);
+        }
+        if (minrex != null) {
+            map.put("minrex", minrex);
+        }
+        if (maxrex != null) {
+            map.put("maxrex", maxrex);
+        }
+        Date isessencetime = null;//开始时间
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        if (mintime != null) {
+            try {
+                isessencetime = format.parse(mintime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("mintime", isessencetime);
+        Date max = null;//最大时间
+        if (maxtime != null) {
+            try {
+                max = format.parse(maxtime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("maxtime", max);
+        if (pai != null) {
+            map.put("pai", pai);
+        }
+
+        return goodsService.findAllComCondition(map, pager);
     }
 }

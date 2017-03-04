@@ -729,7 +729,7 @@ public class GoodsService {
      * @param id
      * @return
      */
-    public List<GoodsImg> queryImgGoods(Integer id) {
+    public GoodsImg queryImgGoods(Integer id) {
         try {
             log.info("商品参数图");
             return goodsMapper.queryImgGoods(id);
@@ -745,7 +745,7 @@ public class GoodsService {
      * @param id
      * @return
      */
-    public List<GoodsImg> queryCommodityDescription(Integer id) {
+    public GoodsImg queryCommodityDescription(Integer id) {
         try {
             log.info("商品描述");
             return goodsMapper.queryCommodityDescription(id);
@@ -929,6 +929,24 @@ public class GoodsService {
         } catch (Exception e) {
             log.error("根据id查询套餐是否有商品失败");
             throw e;
+        }
+    }
+
+    /**
+     * 条件套餐搜索
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<GoodsComboVo> findAllComCondition(Map map, Paging<GoodsComboVo> pager) {
+        try {
+            log.info("条件套餐搜索");
+            return goodsMapper.findAllComCondition(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("条件套餐搜索失败", e);
+            throw e;
+
         }
     }
 }

@@ -956,4 +956,8 @@
             parameterType="java.lang.Integer">
         SELECT g.name FROM yw_goods_combo c LEFT JOIN yw_goods g ON g.id=c.goodsid WHERE c.comboid=#{comboid,jdbcType=INTEGER}
     </select>
+    <select id="findAllComCondition" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.goodscombo.entity.GoodsComboVo">
+
+    </select>
 </mapper>

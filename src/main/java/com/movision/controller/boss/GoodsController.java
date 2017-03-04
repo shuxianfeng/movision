@@ -388,7 +388,7 @@ public class GoodsController {
     @RequestMapping(value = "query_goods_img", method = RequestMethod.POST)
     public Response queryImgGoods(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
         Response response = new Response();
-        List<GoodsImg> goodsImg = goodsFacade.queryImgGoods(id);
+        GoodsImg goodsImg = goodsFacade.queryImgGoods(id);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -406,7 +406,7 @@ public class GoodsController {
     @RequestMapping(value = "query_commodityDescription_img", method = RequestMethod.POST)
     public Response queryCommodityDescription(@ApiParam(value = "商品id") @RequestParam(required = false) Integer id) {
         Response response = new Response();
-        List<GoodsImg> goodsImg = goodsFacade.queryCommodityDescription(id);
+        GoodsImg goodsImg = goodsFacade.queryCommodityDescription(id);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
