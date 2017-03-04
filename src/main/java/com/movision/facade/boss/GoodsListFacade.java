@@ -348,13 +348,16 @@ public class GoodsListFacade {
      * @param maxtime
      * @return
      */
-    public List<GoodsAssessmentVo> queryAllAssessmentCondition(String nickname, String content, String mintime, String maxtime, Paging<GoodsAssessmentVo> pager) {
+    public List<GoodsAssessmentVo> queryAllAssessmentCondition(String nickname, String content, String pai, String mintime, String maxtime, Paging<GoodsAssessmentVo> pager) {
         Map<String, Object> map = new HashedMap();
         if (nickname != null) {
             map.put("nickname", nickname);
         }
         if (content != null) {
             map.put("content", content);
+        }
+        if (pai != null) {
+            map.put("pai", pai);
         }
         Date isessencetime = null;//开始时间
         java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -701,6 +704,28 @@ public class GoodsListFacade {
         }
         List<GoodsComboVo> list = goodsService.findAllComCondition(map, pager);
 
+        Double price = 0.0;
+        for (int i = 0; i < list.size(); i++) {
+            Double sum = 0.0;
+            List<GoodsComboVo> good = goodsService.findAllC(list.get(i).getComboid());
+            for (int j = 0; j < good.size(); j++) {
+                price = good.get(j).getPrice();
+                sum += price;
+            }
+            list.get(i).setList(good);
+            list.get(i).setSum(sum);
+        }
+        return list;
+    }
+
+    /**
+     * 根据id查询套餐
+     *
+     * @param comboid
+     * @return
+     */
+    public List<GoodsComboVo> findByIdCom(Integer comboid) {
+        List<GoodsComboVo> list = goodsService.findByIdCom(comboid);
         Double price = 0.0;
         for (int i = 0; i < list.size(); i++) {
             Double sum = 0.0;

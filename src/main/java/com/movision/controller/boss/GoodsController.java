@@ -15,6 +15,7 @@ import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.apache.regexp.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -348,10 +349,11 @@ public class GoodsController {
                                                 @ApiParam(value = "昵称") @RequestParam(required = false) String nickname,
                                                 @ApiParam(value = "内容") @RequestParam(required = false) String content,
                                                 @ApiParam(value = "开始时间") @RequestParam(required = false) String mintime,
+                                                @ApiParam(value = "排序") @RequestParam(required = false) String pai,
                                                 @ApiParam(value = "结束时间") @RequestParam(required = false) String maxtime) {
         Response response = new Response();
         Paging<GoodsAssessmentVo> pager = new Paging<GoodsAssessmentVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<GoodsAssessmentVo> list = goodsFacade.queryAllAssessmentCondition(nickname, content, mintime, maxtime, pager);
+        List<GoodsAssessmentVo> list = goodsFacade.queryAllAssessmentCondition(nickname, content, mintime, pai, maxtime, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -737,5 +739,23 @@ public class GoodsController {
         pager.result(list);
         return response;
 
+    }
+
+    /**
+     * 根据id查询
+     *
+     * @param comboid
+     * @return
+     */
+    @ApiOperation(value = "根据id查询", notes = "根据id查询", response = Response.class)
+    @RequestMapping(value = "query_byid_com", method = RequestMethod.POST)
+    public Response findByIdCom(@ApiParam(value = "套餐id") @RequestParam(required = false) Integer comboid) {
+        Response response = new Response();
+        List<GoodsComboVo> map = goodsFacade.findByIdCom(comboid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
     }
 }

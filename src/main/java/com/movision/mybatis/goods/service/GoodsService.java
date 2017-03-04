@@ -956,7 +956,7 @@ public class GoodsService {
      * @param comboid
      * @return
      */
-    public GoodsComboVo findByIdCom(Integer comboid) {
+    public List<GoodsComboVo> findByIdCom(Integer comboid) {
         try {
             log.info("根据id查询详情");
             return goodsMapper.findByIdCom(comboid);

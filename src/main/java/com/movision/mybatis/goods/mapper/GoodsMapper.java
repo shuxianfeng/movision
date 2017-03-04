@@ -130,6 +130,6 @@ public interface GoodsMapper {
 
     int queryByCom(Integer comboid);//根据id查询套餐内是否有商品
 
-    GoodsComboVo findByIdCom(Integer comboid);//根据id查询详情
+    List<GoodsComboVo> findByIdCom(Integer comboid);//根据id查询详情
 
 }
