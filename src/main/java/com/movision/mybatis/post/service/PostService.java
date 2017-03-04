@@ -513,7 +513,7 @@ public class PostService {
      *
      * @return
      */
-    public List<Post> queryPostChoicenesslist(String essencedate) {
+    public List<Post> queryPostChoicenesslist(Date essencedate) {
         try {
             log.info("查询当日帖子加精排序列表");
             return postMapper.queryPostChoicenesslist(essencedate);

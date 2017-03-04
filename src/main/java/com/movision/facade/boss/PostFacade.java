@@ -615,7 +615,7 @@ public class PostFacade {
     public Map<String, Integer> addPostChoiceness(String postid, String subtitle, String essencedate, String orderid) {
         Map<String, Integer> map = new HashedMap();
         PostTo p = new PostTo();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date esdate = null;
         if (Integer.parseInt(orderid) > 0) {//加精动作
             p.setId(Integer.parseInt(postid));
@@ -642,6 +642,7 @@ public class PostFacade {
         }
     }
 
+    Logger logger = LoggerFactory.getLogger(PostFacade.class);
 
     /**
      * 查询加精排序
@@ -652,10 +653,13 @@ public class PostFacade {
         Map<String, List> map = new HashedMap();
         PostChoiceness postChoiceness = new PostChoiceness();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String esdate = null;
+        Date esdate = null;
         if (essencedate != null) {
-            Long l = new Long(essencedate);
-            esdate = format.format(l);
+            try {
+                esdate = format.parse(essencedate);
+            } catch (ParseException e) {
+                logger.error("时间格式转换异常");
+            }
         }
         List<Post> posts = postService.queryPostChoicenesslist(esdate);//返回加精日期内有几条加精
         if (postid != null) {
