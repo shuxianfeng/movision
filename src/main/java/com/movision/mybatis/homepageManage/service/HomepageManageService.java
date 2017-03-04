@@ -2,6 +2,7 @@ package com.movision.mybatis.homepageManage.service;
 
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.mapper.HomepageManageMapper;
+import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,22 @@ public class HomepageManageService {
             return homepageManageMapper.queryBannerList(type);
         } catch (Exception e) {
             log.error("根据类型查询banner图列表失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询广告列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<HomepageManage> queryAdvertisementList(Paging<HomepageManage> pager) {
+        try {
+            log.info("查询广告列表");
+            return homepageManageMapper.findAllqueryAdvertisementList(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询广告列表");
             throw e;
         }
     }

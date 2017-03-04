@@ -1,6 +1,7 @@
 package com.movision.mybatis.homepageManage.mapper;
 
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface HomepageManageMapper {
     int updateByPrimaryKeySelective(HomepageManage record);
 
     int updateByPrimaryKey(HomepageManage record);
+
+    List<HomepageManage> findAllqueryAdvertisementList(RowBounds rowBounds);
 }
