@@ -1322,44 +1322,34 @@
         FROM yw_post as p LEFT JOIN yw_video as v ON p.id=v.postid WHERE p.id=#{postid,jdbcType=INTEGER}
     </select>
 
-    <!--   SELECT
-       p.title title,
-       u.nickname nickname,
-       COUNT(c.id) collectsum,
-       COUNT(s.id) share,
-       COUNT(com.id) commentsum,
-       p.zansum zansum,
-       SUM(r.points) rewarded,
-       COUNT(ac.id) accusation,
-       cir.name circlename,
-       p.orderid orderid,
-       p.isessence isessence,
-       p.essencedate essencedate
-       FROM yw_post AS p LEFT JOIN yw_user AS u ON p.userid=u.id LEFT JOIN yw_collection AS c ON p.id=c.postid LEFT JOIN yw_post_share s ON p.id=s.postid
-       LEFT JOIN yw_post_comment com ON p.id=com.postid LEFT JOIN yw_post_rewarded r ON r.postid=p.id LEFT JOIN yw_post_accusation ac ON ac.postid=p.id
-       LEFT JOIN yw_circle cir ON p.circleid=cir.id
-       WHERE 1-->
-    <!-- AND userid IN (SELECT id FROM yw_user WHERE nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%'))-->
+
     <select id="findAllpostSearch" parameterType="com.movision.mybatis.post.entity.PostSpread"
             resultType="com.movision.mybatis.post.entity.PostList">
-        SELECT * FROM yw_post WHERE 1
+        SELECT p.*,(SELECT u.nickname FROM yw_user u WHERE u.id=p.userid) as nickname,
+        (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
+        (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
+        (SELECT SUM(ac.num) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
+        (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid) AS circlename,
+        (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS category
+        FROM yw_post AS p
+        WHERE p.isdel=0 AND p.isactive=0
         <if test="title!=null">
-            AND title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
+            AND p.title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
         </if>
         <if test="userid!=null">
-            AND userid=#{userid,jdbcType=INTEGER}
+            AND p.userid=#{userid,jdbcType=INTEGER}
         </if>
         <if test="postcontent!=null">
-            AND postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
+            AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
         </if>
         <if test="circleid!=null">
-            AND circleid=#{circleid,jdbcType=VARCHAR}
+            AND p.circleid=#{circleid,jdbcType=VARCHAR}
         </if>
         <if test="endtime!=null and begintime!=null">
-            AND intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+            AND p.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
         </if>
         <if test="essencedate!=null">
-            AND essencedate=#{essencedate,jdbcType=DATE}
+            AND p.essencedate=#{essencedate,jdbcType=DATE}
         </if>
         <if test="pai==0">
             ORDER BY intime DESC

@@ -472,7 +472,6 @@ public class PostFacade {
                                         String postcontent, String isessence, String ishot, String orderid, String time, String goodsid) {
         PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
-        try {
             post.setTitle(title);//帖子标题
             post.setSubtitle(subtitle);//帖子副标题
             post.setType(type);//帖子类型
@@ -484,7 +483,7 @@ public class PostFacade {
             if (ishot != null) {
                 post.setIshot(ishot);//是否为圈子精选
             }
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date d = null;
             if (isessence != null) {
                 if (isessence != "0") {//判断是否为加精
@@ -499,20 +498,20 @@ public class PostFacade {
                             d = format.parse(time);
                             post.setEssencedate(d);
                         } catch (ParseException e) {
-                            e.printStackTrace();
+                            log.error("时间插入异常");
                         }
                     }
 
                 }
             }
-
+        post.setCoverimg(coverimg);//插入图片地址
             post.setUserid(userid);
             int result = postService.addPost(post);//添加帖子
             Integer pid = post.getId();//获取到刚刚添加的帖子id
             Video vide = new Video();
             vide.setPostid(pid);
             vide.setVideourl(vid);
-            vide.setBannerimgurl(coverimg);
+        vide.setBannerimgurl(bannerimgurl);
             vide.setIntime(new Date());
             Integer in = videoService.insertVideoById(vide);//添加视频表
             if (goodsid != null) {//添加商品
@@ -525,9 +524,6 @@ public class PostFacade {
                 }
             }
             map.put("result", result);
-        } catch (Exception e) {
-            log.error("帖子添加异常", e);
-        }
         return map;
 
     }
@@ -889,7 +885,7 @@ public class PostFacade {
             if (orderid != null) {
                 post.setOrderid(orderid);
             }
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date estime = null;
             if (time != null) {
                 try {
@@ -937,61 +933,43 @@ public class PostFacade {
         if (postcontent != null) {
             postSpread.setPostcontent(postcontent);//帖子内容
         }
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String end = null;
-        String beg = null;
-        String ess = null;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date end = null;
+        Date beg = null;
+        Date ess = null;
         //结束时间
         if (endtime != null) {
-            Long l = new Long(endtime);
-            end = format.format(l);
-            postSpread.setEndtime(end);
+            try {
+                end = format.parse(endtime);
+                postSpread.setEndtime(end);
+            } catch (ParseException e) {
+                log.error("结束时间转换异常");
+            }
         }
         //开始时间
         if (begintime != null) {
-            Long o = new Long(begintime);
-            beg = format.format(o);
-            postSpread.setBegintime(beg);
+            try {
+                beg = format.parse(begintime);
+                postSpread.setBegintime(beg);
+            } catch (ParseException e) {
+                log.error("开始时间格式转换异常");
+            }
         }
         if (pai != null) {
             postSpread.setPai(pai);
         }
         //精选时间
         if (essencedate != null) {
-            Long n = new Long(essencedate);
-            ess = format.format(n);
-            postSpread.setEssencedate(ess);
+            try {
+                ess = format.parse(essencedate);
+                postSpread.setEssencedate(ess);
+            } catch (ParseException e) {
+                log.error("精选时间格式转换异常");
+            }
         }
         List<PostList> list = postService.postSearch(postSpread, pager);
-        List<PostList> rewardeds = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            PostList postList = new PostList();
-            Integer id = list.get(i).getId();
-            Integer cid = list.get(i).getCircleid();//获取到圈子id
-            System.out.println(list.get(i).getUserid());
-            String name = userService.queryUserByNickname(list.get(i).getUserid());//获取发帖人
-            Integer share = sharesService.querysum(id);//获取分享数
-            Integer rewarded = rewardedService.queryRewardedBySum(id);//获取打赏积分
-            Integer accusation = accusationService.queryAccusationBySum(id);//查询帖子举报次数
-            Circle circlename = circleService.queryCircleByName(cid);//获取圈子名称
-            postList.setId(list.get(i).getId());
-            postList.setTitle(list.get(i).getTitle());
-            postList.setNickname(name);
-            postList.setCollectsum(list.get(i).getCollectsum());
-            postList.setShare(share);
-            postList.setCommentsum(list.get(i).getCommentsum());
-            postList.setZansum(list.get(i).getZansum());
-            postList.setRewarded(rewarded);
-            postList.setAccusation(accusation);
-            postList.setUserid(list.get(i).getUserid());
-            postList.setIsessence(list.get(i).getIsessence());
-            postList.setCirclename(circlename.getName());//帖子所属圈子
-            postList.setOrderid(list.get(i).getOrderid());//获取排序
-            postList.setEssencedate(list.get(i).getEssencedate());//获取精选日期
-            rewardeds.add(postList);
+        return list;
         }
-        return rewardeds;
-    }
 
 
     /**
@@ -1032,7 +1010,7 @@ public class PostFacade {
     }
 
     /**
-     * 条件查询
+     * 活动条件查询
      *
      * @param title
      * @param name

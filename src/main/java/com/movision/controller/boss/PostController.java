@@ -627,7 +627,7 @@ public class PostController {
 
 
     /**
-     * 帖子模糊查询
+     * 帖子多条件联合搜索
      *
      * @param pageNo
      * @param pageSize
@@ -643,10 +643,10 @@ public class PostController {
                                @ApiParam(value = "圈子id")@RequestParam(required = false) String circleid,
                                @ApiParam(value = "发帖人") @RequestParam(required = false) String userid,
                                @ApiParam(value = "帖子内容") @RequestParam(required = false) String postcontent,
-                               @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,
-                               @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
+                               @ApiParam(value = "结束时间(yyyy-MM-dd)") @RequestParam(required = false) String endtime,
+                               @ApiParam(value = "开始时间(yyyy-MM-dd)") @RequestParam(required = false) String begintime,
                                @ApiParam(value = "精选排序方式 0：按时间排序，1：按人气排序(默认不做排序)") @RequestParam(required = false) String pai,
-                               @ApiParam(value = "精选日期") @RequestParam(required = false) String essencedate) {
+                               @ApiParam(value = "精选日期（yyyy-MM-dd）") @RequestParam(required = false) String essencedate) {
         Response response=new Response();
         Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<PostList> list = postFacade.postSearch(title, circleid, userid, postcontent, endtime, begintime, pai, essencedate, pager);
