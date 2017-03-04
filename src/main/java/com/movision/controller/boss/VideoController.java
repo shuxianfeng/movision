@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 作为上传视频测试使用
  * @Author zhuangyuhao
  * @Date 2017/3/3 10:37
  */
@@ -31,7 +32,15 @@ public class VideoController {
     @Autowired
     private VideoFacade videoFacade;
 
-    @ApiOperation(value = "上传视频", notes = "上传视频", response = Response.class)
+    /**
+     * 不能使用
+     *
+     * @param request
+     * @return
+     * @throws ServletException
+     * @throws IOException
+     */
+    @ApiOperation(value = "作为上传视频测试使用", notes = "作为上传视频测试使用", response = Response.class)
     @RequestMapping(value = "boss/video/upload_video", method = RequestMethod.POST)
     public Response queryApplyVipList(HttpServletRequest request) throws ServletException, IOException {
         /*String url = movisionOssClient.uploadObject(file, "video", "test");
