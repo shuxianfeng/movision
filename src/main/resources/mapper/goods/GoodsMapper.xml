@@ -955,7 +955,7 @@
     <select id="findAllComboT" resultType="com.movision.mybatis.goodscombo.entity.GoodsComboVo">
         SELECT c.id,c.comboid,c.comboname,c.combodiscountprice,c.intime,
         (SELECT COUNT(1) FROM yw_sub_order o WHERE o.combotype=c.comboid ) AS sales
-        FROM yw_combo c  ORDER BY c.id
+        FROM yw_combo c ORDER BY c.intime DESC
     </select>
     <select id="queryByCom" resultType="java.lang.Integer" parameterType="java.lang.Integer">
     SELECT COUNT(1) FROM yw_goods_combo WHERE comboid=#{comboid,jdbcType=INTEGER}
@@ -1005,7 +1005,7 @@
             parameterType="java.lang.Integer">
         SELECT c.id,c.comboid,c.comboname,c.combodiscountprice,c.intime,
         (SELECT COUNT(1) FROM yw_sub_order o WHERE o.combotype=c.comboid ) AS sales
-        FROM yw_combo c WHERE c.comboid=#{comboid,jdbcType=INTEGER} ORDER BY c.id
+        FROM yw_combo c WHERE c.comboid=#{comboid,jdbcType=INTEGER}
     </select>
     <select id="queryAssessmentRemark" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
