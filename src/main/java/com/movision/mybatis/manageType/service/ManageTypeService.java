@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -32,6 +33,22 @@ public class ManageTypeService {
             return manageTypeMapper.queryAdvertisementTypeList();
         } catch (Exception e) {
             logge.error("查询广告类型异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 添加广告类型
+     *
+     * @param map
+     * @return
+     */
+    public int addAdvertisementType(Map map) {
+        try {
+            logge.info("添加广告类型");
+            return manageTypeMapper.addAdvertisementType(map);
+        } catch (Exception e) {
+            logge.error("添加广告类型异常");
             throw e;
         }
     }

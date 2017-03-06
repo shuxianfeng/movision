@@ -118,4 +118,54 @@
     <select id="queryAdvertisementTypeList" resultType="com.movision.mybatis.manageType.entity.ManageType">
     SELECT * FROM yw_homepage_manage_type
   </select>
+
+    <insert id="addAdvertisementType" parameterType="java.util.Map">
+        insert into yw_homepage_manage_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="wide != null">
+                wide,
+            </if>
+            <if test="high != null">
+                high,
+            </if>
+            <if test="quantity != null">
+                quantity,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="wide != null">
+                #{wide,jdbcType=INTEGER},
+            </if>
+            <if test="high != null">
+                #{high,jdbcType=INTEGER},
+            </if>
+            <if test="quantity != null">
+                #{quantity,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 </mapper>

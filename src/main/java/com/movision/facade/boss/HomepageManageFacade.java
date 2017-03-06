@@ -67,4 +67,15 @@ public class HomepageManageFacade {
         map.put("ordersum", 0);
         return homepageManageService.addAdvertisement(map);
     }
+
+    public int addAdvertisementType(String type, String name, String wide, String high, String quantity) {
+        Map map = new HashedMap();
+        map.put("type", type);
+        map.put("name", name);
+        map.put("wide", wide);
+        map.put("high", high);
+        map.put("quantity", quantity);
+        map.put("intime", new Date());
+        return manageTypeService.addAdvertisementType(map);
+    }
 }

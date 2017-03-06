@@ -112,4 +112,30 @@ public class AdvertisementController {
         response.setData(map);
         return response;
     }
+
+    /**
+     * 添加广告类型
+     *
+     * @param type
+     * @param name
+     * @param wide
+     * @param high
+     * @param quantity
+     * @return
+     */
+    @ApiOperation(value = "添加广告类型", notes = "用于添加广告类型接口", response = Response.class)
+    @RequestMapping(value = "add_advertisement_type", method = RequestMethod.POST)
+    public Response addAdvertisementType(@ApiParam(value = "广告类型") @RequestParam String type,
+                                         @ApiParam(value = "广告名") @RequestParam String name,
+                                         @ApiParam(value = "宽度") @RequestParam String wide,
+                                         @ApiParam(value = "广告高度") @RequestParam String high,
+                                         @ApiParam(value = "广告数量") @RequestParam String quantity) {
+        Response response = new Response();
+        int i = homepageManageFacade.addAdvertisementType(type, name, wide, high, quantity);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(i);
+        return response;
+    }
 }

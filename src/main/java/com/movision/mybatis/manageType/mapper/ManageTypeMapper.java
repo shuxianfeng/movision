@@ -3,6 +3,7 @@ package com.movision.mybatis.manageType.mapper;
 import com.movision.mybatis.manageType.entity.ManageType;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ManageTypeMapper {
     int deleteByPrimaryKey(Integer id);
@@ -18,4 +19,6 @@ public interface ManageTypeMapper {
     int updateByPrimaryKey(ManageType record);
 
     List<ManageType> queryAdvertisementTypeList();
+
+    int addAdvertisementType(Map map);
 }
