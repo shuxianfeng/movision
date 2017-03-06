@@ -1387,8 +1387,8 @@
         AND p.isdel=0 ORDER BY p.intime DESC
 
     </select>
-    <select id="findAllActivePostCondition" resultType="com.movision.mybatis.post.entity.PostList"
-            parameterType="com.movision.mybatis.post.entity.PostList">
+    <select id="findAllActivePostCondition" resultType="com.movision.mybatis.post.entity.PostActiveList"
+            parameterType="com.movision.mybatis.post.entity.PostActiveList">
         SELECT p.*,a.begintime,a.endtime FROM yw_post p LEFT JOIN yw_active_period a ON a.postid=p.id WHERE p.isdel=0
         AND p.isactive=1
         <if test="title!=null">
@@ -1400,8 +1400,8 @@
         <if test="content!=null">
             AND postcontent LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
         </if>
-        <if test="mintime!=null and maxtime!=null">
-            AND intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
+        <if test="begintime!=null and endtime!=null">
+            AND intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
         </if>
         <if test="statue==0">
             AND a.begintime
@@ -1416,8 +1416,6 @@
         <if test="pai==0">
             ORDER BY intime DESC
         </if>
-
-
     </select>
 
     <insert id="insertGoods" parameterType="java.util.Map">

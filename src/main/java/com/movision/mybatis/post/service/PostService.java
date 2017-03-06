@@ -664,7 +664,7 @@ public class PostService {
      * @param pager
      * @return
      */
-    public List<PostList> queryAllActivePostCondition(Map map, Paging<PostList> pager) {
+    public List<PostActiveList> queryAllActivePostCondition(Map map, Paging<PostActiveList> pager) {
         try {
             log.info("条件查询成功");
             return postMapper.findAllActivePostCondition(map, pager.getRowBounds());

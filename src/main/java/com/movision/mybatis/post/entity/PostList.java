@@ -30,9 +30,6 @@ public class PostList {
 
     private Integer share;//分享数
 
-    private Date mintime;
-
-    private Date maxtime;
 
     private Integer commentsum;//评论数
 
@@ -90,21 +87,7 @@ public class PostList {
 
     private Integer persum;//报名人数
 
-    public Date getMintime() {
-        return mintime;
-    }
 
-    public void setMintime(Date mintime) {
-        this.mintime = mintime;
-    }
-
-    public Date getMaxtime() {
-        return maxtime;
-    }
-
-    public void setMaxtime(Date maxtime) {
-        this.maxtime = maxtime;
-    }
 
     public Integer getPersum() {
         return persum;

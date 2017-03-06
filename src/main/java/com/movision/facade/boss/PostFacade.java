@@ -1018,13 +1018,13 @@ public class PostFacade {
      * @param title
      * @param name
      * @param content
-     * @param mintime
-     * @param maxtime
+     * @param begintime
+     * @param endtime
      * @param statue
      * @param pager
      * @return
      */
-    public List<PostList> queryAllActivePostCondition(String title, String name, String content, String mintime, String maxtime, String statue, String pai, Paging<PostList> pager) {
+    public List<PostActiveList> queryAllActivePostCondition(String title, String name, String content, String begintime, String endtime, String statue, String pai, Paging<PostActiveList> pager) {
         Map<String, Object> map = new HashedMap();
         if (title != null) {
             map.put("title", title);
@@ -1041,18 +1041,18 @@ public class PostFacade {
         }
         Date isessencetime = null;//开始时间
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        if (mintime != null) {
+        if (begintime != null) {
             try {
-                isessencetime = format.parse(mintime);
+                isessencetime = format.parse(begintime);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
         map.put("mintime", isessencetime);
         Date max = null;//最大时间
-        if (maxtime != null) {
+        if (endtime != null) {
             try {
-                max = format.parse(maxtime);
+                max = format.parse(endtime);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -1063,7 +1063,57 @@ public class PostFacade {
         if (pai != null) {
             map.put("pai", pai);
         }
-        return postService.queryAllActivePostCondition(map, pager);
+        List<PostActiveList> list = postService.queryAllActivePostCondition(map, pager);
+        List<PostActiveList> rewardeds = new ArrayList<>();
+        Date date = new Date();
+        long str = date.getTime();
+        for (int i = 0; i < list.size(); i++) {
+            PostActiveList postList = new PostActiveList();
+            Integer postid = list.get(i).getId();//获取到帖子id
+            Integer persum = postService.queryPostPerson(postid);
+            String nickname = userService.queryUserByNicknameBy(postid);
+            Period periods = periodService.queryPostPeriod(postid);
+            Double activefee = list.get(i).getActivefee();
+            Double sumfree = 0.0;
+            if (activefee != null) {
+                sumfree = persum * activefee;
+            }
+
+            Date begintimes = periods.getBegintime();
+            Date endtimes = periods.getEndtime();
+            postList.setId(list.get(i).getId());
+            postList.setTitle(list.get(i).getTitle());//主题
+            postList.setNickname(nickname);//昵称
+            postList.setActivetype(list.get(i).getActivetype());//活动类型
+            postList.setActivefee(activefee);//活动费用
+            postList.setEssencedate(list.get(i).getEssencedate());//精选日期
+            postList.setOrderid(list.get(i).getOrderid());//精选排序
+            postList.setBegintime(begintimes);//开始时间
+            postList.setEndtime(endtimes);//结束时间
+            postList.setPersum(persum);//报名人数
+            postList.setSumfree(sumfree);//总费用
+            String activeStatue = "";
+            if (begintime != null && endtime != null) {
+                long begin = begintimes.getTime();
+                long end = endtimes.getTime();
+                if (str > begin && str < end) {
+                    activeStatue = "报名中";
+                } else if (str < begin) {
+                    activeStatue = "未开始";
+                } else if (str > end) {
+                    activeStatue = "已结束";
+                }
+            }
+            postList.setActivestatue(activeStatue);//活动状态
+            postList.setZansum(list.get(i).getZansum());
+            postList.setCollectsum(list.get(i).getCollectsum());
+            postList.setCommentsum(list.get(i).getCommentsum());
+            postList.setForwardsum(list.get(i).getForwardsum());
+            postList.setIntime(list.get(i).getIntime());
+            rewardeds.add(postList);
+        }
+
+        return rewardeds;
     }
 
 
