@@ -26,10 +26,6 @@ public class HomepageManage {
 
     private Integer ordersum;//生成订单数量
 
-    private Integer wide;//广告宽度
-
-    private Integer high;//广告高度
-
     public Integer getClicksum() {
         return clicksum;
     }
@@ -44,22 +40,6 @@ public class HomepageManage {
 
     public void setOrdersum(Integer ordersum) {
         this.ordersum = ordersum;
-    }
-
-    public Integer getWide() {
-        return wide;
-    }
-
-    public void setWide(Integer wide) {
-        this.wide = wide;
-    }
-
-    public Integer getHigh() {
-        return high;
-    }
-
-    public void setHigh(Integer high) {
-        this.high = high;
     }
 
     public Integer getId() {

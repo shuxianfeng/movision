@@ -2,6 +2,7 @@ package com.movision.mybatis.homepageManage.service;
 
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.mapper.HomepageManageMapper;
+import com.movision.mybatis.manageType.entity.ManageType;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,4 +75,5 @@ public class HomepageManageService {
             throw e;
         }
     }
+
 }

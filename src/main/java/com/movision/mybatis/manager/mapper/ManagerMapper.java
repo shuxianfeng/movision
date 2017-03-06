@@ -1,5 +1,6 @@
 package com.movision.mybatis.manager.mapper;
 
+import com.movision.mybatis.manageType.entity.ManageType;
 import com.movision.mybatis.manager.entity.Manager;
 
 import java.util.Map;

@@ -923,18 +923,18 @@ public class PostFacade {
     public List<PostList> postSearch(String title, String circleid,
                                      String userid, String postcontent, String endtime,
                                      String begintime, String pai, String essencedate, Paging<PostList> pager) {
-        PostSpread postSpread = new PostSpread();
+        Map map = new HashedMap();
         if (title != null) {
-            postSpread.setTitle(title);//帖子标题
+            map.put("title", title);//帖子标题
         }
         if (circleid != null) {
-            postSpread.setCircleid(circleid);//圈子id
+            map.put("circleid", circleid);//圈子id
         }
         if (userid != null) {
-            postSpread.setUserid(userid);//发帖人id
+            map.put("userid", userid);//发帖人id
         }
         if (postcontent != null) {
-            postSpread.setPostcontent(postcontent);//帖子内容
+            map.put("postcontent", postcontent);//帖子内容
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date end = null;
@@ -944,33 +944,33 @@ public class PostFacade {
         if (endtime != null) {
             try {
                 end = format.parse(endtime);
-                postSpread.setEndtime(end);
             } catch (ParseException e) {
                 log.error("结束时间转换异常");
             }
         }
+        map.put("endtime", endtime);
         //开始时间
         if (begintime != null) {
             try {
                 beg = format.parse(begintime);
-                postSpread.setBegintime(beg);
             } catch (ParseException e) {
                 log.error("开始时间格式转换异常");
             }
         }
+        map.put("begintime", begintime);
         if (pai != null) {
-            postSpread.setPai(pai);
+            map.put("pai", pai);
         }
         //精选时间
         if (essencedate != null) {
             try {
                 ess = format.parse(essencedate);
-                postSpread.setEssencedate(ess);
             } catch (ParseException e) {
                 log.error("精选时间格式转换异常");
             }
         }
-        List<PostList> list = postService.postSearch(postSpread, pager);
+        map.put("essencedate", essencedate);
+        List<PostList> list = postService.postSearch(map, pager);
         return list;
         }
 

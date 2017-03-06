@@ -630,7 +630,7 @@ public class PostService {
      * @param
      * @return
      */
-    public List<PostList> postSearch(PostSpread spread, Paging<PostList> pager) {
+    public List<PostList> postSearch(Map spread, Paging<PostList> pager) {
         try {
             log.info("帖子条件查询");
             return postMapper.findAllpostSearch(spread, pager.getRowBounds());

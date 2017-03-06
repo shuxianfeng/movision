@@ -130,7 +130,7 @@ public interface PostMapper {
 
     Integer updateByPrimaryKeySelectiveById(PostTo post);
 
-    List<PostList> findAllpostSearch(PostSpread spread, RowBounds rowBounds);
+    List<PostList> findAllpostSearch(Map spread, RowBounds rowBounds);
 
     List<PostList> findAllQueryCircleByPostList(Map map, RowBounds rowBounds);
 

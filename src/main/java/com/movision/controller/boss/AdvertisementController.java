@@ -1,8 +1,10 @@
 package com.movision.controller.boss;
 
 import com.movision.common.Response;
+import com.movision.facade.boss.HomepageManageFacade;
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
+import com.movision.mybatis.manageType.entity.ManageType;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -23,7 +25,7 @@ import java.util.List;
 public class AdvertisementController {
 
     @Autowired
-    HomepageManageService homepageManageService;
+    HomepageManageFacade homepageManageFacade;
 
     /**
      * 查询广告列表
@@ -38,7 +40,7 @@ public class AdvertisementController {
                                            @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<HomepageManage> pager = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<HomepageManage> list = homepageManageService.queryAdvertisementList(pager);
+        List<HomepageManage> list = homepageManageFacade.queryAdvertisementList(pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -57,11 +59,28 @@ public class AdvertisementController {
     @RequestMapping(value = "query_avertisement_particulars", method = RequestMethod.POST)
     public Response queryAvertisementById(@ApiParam(value = "广告id") @RequestParam String id) {
         Response response = new Response();
-        HomepageManage particulars = homepageManageService.queryAvertisementById(id);
+        HomepageManage particulars = homepageManageFacade.queryAvertisementById(id);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
         response.setData(particulars);
+        return response;
+    }
+
+    /**
+     * 查询广告类型
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询广告类型", notes = "用于查询广告类型接口", response = Response.class)
+    @RequestMapping(value = "query_advertisement_type", method = RequestMethod.POST)
+    public Response queryAdvertisementTypeList() {
+        Response response = new Response();
+        List<ManageType> type = homepageManageFacade.queryAdvertisementTypeList();
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(type);
         return response;
     }
 }
