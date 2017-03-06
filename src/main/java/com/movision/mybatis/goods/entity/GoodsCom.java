@@ -91,10 +91,57 @@ public class GoodsCom {
     private Integer goodsid;
     private String name;
     private Double origprice;
+    private Double price;
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
     private Integer stock;
     private Integer sales;
     private String attribute;
     private Integer id;
     private String typename;
     private String brandname;
+
+    private Double sumorigprice;//总价格
+    private Double sumprice;//总折扣价
+    private Integer sumsales;//总销量
+    private Integer sumstock;//总库存
+
+    public Double getSumorigprice() {
+        return sumorigprice;
+    }
+
+    public void setSumorigprice(Double sumorigprice) {
+        this.sumorigprice = sumorigprice;
+    }
+
+    public Double getSumprice() {
+        return sumprice;
+    }
+
+    public void setSumprice(Double sumprice) {
+        this.sumprice = sumprice;
+    }
+
+    public Integer getSumsales() {
+        return sumsales;
+    }
+
+    public void setSumsales(Integer sumsales) {
+        this.sumsales = sumsales;
+    }
+
+    public Integer getSumstock() {
+        return sumstock;
+    }
+
+    public void setSumstock(Integer sumstock) {
+        this.sumstock = sumstock;
+    }
 }

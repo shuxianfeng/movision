@@ -770,7 +770,7 @@ public class GoodsController {
      */
     @ApiOperation(value = "根据套餐id查询商品信息", notes = "根据套餐id查询商品信息", response = Response.class)
     @RequestMapping(value = "query_byid_com_good", method = RequestMethod.POST)
-    public Response findAllGoods(@ApiParam(value = "套餐id") @RequestParam(required = false) Integer comboid,
+    public Response findAllGoods(@ApiParam(value = "套餐id") @RequestParam Integer comboid,
                                  @RequestParam(required = false, defaultValue = "1") String pageNo,
                                  @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();

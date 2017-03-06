@@ -673,7 +673,9 @@
         </if>
     </select>
     <select id="findAllCombo" resultType="com.movision.mybatis.goods.entity.GoodsVo">
-        SELECT g.name,g.price,g.isdel,g.sales,g.protype,b.brandname,c.id,c.comboid,c.comboname,c.combodiscountprice FROM
+        SELECT
+        g.name,g.price,g.isdel,g.sales,g.protype,b.brandname,c.id,c.comboid,c.comboname,c.combodiscountprice,g.stock
+        FROM
         yw_goods g LEFT JOIN yw_brand b ON b.brandid=g.brandid
         LEFT JOIN yw_goods_combo o ON o.goodsid=g.id LEFT JOIN yw_combo c ON c.comboid=o.comboid
         WHERE g.id IN(
@@ -944,7 +946,7 @@
     </insert>
     <select id="findAllC" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodscombo.entity.GoodsComboVo">
-        SELECT g.comboid,g.goodsid,d.price,d.`name` FROM yw_goods_combo g
+        SELECT g.comboid,g.goodsid,d.price,d.`name`,d.stock FROM yw_goods_combo g
         LEFT JOIN yw_goods d ON d.id=g.goodsid WHERE g.comboid=#{comboid,jdbcType=INTEGER}
     </select>
     <select id="findAllComboT" resultType="com.movision.mybatis.goodscombo.entity.GoodsComboVo">

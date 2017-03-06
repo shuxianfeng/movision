@@ -17,7 +17,15 @@ public class GoodsComboVo {
     private Date intime;
     private Integer comboid;
     private Double sum;
+    private Integer stock;
 
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
 
     public Double getSum() {
         return sum;

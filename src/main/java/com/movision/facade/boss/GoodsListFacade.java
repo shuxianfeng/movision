@@ -749,6 +749,30 @@ public class GoodsListFacade {
      * @return
      */
     public List<GoodsCom> findAllGoods(Integer comboid, Paging<GoodsCom> pager) {
-        return goodsService.findAllGoods(comboid, pager);
+        List<GoodsCom> list = goodsService.findAllGoods(comboid, pager);
+        for (int i = 0; i < list.size(); i++) {
+            List<GoodsComboVo> good = goodsService.findAllC(comboid);
+            Double sumprice = 0.0;
+            Double sumorigprice = 0.0;
+            int sumsales = 0;
+            int sumstock = 0;
+            int finastock = 0;
+            Double origprice = list.get(i).getOrigprice();
+            int sales = list.get(i).getSales();
+            int stock = list.get(i).getStock();
+            Double price = list.get(i).getPrice();
+            sumorigprice += origprice;
+            sumprice += price;
+            sumsales += sales;
+            sumstock += stock;
+            int ststock = good.get(i).getStock();
+            finastock = ststock - sumstock;
+            list.get(i).setSumprice(sumprice);
+            list.get(i).setSumorigprice(sumorigprice);
+            list.get(i).setSumsales(sumsales);
+            list.get(i).setSumstock(finastock);
+
+        }
+        return list;
     }
 }
