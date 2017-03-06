@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.manageType.mapper.ManageTypeMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.manageType.entity.ManageType">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="wide" property="wide" jdbcType="INTEGER"/>
+        <result column="high" property="high" jdbcType="INTEGER"/>
+        <result column="quantity" property="quantity" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, type, name, intime, wide, high, quantity
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_homepage_manage_type
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_homepage_manage_type
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.manageType.entity.ManageType">
+    insert into yw_homepage_manage_type (id, type, name, 
+      intime, wide, high, 
+      quantity)
+    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{intime,jdbcType=TIMESTAMP}, #{wide,jdbcType=INTEGER}, #{high,jdbcType=INTEGER}, 
+      #{quantity,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.manageType.entity.ManageType">
+        insert into yw_homepage_manage_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="wide != null">
+                wide,
+            </if>
+            <if test="high != null">
+                high,
+            </if>
+            <if test="quantity != null">
+                quantity,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="wide != null">
+                #{wide,jdbcType=INTEGER},
+            </if>
+            <if test="high != null">
+                #{high,jdbcType=INTEGER},
+            </if>
+            <if test="quantity != null">
+                #{quantity,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.manageType.entity.ManageType">
+        update yw_homepage_manage_type
+        <set>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="wide != null">
+                wide = #{wide,jdbcType=INTEGER},
+            </if>
+            <if test="high != null">
+                high = #{high,jdbcType=INTEGER},
+            </if>
+            <if test="quantity != null">
+                quantity = #{quantity,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.manageType.entity.ManageType">
+    update yw_homepage_manage_type
+    set type = #{type,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      intime = #{intime,jdbcType=TIMESTAMP},
+      wide = #{wide,jdbcType=INTEGER},
+      high = #{high,jdbcType=INTEGER},
+      quantity = #{quantity,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="queryAdvertisementTypeList" resultType="com.movision.mybatis.manageType.entity.ManageType">
+    SELECT * FROM yw_homepage_manage_type
+  </select>
+</mapper>
