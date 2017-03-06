@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -81,6 +82,34 @@ public class AdvertisementController {
             response.setMessage("查询成功");
         }
         response.setData(type);
+        return response;
+    }
+
+    /**
+     * 添加广告
+     *
+     * @param topictype
+     * @param orderid
+     * @param content
+     * @param subcontent
+     * @param url
+     * @param transurl
+     * @return
+     */
+    @ApiOperation(value = "添加广告", notes = "用于添加广告接口", response = Response.class)
+    @RequestMapping(value = "add_advertisement", method = RequestMethod.POST)
+    public Response addAdvertisement(@ApiParam(value = "类型") @RequestParam String topictype,
+                                     @ApiParam(value = "排序") @RequestParam(required = false) String orderid,
+                                     @ApiParam(value = "主标题") @RequestParam String content,
+                                     @ApiParam(value = "副标题") @RequestParam String subcontent,
+                                     @ApiParam(value = "图片URL") @RequestParam String url,
+                                     @ApiParam(value = "跳转链接URL") @RequestParam String transurl) {
+        Response response = new Response();
+        int map = homepageManageFacade.addAdvertisement(topictype, orderid, content, subcontent, url, transurl);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
         return response;
     }
 }

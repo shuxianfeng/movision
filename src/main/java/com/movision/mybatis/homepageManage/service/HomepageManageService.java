@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author shuxf
@@ -72,6 +73,22 @@ public class HomepageManageService {
             return homepageManageMapper.queryAvertisementById(id);
         } catch (Exception e) {
             log.error("查询广告详情");
+            throw e;
+        }
+    }
+
+    /**
+     * 添加广告
+     *
+     * @param map
+     * @return
+     */
+    public int addAdvertisement(Map map) {
+        try {
+            log.info("添加广告");
+            return homepageManageMapper.addAdvertisement(map);
+        } catch (Exception e) {
+            log.error("添加广告");
             throw e;
         }
     }

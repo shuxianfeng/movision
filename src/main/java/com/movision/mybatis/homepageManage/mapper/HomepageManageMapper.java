@@ -5,6 +5,7 @@ import com.movision.mybatis.manageType.entity.ManageType;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface HomepageManageMapper {
     int deleteByPrimaryKey(Integer id);
@@ -26,5 +27,7 @@ public interface HomepageManageMapper {
     List<HomepageManage> findAllqueryAdvertisementList(RowBounds rowBounds);
 
     HomepageManage queryAvertisementById(String id);
+
+    int addAdvertisement(Map map);
 
 }

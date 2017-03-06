@@ -5,10 +5,13 @@ import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.manageType.entity.ManageType;
 import com.movision.mybatis.manageType.service.ManageTypeService;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -49,5 +52,19 @@ public class HomepageManageFacade {
      */
     public List<ManageType> queryAdvertisementTypeList() {
         return manageTypeService.queryAdvertisementTypeList();
+    }
+
+    public int addAdvertisement(String topictype, String orderid, String content, String subcontent, String url, String transurl) {
+        Map map = new HashedMap();
+        map.put("topictype", topictype);
+        map.put("orderid", orderid);
+        map.put("content", content);
+        map.put("subcontent", subcontent);
+        map.put("url", url);
+        map.put("transurl", transurl);
+        map.put("intime", new Date());
+        map.put("clicksum", 0);
+        map.put("ordersum", 0);
+        return homepageManageService.addAdvertisement(map);
     }
 }

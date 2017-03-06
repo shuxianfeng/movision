@@ -167,4 +167,72 @@
             resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
         select * from yw_homepage_manage WHERE id=#{id.jdbcType=INTEGER}
     </select>
+
+    <insert id="addAdvertisement" parameterType="java.util.Map">
+        insert into yw_homepage_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="topictype != null">
+                topictype,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="subcontent != null">
+                subcontent,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="transurl != null">
+                transurl,
+            </if>
+            <if test="orderid != null">
+                orderid,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="clicksum != null">
+                clicksum,
+            </if>
+            <if test="ordersum != null">
+                ordersum,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="topictype != null">
+                #{topictype,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="subcontent != null">
+                #{subcontent,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="transurl != null">
+                #{transurl,jdbcType=VARCHAR},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="clicksum != null">
+                #{clicksum,jdbcType=INTEGER},
+            </if>
+            <if test="ordersum != null">
+                #{ordersum,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 </mapper>
