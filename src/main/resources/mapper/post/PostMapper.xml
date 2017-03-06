@@ -1413,7 +1413,10 @@
         <if test="statue==2">
             AND NOW()  <![CDATA[>]]> a.begintime AND Now() <![CDATA[<]]> a.endtime
         </if>
-        ORDER BY intime DESC
+        <if test="pai==0">
+            ORDER BY intime DESC
+        </if>
+
 
     </select>
 

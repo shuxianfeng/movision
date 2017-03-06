@@ -732,11 +732,12 @@ public class PostController {
                                                 @ApiParam(value = "活动开始日期") @RequestParam(required = false) String mintime,
                                                 @ApiParam(value = "活动结束日期") @RequestParam(required = false) String maxtime,
                                                 @ApiParam(value = "活动状态") @RequestParam(required = false) String statue,
+                                                @ApiParam(value = "排序") @RequestParam(required = false) String pai,
                                                 @RequestParam(required = false) String pageNo,
                                                 @RequestParam(required = false) String pageSize) {
         Response response = new Response();
         Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostList> list = postFacade.queryAllActivePostCondition(title, name, content, mintime, maxtime, statue, pager);
+        List<PostList> list = postFacade.queryAllActivePostCondition(title, name, content, mintime, maxtime, statue, pai, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
