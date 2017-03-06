@@ -43,6 +43,7 @@ import java.util.*;
  */
 @Service
 public class CircleFacade {
+    Logger logger = LoggerFactory.getLogger(CircleFacade.class);
     @Value("#{configProperties['bannerimg.domain']}")
     private String imgdomain;
 
@@ -520,7 +521,7 @@ public class CircleFacade {
         return userService.queryCircleManList(pager);
     }
 
-    Logger logger = LoggerFactory.getLogger(CircleFacade.class);
+
     /**
      * 根据条件查询圈子列表
      *
@@ -595,8 +596,8 @@ public class CircleFacade {
                     circleVoslist.add(vo);
                 }
                 circlenum.get(i).setClassify(circleVoslist);
-                return circlenum;
             }
+            return circlenum;
         } else {
             List<CircleIndexList> cir = new ArrayList<>();
             //查询，圈子分类，圈主，管理员列表，关注人数，今日关注人数，帖子数量，今日新增帖子，精贴数量，支持人数，创建日期
@@ -643,7 +644,6 @@ public class CircleFacade {
             cir.add(circleVoNum);
             return cir;
         }
-        return null;
     }
 
 }

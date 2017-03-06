@@ -235,4 +235,38 @@
             </if>
         </trim>
     </insert>
+
+    <update id="updateAdvertisement" parameterType="java.util.Map">
+        update yw_homepage_manage
+        <set>
+            <if test="topictype != null">
+                topictype = #{topictype,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="subcontent != null">
+                subcontent = #{subcontent,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="transurl != null">
+                transurl = #{transurl,jdbcType=VARCHAR},
+            </if>
+            <if test="orderid != null">
+                orderid = #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="clicksum != null">
+                clicksum = #{clicksum,jdbcType=INTEGER},
+            </if>
+            <if test="ordersum != null">
+                ordersum = #{ordersum,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

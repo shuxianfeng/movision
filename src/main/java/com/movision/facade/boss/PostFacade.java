@@ -924,6 +924,31 @@ public class PostFacade {
                                      String userid, String postcontent, String endtime,
                                      String begintime, String pai, String essencedate, Paging<PostList> pager) {
         Map map = new HashedMap();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date end = null;
+        Date beg = null;
+        Date ess = null;
+        //结束时间,开始时间
+        if (endtime != null && begintime != null) {
+            try {
+                end = format.parse(endtime);
+                beg = format.parse(begintime);
+
+            } catch (ParseException e) {
+                log.error("时间格式转换异常");
+            }
+        }
+        //精选时间
+        if (essencedate != null) {
+            try {
+                ess = format.parse(essencedate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("endtime", end);
+        map.put("begintime", beg);
+        map.put("essencedate", ess);
         if (title != null) {
             map.put("title", title);//帖子标题
         }
@@ -936,40 +961,9 @@ public class PostFacade {
         if (postcontent != null) {
             map.put("postcontent", postcontent);//帖子内容
         }
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date end = null;
-        Date beg = null;
-        Date ess = null;
-        //结束时间
-        if (endtime != null && endtime != "") {
-            try {
-                end = format.parse(endtime);
-            } catch (ParseException e) {
-                log.error("结束时间转换异常");
-            }
-        }
-        map.put("endtime", end);
-        //开始时间
-        if (begintime != null && begintime != "") {
-            try {
-                beg = format.parse(begintime);
-            } catch (ParseException e) {
-                log.error("开始时间格式转换异常");
-            }
-        }
-        map.put("begintime", beg);
         if (pai != null) {
             map.put("pai", pai);
         }
-        //精选时间
-        if (essencedate != null && essencedate != "") {
-            try {
-                ess = format.parse(essencedate);
-            } catch (ParseException e) {
-                log.error("精选时间格式转换异常");
-            }
-        }
-        map.put("essencedate", ess);
         List<PostList> list = postService.postSearch(map, pager);
         return list;
         }

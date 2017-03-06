@@ -180,4 +180,28 @@ public class AdvertisementController {
         response.setData(pager);
         return response;
     }
+
+    /**
+     * 编辑广告
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "编辑广告", notes = "用于编辑广告接口", response = Response.class)
+    @RequestMapping(value = "update_advertisement", method = RequestMethod.POST)
+    public Response updateAdvertisement(@ApiParam(value = "广告id") @RequestParam String id,
+                                        @ApiParam(value = "类型") @RequestParam String topictype,
+                                        @ApiParam(value = "排序") @RequestParam(required = false) String orderid,
+                                        @ApiParam(value = "主标题") @RequestParam String content,
+                                        @ApiParam(value = "副标题") @RequestParam String subcontent,
+                                        @ApiParam(value = "图片URL") @RequestParam String url,
+                                        @ApiParam(value = "跳转链接URL") @RequestParam String transurl) {
+        Response response = new Response();
+        int i = homepageManageFacade.updateAdvertisement(id, topictype, orderid, content, subcontent, url, transurl);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(i);
+        return response;
+    }
 }

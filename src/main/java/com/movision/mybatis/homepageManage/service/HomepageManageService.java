@@ -93,4 +93,20 @@ public class HomepageManageService {
         }
     }
 
+    /**
+     * 编辑广告
+     *
+     * @param map
+     * @return
+     */
+    public int updateAdvertisement(Map map) {
+        try {
+            log.info("编辑广告");
+            return homepageManageMapper.updateAdvertisement(map);
+        } catch (Exception e) {
+            log.error("编辑广告异常");
+            throw e;
+        }
+    }
+
 }

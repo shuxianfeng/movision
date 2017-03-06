@@ -30,4 +30,6 @@ public interface HomepageManageMapper {
 
     int addAdvertisement(Map map);
 
+    int updateAdvertisement(Map map);
+
 }

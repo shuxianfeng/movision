@@ -90,7 +90,33 @@ public class HomepageManageFacade {
     }
 
 
+    /**
+     * 根据条件查询广告类型名称
+     *
+     * @param name
+     * @param pager
+     * @return
+     */
     public List<ManageType> queryAdvertisementTypeLikeName(String name, Paging<ManageType> pager) {
         return manageTypeService.queryAdvertisementTypeLikeName(name, pager);
+    }
+
+    /**
+     * 编辑广告
+     *
+     * @param id
+     * @return
+     */
+    public int updateAdvertisement(String id, String topictype, String orderid, String content, String subcontent, String url, String transurl) {
+        Map map = new HashedMap();
+        map.put("id", id);
+        map.put("topictype", topictype);
+        map.put("orderid", orderid);
+        map.put("content", content);
+        map.put("subcontent", subcontent);
+        map.put("url", url);
+        map.put("transurl", transurl);
+
+        return homepageManageService.updateAdvertisement(map);
     }
 }
