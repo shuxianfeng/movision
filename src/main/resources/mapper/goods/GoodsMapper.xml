@@ -779,7 +779,10 @@
             resultType="com.movision.mybatis.goods.entity.GoodsImg">
         SELECT goodsid,oderid,img_url FROM yw_goods_img WHERE type=3 AND goodsid=#{goodsid,jdbcType=INTEGER}
     </select>
-
+    <select id="queryAllGoodsPicture" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.goods.entity.GoodsImg">
+        SELECT goodsid,oderid,img_url FROM yw_goods_img WHERE type=2 AND goodsid=#{goodsid,jdbcType=INTEGER}
+    </select>
     <select id="queryCommodityDescription" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goods.entity.GoodsImg">
         SELECT goodsid,oderid,img_url FROM yw_goods_img WHERE type=1 AND goodsid=#{goodsid,jdbcType=INTEGER}
@@ -946,7 +949,7 @@
     </insert>
     <select id="findAllC" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodscombo.entity.GoodsComboVo">
-        SELECT g.comboid,g.goodsid,d.price,d.`name`,d.stock FROM yw_goods_combo g
+        SELECT g.comboid,g.goodsid,d.price,d.`name` FROM yw_goods_combo g
         LEFT JOIN yw_goods d ON d.id=g.goodsid WHERE g.comboid=#{comboid,jdbcType=INTEGER}
     </select>
     <select id="findAllComboT" resultType="com.movision.mybatis.goodscombo.entity.GoodsComboVo">
@@ -1012,5 +1015,9 @@
              SELECT g.goodsid,d.price,d.`name` ,d.origprice,d.stock,d.sales,d.attribute,d.id ,d.isdel,c.typename,b.brandname  FROM yw_goods_combo g
     LEFT JOIN yw_goods d ON d.id=g.goodsid  LEFT JOIN yw_category
     c ON c.protype=d.protype LEFT JOIN yw_brand b ON b.brandid=d.brandid WHERE g.comboid=#{comboid,jdbcType=INTEGER}
+    </select>
+    <select id="queryAllStock" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT SUM(d.stock) FROM yw_goods_combo g
+        LEFT JOIN yw_goods d ON d.id=g.goodsid WHERE g.comboid=#{comboid,jdbcType=INTEGER}
     </select>
 </mapper>

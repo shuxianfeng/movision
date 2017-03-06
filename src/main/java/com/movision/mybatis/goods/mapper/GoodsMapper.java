@@ -105,6 +105,8 @@ public interface GoodsMapper {
 
     GoodsImg queryCommodityDescription(Integer goodsid);//商品描述图
 
+    List<GoodsImg> queryAllGoodsPicture(Integer goodsid);//商品图片
+
     List<GoodsImg> queryblueprint(Integer id);//晒图
 
     int deleteGoodsPicture(Integer id);//删除图片
@@ -130,5 +132,7 @@ public interface GoodsMapper {
     List<GoodsComboVo> findByIdCom(Integer comboid);//根据id查询详情
 
     List<GoodsCom> findAllGoods(Integer comboid, RowBounds rowBounds);//根据套餐id查询商品信息
+
+    Integer queryAllStock(Integer comboid);//根据套餐id查询所有库存
 
 }

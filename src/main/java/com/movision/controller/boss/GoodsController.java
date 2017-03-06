@@ -418,6 +418,23 @@ public class GoodsController {
     }
 
     /**
+     * 商品图
+     *
+     * @param goodsid
+     * @return
+     */
+    @ApiOperation(value = "商品图", notes = "商品图", response = Response.class)
+    @RequestMapping(value = "query_allgoods_img", method = RequestMethod.POST)
+    public Response queryAllGoodsPicture(@ApiParam(value = "商品id") @RequestParam Integer goodsid) {
+        Response response = new Response();
+        List<GoodsImg> goodsImg = goodsFacade.queryAllGoodsPicture(goodsid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(goodsImg);
+        return response;
+    }
+    /**
      * 晒图
      *
      * @param id
@@ -775,11 +792,11 @@ public class GoodsController {
                                  @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<GoodsCom> pager = new Paging<GoodsCom>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<GoodsCom> list = goodsFacade.findAllGoods(comboid, pager);
+        List<GoodsCom> map = goodsFacade.findAllGoods(comboid, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        pager.result(list);
+        pager.result(map);
         response.setData(pager);
         return response;
     }

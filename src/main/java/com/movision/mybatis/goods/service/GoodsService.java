@@ -753,6 +753,21 @@ public class GoodsService {
     }
 
     /**
+     * 商品图片
+     *
+     * @param goodsid
+     * @return
+     */
+    public List<GoodsImg> queryAllGoodsPicture(Integer goodsid) {
+        try {
+            log.info("商品描述");
+            return goodsMapper.queryAllGoodsPicture(goodsid);
+        } catch (Exception e) {
+            log.error("商品描述图失败", e);
+            throw e;
+        }
+    }
+    /**
      * 晒图
      *
      * @param id
@@ -978,6 +993,22 @@ public class GoodsService {
             return goodsMapper.findAllGoods(comboid, pager.getRowBounds());
         } catch (Exception e) {
             log.error("根据id查询商品信息失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据套餐id查询库存
+     *
+     * @param comboid
+     * @return
+     */
+    public Integer queryAllStock(Integer comboid) {
+        try {
+            log.info("根据套餐id查询库存");
+            return goodsMapper.queryAllStock(comboid);
+        } catch (Exception e) {
+            log.error("根据套餐id查询库存失败", e);
             throw e;
         }
     }
