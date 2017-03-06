@@ -24,4 +24,14 @@ public class OrderAppFacade {
         map.put("userid", userid);
         return orderService.findAllMyOrderList(paging, map);
     }
+
+    public int commitOrder(String addressid, String cartids, String takeway, String kind, String onlystatue,
+                           String head, String content, String invoiceaddressid, String companyname, String rigaddress,
+                           String rigphone, String bank, String banknum, String code, String couponid, String points,
+                           String message, String logisticsfee, String totalprice) {
+        int flag = 0;
+
+
+        return flag;
+    }
 }
