@@ -73,6 +73,16 @@ public class AddressService {
         }
     }
 
+    public Address queryNameByCode(Map<String, Object> parammap) {
+        try {
+            log.info("根据省市区县code查询省市区县名称");
+            return addressMapper.queryNameByCode(parammap);
+        } catch (Exception e) {
+            log.error("根据省市区县code查询省市区县名称失败");
+            throw e;
+        }
+    }
+
     public Address queryMyDefaultAddress(int userid) {
         try {
             log.info("查询我的默认地址");

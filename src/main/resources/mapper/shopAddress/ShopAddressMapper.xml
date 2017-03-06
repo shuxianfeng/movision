@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.shopAddress.mapper.ShopAddressMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.shopAddress.entity.ShopAddress">
+        <result column="shopid" property="shopid" jdbcType="INTEGER"/>
+        <result column="provincecode" property="provincecode" jdbcType="INTEGER"/>
+        <result column="provincename" property="provincename" jdbcType="VARCHAR"/>
+        <result column="citycode" property="citycode" jdbcType="INTEGER"/>
+        <result column="cityname" property="cityname" jdbcType="VARCHAR"/>
+        <result column="areacode" property="areacode" jdbcType="INTEGER"/>
+        <result column="areaname" property="areaname" jdbcType="VARCHAR"/>
+        <result column="street" property="street" jdbcType="VARCHAR"/>
+        <result column="lng" property="lng" jdbcType="DECIMAL"/>
+        <result column="lat" property="lat" jdbcType="DECIMAL"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--普通插入语句-->
+    <insert id="insert" parameterType="com.movision.mybatis.shopAddress.entity.ShopAddress">
+    insert into yw_shop_address (shopid, provincecode, provincename, 
+      citycode, cityname, areacode, 
+      areaname, street, lng, 
+      lat, intime)
+    values (#{shopid,jdbcType=INTEGER}, #{provincecode,jdbcType=INTEGER}, #{provincename,jdbcType=VARCHAR}, 
+      #{citycode,jdbcType=INTEGER}, #{cityname,jdbcType=VARCHAR}, #{areacode,jdbcType=INTEGER}, 
+      #{areaname,jdbcType=VARCHAR}, #{street,jdbcType=VARCHAR}, #{lng,jdbcType=DECIMAL}, 
+      #{lat,jdbcType=DECIMAL}, #{intime,jdbcType=TIMESTAMP})
+  </insert>
+
+    <!--管理员设置店铺地址-->
+    <insert id="saveShopAddress" parameterType="com.movision.mybatis.shopAddress.entity.ShopAddress">
+    INSERT INTO yw_shop_address (
+        shopid, provincecode, provincename,
+      citycode, cityname, areacode,
+      areaname, street, lng,
+      lat, intime
+    )
+    VALUES (
+        #{shopid,jdbcType=INTEGER}, #{provincecode,jdbcType=INTEGER}, #{provincename,jdbcType=VARCHAR},
+      #{citycode,jdbcType=INTEGER}, #{cityname,jdbcType=VARCHAR}, #{areacode,jdbcType=INTEGER},
+      #{areaname,jdbcType=VARCHAR}, #{street,jdbcType=VARCHAR}, #{lng,jdbcType=DECIMAL},
+      #{lat,jdbcType=DECIMAL}, #{intime,jdbcType=TIMESTAMP}
+    )
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.movision.mybatis.shopAddress.entity.ShopAddress">
+        insert into yw_shop_address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shopid != null">
+                shopid,
+            </if>
+            <if test="provincecode != null">
+                provincecode,
+            </if>
+            <if test="provincename != null">
+                provincename,
+            </if>
+            <if test="citycode != null">
+                citycode,
+            </if>
+            <if test="cityname != null">
+                cityname,
+            </if>
+            <if test="areacode != null">
+                areacode,
+            </if>
+            <if test="areaname != null">
+                areaname,
+            </if>
+            <if test="street != null">
+                street,
+            </if>
+            <if test="lng != null">
+                lng,
+            </if>
+            <if test="lat != null">
+                lat,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopid != null">
+                #{shopid,jdbcType=INTEGER},
+            </if>
+            <if test="provincecode != null">
+                #{provincecode,jdbcType=INTEGER},
+            </if>
+            <if test="provincename != null">
+                #{provincename,jdbcType=VARCHAR},
+            </if>
+            <if test="citycode != null">
+                #{citycode,jdbcType=INTEGER},
+            </if>
+            <if test="cityname != null">
+                #{cityname,jdbcType=VARCHAR},
+            </if>
+            <if test="areacode != null">
+                #{areacode,jdbcType=INTEGER},
+            </if>
+            <if test="areaname != null">
+                #{areaname,jdbcType=VARCHAR},
+            </if>
+            <if test="street != null">
+                #{street,jdbcType=VARCHAR},
+            </if>
+            <if test="lng != null">
+                #{lng,jdbcType=DECIMAL},
+            </if>
+            <if test="lat != null">
+                #{lat,jdbcType=DECIMAL},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除店铺地址管理的记录-->
+    <delete id="delShopAddress" parameterType="java.lang.Integer">
+    DELETE FROM yw_shop_address WHERE shopid = #{shopid,jdbcType=INTEGER}
+  </delete>
+</mapper>

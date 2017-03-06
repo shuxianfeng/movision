@@ -27,4 +27,6 @@ public interface AddressMapper {
 
     Map<String, Object> queryAddressDetail(@Param("id") Integer id);
 
+    Address queryNameByCode(Map<String, Object> parammap);
+
 }

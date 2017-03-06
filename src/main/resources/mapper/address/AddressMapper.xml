@@ -40,10 +40,21 @@
         and isdel = 0
     </select>
 
+    <!--根据省市区县code查询省市区县名称-->
+    <select id="queryNameByCode" parameterType="java.util.Map" resultType="com.movision.mybatis.address.entity.Address">
+        SELECT name AS province,
+        (SELECT name FROM yw_city WHERE code = #{citycode,jdbcType=INTEGER}) AS city,
+        (SELECT name FROM yw_area WHERE code = #{areacode,jdbcType=INTEGER}) AS district
+        FROM yw_province
+        WHERE code = #{provincecode,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_address
         where id = #{id,jdbcType=INTEGER}
     </delete>
+
+    <!--基础插入语句-->
     <insert id="insert" parameterType="com.movision.mybatis.address.entity.Address">
         insert into yw_address (id, userid, name,
         phone, province, city,
@@ -54,6 +65,7 @@
         #{district,jdbcType=VARCHAR}, #{street,jdbcType=VARCHAR}, #{isdefault,jdbcType=INTEGER},
         #{updatetime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
     </insert>
+
     <insert id="insertSelective" parameterType="com.movision.mybatis.address.entity.Address">
         insert into yw_address
         <trim prefix="(" suffix=")" suffixOverrides=",">
