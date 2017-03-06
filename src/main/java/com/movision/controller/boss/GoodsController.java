@@ -800,4 +800,28 @@ public class GoodsController {
         response.setData(pager);
         return response;
     }
+
+    /**
+     * 修改套餐
+     *
+     * @param comboid
+     * @param comboname
+     * @param imgurl
+     * @param combodiscountprice
+     * @return
+     */
+    @ApiOperation(value = "修改套餐", notes = "修改套餐", response = Response.class)
+    @RequestMapping(value = "update_combo", method = RequestMethod.POST)
+    public Response updateComDetail(@ApiParam(value = "套餐id") @RequestParam String comboid,
+                                    @ApiParam(value = "套餐名字") @RequestParam(required = false) String comboname,
+                                    @ApiParam(value = "图片地址") @RequestParam(required = false) String imgurl,
+                                    @ApiParam(value = "折后价") @RequestParam(required = false) String combodiscountprice) {
+        Response response = new Response();
+        Map<String, Integer> map = goodsFacade.updateComDetail(imgurl, comboname, combodiscountprice, comboid);
+        if (response.getCode() == 200) {
+            response.setMessage("修改成功");
+        }
+        response.setData(map);
+        return response;
+    }
 }

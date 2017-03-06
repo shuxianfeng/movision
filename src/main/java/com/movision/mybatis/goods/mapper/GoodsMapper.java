@@ -1,5 +1,6 @@
 package com.movision.mybatis.goods.mapper;
 
+import com.movision.mybatis.combo.entity.Combo;
 import com.movision.mybatis.combo.entity.ComboVo;
 import com.movision.mybatis.goods.entity.*;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
@@ -133,6 +134,10 @@ public interface GoodsMapper {
 
     List<GoodsCom> findAllGoods(Integer comboid, RowBounds rowBounds);//根据套餐id查询商品信息
 
-    Integer queryAllStock(Integer comboid);//根据套餐id查询所有库存
+    Integer queryAllStock(Integer comboid);//根据套餐id查询最小库存
+
+    Integer updateComDetail(Combo goodsCombo);//修改套餐详情
+
+
 
 }

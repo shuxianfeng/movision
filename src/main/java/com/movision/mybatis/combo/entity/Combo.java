@@ -13,6 +13,16 @@ public class Combo {
 
     private Date intime;//套餐添加时间
 
+    private String imgurl;
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
+    }
+
     public Integer getId() {
         return id;
     }

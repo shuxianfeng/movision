@@ -1012,4 +1012,20 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 修改套餐
+     *
+     * @param goodsCom
+     * @return
+     */
+    public Integer updateComDetail(Combo goodsCom) {
+        try {
+            log.info("修改套餐");
+            return goodsMapper.updateComDetail(goodsCom);
+        } catch (Exception e) {
+            log.error("修改套餐失败", e);
+            throw e;
+        }
+    }
 }

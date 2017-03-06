@@ -1017,7 +1017,22 @@
     c ON c.protype=d.protype LEFT JOIN yw_brand b ON b.brandid=d.brandid WHERE g.comboid=#{comboid,jdbcType=INTEGER}
     </select>
     <select id="queryAllStock" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT SUM(d.stock) FROM yw_goods_combo g
-        LEFT JOIN yw_goods d ON d.id=g.goodsid WHERE g.comboid=#{comboid,jdbcType=INTEGER}
+        SELECT MIN(d.stock) FROM yw_goods_combo g
+        LEFT JOIN yw_goods d ON d.id=g.goodsid WHERE g.comboid=1
     </select>
+    <update id="updateComDetail" parameterType="com.movision.mybatis.combo.entity.Combo">
+        update yw_combo
+        <set>
+            <if test="comboname != null">
+                comboname = #{comboname,jdbcType=VARCHAR}
+            </if>
+            <if test="combodiscountprice != null">
+                combodiscountprice = #{combodiscountprice,jdbcType=INTEGER}
+            </if>
+            <if test="imgurl != null">
+                imgurl = #{combodiscountprice,jdbcType=VARCHAR}
+            </if>
+        </set>
+        WHERE comboid= #{comboid,jdbcType=INTEGER}
+    </update>
 </mapper>

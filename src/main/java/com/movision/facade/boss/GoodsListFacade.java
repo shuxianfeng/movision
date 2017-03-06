@@ -761,18 +761,15 @@ public class GoodsListFacade {
         Double sumorigprice = 0.0;
         int sumsales = 0;
         int sumstock = 0;
-        int finastock = 0;
         for (int i = 0; i < list.size(); i++) {
             int re = goodsService.queryAllStock(comboid);
             origprice = list.get(i).getOrigprice();
             sales = list.get(i).getSales();
-            stock = list.get(i).getStock();
             price = list.get(i).getPrice();
             sumorigprice += origprice;
             sumprice += price;
             sumsales += sales;
-            sumstock += stock;
-            sumstock = re - sumstock;
+            sumstock = re;
             list.get(i).setSumprice(sumprice);
             list.get(i).setSumorigprice(sumorigprice);
             list.get(i).setSumsales(sumsales);
@@ -780,5 +777,25 @@ public class GoodsListFacade {
 
         }
         return list;
+    }
+
+    /**
+     * 修改套餐
+     *
+     * @param imgurl
+     * @param comboname
+     * @param combodiscountprice
+     * @return
+     */
+    public Map<String, Integer> updateComDetail(String imgurl, String comboname, String combodiscountprice, String comboid) {
+        Combo goodsComboVo = new Combo();
+        goodsComboVo.setComboid(Integer.parseInt(comboid));
+        goodsComboVo.setCombodiscountprice(Double.parseDouble(combodiscountprice));
+        goodsComboVo.setComboname(comboname);
+        int res = goodsService.updateComDetail(goodsComboVo);
+        Map<String, Integer> map = new HashedMap();
+        map.put("res", res);
+        return map;
+
     }
 }
