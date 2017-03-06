@@ -941,35 +941,35 @@ public class PostFacade {
         Date beg = null;
         Date ess = null;
         //结束时间
-        if (endtime != null) {
+        if (endtime != null && endtime != "") {
             try {
                 end = format.parse(endtime);
             } catch (ParseException e) {
                 log.error("结束时间转换异常");
             }
         }
-        map.put("endtime", endtime);
+        map.put("endtime", end);
         //开始时间
-        if (begintime != null) {
+        if (begintime != null && begintime != "") {
             try {
                 beg = format.parse(begintime);
             } catch (ParseException e) {
                 log.error("开始时间格式转换异常");
             }
         }
-        map.put("begintime", begintime);
+        map.put("begintime", beg);
         if (pai != null) {
             map.put("pai", pai);
         }
         //精选时间
-        if (essencedate != null) {
+        if (essencedate != null && essencedate != "") {
             try {
                 ess = format.parse(essencedate);
             } catch (ParseException e) {
                 log.error("精选时间格式转换异常");
             }
         }
-        map.put("essencedate", essencedate);
+        map.put("essencedate", ess);
         List<PostList> list = postService.postSearch(map, pager);
         return list;
         }
