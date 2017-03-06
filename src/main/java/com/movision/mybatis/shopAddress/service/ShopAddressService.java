@@ -1,5 +1,7 @@
 package com.movision.mybatis.shopAddress.service;
 
+import com.movision.mybatis.logisticsfeeCalculateRule.entity.LogisticsfeeCalculateRule;
+import com.movision.mybatis.logisticsfeeCalculateRule.mapper.LogisticsfeeCalculateRuleMapper;
 import com.movision.mybatis.shopAddress.entity.ShopAddress;
 import com.movision.mybatis.shopAddress.mapper.ShopAddressMapper;
 import org.slf4j.Logger;
@@ -20,6 +22,9 @@ public class ShopAddressService {
     @Autowired
     private ShopAddressMapper shopAddressMapper;
 
+    @Autowired
+    private LogisticsfeeCalculateRuleMapper logisticsfeeCalculateRuleMapper;
+
     @Transactional
     public void saveShopAddress(ShopAddress shopAddress) {
         try {
@@ -28,6 +33,26 @@ public class ShopAddressService {
             shopAddressMapper.saveShopAddress(shopAddress);
         } catch (Exception e) {
             log.error("保存管理员设置的店铺地址和经纬度失败");
+            throw e;
+        }
+    }
+
+    public ShopAddress queryShopAddressByShopid(int shopid) {
+        try {
+            log.info("根据店铺id查询店铺地址和经纬度");
+            return shopAddressMapper.queryShopAddressByShopid(shopid);
+        } catch (Exception e) {
+            log.error("根据店铺id查询店铺地址和经纬度失败");
+            throw e;
+        }
+    }
+
+    public LogisticsfeeCalculateRule queryLogisticsfeeCalculateRule(int shopid) {
+        try {
+            log.info("根据店铺id查询运费的计费规则");
+            return logisticsfeeCalculateRuleMapper.queryLogisticsfeeCalculateRule(shopid);
+        } catch (Exception e) {
+            log.error("根据店铺id查询运费的计费规则失败");
             throw e;
         }
     }

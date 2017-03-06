@@ -10,4 +10,6 @@ public interface ShopAddressMapper {
     void delShopAddress(int shopid);
 
     void saveShopAddress(ShopAddress shopAddress);
+
+    ShopAddress queryShopAddressByShopid(int shopid);
 }

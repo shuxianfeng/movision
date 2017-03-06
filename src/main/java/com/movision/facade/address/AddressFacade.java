@@ -8,8 +8,10 @@ import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
 import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.address.service.AddressService;
+import com.movision.mybatis.logisticsfeeCalculateRule.entity.LogisticsfeeCalculateRule;
 import com.movision.mybatis.shopAddress.entity.ShopAddress;
 import com.movision.mybatis.shopAddress.service.ShopAddressService;
+import com.movision.utils.CalculateDistance;
 import com.movision.utils.ListUtil;
 import org.apache.commons.collections.map.HashedMap;
 import com.movision.utils.wxpay.baidu.SnCal;
@@ -99,14 +101,14 @@ public class AddressFacade {
         Address address = addressService.queryNameByCode(parammap);
         String addressStr = address.getProvince() + address.getCity() + address.getDistrict() + street;
         //通过地址计算经纬度
-//        String sn = SnCal.getSn(address.getProvince()+address.getCity()+address.getDistrict()+street);
-        String sn = SnCal.getSn(street);
+        String sn = SnCal.getSn(address.getProvince() + address.getCity() + address.getDistrict() + street);
+//        String sn = SnCal.getSn(street);
         String ak = PropertiesUtils.getValue("baidu.ak");
 
         //通过http的get请求url
         String baiduurl = PropertiesUtils.getValue("baidu.url");
         //拼接百度接口的请求url
-        String url = baiduurl + "?address=" + street + "&output=json&ak=" + ak + "&sn=" + sn;
+        String url = baiduurl + "?address=" + addressStr + "&output=json&ak=" + ak + "&sn=" + sn;
         String result = "";
         try {
             // 根据地址获取请求
@@ -154,5 +156,31 @@ public class AddressFacade {
         }
 
         return flag;
+    }
+
+    public double calculateLogisticsfee(String lng, String lat) {
+
+        double fee = 0;
+        //查询我司自营店址的经纬度
+        ShopAddress shopAddress = shopAddressService.queryShopAddressByShopid(-1);
+        //根据经纬度计算里程
+        double distance = CalculateDistance.GetDistance(Double.parseDouble(lng), Double.parseDouble(lat), shopAddress.getLng().doubleValue(), shopAddress.getLat().doubleValue());
+        log.info("经纬度点1>>>>>>>" + Double.parseDouble(lng) + ">>" + Double.parseDouble(lat) + "，经纬度点2>>>>>>" + shopAddress.getLng().doubleValue() + ">>" + shopAddress.getLat().doubleValue());
+        log.info("里程距离>>>>>>>" + distance / 1000 + "公里");
+        //取出运费规则
+        LogisticsfeeCalculateRule logisticsfeeCalculateRule = shopAddressService.queryLogisticsfeeCalculateRule(-1);
+
+        double startprice = logisticsfeeCalculateRule.getStartprice();//起步价
+        double startdistance = logisticsfeeCalculateRule.getStartdistance();//起步公里数
+        double beyondbilling = logisticsfeeCalculateRule.getBeyondbilling();//超出每公里多少钱
+
+        if (distance / 1000 <= startdistance) {
+            fee = startprice;
+        } else if (distance / 1000 > startdistance) {
+            fee = startprice + (distance / 1000 - startdistance) * beyondbilling;
+        }
+        long l = Math.round(fee);//向上取整
+
+        return l;
     }
 }

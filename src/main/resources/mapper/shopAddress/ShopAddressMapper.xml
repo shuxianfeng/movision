@@ -15,6 +15,12 @@
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <!--根据店铺id查询店铺地址和经纬度-->
+    <select id="queryShopAddressByShopid" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.shopAddress.entity.ShopAddress">
+        SELECT * FROM yw_shop_address WHERE shopid = #{shopid,jdbcType=INTEGER}
+    </select>
+
     <!--普通插入语句-->
     <insert id="insert" parameterType="com.movision.mybatis.shopAddress.entity.ShopAddress">
     insert into yw_shop_address (shopid, provincecode, provincename, 
