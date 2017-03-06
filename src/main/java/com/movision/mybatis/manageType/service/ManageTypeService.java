@@ -3,6 +3,7 @@ package com.movision.mybatis.manageType.service;
 import com.movision.mybatis.manageType.entity.ManageType;
 import com.movision.mybatis.manageType.mapper.ManageTypeMapper;
 import com.movision.mybatis.manager.service.ManagerServcie;
+import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,38 @@ public class ManageTypeService {
             return manageTypeMapper.addAdvertisementType(map);
         } catch (Exception e) {
             logge.error("添加广告类型异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 根据id查询广告类型详情
+     *
+     * @param id
+     * @return
+     */
+    public ManageType queryAdvertisementTypeById(String id) {
+        try {
+            logge.info("根据id查询广告类型详情");
+            return manageTypeMapper.queryAdvertisementTypeById(id);
+        } catch (Exception e) {
+            logge.error("根据id查询广告类型详情异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 根据广告名称模糊查询广告类型列表
+     *
+     * @param name
+     * @return
+     */
+    public List<ManageType> queryAdvertisementTypeLikeName(String name, Paging<ManageType> pager) {
+        try {
+            logge.info("根据广告名称模糊查询广告类型列表");
+            return manageTypeMapper.findAllQueryAdvertisementTypeLikeName(name, pager.getRowBounds());
+        } catch (Exception e) {
+            logge.error("根据广告名称模糊查询广告类型列表异常");
             throw e;
         }
     }

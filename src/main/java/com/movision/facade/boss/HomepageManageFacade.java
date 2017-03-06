@@ -78,4 +78,19 @@ public class HomepageManageFacade {
         map.put("intime", new Date());
         return manageTypeService.addAdvertisementType(map);
     }
+
+    /**
+     * 根据id查询广告类型详情
+     *
+     * @param id
+     * @return
+     */
+    public ManageType queryAdvertisementTypeById(String id) {
+        return manageTypeService.queryAdvertisementTypeById(id);
+    }
+
+
+    public List<ManageType> queryAdvertisementTypeLikeName(String name, Paging<ManageType> pager) {
+        return manageTypeService.queryAdvertisementTypeLikeName(name, pager);
+    }
 }

@@ -138,4 +138,46 @@ public class AdvertisementController {
         response.setData(i);
         return response;
     }
+
+    /**
+     * 根据id查询广告类型详情
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "查询广告类型", notes = "用于根据广告id查询广告类型详情", response = Response.class)
+    @RequestMapping(value = "query_type_id", method = RequestMethod.POST)
+    public Response queryAdvertisementTypeById(@ApiParam(value = "类型id") @RequestParam String id) {
+        ManageType manageType = homepageManageFacade.queryAdvertisementTypeById(id);
+        Response response = new Response();
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(manageType);
+        return response;
+    }
+
+    /**
+     * 根据条件查询广告类型名称
+     *
+     * @param name
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "模糊查询广告类型名称", notes = "用于条件查询广告类型名称接口", response = Response.class)
+    @RequestMapping(value = "query_type_like_name", method = RequestMethod.POST)
+    public Response queryAdvertisementTypeLikeName(@ApiParam(value = "位置名称") @RequestParam String name,
+                                                   @ApiParam(value = "当前第几页") @RequestParam(required = false) String pageNo,
+                                                   @ApiParam(value = "每页几条") @RequestParam(required = false) String pageSize) {
+        Response response = new Response();
+        Paging<ManageType> pager = new Paging<ManageType>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<ManageType> list = homepageManageFacade.queryAdvertisementTypeLikeName(name, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
 }

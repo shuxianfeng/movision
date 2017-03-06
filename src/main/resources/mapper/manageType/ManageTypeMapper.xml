@@ -168,4 +168,14 @@
             </if>
         </trim>
     </insert>
+
+    <select id="queryAdvertisementTypeById" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.manageType.entity.ManageType">
+        select * from yw_homepage_manage_type WHERE id=#{id,jdbcType=INTEGER};
+    </select>
+
+    <select id="findAllQueryAdvertisementTypeLikeName" resultType="com.movision.mybatis.manageType.entity.ManageType"
+            parameterType="java.lang.String">
+        SELECT * FROM yw_homepage_manage_type WHERE name LIKE CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+    </select>
 </mapper>
