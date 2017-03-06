@@ -5,19 +5,62 @@ import java.util.Date;
 public class HomepageManage {
     private Integer id;
 
+    //类型：0 首页--你可能喜欢--板块banner  1 ‘发现’首页banner
+    //2 首页最上方的主banner 3 商城--月度热销banner
+    //4 商城--一周热销banner  5 商城--每日神器推荐banner',
     private Integer topictype;
 
-    private String content;
+    private String content;//内容主标题
 
-    private String subcontent;
+    private String subcontent;//内容副标题
 
-    private String url;
+    private String url;//图片url
 
-    private String transurl;
+    private String transurl;//跳转url
 
-    private Integer orderid;
+    private Integer orderid;//排序id
 
-    private Date intime;
+    private Date intime;//主题创建时间
+
+    private Integer clicksum;//点击次数
+
+    private Integer ordersum;//生成订单数量
+
+    private Integer wide;//广告宽度
+
+    private Integer high;//广告高度
+
+    public Integer getClicksum() {
+        return clicksum;
+    }
+
+    public void setClicksum(Integer clicksum) {
+        this.clicksum = clicksum;
+    }
+
+    public Integer getOrdersum() {
+        return ordersum;
+    }
+
+    public void setOrdersum(Integer ordersum) {
+        this.ordersum = ordersum;
+    }
+
+    public Integer getWide() {
+        return wide;
+    }
+
+    public void setWide(Integer wide) {
+        this.wide = wide;
+    }
+
+    public Integer getHigh() {
+        return high;
+    }
+
+    public void setHigh(Integer high) {
+        this.high = high;
+    }
 
     public Integer getId() {
         return id;

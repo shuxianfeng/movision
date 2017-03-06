@@ -10,9 +10,13 @@
         <result column="transurl" jdbcType="VARCHAR" property="transurl"/>
         <result column="orderid" jdbcType="VARCHAR" property="orderid"/>
         <result column="intime" jdbcType="TIMESTAMP" property="intime"/>
+        <result column="clicksum" jdbcType="INTEGER" property="clicksum"/>
+        <result column="ordersum" jdbcType="INTEGER" property="ordersum"/>
+        <result column="wide" jdbcType="INTEGER" property="wide"/>
+        <result column="high" jdbcType="INTEGER" property="high"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, topictype, content, subcontent, url, transurl, orderid, intime
+        id, topictype, content, subcontent, url, transurl, orderid, intime,clicksum,ordersum,wide,high
     </sql>
 
     <!--基础查询语句-->
@@ -37,11 +41,11 @@
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.homepageManage.entity.HomepageManage">
         insert into yw_homepage_manage (id, topictype, content,
-        subcontent, url, transurl, orderid,
-        intime)
+        subcontent, url, transurl, orderid,intime,clicksum,ordersum,wide,high)
         values (#{id,jdbcType=INTEGER}, #{topictype,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR},
         #{subcontent,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{transurl,jdbcType=VARCHAR},
-        #{orderid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP})
+        #{orderid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP},#{clicksum,jdbcType=INTEGER},
+        #{ordersum,jdbcType=INTEGER},#{wide,jdbcType=INTEGER},#{high,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.homepageManage.entity.HomepageManage">
         insert into yw_homepage_manage
@@ -70,6 +74,18 @@
             <if test="intime != null">
                 intime,
             </if>
+            <if test="clicksum != null">
+                clicksum,
+            </if>
+            <if test="ordersum != null">
+                ordersum,
+            </if>
+            <if test="wide != null">
+                wide,
+            </if>
+            <if test="high != null">
+                high,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -95,6 +111,18 @@
             </if>
             <if test="intime != null">
                 #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="clicksum != null">
+                #{clicksum,jdbcType=INTEGER},
+            </if>
+            <if test="ordersum != null">
+                #{ordersum,jdbcType=INTEGER},
+            </if>
+            <if test="wide != null">
+                #{wide,jdbcType=INTEGER},
+            </if>
+            <if test="high != null">
+                #{high,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -122,6 +150,19 @@
             <if test="intime != null">
                 intime = #{intime,jdbcType=TIMESTAMP},
             </if>
+            <if test="clicksum != null">
+                clicksum = #{clicksum,jdbcType=INTEGER},
+            </if>
+            <if test="ordersum != null">
+                ordersum = #{ordersum,jdbcType=INTEGER},
+            </if>
+            <if test="wide != null">
+                wide = #{wide,jdbcType=INTEGER},
+            </if>
+            <if test="high != null">
+                high = #{high,jdbcType=INTEGER},
+            </if>
+
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -133,11 +174,20 @@
         url = #{url,jdbcType=VARCHAR},
         transurl = #{transurl,jdbcType=VARCHAR},
         orderid = #{orderid,jdbcType=INTEGER},
-        intime = #{intime,jdbcType=TIMESTAMP}
+        intime = #{intime,jdbcType=TIMESTAMP},
+        clicksum = #{clicksum,jdbcType=INTEGER},
+        ordersum = #{ordersum,jdbcType=INTEGER},
+        wide = #{wide,jdbcType=INTEGER},
+        high = #{high,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
     <select id="findAllqueryAdvertisementList" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
         select * from yw_homepage_manage
+    </select>
+
+    <select id="queryAvertisementById" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
+        select * from yw_homepage_manage WHERE id=#{id.jdbcType=INTEGER};
     </select>
 </mapper>

@@ -58,4 +58,20 @@ public class HomepageManageService {
             throw e;
         }
     }
+
+    /**
+     * 用于查看广告详情
+     *
+     * @param id
+     * @return
+     */
+    public HomepageManage queryAvertisementById(String id) {
+        try {
+            log.info("查询广告详情");
+            return homepageManageMapper.queryAvertisementById(id);
+        } catch (Exception e) {
+            log.error("查询广告详情");
+            throw e;
+        }
+    }
 }

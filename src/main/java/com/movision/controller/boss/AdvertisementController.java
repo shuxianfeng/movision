@@ -25,6 +25,13 @@ public class AdvertisementController {
     @Autowired
     HomepageManageService homepageManageService;
 
+    /**
+     * 查询广告列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
     @ApiOperation(value = "查询广告列表", notes = "用于查询广告列表接口", response = Response.class)
     @RequestMapping(value = "query_advertisement_list", method = RequestMethod.POST)
     public Response queryAdvertisementList(@ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
@@ -37,6 +44,24 @@ public class AdvertisementController {
         }
         pager.result(list);
         response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 查询广告详情
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "查询广告详情", notes = "查询广告详情", response = Response.class)
+    @RequestMapping(value = "query_avertisement_particulars", method = RequestMethod.POST)
+    public Response queryAvertisementById(@ApiParam(value = "广告id") @RequestParam String id) {
+        Response response = new Response();
+        HomepageManage particulars = homepageManageService.queryAvertisementById(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(particulars);
         return response;
     }
 }
