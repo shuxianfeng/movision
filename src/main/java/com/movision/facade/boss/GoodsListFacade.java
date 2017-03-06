@@ -520,7 +520,7 @@ public class GoodsListFacade {
      *
      * @param
      * @param imgurl
-     * @param tuijian
+     * @param
      * @param name
      * @param
      * @param protype
@@ -800,6 +800,40 @@ public class GoodsListFacade {
         map.put("res", res);
         return map;
 
+    }
+
+    /**
+     * 增加套餐
+     *
+     * @param imgurl
+     * @param comboname
+     * @param combodiscountprice
+     * @param goodsid
+     * @return
+     */
+    public Map<String, Integer> addCom(String imgurl, String comboid, String comboname, String combodiscountprice, String goodsid) {
+        Map<String, Integer> map = new HashedMap();
+        Combo combo = new Combo();
+        combo.setImgurl(imgurl);
+        combo.setComboname(comboname);
+        combo.setComboid(Integer.parseInt(comboid));
+        combo.setIntime(new Date());
+        combo.setCombodiscountprice(Double.parseDouble(combodiscountprice));
+        int res = goodsService.addCom(combo);
+        int comboids = combo.getComboid();
+        GoodsCombo good = new GoodsCombo();
+        good.setComboid(comboids);
+        String goods;
+        String productids[] = goodsid.split(",");
+        int result = 0;
+        for (int i = 0; i < productids.length; i++) {
+            goods = productids[i];
+            good.setGoodsid(Integer.parseInt(goods));
+            result = goodsService.addGoods(good);
+        }
+        map.put("result", result);
+        map.put("res", res);
+        return map;
     }
 
 }

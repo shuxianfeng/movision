@@ -1044,4 +1044,20 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 根据套餐id插入商品
+     *
+     * @param goodsCom
+     * @return
+     */
+    public Integer addGoods(GoodsCombo goodsCom) {
+        try {
+            log.info("根据套餐id插入商品");
+            return goodsMapper.addComGoods(goodsCom);
+        } catch (Exception e) {
+            log.error("根据套餐id插入商品失败", e);
+            throw e;
+        }
+    }
 }

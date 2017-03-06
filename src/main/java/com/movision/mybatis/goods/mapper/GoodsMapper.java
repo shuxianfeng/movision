@@ -140,4 +140,6 @@ public interface GoodsMapper {
 
     Integer addCom(Combo combo);//增加套餐
 
+    Integer addComGoods(GoodsCombo goodsCombo);//根据id插入商品
+
 }

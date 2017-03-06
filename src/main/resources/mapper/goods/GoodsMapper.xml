@@ -1035,4 +1035,76 @@
         </set>
         WHERE comboid= #{comboid,jdbcType=INTEGER}
     </update>
+
+    <insert id="addCom" parameterType="com.movision.mybatis.combo.entity.Combo">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into yw_combo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="comboid != null">
+                comboid,
+            </if>
+            <if test="imgurl != null">
+                imgurl,
+            </if>
+            <if test="comboname != null">
+                comboname,
+            </if>
+            <if test="combodiscountprice != null">
+                combodiscountprice,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="comboid != null">
+                #{comboid,jdbcType=INTEGER},
+            </if>
+            <if test="imgurl != null">
+                #{imgurl,jdbcType=VARCHAR},
+            </if>
+            <if test="comboname != null">
+                #{comboname,jdbcType=VARCHAR},
+            </if>
+            <if test="combodiscountprice != null">
+                #{combodiscountprice,jdbcType=DOUBLE},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=DATE},
+            </if>
+        </trim>
+    </insert>
+    <insert id="addComGoods" parameterType="com.movision.mybatis.goodscombo.entity.GoodsCombo">
+        insert into yw_goods_combo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="comboid != null">
+                comboid,
+            </if>
+            <if test="goodsid != null">
+                goodsid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="comboid != null">
+                #{comboid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsid != null">
+                #{goodsid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 </mapper>
