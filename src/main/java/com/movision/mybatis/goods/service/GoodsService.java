@@ -1028,4 +1028,20 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 增加套餐
+     *
+     * @param combo
+     * @return
+     */
+    public Integer addCom(Combo combo) {
+        try {
+            log.info("增加套餐");
+            return goodsMapper.addCom(combo);
+        } catch (Exception e) {
+            log.error("增加套餐失败", e);
+            throw e;
+        }
+    }
 }

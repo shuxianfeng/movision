@@ -535,7 +535,7 @@ public class GoodsListFacade {
      * @param onlinetime
      * @return
      */
-    public Map<String, Integer> addGoods(String imgurl, String tuijian, String name, String protype, String brandid, String price, String origprice, String stock, String isdel, String recommenddate, String attribute, String onlinetime) {
+    public Map<String, Integer> addGoods(String imgurl, String name, String protype, String brandid, String price, String origprice, String stock, String isdel, String recommenddate, String attribute, String onlinetime, String ishot, String isessence) {
         Map<String, Integer> map = new HashedMap();
         GoodsVo goodsVo = new GoodsVo();
         java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -564,7 +564,7 @@ public class GoodsListFacade {
         goodsVo.setName(name);
         goodsVo.setIsdel(Integer.parseInt(isdel));
         goodsVo.setStock(Integer.parseInt(stock));
-        String ishot;
+        /** String ishot;
         String productids[] = tuijian.split(",");
         for (int i = 0; i < productids.length; i++) {
             ishot = productids[i];
@@ -576,7 +576,9 @@ public class GoodsListFacade {
             } else if (ishot == "2") {
                 goodsVo.setIsessence(1);
             }
-        }
+         }*/
+        goodsVo.setIshot(Integer.parseInt(ishot));
+        goodsVo.setIsessence(Integer.parseInt(isessence));
         goodsVo.setAttribute(attribute);
         int res = goodsService.addGoods(goodsVo);
         int id = goodsVo.getId();
@@ -792,10 +794,12 @@ public class GoodsListFacade {
         goodsComboVo.setComboid(Integer.parseInt(comboid));
         goodsComboVo.setCombodiscountprice(Double.parseDouble(combodiscountprice));
         goodsComboVo.setComboname(comboname);
+        goodsComboVo.setImgurl(imgurl);
         int res = goodsService.updateComDetail(goodsComboVo);
         Map<String, Integer> map = new HashedMap();
         map.put("res", res);
         return map;
 
     }
+
 }

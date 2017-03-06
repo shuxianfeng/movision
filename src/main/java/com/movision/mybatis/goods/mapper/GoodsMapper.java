@@ -138,6 +138,6 @@ public interface GoodsMapper {
 
     Integer updateComDetail(Combo goodsCombo);//修改套餐详情
 
-
+    Integer addCom(Combo combo);//增加套餐
 
 }
