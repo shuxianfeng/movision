@@ -477,6 +477,37 @@ public class PostService {
     }
 
     /**
+     * 根据id查询帖子是否加精
+     * @param id
+     * @return
+     */
+    public int queryPostByIsessence(String id) {
+        try {
+            log.info("根据id查询帖子是否加精");
+            return postMapper.queryPostByIsessence(id);
+        } catch (Exception e) {
+            log.error("根据id查询帖子是否加精异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 修改帖子加精
+     *
+     * @param post
+     * @return
+     */
+    public int updatePostChoiceness(PostTo post) {
+        try {
+            log.info("修改帖子加精");
+            return postMapper.updatePostChoiceness(post);
+        } catch (Exception e) {
+            log.error("修改帖子加精异常");
+            throw e;
+        }
+    }
+
+    /**
      * 帖子添加精选
      *
      * @param postid

@@ -631,7 +631,14 @@ public class PostFacade {
                 p.setOrderid(Integer.parseInt(orderid));
             }
             p.setSubtitle(subtitle);
-            Integer result = postService.addPostChoiceness(p);
+            Integer result = null;
+            int isessence = postService.queryPostByIsessence(postid);
+            if (isessence == 1) {//已经加精,做修改操作
+                p.setId(Integer.parseInt(postid));
+                result = postService.updatePostChoiceness(p);
+            } else {
+                result = postService.addPostChoiceness(p);
+            }
             map.put("result", result);
             return map;
         } else {//取消加精

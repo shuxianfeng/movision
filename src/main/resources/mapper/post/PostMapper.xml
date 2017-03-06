@@ -1473,4 +1473,22 @@
         WHERE p.isdel=0 AND p.isactive=1 AND p.id=#{id,jdbcType=INTEGER}
     </select>
 
+    <select id="queryPostByIsessence" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT isessence FROM yw_post WHERE id=#{id,jdbcType=INTEGER}
+    </select>
+
+    <update id="updatePostChoiceness" parameterType="com.movision.mybatis.post.entity.PostTo">
+        UPDATE yw_post SET
+        <if test="essencedate != null">
+            essencedate = #{essencedate,jdbcType=DATE},
+        </if>
+        <if test="subtitle!=null">
+            subtitle=#{subtitle,jdbcType=VARCHAR},
+        </if>
+        <if test="orderid!=null">
+            orderid=#{orderid,jdbcType=INTEGER}
+        </if>
+        WHERE id=#{id,jdbcType=INTEGER} AND isessence=1
+    </update>
+
 </mapper>
