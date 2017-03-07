@@ -1,6 +1,9 @@
 package com.movision.utils.im;
 
+import com.movision.common.constant.ImConstant;
+
 import java.security.MessageDigest;
+import java.util.Date;
 
 /**
  * 计算CheckSum
@@ -27,6 +30,16 @@ public class CheckSumBuilder {
     // 计算并获取md5值
     public static String getMD5(String requestBody) {
         return encode("md5", requestBody);
+    }
+
+    /**
+     * 根据用户的手机号生成一个accid
+     * @param phone
+     * @return
+     */
+    public static String getAccid(String phone) {
+        String curTime = String.valueOf((new Date()).getTime() / 1000L);
+        return encode("md5", phone + ImConstant.APP_SECRET + curTime);
     }
 
     /**
@@ -62,4 +75,10 @@ public class CheckSumBuilder {
 
     private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5',
             '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+
+
+    public static void main(String[] args) {
+        System.out.println(getAccid("18051989558"));
+    }
+
 }

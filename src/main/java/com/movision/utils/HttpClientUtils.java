@@ -18,7 +18,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.apache.regexp.RE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,17 +65,15 @@ public class HttpClientUtils {
             CloseableHttpResponse response = httpclient.execute(httpGet);
 
             try {
-                logger.info("statusCode="
-                        + response.getStatusLine().getStatusCode());
+                Integer statusCode = response.getStatusLine().getStatusCode();
+                logger.info("statusCode=" + statusCode);
                 HttpEntity entity = response.getEntity();
                 // do something useful with the response body
                 // and ensure it is fully consumed
                 String content = EntityUtils.toString(entity);
                 logger.info("content=" + content);
-                Map<String, String> resultMap = JsonUtils
-                        .getMapFromJsonString(content);
-                resultMap.put("statusCode", String.valueOf(response
-                        .getStatusLine().getStatusCode()));
+                Map<String, String> resultMap = JsonUtils.getStringMapFromJsonString(content);
+                resultMap.put("statusCode", String.valueOf(statusCode));
                 EntityUtils.consume(entity);
                 return resultMap;
             } finally {

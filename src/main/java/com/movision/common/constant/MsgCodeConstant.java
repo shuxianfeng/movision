@@ -320,4 +320,9 @@ public interface MsgCodeConstant {
 	 */
 	int app_point_type_not_exist = 30000;
 
+    /**
+     * 创建云信id失败
+     */
+    int create_im_id_fail = 30100;
+
 }

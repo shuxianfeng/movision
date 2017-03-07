@@ -1,7 +1,37 @@
 package com.movision.facade.im;
 
+import com.google.gson.Gson;
+import com.movision.common.constant.ImConstant;
+import com.movision.common.constant.MsgCodeConstant;
+import com.movision.common.util.ShiroUtil;
+import com.movision.exception.BusinessException;
+import com.movision.mybatis.imuser.entity.ImUser;
+import com.movision.mybatis.imuser.service.ImUserService;
+import com.movision.utils.JsonUtils;
+import com.movision.utils.SignUtil;
+import com.movision.utils.im.CheckSumBuilder;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+
+import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.util.*;
 
 /**
  * 网易云通讯接口
@@ -9,9 +39,158 @@ import org.slf4j.LoggerFactory;
  * @Author zhuangyuhao
  * @Date 2017/3/6 17:07
  */
+@Service
 public class ImFacade {
 
     private static Logger log = LoggerFactory.getLogger(ImFacade.class);
+
+    @Autowired
+    private ImUserService imUserService;
+
+    /**
+     * 发起IM请求，获得响应
+     *
+     * @param url    向IM服务器发送的请求的url
+     * @param params 接口的传参
+     * @return
+     * @throws IOException
+     */
+    public Map<String, Object> sendImHttpPost(String url, Map<String, Object> params) throws IOException {
+
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        try {
+
+            HttpPost httpPost = new HttpPost(url);
+            log.info("请求的云信url:" + url);
+
+            String appKey = ImConstant.APP_KEY;
+            String appSecret = ImConstant.APP_SECRET;
+            String nonce = SignUtil.generateString(32);
+            String curTime = String.valueOf((new Date()).getTime() / 1000L);
+            String checkSum = CheckSumBuilder.getCheckSum(appSecret, nonce, curTime);//参考 计算CheckSum的java代码
+
+            // 设置请求的header
+            httpPost.addHeader("AppKey", appKey);
+            httpPost.addHeader("Nonce", nonce);
+            httpPost.addHeader("CheckSum", checkSum);
+            httpPost.addHeader("CurTime", curTime);
+            httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+
+            // 设置请求的参数
+            List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+            List<String> keyList = new ArrayList<String>(params.keySet());
+            for (String key : keyList) {
+                nvps.add(new BasicNameValuePair(key, String.valueOf(params.get(key))));
+            }
+            log.info("请求云信接口的传参params：" + params);
+            httpPost.setEntity(new UrlEncodedFormEntity(nvps, "utf-8"));
+
+            // 执行请求
+            CloseableHttpResponse response = httpclient.execute(httpPost);
+
+            // 打印执行结果
+            // {"code":200,"info":{"token":"a967478ef49bd18cfaa369dec8b6a74f","accid":"test_create_user","name":""}}
+//        System.out.println(EntityUtils.toString(response.getEntity(), "utf-8"));
+            try {
+                HttpEntity entity = response.getEntity();
+                // do something useful with the response body
+                // and ensure it is fully consumed
+                String result = EntityUtils.toString(entity, "utf-8");
+                Map<String, Object> resultMap = JsonUtils.getObjectMapFromJsonString(result);
+//                log.info("转换成map的结果："+resultMap);
+                EntityUtils.consume(entity);
+                log.info("返回的结果：" + resultMap);
+                return resultMap;
+            } finally {
+                response.close();
+            }
+
+        } catch (ConnectTimeoutException e) {
+            log.error("请求连接超时：" + e.getMessage());
+            e.printStackTrace();
+        } catch (SocketTimeoutException e) {
+            log.error("返回超时：" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            httpclient.close();
+        }
+        return null;
+    }
+
+
+    /**
+     * 向Im服务器注册IM用户
+     *
+     * @throws IOException
+     */
+    public Map<String, Object> registerIM(ImUser imUser) throws IOException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("accid", imUser.getAccid());
+
+        if (StringUtils.isNotEmpty(imUser.getName())) {
+            params.put("name", imUser.getName());
+        }
+
+        if (StringUtils.isNotEmpty(imUser.getIcon())) {
+            params.put("icon", imUser.getIcon());
+        }
+
+        if (StringUtils.isNotEmpty(imUser.getToken())) {
+            params.put("token", imUser.getToken());
+        }
+
+        return this.sendImHttpPost(ImConstant.CREATE_USER_URL, params);
+    }
+
+    /**
+     * 新增IM用户
+     *
+     * @param imUser
+     * @return 把返回值给app端
+     * @throws IOException
+     */
+    public Map<String, Object> AddImUser(ImUser imUser) throws IOException {
+
+        Map res = this.registerIM(imUser);
+
+        if (res.get("code").equals(200)) {
+
+            String info = JsonUtils.getJsonStringFromObj(res.get("info"));
+            Map infoMap = JsonUtils.getObjectMapFromJsonString(info);
+            String token = String.valueOf(infoMap.get("token"));
+            String accid = String.valueOf(infoMap.get("accid"));
+            String name = String.valueOf(infoMap.get("name"));
+            log.info("注册IM用户从服务器返回的值：token=" + token + ",accid=" + accid + ",name=" + name);
+
+            //im用户信息入库
+            ImUser finalImUser = new ImUser();
+            finalImUser.setAccid(accid);
+            finalImUser.setToken(token);
+            finalImUser.setName(name);
+            finalImUser.setUserid(ShiroUtil.getAppUserID());
+            imUserService.addImUser(finalImUser);
+
+        } else {
+            throw new BusinessException(MsgCodeConstant.create_im_id_fail, "创建云信id失败");
+        }
+        return res;
+    }
+
+
+    public ImUser selectByUserid() {
+        return imUserService.selectByUserid(ShiroUtil.getAppUserID());
+    }
+
+    /**
+     * 判断是否存在IM账号
+     *
+     * @return true:存在；  false:不存在
+     */
+    public Boolean isExistImuser() {
+        ImUser imUser = imUserService.selectByUserid(ShiroUtil.getAppUserID());
+        return null != imUser;
+    }
+
 
 
 }

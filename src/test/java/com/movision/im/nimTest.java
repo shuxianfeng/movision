@@ -38,8 +38,8 @@ public class nimTest extends SpringTestCase {
         // 设置请求的header
         httpPost.addHeader("AppKey", appKey);
         httpPost.addHeader("Nonce", nonce);
-        httpPost.addHeader("CurTime", curTime);
         httpPost.addHeader("CheckSum", checkSum);
+        httpPost.addHeader("CurTime", curTime);
         httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 
         // 设置请求的参数

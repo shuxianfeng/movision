@@ -7,8 +7,10 @@ import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.SessionConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.controller.boss.BossAuthenticationController;
+import com.movision.facade.im.ImFacade;
 import com.movision.facade.user.AppRegisterFacade;
 import com.movision.facade.user.UserFacade;
+import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
@@ -17,6 +19,7 @@ import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
 import com.movision.utils.MsgPropertiesUtils;
 import com.movision.utils.VerifyCodeUtils;
+import com.movision.utils.im.CheckSumBuilder;
 import com.taobao.api.ApiException;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -56,6 +59,9 @@ public class AppLoginController {
 
     @Autowired
     private UserFacade userFacade;
+
+    @Autowired
+    private ImFacade imFacade;
 
 
     /**
@@ -150,7 +156,7 @@ public class AppLoginController {
      *
      * @param phone
      * @param appToken
-     * @return
+     * @return 返回给前台IM注册的信息
      * @throws Exception
      */
     @ApiOperation(value = "APP登录", notes = "APP登录", response = Response.class)
@@ -188,9 +194,20 @@ public class AppLoginController {
                         session.setAttribute(SessionConstant.APP_USER, currentUser.getPrincipal());
                         session.removeAttribute(SessionConstant.BOSS_USER);
 
+                        //6 判断该userid是否存在一个im用户，
+                        Boolean isExistImUser = imFacade.isExistImuser();
+                        if (!isExistImUser) {
+                            //若不存在，则注册im用户
+                            ImUser imUser = new ImUser();
+                            imUser.setAccid(CheckSumBuilder.getAccid(phone));
+                            Map imResult = imFacade.AddImUser(imUser);
+                            response.setData(imResult);
+                        }
+
                     } else {
                         token.clear();
                     }
+
                 } else {
                     log.warn("appToken和serverToken不相等");
                     response.setCode(400);
@@ -253,7 +270,8 @@ public class AppLoginController {
             currentUser.login(token);
             log.debug("登录成功");
             response.setMessage("登录成功");
-            response.setData(phone);
+//            response.setData(phone);
+
         } catch (UnknownAccountException e) {
             log.warn("用户名不存在");
             response.setCode(400);

@@ -14,15 +14,27 @@ public class JsonUtils {
     private static final ObjectMapper om = new ObjectMapper();
 
     /**
-     * json串转换为字符串
+     * json串转换为 Map<String, String>
      *
      * @param msg   string
      * @return
      * @throws IOException
      */
-    public static Map<String, String> getMapFromJsonString(String msg)
+    public static Map<String, String> getStringMapFromJsonString(String msg)
             throws IOException {
         return om.readValue(msg, new TypeReference<Map<String, String>>() {
+        });
+    }
+
+    /**
+     *  json串转换为 Map<String, Object>
+     * @param msg
+     * @return
+     * @throws IOException
+     */
+    public static Map<String, Object> getObjectMapFromJsonString(String msg)
+            throws IOException {
+        return om.readValue(msg, new TypeReference<Map<String, Object>>() {
         });
     }
 
@@ -53,5 +65,10 @@ public class JsonUtils {
     public static String getJsonStringFromObj(Object obj) throws IOException
     {
     	return om.writeValueAsString(obj);
+    }
+
+    public static void main(String[] args) throws IOException {
+        String a = "{\"code\":200,\"info\":{\"token\":\"a967478ef49bd18cfaa369dec8b6a74f\",\"accid\":\"test_create_user\",\"name\":\"\"}}";
+        System.out.println(getObjectMapFromJsonString(a));
     }
 }
