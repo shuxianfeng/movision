@@ -74,7 +74,7 @@
             beyondbilling=#{beyondbilling,jdbcType=DOUBLE},
         </if>
         <if test="intime!=null">
-            intime=#{intime,jdbcType=DATE}
+            intime=#{intime,jdbcType=TIMESTAMP}
         </if>
         WHERE shopid=#{shopid,jdbcType=INTEGER}
     </update>
