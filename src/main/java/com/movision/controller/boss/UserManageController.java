@@ -288,6 +288,26 @@ public class UserManageController {
     }
 
     /**
+     * 用于对用户进行加V去V 操作
+     *
+     * @param userid
+     * @param type
+     * @return
+     */
+    @ApiOperation(value = "账号加V/去V", notes = "用于账号加V/去V接口", response = Response.class)
+    @RequestMapping(value = "delete_user_levl", method = RequestMethod.POST)
+    public Response deleteUserLevl(@ApiParam(value = "用户id") @RequestParam String userid,
+                                   @ApiParam(value = "(传1加V，0去V)") @RequestParam String type) {
+        Response response = new Response();
+        int i = userManageFacade.deleteUserLevl(userid, type);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(i);
+        return response;
+    }
+
+    /**
      * 查询用户积分流水列表
      *
      * @param pageNo

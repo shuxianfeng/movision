@@ -726,6 +726,17 @@
         WHERE id=#{userid,jdbcType=INTEGER}
     </update>
 
+    <update id="deleteUserLevl" parameterType="java.util.Map">
+        UPDATE yw_user
+        <if test="type==1">
+            SET level=1
+        </if>
+        <if test="type==0">
+            SET level=0
+        </if>
+        WHERE id=#{userid,jdbcType=INTEGER}
+    </update>
+
     <select id="queryUserParticulars" parameterType="java.lang.String"
             resultType="com.movision.mybatis.user.entity.UserParticulars">
         SELECT u.*,vd.audit_time as viptime,aut.name,aut.idnumber,

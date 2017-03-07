@@ -85,6 +85,8 @@ public interface UserMapper {
 
     int deleteUserByid(Map map);
 
+    int deleteUserLevl(Map map);
+
     UserParticulars queryUserParticulars(String userid);
 
     List<ProvinceVo> queryProvinces(String userid);

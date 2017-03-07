@@ -241,6 +241,20 @@ public class UserManageFacade {
     }
 
     /**
+     * 对用户进行加V去V操作
+     *
+     * @param userid
+     * @param type
+     * @return
+     */
+    public int deleteUserLevl(String userid, String type) {
+        Map map = new HashedMap();
+        map.put("userid", userid);
+        map.put("type", type);
+        return userService.deleteUserLevl(map);
+    }
+
+    /**
      * 查询用户积分流水列表
      *
      * @param pager

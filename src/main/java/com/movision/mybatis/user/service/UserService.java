@@ -447,10 +447,26 @@ public class UserService {
      */
     public int deleteUserByid(Map map) {
         try {
-            log.info("用户删除操作");
+            log.info("用户封号");
             return userMapper.deleteUserByid(map);
         } catch (Exception e) {
-            log.error("用户删除异常");
+            log.error("用户封号异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 对用户加V去V
+     *
+     * @param map
+     * @return
+     */
+    public int deleteUserLevl(Map map) {
+        try {
+            log.info("对用户加V去V");
+            return userMapper.deleteUserLevl(map);
+        } catch (Exception e) {
+            log.error("对用户加V去V异常");
             throw e;
         }
     }
