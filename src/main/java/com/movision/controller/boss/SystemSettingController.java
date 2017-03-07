@@ -2,6 +2,7 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.SystemSettingFacade;
+import com.movision.mybatis.logisticsfeeCalculateRule.entity.LogisticsfeeCalculateRule;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,24 @@ public class SystemSettingController {
             response.setMessage("操作成功");
         }
         response.setData(i);
+        return response;
+    }
+
+    /**
+     * 查询运算计费规则
+     *
+     * @param shopid
+     * @return
+     */
+    @ApiOperation(value = "查询运费计算规则", notes = "用于查询运费计算规则接口", response = Response.class)
+    @RequestMapping(value = "query_carriiage_calculate", method = RequestMethod.POST)
+    public Response queryCarriageCalculate(@ApiParam(value = "店铺id") @RequestParam String shopid) {
+        Response response = new Response();
+        LogisticsfeeCalculateRule logisticsfeeCalculateRule = systemSettingFacade.queryCarriageCalculate(shopid);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(logisticsfeeCalculateRule);
         return response;
     }
 }

@@ -1,5 +1,6 @@
 package com.movision.facade.boss;
 
+import com.movision.mybatis.logisticsfeeCalculateRule.entity.LogisticsfeeCalculateRule;
 import com.movision.mybatis.logisticsfeeCalculateRule.service.LogisticsfeeCalculateRuleServcie;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,15 @@ public class SystemSettingFacade {
         map.put("beyondbilling", beyondbilling);
         map.put("intime", new Date());//最后修改时间
         return logisticsfeeCalculateRuleServcie.updateCarriageCalculate(map);
+    }
+
+    /**
+     * 查询运费计算规则
+     *
+     * @param shopid
+     * @return
+     */
+    public LogisticsfeeCalculateRule queryCarriageCalculate(String shopid) {
+        return logisticsfeeCalculateRuleServcie.queryCarriageCalculate(shopid);
     }
 }

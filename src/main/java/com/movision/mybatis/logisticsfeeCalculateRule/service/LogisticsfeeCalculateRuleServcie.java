@@ -1,5 +1,6 @@
 package com.movision.mybatis.logisticsfeeCalculateRule.service;
 
+import com.movision.mybatis.logisticsfeeCalculateRule.entity.LogisticsfeeCalculateRule;
 import com.movision.mybatis.logisticsfeeCalculateRule.mapper.LogisticsfeeCalculateRuleMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,22 @@ public class LogisticsfeeCalculateRuleServcie {
             return logisticsfeeCalculateRuleMapper.updateCarriageCalculate(map);
         } catch (Exception e) {
             logger.error("运费计算规则异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询运费计算规则
+     *
+     * @param shopid
+     * @return
+     */
+    public LogisticsfeeCalculateRule queryCarriageCalculate(String shopid) {
+        try {
+            logger.info("查询运费计算规则");
+            return logisticsfeeCalculateRuleMapper.queryCarriageCalculate(shopid);
+        } catch (Exception e) {
+            logger.error("查询运费计算规则异常");
             throw e;
         }
     }

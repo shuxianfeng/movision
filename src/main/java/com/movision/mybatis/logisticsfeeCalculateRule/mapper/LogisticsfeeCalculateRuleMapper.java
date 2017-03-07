@@ -12,4 +12,6 @@ public interface LogisticsfeeCalculateRuleMapper {
     LogisticsfeeCalculateRule queryLogisticsfeeCalculateRule(int shopid);
 
     int updateCarriageCalculate(Map map);
+
+    LogisticsfeeCalculateRule queryCarriageCalculate(String shopid);
 }

@@ -78,4 +78,9 @@
         </if>
         WHERE shopid=#{shopid,jdbcType=INTEGER}
     </update>
+
+    <select id="queryCarriageCalculate" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.logisticsfeeCalculateRule.entity.LogisticsfeeCalculateRule">
+        SELECT * FROM  yw_logisticsfee_calculate_rule WHERE shopid=#{shopid,jdbcType=INTEGER}
+    </select>
 </mapper>
