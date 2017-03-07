@@ -38,9 +38,10 @@ public class SystemSettingController {
     public Response updateCarriageCalculate(@ApiParam(value = "店铺id") @RequestParam String shopid,
                                             @ApiParam(value = "起步价") @RequestParam String startprice,
                                             @ApiParam(value = "起步公里数") @RequestParam String startdistance,
-                                            @ApiParam(value = "超出计费") @RequestParam String beyondbilling) {
+                                            @ApiParam(value = "超出计费") @RequestParam String beyondbilling,
+                                            @ApiParam(value = "运费封顶") @RequestParam String capping) {
         Response response = new Response();
-        int i = systemSettingFacade.updateCarriageCalculate(shopid, startprice, startdistance, beyondbilling);
+        int i = systemSettingFacade.updateCarriageCalculate(shopid, startprice, startdistance, beyondbilling, capping);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

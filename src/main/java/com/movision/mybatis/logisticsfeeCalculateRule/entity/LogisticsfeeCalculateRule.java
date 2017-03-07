@@ -13,6 +13,16 @@ public class LogisticsfeeCalculateRule {
 
     private Date intime;
 
+    private Double capping;
+
+    public Double getCapping() {
+        return capping;
+    }
+
+    public void setCapping(Double capping) {
+        this.capping = capping;
+    }
+
     public Integer getShopid() {
         return shopid;
     }

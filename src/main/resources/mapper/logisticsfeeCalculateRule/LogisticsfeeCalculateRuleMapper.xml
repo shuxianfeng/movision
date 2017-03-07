@@ -8,6 +8,7 @@
         <result column="startdistance" property="startdistance" jdbcType="DOUBLE"/>
         <result column="beyondbilling" property="beyondbilling" jdbcType="DOUBLE"/>
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="capping" property="capping" jdbcType="DOUBLE"/>
     </resultMap>
 
     <!--根据店铺id查询运费计费规则-->
@@ -17,10 +18,10 @@
   </select>
 
     <insert id="insert" parameterType="com.movision.mybatis.logisticsfeeCalculateRule.entity.LogisticsfeeCalculateRule">
-    insert into yw_logisticsfee_calculate_rule (shopid, startprice, startdistance, 
-      beyondbilling, intime)
-    values (#{shopid,jdbcType=INTEGER}, #{startprice,jdbcType=DOUBLE}, #{startdistance,jdbcType=DOUBLE}, 
-      #{beyondbilling,jdbcType=DOUBLE}, #{intime,jdbcType=TIMESTAMP})
+    insert into yw_logisticsfee_calculate_rule (shopid, startprice, startdistance,
+        beyondbilling, intime, capping)
+    values (#{shopid,jdbcType=INTEGER}, #{startprice,jdbcType=DOUBLE}, #{startdistance,jdbcType=DOUBLE},
+        #{beyondbilling,jdbcType=DOUBLE}, #{intime,jdbcType=TIMESTAMP}, #{capping,jdbcType=DOUBLE})
   </insert>
     <insert id="insertSelective"
             parameterType="com.movision.mybatis.logisticsfeeCalculateRule.entity.LogisticsfeeCalculateRule">
@@ -41,6 +42,9 @@
             <if test="intime != null">
                 intime,
             </if>
+            <if test="capping != null">
+                capping,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="shopid != null">
@@ -58,6 +62,9 @@
             <if test="intime != null">
                 #{intime,jdbcType=TIMESTAMP},
             </if>
+            <if test="capping != null">
+                #{capping,jdbcType=DOUBLE},
+            </if>
         </trim>
     </insert>
     <!--shopid,startprice,startdistance,beyondbilling -->
@@ -74,7 +81,10 @@
             beyondbilling=#{beyondbilling,jdbcType=DOUBLE},
         </if>
         <if test="intime!=null">
-            intime=#{intime,jdbcType=TIMESTAMP}
+            intime=#{intime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="capping != null">
+            capping=#{capping,jdbcType=DOUBLE}
         </if>
         WHERE shopid=#{shopid,jdbcType=INTEGER}
     </update>

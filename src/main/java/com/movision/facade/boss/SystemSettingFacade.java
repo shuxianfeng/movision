@@ -27,13 +27,14 @@ public class SystemSettingFacade {
      * @param beyondbilling
      * @return
      */
-    public int updateCarriageCalculate(String shopid, String startprice, String startdistance, String beyondbilling) {
+    public int updateCarriageCalculate(String shopid, String startprice, String startdistance, String beyondbilling, String capping) {
         Map map = new HashedMap();
         map.put("shopid", shopid);
         map.put("startprice", startprice);
         map.put("startdistance", startdistance);
         map.put("beyondbilling", beyondbilling);
         map.put("intime", new Date());//最后修改时间
+        map.put("capping", capping);//运费封顶
         return logisticsfeeCalculateRuleServcie.updateCarriageCalculate(map);
     }
 
