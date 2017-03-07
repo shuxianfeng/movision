@@ -80,6 +80,26 @@ public class UserParticulars implements Serializable {
 
     private Date onecollection;//第一次收藏
 
+    private String name;//姓名
+
+    private String idnumber;//身份证号
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIdnumber() {
+        return idnumber;
+    }
+
+    public void setIdnumber(String idnumber) {
+        this.idnumber = idnumber;
+    }
+
     public Date getOnecollection() {
         return onecollection;
     }

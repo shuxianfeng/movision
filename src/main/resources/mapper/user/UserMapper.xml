@@ -756,7 +756,7 @@
 
     <select id="queryProvinces" resultType="com.movision.mybatis.province.entity.ProvinceVo"
             parameterType="java.lang.String">
-        SELECT
+        SELECT addr.*,
         (SELECT name FROM yw_province WHERE code=addr.province)AS province,
         (SELECT name FROM yw_city WHERE code=addr.city) AS city,
         (SELECT name FROM yw_area WHERE code=addr.district) AS district,addr.street

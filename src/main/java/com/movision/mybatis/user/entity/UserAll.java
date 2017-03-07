@@ -39,6 +39,16 @@ public class UserAll {
 
     private String openid;//微信登录
 
+    private String login;//用户登录方式1:qq 2:微信 3: 微博 4：QQ、微信 5：QQ、微博 6：微信、微博 7：QQ、微信、微博
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
     public Integer getAuthstatus() {
         return authstatus;
     }

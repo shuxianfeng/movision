@@ -199,7 +199,31 @@ public class UserManageFacade {
         map.put("conditiontwo", conditiontwo);//条件2
         map.put("price", price);//比较值
         map.put("login", login);//登录状态
-        return userService.queryAllUserList(pager, map);
+        List<UserAll> list = userService.queryAllUserList(pager, map);
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getQq() != null) {
+                list.get(i).setLogin("1");//QQ
+            }
+            if (list.get(i).getOpenid() != null) {
+                list.get(i).setLogin("2");//微信
+            }
+            if (list.get(i).getSina() != null) {
+                list.get(i).setLogin("3");//微博
+            }
+            if (list.get(i).getQq() != null && list.get(i).getOpenid() != null) {
+                list.get(i).setLogin("4");//QQ,微信
+            }
+            if (list.get(i).getQq() != null && list.get(i).getSina() != null) {
+                list.get(i).setLogin("5");//QQ，微博
+            }
+            if (list.get(i).getOpenid() != null && list.get(i).getSina() != null) {
+                list.get(i).setLogin("6");//微信，微博
+            }
+            if (list.get(i).getQq() != null && list.get(i).getOpenid() != null && list.get(i).getSina() != null) {
+                list.get(i).setLogin("7");//QQ,微信,微博
+            }
+        }
+        return list;
     }
 
     /**
