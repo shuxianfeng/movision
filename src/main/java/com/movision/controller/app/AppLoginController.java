@@ -5,8 +5,6 @@ import com.movision.common.Response;
 import com.movision.common.constant.Constants;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.SessionConstant;
-import com.movision.common.util.ShiroUtil;
-import com.movision.controller.boss.BossAuthenticationController;
 import com.movision.facade.im.ImFacade;
 import com.movision.facade.user.AppRegisterFacade;
 import com.movision.facade.user.UserFacade;
@@ -14,7 +12,6 @@ import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
-import com.movision.shiro.realm.BossRealm;
 import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
 import com.movision.utils.MsgPropertiesUtils;
@@ -39,8 +36,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.security.auth.login.LoginException;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
 
@@ -204,7 +199,7 @@ public class AppLoginController {
                             ImUser newImUser = imFacade.AddImUser(imUser);
                             returnMap.put("imuser", newImUser);
                         } else {
-                            returnMap.put("imuser", imFacade.selectByUserid());
+                            returnMap.put("imuser", imFacade.getImuserByCurrentAppuser());
                         }
 
                         response.setData(returnMap);

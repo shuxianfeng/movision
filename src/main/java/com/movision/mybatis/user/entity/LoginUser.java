@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 用于shiroRealm
- * 比User多出一个role字段
+ * 用于shiroRealm，包含登录app的用户的所有信息
+ * 比User多出  role, accid, imtoken
  *
  * @Author zhuangyuhao
  * @Date 2017/1/18 16:26
@@ -63,6 +63,35 @@ public class LoginUser implements Serializable {
     private Date applydate;
 
     private String role;    //角色
+
+    private String accid;
+
+    private String imtoken;
+
+    public void setApplydate(Date applydate) {
+        this.applydate = applydate;
+    }
+
+    public void setAccid(String accid) {
+        this.accid = accid;
+    }
+
+    public void setImtoken(String imtoken) {
+        this.imtoken = imtoken;
+    }
+
+    public Date getApplydate() {
+
+        return applydate;
+    }
+
+    public String getAccid() {
+        return accid;
+    }
+
+    public String getImtoken() {
+        return imtoken;
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -265,6 +294,9 @@ public class LoginUser implements Serializable {
         return "LoginUser{" +
                 "id=" + id +
                 ", openid='" + openid + '\'' +
+                ", qq='" + qq + '\'' +
+                ", sina='" + sina + '\'' +
+                ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", token='" + token + '\'' +
                 ", invitecode='" + invitecode + '\'' +
@@ -283,7 +315,10 @@ public class LoginUser implements Serializable {
                 ", growth=" + growth +
                 ", level=" + level +
                 ", status=" + status +
+                ", applydate=" + applydate +
                 ", role='" + role + '\'' +
+                ", accid='" + accid + '\'' +
+                ", imtoken='" + imtoken + '\'' +
                 '}';
     }
 }

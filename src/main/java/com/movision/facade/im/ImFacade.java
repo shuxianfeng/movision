@@ -1,5 +1,6 @@
 package com.movision.facade.im;
 
+import com.google.gson.Gson;
 import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.util.ShiroUtil;
@@ -175,7 +176,12 @@ public class ImFacade {
     }
 
 
-    public ImUser selectByUserid() {
+    /**
+     * 查找当前用户的IM信息
+     *
+     * @return
+     */
+    public ImUser getImuserByCurrentAppuser() {
         return imUserService.selectByUserid(ShiroUtil.getAppUserID());
     }
 
@@ -188,6 +194,61 @@ public class ImFacade {
         ImUser imUser = imUserService.selectByUserid(ShiroUtil.getAppUserID());
         return null != imUser;
     }
+
+    /**
+     * 更新IM用户名片
+     *
+     * @param map accid 必填
+     *            name，icon， sign， email， birth， mobile， gender， ex
+     * @return {
+     * "code":200
+     * }
+     * @throws IOException
+     */
+    public Map updateImUserInfo(Map map) throws IOException {
+        return this.sendImHttpPost(ImConstant.UPDATE_USER_INFO_URL, map);
+    }
+
+
+    /**
+     * 查询IM名片
+     *
+     * @param accids 对应的accid串，如：["zhangsan"]，一次最多200个
+     * @return
+     * @throws IOException
+     */
+    public Map queryImuserInfo(String[] accids) throws IOException {
+
+        Map<String, Object> params = new HashMap<>();
+        //需要把入参以字符串数组的形式，转化成json字符串
+        Gson gson = new Gson();
+        String str = gson.toJson(accids);
+        params.put("accids", str);
+        return this.sendImHttpPost(ImConstant.GET_USER_INFO, params);
+    }
+
+
+    /**
+     * 加好友
+     *
+     * @param accid  加好友发起者accid
+     * @param faccid 加好友接收者accid
+     * @param type   1直接加好友，2请求加好友，3同意加好友，4拒绝加好友
+     * @param msg    加好友对应的请求消息，第三方组装，最长256字符
+     * @return
+     * @throws IOException
+     */
+    public Map addFriend(String accid, String faccid, int type, String msg) throws IOException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("accid", accid);
+        params.put("faccid", faccid);
+        params.put("type", type);
+        if (StringUtils.isNotEmpty(msg)) {
+            params.put("msg", msg);
+        }
+        return this.sendImHttpPost(ImConstant.ADD_FRIEND, params);
+    }
+
 
 
 

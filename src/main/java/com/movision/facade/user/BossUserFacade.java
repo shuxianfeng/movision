@@ -1,18 +1,12 @@
 package com.movision.facade.user;
 
 import com.movision.common.constant.MsgCodeConstant;
-import com.movision.exception.AuthException;
 import com.movision.exception.BusinessException;
-import com.movision.mybatis.bossMenu.entity.Menu;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.entity.BossUserVo;
 import com.movision.mybatis.bossUser.service.BossUserService;
-import com.movision.mybatis.role.entity.Role;
-import com.movision.mybatis.user.entity.LoginUser;
-import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.MsgPropertiesUtils;
 import com.movision.utils.pagination.model.Paging;
-import com.movision.utils.pagination.util.StringUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;

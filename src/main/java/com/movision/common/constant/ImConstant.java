@@ -41,5 +41,10 @@ public class ImConstant {
     public static final String GET_USER_INFO = ImPropertiesLoader.getPropertyValue("get_user_info");
 
 
+    /**
+     * 加好友
+     */
+    public static final String ADD_FRIEND = ImPropertiesLoader.getPropertyValue("add_friend");
+
 
 }

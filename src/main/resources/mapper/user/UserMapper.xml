@@ -28,33 +28,6 @@
         <result column="applydate" property="applydate" jdbcType="DATE"/>
     </resultMap>
 
-    <resultMap id="loginUserMap" type="com.movision.mybatis.user.entity.LoginUser">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="openid" property="openid" jdbcType="VARCHAR"/>
-        <result column="qq" property="qq" jdbcType="VARCHAR"/>
-        <result column="sina" property="sina" jdbcType="VARCHAR"/>
-        <result column="phone" property="phone" jdbcType="VARCHAR"/>
-        <result column="email" property="email" jdbcType="VARCHAR"/>
-        <result column="token" property="token" jdbcType="VARCHAR"/>
-        <result column="invitecode" property="invitecode" jdbcType="VARCHAR"/>
-        <result column="referrals" property="referrals" jdbcType="VARCHAR"/>
-        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
-        <result column="sign" property="sign" jdbcType="VARCHAR"/>
-        <result column="attention" property="attention" jdbcType="INTEGER"/>
-        <result column="fans" property="fans" jdbcType="INTEGER"/>
-        <result column="points" property="points" jdbcType="INTEGER"/>
-        <result column="photo" property="photo" jdbcType="VARCHAR"/>
-        <result column="sex" property="sex" jdbcType="INTEGER"/>
-        <result column="birthday" property="birthday" jdbcType="DATE"/>
-        <result column="province" property="province" jdbcType="VARCHAR"/>
-        <result column="city" property="city" jdbcType="VARCHAR"/>
-        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
-        <result column="growth" property="growth" jdbcType="INTEGER"/>
-        <result column="level" property="level" jdbcType="INTEGER"/>
-        <result column="status" property="status" jdbcType="INTEGER"/>
-        <result column="role" property="role" jdbcType="VARCHAR"/>
-    </resultMap>
-
     <sql id="Base_Column_List">
         id, openid, qq, sina, phone, email, token, invitecode, referrals, nickname, sign, attention, fans,
         points, photo, sex, birthday, province, city, intime, growth, level, status, applydate
@@ -380,11 +353,11 @@
     </select>
 
     <select id="selectLoginUserByPhone" parameterType="com.movision.mybatis.user.entity.User"
-            resultMap="loginUserMap">
+            resultType="com.movision.mybatis.user.entity.LoginUser">
         select
-        <include refid="Base_Column_List"/>
-
-        from yw_user
+        u.*, i.accid, i.token as imtoken
+        from yw_user u
+        LEFT JOIN yw_im_user i on u.id= i.userid
         <where>
             <if test="phone != null || phone != ''">
                 phone = #{phone}

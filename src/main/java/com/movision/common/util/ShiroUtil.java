@@ -115,4 +115,28 @@ public class ShiroUtil {
             session.setAttribute("appuser", principal);
         }
     }
+
+    /**
+     * 获取云信id
+     *
+     * @return
+     */
+    public static String getAccid() {
+        String accid = null;
+        try {
+            Subject currentUser = SecurityUtils.getSubject();
+            Session session = currentUser.getSession(false);
+            if (session != null) {
+                ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
+                if (principal != null) {
+                    accid = principal.getAccid();
+                }
+            }
+        } catch (Exception e) {
+            log.error("get seesion user info error!", e);
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return accid;
+    }
+
 }

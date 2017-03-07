@@ -69,7 +69,7 @@ public class ShiroRealm extends AuthorizingRealm {
         // 2 根据登录用户信息生成ShiroUser用户，PS:这个ShiroUser就是session中存储的app用户对象
         ShiroUser shiroUser = new ShiroUser(loginUser.getId(), loginUser.getPhone(), loginUser.getStatus(), loginUser.getRole(),
                 loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(), loginUser.getPhone(),
-                loginUser.getToken(), loginUser.getPoints(), loginUser.getSex());
+                loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(), loginUser.getAccid(), loginUser.getToken());
 
         // 3 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(shiroUser, // 用户
@@ -153,6 +153,25 @@ public class ShiroRealm extends AuthorizingRealm {
         private String token;
         private Integer points; //用户积分
         private Integer sex;    //性别：1男 0女
+        private String accid;   //云信id
+        private String imToken; //云信token
+
+        public void setAccid(String accid) {
+            this.accid = accid;
+        }
+
+        public void setImToken(String imToken) {
+            this.imToken = imToken;
+        }
+
+        public String getAccid() {
+
+            return accid;
+        }
+
+        public String getImToken() {
+            return imToken;
+        }
 
         public void setSex(Integer sex) {
             this.sex = sex;
@@ -252,7 +271,7 @@ public class ShiroRealm extends AuthorizingRealm {
             return token;
         }
 
-        public ShiroUser(Integer id, String account, Integer status, String role, Date registerTime, String photo, String nickname, Integer level, String phone, String token, Integer points, Integer sex) {
+        public ShiroUser(Integer id, String account, Integer status, String role, Date registerTime, String photo, String nickname, Integer level, String phone, String token, Integer points, Integer sex, String accid, String imToken) {
             this.id = id;
             this.account = account;
             this.status = status;
@@ -265,6 +284,8 @@ public class ShiroRealm extends AuthorizingRealm {
             this.token = token;
             this.points = points;
             this.sex = sex;
+            this.accid = accid;
+            this.imToken = imToken;
         }
 
         /**
@@ -302,6 +323,8 @@ public class ShiroRealm extends AuthorizingRealm {
                     ", token='" + token + '\'' +
                     ", points=" + points +
                     ", sex=" + sex +
+                    ", accid='" + accid + '\'' +
+                    ", imToken='" + imToken + '\'' +
                     '}';
         }
     }
