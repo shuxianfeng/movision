@@ -461,20 +461,20 @@ public class GoodsListFacade {
      *
      * @param
      * @param goodsid
-     * @param imgurl
+     * @param img_url
      * @return
      */
-    public Map<String, Integer> addpicture(String goodsid, String imgurl) {
+    public Map<String, Integer> addpicture(String goodsid, String img_url) {
         Map<String, Integer> map = new HashedMap();
         GoodsImg goodsImg = new GoodsImg();
         goodsImg.setType(2);
         goodsImg.setGoodsid(Integer.parseInt(goodsid));
         String imgurls;
-        String productids[] = imgurl.split(",");
+        String productids[] = img_url.split(",");
         int result = 0;
         for (int i = 0; i < productids.length; i++) {
             imgurls = productids[i];
-            goodsImg.setImgurl(imgurls);
+            goodsImg.setImg_url(imgurls);
             result = goodsService.addPicture(goodsImg);
         }
         map.put("result", result);
@@ -485,15 +485,15 @@ public class GoodsListFacade {
      * 修改参数图
      *
      * @param goodsid
-     * @param imgurl
+     * @param img_url
      * @return
      */
-    public Map<String, Integer> updateImgGoods(String goodsid, String imgurl) {
+    public Map<String, Integer> updateImgGoods(String goodsid, String img_url) {
         Map<String, Integer> map = new HashedMap();
         GoodsImg img = new GoodsImg();
         img.setGoodsid(Integer.parseInt(goodsid));
 
-        img.setImgurl(imgurl);
+        img.setImg_url(img_url);
             int result = goodsService.updateImgGoods(img);
             map.put("result", result);
 
@@ -504,15 +504,15 @@ public class GoodsListFacade {
      * 修改描述图
      *
      * @param goodsid
-     * @param imgurl
+     * @param img_url
      * @return
      */
-    public Map<String, Integer> updateCommodityDescription(String goodsid, String imgurl) {
+    public Map<String, Integer> updateCommodityDescription(String goodsid, String img_url) {
         Map<String, Integer> map = new HashedMap();
         GoodsImg img = new GoodsImg();
         img.setGoodsid(Integer.parseInt(goodsid));
 
-        img.setImgurl(imgurl);
+        img.setImg_url(img_url);
             int result = goodsService.updateCommodityDescription(img);
             map.put("result", result);
 
@@ -523,7 +523,7 @@ public class GoodsListFacade {
      * 商品添加
      *
      * @param
-     * @param imgurl
+     * @param img_url
      * @param
      * @param name
      * @param
@@ -539,7 +539,7 @@ public class GoodsListFacade {
      * @param onlinetime
      * @return
      */
-    public Map<String, Integer> addGoods(String imgurl, String name, String protype, String brandid, String price, String origprice, String stock, String isdel, String recommenddate, String attribute, String onlinetime, String ishot, String isessence) {
+    public Map<String, Integer> addGoods(String img_url, String name, String protype, String brandid, String price, String origprice, String stock, String isdel, String recommenddate, String attribute, String onlinetime, String ishot, String isessence) {
         Map<String, Integer> map = new HashedMap();
         GoodsVo goodsVo = new GoodsVo();
         java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -591,7 +591,7 @@ public class GoodsListFacade {
         img.setGoodsid(id);
         img.setType(2);
 
-        img.setImgurl(imgurl);
+        img.setImg_url(img_url);
             int result = goodsService.addPicture(img);
             map.put("result", result);
 
@@ -838,6 +838,43 @@ public class GoodsListFacade {
         map.put("result", result);
         map.put("res", res);
         return map;
+    }
+
+    /**
+     * 增加参数图
+     *
+     * @param img_url
+     * @param goodsid
+     * @return
+     */
+    public Map<String, Integer> addImgGoods(String img_url, String goodsid) {
+        Map<String, Integer> map = new HashedMap();
+        GoodsImg goodsImg = new GoodsImg();
+        goodsImg.setImg_url(img_url);
+        goodsImg.setType(3);
+        goodsImg.setGoodsid(Integer.parseInt(goodsid));
+        int res = goodsService.addImgGoods(goodsImg);
+        map.put("res", res);
+        return map;
+    }
+
+    /**
+     * 增加描述图
+     *
+     * @param img_url
+     * @param goodsid
+     * @return
+     */
+    public Map<String, Integer> addCommodityDescription(String img_url, String goodsid) {
+        Map<String, Integer> map = new HashedMap();
+        GoodsImg goodsImg = new GoodsImg();
+        goodsImg.setImg_url(img_url);
+        goodsImg.setType(1);
+        goodsImg.setGoodsid(Integer.parseInt(goodsid));
+        int res = goodsService.addCommodityDescription(goodsImg);
+        map.put("res", res);
+        return map;
+
     }
 
 }

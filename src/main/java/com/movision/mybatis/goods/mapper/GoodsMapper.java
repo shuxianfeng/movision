@@ -142,4 +142,9 @@ public interface GoodsMapper {
 
     Integer addComGoods(GoodsCombo goodsCombo);//根据id插入商品
 
+
+    Integer addImgGoods(GoodsImg goodsImg);//增加参数图
+
+    Integer addCommodityDescription(GoodsImg goodsImg);//增加描述图
+
 }

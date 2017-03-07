@@ -850,4 +850,45 @@ public class GoodsController {
         response.setData(map);
         return response;
     }
+
+    /**
+     * 增加参数图
+     *
+     * @param imgurl
+     * @param goodsid
+     * @return
+     */
+    @ApiOperation(value = "增加参数图", notes = "增加参数图", response = Response.class)
+    @RequestMapping(value = "add_imgpic", method = RequestMethod.POST)
+    public Response addImgGoods(@ApiParam(value = "图片地址") @RequestParam(required = false) String imgurl,
+                                @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
+        Response response = new Response();
+        Map<String, Integer> map = goodsFacade.addImgGoods(imgurl, goodsid);
+        if (response.getCode() == 200) {
+            response.setMessage("增加成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 增加描述图
+     *
+     * @param imgurl
+     * @param goodsid
+     * @return
+     */
+    @ApiOperation(value = "增加描述图", notes = "增加描述图", response = Response.class)
+    @RequestMapping(value = "add_commoditypic", method = RequestMethod.POST)
+    public Response addCommodityDescription(@ApiParam(value = "图片地址") @RequestParam(required = false) String imgurl,
+                                            @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
+        Response response = new Response();
+        Map<String, Integer> map = goodsFacade.addCommodityDescription(imgurl, goodsid);
+        if (response.getCode() == 200) {
+            response.setMessage("增加成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
 }
