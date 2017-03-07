@@ -684,4 +684,8 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
             resultType="com.movision.mybatis.afterservice.entity.AfterServiceVo">
         SELECT remark,proposertime FROM yw_afterservice WHERE id=#{id,jdbcType=INTEGER}
     </select>
+    <select id="queryoperate" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.afterservice.entity.AfterServiceVo">
+        SELECT a.processingpeople,a.processingtime,o.status,a.aftersalestatus,a.processingstatus,a.remark FROM yw_afterservice a LEFT JOIN yw_orders o ON o.id=a.orderid WHERE a.id=#{id,jdbcType=INTEGER}
+    </select>
 </mapper>

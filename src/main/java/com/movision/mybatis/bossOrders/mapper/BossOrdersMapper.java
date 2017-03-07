@@ -90,4 +90,6 @@ public interface BossOrdersMapper {
 
     AfterServiceVo queryRemark(Integer id);//查询留言
 
+    List<AfterServiceVo> queryoperate(Integer id);//查询操作信息
+
 }

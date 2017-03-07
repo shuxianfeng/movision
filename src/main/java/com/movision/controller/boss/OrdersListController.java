@@ -522,5 +522,22 @@ public class OrdersListController {
         return response;
     }
 
+    /**
+     * 查询售后操作信息
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "查询售后操作信息", notes = "查询售后操作信息", response = Response.class)
+    @RequestMapping(value = "query_operateinfo", method = RequestMethod.POST)
+    public Response queryAllOperate(@ApiParam(value = "") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        List<AfterServiceVo> list = orderFacade.queryAlloperate(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
+        return response;
+    }
 
 }
