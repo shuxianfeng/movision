@@ -537,5 +537,15 @@ public class OrderFacade {
     }
 
 
+    /**
+     * 查询售后操作信息
+     *
+     * @param id
+     * @return
+     */
+    public List<AfterServiceVo> queryAlloperate(Integer id) {
+        return bossOrderService.queryAlloperate(id);
+    }
+
 }
 

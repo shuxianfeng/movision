@@ -485,4 +485,20 @@ public class BossOrderService {
         }
     }
 
+    /**
+     * 查询售后操作信息
+     *
+     * @param id
+     * @return
+     */
+    public List<AfterServiceVo> queryAlloperate(Integer id) {
+        try {
+            loger.info("查询售后操作信息");
+            return bossOrdersMapper.queryoperate(id);
+        } catch (Exception e) {
+            loger.error("查询售后操作信息失败", e);
+            throw e;
+        }
+    }
+
 }
