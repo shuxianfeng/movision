@@ -12,6 +12,8 @@ import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.goodsDiscount.service.DiscountService;
 import com.movision.mybatis.rentdate.entity.Rentdate;
+import com.movision.mybatis.shopAddress.entity.ShopAddress;
+import com.movision.mybatis.shopAddress.service.ShopAddressService;
 import com.movision.mybatis.user.service.UserService;
 import org.apache.commons.beanutils.converters.DoubleConverter;
 import org.apache.commons.lang3.StringUtils;
@@ -43,6 +45,9 @@ public class CartFacade {
 
     @Autowired
     private ComboService comboService;
+
+    @Autowired
+    private ShopAddressService shopAddressService;
 
     //商品加入购物车
     public int addGoodsCart(String userid, String goodsid, String comboid, String discountid, String isdebug, String sum, String type, String rentdate) throws ParseException {
@@ -186,6 +191,13 @@ public class CartFacade {
 
         //遍历购物车所有商品，当套餐id不为空时，需要查询套餐名称和套餐折后价，set到list中的对象里
         for (int i = 0; i < cartList.size(); i++) {
+            //查询购物车中商品的所在地省市区code
+            ShopAddress shopAddress = shopAddressService.queryShopAddressByShopid(cartList.get(i).getShopid());
+            cartList.get(i).setProvincecode(shopAddress.getProvincecode());
+            cartList.get(i).setCitycode(shopAddress.getCitycode());
+            cartList.get(i).setAreacode(shopAddress.getAreacode());
+
+            //查询购物车中商品所属店铺名称
             if (cartList.get(i).getShopid() == -1) {
                 cartList.get(i).setShopname("三元佳美自营");
             } else {

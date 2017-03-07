@@ -50,6 +50,12 @@ public class CartVo {
 
     private String shopname;//店铺名称
 
+    private Integer provincecode;//商品所在地省code
+
+    private Integer citycode;//商品所在地市code
+
+    private Integer areacode;//商品所在地区code
+
     private String imgurl;//购物车中的商品小方图
 
     private String comboname;//套餐名称
@@ -308,5 +314,29 @@ public class CartVo {
 
     public void setShopname(String shopname) {
         this.shopname = shopname;
+    }
+
+    public Integer getProvincecode() {
+        return provincecode;
+    }
+
+    public void setProvincecode(Integer provincecode) {
+        this.provincecode = provincecode;
+    }
+
+    public Integer getCitycode() {
+        return citycode;
+    }
+
+    public void setCitycode(Integer citycode) {
+        this.citycode = citycode;
+    }
+
+    public Integer getAreacode() {
+        return areacode;
+    }
+
+    public void setAreacode(Integer areacode) {
+        this.areacode = areacode;
     }
 }
