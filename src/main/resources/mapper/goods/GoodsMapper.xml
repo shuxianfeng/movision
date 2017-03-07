@@ -11,6 +11,7 @@
         <result column="provincecode" property="provincecode" jdbcType="VARCHAR"/>
         <result column="citycode" property="citycode" jdbcType="VARCHAR"/>
         <result column="isself" property="isself" jdbcType="INTEGER"/>
+        <result column="shopid" property="shopid" jdbcType="INTEGER"/>
         <result column="isdamage" property="isdamage" jdbcType="INTEGER"/>
         <result column="isquality" property="isquality" jdbcType="INTEGER"/>
         <result column="promotions" property="promotions" jdbcType="VARCHAR"/>
@@ -31,7 +32,7 @@
         <result column="isessence" property="isessence" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, name, subname, price, origprice, attribute, provincecode, citycode, isself, isdamage,
+        id, name, subname, price, origprice, attribute, provincecode, citycode, isself, shopid, isdamage,
         isquality, promotions, protype, brandid, brandsupple, sales, stock, goodsposition, iscombo,
         isspecial, isseckill, ishomepage, recommenddate, onlinetime, isdel, ishot, isessence
   </sql>
@@ -242,8 +243,8 @@
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.goods.entity.Goods">
     insert into yw_goods (id, name, subname, 
-      price, origprice, attribute, 
-      provincecode, citycode, isself, 
+      price, origprice, attribute,
+        provincecode, citycode, isself, shopid,
       isdamage, isquality, promotions, 
       protype, brandid, brandsupple,
         sales, stock, goodsposition,
@@ -252,7 +253,8 @@
         isdel, ishot, isessence)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{subname,jdbcType=VARCHAR},
         #{price,jdbcType=DOUBLE}, #{origprice,jdbcType=DOUBLE}, #{attribute,jdbcType=VARCHAR},
-      #{provincecode,jdbcType=VARCHAR}, #{citycode,jdbcType=VARCHAR}, #{isself,jdbcType=INTEGER}, 
+        #{provincecode,jdbcType=VARCHAR}, #{citycode,jdbcType=VARCHAR}, #{isself,jdbcType=INTEGER},
+        #{shopid,jdbcType=INTEGER}
       #{isdamage,jdbcType=INTEGER}, #{isquality,jdbcType=INTEGER}, #{promotions,jdbcType=VARCHAR}, 
       #{protype,jdbcType=INTEGER}, #{brandid,jdbcType=VARCHAR}, #{brandsupple,jdbcType=VARCHAR},
         #{sales,jdbcType=INTEGER}, #{stock,jdbcType=INTEGER}, #{goodsposition,jdbcType=INTEGER},
@@ -289,6 +291,9 @@
             </if>
             <if test="isself != null">
                 isself,
+            </if>
+            <if test="shopid != null">
+                shopid,
             </if>
             <if test="isdamage != null">
                 isdamage,
@@ -373,6 +378,9 @@
             <if test="isself != null">
                 #{isself,jdbcType=INTEGER},
             </if>
+            <if test="shopid != null">
+                #{shopid,jdbcType=INTEGER},
+            </if>
             <if test="isdamage != null">
                 #{isdamage,jdbcType=INTEGER},
             </if>
@@ -456,6 +464,9 @@
             <if test="isself != null">
                 isself = #{isself,jdbcType=INTEGER},
             </if>
+            <if test="shopid != null">
+                shopid = #{shopid,jdbcType=INTEGER},
+            </if>
             <if test="isdamage != null">
                 isdamage = #{isdamage,jdbcType=INTEGER},
             </if>
@@ -523,6 +534,7 @@
       provincecode = #{provincecode,jdbcType=VARCHAR},
       citycode = #{citycode,jdbcType=VARCHAR},
       isself = #{isself,jdbcType=INTEGER},
+        shopid = #{shopid,jdbcType=INTEGER},
       isdamage = #{isdamage,jdbcType=INTEGER},
       isquality = #{isquality,jdbcType=INTEGER},
       promotions = #{promotions,jdbcType=VARCHAR},
