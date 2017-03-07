@@ -28,13 +28,14 @@ public class BaiduPositionController {
 
     @ApiOperation(value = "后台设置店铺地址接口", notes = "针对后台设置当前店铺地址的百度服务接口", response = Response.class)
     @RequestMapping(value = "setPosition", method = RequestMethod.POST)
-    public Response setPosition(@ApiParam(value = "省code") @RequestParam String provincecode,
+    public Response setPosition(@ApiParam(value = "店铺id(-1时为自营)") @RequestParam String shopid,
+                                @ApiParam(value = "省code") @RequestParam String provincecode,
                                 @ApiParam(value = "市code") @RequestParam String citycode,
                                 @ApiParam(value = "区县code") @RequestParam String areacode,
                                 @ApiParam(value = "街道") @RequestParam String street) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         Response response = new Response();
 
-        int flag = addressFacade.setPosition(provincecode, citycode, areacode, street);
+        int flag = addressFacade.setPosition(shopid, provincecode, citycode, areacode, street);
 
         if (flag == 1) {
             response.setCode(200);

@@ -91,7 +91,7 @@ public class AddressFacade {
         return addressService.queryAddressDetail(id);
     }
 
-    public int setPosition(String provincecode, String citycode, String areacode, String street) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public int setPosition(String shopid, String provincecode, String citycode, String areacode, String street) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         int flag = 0;//设置标志位
         //根据省市区县的code查询省市区县名称
         Map<String, Object> parammap = new HashMap<>();
@@ -135,7 +135,7 @@ public class AddressFacade {
                 log.info("经纬度>>>>>>>>" + lng + ">>>>>>>" + lat);
                 //持久化地址和经纬度
                 ShopAddress shopAddress = new ShopAddress();
-                shopAddress.setShopid(-1);
+                shopAddress.setShopid(Integer.parseInt(shopid));
                 shopAddress.setProvincecode(Integer.parseInt(provincecode));
                 shopAddress.setProvincename(address.getProvince());
                 shopAddress.setCitycode(Integer.parseInt(citycode));

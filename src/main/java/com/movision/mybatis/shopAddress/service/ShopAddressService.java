@@ -29,7 +29,7 @@ public class ShopAddressService {
     public void saveShopAddress(ShopAddress shopAddress) {
         try {
             log.info("保存或更新管理员设置的店铺地址和经纬度");
-            shopAddressMapper.delShopAddress(-1);//shopid==-1默认为幻棱自营店铺
+            shopAddressMapper.delShopAddress(shopAddress.getShopid());//shopid==-1默认为幻棱自营店铺
             shopAddressMapper.saveShopAddress(shopAddress);
         } catch (Exception e) {
             log.error("保存管理员设置的店铺地址和经纬度失败");
