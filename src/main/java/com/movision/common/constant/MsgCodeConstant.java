@@ -323,6 +323,6 @@ public interface MsgCodeConstant {
     /**
      * 创建云信id失败
      */
-    int create_im_id_fail = 30100;
+    int create_im_accid_fail = 30100;
 
 }

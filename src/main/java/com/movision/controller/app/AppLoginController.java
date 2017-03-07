@@ -186,7 +186,8 @@ public class AppLoginController {
                     Gson gson = new Gson();
                     UsernamePasswordToken token = gson.fromJson(appToken, UsernamePasswordToken.class);
                     //4 开始进入shiro的认证流程
-                    this.shiroLogin(phone, response, currentUser, token);
+                    Map returnMap = new HashedMap();
+                    this.shiroLogin(phone, response, currentUser, token, returnMap);
 
                     if (currentUser.isAuthenticated()) {
                         //5 验证通过则在session中缓存登录用户信息
@@ -200,10 +201,13 @@ public class AppLoginController {
                             //若不存在，则注册im用户
                             ImUser imUser = new ImUser();
                             imUser.setAccid(CheckSumBuilder.getAccid(phone));
-                            Map imResult = imFacade.AddImUser(imUser);
-                            response.setData(imResult);
+                            ImUser newImUser = imFacade.AddImUser(imUser);
+                            returnMap.put("imResult", newImUser);
+                        } else {
+                            returnMap.put("imResult", imFacade.selectByUserid());
                         }
 
+                        response.setData(returnMap);
                     } else {
                         token.clear();
                     }
@@ -263,14 +267,15 @@ public class AppLoginController {
     }
 
 
-
-    private void shiroLogin(@ApiParam(value = "手机号") @RequestParam String phone, Response response, Subject currentUser, UsernamePasswordToken token) {
+    private Map shiroLogin(String phone, Response response, Subject currentUser, UsernamePasswordToken token, Map map) {
         try {
             //登录，即身份验证 , 开始进入shiro的认证流程
             currentUser.login(token);
             log.debug("登录成功");
             response.setMessage("登录成功");
 //            response.setData(phone);
+            map.put("phone", phone);
+            return map;
 
         } catch (UnknownAccountException e) {
             log.warn("用户名不存在");
@@ -288,6 +293,7 @@ public class AppLoginController {
             response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.app_account_name_error)));
             response.setMsgCode(MsgCodeConstant.app_account_name_error);
         }
+        return null;
     }
 
     /**

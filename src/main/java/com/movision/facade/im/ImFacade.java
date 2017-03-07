@@ -1,6 +1,5 @@
 package com.movision.facade.im;
 
-import com.google.gson.Gson;
 import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.util.ShiroUtil;
@@ -12,14 +11,12 @@ import com.movision.utils.SignUtil;
 import com.movision.utils.im.CheckSumBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -149,7 +146,7 @@ public class ImFacade {
      * @return 把返回值给app端
      * @throws IOException
      */
-    public Map<String, Object> AddImUser(ImUser imUser) throws IOException {
+    public ImUser AddImUser(ImUser imUser) throws IOException {
 
         Map res = this.registerIM(imUser);
 
@@ -170,10 +167,11 @@ public class ImFacade {
             finalImUser.setUserid(ShiroUtil.getAppUserID());
             imUserService.addImUser(finalImUser);
 
+
         } else {
-            throw new BusinessException(MsgCodeConstant.create_im_id_fail, "创建云信id失败");
+            throw new BusinessException(MsgCodeConstant.create_im_accid_fail, "创建云信id失败");
         }
-        return res;
+        return imUserService.selectByUserid(ShiroUtil.getAppUserID());
     }
 
 
