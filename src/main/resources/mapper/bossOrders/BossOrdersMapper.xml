@@ -688,4 +688,13 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
             resultType="com.movision.mybatis.afterservice.entity.AfterServiceVo">
         SELECT a.processingpeople,a.processingtime,o.status,a.aftersalestatus,a.processingstatus,a.remark FROM yw_afterservice a LEFT JOIN yw_orders o ON o.id=a.orderid WHERE a.id=#{id,jdbcType=INTEGER}
     </select>
+    <select id="queryprovice" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT name FROM yw_province WHERE code=#{code,jdbcType=VARCHAR}
+    </select>
+    <select id="querycity" parameterType="java.lang.String" resultType="java.lang.String">
+SELECT name FROM yw_city WHERE code=#{code,jdbcType=VARCHAR}
+    </select>
+    <select id="querydistrict" parameterType="java.lang.String" resultType="java.lang.String">
+SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
+    </select>
 </mapper>

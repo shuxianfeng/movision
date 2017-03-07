@@ -11,6 +11,7 @@ import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
+import com.movision.mybatis.post.entity.Post;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -47,11 +48,13 @@ public class OrdersListController {
     public Response QueryOrderList(@RequestParam(required = false) String pageNo,//required默认是true表示必须
                                    @RequestParam(required = false) String pageSize) {
         Response response = new Response();
-        Map<String, Object> list = orderFacade.queryOrderList(pageNo, pageSize);//获取订单列表
+        Paging<BossOrdersVo> pager = new Paging<BossOrdersVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<BossOrdersVo> list = orderFacade.queryOrderList(pager);//获取订单列表
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(list);
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 

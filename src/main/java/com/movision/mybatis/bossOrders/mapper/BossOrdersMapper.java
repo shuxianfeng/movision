@@ -78,7 +78,7 @@ public interface BossOrdersMapper {
 
     Address queryByAddress(Integer id);//返回地址
 
-    List<AfterServiceVo> findAllAfterService(RowBounds rowBounds);//售后服务
+    List<AfterServiceVo> findAllAfterService(RowBounds rowBounds);//售后服务r
 
     AfterServiceVo queryAfterService(Integer id);//售后处理
 
@@ -91,5 +91,11 @@ public interface BossOrdersMapper {
     AfterServiceVo queryRemark(Integer id);//查询留言
 
     List<AfterServiceVo> queryoperate(Integer id);//查询操作信息
+
+    String queryprovice(String code);//根据code查询省名
+
+    String querycity(String code);//根据code查询市名
+
+    String querydistrict(String code);//区名
 
 }

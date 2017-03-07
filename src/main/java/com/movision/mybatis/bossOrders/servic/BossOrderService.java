@@ -48,7 +48,7 @@ public class BossOrderService {
      * @param pager
      * @return
      */
-    public List<BossOrdersVo> queryOrderList(Paging<Post> pager) {
+    public List<BossOrdersVo> queryOrderList(Paging<BossOrdersVo> pager) {
         try {
             if (loger.isDebugEnabled()) {
                 loger.debug("查询订单列表");
@@ -497,6 +497,54 @@ public class BossOrderService {
             return bossOrdersMapper.queryoperate(id);
         } catch (Exception e) {
             loger.error("查询售后操作信息失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据code查询省名
+     *
+     * @param code
+     * @return
+     */
+    public String queryprovice(String code) {
+        try {
+            loger.info("根据code查询省名");
+            return bossOrdersMapper.queryprovice(code);
+        } catch (Exception e) {
+            loger.error("根据code查询省名失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据code查询市名
+     *
+     * @param code
+     * @return
+     */
+    public String querycity(String code) {
+        try {
+            loger.info("根据code查询市名");
+            return bossOrdersMapper.querycity(code);
+        } catch (Exception e) {
+            loger.error("根据code查询市名失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据code查询区名
+     *
+     * @param code
+     * @return
+     */
+    public String querydistrict(String code) {
+        try {
+            loger.info("根据code查询区名");
+            return bossOrdersMapper.querydistrict(code);
+        } catch (Exception e) {
+            loger.error("根据code查询区名失败", e);
             throw e;
         }
     }

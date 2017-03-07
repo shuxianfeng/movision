@@ -47,24 +47,26 @@ public class OrderFacade {
     /**
      * 查询订单列表
      *
-     * @param pageNo
-     * @param pageSize
+     * @param
+     * @param
      * @return
      */
-    public Map<String, Object> queryOrderList(String pageNo, String pageSize) {
-        if (StringUtils.isEmpty(pageNo)) {
-            pageNo = "1";
-        }
-        if (StringUtils.isEmpty(pageSize)) {
-            pageSize = "10";
-        }
-        Map<String, Object> map = new HashedMap();
-        Paging<Post> pager = new Paging<Post>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+    public List<BossOrdersVo> queryOrderList(Paging<BossOrdersVo> pager) {
         List<BossOrdersVo> ordersVos = bossOrderService.queryOrderList(pager);
-        int total = bossOrderService.queryOrderAll();
-        map.put("ordersVos", ordersVos);
-        map.put("total", total);
-        return map;
+        if (ordersVos != null) {
+            for (int i = 0; i < ordersVos.size(); i++) {
+                String provice = ordersVos.get(i).getProvince();
+                String city = ordersVos.get(i).getCity();
+                String district = ordersVos.get(i).getDistrict();
+                String prov = bossOrderService.queryprovice(provice);
+                String cit = bossOrderService.querycity(city);
+                String distr = bossOrderService.querydistrict(district);
+                ordersVos.get(i).setProvince(prov);
+                ordersVos.get(i).setCity(cit);
+                ordersVos.get(i).setDistrict(distr);
+            }
+        }
+        return ordersVos;
     }
 
     /**
@@ -153,6 +155,7 @@ public class OrderFacade {
                 map.put("ordernumber", ordernumber);
             }
             if (province != null) {
+
                 map.put("province", province);
             }
             if (city != null) {
@@ -255,6 +258,17 @@ public class OrderFacade {
         InvoiceVo invoice = bossOrderService.queryOrderInvoiceInfo(id);//查询发票信息
         BossOrders bossOrders = bossOrderService.queryOrderInfo(id);//查询基本信息(包含其他信息)
         Address bossOrdersGet = bossOrderService.queryOrderGetInfo(id);//查询收货人信息
+        if (bossOrdersGet != null) {
+            String provice = bossOrdersGet.getProvince();
+            String city = bossOrdersGet.getCity();
+            String district = bossOrdersGet.getDistrict();
+            String prov = bossOrderService.queryprovice(provice);
+            String cit = bossOrderService.querycity(city);
+            String distr = bossOrderService.querydistrict(district);
+            bossOrdersGet.setProvince(prov);
+            bossOrdersGet.setCity(cit);
+            bossOrdersGet.setDistrict(distr);
+        }
         List<GoodsTo> goods = bossOrderService.queryOrderGoods(id);//查询商品信息
         Double money = 0.0;//小计
         Double summoney = 0.0;//总价
@@ -394,6 +408,19 @@ public class OrderFacade {
      */
     public List<Address> queryOrderAddress(Integer orderid) {
         List<Address> list = bossOrderService.queryOrders(orderid);
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                String provice = list.get(i).getProvince();
+                String city = list.get(i).getCity();
+                String district = list.get(i).getDistrict();
+                String prov = bossOrderService.queryprovice(provice);
+                String cit = bossOrderService.querycity(city);
+                String distr = bossOrderService.querydistrict(district);
+                list.get(i).setProvince(prov);
+                list.get(i).setCity(cit);
+                list.get(i).setDistrict(distr);
+            }
+        }
         return list;
     }
 
@@ -406,7 +433,18 @@ public class OrderFacade {
     public Map<String, Object> queryOrderByAddress(Integer id) {
         Map<String, Object> map = new HashedMap();
         Address address = bossOrderService.queryOrdersByAddress(id);
-        map.put("address", address);
+        if (address != null) {
+            String provice = address.getProvince();
+            String city = address.getCity();
+            String district = address.getDistrict();
+            String prov = bossOrderService.queryprovice(provice);
+            String cit = bossOrderService.querycity(city);
+            String distr = bossOrderService.querydistrict(district);
+            address.setProvince(prov);
+            address.setCity(cit);
+            address.setDistrict(distr);
+            map.put("address", address);
+        }
         return map;
     }
 
