@@ -202,9 +202,9 @@ public class AppLoginController {
                             ImUser imUser = new ImUser();
                             imUser.setAccid(CheckSumBuilder.getAccid(phone));
                             ImUser newImUser = imFacade.AddImUser(imUser);
-                            returnMap.put("imResult", newImUser);
+                            returnMap.put("imuser", newImUser);
                         } else {
-                            returnMap.put("imResult", imFacade.selectByUserid());
+                            returnMap.put("imuser", imFacade.selectByUserid());
                         }
 
                         response.setData(returnMap);
