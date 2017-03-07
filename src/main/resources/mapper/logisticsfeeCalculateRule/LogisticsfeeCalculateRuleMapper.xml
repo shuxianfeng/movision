@@ -60,4 +60,22 @@
             </if>
         </trim>
     </insert>
+    <!--shopid,startprice,startdistance,beyondbilling -->
+    <update id="updateCarriageCalculate" parameterType="java.util.Map">
+        UPDATE yw_logisticsfee_calculate_rule
+        SET
+        <if test="startprice!=null">
+            startprice=#{startprice,jdbcType=DOUBLE},
+        </if>
+        <if test="startdistance!=null">
+            startdistance=#{startdistance,jdbcType=DOUBLE},
+        </if>
+        <if test="beyondbilling!=null">
+            beyondbilling=#{beyondbilling,jdbcType=DOUBLE},
+        </if>
+        <if test="intime!=null">
+            intime=#{intime,jdbcType=DATE}
+        </if>
+        WHERE shopid=#{shopid,jdbcType=INTEGER}
+    </update>
 </mapper>
