@@ -469,11 +469,15 @@ public class GoodsListFacade {
         GoodsImg goodsImg = new GoodsImg();
         goodsImg.setType(2);
         goodsImg.setGoodsid(Integer.parseInt(goodsid));
-
-        goodsImg.setImgurl(imgurl);
-            int result = goodsService.addPicture(goodsImg);
-            map.put("result", result);
-
+        String imgurls;
+        String productids[] = imgurl.split(",");
+        int result = 0;
+        for (int i = 0; i < productids.length; i++) {
+            imgurls = productids[i];
+            goodsImg.setImgurl(imgurls);
+            result = goodsService.addPicture(goodsImg);
+        }
+        map.put("result", result);
         return map;
     }
 
