@@ -43,6 +43,8 @@ public class GoodsVo {
 
     private Integer isself;
 
+    private Integer shopid;
+
     private Integer collect;//收藏
 
     public Integer getCollect() {
@@ -355,5 +357,13 @@ public class GoodsVo {
 
     public void setIsessence(Integer isessence) {
         this.isessence = isessence;
+    }
+
+    public Integer getShopid() {
+        return shopid;
+    }
+
+    public void setShopid(Integer shopid) {
+        this.shopid = shopid;
     }
 }

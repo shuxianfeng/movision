@@ -33,6 +33,8 @@ public class Goods {
 
     private Integer isself;
 
+    private Integer shopid;
+
     private Integer isdamage;
 
     private Integer isquality;
@@ -285,5 +287,13 @@ public class Goods {
 
     public void setIsessence(Integer isessence) {
         this.isessence = isessence;
+    }
+
+    public Integer getShopid() {
+        return shopid;
+    }
+
+    public void setShopid(Integer shopid) {
+        this.shopid = shopid;
     }
 }

@@ -26,6 +26,8 @@ public class GoodsDetail {
 
     private Integer isself;
 
+    private Integer shopid;
+
     private Integer isdamage;
 
     private Integer isquality;
@@ -306,5 +308,13 @@ public class GoodsDetail {
 
     public void setGoodsParamImgurl(String goodsParamImgurl) {
         this.goodsParamImgurl = goodsParamImgurl;
+    }
+
+    public Integer getShopid() {
+        return shopid;
+    }
+
+    public void setShopid(Integer shopid) {
+        this.shopid = shopid;
     }
 }
