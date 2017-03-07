@@ -23,13 +23,13 @@
 
     <!--普通插入语句-->
     <insert id="insert" parameterType="com.movision.mybatis.shopAddress.entity.ShopAddress">
-    insert into yw_shop_address (shopid, provincecode, provincename, 
-      citycode, cityname, areacode, 
-      areaname, street, lng, 
+    insert into yw_shop_address (shopid, provincecode, provincename,
+        citycode, cityname, areacode,
+        areaname, street, lng,
       lat, intime)
-    values (#{shopid,jdbcType=INTEGER}, #{provincecode,jdbcType=INTEGER}, #{provincename,jdbcType=VARCHAR}, 
-      #{citycode,jdbcType=INTEGER}, #{cityname,jdbcType=VARCHAR}, #{areacode,jdbcType=INTEGER}, 
-      #{areaname,jdbcType=VARCHAR}, #{street,jdbcType=VARCHAR}, #{lng,jdbcType=DECIMAL}, 
+        values (#{shopid,jdbcType=INTEGER}, #{provincecode,jdbcType=INTEGER}, #{provincename,jdbcType=VARCHAR},
+        #{citycode,jdbcType=INTEGER}, #{cityname,jdbcType=VARCHAR}, #{areacode,jdbcType=INTEGER},
+        #{areaname,jdbcType=VARCHAR}, #{street,jdbcType=VARCHAR}, #{lng,jdbcType=DECIMAL},
       #{lat,jdbcType=DECIMAL}, #{intime,jdbcType=TIMESTAMP})
   </insert>
 
