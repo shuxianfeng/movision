@@ -10,6 +10,26 @@ public class ProvinceVo {
 
     private String street;//地址
 
+    private String name;//用户名
+
+    private String phone;//电话
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getProvince() {
         return province;
     }
