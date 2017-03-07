@@ -48,6 +48,8 @@ public class CartVo {
 
     private Integer shopid;//所属三方店铺id（isself为0 时不为空）-------二期预留（按照不同店铺拆分订单）
 
+    private String shopname;//店铺名称
+
     private String imgurl;//购物车中的商品小方图
 
     private String comboname;//套餐名称
@@ -298,5 +300,13 @@ public class CartVo {
 
     public void setEnrentday(Integer enrentday) {
         this.enrentday = enrentday;
+    }
+
+    public String getShopname() {
+        return shopname;
+    }
+
+    public void setShopname(String shopname) {
+        this.shopname = shopname;
     }
 }

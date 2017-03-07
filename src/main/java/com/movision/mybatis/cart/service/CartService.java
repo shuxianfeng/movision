@@ -129,6 +129,16 @@ public class CartService {
         }
     }
 
+    public String queryShopName(int shopid) {
+        try {
+            log.info("根据店铺id查询店铺名称");
+            return cartMapper.queryShopName(shopid);
+        } catch (Exception e) {
+            log.error("根据店铺id查询店铺名称失败");
+            throw e;
+        }
+    }
+
     public CartVo queryNamePrice(int comboid) {
         try {
             log.info("查询套餐名称和套餐折后价");

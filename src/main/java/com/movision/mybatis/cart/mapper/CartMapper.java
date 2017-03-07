@@ -35,6 +35,8 @@ public interface CartMapper {
 
     List<CartVo> queryCartByUser(int userid);
 
+    String queryShopName(int shopid);
+
     List<Rentdate> queryRentDateList(int cartid);
 
     List<GoodsVo> queryGoodsByComboid(int comboid);

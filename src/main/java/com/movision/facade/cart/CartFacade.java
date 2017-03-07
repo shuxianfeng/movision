@@ -181,11 +181,17 @@ public class CartFacade {
     //查询用户的购物车中所有商品
     public List<CartVo> queryCartByUser(String userid) {
 
-        //一次查询所有商品（不分页且全部为自营商品）
+        //一次查询所有商品（不分页含自营和三方所有商品）
         List<CartVo> cartList = cartService.queryCartByUser(Integer.parseInt(userid));
 
         //遍历购物车所有商品，当套餐id不为空时，需要查询套餐名称和套餐折后价，set到list中的对象里
         for (int i = 0; i < cartList.size(); i++) {
+            if (cartList.get(i).getShopid() == -1) {
+                cartList.get(i).setShopname("三元佳美自营");
+            } else {
+                String shopname = cartService.queryShopName(cartList.get(i).getShopid());
+                cartList.get(i).setShopname(shopname);
+            }
             if (cartList.get(i).getCombotype() != null) {
                 //查询套餐名称和套餐折后价
                 CartVo vo = cartService.queryNamePrice(cartList.get(i).getCombotype());

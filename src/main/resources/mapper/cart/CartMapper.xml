@@ -113,7 +113,7 @@
     <!--查询该用户购物车中的所有商品-->
     <select id="queryCartByUser" parameterType="java.lang.Integer" resultType="com.movision.mybatis.cart.entity.CartVo">
         SELECT * FROM (
-        SELECT t1.*,t2.img_url AS imgurl,t3.price AS goodsprice,t3.isself,t3.isdel AS online, t3.stock
+        SELECT t1.*,t2.img_url AS imgurl,t3.price AS goodsprice, t3.isself, t3.shopid, t3.isdel AS online, t3.stock
             FROM yw_cart t1
             LEFT JOIN (SELECT * FROM yw_goods_img WHERE type='2') t2
             ON t1.goodsid = t2.goodsid
@@ -166,6 +166,11 @@
         WHERE id IN (
         SELECT goodsid FROM yw_goods_combo WHERE comboid = #{comboid,jdbcType=INTEGER}
         )
+    </select>
+
+    <!--根据店铺id查询店铺名称-->
+    <select id="queryShopName" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT name FROM yw_shop WHERE id = #{shopid,jdbcType=INTEGER}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
