@@ -43,7 +43,6 @@ public class GoodsVo {
 
     private Integer isself;
 
-    private Integer shopid;
 
     private Integer collect;//收藏
 
@@ -82,6 +81,8 @@ public class GoodsVo {
     public void setAssess(Integer assess) {
         this.assess = assess;
     }
+
+    private Integer shopid;
 
 
     private Integer iscombo;

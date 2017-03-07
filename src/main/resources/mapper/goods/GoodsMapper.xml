@@ -923,6 +923,10 @@
             <if test="attribute != null">
                 attribute,
             </if>
+            <if test="shopid != null">
+                shopid,
+            </if>
+
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -959,6 +963,10 @@
             <if test="attribute != null">
                 #{attribute,jdbcType=VARCHAR},
             </if>
+            <if test="shopid != null">
+                #{shopid,jdbcType=INTEGER},
+            </if>
+
         </trim>
     </insert>
     <select id="findAllC" parameterType="java.lang.Integer"

@@ -561,6 +561,7 @@ public class GoodsListFacade {
             }
         }
         goodsVo.setOnlinetime(ondate);
+        goodsVo.setShopid(-1);
         goodsVo.setBrandid(brandid);
         goodsVo.setProtype(Integer.parseInt(protype));
         goodsVo.setPrice(Double.parseDouble(price));
