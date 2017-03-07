@@ -147,4 +147,5 @@ public interface GoodsMapper {
 
     Integer addCommodityDescription(GoodsImg goodsImg);//增加描述图
 
+
 }
