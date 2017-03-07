@@ -830,8 +830,8 @@
     <update id="updateImgGoods" parameterType="com.movision.mybatis.goods.entity.GoodsImg">
         update yw_goods_img
         <set>
-            <if test="imgurl != null">
-                img_url = #{imgurl,jdbcType=VARCHAR}
+            <if test="img_url != null">
+                img_url = #{img_url,jdbcType=VARCHAR}
             </if>
         </set>
         WHERE goodsid= #{goodsid,jdbcType=INTEGER} AND type=3
@@ -839,34 +839,36 @@
     <update id="updateCommodityDescription" parameterType="com.movision.mybatis.goods.entity.GoodsImg">
         update yw_goods_img
         <set>
-            <if test="imgurl != null">
-                img_url = #{imgurl,jdbcType=VARCHAR}
+            <if test="img_url != null">
+                img_url = #{img_url,jdbcType=VARCHAR}
             </if>
         </set>
         WHERE goodsid= #{goodsid,jdbcType=INTEGER} AND type=1
 
     </update>
     <insert id="addPicture" parameterType="com.movision.mybatis.goods.entity.GoodsImg">
-        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
-            select LAST_INSERT_ID()
-        </selectKey>
         insert into yw_goods_img
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="goodsid != null">
                 goodsid,
             </if>
 
-            <if test="imgurl != null">
+            <if test="img_url != null">
                 img_url,
+            </if>
+            <if test="type != null">
+                type,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-
-            <if test="imgurl != null">
-                #{img_url,jdbcType=VARCHAR},
-            </if>
             <if test="goodsid != null">
                 #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="img_url != null">
+                #{img_url,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -874,7 +876,7 @@
         <selectKey keyProperty="id" order="AFTER" resultType="Integer">
             select LAST_INSERT_ID()
         </selectKey>
-        insert into yw_goods_img
+        insert into yw_goods
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -1104,6 +1106,56 @@
             </if>
             <if test="goodsid != null">
                 #{goodsid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <insert id="addImgGoods" parameterType="com.movision.mybatis.goods.entity.GoodsImg">
+        insert into yw_goods_img
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="img_url != null">
+                img_url,
+            </if>
+            <if test="goodsid != null">
+                goodsid,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="img_url != null">
+                #{img_url,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsid != null">
+                #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <insert id="addCommodityDescription" parameterType="com.movision.mybatis.goods.entity.GoodsImg">
+        insert into yw_goods_img
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="img_url != null">
+                img_url,
+            </if>
+            <if test="goodsid != null">
+                goodsid,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="img_url != null">
+                #{img_url,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsid != null">
+                #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>

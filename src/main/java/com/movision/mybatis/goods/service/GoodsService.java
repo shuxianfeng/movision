@@ -1060,4 +1060,36 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 增加参数图
+     *
+     * @param goodsImg
+     * @return
+     */
+    public Integer addImgGoods(GoodsImg goodsImg) {
+        try {
+            log.info("增加参数图");
+            return goodsMapper.addImgGoods(goodsImg);
+        } catch (Exception e) {
+            log.error("增加参数图失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 增加描述图
+     *
+     * @param goodsImg
+     * @return
+     */
+    public Integer addCommodityDescription(GoodsImg goodsImg) {
+        try {
+            log.info("增加描述图");
+            return goodsMapper.addCommodityDescription(goodsImg);
+        } catch (Exception e) {
+            log.error("增加描述图失败", e);
+            throw e;
+        }
+    }
 }
