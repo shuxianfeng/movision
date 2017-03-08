@@ -38,6 +38,33 @@ public class UserManageFacade {
     @Autowired
     private RecordService recordService;
 
+
+    //用于返回用户登录状态
+    public String returnLoginType(String qq, String opendid, String sina) {
+        if (qq != null) {
+            return "1";//QQ
+        }
+        if (opendid != null) {
+            return "2";//微信
+        }
+        if (sina != null) {
+            return "3";//微博
+        }
+        if (qq != null && opendid != null) {
+            return "4";//QQ,微信
+        }
+        if (qq != null && sina != null) {
+            return "5";//QQ，微博
+        }
+        if (opendid != null && sina != null) {
+            return "6";//微信，微博
+        }
+        if (qq != null && opendid != null && sina != null) {
+            return "7";//QQ,微信,微博
+        }
+        return "0";
+    }
+
     /**
      * 查看vip申请列表
      *
@@ -201,27 +228,8 @@ public class UserManageFacade {
         map.put("login", login);//登录状态
         List<UserAll> list = userService.queryAllUserList(pager, map);
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getQq() != null) {
-                list.get(i).setLogin("1");//QQ
-            }
-            if (list.get(i).getOpenid() != null) {
-                list.get(i).setLogin("2");//微信
-            }
-            if (list.get(i).getSina() != null) {
-                list.get(i).setLogin("3");//微博
-            }
-            if (list.get(i).getQq() != null && list.get(i).getOpenid() != null) {
-                list.get(i).setLogin("4");//QQ,微信
-            }
-            if (list.get(i).getQq() != null && list.get(i).getSina() != null) {
-                list.get(i).setLogin("5");//QQ，微博
-            }
-            if (list.get(i).getOpenid() != null && list.get(i).getSina() != null) {
-                list.get(i).setLogin("6");//微信，微博
-            }
-            if (list.get(i).getQq() != null && list.get(i).getOpenid() != null && list.get(i).getSina() != null) {
-                list.get(i).setLogin("7");//QQ,微信,微博
-            }
+            String resault = returnLoginType(list.get(i).getQq(), list.get(i).getOpenid(), list.get(i).getSina());
+            list.get(i).setLogin(resault);
         }
         return list;
     }
@@ -289,29 +297,28 @@ public class UserManageFacade {
         String[] str = userids.split(",");
         for (String itm : str) {
             UserAll users = userService.queryUserById(Integer.parseInt(itm));
-            if (users.getQq() != null) {
-                users.setLogin("1");//QQ
-            }
-            if (users.getOpenid() != null) {
-                users.setLogin("2");//微信
-            }
-            if (users.getSina() != null) {
-                users.setLogin("3");//微博
-            }
-            if (users.getQq() != null && users.getOpenid() != null) {
-                users.setLogin("4");//QQ,微信
-            }
-            if (users.getQq() != null && users.getSina() != null) {
-                users.setLogin("5");//QQ，微博
-            }
-            if (users.getOpenid() != null && users.getSina() != null) {
-                users.setLogin("6");//微信，微博
-            }
-            if (users.getQq() != null && users.getOpenid() != null && users.getSina() != null) {
-                users.setLogin("7");//QQ,微信,微博
-            }
+            String resault = returnLoginType(users.getQq(), users.getOpenid(), users.getSina());
+            users.setLogin(resault);
             list.add(users);
         }
         return list;
     }
+
+
+    /**
+     * 根据圈子关注查询用户列表
+     *
+     * @param circleid
+     * @param pager
+     * @return
+     */
+    public List<UserAll> queryAttentionUserList(String circleid, Paging<UserAll> pager) {
+        List<UserAll> list = userService.queryAttentionUserList(Integer.parseInt(circleid), pager);
+        for (int i = 0; i < list.size(); i++) {
+            String resault = returnLoginType(list.get(i).getQq(), list.get(i).getOpenid(), list.get(i).getSina());
+            list.get(i).setLogin(resault);
+        }
+        return list;
+    }
+
 }

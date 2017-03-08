@@ -92,4 +92,6 @@ public interface UserMapper {
     List<ProvinceVo> queryProvinces(String userid);
 
     UserAll queryUserById(Integer userid);
+
+    List<UserAll> findAllqueryAttentionUserList(Integer circleid, RowBounds rowBounds);
 }

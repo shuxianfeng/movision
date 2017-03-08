@@ -2,6 +2,7 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.CircleFacade;
+import com.movision.facade.boss.UserManageFacade;
 import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.category.entity.CategoryVo;
 import com.movision.mybatis.circle.entity.Circle;
@@ -10,6 +11,7 @@ import com.movision.mybatis.circle.entity.CircleIndexList;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserAll;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
@@ -40,6 +42,8 @@ public class CircleController {
     CircleFacade circleFacade;
     @Autowired
     MovisionOssClient movisionOssClient;
+    @Autowired
+    UserManageFacade userManageFacade;
 
     /**
      * 后台管理-查询圈子列表
@@ -417,4 +421,27 @@ public class CircleController {
         return new Response(map);
     }
 
+    /**
+     * 根据圈子关注查询用户列表
+     *
+     * @param circleid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "根据圈子关注查询用户列表", notes = "用于圈子列表中点击圈子关注数量，查看关注用户列表", response = Response.class)
+    @RequestMapping(value = "query_attention_user_list", method = RequestMethod.POST)
+    public Response queryAttentionUserList(@ApiParam(value = "圈子id") @RequestParam String circleid,
+                                           @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                           @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<UserAll> pager = new Paging<UserAll>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<UserAll> list = userManageFacade.queryAttentionUserList(circleid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
 }

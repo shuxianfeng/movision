@@ -518,4 +518,21 @@ public class UserService {
             throw e;
         }
     }
+
+    /**
+     * 根据圈子关注查询用户列表
+     *
+     * @param circleid
+     * @param pager
+     * @return
+     */
+    public List<UserAll> queryAttentionUserList(Integer circleid, Paging<UserAll> pager) {
+        try {
+            log.info("根据圈子关注查询用户列表");
+            return userMapper.findAllqueryAttentionUserList(circleid, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据圈子关注查询用户列表异常");
+            throw e;
+        }
+    }
 }
