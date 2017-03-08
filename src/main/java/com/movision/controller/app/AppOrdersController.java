@@ -70,7 +70,7 @@ public class AppOrdersController {
 
         int flag = orderAppFacade.commitOrder(addressid, cartids, takeway, kind, onlystatue, head, content, invoiceaddressid,
                 companyname, rigaddress, rigphone, bank, banknum, code, couponid, points, message, logisticsfee, totalprice);
-
+        System.out.println(flag);
         if (flag == 1) {
             response.setCode(200);
             response.setMessage("订单提交成功");

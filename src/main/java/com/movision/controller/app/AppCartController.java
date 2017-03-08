@@ -134,10 +134,12 @@ public class AppCartController {
     @RequestMapping(value = "cartBilling", method = RequestMethod.POST)
     public Response cartBilling(@ApiParam(value = "购物车id(多件商品的购物车id用英文逗号','隔开)") @RequestParam String cartids,
                                 @ApiParam(value = "用户id") @RequestParam String userid,
-                                @ApiParam(value = "结算总价") @RequestParam String totalprice) {
+                                @ApiParam(value = "结算总价") @RequestParam String totalprice,
+                                @ApiParam(value = "当前选择的定位地址-省code") @RequestParam String provincecode,
+                                @ApiParam(value = "当前选择的定位地址-市code") @RequestParam String citycode) {
         Response response = new Response();
 
-        Map<String, Object> map = cartFacade.cartBilling(cartids, userid, totalprice);
+        Map<String, Object> map = cartFacade.cartBilling(cartids, userid, totalprice, provincecode, citycode);
 
         if ((int) map.get("code") == 200) {
             response.setMessage("可结算");

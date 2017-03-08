@@ -15,6 +15,7 @@ import com.movision.mybatis.rentdate.entity.Rentdate;
 import com.movision.mybatis.shopAddress.entity.ShopAddress;
 import com.movision.mybatis.shopAddress.service.ShopAddressService;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.utils.CalculateFee;
 import org.apache.commons.beanutils.converters.DoubleConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,9 @@ public class CartFacade {
 
     @Autowired
     private ShopAddressService shopAddressService;
+
+    @Autowired
+    private CalculateFee calculateFee;
 
     //商品加入购物车
     public int addGoodsCart(String userid, String goodsid, String comboid, String discountid, String isdebug, String sum, String type, String rentdate) throws ParseException {
@@ -284,7 +288,12 @@ public class CartFacade {
     }
 
     //购物车结算校验和订单确认页数据返回
-    public Map<String, Object> cartBilling(String cartids, String userid, String totalprice) {
+    public Map<String, Object> cartBilling(String cartids, String userid, String totalprice, String provincecode, String citycode) {
+        //根据userid查询用户默认地址的省市code
+        Address addr = addressService.queryDefaultAddress(Integer.parseInt(userid));
+        //定义运费变量map
+        Map<String, Object> feemap = new HashMap<>();
+
         int flag = 0;
         double totalamount = 0;//订单总金额(=订单中自营商品的总金额+订单中第三方商品的总金额)
         double selfamount = 0;//订单中自营商品的总金额
@@ -299,6 +308,12 @@ public class CartFacade {
             cartid[i] = Integer.parseInt(cartidarr[i]);
         }
         List<CartVo> cartVoList = cartService.queryCartVoList(cartid);//查询需要结算的购物车所有商品
+
+        //根据判断条件来决定是否在这里进行运费结算----结算时调用计算运费的公共方法
+        if (addr.getProvince().equals(provincecode) && addr.getCity().equals(citycode)) {
+            //调用公共计算接口计算运费
+            feemap = calculateFee.GetFee(cartVoList, addr.getLng(), addr.getLat());
+        }
 
         for (int i = 0; i < cartVoList.size(); i++) {
 
@@ -420,9 +435,11 @@ public class CartFacade {
                 } else if (cartVoList.get(i).getType() == 1) {
                     //购买
                     if (cartVoList.get(i).getCombotype() != null) {//包含套餐
+                        //查询套餐的折后价
+                        double comboprice = comboService.queryComboPrice(cartVoList.get(i).getCombotype());
                         if (cartVoList.get(i).getDiscountid() != null) {
                             //单个套餐总价=套餐价*套餐件数*活动百分比（有活动）
-                            double amount = cartVoList.get(i).getComboprice() * cartVoList.get(i).getNum() * Integer.parseInt(cartVoList.get(i).getDiscount()) / 100;
+                            double amount = comboprice * cartVoList.get(i).getNum() * Integer.parseInt(cartVoList.get(i).getDiscount()) / 100;
                             totalamount = totalamount + amount;
 
                             if (cartVoList.get(i).getIsself() == 1) {//自营
@@ -432,7 +449,7 @@ public class CartFacade {
                             }
                         } else {
                             //单个套餐总价=套餐价*套餐件数（无活动）
-                            double amount = cartVoList.get(i).getComboprice() * cartVoList.get(i).getNum();
+                            double amount = comboprice * cartVoList.get(i).getNum();
                             totalamount = totalamount + amount;
 
                             if (cartVoList.get(i).getIsself() == 1) {//自营
@@ -489,6 +506,7 @@ public class CartFacade {
 
             map.put("selfamount", selfamount);//自营总额
             map.put("shopamount", shopamount);//三方总额
+            map.put("feemap", feemap);//总运费
 
             map.put("code", 200);
             map.put("msg", "您提交的购物车结算商品校验通过，可结算");

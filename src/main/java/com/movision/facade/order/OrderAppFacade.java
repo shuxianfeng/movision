@@ -30,7 +30,7 @@ public class OrderAppFacade {
                            String rigphone, String bank, String banknum, String code, String couponid, String points,
                            String message, String logisticsfee, String totalprice) {
         int flag = 0;
-
+        System.out.println(flag);
 
         return flag;
     }
