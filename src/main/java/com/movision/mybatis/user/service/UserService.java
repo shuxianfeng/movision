@@ -502,4 +502,20 @@ public class UserService {
             throw e;
         }
     }
+
+    /**
+     * 根据id查询用户信息
+     *
+     * @param userid
+     * @return
+     */
+    public UserAll queryUserById(Integer userid) {
+        try {
+            log.info("根据id查询用户信息");
+            return userMapper.queryUserById(userid);
+        } catch (Exception e) {
+            log.error("根据id查询用户信息异常");
+            throw e;
+        }
+    }
 }

@@ -371,4 +371,22 @@ public class UserManageController {
         response.setData(user);
         return response;
     }
+
+    /**
+     * 根据用户id查询用户列表
+     *
+     * @param userids
+     * @return
+     */
+    @ApiOperation(value = "根据用户id查询用户列表", notes = "用于根据多个用户id查询用户列表", response = Response.class)
+    @RequestMapping(value = "query_user_ids", method = RequestMethod.POST)
+    public Response queryUserByIds(@ApiParam(value = "用户id(以逗号分隔)") @RequestParam String userids) {
+        Response response = new Response();
+        List<UserAll> list = userManageFacade.queryUserByIds(userids);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
+        return response;
+    }
 }

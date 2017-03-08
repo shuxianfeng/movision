@@ -90,4 +90,6 @@ public interface UserMapper {
     UserParticulars queryUserParticulars(String userid);
 
     List<ProvinceVo> queryProvinces(String userid);
+
+    UserAll queryUserById(Integer userid);
 }
