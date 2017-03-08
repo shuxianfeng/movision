@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.*;
 
@@ -817,20 +818,26 @@ public class GoodsListFacade {
      * @param goodsid
      * @return
      */
-    public Map<String, Object> addCom(String imgurl, String comboid, String comboname, String combodiscountprice, String goodsid) {
-        Map<String, Object> map = new HashedMap();
+    public Map<String, Integer> addCom(String imgurl, String comboid, String comboname, String combodiscountprice, String goodsid) {
+        Map<String, Integer> map = new HashedMap();
         Combo combo = new Combo();
         combo.setImgurl(imgurl);
         combo.setComboname(comboname);
         List<Integer> list = goodsService.findAllComboid();
-        String comboidsd = "";
+        int comboidsd = 0;
         int com = Integer.parseInt(comboid);
         for (int i = 0; i < list.size(); i++) {
             int a = list.get(i);
             if (com == a) {
-                comboidsd = "套餐id重复";
+                comboidsd = com + 1;
+                //combo.setComboid(comboidsd);
+                com = comboidsd;
+                if (com == a) {
+                    break;
+                }
             }
         }
+        combo.setComboid(com);
         combo.setIntime(new Date());
         combo.setCombodiscountprice(Double.parseDouble(combodiscountprice));
         int res = goodsService.addCom(combo);
@@ -847,7 +854,6 @@ public class GoodsListFacade {
         }
         map.put("result", result);
         map.put("res", res);
-        map.put("comboidsd", comboidsd);
         return map;
     }
 

@@ -844,7 +844,7 @@ public class GoodsController {
                                 @ApiParam(value = "折后价") @RequestParam(required = false) String combodiscountprice,
                                 @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Object> map = goodsFacade.addCom(imgurl, comboid, comboname, combodiscountprice, goodsid);
+        Map<String, Integer> map = goodsFacade.addCom(imgurl, comboid, comboname, combodiscountprice, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("插入成功");
         }

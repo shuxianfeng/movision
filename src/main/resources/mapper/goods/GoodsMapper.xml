@@ -1106,7 +1106,7 @@
                 #{combodiscountprice,jdbcType=DOUBLE},
             </if>
             <if test="intime != null">
-                #{intime,jdbcType=DATE},
+                #{intime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
