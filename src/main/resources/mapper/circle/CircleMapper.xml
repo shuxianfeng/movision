@@ -374,11 +374,12 @@
         <if test="begintime!=null and endtime!=null">
             AND createtime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
         </if>
+        ORDER BY category
         <if test="pai==null">
-            ORDER BY c.createtime DESC
+            ,c.createtime DESC
         </if>
         <if test="pai==1">
-            ORDER BY follownum DESC
+            ,follownum DESC
         </if>
     </select>
 
@@ -404,7 +405,8 @@
         SELECT name,category FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER}
     </select>
 
-    <select id="queryListByCircleCategory" resultType="com.movision.mybatis.circle.entity.CircleIndexList">
+    <select id="queryListByCircleCategory" resultType="com.movision.mybatis.circle.entity.CircleIndexList"
+            parameterType="java.util.Map">
         SELECT c.id AS category,c.categoryname , c.intime,
         (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN (SELECT id FROM yw_circle WHERE category=c.id)) as
         follownum,
@@ -417,6 +419,9 @@
         (SELECT COUNT(1) FROM yw_post p WHERE p.circleid IN (SELECT id FROM yw_circle WHERE category=c.id)) AS postnum,
         (SELECT SUM(supportnum) FROM yw_circle WHERE category=c.id) AS supportnum
         FROM yw_circle_category c
+        <if test="categoryid!=null">
+            WHERE c.id=#{categoryid,jdbcType=INTEGER}
+        </if>
     </select>
 
     <select id="queryListByCircleList" parameterType="java.lang.Integer"

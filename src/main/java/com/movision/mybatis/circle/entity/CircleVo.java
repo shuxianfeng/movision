@@ -77,6 +77,16 @@ public class CircleVo {
 
     private Date intime;//时间
 
+    private Integer userid;//用户id
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
+
     public String getCirclename() {
         return circlename;
     }

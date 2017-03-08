@@ -6,6 +6,7 @@ import com.movision.mybatis.circle.mapper.CircleMapper;
 import com.movision.mybatis.followCircle.mapper.FollowCircleMapper;
 import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -255,10 +256,10 @@ public class CircleService {
      *
      * @return
      */
-    public List<CircleIndexList> queryListByCircleCategory() {
+    public List<CircleIndexList> queryListByCircleCategory(Map map) {
         try {
             log.info("查询圈子中所有圈子所属分类");
-            return circleMapper.queryListByCircleCategory();
+            return circleMapper.queryListByCircleCategory(map);
         } catch (Exception e) {
             log.error("查询圈子中所有圈子所属分类异常");
             throw e;
