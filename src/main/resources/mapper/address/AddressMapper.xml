@@ -13,10 +13,12 @@
         <result column="isdefault" property="isdefault" jdbcType="INTEGER"/>
         <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP"/>
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+        <result column="lng" property="lng" jdbcType="BigDecimal"/>
+        <result column="lat" property="lat" jdbcType="BigDecimal"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, userid, name, phone, province, city, district, street, isdefault, updatetime,
-        isdel
+        isdel,lng, lat
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -59,11 +61,11 @@
         insert into yw_address (id, userid, name,
         phone, province, city,
         district, street, isdefault,
-        updatetime, isdel)
+        updatetime, isdel,lng,lat)
         values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
         #{phone,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
         #{district,jdbcType=VARCHAR}, #{street,jdbcType=VARCHAR}, #{isdefault,jdbcType=INTEGER},
-        #{updatetime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
+        #{updatetime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER},#{lng},#{lat})
     </insert>
 
     <insert id="insertSelective" parameterType="com.movision.mybatis.address.entity.Address">
@@ -98,6 +100,12 @@
             </if>
                 updatetime,
                 isdel,
+            <if test="lng!=null">
+                lng,
+            </if>
+            <if test="lat!=null">
+                lat,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -129,6 +137,12 @@
             </if>
             now(),
             0
+            <if test="lng">
+                #{lng},
+            </if>
+            <if test="lat">
+                #{lat},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.address.entity.Address">
@@ -162,6 +176,12 @@
             <if test="isdel != null">
                 isdel = #{isdel,jdbcType=INTEGER},
             </if>
+            <if test="lng!=null">
+                lng = #{lng},
+            </if>
+            <if test="lat!=null">
+                lat = #{lat},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -176,12 +196,14 @@
         street = #{street,jdbcType=VARCHAR},
         isdefault = #{isdefault,jdbcType=INTEGER},
         updatetime = #{updatetime,jdbcType=TIMESTAMP},
-        isdel = #{isdel,jdbcType=INTEGER}
+        isdel = #{isdel,jdbcType=INTEGER},
+        lng = #{lng},
+        lat =#{lat}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
     <select id="queryMyAddressList" resultType="java.util.HashMap">
-        SELECT a.id, a.name, a.userid, a.phone, a.street, a.isdefault,
+        SELECT a.id, a.name, a.userid, a.phone, a.street, a.isdefault,a.lng, a.lat,
         a.province, p.name as provincename,
         a.city, c.name as cityname,
         a.district, area.name as districtname
@@ -197,7 +219,7 @@
     </select>
 
     <select id="queryAddressDetail" resultType="java.util.HashMap" parameterType="int">
-        SELECT a.id, a.name, a.userid, a.phone, a.street, a.isdefault,
+        SELECT a.id, a.name, a.userid, a.phone, a.street, a.isdefault,a.lng,a.lat,
         a.province, p.name as provincename,
         a.city, c.name as cityname,
         a.district, area.name as districtname

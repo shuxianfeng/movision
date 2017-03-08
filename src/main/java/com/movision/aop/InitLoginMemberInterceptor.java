@@ -170,7 +170,8 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 // 初始化登录信息
                 ShiroUser loginInfo = new ShiroUser(loginUser.getId(), loginUser.getPhone(), loginUser.getStatus(), loginUser.getRole(),
                         loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(),
-                        loginUser.getPhone(), loginUser.getToken(), loginUser.getPoints(), loginUser.getSex());
+                        loginUser.getPhone(), loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(), loginUser.getAccid(),
+                        loginUser.getToken());
 
                 //判断登录信息是否改变,若改变了则更新session，
                 if (this.loginUserInfoIsChange(appuser, loginInfo)) {

@@ -3,6 +3,7 @@ package com.movision.mybatis.address.entity;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Api("地址")
@@ -27,6 +28,27 @@ public class Address {
     private Date updatetime;
 
     private Integer isdel;
+
+    private BigDecimal lng;
+
+    private BigDecimal lat;
+
+    public void setLng(BigDecimal lng) {
+        this.lng = lng;
+    }
+
+    public void setLat(BigDecimal lat) {
+        this.lat = lat;
+    }
+
+    public BigDecimal getLng() {
+
+        return lng;
+    }
+
+    public BigDecimal getLat() {
+        return lat;
+    }
 
     public Integer getId() {
         return id;
