@@ -601,13 +601,14 @@ public class OrderFacade {
      * @param orderid
      * @return
      */
-    public Map<String, Integer> adddelivery(String id, String takeway, String remark, String orderid) {
+    public Map<String, Integer> adddelivery(String id, String takeway, String remark, String orderid, String replacementnumber) {
         Map<String, Integer> map = new HashedMap();
         Afterservice afterservice = new Afterservice();
         afterservice.setId(Integer.parseInt(id));
         afterservice.setTakeway(Integer.parseInt(takeway));
         afterservice.setAftersalestatus(3);
         afterservice.setProcessingstatus(2);
+        afterservice.setReplacementnumber(replacementnumber);
         int res = bossOrderService.updateAfterService(afterservice);
         AfterserviceStream afterserviceStream = new AfterserviceStream();
         afterserviceStream.setAfterserviceid(Integer.parseInt(id));

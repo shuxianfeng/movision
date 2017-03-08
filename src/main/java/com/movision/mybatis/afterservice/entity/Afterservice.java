@@ -8,6 +8,15 @@ public class Afterservice {
     private Integer orderid;
 
     private Integer addressid;
+    private String replacementnumber;
+
+    public String getReplacementnumber() {
+        return replacementnumber;
+    }
+
+    public void setReplacementnumber(String replacementnumber) {
+        this.replacementnumber = replacementnumber;
+    }
 
     private Integer goodsid;
 
