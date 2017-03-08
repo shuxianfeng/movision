@@ -8,10 +8,13 @@ import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
 import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.address.service.AddressService;
+import com.movision.mybatis.cart.entity.CartVo;
+import com.movision.mybatis.cart.service.CartService;
 import com.movision.mybatis.logisticsfeeCalculateRule.entity.LogisticsfeeCalculateRule;
 import com.movision.mybatis.shopAddress.entity.ShopAddress;
 import com.movision.mybatis.shopAddress.service.ShopAddressService;
 import com.movision.utils.CalculateDistance;
+import com.movision.utils.CalculateFee;
 import com.movision.utils.ListUtil;
 import org.apache.commons.collections.map.HashedMap;
 import com.movision.utils.wxpay.baidu.SnCal;
@@ -48,6 +51,12 @@ public class AddressFacade {
 
     @Autowired
     private ShopAddressService shopAddressService;
+
+    @Autowired
+    private CartService cartService;
+
+    @Autowired
+    private CalculateFee calculateFee;
 
     public List<Map<String, Object>> queryMyAddressList(int userid) {
         Map map = new HashedMap();
@@ -158,29 +167,24 @@ public class AddressFacade {
         return flag;
     }
 
-    public double calculateLogisticsfee(String lng, String lat) {
+    public Map<String, Object> calculateLogisticsfee(String cartids, String provincecode, String citycode, String positionprovincecode, String positioncitycode, String lng, String lat) {
+        //定义运费变量map
+        Map<String, Object> feemap = new HashMap<>();
 
-        double fee = 0;
-        //查询我司自营店址的经纬度
-        ShopAddress shopAddress = shopAddressService.queryShopAddressByShopid(-1);
-        //根据经纬度计算里程
-        double distance = CalculateDistance.GetDistance(Double.parseDouble(lng), Double.parseDouble(lat), shopAddress.getLng().doubleValue(), shopAddress.getLat().doubleValue());
-        log.info("经纬度点1>>>>>>>" + Double.parseDouble(lng) + ">>" + Double.parseDouble(lat) + "，经纬度点2>>>>>>" + shopAddress.getLng().doubleValue() + ">>" + shopAddress.getLat().doubleValue());
-        log.info("里程距离>>>>>>>" + distance / 1000 + "公里");
-        //取出运费规则
-        LogisticsfeeCalculateRule logisticsfeeCalculateRule = shopAddressService.queryLogisticsfeeCalculateRule(-1);
-
-        double startprice = logisticsfeeCalculateRule.getStartprice();//起步价
-        double startdistance = logisticsfeeCalculateRule.getStartdistance();//起步公里数
-        double beyondbilling = logisticsfeeCalculateRule.getBeyondbilling();//超出每公里多少钱
-
-        if (distance / 1000 <= startdistance) {
-            fee = startprice;
-        } else if (distance / 1000 > startdistance) {
-            fee = startprice + (distance / 1000 - startdistance) * beyondbilling;
+        //首先根据cartids取出用户需要结算的所有商品
+        String[] cartidarr = cartids.split(",");
+        int[] cartid = new int[cartidarr.length];
+        for (int i = 0; i < cartidarr.length; i++) {
+            cartid[i] = Integer.parseInt(cartidarr[i]);
         }
-        long l = Math.round(fee);//向上取整
+        List<CartVo> cartVoList = cartService.queryCartVoList(cartid);//查询需要结算的购物车所有商品
 
-        return l;
+        //根据判断条件来决定是否在这里进行运费结算----结算时调用计算运费的公共方法
+        if (positionprovincecode.equals(provincecode) && positioncitycode.equals(citycode)) {
+            //调用公共计算接口计算运费
+            feemap = calculateFee.GetFee(cartVoList, new BigDecimal(lng), new BigDecimal(lat));
+        }
+
+        return feemap;
     }
 }

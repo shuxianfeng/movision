@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 /**
  * @Author shuxf
  * @Date 2017/3/3 20:41
@@ -25,17 +27,22 @@ public class AppOrdersController {
     @Autowired
     private AddressFacade addressFacade;
 
-    @ApiOperation(value = "计算配送距离和运费", notes = "根据前台App提交的地址经纬度，计算配送距离和运费", response = Response.class)
+    @ApiOperation(value = "确认订单页面（点击提交订单前）更换可用地址时动态调用", notes = "根据前台App用户选择的定位地点和用户选择的可用收货地址计算用户购物车中运费总和", response = Response.class)
     @RequestMapping(value = "calculateLogisticsfee", method = RequestMethod.POST)
-    public Response calculateLogisticsfee(@ApiParam(value = "经度") @RequestParam String lng,
-                                          @ApiParam(value = "纬度") @RequestParam String lat) {
+    public Response calculateLogisticsfee(@ApiParam(value = "购物车id(多件商品的购物车id用英文逗号','隔开)") @RequestParam String cartids,
+                                          @ApiParam(value = "省code(收货地址选择的可用收货地址的省code)") @RequestParam String provincecode,
+                                          @ApiParam(value = "市code((收货地址选择的可用收货地址的市code)") @RequestParam String citycode,
+                                          @ApiParam(value = "当前选择的定位地址-省code") @RequestParam String positionprovincecode,
+                                          @ApiParam(value = "当前选择的定位地址-市code") @RequestParam String positioncitycode,
+                                          @ApiParam(value = "经度(选择的可用收货地址的经度)") @RequestParam String lng,
+                                          @ApiParam(value = "纬度(选择的可用收货地址的纬度)") @RequestParam String lat) {
         Response response = new Response();
 
-        double fee = addressFacade.calculateLogisticsfee(lng, lat);
+        Map<String, Object> feemap = addressFacade.calculateLogisticsfee(cartids, provincecode, citycode, positionprovincecode, positioncitycode, lng, lat);
 
         if (response.getCode() == 200) {
             response.setMessage("计算成功");
-            response.setData(fee);
+            response.setData(feemap);
         } else {
             response.setMessage("计算失败");
         }
