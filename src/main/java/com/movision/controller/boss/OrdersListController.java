@@ -549,8 +549,8 @@ public class OrdersListController {
      *
      * @param id
      * @param takeway
-     * @param aftersalestatus
-     * @param processingstatus
+     * @param
+     * @param
      * @param remark
      * @param orderid
      * @return
@@ -560,12 +560,10 @@ public class OrdersListController {
     public Response adddelivery(
             @ApiParam(value = "售后id") @RequestParam(required = false) String id,
             @ApiParam(value = "配送方式") @RequestParam(required = false) String takeway,
-            @ApiParam(value = "售后状态") @RequestParam(required = false) String aftersalestatus,
-            @ApiParam(value = "处理状态") @RequestParam(required = false) String processingstatus,
             @ApiParam(value = "操作备注") @RequestParam(required = false) String remark,
             @ApiParam(value = "订单id") @RequestParam(required = false) String orderid) {
         Response response = new Response();
-        Map<String, Integer> map = orderFacade.adddelivery(id, takeway, aftersalestatus, processingstatus, remark, orderid);
+        Map<String, Integer> map = orderFacade.adddelivery(id, takeway, remark, orderid);
         if (response.getCode() == 200) {
             response.setMessage("发货成功");
         }

@@ -595,24 +595,24 @@ public class OrderFacade {
      * 发货
      * @param id
      * @param takeway
-     * @param aftersalestatus
-     * @param processingstatus
+     * @param
+     * @param
      * @param remark
      * @param orderid
      * @return
      */
-    public Map<String, Integer> adddelivery(String id, String takeway, String aftersalestatus, String processingstatus, String remark, String orderid) {
+    public Map<String, Integer> adddelivery(String id, String takeway, String remark, String orderid) {
         Map<String, Integer> map = new HashedMap();
         Afterservice afterservice = new Afterservice();
         afterservice.setId(Integer.parseInt(id));
         afterservice.setTakeway(Integer.parseInt(takeway));
-        afterservice.setAftersalestatus(Integer.parseInt(aftersalestatus));
-        afterservice.setProcessingstatus(Integer.parseInt(processingstatus));
+        afterservice.setAftersalestatus(3);
+        afterservice.setProcessingstatus(2);
         int res = bossOrderService.updateAfterService(afterservice);
         AfterserviceStream afterserviceStream = new AfterserviceStream();
         afterserviceStream.setAfterserviceid(Integer.parseInt(id));
-        afterserviceStream.setProcessingstatus(Integer.parseInt(processingstatus));
-        afterserviceStream.setAftersalestatus(Integer.parseInt(aftersalestatus));
+        afterserviceStream.setProcessingstatus(3);
+        afterserviceStream.setAftersalestatus(2);
         afterserviceStream.setOrderid(Integer.parseInt(orderid));
         afterserviceStream.setRemark(remark);
         afterserviceStream.setProcessingpeople(ShiroUtil.getBossUser().getUsername());
