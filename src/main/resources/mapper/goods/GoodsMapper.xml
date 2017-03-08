@@ -871,6 +871,9 @@
             <if test="type != null">
                 type,
             </if>
+            <if test="orderid != null">
+                orderid,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="goodsid != null">
@@ -881,6 +884,9 @@
             </if>
             <if test="type != null">
                 #{type,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -1155,6 +1161,34 @@
         </trim>
     </insert>
     <insert id="addCommodityDescription" parameterType="com.movision.mybatis.goods.entity.GoodsImg">
+        insert into yw_goods_img
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="img_url != null">
+                img_url,
+            </if>
+            <if test="goodsid != null">
+                goodsid,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="img_url != null">
+                #{img_url,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsid != null">
+                #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="findcomboid" resultType="java.lang.Integer">
+        SELECT comboid FROM yw_combo
+    </select>
+    <insert id="addGoodsPic" parameterType="com.movision.mybatis.goods.entity.GoodsImg">
         insert into yw_goods_img
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="img_url != null">

@@ -641,5 +641,25 @@ public class OrderFacade {
         return map;
     }
 
+    /**
+     * 订单发货
+     *
+     * @param id
+     * @param remark
+     * @param logisticstatue
+     * @param replacementnumber
+     * @return
+     */
+    public Map<String, Integer> updateOperater(String id, String remark, String logisticstatue, String replacementnumber) {
+        Map<String, Integer> map = new HashedMap();
+        Orderoperation orderoperation = new Orderoperation();
+        orderoperation.setId(Integer.parseInt(id));
+        orderoperation.setLogisticstatue(Integer.parseInt(logisticstatue));
+        orderoperation.setRemark(remark);
+        orderoperation.setReplacementnumber(replacementnumber);
+        int result = bossOrderService.updateOperater(orderoperation);
+        map.put("result", result);
+        return map;
+    }
 }
 

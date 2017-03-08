@@ -15,6 +15,16 @@ public class Orderoperation {
 
     private String orderoperation;
 
+    private String replacementnumber;
+
+    public String getReplacementnumber() {
+        return replacementnumber;
+    }
+
+    public void setReplacementnumber(String replacementnumber) {
+        this.replacementnumber = replacementnumber;
+    }
+
     private Date orderoperationtime;
 
     private Integer orderstatue;

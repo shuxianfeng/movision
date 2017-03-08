@@ -546,9 +546,10 @@ public class GoodsController {
     @RequestMapping(value = "add_goodspicture", method = RequestMethod.POST)
     public Response addpicture(
             @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
-            @ApiParam(value = "地址") @RequestParam(required = false) String imgurl) {
+            @ApiParam(value = "地址") @RequestParam(required = false) String imgurl,
+            @ApiParam(value = "排序") @RequestParam(required = false) String orderid) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.addpicture(goodsid, imgurl);
+        Map<String, Integer> map = goodsFacade.addpicture(goodsid, imgurl, orderid);
         if (response.getCode() == 200) {
             response.setMessage("增加成功");
         }
@@ -843,7 +844,7 @@ public class GoodsController {
                                 @ApiParam(value = "折后价") @RequestParam(required = false) String combodiscountprice,
                                 @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.addCom(imgurl, comboid, comboname, combodiscountprice, goodsid);
+        Map<String, Object> map = goodsFacade.addCom(imgurl, comboid, comboname, combodiscountprice, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("插入成功");
         }

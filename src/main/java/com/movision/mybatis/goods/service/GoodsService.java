@@ -865,6 +865,22 @@ public class GoodsService {
     }
 
     /**
+     * 增加商品图片
+     *
+     * @param goodsImg
+     * @return
+     */
+    public int addGoodsPic(GoodsImg goodsImg) {
+        try {
+            log.info("增加商品图片");
+            return goodsMapper.addGoodsPic(goodsImg);
+        } catch (Exception e) {
+            log.error("增加商品图片失败", e);
+            throw e;
+        }
+    }
+
+    /**
      * 增加商品
      *
      * @param goodsVo
@@ -1093,5 +1109,18 @@ public class GoodsService {
         }
     }
 
-
+    /**
+     * 查询套餐id
+     *
+     * @return
+     */
+    public List<Integer> findAllComboid() {
+        try {
+            log.info("查询套餐id");
+            return goodsMapper.findcomboid();
+        } catch (Exception e) {
+            log.error("查询套餐id失败", e);
+            throw e;
+        }
+    }
 }

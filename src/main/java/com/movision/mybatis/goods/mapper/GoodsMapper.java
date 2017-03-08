@@ -120,6 +120,7 @@ public interface GoodsMapper {
 
     int addPicture(GoodsImg goodsImg);//增加图片
 
+    int addGoodsPic(GoodsImg goodsImg);//增加商品图片
     int addGoods(GoodsVo goodsVo);//增加商品
 
     List<GoodsComboVo> findAllC(Integer comboid);
@@ -146,6 +147,8 @@ public interface GoodsMapper {
     Integer addImgGoods(GoodsImg goodsImg);//增加参数图
 
     Integer addCommodityDescription(GoodsImg goodsImg);//增加描述图
+
+    List<Integer> findcomboid();//查询套餐id
 
 
 }

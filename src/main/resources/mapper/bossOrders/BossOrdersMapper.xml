@@ -783,10 +783,16 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
     <update id="updateOperation" parameterType="com.movision.mybatis.orderoperation.entity.Orderoperation">
         update yw_orderoperation
         <set>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
             <if test="logisticstatue != null">
                 logisticstatue = #{logisticstatue,jdbcType=INTEGER},
             </if>
+            <if test="replacementnumber != null">
+                replacementnumber = #{replacementnumber,jdbcType=VARCHAR},
+            </if>
         </set>
-        where id=#{id,jdbcType=INTEGER}
+        where orderid=#{id,jdbcType=INTEGER}
     </update>
 </mapper>

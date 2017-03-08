@@ -604,7 +604,7 @@ public class BossOrderService {
      * @param orderoperation
      * @return
      */
-    private Integer updateOperater(Orderoperation orderoperation) {
+    public Integer updateOperater(Orderoperation orderoperation) {
         try {
             loger.info("修改发货状态");
             return bossOrdersMapper.updateOperation(orderoperation);

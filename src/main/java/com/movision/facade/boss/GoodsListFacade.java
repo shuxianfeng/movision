@@ -13,6 +13,7 @@ import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.mybatis.goodscombo.entity.GoodsCombo;
 import com.movision.mybatis.goodscombo.entity.GoodsComboDetail;
 import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
+import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -464,11 +465,12 @@ public class GoodsListFacade {
      * @param img_url
      * @return
      */
-    public Map<String, Integer> addpicture(String goodsid, String img_url) {
+    public Map<String, Integer> addpicture(String goodsid, String img_url, String orderid) {
         Map<String, Integer> map = new HashedMap();
         GoodsImg goodsImg = new GoodsImg();
-        goodsImg.setType(2);
+        goodsImg.setType(0);
         goodsImg.setGoodsid(Integer.parseInt(goodsid));
+        goodsImg.setOderid(Integer.parseInt(orderid));
         String imgurls;
         String productids[] = img_url.split(",");
         int result = 0;
@@ -591,9 +593,8 @@ public class GoodsListFacade {
         GoodsImg img = new GoodsImg();
         img.setGoodsid(id);
         img.setType(2);
-
         img.setImg_url(img_url);
-            int result = goodsService.addPicture(img);
+        int result = goodsService.addGoodsPic(img);
             map.put("result", result);
 
         return map;
@@ -816,12 +817,20 @@ public class GoodsListFacade {
      * @param goodsid
      * @return
      */
-    public Map<String, Integer> addCom(String imgurl, String comboid, String comboname, String combodiscountprice, String goodsid) {
-        Map<String, Integer> map = new HashedMap();
+    public Map<String, Object> addCom(String imgurl, String comboid, String comboname, String combodiscountprice, String goodsid) {
+        Map<String, Object> map = new HashedMap();
         Combo combo = new Combo();
         combo.setImgurl(imgurl);
         combo.setComboname(comboname);
-        combo.setComboid(Integer.parseInt(comboid));
+        List<Integer> list = goodsService.findAllComboid();
+        String comboidsd = "";
+        int com = Integer.parseInt(comboid);
+        for (int i = 0; i < list.size(); i++) {
+            int a = list.get(i);
+            if (com == a) {
+                comboidsd = "套餐id重复";
+            }
+        }
         combo.setIntime(new Date());
         combo.setCombodiscountprice(Double.parseDouble(combodiscountprice));
         int res = goodsService.addCom(combo);
@@ -838,6 +847,7 @@ public class GoodsListFacade {
         }
         map.put("result", result);
         map.put("res", res);
+        map.put("comboidsd", comboidsd);
         return map;
     }
 
