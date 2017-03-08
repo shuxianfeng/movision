@@ -68,18 +68,26 @@ public class CalculateFee {
             //取出运费规则
             LogisticsfeeCalculateRule logisticsfeeCalculateRule = shopAddressService.queryLogisticsfeeCalculateRule(billingShopidList.get(i));
 
-            double startprice = logisticsfeeCalculateRule.getStartprice();//起步价
-            double startdistance = logisticsfeeCalculateRule.getStartdistance();//起步公里数
-            double beyondbilling = logisticsfeeCalculateRule.getBeyondbilling();//超出每公里多少钱
+            if (logisticsfeeCalculateRule != null) {
+                double startprice = logisticsfeeCalculateRule.getStartprice();//起步价
+                double startdistance = logisticsfeeCalculateRule.getStartdistance();//起步公里数
+                double beyondbilling = logisticsfeeCalculateRule.getBeyondbilling();//超出每公里多少钱
 
-            if (distance / 1000 <= startdistance) {
-                fee = startprice;
-            } else if (distance / 1000 > startdistance) {
-                fee = startprice + (distance / 1000 - startdistance) * beyondbilling;
+                if (distance / 1000 <= startdistance) {
+                    fee = startprice;
+                } else if (distance / 1000 > startdistance) {
+                    fee = startprice + (distance / 1000 - startdistance) * beyondbilling;
+                }
+                //如果计算出的该店铺的运费超出卖家设置的上限，就取上限
+                if (fee > logisticsfeeCalculateRule.getCapping()) {
+                    fee = logisticsfeeCalculateRule.getCapping();
+                }
+                long l = Math.round(fee);//向上取整
+                feemap.put(billingShopidList.get(i).toString(), l);
+                totalfee = totalfee + l;
+            } else {
+                feemap.put(billingShopidList.get(i).toString(), "该卖家未设置运费规则");
             }
-            long l = Math.round(fee);//向上取整
-            feemap.put(billingShopidList.get(i).toString(), l);
-            totalfee = totalfee + l;
         }
         feemap.put("totalfee", totalfee);
         return feemap;
