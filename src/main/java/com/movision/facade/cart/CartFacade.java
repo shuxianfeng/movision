@@ -310,9 +310,11 @@ public class CartFacade {
         List<CartVo> cartVoList = cartService.queryCartVoList(cartid);//查询需要结算的购物车所有商品
 
         //根据判断条件来决定是否在这里进行运费结算----结算时调用计算运费的公共方法
-        if (addr.getProvince().equals(provincecode) && addr.getCity().equals(citycode)) {
-            //调用公共计算接口计算运费
-            feemap = calculateFee.GetFee(cartVoList, addr.getLng(), addr.getLat());
+        if (addr != null) {//判空 防止空指针
+            if (addr.getProvince().equals(provincecode) && addr.getCity().equals(citycode)) {
+                //调用公共计算接口计算运费
+                feemap = calculateFee.GetFee(cartVoList, addr.getLng(), addr.getLat());
+            }
         }
 
         for (int i = 0; i < cartVoList.size(); i++) {
