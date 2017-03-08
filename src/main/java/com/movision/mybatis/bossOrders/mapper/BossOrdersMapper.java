@@ -4,6 +4,7 @@ import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.address.entity.AddressVo;
 import com.movision.mybatis.afterservice.entity.AfterServiceVo;
 import com.movision.mybatis.afterservice.entity.Afterservice;
+import com.movision.mybatis.afterservicestream.entity.AfterserviceStream;
 import com.movision.mybatis.area.entity.Area;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
@@ -90,12 +91,16 @@ public interface BossOrdersMapper {
 
     AfterServiceVo queryRemark(Integer id);//查询留言
 
-    List<AfterServiceVo> queryoperate(Integer id);//查询操作信息
+    List<AfterserviceStream> queryoperate(Integer afterserviceid);//查询操作信息
 
     String queryprovice(String code);//根据code查询省名
 
     String querycity(String code);//根据code查询市名
 
     String querydistrict(String code);//区名
+
+    Integer updateAfterServiceStream(Afterservice afterservice);//修改售后信息
+
+    Integer addAfterService(AfterserviceStream afterserviceStream);//增加一条售后信息
 
 }

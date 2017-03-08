@@ -5,6 +5,7 @@ import com.movision.facade.boss.OrderFacade;
 import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.afterservice.entity.AfterServiceVo;
 import com.movision.mybatis.afterservice.entity.Afterservice;
+import com.movision.mybatis.afterservicestream.entity.AfterserviceStream;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
@@ -528,19 +529,51 @@ public class OrdersListController {
     /**
      * 查询售后操作信息
      *
-     * @param id
+     * @param afterserviceid
      * @return
      */
     @ApiOperation(value = "查询售后操作信息", notes = "查询售后操作信息", response = Response.class)
     @RequestMapping(value = "query_operateinfo", method = RequestMethod.POST)
-    public Response queryAllOperate(@ApiParam(value = "") @RequestParam(required = false) Integer id) {
+    public Response queryAllOperate(@ApiParam(value = "售后id") @RequestParam(required = false) Integer afterserviceid) {
         Response response = new Response();
-        List<AfterServiceVo> list = orderFacade.queryAlloperate(id);
+        List<AfterserviceStream> list = orderFacade.queryAlloperate(afterserviceid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
         response.setData(list);
         return response;
     }
+
+    /**
+     * 发货
+     *
+     * @param id
+     * @param takeway
+     * @param aftersalestatus
+     * @param processingstatus
+     * @param remark
+     * @param orderid
+     * @return
+     */
+    @ApiOperation(value = "发货", notes = "发货", response = Response.class)
+    @RequestMapping(value = "add_adddelivery", method = RequestMethod.POST)
+    public Response adddelivery(
+            @ApiParam(value = "售后id") @RequestParam(required = false) String id,
+            @ApiParam(value = "配送方式") @RequestParam(required = false) String takeway,
+            @ApiParam(value = "售后状态") @RequestParam(required = false) String aftersalestatus,
+            @ApiParam(value = "处理状态") @RequestParam(required = false) String processingstatus,
+            @ApiParam(value = "操作备注") @RequestParam(required = false) String remark,
+            @ApiParam(value = "订单id") @RequestParam(required = false) String orderid) {
+        Response response = new Response();
+        Map<String, Integer> map = orderFacade.adddelivery(id, takeway, aftersalestatus, processingstatus, remark, orderid);
+        if (response.getCode() == 200) {
+            response.setMessage("发货成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+
+
 
 }

@@ -1,9 +1,12 @@
 package com.movision.facade.boss;
 
+import com.movision.common.constant.SessionConstant;
+import com.movision.common.util.ShiroUtil;
 import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.address.entity.AddressVo;
 import com.movision.mybatis.afterservice.entity.AfterServiceVo;
 import com.movision.mybatis.afterservice.entity.Afterservice;
+import com.movision.mybatis.afterservicestream.entity.AfterserviceStream;
 import com.movision.mybatis.area.entity.Area;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
@@ -22,6 +25,9 @@ import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpRequest;
@@ -578,11 +584,43 @@ public class OrderFacade {
     /**
      * 查询售后操作信息
      *
-     * @param id
+     * @param afterserviceid
      * @return
      */
-    public List<AfterServiceVo> queryAlloperate(Integer id) {
-        return bossOrderService.queryAlloperate(id);
+    public List<AfterserviceStream> queryAlloperate(Integer afterserviceid) {
+        return bossOrderService.queryAlloperate(afterserviceid);
+    }
+
+    /**
+     * 发货
+     * @param id
+     * @param takeway
+     * @param aftersalestatus
+     * @param processingstatus
+     * @param remark
+     * @param orderid
+     * @return
+     */
+    public Map<String, Integer> adddelivery(String id, String takeway, String aftersalestatus, String processingstatus, String remark, String orderid) {
+        Map<String, Integer> map = new HashedMap();
+        Afterservice afterservice = new Afterservice();
+        afterservice.setId(Integer.parseInt(id));
+        afterservice.setTakeway(Integer.parseInt(takeway));
+        afterservice.setAftersalestatus(Integer.parseInt(aftersalestatus));
+        afterservice.setProcessingstatus(Integer.parseInt(processingstatus));
+        int res = bossOrderService.updateAfterService(afterservice);
+        AfterserviceStream afterserviceStream = new AfterserviceStream();
+        afterserviceStream.setAfterserviceid(Integer.parseInt(id));
+        afterserviceStream.setProcessingstatus(Integer.parseInt(processingstatus));
+        afterserviceStream.setAftersalestatus(Integer.parseInt(aftersalestatus));
+        afterserviceStream.setOrderid(Integer.parseInt(orderid));
+        afterserviceStream.setRemark(remark);
+        afterserviceStream.setProcessingpeople(ShiroUtil.getBossUser().getUsername());
+        afterserviceStream.setProcessingtime(new Date());
+        int result = bossOrderService.addAfterService(afterserviceStream);
+        map.put("result", result);
+        map.put("res", res);
+        return map;
     }
 
 }

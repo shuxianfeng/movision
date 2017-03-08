@@ -19,6 +19,15 @@ public class Afterservice {
 
     private Integer isdel;
 
+    private Integer takeway;
+
+    public Integer getTakeway() {
+        return takeway;
+    }
+
+    public void setTakeway(Integer takeway) {
+        this.takeway = takeway;
+    }
 
     private Double refundamount;
 

@@ -4,6 +4,7 @@ import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.address.entity.AddressVo;
 import com.movision.mybatis.afterservice.entity.AfterServiceVo;
 import com.movision.mybatis.afterservice.entity.Afterservice;
+import com.movision.mybatis.afterservicestream.entity.AfterserviceStream;
 import com.movision.mybatis.area.entity.Area;
 import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
@@ -488,13 +489,13 @@ public class BossOrderService {
     /**
      * 查询售后操作信息
      *
-     * @param id
+     * @param afterserviceid
      * @return
      */
-    public List<AfterServiceVo> queryAlloperate(Integer id) {
+    public List<AfterserviceStream> queryAlloperate(Integer afterserviceid) {
         try {
             loger.info("查询售后操作信息");
-            return bossOrdersMapper.queryoperate(id);
+            return bossOrdersMapper.queryoperate(afterserviceid);
         } catch (Exception e) {
             loger.error("查询售后操作信息失败", e);
             throw e;
@@ -545,6 +546,38 @@ public class BossOrderService {
             return bossOrdersMapper.querydistrict(code);
         } catch (Exception e) {
             loger.error("根据code查询区名失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 修改售后信息
+     *
+     * @param afterserviceStream
+     * @return
+     */
+    public Integer updateAfterService(Afterservice afterserviceStream) {
+        try {
+            loger.info("修改售后信息");
+            return bossOrdersMapper.updateAfterServiceStream(afterserviceStream);
+        } catch (Exception e) {
+            loger.error("修改售后信息失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 增加售后信息
+     *
+     * @param afterserviceStream
+     * @return
+     */
+    public Integer addAfterService(AfterserviceStream afterserviceStream) {
+        try {
+            loger.info("增加售后信息");
+            return bossOrdersMapper.addAfterService(afterserviceStream);
+        } catch (Exception e) {
+            loger.error("增加售后信息失败", e);
             throw e;
         }
     }

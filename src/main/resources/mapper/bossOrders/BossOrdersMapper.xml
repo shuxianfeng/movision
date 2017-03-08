@@ -685,9 +685,9 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         SELECT remark,proposertime FROM yw_afterservice WHERE id=#{id,jdbcType=INTEGER}
     </select>
     <select id="queryoperate" parameterType="java.lang.Integer"
-            resultType="com.movision.mybatis.afterservice.entity.AfterServiceVo">
-        SELECT a.processingpeople,a.processingtime,o.status,a.aftersalestatus,a.processingstatus,a.remark FROM yw_afterservice a LEFT JOIN yw_orders o ON o.id=a.orderid WHERE a.id=#{id,jdbcType=INTEGER}
-    </select>
+            resultType="com.movision.mybatis.afterservicestream.entity.AfterserviceStream">
+SELECT s.processingpeople,s.processingtime,o.`status`,s.aftersalestatus,s.processingstatus,s.remark FROM yw_afterservice_stream s LEFT JOIN yw_orders o ON o.id=s.orderid WHERE afterserviceid=#{afterserviceid,jdbcType=INTEGER}
+     </select>
     <select id="queryprovice" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT name FROM yw_province WHERE code=#{code,jdbcType=VARCHAR}
     </select>
@@ -697,4 +697,74 @@ SELECT name FROM yw_city WHERE code=#{code,jdbcType=VARCHAR}
     <select id="querydistrict" parameterType="java.lang.String" resultType="java.lang.String">
 SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
     </select>
+    <update id="updateAfterServiceStream" parameterType="com.movision.mybatis.afterservice.entity.Afterservice">
+        update yw_afterservice
+        <set>
+            <if test="aftersalestatus != null">
+                aftersalestatus = #{aftersalestatus,jdbcType=INTEGER},
+            </if>
+            <if test="processingstatus != null">
+                processingstatus = #{processingstatus,jdbcType=INTEGER},
+            </if>
+            <if test="takeway != null">
+                takeway = #{takeway,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id=#{id,jdbcType=INTEGER}
+    </update>
+    <insert id="addAfterService" parameterType="com.movision.mybatis.afterservicestream.entity.AfterserviceStream">
+        insert into yw_afterservice_stream
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="orderid != null">
+                orderid,
+            </if>
+            <if test="processingpeople != null">
+                processingpeople,
+            </if>
+            <if test="processingtime != null">
+                processingtime,
+            </if>
+            <if test="aftersalestatus != null">
+                aftersalestatus,
+            </if>
+            <if test="processingstatus != null">
+                processingstatus,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="afterserviceid != null">
+                afterserviceid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="processingpeople != null">
+                #{processingpeople,jdbcType=VARCHAR},
+            </if>
+            <if test="processingtime != null">
+                #{processingtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="aftersalestatus != null">
+                #{aftersalestatus,jdbcType=INTEGER},
+            </if>
+            <if test="processingstatus != null">
+                #{processingstatus,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="afterserviceid != null">
+                #{afterserviceid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 </mapper>
