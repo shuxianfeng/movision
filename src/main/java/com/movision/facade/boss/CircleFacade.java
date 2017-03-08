@@ -86,27 +86,49 @@ public class CircleFacade {
         tm.put("categoryid", null);
         List<CircleIndexList> circlenum = circleService.queryListByCircleCategory(tm);//查询圈子所有分类
         for (int i = 0; i < circlenum.size(); i++) {
-            Integer categy = circlenum.get(i).getCategory();
-            //查询，圈子分类，圈主，管理员列表，关注人数，今日关注人数，帖子数量，今日新增帖子，精贴数量，支持人数，创建日期
-            List<User> users = circleService.queryCircleUserList(categy);//查询管理员列表
-            List<User> circlemaster = circleService.queryCircleMan(categy);//圈主
-            circlenum.get(i).setCirclemaster(circlemaster);//圈主列表
-            circlenum.get(i).setCategory(categy);//圈子分类
-            circlenum.get(i).setCirclemanagerlist(users);//管理员列表
             /////////////////////分类列表////////////////////////
             Map map = new HashedMap();
             map.put("type", circlenum.get(i).getCategory());
             List<CircleVo> listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
             List<CircleVo> circleVoslist = new ArrayList<>();
+            List<User> adminlist = new ArrayList();//用于存储类型中所有圈子的管理员
+            List username = new ArrayList();//用于存放类型中所有圈主
+            int posts = 0;//总帖子数
+            int follows = 0;//关注数
+            int follownews = 0;//今日关注
+            int postnews = 0;//今日新增帖子
+            int isessences = 0;//精贴数
             for (int e = 0; e < listt.size(); e++) {
                 CircleVo vo = new CircleVo();
                 Integer circleid = listt.get(e).getId();
                 List<User> userslist = userService.queryCircleManagerList(circleid);//查询出圈子管理员列表
-                for (int j = 0; j < userslist.size(); j++) {
-                    if (userslist.get(j).getNickname() == null) {
-                        userslist.get(j).setNickname("用户" + userslist.get(j).getPhone().substring(7));
+
+                if (userslist != null) {
+                    for (int u = 0; u < userslist.size(); u++) {
+                        if (userslist.get(u).getNickname() == null) {
+                            userslist.get(u).setNickname("用户" + userslist.get(u).getPhone().substring(7));
+                        }
+                        adminlist.add(userslist.get(u));//把圈子的管理员遍历出临时存放
                     }
                 }
+                Map m = new HashedMap();
+                m.put("nickname", listt.get(e).getCirclename());
+                m.put("userid", listt.get(e).getUserid());
+                username.add(m);//把圈子的圈主遍历出来临时存放
+                posts += listt.get(e).getPostnum();//圈子帖子和
+                postnews += listt.get(e).getPostnewnum();//新增帖子和
+                follows += listt.get(e).getFollownum();//关注和
+                follownews += listt.get(e).getFollownewnum();//新增关注和
+                isessences += listt.get(e).getIsessencenum();//精贴和
+                circlenum.get(i).setCirclemanagerlist(adminlist);
+                circlenum.get(i).setCirclemaster(username);
+                circlenum.get(i).setPostnum(posts);
+                circlenum.get(i).setPostnewnum(postnews);
+                circlenum.get(i).setFollownum(follows);
+                circlenum.get(i).setFollownewnum(follownews);
+                circlenum.get(i).setIsessencenum(isessences);
+
+
                 vo.setPostnum(listt.get(e).getPostnum());//帖子数量
                 vo.setPostnewnum(listt.get(e).getPostnewnum());//今日新增帖子数量
                 vo.setIsessencenum(listt.get(e).getIsessencenum());//精贴数量
@@ -556,7 +578,6 @@ public class CircleFacade {
         map.put("endtime", end);
         List<CircleIndexList> circlenum = new ArrayList<>();
         if (type == null) {
-            String str = null;
             Map tm = new HashedMap();
             tm.put("categoryid", type);
             circlenum = circleService.queryListByCircleCategory(tm);//查询圈子所有分类
@@ -633,7 +654,6 @@ public class CircleFacade {
             for (int f = 0; f < circlenum.size(); f++) {
                 List<CircleVo> listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
                 List<CircleVo> circleVoslist = new ArrayList<>();
-                CircleIndexList clidl = new CircleIndexList();
                 List<User> adminlist = new ArrayList();//用于存储类型中所有圈子的管理员
                 List username = new ArrayList();//用于存放类型中所有圈主
                 int posts = 0;//总帖子数
