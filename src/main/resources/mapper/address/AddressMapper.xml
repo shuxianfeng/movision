@@ -13,8 +13,8 @@
         <result column="isdefault" property="isdefault" jdbcType="INTEGER"/>
         <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP"/>
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
-        <result column="lng" property="lng" jdbcType="BigDecimal"/>
-        <result column="lat" property="lat" jdbcType="BigDecimal"/>
+        <result column="lng" property="lng" jdbcType="DECIMAL"/>
+        <result column="lat" property="lat" jdbcType="DECIMAL"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, userid, name, phone, province, city, district, street, isdefault, updatetime,
