@@ -93,5 +93,5 @@ public interface UserMapper {
 
     UserAll queryUserById(Integer userid);
 
-    List<UserAll> findAllqueryAttentionUserList(Integer circleid, RowBounds rowBounds);
+    List<UserAll> findAllqueryAttentionUserList(Map map, RowBounds rowBounds);
 }

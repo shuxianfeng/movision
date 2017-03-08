@@ -765,6 +765,10 @@
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1) AS isessencesum
         FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE u.id IN
-        (SELECT userid FROM yw_follow_circle fc WHERE fc.circleid=#{circleid,jdbcType=INTEGER})
+        (SELECT userid FROM yw_follow_circle fc WHERE fc.circleid=#{circleid,jdbcType=INTEGER}
+        <if test="type!=null">
+            AND date(fc.intime) = curdate()
+        </if>
+        )
     </select>
 </mapper>

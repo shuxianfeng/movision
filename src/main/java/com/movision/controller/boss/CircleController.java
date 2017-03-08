@@ -432,11 +432,12 @@ public class CircleController {
     @ApiOperation(value = "根据圈子关注查询用户列表", notes = "用于圈子列表中点击圈子关注数量，查看关注用户列表", response = Response.class)
     @RequestMapping(value = "query_attention_user_list", method = RequestMethod.POST)
     public Response queryAttentionUserList(@ApiParam(value = "圈子id") @RequestParam String circleid,
+                                           @ApiParam(value = "是否查询今日新增关注：1是，否不用填") @RequestParam(required = false) String type,
                                            @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                            @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<UserAll> pager = new Paging<UserAll>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<UserAll> list = userManageFacade.queryAttentionUserList(circleid, pager);
+        List<UserAll> list = userManageFacade.queryAttentionUserList(circleid, type, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

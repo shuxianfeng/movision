@@ -325,8 +325,11 @@ public class UserManageFacade {
      * @param pager
      * @return
      */
-    public List<UserAll> queryAttentionUserList(String circleid, Paging<UserAll> pager) {
-        List<UserAll> list = userService.queryAttentionUserList(Integer.parseInt(circleid), pager);
+    public List<UserAll> queryAttentionUserList(String circleid, String type, Paging<UserAll> pager) {
+        Map map = new HashedMap();
+        map.put("circleid", Integer.parseInt(circleid));
+        map.put("type", type);
+        List<UserAll> list = userService.queryAttentionUserList(map, pager);
         for (int i = 0; i < list.size(); i++) {
             String resault = returnLoginType(list.get(i).getQq(), list.get(i).getOpenid(), list.get(i).getSina());
             list.get(i).setLogin(resault);

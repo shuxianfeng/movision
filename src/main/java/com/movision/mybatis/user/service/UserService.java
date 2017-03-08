@@ -522,14 +522,13 @@ public class UserService {
     /**
      * 根据圈子关注查询用户列表
      *
-     * @param circleid
-     * @param pager
+     * @param map
      * @return
      */
-    public List<UserAll> queryAttentionUserList(Integer circleid, Paging<UserAll> pager) {
+    public List<UserAll> queryAttentionUserList(Map map, Paging<UserAll> pager) {
         try {
             log.info("根据圈子关注查询用户列表");
-            return userMapper.findAllqueryAttentionUserList(circleid, pager.getRowBounds());
+            return userMapper.findAllqueryAttentionUserList(map, pager.getRowBounds());
         } catch (Exception e) {
             log.error("根据圈子关注查询用户列表异常");
             throw e;
