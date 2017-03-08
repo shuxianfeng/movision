@@ -92,6 +92,8 @@ public interface PostMapper {
 
     List<PostList> findAllqueryPostByList(RowBounds rowBounds);
 
+    List<PostList> findAllqueryPostByCircleId(Map map, RowBounds rowBounds);
+
     List<PostList> findAllIsessenceByList(Map map, RowBounds rowBounds);//查询精贴
 
     int queryPostNum();

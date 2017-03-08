@@ -275,6 +275,22 @@ public class PostService {
     }
 
     /**
+     * 根据圈子id查询帖子列表
+     *
+     * @param map
+     * @return
+     */
+    public List<PostList> queryPostByCircleId(Map map, Paging<PostList> pager) {
+        try {
+            log.info("根据圈子id查询帖子列表");
+            return postMapper.findAllqueryPostByCircleId(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据圈子id查询帖子列表异常");
+            throw e;
+        }
+    }
+
+    /**
      * 后台管理-查询精贴列表
      * @param pager
      * @return

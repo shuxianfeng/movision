@@ -3,8 +3,6 @@ package com.movision.controller.boss;
 import com.movision.common.Response;
 import com.movision.facade.boss.PostFacade;
 import com.movision.mybatis.activePart.entity.ActivePartList;
-import com.movision.mybatis.circle.entity.Circle;
-import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.post.entity.*;
@@ -12,7 +10,6 @@ import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.share.entity.SharesVo;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
-import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
@@ -25,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +51,31 @@ public class PostController {
         Response response = new Response();
         Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<PostList> list = postFacade.queryPostByList(pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 根据圈子id查询帖子列表
+     *
+     * @param circleid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "根据圈子id查询帖子列表", notes = "用于根据圈子id查询帖子列表接口", response = Response.class)
+    @RequestMapping(value = "query_post_circleid", method = RequestMethod.POST)
+    public Response queryPostByCircleId(@ApiParam(value = "圈子id") @RequestParam String circleid,
+                                        @ApiParam(value = "是否查询今日新增帖子（是1 否不填）") @RequestParam(required = false) String type,
+                                        @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                        @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostList> list = postFacade.queryPostByCircleId(circleid, type, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成");
         }
