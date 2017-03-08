@@ -70,7 +70,7 @@ public class PostController {
     @ApiOperation(value = "根据圈子id查询帖子列表", notes = "用于根据圈子id查询帖子列表接口", response = Response.class)
     @RequestMapping(value = "query_post_circleid", method = RequestMethod.POST)
     public Response queryPostByCircleId(@ApiParam(value = "圈子id") @RequestParam String circleid,
-                                        @ApiParam(value = "是否查询今日新增帖子（是1 否不填）") @RequestParam(required = false) String type,
+                                        @ApiParam(value = "是否查询今日新增帖子（是:1 否:不填  2:查询精贴列表）") @RequestParam(required = false) String type,
                                         @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                         @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();

@@ -1003,8 +1003,11 @@
         FROM yw_post AS p
         WHERE p.isdel=0 AND p.isactive=0
         AND p.circleid=#{circleid,jdbcType=INTEGER}
-        <if test="type!=null">
+        <if test="type==1">
             AND date(p.intime)=curdate()
+        </if>
+        <if test="type==2">
+            AND p.isessence=1
         </if>
         ORDER BY p.intime DESC
     </select>
