@@ -335,9 +335,10 @@ public class CartFacade {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 Date now = new Date();
                 String nowString = formatter.format(now);
-                String rentdateString = formatter.format(rentdateList.get(i).getRentdate());
+                String rentdateString;
                 for (int j = 0; j < rentdateList.size(); j++) {
-                    if (now.after(rentdateList.get(i).getRentdate()) || nowString.equals(rentdateString)) {
+                    rentdateString = formatter.format(rentdateList.get(j).getRentdate());
+                    if (now.after(rentdateList.get(j).getRentdate()) || nowString.equals(rentdateString)) {
                         map.put("rentdatecode", -3);
                         map.put("rentdatecartid", id);
                         map.put("rentdatemsg", "商品租赁日期必须从次日起租");
