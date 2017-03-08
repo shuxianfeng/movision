@@ -12,6 +12,8 @@ import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
+import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.beanutils.converters.IntegerConverter;
@@ -53,6 +55,9 @@ public class FacadePost {
     @Autowired
     private CircleService circleService;
 
+    @Autowired
+    private UserService userService;
+
     public PostVo queryPostDetail(String postid, String userid, String type) {
 
         //通过userid、postid查询该用户有没有关注该圈子的权限
@@ -65,6 +70,11 @@ public class FacadePost {
         if (type.equals("1")) {
             String url = postService.queryVideoUrl(Integer.parseInt(postid));
             vo.setVideourl(url);
+        }
+        if (vo.getUserid() != -1) {//发帖人为普通用户时查询发帖人昵称和手机号
+            User user = userService.queryUserB(vo.getUserid());
+            vo.setNickname(user.getNickname());
+            vo.setPhone(user.getPhone());
         }
         //查询帖子详情最下方推荐的4个热门圈子
         List<Circle> hotcirclelist = circleService.queryHotCircle();

@@ -79,7 +79,11 @@ public class PostVo {
 
     private String circlename;//所属圈子名称
 
-    private Integer userid;//用户id
+    private Integer userid;//用户id(发帖人用户id)
+
+    private String nickname;//发帖人昵称
+
+    private String phone;//发帖人手机号
 
     private Integer isCollect;//该用户是否已收藏该帖子/活动 0 否 1 是
 
@@ -389,5 +393,21 @@ public class PostVo {
 
     public void setIscontribute(Integer iscontribute) {
         this.iscontribute = iscontribute;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
