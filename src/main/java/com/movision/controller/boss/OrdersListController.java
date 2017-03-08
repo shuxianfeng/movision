@@ -572,6 +572,25 @@ public class OrdersListController {
     }
 
 
+    /**
+     * 已退回
+     *
+     * @param id
+     * @param
+     * @return
+     */
+    @ApiOperation(value = "已退回", notes = "已退回", response = Response.class)
+    @RequestMapping(value = "update_afterstatus", method = RequestMethod.POST)
+    public Response updateAfterStatus(@ApiParam(value = "售后id") @RequestParam(required = false) String id
+    ) {
+        Response response = new Response();
+        Map<String, Integer> map = orderFacade.updateAfterStatus(id);
+        if (response.getCode() == 200) {
+            response.setMessage("修改成功");
+        }
+        response.setData(map);
+        return response;
+    }
 
 
 }

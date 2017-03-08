@@ -103,4 +103,6 @@ public interface BossOrdersMapper {
 
     Integer addAfterService(AfterserviceStream afterserviceStream);//增加一条售后信息
 
+    Integer updateAfterStatus(Afterservice afterservice);//已退回
+
 }

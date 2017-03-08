@@ -623,5 +623,22 @@ public class OrderFacade {
         return map;
     }
 
+    /**
+     * 已退回
+     *
+     * @param id
+     * @param
+     * @return
+     */
+    public Map<String, Integer> updateAfterStatus(String id) {
+        Map<String, Integer> map = new HashedMap();
+        Afterservice afterservice = new Afterservice();
+        afterservice.setId(Integer.parseInt(id));
+        afterservice.setAftersalestatus(3);
+        int result = bossOrderService.updateAfterStatus(afterservice);
+        map.put("result", result);
+        return map;
+    }
+
 }
 

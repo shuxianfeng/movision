@@ -767,4 +767,13 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
             </if>
         </trim>
     </insert>
+    <update id="updateAfterStatus" parameterType="com.movision.mybatis.afterservice.entity.Afterservice">
+        update yw_afterservice
+        <set>
+            <if test="aftersalestatus != null">
+                aftersalestatus = #{aftersalestatus,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id=#{id,jdbcType=INTEGER}
+    </update>
 </mapper>

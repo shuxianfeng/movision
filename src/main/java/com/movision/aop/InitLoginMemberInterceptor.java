@@ -173,6 +173,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                         loginUser.getPhone(), loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(), loginUser.getAccid(), loginUser.getImtoken());
                         loginUser.getPhone(), loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(), loginUser.getAccid(),
                         loginUser.getImtoken());
+                //判断登录信息是否改变,若改变了则更新session，
 
                 //判断登录信息是否改变,若改变了则更新session，
                 if (this.loginUserInfoIsChange(appuser, loginInfo)) {

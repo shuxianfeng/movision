@@ -582,4 +582,19 @@ public class BossOrderService {
         }
     }
 
+    /**
+     * 已退回
+     *
+     * @param afterservice
+     * @return
+     */
+    public Integer updateAfterStatus(Afterservice afterservice) {
+        try {
+            loger.info("已退回");
+            return bossOrdersMapper.updateAfterStatus(afterservice);
+        } catch (Exception e) {
+            loger.error("已退回失败", e);
+            throw e;
+        }
+    }
 }
