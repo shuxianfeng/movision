@@ -597,4 +597,20 @@ public class BossOrderService {
             throw e;
         }
     }
+
+    /**
+     * 修改发货状态
+     *
+     * @param orderoperation
+     * @return
+     */
+    private Integer updateOperater(Orderoperation orderoperation) {
+        try {
+            loger.info("修改发货状态");
+            return bossOrdersMapper.updateOperation(orderoperation);
+        } catch (Exception e) {
+            loger.error("修改发货状态失败", e);
+            throw e;
+        }
+    }
 }

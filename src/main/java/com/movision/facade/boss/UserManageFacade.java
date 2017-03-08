@@ -276,4 +276,42 @@ public class UserManageFacade {
         userParticulars.setProvinces(provinceVos);
         return userParticulars;
     }
+
+    /**
+     * 根据id查询用户列表
+     *
+     * @param userids
+     * @return
+     */
+    public List<UserAll> queryUserByIds(String userids) {
+        List<UserAll> list = new ArrayList<>();
+        System.out.println(userids);
+        String[] str = userids.split(",");
+        for (String itm : str) {
+            UserAll users = userService.queryUserById(Integer.parseInt(itm));
+            if (users.getQq() != null) {
+                users.setLogin("1");//QQ
+            }
+            if (users.getOpenid() != null) {
+                users.setLogin("2");//微信
+            }
+            if (users.getSina() != null) {
+                users.setLogin("3");//微博
+            }
+            if (users.getQq() != null && users.getOpenid() != null) {
+                users.setLogin("4");//QQ,微信
+            }
+            if (users.getQq() != null && users.getSina() != null) {
+                users.setLogin("5");//QQ，微博
+            }
+            if (users.getOpenid() != null && users.getSina() != null) {
+                users.setLogin("6");//微信，微博
+            }
+            if (users.getQq() != null && users.getOpenid() != null && users.getSina() != null) {
+                users.setLogin("7");//QQ,微信,微博
+            }
+            list.add(users);
+        }
+        return list;
+    }
 }

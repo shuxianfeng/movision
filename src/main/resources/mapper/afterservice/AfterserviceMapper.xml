@@ -18,10 +18,12 @@
         <result column="amountdue" property="amountdue" jdbcType="DOUBLE"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="takeway" property="takeway" jdbcType="INTEGER"/>
+        <result column="replacementnumber" property="replacementnumber" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, orderid, addressid, goodsid, afterstatue, aftersalestatus, processingstatus,
-        isdel, refundamount, processingpeople, processingtime, userid, proposertime, amountdue,remark,takeway
+        isdel, refundamount, processingpeople, processingtime, userid, proposertime,
+        amountdue,remark,takeway,replacementnumber
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -38,13 +40,13 @@
         goodsid, afterstatue, aftersalestatus,
         processingstatus, isdel, refundamount,
         processingpeople, processingtime, userid,
-        proposertime, amountdue,remark,takeway)
+        proposertime, amountdue,remark,takeway,replacementnumber)
         values (#{id,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER}, #{addressid,jdbcType=INTEGER},
         #{goodsid,jdbcType=INTEGER}, #{afterstatue,jdbcType=INTEGER}, #{aftersalestatus,jdbcType=INTEGER},
         #{processingstatus,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER}, #{refundamount,jdbcType=DOUBLE},
         #{processingpeople,jdbcType=VARCHAR}, #{processingtime,jdbcType=TIMESTAMP}, #{userid,jdbcType=INTEGER},
         #{proposertime,jdbcType=TIMESTAMP},
-        #{amountdue,jdbcType=DOUBLE},#{remark,jdbcType=VARCHAR},#{takeway,jdbcType=INTEGER})
+        #{amountdue,jdbcType=DOUBLE},#{remark,jdbcType=VARCHAR},#{takeway,jdbcType=INTEGER},#{replacementnumber,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.afterservice.entity.Afterservice">
         insert into yw_afterservice
@@ -97,6 +99,9 @@
             <if test="takeway != null">
                 takeway,
             </if>
+            <if test="replacementnumber != null">
+                replacementnumber,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -146,6 +151,9 @@
             </if>
             <if test="takeway != null">
                 #{takeway,jdbcType=INTEGER},
+            </if>
+            <if test="replacementnumber!=null">
+                replacementnumber=#{replacementnumber,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -197,6 +205,9 @@
             <if test="takeway != null">
                 takeway = #{takeway,jdbcType=INTEGER},
             </if>
+            <if test="replacementnumber!=null">
+                replacementnumber=#{replacementnumber,jdbcType=VARCHAR}
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -214,7 +225,8 @@
         processingtime = #{processingtime,jdbcType=TIMESTAMP},
         userid = #{userid,jdbcType=INTEGER},
         proposertime = #{proposertime,jdbcType=TIMESTAMP},
-        amountdue = #{amountdue,jdbcType=DOUBLE},remark = #{remark,jdbcType=VARCHAR},takeway=#{takeway.jdbcType=INTEGER}
+        amountdue = #{amountdue,jdbcType=DOUBLE},remark =
+        #{remark,jdbcType=VARCHAR},takeway=#{takeway.jdbcType=INTEGER},replacementnumber=#{replacementnumber,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

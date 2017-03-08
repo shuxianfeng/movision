@@ -709,6 +709,9 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
             <if test="takeway != null">
                 takeway = #{takeway,jdbcType=INTEGER},
             </if>
+            <if test="replacementnumber != null">
+                replacementnumber = #{replacementnumber,jdbcType=VARCHAR},
+            </if>
         </set>
         where id=#{id,jdbcType=INTEGER}
     </update>
@@ -772,6 +775,16 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
         <set>
             <if test="aftersalestatus != null">
                 aftersalestatus = #{aftersalestatus,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id=#{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateOperation" parameterType="com.movision.mybatis.orderoperation.entity.Orderoperation">
+        update yw_orderoperation
+        <set>
+            <if test="logisticstatue != null">
+                logisticstatue = #{logisticstatue,jdbcType=INTEGER},
             </if>
         </set>
         where id=#{id,jdbcType=INTEGER}
