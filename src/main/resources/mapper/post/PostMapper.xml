@@ -1372,7 +1372,7 @@
             AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
         </if>
         <if test="circleid!=null">
-            AND p.circleid=#{circleid,jdbcType=VARCHAR}
+            AND p.circleid=#{circleid,jdbcType=INTEGER}
         </if>
         <if test="endtime!=null and begintime!=null">
             AND p.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
