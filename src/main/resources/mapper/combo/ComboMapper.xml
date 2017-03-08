@@ -26,7 +26,7 @@
         SELECT id, comboid, comboname, combodiscountprice,
         (SELECT img_url FROM yw_goods_img WHERE goodsid = #{goodsid,jdbcType=INTEGER} AND type = '2') AS imgurl
         FROM yw_combo
-    WHERE comboid in (SELECT comboid FROM yw_goods_combo WHERE goodsid = #{goodsid,jdbcType=INTEGER})
+        WHERE comboid in (SELECT DISTINCT comboid FROM yw_goods_combo WHERE goodsid = #{goodsid,jdbcType=INTEGER})
   </select>
 
     <!--根据套餐id查询套餐库存-->
