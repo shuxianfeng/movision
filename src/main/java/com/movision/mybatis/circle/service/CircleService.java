@@ -267,6 +267,20 @@ public class CircleService {
     }
 
     /**
+     * 查询圈子分类
+     * @return
+     */
+    public List<Circle> queryListByCircleCategoryTo() {
+        try {
+            log.info("查询圈子中所有圈子所属分类");
+            return circleMapper.queryListByCircleCategoryTo();
+        } catch (Exception e) {
+            log.error("查询圈子中所有圈子所属分类异常");
+            throw e;
+        }
+    }
+
+    /**
      * 根据所属圈子查询总数据
      *
      * @param categoryid

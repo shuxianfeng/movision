@@ -731,9 +731,7 @@ public class PostFacade {
      */
     public Map<String, Object> queryListByCircleType() {
         Map<String, Object> map = new HashedMap();
-        Map tm = new HashedMap();
-        tm.put("categoryid", null);
-        List<CircleIndexList> list = circleService.queryListByCircleCategory(map);//查询圈子所有的所属分类
+        List<Circle> list = circleService.queryListByCircleCategoryTo();//查询圈子所有的所属分类
         List<List<Circle>> circlename = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {//根据圈子的所属分类添加二级菜单
             List<Circle> circle = circleService.queryListByCircleList(list.get(i).getCategory());//用于查询圈子名称

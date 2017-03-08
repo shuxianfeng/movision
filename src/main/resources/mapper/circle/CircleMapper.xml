@@ -424,6 +424,10 @@
         </if>
     </select>
 
+    <select id="queryListByCircleCategoryTo" resultType="com.movision.mybatis.circle.entity.Circle">
+        select c.id AS category,c.categoryname from yw_circle_category c ORDER BY
+    </select>
+
     <select id="queryListByCircleList" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.circle.entity.Circle">
         SELECT id,name,category FROM yw_circle WHERE category=#{in,jdbcType=INTEGER}
