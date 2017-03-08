@@ -211,7 +211,7 @@
     <!--根据商品id查询商品的实物图列表-->
     <select id="queryGoodsImgList" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goods.entity.GoodsImg">
-        SELECT t.goodsid, t.img_url AS imgurl, t.type, t.oderid
+        SELECT t.goodsid, t.img_url, t.type, t.oderid
         FROM yw_goods_img t
         WHERE goodsid = #{goodsid,jdbcType=INTEGER}
           AND type = '0'
