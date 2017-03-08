@@ -86,17 +86,33 @@ public class SubmissionService {
     }
 
     /**
-     * 逻辑删除投稿
+     * 对投稿做审核操作
+     *
+     * @param map
+     * @return
+     */
+    public int update_contribute_audit(Map map) {
+        try {
+            log.info("对投稿做审核操作");
+            return submissionMapper.update_contribute_audit(map);
+        } catch (Exception e) {
+            log.error("对投稿做审核操作异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 删除投稿
      *
      * @param id
      * @return
      */
     public int deleteContributeById(String id) {
         try {
-            log.info("逻辑删除投稿");
+            log.info("删除投稿");
             return submissionMapper.deleteContributeById(id);
         } catch (Exception e) {
-            log.error("逻辑删除投稿异常");
+            log.error("删除投稿异常");
             throw e;
         }
     }

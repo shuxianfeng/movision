@@ -173,7 +173,11 @@
     </select>
 
     <update id="deleteContributeById" parameterType="java.lang.String">
-        update yw_submission set status = 1 where id = #{id,jdbcType=INTEGER}
+        DELETE FROM yw_submission where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="update_contribute_audit" parameterType="java.util.Map">
+        update yw_submission set status = #{status,jdbcType=INTEGER} where id = #{id,jdbcType=INTEGER}
     </update>
 
 </mapper>

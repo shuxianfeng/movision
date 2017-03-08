@@ -183,6 +183,19 @@ public class UserManageFacade {
     }
 
     /**
+     * 对投稿做审核操作
+     *
+     * @param id
+     * @return
+     */
+    public int update_contribute_audit(String id, String status) {
+        Map map = new HashedMap();
+        map.put("id", id);
+        map.put("status", status);
+        return submissionService.update_contribute_audit(map);
+    }
+
+    /**
      * 逻辑删除投稿
      *
      * @param id

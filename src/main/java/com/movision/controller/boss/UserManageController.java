@@ -215,6 +215,24 @@ public class UserManageController {
     }
 
     /**
+     * 投稿列表审核
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "对投稿做审核操作", notes = "用于对某个投稿审核", response = Response.class)
+    @RequestMapping(value = "update_contribute_audit", method = RequestMethod.POST)
+    public Response updateContributeAudit(@ApiParam(value = "投稿id") @RequestParam String id, @ApiParam(value = "审核状态（0 待审核 1 审核通过 2 审核未通过）") @RequestParam String status) {
+        Response response = new Response();
+        int i = userManageFacade.update_contribute_audit(id, status);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(i);
+        return response;
+    }
+
+    /**
      * 逻辑删除投稿
      *
      * @param id

@@ -29,5 +29,7 @@ public interface SubmissionMapper {
 
     List<SubmissionVo> findAllqueryUniteConditionByContribute(Map map, RowBounds rowBounds);
 
+    int update_contribute_audit(Map map);
+
     int deleteContributeById(String id);
 }
