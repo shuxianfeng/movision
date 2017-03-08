@@ -943,39 +943,41 @@ public class PostFacade {
         Date beg = null;
         Date ess = null;
         //结束时间,开始时间
-        if (endtime != null && begintime != null) {
+        if ((endtime != null && endtime != "") && (begintime != null && begintime != "")) {
             try {
                 end = format.parse(endtime);
                 beg = format.parse(begintime);
-
+                map.put("endtime", end);
+                map.put("begintime", beg);
             } catch (ParseException e) {
                 log.error("时间格式转换异常");
             }
         }
+        map.put("endtime", end);
+        map.put("begintime", beg);
         //精选时间
-        if (essencedate != null) {
+        if (essencedate != null && essencedate != "") {
             try {
                 ess = format.parse(essencedate);
+                map.put("essencedate", ess);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-        map.put("endtime", end);
-        map.put("begintime", beg);
         map.put("essencedate", ess);
-        if (title != null) {
+        if (title != null && title != "") {
             map.put("title", title);//帖子标题
         }
-        if (circleid != null) {
+        if (circleid != null && circleid != "") {
             map.put("circleid", circleid);//圈子id
         }
-        if (userid != null) {
+        if (userid != null && userid != "") {
             map.put("userid", userid);//发帖人id
         }
-        if (postcontent != null) {
+        if (postcontent != null && postcontent != "") {
             map.put("postcontent", postcontent);//帖子内容
         }
-        if (pai != null) {
+        if (pai != null && pai != "") {
             map.put("pai", pai);
         }
         List<PostList> list = postService.postSearch(map, pager);
