@@ -780,19 +780,64 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
         where id=#{id,jdbcType=INTEGER}
     </update>
 
-    <update id="updateOperation" parameterType="com.movision.mybatis.orderoperation.entity.Orderoperation">
-        update yw_orderoperation
-        <set>
-            <if test="remark != null">
-                remark = #{remark,jdbcType=VARCHAR},
+    <insert id="updateOperation" parameterType="com.movision.mybatis.orderoperation.entity.Orderoperation">
+        insert into yw_orderoperation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                id,
+            </if>
+            <if test="orderoperation != null">
+                orderoperation,
+            </if>
+            <if test="orderoperationtime != null">
+                orderoperationtime,
+            </if>
+            <if test="orderstatue != null">
+                orderstatue,
             </if>
             <if test="logisticstatue != null">
-                logisticstatue = #{logisticstatue,jdbcType=INTEGER},
+                logisticstatue,
             </if>
-            <if test="replacementnumber != null">
-                replacementnumber = #{replacementnumber,jdbcType=VARCHAR},
+            <if test="orderid != null">
+                orderid,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="orderoperation != null">
+                #{orderoperation,jdbcType=VARCHAR},
+            </if>
+            <if test="orderoperationtime != null">
+                #{orderoperationtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="orderstatue != null">
+                #{orderstatue,jdbcType=INTEGER},
+            </if>
+            <if test="logisticstatue != null">
+                #{logisticstatue,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+
+        </trim>
+    </insert>
+    <update id="addLogistic" parameterType="com.movision.mybatis.orders.entity.Orders">
+        update yw_orderoperation
+        <set>
+            <if test="logisticsid != null">
+                logisticsid = #{logisticsid,jdbcType=VARCHAR},
             </if>
         </set>
-        where orderid=#{id,jdbcType=INTEGER}
+        where id=#{id,jdbcType=INTEGER}
     </update>
 </mapper>

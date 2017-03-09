@@ -6,7 +6,6 @@
         <result column="orderoperation" property="orderoperation" jdbcType="VARCHAR"/>
         <result column="orderoperationtime" property="orderoperationtime" jdbcType="TIMESTAMP"/>
         <result column="orderstatue" property="orderstatue" jdbcType="INTEGER"/>
-        <result column="paystatue" property="paystatue" jdbcType="INTEGER"/>
         <result column="logisticstatue" property="logisticstatue" jdbcType="INTEGER"/>
         <result column="orderid" property="orderid" jdbcType="INTEGER"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
@@ -29,9 +28,6 @@
             </if>
             <if test="orderstatue != null">
                 orderstatue,
-            </if>
-            <if test="paystatue != null">
-                paystatue,
             </if>
             <if test="logisticstatue != null">
                 logisticstatue,
@@ -56,9 +52,6 @@
             </if>
             <if test="orderstatue != null">
                 #{orderstatue,jdbcType=INTEGER},
-            </if>
-            <if test="paystatue != null">
-                #{paystatue,jdbcType=INTEGER},
             </if>
             <if test="logisticstatue != null">
                 #{logisticstatue,jdbcType=INTEGER},

@@ -613,4 +613,20 @@ public class BossOrderService {
             throw e;
         }
     }
+
+    /**
+     * 增加快递单号
+     *
+     * @param orders
+     * @return
+     */
+    public Integer addLogistic(Orders orders) {
+        try {
+            loger.info("增加快递单号");
+            return bossOrdersMapper.addLogistic(orders);
+        } catch (Exception e) {
+            loger.error("增加快递单号失败", e);
+            throw e;
+        }
+    }
 }

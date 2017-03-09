@@ -21,7 +21,6 @@ public class Orderoperation {
 
     private Integer orderstatue;
 
-    private Integer paystatue;
 
     private Integer logisticstatue;
 
@@ -53,13 +52,6 @@ public class Orderoperation {
         this.orderstatue = orderstatue;
     }
 
-    public Integer getPaystatue() {
-        return paystatue;
-    }
-
-    public void setPaystatue(Integer paystatue) {
-        this.paystatue = paystatue;
-    }
 
     public Integer getLogisticstatue() {
         return logisticstatue;

@@ -262,6 +262,17 @@ public class OrderFacade {
     public Map<String, Object> queryOrderDetail(Integer id) {
         Map<String, Object> map = new HashedMap();
         InvoiceVo invoice = bossOrderService.queryOrderInvoiceInfo(id);//查询发票信息
+        if (invoice != null) {
+            String provice = invoice.getProvince();
+            String city = invoice.getCity();
+            String district = invoice.getDistrict();
+            String prov = bossOrderService.queryprovice(provice);
+            String cit = bossOrderService.querycity(city);
+            String distr = bossOrderService.querydistrict(district);
+            invoice.setProvince(prov);
+            invoice.setCity(cit);
+            invoice.setDistrict(distr);
+        }
         BossOrders bossOrders = bossOrderService.queryOrderInfo(id);//查询基本信息(包含其他信息)
         AddressVo bossOrdersGet = bossOrderService.queryOrderGetInfo(id);//查询收货人信息
         if (bossOrdersGet != null) {
@@ -652,18 +663,25 @@ public class OrderFacade {
      *
      * @param id
      * @param remark
-     * @param logisticstatue
+     * @param
      * @param
      * @return
      */
-    public Map<String, Integer> updateOperater(String id, String remark, String logisticstatue) {
+    public Map<String, Integer> updateOperater(String id, String remark, String logisticsid) {
         Map<String, Integer> map = new HashedMap();
         Orderoperation orderoperation = new Orderoperation();
-        orderoperation.setId(Integer.parseInt(id));
-        orderoperation.setLogisticstatue(Integer.parseInt(logisticstatue));
+        orderoperation.setOrderid(Integer.parseInt(id));
+        orderoperation.setLogisticstatue(0);
+        orderoperation.setOrderoperationtime(new Date());
+        orderoperation.setOrderoperation(ShiroUtil.getBossUser().getUsername());
+        orderoperation.setOrderstatue(0);
         orderoperation.setRemark(remark);
         int result = bossOrderService.updateOperater(orderoperation);
+        Orders orders = new Orders();
+        orders.setLogisticsid(logisticsid);
+        int res = bossOrderService.addLogistic(orders);
         map.put("result", result);
+        map.put("res", res);
         return map;
     }
 }
