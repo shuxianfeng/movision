@@ -653,16 +653,15 @@ public class OrderFacade {
      * @param id
      * @param remark
      * @param logisticstatue
-     * @param replacementnumber
+     * @param
      * @return
      */
-    public Map<String, Integer> updateOperater(String id, String remark, String logisticstatue, String replacementnumber) {
+    public Map<String, Integer> updateOperater(String id, String remark, String logisticstatue) {
         Map<String, Integer> map = new HashedMap();
         Orderoperation orderoperation = new Orderoperation();
         orderoperation.setId(Integer.parseInt(id));
         orderoperation.setLogisticstatue(Integer.parseInt(logisticstatue));
         orderoperation.setRemark(remark);
-        orderoperation.setReplacementnumber(replacementnumber);
         int result = bossOrderService.updateOperater(orderoperation);
         map.put("result", result);
         return map;

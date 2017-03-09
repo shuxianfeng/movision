@@ -599,17 +599,17 @@ public class OrdersListController {
      * @param id
      * @param remark
      * @param logisticstatue
-     * @param replacementnumber
+     * @param
      * @return
      */
     @ApiOperation(value = "订单发货", notes = "订单发货", response = Response.class)
     @RequestMapping(value = "update_Operate", method = RequestMethod.POST)
     public Response updateOperate(@ApiParam(value = "订单id") @RequestParam(required = false) String id,
                                   @ApiParam(value = "备注") @RequestParam(required = false) String remark,
-                                  @ApiParam(value = "发货状态") @RequestParam(required = false) String logisticstatue,
-                                  @ApiParam(value = "快递单号") @RequestParam(required = false) String replacementnumber) {
+                                  @ApiParam(value = "发货状态") @RequestParam(required = false) String logisticstatue
+    ) {
         Response response = new Response();
-        Map<String, Integer> map = orderFacade.updateOperater(id, remark, logisticstatue, replacementnumber);
+        Map<String, Integer> map = orderFacade.updateOperater(id, remark, logisticstatue);
         if (response.getCode() == 200) {
             response.setMessage("发货成功");
         }
