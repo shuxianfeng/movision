@@ -1,5 +1,7 @@
 package com.movision.facade.boss;
 
+import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.province.entity.ProvinceVo;
 import com.movision.mybatis.record.entity.RecordVo;
 import com.movision.mybatis.record.service.RecordService;
@@ -37,6 +39,9 @@ public class UserManageFacade {
 
     @Autowired
     private RecordService recordService;
+
+    @Autowired
+    private CommentService commentService;
 
 
     //用于返回用户登录状态
@@ -337,4 +342,15 @@ public class UserManageFacade {
         return list;
     }
 
+
+    /**
+     * 根据用户id查询用户帖子被评论的评论列表
+     *
+     * @param userid
+     * @param pager
+     * @return
+     */
+    public List<CommentVo> queryCommentListByUserid(String userid, Paging<CommentVo> pager) {
+        return commentService.queryCommentListByUserid(userid, pager);
+    }
 }

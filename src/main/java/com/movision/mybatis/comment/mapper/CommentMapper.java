@@ -47,4 +47,6 @@ public interface CommentMapper {
 
     List<CommentVo> findAllQueryCommentSensitiveWords(Map map, RowBounds rowBounds);
 
+    List<CommentVo> findAllQueryCommentListByUserid(String userid, RowBounds rowBounds);
+
 }
