@@ -462,4 +462,28 @@ public class UserManageController {
         response.setData(pager);
         return response;
     }
+
+    /**
+     * 根据用户id查询用户被分享的帖子列表
+     *
+     * @param userid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "根据用户id查询用户被分享的帖子列表", notes = "用于根据用户id查询用户被分享的帖子列表接口", response = Response.class)
+    @RequestMapping(value = "query_share_post_list", method = RequestMethod.POST)
+    public Response querySharePostList(@ApiParam(value = "用户id") @RequestParam String userid,
+                                       @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                       @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostList> list = postFacade.querySharePostList(userid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
 }

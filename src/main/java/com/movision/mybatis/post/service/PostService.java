@@ -323,6 +323,23 @@ public class PostService {
     }
 
     /**
+     * 根据用户id查询用户被分享的帖子列表
+     *
+     * @param userid
+     * @param pager
+     * @return
+     */
+    public List<PostList> querySharePostList(String userid, Paging<PostList> pager) {
+        try {
+            log.info("根据用户id查询用户被分享的帖子列表");
+            return postMapper.findAllquerySharePostList(userid, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据用户id查询用户被分享的帖子列表异常");
+            throw e;
+        }
+    }
+
+    /**
      * 后台管理-查询精贴列表
      * @param pager
      * @return
