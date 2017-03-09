@@ -527,10 +527,18 @@ public class CircleFacade {
                 logger.error("时间格式转换异常", e);
             }
         }
-        map.put("pai", pai);
-        map.put("circleid", circle);
-        map.put("type", type);
-        map.put("circleman", circleman);
+        if (pai != null && pai != "") {
+            map.put("pai", pai);
+        }
+        if (circle != null && circle != "") {
+            map.put("circleid", circle);
+        }
+        if (type != null && type != "") {
+            map.put("type", type);
+        }
+        if (circleman != null && circleman != "") {
+            map.put("circleman", circleman);
+        }
         map.put("begintime", beg);
         map.put("endtime", end);
         List<CircleIndexList> circlenum = new ArrayList<>();
