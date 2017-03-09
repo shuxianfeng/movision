@@ -381,7 +381,7 @@ public class CircleController {
     /**
      * 根据条件查询圈子列表
      *
-     * @param name
+     * @param circleid
      * @param circleman
      * @param type
      * @param begintime
@@ -391,13 +391,13 @@ public class CircleController {
     @ApiOperation(value = "按条件搜索圈子列表", notes = "用于根据条件查询圈子列表", response = Response.class)
     @RequestMapping(value = "query_circle_condition", method = RequestMethod.POST)
     public Response queryCircleByCondition(@ApiParam(value = "排序方式(默认按创建时间排序，1为按人气排序)") @RequestParam(required = false) String pai,
-                                           @ApiParam(value = "圈子名称") @RequestParam(required = false) String name,
+                                           @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
                                            @ApiParam(value = "圈主") @RequestParam(required = false) String circleman,
                                            @ApiParam(value = "圈子类型") @RequestParam(required = false) String type,
                                            @ApiParam(value = "圈子创建开始时间") @RequestParam(required = false) String begintime,
                                            @ApiParam(value = "圈子创建结束时间") @RequestParam(required = false) String endtime) {
         Response response = new Response();
-        List<CircleIndexList> list = circleFacade.queryCircleByCondition(pai, name, circleman, type, begintime, endtime);
+        List<CircleIndexList> list = circleFacade.queryCircleByCondition(pai, circleid, circleman, type, begintime, endtime);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

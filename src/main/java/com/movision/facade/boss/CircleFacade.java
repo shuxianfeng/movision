@@ -507,16 +507,16 @@ public class CircleFacade {
     /**
      * 根据条件查询圈子列表
      *
-     * @param name
+     * @param circle
      * @param circleman
      * @param type
      * @param begintime
      * @param endtime
      * @return
      */
-    public List<CircleIndexList> queryCircleByCondition(String pai, String name, String circleman, String type, String begintime, String endtime) {
+    public List<CircleIndexList> queryCircleByCondition(String pai, String circle, String circleman, String type, String begintime, String endtime) {
         Map map = new HashedMap();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date beg = null;
         Date end = null;
         if ((begintime != null && begintime != "") && (endtime != null && endtime != "")) {
@@ -528,7 +528,7 @@ public class CircleFacade {
             }
         }
         map.put("pai", pai);
-        map.put("name", name);
+        map.put("circleid", circle);
         map.put("type", type);
         map.put("circleman", circleman);
         map.put("begintime", beg);

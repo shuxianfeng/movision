@@ -361,18 +361,21 @@
         (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id) AS postnum,
         (SELECT u.nickname FROM yw_user u WHERE id=c.userid) AS circlename,
         (SELECT u.level FROM yw_user u WHERE id=c.userid) AS categorylevel
-        FROM yw_circle c WHERE isdel=0
+        FROM yw_circle c WHERE isdel=0 AND status=1
         <if test="type==null">
             AND category=#{type,jdbcType=INTEGER}
         </if>
         <if test="type!=null">
             AND category=#{type,jdbcType=INTEGER}
         </if>
-        <if test="name!=null">
-            AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        <if test="circleid!=null">
+            AND c.id=#{circleid,jdbcType=INTEGER}
+        </if>
+        <if test="circleman != null">
+            AND (SELECT u.nickname FROM yw_user u WHERE id=c.userid) LIKE concat('%',#{circleman,jdbcType=VARCHAR},'%')
         </if>
         <if test="begintime!=null and endtime!=null">
-            AND createtime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+            AND createtime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}
         </if>
         ORDER BY category
         <if test="pai==null">
