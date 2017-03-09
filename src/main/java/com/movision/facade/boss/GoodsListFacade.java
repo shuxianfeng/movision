@@ -481,7 +481,7 @@ public class GoodsListFacade {
         int result = 0;
         for (int i = 0; i < productids.length; i++) {
             imgurls = productids[i];
-            goodsImg.setImg_url(imgurls);
+            goodsImg.setImgurl(imgurls);
             result = goodsService.addPicture(goodsImg);
         }
         map.put("result", result);
@@ -500,7 +500,7 @@ public class GoodsListFacade {
         GoodsImg img = new GoodsImg();
         img.setGoodsid(Integer.parseInt(goodsid));
 
-        img.setImg_url(img_url);
+        img.setImgurl(img_url);
             int result = goodsService.updateImgGoods(img);
             map.put("result", result);
 
@@ -519,7 +519,7 @@ public class GoodsListFacade {
         GoodsImg img = new GoodsImg();
         img.setGoodsid(Integer.parseInt(goodsid));
 
-        img.setImg_url(img_url);
+        img.setImgurl(img_url);
             int result = goodsService.updateCommodityDescription(img);
             map.put("result", result);
 
@@ -598,7 +598,7 @@ public class GoodsListFacade {
         GoodsImg img = new GoodsImg();
         img.setGoodsid(id);
         img.setType(2);
-        img.setImg_url(img_url);
+        img.setImgurl(img_url);
         int result = goodsService.addGoodsPic(img);
             map.put("result", result);
 
@@ -871,7 +871,7 @@ public class GoodsListFacade {
     public Map<String, Integer> addImgGoods(String img_url, String goodsid) {
         Map<String, Integer> map = new HashedMap();
         GoodsImg goodsImg = new GoodsImg();
-        goodsImg.setImg_url(img_url);
+        goodsImg.setImgurl(img_url);
         goodsImg.setType(3);
         goodsImg.setGoodsid(Integer.parseInt(goodsid));
         int res = goodsService.addImgGoods(goodsImg);
@@ -889,7 +889,7 @@ public class GoodsListFacade {
     public Map<String, Integer> addCommodityDescription(String img_url, String goodsid) {
         Map<String, Integer> map = new HashedMap();
         GoodsImg goodsImg = new GoodsImg();
-        goodsImg.setImg_url(img_url);
+        goodsImg.setImgurl(img_url);
         goodsImg.setType(1);
         goodsImg.setGoodsid(Integer.parseInt(goodsid));
         int res = goodsService.addCommodityDescription(goodsImg);
