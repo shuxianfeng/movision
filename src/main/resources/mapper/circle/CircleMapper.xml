@@ -417,7 +417,7 @@
         (SELECT COUNT(1) FROM yw_post WHERE circleid IN(SELECT id FROM yw_circle WHERE category=c.id) AND isessence=1)
         AS isessencenum,
         (SELECT COUNT(1) FROM yw_post p WHERE p.circleid IN (SELECT id FROM yw_circle WHERE category=c.id)) AS postnum,
-        (SELECT SUM(supportnum) FROM yw_circle WHERE category=c.id) AS supportnum
+        (SELECT COALESCE(SUM(supportnum),0) FROM yw_circle WHERE category=c.id) AS supportnum
         FROM yw_circle_category c
         <if test="categoryid!=null">
             WHERE c.id=#{categoryid,jdbcType=INTEGER}
