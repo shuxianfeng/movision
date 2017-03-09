@@ -767,7 +767,7 @@
 
     <select id="findAllAssessment" resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
         SELECT g.id,u.nickname,u.level,g.goodpoint,g.logisticpoint,g.servicepoint,g.content,(SELECT COUNT(1) FROM
-        yw_goods_assessment_img i WHERE i.assessmentid=g.id) AS number,g.createtime FROM yw_goods_assessment g
+        yw_goods_assessment_img i WHERE i.assessmentid=g.id) AS number,g.createtime,g.goodid FROM yw_goods_assessment g
         LEFT JOIN yw_user u on u.id=g.userid WHERE g.userid<![CDATA[<>]]>-1
     </select>
     <select id="findAllAssessmentCondition" parameterType="java.util.Map"
