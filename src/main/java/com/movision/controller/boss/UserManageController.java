@@ -1,11 +1,14 @@
 package com.movision.controller.boss;
 
 import com.movision.common.Response;
+import com.movision.facade.boss.GoodsListFacade;
 import com.movision.facade.boss.PostFacade;
 import com.movision.facade.boss.UserManageFacade;
 import com.movision.facade.coupon.CouponFacade;
+import com.movision.mybatis.collection.entity.Collection;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.coupon.entity.Coupon;
+import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.record.entity.RecordVo;
 import com.movision.mybatis.submission.entity.Submission;
@@ -42,6 +45,9 @@ public class UserManageController {
 
     @Autowired
     PostFacade postFacade;
+
+    @Autowired
+    GoodsListFacade goodsListFacade;
 
     /**
      * 查看vip申请列表
@@ -441,14 +447,14 @@ public class UserManageController {
     }
 
     /**
-     * 根据用户id查询用户收藏的帖子列表
+     * 根据用户id查询用户被收藏的帖子列表
      *
      * @param userid
      * @param pageNo
      * @param pageSize
      * @return
      */
-    @ApiOperation(value = "根据用户id查询用户收藏的帖子列表", notes = "用于根据用户id查询用户收藏的帖子列表接口", response = Response.class)
+    @ApiOperation(value = "根据用户id查询用户被收藏的帖子列表", notes = "用于根据用户id查询用户被收藏的帖子列表接口", response = Response.class)
     @RequestMapping(value = "query_collection_userid", method = RequestMethod.POST)
     public Response queryCollectionListByUserid(@ApiParam(value = "用户id") @RequestParam String userid,
                                                 @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
@@ -504,6 +510,30 @@ public class UserManageController {
         Response response = new Response();
         Paging<CommentVo> pager = new Paging<CommentVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<CommentVo> list = userManageFacade.queryCommentListByUserid(userid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 根据用户id查询用户被收藏的商品列表
+     *
+     * @param goodsid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "根据用户id查询用户被收藏的商品列表", notes = "根据用户id查询用户被收藏的商品列表", response = Response.class)
+    @RequestMapping(value = "query_comment_userid", method = RequestMethod.POST)
+    public Response queryCollectionGoodsListByUserid(@ApiParam(value = "商品id") @RequestParam String goodsid,
+                                                     @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                     @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<GoodsVo> pager = new Paging<GoodsVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<GoodsVo> list = goodsListFacade.queryCollectionGoodsListByUserid(goodsid, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

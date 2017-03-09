@@ -145,7 +145,7 @@ public class PostFacade {
     }
 
     /**
-     * 根据用户id查询用户收藏的帖子列表
+     * 根据用户id查询用户被收藏的帖子列表
      *
      * @param userid
      * @param pager
@@ -1269,4 +1269,5 @@ public class PostFacade {
     public PostActiveList queryActiveById(Integer id) {
         return postService.queryActiveById(id);
     }
+
 }

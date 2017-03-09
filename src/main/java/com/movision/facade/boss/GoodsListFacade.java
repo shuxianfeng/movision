@@ -898,5 +898,16 @@ public class GoodsListFacade {
 
     }
 
+    /**
+     * 根据用户id查询用户被收藏的商品列表
+     *
+     * @param goodsid
+     * @param pager
+     * @return
+     */
+    public List<GoodsVo> queryCollectionGoodsListByUserid(String goodsid, Paging<GoodsVo> pager) {
+        return goodsService.queryCollectionGoodsListByUserid(goodsid, pager);
+    }
+
 
 }
