@@ -679,6 +679,7 @@ public class OrderFacade {
         int result = bossOrderService.updateOperater(orderoperation);
         Orders orders = new Orders();
         orders.setLogisticsid(logisticsid);
+        orders.setId(Integer.parseInt(id));
         int res = bossOrderService.addLogistic(orders);
         map.put("result", result);
         map.put("res", res);

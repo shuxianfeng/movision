@@ -832,7 +832,7 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
         </trim>
     </insert>
     <update id="addLogistic" parameterType="com.movision.mybatis.orders.entity.Orders">
-        update yw_orderoperation
+        update yw_orders
         <set>
             <if test="logisticsid != null">
                 logisticsid = #{logisticsid,jdbcType=VARCHAR},
