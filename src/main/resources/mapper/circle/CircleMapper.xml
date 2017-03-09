@@ -362,9 +362,6 @@
         (SELECT u.nickname FROM yw_user u WHERE id=c.userid) AS circlename,
         (SELECT u.level FROM yw_user u WHERE id=c.userid) AS categorylevel
         FROM yw_circle c WHERE isdel=0 AND status=1
-        <if test="type==null">
-            AND category=#{type,jdbcType=INTEGER}
-        </if>
         <if test="type!=null">
             AND category=#{type,jdbcType=INTEGER}
         </if>
