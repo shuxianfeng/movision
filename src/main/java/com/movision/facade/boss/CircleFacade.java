@@ -542,8 +542,9 @@ public class CircleFacade {
         map.put("begintime", beg);
         map.put("endtime", end);
         List<CircleIndexList> circlenum = new ArrayList<>();
-        if (type == null) {
+        if (type == null || type == "") {
             Map tm = new HashedMap();
+            type = null;
             tm.put("categoryid", type);
             circlenum = circleService.queryListByCircleCategory(tm);//查询圈子所有分类
             for (int i = 0; i < circlenum.size(); i++) {
