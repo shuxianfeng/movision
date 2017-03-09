@@ -542,7 +542,7 @@ public class PostFacade {
         vide.setBannerimgurl(bannerimgurl);
             vide.setIntime(new Date());
             Integer in = videoService.insertVideoById(vide);//添加视频表
-            if (goodsid != null) {//添加商品
+        if (goodsid != null && goodsid != "") {//添加商品
                 String[] lg = goodsid.split(",");//以逗号分隔
                 for (int i = 0; i < lg.length; i++) {
                     Map addgoods = new HashedMap();
