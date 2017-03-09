@@ -819,24 +819,52 @@
             <if test="id != null">
                 id,
             </if>
-
+            <if test="userid!=null">
+                userid,
+            </if>
             <if test="content != null">
                 content,
             </if>
             <if test="goodid != null">
                 goodid,
             </if>
+            <if test="createtime != null">
+                createtime,
+            </if>
+            <if test="isimage != null">
+                isimage,
+            </if>
+            <if test="isanonymity != null">
+                isanonymity,
+            </if>
+            <if test="pid != null">
+                pid,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 #{id,jdbcType=INTEGER},
             </if>
-
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
             <if test="content != null">
                 #{content,jdbcType=VARCHAR},
             </if>
             <if test="goodid != null">
                 #{goodid,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null">
+                #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isimage != null">
+                #{isimage,jdbcType=INTEGER},
+            </if>
+            <if test="isanonymity != null">
+                #{isanonymity,jdbcType=INTEGER},
+            </if>
+            <if test="pid != null">
+                #{pid,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>

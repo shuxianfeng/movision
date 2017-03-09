@@ -447,12 +447,16 @@ public class GoodsListFacade {
      * @param
      * @return
      */
-    public Map<String, Integer> addAssessment(String content, String goodid) {
+    public Map<String, Integer> addAssessment(String content, String goodid, String pid) {
         GoodsAssessment goodsAssessment = new GoodsAssessment();
         Map<String, Integer> map = new HashedMap();
         goodsAssessment.setUserid(-1);
         goodsAssessment.setContent(content);
         goodsAssessment.setGoodid(Integer.parseInt(goodid));
+        goodsAssessment.setCreatetime(new Date());
+        goodsAssessment.setIsimage(0);
+        goodsAssessment.setIsanonymity(0);
+        goodsAssessment.setPid(Integer.parseInt(pid));
         int result = goodsService.addAssessment(goodsAssessment);
         map.put("result", result);
         return map;
