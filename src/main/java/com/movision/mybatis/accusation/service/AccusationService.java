@@ -55,13 +55,4 @@ public class AccusationService {
         }
     }
 
-    public Integer queryAccusationBySum(Integer posid) {
-        try {
-            LOGGER.info("查询帖子被举报次数");
-            return accusationMapper.queryAccusationBySum(posid);
-        } catch (Exception e) {
-            LOGGER.error("查询帖子被举报次数失败");
-            throw e;
-        }
-    }
 }

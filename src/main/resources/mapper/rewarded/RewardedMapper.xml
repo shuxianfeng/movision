@@ -94,10 +94,6 @@
 
     </insert>
 
-    <select id="queryRewardedBySum" resultType="java.lang.Integer" parameterType="java.lang.Integer">
-        SELECT SUM(points) FROM yw_post_rewarded WHERE postid=#{postid,jdbcType=INTEGER}
-    </select>
-
     <!-- 根据打赏时间倒序展示列表 -->
     <select id="findAllqueryPostAward" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.rewarded.entity.RewardedVo">

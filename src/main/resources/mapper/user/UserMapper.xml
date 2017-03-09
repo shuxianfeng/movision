@@ -555,9 +555,6 @@
         </if>
     </select>
 
-    <select id="queryUserByNicknameByAdmin" parameterType="java.lang.String" resultType="java.lang.String">
-        SELECT name FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER}
-    </select>
 
     <select id="findAllqueryAllUserList" parameterType="java.util.Map"
             resultType="com.movision.mybatis.user.entity.UserAll">

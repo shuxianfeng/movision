@@ -42,8 +42,8 @@ public class SharesService {
     /**
      * 查询帖子分享列表
      *
-     * @param pager
-     * @param postid
+     * @param
+     * @param map
      * @return
      */
     public List<SharesVo> queryPostShareList(Paging<SharesVo> pager, Map map) {

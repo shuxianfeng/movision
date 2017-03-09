@@ -1046,7 +1046,15 @@
     <!--查询精贴列表-->
     <select id="findAllIsessenceByList" parameterType="java.util.Map"
             resultType="com.movision.mybatis.post.entity.PostList">
-        SELECT * FROM yw_post WHERE 1
+        SELECT p.id,p.title,p.collectsum,p.commentsum,p.zansum,p.intime,
+        p.totalpoint,p.isessence,p.orderid,p.essencedate,
+        (SELECT u.nickname FROM yw_user u WHERE u.id=p.userid) AS nickname,
+        (SELECT COUNT(1) FROM yw_post_share WHERE postid=p.id) AS share,
+        (SELECT SUM(points) FROM yw_post_rewarded WHERE postid=p.id) AS rewarded,
+        (SELECT SUM(num) FROM yw_post_accusation WHERE postid =p.id) AS accusation,
+        (SELECT name FROM yw_circle WHERE id=p.circleid) AS circlename,
+        (SELECT category FROM yw_circle WHERE id=p.circleid) AS category
+        FROM yw_post p WHERE 1
         <if test="circleid!=null">
             AND circleid =#{circleid,jdbcType=INTEGER}
         </if>
@@ -1081,7 +1089,7 @@
         (SELECT COUNT(1) FROM yw_post_share WHERE postid=p.id) AS share,
         (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded WHERE postid=p.id) AS rewarded,
         (SELECT COALESCE(SUM(num),0) FROM yw_post_accusation WHERE postid =p.id) AS accusation,
-        (SELECT nickname FROM yw_user WHERE id=(SELECT id FROM yw_post WHERE id=p.id)) AS nickname,
+        (SELECT nickname FROM yw_user WHERE id=(SELECT userid FROM yw_post WHERE id=p.id)) AS nickname,
         (SELECT name FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id)) AS circlename,
         (SELECT category FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id)) AS category
         FROM yw_post p

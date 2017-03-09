@@ -20,8 +20,6 @@ public interface RewardedMapper {
 
     int updateByPrimaryKey(Rewarded record);
 
-    Integer queryRewardedBySum(Integer postid);
-
     List<RewardedVo> findAllqueryPostAward(int postid, RowBounds rowBounds);
 
 }

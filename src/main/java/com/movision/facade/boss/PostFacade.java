@@ -500,19 +500,31 @@ public class PostFacade {
                                         String postcontent, String isessence, String ishot, String orderid, String time, String goodsid) {
         PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
+        if (title != null && title != "") {
             post.setTitle(title);//帖子标题
+        }
+        if (subtitle != null && subtitle != "") {
             post.setSubtitle(subtitle);//帖子副标题
+        }
+        if (type != null && type != "") {
             post.setType(type);//帖子类型
+        }
+        if (circleid != null && circleid != "") {
             post.setCircleid(circleid);//圈子id
+        }
+        if (bannerimgurl != null && bannerimgurl != "") {
             post.setCoverimg(bannerimgurl);//添加帖子封面
-            post.setIsactive("0");//设置状态为帖子
+        }
+        post.setIsactive("0");//设置状态为帖子
+        if (postcontent != null && postcontent != "") {
             post.setPostcontent(postcontent);//帖子内容
-            post.setIntime(new Date());//插入时间
-            if (ishot != null) {
-                post.setIshot(ishot);//是否为圈子精选
-            }
+        }
+        post.setIntime(new Date());//插入时间
+        if (ishot != null && ishot != "") {
+            post.setIshot(ishot);//是否为圈子精选
+        }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date d = null;
+        Date d = null;
         if (isessence != null && isessence != "") {
                 if (isessence != "0") {//判断是否为加精
                     post.setIsessence(isessence);//是否为首页精选
@@ -533,25 +545,29 @@ public class PostFacade {
                 }
             }
         post.setCoverimg(coverimg);//插入图片地址
-            post.setUserid(userid);
-            int result = postService.addPost(post);//添加帖子
+        post.setUserid(userid);
+        int result = postService.addPost(post);//添加帖子
+        if (result == 1) {
             Integer pid = post.getId();//获取到刚刚添加的帖子id
             Video vide = new Video();
             vide.setPostid(pid);
             vide.setVideourl(vid);
-        vide.setBannerimgurl(bannerimgurl);
+            vide.setBannerimgurl(bannerimgurl);
             vide.setIntime(new Date());
             Integer in = videoService.insertVideoById(vide);//添加视频表
-        if (goodsid != null && goodsid != "") {//添加商品
+            if (goodsid != null && goodsid != "") {//添加商品
                 String[] lg = goodsid.split(",");//以逗号分隔
                 for (int i = 0; i < lg.length; i++) {
                     Map addgoods = new HashedMap();
                     addgoods.put("postid", pid);
                     addgoods.put("goodsid", lg[i]);
-                    postService.insertGoods(addgoods);
+                    int goods = postService.insertGoods(addgoods);
+                    if (goods == 1 && in == 1) {//添加视频和添加帖子同时成功
+                        map.put("result", goods);
+                    }
                 }
-            }
-            map.put("result", result);
+                }
+        }
         return map;
 
     }
@@ -911,11 +927,17 @@ public class PostFacade {
             if (id != null && id != "") {
                 vide.setPostid(Integer.parseInt(id));
             }
-            vide.setVideourl(vid);
-            vide.setBannerimgurl(bannerimgurl);
+            if (vid != null && vid != "") {
+                vide.setVideourl(vid);
+            }
+            if (bannerimgurl != null && bannerimgurl != "") {
+                vide.setBannerimgurl(bannerimgurl);
+            }
             vide.setIntime(new Date());
             Integer in = videoService.updateVideoById(vide);
-            post.setCoverimg(coverimg);//添加帖子封面
+            if (coverimg != null && coverimg != "") {
+                post.setCoverimg(coverimg);//添加帖子封面
+            }
             post.setIsactive("0");//设置状态为帖子
             post.setPostcontent(postcontent);//帖子内容
             if (isessence != null && isessence != "") {
@@ -925,7 +947,7 @@ public class PostFacade {
                 post.setIshot(ishot);//是否为圈子精选
             }
             post.setIntime(new Date());
-            if (orderid != null) {
+            if (orderid != null && orderid != "") {
                 post.setOrderid(Integer.parseInt(orderid));
             }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
