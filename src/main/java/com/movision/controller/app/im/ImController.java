@@ -23,7 +23,7 @@ import java.util.Map;
  * @Date 2017/3/7 19:16
  */
 @RestController
-@RequestMapping("app/im")
+@RequestMapping("/app/im")
 public class ImController {
 
     private static Logger log = LoggerFactory.getLogger(ImController.class);
@@ -38,7 +38,7 @@ public class ImController {
      * @throws IOException
      */
     @ApiOperation(value = "打招呼", notes = "打招呼", response = Response.class)
-    @RequestMapping(value = {"/say_hi"}, method = RequestMethod.POST)
+    @RequestMapping(value = "/say_hi", method = RequestMethod.POST)
     public Response sayHi(@ApiParam @ModelAttribute ImMsg imMsg) throws IOException {
         return imFacade.doFirstCommunicate(imMsg, 2, "打招呼");
     }
@@ -51,7 +51,7 @@ public class ImController {
      * @throws IOException
      */
     @ApiOperation(value = "回复打招呼", notes = "回复打招呼", response = Response.class)
-    @RequestMapping(value = {"/say_hi"}, method = RequestMethod.POST)
+    @RequestMapping(value = "/reply_say_hi", method = RequestMethod.POST)
     public Response replySayHi(@ApiParam @ModelAttribute ImMsg imMsg) throws IOException {
         return imFacade.doFirstCommunicate(imMsg, 3, "回复打招呼");
     }
@@ -69,7 +69,7 @@ public class ImController {
      * @throws IOException
      */
     @ApiOperation(value = "查询是否有权限发送消息", notes = "查询是否有权限发送消息", response = Response.class)
-    @RequestMapping(value = {"/get_communication_situation"}, method = RequestMethod.POST)
+    @RequestMapping(value = "/get_communication_situation", method = RequestMethod.POST)
     public Response getCommunicationSituation(@ApiParam("被发消息的人的accid") @RequestParam String toAccid) throws IOException {
 
         Response response = new Response();
