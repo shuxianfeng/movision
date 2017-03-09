@@ -480,7 +480,6 @@ public class CircleFacade {
         Map packaging = new HashedMap();
         packaging.put("categoryname", typename);
         packaging.put("intime", new Date());
-        String savedFileName = "";
         packaging.put("discoverpageurl", discoverpageurl);
         int i = categoryService.addCircleType(packaging);
         map.put("resault", i);
@@ -562,7 +561,7 @@ public class CircleFacade {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date beg = null;
         Date end = null;
-        if (begintime != null && endtime != null) {
+        if ((begintime != null && begintime != "") && (endtime != null && endtime != "")) {
             try {
                 beg = format.parse(begintime);
                 end = format.parse(endtime);
