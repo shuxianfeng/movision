@@ -1,5 +1,10 @@
 package com.movision.mybatis.address.entity;
 
+import com.wordnik.swagger.annotations.ApiModelProperty;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
  * @Author zhanglei
  * @Date 2017/2/28 11:38
@@ -13,6 +18,17 @@ public class AddressVo {
     private String province;
     private String city;
     private String district;
+    private Integer id;
+    private Integer userid;
+    private Integer isdefault;
+    private Date updatetime;
+    private Integer isdel;
+    private BigDecimal lng;
+    private BigDecimal lat;
+    private String street;
+    private String provicecode;
+    private String citycode;
+    private String districtcode;
 
     public Integer getOrderid() {
         return orderid;
@@ -21,7 +37,6 @@ public class AddressVo {
     public void setOrderid(Integer orderid) {
         this.orderid = orderid;
     }
-
 
     public String getPhone() {
         return phone;
@@ -71,6 +86,62 @@ public class AddressVo {
         this.district = district;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
+
+    public Integer getIsdefault() {
+        return isdefault;
+    }
+
+    public void setIsdefault(Integer isdefault) {
+        this.isdefault = isdefault;
+    }
+
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
+    }
+
+    public Integer getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(Integer isdel) {
+        this.isdel = isdel;
+    }
+
+    public BigDecimal getLng() {
+        return lng;
+    }
+
+    public void setLng(BigDecimal lng) {
+        this.lng = lng;
+    }
+
+    public BigDecimal getLat() {
+        return lat;
+    }
+
+    public void setLat(BigDecimal lat) {
+        this.lat = lat;
+    }
+
     public String getStreet() {
         return street;
     }
@@ -79,5 +150,27 @@ public class AddressVo {
         this.street = street;
     }
 
-    private String street;
+    public String getProvicecode() {
+        return provicecode;
+    }
+
+    public void setProvicecode(String provicecode) {
+        this.provicecode = provicecode;
+    }
+
+    public String getCitycode() {
+        return citycode;
+    }
+
+    public void setCitycode(String citycode) {
+        this.citycode = citycode;
+    }
+
+    public String getDistrictcode() {
+        return districtcode;
+    }
+
+    public void setDistrictcode(String districtcode) {
+        this.districtcode = districtcode;
+    }
 }
