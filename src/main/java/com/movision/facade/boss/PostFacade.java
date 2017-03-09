@@ -513,7 +513,7 @@ public class PostFacade {
             }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date d = null;
-            if (isessence != null) {
+        if (isessence != null && isessence != "") {
                 if (isessence != "0") {//判断是否为加精
                     post.setIsessence(isessence);//是否为首页精选
                     if (!orderid.isEmpty()) {
@@ -521,7 +521,7 @@ public class PostFacade {
                     } else {
                         post.setOrderid(0);
                     }
-                    if (time != null) {
+                    if (time != null && time != "") {
                         try {
                             d = format.parse(time);
                             post.setEssencedate(d);
@@ -900,15 +900,15 @@ public class PostFacade {
             post.setId(Integer.parseInt(id));//帖子id
             post.setTitle(title);//帖子标题
             post.setSubtitle(subtitle);//帖子副标题
-            if (type != null) {
+            if (type != null && type != "") {
                 post.setType(type);//帖子类型
             }
-            if (circleid != null) {
+            if (circleid != null && circleid != "") {
                 post.setCircleid(circleid);//圈子id
             }
 
             Video vide = new Video();
-            if (id != null) {
+            if (id != null && id != "") {
                 vide.setPostid(Integer.parseInt(id));
             }
             vide.setVideourl(vid);
@@ -918,10 +918,10 @@ public class PostFacade {
             post.setCoverimg(coverimg);//添加帖子封面
             post.setIsactive("0");//设置状态为帖子
             post.setPostcontent(postcontent);//帖子内容
-            if (isessence != null) {
+            if (isessence != null && isessence != "") {
                 post.setIsessence(isessence);//是否为首页精选
             }
-            if (ishot != null) {
+            if (ishot != null && ishot != "") {
                 post.setIshot(ishot);//是否为圈子精选
             }
             post.setIntime(new Date());
@@ -930,7 +930,7 @@ public class PostFacade {
             }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date estime = null;
-            if (time != null) {
+            if (time != null && time != "") {
                 try {
                     estime = format.parse(time);
                     post.setEssencedate(estime);
@@ -1030,14 +1030,16 @@ public class PostFacade {
      * @return
      */
     public List<CommentVo> queryCommentSensitiveWords(String content, String words, String begintime, String endtime, Paging<CommentVo> pager) {
-        String beg = null;
-        String end = null;
-        if (begintime != null && endtime != null) {
+        Date beg = null;
+        Date end = null;
+        if ((begintime != null && begintime != "") && (endtime != null && endtime != "")) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Long l = new Long(begintime);
-            Long o = new Long(endtime);
-            beg = format.format(l);
-            end = format.format(o);
+            try {
+                beg = format.parse(begintime);
+                end = format.parse(endtime);
+            } catch (ParseException e) {
+                logger.error("时间转换异常", e);
+            }
         }
         Map map = new HashedMap();
         map.put("content", content);
