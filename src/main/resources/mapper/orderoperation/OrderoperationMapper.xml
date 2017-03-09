@@ -10,7 +10,6 @@
         <result column="logisticstatue" property="logisticstatue" jdbcType="INTEGER"/>
         <result column="orderid" property="orderid" jdbcType="INTEGER"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
-        <result column="replacementnumber" property="replacementnumber" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id,orderoperation,orderoperationtime,orderstatue,paystatue,logisticstatue,orderid,remark,replacementnumber
@@ -43,9 +42,7 @@
             <if test="remark != null">
                 remark,
             </if>
-            <if test="replacementnumber != null">
-                replacementnumber,
-            </if>
+
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
@@ -72,9 +69,7 @@
             <if test="remark != null">
                 #{remark,jdbcType=VARCHAR},
             </if>
-            <if test="replacementnumber != null">
-                #{replacementnumber,jdbcType=VARCHAR},
-            </if>
+
         </trim>
     </insert>
 </mapper>
