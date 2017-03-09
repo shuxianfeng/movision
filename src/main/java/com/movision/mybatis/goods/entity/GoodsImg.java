@@ -8,7 +8,7 @@ public class GoodsImg {
 
     private Integer goodsid;//商品id
 
-    private String img_url;//图片地址url
+    private String imgurl;//图片地址url
 
     private Integer type;//图片类型
 
@@ -20,14 +20,6 @@ public class GoodsImg {
 
     public void setGoodsid(Integer goodsid) {
         this.goodsid = goodsid;
-    }
-
-    public String getImg_url() {
-        return img_url;
-    }
-
-    public void setImg_url(String img_url) {
-        this.img_url = img_url;
     }
 
     public Integer getType() {
@@ -44,5 +36,13 @@ public class GoodsImg {
 
     public void setOderid(Integer oderid) {
         this.oderid = oderid;
+    }
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
     }
 }
