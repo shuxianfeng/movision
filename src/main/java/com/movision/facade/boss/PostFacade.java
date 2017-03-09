@@ -145,6 +145,17 @@ public class PostFacade {
     }
 
     /**
+     * 根据用户id查询用户收藏的帖子列表
+     *
+     * @param userid
+     * @param pager
+     * @return
+     */
+    public List<PostList> queryCollectionListByUserid(String userid, Paging<PostList> pager) {
+        return postService.queryCollectionListByUserid(userid, pager);
+    }
+
+    /**
      * 后台管理-查询活动列表（草稿箱）
      *
      * @param pager

@@ -96,6 +96,8 @@ public interface PostMapper {
 
     List<PostList> findAllQueryPostListByUserid(Map map, RowBounds rowBounds);
 
+    List<PostList> findAllQueryCollectionListByUserid(String userid, RowBounds rowBounds);
+
     List<PostList> findAllIsessenceByList(Map map, RowBounds rowBounds);//查询精贴
 
     int queryPostNum();
