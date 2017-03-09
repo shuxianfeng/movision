@@ -984,8 +984,8 @@
     <select id="findAllqueryPostByList" resultType="com.movision.mybatis.post.entity.PostList">
         SELECT p.*,(SELECT u.nickname FROM yw_user u WHERE u.id=p.userid) as nickname,
         (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
-        (SELECT SUM(r.points) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
-        (SELECT SUM(ac.num) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
+        (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
+        (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
         (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid) AS circlename,
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS category
         FROM yw_post AS p
@@ -996,8 +996,8 @@
             resultType="com.movision.mybatis.post.entity.PostList">
         SELECT p.*,(SELECT u.nickname FROM yw_user u WHERE u.id=p.userid) as nickname,
         (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
-        (SELECT SUM(r.points) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
-        (SELECT SUM(ac.num) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
+        (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
+        (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
         (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid) AS circlename,
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS category
         FROM yw_post AS p
@@ -1016,8 +1016,8 @@
             parameterType="java.util.Map">
         SELECT p.*,(SELECT u.nickname FROM yw_user u WHERE u.id=p.userid) as nickname,
         (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
-        (SELECT SUM(r.points) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
-        (SELECT SUM(ac.num) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
+        (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
+        (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
         (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid) AS circlename,
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS category
         FROM yw_post AS p
@@ -1033,8 +1033,8 @@
             resultType="com.movision.mybatis.post.entity.PostList">
         SELECT p.*,(SELECT u.nickname FROM yw_user u WHERE u.id=p.userid) as nickname,
         (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
-        (SELECT SUM(r.points) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
-        (SELECT SUM(ac.num) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
+        (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
+        (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
         (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid) AS circlename,
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS category
         FROM yw_post AS p
@@ -1050,8 +1050,8 @@
         p.totalpoint,p.isessence,p.orderid,p.essencedate,
         (SELECT u.nickname FROM yw_user u WHERE u.id=p.userid) AS nickname,
         (SELECT COUNT(1) FROM yw_post_share WHERE postid=p.id) AS share,
-        (SELECT SUM(points) FROM yw_post_rewarded WHERE postid=p.id) AS rewarded,
-        (SELECT SUM(num) FROM yw_post_accusation WHERE postid =p.id) AS accusation,
+        (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded WHERE postid=p.id) AS rewarded,
+        (SELECT COALESCE(SUM(num),0) FROM yw_post_accusation WHERE postid =p.id) AS accusation,
         (SELECT name FROM yw_circle WHERE id=p.circleid) AS circlename,
         (SELECT category FROM yw_circle WHERE id=p.circleid) AS category
         FROM yw_post p WHERE 1
@@ -1396,7 +1396,7 @@
         SELECT p.*,(SELECT u.nickname FROM yw_user u WHERE u.id=p.userid) as nickname,
         (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
         (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
-        (SELECT SUM(ac.num) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
+        (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
         (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid) AS circlename,
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS category
         FROM yw_post AS p
@@ -1432,7 +1432,7 @@
         SELECT p.circleid,p.id,p.title,u.nickname,p.collectsum,
         (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid=p.id) AS share,
         (SELECT COUNT(1) FROM yw_post_comment c WHERE c.postid=p.id) AS commentsum,p.zansum,
-        (SELECT SUM(points) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
+        (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
         (SELECT COUNT(1) FROM yw_post_accusation a WHERE a.postid=p.id) AS accusation,cir.name AS circlename,
         p.orderid,p.essencedate
         FROM yw_post AS p LEFT JOIN yw_user as u ON u.id=p.userid LEFT JOIN yw_circle cir ON cir.id=p.circleid
