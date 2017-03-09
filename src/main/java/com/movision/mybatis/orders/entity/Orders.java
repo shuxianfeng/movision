@@ -45,7 +45,7 @@ public class Orders {
 
     private Integer isdel;
 
-    private Integer logisticsid;
+    private String logisticsid;
 
     public Integer getId() {
         return id;
@@ -215,11 +215,11 @@ public class Orders {
         this.isdel = isdel;
     }
 
-    public Integer getLogisticsid() {
+    public String getLogisticsid() {
         return logisticsid;
     }
 
-    public void setLogisticsid(Integer logisticsid) {
+    public void setLogisticsid(String logisticsid) {
         this.logisticsid = logisticsid;
     }
 }
