@@ -135,6 +135,8 @@ public class BossRealm extends AuthorizingRealm {
         private Date beforelogintime;
         //对应的角色
         private Integer role;
+        private String accid;
+
 
         public void setId(Integer id) {
             this.id = id;

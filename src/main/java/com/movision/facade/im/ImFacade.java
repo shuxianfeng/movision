@@ -9,6 +9,7 @@ import com.movision.exception.BusinessException;
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
 import com.movision.mybatis.imFirstDialogue.entity.ImMsg;
 import com.movision.mybatis.imFirstDialogue.service.ImFirstDialogueService;
+import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.imuser.service.ImUserService;
 import com.movision.utils.JsonUtils;
@@ -333,13 +334,23 @@ public class ImFacade {
         return imFirstDialogueService.selectFirstDialog(imFirstDialogue);
     }
 
+    /**
+     * @param imMsg
+     * @param addFriendType
+     * @param responseMsg
+     * @return
+     * @throws IOException
+     */
     public Response doFirstCommunicate(ImMsg imMsg, int addFriendType, String responseMsg) throws IOException {
         Response response = new Response();
         //1 发消息
         Map sendMsgResult = this.sendMsg(imMsg);
         Object code_1 = sendMsgResult.get("code");
 
-        //2 请求加好友
+        /**
+         *  addFriendType=2 请求加好友
+         *  addFriendType=3 接受加好友
+         */
         Map map = this.addFriend(ShiroUtil.getAccid(), imMsg.getTo(), addFriendType, imMsg.getBody());
         Object code_2 = map.get("code");
 
@@ -355,6 +366,16 @@ public class ImFacade {
 
         return response;
     }
+
+
+    /*public int recordSystemInform(String body){
+
+        ImSystemInform imSystemInform = new ImSystemInform();
+        imSystemInform.setBody(body);
+        imSystemInform.setFromAccid();
+
+
+    }*/
 
 
 }

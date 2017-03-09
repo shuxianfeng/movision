@@ -3,12 +3,14 @@ package com.movision.mybatis.imFirstDialogue.entity;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 /**
  * @Author zhuangyuhao
  * @Date 2017/3/9 11:02
  */
 @ApiModel(value = "IM消息实体")
-public class ImMsg {
+public class ImMsg implements Serializable {
     @ApiModelProperty(value = "发送者accid，用户帐号，最大32字符", required = true)
     private String from;
     @ApiModelProperty(value = "0：点对点个人消息，1：群消息，其他返回414", required = true)
