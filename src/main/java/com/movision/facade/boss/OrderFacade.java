@@ -659,12 +659,10 @@ public class OrderFacade {
     }
 
     /**
-     * 订单发货
-     *
+     *  订单发货
      * @param id
      * @param remark
-     * @param
-     * @param
+     * @param logisticsid
      * @return
      */
     public Map<String, Integer> updateOperater(String id, String remark, String logisticsid) {
