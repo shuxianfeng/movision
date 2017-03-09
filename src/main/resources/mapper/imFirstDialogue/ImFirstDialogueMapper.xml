@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.imFirstDialogue.mapper.ImFirstDialogueMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="fromid" property="fromid" jdbcType="VARCHAR"/>
+        <result column="toid" property="toid" jdbcType="VARCHAR"/>
+        <result column="body" property="body" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, userid, fromid, toid, body, create_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        fromid yw_im_first_dialogue
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete fromid yw_im_first_dialogue
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue">
+        insert into yw_im_first_dialogue (id, userid, fromid,
+        toid, body, create_time
+        )
+        values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{fromid,jdbcType=VARCHAR},
+        #{toid,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue">
+        insert into yw_im_first_dialogue
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="fromid != null">
+                fromid,
+            </if>
+            <if test="toid != null">
+                toid,
+            </if>
+            <if test="body != null">
+                body,
+            </if>
+            create_time,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="fromid != null">
+                #{fromid,jdbcType=VARCHAR},
+            </if>
+            <if test="toid != null">
+                #{toid,jdbcType=VARCHAR},
+            </if>
+            <if test="body != null">
+                #{body,jdbcType=VARCHAR},
+            </if>
+            now(),
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue">
+        update yw_im_first_dialogue
+        <set>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="fromid != null">
+                fromid = #{fromid,jdbcType=VARCHAR},
+            </if>
+            <if test="toid != null">
+                toid = #{toid,jdbcType=VARCHAR},
+            </if>
+            <if test="body != null">
+                body = #{body,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue">
+        update yw_im_first_dialogue
+        set userid = #{userid,jdbcType=INTEGER},
+        fromid = #{fromid,jdbcType=VARCHAR},
+        toid = #{toid,jdbcType=VARCHAR},
+        body = #{body,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="isExistFirstDialogue" parameterType="com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue"
+            resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM yw_im_first_dialogue
+        WHERE fromid = #{fromid}
+        and toid = #{toid}
+    </select>
+
+    <select id="selectFirstDialog" parameterType="com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue"
+            resultType="com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue">
+        SELECT *
+        FROM yw_im_first_dialogue
+        WHERE (fromid = #{fromid} and toid = #{toid})
+        or (fromid = #{toid} and toid=#{fromid})
+        ORDER BY create_time
+    </select>
+
+</mapper>

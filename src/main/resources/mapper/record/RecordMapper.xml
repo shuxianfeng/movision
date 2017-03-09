@@ -17,11 +17,11 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from yw_points_record
+        fromid yw_points_record
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from yw_points_record
+        delete fromid yw_points_record
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.record.entity.Record">

@@ -12,11 +12,11 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from yw_admin_role_menu
+        fromid yw_admin_role_menu
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from yw_admin_role_menu
+        delete fromid yw_admin_role_menu
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.roleMenuRelation.entity.RoleMenuRelation">
@@ -71,14 +71,14 @@
     </update>
 
     <delete id="delRelationByRoleid" parameterType="int">
-        DELETE from yw_admin_role_menu where roleid IN
+        DELETE fromid yw_admin_role_menu where roleid IN
         <foreach collection="array" item="roleid" open="(" separator="," close=")">
             #{roleid}
         </foreach>
     </delete>
 
     <delete id="delRelationByMenuid" parameterType="int">
-        DELETE from yw_admin_role_menu where menuid IN
+        DELETE fromid yw_admin_role_menu where menuid IN
         <foreach collection="array" item="menuid" open="(" separator="," close=")">
             #{menuid}
         </foreach>

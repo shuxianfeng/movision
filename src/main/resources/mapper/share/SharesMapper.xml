@@ -15,11 +15,11 @@
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from yw_post_share
+        fromid yw_post_share
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from yw_post_share
+        delete fromid yw_post_share
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.share.entity.Shares">

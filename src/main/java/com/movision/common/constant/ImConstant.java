@@ -47,4 +47,10 @@ public class ImConstant {
     public static final String ADD_FRIEND = ImPropertiesLoader.getPropertyValue("add_friend");
 
 
+    /**
+     * 个人与个人 发消息
+     */
+    public static final String SEND_MSG = ImPropertiesLoader.getPropertyValue("send_msg");
+
+
 }

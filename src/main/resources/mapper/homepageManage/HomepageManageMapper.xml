@@ -21,7 +21,7 @@
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from yw_homepage_manage
+        fromid yw_homepage_manage
         where id = #{id,jdbcType=INTEGER}
     </select>
 
@@ -34,7 +34,7 @@
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from yw_homepage_manage
+        delete fromid yw_homepage_manage
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.homepageManage.entity.HomepageManage">
@@ -160,12 +160,12 @@
     </update>
 
     <select id="findAllqueryAdvertisementList" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
-        select * from yw_homepage_manage
+        select * fromid yw_homepage_manage
     </select>
 
     <select id="queryAvertisementById" parameterType="java.lang.String"
             resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
-        select * from yw_homepage_manage WHERE id=#{id.jdbcType=INTEGER}
+        select * fromid yw_homepage_manage WHERE id=#{id.jdbcType=INTEGER}
     </select>
 
     <insert id="addAdvertisement" parameterType="java.util.Map">

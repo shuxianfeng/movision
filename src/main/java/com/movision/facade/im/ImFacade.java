@@ -1,14 +1,19 @@
 package com.movision.facade.im;
 
 import com.google.gson.Gson;
+import com.movision.common.Response;
 import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
+import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
+import com.movision.mybatis.imFirstDialogue.entity.ImMsg;
+import com.movision.mybatis.imFirstDialogue.service.ImFirstDialogueService;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.imuser.service.ImUserService;
 import com.movision.utils.JsonUtils;
 import com.movision.utils.SignUtil;
+import com.movision.utils.convert.BeanUtil;
 import com.movision.utils.im.CheckSumBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
@@ -44,6 +49,9 @@ public class ImFacade {
 
     @Autowired
     private ImUserService imUserService;
+
+    @Autowired
+    private ImFirstDialogueService imFirstDialogueService;
 
     /**
      * 发起IM请求，获得响应
@@ -249,7 +257,104 @@ public class ImFacade {
         return this.sendImHttpPost(ImConstant.ADD_FRIEND, params);
     }
 
+    /**
+     * 增加一条加好友的记录
+     *
+     * @param toAccid
+     * @param msg
+     * @return
+     */
+    public int addFirstDialogue(String toAccid, String msg) {
+        ImFirstDialogue imFirstDialogue = new ImFirstDialogue();
+        imFirstDialogue.setUserid(ShiroUtil.getAppUserID());
+        imFirstDialogue.setFromid(ShiroUtil.getAccid());
+        imFirstDialogue.setToid(toAccid);
+        imFirstDialogue.setBody(msg);
 
+        return imFirstDialogueService.addDialogue(imFirstDialogue);
+    }
+
+
+    /**
+     * 发消息接口
+     *
+     * @param imMsg
+     * @return
+     * @throws IOException
+     */
+    public Map sendMsg(ImMsg imMsg) throws IOException {
+
+        Map<String, Object> params = BeanUtil.ImBeanToMap(imMsg);
+
+        return this.sendImHttpPost(ImConstant.SEND_MSG, params);
+    }
+
+    /**
+     * 判断是否存在该次对话记录
+     *
+     * @param toAccid
+     * @return
+     */
+    public Boolean isExistFirstDialog(String toAccid) {
+        ImFirstDialogue imFirstDialogue = new ImFirstDialogue();
+        imFirstDialogue.setFromid(ShiroUtil.getAccid());
+        imFirstDialogue.setToid(toAccid);
+
+        int result = imFirstDialogueService.isExistFirstDialogue(imFirstDialogue);
+        return result == 1;
+    }
+
+    /**
+     * 判断被我打招呼的人是否回复
+     *
+     * @param replyAccid
+     * @return
+     */
+    public Boolean isExistReply(String replyAccid) {
+        ImFirstDialogue imFirstDialogue = new ImFirstDialogue();
+        imFirstDialogue.setFromid(replyAccid);
+        imFirstDialogue.setToid(ShiroUtil.getAccid());
+
+        int result = imFirstDialogueService.isExistReply(imFirstDialogue);
+        return result == 1;
+    }
+
+    /**
+     * 查询我和对方的对话记录
+     *
+     * @param toAccid
+     * @return
+     */
+    public List<ImFirstDialogue> selectFirstDialog(String toAccid) {
+        ImFirstDialogue imFirstDialogue = new ImFirstDialogue();
+        imFirstDialogue.setFromid(ShiroUtil.getAccid());
+        imFirstDialogue.setToid(toAccid);
+
+        return imFirstDialogueService.selectFirstDialog(imFirstDialogue);
+    }
+
+    public Response doFirstCommunicate(ImMsg imMsg, int addFriendType, String responseMsg) throws IOException {
+        Response response = new Response();
+        //1 发消息
+        Map sendMsgResult = this.sendMsg(imMsg);
+        Object code_1 = sendMsgResult.get("code");
+
+        //2 请求加好友
+        Map map = this.addFriend(ShiroUtil.getAccid(), imMsg.getTo(), addFriendType, imMsg.getBody());
+        Object code_2 = map.get("code");
+
+        if (code_2.equals(200) && code_1.equals(200)) {
+            response.setCode(200);
+            response.setMessage(responseMsg + "成功");
+            //3 记录发送的消息
+            this.addFirstDialogue(imMsg.getTo(), imMsg.getBody());
+        } else {
+            response.setCode(400);
+            response.setMessage(responseMsg + "失败");
+        }
+
+        return response;
+    }
 
 
 }

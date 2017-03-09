@@ -15,7 +15,7 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from yw_circle_category
+        fromid yw_circle_category
         where id = #{id,jdbcType=INTEGER}
     </select>
 
@@ -30,7 +30,7 @@
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from yw_circle_category
+        delete fromid yw_circle_category
     where id = #{id,jdbcType=INTEGER}
   </delete>
 

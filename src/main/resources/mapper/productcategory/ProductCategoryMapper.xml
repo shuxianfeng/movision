@@ -15,11 +15,11 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from yw_category
+        fromid yw_category
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from yw_category
+        delete fromid yw_category
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.productcategory.entity.ProductCategory">
@@ -109,7 +109,7 @@
     </select>
 
     <select id="findAllGoodsDiscount" resultType="com.movision.mybatis.goodsDiscount.entity.GoodsDiscount">
-    SELECT id,name,isenrent,rentday,discount,content,orderid,isdel,startdate,enddate,intime from  yw_goods_discount
+        SELECT id,name,isenrent,rentday,discount,content,orderid,isdel,startdate,enddate,intime fromid yw_goods_discount
 </select>
     <select id="findAllCategoryCondition" resultType="com.movision.mybatis.productcategory.entity.ProductCategory">
         SELECT id,protype,typename,intime FROM yw_category WHERE 1
@@ -120,7 +120,7 @@
     </select>
 
     <select id="findAllGoodsDiscountCondition" resultType="com.movision.mybatis.goodsDiscount.entity.GoodsDiscount">
-        SELECT id,name,isenrent,rentday,discount,content,orderid,isdel,startdate,enddate,intime from yw_goods_discount
+        SELECT id,name,isenrent,rentday,discount,content,orderid,isdel,startdate,enddate,intime fromid yw_goods_discount
         WHERE 1
         <if test="name!=null">
             AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
@@ -150,7 +150,8 @@
     </select>
     <select id="queryGoodsDiscount" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodsDiscount.entity.GoodsDiscount">
-        SELECT id,name,isenrent,rentday,discount,content,orderid,isdel,startdate,enddate,intime from yw_goods_discount WHERE id=#{id,jdbcType=INTEGER}
+        SELECT id,name,isenrent,rentday,discount,content,orderid,isdel,startdate,enddate,intime fromid yw_goods_discount
+        WHERE id=#{id,jdbcType=INTEGER}
     </select>
     <select id="queryBrand" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.brand.entity.Brand">

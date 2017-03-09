@@ -83,15 +83,15 @@ public class ShiroUtil {
      *
      * @return
      */
-    public static Long getBossUserID() {
-        Long createID = null;
+    public static Integer getBossUserID() {
+        Integer createID = null;
         try {
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
             if (session != null) {
                 BossRealm.ShiroBossUser principal = (BossRealm.ShiroBossUser) session.getAttribute(SessionConstant.BOSS_USER);
                 if (principal != null) {
-                    createID = Long.valueOf(principal.getId() + "");
+                    createID = principal.getId();
                 }
             }
         } catch (Exception e) {

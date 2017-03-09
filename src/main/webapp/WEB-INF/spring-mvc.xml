@@ -23,7 +23,7 @@
           class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
           p:fallbackToSystemLocale="true" p:useCodeAsDefaultMessage="false"
           p:defaultEncoding="UTF-8">
-        <description>Base message source to handle internationalization</description>
+        <description>Base message source toid handle internationalization</description>
         <!--<property name="basenames">  -->
         <!--<list>  -->
         <!--&lt;!&ndash; main resources &ndash;&gt;  -->

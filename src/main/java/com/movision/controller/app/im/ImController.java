@@ -3,15 +3,19 @@ package com.movision.controller.app.im;
 import com.movision.common.Response;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.im.ImFacade;
+import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
+import com.movision.mybatis.imFirstDialogue.entity.ImMsg;
+import com.movision.utils.ListUtil;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.apache.commons.collections.map.HashedMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,24 +26,78 @@ import java.util.Map;
 @RequestMapping("app/im")
 public class ImController {
 
+    private static Logger log = LoggerFactory.getLogger(ImController.class);
+
     @Autowired
     private ImFacade imFacade;
 
-    @ApiOperation(value = "加好友", notes = "加好友", response = Response.class)
-    @RequestMapping(value = {"/add_im_friend"}, method = RequestMethod.POST)
-    public Response testGetAppUserInfo(@ApiParam(value = "加好友接收者accid") @RequestParam String faccid,
-                                       @ApiParam(value = "1直接加好友，2请求加好友，3同意加好友，4拒绝加好友") @RequestParam int type,
-                                       @ApiParam(value = "加好友对应的请求消息，最长256字符") @RequestParam(required = false) String msg) throws IOException {
-        Response response = new Response();
+    /**
+     * 打招呼接口
+     *
+     * @return
+     * @throws IOException
+     */
+    @ApiOperation(value = "打招呼", notes = "打招呼", response = Response.class)
+    @RequestMapping(value = {"/say_hi"}, method = RequestMethod.POST)
+    public Response sayHi(@ApiParam @ModelAttribute ImMsg imMsg) throws IOException {
+        return imFacade.doFirstCommunicate(imMsg, 2, "打招呼");
+    }
 
-        Map map = imFacade.addFriend(ShiroUtil.getAccid(), faccid, type, msg);
-        if (map.get("code").equals(200)) {
-            response.setCode(200);
-            response.setMessage("添加好友成功");
-        } else {
-            response.setCode(400);
-            response.setMessage("添加好友失败");
+    /**
+     * 回复打招呼
+     *
+     * @param imMsg
+     * @return
+     * @throws IOException
+     */
+    @ApiOperation(value = "回复打招呼", notes = "回复打招呼", response = Response.class)
+    @RequestMapping(value = {"/say_hi"}, method = RequestMethod.POST)
+    public Response replySayHi(@ApiParam @ModelAttribute ImMsg imMsg) throws IOException {
+        return imFacade.doFirstCommunicate(imMsg, 3, "回复打招呼");
+    }
+
+
+    /**
+     * 判断当前用户和对方是什么情况
+     * is_say_hi=true, is_reply=true, 表示两人已经是好友，并且可以对话 (对话调IM接口)
+     * is_say_hi=true, is_reply=false, 表示对方还未回复，此时我不能再私信给对方 （提示）
+     * is_say_hi=false, is_reply=false, 表示两人都没有打招呼  （可以打招呼）
+     * is_say_hi=false, is_reply=true, 表示对方向我打招呼，但，我还没有回复 （可以回复打招呼）
+     *
+     * @param toAccid
+     * @return
+     * @throws IOException
+     */
+    @ApiOperation(value = "查询是否有权限发送消息", notes = "查询是否有权限发送消息", response = Response.class)
+    @RequestMapping(value = {"/get_communication_situation"}, method = RequestMethod.POST)
+    public Response getCommunicationSituation(@ApiParam("被发消息的人的accid") @RequestParam String toAccid) throws IOException {
+
+        Response response = new Response();
+        String accid = ShiroUtil.getAccid();
+        //默认是双方未互打招呼
+        Boolean is_say_hi = false;
+        Boolean is_reply = false;
+        Map map = new HashedMap();
+
+        List<ImFirstDialogue> list = imFacade.selectFirstDialog(toAccid);
+        if (ListUtil.isNotEmpty(list)) {
+            if (list.size() > 1) {
+                //说明用户已经打过招呼了，并且对方已经回复
+                is_say_hi = true;
+                is_reply = true;
+            } else {
+                if (list.get(0).getFromid().equals(accid)) {
+                    //说明用户已经打过招呼，但对方还未回复
+                    is_say_hi = true;
+                } else {
+                    //说明是对方先打招呼，用户还未回复
+                    is_reply = true;
+                }
+            }
         }
+        map.put("is_say_hi", is_say_hi);
+        map.put("is_reply", is_reply);
+        response.setData(map);
         return response;
     }
 

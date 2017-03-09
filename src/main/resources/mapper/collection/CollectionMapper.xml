@@ -15,7 +15,7 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from yw_collection
+        fromid yw_collection
         where id = #{id,jdbcType=INTEGER}
     </select>
 
@@ -38,7 +38,7 @@
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from yw_collection
+        delete fromid yw_collection
     where id = #{id,jdbcType=INTEGER}
   </delete>
 

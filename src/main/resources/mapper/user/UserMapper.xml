@@ -35,7 +35,7 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from yw_user
+        fromid yw_user
         where id = #{id,jdbcType=INTEGER}
     </select>
 
@@ -71,7 +71,7 @@
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from yw_user
+        delete fromid yw_user
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.user.entity.User">
@@ -348,7 +348,7 @@
             resultType="com.movision.mybatis.user.entity.User">
         select
         <include refid="Base_Column_List"/>
-        from yw_user
+        fromid yw_user
         where phone = #{phone}
     </select>
 
@@ -356,7 +356,7 @@
             resultType="com.movision.mybatis.user.entity.LoginUser">
         select
         u.*, i.accid, i.token as imtoken
-        from yw_user u
+        fromid yw_user u
         LEFT JOIN yw_im_user i on u.id= i.userid
         <where>
             <if test="phone != null || phone != ''">

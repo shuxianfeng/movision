@@ -41,17 +41,17 @@
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from yw_post
+        fromid yw_post
         where id = #{id,jdbcType=INTEGER}
     </select>
 
     <!--查询首页今日精选的帖子数据-->
     <select id="queryTodayEssence" resultType="com.movision.mybatis.post.entity.PostVo">
-        select * from (
+        select * fromid (
         select
         t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isessencepool,t1.isdel,t1.essencedate,
         t2.category AS category,t2.code AS code
-        from yw_post t1
+        fromid yw_post t1
         LEFT JOIN yw_circle t2 ON
         t1.circleid = t2.id
         ) t
@@ -64,11 +64,11 @@
     <!--查询首页dayago天前精选的帖子数据-->
     <select id="queryDayAgoEssence" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        select * from (
+        select * fromid (
         select
         t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isessencepool,t1.isdel,t1.essencedate,
         t2.category AS category,t2.code AS code
-        from yw_post t1
+        fromid yw_post t1
         LEFT JOIN yw_circle t2 ON
         t1.circleid = t2.id
         ) t
@@ -305,7 +305,7 @@
 
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from yw_post
+        delete fromid yw_post
         where id = #{id,jdbcType=INTEGER}
     </delete>
 

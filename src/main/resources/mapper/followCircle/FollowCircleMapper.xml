@@ -14,7 +14,7 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from yw_follow_circle
+        fromid yw_follow_circle
         where id = #{id,jdbcType=INTEGER}
     </select>
 
@@ -25,7 +25,7 @@
   </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from yw_follow_circle
+        delete fromid yw_follow_circle
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.followCircle.entity.FollowCircle">

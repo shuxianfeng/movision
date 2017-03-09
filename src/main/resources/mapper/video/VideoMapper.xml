@@ -21,11 +21,11 @@
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from yw_video
+        fromid yw_video
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from yw_video
+        delete fromid yw_video
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.video.entity.Video">
