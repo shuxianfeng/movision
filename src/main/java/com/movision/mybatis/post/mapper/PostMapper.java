@@ -5,6 +5,7 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
+import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.Date;
@@ -153,4 +154,5 @@ public interface PostMapper {
     Integer updateActiveByIdP(Period period);//编辑活动帖子
 
     PostActiveList queryActiveById(Integer id);//根据id查询帖子
+
 }

@@ -306,7 +306,7 @@ public class PostService {
     }
 
     /**
-     * 根据用户id查询用户收藏帖子列表
+     * 根据用户id查询用户被收藏帖子列表
      *
      * @param userid
      * @param pager

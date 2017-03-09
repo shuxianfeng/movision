@@ -150,5 +150,7 @@ public interface GoodsMapper {
 
     List<Integer> findcomboid();//查询套餐id
 
+    List<GoodsVo> findAllQueryCollectionGoodsListByUserid(String goodsid, RowBounds rowBounds);
+
 
 }

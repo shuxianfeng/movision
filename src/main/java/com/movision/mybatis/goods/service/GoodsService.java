@@ -1123,4 +1123,21 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 根据用户id查询用户被收藏的商品列表
+     *
+     * @param goodsid
+     * @param pager
+     * @return
+     */
+    public List<GoodsVo> queryCollectionGoodsListByUserid(String goodsid, Paging<GoodsVo> pager) {
+        try {
+            log.info("根据用户id查询用户被收藏的商品列表");
+            return goodsMapper.findAllQueryCollectionGoodsListByUserid(goodsid, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据用户id查询用户被收藏的商品列表异常");
+            throw e;
+        }
+    }
 }
