@@ -55,7 +55,7 @@ public interface BossOrdersMapper {
 
     InvoiceVo findAllInvoiceInfo(Integer id);//发票信息
 
-    Address findAllGetInfo(Integer id);//收货人信息
+    AddressVo findAllGetInfo(Integer id);//收货人信息
 
     int deleteOrder(Integer id);//删除订单
 
@@ -79,7 +79,7 @@ public interface BossOrdersMapper {
 
     int updateOperation(Orderoperation orderoperation);//修改发货状态
 
-    Address queryByAddress(Integer id);//返回地址
+    AddressVo queryByAddress(Integer id);//返回地址
 
     List<AfterServiceVo> findAllAfterService(RowBounds rowBounds);//售后服务r
 

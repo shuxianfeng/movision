@@ -263,7 +263,7 @@ public class OrderFacade {
         Map<String, Object> map = new HashedMap();
         InvoiceVo invoice = bossOrderService.queryOrderInvoiceInfo(id);//查询发票信息
         BossOrders bossOrders = bossOrderService.queryOrderInfo(id);//查询基本信息(包含其他信息)
-        Address bossOrdersGet = bossOrderService.queryOrderGetInfo(id);//查询收货人信息
+        AddressVo bossOrdersGet = bossOrderService.queryOrderGetInfo(id);//查询收货人信息
         if (bossOrdersGet != null) {
             String provice = bossOrdersGet.getProvince();
             String city = bossOrdersGet.getCity();
@@ -274,6 +274,9 @@ public class OrderFacade {
             bossOrdersGet.setProvince(prov);
             bossOrdersGet.setCity(cit);
             bossOrdersGet.setDistrict(distr);
+            bossOrdersGet.setProvicecode(provice);
+            bossOrdersGet.setCitycode(city);
+            bossOrdersGet.setDistrictcode(district);
         }
         List<GoodsTo> goods = bossOrderService.queryOrderGoods(id);//查询商品信息
         Double money = 0.0;//小计
@@ -438,7 +441,7 @@ public class OrderFacade {
      */
     public Map<String, Object> queryOrderByAddress(Integer id) {
         Map<String, Object> map = new HashedMap();
-        Address address = bossOrderService.queryOrdersByAddress(id);
+        AddressVo address = bossOrderService.queryOrdersByAddress(id);
         if (address != null) {
             String provice = address.getProvince();
             String city = address.getCity();
@@ -449,6 +452,9 @@ public class OrderFacade {
             address.setProvince(prov);
             address.setCity(cit);
             address.setDistrict(distr);
+            address.setProvicecode(provice);
+            address.setCitycode(city);
+            address.setDistrictcode(district);
             map.put("address", address);
         }
         return map;

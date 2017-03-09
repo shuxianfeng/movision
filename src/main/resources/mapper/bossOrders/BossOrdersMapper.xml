@@ -483,7 +483,7 @@ SELECT
         SET isdel=1
         WHERE id=#{id,jdbcType=INTEGER}
     </update>
-    <select id="findAllGetInfo" resultType="com.movision.mybatis.address.entity.Address"
+    <select id="findAllGetInfo" resultType="com.movision.mybatis.address.entity.AddressVo"
             parameterType="java.lang.Integer">
         SELECT a.phone,a.name,u.email,a.province,a.city,a.district,a.street FROM yw_address a LEFT JOIN yw_user u ON
         u.id=a.userid WHERE a.id=(SELECT s.addressid FROM yw_orders s WHERE s.id=#{id,jdbcType=INTEGER} )
@@ -609,7 +609,7 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
     </select>
 
     <select id="queryByAddress" parameterType="java.lang.Integer"
-            resultType="com.movision.mybatis.address.entity.Address">
+            resultType="com.movision.mybatis.address.entity.AddressVo">
         SELECT s.id, s.province,s.city,s.district,s.street FROM yw_address s WHERE s.id=#{id,jdbcType=INTEGER}
     </select>
     <select id="findAllAfterService" resultType="com.movision.mybatis.afterservice.entity.AfterServiceVo">

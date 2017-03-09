@@ -23,7 +23,7 @@
         <result column="paycode" property="paycode" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
-        <result column="logisticsid" property="logisticsid" jdbcType="INTEGER"/>
+        <result column="logisticsid" property="logisticsid" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, ordernumber, userid, addressid, takeway, position, status, bill, money, sendmoney,
@@ -56,7 +56,7 @@
         #{discouponmoney,jdbcType=DOUBLE}, #{dispointmoney,jdbcType=DOUBLE}, #{realmoney,jdbcType=DOUBLE},
         #{intime,jdbcType=TIMESTAMP}, #{paytype,jdbcType=INTEGER}, #{paytime,jdbcType=TIMESTAMP},
         #{paycode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{isdel,jdbcType=INTEGER},
-        #{logisticsid,jdbcType=INTEGER})
+        #{logisticsid,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.orders.entity.Orders">
         insert into yw_orders
@@ -193,7 +193,7 @@
                 #{isdel,jdbcType=INTEGER},
             </if>
             <if test="logisticsid != null">
-                #{logisticsid,jdbcType=INTEGER},
+                #{logisticsid,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -261,7 +261,7 @@
                 isdel = #{isdel,jdbcType=INTEGER},
             </if>
             <if test="logisticsid != null">
-                logisticsid = #{logisticsid,jdbcType=INTEGER},
+                logisticsid = #{logisticsid,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -288,7 +288,7 @@
         paycode = #{paycode,jdbcType=VARCHAR},
         remark = #{remark,jdbcType=VARCHAR},
         isdel = #{isdel,jdbcType=INTEGER},
-        logisticsid = #{logisticsid,jdbcType=INTEGER}
+        logisticsid = #{logisticsid,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 

@@ -82,7 +82,7 @@ public class BossOrderService {
      * @param id
      * @return
      */
-    public Address queryOrdersByAddress(Integer id) {
+    public AddressVo queryOrdersByAddress(Integer id) {
         try {
             loger.info("返回地址");
             return bossOrdersMapper.queryByAddress(id);
@@ -112,7 +112,7 @@ public class BossOrderService {
      * @param id
      * @return
      */
-    public Address queryOrderGetInfo(Integer id) {
+    public AddressVo queryOrderGetInfo(Integer id) {
         try {
             loger.info("查询收货人信息");
             return bossOrdersMapper.findAllGetInfo(id);
