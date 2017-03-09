@@ -291,6 +291,21 @@ public class PostService {
     }
 
     /**
+     * 根据用户id查询帖子列表
+     * @param map
+     * @return
+     */
+    public List<PostList> queryPostListByUserid(Map map, Paging<PostList> pager) {
+        try {
+            log.info("根据用户id查询帖子列表");
+            return postMapper.findAllQueryPostListByUserid(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据用户id查询帖子列表");
+            throw e;
+        }
+    }
+
+    /**
      * 后台管理-查询精贴列表
      * @param pager
      * @return

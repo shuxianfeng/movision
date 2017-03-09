@@ -130,6 +130,21 @@ public class PostFacade {
     }
 
     /**
+     * 根据用户id查询帖子列表
+     *
+     * @param userid
+     * @param type
+     * @param pager
+     * @return
+     */
+    public List<PostList> queryPostListByUserid(String userid, String type, Paging<PostList> pager) {
+        Map map = new HashedMap();
+        map.put("userid", userid);
+        map.put("type", type);
+        return postService.queryPostListByUserid(map, pager);
+    }
+
+    /**
      * 后台管理-查询活动列表（草稿箱）
      *
      * @param pager

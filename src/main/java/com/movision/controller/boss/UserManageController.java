@@ -1,9 +1,11 @@
 package com.movision.controller.boss;
 
 import com.movision.common.Response;
+import com.movision.facade.boss.PostFacade;
 import com.movision.facade.boss.UserManageFacade;
 import com.movision.facade.coupon.CouponFacade;
 import com.movision.mybatis.coupon.entity.Coupon;
+import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.record.entity.RecordVo;
 import com.movision.mybatis.submission.entity.Submission;
 import com.movision.mybatis.submission.entity.SubmissionVo;
@@ -36,6 +38,9 @@ public class UserManageController {
 
     @Autowired
     CouponFacade couponFacade;
+
+    @Autowired
+    PostFacade postFacade;
 
     /**
      * 查看vip申请列表
@@ -405,6 +410,32 @@ public class UserManageController {
             response.setMessage("查询成功");
         }
         response.setData(list);
+        return response;
+    }
+
+    /**
+     * 根据用户id查询帖子列表
+     *
+     * @param userid
+     * @param type
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "根据用户id查询帖子列表", notes = "用于根据用户id查询帖子列表接口", response = Response.class)
+    @RequestMapping(value = "query_post_userid", method = RequestMethod.POST)
+    public Response queryPostByUserid(@ApiParam(value = "用户id") @RequestParam String userid,
+                                      @ApiParam(value = "查询帖子：不用填，查询精贴：2") @RequestParam(required = false) String type,
+                                      @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                      @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostList> list = postFacade.queryPostListByUserid(userid, type, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 }
