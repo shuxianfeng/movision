@@ -478,9 +478,9 @@ public class GoodsController {
      */
     @ApiOperation(value = "回复评论", notes = "回复评论", response = Response.class)
     @RequestMapping(value = "add_assessment", method = RequestMethod.POST)
-    public Response addAssessment(@ApiParam(value = "回复内容") @RequestParam(required = false) String content,
-                                  @ApiParam(value = "商品id") @RequestParam(required = false) String goodid,
-                                  @ApiParam(value = "父评论id") @RequestParam(required = false) String pid) {
+    public Response addAssessment(@ApiParam(value = "回复内容") @RequestParam String content,
+                                  @ApiParam(value = "商品id") @RequestParam String goodid,
+                                  @ApiParam(value = "父评论id") @RequestParam String pid) {
         Response response = new Response();
         Map<String, Integer> goodsAssessment = goodsFacade.addAssessment(content, goodid, pid);
         if (response.getCode() == 200) {
