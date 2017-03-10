@@ -9,7 +9,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.movision.utils.PropertiesUtils;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.ueditor.PathFormat;
 import com.movision.utils.ueditor.define.AppInfo;
@@ -23,7 +23,7 @@ public class BinaryUploader {
 
 
     public static final State saveToObject(HttpServletRequest request, Map<String, Object> conf) {
-        String uploadMode = PropertiesUtils.getValue("upload.mode");
+        String uploadMode = PropertiesLoader.getValue("upload.mode");
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         MultipartFile upfile = multipartRequest.getFile("upfile");
         if ("zhb".equals(uploadMode)) {

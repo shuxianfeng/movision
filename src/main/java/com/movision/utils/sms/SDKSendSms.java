@@ -1,7 +1,7 @@
 package com.movision.utils.sms;
 
 import com.google.gson.Gson;
-import com.movision.utils.PropertiesUtils;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -19,7 +19,7 @@ public class SDKSendSms {
 
     public static Boolean sendSMS(String mobile, String params, String templateCode){
 
-        String gateWay = PropertiesUtils.getValue("sms_gateway");
+        String gateWay = PropertiesLoader.getValue("sms_gateway");
 
         if("alidayu".equals(gateWay)){
             return SDKSendTaoBaoSMS.sendSMS(mobile,params,templateCode);
@@ -40,7 +40,7 @@ public class SDKSendSms {
         map.put("code","04sb250,094sb0");
         Gson gson = new Gson();
         String json = gson.toJson(map);
-        SDKSendSms.sendSMS("18652093798",json,PropertiesUtils.getValue("course_begin_sms_template_code"));
+        SDKSendSms.sendSMS("18652093798", json, PropertiesLoader.getValue("course_begin_sms_template_code"));
 
     }
 }

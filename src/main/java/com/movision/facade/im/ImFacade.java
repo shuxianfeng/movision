@@ -150,7 +150,7 @@ public class ImFacade {
     }
 
     /**
-     * 新增IM用户
+     * APP新增IM用户
      *
      * @param imUser
      * @return 把返回值给app端
@@ -158,6 +158,18 @@ public class ImFacade {
      */
     public ImUser AddImUser(ImUser imUser) throws IOException {
 
+        registerImUserAndSave(imUser, ShiroUtil.getAppUserID(), ImConstant.TYPE_APP);
+        return imUserService.selectByUserid(ShiroUtil.getAppUserID(), ImConstant.TYPE_APP);
+    }
+
+    /**
+     * 注册云信用户， 并且保存用户信息在本地
+     *
+     * @param imUser
+     * @param currentUserid
+     * @throws IOException
+     */
+    public void registerImUserAndSave(ImUser imUser, int currentUserid, int systemType) throws IOException {
         Map res = this.registerIM(imUser);
 
         if (res.get("code").equals(200)) {
@@ -167,6 +179,7 @@ public class ImFacade {
             String token = String.valueOf(infoMap.get("token"));
             String accid = String.valueOf(infoMap.get("accid"));
             String name = String.valueOf(infoMap.get("name"));
+
             log.info("注册IM用户从服务器返回的值：token=" + token + ",accid=" + accid + ",name=" + name);
 
             //im用户信息入库
@@ -174,14 +187,13 @@ public class ImFacade {
             finalImUser.setAccid(accid);
             finalImUser.setToken(token);
             finalImUser.setName(name);
-            finalImUser.setUserid(ShiroUtil.getAppUserID());
+            finalImUser.setUserid(currentUserid);
+            finalImUser.setType(systemType);
             imUserService.addImUser(finalImUser);
 
-
         } else {
-            throw new BusinessException(MsgCodeConstant.create_im_accid_fail, "创建云信id失败");
+            throw new BusinessException(MsgCodeConstant.create_im_accid_fail, "注册云信用户失败");
         }
-        return imUserService.selectByUserid(ShiroUtil.getAppUserID());
     }
 
 
@@ -190,8 +202,8 @@ public class ImFacade {
      *
      * @return
      */
-    public ImUser getImuserByCurrentAppuser() {
-        return imUserService.selectByUserid(ShiroUtil.getAppUserID());
+    public ImUser getImuserByCurrentAppuser(int type) {
+        return imUserService.selectByUserid(ShiroUtil.getAppUserID(), type);
     }
 
     /**
@@ -199,8 +211,8 @@ public class ImFacade {
      *
      * @return true:存在；  false:不存在
      */
-    public Boolean isExistImuser() {
-        ImUser imUser = imUserService.selectByUserid(ShiroUtil.getAppUserID());
+    public Boolean isExistImuser(int type) {
+        ImUser imUser = imUserService.selectByUserid(ShiroUtil.getAppUserID(), type);
         return null != imUser;
     }
 

@@ -1,7 +1,7 @@
 package com.movision.utils.redis;
 
 
-import com.movision.utils.ApplicationPropertiesUtils;
+import com.movision.utils.propertiesLoader.ApplicationPropertiesLoader;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -17,10 +17,10 @@ public class RedisUtil {
 	
 	
 	//Redis服务器IP
-    private static String ADDR = ApplicationPropertiesUtils.getValue("redis.host");
+    private static String ADDR = ApplicationPropertiesLoader.getValue("redis.host");
     
     //Redis的端口号
-    private static int PORT = Integer.valueOf(ApplicationPropertiesUtils.getValue("redis.port"));
+    private static int PORT = Integer.valueOf(ApplicationPropertiesLoader.getValue("redis.port"));
     //访问密码
     private static String AUTH = "admin";
     
@@ -29,10 +29,10 @@ public class RedisUtil {
     private static int MAX_ACTIVE = 1024;
     
     //控制一个pool最多有多少个状态为idle(空闲的)的jedis实例，默认值也是8。
-    private static int MAX_IDLE = Integer.valueOf(ApplicationPropertiesUtils.getValue("redis.maxIdle"));
+    private static int MAX_IDLE = Integer.valueOf(ApplicationPropertiesLoader.getValue("redis.maxIdle"));
     
     //等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接抛出JedisConnectionException；
-    private static int MAX_WAIT = Integer.valueOf(ApplicationPropertiesUtils.getValue("redis.maxWait"));
+    private static int MAX_WAIT = Integer.valueOf(ApplicationPropertiesLoader.getValue("redis.maxWait"));
     
     private static int TIMEOUT = 10000;
     

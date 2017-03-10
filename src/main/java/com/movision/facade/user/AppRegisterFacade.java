@@ -7,7 +7,7 @@ import com.movision.exception.BusinessException;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.utils.DateUtils;
-import com.movision.utils.MsgPropertiesUtils;
+import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
@@ -88,11 +88,11 @@ public class AppRegisterFacade {
             } else {
                 //超过短信验证码有效期，则清除session信息
                 session.removeAttribute("r" + validateinfo.getAccount());
-                throw new BusinessException(MsgCodeConstant.member_mcode_sms_timeout, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_sms_timeout)));
+                throw new BusinessException(MsgCodeConstant.member_mcode_sms_timeout, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.member_mcode_sms_timeout)));
             }
 
         } else {
-            throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
+            throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
         }
     }
 

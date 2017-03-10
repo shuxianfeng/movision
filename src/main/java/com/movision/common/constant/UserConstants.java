@@ -1,5 +1,7 @@
 package com.movision.common.constant;
 
+import com.movision.utils.propertiesLoader.BossPropertiesLoader;
+
 import java.util.Date;
 
 /**
@@ -7,6 +9,16 @@ import java.util.Date;
  * @Date 2017/1/18 14:59
  */
 public class UserConstants {
+
+    /**
+     * 超管角色id
+     */
+    public static final String SUPER_ADMIN = BossPropertiesLoader.getValue("boss_superadmin_role");
+    /**
+     * 系统管理员角色id
+     */
+    public static final String SYSTEM_ADMIN = BossPropertiesLoader.getValue("boss_system_admin_role");
+
 
 
     public enum USER_STATUS {

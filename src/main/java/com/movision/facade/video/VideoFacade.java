@@ -3,10 +3,8 @@ package com.movision.facade.video;
 import com.movision.common.constant.ApiConstants;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.BusinessException;
-import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
-import com.movision.utils.PropertiesUtils;
-import com.movision.utils.VideoUtil;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -15,14 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -88,7 +83,7 @@ public class VideoFacade {
                     //获得保存文件的路径
 //                    String basePath = sctx.getRealPath("videos");
                     String basePath = apiConstants.getUploadDir() + "/" + chann + "/video";
-                    String videoDomain = PropertiesUtils.getValue("upload.video.domain");
+                    String videoDomain = PropertiesLoader.getValue("upload.video.domain");
                     //获得文件名
                     String fileUrl = item.getName();
                     //在某些操作系统上,item.getName()方法会返回文件的完整名称,即包括路径

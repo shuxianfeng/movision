@@ -33,13 +33,14 @@ public class CheckSumBuilder {
     }
 
     /**
-     * 根据用户的手机号生成一个accid
-     * @param phone
+     * 根据指定字符串生成一个accid
+     * 生成规则：拼接 【字符串+APP_SECRET+当前时间戳】， 最后进行MD5
+     * @param str
      * @return
      */
-    public static String getAccid(String phone) {
+    public static String getAccid(String str) {
         String curTime = String.valueOf((new Date()).getTime() / 1000L);
-        return encode("md5", phone + ImConstant.APP_SECRET + curTime);
+        return encode("md5", str + ImConstant.APP_SECRET + curTime);
     }
 
     /**

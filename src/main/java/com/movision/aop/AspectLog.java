@@ -1,7 +1,7 @@
 package com.movision.aop;
 
 import com.movision.shiro.realm.ShiroRealm.ShiroUser;
-import com.movision.utils.PropertiesUtils;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -10,7 +10,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -53,7 +52,7 @@ public class AspectLog {
         String queryString = request.getQueryString();
         String userAgent = request.getHeader("User-Agent");
 
-        String logMode = PropertiesUtils.getValue("busi.log.mode");
+        String logMode = PropertiesLoader.getValue("busi.log.mode");
 
         switch (logMode) {
             case "db":

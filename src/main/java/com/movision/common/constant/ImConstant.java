@@ -13,6 +13,10 @@ public class ImConstant {
     public static final String APP_SECRET = ImPropertiesLoader.getPropertyValue("app_secret");
 
 
+    public static final Integer TYPE_APP = 1;
+    public static final Integer TYPE_BOSS = 0;
+
+
     //-------------------------------------**********-----------------------------------------------
 
     /**

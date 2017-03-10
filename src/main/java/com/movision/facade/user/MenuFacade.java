@@ -6,7 +6,7 @@ import com.movision.mybatis.bossMenu.entity.AuthMenu;
 import com.movision.mybatis.bossMenu.entity.Menu;
 import com.movision.mybatis.bossMenu.entity.MenuDetail;
 import com.movision.mybatis.bossMenu.service.MenuService;
-import com.movision.utils.MsgPropertiesUtils;
+import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ public class MenuFacade {
         //检验菜单名是否已经存在
         int isExist = menuService.isExistSameName(menu);
         if (isExist >= 1) {
-            throw new BusinessException(MsgCodeConstant.boss_menu_name_is_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.boss_menu_name_is_exist)));
+            throw new BusinessException(MsgCodeConstant.boss_menu_name_is_exist, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.boss_menu_name_is_exist)));
         }
     }
 

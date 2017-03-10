@@ -4,11 +4,9 @@ import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.BusinessException;
 import com.movision.mybatis.role.entity.Role;
 import com.movision.mybatis.role.service.RoleService;
-import com.movision.utils.MsgPropertiesUtils;
+import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.junit.Assert.*;
 
 /**
  * @Author zhuangyuhao
@@ -35,7 +33,7 @@ public class RoleFacadeTest {
         int isExist = roleService.isExistSameName(role);
         if (isExist >= 1) {
             System.out.println("error");
-            throw new BusinessException(MsgCodeConstant.boss_role_name_is_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.boss_role_name_is_exist)));
+            throw new BusinessException(MsgCodeConstant.boss_role_name_is_exist, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.boss_role_name_is_exist)));
         }
     }
 

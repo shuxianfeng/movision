@@ -8,5 +8,5 @@ public interface ImUserMapper {
 
     int insertSelective(ImUser record);
 
-    ImUser selectByUserid(@Param("userid") Integer id);
+    ImUser selectByUserid(@Param("userid") Integer id, @Param("type") Integer type);
 }

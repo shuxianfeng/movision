@@ -9,12 +9,13 @@
         <result column="icon" property="icon" jdbcType="VARCHAR"/>
         <result column="sign" property="sign" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
     </resultMap>
     <insert id="insert" parameterType="com.movision.mybatis.imuser.entity.ImUser">
         insert into yw_im_user (userid, accid, token,
-        name, icon, sign, create_time)
+        name, icon, sign, create_time,type)
         values (#{userid,jdbcType=INTEGER}, #{accid,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR},
-        #{name,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, #{createTime})
+        #{name,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, #{createTime}, #{type})
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.imuser.entity.ImUser">
         insert into yw_im_user
@@ -38,6 +39,9 @@
                 sign,
             </if>
             create_time,
+            <if test="type!=null">
+                type,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userid != null">
@@ -59,6 +63,9 @@
                 #{sign,jdbcType=VARCHAR},
             </if>
             now(),
+            <if test="type != null">
+                #{type},
+            </if>
         </trim>
     </insert>
 
@@ -66,5 +73,6 @@
         SELECT *
         FROM yw_im_user
         WHERE userid = #{userid}
+        AND type = #{type}
     </select>
 </mapper>

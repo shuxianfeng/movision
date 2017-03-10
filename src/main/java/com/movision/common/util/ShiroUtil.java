@@ -3,9 +3,7 @@ package com.movision.common.util;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.SessionConstant;
 import com.movision.exception.AuthException;
-import com.movision.mybatis.bossUser.entity.BossUser;
-import com.movision.utils.MsgPropertiesUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -35,7 +33,7 @@ public class ShiroUtil {
             }
         } catch (Exception e) {
             log.error("从session中获取当前登录的app用户失败!", e);
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.un_login)));
 
         }
         return member;
@@ -52,7 +50,7 @@ public class ShiroUtil {
             }
         } catch (Exception e) {
             log.error("从session中获取当前登录的Boss用户失败!", e);
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.un_login)));
 
         }
         return member;
@@ -72,7 +70,7 @@ public class ShiroUtil {
             }
         } catch (Exception e) {
             log.error("get seesion user info error!", e);
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return createID;
     }
@@ -96,7 +94,7 @@ public class ShiroUtil {
             }
         } catch (Exception e) {
             log.error("从session中获取当前登录人id失败!", e);
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return createID;
     }
@@ -134,7 +132,7 @@ public class ShiroUtil {
             }
         } catch (Exception e) {
             log.error("get seesion user info error!", e);
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.un_login)));
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.un_login)));
         }
         return accid;
     }
