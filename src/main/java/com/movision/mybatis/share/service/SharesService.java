@@ -55,4 +55,21 @@ public class SharesService {
             throw e;
         }
     }
+
+    /**
+     * 根据用户id查询用户被分享的分享列表
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<SharesVo> querySharePostList(Map map, Paging<SharesVo> pager) {
+        try {
+            log.info("根据用户id查询用户被分享的分享列表");
+            return sharesMapper.findAllqueryShareList(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据用户id查询用户被分享的分享列表");
+            throw e;
+        }
+    }
 }

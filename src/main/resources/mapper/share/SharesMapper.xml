@@ -109,4 +109,16 @@
             ORDER BY intime ASC
         </if>
     </select>
+
+    <select id="findAllqueryShareList" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.share.entity.SharesVo">
+        SELECT s.*,u.nickname FROM yw_post_share s LEFT JOIN yw_user u ON s.userid=u.id WHERE s.postid
+        IN (SELECT id FROM yw_post WHERE userid=1 AND isdel=0 AND isactive=0)
+        <if test="type==0">
+            ORDER BY intime DESC
+        </if>
+        <if test="type==1">
+            ORDER BY intime ASC
+        </if>
+    </select>
 </mapper>

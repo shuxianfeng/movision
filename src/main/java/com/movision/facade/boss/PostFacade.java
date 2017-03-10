@@ -162,8 +162,11 @@ public class PostFacade {
      * @param pager
      * @return
      */
-    public List<PostList> querySharePostList(String userid, Paging<PostList> pager) {
-        return postService.querySharePostList(userid, pager);
+    public List<SharesVo> querySharePostList(String userid, Paging<SharesVo> pager) {
+        Map map = new HashedMap();
+        map.put("userid", userid);
+        map.put("type", 1);
+        return sharesService.querySharePostList(map, pager);
     }
 
     /**
