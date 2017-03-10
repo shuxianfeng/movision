@@ -248,7 +248,7 @@ public class CircleFacade {
      * @param id
      * @param name
      * @param category
-     * @param admin
+     * @param circleadmin
      * @param photo
      * @param introduction
      * @param erweima
@@ -259,7 +259,7 @@ public class CircleFacade {
      * @return
      */
     public Map<String, Integer> updateCircle(String id, String name, String category, String circlemanid,
-                                             String admin, String photo, String introduction,
+                                             String circleadmin, String photo, String introduction,
                                              String erweima, String status, String isrecommend, String orderid, String permission) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
@@ -274,9 +274,9 @@ public class CircleFacade {
             if (category != null) {
                 circleDetails.setCategory(Integer.parseInt(category));
             }
-        if (admin != null && admin != "") {//管理员列表
+        if (circleadmin != null && circleadmin != "") {//管理员列表
                 //待定
-                String[] ary = admin.split(",");//以逗号分隔接收数据
+            String[] ary = circleadmin.split(",");//以逗号分隔接收数据
                 managerService.deleteManagerToCircleid(circleid);//删除圈子的所有管理员
                 for (String itm : ary) {//循环添加
                     Map<String, Integer> mapd = new HashedMap();
@@ -389,7 +389,6 @@ public class CircleFacade {
             }
             circleDetails.setCreatetime(new Date());
             if (photo != null) {
-                //savedFileName = movisionOssClient.uploadObject(photo, "img", "circle");
                 circleDetails.setPhoto(photo);
             }
             if (introduction != null) {
