@@ -373,6 +373,7 @@ public class CircleFacade {
                                           String circlemanid, String photo, String introduction) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
+        System.out.println(circleadmin + "****************************************************");
         if (!StringUtils.isEmpty(category)) {
                 circleDetails.setName(name);
             }
