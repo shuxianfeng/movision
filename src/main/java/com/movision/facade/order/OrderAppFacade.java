@@ -412,6 +412,8 @@ public class OrderAppFacade {
                         orders.setDiscouponmoney(coupon.getTmoney());
 
                         realpayamount = realpayamount - coupon.getTmoney();//实际支付金额扣减
+                    } else {
+                        orders.setIsdiscount(0);//只使用了一张优惠券，除了上面两种情况之外的情况全部设为0 未使用优惠券
                     }
                 } else {//未使用优惠券
                     orders.setIsdiscount(0);

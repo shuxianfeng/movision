@@ -361,11 +361,11 @@
     <!--插入一条用户参与活动的记录-->
     <insert id="saveActiveRecord" parameterType="java.util.Map">
       INSERT INTO yw_active_part (
-        postid, userid, title, email, videourl, introduction
+        postid, userid, title, email, introduction
       )
       VALUES (
         #{postid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
-        #{email,jdbcType=VARCHAR}, #{videourl,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR}
+        #{email,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR}
       )
     </insert>
 
