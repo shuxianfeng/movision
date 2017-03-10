@@ -1029,20 +1029,20 @@
         <if test="comboname!=null and comboname!=''">
             AND c.comboname LIKE concat('%',#{comboname,jdbcType=VARCHAR},'%')
         </if>
-        <if test="allstatue==1 and combodiscountprice!=null and combodiscountprice!='' and allstatue!=null and allstatue!='' ">
+        <if test="allstatue==1 and minrex!=null and minrex!='' and maxrex!=null and maxrex!='' ">
             AND c.combodiscountprice BETWEEN #{minrex,jdbcType=DOUBLE} AND #{maxrex,jdbcType=DOUBLE}
         </if>
-        <if test="allstatue==2 and sales!=null and sales!='' and allstatue!=null and allstatue!=''">
+        <if test="allstatue==2 and minrex!=null and maxrex!=''">
             AND (SELECT COUNT(1) FROM yw_sub_order o WHERE o.combotype=c.comboid ) BETWEEN #{minrex,jdbcType=INTEGER}
             AND #{maxrex,jdbcType=INTEGER}
         </if>
         <if test="comboid!=null and comboid!=''">
             AND c.comboid=#{comboid,jdbcType=INTEGER}
         </if>
-        <if test="intime!=null and intime!='' and mintime!=null and maxtime!=null and maxtime!='' and mintime!='' ">
+        <if test="mintime!=null and maxtime!=null and maxtime!='' and mintime!='' ">
             AND c.intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
         </if>
-        <if test="allstatue==3 and price!=null and price!='' and allstatue!=null and allstatue!=''">
+        <if test="allstatue==3  and minrex!=null and minrex!='' and maxrex!=null and maxrex!=''">
             AND d.price BETWEEN #{minrex,jdbcType=DOUBLE} AND #{maxrex,jdbcType=DOUBLE}
         </if>
         <if test="name!=null and name!=''">
