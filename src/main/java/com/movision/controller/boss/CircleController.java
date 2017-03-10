@@ -250,6 +250,8 @@ public class CircleController {
                               @ApiParam(value = "圈子否封面") @RequestParam String photo,
                               @ApiParam(value = "圈子简介") @RequestParam String introduction) {
         Response response = new Response();
+        System.out.println("测试circleadmin》》》》》》》》》》》》》》》》》》》》》" + circleadmin);
+        System.out.println("测试circlemanid》》》》》》》》》》》》》》》》》》》》》" + circlemanid);
         Map<String, Integer> map = circleFacade.addCircle(name, category, userid, circleadmin, circlemanid, photo, introduction);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
