@@ -222,6 +222,10 @@ public class ImFacade {
         return imUserService.selectByUserid(ShiroUtil.getBossUserID(), ImConstant.TYPE_BOSS);
     }
 
+    public ImUser getImuser(Integer uid, Integer type) {
+        return imUserService.selectByUserid(uid, type);
+    }
+
     /**
      * 判断是否存在APP IM账号
      *

@@ -1,10 +1,13 @@
 package com.movision.shiro.realm;
 
+import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.SessionConstant;
 import com.movision.common.constant.UserConstants;
+import com.movision.facade.im.ImFacade;
 import com.movision.facade.user.BossUserFacade;
 import com.movision.facade.user.UserRoleRelationFacade;
 import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -33,6 +36,9 @@ public class BossRealm extends AuthorizingRealm {
     @Autowired
     private BossUserFacade bossUserFacade;
 
+    @Autowired
+    private ImFacade imFacade;
+
     /**
      * 认证回调函数,登录时调用.
      */
@@ -50,11 +56,14 @@ public class BossRealm extends AuthorizingRealm {
         }
         // 获取用户的角色
         int roleid = userRoleRelationFacade.getRoleidByUserid(bossUser.getId());
+        ImUser imUser = imFacade.getImuser(bossUser.getId(), ImConstant.TYPE_BOSS);
+        String accid = null == imUser ? null : imUser.getAccid();
+        String imtoken = null == imUser ? null : imUser.getToken();
 
         //封装自定义principle对象
         ShiroBossUser shiroBossUser = new ShiroBossUser(bossUser.getId(), bossUser.getName(), bossUser.getPhone(), bossUser.getUsername(),
                 bossUser.getPassword(), bossUser.getIssuper(), bossUser.getStatus(), bossUser.getIsdel(), bossUser.getCreatetime(),
-                bossUser.getAfterlogintime(), bossUser.getBeforelogintime(), roleid);
+                bossUser.getAfterlogintime(), bossUser.getBeforelogintime(), roleid, accid, imtoken);
 
         AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 shiroBossUser, // 自定义principle对象
@@ -136,7 +145,24 @@ public class BossRealm extends AuthorizingRealm {
         //对应的角色
         private Integer role;
         private String accid;
+        private String imtoken;
 
+        public void setAccid(String accid) {
+            this.accid = accid;
+        }
+
+        public void setToken(String imtoken) {
+            this.imtoken = imtoken;
+        }
+
+        public String getAccid() {
+
+            return accid;
+        }
+
+        public String getImtoken() {
+            return imtoken;
+        }
 
         public void setId(Integer id) {
             this.id = id;
@@ -239,7 +265,7 @@ public class BossRealm extends AuthorizingRealm {
             return role;
         }
 
-        public ShiroBossUser(Integer id, String name, String phone, String username, String password, Integer issuper, Integer status, Integer isdel, Date createtime, Date afterlogintime, Date beforelogintime, Integer role) {
+        public ShiroBossUser(Integer id, String name, String phone, String username, String password, Integer issuper, Integer status, Integer isdel, Date createtime, Date afterlogintime, Date beforelogintime, Integer role, String accid, String imtoken) {
             this.id = id;
             this.name = name;
             this.phone = phone;
@@ -252,6 +278,8 @@ public class BossRealm extends AuthorizingRealm {
             this.afterlogintime = afterlogintime;
             this.beforelogintime = beforelogintime;
             this.role = role;
+            this.accid = accid;
+            this.imtoken = imtoken;
         }
 
         @Override
@@ -269,6 +297,8 @@ public class BossRealm extends AuthorizingRealm {
                     ", afterlogintime=" + afterlogintime +
                     ", beforelogintime=" + beforelogintime +
                     ", role=" + role +
+                    ", accid='" + accid + '\'' +
+                    ", imtoken='" + imtoken + '\'' +
                     '}';
         }
 

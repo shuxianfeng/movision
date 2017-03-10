@@ -3,13 +3,16 @@ package com.movision.aop;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.SessionConstant;
 import com.movision.facade.boss.BossLoginFacade;
+import com.movision.facade.im.ImFacade;
 import com.movision.facade.user.BossUserFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.facade.user.UserRoleRelationFacade;
 import com.movision.mybatis.bossMenu.entity.AuthMenu;
 import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.shiro.realm.BossRealm;
 import com.movision.utils.propertiesLoader.LoginPropertiesLoader;
@@ -53,6 +56,9 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private BossLoginFacade bossLoginFacade;
+
+    @Autowired
+    private ImFacade imFacade;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -131,11 +137,17 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
             //根据用户名获取用户信息
             BossUser bossUser = bossUserFacade.getUserByPhone(bossuser.getPhone());
             int roleid = userRoleRelationFacade.getRoleidByUserid(bossUser.getId());
+            //获取imuser
+            ImUser imUser = imFacade.getImuser(bossUser.getId(), ImConstant.TYPE_BOSS);
+            String accid = null == imUser ? null : imUser.getAccid();
+            String imtoken = null == imUser ? null : imUser.getToken();
+
+
             if (null != bossUser) {
                 // 初始化登录信息
                 BossRealm.ShiroBossUser loginInfo = new BossRealm.ShiroBossUser(bossUser.getId(), bossUser.getName(), bossUser.getPhone(), bossUser.getUsername(),
                         bossUser.getPassword(), bossUser.getIssuper(), bossUser.getStatus(), bossUser.getIsdel(), bossUser.getCreatetime(),
-                        bossUser.getAfterlogintime(), bossUser.getBeforelogintime(), roleid);
+                        bossUser.getAfterlogintime(), bossUser.getBeforelogintime(), roleid, accid, imtoken);
 
                 //判断登录信息是否改变,若改变了则更新session，
                 if (this.loginBossInfoIsChange(bossuser, loginInfo)) {
@@ -187,7 +199,8 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
     private boolean loginUserInfoIsChange(ShiroUser appuser, ShiroUser loginInfo) {
         boolean isChange = appuser == null || loginInfo == null || loginInfo.getLevel() != appuser.getLevel()
                 || loginInfo.getStatus() != appuser.getStatus() || !loginInfo.getRole().equals(appuser.getRole())
-                || loginInfo.getToken() != appuser.getToken();
+                || loginInfo.getToken() != appuser.getToken() || loginInfo.getAccid() != appuser.getAccid()
+                || loginInfo.getImToken() != appuser.getImToken();
         return isChange;
     }
 
@@ -201,7 +214,9 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
     private boolean loginBossInfoIsChange(BossRealm.ShiroBossUser bossuser, BossRealm.ShiroBossUser loginInfo) {
         boolean isChange = bossuser == null || loginInfo == null || bossuser.getRole() != loginInfo.getRole()
                 || bossuser.getPhone() != loginInfo.getPhone() || bossuser.getPassword() != loginInfo.getPassword()
-                || bossuser.getUsername() != loginInfo.getUsername();
+                || bossuser.getUsername() != loginInfo.getUsername()
+                || bossuser.getAccid() != loginInfo.getAccid()
+                || bossuser.getImtoken() != loginInfo.getImtoken();
         return isChange;
     }
 }
