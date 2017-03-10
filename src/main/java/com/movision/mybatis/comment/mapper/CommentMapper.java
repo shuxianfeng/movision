@@ -49,4 +49,6 @@ public interface CommentMapper {
 
     List<CommentVo> findAllQueryCommentListByUserid(String userid, RowBounds rowBounds);
 
+    List<CommentVo> findAllqueryTheUserComments(String userid, RowBounds rowBounds);
+
 }

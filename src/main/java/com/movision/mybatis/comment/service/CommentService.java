@@ -233,4 +233,21 @@ public class CommentService {
             throw e;
         }
     }
+
+    /**
+     * 查询用户评论帖子的评论列表
+     *
+     * @param userid
+     * @param pager
+     * @return
+     */
+    public List<CommentVo> queryTheUserComments(String userid, Paging<CommentVo> pager) {
+        try {
+            log.info("查询用户评论帖子的评论列表");
+            return commentMapper.findAllqueryTheUserComments(userid, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询用户评论帖子的评论列表异常");
+            throw e;
+        }
+    }
 }

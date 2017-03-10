@@ -446,6 +446,8 @@ public class UserManageController {
         return response;
     }
 
+    //------------------------------收藏------------------------------------
+
     /**
      * 根据用户id查询用户被收藏的帖子列表
      *
@@ -455,8 +457,8 @@ public class UserManageController {
      * @return
      */
     @ApiOperation(value = "根据用户id查询用户被收藏的帖子列表", notes = "用于根据用户id查询用户被收藏的帖子列表接口", response = Response.class)
-    @RequestMapping(value = "query_collection_userid", method = RequestMethod.POST)
-    public Response queryCollectionListByUserid(@ApiParam(value = "用户id") @RequestParam String userid,
+    @RequestMapping(value = "query_by_collection_userid", method = RequestMethod.POST)
+    public Response queryByCollectionListByUserid(@ApiParam(value = "用户id") @RequestParam String userid,
                                                 @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                                 @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
@@ -470,53 +472,6 @@ public class UserManageController {
         return response;
     }
 
-    /**
-     * 根据用户id查询用户被分享的帖子列表
-     *
-     * @param userid
-     * @param pageNo
-     * @param pageSize
-     * @return
-     */
-    @ApiOperation(value = "根据用户id查询用户被分享的帖子列表", notes = "用于根据用户id查询用户被分享的帖子列表接口", response = Response.class)
-    @RequestMapping(value = "query_share_post_list", method = RequestMethod.POST)
-    public Response querySharePostList(@ApiParam(value = "用户id") @RequestParam String userid,
-                                       @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                       @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
-        Response response = new Response();
-        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostList> list = postFacade.querySharePostList(userid, pager);
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
-        }
-        pager.result(list);
-        response.setData(pager);
-        return response;
-    }
-
-    /**
-     * 根据用户id查询用户帖子被评论的评论列表
-     *
-     * @param userid
-     * @param pageNo
-     * @param pageSize
-     * @return
-     */
-    @ApiOperation(value = "根据用户id查询用户帖子被评论的评论列表", notes = "用于根据用户id查询用户帖子被评论的评论列表接口", response = Response.class)
-    @RequestMapping(value = "query_comment_userid", method = RequestMethod.POST)
-    public Response queryCommentListByUserid(@ApiParam(value = "用户id") @RequestParam String userid,
-                                             @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                             @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
-        Response response = new Response();
-        Paging<CommentVo> pager = new Paging<CommentVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<CommentVo> list = userManageFacade.queryCommentListByUserid(userid, pager);
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
-        }
-        pager.result(list);
-        response.setData(pager);
-        return response;
-    }
 
     /**
      * 根据用户id查询用户收藏的商品列表
@@ -542,6 +497,7 @@ public class UserManageController {
         return response;
     }
 
+
     /**
      * 查询收藏的帖子列表
      *
@@ -565,4 +521,83 @@ public class UserManageController {
         response.setData(pager);
         return response;
     }
+
+    //---------------------------------------分享-------------------------------------------
+
+    /**
+     * 根据用户id查询用户被分享的帖子列表
+     *
+     * @param userid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "根据用户id查询用户被分享的帖子列表", notes = "用于根据用户id查询用户被分享的帖子列表接口", response = Response.class)
+    @RequestMapping(value = "query_share_by_post_list", method = RequestMethod.POST)
+    public Response queryBySharePostList(@ApiParam(value = "用户id") @RequestParam String userid,
+                                       @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                       @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostList> list = postFacade.querySharePostList(userid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
+
+    //--------------------------------------------评论-----------------------------------------------
+
+    /**
+     * 根据用户id查询用户帖子被评论的评论列表
+     *
+     * @param userid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "根据用户id查询用户帖子被评论的评论列表", notes = "用于根据用户id查询用户帖子被评论的评论列表接口", response = Response.class)
+    @RequestMapping(value = "query_comment_by_userid", method = RequestMethod.POST)
+    public Response queryByCommentListByUserid(@ApiParam(value = "用户id") @RequestParam String userid,
+                                             @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                             @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<CommentVo> pager = new Paging<CommentVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<CommentVo> list = userManageFacade.queryCommentListByUserid(userid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 查询用户评论帖子的评论列表
+     *
+     * @param userid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查询用户评论帖子的评论列表", notes = "用于根据用户id查询评论的帖子评论列表接口", response = Response.class)
+    @RequestMapping(value = "query_the_user_comments", method = RequestMethod.POST)
+    public Response queryTheUserComments(@ApiParam(value = "用户id") @RequestParam String userid,
+                                         @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                         @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<CommentVo> pager = new Paging<CommentVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<CommentVo> list = userManageFacade.queryTheUserComments(userid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
+
 }

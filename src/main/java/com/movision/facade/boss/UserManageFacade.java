@@ -353,4 +353,15 @@ public class UserManageFacade {
     public List<CommentVo> queryCommentListByUserid(String userid, Paging<CommentVo> pager) {
         return commentService.queryCommentListByUserid(userid, pager);
     }
+
+    /**
+     * 查询用户评论帖子的评论列表
+     *
+     * @param user
+     * @param pager
+     * @return
+     */
+    public List<CommentVo> queryTheUserComments(String user, Paging<CommentVo> pager) {
+        return commentService.queryTheUserComments(user, pager);
+    }
 }
