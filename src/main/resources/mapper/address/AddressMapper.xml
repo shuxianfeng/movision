@@ -51,6 +51,12 @@
         WHERE code = #{provincecode,jdbcType=INTEGER}
     </select>
 
+    <!--根据地址id查询地址详情-->
+    <select id="queryAddressById" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.address.entity.Address">
+        SELECT * FROM yw_address WHERE id = #{addressid,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_address
         where id = #{id,jdbcType=INTEGER}

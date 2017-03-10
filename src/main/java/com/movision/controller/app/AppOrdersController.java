@@ -51,9 +51,9 @@ public class AppOrdersController {
 
     @ApiOperation(value = "APP提交订单接口", notes = "用于用户提交订单的接口", response = Response.class)
     @RequestMapping(value = "commitOrder", method = RequestMethod.POST)
-    public Response commitOrder(@ApiParam(value = "地址id") @RequestParam String addressid,
+    public Response commitOrder(@ApiParam(value = "用户id") @RequestParam String userid,
+                                @ApiParam(value = "地址id") @RequestParam String addressid,
                                 @ApiParam(value = "购物车id") @RequestParam String cartids,
-                                @ApiParam(value = "配送方式（0 自提 1 快递（送货上门））") @RequestParam String takeway,
 
                                 @ApiParam(value = "开票种类：1 普通发票 2 增值税发票") @RequestParam String kind,
                                 @ApiParam(value = "状态：1 个人 2企业（普通发票时为必填）") @RequestParam(required = false) String onlystatue,
@@ -67,23 +67,26 @@ public class AppOrdersController {
                                 @ApiParam(value = "银行账户（卡号）(增值税发票时为必填)") @RequestParam(required = false) String banknum,
                                 @ApiParam(value = "纳税识别码(增值税发票时为必填)") @RequestParam(required = false) String code,
 
+                                @ApiParam(value = "配送方式（0 自提 1 快递（送货上门））") @RequestParam String takeway,
                                 @ApiParam(value = "优惠券id(选填)") @RequestParam(required = false) String couponid,
                                 @ApiParam(value = "使用积分数(选填)") @RequestParam(required = false) String points,
                                 @ApiParam(value = "买家留言（订单备注,选填）") @RequestParam(required = false) String message,
                                 @ApiParam(value = "快递费") @RequestParam String logisticsfee,
-                                @ApiParam(value = "订单总额") @RequestParam String totalprice
+                                @ApiParam(value = "订单总额") @RequestParam String totalprice,
+                                @ApiParam(value = "实付款") @RequestParam String payprice
     ) {
         Response response = new Response();
 
-        int flag = orderAppFacade.commitOrder(addressid, cartids, takeway, kind, onlystatue, head, content, invoiceaddressid,
-                companyname, rigaddress, rigphone, bank, banknum, code, couponid, points, message, logisticsfee, totalprice);
-        System.out.println(flag);
-        if (flag == 1) {
+        Map<String, Object> map = orderAppFacade.commitOrder(userid, addressid, cartids, takeway, kind, onlystatue, head, content, invoiceaddressid,
+                companyname, rigaddress, rigphone, bank, banknum, code, couponid, points, message, logisticsfee, totalprice, payprice);
+        if ((int) map.get("code") == 200) {
             response.setCode(200);
             response.setMessage("订单提交成功");
-        } else if (flag == -1) {
+            response.setData(map);
+        } else {
             response.setCode(300);
             response.setMessage("订单提交失败");
+            response.setData(map);
         }
         return response;
     }

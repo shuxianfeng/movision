@@ -27,4 +27,6 @@ public interface PointRecordMapper {
     int queryIsSignToday(@Param("userid") Integer id);
 
     List<Map> findAllMyPointRecord(RowBounds rowBounds, Map map);
+
+    void inserRecord(Map<String, Object> parammap);
 }

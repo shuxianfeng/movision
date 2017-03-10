@@ -141,6 +141,14 @@
         </foreach>
     </select>
 
+    <!--批量删除购物车商品-->
+    <delete id="batchDeleteCartGoods" parameterType="int">
+        DELETE FROM yw_cart WHERE id IN
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
     <!--根据购物车id查询租赁商品的租赁日期列表-->
     <select id="queryRentDateList" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.rentdate.entity.Rentdate">

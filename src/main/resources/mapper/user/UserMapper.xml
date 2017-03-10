@@ -344,6 +344,13 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
+    <!--用户下单消费积分进行积分扣除-->
+    <update id="deductPoints" parameterType="java.util.Map">
+        UPDATE yw_user
+        SET points = points - #{points,jdbcType=INTEGER}
+        WHERE id = #{userid,jdbcType=INTEGER}
+    </update>
+
     <select id="selectByPhone" parameterType="com.movision.mybatis.user.entity.User"
             resultType="com.movision.mybatis.user.entity.User">
         select

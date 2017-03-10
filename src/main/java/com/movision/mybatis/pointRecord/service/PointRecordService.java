@@ -75,5 +75,15 @@ public class PointRecordService {
         }
     }
 
+    public void inserRecord(Map<String, Object> parammap) {
+        try {
+            log.info("插入积分消费流水记录");
+            pointRecordMapper.inserRecord(parammap);
+        } catch (Exception e) {
+            log.error("插入积分消费流水记录失败");
+            throw e;
+        }
+    }
+
 
 }

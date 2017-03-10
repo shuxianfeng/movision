@@ -32,6 +32,17 @@
         #{isadd,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER},
         #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
     </insert>
+
+    <!--插入积分消费流水-->
+    <insert id="inserRecord" parameterType="java.util.Map">
+        insert into yw_points_record (userid, point,
+        isadd, type, orderid,
+        intime, isdel)
+        values (#{userid,jdbcType=INTEGER}, #{points,jdbcType=INTEGER},
+        #{isadd,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER},
+        #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
+    </insert>
+
     <insert id="insertSelective" parameterType="com.movision.mybatis.pointRecord.entity.PointRecord">
         insert into yw_points_record
         <trim prefix="(" suffix=")" suffixOverrides=",">

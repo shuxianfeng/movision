@@ -68,6 +68,12 @@
         AND endtime > now()
     </select>
 
+    <!--根据优惠券id查询优惠券-->
+    <select id="queryCouponById" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.coupon.entity.Coupon">
+        SELECT * FROM yw_coupon WHERE id = #{couponid,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_coupon
     where id = #{id,jdbcType=INTEGER}
@@ -237,6 +243,13 @@
       isdel = #{isdel,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <!--用户使用优惠券后扣除-->
+    <update id="useCoupon" parameterType="java.lang.Integer">
+        UPDATE yw_coupon
+        SET statue = '1'
+        WHERE id = #{couponid,jdbcType=INTEGER}
+    </update>
 
     <select id="findAllMyCouponList" resultType="com.movision.mybatis.coupon.entity.Coupon">
         SELECT *

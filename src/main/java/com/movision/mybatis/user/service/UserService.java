@@ -519,4 +519,14 @@ public class UserService {
             throw e;
         }
     }
+
+    public void usePoints(Map<String, Object> parammap) {
+        try {
+            log.info("扣除用户下单使用积分");
+            userMapper.deductPoints(parammap);
+        } catch (Exception e) {
+            log.error("扣除用户下单使用积分失败");
+            throw e;
+        }
+    }
 }

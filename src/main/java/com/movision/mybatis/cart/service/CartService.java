@@ -238,4 +238,14 @@ public class CartService {
             throw e;
         }
     }
+
+    public void batchDeleteCartGoods(int[] cartid) {
+        try {
+            log.info("批量删除购物车中的商品");
+            cartMapper.batchDeleteCartGoods(cartid);
+        } catch (Exception e) {
+            log.error("批量删除购物车中的商品失败");
+            throw e;
+        }
+    }
 }

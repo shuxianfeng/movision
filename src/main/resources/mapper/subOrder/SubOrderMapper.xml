@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.subOrder.mapper.SubOrderMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.subOrder.entity.SubOrder">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="porderid" property="porderid" jdbcType="INTEGER"/>
+        <result column="goodsid" property="goodsid" jdbcType="INTEGER"/>
+        <result column="combotype" property="combotype" jdbcType="INTEGER"/>
+        <result column="discountid" property="discountid" jdbcType="INTEGER"/>
+        <result column="rom" property="rom" jdbcType="INTEGER"/>
+        <result column="sum" property="sum" jdbcType="INTEGER"/>
+        <result column="isdebug" property="isdebug" jdbcType="INTEGER"/>
+        <result column="debugid" property="debugid" jdbcType="INTEGER"/>
+        <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, porderid, goodsid, combotype, discountid, rom, sum, isdebug, debugid, isdel, 
+    type
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_sub_order
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_sub_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+    <!--批量插入子订单-->
+    <insert id="batchInsertOrders" parameterType="java.util.List">
+        INSERT INTO yw_sub_order (
+        porderid, goodsid, combotype, discountid, rom,
+        sum, isdebug, debugid, isdel, type
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.porderid,jdbcType=INTEGER}, #{item.goodsid,jdbcType=INTEGER},
+            #{item.combotype,jdbcType=INTEGER}, #{item.discountid,jdbcType=INTEGER}, #{item.rom,jdbcType=INTEGER},
+            #{item.sum,jdbcType=INTEGER}, #{item.isdebug,jdbcType=INTEGER}, #{item.debugid,jdbcType=INTEGER},
+            #{item.isdel,jdbcType=INTEGER}, #{item.type,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+
+    <!--基础插入语句-->
+    <insert id="insert" parameterType="com.movision.mybatis.subOrder.entity.SubOrder">
+    insert into yw_sub_order (id, porderid, goodsid, 
+      combotype, discountid, rom, 
+      sum, isdebug, debugid, 
+      isdel, type)
+    values (#{id,jdbcType=INTEGER}, #{porderid,jdbcType=INTEGER}, #{goodsid,jdbcType=INTEGER}, 
+      #{combotype,jdbcType=INTEGER}, #{discountid,jdbcType=INTEGER}, #{rom,jdbcType=INTEGER}, 
+      #{sum,jdbcType=INTEGER}, #{isdebug,jdbcType=INTEGER}, #{debugid,jdbcType=INTEGER}, 
+      #{isdel,jdbcType=INTEGER}, #{type,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.subOrder.entity.SubOrder">
+        insert into yw_sub_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="porderid != null">
+                porderid,
+            </if>
+            <if test="goodsid != null">
+                goodsid,
+            </if>
+            <if test="combotype != null">
+                combotype,
+            </if>
+            <if test="discountid != null">
+                discountid,
+            </if>
+            <if test="rom != null">
+                rom,
+            </if>
+            <if test="sum != null">
+                sum,
+            </if>
+            <if test="isdebug != null">
+                isdebug,
+            </if>
+            <if test="debugid != null">
+                debugid,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="porderid != null">
+                #{porderid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsid != null">
+                #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="combotype != null">
+                #{combotype,jdbcType=INTEGER},
+            </if>
+            <if test="discountid != null">
+                #{discountid,jdbcType=INTEGER},
+            </if>
+            <if test="rom != null">
+                #{rom,jdbcType=INTEGER},
+            </if>
+            <if test="sum != null">
+                #{sum,jdbcType=INTEGER},
+            </if>
+            <if test="isdebug != null">
+                #{isdebug,jdbcType=INTEGER},
+            </if>
+            <if test="debugid != null">
+                #{debugid,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.subOrder.entity.SubOrder">
+        update yw_sub_order
+        <set>
+            <if test="porderid != null">
+                porderid = #{porderid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsid != null">
+                goodsid = #{goodsid,jdbcType=INTEGER},
+            </if>
+            <if test="combotype != null">
+                combotype = #{combotype,jdbcType=INTEGER},
+            </if>
+            <if test="discountid != null">
+                discountid = #{discountid,jdbcType=INTEGER},
+            </if>
+            <if test="rom != null">
+                rom = #{rom,jdbcType=INTEGER},
+            </if>
+            <if test="sum != null">
+                sum = #{sum,jdbcType=INTEGER},
+            </if>
+            <if test="isdebug != null">
+                isdebug = #{isdebug,jdbcType=INTEGER},
+            </if>
+            <if test="debugid != null">
+                debugid = #{debugid,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.subOrder.entity.SubOrder">
+    update yw_sub_order
+    set porderid = #{porderid,jdbcType=INTEGER},
+      goodsid = #{goodsid,jdbcType=INTEGER},
+      combotype = #{combotype,jdbcType=INTEGER},
+      discountid = #{discountid,jdbcType=INTEGER},
+      rom = #{rom,jdbcType=INTEGER},
+      sum = #{sum,jdbcType=INTEGER},
+      isdebug = #{isdebug,jdbcType=INTEGER},
+      debugid = #{debugid,jdbcType=INTEGER},
+      isdel = #{isdel,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

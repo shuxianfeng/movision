@@ -164,4 +164,24 @@ public class CouponService {
             throw e;
         }
     }
+
+    public Coupon queryCouponById(int couponid) {
+        try {
+            log.info("根据优惠券id查询优惠券信息");
+            return couponMapper.queryCouponById(couponid);
+        } catch (Exception e) {
+            log.error("根据优惠券id查询优惠券信息失败");
+            throw e;
+        }
+    }
+
+    public void useCoupon(int couponid) {
+        try {
+            log.info("使用后扣除优惠券");
+            couponMapper.useCoupon(couponid);
+        } catch (Exception e) {
+            log.error("使用后扣除优惠券失败");
+            throw e;
+        }
+    }
 }

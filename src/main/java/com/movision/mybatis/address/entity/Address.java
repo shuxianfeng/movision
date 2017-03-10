@@ -23,15 +23,15 @@ public class Address {
     @ApiModelProperty(value = "街道详细地址")
     private String street;
     @ApiModelProperty(value = "是否为默认收货地址：1是 0否")
-    private Integer isdefault;
+    private Integer isdefault;//是否为默认地址：0 否 1 是
 
-    private Date updatetime;
+    private Date updatetime;//最后更新时间
 
-    private Integer isdel;
+    private Integer isdel;//是否被逻辑删除
 
-    private BigDecimal lng;
+    private BigDecimal lng;//地址经度
 
-    private BigDecimal lat;
+    private BigDecimal lat;//地址纬度
 
     public void setLng(BigDecimal lng) {
         this.lng = lng;

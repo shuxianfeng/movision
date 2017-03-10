@@ -30,12 +30,20 @@
         isdiscount, couponsid, discouponmoney, dispointmoney, realmoney, intime, paytype,
         paytime, paycode, remark, isdel, logisticsid
     </sql>
+
+    <!--基础查询语句-->
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
         from yw_orders
         where id = #{id,jdbcType=INTEGER}
     </select>
+
+    <!--根据订单号前缀模糊查询最大订单号-->
+    <select id="queryMaxOrderNumber" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT MAX(ordernumber) FROM yw_orders WHERE ordernumber LIKE #{paramstr, jdbcType=VARCHAR}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_orders
         where id = #{id,jdbcType=INTEGER}
@@ -58,6 +66,8 @@
         #{paycode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{isdel,jdbcType=INTEGER},
         #{logisticsid,jdbcType=VARCHAR})
     </insert>
+
+    <!--普通插入语句-->
     <insert id="insertSelective" parameterType="com.movision.mybatis.orders.entity.Orders">
         insert into yw_orders
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -197,6 +207,151 @@
             </if>
         </trim>
     </insert>
+
+    <!--插入主订单-->
+    <insert id="insertOrders" parameterType="com.movision.mybatis.orders.entity.Orders">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into yw_orders
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="ordernumber != null">
+                ordernumber,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="addressid != null">
+                addressid,
+            </if>
+            <if test="takeway != null">
+                takeway,
+            </if>
+            <if test="position != null">
+                position,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="bill != null">
+                bill,
+            </if>
+            <if test="money != null">
+                money,
+            </if>
+            <if test="sendmoney != null">
+                sendmoney,
+            </if>
+            <if test="isdiscount != null">
+                isdiscount,
+            </if>
+            <if test="couponsid != null">
+                couponsid,
+            </if>
+            <if test="discouponmoney != null">
+                discouponmoney,
+            </if>
+            <if test="dispointmoney != null">
+                dispointmoney,
+            </if>
+            <if test="realmoney != null">
+                realmoney,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="paytype != null">
+                paytype,
+            </if>
+            <if test="paytime != null">
+                paytime,
+            </if>
+            <if test="paycode != null">
+                paycode,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+            <if test="logisticsid != null">
+                logisticsid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="ordernumber != null">
+                #{ordernumber,jdbcType=VARCHAR},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="addressid != null">
+                #{addressid,jdbcType=INTEGER},
+            </if>
+            <if test="takeway != null">
+                #{takeway,jdbcType=INTEGER},
+            </if>
+            <if test="position != null">
+                #{position,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="bill != null">
+                #{bill,jdbcType=VARCHAR},
+            </if>
+            <if test="money != null">
+                #{money,jdbcType=DOUBLE},
+            </if>
+            <if test="sendmoney != null">
+                #{sendmoney,jdbcType=DOUBLE},
+            </if>
+            <if test="isdiscount != null">
+                #{isdiscount,jdbcType=INTEGER},
+            </if>
+            <if test="couponsid != null">
+                #{couponsid,jdbcType=VARCHAR},
+            </if>
+            <if test="discouponmoney != null">
+                #{discouponmoney,jdbcType=DOUBLE},
+            </if>
+            <if test="dispointmoney != null">
+                #{dispointmoney,jdbcType=DOUBLE},
+            </if>
+            <if test="realmoney != null">
+                #{realmoney,jdbcType=DOUBLE},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="paytype != null">
+                #{paytype,jdbcType=INTEGER},
+            </if>
+            <if test="paytime != null">
+                #{paytime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="paycode != null">
+                #{paycode,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="logisticsid != null">
+                #{logisticsid,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.orders.entity.Orders">
         update yw_orders
         <set>

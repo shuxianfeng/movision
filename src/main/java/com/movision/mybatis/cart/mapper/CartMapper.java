@@ -55,6 +55,8 @@ public interface CartMapper {
 
     List<CartVo> queryCartVoList(int[] cartid);
 
+    void batchDeleteCartGoods(int[] cartid);
+
     int addGoodsCart(Map<String, Object> parammap);
 
     int updateByPrimaryKeySelective(Cart record);
