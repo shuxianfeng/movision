@@ -358,7 +358,6 @@ public class CircleFacade {
 
     /**
      * 圈子添加
-     *
      * @param name
      * @param category
      * @param userid
