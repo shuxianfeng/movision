@@ -1246,4 +1246,14 @@
             resultType="com.movision.mybatis.goods.entity.GoodsImg">
         select * from yw_goods_img WHERE goodsid=#{goodsid,jdbcType=INTEGER} AND  TYPE =0
     </select>
+
+    <select id="findAllQueryCollectionGoodsListByUserid" resultType="com.movision.mybatis.goods.entity.GoodsVo"
+            parameterType="java.lang.String">
+        SELECT
+        s.id,s.name,a.typename,d.brandname,s.origprice,s.price,s.stock,s.sales,s.ishomepage,s.recommenddate,s.isdel,s.ishot,s.isessence,COUNT(c.goodsid)
+        AS collect from yw_goods s
+        LEFT JOIN yw_brand d ON d.brandid=s.brandid LEFT JOIN yw_collection c ON c.goodsid=s.id LEFT JOIN yw_category a
+        ON a.protype=s.protype WHERE s.id IN (SELECT goodsid FROM yw_collection WHERE userid=#{goodsid,jdbcType=INTEGER})
+        GROUP BY s.id
+    </select>
 </mapper>

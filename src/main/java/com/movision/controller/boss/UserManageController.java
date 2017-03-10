@@ -519,14 +519,14 @@ public class UserManageController {
     }
 
     /**
-     * 根据用户id查询用户被收藏的商品列表
+     * 根据用户id查询用户收藏的商品列表
      *
      * @param goodsid
      * @param pageNo
      * @param pageSize
      * @return
      */
-    @ApiOperation(value = "根据用户id查询用户被收藏的商品列表", notes = "根据用户id查询用户被收藏的商品列表", response = Response.class)
+    @ApiOperation(value = "根据用户id查询用户收藏的商品列表", notes = "根据用户id查询用户收藏的商品列表", response = Response.class)
     @RequestMapping(value = "query_collection_goods_userid", method = RequestMethod.POST)
     public Response queryCollectionGoodsListByUserid(@ApiParam(value = "商品id") @RequestParam String goodsid,
                                                      @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
