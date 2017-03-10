@@ -648,6 +648,15 @@
         where id=#{id,jdbcType=INTEGER}
     </update>
 
+    <!--提交订单后减库存-->
+    <update id="deductStock" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            UPDATE yw_goods
+            SET stock = stock - #{item.sum,jdbcType=INTEGER}
+            WHERE id = #{item.goodsid,jdbcType=INTEGER}
+        </foreach>
+    </update>
+
     <select id="findAllQueryPostByGoodsList" resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT g.id,
         (SELECT brandname FROM yw_brand b WHERE b.brandid=g.brandid) AS brandname,

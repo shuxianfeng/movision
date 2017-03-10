@@ -8,6 +8,7 @@ import com.movision.mybatis.combo.service.ComboService;
 import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.coupon.service.CouponService;
 import com.movision.mybatis.goods.entity.GoodsVo;
+import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.goodsDiscount.service.DiscountService;
 import com.movision.mybatis.invoice.entity.Invoice;
@@ -69,6 +70,9 @@ public class OrderAppFacade {
 
     @Autowired
     private PointRecordService pointRecordService;
+
+    @Autowired
+    private GoodsService goodsService;
 
     public List<Orders> getMyOrderList(Paging<Orders> paging, int userid) {
         Map map = new HashedMap();
@@ -456,6 +460,9 @@ public class OrderAppFacade {
                 }
                 //-------------------------------------------------------------------拼装子订单列表对象完成
                 orderService.batchInsertOrders(subOrderList);//批量插入子订单表中的各个子订单
+
+                //提交子订单的同时去除库存
+                goodsService.deductStock(subOrderList);
 
                 //增加发票信息
                 Invoice invoice = new Invoice();

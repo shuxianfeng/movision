@@ -8,6 +8,7 @@ import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.mybatis.goodscombo.entity.GoodsCombo;
 import com.movision.mybatis.goodscombo.entity.GoodsComboDetail;
 import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
+import com.movision.mybatis.subOrder.entity.SubOrder;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.taglibs.standard.lang.jstl.Literal;
 
@@ -154,5 +155,5 @@ public interface GoodsMapper {
 
     List<GoodsImg> queryBannerImg(String goodsid);//查询banner图
 
-
+    void deductStock(List<SubOrder> subOrderList);
 }

@@ -18,6 +18,7 @@ import com.movision.mybatis.goodscombo.entity.GoodsCombo;
 import com.movision.mybatis.goodscombo.entity.GoodsComboDetail;
 import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
 import com.movision.mybatis.role.entity.Role;
+import com.movision.mybatis.subOrder.entity.SubOrder;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.executor.ExecutorException;
 import org.apache.ibatis.session.RowBounds;
@@ -1152,6 +1153,19 @@ public class GoodsService {
             return goodsMapper.queryBannerImg(goodsid);
         } catch (Exception e) {
             log.error("查询banner图失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 减库存
+     */
+    public void deductStock(List<SubOrder> subOrderList) {
+        try {
+            log.info("提交订单后减库存");
+            goodsMapper.deductStock(subOrderList);
+        } catch (Exception e) {
+            log.error("提交订单后减库存失败");
             throw e;
         }
     }
