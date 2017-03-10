@@ -527,7 +527,7 @@ public class UserManageController {
      * @return
      */
     @ApiOperation(value = "根据用户id查询用户被收藏的商品列表", notes = "根据用户id查询用户被收藏的商品列表", response = Response.class)
-    @RequestMapping(value = "query_comment_userid", method = RequestMethod.POST)
+    @RequestMapping(value = "query_collection_goods_userid", method = RequestMethod.POST)
     public Response queryCollectionGoodsListByUserid(@ApiParam(value = "商品id") @RequestParam String goodsid,
                                                      @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                                      @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
