@@ -193,7 +193,7 @@ public class CircleController {
                                  @ApiParam(value = "圈子名称") @RequestParam String name,
                                  @ApiParam(value = "圈子类型") @RequestParam String category,
                                  @ApiParam(value = "圈主id") @RequestParam String userid,
-                                 @ApiParam(value = "管理员列表") @RequestParam String circleadmin,
+                                 @ApiParam(value = "管理员列表") @RequestParam List circleadmin,
                                  @ApiParam(value = "圈子否封面") @RequestParam String photo,
                                  @ApiParam(value = "圈子简介") @RequestParam String introduction,
                                  @ApiParam(value = "圈子二维码") @RequestParam(required = false) String erweima,

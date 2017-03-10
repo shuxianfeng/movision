@@ -259,7 +259,7 @@ public class CircleFacade {
      * @return
      */
     public Map<String, Integer> updateCircle(String id, String name, String category, String circlemanid,
-                                             String circleadmin, String photo, String introduction,
+                                             List circleadmin, String photo, String introduction,
                                              String erweima, String status, String isrecommend, String orderid, String permission) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
@@ -274,16 +274,18 @@ public class CircleFacade {
             if (category != null) {
                 circleDetails.setCategory(Integer.parseInt(category));
             }
-        if (circleadmin != null && circleadmin != "") {//管理员列表
+        if (circleadmin != null && circleadmin.size() > 0) {//管理员列表
                 //待定
-            String[] ary = circleadmin.split(",");//以逗号分隔接收数据
+            //String[] ary = circleadmin.split(",");//以逗号分隔接收数据
                 managerService.deleteManagerToCircleid(circleid);//删除圈子的所有管理员
-                for (String itm : ary) {//循环添加
-                    Map<String, Integer> mapd = new HashedMap();
-                    mapd.put("circleid", circleid);
-                    mapd.put("userid", Integer.parseInt(itm));
-                    managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
-                }
+            //for (String itm : ary) {//循环添加
+            for (int i = 0; i < circleadmin.size(); i++) {
+                Map mapd = new HashedMap();
+                mapd.put("circleid", circleid);
+                mapd.put("userid", circleadmin.get(i));
+                managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
+            }
+            //}
             }
             if (circlemanid != null) {
                 //查询圈主
