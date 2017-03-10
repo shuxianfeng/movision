@@ -259,7 +259,7 @@ public class CircleFacade {
      * @return
      */
     public Map<String, Integer> updateCircle(String id, String name, String category, String circlemanid,
-                                             List circleadmin, String photo, String introduction,
+                                             String circleadmin, String photo, String introduction,
                                              String erweima, String status, String isrecommend, String orderid, String permission) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
@@ -274,18 +274,16 @@ public class CircleFacade {
             if (category != null) {
                 circleDetails.setCategory(Integer.parseInt(category));
             }
-        if (circleadmin != null && circleadmin.size() > 0) {//管理员列表
+        if (circleadmin != null && circleadmin != "") {//管理员列表
                 //待定
-            //String[] ary = circleadmin.split(",");//以逗号分隔接收数据
+            String[] ary = circleadmin.split(",");//以逗号分隔接收数据
                 managerService.deleteManagerToCircleid(circleid);//删除圈子的所有管理员
-            //for (String itm : ary) {//循环添加
-            for (int i = 0; i < circleadmin.size(); i++) {
-                Map mapd = new HashedMap();
+            for (String itm : ary) {//循环添加
+                Map<String, Integer> mapd = new HashedMap();
                 mapd.put("circleid", circleid);
-                mapd.put("userid", circleadmin.get(i));
+                mapd.put("userid", Integer.parseInt(itm));
                 managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
             }
-            //}
             }
             if (circlemanid != null) {
                 //查询圈主
@@ -360,6 +358,7 @@ public class CircleFacade {
 
     /**
      * 圈子添加
+     *
      * @param name
      * @param category
      * @param userid
@@ -369,7 +368,7 @@ public class CircleFacade {
      * @param introduction
      * @return
      */
-    public Map<String, Integer> addCircle(String name, String category, String userid, List circleadmin,
+    public Map<String, Integer> addCircle(String name, String category, String userid, String circleadmin,
                                           String circlemanid, String photo, String introduction) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
@@ -401,17 +400,16 @@ public class CircleFacade {
         circleDetails.setPermission(1);//设置其他用户是否可以发帖，初始值：1是
             Integer s = circleService.insertCircle(circleDetails);
             Integer cirid = circleDetails.getId();
-        if (circleadmin != null && circleadmin.size() > 0) {//管理员列表
+        if (circleadmin != null && circleadmin != "") {//管理员列表
                 //待定
-            //String[] ary = circleadmin.split(",");//以逗号分隔接收数据
-            //for (String itm : ary) {//循环添加
-            for (int i = 0; i < circleadmin.size(); i++) {
-                Map mapd = new HashedMap();
+            String[] ary = circleadmin.split(",");//以逗号分隔接收数据
+            System.out.println(circleadmin + "===========================================");
+            for (String itm : ary) {//循环添加
+                Map<String, Integer> mapd = new HashedMap();
                 mapd.put("circleid", cirid);
-                mapd.put("userid", circleadmin.get(i));
+                mapd.put("userid", Integer.parseInt(itm));
                 managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
             }
-            // }
             }
             if (s == 1) {
                 map.put("resault", s);
