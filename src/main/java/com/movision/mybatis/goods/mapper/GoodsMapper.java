@@ -115,6 +115,9 @@ public interface GoodsMapper {
 
     int addAssessment(GoodsAssessment assessment);//回复评论
 
+    int queryAssessment(Integer pid);//查询是否有评价过
+
+
     int updateImgGoods(GoodsImg goodsImg);//修改参数图
 
     int updateCommodityDescription(GoodsImg img);//修改描述图

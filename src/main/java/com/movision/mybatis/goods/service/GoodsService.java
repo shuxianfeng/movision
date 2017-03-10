@@ -817,6 +817,21 @@ public class GoodsService {
     }
 
     /**
+     * 是否有评论
+     * @param pid
+     * @return
+     */
+    public Integer queryAssessment(Integer pid) {
+        try {
+            log.info("是否有评论");
+            return goodsMapper.queryAssessment(pid);
+        } catch (Exception e) {
+            log.error("是否有评论失败", e);
+            throw e;
+        }
+    }
+
+    /**
      * 添加参数图
      *
      * @param goodsImg

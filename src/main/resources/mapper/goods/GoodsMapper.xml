@@ -1265,4 +1265,7 @@
         ON a.protype=s.protype WHERE s.id IN (SELECT goodsid FROM yw_collection WHERE userid=#{goodsid,jdbcType=INTEGER})
         GROUP BY s.id
     </select>
+    <select id="queryAssessment" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT COUNT(1) from  yw_goods_assessment WHERE pid=#{pid,jdbcType=INTEGER}
+    </select>
 </mapper>

@@ -454,16 +454,22 @@ public class GoodsListFacade {
      * @return
      */
     public Map<String, Integer> addAssessment(String content, String goodid, String pid) {
-        GoodsAssessment goodsAssessment = new GoodsAssessment();
+        int result = 0;
+        result = goodsService.queryAssessment(Integer.parseInt(pid));
         Map<String, Integer> map = new HashedMap();
-        goodsAssessment.setUserid(-1);
-        goodsAssessment.setContent(content);
-        goodsAssessment.setGoodid(Integer.parseInt(goodid));
-        goodsAssessment.setCreatetime(new Date());
-        goodsAssessment.setIsimage(0);
-        goodsAssessment.setIsanonymity(0);
-        goodsAssessment.setPid(Integer.parseInt(pid));
-        int result = goodsService.addAssessment(goodsAssessment);
+        if (result > 0) {
+            result = 0;
+        } else if (result <= 0) {
+            GoodsAssessment goodsAssessment = new GoodsAssessment();
+            goodsAssessment.setUserid(-1);
+            goodsAssessment.setContent(content);
+            goodsAssessment.setGoodid(Integer.parseInt(goodid));
+            goodsAssessment.setCreatetime(new Date());
+            goodsAssessment.setIsimage(0);
+            goodsAssessment.setIsanonymity(0);
+            goodsAssessment.setPid(Integer.parseInt(pid));
+            result = goodsService.addAssessment(goodsAssessment);
+        }
         map.put("result", result);
         return map;
     }
