@@ -303,6 +303,11 @@
         ON t1.id = t2.goodsid
     </select>
 
+    <!--查询活动最下方推荐的四个热门活动-->
+    <select id="queryFourHotActive" resultType="com.movision.mybatis.post.entity.ActiveVo">
+        SELECT * FROM yw_post WHERE isactive='1' ORDER BY intime DESC limit 0,4
+    </select>
+
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_post

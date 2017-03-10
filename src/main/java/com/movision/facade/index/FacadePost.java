@@ -110,6 +110,9 @@ public class FacadePost {
             active.setPromotionGoodsList(goodsList);
 
         }
+
+        //增加活动详情最下方推荐的四个热门活动
+        active.setHotActiveList(postService.queryFourHotActive());
         return active;
     }
 
