@@ -1107,9 +1107,7 @@ public class PostFacade {
             map.put("content", content);
         }
 
-        if (statue != null) {
-            map.put("statue", statue);
-        }
+
         Date isessencetime = null;//开始时间
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (begintime != null) {
@@ -1129,10 +1127,10 @@ public class PostFacade {
             }
         }
         map.put("maxtime", max);
-        if (statue != null) {
+        if (!StringUtils.isEmpty(statue)) {
             map.put("statue", statue);
         }
-        if (pai != null) {
+        if (!StringUtils.isEmpty(pai)) {
             map.put("pai", pai);
         }
         List<PostActiveList> list = postService.queryAllActivePostCondition(map, pager);
@@ -1150,7 +1148,6 @@ public class PostFacade {
             if (activefee != null) {
                 sumfree = persum * activefee;
             }
-
             Date begintimes = periods.getBegintime();
             Date endtimes = periods.getEndtime();
             postList.setId(list.get(i).getId());
