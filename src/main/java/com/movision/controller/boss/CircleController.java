@@ -244,7 +244,7 @@ public class CircleController {
     public Response addCircle(@ApiParam(value = "圈子名称") @RequestParam String name,
                               @ApiParam(value = "圈子类型0 科技 1 交友 2 摄影 3 影视 4 达人秀") @RequestParam String category,
                               @ApiParam(value = "圈主id") @RequestParam String userid,
-                              @ApiParam(value = "管理员列表") @RequestParam String circleadmin,
+                              @ApiParam(value = "管理员列表") @RequestParam List circleadmin,
                               @ApiParam(value = "创建人") @RequestParam String circlemanid,
                               @ApiParam(value = "圈子否封面") @RequestParam String photo,
                               @ApiParam(value = "圈子简介") @RequestParam String introduction) {

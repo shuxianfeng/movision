@@ -368,7 +368,7 @@ public class CircleFacade {
      * @param introduction
      * @return
      */
-    public Map<String, Integer> addCircle(String name, String category, String userid, String circleadmin,
+    public Map<String, Integer> addCircle(String name, String category, String userid, List circleadmin,
                                           String circlemanid, String photo, String introduction) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
@@ -394,17 +394,23 @@ public class CircleFacade {
             if (introduction != null) {
                 circleDetails.setIntroduction(introduction);
             }
+        circleDetails.setStatus(0);//设置审核状态，初始值为待审核：0
+        circleDetails.setOrderid(0);//设置精选排序，初始值：0
+        circleDetails.setIsrecommend(0);//设置是否被推荐，初始值0
+        circleDetails.setPermission(1);//设置其他用户是否可以发帖，初始值：1是
             Integer s = circleService.insertCircle(circleDetails);
             Integer cirid = circleDetails.getId();
-        if (circleadmin != null && circleadmin != "") {//管理员列表
+        if (circleadmin != null && circleadmin.size() > 0) {//管理员列表
                 //待定
-            String[] ary = circleadmin.split(",");//以逗号分隔接收数据
-                for (String itm : ary) {//循环添加
-                    Map<String, Integer> mapd = new HashedMap();
-                    mapd.put("circleid", cirid);
-                    mapd.put("userid", Integer.parseInt(itm));
-                    managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
-                }
+            //String[] ary = circleadmin.split(",");//以逗号分隔接收数据
+            //for (String itm : ary) {//循环添加
+            for (int i = 0; i < circleadmin.size(); i++) {
+                Map mapd = new HashedMap();
+                mapd.put("circleid", cirid);
+                mapd.put("userid", circleadmin.get(i));
+                managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
+            }
+            // }
             }
             if (s == 1) {
                 map.put("resault", s);
