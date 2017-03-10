@@ -265,17 +265,17 @@ public class CircleFacade {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
         Integer circleid = null;
-            if (id != null) {
+        if (!StringUtils.isEmpty(id)) {
                 circleid = Integer.parseInt(id);
                 circleDetails.setId(Integer.parseInt(id));
             }
-            if (name != null) {
+        if (!StringUtils.isEmpty(name)) {
                 circleDetails.setName(name);
             }
-            if (category != null) {
+        if (!StringUtils.isEmpty(category)) {
                 circleDetails.setCategory(Integer.parseInt(category));
             }
-        if (circleadmin != null && circleadmin != "") {//管理员列表
+        if (!StringUtils.isEmpty(circleadmin)) {//管理员列表
                 //待定
             String[] ary = circleadmin.split(",");//以逗号分隔接收数据
                 managerService.deleteManagerToCircleid(circleid);//删除圈子的所有管理员
@@ -286,34 +286,34 @@ public class CircleFacade {
                 managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
             }
             }
-            if (circlemanid != null) {
+        if (!StringUtils.isEmpty(circlemanid)) {
                 //查询圈主
                 String pon = userService.queryUserbyPhoneByUserid(Integer.parseInt(circlemanid));
                 circleDetails.setPhone(pon);
             }
-            if (photo != null) {
+        if (!StringUtils.isEmpty(photo)) {
                 //savedFileName = movisionOssClient.uploadObject(photo, "img", "circle");
                 circleDetails.setPhoto(photo);
             }
-            if (introduction != null) {
+        if (!StringUtils.isEmpty(introduction)) {
                 circleDetails.setIntroduction(introduction);
             }
-            if (erweima != null) {
+        if (!StringUtils.isEmpty(erweima)) {
                 circleDetails.setErweima(erweima);
             }
-            if (status != null) {
+        if (!StringUtils.isEmpty(status)) {
                 circleDetails.setStatus(Integer.parseInt(status));
             }
-            if (isrecommend != null) {
+        if (!StringUtils.isEmpty(isrecommend)) {
                 circleDetails.setIsrecommend(Integer.parseInt(isrecommend));
             }
-            if (orderid != null) {
+        if (!StringUtils.isEmpty(orderid)) {
                 if (Integer.parseInt(orderid) > 0) {
                     circleDetails.setIsdiscover(1);
                 }
                 circleDetails.setOrderid(Integer.parseInt(orderid));
             }
-            if (permission != null) {
+        if (!StringUtils.isEmpty(permission)) {
                 circleDetails.setPermission(Integer.parseInt(permission));
             }
             Integer s = circleService.updateCircle(circleDetails);
@@ -373,26 +373,26 @@ public class CircleFacade {
                                           String circlemanid, String photo, String introduction) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
-            if (name != null) {
+        if (!StringUtils.isEmpty(category)) {
                 circleDetails.setName(name);
             }
-            if (category != null) {
+        if (!StringUtils.isEmpty(category)) {
                 circleDetails.setCategory(Integer.parseInt(category));
             }
 
-            if (circlemanid != null) {//添加创建人
+        if (!StringUtils.isEmpty(circlemanid)) {//添加创建人
                 circleDetails.setUserid(circlemanid);
             }
-            if (userid != null) {
+        if (!StringUtils.isEmpty(userid)) {
                 //查询圈主手机号
                 String pon = userService.queryUserbyPhoneByUserid(Integer.parseInt(userid));
                 circleDetails.setPhone(pon);//设置圈主手机号
             }
             circleDetails.setCreatetime(new Date());
-            if (photo != null) {
+        if (!StringUtils.isEmpty(photo)) {
                 circleDetails.setPhoto(photo);
             }
-            if (introduction != null) {
+        if (!StringUtils.isEmpty(introduction)) {
                 circleDetails.setIntroduction(introduction);
             }
         circleDetails.setStatus(0);//设置审核状态，初始值为待审核：0
