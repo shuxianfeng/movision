@@ -19,6 +19,7 @@ import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.pagination.util.StringUtils;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
@@ -400,7 +401,8 @@ public class CircleFacade {
         circleDetails.setPermission(1);//设置其他用户是否可以发帖，初始值：1是
             Integer s = circleService.insertCircle(circleDetails);
             Integer cirid = circleDetails.getId();
-        if (circleadmin != null && circleadmin != "") {//管理员列表
+//        if (circleadmin != null && circleadmin != "") {//管理员列表
+        if (!StringUtils.isEmpty(circleadmin)) {//管理员列表
                 //待定
             String[] ary = circleadmin.split(",");//以逗号分隔接收数据
             System.out.println(circleadmin + "===========================================");
