@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @Author zhuangyuhao
  * @Date 2017/3/7 17:11
@@ -37,6 +39,16 @@ public class ImUserService {
             return imUserMapper.selectByUserid(id, type);
         } catch (Exception e) {
             log.error("根据用户id查询IM用户失败", e);
+            throw e;
+        }
+    }
+
+    public List<ImUser> selectAllAPPImuser() {
+        try {
+            log.info("查询所有的app用户对应的im账号");
+            return imUserMapper.selectAllAPPImuser();
+        } catch (Exception e) {
+            log.error("查询所有的app用户对应的im账号", e);
             throw e;
         }
     }

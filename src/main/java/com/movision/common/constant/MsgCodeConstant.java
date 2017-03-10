@@ -325,4 +325,9 @@ public interface MsgCodeConstant {
      */
     int create_im_accid_fail = 30100;
 
+	/**
+	 * 发送系统通知失败
+	 */
+	int send_system_msg_fail = 30101;
+
 }

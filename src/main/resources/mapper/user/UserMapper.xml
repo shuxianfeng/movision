@@ -365,11 +365,10 @@
         u.*, i.accid, i.token as imtoken
         from yw_user u
         LEFT JOIN yw_im_user i on u.id= i.userid
-        <where>
-            <if test="phone != null || phone != ''">
-                phone = #{phone}
-            </if>
-        </where>
+        WHERE i.type = 1
+        <if test="phone != null || phone != ''">
+            AND u.phone = #{phone}
+        </if>
 
     </select>
 

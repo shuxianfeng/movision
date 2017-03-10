@@ -19,6 +19,7 @@ import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.pagination.util.StringUtils;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
@@ -259,62 +260,60 @@ public class CircleFacade {
      * @return
      */
     public Map<String, Integer> updateCircle(String id, String name, String category, String circlemanid,
-                                             List circleadmin, String photo, String introduction,
+                                             String circleadmin, String photo, String introduction,
                                              String erweima, String status, String isrecommend, String orderid, String permission) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
         Integer circleid = null;
-            if (id != null) {
+        if (!StringUtils.isEmpty(id)) {
                 circleid = Integer.parseInt(id);
                 circleDetails.setId(Integer.parseInt(id));
             }
-            if (name != null) {
+        if (!StringUtils.isEmpty(name)) {
                 circleDetails.setName(name);
             }
-            if (category != null) {
+        if (!StringUtils.isEmpty(category)) {
                 circleDetails.setCategory(Integer.parseInt(category));
             }
-        if (circleadmin != null && circleadmin.size() > 0) {//管理员列表
+        if (!StringUtils.isEmpty(circleadmin)) {//管理员列表
                 //待定
-            //String[] ary = circleadmin.split(",");//以逗号分隔接收数据
+            String[] ary = circleadmin.split(",");//以逗号分隔接收数据
                 managerService.deleteManagerToCircleid(circleid);//删除圈子的所有管理员
-            //for (String itm : ary) {//循环添加
-            for (int i = 0; i < circleadmin.size(); i++) {
-                Map mapd = new HashedMap();
+            for (String itm : ary) {//循环添加
+                Map<String, Integer> mapd = new HashedMap();
                 mapd.put("circleid", circleid);
-                mapd.put("userid", circleadmin.get(i));
+                mapd.put("userid", Integer.parseInt(itm));
                 managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
             }
-            //}
             }
-            if (circlemanid != null) {
+        if (!StringUtils.isEmpty(circlemanid)) {
                 //查询圈主
                 String pon = userService.queryUserbyPhoneByUserid(Integer.parseInt(circlemanid));
                 circleDetails.setPhone(pon);
             }
-            if (photo != null) {
+        if (!StringUtils.isEmpty(photo)) {
                 //savedFileName = movisionOssClient.uploadObject(photo, "img", "circle");
                 circleDetails.setPhoto(photo);
             }
-            if (introduction != null) {
+        if (!StringUtils.isEmpty(introduction)) {
                 circleDetails.setIntroduction(introduction);
             }
-            if (erweima != null) {
+        if (!StringUtils.isEmpty(erweima)) {
                 circleDetails.setErweima(erweima);
             }
-            if (status != null) {
+        if (!StringUtils.isEmpty(status)) {
                 circleDetails.setStatus(Integer.parseInt(status));
             }
-            if (isrecommend != null) {
+        if (!StringUtils.isEmpty(isrecommend)) {
                 circleDetails.setIsrecommend(Integer.parseInt(isrecommend));
             }
-            if (orderid != null) {
+        if (!StringUtils.isEmpty(orderid)) {
                 if (Integer.parseInt(orderid) > 0) {
                     circleDetails.setIsdiscover(1);
                 }
                 circleDetails.setOrderid(Integer.parseInt(orderid));
             }
-            if (permission != null) {
+        if (!StringUtils.isEmpty(permission)) {
                 circleDetails.setPermission(Integer.parseInt(permission));
             }
             Integer s = circleService.updateCircle(circleDetails);
@@ -360,6 +359,7 @@ public class CircleFacade {
 
     /**
      * 圈子添加
+     *
      * @param name
      * @param category
      * @param userid
@@ -369,30 +369,30 @@ public class CircleFacade {
      * @param introduction
      * @return
      */
-    public Map<String, Integer> addCircle(String name, String category, String userid, List circleadmin,
+    public Map<String, Integer> addCircle(String name, String category, String userid, String circleadmin,
                                           String circlemanid, String photo, String introduction) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
-            if (name != null) {
+        if (!StringUtils.isEmpty(category)) {
                 circleDetails.setName(name);
             }
-            if (category != null) {
+        if (!StringUtils.isEmpty(category)) {
                 circleDetails.setCategory(Integer.parseInt(category));
             }
 
-            if (circlemanid != null) {//添加创建人
+        if (!StringUtils.isEmpty(circlemanid)) {//添加创建人
                 circleDetails.setUserid(circlemanid);
             }
-            if (userid != null) {
+        if (!StringUtils.isEmpty(userid)) {
                 //查询圈主手机号
                 String pon = userService.queryUserbyPhoneByUserid(Integer.parseInt(userid));
                 circleDetails.setPhone(pon);//设置圈主手机号
             }
             circleDetails.setCreatetime(new Date());
-            if (photo != null) {
+        if (!StringUtils.isEmpty(photo)) {
                 circleDetails.setPhoto(photo);
             }
-            if (introduction != null) {
+        if (!StringUtils.isEmpty(introduction)) {
                 circleDetails.setIntroduction(introduction);
             }
         circleDetails.setStatus(0);//设置审核状态，初始值为待审核：0
@@ -401,17 +401,17 @@ public class CircleFacade {
         circleDetails.setPermission(1);//设置其他用户是否可以发帖，初始值：1是
             Integer s = circleService.insertCircle(circleDetails);
             Integer cirid = circleDetails.getId();
-        if (circleadmin != null && circleadmin.size() > 0) {//管理员列表
+//        if (circleadmin != null && circleadmin != "") {//管理员列表
+        if (!StringUtils.isEmpty(circleadmin)) {//管理员列表
                 //待定
-            //String[] ary = circleadmin.split(",");//以逗号分隔接收数据
-            //for (String itm : ary) {//循环添加
-            for (int i = 0; i < circleadmin.size(); i++) {
-                Map mapd = new HashedMap();
+            String[] ary = circleadmin.split(",");//以逗号分隔接收数据
+            System.out.println(circleadmin + "===========================================");
+            for (int ad = 0; ad < ary.length; ad++) {//循环添加
+                Map<String, Integer> mapd = new HashedMap();
                 mapd.put("circleid", cirid);
-                mapd.put("userid", circleadmin.get(i));
+                mapd.put("userid", Integer.parseInt(ary[ad]));
                 managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
             }
-            // }
             }
             if (s == 1) {
                 map.put("resault", s);
