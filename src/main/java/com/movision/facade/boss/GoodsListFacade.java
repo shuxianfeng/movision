@@ -476,12 +476,12 @@ public class GoodsListFacade {
      * @param img_url
      * @return
      */
-    public Map<String, Integer> addpicture(String goodsid, String img_url, String orderid) {
+    public Map<String, Integer> addpicture(String goodsid, String img_url, String oderid) {
         Map<String, Integer> map = new HashedMap();
         GoodsImg goodsImg = new GoodsImg();
         goodsImg.setType(0);
         goodsImg.setGoodsid(Integer.parseInt(goodsid));
-        goodsImg.setOderid(Integer.parseInt(orderid));
+        goodsImg.setOderid(Integer.parseInt(oderid));
         String imgurls;
         String productids[] = img_url.split(",");
         int result = 0;

@@ -900,8 +900,8 @@
             <if test="type != null">
                 type,
             </if>
-            <if test="orderid != null">
-                orderid,
+            <if test="oderid != null">
+                oderid,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -914,8 +914,8 @@
             <if test="type != null">
                 #{type,jdbcType=INTEGER},
             </if>
-            <if test="orderid != null">
-                #{orderid,jdbcType=INTEGER},
+            <if test="oderid != null">
+                #{oderid,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>

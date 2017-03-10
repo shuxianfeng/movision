@@ -548,9 +548,9 @@ public class GoodsController {
     public Response addpicture(
             @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
             @ApiParam(value = "地址") @RequestParam(required = false) String imgurl,
-            @ApiParam(value = "排序") @RequestParam(required = false) String orderid) {
+            @ApiParam(value = "排序") @RequestParam(required = false) String oderid) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.addpicture(goodsid, imgurl, orderid);
+        Map<String, Integer> map = goodsFacade.addpicture(goodsid, imgurl, oderid);
         if (response.getCode() == 200) {
             response.setMessage("增加成功");
         }
