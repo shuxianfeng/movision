@@ -1129,8 +1129,9 @@ public class PostFacade {
             }
         }
         map.put("maxtime", max);
-
-        map.put("statue", statue);
+        if (statue != null) {
+            map.put("statue", statue);
+        }
         if (pai != null) {
             map.put("pai", pai);
         }
