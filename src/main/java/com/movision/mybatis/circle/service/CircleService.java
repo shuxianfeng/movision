@@ -1,5 +1,6 @@
 package com.movision.mybatis.circle.service;
 
+import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.category.entity.CircleAndCircle;
 import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.circle.mapper.CircleMapper;
@@ -570,6 +571,38 @@ public class CircleService {
             return circleMapper.queryCircleAwaitAudit(map);
         } catch (Exception e) {
             log.error("查询待审核圈子异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 修改圈子分类
+     *
+     * @param map
+     * @return
+     */
+    public int updateCircleCategoryClassify(Map map) {
+        try {
+            log.info("修改圈子分类");
+            return circleMapper.updateCircleCategoryClassify(map);
+        } catch (Exception e) {
+            log.error("修改圈子分类异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 根据类型Id查询圈子类型
+     *
+     * @param categoryid
+     * @return
+     */
+    public Category queryCircleCategoryClassify(String categoryid) {
+        try {
+            log.info("根据类型id查询圈子类型");
+            return circleMapper.queryCircleCategoryClassify(categoryid);
+        } catch (Exception e) {
+            log.error("根据类型id查询圈子类型异常");
             throw e;
         }
     }

@@ -871,4 +871,29 @@ public class CircleFacade {
         }
     }
 
+    /**
+     * 修改圈子分类
+     *
+     * @param categoryid
+     * @param categoryname
+     * @param discoverpageurl
+     * @return
+     */
+    public int updateCircleCategoryClassify(String categoryid, String categoryname, String discoverpageurl) {
+        Map map = new HashedMap();
+        map.put("categoryid", categoryid);
+        map.put("categoryname", categoryname);
+        map.put("discoverpageurl", discoverpageurl);
+        return circleService.updateCircleCategoryClassify(map);
+    }
+
+    /**
+     * 根据类型id查询圈子类型
+     *
+     * @param categoryid
+     * @return
+     */
+    public Category queryCircleCategoryClassify(String categoryid) {
+        return circleService.queryCircleCategoryClassify(categoryid);
+    }
 }

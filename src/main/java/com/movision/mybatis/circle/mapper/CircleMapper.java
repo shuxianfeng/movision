@@ -1,5 +1,6 @@
 package com.movision.mybatis.circle.mapper;
 
+import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.category.entity.CircleAndCircle;
 import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.user.entity.User;
@@ -96,4 +97,8 @@ public interface CircleMapper {
     List<Circle> findAllMyFollowCircleList(RowBounds rowBounds, Map map);
 
     List<CircleVo> queryCircleAwaitAudit(Map map);
+
+    int updateCircleCategoryClassify(Map map);
+
+    Category queryCircleCategoryClassify(String categoryid);
 }

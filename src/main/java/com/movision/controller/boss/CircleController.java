@@ -471,8 +471,43 @@ public class CircleController {
         return response;
     }
 
-    public Response updateCircleCategory(@ApiParam(value = "分类id") @RequestParam String categoryid) {
+    /**
+     * 修改圈子分类
+     *
+     * @param categoryid
+     * @param categoryname
+     * @param discoverpageurl
+     * @return
+     */
+    @ApiOperation(value = "修改圈子分类", notes = "用于修改圈子分类", response = Response.class)
+    @RequestMapping(value = "update_circle_classify", method = RequestMethod.POST)
+    public Response updateCircleCategoryClassify(@ApiParam(value = "分类id") @RequestParam String categoryid,
+                                                 @ApiParam(value = "分类名称") @RequestParam String categoryname,
+                                                 @ApiParam(value = "分类发现banner图") @RequestParam String discoverpageurl) {
         Response response = new Response();
-        return null;
+        int list = circleFacade.updateCircleCategoryClassify(categoryid, categoryname, discoverpageurl);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(list);
+        return response;
+    }
+
+    /**
+     * 查询圈子分类
+     *
+     * @param categoryid
+     * @return
+     */
+    @ApiOperation(value = "根据id查询圈子分类", notes = "用于修改圈子分类时，数据回显接口", response = Response.class)
+    @RequestMapping(value = "query_circle_category_classify", method = RequestMethod.POST)
+    public Response queryCircleCategoryClassify(@ApiParam(value = "分类id") @RequestParam String categoryid) {
+        Response response = new Response();
+        Category cate = circleFacade.queryCircleCategoryClassify(categoryid);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(cate);
+        return response;
     }
 }
