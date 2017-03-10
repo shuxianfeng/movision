@@ -40,7 +40,8 @@
         #{status,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP},
         #{afterlogintime,jdbcType=TIMESTAMP}, #{beforelogintime,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.movision.mybatis.bossUser.entity.BossUser">
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.movision.mybatis.bossUser.entity.BossUser">
         insert into yw_admin_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

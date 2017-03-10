@@ -5,7 +5,7 @@ import com.movision.exception.BusinessException;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.entity.BossUserVo;
 import com.movision.mybatis.bossUser.service.BossUserService;
-import com.movision.utils.MsgPropertiesUtils;
+import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -37,9 +37,6 @@ public class BossUserFacade {
         return bossUserService.queryBossUserList(pager, map);
     }
 
-    public Boolean addUser(BossUser bossUser) {
-        return bossUserService.addUser(bossUser);
-    }
 
     public Boolean updateUser(BossUser bossUser) {
         return bossUserService.updateUser(bossUser);
@@ -102,7 +99,7 @@ public class BossUserFacade {
     private BossUser validateRequestBossuserIdIsExist(Integer userid) {
         BossUser bossUser = this.selectByPrimaryKey(userid);
         if (null == bossUser) {
-            throw new BusinessException(MsgCodeConstant.boss_user_not_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.boss_user_not_exist)));
+            throw new BusinessException(MsgCodeConstant.boss_user_not_exist, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.boss_user_not_exist)));
         }
         return bossUser;
     }
@@ -112,7 +109,7 @@ public class BossUserFacade {
      *
      * @param bossUserVo
      */
-    public void addBySelectiveInfo(BossUserVo bossUserVo) {
+    public int addBySelectiveInfo(BossUserVo bossUserVo) {
 
         String phone = bossUserVo.getPhone();
         this.validateBossuserPhoneIsExist(phone);
@@ -131,7 +128,7 @@ public class BossUserFacade {
             String newPwd = new Md5Hash(password, null, 2).toString();
             newBossUser.setPassword(newPwd);
         }
-        this.addUser(newBossUser);
+        return bossUserService.addUser(newBossUser);
 
     }
 
@@ -143,7 +140,7 @@ public class BossUserFacade {
     private void validateBossuserPhoneIsExist(String phone) {
         Boolean isExistPhone = bossUserService.isExistPhone(phone);
         if (isExistPhone) {
-            throw new BusinessException(MsgCodeConstant.phone_is_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.phone_is_exist)));
+            throw new BusinessException(MsgCodeConstant.phone_is_exist, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.phone_is_exist)));
         }
     }
 
@@ -156,7 +153,7 @@ public class BossUserFacade {
         //检验菜单名是否已经存在
         int isExist = bossUserService.isExistSameUsername(bossUser);
         if (isExist >= 1) {
-            throw new BusinessException(MsgCodeConstant.boss_username_is_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.boss_username_is_exist)));
+            throw new BusinessException(MsgCodeConstant.boss_username_is_exist, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.boss_username_is_exist)));
         }
     }
 

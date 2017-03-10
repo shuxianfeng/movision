@@ -3,10 +3,7 @@ package com.movision.aop;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.movision.common.Response;
-import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.SessionConstant;
-import com.movision.exception.AuthException;
 import com.movision.facade.boss.BossLoginFacade;
 import com.movision.facade.user.BossUserFacade;
 import com.movision.facade.user.UserFacade;
@@ -15,8 +12,7 @@ import com.movision.mybatis.bossMenu.entity.AuthMenu;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.shiro.realm.BossRealm;
-import com.movision.utils.JsonUtils;
-import com.movision.utils.LoginPropertiesUtils;
+import com.movision.utils.propertiesLoader.LoginPropertiesLoader;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -28,7 +24,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import com.movision.shiro.realm.ShiroRealm;
 import com.movision.shiro.realm.ShiroRealm.ShiroUser;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +59,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
         String path = request.getServletPath();
         log.info("path=" + path);
         //请求中带这些字符串的不去拦截
-        if (path.matches(LoginPropertiesUtils.getValue("no.intercept.url"))) {
+        if (path.matches(LoginPropertiesLoader.getValue("no.intercept.url"))) {
             return true;
         } else {
             // shiro管理的session

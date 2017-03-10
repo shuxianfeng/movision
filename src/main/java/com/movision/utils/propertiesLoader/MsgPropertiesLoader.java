@@ -1,23 +1,19 @@
-package com.movision.utils;
+package com.movision.utils.propertiesLoader;
 
+import com.movision.common.constant.MsgCodeConstant;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import java.io.IOException;
 import java.util.Properties;
 
-/**
- * 登录配置文件加载工具
- *
- * @Author zhuangyuhao
- * @Date 2017/2/20 20:40
- */
-public class LoginPropertiesUtils {
+
+public class MsgPropertiesLoader {
 
     private static Properties properties = null;
 
     static {
         try {
-            properties = PropertiesLoaderUtils.loadAllProperties("web/login.properties");
+            properties = PropertiesLoaderUtils.loadAllProperties("web/message.properties");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -28,6 +24,7 @@ public class LoginPropertiesUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(LoginPropertiesUtils.getValue("no.intercept.url"));
+        System.out.println(MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
     }
+
 }

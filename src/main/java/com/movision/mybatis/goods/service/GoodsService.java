@@ -1140,4 +1140,19 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 查询banner图
+     *
+     * @return
+     */
+    public List<GoodsImg> queryBannerImg(String goodsid) {
+        try {
+            log.info("查询banner图");
+            return goodsMapper.queryBannerImg(goodsid);
+        } catch (Exception e) {
+            log.error("查询banner图失败", e);
+            throw e;
+        }
+    }
 }

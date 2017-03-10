@@ -3,7 +3,7 @@ package com.movision.utils.oss;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.BusinessException;
 import com.movision.facade.upload.UploadFacade;
-import com.movision.utils.PropertiesUtils;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.file.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ public class MovisionOssClient {
      */
     public String uploadObject(MultipartFile file, String type, String chann) {
 
-        String uploadMode = PropertiesUtils.getValue("upload.mode");
+        String uploadMode = PropertiesLoader.getValue("upload.mode");
         //判断是否为允许的上传文件后缀
         boolean allowed = FileUtil.isAllowed(file.getOriginalFilename(), type);
         if (!allowed) {

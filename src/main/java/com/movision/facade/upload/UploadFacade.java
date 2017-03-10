@@ -3,7 +3,7 @@ package com.movision.facade.upload;
 import com.movision.common.constant.ApiConstants;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.BusinessException;
-import com.movision.utils.PropertiesUtils;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.file.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +45,8 @@ public class UploadFacade {
              */
             String saveDirectory;
             long maxPostSize;
-            String imgDomain = PropertiesUtils.getValue("upload.img.domain");
-//            String docDomain = PropertiesUtils.getValue("doc.domain");
+            String imgDomain = PropertiesLoader.getValue("upload.img.domain");
+//            String docDomain = PropertiesLoader.getValue("doc.domain");
             String fileName = FileUtil.renameFile(file.getOriginalFilename());
             String data;
             switch (type) {

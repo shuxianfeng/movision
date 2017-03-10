@@ -1,24 +1,25 @@
 package com.movision.controller.boss;
 
 import com.movision.common.Response;
-import com.movision.common.constant.MsgCodeConstant;
-import com.movision.exception.BusinessException;
+import com.movision.common.constant.ImConstant;
+import com.movision.common.constant.UserConstants;
+import com.movision.common.util.ShiroUtil;
+import com.movision.facade.im.ImFacade;
 import com.movision.facade.user.BossUserFacade;
 import com.movision.facade.user.UserRoleRelationFacade;
-import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.entity.BossUserVo;
-import com.movision.mybatis.role.entity.Role;
+import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.userRoleRelation.entity.UserRoleRelation;
 import com.movision.utils.CommonUtils;
-import com.movision.utils.MsgPropertiesUtils;
+import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
@@ -37,21 +38,33 @@ public class BossUserController {
     @Autowired
     private UserRoleRelationFacade userRoleRelationFacade;
 
+    @Autowired
+    private ImFacade imFacade;
+
     @RequestMapping(value = "add_boss_user", method = RequestMethod.POST)
     @ApiOperation(value = "新增boss用户", notes = "新增boss用户", response = Response.class)
-    public Response addBossUser(@ApiParam @ModelAttribute BossUserVo bossUserVo) throws UnsupportedEncodingException {
+    public Response addBossUser(@ApiParam @ModelAttribute BossUserVo bossUserVo) throws IOException {
         Response response = new Response();
 
         //1 新增用户信息
-        bossUserFacade.addBySelectiveInfo(bossUserVo);
+        int userid = bossUserFacade.addBySelectiveInfo(bossUserVo);
         //2 新增用户角色
         String roleid = bossUserVo.getRoleid();
-        BossUser newBossUser = bossUserFacade.getUserByPhone(bossUserVo.getPhone());    //查出新增的用户信息
+
         if (StringUtils.isNotEmpty(roleid)) {
+
             UserRoleRelation userRoleRelation = new UserRoleRelation();
-            userRoleRelation.setUserid(Integer.valueOf(newBossUser.getId()));
+            userRoleRelation.setUserid(userid);
             userRoleRelation.setRoleid(Integer.valueOf(roleid));
             userRoleRelationFacade.addRelation(userRoleRelation);
+
+            //如果是系统管理员角色， 则创建accid
+            if (StringUtils.equals(roleid, UserConstants.SYSTEM_ADMIN)) {
+                ImUser imUser = new ImUser();
+                imUser.setAccid(CheckSumBuilder.getAccid(bossUserVo.getUsername()));
+                imFacade.registerImUserAndSave(imUser, ShiroUtil.getBossUserID(), ImConstant.TYPE_BOSS);
+            }
+
         }
         return response;
     }
@@ -66,7 +79,7 @@ public class BossUserController {
      */
     @RequestMapping(value = "update_boss_user", method = RequestMethod.POST)
     @ApiOperation(value = "修改boss用户", notes = "修改boss用户", response = Response.class)
-    public Response updateBossUser(@ApiParam @ModelAttribute BossUserVo bossUserVo) throws UnsupportedEncodingException {
+    public Response updateBossUser(@ApiParam @ModelAttribute BossUserVo bossUserVo) throws IOException {
         Response response = new Response();
 
         //1 更新用户信息
@@ -79,6 +92,13 @@ public class BossUserController {
             userRoleRelation.setUserid(Integer.valueOf(bossUserVo.getId()));
             userRoleRelation.setRoleid(Integer.valueOf(roleid));
             userRoleRelationFacade.updateByUserid(userRoleRelation);
+
+            //如果是系统管理员角色， 则创建accid
+            if (StringUtils.equals(roleid, UserConstants.SYSTEM_ADMIN)) {
+                ImUser imUser = new ImUser();
+                imUser.setAccid(CheckSumBuilder.getAccid(bossUserVo.getUsername()));
+                imFacade.registerImUserAndSave(imUser, ShiroUtil.getBossUserID(), ImConstant.TYPE_BOSS);
+            }
         }
 
         return response;

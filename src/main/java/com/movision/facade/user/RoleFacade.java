@@ -9,7 +9,7 @@ import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.role.entity.Role;
 import com.movision.mybatis.role.service.RoleService;
 import com.movision.mybatis.roleMenuRelation.service.RoleMenuRelationService;
-import com.movision.utils.MsgPropertiesUtils;
+import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
@@ -70,7 +70,7 @@ public class RoleFacade {
         //检验角色名是否已经存在
         int isExist = roleService.isExistSameName(role);
         if (isExist >= 1) {
-            throw new BusinessException(MsgCodeConstant.boss_role_name_is_exist, MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.boss_role_name_is_exist)));
+            throw new BusinessException(MsgCodeConstant.boss_role_name_is_exist, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.boss_role_name_is_exist)));
         }
     }
 

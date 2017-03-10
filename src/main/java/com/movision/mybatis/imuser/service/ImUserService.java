@@ -31,10 +31,10 @@ public class ImUserService {
         }
     }
 
-    public ImUser selectByUserid(Integer id) {
+    public ImUser selectByUserid(Integer id, Integer type) {
         try {
             log.info("根据用户id查询IM用户失败");
-            return imUserMapper.selectByUserid(id);
+            return imUserMapper.selectByUserid(id, type);
         } catch (Exception e) {
             log.error("根据用户id查询IM用户失败", e);
             throw e;

@@ -1,7 +1,7 @@
 package com.movision.zookeeper;
 
 import com.movision.exception.LockException;
-import com.movision.utils.PropertiesUtils;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
 
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.Watcher.Event.KeeperState;
@@ -49,9 +49,9 @@ public class DistributedLock implements Lock, Watcher {
         try {
         	//调用exist之前需要先判断链接是否成功，否则会报错：KeeperErrorCode = ConnectionLoss for /locks
         	CountDownLatch connectedLatch = new CountDownLatch(1);
-            Watcher watcher = new ConnectedWatcher(connectedLatch); 
-            zk = new ZooKeeper(PropertiesUtils.getValue("zookeeper_hosts"),
-                    Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")), 
+            Watcher watcher = new ConnectedWatcher(connectedLatch);
+            zk = new ZooKeeper(PropertiesLoader.getValue("zookeeper_hosts"),
+                    Integer.valueOf(PropertiesLoader.getValue("zookeeper_session_timeout")),
                     watcher);
             waitUntilConnected(zk, connectedLatch);
 
@@ -64,8 +64,8 @@ public class DistributedLock implements Lock, Watcher {
                 }
             }
             
-            /*zk = new ZooKeeper(PropertiesUtils.getValue("zookeeper_hosts"),
-                    Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")), 
+            /*zk = new ZooKeeper(PropertiesLoader.getValue("zookeeper_hosts"),
+                    Integer.valueOf(PropertiesLoader.getValue("zookeeper_session_timeout")),
                     this);
             Stat stat = zk.exists(root, false);
             if (stat == null) {
@@ -91,7 +91,7 @@ public class DistributedLock implements Lock, Watcher {
                  *  该问题的原因是，本地的zookeeper服务未启动！！！
                  *  所以程序会一直停留在这一步，进行等待
                  */
-                connectedLatch.await(Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")), TimeUnit.MILLISECONDS);
+                connectedLatch.await(Integer.valueOf(PropertiesLoader.getValue("zookeeper_session_timeout")), TimeUnit.MILLISECONDS);
                 
             } catch (InterruptedException e) {  
                 throw new IllegalStateException(e);  
@@ -131,7 +131,7 @@ public class DistributedLock implements Lock, Watcher {
                 log.info("Thread " + Thread.currentThread().getId() + " " + myZnode + " get lock true");
                 return;
             } else {
-                waitForLock(waitNode, Integer.valueOf(PropertiesUtils.getValue("zookeeper_session_timeout")));//等待锁
+                waitForLock(waitNode, Integer.valueOf(PropertiesLoader.getValue("zookeeper_session_timeout")));//等待锁
             }
         } catch (KeeperException | InterruptedException e) {
             throw new LockException(9999,e.getMessage());

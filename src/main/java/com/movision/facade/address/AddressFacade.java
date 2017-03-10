@@ -10,15 +10,13 @@ import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.address.service.AddressService;
 import com.movision.mybatis.cart.entity.CartVo;
 import com.movision.mybatis.cart.service.CartService;
-import com.movision.mybatis.logisticsfeeCalculateRule.entity.LogisticsfeeCalculateRule;
 import com.movision.mybatis.shopAddress.entity.ShopAddress;
 import com.movision.mybatis.shopAddress.service.ShopAddressService;
-import com.movision.utils.CalculateDistance;
 import com.movision.utils.CalculateFee;
 import com.movision.utils.ListUtil;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
 import org.apache.commons.collections.map.HashedMap;
-import com.movision.utils.wxpay.baidu.SnCal;
-import com.movision.utils.PropertiesUtils;
+import com.movision.utils.baidu.SnCal;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -112,10 +110,10 @@ public class AddressFacade {
         //通过地址计算经纬度
         String sn = SnCal.getSn(address.getProvince() + address.getCity() + address.getDistrict() + street);
 //        String sn = SnCal.getSn(street);
-        String ak = PropertiesUtils.getValue("baidu.ak");
+        String ak = PropertiesLoader.getValue("baidu.ak");
 
         //通过http的get请求url
-        String baiduurl = PropertiesUtils.getValue("baidu.url");
+        String baiduurl = PropertiesLoader.getValue("baidu.url");
         //拼接百度接口的请求url
         String url = baiduurl + "?address=" + addressStr + "&output=json&ak=" + ak + "&sn=" + sn;
         String result = "";

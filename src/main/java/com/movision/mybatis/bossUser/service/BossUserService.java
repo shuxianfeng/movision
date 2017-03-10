@@ -49,14 +49,11 @@ public class BossUserService {
         }
     }
 
-
-
-
-    public Boolean addUser(BossUser bossUser) {
+    public int addUser(BossUser bossUser) {
         try {
             log.info("新增boss用户， bossUser = " + bossUser.toString());
-            int n = bossUserMapper.insertSelective(bossUser);
-            return n == 1;
+            bossUserMapper.insertSelective(bossUser);
+            return bossUser.getId();
         } catch (Exception e) {
             log.error("新增boss用户失败, bossUser = " + bossUser.toString(), e);
             throw e;

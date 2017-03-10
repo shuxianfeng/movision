@@ -7,7 +7,7 @@ import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.*;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.BusinessException;
-import com.movision.utils.PropertiesUtils;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.file.FileUtil;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -155,14 +155,14 @@ public class AliOSSClient {
 
             String data = "";
             if (type.equals("img")) {
-                bucketName = PropertiesUtils.getValue("img.bucket");
-//                domain = PropertiesUtils.getValue("img.domain");
+                bucketName = PropertiesLoader.getValue("img.bucket");
+//                domain = PropertiesLoader.getValue("img.domain");
                 data = fileKey;
 
 
             } else if (type.equals("doc")) {
-                bucketName = PropertiesUtils.getValue("file.bucket");
-//                domain = PropertiesUtils.getValue("file.domain");
+                bucketName = PropertiesLoader.getValue("file.bucket");
+//                domain = PropertiesLoader.getValue("file.domain");
                 data = fileName2;
             }
 
@@ -215,7 +215,7 @@ public class AliOSSClient {
                 fileKey = "upload/" + chann + "/" + type + "/" + fileName2;
 
                 if (type.equals("doc") && chann.equals("tech")) {
-                    String maxSize = PropertiesUtils.getValue("uploadTechMaxPostSize");
+                    String maxSize = PropertiesLoader.getValue("uploadTechMaxPostSize");
                     if (size > Long.valueOf(maxSize)) {
                         throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
                     }
@@ -226,19 +226,19 @@ public class AliOSSClient {
 
             String data = "";
             if (type.equals("img")) {
-                bucketName = PropertiesUtils.getValue("img.bucket");
-                domain = PropertiesUtils.getValue("img.domain");
+                bucketName = PropertiesLoader.getValue("img.bucket");
+                domain = PropertiesLoader.getValue("img.domain");
                 data = "//" + domain + "/" + fileKey;
-                String maxSize = PropertiesUtils.getValue("uploadPicMaxPostSize");
+                String maxSize = PropertiesLoader.getValue("uploadPicMaxPostSize");
                 if (size > Long.valueOf(maxSize)) {
                     throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
                 }
 
             } else if (type.equals("doc")) {
-                bucketName = PropertiesUtils.getValue("file.bucket");
-//                domain = PropertiesUtils.getValue("file.domain");
+                bucketName = PropertiesLoader.getValue("file.bucket");
+//                domain = PropertiesLoader.getValue("file.domain");
                 data = fileName2;
-                String maxSize = PropertiesUtils.getValue("uploadDocMaxPostSize");
+                String maxSize = PropertiesLoader.getValue("uploadDocMaxPostSize");
                 if (size > Long.valueOf(maxSize)) {
                     throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
                 }
@@ -297,13 +297,13 @@ public class AliOSSClient {
 
             String data = "";
             if (type.equals("img")) {
-                bucketName = PropertiesUtils.getValue("img.bucket");
-                domain = PropertiesUtils.getValue("img.domain");
+                bucketName = PropertiesLoader.getValue("img.bucket");
+                domain = PropertiesLoader.getValue("img.domain");
                 data = "//" + domain + "/" + fileKey;
 
             } else if (type.equals("doc")) {
-                bucketName = PropertiesUtils.getValue("file.bucket");
-//                domain = PropertiesUtils.getValue("file.domain");
+                bucketName = PropertiesLoader.getValue("file.bucket");
+//                domain = PropertiesLoader.getValue("file.domain");
                 data = fileName;
             }
 
@@ -346,10 +346,10 @@ public class AliOSSClient {
         OSSClient ossClient = init();
         try {
             if (type.equals("img")) {
-                bucketName = PropertiesUtils.getValue("img.bucket");
+                bucketName = PropertiesLoader.getValue("img.bucket");
 
             } else if (type.equals("doc")) {
-                bucketName = PropertiesUtils.getValue("file.bucket");
+                bucketName = PropertiesLoader.getValue("file.bucket");
             }
 
             String objKey;

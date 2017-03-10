@@ -893,4 +893,22 @@ public class GoodsController {
         return response;
     }
 
+
+    /**
+     * 查询banner图
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询banner图", notes = "查询banner图", response = Response.class)
+    @RequestMapping(value = "query_banner", method = RequestMethod.POST)
+    public Response queryBannerImg(@ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
+        Response response = new Response();
+        List<GoodsImg> list = goodsFacade.queryBannerImg(goodsid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
+        return response;
+    }
+
 }

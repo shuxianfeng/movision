@@ -1,10 +1,8 @@
 package com.movision.facade.sms;
 
 import com.google.gson.Gson;
-import com.movision.common.Response;
 import com.movision.common.constant.SmsConstants;
-import com.movision.utils.DateUtils;
-import com.movision.utils.PropertiesUtils;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.VerifyCodeUtils;
 import com.movision.utils.sms.SDKSendSms;
 import org.apache.shiro.SecurityUtils;
@@ -14,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -42,7 +39,7 @@ public class smsFacade {
         log.debug("verifyCode == " + verifyCode);
         // 2 发送验证码到手机
         String json = convertVerifyMap2Json(verifyCode);
-        SDKSendSms.sendSMS(mobile, json, PropertiesUtils.getValue("modify_mobile_sms_template_code"));
+        SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("modify_mobile_sms_template_code"));
         // 3 把生成的手机验证码缓存到session
         sess.setAttribute("mobile_verifycode_" + mobile, verifyCode);
 

@@ -4,8 +4,8 @@ import com.movision.common.Response;
 import com.movision.common.constant.ApiConstants;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.BusinessException;
-import com.movision.utils.MsgPropertiesUtils;
-import com.movision.utils.PropertiesUtils;
+import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.UUIDGenerator;
 import com.movision.utils.oss.AliOSSClient;
 import org.slf4j.Logger;
@@ -45,26 +45,26 @@ public class FileUtil {
 	public Response downloadObject(HttpServletResponse response, String fileName, String type, String chann)
 			throws IOException {
 		Response result = new Response();
-		String uploadMode = PropertiesUtils.getValue("upload.mode");
-		if (uploadMode.equals("zhb")) {
+        String uploadMode = PropertiesLoader.getValue("upload.mode");
+        if (uploadMode.equals("zhb")) {
 			String downloadDir;
 
 			switch (type) {
 			case "img":
 				if (chann != null) {
-					downloadDir = PropertiesUtils.getValue("uploadDir") + "/" + chann + "/img";
-				} else {
-					downloadDir = PropertiesUtils.getValue("uploadDir");
-				}
+                    downloadDir = PropertiesLoader.getValue("uploadDir") + "/" + chann + "/img";
+                } else {
+                    downloadDir = PropertiesLoader.getValue("uploadDir");
+                }
 
 				break;
 			case "doc":
 				if (chann != null) {
-					downloadDir = PropertiesUtils.getValue("uploadDir") + "/" + chann + "/doc";
+                    downloadDir = PropertiesLoader.getValue("uploadDir") + "/" + chann + "/doc";
 
 				} else {
-					downloadDir = PropertiesUtils.getValue("uploadDir");
-				}
+                    downloadDir = PropertiesLoader.getValue("uploadDir");
+                }
 				break;
 			default:
 				log.error("下载类型不支持");
@@ -117,8 +117,8 @@ public class FileUtil {
 	private static void genErrorMessage(Response result) {
 		result.setCode(MsgCodeConstant.response_status_400);
 		result.setMsgCode(MsgCodeConstant.file_download_error);
-		result.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.file_download_error))));
-	}
+        result.setMessage((MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.file_download_error))));
+    }
 
 	/**
 	 * 下载文件
@@ -144,10 +144,10 @@ public class FileUtil {
 			} else {
 				// result.setCode(MsgCodeConstant.response_status_400);
 				// result.setMsgCode(MsgCodeConstant.file_not_exist);
-				// result.setMessage((MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.file_not_exist))));
-				log.error("文件不存在");
-				throw new BusinessException(MsgCodeConstant.file_not_exist, MsgPropertiesUtils.getValue(String
-						.valueOf(MsgCodeConstant.file_not_exist)));
+                // result.setMessage((MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.file_not_exist))));
+                log.error("文件不存在");
+                throw new BusinessException(MsgCodeConstant.file_not_exist, MsgPropertiesLoader.getValue(String
+                        .valueOf(MsgCodeConstant.file_not_exist)));
 			}
 		} catch (Exception e) {
 			log.error("download file error!", e);
@@ -213,8 +213,8 @@ public class FileUtil {
 	 * @return
 	 */
 	public boolean isExistFile(String fileName, String type, String chann) {
-		String uploadMode = PropertiesUtils.getValue("upload.mode");
-		switch (uploadMode) {
+        String uploadMode = PropertiesLoader.getValue("upload.mode");
+        switch (uploadMode) {
 		case "alioss":
 			Map<String, Object> map = aliOSSClient.downloadStream(fileName, type, chann);
 			String status = (String) map.get("status");
@@ -249,17 +249,17 @@ public class FileUtil {
 	 */
 	public static String[] getAllowSuffixs(String type) {
 		if ("img".equals(type)) {
-			String allowImgSuffix = PropertiesUtils.getValue("allowed.img.suffix");
-			return allowImgSuffix.split(",");
+            String allowImgSuffix = PropertiesLoader.getValue("allowed.img.suffix");
+            return allowImgSuffix.split(",");
 		} else if ("doc".equals(type)) {
-			String allowFileSuffix = PropertiesUtils.getValue("allowed.file.suffix");
-			return allowFileSuffix.split(",");
+            String allowFileSuffix = PropertiesLoader.getValue("allowed.file.suffix");
+            return allowFileSuffix.split(",");
 		}else if ("zip".equals(type)) {
-			String allowFileSuffix = PropertiesUtils.getValue("allowed.file.suffix");
-			return allowFileSuffix.split(",");
+            String allowFileSuffix = PropertiesLoader.getValue("allowed.file.suffix");
+            return allowFileSuffix.split(",");
 		} else if ("video".equals(type)) {
-			String allowFileSuffix = PropertiesUtils.getValue("allowed.video.suffix");
-			return allowFileSuffix.split(",");
+            String allowFileSuffix = PropertiesLoader.getValue("allowed.video.suffix");
+            return allowFileSuffix.split(",");
 		}
 		return null;
 	}

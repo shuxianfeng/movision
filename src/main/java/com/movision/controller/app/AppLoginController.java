@@ -3,6 +3,7 @@ package com.movision.controller.app;
 import com.google.gson.Gson;
 import com.movision.common.Response;
 import com.movision.common.constant.Constants;
+import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.SessionConstant;
 import com.movision.facade.im.ImFacade;
@@ -14,7 +15,7 @@ import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
-import com.movision.utils.MsgPropertiesUtils;
+import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.VerifyCodeUtils;
 import com.movision.utils.im.CheckSumBuilder;
 import com.taobao.api.ApiException;
@@ -85,7 +86,7 @@ public class AppLoginController {
         Gson gson = new Gson();
         String json = gson.toJson(map);
         // TODO: 2017/2/3 短信平台未开通
-//        SDKSendSms.sendSMS(mobile, json, PropertiesUtils.getValue("register_code_sms_template_code"));
+//        SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("register_code_sms_template_code"));
         //验证信息放入session保存
         Validateinfo info = new Validateinfo();
         info.setCreateTime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
@@ -191,7 +192,7 @@ public class AppLoginController {
                         session.removeAttribute(SessionConstant.BOSS_USER);
 
                         //6 判断该userid是否存在一个im用户，
-                        Boolean isExistImUser = imFacade.isExistImuser();
+                        Boolean isExistImUser = imFacade.isExistImuser(ImConstant.TYPE_APP);
                         if (!isExistImUser) {
                             //若不存在，则注册im用户
                             ImUser imUser = new ImUser();
@@ -199,7 +200,7 @@ public class AppLoginController {
                             ImUser newImUser = imFacade.AddImUser(imUser);
                             returnMap.put("imuser", newImUser);
                         } else {
-                            returnMap.put("imuser", imFacade.getImuserByCurrentAppuser());
+                            returnMap.put("imuser", imFacade.getImuserByCurrentAppuser(ImConstant.TYPE_APP));
                         }
 
                         response.setData(returnMap);
@@ -275,17 +276,17 @@ public class AppLoginController {
         } catch (UnknownAccountException e) {
             log.warn("用户名不存在");
             response.setCode(400);
-            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.app_user_not_exist)));
+            response.setMessage(MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.app_user_not_exist)));
             response.setMsgCode(MsgCodeConstant.app_user_not_exist);
         } catch (LockedAccountException e) {
             log.warn("帐户状态异常");
             response.setCode(400);
-            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.app_account_status_error)));
+            response.setMessage(MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.app_account_status_error)));
             response.setMsgCode(MsgCodeConstant.app_account_status_error);
         } catch (AuthenticationException e) {
             log.warn("用户名或验证码错误");
             response.setCode(400);
-            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.app_account_name_error)));
+            response.setMessage(MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.app_account_name_error)));
             response.setMsgCode(MsgCodeConstant.app_account_name_error);
         }
         return null;
@@ -303,7 +304,7 @@ public class AppLoginController {
         if (StringUtils.isEmpty(appToken)) {
             log.warn("app本地的token丢失");
             response.setCode(400);
-            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.app_token_missing)));
+            response.setMessage(MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.app_token_missing)));
             response.setMsgCode(MsgCodeConstant.app_token_missing);
         }
 
@@ -311,7 +312,7 @@ public class AppLoginController {
         if (StringUtils.isEmpty(serverToken)) {
             log.warn("服务器存储的token丢失");
             response.setCode(400);
-            response.setMessage(MsgPropertiesUtils.getValue(String.valueOf(MsgCodeConstant.server_token_missing)));
+            response.setMessage(MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.server_token_missing)));
             response.setMsgCode(MsgCodeConstant.server_token_missing);
         }
         return serverToken;
