@@ -1575,5 +1575,17 @@
         WHERE id=#{id,jdbcType=INTEGER} AND isessence=1
     </update>
 
+    <select id="findAllQueryCollectPostList" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.post.entity.PostList">
+        SELECT p.*,(SELECT u.nickname FROM yw_user u WHERE u.id=p.userid) as nickname,
+        (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
+        (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
+        (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
+        (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid) AS circlename,
+        (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS category
+        FROM yw_post AS p
+        WHERE p.isdel=0 AND p.isactive=0 AND p.id IN (SELECT postid FROM yw_collection WHERE userid=#{userid,jdbcType=INTEGER}) ORDER BY p.intime DESC
+
+    </select>
 
 </mapper>

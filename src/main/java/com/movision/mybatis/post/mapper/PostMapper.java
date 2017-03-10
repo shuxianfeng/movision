@@ -157,4 +157,6 @@ public interface PostMapper {
 
     PostActiveList queryActiveById(Integer id);//根据id查询帖子
 
+    List<PostList> findAllQueryCollectPostList(String userid, RowBounds rowBounds);
+
 }

@@ -792,4 +792,21 @@ public class PostService {
         }
     }
 
+    /**
+     * 查询用户收藏的帖子列表
+     *
+     * @param userid
+     * @param pager
+     * @return
+     */
+    public List<PostList> queryCollectPostList(String userid, Paging<PostList> pager) {
+        try {
+            log.info("查询用户收藏的帖子列表");
+            return postMapper.findAllQueryCollectPostList(userid, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询用户收藏的帖子列表");
+            throw e;
+        }
+    }
+
 }
