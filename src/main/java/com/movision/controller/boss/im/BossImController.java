@@ -29,7 +29,7 @@ public class BossImController {
      * @return
      * @throws IOException
      */
-    @ApiOperation(value = "发送系统通知", notes = "发送系统通知", response = Response.class)
+    @ApiOperation(value = "给APP用户发送系统通知", notes = "给APP用户发送系统通知", response = Response.class)
     @RequestMapping(value = {"/send_system_inform"}, method = RequestMethod.POST)
     public Response sendSystemInform(@ApiParam(value = "系统通知内容") @RequestParam String body) throws IOException {
         Response response = new Response();
