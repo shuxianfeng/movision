@@ -219,7 +219,7 @@ public class AppPostController {
     public Response partActive(@ApiParam(value = "活动id") @RequestParam String postid,
                                @ApiParam(value = "参与用户id") @RequestParam String userid,
                                @ApiParam(value = "参与活动的主题") @RequestParam(required = false) String title,
-                               @ApiParam(value = "邮箱") @RequestParam String email,
+                               @ApiParam(value = "邮箱") @RequestParam(required = false) String email,
                                @ApiParam(value = "作品简介") @RequestParam(required = false) String introduction) {
         Response response = new Response();
         int flag = facadePost.partActive(postid, userid, title, email, introduction);
