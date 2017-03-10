@@ -915,5 +915,13 @@ public class GoodsListFacade {
         return goodsService.queryCollectionGoodsListByUserid(goodsid, pager);
     }
 
+    /**
+     * 查询banner图
+     *
+     * @return
+     */
+    public List<GoodsImg> queryBannerImg(String goodsid) {
+        return goodsService.queryBannerImg(goodsid);
+    }
 
 }

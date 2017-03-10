@@ -1242,4 +1242,8 @@
             </if>
         </trim>
     </insert>
+    <select id="queryBannerImg" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.goods.entity.GoodsImg">
+        select * from yw_goods_img WHERE goodsid=#{goodsid,jdbcType=INTEGER} AND  TYPE =0
+    </select>
 </mapper>

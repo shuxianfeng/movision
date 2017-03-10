@@ -152,5 +152,7 @@ public interface GoodsMapper {
 
     List<GoodsVo> findAllQueryCollectionGoodsListByUserid(String goodsid, RowBounds rowBounds);
 
+    List<GoodsImg> queryBannerImg(String goodsid);//查询banner图
+
 
 }
