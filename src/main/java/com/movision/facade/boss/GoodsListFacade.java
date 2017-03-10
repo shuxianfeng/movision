@@ -896,7 +896,7 @@ public class GoodsListFacade {
     }
 
     /**
-     * 根据用户id查询用户被收藏的商品列表
+     * 根据用户id查询用户收藏的商品列表
      *
      * @param goodsid
      * @param pager

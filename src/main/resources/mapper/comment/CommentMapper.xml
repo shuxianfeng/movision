@@ -267,6 +267,13 @@
   <select id="findAllQueryCommentListByUserid" parameterType="java.lang.String"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.*,u.phone,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u
-    ON c.userid=u.id WHERE postid IN (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} and isdel=0) AND isdel=0 and pid is NULL
+    ON c.userid=u.id WHERE postid IN (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} and isdel=0)
+    AND isdel=0 and pid is NULL ORDER BY intime DESC
+  </select>
+
+  <select id="findAllqueryTheUserComments" parameterType="java.lang.String"
+          resultType="com.movision.mybatis.comment.entity.CommentVo">
+    SELECT c.*,u.phone,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u ON c.userid=u.id  WHERE c.userid=1 AND c.isdel=0
+    AND c.pid is NULL ORDER BY c.intime DESC
   </select>
 </mapper>

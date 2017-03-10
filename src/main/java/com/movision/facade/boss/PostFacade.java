@@ -1268,4 +1268,15 @@ public class PostFacade {
         return postService.queryActiveById(id);
     }
 
+    /**
+     * 查询用户收藏的帖子列表
+     *
+     * @param userid
+     * @param pager
+     * @return
+     */
+    public List<PostList> queryCollectPostList(String userid, Paging<PostList> pager) {
+        return postService.queryCollectPostList(userid, pager);
+    }
+
 }
