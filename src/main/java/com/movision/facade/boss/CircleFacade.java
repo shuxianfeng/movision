@@ -404,10 +404,10 @@ public class CircleFacade {
                 //待定
             String[] ary = circleadmin.split(",");//以逗号分隔接收数据
             System.out.println(circleadmin + "===========================================");
-            for (String itm : ary) {//循环添加
+            for (int ad = 0; ad < ary.length; ad++) {//循环添加
                 Map<String, Integer> mapd = new HashedMap();
                 mapd.put("circleid", cirid);
-                mapd.put("userid", Integer.parseInt(itm));
+                mapd.put("userid", Integer.parseInt(ary[ad]));
                 managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
             }
             }
