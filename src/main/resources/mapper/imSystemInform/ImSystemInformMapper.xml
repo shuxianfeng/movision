@@ -48,9 +48,7 @@
             <if test="body != null">
                 body,
             </if>
-            <if test="informTime != null">
                 inform_time,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -68,9 +66,7 @@
             <if test="body != null">
                 #{body,jdbcType=VARCHAR},
             </if>
-            <if test="informTime != null">
-                #{informTime,jdbcType=TIMESTAMP},
-            </if>
+            now(),
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">

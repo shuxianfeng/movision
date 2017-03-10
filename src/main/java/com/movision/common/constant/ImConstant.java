@@ -57,4 +57,9 @@ public class ImConstant {
     public static final String SEND_MSG = ImPropertiesLoader.getPropertyValue("send_msg");
 
 
+    /**
+     * 批量发送系统通知
+     */
+    public static final String SEND_BATCH_ATTACH_MSG = ImPropertiesLoader.getPropertyValue("send_batch_attach_msg");
+
 }

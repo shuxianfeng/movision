@@ -192,7 +192,7 @@ public class AppLoginController {
                         session.removeAttribute(SessionConstant.BOSS_USER);
 
                         //6 判断该userid是否存在一个im用户，
-                        Boolean isExistImUser = imFacade.isExistImuser(ImConstant.TYPE_APP);
+                        Boolean isExistImUser = imFacade.isExistAPPImuser();
                         if (!isExistImUser) {
                             //若不存在，则注册im用户
                             ImUser imUser = new ImUser();
@@ -200,7 +200,7 @@ public class AppLoginController {
                             ImUser newImUser = imFacade.AddImUser(imUser);
                             returnMap.put("imuser", newImUser);
                         } else {
-                            returnMap.put("imuser", imFacade.getImuserByCurrentAppuser(ImConstant.TYPE_APP));
+                            returnMap.put("imuser", imFacade.getImuserByCurrentAppuser());
                         }
 
                         response.setData(returnMap);

@@ -21,8 +21,10 @@ public class MathUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(division100ToInteger(343.58));
+        /*System.out.println(division100ToInteger(343.58));
         System.out.println(division100ToInteger(353.58));
-        System.out.println(division100ToInteger(0.0));
+        System.out.println(division100ToInteger(0.0));*/
+
+        System.out.println(499 / 500);
     }
 }

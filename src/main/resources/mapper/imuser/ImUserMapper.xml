@@ -75,4 +75,11 @@
         WHERE userid = #{userid}
         AND type = #{type}
     </select>
+
+    <select id="selectAllAPPImuser" resultType="com.movision.mybatis.imuser.entity.ImUser">
+        SELECT *
+        FROM yw_im_user
+        WHERE TYPE = 1
+        ORDER BY create_time
+    </select>
 </mapper>
