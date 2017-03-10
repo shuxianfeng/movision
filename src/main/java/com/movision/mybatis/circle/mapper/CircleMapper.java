@@ -94,4 +94,6 @@ public interface CircleMapper {
     int insertCircle(CircleDetails circleDetails);
 
     List<Circle> findAllMyFollowCircleList(RowBounds rowBounds, Map map);
+
+    List<CircleVo> queryCircleAwaitAudit();
 }

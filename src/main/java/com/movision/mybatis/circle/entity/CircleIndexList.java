@@ -13,6 +13,7 @@ import java.util.List;
  */
 public class CircleIndexList {
     private Integer category;//圈子分类
+    private String categoryname;//圈子分类名称
     private List<User> circlemaster;//圈主
     private List<User> circlemanagerlist;//圈子管理员列表
     private Integer follownum;//圈子关注数
@@ -23,6 +24,14 @@ public class CircleIndexList {
     private Integer supportnum;//支持数
     private Date intime;//时间
     private List<CircleVo> classify;//分类列表
+
+    public String getCategoryname() {
+        return categoryname;
+    }
+
+    public void setCategoryname(String categoryname) {
+        this.categoryname = categoryname;
+    }
 
     public List<CircleVo> getClassify() {
         return classify;

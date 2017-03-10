@@ -233,8 +233,8 @@ public class CircleController {
      * @param name
      * @param category
      * @param userid
-     * @param admin
-     * @param criclemanid
+     * @param circleadmin
+     * @param circlemanid
      * @param photo
      * @param introduction
      * @return
@@ -244,12 +244,12 @@ public class CircleController {
     public Response addCircle(@ApiParam(value = "圈子名称") @RequestParam String name,
                               @ApiParam(value = "圈子类型0 科技 1 交友 2 摄影 3 影视 4 达人秀") @RequestParam String category,
                               @ApiParam(value = "圈主id") @RequestParam String userid,
-                              @ApiParam(value = "管理员列表") @RequestParam String admin,
-                              @ApiParam(value = "创建人") @RequestParam String criclemanid,
+                              @ApiParam(value = "管理员列表") @RequestParam String circleadmin,
+                              @ApiParam(value = "创建人") @RequestParam String circlemanid,
                               @ApiParam(value = "圈子否封面") @RequestParam String photo,
                               @ApiParam(value = "圈子简介") @RequestParam String introduction) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.addCircle(name, category, userid, admin, criclemanid, photo, introduction);
+        Map<String, Integer> map = circleFacade.addCircle(name, category, userid, circleadmin, circlemanid, photo, introduction);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -443,6 +443,23 @@ public class CircleController {
         }
         pager.result(list);
         response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 查询圈子分类列表-查询待审核圈子
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询待审核圈子", notes = "用于查询圈子列表时，查询待审核圈子", response = Response.class)
+    @RequestMapping(value = "query_circle_await_audit", method = RequestMethod.POST)
+    public Response queryCircleAwaitAudit() {
+        Response response = new Response();
+        List<CircleVo> audit = circleFacade.queryCircleAwaitAudit();
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(audit);
         return response;
     }
 }

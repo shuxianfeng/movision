@@ -558,4 +558,19 @@ public class CircleService {
             throw e;
         }
     }
+
+    /**
+     * 查询待审核圈子
+     *
+     * @return
+     */
+    public List<CircleVo> queryCircleAwaitAudit() {
+        try {
+            log.info("查询待审核圈子");
+            return circleMapper.queryCircleAwaitAudit();
+        } catch (Exception e) {
+            log.error("查询待审核圈子异常");
+            throw e;
+        }
+    }
 }

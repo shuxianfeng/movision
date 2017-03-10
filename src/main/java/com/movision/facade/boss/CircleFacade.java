@@ -274,7 +274,7 @@ public class CircleFacade {
             if (category != null) {
                 circleDetails.setCategory(Integer.parseInt(category));
             }
-            if (admin != null) {//管理员列表
+        if (admin != null && admin != "") {//管理员列表
                 //待定
                 String[] ary = admin.split(",");//以逗号分隔接收数据
                 managerService.deleteManagerToCircleid(circleid);//删除圈子的所有管理员
@@ -362,13 +362,13 @@ public class CircleFacade {
      * @param name
      * @param category
      * @param userid
-     * @param admin
+     * @param circleadmin
      * @param circlemanid
      * @param photo
      * @param introduction
      * @return
      */
-    public Map<String, Integer> addCircle(String name, String category, String userid, String admin,
+    public Map<String, Integer> addCircle(String name, String category, String userid, String circleadmin,
                                           String circlemanid, String photo, String introduction) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
@@ -397,9 +397,9 @@ public class CircleFacade {
             }
             Integer s = circleService.insertCircle(circleDetails);
             Integer cirid = circleDetails.getId();
-            if (admin != null) {//管理员列表
+        if (circleadmin != null && circleadmin != "") {//管理员列表
                 //待定
-                String[] ary = admin.split(",");//以逗号分隔接收数据
+            String[] ary = circleadmin.split(",");//以逗号分隔接收数据
                 for (String itm : ary) {//循环添加
                     Map<String, Integer> mapd = new HashedMap();
                     mapd.put("circleid", cirid);
@@ -547,6 +547,7 @@ public class CircleFacade {
             type = null;
             tm.put("categoryid", type);
             circlenum = circleService.queryListByCircleCategory(tm);//查询圈子所有分类
+
             for (int i = 0; i < circlenum.size(); i++) {
                 /////////////////////分类列表////////////////////////
                 map.put("type", circlenum.get(i).getCategory());
@@ -679,8 +680,18 @@ public class CircleFacade {
                 }
                 circlenum.get(f).setClassify(circleVoslist);
             }
+
             return circlenum;
         }
+    }
+
+    /**
+     * 查询待审核圈子
+     *
+     * @return
+     */
+    public List<CircleVo> queryCircleAwaitAudit() {
+        return circleService.queryCircleAwaitAudit();
     }
 
 }
