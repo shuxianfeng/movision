@@ -16,11 +16,11 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        fromid yw_admin_menu
+        from yw_admin_menu
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete fromid yw_admin_menu
+        delete from yw_admin_menu
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.bossMenu.entity.Menu">
@@ -121,7 +121,7 @@
     <select id="findAllMenuList" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        fromid yw_admin_menu
+        from yw_admin_menu
         where isdel = 1
         <if test="menuname != null and menuname != ''">
             menuname like CONCAT('%',#{menuname},'%')
@@ -142,14 +142,14 @@
     <select id="selectAllMenu" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        fromid yw_admin_menu
+        from yw_admin_menu
         where isdel = 1
     </select>
 
     <select id="selectAllParentMenu" resultType="com.movision.mybatis.bossMenu.entity.AuthMenu">
         select
         yw_admin_menu.*
-        fromid yw_admin_menu
+        from yw_admin_menu
         where isdel = 1 AND pid = 0
         ORDER BY orderid, id
     </select>
@@ -157,7 +157,7 @@
     <select id="selectAllChildrenMenu" resultType="com.movision.mybatis.bossMenu.entity.AuthMenu">
         select
         yw_admin_menu.*
-        fromid yw_admin_menu
+        from yw_admin_menu
         <![CDATA[
         where isdel = 1 AND pid <> 0
         ]]>
@@ -168,7 +168,7 @@
             parameterType="java.lang.Integer">
         select
         m.*
-        fromid yw_admin_menu m
+        from yw_admin_menu m
         LEFT JOIN yw_admin_role_menu rm ON m.id = rm.menuid
         where m.isdel = 1 AND m.pid = 0
         and rm.roleid = #{roleid}

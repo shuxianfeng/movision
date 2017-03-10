@@ -41,7 +41,7 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        fromid yw_goods
+        from yw_goods
         where id = #{id,jdbcType=INTEGER}
     </select>
 
@@ -238,7 +238,7 @@
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete fromid yw_goods
+        delete from yw_goods
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.goods.entity.Goods">
@@ -564,7 +564,7 @@
     <select id="findAllGoodsList" resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT
         s.id,s.name,a.typename,d.brandname,s.origprice,s.price,s.stock,s.sales,s.ishomepage,s.recommenddate,s.isdel,s.ishot,s.isessence,COUNT(c.goodsid)
-        AS collect fromid yw_goods s
+        AS collect from yw_goods s
         LEFT JOIN yw_brand d ON d.brandid=s.brandid LEFT JOIN yw_collection c ON c.goodsid=s.id LEFT JOIN yw_category a
         ON a.protype=s.protype
         GROUP BY s.id
@@ -573,7 +573,7 @@
             resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT
         s.id,s.name,a.typename,d.brandname,s.origprice,s.price,s.stock,s.sales,s.ishomepage,s.recommenddate,s.isdel,s.ishot,s.isessence,COUNT(c.goodsid)
-        AS collect,s.onlinetime,s.protype,s.brandid fromid yw_goods s
+        AS collect,s.onlinetime,s.protype,s.brandid from yw_goods s
         LEFT JOIN yw_brand d ON d.brandid=s.brandid LEFT JOIN yw_collection c ON c.goodsid=s.id LEFT JOIN yw_category a
         ON a.protype=s.protype
         WHERE 1=1
@@ -657,7 +657,7 @@
 
     <select id="findAllMyCollectGoodsList" resultType="java.util.HashMap">
         SELECT g.*, i.img_url
-        fromid yw_goods g
+        from yw_goods g
         LEFT JOIN yw_collection c ON g.id = c.goodsid
         LEFT JOIN yw_goods_img i ON g.id = i.goodsid
         where c.type = 1
@@ -805,7 +805,7 @@
         SELECT id,imgurl,orderid FROM yw_goods_assessment_img WHERE assessmentid=#{id,jdbcType=INTEGER}
     </select>
     <select id="queryisdel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT isdel fromid yw_goods WHERE id=#{id,jdbcType=INTEGER}
+        SELECT isdel from yw_goods WHERE id=#{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteGoodsPicture" parameterType="java.lang.Integer">
         DELETE FROM yw_goods_img WHERE  type=2 AND goodsid=#{id,jdbcType=INTEGER}

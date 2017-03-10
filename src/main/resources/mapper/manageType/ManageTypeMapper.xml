@@ -16,11 +16,11 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        fromid yw_homepage_manage_type
+        from yw_homepage_manage_type
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete fromid yw_homepage_manage_type
+        delete from yw_homepage_manage_type
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.manageType.entity.ManageType">
@@ -171,7 +171,7 @@
 
     <select id="queryAdvertisementTypeById" parameterType="java.lang.String"
             resultType="com.movision.mybatis.manageType.entity.ManageType">
-        select * fromid yw_homepage_manage_type WHERE id=#{id,jdbcType=INTEGER};
+        select * from yw_homepage_manage_type WHERE id=#{id,jdbcType=INTEGER};
     </select>
 
     <select id="findAllQueryAdvertisementTypeLikeName" resultType="com.movision.mybatis.manageType.entity.ManageType"

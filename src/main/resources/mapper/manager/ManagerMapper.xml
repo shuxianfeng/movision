@@ -12,11 +12,11 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        fromid yw_circle_manager
+        from yw_circle_manager
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete fromid yw_circle_manager
+        delete from yw_circle_manager
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.manager.entity.Manager">
@@ -70,7 +70,7 @@
     </update>
 
     <delete id="deleteManagerToCircleid" parameterType="java.lang.Integer">
-        delete fromid yw_circle_manager where circleid=#{circleid,jdbcType=INTEGER}
+        delete from yw_circle_manager where circleid=#{circleid,jdbcType=INTEGER}
     </delete>
 
     <insert id="addManagerToCircleAndUserid" parameterType="java.util.Map">

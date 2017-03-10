@@ -24,7 +24,7 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        fromid yw_goods_assessment
+        from yw_goods_assessment
         where id = #{id,jdbcType=INTEGER}
     </select>
 
@@ -156,7 +156,7 @@
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete fromid yw_goods_assessment
+        delete from yw_goods_assessment
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessment">

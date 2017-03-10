@@ -32,7 +32,7 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        fromid yw_circle
+        from yw_circle
         where id = #{id,jdbcType=INTEGER}
     </select>
 
@@ -111,7 +111,7 @@
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete fromid yw_circle
+        delete from yw_circle
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.circle.entity.Circle">
@@ -410,7 +410,7 @@
         SELECT c.id AS category,c.categoryname , c.intime,
         (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN (SELECT id FROM yw_circle WHERE category=c.id)) as
         follownum,
-        (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN(select circleid fromid yw_follow_circle where
+        (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN(select circleid from yw_follow_circle where
         date(intime) = curdate())) AS follownewnum ,
         (SELECT COUNT(1) FROM yw_post WHERE circleid IN(SELECT id FROM yw_circle WHERE category=c.id) AND date(intime) =
         curdate()) AS postnewnum,
@@ -425,7 +425,7 @@
     </select>
 
     <select id="queryListByCircleCategoryTo" resultType="com.movision.mybatis.circle.entity.Circle">
-        select c.id AS category,c.categoryname fromid yw_circle_category c ORDER BY c.id DESC
+        select c.id AS category,c.categoryname from yw_circle_category c ORDER BY c.id DESC
     </select>
 
     <select id="queryListByCircleList" parameterType="java.lang.Integer"
@@ -448,7 +448,7 @@
             parameterType="java.lang.Integer">
         SELECT COUNT(1) AS num,
         (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN
-        (select circleid fromid yw_follow_circle where date(intime) = curdate())) AS newnum
+        (select circleid from yw_follow_circle where date(intime) = curdate())) AS newnum
         FROM yw_follow_circle WHERE circleid IN (SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER})
     </select>
 
@@ -475,7 +475,7 @@
 
     <select id="queryCircleSupportnum" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.circle.entity.CircleVo">
-        SELECT SUM(supportnum) AS supportnum,(SELECT intime fromid yw_circle_category WHERE id=0) AS intime FROM
+        SELECT SUM(supportnum) AS supportnum,(SELECT intime from yw_circle_category WHERE id=0) AS intime FROM
         yw_circle
         WHERE category=#{categoryid,jdbcType=INTEGER}
     </select>
@@ -484,12 +484,12 @@
             parameterType="java.lang.Integer">
          SELECT c.categoryname ,
         (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN (SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER})) as follownum,
-        (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN(select circleid fromid yw_follow_circle where
+        (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN(select circleid from yw_follow_circle where
         date(intime) = curdate())) AS follownewnum ,
         (SELECT COUNT(1) FROM yw_post WHERE circleid IN(SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER}) AND date(intime) = curdate()) AS postnewnum,
         (SELECT COUNT(1) FROM yw_post WHERE circleid IN(SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER}) AND isessence=1) AS isessencenum,
         (SELECT COUNT(1) FROM yw_post p WHERE p.circleid IN (SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER})) AS postnum,
-        (SELECT intime fromid yw_circle_category WHERE id=#{categoryid,jdbcType=INTEGER}) AS intime,
+        (SELECT intime from yw_circle_category WHERE id=#{categoryid,jdbcType=INTEGER}) AS intime,
 		(SELECT SUM(supportnum) FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER}) AS supportnum
         FROM yw_circle_category c WHERE c.id=#{categoryid,jdbcType=INTEGER}
 

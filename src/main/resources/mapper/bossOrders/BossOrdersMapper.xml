@@ -33,11 +33,11 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        fromid yw_orders
+        from yw_orders
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete fromid yw_orders
+        delete from yw_orders
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.bossOrders.entity.BossOrders">
@@ -605,7 +605,7 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
     </update>
     <select id="queryOrderOperation" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.orderoperation.entity.Orderoperation">
-        SELECT * fromid yw_orderoperation WHERE orderid=#{id,jdbcType=INTEGER}
+        SELECT * from yw_orderoperation WHERE orderid=#{id,jdbcType=INTEGER}
     </select>
 
     <select id="queryByAddress" parameterType="java.lang.Integer"

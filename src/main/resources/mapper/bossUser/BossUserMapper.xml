@@ -23,11 +23,11 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        fromid yw_admin_user
+        from yw_admin_user
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete fromid yw_admin_user
+        delete from yw_admin_user
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.bossUser.entity.BossUser">
@@ -154,7 +154,7 @@
             resultType="com.movision.mybatis.bossUser.entity.BossUser">
         select
         <include refid="Base_Column_List"/>
-        fromid yw_admin_user
+        from yw_admin_user
         WHERE phone = #{phone}
     </select>
 
@@ -162,7 +162,7 @@
             resultType="com.movision.mybatis.bossUser.entity.BossUser">
         select
         <include refid="Base_Column_List"/>
-        fromid yw_admin_user
+        from yw_admin_user
         where username = #{username}
     </select>
 

@@ -4,41 +4,41 @@
 <urlrewrite>
 
 	<rule>
-        <fromid>/index.html</fromid>
+        <from>/index.html</from>
         <toid>/index</toid>
 	</rule>
 	<rule>
-        <fromid>/signin.html</fromid>
+        <from>/signin.html</from>
         <toid>/login</toid>
 	</rule>
 
 	<rule>
-        <fromid>/signup.html</fromid>
+        <from>/signup.html</from>
         <toid>/register</toid>
 	</rule>
 	
 	<!--<rule>-->
-    <!--<fromid>/product/([0-9]+).html$</fromid>-->
+    <!--<from>/product/([0-9]+).html$</from>-->
     <!--<toid>/product?id=$1</toid>-->
 	<!--</rule>-->
 	<!-- -->
 	<!--<rule>-->
-    <!--<fromid>/enquiry/([0-9]+).html$</fromid>-->
+    <!--<from>/enquiry/([0-9]+).html$</from>-->
     <!--<toid>/enquiry?id=$1</toid>-->
 	<!--</rule>-->
 	<!-- -->
 	<!--<rule>-->
-    <!--<fromid>/store/([0-9]+).html$</fromid>-->
+    <!--<from>/store/([0-9]+).html$</from>-->
     <!--<toid>/store?id=$1</toid>-->
 	<!--</rule>-->
 	<!-- -->
 	<!--<rule>-->
-    <!--<fromid>/news/([0-9]+).html$</fromid>-->
+    <!--<from>/news/([0-9]+).html$</from>-->
     <!--<toid>/news?id=$1</toid>-->
 	<!--</rule>-->
 	<!-- -->
 	<!--<rule>-->
-    <!--<fromid>/exhibition/([0-9]+).html$</fromid>-->
+    <!--<from>/exhibition/([0-9]+).html$</from>-->
     <!--<toid>/exhibition?id=$1</toid>-->
 	<!--</rule>-->
 	
