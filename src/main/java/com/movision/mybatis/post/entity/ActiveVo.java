@@ -76,6 +76,8 @@ public class ActiveVo {
 
     private Integer isZan;//该用户是否已赞该帖子/活动 0 否 1 是
 
+    private Integer isPart;//0 未参加可参加 1 已参加不可参加
+
     public Integer getId() {
         return id;
     }
@@ -338,5 +340,13 @@ public class ActiveVo {
 
     public void setHotActiveList(List<ActiveVo> hotActiveList) {
         this.hotActiveList = hotActiveList;
+    }
+
+    public Integer getIsPart() {
+        return isPart;
+    }
+
+    public void setIsPart(Integer isPart) {
+        this.isPart = isPart;
     }
 }
