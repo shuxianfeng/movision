@@ -564,10 +564,10 @@ public class CircleService {
      *
      * @return
      */
-    public List<CircleVo> queryCircleAwaitAudit() {
+    public List<CircleVo> queryCircleAwaitAudit(Map map) {
         try {
             log.info("查询待审核圈子");
-            return circleMapper.queryCircleAwaitAudit();
+            return circleMapper.queryCircleAwaitAudit(map);
         } catch (Exception e) {
             log.error("查询待审核圈子异常");
             throw e;

@@ -718,7 +718,8 @@
         </if>
     </select>
 
-    <select id="queryCircleAwaitAudit" resultType="com.movision.mybatis.circle.entity.CircleIndexList">
+    <select id="queryCircleAwaitAudit" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.circle.entity.CircleVo">
         SELECT c.* ,
         (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid=c.id) as follownum,
         (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid=c.id) AS follownewnum,
@@ -728,6 +729,9 @@
         (SELECT u.nickname FROM yw_user u WHERE id=c.userid) AS circlename,
         (SELECT u.level FROM yw_user u WHERE id=c.userid) AS categorylevel
         FROM yw_circle c WHERE isdel=0 AND status=0
+        <if test="type!=null">
+            AND category=#{type,jdbcType=INTEGER}
+        </if>
         <if test="circleid!=null">
             AND c.id=#{circleid,jdbcType=INTEGER}
         </if>

@@ -453,9 +453,14 @@ public class CircleController {
      */
     @ApiOperation(value = "查询待审核圈子", notes = "用于查询圈子列表时，查询待审核圈子", response = Response.class)
     @RequestMapping(value = "query_circle_await_audit", method = RequestMethod.POST)
-    public Response queryCircleAwaitAudit() {
+    public Response queryCircleAwaitAudit(@ApiParam(value = "排序方式(默认按创建时间排序，1为按人气排序)") @RequestParam(required = false) String pai,
+                                          @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
+                                          @ApiParam(value = "圈主") @RequestParam(required = false) String circleman,
+                                          @ApiParam(value = "圈子类型") @RequestParam(required = false) String type,
+                                          @ApiParam(value = "圈子创建开始时间") @RequestParam(required = false) String begintime,
+                                          @ApiParam(value = "圈子创建结束时间") @RequestParam(required = false) String endtime) {
         Response response = new Response();
-        List<CircleVo> audit = circleFacade.queryCircleAwaitAudit();
+        List<CircleIndexList> audit = circleFacade.queryCircleAwaitAudit(pai, circleid, circleman, type, begintime, endtime);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
