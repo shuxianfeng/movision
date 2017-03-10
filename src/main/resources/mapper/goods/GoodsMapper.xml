@@ -1266,6 +1266,6 @@
         GROUP BY s.id
     </select>
     <select id="queryAssessment" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-    SELECT COUNT(1) from  yw_goods_assessment WHERE pid=#{pid,jdbcType=INTEGER}
+        SELECT COUNT(1) from yw_goods_assessment WHERE pid=#{pid,jdbcType=INTEGER} AND userid=-1
     </select>
 </mapper>
