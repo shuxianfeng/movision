@@ -1478,7 +1478,7 @@
             AND title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
         </if>
         <if test="name!=null">
-            AND nickname LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
+            AND userid LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
         <if test="content!=null">
             AND postcontent LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
