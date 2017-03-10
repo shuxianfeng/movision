@@ -70,6 +70,8 @@ public class ActiveVo {
 
     private Integer partsum;//活动参与总人数
 
+    private List<ActiveVo> hotActiveList;//活动详情最下方推荐的4个热门活动
+
     private Integer isCollect;//该用户是否已收藏该帖子/活动 0 否 1 是
 
     private Integer isZan;//该用户是否已赞该帖子/活动 0 否 1 是
@@ -328,5 +330,13 @@ public class ActiveVo {
 
     public void setIscontribute(Integer iscontribute) {
         this.iscontribute = iscontribute;
+    }
+
+    public List<ActiveVo> getHotActiveList() {
+        return hotActiveList;
+    }
+
+    public void setHotActiveList(List<ActiveVo> hotActiveList) {
+        this.hotActiveList = hotActiveList;
     }
 }

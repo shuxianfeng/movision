@@ -73,6 +73,8 @@ public interface PostMapper {
 
     ActiveVo queryNoticeActive(Map<String, Object> parammap);
 
+    List<ActiveVo> queryFourHotActive();
+
     int queryPostByCircleid(int id);
 
     int releasePost(Post post);

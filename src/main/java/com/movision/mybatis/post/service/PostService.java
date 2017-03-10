@@ -161,6 +161,16 @@ public class PostService {
 
     }
 
+    public List<ActiveVo> queryFourHotActive() {
+        try {
+            log.info("查询活动详情最下方推荐的四个热门活动");
+            return postMapper.queryFourHotActive();
+        } catch (Exception e) {
+            log.error("查询活动详情最下方推荐的四个热门活动失败");
+            throw e;
+        }
+    }
+
     //查询某个帖子所属圈子
     public int queryPostByCircleid(String postid) {
         try {
