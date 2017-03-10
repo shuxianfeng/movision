@@ -470,4 +470,9 @@ public class CircleController {
         response.setData(audit);
         return response;
     }
+
+    public Response updateCircleCategory(@ApiParam(value = "分类id") @RequestParam String categoryid) {
+        Response response = new Response();
+        return null;
+    }
 }

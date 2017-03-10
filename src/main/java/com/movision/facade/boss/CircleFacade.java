@@ -404,15 +404,16 @@ public class CircleFacade {
 //        if (circleadmin != null && circleadmin != "") {//管理员列表
         if (!StringUtils.isEmpty(circleadmin)) {//管理员列表
                 //待定
-            String[] ary = circleadmin.split(",");//以逗号分隔接收数据
+            String ary[] = circleadmin.split(",");//以逗号分隔接收数据
             System.out.println(circleadmin + "===========================================");
             for (int ad = 0; ad < ary.length; ad++) {//循环添加
                 Map<String, Integer> mapd = new HashedMap();
+                String ads = ary[ad];
                 mapd.put("circleid", cirid);
-                mapd.put("userid", Integer.parseInt(ary[ad]));
+                mapd.put("userid", Integer.parseInt(ads));
                 managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
             }
-            }
+        }
             if (s == 1) {
                 map.put("resault", s);
             } else {
