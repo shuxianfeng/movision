@@ -487,8 +487,8 @@
         p5.isdel=0)) AS besharesum,
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=u.id AND p3.isdel=0) AS commentsum,
         (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=u.id AND p4.isdel=0) AS
-        zansum,u.fans,u.applydate
-        FROM yw_user u WHERE level>0 AND status=0 ORDER BY intime
+        zansum,u.fans,vd.apply_time AS applydate
+        FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE level>0 AND status=0 ORDER BY intime
     </select>
 
     <select id="findAllQueryCircleManList" resultType="com.movision.mybatis.user.entity.User">
