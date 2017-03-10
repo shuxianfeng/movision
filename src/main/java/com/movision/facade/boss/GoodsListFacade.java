@@ -416,6 +416,12 @@ public class GoodsListFacade {
         return goodsService.queryCommodityDescription(goodsid);
     }
 
+    /**
+     * 商品图
+     *
+     * @param goodsid
+     * @return
+     */
     public List<GoodsImg> queryAllGoodsPicture(Integer goodsid) {
         return goodsService.queryAllGoodsPicture(goodsid);
     }

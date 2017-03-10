@@ -760,10 +760,10 @@ public class GoodsService {
      */
     public List<GoodsImg> queryAllGoodsPicture(Integer goodsid) {
         try {
-            log.info("商品描述");
+            log.info("商品图片");
             return goodsMapper.queryAllGoodsPicture(goodsid);
         } catch (Exception e) {
-            log.error("商品描述图失败", e);
+            log.error("商品图片失败", e);
             throw e;
         }
     }
