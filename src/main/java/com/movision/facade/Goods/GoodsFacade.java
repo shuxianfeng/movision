@@ -101,6 +101,14 @@ public class GoodsFacade {
         //查询各类评论的数量
         GoodsAssessmentCategery goodsAssessmentCategery = goodsService.queryAssessmentCategorySum(Integer.parseInt(goodsid));
 
+        //输入评论列表标签汉字名称，减少IOS发布版本的频率
+        goodsAssessmentCategery.setAllname("全部");
+        goodsAssessmentCategery.setImgname("有图");
+        goodsAssessmentCategery.setQualityname("质量好");
+        goodsAssessmentCategery.setFastname("送货快");
+        goodsAssessmentCategery.setAttitudename("态度不错");
+        goodsAssessmentCategery.setQualitygeneralname("质量一般");
+
         map.put("goodsAssessmentList", pager);
         map.put("goodsAssessmentCategery", goodsAssessmentCategery);
 
