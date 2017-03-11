@@ -349,6 +349,7 @@ public class GoodsController {
     @RequestMapping(value = "query_assessmentcondition_list", method = RequestMethod.POST)
     public Response queryAllAssessmentCondition(@RequestParam(required = false, defaultValue = "1") String pageNo,
                                                 @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                                @ApiParam(value = "商品id") @RequestParam String goodsid,
                                                 @ApiParam(value = "昵称") @RequestParam(required = false) String nickname,
                                                 @ApiParam(value = "内容") @RequestParam(required = false) String content,
                                                 @ApiParam(value = "开始时间") @RequestParam(required = false) String mintime,
@@ -356,7 +357,7 @@ public class GoodsController {
                                                 @ApiParam(value = "结束时间") @RequestParam(required = false) String maxtime) {
         Response response = new Response();
         Paging<GoodsAssessmentVo> pager = new Paging<GoodsAssessmentVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<GoodsAssessmentVo> list = goodsFacade.queryAllAssessmentCondition(nickname, content, pai, mintime, maxtime, pager);
+        List<GoodsAssessmentVo> list = goodsFacade.queryAllAssessmentCondition(goodsid, nickname, content, pai, mintime, maxtime, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

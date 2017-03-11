@@ -359,8 +359,11 @@ public class GoodsListFacade {
      * @param maxtime
      * @return
      */
-    public List<GoodsAssessmentVo> queryAllAssessmentCondition(String nickname, String content, String pai, String mintime, String maxtime, Paging<GoodsAssessmentVo> pager) {
+    public List<GoodsAssessmentVo> queryAllAssessmentCondition(String goodsid, String nickname, String content, String pai, String mintime, String maxtime, Paging<GoodsAssessmentVo> pager) {
         Map<String, Object> map = new HashedMap();
+        if (goodsid != null) {
+            map.put("goodsid", goodsid);
+        }
         if (nickname != null) {
             map.put("nickname", nickname);
         }
