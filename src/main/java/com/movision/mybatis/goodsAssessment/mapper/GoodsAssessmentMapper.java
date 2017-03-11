@@ -15,6 +15,10 @@ public interface GoodsAssessmentMapper {
 
     int insertSelective(GoodsAssessment record);
 
+    int insertGoodAssessment(GoodsAssessment goodsAssessment);
+
+    void insertGoodAssessmentImg(List<GoodsAssessmentImg> goodsAssessmentImgList);
+
     GoodsAssessment selectByPrimaryKey(Integer id);
 
     List<GoodsAssessmentVo> findAllGoodsAssessment(RowBounds rowBounds, int goodsid);

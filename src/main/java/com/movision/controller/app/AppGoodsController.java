@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +68,32 @@ public class AppGoodsController {
             response.setMessage("查询成功");
         }
         response.setData(map);
+        return response;
+    }
+
+    /**
+     * 商品评论接口
+     */
+    @ApiOperation(value = "商品评论接口", notes = "用户订单付款完成后进行商品评价的接口", response = Response.class)
+    @RequestMapping(value = "insertGoodAssessment", method = RequestMethod.POST)
+    public Response insertGoodAssessment(@ApiParam(value = "用户id") @RequestParam String userid,
+                                         @ApiParam(value = "商品id") @RequestParam String goodsid,
+                                         @ApiParam(value = "子订单id") @RequestParam String suborderid,
+                                         @ApiParam(value = "商品评分") @RequestParam String goodpoint,
+                                         @ApiParam(value = "物流评分") @RequestParam String logisticpoint,
+                                         @ApiParam(value = "服务态度评分") @RequestParam String servicepoint,
+                                         @ApiParam(value = "评价内容") @RequestParam String content,
+                                         @ApiParam(value = "是否匿名：0 不匿名 1 匿名") @RequestParam String isanonymity,
+                                         @ApiParam(value = "晒单图片url(多张图片url用英文逗号分隔)") @RequestParam(required = false) String imgsurl) {
+        Response response = new Response();
+
+        goodsFacade.insertGoodAssessment(userid, goodsid, suborderid, goodpoint, logisticpoint, servicepoint, content, isanonymity, imgsurl);
+
+        if (response.getCode() == 200) {
+            response.setMessage("评论成功");
+        } else {
+            response.setMessage("评论失败");
+        }
         return response;
     }
 

@@ -171,6 +171,34 @@
       #{isimage,jdbcType=INTEGER}, #{isanonymity,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}
       )
   </insert>
+
+    <!--插入用户的商品评论-->
+    <insert id="insertGoodAssessment" parameterType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessment">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO yw_goods_assessment (
+        userid, goodid, suborderid, goodpoint,logisticpoint,
+        servicepoint, content, isimage, isanonymity, createtime
+        )VALUES (
+        #{userid,jdbcType=INTEGER}, #{goodid,jdbcType=INTEGER},
+        #{suborderid,jdbcType=INTEGER}, #{goodpoint,jdbcType=INTEGER},
+        #{logisticpoint,jdbcType=INTEGER}, #{servicepoint,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR},
+        #{isimage,jdbcType=INTEGER}, #{isanonymity,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <!--批量插入商品评论的晒单图片-->
+    <insert id="insertGoodAssessmentImg" parameterType="java.util.List">
+        INSERT INTO yw_goods_assessment_img (
+        assessmentid, imgurl, orderid
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.assessmentid,jdbcType=INTEGER}, #{item.imgurl,jdbcType=VARCHAR}, #{item.orderid,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+
     <insert id="insertSelective" parameterType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessment">
         insert into yw_goods_assessment
         <trim prefix="(" suffix=")" suffixOverrides=",">

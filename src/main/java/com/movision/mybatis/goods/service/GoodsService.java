@@ -297,6 +297,26 @@ public class GoodsService {
         }
     }
 
+    public int insertGoodAssessment(GoodsAssessment goodsAssessment) {
+        try {
+            log.info("发表商品评论");
+            return goodsAssessmentMapper.insertGoodAssessment(goodsAssessment);
+        } catch (Exception e) {
+            log.error("发表商品评论失败");
+            throw e;
+        }
+    }
+
+    public void insertGoodAssessmentImg(List<GoodsAssessmentImg> goodsAssessmentImgList) {
+        try {
+            log.info("批量插入商品评论的晒单图片");
+            goodsAssessmentMapper.insertGoodAssessmentImg(goodsAssessmentImgList);
+        } catch (Exception e) {
+            log.error("批量插入商品评论的晒单图片失败");
+            throw e;
+        }
+    }
+
     public List<ComboVo> queryCombo(int goodsid) {
         try {
             log.info("查询套餐类别");

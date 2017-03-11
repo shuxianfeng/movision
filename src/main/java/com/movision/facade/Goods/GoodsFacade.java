@@ -20,6 +20,7 @@ import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -113,6 +114,43 @@ public class GoodsFacade {
         map.put("goodsAssessmentCategery", goodsAssessmentCategery);
 
         return map;
+    }
+
+    @Transactional
+    public void insertGoodAssessment(String userid, String goodsid, String suborderid, String goodpoint, String logisticpoint,
+                                     String servicepoint, String content, String isanonymity, String imgsurl) {
+        //插入评论
+        GoodsAssessment goodsAssessment = new GoodsAssessment();
+        goodsAssessment.setUserid(Integer.parseInt(userid));
+        goodsAssessment.setGoodid(Integer.parseInt(goodsid));
+        goodsAssessment.setSuborderid(Integer.parseInt(suborderid));
+        goodsAssessment.setGoodpoint(Integer.parseInt(goodpoint));
+        goodsAssessment.setLogisticpoint(Integer.parseInt(logisticpoint));
+        goodsAssessment.setServicepoint(Integer.parseInt(servicepoint));
+        goodsAssessment.setContent(content);
+        if (!StringUtils.isEmpty(imgsurl)) {
+            goodsAssessment.setIsimage(1);//有图
+        } else {
+            goodsAssessment.setIsimage(0);//无图
+        }
+        goodsAssessment.setIsanonymity(Integer.parseInt(isanonymity));
+        goodsAssessment.setCreatetime(new Date());
+        goodsService.insertGoodAssessment(goodsAssessment);//插入评论
+
+        int assessmentid = goodsAssessment.getId();//获取插入的主键id
+
+        if (!StringUtils.isEmpty(imgsurl)) {//如果有图的话需要保存图片信息
+            List<GoodsAssessmentImg> goodsAssessmentImgList = new ArrayList<>();
+            String[] imgurlarray = imgsurl.split(",");
+            for (int i = 0; i < imgurlarray.length; i++) {
+                GoodsAssessmentImg goodsAssessmentImg = new GoodsAssessmentImg();
+                goodsAssessmentImg.setAssessmentid(assessmentid);
+                goodsAssessmentImg.setImgurl(imgurlarray[i]);
+                goodsAssessmentImg.setOrderid(i);
+                goodsAssessmentImgList.add(goodsAssessmentImg);
+            }
+            goodsService.insertGoodAssessmentImg(goodsAssessmentImgList);//插入晒单图片
+        }
     }
 
     public Map<String, Object> queryCombo(String goodsid, String goodsposition) {
