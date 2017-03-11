@@ -102,9 +102,29 @@ public class AppCircleController {
         int flag = facadeCircle.supportCircle(userid, circleid);
 
         if (flag == 0) {
+            response.setCode(200);
             response.setMessage("支持成功");
         } else if (flag == 1) {
+            response.setCode(300);
             response.setMessage("已支持过该圈子");
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "关注圈子接口", notes = "用于用户关注圈子的接口", response = Response.class)
+    @RequestMapping(value = "followCircle", method = RequestMethod.POST)
+    public Response followCircle(@ApiParam(value = "用户id") @RequestParam String userid,
+                                 @ApiParam(value = "圈子id") @RequestParam String circleid) {
+        Response response = new Response();
+
+        int flag = facadeCircle.followCircle(userid, circleid);
+
+        if (flag == 0) {
+            response.setCode(200);
+            response.setMessage("关注成功");
+        } else if (flag == 1) {
+            response.setCode(300);
+            response.setMessage("已关注过该圈子");
         }
         return response;
     }

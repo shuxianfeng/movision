@@ -123,6 +123,26 @@ public class CircleService {
         }
     }
 
+    public int queryFollowSum(Map<String, Object> parammap) {
+        try {
+            log.info("查询当前用户是否关注过该圈子");
+            return followCircleMapper.queryCountByFollow(parammap);
+        } catch (Exception e) {
+            log.error("查询当前用户是否关注过该圈子失败");
+            throw e;
+        }
+    }
+
+    public void followCircle(Map<String, Object> parammap) {
+        try {
+            log.info("当前用户关注该圈子");
+            followCircleMapper.followCircle(parammap);
+        } catch (Exception e) {
+            log.error("当前用户关注该圈子失败");
+            throw e;
+        }
+    }
+
     public int queryCountByFollow(Map<String, Object> parammap) {
         try {
             log.info("查询该用户对当前圈子关注的次数");

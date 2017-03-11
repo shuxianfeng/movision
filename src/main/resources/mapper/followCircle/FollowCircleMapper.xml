@@ -5,9 +5,10 @@
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="userid" property="userid" jdbcType="INTEGER"/>
         <result column="circleid" property="circleid" jdbcType="INTEGER"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, userid, circleid
+        id, userid, circleid, intime
   </sql>
 
     <!--基础查询语句-->
@@ -20,20 +21,31 @@
 
     <!--查询该用户对当前圈子关注的次数-->
     <select id="queryCountByFollow" parameterType="java.util.Map" resultType="java.lang.Integer">
-    SELECT count(1) FROM yw_follow_circle
-    WHERE userid = #{userid,jdbcType=INTEGER} AND circleid = #{circleid,jdbcType=INTEGER}
-  </select>
+        SELECT count(1) FROM yw_follow_circle
+        WHERE userid = #{userid,jdbcType=INTEGER} AND circleid = #{circleid,jdbcType=INTEGER}
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_follow_circle
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.followCircle.entity.FollowCircle">
-    insert into yw_follow_circle (id, userid, circleid
+        insert into yw_follow_circle (id, userid, circleid, intime
       )
-    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}
+        values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER},
+        #{intime,jdbcType=TIMESTAMP}
       )
   </insert>
+
+    <!--当前用户关注该圈子-->
+    <insert id="followCircle" parameterType="java.util.Map">
+      INSERT INTO yw_follow_circle (
+        userid, circleid, intime
+      )
+      VALUES (
+        #{userid,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}
+      )
+    </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.followCircle.entity.FollowCircle">
         insert into yw_follow_circle
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -46,6 +58,9 @@
             <if test="circleid != null">
                 circleid,
             </if>
+            <if test="intime != null">
+                intime,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -56,6 +71,9 @@
             </if>
             <if test="circleid != null">
                 #{circleid,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
@@ -68,13 +86,17 @@
             <if test="circleid != null">
                 circleid = #{circleid,jdbcType=INTEGER},
             </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.followCircle.entity.FollowCircle">
-    update yw_follow_circle
-    set userid = #{userid,jdbcType=INTEGER},
-      circleid = #{circleid,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+        update yw_follow_circle
+        set userid = #{userid,jdbcType=INTEGER},
+        circleid = #{circleid,jdbcType=INTEGER},
+        intime = #{intime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

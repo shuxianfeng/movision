@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -149,6 +150,21 @@ public class FacadeCircle {
             return 0;//未支持过该圈子
         } else {
             return 1;//已支持过该圈子
+        }
+    }
+
+    public int followCircle(String userid, String circleid) {
+        //首先查询该用户有没有关注过该圈子
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("userid", Integer.parseInt(userid));
+        parammap.put("circleid", Integer.parseInt(circleid));
+        parammap.put("intime", new Date());
+        int count = circleService.queryFollowSum(parammap);
+        if (count == 0) {
+            circleService.followCircle(parammap);
+            return 0;//未关注过该圈子
+        } else {
+            return 1;//已关注过该圈子
         }
     }
 }
