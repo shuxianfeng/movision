@@ -86,6 +86,8 @@ public class VideoFacade {
             Map result = new HashedMap();
             String data = null;
             //可以上传多个文件
+            log.info("请求消息中的所有参数名的Enumeration对象" + request.getParameterNames() + ", 求消息中的所有参数名和值的Map对象" +
+                    request.getParameterMap());
             List<FileItem> list = upload.parseRequest(request);
 
             for (FileItem item : list) {
