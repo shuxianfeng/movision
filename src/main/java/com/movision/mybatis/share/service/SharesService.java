@@ -72,4 +72,21 @@ public class SharesService {
             throw e;
         }
     }
+
+    /**
+     * 查询用户分享帖子的分享列表
+     *
+     * @param userid
+     * @param pager
+     * @return
+     */
+    public List<SharesVo> queryUsersSharePostsList(String userid, Paging<SharesVo> pager) {
+        try {
+            log.info("查询用户分享帖子的分享列表");
+            return sharesMapper.queryUsersSharePostsList(userid, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询用户分享帖子的分享列表异常");
+            throw e;
+        }
+    }
 }

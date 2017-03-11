@@ -11,6 +11,7 @@ import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.record.entity.RecordVo;
+import com.movision.mybatis.share.entity.Shares;
 import com.movision.mybatis.share.entity.SharesVo;
 import com.movision.mybatis.submission.entity.Submission;
 import com.movision.mybatis.submission.entity.SubmissionVo;
@@ -550,23 +551,25 @@ public class UserManageController {
     }
 
     /**
-     * 查询用户分享的分享列表
+     * 查询用户分享帖子的分享列表
      *
      * @param userid
      * @param pageNo
      * @param pageSize
      * @return
      */
-    @ApiOperation(value = "查询用户分享的分享列表", notes = "用于查询用户分享的分享列表接口", response = Response.class)
+    @ApiOperation(value = "查询用户分享帖子的分享列表", notes = "用于查询用户分享帖子的分享列表接口", response = Response.class)
     @RequestMapping(value = "query_user_share_post_list", method = RequestMethod.POST)
     public Response queryUsersSharePostsList(@ApiParam(value = "用户id") @RequestParam String userid,
                                              @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                              @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Paging<SharesVo> pager = new Paging<SharesVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<SharesVo> list = postFacade.queryUsersSharePostsList(userid, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
+        pager.result(list);
         response.setData(pager);
         return response;
     }

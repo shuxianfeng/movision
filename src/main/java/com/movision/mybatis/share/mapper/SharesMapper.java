@@ -26,4 +26,6 @@ public interface SharesMapper {
     List<SharesVo> findAllQueryPostShareList(RowBounds rowBounds, Map map);
 
     List<SharesVo> findAllqueryShareList(Map map, RowBounds rowBounds);
+
+    List<SharesVo> queryUsersSharePostsList(String userid, RowBounds rowBounds);
 }

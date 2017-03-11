@@ -121,4 +121,9 @@
             ORDER BY intime ASC
         </if>
     </select>
+
+    <select id="queryUsersSharePostsList" resultType="com.movision.mybatis.share.entity.SharesVo"
+            parameterType="java.lang.String">
+      SELECT s.*,u.nickname FROM yw_post_share s LEFT JOIN yw_user u ON s.userid=u.id WHERE s.userid=#{userid,jdbcType=INTEGER} ORDER BY s.intime DESC
+    </select>
 </mapper>

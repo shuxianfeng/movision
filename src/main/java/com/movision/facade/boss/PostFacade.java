@@ -170,6 +170,23 @@ public class PostFacade {
     }
 
     /**
+     * 查询用户分享帖子的分享列表
+     *
+     * @param userid
+     * @param pager
+     * @return
+     */
+    public List<SharesVo> queryUsersSharePostsList(String userid, Paging<SharesVo> pager) {
+        try {
+            logger.info("查询用户分享帖子的分享列表");
+            return sharesService.queryUsersSharePostsList(userid, pager);
+        } catch (Exception e) {
+            logger.error("查询用户分享帖子的分享列表异常");
+            throw e;
+        }
+    }
+
+    /**
      * 后台管理-查询活动列表（草稿箱）
      *
      * @param pager
