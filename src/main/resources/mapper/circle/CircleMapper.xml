@@ -750,6 +750,19 @@
         </if>
     </select>
 
+    <update id="updateAuditCircle" parameterType="java.util.Map">
+        update yw_circle
+        <set>
+            <if test="status==1">
+                status=#{status,jdbcType=INTEGER}
+            </if>
+            <if test="status==2">
+                status=#{status,jdbcType=INTEGER}
+            </if>
+        </set>
+        where id = #{circleid,jdbcType=INTEGER}
+    </update>
+
     <update id="updateCircleCategoryClassify" parameterType="java.util.Map">
         update yw_circle_category
         <set>

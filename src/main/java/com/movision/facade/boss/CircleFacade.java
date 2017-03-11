@@ -751,7 +751,8 @@ public class CircleFacade {
                     if (userslist != null) {
                         for (int u = 0; u < userslist.size(); u++) {
                             if (userslist.get(u).getNickname() == null) {
-                                userslist.get(u).setNickname("用户" + userslist.get(u).getPhone().substring(7));
+                                String str = "用户" + userslist.get(u).getPhone().substring(7);
+                                userslist.get(u).setNickname(str);
                             }
                             adminlist.add(userslist.get(u));//把圈子的管理员遍历出临时存放
                         }
@@ -866,6 +867,23 @@ public class CircleFacade {
 
             return circlenum;
         }
+    }
+
+    /**
+     * 圈子审核
+     *
+     * @param circleid
+     * @param type
+     * @return
+     */
+    public Map updateAuditCircle(String circleid, String status) {
+        Map map = new HashedMap();
+        Map m = new HashedMap();
+        map.put("circleid", circleid);
+        map.put("status", status);
+        int i = circleService.updateAuditCircle(map);
+        m.put("resault", i);
+        return m;
     }
 
     /**

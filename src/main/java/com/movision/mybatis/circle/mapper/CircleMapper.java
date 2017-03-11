@@ -98,6 +98,8 @@ public interface CircleMapper {
 
     List<CircleVo> queryCircleAwaitAudit(Map map);
 
+    int updateAuditCircle(Map map);
+
     int updateCircleCategoryClassify(Map map);
 
     Category queryCircleCategoryClassify(String categoryid);

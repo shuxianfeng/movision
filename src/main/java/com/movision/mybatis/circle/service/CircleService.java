@@ -596,6 +596,22 @@ public class CircleService {
     }
 
     /**
+     * 审核圈子
+     *
+     * @param map
+     * @return
+     */
+    public int updateAuditCircle(Map map) {
+        try {
+            log.info("审核圈子");
+            return circleMapper.updateAuditCircle(map);
+        } catch (Exception e) {
+            log.error("审核圈子异常");
+            throw e;
+        }
+    }
+
+    /**
      * 修改圈子分类
      *
      * @param map

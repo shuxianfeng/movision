@@ -470,6 +470,25 @@ public class CircleController {
     }
 
     /**
+     * 审核圈子
+     *
+     * @param circleid
+     * @param status
+     * @return
+     */
+    @ApiOperation(value = "审核圈子", notes = "用于审核圈子接口", response = Response.class)
+    @RequestMapping(value = "update_audit_circle", method = RequestMethod.POST)
+    public Response updateAuditCircle(@ApiParam(value = "圈子id") @RequestParam String circleid, @ApiParam(value = "审核状态 1:通过，2：未通过") @RequestParam String status) {
+        Response response = new Response();
+        Map map = circleFacade.updateAuditCircle(circleid, status);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
      * 修改圈子分类
      *
      * @param categoryid
