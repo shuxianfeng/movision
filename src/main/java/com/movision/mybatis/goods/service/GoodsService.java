@@ -880,6 +880,22 @@ public class GoodsService {
 
     }
 
+    /**
+     * 删除banner
+     *
+     * @param goodsid
+     * @return
+     */
+    public int deletebanner(String goodsid) {
+        try {
+            log.info("删除banner");
+            return goodsMapper.deletebanner(goodsid);
+        } catch (Exception e) {
+            log.error("删除banner失败", e);
+            throw e;
+        }
+    }
+
 
     /**
      * 增加商品图片

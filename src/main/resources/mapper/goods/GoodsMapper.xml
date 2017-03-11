@@ -1268,5 +1268,7 @@
     <select id="queryAssessment" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(1) from yw_goods_assessment WHERE pid=#{pid,jdbcType=INTEGER} AND userid=-1
     </select>
-
+    <delete id="deletebanner" parameterType="java.lang.String">
+        DELETE  FROM  yw_goods_img WHERE  TYPE =0 AND  goodsid=#{goodsid,jdbcType=INTEGER}
+    </delete>
 </mapper>

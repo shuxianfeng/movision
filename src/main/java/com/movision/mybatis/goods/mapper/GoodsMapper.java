@@ -124,6 +124,7 @@ public interface GoodsMapper {
 
     int addPicture(GoodsImg goodsImg);//增加图片
 
+    int deletebanner(String goodsid);
     int addGoodsPic(GoodsImg goodsImg);//增加商品图片
     int addGoods(GoodsVo goodsVo);//增加商品
 

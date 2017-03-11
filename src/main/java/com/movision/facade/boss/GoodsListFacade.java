@@ -483,6 +483,7 @@ public class GoodsListFacade {
      * @return
      */
     public Map<String, Integer> addpicture(String goodsid, String img_url, String oderid) {
+        int res = goodsService.deletebanner(goodsid);
         Map<String, Integer> map = new HashedMap();
         GoodsImg goodsImg = new GoodsImg();
         goodsImg.setType(0);
@@ -500,6 +501,7 @@ public class GoodsListFacade {
             result = goodsService.addPicture(goodsImg);
         }
         map.put("result", result);
+        map.put("res", res);
         return map;
     }
 
