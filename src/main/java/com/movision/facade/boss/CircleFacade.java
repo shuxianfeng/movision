@@ -373,7 +373,6 @@ public class CircleFacade {
                                           String circlemanid, String photo, String introduction) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
-        System.out.println(circleadmin + "****************************************************");
         if (!StringUtils.isEmpty(category)) {
                 circleDetails.setName(name);
             }
@@ -402,11 +401,9 @@ public class CircleFacade {
         circleDetails.setPermission(1);//设置其他用户是否可以发帖，初始值：1是
             Integer s = circleService.insertCircle(circleDetails);
             Integer cirid = circleDetails.getId();
-//        if (circleadmin != null && circleadmin != "") {//管理员列表
         if (!StringUtils.isEmpty(circleadmin)) {//管理员列表
                 //待定
             String ary[] = circleadmin.split(",");//以逗号分隔接收数据
-            System.out.println(circleadmin + "===========================================");
             for (int ad = 0; ad < ary.length; ad++) {//循环添加
                 Map<String, Integer> mapd = new HashedMap();
                 String ads = ary[ad];
