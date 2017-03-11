@@ -42,9 +42,17 @@ public class GoodsAssessmentVo {
 
     private Integer isanonymity;
 
+    public Integer getResult() {
+        return result;
+    }
+
+    public void setResult(Integer result) {
+        this.result = result;
+    }
+
     private Date mintime;
     private Date maxtime;
-
+    private Integer result;//是否回复过
     public Date getMintime() {
         return mintime;
     }

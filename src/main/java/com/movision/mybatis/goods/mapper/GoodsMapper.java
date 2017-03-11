@@ -97,7 +97,7 @@ public interface GoodsMapper {
 
     Goods todayCommend(Integer id);//今日推荐
 
-    List<GoodsAssessmentVo> findAllAssessment(RowBounds rowBounds);//查询评价列表
+    List<GoodsAssessmentVo> findAllAssessment(RowBounds rowBounds, String goodsid);//查询评价列表
 
     List<GoodsAssessmentVo> findAllAssessmentCondition(Map map, RowBounds rowBounds);//条件查询商品
 

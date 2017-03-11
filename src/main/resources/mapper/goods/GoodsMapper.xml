@@ -776,8 +776,9 @@
 
     <select id="findAllAssessment" resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
         SELECT g.id,u.nickname,u.level,g.goodpoint,g.logisticpoint,g.servicepoint,g.content,(SELECT COUNT(1) FROM
-        yw_goods_assessment_img i WHERE i.assessmentid=g.id) AS number,g.createtime,g.goodid FROM yw_goods_assessment g
-        LEFT JOIN yw_user u on u.id=g.userid WHERE g.userid<![CDATA[<>]]>-1
+        yw_goods_assessment_img i WHERE i.assessmentid=g.id) AS number,g.createtime,g.goodid,g.pid FROM
+        yw_goods_assessment g
+        LEFT JOIN yw_user u on u.id=g.userid WHERE g.userid<![CDATA[<>]]>-1 AND g.goodid=#{goodsid,jdbcType=INTEGER}
     </select>
     <select id="findAllAssessmentCondition" parameterType="java.util.Map"
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
@@ -996,13 +997,13 @@
                 #{price,jdbcType=DOUBLE},
             </if>
             <if test="recommenddate != null">
-                #{recommenddate,jdbcType=DATE},
+                #{recommenddate,jdbcType=TIMESTAMP},
             </if>
             <if test="isdel != null">
                 #{isdel,jdbcType=INTEGER},
             </if>
             <if test="onlinetime != null">
-                #{onlinetime,jdbcType=DATE},
+                #{onlinetime,jdbcType=TIMESTAMP},
             </if>
             <if test="attribute != null">
                 #{attribute,jdbcType=VARCHAR},

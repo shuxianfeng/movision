@@ -322,11 +322,13 @@ public class GoodsController {
     @ApiOperation(value = "评价列表（分页）", notes = "评价列表（分页）", response = Response.class)
     @RequestMapping(value = "query_assessment_list", method = RequestMethod.POST)
     public Response queryAllAssessment(@RequestParam(required = false, defaultValue = "1") String pageNo,
-                                       @RequestParam(required = false, defaultValue = "10") String pageSize
+                                       @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                       @ApiParam(value = "商品id") @RequestParam String goodsid
+
     ) {
         Response response = new Response();
         Paging<GoodsAssessmentVo> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<GoodsAssessmentVo> list = goodsFacade.queryAllAssessment(pager);
+        List<GoodsAssessmentVo> list = goodsFacade.queryAllAssessment(pager, goodsid);
         pager.result(list);
         response.setData(pager);
         return response;
@@ -573,7 +575,7 @@ public class GoodsController {
      * @param isdel
      * @param recommenddate
      * @param attribute
-     * @param onlinetime
+     * @param 
      * @return
      */
     @ApiOperation(value = "增加商品", notes = "增加商品", response = Response.class)
@@ -589,11 +591,10 @@ public class GoodsController {
             @ApiParam(value = "是否上架") @RequestParam String isdel,
             @ApiParam(value = "推荐日期") @RequestParam(required = false) String recommenddate,
             @ApiParam(value = "商品标签") @RequestParam String attribute,
-            @ApiParam(value = "上架时间") @RequestParam String onlinetime,
             @ApiParam(value = "热门精选") @RequestParam String ishot,
             @ApiParam(value = "精选") @RequestParam String isessence) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.addGoods(imgurl, name, protype, brandid, price, origprice, stock, isdel, recommenddate, attribute, onlinetime, ishot, isessence);
+        Map<String, Integer> map = goodsFacade.addGoods(imgurl, name, protype, brandid, price, origprice, stock, isdel, recommenddate, attribute, ishot, isessence);
         if (response.getCode() == 200) {
             response.setMessage("插入成功");
         }

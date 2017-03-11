@@ -15,6 +15,7 @@ import com.movision.mybatis.goodscombo.entity.GoodsComboDetail;
 import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.pagination.util.StringUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
@@ -337,8 +338,15 @@ public class GoodsListFacade {
      * @param pager
      * @return
      */
-    public List<GoodsAssessmentVo> queryAllAssessment(Paging<GoodsAssessmentVo> pager) {
-        List<GoodsAssessmentVo> list = goodsService.queryAllAssessment(pager);
+    public List<GoodsAssessmentVo> queryAllAssessment(Paging<GoodsAssessmentVo> pager, String goodsid) {
+        List<GoodsAssessmentVo> list = goodsService.queryAllAssessment(pager, goodsid);
+        for (int i = 0; i < list.size(); i++) {
+            String pid = list.get(i).getId().toString();
+            if (!StringUtils.isEmpty(pid)) {
+                int result = goodsService.queryAssessment(Integer.parseInt(pid));
+                list.get(i).setResult(result);
+            }
+        }
         return list;
     }
 
@@ -455,11 +463,7 @@ public class GoodsListFacade {
      */
     public Map<String, Integer> addAssessment(String content, String goodid, String pid) {
         int result = 0;
-        result = goodsService.queryAssessment(Integer.parseInt(pid));
         Map<String, Integer> map = new HashedMap();
-        if (result > 0) {
-            result = 0;
-        } else if (result <= 0) {
             GoodsAssessment goodsAssessment = new GoodsAssessment();
             goodsAssessment.setUserid(-1);
             goodsAssessment.setContent(content);
@@ -469,7 +473,6 @@ public class GoodsListFacade {
             goodsAssessment.setIsanonymity(0);
             goodsAssessment.setPid(Integer.parseInt(pid));
             result = goodsService.addAssessment(goodsAssessment);
-        }
         map.put("result", result);
         return map;
     }
@@ -560,10 +563,10 @@ public class GoodsListFacade {
      * @param isdel
      * @param recommenddate
      * @param attribute
-     * @param onlinetime
+     * @param
      * @return
      */
-    public Map<String, Integer> addGoods(String img_url, String name, String protype, String brandid, String price, String origprice, String stock, String isdel, String recommenddate, String attribute, String onlinetime, String ishot, String isessence) {
+    public Map<String, Integer> addGoods(String img_url, String name, String protype, String brandid, String price, String origprice, String stock, String isdel, String recommenddate, String attribute, String ishot, String isessence) {
         Map<String, Integer> map = new HashedMap();
         GoodsVo goodsVo = new GoodsVo();
         java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -576,15 +579,8 @@ public class GoodsListFacade {
             }
         }
         goodsVo.setRecommenddate(date);
-        Date ondate = null;
-        if (onlinetime != null) {
-            try {
-                ondate = format.parse(onlinetime);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        goodsVo.setOnlinetime(ondate);
+
+        goodsVo.setOnlinetime(new Date());
         goodsVo.setShopid(-1);
         goodsVo.setBrandid(brandid);
         goodsVo.setProtype(Integer.parseInt(protype));

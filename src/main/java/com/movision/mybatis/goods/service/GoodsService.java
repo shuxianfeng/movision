@@ -696,11 +696,11 @@ public class GoodsService {
      * @param pager
      * @return
      */
-    public List<GoodsAssessmentVo> queryAllAssessment(Paging<GoodsAssessmentVo> pager) {
+    public List<GoodsAssessmentVo> queryAllAssessment(Paging<GoodsAssessmentVo> pager, String goodsid) {
         try {
 
             log.info("查询评价列表");
-            return goodsMapper.findAllAssessment(pager.getRowBounds());
+            return goodsMapper.findAllAssessment(pager.getRowBounds(), goodsid);
         } catch (Exception e) {
             log.error("查询评价列表失败", e);
             throw e;
