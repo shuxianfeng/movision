@@ -493,13 +493,11 @@ public class GoodsListFacade {
         String orderid[] = oderid.split(",");
         int result = 0;
         for (int i = 0; i < productids.length; i++) {
-            for (int j = 0; j < orderid.length; j++) {
             imgurls = productids[i];
+            oderids = orderid[i];
             goodsImg.setImgurl(imgurls);
-                oderids = orderid[j];
-                goodsImg.setOderid(Integer.parseInt(oderids));
+            goodsImg.setOderid(Integer.parseInt(oderids));
             result = goodsService.addPicture(goodsImg);
-            }
         }
         map.put("result", result);
         return map;
