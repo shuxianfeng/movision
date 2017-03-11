@@ -89,16 +89,17 @@ public class VideoFacade {
             log.info("请求消息中的所有参数名的Enumeration对象" + request.getParameterNames() + ", 求消息中的所有参数名和值的Map对象" +
                     request.getParameterMap());
             List<FileItem> list = upload.parseRequest(request);
-
+            log.info("List<FileItem>=" + list);
             for (FileItem item : list) {
+
                 //获取表单的属性名字
                 String name = item.getFieldName();
-
+                log.info("获取表单的属性名字=" + name);
                 //如果获取的 表单信息是普通的 文本 信息
                 if (item.isFormField()) {
                     //获取用户具体输入的字符串 ，名字起得挺好，因为表单提交过来的是 字符串类型的
                     String value = item.getString();
-
+                    log.info("获取用户具体输入的字符串=" + value);
                     request.setAttribute(name, value);
                 }
                 //对传入的非 简单的字符串进行处理 ，比如说二进制的 图片，电影这些
@@ -112,7 +113,7 @@ public class VideoFacade {
                     int start = value.lastIndexOf("\\");
                     //截取 上传文件的 字符串名字，加1是 去掉反斜杠，
                     String filename = value.substring(start + 1);
-
+                    log.info("上传的文件名=" + filename);
                     request.setAttribute(name, filename);
 
                     //真正写到磁盘上
@@ -138,11 +139,14 @@ public class VideoFacade {
                     out.close();
                     String videoDomain = PropertiesLoader.getValue("upload.video.domain");
                     data = videoDomain + "/upload/" + chann + "/video/" + filename;
+
                 }
             }
+
             log.info("上传成功");
             result.put("status", "success");
             result.put("data", data);
+            log.info("返回的data=" + data);
             return result;
 
         } catch (FileUploadException e) {
