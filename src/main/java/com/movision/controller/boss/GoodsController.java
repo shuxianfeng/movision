@@ -582,7 +582,7 @@ public class GoodsController {
     @ApiOperation(value = "增加商品", notes = "增加商品", response = Response.class)
     @RequestMapping(value = "add_goods", method = RequestMethod.POST)
     public Response addGoods(
-            @ApiParam(value = "图片地址") @RequestParam String imgurl,
+            @ApiParam(value = "图片地址") @RequestParam(required = false) String imgurl,
             @ApiParam(value = "商品名称") @RequestParam String name,
             @ApiParam(value = "商品类别") @RequestParam String protype,
             @ApiParam(value = "品牌id") @RequestParam String brandid,
