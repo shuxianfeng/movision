@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.bossIndex.mapper.IndexMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.bossIndex.entity.IndexTodayDetails">
+        <result column="newPost" property="newPost" jdbcType="INTEGER"/>
+        <result column="newMember" property="newMember" jdbcType="INTEGER"/>
+        <result column="newActivityApply" property="newActivityApply" jdbcType="INTEGER"/>
+        <result column="newOrderForm" property="newOrderForm" jdbcType="INTEGER"/>
+        <result column="applyForNotAudit" property="applyForNotAudit" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    newPost, newMember, newActivityApply, newOrderForm,applyForNotAudit
+  </sql>
+
+    <select id="queryTheHomepageDetailsToday" resultType="com.movision.mybatis.bossIndex.entity.IndexTodayDetails">
+    SELECT COUNT(1) AS newPost ,
+    (SELECT COUNT(1) FROM yw_user WHERE DATE(intime)=CURDATE() AND status=0) AS newMember,
+    (SELECT COUNT(1) FROM yw_active_part WHERE DATE(intime)=CURDATE()) AS newActivityApply,
+    (SELECT COUNT(1) FROM yw_orders WHERE DATE(paytime)=CURDATE() AND isdel=0) AS newOrderForm,
+    (SELECT COUNT(1) FROM yw_audit_vip_detail WHERE userid = (SELECT id FROM yw_user WHERE DATE(applydate)=CURDATE())) AS applyForNotAudit
+    FROM yw_post WHERE date(intime)=curdate() AND isdel=0 AND isactive=0
+  </select>
+
+</mapper>
