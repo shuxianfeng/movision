@@ -996,6 +996,12 @@
             <if test="isquality != null">
                 isquality,
             </if>
+            <if test="ishot != null">
+                ishot,
+            </if>
+            <if test="isessence != null">
+                isessence,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -1055,6 +1061,12 @@
             </if>
             <if test="isquality != null">
                 #{isquality,jdbcType=INTEGER},
+            </if>
+            <if test="ishot != null">
+                #{ishot,jdbcType=INTEGER},
+            </if>
+            <if test="isessence != null">
+                #{isessence,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>

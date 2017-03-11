@@ -298,13 +298,7 @@ public class GoodsListFacade {
                 goodsVo.setIsessence(1);
             }
          }*/
-        goodsVo.setIsdamage(0);
-        goodsVo.setIsquality(1);
-        goodsVo.setGoodsposition(0);
-        goodsVo.setIscombo(0);
-        goodsVo.setIsspecial(0);
-        goodsVo.setIsseckill(0);
-        goodsVo.setIshomepage(0);
+
         goodsVo.setIshot(Integer.parseInt(ishot));
         goodsVo.setIsessence(Integer.parseInt(isessence));
         goodsVo.setAttribute(attribute);
@@ -588,7 +582,13 @@ public class GoodsListFacade {
             }
         }
         goodsVo.setRecommenddate(date);
-
+        goodsVo.setIsdamage(0);
+        goodsVo.setIsquality(1);
+        goodsVo.setGoodsposition(0);
+        goodsVo.setIscombo(0);
+        goodsVo.setIsspecial(1);
+        goodsVo.setIsseckill(0);
+        goodsVo.setIshomepage(0);
         goodsVo.setOnlinetime(new Date());
         goodsVo.setShopid(-1);
         goodsVo.setBrandid(brandid);
