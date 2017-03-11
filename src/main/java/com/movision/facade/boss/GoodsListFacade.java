@@ -383,7 +383,6 @@ public class GoodsListFacade {
         Date max = null;//最大时间
         if (maxtime != null) {
             try {
-
                 max = format.parse(maxtime);
             } catch (ParseException e) {
                 e.printStackTrace();

@@ -782,7 +782,8 @@
     </select>
     <select id="findAllAssessmentCondition" parameterType="java.util.Map"
             resultType="com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo">
-        SELECT g.id,u.nickname,g.goodpoint,g.logisticpoint,g.servicepoint,g.content,g.isimage,g.createtime FROM
+        SELECT g.id,u.nickname,u.level,g.goodpoint,g.logisticpoint,g.servicepoint,g.content,(SELECT COUNT(1) FROM
+        yw_goods_assessment_img i WHERE i.assessmentid=g.id) AS number,g.createtime,g.goodid,g.pid FROM
         yw_goods_assessment g
         LEFT JOIN yw_user u on u.id=g.userid WHERE g.userid<![CDATA[<>]]>-1
         <if test="nickname!=null and nickname!=''">
@@ -791,7 +792,7 @@
         <if test="content!=null and content!=''">
             AND g.content LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
         </if>
-        <if test="createtime!=null and createtime!=''">
+        <if test="mintime!=null and maxtime!='' and mintime!=null and maxtime!=null ">
             AND g.createtime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
         </if>
         <if test="pai==0">

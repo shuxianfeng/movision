@@ -356,7 +356,7 @@ public class GoodsController {
                                                 @ApiParam(value = "结束时间") @RequestParam(required = false) String maxtime) {
         Response response = new Response();
         Paging<GoodsAssessmentVo> pager = new Paging<GoodsAssessmentVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<GoodsAssessmentVo> list = goodsFacade.queryAllAssessmentCondition(nickname, content, mintime, pai, maxtime, pager);
+        List<GoodsAssessmentVo> list = goodsFacade.queryAllAssessmentCondition(nickname, content, pai, mintime, maxtime, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
