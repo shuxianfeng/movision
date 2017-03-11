@@ -252,16 +252,11 @@ public class CircleFacade {
      * @param circleadmin
      * @param photo
      * @param introduction
-     * @param erweima
-     * @param status
-     * @param isrecommend
-     * @param orderid
      * @param permission
      * @return
      */
     public Map<String, Integer> updateCircle(String id, String name, String category, String circlemanid,
-                                             String circleadmin, String photo, String introduction,
-                                             String erweima, String status, String isrecommend, String orderid, String permission) {
+                                             String circleadmin, String photo, String introduction, String permission) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
         Integer circleid = null;
@@ -292,26 +287,10 @@ public class CircleFacade {
                 circleDetails.setPhone(pon);
             }
         if (!StringUtils.isEmpty(photo)) {
-                //savedFileName = movisionOssClient.uploadObject(photo, "img", "circle");
                 circleDetails.setPhoto(photo);
             }
         if (!StringUtils.isEmpty(introduction)) {
                 circleDetails.setIntroduction(introduction);
-            }
-        if (!StringUtils.isEmpty(erweima)) {
-                circleDetails.setErweima(erweima);
-            }
-        if (!StringUtils.isEmpty(status)) {
-                circleDetails.setStatus(Integer.parseInt(status));
-            }
-        if (!StringUtils.isEmpty(isrecommend)) {
-                circleDetails.setIsrecommend(Integer.parseInt(isrecommend));
-            }
-        if (!StringUtils.isEmpty(orderid)) {
-                if (Integer.parseInt(orderid) > 0) {
-                    circleDetails.setIsdiscover(1);
-                }
-                circleDetails.setOrderid(Integer.parseInt(orderid));
             }
         if (!StringUtils.isEmpty(permission)) {
                 circleDetails.setPermission(Integer.parseInt(permission));
@@ -350,8 +329,6 @@ public class CircleFacade {
             }
             circleDetails.setOrderids(h);
         }
-        /*String nn = userService.queryUserByNicknameByAdmin(circleDetails.getUserid());
-        circleDetails.setUsername(nn);*/
         map.put("resault", circleDetails);
         return map;
     }
