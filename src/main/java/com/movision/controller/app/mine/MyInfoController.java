@@ -7,6 +7,7 @@ import com.movision.facade.Goods.GoodsFacade;
 import com.movision.facade.boss.PostFacade;
 import com.movision.facade.circle.CircleAppFacade;
 import com.movision.facade.coupon.CouponFacade;
+import com.movision.facade.im.ImFacade;
 import com.movision.facade.index.SuggestionFacade;
 import com.movision.facade.order.OrderAppFacade;
 import com.movision.facade.pointRecord.PointRecordFacade;
@@ -14,6 +15,7 @@ import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.pointRecord.entity.PointRecord;
 import com.movision.mybatis.post.entity.Post;
@@ -67,6 +69,9 @@ public class MyInfoController {
 
     @Autowired
     private PointRecordFacade pointRecordFacade;
+
+    @Autowired
+    private ImFacade imFacade;
 
 
     @ApiOperation(value = "查询我的达人页信息:收藏商品", notes = "查询我的达人页信息:收藏商品", response = Response.class)
@@ -217,5 +222,34 @@ public class MyInfoController {
         pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment.getCode(), 0);
         return response;
     }
+
+    /**
+     * 分页
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查询系统通知列表", notes = "查询系统通知列表", response = Response.class)
+    @RequestMapping(value = "query_system_inform_list", method = RequestMethod.GET)
+    public Response querySystemInformList(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                          @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<ImSystemInform> paging = new Paging<ImSystemInform>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<ImSystemInform> list = imFacade.queryAllSystemInform(paging);
+        paging.result(list);
+        response.setData(paging);
+        return response;
+    }
+
+    @ApiOperation(value = "查询系统通知详情", notes = "查询系统通知详情", response = Response.class)
+    @RequestMapping(value = "query_system_inform_detail", method = RequestMethod.GET)
+    public Response querySystemInformDetail(@ApiParam(value = "系统通知id") @RequestParam Integer id) {
+        Response response = new Response();
+        ImSystemInform imSystemInform = imFacade.querySystemInformDetail(id);
+        response.setData(imSystemInform);
+        return response;
+    }
+
 
 }

@@ -31,10 +31,11 @@ public class BossImController {
      */
     @ApiOperation(value = "给APP用户发送系统通知", notes = "给APP用户发送系统通知", response = Response.class)
     @RequestMapping(value = {"/send_system_inform"}, method = RequestMethod.POST)
-    public Response sendSystemInform(@ApiParam(value = "系统通知内容") @RequestParam String body) throws IOException {
+    public Response sendSystemInform(@ApiParam(value = "系统通知内容") @RequestParam String body,
+                                     @ApiParam(value = "系统通知标题") @RequestParam String title) throws IOException {
         Response response = new Response();
 
-        imFacade.sendSystemInform(body);
+        imFacade.sendSystemInform(body, title);
         return response;
     }
 

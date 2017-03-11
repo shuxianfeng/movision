@@ -15,6 +15,17 @@ public class ImSystemInform {
 
     private Date informTime;
 
+    private String title;
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getTitle() {
+
+        return title;
+    }
+
     public Integer getId() {
         return id;
     }
