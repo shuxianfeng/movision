@@ -487,14 +487,19 @@ public class GoodsListFacade {
         GoodsImg goodsImg = new GoodsImg();
         goodsImg.setType(0);
         goodsImg.setGoodsid(Integer.parseInt(goodsid));
-        goodsImg.setOderid(Integer.parseInt(oderid));
         String imgurls;
         String productids[] = img_url.split(",");
+        String oderids;
+        String orderid[] = oderid.split(",");
         int result = 0;
         for (int i = 0; i < productids.length; i++) {
+            for (int j = 0; j < orderid.length; j++) {
             imgurls = productids[i];
             goodsImg.setImgurl(imgurls);
+                oderids = orderid[j];
+                goodsImg.setOderid(Integer.parseInt(oderids));
             result = goodsService.addPicture(goodsImg);
+            }
         }
         map.put("result", result);
         return map;
