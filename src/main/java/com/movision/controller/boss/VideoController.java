@@ -43,15 +43,15 @@ public class VideoController {
      */
     @ApiOperation(value = "作为上传视频测试使用", notes = "作为上传视频测试使用", response = Response.class)
     @RequestMapping(value = "boss/video/upload_video", method = RequestMethod.POST)
-    public Response queryApplyVipList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        /*String url = movisionOssClient.uploadObject(file, "video", "test");
+    public Response queryApplyVipList(@RequestParam(value = "file", required = false) MultipartFile file) throws ServletException, IOException {
+        String url = movisionOssClient.uploadObject(file, "video", "test");
         Map<String, String> map = new HashMap<>();
         map.put("url", url);
         map.put("name", FileUtil.getFileNameByUrl(url));
-        return new Response(map);*/
-
-        Map map = videoFacade.newUploadVideo(request, "video", response);
         return new Response(map);
+
+        /*Map map = videoFacade.newUploadVideo(request, "video", response);
+        return new Response(map);*/
 
     }
 

@@ -83,6 +83,7 @@ public class UploadFacade {
                     if (chann != null) {
                         saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/video";
                         maxPostSize = apiConstants.getUploadVideoMaxPostSize();
+                        log.info("最大上传限制为=" + maxPostSize);
                         /**
                          * 这是外界访问该视频的地址
                          * 其中data = http://120.77.214.187:8100/upload/$chan/video/$filename
