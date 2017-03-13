@@ -20,6 +20,7 @@ import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.NamedBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -264,13 +265,27 @@ public class GoodsListFacade {
         GoodsVo goodsVo = new GoodsVo();
         Map<String, Object> map = new HashedMap();
         goodsVo.setId(Integer.parseInt(id));
-        goodsVo.setName(name);
-        goodsVo.setProtype(Integer.parseInt(protype));
-        goodsVo.setOrigprice(Double.parseDouble(origprice));
-        goodsVo.setPrice(Double.parseDouble(price));
-        goodsVo.setStock(Integer.parseInt(stock));
-        goodsVo.setIsdel(Integer.parseInt(isdel));
-        goodsVo.setBrandid(brandid);
+        if (name != null) {
+            goodsVo.setName(name);
+        }
+        if (protype != null) {
+            goodsVo.setProtype(Integer.parseInt(protype));
+        }
+        if (origprice != null) {
+            goodsVo.setOrigprice(Double.parseDouble(origprice));
+        }
+        if (price != null) {
+            goodsVo.setPrice(Double.parseDouble(price));
+        }
+        if (stock != null) {
+            goodsVo.setStock(Integer.parseInt(stock));
+        }
+        if (isdel != null) {
+            goodsVo.setIsdel(Integer.parseInt(isdel));
+        }
+        if (brandid != null) {
+            goodsVo.setBrandid(brandid);
+        }
         Date date = null;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (recommenddate != null) {
@@ -298,12 +313,18 @@ public class GoodsListFacade {
                 goodsVo.setIsessence(1);
             }
          }*/
-
-        goodsVo.setIshot(Integer.parseInt(ishot));
-        goodsVo.setIsessence(Integer.parseInt(isessence));
-        goodsVo.setAttribute(attribute);
-        GoodsImg img = new GoodsImg();
-        map.put("imgurl", imgurl);
+        if (ishot != null) {
+            goodsVo.setIshot(Integer.parseInt(ishot));
+        }
+        if (isessence != null) {
+            goodsVo.setIsessence(Integer.parseInt(isessence));
+        }
+        if (attribute != null) {
+            goodsVo.setAttribute(attribute);
+        }
+        if (imgurl != null) {
+            map.put("imgurl", imgurl);
+        }
         map.put("id", id);
         int result = goodsService.updateGoods(goodsVo);
         int res = goodsService.updateImage(map);
