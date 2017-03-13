@@ -6,6 +6,8 @@ import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.activePart.entity.ActivePart;
 import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.activePart.service.ActivePartService;
+import com.movision.mybatis.category.entity.Category;
+import com.movision.mybatis.category.service.CategoryService;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleIndexList;
 import com.movision.mybatis.circle.service.CircleService;
@@ -100,6 +102,9 @@ public class PostFacade {
 
     @Autowired
     private GoodsService goodsService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
@@ -812,24 +817,26 @@ public class PostFacade {
         return userService.likeQueryPostByNickname(name, pager);
     }
 
-    /**
+/*    *//**
      * 查询圈子名称二级菜单列表
      *
      * @return
-     */
+     *//*
     public Map<String, Object> queryListByCircleType() {
         Map<String, Object> map = new HashedMap();
-        List<Circle> list = circleService.queryListByCircleCategoryTo();//查询圈子所有的所属分类
+        //List<Circle> list1 = circleService.queryListByCircleCategoryTo();//查询圈子所有的所属分类
+        List<Category> list = categoryService.queryCircleTypeList();
         List<List<Circle>> circlename = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {//根据圈子的所属分类添加二级菜单
-            List<Circle> circle = circleService.queryListByCircleList(list.get(i).getCategory());//用于查询圈子名称
+            String integer=list.get(i).getCategoryname();
+            List<Circle> circle = circleService.queryListByCircleList(integer);//用于查询圈子名称
             circlename.add(circle);
         }
         Integer num = circleService.queryCircleByNum();
         map.put("resault", circlename);
         map.put("num", num);
         return map;
-    }
+    }*/
 
     /**
      * 帖子编辑数据回显

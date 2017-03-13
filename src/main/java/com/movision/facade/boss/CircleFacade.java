@@ -396,6 +396,16 @@ public class CircleFacade {
     }
 
     /**
+     * 查询圈子名称
+     * @param categoryid
+     * @return
+     */
+    public List<Circle> queryListByCircleType(String categoryid) {
+        List<Circle> circle = circleService.queryListByCircleList(categoryid);//用于查询圈子名称
+        return circle;
+    }
+
+    /**
      * 添加圈子分类
      *
      * @param typename

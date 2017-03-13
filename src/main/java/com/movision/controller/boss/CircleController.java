@@ -181,9 +181,6 @@ public class CircleController {
      * @param circleadmin
      * @param photo
      * @param introduction
-     * @param erweima
-     * @param status
-     * @param orderid
      * @param permission
      * @return
      */
@@ -267,6 +264,23 @@ public class CircleController {
             response.setMessage("操作成功");
         }
         response.setData(map);
+        return response;
+    }
+
+    /**
+     * 选择圈子
+     *
+     * @return
+     */
+    @ApiOperation(value = "选择圈子", notes = "用于选择圈子接口", response = Response.class)
+    @RequestMapping(value = "/query_list_circle_type", method = RequestMethod.POST)
+    public Response queryListByCircleType(@ApiParam(value = "圈子类型id") @RequestParam(required = false) String categoryid) {
+        Response response = new Response();
+        List<Circle> list = circleFacade.queryListByCircleType(categoryid);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(list);
         return response;
     }
 

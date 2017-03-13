@@ -297,7 +297,7 @@ public class PostController {
     }
 
     /**
-     * 后台管理-帖子列表-帖子打赏
+     * 后台管理-帖子列表-查看帖子打赏
      *
      * @param postid
      * @param pageNo
@@ -524,11 +524,11 @@ public class PostController {
         return response;
     }
 
-    /**
+/*    *//**
      * 选择圈子
      *
      * @return
-     */
+     *//*
     @ApiOperation(value = "选择圈子", notes = "用于选择圈子接口", response = Response.class)
     @RequestMapping(value = "/query_list_circle_type", method = RequestMethod.POST)
     public Response queryListByCircleType() {
@@ -539,7 +539,7 @@ public class PostController {
         }
         response.setData(list);
         return response;
-    }
+    }*/
 
 
     /**

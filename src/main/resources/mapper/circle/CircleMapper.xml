@@ -437,9 +437,12 @@
         select c.id AS category,c.categoryname from yw_circle_category c ORDER BY c.id DESC
     </select>
 
-    <select id="queryListByCircleList" parameterType="java.lang.Integer"
+    <select id="queryListByCircleList" parameterType="java.lang.String"
             resultType="com.movision.mybatis.circle.entity.Circle">
-        SELECT id,name,category FROM yw_circle WHERE category=#{in,jdbcType=INTEGER}
+        SELECT id,name,category FROM yw_circle
+        <if test="in!=null">
+            WHERE category=#{in,jdbcType=INTEGER}
+        </if>
     </select>
 
     <select id="queryCircleUserList" parameterType="java.lang.Integer"
