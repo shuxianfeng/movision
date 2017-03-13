@@ -619,6 +619,8 @@ public class GoodsListFacade {
         goodsVo.setName(name);
         goodsVo.setIsdel(Integer.parseInt(isdel));
         goodsVo.setStock(Integer.parseInt(stock));
+        goodsVo.setProvincecode("320000");
+        goodsVo.setCitycode("320100");
         /** String ishot;
         String productids[] = tuijian.split(",");
         for (int i = 0; i < productids.length; i++) {

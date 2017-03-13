@@ -1002,6 +1002,12 @@
             <if test="isessence != null">
                 isessence,
             </if>
+            <if test="provincecode != null">
+                provincecode,
+            </if>
+            <if test="citycode != null">
+                citycode,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -1067,6 +1073,12 @@
             </if>
             <if test="isessence != null">
                 #{isessence,jdbcType=INTEGER},
+            </if>
+            <if test="provincecode != null">
+                #{provincecode,jdbcType=VARCHAR},
+            </if>
+            <if test="citycode != null">
+                #{citycode,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
