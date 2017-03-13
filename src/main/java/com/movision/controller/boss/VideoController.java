@@ -34,9 +34,8 @@ public class VideoController {
     private VideoFacade videoFacade;
 
     /**
-     * 不能使用
-     *
-     * @param request
+     * 可以使用，上传时间有点长
+     * @param file
      * @return
      * @throws ServletException
      * @throws IOException
