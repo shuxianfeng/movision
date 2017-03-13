@@ -401,7 +401,9 @@ public class CircleFacade {
      * @return
      */
     public List<Circle> queryListByCircleType(String categoryid) {
-        List<Circle> circle = circleService.queryListByCircleList(categoryid);//用于查询圈子名称
+        Map map = new HashedMap();
+        map.put("categoryid", categoryid);
+        List<Circle> circle = circleService.queryListByCircleList(map);//用于查询圈子名称
         return circle;
     }
 

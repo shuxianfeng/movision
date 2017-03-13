@@ -371,10 +371,10 @@ public class CircleService {
      *
      * @return
      */
-    public List<Circle> queryListByCircleList(String in) {
+    public List<Circle> queryListByCircleList(Map categoryid) {
         try {
             log.info("查询圈子名称");
-            return circleMapper.queryListByCircleList(in);
+            return circleMapper.queryListByCircleList(categoryid);
         } catch (Exception e) {
             log.error("查询圈子名称异常");
             throw e;
