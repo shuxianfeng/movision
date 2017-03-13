@@ -913,4 +913,21 @@ public class GoodsController {
         return response;
     }
 
+    /**
+     * 查询所有id
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询所有id", notes = "查询所有id", response = Response.class)
+    @RequestMapping(value = "query_allcomboid", method = RequestMethod.POST)
+    public Response findAllComboid() {
+        Response response = new Response();
+        List<Integer> list = goodsFacade.findAllComboid();
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
+        return response;
+    }
+
 }

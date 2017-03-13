@@ -898,6 +898,14 @@ public class GoodsListFacade {
     }
 
     /**
+     * 查询所有ids
+     *
+     * @return
+     */
+    public List<Integer> findAllComboid() {
+        return goodsService.findAllComboid();
+    }
+    /**
      * 增加参数图
      *
      * @param img_url
