@@ -679,7 +679,7 @@ public class GoodsListFacade {
      * @param comboid
      * @return
      */
-    public GoodsComboVo queryName(Integer comboid) {
+    public List<GoodsComboVo> queryName(Integer comboid) {
         return goodsService.queryName(comboid);
     }
 
@@ -756,14 +756,15 @@ public class GoodsListFacade {
             map.put("pai", pai);
         }
         List<GoodsComboVo> list = goodsService.findAllComCondition(map, pager);
-
         Double price = 0.0;
         for (int i = 0; i < list.size(); i++) {
             Double sum = 0.0;
             List<GoodsComboVo> good = goodsService.findAllC(list.get(i).getComboid());
             for (int j = 0; j < good.size(); j++) {
                 price = good.get(j).getPrice();
-                sum += price;
+                if (price != null) {
+                    sum += price;
+                }
             }
             list.get(i).setList(good);
             list.get(i).setSum(sum);

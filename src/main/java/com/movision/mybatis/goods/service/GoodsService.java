@@ -971,7 +971,7 @@ public class GoodsService {
      * @param comboid
      * @return
      */
-    public GoodsComboVo queryName(Integer comboid) {
+    public List<GoodsComboVo> queryName(Integer comboid) {
         try {
             log.info("根据id查询商品");
             return goodsMapper.queryName(comboid);

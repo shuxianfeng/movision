@@ -1121,13 +1121,13 @@
             AND c.intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
         </if>
         <if test="allstatue==3  and minrex!=null and minrex!='' and maxrex!=null and maxrex!=''">
-            AND d.price BETWEEN #{minrex,jdbcType=DOUBLE} AND #{maxrex,jdbcType=DOUBLE}
+            AND price BETWEEN #{minrex,jdbcType=DOUBLE} AND #{maxrex,jdbcType=DOUBLE}
         </if>
         <if test="name!=null and name!=''">
             AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
         <if test="pai==2">
-            ORDER BY d.price DESC
+            ORDER BY price DESC
         </if>
         <if test="pai==0">
             ORDER BY (SELECT COUNT(1) FROM yw_sub_order o WHERE o.combotype=c.comboid ) DESC

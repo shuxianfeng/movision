@@ -697,7 +697,7 @@ public class GoodsController {
     @RequestMapping(value = "query_comboid_name", method = RequestMethod.POST)
     public Response queryName(@ApiParam(value = "套餐id") @RequestParam(required = false) Integer comboid) {
         Response response = new Response();
-        GoodsComboVo goodsComboVo = goodsFacade.queryName(comboid);
+        List<GoodsComboVo> goodsComboVo = goodsFacade.queryName(comboid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
