@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -873,6 +875,24 @@ public class PostController {
     public Response updatePostVid(@RequestParam(value = "file", required = false) MultipartFile file) {
 
         String url = movisionOssClient.uploadObject(file, "img", "post");
+        Map<String, String> map = new HashMap<>();
+        map.put("url", url);
+        map.put("name", FileUtil.getFileNameByUrl(url));
+        return new Response(map);
+    }
+
+    /**
+     * 上传帖子相关视频
+     *
+     * @param file
+     * @return
+     * @throws ServletException
+     * @throws IOException
+     */
+    @ApiOperation(value = "上传帖子相关视频", notes = "上传帖子相关视频", response = Response.class)
+    @RequestMapping(value = "/upload_post_video", method = RequestMethod.POST)
+    public Response queryApplyVipList(@RequestParam(value = "file", required = false) MultipartFile file) throws ServletException, IOException {
+        String url = movisionOssClient.uploadObject(file, "video", "post");
         Map<String, String> map = new HashMap<>();
         map.put("url", url);
         map.put("name", FileUtil.getFileNameByUrl(url));
