@@ -573,7 +573,7 @@
 
     <select id="queryCircleByShow" resultType="com.movision.mybatis.circle.entity.CircleDetails">
         SELECT c.*,
-        (SELECT categoryname FROM yw_circle_category WHERE id=c.category) AS categroyname,
+        (SELECT categoryname FROM yw_circle_category WHERE id=c.category) AS categoryname,
         u.id as circlemanid,u.nickname as nickname,ue.username as username
         FROM yw_circle AS c LEFT JOIN yw_user AS u ON u.phone=c.phone
         LEFT JOIN yw_admin_user ue ON c.userid=ue.id

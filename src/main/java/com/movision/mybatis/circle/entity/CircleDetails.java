@@ -55,7 +55,7 @@ public class CircleDetails {
 
     private String nickname;//圈主名
 
-    private String categroyname;//圈子所属类型
+    private String categoryname;//圈子所属类型
 
     private List<User> admin;//管理员列表
 
@@ -241,12 +241,12 @@ public class CircleDetails {
         this.nickname = nickname;
     }
 
-    public String getCategroyname() {
-        return categroyname;
+    public String getCategoryname() {
+        return categoryname;
     }
 
-    public void setCategroyname(String categroyname) {
-        this.categroyname = categroyname;
+    public void setCategoryname(String categoryname) {
+        this.categoryname = categoryname;
     }
 
     public List<User> getAdmin() {
