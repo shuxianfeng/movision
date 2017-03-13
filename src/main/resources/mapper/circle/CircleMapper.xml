@@ -361,7 +361,7 @@
         (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id) AS postnum,
         (SELECT u.nickname FROM yw_user u WHERE id=c.userid) AS circlename,
         (SELECT u.level FROM yw_user u WHERE id=c.userid) AS categorylevel
-        FROM yw_circle c WHERE isdel=0 AND status=1
+        FROM yw_circle c WHERE isdel=0
         <if test="type!=null">
             AND category=#{type,jdbcType=INTEGER}
         </if>
@@ -516,11 +516,11 @@
     </select>
 
     <update id="updateCircleIndex" parameterType="java.lang.Integer">
-        UPDATE yw_circle SET isrecommend=1 WHERE id=#{circleid,jdbcType=INTEGER} AND isdiscover=0
+        UPDATE yw_circle SET isrecommend=1 WHERE id=#{circleid,jdbcType=INTEGER} AND isrecommend=0
     </update>
 
     <update id="updateCircleIndexDel" parameterType="java.lang.String">
-        UPDATE yw_circle SET isrecommend=0 WHERE id=#{circleid,jdbcType=INTEGER} AND isdiscover=1
+        UPDATE yw_circle SET isrecommend=0 WHERE id=#{circleid,jdbcType=INTEGER} AND isrecommend=1
     </update>
 
     <select id="quryCircleDetails" parameterType="java.lang.Integer"

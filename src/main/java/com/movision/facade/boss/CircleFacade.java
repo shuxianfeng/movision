@@ -225,8 +225,8 @@ public class CircleFacade {
         Map<String, Integer> map = new HashedMap();
         if (recommend == 0) {
             Integer l = circleService.updateCircleIndex(Integer.parseInt(circleid));
-            map.put("resault", l);
-        } else {
+            map.put("resault", 1);
+        } else if (recommend == 1) {
             Integer n = circleService.updateCircleIndexDel(circleid);
             map.put("resault", 2);
         }
@@ -850,7 +850,7 @@ public class CircleFacade {
      * 圈子审核
      *
      * @param circleid
-     * @param type
+     * @param status
      * @return
      */
     public Map updateAuditCircle(String circleid, String status) {
