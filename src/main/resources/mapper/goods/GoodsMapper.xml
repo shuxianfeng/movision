@@ -567,7 +567,7 @@
         AS collect from yw_goods s
         LEFT JOIN yw_brand d ON d.brandid=s.brandid LEFT JOIN yw_collection c ON c.goodsid=s.id LEFT JOIN yw_category a
         ON a.protype=s.protype
-        GROUP BY s.id
+        GROUP BY s.id ORDER BY s.onlinetime DESC
     </select>
     <select id="findAllGoodsCondition" parameterType="com.movision.mybatis.goods.entity.GoodsVo"
             resultType="com.movision.mybatis.goods.entity.GoodsVo">
