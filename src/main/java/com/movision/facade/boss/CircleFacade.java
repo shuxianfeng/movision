@@ -372,6 +372,7 @@ public class CircleFacade {
         if (!StringUtils.isEmpty(introduction)) {
                 circleDetails.setIntroduction(introduction);
             }
+        circleDetails.setScope(2);//设置默认圈子贷方范围，对所有人开放
         circleDetails.setStatus(0);//设置审核状态，初始值为待审核：0
         circleDetails.setOrderid(0);//设置精选排序，初始值：0
         circleDetails.setIsrecommend(0);//设置是否被推荐，初始值0
