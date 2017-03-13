@@ -18,6 +18,7 @@ import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.orders.entity.Orders;
+import com.movision.mybatis.orders.entity.OrdersVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.province.entity.Province;
 import com.movision.mybatis.user.entity.User;
@@ -304,7 +305,7 @@ public class OrderFacade {
             goods.get(i).setMoney(money);
         }
         good.setSummoney(summoney);
-        Orders orderses = bossOrderService.queryOrderMoney(id);//查询费用信息
+        OrdersVo orderses = bossOrderService.queryOrderMoney(id);//查询费用信息
         List<Orderoperation> orderoperationrs = bossOrderService.queryOrderoperation(id);//查询操作信息
         map.put("invoice", invoice);
         map.put("bossOrders", bossOrders);

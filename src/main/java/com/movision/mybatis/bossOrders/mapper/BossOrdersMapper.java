@@ -15,6 +15,7 @@ import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.orders.entity.Orders;
+import com.movision.mybatis.orders.entity.OrdersVo;
 import com.movision.mybatis.province.entity.Province;
 import com.movision.mybatis.user.entity.User;
 import org.apache.ibatis.session.RowBounds;
@@ -65,7 +66,7 @@ public interface BossOrdersMapper {
 
     int updateAddress(AddressVo address);//编辑收货人信息
 
-    Orders queryMoney(Integer id);//费用信息
+    OrdersVo queryMoney(Integer id);//费用信息
 
     int updateOrdersMoney(Orders orders);//编辑费用信息
 

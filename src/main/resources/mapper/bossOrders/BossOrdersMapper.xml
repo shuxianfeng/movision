@@ -585,7 +585,7 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         </set>
         where id=(SELECT userid FROM yw_orders WHERE id=#{orderid,jdbcType=INTEGER})
     </update>
-    <select id="queryMoney" parameterType="java.lang.Integer" resultType="com.movision.mybatis.orders.entity.Orders">
+    <select id="queryMoney" parameterType="java.lang.Integer" resultType="com.movision.mybatis.orders.entity.OrdersVo">
         SELECT sendmoney,money,discouponmoney,dispointmoney,realmoney FROM  yw_orders WHERE  id=#{id,jdbcType=INTEGER}
     </select>
     <update id="updateOrdersMoney" parameterType="com.movision.mybatis.orders.entity.Orders">

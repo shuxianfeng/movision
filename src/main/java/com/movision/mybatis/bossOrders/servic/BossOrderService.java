@@ -16,6 +16,7 @@ import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.orders.entity.Orders;
+import com.movision.mybatis.orders.entity.OrdersVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.province.entity.Province;
 import com.movision.mybatis.user.entity.User;
@@ -317,7 +318,7 @@ public class BossOrderService {
      * @param id
      * @return
      */
-    public Orders queryOrderMoney(Integer id) {
+    public OrdersVo queryOrderMoney(Integer id) {
         try {
             loger.info("查询费用信息成功");
             return bossOrdersMapper.queryMoney(id);
