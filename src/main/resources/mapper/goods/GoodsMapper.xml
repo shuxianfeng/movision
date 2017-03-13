@@ -622,6 +622,7 @@
         <if test="pai==3">
             ORDER BY s.collect DESC
         </if>
+        GROUP BY s.id
 
     </select>
     <update id="AddToGoods" parameterType="java.lang.Integer">
