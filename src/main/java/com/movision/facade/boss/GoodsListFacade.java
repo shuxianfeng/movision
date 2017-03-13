@@ -646,7 +646,7 @@ public class GoodsListFacade {
         img.setImgurl(img_url);
         int result = goodsService.addGoodsPic(img);
             map.put("result", result);
-
+        map.put("id", id);
         return map;
     }
 
