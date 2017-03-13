@@ -451,12 +451,6 @@
         SELECT phone FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
     </select>
 
-    <select id="queryUserByAdministratorList" resultType="com.movision.mybatis.user.entity.User"
-            parameterType="java.lang.Integer">
-        SELECT * FROM yw_user ad WHERE ad.id IN (SELECT m.userid FROM yw_circle_manager AS m WHERE
-        m.circleid=#{circleid,jdbcType=INTEGER})
-    </select>
-
     <!-- 查看VIP申请列表 -->
     <select id="findAllqueryUsers" resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT u.id,u.nickname,u.phone,u.level,u.status,

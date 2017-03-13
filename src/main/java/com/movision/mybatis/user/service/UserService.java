@@ -287,21 +287,6 @@ public class UserService {
         }
     }
 
-    /**
-     * 查询圈子管理员列表
-     *
-     * @param circleid
-     * @return
-     */
-    public List<User> queryUserByAdministratorList(Integer circleid) {
-        try {
-            log.info("查询圈子管理员列表");
-            return userMapper.queryUserByAdministratorList(circleid);
-        } catch (Exception e) {
-            log.error("查询圈子管理员列表异常");
-            throw e;
-        }
-    }
 
 
     public int updateRegisterUser(RegisterUser registerUser) {

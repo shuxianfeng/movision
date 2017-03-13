@@ -21,4 +21,23 @@
     FROM yw_post WHERE date(intime)=curdate() AND isdel=0 AND isactive=0
   </select>
 
+    <select id="queryProcessedGoodsOrders" resultType="com.movision.mybatis.bossIndex.entity.ProcessedGoodsOrders">
+        SELECT COUNT(1) AS addVExamine,
+        (SELECT COUNT(1) FROM yw_goods WHERE isself=1 AND isdel=0) AS selfSupportGoods,
+        (SELECT COUNT(1) FROM yw_goods WHERE isself=0 AND isdel=0) AS tripartiteGoods,
+        <![CDATA[ (SELECT COUNT(1) FROM yw_goods WHERE stock<10 AND isdel=0) AS inventoryWarning, ]]>
+        (SELECT COUNT(1) FROM yw_goods WHERE ishot=1 AND isdel=0) AS sellLikeHotCakesGoods,
+        (SELECT COUNT(1) FROM yw_goods WHERE stock=0) AS noStock,
+        (SELECT COUNT(1) FROM yw_goods WHERE isspecial=1 AND isdel=0) AS promotionItem,
+        (SELECT COUNT(1) FROM yw_goods WHERE isdel=1) AS soldOut,
+        (SELECT COUNT(1) FROM yw_goods WHERE isdel=0) AS goodsQuantity,
+        (SELECT COUNT(1) FROM yw_orders WHERE status=1 AND isdel=0) AS dropShipping,
+        (SELECT COUNT(1) FROM yw_orders WHERE status=0 AND isdel=0) AS tobepaid,
+        (SELECT COUNT(1) FROM yw_orders o WHERE o.status=2 AND o.isdel=0 AND (SELECT COUNT(1) FROM yw_afterservice WHERE orderid=o.ordernumber)=0) AS deliverGoods,
+        (SELECT COUNT(1) FROM yw_afterservice WHERE afterstatue=2 AND aftersalestatus=1 AND processingstatus=2 AND isdel=1) AS refund,
+        (SELECT COUNT(1) FROM yw_afterservice WHERE afterstatue=1 AND aftersalestatus=1 AND processingstatus=2 AND isdel=1) AS salesReturn,
+        (SELECT COUNT(1) FROM yw_orders WHERE isdel=0 AND status &lt;&gt; 0 AND status &lt;&gt; -1) AS orderQuantity
+        FROM yw_apply_vip_detail WHERE apply_level=0
+    </select>
+
 </mapper>

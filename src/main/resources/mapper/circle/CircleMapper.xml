@@ -359,7 +359,7 @@
         (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id AND date(intime) = curdate()) AS postnewnum,
         (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id AND isessence=1) AS isessencenum,
         (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id) AS postnum,
-        (SELECT u.nickname FROM yw_user u WHERE id=c.userid) AS circlename,
+        (SELECT u.nickname FROM yw_user u WHERE phone=c.phone) AS circlename,
         (SELECT u.level FROM yw_user u WHERE id=c.userid) AS categorylevel
         FROM yw_circle c WHERE isdel=0
         <if test="type!=null">
