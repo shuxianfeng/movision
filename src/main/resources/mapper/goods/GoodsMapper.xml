@@ -610,7 +610,6 @@
         <if test="onlinetime!=null and onlinetime!=''">
             AND s.onlinetime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
         </if>
-        GROUP BY s.id
         <if test="pai==0">
             ORDER BY s.sales DESC
         </if>
@@ -621,7 +620,7 @@
             ORDER BY s.origprice DESC
         </if>
         <if test="pai==3">
-            ORDER BY collect DESC
+            ORDER BY s.collect DESC
         </if>
 
     </select>
