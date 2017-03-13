@@ -20,6 +20,10 @@ public class ProcessedGoodsOrders {
 
     private Integer sellLikeHotCakesGoods;//畅销商品
 
+    private Integer tripartiteShop;//第三方商铺
+
+    private Integer noStock;//无库存商品
+
     private Integer promotionItem;//促销商品
 
     private Integer soldOut;//下架商品
@@ -30,11 +34,37 @@ public class ProcessedGoodsOrders {
 
     private Integer tobepaid;//待支付
 
+    private Integer deliverGoods;//已发货订单
+
     private Integer refund;//退款
 
     private Integer salesReturn;//退货
 
     private Integer orderQuantity;//订单数量
+
+    public Integer getDeliverGoods() {
+        return deliverGoods;
+    }
+
+    public void setDeliverGoods(Integer deliverGoods) {
+        this.deliverGoods = deliverGoods;
+    }
+
+    public Integer getNoStock() {
+        return noStock;
+    }
+
+    public void setNoStock(Integer noStock) {
+        this.noStock = noStock;
+    }
+
+    public Integer getTripartiteShop() {
+        return tripartiteShop;
+    }
+
+    public void setTripartiteShop(Integer tripartiteShop) {
+        this.tripartiteShop = tripartiteShop;
+    }
 
     public Integer getPromotionItem() {
         return promotionItem;

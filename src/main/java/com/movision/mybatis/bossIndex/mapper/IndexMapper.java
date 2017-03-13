@@ -1,6 +1,7 @@
 package com.movision.mybatis.bossIndex.mapper;
 
 import com.movision.mybatis.bossIndex.entity.IndexTodayDetails;
+import com.movision.mybatis.bossIndex.entity.ProcessedGoodsOrders;
 
 /**
  * @Author zhurui
@@ -9,4 +10,6 @@ import com.movision.mybatis.bossIndex.entity.IndexTodayDetails;
 public interface IndexMapper {
 
     IndexTodayDetails queryTheHomepageDetailsToday();
+
+    ProcessedGoodsOrders queryProcessedGoodsOrders();
 }
