@@ -1,15 +1,10 @@
 package com.movision.facade.boss;
 
-import com.movision.common.Response;
 import com.movision.mybatis.accusation.service.AccusationService;
-import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.category.entity.Category;
-import com.movision.mybatis.category.entity.CategoryVo;
-import com.movision.mybatis.category.entity.CircleAndCircle;
 import com.movision.mybatis.category.service.CategoryService;
 import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.circle.service.CircleService;
-import com.movision.mybatis.manager.entity.Manager;
 import com.movision.mybatis.manager.service.ManagerServcie;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.post.service.PostService;
@@ -20,20 +15,12 @@ import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
-import com.wordnik.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -82,7 +69,6 @@ public class CircleFacade {
      * @return
      */
     public List<CircleIndexList> queryCircleByList() {
-        String str = null;
         Map tm = new HashedMap();
         tm.put("categoryid", null);
         List<CircleIndexList> circlenum = circleService.queryListByCircleCategory(tm);//查询圈子所有分类
@@ -314,7 +300,7 @@ public class CircleFacade {
     public Map<String, CircleDetails> queryCircleByShow(String circleid) {
         Map<String, CircleDetails> map = new HashedMap();
         CircleDetails circleDetails = circleService.queryCircleByShow(Integer.parseInt(circleid));//查询出圈子信息
-        List<User> list = userService.queryUserByAdministratorList(Integer.parseInt(circleid));//查询出圈子管理员列表
+        List<User> list = userService.queryCircleManagerList(Integer.parseInt(circleid));//查询出圈子管理员列表
         circleDetails.setAdmin(list);
         List<Integer> ords = circleService.queryCircleByOrderidList();//查询圈子推荐发现页排序
         List<Integer> h = new ArrayList<>();
@@ -528,7 +514,7 @@ public class CircleFacade {
         map.put("begintime", beg);
         map.put("endtime", end);
         List<CircleIndexList> circlenum = new ArrayList<>();
-        if (type == null || type == "") {
+        if (!StringUtils.isEmpty(type)) {
             Map tm = new HashedMap();
             type = null;
             tm.put("categoryid", type);
@@ -683,7 +669,7 @@ public class CircleFacade {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date beg = null;
         Date end = null;
-        if ((begintime != null && begintime != "") && (endtime != null && endtime != "")) {
+        if ((!StringUtils.isEmpty(begintime)) && (!StringUtils.isEmpty(endtime))) {
             try {
                 beg = format.parse(begintime);
                 end = format.parse(endtime);
@@ -691,22 +677,22 @@ public class CircleFacade {
                 logger.error("时间格式转换异常", e);
             }
         }
-        if (pai != null && pai != "") {
+        if (!StringUtils.isEmpty(pai)) {
             map.put("pai", pai);
         }
-        if (circle != null && circle != "") {
+        if (!StringUtils.isEmpty(circle)) {
             map.put("circleid", circle);
         }
-        if (type != null && type != "") {
+        if (!StringUtils.isEmpty(type)) {
             map.put("type", type);
         }
-        if (circleman != null && circleman != "") {
+        if (!StringUtils.isEmpty(circleman)) {
             map.put("circleman", circleman);
         }
         map.put("begintime", beg);
         map.put("endtime", end);
         List<CircleIndexList> circlenum = new ArrayList<>();
-        if (type == null || type == "") {
+        if (!StringUtils.isEmpty(type)) {
             Map tm = new HashedMap();
             type = null;
             tm.put("categoryid", type);
