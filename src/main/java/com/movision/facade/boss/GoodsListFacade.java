@@ -564,8 +564,8 @@ public class GoodsListFacade {
         img.setGoodsid(Integer.parseInt(goodsid));
 
         img.setImgurl(img_url);
-            int result = goodsService.updateCommodityDescription(img);
-            map.put("result", result);
+        int result = goodsService.updateCommodityDescription(img);
+        map.put("result", result);
 
         return map;
     }
