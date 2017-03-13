@@ -497,7 +497,7 @@ public class CircleFacade {
      * @param endtime
      * @return
      */
-    public List<CircleIndexList> queryCircleByCondition(String pai, String circle, String circleman, String type, String begintime, String endtime) {
+    public List<CircleIndexList> queryCircleByCondition(String pai, String circle, String circleman, String type, String status, String begintime, String endtime) {
         Map map = new HashedMap();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date beg = null;
@@ -510,16 +510,19 @@ public class CircleFacade {
                 logger.error("时间格式转换异常", e);
             }
         }
-        if (pai != null && pai != "") {
+        if (!StringUtils.isEmpty(pai)) {
             map.put("pai", pai);
         }
-        if (circle != null && circle != "") {
+        if (!StringUtils.isEmpty(circle)) {
             map.put("circleid", circle);
         }
-        if (type != null && type != "") {
+        if (!StringUtils.isEmpty(type)) {
             map.put("type", type);
         }
-        if (circleman != null && circleman != "") {
+        if (!StringUtils.isEmpty(status)) {
+            map.put("status", status);
+        }
+        if (!StringUtils.isEmpty(circleman)) {
             map.put("circleman", circleman);
         }
         map.put("begintime", beg);

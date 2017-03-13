@@ -20,6 +20,8 @@ public class ProcessedGoodsOrders {
 
     private Integer sellLikeHotCakesGoods;//畅销商品
 
+    private Integer promotionItem;//促销商品
+
     private Integer soldOut;//下架商品
 
     private Integer goodsQuantity;//商品数量
@@ -33,6 +35,14 @@ public class ProcessedGoodsOrders {
     private Integer salesReturn;//退货
 
     private Integer orderQuantity;//订单数量
+
+    public Integer getPromotionItem() {
+        return promotionItem;
+    }
+
+    public void setPromotionItem(Integer promotionItem) {
+        this.promotionItem = promotionItem;
+    }
 
     public Integer getAddVExamine() {
         return addVExamine;

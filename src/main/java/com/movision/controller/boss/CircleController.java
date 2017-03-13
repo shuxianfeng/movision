@@ -391,10 +391,11 @@ public class CircleController {
                                            @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
                                            @ApiParam(value = "圈主") @RequestParam(required = false) String circleman,
                                            @ApiParam(value = "圈子类型") @RequestParam(required = false) String type,
+                                           @ApiParam(value = "圈子状态：0 待审核 1 审核通过 2 审核不通过") @RequestParam(required = false) String status,
                                            @ApiParam(value = "圈子创建开始时间") @RequestParam(required = false) String begintime,
                                            @ApiParam(value = "圈子创建结束时间") @RequestParam(required = false) String endtime) {
         Response response = new Response();
-        List<CircleIndexList> list = circleFacade.queryCircleByCondition(pai, circleid, circleman, type, begintime, endtime);
+        List<CircleIndexList> list = circleFacade.queryCircleByCondition(pai, circleid, circleman, type, status, begintime, endtime);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

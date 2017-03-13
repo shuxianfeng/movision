@@ -365,6 +365,15 @@
         <if test="type!=null">
             AND category=#{type,jdbcType=INTEGER}
         </if>
+        <if test="status==0">
+            AND status=0
+        </if>
+        <if test="status==1">
+            AND status=1
+        </if>
+        <if test="status==2">
+            AND status=2
+        </if>
         <if test="circleid!=null">
             AND c.id=#{circleid,jdbcType=INTEGER}
         </if>
