@@ -33,7 +33,7 @@ public class SDKSendSms {
 
         Map<String,String> map = new LinkedHashMap<>();
         map.put("min", "10");
-        map.put("code", "1111");
+        map.put("code", "2222");
         Gson gson = new Gson();
         String json = gson.toJson(map);
         SDKSendSms.sendSMS("18051989558", json, PropertiesLoader.getValue("login_app_sms_template_code"));
