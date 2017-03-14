@@ -106,6 +106,15 @@ public class GoodsCom {
     private Integer id;
     private String typename;
     private String brandname;
+    private Integer isdel;
+
+    public Integer getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(Integer isdel) {
+        this.isdel = isdel;
+    }
 
     private Double sumorigprice;//总价格
     private Double sumprice;//总折扣价
