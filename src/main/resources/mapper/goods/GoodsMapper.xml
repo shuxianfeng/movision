@@ -684,7 +684,7 @@
         (SELECT img_url FROM yw_goods_img WHERE goodsid=g.id AND type=2) AS imgurl,
         g.name,g.protype,g.isdel,g.origprice,g.price,g.sales,g.stock,g.attribute
         FROM yw_goods g LEFT JOIN yw_brand b ON g.brandid=b.brandid WHERE 1
-        <if test="brandname!=null">
+        <if test="brandid!=null">
             AND b.id=#{brandid,jdbcType=VARCHAR}
         </if>
         <if test="name!=null">
