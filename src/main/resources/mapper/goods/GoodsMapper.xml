@@ -1163,13 +1163,13 @@
         update yw_combo
         <set>
             <if test="comboname != null">
-                comboname = #{comboname,jdbcType=VARCHAR}
+                comboname = #{comboname,jdbcType=VARCHAR},
             </if>
             <if test="combodiscountprice != null">
-                combodiscountprice = #{combodiscountprice,jdbcType=INTEGER}
+                combodiscountprice = #{combodiscountprice,jdbcType=DOUBLE},
             </if>
             <if test="imgurl != null">
-                imgurl = #{combodiscountprice,jdbcType=VARCHAR}
+                imgurl = #{imgurl,jdbcType=VARCHAR},
             </if>
         </set>
         WHERE comboid= #{comboid,jdbcType=INTEGER}
@@ -1349,5 +1349,8 @@
     </update>
     <delete id="deleteByComGoods" parameterType="java.lang.String">
         DELETE  FROM  yw_goods_combo WHERE  goodsid=#{goodsid,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteComGoods" parameterType="java.lang.Integer">
+        DELETE  FROM  yw_goods_combo WHERE  comboid=#{comboid,jdbcType=INTEGER}
     </delete>
 </mapper>
