@@ -1,12 +1,11 @@
 package com.movision.mybatis.goods.entity;
 
+
 /**
  * @Author zhanglei
  * @Date 2017/3/4 17:48
  */
 public class GoodsCom {
-
-
     public Integer getComboid() {
         return comboid;
     }

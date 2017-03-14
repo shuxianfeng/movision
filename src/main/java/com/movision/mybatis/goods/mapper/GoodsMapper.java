@@ -160,4 +160,6 @@ public interface GoodsMapper {
     List<GoodsImg> queryBannerImg(String goodsid);//查询banner图
 
     void deductStock(List<SubOrder> subOrderList);
+
+    Integer delectAllComboGoods(Integer goodsid);//批量删除商品
 }

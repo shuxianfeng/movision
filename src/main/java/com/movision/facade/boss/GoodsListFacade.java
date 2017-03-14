@@ -797,12 +797,13 @@ public class GoodsListFacade {
             sumprice += price;
             sumsales += sales;
             sumstock = re;
-            list.get(i).setSumprice(sumprice);
-            list.get(i).setSumorigprice(sumorigprice);
-            list.get(i).setSumsales(sumsales);
-            list.get(i).setSumstock(sumstock);
-
         }
+        GoodsCom goodsCom = new GoodsCom();
+        goodsCom.setSumsales(sumsales);
+        goodsCom.setSumstock(sumstock);
+        goodsCom.setSumorigprice(sumorigprice);
+        goodsCom.setSumprice(sumprice);
+        list.add(goodsCom);
         return list;
     }
 

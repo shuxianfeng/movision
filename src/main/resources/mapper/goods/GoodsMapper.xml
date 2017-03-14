@@ -1121,15 +1121,14 @@
             AND c.intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
         </if>
         <if test="allstatue==3  and minrex!=null and minrex!='' and maxrex!=null and maxrex!=''">
-            AND (SELECT SUM(d.price ) FROM yw_goods_combo g
-            LEFT JOIN yw_goods d ON d.id=g.goodsid) BETWEEN #{minrex,jdbcType=DOUBLE} AND #{maxrex,jdbcType=DOUBLE}
+            AND (SELECT SUM(g.price) FROM yw_goods g WHERE c.comboid=g.id) BETWEEN #{minrex,jdbcType=DOUBLE} AND
+            #{maxrex,jdbcType=DOUBLE}
         </if>
         <if test="name!=null and name!=''">
             AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
         <if test="pai==2">
-            ORDER BY (SELECT SUM(d.price ) FROM yw_goods_combo g
-            LEFT JOIN yw_goods d ON d.id=g.goodsid) DESC
+            ORDER BY (SELECT SUM(g.price) FROM yw_goods g WHERE c.comboid=g.id) DESC
         </if>
         <if test="pai==0">
             ORDER BY (SELECT COUNT(1) FROM yw_sub_order o WHERE o.combotype=c.comboid ) DESC
@@ -1141,7 +1140,7 @@
     <select id="findByIdCom" resultType="com.movision.mybatis.goodscombo.entity.GoodsComboVo"
             parameterType="java.lang.Integer">
         SELECT c.id,c.comboid,c.comboname,c.combodiscountprice,c.intime,
-        (SELECT COUNT(1) FROM yw_sub_order o WHERE o.combotype=c.comboid ) AS sales
+        (SELECT COUNT(1) FROM yw_sub_order o WHERE o.combotype=c.comboid ) AS sales,c.imgurl
         FROM yw_combo c WHERE c.comboid=#{comboid,jdbcType=INTEGER}
     </select>
     <select id="queryAssessmentRemark" parameterType="java.lang.Integer"
