@@ -1216,10 +1216,18 @@ public class PostFacade {
      */
     public List<GoodsVo> findAllQueryLikeGoods(String name, String goodsid, String brandname, String protype, Paging<GoodsVo> pager) {
         Map map = new HashedMap();
-        map.put("name", name);
-        map.put("brandname", brandname);
-        map.put("protype", protype);
-        map.put("goodsid", goodsid);
+        if (!StringUtils.isEmpty(name)) {
+            map.put("name", name);
+        }
+        if (!StringUtils.isEmpty(brandname)) {
+            map.put("brandname", brandname);
+        }
+        if (!StringUtils.isEmpty(protype)) {
+            map.put("protype", protype);
+        }
+        if (!StringUtils.isEmpty(goodsid)) {
+            map.put("goodsid", goodsid);
+        }
         return goodsService.findAllQueryLikeGoods(map, pager);
     }
 
