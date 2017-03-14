@@ -1084,7 +1084,7 @@
     </insert>
     <select id="findAllC" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodscombo.entity.GoodsComboVo">
-        SELECT g.comboid,g.goodsid,SUM(d.price) AS sumprice,d.`name` FROM yw_goods_combo g
+        SELECT g.comboid,g.goodsid,d.price,d.`name` FROM yw_goods_combo g
         LEFT JOIN yw_goods d ON d.id=g.goodsid WHERE g.comboid=#{comboid,jdbcType=INTEGER}
     </select>
     <select id="findAllComboT" resultType="com.movision.mybatis.goodscombo.entity.GoodsComboVo">

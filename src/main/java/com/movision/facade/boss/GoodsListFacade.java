@@ -659,8 +659,16 @@ public class GoodsListFacade {
     public List<GoodsComboVo> queryCom(Paging<GoodsComboVo> pager) {
         List<GoodsComboVo> list = goodsService.findAllCombo(pager);
         for (int i = 0; i < list.size(); i++) {
+            Double sum = 0.0;
             List<GoodsComboVo> good = goodsService.findAllC(list.get(i).getComboid());
+            for (int j = 0; j < good.size(); j++) {
+                Double price = good.get(j).getPrice();
+                if (price != null) {
+                    sum += price;
+                }
+            }
             list.get(i).setList(good);
+            list.get(i).setSumprice(sum);
         }
         return list;
     }
@@ -750,8 +758,16 @@ public class GoodsListFacade {
         }
         List<GoodsComboVo> list = goodsService.findAllComCondition(map, pager);
         for (int i = 0; i < list.size(); i++) {
+            Double sum = 0.0;
             List<GoodsComboVo> good = goodsService.findAllC(list.get(i).getComboid());
+            for (int j = 0; j < good.size(); j++) {
+                Double price = good.get(j).getPrice();
+                if (price != null) {
+                    sum += price;
+                }
+            }
             list.get(i).setList(good);
+            list.get(i).setSumprice(sum);
         }
         return list;
     }
@@ -765,8 +781,16 @@ public class GoodsListFacade {
     public List<GoodsComboVo> findByIdCom(Integer comboid) {
         List<GoodsComboVo> list = goodsService.findByIdCom(comboid);
         for (int i = 0; i < list.size(); i++) {
+            Double sum = 0.0;
             List<GoodsComboVo> good = goodsService.findAllC(list.get(i).getComboid());
+            for (int j = 0; j < good.size(); j++) {
+                Double price = good.get(j).getPrice();
+                if (price != null) {
+                    sum += price;
+                }
+            }
             list.get(i).setList(good);
+            list.get(i).setSumprice(sum);
         }
         return list;
     }
