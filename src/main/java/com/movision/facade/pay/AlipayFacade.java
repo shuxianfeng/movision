@@ -1,8 +1,6 @@
 package com.movision.facade.pay;
 
 import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayClient;
-import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.service.OrderService;
@@ -82,7 +80,7 @@ public class AlipayFacade {
 
         String app_id = AlipayPropertiesLoader.getValue("app_id");//获取配置文件中的APPID
         String appprivatekey = AlipayPropertiesLoader.getValue("private_key");//应用私钥（商户的私钥）
-        String alipublickey = AlipayPropertiesLoader.getValue("alipay_public_key");//支付宝公钥
+//        String alipublickey = AlipayPropertiesLoader.getValue("alipay_public_key");//支付宝公钥（请求接口入参目前未用到）
         String alipaygateway = AlipayPropertiesLoader.getValue("alipay_gateway");//支付宝请求网关
         String seller_id = AlipayPropertiesLoader.getValue("seller_email");//收款支付宝账号
 
@@ -113,13 +111,11 @@ public class AlipayFacade {
         String charset = "GBK";
         String format = "json";
         String method = "alipay.trade.app.pay";//App支付接口  alipay.trade.app.pay
-        String notify_url = AlipayPropertiesLoader.getValue("service_notify_url");//回调接口（支付后服务端通知）
         String sign_type = "RSA2";
         String timestamp = df.format(new Date());
         String version = "1.0";
 
         //手动拼装待签内容
-//        String content = "app_id="+app_id+"&biz_content="+biz_content+"&charset="+charset+"&method="+method+"&sign_type"+sign_type+"&timestamp="+timestamp+"&version="+version;
         StringBuffer contentstr = new StringBuffer();
         contentstr.append("app_id=");
         contentstr.append(app_id);
