@@ -15,8 +15,6 @@ import java.util.Map;
  */
 public class SDKSendSms {
 
-
-
     public static Boolean sendSMS(String mobile, String params, String templateCode){
 
         String gateWay = PropertiesLoader.getValue("sms_gateway");
@@ -30,17 +28,15 @@ public class SDKSendSms {
         return false;
     }
 
-
     //测试
     public static void main(String[] args) throws IOException {
 
         Map<String,String> map = new LinkedHashMap<>();
-        map.put("name","SB是怎么炼成的");
-        map.put("time","2016-06-09 12:00:33");
-        map.put("code","04sb250,094sb0");
+        map.put("min", "10");
+        map.put("code", "1111");
         Gson gson = new Gson();
         String json = gson.toJson(map);
-        SDKSendSms.sendSMS("18652093798", json, PropertiesLoader.getValue("course_begin_sms_template_code"));
+        SDKSendSms.sendSMS("18051989558", json, PropertiesLoader.getValue("login_app_sms_template_code"));
 
     }
 }

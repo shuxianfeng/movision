@@ -360,6 +360,14 @@
             <version>3</version>
         </dependency>
 
+        <!--alidayu 对应taobao-sdk-java-auto_1455552377940-20170314.jar-->
+        <!-- <dependency>
+             <groupId>taobao.sdk</groupId>
+             <artifactId>java</artifactId>
+             <version>4</version>
+         </dependency>-->
+
+
         <dependency>
             <groupId>com.mangofactory</groupId>
             <artifactId>swagger-springmvc</artifactId>

@@ -9,6 +9,7 @@ import com.taobao.api.TaobaoClient;
 import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
 import com.taobao.api.response.AlibabaAliqinFcSmsNumSendResponse;
 
+
 /**
  * 淘宝阿里大于短信继集成类
  */
@@ -17,8 +18,8 @@ public class SDKSendTaoBaoSMS {
     private static Logger log = LoggerFactory.getLogger(SDKSendTaoBaoSMS.class);
 
     private static final String TAOBAO_CLIENT_URL = "http://gw.api.taobao.com/router/rest";
-    private static final String APPKEY = "23361295";
-    private static final String SECRET = "752b6bcb411e07baf34e11e0b4ddb767";
+    private static final String APPKEY = "23696382";
+    private static final String SECRET = "27717070d06e98f5e4bd982293b0d77f";
 
 
     /**
@@ -35,10 +36,10 @@ public class SDKSendTaoBaoSMS {
         try {
             req.setExtend("123456");
             req.setSmsType("normal");
-            req.setSmsFreeSignName("movision");
+            req.setSmsFreeSignName("登录验证");   //申请的签名名称
             req.setSmsParamString(params);
-            req.setRecNum(mobile);
-            req.setSmsTemplateCode(templateCode);
+            req.setRecNum(mobile);  //接受的手机号码
+            req.setSmsTemplateCode(templateCode);   //模板code
             AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
             log.info("send sms response:" + rsp.getBody());
             return rsp.getResult().getSuccess();
@@ -49,6 +50,27 @@ public class SDKSendTaoBaoSMS {
         }
 
     }
+
+
+    /**
+     * 发送 登录app短信验证码
+     * @param mobile
+     * @param checkCode
+     * @throws ApiException
+     */
+    /*public static void snedAppLoginSms(String mobile, String checkCode) throws ApiException {
+        log.info("send app login sms mobile =  " + mobile + " checkcode = " + checkCode);
+        TaobaoClient client = new DefaultTaobaoClient(TAOBAO_CLIENT_URL, APPKEY, SECRET);
+        AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
+        req.setExtend("123456");
+        req.setSmsType("normal");
+        req.setSmsFreeSignName("美番");
+        req.setSmsParamString("{\"code\":\"" + checkCode + "\",\"product\":\"美番\"}");
+        req.setRecNum(mobile);
+        req.setSmsTemplateCode("SMS_54600056");
+        AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
+        System.out.println(rsp.getBody());
+    }*/
 
 
     /**
