@@ -94,4 +94,24 @@ public class OrderService {
         }
     }
 
+    public List<Orders> queryOrdersListByIds(int[] ids) {
+        try {
+            log.info("根据主订单id数组查询所有的主订单列表");
+            return ordersMapper.queryOrdersListByIds(ids);
+        } catch (Exception e) {
+            log.error("根据主订单id数组查询所有的主订单列表失败");
+            throw e;
+        }
+    }
+
+    public List<SubOrder> queryAllSubOrderList(int[] ids) {
+        try {
+            log.info("根据订单id数组查询所有子订单列表");
+            return subOrderMapper.queryAllSubOrderList(ids);
+        } catch (Exception e) {
+            log.error("根据订单id数组查询所有子订单列表失败");
+            throw e;
+        }
+    }
+
 }

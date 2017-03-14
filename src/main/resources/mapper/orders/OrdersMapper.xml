@@ -44,6 +44,14 @@
         SELECT MAX(ordernumber) FROM yw_orders WHERE ordernumber LIKE #{paramstr, jdbcType=VARCHAR}
     </select>
 
+    <!--根据主订单id数组查询所有主订单id列表-->
+    <select id="queryOrdersListByIds" parameterType="int" resultType="com.movision.mybatis.orders.entity.Orders">
+        SELECT * FROM yw_orders WHERE id IN
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_orders
         where id = #{id,jdbcType=INTEGER}

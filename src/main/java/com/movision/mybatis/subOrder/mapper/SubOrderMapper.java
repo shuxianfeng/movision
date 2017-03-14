@@ -1,9 +1,11 @@
 package com.movision.mybatis.subOrder.mapper;
 
 import com.movision.mybatis.subOrder.entity.SubOrder;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface SubOrderMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,6 +16,8 @@ public interface SubOrderMapper {
     void batchInsertOrders(List<SubOrder> subOrderList);
 
     SubOrder selectByPrimaryKey(Integer id);
+
+    List<SubOrder> queryAllSubOrderList(int[] ids);
 
     int updateByPrimaryKeySelective(SubOrder record);
 

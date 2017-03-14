@@ -18,6 +18,8 @@
     id, porderid, goodsid, combotype, discountid, rom, sum, isdebug, debugid, isdel, 
     type
   </sql>
+
+    <!--基础查询语句-->
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
@@ -28,6 +30,14 @@
     delete from yw_sub_order
     where id = #{id,jdbcType=INTEGER}
   </delete>
+
+    <!--根据订单id查询所有订单中的所有子订单列表-->
+    <select id="queryAllSubOrderList" parameterType="int" resultType="com.movision.mybatis.subOrder.entity.SubOrder">
+        SELECT * FROM yw_sub_order WHERE porderid IN
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
 
     <!--批量插入子订单-->
     <insert id="batchInsertOrders" parameterType="java.util.List">

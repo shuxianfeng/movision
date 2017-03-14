@@ -1,7 +1,9 @@
 package com.movision.mybatis.invoice.mapper;
 
 import com.movision.mybatis.invoice.entity.Invoice;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface InvoiceMapper {
     int deleteByPrimaryKey(Integer id);
 
