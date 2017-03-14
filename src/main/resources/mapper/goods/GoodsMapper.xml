@@ -71,7 +71,7 @@
         GROUP BY d.goodsid
         ) t2
         WHERE t1.id = t2.goodsid
-        LIMIT 10) a
+        LIMIT 5) a
         LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
         ORDER BY vol DESC
@@ -127,7 +127,7 @@
         GROUP BY d.goodsid
         ) t2
         WHERE t1.id = t2.goodsid
-        LIMIT 10) a
+        LIMIT 5) a
         LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
         ORDER BY vol DESC
@@ -163,7 +163,7 @@
               )) a
         LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
-        LIMIT 10;
+        LIMIT 5;
     </select>
 
     <!--查询往期每日神器推荐列表-->
