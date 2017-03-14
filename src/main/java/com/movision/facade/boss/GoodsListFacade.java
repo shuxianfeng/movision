@@ -664,11 +664,12 @@ public class GoodsListFacade {
             List<GoodsComboVo> good = goodsService.findAllC(list.get(i).getComboid());
             for (int j = 0; j < good.size(); j++) {
                 price = good.get(j).getPrice();
-                sum += price;
+                if (price != null) {
+                    sum += price;
+                }
             }
             list.get(i).setList(good);
             list.get(i).setSumprice(sum);
-            System.out.println(list.get(i).getSum());
         }
         return list;
     }
@@ -764,7 +765,9 @@ public class GoodsListFacade {
             for (int j = 0; j < good.size(); j++) {
                 price = good.get(j).getPrice();
                 if (price != null) {
-                    sum += price;
+                    if (price != null) {
+                        sum += price;
+                    }
                 }
             }
             list.get(i).setList(good);
