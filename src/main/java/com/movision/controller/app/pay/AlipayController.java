@@ -36,13 +36,15 @@ public class AlipayController {
 
         Map<String, Object> parammap = alipayFacade.packagePayParam(ordersid);
 
-        if (response.getCode() == 200) {
+        if (response.getCode() == 200 && (int) parammap.get("code") == 200) {
             response.setMessage("拼参及支付宝签名生成成功");
             response.setData(parammap);
-        } else {
+        } else if ((int) parammap.get("code") == 300) {
+            response.setCode(300);
+            response.setMessage("请求的订单号中有订单被取消或订单不存在");
+        } else if (response.getCode() != 200) {
             response.setMessage("拼参及支付宝签名生成失败");
         }
         return response;
     }
-
 }
