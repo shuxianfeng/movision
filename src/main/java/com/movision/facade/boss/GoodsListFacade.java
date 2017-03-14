@@ -667,7 +667,8 @@ public class GoodsListFacade {
                 sum += price;
             }
             list.get(i).setList(good);
-            list.get(i).setSum(sum);
+            list.get(i).setSumprice(sum);
+            System.out.println(list.get(i).getSum());
         }
         return list;
     }
@@ -767,7 +768,7 @@ public class GoodsListFacade {
                 }
             }
             list.get(i).setList(good);
-            list.get(i).setSum(sum);
+            list.get(i).setSumprice(sum);
         }
         return list;
     }
