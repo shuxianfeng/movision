@@ -817,26 +817,6 @@ public class PostFacade {
         return userService.likeQueryPostByNickname(name, pager);
     }
 
-/*    *//**
-     * 查询圈子名称二级菜单列表
-     *
-     * @return
-     *//*
-    public Map<String, Object> queryListByCircleType() {
-        Map<String, Object> map = new HashedMap();
-        //List<Circle> list1 = circleService.queryListByCircleCategoryTo();//查询圈子所有的所属分类
-        List<Category> list = categoryService.queryCircleTypeList();
-        List<List<Circle>> circlename = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {//根据圈子的所属分类添加二级菜单
-            String integer=list.get(i).getCategoryname();
-            List<Circle> circle = circleService.queryListByCircleList(integer);//用于查询圈子名称
-            circlename.add(circle);
-        }
-        Integer num = circleService.queryCircleByNum();
-        map.put("resault", circlename);
-        map.put("num", num);
-        return map;
-    }*/
 
     /**
      * 帖子编辑数据回显
@@ -955,43 +935,43 @@ public class PostFacade {
             post.setId(Integer.parseInt(id));//帖子id
             post.setTitle(title);//帖子标题
             post.setSubtitle(subtitle);//帖子副标题
-            if (type != null && type != "") {
+            if (!StringUtils.isEmpty(type)) {
                 post.setType(type);//帖子类型
             }
-            if (circleid != null && circleid != "") {
+            if (!StringUtils.isEmpty(circleid)) {
                 post.setCircleid(circleid);//圈子id
             }
 
             Video vide = new Video();
-            if (id != null && id != "") {
+            if (!StringUtils.isEmpty(id)) {
                 vide.setPostid(Integer.parseInt(id));
             }
-            if (vid != null && vid != "") {
+            if (!StringUtils.isEmpty(vid)) {
                 vide.setVideourl(vid);
             }
-            if (bannerimgurl != null && bannerimgurl != "") {
+            if (!StringUtils.isEmpty(bannerimgurl)) {
                 vide.setBannerimgurl(bannerimgurl);
             }
             vide.setIntime(new Date());
             Integer in = videoService.updateVideoById(vide);
-            if (coverimg != null && coverimg != "") {
+            if (!StringUtils.isEmpty(coverimg)) {
                 post.setCoverimg(coverimg);//添加帖子封面
             }
             post.setIsactive("0");//设置状态为帖子
             post.setPostcontent(postcontent);//帖子内容
-            if (isessence != null && isessence != "") {
+            if (!StringUtils.isEmpty(isessence)) {
                 post.setIsessence(isessence);//是否为首页精选
             }
-            if (ishot != null && ishot != "") {
+            if (!StringUtils.isEmpty(ishot)) {
                 post.setIshot(ishot);//是否为圈子精选
             }
             post.setIntime(new Date());
-            if (orderid != null && orderid != "") {
+            if (!StringUtils.isEmpty(orderid)) {
                 post.setOrderid(Integer.parseInt(orderid));
             }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date estime = null;
-            if (time != null && time != "") {
+            if (!StringUtils.isEmpty(time)) {
                 try {
                     estime = format.parse(time);
                     post.setEssencedate(estime);
@@ -1030,7 +1010,7 @@ public class PostFacade {
         Date beg = null;
         Date ess = null;
         //结束时间,开始时间
-        if ((endtime != null && endtime != "") && (begintime != null && begintime != "")) {
+        if (!StringUtils.isEmpty(endtime) && !StringUtils.isEmpty(begintime)) {
             try {
                 end = format.parse(endtime);
                 beg = format.parse(begintime);
@@ -1043,7 +1023,7 @@ public class PostFacade {
         map.put("endtime", end);
         map.put("begintime", beg);
         //精选时间
-        if (essencedate != null && essencedate != "") {
+        if (!StringUtils.isEmpty(essencedate)) {
             try {
                 ess = format.parse(essencedate);
                 map.put("essencedate", ess);
@@ -1052,19 +1032,19 @@ public class PostFacade {
             }
         }
         map.put("essencedate", ess);
-        if (title != null && title != "") {
+        if (!StringUtils.isEmpty(title)) {
             map.put("title", title);//帖子标题
         }
-        if (circleid != null && circleid != "") {
+        if (!StringUtils.isEmpty(circleid)) {
             map.put("circleid", circleid);//圈子id
         }
-        if (userid != null && userid != "") {
+        if (!StringUtils.isEmpty(userid)) {
             map.put("userid", userid);//发帖人id
         }
-        if (postcontent != null && postcontent != "") {
+        if (!StringUtils.isEmpty(postcontent)) {
             map.put("postcontent", postcontent);//帖子内容
         }
-        if (pai != null && pai != "") {
+        if (!StringUtils.isEmpty(pai)) {
             map.put("pai", pai);
         }
         List<PostList> list = postService.postSearch(map, pager);
@@ -1093,7 +1073,7 @@ public class PostFacade {
     public List<CommentVo> queryCommentSensitiveWords(String content, String words, String begintime, String endtime, Paging<CommentVo> pager) {
         Date beg = null;
         Date end = null;
-        if ((begintime != null && begintime != "") && (endtime != null && endtime != "")) {
+        if (!StringUtils.isEmpty(begintime) && !StringUtils.isEmpty(endtime)) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 beg = format.parse(begintime);

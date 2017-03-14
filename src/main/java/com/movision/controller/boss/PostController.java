@@ -769,7 +769,7 @@ public class PostController {
     }
 
     /**
-     * 查询商品列表
+     * 查询商品列表（帖子添加商品分享）
      *
      * @param pageNo
      * @param pageSize
@@ -791,7 +791,7 @@ public class PostController {
     }
 
     /**
-     * 条件查询商品列表
+     * 条件查询商品列表（帖子添加商品分享）
      *
      * @param name
      * @param brandname
@@ -819,7 +819,7 @@ public class PostController {
     }
 
     /**
-     * 根据id查询
+     * 根据id查询活动
      *
      * @param id
      * @return
@@ -836,6 +836,13 @@ public class PostController {
         return response;
     }
 
+
+    /**
+     * 上传活动图片
+     *
+     * @param file
+     * @return
+     */
     @ApiOperation(value = "上传活动图片", notes = "上传活动图片", response = Response.class)
     @RequestMapping(value = {"/upload_active_pic"}, method = RequestMethod.POST)
     public Response updateMyInfo(@RequestParam(value = "file", required = false) MultipartFile file) {
@@ -864,22 +871,6 @@ public class PostController {
         return new Response(map);
     }
 
-    /**
-     * 上传帖子相关图片
-     *
-     * @param file
-     * @return
-     */
-    @ApiOperation(value = "上传帖子相关视频", notes = "上传帖子相关视频", response = Response.class)
-    @RequestMapping(value = {"/upload_post_vid"}, method = RequestMethod.POST)
-    public Response updatePostVid(@RequestParam(value = "file", required = false) MultipartFile file) {
-
-        String url = movisionOssClient.uploadObject(file, "img", "post");
-        Map<String, String> map = new HashMap<>();
-        map.put("url", url);
-        map.put("name", FileUtil.getFileNameByUrl(url));
-        return new Response(map);
-    }
 
     /**
      * 上传帖子相关视频
