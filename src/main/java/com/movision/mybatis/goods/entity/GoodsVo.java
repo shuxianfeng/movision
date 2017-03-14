@@ -19,22 +19,6 @@ public class GoodsVo {
 
     private Double comprice;//套餐原价
 
-    public Double getComprice() {
-        return comprice;
-    }
-
-    public void setComprice(Double comprice) {
-        this.comprice = comprice;
-    }
-
-    public String getAttribute() {
-        return attribute;
-    }
-
-    public void setAttribute(String attribute) {
-        this.attribute = attribute;
-    }
-
     private String attribute;//商品标签
 
     private String provincecode;
@@ -43,16 +27,7 @@ public class GoodsVo {
 
     private Integer isself;
 
-
     private Integer collect;//收藏
-
-    public Integer getCollect() {
-        return collect;
-    }
-
-    public void setCollect(Integer collect) {
-        this.collect = collect;
-    }
 
     private Integer isdamage;
 
@@ -74,16 +49,7 @@ public class GoodsVo {
 
     private Integer assess;//评价
 
-    public Integer getAssess() {
-        return assess;
-    }
-
-    public void setAssess(Integer assess) {
-        this.assess = assess;
-    }
-
     private Integer shopid;
-
 
     private Integer iscombo;
 
@@ -92,8 +58,58 @@ public class GoodsVo {
     private Integer isseckill;
 
     private Integer ishomepage;//是否为推荐：0 否 1 是
+
     private Date mintime;
+
     private Date maxtime;
+
+    private Date recommenddate;//推荐日期
+
+    private String typename;//类别名
+
+    private Date onlinetime;
+
+    private Integer isdel;//商品状态
+
+    private Integer ishot;//是否为热门：0 否 1 是
+
+    private Integer isessence;//是否为精选：0 否 1 是
+
+    private String imgurl;//商品缩略小方图
+
+    private String brandname;//品牌名称
+
+    public Double getComprice() {
+        return comprice;
+    }
+
+    public void setComprice(Double comprice) {
+        this.comprice = comprice;
+    }
+
+    public String getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
+    }
+
+    public Integer getCollect() {
+        return collect;
+    }
+
+    public void setCollect(Integer collect) {
+        this.collect = collect;
+    }
+
+    public Integer getAssess() {
+        return assess;
+    }
+
+    public void setAssess(Integer assess) {
+        this.assess = assess;
+    }
 
     public Date getMintime() {
         return mintime;
@@ -111,9 +127,6 @@ public class GoodsVo {
         this.maxtime = maxtime;
     }
 
-    private Date recommenddate;//推荐日期
-    private String typename;//类别名
-
     public String getTypename() {
         return typename;
     }
@@ -121,18 +134,6 @@ public class GoodsVo {
     public void setTypename(String typename) {
         this.typename = typename;
     }
-
-    private Date onlinetime;
-
-    private Integer isdel;//商品状态
-
-    private Integer ishot;//是否为热门：0 否 1 是
-
-    private Integer isessence;//是否为精选：0 否 1 是
-
-    private String imgurl;//商品缩略小方图
-
-    private String brandname;//品牌名称
 
     public String getBrandname() {
         return brandname;
@@ -181,8 +182,6 @@ public class GoodsVo {
     public void setOrigprice(Double origprice) {
         this.origprice = origprice;
     }
-
-
 
     public String getProvincecode() {
         return provincecode;

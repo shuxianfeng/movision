@@ -660,6 +660,7 @@
     <select id="findAllQueryPostByGoodsList" resultType="com.movision.mybatis.goods.entity.GoodsVo">
         SELECT g.id,
         (SELECT brandname FROM yw_brand b WHERE b.brandid=g.brandid) AS brandname,
+        (SELECT img_url FROM yw_goods_img WHERE goodsid=g.id AND type=2) AS imgurl,
         g.name,g.protype,g.isdel,g.origprice,g.price,g.sales,g.stock,g.attribute
         FROM yw_goods g
     </select>
