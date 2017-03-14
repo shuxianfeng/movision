@@ -769,7 +769,7 @@ public class PostController {
     }
 
     /**
-     * 查询商品列表（帖子添加商品分享）
+     * 查询商品列表
      *
      * @param pageNo
      * @param pageSize
@@ -791,7 +791,7 @@ public class PostController {
     }
 
     /**
-     * 条件查询商品列表（帖子添加商品分享）
+     * 条件查询商品列表
      *
      * @param name
      * @param brandname
@@ -803,13 +803,14 @@ public class PostController {
     @ApiOperation(value = "条件查询商品列表", notes = "用于条件搜索接口", response = Response.class)
     @RequestMapping(value = "query_like_goods", method = RequestMethod.POST)
     public Response findAllQueryLikeGoods(@ApiParam(value = "产品名称") @RequestParam(required = false) String name,
+                                          @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
                                           @ApiParam(value = "品牌名称") @RequestParam(required = false) String brandname,
                                           @ApiParam(value = "产品分类") @RequestParam(required = false) String protype,
                                           @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                           @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<GoodsVo> pager = new Paging<GoodsVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<GoodsVo> list = postFacade.findAllQueryLikeGoods(name, brandname, protype, pager);
+        List<GoodsVo> list = postFacade.findAllQueryLikeGoods(name, goodsid, brandname, protype, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -819,7 +820,7 @@ public class PostController {
     }
 
     /**
-     * 根据id查询活动
+     * 根据id查询
      *
      * @param id
      * @return
@@ -838,11 +839,6 @@ public class PostController {
 
 
     /**
-     * 上传活动图片
-     *
-     * @param file
-     * @return
-     */
     @ApiOperation(value = "上传活动图片", notes = "上传活动图片", response = Response.class)
     @RequestMapping(value = {"/upload_active_pic"}, method = RequestMethod.POST)
     public Response updateMyInfo(@RequestParam(value = "file", required = false) MultipartFile file) {

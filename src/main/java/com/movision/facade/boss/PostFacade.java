@@ -1214,11 +1214,12 @@ public class PostFacade {
      * @param pager
      * @return
      */
-    public List<GoodsVo> findAllQueryLikeGoods(String name, String brandname, String protype, Paging<GoodsVo> pager) {
+    public List<GoodsVo> findAllQueryLikeGoods(String name, String goodsid, String brandname, String protype, Paging<GoodsVo> pager) {
         Map map = new HashedMap();
         map.put("name", name);
         map.put("brandname", brandname);
         map.put("protype", protype);
+        map.put("goodsid", goodsid);
         return goodsService.findAllQueryLikeGoods(map, pager);
     }
 
