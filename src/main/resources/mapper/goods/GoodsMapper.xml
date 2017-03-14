@@ -182,7 +182,7 @@
         SELECT a.*,b.img_url AS imgurl
         FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t1.sales, t1.stock, t1.goodsposition
             FROM yw_goods t1
-            WHERE t1.isessence = '1'
+        WHERE t1.isspecial = '1'
              LIMIT 8) a
         LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid

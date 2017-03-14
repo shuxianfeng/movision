@@ -152,11 +152,11 @@ public class AppMallIndexController {
     }
 
     /**
-     * 查询商城首页--精选模块接口
+     * 查询商城首页--特惠模块接口
      *
      * @return
      */
-    @ApiOperation(value = "查询商城首页--精选模块列表接口", notes = "用户用于加载商城首页精选板块数据列表")
+    @ApiOperation(value = "查询商城首页--特惠模块列表接口", notes = "用户用于加载商城首页特惠板块数据列表")
     @RequestMapping(value = "essenceGoods", method = RequestMethod.POST)
     public Response queryEssenceGoods() {
         Response response = new Response();
