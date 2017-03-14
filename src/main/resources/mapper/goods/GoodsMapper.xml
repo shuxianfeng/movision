@@ -1343,4 +1343,7 @@
     <delete id="deletebanner" parameterType="java.lang.String">
         DELETE  FROM  yw_goods_img WHERE  TYPE =0 AND  goodsid=#{goodsid,jdbcType=INTEGER}
     </delete>
+    <update id="delectAllComboGoods" parameterType="java.lang.String">
+        UPDATE  yw_goods SET  isdel=1 WHERE id=#{goodsid,jdbcType=INTEGER}
+    </update>
 </mapper>

@@ -1221,4 +1221,20 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 批量删除
+     *
+     * @param goodsid
+     * @return
+     */
+    public Integer delectAllComboGoods(String goodsid) {
+        try {
+            log.info("批量删除");
+            return goodsMapper.delectAllComboGoods(goodsid);
+        } catch (Exception e) {
+            log.error("批量删除失败", e);
+            throw e;
+        }
+    }
 }

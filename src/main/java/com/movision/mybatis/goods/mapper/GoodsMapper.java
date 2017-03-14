@@ -161,5 +161,5 @@ public interface GoodsMapper {
 
     void deductStock(List<SubOrder> subOrderList);
 
-    Integer delectAllComboGoods(Integer goodsid);//批量删除商品
+    Integer delectAllComboGoods(String goodsid);//批量删除商品
 }

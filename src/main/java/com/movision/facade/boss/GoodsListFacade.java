@@ -967,4 +967,23 @@ public class GoodsListFacade {
         return goodsService.queryBannerImg(goodsid);
     }
 
+    /**
+     * 批量删除
+     *
+     * @param goodsid
+     * @return
+     */
+    public Map<String, Integer> deleteAllComboGoods(String goodsid) {
+        String productids[] = goodsid.split(",");
+        Map<String, Integer> map = new HashedMap();
+        int result = 0;
+        for (int i = 0; i < productids.length; i++) {
+            String goods = productids[i];
+            result = goodsService.delectAllComboGoods(goods);
+        }
+        map.put("result", result);
+        return map;
+
+    }
+
 }

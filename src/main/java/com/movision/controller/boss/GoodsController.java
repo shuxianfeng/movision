@@ -927,4 +927,22 @@ public class GoodsController {
         return response;
     }
 
+    /**
+     * 批量删除
+     *
+     * @param goodsid
+     * @return
+     */
+    @ApiOperation(value = "批量删除", notes = "批量删除", response = Response.class)
+    @RequestMapping(value = "delete_allcombogoods", method = RequestMethod.POST)
+    public Response deleteAllComboGoods(@ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
+        Response response = new Response();
+        Map<String, Integer> map = goodsFacade.deleteAllComboGoods(goodsid);
+        if (response.getCode() == 200) {
+            response.setMessage("删除成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
 }
