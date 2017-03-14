@@ -193,20 +193,6 @@ public class CircleService {
         }
     }
 
-    /**
-     * 查询圈子列表
-     *
-     * @return
-     */
-    public List<CircleVo> queryCircleByList(Integer category) {
-        try {
-            log.info("查询圈子列表");
-            return circleMapper.findAllqueryCircleByList(category);
-        } catch (Exception e) {
-            log.error("查询圈子列表异常");
-            throw e;
-        }
-    }
 
 
     /**
@@ -225,52 +211,6 @@ public class CircleService {
         }
     }
 
-    /**
-     * 查询圈主
-     * @param phone
-     * @return
-     */
-    public User queryCircleBycirclemaster(String phone) {
-        try {
-            log.info("根据圈子id查询圈主");
-            return circleMapper.queryCircleBycirclemaster(phone);
-        } catch (Exception e) {
-            log.error("根据圈子id查询圈主失败");
-            throw e;
-        }
-    }
-
-
-    /**
-     * 查询圈子总数量
-     *
-     * @return
-     */
-    public Integer queryCircleByNum() {
-        try {
-            log.info("查询圈子总数量");
-            return circleMapper.queryCircleByNum();
-        } catch (Exception e) {
-            log.error("查询圈子数量异常");
-            throw e;
-        }
-    }
-
-    /**
-     * 查询帖子所属圈子的名称
-     *
-     * @param circleid
-     * @return
-     */
-    public Circle queryCircleByName(Integer circleid) {
-        try {
-            log.info("查询所属圈子名称");
-            return circleMapper.queryCircleByName(circleid);
-        } catch (Exception e) {
-            log.error("查询所属圈子名称异常");
-            throw e;
-        }
-    }
 
     /**
      * 查询圈子中所有圈子所属分类
@@ -287,84 +227,6 @@ public class CircleService {
         }
     }
 
-    /**
-     * 查询圈子分类
-     * @return
-     */
-    public List<Circle> queryListByCircleCategoryTo() {
-        try {
-            log.info("查询圈子中所有圈子所属分类");
-            return circleMapper.queryListByCircleCategoryTo();
-        } catch (Exception e) {
-            log.error("查询圈子中所有圈子所属分类异常");
-            throw e;
-        }
-    }
-
-    /**
-     * 根据所属圈子查询总数据
-     *
-     * @param categoryid
-     * @return
-     */
-    public List<User> queryCircleUserList(Integer categoryid) {
-        try {
-            log.info("获取圈子所属数据");
-            return circleMapper.queryCircleUserList(categoryid);
-        } catch (Exception e) {
-            log.error("获取圈子所属数据异常");
-            throw e;
-        }
-    }
-
-    /**
-     * 根据所属圈子查询圈主
-     *
-     * @param categoryid
-     * @return
-     */
-    public List<User> queryCircleMan(Integer categoryid) {
-        try {
-            log.info("查询圈子分类圈主");
-            return circleMapper.queryCircleMan(categoryid);
-        } catch (Exception e) {
-            log.error("获取圈子分类圈主异常");
-            throw e;
-        }
-    }
-
-
-    /**
-     * 查询圈子帖子总数，精贴总数，关注总数，支持人数和时间
-     * @param categoryid
-     * @return
-     */
-    public CircleIndexList queryFollowAndNum(Integer categoryid) {
-        try {
-            log.info("查询圈子帖子总数，精贴总数，关注总数，支持人数和时间");
-            return circleMapper.queryFollowAndNum(categoryid);
-        } catch (Exception e) {
-            log.error("查询圈子帖子总数，精贴总数，关注总数，支持人数和时间异常");
-            throw e;
-        }
-    }
-
-
-
-    /**
-     * 查询圈子帖子数，关注数
-     * @param circleid
-     * @return
-     */
-    public CircleVo queryCircleSum(Integer circleid) {
-        try {
-            log.info("查询圈子帖子数，关注数");
-            return circleMapper.queryCircleSum(circleid);
-        } catch (Exception e) {
-            log.error("查询圈子帖子数，关注速异常");
-            throw e;
-        }
-    }
 
     /**
      * 查询圈子所有的名称和id
@@ -580,20 +442,6 @@ public class CircleService {
         }
     }
 
-    /**
-     * 查询待审核圈子
-     *
-     * @return
-     */
-    public List<CircleVo> queryCircleAwaitAudit(Map map) {
-        try {
-            log.info("查询待审核圈子");
-            return circleMapper.queryCircleAwaitAudit(map);
-        } catch (Exception e) {
-            log.error("查询待审核圈子异常");
-            throw e;
-        }
-    }
 
     /**
      * 审核圈子

@@ -46,29 +46,11 @@ public interface CircleMapper {
 
     int queryCircleOwner(int circleid);
 
-    List<CircleVo> findAllqueryCircleByList(Integer category);
-
     List<CircleVo> queryCircleByLikeList(Map map);
-
-    User queryCircleBycirclemaster(String phone);
-
-    Integer queryCircleByNum();
-
-    Circle queryCircleByName(Integer circleid);
 
     List<CircleIndexList> queryListByCircleCategory(Map map);
 
-    List<Circle> queryListByCircleCategoryTo();
-
     List<Circle> queryListByCircleList(Map categoryid);
-
-    List<User> queryCircleUserList(Integer categoryid);
-
-    List<User> queryCircleMan(Integer categoryid);
-
-    CircleIndexList queryFollowAndNum(Integer categoryid);
-
-    CircleVo queryCircleSum(Integer circleid);
 
     List<Circle> queryDiscoverList();
 
@@ -95,8 +77,6 @@ public interface CircleMapper {
     int insertCircle(CircleDetails circleDetails);
 
     List<Circle> findAllMyFollowCircleList(RowBounds rowBounds, Map map);
-
-    List<CircleVo> queryCircleAwaitAudit(Map map);
 
     int updateAuditCircle(Map map);
 
