@@ -70,9 +70,9 @@ public class GoodsController {
      */
     @ApiOperation(value = "删除商品", notes = "删除商品", response = Response.class)
     @RequestMapping(value = "delete_goods", method = RequestMethod.POST)
-    public Response deleteGoods(@ApiParam(value = "商品编号") @RequestParam Integer id) {
+    public Response deleteGoods(@ApiParam(value = "商品编号") @RequestParam String id) {
         Response response = new Response();
-        int result = goodsFacade.deleteGoods(id);
+        Map<String, Integer> result = goodsFacade.deleteGoods(id);
         if (response.getCode() == 200) {
             response.setMessage("删除成功");
         }
@@ -817,9 +817,10 @@ public class GoodsController {
     public Response updateComDetail(@ApiParam(value = "套餐id") @RequestParam String comboid,
                                     @ApiParam(value = "套餐名字") @RequestParam(required = false) String comboname,
                                     @ApiParam(value = "图片地址") @RequestParam(required = false) String imgurl,
-                                    @ApiParam(value = "折后价") @RequestParam(required = false) String combodiscountprice) {
+                                    @ApiParam(value = "折后价") @RequestParam(required = false) String combodiscountprice,
+                                    @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.updateComDetail(imgurl, comboname, combodiscountprice, comboid);
+        Map<String, Integer> map = goodsFacade.updateComDetail(imgurl, comboname, combodiscountprice, comboid, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("修改成功");
         }

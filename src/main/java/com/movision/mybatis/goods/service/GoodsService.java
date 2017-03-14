@@ -379,7 +379,7 @@ public class GoodsService {
      * @param id
      * @return
      */
-    public int deleteGoods(Integer id) {
+    public int deleteGoods(String id) {
         try {
             log.info("删除商品");
             return goodsMapper.deleteGoods(id);
@@ -1234,6 +1234,22 @@ public class GoodsService {
             return goodsMapper.delectAllComboGoods(goodsid);
         } catch (Exception e) {
             log.error("批量删除失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 删除套餐
+     *
+     * @param goodsid
+     * @return
+     */
+    public Integer deleteByComGoods(String goodsid) {
+        try {
+            log.info("删除套餐");
+            return goodsMapper.deleteByComGoods(goodsid);
+        } catch (Exception e) {
+            log.error("删除套餐", e);
             throw e;
         }
     }

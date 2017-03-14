@@ -61,8 +61,13 @@ public class GoodsListFacade {
      * @param id
      * @return
      */
-    public int deleteGoods(Integer id) {
-        return goodsService.deleteGoods(id);
+    public Map<String, Integer> deleteGoods(String id) {
+        int result = goodsService.deleteGoods(id);
+        int res = goodsService.deleteByComGoods(id);
+        Map<String, Integer> map = new HashedMap();
+        map.put("result", result);
+        map.put("res", res);
+        return map;
     }
 
     /**
@@ -783,12 +788,14 @@ public class GoodsListFacade {
         for (int i = 0; i < list.size(); i++) {
             Double sum = 0.0;
             List<GoodsComboVo> good = goodsService.findAllC(list.get(i).getComboid());
+            int re = goodsService.queryAllStock(comboid);
             for (int j = 0; j < good.size(); j++) {
                 Double price = good.get(j).getPrice();
                 if (price != null) {
                     sum += price;
                 }
             }
+            list.get(i).setStock(re);
             list.get(i).setList(good);
             list.get(i).setSumprice(sum);
         }
@@ -841,15 +848,28 @@ public class GoodsListFacade {
      * @param combodiscountprice
      * @return
      */
-    public Map<String, Integer> updateComDetail(String imgurl, String comboname, String combodiscountprice, String comboid) {
+    public Map<String, Integer> updateComDetail(String imgurl, String comboname, String combodiscountprice, String comboid, String goodsid) {
         Combo goodsComboVo = new Combo();
         goodsComboVo.setComboid(Integer.parseInt(comboid));
         goodsComboVo.setCombodiscountprice(Double.parseDouble(combodiscountprice));
         goodsComboVo.setComboname(comboname);
         goodsComboVo.setImgurl(imgurl);
         int res = goodsService.updateComDetail(goodsComboVo);
+        String productids[] = goodsid.split(",");
+        int re = goodsService.deleteComGoods(Integer.parseInt(comboid));
+        int result = 0;
+        GoodsCombo good = new GoodsCombo();
+        good.setComboid(Integer.parseInt(comboid));
+        String goods;
+        for (int i = 0; i < productids.length; i++) {
+            goods = productids[i];
+            good.setGoodsid(Integer.parseInt(goods));
+            result = goodsService.addGoods(good);
+        }
         Map<String, Integer> map = new HashedMap();
         map.put("res", res);
+        map.put("re", re);
+        map.put("result", result);
         return map;
 
     }
@@ -977,11 +997,14 @@ public class GoodsListFacade {
         String productids[] = goodsid.split(",");
         Map<String, Integer> map = new HashedMap();
         int result = 0;
+        int res = 0;
         for (int i = 0; i < productids.length; i++) {
             String goods = productids[i];
             result = goodsService.delectAllComboGoods(goods);
+            res = goodsService.deleteByComGoods(goods);
         }
         map.put("result", result);
+        map.put("res", res);
         return map;
 
     }

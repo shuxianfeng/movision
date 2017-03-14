@@ -58,7 +58,7 @@ public interface GoodsMapper {
 
     List<GoodsVo> findAllGoodsList(RowBounds rowBounds);//查询商品列表
 
-    int deleteGoods(Integer id);//删除商品
+    int deleteGoods(String id);//删除商品
 
     int deleteAssessment(Integer id);//删除评价
     int AddToGoods(Integer id);//上架
@@ -162,4 +162,6 @@ public interface GoodsMapper {
     void deductStock(List<SubOrder> subOrderList);
 
     Integer delectAllComboGoods(String goodsid);//批量删除商品
+
+    Integer deleteByComGoods(String goodsid);
 }

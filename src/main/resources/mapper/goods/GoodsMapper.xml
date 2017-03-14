@@ -555,7 +555,7 @@
         isessence = #{isessence,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-    <update id="deleteGoods" parameterType="java.lang.Integer">
+    <update id="deleteGoods" parameterType="java.lang.String">
     UPDATE yw_goods SET isdel=1 WHERE  id=#{id,jdbcType=INTEGER}
 </update>
     <delete id="deleteAssessment" parameterType="java.lang.Integer">
@@ -1084,7 +1084,7 @@
     </insert>
     <select id="findAllC" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodscombo.entity.GoodsComboVo">
-        SELECT g.comboid,g.goodsid,d.price,d.`name` FROM yw_goods_combo g
+        SELECT g.comboid,g.goodsid,d.price,d.`name`,d.stock FROM yw_goods_combo g
         LEFT JOIN yw_goods d ON d.id=g.goodsid WHERE g.comboid=#{comboid,jdbcType=INTEGER} AND d.isdel=0
     </select>
     <select id="findAllComboT" resultType="com.movision.mybatis.goodscombo.entity.GoodsComboVo">
@@ -1157,7 +1157,7 @@
     </select>
     <select id="queryAllStock" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT MIN(d.stock) FROM yw_goods_combo g
-        LEFT JOIN yw_goods d ON d.id=g.goodsid WHERE g.comboid=1
+        LEFT JOIN yw_goods d ON d.id=g.goodsid WHERE g.comboid=#{comboid,jdbcType=INTEGER}
     </select>
     <update id="updateComDetail" parameterType="com.movision.mybatis.combo.entity.Combo">
         update yw_combo
@@ -1347,4 +1347,7 @@
     <update id="delectAllComboGoods" parameterType="java.lang.String">
         UPDATE  yw_goods SET  isdel=1 WHERE id=#{goodsid,jdbcType=INTEGER}
     </update>
+    <delete id="deleteByComGoods" parameterType="java.lang.String">
+        DELETE  FROM  yw_goods_combo WHERE  goodsid=#{goodsid,jdbcType=INTEGER}
+    </delete>
 </mapper>
