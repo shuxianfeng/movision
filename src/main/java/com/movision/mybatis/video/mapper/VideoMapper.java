@@ -14,4 +14,6 @@ public interface VideoMapper {
     int updateByPrimaryKeySelective(Video record);
 
     int updateByPrimaryKey(Video record);
+
+    int updateVoid(Video video);
 }

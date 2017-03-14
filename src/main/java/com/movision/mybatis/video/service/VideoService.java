@@ -29,7 +29,7 @@ public class VideoService {
     public Integer updateVideoById(Video vide) {
         try {
             log.info("修改视频信息");
-            return videoMapper.updateByPrimaryKeySelective(vide);
+            return videoMapper.updateVoid(vide);
         } catch (Exception e) {
             log.error("修改视频信息异常");
             throw e;

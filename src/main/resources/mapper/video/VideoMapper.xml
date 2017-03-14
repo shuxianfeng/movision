@@ -143,6 +143,40 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <update id="updateVoid" parameterType="com.movision.mybatis.video.entity.Video">
+        update yw_video
+        <set>
+            <if test="videoname != null">
+                videoname = #{videoname,jdbcType=VARCHAR},
+            </if>
+            <if test="videourl != null">
+                videourl = #{videourl,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="playnum != null">
+                playnum = #{playnum,jdbcType=INTEGER},
+            </if>
+            <if test="isrecommend != null">
+                isrecommend = #{isrecommend,jdbcType=INTEGER},
+            </if>
+            <if test="isbanner != null">
+                isbanner = #{isbanner,jdbcType=INTEGER},
+            </if>
+            <if test="bannerimgurl != null">
+                bannerimgurl = #{bannerimgurl,jdbcType=VARCHAR},
+            </if>
+            <if test="orderid != null">
+                orderid = #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where postid = #{postid,jdbcType=INTEGER}
+    </update>
     <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.video.entity.Video">
     update yw_video
     set postid = #{postid,jdbcType=INTEGER},
