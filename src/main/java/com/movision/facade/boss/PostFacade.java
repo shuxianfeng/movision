@@ -1209,18 +1209,18 @@ public class PostFacade {
      * 用于条件查询商品列表（帖子使用）
      *
      * @param name
-     * @param brandname
+     * @param brandid
      * @param protype
      * @param pager
      * @return
      */
-    public List<GoodsVo> findAllQueryLikeGoods(String name, String goodsid, String brandname, String protype, Paging<GoodsVo> pager) {
+    public List<GoodsVo> findAllQueryLikeGoods(String name, String goodsid, String brandid, String protype, Paging<GoodsVo> pager) {
         Map map = new HashedMap();
         if (!StringUtils.isEmpty(name)) {
             map.put("name", name);
         }
-        if (!StringUtils.isEmpty(brandname)) {
-            map.put("brandname", brandname);
+        if (!StringUtils.isEmpty(brandid)) {
+            map.put("brandid", brandid);
         }
         if (!StringUtils.isEmpty(protype)) {
             map.put("protype", protype);

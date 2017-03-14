@@ -794,7 +794,7 @@ public class PostController {
      * 条件查询商品列表
      *
      * @param name
-     * @param brandname
+     * @param brandid
      * @param protype
      * @param pageNo
      * @param pageSize
@@ -804,13 +804,13 @@ public class PostController {
     @RequestMapping(value = "query_like_goods", method = RequestMethod.POST)
     public Response findAllQueryLikeGoods(@ApiParam(value = "产品名称") @RequestParam(required = false) String name,
                                           @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
-                                          @ApiParam(value = "品牌名称") @RequestParam(required = false) String brandname,
+                                          @ApiParam(value = "品牌名称") @RequestParam(required = false) String brandid,
                                           @ApiParam(value = "产品分类") @RequestParam(required = false) String protype,
                                           @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                           @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<GoodsVo> pager = new Paging<GoodsVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<GoodsVo> list = postFacade.findAllQueryLikeGoods(name, goodsid, brandname, protype, pager);
+        List<GoodsVo> list = postFacade.findAllQueryLikeGoods(name, goodsid, brandid, protype, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
