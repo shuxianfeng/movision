@@ -635,7 +635,7 @@
         UPDATE yw_goods SET ishot=1 WHERE id=#{id,jdbcType=INTEGER}
     </update>
     <update id="recommendisessence" parameterType="java.lang.Integer">
-        UPDATE yw_goods SET isessence=1 WHERE id=#{id,jdbcType=INTEGER}
+        UPDATE yw_goods SET isspecial=1 WHERE id=#{id,jdbcType=INTEGER}
     </update>
 
     <update id="updateDate" parameterType="com.movision.mybatis.goods.entity.GoodsVo">

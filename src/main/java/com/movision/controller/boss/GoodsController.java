@@ -191,7 +191,7 @@ public class GoodsController {
      * @param id
      * @return
      */
-    @ApiOperation(value = "推荐到精选", notes = "推荐到精选", response = Response.class)
+    @ApiOperation(value = "推荐到特惠", notes = "推荐到特惠", response = Response.class)
     @RequestMapping(value = "recommend_isessence", method = RequestMethod.POST)
     public Response recommendisessence(@ApiParam(value = "商品id") @RequestParam Integer id) {
         Response response = new Response();
