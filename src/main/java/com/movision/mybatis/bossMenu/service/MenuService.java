@@ -2,6 +2,7 @@ package com.movision.mybatis.bossMenu.service;
 
 import com.movision.mybatis.bossMenu.entity.AuthMenu;
 import com.movision.mybatis.bossMenu.entity.Menu;
+import com.movision.mybatis.bossMenu.entity.MenuVo;
 import com.movision.mybatis.bossMenu.mapper.MenuMapper;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
@@ -142,5 +143,35 @@ public class MenuService {
         }
     }
 
+    /**
+     * 查询首页侧边栏父级菜单
+     *
+     * @return
+     */
+    public List<MenuVo> querySidebarFather() {
+        try {
+            log.info("查询首页侧边栏父级菜单");
+            return menuMapper.querySidebarFather();
+        } catch (Exception e) {
+            log.error("查询首页侧边栏父级菜单异常");
+            throw e;
+        }
+    }
+
+
+    /**
+     * 查询首页侧边栏子菜单
+     *
+     * @return
+     */
+    public List<MenuVo> querySidebarSon() {
+        try {
+            log.info("查询首页侧边栏子菜单");
+            return menuMapper.querySidebarSon();
+        } catch (Exception e) {
+            log.error("查询首页侧边栏子菜单异常");
+            throw e;
+        }
+    }
 
 }

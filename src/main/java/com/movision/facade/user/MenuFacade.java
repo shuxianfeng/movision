@@ -5,6 +5,7 @@ import com.movision.exception.BusinessException;
 import com.movision.mybatis.bossMenu.entity.AuthMenu;
 import com.movision.mybatis.bossMenu.entity.Menu;
 import com.movision.mybatis.bossMenu.entity.MenuDetail;
+import com.movision.mybatis.bossMenu.entity.MenuVo;
 import com.movision.mybatis.bossMenu.service.MenuService;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.pagination.model.Paging;
@@ -171,5 +172,27 @@ public class MenuFacade {
                 }
             }
         }
+    }
+
+    /**
+     * 查询首页侧边栏
+     *
+     * @return
+     */
+    public List<MenuVo> querySidebar() {
+        List<MenuVo> father = menuService.querySidebarFather();
+        List<MenuVo> son = menuService.querySidebarSon();
+        for (int i = 0; i < father.size(); i++) {
+            List<MenuVo> mu = new ArrayList<>();
+            for (int j = 0; j < son.size(); j++) {
+                int z = son.get(j).getPid();
+                int f = father.get(i).getId();
+                if (z == f) {
+                    mu.add(son.get(j));
+                }
+            }
+            father.get(i).setSun(mu);
+        }
+        return father;
     }
 }

@@ -2,6 +2,7 @@ package com.movision.mybatis.bossMenu.mapper;
 
 import com.movision.mybatis.bossMenu.entity.AuthMenu;
 import com.movision.mybatis.bossMenu.entity.Menu;
+import com.movision.mybatis.bossMenu.entity.MenuVo;
 import com.movision.mybatis.role.entity.Role;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
@@ -40,4 +41,8 @@ public interface MenuMapper {
     List<AuthMenu> selectAuthroizeChildrenMenu(@Param("roleid") Integer roleid);
 
     int isExistSameName(Menu menu);
+
+    List<MenuVo> querySidebarFather();
+
+    List<MenuVo> querySidebarSon();
 }

@@ -7,6 +7,7 @@ import com.movision.facade.user.RoleFacade;
 import com.movision.facade.user.RoleMenuRelationFacade;
 import com.movision.mybatis.bossMenu.entity.Menu;
 import com.movision.mybatis.bossMenu.entity.MenuDetail;
+import com.movision.mybatis.bossMenu.entity.MenuVo;
 import com.movision.mybatis.role.entity.Role;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -123,5 +124,17 @@ public class MenuController {
         return response;
     }
 
+
+    @ApiOperation(value = "查询首页侧边栏", notes = "用于查询后台系统侧边栏接口", response = Response.class)
+    @RequestMapping(value = "query_sidebar", method = RequestMethod.POST)
+    public Response querySidebar() {
+        Response response = new Response();
+        List<MenuVo> list = menuFacade.querySidebar();
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
+        return response;
+    }
 
 }
