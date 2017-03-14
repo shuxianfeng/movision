@@ -1121,14 +1121,16 @@
             AND c.intime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
         </if>
         <if test="allstatue==3  and minrex!=null and minrex!='' and maxrex!=null and maxrex!=''">
-            AND (SELECT SUM(g.price) FROM yw_goods g WHERE c.comboid=g.id) BETWEEN #{minrex,jdbcType=DOUBLE} AND
+            AND (SELECT SUM(g.price) price FROM yw_goods g LEFT JOIN yw_goods_combo coo ON coo.goodsid=g.id WHERE
+            coo.comboid=c.comboid) BETWEEN #{minrex,jdbcType=DOUBLE} AND
             #{maxrex,jdbcType=DOUBLE}
         </if>
         <if test="name!=null and name!=''">
             AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
         <if test="pai==2">
-            ORDER BY (SELECT SUM(g.price) FROM yw_goods g WHERE c.comboid=g.id) DESC
+            ORDER BY (SELECT SUM(g.price) price FROM yw_goods g LEFT JOIN yw_goods_combo coo ON coo.goodsid=g.id WHERE
+            coo.comboid=c.comboid) DESC
         </if>
         <if test="pai==0">
             ORDER BY (SELECT COUNT(1) FROM yw_sub_order o WHERE o.combotype=c.comboid ) DESC

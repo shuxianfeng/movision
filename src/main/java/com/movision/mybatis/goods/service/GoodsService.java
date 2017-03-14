@@ -1052,14 +1052,14 @@ public class GoodsService {
      * 根据id查询商品信息
      *
      * @param comboid
-     * @param pager
+     * @param
      * @return
      */
-    public List<GoodsCom> findAllGoods(Integer comboid, Paging<GoodsCom> pager) {
+    public List<GoodsCom> findAllGoods(Integer comboid) {
 
         try {
             log.info("根据id查询商品信息");
-            return goodsMapper.findAllGoods(comboid, pager.getRowBounds());
+            return goodsMapper.findAllGoods(comboid);
         } catch (Exception e) {
             log.error("根据id查询商品信息失败", e);
             throw e;

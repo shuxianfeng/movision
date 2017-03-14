@@ -775,11 +775,12 @@ public class GoodsListFacade {
      * 根据套餐id查询商品
      *
      * @param comboid
-     * @param pager
+     * @param
      * @return
      */
-    public List<GoodsCom> findAllGoods(Integer comboid, Paging<GoodsCom> pager) {
-        List<GoodsCom> list = goodsService.findAllGoods(comboid, pager);
+    public Map<String, Object> findAllGoods(Integer comboid) {
+        Map<String, Object> map = new HashedMap();
+        List<GoodsCom> list = goodsService.findAllGoods(comboid);
         Double origprice = 0.0;
         int sales = 0;
         int stock = 0;
@@ -803,8 +804,9 @@ public class GoodsListFacade {
         goodsCom.setSumstock(sumstock);
         goodsCom.setSumorigprice(sumorigprice);
         goodsCom.setSumprice(sumprice);
-        list.add(goodsCom);
-        return list;
+        map.put("goodsCom", goodsCom);
+        map.put("list", list);
+        return map;
     }
 
     /**

@@ -138,7 +138,7 @@ public interface GoodsMapper {
 
     List<GoodsComboVo> findByIdCom(Integer comboid);//根据id查询详情
 
-    List<GoodsCom> findAllGoods(Integer comboid, RowBounds rowBounds);//根据套餐id查询商品信息
+    List<GoodsCom> findAllGoods(Integer comboid);//根据套餐id查询商品信息
 
     Integer queryAllStock(Integer comboid);//根据套餐id查询最小库存
 
