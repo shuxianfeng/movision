@@ -680,8 +680,8 @@
 
     <select id="findAllQueryLikeGoods" parameterType="java.util.Map"
             resultType="com.movision.mybatis.goods.entity.GoodsVo">
-        SELECT g.id,
-        b.brandname,
+        SELECT g.id,b.brandname,
+        (SELECT img_url FROM yw_goods_img WHERE goodsid=g.id AND type=2) AS imgurl,
         g.name,g.protype,g.isdel,g.origprice,g.price,g.sales,g.stock,g.attribute
         FROM yw_goods g LEFT JOIN yw_brand b ON g.brandid=b.brandid WHERE 1
         <if test="brandname!=null">
@@ -689,6 +689,9 @@
         </if>
         <if test="name!=null">
             AND g.name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="goodsid!=null">
+            AND g.id=#{goodsid,jdbcType=INTEGER}
         </if>
         <if test="protype!=null">
             AND g.protype=#{protype,jdbcType=INTEGER}

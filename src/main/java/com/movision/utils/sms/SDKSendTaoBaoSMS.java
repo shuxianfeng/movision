@@ -36,7 +36,7 @@ public class SDKSendTaoBaoSMS {
         try {
             req.setExtend("123456");
             req.setSmsType("normal");
-            req.setSmsFreeSignName("登录验证");   //申请的签名名称
+            req.setSmsFreeSignName("美番");   //申请的签名名称
             req.setSmsParamString(params);
             req.setRecNum(mobile);  //接受的手机号码
             req.setSmsTemplateCode(templateCode);   //模板code

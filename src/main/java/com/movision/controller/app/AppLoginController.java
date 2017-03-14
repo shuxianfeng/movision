@@ -18,6 +18,8 @@ import com.movision.utils.DateUtils;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.VerifyCodeUtils;
 import com.movision.utils.im.CheckSumBuilder;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
+import com.movision.utils.sms.SDKSendSms;
 import com.taobao.api.ApiException;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -85,8 +87,9 @@ public class AppLoginController {
         map.put("time", Constants.sms_time);
         Gson gson = new Gson();
         String json = gson.toJson(map);
-        // TODO: 2017/2/3 短信平台未开通
-//        SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("register_code_sms_template_code"));
+
+        SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("login_app_sms_template_code"));
+
         //验证信息放入session保存
         Validateinfo info = new Validateinfo();
         info.setCreateTime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
