@@ -116,6 +116,16 @@ public class GoodsCom {
         this.isdel = isdel;
     }
 
+    private String imgurl;
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
+    }
+
     private Double sumorigprice;//总价格
     private Double sumprice;//总折扣价
     private Integer sumsales;//总销量
