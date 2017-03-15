@@ -189,7 +189,7 @@ public class AlipayFacade {
             //校验签名
             boolean signVerified = AlipaySignature.rsaCheck(alipay_trade_app_pay_response, sign, alipublickey, charsets, sign_type);
 
-            if (!signVerified) {
+            if (signVerified) {
                 //验签通过
                 //解析原始字符串，持久化存储处理结果
                 JSONObject jObject = JSONObject.parseObject(alipay_trade_app_pay_response);
