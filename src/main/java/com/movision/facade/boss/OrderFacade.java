@@ -518,6 +518,7 @@ public class OrderFacade {
             afterservice.setProcessingstatus(1);
             afterservice.setAftersalestatus(5);
         }
+        afterservice.setRefundamount(Double.parseDouble(refundamount));
         int result = bossOrderService.updateAfterService(afterservice);
         map.put("result", result);
         return map;
