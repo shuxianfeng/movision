@@ -1179,6 +1179,13 @@
         WHERE comboid= #{comboid,jdbcType=INTEGER}
     </update>
 
+    <!--支付成功后更新商品库存-->
+    <update id="updateStock" parameterType="java.util.Map">
+        UPDATE yw_goods
+        SET sales = sales + #{sum,jdbcType=INTEGER}
+        WHERE id = #{goodsid,jdbcType=INTEGER}
+    </update>
+
     <insert id="addCom" parameterType="com.movision.mybatis.combo.entity.Combo">
         <selectKey keyProperty="id" order="AFTER" resultType="Integer">
             select LAST_INSERT_ID()

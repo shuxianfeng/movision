@@ -1,5 +1,6 @@
 package com.movision.mybatis.orders.service;
 
+import com.movision.mybatis.goods.mapper.GoodsMapper;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.mapper.InvoiceMapper;
 import com.movision.mybatis.orders.entity.Orders;
@@ -33,6 +34,9 @@ public class OrderService {
 
     @Autowired
     private InvoiceMapper invoiceMapper;
+
+    @Autowired
+    private GoodsMapper goodsMapper;
 
     public List<Orders> findAllMyOrderList(Paging<Orders> paging, Map<String, Object> map) {
         try {
@@ -110,6 +114,26 @@ public class OrderService {
             return subOrderMapper.queryAllSubOrderList(ids);
         } catch (Exception e) {
             log.error("根据订单id数组查询所有子订单列表失败");
+            throw e;
+        }
+    }
+
+    public void updateOrder(Map<String, Object> parammap) {
+        try {
+            log.info("支付回调更新订单信息");
+            ordersMapper.updateOrder(parammap);
+        } catch (Exception e) {
+            log.error("支付回调更新订单信息失败");
+            throw e;
+        }
+    }
+
+    public void updateStock(Map<String, Object> map) {
+        try {
+            log.info("更新数据库商品销量数据");
+            goodsMapper.updateStock(map);
+        } catch (Exception e) {
+            log.error("更新数据库商品销量数据失败");
             throw e;
         }
     }

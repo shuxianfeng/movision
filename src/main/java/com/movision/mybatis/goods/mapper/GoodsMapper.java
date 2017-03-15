@@ -164,4 +164,6 @@ public interface GoodsMapper {
     Integer delectAllComboGoods(String goodsid);//批量删除商品
 
     Integer deleteByComGoods(String goodsid);
+
+    void updateStock(Map<String, Object> map);
 }

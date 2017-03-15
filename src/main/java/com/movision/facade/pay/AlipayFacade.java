@@ -1,10 +1,12 @@
 package com.movision.facade.pay;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.service.OrderService;
 import com.movision.mybatis.subOrder.entity.SubOrder;
+import com.movision.utils.UpdateOrderPayBack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.movision.utils.propertiesLoader.AlipayPropertiesLoader;
 
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,6 +32,9 @@ public class AlipayFacade {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private UpdateOrderPayBack updateOrderPayBack;
 
     /**
      * 拼装支付宝支付请求入参
@@ -84,7 +90,7 @@ public class AlipayFacade {
             String appprivatekey = AlipayPropertiesLoader.getValue("private_key");//应用私钥（商户的私钥）
 //        String alipublickey = AlipayPropertiesLoader.getValue("alipay_public_key");//支付宝公钥（请求接口入参目前未用到）
             String alipaygateway = AlipayPropertiesLoader.getValue("alipay_gateway");//支付宝请求网关
-            String seller_id = AlipayPropertiesLoader.getValue("seller_email");//收款支付宝账号
+            String seller_id = AlipayPropertiesLoader.getValue("seller_id");//收款支付宝用户号UID
 
             //请求报文体
             String biz_content = "{" + "\"body\":\"" + body + "\"," + // 订单商品的整体描述（取所有主订单的id,逗号隔开）
@@ -160,5 +166,79 @@ public class AlipayFacade {
 
         }
         return map;
+    }
+
+    /**
+     * 支付宝支付后，APP前台同步通知接口
+     */
+    public int alipayback(String resultStatus, String result) throws AlipayApiException, ParseException {
+        int flag = 0;//设置标志位
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+
+        if (resultStatus.equals("9000") || resultStatus.equals("8000") || resultStatus.equals("4000") || resultStatus.equals("6001") ||
+                resultStatus.equals("6002") || resultStatus.equals("6004")) {
+            //解析json
+            JSONObject jSONObject = JSONObject.parseObject(result);
+            String sign = (String) jSONObject.get("sign");//签名（用于验签）
+            String sign_type = (String) jSONObject.get("sign_type");//签名类型
+            String alipay_trade_app_pay_response = jSONObject.getString("alipay_trade_app_pay_response");//签名原始字符串
+            String alipublickey = AlipayPropertiesLoader.getValue("alipay_public_key");//支付宝公钥
+            String charsets = "GBK";
+
+            //校验签名
+            boolean signVerified = AlipaySignature.rsaCheck(alipay_trade_app_pay_response, sign, alipublickey, charsets, sign_type);
+
+            if (!signVerified) {
+                //验签通过
+                //解析原始字符串，持久化存储处理结果
+                JSONObject jObject = JSONObject.parseObject(alipay_trade_app_pay_response);
+                String code = (String) jObject.get("code");//结果码
+                String msg = (String) jObject.get("msg");//处理结果的描述
+                String app_id = (String) jObject.get("app_id");//支付宝分配给开发者的应用Id（未使用）
+                String out_trade_no = (String) jObject.get("out_trade_no");//商户网站唯一订单号
+                String trade_no = (String) jObject.get("trade_no");//该交易在支付宝系统中的交易流水号,最长64位
+                String total_amount = (String) jObject.get("total_amount");//该笔订单的资金总额，单位为RMB-Yuan。取值范围为[0.01,100000000.00]，精确到小数点后两位。
+                String seller_id = (String) jObject.get("seller_id");//收款支付宝账号对应的支付宝唯一用户号。以2088开头的纯16位数字（未使用）
+                String charset = (String) jObject.get("charset");//编码格式（未使用）
+                String timestamp = (String) jObject.get("timestamp");//时间
+
+                Date intime = df.parse(timestamp);//转化后的时间
+
+                if (code.equals("10000")) {
+                    //接口调用成功,持久化存储
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                    log.info("订单实付总金额>>>>>>>>>>>>>>>>>>>>>>>>" + total_amount);
+                    String[] tradenostr = out_trade_no.split(",");
+                    int[] tradenoarray = new int[tradenostr.length];//获取主订单号int数组
+                    for (int i = 0; i < tradenostr.length; i++) {
+                        tradenoarray[i] = Integer.parseInt(tradenostr[i]);
+                    }
+
+                    //更改订单状态，记录流水号、实际支付金额、交易时间、支付方式
+                    int type = 1;//支付宝类型为1  微信为2
+                    updateOrderPayBack.updateOrder(tradenoarray, trade_no, intime, type);
+
+                } else if (code.equals("20000")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                } else if (code.equals("20001")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                } else if (code.equals("40001")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                } else if (code.equals("40002")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                } else if (code.equals("40004")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                } else if (code.equals("40006")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                }
+                flag = 1;
+            } else {
+                //验签失败
+                flag = -1;
+            }
+        }
+
+        return flag;
     }
 }

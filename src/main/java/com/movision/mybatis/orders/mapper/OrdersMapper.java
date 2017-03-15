@@ -19,6 +19,8 @@ public interface OrdersMapper {
 
     List<Orders> queryOrdersListByIds(int[] ids);
 
+    void updateOrder(Map<String, Object> parammap);
+
     Orders selectByPrimaryKey(Integer id);
 
     String queryMaxOrderNumber(String paramstr);
