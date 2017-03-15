@@ -458,16 +458,7 @@
     <!--支付回调更新订单信息-->
     <update id="updateOrder" parameterType="java.util.Map">
         UPDATE yw_orders
-        SET realmoney = money
-        (CASE WHEN discouponmoney IS NOT NULL THEN
-        - discouponmoney
-        ELSE - 0
-        END
-        CASE WHEN dispointmoney IS NOT NULL THEN
-        - dispointmoney
-        ELSE - 0
-        END)
-        ,
+        SET realmoney = money - discouponmoney - dispointmoney,
         paytype = #{type,jdbcType=INTEGER},
         paytime = #{intime,jdbcType=TIMESTAMP},
         paycode = #{trade_no,jdbcType=VARCHAR},
