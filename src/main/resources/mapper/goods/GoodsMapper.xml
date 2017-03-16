@@ -1362,6 +1362,6 @@
         DELETE  FROM  yw_goods_combo WHERE  goodsid=#{goodsid,jdbcType=INTEGER}
     </delete>
     <delete id="deleteComGoods" parameterType="java.lang.Integer">
-        DELETE  FROM  yw_goods_combo WHERE  comboid=#{comboid,jdbcType=INTEGER}
+        DELETE FROM yw_combo WHERE comboid=#{comboid,jdbcType=INTEGER}
     </delete>
 </mapper>
