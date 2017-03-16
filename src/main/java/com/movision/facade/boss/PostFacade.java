@@ -1254,7 +1254,10 @@ public class PostFacade {
      * @return
      */
     public PostActiveList queryActiveById(Integer id) {
-        return postService.queryActiveById(id);
+        PostActiveList postActiveList = postService.queryActiveById(id);
+        List<GoodsVo> goodses = goodsService.queryGoods(postActiveList.getId());
+        postActiveList.setGoodss(goodses);
+        return postActiveList;
     }
 
     /**

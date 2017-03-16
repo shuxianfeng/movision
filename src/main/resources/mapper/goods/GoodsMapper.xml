@@ -1366,7 +1366,11 @@
     </delete>
 
     <select id="queryGoods" parameterType="java.lang.Integer" resultType="com.movision.mybatis.goods.entity.GoodsVo">
-        SELECT go.*,img.img_url FROM yw_goods go LEFT JOIN yw_goods_img img ON img.goodsid=go.id WHERE go.id IN
-        (SELECT goodsid FROM yw_post_share_goods WHERE postid=#{goodsId,jdbcType=INTEGER}) AND img.type=2 ORDER BY go.onlinetime DESC
+        SELECT go.id,
+        (SELECT brandname FROM yw_brand b WHERE b.brandid=go.brandid) AS brandname,
+        (SELECT img_url FROM yw_goods_img WHERE goodsid=go.id AND type=2) AS imgurl,
+        go.name,go.protype,go.isdel,go.origprice,go.price,go.sales,go.stock,go.attribute
+        FROM yw_goods go WHERE go.id IN
+        (SELECT goodsid FROM yw_post_share_goods WHERE postid=232) ORDER BY go.onlinetime DESC
     </select>
 </mapper>
