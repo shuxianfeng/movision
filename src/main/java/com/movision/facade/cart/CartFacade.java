@@ -211,8 +211,13 @@ public class CartFacade {
             if (cartList.get(i).getCombotype() != null) {
                 //查询套餐名称和套餐折后价
                 CartVo vo = cartService.queryNamePrice(cartList.get(i).getCombotype());
-                cartList.get(i).setComboname(vo.getComboname());
-                cartList.get(i).setComboprice(vo.getComboprice());
+                if (null != vo) {
+                    cartList.get(i).setComboname(vo.getComboname());
+                    cartList.get(i).setComboprice(vo.getComboprice());
+                } else {
+                    cartList.get(i).setComboname("套餐不存在");
+                    cartList.get(i).setComboprice(0.0);
+                }
             }
             if (cartList.get(i).getDiscountid() != null) {
                 //查询商品参加的活动名称和活动折扣百分比
