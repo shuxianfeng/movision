@@ -672,7 +672,7 @@
         (SELECT brandname FROM yw_brand b WHERE b.brandid=g.brandid) AS brandname,
         (SELECT img_url FROM yw_goods_img WHERE goodsid=g.id AND type=2) AS imgurl,
         g.name,g.protype,g.isdel,g.origprice,g.price,g.sales,g.stock,g.attribute
-        FROM yw_goods g AND isdel=0
+        FROM yw_goods g WHERE g.isdel=0
     </select>
 
     <select id="findAllMyCollectGoodsList" resultType="java.util.HashMap">
@@ -693,7 +693,7 @@
         SELECT g.id,b.brandname,
         (SELECT img_url FROM yw_goods_img WHERE goodsid=g.id AND type=2) AS imgurl,
         g.name,g.protype,g.isdel,g.origprice,g.price,g.sales,g.stock,g.attribute
-        FROM yw_goods g LEFT JOIN yw_brand b ON g.brandid=b.brandid WHERE 1 AND isdel=0
+        FROM yw_goods g LEFT JOIN yw_brand b ON g.brandid=b.brandid WHERE 1 AND g.isdel=0
         <if test="brandid!=null">
             AND b.id=#{brandid,jdbcType=VARCHAR}
         </if>
