@@ -385,6 +385,21 @@ public class CircleFacade {
         return map;
     }
 
+
+    /**
+     * 根据圈子id查询帖子列表
+     *
+     * @param circleid
+     * @param pager
+     * @return
+     */
+    public List<PostList> queryPostByCircleId(String circleid, String type, Paging<PostList> pager) {
+        Map map = new HashedMap();
+        map.put("circleid", Integer.parseInt(circleid));
+        map.put("type", type);
+        return postService.queryPostByCircleId(map, pager);
+    }
+
     /**
      * 查询圈子分类
      *

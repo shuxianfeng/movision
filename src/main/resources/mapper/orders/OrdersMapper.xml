@@ -477,4 +477,10 @@
             AND userid = #{userid}
         </if>
     </select>
+
+    <update id="updateOrderByIntegral" parameterType="java.util.Map">
+        UPDATE yw_orders o
+        SET o.isdiscount=0,o.status=6
+        WHERE o.id=#{id,jdbcType=INTEGER}
+    </update>
 </mapper>

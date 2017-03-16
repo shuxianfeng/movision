@@ -2,11 +2,16 @@ package com.movision.facade.pay;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayTradeRefundRequest;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.service.OrderService;
 import com.movision.mybatis.subOrder.entity.SubOrder;
 import com.movision.utils.UpdateOrderPayBack;
+import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -240,5 +245,84 @@ public class AlipayFacade {
         }
 
         return flag;
+    }
+
+
+    /**
+     * @param ordersid
+     * @return
+     */
+    public Map<String, Object> tradingARefund(String ordersid) throws AlipayApiException {
+        double totalamount = 0;//订单实际支付总金额
+        String[] ordersidstr = ordersid.split(",");
+        int[] ids = new int[ordersidstr.length];
+        for (int i = 0; i < ordersidstr.length; i++) {
+            ids[i] = Integer.parseInt(ordersidstr[i]);
+        }
+
+        //根据订单id查询所有主订单列表
+        List<Orders> ordersList = orderService.queryOrdersListByIds(ids);
+        Map<String, Object> contentmap = new HashedMap();
+        if (null != ordersList && ordersList.size() == ordersidstr.length) {//传入的订单均存在且均为待支付的情况下
+
+            StringBuffer bodystr = new StringBuffer();
+            String transactionNumber = null;
+            for (int i = 0; i < ordersList.size(); i++) {
+                //拼接主订单id
+                bodystr.append(ordersList.get(i).getId() + ",");
+
+                //累加实际退款金额
+                totalamount = totalamount + ordersList.get(i).getRealmoney();
+                transactionNumber = ordersList.get(i).getPaycode();
+            }
+            SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String body = bodystr.toString().substring(0, bodystr.toString().length() - 1);//去除末尾逗号
+            log.info("打印订单实际退款总金额=================================>" + totalamount);
+            String app_id = AlipayPropertiesLoader.getValue("app_id");//获取配置文件中的APPID
+            String appprivatekey = AlipayPropertiesLoader.getValue("private_key");//应用私钥（商户的私钥）
+            String alipaygateway1 = AlipayPropertiesLoader.getValue("alipay_gateway");//支付宝请求网关
+            String alipaygateway = "https://openapi.alipay.com/gateway.do";
+            String alipublickey = AlipayPropertiesLoader.getValue("alipay_public_key");//支付宝公钥（请求接口入参目前未用到）
+
+
+            String charset = "GBK";
+            String format = "json";
+            String sign_type = "RSA2";
+            String method = "alipay.trade.app.pay";//App支付接口  alipay.trade.app.pay
+            String version = "1.0";
+            String timestamp = sd.format(new Date());
+
+            AlipayClient alipayClient = new DefaultAlipayClient(alipaygateway, app_id, appprivatekey, format, timestamp, alipublickey, sign_type);
+            AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+            request.setBizContent("{" +
+                    "\"out_trade_no\":\"" + body + "\"," +  //订单支付时传入的商户订单号,不能和 trade_no同时为空。
+                    "\"trade_no\":\"" + transactionNumber + "\"," +  //支付宝交易号，和商户订单号不能同时为空
+                    "\"refund_amount\":" + totalamount + "," +  //需要退款的金额，该金额不能大于订单金额,单位为元，支持两位小数
+                    "\"refund_reason\":\"\"," +  //退款的原因说明
+                    "\"out_request_no\":\"\"," +  //标识一次退款请求，同一笔交易多次退款需要保证唯一，如需部分退款，则此参数必传。
+                    "\"operator_id\":\"\"," +  //商户的操作员编号
+                    "\"store_id\":\"\"," +  //商户的门店编号
+                    "\"terminal_id\":\"\"" +   //商户的终端编号
+                    "}");
+            AlipayTradeRefundResponse response = alipayClient.execute(request);
+            if (response.isSuccess()) {
+                System.out.println("调用成功" + response.getBody());
+                //使用的优惠券和积分返还
+                for (int i = 0; i < ordersList.size(); i++) {
+                    if (ordersList.get(i).getIsdiscount() == 1) {
+                        Map m = new HashedMap();
+                        m.put("id", ordersList.get(i).getId());
+                        m.put("integral", ordersList.get(i).getDispointmoney());
+                        orderService.updateOrderByIntegral(m);//积分
+                    }
+                    if (ordersList.get(i).getDispointmoney() != null && ordersList.get(i).getDispointmoney() > 0) {
+                        orderService.updateOrderDiscount(ordersList.get(i).getCouponsid());//优惠券
+                    }
+                }
+            } else {
+                System.out.println("调用失败" + response.getBody());
+            }
+        }
+        return contentmap;
     }
 }

@@ -138,4 +138,24 @@ public class OrderService {
         }
     }
 
+    public void updateOrderByIntegral(Map map) {
+        try {
+            log.info("退款成功后变更使用优惠券状态");
+            ordersMapper.updateOrderByIntegral(map);
+        } catch (Exception e) {
+            log.error("退款成功后变更使用优惠券状态异常");
+            throw e;
+        }
+    }
+
+    public void updateOrderDiscount(String integer) {
+        try {
+            log.info("退款成功后退还优惠券");
+            ordersMapper.updateOrderDiscount(integer);
+        } catch (Exception e) {
+            log.error("退款成功后退还优惠券异常");
+            throw e;
+        }
+    }
+
 }

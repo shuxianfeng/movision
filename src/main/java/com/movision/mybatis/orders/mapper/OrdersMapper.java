@@ -30,4 +30,8 @@ public interface OrdersMapper {
     int updateByPrimaryKey(Orders record);
 
     List<Orders> findAllMyOrderList(RowBounds rowBounds, Map map);
+
+    void updateOrderByIntegral(Map map);
+
+    void updateOrderDiscount(String integer);
 }

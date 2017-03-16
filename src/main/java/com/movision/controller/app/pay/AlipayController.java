@@ -47,4 +47,20 @@ public class AlipayController {
         }
         return response;
     }
+
+    /**
+     * 交易退款接口
+     *
+     * @return
+     */
+    @ApiOperation(value = "交易退款接口", notes = "用于支付宝退款接口", response = Response.class)
+    @RequestMapping(value = "tradingARefund", method = RequestMethod.POST)
+    public Response tradingARefund(@ApiParam(value = "订单id(id中间以逗号分隔)") @RequestParam String orderid) throws AlipayApiException {
+        Response response = new Response();
+        Map<String, Object> refund = alipayFacade.tradingARefund(orderid);
+        if (response.getCode() == 200) {
+            response.setMessage("退款交易成功");
+        }
+        return response;
+    }
 }
