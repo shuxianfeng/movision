@@ -270,8 +270,8 @@ public class MyInfoController {
     @RequestMapping(value = "query_system_inform_list", method = RequestMethod.POST)
     public Response findAllSystemCondition(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                            @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
-                                           @ApiParam(value = "内容") @RequestParam(required = false, defaultValue = "10") String body,
-                                           @ApiParam(value = "排序") @RequestParam(required = false, defaultValue = "10") String pai) {
+                                           @ApiParam(value = "内容") @RequestParam(required = false) String body,
+                                           @ApiParam(value = "排序") @RequestParam(required = false) String pai) {
         Response response = new Response();
         Paging<ImSystemInform> paging = new Paging<ImSystemInform>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<ImSystemInform> list = imFacade.findAllSystemCondition(body, pai, paging);
