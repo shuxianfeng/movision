@@ -250,5 +250,52 @@ public class MyInfoController {
         return response;
     }
 
+    @ApiOperation(value = "删除系统通知", notes = "删除系统通知", response = Response.class)
+    @RequestMapping(value = "delete_system_inform_detail", method = RequestMethod.POST)
+    public Response deleteSystemInformDetail(@ApiParam(value = "系统通知id") @RequestParam Integer id) {
+        Response response = new Response();
+        int imSystemInform = imFacade.deleteImSystem(id);
+        response.setData(imSystemInform);
+        return response;
+    }
+
+    /**
+     * 条件搜索分页
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查询系统通知条件搜索分页", notes = "查询系统通知条件搜索分页", response = Response.class)
+    @RequestMapping(value = "query_system_inform_list", method = RequestMethod.POST)
+    public Response findAllSystemCondition(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                           @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                           @ApiParam(value = "内容") @RequestParam(required = false, defaultValue = "10") String body,
+                                           @ApiParam(value = "排序") @RequestParam(required = false, defaultValue = "10") String pai) {
+        Response response = new Response();
+        Paging<ImSystemInform> paging = new Paging<ImSystemInform>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<ImSystemInform> list = imFacade.findAllSystemCondition(body, pai, paging);
+        paging.result(list);
+        response.setData(paging);
+        return response;
+    }
+
+    /**
+     * 查询内容全部
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "查询内容全部", notes = "查询内容全部", response = Response.class)
+    @RequestMapping(value = "query_body_all", method = RequestMethod.POST)
+    public Response queryBodyAll(@ApiParam(value = "系统通知id") @RequestParam Integer id) {
+        Response response = new Response();
+        ImSystemInform imSystemInform = imFacade.queryBodyAll(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(imSystemInform);
+        return response;
+    }
 
 }

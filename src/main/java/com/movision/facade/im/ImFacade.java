@@ -540,6 +540,43 @@ public class ImFacade {
         return imSystemInformService.queryDetail(id);
     }
 
+    /**
+     * 删除系统通知
+     *
+     * @param id
+     * @return
+     */
+    public Integer deleteImSystem(Integer id) {
+        return imSystemInformService.deleteImSystem(id);
+    }
 
+    /**
+     * 条件搜索
+     *
+     * @param body
+     * @param pai
+     * @param pager
+     * @return
+     */
+    public List<ImSystemInform> findAllSystemCondition(String body, String pai, Paging<ImSystemInform> pager) {
+        Map<String, Object> map = new HashMap<>();
+        if (body != null) {
+            map.put("body", body);
+        }
+        if (pai != null) {
+            map.put("pai", pai);
+        }
+        return imSystemInformService.findAllSystemForm(map, pager);
+    }
+
+    /**
+     * 查询内容全部
+     *
+     * @param id
+     * @return
+     */
+    public ImSystemInform queryBodyAll(Integer id) {
+        return imSystemInformService.queryBodyAll(id);
+    }
 
 }

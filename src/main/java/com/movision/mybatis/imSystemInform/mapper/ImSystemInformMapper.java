@@ -4,6 +4,7 @@ import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ImSystemInformMapper {
     int deleteByPrimaryKey(Integer id);
@@ -19,4 +20,8 @@ public interface ImSystemInformMapper {
     int updateByPrimaryKey(ImSystemInform record);
 
     List<ImSystemInform> selectAll(RowBounds rowBounds);
+
+    List<ImSystemInform> findAllSystemInform(Map map, RowBounds rowBounds);//条件搜索
+
+    ImSystemInform queryBodyAll(Integer id);//查询全部内容
 }

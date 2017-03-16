@@ -3,6 +3,7 @@ package com.movision.mybatis.imSystemInform.service;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInform.mapper.ImSystemInformMapper;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhuangyuhao
@@ -68,5 +70,38 @@ public class ImSystemInformService {
             throw e;
         }
 
+    }
+
+    /**
+     * 条件搜索
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<ImSystemInform> findAllSystemForm(Map map, Paging<ImSystemInform> pager) {
+        try {
+            log.info("条件搜索");
+            return imSystemInformMapper.findAllSystemInform(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("条件搜索失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询内容全部
+     *
+     * @param id
+     * @return
+     */
+    public ImSystemInform queryBodyAll(Integer id) {
+        try {
+            log.info("查询内容全部");
+            return imSystemInformMapper.queryBodyAll(id);
+        } catch (Exception e) {
+            log.error("查询内容全部失败", e);
+            throw e;
+        }
     }
 }

@@ -207,7 +207,7 @@ public class ProductCategoryController {
     /**
      * 增加类别
      *
-     * @param request
+     * @param
      * @param typename
      * @param imgurl
      * @return
@@ -262,7 +262,7 @@ public class ProductCategoryController {
             @ApiParam(value = "图片") @RequestParam(required = false) String imgurl,
             @ApiParam(value = "分类id") @RequestParam(required = false) String id) {
         Response response = new Response();
-        Map<String, Integer> map = productCategoryFacade.updateCategory(typename, id, imgurl);
+        Map<String, Integer> map = productCategoryFacade.updateCategory(id, typename, imgurl);
         if (response.getCode() == 200) {
             response.setMessage("修改成功");
         }
@@ -285,7 +285,7 @@ public class ProductCategoryController {
             @ApiParam(value = "是否启用") @RequestParam(required = false) String isdel,
             @ApiParam(value = "品牌id") @RequestParam(required = false) String id) {
         Response response = new Response();
-        Map<String, Integer> map = productCategoryFacade.updateBrand(brandname, id, isdel);
+        Map<String, Integer> map = productCategoryFacade.updateBrand(brandname, isdel, id);
         if (response.getCode() == 200) {
             response.setMessage("修改成功");
         }
