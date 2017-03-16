@@ -8,6 +8,7 @@ import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.UUIDGenerator;
 import com.movision.utils.oss.AliOSSClient;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class FileUtil {
@@ -239,6 +239,113 @@ public class FileUtil {
 		int index = fileName.lastIndexOf(".");
 		String suffix = fileName.substring(index + 1, fileName.length());
 		return suffix.toLowerCase();
+	}
+
+	/**
+	 * 获取图片名称
+	 *
+	 * @param url 类似:http://139.196.189.100/upload/brand/img/613.jpg
+	 * @return 613.jpg
+	 */
+	public static String getPicName(String url) {
+
+		return url.substring(url.lastIndexOf("/") + 1);
+	}
+
+	/**
+	 * 获取指定文件夹下的文件的名称的集合
+	 *
+	 * @param filepath
+	 * @param suffix   若不传，则不需要筛选指定后缀文件
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static List<String> readfileName(String filepath, String suffix)
+			throws FileNotFoundException, IOException {
+		List<String> list = new ArrayList<String>();
+		try {
+			File file = new File(filepath);
+			if (!file.isDirectory()) {
+				if (StringUtils.isNotEmpty(suffix)) {
+					if (file.getName().endsWith("." + suffix)) {
+						list.add(file.getName());
+					}
+				} else {
+					list.add(file.getName());
+				}
+				// System.out.println("文件");
+				// System.out.println("path=" + file.getPath());
+				// System.out.println("absolutepath=" + file.getAbsolutePath());
+				// System.out.println("name=" + file.getName());
+
+			} else if (file.isDirectory()) {
+				System.out.println(filepath + "，是文件夹");
+				String[] filelist = file.list();
+				for (int i = 0; i < filelist.length; i++) {
+
+					File readfile = new File(filepath + "\\" + filelist[i]);
+					if (!readfile.isDirectory()) {
+
+						if (StringUtils.isNotEmpty(suffix)) {
+							if (readfile.getName().endsWith("." + suffix)) {
+								list.add(readfile.getName());
+							}
+						} else {
+							list.add(readfile.getName());
+						}
+
+					} else if (readfile.isDirectory()) {
+
+						readfile(filepath + "\\" + filelist[i], suffix);
+					}
+				}
+			}
+
+		} catch (FileNotFoundException e) {
+			System.out.println("readfile()   Exception:" + e.getMessage());
+		}
+		return list;
+	}
+
+	/**
+	 * 获取指定文件夹下的文件
+	 *
+	 * @param filepath 文件夹路径
+	 * @param suffix   匹配的文件的后缀，如jpg
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static List<String> readfile(String filepath, String suffix)
+			throws FileNotFoundException, IOException {
+		List<String> list = new ArrayList<String>();
+		try {
+			File file = new File(filepath);
+			if (!file.isDirectory() && file.getName().endsWith("." + suffix)) {
+
+				list.add(file.getAbsolutePath());
+			} else if (file.isDirectory()) {
+				System.out.println("文件夹");
+				String[] filelist = file.list();
+				for (int i = 0; i < filelist.length; i++) {
+					File readfile = new File(filepath + "\\" + filelist[i]);
+					if (!readfile.isDirectory()
+							&& readfile.getName().endsWith("." + suffix)) {
+
+						list.add(readfile.getAbsolutePath());
+
+					} else if (readfile.isDirectory()) {
+						readfile(filepath + "\\" + filelist[i], suffix);
+					}
+				}
+
+			}
+
+		} catch (FileNotFoundException e) {
+			System.out.println("readfile()   Exception:" + e.getMessage());
+		}
+		return list;
 	}
 
 	/**
