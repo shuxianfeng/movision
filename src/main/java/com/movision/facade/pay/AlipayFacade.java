@@ -10,6 +10,7 @@ import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.service.OrderService;
 import com.movision.mybatis.subOrder.entity.SubOrder;
+import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.UpdateOrderPayBack;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
@@ -40,6 +41,9 @@ public class AlipayFacade {
 
     @Autowired
     private UpdateOrderPayBack updateOrderPayBack;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 拼装支付宝支付请求入参
@@ -314,7 +318,9 @@ public class AlipayFacade {
                         Map m = new HashedMap();
                         m.put("id", ordersList.get(i).getId());
                         m.put("integral", ordersList.get(i).getDispointmoney());
-                        orderService.updateOrderByIntegral(m);//积分
+                        orderService.updateOrderByIntegral(m);//修改订单状态
+                        userService.updateUserPoints(ordersList.get(i).getDispointmoney());//把积分返还
+
                     }
                     if (ordersList.get(i).getDispointmoney() != null && ordersList.get(i).getDispointmoney() > 0) {
                         orderService.updateOrderDiscount(ordersList.get(i).getCouponsid());//优惠券

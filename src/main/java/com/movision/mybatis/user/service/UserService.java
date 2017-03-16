@@ -514,4 +514,13 @@ public class UserService {
             throw e;
         }
     }
+
+    public void updateUserPoints(Double dispointmoney) {
+        try {
+            log.info("");
+            userMapper.updateUserPoints(dispointmoney);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -858,11 +858,16 @@ public class PostController {
 
 
     /**
+     * 上传活动图片
+     *
+     * @param file
+     * @return
+     */
     @ApiOperation(value = "上传活动图片", notes = "上传活动图片", response = Response.class)
     @RequestMapping(value = {"/upload_active_pic"}, method = RequestMethod.POST)
     public Response updateMyInfo(@RequestParam(value = "file", required = false) MultipartFile file) {
 
-        String url = movisionOssClient.uploadObject(file, "img", "post");
+        String url = movisionOssClient.uploadObject(file, "img", "activity");
         Map<String, String> map = new HashMap<>();
         map.put("url", url);
         map.put("name", FileUtil.getFileNameByUrl(url));

@@ -92,4 +92,6 @@ public interface UserMapper {
     List<UserAll> findAllqueryAttentionUserList(Map map, RowBounds rowBounds);
 
     void deductPoints(Map<String, Object> parammap);
+
+    void updateUserPoints(Double dispointmoney);
 }
