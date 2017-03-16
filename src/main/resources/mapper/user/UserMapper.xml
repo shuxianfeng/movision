@@ -768,4 +768,8 @@
         </if>
         )
     </select>
+
+    <update id="updateUserPoints" parameterType="java.util.Map">
+        UPDATE yw_user SET points=points+#{dispointmoney,jdbcTypet=DOUBLE} WHERE id=#{userid,jdbcType=INTEGER}
+    </update>
 </mapper>

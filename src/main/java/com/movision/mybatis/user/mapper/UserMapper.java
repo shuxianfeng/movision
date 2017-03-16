@@ -93,5 +93,5 @@ public interface UserMapper {
 
     void deductPoints(Map<String, Object> parammap);
 
-    void updateUserPoints(Double dispointmoney);
+    void updateUserPoints(Map dispointmoney);
 }

@@ -319,7 +319,9 @@ public class AlipayFacade {
                         m.put("id", ordersList.get(i).getId());
                         m.put("integral", ordersList.get(i).getDispointmoney());
                         orderService.updateOrderByIntegral(m);//修改订单状态
-                        userService.updateUserPoints(ordersList.get(i).getDispointmoney());//把积分返还
+                        m.put("dispointmoney", ordersList.get(i).getDispointmoney());
+                        m.put("userid", ordersList.get(i).getUserid());
+                        userService.updateUserPoints(m);//把积分返还
 
                     }
                     if (ordersList.get(i).getDispointmoney() != null && ordersList.get(i).getDispointmoney() > 0) {

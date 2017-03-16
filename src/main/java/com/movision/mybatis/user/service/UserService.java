@@ -515,7 +515,7 @@ public class UserService {
         }
     }
 
-    public void updateUserPoints(Double dispointmoney) {
+    public void updateUserPoints(Map dispointmoney) {
         try {
             log.info("");
             userMapper.updateUserPoints(dispointmoney);
