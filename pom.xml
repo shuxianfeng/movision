@@ -367,13 +367,6 @@
              <version>4</version>
          </dependency>-->
 
-
-        <dependency>
-            <groupId>taobao.sdk</groupId>
-            <artifactId>java</artifactId>
-            <version>4</version>
-        </dependency>
-
         <dependency>
             <groupId>com.mangofactory</groupId>
             <artifactId>swagger-springmvc</artifactId>
