@@ -1,6 +1,9 @@
 package com.movision.mybatis.post.entity;
 
+import com.movision.mybatis.goods.entity.GoodsVo;
+
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author zhanglei
@@ -12,6 +15,15 @@ public class PostActiveList {
     private Integer forwardsum;
     private Integer collectsum;
     private String postcontent;
+    private List<GoodsVo> goodss;
+
+    public List<GoodsVo> getGoodss() {
+        return goodss;
+    }
+
+    public void setGoodss(List<GoodsVo> goodss) {
+        this.goodss = goodss;
+    }
 
     public String getPostcontent() {
         return postcontent;

@@ -215,9 +215,10 @@ public class ProductCategoryController {
     @ApiOperation(value = "增加类别", notes = "增加类别", response = Response.class)
     @RequestMapping(value = "add_category", method = RequestMethod.POST)
     public Response addCategory(@ApiParam(value = "分类名称") @RequestParam String typename,
-                                @ApiParam(value = "图片") @RequestParam String imgurl) {
+                                @ApiParam(value = "图片") @RequestParam String imgurl,
+                                @ApiParam(value = "分类id") @RequestParam String protype) {
         Response response = new Response();
-        Map<String, Integer> map = productCategoryFacade.addCategory(typename, imgurl);
+        Map<String, Integer> map = productCategoryFacade.addCategory(typename, imgurl, protype);
         if (response.getCode() == 200) {
             response.setMessage("增加成功");
         }
@@ -237,9 +238,11 @@ public class ProductCategoryController {
     @RequestMapping(value = "add_brand", method = RequestMethod.POST)
     public Response addBrand(
             @ApiParam(value = "品牌名称") @RequestParam String brandname,
-            @ApiParam(value = "是否启用") @RequestParam(required = false) String isdel) {
+            @ApiParam(value = "是否启用") @RequestParam(required = false) String isdel,
+            @ApiParam(value = "品牌id") @RequestParam(required = false) String brandid
+    ) {
         Response response = new Response();
-        Map<String, Integer> map = productCategoryFacade.addBrand(brandname, isdel);
+        Map<String, Integer> map = productCategoryFacade.addBrand(brandname, isdel, brandid);
         if (response.getCode() == 200) {
             response.setMessage("增加成功");
         }

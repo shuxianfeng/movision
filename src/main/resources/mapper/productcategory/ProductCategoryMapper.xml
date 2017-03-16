@@ -169,6 +169,12 @@
             <if test="imgurl != null">
                 imgurl,
             </if>
+            <if test="protype != null">
+                protype,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -179,6 +185,12 @@
             </if>
             <if test="imgurl != null">
                 #{imgurl,jdbcType=VARCHAR},
+            </if>
+            <if test="protype != null">
+                #{protype,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
@@ -217,6 +229,12 @@
             <if test="isdel != null">
                 isdel,
             </if>
+            <if test="brandid != null">
+                brandid,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -227,6 +245,12 @@
             </if>
             <if test="isdel != null">
                 #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="brandid != null">
+                #{brandid,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>

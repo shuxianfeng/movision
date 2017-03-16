@@ -119,12 +119,13 @@ public class ProductCategoryFacade {
      * @param imgurl
      * @return
      */
-    public Map<String, Integer> addCategory(String typename, String imgurl) {
+    public Map<String, Integer> addCategory(String typename, String imgurl, String protype) {
         Map<String, Integer> map = new HashMap<>();
         ProductCategory productCategory = new ProductCategory();
         productCategory.setTypename(typename);
-
+        productCategory.setProtype(Integer.parseInt(protype));
         productCategory.setImgurl(imgurl);
+        productCategory.setIntime(new Date());
             int result = productCategoryService.addCategory(productCategory);
             map.put("result", result);
 
@@ -138,11 +139,13 @@ public class ProductCategoryFacade {
      * @param isdel
      * @return
      */
-    public Map<String, Integer> addBrand(String brandname, String isdel) {
+    public Map<String, Integer> addBrand(String brandname, String isdel, String brandid) {
         Map<String, Integer> map = new HashMap<>();
         Brand brand = new Brand();
         brand.setBrandname(brandname);
         brand.setIsdel(Integer.parseInt(isdel));
+        brand.setBrandid(Integer.parseInt(brandid));
+        brand.setIntime(new Date());
         int result = productCategoryService.addBrand(brand);
         map.put("result", result);
         return map;
