@@ -897,6 +897,8 @@ public class PostFacade {
                         map.put("result", goods);
                     }
                 }
+            } else {
+                goodsService.deletePostyByGoods(Integer.parseInt(id));//删除活动发表的商品
             }
             map.put("result", result);
             map.put("res", res);
@@ -991,6 +993,8 @@ public class PostFacade {
                         map.put("result", goods);
                     }
                 }
+            } else {
+                goodsService.deletePostyByGoods(Integer.parseInt(id));//删除活动发表的商品
             }
         } catch (Exception e) {
             log.error("帖子添加异常", e);
