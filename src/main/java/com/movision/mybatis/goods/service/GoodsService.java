@@ -177,6 +177,16 @@ public class GoodsService {
         }
     }
 
+    public String queryShopnameById(int shopid) {
+        try {
+            log.info("根据店铺id查询店铺名称");
+            return goodsMapper.queryShopnameById(shopid);
+        } catch (Exception e) {
+            log.error("根据店铺id查询店铺名称失败");
+            throw e;
+        }
+    }
+
     public List<GoodsImg> queryGoodsImgList(int goodsid) {
         try {
             log.info("根据商品id查询商品实物图列表");

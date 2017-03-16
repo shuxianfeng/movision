@@ -46,6 +46,8 @@ public interface GoodsMapper {
 
     GoodsDetail queryGoodDetail(int goodsid);
 
+    String queryShopnameById(int shopid);
+
     List<GoodsImg> queryGoodsImgList(int goodsid);
 
     int queryStore(int goodsid);

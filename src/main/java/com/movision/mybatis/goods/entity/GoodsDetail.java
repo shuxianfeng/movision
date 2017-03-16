@@ -28,6 +28,8 @@ public class GoodsDetail {
 
     private Integer shopid;
 
+    private String shopname;
+
     private Integer isdamage;
 
     private Integer isquality;
@@ -316,5 +318,13 @@ public class GoodsDetail {
 
     public void setShopid(Integer shopid) {
         this.shopid = shopid;
+    }
+
+    public String getShopname() {
+        return shopname;
+    }
+
+    public void setShopname(String shopname) {
+        this.shopname = shopname;
     }
 }

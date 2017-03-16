@@ -228,6 +228,11 @@
         SELECT img_url FROM yw_goods_img WHERE goodsid = #{goodsid,jdbcType=INTEGER} AND type = '2'
     </select>
 
+    <!--根据店铺id查询店铺名称-->
+    <select id="queryShopnameById" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT name FROM yw_shop WHERE id = #{shopid,jdbcType=INTEGER}
+    </select>
+
     <!--查询该商品的该套餐中包含的所有商品列表-->
     <select id="queryComboGoodsList" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goods.entity.GoodsVo">

@@ -51,6 +51,14 @@ public class GoodsFacade {
         //首先查询用户基本信息
         GoodsDetail goodsDetail = goodsService.queryGoodDetail(Integer.parseInt(goodsid));
 
+        //根据店铺id查询店铺名称
+        if (goodsDetail.getShopid() != -1) {
+            String shopname = goodsService.queryShopnameById(goodsDetail.getShopid());
+            goodsDetail.setShopname(shopname);
+        } else {
+            goodsDetail.setShopname("美番自营");
+        }
+
         //再查询用户商品实物图列表集合
         List<GoodsImg> goodsImgList = goodsService.queryGoodsImgList(Integer.parseInt(goodsid));
         goodsDetail.setGoodsImgList(goodsImgList);
