@@ -174,4 +174,6 @@ public interface GoodsMapper {
     void updateStock(Map<String, Object> map);
 
     List<GoodsVo> queryGoods(Integer goodsId);
+
+    int deletePostyByGoods(Integer map);
 }

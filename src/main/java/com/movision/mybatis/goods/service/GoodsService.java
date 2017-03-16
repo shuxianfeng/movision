@@ -1298,4 +1298,20 @@ public class GoodsService {
             throw e;
         }
     }
+
+    /**
+     * 删除帖子分享的商品
+     *
+     * @param map
+     * @return
+     */
+    public int deletePostyByGoods(Integer map) {
+        try {
+            log.info("删除帖子分享的商品");
+            return goodsMapper.deletePostyByGoods(map);
+        } catch (Exception e) {
+            log.error("删除帖子分享的商品异常");
+            throw e;
+        }
+    }
 }

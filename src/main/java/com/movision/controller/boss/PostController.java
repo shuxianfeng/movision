@@ -443,9 +443,10 @@ public class PostController {
             @ApiParam(value = "精选日期（毫秒值）") @RequestParam(required = false) String time,
             @ApiParam(value = "活动开始日期 ") @RequestParam String begintime,
             @ApiParam(value = "活动结束日期 ") @RequestParam String endtime,
-            @ApiParam(value = "发帖人") @RequestParam String userid) {
+            @ApiParam(value = "发帖人") @RequestParam String userid,
+            @ApiParam(value = "分享商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Integer> result = postFacade.addPostActive(title, subtitle, activetype, activefee, coverimg, postcontent, isessence, orderid, time, begintime, endtime, userid);
+        Map<String, Integer> result = postFacade.addPostActive(title, subtitle, activetype, activefee, coverimg, postcontent, isessence, orderid, time, begintime, endtime, userid, goodsid);
         if(response.getCode()==200){
             response.setMessage("添加成功");
         }
@@ -609,9 +610,10 @@ public class PostController {
                                    @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
                                    @ApiParam(value = "圈子精选") @RequestParam(required = false) String ishot,//本圈精华
                                    @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,//精选排序
-                                   @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String time) {
+                                   @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String time,
+                                   @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Integer> map = postFacade.updatePostById(id, title, subtitle, type, userid, circleid, vid, bannerimgurl, coverimg, postcontent, isessence, ishot, orderid, time);
+        Map<String, Integer> map = postFacade.updatePostById(id, title, subtitle, type, userid, circleid, vid, bannerimgurl, coverimg, postcontent, isessence, ishot, orderid, time, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -653,10 +655,11 @@ public class PostController {
             @ApiParam(value = "活动类型") @RequestParam String activetype,
             @ApiParam(value = "开始时间") @RequestParam String begintime,
             @ApiParam(value = "结束时间") @RequestParam String endtime,
-            @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String essencedate) {
+            @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String essencedate,
+            @ApiParam(value = "编辑商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
 
-        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, activetype, activefee, userid, coverimg, begintime, endtime, isessence, orderid, postcontent, essencedate);
+        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, activetype, activefee, userid, coverimg, begintime, endtime, isessence, orderid, postcontent, essencedate, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

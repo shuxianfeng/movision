@@ -280,8 +280,8 @@ public class AlipayFacade {
             log.info("打印订单实际退款总金额=================================>" + totalamount);
             String app_id = AlipayPropertiesLoader.getValue("app_id");//获取配置文件中的APPID
             String appprivatekey = AlipayPropertiesLoader.getValue("private_key");//应用私钥（商户的私钥）
-            String alipaygateway1 = AlipayPropertiesLoader.getValue("alipay_gateway");//支付宝请求网关
-            String alipaygateway = "https://openapi.alipay.com/gateway.do";
+            String alipaygateway = AlipayPropertiesLoader.getValue("alipay_gateway");//支付宝请求网关
+            String alipaygateway1 = "https://openapi.alipay.com/gateway.do";
             String alipublickey = AlipayPropertiesLoader.getValue("alipay_public_key");//支付宝公钥（请求接口入参目前未用到）
 
 
@@ -292,7 +292,8 @@ public class AlipayFacade {
             String version = "1.0";
             String timestamp = sd.format(new Date());
 
-            AlipayClient alipayClient = new DefaultAlipayClient(alipaygateway, app_id, appprivatekey, format, timestamp, alipublickey, sign_type);
+
+            AlipayClient alipayClient = new DefaultAlipayClient(alipaygateway, app_id, appprivatekey, format, charset, alipublickey, sign_type);
             AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
             request.setBizContent("{" +
                     "\"out_trade_no\":\"" + body + "\"," +  //订单支付时传入的商户订单号,不能和 trade_no同时为空。

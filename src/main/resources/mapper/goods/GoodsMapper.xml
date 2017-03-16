@@ -1386,4 +1386,8 @@
     <select id="findMaxComboid" resultType="java.lang.Integer">
         select MAX(comboid) from yw_combo
     </select>
+
+    <delete id="deletePostyByGoods" parameterType="java.lang.Integer">
+        DELETE FROM yw_post_share_goods WHERE postid=#{postid,jdbcType=INTEGER}
+    </delete>
 </mapper>

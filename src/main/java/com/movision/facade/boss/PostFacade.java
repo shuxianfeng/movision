@@ -596,7 +596,7 @@ public class PostFacade {
      * @return
      */
     public Map<String, Integer> addPostActive(String title, String subtitle, String activetype, String activefee,
-                                              String coverimg, String postcontent, String isessence, String orderid, String time, String begintime, String endtime, String userid) {
+                                              String coverimg, String postcontent, String isessence, String orderid, String time, String begintime, String endtime, String userid, String goodsid) {
         PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
 
@@ -611,7 +611,7 @@ public class PostFacade {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             post.setCoverimg(coverimg);
             post.setPostcontent(postcontent);//帖子内容
-            if (!isessence.isEmpty() || isessence != null) {
+        if (!StringUtils.isEmpty(isessence)) {
                 if (Integer.parseInt(isessence) != 0) {//判断是否为加精
                     post.setIsessence(isessence);//是否为首页精选
                     if (!orderid.isEmpty()) {
@@ -620,7 +620,7 @@ public class PostFacade {
                         post.setOrderid(0);
                     }
                     Date d = null;
-                    if (time != null || time != "") {
+                    if (!StringUtils.isEmpty(time)) {
                         try {
                             d = format.parse(time);
                             post.setEssencedate(d);
@@ -657,12 +657,23 @@ public class PostFacade {
                 e.printStackTrace();
             }
         }
-            period.setBegintime(begin);
-            period.setEndtime(end);
-            Integer id = post.getId();
-            period.setPostid(id);
-            int r = postService.addPostPeriod(period);
-            map.put("result", result);
+        period.setBegintime(begin);
+        period.setEndtime(end);
+        Integer id = post.getId();
+        period.setPostid(id);
+        int r = postService.addPostPeriod(period);
+        if (!StringUtils.isEmpty(goodsid)) {//添加商品
+            String[] lg = goodsid.split(",");//以逗号分隔
+            for (int i = 0; i < lg.length; i++) {
+                Map addgoods = new HashedMap();
+                addgoods.put("postid", post.getId());
+                addgoods.put("goodsid", lg[i]);
+                int goods = postService.insertGoods(addgoods);
+                if (goods == 1) {//添加视频和添加帖子同时成功
+                    map.put("result", goods);
+                }
+            }
+        }
             map.put("result", r);
 
         return map;
@@ -820,7 +831,7 @@ public class PostFacade {
      * @return
      */
     public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String activetype, String activefee, String userid, String coverimg,
-                                                     String begintime, String endtime, String isessence, String orderid, String postcontent, String essencedate) {
+                                                     String begintime, String endtime, String isessence, String orderid, String postcontent, String essencedate, String goodsid) {
         PostActiveList postActiveList = new PostActiveList();
         Map<String, Integer> map = new HashedMap();
         try {
@@ -873,6 +884,20 @@ public class PostFacade {
                 period.setEndtime(enstime);
             }
             int res = postService.updateActivePostPerById(period);
+            if (!StringUtils.isEmpty(goodsid)) {
+                String[] lg = goodsid.split(",");//以逗号分隔
+                int de = goodsService.deletePostyByGoods(Integer.parseInt(id));//删除活动发表的商品
+
+                for (int i = 0; i < lg.length; i++) {
+                    Map addgoods = new HashedMap();
+                    addgoods.put("postid", id);
+                    addgoods.put("goodsid", lg[i]);
+                    int goods = postService.insertGoods(addgoods);//添加活动分享的商品
+                    if (goods == 1) {//修改活动
+                        map.put("result", goods);
+                    }
+                }
+            }
             map.put("result", result);
             map.put("res", res);
         } catch (Exception e) {
@@ -900,7 +925,7 @@ public class PostFacade {
      */
     public Map<String, Integer> updatePostById(String id, String title, String subtitle, String type,
                                                String userid, String circleid, String vid, String bannerimgurl,
-                                               String coverimg, String postcontent, String isessence, String ishot, String orderid, String time) {
+                                               String coverimg, String postcontent, String isessence, String ishot, String orderid, String time, String goodsid) {
         PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
         try {
@@ -954,6 +979,19 @@ public class PostFacade {
             post.setUserid(userid);
             int result = postService.updatePostById(post);//编辑帖子
             map.put("result", result);
+            if (goodsid != null && goodsid != "") {//添加商品
+                String[] lg = goodsid.split(",");//以逗号分隔
+                int de = goodsService.deletePostyByGoods(Integer.parseInt(id));//删除帖子发表的商品
+                for (int i = 0; i < lg.length; i++) {
+                    Map addgoods = new HashedMap();
+                    addgoods.put("postid", id);
+                    addgoods.put("goodsid", lg[i]);
+                    int goods = postService.insertGoods(addgoods);//添加帖子分享的商品
+                    if (goods == 1 && in == 1) {//修改帖子和修改视频文件成功
+                        map.put("result", goods);
+                    }
+                }
+            }
         } catch (Exception e) {
             log.error("帖子添加异常", e);
         }
