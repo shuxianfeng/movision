@@ -5,7 +5,6 @@ import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.productcategory.entity.ProductCategory;
 import com.movision.mybatis.productcategory.service.ProductCategoryService;
 import com.movision.utils.pagination.model.Paging;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @Author zhanglei
@@ -72,7 +68,7 @@ public class ProductCategoryFacade {
      * @return
      */
     public List<ProductCategory> findAllCategoryCondition(String typename, Paging<ProductCategory> pager) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap<>();
         map.put("typename", typename);
 
         return productCategoryService.findAllCategoryCondition(map, pager);
@@ -86,7 +82,7 @@ public class ProductCategoryFacade {
      * @return
      */
     public List<GoodsDiscount> findAllCategoryCondition(String name, String isdel, Paging<GoodsDiscount> pager) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap<>();
         map.put("name", name);
         map.put("isdel", isdel);
         return productCategoryService.findAllGoodsDiscountCondition(map, pager);
@@ -99,7 +95,7 @@ public class ProductCategoryFacade {
      * @return
      */
     public List<Brand> findAllBrandCondition(String brandname, String isdel, Paging<Brand> pager) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap<>();
         map.put("typename", brandname);
         map.put("isdel", isdel);
         return productCategoryService.findAllBrandCondition(map, pager);
@@ -124,7 +120,7 @@ public class ProductCategoryFacade {
      * @return
      */
     public Map<String, Integer> addCategory(HttpServletRequest request, String typename, MultipartFile imgurl) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         ProductCategory productCategory = new ProductCategory();
         productCategory.setTypename(typename);
         try {
@@ -171,7 +167,7 @@ public class ProductCategoryFacade {
      * @return
      */
     public Map<String, Integer> addBrand(String brandname, String isdel) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         Brand brand = new Brand();
         brand.setBrandname(brandname);
         brand.setIsdel(Integer.parseInt(isdel));
@@ -194,7 +190,7 @@ public class ProductCategoryFacade {
      * @return
      */
     public Map<String, Integer> addGoodsDiscount(String name, String discount, String content, String startdate, String enddate, String isenrent, String rentday, String orderid, String isdel) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         GoodsDiscount goodsDiscount = new GoodsDiscount();
         goodsDiscount.setName(name);
         goodsDiscount.setIsdel(Integer.parseInt(isdel));
@@ -266,7 +262,7 @@ public class ProductCategoryFacade {
      * @return
      */
     public Map<String, Integer> updateCategory(HttpServletRequest request, String id, String typename, MultipartFile imgurl) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         ProductCategory productCategory = new ProductCategory();
         productCategory.setId(Integer.parseInt(id));
         productCategory.setTypename(typename);
@@ -354,7 +350,7 @@ public class ProductCategoryFacade {
      * @return
      */
     public Map<String, Integer> updateBrand(String brandname, String isdel, String id) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         Brand brand = new Brand();
         brand.setBrandname(brandname);
         brand.setIsdel(Integer.parseInt(isdel));
@@ -380,7 +376,7 @@ public class ProductCategoryFacade {
      */
     public Map<String, Integer> updateGoodsDis(String name, String id, String discount, String content, String startdate, String enddate, String isenrent, String rentday, String orderid, String isdel) {
 
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         GoodsDiscount goodsDiscount = new GoodsDiscount();
         goodsDiscount.setName(name);
         goodsDiscount.setIsdel(Integer.parseInt(isdel));

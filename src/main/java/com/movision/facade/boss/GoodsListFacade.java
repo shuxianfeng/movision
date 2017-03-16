@@ -2,7 +2,6 @@ package com.movision.facade.boss;
 
 import com.ibm.icu.text.SimpleDateFormat;
 import com.movision.mybatis.combo.entity.Combo;
-import com.movision.mybatis.combo.entity.ComboVo;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsCom;
 import com.movision.mybatis.goods.entity.GoodsImg;
@@ -11,24 +10,15 @@ import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.mybatis.goodscombo.entity.GoodsCombo;
-import com.movision.mybatis.goodscombo.entity.GoodsComboDetail;
 import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
-import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
-import org.apache.commons.collections.map.HashedMap;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.NamedBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.*;
 
@@ -64,7 +54,7 @@ public class GoodsListFacade {
     public Map<String, Integer> deleteGoods(String id) {
         int result = goodsService.deleteGoods(id);
         int res = goodsService.deleteByComGoods(id);
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         map.put("result", result);
         map.put("res", res);
         return map;
@@ -142,7 +132,7 @@ public class GoodsListFacade {
     public List<GoodsVo> queryGoodsCondition(String name, String producttags, String brand, String protype, String isdel, String allstatue, String minorigprice, String maxorigprice,
                                              String pai, String mintime, String maxtime, Paging<GoodsVo> pager) {
 
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap<>();
         if (name != null) {
             map.put("name", name);
         }
@@ -201,7 +191,7 @@ public class GoodsListFacade {
      * @return
      */
     public Map<String, Integer> updateDate(String id, String recommenddate) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         GoodsVo goodsVo = new GoodsVo();
         goodsVo.setId(Integer.parseInt(id));
         Date date = null;
@@ -268,7 +258,7 @@ public class GoodsListFacade {
      */
     public Map<String, Object> updateGoods(String imgurl, String name, String protype, String id, String price, String origprice, String stock, String isdel, String recommenddate, String brandid, String ishot, String isessence, String attribute) {
         GoodsVo goodsVo = new GoodsVo();
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap<>();
         goodsVo.setId(Integer.parseInt(id));
         if (name != null) {
             goodsVo.setName(name);
@@ -387,7 +377,7 @@ public class GoodsListFacade {
      * @return
      */
     public List<GoodsAssessmentVo> queryAllAssessmentCondition(String goodsid, String nickname, String content, String pai, String mintime, String maxtime, Paging<GoodsAssessmentVo> pager) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap<>();
         if (goodsid != null) {
             map.put("goodsid", goodsid);
         }
@@ -492,7 +482,7 @@ public class GoodsListFacade {
      */
     public Map<String, Integer> addAssessment(String content, String goodid, String pid) {
         int result = 0;
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
             GoodsAssessment goodsAssessment = new GoodsAssessment();
             goodsAssessment.setUserid(-1);
             goodsAssessment.setContent(content);
@@ -516,7 +506,7 @@ public class GoodsListFacade {
      */
     public Map<String, Integer> addpicture(String goodsid, String img_url, String oderid) {
         int res = goodsService.deletebanner(goodsid);
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         GoodsImg goodsImg = new GoodsImg();
         goodsImg.setType(0);
         goodsImg.setGoodsid(Integer.parseInt(goodsid));
@@ -545,7 +535,7 @@ public class GoodsListFacade {
      * @return
      */
     public Map<String, Integer> updateImgGoods(String goodsid, String img_url) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         GoodsImg img = new GoodsImg();
         img.setGoodsid(Integer.parseInt(goodsid));
 
@@ -564,7 +554,7 @@ public class GoodsListFacade {
      * @return
      */
     public Map<String, Integer> updateCommodityDescription(String goodsid, String img_url) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         GoodsImg img = new GoodsImg();
         img.setGoodsid(Integer.parseInt(goodsid));
 
@@ -596,7 +586,7 @@ public class GoodsListFacade {
      * @return
      */
     public Map<String, Integer> addGoods(String img_url, String name, String protype, String brandid, String price, String origprice, String stock, String isdel, String recommenddate, String attribute, String ishot, String isessence) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         GoodsVo goodsVo = new GoodsVo();
         java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
@@ -720,7 +710,7 @@ public class GoodsListFacade {
      * @return
      */
     public List<GoodsComboVo> findAllComCondition(String comboname, String name, String allstatue, String comboid, String minrex, String maxrex, String mintime, String maxtime, String pai, Paging<GoodsComboVo> pager) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap<>();
         if (comboname != null) {
             map.put("comboname", comboname);
         }
@@ -810,7 +800,7 @@ public class GoodsListFacade {
      * @return
      */
     public Map<String, Object> findAllGoods(Integer comboid) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap<>();
         List<GoodsCom> list = goodsService.findAllGoods(comboid);
         Double origprice = 0.0;
         int sales = 0;
@@ -866,7 +856,7 @@ public class GoodsListFacade {
             good.setGoodsid(Integer.parseInt(goods));
             result = goodsService.addGoods(good);
         }
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         map.put("res", res);
         map.put("re", re);
         map.put("result", result);
@@ -884,7 +874,7 @@ public class GoodsListFacade {
      * @return
      */
     public Map<String, Integer> addCom(String imgurl, String comboid, String comboname, String combodiscountprice, String goodsid) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         Combo combo = new Combo();
         combo.setImgurl(imgurl);
         combo.setComboname(comboname);
@@ -938,7 +928,7 @@ public class GoodsListFacade {
      * @return
      */
     public Map<String, Integer> addImgGoods(String img_url, String goodsid) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         GoodsImg goodsImg = new GoodsImg();
         goodsImg.setImgurl(img_url);
         goodsImg.setType(3);
@@ -956,7 +946,7 @@ public class GoodsListFacade {
      * @return
      */
     public Map<String, Integer> addCommodityDescription(String img_url, String goodsid) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         GoodsImg goodsImg = new GoodsImg();
         goodsImg.setImgurl(img_url);
         goodsImg.setType(1);
@@ -995,7 +985,7 @@ public class GoodsListFacade {
      */
     public Map<String, Integer> deleteAllComboGoods(String goodsid) {
         String productids[] = goodsid.split(",");
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         int result = 0;
         int res = 0;
         for (int i = 0; i < productids.length; i++) {

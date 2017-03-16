@@ -1,6 +1,6 @@
 package com.movision.facade.boss;
 
-import com.movision.common.constant.SessionConstant;
+
 import com.movision.common.util.ShiroUtil;
 import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.address.entity.AddressVo;
@@ -12,26 +12,16 @@ import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.bossOrders.servic.BossOrderService;
 import com.movision.mybatis.city.entity.City;
-import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsTo;
-import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.entity.OrdersVo;
-import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.province.entity.Province;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
-import com.movision.utils.pagination.util.StringUtils;
-import org.apache.commons.collections.map.HashedMap;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -97,7 +87,7 @@ public class OrderFacade {
      * @return
      */
     public List<BossOrdersVo> queryOrderByCondition(String ordernumber, String name, String status, String position, String logisticid, String mintime, String maxtime, Paging<BossOrdersVo> pager) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap<>();
         if (ordernumber != null) {
             map.put("ordernumber", ordernumber);
         }
@@ -154,7 +144,7 @@ public class OrderFacade {
     public List<BossOrdersVo> queryAccuracyConditionByOrder(HttpServletRequest request, String ordernumber,
                                                             String province, String city, String district, String takeway, String mintime,
                                                             String maxtime, String email, String name, String phone, String paytype, Paging<BossOrdersVo> pager) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap<>();
         try {
             request.setCharacterEncoding("utf-8");
 
@@ -221,7 +211,7 @@ public class OrderFacade {
      * @return
      */
     public Map<String, Object> queryPostProvince() {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap<>();
         List<Province> province = bossOrderService.queryPostProvinceName();
         map.put("proname", province);
         return map;
@@ -235,7 +225,7 @@ public class OrderFacade {
      * @return
      */
     public Map<String, Object> queryOrderArea(Integer id) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap<>();
         List<Area> list = bossOrderService.queryPostAreaName(id);
         map.put("list", list);
         return map;
@@ -248,7 +238,7 @@ public class OrderFacade {
      * @return
      */
     public Map<String, Object> queryOrderCity(Integer id) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap<>();
         List<City> list = bossOrderService.queryPostCityName(id);
         map.put("list", list);
         return map;
@@ -261,7 +251,7 @@ public class OrderFacade {
      * @return
      */
     public Map<String, Object> queryOrderDetail(Integer id) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap<>();
         InvoiceVo invoice = bossOrderService.queryOrderInvoiceInfo(id);//查询发票信息
         if (invoice != null) {
             String provice = invoice.getProvince();
@@ -333,7 +323,7 @@ public class OrderFacade {
      */
     public Map<String, Integer> updateOrderAddress(String orderid, String phone, String name, String email, String province, String city, String district, String street) {
         AddressVo address = new AddressVo();
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         address.setCity(city);
         address.setDistrict(district);
         address.setOrderid(Integer.parseInt(orderid));
@@ -362,7 +352,7 @@ public class OrderFacade {
      */
     public Map<String, Integer> updateOrderInvoice(String head, String kind, String content, String orderid, String companyname, String rigaddress, String rigphone, String bank, String banknum, String code, String onlystatue) {
         InvoiceVo invoice = new InvoiceVo();
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         int kinds = Integer.parseInt(kind);
         if (kinds == 1) {
             invoice.setKind(kinds);
@@ -400,7 +390,7 @@ public class OrderFacade {
      * @return
      */
     public Map<String, Integer> updateOrderMoney(String id, String discouponmoney, String dispointmoney, String sendmoney) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         Orders orders = new Orders();
         orders.setId(Integer.parseInt(id));
         orders.setDiscouponmoney(Double.parseDouble(discouponmoney));
@@ -452,7 +442,7 @@ public class OrderFacade {
      * @return
      */
     public Map<String, Object> queryOrderByAddress(Integer id) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap<>();
         AddressVo address = bossOrderService.queryOrdersByAddress(id);
         if (address != null) {
             String provice = address.getProvince();
@@ -503,7 +493,7 @@ public class OrderFacade {
      * @return
      */
     public Map<String, Integer> updateAfterService(Integer processingstatus, String refundamount, String id) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         AfterServiceVo afterservice = new AfterServiceVo();
         afterservice.setId(Integer.parseInt(id));
         if (processingstatus == 1 && refundamount != null) {
@@ -549,7 +539,7 @@ public class OrderFacade {
      * @return
      */
     public List<AfterServiceVo> queryOrderByConditionAfterService(String ordernumber, String name, String aftersalestatus, String afterstatue, String processingstatus, String mintime, String maxtime, Paging<AfterServiceVo> pager) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap<>();
         if (ordernumber != null) {
             map.put("ordernumber", ordernumber);
         }
@@ -621,7 +611,7 @@ public class OrderFacade {
      * @return
      */
     public Map<String, Integer> adddelivery(String id, String takeway, String remark, String orderid, String replacementnumber) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         Afterservice afterservice = new Afterservice();
         afterservice.setId(Integer.parseInt(id));
         afterservice.setTakeway(Integer.parseInt(takeway));
@@ -651,7 +641,7 @@ public class OrderFacade {
      * @return
      */
     public Map<String, Integer> updateAfterStatus(String id) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         Afterservice afterservice = new Afterservice();
         afterservice.setId(Integer.parseInt(id));
         afterservice.setAftersalestatus(3);
@@ -668,7 +658,7 @@ public class OrderFacade {
      * @return
      */
     public Map<String, Integer> updateOperater(String id, String remark, String logisticsid) {
-        Map<String, Integer> map = new HashedMap();
+        Map<String, Integer> map = new HashMap<>();
         Orderoperation orderoperation = new Orderoperation();
         orderoperation.setOrderid(Integer.parseInt(id));
         orderoperation.setLogisticstatue(0);
