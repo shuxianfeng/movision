@@ -160,6 +160,67 @@ public class ProductCategoryService {
     }
 
     /**
+     * 查询所有分类id
+     * @return
+     */
+    public Integer queryAllProtype() {
+        try {
+            log.info("查询所有分类id");
+            return productCategoryMapper.queryAllProtype();
+        } catch (Exception e) {
+            log.error("查询所有分类id失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询是否存在分类
+     *
+     * @param typename
+     * @return
+     */
+    public Integer queryCategoryHave(String typename) {
+        try {
+            log.info("查询是否存在分类");
+            return productCategoryMapper.queryCategoryHave(typename);
+        } catch (Exception e) {
+            log.error("查询是否存在分类失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询所有分类id
+     *
+     * @return
+     */
+    public Integer queryAllBrand() {
+        try {
+            log.info("查询所有分类id");
+            return productCategoryMapper.queryAllBrand();
+        } catch (Exception e) {
+            log.error("查询所有分类id失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询是否存在分类
+     *
+     * @param brandname
+     * @return
+     */
+    public Integer queryBrandHave(String brandname) {
+        try {
+            log.info("查询是否存在分类");
+            return productCategoryMapper.queryBrandHave(brandname);
+        } catch (Exception e) {
+            log.error("查询是否存在分类失败", e);
+            throw e;
+        }
+    }
+
+    /**
      * 添加品牌
      *
      * @param brand

@@ -119,15 +119,22 @@ public class ProductCategoryFacade {
      * @param imgurl
      * @return
      */
-    public Map<String, Integer> addCategory(String typename, String imgurl, String protype) {
+    public Map<String, Integer> addCategory(String typename, String imgurl) {
         Map<String, Integer> map = new HashMap<>();
         ProductCategory productCategory = new ProductCategory();
-        productCategory.setTypename(typename);
-        productCategory.setProtype(Integer.parseInt(protype));
+        int maxpro = productCategoryService.queryAllProtype();
+        int have = productCategoryService.queryCategoryHave(typename);
+        int result = 0;
+        if (have >= 1) {
+            result = 0;
+        } else {
+            productCategory.setProtype(maxpro + 1);
+            productCategory.setTypename(typename);
+        }
         productCategory.setImgurl(imgurl);
         productCategory.setIntime(new Date());
-            int result = productCategoryService.addCategory(productCategory);
-            map.put("result", result);
+        result = productCategoryService.addCategory(productCategory);
+        map.put("result", result);
 
         return map;
     }
@@ -139,14 +146,21 @@ public class ProductCategoryFacade {
      * @param isdel
      * @return
      */
-    public Map<String, Integer> addBrand(String brandname, String isdel, String brandid) {
+    public Map<String, Integer> addBrand(String brandname, String isdel) {
         Map<String, Integer> map = new HashMap<>();
         Brand brand = new Brand();
-        brand.setBrandname(brandname);
+        int maxpro = productCategoryService.queryAllBrand();
+        int have = productCategoryService.queryBrandHave(brandname);
+        int result = 0;
+        if (have >= 1) {
+            result = 0;
+        } else {
+            brand.setBrandid(maxpro + 1);
+            brand.setBrandname(brandname);
+        }
         brand.setIsdel(Integer.parseInt(isdel));
-        brand.setBrandid(Integer.parseInt(brandid));
         brand.setIntime(new Date());
-        int result = productCategoryService.addBrand(brand);
+        result = productCategoryService.addBrand(brand);
         map.put("result", result);
         return map;
     }

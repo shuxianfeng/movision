@@ -1378,4 +1378,7 @@
         FROM yw_goods go WHERE go.id IN
         (SELECT goodsid FROM yw_post_share_goods WHERE postid=232) ORDER BY go.onlinetime DESC
     </select>
+    <select id="findMaxComboid" resultType="java.lang.Integer">
+        select MAX(comboid) from yw_combo
+    </select>
 </mapper>

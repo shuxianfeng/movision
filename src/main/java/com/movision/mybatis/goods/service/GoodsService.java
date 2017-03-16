@@ -1188,6 +1188,21 @@ public class GoodsService {
     }
 
     /**
+     * 查询最大套餐id
+     *
+     * @return
+     */
+    public Integer findMaxComboid() {
+        try {
+            log.info("查询套餐id");
+            return goodsMapper.findMaxComboid();
+        } catch (Exception e) {
+            log.error("查询套餐id失败", e);
+            throw e;
+        }
+    }
+
+    /**
      * 根据用户id查询用户收藏的商品列表
      *
      * @param goodsid

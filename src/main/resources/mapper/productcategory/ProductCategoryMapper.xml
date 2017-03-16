@@ -371,4 +371,16 @@
             </if>
         </trim>
     </insert>
+    <select id="queryAllBrand" resultType="java.lang.Integer">
+       SELECT MAX(brandid) from  yw_brand
+    </select>
+    <select id="queryBrandHave" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select COUNT(1) from yw_brand WHERE  brandname=#{brandname,jdbcType=VARCHAR}
+    </select>
+    <select id="queryAllProtype" resultType="java.lang.Integer">
+        SELECT MAX(protype) from  yw_category
+    </select>
+    <select id="queryCategoryHave" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select COUNT(1) from yw_category WHERE  typename=#{typename,jdbcType=VARCHAR}
+    </select>
 </mapper>

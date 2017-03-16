@@ -19,6 +19,7 @@ import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.pointRecord.entity.PointRecord;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.systemPush.entity.SystemPush;
 import com.movision.mybatis.user.entity.PersonInfo;
 import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.file.FileUtil;
@@ -241,6 +242,25 @@ public class MyInfoController {
         return response;
     }
 
+    /**
+     * 分页
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查询消息推送列表", notes = "查询消息推送列表", response = Response.class)
+    @RequestMapping(value = "query_system_push_list", method = RequestMethod.GET)
+    public Response findAllSyetemPush(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                      @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<SystemPush> paging = new Paging<SystemPush>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<SystemPush> list = imFacade.findAllSyetemPush(paging);
+        paging.result(list);
+        response.setData(paging);
+        return response;
+    }
+
     @ApiOperation(value = "查询系统通知详情", notes = "查询系统通知详情", response = Response.class)
     @RequestMapping(value = "query_system_inform_detail", method = RequestMethod.GET)
     public Response querySystemInformDetail(@ApiParam(value = "系统通知id") @RequestParam Integer id) {
@@ -267,7 +287,7 @@ public class MyInfoController {
      * @return
      */
     @ApiOperation(value = "查询系统通知条件搜索分页", notes = "查询系统通知条件搜索分页", response = Response.class)
-    @RequestMapping(value = "query_system_inform_list", method = RequestMethod.POST)
+    @RequestMapping(value = "query_system_informcondition_list", method = RequestMethod.POST)
     public Response findAllSystemCondition(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                            @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
                                            @ApiParam(value = "内容") @RequestParam(required = false) String body,
@@ -275,6 +295,27 @@ public class MyInfoController {
         Response response = new Response();
         Paging<ImSystemInform> paging = new Paging<ImSystemInform>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<ImSystemInform> list = imFacade.findAllSystemCondition(body, pai, paging);
+        paging.result(list);
+        response.setData(paging);
+        return response;
+    }
+
+    /**
+     * 条件搜索分页
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查询消息推送条件搜索分页", notes = "查询消息推送条件搜索分页", response = Response.class)
+    @RequestMapping(value = "query_system_pushcondition_list", method = RequestMethod.POST)
+    public Response findAllPushCondition(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                         @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                         @ApiParam(value = "内容") @RequestParam(required = false) String body,
+                                         @ApiParam(value = "排序") @RequestParam(required = false) String pai) {
+        Response response = new Response();
+        Paging<SystemPush> paging = new Paging<SystemPush>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<SystemPush> list = imFacade.findAllPushCondition(body, pai, paging);
         paging.result(list);
         response.setData(paging);
         return response;
@@ -291,6 +332,30 @@ public class MyInfoController {
     public Response queryBodyAll(@ApiParam(value = "系统通知id") @RequestParam Integer id) {
         Response response = new Response();
         ImSystemInform imSystemInform = imFacade.queryBodyAll(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(imSystemInform);
+        return response;
+    }
+
+    @ApiOperation(value = "查询消息内容全部", notes = "查询消息内容全部", response = Response.class)
+    @RequestMapping(value = "query_pushbody_all", method = RequestMethod.POST)
+    public Response queryPushBody(@ApiParam(value = "消息推送id") @RequestParam Integer id) {
+        Response response = new Response();
+        SystemPush imSystemInform = imFacade.queryPushBody(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(imSystemInform);
+        return response;
+    }
+
+    @ApiOperation(value = "删除消息", notes = "删除消息", response = Response.class)
+    @RequestMapping(value = "delete_push", method = RequestMethod.POST)
+    public Response deleteSystemPush(@ApiParam(value = "消息推送id") @RequestParam Integer id) {
+        Response response = new Response();
+        Integer imSystemInform = imFacade.deleteSystemPush(id);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

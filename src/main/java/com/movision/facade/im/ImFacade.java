@@ -14,6 +14,8 @@ import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInform.service.ImSystemInformService;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.imuser.service.ImUserService;
+import com.movision.mybatis.systemPush.entity.SystemPush;
+import com.movision.mybatis.systemPush.service.SystemPushService;
 import com.movision.utils.JsonUtils;
 import com.movision.utils.ListUtil;
 import com.movision.utils.SignUtil;
@@ -54,6 +56,9 @@ public class ImFacade {
 
     @Autowired
     private ImUserService imUserService;
+
+    @Autowired
+    private SystemPushService systemPushService;
 
     @Autowired
     private ImFirstDialogueService imFirstDialogueService;
@@ -525,6 +530,17 @@ public class ImFacade {
         imSystemInformService.add(imSystemInform);
     }
 
+    public void addPush(String body, String fromaccid, String toAccids) {
+        SystemPush systemPush = new SystemPush();
+        systemPush.setBody(body);
+        systemPush.setFromAccid(fromaccid);
+        systemPush.setInformTime(new Date());
+        systemPush.setUserid(ShiroUtil.getBossUserID());
+        systemPush.setToAccids(toAccids);
+        systemPushService.addPush(systemPush);
+    }
+
+
     /**
      * 查询所有的系统通知
      *
@@ -577,6 +593,55 @@ public class ImFacade {
      */
     public ImSystemInform queryBodyAll(Integer id) {
         return imSystemInformService.queryBodyAll(id);
+    }
+
+    /**
+     * 查询消息列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<SystemPush> findAllSyetemPush(Paging<SystemPush> pager) {
+        return systemPushService.findAllSystemPush(pager);
+    }
+
+    /**
+     * 消息搜索
+     *
+     * @param body
+     * @param pai
+     * @param pager
+     * @return
+     */
+    public List<SystemPush> findAllPushCondition(String body, String pai, Paging<SystemPush> pager) {
+        Map<String, Object> map = new HashMap<>();
+        if (body != null) {
+            map.put("body", body);
+        }
+        if (pai != null) {
+            map.put("pai", pai);
+        }
+        return systemPushService.findAllPushCondition(map, pager);
+    }
+
+    /**
+     * 查询消息内容
+     *
+     * @param id
+     * @return
+     */
+    public SystemPush queryPushBody(Integer id) {
+        return systemPushService.queryPushBody(id);
+    }
+
+    /**
+     * 删除消息
+     *
+     * @param id
+     * @return
+     */
+    public Integer deleteSystemPush(Integer id) {
+        return systemPushService.deleteSystemPush(id);
     }
 
 }

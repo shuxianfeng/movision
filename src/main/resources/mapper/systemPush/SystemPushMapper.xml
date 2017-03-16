@@ -103,4 +103,24 @@
         inform_time = #{informTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="findAllSystemPush" resultType="com.movision.mybatis.systemPush.entity.SystemPush">
+        select * from yw_sms_system_push
+    </select>
+    <select id="findAllPushCondition" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.systemPush.entity.SystemPush">
+        select * from yw_sms_system_push WHERE 1
+        <if test="body!=null">
+            AND body LIKE LIKE concat('%',#{body,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="pai==0">
+            ORDER BY inform_time DESC
+        </if>
+    </select>
+    <select id="queryPushBody" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.systemPush.entity.SystemPush">
+        select body from yw_sms_system_push
+    </select>
+    <delete id="deleteSystemPush" parameterType="java.lang.Integer">
+        DELETE FROM yw_sms_system_push WHERE id=#{id,jdbcType=INTEGER}
+    </delete>
 </mapper>

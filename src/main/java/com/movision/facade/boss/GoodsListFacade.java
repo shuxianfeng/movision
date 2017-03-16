@@ -873,26 +873,13 @@ public class GoodsListFacade {
      * @param goodsid
      * @return
      */
-    public Map<String, Integer> addCom(String imgurl, String comboid, String comboname, String combodiscountprice, String goodsid) {
+    public Map<String, Integer> addCom(String imgurl, String comboname, String combodiscountprice, String goodsid) {
         Map<String, Integer> map = new HashMap<>();
         Combo combo = new Combo();
         combo.setImgurl(imgurl);
         combo.setComboname(comboname);
-        List<Integer> list = goodsService.findAllComboid();
-        int comboidsd = 0;
-        int com = Integer.parseInt(comboid);
-        for (int i = 0; i < list.size(); i++) {
-            int a = list.get(i);
-            if (com == a) {
-                comboidsd = com + 1;
-                //combo.setComboid(comboidsd);
-                com = comboidsd;
-                if (com == a) {
-                    break;
-                }
-            }
-        }
-        combo.setComboid(com);
+        int list = goodsService.findMaxComboid();
+        combo.setComboid(list + 1);
         combo.setIntime(new Date());
         combo.setCombodiscountprice(Double.parseDouble(combodiscountprice));
         int res = goodsService.addCom(combo);

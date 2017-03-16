@@ -842,12 +842,11 @@ public class GoodsController {
     @ApiOperation(value = "插入套餐", notes = "插入套餐", response = Response.class)
     @RequestMapping(value = "add_combo", method = RequestMethod.POST)
     public Response addComGoods(@ApiParam(value = "套餐图") @RequestParam(required = false) String imgurl,
-                                @ApiParam(value = "套餐id") @RequestParam(required = false) String comboid,
                                 @ApiParam(value = "套餐名字") @RequestParam(required = false) String comboname,
                                 @ApiParam(value = "折后价") @RequestParam(required = false) String combodiscountprice,
                                 @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.addCom(imgurl, comboid, comboname, combodiscountprice, goodsid);
+        Map<String, Integer> map = goodsFacade.addCom(imgurl, comboname, combodiscountprice, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("插入成功");
         }

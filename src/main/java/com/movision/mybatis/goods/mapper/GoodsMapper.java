@@ -157,6 +157,8 @@ public interface GoodsMapper {
 
     List<Integer> findcomboid();//查询套餐id
 
+    Integer findMaxComboid();//查询最大id
+
     List<GoodsVo> findAllQueryCollectionGoodsListByUserid(String goodsid, RowBounds rowBounds);
 
     List<GoodsImg> queryBannerImg(String goodsid);//查询banner图

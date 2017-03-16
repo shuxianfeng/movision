@@ -31,8 +31,14 @@ public interface ProductCategoryMapper {
 
     int addCategory(ProductCategory productCategory);//添加商品分类
 
+    Integer queryAllProtype();
+
+    Integer queryCategoryHave(String typename);
     int addBrand(Brand brand);//添加品牌
 
+    Integer queryAllBrand();
+
+    Integer queryBrandHave(String brandname);
     int addGoodsDiscount(GoodsDiscount goodsDiscount);//添加商品活动
     ProductCategory queryCategory(Integer id);//根据id查询类别信息
 
