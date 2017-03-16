@@ -62,7 +62,14 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String path = request.getServletPath();
+        String path = request.getServletPath(); //  path=/boss/menu/query_sidebar
+        /**
+         *  如果是/boss/menu/menu_list.html应该怎么拦截？
+         *  如果他的角色拥有 /boss/menu的权限，那么就不拦截
+         *  如果没有 /boss/menu的权限，就拦截
+         *
+         */
+
         log.info("path=" + path);
         //请求中带这些字符串的不去拦截
         if (path.matches(LoginPropertiesLoader.getValue("no.intercept.url"))) {
@@ -83,16 +90,32 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                     //超管拥有所有权限
                     return true;
                 }
+
                 //获取授权的菜单列表
                 List<Map<String, Object>> menuList = (List) session.getAttribute(SessionConstant.ACCESS_MENU);
                 log.info("获取授权的菜单列表：" + menuList.toString());
-                //遍历父菜单
+                //遍历菜单列表
                 for (int i = 0; i < menuList.size(); i++) {
+                    //获取一个map中的父菜单
+                    AuthMenu parentMenu = (AuthMenu) menuList.get(i).get("parent_menu");
+                    //父菜单的url
+                    String parentUrl = parentMenu.getUrl();
+                    /*if (path.contains(parentUrl) && parentMenu.getAuthroize()) {
+                        this.initBossUserInfo(currentUser, session);
+                        return true;
+                    }*/
+                    //获取一个map钟的子菜单集合
                     List<AuthMenu> childrenList = (List<AuthMenu>) menuList.get(i).get("child_menu");
                     //遍历子菜单
                     for (int j = 0; j < childrenList.size(); j++) {
-                        //若请求的url包含子菜单的url，并且 该菜单属于授权菜单，则通过拦截器
-                        if (path.contains(childrenList.get(j).getUrl()) && childrenList.get(j).getAuthroize()) {
+                        //子菜单的url
+                        String childUrl = childrenList.get(j).getUrl();
+                        //
+                        /**
+                         * 若请求的url包含父菜单的url，并且 子菜单url包含父菜单url， 并且 该菜单属于授权菜单，
+                         * 则通过拦截器
+                         */
+                        if (path.contains(parentUrl) && childUrl.contains(parentUrl) && childrenList.get(j).getAuthroize()) {
                             this.initBossUserInfo(currentUser, session);
                             return true;
                         }
@@ -153,7 +176,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 if (this.loginBossInfoIsChange(bossuser, loginInfo)) {
                     session.setAttribute(SessionConstant.BOSS_USER, loginInfo);
                     //清除缓存
-                    bossRealm.getAuthorizationCache().remove(subject.getPrincipals());
+                    bossRealm.getAuthorizationCache().remove(String.valueOf(subject.getPrincipals()));
                 }
             }
         }

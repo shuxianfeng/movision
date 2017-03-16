@@ -65,6 +65,7 @@ public class BossRealm extends AuthorizingRealm {
                 bossUser.getPassword(), bossUser.getIssuper(), bossUser.getStatus(), bossUser.getIsdel(), bossUser.getCreatetime(),
                 bossUser.getAfterlogintime(), bossUser.getBeforelogintime(), roleid, accid, imtoken);
 
+        log.info("realm name = " + getName());
         AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 shiroBossUser, // 自定义principle对象
                 bossUser.getPassword(), // 密码，这里密码是加密的
@@ -130,6 +131,7 @@ public class BossRealm extends AuthorizingRealm {
      * 自定义Authentication对象，使得Subject除了携带用户的登录名外还可以携带更多信息.
      */
     public static class ShiroBossUser implements Serializable {
+
         private static final long serialVersionUID = -1373760761780840081L;
         private Integer id;
         private String name;

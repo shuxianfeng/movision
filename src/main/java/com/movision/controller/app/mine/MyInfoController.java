@@ -152,7 +152,7 @@ public class MyInfoController {
     }
 
     @ApiOperation(value = "修改个人资料", notes = "修改个人资料", response = Response.class)
-    @RequestMapping(value = {"/update_my_info"}, method = RequestMethod.POST)
+    @RequestMapping(value = "/update_my_info", method = RequestMethod.POST)
     public Response updateMyInfo(@ApiParam @ModelAttribute PersonInfo personInfo) {
 
         Response response = new Response();
@@ -160,7 +160,6 @@ public class MyInfoController {
         userFacade.updatePersonInfo(personInfo);
         return response;
     }
-
 
     @ApiOperation(value = "上传个人资料头像图片", notes = "上传个人资料头像图片", response = Response.class)
     @RequestMapping(value = {"/upload_person_info_pic"}, method = RequestMethod.POST)
