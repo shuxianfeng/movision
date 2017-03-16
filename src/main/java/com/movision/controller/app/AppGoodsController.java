@@ -136,24 +136,6 @@ public class AppGoodsController {
 //    }
 
     /**
-     * 租用的商品立即租用接口(选择好商品及套餐类型后调用)
-     */
-    @ApiOperation(value = "租用的商品立即租用接口(选择好商品及套餐类型后调用)", notes = "租用的商品立即租用接口，选择好商品及套餐类型后调用(返回所有地址列表、所含套餐商品列表、用户可用积分数)", response = Response.class)
-    @RequestMapping(value = "immediateRent", method = RequestMethod.POST)
-    public Response immediateRent(@ApiParam(value = "套餐id") @RequestParam String comboid,
-                                  @ApiParam(value = "用户id") @RequestParam String userid) {
-        Response response = new Response();
-
-        Map<String, Object> map = goodsFacade.immediateRent(comboid, userid);
-
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
-        }
-        response.setData(map);
-        return response;
-    }
-
-    /**
      * 提交订单前，点击选择优惠券，跳转页面，返回所有优惠券列表
      */
     @ApiOperation(value = "提交订单时选择优惠券，返回所有优惠券列表接口", notes = "提交订单前，点击选择优惠券，页面跳转，并在该接口中返回所有该用户名下的优惠券列表", response = Response.class)
@@ -165,6 +147,31 @@ public class AppGoodsController {
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 租用的商品立即租用接口(选择好商品及套餐类型后调用)
+     */
+    @ApiOperation(value = "租用的商品立即租用接口(选择好商品及套餐类型后调用)", notes = "租用的商品立即租用接口，选择好商品及套餐类型后调用(返回所有地址列表、所含套餐商品列表、用户可用积分数)", response = Response.class)
+    @RequestMapping(value = "immediateRent", method = RequestMethod.POST)
+    public Response immediateRent(@ApiParam(value = "商品id") @RequestParam String goodsid,
+                                  @ApiParam(value = "用户id") @RequestParam String userid,
+                                  @ApiParam(value = "套餐类型id（不选择套餐时传空）") @RequestParam(required = false) String combotype,
+                                  @ApiParam(value = "活动id（不参加活动时传空）") @RequestParam(required = false) String discountid,
+                                  @ApiParam(value = "租用日期（多天用英文逗号隔开）") @RequestParam String rentdate,
+                                  @ApiParam(value = "是否需要跟机员 0不需要 1需要") @RequestParam String isdebug,
+                                  @ApiParam(value = "商品数量") @RequestParam String num) {
+        Response response = new Response();
+
+        Map<String, Object> map = goodsFacade.immediateRent(goodsid, userid, combotype, discountid, rentdate, isdebug, num);
+
+        if (response.getCode() == 200) {
+            response.setMessage("请求成功");
+        } else {
+            response.setMessage("请求失败");
         }
         response.setData(map);
         return response;

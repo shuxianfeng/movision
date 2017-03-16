@@ -159,6 +159,10 @@ public class GoodsFacade {
         int storenum = goodsService.queryStore(Integer.parseInt(goodsid));
         if (storenum > 0) {
 
+            //查询商品小方图
+            String imgurl = goodsService.queryGoodsImg(Integer.parseInt(goodsid));
+            map.put("smallimg", imgurl);
+
             //查询套餐
             List<ComboVo> comboList = goodsService.queryCombo(Integer.parseInt(goodsid));
             //再查询套餐剩余库存(取套餐中商品库存的最小值)
@@ -194,17 +198,15 @@ public class GoodsFacade {
         return map;
     }
 
-    public Map<String, Object> immediateRent(String comboid, String userid) {
+    public Map<String, Object> immediateRent(String goodsid, String userid, String combotype, String discountid, String rentdate, String isdebug, String num) {
 
         Map<String, Object> map = new HashMap<>();
 
-        //先根据用户id查询该用户的所有地址列表
+        //先根据用户id查询该用户的默认地址
         List<Address> addressList = goodsService.queryAddressList(Integer.parseInt(userid));
 
-        //根据套餐id和商品id查询，该套餐包含的所有商品
-        List<GoodsVo> allRentGoodsList = goodsService.queryComboGoodsList(Integer.parseInt(comboid));
-
-        //查询所有配送方式列表(临时屏蔽)
+        //根据商品id查询商品详情
+        List<GoodsVo> allRentGoodsList = goodsService.queryComboGoodsList(Integer.parseInt(combotype));
 
         //查询用户可用积分数
         int userpoint = userService.queryUserPoint(Integer.parseInt(userid));

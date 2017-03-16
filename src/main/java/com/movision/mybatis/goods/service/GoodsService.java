@@ -297,6 +297,16 @@ public class GoodsService {
         }
     }
 
+    public String queryGoodsImg(int goodsid) {
+        try {
+            log.info("根据商品id查询商品小方图");
+            return goodsMapper.queryGoodsImg(goodsid);
+        } catch (Exception e) {
+            log.error("根据商品id查询商品小方图失败");
+            throw e;
+        }
+    }
+
     public int insertGoodAssessment(GoodsAssessment goodsAssessment) {
         try {
             log.info("发表商品评论");
