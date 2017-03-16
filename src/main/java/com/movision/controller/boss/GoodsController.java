@@ -716,7 +716,7 @@ public class GoodsController {
     public Response deleteComGoods(@ApiParam(value = "套餐id") @RequestParam(required = false) Integer comboid) {
         Response response = new Response();
         int res = goodsFacade.deleteComGoods(comboid);
-        if (response.getCode() == 200 && res == 1) {
+        if (res == 1) {
             response.setMessage("删除成功");
         } else if (res == 0) {
             response.setMessage("套餐内有商品不可删除");
