@@ -57,8 +57,11 @@ public interface ProductCategoryMapper {
 
     int updateUp(Integer id);//启用
 
+    int queryisdel(Integer ID);
     int updateDownD(Integer id);//活动停用
 
     int updateUpD(Integer id);//活动启用
+
+    int queryGoodsisdel(Integer id);
 
 }

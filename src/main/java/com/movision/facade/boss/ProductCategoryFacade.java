@@ -270,18 +270,16 @@ public class ProductCategoryFacade {
      * @return
      */
     public int updateDown(Integer id) {
-        return productCategoryService.updateDown(id);
+        int isdel = productCategoryService.queryisdel(id);
+        int result = 0;
+        if (isdel == 1) {
+            result = productCategoryService.updateUp(id);
+        } else if (isdel == 0) {
+            result = productCategoryService.updateDown(id);
+        }
+        return result;
     }
 
-    /**
-     * 启用
-     *
-     * @param id
-     * @return
-     */
-    public int updateUp(Integer id) {
-        return productCategoryService.updateUp(id);
-    }
 
     /**
      * 活动停用
@@ -290,18 +288,16 @@ public class ProductCategoryFacade {
      * @return
      */
     public int updateDownD(Integer id) {
-        return productCategoryService.updateDownD(id);
+        int isdel = productCategoryService.queryGoodsisdel(id);
+        int result = 0;
+        if (isdel == 1) {
+            result = productCategoryService.updateUpD(id);
+        } else if (isdel == 0) {
+            result = productCategoryService.updateDownD(id);
+        }
+        return result;
     }
 
-    /**
-     * 活动启用
-     *
-     * @param id
-     * @return
-     */
-    public int updateUpD(Integer id) {
-        return productCategoryService.updateUpD(id);
-    }
 
     /**
      * 修改品牌

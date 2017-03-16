@@ -378,6 +378,16 @@ public class ProductCategoryService {
         }
     }
 
+    public int queryisdel(Integer id) {
+        try {
+            log.info("查询上下架");
+            return productCategoryMapper.queryisdel(id);
+        } catch (Exception e) {
+            log.error("查询上下架失败", e);
+            throw e;
+        }
+    }
+
     /**
      * 活动停用
      *
@@ -390,6 +400,16 @@ public class ProductCategoryService {
             return productCategoryMapper.updateDownD(id);
         } catch (Exception e) {
             log.error("活动停用失败", e);
+            throw e;
+        }
+    }
+
+    public int queryGoodsisdel(Integer id) {
+        try {
+            log.info("查询活动是否上架");
+            return productCategoryMapper.queryGoodsisdel(id);
+        } catch (Exception e) {
+            log.error("查询活动是否上架失败", e);
             throw e;
         }
     }
