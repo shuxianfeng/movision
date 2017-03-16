@@ -52,4 +52,21 @@ public class ImSystemInformService {
             throw e;
         }
     }
+
+    /**
+     * 删除系统通知
+     *
+     * @param id
+     * @return
+     */
+    public Integer deleteImSystem(Integer id) {
+        try {
+            log.info("删除系统通知");
+            return imSystemInformMapper.deleteByPrimaryKey(id);
+        } catch (Exception e) {
+            log.error("删除系统通知失败", e);
+            throw e;
+        }
+
+    }
 }

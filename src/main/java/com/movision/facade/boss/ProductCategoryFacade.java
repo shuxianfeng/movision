@@ -119,43 +119,15 @@ public class ProductCategoryFacade {
      * @param imgurl
      * @return
      */
-    public Map<String, Integer> addCategory(HttpServletRequest request, String typename, MultipartFile imgurl) {
+    public Map<String, Integer> addCategory(String typename, String imgurl) {
         Map<String, Integer> map = new HashMap<>();
         ProductCategory productCategory = new ProductCategory();
         productCategory.setTypename(typename);
-        try {
-            //上传图片到本地服务器
-            String savedFileName = "";
-            String imgurle = "";
-            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if (imgurl != null && isMultipart) {
-                if (!imgurl.isEmpty()) {
-                    String fileRealName = imgurl.getOriginalFilename();
-                    int pointIndex = fileRealName.indexOf(".");
-                    String fileSuffix = fileRealName.substring(pointIndex);
-                    UUID FileId = UUID.randomUUID();
-                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
-                    String savedDir = request.getSession().getServletContext().getRealPath("");
-                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
-                    //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 9);
-                    //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/goods/coverimg/";
-                    File savedFile = new File(combinpath, savedFileName);
-                    System.out.println("文件url：" + combinpath + "" + savedFileName);
-                    boolean isCreateSuccess = savedFile.createNewFile();
-                    if (isCreateSuccess) {
-                        imgurl.transferTo(savedFile);  //转存文件
-                    }
-                }
-                imgurle = imgdomain + savedFileName;
-            }
-            productCategory.setImgurl(imgurle);
+
+        productCategory.setImgurl(imgurl);
             int result = productCategoryService.addCategory(productCategory);
             map.put("result", result);
-        } catch (Exception e) {
-            log.error("增加失败", e);
-        }
+
         return map;
     }
 
@@ -255,50 +227,22 @@ public class ProductCategoryFacade {
     /**
      * 修改类别
      *
-     * @param request
+     * @param
      * @param id
      * @param typename
      * @param imgurl
      * @return
      */
-    public Map<String, Integer> updateCategory(HttpServletRequest request, String id, String typename, MultipartFile imgurl) {
+    public Map<String, Integer> updateCategory(String id, String typename, String imgurl) {
         Map<String, Integer> map = new HashMap<>();
         ProductCategory productCategory = new ProductCategory();
         productCategory.setId(Integer.parseInt(id));
         productCategory.setTypename(typename);
-        try {
-            //上传图片到本地服务器
-            String savedFileName = "";
-            String imgurle = "";
-            boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-            if (imgurl != null && isMultipart) {
-                if (!imgurl.isEmpty()) {
-                    String fileRealName = imgurl.getOriginalFilename();
-                    int pointIndex = fileRealName.indexOf(".");
-                    String fileSuffix = fileRealName.substring(pointIndex);
-                    UUID FileId = UUID.randomUUID();
-                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
-                    String savedDir = request.getSession().getServletContext().getRealPath("");
-                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision后缀movision去除
-                    //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 9);
-                    //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/goods/coverimg/";
-                    File savedFile = new File(combinpath, savedFileName);
-                    System.out.println("文件url：" + combinpath + "" + savedFileName);
-                    boolean isCreateSuccess = savedFile.createNewFile();
-                    if (isCreateSuccess) {
-                        imgurl.transferTo(savedFile);  //转存文件
-                    }
-                }
-                imgurle = imgdomain + savedFileName;
-            }
-            productCategory.setImgurl(imgurle);
+
+        productCategory.setImgurl(imgurl);
             int result = productCategoryService.updateCategory(productCategory);
             map.put("result", result);
-        } catch (Exception e) {
-            log.error("修改失败", e);
-        }
+
         return map;
     }
 

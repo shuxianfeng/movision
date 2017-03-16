@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -215,11 +214,10 @@ public class ProductCategoryController {
      */
     @ApiOperation(value = "增加类别", notes = "增加类别", response = Response.class)
     @RequestMapping(value = "add_category", method = RequestMethod.POST)
-    public Response addCategory(HttpServletRequest request,
-                                @ApiParam(value = "分类名称") @RequestParam String typename,
-                                @ApiParam(value = "图片") @RequestParam MultipartFile imgurl) {
+    public Response addCategory(@ApiParam(value = "分类名称") @RequestParam String typename,
+                                @ApiParam(value = "图片") @RequestParam String imgurl) {
         Response response = new Response();
-        Map<String, Integer> map = productCategoryFacade.addCategory(request, typename, imgurl);
+        Map<String, Integer> map = productCategoryFacade.addCategory(typename, imgurl);
         if (response.getCode() == 200) {
             response.setMessage("增加成功");
         }
@@ -237,7 +235,7 @@ public class ProductCategoryController {
      */
     @ApiOperation(value = "增加品牌", notes = "增加品牌", response = Response.class)
     @RequestMapping(value = "add_brand", method = RequestMethod.POST)
-    public Response addCategory(
+    public Response addBrand(
             @ApiParam(value = "品牌名称") @RequestParam String brandname,
             @ApiParam(value = "是否启用") @RequestParam(required = false) String isdel) {
         Response response = new Response();
@@ -252,19 +250,19 @@ public class ProductCategoryController {
     /**
      * 修改类别
      *
-     * @param request
+     * @param
      * @param typename
      * @param imgurl
      * @return
      */
     @ApiOperation(value = "修改类别", notes = "修改类别", response = Response.class)
     @RequestMapping(value = "update_category", method = RequestMethod.POST)
-    public Response updateCategory(HttpServletRequest request,
-                                   @ApiParam(value = "分类名称") @RequestParam(required = false) String typename,
-                                   @ApiParam(value = "图片") @RequestParam(required = false) MultipartFile imgurl,
-                                   @ApiParam(value = "分类id") @RequestParam(required = false) String id) {
+    public Response updateCategory(
+            @ApiParam(value = "分类名称") @RequestParam(required = false) String typename,
+            @ApiParam(value = "图片") @RequestParam(required = false) String imgurl,
+            @ApiParam(value = "分类id") @RequestParam(required = false) String id) {
         Response response = new Response();
-        Map<String, Integer> map = productCategoryFacade.updateCategory(request, typename, id, imgurl);
+        Map<String, Integer> map = productCategoryFacade.updateCategory(typename, id, imgurl);
         if (response.getCode() == 200) {
             response.setMessage("修改成功");
         }
