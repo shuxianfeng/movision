@@ -130,10 +130,10 @@ public class ProductCategoryFacade {
         } else {
             productCategory.setProtype(maxpro + 1);
             productCategory.setTypename(typename);
+            productCategory.setImgurl(imgurl);
+            productCategory.setIntime(new Date());
+            result = productCategoryService.addCategory(productCategory);
         }
-        productCategory.setImgurl(imgurl);
-        productCategory.setIntime(new Date());
-        result = productCategoryService.addCategory(productCategory);
         map.put("result", result);
 
         return map;
@@ -157,10 +157,10 @@ public class ProductCategoryFacade {
         } else {
             brand.setBrandid(maxpro + 1);
             brand.setBrandname(brandname);
+            brand.setIsdel(Integer.parseInt(isdel));
+            brand.setIntime(new Date());
+            result = productCategoryService.addBrand(brand);
         }
-        brand.setIsdel(Integer.parseInt(isdel));
-        brand.setIntime(new Date());
-        result = productCategoryService.addBrand(brand);
         map.put("result", result);
         return map;
     }
