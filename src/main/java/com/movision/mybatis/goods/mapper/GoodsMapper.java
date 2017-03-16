@@ -166,4 +166,6 @@ public interface GoodsMapper {
     Integer deleteByComGoods(String goodsid);
 
     void updateStock(Map<String, Object> map);
+
+    List<GoodsVo> queryGoods(Integer goodsId);
 }

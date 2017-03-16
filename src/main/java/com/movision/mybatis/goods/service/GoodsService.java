@@ -1253,4 +1253,14 @@ public class GoodsService {
             throw e;
         }
     }
+
+    public List<GoodsVo> queryGoods(Integer goodsid) {
+        try {
+            log.info("查询商品");
+            return goodsMapper.queryGoods(goodsid);
+        } catch (Exception e) {
+            log.error("查询商品异常");
+            throw e;
+        }
+    }
 }

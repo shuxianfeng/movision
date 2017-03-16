@@ -1364,4 +1364,9 @@
     <delete id="deleteComGoods" parameterType="java.lang.Integer">
         DELETE FROM yw_combo WHERE comboid=#{comboid,jdbcType=INTEGER}
     </delete>
+
+    <select id="queryGoods" parameterType="java.lang.Integer" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT go.*,img.img_url FROM yw_goods go LEFT JOIN yw_goods_img img ON img.goodsid=go.id WHERE go.id IN
+        (SELECT goodsid FROM yw_post_share_goods WHERE postid=#{goodsId,jdbcType=INTEGER}) AND img.type=2 ORDER BY go.onlinetime DESC
+    </select>
 </mapper>

@@ -1,8 +1,11 @@
 package com.movision.controller.boss;
 
 import com.movision.common.Response;
+import com.movision.facade.boss.CircleFacade;
 import com.movision.facade.boss.PostFacade;
 import com.movision.mybatis.activePart.entity.ActivePartList;
+import com.movision.mybatis.category.entity.Category;
+import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.post.entity.*;
@@ -37,6 +40,10 @@ import java.util.Map;
 public class PostController {
     @Autowired
     PostFacade postFacade;
+
+    @Autowired
+    CircleFacade circleFacade;
+
     @Autowired
     private MovisionOssClient movisionOssClient;
     /**
@@ -62,27 +69,36 @@ public class PostController {
     }
 
     /**
-     * 根据圈子id查询帖子列表
+     * 查询圈子分类
      *
-     * @param circleid
-     * @param pageNo
-     * @param pageSize
      * @return
      */
-    @ApiOperation(value = "根据圈子id查询帖子列表", notes = "用于根据圈子id查询帖子列表接口", response = Response.class)
-    @RequestMapping(value = "query_post_circleid", method = RequestMethod.POST)
-    public Response queryPostByCircleId(@ApiParam(value = "圈子id") @RequestParam String circleid,
-                                        @ApiParam(value = "是否查询今日新增帖子（是:1 否:不填  2:查询精贴列表）") @RequestParam(required = false) String type,
-                                        @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                        @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+    @ApiOperation(value = "查询圈子分类", notes = "用于查询圈子分类接口", response = Response.class)
+    @RequestMapping(value = "query_circle_type_list", method = RequestMethod.POST)
+    public Response queryCircleTypeList() {
+        List<Category> map = circleFacade.queryCircleTypeList();
         Response response = new Response();
-        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostList> list = postFacade.queryPostByCircleId(circleid, type, pager);
         if (response.getCode() == 200) {
-            response.setMessage("查询成");
+            response.setMessage("操作成功");
         }
-        pager.result(list);
-        response.setData(pager);
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 选择圈子
+     *
+     * @return
+     */
+    @ApiOperation(value = "选择圈子", notes = "用于选择圈子接口", response = Response.class)
+    @RequestMapping(value = "/query_list_circle_type", method = RequestMethod.POST)
+    public Response queryListByCircleType(@ApiParam(value = "圈子类型id") @RequestParam(required = false) String categoryid) {
+        Response response = new Response();
+        List<Circle> list = circleFacade.queryListByCircleType(categoryid);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(list);
         return response;
     }
 

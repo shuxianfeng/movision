@@ -8,6 +8,7 @@ import com.movision.mybatis.category.service.CategoryService;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
+import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.period.entity.Period;
@@ -101,19 +102,6 @@ public class PostFacade {
         return list;
     }
 
-    /**
-     * 根据圈子id查询帖子列表
-     *
-     * @param circleid
-     * @param pager
-     * @return
-     */
-    public List<PostList> queryPostByCircleId(String circleid, String type, Paging<PostList> pager) {
-        Map map = new HashedMap();
-        map.put("circleid", Integer.parseInt(circleid));
-        map.put("type", type);
-        return postService.queryPostByCircleId(map, pager);
-    }
 
     /**
      * 根据用户id查询帖子列表
@@ -806,7 +794,10 @@ public class PostFacade {
      * @return
      */
     public PostCompile queryPostByIdEcho(String postid) {
-        return postService.queryPostByIdEcho(Integer.parseInt(postid));
+        PostCompile postCompile = postService.queryPostByIdEcho(Integer.parseInt(postid));
+        List<GoodsVo> goodses = goodsService.queryGoods(postCompile.getId());
+        postCompile.setGoodses(goodses);
+        return postCompile;
     }
 
     /**

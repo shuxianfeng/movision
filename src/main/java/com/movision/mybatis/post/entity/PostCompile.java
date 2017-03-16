@@ -1,6 +1,10 @@
 package com.movision.mybatis.post.entity;
 
+import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.goods.entity.GoodsVo;
+
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用于帖子编辑数据回显
@@ -43,6 +47,16 @@ public class PostCompile {
     private Integer orderid;//精选排序
 
     private String postcontent;//帖子内容
+
+    private List<GoodsVo> goodses;//商品
+
+    public List<GoodsVo> getGoodses() {
+        return goodses;
+    }
+
+    public void setGoodses(List<GoodsVo> goodses) {
+        this.goodses = goodses;
+    }
 
     public Date getTime() {
         return time;
