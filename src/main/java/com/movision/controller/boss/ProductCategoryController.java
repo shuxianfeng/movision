@@ -215,7 +215,7 @@ public class ProductCategoryController {
     @ApiOperation(value = "增加类别", notes = "增加类别", response = Response.class)
     @RequestMapping(value = "add_category", method = RequestMethod.POST)
     public Response addCategory(@ApiParam(value = "分类名称") @RequestParam String typename,
-                                @ApiParam(value = "图片") @RequestParam String imgurl
+                                @ApiParam(value = "图片") @RequestParam(required = false) String imgurl
     ) {
         Response response = new Response();
         Map<String, Integer> map = productCategoryFacade.addCategory(typename, imgurl);
