@@ -20,7 +20,7 @@ import java.security.NoSuchAlgorithmException;
  * 入参 address
  */
 @RestController
-@RequestMapping("/boss/baiduposition/")
+@RequestMapping("/boss/system/")
 public class BaiduPositionController {
 
     @Autowired
