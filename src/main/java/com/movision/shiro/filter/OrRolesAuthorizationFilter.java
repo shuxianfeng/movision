@@ -11,7 +11,7 @@ import org.apache.shiro.util.CollectionUtils;
 import org.apache.shiro.web.filter.authz.AuthorizationFilter;
 
 /**
- * 角色授权过滤器
+ * 角色授权过滤器【废弃】
  * @author zhuangyuhao@20160606
  */
 public class OrRolesAuthorizationFilter extends AuthorizationFilter {

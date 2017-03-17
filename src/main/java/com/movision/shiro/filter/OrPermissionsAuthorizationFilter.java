@@ -13,6 +13,7 @@ import java.util.Arrays;
 import static org.apache.shiro.web.filter.mgt.DefaultFilter.user;
 
 /**
+ * shiro权限过滤器【废弃】
  * @author zhuangyuhao@20160606
  */
 public class OrPermissionsAuthorizationFilter extends AuthorizationFilter {
