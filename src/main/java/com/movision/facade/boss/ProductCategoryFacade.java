@@ -5,6 +5,7 @@ import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.productcategory.entity.ProductCategory;
 import com.movision.mybatis.productcategory.service.ProductCategoryService;
 import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.pagination.util.StringUtils;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -194,9 +195,15 @@ public class ProductCategoryFacade {
         goodsDiscount.setIsdel(Integer.parseInt(isdel));
         goodsDiscount.setDiscount(Integer.parseInt(discount));
         goodsDiscount.setContent(content);
-        goodsDiscount.setIsenrent(Integer.parseInt(isenrent));
-        goodsDiscount.setRentday(Integer.parseInt(rentday));
-        goodsDiscount.setOrderid(Integer.parseInt(orderid));
+        if (!StringUtils.isEmpty(isenrent)) {
+            goodsDiscount.setIsenrent(Integer.parseInt(isenrent));
+        }
+        if (!StringUtils.isEmpty(rentday)) {
+            goodsDiscount.setRentday(Integer.parseInt(rentday));
+        }
+        if (!StringUtils.isEmpty(orderid)) {
+            goodsDiscount.setOrderid(Integer.parseInt(orderid));
+        }
         Date isessencetime = null;//开始时间
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (startdate != null) {
@@ -349,9 +356,15 @@ public class ProductCategoryFacade {
         goodsDiscount.setIsdel(Integer.parseInt(isdel));
         goodsDiscount.setDiscount(Integer.parseInt(discount));
         goodsDiscount.setContent(content);
-        goodsDiscount.setIsenrent(Integer.parseInt(isenrent));
-        goodsDiscount.setRentday(Integer.parseInt(rentday));
-        goodsDiscount.setOrderid(Integer.parseInt(orderid));
+        if (!StringUtils.isEmpty(isenrent)) {
+            goodsDiscount.setIsenrent(Integer.parseInt(isenrent));
+        }
+        if (!StringUtils.isEmpty(rentday)) {
+            goodsDiscount.setRentday(Integer.parseInt(rentday));
+        }
+        if (!StringUtils.isEmpty(orderid)) {
+            goodsDiscount.setOrderid(Integer.parseInt(orderid));
+        }
         goodsDiscount.setId(Integer.parseInt(id));
         Date isessencetime = null;//开始时间
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
