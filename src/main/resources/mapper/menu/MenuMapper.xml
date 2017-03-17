@@ -203,7 +203,7 @@
     <select id="isExistSameName" parameterType="com.movision.mybatis.bossMenu.entity.Menu"
             resultType="java.lang.Integer">
         SELECT COUNT(1) FROM yw_admin_menu
-        WHERE menuname = #{menuname}
+        WHERE menuname = #{menuname} AND isdel=1
         <if test="id!=null and id!=''">
             <![CDATA[
             and id <> #{id}
