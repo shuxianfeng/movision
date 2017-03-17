@@ -16,6 +16,7 @@ import com.movision.mybatis.shopAddress.entity.ShopAddress;
 import com.movision.mybatis.shopAddress.service.ShopAddressService;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.CalculateFee;
+import com.movision.utils.CheckStock;
 import org.apache.commons.beanutils.converters.DoubleConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,9 @@ public class CartFacade {
 
     @Autowired
     private CalculateFee calculateFee;
+
+    @Autowired
+    private CheckStock checkStock;
 
     //商品加入购物车
     public int addGoodsCart(String userid, String goodsid, String comboid, String discountid, String isdebug, String sum, String type, String rentdate) throws ParseException {
@@ -299,7 +303,11 @@ public class CartFacade {
         //定义运费变量map
         Map<String, Object> feemap = new HashMap<>();
 
-        int flag = 0;
+        int flag = 0;//商品和套餐库存校验标识
+        int flag1 = 0;//商品是否下架校验标识
+        int flag2 = 0;//商品租赁日期校验标识
+        int flag3 = 0;//商品优惠活动校验标识
+
         double totalamount = 0;//订单总金额(=订单中自营商品的总金额+订单中第三方商品的总金额)
         double selfamount = 0;//订单中自营商品的总金额
         double shopamount = 0;//订单中第三方商品的总金额
@@ -322,6 +330,14 @@ public class CartFacade {
             }
         }
 
+        //由于购物车中可能会出现选择不同配置或套餐或者立即购买时临时生成的购物车记录，会导致购物车中出现同一个goodsid的商品出现多条的情况，
+        //因此不能在遍历购物车时再轮流进行商品和套餐的库存判断（会出现多个套餐多条记录导致总购买件数大于商品库存的超卖情况）
+        //所以这里需要对购物车中的记录按照商品的goodsid分组判断总购买件数，轮训判断所有商品的库存
+        map = checkStock.checkGoodsStock(cartVoList, map);
+        if ((int) map.get("stockcode") == -2) {
+            flag = 1;
+        }
+
         for (int i = 0; i < cartVoList.size(); i++) {
 
             int id = cartVoList.get(i).getId();//购物车id
@@ -331,16 +347,16 @@ public class CartFacade {
                 map.put("delcode", 0);
                 map.put("delcartid", id);
                 map.put("delmsg", "商品已下架");
-                flag = 1;
+                flag1 = 1;
             }
 
-            //1.校验所有商品库存
-            if (cartVoList.get(i).getStock() < cartVoList.get(i).getNum()) {
-                map.put("stockcode", -2);
-                map.put("stockcartid", id);
-                map.put("stockmsg", "商品库存不足");
-                flag = 1;
-            }
+            //1.校验所有商品库存//--------------------------参照333行说明
+//            if (cartVoList.get(i).getStock() < cartVoList.get(i).getNum()) {
+//                map.put("stockcode", -2);
+//                map.put("stockcartid", id);
+//                map.put("stockmsg", "商品库存不足");
+//                flag = 1;
+//            }
 
             //2.校验租赁商品的租赁日期
             if (cartVoList.get(i).getType() == 0) {//判断为租赁时才进行校验
@@ -355,24 +371,24 @@ public class CartFacade {
                         map.put("rentdatecode", -3);
                         map.put("rentdatecartid", id);
                         map.put("rentdatemsg", "商品租赁日期必须从次日起租");
-                        flag = 1;
+                        flag2 = 1;
                     }
                 }
             }
 
-            //3.校验商品套餐的库存
-            if (cartVoList.get(i).getCombotype() != null) {
-                //根据套餐id查询该套餐中所有的商品的库存
-                List<GoodsVo> goodsVos = cartService.queryGoodsByComboid(cartVoList.get(i).getCombotype());
-                for (int k = 0; k < goodsVos.size(); k++) {
-                    if (goodsVos.get(k).getStock() < cartVoList.get(i).getNum()) {
-                        map.put("combocode", -4);
-                        map.put("combocartid", id);
-                        map.put("combomsg", "该商品套餐中包含库存不足的商品");
-                        flag = 1;
-                    }
-                }
-            }
+            //3.校验商品套餐的库存//--------------------------参照333行说明
+//            if (cartVoList.get(i).getCombotype() != null) {
+//                //根据套餐id查询该套餐中所有的商品的库存
+//                List<GoodsVo> goodsVos = cartService.queryGoodsByComboid(cartVoList.get(i).getCombotype());
+//                for (int k = 0; k < goodsVos.size(); k++) {
+//                    if (goodsVos.get(k).getStock() < cartVoList.get(i).getNum()) {
+//                        map.put("combocode", -4);
+//                        map.put("combocartid", id);
+//                        map.put("combomsg", "该商品套餐中包含库存不足的商品");
+//                        flag = 1;
+//                    }
+//                }
+//            }
 
             //4.校验商品活动的起止日期（分为整租活动和非整租活动）
             if (cartVoList.get(i).getDiscountid() != null) {
@@ -386,17 +402,17 @@ public class CartFacade {
                         map.put("discountcode", -5);
                         map.put("discountcartid", id);
                         map.put("discountmsg", "该商品参与的优惠活动不在活动期间");
-                        flag = 1;
+                        flag3 = 1;
                     }
                 } else {
                     map.put("discountcode", -5);
                     map.put("discountcartid", id);
                     map.put("discountmsg", "该商品参与的优惠活动已下架");
-                    flag = 1;
+                    flag3 = 1;
                 }
             }
 
-            if (flag == 0) {//如果上面的校验全部通过，进行如下操作
+            if (flag == 0 && flag1 == 0 && flag2 == 0 && flag3 == 0) {//如果上面的校验全部通过，进行如下操作
 
                 //5.计算选择的结算商品的总价格（与APP入参核对）
                 if (cartVoList.get(i).getType() == 0) {//租赁
@@ -506,33 +522,66 @@ public class CartFacade {
                     }
                 }
 
+                if (totalamount != Double.parseDouble(totalprice)) {
+                    System.out.println("服务器计算的结算金额>>>>>>>>>>" + totalamount);
+                    System.out.println("客户端提交的结算金额>>>>>>>>>>" + Double.parseDouble(totalprice));
+                    map.put("code", -1);
+
+                    map.put("msg", "你提交的结算总价和服务端校验的总价不一致");
+                } else {
+                    //6.查询用户的默认地址
+                    Address address = addressService.queryDefaultAddress(Integer.parseInt(userid));
+                    map.put("address", address);
+
+                    //7.按照最优算法，计算最佳优惠券（以折扣最多为最佳）
+                    //**************************************计算过程过于复杂，1.0版本暂时不做最佳优惠券推荐************************************
+
+                    //8.用户当前可用积分
+                    int points = userService.queryUserByPoints(userid);
+                    map.put("points", points);
+
+                    map.put("selfamount", selfamount);//自营总额
+                    map.put("shopamount", shopamount);//三方总额
+                    map.put("feemap", feemap);//总运费
+
+                    map.put("code", 200);
+                    map.put("msg", "您提交的购物车结算商品校验通过，可结算");
+                }
+
+            } else {
+                map.put("code", -1);
+                map.put("msg", "提交的商品校验不通过");
             }
         }
 
-        if (totalamount != Double.parseDouble(totalprice)) {
-            System.out.println("服务器计算的结算金额>>>>>>>>>>" + totalamount);
-            System.out.println("客户端提交的结算金额>>>>>>>>>>" + Double.parseDouble(totalprice));
-            map.put("code", -1);
-
-            map.put("msg", "你提交的结算总价和服务端校验的总价不一致");
-        } else {
-            //6.查询用户的默认地址
-            Address address = addressService.queryDefaultAddress(Integer.parseInt(userid));
-            map.put("address", address);
-
-            //7.按照最优算法，计算最佳优惠券（以折扣最多为最佳）
-            //**************************************计算过程过于复杂，1.0版本暂时不做最佳优惠券推荐************************************
-
-            //8.用户当前可用积分
-            int points = userService.queryUserByPoints(userid);
-            map.put("points", points);
-
-            map.put("selfamount", selfamount);//自营总额
-            map.put("shopamount", shopamount);//三方总额
-            map.put("feemap", feemap);//总运费
-
-            map.put("code", 200);
-            map.put("msg", "您提交的购物车结算商品校验通过，可结算");
+        //这里对map进行处理
+        Set keys = map.keySet();
+        int keymark1 = 0;
+        int keymark2 = 0;
+        int keymark3 = 0;
+        //检索
+        for (Object obj : keys) {
+            if (obj.toString().equals("delcode")) {
+                keymark1 = 1;
+            }
+            if (obj.toString().equals("rentdatecode")) {
+                keymark2 = 1;
+            }
+            if (obj.toString().equals("discountcode")) {
+                keymark3 = 1;
+            }
+        }
+        if (keymark1 == 0) {
+            map.put("delcode", 200);
+            map.put("delmsg", "商品处于上架状态");
+        }
+        if (keymark2 == 0) {
+            map.put("rentdatecode", 200);
+            map.put("rentdatemsg", "商品租赁日期符合");
+        }
+        if (keymark3 == 0) {
+            map.put("discountcode", 200);
+            map.put("discountmsg", "商品选择的活动有效");
         }
 
         return map;

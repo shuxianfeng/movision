@@ -53,20 +53,34 @@ public class CalculateFee {
                 }
             }
         }
+        //对billingShopidList做排重
+        List<Integer> billingShopid = new ArrayList<>();
+        for (int i = 0; i < billingShopidList.size(); i++) {
+            int flag = 0;
+            for (int j = 0; j < billingShopid.size(); j++) {
+                if (billingShopidList.get(i) == billingShopid.get(j)) {
+                    flag = 1;
+                }
+            }
+            if (flag == 0) {
+                billingShopid.add(billingShopidList.get(i));
+            }
+        }
+
         //遍历需要计算运费的店铺
         long totalfee = 0;
-        for (int i = 0; i < billingShopidList.size(); i++) {
+        for (int i = 0; i < billingShopid.size(); i++) {
             double fee = 0;
-            log.info("需要计算运费的店铺id>>>>>>>>>>>" + billingShopidList.get(i));
+            log.info("需要计算运费的店铺id>>>>>>>>>>>" + billingShopid.get(i));
             //根据shopid查询店铺经纬度
-            ShopAddress shopAddress = shopAddressService.queryShopAddressByShopid(billingShopidList.get(i));
+            ShopAddress shopAddress = shopAddressService.queryShopAddressByShopid(billingShopid.get(i));
             double shoplng = shopAddress.getLng().doubleValue();
             double shoplat = shopAddress.getLat().doubleValue();
             //根据经纬度计算两个地点的运费
             double distance = CalculateDistance.GetDistance(shoplng, shoplat, lng.doubleValue(), lat.doubleValue());
 
             //取出运费规则
-            LogisticsfeeCalculateRule logisticsfeeCalculateRule = shopAddressService.queryLogisticsfeeCalculateRule(billingShopidList.get(i));
+            LogisticsfeeCalculateRule logisticsfeeCalculateRule = shopAddressService.queryLogisticsfeeCalculateRule(billingShopid.get(i));
 
             if (logisticsfeeCalculateRule != null) {
                 double startprice = logisticsfeeCalculateRule.getStartprice();//起步价
@@ -83,10 +97,10 @@ public class CalculateFee {
                     fee = logisticsfeeCalculateRule.getCapping();
                 }
                 long l = Math.round(fee);//向上取整
-                feemap.put(billingShopidList.get(i).toString(), l);
+                feemap.put(billingShopid.get(i).toString(), l);
                 totalfee = totalfee + l;
             } else {
-                feemap.put(billingShopidList.get(i).toString(), "该卖家未设置运费规则");
+                feemap.put(billingShopid.get(i).toString(), "该卖家未设置运费规则");
             }
         }
         feemap.put("totalfee", totalfee);
