@@ -138,10 +138,10 @@ public class OrderService {
         }
     }
 
-    public void updateOrderByIntegral(Map map) {
+    public void updateOrderByIntegral(Integer id) {
         try {
             log.info("退款成功后变更使用优惠券状态");
-            ordersMapper.updateOrderByIntegral(map);
+            ordersMapper.updateOrderByIntegral(id);
         } catch (Exception e) {
             log.error("退款成功后变更使用优惠券状态异常");
             throw e;

@@ -31,7 +31,7 @@ public interface OrdersMapper {
 
     List<Orders> findAllMyOrderList(RowBounds rowBounds, Map map);
 
-    void updateOrderByIntegral(Map map);
+    void updateOrderByIntegral(Integer id);
 
     void updateOrderDiscount(String integer);
 }

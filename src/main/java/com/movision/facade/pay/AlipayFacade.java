@@ -314,18 +314,18 @@ public class AlipayFacade {
                 System.out.println("调用成功" + response.getBody());
                 //使用的优惠券和积分返还
                 for (int i = 0; i < ordersList.size(); i++) {
-                    if (ordersList.get(i).getIsdiscount() == 1) {
+                    if (ordersList.get(i).getIsdiscount() == 1) {//是否使用优惠券
                         Map m = new HashedMap();
                         m.put("id", ordersList.get(i).getId());
                         m.put("integral", ordersList.get(i).getDispointmoney());
-                        orderService.updateOrderByIntegral(m);//修改订单状态
+                        orderService.updateOrderDiscount(ordersList.get(i).getCouponsid());//优惠券
+                    }
+                    if (ordersList.get(i).getDispointmoney() != null && ordersList.get(i).getDispointmoney() > 0) {//是否使用了积分
+                        Map m = new HashedMap();
                         m.put("dispointmoney", ordersList.get(i).getDispointmoney());
                         m.put("userid", ordersList.get(i).getUserid());
                         userService.updateUserPoints(m);//把积分返还
-
-                    }
-                    if (ordersList.get(i).getDispointmoney() != null && ordersList.get(i).getDispointmoney() > 0) {
-                        orderService.updateOrderDiscount(ordersList.get(i).getCouponsid());//优惠券
+                        orderService.updateOrderByIntegral(ordersList.get(i).getId());//修改订单状态
                     }
                 }
             } else {

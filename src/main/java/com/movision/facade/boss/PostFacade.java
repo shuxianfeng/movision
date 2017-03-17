@@ -595,15 +595,16 @@ public class PostFacade {
      * @param userid
      * @return
      */
-    public Map<String, Integer> addPostActive(String title, String subtitle, String activetype, String activefee,
-                                              String coverimg, String postcontent, String isessence, String orderid, String time, String begintime, String endtime, String userid, String goodsid) {
+    public Map<String, Integer> addPostActive(String title, String subtitle, String activetype, String iscontribute, String activefee,
+                                              String coverimg, String postcontent, String isessence, String orderid, String time,
+                                              String begintime, String endtime, String userid, String goodsid) {
         PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
-
-            post.setTitle(title);//帖子标题
-            post.setSubtitle(subtitle);//帖子副标题
+        post.setTitle(title);//帖子标题
+        post.setSubtitle(subtitle);//帖子副标题
         Integer typee = Integer.parseInt(activetype);
         post.setActivetype(activetype);
+        post.setIscontribute(iscontribute);//是否投稿，必填
             if (typee == 0) {
                 post.setActivefee(Double.parseDouble(activefee));//金额
             }
@@ -830,7 +831,7 @@ public class PostFacade {
      * @param essencedate
      * @return
      */
-    public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String activetype, String activefee, String userid, String coverimg,
+    public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String activetype, String activefee, String iscontribute, String userid, String coverimg,
                                                      String begintime, String endtime, String isessence, String orderid, String postcontent, String essencedate, String goodsid) {
         PostActiveList postActiveList = new PostActiveList();
         Map<String, Integer> map = new HashedMap();
@@ -844,6 +845,9 @@ public class PostFacade {
             postActiveList.setCoverimg(coverimg);//帖子封面
             if (activefee != null) {
                 postActiveList.setActivefee(Double.parseDouble(activefee));//费用
+            }
+            if (!StringUtils.isEmpty(iscontribute)) {
+                postActiveList.setIscontribute(iscontribute);
             }
             postActiveList.setUserid(Integer.parseInt(userid));
             postActiveList.setPostcontent(postcontent);

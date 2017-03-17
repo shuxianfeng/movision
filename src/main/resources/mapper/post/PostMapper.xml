@@ -881,6 +881,9 @@
             <if test="activefee != null">
                 activefee = #{activefee,jdbcType=DOUBLE},
             </if>
+            <if test="iscontribute!=null">
+                iscontribute=#{iscontribute,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -1319,7 +1322,10 @@
                 intime,
             </if>
             <if test="userid !=null">
-                userid
+                userid,
+            </if>
+            <if test="iscontribute!=null">
+                iscontribute
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -1361,7 +1367,10 @@
                 #{intime,jdbcType=TIMESTAMP},
             </if>
             <if test="userid!=null">
-                #{userid,jdbcType=INTEGER}
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="iscontribute!=null">
+                #{iscontribute,jdbcType=INTEGER}
             </if>
         </trim>
     </insert>

@@ -15,7 +15,39 @@ public class PostActiveList {
     private Integer forwardsum;
     private Integer collectsum;
     private String postcontent;
+    private Integer isessence;
+    private String subtitle;
+    private Integer id;//帖子id
+    private Integer circleid;
+    private Integer userid;//用户id
+    private Integer payStatue;//付款方式
+    private Double moneypay;//实付金额
+    private Double moneyying;//应付金额
+    private String phone;//联系方式
+    private Double sumfree;//总价格
+    private Integer persum;//报名人数
+    private String title;//标题
+    private String nickname;//发帖人
+    private Integer orderid;//排序id
+    private Date intime;//参与时间
+    private Date begintime;
+    private Date endtime;
+    private Integer isactive;
+    private Integer activetype;
+    private Double activefee;
+    private String activestatue;//活动状态
+    private String iscontribute;//是否投稿
+    private Date essencedate;//精选日期
+    private String coverimg;
     private List<GoodsVo> goodss;
+
+    public String getIscontribute() {
+        return iscontribute;
+    }
+
+    public void setIscontribute(String iscontribute) {
+        this.iscontribute = iscontribute;
+    }
 
     public List<GoodsVo> getGoodss() {
         return goodss;
@@ -65,10 +97,6 @@ public class PostActiveList {
         this.collectsum = collectsum;
     }
 
-    private Integer id;//帖子id
-    private Integer circleid;
-    private Integer userid;//用户id
-
     public Integer getUserid() {
         return userid;
     }
@@ -77,8 +105,6 @@ public class PostActiveList {
         this.userid = userid;
     }
 
-    private Integer payStatue;//付款方式
-
     public Integer getPayStatue() {
         return payStatue;
     }
@@ -86,9 +112,6 @@ public class PostActiveList {
     public void setPayStatue(Integer payStatue) {
         this.payStatue = payStatue;
     }
-
-    private Double moneypay;//实付金额
-    private Double moneyying;//应付金额
 
     public Double getMoneyying() {
         return moneyying;
@@ -106,8 +129,6 @@ public class PostActiveList {
         this.moneypay = moneypay;
     }
 
-    private  String phone;//联系方式
-
     public String getPhone() {
         return phone;
     }
@@ -124,8 +145,6 @@ public class PostActiveList {
         this.circleid = circleid;
     }
 
-    private Double sumfree;//总价格
-
     public Double getSumfree() {
         return sumfree;
     }
@@ -133,8 +152,6 @@ public class PostActiveList {
     public void setSumfree(Double sumfree) {
         this.sumfree = sumfree;
     }
-
-    public Integer persum;//报名人数
 
     public Integer getPersum() {
         return persum;
@@ -144,14 +161,6 @@ public class PostActiveList {
         this.persum = persum;
     }
 
-    private String title;//标题
-
-    private String nickname;//发帖人
-
-    private Integer orderid;//排序id
-
-    private  Date intime;//参与时间
-
     public Date getIntime() {
         return intime;
     }
@@ -159,20 +168,6 @@ public class PostActiveList {
     public void setIntime(Date intime) {
         this.intime = intime;
     }
-
-    private  Date begintime;
-
-    private Date endtime;
-
-    private Integer isactive;
-
-    private Integer activetype;
-
-    private Double activefee;
-
-    private  String activestatue;//活动状态
-
-    private Date essencedate;//精选日期
 
     public Integer getId() {
         return id;
@@ -247,8 +242,6 @@ public class PostActiveList {
         return begintime;
     }
 
-    private String coverimg;
-
     public String getCoverimg() {
         return coverimg;
     }
@@ -278,9 +271,6 @@ public class PostActiveList {
     public void setTitle(String title) {
         this.title = title;
     }
-
-    private Integer isessence;
-    private String subtitle;
 
     public String getSubtitle() {
         return subtitle;

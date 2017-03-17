@@ -432,11 +432,12 @@ public class PostController {
     @ApiOperation(value = "添加活动帖子", notes = "添加活动帖子", response = Response.class)
     @RequestMapping(value = "/add_active_post", method = RequestMethod.POST)
     public Response addPostActiveList(
-            @ApiParam(value = "帖子标题") @RequestParam String title,
-            @ApiParam(value = "帖子副标题") @RequestParam String subtitle,
-            @ApiParam(value = "帖子类型") @RequestParam String activetype,
+            @ApiParam(value = "活动标题") @RequestParam String title,
+            @ApiParam(value = "活动副标题") @RequestParam String subtitle,
+            @ApiParam(value = "活动类型：0 告知类活动 1 商城促销类活动") @RequestParam String activetype,
+            @ApiParam(value = "是否需要投稿 0,投,1不投") @RequestParam String iscontribute,
             @ApiParam(value = "单价") @RequestParam String activefee,
-            @ApiParam(value = "帖子封面") @RequestParam(required = false) String coverimg,
+            @ApiParam(value = "活动封面") @RequestParam(required = false) String coverimg,
             @ApiParam(value = "内容") @RequestParam String postcontent,
             @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,
             @ApiParam(value = "精选排序") @RequestParam(required = false) String orderid,
@@ -446,7 +447,7 @@ public class PostController {
             @ApiParam(value = "发帖人") @RequestParam String userid,
             @ApiParam(value = "分享商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Integer> result = postFacade.addPostActive(title, subtitle, activetype, activefee, coverimg, postcontent, isessence, orderid, time, begintime, endtime, userid, goodsid);
+        Map<String, Integer> result = postFacade.addPostActive(title, subtitle, activetype, iscontribute, activefee, coverimg, postcontent, isessence, orderid, time, begintime, endtime, userid, goodsid);
         if(response.getCode()==200){
             response.setMessage("添加成功");
         }
@@ -653,13 +654,14 @@ public class PostController {
             @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,
             @ApiParam(value = "费用") @RequestParam String activefee,
             @ApiParam(value = "活动类型") @RequestParam String activetype,
+            @ApiParam(value = "是否需要投稿 0,投,1不投") @RequestParam String iscontribute,
             @ApiParam(value = "开始时间") @RequestParam String begintime,
             @ApiParam(value = "结束时间") @RequestParam String endtime,
             @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String essencedate,
             @ApiParam(value = "编辑商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
 
-        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, activetype, activefee, userid, coverimg, begintime, endtime, isessence, orderid, postcontent, essencedate, goodsid);
+        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, activetype, iscontribute, activefee, userid, coverimg, begintime, endtime, isessence, orderid, postcontent, essencedate, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

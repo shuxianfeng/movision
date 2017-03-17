@@ -478,9 +478,9 @@
         </if>
     </select>
 
-    <update id="updateOrderByIntegral" parameterType="java.util.Map">
+    <update id="updateOrderByIntegral" parameterType="java.lang.Integer">
         UPDATE yw_orders o
-        SET o.isdiscount=0,o.status=6
+        SET o.isdiscount=0,o.status=6,s.discouponmoney=0,dispointmoney=0
         WHERE o.id=#{id,jdbcType=INTEGER}
     </update>
 </mapper>

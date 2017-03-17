@@ -57,6 +57,16 @@ public class PostTo {
 
     private String activestatue;
 
+    private String iscontribute;//是否投稿
+
+    public String getIscontribute() {
+        return iscontribute;
+    }
+
+    public void setIscontribute(String iscontribute) {
+        this.iscontribute = iscontribute;
+    }
+
     public Integer getId() {
         return id;
     }
