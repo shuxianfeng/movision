@@ -17,7 +17,7 @@ public class GoodsDiscount {
 
     private Integer rentday;
 
-    private Integer discount;
+    private String discount;
 
     private Integer orderid;
 
@@ -81,11 +81,11 @@ public class GoodsDiscount {
         this.rentday = rentday;
     }
 
-    public Integer getDiscount() {
+    public String getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Integer discount) {
+    public void setDiscount(String discount) {
         this.discount = discount;
     }
 
