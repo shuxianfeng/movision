@@ -64,4 +64,5 @@ public interface ProductCategoryMapper {
 
     int queryGoodsisdel(Integer id);
 
+
 }

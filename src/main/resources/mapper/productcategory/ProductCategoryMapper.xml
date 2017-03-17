@@ -105,11 +105,12 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <select id="findAllProductCategory" resultType="com.movision.mybatis.productcategory.entity.ProductCategory">
-        SELECT id,protype,typename,intime FROM yw_category
+        SELECT id,protype,typename,intime FROM yw_category ORDER BY intime DESC
     </select>
 
     <select id="findAllGoodsDiscount" resultType="com.movision.mybatis.goodsDiscount.entity.GoodsDiscount">
         SELECT id,name,isenrent,rentday,discount,content,orderid,isdel,startdate,enddate,intime from yw_goods_discount
+        ORDER BY intime DESC
 </select>
     <select id="findAllCategoryCondition" resultType="com.movision.mybatis.productcategory.entity.ProductCategory">
         SELECT id,protype,typename,intime FROM yw_category WHERE 1
@@ -209,7 +210,7 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <select id="findAllBrand" resultType="com.movision.mybatis.brand.entity.Brand">
-      SELECT id,brandid,brandname,isdel,intime FROM yw_brand
+        SELECT id,brandid,brandname,isdel,intime FROM yw_brand ORDER BY intime DESC
     </select>
     <update id="updateUp" parameterType="java.lang.Integer">
         UPDATE yw_brand SET isdel=0 WHERE id=#{id,jdbcType=INTEGER}
