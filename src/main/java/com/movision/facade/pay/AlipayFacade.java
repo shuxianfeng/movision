@@ -9,6 +9,7 @@ import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.service.OrderService;
+import com.movision.mybatis.record.service.RecordService;
 import com.movision.mybatis.subOrder.entity.SubOrder;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.UpdateOrderPayBack;
@@ -44,6 +45,9 @@ public class AlipayFacade {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RecordService recordService;
 
     /**
      * 拼装支付宝支付请求入参
@@ -315,16 +319,18 @@ public class AlipayFacade {
                 //使用的优惠券和积分返还
                 for (int i = 0; i < ordersList.size(); i++) {
                     if (ordersList.get(i).getIsdiscount() == 1) {//是否使用优惠券
-                        Map m = new HashedMap();
-                        m.put("id", ordersList.get(i).getId());
-                        m.put("integral", ordersList.get(i).getDispointmoney());
-                        orderService.updateOrderDiscount(ordersList.get(i).getCouponsid());//优惠券
+                        orderService.updateOrderDiscount(ordersList.get(i).getCouponsid());//返还优惠券
                     }
                     if (ordersList.get(i).getDispointmoney() != null && ordersList.get(i).getDispointmoney() > 0) {//是否使用了积分
                         Map m = new HashedMap();
                         m.put("dispointmoney", ordersList.get(i).getDispointmoney());
                         m.put("userid", ordersList.get(i).getUserid());
+                        m.put("orderid", ordersList.get(i).getId());
+                        Integer integral = userService.queryUserUseIntegral(m);//查询订单对应用户使用的积分
+                        m.put("integral", integral);
                         userService.updateUserPoints(m);//把积分返还
+                        m.put("intime", new Date());//生成时间
+                        recordService.addIntegralRecord(m);//增加用户积分操作记录
                         orderService.updateOrderByIntegral(ordersList.get(i).getId());//修改订单状态
                     }
                 }

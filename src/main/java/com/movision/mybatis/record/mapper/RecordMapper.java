@@ -5,6 +5,7 @@ import com.movision.mybatis.record.entity.RecordVo;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RecordMapper {
     int deleteByPrimaryKey(Integer id);
@@ -20,4 +21,6 @@ public interface RecordMapper {
     int updateByPrimaryKey(Record record);
 
     List<RecordVo> queryIntegralList(String userid, RowBounds rowBounds);
+
+    int addIntegralRecord(Map map);
 }

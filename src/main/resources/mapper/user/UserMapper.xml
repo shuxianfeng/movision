@@ -770,6 +770,12 @@
     </select>
 
     <update id="updateUserPoints" parameterType="java.util.Map">
-        UPDATE yw_user SET points=points+#{dispointmoney,jdbcType=DOUBLE} WHERE id=#{userid,jdbcType=INTEGER}
+        UPDATE yw_user SET points=points+#{integral,jdbcType=INTEGER} WHERE id=#{userid,jdbcType=INTEGER}
     </update>
+
+    <select id="queryUserUseIntegral" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT point FROM yw_points_record
+        WHERE userid=#{userid,jdbcType=INTEGER} AND isadd=1 AND isdel=0 AND type=21 AND orderid=#{orderid,jdbcType=INTEGER}
+    </select>
+
 </mapper>

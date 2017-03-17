@@ -94,4 +94,7 @@ public interface UserMapper {
     void deductPoints(Map<String, Object> parammap);
 
     void updateUserPoints(Map dispointmoney);
+
+    Integer queryUserUseIntegral(Map map);
+
 }

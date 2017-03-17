@@ -33,5 +33,5 @@ public interface OrdersMapper {
 
     void updateOrderByIntegral(Integer id);
 
-    void updateOrderDiscount(String integer);
+    void updateOrderDiscount(String couponsid);
 }

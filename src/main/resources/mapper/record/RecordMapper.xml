@@ -134,4 +134,60 @@
     ELSE con.name END) as name
     FROM yw_points_record AS rec LEFT JOIN yw_type_constant con ON con.code=rec.type WHERE rec.userid=#{userid,jdbcType=INTEGER}  ORDER BY intime DESC
   </select>
+
+    <insert id="addIntegralRecord" parameterType="java.util.Map">
+        insert into yw_points_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="integral != null">
+                point,
+            </if>
+            <if test="isadd != null">
+                isadd,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="orderid != null">
+                orderid,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="integral != null">
+                #{integral,jdbcType=INTEGER},
+            </if>
+            <if test="isadd != null">
+                0,
+            </if>
+            <if test="type != null">
+                22,
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isdel != null">
+                0,
+            </if>
+        </trim>
+    </insert>
 </mapper>

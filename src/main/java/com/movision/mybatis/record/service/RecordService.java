@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -34,6 +35,22 @@ public class RecordService {
             return recordMapper.queryIntegralList(userid, pager.getRowBounds());
         } catch (Exception e) {
             logger.error("查询用户积分流水列表异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 添加用户积分操作流水
+     *
+     * @param map
+     * @return
+     */
+    public Integer addIntegralRecord(Map map) {
+        try {
+            logger.info("添加用户积分操作流水");
+            return recordMapper.addIntegralRecord(map);
+        } catch (Exception e) {
+            logger.error("添加用户积分操作流水异常");
             throw e;
         }
     }

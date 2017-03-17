@@ -148,10 +148,10 @@ public class OrderService {
         }
     }
 
-    public void updateOrderDiscount(String integer) {
+    public void updateOrderDiscount(String couponsid) {
         try {
             log.info("退款成功后退还优惠券");
-            ordersMapper.updateOrderDiscount(integer);
+            ordersMapper.updateOrderDiscount(couponsid);
         } catch (Exception e) {
             log.error("退款成功后退还优惠券异常");
             throw e;

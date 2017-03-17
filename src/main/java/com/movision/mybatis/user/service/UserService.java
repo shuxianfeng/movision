@@ -523,4 +523,21 @@ public class UserService {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 查询用户使用积分
+     *
+     * @param map
+     * @return
+     */
+    public Integer queryUserUseIntegral(Map map) {
+        try {
+            log.info("查询用户使用积分");
+            return userMapper.queryUserUseIntegral(map);
+        } catch (Exception e) {
+            log.error("查询用户使用积分异常");
+            throw e;
+        }
+    }
+
 }
