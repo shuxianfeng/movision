@@ -150,6 +150,7 @@
                 /app/comment/**=authc
                 /app/cart/**=authc
                 /app/submission/commitSubmission=authc
+                /app/collection/**=authc
 
                 /app/** = anon
                 /boss/login = anon
