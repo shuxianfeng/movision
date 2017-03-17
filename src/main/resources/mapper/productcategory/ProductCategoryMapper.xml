@@ -125,7 +125,7 @@
         <if test="name!=null">
             AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
-        <if test="isdel!=null">
+        <if test="isdel!=null and isdel!=''">
             AND isdel=#{id,jdbcType=INTEGER}
         </if>
         ORDER BY enddate DESC
@@ -136,7 +136,7 @@
         <if test="brandname!=null">
             AND brandname LIKE concat('%',#{brandname,jdbcType=VARCHAR},'%')
         </if>
-        <if test="isdel!=null">
+        <if test="isdel!=null and isdel!=''">
             AND isdel=#{isdel,jdbcType=INTEGER}
         </if>
         ORDER BY intime DESC
