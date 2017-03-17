@@ -195,7 +195,9 @@ public class ProductCategoryFacade {
         if (!StringUtils.isEmpty(isdel)) {
             goodsDiscount.setIsdel(Integer.parseInt(isdel));
         }
-        goodsDiscount.setDiscount(Integer.parseInt(discount));
+        if (!StringUtils.isEmpty(discount)) {
+            goodsDiscount.setDiscount(Integer.parseInt(discount));
+        }
         goodsDiscount.setContent(content);
         if (!StringUtils.isEmpty(isenrent)) {
             goodsDiscount.setIsenrent(Integer.parseInt(isenrent));
