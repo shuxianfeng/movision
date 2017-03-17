@@ -160,13 +160,20 @@ public class OrderAppFacade {
             if (cartVoList.get(i).getDiscountid() != null) {
                 //根据活动id查询活动的开始时间和结束时间
                 GoodsDiscount goodsDiscount = discountService.queryGoodsDiscountById(cartVoList.get(i).getDiscountid());
-                Date startdate = goodsDiscount.getStartdate();
-                Date enddate = goodsDiscount.getEnddate();
-                Date now = new Date();
-                if (now.before(startdate) || now.after(enddate)) {
+                if (null != goodsDiscount) {
+                    Date startdate = goodsDiscount.getStartdate();
+                    Date enddate = goodsDiscount.getEnddate();
+                    Date now = new Date();
+                    if (now.before(startdate) || now.after(enddate)) {
+                        map.put("discountcode", -5);
+                        map.put("discountcartid", id);
+                        map.put("discountmsg", "该商品参与的优惠活动不在活动期间");
+                        flag = 1;
+                    }
+                } else {
                     map.put("discountcode", -5);
                     map.put("discountcartid", id);
-                    map.put("discountmsg", "该商品参与的优惠活动不在活动期间");
+                    map.put("discountmsg", "该商品参与的优惠活动已下架");
                     flag = 1;
                 }
             }

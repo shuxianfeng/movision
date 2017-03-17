@@ -1,27 +1,36 @@
 package com.movision.facade.Goods;
 
+import com.movision.facade.cart.CartFacade;
 import com.movision.mybatis.address.entity.Address;
-import com.movision.mybatis.combo.entity.Combo;
+import com.movision.mybatis.cart.entity.CartVo;
+import com.movision.mybatis.cart.service.CartService;
+import com.movision.mybatis.collection.service.CollectionService;
 import com.movision.mybatis.combo.entity.ComboVo;
+import com.movision.mybatis.combo.service.ComboService;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsDetail;
 import com.movision.mybatis.goods.entity.GoodsImg;
-import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentCategery;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg;
+import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.goodsDiscount.entity.GoodsDiscountVo;
 import com.movision.mybatis.goodsDiscount.service.DiscountService;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.utils.AddCartUtil;
+import com.movision.utils.CalculateFee;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.movision.mybatis.collection.entity.Collection;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -40,13 +49,25 @@ public class GoodsFacade {
     @Autowired
     private DiscountService discountService;
 
+    @Autowired
+    private CalculateFee calculateFee;
+
+    @Autowired
+    private CollectionService collectionService;
+
+    @Autowired
+    private AddCartUtil addCartUtil;
+
+    @Autowired
+    private CartService cartService;
+
     /**
      * 根据商品id查询商品详情
      *
      * @param goodsid
      * @return
      */
-    public GoodsDetail queryGoodDetail(String goodsid) {
+    public GoodsDetail queryGoodDetail(String goodsid, String userid) {
 
         //首先查询用户基本信息
         GoodsDetail goodsDetail = goodsService.queryGoodDetail(Integer.parseInt(goodsid));
@@ -57,6 +78,18 @@ public class GoodsFacade {
             goodsDetail.setShopname(shopname);
         } else {
             goodsDetail.setShopname("美番自营");
+        }
+
+        Collection collection = new Collection();
+        collection.setUserid(Integer.parseInt(userid));
+        collection.setGoodsid(Integer.parseInt(goodsid));
+        collection.setType(1);
+        //检查该用户是否收藏过该商品
+        int count = collectionService.checkIsHaveGoods(collection);
+        if (count == 0) {
+            goodsDetail.setIscollect(0);//未收藏
+        } else if (count > 0) {
+            goodsDetail.setIscollect(1);//已收藏
         }
 
         //再查询用户商品实物图列表集合
@@ -206,23 +239,114 @@ public class GoodsFacade {
         return map;
     }
 
-    public Map<String, Object> immediateRent(String goodsid, String userid, String combotype, String discountid, String rentdate, String isdebug, String num) {
+    @Transactional
+    public Map<String, Object> immediateRent(String goodsid, String userid, String combotype, String discountid, String rentdate, String isdebug, String num, String provincecode, String citycode) throws ParseException {
 
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();//定义返回map
+        int flag = 0;//定义标志位
 
-        //先根据用户id查询该用户的默认地址
-        List<Address> addressList = goodsService.queryAddressList(Integer.parseInt(userid));
+        //校验商品是否下架
+        int count = goodsService.queryIsOnline(Integer.parseInt(goodsid));
+        if (count == 0) {
+            map.put("code", -1);//商品已下架
+            map.put("msg", "商品已下架");
+            flag = -1;
+        }
 
-        //根据商品id查询商品详情
-        List<GoodsVo> allRentGoodsList = goodsService.queryComboGoodsList(Integer.parseInt(combotype));
+        //校验商品库存
+        int stock = goodsService.queryStore(Integer.parseInt(goodsid));
+        if (stock < Integer.parseInt(num)) {
+            map.put("code", -2);//库存不足
+            map.put("msg", "商品库存不足");
+            flag = -1;
+        }
 
-        //查询用户可用积分数
-        int userpoint = userService.queryUserPoint(Integer.parseInt(userid));
+        //校验套餐库存
+        if (!StringUtils.isEmpty(combotype)) {
+            //根据商品id查询套餐库存
+            int combostoock = goodsService.queryAllStock(Integer.parseInt(combotype));
+            if (combostoock < Integer.parseInt(num)) {
+                map.put("code", -3);//套餐库存不足
+                map.put("msg", "套餐库存不足");
+                flag = -1;
+            }
+        }
 
-        map.put("addressList", addressList);
-        map.put("allRentGoodsList", allRentGoodsList);
-        map.put("userpoint", userpoint);
+        //校验活动是否合法
+        if (!StringUtils.isEmpty(discountid)) {
+            //根据活动id校验活动是否合法
+            GoodsDiscount goodsDiscount = discountService.queryGoodsDiscountById(Integer.parseInt(discountid));
+            if (null != goodsDiscount) {
+                Date startdate = goodsDiscount.getStartdate();
+                Date enddate = goodsDiscount.getEnddate();
+                Date now = new Date();
+                if (now.before(startdate) || now.after(enddate)) {
+                    map.put("code", -4);
+                    map.put("msg", "该商品参与的优惠活动不在活动期间");
+                    flag = -1;
+                }
+            } else {
+                map.put("code", -4);
+                map.put("msg", "该商品参与的优惠活动已下架");
+                flag = -1;
+            }
+        }
 
+        //校验租赁日期
+        if (!StringUtils.isEmpty(rentdate)) {
+            String[] rentdatearr = rentdate.split(",");//租赁日期数组
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date now = new Date();
+            String nowString = formatter.format(now);//当前日期字符串
+            String rentdateString;//租赁日期字符串
+
+            for (int j = 0; j < rentdatearr.length; j++) {
+                rentdateString = rentdatearr[j];
+                if (now.after(formatter.parse(rentdateString)) || nowString.equals(rentdateString)) {//当前日期大于或等于租赁日期时
+                    map.put("code", -5);
+                    map.put("msg", "商品租赁日期必须从次日起租");
+                    flag = -1;
+                }
+            }
+        }
+
+        if (flag == 0) {
+            //先根据用户id查询该用户的默认地址
+            Address address = goodsService.queryDefaultAddress(Integer.parseInt(userid));
+            //定义运费变量map
+            Map<String, Object> feemap = new HashMap<>();
+
+            //查询用户可用积分数
+            int userpoint = userService.queryUserPoint(Integer.parseInt(userid));
+
+            //根据商品id查询商品定位type
+            int type = goodsService.queryGoodsPosition(Integer.parseInt(goodsid));
+
+            //加入购物车并返回购物车id
+            int cartid = addCartUtil.addGoodsCart(userid, goodsid, combotype, discountid, isdebug, num, type, rentdate);
+
+            //根据购物车id查询cartVoList(购物车id封装到数组里，数组查询后封装到List<CartVo>，调用公共接口)
+            int[] cartids = new int[1];
+            cartids[0] = cartid;
+            List<CartVo> cartVoList = cartService.queryCartVoList(cartids);
+
+            //计算运费
+            //根据判断条件来决定是否在这里进行运费结算----结算时调用计算运费的公共方法
+            if (null != address) {//判空 防止空指针
+                if (address.getProvince().equals(provincecode) && address.getCity().equals(citycode)) {
+                    //调用公共计算接口计算运费
+                    feemap = calculateFee.GetFee(cartVoList, address.getLng(), address.getLat());
+                }
+            } else {
+                feemap.put("totalfee", 0.0);
+            }
+
+            map.put("code", 200);
+            map.put("address", address);
+            map.put("userpoint", userpoint);
+            map.put("feemap", feemap);
+            map.put("cartid", cartid);
+        }
         return map;
     }
 

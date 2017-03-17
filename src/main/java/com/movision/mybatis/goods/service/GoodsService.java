@@ -357,12 +357,32 @@ public class GoodsService {
         }
     }
 
-    public List<Address> queryAddressList(int userid) {
+    public int queryIsOnline(int goodsid) {
+        try {
+            log.info("根据商品id查询商品是否已下架");
+            return goodsMapper.queryIsOnline(goodsid);
+        } catch (Exception e) {
+            log.error("根据商品id查询商品是否已下架失败");
+            throw e;
+        }
+    }
+
+    public Address queryDefaultAddress(int userid) {
         try {
             log.info("查询该用户的所有收货地址列表");
-            return addressMapper.queryAddressList(userid);
+            return addressMapper.queryDefaultAddress(userid);
         } catch (Exception e) {
             log.error("查询该用户的所有收货地址列表失败");
+            throw e;
+        }
+    }
+
+    public int queryGoodsPosition(int goodsid) {
+        try {
+            log.info("根据商品id查询商品定位type");
+            return goodsMapper.queryGoodsPosition(goodsid);
+        } catch (Exception e) {
+            log.error("根据商品id查询商品定位type失败");
             throw e;
         }
     }

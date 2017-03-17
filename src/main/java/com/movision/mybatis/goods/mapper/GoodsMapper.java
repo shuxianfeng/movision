@@ -11,10 +11,12 @@ import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
 import com.movision.mybatis.subOrder.entity.SubOrder;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.taglibs.standard.lang.jstl.Literal;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public interface GoodsMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -55,6 +57,10 @@ public interface GoodsMapper {
     String queryGoodsImg(int goodsid);
 
     List<GoodsVo> queryComboGoodsList(int comboid);
+
+    int queryIsOnline(int goodsid);
+
+    int queryGoodsPosition(int goodsid);
 
     int updateByPrimaryKeySelective(Goods record);
 

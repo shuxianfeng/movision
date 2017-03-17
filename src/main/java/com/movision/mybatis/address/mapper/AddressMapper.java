@@ -2,10 +2,12 @@ package com.movision.mybatis.address.mapper;
 
 import com.movision.mybatis.address.entity.Address;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public interface AddressMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -16,8 +18,6 @@ public interface AddressMapper {
     Address queryDefaultAddress(int userid);
 
     Address selectByPrimaryKey(Integer id);
-
-    List<Address> queryAddressList(int userid);
 
     int updateByPrimaryKeySelective(Address record);
 

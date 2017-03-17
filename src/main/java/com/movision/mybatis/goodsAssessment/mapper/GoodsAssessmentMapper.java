@@ -5,9 +5,11 @@ import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentCategery;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface GoodsAssessmentMapper {
     int deleteByPrimaryKey(Integer id);
 

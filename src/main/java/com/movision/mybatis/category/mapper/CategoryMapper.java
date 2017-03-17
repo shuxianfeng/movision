@@ -1,10 +1,12 @@
 package com.movision.mybatis.category.mapper;
 
 import com.movision.mybatis.category.entity.Category;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public interface CategoryMapper {
     int deleteByPrimaryKey(Integer id);
 

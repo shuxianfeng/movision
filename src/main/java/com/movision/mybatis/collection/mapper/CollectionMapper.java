@@ -1,7 +1,9 @@
 package com.movision.mybatis.collection.mapper;
 
 import com.movision.mybatis.collection.entity.Collection;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface CollectionMapper {
     int deleteByPrimaryKey(Integer id);
 

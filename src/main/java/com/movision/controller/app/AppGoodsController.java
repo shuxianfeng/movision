@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,10 +40,11 @@ public class AppGoodsController {
      */
     @ApiOperation(value = "点击商品缩略图进入商品详情页面", notes = "用户点击商品缩略图返回商品详情数据接口", response = Response.class)
     @RequestMapping(value = "goodDetail", method = RequestMethod.POST)
-    public Response queryGoodDetail(@ApiParam(value = "商品id") @RequestParam String goodsid) {
+    public Response queryGoodDetail(@ApiParam(value = "商品id") @RequestParam String goodsid,
+                                    @ApiParam(value = "用户id") @RequestParam String userid) {
         Response response = new Response();
 
-        GoodsDetail goodsDetail = goodsFacade.queryGoodDetail(goodsid);
+        GoodsDetail goodsDetail = goodsFacade.queryGoodDetail(goodsid, userid);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
@@ -163,14 +165,18 @@ public class AppGoodsController {
                                   @ApiParam(value = "活动id（不参加活动时传空）") @RequestParam(required = false) String discountid,
                                   @ApiParam(value = "租用日期（多天用英文逗号隔开）") @RequestParam String rentdate,
                                   @ApiParam(value = "是否需要跟机员 0不需要 1需要") @RequestParam String isdebug,
-                                  @ApiParam(value = "商品数量") @RequestParam String num) {
+                                  @ApiParam(value = "商品数量") @RequestParam String num,
+                                  @ApiParam(value = "当前选择的定位地址-省code") @RequestParam String provincecode,
+                                  @ApiParam(value = "当前选择的定位地址-市code") @RequestParam String citycode) throws ParseException {
         Response response = new Response();
 
-        Map<String, Object> map = goodsFacade.immediateRent(goodsid, userid, combotype, discountid, rentdate, isdebug, num);
+        Map<String, Object> map = goodsFacade.immediateRent(goodsid, userid, combotype, discountid, rentdate, isdebug, num, provincecode, citycode);
 
-        if (response.getCode() == 200) {
+        if ((int) map.get("code") == 200) {
+            response.setCode(200);
             response.setMessage("请求成功");
         } else {
+            response.setCode(300);
             response.setMessage("请求失败");
         }
         response.setData(map);

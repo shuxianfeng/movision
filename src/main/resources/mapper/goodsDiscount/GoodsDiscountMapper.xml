@@ -49,7 +49,7 @@
     <!--根据活动id查询活动的起止时间-->
     <select id="queryGoodsDiscountById" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goodsDiscount.entity.GoodsDiscount">
-        SELECT startdate, enddate FROM yw_goods_discount WHERE id = #{discountid,jdbcType=INTEGER}
+        SELECT startdate, enddate FROM yw_goods_discount WHERE id = #{discountid,jdbcType=INTEGER} AND isdel = '0'
     </select>
 
     <!--根据活动id查询活动折扣-->

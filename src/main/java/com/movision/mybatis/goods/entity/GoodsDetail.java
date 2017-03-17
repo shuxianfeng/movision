@@ -72,6 +72,8 @@ public class GoodsDetail {
 
     private String goodsParamImgurl;//商品参数长图
 
+    private int iscollect;//0 未收藏 可收藏 1 已收藏 不可收藏
+
     public Integer getId() {
         return id;
     }
@@ -326,5 +328,13 @@ public class GoodsDetail {
 
     public void setShopname(String shopname) {
         this.shopname = shopname;
+    }
+
+    public int getIscollect() {
+        return iscollect;
+    }
+
+    public void setIscollect(int iscollect) {
+        this.iscollect = iscollect;
     }
 }

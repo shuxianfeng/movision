@@ -233,6 +233,16 @@
         SELECT name FROM yw_shop WHERE id = #{shopid,jdbcType=INTEGER}
     </select>
 
+    <!--根据商品id查询商品定位position-->
+    <select id="queryGoodsPosition" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT goodsposition FROM yw_goods WHERE id = #{goodsid,jdbcType=INTEGER}
+    </select>
+
+    <!--根据商品id查询商品是否已下架-->
+    <select id="queryIsOnline" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_goods WHERE id = #{goodsid,jdbcType=INTEGER} AND isdel = '0'
+    </select>
+
     <!--查询该商品的该套餐中包含的所有商品列表-->
     <select id="queryComboGoodsList" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goods.entity.GoodsVo">
