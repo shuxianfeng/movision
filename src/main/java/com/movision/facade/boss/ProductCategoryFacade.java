@@ -192,7 +192,9 @@ public class ProductCategoryFacade {
         Map<String, Integer> map = new HashMap<>();
         GoodsDiscount goodsDiscount = new GoodsDiscount();
         goodsDiscount.setName(name);
-        goodsDiscount.setIsdel(Integer.parseInt(isdel));
+        if (!StringUtils.isEmpty(isdel)) {
+            goodsDiscount.setIsdel(Integer.parseInt(isdel));
+        }
         goodsDiscount.setDiscount(Integer.parseInt(discount));
         goodsDiscount.setContent(content);
         if (!StringUtils.isEmpty(isenrent)) {
@@ -353,7 +355,9 @@ public class ProductCategoryFacade {
         Map<String, Integer> map = new HashMap<>();
         GoodsDiscount goodsDiscount = new GoodsDiscount();
         goodsDiscount.setName(name);
-        goodsDiscount.setIsdel(Integer.parseInt(isdel));
+        if (!StringUtils.isEmpty(isdel)) {
+            goodsDiscount.setIsdel(Integer.parseInt(isdel));
+        }
         goodsDiscount.setDiscount(Integer.parseInt(discount));
         goodsDiscount.setContent(content);
         if (!StringUtils.isEmpty(isenrent)) {
