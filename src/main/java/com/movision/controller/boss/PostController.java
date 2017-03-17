@@ -661,7 +661,7 @@ public class PostController {
             @ApiParam(value = "编辑商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
 
-        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, activetype, iscontribute, activefee, userid, coverimg, begintime, endtime, isessence, orderid, postcontent, essencedate, goodsid);
+        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, userid, coverimg, postcontent, isessence, orderid, activefee, activetype, iscontribute, begintime, endtime, essencedate, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

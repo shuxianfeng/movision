@@ -831,9 +831,8 @@ public class PostFacade {
      * @param essencedate
      * @return
      */
-    public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String activetype,
-                                                     String iscontribute, String activefee, String userid, String coverimg,
-                                                     String begintime, String endtime, String isessence, String orderid, String postcontent, String essencedate, String goodsid) {
+    public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String userid, String coverimg, String postcontent, String isessence,
+                                                     String orderid, String activefee, String activetype, String iscontribute, String begintime, String endtime, String essencedate, String goodsid) {
         PostActiveList postActiveList = new PostActiveList();
         Map<String, Integer> map = new HashedMap();
         try {
