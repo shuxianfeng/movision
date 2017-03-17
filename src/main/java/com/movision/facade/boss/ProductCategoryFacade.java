@@ -216,6 +216,7 @@ public class ProductCategoryFacade {
             }
         }
         goodsDiscount.setEnddate(max);
+        goodsDiscount.setIntime(new Date());
         int result = productCategoryService.addGoodsDiscount(goodsDiscount);
         map.put("result", result);
         return map;

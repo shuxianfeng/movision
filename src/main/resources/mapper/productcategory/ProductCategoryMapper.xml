@@ -338,6 +338,9 @@
             <if test="isdel != null">
                 isdel,
             </if>
+            <if test="intime != null">
+                intime,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -369,6 +372,9 @@
             </if>
             <if test="isdel != null">
                 #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
