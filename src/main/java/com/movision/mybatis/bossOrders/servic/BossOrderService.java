@@ -14,6 +14,7 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsTo;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
+import com.movision.mybatis.logisticsCompany.entity.LogisticsCompany;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.entity.OrdersVo;
@@ -627,6 +628,21 @@ public class BossOrderService {
             return bossOrdersMapper.addLogistic(orders);
         } catch (Exception e) {
             loger.error("增加快递单号失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询所有快递公司
+     *
+     * @return
+     */
+    public List<LogisticsCompany> findAllLogisticsCompany() {
+        try {
+            loger.info("查询所有快递公司");
+            return bossOrdersMapper.findAllLogisticsCompany();
+        } catch (Exception e) {
+            loger.error("查询所有快递公司失败", e);
             throw e;
         }
     }

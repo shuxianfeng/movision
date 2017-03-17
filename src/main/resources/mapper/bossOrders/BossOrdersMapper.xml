@@ -840,4 +840,7 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
         </set>
         where id=#{id,jdbcType=INTEGER}
     </update>
+    <select id="findAllLogisticsCompany" resultType="com.movision.mybatis.logisticsCompany.entity.LogisticsCompany">
+        SELECT id,logisticscompany FROM yw_logistics_company
+    </select>
 </mapper>

@@ -13,6 +13,7 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsTo;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
+import com.movision.mybatis.logisticsCompany.entity.LogisticsCompany;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.entity.OrdersVo;
@@ -109,6 +110,8 @@ public interface BossOrdersMapper {
     Integer addAfterService(AfterserviceStream afterserviceStream);//增加一条售后信息
 
     Integer updateAfterStatus(Afterservice afterservice);//已退回
+
+    List<LogisticsCompany> findAllLogisticsCompany();//查询所有快递公司
 
 
 }

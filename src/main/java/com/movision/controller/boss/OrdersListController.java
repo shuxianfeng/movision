@@ -11,6 +11,7 @@ import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
+import com.movision.mybatis.logisticsCompany.entity.LogisticsCompany;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.utils.pagination.model.Paging;
@@ -609,6 +610,28 @@ public class OrdersListController {
                                   @ApiParam(value = "发货单号") @RequestParam(required = false) String logisticsid) {
         Response response = new Response();
         Map<String, Integer> map = orderFacade.updateOperater(id, remark, logisticsid);
+        if (response.getCode() == 200) {
+            response.setMessage("发货成功");
+        }
+        response.setData(map);
+        return response;
+
+    }
+
+    /**
+     * 查询所有快递公司
+     *
+     * @param
+     * @param
+     * @param
+     * @param
+     * @return
+     */
+    @ApiOperation(value = "查询所有快递公司", notes = "查询所有快递公司", response = Response.class)
+    @RequestMapping(value = "query_all_logisticscompany", method = RequestMethod.POST)
+    public Response findAllLogisticsCompany() {
+        Response response = new Response();
+        List<LogisticsCompany> map = orderFacade.findAllLogisticsCompany();
         if (response.getCode() == 200) {
             response.setMessage("发货成功");
         }
