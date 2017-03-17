@@ -192,6 +192,7 @@ public class ProductCategoryFacade {
         Map<String, Integer> map = new HashMap<>();
         GoodsDiscount goodsDiscount = new GoodsDiscount();
         goodsDiscount.setName(name);
+        System.out.print(discount);
         if (!StringUtils.isEmpty(isdel)) {
             goodsDiscount.setIsdel(Integer.parseInt(isdel));
         }
