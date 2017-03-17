@@ -383,15 +383,15 @@
     <select id="queryCategoryHave" parameterType="java.lang.String" resultType="java.lang.Integer">
         select COUNT(1) from yw_category WHERE  typename=#{typename,jdbcType=VARCHAR}
     </select>
-    <select id=" queryisdel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        select isdel from FROM yw_brand WHERE id=#{id,jdbcType=INTEGER}
+    <select id="queryisdel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select isdel from yw_brand WHERE id=#{id,jdbcType=INTEGER}
     </select>
-    <select id="updateDownD" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <update id="updateDownD" parameterType="java.lang.Integer">
         update yw_goods_discount set  isdel=1  where id=#{id,jdbcType=INTEGER}
-    </select>
-    <select id="updateUpD" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    </update>
+    <update id="updateUpD" parameterType="java.lang.Integer">
         update yw_goods_discount set  isdel=0  where id=#{id,jdbcType=INTEGER}
-    </select>
+    </update>
     <select id="queryGoodsisdel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select isdel from yw_goods_discount where id=#{id,jdbcType=INTEGER}
     </select>

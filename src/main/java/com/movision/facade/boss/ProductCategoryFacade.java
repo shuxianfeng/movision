@@ -96,7 +96,7 @@ public class ProductCategoryFacade {
      */
     public List<Brand> findAllBrandCondition(String brandname, String isdel, Paging<Brand> pager) {
         Map<String, Object> map = new HashMap<>();
-        map.put("typename", brandname);
+        map.put("brandname", brandname);
         map.put("isdel", isdel);
         return productCategoryService.findAllBrandCondition(map, pager);
     }

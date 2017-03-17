@@ -310,7 +310,7 @@ public class ProductCategoryController {
         Response response = new Response();
         int result = productCategoryFacade.updateDown(id);
         if (response.getCode() == 200) {
-            response.setMessage("停用成功");
+            response.setMessage("停用启用成功");
         }
         response.setData(result);
         return response;
