@@ -196,7 +196,7 @@ public class ProductCategoryFacade {
             goodsDiscount.setIsdel(Integer.parseInt(isdel));
         }
         if (!StringUtils.isEmpty(discount)) {
-            goodsDiscount.setDiscount(Integer.parseInt(discount));
+            goodsDiscount.setDiscount(discount);
         }
         if (!StringUtils.isEmpty(content)) {
             goodsDiscount.setContent(content);
@@ -362,7 +362,7 @@ public class ProductCategoryFacade {
         if (!StringUtils.isEmpty(isdel)) {
             goodsDiscount.setIsdel(Integer.parseInt(isdel));
         }
-        goodsDiscount.setDiscount(Integer.parseInt(discount));
+        goodsDiscount.setDiscount(discount);
         goodsDiscount.setContent(content);
         if (!StringUtils.isEmpty(isenrent)) {
             goodsDiscount.setIsenrent(Integer.parseInt(isenrent));
