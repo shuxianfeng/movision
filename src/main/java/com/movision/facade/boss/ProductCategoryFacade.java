@@ -69,8 +69,9 @@ public class ProductCategoryFacade {
      */
     public List<ProductCategory> findAllCategoryCondition(String typename, Paging<ProductCategory> pager) {
         Map<String, Object> map = new HashMap<>();
-        map.put("typename", typename);
-
+        if (typename != null) {
+            map.put("typename", typename);
+        }
         return productCategoryService.findAllCategoryCondition(map, pager);
     }
 
@@ -83,8 +84,12 @@ public class ProductCategoryFacade {
      */
     public List<GoodsDiscount> findAllCategoryCondition(String name, String isdel, Paging<GoodsDiscount> pager) {
         Map<String, Object> map = new HashMap<>();
-        map.put("name", name);
-        map.put("isdel", isdel);
+        if (name != null) {
+            map.put("name", name);
+        }
+        if (isdel != null) {
+            map.put("isdel", isdel);
+        }
         return productCategoryService.findAllGoodsDiscountCondition(map, pager);
     }
     /**
@@ -96,8 +101,12 @@ public class ProductCategoryFacade {
      */
     public List<Brand> findAllBrandCondition(String brandname, String isdel, Paging<Brand> pager) {
         Map<String, Object> map = new HashMap<>();
-        map.put("brandname", brandname);
-        map.put("isdel", isdel);
+        if (brandname != null) {
+            map.put("brandname", brandname);
+        }
+        if (isdel != null) {
+            map.put("isdel", isdel);
+        }
         return productCategoryService.findAllBrandCondition(map, pager);
     }
 
