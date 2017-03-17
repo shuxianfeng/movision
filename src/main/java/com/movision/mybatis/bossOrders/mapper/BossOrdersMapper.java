@@ -13,6 +13,7 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsTo;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
+import com.movision.mybatis.logidticsRelation.entity.LogidticsRelation;
 import com.movision.mybatis.logisticsCompany.entity.LogisticsCompany;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.orders.entity.Orders;
@@ -82,6 +83,8 @@ public interface BossOrdersMapper {
     int updateOperation(Orderoperation orderoperation);//修改发货状态
 
     int addLogistic(Orders orders);//增加快递单号
+
+    int addLogisticsRalation(LogidticsRelation logidticsRelation);
 
     AddressVo queryByAddress(Integer id);//返回地址
 

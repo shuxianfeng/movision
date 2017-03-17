@@ -843,4 +843,29 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
     <select id="findAllLogisticsCompany" resultType="com.movision.mybatis.logisticsCompany.entity.LogisticsCompany">
         SELECT id,logisticscompany FROM yw_logistics_company
     </select>
+    <insert id="addLogisticsRalation" parameterType="com.movision.mybatis.logidticsRelation.entity.LogidticsRelation">
+        insert into yw_logidtics_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="logisticsid != null">
+                logisticsid,
+            </if>
+            <if test="companyid != null">
+                companyid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="logisticsid != null">
+                #{logisticsid,jdbcType=VARCHAR},
+            </if>
+            <if test="companyid != null">
+                #{companyid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 </mapper>

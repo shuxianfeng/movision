@@ -607,9 +607,10 @@ public class OrdersListController {
     @RequestMapping(value = "update_Operate", method = RequestMethod.POST)
     public Response updateOperate(@ApiParam(value = "订单id") @RequestParam(required = false) String id,
                                   @ApiParam(value = "备注") @RequestParam(required = false) String remark,
-                                  @ApiParam(value = "发货单号") @RequestParam(required = false) String logisticsid) {
+                                  @ApiParam(value = "发货单号") @RequestParam(required = false) String logisticsid,
+                                  @ApiParam(value = "送货方式") @RequestParam(required = false) String takeway) {
         Response response = new Response();
-        Map<String, Integer> map = orderFacade.updateOperater(id, remark, logisticsid);
+        Map<String, Integer> map = orderFacade.updateOperater(id, remark, logisticsid, takeway);
         if (response.getCode() == 200) {
             response.setMessage("发货成功");
         }

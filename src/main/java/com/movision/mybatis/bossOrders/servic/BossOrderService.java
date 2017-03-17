@@ -14,6 +14,7 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsTo;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
+import com.movision.mybatis.logidticsRelation.entity.LogidticsRelation;
 import com.movision.mybatis.logisticsCompany.entity.LogisticsCompany;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.orders.entity.Orders;
@@ -632,6 +633,21 @@ public class BossOrderService {
         }
     }
 
+    /**
+     * 增加物流关系表
+     *
+     * @param logidticsRelation
+     * @return
+     */
+    public Integer addLogisticsRalation(LogidticsRelation logidticsRelation) {
+        try {
+            loger.info("增加物流关系表");
+            return bossOrdersMapper.addLogisticsRalation(logidticsRelation);
+        } catch (Exception e) {
+            loger.error("增加物流关系表失败", e);
+            throw e;
+        }
+    }
     /**
      * 查询所有快递公司
      *

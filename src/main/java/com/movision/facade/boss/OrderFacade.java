@@ -14,6 +14,7 @@ import com.movision.mybatis.bossOrders.servic.BossOrderService;
 import com.movision.mybatis.city.entity.City;
 import com.movision.mybatis.goods.entity.GoodsTo;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
+import com.movision.mybatis.logidticsRelation.entity.LogidticsRelation;
 import com.movision.mybatis.logisticsCompany.entity.LogisticsCompany;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.orders.entity.Orders;
@@ -629,8 +630,18 @@ public class OrderFacade {
         afterserviceStream.setProcessingpeople(ShiroUtil.getBossUser().getUsername());
         afterserviceStream.setProcessingtime(new Date());
         int result = bossOrderService.addAfterService(afterserviceStream);
+        Orders orders = new Orders();
+        orders.setLogisticsid(replacementnumber);
+        orders.setId(Integer.parseInt(id));
+        int ress = bossOrderService.addLogistic(orders);
+        LogidticsRelation relation = new LogidticsRelation();
+        relation.setLogisticsid(replacementnumber);
+        relation.setCompanyid(Integer.parseInt(takeway));
+        int red = bossOrderService.addLogisticsRalation(relation);
         map.put("result", result);
         map.put("res", res);
+        map.put("ress", ress);
+        map.put("red", red);
         return map;
     }
 
@@ -658,7 +669,7 @@ public class OrderFacade {
      * @param logisticsid
      * @return
      */
-    public Map<String, Integer> updateOperater(String id, String remark, String logisticsid) {
+    public Map<String, Integer> updateOperater(String id, String remark, String takeway, String logisticsid) {
         Map<String, Integer> map = new HashMap<>();
         Orderoperation orderoperation = new Orderoperation();
         orderoperation.setOrderid(Integer.parseInt(id));
@@ -672,6 +683,10 @@ public class OrderFacade {
         orders.setLogisticsid(logisticsid);
         orders.setId(Integer.parseInt(id));
         int res = bossOrderService.addLogistic(orders);
+        LogidticsRelation relation = new LogidticsRelation();
+        relation.setLogisticsid(logisticsid);
+        relation.setCompanyid(Integer.parseInt(takeway));
+        int red = bossOrderService.addLogisticsRalation(relation);
         map.put("result", result);
         map.put("res", res);
         return map;
