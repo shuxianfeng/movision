@@ -831,7 +831,8 @@ public class PostFacade {
      * @param essencedate
      * @return
      */
-    public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String activetype, String activefee, String iscontribute, String userid, String coverimg,
+    public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String activetype,
+                                                     String iscontribute, String activefee, String userid, String coverimg,
                                                      String begintime, String endtime, String isessence, String orderid, String postcontent, String essencedate, String goodsid) {
         PostActiveList postActiveList = new PostActiveList();
         Map<String, Integer> map = new HashedMap();
@@ -846,7 +847,7 @@ public class PostFacade {
             if (activefee != null) {
                 postActiveList.setActivefee(Double.parseDouble(activefee));//费用
             }
-            if (!StringUtils.isEmpty(iscontribute)) {
+            if (!StringUtils.isEmpty(iscontribute)) {//是否投稿
                 postActiveList.setIscontribute(iscontribute);
             }
             postActiveList.setUserid(Integer.parseInt(userid));
@@ -857,7 +858,7 @@ public class PostFacade {
             if (orderid != null) {
                 postActiveList.setOrderid(Integer.parseInt(orderid));
             }
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date estime = null;
             if (essencedate != null) {
                 try {

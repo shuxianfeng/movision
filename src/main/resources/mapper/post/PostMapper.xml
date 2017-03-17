@@ -891,10 +891,10 @@
         UPDATE yw_active_period
         <set>
             <if test="begintime != null">
-                begintime = #{begintime,jdbcType=DATE},
+                begintime = #{begintime,jdbcType=TIMESTAMP},
             </if>
             <if test="endtime != null">
-                endtime = #{endtime,jdbcType=DATE},
+                endtime = #{endtime,jdbcType=TIMESTAMP},
             </if>
         </set>
         WHERE postid=#{id,jdbcType=INTEGER}

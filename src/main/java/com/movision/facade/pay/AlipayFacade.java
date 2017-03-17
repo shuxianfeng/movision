@@ -334,8 +334,30 @@ public class AlipayFacade {
                         orderService.updateOrderByIntegral(ordersList.get(i).getId());//修改订单状态
                     }
                 }
+                contentmap.put("code", response.getCode());
+                contentmap.put("msg", response.getMsg());
+                contentmap.put("type", response);
             } else {
+                String code = response.getCode();
+                String msg = response.getMsg();
                 System.out.println("调用失败" + response.getBody());
+                if (code.equals("20000")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                } else if (code.equals("20001")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                } else if (code.equals("40001")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                } else if (code.equals("40002")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                } else if (code.equals("40004")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                } else if (code.equals("40006")) {
+                    log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
+                }
+                contentmap.put("code", code);
+                contentmap.put("msg", msg);
+                contentmap.put("sub_cod", response.getSubCode());
+                contentmap.put("sub_msg", response.getSubMsg());
             }
         }
         return contentmap;
