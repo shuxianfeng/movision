@@ -126,7 +126,7 @@
             AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
         <if test="isdel!=null and isdel!=''">
-            AND isdel=#{id,jdbcType=INTEGER}
+            AND isdel=#{isdel,jdbcType=INTEGER}
         </if>
         ORDER BY enddate DESC
     </select>
