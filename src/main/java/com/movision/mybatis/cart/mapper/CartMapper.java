@@ -4,10 +4,12 @@ import com.movision.mybatis.cart.entity.Cart;
 import com.movision.mybatis.cart.entity.CartVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.rentdate.entity.Rentdate;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public interface CartMapper {
     int deleteByPrimaryKey(Integer id);
 

@@ -6,9 +6,6 @@ import com.movision.mybatis.cart.entity.Cart;
 import com.movision.mybatis.cart.entity.CartVo;
 import com.movision.mybatis.cart.service.CartService;
 import com.movision.mybatis.combo.service.ComboService;
-import com.movision.mybatis.coupon.entity.Coupon;
-import com.movision.mybatis.coupon.service.CouponService;
-import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.goodsDiscount.service.DiscountService;
 import com.movision.mybatis.rentdate.entity.Rentdate;
@@ -17,7 +14,6 @@ import com.movision.mybatis.shopAddress.service.ShopAddressService;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.CalculateFee;
 import com.movision.utils.CheckStock;
-import org.apache.commons.beanutils.converters.DoubleConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,7 +71,9 @@ public class CartFacade {
         if (!StringUtils.isEmpty(discountid)) {
             parammap.put("discountid", Integer.parseInt(discountid));
         }
-        parammap.put("isdebug", Integer.parseInt(isdebug));
+        if (!StringUtils.isEmpty(isdebug)) {
+            parammap.put("isdebug", Integer.parseInt(isdebug));
+        }
         parammap.put("sum", Integer.parseInt(sum));
         parammap.put("intime", new Date());
         parammap.put("isdel", 0);

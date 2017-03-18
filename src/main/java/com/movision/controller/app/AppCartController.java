@@ -36,7 +36,7 @@ public class AppCartController {
                                  @ApiParam(value = "商品id") @RequestParam String goodsid,
                                  @ApiParam(value = "套餐id,为空时表示不选择套餐") @RequestParam(required = false) String comboid,
                                  @ApiParam(value = "活动id,为空时表示不参加活动") @RequestParam(required = false) String discountid,
-                                 @ApiParam(value = "是否需要跟机员（0 不需要 1 需要）") @RequestParam String isdebug,
+                                 @ApiParam(value = "是否需要跟机员（0 不需要 1 需要）租赁时必填，购买时传空") @RequestParam(required = false) String isdebug,
                                  @ApiParam(value = "数量") @RequestParam String sum,
                                  @ApiParam(value = "商品定位：0 租赁 1 出售") @RequestParam String type,
                                  @ApiParam(value = "租赁日期（租赁商品时为必填。多天使用年-月-日，并用英文逗号隔开）") @RequestParam(required = false) String rentdate) throws ParseException {

@@ -226,12 +226,18 @@
             select LAST_INSERT_ID()
         </selectKey>
         INSERT INTO yw_cart(userid, goodsid,
-        goodsname, combotype, discountid, num, isdebug,
+        goodsname, combotype, discountid, num,
+        <if test="isdebug != null">
+            isdebug,
+        </if>
         intime, isdel, type
         )
         VALUES (#{userid,jdbcType=INTEGER}, #{goodsid,jdbcType=INTEGER},
         (SELECT name FROM yw_goods WHERE id = #{goodsid,jdbcType=INTEGER}), #{comboid,jdbcType=INTEGER},
-        #{discountid,jdbcType=INTEGER}, #{sum,jdbcType=INTEGER}, #{isdebug,jdbcType=INTEGER},
+        #{discountid,jdbcType=INTEGER}, #{sum,jdbcType=INTEGER},
+        <if test="isdebug != null">
+            #{isdebug,jdbcType=INTEGER},
+        </if>
         #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}
         )
     </insert>

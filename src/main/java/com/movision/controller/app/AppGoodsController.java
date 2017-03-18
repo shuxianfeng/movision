@@ -157,7 +157,7 @@ public class AppGoodsController {
     /**
      * 租用的商品立即租用接口
      */
-    @ApiOperation(value = "租用的商品立即租用接口(选择好商品及套餐类型后调用)", notes = "租用的商品立即租用接口，选择好商品及套餐类型后调用(返回所有地址列表、所含套餐商品列表、用户可用积分数)", response = Response.class)
+    @ApiOperation(value = "租用的商品立即租用接口", notes = "租用的商品立即租用接口，选择好商品及套餐类型后调用(返回默认地址、所含套餐商品列表、用户可用积分数)", response = Response.class)
     @RequestMapping(value = "immediateRent", method = RequestMethod.POST)
     public Response immediateRent(@ApiParam(value = "商品id") @RequestParam String goodsid,
                                   @ApiParam(value = "用户id") @RequestParam String userid,
@@ -186,9 +186,15 @@ public class AppGoodsController {
     /**
      * 购买的商品立即购买接口
      */
-    @ApiOperation(value = "购买的商品立即购买接口", notes = "用户租用商品时，点击加入购物车或立即租用之前选择租用日期和套餐类型等的选择数据返回", response = Response.class)
+    @ApiOperation(value = "购买的商品立即购买接口", notes = "购买的商品立即购买接口，选择好商品及套餐类型后调用（返回默认地址、所含套餐商品列表、用户可用积分）", response = Response.class)
     @RequestMapping(value = "immediateBuy", method = RequestMethod.POST)
-    public Response immediateBuy(@ApiParam(value = "商品id") @RequestParam String goodsid) {
+    public Response immediateBuy(@ApiParam(value = "商品id") @RequestParam String goodsid,
+                                 @ApiParam(value = "用户id") @RequestParam String userid,
+                                 @ApiParam(value = "套餐类型id（不选择套餐时传空）") @RequestParam(required = false) String combotype,
+                                 @ApiParam(value = "活动id（不参加活动时传空）") @RequestParam(required = false) String discountid,
+                                 @ApiParam(value = "商品数量") @RequestParam String num,
+                                 @ApiParam(value = "当前选择的定位地址-省code") @RequestParam String provincecode,
+                                 @ApiParam(value = "当前选择的定位地址-市code") @RequestParam String citycode) {
         Response response = new Response();
 
         Map<String, Object> map = new HashMap<>();
