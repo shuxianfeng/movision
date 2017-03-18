@@ -350,6 +350,85 @@ public class GoodsFacade {
         return map;
     }
 
+    @Transactional
+    public Map<String, Object> immediateBuy(String goodsid, String userid, String combotype, String discountid, String num) throws ParseException {
+
+        Map<String, Object> map = new HashMap<>();//定义返回map
+        int flag = 0;//定义标志位
+
+        //校验商品是否下架
+        int count = goodsService.queryIsOnline(Integer.parseInt(goodsid));
+        if (count == 0) {
+            map.put("code", -1);//商品已下架
+            map.put("msg", "商品已下架");
+            flag = -1;
+        }
+
+        //校验商品库存
+        int stock = goodsService.queryStore(Integer.parseInt(goodsid));
+        if (stock < Integer.parseInt(num)) {
+            map.put("code", -2);//库存不足
+            map.put("msg", "商品库存不足");
+            flag = -1;
+        }
+
+        //校验套餐库存
+        if (!StringUtils.isEmpty(combotype)) {
+            //根据商品id查询套餐库存
+            int combostoock = goodsService.queryAllStock(Integer.parseInt(combotype));
+            if (combostoock < Integer.parseInt(num)) {
+                map.put("code", -3);//套餐库存不足
+                map.put("msg", "套餐库存不足");
+                flag = -1;
+            }
+        }
+
+        //校验活动是否合法
+        if (!StringUtils.isEmpty(discountid)) {
+            //根据活动id校验活动是否合法
+            GoodsDiscount goodsDiscount = discountService.queryGoodsDiscountById(Integer.parseInt(discountid));
+            if (null != goodsDiscount) {
+                Date startdate = goodsDiscount.getStartdate();
+                Date enddate = goodsDiscount.getEnddate();
+                Date now = new Date();
+                if (now.before(startdate) || now.after(enddate)) {
+                    map.put("code", -4);
+                    map.put("msg", "该商品参与的优惠活动不在活动期间");
+                    flag = -1;
+                }
+            } else {
+                map.put("code", -4);
+                map.put("msg", "该商品参与的优惠活动已下架");
+                flag = -1;
+            }
+        }
+
+        if (flag == 0) {
+            //先根据用户id查询该用户的默认地址
+            Address address = goodsService.queryDefaultAddress(Integer.parseInt(userid));
+
+            //查询用户可用积分数
+            int userpoint = userService.queryUserPoint(Integer.parseInt(userid));
+
+            //根据商品id查询商品定位type
+            int type = goodsService.queryGoodsPosition(Integer.parseInt(goodsid));
+
+            //加入购物车并返回购物车id
+            int cartid = addCartUtil.addGoodsCart(userid, goodsid, combotype, discountid, "", num, type, "");
+
+            //定义运费map
+            Map<String, Object> feemap = new HashMap<>();
+            feemap.put("totalfee", 0.0);
+
+            map.put("code", 200);
+            map.put("address", address);
+            map.put("userpoint", userpoint);
+            map.put("feemap", feemap);
+            map.put("cartid", cartid);
+        }
+        return map;
+    }
+
     public List<Map> findAllMyCollectGoods(Paging<Map> pager, int userid) {
         Map map = new HashedMap();
         map.put("userid", userid);

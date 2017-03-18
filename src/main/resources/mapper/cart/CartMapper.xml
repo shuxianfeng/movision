@@ -227,7 +227,7 @@
         </selectKey>
         INSERT INTO yw_cart(userid, goodsid,
         goodsname, combotype, discountid, num,
-        <if test="isdebug != null">
+        <if test="isdebug != null and isdebug != ''">
             isdebug,
         </if>
         intime, isdel, type
@@ -235,7 +235,7 @@
         VALUES (#{userid,jdbcType=INTEGER}, #{goodsid,jdbcType=INTEGER},
         (SELECT name FROM yw_goods WHERE id = #{goodsid,jdbcType=INTEGER}), #{comboid,jdbcType=INTEGER},
         #{discountid,jdbcType=INTEGER}, #{sum,jdbcType=INTEGER},
-        <if test="isdebug != null">
+        <if test="isdebug != null and isdebug != ''">
             #{isdebug,jdbcType=INTEGER},
         </if>
         #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}

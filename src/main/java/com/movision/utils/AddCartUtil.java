@@ -49,7 +49,9 @@ public class AddCartUtil {
         if (!StringUtils.isEmpty(discountid)) {
             parammap.put("discountid", Integer.parseInt(discountid));
         }
-        parammap.put("isdebug", Integer.parseInt(isdebug));
+        if (!isdebug.equals("")) {
+            parammap.put("isdebug", Integer.parseInt(isdebug));
+        }
         parammap.put("sum", Integer.parseInt(num));
         parammap.put("intime", new Date());
         parammap.put("isdel", 0);

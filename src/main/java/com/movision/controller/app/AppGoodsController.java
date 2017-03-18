@@ -192,15 +192,17 @@ public class AppGoodsController {
                                  @ApiParam(value = "用户id") @RequestParam String userid,
                                  @ApiParam(value = "套餐类型id（不选择套餐时传空）") @RequestParam(required = false) String combotype,
                                  @ApiParam(value = "活动id（不参加活动时传空）") @RequestParam(required = false) String discountid,
-                                 @ApiParam(value = "商品数量") @RequestParam String num,
-                                 @ApiParam(value = "当前选择的定位地址-省code") @RequestParam String provincecode,
-                                 @ApiParam(value = "当前选择的定位地址-市code") @RequestParam String citycode) {
+                                 @ApiParam(value = "商品数量") @RequestParam String num) throws ParseException {
         Response response = new Response();
 
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = goodsFacade.immediateBuy(goodsid, userid, combotype, discountid, num);
 
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
+        if ((int) map.get("code") == 200) {
+            response.setCode(200);
+            response.setMessage("请求成功");
+        } else {
+            response.setCode(300);
+            response.setMessage("请求失败");
         }
         response.setData(map);
         return response;
