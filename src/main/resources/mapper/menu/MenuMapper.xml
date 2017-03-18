@@ -212,12 +212,12 @@
     </select>
 
     <select id="querySidebarFather" resultType="com.movision.mybatis.bossMenu.entity.MenuVo">
-        SELECT * FROM yw_admin_menu WHERE pid=0
+        SELECT * FROM yw_admin_menu WHERE pid=0 and isdel=1
     </select>
 
     <select id="querySidebarSon" resultType="com.movision.mybatis.bossMenu.entity.MenuVo">
         <![CDATA[
-        SELECT * FROM yw_admin_menu WHERE pid>0
+        SELECT * FROM yw_admin_menu WHERE pid>0 and isdel=1
         ]]>
     </select>
 
