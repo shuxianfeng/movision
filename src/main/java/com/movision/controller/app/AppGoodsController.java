@@ -155,7 +155,7 @@ public class AppGoodsController {
     }
 
     /**
-     * 租用的商品立即租用接口(选择好商品及套餐类型后调用)
+     * 租用的商品立即租用接口
      */
     @ApiOperation(value = "租用的商品立即租用接口(选择好商品及套餐类型后调用)", notes = "租用的商品立即租用接口，选择好商品及套餐类型后调用(返回所有地址列表、所含套餐商品列表、用户可用积分数)", response = Response.class)
     @RequestMapping(value = "immediateRent", method = RequestMethod.POST)
