@@ -19,6 +19,7 @@ import com.movision.mybatis.rentdate.entity.Rentdate;
 import com.movision.mybatis.subOrder.entity.SubOrder;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.CalculateFee;
+import com.movision.utils.CheckStock;
 import com.movision.utils.GenerateOrderNum;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
@@ -74,6 +75,9 @@ public class OrderAppFacade {
     @Autowired
     private GoodsService goodsService;
 
+    @Autowired
+    private CheckStock checkStock;
+
     public List<Orders> getMyOrderList(Paging<Orders> paging, int userid) {
         Map map = new HashedMap();
         map.put("userid", userid);
@@ -85,8 +89,6 @@ public class OrderAppFacade {
                                            String head, String content, String invoiceaddressid, String companyname, String rigaddress,
                                            String rigphone, String bank, String banknum, String code, String couponid, String points,
                                            String message, String logisticsfee, String totalprice, String payprice) {
-        int flag = 0;//自定义标志位（用于标志校验是否通过的标志 0 通过 1为有不通过的校验）
-
         Map<String, Object> map = new HashMap<>();
 
         //首先根据cartids取出用户需要结算的所有商品
@@ -100,10 +102,20 @@ public class OrderAppFacade {
         //此处再次计算运费，用于拆分的不同商家订单中运费的填充
         Address addr = addressService.queryAddressById(Integer.parseInt(addressid));
         //定义运费变量map
-        Map<String, Object> feemap;
+        Map<String, Object> feemap = new HashMap<>();
+
+        int flag = 0;//商品和套餐库存校验标识
+        int flag1 = 0;//商品是否下架校验标识
+        int flag2 = 0;//商品租赁日期校验标识
+        int flag3 = 0;//商品优惠活动校验标识
+        int flag4 = 0;//订单总金额的校验标识
+        int flag5 = 0;//实付总金额的校验标识
+        int flag6 = 0;//运费总额的校验标识
 
         //调用公共计算接口计算运费(只有地址可用才会调用提交订单接口，所以此处不用判空也不用校验省市code是否可计算)
-        feemap = calculateFee.GetFee(cartVoList, addr.getLng(), addr.getLat());
+        if (addr != null) {//判空 防止空指针
+            feemap = calculateFee.GetFee(cartVoList, addr.getLng(), addr.getLat());
+        }
 
         //此处需要对订单中的商品进行二次校验
         double totalamount = 0;//订单总金额(=订单中自营商品的总金额+订单中第三方商品的总金额)
@@ -112,17 +124,33 @@ public class OrderAppFacade {
 
         Iterator<Integer> it = shopamountmap.keySet().iterator();//取出map中所有的key，即shopid
 
+        //由于购物车中可能会出现选择不同配置或套餐或者立即购买时临时生成的购物车记录，会导致购物车中出现同一个goodsid的商品出现多条的情况，
+        //因此不能在遍历购物车时再轮流进行商品和套餐的库存判断（会出现多个套餐多条记录导致总购买件数大于商品库存的超卖情况）
+        //所以这里需要对购物车中的记录按照商品的goodsid分组判断总购买件数，轮训判断所有商品的库存
+        map = checkStock.checkGoodsStock(cartVoList, map);
+        if ((int) map.get("stockcode") == -2) {
+            flag = 1;
+        }
+
         for (int i = 0; i < cartVoList.size(); i++) {
 
             int id = cartVoList.get(i).getId();//购物车id
 
-            //1.校验所有商品库存
-            if (cartVoList.get(i).getStock() < cartVoList.get(i).getNum()) {
-                map.put("stockcode", -2);
-                map.put("stockcartid", id);
-                map.put("stockmsg", "商品库存不足");
-                flag = 1;
+            //校验商品是否已下架
+            if (cartVoList.get(i).getIsdel() == 1) {
+                map.put("delcode", 0);
+                map.put("delcartid", id);
+                map.put("delmsg", "商品已下架");
+                flag1 = 1;
             }
+
+            //1.校验所有商品库存//--------------------------参照333行说明
+//            if (cartVoList.get(i).getStock() < cartVoList.get(i).getNum()) {
+//                map.put("stockcode", -2);
+//                map.put("stockcartid", id);
+//                map.put("stockmsg", "商品库存不足");
+//                flag = 1;
+//            }
 
             //2.校验租赁商品的租赁日期
             if (cartVoList.get(i).getType() == 0) {//判断为租赁时才进行校验
@@ -137,24 +165,24 @@ public class OrderAppFacade {
                         map.put("rentdatecode", -3);
                         map.put("rentdatecartid", id);
                         map.put("rentdatemsg", "商品租赁日期必须从次日起租");
-                        flag = 1;
+                        flag2 = 1;
                     }
                 }
             }
 
-            //3.校验商品套餐的库存
-            if (cartVoList.get(i).getCombotype() != null) {
-                //根据套餐id查询该套餐中所有的商品的库存
-                List<GoodsVo> goodsVos = cartService.queryGoodsByComboid(cartVoList.get(i).getCombotype());
-                for (int k = 0; k < goodsVos.size(); k++) {
-                    if (goodsVos.get(k).getStock() < cartVoList.get(i).getNum()) {
-                        map.put("combocode", -4);
-                        map.put("combocartid", id);
-                        map.put("combomsg", "该商品套餐中包含库存不足的商品");
-                        flag = 1;
-                    }
-                }
-            }
+            //3.校验商品套餐的库存//--------------------------参照333行说明
+//            if (cartVoList.get(i).getCombotype() != null) {
+//                //根据套餐id查询该套餐中所有的商品的库存
+//                List<GoodsVo> goodsVos = cartService.queryGoodsByComboid(cartVoList.get(i).getCombotype());
+//                for (int k = 0; k < goodsVos.size(); k++) {
+//                    if (goodsVos.get(k).getStock() < cartVoList.get(i).getNum()) {
+//                        map.put("combocode", -4);
+//                        map.put("combocartid", id);
+//                        map.put("combomsg", "该商品套餐中包含库存不足的商品");
+//                        flag = 1;
+//                    }
+//                }
+//            }
 
             //4.校验商品活动的起止日期（分为整租活动和非整租活动）
             if (cartVoList.get(i).getDiscountid() != null) {
@@ -168,17 +196,17 @@ public class OrderAppFacade {
                         map.put("discountcode", -5);
                         map.put("discountcartid", id);
                         map.put("discountmsg", "该商品参与的优惠活动不在活动期间");
-                        flag = 1;
+                        flag3 = 1;
                     }
                 } else {
                     map.put("discountcode", -5);
                     map.put("discountcartid", id);
                     map.put("discountmsg", "该商品参与的优惠活动已下架");
-                    flag = 1;
+                    flag3 = 1;
                 }
             }
 
-            if (flag == 0) {//如果上面的校验全部通过，进行如下操作
+            if (flag == 0 && flag1 == 0 && flag2 == 0 && flag3 == 0) {//如果上面的校验全部通过，进行如下操作
 
                 //5.计算选择的结算商品的总价格（与APP入参核对）
                 if (cartVoList.get(i).getType() == 0) {//租赁
@@ -303,240 +331,299 @@ public class OrderAppFacade {
                         }
                     }
                 }
-
             }
         }
 
-        //此处需要对订单总额进行核对
-        if (Double.parseDouble(totalprice) != totalamount) {
-            log.info("服务器计算的订单总额>>>>>>>>>>>>>>>>" + totalamount);
-            map.put("totalcode", -1);
-            map.put("totalmsg", "提交的订单总额和服务器订单总额不一致");
-            flag = 1;
-        }
-
-        double payamount = totalamount;//系统计算得到的实际支付金额
-        //如果优惠券id不为空
-        Coupon coupon = new Coupon();
-        if (!StringUtils.isEmpty(couponid)) {
-            //根据优惠券id查询优惠券实体
-            coupon = couponService.queryCouponById(Integer.parseInt(couponid));
-            payamount = payamount - coupon.getTmoney();
-        }
-        //如果使用积分数不为空
-        if (!StringUtils.isEmpty(points)) {
-            //100分抵扣1元
-            payamount = payamount - Double.parseDouble(points) / 100;
-        }
-
-        //此处需要对订单实际支付金额进行核对
-        if (Double.parseDouble(payprice) != payamount) {
-            log.info("服务器计算的实付金额>>>>>>>>>>>>>>>>" + payamount);
-            map.put("paycode", 0);
-            map.put("paymsg", "提交的实付金额和服务器实付金额不一致");
-            flag = 1;
-        }
-
-        //此处需要对运费总额进行校验
-        if (Double.parseDouble(logisticsfee) != (double) ((long) feemap.get("totalfee"))) {
-            log.info("服务器计算的运费总额>>>>>>>>>>>>>>>>" + feemap.get("totalfee"));
-            map.put("paycode", -6);
-            map.put("paymsg", "提交的运费总额和服务器运费总额不一致");
-            flag = 1;
-        }
-
-        //------------------------------debug各店铺商品的总金额-----------------------
-        java.util.Iterator its = shopamountmap.entrySet().iterator();
-        while (its.hasNext()) {
-            java.util.Map.Entry entry = (java.util.Map.Entry) its.next();
-            log.info("测试打印的key>>>>>>>>>>>>>>>>>>>" + entry.getKey());     //返回对应的键
-            log.info("测试打印的value>>>>>>>>>>>>>>>>>>>" + entry.getValue());   //返回对应的值
-        }
-        //------------------------------debug各店铺商品的总金额-----------------------
-
-        //如果所有的校验都通过的话，下面进行订单提交
-        if (flag == 0) {//批量提交（引入申明式事务）
-
-            //取出所有店铺id
-            List<Integer> shoplist = new ArrayList<>();
-            //对所有的shopid遍历去重
-            for (int i = 0; i < cartVoList.size(); i++) {
-                int mark = 0;
-                for (int j = 0; j < shoplist.size(); j++) {
-                    if (cartVoList.get(i).getShopid() == shoplist.get(j)) {
-                        mark = 1;
-                    }
-                }
-                if (mark == 0) {
-                    shoplist.add(cartVoList.get(i).getShopid());
-                }
+        if (flag == 0 && flag1 == 0 && flag2 == 0 && flag3 == 0) {
+            //此处需要对订单总额进行核对
+            if (Double.parseDouble(totalprice) != totalamount) {
+                log.info("服务器计算的订单总额>>>>>>>>>>>>>>>>" + totalamount);
+                map.put("totalcode", -1);
+                map.put("totalmsg", "提交的订单总额和服务器订单总额不一致");
+                flag4 = 1;
             }
 
-            List<Integer> orderidlsit = new ArrayList<>();//记录生成的所有订单号
-            for (int i = 0; i < shoplist.size(); i++) {
-
-                log.info("提交订单的店铺id>>>>>>>>>>>>>>>>>>>>>>>>>>" + shoplist.get(i));
-                double realpayamount = 0;//定义当前遍历的这个店铺订单的实际支付金额
-                if (shoplist.get(i) == -1) {
-                    realpayamount = selfamount;
-                } else {
-                    realpayamount = shopamountmap.get(shoplist.get(i));
-                }
-
-                //定义一个list集合存放当前遍历的这个店铺的商品
-                List<CartVo> shopCartList = new ArrayList<>();
-                for (int j = 0; j < cartVoList.size(); j++) {
-                    if (shoplist.get(i) == cartVoList.get(j).getShopid()) {//如果从所有购物车商品中找到shopid和当前的shopid一样的商品就加入shopCartList
-                        shopCartList.add(cartVoList.get(j));
-                    }
-                }
-
-                //------------------------------------下面开始拼装入参，统一放到service曾进行事务提交------------------------------------
-                //提交主订单（批量提交）
-                String ordernumber = generateOrderNum.getOrderNum(shoplist.get(i));//调用生成订单号工具方法生成订单编号
-
-                Orders orders = new Orders();
-                orders.setOrdernumber(ordernumber);
-                orders.setUserid(Integer.parseInt(userid));
-                orders.setAddressid(Integer.parseInt(addressid));
-                orders.setTakeway(Integer.parseInt(takeway));
-                orders.setStatus(0);//生成后订单状态设为待支付
-                if (kind.equals("1")) {
-                    orders.setBill(head);
-                } else if (kind.equals("2")) {
-                    orders.setBill(companyname);
-                }
-                if (shoplist.get(i) == -1) {
-                    orders.setMoney(selfamount);
-                } else {
-                    orders.setMoney(shopamountmap.get(shoplist.get(i)));
-                }
-                if (null != feemap.get(shoplist.get(i))) {
-                    orders.setSendmoney((double) feemap.get(shoplist.get(i)));
-                } else {
-                    orders.setSendmoney(0.0);
-                }
-                if (!StringUtils.isEmpty(couponid)) {//使用了优惠券
-                    if ((i == 0 && coupon.getType() != 2) || (coupon.getType() == 2 && coupon.getShopid() == shoplist.get(i))) {//非店铺券且为第一家店直接使用   或者  店铺优惠券 且 当前店铺id等于优惠券上的店铺id可使用
-                        orders.setIsdiscount(1);
-                        orders.setCouponsid(couponid);
-                        orders.setDiscouponmoney(coupon.getTmoney());
-
-                        realpayamount = realpayamount - coupon.getTmoney();//实际支付金额扣减
-                    } else {
-                        orders.setIsdiscount(0);//只使用了一张优惠券，除了上面两种情况之外的情况全部设为0 未使用优惠券
-                    }
-                } else {//未使用优惠券
-                    orders.setIsdiscount(0);
-                }
-                if (!StringUtils.isEmpty(points)) {//使用了积分
-                    if (i == 0) {
-                        orders.setDispointmoney(Double.parseDouble(points) / 100);
-
-                        realpayamount = realpayamount - Double.parseDouble(points) / 100;//实际支付金额扣减
-                    }
-                }
-                orders.setIntime(new Date());
-                if (!StringUtils.isEmpty(message)) {
-                    orders.setRemark(message);
-                }
-                orders.setIsdel(0);
-                //-------------------------------------------------------------------拼装主订单对象完成
-                orderService.insertOrders(orders);//插入返回主键订单id
-                int orderid = orders.getId();//主订单id
-                orderidlsit.add(orderid);
-
-                //提交子订单(由于一个订单中会出现多个商品，所以封装子订单list)
-                List<SubOrder> subOrderList = new ArrayList<>();
-                for (int j = 0; j < shopCartList.size(); j++) {
-                    SubOrder subOrder = new SubOrder();
-                    subOrder.setPorderid(orderid);
-                    subOrder.setGoodsid(shopCartList.get(j).getGoodsid());
-                    if (shopCartList.get(j).getCombotype() != null) {
-                        subOrder.setCombotype(shopCartList.get(j).getCombotype());
-                    }
-                    if (shopCartList.get(j).getDiscountid() != null) {
-                        subOrder.setDiscountid(shopCartList.get(j).getDiscountid());
-                    }
-                    subOrder.setSum(shopCartList.get(j).getNum());
-                    subOrder.setIsdebug(shopCartList.get(j).getIsdebug());
-                    subOrder.setIsdel(0);
-                    subOrder.setType(shopCartList.get(j).getType());
-
-                    subOrderList.add(subOrder);
-                }
-                //-------------------------------------------------------------------拼装子订单列表对象完成
-                orderService.batchInsertOrders(subOrderList);//批量插入子订单表中的各个子订单
-
-                //提交子订单的同时去除库存
-                goodsService.deductStock(subOrderList);
-
-                //增加发票信息
-                Invoice invoice = new Invoice();
-                invoice.setOrderid(orderid);
-                if (kind.equals("1")) {
-                    invoice.setHead(head);
-                } else if (kind.equals("2")) {
-                    invoice.setHead(companyname);
-                }
-                invoice.setAddressid(Integer.parseInt(invoiceaddressid));
-                invoice.setMoney(realpayamount);//开票金额为实际支付金额
-                invoice.setKind(Integer.parseInt(kind));
-                invoice.setContent(content);
-                if (!StringUtils.isEmpty(companyname)) {
-                    invoice.setCompanyname(companyname);
-                }
-                if (!StringUtils.isEmpty(rigaddress)) {
-                    invoice.setRigaddress(rigaddress);
-                }
-                if (!StringUtils.isEmpty(rigphone)) {
-                    invoice.setRigphone(rigphone);
-                }
-                if (!StringUtils.isEmpty(bank)) {
-                    invoice.setBank(bank);
-                }
-                if (!StringUtils.isEmpty(banknum)) {
-                    invoice.setBanknum(banknum);
-                }
-                if (!StringUtils.isEmpty(code)) {
-                    invoice.setCode(code);
-                }
-                if (!StringUtils.isEmpty(onlystatue)) {
-                    invoice.setOnlystatue(Integer.parseInt(onlystatue));
-                }
-                //-------------------------------------------------------------------拼装发票信息对象完成
-                orderService.insertInvoice(invoice);
-
-                //删除购物车中对应的商品(批量删除)
-                cartService.batchDeleteCartGoods(cartid);
+            double payamount = totalamount;//系统计算得到的实际支付金额
+            //如果优惠券id不为空
+            Coupon coupon = new Coupon();
+            if (!StringUtils.isEmpty(couponid)) {
+                //根据优惠券id查询优惠券实体
+                coupon = couponService.queryCouponById(Integer.parseInt(couponid));
+                payamount = payamount - coupon.getTmoney();
             }
-
-            //扣除优惠券（根据优惠券id进行扣除）
-            if (!StringUtils.isEmpty(couponid)) {//使用了优惠券
-                couponService.useCoupon(Integer.parseInt(couponid));
-            }
-
-            //扣除积分（扣总分 加流水）
+            //如果使用积分数不为空
             if (!StringUtils.isEmpty(points)) {
-                Map<String, Object> parammap = new HashMap<>();
-                parammap.put("userid", Integer.parseInt(userid));
-                parammap.put("points", Integer.parseInt(points));
-                userService.usePoints(parammap);
-
-                parammap.put("isadd", 1);
-                parammap.put("type", 21);//type为21表示积分抵用现金
-                parammap.put("orderid", orderidlsit.get(0));
-                parammap.put("intime", new Date());
-                parammap.put("isdel", 0);
-                pointRecordService.inserRecord(parammap);
+                //100分抵扣1元
+                payamount = payamount - Double.parseDouble(points) / 100;
             }
 
-            map.put("code", 200);
-            map.put("msg", "订单生成成功");
-            map.put("orderidlsit", orderidlsit);
+            //此处需要对订单实际支付金额进行核对
+            if (Double.parseDouble(payprice) != payamount) {
+                log.info("服务器计算的实付金额>>>>>>>>>>>>>>>>" + payamount);
+                map.put("paycode", 0);
+                map.put("paymsg", "提交的实付金额和服务器实付金额不一致");
+                flag5 = 1;
+            }
+
+            //此处需要对运费总额进行校验
+            if (Double.parseDouble(logisticsfee) != (double) ((long) feemap.get("totalfee"))) {
+                log.info("服务器计算的运费总额>>>>>>>>>>>>>>>>" + feemap.get("totalfee"));
+                map.put("feecode", -6);
+                map.put("feemsg", "提交的运费总额和服务器运费总额不一致");
+                flag6 = 1;
+            }
+
+            //------------------------------debug各店铺商品的总金额-----------------------
+            java.util.Iterator its = shopamountmap.entrySet().iterator();
+            while (its.hasNext()) {
+                java.util.Map.Entry entry = (java.util.Map.Entry) its.next();
+                log.info("测试打印的key>>>>>>>>>>>>>>>>>>>" + entry.getKey());     //返回对应的键
+                log.info("测试打印的value>>>>>>>>>>>>>>>>>>>" + entry.getValue());   //返回对应的值
+            }
+            //------------------------------debug各店铺商品的总金额-----------------------
+
+            //除了基础校验之外以上三项金额校验也通过的话，进行订单提交
+            if (flag4 == 0 && flag5 == 0 && flag6 == 0) {//批量提交（引入申明式事务）
+
+                //取出所有店铺id
+                List<Integer> shoplist = new ArrayList<>();
+                //对所有的shopid遍历去重
+                for (int i = 0; i < cartVoList.size(); i++) {
+                    int mark = 0;
+                    for (int j = 0; j < shoplist.size(); j++) {
+                        if (cartVoList.get(i).getShopid() == shoplist.get(j)) {
+                            mark = 1;
+                        }
+                    }
+                    if (mark == 0) {
+                        shoplist.add(cartVoList.get(i).getShopid());
+                    }
+                }
+
+                List<Integer> orderidlsit = new ArrayList<>();//记录生成的所有订单号
+                for (int i = 0; i < shoplist.size(); i++) {
+
+                    log.info("提交订单的店铺id>>>>>>>>>>>>>>>>>>>>>>>>>>" + shoplist.get(i));
+                    double realpayamount = 0;//定义当前遍历的这个店铺订单的实际支付金额
+                    if (shoplist.get(i) == -1) {
+                        realpayamount = selfamount;
+                    } else {
+                        realpayamount = shopamountmap.get(shoplist.get(i));
+                    }
+
+                    //定义一个list集合存放当前遍历的这个店铺的商品
+                    List<CartVo> shopCartList = new ArrayList<>();
+                    for (int j = 0; j < cartVoList.size(); j++) {
+                        if (shoplist.get(i) == cartVoList.get(j).getShopid()) {//如果从所有购物车商品中找到shopid和当前的shopid一样的商品就加入shopCartList
+                            shopCartList.add(cartVoList.get(j));
+                        }
+                    }
+
+                    //------------------------------------下面开始拼装入参，统一放到service曾进行事务提交------------------------------------
+                    //提交主订单（批量提交）
+                    String ordernumber = generateOrderNum.getOrderNum(shoplist.get(i));//调用生成订单号工具方法生成订单编号
+
+                    Orders orders = new Orders();
+                    orders.setOrdernumber(ordernumber);
+                    orders.setUserid(Integer.parseInt(userid));
+                    orders.setAddressid(Integer.parseInt(addressid));
+                    orders.setTakeway(Integer.parseInt(takeway));
+                    orders.setStatus(0);//生成后订单状态设为待支付
+                    if (kind.equals("1")) {
+                        orders.setBill(head);
+                    } else if (kind.equals("2")) {
+                        orders.setBill(companyname);
+                    }
+                    if (shoplist.get(i) == -1) {
+                        orders.setMoney(selfamount);
+                    } else {
+                        orders.setMoney(shopamountmap.get(shoplist.get(i)));
+                    }
+                    if (null != feemap.get(shoplist.get(i))) {
+                        orders.setSendmoney((double) feemap.get(shoplist.get(i)));
+                    } else {
+                        orders.setSendmoney(0.0);
+                    }
+                    if (!StringUtils.isEmpty(couponid)) {//使用了优惠券
+                        if ((i == 0 && coupon.getType() != 2) || (coupon.getType() == 2 && coupon.getShopid() == shoplist.get(i))) {//非店铺券且为第一家店直接使用   或者  店铺优惠券 且 当前店铺id等于优惠券上的店铺id可使用
+                            orders.setIsdiscount(1);
+                            orders.setCouponsid(couponid);
+                            orders.setDiscouponmoney(coupon.getTmoney());
+
+                            realpayamount = realpayamount - coupon.getTmoney();//实际支付金额扣减
+                        } else {
+                            orders.setIsdiscount(0);//只使用了一张优惠券，除了上面两种情况之外的情况全部设为0 未使用优惠券
+                        }
+                    } else {//未使用优惠券
+                        orders.setIsdiscount(0);
+                    }
+                    if (!StringUtils.isEmpty(points)) {//使用了积分
+                        if (i == 0) {
+                            orders.setDispointmoney(Double.parseDouble(points) / 100);
+
+                            realpayamount = realpayamount - Double.parseDouble(points) / 100;//实际支付金额扣减
+                        }
+                    }
+                    orders.setIntime(new Date());
+                    if (!StringUtils.isEmpty(message)) {
+                        orders.setRemark(message);
+                    }
+                    orders.setIsdel(0);
+                    //-------------------------------------------------------------------拼装主订单对象完成
+                    orderService.insertOrders(orders);//插入返回主键订单id
+                    int orderid = orders.getId();//主订单id
+                    orderidlsit.add(orderid);
+
+                    //提交子订单(由于一个订单中会出现多个商品，所以封装子订单list)
+                    List<SubOrder> subOrderList = new ArrayList<>();
+                    for (int j = 0; j < shopCartList.size(); j++) {
+                        SubOrder subOrder = new SubOrder();
+                        subOrder.setPorderid(orderid);
+                        subOrder.setGoodsid(shopCartList.get(j).getGoodsid());
+                        if (shopCartList.get(j).getCombotype() != null) {
+                            subOrder.setCombotype(shopCartList.get(j).getCombotype());
+                        }
+                        if (shopCartList.get(j).getDiscountid() != null) {
+                            subOrder.setDiscountid(shopCartList.get(j).getDiscountid());
+                        }
+                        subOrder.setSum(shopCartList.get(j).getNum());
+                        subOrder.setIsdebug(shopCartList.get(j).getIsdebug());
+                        subOrder.setIsdel(0);
+                        subOrder.setType(shopCartList.get(j).getType());
+
+                        subOrderList.add(subOrder);
+                    }
+                    //-------------------------------------------------------------------拼装子订单列表对象完成
+                    orderService.batchInsertOrders(subOrderList);//批量插入子订单表中的各个子订单
+
+                    //提交子订单的同时去除库存
+                    goodsService.deductStock(subOrderList);
+
+                    //增加发票信息
+                    Invoice invoice = new Invoice();
+                    invoice.setOrderid(orderid);
+                    if (kind.equals("1")) {
+                        invoice.setHead(head);
+                    } else if (kind.equals("2")) {
+                        invoice.setHead(companyname);
+                    }
+                    invoice.setAddressid(Integer.parseInt(invoiceaddressid));
+                    invoice.setMoney(realpayamount);//开票金额为实际支付金额
+                    invoice.setKind(Integer.parseInt(kind));
+                    invoice.setContent(content);
+                    if (!StringUtils.isEmpty(companyname)) {
+                        invoice.setCompanyname(companyname);
+                    }
+                    if (!StringUtils.isEmpty(rigaddress)) {
+                        invoice.setRigaddress(rigaddress);
+                    }
+                    if (!StringUtils.isEmpty(rigphone)) {
+                        invoice.setRigphone(rigphone);
+                    }
+                    if (!StringUtils.isEmpty(bank)) {
+                        invoice.setBank(bank);
+                    }
+                    if (!StringUtils.isEmpty(banknum)) {
+                        invoice.setBanknum(banknum);
+                    }
+                    if (!StringUtils.isEmpty(code)) {
+                        invoice.setCode(code);
+                    }
+                    if (!StringUtils.isEmpty(onlystatue)) {
+                        invoice.setOnlystatue(Integer.parseInt(onlystatue));
+                    }
+                    //-------------------------------------------------------------------拼装发票信息对象完成
+                    orderService.insertInvoice(invoice);
+
+                    //删除购物车中对应的商品(批量删除)
+                    cartService.batchDeleteCartGoods(cartid);
+                }
+
+                //扣除优惠券（根据优惠券id进行扣除）
+                if (!StringUtils.isEmpty(couponid)) {//使用了优惠券
+                    couponService.useCoupon(Integer.parseInt(couponid));
+                }
+
+                //扣除积分（扣总分 加流水）
+                if (!StringUtils.isEmpty(points)) {
+                    Map<String, Object> parammap = new HashMap<>();
+                    parammap.put("userid", Integer.parseInt(userid));
+                    parammap.put("points", Integer.parseInt(points));
+                    userService.usePoints(parammap);
+
+                    parammap.put("isadd", 1);
+                    parammap.put("type", 21);//type为21表示积分抵用现金
+                    parammap.put("orderid", orderidlsit.get(0));
+                    parammap.put("intime", new Date());
+                    parammap.put("isdel", 0);
+                    pointRecordService.inserRecord(parammap);
+                }
+
+                map.put("code", 200);
+                map.put("msg", "订单生成成功");
+                map.put("orderidlsit", orderidlsit);
+            } else {
+                map.put("code", 300);
+                map.put("msg", "提交的订单金额与服务端计算金额校验不通过");
+            }
         } else {
-            map.put("code", 300);
-            map.put("msg", "订单提交失败");
+            map.put("code", -1);
+            map.put("msg", "订单商品信息校验不通过");
+        }
+
+        //这里对map进行处理
+        Set keys = map.keySet();
+        int keymark1 = 0;
+        int keymark2 = 0;
+        int keymark3 = 0;
+        int keymark4 = 0;
+        int keymark5 = 0;
+        int keymark6 = 0;
+        //检索
+        for (Object obj : keys) {
+            if (obj.toString().equals("delcode")) {
+                keymark1 = 1;
+            }
+            if (obj.toString().equals("rentdatecode")) {
+                keymark2 = 1;
+            }
+            if (obj.toString().equals("discountcode")) {
+                keymark3 = 1;
+            }
+            if (obj.toString().equals("totalcode")) {
+                keymark4 = 1;
+            }
+            if (obj.toString().equals("paycode")) {
+                keymark5 = 1;
+            }
+            if (obj.toString().equals("feecode")) {
+                keymark6 = 1;
+            }
+
+        }
+        if (keymark1 == 0) {
+            map.put("delcode", 200);
+            map.put("delmsg", "商品处于上架状态");
+        }
+        if (keymark2 == 0) {
+            map.put("rentdatecode", 200);
+            map.put("rentdatemsg", "商品租赁日期符合");
+        }
+        if (keymark3 == 0) {
+            map.put("discountcode", 200);
+            map.put("discountmsg", "商品选择的活动有效");
+        }
+        if (keymark4 == 0) {
+            map.put("totalcode", 200);
+            map.put("totalmsg", "提交的订单总金额校验通过");
+        }
+        if (keymark5 == 0) {
+            map.put("paycode", 200);
+            map.put("paymsg", "实付总金额校验通过");
+        }
+        if (keymark6 == 0) {
+            map.put("feecode", 200);
+            map.put("feemsg", "运费总金额校验通过");
         }
 
         return map;
