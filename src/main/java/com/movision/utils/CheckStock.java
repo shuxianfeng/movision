@@ -58,6 +58,7 @@ public class CheckStock {
 
         }
 
+        int flag = 0;
         for (int k = 0; k < goodsidList.size(); k++) {
             int sum = stockmap.get(goodsidList.get(k));//购买的该商品件数
             int stock = goodsService.queryStore(goodsidList.get(k));//根据商品id查询商品库存
@@ -65,10 +66,12 @@ public class CheckStock {
                 map.put("stockcode", -2);
                 map.put("stockgoodsid", goodsidList.get(k));
                 map.put("stockmsg", "购买商品的总数量大于商品总库存");
-            } else {
-                map.put("stockcode", 200);
-                map.put("stockmsg", "商品库存充足");
+                flag = 1;
             }
+        }
+        if (flag == 0) {
+            map.put("stockcode", 200);
+            map.put("stockmsg", "购买商品的库存充足");
         }
 
         return map;
