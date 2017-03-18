@@ -357,20 +357,23 @@ public class OrderAppFacade {
                 payamount = payamount - Double.parseDouble(points) / 100;
             }
 
-            //此处需要对订单实际支付金额进行核对
-            if (Double.parseDouble(payprice) != payamount) {
-                log.info("服务器计算的实付金额>>>>>>>>>>>>>>>>" + payamount);
-                map.put("paycode", 0);
-                map.put("paymsg", "提交的实付金额和服务器实付金额不一致");
-                flag5 = 1;
-            }
-
             //此处需要对运费总额进行校验
             if (Double.parseDouble(logisticsfee) != (double) ((long) feemap.get("totalfee"))) {
                 log.info("服务器计算的运费总额>>>>>>>>>>>>>>>>" + feemap.get("totalfee"));
                 map.put("feecode", -6);
                 map.put("feemsg", "提交的运费总额和服务器运费总额不一致");
                 flag6 = 1;
+            }
+
+            //实付款=订单总额-优惠券金额-积分优惠金额+运费总额
+            payamount = payamount + (double) ((long) feemap.get("totalfee"));
+
+            //此处需要对订单实际支付金额进行核对
+            if (Double.parseDouble(payprice) != payamount) {
+                log.info("服务器计算的实付金额>>>>>>>>>>>>>>>>" + payamount);
+                map.put("paycode", 0);
+                map.put("paymsg", "提交的实付金额和服务器实付金额不一致");
+                flag5 = 1;
             }
 
             //------------------------------debug各店铺商品的总金额-----------------------
@@ -439,8 +442,8 @@ public class OrderAppFacade {
                     } else {
                         orders.setMoney(shopamountmap.get(shoplist.get(i)));
                     }
-                    if (null != feemap.get(shoplist.get(i))) {
-                        orders.setSendmoney((double) feemap.get(shoplist.get(i)));
+                    if (null != feemap.get(String.valueOf(shoplist.get(i)))) {
+                        orders.setSendmoney(new Double(feemap.get(String.valueOf(shoplist.get(i))).toString()));
                     } else {
                         orders.setSendmoney(0.0);
                     }
@@ -487,7 +490,9 @@ public class OrderAppFacade {
                             subOrder.setDiscountid(shopCartList.get(j).getDiscountid());
                         }
                         subOrder.setSum(shopCartList.get(j).getNum());
-                        subOrder.setIsdebug(shopCartList.get(j).getIsdebug());
+                        if (shopCartList.get(j).getIsdebug() != null) {
+                            subOrder.setIsdebug(shopCartList.get(j).getIsdebug());
+                        }
                         subOrder.setIsdel(0);
                         subOrder.setType(shopCartList.get(j).getType());
 

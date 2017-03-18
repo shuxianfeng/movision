@@ -73,7 +73,7 @@ public class AppOrdersController {
                                 @ApiParam(value = "买家留言（订单备注,选填）") @RequestParam(required = false) String message,
                                 @ApiParam(value = "快递费") @RequestParam String logisticsfee,
                                 @ApiParam(value = "订单总额") @RequestParam String totalprice,
-                                @ApiParam(value = "实付款") @RequestParam String payprice
+                                @ApiParam(value = "实付款（实付款=订单总额-优惠券金额-积分优惠金额+运费总额）") @RequestParam String payprice
     ) {
         Response response = new Response();
 
