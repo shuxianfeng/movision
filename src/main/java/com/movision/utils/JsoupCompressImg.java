@@ -82,7 +82,7 @@ public class JsoupCompressImg {
                 log.info("原图的绝对路径，proto_img_dir=" + proto_img_dir);
 
                 //根据图片url下载图片存在服务器/WWW/tomcat-8200/apache-tomcat-7.0.73/webapps/images/post/compressimg/目录下
-//                FileUtil.downloadObject(imgurl, tempDir, filename, "img");
+                FileUtil.downloadObject(imgurl, tempDir, filename, "img");
 
                 if (StringUtils.isNotEmpty(imgurl)) {
 
@@ -93,7 +93,7 @@ public class JsoupCompressImg {
                     // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
                     if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
                         // 压缩核心算法
-                        compressFlag = compressJpgOrPng(w, h, compressFlag, filename, proto_img_dir, compress_file_path);
+                        compressFlag = compressJpgOrPng(w, h, compressFlag, filename, proto_img_dir, tempDir);
                         // 处理过的图片加入到已处理集合，防止重复压缩图片
                         existFileList.add(filename);
                     } else {
@@ -119,18 +119,18 @@ public class JsoupCompressImg {
         return map;
     }
 
-    public boolean compressJpgOrPng(int w, int h, boolean compressFlag, String filename, String filePath, String compress_file_path) {
+    public boolean compressJpgOrPng(int w, int h, boolean compressFlag, String filename, String filePath, String tempDir) {
         if (filename.endsWith(".jpg")) {
 
             log.info("压缩jpg图片，filepath=" + filePath);
-            compressFlag = ImgCompressUtil.ImgCompress(filePath, compress_file_path, w, h);
+            compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
         }
         if (filename.endsWith(".png")) {
             File srcFile = new File(filePath);
             log.info("压缩png图片,filepath=" + filePath);
             compressFlag = ImageUtil.fromFile(srcFile).size(w, h).quality(0.7f).fixedGivenSize(false).keepRatio(true) // 图片宽高比例
                     .bgcolor(null) // 透明背景
-                    .toFile(new File(compress_file_path));
+                    .toFile(new File(tempDir));
         }
         return compressFlag;
     }

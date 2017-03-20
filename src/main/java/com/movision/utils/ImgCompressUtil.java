@@ -31,12 +31,12 @@ public class ImgCompressUtil {
      * 压缩图片：外部调用方法
      *
      * @param url      需要压缩的图片url，例如：F:/Download_pic/613.jpg
-     * @param filePath 压缩后的图片url，例如：E:/test/fileSource/mini613_2.jpg
+     * @param tempDir 压缩后的图片url，例如：E:/test/fileSource/mini613_2.jpg
      * @param w        宽
      * @param h        高
      * @return 压缩是否成功
      */
-    public static boolean ImgCompress(String url, String filePath, int w, int h) {
+    public static boolean ImgCompress(String url, String tempDir, int w, int h) {
         // 压缩质量 百分比
         float JPEGcompression = 0.7f;
 
@@ -47,22 +47,22 @@ public class ImgCompressUtil {
         log.info("name：=========" + name);
 
         // 压缩主方法
-        return ImgCompress(filePath, url, name, w, h, JPEGcompression);
+        return ImgCompress(tempDir, url, name, w, h, JPEGcompression);
 
     }
 
     /**
      * 图片压缩主方法
      *
-     * @param filePath        压缩后的图片的url
-     * @param url             需要压缩的图片的url
+     * @param tempDir        压缩后的图片的存放目录
+     * @param url             需要压缩的图片的存放目录
      * @param name            图片名
      * @param w               目标宽
      * @param h               目标高
      * @param JPEGcompression 压缩质量/百分比
      * @return
      */
-    public static boolean ImgCompress(String filePath, String url, String name,
+    public static boolean ImgCompress(String tempDir, String url, String name,
                                       int w, int h, float JPEGcompression) {
         boolean compressFlag = false;
         File file = new File(url);
@@ -155,7 +155,7 @@ public class ImgCompressUtil {
                 image_to_save.getGraphics().drawImage(
                         bufferedImage.getScaledInstance(final_w, final_h,
                                 Image.SCALE_SMOOTH), 0, 0, null);
-                FileOutputStream fos = new FileOutputStream(filePath); // 输出到文件流
+                FileOutputStream fos = new FileOutputStream(tempDir); // 输出到文件流
 
                 // 旧的使用 jpeg classes进行处理的方法
                 // JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(fos);
