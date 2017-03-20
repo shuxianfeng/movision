@@ -7,8 +7,9 @@ import java.io.Serializable;
 
 /**
  * controller返回的实体：封装了返回前台的json数据
- * 
- * @author pl
+ *
+ * @Author zhuangyuhao
+ * @Date 2017/3/20 20:35
  */
 @ApiModel(value = "后台返回前端的统一JSON格式", description = "JSON格式定义")
 public class Response implements Serializable {
