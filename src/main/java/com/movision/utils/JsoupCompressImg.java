@@ -101,14 +101,21 @@ public class JsoupCompressImg {
                         log.info("该图片已存在，不需要压缩，filename=" + filename);
                     }
                     if (compressFlag) {
-                        // 上传
-                        Map<String, String> resultmap = aliossClient.uploadLocalFile(file, "img", "compress");
-                        log.info("upload>>>>>>>>>status:" + resultmap.get("status"));
-                        log.info("upload>>>>>>>>>data:" + resultmap.get("data"));
-                        if (resultmap.get("status").equals("success")) {
-                            //如果上传成功，这里替换文章中的第i个img标签中的src属性
+//                        // 上传
+//                        Map<String, String> resultmap = aliossClient.uploadLocalFile(file, "img", "compress");
+//                        log.info("upload>>>>>>>>>status:" + resultmap.get("status"));
+//                        log.info("upload>>>>>>>>>data:" + resultmap.get("data"));
+//                        if (resultmap.get("status").equals("success")) {
+//                            //如果上传成功，这里替换文章中的第i个img标签中的src属性
+//
+//                        }
+                        //如果压缩保存成功，这里替换文章中的第i个img标签中的src属性
 
-                        }
+
+                        //保存缩略图和原图的映射关系到数据库中yw_compress_img
+
+
+                        //获取原图绝对路径和图片大小
                     }
                 }
 
