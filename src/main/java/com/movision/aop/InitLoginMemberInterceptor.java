@@ -31,7 +31,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 初始化登录用户信息
+ * 请求拦截器，初始化登录用户信息
+ *
+ * 系统处理顺序：
+ * shiroFilter ——> shiroInterceptor ——> InitLoginMemberInterceptor ——> Controller
  *
  * @Author zhuangyuhao
  * @Date 2017/2/20 10:16
