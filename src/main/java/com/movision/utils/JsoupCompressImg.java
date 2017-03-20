@@ -15,6 +15,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.*;
@@ -24,6 +25,7 @@ import java.util.*;
  * @Date 2017/3/15 16:09
  * 通过jsoup解析帖子表中的content字段，解析html，处理帖子中的img，进行压缩处理
  */
+@Service
 public class JsoupCompressImg {
 
     @Autowired
@@ -37,13 +39,13 @@ public class JsoupCompressImg {
      * @param content
      * @return
      */
-    public Map<String, String> compressImg(String content) {//content为带有img和html标签的富文本内容
+    public Map<String, Object> compressImg(String content) {//content为带有img和html标签的富文本内容
 
         int w = 750;//图片压缩后的宽度
         int h = 425;//图片压缩后的高度
 
         //通过jsoup解析html
-        Map<String, String> map = new LinkedHashMap<>();
+        Map<String, Object> map = new LinkedHashMap<>();
         try {
             Document doc = Jsoup.parse(content);
             Elements titleElms = doc.getElementsByTag("img");

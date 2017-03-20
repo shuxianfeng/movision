@@ -66,6 +66,7 @@ public class ImgCompressUtil {
                                       int w, int h, float JPEGcompression) {
         boolean compressFlag = false;
         File file = new File(url);
+        System.out.println("测试图片链接地址>>>>>>>>>>>>>" + url + "测试图片是否存在>>>>>>>>>>>>>>>" + file.exists() + "测试图片是否可读>>>>>>>>>>>>>>" + file.canRead());
         if (!(file.exists() && file.canRead())) {
             // 当文件不存在或者不能读取的时候
             // filePath = "/var/upload/404.jpg";
