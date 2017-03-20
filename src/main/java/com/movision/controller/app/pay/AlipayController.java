@@ -3,6 +3,7 @@ package com.movision.controller.app.pay;
 import com.alipay.api.AlipayApiException;
 import com.movision.common.Response;
 import com.movision.facade.pay.AlipayFacade;
+import com.movision.mybatis.record.entity.Record;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +59,35 @@ public class AlipayController {
     public Response tradingARefund(@ApiParam(value = "订单id(id中间以逗号分隔)") @RequestParam String orderid) throws AlipayApiException {
         Response response = new Response();
         Map<String, Object> refund = alipayFacade.tradingARefund(orderid);
-        if (response.getCode() == 200) {
+        if (response.getCode() == 200 && (int) refund.get("code") == 200) {
+            response.setCode(400);
             response.setMessage("退款交易成功");
+            response.setData(refund.get("type"));
+        } else if ((int) refund.get("code") == 300) {
+            response.setCode(300);
+            response.setMessage(refund.get("msg").toString());
+        }
+
+        return response;
+    }
+
+    /**
+     * 支付宝支付订单的查询
+     *
+     * @return
+     */
+    @ApiOperation(value = "支付宝支付订单的查询", notes = "支付宝支付订单的查询", response = Response.class)
+    @RequestMapping(value = "alipay_trade_query", method = RequestMethod.POST)
+    public Response alipayTradeQuery(@ApiParam(value = "订单编号") @RequestParam String ordirid) throws AlipayApiException {
+        Response response = new Response();
+        Map map = alipayFacade.alipayTradeQuery(ordirid);
+        if (response.getCode() == 200 && (int) map.get("code") == 200) {
+            response.setMessage("支付宝支付订单的查询成功");
+            response.setData(map);
+        } else if ((int) map.get("code") == 300) {
+            response.setCode(300);
+            response.setMessage(map.get("msg").toString());
+            //response.setData(map);
         }
         return response;
     }
