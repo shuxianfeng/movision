@@ -184,4 +184,17 @@ public class BossImController {
         response.setData(imSystemInform);
         return response;
     }
+
+    @ApiOperation(value = "发送消息", notes = "发送消息", response = Response.class)
+    @RequestMapping(value = "find_allpush", method = RequestMethod.POST)
+    public Response AddPushMovement(@ApiParam(value = "短信内容") @RequestParam String body
+    ) {
+        Response response = new Response();
+        boolean result = imFacade.AddPushMovement(body);
+        if (response.getCode() == 200) {
+            response.setMessage("发送成功");
+        }
+        response.setData(result);
+        return response;
+    }
 }

@@ -1,6 +1,8 @@
 package com.movision.utils.sms;
 
 import com.google.gson.Gson;
+import com.movision.facade.im.ImFacade;
+import com.movision.mybatis.systemPush.service.SystemPushService;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 
 import java.io.IOException;
@@ -37,6 +39,5 @@ public class SDKSendSms {
         Gson gson = new Gson();
         String json = gson.toJson(map);
         SDKSendSms.sendSMS("18051989558", json, PropertiesLoader.getValue("login_app_sms_template_code"));
-
     }
 }

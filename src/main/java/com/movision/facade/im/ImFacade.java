@@ -22,6 +22,8 @@ import com.movision.utils.SignUtil;
 import com.movision.utils.convert.BeanUtil;
 import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
+import com.movision.utils.sms.SDKSendSms;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -637,5 +639,36 @@ public class ImFacade {
     public Integer deleteSystemPush(Integer id) {
         return systemPushService.deleteSystemPush(id);
     }
+
+    /**
+     * 消息推送
+     *
+     * @param
+     * @param
+     * @param
+     * @param body
+     * @return
+     */
+    public Boolean AddPushMovement(String body) {
+        Map<String, String> map = new LinkedHashMap<>();
+        SystemPush systemPush = new SystemPush();
+        systemPush.setUserid(ShiroUtil.getBossUserID());
+        systemPush.setBody(body);
+        systemPush.setInformTime(new Date());
+        int result = systemPushService.addPush(systemPush);
+        List<String> list = systemPushService.findAllPhone();
+        String mobile = "13814501287";
+        String str = "";
+        for (int i = 0; i < list.size(); i++) {
+            str += list.get(i) + ",";
+        }
+        map.put("body", body);
+        Gson gson = new Gson();
+        String json = gson.toJson(map);
+        SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("propelling_movement_infomation"));
+        return false;
+    }
+
+    
 
 }

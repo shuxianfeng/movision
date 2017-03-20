@@ -1,6 +1,7 @@
 package com.movision.mybatis.systemPush.mapper;
 
 import com.movision.mybatis.systemPush.entity.SystemPush;
+import com.movision.mybatis.user.entity.User;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -28,5 +29,7 @@ public interface SystemPushMapper {
     Integer deleteSystemPush(Integer id);//删除消息
 
     int addPush(SystemPush systemPush);//增加消息推送
+
+    List<String> findAllPhone();//查询所有短信
 
 }

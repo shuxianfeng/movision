@@ -67,9 +67,9 @@ public class AfterServiceVo {
     }
 
     private Date intime;//发货时间
-    private Integer logisticsid;//发货单号
+    private String logisticsid;//发货单号
     private String nickname;//昵称
-    private Integer ordernumber;//订单号
+    private String ordernumber;//订单号
     private String name;//收货人
     private String province;
     private String city;
@@ -114,13 +114,6 @@ public class AfterServiceVo {
         this.intime = intime;
     }
 
-    public Integer getLogisticsid() {
-        return logisticsid;
-    }
-
-    public void setLogisticsid(Integer logisticsid) {
-        this.logisticsid = logisticsid;
-    }
 
     public String getNickname() {
         return nickname;
@@ -130,12 +123,12 @@ public class AfterServiceVo {
         this.nickname = nickname;
     }
 
-    public Integer getOrdernumber() {
-        return ordernumber;
+    public String getLogisticsid() {
+        return logisticsid;
     }
 
-    public void setOrdernumber(Integer ordernumber) {
-        this.ordernumber = ordernumber;
+    public void setLogisticsid(String logisticsid) {
+        this.logisticsid = logisticsid;
     }
 
     public String getName() {

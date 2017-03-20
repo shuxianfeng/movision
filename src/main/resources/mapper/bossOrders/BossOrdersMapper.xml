@@ -23,7 +23,7 @@
         <result column="paycode" property="paycode" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
-        <result column="logictisid" property="logictisid" jdbcType="INTEGER"/>
+        <result column="logictisid" property="logictisid" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, ordernumber, userid, addressid, takeway, position, status, bill, money, sendmoney, 
@@ -54,8 +54,9 @@
       #{status,jdbcType=INTEGER}, #{bill,jdbcType=VARCHAR}, #{money,jdbcType=DOUBLE}, 
       #{sendmoney,jdbcType=DOUBLE}, #{isdiscount,jdbcType=INTEGER}, #{couponsid,jdbcType=VARCHAR}, 
       #{discouponmoney,jdbcType=DOUBLE}, #{dispointmoney,jdbcType=DOUBLE}, #{realmoney,jdbcType=DOUBLE}, 
-      #{intime,jdbcType=TIMESTAMP}, #{paytype,jdbcType=INTEGER}, #{paytime,jdbcType=TIMESTAMP}, 
-      #{paycode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{isdel,jdbcType=INTEGER},#{logictisid,jdbcType=INTEGER}
+      #{intime,jdbcType=TIMESTAMP}, #{paytype,jdbcType=INTEGER}, #{paytime,jdbcType=TIMESTAMP},
+        #{paycode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+        #{isdel,jdbcType=INTEGER},#{logictisid,jdbcType=VARCHAR}
       )
   </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.bossOrders.entity.BossOrders">
@@ -193,7 +194,7 @@
                 #{isdel,jdbcType=INTEGER},
             </if>
             <if test="logictisid != null">
-                #{logictisid,jdbcType=INTEGER},
+                #{logictisid,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -261,7 +262,7 @@
                 isdel = #{isdel,jdbcType=INTEGER},
             </if>
             <if test="logictisid != null">
-                isdel = #{logictisid,jdbcType=INTEGER},
+                logictisid = #{logictisid,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -288,7 +289,7 @@
       paycode = #{paycode,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       isdel = #{isdel,jdbcType=INTEGER},
-      logictisid= #{logictisid,jdbcType=INTEGER}
+        logictisid= #{logictisid,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
