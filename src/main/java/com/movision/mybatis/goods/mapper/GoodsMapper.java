@@ -144,6 +144,7 @@ public interface GoodsMapper {
 
     int deleteComGoods(Integer comboid);//删除套餐
 
+    int deleteComGoodsT(Integer comboid);//删除套餐
     int queryByCom(Integer comboid);//根据id查询套餐内是否有商品
 
     List<GoodsComboVo> findByIdCom(Integer comboid);//根据id查询详情

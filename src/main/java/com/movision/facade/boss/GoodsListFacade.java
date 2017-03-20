@@ -846,7 +846,7 @@ public class GoodsListFacade {
         goodsComboVo.setImgurl(imgurl);
         int res = goodsService.updateComDetail(goodsComboVo);
         String productids[] = goodsid.split(",");
-        int re = goodsService.deleteComGoods(Integer.parseInt(comboid));
+        int re = goodsService.deleteComGoodsT(Integer.parseInt(comboid));
         int result = 0;
         GoodsCombo good = new GoodsCombo();
         good.setComboid(Integer.parseInt(comboid));

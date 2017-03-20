@@ -123,4 +123,39 @@
     <delete id="deleteSystemPush" parameterType="java.lang.Integer">
         DELETE FROM yw_sms_system_push WHERE id=#{id,jdbcType=INTEGER}
     </delete>
+
+    <insert id="addPush" parameterType="com.movision.mybatis.systemPush.entity.SystemPush">
+        insert into yw_sms_system_push
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="body != null">
+                body,
+            </if>
+            <if test="informTime != null">
+                inform_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="body != null">
+                #{body,jdbcType=VARCHAR},
+            </if>
+            <if test="informTime != null">
+                #{informTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <select id="findAllPhone" resultType="java.lang.String">
+        SELECT phone FROM yw_user
+    </select>
 </mapper>

@@ -107,4 +107,19 @@ public class SystemPushService {
         }
     }
 
+    /**
+     * 查询所有电话
+     *
+     * @return
+     */
+    public List<String> findAllPhone() {
+        try {
+            log.info("查询所有电话");
+            return systemPushMapper.findAllPhone();
+        } catch (Exception e) {
+            log.error("查询所有电话失败", e);
+            throw e;
+        }
+    }
+
 }

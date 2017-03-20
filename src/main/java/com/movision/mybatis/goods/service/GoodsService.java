@@ -1038,6 +1038,21 @@ public class GoodsService {
     }
 
     /**
+     * 删除套餐
+     *
+     * @param comboid
+     * @return
+     */
+    public int deleteComGoodsT(Integer comboid) {
+        try {
+            log.info("删除套餐");
+            return goodsMapper.deleteComGoodsT(comboid);
+        } catch (Exception e) {
+            log.error("删除套餐失败", e);
+            throw e;
+        }
+    }
+    /**
      * 根据id查询套餐是否有商品
      *
      * @param comboid
