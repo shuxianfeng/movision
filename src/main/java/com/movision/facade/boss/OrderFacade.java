@@ -689,6 +689,7 @@ public class OrderFacade {
         int red = bossOrderService.addLogisticsRalation(relation);
         map.put("result", result);
         map.put("res", res);
+        map.put("res", red);
         return map;
     }
 

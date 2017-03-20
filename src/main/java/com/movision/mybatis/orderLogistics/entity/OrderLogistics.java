@@ -13,6 +13,7 @@ public class OrderLogistics {
 
     private Integer isdel;
 
+
     public Integer getId() {
         return id;
     }

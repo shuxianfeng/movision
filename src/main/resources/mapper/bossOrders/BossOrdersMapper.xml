@@ -868,4 +868,101 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
             </if>
         </trim>
     </insert>
+    <select id="queryLogisticsid" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT logisticsid FROM yw_orders  WHERE ordernumber=#{ordersid,jdbcType=VARCHAR}
+    </select>
+    <select id="queryLogisticsCode" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT c.code FROM yw_orders o LEFT JOIN yw_logidtics_relation l ON l.logisticsid=o.logisticsid
+LEFT JOIN yw_logistics_company c ON c.id=l.companyid WHERE o.ordernumber=#{ordersid,jdbcType=VARCHAR}
+    </select>
+    <insert id="addLogistics" parameterType="com.movision.mybatis.orderLogistics.entity.OrderLogistics">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into yw_order_logistics
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="logisticsname != null">
+                logisticsname,
+            </if>
+            <if test="logisticstatue != null">
+                logisticstatue,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="logisticsname != null">
+                #{logisticsname,jdbcType=VARCHAR},
+            </if>
+            <if test="logisticstatue != null">
+                #{logisticstatue,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="addSubLogistics" parameterType="com.movision.mybatis.orderSubLogistics.entity.OrderSubLogistics">
+        insert into yw_order_sub_logistics
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="logisticsid != null">
+                logisticsid,
+            </if>
+            <if test="info != null">
+                info,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="orderid != null">
+                orderid,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="logisticsid != null">
+                #{logisticsid,jdbcType=INTEGER},
+            </if>
+            <if test="info != null">
+                #{info,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="logisticsCompany" parameterType="java.lang.String" resultType="java.lang.String">
+    SELECT logisticscompany from yw_logistics_company WHERE `code`=#{code,jdbcType=VARCHAR}
+    </select>
+    <update id="updateLogistics" parameterType="com.movision.mybatis.orderLogistics.entity.OrderLogistics">
+        update yw_order_logistics
+        <set>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE id=#{id,jdbcType=INTEGER}
+    </update>
 </mapper>

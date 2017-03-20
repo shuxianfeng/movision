@@ -23,9 +23,9 @@
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.orderLogistics.entity.OrderLogistics">
         insert into yw_order_logistics (id, logisticsname, logisticstatue,
-        intime, isdel)
+        intime, isdel,logisticsid)
         values (#{id,jdbcType=INTEGER}, #{logisticsname,jdbcType=VARCHAR}, #{logisticstatue,jdbcType=INTEGER},
-        #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
+        #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER} )
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.orderLogistics.entity.OrderLogistics">
         insert into yw_order_logistics

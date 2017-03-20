@@ -16,11 +16,14 @@ import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.logidticsRelation.entity.LogidticsRelation;
 import com.movision.mybatis.logisticsCompany.entity.LogisticsCompany;
+import com.movision.mybatis.orderLogistics.entity.OrderLogistics;
+import com.movision.mybatis.orderSubLogistics.entity.OrderSubLogistics;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.entity.OrdersVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.province.entity.Province;
+import com.movision.mybatis.shopAddress.entity.ShopAddress;
 import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
@@ -662,4 +665,102 @@ public class BossOrderService {
             throw e;
         }
     }
+
+    /**
+     * 根据订单号查询快递单号
+     *
+     * @param ordersid
+     * @return
+     */
+    public String queryLogisticsid(String ordersid) {
+        try {
+            loger.info("根据订单号查询快递单号");
+            return bossOrdersMapper.queryLogisticsid(ordersid);
+        } catch (Exception e) {
+            loger.error("根据订单号查询快递单号失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据订单号查询物流编码
+     *
+     * @param ordersid
+     * @return
+     */
+    public String queryLogisticsCode(String ordersid) {
+        try {
+            loger.info("根据订单号查询物流编码");
+            return bossOrdersMapper.queryLogisticsCode(ordersid);
+        } catch (Exception e) {
+            loger.error("根据订单号查询物流编码失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 增加物流信息
+     *
+     * @param orderLogistics
+     * @return
+     */
+    public Integer addLogistics(OrderLogistics orderLogistics) {
+        try {
+            loger.info("增加物流信息");
+            return bossOrdersMapper.addLogistics(orderLogistics);
+        } catch (Exception e) {
+            loger.error("增加物流信息失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 增加物流子表信息
+     *
+     * @param orderSubLogistics
+     * @return
+     */
+    public Integer addSubLogistics(OrderSubLogistics orderSubLogistics) {
+        try {
+            loger.info("增加物流子表信息");
+            return bossOrdersMapper.addSubLogistics(orderSubLogistics);
+        } catch (Exception e) {
+            loger.error("增加物流子表信息失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 修改物流子表信息
+     *
+     * @param orderLogistics
+     * @return
+     */
+    public Integer updateLogistics(OrderLogistics orderLogistics) {
+        try {
+            loger.info("修改物流子表信息");
+            return bossOrdersMapper.updateLogistics(orderLogistics);
+        } catch (Exception e) {
+            loger.error("修改物流子表信息失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据code查快递公司
+     *
+     * @param code
+     * @return
+     */
+    public String logisticsCompany(String code) {
+        try {
+            loger.info("根据code查快递公司");
+            return bossOrdersMapper.logisticsCompany(code);
+        } catch (Exception e) {
+            loger.error("根据code查快递公司失败", e);
+            throw e;
+        }
+    }
+
+
 }

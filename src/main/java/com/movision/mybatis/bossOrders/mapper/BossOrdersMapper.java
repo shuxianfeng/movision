@@ -15,10 +15,13 @@ import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.logidticsRelation.entity.LogidticsRelation;
 import com.movision.mybatis.logisticsCompany.entity.LogisticsCompany;
+import com.movision.mybatis.orderLogistics.entity.OrderLogistics;
+import com.movision.mybatis.orderSubLogistics.entity.OrderSubLogistics;
 import com.movision.mybatis.orderoperation.entity.Orderoperation;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.entity.OrdersVo;
 import com.movision.mybatis.province.entity.Province;
+import com.movision.mybatis.shopAddress.entity.ShopAddress;
 import com.movision.mybatis.user.entity.User;
 import org.apache.ibatis.session.RowBounds;
 
@@ -115,6 +118,20 @@ public interface BossOrdersMapper {
     Integer updateAfterStatus(Afterservice afterservice);//已退回
 
     List<LogisticsCompany> findAllLogisticsCompany();//查询所有快递公司
+
+    String queryLogisticsid(String ordersid);//根据订单号查询快递单号
+
+    String queryLogisticsCode(String ordersid);//根据订单号查询物流编码
+
+    Integer addLogistics(OrderLogistics orderLogistics);//增加物流信息
+
+    Integer addSubLogistics(OrderSubLogistics orderLogistics);//增加子表物流信息
+
+    Integer updateLogistics(OrderLogistics orderLogistics);
+
+    String logisticsCompany(String code);//根据code查快递公司
+
+
 
 
 }
