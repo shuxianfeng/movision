@@ -4,7 +4,7 @@ import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
 /**
- * @author tongxinglong
+ * @author zhuangyuhao
  * @date 2016/12/21 0021.
  */
 @ApiModel

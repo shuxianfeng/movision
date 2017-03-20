@@ -3,7 +3,7 @@ package com.movision.fsearch.pojo.spec;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
 /**
- * @author tongxinglong
+ * @author zhuangyuhao
  * @date 2017/1/17 0017.
  */
 public class WitkeySearchSpec {
