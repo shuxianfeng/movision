@@ -43,21 +43,7 @@ public class BossImController {
         return response;
     }
 
-    /**
-     * 该接口给系统管理员调用
-     *
-     * @return
-     * @throws IOException
-     */
-    @ApiOperation(value = "给APP用户发送系统消息", notes = "给APP用户发送系统消息", response = Response.class)
-    @RequestMapping(value = {"/send_push_inform"}, method = RequestMethod.POST)
-    public Response sendPushInform(@ApiParam(value = "系统消息内容") @RequestParam String body
-    ) throws IOException {
-        Response response = new Response();
 
-        imFacade.sendPushInform(body);
-        return response;
-    }
 
     /**
      * 分页
