@@ -103,6 +103,11 @@ public class FileUtil {
 	public static Response downloadFile(String fileUrl, String downloadDir, String fileName) throws IOException {
 		Response result = new Response();
 		try {
+			//校验存储的文件夹是否存在，不存在时自动创建目录
+			File file = new File(downloadDir);
+			if (!file.exists() && !file.isDirectory()) {
+				file.mkdir();
+			}
 			// 构造URL
 			URL url = new URL(fileUrl);
 			// 打开连接
