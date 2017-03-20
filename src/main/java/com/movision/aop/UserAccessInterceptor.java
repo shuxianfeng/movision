@@ -19,7 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 用户登录检验拦截器
+ * 用户登录检验拦截器（未使用）
+ *
  * @author zhuangyuhao
  * @since 16/7/5.
  */
