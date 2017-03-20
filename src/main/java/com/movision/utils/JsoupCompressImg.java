@@ -11,6 +11,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,8 +73,6 @@ public class JsoupCompressImg {
                 //从img标签中获取src属性
                 String imgurl = titleElms.get(i).attr("src");
 
-                File file = new File(imgurl);//首先下载该文件到服务器路径下
-
                 String filename = FileUtil.getPicName(imgurl);
                 log.info("filename=" + filename);
 
@@ -82,7 +81,7 @@ public class JsoupCompressImg {
                 log.info("原图的绝对路径，proto_img_dir=" + proto_img_dir);
 
                 //根据图片url下载图片存在服务器/WWW/tomcat-8200/apache-tomcat-7.0.73/webapps/images/post/compressimg/目录下
-//                FileUtil.downloadObject(imgurl, tempDir, filename, "img");
+                FileUtil.downloadObject(imgurl, tempDir, filename, "img");
 
                 if (StringUtils.isNotEmpty(imgurl)) {
 
@@ -110,17 +109,28 @@ public class JsoupCompressImg {
 //
 //                        }
                         //如果压缩保存成功，这里替换文章中的第i个img标签中的src属性
-
+                        Element imgele = titleElms.get(i).attr("src", compress_file_path);
+                        titleElms.get(i).attr("src", compress_file_path);
 
                         //保存缩略图和原图的映射关系到数据库中yw_compress_img
 
 
                         //获取原图绝对路径和图片大小
+                        File file = new File(tempDir + filename);//获取原图大小
+                        FileInputStream fis = new FileInputStream(file);
+                        int s = fis.available();
+                        System.out.println("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + s);
                     }
                 }
 
             }
+            map.put("code", 200);
+            map.put("msg", "帖子所有图片压缩完成");
+            map.put("content", doc.html());//压缩后的帖子内容html标签字符串
+            return map;
         } catch (Exception e) {
+            map.put("code", 300);
+            map.put("msg", "帖子所有图片压缩失败");
             e.printStackTrace();
         }
         return map;
