@@ -679,7 +679,7 @@ public class ImFacade {
         Gson gson = new Gson();
         String json = gson.toJson(map);
         SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("propelling_movement_infomation"));
-        return true;
+        return blen;
     }
 
     
