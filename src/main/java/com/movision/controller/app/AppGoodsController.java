@@ -13,10 +13,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -219,9 +216,10 @@ public class AppGoodsController {
     }
 
 
-    @RequestMapping(value = {"/searchProducts"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"searchProducts"}, method = RequestMethod.GET)
     @ApiOperation(value = "商品搜索", notes = "商品搜索", response = Response.class)
-    public Response searchProducts(GoodsSearchSpec spec) throws IOException {
+    public Response searchProducts(@ApiParam @ModelAttribute GoodsSearchSpec spec) throws IOException {
+
         if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
             spec.setLimit(12);
         }

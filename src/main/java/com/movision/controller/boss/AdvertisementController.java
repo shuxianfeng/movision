@@ -5,6 +5,8 @@ import com.movision.facade.boss.HomepageManageFacade;
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.manageType.entity.ManageType;
+import com.movision.utils.file.FileUtil;
+import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +31,9 @@ public class AdvertisementController {
 
     @Autowired
     HomepageManageFacade homepageManageFacade;
+
+    @Autowired
+    MovisionOssClient movisionOssClient;
 
     /**
      * 查询广告列表
@@ -203,5 +210,22 @@ public class AdvertisementController {
         }
         response.setData(i);
         return response;
+    }
+
+    /**
+     * 上传帖子相关图片
+     *
+     * @param file
+     * @return
+     */
+    @ApiOperation(value = "上传广告相关图片", notes = "上传广告相关图片", response = Response.class)
+    @RequestMapping(value = {"/upload_advertisement_img"}, method = RequestMethod.POST)
+    public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file) {
+
+        String url = movisionOssClient.uploadObject(file, "img", "advertisement");
+        Map<String, String> map = new HashMap<>();
+        map.put("url", url);
+        map.put("name", FileUtil.getFileNameByUrl(url));
+        return new Response(map);
     }
 }

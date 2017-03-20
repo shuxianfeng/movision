@@ -72,10 +72,15 @@ public class Searcher {
      * HttpClient请求fsearch服务器，根据params获取搜索结果
      *
      * @param api
-     * @param params
+     * @param params table：对应fsearch工程中的movision_product.ini中的name;
+     *               query: 表示上面封装的query;
+     *               sort: 表示排序字段；
+     *               offset: 分页起始值；
+     *               limit: 每页数量；
      * @return
      * @throws ServiceException
      */
+
     public static Object request(String api, Map<String, Object> params) throws ServiceException {
         HttpClient client = new HttpClient();
         //封装请求头

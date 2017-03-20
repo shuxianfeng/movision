@@ -122,4 +122,18 @@ public class SystemPushService {
         }
     }
 
+    /**
+     * 查询所有电话
+     *
+     * @return
+     */
+    public List<String> findPhone(Integer pageNo, Integer pageSize) {
+        try {
+            log.info("查询所有电话");
+            return systemPushMapper.findPhone(pageNo, pageSize);
+        } catch (Exception e) {
+            log.error("查询所有电话失败", e);
+            throw e;
+        }
+    }
 }

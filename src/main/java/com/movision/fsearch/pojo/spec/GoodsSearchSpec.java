@@ -1,17 +1,39 @@
 package com.movision.fsearch.pojo.spec;
 
+import com.wordnik.swagger.annotations.ApiModel;
+
+import java.io.Serializable;
+
 /**
  * @Author zhuangyuhao
  * @Date 2017/3/20 16:00
  */
-public class GoodsSearchSpec {
+@ApiModel(value = "商品搜索筛选条件", description = "商品搜索筛选条件")
+public class GoodsSearchSpec implements Serializable {
 
+    /**
+     * 产品分类id
+     */
     private int protype;
+    /**
+     * 品牌id
+     */
     private int brandid;
+    /**
+     *
+     */
     private String q;
+    /**
+     * 排序的字段
+     */
     private String sort;
+    /**
+     * 正序 or 倒序
+     */
     private String sortorder;
+
     private int offset;
+
     private int limit;
 
     @Override

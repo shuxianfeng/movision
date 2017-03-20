@@ -737,7 +737,7 @@ public class PostFacade {
         PostChoiceness postChoiceness = new PostChoiceness();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date esdate = null;
-        if (essencedate != null) {
+        if (!StringUtils.isEmpty(essencedate)) {
             try {
                 esdate = format.parse(essencedate);
             } catch (ParseException e) {
@@ -762,13 +762,19 @@ public class PostFacade {
                             lou.remove(j);
                         }
                     } else {
-                        lou.remove(j);
+                            lou.remove(j);
+                        }
                     }
                 }
             }
-        }
+
         map.put("result", lou);
-        postChoiceness.setOrderids(map);
+        if (postChoiceness != null) {
+            postChoiceness.setOrderids(map);
+        } else {
+            PostChoiceness p = new PostChoiceness();
+            p.setOrderids(map);
+        }
         return postChoiceness;
     }
 
