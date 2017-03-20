@@ -109,12 +109,4 @@ public class BossLoginController {
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
     }
 
-    @ApiOperation(value = "测试获取当前登录人信息", notes = "测试获取当前登录人信息", response = Response.class)
-    @RequestMapping(value = "/boss/test/test_query_current_login_user", method = RequestMethod.GET)
-    public Response testQueryCurrentLoginUser() {
-        Response response = new Response();
-        response.setData(ShiroUtil.getBossUser());
-        return response;
-    }
-
 }

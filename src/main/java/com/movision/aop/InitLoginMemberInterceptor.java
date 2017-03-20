@@ -131,14 +131,14 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 return true;
 
             } else {
-                //跳转到登录界面
-//                String str=SmartConfig.getString("smart.login");
-                //todo 重定向到登录界面xxx.login.html，这里需要登录页面的地址
-//                response.sendRedirect(request.getContextPath() + "app/login");
-//                log.info("sendRedirect的路径："+request.getContextPath() + "app/login");
+
                 log.error("请登录");
                 bossLoginFacade.handleNotLogin(response);
                 return false;
+                //跳转到登录界面
+//                String str=SmartConfig.getString("smart.login");
+//                response.sendRedirect(request.getContextPath() + "app/login");
+//                log.info("sendRedirect的路径："+request.getContextPath() + "app/login");
 //                throw new AuthException(MsgCodeConstant.un_login, "请先登录");
 
             }
@@ -206,7 +206,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 //判断登录信息是否改变,若改变了则更新session，
                 if (this.loginUserInfoIsChange(appuser, loginInfo)) {
                     session.setAttribute(SessionConstant.APP_USER, loginInfo);
-                    shiroRealm.getAuthorizationCache().remove(subject.getPrincipals());
+                    shiroRealm.getAuthorizationCache().remove(String.valueOf(subject.getPrincipals()));
                 }
             }
         }
