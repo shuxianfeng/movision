@@ -60,7 +60,7 @@ public class JsoupCompressImg {
 //            String savedDir = request.getSession().getServletContext().getRealPath(compress_dir_local_path);
             String savedDir = request.getSession().getServletContext().getRealPath("");
             String tempDir = savedDir.substring(0, savedDir.lastIndexOf("/")) + compress_dir_local_path;
-            System.out.println("测试获取的压缩图片服务器路径>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + tempDir);
+            System.out.println("测试获取的压缩图片服务器路径>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + savedDir.substring(0, savedDir.lastIndexOf("/")));
 
             List<String> existFileList = getExistFiles(compress_dir_path);
 
@@ -89,7 +89,7 @@ public class JsoupCompressImg {
                     // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
                     if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
                         // 压缩核心算法
-                        compressFlag = compressJpgOrPng(w, h, compressFlag, filename, tempDir, compress_file_path);
+                        compressFlag = compressJpgOrPng(w, h, compressFlag, filename, compress_file_path, compress_file_path);
                         // 处理过的图片加入到已处理集合，防止重复压缩图片
                         existFileList.add(filename);
                     } else {
