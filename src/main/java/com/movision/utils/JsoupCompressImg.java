@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.*;
 
@@ -39,7 +40,7 @@ public class JsoupCompressImg {
      * @param content
      * @return
      */
-    public Map<String, Object> compressImg(String content) {//content为带有img和html标签的富文本内容
+    public Map<String, Object> compressImg(HttpServletRequest request, String content) {//content为带有img和html标签的富文本内容
 
         int w = 750;//图片压缩后的宽度
         int h = 425;//图片压缩后的高度
@@ -50,7 +51,15 @@ public class JsoupCompressImg {
             Document doc = Jsoup.parse(content);
             Elements titleElms = doc.getElementsByTag("img");
 
-            String compress_dir_path = PropertiesLoader.getValue("post.img.domain");//压缩图片存储路径
+            String compress_dir_path = PropertiesLoader.getValue("post.img.domain");//压缩图片路径url
+
+            String compress_dir_local_path = PropertiesLoader.getValue("post.img.local.domain");//获取项目根目录/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision
+            //去除最后一个/后面的内容
+
+//            String savedDir = request.getSession().getServletContext().getRealPath(compress_dir_local_path);
+            String savedDir = request.getSession().getServletContext().getRealPath("");
+            String tempDir = savedDir.substring(0, savedDir.lastIndexOf("/")) + compress_dir_local_path;
+            System.out.println("测试获取的压缩图片服务器路径>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + tempDir);
 
             List<String> existFileList = getExistFiles(compress_dir_path);
 
@@ -62,7 +71,10 @@ public class JsoupCompressImg {
                 //从img标签中获取src属性
                 String imgurl = titleElms.get(i).attr("src");
 
-                File file = new File(imgurl);
+                File file = new File(imgurl);//首先下载该文件到服务器路径下
+
+                //下载图片存在服务器/WWW/tomcat-8200/apache-tomcat-7.0.73/webapps/images/post/compressimg下
+
 
                 String filename = FileUtil.getPicName(imgurl);
                 log.info("filename=" + filename);
@@ -76,7 +88,7 @@ public class JsoupCompressImg {
                     // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
                     if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
                         // 压缩核心算法
-                        compressFlag = compressJpgOrPng(w, h, compressFlag, filename, imgurl, compress_file_path);
+                        compressFlag = compressJpgOrPng(w, h, compressFlag, filename, tempDir, compress_file_path);
                         // 处理过的图片加入到已处理集合，防止重复压缩图片
                         existFileList.add(filename);
                     } else {

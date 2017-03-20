@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -31,10 +32,11 @@ public class AppJUnitTest {
      */
     @ApiOperation(value = "测试图片压缩", notes = "测试图片压缩", response = Response.class)
     @RequestMapping(value = "testCompressImg", method = RequestMethod.POST)
-    public Response testCompressImg(@ApiParam(value = "帖子内容") @RequestParam String content) {
+    public Response testCompressImg(HttpServletRequest request,
+                                    @ApiParam(value = "帖子内容") @RequestParam String content) {
         Response response = new Response();
 
-        Map<String, Object> resultmap = jsoupCompressImg.compressImg(content);
+        Map<String, Object> resultmap = jsoupCompressImg.compressImg(request, content);
 
         if (response.getCode() == 200) {
             response.setMessage("生成成功");

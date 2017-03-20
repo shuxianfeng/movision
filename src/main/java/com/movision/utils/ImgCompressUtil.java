@@ -65,9 +65,7 @@ public class ImgCompressUtil {
     public static boolean ImgCompress(String filePath, String url, String name,
                                       int w, int h, float JPEGcompression) {
         boolean compressFlag = false;
-//        File file = new File(url);
-        File file = new File("/WWW/tomcat-8200/apache-tomcat-7.0.73/webapps/upload/post/img/nb8NQgUP1489030392781.jpg");
-        System.out.println("测试图片链接地址>>>>>>>>>>>>>" + url + "测试图片是否存在>>>>>>>>>>>>>>>" + file.exists() + "测试图片是否可读>>>>>>>>>>>>>>" + file.canRead());
+        File file = new File(url);
         if (!(file.exists() && file.canRead())) {
             // 当文件不存在或者不能读取的时候
             // filePath = "/var/upload/404.jpg";
