@@ -55,7 +55,6 @@ public class JsoupCompressImg {
             String compress_dir_path = PropertiesLoader.getValue("post.img.domain");//压缩图片路径url
 
             String compress_dir_local_path = PropertiesLoader.getValue("post.img.local.domain");//获取项目根目录/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision
-            //去除最后一个/后面的内容
 
 //            String savedDir = request.getSession().getServletContext().getRealPath(compress_dir_local_path);
             String savedDir = request.getSession().getServletContext().getRealPath("");
@@ -65,6 +64,7 @@ public class JsoupCompressImg {
             List<String> existFileList = getExistFiles(compress_dir_path);
 
             for (int i = 0; i < titleElms.size(); i++) {
+
                 boolean compressFlag = false;
 
                 //遍历帖子中的所有图片列表
@@ -77,8 +77,11 @@ public class JsoupCompressImg {
                 String filename = FileUtil.getPicName(imgurl);
                 log.info("filename=" + filename);
 
+                //原图的绝对路径
+                String proto_img_dir = savedDir.substring(0, savedDir.lastIndexOf("/")) + PropertiesLoader.getValue("post.proto.img.domain") + filename;
+
                 //根据图片url下载图片存在服务器/WWW/tomcat-8200/apache-tomcat-7.0.73/webapps/images/post/compressimg/目录下
-                FileUtil.downloadObject(imgurl, tempDir, filename, "img");
+//                FileUtil.downloadObject(imgurl, tempDir, filename, "img");
 
                 if (StringUtils.isNotEmpty(imgurl)) {
 
@@ -89,7 +92,7 @@ public class JsoupCompressImg {
                     // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
                     if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
                         // 压缩核心算法
-                        compressFlag = compressJpgOrPng(w, h, compressFlag, filename, compress_file_path, compress_file_path);
+                        compressFlag = compressJpgOrPng(w, h, compressFlag, filename, proto_img_dir, compress_file_path);
                         // 处理过的图片加入到已处理集合，防止重复压缩图片
                         existFileList.add(filename);
                     } else {
