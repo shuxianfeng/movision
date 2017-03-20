@@ -89,7 +89,7 @@ public class VideoFacade {
             log.info("请求消息中的所有参数名的Enumeration对象" + request.getParameterNames() + ", 求消息中的所有参数名和值的Map对象" +
                     String.valueOf(request.getParameterMap()));
             Map<String, Object> requestMap = request.getParameterMap();
-            // TODO: 2017/3/13 下面是获取请求中的参数
+
             for (Map.Entry<String, Object> entry : requestMap.entrySet()) {
                 log.info("键值对是：" + String.valueOf(entry.getKey()) + ", " + String.valueOf(entry.getValue()));
             }
@@ -155,10 +155,8 @@ public class VideoFacade {
             return result;
 
         } catch (FileUploadException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         //分发到下一个JSP页面处理

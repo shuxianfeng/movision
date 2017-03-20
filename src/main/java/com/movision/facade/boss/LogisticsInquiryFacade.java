@@ -118,7 +118,6 @@ public class LogisticsInquiryFacade {
                 map.put("returnCode", returnCode);
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

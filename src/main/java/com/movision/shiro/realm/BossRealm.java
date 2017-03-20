@@ -107,9 +107,6 @@ public class BossRealm extends AuthorizingRealm {
         return null;
     }
 
-
-
-
     /**
      * 更新用户授权信息缓存.
      */
@@ -125,7 +122,6 @@ public class BossRealm extends AuthorizingRealm {
         // this.isPermitted(SecurityUtils.getSubject().getPrincipals(),
         // "强制加载缓存，避免懒加载" + System.currentTimeMillis());
     }
-
 
     /**
      * 自定义Authentication对象，使得Subject除了携带用户的登录名外还可以携带更多信息.
