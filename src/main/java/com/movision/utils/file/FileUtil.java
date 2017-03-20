@@ -33,60 +33,35 @@ public class FileUtil {
 	ApiConstants apiConstants;
 
 	/**
-	 * 下载文件
+	 * 下载文件(图片及doc文件下载工具类)
 	 *
 	 * @param response
 	 * @param fileName
 	 * @param type
-	 * @param chann
 	 * @return
 	 * @throws IOException
 	 */
-	public Response downloadObject(HttpServletResponse response, String fileName, String type, String chann)
+	public static Response downloadObject(HttpServletResponse response, String fileUrl, String downloadDir, String fileName, String type)
 			throws IOException {
-		Response result = new Response();
-        String uploadMode = PropertiesLoader.getValue("upload.mode");
-        if (uploadMode.equals("zhb")) {
-			String downloadDir;
+		//fileUrl下载地址 downloadDir服务器存放路径 fileName文件名 type下载文件类型
+//		String fileurl;
 
-			switch (type) {
+		switch (type) {
 			case "img":
-				if (chann != null) {
-                    downloadDir = PropertiesLoader.getValue("uploadDir") + "/" + chann + "/img";
-                } else {
-                    downloadDir = PropertiesLoader.getValue("uploadDir");
-                }
+
+//			fileurl = downloadDir + fileName;
 
 				break;
 			case "doc":
-				if (chann != null) {
-                    downloadDir = PropertiesLoader.getValue("uploadDir") + "/" + chann + "/doc";
 
-				} else {
-                    downloadDir = PropertiesLoader.getValue("uploadDir");
-                }
+//			fileurl = downloadDir + fileName;
+
 				break;
 			default:
 				log.error("下载类型不支持");
 				throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "下载类型不支持");
-			}
-			String fileurl = downloadDir + "/" + fileName;
-			result = downloadFile(response, fileurl);
-
-		} else if (uploadMode.equals("alioss")) {
-			byte[] bytes;
-			Map<String, Object> map = aliOSSClient.downloadStream(fileName, type, chann);
-			String status = String.valueOf(map.get("status"));
-			if (status.equals("success")) {
-
-				bytes = (byte[]) map.get("data");
-				result = downloadFile(response, bytes);
-			} else {
-				genErrorMessage(result);
-				return result;
-			}
-
 		}
+		Response result = downloadFile(response, fileUrl, downloadDir, fileName);
 
 		return result;
 	}
@@ -124,14 +99,14 @@ public class FileUtil {
 	 * 下载文件
 	 *
 	 * @param response
-	 * @param fileurl
+	 * @param fileUrl
 	 *            文件完整路径
 	 * @throws IOException
 	 */
-	public static Response downloadFile(HttpServletResponse response, String fileurl) throws IOException {
+	public static Response downloadFile(HttpServletResponse response, String fileUrl, String downloadDir, String fileName) throws IOException {
 		Response result = new Response();
 		try {
-			File file = new File(fileurl);
+			File file = new File(fileUrl);
 			if (file.exists()) { // 如果文件存在
 				FileInputStream inputStream = new FileInputStream(file);
 				byte[] data = new byte[(int) file.length()];
