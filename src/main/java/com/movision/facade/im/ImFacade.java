@@ -17,6 +17,7 @@ import com.movision.mybatis.imuser.service.ImUserService;
 import com.movision.mybatis.systemPush.entity.SystemPush;
 import com.movision.mybatis.systemPush.service.SystemPushService;
 import com.movision.utils.JsonUtils;
+import com.movision.utils.L;
 import com.movision.utils.ListUtil;
 import com.movision.utils.SignUtil;
 import com.movision.utils.convert.BeanUtil;
@@ -658,15 +659,27 @@ public class ImFacade {
         int result = systemPushService.addPush(systemPush);
         List<String> list = systemPushService.findAllPhone();
         String mobile = "13814501287";
-        String str = "";
-        for (int i = 0; i < list.size(); i++) {
-            str += list.get(i) + ",";
+        boolean blen = true;
+        int pageNo = 0;
+        int pageSize = 200;
+        for (int i = 0; pageSize < list.size(); i++) {
+            List<String> phone = systemPushService.findPhone(pageNo, pageSize);
+            pageNo += 200;
+            pageSize += 200;
+            for (int j = 0; j < phone.size(); j++) {
+                mobile += phone.get(i) + ",";
+            }
+            mobile = mobile.substring(0, mobile.length() - 1);
+            if (pageSize > list.size() && blen) {//当总数小于要查的数量，让要查的数量减去总数，并只查询此一次，结束循环
+                pageSize = pageSize - list.size();
+                blen = false;
+            }
         }
         map.put("body", body);
         Gson gson = new Gson();
         String json = gson.toJson(map);
         SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("propelling_movement_infomation"));
-        return false;
+        return true;
     }
 
     
