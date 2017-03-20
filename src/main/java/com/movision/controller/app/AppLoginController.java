@@ -84,7 +84,7 @@ public class AppLoginController {
 
         Map<String, String> map = new LinkedHashMap<>();
         map.put("code", verifyCode);
-        map.put("time", Constants.sms_time);
+        map.put("min", Constants.sms_time);
         Gson gson = new Gson();
         String json = gson.toJson(map);
 
