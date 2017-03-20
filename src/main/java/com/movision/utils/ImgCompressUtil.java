@@ -74,6 +74,12 @@ public class ImgCompressUtil {
             return compressFlag;
         } else {
             try {
+                //校验存储的文件夹是否存在，不存在时自动创建目录
+                File tempfile = new File(tempDir);
+                if (!tempfile.exists() && !tempfile.isDirectory()) {
+                    tempfile.mkdir();
+                }
+
                 BufferedImage bufferedImage = ImageIO.read(file);
 
 				/*//获取Img
