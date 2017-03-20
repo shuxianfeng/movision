@@ -161,7 +161,7 @@ public class ImgCompressUtil {
                 image_to_save.getGraphics().drawImage(
                         bufferedImage.getScaledInstance(final_w, final_h,
                                 Image.SCALE_SMOOTH), 0, 0, null);
-                FileOutputStream fos = new FileOutputStream(tempDir); // 输出到文件流
+                FileOutputStream fos = new FileOutputStream(tempDir + name); // 输出到文件流
 
                 // 旧的使用 jpeg classes进行处理的方法
                 // JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(fos);
