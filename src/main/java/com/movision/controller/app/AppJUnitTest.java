@@ -33,11 +33,11 @@ public class AppJUnitTest {
      */
     @ApiOperation(value = "测试图片压缩", notes = "测试图片压缩", response = Response.class)
     @RequestMapping(value = "testCompressImg", method = RequestMethod.POST)
-    public Response testCompressImg(HttpServletRequest request, HttpServletResponse res,
+    public Response testCompressImg(HttpServletRequest request,
                                     @ApiParam(value = "帖子内容") @RequestParam String content) {
         Response response = new Response();
 
-        Map<String, Object> resultmap = jsoupCompressImg.compressImg(request, res, content);
+        Map<String, Object> resultmap = jsoupCompressImg.compressImg(request, content);
 
         if (response.getCode() == 200) {
             response.setMessage("生成成功");

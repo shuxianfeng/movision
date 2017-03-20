@@ -41,7 +41,7 @@ public class JsoupCompressImg {
      * @param content
      * @return
      */
-    public Map<String, Object> compressImg(HttpServletRequest request, HttpServletResponse response, String content) {//content为带有img和html标签的富文本内容
+    public Map<String, Object> compressImg(HttpServletRequest request, String content) {//content为带有img和html标签的富文本内容
 
         int w = 750;//图片压缩后的宽度
         int h = 425;//图片压缩后的高度
@@ -78,7 +78,7 @@ public class JsoupCompressImg {
                 log.info("filename=" + filename);
 
                 //根据图片url下载图片存在服务器/WWW/tomcat-8200/apache-tomcat-7.0.73/webapps/images/post/compressimg/目录下
-                FileUtil.downloadObject(response, imgurl, tempDir, filename, "img");
+                FileUtil.downloadObject(imgurl, tempDir, filename, "img");
 
                 if (StringUtils.isNotEmpty(imgurl)) {
 

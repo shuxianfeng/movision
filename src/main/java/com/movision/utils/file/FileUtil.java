@@ -16,10 +16,9 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 @Component
@@ -35,13 +34,12 @@ public class FileUtil {
 	/**
 	 * 下载文件(图片及doc文件下载工具类)
 	 *
-	 * @param response
 	 * @param fileName
 	 * @param type
 	 * @return
 	 * @throws IOException
 	 */
-	public static Response downloadObject(HttpServletResponse response, String fileUrl, String downloadDir, String fileName, String type)
+	public static Response downloadObject(String fileUrl, String downloadDir, String fileName, String type)
 			throws IOException {
 		//fileUrl下载地址 downloadDir服务器存放路径 fileName文件名 type下载文件类型
 //		String fileurl;
@@ -61,7 +59,7 @@ public class FileUtil {
 				log.error("下载类型不支持");
 				throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "下载类型不支持");
 		}
-		Response result = downloadFile(response, fileUrl, downloadDir, fileName);
+		Response result = downloadFile(fileUrl, downloadDir, fileName);
 
 		return result;
 	}
@@ -98,32 +96,33 @@ public class FileUtil {
 	/**
 	 * 下载文件
 	 *
-	 * @param response
 	 * @param fileUrl
 	 *            文件完整路径
 	 * @throws IOException
 	 */
-	public static Response downloadFile(HttpServletResponse response, String fileUrl, String downloadDir, String fileName) throws IOException {
+	public static Response downloadFile(String fileUrl, String downloadDir, String fileName) throws IOException {
 		Response result = new Response();
 		try {
-			File file = new File(fileUrl);
-			if (file.exists()) { // 如果文件存在
-				FileInputStream inputStream = new FileInputStream(file);
-				byte[] data = new byte[(int) file.length()];
-				int length = inputStream.read(data);
-				inputStream.close();
-				ServletOutputStream stream = response.getOutputStream();
-				stream.write(data);
-				stream.flush();
-				stream.close();
-			} else {
-				// result.setCode(MsgCodeConstant.response_status_400);
-				// result.setMsgCode(MsgCodeConstant.file_not_exist);
-                // result.setMessage((MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.file_not_exist))));
-                log.error("文件不存在");
-                throw new BusinessException(MsgCodeConstant.file_not_exist, MsgPropertiesLoader.getValue(String
-                        .valueOf(MsgCodeConstant.file_not_exist)));
+			// 构造URL
+			URL url = new URL(fileUrl);
+			// 打开连接
+			URLConnection con = url.openConnection();
+			// 输入流
+			InputStream is = con.getInputStream();
+			// 1M的数据缓冲
+			byte[] bs = new byte[1024 * 1024];
+			// 读取到的数据长度
+			int len;
+			// 输出的文件流
+			OutputStream os = new FileOutputStream(downloadDir + fileName);
+			// 开始读取
+			while ((len = is.read(bs)) != -1) {
+				os.write(bs, 0, len);
 			}
+			// 完毕，关闭所有链接
+			os.close();
+			is.close();
+
 		} catch (Exception e) {
 			log.error("download file error!", e);
 			genErrorMessage(result);
