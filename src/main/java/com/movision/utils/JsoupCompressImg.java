@@ -79,6 +79,7 @@ public class JsoupCompressImg {
 
                 //原图的绝对路径
                 String proto_img_dir = savedDir.substring(0, savedDir.lastIndexOf("/")) + PropertiesLoader.getValue("post.proto.img.domain") + filename;
+                log.info("原图的绝对路径，proto_img_dir=" + proto_img_dir);
 
                 //根据图片url下载图片存在服务器/WWW/tomcat-8200/apache-tomcat-7.0.73/webapps/images/post/compressimg/目录下
 //                FileUtil.downloadObject(imgurl, tempDir, filename, "img");
