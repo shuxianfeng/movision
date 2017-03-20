@@ -5,7 +5,9 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
+import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.service.OrderService;
@@ -256,7 +258,8 @@ public class AlipayFacade {
     }
 
 
-    /**
+    /**支付宝交易退款
+     *
      * @param ordersid
      * @return
      */
@@ -334,12 +337,12 @@ public class AlipayFacade {
                         orderService.updateOrderByIntegral(ordersList.get(i).getId());//修改订单状态
                     }
                 }
-                contentmap.put("code", response.getCode());
+                contentmap.put("code", 200);
                 contentmap.put("msg", response.getMsg());
                 contentmap.put("type", response);
             } else {
                 String code = response.getCode();
-                String msg = response.getMsg();
+                String msg = response.getSubMsg();
                 System.out.println("调用失败" + response.getBody());
                 if (code.equals("20000")) {
                     log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
@@ -354,10 +357,65 @@ public class AlipayFacade {
                 } else if (code.equals("40006")) {
                     log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
                 }
-                contentmap.put("code", code);
+                contentmap.put("code", 300);
                 contentmap.put("msg", msg);
-                contentmap.put("sub_cod", response.getSubCode());
-                contentmap.put("sub_msg", response.getSubMsg());
+                contentmap.put("type", response);
+            }
+        }
+        return contentmap;
+    }
+
+    /**
+     * 支付宝支付订单的查询
+     *
+     * @param orderid
+     * @return
+     * @throws AlipayApiException
+     */
+    public Map alipayTradeQuery(String orderid) throws AlipayApiException {
+
+        String[] ordersidstr = orderid.split(",");
+        int[] ids = new int[ordersidstr.length];
+        for (int i = 0; i < ordersidstr.length; i++) {
+            ids[i] = Integer.parseInt(ordersidstr[i]);
+        }
+        Map<String, Object> contentmap = new HashedMap();
+        //根据订单id查询所有主订单列表
+        List<Orders> ordersList = orderService.queryOrdersListByIds(ids);
+
+        if (null != ordersList && ordersList.size() == ordersidstr.length) {//传入的订单均存在且均为待支付的情况下
+            String transactionNumber = null;
+            for (int i = 0; i < ordersList.size(); i++) {
+                //拼接主订单id
+                transactionNumber = ordersList.get(i).getPaycode();
+            }
+
+            SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String app_id = AlipayPropertiesLoader.getValue("app_id");//获取配置文件中的APPID
+            String appprivatekey = AlipayPropertiesLoader.getValue("private_key");//应用私钥（商户的私钥）
+            String alipaygateway = AlipayPropertiesLoader.getValue("alipay_gateway");//支付宝请求网关
+            String alipublickey = AlipayPropertiesLoader.getValue("alipay_public_key");//支付宝公钥（请求接口入参目前未用到）
+            String charset = "GBK";
+            String format = "json";
+            String sign_type = "RSA2";
+
+            AlipayClient alipayClient = new DefaultAlipayClient(alipaygateway, app_id, appprivatekey, format, charset, alipublickey, sign_type);
+            AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
+            request.setBizContent("{" +
+                    "    \"out_trade_no\":\"\"," +//订单支付时传入的商户订单号
+                    "    \"trade_no\":\"" + transactionNumber + "\"" +//支付宝交易号
+                    "  }");
+            AlipayTradeQueryResponse response = alipayClient.execute(request);
+            if (response.isSuccess()) {
+                System.out.println("调用成功");
+                contentmap.put("code", 200);
+                contentmap.put("msg", response.getSubMsg());
+                contentmap.put("return", response);
+            } else {
+                System.out.println("调用失败");
+                contentmap.put("code", 300);
+                contentmap.put("msg", response.getSubMsg());
+                contentmap.put("return", response);
             }
         }
         return contentmap;
