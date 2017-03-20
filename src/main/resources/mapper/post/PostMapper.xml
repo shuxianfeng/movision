@@ -50,7 +50,7 @@
         select * from (
         select
         t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isessencepool,t1.isdel,t1.essencedate,
-        t2.category AS category,t2.code AS code
+        t1.activetype, t1.activefee, t1.iscontribute, t2.category AS category,t2.code AS code
         from yw_post t1
         LEFT JOIN yw_circle t2 ON
         t1.circleid = t2.id
@@ -67,7 +67,7 @@
         select * from (
         select
         t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isessencepool,t1.isdel,t1.essencedate,
-        t2.category AS category,t2.code AS code
+        t1.activetype, t1.activefee, t1.iscontribute, t2.category AS category,t2.code AS code
         from yw_post t1
         LEFT JOIN yw_circle t2 ON
         t1.circleid = t2.id
