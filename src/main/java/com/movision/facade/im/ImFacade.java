@@ -475,6 +475,64 @@ public class ImFacade {
 
 
     /**
+     * 发送系统消息并记录
+     *
+     * @param body
+     * @throws IOException
+     */
+    public void sendPushInform(String body) throws IOException {
+
+        ImUser imUser = this.getImuserByCurrentBossuser();
+
+        List<ImUser> imAppUserList = imUserService.selectAllAPPImuser();
+        if (ListUtil.isNotEmpty(imAppUserList)) {
+            int size = imAppUserList.size();
+            log.info("app中的IM用户共" + size + "人！");
+            if (size > 500) {
+                //人数多于500人，分批次发系统通知
+                int mutiple = size / 500;   //倍数
+                for (int i = 0; i <= mutiple; i++) {
+                    /**
+                     * 比如共1002人，
+                     * 那么i=0, 即第0-500人， 取500人
+                     *     i=1, 即第501-1000人，    取500人
+                     *     i=2, 即第1001-1002人，   取两人
+                     */
+                    int eachSize = i < mutiple ? 500 : size - mutiple * 500;
+                    addPush(body, imUser, imAppUserList, eachSize, i);
+                }
+            } else {
+                //不超过500人
+                addPush(body, imUser, imAppUserList, size, 0);
+            }
+        }
+    }
+
+    /**
+     * 准备toAccids参数,发送系统消息，并且记录
+     *
+     * @param body
+     * @param imUser
+     * @param imAppUserList
+     * @param size
+     * @param multiple
+     * @throws IOException
+     */
+    private void addPush(String body, ImUser imUser, List<ImUser> imAppUserList, int size, int multiple) throws IOException {
+        //不足500人
+        String toAccids = prepareToAccids(imAppUserList, size, multiple);
+
+        Map result = this.sendSystemInform(body, imUser.getAccid(), toAccids);
+        if (result.get("code").equals(200)) {
+            log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
+            this.addPush(body, imUser.getAccid(), toAccids);
+        } else {
+            throw new BusinessException(MsgCodeConstant.send_system_msg_fail, "发送系统通知失败");
+        }
+
+    }
+
+    /**
      * 准备toAccids参数
      *
      * @param imAppUserList
@@ -530,6 +588,13 @@ public class ImFacade {
         imSystemInformService.add(imSystemInform);
     }
 
+    /**
+     * 记录流水
+     *
+     * @param body
+     * @param fromaccid
+     * @param toAccids
+     */
     public void addPush(String body, String fromaccid, String toAccids) {
         SystemPush systemPush = new SystemPush();
         systemPush.setBody(body);
