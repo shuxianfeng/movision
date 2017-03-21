@@ -489,4 +489,8 @@
         SET isdel=0,statue=0
         WHERE id=#{couponsid,jdbcType=INTEGER}
     </update>
+
+    <select id="queryOrdersListByTradingAccount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT id FROM yw_orders WHERE paycode=#{tradingAccount,jdbcType=VARCHAR} AND isdel=0
+    </select>
 </mapper>

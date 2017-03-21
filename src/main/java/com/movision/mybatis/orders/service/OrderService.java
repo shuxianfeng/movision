@@ -1,5 +1,6 @@
 package com.movision.mybatis.orders.service;
 
+import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.goods.mapper.GoodsMapper;
 import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.mapper.InvoiceMapper;
@@ -158,4 +159,13 @@ public class OrderService {
         }
     }
 
+    public List<Integer> queryOrdersListByTradingAccount(String tradingAccount) {
+        try {
+            log.info("支付宝交易退款查询");
+            return ordersMapper.queryOrdersListByTradingAccount(tradingAccount);
+        } catch (Exception e) {
+            log.error("支付宝交易退款查询异常");
+            throw e;
+        }
+    }
 }

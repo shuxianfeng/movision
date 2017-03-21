@@ -5,15 +5,20 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayTradeFastpayRefundQueryRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
+import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
+import com.movision.mybatis.afterservice.entity.Afterservice;
+import com.movision.mybatis.afterservice.service.AfterServcieServcie;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.service.OrderService;
 import com.movision.mybatis.record.service.RecordService;
 import com.movision.mybatis.subOrder.entity.SubOrder;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.utils.L;
 import com.movision.utils.UpdateOrderPayBack;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
@@ -50,6 +55,9 @@ public class AlipayFacade {
 
     @Autowired
     private RecordService recordService;
+
+    @Autowired
+    private AfterServcieServcie afterServcieServcie;
 
     /**
      * 拼装支付宝支付请求入参
@@ -336,6 +344,17 @@ public class AlipayFacade {
                         recordService.addIntegralRecord(m);//增加用户积分操作记录
                         orderService.updateOrderByIntegral(ordersList.get(i).getId());//修改订单状态
                     }
+                    Afterservice afterservice = new Afterservice();
+                    afterservice.setOrderid(ordersList.get(i).getId());//订单id
+                    afterservice.setAddressid(ordersList.get(i).getAddressid());//配送地址
+                    afterservice.setAmountdue(ordersList.get(i).getRealmoney());//应退款金额
+                    afterservice.setAfterstatue(2);//售后类型退款
+                    afterservice.setAftersalestatus(1);//销售状态
+                    afterservice.setProcessingstatus(2);//处理状态
+                    afterservice.setProcessingtime(new Date());//处理时间
+                    afterservice.setUserid(ordersList.get(i).getUserid());//用户id
+                    afterservice.setRemark(ordersList.get(i).getRemark());//留言
+                    afterServcieServcie.insertAfterInformation(afterservice);//插入售后详情
                 }
                 contentmap.put("code", 200);
                 contentmap.put("msg", response.getMsg());
@@ -410,14 +429,85 @@ public class AlipayFacade {
                 System.out.println("调用成功");
                 contentmap.put("code", 200);
                 contentmap.put("msg", response.getSubMsg());
-                contentmap.put("return", response);
+                if (response.getTradeStatus() == "WAIT_BUYER_PAY") {
+                    contentmap.put("status", "交易创建，等待买家付款");
+                } else if (response.getTradeStatus() == "TRADE_CLOSED") {
+                    contentmap.put("status", "未付款交易超时关闭，或支付完成后全额退款");
+                } else if (response.getTradeStatus() == "TRADE_SUCCESS") {
+                    contentmap.put("status", "交易支付成功");
+                } else if (response.getTradeStatus() == "TRADE_FINISHED") {
+                    contentmap.put("status", "交易结束，不可退款");
+                }
+                contentmap.put("resault", request);
             } else {
                 System.out.println("调用失败");
                 contentmap.put("code", 300);
                 contentmap.put("msg", response.getSubMsg());
-                contentmap.put("return", response);
+                contentmap.put("resault", request);
             }
         }
         return contentmap;
+    }
+
+    /**
+     * 支付宝交易退款查询
+     *
+     * @param tradingAccount
+     * @return
+     * @throws AlipayApiException
+     */
+    public Map tradingRefundQuery(String tradingAccount) throws AlipayApiException {
+
+        //根据支付宝交易号查询订单号，
+        List ordersList = orderService.queryOrdersListByTradingAccount(tradingAccount);
+        Map map = new HashedMap();
+        if (null != ordersList) {//传入的订单均存在且均为待支付的情况下
+            SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String app_id = AlipayPropertiesLoader.getValue("app_id");//获取配置文件中的APPID
+            String appprivatekey = AlipayPropertiesLoader.getValue("private_key");//应用私钥（商户的私钥）
+            String alipaygateway = AlipayPropertiesLoader.getValue("alipay_gateway");//支付宝请求网关
+            String alipublickey = AlipayPropertiesLoader.getValue("alipay_public_key");//支付宝公钥（请求接口入参目前未用到）
+            String charset = "GBK";
+            String format = "json";
+            String sign_type = "RSA2";
+            String outrequestno = "";
+            for (int i = 0; i < ordersList.size(); i++) {
+                outrequestno = outrequestno + ordersList.get(i).toString() + ",";
+            }
+            outrequestno.substring(0, outrequestno.length() - 1);
+
+
+            AlipayClient alipayClient = new DefaultAlipayClient(alipaygateway, app_id, appprivatekey, format, charset, alipublickey, sign_type);
+            AlipayTradeFastpayRefundQueryRequest request = new AlipayTradeFastpayRefundQueryRequest();
+            request.setBizContent("{" +
+                    "    \"trade_no\":\"\"," +
+                    "    \"out_trade_no\":\"" + tradingAccount + "\"," +
+                    "    \"out_request_no\":\"" + outrequestno + "\"" +
+                    "  }");
+            AlipayTradeFastpayRefundQueryResponse response = alipayClient.execute(request);
+            if (response.isSuccess()) {
+                System.out.println("调用成功");
+                System.out.println(response.getBody() + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                map.put("code", 200);
+                map.put("msg", response.getSubMsg());
+                map.put("tradeno", response.getTradeNo());//支付宝交易号
+                map.put("outtradeno", response.getOutTradeNo());//创建交易传入的商户订单号
+                map.put("outrequestno", response.getOutRequestNo());//本笔退款对应的退款请求号
+                map.put("refundreason", response.getRefundReason());//发起退款时，传入的退款原因
+                map.put("totalamount", response.getTotalAmount());//该笔退款所对应的交易的订单金额
+                map.put("refundamount", response.getRefundAmount());//本次退款请求，对应的退款金额
+            } else {
+                System.out.println(response.getBody() + "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+                map.put("code", 300);
+                map.put("msg", response.getSubMsg());
+                map.put("tradeno", response.getTradeNo());//支付宝交易号
+                map.put("outtradeno", response.getOutTradeNo());//创建交易传入的商户订单号
+                map.put("outrequestno", response.getOutRequestNo());//本笔退款对应的退款请求号
+                map.put("refundreason", response.getRefundReason());//发起退款时，传入的退款原因
+                map.put("totalamount", response.getTotalAmount());//该笔退款所对应的交易的订单金额
+                map.put("refundamount", response.getRefundAmount());//本次退款请求，对应的退款金额
+            }
+        }
+        return map;
     }
 }

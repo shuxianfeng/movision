@@ -34,4 +34,6 @@ public interface OrdersMapper {
     void updateOrderByIntegral(Integer id);
 
     void updateOrderDiscount(String couponsid);
+
+    List<Integer> queryOrdersListByTradingAccount(String tradingAccount);
 }
