@@ -39,7 +39,7 @@ public class PostActiveList {
     private String iscontribute;//是否投稿
     private Date essencedate;//精选日期
     private String coverimg;
-    private String squareimgurl;//活动首页方形图
+    private String hotimgurl;//活动首页方形图
     private List<GoodsVo> goodss;
     private String ishot;
 
@@ -51,12 +51,12 @@ public class PostActiveList {
         this.ishot = ishot;
     }
 
-    public String getSquareimgurl() {
-        return squareimgurl;
+    public String getHotimgurl() {
+        return hotimgurl;
     }
 
-    public void setSquareimgurl(String squareimgurl) {
-        this.squareimgurl = squareimgurl;
+    public void setHotimgurl(String hotimgurl) {
+        this.hotimgurl = hotimgurl;
     }
 
     public String getIscontribute() {
