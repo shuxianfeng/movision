@@ -368,11 +368,12 @@
         select
         u.*, i.accid, i.token as imtoken
         from yw_user u
-        LEFT JOIN yw_im_user i on u.id= i.userid
-        WHERE i.type = 1
-        <if test="phone != null || phone != ''">
-            AND u.phone = #{phone}
-        </if>
+        LEFT JOIN yw_im_user i on u.id= i.userid AND i.type = 1
+        <where>
+            <if test="phone != null || phone != ''">
+                u.phone = #{phone}
+            </if>
+        </where>
 
     </select>
 

@@ -257,13 +257,13 @@ public class AppLoginController {
         return response;
     }
 
-    @ApiOperation(value = "测试用-获取当前登录人信息", notes = "测试用-获取当前登录人信息", response = Response.class)
+    /*@ApiOperation(value = "测试用-获取当前登录人信息", notes = "测试用-获取当前登录人信息", response = Response.class)
     @RequestMapping(value = {"/testGetAppUserInfo"}, method = RequestMethod.POST)
     public Response testGetAppUserInfo(@ApiParam @RequestParam String phone) {
         Response response = new Response();
         response.setData(userFacade.getLoginUserByPhone(phone));
         return response;
-    }
+    }*/
 
 
     private Map shiroLogin(String phone, Response response, Subject currentUser, UsernamePasswordToken token, Map map) {
