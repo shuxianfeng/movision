@@ -81,13 +81,13 @@ public class JsoupCompressImg {
                 log.info("原图的绝对路径，proto_img_dir=" + proto_img_dir);
 
                 //根据图片url下载图片存在服务器/WWW/tomcat-8200/apache-tomcat-7.0.73/webapps/images/post/compressimg/目录下
-                FileUtil.downloadObject(imgurl, tempDir, filename, "img");
+//                FileUtil.downloadObject(imgurl, tempDir, filename, "img");
 
                 if (StringUtils.isNotEmpty(imgurl)) {
 
                     // 1 生成压缩后的图片的url
                     String compress_file_path = compress_dir_path + filename;
-                    log.info("压缩后的图片路径，compress_file_path=" + compress_file_path);
+                    log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
 
                     // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
                     if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
@@ -116,10 +116,10 @@ public class JsoupCompressImg {
 
 
                         //获取原图绝对路径和图片大小
-                        File file = new File(tempDir + filename);//获取原图大小
+                        File file = new File(proto_img_dir);//获取原图大小
                         FileInputStream fis = new FileInputStream(file);
                         int s = fis.available();
-                        System.out.println("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + s);
+                        System.out.println("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + s / 1024 / 1024 + "M");
                     }
                 }
 
