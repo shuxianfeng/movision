@@ -36,24 +36,18 @@ public class LogisticsInquiryController {
         Map<String, Object> parammap = logisticsInquiryFacade.LogisticInquiry(orderid);
         if (response.getCode() == 200 && parammap.get("message").equals("ok")) {
             response.setMessage("物流信息返回成功");
-            response.setData(parammap);
         } else if (parammap.get("returnCode").equals("500")) {
             response.setMessage("查询无结果，请隔段时间再查");
-            response.setData(parammap);
         } else if (parammap.get("returnCode").equals("400")) {
             response.setMessage("提交的数据不完整，或者贵公司没授权");
-            response.setData(parammap);
         } else if (parammap.get("returnCode").equals("501")) {
             response.setMessage("服务器错误，快递100服务器压力过大或需要升级，暂停服务");
-            response.setData(parammap);
         } else if (parammap.get("returnCode").equals("502")) {
             response.setMessage("服务器繁忙");
-            response.setData(parammap);
         } else if (parammap.get("returnCode").equals("503")) {
             response.setMessage("验证签名失败。");
-            response.setData(parammap);
         }
-
+        response.setData(parammap);
         return response;
     }
 
