@@ -32,9 +32,9 @@ public class FacadeRewarded {
     RewardedService rewardedService;
 
     public int updateRewarded(String postid, String integral, String userid) {
-        int i = pointRecordFacade.addPointRecord(Integer.parseInt(integral), null, userid);//当前登录用户
+       /* int i = pointRecordFacade.addPointRecord(Integer.parseInt(integral), null, userid);//当前登录用户
         int uid = postService.queryUserByPostid(postid);
-        pointRecordFacade.addPointRecord(Integer.parseInt(integral), null, userid);//被打赏用户
-        return i;
+        pointRecordFacade.addPointRecord(Integer.parseInt(integral), null, userid);//被打赏用户*/
+        return 0;
     }
 }
