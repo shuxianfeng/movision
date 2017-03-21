@@ -436,7 +436,7 @@ public class PostController {
             @ApiParam(value = "活动副标题") @RequestParam String subtitle,
             @ApiParam(value = "活动类型：0 告知类活动 1 商城促销类活动") @RequestParam String activetype,
             @ApiParam(value = "是否需要投稿 0,投,1不投") @RequestParam String iscontribute,
-            @ApiParam(value = "单价") @RequestParam String activefee,
+            @ApiParam(value = "单价") @RequestParam(required = false) String activefee,
             @ApiParam(value = "活动封面") @RequestParam(required = false) String coverimg,
             @ApiParam(value = "内容") @RequestParam String postcontent,
             @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,
