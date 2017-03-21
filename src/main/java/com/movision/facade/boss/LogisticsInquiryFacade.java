@@ -7,6 +7,7 @@ import com.movision.utils.HttpRequest;
 import com.movision.utils.LogisticsMD5;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class LogisticsInquiryFacade {
     private BossOrderService orderService;
 
 
-    public Map<String, String> LogisticInquiry(String ordersid) {
+    public Map<String, Object> LogisticInquiry(String ordersid) {
         Map<String, String> map = new HashMap<>();
         String logisticsid = orderService.queryLogisticsid(ordersid);//快递单号
         String logisticscode = orderService.queryLogisticsCode(ordersid);//物流code
@@ -46,6 +47,7 @@ public class LogisticsInquiryFacade {
         map.put("sign", sign);
         map.put("customer", customer);
         String resp;
+        Map<String, Object> backmap = new HashedMap();
         try {
             resp = new HttpRequest().postData("http://poll.kuaidi100.com/poll/query.do", map, "utf-8").toString();
             System.out.println(resp);
@@ -57,10 +59,11 @@ public class LogisticsInquiryFacade {
             if (message.equals("ok")) {
                 state = jsonObject.get("state").toString();
                 com = jsonObject.get("com").toString();
-                map.put("message", message);
-                map.put("state", state);
-                map.put("com", com);
+                backmap.put("message", message);
+                backmap.put("state", state);
+                backmap.put("com", com);
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
+                backmap.put("jsonArray", jsonArray);
                 String company = orderService.logisticsCompany(com);
                 int result = 0;
                 Date isessencetime = null;//开始时间
@@ -102,6 +105,7 @@ public class LogisticsInquiryFacade {
                     ordersub.setOrderid(jsonArray.size() - i);
                     ordersub.setIsdel(0);
                     result = orderService.addSubLogistics(ordersub);
+
                 }
                 if (!time.equals("")) {
                     orderlogistics.setId(id);
@@ -115,15 +119,16 @@ public class LogisticsInquiryFacade {
             if (!message.equals("ok")) {
                 results = jsonObject.get("result").toString();
                 returnCode = jsonObject.get("returnCode").toString();
-                map.put("message", message);
-                map.put("results", results);
-                map.put("returnCode", returnCode);
+                backmap.put("message", message);
+                backmap.put("results", results);
+                backmap.put("returnCode", returnCode);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return map;
+        return backmap;
     }
 
 

@@ -33,7 +33,7 @@ public class LogisticsInquiryController {
     @RequestMapping(value = "queryLogistics", method = RequestMethod.POST)
     public Response queryLogistics(@ApiParam(value = "订单id") @RequestParam String orderid) {
         Response response = new Response();
-        Map<String, String> parammap = logisticsInquiryFacade.LogisticInquiry(orderid);
+        Map<String, Object> parammap = logisticsInquiryFacade.LogisticInquiry(orderid);
         if (response.getCode() == 200 && parammap.get("message").equals("ok")) {
             response.setMessage("物流信息返回成功");
             response.setData(parammap);
