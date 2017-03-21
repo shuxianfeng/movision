@@ -79,6 +79,9 @@ public class FacadePost {
         //查询帖子详情最下方推荐的4个热门圈子
         List<Circle> hotcirclelist = circleService.queryHotCircle();
         vo.setHotcirclelist(hotcirclelist);
+        //查询帖子中分享的商品
+        List<GoodsVo> shareGoodsList = goodsService.queryShareGoodsList(Integer.parseInt(postid));
+        vo.setShareGoodsList(shareGoodsList);
         return vo;
     }
 

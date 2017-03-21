@@ -605,6 +605,19 @@ public class GoodsService {
     }
 
     /**
+     * 查询帖子中分享的商品列表
+     */
+    public List<GoodsVo> queryShareGoodsList(int postid) {
+        try {
+            log.info("查询帖子中分享的商品列表");
+            return goodsMapper.queryShareGoodsList(postid);
+        } catch (Exception e) {
+            log.error("查询帖子中分享的商品列表失败");
+            throw e;
+        }
+    }
+
+    /**
      * 查询套餐列表
      *
      * @param pager

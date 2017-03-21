@@ -89,6 +89,8 @@ public interface GoodsMapper {
 
     List<GoodsVo> findAllQueryLikeGoods(Map map, RowBounds rowBounds);//查询商品列表，联合搜索（帖子使用）
 
+    List<GoodsVo> queryShareGoodsList(int postid);//查询帖子中分享的商品列表
+
     List<GoodsComboVo> findAllComboT(RowBounds rowBounds);//查询套餐列表
 
     List<GoodsComboVo> findAllComCondition(Map map, RowBounds rowBounds);//套餐条件搜索

@@ -1,6 +1,7 @@
 package com.movision.mybatis.post.entity;
 
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.period.entity.Period;
 
 import java.util.Date;
@@ -68,6 +69,8 @@ public class PostVo {
     private String isfollow;//该帖子所属的圈子是否被关注 0 可关注  1 已关注（用于判断帖子详情中的关注按钮是否可用）
 
     private List<Circle> hotcirclelist;//用于存放帖子详情最下方的4个热门推荐圈子
+
+    private List<GoodsVo> shareGoodsList;//用户分享的商品列表
 
     private Date begintime;//活动开始时间（为活动时使用）
 
@@ -409,5 +412,13 @@ public class PostVo {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public List<GoodsVo> getShareGoodsList() {
+        return shareGoodsList;
+    }
+
+    public void setShareGoodsList(List<GoodsVo> shareGoodsList) {
+        this.shareGoodsList = shareGoodsList;
     }
 }
