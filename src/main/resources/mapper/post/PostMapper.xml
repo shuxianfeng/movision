@@ -1612,9 +1612,9 @@
         SELECT ishot FROM yw_post WHERE id=#{id,jdbcType=INTEGER}
     </select>
     <update id="updateIshot" parameterType="java.lang.Integer">
-        update yw_post SET  ishot=0 WHERE  id=#{id,jdbcType=INTEGER}
+        update yw_post SET ishot=1 WHERE id=#{id,jdbcType=INTEGER}
     </update>
     <update id="updateNoIshot" parameterType="java.lang.Integer">
-   update yw_post SET  ishot=1 WHERE  id=#{id,jdbcType=INTEGER}
+        update yw_post SET ishot=0 WHERE id=#{id,jdbcType=INTEGER}
     </update>
 </mapper>
