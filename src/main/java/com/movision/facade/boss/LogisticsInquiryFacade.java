@@ -38,7 +38,7 @@ public class LogisticsInquiryFacade {
         String logisticsid = orderService.queryLogisticsid(ordersid);//快递单号
         String logisticscode = orderService.queryLogisticsCode(ordersid);//物流code
         String param = "{" + "\"com\":\"" + "zhongtong" + "\"," + //查询的快递公司的编码
-                "\"num\":\"" + "76523293" + "\"" + //快递单号
+                "\"num\":\"" + "765232938392" + "\"" + //快递单号
                 "}";
         String key = "EvNEkbNX6345";
         String customer = "FA0777963476EFDFE72EE58900D6E89A";
