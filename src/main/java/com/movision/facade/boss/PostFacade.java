@@ -606,7 +606,9 @@ public class PostFacade {
         post.setActivetype(activetype);
         post.setIscontribute(iscontribute);//是否投稿，必填
             if (typee == 0) {
-                post.setActivefee(Double.parseDouble(activefee));//金额
+                if (!StringUtils.isEmpty(activefee)) {
+                    post.setActivefee(Double.parseDouble(activefee));//金额
+                }
             }
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
