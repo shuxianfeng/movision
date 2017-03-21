@@ -4,9 +4,13 @@ import com.google.gson.Gson;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.UserConstants;
 import com.movision.exception.BusinessException;
+import com.movision.facade.im.ImFacade;
+import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.user.entity.RegisterUser;
+import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.utils.DateUtils;
+import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -16,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
@@ -31,6 +36,9 @@ public class AppRegisterFacade {
     @Autowired
     private UserFacade userFacade;
 
+    @Autowired
+    private ImFacade imFacade;
+
     /**
      * 校验登录用户信息：手机号+短信验证码
      * 若用户不存在，则新增用户信息；
@@ -42,7 +50,8 @@ public class AppRegisterFacade {
      * @param session
      * @return
      */
-    public Map<String, Object> validateLoginUser(RegisterUser member, Validateinfo validateinfo, Session session) {
+    public Map<String, Object> validateLoginUser(RegisterUser member, Validateinfo validateinfo, Session session) throws IOException {
+
         String phone = member.getPhone();
         String verifyCode = validateinfo.getCheckCode();
         String mobileCheckCode = member.getMobileCheckCode();
@@ -65,14 +74,21 @@ public class AppRegisterFacade {
                     String json = gson.toJson(newToken);
                     member.setToken(json);
 
-                    String isExist = userFacade.isExistAccount(phone);
-                    if (isExist.equals("isExist")) {
+                    int userid = 0;
+                    User user = userFacade.queryUserByPhone(phone);
+                    if (null != user) {
                         //存在该用户,则更新token
                         this.updateAppRegisterUser(member);
+                        userid = user.getId();
                     } else {
                         //手机号不存在,则新增用户，并且新增token
-                        this.registerMember(member);
+                        userid = this.registerMember(member);
                     }
+                    log.info("【获取userid】:" + userid);
+
+                    // 判断该userid是否存在一个im用户，
+                    this.getImuserForReturn(phone, result, userid);
+
                     //3 登录成功则清除session中验证码的信息
                     session.removeAttribute("r" + validateinfo.getAccount());
                     //4 返回token（后期可加密）
@@ -97,7 +113,30 @@ public class AppRegisterFacade {
     }
 
     /**
+     * 判断该userid是否存在一个im用户，若不存在，则注册im用户
+     * @param phone
+     * @param result
+     * @throws IOException
+     */
+    private void getImuserForReturn(String phone, Map<String, Object> result, int userid) throws IOException {
+        Boolean isExistImUser = imFacade.isExistAPPImuser(userid);
+        if (!isExistImUser) {
+            //若不存在，则注册im用户
+            ImUser imUser = new ImUser();
+            imUser.setUserid(userid);
+            imUser.setAccid(CheckSumBuilder.getAccid(phone));
+            ImUser newImUser = imFacade.AddImUser(imUser);
+            result.put("imuser", newImUser);
+        } else {
+            result.put("imuser", imFacade.getImuserByCurrentAppuser(userid));
+        }
+    }
+
+    /**
      * 注册用户，新增用户信息
+     *
+     * @param member
+     * @return 新注册的用户id
      */
     public int registerMember(RegisterUser member) {
         log.debug("注册会员");

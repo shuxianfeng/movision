@@ -173,8 +173,9 @@ public class ImFacade {
      */
     public ImUser AddImUser(ImUser imUser) throws IOException {
 
-        registerImUserAndSave(imUser, ShiroUtil.getAppUserID(), ImConstant.TYPE_APP);
-        return imUserService.selectByUserid(ShiroUtil.getAppUserID(), ImConstant.TYPE_APP);
+        registerImUserAndSave(imUser, imUser.getUserid(), ImConstant.TYPE_APP);
+
+        return imUserService.selectByUserid(imUser.getUserid(), ImConstant.TYPE_APP);
     }
 
     /**
@@ -185,6 +186,7 @@ public class ImFacade {
      * @throws IOException
      */
     public void registerImUserAndSave(ImUser imUser, int currentUserid, int systemType) throws IOException {
+        //注册im用户
         Map res = this.registerIM(imUser);
 
         if (res.get("code").equals(200)) {
@@ -215,10 +217,11 @@ public class ImFacade {
     /**
      * 查找当前APP用户的IM信息
      *
+     * @param userid
      * @return
      */
-    public ImUser getImuserByCurrentAppuser() {
-        return imUserService.selectByUserid(ShiroUtil.getAppUserID(), ImConstant.TYPE_APP);
+    public ImUser getImuserByCurrentAppuser(int userid) {
+        return imUserService.selectByUserid(userid, ImConstant.TYPE_APP);
     }
 
 
@@ -240,8 +243,8 @@ public class ImFacade {
      *
      * @return true:存在；  false:不存在
      */
-    public Boolean isExistAPPImuser() {
-        ImUser imUser = imUserService.selectByUserid(ShiroUtil.getAppUserID(), ImConstant.TYPE_APP);
+    public Boolean isExistAPPImuser(int userid) {
+        ImUser imUser = imUserService.selectByUserid(userid, ImConstant.TYPE_APP);
         return null != imUser;
     }
 

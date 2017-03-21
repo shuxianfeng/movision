@@ -55,6 +55,9 @@ public class PointConstant {
      */
     public static Integer POINT_DECREASE = 1;
 
+    /**
+     * 积分类型对应的积分
+     */
     public enum POINT {
         new_user_register(25),
         finish_personal_data(15),

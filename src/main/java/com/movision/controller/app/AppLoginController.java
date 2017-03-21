@@ -58,10 +58,6 @@ public class AppLoginController {
     @Autowired
     private UserFacade userFacade;
 
-    @Autowired
-    private ImFacade imFacade;
-
-
     /**
      * 手机注册账号时发送的验证码
      *
@@ -88,6 +84,7 @@ public class AppLoginController {
         Gson gson = new Gson();
         String json = gson.toJson(map);
 
+        //发送短信服务
         SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("login_app_sms_template_code"));
 
         //验证信息放入session保存
@@ -123,7 +120,9 @@ public class AppLoginController {
             Session session = currentUser.getSession(true);
             //校验手机验证码是否正确
             if (user.getMobileCheckCode() != null) {
+                //获取缓存中的登录的用户信息
                 Validateinfo validateinfo = (Validateinfo) session.getAttribute("r" + user.getPhone());
+                log.info("【短信验证码登录】获取缓存中的登录的用户信息:" + validateinfo.toString());
                 if (null == validateinfo) {
                     response.setCode(400);
                     response.setMessage("session中无当前用户");
@@ -194,17 +193,6 @@ public class AppLoginController {
                         session.setAttribute(SessionConstant.APP_USER, currentUser.getPrincipal());
                         session.removeAttribute(SessionConstant.BOSS_USER);
 
-                        //6 判断该userid是否存在一个im用户，
-                        Boolean isExistImUser = imFacade.isExistAPPImuser();
-                        if (!isExistImUser) {
-                            //若不存在，则注册im用户
-                            ImUser imUser = new ImUser();
-                            imUser.setAccid(CheckSumBuilder.getAccid(phone));
-                            ImUser newImUser = imFacade.AddImUser(imUser);
-                            returnMap.put("imuser", newImUser);
-                        } else {
-                            returnMap.put("imuser", imFacade.getImuserByCurrentAppuser());
-                        }
 
                         response.setData(returnMap);
                     } else {
