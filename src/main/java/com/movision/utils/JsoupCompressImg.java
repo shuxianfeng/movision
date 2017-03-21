@@ -121,7 +121,7 @@ public class JsoupCompressImg {
                         FileInputStream fis = new FileInputStream(file);
                         int s = fis.available();
                         DecimalFormat df = new DecimalFormat("######0.00");
-                        String filesize = df.format(s / 1024 / 1024);
+                        String filesize = df.format((double) s / 1024 / 1024);
                         System.out.println("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + filesize + "M");
                     }
                 }
