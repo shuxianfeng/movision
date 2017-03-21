@@ -159,4 +159,10 @@ public interface PostMapper {
 
     List<PostList> findAllQueryCollectPostList(String userid, RowBounds rowBounds);
 
+    Integer updateIshot(Integer id);//设为热门
+
+    Integer activeIsHot(Integer id);//查询是不是热门
+
+    Integer updateNoIshot(Integer id);//不是热门
+
 }

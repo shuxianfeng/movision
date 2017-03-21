@@ -445,10 +445,11 @@ public class PostController {
             @ApiParam(value = "活动开始日期 ") @RequestParam String begintime,
             @ApiParam(value = "活动结束日期 ") @RequestParam String endtime,
             @ApiParam(value = "发帖人") @RequestParam String userid,
-            @ApiParam(value = "方形图片url") @RequestParam String squareimgurl,
+            @ApiParam(value = "方形图片url") @RequestParam(required = false) String squareimgurl,
+            @ApiParam(value = "是否设为热门（0 否  1 是）") @RequestParam(required = false) String ishot,
             @ApiParam(value = "分享商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Integer> result = postFacade.addPostActive(title, subtitle, activetype, iscontribute, activefee, coverimg, postcontent, isessence, orderid, time, begintime, endtime, userid, squareimgurl, goodsid);
+        Map<String, Integer> result = postFacade.addPostActive(title, subtitle, activetype, iscontribute, activefee, coverimg, postcontent, isessence, orderid, time, begintime, endtime, userid, squareimgurl, ishot, goodsid);
         if(response.getCode()==200){
             response.setMessage("添加成功");
         }
@@ -658,12 +659,13 @@ public class PostController {
             @ApiParam(value = "是否需要投稿 0,投,1不投") @RequestParam String iscontribute,
             @ApiParam(value = "开始时间") @RequestParam String begintime,
             @ApiParam(value = "结束时间") @RequestParam String endtime,
-            @ApiParam(value = "方形图片url") @RequestParam String hotimgurl,
+            @ApiParam(value = "方形图片url") @RequestParam(required = false) String hotimgurl,
+            @ApiParam(value = "是否设为热门（0 否  1 是）") @RequestParam(required = false) String ishot,
             @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String essencedate,
             @ApiParam(value = "编辑商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
 
-        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, userid, coverimg, postcontent, isessence, orderid, activefee, activetype, iscontribute, begintime, endtime, hotimgurl, essencedate, goodsid);
+        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, userid, coverimg, postcontent, isessence, orderid, activefee, activetype, iscontribute, begintime, endtime, hotimgurl, ishot, essencedate, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -912,5 +914,23 @@ public class PostController {
         map.put("url", url);
         map.put("name", FileUtil.getFileNameByUrl(url));
         return new Response(map);
+    }
+
+    /**
+     * 是否设为热门
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "是否设为热门", notes = "是否设为热门", response = Response.class)
+    @RequestMapping(value = "update_ishot", method = RequestMethod.POST)
+    public Response updateIshot(@ApiParam(value = "活动id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        int result = postFacade.updateIshot(id);
+        if (response.getCode() == 200) {
+            response.setMessage("修改成功");
+        }
+        response.setData(result);
+        return response;
     }
 }

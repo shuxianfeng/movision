@@ -811,4 +811,51 @@ public class PostService {
         }
     }
 
+    /**
+     * 是热门
+     *
+     * @param id
+     * @return
+     */
+    public Integer updateIshot(Integer id) {
+        try {
+            log.info("是否设为热门");
+            return postMapper.updateIshot(id);
+        } catch (Exception e) {
+            log.error("是否设为热门失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 是否设为热门
+     *
+     * @param id
+     * @return
+     */
+    public Integer activeIsHot(Integer id) {
+        try {
+            log.info("是否设为热门");
+            return postMapper.activeIsHot(id);
+        } catch (Exception e) {
+            log.error("是否设为热门失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 不是热门
+     *
+     * @param id
+     * @return
+     */
+    public Integer updateNoIshot(Integer id) {
+        try {
+            log.info("不是热门");
+            return postMapper.updateNoIshot(id);
+        } catch (Exception e) {
+            log.error("不是热门热门失败", e);
+            throw e;
+        }
+    }
 }

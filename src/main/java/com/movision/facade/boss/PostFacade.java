@@ -1,6 +1,7 @@
 package com.movision.facade.boss;
 
 import com.movision.common.util.ShiroUtil;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.activePart.service.ActivePartService;
@@ -598,7 +599,7 @@ public class PostFacade {
      */
     public Map<String, Integer> addPostActive(String title, String subtitle, String activetype, String iscontribute, String activefee,
                                               String coverimg, String postcontent, String isessence, String orderid, String time,
-                                              String begintime, String endtime, String userid, String squareimgurl, String goodsid) {
+                                              String begintime, String endtime, String userid, String squareimgurl, String ishot, String goodsid) {
         PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
         post.setTitle(title);//帖子标题
@@ -644,6 +645,9 @@ public class PostFacade {
             post.setUserid(userid);//发帖人
         if (!StringUtils.isEmpty(squareimgurl)) {
             post.setHotimgurl(squareimgurl);//活动首页方形图
+        }
+        if (!StringUtil.isEmail(ishot)) {
+            post.setIshot(ishot);//是否设为热门
         }
             post.setIsactive("1");
         int result = postService.addPostActiveList(post);//新建活动
@@ -844,7 +848,7 @@ public class PostFacade {
      * @return
      */
     public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String userid, String coverimg, String postcontent, String isessence,
-                                                     String orderid, String activefee, String activetype, String iscontribute, String begintime, String endtime, String hotimgurl, String essencedate, String goodsid) {
+                                                     String orderid, String activefee, String activetype, String iscontribute, String begintime, String endtime, String hotimgurl, String ishot, String essencedate, String goodsid) {
         PostActiveList postActiveList = new PostActiveList();
         Map<String, Integer> map = new HashedMap();
         try {
@@ -881,6 +885,9 @@ public class PostFacade {
             }
             if (!StringUtils.isEmpty(hotimgurl)) {
                 postActiveList.setSquareimgurl(hotimgurl);//首页方形图
+            }
+            if (!StringUtil.isEmpty(ishot)) {
+                postActiveList.setIshot(ishot);
             }
             int result = postService.updateActivePostById(postActiveList);//编辑帖子
             Period period = new Period();
@@ -1344,6 +1351,23 @@ public class PostFacade {
      */
     public void addCompressImg(CompressImg compressImg) {
         postService.addCompressImg(compressImg);
+    }
+
+    /**
+     * 是否设为热门
+     *
+     * @param id
+     * @return
+     */
+    public Integer updateIshot(Integer id) {
+        int ishot = postService.activeIsHot(id);
+        int result = 0;
+        if (ishot == 0) {
+            result = postService.updateIshot(id);
+        } else if (ishot == 1) {
+            result = postService.updateNoIshot(id);
+        }
+        return result;
     }
 
 }

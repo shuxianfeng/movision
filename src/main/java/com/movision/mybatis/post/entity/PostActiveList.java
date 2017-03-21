@@ -41,6 +41,15 @@ public class PostActiveList {
     private String coverimg;
     private String squareimgurl;//活动首页方形图
     private List<GoodsVo> goodss;
+    private String ishot;
+
+    public String getIshot() {
+        return ishot;
+    }
+
+    public void setIshot(String ishot) {
+        this.ishot = ishot;
+    }
 
     public String getSquareimgurl() {
         return squareimgurl;
