@@ -119,7 +119,8 @@ public class JsoupCompressImg {
                         File file = new File(proto_img_dir);//获取原图大小
                         FileInputStream fis = new FileInputStream(file);
                         int s = fis.available();
-                        System.out.println("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + s / 1024 / 1024 + "M");
+                        double filesize = s / 1024 / 1024;
+                        System.out.println("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + filesize + "M");
                     }
                 }
 
