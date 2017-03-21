@@ -144,24 +144,11 @@ public class JsoupCompressImg {
                 }
 
             }
-            String a = doc.html().replaceAll("\\n", "");
-            a = a.replaceAll("\\\\", "");
+            String a = doc.html().replaceAll("\\n", "").replaceAll("\\\\", "").replaceAll("<html>", "").replaceAll("<head>", "").replaceAll("<body>", "").replaceAll("</html>", "").replaceAll("</head>", "").replaceAll("</body>", "");
             log.info("测试返回的content字符串:::::::::>" + a);
-            String b = a.replaceAll("<html>", "");
-            log.info("测试返回的content字符串:::::::::>" + b);
-            String c = b.replaceAll("<head>", "");
-            log.info("测试返回的content字符串:::::::::>" + c);
-            String d = b.replaceAll("<body>", "");
-            log.info("测试返回的content字符串:::::::::>" + d);
-            String e = b.replaceAll("</html>", "");
-            log.info("测试返回的content字符串:::::::::>" + e);
-            String f = b.replaceAll("</head>", "");
-            log.info("测试返回的content字符串:::::::::>" + f);
-            String g = b.replaceAll("</body>", "");
-            log.info("测试返回的content字符串:::::::::>" + g);
             map.put("code", 200);
             map.put("msg", "帖子所有图片压缩完成");
-            map.put("content", doc.html());//压缩后的帖子内容html标签字符串
+            map.put("content", a);//压缩后的帖子内容html标签字符串
             return map;
         } catch (Exception e) {
             map.put("code", 300);
