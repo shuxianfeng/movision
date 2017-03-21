@@ -591,14 +591,14 @@ public class PostFacade {
      * @param postcontent
      * @param isessence
      * @param orderid
-     * @param time
+     * @param essencedate
      * @param begintime
      * @param endtime
      * @param userid
      * @return
      */
     public Map<String, Integer> addPostActive(String title, String subtitle, String activetype, String iscontribute, String activefee,
-                                              String coverimg, String postcontent, String isessence, String orderid, String time,
+                                              String coverimg, String postcontent, String isessence, String orderid, String essencedate,
                                               String begintime, String endtime, String userid, String hotimgurl, String ishot, String goodsid) {
         PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
@@ -625,9 +625,9 @@ public class PostFacade {
                         post.setOrderid(0);
                     }
                     Date d = null;
-                    if (!StringUtils.isEmpty(time)) {
+                    if (!StringUtils.isEmpty(essencedate)) {
                         try {
-                            d = format.parse(time);
+                            d = format.parse(essencedate);
                             post.setEssencedate(d);
                         } catch (ParseException e) {
                             e.printStackTrace();
