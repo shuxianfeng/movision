@@ -660,7 +660,7 @@ public class ImFacade {
         List<String> list = systemPushService.findAllPhone();
         String mobile = "13814501287";
         boolean blen = true;
-        int pageNo = 0;
+        /** int pageNo = 0;
         int pageSize = 200;
         for (int i = 0; pageSize < list.size(); i++) {
             List<String> phone = systemPushService.findPhone(pageNo, pageSize);
@@ -674,7 +674,7 @@ public class ImFacade {
                 pageSize = pageSize - list.size();
                 blen = false;
             }
-        }
+         }*/
         map.put("body", body);
         Gson gson = new Gson();
         String json = gson.toJson(map);

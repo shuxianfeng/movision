@@ -36,8 +36,8 @@ public class LogisticsInquiryFacade {
         Map<String, String> map = new HashMap<>();
         String logisticsid = orderService.queryLogisticsid(ordersid);//快递单号
         String logisticscode = orderService.queryLogisticsCode(ordersid);//物流code
-        String param = "{" + "\"com\":\"" + logisticscode + "\"," + //查询的快递公司的编码
-                "\"num\":\"" + logisticsid + "\"" + //快递单号
+        String param = "{" + "\"com\":\"" + "zhongtong" + "\"," + //查询的快递公司的编码
+                "\"num\":\"" + "765232938392" + "\"" + //快递单号
                 "}";
         String key = "EvNEkbNX6345";
         String customer = "FA0777963476EFDFE72EE58900D6E89A";
@@ -58,6 +58,8 @@ public class LogisticsInquiryFacade {
                 state = jsonObject.get("state").toString();
                 com = jsonObject.get("com").toString();
                 map.put("message", message);
+                map.put("state", state);
+                map.put("com", com);
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
                 String company = orderService.logisticsCompany(com);
                 int result = 0;
@@ -123,5 +125,6 @@ public class LogisticsInquiryFacade {
 
         return map;
     }
+
 
 }
