@@ -884,7 +884,7 @@ public class PostFacade {
                 postActiveList.setEssencedate(estime);
             }
             if (!StringUtils.isEmpty(hotimgurl)) {
-                postActiveList.setSquareimgurl(hotimgurl);//首页方形图
+                postActiveList.setHotimgurl(hotimgurl);//首页方形图
             }
             if (!StringUtil.isEmpty(ishot)) {
                 postActiveList.setIshot(ishot);
