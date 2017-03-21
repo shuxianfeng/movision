@@ -890,6 +890,9 @@
             <if test="hotimgurl!=null">
                 hotimgurl=#{hotimgurl,jdbcType=VARCHAR},
             </if>
+            <if test="ishot!=null">
+                ishot=#{ishot,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -1333,15 +1336,17 @@
             <if test="iscontribute!=null">
                 iscontribute,
             </if>
-            <if test="squareimgurl!=null">
-                squareimgurl
+            <if test="hotimgurl!=null">
+                hotimgurl
+            </if>
+            <if test="ishot!=null">
+                ishot
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 #{id,jdbcType=INTEGER},
             </if>
-
             <if test="title != null">
                 #{title,jdbcType=VARCHAR},
             </if>
@@ -1381,8 +1386,11 @@
             <if test="iscontribute!=null">
                 #{iscontribute,jdbcType=INTEGER},
             </if>
-            <if test="squareimgurl!=null">
-                #{squareimgurl,jdbcType=VARCHAR}
+            <if test="hotimgurl!=null">
+                #{hotimgurl,jdbcType=VARCHAR}
+            </if>
+            <if test="ishot!=null">
+                #{ishot,jdbcType=INTEGER}
             </if>
         </trim>
     </insert>
