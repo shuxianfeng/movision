@@ -43,6 +43,16 @@ public class Circle {
 
     private Integer userid;
 
+    private String circlesquareimg;
+
+    public String getCirclesquareimg() {
+        return circlesquareimg;
+    }
+
+    public void setCirclesquareimg(String circlesquareimg) {
+        this.circlesquareimg = circlesquareimg;
+    }
+
     public Integer getUserid() {
         return userid;
     }

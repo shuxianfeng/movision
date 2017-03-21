@@ -22,10 +22,12 @@
         <result column="orderid" property="orderid" jdbcType="INTEGER"/>
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
         <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="circlesquareimg" property="circlesquareimg" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, isofficial, scope, phone, photo, category, code, name, introduction, notice,
-        permission, isrecommend, maylikeimg, createtime, status, supportnum, isdiscover, orderid, isdel,userid
+        permission, isrecommend, maylikeimg, createtime, status, supportnum, isdiscover, orderid,
+        isdel,userid,circlesquareimg
     </sql>
 
     <!--基础查询语句-->
@@ -120,14 +122,14 @@
         code, name, introduction,
       notice, permission, isrecommend, maylikeimg,
         createtime, status, supportnum, isdiscover,
-        orderid,userid)
+        orderid,userid,circlesquareimg)
         values (#{id,jdbcType=INTEGER}, #{isofficial,jdbcType=INTEGER}, #{scope,jdbcType=INTEGER},
         #{phone,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{category,jdbcType=INTEGER},
         #{code,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR},
       #{notice,jdbcType=VARCHAR}, #{permission,jdbcType=INTEGER}, #{isrecommend,jdbcType=INTEGER}, #{maylikeimg,jdbcType=INTEGER},
         #{createtime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{supportnum,jdbcType=INTEGER},
         #{isdiscover,jdbcType=INTEGER},
-        #{orderid,jdbcType=INTEGER},#{userid,jdbcType=INTEGER})
+        #{orderid,jdbcType=INTEGER},#{userid,jdbcType=INTEGER},#{circlesquareimg,jdbcType=VARCHAR})
   </insert>
 
     <!--新增一条该用户支持该圈子的记录-->
@@ -196,6 +198,9 @@
             <if test="userid != null">
                 userid,
             </if>
+            <if test="circlesquareimg!=null">
+                circlesquareimg,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -254,6 +259,9 @@
             </if>
             <if test="userid != null">
                 #{userid,jdbcType=INTEGER}
+            </if>
+            <if test="circlesquareimg!=null">
+                #{circlesquareimg,jdbcType=VARCHAR}
             </if>
         </trim>
     </insert>
@@ -314,6 +322,9 @@
             <if test="userid != null">
                 userid = #{userid,jdbcType=INTEGER},
             </if>
+            <if test="circlesquareimg!=null">
+                circlesquareimg=#{circlesquareimg,jdbcType=VARCHAR}
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -336,7 +347,8 @@
         supportnum = #{supportnum,jdbcType=INTEGER},
         isdiscover = #{isdiscover,jdbcType=INTEGER},
         orderid = #{orderid,jdbcType=INTEGER},
-        userid = #{userid,jdbcType=INTEGER}
+        userid = #{userid,jdbcType=INTEGER},
+        circlesquareimg=#{circlesquareimg,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -659,6 +671,9 @@
             <if test="userid != null">
                 userid,
             </if>
+            <if test="circlesquareimg!=null">
+                circlesquareimg,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -716,7 +731,10 @@
                 #{orderid,jdbcType=INTEGER},
             </if>
             <if test="userid != null">
-                #{userid,jdbcType=INTEGER}
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="circlesquareimg!=null">
+                #{circlesquareimg,jdbcType=VARCHAR}
             </if>
         </trim>
     </insert>

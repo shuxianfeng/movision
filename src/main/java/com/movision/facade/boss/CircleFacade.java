@@ -242,7 +242,7 @@ public class CircleFacade {
      * @return
      */
     public Map<String, Integer> updateCircle(String id, String name, String category, String circlemanid,
-                                             String circleadmin, String photo, String introduction, String permission) {
+                                             String circleadmin, String photo, String introduction, String circlesquareimg, String permission) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
         Integer circleid = null;
@@ -268,26 +268,29 @@ public class CircleFacade {
             }
             }
         if (!StringUtils.isEmpty(circlemanid)) {
-                //查询圈主
-                String pon = userService.queryUserbyPhoneByUserid(Integer.parseInt(circlemanid));
-                circleDetails.setPhone(pon);
+            //查询圈主
+            String pon = userService.queryUserbyPhoneByUserid(Integer.parseInt(circlemanid));
+            circleDetails.setPhone(pon);
             }
         if (!StringUtils.isEmpty(photo)) {
-                circleDetails.setPhoto(photo);
+            circleDetails.setPhoto(photo);
             }
         if (!StringUtils.isEmpty(introduction)) {
-                circleDetails.setIntroduction(introduction);
+            circleDetails.setIntroduction(introduction);
             }
+        if (!StringUtils.isEmpty(circlesquareimg)) {
+            circleDetails.setCirclesquareimg(circlesquareimg);
+        }
         if (!StringUtils.isEmpty(permission)) {
-                circleDetails.setPermission(Integer.parseInt(permission));
-            }
-            Integer s = circleService.updateCircle(circleDetails);
-            if (s == 1) {
-                map.put("resault", s);
-            } else {
-                Integer t = 0;
-                map.put("resault", t);
-            }
+            circleDetails.setPermission(Integer.parseInt(permission));
+        }
+        Integer s = circleService.updateCircle(circleDetails);
+        if (s == 1) {
+            map.put("resault", s);
+        } else {
+            Integer t = 0;
+            map.put("resault", t);
+        }
         return map;
     }
 
@@ -333,31 +336,34 @@ public class CircleFacade {
      * @return
      */
     public Map<String, Integer> addCircle(String name, String category, String userid, String circleadmin,
-                                          String circlemanid, String photo, String introduction) {
+                                          String circlemanid, String photo, String circlesquareimg, String introduction) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
         if (!StringUtils.isEmpty(category)) {
-                circleDetails.setName(name);
+            circleDetails.setName(name);
             }
         if (!StringUtils.isEmpty(category)) {
-                circleDetails.setCategory(Integer.parseInt(category));
+            circleDetails.setCategory(Integer.parseInt(category));
             }
 
         if (!StringUtils.isEmpty(circlemanid)) {//添加创建人
-                circleDetails.setUserid(circlemanid);
+            circleDetails.setUserid(circlemanid);
             }
         if (!StringUtils.isEmpty(userid)) {
-                //查询圈主手机号
-                String pon = userService.queryUserbyPhoneByUserid(Integer.parseInt(userid));
-                circleDetails.setPhone(pon);//设置圈主手机号
+            //查询圈主手机号
+            String pon = userService.queryUserbyPhoneByUserid(Integer.parseInt(userid));
+            circleDetails.setPhone(pon);//设置圈主手机号
             }
             circleDetails.setCreatetime(new Date());
         if (!StringUtils.isEmpty(photo)) {
-                circleDetails.setPhoto(photo);
+            circleDetails.setPhoto(photo);
             }
         if (!StringUtils.isEmpty(introduction)) {
-                circleDetails.setIntroduction(introduction);
+            circleDetails.setIntroduction(introduction);
             }
+        if (!StringUtils.isEmpty(circlesquareimg)) {//圈子首页展示小方块
+            circleDetails.setCirclesquareimg(circlesquareimg);
+        }
         circleDetails.setScope(2);//设置默认圈子贷方范围，对所有人开放
         circleDetails.setStatus(0);//设置审核状态，初始值为待审核：0
         circleDetails.setOrderid(0);//设置精选排序，初始值：0

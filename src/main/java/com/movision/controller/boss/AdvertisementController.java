@@ -134,7 +134,7 @@ public class AdvertisementController {
     @RequestMapping(value = "add_advertisement_type", method = RequestMethod.POST)
     public Response addAdvertisementType(@ApiParam(value = "广告类型") @RequestParam String type,
                                          @ApiParam(value = "广告名") @RequestParam String name,
-                                         @ApiParam(value = "宽度") @RequestParam String wide,
+                                         @ApiParam(value = "广告宽度") @RequestParam String wide,
                                          @ApiParam(value = "广告高度") @RequestParam String high,
                                          @ApiParam(value = "广告数量") @RequestParam String quantity) {
         Response response = new Response();
@@ -213,7 +213,7 @@ public class AdvertisementController {
     }
 
     /**
-     * 上传帖子相关图片
+     * 上传广告相关图片
      *
      * @param file
      * @return

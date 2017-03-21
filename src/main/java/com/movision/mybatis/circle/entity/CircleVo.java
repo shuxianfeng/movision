@@ -79,6 +79,16 @@ public class CircleVo {
 
     private Integer userid;//用户id
 
+    private String circlesquareimg;//首页方形图
+
+    public String getCirclesquareimg() {
+        return circlesquareimg;
+    }
+
+    public void setCirclesquareimg(String circlesquareimg) {
+        this.circlesquareimg = circlesquareimg;
+    }
+
     public Integer getUserid() {
         return userid;
     }

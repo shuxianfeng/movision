@@ -65,6 +65,16 @@ public class CircleDetails {
 
     private String erweima;//二维码
 
+    private String circlesquareimg;//圈子首页展示方形图
+
+    public String getCirclesquareimg() {
+        return circlesquareimg;
+    }
+
+    public void setCirclesquareimg(String circlesquareimg) {
+        this.circlesquareimg = circlesquareimg;
+    }
+
     public Integer getId() {
         return id;
     }
