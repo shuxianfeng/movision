@@ -1,5 +1,6 @@
 package com.movision.utils;
 
+import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -119,7 +120,8 @@ public class JsoupCompressImg {
                         File file = new File(proto_img_dir);//获取原图大小
                         FileInputStream fis = new FileInputStream(file);
                         int s = fis.available();
-                        double filesize = s / 1024 / 1024;
+                        DecimalFormat df = new DecimalFormat("######0.00");
+                        String filesize = df.format(s / 1024 / 1024);
                         System.out.println("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + filesize + "M");
                     }
                 }
