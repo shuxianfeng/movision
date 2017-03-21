@@ -27,14 +27,13 @@
         <result column="isdel" jdbcType="INTEGER" property="isdel"/>
         <result column="essencedate" jdbcType="DATE" property="essencedate"/>
         <result column="userid" jdbcType="INTEGER" property="userid"/>
+        <result column="squareimgurl" jdbcType="VARCHAR" property="squareimgurl"/>
     </resultMap>
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
         isactive, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
-        hotimgurl, intime,
-        totalpoint,
-        isdel,essencedate,userid
+        hotimgurl, intime,totalpoint,isdel,essencedate,userid,squareimgurl
   </sql>
 
     <!--基础查询语句-->
@@ -328,7 +327,7 @@
         commentsum, forwardsum, collectsum,
         isactive, activetype, activefee, iscontribute, type, ishot, orderid,
         isessence, isessencepool, coverimg, hotimgurl,
-        intime, totalpoint, isdel, essencedate,userid
+        intime, totalpoint, isdel, essencedate,userid,squareimgurl
       )
     values (#{id,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
       #{subtitle,jdbcType=VARCHAR}, #{postcontent,jdbcType=VARCHAR}, #{zansum,jdbcType=INTEGER},
@@ -338,7 +337,7 @@
         #{ishot,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},
         #{isessencepool,jdbcType=INTEGER}, #{coverimg,jdbcType=VARCHAR},#{hotimgurl,jdbcType=VARCHAR},
         #{intime,jdbcType=TIMESTAMP}, #{totalpoint,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER},
-        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER}
+        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{squareimgurl,jdbcType=VARCHAR}
       )
   </insert>
 
@@ -350,7 +349,7 @@
         INSERT INTO yw_post (circleid, title,
           postcontent, zansum, commentsum, forwardsum,
         collectsum, isactive, type, ishot, isessence,
-        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid
+        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,squareimgurl
         )
         VALUES (
           #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=VARCHAR},
@@ -358,7 +357,7 @@
           #{collectsum,jdbcType=INTEGER},#{isactive,jdbcType=INTEGER},#{type,jdbcType=INTEGER},
           #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
         #{coverimg,jdbcType=VARCHAR},#{intime,jdbcType=TIMESTAMP},#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},
-        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER}
+        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{squareimgurl,jdbcType=VARCHAR}
         )
     </insert>
 
@@ -888,6 +887,9 @@
             <if test="iscontribute!=null">
                 iscontribute=#{iscontribute,jdbcType=INTEGER},
             </if>
+            <if test="hotimgurl!=null">
+                hotimgurl=#{hotimgurl,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -1329,7 +1331,10 @@
                 userid,
             </if>
             <if test="iscontribute!=null">
-                iscontribute
+                iscontribute,
+            </if>
+            <if test="squareimgurl!=null">
+                squareimgurl
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -1374,7 +1379,10 @@
                 #{userid,jdbcType=INTEGER},
             </if>
             <if test="iscontribute!=null">
-                #{iscontribute,jdbcType=INTEGER}
+                #{iscontribute,jdbcType=INTEGER},
+            </if>
+            <if test="squareimgurl!=null">
+                #{squareimgurl,jdbcType=VARCHAR}
             </if>
         </trim>
     </insert>
