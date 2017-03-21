@@ -321,5 +321,12 @@ public class AppLoginController {
         return serverToken;
     }
 
+    @ApiOperation(value = "退出登录", notes = "退出登录", response = Response.class)
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public Response logout() throws IOException {
+        SecurityUtils.getSubject().logout();
+        return new Response();
+    }
+
 
 }

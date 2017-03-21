@@ -32,6 +32,7 @@ import java.util.Map;
 
 /**
  * 请求拦截器，初始化登录用户信息
+ * PS: app端的请求都不走这个拦截器,只有Boss端的请求会走
  *
  * 系统处理顺序：
  * shiroFilter ——> shiroInterceptor ——> InitLoginMemberInterceptor ——> Controller
@@ -68,13 +69,14 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
         String path = request.getServletPath(); //  path=/boss/menu/query_sidebar
         /**
          *  如果是/boss/menu/menu_list.html应该怎么拦截？
-         *  如果他的角色拥有 /boss/menu的权限，那么就不拦截
-         *  如果没有 /boss/menu的权限，就拦截
-         *
+         *      如果他的角色拥有 /boss/menu的权限，那么就不拦截
+         *      如果没有 /boss/menu的权限，就拦截
          */
-
         log.info("path=" + path);
-        //请求中带这些字符串的不去拦截
+        /**
+         * 请求中带这些字符串的不去拦截
+         * app端的请求都不走这个拦截器
+         */
         if (path.matches(LoginPropertiesLoader.getValue("no.intercept.url"))) {
             return true;
         } else {
@@ -129,7 +131,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 bossLoginFacade.handleNoPermission(response);
                 return false;
             } else if (bossUser == null && appuser != null) {
-                //app端不做菜单控制
+                //app端不做菜单控制, 所以该分支永远不会进入
                 this.initAppUserInfo(currentUser, session);
                 return true;
 

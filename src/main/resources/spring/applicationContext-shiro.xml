@@ -137,9 +137,6 @@
         </property>
         <property name="filterChainDefinitions">
             <value>
-                <!--role:对应角色表中的角色   100:App管理员  200:App普通用户-->
-                /rest/** = anon
-
                 <!--需要登录的接口-->
                 /app/mine/**=authc
                 /app/post/inAccusation = authc
@@ -153,11 +150,13 @@
                 /app/collection/**=authc
 
                 /app/** = anon
+
                 /boss/login = anon
                 /boss/** = anon
-                /logout = logout
+
                 /swagger/** = anon
                 /static/**=anon
+                /rest/** = anon
             </value>
         </property>
 

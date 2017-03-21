@@ -9,6 +9,7 @@ import net.sf.ehcache.Ehcache;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.cache.CacheManager;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.util.CollectionUtils;
 import org.springframework.cache.support.SimpleValueWrapper;
 
@@ -63,9 +64,14 @@ public class SpringCacheManagerWrapper implements CacheManager {
 
         @Override
         public Object remove(Object key) throws CacheException {
-            springCache.evict(key);
+            if (key instanceof SimplePrincipalCollection) {
+                springCache.evict(String.valueOf(key));
+            } else {
+                springCache.evict(key);
+            }
             return null;
         }
+
 
         @Override
         public void clear() throws CacheException {
