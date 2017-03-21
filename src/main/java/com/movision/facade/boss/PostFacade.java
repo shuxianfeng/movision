@@ -8,6 +8,7 @@ import com.movision.mybatis.category.service.CategoryService;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
+import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
@@ -1323,6 +1324,20 @@ public class PostFacade {
      */
     public List<PostList> queryCollectPostList(String userid, Paging<PostList> pager) {
         return postService.queryCollectPostList(userid, pager);
+    }
+
+    /**
+     * 查询帖子中的这张图片在压缩映射关系表中是否存在
+     */
+    public int queryCount(CompressImg compressImg) {
+        return postService.queryCount(compressImg);
+    }
+
+    /**
+     * 帖子中高清图片压缩处理后保存原图和压缩图url对应关系
+     */
+    public void addCompressImg(CompressImg compressImg) {
+        postService.addCompressImg(compressImg);
     }
 
 }

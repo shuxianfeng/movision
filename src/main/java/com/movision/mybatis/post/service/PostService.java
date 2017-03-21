@@ -1,6 +1,8 @@
 package com.movision.mybatis.post.service;
 
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.compressImg.entity.CompressImg;
+import com.movision.mybatis.compressImg.mapper.CompressImgMapper;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
@@ -28,6 +30,9 @@ public class PostService {
 
     @Autowired
     private PostMapper postMapper;
+
+    @Autowired
+    private CompressImgMapper compressImgMapper;
 
     public List<PostVo> queryTodayEssence() {
         return postMapper.queryTodayEssence();
@@ -776,6 +781,32 @@ public class PostService {
             return postMapper.findAllQueryCollectPostList(userid, pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询用户收藏的帖子列表");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询帖子中的这张图片在压缩映射关系表中是否存在
+     */
+    public int queryCount(CompressImg compressImg) {
+        try {
+            log.info("查询帖子中的这张图片在压缩映射关系表中是否存在");
+            return compressImgMapper.queryCount(compressImg);
+        } catch (Exception e) {
+            log.error("查询帖子中的这张图片在压缩映射关系表中是否存在失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 帖子中高清图片压缩处理后保存原图和压缩图url对应关系
+     */
+    public void addCompressImg(CompressImg compressImg) {
+        try {
+            log.info("保存原图和压缩图url对应关系");
+            compressImgMapper.insertSelective(compressImg);
+        } catch (Exception e) {
+            log.error("保存原图和压缩图url对应关系失败");
             throw e;
         }
     }

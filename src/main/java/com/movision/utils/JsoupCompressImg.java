@@ -4,6 +4,8 @@ import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.movision.facade.boss.PostFacade;
+import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
@@ -18,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +37,9 @@ public class JsoupCompressImg {
 
     @Autowired
     AliOSSClient aliossClient;
+
+    @Autowired
+    private PostFacade postFacade;
 
     private static final Logger log = LoggerFactory.getLogger(JsoupCompressImg.class);
 
@@ -73,6 +79,7 @@ public class JsoupCompressImg {
 
                 //从img标签中获取src属性
                 String imgurl = titleElms.get(i).attr("src");
+                log.info("压缩前的原图url，imgurl=" + imgurl);
 
                 String filename = FileUtil.getPicName(imgurl);
                 log.info("filename=" + filename);
@@ -113,9 +120,6 @@ public class JsoupCompressImg {
                         Element imgele = titleElms.get(i).attr("src", compress_file_path);
                         titleElms.get(i).attr("src", compress_file_path);
 
-                        //保存缩略图和原图的映射关系到数据库中yw_compress_img
-
-
                         //获取原图绝对路径和图片大小
                         File file = new File(proto_img_dir);//获取原图大小
                         FileInputStream fis = new FileInputStream(file);
@@ -123,10 +127,38 @@ public class JsoupCompressImg {
                         DecimalFormat df = new DecimalFormat("######0.00");
                         String filesize = df.format((double) s / 1024 / 1024);
                         System.out.println("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + filesize + "M");
+
+                        //保存缩略图和原图的映射关系到数据库中yw_compress_img
+                        CompressImg compressImg = new CompressImg();
+                        compressImg.setCompressimgurl(compress_file_path);
+                        compressImg.setProtoimgurl(imgurl);
+                        compressImg.setProtoimgsize(filesize);
+                        int count = postFacade.queryCount(compressImg);
+                        if (count == 0) {
+                            //如果已经保存过就不再保存
+                            postFacade.addCompressImg(compressImg);
+                        } else {
+                            log.info("原图:" + imgurl + "已进行过压缩，且已存在映射关系");
+                        }
                     }
                 }
 
             }
+            String a = doc.html().replaceAll("\\n", "");
+            a = a.replaceAll("\\\\", "");
+            log.info("测试返回的content字符串:::::::::>" + a);
+            String b = a.replaceAll("&lt;html&gt;", "");
+            log.info("测试返回的content字符串:::::::::>" + b);
+            String c = b.replaceAll("&lt;head&gt;", "");
+            log.info("测试返回的content字符串:::::::::>" + c);
+            String d = b.replaceAll("&lt;body&gt;", "");
+            log.info("测试返回的content字符串:::::::::>" + d);
+            String e = b.replaceAll("&lt;/html&gt;", "");
+            log.info("测试返回的content字符串:::::::::>" + e);
+            String f = b.replaceAll("&lt;/head&gt;", "");
+            log.info("测试返回的content字符串:::::::::>" + f);
+            String g = b.replaceAll("&lt;/body&gt;", "");
+            log.info("测试返回的content字符串:::::::::>" + g);
             map.put("code", 200);
             map.put("msg", "帖子所有图片压缩完成");
             map.put("content", doc.html());//压缩后的帖子内容html标签字符串

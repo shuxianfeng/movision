@@ -7,11 +7,13 @@ import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public interface PostMapper {
     int deleteByPrimaryKey(Integer id);
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.compressImg.mapper.CompressImgMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.compressImg.entity.CompressImg">
+        <result column="compressimgurl" property="compressimgurl" jdbcType="VARCHAR"/>
+        <result column="protoimgurl" property="protoimgurl" jdbcType="VARCHAR"/>
+        <result column="protoimgsize" property="protoimgsize" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询帖子中的这张图片之前有没有保存过-->
+    <select id="queryCount" parameterType="com.movision.mybatis.compressImg.entity.CompressImg"
+            resultType="java.lang.Integer">
+      SELECT count(*) FROM yw_compress_img
+      WHERE compressimgurl = #{compressimgurl,jdbcType=VARCHAR}
+        AND protoimgurl = #{protoimgurl,jdbcType=VARCHAR}
+        AND protoimgsize = #{protoimgsize,jdbcType=VARCHAR}
+  </select>
+
+    <!--插入一条帖子中的图片原图和压缩图的url映射关系记录-->
+    <insert id="insert" parameterType="com.movision.mybatis.compressImg.entity.CompressImg">
+    insert into yw_compress_img (compressimgurl, protoimgurl, protoimgsize
+      )
+    values (#{compressimgurl,jdbcType=VARCHAR}, #{protoimgurl,jdbcType=VARCHAR}, #{protoimgsize,jdbcType=VARCHAR}
+      )
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.movision.mybatis.compressImg.entity.CompressImg">
+        insert into yw_compress_img
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="compressimgurl != null">
+                compressimgurl,
+            </if>
+            <if test="protoimgurl != null">
+                protoimgurl,
+            </if>
+            <if test="protoimgsize != null">
+                protoimgsize,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="compressimgurl != null">
+                #{compressimgurl,jdbcType=VARCHAR},
+            </if>
+            <if test="protoimgurl != null">
+                #{protoimgurl,jdbcType=VARCHAR},
+            </if>
+            <if test="protoimgsize != null">
+                #{protoimgsize,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>
