@@ -39,7 +39,7 @@ public class CircleVo {
 
     private Integer isrecommend;//推荐
 
-    private String maylikeimg;
+    private String maylikeimg;//圈子首页方形图
 
     private Date createtime;
 
@@ -78,16 +78,6 @@ public class CircleVo {
     private Date intime;//时间
 
     private Integer userid;//用户id
-
-    private String circlesquareimg;//首页方形图
-
-    public String getCirclesquareimg() {
-        return circlesquareimg;
-    }
-
-    public void setCirclesquareimg(String circlesquareimg) {
-        this.circlesquareimg = circlesquareimg;
-    }
 
     public Integer getUserid() {
         return userid;

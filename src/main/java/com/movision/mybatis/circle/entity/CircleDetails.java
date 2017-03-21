@@ -35,7 +35,7 @@ public class CircleDetails {
 
     private Integer isrecommend;//是否被推荐的圈子
 
-    private String maylikeimg;//
+    private String maylikeimg;//首页小方图
 
     private Date createtime;//创建时间
 
@@ -64,16 +64,6 @@ public class CircleDetails {
     private String username;//创建人名称
 
     private String erweima;//二维码
-
-    private String circlesquareimg;//圈子首页展示方形图
-
-    public String getCirclesquareimg() {
-        return circlesquareimg;
-    }
-
-    public void setCirclesquareimg(String circlesquareimg) {
-        this.circlesquareimg = circlesquareimg;
-    }
 
     public Integer getId() {
         return id;

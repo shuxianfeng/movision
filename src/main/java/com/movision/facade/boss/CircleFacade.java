@@ -242,7 +242,7 @@ public class CircleFacade {
      * @return
      */
     public Map<String, Integer> updateCircle(String id, String name, String category, String circlemanid,
-                                             String circleadmin, String photo, String introduction, String circlesquareimg, String permission) {
+                                             String circleadmin, String photo, String introduction, String maylikeimg, String permission) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
         Integer circleid = null;
@@ -278,8 +278,8 @@ public class CircleFacade {
         if (!StringUtils.isEmpty(introduction)) {
             circleDetails.setIntroduction(introduction);
             }
-        if (!StringUtils.isEmpty(circlesquareimg)) {
-            circleDetails.setCirclesquareimg(circlesquareimg);
+        if (!StringUtils.isEmpty(maylikeimg)) {
+            circleDetails.setMaylikeimg(maylikeimg);
         }
         if (!StringUtils.isEmpty(permission)) {
             circleDetails.setPermission(Integer.parseInt(permission));
@@ -333,10 +333,11 @@ public class CircleFacade {
      * @param circlemanid
      * @param photo
      * @param introduction
+     * @param maylikeimg
      * @return
      */
     public Map<String, Integer> addCircle(String name, String category, String userid, String circleadmin,
-                                          String circlemanid, String photo, String circlesquareimg, String introduction) {
+                                          String circlemanid, String photo, String maylikeimg, String introduction) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
         if (!StringUtils.isEmpty(category)) {
@@ -361,8 +362,8 @@ public class CircleFacade {
         if (!StringUtils.isEmpty(introduction)) {
             circleDetails.setIntroduction(introduction);
             }
-        if (!StringUtils.isEmpty(circlesquareimg)) {//圈子首页展示小方块
-            circleDetails.setCirclesquareimg(circlesquareimg);
+        if (!StringUtils.isEmpty(maylikeimg)) {//圈子首页展示小方块
+            circleDetails.setMaylikeimg(maylikeimg);
         }
         circleDetails.setScope(2);//设置默认圈子贷方范围，对所有人开放
         circleDetails.setStatus(0);//设置审核状态，初始值为待审核：0

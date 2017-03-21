@@ -193,10 +193,10 @@ public class CircleController {
                                  @ApiParam(value = "管理员列表") @RequestParam String circleadmin,
                                  @ApiParam(value = "圈子否封面") @RequestParam String photo,
                                  @ApiParam(value = "圈子简介") @RequestParam String introduction,
-                                 @ApiParam(value = "圈子首页方形图") @RequestParam String circlesquareimg,
+                                 @ApiParam(value = "圈子首页方形图") @RequestParam String maylikeimg,
                                  @ApiParam(value = "发帖权限") @RequestParam(required = false) String permission) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.updateCircle(id, name, category, userid, circleadmin, photo, introduction, circlesquareimg, permission);
+        Map<String, Integer> map = circleFacade.updateCircle(id, name, category, userid, circleadmin, photo, introduction, maylikeimg, permission);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -242,10 +242,10 @@ public class CircleController {
                               @ApiParam(value = "管理员列表") @RequestParam String circleadmin,
                               @ApiParam(value = "创建人") @RequestParam String circlemanid,
                               @ApiParam(value = "圈子否封面") @RequestParam String photo,
-                              @ApiParam(value = "圈子首页方形图") @RequestParam String circlesquareimg,
+                              @ApiParam(value = "圈子首页方形图") @RequestParam String maylikeimg,
                               @ApiParam(value = "圈子简介") @RequestParam String introduction) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.addCircle(name, category, userid, circleadmin, circlemanid, photo, circlesquareimg, introduction);
+        Map<String, Integer> map = circleFacade.addCircle(name, category, userid, circleadmin, circlemanid, photo, maylikeimg, introduction);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
