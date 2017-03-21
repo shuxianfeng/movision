@@ -87,7 +87,15 @@ public class PostList {
 
     private Integer persum;//报名人数
 
+    private String squareimgurl;//活动首页方形图
 
+    public String getSquareimgurl() {
+        return squareimgurl;
+    }
+
+    public void setSquareimgurl(String squareimgurl) {
+        this.squareimgurl = squareimgurl;
+    }
 
     public Integer getPersum() {
         return persum;

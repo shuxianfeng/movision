@@ -598,7 +598,7 @@ public class PostFacade {
      */
     public Map<String, Integer> addPostActive(String title, String subtitle, String activetype, String iscontribute, String activefee,
                                               String coverimg, String postcontent, String isessence, String orderid, String time,
-                                              String begintime, String endtime, String userid, String goodsid) {
+                                              String begintime, String endtime, String userid, String squareimgurl, String goodsid) {
         PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
         post.setTitle(title);//帖子标题
@@ -642,8 +642,11 @@ public class PostFacade {
             post.setOrderid(Integer.parseInt(orderid));//排序精选
             }
             post.setUserid(userid);//发帖人
+        if (!StringUtils.isEmpty(squareimgurl)) {
+            post.setHotimgurl(squareimgurl);//活动首页方形图
+        }
             post.setIsactive("1");
-        int result = postService.addPostActiveList(post);//添加帖子
+        int result = postService.addPostActiveList(post);//新建活动
             Period period = new Period();
         Date begin = null;//开始时间
         if (begintime != null) {
@@ -841,7 +844,7 @@ public class PostFacade {
      * @return
      */
     public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String userid, String coverimg, String postcontent, String isessence,
-                                                     String orderid, String activefee, String activetype, String iscontribute, String begintime, String endtime, String essencedate, String goodsid) {
+                                                     String orderid, String activefee, String activetype, String iscontribute, String begintime, String endtime, String hotimgurl, String essencedate, String goodsid) {
         PostActiveList postActiveList = new PostActiveList();
         Map<String, Integer> map = new HashedMap();
         try {
@@ -875,6 +878,9 @@ public class PostFacade {
                     e.printStackTrace();
                 }
                 postActiveList.setEssencedate(estime);
+            }
+            if (!StringUtils.isEmpty(hotimgurl)) {
+                postActiveList.setSquareimgurl(hotimgurl);//首页方形图
             }
             int result = postService.updateActivePostById(postActiveList);//编辑帖子
             Period period = new Period();
