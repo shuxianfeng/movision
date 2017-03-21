@@ -103,9 +103,9 @@ public class AlipayController {
     public Response tradingRefundQuery(@ApiParam(value = "支付宝交易号") @RequestParam String tradingAccount) throws AlipayApiException {
         Response response = new Response();
         Map map = alipayFacade.tradingRefundQuery(tradingAccount);
-        if (response.getCode() == 200 && map.get("code") == 200) {
+        if (response.getCode() == 200 && (int) map.get("code") == 200) {
             response.setMessage(map.get("msg").toString());
-        } else if (map.get("code") == 300) {
+        } else if ((int) map.get("code") == 300) {
             response.setMessage(map.get("msg").toString());
         }
         response.setData(map);
