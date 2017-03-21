@@ -67,7 +67,7 @@ public class JsoupCompressImg {
 //            String savedDir = request.getSession().getServletContext().getRealPath(compress_dir_local_path);
             String savedDir = request.getSession().getServletContext().getRealPath("");
             String tempDir = savedDir.substring(0, savedDir.lastIndexOf("/")) + compress_dir_local_path;
-            System.out.println("测试获取的压缩图片服务器路径>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + savedDir.substring(0, savedDir.lastIndexOf("/")));
+            log.info("测试获取的压缩图片服务器路径>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + savedDir.substring(0, savedDir.lastIndexOf("/")));
 
             List<String> existFileList = getExistFiles(compress_dir_path);
 
@@ -126,7 +126,7 @@ public class JsoupCompressImg {
                         int s = fis.available();
                         DecimalFormat df = new DecimalFormat("######0.00");
                         String filesize = df.format((double) s / 1024 / 1024);
-                        System.out.println("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + filesize + "M");
+                        log.info("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + filesize + "M");
 
                         //保存缩略图和原图的映射关系到数据库中yw_compress_img
                         CompressImg compressImg = new CompressImg();
