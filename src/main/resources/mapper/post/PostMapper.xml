@@ -1617,4 +1617,8 @@
     <update id="updateNoIshot" parameterType="java.lang.Integer">
         update yw_post SET ishot=0 WHERE id=#{id,jdbcType=INTEGER}
     </update>
+
+    <select id="queryUserByPostid" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select userid from yw_post WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
 </mapper>

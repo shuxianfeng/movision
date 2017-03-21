@@ -86,9 +86,10 @@ public class PointRecordFacade {
      *
      * @param type    积分类型
      * @param orderid 订单id--对应下单赚积分，只要下单传积分需要传订单号，其他情况只需要传0即可
+     * @param userid 用户id
      * @return
      */
-    public int addPointRecord(int type, int orderid) {
+    public int addPointRecord(int type, Integer orderid, String userid) {
 
         log.info("调用【增加积分流水】接口，本次操作存在积分变动");
         //获取每日的积分数据
@@ -107,6 +108,7 @@ public class PointRecordFacade {
         pointRecord.setPoint(new_point);
         pointRecord.setType(type);
         pointRecord.setOrderid(orderid);
+        pointRecord.setUserid(Integer.parseInt(userid));
 
         return pointRecordService.addPointRecord(pointRecord);
     }

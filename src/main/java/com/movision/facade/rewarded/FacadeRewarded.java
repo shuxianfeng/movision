@@ -1,6 +1,7 @@
 package com.movision.facade.rewarded;
 
 
+import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.rewarded.entity.Rewarded;
@@ -20,6 +21,8 @@ import java.util.Map;
 @Service
 public class FacadeRewarded {
     @Autowired
+    PointRecordFacade pointRecordFacade;
+    @Autowired
     PostService postService;
     @Autowired
     CircleService circleService;
@@ -28,35 +31,10 @@ public class FacadeRewarded {
     @Autowired
     RewardedService rewardedService;
 
-    public boolean updateRewarded(String postid, String integral, String userid) {
-        int circleid = postService.queryPostByCircleid(postid);//查询帖子所属圈子
-        String phone = circleService.queryCircleByPhone(circleid);//查询圈子的登录手机号
-        Map<String, Object> mapadd = new HashedMap();
-        mapadd.put("phone", phone);
-        mapadd.put("integral", integral);
-        //查询赠送者的积分是否足够
-        int sum = userService.queryUserByPoints(userid);
-        if (sum >= Integer.parseInt(integral)) {//积分充足
-            boolean bool = userService.updateUserPointsAdd(mapadd);//给贴主增加积分
-            if (bool) {
-                Map<String, Object> map = new HashedMap();
-                map.put("userid", userid);
-                map.put("integral", integral);
-                bool = userService.updateUserPointsMinus(map);//给赠送者减积分
-                if (bool) {
-                    Rewarded rewarded = new Rewarded();
-                    rewarded.setIntime(new Date());
-                    rewarded.setPoints(Integer.parseInt(integral));
-                    rewarded.setUserid(Integer.parseInt(userid));
-                    rewarded.setPostid(Integer.parseInt(postid));
-                    rewardedService.insertRewarded(rewarded);//添加帖子打赏记录
-                }
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-        return true;
+    public int updateRewarded(String postid, String integral, String userid) {
+        int i = pointRecordFacade.addPointRecord(Integer.parseInt(integral), null, userid);//当前登录用户
+        int uid = postService.queryUserByPostid(postid);
+        pointRecordFacade.addPointRecord(Integer.parseInt(integral), null, userid);//被打赏用户
+        return i;
     }
 }

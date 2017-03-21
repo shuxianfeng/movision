@@ -165,4 +165,6 @@ public interface PostMapper {
 
     Integer updateNoIshot(Integer id);//不是热门
 
+    Integer queryUserByPostid(String postid);//根据帖子id查询用户id
+
 }

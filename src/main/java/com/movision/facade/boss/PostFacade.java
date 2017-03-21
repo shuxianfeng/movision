@@ -599,7 +599,7 @@ public class PostFacade {
      */
     public Map<String, Integer> addPostActive(String title, String subtitle, String activetype, String iscontribute, String activefee,
                                               String coverimg, String postcontent, String isessence, String orderid, String time,
-                                              String begintime, String endtime, String userid, String squareimgurl, String ishot, String goodsid) {
+                                              String begintime, String endtime, String userid, String hotimgurl, String ishot, String goodsid) {
         PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
         post.setTitle(title);//帖子标题
@@ -643,8 +643,8 @@ public class PostFacade {
             post.setOrderid(Integer.parseInt(orderid));//排序精选
             }
             post.setUserid(userid);//发帖人
-        if (!StringUtils.isEmpty(squareimgurl)) {
-            post.setHotimgurl(squareimgurl);//活动首页方形图
+        if (!StringUtils.isEmpty(hotimgurl)) {
+            post.setHotimgurl(hotimgurl);//活动首页方形图
         }
         if (!StringUtil.isEmail(ishot)) {
             post.setIshot(ishot);//是否设为热门

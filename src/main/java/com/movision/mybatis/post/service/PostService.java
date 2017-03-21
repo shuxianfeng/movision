@@ -858,4 +858,20 @@ public class PostService {
             throw e;
         }
     }
+
+    /**
+     * 根据帖子id查询用户id
+     *
+     * @param postid
+     * @return
+     */
+    public Integer queryUserByPostid(String postid) {
+        try {
+            log.info("根据帖子id查询用户id");
+            return postMapper.queryUserByPostid(postid);
+        } catch (Exception e) {
+            log.error("根据帖子id查询用户id异常");
+            throw e;
+        }
+    }
 }

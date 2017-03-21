@@ -29,14 +29,16 @@ public class RewardedController {
                                       @ApiParam(value = "打赏积分") @RequestParam String integral,
                                       @ApiParam(value = "打赏用户id") @RequestParam String userid) {
         Response response = new Response();
-        boolean flag = facadeRewarded.updateRewarded(postid, integral, userid);
+        int flag = facadeRewarded.updateRewarded(postid, integral, userid);
 
-        if (!flag) {
+        if (!(flag > 0)) {
             response.setCode(500);
             response.setMessage("积分不足");
+            response.setData(flag);
         }
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
+            response.setData(flag);
         }
         return response;
     }
