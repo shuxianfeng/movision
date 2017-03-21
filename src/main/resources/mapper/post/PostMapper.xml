@@ -1362,7 +1362,7 @@
                 #{orderid,jdbcType=INTEGER},
             </if>
             <if test="essencedate != null">
-                #{essencedate,jdbcType=DATE},
+                #{essencedate,jdbcType=TIMESTAMP},
             </if>
             <if test="isactive != null">
                 #{isactive,jdbcType=INTEGER},
@@ -1407,11 +1407,11 @@
                 #{postid,jdbcType=INTEGER},
             </if>
             <if test="begintime != null">
-                #{begintime,jdbcType=DATE},
+                #{begintime,jdbcType=TIMESTAMP},
             </if>
 
             <if test="endtime != null">
-                #{endtime,jdbcType=DATE}
+                #{endtime,jdbcType=TIMESTAMP}
             </if>
 
         </trim>
