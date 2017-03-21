@@ -108,14 +108,7 @@ public class JsoupCompressImg {
                         log.info("该图片已存在，不需要压缩，filename=" + filename);
                     }
                     if (compressFlag) {
-//                        // 上传
-//                        Map<String, String> resultmap = aliossClient.uploadLocalFile(file, "img", "compress");
-//                        log.info("upload>>>>>>>>>status:" + resultmap.get("status"));
-//                        log.info("upload>>>>>>>>>data:" + resultmap.get("data"));
-//                        if (resultmap.get("status").equals("success")) {
-//                            //如果上传成功，这里替换文章中的第i个img标签中的src属性
-//
-//                        }
+
                         //如果压缩保存成功，这里替换文章中的第i个img标签中的src属性
                         Element imgele = titleElms.get(i).attr("src", compress_file_path);
                         titleElms.get(i).attr("src", compress_file_path);
