@@ -270,7 +270,7 @@ public class BossImController {
      * @return
      */
     @ApiOperation(value = "删除系统推送 ", notes = "删除系统推送", response = Response.class)
-    @RequestMapping(value = "query_body_bytopush", method = RequestMethod.POST)
+    @RequestMapping(value = "delete_systemtopush", method = RequestMethod.POST)
     public Response deleteSystemToPush(@ApiParam(value = "系统推送id") @RequestParam Integer id) {
         Response response = new Response();
         Integer systemToPush = imFacade.deleteSystemToPush(id);
