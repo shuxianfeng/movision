@@ -23,6 +23,11 @@ import com.movision.shiro.realm.ShiroRealm;
 public class ShiroUtil {
     private static Logger log = LoggerFactory.getLogger(ShiroUtil.class);
 
+    /**
+     * 获取APP当前登录人信息
+     *
+     * @return
+     */
     public static ShiroRealm.ShiroUser getAppUser() {
         ShiroRealm.ShiroUser member = null;
         try {
