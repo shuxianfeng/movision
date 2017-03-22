@@ -754,7 +754,7 @@
         SELECT g.id,g.name,g.protype,g.brandid,g.price,g.origprice,g.sales,g.stock,i.type,
         (SELECT COUNT(1) FROM yw_collection c WHERE c.goodsid=g.id) AS
         collect,g.ishot,g.isessence,g.isdel,g.recommenddate,i.img_url AS imgurl,
-        (SELECT COUNT(1) FROM yw_goods_assessment a WHERE g.id=a.goodid AND a.userid<>-1 ) AS assess,
+        (SELECT COUNT(1) FROM yw_goods_assessment a WHERE g.id=a.goodid AND a.userid<![CDATA[<>]]>-1 ) AS assess,
         g.onlinetime,g.attribute FROM yw_goods g
         LEFT JOIN yw_goods_img i
         ON g.id=i.goodsid
