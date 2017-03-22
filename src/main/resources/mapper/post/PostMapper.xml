@@ -764,7 +764,7 @@
                 #{isdel,jdbcType=INTEGER},
             </if>
             <if test="essencedate != null">
-                #{essencedate,jdbcType=DATE},
+                #{essencedate,jdbcType=TIMESTAMP},
             </if>
             <if test="userid!=null">
                 #{userid,jdbcType=INTEGER}
@@ -843,7 +843,7 @@
                 isdel = #{isdel,jdbcType=INTEGER},
             </if>
             <if test="essencedate != null">
-                essencedate = #{essencedate,jdbcType=DATE},
+                essencedate = #{essencedate,jdbcType=TIMESTAMP},
             </if>
             <if test="userid != null">
                 userid = #{userid,jdbcType=INTEGER},
@@ -876,7 +876,7 @@
                 coverimg = #{coverimg,jdbcType=VARCHAR},
             </if>
             <if test="essencedate != null">
-                essencedate = #{essencedate,jdbcType=DATE},
+                essencedate = #{essencedate,jdbcType=TIMESTAMP},
             </if>
             <if test="userid != null">
                 userid = #{userid,jdbcType=INTEGER},

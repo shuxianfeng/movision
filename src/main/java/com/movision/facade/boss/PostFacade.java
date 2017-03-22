@@ -686,7 +686,7 @@ public class PostFacade {
             }
         }
             map.put("result", r);
-
+        map.put("result", result);
         return map;
     }
 
@@ -865,7 +865,9 @@ public class PostFacade {
             if (!StringUtils.isEmpty(iscontribute)) {//是否投稿
                 postActiveList.setIscontribute(iscontribute);
             }
-            postActiveList.setUserid(Integer.parseInt(userid));
+            if (!StringUtil.isEmpty(userid)) {
+                postActiveList.setUserid(Integer.parseInt(userid));
+            }
             postActiveList.setPostcontent(postcontent);
             if (isessence != null) {
                 postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
@@ -873,7 +875,7 @@ public class PostFacade {
             if (orderid != null) {
                 postActiveList.setOrderid(Integer.parseInt(orderid));
             }
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date estime = null;
             if (essencedate != null) {
                 try {
