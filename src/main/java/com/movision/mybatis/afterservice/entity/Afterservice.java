@@ -60,10 +60,15 @@ public class Afterservice {
         this.remark = remark;
     }
 
+    public String returnnumber;
 
+    public String getReturnnumber() {
+        return returnnumber;
+    }
 
-
-
+    public void setReturnnumber(String returnnumber) {
+        this.returnnumber = returnnumber;
+    }
 
     public Integer getId() {
         return id;
