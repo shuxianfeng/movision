@@ -239,6 +239,8 @@ public class PostFacade {
             postList.setCommentsum(list.get(i).getCommentsum());
             postList.setForwardsum(list.get(i).getForwardsum());
             postList.setIntime(list.get(i).getIntime());
+            postList.setIshot(list.get(i).getIshot());
+            postList.setHotimgurl(list.get(i).getHotimgurl());
             rewardeds.add(postList);
         }
         return rewardeds;
