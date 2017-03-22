@@ -877,7 +877,7 @@ public class PostFacade {
             }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date estime = null;
-            if (essencedate != null) {
+            if (!StringUtil.isEmpty(essencedate)) {
                 try {
                     estime = format.parse(essencedate);
                 } catch (ParseException e) {
