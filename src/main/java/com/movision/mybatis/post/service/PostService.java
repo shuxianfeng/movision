@@ -865,7 +865,7 @@ public class PostService {
      * @param postid
      * @return
      */
-    public Integer queryUserByPostid(String postid) {
+    public int queryUserByPostid(String postid) {
         try {
             log.info("根据帖子id查询用户id");
             return postMapper.queryUserByPostid(postid);

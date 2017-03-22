@@ -1534,7 +1534,7 @@
     </select>
 
     <insert id="insertGoods" parameterType="java.util.Map">
-        insert into yw_post_share_goods
+        insert into yw_active_goods
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,

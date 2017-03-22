@@ -1419,6 +1419,6 @@
     </select>
 
     <delete id="deletePostyByGoods" parameterType="java.lang.Integer">
-        DELETE FROM yw_post_share_goods WHERE postid=#{postid,jdbcType=INTEGER}
+        DELETE FROM yw_active_goods WHERE postid=#{postid,jdbcType=INTEGER}
     </delete>
 </mapper>
