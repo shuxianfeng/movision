@@ -144,7 +144,8 @@
                 /app/post/recommendGoodsList=authc
                 /app/post/releasePost=authc
                 /app/post/updateZan=authc
-                /app/comment/**=authc
+                /app/comment/CommentZanSum=authc
+                /app/comment/commentLsit=authc
                 /app/cart/**=authc
                 /app/submission/commitSubmission=authc
                 /app/collection/**=authc
