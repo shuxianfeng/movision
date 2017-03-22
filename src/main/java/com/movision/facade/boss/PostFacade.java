@@ -855,11 +855,11 @@ public class PostFacade {
             postActiveList.setId(Integer.parseInt(id));//帖子id
             postActiveList.setTitle(title);//帖子标题
             postActiveList.setSubtitle(subtitle);//帖子副标题
-            if (activetype != null) {
+            if (!StringUtil.isEmpty(activetype)) {
                 postActiveList.setActivetype(Integer.parseInt(activetype));
             }
             postActiveList.setCoverimg(coverimg);//帖子封面
-            if (activefee != null) {
+            if (!StringUtil.isEmpty(activefee)) {
                 postActiveList.setActivefee(Double.parseDouble(activefee));//费用
             }
             if (!StringUtils.isEmpty(iscontribute)) {//是否投稿
@@ -869,10 +869,10 @@ public class PostFacade {
                 postActiveList.setUserid(Integer.parseInt(userid));
             }
             postActiveList.setPostcontent(postcontent);
-            if (isessence != null) {
+            if (!StringUtil.isEmpty(isessence)) {
                 postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
             }
-            if (orderid != null) {
+            if (!StringUtil.isEmpty(orderid)) {
                 postActiveList.setOrderid(Integer.parseInt(orderid));
             }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -893,8 +893,9 @@ public class PostFacade {
             }
             int result = postService.updateActivePostById(postActiveList);//编辑帖子
             Period period = new Period();
+            period.setPostid(Integer.parseInt(id));
             Date bstime = null;
-            if (begintime != null) {
+            if (!StringUtil.isEmpty(begintime)) {
                 try {
                     bstime = format.parse(begintime);
                 } catch (ParseException e) {
@@ -903,7 +904,7 @@ public class PostFacade {
                 period.setBegintime(bstime);
             }
             Date enstime = null;
-            if (endtime != null) {
+            if (!StringUtil.isEmpty(endtime)) {
                 try {
                     enstime = format.parse(endtime);
                 } catch (ParseException e) {
@@ -931,7 +932,7 @@ public class PostFacade {
             map.put("result", result);
             map.put("res", res);
         } catch (Exception e) {
-            log.error("帖子添加异常", e);
+            log.error("帖子编辑异常", e);
         }
 
         return map;

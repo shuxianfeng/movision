@@ -906,7 +906,7 @@
                 endtime = #{endtime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        WHERE postid=#{id,jdbcType=INTEGER}
+        WHERE postid=#{postid,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKeySelectiveById" parameterType="com.movision.mybatis.post.entity.PostTo">
         update yw_post

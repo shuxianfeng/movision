@@ -656,7 +656,7 @@ public class PostController {
             @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,
             @ApiParam(value = "费用") @RequestParam(required = false) String activefee,
             @ApiParam(value = "活动类型") @RequestParam(required = false) String activetype,
-            @ApiParam(value = "是否需要投稿 0,投,1不投") @RequestParam String iscontribute,
+            @ApiParam(value = "是否需要投稿 0,投,1不投") @RequestParam(required = false) String iscontribute,
             @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
             @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,
             @ApiParam(value = "方形图片url") @RequestParam(required = false) String hotimgurl,
