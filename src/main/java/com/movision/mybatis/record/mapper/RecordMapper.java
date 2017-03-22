@@ -23,4 +23,6 @@ public interface RecordMapper {
     List<RecordVo> queryIntegralList(String userid, RowBounds rowBounds);
 
     int addIntegralRecord(Map map);
+
+    int insertRewardRecord(Map map);
 }

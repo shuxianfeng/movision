@@ -547,4 +547,34 @@ public class UserService {
         }
     }
 
+    /**
+     * 获取该用户的积分
+     *
+     * @param userid
+     * @return
+     */
+    public int queryUserByRewarde(int userid) {
+        try {
+            log.info("获取用户的积分");
+            return userMapper.queryUserByRewarde(userid);
+        } catch (Exception e) {
+            log.error("获取该用户的积分异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 操作用户积分
+     *
+     * @param map
+     */
+    public void updateUserPoint(Map map) {
+        try {
+            log.info("操作用户积分");
+            userMapper.updateUserPoint(map);
+        } catch (Exception e) {
+            log.error("操作用户积分异常");
+            throw e;
+        }
+    }
 }

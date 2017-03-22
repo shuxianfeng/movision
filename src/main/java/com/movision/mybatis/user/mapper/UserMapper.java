@@ -97,4 +97,8 @@ public interface UserMapper {
 
     Integer queryUserUseIntegral(Map map);
 
+    int queryUserByRewarde(int userid);
+
+    void updateUserPoint(Map map);
+
 }

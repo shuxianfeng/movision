@@ -55,6 +55,17 @@ public class PointRecordService {
         }
     }
 
+
+    public int queryMyTodayPointSum(int userid) {
+        try {
+            log.info("查询今日的我的积分记录");
+            return pointRecordMapper.queryMyTodayPointSum(userid);
+        } catch (Exception e) {
+            log.error("查询今日的我的积分记录失败", e);
+            throw e;
+        }
+    }
+
     public int queryIsSignToday(int userid) {
         try {
             log.info("查询今天是否有签到记录");

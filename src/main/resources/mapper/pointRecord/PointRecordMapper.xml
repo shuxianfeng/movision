@@ -161,6 +161,11 @@
         ]]>
     </select>
 
+    <select id="queryMyTodayPointSum" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_points_record WHERE isdel = 0 AND userid = #{userid,jdbcType=INTEGER} AND type = 12 AND
+        isadd=1 AND date(intime) = CURDATE()
+    </select>
+
     <select id="queryIsSignToday" resultType="int" parameterType="java.lang.Integer">
         SELECT count(1)
         FROM yw_points_record

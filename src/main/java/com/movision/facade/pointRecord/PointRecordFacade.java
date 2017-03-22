@@ -112,6 +112,7 @@ public class PointRecordFacade {
         return pointRecordService.addPointRecord(pointRecord);
     }
 
+
     /**
      * 根据积分类型，分配对应的加分数值
      *
@@ -253,6 +254,29 @@ public class PointRecordFacade {
             throw new BusinessException(MsgCodeConstant.app_point_type_not_exist, "积分类型不存在");
         }
         return new_point;
+    }
+
+    public int getIntegral(int type) {
+        int integral = 0;
+        if (type == PointConstant.REWARD_TYPE.reward_10.getCode()) {
+            integral = PointConstant.REWARD_POINT.point_10.getCode();
+
+        } else if (type == PointConstant.REWARD_TYPE.reward_20.getCode()) {
+            integral = PointConstant.REWARD_POINT.point_20.getCode();
+
+        } else if (type == PointConstant.REWARD_TYPE.reward_50.getCode()) {
+            integral = PointConstant.REWARD_POINT.point_50.getCode();
+
+        } else if (type == PointConstant.REWARD_TYPE.reward_100.getCode()) {
+            integral = PointConstant.REWARD_POINT.point_100.getCode();
+
+        } else if (type == PointConstant.REWARD_TYPE.reward_233.getCode()) {
+            integral = PointConstant.REWARD_POINT.point_233.getCode();
+
+        } else if (type == PointConstant.REWARD_TYPE.reward_666.getCode()) {
+            integral = PointConstant.REWARD_POINT.point_666.getCode();
+        }
+        return integral;
     }
 
     /**

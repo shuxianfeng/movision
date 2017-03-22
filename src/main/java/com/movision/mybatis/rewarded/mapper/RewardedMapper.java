@@ -22,4 +22,6 @@ public interface RewardedMapper {
 
     List<RewardedVo> findAllqueryPostAward(int postid, RowBounds rowBounds);
 
+    int insertRewardRecord(Map map);
+
 }

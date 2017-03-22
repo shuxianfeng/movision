@@ -1,8 +1,11 @@
 package com.movision.controller.app;
 
 import com.movision.common.Response;
+import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.facade.rewarded.FacadeRewarded;
 import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.mybatis.constant.entity.Constant;
+import com.movision.utils.L;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,24 +25,51 @@ import java.util.List;
 public class RewardedController {
     @Autowired
     FacadeRewarded facadeRewarded;
+    @Autowired
+    PointRecordFacade pointRecordFacade;
 
+    /**
+     * 帖子打赏
+     *
+     * @param postid
+     * @param type
+     * @param userid
+     * @return
+     */
     @ApiOperation(value = "积分操作", notes = "返回是否成功", response = Response.class)
     @RequestMapping(value = "rewarded", method = RequestMethod.POST)
     public Response queryCircleIndex1(@ApiParam(value = "帖子id") @RequestParam String postid,
-                                      @ApiParam(value = "打赏积分") @RequestParam String integral,
+                                      @ApiParam(value = "打赏积分类型") @RequestParam String type,
                                       @ApiParam(value = "打赏用户id") @RequestParam String userid) {
         Response response = new Response();
-        int flag = facadeRewarded.updateRewarded(postid, integral, userid);
+        int flag = facadeRewarded.updateRewarded(postid, type, userid);
 
-        if (!(flag > 0)) {
+        if (flag<0) {
             response.setCode(500);
             response.setMessage("积分不足");
             response.setData(flag);
         }
-        if (response.getCode() == 200) {
+        if (response.getCode() == 200 && flag>0) {
             response.setMessage("操作成功");
             response.setData(flag);
         }
+        return response;
+    }
+
+    /**
+     * 查询打赏积分数值列表
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询积分列表", notes = "用于查询打赏的积分数值列表接口", response = Response.class)
+    @RequestMapping(value = "query_reword_list", method = RequestMethod.POST)
+    public Response queryRewordList() {
+        Response response = new Response();
+        List<Constant> list = facadeRewarded.queryRewordList();
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(list);
         return response;
     }
 }

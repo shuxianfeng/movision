@@ -16,6 +16,7 @@ import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * APP用户 facade
@@ -209,6 +211,30 @@ public class UserFacade {
         //2 更新session中的缓存
         ShiroUtil.updateShiroUser(newPoint);
 
+    }
+
+    /**
+     * 查询出当前用户积分剩余
+     *
+     * @param userid
+     * @return
+     */
+    public int queryUserByRewarde(int userid) {
+        return userService.queryUserByRewarde(userid);
+    }
+
+
+    /**
+     * 操作用户积分
+     *
+     * @param integral
+     */
+    public void updateUserPoint(int userid, int integral, int type) {
+        Map map = new HashedMap();
+        map.put("userid", userid);
+        map.put("integral", integral);
+        map.put("type", type);
+        userService.updateUserPoint(map);
     }
 
 }

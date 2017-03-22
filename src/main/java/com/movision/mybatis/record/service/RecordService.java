@@ -54,4 +54,21 @@ public class RecordService {
             throw e;
         }
     }
+
+
+    /**
+     * 增加积分流水记录
+     *
+     * @param map
+     * @return
+     */
+    public int insertRewardRecord(Map map) {
+        try {
+            logger.info("增加积分流水记录");
+            return recordMapper.insertRewardRecord(map);
+        } catch (Exception e) {
+            logger.error("增加积分流水记录异常");
+            throw e;
+        }
+    }
 }

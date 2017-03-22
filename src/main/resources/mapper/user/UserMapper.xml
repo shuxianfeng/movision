@@ -783,4 +783,19 @@
         WHERE userid=#{userid,jdbcType=INTEGER} AND isadd=1 AND isdel=0 AND type=21 AND orderid=#{orderid,jdbcType=INTEGER}
     </select>
 
+    <select id="queryUserByRewarde" resultType="int" parameterType="int">
+      select points from yw_user WHERE id=#{userid,jdbcType=INTEGER}
+    </select>
+
+    <update id="updateUserPoint" parameterType="java.util.Map">
+        UPDATE yw_user
+        <if test="type==0">
+            SET points=points+#{integral,jdbcType=INTEGER}
+        </if>
+        <if test="type==1">
+            SET points=points-#{integral,jdbcType=INTEGER}
+        </if>
+        WHERE id=#{userid,jdbcType=INTEGER}
+    </update>
+
 </mapper>

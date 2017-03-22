@@ -24,6 +24,8 @@ public interface PointRecordMapper {
 
     List<PointRecord> queryMyTodayPoint(@Param("userid") Integer id);
 
+    int queryMyTodayPointSum(Integer userid);
+
     int queryIsSignToday(@Param("userid") Integer id);
 
     List<Map> findAllMyPointRecord(RowBounds rowBounds, Map map);

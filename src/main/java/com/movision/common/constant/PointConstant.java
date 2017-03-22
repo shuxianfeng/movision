@@ -47,6 +47,61 @@ public class PointConstant {
     }
 
     /**
+     * 获得打赏积分的类型
+     */
+    public enum REWARD_TYPE {
+
+        reward_10(23),
+        reward_20(24),
+        reward_50(25),
+        reward_100(26),
+        reward_233(27),
+        reward_666(28);
+        public final int code;
+
+        REWARD_TYPE(int code) {
+            this.code = code;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
+    /**
+     * 帖子打赏对应积分
+     */
+    public enum REWARD_POINT {
+
+        point_10(10),
+        point_20(20),
+        point_50(50),
+        point_100(100),
+        point_233(233),
+        point_666(666);
+
+        public final int code;
+
+        REWARD_POINT(int code) {
+            this.code = code;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
+    /**
      * 增加积分
      */
     public static Integer POINT_ADD = 0;
