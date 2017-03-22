@@ -145,7 +145,7 @@
                 /app/post/releasePost=authc
                 /app/post/updateZan=authc
                 /app/comment/CommentZanSum=authc
-                /app/comment/commentLsit=authc
+                /app/comment/comment=authc
                 /app/cart/**=authc
                 /app/submission/commitSubmission=authc
                 /app/collection/**=authc
