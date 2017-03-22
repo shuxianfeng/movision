@@ -118,7 +118,7 @@
     </select>
     <select id="queryPushBody" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.systemPush.entity.SystemPush">
-        select body from yw_sms_system_push
+        select body from yw_sms_system_push WHERE id=#{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteSystemPush" parameterType="java.lang.Integer">
         DELETE FROM yw_sms_system_push WHERE id=#{id,jdbcType=INTEGER}
