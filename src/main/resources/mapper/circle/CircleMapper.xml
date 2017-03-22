@@ -440,7 +440,7 @@
 
     <select id="queryListByCircleList" parameterType="java.util.Map"
             resultType="com.movision.mybatis.circle.entity.Circle">
-        SELECT id,name,category FROM yw_circle WHERE isdel=0
+        SELECT id,name,category FROM yw_circle WHERE isdel=0 AND status=1
         <if test="categoryid!=null">
             AND category=#{categoryid,jdbcType=INTEGER}
         </if>
