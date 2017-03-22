@@ -124,7 +124,7 @@ public class ShiroUtil {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
             //此处可以扩张需要的字段
             principal.setPoints(point);
-            session.setAttribute("appuser", principal);
+            session.setAttribute(SessionConstant.APP_USER, principal);
         }
     }
 
