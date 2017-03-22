@@ -742,7 +742,7 @@
     </select>
     <select id="findAllBrand" resultType="com.movision.mybatis.goods.entity.GoodsVo">
 
-        SELECT b.id ,b.brandname,b.brandid FROM yw_brand b
+        SELECT b.id ,b.brandname,b.brandid FROM yw_brand b WHERE b.isdel=0
 
     </select>
     <select id="findAllType" resultType="com.movision.mybatis.goods.entity.GoodsVo">
