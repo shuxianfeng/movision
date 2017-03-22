@@ -115,7 +115,14 @@ public class UserService {
     }
 
     public int registerAccount(RegisterUser registerUser) {
-        return userMapper.registerAccount(registerUser);
+        try {
+            log.info("注册新的app用户");
+            userMapper.registerAccount(registerUser);
+            return registerUser.getId();
+        } catch (Exception e) {
+            log.error("注册新的app用户失败", e);
+            throw e;
+        }
     }
 
     public UserVo queryUserInfo(int userid) {
