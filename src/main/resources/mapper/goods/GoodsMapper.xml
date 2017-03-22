@@ -755,7 +755,7 @@
         collect,g.ishot,g.isessence,g.isdel,g.recommenddate,i.img_url AS imgurl,
         (SELECT COUNT(1) FROM yw_goods_assessment a WHERE g.id=a.goodid  AND a.userid<![CDATA[<>]]>-1 ) AS assess,
         g.onlinetime,g.attribute FROM yw_goods g
-        LEFT JOIN yw_goods_img i ON i.goodsid=g.id WHERE g.id=#{id,jdbcType=INTEGER} AND i.type=2 GROUP BY g.id
+        LEFT JOIN yw_goods_img i ON i.goodsid=g.id WHERE g.id=#{id,jdbcType=INTEGER}
     </select>
     <update id="updateGoods" parameterType="com.movision.mybatis.goods.entity.GoodsVo">
         update yw_goods
