@@ -742,11 +742,11 @@
     </select>
     <select id="findAllBrand" resultType="com.movision.mybatis.goods.entity.GoodsVo">
 
-        SELECT b.id ,b.brandname FROM yw_brand b LEFT JOIN yw_goods g on g.brandid=b.brandid GROUP BY b.id
+        SELECT b.id ,b.brandname,b.brandid FROM yw_brand b
 
     </select>
     <select id="findAllType" resultType="com.movision.mybatis.goods.entity.GoodsVo">
-        SELECT c.id,c.typename FROM yw_category c LEFT JOIN yw_goods g on g.protype=c.protype GROUP BY c.id
+        SELECT c.id,c.typename,c.protype FROM yw_category c
     </select>
     <select id="findGoodDetail" resultType="com.movision.mybatis.goods.entity.GoodsVo"
             parameterType="java.lang.Integer">
