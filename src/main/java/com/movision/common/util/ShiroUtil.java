@@ -40,6 +40,11 @@ public class ShiroUtil {
 
     }
 
+    /**
+     * 获取BOSS当前登录人信息
+     *
+     * @return
+     */
     public static BossRealm.ShiroBossUser getBossUser() {
         BossRealm.ShiroBossUser member = null;
         try {
@@ -57,6 +62,10 @@ public class ShiroUtil {
 
     }
 
+    /**
+     * 获取APP当前登录人id
+     * @return
+     */
     public static int getAppUserID() {
         int createID = 0;
         try {
