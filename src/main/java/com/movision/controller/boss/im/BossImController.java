@@ -4,6 +4,7 @@ import com.movision.common.Response;
 import com.movision.facade.im.ImFacade;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.systemPush.entity.SystemPush;
+import com.movision.mybatis.systemToPush.entity.SystemToPush;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -195,6 +196,88 @@ public class BossImController {
             response.setMessage("发送成功");
         }
         response.setData(result);
+        return response;
+    }
+
+    /**
+     * 查询系统推送
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查询系统推送", notes = "查询系统推送", response = Response.class)
+    @RequestMapping(value = "find_systemto_push", method = RequestMethod.POST)
+    public Response findAllSystemToPush(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                        @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<SystemToPush> paging = new Paging<SystemToPush>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<SystemToPush> list = imFacade.findAllSystemToPush(paging);
+        if (response.getCode() == 200) {
+            response.setMessage("查询系统推送成功");
+        }
+        paging.result(list);
+        response.setData(paging);
+        return response;
+    }
+
+    /**
+     * 查询系统推送搜索
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查询系统推送搜索", notes = "查询系统推送搜索", response = Response.class)
+    @RequestMapping(value = "find_systemto_push_condition", method = RequestMethod.POST)
+    public Response findAllSystenToPushCondition(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                 @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                                 @ApiParam(value = "内容") @RequestParam(required = false) String body,
+                                                 @ApiParam(value = "排序") @RequestParam(required = false) String pai) {
+        Response response = new Response();
+        Paging<SystemToPush> paging = new Paging<SystemToPush>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<SystemToPush> list = imFacade.findAllSystenToPushCondition(body, pai, paging);
+        if (response.getCode() == 200) {
+            response.setMessage("查询系统推送搜索成功");
+        }
+        paging.result(list);
+        response.setData(paging);
+        return response;
+    }
+
+    /**
+     * 根据id查询系统推送内容
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "根据id查询系统推送内容", notes = "根据id查询系统推送内容", response = Response.class)
+    @RequestMapping(value = "query_body_bytopush", method = RequestMethod.POST)
+    public Response querySystemToPushBody(@ApiParam(value = "系统推送id") @RequestParam Integer id) {
+        Response response = new Response();
+        SystemToPush systemToPush = imFacade.querySystemToPushBody(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(systemToPush);
+        return response;
+    }
+
+    /**
+     * 删除系统推送
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "删除系统推送 ", notes = "删除系统推送", response = Response.class)
+    @RequestMapping(value = "query_body_bytopush", method = RequestMethod.POST)
+    public Response deleteSystemToPush(@ApiParam(value = "系统推送id") @RequestParam Integer id) {
+        Response response = new Response();
+        Integer systemToPush = imFacade.deleteSystemToPush(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(systemToPush);
         return response;
     }
 }

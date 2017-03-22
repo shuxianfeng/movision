@@ -110,7 +110,7 @@
             resultType="com.movision.mybatis.systemPush.entity.SystemPush">
         select * from yw_sms_system_push WHERE 1
         <if test="body!=null">
-            AND body LIKE LIKE concat('%',#{body,jdbcType=VARCHAR},'%')
+            AND body LIKE concat('%',#{body,jdbcType=VARCHAR},'%')
         </if>
         <if test="pai==0">
             ORDER BY inform_time DESC

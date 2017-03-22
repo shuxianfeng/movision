@@ -16,6 +16,8 @@ import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.imuser.service.ImUserService;
 import com.movision.mybatis.systemPush.entity.SystemPush;
 import com.movision.mybatis.systemPush.service.SystemPushService;
+import com.movision.mybatis.systemToPush.entity.SystemToPush;
+import com.movision.mybatis.systemToPush.service.SystemToPushService;
 import com.movision.utils.JsonUtils;
 import com.movision.utils.L;
 import com.movision.utils.ListUtil;
@@ -25,6 +27,7 @@ import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.sms.SDKSendSms;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -68,7 +71,8 @@ public class ImFacade {
 
     @Autowired
     private ImSystemInformService imSystemInformService;
-
+    @Autowired
+    private SystemToPushService systemToPushService;
     /**
      * 发起IM请求，获得响应
      *
@@ -685,6 +689,30 @@ public class ImFacade {
         return blen;
     }
 
-    
+
+    public List<SystemToPush> findAllSystemToPush(Paging<SystemToPush> pager) {
+        return systemToPushService.findAllSystemToPush(pager);
+    }
+
+    public List<SystemToPush> findAllSystenToPushCondition(String body, String pai, Paging<SystemToPush> paging) {
+        Map<String, Object> map = new HashMap();
+        if (!StringUtils.isEmpty(body)) {
+            map.put("body", body);
+        }
+        if (!StringUtils.isEmpty(pai)) {
+            map.put("pai", pai);
+        }
+        return systemToPushService.findAllSystenToPushCondition(map, paging);
+    }
+
+    public SystemToPush querySystemToPushBody(Integer id) {
+        return systemToPushService.querySystemToPushBody(id);
+    }
+
+    public Integer deleteSystemToPush(Integer id) {
+        return systemToPushService.deleteSystemToPush(id);
+    }
+
+
 
 }
