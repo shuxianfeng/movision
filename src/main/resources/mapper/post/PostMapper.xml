@@ -1337,7 +1337,7 @@
                 iscontribute,
             </if>
             <if test="hotimgurl!=null">
-                hotimgurl
+                hotimgurl,
             </if>
             <if test="ishot!=null">
                 ishot
@@ -1387,7 +1387,7 @@
                 #{iscontribute,jdbcType=INTEGER},
             </if>
             <if test="hotimgurl!=null">
-                #{hotimgurl,jdbcType=VARCHAR}
+                #{hotimgurl,jdbcType=VARCHAR},
             </if>
             <if test="ishot!=null">
                 #{ishot,jdbcType=INTEGER}
