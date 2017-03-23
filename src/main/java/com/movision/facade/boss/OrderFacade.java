@@ -711,7 +711,7 @@ public class OrderFacade {
      * @return
      */
     public Map<String, Object> updateAfterServiceH(Integer esy, Integer id) {
-        Map<String, Object> map = new HashedMap();
+        Map<String, Object> map = new HashMap();
         Afterservice afterservice = new Afterservice();
         if (esy == 0) {
             afterservice.setAftersalestatus(6);
