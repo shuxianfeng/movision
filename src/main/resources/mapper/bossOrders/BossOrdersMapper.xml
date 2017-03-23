@@ -839,9 +839,6 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
             <if test="logisticsid != null">
                 logisticsid = #{logisticsid,jdbcType=VARCHAR},
             </if>
-            <if test="takeway != null">
-                takeway = #{takeway,jdbcType=INTEGER},
-            </if>
         </set>
         where id=#{id,jdbcType=INTEGER}
     </update>
