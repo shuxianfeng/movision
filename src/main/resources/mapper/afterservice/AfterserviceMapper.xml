@@ -20,11 +20,12 @@
         <result column="takeway" property="takeway" jdbcType="INTEGER"/>
         <result column="replacementnumber" property="replacementnumber" jdbcType="VARCHAR"/>
         <result column="returnnumber" property="returnnumber" jdbcType="VARCHAR"/>
+        <result column="logisticsway" property="logisticsway" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, orderid, addressid, goodsid, afterstatue, aftersalestatus, processingstatus,
         isdel, refundamount, processingpeople, processingtime, userid, proposertime,
-        amountdue,remark,takeway,replacementnumber,returnnumber
+        amountdue,remark,takeway,replacementnumber,returnnumber,logisticsway
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -47,7 +48,7 @@
         #{processingstatus,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER}, #{refundamount,jdbcType=DOUBLE},
         #{processingpeople,jdbcType=VARCHAR}, #{processingtime,jdbcType=TIMESTAMP}, #{userid,jdbcType=INTEGER},
         #{proposertime,jdbcType=TIMESTAMP},
-        #{amountdue,jdbcType=DOUBLE},#{remark,jdbcType=VARCHAR},#{takeway,jdbcType=INTEGER},#{replacementnumber,jdbcType=VARCHAR},#{returnnumber,jdbcType=VARCHAR})
+        #{amountdue,jdbcType=DOUBLE},#{remark,jdbcType=VARCHAR},#{takeway,jdbcType=INTEGER},#{replacementnumber,jdbcType=VARCHAR},#{returnnumber,jdbcType=VARCHAR},#{logisticsway,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.afterservice.entity.Afterservice">
         insert into yw_afterservice
@@ -106,6 +107,9 @@
             <if test="replacementnumber != null">
                 returnnumber,
             </if>
+            <if test="logisticsway != null">
+                logisticsway,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -161,6 +165,9 @@
             </if>
             <if test="returnnumber!=null">
                 #{returnnumber,jdbcType=VARCHAR},
+            </if>
+            <if test="logisticsway!=null">
+                #{logisticsway,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -218,7 +225,9 @@
             <if test="returnnumber!=null">
                 #{returnnumber,jdbcType=VARCHAR}
             </if>
-
+            <if test="logisticsway!=null">
+                #{logisticsway,jdbcType=INTEGER}
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -237,7 +246,9 @@
         userid = #{userid,jdbcType=INTEGER},
         proposertime = #{proposertime,jdbcType=TIMESTAMP},
         amountdue = #{amountdue,jdbcType=DOUBLE},remark =
-        #{remark,jdbcType=VARCHAR},takeway=#{takeway.jdbcType=INTEGER},replacementnumber=#{replacementnumber,jdbcType=VARCHAR},returnnumber=#{returnnumber,jdbcType=VARCHAR}
+        #{remark,jdbcType=VARCHAR},takeway=#{takeway.jdbcType=INTEGER},
+        replacementnumber=#{replacementnumber,jdbcType=VARCHAR},returnnumber=#{returnnumber,jdbcType=VARCHAR},
+        logisticsway=#{logisticsway,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

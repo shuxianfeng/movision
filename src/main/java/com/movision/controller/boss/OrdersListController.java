@@ -549,7 +549,7 @@ public class OrdersListController {
      * 发货
      *
      * @param id
-     * @param takeway
+     * @param logisticsway
      * @param
      * @param
      * @param remark
@@ -560,12 +560,12 @@ public class OrdersListController {
     @RequestMapping(value = "add_adddelivery", method = RequestMethod.POST)
     public Response adddelivery(
             @ApiParam(value = "售后id") @RequestParam(required = false) String id,
-            @ApiParam(value = "配送方式") @RequestParam(required = false) String takeway,
+            @ApiParam(value = "配送方式") @RequestParam(required = false) String logisticsway,
             @ApiParam(value = "操作备注") @RequestParam(required = false) String remark,
             @ApiParam(value = "订单id") @RequestParam(required = false) String orderid,
             @ApiParam(value = "发货单号") @RequestParam(required = false) String replacementnumber) {
         Response response = new Response();
-        Map<String, Integer> map = orderFacade.adddelivery(id, takeway, remark, orderid, replacementnumber);
+        Map<String, Integer> map = orderFacade.adddelivery(id, logisticsway, remark, orderid, replacementnumber);
         if (response.getCode() == 200) {
             response.setMessage("发货成功");
         }
@@ -608,9 +608,9 @@ public class OrdersListController {
     public Response updateOperate(@ApiParam(value = "订单id") @RequestParam(required = false) String id,
                                   @ApiParam(value = "备注") @RequestParam(required = false) String remark,
                                   @ApiParam(value = "发货单号") @RequestParam(required = false) String logisticsid,
-                                  @ApiParam(value = "送货方式") @RequestParam(required = false) String takeway) {
+                                  @ApiParam(value = "送货方式") @RequestParam(required = false) String logisticsway) {
         Response response = new Response();
-        Map<String, Integer> map = orderFacade.updateOperater(id, remark, logisticsid, takeway);
+        Map<String, Integer> map = orderFacade.updateOperater(id, remark, logisticsid, logisticsway);
         if (response.getCode() == 200) {
             response.setMessage("发货成功");
         }

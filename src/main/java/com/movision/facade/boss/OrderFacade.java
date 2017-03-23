@@ -605,18 +605,18 @@ public class OrderFacade {
     /**
      * 发货
      * @param id
-     * @param takeway
+     * @param logisticsway
      * @param
      * @param
      * @param remark
      * @param orderid
      * @return
      */
-    public Map<String, Integer> adddelivery(String id, String takeway, String remark, String orderid, String replacementnumber) {
+    public Map<String, Integer> adddelivery(String id, String logisticsway, String remark, String orderid, String replacementnumber) {
         Map<String, Integer> map = new HashMap<>();
         Afterservice afterservice = new Afterservice();
         afterservice.setId(Integer.parseInt(id));
-        afterservice.setTakeway(Integer.parseInt(takeway));
+        afterservice.setTakeway(Integer.parseInt(logisticsway));
         afterservice.setAftersalestatus(3);
         afterservice.setProcessingstatus(2);
         afterservice.setReplacementnumber(replacementnumber);
@@ -636,7 +636,7 @@ public class OrderFacade {
         int ress = bossOrderService.addLogistic(orders);
         LogidticsRelation relation = new LogidticsRelation();
         relation.setLogisticsid(replacementnumber);
-        relation.setCompanyid(Integer.parseInt(takeway));
+        relation.setCompanyid(Integer.parseInt(logisticsway));
         int red = bossOrderService.addLogisticsRalation(relation);
         map.put("result", result);
         map.put("res", res);
@@ -669,7 +669,7 @@ public class OrderFacade {
      * @param logisticsid
      * @return
      */
-    public Map<String, Integer> updateOperater(String id, String remark, String takeway, String logisticsid) {
+    public Map<String, Integer> updateOperater(String id, String remark, String logisticsway, String logisticsid) {
         Map<String, Integer> map = new HashMap<>();
         Orderoperation orderoperation = new Orderoperation();
         orderoperation.setOrderid(Integer.parseInt(id));
@@ -685,7 +685,7 @@ public class OrderFacade {
         int res = bossOrderService.addLogistic(orders);
         LogidticsRelation relation = new LogidticsRelation();
         relation.setLogisticsid(logisticsid);
-        relation.setCompanyid(Integer.parseInt(takeway));
+        relation.setCompanyid(Integer.parseInt(logisticsway));
         int red = bossOrderService.addLogisticsRalation(relation);
         map.put("result", result);
         map.put("res", res);

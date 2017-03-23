@@ -52,6 +52,16 @@ public class Afterservice {
 
     private String remark;
 
+    private Integer logisticsway;
+
+    public Integer getLogisticsway() {
+        return logisticsway;
+    }
+
+    public void setLogisticsway(Integer logisticsway) {
+        this.logisticsway = logisticsway;
+    }
+
     public String getRemark() {
         return remark;
     }
