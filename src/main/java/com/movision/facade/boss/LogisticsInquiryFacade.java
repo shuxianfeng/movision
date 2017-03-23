@@ -33,12 +33,25 @@ public class LogisticsInquiryFacade {
     private BossOrderService orderService;
 
 
-    public Map<String, Object> LogisticInquiry(String ordersid) {
+    public Map<String, Object> LogisticInquiry(String ordernumber, int type) {
         Map<String, String> map = new HashMap<>();
-        String logisticsid = orderService.queryLogisticsid(ordersid);//快递单号
-        String logisticscode = orderService.queryLogisticsCode(ordersid);//物流code
-        String param = "{" + "\"com\":\"" + "zhongtong" + "\"," + //查询的快递公司的编码
-                "\"num\":\"" + "765232938392" + "\"" + //快递单号
+        String logisticsid = "";
+        String logisticscode = "";
+        if (type == 2) {
+            logisticsid = orderService.queryLogisticsid(ordernumber);//快递单号
+            logisticscode = orderService.queryLogisticsCode(logisticsid);//物流code
+        }
+        if (type == 0) {
+            logisticsid = orderService.queryReturnLogistics(ordernumber);
+            logisticscode = orderService.queryReturnWay(ordernumber);//物流code
+        }
+
+        if (type == 1) {
+            logisticsid = orderService.queryReplaceLogistic(ordernumber);
+            logisticscode = orderService.queryReplaceCode(logisticsid);//物流code
+        }
+        String param = "{" + "\"com\":\"" + logisticscode + "\"," + //查询的快递公司的编码
+                "\"num\":\"" + logisticsid + "\"" + //快递单号
                 "}";
         String key = "EvNEkbNX6345";
         String customer = "FA0777963476EFDFE72EE58900D6E89A";

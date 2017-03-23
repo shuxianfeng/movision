@@ -119,9 +119,9 @@ public interface BossOrdersMapper {
 
     List<LogisticsCompany> findAllLogisticsCompany();//查询所有快递公司
 
-    String queryLogisticsid(String ordersid);//根据订单号查询快递单号
+    String queryLogisticsid(String ordernumber);//根据订单号查询快递单号
 
-    String queryLogisticsCode(String ordersid);//根据订单号查询物流编码
+    String queryLogisticsCode(String logisticsid);//根据订单号查询物流编码
 
     Integer addLogistics(OrderLogistics orderLogistics);//增加物流信息
 
@@ -130,6 +130,14 @@ public interface BossOrdersMapper {
     Integer updateLogistics(OrderLogistics orderLogistics);
 
     String logisticsCompany(String code);//根据code查快递公司
+
+    String queryReturnLogistics(String ordernumber);//查询退回单号
+
+    String queryReturnWay(String ordernumber);//查询退回方式
+
+    String queryReplaceLogistic(String ordernumber);//查询换货单号
+
+    String queryReplaceCode(String logisticsid);
 
 
 

@@ -2,6 +2,7 @@ package com.movision.facade.boss;
 
 
 import com.movision.common.util.ShiroUtil;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.address.entity.AddressVo;
 import com.movision.mybatis.afterservice.entity.AfterServiceVo;
@@ -616,7 +617,6 @@ public class OrderFacade {
         Map<String, Integer> map = new HashMap<>();
         Afterservice afterservice = new Afterservice();
         afterservice.setId(Integer.parseInt(id));
-        afterservice.setTakeway(Integer.parseInt(logisticsway));
         afterservice.setAftersalestatus(3);
         afterservice.setProcessingstatus(2);
         afterservice.setReplacementnumber(replacementnumber);
@@ -630,17 +630,12 @@ public class OrderFacade {
         afterserviceStream.setProcessingpeople(ShiroUtil.getBossUser().getUsername());
         afterserviceStream.setProcessingtime(new Date());
         int result = bossOrderService.addAfterService(afterserviceStream);
-        Orders orders = new Orders();
-        orders.setLogisticsid(replacementnumber);
-        orders.setId(Integer.parseInt(id));
-        int ress = bossOrderService.addLogistic(orders);
         LogidticsRelation relation = new LogidticsRelation();
         relation.setLogisticsid(replacementnumber);
         relation.setCompanyid(Integer.parseInt(logisticsway));
         int red = bossOrderService.addLogisticsRalation(relation);
         map.put("result", result);
         map.put("res", res);
-        map.put("ress", ress);
         map.put("red", red);
         return map;
     }
@@ -677,7 +672,9 @@ public class OrderFacade {
         orderoperation.setOrderoperationtime(new Date());
         orderoperation.setOrderoperation(ShiroUtil.getBossUser().getUsername());
         orderoperation.setOrderstatue(0);
-        orderoperation.setRemark(remark);
+        if (!StringUtil.isEmpty(remark)) {
+            orderoperation.setRemark(remark);
+        }
         int result = bossOrderService.updateOperater(orderoperation);
         Orders orders = new Orders();
         orders.setLogisticsid(logisticsid);

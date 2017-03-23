@@ -708,9 +708,6 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
             <if test="processingstatus != null">
                 processingstatus = #{processingstatus,jdbcType=INTEGER},
             </if>
-            <if test="takeway != null">
-                takeway = #{takeway,jdbcType=INTEGER},
-            </if>
             <if test="replacementnumber != null">
                 replacementnumber = #{replacementnumber,jdbcType=VARCHAR},
             </if>
@@ -871,11 +868,11 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
         </trim>
     </insert>
     <select id="queryLogisticsid" parameterType="java.lang.String" resultType="java.lang.String">
-        SELECT logisticsid FROM yw_orders  WHERE ordernumber=#{ordersid,jdbcType=VARCHAR}
+        SELECT logisticsid FROM yw_orders WHERE ordernumber=#{ordernumber,jdbcType=VARCHAR}
     </select>
     <select id="queryLogisticsCode" parameterType="java.lang.String" resultType="java.lang.String">
-        SELECT c.code FROM yw_orders o LEFT JOIN yw_logidtics_relation l ON l.logisticsid=o.logisticsid
-LEFT JOIN yw_logistics_company c ON c.id=l.companyid WHERE o.ordernumber=#{ordersid,jdbcType=VARCHAR}
+        SELECT c.code FROM yw_logidtics_relation l LEFT JOIN
+        yw_logistics_company c ON c.id=l.companyid WHERE l.logisticsid=#{logisticsid,jdbcType=VARCHAR}
     </select>
     <insert id="addLogistics" parameterType="com.movision.mybatis.orderLogistics.entity.OrderLogistics">
         <selectKey keyProperty="id" order="AFTER" resultType="Integer">
@@ -967,4 +964,17 @@ LEFT JOIN yw_logistics_company c ON c.id=l.companyid WHERE o.ordernumber=#{order
         </set>
         WHERE id=#{id,jdbcType=INTEGER}
     </update>
+    <select id="queryReturnLogistics" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT a.returnnumber FROM yw_afterservice a LEFT JOIN yw_orders o  ON o.id=a.orderid WHERE o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
+    </select>
+    <select id="queryReturnWay" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT a.logisticsway FROM yw_afterservice a LEFT JOIN yw_orders o  ON o.id=a.orderid WHERE o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
+    </select>
+    <select id="queryReplaceLogistic" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT a.replacementnumber FROM yw_afterservice a LEFT JOIN yw_orders o  ON o.id=a.orderid WHERE o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
+    </select>
+    <select id="queryReplaceCode" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT c.code FROM   yw_logidtics_relation  l LEFT JOIN
+  yw_logistics_company c ON c.id=l.companyid WHERE  l.logisticsid=#{logisticsid,jdbcType=VARCHAR}
+</select>
 </mapper>

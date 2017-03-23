@@ -25,7 +25,12 @@ import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.province.entity.Province;
 import com.movision.mybatis.shopAddress.entity.ShopAddress;
 import com.movision.mybatis.user.entity.User;
+import com.movision.utils.HttpRequest;
+import com.movision.utils.LogisticsMD5;
 import com.movision.utils.pagination.model.Paging;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +38,10 @@ import org.springframework.data.redis.core.ListOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -47,6 +56,8 @@ public class BossOrderService {
 
     @Autowired
     BossOrdersMapper bossOrdersMapper;
+    @Autowired
+    BossOrdersMapper orderService;
     Logger loger = LoggerFactory.getLogger(BossOrderService.class);
 
     /**
@@ -669,15 +680,82 @@ public class BossOrderService {
     /**
      * 根据订单号查询快递单号
      *
-     * @param ordersid
+     * @param ordernumber
      * @return
      */
-    public String queryLogisticsid(String ordersid) {
+    public String queryLogisticsid(String ordernumber) {
         try {
             loger.info("根据订单号查询快递单号");
-            return bossOrdersMapper.queryLogisticsid(ordersid);
+            return bossOrdersMapper.queryLogisticsid(ordernumber);
         } catch (Exception e) {
             loger.error("根据订单号查询快递单号失败", e);
+            throw e;
+        }
+    }
+
+
+    /**
+     * 根据订单号查询快递单号(tuihui)
+     *queryReturnWay
+     * @param ordernumber
+     * @return
+     */
+    public String queryReturnLogistics(String ordernumber) {
+        try {
+            loger.info("根据订单号查询快递单号(tuihui)");
+            return bossOrdersMapper.queryReturnLogistics(ordernumber);
+        } catch (Exception e) {
+            loger.error("根据订单号查询快递单号(tuihui)失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据订单号查询快递单号(换货)
+     * queryReturnWay
+     *
+     * @param ordernumber
+     * @return
+     */
+    public String queryReplaceLogistic(String ordernumber) {
+        try {
+            loger.info("根据订单号查询快递单号(换货)");
+            return bossOrdersMapper.queryReplaceLogistic(ordernumber);
+        } catch (Exception e) {
+            loger.error("根据订单号查询快递单号(换货)失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据订单号查询快递单号(换货)
+     * queryReturnWay
+     *
+     * @param logisticsid
+     * @return
+     */
+    public String queryReplaceCode(String logisticsid) {
+        try {
+            loger.info("根据订单号查询快递单号(换货)");
+            return bossOrdersMapper.queryReplaceCode(logisticsid);
+        } catch (Exception e) {
+            loger.error("根据订单号查询快递单号(换货)失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据订单号查询快递code(tuihui)
+     *
+     * @param ordernumber
+     * @return
+     */
+    public String queryReturnWay(String ordernumber) {
+        try {
+            loger.info("根据订单号查询快递code(tuihui)");
+            return bossOrdersMapper.queryReturnWay(ordernumber);
+        } catch (Exception e) {
+            loger.error("根据订单号查询快递code(tuihui)失败", e);
             throw e;
         }
     }
@@ -685,13 +763,13 @@ public class BossOrderService {
     /**
      * 根据订单号查询物流编码
      *
-     * @param ordersid
+     * @param logisticsid
      * @return
      */
-    public String queryLogisticsCode(String ordersid) {
+    public String queryLogisticsCode(String logisticsid) {
         try {
             loger.info("根据订单号查询物流编码");
-            return bossOrdersMapper.queryLogisticsCode(ordersid);
+            return bossOrdersMapper.queryLogisticsCode(logisticsid);
         } catch (Exception e) {
             loger.error("根据订单号查询物流编码失败", e);
             throw e;
