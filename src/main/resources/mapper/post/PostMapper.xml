@@ -1544,7 +1544,7 @@
                 postid,
             </if>
             <if test="goodsid != null">
-                goodsid
+                goodid
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">

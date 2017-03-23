@@ -173,12 +173,13 @@ public class AdvertisementController {
      */
     @ApiOperation(value = "模糊查询广告类型名称", notes = "用于条件查询广告类型名称接口", response = Response.class)
     @RequestMapping(value = "query_type_like_name", method = RequestMethod.POST)
-    public Response queryAdvertisementTypeLikeName(@ApiParam(value = "位置名称") @RequestParam String name,
+    public Response queryAdvertisementTypeLikeName(@ApiParam(value = "位置名称") @RequestParam(required = false) String name,
+                                                   @ApiParam(value = "排序(传1按时间正序，否则倒叙)") @RequestParam(required = false) String type,
                                                    @ApiParam(value = "当前第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                                    @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<ManageType> pager = new Paging<ManageType>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<ManageType> list = homepageManageFacade.queryAdvertisementTypeLikeName(name, pager);
+        List<ManageType> list = homepageManageFacade.queryAdvertisementTypeLikeName(name, type, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

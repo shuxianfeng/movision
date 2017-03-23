@@ -176,6 +176,15 @@
 
     <select id="findAllQueryAdvertisementTypeLikeName" resultType="com.movision.mybatis.manageType.entity.ManageType"
             parameterType="java.lang.String">
-        SELECT * FROM yw_homepage_manage_type WHERE name LIKE CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+        SELECT * FROM yw_homepage_manage_type WHERE 1
+        <if test="name!=null">
+            AND name LIKE CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="type==null">
+            ORDER BY intime DESC
+        </if>
+        <if test="type==1">
+            ORDER BY intime ASC
+        </if>
     </select>
 </mapper>

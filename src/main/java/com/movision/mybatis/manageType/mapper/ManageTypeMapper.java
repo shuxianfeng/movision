@@ -25,5 +25,5 @@ public interface ManageTypeMapper {
 
     ManageType queryAdvertisementTypeById(String id);
 
-    List<ManageType> findAllQueryAdvertisementTypeLikeName(String name, RowBounds rowBounds);
+    List<ManageType> findAllQueryAdvertisementTypeLikeName(Map map, RowBounds rowBounds);
 }

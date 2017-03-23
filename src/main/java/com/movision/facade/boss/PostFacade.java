@@ -576,13 +576,16 @@ public class PostFacade {
         post.setUserid(userid);
         int result = postService.addPost(post);//添加帖子
         if (result == 1) {
+            Integer in = 0;
             Integer pid = post.getId();//获取到刚刚添加的帖子id
-            Video vide = new Video();
-            vide.setPostid(pid);
-            vide.setVideourl(vid);
-            vide.setBannerimgurl(bannerimgurl);
-            vide.setIntime(new Date());
-            Integer in = videoService.insertVideoById(vide);//添加视频表
+            if (type.equals("1")) {
+                Video vide = new Video();
+                vide.setPostid(pid);
+                vide.setVideourl(vid);
+                vide.setBannerimgurl(bannerimgurl);
+                vide.setIntime(new Date());
+                in = videoService.insertVideoById(vide);//添加视频表
+            }
             if (StringUtil.isNotEmpty(goodsid)) {//添加商品
                 String[] lg = goodsid.split(",");//以逗号分隔
                 for (int i = 0; i < lg.length; i++) {
@@ -594,7 +597,7 @@ public class PostFacade {
                         map.put("result", goods);
                     }
                 }
-                }
+            }
         }
         return map;
 
@@ -846,7 +849,9 @@ public class PostFacade {
     public PostCompile queryPostByIdEcho(String postid) {
         PostCompile postCompile = postService.queryPostByIdEcho(Integer.parseInt(postid));
         List<GoodsVo> goodses = goodsService.queryGoods(postCompile.getId());
-        postCompile.setGoodses(goodses);
+        if (goodses != null) {
+            postCompile.setGoodses(goodses);
+        }
         return postCompile;
     }
 
@@ -1008,7 +1013,7 @@ public class PostFacade {
             vide.setIntime(new Date());
             Integer in = videoService.updateVideoById(vide);
             if (!StringUtils.isEmpty(coverimg)) {
-                post.setCoverimg(coverimg);//添加帖子封面
+                post.setCoverimg(coverimg);//编辑帖子封面
             }
             post.setIsactive("0");//设置状态为帖子
             if (StringUtil.isNotEmpty(postcontent)) {

@@ -105,8 +105,11 @@ public class HomepageManageFacade {
      * @param pager
      * @return
      */
-    public List<ManageType> queryAdvertisementTypeLikeName(String name, Paging<ManageType> pager) {
-        return manageTypeService.queryAdvertisementTypeLikeName(name, pager);
+    public List<ManageType> queryAdvertisementTypeLikeName(String name, String type, Paging<ManageType> pager) {
+        Map map = new HashedMap();
+        map.put("name", name);
+        map.put("type", type);
+        return manageTypeService.queryAdvertisementTypeLikeName(map, pager);
     }
 
     /**

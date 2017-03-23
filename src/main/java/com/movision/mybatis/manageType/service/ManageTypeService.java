@@ -73,13 +73,13 @@ public class ManageTypeService {
     /**
      * 根据广告名称模糊查询广告类型列表
      *
-     * @param name
+     * @param map
      * @return
      */
-    public List<ManageType> queryAdvertisementTypeLikeName(String name, Paging<ManageType> pager) {
+    public List<ManageType> queryAdvertisementTypeLikeName(Map map, Paging<ManageType> pager) {
         try {
             logge.info("根据广告名称模糊查询广告类型列表");
-            return manageTypeMapper.findAllQueryAdvertisementTypeLikeName(name, pager.getRowBounds());
+            return manageTypeMapper.findAllQueryAdvertisementTypeLikeName(map, pager.getRowBounds());
         } catch (Exception e) {
             logge.error("根据广告名称模糊查询广告类型列表异常");
             throw e;
