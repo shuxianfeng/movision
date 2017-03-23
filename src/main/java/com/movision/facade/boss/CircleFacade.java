@@ -127,7 +127,7 @@ public class CircleFacade {
                 vo.setCategory(listt.get(e).getCategory());//圈子分类
                 vo.setCategoryname(listt.get(e).getCategoryname());//圈子分类名
                 vo.setCirclename(listt.get(e).getCirclename());//圈主
-                vo.setCategorylevel(listt.get(e).getCategorylevel().toString());//判断是否为大V
+                vo.setCategorylevel(listt.get(e).getCategorylevel());//判断是否为大V
                 vo.setCirclemanagerlist(userslist);//圈子管理员列表
                 vo.setSupportnum(listt.get(e).getSupportnum());//支持数
                 vo.setStatus(listt.get(e).getStatus());//圈子状态：0 待审核 1 审核通过 2 审核不通过
