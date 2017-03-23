@@ -434,7 +434,6 @@ public class PostController {
     @ApiOperation(value = "添加活动帖子", notes = "添加活动帖子", response = Response.class)
     @RequestMapping(value = "/add_active_post", method = RequestMethod.POST)
     public Response addPostActiveList(
-            HttpServletRequest request,
             @ApiParam(value = "活动标题") @RequestParam String title,
             @ApiParam(value = "活动副标题") @RequestParam String subtitle,
             @ApiParam(value = "活动类型：0 告知类活动 1 商城促销类活动") @RequestParam String activetype,
@@ -452,7 +451,7 @@ public class PostController {
             @ApiParam(value = "是否设为热门（0 否  1 是）") @RequestParam(required = false) String ishot,
             @ApiParam(value = "分享商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Integer> result = postFacade.addPostActive(request, title, subtitle, activetype, iscontribute, activefee, coverimg, postcontent, isessence, orderid, essencedate, begintime, endtime, userid, hotimgurl, ishot, goodsid);
+        Map<String, Integer> result = postFacade.addPostActive(title, subtitle, activetype, iscontribute, activefee, coverimg, postcontent, isessence, orderid, essencedate, begintime, endtime, userid, hotimgurl, ishot, goodsid);
         if(response.getCode()==200){
             response.setMessage("添加成功");
         }
@@ -650,7 +649,6 @@ public class PostController {
     @ApiOperation(value = "编辑活动", notes = "编辑活动", response = Response.class)
     @RequestMapping(value = "update_activepost", method = RequestMethod.POST)
     public Response updateActivePostById(
-            HttpServletRequest request,
             @ApiParam(value = "帖子id（必填）") @RequestParam String id,
             @ApiParam(value = "帖子标题") @RequestParam(required = false) String title,
             @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,
@@ -670,7 +668,7 @@ public class PostController {
             @ApiParam(value = "编辑商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
 
-        Map<String, Integer> map = postFacade.updateActivePostById(request, id, title, subtitle, userid, coverimg, postcontent, isessence, orderid, activefee, activetype, iscontribute, begintime, endtime, hotimgurl, ishot, essencedate, goodsid);
+        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, userid, coverimg, postcontent, isessence, orderid, activefee, activetype, iscontribute, begintime, endtime, hotimgurl, ishot, essencedate, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

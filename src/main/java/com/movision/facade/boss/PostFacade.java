@@ -615,7 +615,7 @@ public class PostFacade {
      * @param userid
      * @return
      */
-    public Map<String, Integer> addPostActive(HttpServletRequest request, String title, String subtitle, String activetype, String iscontribute, String activefee,
+    public Map<String, Integer> addPostActive(String title, String subtitle, String activetype, String iscontribute, String activefee,
                                               String coverimg, String postcontent, String isessence, String orderid, String essencedate,
                                               String begintime, String endtime, String userid, String hotimgurl, String ishot, String goodsid) {
         PostTo post = new PostTo();
@@ -634,17 +634,7 @@ public class PostFacade {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             post.setCoverimg(coverimg);
         if (StringUtil.isNotEmpty(postcontent)) {
-            //内容转换
-            Map con = jsoupCompressImg.compressImg(request, postcontent);
-            System.out.println(con);
-            if (con.get("code").toString() == "200") {
-                String str = con.get("content").toString();
-                str = str.replace("\\", "");
-                post.setPostcontent(str);//帖子内容
-            } else {
-                logger.error("帖子内容转换异常");
                 post.setPostcontent(postcontent);
-            }
         }
         if (!StringUtils.isEmpty(isessence)) {
                 if (Integer.parseInt(isessence) != 0) {//判断是否为加精
@@ -877,7 +867,7 @@ public class PostFacade {
      * @param essencedate
      * @return
      */
-    public Map<String, Integer> updateActivePostById(HttpServletRequest request, String id, String title, String subtitle, String userid, String coverimg, String postcontent, String isessence,
+    public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String userid, String coverimg, String postcontent, String isessence,
                                                      String orderid, String activefee, String activetype, String iscontribute, String begintime, String endtime, String hotimgurl, String ishot, String essencedate, String goodsid) {
         PostActiveList postActiveList = new PostActiveList();
         Map<String, Integer> map = new HashedMap();
@@ -899,17 +889,7 @@ public class PostFacade {
                 postActiveList.setUserid(Integer.parseInt(userid));
             }
             if (StringUtil.isNotEmpty(postcontent)) {
-                //内容转换
-                Map con = jsoupCompressImg.compressImg(request, postcontent);
-                System.out.println(con);
-                if (con.get("code").toString() == "200") {
-                    String str = con.get("content").toString();
-                    str = str.replace("\\", "");
-                    postActiveList.setPostcontent(str);//帖子内容
-                } else {
-                    logger.error("帖子内容转换异常");
-                    postActiveList.setPostcontent(postcontent);
-                }
+                postActiveList.setPostcontent(postcontent);//内容
             }
             if (!StringUtil.isEmpty(isessence)) {
                 postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
