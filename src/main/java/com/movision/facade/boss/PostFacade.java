@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
@@ -511,6 +512,7 @@ public class PostFacade {
      * @param time
      * @return
      */
+    @Transactional
     public Map<String, Integer> addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid,
                                         String userid, String coverimg, String vid, String bannerimgurl,
                                         String postcontent, String isessence, String ishot, String orderid, String time, String goodsid) {

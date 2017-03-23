@@ -76,11 +76,11 @@ public class AdvertisementController {
     }
 
     /**
-     * 查询广告类型
+     * 查询广告类型列表
      *
      * @return
      */
-    @ApiOperation(value = "查询广告类型", notes = "用于查询广告类型接口", response = Response.class)
+    @ApiOperation(value = "查询广告类型列表", notes = "用于查询广告类型列表接口", response = Response.class)
     @RequestMapping(value = "query_advertisement_type", method = RequestMethod.POST)
     public Response queryAdvertisementTypeList() {
         Response response = new Response();
@@ -123,7 +123,6 @@ public class AdvertisementController {
     /**
      * 添加广告类型
      *
-     * @param type
      * @param name
      * @param wide
      * @param high
@@ -132,13 +131,13 @@ public class AdvertisementController {
      */
     @ApiOperation(value = "添加广告类型", notes = "用于添加广告类型接口", response = Response.class)
     @RequestMapping(value = "add_advertisement_type", method = RequestMethod.POST)
-    public Response addAdvertisementType(@ApiParam(value = "广告类型") @RequestParam String type,
-                                         @ApiParam(value = "广告名") @RequestParam String name,
+    public Response addAdvertisementType(
+            @ApiParam(value = "广告位置") @RequestParam String name,
                                          @ApiParam(value = "广告宽度") @RequestParam String wide,
                                          @ApiParam(value = "广告高度") @RequestParam String high,
                                          @ApiParam(value = "广告数量") @RequestParam String quantity) {
         Response response = new Response();
-        int i = homepageManageFacade.addAdvertisementType(type, name, wide, high, quantity);
+        int i = homepageManageFacade.addAdvertisementType(name, wide, high, quantity);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -152,7 +151,7 @@ public class AdvertisementController {
      * @param id
      * @return
      */
-    @ApiOperation(value = "查询广告类型", notes = "用于根据广告id查询广告类型详情", response = Response.class)
+    @ApiOperation(value = "查询广告类型详情", notes = "用于根据广告id查询广告类型详情", response = Response.class)
     @RequestMapping(value = "query_type_id", method = RequestMethod.POST)
     public Response queryAdvertisementTypeById(@ApiParam(value = "类型id") @RequestParam String id) {
         ManageType manageType = homepageManageFacade.queryAdvertisementTypeById(id);

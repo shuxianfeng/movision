@@ -1544,7 +1544,7 @@
                 postid,
             </if>
             <if test="goodsid != null">
-                goodsid,
+                goodsid
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -1556,7 +1556,7 @@
                 #{postid,jdbcType=INTEGER},
             </if>
             <if test="goodsid != null">
-                #{goodsid,jdbcType=INTEGER},
+                #{goodsid,jdbcType=INTEGER}
             </if>
         </trim>
     </insert>

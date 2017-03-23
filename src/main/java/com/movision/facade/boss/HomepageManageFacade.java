@@ -68,9 +68,17 @@ public class HomepageManageFacade {
         return homepageManageService.addAdvertisement(map);
     }
 
-    public int addAdvertisementType(String type, String name, String wide, String high, String quantity) {
+    /**
+     * 添加广告类型
+     *
+     * @param name     广告位置
+     * @param wide     宽
+     * @param high     高
+     * @param quantity 广告数量
+     * @return
+     */
+    public int addAdvertisementType(String name, String wide, String high, String quantity) {
         Map map = new HashedMap();
-        map.put("type", type);
         map.put("name", name);
         map.put("wide", wide);
         map.put("high", high);
