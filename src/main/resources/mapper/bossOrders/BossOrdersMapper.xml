@@ -616,7 +616,8 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
     <select id="findAllAfterService" resultType="com.movision.mybatis.afterservice.entity.AfterServiceVo">
         SELECT
         f.id,f.orderid,o.ordernumber,u.nickname,f.proposertime,f.processingpeople,f.processingtime,a.name,a.province,a.city,a.district,a.street,s.`name`
-        AS sname,f.afterstatue,f.amountdue,f.refundamount,f.aftersalestatus,f.processingstatus FROM yw_afterservice f
+        AS sname,f.afterstatue,f.amountdue,f.refundamount,f.aftersalestatus,f.processingstatus,o.origprice FROM
+        yw_afterservice f
         LEFT JOIN yw_address a ON a.id=f.addressid
         LEFT JOIN yw_goods s ON s.id=f.goodsid LEFT JOIN yw_orders o ON o.id=f.orderid LEFT JOIN yw_user u ON
         u.id=f.userid WHERE f.isdel=1
