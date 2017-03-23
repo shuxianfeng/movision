@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -389,7 +390,8 @@ public class PostController {
      */
     @ApiOperation(value = "添加帖子", notes = "添加帖子", response = Response.class)
     @RequestMapping(value = "/add_post", method = RequestMethod.POST)
-    public Response addPost(@ApiParam(value = "帖子标题") @RequestParam String title,//帖子标题
+    public Response addPost(HttpServletRequest request,
+                            @ApiParam(value = "帖子标题") @RequestParam String title,//帖子标题
                             @ApiParam(value = "帖子副标题") @RequestParam String subtitle,//帖子副标题
                             @ApiParam(value = "帖子类型 0 普通帖 1 原生视频帖") @RequestParam String type,//帖子类型
                             @ApiParam(value = "圈子id") @RequestParam String circleid,//圈子id
@@ -404,7 +406,7 @@ public class PostController {
                             @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String time,//精选日期
                             @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Integer> resaut = postFacade.addPost(title, subtitle, type, circleid, userid, coverimg, vid, bannerimgurl, postcontent,
+        Map<String, Integer> resaut = postFacade.addPost(request, title, subtitle, type, circleid, userid, coverimg, vid, bannerimgurl, postcontent,
                 isessence, ishot, orderid, time, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
@@ -423,7 +425,7 @@ public class PostController {
      * @param postcontent
      * @param isessence
      * @param orderid
-     * @param time
+     * @param essencedate
      * @param begintime
      * @param endtime
      * @param userid
@@ -432,6 +434,7 @@ public class PostController {
     @ApiOperation(value = "添加活动帖子", notes = "添加活动帖子", response = Response.class)
     @RequestMapping(value = "/add_active_post", method = RequestMethod.POST)
     public Response addPostActiveList(
+            HttpServletRequest request,
             @ApiParam(value = "活动标题") @RequestParam String title,
             @ApiParam(value = "活动副标题") @RequestParam String subtitle,
             @ApiParam(value = "活动类型：0 告知类活动 1 商城促销类活动") @RequestParam String activetype,
@@ -449,7 +452,7 @@ public class PostController {
             @ApiParam(value = "是否设为热门（0 否  1 是）") @RequestParam(required = false) String ishot,
             @ApiParam(value = "分享商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Integer> result = postFacade.addPostActive(title, subtitle, activetype, iscontribute, activefee, coverimg, postcontent, isessence, orderid, essencedate, begintime, endtime, userid, hotimgurl, ishot, goodsid);
+        Map<String, Integer> result = postFacade.addPostActive(request, title, subtitle, activetype, iscontribute, activefee, coverimg, postcontent, isessence, orderid, essencedate, begintime, endtime, userid, hotimgurl, ishot, goodsid);
         if(response.getCode()==200){
             response.setMessage("添加成功");
         }
@@ -600,7 +603,8 @@ public class PostController {
      */
     @ApiOperation(value = "编辑帖子", notes = "用于帖子编辑接口", response = Response.class)
     @RequestMapping(value = "update_post", method = RequestMethod.POST)
-    public Response updatePostById(@ApiParam(value = "帖子id（必填）") @RequestParam String id,
+    public Response updatePostById(HttpServletRequest request,
+                                   @ApiParam(value = "帖子id（必填）") @RequestParam String id,
                                    @ApiParam(value = "帖子标题") @RequestParam(required = false) String title,//帖子标题
                                    @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,//帖子副标题
                                    @ApiParam(value = "帖子类型 0 普通帖 1 原生视频帖") @RequestParam(required = false) String type,//帖子类型
@@ -616,7 +620,7 @@ public class PostController {
                                    @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String time,
                                    @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Integer> map = postFacade.updatePostById(id, title, subtitle, type, userid, circleid, vid, bannerimgurl, coverimg, postcontent, isessence, ishot, orderid, time, goodsid);
+        Map<String, Integer> map = postFacade.updatePostById(request, id, title, subtitle, type, userid, circleid, vid, bannerimgurl, coverimg, postcontent, isessence, ishot, orderid, time, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -646,6 +650,7 @@ public class PostController {
     @ApiOperation(value = "编辑活动", notes = "编辑活动", response = Response.class)
     @RequestMapping(value = "update_activepost", method = RequestMethod.POST)
     public Response updateActivePostById(
+            HttpServletRequest request,
             @ApiParam(value = "帖子id（必填）") @RequestParam String id,
             @ApiParam(value = "帖子标题") @RequestParam(required = false) String title,
             @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,
@@ -665,7 +670,7 @@ public class PostController {
             @ApiParam(value = "编辑商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
 
-        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, userid, coverimg, postcontent, isessence, orderid, activefee, activetype, iscontribute, begintime, endtime, hotimgurl, ishot, essencedate, goodsid);
+        Map<String, Integer> map = postFacade.updateActivePostById(request, id, title, subtitle, userid, coverimg, postcontent, isessence, orderid, activefee, activetype, iscontribute, begintime, endtime, hotimgurl, ishot, essencedate, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

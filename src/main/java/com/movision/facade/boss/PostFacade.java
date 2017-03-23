@@ -26,6 +26,7 @@ import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
+import com.movision.utils.JsoupCompressImg;
 import com.movision.utils.ListUtil;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
@@ -35,6 +36,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -89,6 +92,9 @@ public class PostFacade {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private JsoupCompressImg jsoupCompressImg;
 
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
@@ -505,45 +511,55 @@ public class PostFacade {
      * @param time
      * @return
      */
-    public Map<String, Integer> addPost(String title, String subtitle, String type, String circleid,
+    public Map<String, Integer> addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid,
                                         String userid, String coverimg, String vid, String bannerimgurl,
                                         String postcontent, String isessence, String ishot, String orderid, String time, String goodsid) {
         PostTo post = new PostTo();
         Map<String, Integer> map = new HashedMap();
-        if (title != null && title != "") {
+        if (StringUtil.isNotEmpty(title)) {
             post.setTitle(title);//帖子标题
         }
-        if (subtitle != null && subtitle != "") {
+        if (StringUtil.isNotEmpty(subtitle)) {
             post.setSubtitle(subtitle);//帖子副标题
         }
-        if (type != null && type != "") {
+        if (StringUtil.isNotEmpty(type)) {
             post.setType(type);//帖子类型
         }
-        if (circleid != null && circleid != "") {
+        if (StringUtil.isNotEmpty(circleid)) {
             post.setCircleid(circleid);//圈子id
         }
-        if (bannerimgurl != null && bannerimgurl != "") {
+        if (StringUtil.isNotEmpty(bannerimgurl)) {
             post.setCoverimg(bannerimgurl);//添加帖子封面
         }
         post.setIsactive("0");//设置状态为帖子
-        if (postcontent != null && postcontent != "") {
-            post.setPostcontent(postcontent);//帖子内容
+        if (StringUtil.isNotEmpty(postcontent)) {
+            //内容转换
+            Map con = jsoupCompressImg.compressImg(request, postcontent);
+            System.out.println(con);
+            if (con.get("code").toString() == "200") {
+                String str = con.get("content").toString();
+                str = str.replace("\\", "");
+                post.setPostcontent(str);//帖子内容
+            } else {
+                logger.error("帖子内容转换异常");
+                post.setPostcontent(postcontent);
+            }
         }
         post.setIntime(new Date());//插入时间
-        if (ishot != null && ishot != "") {
+        if (StringUtil.isNotEmpty(ishot)) {
             post.setIshot(ishot);//是否为圈子精选
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date d = null;
-        if (isessence != null && isessence != "") {
+        if (StringUtil.isNotEmpty(isessence)) {
                 if (isessence != "0") {//判断是否为加精
                     post.setIsessence(isessence);//是否为首页精选
-                    if (!orderid.isEmpty()) {
+                    if (StringUtil.isNotEmpty(orderid)) {
                         post.setOrderid(Integer.parseInt(orderid));
                     } else {
                         post.setOrderid(0);
                     }
-                    if (time != null && time != "") {
+                    if (StringUtil.isNotEmpty(time)) {
                         try {
                             d = format.parse(time);
                             post.setEssencedate(d);
@@ -565,7 +581,7 @@ public class PostFacade {
             vide.setBannerimgurl(bannerimgurl);
             vide.setIntime(new Date());
             Integer in = videoService.insertVideoById(vide);//添加视频表
-            if (goodsid != null && goodsid != "") {//添加商品
+            if (StringUtil.isNotEmpty(goodsid)) {//添加商品
                 String[] lg = goodsid.split(",");//以逗号分隔
                 for (int i = 0; i < lg.length; i++) {
                     Map addgoods = new HashedMap();
@@ -599,7 +615,7 @@ public class PostFacade {
      * @param userid
      * @return
      */
-    public Map<String, Integer> addPostActive(String title, String subtitle, String activetype, String iscontribute, String activefee,
+    public Map<String, Integer> addPostActive(HttpServletRequest request, String title, String subtitle, String activetype, String iscontribute, String activefee,
                                               String coverimg, String postcontent, String isessence, String orderid, String essencedate,
                                               String begintime, String endtime, String userid, String hotimgurl, String ishot, String goodsid) {
         PostTo post = new PostTo();
@@ -617,7 +633,19 @@ public class PostFacade {
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             post.setCoverimg(coverimg);
-            post.setPostcontent(postcontent);//帖子内容
+        if (StringUtil.isNotEmpty(postcontent)) {
+            //内容转换
+            Map con = jsoupCompressImg.compressImg(request, postcontent);
+            System.out.println(con);
+            if (con.get("code").toString() == "200") {
+                String str = con.get("content").toString();
+                str = str.replace("\\", "");
+                post.setPostcontent(str);//帖子内容
+            } else {
+                logger.error("帖子内容转换异常");
+                post.setPostcontent(postcontent);
+            }
+        }
         if (!StringUtils.isEmpty(isessence)) {
                 if (Integer.parseInt(isessence) != 0) {//判断是否为加精
                     post.setIsessence(isessence);//是否为首页精选
@@ -849,7 +877,7 @@ public class PostFacade {
      * @param essencedate
      * @return
      */
-    public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String userid, String coverimg, String postcontent, String isessence,
+    public Map<String, Integer> updateActivePostById(HttpServletRequest request, String id, String title, String subtitle, String userid, String coverimg, String postcontent, String isessence,
                                                      String orderid, String activefee, String activetype, String iscontribute, String begintime, String endtime, String hotimgurl, String ishot, String essencedate, String goodsid) {
         PostActiveList postActiveList = new PostActiveList();
         Map<String, Integer> map = new HashedMap();
@@ -870,7 +898,19 @@ public class PostFacade {
             if (!StringUtil.isEmpty(userid)) {
                 postActiveList.setUserid(Integer.parseInt(userid));
             }
-            postActiveList.setPostcontent(postcontent);
+            if (StringUtil.isNotEmpty(postcontent)) {
+                //内容转换
+                Map con = jsoupCompressImg.compressImg(request, postcontent);
+                System.out.println(con);
+                if (con.get("code").toString() == "200") {
+                    String str = con.get("content").toString();
+                    str = str.replace("\\", "");
+                    postActiveList.setPostcontent(str);//帖子内容
+                } else {
+                    logger.error("帖子内容转换异常");
+                    postActiveList.setPostcontent(postcontent);
+                }
+            }
             if (!StringUtil.isEmpty(isessence)) {
                 postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
             }
@@ -893,7 +933,7 @@ public class PostFacade {
             if (!StringUtil.isEmpty(ishot)) {
                 postActiveList.setIshot(ishot);
             }
-            int result = postService.updateActivePostById(postActiveList);//编辑帖子
+            int result = postService.updateActivePostById(postActiveList);//编辑活动帖子
             Period period = new Period();
             period.setPostid(Integer.parseInt(id));
             Date bstime = null;
@@ -903,8 +943,8 @@ public class PostFacade {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                period.setBegintime(bstime);
             }
+            period.setBegintime(bstime);
             Date enstime = null;
             if (!StringUtil.isEmpty(endtime)) {
                 try {
@@ -912,9 +952,11 @@ public class PostFacade {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                period.setEndtime(enstime);
             }
-            int res = postService.updateActivePostPerById(period);
+            period.setEndtime(enstime);
+            if (enstime != null && bstime != null) {
+                int res = postService.updateActivePostPerById(period);
+            }
             if (!StringUtils.isEmpty(goodsid)) {
                 String[] lg = goodsid.split(",");//以逗号分隔
                 int de = goodsService.deletePostyByGoods(Integer.parseInt(id));//删除活动发表的商品
@@ -932,7 +974,6 @@ public class PostFacade {
                 goodsService.deletePostyByGoods(Integer.parseInt(id));//删除活动发表的商品
             }
             map.put("result", result);
-            map.put("res", res);
         } catch (Exception e) {
             log.error("帖子编辑异常", e);
         }
@@ -956,7 +997,7 @@ public class PostFacade {
      * @param time
      * @return
      */
-    public Map<String, Integer> updatePostById(String id, String title, String subtitle, String type,
+    public Map<String, Integer> updatePostById(HttpServletRequest request, String id, String title, String subtitle, String type,
                                                String userid, String circleid, String vid, String bannerimgurl,
                                                String coverimg, String postcontent, String isessence, String ishot, String orderid, String time, String goodsid) {
         PostTo post = new PostTo();
@@ -988,7 +1029,14 @@ public class PostFacade {
                 post.setCoverimg(coverimg);//添加帖子封面
             }
             post.setIsactive("0");//设置状态为帖子
-            post.setPostcontent(postcontent);//帖子内容
+            if (StringUtil.isNotEmpty(postcontent)) {
+                //内容转换
+                Map con = jsoupCompressImg.compressImg(request, postcontent);
+                System.out.println(con);
+                String str = con.get("content").toString();
+                str = str.replace("\\", "");
+                post.setPostcontent(str);//帖子内容
+            }
             if (!StringUtils.isEmpty(isessence)) {
                 post.setIsessence(isessence);//是否为首页精选
             }
