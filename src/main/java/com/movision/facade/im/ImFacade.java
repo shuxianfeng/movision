@@ -519,7 +519,6 @@ public class ImFacade {
         imBatchAttachMsg.setFromAccid(fromaccid);
         imBatchAttachMsg.setAttach(body);
         imBatchAttachMsg.setToAccids(toAccids);
-
         return this.sendImHttpPost(ImConstant.SEND_BATCH_ATTACH_MSG, BeanUtil.ImBeanToMap(imBatchAttachMsg));
     }
 

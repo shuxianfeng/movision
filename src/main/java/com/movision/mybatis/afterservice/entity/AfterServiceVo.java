@@ -31,6 +31,15 @@ public class AfterServiceVo {
     private Date processingtime;
 
     private Integer userid;
+    private Double origprice;
+
+    public Double getOrigprice() {
+        return origprice;
+    }
+
+    public void setOrigprice(Double origprice) {
+        this.origprice = origprice;
+    }
 
     private Date proposertime;
     private Integer status;
