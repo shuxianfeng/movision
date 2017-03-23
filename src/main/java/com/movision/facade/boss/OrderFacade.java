@@ -24,6 +24,7 @@ import com.movision.mybatis.province.entity.Province;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -700,6 +701,28 @@ public class OrderFacade {
      */
     public List<LogisticsCompany> findAllLogisticsCompany() {
         return bossOrderService.findAllLogisticsCompany();
+    }
+
+    /**
+     * 修改退货
+     *
+     * @param esy
+     * @param id
+     * @return
+     */
+    public Map<String, Object> updateAfterServiceH(Integer esy, Integer id) {
+        Map<String, Object> map = new HashedMap();
+        Afterservice afterservice = new Afterservice();
+        if (esy == 0) {
+            afterservice.setAftersalestatus(6);
+            afterservice.setId(id);
+        } else if (esy == 1) {
+            afterservice.setAftersalestatus(5);
+            afterservice.setId(id);
+        }
+        int result = bossOrderService.updateAfterServiceH(afterservice);
+        map.put("result", result);
+        return map;
     }
 }
 

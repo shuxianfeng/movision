@@ -139,6 +139,8 @@ public interface BossOrdersMapper {
 
     String queryReplaceCode(String logisticsid);
 
+    Integer updateAfterServiceH(Afterservice afterservice);//退货处理
+
 
 
 

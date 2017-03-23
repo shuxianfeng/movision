@@ -840,5 +840,21 @@ public class BossOrderService {
         }
     }
 
+    /**
+     * 退货处理
+     *
+     * @param afterservice
+     * @return
+     */
+    public Integer updateAfterServiceH(Afterservice afterservice) {
+        try {
+            loger.info("退货处理");
+            return bossOrdersMapper.updateAfterServiceH(afterservice);
+        } catch (Exception e) {
+            loger.error("退货处理失败", e);
+            throw e;
+        }
+    }
+
 
 }

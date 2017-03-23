@@ -641,4 +641,25 @@ public class OrdersListController {
 
     }
 
+    /**
+     * 修改收货状态
+     *
+     * @param id
+     * @param esy
+     * @return
+     */
+    @ApiOperation(value = "修改收货状态", notes = "修改收货状态", response = Response.class)
+    @RequestMapping(value = "update_afterhservices", method = RequestMethod.POST)
+    public Response updateAfterServiceH(@ApiParam(value = "售后id") @RequestParam(required = false) Integer id,
+                                        @ApiParam(value = "(0同意1不同意)") @RequestParam(required = false) Integer esy) {
+
+        Response response = new Response();
+        Map<String, Object> map = orderFacade.updateAfterServiceH(esy, id);
+        if (response.getCode() == 200) {
+            response.setMessage("修改成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
 }

@@ -982,4 +982,13 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
         SELECT c.code FROM   yw_logidtics_relation  l LEFT JOIN
   yw_logistics_company c ON c.id=l.companyid WHERE  l.logisticsid=#{logisticsid,jdbcType=VARCHAR}
 </select>
+    <update id="updateAfterServiceH" parameterType="com.movision.mybatis.afterservice.entity.Afterservice">
+        update yw_afterservice
+        <set>
+            <if test="aftersalestatus != null">
+                aftersalestatus = #{aftersalestatus,jdbcType=INTEGER},
+            </if>
+        </set>
+        WHERE id=#{id,jdbcType=INTEGER}
+    </update>
 </mapper>
