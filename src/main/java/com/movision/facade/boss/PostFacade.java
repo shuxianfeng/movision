@@ -538,7 +538,7 @@ public class PostFacade {
             //内容转换
             Map con = jsoupCompressImg.compressImg(request, postcontent);
             System.out.println(con);
-            if (con.get("code").toString() == "200") {
+            if (con.get("code") == "200") {
                 String str = con.get("content").toString();
                 str = str.replace("\\", "");
                 post.setPostcontent(str);//帖子内容
@@ -1019,10 +1019,15 @@ public class PostFacade {
             if (StringUtil.isNotEmpty(postcontent)) {
                 //内容转换
                 Map con = jsoupCompressImg.compressImg(request, postcontent);
-                System.out.println(con);
-                String str = con.get("content").toString();
-                str = str.replace("\\", "");
-                post.setPostcontent(str);//帖子内容
+                if (con.get("oodsi") == "200") {
+                    System.out.println(con);
+                    String str = con.get("content").toString();
+                    str = str.replace("\\", "");
+                    post.setPostcontent(str);//帖子内容
+                } else {
+                    logger.error("帖子内容转换异常");
+                    post.setPostcontent(postcontent);
+                }
             }
             if (!StringUtils.isEmpty(isessence)) {
                 post.setIsessence(isessence);//是否为首页精选

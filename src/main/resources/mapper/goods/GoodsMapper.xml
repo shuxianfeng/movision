@@ -1412,7 +1412,7 @@
         (SELECT img_url FROM yw_goods_img WHERE goodsid=go.id AND type=2) AS imgurl,
         go.name,go.protype,go.isdel,go.origprice,go.price,go.sales,go.stock,go.attribute
         FROM yw_goods go WHERE go.id IN
-        (SELECT goodsid FROM yw_active_goods WHERE postid=#{postid,jdbcType=INTEGER}) ORDER BY go.onlinetime DESC
+        (SELECT goodid FROM yw_active_goods WHERE postid=#{postid,jdbcType=INTEGER}) ORDER BY go.onlinetime DESC
     </select>
     <select id="findMaxComboid" resultType="java.lang.Integer">
         select MAX(comboid) from yw_combo
