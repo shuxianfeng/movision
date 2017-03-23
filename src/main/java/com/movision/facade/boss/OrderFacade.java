@@ -473,7 +473,21 @@ public class OrderFacade {
      * @return
      */
     public List<AfterServiceVo> queryAfterService(Paging<AfterServiceVo> pager) {
-        return bossOrderService.queryAfterSevice(pager);
+        List<AfterServiceVo> list = bossOrderService.queryAfterSevice(pager);
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                String provice = list.get(i).getProvince();
+                String city = list.get(i).getCity();
+                String district = list.get(i).getDistrict();
+                String prov = bossOrderService.queryprovice(provice);
+                String cit = bossOrderService.querycity(city);
+                String distr = bossOrderService.querydistrict(district);
+                list.get(i).setProvince(prov);
+                list.get(i).setCity(cit);
+                list.get(i).setDistrict(distr);
+            }
+        }
+        return list;
     }
 
 
