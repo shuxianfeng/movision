@@ -620,6 +620,9 @@ public class OrderFacade {
         afterservice.setAftersalestatus(3);
         afterservice.setProcessingstatus(2);
         afterservice.setReplacementnumber(replacementnumber);
+        if (logisticsway.equals("-1") || logisticsway.equals("0")) {
+            afterservice.setTakeway(Integer.parseInt(logisticsway));
+        }
         int res = bossOrderService.updateAfterService(afterservice);
         AfterserviceStream afterserviceStream = new AfterserviceStream();
         afterserviceStream.setAfterserviceid(Integer.parseInt(id));
