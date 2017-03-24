@@ -646,9 +646,12 @@ public class OrderFacade {
         afterserviceStream.setProcessingtime(new Date());
         int result = bossOrderService.addAfterService(afterserviceStream);
         LogidticsRelation relation = new LogidticsRelation();
-        relation.setLogisticsid(replacementnumber);
-        relation.setCompanyid(Integer.parseInt(logisticsway));
-        int red = bossOrderService.addLogisticsRalation(relation);
+        int red = 0;
+        if (!logisticsway.equals("-1") || !logisticsway.equals("0")) {
+            relation.setLogisticsid(replacementnumber);
+            relation.setCompanyid(Integer.parseInt(logisticsway));
+            red = bossOrderService.addLogisticsRalation(relation);
+        }
         map.put("result", result);
         map.put("res", res);
         map.put("red", red);
