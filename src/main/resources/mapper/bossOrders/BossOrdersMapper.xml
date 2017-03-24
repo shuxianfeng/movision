@@ -994,15 +994,25 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
         WHERE id=#{id,jdbcType=INTEGER}
     </update>
     <select id="queryLastOrder" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        select id from yw_orders where id = (select id from yw_orders where id<![CDATA[<>]]>#{id,jdbcType=INTEGER} )  order by id desc limit 1)
+        <![CDATA[
+
+        select id from yw_orders where id = (select id from yw_orders where id<#{id,jdbcType=INTEGER} )  order by id desc limit 1)
+
+        ]]>
     </select>
     <select id="queryNextOrder" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-select id from yw_orders where id = (select id from yw_orders where id > #{id,jdbcType=INTEGER}  order by id asc limit 1)
+        select id from yw_orders where id = (select id from yw_orders where id > #{id,jdbcType=INTEGER} order by id asc
+        limit 1)
     </select>
     <select id="queryLastAfterService" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        select id from yw_afterservice where id = (select id from yw_afterservice where id<![CDATA[<>]]>#{id,jdbcType=INTEGER} )   order by id desc limit 1)
+        <![CDATA[
+
+        select id from yw_afterservice where id = (select id from yw_afterservice where id<#{id,jdbcType=INTEGER} )   order by id desc limit 1)
+
+        ]]>
     </select>
     <select id="queryNextAfterService" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-select id from yw_afterservice where id = (select id from yw_afterservice where id > #{id,jdbcType=INTEGER}  order by id asc limit 1)
+        select id from yw_afterservice where id = (select id from yw_afterservice where id > #{id,jdbcType=INTEGER}
+        order by id asc limit 1)
     </select>
 </mapper>
