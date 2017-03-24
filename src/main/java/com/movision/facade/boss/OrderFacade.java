@@ -639,7 +639,7 @@ public class OrderFacade {
         AfterserviceStream afterserviceStream = new AfterserviceStream();
         afterserviceStream.setAfterserviceid(Integer.parseInt(id));
         afterserviceStream.setProcessingstatus(2);
-        afterserviceStream.setAftersalestatus(2);
+        afterserviceStream.setAftersalestatus(3);
         afterserviceStream.setOrderid(Integer.parseInt(orderid));
         afterserviceStream.setRemark(remark);
         afterserviceStream.setProcessingpeople(ShiroUtil.getBossUser().getUsername());
