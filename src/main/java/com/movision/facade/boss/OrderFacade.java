@@ -724,10 +724,10 @@ public class OrderFacade {
     public Map<String, Object> updateAfterServiceH(Integer esy, Integer id) {
         Map<String, Object> map = new HashMap();
         Afterservice afterservice = new Afterservice();
-        if (esy == 0) {
+        if (esy == 1) {
             afterservice.setAftersalestatus(6);
             afterservice.setId(id);
-        } else if (esy == 1) {
+        } else if (esy == 2) {
             afterservice.setAftersalestatus(5);
             afterservice.setId(id);
         }
