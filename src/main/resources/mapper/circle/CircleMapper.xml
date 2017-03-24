@@ -512,7 +512,7 @@
     </select>
 
     <select id="queryDiscoverList" resultType="com.movision.mybatis.circle.entity.Circle">
-        SELECT orderid FROM yw_circle WHERE AND status=1 AND isdel=0 GROUP BY orderid
+        SELECT orderid FROM yw_circle WHERE status=1 AND isdel=0 GROUP BY orderid
     </select>
 
     <select id="queryCircleDiscover" parameterType="java.lang.String" resultType="java.lang.Integer">
@@ -547,7 +547,7 @@
         FROM yw_circle as c
         LEFT JOIN yw_user as u ON c.phone=u.phone
         LEFT JOIN yw_circle_category as cat ON cat.id=c.category
-        WHERE c.id=#{circleid.jdbcType=INTEGER} AND status=1 AND isdel=0
+        WHERE c.id=#{circleid.jdbcType=INTEGER} AND c.status=1 AND c.isdel=0
     </select>
 
     <update id="updateCircle" parameterType="com.movision.mybatis.circle.entity.CircleDetails">

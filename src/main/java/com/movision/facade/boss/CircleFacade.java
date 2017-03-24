@@ -577,6 +577,7 @@ public class CircleFacade {
                             }
                             adminlist.add(userslist.get(u));//把圈子的管理员遍历出临时存放
                         }
+                        vo.setCirclemanagerlist(userslist);//圈子管理员列表
                     }
                     Map m = new HashedMap();
                     m.put("nickname", listt.get(e).getCirclename());
@@ -607,7 +608,6 @@ public class CircleFacade {
                     vo.setCategoryname(listt.get(e).getCategoryname());//圈子分类名
                     vo.setCirclename(listt.get(e).getCirclename());//圈主
                     vo.setCategorylevel(listt.get(e).getCategorylevel().toString());//判断是否为大V
-                    vo.setCirclemanagerlist(userslist);//圈子管理员列表
                     vo.setSupportnum(listt.get(e).getSupportnum());//支持数
                     vo.setStatus(listt.get(e).getStatus());//圈子状态：0 待审核 1 审核通过 2 审核不通过
                     vo.setIsrecommend(listt.get(e).getIsrecommend());//推荐首页
