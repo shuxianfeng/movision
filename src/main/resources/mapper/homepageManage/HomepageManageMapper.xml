@@ -160,7 +160,7 @@
     </update>
 
     <select id="findAllqueryAdvertisementList" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
-        select * from yw_homepage_manage
+        select m.*,t.name,t.type from yw_homepage_manage m LEFT JOIN yw_homepage_manage_type t ON m.topictype=t.type
     </select>
 
     <select id="queryAvertisementById" parameterType="java.lang.String"

@@ -1412,13 +1412,27 @@
         (SELECT img_url FROM yw_goods_img WHERE goodsid=go.id AND type=2) AS imgurl,
         go.name,go.protype,go.isdel,go.origprice,go.price,go.sales,go.stock,go.attribute
         FROM yw_goods go WHERE go.id IN
-        (SELECT goodid FROM yw_active_goods WHERE postid=#{postid,jdbcType=INTEGER}) ORDER BY go.onlinetime DESC
+        (SELECT goodsid FROM yw_post_share_goods WHERE postid=#{postid,jdbcType=INTEGER}) ORDER BY go.onlinetime DESC
     </select>
     <select id="findMaxComboid" resultType="java.lang.Integer">
         select MAX(comboid) from yw_combo
     </select>
 
     <delete id="deletePostyByGoods" parameterType="java.lang.Integer">
+        DELETE FROM yw_post_share_goods WHERE postid=#{postid,jdbcType=INTEGER}
+    </delete>
+
+    <delete id="deleteActivityByGoods" parameterType="java.lang.Integer">
         DELETE FROM yw_active_goods WHERE postid=#{postid,jdbcType=INTEGER}
     </delete>
+
+    <select id="queryGoodsByPostid" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT go.id,
+        (SELECT brandname FROM yw_brand b WHERE b.brandid=go.brandid) AS brandname,
+        (SELECT img_url FROM yw_goods_img WHERE goodsid=go.id AND type=2) AS imgurl,
+        go.name,go.protype,go.isdel,go.origprice,go.price,go.sales,go.stock,go.attribute
+        FROM yw_goods go WHERE go.id IN
+        (SELECT goodid FROM yw_active_goods WHERE postid=#{postid,jdbcType=INTEGER}) ORDER BY go.onlinetime DESC
+    </select>
 </mapper>

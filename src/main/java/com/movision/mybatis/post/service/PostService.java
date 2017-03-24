@@ -415,8 +415,8 @@ public class PostService {
                 log.error("查询报名人数失败");
                 throw  e;
             }
-
     }
+
 
     /**
      * 后台管理-增加活动
@@ -480,6 +480,22 @@ public class PostService {
             throw e;
         }
     }
+
+    /**
+     * 活动预览
+     *
+     * @param postid
+     * @return
+     */
+    public PostList queryActivityParticulars(Integer postid) {
+        try {
+            log.info("帖子预览");
+            return postMapper.queryActivityParticulars(postid);
+        } catch (Exception e) {
+            log.error("帖子预览异常");
+            throw e;
+        }
+    }
      /**
      * 添加帖子
      *
@@ -507,6 +523,22 @@ public class PostService {
             return postMapper.insertGoods(typ);
         } catch (Exception e) {
             log.error("帖子添加商品异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 添加商城促销类商品
+     *
+     * @param map
+     * @return
+     */
+    public int insertPromotionGoods(Map map) {
+        try {
+            log.info("添加商城促销类商品");
+            return postMapper.insertPromotionGoods(map);
+        } catch (Exception e) {
+            log.error("添加商城促销类商品异常");
             throw e;
         }
     }

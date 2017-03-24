@@ -184,5 +184,9 @@ public interface GoodsMapper {
 
     List<GoodsVo> queryGoods(Integer goodsId);
 
-    int deletePostyByGoods(Integer map);
+    int deletePostyByGoods(Integer postid);
+
+    int deleteActivityByGoods(Integer postid);
+
+    List<GoodsVo> queryGoodsByPostid(Integer postid);//根据活动id 查询活动促销类商品
 }

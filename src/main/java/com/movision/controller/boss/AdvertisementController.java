@@ -188,6 +188,18 @@ public class AdvertisementController {
         return response;
     }
 
+    public Response queryAdvertisementLike(@ApiParam(value = "广告名称") @RequestParam(required = false) String name,
+                                           @ApiParam(value = "排序（传1按时间正序，默认倒叙)") @RequestParam(required = false) String type,
+                                           @ApiParam(value = "当前页") @RequestParam(required = false) String pageNo,
+                                           @ApiParam(value = "每页几条") @RequestParam(required = false) String pageSize) {
+        Response response = new Response();
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData("");
+        return response;
+    }
+
     /**
      * 编辑广告
      *

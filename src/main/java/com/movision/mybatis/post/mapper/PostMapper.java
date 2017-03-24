@@ -31,6 +31,8 @@ public interface PostMapper {
 
     int insertGoods(Map typ);
 
+    int insertPromotionGoods(Map map);
+
     Post selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(Post record);
@@ -110,6 +112,8 @@ public interface PostMapper {
     int deletePost(Integer postid);
 
     PostList queryPostParticulars(Integer postid);
+
+    PostList queryActivityParticulars(Integer postid);
 
     int addPost(Map map);
 

@@ -848,7 +848,7 @@ public class PostController {
     }
 
     /**
-     * 根据id查询
+     * 根据id查询活动
      *
      * @param id
      * @return

@@ -1337,12 +1337,18 @@ public class GoodsService {
         }
     }
 
+    /**
+     * 根据帖子id查询被分享的商品
+     *
+     * @param goodsid
+     * @return
+     */
     public List<GoodsVo> queryGoods(Integer goodsid) {
         try {
-            log.info("查询商品");
+            log.info("根据帖子id查询被分享的商品");
             return goodsMapper.queryGoods(goodsid);
         } catch (Exception e) {
-            log.error("查询商品异常");
+            log.error("根据帖子id查询被分享的商品异常");
             throw e;
         }
     }
@@ -1350,15 +1356,48 @@ public class GoodsService {
     /**
      * 删除帖子分享的商品
      *
-     * @param map
+     * @param postid
      * @return
      */
-    public int deletePostyByGoods(Integer map) {
+    public int deletePostyByGoods(Integer postid) {
         try {
             log.info("删除帖子分享的商品");
-            return goodsMapper.deletePostyByGoods(map);
+            return goodsMapper.deletePostyByGoods(postid);
         } catch (Exception e) {
             log.error("删除帖子分享的商品异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 删除活动促销类商品
+     *
+     * @param postid
+     * @return
+     */
+    public int deleteActivityByGoods(Integer postid) {
+        try {
+            log.info("删除活动促销类商品");
+            return goodsMapper.deleteActivityByGoods(postid);
+        } catch (Exception e) {
+            log.error("删除活动促销类商品异常");
+            throw e;
+        }
+    }
+
+
+    /**
+     * 根据活动id查询促销类商品
+     *
+     * @param postid
+     * @return
+     */
+    public List<GoodsVo> queryGoodsByPostid(Integer postid) {
+        try {
+            log.info("根据活动id查询促销类商品");
+            return goodsMapper.queryGoodsByPostid(postid);
+        } catch (Exception e) {
+            log.error("根据活动id查询促销类商品异常");
             throw e;
         }
     }

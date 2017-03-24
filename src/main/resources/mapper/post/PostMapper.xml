@@ -1129,7 +1129,20 @@
         (SELECT name FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id)) AS circlename,
         (SELECT category FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id)) AS category
         FROM yw_post p
-        WHERE id=#{postid,jdbcType=INTEGER}
+        WHERE id=#{postid,jdbcType=INTEGER} AND p.isactive=0
+    </select>
+
+    <select id="queryActivityParticulars" resultType="com.movision.mybatis.post.entity.PostList"
+            parameterType="java.lang.Integer">
+        SELECT p.*,
+        (SELECT COUNT(1) FROM yw_post_share WHERE postid=p.id) AS share,
+        (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded WHERE postid=p.id) AS rewarded,
+        (SELECT COALESCE(SUM(num),0) FROM yw_post_accusation WHERE postid =p.id) AS accusation,
+        (SELECT nickname FROM yw_user WHERE id=(SELECT userid FROM yw_post WHERE id=p.id)) AS nickname,
+        (SELECT name FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id)) AS circlename,
+        (SELECT category FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id)) AS category
+        FROM yw_post p
+        WHERE id=#{postid,jdbcType=INTEGER} AND p.isactive=1
     </select>
 
     <select id="queryPostNumAndisessenceByCircleid" parameterType="java.lang.Integer"
@@ -1440,7 +1453,8 @@
         (SELECT category FROM yw_circle WHERE id=p.circleid)as category,p.ishot,p.userid,
         (SELECT nickname FROM yw_user WHERE id=p.userid) as nickname,p.coverimg,
         p.isessence,p.essencedate as time,p.orderid,p.postcontent,v.videourl vid,v.bannerimgurl
-        FROM yw_post as p LEFT JOIN yw_video as v ON p.id=v.postid WHERE p.id=#{postid,jdbcType=INTEGER}
+        FROM yw_post as p LEFT JOIN yw_video as v ON p.id=v.postid WHERE p.id=#{postid,jdbcType=INTEGER} AND
+        p.isactive=0 AND isdel=0
     </select>
 
 
@@ -1534,6 +1548,34 @@
     </select>
 
     <insert id="insertGoods" parameterType="java.util.Map">
+        insert into yw_post_share_goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+
+            <if test="postid != null">
+                postid,
+            </if>
+            <if test="goodsid != null">
+                goodsid
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+
+            <if test="postid != null">
+                #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="goodsid != null">
+                #{goodsid,jdbcType=INTEGER}
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertPromotionGoods" parameterType="java.util.Map">
         insert into yw_active_goods
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

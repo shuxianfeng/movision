@@ -1,6 +1,9 @@
 package com.movision.mybatis.post.entity;
 
+import com.movision.mybatis.goods.entity.GoodsVo;
+
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用于帖子列表
@@ -88,6 +91,15 @@ public class PostList {
     private Integer persum;//报名人数
 
     private String squareimgurl;//活动首页方形图
+    private List<GoodsVo> promotionGoods;//活动促销商品
+
+    public List<GoodsVo> getPromotionGoods() {
+        return promotionGoods;
+    }
+
+    public void setPromotionGoods(List<GoodsVo> promotionGoods) {
+        this.promotionGoods = promotionGoods;
+    }
 
     public String getSquareimgurl() {
         return squareimgurl;
