@@ -452,6 +452,10 @@ public class PostFacade {
      */
     public PostList queryPostParticulars(String postid) {
         PostList postList = postService.queryPostParticulars(Integer.parseInt(postid));
+        List<GoodsVo> goodses = goodsService.queryGoods(postList.getId());
+        if (goodses != null) {
+            postList.setPromotionGoods(goodses);
+        }
         return postList;
     }
 
