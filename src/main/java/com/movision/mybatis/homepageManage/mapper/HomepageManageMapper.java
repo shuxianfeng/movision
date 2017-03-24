@@ -1,7 +1,7 @@
 package com.movision.mybatis.homepageManage.mapper;
 
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
-import com.movision.mybatis.manageType.entity.ManageType;
+import com.movision.mybatis.homepageManage.entity.HomepageManageVo;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -24,12 +24,16 @@ public interface HomepageManageMapper {
 
     int updateByPrimaryKey(HomepageManage record);
 
-    List<HomepageManage> findAllqueryAdvertisementList(RowBounds rowBounds);
+    List<HomepageManageVo> findAllqueryAdvertisementList(RowBounds rowBounds);
 
-    HomepageManage queryAvertisementById(String id);
+    HomepageManageVo queryAvertisementById(String id);
 
     int addAdvertisement(Map map);
 
     int updateAdvertisement(Map map);
+
+    List<HomepageManageVo> findAllQueryAdvertisementLike(Map map, RowBounds rowBounds);
+
+    List<Integer> queryAdvertisementLocation(String type);
 
 }

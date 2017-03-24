@@ -1,6 +1,8 @@
 package com.movision.facade.boss;
 
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
+import com.movision.mybatis.homepageManage.entity.HomepageManageVo;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.manageType.entity.ManageType;
 import com.movision.mybatis.manageType.service.ManageTypeService;
@@ -9,6 +11,7 @@ import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +34,7 @@ public class HomepageManageFacade {
      * @param pager
      * @return
      */
-    public List<HomepageManage> queryAdvertisementList(Paging<HomepageManage> pager) {
+    public List<HomepageManageVo> queryAdvertisementList(Paging<HomepageManageVo> pager) {
         return homepageManageService.queryAdvertisementList(pager);
     }
 
@@ -41,7 +44,7 @@ public class HomepageManageFacade {
      * @param id
      * @return
      */
-    public HomepageManage queryAvertisementById(String id) {
+    public HomepageManageVo queryAvertisementById(String id) {
         return homepageManageService.queryAvertisementById(id);
     }
 
@@ -50,8 +53,8 @@ public class HomepageManageFacade {
      *
      * @return
      */
-    public List<ManageType> queryAdvertisementTypeList() {
-        return manageTypeService.queryAdvertisementTypeList();
+    public List<ManageType> queryAdvertisementTypeList(Paging<ManageType> pager) {
+        return manageTypeService.queryAdvertisementTypeList(pager);
     }
 
     public int addAdvertisement(String topictype, String orderid, String content, String subcontent, String url, String transurl) {
@@ -65,6 +68,7 @@ public class HomepageManageFacade {
         map.put("intime", new Date());
         map.put("clicksum", 0);
         map.put("ordersum", 0);
+        map.put("isdel", 0);
         return homepageManageService.addAdvertisement(map);
     }
 
@@ -80,6 +84,8 @@ public class HomepageManageFacade {
     public int addAdvertisementType(String name, String wide, String high, String quantity) {
         Map map = new HashedMap();
         map.put("name", name);
+        Integer type = manageTypeService.queryAdvertisementType();
+        map.put("type", type + 1);
         map.put("wide", wide);
         map.put("high", high);
         map.put("quantity", quantity);
@@ -118,10 +124,9 @@ public class HomepageManageFacade {
      * @param id
      * @return
      */
-    public int updateAdvertisement(String id, String topictype, String orderid, String content, String subcontent, String url, String transurl) {
+    public int updateAdvertisement(String id, String orderid, String content, String subcontent, String url, String transurl) {
         Map map = new HashedMap();
         map.put("id", id);
-        map.put("topictype", topictype);
         map.put("orderid", orderid);
         map.put("content", content);
         map.put("subcontent", subcontent);
@@ -129,5 +134,101 @@ public class HomepageManageFacade {
         map.put("transurl", transurl);
 
         return homepageManageService.updateAdvertisement(map);
+    }
+
+    /**
+     * 根据条件查询广告列表
+     *
+     * @param name
+     * @param type
+     * @param pager
+     * @return
+     */
+    public List<HomepageManageVo> queryAdvertisementLike(String name, String type, Paging<HomepageManageVo> pager) {
+        Map map = new HashedMap();
+        map.put("name", name);
+        map.put("type", type);
+        return homepageManageService.queryAdvertisementLike(map, pager);
+    }
+
+    /**
+     * 查询广告位置排序
+     *
+     * @param type
+     * @return
+     */
+    public List<Integer> queryAdvertisementLocation(String type, String orderid) {
+        //查询此广告位置可以放几个广告
+        Integer str = manageTypeService.queryAdvertisementLocation(type);
+        //查询此广告位置下已经有几条广告
+        List<Integer> integers = homepageManageService.queryAdvertisementLocation(type);
+        List<Integer> i = new ArrayList<>();
+        if (str > integers.size()) {
+            for (int n = 1; n <= str; n++) {
+                i.add(n);
+            }
+            for (int m = 0; m < i.size(); m++) {
+                for (int k = 0; k < integers.size(); k++) {
+                    if (integers.get(k) == i.get(m)) {
+                        if (StringUtil.isNotEmpty(orderid)) {
+                            if (i.get(m) != Integer.parseInt(orderid)) {//返回包含当前排序的排序
+                                i.remove(m);
+                            }
+                        } else {
+                            i.remove(m);
+                        }
+                    }
+                }
+            }
+            return i;
+        } else {
+            return i;
+        }
+    }
+
+    /**
+     * 编辑广告类型
+     *
+     * @param id
+     * @param name
+     * @param wide
+     * @param high
+     * @param quantity
+     * @return
+     */
+    public Map updateAdvertisementType(String id, String name, String wide, String high, String quantity) {
+        ManageType manageType = new ManageType();
+        Map map = new HashedMap();
+        if (StringUtil.isNotEmpty(id)) {
+            manageType.setId(Integer.parseInt(id));
+        }
+        if (StringUtil.isNotEmpty(name)) {
+            manageType.setName(name);
+        }
+        if (StringUtil.isNotEmpty(wide)) {
+            manageType.setWide(Integer.parseInt(wide));
+        }
+        if (StringUtil.isNotEmpty(high)) {
+            manageType.setHigh(Integer.parseInt(high));
+        }
+        if (StringUtil.isNotEmpty(quantity)) {
+            manageType.setQuantity(Integer.parseInt(quantity));
+        }
+        int i = manageTypeService.updateAdvertisementType(manageType);
+        map.put("resault", i);
+        return map;
+    }
+
+    /**
+     * 根据id删除广告
+     *
+     * @param id
+     * @return
+     */
+    public Map deleteAdvertisement(String id) {
+        Map map = new HashedMap();
+        int i = homepageManageService.deleteAdvertisement(Integer.parseInt(id));
+        map.put("resault", i);
+        return map;
     }
 }

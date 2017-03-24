@@ -24,16 +24,16 @@ public class ManageTypeService {
     private ManageTypeMapper manageTypeMapper;
 
     /**
-     * 查询广告类型
+     * 查询广告类型列表
      *
      * @return
      */
-    public List<ManageType> queryAdvertisementTypeList() {
+    public List<ManageType> queryAdvertisementTypeList(Paging<ManageType> pager) {
         try {
-            logge.info("查询广告类型");
-            return manageTypeMapper.queryAdvertisementTypeList();
+            logge.info("查询广告类型列表");
+            return manageTypeMapper.findAllqueryAdvertisementTypeList(pager.getRowBounds());
         } catch (Exception e) {
-            logge.error("查询广告类型异常");
+            logge.error("查询广告类型列表异常");
             throw e;
         }
     }
@@ -50,6 +50,20 @@ public class ManageTypeService {
             return manageTypeMapper.addAdvertisementType(map);
         } catch (Exception e) {
             logge.error("添加广告类型异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询最大广告位置类型
+     * @return
+     */
+    public Integer queryAdvertisementType() {
+        try {
+            logge.info("查询最大广告位置类型");
+            return manageTypeMapper.queryAdvertisementType();
+        } catch (Exception e) {
+            logge.error("查询最大广告位置类型");
             throw e;
         }
     }
@@ -82,6 +96,38 @@ public class ManageTypeService {
             return manageTypeMapper.findAllQueryAdvertisementTypeLikeName(map, pager.getRowBounds());
         } catch (Exception e) {
             logge.error("根据广告名称模糊查询广告类型列表异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询广告位置排序
+     *
+     * @param type
+     * @return
+     */
+    public Integer queryAdvertisementLocation(String type) {
+        try {
+            logge.info("查询广告位置排序");
+            return manageTypeMapper.queryAdvertisementLocation(type);
+        } catch (Exception e) {
+            logge.error("查询广告位置排序异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 编辑广告类型
+     *
+     * @param manageType
+     * @return
+     */
+    public int updateAdvertisementType(ManageType manageType) {
+        try {
+            logge.info("编辑广告类型");
+            return manageTypeMapper.updateByPrimaryKeySelective(manageType);
+        } catch (Exception e) {
+            logge.error("编辑广告类型异常");
             throw e;
         }
     }

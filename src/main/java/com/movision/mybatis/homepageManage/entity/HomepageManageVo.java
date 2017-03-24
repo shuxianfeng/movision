@@ -2,7 +2,7 @@ package com.movision.mybatis.homepageManage.entity;
 
 import java.util.Date;
 
-public class HomepageManage {
+public class HomepageManageVo {
     private Integer id;
 
     //广告位置：0 首页--你可能喜欢--板块banner  1 ‘发现’首页banner
@@ -26,6 +26,14 @@ public class HomepageManage {
 
     private Integer ordersum;//生成订单数量
 
+    private String name;//广告位置名称
+
+    private Integer type;//广告位置类型
+
+    private String wide;//宽
+
+    private String high;//高
+
     private Integer isdel;//是否删除 1是 0否
 
     public Integer getIsdel() {
@@ -34,6 +42,38 @@ public class HomepageManage {
 
     public void setIsdel(Integer isdel) {
         this.isdel = isdel;
+    }
+
+    public String getWide() {
+        return wide;
+    }
+
+    public void setWide(String wide) {
+        this.wide = wide;
+    }
+
+    public String getHigh() {
+        return high;
+    }
+
+    public void setHigh(String high) {
+        this.high = high;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public Integer getClicksum() {

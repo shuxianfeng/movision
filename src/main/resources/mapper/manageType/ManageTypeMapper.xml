@@ -115,7 +115,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-    <select id="queryAdvertisementTypeList" resultType="com.movision.mybatis.manageType.entity.ManageType">
+    <select id="findAllqueryAdvertisementTypeList" resultType="com.movision.mybatis.manageType.entity.ManageType">
     SELECT * FROM yw_homepage_manage_type
   </select>
 
@@ -186,5 +186,13 @@
         <if test="type==1">
             ORDER BY intime ASC
         </if>
+    </select>
+
+    <select id="queryAdvertisementLocation" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT quantity FROM yw_homepage_manage_type WHERE type=#{type,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryAdvertisementType" resultType="java.lang.Integer">
+        SELECT MAX(type) FROM yw_homepage_manage_type
     </select>
 </mapper>

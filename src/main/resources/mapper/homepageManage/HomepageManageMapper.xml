@@ -12,9 +12,10 @@
         <result column="intime" jdbcType="TIMESTAMP" property="intime"/>
         <result column="clicksum" jdbcType="INTEGER" property="clicksum"/>
         <result column="ordersum" jdbcType="INTEGER" property="ordersum"/>
+        <result column="isdel" jdbcType="INTEGER" property="isdel"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, topictype, content, subcontent, url, transurl, orderid, intime,clicksum,ordersum
+        id, topictype, content, subcontent, url, transurl, orderid, intime,clicksum,ordersum,isdel
     </sql>
 
     <!--基础查询语句-->
@@ -39,11 +40,11 @@
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.homepageManage.entity.HomepageManage">
         insert into yw_homepage_manage (id, topictype, content,
-        subcontent, url, transurl, orderid,intime,clicksum,ordersum)
+        subcontent, url, transurl, orderid,intime,clicksum,ordersum,isdel)
         values (#{id,jdbcType=INTEGER}, #{topictype,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR},
         #{subcontent,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{transurl,jdbcType=VARCHAR},
         #{orderid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP},#{clicksum,jdbcType=INTEGER},
-        #{ordersum,jdbcType=INTEGER}
+        #{ordersum,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER}
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.homepageManage.entity.HomepageManage">
         insert into yw_homepage_manage
@@ -78,6 +79,9 @@
             <if test="ordersum != null">
                 ordersum,
             </if>
+            <if test="isdel!=null">
+                isdel,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -109,6 +113,9 @@
             </if>
             <if test="ordersum != null">
                 #{ordersum,jdbcType=INTEGER},
+            </if>
+            <if test="isdel!=null">
+                #{isdel,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -142,6 +149,9 @@
             <if test="ordersum != null">
                 ordersum = #{ordersum,jdbcType=INTEGER},
             </if>
+            <if test="isdel!=null">
+                isdel=#{isdel,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -155,17 +165,22 @@
         orderid = #{orderid,jdbcType=INTEGER},
         intime = #{intime,jdbcType=TIMESTAMP},
         clicksum = #{clicksum,jdbcType=INTEGER},
-        ordersum = #{ordersum,jdbcType=INTEGER}
+        ordersum = #{ordersum,jdbcType=INTEGER},
+        isdel=#{isdel,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="findAllqueryAdvertisementList" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
+    <select id="findAllqueryAdvertisementList" resultType="com.movision.mybatis.homepageManage.entity.HomepageManageVo">
         select m.*,t.name,t.type from yw_homepage_manage m LEFT JOIN yw_homepage_manage_type t ON m.topictype=t.type
+        WHERE m.isdel=0
     </select>
 
     <select id="queryAvertisementById" parameterType="java.lang.String"
-            resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
-        select * from yw_homepage_manage WHERE id=#{id.jdbcType=INTEGER}
+            resultType="com.movision.mybatis.homepageManage.entity.HomepageManageVo">
+        select
+        m.id,m.topictype,m.content,m.subcontent,m.url,m.transurl,m.intime,m.orderid,m.clicksum,m.ordersum,t.name,t.wide,t.high
+        from yw_homepage_manage m LEFT JOIN yw_homepage_manage_type t ON m.topictype=t.type WHERE
+        m.id=#{id,jdbcType=INTEGER} AND m.isdel=0
     </select>
 
     <insert id="addAdvertisement" parameterType="java.util.Map">
@@ -201,6 +216,9 @@
             <if test="ordersum != null">
                 ordersum,
             </if>
+            <if test="isdel!=null">
+                isdel
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -232,6 +250,9 @@
             </if>
             <if test="ordersum != null">
                 #{ordersum,jdbcType=INTEGER},
+            </if>
+            <if test="isdel!=null">
+                #{isdel,jdbcType=INTEGER}
             </if>
         </trim>
     </insert>
@@ -266,7 +287,33 @@
             <if test="ordersum != null">
                 ordersum = #{ordersum,jdbcType=INTEGER},
             </if>
+            <if test="isdel!=null">
+                isdel=#{isdel,jdbcType=INTEGER}
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="findAllQueryAdvertisementLike" resultType="com.movision.mybatis.homepageManage.entity.HomepageManageVo"
+            parameterType="java.util.Map">
+        select m.*,t.name,t.type from yw_homepage_manage m LEFT JOIN yw_homepage_manage_type t ON m.topictype=t.type
+        WHERE m.isdel=0
+        <if test="name!=null">
+            AND name LIKE CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="type==1">
+            ORDER BY m.intime ASC
+        </if>
+        <if test="type==null">
+            ORDER BY m.intime DESC
+        </if>
+    </select>
+
+    <select id="queryAdvertisementLocation" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT orderid FROM yw_homepage_manage WHERE topictype=#{type=jdbcType=INTEGER} AND isdel=0
+    </select>
+
+    <delete id="deleteAdvertisement" parameterType="java.lang.String">
+
+    </delete>
 </mapper>

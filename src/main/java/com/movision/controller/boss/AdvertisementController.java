@@ -2,7 +2,9 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.HomepageManageFacade;
+import com.movision.mybatis.homepageManage.entity.HomepageLinkage;
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
+import com.movision.mybatis.homepageManage.entity.HomepageManageVo;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.manageType.entity.ManageType;
 import com.movision.utils.file.FileUtil;
@@ -35,6 +37,7 @@ public class AdvertisementController {
     @Autowired
     MovisionOssClient movisionOssClient;
 
+
     /**
      * 查询广告列表
      *
@@ -47,8 +50,8 @@ public class AdvertisementController {
     public Response queryAdvertisementList(@ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                            @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Paging<HomepageManage> pager = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<HomepageManage> list = homepageManageFacade.queryAdvertisementList(pager);
+        Paging<HomepageManageVo> pager = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<HomepageManageVo> list = homepageManageFacade.queryAdvertisementList(pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -57,38 +60,46 @@ public class AdvertisementController {
         return response;
     }
 
+
     /**
-     * 查询广告详情
-     *
-     * @param id
+     * 根据条件查询广告列表
+     * @param name
+     * @param type
+     * @param pageNo
+     * @param pageSize
      * @return
      */
-    @ApiOperation(value = "查询广告详情", notes = "查询广告详情", response = Response.class)
-    @RequestMapping(value = "query_avertisement_particulars", method = RequestMethod.POST)
-    public Response queryAvertisementById(@ApiParam(value = "广告id") @RequestParam String id) {
+    @ApiOperation(value = "模糊查询广告列表", notes = "用于条件查询广告接口", response = Response.class)
+    @RequestMapping(value = "query_advertisement_like", method = RequestMethod.POST)
+    public Response queryAdvertisementLike(@ApiParam(value = "广告位置") @RequestParam(required = false) String name,
+                                           @ApiParam(value = "排序（传1按时间正序，默认倒叙)") @RequestParam(required = false) String type,
+                                           @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                           @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        HomepageManage particulars = homepageManageFacade.queryAvertisementById(id);
+        Paging<HomepageManageVo> pager = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<HomepageManageVo> list = homepageManageFacade.queryAdvertisementLike(name, type, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(particulars);
+        response.setData(list);
         return response;
     }
 
     /**
-     * 查询广告类型列表
+     * 根据广告类型查询排序
      *
      * @return
      */
-    @ApiOperation(value = "查询广告类型列表", notes = "用于查询广告类型列表接口", response = Response.class)
-    @RequestMapping(value = "query_advertisement_type", method = RequestMethod.POST)
-    public Response queryAdvertisementTypeList() {
+    @ApiOperation(value = "根据广告位置类型查询排序", notes = "根据广告位置类型查询排序", response = Response.class)
+    @RequestMapping(value = "query_advertisement_location", method = RequestMethod.POST)
+    public Response queryAdvertisementLocation(@ApiParam(value = "广告位置类型") @RequestParam String type,
+                                               @ApiParam(value = "排序id") @RequestParam(required = false) String orderid) {
         Response response = new Response();
-        List<ManageType> type = homepageManageFacade.queryAdvertisementTypeList();
+        List<Integer> list = homepageManageFacade.queryAdvertisementLocation(type, orderid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(type);
+        response.setData(list);
         return response;
     }
 
@@ -105,7 +116,7 @@ public class AdvertisementController {
      */
     @ApiOperation(value = "添加广告", notes = "用于添加广告接口", response = Response.class)
     @RequestMapping(value = "add_advertisement", method = RequestMethod.POST)
-    public Response addAdvertisement(@ApiParam(value = "类型") @RequestParam String topictype,
+    public Response addAdvertisement(@ApiParam(value = "广告位置（传位置code）") @RequestParam String topictype,
                                      @ApiParam(value = "排序") @RequestParam(required = false) String orderid,
                                      @ApiParam(value = "主标题") @RequestParam String content,
                                      @ApiParam(value = "副标题") @RequestParam String subcontent,
@@ -121,6 +132,112 @@ public class AdvertisementController {
     }
 
     /**
+     * 查询广告详情
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "查询广告详情", notes = "查询广告详情", response = Response.class)
+    @RequestMapping(value = "query_avertisement_particulars", method = RequestMethod.POST)
+    public Response queryAvertisementById(@ApiParam(value = "广告id") @RequestParam String id) {
+        Response response = new Response();
+        HomepageManageVo particulars = homepageManageFacade.queryAvertisementById(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(particulars);
+        return response;
+    }
+
+    /**
+     * 编辑广告
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "编辑广告", notes = "用于编辑广告接口", response = Response.class)
+    @RequestMapping(value = "update_advertisement", method = RequestMethod.POST)
+    public Response updateAdvertisement(@ApiParam(value = "广告id") @RequestParam String id,
+                                        @ApiParam(value = "排序") @RequestParam(required = false) String orderid,
+                                        @ApiParam(value = "主标题") @RequestParam String content,
+                                        @ApiParam(value = "副标题") @RequestParam String subcontent,
+                                        @ApiParam(value = "图片URL") @RequestParam String url,
+                                        @ApiParam(value = "跳转链接URL") @RequestParam String transurl) {
+        Response response = new Response();
+        int i = homepageManageFacade.updateAdvertisement(id, orderid, content, subcontent, url, transurl);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(i);
+        return response;
+    }
+
+    /**
+     * 根据id删除广告
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "删除广告", notes = "用于删除广告接口", response = Response.class)
+    @RequestMapping(value = "delete_advertisement", method = RequestMethod.POST)
+    public Response deleteAdvertisement(@ApiParam(value = "广告id") @RequestParam String id) {
+        Response response = new Response();
+        Map map = homepageManageFacade.deleteAdvertisement(id);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+
+    /**
+     * 查询广告类型列表
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询广告类型列表", notes = "用于查询广告类型列表接口", response = Response.class)
+    @RequestMapping(value = "query_advertisement_type", method = RequestMethod.POST)
+    public Response queryAdvertisementTypeList(@ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                               @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<ManageType> pager = new Paging<ManageType>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<ManageType> type = homepageManageFacade.queryAdvertisementTypeList(pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(type);
+        return response;
+    }
+
+
+    /**
+     * 根据条件查询广告类型列表
+     *
+     * @param name
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "根据条件查询广告类型列表", notes = "根据条件查询广告类型列表", response = Response.class)
+    @RequestMapping(value = "query_type_like_name", method = RequestMethod.POST)
+    public Response queryAdvertisementTypeLikeName(@ApiParam(value = "位置名称") @RequestParam(required = false) String name,
+                                                   @ApiParam(value = "排序(传1按时间正序，否则倒叙)") @RequestParam(required = false) String type,
+                                                   @ApiParam(value = "当前第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                   @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<ManageType> pager = new Paging<ManageType>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<ManageType> list = homepageManageFacade.queryAdvertisementTypeLikeName(name, type, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
+
+    /**
      * 添加广告类型
      *
      * @param name
@@ -131,8 +248,7 @@ public class AdvertisementController {
      */
     @ApiOperation(value = "添加广告类型", notes = "用于添加广告类型接口", response = Response.class)
     @RequestMapping(value = "add_advertisement_type", method = RequestMethod.POST)
-    public Response addAdvertisementType(
-            @ApiParam(value = "广告位置") @RequestParam String name,
+    public Response addAdvertisementType(@ApiParam(value = "广告位置名称") @RequestParam String name,
                                          @ApiParam(value = "广告宽度") @RequestParam String wide,
                                          @ApiParam(value = "广告高度") @RequestParam String high,
                                          @ApiParam(value = "广告数量") @RequestParam String quantity) {
@@ -164,65 +280,31 @@ public class AdvertisementController {
     }
 
     /**
-     * 根据条件查询广告类型名称
-     *
-     * @param name
-     * @param pageNo
-     * @param pageSize
-     * @return
-     */
-    @ApiOperation(value = "模糊查询广告类型名称", notes = "用于条件查询广告类型名称接口", response = Response.class)
-    @RequestMapping(value = "query_type_like_name", method = RequestMethod.POST)
-    public Response queryAdvertisementTypeLikeName(@ApiParam(value = "位置名称") @RequestParam(required = false) String name,
-                                                   @ApiParam(value = "排序(传1按时间正序，否则倒叙)") @RequestParam(required = false) String type,
-                                                   @ApiParam(value = "当前第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                                   @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
-        Response response = new Response();
-        Paging<ManageType> pager = new Paging<ManageType>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<ManageType> list = homepageManageFacade.queryAdvertisementTypeLikeName(name, type, pager);
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
-        }
-        pager.result(list);
-        response.setData(pager);
-        return response;
-    }
-
-    public Response queryAdvertisementLike(@ApiParam(value = "广告名称") @RequestParam(required = false) String name,
-                                           @ApiParam(value = "排序（传1按时间正序，默认倒叙)") @RequestParam(required = false) String type,
-                                           @ApiParam(value = "当前页") @RequestParam(required = false) String pageNo,
-                                           @ApiParam(value = "每页几条") @RequestParam(required = false) String pageSize) {
-        Response response = new Response();
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
-        }
-        response.setData("");
-        return response;
-    }
-
-    /**
-     * 编辑广告
+     * 编辑广告类型
      *
      * @param id
+     * @param name
+     * @param wide
+     * @param high
+     * @param quantity
      * @return
      */
-    @ApiOperation(value = "编辑广告", notes = "用于编辑广告接口", response = Response.class)
-    @RequestMapping(value = "update_advertisement", method = RequestMethod.POST)
-    public Response updateAdvertisement(@ApiParam(value = "广告id") @RequestParam String id,
-                                        @ApiParam(value = "类型") @RequestParam String topictype,
-                                        @ApiParam(value = "排序") @RequestParam(required = false) String orderid,
-                                        @ApiParam(value = "主标题") @RequestParam String content,
-                                        @ApiParam(value = "副标题") @RequestParam String subcontent,
-                                        @ApiParam(value = "图片URL") @RequestParam String url,
-                                        @ApiParam(value = "跳转链接URL") @RequestParam String transurl) {
+    @ApiOperation(value = "编辑广告类型", notes = "编辑广告类型", response = Response.class)
+    @RequestMapping(value = "update_advertisement_type", method = RequestMethod.POST)
+    public Response updateAdvertisementType(@ApiParam(value = "广告id") @RequestParam String id,
+                                            @ApiParam(value = "广告位置") @RequestParam(required = false) String name,
+                                            @ApiParam(value = "广告宽度") @RequestParam(required = false) String wide,
+                                            @ApiParam(value = "广告高度") @RequestParam(required = false) String high,
+                                            @ApiParam(value = "广告数量") @RequestParam(required = false) String quantity) {
         Response response = new Response();
-        int i = homepageManageFacade.updateAdvertisement(id, topictype, orderid, content, subcontent, url, transurl);
+        Map map = homepageManageFacade.updateAdvertisementType(id, name, wide, high, quantity);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
-        response.setData(i);
+        response.setData(map);
         return response;
     }
+
 
     /**
      * 上传广告相关图片

@@ -1,6 +1,7 @@
 package com.movision.mybatis.homepageManage.service;
 
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
+import com.movision.mybatis.homepageManage.entity.HomepageManageVo;
 import com.movision.mybatis.homepageManage.mapper.HomepageManageMapper;
 import com.movision.mybatis.manageType.entity.ManageType;
 import com.movision.utils.pagination.model.Paging;
@@ -51,7 +52,7 @@ public class HomepageManageService {
      * @param pager
      * @return
      */
-    public List<HomepageManage> queryAdvertisementList(Paging<HomepageManage> pager) {
+    public List<HomepageManageVo> queryAdvertisementList(Paging<HomepageManageVo> pager) {
         try {
             log.info("查询广告列表");
             return homepageManageMapper.findAllqueryAdvertisementList(pager.getRowBounds());
@@ -67,7 +68,7 @@ public class HomepageManageService {
      * @param id
      * @return
      */
-    public HomepageManage queryAvertisementById(String id) {
+    public HomepageManageVo queryAvertisementById(String id) {
         try {
             log.info("查询广告详情");
             return homepageManageMapper.queryAvertisementById(id);
@@ -105,6 +106,54 @@ public class HomepageManageService {
             return homepageManageMapper.updateAdvertisement(map);
         } catch (Exception e) {
             log.error("编辑广告异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 根据条件查询广告列表
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<HomepageManageVo> queryAdvertisementLike(Map map, Paging<HomepageManageVo> pager) {
+        try {
+            log.info("根据条件查询广告列表");
+            return homepageManageMapper.findAllQueryAdvertisementLike(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据条件查询广告列表异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询此广告位置下已经有几条广告
+     *
+     * @return
+     */
+    public List<Integer> queryAdvertisementLocation(String type) {
+        try {
+            log.info("查询此广告位置下已经有几条广告");
+            return homepageManageMapper.queryAdvertisementLocation(type);
+        } catch (Exception e) {
+            log.error("查询此广告位置下已经有几条广告异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 根据id删除广告
+     *
+     * @param id
+     * @return
+     */
+    public int deleteAdvertisement(Integer id) {
+        try {
+            log.info("根据id删除广告");
+            return homepageManageMapper.deleteByPrimaryKey(id);
+        } catch (Exception e) {
+            log.error("根据id删除广告异常");
             throw e;
         }
     }
