@@ -2,6 +2,7 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.address.AddressFacade;
+import com.movision.mybatis.shopAddress.entity.ShopAddress;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,22 @@ public class BaiduPositionController {
         } else if (flag == -2) {
             response.setCode(400);
             response.setMessage("提供的地址无法解析，设置失败");
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "查询店铺地址", notes = "查询店铺地址信息接口", response = Response.class)
+    @RequestMapping(value = "queryPosition", method = RequestMethod.POST)
+    public Response queryPosition(@ApiParam(value = "店铺id(-1时为自营)") @RequestParam String shopid) {
+        Response response = new Response();
+
+        ShopAddress shopAddress = addressFacade.queryPosition(shopid);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+            response.setData(shopAddress);
+        } else {
+            response.setMessage("查询失败");
         }
         return response;
     }
