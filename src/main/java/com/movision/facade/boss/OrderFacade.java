@@ -638,7 +638,7 @@ public class OrderFacade {
         int res = bossOrderService.updateAfterService(afterservice);
         AfterserviceStream afterserviceStream = new AfterserviceStream();
         afterserviceStream.setAfterserviceid(Integer.parseInt(id));
-        afterserviceStream.setProcessingstatus(3);
+        afterserviceStream.setProcessingstatus(2);
         afterserviceStream.setAftersalestatus(2);
         afterserviceStream.setOrderid(Integer.parseInt(orderid));
         afterserviceStream.setRemark(remark);
