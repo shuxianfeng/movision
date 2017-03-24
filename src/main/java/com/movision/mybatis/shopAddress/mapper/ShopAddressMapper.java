@@ -1,7 +1,9 @@
 package com.movision.mybatis.shopAddress.mapper;
 
 import com.movision.mybatis.shopAddress.entity.ShopAddress;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ShopAddressMapper {
     int insert(ShopAddress record);
 

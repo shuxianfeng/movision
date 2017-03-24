@@ -165,6 +165,10 @@ public class AddressFacade {
         return flag;
     }
 
+    public ShopAddress queryPosition(String shopid) {
+        return shopAddressService.queryShopAddressByShopid(Integer.parseInt(shopid));
+    }
+
     public Map<String, Object> calculateLogisticsfee(String cartids, String provincecode, String citycode, String positionprovincecode, String positioncitycode, String lng, String lat) {
         //定义运费变量map
         Map<String, Object> feemap = new HashMap<>();
