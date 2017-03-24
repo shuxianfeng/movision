@@ -84,7 +84,7 @@
     <!--登录时查询用户可能喜欢的圈子-->
     <select id="queryMayLikeCircle" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.circle.entity.Circle">
-        SELECT t1.id,t1.category,t1.code,t1.maylikeimg FROM yw_circle t1
+        SELECT t1.id,t1.category,t1.code,t1.name,t1.maylikeimg FROM yw_circle t1
          WHERE id NOT IN(
         SELECT circleid FROM yw_follow_circle WHERE userid = #{userid,jdbcType=INTEGER})
         AND t1.status = '1'
@@ -92,7 +92,7 @@
 
     <!--未登录时查询我们推荐的圈子-->
     <select id="queryRecommendCircle" resultType="com.movision.mybatis.circle.entity.Circle">
-        SELECT t1.id,t1.category,t1.code,t1.maylikeimg FROM yw_circle t1
+        SELECT t1.id,t1.category,t1.code,t1.name,t1.maylikeimg FROM yw_circle t1
         WHERE t1.isrecommend = '1' AND t1.status = '1'
     </select>
 
