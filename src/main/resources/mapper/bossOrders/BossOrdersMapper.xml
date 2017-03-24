@@ -624,7 +624,9 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
     </select>
     <select id="queryAfterService" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.afterservice.entity.AfterServiceVo">
-        SELECT g.name,a.afterstatue,a.aftersalestatus,a.amountdue,a.refundamount,a.processingstatus,g.origprice FROM
+        SELECT
+        g.name,a.afterstatue,a.aftersalestatus,a.amountdue,a.refundamount,a.processingstatus,g.origprice,g.ordernumber
+        FROM
         yw_afterservice
         a LEFT JOIN yw_goods g ON g.id=a.goodsid WHERE a.id=#{id,jdbcType=INTEGER}
     </select>
