@@ -659,11 +659,12 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
     <select id="findAllOrderByConditionAfterService" parameterType="java.util.Map"
             resultType="com.movision.mybatis.afterservice.entity.AfterServiceVo">
         SELECT
-        f.id,f.orderid,o.ordernumber,u.nickname,f.proposertime,f.processingpeople,f.processingtime,a.name,a.province,a.city,a.district,a.street,s.`name`
-        AS sname,f.afterstatue,f.amountdue,f.refundamount,f.aftersalestatus,f.processingstatus FROM yw_afterservice f
+        f.id,f.orderid,o.ordernumber,s.origprice,u.nickname,f.proposertime,t.processingpeople,t.processingtime,a.name,a.province,a.city,a.district,a.street,s.`name`
+        AS sname,f.afterstatue,f.amountdue,f.refundamount,f.aftersalestatus,t.processingstatus FROM
+        yw_afterservice f
         LEFT JOIN yw_address a ON a.id=f.addressid
         LEFT JOIN yw_goods s ON s.id=f.goodsid LEFT JOIN yw_orders o ON o.id=f.orderid LEFT JOIN yw_user u ON
-        u.id=f.userid WHERE f.isdel=1
+        u.id=f.userid LEFT JOIN yw_afterservice_stream t ON t.afterserviceid=f.id WHERE f.isdel=1
         <if test="ordernumber!=null and ordernumber!=''">
             AND o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
         </if>
@@ -679,6 +680,7 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         <if test="mintime!=null and maxtime!=null">
             AND f.proposertime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
         </if>
+        GROUP BY f.id
     </select>
     <select id="queryRemark" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.afterservice.entity.AfterServiceVo">
