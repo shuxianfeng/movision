@@ -491,7 +491,7 @@
     </select>
 
     <select id="findAllQueryCircleManList" resultType="com.movision.mybatis.user.entity.User">
-        SELECT id,nickname FROM yw_user WHERE status=0
+        SELECT id,nickname FROM yw_user WHERE status=0 AND nickname IS NOT NULL AND phone IS NOT NULL
     </select>
 
     <select id="findAllqueryAddVSortUser" resultType="com.movision.mybatis.user.entity.UserVo"
