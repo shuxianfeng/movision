@@ -362,7 +362,7 @@
         (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id) AS postnum,
         (SELECT u.nickname FROM yw_user u WHERE phone=c.phone) AS circlename,
         (SELECT u.level FROM yw_user u WHERE id=c.userid) AS categorylevel
-        FROM yw_circle c WHERE isdel=0
+        FROM yw_circle c WHERE isdel=0 AND status=1
         <if test="type!=null">
             AND category=#{type,jdbcType=INTEGER}
         </if>
@@ -422,11 +422,14 @@
         follownum,
         (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid IN(select circleid from yw_follow_circle where
         date(intime) = curdate())) AS follownewnum ,
-        (SELECT COUNT(1) FROM yw_post WHERE circleid IN(SELECT id FROM yw_circle WHERE category=c.id) AND date(intime) =
+        (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND isactive=0 AND circleid IN(SELECT id FROM yw_circle WHERE
+        category=c.id AND status=1 AND isdel=0) AND date(intime) =
         curdate()) AS postnewnum,
-        (SELECT COUNT(1) FROM yw_post WHERE circleid IN(SELECT id FROM yw_circle WHERE category=c.id) AND isessence=1)
+        (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND isactive=0 AND circleid IN(SELECT id FROM yw_circle WHERE
+        category=c.id AND status=1 AND isdel=0) AND isessence=1)
         AS isessencenum,
-        (SELECT COUNT(1) FROM yw_post p WHERE p.circleid IN (SELECT id FROM yw_circle WHERE category=c.id)) AS postnum,
+        (SELECT COUNT(1) FROM yw_post p WHERE p.isdel=0 AND p.isactive=0 AND p.circleid IN (SELECT id FROM yw_circle
+        WHERE category=c.id AND status=1 AND isdel=0)) AS postnum,
         (SELECT COALESCE(SUM(supportnum),0) FROM yw_circle WHERE category=c.id) AS supportnum
         FROM yw_circle_category c
         <if test="categoryid!=null">
@@ -509,11 +512,11 @@
     </select>
 
     <select id="queryDiscoverList" resultType="com.movision.mybatis.circle.entity.Circle">
-        SELECT orderid FROM yw_circle WHERE 1 GROUP BY orderid
+        SELECT orderid FROM yw_circle WHERE AND status=1 AND isdel=0 GROUP BY orderid
     </select>
 
     <select id="queryCircleDiscover" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT isdiscover FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER}
+        SELECT isdiscover FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER} AND status=1 AND isdel=0
     </select>
 
     <update id="updateDiscover" parameterType="java.util.Map">
@@ -544,7 +547,7 @@
         FROM yw_circle as c
         LEFT JOIN yw_user as u ON c.phone=u.phone
         LEFT JOIN yw_circle_category as cat ON cat.id=c.category
-        WHERE c.id=#{circleid.jdbcType=INTEGER}
+        WHERE c.id=#{circleid.jdbcType=INTEGER} AND status=1 AND isdel=0
     </select>
 
     <update id="updateCircle" parameterType="com.movision.mybatis.circle.entity.CircleDetails">
@@ -593,11 +596,12 @@
         u.id as circlemanid,u.nickname as nickname,ue.username as username
         FROM yw_circle AS c LEFT JOIN yw_user AS u ON u.phone=c.phone
         LEFT JOIN yw_admin_user ue ON c.userid=ue.id
-        WHERE c.id=#{circleid,jdbcType=INTEGER}
+        WHERE c.id=#{circleid,jdbcType=INTEGER} AND status=1 AND isdel=0
     </select>
 
     <select id="queryCircleByOrderidList" resultType="java.lang.Integer">
-        SELECT orderid FROM yw_circle WHERE orderid BETWEEN 1 AND 9 AND isdiscover=1 ORDER BY orderid DESC
+        SELECT orderid FROM yw_circle WHERE orderid BETWEEN 1 AND 9 AND isdiscover=1 AND status=1 AND isdel=0 ORDER BY
+        orderid DESC
     </select>
 
     <insert id="insertCircle" parameterType="com.movision.mybatis.circle.entity.CircleDetails">
@@ -741,12 +745,13 @@
         SELECT c.* ,
         (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid=c.id) as follownum,
         (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid=c.id) AS follownewnum,
-        (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id AND date(intime) = curdate()) AS postnewnum,
-        (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id AND isessence=1) AS isessencenum,
-        (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id) AS postnum,
+        (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id AND date(intime) = curdate() AND isdel=0 AND isactive=0) AS
+        postnewnum,
+        (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id AND isessence=1 AND isdel=0 AND isactive=0) AS isessencenum,
+        (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id AND isdel=0 AND isactive=0) AS postnum,
         (SELECT u.nickname FROM yw_user u WHERE id=c.userid) AS circlename,
         (SELECT u.level FROM yw_user u WHERE id=c.userid) AS categorylevel
-        FROM yw_circle c WHERE isdel=0 AND status=0
+        FROM yw_circle c WHERE c.isdel=0 AND c.status=0
         <if test="type!=null">
             AND category=#{type,jdbcType=INTEGER}
         </if>
