@@ -272,8 +272,12 @@ public class PostFacade {
             postActiveList.setActivefee(activefee);//活动单价
             Integer id = list.get(i).getUserid();//用户id
             User user = userService.queryUserB(id);
-            Date begintime = periods.getBegintime();
-            Date endtime = periods.getEndtime();
+            Date begintime = null;
+            Date endtime = null;
+            if (periods != null) {
+                begintime = periods.getBegintime();
+                endtime = periods.getEndtime();
+            }
             postActiveList.setBegintime(begintime);
             postActiveList.setEndtime(endtime);
             long begin = begintime.getTime();
