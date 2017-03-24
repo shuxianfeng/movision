@@ -744,5 +744,48 @@ public class OrderFacade {
         map.put("result", result);
         return map;
     }
+
+    /**
+     * 上一个and下一个订单
+     *
+     * @param id
+     * @param type
+     * @return
+     */
+    public Map<String, Object> queryLastAndNextOrder(Integer id, Integer type) {
+        Map<String, Object> map = new HashedMap();
+        int lastid = 0;
+        int nextid = 0;
+        if (type == 1) {
+            lastid = bossOrderService.queryLastOrder(id);
+        } else if (type == 2) {
+            nextid = bossOrderService.queryNextOrder(id);
+        }
+        map.put("lastid", lastid);
+        map.put("nextid", nextid);
+        return map;
+    }
+
+
+    /**
+     * 上一个and下一个售后
+     *
+     * @param id
+     * @param type
+     * @return
+     */
+    public Map<String, Object> queryLastAndNextAfterService(Integer id, Integer type) {
+        Map<String, Object> map = new HashedMap();
+        int lastid = 0;
+        int nextid = 0;
+        if (type == 1) {
+            lastid = bossOrderService.queryLastAfterService(id);
+        } else if (type == 2) {
+            nextid = bossOrderService.queryNextAfterService(id);
+        }
+        map.put("lastid", lastid);
+        map.put("nextid", nextid);
+        return map;
+    }
 }
 

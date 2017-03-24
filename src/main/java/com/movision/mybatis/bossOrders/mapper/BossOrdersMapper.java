@@ -142,6 +142,15 @@ public interface BossOrdersMapper {
     Integer updateAfterServiceH(Afterservice afterservice);//退货处理
 
 
+    Integer queryLastOrder(Integer id);//上一个订单
+
+    Integer queryNextOrder(Integer id);//下一个订单
+
+    Integer queryLastAfterService(Integer id);//上一个售后
+
+    Integer queryNextAfterService(Integer id);//下一个售后
+
+
 
 
 }

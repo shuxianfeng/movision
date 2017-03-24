@@ -856,5 +856,71 @@ public class BossOrderService {
         }
     }
 
+    /**
+     * 上一个订单
+     *
+     * @param id
+     * @return
+     */
+    public Integer queryLastOrder(Integer id) {
+        try {
+            loger.info("上一个订单");
+            return bossOrdersMapper.queryLastOrder(id);
+        } catch (Exception e) {
+            loger.error("上一个订单失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 下一个订单
+     *
+     * @param id
+     * @return
+     */
+    public Integer queryNextOrder(Integer id) {
+        try {
+            loger.info("下一个订单");
+            return bossOrdersMapper.queryNextOrder(id);
+        } catch (Exception e) {
+            loger.error("下一个订单失败", e);
+            throw e;
+        }
+    }
+
+
+    /**
+     * 上一个售后
+     *
+     * @param id
+     * @return
+     */
+    public Integer queryLastAfterService(Integer id) {
+        try {
+            loger.info("上一个售后");
+            return bossOrdersMapper.queryLastAfterService(id);
+        } catch (Exception e) {
+            loger.error("上一个售后失败", e);
+            throw e;
+        }
+    }
+
+
+    /**
+     * 下一个售后
+     *
+     * @param id
+     * @return
+     */
+    public Integer queryNextAfterService(Integer id) {
+        try {
+            loger.info("下一个售后");
+            return bossOrdersMapper.queryNextAfterService(id);
+        } catch (Exception e) {
+            loger.error("下一个售后失败", e);
+            throw e;
+        }
+    }
+
 
 }

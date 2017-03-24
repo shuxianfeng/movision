@@ -661,4 +661,43 @@ public class OrdersListController {
         return response;
     }
 
+    /**
+     * 上一个下一个订单
+     *
+     * @param id
+     * @param type
+     * @return
+     */
+    @ApiOperation(value = "上一个下一个订单", notes = "上一个下一个订单", response = Response.class)
+    @RequestMapping(value = "query_lastandnextorder", method = RequestMethod.POST)
+    public Response queryLastAndNextOrder(@ApiParam(value = "订单id") @RequestParam(required = false) Integer id,
+                                          @ApiParam(value = "(1上一页2下一页)") @RequestParam(required = false) Integer type) {
+        Response response = new Response();
+        Map<String, Object> map = orderFacade.queryLastAndNextOrder(id, type);
+        if (response.getCode() == 200) {
+            response.setMessage("修改成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
+     * 上一个下一个售后
+     *
+     * @param id
+     * @param type
+     * @return
+     */
+    @ApiOperation(value = "上一个下一个售后", notes = "上一个下一个售后", response = Response.class)
+    @RequestMapping(value = "query_lastandnextafterservice", method = RequestMethod.POST)
+    public Response queryLastAndNextAfterService(@ApiParam(value = "售后id") @RequestParam(required = false) Integer id,
+                                                 @ApiParam(value = "(1上一页2下一页)") @RequestParam(required = false) Integer type) {
+        Response response = new Response();
+        Map<String, Object> map = orderFacade.queryLastAndNextAfterService(id, type);
+        if (response.getCode() == 200) {
+            response.setMessage("修改成功");
+        }
+        response.setData(map);
+        return response;
+    }
 }
