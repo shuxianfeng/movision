@@ -23,7 +23,6 @@ public class AfterServiceVo {
 
     private Integer isdel;
 
-
     private Double refundamount;
 
     private String processingpeople;
@@ -79,6 +78,15 @@ public class AfterServiceVo {
     private String logisticsid;//发货单号
     private String nickname;//昵称
     private String ordernumber;//订单号
+
+    public String getOrdernumber() {
+        return ordernumber;
+    }
+
+    public void setOrdernumber(String ordernumber) {
+        this.ordernumber = ordernumber;
+    }
+
     private String name;//收货人
     private String province;
     private String city;
