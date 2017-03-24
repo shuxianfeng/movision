@@ -550,13 +550,13 @@ public class OrderFacade {
      * @param name
      * @param aftersalestatus
      * @param afterstatue
-     * @param processingstatus
+     * @param
      * @param mintime
      * @param maxtime
      * @param pager
      * @return
      */
-    public List<AfterServiceVo> queryOrderByConditionAfterService(String ordernumber, String name, String aftersalestatus, String afterstatue, String processingstatus, String mintime, String maxtime, Paging<AfterServiceVo> pager) {
+    public List<AfterServiceVo> queryOrderByConditionAfterService(String ordernumber, String name, String aftersalestatus, String afterstatue, String mintime, String maxtime, Paging<AfterServiceVo> pager) {
         Map<String, Object> map = new HashMap<>();
         if (ordernumber != null) {
             map.put("ordernumber", ordernumber);
@@ -569,9 +569,6 @@ public class OrderFacade {
         }
         if (afterstatue != null) {
             map.put("afterstatue", afterstatue);
-        }
-        if (processingstatus != null) {
-            map.put("processingstatus", processingstatus);
         }
         Date isessencetime = null;//开始时间
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");

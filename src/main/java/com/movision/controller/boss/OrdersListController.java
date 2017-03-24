@@ -493,14 +493,13 @@ public class OrdersListController {
                                                       @ApiParam(value = "收货人") @RequestParam(required = false) String name,
                                                       @ApiParam(value = "售后状态") @RequestParam(required = false) String aftersalestatus,
                                                       @ApiParam(value = "售后类型") @RequestParam(required = false) String afterstatue,
-                                                      @ApiParam(value = "处理状态") @RequestParam(required = false) String processingstatus,
                                                       @ApiParam(value = "最小时间") @RequestParam(required = false) String mintime,
                                                       @ApiParam(value = "最大时间") @RequestParam(required = false) String maxtime,
                                                       @RequestParam(required = false) String pageNo,
                                                       @RequestParam(required = false) String pageSize) {
         Response response = new Response();
         Paging<AfterServiceVo> pager = new Paging<AfterServiceVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List<AfterServiceVo> list = orderFacade.queryOrderByConditionAfterService(ordernumber, name, aftersalestatus, afterstatue, processingstatus, mintime, maxtime, pager);
+        List<AfterServiceVo> list = orderFacade.queryOrderByConditionAfterService(ordernumber, name, aftersalestatus, afterstatue, mintime, maxtime, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

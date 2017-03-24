@@ -676,9 +676,6 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         <if test="afterstatue!=null and afterstatue!=''">
             AND f.afterstatue=#{afterstatue,jdbcType=INTEGER}
         </if>
-        <if test="processingstatus!=null and processingstatus!=''">
-            AND f.processingstatus=#{processingstatus,jdbcType=INTEGER}
-        </if>
         <if test="mintime!=null and maxtime!=null">
             AND f.proposertime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
         </if>
