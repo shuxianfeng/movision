@@ -1032,7 +1032,7 @@ public class PostFacade {
             if (StringUtil.isNotEmpty(postcontent)) {
                 //内容转换
                 Map con = jsoupCompressImg.compressImg(request, postcontent);
-                if ((int) con.get("oodsi") == 200) {
+                if ((int) con.get("code") == 200) {
                     System.out.println(con);
                     String str = con.get("content").toString();
                     str = str.replace("\\", "");
