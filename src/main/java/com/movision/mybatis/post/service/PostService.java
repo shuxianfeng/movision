@@ -489,10 +489,10 @@ public class PostService {
      */
     public PostList queryActivityParticulars(Integer postid) {
         try {
-            log.info("帖子预览");
+            log.info("活动预览");
             return postMapper.queryActivityParticulars(postid);
         } catch (Exception e) {
-            log.error("帖子预览异常");
+            log.error("活动预览异常");
             throw e;
         }
     }

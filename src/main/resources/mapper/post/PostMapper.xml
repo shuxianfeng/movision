@@ -1100,10 +1100,6 @@
         AND isessence=1 AND isdel=0 ORDER BY intime DESC
      </select>
 
-    <select id="queryPostNum" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM yw_post
-    </select>
-
     <!--查询活动列表草稿箱-->
     <select id="findAllActiveByList" resultType="com.movision.mybatis.post.entity.PostList">
         SELECT * FROM yw_post WHERE isdel=0 AND isactive=1 ORDER  BY intime DESC
@@ -1129,7 +1125,7 @@
         (SELECT name FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id)) AS circlename,
         (SELECT category FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id)) AS category
         FROM yw_post p
-        WHERE id=#{postid,jdbcType=INTEGER} AND p.isactive=0
+        WHERE id=#{postid,jdbcType=INTEGER} AND p.isactive=0 AND isdel=0
     </select>
 
     <select id="queryActivityParticulars" resultType="com.movision.mybatis.post.entity.PostList"
@@ -1142,14 +1138,14 @@
         (SELECT name FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id)) AS circlename,
         (SELECT category FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id)) AS category
         FROM yw_post p
-        WHERE id=#{postid,jdbcType=INTEGER} AND p.isactive=1
+        WHERE id=#{postid,jdbcType=INTEGER} AND p.isactive=1 AND isdel=0
     </select>
 
     <select id="queryPostNumAndisessenceByCircleid" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostNum">
         SELECT COUNT(1) postnum,
         (SELECT COUNT(1) FROM yw_post WHERE circleid=#{circleid,jdbcType=INTEGER} AND isessence=1) as isessence
-        FROM yw_post WHERE circleid=#{circleid,jdbcType=INTEGER}
+        FROM yw_post WHERE circleid=#{circleid,jdbcType=INTEGER} AND isdel=0 AND isactive=0
     </select>
 
     <update id="addPostChoiceness" parameterType="com.movision.mybatis.post.entity.PostTo">
@@ -1173,21 +1169,24 @@
 
     <select id="queryPostChoicenesslist" resultType="com.movision.mybatis.post.entity.PostTo"
             parameterType="java.util.Map">
-        SELECT orderid,essencedate FROM yw_post WHERE essencedate=#{esdate,jdbcType=DATE} AND isessence=1 GROUP BY
+        SELECT orderid,essencedate FROM yw_post WHERE essencedate=#{esdate,jdbcType=DATE} AND isessence=1 AND isdel=0
+        AND isactive=0 GROUP BY
         orderid
     </select>
 
     <select id="queryPostIsessence" resultType="com.movision.mybatis.post.entity.Post">
-        SELECT orderid FROM yw_post WHERE DATE(intime)=CURDATE() AND isessence=1 GROUP BY orderid DESC
+        SELECT orderid FROM yw_post WHERE DATE(intime)=CURDATE() AND isessence=1 AND isdel=0 AND isactive=0 GROUP BY
+        orderid DESC
     </select>
 
     <select id="queryPostChoiceness" resultType="com.movision.mybatis.post.entity.PostChoiceness"
             parameterType="java.lang.Integer">
-        SELECT id,subtitle,essencedate,orderid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
+        SELECT id,subtitle,essencedate,orderid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER} AND isdel=0 AND
+        isactive=0
     </select>
 
     <update id="deletePostChoiceness" parameterType="java.lang.Integer">
-        UPDATE yw_post SET isessence=0,essencedate=null,orderid=0 WHERE id=#{postid,jdbcType=INTEGER}
+        UPDATE yw_post SET isessence=0 WHERE id=#{postid,jdbcType=INTEGER}
     </update>
 
 

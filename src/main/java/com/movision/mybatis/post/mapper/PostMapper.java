@@ -107,8 +107,6 @@ public interface PostMapper {
 
     List<PostList> findAllIsessenceByList(Map map, RowBounds rowBounds);//查询精贴
 
-    int queryPostNum();
-
     int deletePost(Integer postid);
 
     PostList queryPostParticulars(Integer postid);
