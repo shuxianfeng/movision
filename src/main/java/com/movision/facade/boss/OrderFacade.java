@@ -632,8 +632,11 @@ public class OrderFacade {
         afterservice.setAftersalestatus(3);
         afterservice.setProcessingstatus(1);
         afterservice.setReplacementnumber(replacementnumber);
-        if (logisticsway.equals("-1") || logisticsway.equals("0")) {
-            afterservice.setTakeway(Integer.parseInt(logisticsway));
+        if (logisticsway.equals("上门取货")) {
+            afterservice.setTakeway(0);
+        }
+        if (!logisticsway.equals("上门取货")) {
+            afterservice.setTakeway(1);
         }
         int res = bossOrderService.updateAfterService(afterservice);
         AfterserviceStream afterserviceStream = new AfterserviceStream();
@@ -647,7 +650,7 @@ public class OrderFacade {
         int result = bossOrderService.addAfterService(afterserviceStream);
         LogidticsRelation relation = new LogidticsRelation();
         int red = 0;
-        if (!logisticsway.equals("-1") || !logisticsway.equals("0")) {
+        if (!logisticsway.equals("上门取货") && !logisticsway.equals("商家自行配送")) {
             relation.setLogisticsid(replacementnumber);
             relation.setCompanyid(Integer.parseInt(logisticsway));
             red = bossOrderService.addLogisticsRalation(relation);
@@ -699,9 +702,12 @@ public class OrderFacade {
         orders.setId(Integer.parseInt(id));
         int res = bossOrderService.addLogistic(orders);
         LogidticsRelation relation = new LogidticsRelation();
-        relation.setLogisticsid(logisticsid);
-        relation.setCompanyid(Integer.parseInt(logisticsway));
-        int red = bossOrderService.addLogisticsRalation(relation);
+        int red = 0;
+        if (!logisticsway.equals("上门取货") && !logisticsway.equals("商家自行配送")) {
+            relation.setLogisticsid(logisticsid);
+            relation.setCompanyid(Integer.parseInt(logisticsway));
+            red = bossOrderService.addLogisticsRalation(relation);
+        }
         map.put("result", result);
         map.put("res", res);
         map.put("res", red);
