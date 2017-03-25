@@ -676,6 +676,10 @@ public class OrdersListController {
         Map<String, Object> map = orderFacade.queryLastAndNextOrder(id, type);
         if (response.getCode() == 200) {
             response.setMessage("修改成功");
+        } else if (map.get("firstid") == "当前是第一个订单") {
+            response.setMessage("当前是第一个订单");
+        } else if (map.get("finallyid") == "当前是最后一个订单") {
+            response.setMessage("当前是最后一个订单");
         }
         response.setData(map);
         return response;
@@ -696,6 +700,10 @@ public class OrdersListController {
         Map<String, Object> map = orderFacade.queryLastAndNextAfterService(id, type);
         if (response.getCode() == 200) {
             response.setMessage("修改成功");
+        } else if (map.get("firstid") == "当前是第一个售后") {
+            response.setMessage("当前是第一个售后");
+        } else if (map.get("finallyid") == "当前是最后一个售后") {
+            response.setMessage("当前是最后一个售后");
         }
         response.setData(map);
         return response;

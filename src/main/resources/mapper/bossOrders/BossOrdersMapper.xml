@@ -1015,16 +1015,5 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
         select id from yw_afterservice where id = (select id from yw_afterservice where id > #{id,jdbcType=INTEGER}
         order by id asc limit 1)
     </select>
-    <select id="queryFirstOrder" resultType="java.lang.Integer">
-  select id from yw_orders limit 1
-    </select>
-    <select id="queryFinallyOrder" resultType="java.lang.Integer">
-  select id from yw_orders order by id desc limit 1
-    </select>
-    <select id="queryFirstAfterService" resultType="java.lang.Integer">
- select id from yw_afterservice limit 1
-    </select>
-    <select id="queryFinallyAfterService" resultType="java.lang.Integer">
-  select id from yw_afterservice order by id desc limit 1
-    </select>
+
 </mapper>

@@ -872,35 +872,7 @@ public class BossOrderService {
         }
     }
 
-    /**
-     * 查询第一个订单
-     *
-     * @return
-     */
-    public Integer queryFirstOrder() {
-        try {
-            loger.info("查询第一个订单");
-            return bossOrdersMapper.queryFirstOrder();
-        } catch (Exception e) {
-            loger.error("查询第一个订单失败", e);
-            throw e;
-        }
-    }
 
-    /**
-     * 查询最后一个订单
-     *
-     * @return
-     */
-    public Integer queryFinallyOrder() {
-        try {
-            loger.info("查询最后一个订单");
-            return bossOrdersMapper.queryFinallyOrder();
-        } catch (Exception e) {
-            loger.error("查询最后一个订单失败", e);
-            throw e;
-        }
-    }
     /**
      * 下一个订单
      *
@@ -952,34 +924,6 @@ public class BossOrderService {
     }
 
 
-    /**
-     * 查询第一个售后
-     *
-     * @return
-     */
-    public Integer queryFirstAfterService() {
-        try {
-            loger.info("查询第一个售后");
-            return bossOrdersMapper.queryFirstAfterService();
-        } catch (Exception e) {
-            loger.error("查询第一个售后失败", e);
-            throw e;
-        }
-    }
 
-    /**
-     * 查询最后一个售后
-     *
-     * @return
-     */
-    public Integer queryFinallyAfterService() {
-        try {
-            loger.info("查询最后一个售后");
-            return bossOrdersMapper.queryFinallyAfterService();
-        } catch (Exception e) {
-            loger.error("查询最后一个售后失败", e);
-            throw e;
-        }
-    }
 
 }

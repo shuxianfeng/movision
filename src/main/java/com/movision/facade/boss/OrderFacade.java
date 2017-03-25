@@ -754,22 +754,22 @@ public class OrderFacade {
      */
     public Map<String, Object> queryLastAndNextOrder(Integer id, Integer type) {
         Map<String, Object> map = new HashedMap();
-        int lastid = 0;
-        int nextid = 0;
+        Integer lastid = 0;
+        Integer nextid = 0;
         if (type == 1) {
             lastid = bossOrderService.queryLastOrder(id);
-            int firstid = bossOrderService.queryFirstOrder();
-            if (lastid == firstid) {
+            if (lastid != null) {
+                map.put("lastid", lastid);
+            } else if (lastid == null) {
                 map.put("firstid", "当前是第一个订单");
             }
-            map.put("lastid", lastid);
         } else if (type == 2) {
             nextid = bossOrderService.queryNextOrder(id);
-            int finallyid = bossOrderService.queryFinallyOrder();
-            if (nextid == finallyid) {
+            if (nextid != null) {
+                map.put("nextid", nextid);
+            } else if (nextid == null) {
                 map.put("finallyid", "当前是最后一个订单");
             }
-            map.put("nextid", nextid);
         }
         return map;
     }
@@ -784,22 +784,23 @@ public class OrderFacade {
      */
     public Map<String, Object> queryLastAndNextAfterService(Integer id, Integer type) {
         Map<String, Object> map = new HashedMap();
-        int lastid = 0;
-        int nextid = 0;
+        Integer lastid = 0;
+        Integer nextid = 0;
         if (type == 1) {
             lastid = bossOrderService.queryLastAfterService(id);
-            map.put("lastid", lastid);
-            int firstid = bossOrderService.queryFirstAfterService();
-            if (lastid == firstid) {
+            if (lastid != null) {
+                map.put("lastid", lastid);
+            } else if (lastid == null) {
                 map.put("firstid", "当前是第一个售后");
             }
+
         } else if (type == 2) {
             nextid = bossOrderService.queryNextAfterService(id);
-            int finallyid = bossOrderService.queryFinallyAfterService();
-            if (nextid == finallyid) {
+            if (nextid != null) {
+                map.put("nextid", nextid);
+            } else if (nextid == null) {
                 map.put("finallyid", "当前是最后一个售后");
             }
-            map.put("nextid", nextid);
         }
         return map;
     }
