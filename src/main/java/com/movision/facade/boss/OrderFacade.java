@@ -759,12 +759,16 @@ public class OrderFacade {
         if (type == 1) {
             lastid = bossOrderService.queryLastOrder(id);
             int firstid = bossOrderService.queryFirstOrder();
-            map.put("firstid", firstid);
+            if (lastid == firstid) {
+                map.put("firstid", "当前是第一个订单");
+            }
             map.put("lastid", lastid);
         } else if (type == 2) {
             nextid = bossOrderService.queryNextOrder(id);
             int finallyid = bossOrderService.queryFinallyOrder();
-            map.put("finallyid", finallyid);
+            if (nextid == finallyid) {
+                map.put("finallyid", "当前是最后一个订单");
+            }
             map.put("nextid", nextid);
         }
         return map;
@@ -786,12 +790,15 @@ public class OrderFacade {
             lastid = bossOrderService.queryLastAfterService(id);
             map.put("lastid", lastid);
             int firstid = bossOrderService.queryFirstAfterService();
-            map.put("firstid", firstid);
-
+            if (lastid == firstid) {
+                map.put("firstid", "当前是第一个售后");
+            }
         } else if (type == 2) {
             nextid = bossOrderService.queryNextAfterService(id);
             int finallyid = bossOrderService.queryFinallyAfterService();
-            map.put("finallyid", finallyid);
+            if (nextid == finallyid) {
+                map.put("finallyid", "当前是最后一个售后");
+            }
             map.put("nextid", nextid);
         }
         return map;
