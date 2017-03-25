@@ -104,6 +104,25 @@ public class AdvertisementController {
     }
 
     /**
+     * 操作广告排序 （0删除 1添加）
+     *
+     * @return
+     */
+    @ApiOperation(value = "操作广告排序位置", notes = "用于操作广告排序位置接口", response = Response.class)
+    @RequestMapping(value = "operation_advertisement_orderid", method = RequestMethod.POST)
+    public Response operationAdvertisementOrderid(@ApiParam(value = "操作方式0 删除 1添加") @RequestParam String type,
+                                                  @ApiParam(value = "广告id") @RequestParam String id,
+                                                  @ApiParam(value = "排序id") @RequestParam(required = false) String orderid) {
+        Response response = new Response();
+        int map = homepageManageFacade.operationAdvertisementOrderid(type, id, orderid);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
      * 添加广告
      *
      * @param topictype
@@ -286,18 +305,16 @@ public class AdvertisementController {
      * @param name
      * @param wide
      * @param high
-     * @param quantity
      * @return
      */
     @ApiOperation(value = "编辑广告类型", notes = "编辑广告类型", response = Response.class)
     @RequestMapping(value = "update_advertisement_type", method = RequestMethod.POST)
-    public Response updateAdvertisementType(@ApiParam(value = "广告id") @RequestParam String id,
-                                            @ApiParam(value = "广告位置") @RequestParam(required = false) String name,
+    public Response updateAdvertisementType(@ApiParam(value = "广告位置id") @RequestParam String id,
+                                            @ApiParam(value = "广告位置名称") @RequestParam(required = false) String name,
                                             @ApiParam(value = "广告宽度") @RequestParam(required = false) String wide,
-                                            @ApiParam(value = "广告高度") @RequestParam(required = false) String high,
-                                            @ApiParam(value = "广告数量") @RequestParam(required = false) String quantity) {
+                                            @ApiParam(value = "广告高度") @RequestParam(required = false) String high) {
         Response response = new Response();
-        Map map = homepageManageFacade.updateAdvertisementType(id, name, wide, high, quantity);
+        Map map = homepageManageFacade.updateAdvertisementType(id, name, wide, high);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

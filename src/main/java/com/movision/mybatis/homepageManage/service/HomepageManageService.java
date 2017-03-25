@@ -143,6 +143,38 @@ public class HomepageManageService {
     }
 
     /**
+     * 删除广告排序
+     *
+     * @param map
+     * @return
+     */
+    public int deleteAdvertisementOrderid(Map map) {
+        try {
+            log.info("删除广告排序");
+            return homepageManageMapper.deleteAdvertisementOrderid(map);
+        } catch (Exception e) {
+            log.error("删除广告排序异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 修改广告排序
+     *
+     * @param map
+     * @return
+     */
+    public int updateAtionAdvertisementOrderid(Map map) {
+        try {
+            log.info("修改广告排序");
+            return homepageManageMapper.updateAtionAdvertisementOrderid(map);
+        } catch (Exception e) {
+            log.error("修改广告排序异常");
+            throw e;
+        }
+    }
+
+    /**
      * 根据id删除广告
      *
      * @param id

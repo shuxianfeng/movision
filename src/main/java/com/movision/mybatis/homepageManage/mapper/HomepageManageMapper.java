@@ -36,4 +36,8 @@ public interface HomepageManageMapper {
 
     List<Integer> queryAdvertisementLocation(String type);
 
+    int deleteAdvertisementOrderid(Map map);
+
+    int updateAtionAdvertisementOrderid(Map map);
+
 }

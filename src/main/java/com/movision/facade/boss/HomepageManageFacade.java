@@ -163,7 +163,7 @@ public class HomepageManageFacade {
         //查询此广告位置下已经有几条广告
         List<Integer> integers = homepageManageService.queryAdvertisementLocation(type);
         List<Integer> i = new ArrayList<>();
-        if (str > integers.size()) {
+        if (str >= integers.size()) {
             for (int n = 1; n <= str; n++) {
                 i.add(n);
             }
@@ -187,16 +187,38 @@ public class HomepageManageFacade {
     }
 
     /**
+     * 操作广告排序 （0删除 1添加）
+     *
+     * @param type
+     * @param id
+     * @param orderid
+     * @return
+     */
+    public int operationAdvertisementOrderid(String type, String id, String orderid) {
+        Map m = new HashedMap();
+        m.put("id", id);
+        m.put("orderid", orderid);
+        if (type.equals("0")) {//删除
+            return homepageManageService.deleteAdvertisementOrderid(m);
+        } else if (type.equals("1") && orderid != null) {//修改
+            return homepageManageService.updateAtionAdvertisementOrderid(m);
+        } else {
+            return -1;
+        }
+    }
+
+
+
+    /**
      * 编辑广告类型
      *
      * @param id
      * @param name
      * @param wide
      * @param high
-     * @param quantity
      * @return
      */
-    public Map updateAdvertisementType(String id, String name, String wide, String high, String quantity) {
+    public Map updateAdvertisementType(String id, String name, String wide, String high) {
         ManageType manageType = new ManageType();
         Map map = new HashedMap();
         if (StringUtil.isNotEmpty(id)) {
@@ -210,9 +232,6 @@ public class HomepageManageFacade {
         }
         if (StringUtil.isNotEmpty(high)) {
             manageType.setHigh(Integer.parseInt(high));
-        }
-        if (StringUtil.isNotEmpty(quantity)) {
-            manageType.setQuantity(Integer.parseInt(quantity));
         }
         int i = manageTypeService.updateAdvertisementType(manageType);
         map.put("resault", i);

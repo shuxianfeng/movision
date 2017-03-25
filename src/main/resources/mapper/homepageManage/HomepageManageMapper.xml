@@ -254,6 +254,8 @@
             <if test="isdel!=null">
                 #{isdel,jdbcType=INTEGER}
             </if>
+            WHERE
+            <![CDATA[(SELECT COUNT(1) FROM yw_homepage_manage WHERE topictype=#{topictype,jdbcType=INTEGER}) < (SELECT quantity FROM yw_homepage_manage_type WHERE type=#{topictype,jdbcType=INTEGER})]]>
         </trim>
     </insert>
 
@@ -313,7 +315,11 @@
         SELECT orderid FROM yw_homepage_manage WHERE topictype=#{type=jdbcType=INTEGER} AND isdel=0
     </select>
 
-    <delete id="deleteAdvertisement" parameterType="java.lang.String">
+    <update id="deleteAdvertisementOrderid" parameterType="java.util.Map">
+      UPDATE yw_homepage_manage SET orderid=NULL WHERE id=#{id,jdbcType=INTEGER}
+    </update>
 
-    </delete>
+    <update id="updateAtionAdvertisementOrderid" parameterType="java.util.Map">
+        UPDATE yw_homepage_manage SET orderid=#{orderid,jdbcType=INTEGER} WHERE id=#{id,jdbcType=INTEGER}
+    </update>
 </mapper>
