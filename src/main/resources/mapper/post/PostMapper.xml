@@ -1006,8 +1006,8 @@
         (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
         (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
         (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
-        (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid) AS circlename,
-        (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS category
+        (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS circlename,
+        (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
         WHERE p.isdel=0 AND p.isactive=0 ORDER BY p.intime DESC
     </select>
@@ -1038,8 +1038,8 @@
         (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
         (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
         (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
-        (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid) AS circlename,
-        (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS category
+        (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS circlename,
+        (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
         WHERE p.isdel=0 AND p.isactive=0
         AND p.userid=#{userid,jdbcType=INTEGER}
@@ -1055,8 +1055,8 @@
         (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
         (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
         (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
-        (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid) AS circlename,
-        (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS category
+        (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS circlename,
+        (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
         WHERE p.isdel=0 AND p.isactive=0
         (SELECT postid FROM yw_collection WHERE postid IN (SELECT id FROM yw_post WHERE
@@ -1070,8 +1070,8 @@
         (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
         (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
         (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
-        (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid) AS circlename,
-        (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS category
+        (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS circlename,
+        (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
         WHERE p.isdel=0 AND p.isactive=0 AND p.id IN
         (SELECT postid FROM yw_post_share WHERE postid IN
@@ -1088,8 +1088,8 @@
         (SELECT COUNT(1) FROM yw_post_share WHERE postid=p.id) AS share,
         (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded WHERE postid=p.id) AS rewarded,
         (SELECT COALESCE(SUM(num),0) FROM yw_post_accusation WHERE postid =p.id) AS accusation,
-        (SELECT name FROM yw_circle WHERE id=p.circleid) AS circlename,
-        (SELECT category FROM yw_circle WHERE id=p.circleid) AS category
+        (SELECT name FROM yw_circle WHERE id=p.circleid AND cir.isdel=0 AND cir.status=1) AS circlename,
+        (SELECT category FROM yw_circle WHERE id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post p WHERE 1
         <if test="circleid!=null">
             AND p.circleid =#{circleid,jdbcType=INTEGER}
@@ -1121,9 +1121,12 @@
         (SELECT COUNT(1) FROM yw_post_share WHERE postid=p.id) AS share,
         (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded WHERE postid=p.id) AS rewarded,
         (SELECT COALESCE(SUM(num),0) FROM yw_post_accusation WHERE postid =p.id) AS accusation,
-        (SELECT nickname FROM yw_user WHERE id=(SELECT userid FROM yw_post WHERE id=p.id)) AS nickname,
-        (SELECT name FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id)) AS circlename,
-        (SELECT category FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id)) AS category
+        (SELECT nickname FROM yw_user WHERE id=(SELECT userid FROM yw_post WHERE id=p.id AND isactive=0 AND isdel=0)) AS
+        nickname,
+        (SELECT name FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id AND isactive=0 AND isdel=0)) AS
+        circlename,
+        (SELECT category FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id AND isactive=0 AND
+        isdel=0)) AS category
         FROM yw_post p
         WHERE p.id=#{postid,jdbcType=INTEGER} AND p.isactive=0 AND p.isdel=0
     </select>
@@ -1134,9 +1137,12 @@
         (SELECT COUNT(1) FROM yw_post_share WHERE postid=p.id) AS share,
         (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded WHERE postid=p.id) AS rewarded,
         (SELECT COALESCE(SUM(num),0) FROM yw_post_accusation WHERE postid =p.id) AS accusation,
-        (SELECT nickname FROM yw_user WHERE id=(SELECT userid FROM yw_post WHERE id=p.id)) AS nickname,
-        (SELECT name FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id)) AS circlename,
-        (SELECT category FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id)) AS category
+        (SELECT nickname FROM yw_user WHERE id=(SELECT userid FROM yw_post WHERE id=p.id AND isactive=1 AND isdel=0)) AS
+        nickname,
+        (SELECT name FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id AND isactive=1 AND isdel=0)) AS
+        circlename,
+        (SELECT category FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id AND isactive=1 AND
+        isdel=0)) AS category
         FROM yw_post p
         WHERE p.id=#{postid,jdbcType=INTEGER} AND p.isactive=1 AND p.isdel=0
     </select>
@@ -1144,7 +1150,8 @@
     <select id="queryPostNumAndisessenceByCircleid" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostNum">
         SELECT COUNT(1) postnum,
-        (SELECT COUNT(1) FROM yw_post WHERE circleid=#{circleid,jdbcType=INTEGER} AND isessence=1) as isessence
+        (SELECT COUNT(1) FROM yw_post WHERE circleid=#{circleid,jdbcType=INTEGER} AND isessence=1 AND isdel=0) as
+        isessence
         FROM yw_post WHERE circleid=#{circleid,jdbcType=INTEGER} AND isdel=0 AND isactive=0
     </select>
 
@@ -1191,7 +1198,8 @@
 
 
     <select id="findAllActivefee" resultType="java.lang.Double" parameterType="java.lang.Integer">
-        SELECT t.activefee FROM yw_post t  WHERE t.id in (SELECT e.postid FROM yw_active_part e WHERE e.postid=#{postid,jdbcType=INTEGER})
+        SELECT t.activefee FROM yw_post t WHERE t.isactive=1 AND t.isdel=0 AND t.id in (SELECT e.postid FROM
+        yw_active_part e WHERE e.postid=#{postid,jdbcType=INTEGER})
     </select>
 
     <!--基础插入语句（选择性插入）-->
