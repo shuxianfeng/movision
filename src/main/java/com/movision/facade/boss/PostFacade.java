@@ -599,6 +599,13 @@ public class PostFacade {
                 vide.setBannerimgurl(bannerimgurl);
                 vide.setIntime(new Date());
                 in = videoService.insertVideoById(vide);//添加视频表
+            } else if (type.equals("2")) {//分享视频贴
+                Video vide = new Video();
+                vide.setPostid(pid);
+                vide.setVideourl(vid);
+                vide.setBannerimgurl(coverimg);//分享视频贴的视频封面是帖子封面
+                vide.setIntime(new Date());
+                in = videoService.insertVideoById(vide);//添加视频表
             }
             if (StringUtil.isNotEmpty(goodsid)) {//帖子添加商品
                 String[] lg = goodsid.split(",");//以逗号分隔
@@ -1018,17 +1025,32 @@ public class PostFacade {
             }
 
             Video vide = new Video();
-            if (!StringUtils.isEmpty(id)) {
-                vide.setPostid(Integer.parseInt(id));
+            Integer in = null;
+            if (type.equals("1")) {//帖子类型为原生视频贴时修改
+                if (!StringUtils.isEmpty(id)) {
+                    vide.setPostid(Integer.parseInt(id));
+                }
+                if (!StringUtils.isEmpty(vid)) {
+                    vide.setVideourl(vid);
+                }
+                if (!StringUtils.isEmpty(bannerimgurl)) {
+                    vide.setBannerimgurl(bannerimgurl);
+                }
+                vide.setIntime(new Date());
+                in = videoService.updateVideoById(vide);
+            } else if (type.equals("2")) {//帖子为分享视频贴时修改
+                if (!StringUtils.isEmpty(id)) {
+                    vide.setPostid(Integer.parseInt(id));
+                }
+                if (!StringUtils.isEmpty(vid)) {
+                    vide.setVideourl(vid);
+                }
+                if (!StringUtils.isEmpty(bannerimgurl)) {
+                    vide.setBannerimgurl(coverimg);//分享视频贴的封面是帖子的封面
+                }
+                vide.setIntime(new Date());
+                in = videoService.updateVideoById(vide);
             }
-            if (!StringUtils.isEmpty(vid)) {
-                vide.setVideourl(vid);
-            }
-            if (!StringUtils.isEmpty(bannerimgurl)) {
-                vide.setBannerimgurl(bannerimgurl);
-            }
-            vide.setIntime(new Date());
-            Integer in = videoService.updateVideoById(vide);
             if (!StringUtils.isEmpty(coverimg)) {
                 post.setCoverimg(coverimg);//编辑帖子封面
             }

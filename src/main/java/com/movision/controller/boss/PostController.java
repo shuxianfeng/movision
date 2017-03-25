@@ -393,7 +393,7 @@ public class PostController {
     public Response addPost(HttpServletRequest request,
                             @ApiParam(value = "帖子标题") @RequestParam String title,//帖子标题
                             @ApiParam(value = "帖子副标题") @RequestParam String subtitle,//帖子副标题
-                            @ApiParam(value = "帖子类型 0 普通帖 1 原生视频帖") @RequestParam String type,//帖子类型
+                            @ApiParam(value = "帖子类型 0 普通帖 1 原生视频帖 2 分享视频贴") @RequestParam String type,//帖子类型
                             @ApiParam(value = "圈子id") @RequestParam String circleid,//圈子id
                             @ApiParam(value = "发帖人") @RequestParam String userid,//发帖人
                             @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam String coverimg,//帖子封面
@@ -606,7 +606,7 @@ public class PostController {
                                    @ApiParam(value = "帖子id（必填）") @RequestParam String id,
                                    @ApiParam(value = "帖子标题") @RequestParam(required = false) String title,//帖子标题
                                    @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,//帖子副标题
-                                   @ApiParam(value = "帖子类型 0 普通帖 1 原生视频帖") @RequestParam(required = false) String type,//帖子类型
+                                   @ApiParam(value = "帖子类型 0 普通帖 1 原生视频帖 2 分享视频贴") @RequestParam(required = false) String type,//帖子类型
                                    @ApiParam(value = "发帖人（必填且必须是管理员-1）") @RequestParam String userid,//发帖人
                                    @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,//圈子id
                                    @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam String coverimg,//帖子封面
