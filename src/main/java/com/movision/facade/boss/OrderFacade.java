@@ -758,11 +758,15 @@ public class OrderFacade {
         int nextid = 0;
         if (type == 1) {
             lastid = bossOrderService.queryLastOrder(id);
+            int firstid = bossOrderService.queryFirstOrder();
+            map.put("firstid", firstid);
+            map.put("lastid", lastid);
         } else if (type == 2) {
             nextid = bossOrderService.queryNextOrder(id);
+            int finallyid = bossOrderService.queryFinallyOrder();
+            map.put("finallyid", finallyid);
+            map.put("nextid", nextid);
         }
-        map.put("lastid", lastid);
-        map.put("nextid", nextid);
         return map;
     }
 
@@ -780,11 +784,16 @@ public class OrderFacade {
         int nextid = 0;
         if (type == 1) {
             lastid = bossOrderService.queryLastAfterService(id);
+            map.put("lastid", lastid);
+            int firstid = bossOrderService.queryFirstAfterService();
+            map.put("firstid", firstid);
+
         } else if (type == 2) {
             nextid = bossOrderService.queryNextAfterService(id);
+            int finallyid = bossOrderService.queryFinallyAfterService();
+            map.put("finallyid", finallyid);
+            map.put("nextid", nextid);
         }
-        map.put("lastid", lastid);
-        map.put("nextid", nextid);
         return map;
     }
 }

@@ -146,10 +146,17 @@ public interface BossOrdersMapper {
 
     Integer queryNextOrder(Integer id);//下一个订单
 
+    Integer queryFirstOrder();//查询订单第一条记录
+
+    Integer queryFinallyOrder();//查询订单最后一条记录
+
     Integer queryLastAfterService(Integer id);//上一个售后
 
     Integer queryNextAfterService(Integer id);//下一个售后
 
+    Integer queryFirstAfterService();//查询售后第一条记录
+
+    Integer queryFinallyAfterService();//查询售后最后一条记录
 
 
 
