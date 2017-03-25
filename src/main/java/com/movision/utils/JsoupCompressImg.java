@@ -163,11 +163,18 @@ public class JsoupCompressImg {
             compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
         }
         if (filename.endsWith(".png")) {
-            File srcFile = new File(filePath);
-            log.info("压缩png图片,filepath=" + filePath);
-            compressFlag = ImageUtil.fromFile(srcFile).size(w, h).quality(0.7f).fixedGivenSize(false).keepRatio(true) // 图片宽高比例
-                    .bgcolor(null) // 透明背景
-                    .toFile(new File(tempDir));
+//            File srcFile = new File(filePath);
+//            log.info("压缩png图片,filepath=" + filePath);
+//            compressFlag = ImageUtil.fromFile(srcFile).size(w, h).quality(0.7f).fixedGivenSize(false).keepRatio(true) // 图片宽高比例
+//                    .bgcolor(null) // 透明背景
+//                    .toFile(new File(tempDir));
+            log.info("压缩png图片，filepath=" + filePath);
+            compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
+        }
+        if (filename.endsWith(".jpeg")) {
+
+            log.info("压缩jpeg图片，filepath=" + filePath);
+            compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
         }
         return compressFlag;
     }
