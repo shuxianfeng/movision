@@ -66,6 +66,8 @@ public class PostVo {
 
     private String videourl;//存放原生视频链接
 
+    private String videocoverimgurl;//原生视频封面图片（类型为原生视频时有返回值）
+
     private String isfollow;//该帖子所属的圈子是否被关注 0 可关注  1 已关注（用于判断帖子详情中的关注按钮是否可用）
 
     private List<Circle> hotcirclelist;//用于存放帖子详情最下方的4个热门推荐圈子
@@ -420,5 +422,13 @@ public class PostVo {
 
     public void setShareGoodsList(List<GoodsVo> shareGoodsList) {
         this.shareGoodsList = shareGoodsList;
+    }
+
+    public String getVideocoverimgurl() {
+        return videocoverimgurl;
+    }
+
+    public void setVideocoverimgurl(String videocoverimgurl) {
+        this.videocoverimgurl = videocoverimgurl;
     }
 }

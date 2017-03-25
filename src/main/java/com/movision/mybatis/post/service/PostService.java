@@ -8,6 +8,7 @@ import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.mapper.PostMapper;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
+import com.movision.mybatis.video.entity.Video;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +81,7 @@ public class PostService {
         }
     }
 
-    public String queryVideoUrl(int postid) {
+    public Video queryVideoUrl(int postid) {
         try {
             log.info("查询原生帖子详情");
             return postMapper.queryVideoUrl(postid);

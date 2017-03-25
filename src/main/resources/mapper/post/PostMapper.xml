@@ -189,8 +189,8 @@
     </select>
 
     <!--根据圈子id查询该原生视频帖子的视频url-->
-    <select id="queryVideoUrl" parameterType="java.lang.Integer" resultType="String">
-        SELECT videourl FROM yw_video WHERE postid = #{postid,jdbcType=INTEGER}
+    <select id="queryVideoUrl" parameterType="java.lang.Integer" resultType="com.movision.mybatis.video.entity.Video">
+        SELECT videourl, bannerimgurl FROM yw_video WHERE postid = #{postid,jdbcType=INTEGER}
     </select>
 
     <!--查询所有活动列表-->

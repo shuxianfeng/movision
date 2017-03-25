@@ -14,6 +14,7 @@ import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.mybatis.video.entity.Video;
 import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.beanutils.converters.IntegerConverter;
@@ -68,8 +69,9 @@ public class FacadePost {
         }
         PostVo vo = postService.queryPostDetail(parammap);
         if (type.equals("1")) {
-            String url = postService.queryVideoUrl(Integer.parseInt(postid));
-            vo.setVideourl(url);
+            Video video = postService.queryVideoUrl(Integer.parseInt(postid));
+            vo.setVideourl(video.getVideourl());
+            vo.setVideocoverimgurl(video.getBannerimgurl());
         }
         if (vo.getUserid() != -1) {//发帖人为普通用户时查询发帖人昵称和手机号
             User user = userService.queryUserB(vo.getUserid());
