@@ -176,6 +176,11 @@ public class JsoupCompressImg {
             log.info("压缩jpeg图片，filepath=" + filePath);
             compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
         }
+        if (filename.endsWith(".bmp")) {
+
+            log.info("压缩bmp图片，filepath=" + filePath);
+            compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
+        }
         return compressFlag;
     }
 
