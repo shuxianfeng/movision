@@ -33,6 +33,6 @@ public interface SystemPushMapper {
 
     List<String> findAllPhone();//查询所有短信
 
-    List<String> findPhone(Integer pageNo, Integer PageSize);
+    List<String> findPhone(Integer pageNo, Integer pageSize);
 
 }
