@@ -127,7 +127,9 @@ public class HomepageManageFacade {
     public int updateAdvertisement(String id, String orderid, String content, String subcontent, String url, String transurl) {
         Map map = new HashedMap();
         map.put("id", id);
-        map.put("orderid", orderid);
+        if (StringUtil.isNotEmpty(orderid)) {
+            map.put("orderid", orderid);
+        }
         map.put("content", content);
         map.put("subcontent", subcontent);
         map.put("url", url);
