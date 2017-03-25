@@ -72,68 +72,74 @@ public class JsoupCompressImg {
             List<String> existFileList = getExistFiles(compress_dir_path);
 
             for (int i = 0; i < titleElms.size(); i++) {
-
-                boolean compressFlag = false;
-
                 //遍历帖子中的所有图片列表
 
                 //从img标签中获取src属性
                 String imgurl = titleElms.get(i).attr("src");
                 log.info("压缩前的原图url，imgurl=" + imgurl);
 
-                String filename = FileUtil.getPicName(imgurl);
-                log.info("filename=" + filename);
+                //通过帖子中的imgurl查询图片压缩关系表中是否存在该图的压缩记录
+                int sum = postFacade.queryIsHaveCompress(imgurl);
 
-                //原图的绝对路径
-                String proto_img_dir = savedDir.substring(0, savedDir.lastIndexOf("/")) + PropertiesLoader.getValue("post.proto.img.domain") + filename;
-                log.info("原图的绝对路径，proto_img_dir=" + proto_img_dir);
+                if (sum == 0) {//如果没压缩过就进行压缩，压缩过的不处理（防止修改帖子时对压缩过的图片进行重复压缩）
 
-                //根据图片url下载图片存在服务器/WWW/tomcat-8200/apache-tomcat-7.0.73/webapps/images/post/compressimg/目录下
+                    boolean compressFlag = false;
+
+                    String filename = FileUtil.getPicName(imgurl);
+                    log.info("filename=" + filename);
+
+                    //原图的绝对路径
+                    String proto_img_dir = savedDir.substring(0, savedDir.lastIndexOf("/")) + PropertiesLoader.getValue("post.proto.img.domain") + filename;
+                    log.info("原图的绝对路径，proto_img_dir=" + proto_img_dir);
+
+                    //根据图片url下载图片存在服务器/WWW/tomcat-8200/apache-tomcat-7.0.73/webapps/images/post/compressimg/目录下
 //                FileUtil.downloadObject(imgurl, tempDir, filename, "img");
 
-                if (StringUtils.isNotEmpty(imgurl)) {
+                    if (StringUtils.isNotEmpty(imgurl)) {
 
-                    // 1 生成压缩后的图片的url
-                    String compress_file_path = compress_dir_path + filename;
-                    log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
+                        // 1 生成压缩后的图片的url
+                        String compress_file_path = compress_dir_path + filename;
+                        log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
 
-                    // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
-                    if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
-                        // 压缩核心算法
-                        compressFlag = compressJpgOrPng(w, h, compressFlag, filename, proto_img_dir, tempDir);
-                        // 处理过的图片加入到已处理集合，防止重复压缩图片
-                        existFileList.add(filename);
-                    } else {
-                        compressFlag = true;
-                        log.info("该图片已存在，不需要压缩，filename=" + filename);
-                    }
-                    if (compressFlag) {
-
-                        //如果压缩保存成功，这里替换文章中的第i个img标签中的src属性
-                        Element imgele = titleElms.get(i).attr("src", compress_file_path);
-                        titleElms.get(i).attr("src", compress_file_path);
-
-                        //获取原图绝对路径和图片大小
-                        File file = new File(proto_img_dir);//获取原图大小
-                        FileInputStream fis = new FileInputStream(file);
-                        int s = fis.available();
-                        DecimalFormat df = new DecimalFormat("######0.00");
-                        String filesize = df.format((double) s / 1024 / 1024);
-                        log.info("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + filesize + "M");
-
-                        //保存缩略图和原图的映射关系到数据库中yw_compress_img
-                        CompressImg compressImg = new CompressImg();
-                        compressImg.setCompressimgurl(compress_file_path);
-                        compressImg.setProtoimgurl(imgurl);
-                        compressImg.setProtoimgsize(filesize);
-                        int count = postFacade.queryCount(compressImg);
-                        if (count == 0) {
-                            //如果已经保存过就不再保存
-                            postFacade.addCompressImg(compressImg);
+                        // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
+                        if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
+                            // 压缩核心算法
+                            compressFlag = compressJpgOrPng(w, h, compressFlag, filename, proto_img_dir, tempDir);
+                            // 处理过的图片加入到已处理集合，防止重复压缩图片
+                            existFileList.add(filename);
                         } else {
-                            log.info("原图:" + imgurl + "已进行过压缩，且已存在映射关系");
+                            compressFlag = true;
+                            log.info("该图片已存在，不需要压缩，filename=" + filename);
+                        }
+                        if (compressFlag) {
+
+                            //如果压缩保存成功，这里替换文章中的第i个img标签中的src属性
+                            titleElms.get(i).attr("src", compress_file_path);
+
+                            //获取原图绝对路径和图片大小
+                            File file = new File(proto_img_dir);//获取原图大小
+                            FileInputStream fis = new FileInputStream(file);
+                            int s = fis.available();
+                            DecimalFormat df = new DecimalFormat("######0.00");
+                            String filesize = df.format((double) s / 1024 / 1024);
+                            log.info("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + filesize + "M");
+
+                            //保存缩略图和原图的映射关系到数据库中yw_compress_img
+                            CompressImg compressImg = new CompressImg();
+                            compressImg.setCompressimgurl(compress_file_path);
+                            compressImg.setProtoimgurl(imgurl);
+                            compressImg.setProtoimgsize(filesize);
+                            int count = postFacade.queryCount(compressImg);
+                            if (count == 0) {
+                                //如果已经保存过就不再保存
+                                postFacade.addCompressImg(compressImg);
+                            } else {
+                                log.info("原图:" + imgurl + "已进行过压缩，且已存在映射关系");
+                            }
                         }
                     }
+                } else {
+                    log.info("帖子中包含的已压缩过的图片>>>>>>>>>>>>>>>>>>>>>>>>>" + imgurl);
                 }
             }
             String a = doc.html().replaceAll("\\n", "").replaceAll("\\\\", "").replaceAll("<html>", "").replaceAll("<head>", "").replaceAll("<body>", "").replaceAll("</html>", "").replaceAll("</head>", "").replaceAll("</body>", "");

@@ -1402,6 +1402,13 @@ public class PostFacade {
     }
 
     /**
+     * 遍历帖子中每个img时先判断是否已经压缩过（防止修改帖子内容时重复压缩）
+     */
+    public int queryIsHaveCompress(String imgurl) {
+        return postService.queryIsHaveCompress(imgurl);
+    }
+
+    /**
      * 查询帖子中的这张图片在压缩映射关系表中是否存在
      */
     public int queryCount(CompressImg compressImg) {

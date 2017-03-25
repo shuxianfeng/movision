@@ -819,6 +819,19 @@ public class PostService {
     }
 
     /**
+     * 遍历帖子中所有图片进行压缩处理前先查询该图片有没有压缩过
+     */
+    public int queryIsHaveCompress(String imgurl) {
+        try {
+            log.info("判断帖子中当前遍历的图片有没有压缩过");
+            return compressImgMapper.queryIsHaveCompress(imgurl);
+        } catch (Exception e) {
+            log.error("判断帖子中当前遍历的图片有没有压缩过失败");
+            throw e;
+        }
+    }
+
+    /**
      * 查询帖子中的这张图片在压缩映射关系表中是否存在
      */
     public int queryCount(CompressImg compressImg) {

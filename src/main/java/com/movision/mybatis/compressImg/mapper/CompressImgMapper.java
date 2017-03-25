@@ -9,5 +9,7 @@ public interface CompressImgMapper {
 
     int insertSelective(CompressImg record);
 
+    int queryIsHaveCompress(String imgurl);
+
     int queryCount(CompressImg compressImg);
 }
