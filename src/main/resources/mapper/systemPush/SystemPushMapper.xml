@@ -159,6 +159,6 @@
         SELECT phone FROM yw_user
     </select>
     <select id="findPhone" resultType="java.lang.String">
-SELECT phone FROM yw_user LIMIT 0,200
+        SELECT phone FROM yw_user LIMIT #{pageNo,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
     </select>
 </mapper>
