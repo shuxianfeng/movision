@@ -98,21 +98,41 @@ public class AppPostController {
         return response;
     }
 
+    @ApiOperation(value = "APP端发帖前先判断权限", notes = "用于APP端发布帖子时判断用户权限的接口", response = Response.class)
+    @RequestMapping(value = "checkReleasePostPermission", method = RequestMethod.POST)
+    public Response checkReleasePostPermission(@ApiParam(value = "用户id") @RequestParam String userid,
+                                               @ApiParam(value = "所属圈子id") @RequestParam String circleid) {
+        Response response = new Response();
+
+        int count = facadePost.checkReleasePostPermission(userid, circleid);
+
+        if (count == 1) {
+            response.setCode(200);
+            response.setMessage("用户拥有发帖权限");
+        } else if (count == -1) {
+            response.setCode(300);
+            response.setMessage("用户不具备发帖权限");
+        }
+        return response;
+    }
+
 
     @ApiOperation(value = "APP端发布普通帖子", notes = "用于APP端发布普通帖子的接口", response = Response.class)
     @RequestMapping(value = "releasePost", method = RequestMethod.POST)
-    public Response releasePost(HttpServletRequest request, @ApiParam(value = "用户id") @RequestParam String userid,
-                                @ApiParam(value = "用户等级(根据该字段判断是否为大V)") @RequestParam String level,
+    public Response releasePost(@ApiParam(value = "用户id") @RequestParam String userid,
+                                @ApiParam(value = "帖子类型：0 普通图文帖 1 原生视频帖 2 分享视频贴( isactive为0时该字段不为空)") @RequestParam String type,
                                 @ApiParam(value = "所属圈子id") @RequestParam String circleid,
                                 @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
                                 @ApiParam(value = "帖子内容") @RequestParam String postcontent,
                                 @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,
-                                @ApiParam(value = "上传的帖子封面图片截图") @RequestParam("file") MultipartFile file,
+                                @ApiParam(value = "帖子封面图片url(先调用庄总图片上传借口，返回的url传到这里)") @RequestParam String coverimg,
+                                @ApiParam(value = "视频地址url（type为0传空、type为1时先调用庄总视频上传借口返回url传到这里、type为2时直接把分享的第三方视频网址传到这里）") @RequestParam(required = false) String videourl,
+                                @ApiParam(value = "原生视频的封面图片地址url（type为1时必填--先调用庄总图片上传借口，拿到图片url传到这里）") @RequestParam(required = false) String bannerimgurl,
                                 @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids
     ) {
         Response response = new Response();
 
-        int count = facadePost.releasePost(request, userid, level, circleid, title, postcontent, isactive, file, proids);
+        int count = facadePost.releasePost(userid, type, circleid, title, postcontent, isactive, coverimg, videourl, bannerimgurl, proids);
 
         if (count == 0) {
             response.setCode(300);

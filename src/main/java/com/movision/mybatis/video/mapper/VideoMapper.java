@@ -1,7 +1,9 @@
 package com.movision.mybatis.video.mapper;
 
 import com.movision.mybatis.video.entity.Video;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface VideoMapper {
     int deleteByPrimaryKey(Integer id);
 

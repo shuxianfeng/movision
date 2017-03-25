@@ -15,20 +15,18 @@ import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.video.entity.Video;
+import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
-import org.apache.commons.beanutils.converters.IntegerConverter;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -40,9 +38,6 @@ import java.util.*;
 public class FacadePost {
 
     private static Logger log = LoggerFactory.getLogger(FacadePost.class);
-
-    @Value("#{configProperties['img.domain']}")
-    private String imgdomain;
 
     @Autowired
     private PostService postService;
@@ -58,6 +53,9 @@ public class FacadePost {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private VideoService videoService;
 
     public PostVo queryPostDetail(String postid, String userid, String type) {
 
@@ -156,19 +154,33 @@ public class FacadePost {
         return postService.queryPostList(pager, circleid);
     }
 
+    public int checkReleasePostPermission(String userid, String circleid) {
+        //这个根据userid和圈子id判断该用户有没有该圈子的发帖权限
+        //查询当前圈子的开放范围
+        int scope = circleService.queryCircleScope(Integer.parseInt(circleid));
+        //查询当前圈子的所有者(返回所有者的用户id)
+        User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
+        int lev = owner.getLevel();//用户等级
+        if (scope == 0 || Integer.parseInt(userid) == owner.getId() || (scope == 1 && lev >= 1)) {
+            return 1;//有发帖权限
+        } else {
+            return -1;//无发帖权限
+        }
+    }
 
-    public int releasePost(HttpServletRequest request, String userid, String level, String circleid, String title,
-                           String postcontent, String isactive, MultipartFile file, String proids) {
+    @Transactional
+    public int releasePost(String userid, String type, String circleid, String title, String postcontent, String isactive, String coverimg,
+                           String videourl, String bannerimgurl, String proids) {
 
         //这里需要根据userid判断当前登录的用户是否有发帖权限
         //查询当前圈子的开放范围
         int scope = circleService.queryCircleScope(Integer.parseInt(circleid));
         //查询当前圈子的所有者(返回所有者的用户id)
-        int owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
-        int lev = Integer.parseInt(level);//用户等级
+        User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
+        int lev = owner.getLevel();//用户等级
 
         //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.所有者和大V可发时，发帖用户即为大V
-        if (scope == 0 || Integer.parseInt(userid) == owner || (scope == 1 && lev >= 1)) {
+        if (scope == 0 || Integer.parseInt(userid) == owner.getId() || (scope == 1 && lev >= 1)) {
 
             try {
                 log.info("APP前端用户开始请求发普通帖");
@@ -182,50 +194,34 @@ public class FacadePost {
                 post.setForwardsum(0);//被转发次数
                 post.setCollectsum(0);//被收藏次数
                 post.setIsactive(Integer.parseInt(isactive));//是否为活动 0 帖子 1 活动
-                post.setType(0);//帖子类型 0 普通帖 1 原生优质帖
+                post.setType(Integer.parseInt(type));//帖子类型 0 普通图文帖 1 原生视频帖 2 分享视频帖
                 post.setIshot(0);//是否设为热门：默认0否
                 post.setIsessence(0);//是否设为精选：默认0否
                 post.setIsessencepool(0);//是否设为精选池中的帖子
                 post.setIntime(new Date());//帖子发布时间
                 post.setTotalpoint(0);//帖子综合评分
                 post.setIsdel(0);//上架
-
-                //上传图片到本地服务器
-                String savedFileName = "";
-                if (!file.isEmpty()) {
-                    String fileRealName = file.getOriginalFilename();
-                    int pointIndex = fileRealName.indexOf(".");
-                    String fileSuffix = fileRealName.substring(pointIndex);
-                    UUID FileId = UUID.randomUUID();
-                    savedFileName = FileId.toString().replace("-", "").concat(fileSuffix);
-//                    String savedDir = request.getSession().getServletContext().getRealPath("/images/post/coverimg");
-                    String savedDir = request.getSession().getServletContext().getRealPath("");
-
-                    //这里将获取的路径/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision-1.0.0后缀movision-1.0.0去除
-                    //不保存到项目中,防止部包把图片覆盖掉了
-                    String path = savedDir.substring(0, savedDir.length() - 9);
-
-                    //这里组合出真实的图片存储路径
-                    String combinpath = path + "/images/post/coverimg";
-
-//                    File savedFile = new File(savedDir, savedFileName);
-                    File savedFile = new File(combinpath, savedFileName);
-                    boolean isCreateSuccess = savedFile.createNewFile();
-                    if (isCreateSuccess) {
-                        file.transferTo(savedFile);  //转存文件
-                    }
-                }
-
-                //暂定为tomcat本地tomcat服务器上的路径 imgdomain==>"http://120.77.214.187:8100/images/post/coverimg/"
-                String imgurl = imgdomain + savedFileName;
-
-                post.setCoverimg(imgurl);
-
+                post.setCoverimg(coverimg);//帖子封面
+                //插入帖子
                 postService.releasePost(post);
 
-                int flag = post.getId();
+                int flag = post.getId();//返回的主键--帖子id
 
-                //再保存帖子中分享的商品列表(如何商品id字段不为空)
+                if (!type.equals("0")) {
+                    Video video = new Video();
+                    video.setPostid(flag);
+                    video.setVideourl(videourl);
+                    video.setIsrecommend(0);
+                    video.setIsbanner(0);
+                    if (type.equals("1")) {
+                        video.setBannerimgurl(bannerimgurl);
+                    }
+                    video.setIntime(new Date());
+                    //向帖子视频表中插入一条视频记录
+                    videoService.insertVideoById(video);
+                }
+
+                //再保存帖子中分享的商品列表(如果商品id字段不为空)
                 if (!StringUtils.isEmpty(proids)) {
                     String[] proidstr = proids.split(",");
                     List<PostShareGoods> postShareGoodsList = new ArrayList<>();

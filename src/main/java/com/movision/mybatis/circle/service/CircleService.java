@@ -183,7 +183,7 @@ public class CircleService {
         }
     }
 
-    public int queryCircleOwner(int circleid) {
+    public User queryCircleOwner(int circleid) {
         try {
             log.info("查询圈子的所有者userid");
             return circleMapper.queryCircleOwner(circleid);

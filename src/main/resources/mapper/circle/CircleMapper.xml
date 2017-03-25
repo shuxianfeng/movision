@@ -78,8 +78,8 @@
     </select>
 
     <!--查询当前圈子所有者userid-->
-    <select id="queryCircleOwner" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT id FROM yw_user WHERE phone = (
+    <select id="queryCircleOwner" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.User">
+        SELECT id, level FROM yw_user WHERE phone = (
         SELECT phone FROM yw_circle WHERE id = #{circleid,jdbcType=INTEGER}
         )
     </select>
