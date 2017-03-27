@@ -568,10 +568,10 @@ public class UserService {
      *
      * @param map
      */
-    public void updateUserPoint(Map map) {
+    public int updateUserPoint(Map map) {
         try {
             log.info("操作用户积分");
-            userMapper.updateUserPoint(map);
+            return userMapper.updateUserPoint(map);
         } catch (Exception e) {
             log.error("操作用户积分异常");
             throw e;

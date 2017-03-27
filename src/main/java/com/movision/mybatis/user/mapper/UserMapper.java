@@ -99,6 +99,6 @@ public interface UserMapper {
 
     int queryUserByRewarde(int userid);
 
-    void updateUserPoint(Map map);
+    int updateUserPoint(Map map);
 
 }

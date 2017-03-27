@@ -229,12 +229,12 @@ public class UserFacade {
      *
      * @param integral
      */
-    public void updateUserPoint(int userid, int integral, int type) {
+    public int updateUserPoint(int userid, int integral, int type) {
         Map map = new HashedMap();
         map.put("userid", userid);
         map.put("integral", integral);
         map.put("type", type);
-        userService.updateUserPoint(map);
+        return userService.updateUserPoint(map);
     }
 
 }

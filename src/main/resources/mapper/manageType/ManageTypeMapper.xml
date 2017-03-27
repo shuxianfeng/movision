@@ -116,7 +116,7 @@
   </update>
 
     <select id="findAllqueryAdvertisementTypeList" resultType="com.movision.mybatis.manageType.entity.ManageType">
-        SELECT t.id,t.type,t.name,t.intime,t.wide,t.high FROM yw_homepage_manage_type t
+        SELECT t.id,t.type,t.name,t.intime,t.wide,t.high,t.quantity FROM yw_homepage_manage_type t
   </select>
 
     <insert id="addAdvertisementType" parameterType="java.util.Map">
