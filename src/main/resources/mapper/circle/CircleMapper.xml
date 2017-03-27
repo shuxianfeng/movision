@@ -786,6 +786,7 @@
         where id = #{circleid,jdbcType=INTEGER}
     </update>
 
+    <!--
     <update id="updateCircleCategoryClassify" parameterType="java.util.Map">
         update yw_circle_category
         <set>
@@ -798,6 +799,7 @@
         </set>
         where id = #{categoryid,jdbcType=INTEGER}
     </update>
+    -->
 
     <select id="queryCircleCategoryClassify" parameterType="java.lang.String"
             resultType="com.movision.mybatis.category.entity.Category">

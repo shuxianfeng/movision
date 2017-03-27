@@ -465,7 +465,7 @@ public class CircleService {
      * @param map
      * @return
      */
-    public int updateCircleCategoryClassify(Map map) {
+/*    public int updateCircleCategoryClassify(Map map) {
         try {
             log.info("修改圈子分类");
             return circleMapper.updateCircleCategoryClassify(map);
@@ -473,7 +473,7 @@ public class CircleService {
             log.error("修改圈子分类异常");
             throw e;
         }
-    }
+    }*/
 
     /**
      * 根据类型Id查询圈子类型

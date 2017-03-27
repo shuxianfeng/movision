@@ -325,13 +325,13 @@ public class CircleController {
     }
 
     /**
-     * 编辑圈子详情接口
+     * 编辑圈子类型接口
      *
      * @param category
      * @param discoverpageurl
      * @return
      */
-    @ApiOperation(value = "编辑圈子详情", notes = "用于编辑圈子详情接口", response = Response.class)
+    @ApiOperation(value = "编辑圈子类型", notes = "用于编辑圈子类型", response = Response.class)
     @RequestMapping(value = "update_circle_category", method = RequestMethod.POST)
     public Response updateCircleCategory(@ApiParam(value = "圈子类型id") @RequestParam String categoryid,
                                          @ApiParam(value = "圈子类型名称") @RequestParam String category,
@@ -487,7 +487,7 @@ public class CircleController {
      * @param discoverpageurl
      * @return
      */
-    @ApiOperation(value = "修改圈子分类", notes = "用于修改圈子分类", response = Response.class)
+  /*  @ApiOperation(value = "修改圈子分类", notes = "用于修改圈子分类", response = Response.class)
     @RequestMapping(value = "update_circle_classify", method = RequestMethod.POST)
     public Response updateCircleCategoryClassify(@ApiParam(value = "分类id") @RequestParam String categoryid,
                                                  @ApiParam(value = "分类名称") @RequestParam String categoryname,
@@ -499,7 +499,7 @@ public class CircleController {
         }
         response.setData(list);
         return response;
-    }
+    }*/
 
     /**
      * 查询圈子分类

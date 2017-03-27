@@ -457,8 +457,9 @@ public class CircleFacade {
         return categoryService.queryCircleCategory(category);
     }
 
+
     /**
-     * 编辑圈子详情接口
+     * 编辑圈子类型接口
      *
      * @param categoryid
      * @param category
@@ -715,13 +716,13 @@ public class CircleFacade {
      * @param discoverpageurl
      * @return
      */
-    public int updateCircleCategoryClassify(String categoryid, String categoryname, String discoverpageurl) {
+/*    public int updateCircleCategoryClassify(String categoryid, String categoryname, String discoverpageurl) {
         Map map = new HashedMap();
         map.put("categoryid", categoryid);
         map.put("categoryname", categoryname);
         map.put("discoverpageurl", discoverpageurl);
         return circleService.updateCircleCategoryClassify(map);
-    }
+    }*/
 
     /**
      * 根据类型id查询圈子类型

@@ -80,7 +80,7 @@ public interface CircleMapper {
 
     int updateAuditCircle(Map map);
 
-    int updateCircleCategoryClassify(Map map);
+   /* int updateCircleCategoryClassify(Map map);*/
 
     Category queryCircleCategoryClassify(String categoryid);
 }
