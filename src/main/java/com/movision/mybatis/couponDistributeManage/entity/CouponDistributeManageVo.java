@@ -53,6 +53,17 @@ public class CouponDistributeManageVo {
 
     private Integer isHaveGet;//用户是否已领取过：0 未领取 1 已领取
 
+
+    private String trasurl;
+
+    public String getTrasurl() {
+        return trasurl;
+    }
+
+    public void setTrasurl(String trasurl) {
+        this.trasurl = trasurl;
+    }
+
     public Integer getId() {
         return id;
     }

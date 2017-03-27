@@ -1446,7 +1446,9 @@
     <select id="queryByIdCouponDistr"
             resultType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo"
             parameterType="java.lang.Integer">
-     SELECT m.id,m.title,m.content,m.channel,m.scope,p.name,m.type,m.amount,m.fullamount,m.putnum,m.receivednum,m.restnum,m.startdate,m.enddate,m.isdel,m.couponrule  FROM yw_coupon_distribute_manage m
+        SELECT
+        m.id,m.title,m.content,m.channel,m.scope,p.name,m.type,m.amount,m.fullamount,m.putnum,m.receivednum,m.restnum,m.startdate,m.enddate,m.isdel,m.couponrule,m.trasurl
+        FROM yw_coupon_distribute_manage m
     LEFT JOIN yw_shop p ON p.id=m.shopid WHERE  m.id={id,jdbcType=INTEGER}
     </select>
     <select id="queryCouponDistrIsdel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
@@ -1501,4 +1503,150 @@
             ORDER BY restnum DESC
         </if>
     </select>
+    <insert id="addCouponDistr"
+            parameterType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo">
+        insert into yw_coupon_distribute_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="startdate != null">
+                startdate,
+            </if>
+            <if test="enddate != null">
+                enddate,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="fullamount != null">
+                fullamount,
+            </if>
+            <if test="scope != null">
+                scope,
+            </if>
+            <if test="channel != null">
+                channel,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="putnum != null">
+                putnum,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+            <if test="bannerurl != null">
+                bannerurl,
+            </if>
+            <if test="trasurl != null">
+                trasurl,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="startdate != null">
+                #{startdate,jdbcType=DATE},
+            </if>
+            <if test="enddate != null">
+                #{enddate,jdbcType=DATE},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=DOUBLE},
+            </if>
+            <if test="fullamount != null">
+                #{fullamount,jdbcType=DOUBLE},
+            </if>
+            <if test="scope != null">
+                #{scope,jdbcType=INTEGER},
+            </if>
+            <if test="channel != null">
+                #{channel,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="putnum != null">
+                #{putnum,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="bannerurl != null">
+                #{bannerurl,jdbcType=VARCHAR},
+            </if>
+            <if test="trasurl != null">
+                #{trasurl,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateCouponDistr"
+            parameterType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo">
+        update yw_coupon_distribute_manage
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="startdate != null">
+                startdate = #{startdate,jdbcType=DATE},
+            </if>
+            <if test="enddate != null">
+                enddate = #{enddate,jdbcType=DATE},
+            </if>
+            <if test="amount != null">
+                amount = #{amount,jdbcType=DOUBLE},
+            </if>
+            <if test="fullamount != null">
+                fullamount = #{fullamount,jdbcType=DOUBLE},
+            </if>
+            <if test="scope != null">
+                scope = #{scope,jdbcType=INTEGER},
+            </if>
+            <if test="channel != null">
+                channel = #{channel,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="putnum != null">
+                putnum = #{putnum,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="trasurl != null">
+                trasurl = #{isdel,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

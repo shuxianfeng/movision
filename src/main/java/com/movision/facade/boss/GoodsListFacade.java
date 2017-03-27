@@ -15,6 +15,7 @@ import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
 import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
+import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1086,11 +1087,165 @@ public class GoodsListFacade {
         return goodsService.findAllCouponDistrCondition(map, pager);
     }
 
-    public Map<String, Object> addCouponDistr(String bannerurl, String title, String content, String type, String amount, String fullamount, String scope, String putnum, String name, String channel, String startdate, String enddate, String couponrule) {
+    /**
+     * 增加优惠券
+     *
+     * @param bannerurl
+     * @param title
+     * @param content
+     * @param type
+     * @param amount
+     * @param fullamount
+     * @param scope
+     * @param putnum
+     * @param channel
+     * @param startdate
+     * @param enddate
+     * @param couponrule
+     * @return
+     */
+    public Map<String, Object> addCouponDistr(String bannerurl, String title, String content, String type, String amount, String fullamount, String scope, String putnum, String channel, String startdate, String enddate, String couponrule, String trasurl) {
         Map<String, Object> map = new HashMap<>();
-
+        CouponDistributeManageVo cou = new CouponDistributeManageVo();
+        if (!StringUtils.isEmpty(bannerurl)) {
+            cou.setBannerurl(bannerurl);
+        }
+        if (!StringUtils.isEmpty(title)) {
+            cou.setTitle(title);
+        }
+        if (!StringUtils.isEmpty(content)) {
+            cou.setContent(content);
+        }
+        if (!StringUtils.isEmpty(type)) {
+            cou.setType(Integer.parseInt(type));
+        }
+        if (!StringUtils.isEmpty(amount)) {
+            cou.setAmount(Double.parseDouble(amount));
+        }
+        if (!StringUtils.isEmpty(fullamount)) {
+            cou.setFullamount(Double.parseDouble(fullamount));
+        }
+        if (!StringUtils.isEmpty(scope)) {
+            cou.setScope(Integer.parseInt(scope));
+        }
+        if (!StringUtils.isEmpty(putnum)) {
+            cou.setPutnum(Integer.parseInt(putnum));
+        }
+        if (!StringUtils.isEmpty(channel)) {
+            cou.setChannel(Integer.parseInt(channel));
+        }
+        if (channel.equals("1")) {
+            cou.setTrasurl(trasurl);
+        }
+        if (!StringUtils.isEmpty(couponrule)) {
+            cou.setCouponrule(couponrule);
+        }
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        if (startdate != null) {
+            try {
+                date = format.parse(startdate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("date", date);
+        Date date1 = null;
+        if (enddate != null) {
+            try {
+                date1 = format.parse(enddate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("date1", date1);
+        cou.setIntime(new Date());
+        cou.setIsdel(0);
+        int result = goodsService.addCouponDistr(cou);
+        map.put("result", result);
         return  map;
 
+    }
+
+    /**
+     * 编辑优惠券
+     *
+     * @param bannerurl
+     * @param title
+     * @param content
+     * @param type
+     * @param amount
+     * @param fullamount
+     * @param scope
+     * @param putnum
+     * @param channel
+     * @param startdate
+     * @param enddate
+     * @param couponrule
+     * @param trasurl
+     * @return
+     */
+    public Map<String, Object> updateCouponDistr(String id, String bannerurl, String title, String content, String type, String amount, String fullamount, String scope, String putnum, String channel, String startdate, String enddate, String couponrule, String trasurl) {
+        Map<String, Object> map = new HashMap<>();
+        CouponDistributeManageVo cou = new CouponDistributeManageVo();
+        if (!StringUtils.isEmpty(id)) {
+            cou.setId(Integer.parseInt(id));
+        }
+        if (!StringUtils.isEmpty(bannerurl)) {
+            cou.setBannerurl(bannerurl);
+        }
+        if (!StringUtils.isEmpty(title)) {
+            cou.setTitle(title);
+        }
+        if (!StringUtils.isEmpty(content)) {
+            cou.setContent(content);
+        }
+        if (!StringUtils.isEmpty(type)) {
+            cou.setType(Integer.parseInt(type));
+        }
+        if (!StringUtils.isEmpty(amount)) {
+            cou.setAmount(Double.parseDouble(amount));
+        }
+        if (!StringUtils.isEmpty(fullamount)) {
+            cou.setFullamount(Double.parseDouble(fullamount));
+        }
+        if (!StringUtils.isEmpty(scope)) {
+            cou.setScope(Integer.parseInt(scope));
+        }
+        if (!StringUtils.isEmpty(putnum)) {
+            cou.setPutnum(Integer.parseInt(putnum));
+        }
+        if (!StringUtils.isEmpty(channel)) {
+            cou.setChannel(Integer.parseInt(channel));
+        }
+        if (channel.equals("1")) {
+            cou.setTrasurl(trasurl);
+        }
+        if (!StringUtils.isEmpty(couponrule)) {
+            cou.setCouponrule(couponrule);
+        }
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        if (startdate != null) {
+            try {
+                date = format.parse(startdate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("date", date);
+        Date date1 = null;
+        if (enddate != null) {
+            try {
+                date1 = format.parse(enddate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("date1", date1);
+        int result = goodsService.updateCouponDistr(cou);
+        map.put("result", result);
+        return map;
     }
 
 }

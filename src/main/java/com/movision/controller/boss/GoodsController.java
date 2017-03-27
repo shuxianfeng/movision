@@ -1068,4 +1068,91 @@ public class GoodsController {
         return response;
 
     }
+
+    /**
+     * 增加优惠券
+     *
+     * @param bannerurl
+     * @param title
+     * @param content
+     * @param type
+     * @param amount
+     * @param fullamount
+     * @param scope
+     * @param putnum
+     * @param channel
+     * @param startdate
+     * @param enddate
+     * @param couponrule
+     * @return
+     */
+    @ApiOperation(value = "增加优惠券", notes = "增加优惠券", response = Response.class)
+    @RequestMapping(value = "add_coupondistr", method = RequestMethod.POST)
+    public Response addCouponDistr(
+            @ApiParam(value = "优惠卷图片") @RequestParam(required = false) String bannerurl,
+            @ApiParam(value = "优惠卷标题") @RequestParam(required = false) String title,
+            @ApiParam(value = "优惠卷内容") @RequestParam(required = false) String content,
+            @ApiParam(value = "优惠卷类型") @RequestParam(required = false) String type,
+            @ApiParam(value = "优惠券金额") @RequestParam(required = false) String amount,
+            @ApiParam(value = "优惠卷满多少可用") @RequestParam(required = false) String fullamount,
+            @ApiParam(value = "优惠卷使用范围") @RequestParam(required = false) String scope,
+            @ApiParam(value = "本次投放总张数") @RequestParam(required = false) String putnum,
+            @ApiParam(value = "获取渠道：") @RequestParam(required = false) String channel,
+            @ApiParam(value = "生效日期") @RequestParam(required = false) String startdate,
+            @ApiParam(value = "失效日期") @RequestParam(required = false) String enddate,
+            @ApiParam(value = "优惠券使用规则") @RequestParam(required = false) String couponrule,
+            @ApiParam(value = "分享url") @RequestParam(required = false) String trasurl) {
+        Response response = new Response();
+        Map<String, Object> map = goodsFacade.addCouponDistr(bannerurl, title, content, type, amount, fullamount, scope, putnum, channel, startdate, enddate, couponrule, trasurl);
+        if (response.getCode() == 200) {
+            response.setMessage("增加成功");
+        }
+        response.setData(map);
+        return response;
+
+    }
+
+
+    /**
+     * 编辑优惠券
+     *
+     * @param bannerurl
+     * @param title
+     * @param content
+     * @param type
+     * @param amount
+     * @param fullamount
+     * @param scope
+     * @param putnum
+     * @param channel
+     * @param startdate
+     * @param enddate
+     * @param couponrule
+     * @return
+     */
+    @ApiOperation(value = "编辑优惠券", notes = "编辑优惠券", response = Response.class)
+    @RequestMapping(value = "update_coupondistr", method = RequestMethod.POST)
+    public Response updateCouponDistr(
+            @ApiParam(value = "优惠卷图片") @RequestParam(required = false) String bannerurl,
+            @ApiParam(value = "优惠卷标题") @RequestParam(required = false) String title,
+            @ApiParam(value = "优惠卷内容") @RequestParam(required = false) String content,
+            @ApiParam(value = "优惠卷类型") @RequestParam(required = false) String type,
+            @ApiParam(value = "优惠券金额") @RequestParam(required = false) String amount,
+            @ApiParam(value = "优惠卷满多少可用") @RequestParam(required = false) String fullamount,
+            @ApiParam(value = "优惠卷使用范围") @RequestParam(required = false) String scope,
+            @ApiParam(value = "本次投放总张数") @RequestParam(required = false) String putnum,
+            @ApiParam(value = "获取渠道：") @RequestParam(required = false) String channel,
+            @ApiParam(value = "生效日期") @RequestParam(required = false) String startdate,
+            @ApiParam(value = "失效日期") @RequestParam(required = false) String enddate,
+            @ApiParam(value = "优惠券使用规则") @RequestParam(required = false) String couponrule,
+            @ApiParam(value = "分享url") @RequestParam(required = false) String trasurl) {
+        Response response = new Response();
+        Map<String, Object> map = goodsFacade.updateCouponDistr(bannerurl, title, content, type, amount, fullamount, scope, putnum, channel, startdate, enddate, couponrule, trasurl);
+        if (response.getCode() == 200) {
+            response.setMessage("编辑成功");
+        }
+        response.setData(map);
+        return response;
+
+    }
 }
