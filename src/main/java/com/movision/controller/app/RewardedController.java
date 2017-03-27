@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -42,15 +43,14 @@ public class RewardedController {
                                       @ApiParam(value = "打赏积分类型") @RequestParam String type,
                                       @ApiParam(value = "打赏用户id") @RequestParam String userid) {
         Response response = new Response();
-        int flag = facadeRewarded.updateRewarded(postid, type, userid);
+        Map flag = facadeRewarded.updateRewarded(postid, type, userid);
 
-        if (flag<0) {
-            response.setCode(500);
-            response.setMessage("积分不足");
+        if (flag.get("code") == 200 && response.getCode() == 200) {
+            response.setMessage("操作成功");
             response.setData(flag);
         }
-        if (response.getCode() == 200 && flag>0) {
-            response.setMessage("操作成功");
+        if (flag.get("code") == 300) {
+            response.setMessage("积分不足");
             response.setData(flag);
         }
         return response;

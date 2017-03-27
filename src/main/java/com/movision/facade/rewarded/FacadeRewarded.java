@@ -83,11 +83,12 @@ public class FacadeRewarded {
      * @return
      */
     @Transactional
-    public int updateRewarded(String postid, String type, String userid) {
+    public Map updateRewarded(String postid, String type, String userid) {
         Integer u = Integer.parseInt(userid);
         Rewarded rewarded = new Rewarded();
         int integral = pointRecordFacade.getIntegral(Integer.parseInt(type));//获取类型对应的积分
         int in = userFacade.queryUserByRewarde(u);//查询出当前用户积分剩余
+        Map map = new HashedMap();
         if (in > integral) {
             int playtour = pointRecordService.queryMyTodayPointSum(u);//查询当天打赏了多少次
             if (playtour < 5) {
@@ -115,9 +116,13 @@ public class FacadeRewarded {
             rewardedService.insertRewarded(rewarded);
             //2 更新session中的缓存
             ShiroUtil.updateShiroUser(in);
-            return in;
+            map.put("code", 200);
+            map.put("resault", in);
+            return map;
         } else {
-            return in;
+            map.put("code", 300);
+            map.put("resault", in);
+            return map;
         }
     }
 
