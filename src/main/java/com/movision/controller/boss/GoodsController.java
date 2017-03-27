@@ -1133,6 +1133,7 @@ public class GoodsController {
     @ApiOperation(value = "编辑优惠券", notes = "编辑优惠券", response = Response.class)
     @RequestMapping(value = "update_coupondistr", method = RequestMethod.POST)
     public Response updateCouponDistr(
+            @ApiParam(value = "优惠卷id") @RequestParam(required = false) String id,
             @ApiParam(value = "优惠卷图片") @RequestParam(required = false) String bannerurl,
             @ApiParam(value = "优惠卷标题") @RequestParam(required = false) String title,
             @ApiParam(value = "优惠卷内容") @RequestParam(required = false) String content,
@@ -1147,7 +1148,7 @@ public class GoodsController {
             @ApiParam(value = "优惠券使用规则") @RequestParam(required = false) String couponrule,
             @ApiParam(value = "分享url") @RequestParam(required = false) String trasurl) {
         Response response = new Response();
-        Map<String, Object> map = goodsFacade.updateCouponDistr(bannerurl, title, content, type, amount, fullamount, scope, putnum, channel, startdate, enddate, couponrule, trasurl);
+        Map<String, Object> map = goodsFacade.updateCouponDistr(id, bannerurl, title, content, type, amount, fullamount, scope, putnum, channel, startdate, enddate, couponrule, trasurl);
         if (response.getCode() == 200) {
             response.setMessage("编辑成功");
         }
