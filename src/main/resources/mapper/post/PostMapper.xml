@@ -44,6 +44,13 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
+    <!--查询当前用户是否点赞过该帖子-->
+    <select id="queryIsZanPost" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_post_zan_record
+        WHERE userid = #{userid,jdbcType=INTEGER}
+          AND postid = #{postid,jdbcType=INTEGER}
+    </select>
+
     <!--查询首页今日精选的帖子数据-->
     <select id="queryTodayEssence" resultType="com.movision.mybatis.post.entity.PostVo">
         select * from (

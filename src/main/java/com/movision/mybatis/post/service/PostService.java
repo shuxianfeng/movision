@@ -233,6 +233,17 @@ public class PostService {
         }
     }
 
+    //查询当前用户有没有点赞过该帖子
+    public int queryIsZanPost(Map<String, Object> parammap) {
+        try {
+            log.info("查询当前用户有没有点赞过该帖子");
+            return postMapper.queryIsZanPost(parammap);
+        } catch (Exception e) {
+            log.error("查询当前用户有没有点赞过该帖子失败");
+            throw e;
+        }
+    }
+
     //插入一条用户点赞帖子的记录
     public void insertZanRecord(Map<String, Object> parammap) {
         try {

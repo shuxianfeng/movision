@@ -177,8 +177,12 @@ public class AppPostController {
         int sum = facadePost.updatePostByZanSum(id, userid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
+            response.setData(sum);
         }
-        response.setData(sum);
+        if (sum == -1) {
+            response.setCode(300);
+            response.setMessage("重复操作");
+        }
         return response;
     }
 

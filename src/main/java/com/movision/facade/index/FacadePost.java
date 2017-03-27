@@ -271,10 +271,14 @@ public class FacadePost {
         parammap.put("postid", Integer.parseInt(id));
         parammap.put("userid", Integer.parseInt(userid));
         parammap.put("intime", new Date());
-        postService.insertZanRecord(parammap);
-        int type = postService.updatePostByZanSum(Integer.parseInt(id));
-        if (type == 1) {
-            return postService.queryPostByZanSum(Integer.parseInt(id));
+        //查询当前用户是否已点赞该帖
+        int count = postService.queryIsZanPost(parammap);
+        if (count == 0) {
+            postService.insertZanRecord(parammap);
+            int type = postService.updatePostByZanSum(Integer.parseInt(id));
+            if (type == 1) {
+                return postService.queryPostByZanSum(Integer.parseInt(id));
+            }
         }
         return -1;
     }

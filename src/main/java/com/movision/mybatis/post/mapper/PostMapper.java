@@ -88,6 +88,8 @@ public interface PostMapper {
 
     List<Goods> findAllGoodsList(RowBounds rowBounds);
 
+    int queryIsZanPost(Map<String, Object> parammap);
+
     void insertZanRecord(Map<String, Object> parammap);
 
     int updatePostByZanSum(int id);
