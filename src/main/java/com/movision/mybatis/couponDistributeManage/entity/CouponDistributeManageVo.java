@@ -27,6 +27,8 @@ public class CouponDistributeManageVo {
 
     private Integer channel;
 
+    private String trasurl;
+
     private String bannerurl;
 
     private String couponrule;
@@ -52,9 +54,6 @@ public class CouponDistributeManageVo {
     private String shopname;//店铺名称
 
     private Integer isHaveGet;//用户是否已领取过：0 未领取 1 已领取
-
-
-    private String trasurl;
 
     public String getTrasurl() {
         return trasurl;

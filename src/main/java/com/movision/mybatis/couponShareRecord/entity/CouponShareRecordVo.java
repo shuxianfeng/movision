@@ -41,6 +41,8 @@ public class CouponShareRecordVo {
 
     private Integer channel;//获取渠道：0 店内领取 1 支付分享
 
+    private String trasurl;//跳转的领取的H5页面url
+
     private String bannerurl;//分享领取页面的banner图url（channel为1时不为空）
 
     private String couponrule;//优惠券使用规则（投放说明、活动说明）
@@ -235,5 +237,13 @@ public class CouponShareRecordVo {
 
     public void setIsHaveGet(Integer isHaveGet) {
         this.isHaveGet = isHaveGet;
+    }
+
+    public String getTrasurl() {
+        return trasurl;
+    }
+
+    public void setTrasurl(String trasurl) {
+        this.trasurl = trasurl;
     }
 }

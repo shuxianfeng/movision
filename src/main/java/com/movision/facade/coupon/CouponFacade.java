@@ -154,6 +154,7 @@ public class CouponFacade {
         couponShareRecordVo.setScope(couponDistributeManageVo.getScope());
         couponShareRecordVo.setShopid(couponDistributeManageVo.getShopid());
         couponShareRecordVo.setChannel(couponDistributeManageVo.getChannel());
+        couponShareRecordVo.setTrasurl(couponDistributeManageVo.getTrasurl());
         couponShareRecordVo.setBannerurl(couponDistributeManageVo.getBannerurl());
         couponShareRecordVo.setCouponrule(couponDistributeManageVo.getCouponrule());
         couponShareRecordVo.setType(couponDistributeManageVo.getType());

@@ -12,6 +12,9 @@
         <result column="scope" property="scope" jdbcType="INTEGER"/>
         <result column="shopid" property="shopid" jdbcType="INTEGER"/>
         <result column="channel" property="channel" jdbcType="INTEGER"/>
+        <result column="trasurl" property="trasurl" jdbcType="VARCHAR"/>
+        <result column="bannerurl" property="trasurl" jdbcType="VARCHAR"/>
+        <result column="couponrule" property="trasurl" jdbcType="VARCHAR"/>
         <result column="singlesharenum" property="singlesharenum" jdbcType="INTEGER"/>
         <result column="type" property="type" jdbcType="INTEGER"/>
         <result column="putnum" property="putnum" jdbcType="INTEGER"/>
@@ -22,8 +25,8 @@
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, title, content, startdate, enddate, amount, fullamount, scope, shopid, channel, 
-    singlesharenum, type, putnum, totalamount, receivednum, restnum, intime, isdel
+        id, title, content, startdate, enddate, amount, fullamount, scope, shopid, channel, trasurl,
+        bannerurl, couponrule, singlesharenum, type, putnum, totalamount, receivednum, restnum, intime, isdel
   </sql>
 
     <!--基础查询语句-->
@@ -88,17 +91,20 @@
     <insert id="insert" parameterType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage">
     insert into yw_coupon_distribute_manage (id, title, content, 
       startdate, enddate, amount, 
-      fullamount, scope, shopid, 
-      channel, singlesharenum, type, 
+      fullamount, scope, shopid,
+        channel, trasurl, bannerurl, couponrule, singlesharenum, type,
       putnum, totalamount, receivednum, 
       restnum, intime, isdel
       )
     values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
       #{startdate,jdbcType=DATE}, #{enddate,jdbcType=DATE}, #{amount,jdbcType=DOUBLE}, 
-      #{fullamount,jdbcType=DOUBLE}, #{scope,jdbcType=INTEGER}, #{shopid,jdbcType=INTEGER}, 
-      #{channel,jdbcType=INTEGER}, #{singlesharenum,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 
-      #{putnum,jdbcType=INTEGER}, #{totalamount,jdbcType=DOUBLE}, #{receivednum,jdbcType=INTEGER}, 
-      #{restnum,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER}
+      #{fullamount,jdbcType=DOUBLE}, #{scope,jdbcType=INTEGER}, #{shopid,jdbcType=INTEGER},
+        #{channel,jdbcType=INTEGER}, #{trasurl,jdbcType=VARCHAR}, #{bannerurl,jdbcType=VARCHAR},
+        #{couponrule,jdbcType=VARCHAR},
+        #{singlesharenum,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{putnum,jdbcType=INTEGER},
+        #{totalamount,jdbcType=DOUBLE},
+        #{receivednum,jdbcType=INTEGER}, #{restnum,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP},
+        #{isdel,jdbcType=INTEGER}
       )
   </insert>
     <insert id="insertSelective"
@@ -134,6 +140,15 @@
             </if>
             <if test="channel != null">
                 channel,
+            </if>
+            <if test="trasurl != null">
+                trasurl,
+            </if>
+            <if test="bannerurl != null">
+                bannerurl,
+            </if>
+            <if test="couponrule != null">
+                couponrule,
             </if>
             <if test="singlesharenum != null">
                 singlesharenum,
@@ -190,6 +205,15 @@
             </if>
             <if test="channel != null">
                 #{channel,jdbcType=INTEGER},
+            </if>
+            <if test="trasurl != null">
+                #{trasurl,jdbcType=VARCHAR},
+            </if>
+            <if test="bannerurl != null">
+                #{bannerurl,jdbcType=VARCHAR},
+            </if>
+            <if test="couponrule != null">
+                #{couponrule,jdbcType=VARCHAR},
             </if>
             <if test="singlesharenum != null">
                 #{singlesharenum,jdbcType=INTEGER},
@@ -259,6 +283,15 @@
             <if test="channel != null">
                 channel = #{channel,jdbcType=INTEGER},
             </if>
+            <if test="trasurl != null">
+                trasurl = #{trasurl,jdbcType=VARCHAR},
+            </if>
+            <if test="bannerurl != null">
+                bannerurl = #{bannerurl,jdbcType=VARCHAR},
+            </if>
+            <if test="couponrule != null">
+                couponrule = #{couponrule,jdbcType=VARCHAR},
+            </if>
             <if test="singlesharenum != null">
                 singlesharenum = #{singlesharenum,jdbcType=INTEGER},
             </if>
@@ -298,6 +331,9 @@
       scope = #{scope,jdbcType=INTEGER},
       shopid = #{shopid,jdbcType=INTEGER},
       channel = #{channel,jdbcType=INTEGER},
+        trasurl = #{trasurl,jdbcType=VARCHAR},
+        bannerurl = #{bannerurl,jdbcType=VARCHAR},
+        couponrule = #{couponrule,jdbcType=VARCHAR},
       singlesharenum = #{singlesharenum,jdbcType=INTEGER},
       type = #{type,jdbcType=INTEGER},
       putnum = #{putnum,jdbcType=INTEGER},

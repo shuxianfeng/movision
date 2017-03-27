@@ -23,6 +23,12 @@ public class CouponDistributeManage {
 
     private Integer channel;
 
+    private String trasurl;
+
+    private String bannerurl;
+
+    private String couponrule;
+
     private Integer singlesharenum;
 
     private Integer type;
@@ -181,5 +187,29 @@ public class CouponDistributeManage {
 
     public void setIsdel(Integer isdel) {
         this.isdel = isdel;
+    }
+
+    public String getTrasurl() {
+        return trasurl;
+    }
+
+    public void setTrasurl(String trasurl) {
+        this.trasurl = trasurl;
+    }
+
+    public String getBannerurl() {
+        return bannerurl;
+    }
+
+    public void setBannerurl(String bannerurl) {
+        this.bannerurl = bannerurl;
+    }
+
+    public String getCouponrule() {
+        return couponrule;
+    }
+
+    public void setCouponrule(String couponrule) {
+        this.couponrule = couponrule;
     }
 }
