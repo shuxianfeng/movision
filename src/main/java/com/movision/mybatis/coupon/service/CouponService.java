@@ -128,6 +128,16 @@ public class CouponService {
         }
     }
 
+    public int checkHaveDistribute() {
+        try {
+            log.info("检查当前是否存在可分享的优惠券活动");
+            return couponDistributeManageMapper.checkHaveDistribute();
+        } catch (Exception e) {
+            log.error("检查当前是否存在可分享的优惠券活动失败");
+            throw e;
+        }
+    }
+
     public List<Coupon> findAllMyCouponList(Paging<Coupon> paging, Map map) {
         try {
             log.info("查询我的优惠券列表");

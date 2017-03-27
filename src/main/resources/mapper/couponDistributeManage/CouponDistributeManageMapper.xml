@@ -49,6 +49,7 @@
         SELECT count(*) FROM yw_coupon_distribute_manage
         WHERE id = #{id,jdbcType=INTEGER}
         AND restnum > 0
+        AND isdel = '0'
         AND NOW() > startdate
         AND enddate > NOW()
     </select>
@@ -57,6 +58,16 @@
     <select id="checkIsHaveGet" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT count(*) FROM yw_coupon_receive_record WHERE userid = #{userid,jdbcType=INTEGER} AND distributeid =
         #{id,jdbcType=INTEGER}
+    </select>
+
+    <!--支付成功后检查当前是否存在可分享的优惠券活动-->
+    <select id="checkHaveDistribute" resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_coupon_distribute_manage
+        WHERE channel = '1'
+          AND restnum > 0
+          AND isdel = '0'
+          AND NOW() > startdate
+          AND enddate > NOW()
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

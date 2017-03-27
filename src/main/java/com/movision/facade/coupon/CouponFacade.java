@@ -103,6 +103,11 @@ public class CouponFacade {
         return flag;
     }
 
+    public int checkHaveDistribute() {
+        //检查当前是否存在可分享的优惠券活动
+        return couponService.checkHaveDistribute();
+    }
+
     public List<Coupon> findAllMyCouponList(Paging<Coupon> paging, int userid) {
         Map map = new HashedMap();
         map.put("userid", userid);

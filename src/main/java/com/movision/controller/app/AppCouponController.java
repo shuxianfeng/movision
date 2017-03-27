@@ -61,4 +61,20 @@ public class AppCouponController {
         }
         return response;
     }
+
+    @ApiOperation(value = "检查当前是否存在可分享的优惠券", notes = "支付成功后，跳转到支付成功提示页前请求该接口判断存不存在可分享的优惠券活动", response = Response.class)
+    @RequestMapping(value = "checkHaveDistribute", method = RequestMethod.POST)
+    public Response checkHaveDistribute() {
+        Response response = new Response();
+
+        int count = couponFacade.checkHaveDistribute();
+        if (count == 0) {
+            response.setCode(300);
+            response.setMessage("不存在可分享的优惠券活动");
+        } else if (count > 0) {
+            response.setCode(200);
+            response.setMessage("存在可分享的优惠券活动");
+        }
+        return response;
+    }
 }
