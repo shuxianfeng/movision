@@ -115,15 +115,10 @@ public class FacadeRewarded {
             rewardedService.insertRewarded(rewarded);
             //2 更新session中的缓存
             ShiroUtil.updateShiroUser(in);
+            return in;
         } else {
-            return -1;
+            return in;
         }
-
-
-
-
-
-        return 0;
     }
 
     /**
