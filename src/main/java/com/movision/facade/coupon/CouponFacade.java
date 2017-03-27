@@ -4,10 +4,14 @@ import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.coupon.service.CouponService;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
+import com.movision.mybatis.couponShareRecord.entity.CouponShareRecord;
+import com.movision.mybatis.couponShareRecord.entity.CouponShareRecordVo;
+import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -20,6 +24,9 @@ public class CouponFacade {
 
     @Autowired
     private CouponService couponService;
+
+    @Autowired
+    private GoodsService goodsService;
 
     public Map<String, Object> choiceCoupon(String userid) {
 
@@ -106,6 +113,62 @@ public class CouponFacade {
     public int checkHaveDistribute() {
         //检查当前是否存在可分享的优惠券活动
         return couponService.checkHaveDistribute();
+    }
+
+    @Transactional
+    public CouponShareRecordVo getCouponDistributeInfo(String userid) {
+        //先查询分享的优惠券信息
+        CouponDistributeManageVo couponDistributeManageVo = couponService.getCouponDistributeInfo();
+
+        //再将分享出去的部分剥离到yw_coupon_share_record 优惠券分享记录表中
+        CouponShareRecord couponShareRecord = new CouponShareRecord();
+        couponShareRecord.setDistributeid(couponDistributeManageVo.getId());
+        couponShareRecord.setUserid(Integer.parseInt(userid));
+        couponShareRecord.setSinglesharenum(couponDistributeManageVo.getSinglesharenum());
+        couponShareRecord.setReceivednum(0);
+        couponShareRecord.setRestnum(couponDistributeManageVo.getSinglesharenum());
+        couponShareRecord.setIntime(new Date());
+        couponShareRecord.setIsdel(0);
+        couponService.insertCouponShareRecord(couponShareRecord);
+        //更新优惠券分发管理表中的信息
+        couponService.updateCouponDistributeInfo(couponDistributeManageVo.getId());
+
+        int shareid = couponShareRecord.getId();//返回的分享id
+
+        //封装返回的优惠券分享实体(剥离的分享实体)
+        CouponShareRecordVo couponShareRecordVo = new CouponShareRecordVo();
+        couponShareRecordVo.setId(shareid);
+        couponShareRecordVo.setDistributeid(couponDistributeManageVo.getId());
+        couponShareRecordVo.setUserid(Integer.parseInt(userid));
+        couponShareRecordVo.setSinglesharenum(couponDistributeManageVo.getSinglesharenum());
+        couponShareRecordVo.setReceivednum(0);
+        couponShareRecordVo.setRestnum(couponDistributeManageVo.getSinglesharenum());
+        couponShareRecordVo.setIntime(new Date());
+        couponShareRecordVo.setIsdel(0);
+        couponShareRecordVo.setTitle(couponDistributeManageVo.getTitle());
+        couponShareRecordVo.setContent(couponDistributeManageVo.getContent());
+        couponShareRecordVo.setStartdate(couponDistributeManageVo.getStartdate());
+        couponShareRecordVo.setEnddate(couponDistributeManageVo.getEnddate());
+        couponShareRecordVo.setAmount(couponDistributeManageVo.getAmount());
+        couponShareRecordVo.setFullamount(couponDistributeManageVo.getFullamount());
+        couponShareRecordVo.setScope(couponDistributeManageVo.getScope());
+        couponShareRecordVo.setShopid(couponDistributeManageVo.getShopid());
+        couponShareRecordVo.setChannel(couponDistributeManageVo.getChannel());
+        couponShareRecordVo.setBannerurl(couponDistributeManageVo.getBannerurl());
+        couponShareRecordVo.setCouponrule(couponDistributeManageVo.getCouponrule());
+        couponShareRecordVo.setType(couponDistributeManageVo.getType());
+        couponShareRecordVo.setStatus(0);
+        if (couponDistributeManageVo.getScope() == 0) {
+            couponShareRecordVo.setShopname("全场通用");
+        } else if (couponDistributeManageVo.getScope() == 1) {
+            couponShareRecordVo.setShopname("美番券");
+        } else if (couponDistributeManageVo.getScope() == 2) {
+            couponShareRecordVo.setShopname(goodsService.queryShopnameById(couponDistributeManageVo.getShopid()) + "券");
+        }
+        couponShareRecordVo.setIsHaveGet(0);
+
+        //支付成功后分享优惠券到第三方平台前获取分享的优惠券信息
+        return couponShareRecordVo;
     }
 
     public List<Coupon> findAllMyCouponList(Paging<Coupon> paging, int userid) {

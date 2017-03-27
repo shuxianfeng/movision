@@ -27,6 +27,10 @@ public class CouponDistributeManageVo {
 
     private Integer channel;
 
+    private String bannerurl;
+
+    private String couponrule;
+
     private Integer singlesharenum;
 
     private Integer type;
@@ -215,5 +219,21 @@ public class CouponDistributeManageVo {
 
     public void setIsHaveGet(Integer isHaveGet) {
         this.isHaveGet = isHaveGet;
+    }
+
+    public String getBannerurl() {
+        return bannerurl;
+    }
+
+    public void setBannerurl(String bannerurl) {
+        this.bannerurl = bannerurl;
+    }
+
+    public String getCouponrule() {
+        return couponrule;
+    }
+
+    public void setCouponrule(String couponrule) {
+        this.couponrule = couponrule;
     }
 }

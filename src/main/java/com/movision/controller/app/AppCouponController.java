@@ -4,6 +4,7 @@ import com.movision.common.Response;
 import com.movision.facade.coupon.CouponFacade;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
+import com.movision.mybatis.couponShareRecord.entity.CouponShareRecordVo;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,22 @@ public class AppCouponController {
         } else if (count > 0) {
             response.setCode(200);
             response.setMessage("存在可分享的优惠券活动");
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "分享优惠券前先获取分享的优惠券信息", notes = "获取分享到第三方平台优惠券的信息", response = Response.class)
+    @RequestMapping(value = "getCouponDistributeInfo", method = RequestMethod.POST)
+    public Response getCouponDistributeInfo(@ApiParam(value = "分享用户id") @RequestParam String userid) {
+        Response response = new Response();
+
+        CouponShareRecordVo couponShareRecordVo = couponFacade.getCouponDistributeInfo(userid);
+
+        if (response.getCode() == 200 && null != couponShareRecordVo) {
+            response.setMessage("获取成功");
+            response.setData(couponShareRecordVo);
+        } else {
+            response.setMessage("获取优惠券活动失败或不存在可分享的优惠券活动");
         }
         return response;
     }

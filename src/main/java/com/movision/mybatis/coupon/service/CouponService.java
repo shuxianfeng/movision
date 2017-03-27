@@ -5,6 +5,8 @@ import com.movision.mybatis.coupon.mapper.CouponMapper;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
 import com.movision.mybatis.couponDistributeManage.mapper.CouponDistributeManageMapper;
+import com.movision.mybatis.couponShareRecord.entity.CouponShareRecord;
+import com.movision.mybatis.couponShareRecord.mapper.CouponShareRecordMapper;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,9 @@ public class CouponService {
 
     @Autowired
     private CouponDistributeManageMapper couponDistributeManageMapper;
+
+    @Autowired
+    private CouponShareRecordMapper couponShareRecordMapper;
 
     private Logger log = LoggerFactory.getLogger(CouponService.class);
 
@@ -134,6 +139,36 @@ public class CouponService {
             return couponDistributeManageMapper.checkHaveDistribute();
         } catch (Exception e) {
             log.error("检查当前是否存在可分享的优惠券活动失败");
+            throw e;
+        }
+    }
+
+    public CouponDistributeManageVo getCouponDistributeInfo() {
+        try {
+            log.info("分享优惠券到第三方平台前先获取分享的优惠券信息");
+            return couponDistributeManageMapper.getCouponDistributeInfo();
+        } catch (Exception e) {
+            log.error("分享优惠券到第三方平台前先获取分享的优惠券信息失败");
+            throw e;
+        }
+    }
+
+    public void insertCouponShareRecord(CouponShareRecord couponShareRecord) {
+        try {
+            log.info("优惠券分享记录插入到表中");
+            couponShareRecordMapper.insertSelective(couponShareRecord);
+        } catch (Exception e) {
+            log.error("优惠券分享记录插入到表中失败");
+            throw e;
+        }
+    }
+
+    public void updateCouponDistributeInfo(int id) {
+        try {
+            log.info("更新优惠券分发管理表中的信息");
+            couponDistributeManageMapper.updateCouponDistributeInfo(id);
+        } catch (Exception e) {
+            log.error("更新优惠券分发管理表中的信息失败");
             throw e;
         }
     }

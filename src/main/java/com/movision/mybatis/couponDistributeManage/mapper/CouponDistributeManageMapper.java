@@ -2,10 +2,13 @@ package com.movision.mybatis.couponDistributeManage.mapper;
 
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
+import com.movision.mybatis.couponShareRecord.entity.CouponShareRecord;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public interface CouponDistributeManageMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -20,6 +23,10 @@ public interface CouponDistributeManageMapper {
     void insertGetRecord(Map<String, Object> parammap);
 
     int checkHaveDistribute();
+
+    CouponDistributeManageVo getCouponDistributeInfo();
+
+    void updateCouponDistributeInfo(int id);
 
     List<CouponDistributeManageVo> queryCurReceiveCoupon();
 

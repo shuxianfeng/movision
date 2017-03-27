@@ -2,10 +2,12 @@ package com.movision.mybatis.coupon.mapper;
 
 import com.movision.mybatis.coupon.entity.Coupon;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public interface CouponMapper {
     int deleteByPrimaryKey(Integer id);
 

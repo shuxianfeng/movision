@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.couponShareRecord.mapper.CouponShareRecordMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.couponShareRecord.entity.CouponShareRecord">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="distributeid" property="distributeid" jdbcType="INTEGER"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="singlesharenum" property="singlesharenum" jdbcType="INTEGER"/>
+        <result column="receivednum" property="receivednum" jdbcType="INTEGER"/>
+        <result column="restnum" property="restnum" jdbcType="INTEGER"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, distributeid, userid, singlesharenum, receivednum, restnum, intime, isdel
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_coupon_share_record
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_coupon_share_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.couponShareRecord.entity.CouponShareRecord">
+    insert into yw_coupon_share_record (id, distributeid, userid, 
+      singlesharenum, receivednum, restnum, 
+      intime, isdel)
+    values (#{id,jdbcType=INTEGER}, #{distributeid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+      #{singlesharenum,jdbcType=INTEGER}, #{receivednum,jdbcType=INTEGER}, #{restnum,jdbcType=INTEGER}, 
+      #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.couponShareRecord.entity.CouponShareRecord">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into yw_coupon_share_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="distributeid != null">
+                distributeid,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="singlesharenum != null">
+                singlesharenum,
+            </if>
+            <if test="receivednum != null">
+                receivednum,
+            </if>
+            <if test="restnum != null">
+                restnum,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="distributeid != null">
+                #{distributeid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="singlesharenum != null">
+                #{singlesharenum,jdbcType=INTEGER},
+            </if>
+            <if test="receivednum != null">
+                #{receivednum,jdbcType=INTEGER},
+            </if>
+            <if test="restnum != null">
+                #{restnum,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.movision.mybatis.couponShareRecord.entity.CouponShareRecord">
+        update yw_coupon_share_record
+        <set>
+            <if test="distributeid != null">
+                distributeid = #{distributeid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="singlesharenum != null">
+                singlesharenum = #{singlesharenum,jdbcType=INTEGER},
+            </if>
+            <if test="receivednum != null">
+                receivednum = #{receivednum,jdbcType=INTEGER},
+            </if>
+            <if test="restnum != null">
+                restnum = #{restnum,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.couponShareRecord.entity.CouponShareRecord">
+    update yw_coupon_share_record
+    set distributeid = #{distributeid,jdbcType=INTEGER},
+      userid = #{userid,jdbcType=INTEGER},
+      singlesharenum = #{singlesharenum,jdbcType=INTEGER},
+      receivednum = #{receivednum,jdbcType=INTEGER},
+      restnum = #{restnum,jdbcType=INTEGER},
+      intime = #{intime,jdbcType=TIMESTAMP},
+      isdel = #{isdel,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

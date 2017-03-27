@@ -44,6 +44,17 @@
       AND (scope = '0' OR scope = '1')
   </select>
 
+    <!--分享优惠券到第三方平台之前获取优惠券信息-->
+    <select id="getCouponDistributeInfo"
+            resultType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo">
+       SELECT * FROM yw_coupon_distribute_manage
+       WHERE channel = '1'
+        AND restnum > 0
+        AND isdel = '0'
+        AND NOW() > startdate
+        AND enddate > NOW()
+    </select>
+
     <!--检查当前领取的优惠券是否合法-->
     <select id="checkCoupon" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT count(*) FROM yw_coupon_distribute_manage
@@ -303,6 +314,14 @@
         UPDATE yw_coupon_distribute_manage
         SET receivednum = receivednum + 1,
         restnum = restnum - 1
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!--更新优惠券分发管理表中的信息-->
+    <update id="updateCouponDistributeInfo" parameterType="java.lang.Integer">
+        UPDATE yw_coupon_distribute_manage
+        SET receivednum = receivednum + singlesharenum,
+        restnum = restnum - singlesharenum
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>
