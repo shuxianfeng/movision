@@ -7,6 +7,7 @@ import com.movision.mybatis.category.mapper.CategoryMapper;
 import com.movision.mybatis.combo.entity.Combo;
 import com.movision.mybatis.combo.entity.ComboVo;
 import com.movision.mybatis.combo.mapper.ComboMapper;
+import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
 import com.movision.mybatis.goods.entity.*;
 import com.movision.mybatis.goods.mapper.GoodsMapper;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
@@ -1398,6 +1399,151 @@ public class GoodsService {
             return goodsMapper.queryGoodsByPostid(postid);
         } catch (Exception e) {
             log.error("根据活动id查询促销类商品异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询优惠卷列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<CouponDistributeManageVo> findAllCouponDistr(Paging<CouponDistributeManageVo> pager) {
+        try {
+            log.info("查询优惠卷列表");
+            return goodsMapper.findAllCouponDistr(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询优惠卷列表失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 删除优惠卷
+     *
+     * @param id
+     * @return
+     */
+    public Integer deleteCouponDistr(Integer id) {
+        try {
+            log.info("删除优惠卷");
+            return goodsMapper.deleteCouponDistr(id);
+        } catch (Exception e) {
+            log.error("删除优惠卷失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据id查询优惠卷
+     *
+     * @param id
+     * @return
+     */
+    public CouponDistributeManageVo queryByIdCouponDistr(Integer id) {
+        try {
+            log.info("根据id查询优惠卷");
+            return goodsMapper.queryByIdCouponDistr(id);
+        } catch (Exception e) {
+            log.error("根据id查询优惠卷失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 上架
+     *
+     * @param id
+     * @return
+     */
+    public Integer couponDistrIsdel(Integer id) {
+        try {
+            log.info("上架");
+            return goodsMapper.couponDistrIsdel(id);
+        } catch (Exception e) {
+            log.error("上架失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 下架
+     *
+     * @param id
+     * @return
+     */
+    public Integer couponDistrDownIsdel(Integer id) {
+        try {
+            log.info("下架");
+            return goodsMapper.couponDistrDownIsdel(id);
+        } catch (Exception e) {
+            log.error("下架失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询是否上架
+     *
+     * @param id
+     * @return
+     */
+    public Integer queryCouponDistrIsdel(Integer id) {
+        try {
+            log.info("查询是否上架");
+            return goodsMapper.queryCouponDistrIsdel(id);
+        } catch (Exception e) {
+            log.error("查询是否上架失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 条件查询优惠卷
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<CouponDistributeManageVo> findAllCouponDistrCondition(Map map, Paging<CouponDistributeManageVo> pager) {
+        try {
+            log.info("条件查询优惠卷");
+            return goodsMapper.findAllCouponDistrCondition(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("条件查询优惠卷失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 添加优惠券
+     *
+     * @param couponDistributeManageVo
+     * @return
+     */
+    public Integer addCouponDistr(CouponDistributeManageVo couponDistributeManageVo) {
+        try {
+            log.info("添加优惠券");
+            return goodsMapper.addCouponDistr(couponDistributeManageVo);
+        } catch (Exception e) {
+            log.error("添加优惠券失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 编辑优惠券
+     *
+     * @param couponDistributeManageVo
+     * @return
+     */
+    public Integer updateCouponDistr(CouponDistributeManageVo couponDistributeManageVo) {
+        try {
+            log.info("编辑优惠券");
+            return goodsMapper.updateCouponDistr(couponDistributeManageVo);
+        } catch (Exception e) {
+            log.error("编辑优惠券失败",e);
             throw e;
         }
     }

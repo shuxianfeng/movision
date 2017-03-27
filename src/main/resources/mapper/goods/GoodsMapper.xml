@@ -1435,4 +1435,70 @@
         FROM yw_goods go WHERE go.id IN
         (SELECT goodid FROM yw_active_goods WHERE postid=#{postid,jdbcType=INTEGER}) ORDER BY go.onlinetime DESC
     </select>
+    <select id="findAllCouponDistr"
+            resultType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo">
+    SELECT m.id,m.title,m.content,m.channel,m.scope,p.name,m.type,m.amount,m.fullamount,m.putnum,m.receivednum,m.restnum,m.startdate,m.enddate,m.isdel FROM yw_coupon_distribute_manage m
+    LEFT JOIN yw_shop p ON p.id=m.shopid
+    </select>
+    <update id="deleteCouponDistr" parameterType="java.lang.Integer">
+        UPDATE  yw_coupon_distribute_manage SET  isdel=1 WHERE  id={id,jdbcType=INTEGER}
+    </update>
+    <select id="queryByIdCouponDistr"
+            resultType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo"
+            parameterType="java.lang.Integer">
+     SELECT m.id,m.title,m.content,m.channel,m.scope,p.name,m.type,m.amount,m.fullamount,m.putnum,m.receivednum,m.restnum,m.startdate,m.enddate,m.isdel,m.couponrule  FROM yw_coupon_distribute_manage m
+    LEFT JOIN yw_shop p ON p.id=m.shopid WHERE  m.id={id,jdbcType=INTEGER}
+    </select>
+    <select id="queryCouponDistrIsdel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select isdel from yw_coupon_distribute_manage
+    </select>
+    <update id="couponDistrIsdel" parameterType="java.lang.Integer">
+         UPDATE  yw_coupon_distribute_manage SET  isdel=0 WHERE  id={id,jdbcType=INTEGER}
+    </update>
+    <update id="couponDistrDownIsdel" parameterType="java.lang.Integer">
+        UPDATE  yw_coupon_distribute_manage SET  isdel=1 WHERE  id={id,jdbcType=INTEGER}
+    </update>
+    <select id="findAllCouponDistrCondition" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo">
+        SELECT
+        m.id,m.title,m.content,m.channel,m.scope,p.name,m.type,m.amount,m.fullamount,m.putnum,m.receivednum,m.restnum,m.startdate,m.enddate,m.isdel
+        FROM yw_coupon_distribute_manage m
+        LEFT JOIN yw_shop p ON p.id=m.shopid WHERE 1
+        <if test="title!=null">
+            AND title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="content!=null">
+            AND content LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="channel!=null">
+            AND channel=#{channel,jdbcType=INTEGER}
+        </if>
+        <if test="scope!=null">
+            AND scope=#{scope,jdbcType=INTEGER}
+        </if>
+        <if test="type!=null">
+            AND type=#{type,jdbcType=INTEGER}
+        </if>
+        <if test="allstatue==0 and amount!=null">
+            AND amount BETWEEN #{min,jdbcType=DOUBLE} AND #{max,jdbcType=DOUBLE}
+        </if>
+        <if test="allstatue==1 and fullamount!=null">
+            AND fullamount BETWEEN #{min,jdbcType=DOUBLE} AND #{max,jdbcType=DOUBLE}
+        </if>
+        <if test="allstatue==2 and putnum!=null">
+            AND putnum BETWEEN #{min,jdbcType=INTEGER} AND #{max,jdbcType=INTEGER}
+        </if>
+        <if test="allstatue==3 and receivednum!=null">
+            AND receivednum BETWEEN #{min,jdbcType=INTEGER} AND #{max,jdbcType=INTEGER}
+        </if>
+        <if test="allstatue==4 and restnum!=null">
+            AND restnum BETWEEN #{min,jdbcType=INTEGER} AND #{max,jdbcType=INTEGER}
+        </if>
+        <if test="pai==0">
+            ORDER BY enddate DESC
+        </if>
+        <if test="pai==1">
+            ORDER BY restnum DESC
+        </if>
+    </select>
 </mapper>

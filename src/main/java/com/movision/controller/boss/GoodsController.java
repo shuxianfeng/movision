@@ -2,6 +2,7 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.GoodsListFacade;
+import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsCom;
 import com.movision.mybatis.goods.entity.GoodsImg;
@@ -947,4 +948,124 @@ public class GoodsController {
         return response;
     }
 
+    /**
+     * 查询优惠卷列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+
+    @ApiOperation(value = "查询优惠卷列表", notes = "查询优惠卷列表", response = Response.class)
+    @RequestMapping(value = "query_coupondistr", method = RequestMethod.POST)
+    public Response findAllCouponDistr(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                       @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<CouponDistributeManageVo> pager = new Paging<CouponDistributeManageVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<CouponDistributeManageVo> list = goodsFacade.findAllCouponDistr(pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+
+    }
+
+    /**
+     * 删除优惠卷
+     *
+     * @param id
+     * @return0
+     */
+    @ApiOperation(value = "删除优惠卷", notes = "删除优惠卷", response = Response.class)
+    @RequestMapping(value = "delete_coupondistr", method = RequestMethod.POST)
+    public Response deleteCouponDistr(@ApiParam(value = "优惠卷id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        Integer result = goodsFacade.deleteCouponDistr(id);
+        if (response.getCode() == 200) {
+            response.setMessage("删除成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
+    /**
+     * 根据id查询优惠卷
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "根据id查询优惠卷", notes = "根据id查询优惠卷", response = Response.class)
+    @RequestMapping(value = "query_byidcoupondistr", method = RequestMethod.POST)
+    public Response queryByIdCouponDistr(@ApiParam(value = "优惠卷id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        CouponDistributeManageVo couponDistributeManageVo = goodsFacade.queryByIdCouponDistr(id);
+        if (response.getCode() == 200) {
+            response.setMessage("根据id查询成功");
+        }
+        response.setData(couponDistributeManageVo);
+        return response;
+    }
+
+
+    /**
+     * 优惠卷上下架
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "优惠卷上下架", notes = "优惠卷上下架", response = Response.class)
+    @RequestMapping(value = "query_coupondistrisdel", method = RequestMethod.POST)
+    public Response couponDistrIsdel(@ApiParam(value = "优惠卷id") @RequestParam(required = false) Integer id) {
+        Response response = new Response();
+        Integer couponDistributeManageVo = goodsFacade.couponDistrIsdel(id);
+        if (response.getCode() == 200) {
+            response.setMessage("根据id查询成功");
+        }
+        response.setData(couponDistributeManageVo);
+        return response;
+    }
+
+    /**
+     * 优惠券条件查询
+     *
+     * @param title
+     * @param content
+     * @param channel
+     * @param scope
+     * @param type
+     * @param allstatue
+     * @param min
+     * @param max
+     * @param
+     * @param
+     * @param pai
+     * @return
+     */
+    @ApiOperation(value = "优惠券条件查询", notes = "优惠券条件查询", response = Response.class)
+    @RequestMapping(value = "query_coupondistrcondition", method = RequestMethod.POST)
+    public Response findAllCouponDistrCondition(@ApiParam(value = "优惠卷标题") @RequestParam(required = false) String title,
+                                                @ApiParam(value = "优惠卷内容") @RequestParam(required = false) String content,
+                                                @ApiParam(value = "优惠卷获取渠道") @RequestParam(required = false) String channel,
+                                                @ApiParam(value = "优惠卷使用范围") @RequestParam(required = false) String scope,
+                                                @ApiParam(value = "优惠卷类型") @RequestParam(required = false) String type,
+                                                @ApiParam(value = "优惠卷状态") @RequestParam(required = false) String allstatue,
+                                                @ApiParam(value = "最小值") @RequestParam(required = false) String min,
+                                                @ApiParam(value = "最大值") @RequestParam(required = false) String max,
+                                                @ApiParam(value = "排序（0 时间 1 剩余）") @RequestParam(required = false) String pai,
+                                                @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                @RequestParam(required = false, defaultValue = "10") String pageSize
+    ) {
+        Response response = new Response();
+        Paging<CouponDistributeManageVo> pager = new Paging<CouponDistributeManageVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<CouponDistributeManageVo> map = goodsFacade.findAllCouponDistrCondition(title, content, channel, scope, type, allstatue, min, max, pai, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(pager);
+        pager.result(map);
+        return response;
+
+    }
 }

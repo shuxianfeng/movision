@@ -26,4 +26,7 @@ public interface SystemToPushMapper {
     SystemToPush querySystemToPushBody(Integer id);
 
     Integer deleteSystemToPush(Integer id);
+
+    Integer addSystemToPush(SystemToPush systemToPush);//增加
+
 }

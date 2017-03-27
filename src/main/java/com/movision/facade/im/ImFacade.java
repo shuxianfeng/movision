@@ -712,6 +712,18 @@ public class ImFacade {
         return systemToPushService.deleteSystemToPush(id);
     }
 
+    /**
+     * 系统推送
+     *
+     * @param
+     * @return
+     */
+    public Integer addSystemToPush(String body, String title, String description) {
+        SystemToPush systemToPush = new SystemToPush();
+        systemToPush.setBody(body);
+        int result = systemToPushService.addSystemToPush(systemToPush);
+        return result;
+    }
 
 
 }

@@ -2,6 +2,7 @@ package com.movision.mybatis.goods.mapper;
 
 import com.movision.mybatis.combo.entity.Combo;
 import com.movision.mybatis.combo.entity.ComboVo;
+import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
 import com.movision.mybatis.goods.entity.*;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
@@ -9,6 +10,7 @@ import com.movision.mybatis.goodscombo.entity.GoodsCombo;
 import com.movision.mybatis.goodscombo.entity.GoodsComboDetail;
 import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
 import com.movision.mybatis.subOrder.entity.SubOrder;
+import org.apache.http.conn.util.InetAddressUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.taglibs.standard.lang.jstl.Literal;
 import org.springframework.stereotype.Repository;
@@ -189,4 +191,23 @@ public interface GoodsMapper {
     int deleteActivityByGoods(Integer postid);
 
     List<GoodsVo> queryGoodsByPostid(Integer postid);//根据活动id 查询活动促销类商品
+
+    List<CouponDistributeManageVo> findAllCouponDistr(RowBounds rowBounds);//查询所有优惠卷
+
+    Integer deleteCouponDistr(Integer id);//删除优惠卷
+
+    CouponDistributeManageVo queryByIdCouponDistr(Integer id);//根据id查询优惠卷
+
+    Integer couponDistrIsdel(Integer id);//上架
+
+    Integer couponDistrDownIsdel(Integer id);//下架
+
+    Integer queryCouponDistrIsdel(Integer id);//查询是否上架
+
+    List<CouponDistributeManageVo> findAllCouponDistrCondition(Map map, RowBounds rowBounds);//条件查寻优惠卷列表
+
+    Integer addCouponDistr(CouponDistributeManageVo couponDistributeManageVo);//添加优惠券
+
+    Integer updateCouponDistr(CouponDistributeManageVo couponDistributeManageVo);//编辑优惠券
+
 }

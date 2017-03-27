@@ -92,4 +92,20 @@ public class SystemToPushService {
         }
     }
 
+    /**
+     * 增加系统推送
+     *
+     * @param systemToPush
+     * @return
+     */
+    public Integer addSystemToPush(SystemToPush systemToPush) {
+        try {
+            log.info("增加系统推送");
+            return systemToPushMapper.addSystemToPush(systemToPush);
+        } catch (Exception e) {
+            log.error("增加系统推送失败", e);
+            throw e;
+        }
+    }
+
 }

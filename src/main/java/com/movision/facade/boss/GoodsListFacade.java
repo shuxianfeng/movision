@@ -2,6 +2,7 @@ package com.movision.facade.boss;
 
 import com.ibm.icu.text.SimpleDateFormat;
 import com.movision.mybatis.combo.entity.Combo;
+import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsCom;
 import com.movision.mybatis.goods.entity.GoodsImg;
@@ -11,6 +12,7 @@ import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.mybatis.goodscombo.entity.GoodsCombo;
 import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
+import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
 import org.slf4j.Logger;
@@ -983,6 +985,111 @@ public class GoodsListFacade {
         map.put("result", result);
         map.put("res", res);
         return map;
+
+    }
+
+    /**
+     * 查询优惠卷列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<CouponDistributeManageVo> findAllCouponDistr(Paging<CouponDistributeManageVo> pager) {
+        return goodsService.findAllCouponDistr(pager);
+    }
+
+    /**
+     * 删除优惠卷
+     *
+     * @param id
+     * @return
+     */
+    public Integer deleteCouponDistr(Integer id) {
+        return goodsService.deleteCouponDistr(id);
+    }
+
+    /**
+     * 根据id查询优惠卷
+     *
+     * @param id
+     * @return
+     */
+    public CouponDistributeManageVo queryByIdCouponDistr(Integer id) {
+        return goodsService.queryByIdCouponDistr(id);
+    }
+
+    /**
+     * 上下架
+     *
+     * @param id
+     * @return
+     */
+    public Integer couponDistrIsdel(Integer id) {
+        Integer isdel = goodsService.queryCouponDistrIsdel(id);
+        int res = 0;
+        if (isdel == 0) {
+            res = goodsService.couponDistrDownIsdel(id);
+        } else if (isdel == 1) {
+            res = goodsService.couponDistrIsdel(id);
+        }
+        return res;
+    }
+
+    /**
+     * 优惠券条件查询
+     *
+     * @param title
+     * @param content
+     * @param channel
+     * @param scope
+     * @param type
+     * @param allstatue
+     * @param min
+     * @param max
+     * @param
+     * @param
+     * @param pai
+     * @param pager
+     * @return
+     */
+    public List<CouponDistributeManageVo> findAllCouponDistrCondition(String title, String content, String channel, String scope, String type, String allstatue, String min, String max, String pai, Paging<CouponDistributeManageVo> pager) {
+        Map<String, Object> map = new HashMap<>();
+        if (!StringUtils.isEmpty(title)) {
+            map.put("title", title);
+        }
+        if (!StringUtils.isEmpty(content)) {
+            map.put("content", content);
+        }
+        if (!StringUtils.isEmpty(channel)) {
+            map.put("channel", channel);
+        }
+        if (!StringUtils.isEmpty(scope)) {
+            map.put("scope", scope);
+        }
+        if (!StringUtils.isEmpty(type)) {
+            map.put("type", type);
+        }
+        if (!StringUtils.isEmpty(allstatue)) {
+            map.put("allstatue", allstatue);
+        }
+        if (!StringUtils.isEmpty(min)) {
+            map.put("min", min);
+        }
+        if (!StringUtils.isEmpty(max)) {
+            map.put("max", max);
+        }
+
+
+        if (!StringUtils.isEmpty(pai)) {
+            map.put("pai", pai);
+        }
+        return goodsService.findAllCouponDistrCondition(map, pager);
+    }
+
+    public Map<String, Object> addCouponDistr(String bannerurl, String title, String content, String type, String amount, String fullamount, String scope, String putnum, String name, String channel, String startdate, String enddate, String couponrule) {
+        Map<String, Object> map = new HashMap<>();
+
+        return  map;
 
     }
 
