@@ -81,7 +81,8 @@ public class AdvertisementController {
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(list);
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 
@@ -225,7 +226,8 @@ public class AdvertisementController {
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(type);
+        pager.result(type);
+        response.setData(pager);
         return response;
     }
 
