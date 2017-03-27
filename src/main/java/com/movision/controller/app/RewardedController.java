@@ -45,11 +45,11 @@ public class RewardedController {
         Response response = new Response();
         Map flag = facadeRewarded.updateRewarded(postid, type, userid);
 
-        if (flag.get("code") == 200 && response.getCode() == 200) {
+        if ((int) flag.get("code") == 200 && response.getCode() == 200) {
             response.setMessage("操作成功");
             response.setData(flag);
         }
-        if (flag.get("code") == 300) {
+        if ((int) flag.get("code") == 300) {
             response.setMessage("积分不足");
             response.setData(flag);
         }
