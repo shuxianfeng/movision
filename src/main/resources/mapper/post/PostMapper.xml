@@ -1133,8 +1133,8 @@
         (SELECT name FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id AND isactive=0 AND isdel=0)) AS
         circlename,
         (SELECT category FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id AND isactive=0 AND
-        isdel=0)) AS category
-        FROM yw_post p
+        isdel=0)) AS category,v.videourl vid,v.bannerimgurl
+        FROM yw_post p LEFT JOIN yw_video as v ON p.id=v.postid
         WHERE p.id=#{postid,jdbcType=INTEGER} AND p.isactive=0 AND p.isdel=0
     </select>
 

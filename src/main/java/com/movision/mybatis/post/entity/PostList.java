@@ -90,8 +90,29 @@ public class PostList {
 
     private Integer persum;//报名人数
 
+    private String vid;//视频文件
+
+    private String bannerimgurl;//视频图片url
+
     private String squareimgurl;//活动首页方形图
+
     private List<GoodsVo> promotionGoods;//活动促销商品
+
+    public String getVid() {
+        return vid;
+    }
+
+    public void setVid(String vid) {
+        this.vid = vid;
+    }
+
+    public String getBannerimgurl() {
+        return bannerimgurl;
+    }
+
+    public void setBannerimgurl(String bannerimgurl) {
+        this.bannerimgurl = bannerimgurl;
+    }
 
     public List<GoodsVo> getPromotionGoods() {
         return promotionGoods;
