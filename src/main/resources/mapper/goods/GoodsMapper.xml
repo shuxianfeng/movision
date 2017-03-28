@@ -1441,7 +1441,7 @@
     LEFT JOIN yw_shop p ON p.id=m.shopid
     </select>
     <update id="deleteCouponDistr" parameterType="java.lang.Integer">
-        UPDATE  yw_coupon_distribute_manage SET  isdel=1 WHERE  id={id,jdbcType=INTEGER}
+        UPDATE yw_coupon_distribute_manage SET isdel=1 WHERE id=#{id,jdbcType=INTEGER}
     </update>
     <select id="queryByIdCouponDistr"
             resultType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo"
@@ -1449,16 +1449,16 @@
         SELECT
         m.id,m.title,m.content,m.channel,m.scope,p.name,m.type,m.amount,m.fullamount,m.putnum,m.receivednum,m.restnum,m.startdate,m.enddate,m.isdel,m.couponrule,m.trasurl
         FROM yw_coupon_distribute_manage m
-    LEFT JOIN yw_shop p ON p.id=m.shopid WHERE  m.id={id,jdbcType=INTEGER}
+        LEFT JOIN yw_shop p ON p.id=m.shopid WHERE m.id=#{id,jdbcType=INTEGER}
     </select>
     <select id="queryCouponDistrIsdel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        select isdel from yw_coupon_distribute_manage WHERE id={id,jdbcType=INTEGER}
+        select isdel from yw_coupon_distribute_manage WHERE id=#{id,jdbcType=INTEGER}
     </select>
     <update id="couponDistrIsdel" parameterType="java.lang.Integer">
-         UPDATE  yw_coupon_distribute_manage SET  isdel=0 WHERE  id={id,jdbcType=INTEGER}
+        UPDATE yw_coupon_distribute_manage SET isdel=0 WHERE id=#{id,jdbcType=INTEGER}
     </update>
     <update id="couponDistrDownIsdel" parameterType="java.lang.Integer">
-        UPDATE  yw_coupon_distribute_manage SET  isdel=1 WHERE  id={id,jdbcType=INTEGER}
+        UPDATE yw_coupon_distribute_manage SET isdel=1 WHERE id=#{id,jdbcType=INTEGER}
     </update>
     <select id="findAllCouponDistrCondition" parameterType="java.util.Map"
             resultType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo">
