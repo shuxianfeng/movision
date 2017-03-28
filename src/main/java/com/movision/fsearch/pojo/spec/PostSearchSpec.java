@@ -1,26 +1,15 @@
 package com.movision.fsearch.pojo.spec;
 
-import com.wordnik.swagger.annotations.ApiModel;
-
 import java.io.Serializable;
 
 /**
  * @Author zhuangyuhao
- * @Date 2017/3/20 16:00
+ * @Date 2017/3/27 16:30
  */
-@ApiModel(value = "商品搜索筛选条件", description = "商品搜索筛选条件")
-public class GoodsSearchSpec implements Serializable {
+public class PostSearchSpec implements Serializable {
 
     /**
-     * 产品分类id
-     */
-    private int protype;
-    /**
-     * 品牌id
-     */
-    private int brandid;
-    /**
-     *  搜索的词(输入框中的词)
+     * 搜索的词(输入框中的词)
      */
     private String q;
     /**
@@ -38,23 +27,13 @@ public class GoodsSearchSpec implements Serializable {
 
     @Override
     public String toString() {
-        return "GoodsSearchSpec{" +
-                "protype=" + protype +
-                ", brandid=" + brandid +
-                ", q='" + q + '\'' +
+        return "PostSearchSpec{" +
+                "q='" + q + '\'' +
                 ", sort='" + sort + '\'' +
                 ", sortorder='" + sortorder + '\'' +
                 ", offset=" + offset +
                 ", limit=" + limit +
                 '}';
-    }
-
-    public void setProtype(int protype) {
-        this.protype = protype;
-    }
-
-    public void setBrandid(int brandid) {
-        this.brandid = brandid;
     }
 
     public void setQ(String q) {
@@ -77,16 +56,8 @@ public class GoodsSearchSpec implements Serializable {
         this.limit = limit;
     }
 
-    public int getProtype() {
-
-        return protype;
-    }
-
-    public int getBrandid() {
-        return brandid;
-    }
-
     public String getQ() {
+
         return q;
     }
 

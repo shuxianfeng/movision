@@ -498,6 +498,14 @@
             <artifactId>jackson-jr-all</artifactId>
             <version>2.8.5</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <!--小米-->
+
     </dependencies>
 
 
@@ -513,7 +521,7 @@
             </resource>
         </resources>
         <plugins>
-
+            <!--maven插件组-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -570,7 +578,6 @@
                     <target>1.7</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
-
             </plugin>
 
             <plugin>
@@ -602,9 +609,8 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
         </plugins>
-
-
     </build>
 
     <repositories>

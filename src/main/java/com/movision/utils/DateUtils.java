@@ -198,8 +198,8 @@ public class DateUtils {
     }
 
     public static void main(String[] args) throws ParseException {
-        Date date = DateUtils.date2Sub(DateUtils.str2Date("2016-03-02 20:16:21", "yyyy-MM-dd HH:mm:ss"), 12, 10);
-        System.out.println(date);
+//        Date date = DateUtils.date2Sub(DateUtils.str2Date("2016-03-02 20:16:21", "yyyy-MM-dd HH:mm:ss"), 12, 10);
+//        System.out.println(date);
         // Date date1 = new Date();
         // System.out.println(date1);
         // System.out.println(date1.before(date));
@@ -210,7 +210,11 @@ public class DateUtils {
         // Date endTime = sf.parse(end);
         // long days = dayDiff(startTime, endTime);
         // System.out.println(days);
-        // String s = DateUtils.str2DateFormat("1468466182000", "yyyy-MM-dd");
-        // System.out.println(s);
+//         String s = DateUtils.str2DateFormat("1468466182000", "yyyy-MM-dd");
+//         System.out.println(s);
+
+        System.out.println(DateUtils.str2Date("20170129023128", "yyyyMMddHHmmss"));
+
+
     }
 }

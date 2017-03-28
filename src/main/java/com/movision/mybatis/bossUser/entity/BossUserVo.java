@@ -1,6 +1,5 @@
 package com.movision.mybatis.bossUser.entity;
 
-import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
