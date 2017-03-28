@@ -617,6 +617,7 @@
         </plugins>
     </build>
 
+    <!--两个存储库-->
     <repositories>
         <repository>
             <id>releases</id>
