@@ -499,12 +499,18 @@
             <version>2.8.5</version>
         </dependency>
 
-        <!--<dependency>
+        <dependency>
              <groupId>com.googlecode.json-simple</groupId>
              <artifactId>json-simple</artifactId>
              <version>1.1.1</version>
-        </dependency>-->
+        </dependency>
         <!--小米-->
+        <!-- <dependency>
+             <groupId>MiPush_SDK_Server</groupId>
+             <artifactId>MiPush_SDK_Server</artifactId>
+             <version>2.2.18</version>
+         </dependency>-->
+
     </dependencies>
 
     <build>
