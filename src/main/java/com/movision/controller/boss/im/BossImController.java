@@ -291,10 +291,10 @@ public class BossImController {
     @ApiOperation(value = "系统推送 ", notes = "系统推送", response = Response.class)
     @RequestMapping(value = "add_systemtopush", method = RequestMethod.POST)
     public Response addSystemToPush(@ApiParam(value = "系统推送内容") @RequestParam String body,
-                                    @ApiParam(value = "系统推送标题") @RequestParam String title) {
+                                    @ApiParam(value = "系统推送标题") @RequestParam String title) throws Exception {
 
         Response response = new Response();
-        imFacade.addSystemToPush(body, title);
+        imFacade.systemPushMessage(body, title);
         if (response.getCode() == 200) {
             response.setMessage("系统推送成功");
         }

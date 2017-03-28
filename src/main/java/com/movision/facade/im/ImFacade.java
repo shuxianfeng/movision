@@ -27,6 +27,7 @@ import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.sms.SDKSendSms;
+import com.xiaomi.xmpush.server.Message;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
@@ -725,6 +726,38 @@ public class ImFacade {
         systemToPush.setUserid(ShiroUtil.getBossUserID());
         systemToPush.setInformTime(new Date());
         systemToPushService.addSystemToPush(systemToPush);//记录流水
+    }
+
+
+    /**
+     * 系统推送
+     *
+     * @param body
+     * @param title
+     * @return
+     */
+    public Message buildMessage(String body, String title) throws Exception {
+        String PACKAGENAME = "com.syjm.movision";
+        Message message = new Message.Builder()
+                .title(title)
+                .description(body).payload(body)
+                .restrictedPackageName(PACKAGENAME)
+                .passThrough(1)  //消息使用透传方式
+                .notifyType(1)     // 使用默认提示音提示
+                .extra("flow_control", "4000")     // 设置平滑推送, 推送速度4000每秒(qps=4000)
+                .build();
+        return message;
+    }
+
+    /**
+     * 系统推送
+     *
+     * @param body
+     * @param title
+     */
+    public void systemPushMessage(String body, String title) throws Exception {
+        buildMessage(body, title);
+        addSystemToPush(body, title);
     }
 
 
