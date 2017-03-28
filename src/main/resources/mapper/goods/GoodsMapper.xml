@@ -1481,19 +1481,19 @@
         <if test="type!=null">
             AND type=#{type,jdbcType=INTEGER}
         </if>
-        <if test="allstatue==0 and amount!=null">
+        <if test="allstatue==0 and min!=null and max!=null">
             AND amount BETWEEN #{min,jdbcType=DOUBLE} AND #{max,jdbcType=DOUBLE}
         </if>
-        <if test="allstatue==1 and fullamount!=null">
+        <if test="allstatue==1 and min!=null and max!=null">
             AND fullamount BETWEEN #{min,jdbcType=DOUBLE} AND #{max,jdbcType=DOUBLE}
         </if>
-        <if test="allstatue==2 and putnum!=null">
+        <if test="allstatue==2 and min!=null and max!=null">
             AND putnum BETWEEN #{min,jdbcType=INTEGER} AND #{max,jdbcType=INTEGER}
         </if>
-        <if test="allstatue==3 and receivednum!=null">
+        <if test="allstatue==3 and min!=null and max!=nulll">
             AND receivednum BETWEEN #{min,jdbcType=INTEGER} AND #{max,jdbcType=INTEGER}
         </if>
-        <if test="allstatue==4 and restnum!=null">
+        <if test="allstatue==4 and min!=null and max!=null">
             AND restnum BETWEEN #{min,jdbcType=INTEGER} AND #{max,jdbcType=INTEGER}
         </if>
         <if test="pai==0">
