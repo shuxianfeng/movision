@@ -505,11 +505,11 @@
              <version>1.1.1</version>
         </dependency>
         <!--小米-->
-        <!-- <dependency>
-             <groupId>MiPush_SDK_Server</groupId>
-             <artifactId>MiPush_SDK_Server</artifactId>
-             <version>2.2.18</version>
-         </dependency>-->
+        <dependency>
+            <groupId>MiPush_SDK_Server</groupId>
+            <artifactId>MiPush_SDK_Server</artifactId>
+            <version>2.2.18</version>
+        </dependency>
 
     </dependencies>
 
