@@ -53,6 +53,10 @@ public class RewardedController {
             response.setMessage("积分不足");
             response.setData(flag);
         }
+        if ((int) flag.get("code") == 400) {
+            response.setMessage("用户不可以打赏自己的帖子");
+            response.setData(flag);
+        }
         return response;
     }
 

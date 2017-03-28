@@ -85,43 +85,50 @@ public class FacadeRewarded {
     @Transactional
     public Map updateRewarded(String postid, String type, String userid) {
         Integer u = Integer.parseInt(userid);
-        Rewarded rewarded = new Rewarded();
-        int integral = pointRecordFacade.getIntegral(Integer.parseInt(type));//获取类型对应的积分
-        int in = userFacade.queryUserByRewarde(u);//查询出当前用户积分剩余
         Map map = new HashedMap();
-        if (in > integral) {
-            int playtour = pointRecordService.queryMyTodayPointSum(u);//查询当天打赏了多少次
-            if (playtour < 5) {
-                //每天打赏次数在五次以内，参加每日活动，给赠送积分者增加5积分,并且增加积分流水记录
-                userFacade.updateUserPoint(u, 5, PointConstant.POINT_ADD);//给用户增加每日活动积分
-                rewardRecord(u, 5, PointConstant.POINT_ADD);//保存积分流水记录
-                in += 5;//为当前登录用户增加活动积分
-            }
-            //为打赏者减去积分
-            int i = userFacade.updateUserPoint(u, integral, PointConstant.POINT_DECREASE);
-            rewardRecord(u, integral, PointConstant.POINT_DECREASE);//保存积分流水记录
-            if (i == 1) {
-                in -= integral;
-            }
-            int uid = postService.queryUserByPostid(postid);//查询出被打赏用户
-            //为帖主增加积分
-            userFacade.updateUserPoint(uid, integral, PointConstant.POINT_ADD);
-            rewardRecord(uid, integral, PointConstant.POINT_ADD);//保存积分流水记录
+        Rewarded rewarded = new Rewarded();
+        //查询出贴主id
+        int uid = postService.queryUserByPostid(postid);
+        if (uid != u) {//如果当前登录用户id和打赏帖子的贴主相同，则不可以打赏
+            int integral = pointRecordFacade.getIntegral(Integer.parseInt(type));//获取类型对应的积分
+            int in = userFacade.queryUserByRewarde(u);//查询出当前用户积分剩余
+            if (in > integral) {
+                int playtour = pointRecordService.queryMyTodayPointSum(u);//查询当天打赏了多少次
+                if (playtour < 5) {
+                    //每天打赏次数在五次以内，参加每日活动，给赠送积分者增加5积分,并且增加积分流水记录
+                    userFacade.updateUserPoint(u, 5, PointConstant.POINT_ADD);//给用户增加每日活动积分
+                    rewardRecord(u, 5, PointConstant.POINT_ADD);//保存积分流水记录
+                    in += 5;//为当前登录用户增加活动积分
+                }
+                //为打赏者减去积分
+                int i = userFacade.updateUserPoint(u, integral, PointConstant.POINT_DECREASE);
+                rewardRecord(u, integral, PointConstant.POINT_DECREASE);//保存积分流水记录
+                if (i == 1) {
+                    in -= integral;
+                }
+                //int uid = postService.queryUserByPostid(postid);//查询出被打赏用户
+                //为帖主增加积分
+                userFacade.updateUserPoint(uid, integral, PointConstant.POINT_ADD);
+                rewardRecord(uid, integral, PointConstant.POINT_ADD);//保存积分流水记录
 
-            rewarded.setPostid(Integer.parseInt(postid));//帖子id
-            rewarded.setUserid(u);//打赏 人
-            rewarded.setIntime(new Date());//打赏时间
-            rewarded.setPoints(integral);//打赏分数
-            //帖子打赏记录流水
-            rewardedService.insertRewarded(rewarded);
-            //2 更新session中的缓存
-            ShiroUtil.updateShiroUser(in);
-            map.put("code", 200);
-            map.put("resault", in);
-            return map;
+                rewarded.setPostid(Integer.parseInt(postid));//帖子id
+                rewarded.setUserid(u);//打赏 人
+                rewarded.setIntime(new Date());//打赏时间
+                rewarded.setPoints(integral);//打赏分数
+                //帖子打赏记录流水
+                rewardedService.insertRewarded(rewarded);
+                //2 更新session中的缓存
+                ShiroUtil.updateShiroUser(in);
+                map.put("code", 200);
+                map.put("resault", in);
+                return map;
+            } else {
+                map.put("code", 300);
+                map.put("resault", in);
+                return map;
+            }
         } else {
-            map.put("code", 300);
-            map.put("resault", in);
+            map.put("code", 400);
             return map;
         }
     }
