@@ -617,11 +617,15 @@
         </plugins>
     </build>
 
-
     <repositories>
         <repository>
             <id>releases</id>
             <name>releases</name>
+            <url>http://120.77.214.187:8081/nexus/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>workstation</id>
+            <name>workstation</name>
             <url>http://192.168.0.172:8081/nexus/content/groups/public</url>
         </repository>
     </repositories>
