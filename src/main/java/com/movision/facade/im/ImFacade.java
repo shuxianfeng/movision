@@ -657,7 +657,7 @@ public class ImFacade {
      * @param body
      * @return
      */
-    public Boolean AddPushMovement(String body) {
+    public void AddPushMovement(String body) {
         Map<String, String> map = new LinkedHashMap<>();
         SystemPush systemPush = new SystemPush();
         systemPush.setUserid(ShiroUtil.getBossUserID());
@@ -686,7 +686,6 @@ public class ImFacade {
         Gson gson = new Gson();
         String json = gson.toJson(map);
         SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("propelling_movement_infomation"));
-        return blen;
     }
 
 

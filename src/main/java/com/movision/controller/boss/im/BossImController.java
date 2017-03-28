@@ -191,11 +191,10 @@ public class BossImController {
     public Response AddPushMovement(@ApiParam(value = "短信内容") @RequestParam String body
     ) {
         Response response = new Response();
-        boolean result = imFacade.AddPushMovement(body);
+        imFacade.AddPushMovement(body);
         if (response.getCode() == 200) {
             response.setMessage("发送成功");
         }
-        response.setData(result);
         return response;
     }
 
