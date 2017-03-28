@@ -1452,7 +1452,7 @@
     LEFT JOIN yw_shop p ON p.id=m.shopid WHERE  m.id={id,jdbcType=INTEGER}
     </select>
     <select id="queryCouponDistrIsdel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        select isdel from yw_coupon_distribute_manage
+        select isdel from yw_coupon_distribute_manage WHERE id={id,jdbcType=INTEGER}
     </select>
     <update id="couponDistrIsdel" parameterType="java.lang.Integer">
          UPDATE  yw_coupon_distribute_manage SET  isdel=0 WHERE  id={id,jdbcType=INTEGER}

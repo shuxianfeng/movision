@@ -718,12 +718,17 @@ public class ImFacade {
      * @param
      * @return
      */
-    public Integer addSystemToPush(String body, String title, String description) {
+    public void addSystemToPush(String body, String title) {
         SystemToPush systemToPush = new SystemToPush();
         systemToPush.setBody(body);
-        int result = systemToPushService.addSystemToPush(systemToPush);
-        return result;
+        systemToPush.setTitle(title);
+        systemToPush.setUserid(ShiroUtil.getBossUserID());
+        systemToPush.setInformTime(new Date());
+        systemToPushService.addSystemToPush(systemToPush);//记录流水
     }
+
+
+
 
 
 }
