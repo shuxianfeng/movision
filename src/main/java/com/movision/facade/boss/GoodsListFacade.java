@@ -1026,7 +1026,7 @@ public class GoodsListFacade {
      * @return
      */
     public Integer couponDistrIsdel(Integer id) {
-        Integer isdel = goodsService.queryCouponDistrIsdel(id);
+        int isdel = goodsService.queryCouponDistrIsdel(id);
         int res = 0;
         if (isdel == 0) {
             res = goodsService.couponDistrDownIsdel(id);
