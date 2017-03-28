@@ -9,6 +9,8 @@ public interface CouponShareRecordMapper {
 
     int insert(CouponShareRecord record);
 
+    void updateCouponShareRecord(int id);
+
     int insertSelective(CouponShareRecord record);
 
     CouponShareRecord selectByPrimaryKey(Integer id);

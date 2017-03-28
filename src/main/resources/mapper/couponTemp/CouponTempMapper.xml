@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.couponTemp.mapper.CouponTempMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.couponTemp.entity.CouponTemp">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="shopid" property="shopid" jdbcType="INTEGER"/>
+        <result column="category" property="category" jdbcType="INTEGER"/>
+        <result column="statue" property="statue" jdbcType="INTEGER"/>
+        <result column="begintime" property="begintime" jdbcType="TIMESTAMP"/>
+        <result column="endtime" property="endtime" jdbcType="TIMESTAMP"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="tmoney" property="tmoney" jdbcType="DOUBLE"/>
+        <result column="usemoney" property="usemoney" jdbcType="DOUBLE"/>
+        <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, phone, title, content, type, shopid, category, statue, begintime, endtime, intime,
+        tmoney, usemoney, isdel
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_coupon_temp
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from yw_coupon_temp
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.couponTemp.entity.CouponTemp">
+        insert into yw_coupon_temp (id, phone, title,
+        content, type, shopid,
+        category, statue, begintime,
+        endtime, intime, tmoney,
+        usemoney, isdel)
+        values (#{id,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
+        #{content,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{shopid,jdbcType=INTEGER},
+        #{category,jdbcType=INTEGER}, #{statue,jdbcType=INTEGER}, #{begintime,jdbcType=TIMESTAMP},
+        #{endtime,jdbcType=TIMESTAMP}, #{intime,jdbcType=TIMESTAMP}, #{tmoney,jdbcType=DOUBLE},
+        #{usemoney,jdbcType=DOUBLE}, #{isdel,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.couponTemp.entity.CouponTemp">
+        insert into yw_coupon_temp
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="shopid != null">
+                shopid,
+            </if>
+            <if test="category != null">
+                category,
+            </if>
+            <if test="statue != null">
+                statue,
+            </if>
+            <if test="begintime != null">
+                begintime,
+            </if>
+            <if test="endtime != null">
+                endtime,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="tmoney != null">
+                tmoney,
+            </if>
+            <if test="usemoney != null">
+                usemoney,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="shopid != null">
+                #{shopid,jdbcType=INTEGER},
+            </if>
+            <if test="category != null">
+                #{category,jdbcType=INTEGER},
+            </if>
+            <if test="statue != null">
+                #{statue,jdbcType=INTEGER},
+            </if>
+            <if test="begintime != null">
+                #{begintime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endtime != null">
+                #{endtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="tmoney != null">
+                #{tmoney,jdbcType=DOUBLE},
+            </if>
+            <if test="usemoney != null">
+                #{usemoney,jdbcType=DOUBLE},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.couponTemp.entity.CouponTemp">
+        update yw_coupon_temp
+        <set>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="shopid != null">
+                shopid = #{shopid,jdbcType=INTEGER},
+            </if>
+            <if test="category != null">
+                category = #{category,jdbcType=INTEGER},
+            </if>
+            <if test="statue != null">
+                statue = #{statue,jdbcType=INTEGER},
+            </if>
+            <if test="begintime != null">
+                begintime = #{begintime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endtime != null">
+                endtime = #{endtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="tmoney != null">
+                tmoney = #{tmoney,jdbcType=DOUBLE},
+            </if>
+            <if test="usemoney != null">
+                usemoney = #{usemoney,jdbcType=DOUBLE},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.couponTemp.entity.CouponTemp">
+        update yw_coupon_temp
+        set phone = #{phone,jdbcType=VARCHAR},
+        title = #{title,jdbcType=VARCHAR},
+        content = #{content,jdbcType=VARCHAR},
+        type = #{type,jdbcType=INTEGER},
+        shopid = #{shopid,jdbcType=INTEGER},
+        category = #{category,jdbcType=INTEGER},
+        statue = #{statue,jdbcType=INTEGER},
+        begintime = #{begintime,jdbcType=TIMESTAMP},
+        endtime = #{endtime,jdbcType=TIMESTAMP},
+        intime = #{intime,jdbcType=TIMESTAMP},
+        tmoney = #{tmoney,jdbcType=DOUBLE},
+        usemoney = #{usemoney,jdbcType=DOUBLE},
+        isdel = #{isdel,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

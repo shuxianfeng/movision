@@ -129,4 +129,12 @@
       isdel = #{isdel,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <!--领取完优惠券更新分享记录表-->
+    <update id="updateCouponShareRecord" parameterType="java.lang.Integer">
+      UPDATE yw_coupon_share_record
+      SET receivednum = receivednum + 1,
+          restnum = restnum - 1
+      WHERE id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

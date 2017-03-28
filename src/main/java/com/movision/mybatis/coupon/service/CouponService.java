@@ -5,8 +5,12 @@ import com.movision.mybatis.coupon.mapper.CouponMapper;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
 import com.movision.mybatis.couponDistributeManage.mapper.CouponDistributeManageMapper;
+import com.movision.mybatis.couponReceiveRecord.entity.CouponReceiveRecord;
+import com.movision.mybatis.couponReceiveRecord.mapper.CouponReceiveRecordMapper;
 import com.movision.mybatis.couponShareRecord.entity.CouponShareRecord;
 import com.movision.mybatis.couponShareRecord.mapper.CouponShareRecordMapper;
+import com.movision.mybatis.couponTemp.entity.CouponTemp;
+import com.movision.mybatis.couponTemp.mapper.CouponTempMapper;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +38,12 @@ public class CouponService {
 
     @Autowired
     private CouponShareRecordMapper couponShareRecordMapper;
+
+    @Autowired
+    private CouponTempMapper couponTempMapper;
+
+    @Autowired
+    private CouponReceiveRecordMapper couponReceiveRecordMapper;
 
     private Logger log = LoggerFactory.getLogger(CouponService.class);
 
@@ -149,6 +159,56 @@ public class CouponService {
             return couponDistributeManageMapper.getCouponDistributeInfo();
         } catch (Exception e) {
             log.error("分享优惠券到第三方平台前先获取分享的优惠券信息失败");
+            throw e;
+        }
+    }
+
+    public int checkIsHave(Map<String, Object> parammap) {
+        try {
+            log.info("检查该用户有没有领取过该优惠券");
+            return couponReceiveRecordMapper.checkIsHave(parammap);
+        } catch (Exception e) {
+            log.error("检查该用户有没有领取过该优惠券失败");
+            throw e;
+        }
+    }
+
+    public CouponDistributeManageVo getCouponDistributeInfoById(int id) {
+        try {
+            log.info("通过分享记录id查询分享的优惠券信息");
+            return couponDistributeManageMapper.getCouponDistributeInfoById(id);
+        } catch (Exception e) {
+            log.error("通过分享记录id查询分享的优惠券信息失败");
+            throw e;
+        }
+    }
+
+    public void insertCouponTemp(CouponTemp couponTemp) {
+        try {
+            log.info("插入一条优惠券临时记录");
+            couponTempMapper.insertSelective(couponTemp);
+        } catch (Exception e) {
+            log.error("插入一条优惠券临时记录表失败");
+            throw e;
+        }
+    }
+
+    public void updateCouponShareRecord(int id) {
+        try {
+            log.info("更新分享记录");
+            couponShareRecordMapper.updateCouponShareRecord(id);
+        } catch (Exception e) {
+            log.error("更新分享记录失败");
+            throw e;
+        }
+    }
+
+    public void insertCouponReceiveRecord(CouponReceiveRecord couponReceiveRecord) {
+        try {
+            log.info("插入优惠券领取记录表");
+            couponReceiveRecordMapper.insertSelective(couponReceiveRecord);
+        } catch (Exception e) {
+            log.error("插入优惠券领取记录表失败");
             throw e;
         }
     }

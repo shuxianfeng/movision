@@ -94,4 +94,24 @@ public class AppCouponController {
         }
         return response;
     }
+
+    @ApiOperation(value = "H5优惠券页面点击立即领取", notes = "新用户进入分享的H5优惠券页面点击立即领取时调用", response = Response.class)
+    @RequestMapping(value = "getCouponByShare", method = RequestMethod.POST)
+    public Response getCouponByShare(@ApiParam(value = "领取的用户手机号") @RequestParam String phone,
+                                     @ApiParam(value = "领取的优惠券分享id") @RequestParam String id) {
+        Response response = new Response();
+
+        int flag = couponFacade.getCouponDistributeInfo(id, phone);
+        if (flag == 1) {
+            response.setCode(200);
+            response.setMessage("领取成功");
+        } else if (flag == 0) {
+            response.setCode(300);
+            response.setMessage("领取失败");
+        } else if (flag == -1) {
+            response.setCode(201);
+            response.setMessage("不可重复领取");
+        }
+        return response;
+    }
 }

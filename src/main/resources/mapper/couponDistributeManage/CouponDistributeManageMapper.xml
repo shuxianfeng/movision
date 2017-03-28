@@ -58,6 +58,15 @@
         AND enddate > NOW()
     </select>
 
+    <!--根据id查询分享的优惠券信息-->
+    <select id="getCouponDistributeInfoById" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo">
+        SELECT * FROM yw_coupon_distribute_manage
+        WHERE id = (
+            SELECT distributeid FROM yw_coupon_share_record WHERE id = #{id,jdbcType=INTEGER}
+        )
+    </select>
+
     <!--检查当前领取的优惠券是否合法-->
     <select id="checkCoupon" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT count(*) FROM yw_coupon_distribute_manage

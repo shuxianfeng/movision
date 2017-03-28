@@ -26,6 +26,8 @@ public interface CouponDistributeManageMapper {
 
     CouponDistributeManageVo getCouponDistributeInfo();
 
+    CouponDistributeManageVo getCouponDistributeInfoById(int id);
+
     void updateCouponDistributeInfo(int id);
 
     List<CouponDistributeManageVo> queryCurReceiveCoupon();
