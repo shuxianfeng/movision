@@ -805,7 +805,7 @@ public class PostFacade {
         m.put("esdate", esdate);
         List<PostTo> posts = postService.queryPostChoicenesslist(m);//返回加精日期内有几条加精
         if (postid != null) {
-            postChoiceness = postService.queryPostChoiceness(Integer.parseInt(postid));
+            postChoiceness = postService.queryPostChoiceness(Integer.parseInt(postid));//查询帖子加精回显数据
         }
         List<Integer> lou = new ArrayList();
         for (int e = 1; e < 6; e++) {//赋值一个的集合，用于返回排序
@@ -814,7 +814,7 @@ public class PostFacade {
         for (int i = 0; i < posts.size(); i++) {
             for (int j = 0; j < lou.size(); j++) {
                 if (posts.get(i).getOrderid() == lou.get(j)) {
-                    if (postid != null) {
+                    if (postid != null && postChoiceness != null) {
                         if (lou.get(j) != postChoiceness.getOrderid()) {
                             lou.remove(j);
                         }
