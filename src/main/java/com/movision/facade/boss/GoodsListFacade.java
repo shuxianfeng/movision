@@ -1122,6 +1122,12 @@ public class GoodsListFacade {
         if (!StringUtils.isEmpty(amount)) {
             cou.setAmount(Double.parseDouble(amount));
         }
+        Double amoun = Double.parseDouble(amount);
+        Integer putnu = Integer.parseInt(putnum);
+        Double totalamount = amoun * putnu;
+        if (totalamount != null) {
+            cou.setTotalamount(totalamount);
+        }
         if (!StringUtils.isEmpty(fullamount)) {
             cou.setFullamount(Double.parseDouble(fullamount));
         }
@@ -1149,7 +1155,7 @@ public class GoodsListFacade {
                 e.printStackTrace();
             }
         }
-        map.put("startdate", date);
+        cou.setStartdate(date);
         Date date1 = null;
         if (enddate != null) {
             try {
@@ -1158,7 +1164,7 @@ public class GoodsListFacade {
                 e.printStackTrace();
             }
         }
-        map.put("enddate", date1);
+        cou.setEnddate(date1);
         cou.setIntime(new Date());
         cou.setIsdel(0);
         int result = goodsService.addCouponDistr(cou);

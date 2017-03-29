@@ -1555,6 +1555,9 @@
             <if test="trasurl != null">
                 trasurl,
             </if>
+            <if test="totalamount != null">
+                totalamount,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -1604,6 +1607,9 @@
             </if>
             <if test="trasurl != null">
                 #{trasurl,jdbcType=VARCHAR},
+            </if>
+            <if test="totalamount != null">
+                #{totalamount,jdbcType=DOUBLE},
             </if>
         </trim>
     </insert>
