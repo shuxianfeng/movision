@@ -23,7 +23,7 @@
 
     <!---->
     <select id="queryGoodsCategory" resultType="com.movision.mybatis.category.entity.Category">
-    SELECT id, protype, typename, imgurl FROM yw_category
+        SELECT protype AS id, typename AS categoryname, imgurl AS discoverpageurl FROM yw_category
   </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
