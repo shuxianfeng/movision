@@ -492,8 +492,8 @@
         FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE level>0 AND status=0 ORDER BY intime
     </select>
 
-    <select id="findAllQueryCircleManList" resultType="com.movision.mybatis.user.entity.User">
-        SELECT id,nickname FROM yw_user WHERE status=0 AND nickname IS NOT NULL AND phone IS NOT NULL
+    <select id="findAllQueryIssuePostManList" resultType="com.movision.mybatis.bossUser.entity.BossUser">
+        SELECT id,username FROM yw_admin_user WHERE isdel=0 AND status=0 AND username IS NOT NULL AND phone IS NOT NULL
     </select>
 
     <select id="findAllqueryAddVSortUser" resultType="com.movision.mybatis.user.entity.UserVo"

@@ -4,6 +4,7 @@ import com.movision.common.Response;
 import com.movision.facade.boss.CircleFacade;
 import com.movision.facade.boss.PostFacade;
 import com.movision.mybatis.activePart.entity.ActivePartList;
+import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.comment.entity.CommentVo;
@@ -549,17 +550,17 @@ public class PostController {
     }
 
     /**
-     * 查询圈子圈主
+     * 查询发帖人
      *
      * @return
      */
-    @ApiOperation(value = "查询所有用户", notes = "用于查询所有用户列表接口", response = Response.class)
-    @RequestMapping(value = "query_circle", method = RequestMethod.POST)
-    public Response queryCircleManList(@RequestParam(required = false, defaultValue = "1") String pageNo,
+    @ApiOperation(value = "查询发帖人", notes = "用于查询发帖人列表接口", response = Response.class)
+    @RequestMapping(value = "query_issue_post", method = RequestMethod.POST)
+    public Response queryIssuePostManList(@RequestParam(required = false, defaultValue = "1") String pageNo,
                                        @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Paging<User> pager = new Paging<User>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<User> list = circleFacade.queryCircleManList(pager);
+        Paging<BossUser> pager = new Paging<BossUser>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<BossUser> list = circleFacade.queryIssuePostManList(pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

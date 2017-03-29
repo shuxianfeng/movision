@@ -1,6 +1,7 @@
 package com.movision.facade.boss;
 
 import com.movision.mybatis.accusation.service.AccusationService;
+import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.category.service.CategoryService;
 import com.movision.mybatis.circle.entity.*;
@@ -498,13 +499,13 @@ public class CircleFacade {
     }
 
     /**
-     * 查询圈主列表
+     * 查询发帖人
      *
      * @param pager
      * @return
      */
-    public List<User> queryCircleManList(Paging<User> pager) {
-        return userService.queryCircleManList(pager);
+    public List<BossUser> queryIssuePostManList(Paging<BossUser> pager) {
+        return userService.queryIssuePostManList(pager);
     }
 
 

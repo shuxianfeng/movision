@@ -19,14 +19,6 @@ public class User implements Serializable {
 
     private Integer orderid;
 
-    public Integer getOrderid() {
-        return orderid;
-    }
-
-    public void setOrderid(Integer orderid) {
-        this.orderid = orderid;
-    }
-
     private String token;
 
     private String invitecode;
@@ -62,6 +54,14 @@ public class User implements Serializable {
     private Integer status;
 
     private Date applydate;
+
+    public Integer getOrderid() {
+        return orderid;
+    }
+
+    public void setOrderid(Integer orderid) {
+        this.orderid = orderid;
+    }
 
     public Date getApplydate() {
         return applydate;
