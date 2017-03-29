@@ -141,7 +141,7 @@ public class AdvertisementController {
                                      @ApiParam(value = "主标题") @RequestParam String content,
                                      @ApiParam(value = "副标题") @RequestParam String subcontent,
                                      @ApiParam(value = "图片URL") @RequestParam String url,
-                                     @ApiParam(value = "跳转链接URL") @RequestParam String transurl) {
+                                     @ApiParam(value = "跳转链接URL") @RequestParam(required = false) String transurl) {
         Response response = new Response();
         int map = homepageManageFacade.addAdvertisement(topictype, orderid, content, subcontent, url, transurl);
         if (response.getCode() == 200) {
@@ -182,7 +182,7 @@ public class AdvertisementController {
                                         @ApiParam(value = "主标题") @RequestParam String content,
                                         @ApiParam(value = "副标题") @RequestParam String subcontent,
                                         @ApiParam(value = "图片URL") @RequestParam String url,
-                                        @ApiParam(value = "跳转链接URL") @RequestParam String transurl) {
+                                        @ApiParam(value = "跳转链接URL") @RequestParam(required = false) String transurl) {
         Response response = new Response();
         int i = homepageManageFacade.updateAdvertisement(id, orderid, content, subcontent, url, transurl);
         if (response.getCode() == 200) {
