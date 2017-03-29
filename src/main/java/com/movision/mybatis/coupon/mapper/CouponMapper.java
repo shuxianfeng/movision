@@ -35,5 +35,7 @@ public interface CouponMapper {
 
     void useCoupon(int couponid);
 
+    void insertCouponList(List<Coupon> couponList);
+
     List<Coupon> queryDiscountCouponList(String userid, RowBounds rowBounds);
 }

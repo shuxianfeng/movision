@@ -289,4 +289,34 @@ public class CouponService {
             throw e;
         }
     }
+
+    public List<CouponTemp> checkIsGetCoupon(String phone) {
+        try {
+            log.info("检查当前手机号是否领取过该优惠券");
+            return couponTempMapper.checkIsGetCoupon(phone);
+        } catch (Exception e) {
+            log.error("检查当前手机号是否领取过该优惠券失败");
+            throw e;
+        }
+    }
+
+    public void insertCouponList(List<Coupon> couponList) {
+        try {
+            log.info("插入正式的优惠券列表");
+            couponMapper.insertCouponList(couponList);
+        } catch (Exception e) {
+            log.error("插入正式的优惠券列表失败");
+            throw e;
+        }
+    }
+
+    public void delCouponTemp(String phone) {
+        try {
+            log.info("删除优惠券领取临时表");
+            couponTempMapper.delCouponTemp(phone);
+        } catch (Exception e) {
+            log.error("删除优惠券领取临时表失败");
+            throw e;
+        }
+    }
 }

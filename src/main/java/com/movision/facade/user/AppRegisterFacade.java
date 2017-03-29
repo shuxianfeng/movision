@@ -5,6 +5,9 @@ import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.UserConstants;
 import com.movision.exception.BusinessException;
 import com.movision.facade.im.ImFacade;
+import com.movision.mybatis.coupon.entity.Coupon;
+import com.movision.mybatis.coupon.service.CouponService;
+import com.movision.mybatis.couponTemp.entity.CouponTemp;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
@@ -19,9 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,6 +44,9 @@ public class AppRegisterFacade {
 
     @Autowired
     private ImFacade imFacade;
+
+    @Autowired
+    private CouponService couponService;
 
     /**
      * 校验登录用户信息：手机号+短信验证码
@@ -86,6 +95,9 @@ public class AppRegisterFacade {
                     }
                     log.info("【获取userid】:" + userid);
 
+                    //如果用户当前手机号有领取过H5页面分享的优惠券，那么不管新老用户统一将优惠券临时表yw_coupon_temp中的优惠券信息全部放入优惠券正式表yw_coupon中
+                    this.processCoupon(phone, userid);
+
                     // 判断该userid是否存在一个im用户，
                     this.getImuserForReturn(phone, result, userid);
 
@@ -129,6 +141,46 @@ public class AppRegisterFacade {
             result.put("imuser", newImUser);
         } else {
             result.put("imuser", imFacade.getImuserByCurrentAppuser(userid));
+        }
+    }
+
+    /**
+     * 如果当前手机号在分享的H5页面领取过优惠券，那么不管新老用户统一在这里将优惠券临时表中的数据同步到优惠券正式表中
+     *
+     * @param phone
+     * @param userid
+     */
+    @Transactional
+    private void processCoupon(String phone, int userid) {
+        //首先检查当前手机号是否领取过优惠券
+        List<CouponTemp> couponTempList = couponService.checkIsGetCoupon(phone);
+        List<Coupon> couponList = new ArrayList<>();
+        if (null != couponTempList) {
+            //遍历替换phone为userid，放入List<Coupon>
+            for (int i = 0; i < couponTempList.size(); i++) {
+                CouponTemp couponTemp = couponTempList.get(i);
+                Coupon coupon = new Coupon();
+                coupon.setUserid(userid);
+                coupon.setTitle(couponTemp.getTitle());
+                coupon.setContent(couponTemp.getContent());
+                coupon.setType(couponTemp.getType());
+                if (null != couponTemp.getShopid()) {
+                    coupon.setShopid(couponTemp.getShopid());
+                }
+                coupon.setStatue(couponTemp.getStatue());
+                coupon.setBegintime(couponTemp.getBegintime());
+                coupon.setEndtime(couponTemp.getEndtime());
+                coupon.setIntime(couponTemp.getIntime());
+                coupon.setTmoney(couponTemp.getTmoney());
+                coupon.setUsemoney(couponTemp.getUsemoney());
+                coupon.setIsdel(couponTemp.getIsdel());
+                couponList.add(coupon);
+            }
+
+            //插入优惠券列表
+            couponService.insertCouponList(couponList);
+            //删除临时表中的优惠券领取记录
+            couponService.delCouponTemp(phone);
         }
     }
 

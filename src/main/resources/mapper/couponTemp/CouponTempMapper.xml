@@ -27,10 +27,24 @@
         from yw_coupon_temp
         where id = #{id,jdbcType=INTEGER}
     </select>
+
+    <!--检查当前手机号是否领取过H5页面分享的优惠券-->
+    <select id="checkIsGetCoupon" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.couponTemp.entity.CouponTemp">
+        SELECT * FROM yw_coupon_temp WHERE phone = #{phone,jdbcType=VARCHAR}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_coupon_temp
         where id = #{id,jdbcType=INTEGER}
     </delete>
+
+    <!--删除该手机号下的所有临时领取记录-->
+    <delete id="delCouponTemp" parameterType="java.lang.String">
+        DELETE FROM yw_coupon_temp
+        WHERE phone = #{phone,jdbcType=VARCHAR}
+    </delete>
+
     <insert id="insert" parameterType="com.movision.mybatis.couponTemp.entity.CouponTemp">
         insert into yw_coupon_temp (id, phone, title,
         content, type, shopid,

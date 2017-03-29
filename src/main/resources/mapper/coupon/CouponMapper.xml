@@ -90,6 +90,22 @@
       #{endtime,jdbcType=TIMESTAMP}, #{intime,jdbcType=TIMESTAMP}, #{tmoney,jdbcType=DOUBLE}, 
       #{usemoney,jdbcType=DOUBLE}, #{isdel,jdbcType=INTEGER})
   </insert>
+
+    <!--插入正式的优惠券列表-->
+    <insert id="insertCouponList" parameterType="java.util.List">
+        INSERT INTO yw_coupon(
+        userid, title, content, type, shopid, category, statue, begintime, endtime, intime, tmoney, usemoney, isdel
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.userid,jdbcType=INTEGER}, #{item.title,jdbcType=VARCHAR},
+            #{item.content,jdbcType=VARCHAR}, #{item.type,jdbcType=INTEGER}, #{item.shopid,jdbcType=INTEGER},
+            #{item.category,jdbcType=INTEGER}, #{item.statue,jdbcType=INTEGER}, #{item.begintime,jdbcType=TIMESTAMP},
+            #{item.endtime,jdbcType=TIMESTAMP}, #{item.intime,jdbcType=TIMESTAMP}, #{item.tmoney,jdbcType=DOUBLE},
+            #{item.usemoney,jdbcType=DOUBLE}, #{item.isdel,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+
     <insert id="insertSelective" parameterType="com.movision.mybatis.coupon.entity.Coupon">
         insert into yw_coupon
         <trim prefix="(" suffix=")" suffixOverrides=",">
