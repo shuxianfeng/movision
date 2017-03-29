@@ -1137,10 +1137,11 @@ public class GoodsListFacade {
         if (!StringUtils.isEmpty(putnum)) {
             cou.setPutnum(Integer.parseInt(putnum));
         }
-        if (!StringUtils.isEmpty(channel)) {
-            cou.setChannel(Integer.parseInt(channel));
+        Integer channe = Integer.parseInt(channel);
+        if (channe != null) {
+            cou.setChannel(channe);
         }
-        if (channel.equals("1")) {
+        if (channe == 1) {
             cou.setTrasurl(trasurl);
         }
         if (!StringUtils.isEmpty(couponrule)) {
