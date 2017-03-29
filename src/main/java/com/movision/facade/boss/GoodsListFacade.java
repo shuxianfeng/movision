@@ -1149,7 +1149,7 @@ public class GoodsListFacade {
                 e.printStackTrace();
             }
         }
-        map.put("date", date);
+        map.put("startdate", date);
         Date date1 = null;
         if (enddate != null) {
             try {
@@ -1158,7 +1158,7 @@ public class GoodsListFacade {
                 e.printStackTrace();
             }
         }
-        map.put("date1", date1);
+        map.put("enddate", date1);
         cou.setIntime(new Date());
         cou.setIsdel(0);
         int result = goodsService.addCouponDistr(cou);
