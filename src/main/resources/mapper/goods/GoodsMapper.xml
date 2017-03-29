@@ -60,8 +60,9 @@
 
     <!--查询月度销量前十商品列表(根据销量倒叙排列)-->
     <select id="queryMonthHot" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT t.* FROM (
         SELECT a.*,b.img_url AS imgurl
-        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t2.vol
+        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t1.isdel, t2.vol
         FROM yw_goods t1,(
         SELECT d.goodsid,count(*) AS vol
         FROM yw_sub_order d, yw_orders e
@@ -74,7 +75,9 @@
         LIMIT 5) a
         LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
-        ORDER BY vol DESC
+        ) t
+        WHERE t.isdel = '0'
+        ORDER BY t.vol DESC
     </select>
 
     <!--查询月度热销-点击查看全部查询所有月度热销商品列表-->
@@ -98,8 +101,9 @@
 
     <!--查询月度热销商品的缺省商品列表-->
     <select id="queryDefaultGoods" parameterType="java.util.Map" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT t.* FROM (
         SELECT a.*,b.img_url AS imgurl
-        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice
+        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t1.isdel
         FROM yw_goods t1
         <if test="ids.length != 0">
             WHERE t1.id NOT IN
@@ -110,13 +114,16 @@
         ) a
         LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
+        ) t
+        WHERE t.isdel = '0'
         LIMIT #{defaultcount,jdbcType=INTEGER}
     </select>
 
     <!--查询一周热销前十商品列表-->
     <select id="queryWeekHot" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT t.* FROM (
         SELECT a.*,b.img_url AS imgurl
-        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t2.vol
+        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t1.isdel, t2.vol
         FROM yw_goods t1,(
         SELECT d.goodsid,count(*) AS vol
         FROM yw_sub_order d, yw_orders e
@@ -130,7 +137,9 @@
         LIMIT 5) a
         LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
-        ORDER BY vol DESC
+        ) t
+        WHERE t.isdel = '0'
+        ORDER BY t.vol DESC
     </select>
 
     <!--查询一周热销-点击查看全部查询所有一周热销商品列表-->
@@ -154,15 +163,19 @@
 
     <!--查询最近一期的推荐神器列表-->
     <select id="queryLastDayGodList" resultType="com.movision.mybatis.goods.entity.GoodsVo">
+        SELECT t.* FROM (
         SELECT a.*,b.img_url AS imgurl
-        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice
-             FROM yw_goods t1
-            WHERE ishomepage = '1'
-              AND recommenddate = (
-                SELECT max(recommenddate) FROM yw_goods
-              )) a
+        FROM (SELECT t1.id, t1.name, t1.price, t1.origprice, t1.isdel
+        FROM yw_goods t1
+        WHERE ishomepage = '1'
+        AND recommenddate = (
+        SELECT max(recommenddate) FROM yw_goods
+        )
+        ) a
         LEFT JOIN (SELECT * FROM yw_goods_img WHERE type = '2') b
         ON a.id = b.goodsid
+        ) t
+        WHERE t.isdel = '0'
         LIMIT 5;
     </select>
 
