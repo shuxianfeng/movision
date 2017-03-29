@@ -217,9 +217,7 @@
         FROM yw_admin_menu m
         LEFT JOIN yw_admin_role_menu rm ON m.id = rm.menuid
         where m.isdel = 1 AND m.pid = 0
-        <if test="roleid!=1">
             and rm.roleid = #{roleid}
-        </if>
         ORDER BY m.orderid ASC, m.id
     </select>
 
@@ -230,13 +228,29 @@
         FROM yw_admin_menu m
         LEFT JOIN yw_admin_role_menu rm ON m.id = rm.menuid
         <![CDATA[
-          where m.isdel = 1 AND m.pid > 0
+          where m.isdel = 1 AND m.pid <> 0
         ]]>
-        <if test="roleid!=1">
             and rm.roleid = #{roleid}
-        </if>
         ORDER BY m.orderid ASC, m.id
 
+    </select>
+
+    <select id="selectAllParentMenuSideBar" resultType="com.movision.mybatis.bossMenu.entity.MenuVo">
+        select
+        yw_admin_menu.*
+        from yw_admin_menu
+        where isdel = 1 AND pid = 0
+        ORDER BY orderid, id
+    </select>
+
+    <select id="selectAllChildrenMenuSideBar" resultType="com.movision.mybatis.bossMenu.entity.MenuVo">
+        select
+        yw_admin_menu.*
+        from yw_admin_menu
+        <![CDATA[
+        where isdel = 1 AND pid <> 0
+        ]]>
+        ORDER BY orderid, id
     </select>
 
 </mapper>

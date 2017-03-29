@@ -77,7 +77,6 @@ public class MenuFacade {
     }
 
 
-
     public List<Menu> queryMenuList(Paging<Menu> pager, String menuname) {
 
         Map<String, Object> map = new HashedMap();
@@ -181,8 +180,17 @@ public class MenuFacade {
      * @return
      */
     public List<MenuVo> querySidebar(Integer roleid) {
-        List<MenuVo> father = menuService.querySidebarFather(roleid);
-        List<MenuVo> son = menuService.querySidebarSon(roleid);
+        List<MenuVo> father = new ArrayList<>();
+        List<MenuVo> son = new ArrayList<>();
+        if (roleid == 1) {
+            //超级管理员
+            father = menuService.selectAllParentMenuSideBar();
+            son = menuService.selectAllChildrenMenuSideBar();
+        } else {
+            //其他用户
+            father = menuService.querySidebarFather(roleid);
+            son = menuService.querySidebarSon(roleid);
+        }
         for (int i = 0; i < father.size(); i++) {
             List<MenuVo> mu = new ArrayList<>();
             for (int j = 0; j < son.size(); j++) {

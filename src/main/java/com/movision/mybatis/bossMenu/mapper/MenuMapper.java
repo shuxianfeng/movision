@@ -45,4 +45,8 @@ public interface MenuMapper {
     List<MenuVo> querySidebarFather(@Param("roleid") Integer roleid);
 
     List<MenuVo> querySidebarSon(@Param("roleid") Integer roleid);
+
+    List<MenuVo> selectAllParentMenuSideBar();
+
+    List<MenuVo> selectAllChildrenMenuSideBar();
 }

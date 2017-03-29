@@ -174,4 +174,25 @@ public class MenuService {
         }
     }
 
+
+    public List<MenuVo> selectAllParentMenuSideBar() {
+        try {
+            log.info("查询所有父级菜单");
+            return menuMapper.selectAllParentMenuSideBar();
+        } catch (Exception e) {
+            log.error("查询所有父级菜单失败", e);
+            throw e;
+        }
+    }
+
+    public List<MenuVo> selectAllChildrenMenuSideBar() {
+        try {
+            log.info("查询所有子级菜单");
+            return menuMapper.selectAllChildrenMenuSideBar();
+        } catch (Exception e) {
+            log.error("查询所有子级菜单失败", e);
+            throw e;
+        }
+    }
+
 }
