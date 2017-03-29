@@ -443,7 +443,8 @@
     </select>
     <select id="findAlllikeQueryPostByNickname" resultType="com.movision.mybatis.user.entity.UserLike"
             parameterType="java.lang.String">
-        SELECT u.nickname,u.id FROM yw_user u WHERE nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        SELECT u.nickname,u.id FROM yw_user u WHERE nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%') AND
+        u.status=0
     </select>
 
     <update id="updateRegisterUser" parameterType="com.movision.mybatis.user.entity.RegisterUser">
@@ -470,7 +471,8 @@
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
         (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
         zansum,u.fans,u.applydate
-        FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE vd.userid=u.id AND u.level=0
+        FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE vd.userid=u.id AND u.level=0 AND
+        u.status=0
     </select>
 
     <!-- 查看VIP列表-->
@@ -528,7 +530,7 @@
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
         (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
         zansum,u.fans,u.applydate
-        FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE vd.userid=u.id
+        FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE vd.userid=u.id AND u.status=0
         <if test="">
             AND u.nickname LIKE concat('%',#{,jdbcType=VARCHAR},'%')
         </if>
@@ -548,7 +550,7 @@
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
         (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
         zansum,u.fans,u.applydate
-        FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE vd.userid=u.id
+        FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE vd.userid=u.id AND u.status=0
         <if test="username!=null">
             AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
         </if>
@@ -567,7 +569,7 @@
         (SELECT COUNT(1) FROM yw_coupon WHERE isdel=0 AND userid=u.id) AS coupon,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1) AS isessencesum
-        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE 1
+        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE 1 AND u.status=0
 
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
@@ -739,7 +741,7 @@
         FROM yw_user AS u
         LEFT JOIN yw_audit_vip_detail AS vd ON vd.apply_userid=#{userid,jdbcType=INTEGER} AND vd.status=0
         LEFT JOIN yw_autonym_authentication AS aut ON aut.userid=#{userid,jdbcType=INTEGER} AND aut.authstatus=1
-        WHERE u.id=#{userid,jdbcType=INTEGER}
+        WHERE u.id=#{userid,jdbcType=INTEGER} AND u.status=0
     </select>
 
     <select id="queryProvinces" resultType="com.movision.mybatis.province.entity.ProvinceVo"
@@ -757,7 +759,8 @@
         (SELECT COUNT(1) FROM yw_coupon WHERE isdel=0 AND userid=u.id) AS coupon,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1) AS isessencesum
-        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE u.id = (#{userid,jdbcType=INTEGER})
+        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE u.id =
+        (#{userid,jdbcType=INTEGER}) AND u.status=0
     </select>
 
     <select id="findAllqueryAttentionUserList" resultType="com.movision.mybatis.user.entity.UserAll"
@@ -767,7 +770,7 @@
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1) AS isessencesum
         FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE u.id IN
-        (SELECT userid FROM yw_follow_circle fc WHERE fc.circleid=#{circleid,jdbcType=INTEGER}
+        (SELECT userid FROM yw_follow_circle fc WHERE fc.circleid=#{circleid,jdbcType=INTEGER} AND u.status=0
         <if test="type!=null">
             AND date(fc.intime) = curdate()
         </if>

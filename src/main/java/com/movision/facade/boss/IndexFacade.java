@@ -1,5 +1,6 @@
 package com.movision.facade.boss;
 
+import com.movision.mybatis.bossIndex.entity.AboveStatistics;
 import com.movision.mybatis.bossIndex.entity.IndexTodayDetails;
 import com.movision.mybatis.bossIndex.entity.ProcessedGoodsOrders;
 import com.movision.mybatis.bossIndex.service.IndexService;
@@ -36,5 +37,14 @@ public class IndexFacade {
         /*Integer shop=pgo.getShopExamine();*/
         pgo.setPendingQuantity(add);//待审核，加V审批和店铺审批合
         return pgo;
+    }
+
+    /**
+     * 首页上方统计查询
+     *
+     * @return
+     */
+    public AboveStatistics queryAboveStatistics() {
+        return indexService.queryAboveStatistics();
     }
 }

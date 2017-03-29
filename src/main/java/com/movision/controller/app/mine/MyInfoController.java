@@ -122,10 +122,11 @@ public class MyInfoController {
     @ApiOperation(value = "查询我的礼券列表", notes = "查询我的礼券列表", response = Response.class)
     @RequestMapping(value = {"/get_my_coupon_list"}, method = RequestMethod.GET)
     public Response getMyCouponList(@RequestParam(required = false, defaultValue = "1") String pageNo,
-                                    @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
+                                    @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                    @ApiParam(value = "券状态：0 可用 1 已用 2 失效") @RequestParam Integer status) throws Exception {
         Response response = new Response();
         Paging<Coupon> paging = new Paging<Coupon>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<Coupon> couponList = couponFacade.findAllMyCouponList(paging, ShiroUtil.getAppUserID());
+        List<Coupon> couponList = couponFacade.findAllMyCouponList(paging, ShiroUtil.getAppUserID(), status);
         paging.result(couponList);
         response.setData(paging);
         return response;

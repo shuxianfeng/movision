@@ -1122,6 +1122,12 @@ public class GoodsListFacade {
         if (!StringUtils.isEmpty(amount)) {
             cou.setAmount(Double.parseDouble(amount));
         }
+        Double amoun = Double.parseDouble(amount);
+        Integer putnu = Integer.parseInt(putnum);
+        Double totalamount = amoun * putnu;
+        if (totalamount != null) {
+            cou.setTotalamount(totalamount);
+        }
         if (!StringUtils.isEmpty(fullamount)) {
             cou.setFullamount(Double.parseDouble(fullamount));
         }
@@ -1131,10 +1137,11 @@ public class GoodsListFacade {
         if (!StringUtils.isEmpty(putnum)) {
             cou.setPutnum(Integer.parseInt(putnum));
         }
-        if (!StringUtils.isEmpty(channel)) {
-            cou.setChannel(Integer.parseInt(channel));
+        Integer channe = Integer.parseInt(channel);
+        if (channe != null) {
+            cou.setChannel(channe);
         }
-        if (channel.equals("1")) {
+        if (channe == 1) {
             cou.setTrasurl(trasurl);
         }
         if (!StringUtils.isEmpty(couponrule)) {
@@ -1149,7 +1156,7 @@ public class GoodsListFacade {
                 e.printStackTrace();
             }
         }
-        map.put("date", date);
+        cou.setStartdate(date);
         Date date1 = null;
         if (enddate != null) {
             try {
@@ -1158,7 +1165,7 @@ public class GoodsListFacade {
                 e.printStackTrace();
             }
         }
-        map.put("date1", date1);
+        cou.setEnddate(date1);
         cou.setIntime(new Date());
         cou.setIsdel(0);
         int result = goodsService.addCouponDistr(cou);
@@ -1218,7 +1225,7 @@ public class GoodsListFacade {
         if (!StringUtils.isEmpty(channel)) {
             cou.setChannel(Integer.parseInt(channel));
         }
-        if (channel.equals("1")) {
+        if (!StringUtils.isEmpty(trasurl)) {
             cou.setTrasurl(trasurl);
         }
         if (!StringUtils.isEmpty(couponrule)) {
@@ -1233,7 +1240,7 @@ public class GoodsListFacade {
                 e.printStackTrace();
             }
         }
-        map.put("date", date);
+        cou.setStartdate(date);
         Date date1 = null;
         if (enddate != null) {
             try {
@@ -1242,7 +1249,7 @@ public class GoodsListFacade {
                 e.printStackTrace();
             }
         }
-        map.put("date1", date1);
+        cou.setEnddate(date1);
         int result = goodsService.updateCouponDistr(cou);
         map.put("result", result);
         return map;

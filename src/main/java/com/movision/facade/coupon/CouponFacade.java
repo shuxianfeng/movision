@@ -238,9 +238,10 @@ public class CouponFacade {
         return flag;
     }
 
-    public List<Coupon> findAllMyCouponList(Paging<Coupon> paging, int userid) {
+    public List<Coupon> findAllMyCouponList(Paging<Coupon> paging, int userid, int status) {
         Map map = new HashedMap();
         map.put("userid", userid);
+        map.put("status", status);
         return couponService.findAllMyCouponList(paging, map);
     }
 

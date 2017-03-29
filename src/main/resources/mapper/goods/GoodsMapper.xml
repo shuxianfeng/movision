@@ -1460,7 +1460,7 @@
             resultType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo"
             parameterType="java.lang.Integer">
         SELECT
-        m.id,m.title,m.content,m.channel,m.scope,p.name,m.type,m.amount,m.fullamount,m.putnum,m.receivednum,m.restnum,m.startdate,m.enddate,m.isdel,m.couponrule,m.trasurl
+        m.id,m.title,m.content,m.channel,m.scope,p.name,m.type,m.amount,m.fullamount,m.putnum,m.receivednum,m.restnum,m.startdate,m.enddate,m.isdel,m.couponrule,m.trasurl,m.bannerurl
         FROM yw_coupon_distribute_manage m
         LEFT JOIN yw_shop p ON p.id=m.shopid WHERE m.id=#{id,jdbcType=INTEGER}
     </select>
@@ -1568,6 +1568,9 @@
             <if test="trasurl != null">
                 trasurl,
             </if>
+            <if test="totalamount != null">
+                totalamount,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -1580,10 +1583,10 @@
                 #{content,jdbcType=VARCHAR},
             </if>
             <if test="startdate != null">
-                #{startdate,jdbcType=DATE},
+                #{startdate,jdbcType=TIMESTAMP},
             </if>
             <if test="enddate != null">
-                #{enddate,jdbcType=DATE},
+                #{enddate,jdbcType=TIMESTAMP},
             </if>
             <if test="amount != null">
                 #{amount,jdbcType=DOUBLE},
@@ -1617,6 +1620,9 @@
             </if>
             <if test="trasurl != null">
                 #{trasurl,jdbcType=VARCHAR},
+            </if>
+            <if test="totalamount != null">
+                #{totalamount,jdbcType=DOUBLE},
             </if>
         </trim>
     </insert>
