@@ -155,7 +155,7 @@ public class AppRegisterFacade {
         //首先检查当前手机号是否领取过优惠券
         List<CouponTemp> couponTempList = couponService.checkIsGetCoupon(phone);
         List<Coupon> couponList = new ArrayList<>();
-        if (null != couponTempList) {
+        if (couponTempList.size() > 0) {
             //遍历替换phone为userid，放入List<Coupon>
             for (int i = 0; i < couponTempList.size(); i++) {
                 CouponTemp couponTemp = couponTempList.get(i);
