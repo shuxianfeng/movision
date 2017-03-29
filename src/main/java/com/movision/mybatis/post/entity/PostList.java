@@ -88,6 +88,8 @@ public class PostList {
 
     private Integer category;//圈子分类
 
+    private String categoryname;//圈子分类名称
+
     private Integer persum;//报名人数
 
     private String vid;//视频文件
@@ -97,6 +99,14 @@ public class PostList {
     private String squareimgurl;//活动首页方形图
 
     private List<GoodsVo> promotionGoods;//活动促销商品
+
+    public String getCategoryname() {
+        return categoryname;
+    }
+
+    public void setCategoryname(String categoryname) {
+        this.categoryname = categoryname;
+    }
 
     public String getVid() {
         return vid;
