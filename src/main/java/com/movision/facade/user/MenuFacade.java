@@ -156,6 +156,7 @@ public class MenuFacade {
         return result;
     }
 
+
     /**
      * 对菜单进行鉴权
      *
@@ -179,9 +180,9 @@ public class MenuFacade {
      *
      * @return
      */
-    public List<MenuVo> querySidebar() {
-        List<MenuVo> father = menuService.querySidebarFather();
-        List<MenuVo> son = menuService.querySidebarSon();
+    public List<MenuVo> querySidebar(Integer roleid) {
+        List<MenuVo> father = menuService.querySidebarFather(roleid);
+        List<MenuVo> son = menuService.querySidebarSon(roleid);
         for (int i = 0; i < father.size(); i++) {
             List<MenuVo> mu = new ArrayList<>();
             for (int j = 0; j < son.size(); j++) {
@@ -195,4 +196,5 @@ public class MenuFacade {
         }
         return father;
     }
+
 }

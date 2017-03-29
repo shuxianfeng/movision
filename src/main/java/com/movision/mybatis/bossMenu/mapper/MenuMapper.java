@@ -42,7 +42,7 @@ public interface MenuMapper {
 
     int isExistSameName(Menu menu);
 
-    List<MenuVo> querySidebarFather();
+    List<MenuVo> querySidebarFather(@Param("roleid") Integer roleid);
 
-    List<MenuVo> querySidebarSon();
+    List<MenuVo> querySidebarSon(@Param("roleid") Integer roleid);
 }

@@ -148,12 +148,12 @@ public class MenuService {
      *
      * @return
      */
-    public List<MenuVo> querySidebarFather() {
+    public List<MenuVo> querySidebarFather(Integer roleid) {
         try {
             log.info("查询首页侧边栏父级菜单");
-            return menuMapper.querySidebarFather();
+            return menuMapper.querySidebarFather(roleid);
         } catch (Exception e) {
-            log.error("查询首页侧边栏父级菜单异常");
+            log.error("查询首页侧边栏父级菜单异常", e);
             throw e;
         }
     }
@@ -164,12 +164,12 @@ public class MenuService {
      *
      * @return
      */
-    public List<MenuVo> querySidebarSon() {
+    public List<MenuVo> querySidebarSon(Integer roleid) {
         try {
             log.info("查询首页侧边栏子菜单");
-            return menuMapper.querySidebarSon();
+            return menuMapper.querySidebarSon(roleid);
         } catch (Exception e) {
-            log.error("查询首页侧边栏子菜单异常");
+            log.error("查询首页侧边栏子菜单异常", e);
             throw e;
         }
     }

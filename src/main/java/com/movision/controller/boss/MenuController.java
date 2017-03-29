@@ -9,9 +9,12 @@ import com.movision.mybatis.bossMenu.entity.Menu;
 import com.movision.mybatis.bossMenu.entity.MenuDetail;
 import com.movision.mybatis.bossMenu.entity.MenuVo;
 import com.movision.mybatis.role.entity.Role;
+import com.movision.shiro.realm.BossRealm;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +29,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/boss/menu")
 public class MenuController {
+
+    private static Logger log = LoggerFactory.getLogger(MenuController.class);
 
     @Autowired
     private MenuFacade menuFacade;
@@ -129,7 +134,11 @@ public class MenuController {
     @RequestMapping(value = "query_sidebar", method = RequestMethod.POST)
     public Response querySidebar() {
         Response response = new Response();
-        List<MenuVo> list = menuFacade.querySidebar();
+
+        BossRealm.ShiroBossUser user = ShiroUtil.getBossUser();
+        int roleid = user.getRole();
+        log.info("查询首页侧边栏, roleid = " + roleid);
+        List<MenuVo> list = menuFacade.querySidebar(roleid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
