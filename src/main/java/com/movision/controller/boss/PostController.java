@@ -548,6 +548,26 @@ public class PostController {
         return response;
     }
 
+    /**
+     * 查询圈子圈主
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询所有用户", notes = "用于查询所有用户列表接口", response = Response.class)
+    @RequestMapping(value = "query_circle", method = RequestMethod.POST)
+    public Response queryCircleManList(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                       @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<User> pager = new Paging<User>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<User> list = circleFacade.queryCircleManList(pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
 /*    *//**
      * 选择圈子
      *
