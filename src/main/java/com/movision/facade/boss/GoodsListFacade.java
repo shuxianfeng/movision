@@ -1225,7 +1225,7 @@ public class GoodsListFacade {
         if (!StringUtils.isEmpty(channel)) {
             cou.setChannel(Integer.parseInt(channel));
         }
-        if (channel.equals("1")) {
+        if (!StringUtils.isEmpty(trasurl)) {
             cou.setTrasurl(trasurl);
         }
         if (!StringUtils.isEmpty(couponrule)) {
