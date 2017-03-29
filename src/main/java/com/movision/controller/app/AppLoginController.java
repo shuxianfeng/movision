@@ -6,6 +6,7 @@ import com.movision.common.constant.Constants;
 import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.SessionConstant;
+import com.movision.common.util.ShiroUtil;
 import com.movision.facade.im.ImFacade;
 import com.movision.facade.user.AppRegisterFacade;
 import com.movision.facade.user.UserFacade;
@@ -183,16 +184,31 @@ public class AppLoginController {
                     Subject currentUser = SecurityUtils.getSubject();
                     Gson gson = new Gson();
                     UsernamePasswordToken token = gson.fromJson(appToken, UsernamePasswordToken.class);
-                    //4 开始进入shiro的认证流程
-                    Map returnMap = new HashedMap();
-                    this.shiroLogin(phone, response, currentUser, token, returnMap);
 
+                    Map returnMap = new HashedMap();
+                    //4 开始进入shiro的认证流程
+                    this.shiroLogin(response, currentUser, token);
+
+                    //若shiro获取身份验证信息通过，则进行下面操作
                     if (currentUser.isAuthenticated()) {
+
                         //5 验证通过则在session中缓存登录用户信息
                         Session session = currentUser.getSession();
                         session.setAttribute(SessionConstant.APP_USER, currentUser.getPrincipal());
+                        //6 返回登录人的信息
+                        ShiroRealm.ShiroUser appuser = (ShiroRealm.ShiroUser) currentUser.getPrincipal();
+                        if (null == appuser) {
+                            response.setMsgCode(0);
+                            response.setMessage("登录失败");
+                            returnMap.put("authorized", false);
+                        } else {
+                            response.setMsgCode(1);
+                            response.setMessage("登录成功");
+                            returnMap.put("authorized", true);
+                            returnMap.put("user", appuser);
+                        }
+                        //7 清除session中的boss用户信息
                         session.removeAttribute(SessionConstant.BOSS_USER);
-
 
                         response.setData(returnMap);
                     } else {
@@ -228,7 +244,7 @@ public class AppLoginController {
             response.setMessage("you are rejected!");
             map.put("authorized", false);
         } else {
-            ShiroRealm.ShiroUser appuser = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
+            ShiroRealm.ShiroUser appuser = ShiroUtil.getAppUser();
             if (null == appuser) {
                 response.setMsgCode(0);
                 response.setMessage("you are rejected!");
@@ -254,15 +270,10 @@ public class AppLoginController {
     }*/
 
 
-    private Map shiroLogin(String phone, Response response, Subject currentUser, UsernamePasswordToken token, Map map) {
+    private void shiroLogin(Response response, Subject currentUser, UsernamePasswordToken token) {
         try {
             //登录，即身份验证 , 开始进入shiro的认证流程
             currentUser.login(token);
-            log.debug("登录成功");
-            response.setMessage("登录成功");
-//            response.setData(phone);
-            map.put("phone", phone);
-            return map;
 
         } catch (UnknownAccountException e) {
             log.warn("用户名不存在");
@@ -280,7 +291,6 @@ public class AppLoginController {
             response.setMessage(MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.app_account_name_error)));
             response.setMsgCode(MsgCodeConstant.app_account_name_error);
         }
-        return null;
     }
 
     /**
