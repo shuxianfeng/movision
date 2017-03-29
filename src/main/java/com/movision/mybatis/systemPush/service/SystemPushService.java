@@ -127,10 +127,10 @@ public class SystemPushService {
      *
      * @return
      */
-    public List<String> findPhone(Integer pageNo, Integer pageSize) {
+    public List<String> findPhone(Paging pager) {
         try {
             log.info("查询所有电话");
-            return systemPushMapper.findPhone(pageNo, pageSize);
+            return systemPushMapper.findPhone(pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询所有电话失败", e);
             throw e;
