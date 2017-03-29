@@ -173,7 +173,8 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
 
             if (null != bossUser) {
                 // 初始化登录信息
-                BossRealm.ShiroBossUser loginInfo = new BossRealm.ShiroBossUser(bossUser.getId(), bossUser.getName(), bossUser.getPhone(), bossUser.getUsername(),
+                BossRealm.ShiroBossUser loginInfo = new BossRealm.ShiroBossUser(bossUser.getId(), bossUser.getName(),
+                        bossUser.getPhone(), bossUser.getUsername(),
                         bossUser.getPassword(), bossUser.getIssuper(), bossUser.getStatus(), bossUser.getIsdel(), bossUser.getCreatetime(),
                         bossUser.getAfterlogintime(), bossUser.getBeforelogintime(), roleid, accid, imtoken);
 
@@ -205,7 +206,8 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 // 初始化登录信息
                 ShiroUser loginInfo = new ShiroUser(loginUser.getId(), loginUser.getPhone(), loginUser.getStatus(), loginUser.getRole(),
                         loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(),
-                        loginUser.getPhone(), loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(), loginUser.getAccid(), loginUser.getImtoken());
+                        loginUser.getPhone(), loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(),
+                        loginUser.getAccid(), loginUser.getImtoken());
                 //判断登录信息是否改变,若改变了则更新session，
 
                 //判断登录信息是否改变,若改变了则更新session，

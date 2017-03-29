@@ -274,6 +274,9 @@
         <if test="userid!=null and userid!=''">
             and userid = #{userid}
         </if>
+        <if test="status!=null and status!=''">
+            and statue= #{status}
+        </if>
     </select>
 
     <select id="queryDiscountCouponList" resultType="com.movision.mybatis.coupon.entity.Coupon"
