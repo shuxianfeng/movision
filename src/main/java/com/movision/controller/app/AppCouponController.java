@@ -86,10 +86,11 @@ public class AppCouponController {
 
         CouponShareRecordVo couponShareRecordVo = couponFacade.getCouponDistributeInfo(userid);
 
-        if (response.getCode() == 200 && null != couponShareRecordVo) {
+        if (response.getCode() == 200 && null != couponShareRecordVo.getId()) {
             response.setMessage("获取成功");
             response.setData(couponShareRecordVo);
         } else {
+            response.setCode(300);
             response.setMessage("获取优惠券活动失败或不存在可分享的优惠券活动");
         }
         return response;
