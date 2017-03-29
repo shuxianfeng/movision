@@ -40,4 +40,13 @@
         FROM yw_apply_vip_detail WHERE apply_level=0
     </select>
 
+    <select id="queryAboveStatistics" resultType="com.movision.mybatis.bossIndex.entity.AboveStatistics">
+        SELECT COUNT(1) AS posts,
+        (SELECT COUNT(1) FROM yw_orders WHERE isdel=0) AS orders,
+        (SELECT COUNT(1) FROM yw_goods WHERE isdel=0) AS goods,
+        <![CDATA[ (SELECT COUNT(1) FROM yw_user WHERE status=0 AND level>0) AS vip,]]>
+        (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND isactive=0 AND isessencepool=1) AS quintessence
+        FROM yw_post WHERE isdel=0 AND isactive=0
+    </select>
+
 </mapper>

@@ -2,6 +2,7 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.IndexFacade;
+import com.movision.mybatis.bossIndex.entity.AboveStatistics;
 import com.movision.mybatis.bossIndex.entity.IndexTodayDetails;
 import com.movision.mybatis.bossIndex.entity.ProcessedGoodsOrders;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -52,6 +53,24 @@ public class BossIndexController {
             response.setMessage("查询成功");
         }
         response.setData(resault);
+        return response;
+    }
+
+
+    /**
+     * 首页上方统计查询
+     *
+     * @return
+     */
+    @ApiOperation(value = "首页上方查询统计", notes = "用于首页上方统计查询接口", response = Response.class)
+    @RequestMapping(value = "query_above_statistics", method = RequestMethod.POST)
+    public Response queryAboveStatistics() {
+        Response response = new Response();
+        AboveStatistics aboveStatistics = indexFacade.queryAboveStatistics();
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(aboveStatistics);
         return response;
     }
 }

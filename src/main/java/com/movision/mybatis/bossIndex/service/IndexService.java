@@ -1,5 +1,6 @@
 package com.movision.mybatis.bossIndex.service;
 
+import com.movision.mybatis.bossIndex.entity.AboveStatistics;
 import com.movision.mybatis.bossIndex.entity.IndexTodayDetails;
 import com.movision.mybatis.bossIndex.entity.ProcessedGoodsOrders;
 import com.movision.mybatis.bossIndex.mapper.IndexMapper;
@@ -45,6 +46,21 @@ public class IndexService {
             return indexMapper.queryProcessedGoodsOrders();
         } catch (Exception e) {
             logger.error("查询后台首页待处理、商品、订单异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 首页上方统计查询
+     *
+     * @return
+     */
+    public AboveStatistics queryAboveStatistics() {
+        try {
+            logger.info("首页上方统计查询");
+            return indexMapper.queryAboveStatistics();
+        } catch (Exception e) {
+            logger.error("首页上方统计查询异常");
             throw e;
         }
     }
