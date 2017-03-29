@@ -669,6 +669,7 @@ public class ImFacade {
         boolean blen = true;
         int pageNo = 0;
         int pageSize = 200;
+        // List<String> phone = systemPushService.findPhone(pageNo, pageSize);
         for (int i = 0; pageSize < list.size(); i++) {
             List<String> phone = systemPushService.findPhone(pageNo, pageSize);
             pageNo += 200;

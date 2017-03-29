@@ -1494,9 +1494,6 @@
         <if test="type!=null">
             AND type=#{type,jdbcType=INTEGER}
         </if>
-        <if test="allstatue==0 and min!=null and max!=null">
-            AND amount BETWEEN #{min,jdbcType=DOUBLE} AND #{max,jdbcType=DOUBLE}
-        </if>
         <if test="allstatue==1 and min!=null and max!=null">
             AND fullamount BETWEEN #{min,jdbcType=DOUBLE} AND #{max,jdbcType=DOUBLE}
         </if>
