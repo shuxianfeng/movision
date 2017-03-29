@@ -496,6 +496,10 @@
         SELECT id,username FROM yw_admin_user WHERE isdel=0 AND status=0 AND username IS NOT NULL AND phone IS NOT NULL
     </select>
 
+    <select id="findAllQueryCircleManList" resultType="com.movision.mybatis.user.entity.User">
+        SELECT id,nickname FROM yw_user WHERE status=0 AND  nickname IS NOT NULL AND phone IS NOT NULL
+    </select>
+
     <select id="findAllqueryAddVSortUser" resultType="com.movision.mybatis.user.entity.UserVo"
             parameterType="java.util.Map">
         SELECT u.id,u.nickname,u.phone,u.level,u.status,
@@ -569,7 +573,7 @@
         (SELECT COUNT(1) FROM yw_coupon WHERE isdel=0 AND userid=u.id) AS coupon,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1) AS isessencesum
-        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE 1 AND u.status=0
+        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE 1
 
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
@@ -578,16 +582,16 @@
             AND u.phone=#{phone,jdbcType=VARCHAR}
         </if>
         <if test="authentication!=null">
-            AND authstatus=#{authentication,jdbcType=INTEGER}
+            AND aut.authstatus=#{authentication,jdbcType=INTEGER}
         </if>
         <if test="level!=null">
             AND level=#{level,jdbcType=INTEGER}
         </if>
         <if test="status!=null">
-            AND status=#{status,jdbcType=INTEGER}
+            AND u.status=#{status,jdbcType=INTEGER}
         </if>
         <if test="begintime!=null and endtime!=null">
-            AND intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+            AND u.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
         </if>
         <if test="price!=null and conditionon!=null and conditiontwo!=null">
             <if test="conditionon==1">

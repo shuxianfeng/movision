@@ -351,17 +351,33 @@ public class UserService {
     }
 
     /**
-     * 查询圈主列表
+     * 查询发帖人列表
      *
      * @param pager
      * @return
      */
     public List<BossUser> queryIssuePostManList(Paging<BossUser> pager) {
         try {
-            log.info("查询圈主列表");
+            log.info("查询发帖人列表");
             return userMapper.findAllQueryIssuePostManList(pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询圈主列表异常");
+            log.error("查询发帖人列表异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询圈主和管理员
+     *
+     * @param pager
+     * @return
+     */
+    public List<User> queryCircleManList(Paging<User> pager) {
+        try {
+            log.info("查询圈主和管理员");
+            return userMapper.findAllQueryCircleManList(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询圈主和管理员异常");
             throw e;
         }
     }

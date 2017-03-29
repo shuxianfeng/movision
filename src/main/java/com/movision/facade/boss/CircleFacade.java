@@ -13,6 +13,7 @@ import com.movision.mybatis.rewarded.service.RewardedService;
 import com.movision.mybatis.share.service.SharesService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.utils.L;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
@@ -496,6 +497,10 @@ public class CircleFacade {
         map.put("circleid", circleid);
         map.put("categoryid", categoryid);
         return postService.findAllQueryCircleByPostList(map, pager);
+    }
+
+    public List<User> queryCircleManList(Paging<User> pager) {
+        return userService.queryCircleManList(pager);
     }
 
     /**

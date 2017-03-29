@@ -221,14 +221,16 @@ public class UserManageFacade {
                                           String begintime, String endtime, String pointsSort, String postsumSort, String isessenceSort,
                                           String fansSort, String conditionon, String conditiontwo, String price, String login) {
         Map map = new HashedMap();
-        String beg = null;
-        String end = null;
+        Date beg = null;
+        Date end = null;
         if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Long l = new Long(begintime);
-            Long o = new Long(endtime);
-            beg = format.format(l);
-            end = format.format(o);
+            try {
+                beg = format.parse(begintime);
+                end = format.parse(endtime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         if (StringUtil.isNotEmpty(nickname)) {
             map.put("nickname", nickname);//用户名
@@ -245,12 +247,8 @@ public class UserManageFacade {
         if (StringUtil.isNotEmpty(seal)) {
             map.put("status", seal);//是否封号
         }
-        if (StringUtil.isNotEmpty(beg)) {
-            map.put("begintime", beg);//注册开始时间
-        }
-        if (StringUtil.isNotEmpty(end)) {
-            map.put("endtime", end);//注册结束时间
-        }
+        map.put("begintime", beg);//注册开始时间
+        map.put("endtime", end);//注册结束时间
         if (StringUtil.isNotEmpty(pointsSort)) {
             map.put("pointsSort", pointsSort);//积分排序
         }

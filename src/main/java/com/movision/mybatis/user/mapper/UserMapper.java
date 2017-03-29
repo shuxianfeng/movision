@@ -4,6 +4,7 @@ import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.province.entity.ProvinceVo;
 import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.user.entity.*;
+import com.movision.utils.L;
 import org.apache.ibatis.annotations.Param;
 import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
 import org.apache.ibatis.session.RowBounds;
@@ -72,6 +73,8 @@ public interface UserMapper {
     List<UserVo> findAllqueryUserVIPByList(RowBounds rowBounds);
 
     List<BossUser> findAllQueryIssuePostManList(RowBounds rowBounds);
+
+    List<User> findAllQueryCircleManList(RowBounds rowBounds);
 
     List<UserVo> findAllqueryAddVSortUser(Map map, RowBounds rowBounds);
 
