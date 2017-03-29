@@ -1549,6 +1549,9 @@
             <if test="bannerurl != null">
                 bannerurl,
             </if>
+            <if test="couponrule != null">
+                couponrule,
+            </if>
             <if test="trasurl != null">
                 trasurl,
             </if>
@@ -1596,6 +1599,9 @@
             <if test="bannerurl != null">
                 #{bannerurl,jdbcType=VARCHAR},
             </if>
+            <if test="couponrule != null">
+                #{couponrule,jdbcType=VARCHAR},
+            </if>
             <if test="trasurl != null">
                 #{trasurl,jdbcType=VARCHAR},
             </if>
@@ -1607,6 +1613,9 @@
             parameterType="com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo">
         update yw_coupon_distribute_manage
         <set>
+            <if test="bannerurl != null">
+                bannerurl = #{bannerurl,jdbcType=VARCHAR},
+            </if>
             <if test="title != null">
                 title = #{title,jdbcType=VARCHAR},
             </if>
@@ -1642,6 +1651,9 @@
             </if>
             <if test="isdel != null">
                 isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="couponrule != null">
+                couponrule = #{couponrule,jdbcType=VARCHAR},
             </if>
             <if test="trasurl != null">
                 trasurl = #{isdel,jdbcType=VARCHAR},
