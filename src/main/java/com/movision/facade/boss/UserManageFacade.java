@@ -329,7 +329,7 @@ public class UserManageFacade {
      */
     public List<UserAll> queryAllUserList(Paging<UserAll> pager, String nickname, String phone, String authentication, String vip, String seal,
                                           String begintime, String endtime, String pointsSort, String postsumSort, String isessenceSort,
-                                          String fansSort, String conditionon, String conditiontwo, String price, String login) {
+                                          String fansSort, String conditionon, String conditiontwo, String price, String login, String pai) {
         Map map = new HashedMap();
         Date beg = null;
         Date end = null;
@@ -382,6 +382,9 @@ public class UserManageFacade {
         }
         if (StringUtil.isNotEmpty(login)) {
             map.put("login", login);//登录状态
+        }
+        if (StringUtil.isNotEmpty(pai)) {
+            map.put("pai", pai);//排序方式
         }
         List<UserAll> list = userService.queryAllUserList(pager, map);
         for (int j = 0; j < list.size(); j++) {

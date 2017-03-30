@@ -769,6 +769,12 @@
                 ORDER BY fans DESC
             </if>
         </if>
+        <if test="pai==1">
+            ORDER BY u.intime DESC
+        </if>
+        <if test="pai==2">
+            ORDER BY u.level DESC
+        </if>
     </select>
 
     <update id="deleteUserByid" parameterType="java.util.Map">

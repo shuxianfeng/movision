@@ -104,7 +104,7 @@ public class UserManageController {
      * @param authstatus
      * @param begintime
      * @param endtime
-     * @param type
+     * @param pai
      * @param pageNo
      * @param pageSize
      * @return
@@ -116,12 +116,12 @@ public class UserManageController {
                                             @ApiParam(value = "实名认证0失败1成功2驳回3未认证") @RequestParam(required = false) String authstatus,
                                             @ApiParam(value = "加V日期-开始时间") @RequestParam(required = false) String begintime,
                                             @ApiParam(value = "加V日期-结束时间") @RequestParam(required = false) String endtime,
-                                            @ApiParam(value = "排序方式1 按加V时间拍，2按会员等级排") @RequestParam(required = false) String type,
+                                            @ApiParam(value = "排序方式1 按加V时间拍，2按会员等级排") @RequestParam(required = false) String pai,
                                             @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                             @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<UserVo> pager = new Paging<UserVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<UserVo> list = userManageFacade.queryByConditionvipList(name, phone, authstatus, begintime, endtime, type, pager);
+        List<UserVo> list = userManageFacade.queryByConditionvipList(name, phone, authstatus, begintime, endtime, pai, pager);
         pager.result(list);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
@@ -302,7 +302,24 @@ public class UserManageController {
 
     /**
      * 查询所有用户列表
-     *
+     * @param nickname
+     * @param phone
+     * @param authentication
+     * @param vip
+     * @param seal
+     * @param begintime
+     * @param endtime
+     * @param pointsSort
+     * @param postsumSort
+     * @param isessenceSort
+     * @param fansSort
+     * @param conditionon
+     * @param conditiontwo
+     * @param price
+     * @param login
+     * @param pai
+     * @param pageNo
+     * @param pageSize
      * @return
      */
     @ApiOperation(value = "查询所有用户列表", notes = "用于查询所有用户列表接口", response = Response.class)
@@ -322,12 +339,13 @@ public class UserManageController {
                                      @ApiParam(value = "条件2(大于：3，等于：2，小于：1)") @RequestParam(required = false) String conditiontwo,
                                      @ApiParam(value = "值") @RequestParam(required = false) String price,
                                      @ApiParam(value = "登录方式") @RequestParam(required = false) String login,
+                                     @ApiParam(value = "排序方式  1按注册时间拍 2按会员等级排") @RequestParam(required = false) String pai,
                                      @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                      @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<UserAll> pager = new Paging<UserAll>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<UserAll> list = userManageFacade.queryAllUserList(pager, nickname, phone, authentication, vip, seal, begintime, endtime, pointsSort,
-                postsumSort, isessenceSort, fansSort, conditionon, conditiontwo, price, login);
+                postsumSort, isessenceSort, fansSort, conditionon, conditiontwo, price, login, pai);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
