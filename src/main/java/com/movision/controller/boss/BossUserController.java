@@ -59,11 +59,12 @@ public class BossUserController {
             userRoleRelationFacade.addRelation(userRoleRelation);
 
             //如果是系统管理员角色， 则创建accid
-            if (StringUtils.equals(roleid, UserConstants.SYSTEM_ADMIN)) {
+            //怎么判断是系统管理员角色呢？
+            /*if (StringUtils.equals(roleid, UserConstants.SYSTEM_ADMIN)) {
                 ImUser imUser = new ImUser();
-                imUser.setAccid(CheckSumBuilder.getAccid(bossUserVo.getUsername()));
+                imUser.setAccid(CheckSumBuilder.getAccid(bossUserVo.getUsername()));    //此处是根据username来创建accid
                 imFacade.registerImUserAndSave(imUser, ShiroUtil.getBossUserID(), ImConstant.TYPE_BOSS);
-            }
+            }*/
 
         }
         return response;
@@ -94,11 +95,11 @@ public class BossUserController {
             userRoleRelationFacade.updateByUserid(userRoleRelation);
 
             //如果是系统管理员角色， 则创建accid
-            if (StringUtils.equals(roleid, UserConstants.SYSTEM_ADMIN)) {
-                ImUser imUser = new ImUser();
-                imUser.setAccid(CheckSumBuilder.getAccid(bossUserVo.getUsername()));
-                imFacade.registerImUserAndSave(imUser, ShiroUtil.getBossUserID(), ImConstant.TYPE_BOSS);
-            }
+//            if (StringUtils.equals(roleid, UserConstants.SYSTEM_ADMIN)) {
+//                ImUser imUser = new ImUser();
+//                imUser.setAccid(CheckSumBuilder.getAccid(bossUserVo.getUsername()));
+//                imFacade.registerImUserAndSave(imUser, ShiroUtil.getBossUserID(), ImConstant.TYPE_BOSS);
+//            }
         }
 
         return response;
