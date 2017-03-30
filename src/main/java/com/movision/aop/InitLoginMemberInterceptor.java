@@ -176,7 +176,8 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 BossRealm.ShiroBossUser loginInfo = new BossRealm.ShiroBossUser(bossUser.getId(), bossUser.getName(),
                         bossUser.getPhone(), bossUser.getUsername(),
                         bossUser.getPassword(), bossUser.getIssuper(), bossUser.getStatus(), bossUser.getIsdel(), bossUser.getCreatetime(),
-                        bossUser.getAfterlogintime(), bossUser.getBeforelogintime(), roleid, accid, imtoken);
+                        bossUser.getAfterlogintime(), bossUser.getBeforelogintime(), roleid, accid, imtoken,
+                        bossUser.getIscircle(), bossUser.getCirclemanagement(), bossUser.getContributing(), bossUser.getCommon());
 
                 //判断登录信息是否改变,若改变了则更新session，
                 if (this.loginBossInfoIsChange(bossuser, loginInfo)) {
@@ -246,7 +247,11 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 || bossuser.getPhone() != loginInfo.getPhone() || bossuser.getPassword() != loginInfo.getPassword()
                 || bossuser.getUsername() != loginInfo.getUsername()
                 || bossuser.getAccid() != loginInfo.getAccid()
-                || bossuser.getImtoken() != loginInfo.getImtoken();
+                || bossuser.getImtoken() != loginInfo.getImtoken()
+                || bossuser.getCirclemanagement() != loginInfo.getCirclemanagement()
+                || bossuser.getCommon() != loginInfo.getCommon()
+                || bossuser.getContributing() != loginInfo.getContributing()
+                || bossuser.getIscircle() != loginInfo.getIscircle();
         return isChange;
     }
 }

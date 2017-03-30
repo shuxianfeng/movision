@@ -46,8 +46,8 @@ public class BossUserFacade {
         return bossUserService.getBossUserByUsername(username);
     }
 
-    public Boolean updateLoginInfo(BossUser bossUser) {
-        return bossUserService.updateUserLoginInfo(bossUser);
+    public Boolean updateLoginTime(BossUser bossUser) {
+        return bossUserService.updateUserLoginTime(bossUser);
     }
 
     public void delUser(int[] ids) {
