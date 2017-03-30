@@ -247,7 +247,7 @@ public class UserManageController {
     @RequestMapping(value = "query_unite_condition_contribute", method = RequestMethod.POST)
     public Response queryUniteConditionByContribute(@ApiParam(value = "用户名") @RequestParam(required = false) String nickname,
                                                     @ApiParam(value = "邮箱") @RequestParam(required = false) String email,
-                                                    @ApiParam(value = "审核状态") @RequestParam(required = false) String type,
+                                                    @ApiParam(value = "审核状态 0 待审核 1 审核通过 2 审核未通过") @RequestParam(required = false) String type,
                                                     @ApiParam(value = "vip") @RequestParam(required = false) String vip,
                                                     @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
                                                     @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,

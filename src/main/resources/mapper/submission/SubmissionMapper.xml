@@ -161,8 +161,13 @@
         <if test="type!=null">
             AND s.status=#{type,jdbcType=INTEGER}
         </if>
-        <if test="vip!=null">
+        <if test="vip==0">
             AND u.level=#{vip,jdbcType=INTEGER}
+        </if>
+        <if test="vip==1">
+            <![CDATA[
+            AND u.level>0
+            ]]>
         </if>
         <if test="begintime!=null and endtime!=null">
             AND s.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
