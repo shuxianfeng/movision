@@ -5,6 +5,7 @@ import com.movision.facade.coupon.CouponFacade;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
 import com.movision.mybatis.couponShareRecord.entity.CouponShareRecordVo;
+import com.movision.mybatis.couponTemp.entity.CouponTempVo;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author shuxf
@@ -102,14 +104,15 @@ public class AppCouponController {
                                      @ApiParam(value = "领取的优惠券分享id") @RequestParam String id) {
         Response response = new Response();
 
-        int flag = couponFacade.getCouponDistributeInfo(id, phone);
-        if (flag == 1) {
+        Map<String, Object> map = couponFacade.getCouponDistributeInfo(id, phone);
+        if ((int) map.get("flag") == 1) {
             response.setCode(200);
             response.setMessage("领取成功");
-        } else if (flag == 0) {
+            response.setData(map.get("couponTempVo"));
+        } else if ((int) map.get("flag") == 0) {
             response.setCode(300);
             response.setMessage("领取失败");
-        } else if (flag == -1) {
+        } else if ((int) map.get("flag") == -1) {
             response.setCode(201);
             response.setMessage("不可重复领取");
         }

@@ -1,13 +1,14 @@
 package com.movision.facade.coupon;
 
+import com.movision.mybatis.cart.service.CartService;
 import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.coupon.service.CouponService;
-import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
 import com.movision.mybatis.couponReceiveRecord.entity.CouponReceiveRecord;
 import com.movision.mybatis.couponShareRecord.entity.CouponShareRecord;
 import com.movision.mybatis.couponShareRecord.entity.CouponShareRecordVo;
 import com.movision.mybatis.couponTemp.entity.CouponTemp;
+import com.movision.mybatis.couponTemp.entity.CouponTempVo;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
@@ -29,6 +30,9 @@ public class CouponFacade {
 
     @Autowired
     private GoodsService goodsService;
+
+    @Autowired
+    private CartService cartService;
 
     public Map<String, Object> choiceCoupon(String userid) {
 
@@ -177,8 +181,11 @@ public class CouponFacade {
     }
 
     @Transactional
-    public int getCouponDistributeInfo(String id, String phone) {
+    public Map<String, Object> getCouponDistributeInfo(String id, String phone) {
         int flag = 0;//定义标志位
+
+        //封装领取的优惠券返回体
+        CouponTempVo couponTempVo = new CouponTempVo();
 
         //根据分享id查询当前分享的优惠券详情
         CouponDistributeManageVo couponDistributeManageVo = couponService.getCouponDistributeInfoById(Integer.parseInt(id));
@@ -208,19 +215,38 @@ public class CouponFacade {
             //封装优惠券临时表实体,写入表中
             CouponTemp couponTemp = new CouponTemp();
             couponTemp.setPhone(phone);
+            couponTempVo.setPhone(phone);
             couponTemp.setTitle(title);
+            couponTempVo.setTitle(title);
             couponTemp.setContent(content);
+            couponTempVo.setContent(content);
             couponTemp.setType(type);
+            couponTempVo.setType(type);
             if (type == 2) {
                 couponTemp.setShopid(shopid);
+                couponTempVo.setShopid(shopid);
+                //根据shopid查询店铺名称
+                String shopname = cartService.queryShopName(shopid);
+                couponTempVo.setShopname(shopname);
+            } else if (type == 1) {
+                couponTemp.setShopid(-1);
+                couponTempVo.setShopid(-1);
+                couponTempVo.setShopname("美番");
             }
             couponTemp.setStatue(statue);
+            couponTempVo.setStatue(statue);
             couponTemp.setBegintime(begintime);
+            couponTempVo.setBegintime(begintime);
             couponTemp.setEndtime(endtime);
+            couponTempVo.setEndtime(endtime);
             couponTemp.setIntime(intime);
+            couponTempVo.setIntime(intime);
             couponTemp.setTmoney(tmoney);
+            couponTempVo.setTmoney(tmoney);
             couponTemp.setUsemoney(usemoney);
+            couponTempVo.setUsemoney(usemoney);
             couponTemp.setIsdel(isdel);
+            couponTempVo.setIsdel(isdel);
             couponService.insertCouponTemp(couponTemp);
 
             //根据分享id更新分享记录表
@@ -237,7 +263,10 @@ public class CouponFacade {
         } else if (sum > 0) {
             flag = -1;
         }
-        return flag;
+        Map<String, Object> map = new HashMap<>();
+        map.put("couponTempVo", couponTempVo);
+        map.put("flag", flag);
+        return map;
     }
 
     public List<Coupon> findAllMyCouponList(Paging<Coupon> paging, int userid, int status) {
