@@ -83,6 +83,12 @@ public class UserManageFacade {
             if (users.get(i).getAuthstatus() == null) {
                 users.get(i).setAuthstatus(3);
             }
+            if (users.get(i).getNickname() == null) {//如果查询出的用户昵称为空，拼接默认的昵称显示
+                String p = users.get(i).getPhone();
+                String substr = p.substring(p.length() - 4, p.length());
+                substr = "用户名" + substr;
+                users.get(i).setNickname(substr);
+            }
         }
         return users;
     }
@@ -98,6 +104,12 @@ public class UserManageFacade {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getAuthstatus() == null) {
                 users.get(i).setAuthstatus(3);
+            }
+            if (users.get(i).getNickname() == null) {//如果查询出的用户昵称为空，拼接默认的昵称显示
+                String p = users.get(i).getPhone();
+                String substr = p.substring(p.length() - 4, p.length());
+                substr = "用户名" + substr;
+                users.get(i).setNickname(substr);
             }
         }
         return users;
@@ -146,6 +158,12 @@ public class UserManageFacade {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getAuthstatus() == null) {
                 users.get(i).setAuthstatus(3);
+            }
+            if (users.get(i).getNickname() == null) {//如果查询出的用户昵称为空，拼接默认的昵称显示
+                String p = users.get(i).getPhone();
+                String substr = p.substring(p.length() - 4, p.length());
+                substr = "用户名" + substr;
+                users.get(i).setNickname(substr);
             }
         }
         return users;
@@ -226,6 +244,12 @@ public class UserManageFacade {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getAuthstatus() == null) {
                 users.get(i).setAuthstatus(3);
+            }
+            if (users.get(i).getNickname() == null) {//如果查询出的用户昵称为空，拼接默认的昵称显示
+                String p = users.get(i).getPhone();
+                String substr = p.substring(p.length() - 4, p.length());
+                substr = "用户名" + substr;
+                users.get(i).setNickname(substr);
             }
         }
         return users;
@@ -363,6 +387,12 @@ public class UserManageFacade {
         for (int j = 0; j < list.size(); j++) {
             if (list.get(j).getAuthstatus() == null) {
                 list.get(j).setAuthstatus(3);//如果当前用户没有实名认证 返回3作为提示
+            }
+            if (list.get(j).getNickname() == null) {//如果查询出的用户昵称为空，拼接默认的昵称显示
+                String p = list.get(j).getPhone();
+                String substr = p.substring(p.length() - 4, p.length());
+                substr = "用户名" + substr;
+                list.get(j).setNickname(substr);
             }
         }
         for (int i = 0; i < list.size(); i++) {

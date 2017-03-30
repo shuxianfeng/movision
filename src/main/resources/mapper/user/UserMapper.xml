@@ -533,7 +533,7 @@
             AND au.authstatus IS NULL
         </if>
         <if test="type==1">
-            ORDER BY applydate DESC
+            ORDER BY vd.apply_time DESC
         </if>
         <if test="type==2">
             ORDER BY level DESC
