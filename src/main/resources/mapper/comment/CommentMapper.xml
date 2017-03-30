@@ -69,6 +69,15 @@
       <if test="zansum != null" >
         zansum,
       </if>
+      <if test="isdel != null">
+        isdel,
+      </if>
+      <if test="iscontribute != null">
+        iscontribute,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -91,6 +100,15 @@
       </if>
       <if test="zansum != null" >
         #{zansum,jdbcType=INTEGER},
+      </if>
+      <if test="isdel != null">
+        #{isdel,jdbcType=VARCHAR},
+      </if>
+      <if test="iscontribute != null">
+        #{iscontribute,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -115,6 +133,15 @@
       <if test="zansum != null" >
         zansum = #{zansum,jdbcType=INTEGER},
       </if>
+      <if test="isdel != null">
+        isdel = #{isdel,jdbcType=VARCHAR},
+      </if>
+      <if test="iscontribute != null">
+        iscontribute = #{iscontribute,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -126,6 +153,9 @@
       content = #{content,jdbcType=VARCHAR},
       intime = #{intime,jdbcType=TIMESTAMP},
       zansum = #{zansum,jdbcType=INTEGER},
+    isdel = #{isdel,jdbcType=VARCHAR},
+    iscontribute = #{iscontribute,jdbcType=INTEGER},
+    status = #{status,jdbcType=INTEGER},
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -224,6 +254,18 @@
       <if test="intime != null">
         intime,
       </if>
+      <if test="zansum != null">
+        zansum,
+      </if>
+      <if test="isdel != null">
+        isdel,
+      </if>
+      <if test="iscontribute != null">
+        iscontribute,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -243,6 +285,18 @@
       </if>
       <if test="intime != null">
         #{intime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zansum != null">
+        #{zansum,jdbcType=INTEGER},
+      </if>
+      <if test="isdel != null">
+        #{isdel,jdbcType=VARCHAR},
+      </if>
+      <if test="iscontribute != null">
+        #{iscontribute,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>

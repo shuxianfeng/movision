@@ -73,7 +73,7 @@ public class FacadeComments {
     }
 
     public int insertComment(String userid, String content, String fuid, String postid) {
-        if (content.length() > 1000) {
+        if (content.length() > 500) {
             return 2;
         } else {
             int type = 0;
@@ -84,6 +84,8 @@ public class FacadeComments {
                 vo.setUserid(Integer.parseInt(userid));
                 vo.setIntime(new Date());
                 vo.setZansum(0);
+                vo.setIsdel("0");
+                vo.setIscontribute(0);
                 type = CommentService.insertComment(vo);//添加评论
                 //更新用户最后操作时间和帖子评论总次数
                 postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子表的评论次数字段
@@ -94,6 +96,8 @@ public class FacadeComments {
                 vo.setUserid(Integer.parseInt(userid));
                 vo.setIntime(new Date());
                 vo.setZansum(0);
+                vo.setIsdel("0");
+                vo.setIscontribute(0);
                 vo.setPid(Integer.parseInt(fuid));
                 type = CommentService.insertComment(vo);//添加评论
             }
