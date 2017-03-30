@@ -36,7 +36,7 @@ import java.util.Map;
  * @Date 2017/2/24 11:09
  */
 @RestController
-@RequestMapping(value = "boss/user/manage")
+@RequestMapping(value = "boss/userManage")
 public class UserManageController {
 
     @Autowired
@@ -92,6 +92,40 @@ public class UserManageController {
             response.setMessage("查询成功");
         }
         pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 根据条件查看VIP列表
+     *
+     * @param name
+     * @param phone
+     * @param authstatus
+     * @param begintime
+     * @param endtime
+     * @param type
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "根据条件查看VIP列表", notes = "根据条件用于查看VIP用户列表", response = Response.class)
+    @RequestMapping(value = "query_condition_vip_list", method = RequestMethod.POST)
+    public Response queryByConditionvipList(@ApiParam(value = "用户名") @RequestParam(required = false) String name,
+                                            @ApiParam(value = "手机号") @RequestParam(required = false) String phone,
+                                            @ApiParam(value = "实名认证0失败1成功2驳回3未认证") @RequestParam(required = false) String authstatus,
+                                            @ApiParam(value = "申请日期-开始时间") @RequestParam(required = false) String begintime,
+                                            @ApiParam(value = "申请日期-结束时间") @RequestParam(required = false) String endtime,
+                                            @ApiParam(value = "排序方式1 按加V时间拍，2按会员等级排") @RequestParam(required = false) String type,
+                                            @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                            @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<UserVo> pager = new Paging<UserVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<UserVo> list = userManageFacade.queryByConditionvipList(name, phone, authstatus, begintime, endtime, type, pager);
+        pager.result(list);
+        if (response.getCode() == 200) {
+            response.setMessage("查询车广告");
+        }
         response.setData(pager);
         return response;
     }

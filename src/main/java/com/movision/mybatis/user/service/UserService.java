@@ -340,6 +340,23 @@ public class UserService {
         }
     }
 
+    /**
+     * 根据条件查看VIP列表
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<UserVo> queryByConditionvipList(Map map, Paging<UserVo> pager) {
+        try {
+            log.info("根据条件查看VIP列表");
+            return userMapper.findAllQueryByConditionvipList(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据条件查看VIP列表异常");
+            throw e;
+        }
+    }
+
     public int updateByPrimaryKeySelective(User user) {
         try {
             log.info("修改个人资料");

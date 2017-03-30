@@ -75,6 +75,16 @@ public class UserVo {
 
     private Integer zansum;//被点赞数
 
+    private Integer authstatus;//实名认证状态
+
+    public Integer getAuthstatus() {
+        return authstatus;
+    }
+
+    public void setAuthstatus(Integer authstatus) {
+        this.authstatus = authstatus;
+    }
+
     public Integer getZansum() {
         return zansum;
     }

@@ -76,6 +76,8 @@ public interface UserMapper {
 
     List<User> findAllQueryCircleManList(RowBounds rowBounds);
 
+    List<UserVo> findAllQueryByConditionvipList(Map map, RowBounds rowBounds);
+
     List<UserVo> findAllqueryAddVSortUser(Map map, RowBounds rowBounds);
 
     List<UserVo> findAllQueryUniteConditionByApply(Map map, RowBounds rowBounds);

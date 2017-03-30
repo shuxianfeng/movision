@@ -90,6 +90,63 @@ public class UserManageFacade {
      */
     public List<UserVo> queryVipList(Paging<UserVo> pager) {
         List<UserVo> users = userService.findAllqueryUserVIPByList(pager);//查询所有VIP用户
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getAuthstatus() == null) {
+                users.get(i).setAuthstatus(3);
+            }
+        }
+        return users;
+    }
+
+    /**
+     * 根据条件查看VIP列表
+     *
+     * @param name
+     * @param phone
+     * @param authstatus
+     * @param begintime
+     * @param endtime
+     * @param type
+     * @param pager
+     * @return
+     */
+    public List<UserVo> queryByConditionvipList(String name, String phone, String authstatus, String begintime, String endtime, String type, Paging<UserVo> pager) {
+        Map map = new HashedMap();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        if (StringUtil.isNotEmpty(name)) {
+            map.put("name", name);
+        }
+        if (StringUtil.isNotEmpty(phone)) {
+            map.put("phone", phone);
+        }
+        if (StringUtil.isNotEmpty(authstatus)) {
+            if (Integer.parseInt(authstatus) == 3) {//为3时就是查未审核的用户，数据库中为null
+                map.put("authstatus", null);
+            } else {
+                map.put("authstatus", authstatus);
+            }
+        }
+        Date beg = null;
+        Date end = null;
+        if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
+            try {
+                beg = format.parse(begintime);
+                end = format.parse(endtime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            map.put("begintime", beg);
+            map.put("endtime", end);
+        }
+        if (StringUtil.isNotEmpty(type)) {
+            map.put("type", type);
+        }
+        List<UserVo> users = userService.queryByConditionvipList(map, pager);
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getAuthstatus() == null) {
+                users.get(i).setAuthstatus(3);
+            }
+        }
         return users;
     }
 
@@ -224,7 +281,7 @@ public class UserManageFacade {
         Date beg = null;
         Date end = null;
         if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 beg = format.parse(begintime);
                 end = format.parse(endtime);
@@ -274,6 +331,11 @@ public class UserManageFacade {
             map.put("login", login);//登录状态
         }
         List<UserAll> list = userService.queryAllUserList(pager, map);
+        for (int j = 0; j < list.size(); j++) {
+            if (list.get(j).getAuthstatus() == null) {
+                list.get(j).setAuthstatus(3);//如果当前用户没有实名认证 返回3作为提示
+            }
+        }
         for (int i = 0; i < list.size(); i++) {
             String resault = returnLoginType(list.get(i).getQq(), list.get(i).getOpenid(), list.get(i).getSina());
             list.get(i).setLogin(resault);

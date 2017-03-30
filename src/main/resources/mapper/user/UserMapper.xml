@@ -492,6 +492,55 @@
         FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE level>0 AND status=0 ORDER BY intime
     </select>
 
+    <!-- 根据条件查询vip列表  -->
+    <select id="findAllQueryByConditionvipList" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,
+        (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) AS autonym,
+        (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
+        (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
+        (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
+        p1.userid=u.id AND p1.isdel=0)) AS exceptional,
+        (SELECT COALESCE(SUM(collectsum),0) FROM yw_post p2 WHERE p2.userid=u.id AND p2.isdel=0) AS becollectsum,
+        (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid IN (SELECT p5.id FROM yw_post p5 WHERE p5.userid=u.id AND
+        p5.isdel=0)) AS besharesum,
+        (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=u.id AND p3.isdel=0) AS commentsum,
+        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=u.id AND p4.isdel=0) AS
+        zansum,u.fans,vd.apply_time AS applydate,au.authstatus
+        FROM (yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id) LEFT JOIN yw_autonym_authentication au ON
+        au.userid=u.id WHERE u.level>0 AND u.status=0
+        <if test="name!=null">
+            AND u.nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="phone!=null">
+            AND u.phone=#{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="begintime!=null and endtime!=null">
+            AND u.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
+        <if test="authstatus==0">
+            AND au.authstatus=#{authstatus,jdbcType=INTEGER}
+        </if>
+        <if test="authstatus==1">
+            AND au.authstatus=#{authstatus,jdbcType=INTEGER}
+        </if>
+        <if test="authstatus==2">
+            AND au.authstatus=#{authstatus,jdbcType=INTEGER}
+        </if>
+        <if test="authstatus==3">
+            AND au.authstatus IS NULL
+        </if>
+        <if test="type==1">
+            ORDER BY applydate DESC
+        </if>
+        <if test="type==2">
+            ORDER BY level DESC
+        </if>
+        <if test="type==null">
+            ORDER BY intime
+        </if>
+    </select>
+
     <select id="findAllQueryIssuePostManList" resultType="com.movision.mybatis.bossUser.entity.BossUser">
         SELECT id,username FROM yw_admin_user WHERE isdel=0 AND status=0 AND username IS NOT NULL AND phone IS NOT NULL
     </select>
