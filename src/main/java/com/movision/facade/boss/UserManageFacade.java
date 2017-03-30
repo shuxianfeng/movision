@@ -272,7 +272,7 @@ public class UserManageFacade {
         Date end = null;
         //对时间做转换 毫秒转 日期类型
         if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 beg = format.parse(begintime);
                 end = format.parse(endtime);

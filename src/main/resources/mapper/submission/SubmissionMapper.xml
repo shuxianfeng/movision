@@ -149,14 +149,14 @@
 
     <select id="findAllqueryUniteConditionByContribute" resultType="com.movision.mybatis.submission.entity.SubmissionVo"
             parameterType="java.util.Map">
-        SELECT s.id,s.title,s.videourl,s.userid,s.email,s.comment,s.status,u.nickname,u.level,de.apply_time AS intime
-        FROM (yw_submission s LEFT JOIN yw_user u ON s.userid=u.id) LEFT JOIN yw_apply_vip_detail de ON de.userid=u.id
+        SELECT s.id,s.title,s.videourl,s.userid,s.email,s.comment,s.status,u.nickname,u.level,s.intime
+        FROM yw_submission s LEFT JOIN yw_user u ON s.userid=u.id
         WHERE 1
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>
-        <if test="email">
-            AND s.email=#{email.jdbcType=VARCHAR}
+        <if test="email!=null">
+            AND s.email LIKE concat('%',#{email,jdbcType=VARCHAR},'%')
         </if>
         <if test="type!=null">
             AND s.status=#{type,jdbcType=INTEGER}
@@ -170,7 +170,7 @@
             ]]>
         </if>
         <if test="begintime!=null and endtime!=null">
-            AND s.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+            AND s.intime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}
         </if>
     </select>
 
