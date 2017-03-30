@@ -3,7 +3,6 @@ package com.movision.mybatis.bossUser.service;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.mapper.BossUserMapper;
 import com.movision.utils.pagination.model.Paging;
-import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,13 +81,13 @@ public class BossUserService {
         }
     }
 
-    public Boolean updateUserLoginInfo(BossUser bossUser) {
+    public Boolean updateUserLoginTime(BossUser bossUser) {
         try {
-            log.info("更新boss用户登录信息, bossUser = " + bossUser.toString());
-            int n = bossUserMapper.updateBossUserLoginInfo(bossUser);
+            log.info("更新boss用户登录时间, bossUser = " + bossUser.toString());
+            int n = bossUserMapper.updateBossUserLoginTime(bossUser);
             return n == 1;
         } catch (Exception e) {
-            log.error("更新boss用户登录信息失败");
+            log.error("更新boss用户登录时间失败");
             throw e;
         }
     }

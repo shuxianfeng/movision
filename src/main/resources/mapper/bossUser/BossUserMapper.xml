@@ -23,7 +23,8 @@
         id, name, phone, username, password, issuper, status, isdel,
         createtime,
         afterlogintime,
-        beforelogintime,iscircle,circlemanagement,contributing,common
+        beforelogintime,
+        iscircle,circlemanagement,contributing,common
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -206,7 +207,7 @@
         where username = #{username}
     </select>
 
-    <update id="updateBossUserLoginInfo" parameterType="com.movision.mybatis.bossUser.entity.BossUser">
+    <update id="updateBossUserLoginTime" parameterType="com.movision.mybatis.bossUser.entity.BossUser">
         update yw_admin_user
         SET afterlogintime = beforelogintime,
         beforelogintime = now()
@@ -223,6 +224,7 @@
     <select id="findAllBossUser" resultType="java.util.HashMap" parameterType="java.util.HashMap">
         SELECT
         id, name, phone, username, issuper, status, isdel,
+        iscircle, circlemanagement, contributing, common,
         date_format(createtime,'%Y-%m-%d %H:%i:%s') createtime,
         date_format(afterlogintime,'%Y-%m-%d %H:%i:%s') afterlogintime,
         date_format(beforelogintime,'%Y-%m-%d %H:%i:%s') beforelogintime
@@ -240,7 +242,8 @@
 
     <select id="selectBossUserDetail" resultType="java.util.HashMap" parameterType="java.lang.Integer">
         select
-        u.id as userid, u.name, u.phone, r.id as roleid, r.rolename, u.issuper,u.username
+        u.id as userid, u.name, u.phone, r.id as roleid, r.rolename, u.issuper, u.username,
+        u.iscircle, u.circlemanagement, u.contributing, u.common
         FROM yw_admin_user u
         LEFT JOIN yw_admin_user_role ur ON ur.userid = u.id
         LEFT JOIN yw_admin_role r ON r.id = ur.roleid

@@ -63,7 +63,8 @@ public class BossRealm extends AuthorizingRealm {
         //封装自定义principle对象
         ShiroBossUser shiroBossUser = new ShiroBossUser(bossUser.getId(), bossUser.getName(), bossUser.getPhone(), bossUser.getUsername(),
                 bossUser.getPassword(), bossUser.getIssuper(), bossUser.getStatus(), bossUser.getIsdel(), bossUser.getCreatetime(),
-                bossUser.getAfterlogintime(), bossUser.getBeforelogintime(), roleid, accid, imtoken);
+                bossUser.getAfterlogintime(), bossUser.getBeforelogintime(), roleid, accid, imtoken,
+                bossUser.getIscircle(), bossUser.getCirclemanagement(), bossUser.getContributing(), bossUser.getCommon());
 
         log.info("realm name = " + getName());
         AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
@@ -144,6 +145,51 @@ public class BossRealm extends AuthorizingRealm {
         private Integer role;
         private String accid;
         private String imtoken;
+        //是否是圈主 0否 1是
+        private Integer iscircle;
+        //是否是圈子管理员 0否 1是
+        private Integer circlemanagement;
+        //是否是特约嘉宾 0否 1是
+        private Integer contributing;
+        //是否是普通管理员 0否 1是
+        private Integer common;
+
+        public void setImtoken(String imtoken) {
+            this.imtoken = imtoken;
+        }
+
+        public void setIscircle(Integer iscircle) {
+            this.iscircle = iscircle;
+        }
+
+        public void setCirclemanagement(Integer circlemanagement) {
+            this.circlemanagement = circlemanagement;
+        }
+
+        public void setContributing(Integer contributing) {
+            this.contributing = contributing;
+        }
+
+        public void setCommon(Integer common) {
+            this.common = common;
+        }
+
+        public Integer getIscircle() {
+
+            return iscircle;
+        }
+
+        public Integer getCirclemanagement() {
+            return circlemanagement;
+        }
+
+        public Integer getContributing() {
+            return contributing;
+        }
+
+        public Integer getCommon() {
+            return common;
+        }
 
         public void setAccid(String accid) {
             this.accid = accid;
@@ -263,7 +309,8 @@ public class BossRealm extends AuthorizingRealm {
             return role;
         }
 
-        public ShiroBossUser(Integer id, String name, String phone, String username, String password, Integer issuper, Integer status, Integer isdel, Date createtime, Date afterlogintime, Date beforelogintime, Integer role, String accid, String imtoken) {
+
+        public ShiroBossUser(Integer id, String name, String phone, String username, String password, Integer issuper, Integer status, Integer isdel, Date createtime, Date afterlogintime, Date beforelogintime, Integer role, String accid, String imtoken, Integer iscircle, Integer circlemanagement, Integer contributing, Integer common) {
             this.id = id;
             this.name = name;
             this.phone = phone;
@@ -278,6 +325,10 @@ public class BossRealm extends AuthorizingRealm {
             this.role = role;
             this.accid = accid;
             this.imtoken = imtoken;
+            this.iscircle = iscircle;
+            this.circlemanagement = circlemanagement;
+            this.contributing = contributing;
+            this.common = common;
         }
 
         @Override
@@ -297,6 +348,10 @@ public class BossRealm extends AuthorizingRealm {
                     ", role=" + role +
                     ", accid='" + accid + '\'' +
                     ", imtoken='" + imtoken + '\'' +
+                    ", iscircle=" + iscircle +
+                    ", circlemanagement=" + circlemanagement +
+                    ", contributing=" + contributing +
+                    ", common=" + common +
                     '}';
         }
 

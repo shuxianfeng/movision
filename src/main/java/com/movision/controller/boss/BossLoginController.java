@@ -2,7 +2,6 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.common.constant.SessionConstant;
-import com.movision.common.util.ShiroUtil;
 import com.movision.facade.user.BossUserFacade;
 import com.movision.facade.user.MenuFacade;
 import com.movision.mybatis.bossUser.entity.BossUser;
@@ -77,7 +76,7 @@ public class BossLoginController {
             BossRealm.ShiroBossUser shiroBossUser = (BossRealm.ShiroBossUser) currentUser.getPrincipal();
             record.setId(shiroBossUser.getId());
             //更新Boss用户信息
-            if (bossUserFacade.updateLoginInfo(record)) {
+            if (bossUserFacade.updateLoginTime(record)) {
                 log.info("更新Boss用户登录信息成功");
             } else {
                 log.warn("更新Boss用户登录信息失败");
