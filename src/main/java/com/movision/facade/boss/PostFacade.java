@@ -1127,7 +1127,7 @@ public class PostFacade {
      */
     public List<PostList> postSearch(String title, String circleid,
                                      String userid, String postcontent, String endtime,
-                                     String begintime, String pai, String essencedate, Paging<PostList> pager) {
+                                     String begintime, String pai, String essencedate, String uid, String price, Paging<PostList> pager) {
         Map map = new HashedMap();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date end = null;
@@ -1146,6 +1146,12 @@ public class PostFacade {
         }
         map.put("endtime", end);
         map.put("begintime", beg);
+        if (StringUtil.isNotEmpty(uid)) {
+            map.put("uid", uid);//从用户列表跳转过来传参
+        }
+        if (StringUtil.isNotEmpty(price) && StringUtil.isNotEmpty(uid)) {
+            map.put("price", price);//从用户列表跳转过来传参
+        }
         //精选时间
         if (!StringUtils.isEmpty(essencedate)) {
             try {

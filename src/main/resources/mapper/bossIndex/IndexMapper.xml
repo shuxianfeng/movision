@@ -42,11 +42,12 @@
 
     <select id="queryAboveStatistics" resultType="com.movision.mybatis.bossIndex.entity.AboveStatistics">
         SELECT COUNT(1) AS posts,
-        (SELECT COUNT(1) FROM yw_orders WHERE isdel=0) AS orders,
-        (SELECT COUNT(1) FROM yw_goods WHERE isdel=0) AS goods,
-        <![CDATA[ (SELECT COUNT(1) FROM yw_user WHERE status=0 AND level>0) AS vip,]]>
-        (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND isactive=0 AND isessencepool=1) AS quintessence
-        FROM yw_post WHERE isdel=0 AND isactive=0
+        (SELECT COUNT(1) FROM yw_orders o WHERE o.isdel=0 AND date (o.intime) = curdate()) AS orders,
+        (SELECT COUNT(1) FROM yw_goods g WHERE g.isdel=0 AND date (g.onlinetime) = curdate()) AS goods,
+        <![CDATA[ (SELECT COUNT(1) FROM yw_user u WHERE u.status=0 AND u.level>0 AND date (u.intime) = curdate()) AS vip,]]>
+        (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND isactive=0 AND isessencepool=1 AND date (intime) = curdate()) AS
+        quintessence
+        FROM yw_post p WHERE p.isdel=0 AND p.isactive=0 AND date (p.intime) = curdate()
     </select>
 
 </mapper>

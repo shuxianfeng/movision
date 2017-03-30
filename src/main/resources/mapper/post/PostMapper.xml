@@ -1478,14 +1478,23 @@
 
     <select id="findAllpostSearch" parameterType="com.movision.mybatis.post.entity.PostSpread"
             resultType="com.movision.mybatis.post.entity.PostList">
-        SELECT p.*,(SELECT u.nickname FROM yw_user u WHERE u.id=p.userid) as nickname,
+        SELECT p.*,u.nickname,
         (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
         (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
         (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
         (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid) AS circlename,
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS category
-        FROM yw_post AS p
+        FROM yw_post AS p LEFT JOIN yw_user u ON u.id=p.userid
         WHERE p.isdel=0 AND p.isactive=0
+        <if test="uid!=null">
+            AND u.id=#{uid,jdbcType=INTEGER}
+        </if>
+        <if test="price==5">
+            AND p.isactive=0
+        </if>
+        <if test="price==6">
+            AND p.isessence=1
+        </if>
         <if test="title!=null">
             AND p.title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
         </if>
