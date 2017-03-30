@@ -678,10 +678,11 @@ public class ImFacade {
                 SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("propelling_movement_infomation"));
             }
             }
+        int totalPageNum = (list.size() + pageSize - 1) / pageSize;
         if (list.size() > 17) {
-            Paging pa = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-            List<String> phone = systemPushService.findPhone(pa);
-            for (int j = 0; j < list.size() / pageSize; j++) {
+            for (int j = 0; j < totalPageNum; j++) {
+                Paging pa = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+                List<String> phone = systemPushService.findPhone(pa);
                 String mobile = "";
                 for (int i = 0; i < phone.size(); i++) {
                     mobile += phone.get(i) + ",";
