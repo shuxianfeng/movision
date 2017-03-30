@@ -65,12 +65,8 @@
             status,
             isdel,
             createtime,
-            <if test="afterlogintime != null">
                 afterlogintime,
-            </if>
-            <if test="beforelogintime != null">
                 beforelogintime,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -94,12 +90,8 @@
             0,
             0,
             now(),
-            <if test="afterlogintime != null">
-                #{afterlogintime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="beforelogintime != null">
-                #{beforelogintime,jdbcType=TIMESTAMP},
-            </if>
+            now(),
+            now(),
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.bossUser.entity.BossUser">
