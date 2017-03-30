@@ -408,8 +408,8 @@
 
     <insert id="registerAccount" parameterType="com.movision.mybatis.user.entity.RegisterUser" useGeneratedKeys="true"
             keyProperty="id">
-        INSERT INTO yw_user (phone, intime, status, token)
-        VALUES (#{phone}, #{intime}, #{status}, #{token})
+        INSERT INTO yw_user (phone, intime, status, token, nickname)
+        VALUES (#{phone}, #{intime}, #{status}, #{token}, #{nickname})
     </insert>
     <select id="queryUserByOpenid" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT u.openid FROM yw_user u WHERE id=#{userid,jdbcType=INTEGER}

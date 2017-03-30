@@ -31,6 +31,18 @@ public class RegisterUser implements Serializable {
     @ApiModelProperty(value = "用户身份令牌")
     private String token;
 
+    @ApiModelProperty(value = "昵称")
+    private String nickname;
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getNickname() {
+
+        return nickname;
+    }
+
     public void setToken(String token) {
         this.token = token;
     }
@@ -90,5 +102,17 @@ public class RegisterUser implements Serializable {
         this.status = status;
     }
 
-
+    @Override
+    public String toString() {
+        return "RegisterUser{" +
+                "id=" + id +
+                ", phone='" + phone + '\'' +
+                ", account='" + account + '\'' +
+                ", mobileCheckCode='" + mobileCheckCode + '\'' +
+                ", intime=" + intime +
+                ", status=" + status +
+                ", token='" + token + '\'' +
+                ", nickname='" + nickname + '\'' +
+                '}';
+    }
 }

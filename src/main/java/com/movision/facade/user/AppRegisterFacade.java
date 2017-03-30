@@ -13,9 +13,11 @@ import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.utils.DateUtils;
+import com.movision.utils.StrUtil;
 import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
@@ -195,10 +197,14 @@ public class AppRegisterFacade {
         int memberId = 0;
         try {
             if (member != null) {
-
-                if (member.getPhone() != null) {
+                String phone = member.getPhone();
+                if (StringUtils.isNotEmpty(phone)) {
                     // 手机默认注册成功
                     member.setStatus(Integer.parseInt(UserConstants.USER_STATUS.normal.toString()));
+                    // 默认昵称设置
+                    if (StringUtils.isEmpty(member.getNickname())) {
+                        member.setNickname(StrUtil.genDefaultNickNameByPhone(phone));
+                    }
                 }
                 member.setIntime(new Date());
 
