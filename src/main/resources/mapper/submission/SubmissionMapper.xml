@@ -149,7 +149,9 @@
 
     <select id="findAllqueryUniteConditionByContribute" resultType="com.movision.mybatis.submission.entity.SubmissionVo"
             parameterType="java.util.Map">
-        SELECT s.*,u.nickname,u.level FROM yw_submission s LEFT JOIN yw_user u ON s.userid=u.id WHERE 1
+        SELECT s.id,s.title,s.videourl,s.userid,s.email,s.comment,s.status,u.nickname,u.level,de.apply_time AS intime
+        FROM (yw_submission s LEFT JOIN yw_user u ON s.userid=u.id) LEFT JOIN yw_apply_vip_detail de ON de.userid=u.id
+        WHERE 1
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>

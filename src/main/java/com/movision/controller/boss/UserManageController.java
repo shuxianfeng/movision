@@ -114,8 +114,8 @@ public class UserManageController {
     public Response queryByConditionvipList(@ApiParam(value = "用户名") @RequestParam(required = false) String name,
                                             @ApiParam(value = "手机号") @RequestParam(required = false) String phone,
                                             @ApiParam(value = "实名认证0失败1成功2驳回3未认证") @RequestParam(required = false) String authstatus,
-                                            @ApiParam(value = "申请日期-开始时间") @RequestParam(required = false) String begintime,
-                                            @ApiParam(value = "申请日期-结束时间") @RequestParam(required = false) String endtime,
+                                            @ApiParam(value = "加V日期-开始时间") @RequestParam(required = false) String begintime,
+                                            @ApiParam(value = "加V日期-结束时间") @RequestParam(required = false) String endtime,
                                             @ApiParam(value = "排序方式1 按加V时间拍，2按会员等级排") @RequestParam(required = false) String type,
                                             @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                             @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
