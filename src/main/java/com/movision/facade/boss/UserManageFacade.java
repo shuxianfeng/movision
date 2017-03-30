@@ -125,11 +125,7 @@ public class UserManageFacade {
             map.put("phone", phone);
         }
         if (StringUtil.isNotEmpty(authstatus)) {
-            if (Integer.parseInt(authstatus) == 3) {//为3时就是查未审核的用户，数据库中为null
-                map.put("authstatus", null);
-            } else {
                 map.put("authstatus", authstatus);
-            }
         }
         Date beg = null;
         Date end = null;
@@ -199,21 +195,33 @@ public class UserManageFacade {
      * @param pager
      * @return
      */
-    public List<UserVo> queryUniteConditionByApply(String username, String phone, String begintime, String endtime, Paging<UserVo> pager) {
+    public List<UserVo> queryUniteConditionByApply(String username, String phone, String authstatus, String begintime, String endtime, String type, Paging<UserVo> pager) {
         Map map = new HashedMap();
-        String beg = null;
-        String end = null;
-        if (begintime != null && endtime != null) {
+        Date beg = null;
+        Date end = null;
+        if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Long l = new Long(begintime);
-            Long o = new Long(endtime);
-            beg = format.format(l);
-            end = format.format(o);
+            try {
+                beg = format.parse(begintime);
+                end = format.parse(endtime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
-        map.put("username", username);
-        map.put("phone", phone);
+        if (StringUtil.isNotEmpty(username)) {
+            map.put("username", username);
+        }
+        if (StringUtil.isNotEmpty(phone)) {
+            map.put("phone", phone);
+        }
+        if (StringUtil.isNotEmpty(authstatus)) {
+            map.put("authstatus", authstatus);
+        }
         map.put("begintime", beg);
         map.put("endtime", end);
+        if (StringUtil.isNotEmpty(type)) {
+            map.put("type", type);
+        }
         List<UserVo> users = userService.queryUniteConditionByApply(map, pager);
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getAuthstatus() == null) {
@@ -236,21 +244,31 @@ public class UserManageFacade {
      * @return
      */
     public List<SubmissionVo> queryUniteConditionByContribute(String nickname, String email, String type, String vip, String begintime, String endtime, Paging<SubmissionVo> pager) {
-        String beg = null;
-        String end = null;
+        Date beg = null;
+        Date end = null;
         //对时间做转换 毫秒转 日期类型
         if (begintime != null && endtime != null) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Long l = new Long(begintime);
-            Long o = new Long(endtime);
-            beg = format.format(l);
-            end = format.format(o);
+            try {
+                beg = format.parse(begintime);
+                end = format.parse(endtime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         Map map = new HashedMap();
-        map.put("nickname", nickname);
-        map.put("email", email);
-        map.put("type", type);
-        map.put("vip", vip);
+        if (StringUtil.isNotEmpty(nickname)) {
+            map.put("nickname", nickname);
+        }
+        if (StringUtil.isNotEmpty(email)) {
+            map.put("email", email);
+        }
+        if (StringUtil.isNotEmpty(type)) {
+            map.put("type", type);
+        }
+        if (StringUtil.isNotEmpty(vip)) {
+            map.put("vip", vip);
+        }
         map.put("begintime", beg);
         map.put("endtime", end);
         return submissionService.queryUniteConditionByContribute(map, pager);

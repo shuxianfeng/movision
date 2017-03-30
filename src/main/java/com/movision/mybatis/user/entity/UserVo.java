@@ -77,6 +77,16 @@ public class UserVo {
 
     private Integer authstatus;//实名认证状态
 
+    private Date addVtime;//加V时间
+
+    public Date getAddVtime() {
+        return addVtime;
+    }
+
+    public void setAddVtime(Date addVtime) {
+        this.addVtime = addVtime;
+    }
+
     public Integer getAuthstatus() {
         return authstatus;
     }

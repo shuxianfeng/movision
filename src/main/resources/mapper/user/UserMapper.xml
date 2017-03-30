@@ -606,16 +606,33 @@
         AND p5.isdel=0)) AS besharesum,
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
         (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
-        zansum,u.fans,u.applydate
-        FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE vd.userid=u.id AND u.status=0
+        zansum,u.fans,u.applydate,aut.authstatus,vd.apply_time AS addVtime
+        FROM (yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id) LEFT JOIN yw_autonym_authentication aut ON
+        aut.userid=u.id
+        WHERE vd.userid=u.id AND u.status=0
         <if test="username!=null">
             AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
         </if>
         <if test="phone!=null">
             AND u.phone=#{phone,jdbcType=VARCHAR}
         </if>
+        <if test="authstatus==1">
+            AND aut.authstatus=#{authstatus,jdbcType=INTEGER}
+        </if>
+        <if test="authstatus==2">
+            AND aut.authstatus=#{authstatus,jdbcType=INTEGER}
+        </if>
+        <if test="authstatus==3">
+            AND aut.authstatus IS NULL
+        </if>
         <if test="begintime!=null and endtime!=null">
             AND vd.apply_time BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
+        <if test="type==1">
+            ORDER BY vd.apply_time DESC
+        </if>
+        <if test="type==2">
+            ORDER BY u.level DESC
         </if>
     </select>
 
@@ -634,8 +651,14 @@
         <if test="phone!=null">
             AND u.phone=#{phone,jdbcType=VARCHAR}
         </if>
-        <if test="authentication!=null">
+        <if test="authentication==1">
             AND aut.authstatus=#{authentication,jdbcType=INTEGER}
+        </if>
+        <if test="authentication==2">
+            AND aut.authstatus=#{authentication,jdbcType=INTEGER}
+        </if>
+        <if test="authentication==3">
+            AND aut.authstatus IS nu
         </if>
         <if test="level!=null">
             AND level=#{level,jdbcType=INTEGER}
