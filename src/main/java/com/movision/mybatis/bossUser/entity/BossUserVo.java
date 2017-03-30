@@ -147,6 +147,10 @@ public class BossUserVo implements Serializable {
                 ", issuper=" + issuper +
                 ", newPassword='" + newPassword + '\'' +
                 ", roleid='" + roleid + '\'' +
+                ", iscircle=" + iscircle +
+                ", circlemanagement=" + circlemanagement +
+                ", contributing=" + contributing +
+                ", common=" + common +
                 '}';
     }
 }

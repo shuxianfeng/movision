@@ -187,7 +187,8 @@ public class ImFacade {
      * 注册云信用户， 并且保存用户信息在本地
      *
      * @param imUser
-     * @param currentUserid
+     * @param currentUserid 注册IM账号对应的userid
+     * @param systemType 系统类型，1：APP， 0：BOSS
      * @throws IOException
      */
     public void registerImUserAndSave(ImUser imUser, int currentUserid, int systemType) throws IOException {
