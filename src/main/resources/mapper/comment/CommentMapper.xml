@@ -10,9 +10,11 @@
     <result column="zansum" property="zansum" jdbcType="INTEGER" />
     <result column="postid" property="postid" jdbcType="INTEGER"/>
     <result column="isdel" property="isdel" jdbcType="VARCHAR"/>
+    <result column="iscontribute" property="iscontribute" jdbcType="INTEGER"/>
+    <result column="status" property="status" jdbcType="INTEGER"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, userid, pid, content, intime, zansum,isdel
+    id, userid, pid, content, intime, zansum, isdel, iscontribute, status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
