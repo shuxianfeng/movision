@@ -57,8 +57,7 @@ public class BossLoginController {
             //核心代码
             token = new UsernamePasswordToken(username, password.toCharArray());
             currentUser.login(token);
-            jsonResult.setData(username);
-            jsonResult.setMessage("登录成功");
+
 
         } catch (UnknownAccountException e) {
             jsonResult.setCode(400);
@@ -85,12 +84,15 @@ public class BossLoginController {
             }
 
             //session中存入当前用户信息
-            session.setAttribute(SessionConstant.BOSS_USER, currentUser.getPrincipal());
+            session.setAttribute(SessionConstant.BOSS_USER, shiroBossUser);
             session.removeAttribute(SessionConstant.APP_USER);
 
             //session中存入该用户所属的角色所对应的菜单信息
             List<Map<String, Object>> menuList = menuFacade.getAuthroizeMenu(shiroBossUser.getRole());
             session.setAttribute(SessionConstant.ACCESS_MENU, menuList);
+
+            jsonResult.setData(shiroBossUser);
+            jsonResult.setMessage("登录成功");
 
             System.out.println("boss 用户[" + username + "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
         } else {
