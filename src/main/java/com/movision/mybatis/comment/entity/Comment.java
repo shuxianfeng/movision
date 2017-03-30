@@ -19,6 +19,10 @@ public class Comment {
 
     private String isdel;
 
+    private Integer iscontribute;//是否为特邀嘉宾的评论：0否 1是
+
+    private Integer status;//审核状态：0待审核 1审核通过 2审核不通过（iscontribute为1时不为空）
+
     public String getIsdel() {
         return isdel;
     }
@@ -81,5 +85,21 @@ public class Comment {
 
     public Integer getPostid(){
         return  postid;
+    }
+
+    public Integer getIscontribute() {
+        return iscontribute;
+    }
+
+    public void setIscontribute(Integer iscontribute) {
+        this.iscontribute = iscontribute;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }
