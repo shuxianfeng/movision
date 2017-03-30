@@ -471,7 +471,9 @@
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
         (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
         zansum,u.fans,u.applydate
-        FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE vd.userid=u.id AND u.level=0 AND
+        FROM (yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id) LEFT JOIN yw_autonym_authentication au ON
+        au.userid=u.id
+        WHERE vd.userid=u.id AND u.level=0 AND
         u.status=0
     </select>
 
@@ -489,7 +491,9 @@
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=u.id AND p3.isdel=0) AS commentsum,
         (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=u.id AND p4.isdel=0) AS
         zansum,u.fans,vd.apply_time AS applydate
-        FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE level>0 AND status=0 ORDER BY intime
+        FROM (yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id) LEFT JOIN yw_autonym_authentication au ON
+        au.userid=u.id
+        WHERE level>0 AND status=0 ORDER BY intime
     </select>
 
     <!-- 根据条件查询vip列表  -->

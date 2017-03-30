@@ -79,6 +79,11 @@ public class UserManageFacade {
      */
     public List<UserVo> queryApplyVipList(Paging<UserVo> pager) {
         List<UserVo> users = userService.findAllqueryUsers(pager);//查询所有申请加v用户
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getAuthstatus() == null) {
+                users.get(i).setAuthstatus(3);
+            }
+        }
         return users;
     }
 
@@ -209,7 +214,13 @@ public class UserManageFacade {
         map.put("phone", phone);
         map.put("begintime", beg);
         map.put("endtime", end);
-        return userService.queryUniteConditionByApply(map,pager);
+        List<UserVo> users = userService.queryUniteConditionByApply(map, pager);
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getAuthstatus() == null) {
+                users.get(i).setAuthstatus(3);
+            }
+        }
+        return users;
     }
 
     /**
@@ -429,6 +440,9 @@ public class UserManageFacade {
         for (int i = 0; i < list.size(); i++) {
             String resault = returnLoginType(list.get(i).getQq(), list.get(i).getOpenid(), list.get(i).getSina());
             list.get(i).setLogin(resault);
+            if (list.get(i).getAuthstatus() == null) {
+                list.get(i).setAuthstatus(3);
+            }
         }
         return list;
     }
