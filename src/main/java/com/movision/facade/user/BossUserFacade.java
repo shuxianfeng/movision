@@ -79,6 +79,10 @@ public class BossUserFacade {
         newBossUser.setUsername(bossUserVo.getUsername());
         newBossUser.setName(bossUserVo.getName());
         newBossUser.setIssuper(bossUserVo.getIssuper());
+        newBossUser.setIscircle(bossUserVo.getIscircle());
+        newBossUser.setCommon(bossUserVo.getCommon());
+        newBossUser.setCirclemanagement(bossUserVo.getCirclemanagement());
+        newBossUser.setContributing(bossUserVo.getContributing());
 
         this.validateBossNameIsExist(newBossUser);
         //修改密码
@@ -120,6 +124,10 @@ public class BossUserFacade {
         newBossUser.setPhone(phone);
         newBossUser.setUsername(bossUserVo.getUsername());
         newBossUser.setIssuper(bossUserVo.getIssuper());
+        newBossUser.setIscircle(bossUserVo.getIscircle());
+        newBossUser.setCommon(bossUserVo.getCommon());
+        newBossUser.setCirclemanagement(bossUserVo.getCirclemanagement());
+        newBossUser.setContributing(bossUserVo.getContributing());
 
         this.validateBossNameIsExist(newBossUser);
         //新增密码

@@ -12,6 +12,7 @@ import com.movision.mybatis.roleMenuRelation.service.RoleMenuRelationService;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,12 +75,23 @@ public class RoleFacade {
         }
     }
 
+    /**
+     * 修改角色信息
+     *
+     * @param remark 一定会有值
+     * @param name   一定会有值
+     * @param id
+     */
     public void updateRole(String remark, String name, int id) {
         Role role = new Role();
         role.setId(id);
         role.setRemark(remark);
-        role.setRolename(name);
-        this.validateRoleNameExist(role);
+
+        if (StringUtils.isNotEmpty(name)) {
+            role.setRolename(name);
+            this.validateRoleNameExist(role);
+        }
+
         roleService.updateRole(role);
     }
 

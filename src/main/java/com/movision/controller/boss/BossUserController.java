@@ -62,6 +62,7 @@ public class BossUserController {
             if (isCommon == 1) {
                 //如果是普管，则给他注册一个IM账号
                 ImUser imUser = new ImUser();
+                imUser.setName(bossUserVo.getUsername());
                 imUser.setAccid(CheckSumBuilder.getAccid(bossUserVo.getUsername()));    //此处是根据username来创建accid
                 imFacade.registerImUserAndSave(imUser, userid, ImConstant.TYPE_BOSS);
             }

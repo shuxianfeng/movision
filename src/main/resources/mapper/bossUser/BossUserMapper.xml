@@ -75,16 +75,16 @@
             createtime,
             afterlogintime,
             beforelogintime,
-            <if test="iscircle">
+            <if test="iscircle != null">
                 iscircle,
             </if>
-            <if test="circlemanagement">
+            <if test="circlemanagement != null">
                 circlemanagement,
             </if>
-            <if test="contributing">
+            <if test="contributing != null">
                 contributing,
             </if>
-            <if test="common">
+            <if test="common != null">
                 common,
             </if>
         </trim>
