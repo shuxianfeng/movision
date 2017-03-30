@@ -658,7 +658,7 @@
             AND aut.authstatus=#{authentication,jdbcType=INTEGER}
         </if>
         <if test="authentication==3">
-            AND aut.authstatus IS nu
+            AND aut.authstatus IS NULL
         </if>
         <if test="level!=null">
             AND level=#{level,jdbcType=INTEGER}
