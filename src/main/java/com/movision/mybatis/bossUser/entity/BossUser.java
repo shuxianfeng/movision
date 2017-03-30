@@ -30,6 +30,46 @@ public class BossUser implements Serializable {
     private Date afterlogintime;
     @ApiModelProperty(value = "本次登录时间")
     private Date beforelogintime;
+    @ApiModelProperty(value = "是否是圈主 0否 1是")
+    private Integer iscircle;
+    @ApiModelProperty(value = "是否是圈子管理员 0否 1是")
+    private Integer circlemanagement;
+    @ApiModelProperty(value = "是否是特约嘉宾 0否 1是")
+    private Integer contributing;
+    @ApiModelProperty(value = "是否是普通管理员 0否 1是")
+    private Integer common;
+
+    public Integer getIscircle() {
+        return iscircle;
+    }
+
+    public void setIscircle(Integer iscircle) {
+        this.iscircle = iscircle;
+    }
+
+    public Integer getCirclemanagement() {
+        return circlemanagement;
+    }
+
+    public void setCirclemanagement(Integer circlemanagement) {
+        this.circlemanagement = circlemanagement;
+    }
+
+    public Integer getContributing() {
+        return contributing;
+    }
+
+    public void setContributing(Integer contributing) {
+        this.contributing = contributing;
+    }
+
+    public Integer getCommon() {
+        return common;
+    }
+
+    public void setCommon(Integer common) {
+        this.common = common;
+    }
 
     public Integer getId() {
         return id;
