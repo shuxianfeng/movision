@@ -641,8 +641,7 @@
         (SELECT COUNT(1) FROM yw_coupon WHERE isdel=0 AND userid=u.id) AS coupon,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1) AS isessencesum
-        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE 1
-
+        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE 1 AND u.phone IS NOT NULL
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>
@@ -848,7 +847,8 @@
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1) AS isessencesum
         FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE u.id IN
-        (SELECT userid FROM yw_follow_circle fc WHERE fc.circleid=#{circleid,jdbcType=INTEGER} AND u.status=0
+        (SELECT userid FROM yw_follow_circle fc WHERE fc.circleid=#{circleid,jdbcType=INTEGER} AND u.status=0 AND
+        u.phone IS NOT NULL
         <if test="type!=null">
             AND date(fc.intime) = curdate()
         </if>

@@ -271,7 +271,7 @@ public class UserManageFacade {
         Date beg = null;
         Date end = null;
         //对时间做转换 毫秒转 日期类型
-        if (begintime != null && endtime != null) {
+        if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 beg = format.parse(begintime);
@@ -396,8 +396,12 @@ public class UserManageFacade {
             }
         }
         for (int i = 0; i < list.size(); i++) {
-            String resault = returnLoginType(list.get(i).getQq(), list.get(i).getOpenid(), list.get(i).getSina());
-            list.get(i).setLogin(resault);
+            if (list.get(i).getPhone() != null) {
+                list.get(i).setLogin("8");//如果用户手机号不为null那么手机号作为登录方式
+            } else {
+                String resault = returnLoginType(list.get(i).getQq(), list.get(i).getOpenid(), list.get(i).getSina());
+                list.get(i).setLogin(resault);
+            }
         }
         return list;
     }
@@ -465,8 +469,12 @@ public class UserManageFacade {
         String[] str = userids.split(",");
         for (String itm : str) {
             UserAll users = userService.queryUserById(Integer.parseInt(itm));
-            String resault = returnLoginType(users.getQq(), users.getOpenid(), users.getSina());
-            users.setLogin(resault);
+            if (users.getPhone() != null) {
+                users.setLogin("8");//代表手机登录
+            } else {
+                String resault = returnLoginType(users.getQq(), users.getOpenid(), users.getSina());
+                users.setLogin(resault);
+            }
             list.add(users);
         }
         return list;
@@ -486,8 +494,12 @@ public class UserManageFacade {
         map.put("type", type);
         List<UserAll> list = userService.queryAttentionUserList(map, pager);
         for (int i = 0; i < list.size(); i++) {
-            String resault = returnLoginType(list.get(i).getQq(), list.get(i).getOpenid(), list.get(i).getSina());
-            list.get(i).setLogin(resault);
+            if (list.get(i).getPhone() != null) {
+                list.get(i).setLogin("8");//代表手机号登录
+            } else {
+                String resault = returnLoginType(list.get(i).getQq(), list.get(i).getOpenid(), list.get(i).getSina());
+                list.get(i).setLogin(resault);
+            }
             if (list.get(i).getAuthstatus() == null) {
                 list.get(i).setAuthstatus(3);
             }
