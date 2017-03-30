@@ -4,10 +4,12 @@ import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public interface CommentMapper {
     int deleteByPrimaryKey(Integer id);
 
