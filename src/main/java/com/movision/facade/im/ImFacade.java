@@ -680,7 +680,7 @@ public class ImFacade {
             }
         int totalPageNum = (list.size() + pageSize - 1) / pageSize;
         if (list.size() > 17) {
-            for (int j = 0; j < totalPageNum; j++) {
+            for (int j = 0; j <= totalPageNum; j++) {
                 Paging pa = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
                 List<String> phone = systemPushService.findPhone(pa);
                 String mobile = "";
