@@ -194,8 +194,10 @@ public class AppLoginController {
 
                         //5 验证通过则在session中缓存登录用户信息
                         Session session = currentUser.getSession();
+                        //6 清除session中的boss用户信息
+                        session.removeAttribute(SessionConstant.BOSS_USER);
                         session.setAttribute(SessionConstant.APP_USER, currentUser.getPrincipal());
-                        //6 返回登录人的信息
+                        //7 返回登录人的信息
                         ShiroRealm.ShiroUser appuser = (ShiroRealm.ShiroUser) currentUser.getPrincipal();
                         if (null == appuser) {
                             response.setMsgCode(0);
@@ -207,8 +209,6 @@ public class AppLoginController {
                             returnMap.put("authorized", true);
                             returnMap.put("user", appuser);
                         }
-                        //7 清除session中的boss用户信息
-                        session.removeAttribute(SessionConstant.BOSS_USER);
 
                         response.setData(returnMap);
                     } else {
