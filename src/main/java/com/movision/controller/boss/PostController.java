@@ -900,10 +900,13 @@ public class PostController {
     @RequestMapping(value = {"/upload_active_pic"}, method = RequestMethod.POST)
     public Response updateMyInfo(@RequestParam(value = "file", required = false) MultipartFile file) {
 
-        String url = movisionOssClient.uploadObject(file, "img", "activity");
-        Map<String, String> map = new HashMap<>();
+        Map m = movisionOssClient.uploadObject(file, "img", "activity");
+        String url = String.valueOf(m.get("url"));
+        Map<String, Object> map = new HashMap<>();
         map.put("url", url);
         map.put("name", FileUtil.getFileNameByUrl(url));
+        map.put("width", m.get("width"));
+        map.put("height", m.get("height"));
         return new Response(map);
     }
 
@@ -917,10 +920,13 @@ public class PostController {
     @RequestMapping(value = {"/upload_post_img"}, method = RequestMethod.POST)
     public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file) {
 
-        String url = movisionOssClient.uploadObject(file, "img", "post");
-        Map<String, String> map = new HashMap<>();
+        Map m = movisionOssClient.uploadObject(file, "img", "post");
+        String url = String.valueOf(m.get("url"));
+        Map<String, Object> map = new HashMap<>();
         map.put("url", url);
         map.put("name", FileUtil.getFileNameByUrl(url));
+        map.put("width", m.get("width"));
+        map.put("height", m.get("height"));
         return new Response(map);
     }
 
@@ -936,10 +942,13 @@ public class PostController {
     @ApiOperation(value = "上传帖子相关视频", notes = "上传帖子相关视频", response = Response.class)
     @RequestMapping(value = "/upload_post_video", method = RequestMethod.POST)
     public Response queryApplyVipList(@RequestParam(value = "file", required = false) MultipartFile file) throws ServletException, IOException {
-        String url = movisionOssClient.uploadObject(file, "video", "post");
-        Map<String, String> map = new HashMap<>();
+        Map m = movisionOssClient.uploadObject(file, "video", "post");
+        String url = String.valueOf(m.get("url"));
+        Map<String, Object> map = new HashMap<>();
         map.put("url", url);
         map.put("name", FileUtil.getFileNameByUrl(url));
+        map.put("width", m.get("width"));
+        map.put("height", m.get("height"));
         return new Response(map);
     }
 
