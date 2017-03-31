@@ -66,7 +66,7 @@ public class FacadePost {
             parammap.put("userid", Integer.parseInt(userid));
         }
         PostVo vo = postService.queryPostDetail(parammap);
-        if (type.equals("1")) {
+        if (type.equals("1") || type.equals("2")) {
             Video video = postService.queryVideoUrl(Integer.parseInt(postid));
             vo.setVideourl(video.getVideourl());
             vo.setVideocoverimgurl(video.getBannerimgurl());

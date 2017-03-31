@@ -36,7 +36,7 @@ public class AppPostController {
     @RequestMapping(value = "detail", method = RequestMethod.POST)
     public Response queryPostDetail(@ApiParam(value = "帖子id") @RequestParam String postid,
                                     @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid,
-                                    @ApiParam(value = "帖子类型：0 普通帖 1 原生视频帖( isactive为0时该字段不为空)") @RequestParam String type) {
+                                    @ApiParam(value = "帖子类型：0 普通帖 1 原生视频帖( isactive为0时该字段不为空) 2 分享视频帖") @RequestParam String type) {
         Response response = new Response();
 
         PostVo post = facadePost.queryPostDetail(postid, userid, type);
@@ -117,7 +117,7 @@ public class AppPostController {
     }
 
 
-    @ApiOperation(value = "APP端发布普通帖子", notes = "用于APP端发布普通帖子的接口", response = Response.class)
+    @ApiOperation(value = "APP端发布帖子", notes = "用于APP端发布普通帖子的接口", response = Response.class)
     @RequestMapping(value = "releasePost", method = RequestMethod.POST)
     public Response releasePost(@ApiParam(value = "用户id") @RequestParam String userid,
                                 @ApiParam(value = "帖子类型：0 普通图文帖 1 原生视频帖 2 分享视频贴( isactive为0时该字段不为空)") @RequestParam String type,
@@ -162,6 +162,12 @@ public class AppPostController {
         response.setData(map);
         return response;
     }
+
+//    @ApiOperation(value = "APP端删帖接口", notes = "提供APP端登录的用户删除自己发布的帖子接口", response = Response.class)
+//    @RequestMapping(value = "delPost", method = RequestMethod.POST)
+//    public Response delPost(){
+//
+//    }
 
     /**
      * 帖子点赞接口
