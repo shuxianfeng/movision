@@ -671,25 +671,7 @@ public class GoodsController {
         return new Response(map);
     }
 
-    /**
-     * 上传套餐图片
-     *
-     * @param file
-     * @return
-     */
-    @ApiOperation(value = "上传套餐图片", notes = "上传套餐图片", response = Response.class)
-    @RequestMapping(value = {"/upload_combo_pic"}, method = RequestMethod.POST)
-    public Response updateMyComInfo(@RequestParam(value = "file", required = false) MultipartFile file) {
 
-        Map m = movisionOssClient.uploadObject(file, "img", "combo");
-        String url = String.valueOf(m.get("url"));
-        Map<String, Object> map = new HashMap<>();
-        map.put("url", url);
-        map.put("name", FileUtil.getFileNameByUrl(url));
-        map.put("width", m.get("width"));
-        map.put("height", m.get("height"));
-        return new Response(map);
-    }
 
     /**
      * 商品管理*--套餐列表
