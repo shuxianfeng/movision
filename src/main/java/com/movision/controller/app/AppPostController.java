@@ -3,6 +3,7 @@ package com.movision.controller.app;
 import com.movision.common.Response;
 import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.accusation.service.AccusationService;
+import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
@@ -163,11 +164,31 @@ public class AppPostController {
         return response;
     }
 
-//    @ApiOperation(value = "APP端删帖接口", notes = "提供APP端登录的用户删除自己发布的帖子接口", response = Response.class)
-//    @RequestMapping(value = "delPost", method = RequestMethod.POST)
-//    public Response delPost(){
-//
-//    }
+    @ApiOperation(value = "APP端删帖接口", notes = "提供APP端登录的用户删除自己发布的帖子接口", response = Response.class)
+    @RequestMapping(value = "delPost", method = RequestMethod.POST)
+    public Response delPost() {
+        //--------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        Response response = new Response();
+
+
+        return response;
+    }
+
+    @ApiOperation(value = "APP端通过缩略图url请求原图url和图片大小接口", notes = "APP端通过缩略图url请求原图url和图片大小接口", response = Response.class)
+    @RequestMapping(value = "getProtoImg", method = RequestMethod.POST)
+    public Response getProtoImg(@ApiParam(value = "帖子中图片的缩略图url") @RequestParam String imgurl) {
+        Response response = new Response();
+
+        CompressImg compressImg = facadePost.getProtoImg(imgurl);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+            response.setData(compressImg);
+        } else {
+            response.setMessage("查询失败");
+        }
+        return response;
+    }
 
     /**
      * 帖子点赞接口

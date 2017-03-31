@@ -4,6 +4,7 @@ import com.movision.mybatis.accusation.entity.Accusation;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.service.CircleService;
+import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
@@ -264,6 +265,10 @@ public class FacadePost {
         map.put("collectGoodsList", collectGoodsList);
         map.put("allGoodsList", pager);
         return map;
+    }
+
+    public CompressImg getProtoImg(String imgurl) {
+        return postService.getProtoImg(imgurl);
     }
 
     public int updatePostByZanSum(String id, String userid) {

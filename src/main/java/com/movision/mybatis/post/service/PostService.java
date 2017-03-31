@@ -233,6 +233,16 @@ public class PostService {
         }
     }
 
+    public CompressImg getProtoImg(String imgurl) {
+        try {
+            log.info("根据缩略图url查询原图url和大小");
+            return compressImgMapper.getProtoImg(imgurl);
+        } catch (Exception e) {
+            log.error("根据缩略图url查询原图url和大小失败");
+            throw e;
+        }
+    }
+
     //查询当前用户有没有点赞过该帖子
     public int queryIsZanPost(Map<String, Object> parammap) {
         try {

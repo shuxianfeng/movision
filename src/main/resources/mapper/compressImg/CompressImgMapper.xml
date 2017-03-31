@@ -22,6 +22,13 @@
         AND protoimgsize = #{protoimgsize,jdbcType=VARCHAR}
   </select>
 
+    <!--根据缩略图url查询原图url和图片大小-->
+    <select id="getProtoImg" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.compressImg.entity.CompressImg">
+        SELECT * FROM yw_compress_img
+        WHERE compressimgurl = #{imgurl,jdbcType=VARCHAR}
+    </select>
+
     <!--插入一条帖子中的图片原图和压缩图的url映射关系记录-->
     <insert id="insert" parameterType="com.movision.mybatis.compressImg.entity.CompressImg">
     insert into yw_compress_img (compressimgurl, protoimgurl, protoimgsize
