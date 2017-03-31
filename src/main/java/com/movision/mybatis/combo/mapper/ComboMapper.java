@@ -23,6 +23,8 @@ public interface ComboMapper {
 
     double queryComboPrice(int comboid);
 
+    List<String> queryComboDescribeImgList(int goodsid);
+
     int queryComboStork(int comboid);
 
     int updateByPrimaryKeySelective(Combo record);

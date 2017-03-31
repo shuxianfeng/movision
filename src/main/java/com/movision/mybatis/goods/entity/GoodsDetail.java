@@ -70,6 +70,8 @@ public class GoodsDetail {
 
     private String goodsDescribeImgurl;//商品描述长图
 
+    private List<String> comboDescribeImgList;//套餐描述图片列表
+
     private String goodsParamImgurl;//商品参数长图
 
     private int iscollect;//0 未收藏 可收藏 1 已收藏 不可收藏
@@ -336,5 +338,13 @@ public class GoodsDetail {
 
     public void setIscollect(int iscollect) {
         this.iscollect = iscollect;
+    }
+
+    public List<String> getComboDescribeImgList() {
+        return comboDescribeImgList;
+    }
+
+    public void setComboDescribeImgList(List<String> comboDescribeImgList) {
+        this.comboDescribeImgList = comboDescribeImgList;
     }
 }

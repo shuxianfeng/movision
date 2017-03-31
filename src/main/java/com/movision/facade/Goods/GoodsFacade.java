@@ -61,6 +61,9 @@ public class GoodsFacade {
     @Autowired
     private CartService cartService;
 
+    @Autowired
+    private ComboService comboService;
+
     /**
      * 根据商品id查询商品详情
      *
@@ -91,6 +94,10 @@ public class GoodsFacade {
         } else if (count > 0) {
             goodsDetail.setIscollect(1);//已收藏
         }
+
+        //查询当前商品所属的所有套餐详情图列表
+        List<String> comboDescribeImgList = comboService.queryComboDescribeImgList(Integer.parseInt(goodsid));
+        goodsDetail.setComboDescribeImgList(comboDescribeImgList);
 
         //再查询用户商品实物图列表集合
         List<GoodsImg> goodsImgList = goodsService.queryGoodsImgList(Integer.parseInt(goodsid));

@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @Author shuxf
  * @Date 2017/3/3 10:39
@@ -24,6 +26,16 @@ public class ComboService {
             return comboMapper.queryComboPrice(comboid);
         } catch (Exception e) {
             log.error("根据套餐id查询套餐折后价失败");
+            throw e;
+        }
+    }
+
+    public List<String> queryComboDescribeImgList(int goodsid) {
+        try {
+            log.info("根据商品id查询套餐图片列表");
+            return comboMapper.queryComboDescribeImgList(goodsid);
+        } catch (Exception e) {
+            log.error("根据商品id查询套餐图片列表失败");
             throw e;
         }
     }
