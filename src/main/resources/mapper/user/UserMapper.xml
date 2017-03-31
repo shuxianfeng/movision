@@ -648,6 +648,9 @@
         <if test="phone!=null">
             AND u.phone=#{phone,jdbcType=VARCHAR}
         </if>
+        <if test="authentication==0">
+            AND aut.authstatus=#{authentication,jdbcType=INTEGER}
+        </if>
         <if test="authentication==1">
             AND aut.authstatus=#{authentication,jdbcType=INTEGER}
         </if>
