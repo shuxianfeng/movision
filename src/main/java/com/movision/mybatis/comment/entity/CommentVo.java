@@ -22,6 +22,8 @@ public class CommentVo {
 
     private String nickname;
 
+    private Integer level;//用户等级：0 普通用户 >=1为大V
+
     private String photo;
 
     private String isdel;
@@ -162,5 +164,13 @@ public class CommentVo {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 }
