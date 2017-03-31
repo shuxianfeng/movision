@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -198,8 +200,9 @@ public class AliOSSClient {
      * @param chann 频道
      * @return
      */
-    public Map<String, String> uploadFileStream(MultipartFile file, String type, String chann) {
-        Map<String, String> result = new HashMap<>();
+    public Map<String, Object> uploadFileStream(MultipartFile file, String type, String chann) {
+        //返回值
+        Map<String, Object> result = new HashMap<>();
 
         log.info("阿里云OSS上传Started");
         OSSClient ossClient = init();
@@ -233,6 +236,10 @@ public class AliOSSClient {
                 if (size > Long.valueOf(maxSize)) {
                     throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
                 }
+                //返回图片的宽高
+                BufferedImage bi = ImageIO.read(file.getInputStream());
+                result.put("width", bi.getWidth());
+                result.put("height", bi.getHeight());
 
             } else if (type.equals("doc")) {
                 bucketName = PropertiesLoader.getValue("file.bucket");
@@ -248,8 +255,9 @@ public class AliOSSClient {
             ossClient.putObject(bucketName, fileKey, in);
 
             log.debug("Object：" + fileKey + "存入OSS成功。");
+            log.info("【上传Alioss的返回值】：" + result.toString());
             result.put("status", "success");
-            result.put("data", data);
+            result.put("url", data);
 
         } catch (OSSException oe) {
             oe.printStackTrace();

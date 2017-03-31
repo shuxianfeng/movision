@@ -428,10 +428,13 @@ public class CircleController {
     @ApiOperation(value = "上传图片", notes = "用于上传圈子banner图等图片", response = Response.class)
     @RequestMapping(value = {"/upload_circle_img"}, method = RequestMethod.POST)
     public Response uploadImg(@RequestParam(value = "file", required = false) MultipartFile file) {
-        String url = movisionOssClient.uploadObject(file, "img", "circle");
-        Map<String, String> map = new HashMap<>();
+        Map m = movisionOssClient.uploadObject(file, "img", "circle");
+        String url = String.valueOf(m.get("url"));
+        Map<String, Object> map = new HashMap<>();
         map.put("url", url);
         map.put("name", FileUtil.getFileNameByUrl(url));
+        map.put("width", m.get("width"));
+        map.put("height", m.get("height"));
         return new Response(map);
     }
 

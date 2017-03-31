@@ -279,8 +279,11 @@
         </if>
     </select>
 
-    <select id="queryDiscountCouponList" resultType="com.movision.mybatis.coupon.entity.Coupon"
+    <select id="queryDiscountCouponList" resultType="com.movision.mybatis.coupon.entity.CouponVo"
             parameterType="java.lang.String">
-        SELECT * FROM yw_coupon WHERE userid=#{userid,jdbcType=INTEGER}
+        SELECT c.id,c.title,c.content,c.type,
+        (SELECT name FROM yw_shop WHERE id=c.shopid) AS storename,
+        c.statue,c.begintime,c.endtime,c.intime,c.tmoney,c.usemoney
+        FROM yw_coupon c WHERE c.userid=#{userid，jdbcType=INTEGER} AND c.isdel=0
     </select>
 </mapper>

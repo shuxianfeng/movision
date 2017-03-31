@@ -2,6 +2,7 @@ package com.movision.facade.coupon;
 
 import com.movision.mybatis.cart.service.CartService;
 import com.movision.mybatis.coupon.entity.Coupon;
+import com.movision.mybatis.coupon.entity.CouponVo;
 import com.movision.mybatis.coupon.service.CouponService;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
 import com.movision.mybatis.couponReceiveRecord.entity.CouponReceiveRecord;
@@ -283,7 +284,7 @@ public class CouponFacade {
      * @param userid
      * @return
      */
-    public List<Coupon> queryDiscountCouponList(String userid, Paging<Coupon> pager) {
+    public List<CouponVo> queryDiscountCouponList(String userid, Paging<CouponVo> pager) {
         return couponService.queryDiscountCouponList(userid, pager);
     }
 

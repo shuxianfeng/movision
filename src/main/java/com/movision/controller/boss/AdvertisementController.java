@@ -335,10 +335,13 @@ public class AdvertisementController {
     @RequestMapping(value = {"/upload_advertisement_img"}, method = RequestMethod.POST)
     public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file) {
 
-        String url = movisionOssClient.uploadObject(file, "img", "advertisement");
-        Map<String, String> map = new HashMap<>();
+        Map m = movisionOssClient.uploadObject(file, "img", "advertisement");
+        String url = String.valueOf(m.get("url"));
+        Map<String, Object> map = new HashMap<>();
         map.put("url", url);
         map.put("name", FileUtil.getFileNameByUrl(url));
+        map.put("width", m.get("width"));
+        map.put("height", m.get("height"));
         return new Response(map);
     }
 }

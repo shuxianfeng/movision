@@ -36,7 +36,7 @@ public class MovisionOssClient {
      * @param chann 频道类型  post | person | ....
      * @return url | filename
      */
-    public String uploadObject(MultipartFile file, String type, String chann) {
+    public Map<String, Object> uploadObject(MultipartFile file, String type, String chann) {
 
         String uploadMode = PropertiesLoader.getValue("upload.mode");
         //判断是否为允许的上传文件后缀
@@ -47,10 +47,10 @@ public class MovisionOssClient {
 
         switch (uploadMode) {
             case "alioss":
-                Map<String, String> map = aliOSSClient.uploadFileStream(file, type, chann);
-                String status = map.get("status");
+                Map<String, Object> map = aliOSSClient.uploadFileStream(file, type, chann);
+                String status = String.valueOf(map.get("status"));
                 if (status.equals("success")) {
-                    return map.get("data");
+                    return map;
                 } else {
                     log.error("上传失败");
                     throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传失败");
@@ -58,8 +58,8 @@ public class MovisionOssClient {
 
             case "movision":
                 // 上传到测试服务器，返回url
-                Map<String, String> map2 = uploadFacade.upload(file, type, chann);
-                return map2.get("data");
+                Map<String, Object> map2 = uploadFacade.upload(file, type, chann);
+                return map2;
 
             default:
                 log.error("上传模式不正确");

@@ -397,13 +397,11 @@ public class UserManageFacade {
                 substr = "mofo_" + substr;
                 list.get(j).setNickname(substr);
             }
-        }
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getPhone() != null) {
-                list.get(i).setLogin("8");//如果用户手机号不为null那么手机号作为登录方式
+            if (list.get(j).getPhone() != null) {
+                list.get(j).setLogin("8");//如果用户手机号不为null那么手机号作为登录方式
             } else {
-                String resault = returnLoginType(list.get(i).getQq(), list.get(i).getOpenid(), list.get(i).getSina());
-                list.get(i).setLogin(resault);
+                String resault = returnLoginType(list.get(j).getQq(), list.get(j).getOpenid(), list.get(j).getSina());
+                list.get(j).setLogin(resault);
             }
         }
         return list;
