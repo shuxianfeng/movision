@@ -458,9 +458,6 @@ public class OrderFacade {
             address.setProvince(prov);
             address.setCity(cit);
             address.setDistrict(distr);
-            address.setProvicecode(provice);
-            address.setCitycode(city);
-            address.setDistrictcode(district);
             map.put("address", address);
         }
         return map;
