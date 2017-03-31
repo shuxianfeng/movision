@@ -339,9 +339,18 @@ public class PostFacade {
      */
     public List<CommentVo> queryPostAppraise(String postid, String type, Paging<CommentVo> pager) {
         Map map = new HashedMap();
+        List<CommentVo> commentVo = new ArrayList<>();
         map.put("postid", postid);
         map.put("type", type);
-        return commentService.queryCommentsByLsit(pager, map);
+        List<CommentVo> co = commentService.queryCommentsByLsit(pager, map);
+        for (int i = 0; i < co.size(); i++) {//主要循环出特约嘉宾的评论并置顶
+            if (co.get(i).getIscontribute() == 1) {
+                commentVo.add(co.get(i));//当评论为特约嘉宾时，放在头部
+            } else {
+                commentVo.add(co.get(i));
+            }
+        }
+        return commentVo;
     }
 
     /**
