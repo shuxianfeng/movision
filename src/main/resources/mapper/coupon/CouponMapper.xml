@@ -279,7 +279,7 @@
         </if>
     </select>
 
-    <select id="queryDiscountCouponList" resultType="com.movision.mybatis.coupon.entity.Coupon"
+    <select id="queryDiscountCouponList" resultType="com.movision.mybatis.coupon.entity.CouponVo"
             parameterType="java.lang.String">
         SELECT * FROM yw_coupon WHERE userid=#{userid,jdbcType=INTEGER}
     </select>

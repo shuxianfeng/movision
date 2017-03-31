@@ -728,16 +728,16 @@
         </if>
         <if test="login!=null">
             <if test="login==1">
-                AND u.phone &lt;&gt; ''
+                AND u.phone IS NOT NULL
             </if>
             <if test="login==2">
-                AND u.openid &lt;&gt; ''
+                AND u.openid IS NOT NULL
             </if>
             <if test="login==3">
-                AND u.qq &lt;&gt; ''
+                AND u.qq IS NOT NULL
             </if>
             <if test="login==4">
-                AND u.sina &lt;&gt; ''
+                AND u.sina IS NOT NULL
             </if>
         </if>
         <if test="pointsSort!=null">
@@ -772,11 +772,16 @@
                 ORDER BY fans DESC
             </if>
         </if>
-        <if test="pai==1">
-            ORDER BY u.intime DESC
-        </if>
-        <if test="pai==2">
-            ORDER BY u.level DESC
+        <if test="pai!=null">
+            <if test="pai==0">
+                ORDER BY u.intime ASC
+            </if>
+            <if test="pai==1">
+                ORDER BY u.intime DESC
+            </if>
+            <if test="pai==2">
+                ORDER BY u.level DESC
+            </if>
         </if>
     </select>
 

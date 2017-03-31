@@ -1,6 +1,7 @@
 package com.movision.mybatis.coupon.service;
 
 import com.movision.mybatis.coupon.entity.Coupon;
+import com.movision.mybatis.coupon.entity.CouponVo;
 import com.movision.mybatis.coupon.mapper.CouponMapper;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManage;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
@@ -250,7 +251,7 @@ public class CouponService {
      * @param pager
      * @return
      */
-    public List<Coupon> queryDiscountCouponList(String userid, Paging<Coupon> pager) {
+    public List<CouponVo> queryDiscountCouponList(String userid, Paging<CouponVo> pager) {
         try {
             log.info("查询用户优惠券列表");
             return couponMapper.queryDiscountCouponList(userid, pager.getRowBounds());

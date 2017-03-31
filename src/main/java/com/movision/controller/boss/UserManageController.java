@@ -8,6 +8,7 @@ import com.movision.facade.coupon.CouponFacade;
 import com.movision.mybatis.collection.entity.Collection;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.coupon.entity.Coupon;
+import com.movision.mybatis.coupon.entity.CouponVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.record.entity.RecordVo;
@@ -430,8 +431,8 @@ public class UserManageController {
                                             @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                             @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Paging<Coupon> pager = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<Coupon> list = couponFacade.queryDiscountCouponList(userid, pager);
+        Paging<CouponVo> pager = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<CouponVo> list = couponFacade.queryDiscountCouponList(userid, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

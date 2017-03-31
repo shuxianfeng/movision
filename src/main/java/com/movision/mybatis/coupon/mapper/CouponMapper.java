@@ -1,6 +1,7 @@
 package com.movision.mybatis.coupon.mapper;
 
 import com.movision.mybatis.coupon.entity.Coupon;
+import com.movision.mybatis.coupon.entity.CouponVo;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
@@ -37,5 +38,5 @@ public interface CouponMapper {
 
     void insertCouponList(List<Coupon> couponList);
 
-    List<Coupon> queryDiscountCouponList(String userid, RowBounds rowBounds);
+    List<CouponVo> queryDiscountCouponList(String userid, RowBounds rowBounds);
 }
