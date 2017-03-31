@@ -45,6 +45,8 @@ public interface CommentMapper {
 
     int replyPostComment(Map map);
 
+    Comment queryAuthenticationBypid(Integer pid);
+
     List<CommentVo> commentZanSork(Integer postid, RowBounds rowBounds);
 
     List<CommentVo> findAllQueryCommentSensitiveWords(Map map, RowBounds rowBounds);

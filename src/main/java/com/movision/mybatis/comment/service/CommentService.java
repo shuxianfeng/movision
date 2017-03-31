@@ -1,5 +1,6 @@
 package com.movision.mybatis.comment.service;
 
+import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.mapper.CommentMapper;
 import com.movision.utils.pagination.model.Paging;
@@ -181,6 +182,22 @@ public class CommentService {
             return commentMapper.replyPostComment(map);
         } catch (Exception e) {
             log.error("回复帖子评论异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询评论是否可被评论
+     *
+     * @param pid
+     * @return
+     */
+    public Comment queryAuthenticationBypid(Integer pid) {
+        try {
+            log.info("查询评论是否可被评论");
+            return commentMapper.queryAuthenticationBypid(pid);
+        } catch (Exception e) {
+            log.error("查询评论是否可被评论异常");
             throw e;
         }
     }

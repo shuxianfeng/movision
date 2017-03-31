@@ -7,6 +7,7 @@ import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.activePart.service.ActivePartService;
 import com.movision.mybatis.category.service.CategoryService;
 import com.movision.mybatis.circle.service.CircleService;
+import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
@@ -425,16 +426,23 @@ public class PostFacade {
      * @return
      */
     public Map replyPostComment(String pid, String content, String postid, String userid) {
-        Map chuan = new HashedMap();
         Map map = new HashedMap();
-        chuan.put("pid", pid);
-        chuan.put("content", content);
-        chuan.put("userid", userid);
-        chuan.put("postid", postid);
-        chuan.put("intime", new Date());
-        int i = commentService.replyPostComment(chuan);
-        map.put("resault", i);
-        return map;
+        Comment comment = commentService.queryAuthenticationBypid(Integer.parseInt(pid));
+        if (comment == null) {
+            Map chuan = new HashedMap();
+            chuan.put("pid", pid);
+            chuan.put("content", content);
+            chuan.put("userid", userid);
+            chuan.put("postid", postid);
+            chuan.put("intime", new Date());
+            int i = commentService.replyPostComment(chuan);
+            map.put("resault", i);
+            return map;
+        } else {
+            map.put("resault", -1);
+            map.put("msagger", "官方回复不能评论");
+            return map;
+        }
     }
 
     /**

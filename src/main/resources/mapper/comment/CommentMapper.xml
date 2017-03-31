@@ -301,6 +301,11 @@
     </trim>
   </insert>
 
+  <select id="queryAuthenticationBypid" parameterType="java.lang.Integer"
+          resultType="com.movision.mybatis.comment.entity.Comment">
+      SELECT * FROM yw_post_comment WHERE id=#{pid,jdbcType=INTEGER} AND iscontribute=1
+  </select>
+
   <select id="findAllQueryCommentSensitiveWords" parameterType="java.util.Map"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.*,u.phone,u.photo,u.nickname
