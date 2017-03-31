@@ -152,6 +152,7 @@ public class UploadFacade {
             result.put("status", "success");
             returnMap.put("url", data);
             result.put("data", returnMap);
+            log.info("【上传测试服务器返回值】：" + result.toString());
 
         } catch (Exception e) {
             log.error("upload error!", e);

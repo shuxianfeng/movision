@@ -47,12 +47,10 @@ public class MovisionOssClient {
 
         switch (uploadMode) {
             case "alioss":
-                Map<String, String> map = aliOSSClient.uploadFileStream(file, type, chann);
-                String status = map.get("status");
+                Map<String, Object> map = aliOSSClient.uploadFileStream(file, type, chann);
+                String status = String.valueOf(map.get("status"));
                 if (status.equals("success")) {
-                    // TODO: 2017/3/31
-//                    return map.get("data");
-                    return null;
+                    return map;
                 } else {
                     log.error("上传失败");
                     throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传失败");

@@ -1,5 +1,7 @@
 package com.movision.utils;
 
+import org.apache.commons.collections.map.HashedMap;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -110,6 +112,13 @@ public class MapUtil {
              }
 		}
 		return result;
+	}
+
+	public static void main(String[] args) {
+		Map map = new HashedMap();
+		map.put("1", 11111);
+		map.put("2", 222222);
+		System.out.println(map.toString());
 	}
 	
 }
