@@ -5,6 +5,7 @@ import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.BusinessException;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.file.FileUtil;
+import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,8 +39,8 @@ public class UploadFacade {
      * @param chann 如：post，person
      * @return
      */
-    public Map<String, String> upload(MultipartFile file, String type, String chann) {
-        Map<String, String> result = new HashMap<>();
+    public Map<String, Object> upload(MultipartFile file, String type, String chann) {
+        Map<String, Object> result = new HashMap<>();
         try {
             /**
              * 这是测试环境上传的图片的路径
@@ -48,6 +51,7 @@ public class UploadFacade {
             String imgDomain = PropertiesLoader.getValue("upload.img.domain");
 //            String docDomain = PropertiesLoader.getValue("doc.domain");
             String fileName = FileUtil.renameFile(file.getOriginalFilename());
+            Map returnMap = new HashedMap();
             String data;
             switch (type) {
                 case "img":
@@ -64,6 +68,10 @@ public class UploadFacade {
                         maxPostSize = apiConstants.getUploadPicMaxPostSize();
                         data = imgDomain + "/upload/" + fileName;
                     }
+                    //获取图片的宽高
+                    BufferedImage bi = ImageIO.read(file.getInputStream());
+                    returnMap.put("width", bi.getWidth());
+                    returnMap.put("height", bi.getHeight());
 
                     break;
                 case "doc":
@@ -142,7 +150,8 @@ public class UploadFacade {
             file.transferTo(upfile);
 
             result.put("status", "success");
-            result.put("data", data);
+            returnMap.put("url", data);
+            result.put("data", returnMap);
 
         } catch (Exception e) {
             log.error("upload error!", e);
