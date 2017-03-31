@@ -8,9 +8,11 @@
         <result column="combodiscountprice" property="combodiscountprice" jdbcType="DOUBLE"/>
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
         <result column="imgurl" property="imgurl" jdbcType="VARCHAR"/>
+        <result column="width" property="width" jdbcType="VARCHAR"/>
+        <result column="height" property="height" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, comboid, comboname, combodiscountprice, intime,imgurl
+        id, comboid, comboname, combodiscountprice, intime,imgurl,width,height
   </sql>
 
     <!--基础查询语句-->
@@ -61,10 +63,11 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.combo.entity.Combo">
-        insert into yw_combo (id, comboid, comboname, combodiscountprice, intime,imgurl
+        insert into yw_combo (id, comboid, comboname, combodiscountprice, intime,imgurl,height,width
       )
         values (#{id,jdbcType=INTEGER}, #{comboid,jdbcType=INTEGER}, #{comboname,jdbcType=VARCHAR},
-        #{combodiscountprice,jdbcType=DOUBLE}, #{intime,jdbcType=TIMESTAMP},#{imgurl,jdbcType=VARCHAR}
+        #{combodiscountprice,jdbcType=DOUBLE},
+        #{intime,jdbcType=TIMESTAMP},#{imgurl,jdbcType=VARCHAR},#{height,jdbcType=VARCHAR},#{width,jdbcType=VARCHAR}
       )
   </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.combo.entity.Combo">
@@ -88,6 +91,12 @@
             <if test="imgurl != null">
                 imgurl,
             </if>
+            <if test="height != null">
+                height,
+            </if>
+            <if test="width != null">
+                width,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -107,6 +116,12 @@
             </if>
             <if test="imgurl != null">
                 #{imgurl,jdbcType=VARCHAR},
+            </if>
+            <if test="height != null">
+                #{height,jdbcType=VARCHAR},
+            </if>
+            <if test="width != null">
+                #{width,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -128,6 +143,12 @@
             <if test="imgurl != null">
                 imgurl = #{imgurl,jdbcType=VARCHAR},
             </if>
+            <if test="height != null">
+                height = #{height,jdbcType=VARCHAR},
+            </if>
+            <if test="width != null">
+                width = #{width,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -137,7 +158,9 @@
         comboname = #{comboname,jdbcType=VARCHAR},
         combodiscountprice = #{combodiscountprice,jdbcType=DOUBLE},
         intime = #{intime,jdbcType=TIMESTAMP},
-        imgurl = #{imgurl,jdbcType=VARCHAR}
+        imgurl = #{imgurl,jdbcType=VARCHAR},
+        height = #{height,jdbcType=VARCHAR},
+        width = #{width,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

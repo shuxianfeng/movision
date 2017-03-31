@@ -944,6 +944,12 @@
             <if test="imgurl != null">
                 img_url = #{imgurl,jdbcType=VARCHAR}
             </if>
+            <if test="width != null">
+                width = #{imgurl,jdbcType=VARCHAR}
+            </if>
+            <if test="height != null">
+                height = #{imgurl,jdbcType=VARCHAR}
+            </if>
         </set>
         WHERE goodsid= #{goodsid,jdbcType=INTEGER} AND type=3
     </update>
@@ -952,6 +958,12 @@
         <set>
             <if test="imgurl != null">
                 img_url = #{imgurl,jdbcType=VARCHAR}
+            </if>
+            <if test="width != null">
+                width = #{imgurl,jdbcType=VARCHAR}
+            </if>
+            <if test="height != null">
+                height = #{imgurl,jdbcType=VARCHAR}
             </if>
         </set>
         WHERE goodsid= #{goodsid,jdbcType=INTEGER} AND type=1
@@ -1227,6 +1239,12 @@
             <if test="imgurl != null">
                 imgurl = #{imgurl,jdbcType=VARCHAR},
             </if>
+            <if test="height != null">
+                height = #{height,jdbcType=VARCHAR},
+            </if>
+            <if test="width != null">
+                width = #{width,jdbcType=VARCHAR},
+            </if>
         </set>
         WHERE comboid= #{comboid,jdbcType=INTEGER}
     </update>
@@ -1262,6 +1280,13 @@
             <if test="intime != null">
                 intime,
             </if>
+            <if test="width != null">
+                width,
+            </if>
+            <if test="height != null">
+                height,
+            </if>
+
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -1281,6 +1306,12 @@
             </if>
             <if test="intime != null">
                 #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="width != null">
+                #{width,jdbcType=VARCHAR},
+            </if>
+            <if test="height != null">
+                #{height,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -1321,6 +1352,12 @@
             <if test="type != null">
                 type,
             </if>
+            <if test="height != null">
+                height,
+            </if>
+            <if test="width != null">
+                width,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="imgurl != null">
@@ -1331,6 +1368,12 @@
             </if>
             <if test="type != null">
                 #{type,jdbcType=INTEGER},
+            </if>
+            <if test="height != null">
+                #{height,jdbcType=VARCHAR},
+            </if>
+            <if test="width != null">
+                #{width,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -1346,6 +1389,12 @@
             <if test="type != null">
                 type,
             </if>
+            <if test="height != null">
+                height,
+            </if>
+            <if test="width != null">
+                width,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="imgurl != null">
@@ -1356,6 +1405,12 @@
             </if>
             <if test="type != null">
                 #{type,jdbcType=INTEGER},
+            </if>
+            <if test="height != null">
+                #{height,jdbcType=VARCHAR},
+            </if>
+            <if test="width != null">
+                #{width,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
