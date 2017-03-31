@@ -101,6 +101,12 @@
       FROM yw_post_rewarded r
       LEFT JOIN yw_user u
       ON r.userid=u.id
-      WHERE r.postid=#{postid,jdbcType=INTEGER} ORDER BY intime DESC
+        WHERE r.postid=#{postid,jdbcType=INTEGER}
+        <if test="pai==1">
+            ORDER BY intime DESC
+        </if>
+        <if test="pai==null">
+            ORDER BY intime ASC
+        </if>
     </select>
 </mapper>

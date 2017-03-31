@@ -20,7 +20,7 @@ public interface RewardedMapper {
 
     int updateByPrimaryKey(Rewarded record);
 
-    List<RewardedVo> findAllqueryPostAward(int postid, RowBounds rowBounds);
+    List<RewardedVo> findAllqueryPostAward(Map map, RowBounds rowBounds);
 
     int insertRewardRecord(Map map);
 

@@ -444,8 +444,11 @@ public class PostFacade {
      * @param pager
      * @return
      */
-    public List<RewardedVo> queryPostAward(String postid, Paging<RewardedVo> pager) {
-        return rewardedService.queryPostAward(Integer.parseInt(postid), pager);//分页返回帖子打赏列表
+    public List<RewardedVo> queryPostAward(String postid, String pai, Paging<RewardedVo> pager) {
+        Map map = new HashedMap();
+        map.put("postid", postid);
+        map.put("pai", pai);
+        return rewardedService.queryPostAward(map, pager);//分页返回帖子打赏列表
     }
 
     /**

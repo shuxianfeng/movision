@@ -327,11 +327,12 @@ public class PostController {
     @ApiOperation(value = "查看帖子打赏列表", notes = "查看帖子打赏列表", response = Response.class)
     @RequestMapping(value = "/query_post_award", method = RequestMethod.POST)
     public Response queryPostAward(@ApiParam(value = "帖子id") @RequestParam String postid,
+                                   @ApiParam(value = "排序 1时间拍倒叙 null正序") @RequestParam(required = false) String pai,
                                    @RequestParam(required = false, defaultValue = "1") String pageNo,
                                    @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<RewardedVo> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<RewardedVo> list = postFacade.queryPostAward(postid, pager);
+        List<RewardedVo> list = postFacade.queryPostAward(postid, pai, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
