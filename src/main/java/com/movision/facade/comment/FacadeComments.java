@@ -54,8 +54,8 @@ public class FacadeComments {
             //遍历所有评论获取父评论
             if (null != volist.get(i).getPid()) {//当评论的pid不为空的话说明是对别的评论的评论，查出父评论
                 //通过pid查询评论实体
-                Comment comment = commentService.queryCommentByPid(volist.get(i).getPid());
-                volist.get(i).addVo(comment);
+                CommentVo commentVo = commentService.queryCommentByPid(volist.get(i).getPid());
+                volist.get(i).addVo(commentVo);
             }
         }
         return volist;

@@ -47,10 +47,10 @@ public class CommentService {
         }
     }
 
-    public Comment queryCommentByPid(int pid) {
+    public CommentVo queryCommentByPid(int pid) {
         try {
             log.info("根据父评论id查询评论实体");
-            return commentMapper.selectByPrimaryKey(pid);
+            return commentMapper.queryCommentByPid(pid);
         } catch (Exception e) {
             log.error("根据父评论id查询评论实体失败");
             throw e;

@@ -34,7 +34,7 @@ public class CommentVo {
 
     private List<CommentVo> soncomment;
 
-    private Comment vo;
+    private CommentVo vo;
 
     public List<CommentVo> getSoncomment() {
         return soncomment;
@@ -132,11 +132,11 @@ public class CommentVo {
         return  postid;
     }
 
-    public void addVo(Comment vo) {
+    public void addVo(CommentVo vo) {
         this.vo = vo;
     }
 
-    public Comment getVo() {
+    public CommentVo getVo() {
         return vo;
     }
 

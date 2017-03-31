@@ -176,6 +176,17 @@
     </if>
   </select>
 
+  <!--根据父评论id查询评论实体-->
+  <select id="queryCommentByPid" parameterType="java.lang.Integer"
+          resultType="com.movision.mybatis.comment.entity.CommentVo">
+    SELECT t.* FROM (
+      SELECT t1.*, t2.photo, t2.nickname FROM yw_post_comment t1
+      LEFT JOIN yw_user t2
+      ON t1.userid = t2.id
+    ) t
+    WHERE t.id = #{pid,jdbcType=INTEGER}
+  </select>
+
   <!--查询该用户有没有点赞该评论-->
   <select id="queryIsZan" parameterType="java.util.Map" resultType="java.lang.Integer">
     SELECT count(*) FROM yw_post_comment_zan_record
