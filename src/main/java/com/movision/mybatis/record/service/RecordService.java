@@ -32,7 +32,7 @@ public class RecordService {
     public List<RecordVo> queryIntegralList(String userid, Paging<RecordVo> pager) {
         try {
             logger.info("查询用户积分流水列表");
-            return recordMapper.queryIntegralList(userid, pager.getRowBounds());
+            return recordMapper.findAllqueryIntegralList(userid, pager.getRowBounds());
         } catch (Exception e) {
             logger.error("查询用户积分流水列表异常");
             throw e;

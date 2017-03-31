@@ -393,8 +393,8 @@ public class UserManageFacade {
             }
             if (list.get(j).getNickname() == null) {//如果查询出的用户昵称为空，拼接默认的昵称显示
                 String p = list.get(j).getPhone();
-                String substr = p.substring(p.length() - 4, p.length());
-                substr = "用户名" + substr;
+                String substr = p.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
+                substr = "mofo_" + substr;
                 list.get(j).setNickname(substr);
             }
         }

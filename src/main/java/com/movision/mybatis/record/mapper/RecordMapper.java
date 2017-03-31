@@ -20,7 +20,7 @@ public interface RecordMapper {
 
     int updateByPrimaryKey(Record record);
 
-    List<RecordVo> queryIntegralList(String userid, RowBounds rowBounds);
+    List<RecordVo> findAllqueryIntegralList(String userid, RowBounds rowBounds);
 
     int addIntegralRecord(Map map);
 

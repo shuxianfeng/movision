@@ -126,7 +126,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-    <select id="queryIntegralList" parameterType="java.lang.String"
+    <select id="findAllqueryIntegralList" parameterType="java.lang.String"
             resultType="com.movision.mybatis.record.entity.RecordVo">
     SELECT rec.*,
     (CASE WHEN orderid>0 THEN (SELECT name FROM yw_type_constant ct WHERE ct.code=(
