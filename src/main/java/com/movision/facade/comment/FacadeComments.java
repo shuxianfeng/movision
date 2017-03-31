@@ -1,6 +1,8 @@
 package com.movision.facade.comment;
 
 import com.movision.facade.index.FacadePost;
+import com.movision.fsearch.utils.StringUtil;
+import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.post.service.PostService;
@@ -20,7 +22,7 @@ import java.util.*;
 public class FacadeComments {
 
     @Autowired
-    public CommentService CommentService;
+    public CommentService commentService;
     @Autowired
     public FacadePost facadePost;
     @Autowired
@@ -36,29 +38,27 @@ public class FacadeComments {
         Map map = new HashedMap();
         map.put("postid", postid);
         map.put("type", type);
-        List<CommentVo> vo = CommentService.queryCommentsByLsit(pager, map);
-        List<CommentVo> resaultvo=new ArrayList();
-        for (int i=0;i<vo.size();i++){//遍历所有帖子
+        List<CommentVo> volist = commentService.queryCommentsByLsit(pager, map);
+        for (int i = 0; i < volist.size(); i++) {//遍历所有帖子
             //查询该用户有没有点赞该评论
-            Map<String, Object> parammap = new HashMap<>();
-            parammap.put("userid", Integer.parseInt(userid));
-            parammap.put("commentid", vo.get(i).getId());
-            int sum = CommentService.queryIsZan(parammap);
-            vo.get(i).setIsZan(sum);
+            if (!StringUtil.isEmpty(userid)) {
+                Map<String, Object> parammap = new HashMap<>();
+                parammap.put("userid", Integer.parseInt(userid));
+                parammap.put("commentid", volist.get(i).getId());
+                int sum = commentService.queryIsZan(parammap);
+                volist.get(i).setIsZan(sum);
+            } else {
+                volist.get(i).setIsZan(0);
+            }
 
             //遍历所有评论获取父评论
-            if (vo.get(i).getPid() == null) {//当评论没有子评论的时候（父评论）
-                 for(int j=0;j<vo.size();j++) {//遍历所有帖子
-                    if (vo.get(i).getId()==vo.get(j).getPid()){//当子评论id和父评论的id相等时，表示该子评论是这个父评论的
-                        CommentVo cv=vo.get(j);//这条子评论
-                        List<CommentVo> list=new ArrayList();
-                        list.add(vo.get(i));//把父评论暂存在List中
-                        cv.addVo(list);//把父评论存放在子评论字段中
-                 }
-                }
+            if (null != volist.get(i).getPid()) {//当评论的pid不为空的话说明是对别的评论的评论，查出父评论
+                //通过pid查询评论实体
+                Comment comment = commentService.queryCommentByPid(volist.get(i).getPid());
+                volist.get(i).addVo(comment);
             }
         }
-        return vo;
+        return volist;
     }
 
     public int updateCommentZanSum(String commentid, String userid) {
@@ -66,9 +66,9 @@ public class FacadeComments {
         parammap.put("userid", Integer.parseInt(userid));
         parammap.put("commentid", Integer.parseInt(commentid));
         parammap.put("intime", new Date());
-        CommentService.insertCommentZanRecord(parammap);
-        CommentService.updateCommentZanSum(Integer.parseInt(commentid));//更新评论点赞次数
-        int sum = CommentService.queryCommentZanSum(Integer.parseInt(commentid));//查询点赞次数
+        commentService.insertCommentZanRecord(parammap);
+        commentService.updateCommentZanSum(Integer.parseInt(commentid));//更新评论点赞次数
+        int sum = commentService.queryCommentZanSum(Integer.parseInt(commentid));//查询点赞次数
         return sum;
     }
 
@@ -86,7 +86,7 @@ public class FacadeComments {
                 vo.setZansum(0);
                 vo.setIsdel("0");
                 vo.setIscontribute(0);
-                type = CommentService.insertComment(vo);//添加评论
+                type = commentService.insertComment(vo);//添加评论
                 //更新用户最后操作时间和帖子评论总次数
                 postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子表的评论次数字段
             } else {//表示是其他评论的子评论，不算评论次数
@@ -99,7 +99,7 @@ public class FacadeComments {
                 vo.setIsdel("0");
                 vo.setIscontribute(0);
                 vo.setPid(Integer.parseInt(fuid));
-                type = CommentService.insertComment(vo);//添加评论
+                type = commentService.insertComment(vo);//添加评论
             }
             return type;
         }

@@ -27,6 +27,8 @@ public interface CommentMapper {
 
     int queryIsZan(Map<String, Object> parammap);
 
+    Comment selectByPrimaryKey(int pid);
+
     List<CommentVo> findAllQueryPostByCommentParticulars(Map<String, Integer> map, RowBounds rowBounds);
 
     CommentVo queryCommentById(Map map);

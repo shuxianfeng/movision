@@ -47,6 +47,16 @@ public class CommentService {
         }
     }
 
+    public Comment queryCommentByPid(int pid) {
+        try {
+            log.info("根据父评论id查询评论实体");
+            return commentMapper.selectByPrimaryKey(pid);
+        } catch (Exception e) {
+            log.error("根据父评论id查询评论实体失败");
+            throw e;
+        }
+    }
+
     /**
      * 查询评论详情
      *

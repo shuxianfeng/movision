@@ -34,6 +34,8 @@ public class CommentVo {
 
     private List<CommentVo> soncomment;
 
+    private Comment vo;
+
     public List<CommentVo> getSoncomment() {
         return soncomment;
     }
@@ -49,8 +51,6 @@ public class CommentVo {
     public void setIsdel(String isdel) {
         this.isdel = isdel;
     }
-
-    private List<CommentVo> vo;
 
     public Integer getId() {
         return id;
@@ -132,11 +132,11 @@ public class CommentVo {
         return  postid;
     }
 
-    public void addVo(List<CommentVo> vo){
+    public void addVo(Comment vo) {
         this.vo = vo;
     }
 
-    public List<CommentVo> getVo(){
+    public Comment getVo() {
         return vo;
     }
 

@@ -28,8 +28,8 @@ public class CommentController {
     @ApiOperation(value = "评论列表", notes = "返回帖子评论列表", response = Response.class)
     @RequestMapping(value = "commentLsit", method = RequestMethod.POST)
     public Response queryCommentLsit(@ApiParam(value = "帖子id") @RequestParam String postid,
-                                     @ApiParam(value = "用户id") @RequestParam String userid,
-                                     @ApiParam(value = "排序") @RequestParam(required = false) String type,
+                                     @ApiParam(value = "用户id") @RequestParam(required = false) String userid,
+                                     @ApiParam(value = "排序(0表示按发表时间正序  空默认按发表时间倒叙)") @RequestParam(required = false) String type,
                                      @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                      @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
