@@ -48,6 +48,14 @@
         SELECT combodiscountprice FROM yw_combo WHERE id = #{comboid,jdbcType=INTEGER}
     </select>
 
+    <!--根据商品id查询该商品所属的所有套餐图片列表-->
+    <select id="queryComboDescribeImgList" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT imgurl FROM yw_combo
+        WHERE comboid IN (
+          SELECT comboid FROM yw_goods_combo WHERE goodsid = #{goodsid,jdbcType=INTEGER}
+        )
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_combo
     where id = #{id,jdbcType=INTEGER}
