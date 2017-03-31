@@ -57,16 +57,18 @@ public class BossLoginController {
             token = new UsernamePasswordToken(username, password.toCharArray());
             currentUser.login(token);
 
-
         } catch (UnknownAccountException e) {
             jsonResult.setCode(400);
             jsonResult.setMessage("用户名不存在");
+            return jsonResult;
         } catch (LockedAccountException e) {
             jsonResult.setCode(400);
             jsonResult.setMessage("帐户状态异常");
+            return jsonResult;
         } catch (AuthenticationException e) {
             jsonResult.setCode(400);
             jsonResult.setMessage("用户名或密码错误");
+            return jsonResult;
         }
 
         if (currentUser.isAuthenticated()) {
