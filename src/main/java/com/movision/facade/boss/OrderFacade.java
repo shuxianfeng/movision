@@ -449,6 +449,9 @@ public class OrderFacade {
             String provice = address.getProvince();
             String city = address.getCity();
             String district = address.getDistrict();
+            address.setDistrictcode(district);
+            address.setCitycode(city);
+            address.setProvicecode(provice);
             String prov = bossOrderService.queryprovice(provice);
             String cit = bossOrderService.querycity(city);
             String distr = bossOrderService.querydistrict(district);
