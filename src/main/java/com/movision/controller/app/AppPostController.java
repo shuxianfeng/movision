@@ -164,16 +164,6 @@ public class AppPostController {
         return response;
     }
 
-    @ApiOperation(value = "APP端删帖接口", notes = "提供APP端登录的用户删除自己发布的帖子接口", response = Response.class)
-    @RequestMapping(value = "delPost", method = RequestMethod.POST)
-    public Response delPost() {
-        //--------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        Response response = new Response();
-
-
-        return response;
-    }
-
     @ApiOperation(value = "APP端通过缩略图url请求原图url和图片大小接口", notes = "APP端通过缩略图url请求原图url和图片大小接口", response = Response.class)
     @RequestMapping(value = "getProtoImg", method = RequestMethod.POST)
     public Response getProtoImg(@ApiParam(value = "帖子中图片的缩略图url") @RequestParam String imgurl) {
