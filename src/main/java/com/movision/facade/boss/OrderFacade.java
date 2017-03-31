@@ -280,9 +280,6 @@ public class OrderFacade {
             bossOrdersGet.setProvince(prov);
             bossOrdersGet.setCity(cit);
             bossOrdersGet.setDistrict(distr);
-            bossOrdersGet.setProvicecode(provice);
-            bossOrdersGet.setCitycode(city);
-            bossOrdersGet.setDistrictcode(district);
         }
         List<GoodsTo> goods = bossOrderService.queryOrderGoods(id);//查询商品信息
         Double money = 0.0;//小计
