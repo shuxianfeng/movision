@@ -537,12 +537,14 @@ public class GoodsListFacade {
      * @param img_url
      * @return
      */
-    public Map<String, Integer> updateImgGoods(String goodsid, String img_url) {
+    public Map<String, Integer> updateImgGoods(String goodsid, String img_url, String height, String width) {
         Map<String, Integer> map = new HashMap<>();
         GoodsImg img = new GoodsImg();
         img.setGoodsid(Integer.parseInt(goodsid));
 
         img.setImgurl(img_url);
+        img.setHeight(height);
+        img.setWidth(width);
             int result = goodsService.updateImgGoods(img);
             map.put("result", result);
 
@@ -556,12 +558,14 @@ public class GoodsListFacade {
      * @param img_url
      * @return
      */
-    public Map<String, Integer> updateCommodityDescription(String goodsid, String img_url) {
+    public Map<String, Integer> updateCommodityDescription(String goodsid, String img_url, String height, String width) {
         Map<String, Integer> map = new HashMap<>();
         GoodsImg img = new GoodsImg();
         img.setGoodsid(Integer.parseInt(goodsid));
 
         img.setImgurl(img_url);
+        img.setHeight(height);
+        img.setWidth(width);
         int result = goodsService.updateCommodityDescription(img);
         map.put("result", result);
 
@@ -841,11 +845,13 @@ public class GoodsListFacade {
      * @param combodiscountprice
      * @return
      */
-    public Map<String, Integer> updateComDetail(String imgurl, String comboname, String combodiscountprice, String comboid, String goodsid) {
+    public Map<String, Integer> updateComDetail(String imgurl, String comboname, String combodiscountprice, String comboid, String goodsid, String width, String height) {
         Combo goodsComboVo = new Combo();
         goodsComboVo.setComboid(Integer.parseInt(comboid));
         goodsComboVo.setCombodiscountprice(Double.parseDouble(combodiscountprice));
         goodsComboVo.setComboname(comboname);
+        goodsComboVo.setHeight(height);
+        goodsComboVo.setWidth(width);
         goodsComboVo.setImgurl(imgurl);
         int res = goodsService.updateComDetail(goodsComboVo);
         String productids[] = goodsid.split(",");
@@ -876,11 +882,13 @@ public class GoodsListFacade {
      * @param goodsid
      * @return
      */
-    public Map<String, Integer> addCom(String imgurl, String comboname, String combodiscountprice, String goodsid) {
+    public Map<String, Integer> addCom(String imgurl, String comboname, String combodiscountprice, String goodsid, String height, String width) {
         Map<String, Integer> map = new HashMap<>();
         Combo combo = new Combo();
         combo.setImgurl(imgurl);
         combo.setComboname(comboname);
+        combo.setHeight(height);
+        combo.setWidth(width);
         int list = goodsService.findMaxComboid();
         combo.setComboid(list + 1);
         combo.setIntime(new Date());
@@ -917,12 +925,14 @@ public class GoodsListFacade {
      * @param goodsid
      * @return
      */
-    public Map<String, Integer> addImgGoods(String img_url, String goodsid) {
+    public Map<String, Integer> addImgGoods(String img_url, String goodsid, String height, String width) {
         Map<String, Integer> map = new HashMap<>();
         GoodsImg goodsImg = new GoodsImg();
         goodsImg.setImgurl(img_url);
         goodsImg.setType(3);
         goodsImg.setGoodsid(Integer.parseInt(goodsid));
+        goodsImg.setHeight(height);
+        goodsImg.setWidth(width);
         int res = goodsService.addImgGoods(goodsImg);
         map.put("res", res);
         return map;
@@ -935,12 +945,14 @@ public class GoodsListFacade {
      * @param goodsid
      * @return
      */
-    public Map<String, Integer> addCommodityDescription(String img_url, String goodsid) {
+    public Map<String, Integer> addCommodityDescription(String img_url, String goodsid, String width, String height) {
         Map<String, Integer> map = new HashMap<>();
         GoodsImg goodsImg = new GoodsImg();
         goodsImg.setImgurl(img_url);
         goodsImg.setType(1);
         goodsImg.setGoodsid(Integer.parseInt(goodsid));
+        goodsImg.setWidth(width);
+        goodsImg.setHeight(height);
         int res = goodsService.addCommodityDescription(goodsImg);
         map.put("res", res);
         return map;

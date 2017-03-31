@@ -508,9 +508,11 @@ public class GoodsController {
     @RequestMapping(value = "update_cimg", method = RequestMethod.POST)
     public Response updateImgGoods(
             @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
-            @ApiParam(value = "地址") @RequestParam(required = false) String imgurl) {
+            @ApiParam(value = "地址") @RequestParam(required = false) String imgurl,
+            @ApiParam(value = "宽度") @RequestParam(required = false) String width,
+            @ApiParam(value = "高度") @RequestParam(required = false) String height) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.updateImgGoods(goodsid, imgurl);
+        Map<String, Integer> map = goodsFacade.updateImgGoods(goodsid, imgurl, width, height);
         if (response.getCode() == 200) {
             response.setMessage("修改成功");
         }
@@ -530,9 +532,11 @@ public class GoodsController {
     @RequestMapping(value = "update_CommodityDescription", method = RequestMethod.POST)
     public Response updateCommodityDescription(
             @ApiParam(value = "商品id") @RequestParam String goodsid,
-            @ApiParam(value = "地址") @RequestParam(required = false) String imgurl) {
+            @ApiParam(value = "地址") @RequestParam(required = false) String imgurl,
+            @ApiParam(value = "宽度") @RequestParam(required = false) String width,
+            @ApiParam(value = "高度") @RequestParam(required = false) String height) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.updateCommodityDescription(goodsid, imgurl);
+        Map<String, Integer> map = goodsFacade.updateCommodityDescription(goodsid, imgurl, width, height);
         if (response.getCode() == 200) {
             response.setMessage("修改成功");
         }
@@ -827,9 +831,11 @@ public class GoodsController {
                                     @ApiParam(value = "套餐名字") @RequestParam(required = false) String comboname,
                                     @ApiParam(value = "图片地址") @RequestParam(required = false) String imgurl,
                                     @ApiParam(value = "折后价") @RequestParam(required = false) String combodiscountprice,
-                                    @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
+                                    @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
+                                    @ApiParam(value = "宽度") @RequestParam(required = false) String width,
+                                    @ApiParam(value = "高度") @RequestParam(required = false) String height) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.updateComDetail(imgurl, comboname, combodiscountprice, comboid, goodsid);
+        Map<String, Integer> map = goodsFacade.updateComDetail(imgurl, comboname, combodiscountprice, comboid, goodsid, width, height);
         if (response.getCode() == 200) {
             response.setMessage("修改成功");
         }
@@ -851,9 +857,11 @@ public class GoodsController {
     public Response addComGoods(@ApiParam(value = "套餐图") @RequestParam(required = false) String imgurl,
                                 @ApiParam(value = "套餐名字") @RequestParam(required = false) String comboname,
                                 @ApiParam(value = "折后价") @RequestParam(required = false) String combodiscountprice,
-                                @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
+                                @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
+                                @ApiParam(value = "宽度") @RequestParam(required = false) String width,
+                                @ApiParam(value = "高度") @RequestParam(required = false) String height) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.addCom(imgurl, comboname, combodiscountprice, goodsid);
+        Map<String, Integer> map = goodsFacade.addCom(imgurl, comboname, combodiscountprice, goodsid, width, height);
         if (response.getCode() == 200) {
             response.setMessage("插入成功");
         }
@@ -871,9 +879,11 @@ public class GoodsController {
     @ApiOperation(value = "增加参数图", notes = "增加参数图", response = Response.class)
     @RequestMapping(value = "add_imgpic", method = RequestMethod.POST)
     public Response addImgGoods(@ApiParam(value = "图片地址") @RequestParam(required = false) String imgurl,
-                                @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
+                                @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
+                                @ApiParam(value = "宽度") @RequestParam(required = false) String width,
+                                @ApiParam(value = "高度") @RequestParam(required = false) String height) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.addImgGoods(imgurl, goodsid);
+        Map<String, Integer> map = goodsFacade.addImgGoods(imgurl, goodsid, width, height);
         if (response.getCode() == 200) {
             response.setMessage("增加成功");
         }
@@ -891,9 +901,11 @@ public class GoodsController {
     @ApiOperation(value = "增加描述图", notes = "增加描述图", response = Response.class)
     @RequestMapping(value = "add_commoditypic", method = RequestMethod.POST)
     public Response addCommodityDescription(@ApiParam(value = "图片地址") @RequestParam(required = false) String imgurl,
-                                            @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
+                                            @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
+                                            @ApiParam(value = "宽度") @RequestParam(required = false) String width,
+                                            @ApiParam(value = "高度") @RequestParam(required = false) String height) {
         Response response = new Response();
-        Map<String, Integer> map = goodsFacade.addCommodityDescription(imgurl, goodsid);
+        Map<String, Integer> map = goodsFacade.addCommodityDescription(imgurl, goodsid, width, height);
         if (response.getCode() == 200) {
             response.setMessage("增加成功");
         }
