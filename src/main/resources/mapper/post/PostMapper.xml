@@ -356,7 +356,7 @@
         INSERT INTO yw_post (circleid, title,
           postcontent, zansum, commentsum, forwardsum,
         collectsum, isactive, type, ishot, isessence,
-        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,squareimgurl
+        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid
         )
         VALUES (
           #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=VARCHAR},
@@ -364,7 +364,7 @@
           #{collectsum,jdbcType=INTEGER},#{isactive,jdbcType=INTEGER},#{type,jdbcType=INTEGER},
           #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
         #{coverimg,jdbcType=VARCHAR},#{intime,jdbcType=TIMESTAMP},#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},
-        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{squareimgurl,jdbcType=VARCHAR}
+        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER}
         )
     </insert>
 
