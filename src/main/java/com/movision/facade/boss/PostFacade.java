@@ -5,6 +5,8 @@ import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.activePart.service.ActivePartService;
+import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.category.service.CategoryService;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.comment.entity.Comment;
@@ -78,7 +80,7 @@ public class PostFacade {
     private ActivePartService activePartService;
 
     @Autowired
-    private AccusationService accusationService;
+    private BossUserService bossUserService;
 
     @Autowired
     private CommentService commentService;
@@ -380,15 +382,38 @@ public class PostFacade {
      * @param content
      * @return
      */
+    @Transactional
     public Map<String, Integer> addPostAppraise(String postid, String userid, String content) {
         CommentVo comm = new CommentVo();
+        Map<String, Integer> map = new HashedMap();
+        Integer uid = Integer.parseInt(userid);
+        Integer iscontribute = bossUserService.queryUserByIscontribute(uid);//查询当前登录用户是否是特邀嘉宾
         comm.setPostid(Integer.parseInt(postid));
-        comm.setUserid(Integer.parseInt(userid));
         comm.setIntime(new Date());
         comm.setContent(content);
-        Map<String, Integer> map = new HashedMap();
+        if (iscontribute == 1) {//如果是特邀嘉宾
+            comm.setIscontribute(iscontribute);//设置为特邀嘉宾评论
+            comm.setIsdel("1");//设置状态为删除
+            comm.setStatus(0);//设置审核状态
+        } else {
+            Integer iscircle = bossUserService.queryUserByiscircle(uid);//查询当前登录用户是否是圈主
+            if (iscircle == 1) {
+                comm.setIscontribute(0);
+            } else {
+                Integer circlemanagement = bossUserService.queryUserBycirclemanagements(uid);//查询当前登录用户是否是圈子管理员
+                if (circlemanagement == 1) {
+                    comm.setIscontribute(0);
+                } else {
+                    map.put("status", -1);
+                    return map;
+                }
+            }
+        }
+
+        Integer u = bossUserService.queryUserById(uid);//根据用户id查询前台对应用户id
+        comm.setUserid(u);
         int status;
-        int c = commentService.insertComment(comm);
+        int c = commentService.insertComment(comm);//添加评论
         if (c == 1) {
             postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子的评论数
             status = 2;
@@ -420,7 +445,9 @@ public class PostFacade {
         Map map = new HashedMap();
         chuan.put("commentid", commentid);
         chuan.put("content", content);
-        chuan.put("userid", userid);
+        //查询出前台对应的用户id
+        Integer uid = bossUserService.queryUserById(Integer.parseInt(userid));
+        chuan.put("userid", uid);
         int i = commentService.updatePostComment(chuan);
         map.put("resault", i);
         return map;

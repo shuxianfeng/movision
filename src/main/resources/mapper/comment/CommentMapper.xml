@@ -350,4 +350,71 @@
     SELECT c.*,u.phone,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u ON c.userid=u.id  WHERE c.userid=1 AND c.isdel=0
     AND c.pid is NULL ORDER BY c.intime DESC
   </select>
+
+  <insert id="insertComment" parameterType="com.movision.mybatis.comment.entity.CommentVo">
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="postid != null">
+        postid,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="intime != null">
+        intime,
+      </if>
+      <if test="zansum != null">
+        zansum,
+      </if>
+      <if test="isdel != null">
+        isdel,
+      </if>
+      <if test="iscontribute != null">
+        iscontribute,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="postid != null">
+        #{postid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="intime != null">
+        #{intime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zansum != null">
+        #{zansum,jdbcType=INTEGER},
+      </if>
+      <if test="isdel != null">
+        #{isdel,jdbcType=VARCHAR},
+      </if>
+      <if test="iscontribute != null">
+        #{iscontribute,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
 </mapper>

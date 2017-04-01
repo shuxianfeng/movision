@@ -39,4 +39,12 @@ public interface BossUserMapper {
 
     int isExistSameName(BossUser bossUser);
 
+    Integer queryUserByIscontribute(Integer userid);
+
+    Integer queryUserByiscircle(Integer userid);
+
+    Integer queryUserBycirclemanagements(Integer userid);
+
+    Integer queryUserById(Integer userid);
+
 }

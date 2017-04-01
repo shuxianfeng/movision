@@ -153,4 +153,67 @@ public class BossUserService {
     }
 
 
+    /**
+     * 查询当前登录用户是否是特邀嘉宾
+     *
+     * @param userid
+     * @return
+     */
+    public Integer queryUserByIscontribute(Integer userid) {
+        try {
+            log.info("查询当前登录用户是否是特邀嘉宾");
+            return bossUserMapper.queryUserByIscontribute(userid);
+        } catch (Exception e) {
+            log.error("查询当前登录用户是否是特邀嘉宾异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询当前登录用户是否是圈主
+     *
+     * @param userid
+     * @return
+     */
+    public Integer queryUserByiscircle(Integer userid) {
+        try {
+            log.info("查询当前登录用户是否是圈主");
+            return bossUserMapper.queryUserByiscircle(userid);
+        } catch (Exception e) {
+            log.error("查询当前登录用户是否是圈主异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询当前登录用户是否是圈子管理员
+     *
+     * @param userid
+     * @return
+     */
+    public Integer queryUserBycirclemanagements(Integer userid) {
+        try {
+            log.info("查询当前登录用户是否是圈子管理员");
+            return bossUserMapper.queryUserBycirclemanagements(userid);
+        } catch (Exception e) {
+            log.error("查询当前登录用户是否是圈子管理员异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 根据用户id查询前台对应用户id
+     *
+     * @param userid
+     * @return
+     */
+    public Integer queryUserById(Integer userid) {
+        try {
+            log.info("根据用户id查询前台对应用户id");
+            return bossUserMapper.queryUserById(userid);
+        } catch (Exception e) {
+            log.error("根据用户id查询前台对应用户id异常");
+            throw e;
+        }
+    }
 }

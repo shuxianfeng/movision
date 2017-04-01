@@ -132,7 +132,7 @@ public class CommentService {
     public int insertComment(CommentVo vo) {
         try {
             log.info("插入帖子评论");
-            return commentMapper.insertSelective(vo);
+            return commentMapper.insertComment(vo);
         } catch (Exception e) {
             log.error("帖子评论失败");
             throw e;

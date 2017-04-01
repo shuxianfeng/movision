@@ -272,4 +272,20 @@
             ]]>
         </if>
     </select>
+
+    <select id="queryUserByIscontribute" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT contributing FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER} AND contributing=1
+    </select>
+
+    <select id="queryUserByiscircle" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        select iscircle from yw_admin_user WHERE  id=#{userid,jdbcType=INTEGER} AND iscircle=1
+    </select>
+
+    <select id="queryUserBycirclemanagements" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        select circlemanagement from yw_admin_user WHERE id=#{userid,jdbcType=INTEGER} AND circlemanagement=1
+    </select>
+
+    <select id="queryUserById" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT u.id FROM yw_admin_user a LEFT JOIN yw_user u ON u.phone=a.phone WHERE a.id=#{userid,jdbcType=INTEGER}
+    </select>
 </mapper>
