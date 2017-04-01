@@ -250,7 +250,7 @@
         select
         yw_admin_menu.*
         from yw_admin_menu
-        where isdel = 1 AND pid = 0 AND m.isshow = 1
+        where isdel = 1 AND pid = 0 AND isshow = 1
         ORDER BY orderid, id
     </select>
 
@@ -259,7 +259,7 @@
         yw_admin_menu.*
         from yw_admin_menu
         <![CDATA[
-        where isdel = 1 AND pid <> 0 AND m.isshow = 1
+        where isdel = 1 AND pid <> 0 AND isshow = 1
         ]]>
         ORDER BY orderid, id
     </select>
