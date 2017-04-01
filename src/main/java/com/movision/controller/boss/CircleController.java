@@ -378,16 +378,13 @@ public class CircleController {
      */
     @ApiOperation(value = "查询圈主和管理员", notes = "用于查询圈主列表和管理员列表接口", response = Response.class)
     @RequestMapping(value = "query_circle", method = RequestMethod.POST)
-    public Response queryCircleManList(@RequestParam(required = false, defaultValue = "1") String pageNo,
-                                       @RequestParam(required = false, defaultValue = "10") String pageSize) {
+    public Response queryCircleManList() {
         Response response = new Response();
-        Paging<User> pager = new Paging<User>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<User> list = circleFacade.queryCircleManList(pager);
+        List<User> list = circleFacade.queryCircleManList();
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        pager.result(list);
-        response.setData(pager);
+        response.setData(list);
         return response;
     }
 

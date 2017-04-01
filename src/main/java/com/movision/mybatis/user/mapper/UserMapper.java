@@ -74,7 +74,7 @@ public interface UserMapper {
 
     List<BossUser> findAllQueryIssuePostManList(RowBounds rowBounds);
 
-    List<User> findAllQueryCircleManList(RowBounds rowBounds);
+    List<User> findAllQueryCircleManList();
 
     List<UserVo> findAllQueryByConditionvipList(Map map, RowBounds rowBounds);
 

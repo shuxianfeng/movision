@@ -499,8 +499,8 @@ public class CircleFacade {
         return postService.findAllQueryCircleByPostList(map, pager);
     }
 
-    public List<User> queryCircleManList(Paging<User> pager) {
-        return userService.queryCircleManList(pager);
+    public List<User> queryCircleManList() {
+        return userService.queryCircleManList();
     }
 
     /**

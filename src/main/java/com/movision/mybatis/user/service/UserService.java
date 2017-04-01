@@ -389,10 +389,10 @@ public class UserService {
      * @param pager
      * @return
      */
-    public List<User> queryCircleManList(Paging<User> pager) {
+    public List<User> queryCircleManList() {
         try {
             log.info("查询圈主和管理员");
-            return userMapper.findAllQueryCircleManList(pager.getRowBounds());
+            return userMapper.findAllQueryCircleManList();
         } catch (Exception e) {
             log.error("查询圈主和管理员异常");
             throw e;
