@@ -1698,4 +1698,8 @@
     <select id="queryUserByPostid" parameterType="java.lang.String" resultType="java.lang.Integer">
         select userid from yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
+
+    <update id="addPostByisessencepool" parameterType="java.lang.Integer">
+        UPDATE yw_post SET isessencepool=1 WHERE id=#{postid,jdbcType=INTEGER}
+    </update>
 </mapper>

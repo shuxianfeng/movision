@@ -1540,4 +1540,25 @@ public class PostFacade {
         return result;
     }
 
+    /**
+     * 特邀嘉宾操作帖子，加入精选池
+     *
+     * @param postid
+     * @param userid
+     * @return
+     */
+    public Map addPostByisessencepool(String postid, String userid) {
+        Map map = new HashedMap();
+        //查询登录用户是否是特邀嘉宾
+        Integer guest = bossUserService.queryUserIdBySpeciallyGuest(Integer.parseInt(userid));//判断用户是否是特邀嘉宾
+        if (guest == 1) {//是
+            Integer resault = postService.addPostByisessencepool(Integer.parseInt(postid));
+            map.put("resault", resault);
+            return map;
+        } else {
+            map.put("resault", -1);
+            return map;
+        }
+    }
+
 }

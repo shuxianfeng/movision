@@ -927,6 +927,21 @@ public class PostService {
     }
 
     /**
+     * 特邀嘉宾操作帖子，加入精选池
+     * @param postid
+     * @return
+     */
+    public Integer addPostByisessencepool(Integer postid) {
+        try {
+            log.info("特邀嘉宾操作帖子，加入精选池");
+            return postMapper.addPostByisessencepool(postid);
+        } catch (Exception e) {
+            log.error("特邀嘉宾操作帖子，加入精选池异常");
+            throw e;
+        }
+    }
+
+    /**
      * 根据帖子id查询用户id
      *
      * @param postid

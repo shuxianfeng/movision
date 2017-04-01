@@ -170,4 +170,6 @@ public interface PostMapper {
 
     Integer queryUserByPostid(String postid);//根据帖子id查询用户id
 
+    Integer addPostByisessencepool(Integer postid);//特邀嘉宾操作帖子，加入精选池
+
 }
