@@ -568,23 +568,17 @@ public class PostController {
      * 模糊查询发帖人
      *
      * @param name
-     * @param pageNo
-     * @param pageSize
      * @return
      */
     @ApiOperation(value = "模糊查询发帖人", notes = "用于模糊查询发帖人接口", response = Response.class)
     @RequestMapping(value = "/like_query_post_nickname", method = RequestMethod.POST)
-    public Response likeQueryPostByNickname(@ApiParam(value = "关键字") @RequestParam String name,
-                                            @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                            @RequestParam(required = false, defaultValue = "10") String pageSize) {
+    public Response likeQueryPostByNickname(@ApiParam(value = "关键字") @RequestParam String name) {
         Response response = new Response();
-        Paging<UserLike> pager = new Paging<UserLike>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<UserLike> list = postFacade.likeQueryPostByNickname(name, pager);
+        List<UserLike> list = postFacade.likeQueryPostByNickname(name);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        pager.result(list);
-        response.setData(pager);
+        response.setData(list);
         return response;
     }
 

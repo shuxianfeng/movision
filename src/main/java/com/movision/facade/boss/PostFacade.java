@@ -938,11 +938,10 @@ public class PostFacade {
      * 查询名称
      *
      * @param name
-     * @param pager
      * @return
      */
-    public List<UserLike> likeQueryPostByNickname(String name, Paging<UserLike> pager) {
-        return userService.likeQueryPostByNickname(name, pager);
+    public List<UserLike> likeQueryPostByNickname(String name) {
+        return userService.likeQueryPostByNickname(name);
     }
 
 

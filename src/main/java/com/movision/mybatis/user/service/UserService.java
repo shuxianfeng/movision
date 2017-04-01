@@ -255,13 +255,12 @@ public class UserService {
      * 模糊查询发帖人
      *
      * @param name
-     * @param pager
      * @return
      */
-    public List<UserLike> likeQueryPostByNickname(String name, Paging<UserLike> pager) {
+    public List<UserLike> likeQueryPostByNickname(String name) {
         try {
             log.info("模糊查询发帖人");
-            return userMapper.findAlllikeQueryPostByNickname(name, pager.getRowBounds());
+            return userMapper.findAlllikeQueryPostByNickname(name);
         } catch (Exception e) {
             log.error("模糊查询发帖人异常");
             throw e;
