@@ -219,6 +219,7 @@ public class FacadePost {
                 post.setTotalpoint(0);//帖子综合评分
                 post.setIsdel(0);//上架
                 post.setCoverimg(coverurl);//帖子封面
+                post.setUserid(Integer.parseInt(userid));
                 //插入帖子
                 postService.releasePost(post);
 
