@@ -1,5 +1,6 @@
 package com.movision.mybatis.combo.service;
 
+import com.movision.mybatis.combo.entity.Combo;
 import com.movision.mybatis.combo.mapper.ComboMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ public class ComboService {
         }
     }
 
-    public List<String> queryComboDescribeImgList(int goodsid) {
+    public List<Combo> queryComboDescribeImgList(int goodsid) {
         try {
             log.info("根据商品id查询套餐图片列表");
             return comboMapper.queryComboDescribeImgList(goodsid);

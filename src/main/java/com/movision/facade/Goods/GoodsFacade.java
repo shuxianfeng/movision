@@ -5,6 +5,7 @@ import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.cart.entity.CartVo;
 import com.movision.mybatis.cart.service.CartService;
 import com.movision.mybatis.collection.service.CollectionService;
+import com.movision.mybatis.combo.entity.Combo;
 import com.movision.mybatis.combo.entity.ComboVo;
 import com.movision.mybatis.combo.service.ComboService;
 import com.movision.mybatis.goods.entity.Goods;
@@ -95,8 +96,20 @@ public class GoodsFacade {
             goodsDetail.setIscollect(1);//已收藏
         }
 
+        //查询商品描述长图
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("goodsid", Integer.parseInt(goodsid));
+        parammap.put("type", 1);//type==1是商品描述长图
+        GoodsImg goodsDescribeImgurl = goodsService.queryGoodsDescribeImg(parammap);
+        goodsDetail.setGoodsDescribeImgurl(goodsDescribeImgurl);
+
+        //查询商品描述长图
+        parammap.put("type", 3);//type==3是商品参数长图
+        GoodsImg goodsParamImgurl = goodsService.queryGoodsDescribeImg(parammap);
+        goodsDetail.setGoodsParamImgurl(goodsParamImgurl);
+
         //查询当前商品所属的所有套餐详情图列表
-        List<String> comboDescribeImgList = comboService.queryComboDescribeImgList(Integer.parseInt(goodsid));
+        List<Combo> comboDescribeImgList = comboService.queryComboDescribeImgList(Integer.parseInt(goodsid));
         goodsDetail.setComboDescribeImgList(comboDescribeImgList);
 
         //再查询用户商品实物图列表集合

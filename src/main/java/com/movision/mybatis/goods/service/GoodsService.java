@@ -188,6 +188,16 @@ public class GoodsService {
         }
     }
 
+    public GoodsImg queryGoodsDescribeImg(Map<String, Object> parammap) {
+        try {
+            log.info("根据商品id和图片类型查询商品描述长图和商品参数长图");
+            return goodsMapper.queryGoodsDescribeImg(parammap);
+        } catch (Exception e) {
+            log.error("根据商品id和图片类型查询商品描述长图和商品参数长图失败");
+            throw e;
+        }
+    }
+
     public List<GoodsImg> queryGoodsImgList(int goodsid) {
         try {
             log.info("根据商品id查询商品实物图列表");

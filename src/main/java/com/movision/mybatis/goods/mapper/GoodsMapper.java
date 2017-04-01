@@ -52,6 +52,8 @@ public interface GoodsMapper {
 
     String queryShopnameById(int shopid);
 
+    GoodsImg queryGoodsDescribeImg(Map<String, Object> parammap);
+
     List<GoodsImg> queryGoodsImgList(int goodsid);
 
     int queryStore(int goodsid);

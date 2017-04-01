@@ -1,5 +1,7 @@
 package com.movision.mybatis.goods.entity;
 
+import com.movision.mybatis.combo.entity.Combo;
+
 import java.util.Date;
 import java.util.List;
 
@@ -68,11 +70,11 @@ public class GoodsDetail {
 
     private List<GoodsImg> goodsImgList;//商品详情实物图片列表
 
-    private String goodsDescribeImgurl;//商品描述长图
+    private GoodsImg goodsDescribeImgurl;//商品描述长图
 
-    private List<String> comboDescribeImgList;//套餐描述图片列表
+    private List<Combo> comboDescribeImgList;//套餐描述图片列表
 
-    private String goodsParamImgurl;//商品参数长图
+    private GoodsImg goodsParamImgurl;//商品参数长图
 
     private int iscollect;//0 未收藏 可收藏 1 已收藏 不可收藏
 
@@ -300,22 +302,6 @@ public class GoodsDetail {
         this.goodsImgList = goodsImgList;
     }
 
-    public String getGoodsDescribeImgurl() {
-        return goodsDescribeImgurl;
-    }
-
-    public void setGoodsDescribeImgurl(String goodsDescribeImgurl) {
-        this.goodsDescribeImgurl = goodsDescribeImgurl;
-    }
-
-    public String getGoodsParamImgurl() {
-        return goodsParamImgurl;
-    }
-
-    public void setGoodsParamImgurl(String goodsParamImgurl) {
-        this.goodsParamImgurl = goodsParamImgurl;
-    }
-
     public Integer getShopid() {
         return shopid;
     }
@@ -340,11 +326,27 @@ public class GoodsDetail {
         this.iscollect = iscollect;
     }
 
-    public List<String> getComboDescribeImgList() {
+    public GoodsImg getGoodsDescribeImgurl() {
+        return goodsDescribeImgurl;
+    }
+
+    public void setGoodsDescribeImgurl(GoodsImg goodsDescribeImgurl) {
+        this.goodsDescribeImgurl = goodsDescribeImgurl;
+    }
+
+    public List<Combo> getComboDescribeImgList() {
         return comboDescribeImgList;
     }
 
-    public void setComboDescribeImgList(List<String> comboDescribeImgList) {
+    public void setComboDescribeImgList(List<Combo> comboDescribeImgList) {
         this.comboDescribeImgList = comboDescribeImgList;
+    }
+
+    public GoodsImg getGoodsParamImgurl() {
+        return goodsParamImgurl;
+    }
+
+    public void setGoodsParamImgurl(GoodsImg goodsParamImgurl) {
+        this.goodsParamImgurl = goodsParamImgurl;
     }
 }

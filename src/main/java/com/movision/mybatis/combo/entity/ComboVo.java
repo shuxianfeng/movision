@@ -20,6 +20,10 @@ public class ComboVo {
 
     private String imgurl;//商品小方图
 
+    private String width;
+
+    private String height;
+
     private Integer stock;//套餐剩余库存
 
     public Integer getId() {
@@ -76,5 +80,21 @@ public class ComboVo {
 
     public void setIntime(Date intime) {
         this.intime = intime;
+    }
+
+    public String getWidth() {
+        return width;
+    }
+
+    public void setWidth(String width) {
+        this.width = width;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
     }
 }

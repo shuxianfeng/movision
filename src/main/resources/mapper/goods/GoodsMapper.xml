@@ -215,8 +215,7 @@
     <!--根据商品id查询商品详情-->
     <select id="queryGoodDetail" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.goods.entity.GoodsDetail">
-        SELECT t1.*,  (SELECT img_url FROM yw_goods_img WHERE goodsid = #{goodsid,jdbcType=INTEGER} AND type = '1') AS goodsDescribeImgurl,
-              (SELECT img_url FROM yw_goods_img WHERE goodsid = #{goodsid,jdbcType=INTEGER} AND type = '3') AS goodsParamImgurl
+        SELECT t1.*
         FROM yw_goods t1
         WHERE id = #{goodsid,jdbcType=INTEGER}
     </select>
@@ -229,6 +228,14 @@
         WHERE goodsid = #{goodsid,jdbcType=INTEGER}
           AND type = '0'
           ORDER BY oderid
+    </select>
+
+    <!--根据商品id和图片类型查询商品描述长图和商品参数长图-->
+    <select id="queryGoodsDescribeImg" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.goods.entity.GoodsImg">
+        SELECT img_url, height, width FROM yw_goods_img
+        WHERE goodsid = #{goodsid,jdbcType=INTEGER}
+          AND type = #{type,jdbcType=INTEGER}
     </select>
 
     <!--根据商品id查询商品库存-->
