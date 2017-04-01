@@ -37,13 +37,13 @@ public class BossImController {
     @ApiOperation(value = "给APP用户发送系统通知", notes = "给APP用户发送系统通知", response = Response.class)
     @RequestMapping(value = {"/send_system_inform"}, method = RequestMethod.POST)
     public Response sendSystemInform(@ApiParam(value = "系统通知内容") @RequestParam String body,
-                                     @ApiParam(value = "系统通知标题") @RequestParam String title) throws IOException {
+                                     @ApiParam(value = "系统通知标题") @RequestParam String title,
+                                     @ApiParam(value = "系统推送内容(填就是推送，不填就是通知)") @RequestParam(required = false) String pushcontent) throws IOException {
         Response response = new Response();
 
-        imFacade.sendSystemInform(body, title);
+        imFacade.sendSystemInform(body, title, pushcontent);
         return response;
     }
-
 
 
     /**

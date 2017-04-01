@@ -433,7 +433,7 @@ public class ImFacade {
      * @param body
      * @throws IOException
      */
-    public void sendSystemInform(String body, String title) throws IOException {
+    public void sendSystemInform(String body, String title, String pushcontent) throws IOException {
 
         ImUser imUser = this.getImuserByCurrentBossuser();
 
@@ -452,14 +452,15 @@ public class ImFacade {
                      *     i=2, 即第1001-1002人，   取两人
                      */
                     int eachSize = i < mutiple ? 500 : size - mutiple * 500;
-                    sendAndRecord(body, imUser, imAppUserList, eachSize, i, title);
+                    sendAndRecord(body, imUser, imAppUserList, eachSize, i, title, pushcontent);
                 }
             } else {
                 //不超过500人
-                sendAndRecord(body, imUser, imAppUserList, size, 0, title);
+                sendAndRecord(body, imUser, imAppUserList, size, 0, title, pushcontent);
             }
         }
     }
+
 
     /**
      * 准备toAccids参数,发送系统通知，并且记录
@@ -471,14 +472,14 @@ public class ImFacade {
      * @param multiple
      * @throws IOException
      */
-    private void sendAndRecord(String body, ImUser imUser, List<ImUser> imAppUserList, int size, int multiple, String title) throws IOException {
+    private void sendAndRecord(String body, ImUser imUser, List<ImUser> imAppUserList, int size, int multiple, String title, String pushcontent) throws IOException {
         //不足500人
         String toAccids = prepareToAccids(imAppUserList, size, multiple);
 
-        Map result = this.sendSystemInform(body, imUser.getAccid(), toAccids);
+        Map result = this.sendSystemInform(body, imUser.getAccid(), toAccids, pushcontent);
         if (result.get("code").equals(200)) {
             log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
-            this.recordSysInforms(body, imUser.getAccid(), toAccids, title);
+            this.recordSysInforms(body, imUser.getAccid(), toAccids, title, pushcontent);
         } else {
             throw new BusinessException(MsgCodeConstant.send_system_msg_fail, "发送系统通知失败");
         }
@@ -515,11 +516,12 @@ public class ImFacade {
      * @return
      * @throws IOException
      */
-    public Map sendSystemInform(String body, String fromaccid, String toAccids) throws IOException {
+    public Map sendSystemInform(String body, String fromaccid, String toAccids, String pushcontent) throws IOException {
         //发系统通知
         ImBatchAttachMsg imBatchAttachMsg = new ImBatchAttachMsg();
         imBatchAttachMsg.setFromAccid(fromaccid);
         imBatchAttachMsg.setAttach(body);
+        imBatchAttachMsg.setPushcontent(pushcontent);
         imBatchAttachMsg.setToAccids(toAccids);
         return this.sendImHttpPost(ImConstant.SEND_BATCH_ATTACH_MSG, BeanUtil.ImBeanToMap(imBatchAttachMsg));
     }
@@ -532,7 +534,7 @@ public class ImFacade {
      * @param fromaccid
      * @param toAccids
      */
-    public void recordSysInforms(String body, String fromaccid, String toAccids, String title) {
+    public void recordSysInforms(String body, String fromaccid, String toAccids, String title, String pushcontent) {
 
         ImSystemInform imSystemInform = new ImSystemInform();
         imSystemInform.setBody(body);
@@ -540,6 +542,8 @@ public class ImFacade {
         imSystemInform.setUserid(ShiroUtil.getBossUserID());
         imSystemInform.setToAccids(toAccids);
         imSystemInform.setTitle(title);
+        imSystemInform.setPushcontent(pushcontent);
+        imSystemInform.setInformTime(new Date());
         //每次取500个人
         imSystemInformService.add(imSystemInform);
     }
@@ -724,6 +728,8 @@ public class ImFacade {
     }
 
     /**
+     *
+     *
      * 系统推送
      *
      * @param

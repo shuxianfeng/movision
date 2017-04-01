@@ -17,6 +17,16 @@ public class ImSystemInform {
 
     private String title;
 
+    private String pushcontent;
+
+    public String getPushcontent() {
+        return pushcontent;
+    }
+
+    public void setPushcontent(String pushcontent) {
+        this.pushcontent = pushcontent;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
