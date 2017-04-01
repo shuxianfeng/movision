@@ -64,7 +64,7 @@
     <!--查询圈子的所有管理员列表-->
     <select id="queryCircleManagerList" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.user.entity.User">
-        SELECT id, photo, nickname, phone FROM yw_user WHERE id IN (
+        SELECT id, photo, nickname, phone,level FROM yw_user WHERE id IN (
         SELECT userid FROM yw_circle_manager WHERE circleid = #{circleid,jdbcType=INTEGER}
         )
     </select>
