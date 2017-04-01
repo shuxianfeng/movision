@@ -540,11 +540,18 @@ public class GoodsListFacade {
     public Map<String, Integer> updateImgGoods(String goodsid, String img_url, String height, String width) {
         Map<String, Integer> map = new HashMap<>();
         GoodsImg img = new GoodsImg();
-        img.setGoodsid(Integer.parseInt(goodsid));
-
-        img.setImgurl(img_url);
-        img.setHeight(height);
-        img.setWidth(width);
+        if (!StringUtils.isEmpty(goodsid)) {
+            img.setGoodsid(Integer.parseInt(goodsid));
+        }
+        if (!StringUtils.isEmpty(img_url)) {
+            img.setImgurl(img_url);
+        }
+        if (!StringUtils.isEmpty(height)) {
+            img.setHeight(height);
+        }
+        if (!StringUtils.isEmpty(width)) {
+            img.setWidth(width);
+        }
             int result = goodsService.updateImgGoods(img);
             map.put("result", result);
 
@@ -561,11 +568,18 @@ public class GoodsListFacade {
     public Map<String, Integer> updateCommodityDescription(String goodsid, String img_url, String height, String width) {
         Map<String, Integer> map = new HashMap<>();
         GoodsImg img = new GoodsImg();
-        img.setGoodsid(Integer.parseInt(goodsid));
-
-        img.setImgurl(img_url);
-        img.setHeight(height);
-        img.setWidth(width);
+        if (!StringUtils.isEmpty(goodsid)) {
+            img.setGoodsid(Integer.parseInt(goodsid));
+        }
+        if (!StringUtils.isEmpty(img_url)) {
+            img.setImgurl(img_url);
+        }
+        if (!StringUtils.isEmpty(height)) {
+            img.setHeight(height);
+        }
+        if (!StringUtils.isEmpty(width)) {
+            img.setWidth(width);
+        }
         int result = goodsService.updateCommodityDescription(img);
         map.put("result", result);
 
@@ -848,11 +862,22 @@ public class GoodsListFacade {
     public Map<String, Integer> updateComDetail(String imgurl, String comboname, String combodiscountprice, String comboid, String goodsid, String width, String height) {
         Combo goodsComboVo = new Combo();
         goodsComboVo.setComboid(Integer.parseInt(comboid));
-        goodsComboVo.setCombodiscountprice(Double.parseDouble(combodiscountprice));
-        goodsComboVo.setComboname(comboname);
-        goodsComboVo.setHeight(height);
-        goodsComboVo.setWidth(width);
-        goodsComboVo.setImgurl(imgurl);
+        if (!StringUtils.isEmpty(combodiscountprice)) {
+            goodsComboVo.setCombodiscountprice(Double.parseDouble(combodiscountprice));
+        }
+        if (!StringUtils.isEmpty(comboname)) {
+            goodsComboVo.setComboname(comboname);
+        }
+
+        if (!StringUtils.isEmpty(height)) {
+            goodsComboVo.setHeight(height);
+        }
+        if (!StringUtils.isEmpty(width)) {
+            goodsComboVo.setWidth(width);
+        }
+        if (!StringUtils.isEmpty(imgurl)) {
+            goodsComboVo.setImgurl(imgurl);
+        }
         int res = goodsService.updateComDetail(goodsComboVo);
         String productids[] = goodsid.split(",");
         int re = goodsService.deleteComGoodsT(Integer.parseInt(comboid));

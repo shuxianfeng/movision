@@ -507,10 +507,10 @@ public class GoodsController {
     @ApiOperation(value = "修改参数图", notes = "修改参数图", response = Response.class)
     @RequestMapping(value = "update_cimg", method = RequestMethod.POST)
     public Response updateImgGoods(
-            @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
-            @ApiParam(value = "地址") @RequestParam(required = false) String imgurl,
-            @ApiParam(value = "宽度") @RequestParam(required = false) String width,
-            @ApiParam(value = "高度") @RequestParam(required = false) String height) {
+            @ApiParam(value = "商品id") @RequestParam String goodsid,
+            @ApiParam(value = "地址") @RequestParam String imgurl,
+            @ApiParam(value = "宽度") @RequestParam String width,
+            @ApiParam(value = "高度") @RequestParam String height) {
         Response response = new Response();
         Map<String, Integer> map = goodsFacade.updateImgGoods(goodsid, imgurl, width, height);
         if (response.getCode() == 200) {
@@ -532,9 +532,9 @@ public class GoodsController {
     @RequestMapping(value = "update_CommodityDescription", method = RequestMethod.POST)
     public Response updateCommodityDescription(
             @ApiParam(value = "商品id") @RequestParam String goodsid,
-            @ApiParam(value = "地址") @RequestParam(required = false) String imgurl,
-            @ApiParam(value = "宽度") @RequestParam(required = false) String width,
-            @ApiParam(value = "高度") @RequestParam(required = false) String height) {
+            @ApiParam(value = "地址") @RequestParam String imgurl,
+            @ApiParam(value = "宽度") @RequestParam String width,
+            @ApiParam(value = "高度") @RequestParam String height) {
         Response response = new Response();
         Map<String, Integer> map = goodsFacade.updateCommodityDescription(goodsid, imgurl, width, height);
         if (response.getCode() == 200) {
@@ -832,8 +832,8 @@ public class GoodsController {
                                     @ApiParam(value = "图片地址") @RequestParam(required = false) String imgurl,
                                     @ApiParam(value = "折后价") @RequestParam(required = false) String combodiscountprice,
                                     @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
-                                    @ApiParam(value = "宽度") @RequestParam(required = false) String width,
-                                    @ApiParam(value = "高度") @RequestParam(required = false) String height) {
+                                    @ApiParam(value = "宽度") @RequestParam String width,
+                                    @ApiParam(value = "高度") @RequestParam String height) {
         Response response = new Response();
         Map<String, Integer> map = goodsFacade.updateComDetail(imgurl, comboname, combodiscountprice, comboid, goodsid, width, height);
         if (response.getCode() == 200) {
@@ -858,8 +858,8 @@ public class GoodsController {
                                 @ApiParam(value = "套餐名字") @RequestParam(required = false) String comboname,
                                 @ApiParam(value = "折后价") @RequestParam(required = false) String combodiscountprice,
                                 @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
-                                @ApiParam(value = "宽度") @RequestParam(required = false) String width,
-                                @ApiParam(value = "高度") @RequestParam(required = false) String height) {
+                                @ApiParam(value = "宽度") @RequestParam String width,
+                                @ApiParam(value = "高度") @RequestParam String height) {
         Response response = new Response();
         Map<String, Integer> map = goodsFacade.addCom(imgurl, comboname, combodiscountprice, goodsid, width, height);
         if (response.getCode() == 200) {
