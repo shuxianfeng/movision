@@ -27,13 +27,13 @@
         <result column="isdel" jdbcType="INTEGER" property="isdel"/>
         <result column="essencedate" jdbcType="DATE" property="essencedate"/>
         <result column="userid" jdbcType="INTEGER" property="userid"/>
-        <result column="squareimgurl" jdbcType="VARCHAR" property="squareimgurl"/>
+        <result column="oprtime" jdbcType="TIMESTAMP" property="oprtime"/>
     </resultMap>
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
         isactive, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
-        hotimgurl, intime,totalpoint,isdel,essencedate,userid,squareimgurl
+        hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime
   </sql>
 
     <!--基础查询语句-->
@@ -334,7 +334,7 @@
         commentsum, forwardsum, collectsum,
         isactive, activetype, activefee, iscontribute, type, ishot, orderid,
         isessence, isessencepool, coverimg, hotimgurl,
-        intime, totalpoint, isdel, essencedate,userid,squareimgurl
+        intime, totalpoint, isdel, essencedate,userid,oprtime
       )
     values (#{id,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
       #{subtitle,jdbcType=VARCHAR}, #{postcontent,jdbcType=VARCHAR}, #{zansum,jdbcType=INTEGER},
@@ -344,7 +344,7 @@
         #{ishot,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},
         #{isessencepool,jdbcType=INTEGER}, #{coverimg,jdbcType=VARCHAR},#{hotimgurl,jdbcType=VARCHAR},
         #{intime,jdbcType=TIMESTAMP}, #{totalpoint,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER},
-        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{squareimgurl,jdbcType=VARCHAR}
+        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{oprtime,jdbcType=TIMESTAMP}
       )
   </insert>
 
@@ -356,7 +356,7 @@
         INSERT INTO yw_post (circleid, title,
           postcontent, zansum, commentsum, forwardsum,
         collectsum, isactive, type, ishot, isessence,
-        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid
+        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime
         )
         VALUES (
           #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=VARCHAR},
@@ -364,7 +364,7 @@
           #{collectsum,jdbcType=INTEGER},#{isactive,jdbcType=INTEGER},#{type,jdbcType=INTEGER},
           #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
         #{coverimg,jdbcType=VARCHAR},#{intime,jdbcType=TIMESTAMP},#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},
-        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER}
+        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{oprtime,jdbcType=TIMESTAMP}
         )
     </insert>
 
@@ -427,7 +427,13 @@
             time,
         </if>
         <if test="intime != null">
-            intime
+            intime,
+        </if>
+        <if test="userid!=null">
+            userid,
+        </if>
+        <if test="oprtime!=null">
+            oprtime
         </if>
         )
         VALUES (
@@ -456,7 +462,13 @@
             #{time,jdbcType=TIMESTAMP},
         </if>
         <if test="intime != null">
-            #{intime,jdbcType=TIMESTAMP}
+            #{intime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="userid != null">
+            #{userid,jdbcType=INTEGER},
+        </if>
+        <if test="oprtime!=null">
+            #{oprtime,jdbcType=TIMESTAMP}
         </if>
         )
     </insert>
@@ -541,7 +553,10 @@
                 essencedate,
             </if>
             <if test="userid !=null">
-                userid
+                userid,
+            </if>
+            <if test="oprtime != null">
+                oprtime
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -618,7 +633,10 @@
                 #{essencedate,jdbcType=DATE},
             </if>
             <if test="userid!=null">
-                #{userid,jdbcType=INTEGER}
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="oprtime !=null">
+                #{oprtime,jdbcType=TIMESTAMP}
             </if>
         </trim>
     </insert>
@@ -700,7 +718,10 @@
                 essencedate,
             </if>
             <if test="userid !=null">
-                userid
+                userid,
+            </if>
+            <if test="oprtime != null">
+                oprtime
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -774,7 +795,10 @@
                 #{essencedate,jdbcType=TIMESTAMP},
             </if>
             <if test="userid!=null">
-                #{userid,jdbcType=INTEGER}
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="oprtime != null">
+                #{oprtime,jdbcType=TIMESTAMP}
             </if>
         </trim>
     </insert>
@@ -855,6 +879,9 @@
             <if test="userid != null">
                 userid = #{userid,jdbcType=INTEGER},
             </if>
+            <if test="oprtime != null">
+                oprtime=#{oprtime,jdbcType=TIMESTAMP},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -899,6 +926,9 @@
             </if>
             <if test="ishot!=null">
                 ishot=#{ishot,jdbcType=INTEGER},
+            </if>
+            <if test="oprtime!=null">
+                oprtime=#{oprtime,jdbcType=TIMESTAMP},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -955,6 +985,9 @@
             <if test="userid != null">
                 userid = #{userid,jdbcType=INTEGER},
             </if>
+            <if test="oprtime!=null">
+                oprtime=#{oprtime,jdbcType=TIMESTAMP},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -985,7 +1018,8 @@
       totalpoint = #{totalpoint,jdbcType=INTEGER},
         isdel = #{isdel,jdbcType=INTEGER},
         essencedate = #{essencedate,jdbcType=DATE},
-        userid=#{userid,jdbcType=INTEGER}
+        userid=#{userid,jdbcType=INTEGER},
+        oprtime=#{oprtime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
     <update id="updatePostByZanSum" parameterType="java.lang.Integer">
@@ -1264,7 +1298,10 @@
                 essencedate,
             </if>
             <if test="userid !=null">
-                userid
+                userid,
+            </if>
+            <if test="oprtime!=null">
+                oprtime
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -1313,7 +1350,10 @@
                   #{essencedate,jdbcType=DATE},
               </if>
             <if test="userid!=null">
-                #{userid,jdbcType=INTEGER}
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="oprtime!=null">
+                #{oprtime,jdbcType=TIMESTAMP}
             </if>
         </trim>
     </insert>
@@ -1371,7 +1411,10 @@
                 hotimgurl,
             </if>
             <if test="ishot!=null">
-                ishot
+                ishot,
+            </if>
+            <if test="oprtime!=null">
+                oprtime
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -1421,7 +1464,10 @@
                 #{hotimgurl,jdbcType=VARCHAR},
             </if>
             <if test="ishot!=null">
-                #{ishot,jdbcType=INTEGER}
+                #{ishot,jdbcType=INTEGER},
+            </if>
+            <if test="oprtime!=null">
+                #{oprtime,jdbcType=TIMESTAMP}
             </if>
         </trim>
     </insert>
