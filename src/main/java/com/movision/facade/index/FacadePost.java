@@ -18,6 +18,7 @@ import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.DateUtils;
+import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -57,6 +59,9 @@ public class FacadePost {
 
     @Autowired
     private VideoService videoService;
+
+    @Autowired
+    private MovisionOssClient movisionOssClient;
 
     public PostVo queryPostDetail(String postid, String userid, String type) {
 
@@ -170,8 +175,19 @@ public class FacadePost {
     }
 
     @Transactional
-    public int releasePost(String userid, String type, String circleid, String title, String postcontent, String isactive, String coverimg,
-                           String videourl, String bannerimgurl, String proids) {
+    public int releasePost(String userid, String type, String circleid, String title, String postcontent, String isactive, MultipartFile coverimg,
+                           MultipartFile videofile, String videourl, String proids) {
+
+        String url = "";//定义原生视频地址
+        if (videofile != null) {
+            //首先调用庄总的视频上传接口
+            Map m = movisionOssClient.uploadObject(videofile, "video", "post");
+            url = String.valueOf(m.get("url"));//原生视频上传地址
+        }
+
+        //上传帖子封面图片
+        Map m = movisionOssClient.uploadObject(coverimg, "img", "post");
+        String coverurl = String.valueOf(m.get("url"));
 
         //这里需要根据userid判断当前登录的用户是否有发帖权限
         //查询当前圈子的开放范围
@@ -184,7 +200,7 @@ public class FacadePost {
         if (scope == 0 || Integer.parseInt(userid) == owner.getId() || (scope == 1 && lev >= 1)) {
 
             try {
-                log.info("APP前端用户开始请求发普通帖");
+                log.info("APP前端用户开始请求发帖");
 
                 Post post = new Post();
                 post.setCircleid(Integer.parseInt(circleid));
@@ -202,7 +218,7 @@ public class FacadePost {
                 post.setIntime(new Date());//帖子发布时间
                 post.setTotalpoint(0);//帖子综合评分
                 post.setIsdel(0);//上架
-                post.setCoverimg(coverimg);//帖子封面
+                post.setCoverimg(coverurl);//帖子封面
                 //插入帖子
                 postService.releasePost(post);
 
@@ -211,11 +227,13 @@ public class FacadePost {
                 if (!type.equals("0")) {
                     Video video = new Video();
                     video.setPostid(flag);
-                    video.setVideourl(videourl);
                     video.setIsrecommend(0);
                     video.setIsbanner(0);
+                    video.setBannerimgurl(coverurl);//简化APP，直接取帖子封面图片为原生视频的封面(运营后台不变)
                     if (type.equals("1")) {
-                        video.setBannerimgurl(bannerimgurl);
+                        video.setVideourl(url);//原生视频上传链接
+                    } else if (type.equals("2")) {
+                        video.setVideourl(videourl);//分享视频链接
                     }
                     video.setIntime(new Date());
                     //向帖子视频表中插入一条视频记录
@@ -240,7 +258,7 @@ public class FacadePost {
                 return flag;
 
             } catch (Exception e) {
-                log.error("系统异常，APP普通帖发布失败");
+                log.error("系统异常，APP发帖失败");
                 e.printStackTrace();
                 return 0;
             }

@@ -126,24 +126,24 @@ public class AppPostController {
                                 @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
                                 @ApiParam(value = "帖子内容") @RequestParam String postcontent,
                                 @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,
-                                @ApiParam(value = "帖子封面图片url(先调用庄总图片上传借口，返回的url传到这里)") @RequestParam String coverimg,
-                                @ApiParam(value = "视频地址url（type为0传空、type为1时先调用庄总视频上传借口返回url传到这里、type为2时直接把分享的第三方视频网址传到这里）") @RequestParam(required = false) String videourl,
-                                @ApiParam(value = "原生视频的封面图片地址url（type为1时必填--先调用庄总图片上传借口，拿到图片url传到这里）") @RequestParam(required = false) String bannerimgurl,
+                                @ApiParam(value = "帖子封面图片") @RequestParam MultipartFile coverimg,
+                                @ApiParam(value = "原生视频文件（手机本地视频文件，type为1时必填）") @RequestParam(required = false) MultipartFile videofile,
+                                @ApiParam(value = "第三方视频地址url（type为2时必填，直接把分享的第三方视频网址传到这里）") @RequestParam(required = false) String videourl,
                                 @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids
     ) {
         Response response = new Response();
 
-        int count = facadePost.releasePost(userid, type, circleid, title, postcontent, isactive, coverimg, videourl, bannerimgurl, proids);
+        int count = facadePost.releasePost(userid, type, circleid, title, postcontent, isactive, coverimg, videofile, videourl, proids);
 
         if (count == 0) {
             response.setCode(300);
-            response.setMessage("系统异常，APP普通帖发布失败");
+            response.setMessage("系统异常，APP发帖失败");
         } else if (count == -1) {
             response.setCode(201);
             response.setMessage("用户不具备发帖权限");
         } else {
             response.setCode(200);
-            response.setMessage("发布成功");
+            response.setMessage("发帖成功");
         }
         return response;
     }
