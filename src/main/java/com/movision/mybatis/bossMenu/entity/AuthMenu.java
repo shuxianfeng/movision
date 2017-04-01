@@ -22,6 +22,16 @@ public class AuthMenu implements Serializable {
 
     private String url;
 
+    private Integer isshow;
+
+    public void setIsshow(Integer isshow) {
+        this.isshow = isshow;
+    }
+
+    public Integer getIsshow() {
+        return isshow;
+    }
+
     public void setUrl(String url) {
         this.url = url;
     }
@@ -99,6 +109,7 @@ public class AuthMenu implements Serializable {
                 ", remark='" + remark + '\'' +
                 ", isAuthroize=" + isAuthroize +
                 ", url='" + url + '\'' +
+                ", isshow=" + isshow +
                 '}';
     }
 }

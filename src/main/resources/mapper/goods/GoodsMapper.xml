@@ -949,13 +949,13 @@
         update yw_goods_img
         <set>
             <if test="imgurl != null">
-                img_url = #{imgurl,jdbcType=VARCHAR}
+                img_url = #{imgurl,jdbcType=VARCHAR},
             </if>
             <if test="width != null">
-                width = #{imgurl,jdbcType=VARCHAR}
+                width = #{width,jdbcType=VARCHAR},
             </if>
             <if test="height != null">
-                height = #{imgurl,jdbcType=VARCHAR}
+                height = #{height,jdbcType=VARCHAR},
             </if>
         </set>
         WHERE goodsid= #{goodsid,jdbcType=INTEGER} AND type=3
@@ -964,13 +964,13 @@
         update yw_goods_img
         <set>
             <if test="imgurl != null">
-                img_url = #{imgurl,jdbcType=VARCHAR}
+                img_url = #{imgurl,jdbcType=VARCHAR},
             </if>
             <if test="width != null">
-                width = #{imgurl,jdbcType=VARCHAR}
+                width = #{width,jdbcType=VARCHAR},
             </if>
             <if test="height != null">
-                height = #{imgurl,jdbcType=VARCHAR}
+                height = #{height,jdbcType=VARCHAR},
             </if>
         </set>
         WHERE goodsid= #{goodsid,jdbcType=INTEGER} AND type=1

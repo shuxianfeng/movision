@@ -173,7 +173,8 @@
             t1.circleid = t2.id
         WHERE circleid = #{circleid,jdbcType=INTEGER}
         AND t1.isdel = '0'
-        ORDER BY oprtime DESC, intime DESC
+        ORDER BY intime DESC
+        -- ORDER BY oprtime DESC, intime DESC
     </select>
 
     <!--查询圈子中推荐的往期所有热帖列表-->
