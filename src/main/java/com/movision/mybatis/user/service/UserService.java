@@ -370,13 +370,13 @@ public class UserService {
     /**
      * 查询发帖人列表
      *
-     * @param pager
+     * @param
      * @return
      */
-    public List<BossUser> queryIssuePostManList(Paging<BossUser> pager) {
+    public List<BossUser> queryIssuePostManList() {
         try {
             log.info("查询发帖人列表");
-            return userMapper.findAllQueryIssuePostManList(pager.getRowBounds());
+            return userMapper.findAllQueryIssuePostManList();
         } catch (Exception e) {
             log.error("查询发帖人列表异常");
             throw e;

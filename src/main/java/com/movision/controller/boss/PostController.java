@@ -595,16 +595,13 @@ public class PostController {
      */
     @ApiOperation(value = "查询发帖人", notes = "用于查询发帖人列表接口", response = Response.class)
     @RequestMapping(value = "query_issue_post", method = RequestMethod.POST)
-    public Response queryIssuePostManList(@RequestParam(required = false, defaultValue = "1") String pageNo,
-                                       @RequestParam(required = false, defaultValue = "10") String pageSize) {
+    public Response queryIssuePostManList() {
         Response response = new Response();
-        Paging<BossUser> pager = new Paging<BossUser>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<BossUser> list = circleFacade.queryIssuePostManList(pager);
+        List<BossUser> list = circleFacade.queryIssuePostManList();
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        pager.result(list);
-        response.setData(pager);
+        response.setData(list);
         return response;
     }
 

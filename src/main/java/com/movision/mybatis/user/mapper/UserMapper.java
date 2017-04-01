@@ -72,7 +72,7 @@ public interface UserMapper {
 
     List<UserVo> findAllqueryUserVIPByList(RowBounds rowBounds);
 
-    List<BossUser> findAllQueryIssuePostManList(RowBounds rowBounds);
+    List<BossUser> findAllQueryIssuePostManList();
 
     List<User> findAllQueryCircleManList();
 

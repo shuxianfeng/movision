@@ -506,11 +506,11 @@ public class CircleFacade {
     /**
      * 查询发帖人
      *
-     * @param pager
+     * @param
      * @return
      */
-    public List<BossUser> queryIssuePostManList(Paging<BossUser> pager) {
-        return userService.queryIssuePostManList(pager);
+    public List<BossUser> queryIssuePostManList() {
+        return userService.queryIssuePostManList();
     }
 
 
