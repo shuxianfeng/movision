@@ -47,4 +47,8 @@ public interface BossUserMapper {
 
     Integer queryUserById(Integer userid);
 
+    Integer queryUserIdBySpeciallyGuest(Integer userid);
+
+    Integer queryUserByAdministrator(Integer userid);
+
 }

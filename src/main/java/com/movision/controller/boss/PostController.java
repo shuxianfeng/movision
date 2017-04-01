@@ -317,6 +317,24 @@ public class PostController {
     }
 
     /**
+     * 特约嘉宾评论审核
+     *
+     * @return
+     */
+    @ApiOperation(value = "帖子评论审核", notes = "用于给特约嘉宾评论审核接口", response = Response.class)
+    @RequestMapping(value = "update_comment_audit", method = RequestMethod.POST)
+    public Response auditComment(@ApiParam(value = "评论id") @RequestParam String commentid,
+                                 @ApiParam(value = "登录用户id") @RequestParam String userid) {
+        Response response = new Response();
+        Map map = postFacade.auditComment(commentid, userid);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+    /**
      * 后台管理-帖子列表-查看帖子打赏
      *
      * @param postid

@@ -480,6 +480,32 @@ public class PostFacade {
             return map;
         }
     }
+//bossUserService.queryUserIdBySpeciallyGuest(Integer.parseInt(commentid));判断用户是否是特邀嘉宾
+
+    /**
+     * 特约嘉宾评论审核
+     *
+     * @param commentid
+     * @param userid
+     * @return
+     */
+    public Map auditComment(String commentid, String userid) {
+        Map map = new HashedMap();
+        //查询该用户是否是超管或普管
+        Integer user = bossUserService.queryUserByAdministrator(Integer.parseInt(userid));
+        if (user == 1) {//是管理员
+            Integer resault = commentService.updateCommentAudit(Integer.parseInt(commentid));
+            map.put("massege", "审核成功");
+            map.put("resault", resault);
+            return map;
+        } else {
+            map.put("massege", "不是特邀嘉宾不可以审核该评论");
+            map.put("resault", -1);
+            return map;
+        }
+    }
+
+
 
     /**
      * 后台管理-帖子列表-帖子打赏列表

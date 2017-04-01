@@ -197,6 +197,22 @@ public class CommentService {
     }
 
     /**
+     * 特约嘉宾评论审核
+     *
+     * @param commentid
+     * @return
+     */
+    public Integer updateCommentAudit(Integer commentid) {
+        try {
+            log.info("特约嘉宾评论审核");
+            return commentMapper.updateCommentAudit(commentid);
+        } catch (Exception e) {
+            log.error("特约嘉宾评论审核异常");
+            throw e;
+        }
+    }
+
+    /**
      * 查询评论是否可被评论
      *
      * @param pid

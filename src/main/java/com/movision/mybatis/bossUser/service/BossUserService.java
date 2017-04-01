@@ -216,4 +216,36 @@ public class BossUserService {
             throw e;
         }
     }
+
+    /**
+     * 根据id查询该用户是否是特邀嘉宾
+     *
+     * @param userid
+     * @return
+     */
+    public Integer queryUserIdBySpeciallyGuest(Integer userid) {
+        try {
+            log.info("根据id查询该用户是否是特邀嘉宾");
+            return bossUserMapper.queryUserIdBySpeciallyGuest(userid);
+        } catch (Exception e) {
+            log.error("根据id查询该用户是否是特邀嘉宾异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询用户是否是管理员
+     *
+     * @param userid
+     * @return
+     */
+    public Integer queryUserByAdministrator(Integer userid) {
+        try {
+            log.info("查询用户是否是管理员");
+            return bossUserMapper.queryUserByAdministrator(userid);
+        } catch (Exception e) {
+            log.error("查询用户是否是管理员异常");
+            throw e;
+        }
+    }
 }

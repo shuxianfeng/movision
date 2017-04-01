@@ -417,4 +417,10 @@
       </if>
     </trim>
   </insert>
+
+  <update id="updateCommentAudit" parameterType="java.lang.Integer">
+    update yw_post_comment
+    SET isdel=0,status=1
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

@@ -58,4 +58,6 @@ public interface CommentMapper {
     List<CommentVo> findAllqueryTheUserComments(String userid, RowBounds rowBounds);
 
     int insertComment(CommentVo commentVo);
+
+    Integer updateCommentAudit(Integer commentid);
 }
