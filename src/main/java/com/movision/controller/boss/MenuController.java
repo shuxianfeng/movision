@@ -112,11 +112,13 @@ public class MenuController {
     @ApiOperation(value = "删除菜单", notes = "删除菜单", response = Response.class)
     @RequestMapping(value = "del_menu", method = RequestMethod.POST)
     public Response delMenu(@ApiParam(value = "菜单id") @RequestParam(required = true) Integer menuid) {
+
         Response response = new Response();
         //1 删除菜单角色关系表
         roleMenuRelationFacade.delRelationByMenuid(menuid);
         //2 逻辑删除菜单本身
         menuFacade.delMenu(menuid);
+
         return response;
     }
 

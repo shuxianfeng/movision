@@ -47,6 +47,11 @@ public class RoleMenuRelationFacade {
         roleMenuRelationService.delRelationByRoleid(roleid);
     }
 
+    /**
+     * 删除所有与该菜单相关的权限
+     *
+     * @param menuid
+     */
     public void delRelationByMenuid(int menuid) {
         int[] arr = new int[1];
         arr[0] = menuid;

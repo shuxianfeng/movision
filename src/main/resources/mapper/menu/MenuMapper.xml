@@ -9,9 +9,10 @@
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
         <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="isshow" property="isshow" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, menuname, pid, orderid, isdel, remark, url
+        id, menuname, pid, orderid, isdel, remark, url, isshow
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -25,11 +26,11 @@
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.bossMenu.entity.Menu">
         insert into yw_admin_menu (id, menuname, pid,
-        orderid, isdel, remark, url
+        orderid, isdel, remark, url, isshow
         )
         values (#{id,jdbcType=INTEGER}, #{menuname,jdbcType=VARCHAR}, #{pid,jdbcType=INTEGER},
         #{orderid,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR},
-        #{url,jdbcType=VARCHAR}
+        #{url,jdbcType=VARCHAR}, #{isshow}
         )
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.bossMenu.entity.Menu">
@@ -51,6 +52,9 @@
             </if>
             <if test="url != null">
                 url,
+            </if>
+            <if test="isshow!=null">
+                isshow,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -80,6 +84,9 @@
             <if test="url != null">
                 #{url,jdbcType=VARCHAR},
             </if>
+            <if test="isshow != null">
+                #{isshow},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.bossMenu.entity.Menu">
@@ -103,6 +110,9 @@
             <if test="url != null">
                 url = #{url,jdbcType=VARCHAR},
             </if>
+            <if test="isshow!=null">
+                isshow=#{isshow},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -114,6 +124,7 @@
         isdel = #{isdel,jdbcType=INTEGER},
         remark = #{remark,jdbcType=VARCHAR},
         url = #{url,jdbcType=VARCHAR},
+        isshow = #{isshow},
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -216,7 +227,7 @@
         SELECT m.*
         FROM yw_admin_menu m
         LEFT JOIN yw_admin_role_menu rm ON m.id = rm.menuid
-        where m.isdel = 1 AND m.pid = 0
+        where m.isdel = 1 AND m.pid = 0 AND m.isshow = 1
             and rm.roleid = #{roleid}
         ORDER BY m.orderid ASC, m.id
     </select>
@@ -228,7 +239,7 @@
         FROM yw_admin_menu m
         LEFT JOIN yw_admin_role_menu rm ON m.id = rm.menuid
         <![CDATA[
-          where m.isdel = 1 AND m.pid <> 0
+          where m.isdel = 1 AND m.pid <> 0 AND m.isshow = 1
         ]]>
             and rm.roleid = #{roleid}
         ORDER BY m.orderid ASC, m.id

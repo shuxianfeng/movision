@@ -71,7 +71,8 @@ public class MenuFacade {
             pname = pmenu.getMenuname();
         }
         MenuDetail menuDetail = new MenuDetail(
-                menu.getId(), menu.getMenuname(), menu.getPid(), menu.getOrderid(), menu.getIsdel(), menu.getRemark(), menu.getUrl(), pname
+                menu.getId(), menu.getMenuname(), menu.getPid(), menu.getOrderid(), menu.getIsdel(),
+                menu.getRemark(), menu.getUrl(), pname, menu.getIsshow()
         );
         return menuDetail;
     }
@@ -187,7 +188,7 @@ public class MenuFacade {
             father = menuService.selectAllParentMenuSideBar();
             son = menuService.selectAllChildrenMenuSideBar();
         } else {
-            //其他用户
+            //其他用户，获取所有显示的菜单
             father = menuService.querySidebarFather(roleid);
             son = menuService.querySidebarSon(roleid);
         }

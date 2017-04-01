@@ -22,6 +22,18 @@ public class Menu {
     @ApiModelProperty(value = "菜单的rest接口路径")
     private String url;
 
+    @ApiModelProperty(value = "是否在左边的菜单导航栏显示，0：不显示，1：显示")
+    private Integer isshow;
+
+    public void setIsshow(Integer isshow) {
+        this.isshow = isshow;
+    }
+
+    public Integer getIsshow() {
+
+        return isshow;
+    }
+
     public void setUrl(String url) {
         this.url = url;
     }
@@ -88,6 +100,8 @@ public class Menu {
                 ", orderid=" + orderid +
                 ", isdel=" + isdel +
                 ", remark='" + remark + '\'' +
+                ", url='" + url + '\'' +
+                ", isshow=" + isshow +
                 '}';
     }
 }

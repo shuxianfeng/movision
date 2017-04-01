@@ -20,6 +20,17 @@ public class MenuDetail {
 
     private String parentMenuName;
 
+    private Integer isshow;
+
+    public void setIsshow(Integer isshow) {
+        this.isshow = isshow;
+    }
+
+    public Integer getIsshow() {
+
+        return isshow;
+    }
+
     @Override
     public String toString() {
         return "MenuDetail{" +
@@ -31,6 +42,7 @@ public class MenuDetail {
                 ", remark='" + remark + '\'' +
                 ", url='" + url + '\'' +
                 ", parentMenuName='" + parentMenuName + '\'' +
+                ", isshow=" + isshow +
                 '}';
     }
 
@@ -99,8 +111,7 @@ public class MenuDetail {
         return parentMenuName;
     }
 
-    public MenuDetail(Integer id, String menuname, Integer pid, Integer orderid, Integer isdel, String remark, String url, String parentMenuName) {
-
+    public MenuDetail(Integer id, String menuname, Integer pid, Integer orderid, Integer isdel, String remark, String url, String parentMenuName, Integer isshow) {
         this.id = id;
         this.menuname = menuname;
         this.pid = pid;
@@ -109,5 +120,6 @@ public class MenuDetail {
         this.remark = remark;
         this.url = url;
         this.parentMenuName = parentMenuName;
+        this.isshow = isshow;
     }
 }
