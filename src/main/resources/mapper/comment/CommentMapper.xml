@@ -423,4 +423,5 @@
     SET isdel=0,status=1
     where id = #{id,jdbcType=INTEGER} AND iscontribute=1
   </update>
+
 </mapper>
