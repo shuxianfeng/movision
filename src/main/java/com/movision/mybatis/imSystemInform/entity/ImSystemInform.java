@@ -19,6 +19,16 @@ public class ImSystemInform {
 
     private String pushcontent;
 
+    private Integer isread;
+
+    public Integer getIsread() {
+        return isread;
+    }
+
+    public void setIsread(Integer isread) {
+        this.isread = isread;
+    }
+
     public String getPushcontent() {
         return pushcontent;
     }
