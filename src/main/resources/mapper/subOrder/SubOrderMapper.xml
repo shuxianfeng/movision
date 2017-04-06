@@ -39,6 +39,26 @@
         </foreach>
     </select>
 
+    <!--根据订单id查询子订单列表-->
+    <select id="querySubOrderListById" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.subOrder.entity.SubOrderVo">
+        SELECT * FROM yw_sub_order WHERE porderid = #{orderid,jdbcType=INTEGER}
+    </select>
+
+    <!--根据商品id、活动id、套餐id查询子订单相关信息-->
+    <select id="querySubOrderInfo" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.subOrder.entity.SubOrderVo">
+        SELECT (SELECT img_url FROM yw_goods_img WHERE goodsid = #{goodsid,jdbcType=INTEGER} AND type = '2') AS imgurl,
+                name AS goodsname, price AS goodsprice,
+                (SELECT combodiscountprice FROM yw_combo WHERE comboid = #{combotype,jdbcType=INTEGER}) AS comboprice,
+                isdel AS online,
+                (SELECT discount FROM yw_goods_discount WHERE id = #{discountid,jdbcType=INTEGER}) AS discount,
+                (SELECT comboname FROM yw_combo WHERE comboid = #{combotype,jdbcType=INTEGER}) AS comboname,
+                (SELECT name FROM yw_goods_discount WHERE id = #{discountid,jdbcType=INTEGER}) AS discountname
+        FROM yw_goods
+        WHERE id = #{goodsid,jdbcType=INTEGER}
+    </select>
+
     <!--批量插入子订单-->
     <insert id="batchInsertOrders" parameterType="java.util.List">
         INSERT INTO yw_sub_order (

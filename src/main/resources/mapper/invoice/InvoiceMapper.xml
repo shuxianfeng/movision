@@ -29,6 +29,13 @@
         from yw_invoice
         where id = #{id,jdbcType=INTEGER}
     </select>
+
+    <!--根据订单id查询发票信息-->
+    <select id="queryInvoiceInfo" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.invoice.entity.Invoice">
+        SELECT * FROM yw_invoice WHERE orderid = #{orderid,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_invoice
         where id = #{id,jdbcType=INTEGER}

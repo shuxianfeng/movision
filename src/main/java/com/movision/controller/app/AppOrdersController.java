@@ -90,4 +90,21 @@ public class AppOrdersController {
         }
         return response;
     }
+
+    @ApiOperation(value = "APP订单详情接口", notes = "用于用户在APP查询订单详情的接口", response = Response.class)
+    @RequestMapping(value = "queryOrderDetail", method = RequestMethod.POST)
+    public Response commitOrder(@ApiParam(value = "订单id") @RequestParam String orderid) {
+        Response response = new Response();
+
+        Map<String, Object> map = orderAppFacade.queryOrderDetail(orderid);
+
+        if (response.getCode() == 200) {
+            response.setMessage("订单详情查询成功");
+            response.setData(map);
+        } else {
+            response.setCode(300);
+            response.setMessage("订单详情查询失败");
+        }
+        return response;
+    }
 }

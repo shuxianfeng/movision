@@ -13,6 +13,8 @@ public interface InvoiceMapper {
 
     Invoice selectByPrimaryKey(Integer id);
 
+    Invoice queryInvoiceInfo(int orderid);
+
     int updateByPrimaryKeySelective(Invoice record);
 
     int updateByPrimaryKey(Invoice record);

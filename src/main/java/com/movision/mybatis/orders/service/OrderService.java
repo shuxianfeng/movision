@@ -7,6 +7,7 @@ import com.movision.mybatis.invoice.mapper.InvoiceMapper;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.mapper.OrdersMapper;
 import com.movision.mybatis.subOrder.entity.SubOrder;
+import com.movision.mybatis.subOrder.entity.SubOrderVo;
 import com.movision.mybatis.subOrder.mapper.SubOrderMapper;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
@@ -115,6 +116,36 @@ public class OrderService {
             return subOrderMapper.queryAllSubOrderList(ids);
         } catch (Exception e) {
             log.error("根据订单id数组查询所有子订单列表失败");
+            throw e;
+        }
+    }
+
+    public List<SubOrderVo> querySubOrderListById(int orderid) {
+        try {
+            log.info("根据订单id查询子订单列表");
+            return subOrderMapper.querySubOrderListById(orderid);
+        } catch (Exception e) {
+            log.error("根据订单id查询子订单列表失败");
+            throw e;
+        }
+    }
+
+    public SubOrderVo querySubOrderInfo(Map<String, Object> parammap) {
+        try {
+            log.info("查询子订单相关信息");
+            return subOrderMapper.querySubOrderInfo(parammap);
+        } catch (Exception e) {
+            log.error("查询子订单相关信息失败");
+            throw e;
+        }
+    }
+
+    public Invoice queryInvoiceInfo(int orderid) {
+        try {
+            log.info("根据订单id查询发票信息");
+            return invoiceMapper.queryInvoiceInfo(orderid);
+        } catch (Exception e) {
+            log.error("根据订单id查询发票信息失败");
             throw e;
         }
     }

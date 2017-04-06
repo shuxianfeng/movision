@@ -17,6 +17,7 @@ import com.movision.mybatis.orders.service.OrderService;
 import com.movision.mybatis.pointRecord.service.PointRecordService;
 import com.movision.mybatis.rentdate.entity.Rentdate;
 import com.movision.mybatis.subOrder.entity.SubOrder;
+import com.movision.mybatis.subOrder.entity.SubOrderVo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.CalculateFee;
 import com.movision.utils.CheckStock;
@@ -660,5 +661,51 @@ public class OrderAppFacade {
             shopamountmap.put(cartVoList.get(i).getShopid(), shopamountmap.get(cartVoList.get(i).getShopid()) + amount);
         }
         return shopamountmap;
+    }
+
+    /**
+     * 根据订单id查询订单详情
+     */
+    public Map<String, Object> queryOrderDetail(String orderid) {
+
+        Map<String, Object> map = new HashMap<>();
+        //查询订单基本信息
+        Orders orders = orderService.getOrderById(Integer.parseInt(orderid));
+        map.put("orders", orders);
+
+        //查询订单收货地址和地址id
+        int addressid = orders.getAddressid();//收货地址id
+        Address address = addressService.queryAddressById(addressid);
+        map.put("address", address);
+
+        //查询单个订单中包含的所有商品和子订单id（即订单中的子订单id）
+        List<SubOrderVo> subOrderVoList = orderService.querySubOrderListById(Integer.parseInt(orderid));
+        //查询子订单的其他附属信息
+        for (int i = 0; i < subOrderVoList.size(); i++) {
+            Map<String, Object> parammap = new HashMap<>();
+            parammap.put("goodsid", subOrderVoList.get(i).getGoodsid());
+//            if (null != subOrderVoList.get(i).getCombotype()) {
+            parammap.put("combotype", subOrderVoList.get(i).getCombotype());
+//            }
+//            if (null != subOrderVoList.get(i).getDiscountid()){
+            parammap.put("discountid", subOrderVoList.get(i).getDiscountid());
+//            }
+            SubOrderVo vo = orderService.querySubOrderInfo(parammap);
+            subOrderVoList.get(i).setImgurl(vo.getImgurl());
+            subOrderVoList.get(i).setGoodsname(vo.getGoodsname());
+            subOrderVoList.get(i).setGoodsprice(vo.getGoodsprice());
+            subOrderVoList.get(i).setComboprice(vo.getComboprice());
+            subOrderVoList.get(i).setOnline(vo.getOnline());
+            subOrderVoList.get(i).setDiscount(vo.getDiscount());
+            subOrderVoList.get(i).setComboname(vo.getComboname());
+            subOrderVoList.get(i).setDiscountname(vo.getDiscountname());
+        }
+        map.put("subOrderVoList", subOrderVoList);
+
+        //查询发票抬头和发票id
+        Invoice invoice = orderService.queryInvoiceInfo(Integer.parseInt(orderid));
+        map.put("invoice", invoice);
+
+        return map;
     }
 }

@@ -1,9 +1,11 @@
 package com.movision.mybatis.subOrder.mapper;
 
 import com.movision.mybatis.subOrder.entity.SubOrder;
+import com.movision.mybatis.subOrder.entity.SubOrderVo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface SubOrderMapper {
@@ -18,6 +20,10 @@ public interface SubOrderMapper {
     SubOrder selectByPrimaryKey(Integer id);
 
     List<SubOrder> queryAllSubOrderList(int[] ids);
+
+    List<SubOrderVo> querySubOrderListById(int orderid);
+
+    SubOrderVo querySubOrderInfo(Map<String, Object> parammap);
 
     int updateByPrimaryKeySelective(SubOrder record);
 
