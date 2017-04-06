@@ -69,7 +69,8 @@ public class ShiroRealm extends AuthorizingRealm {
         // 2 根据登录用户信息生成ShiroUser用户，PS:这个ShiroUser就是session中存储的app用户对象
         ShiroUser shiroUser = new ShiroUser(loginUser.getId(), loginUser.getPhone(), loginUser.getStatus(), loginUser.getRole(),
                 loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(), loginUser.getPhone(),
-                loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(), loginUser.getAccid(), loginUser.getImtoken());
+                loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(), loginUser.getAccid(), loginUser.getImtoken(),
+                loginUser.getSign(), loginUser.getBirthday());
 
         // 3 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(shiroUser, // 用户
@@ -155,6 +156,26 @@ public class ShiroRealm extends AuthorizingRealm {
         private Integer sex;    //性别：1男 0女
         private String accid;   //云信id
         private String imToken; //云信token
+        private String sign;    //个性签名
+        private Date birthday;  //生日
+
+        public void setBirthday(Date birthday) {
+            this.birthday = birthday;
+        }
+
+        public Date getBirthday() {
+
+            return birthday;
+        }
+
+        public void setSign(String sign) {
+            this.sign = sign;
+        }
+
+        public String getSign() {
+
+            return sign;
+        }
 
         public void setAccid(String accid) {
             this.accid = accid;
@@ -271,22 +292,6 @@ public class ShiroRealm extends AuthorizingRealm {
             return token;
         }
 
-        public ShiroUser(Integer id, String account, Integer status, String role, Date registerTime, String photo, String nickname, Integer level, String phone, String token, Integer points, Integer sex, String accid, String imToken) {
-            this.id = id;
-            this.account = account;
-            this.status = status;
-            this.role = role;
-            this.registerTime = registerTime;
-            this.photo = photo;
-            this.nickname = nickname;
-            this.level = level;
-            this.phone = phone;
-            this.token = token;
-            this.points = points;
-            this.sex = sex;
-            this.accid = accid;
-            this.imToken = imToken;
-        }
 
         /**
          * 重载equals,只计算id+account;
@@ -308,6 +313,25 @@ public class ShiroRealm extends AuthorizingRealm {
             return false;
         }
 
+        public ShiroUser(Integer id, String account, Integer status, String role, Date registerTime, String photo, String nickname, Integer level, String phone, String token, Integer points, Integer sex, String accid, String imToken, String sign, Date birthday) {
+            this.id = id;
+            this.account = account;
+            this.status = status;
+            this.role = role;
+            this.registerTime = registerTime;
+            this.photo = photo;
+            this.nickname = nickname;
+            this.level = level;
+            this.phone = phone;
+            this.token = token;
+            this.points = points;
+            this.sex = sex;
+            this.accid = accid;
+            this.imToken = imToken;
+            this.sign = sign;
+            this.birthday = birthday;
+        }
+
         @Override
         public String toString() {
             return "ShiroUser{" +
@@ -325,6 +349,8 @@ public class ShiroRealm extends AuthorizingRealm {
                     ", sex=" + sex +
                     ", accid='" + accid + '\'' +
                     ", imToken='" + imToken + '\'' +
+                    ", sign='" + sign + '\'' +
+                    ", birthday=" + birthday +
                     '}';
         }
     }

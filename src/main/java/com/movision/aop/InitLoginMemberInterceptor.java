@@ -208,7 +208,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 ShiroUser loginInfo = new ShiroUser(loginUser.getId(), loginUser.getPhone(), loginUser.getStatus(), loginUser.getRole(),
                         loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(),
                         loginUser.getPhone(), loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(),
-                        loginUser.getAccid(), loginUser.getImtoken());
+                        loginUser.getAccid(), loginUser.getImtoken(), loginUser.getSign(), loginUser.getBirthday());
                 //判断登录信息是否改变,若改变了则更新session，
 
                 //判断登录信息是否改变,若改变了则更新session，
@@ -231,7 +231,9 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
         boolean isChange = appuser == null || loginInfo == null || loginInfo.getLevel() != appuser.getLevel()
                 || loginInfo.getStatus() != appuser.getStatus() || !loginInfo.getRole().equals(appuser.getRole())
                 || loginInfo.getToken() != appuser.getToken() || loginInfo.getAccid() != appuser.getAccid()
-                || loginInfo.getImToken() != appuser.getImToken();
+                || loginInfo.getImToken() != appuser.getImToken()
+                || loginInfo.getSign() != appuser.getSign()
+                || loginInfo.getBirthday() != appuser.getBirthday();
         return isChange;
     }
 
