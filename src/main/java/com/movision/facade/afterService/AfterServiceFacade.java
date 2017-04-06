@@ -34,8 +34,9 @@ public class AfterServiceFacade {
     private MovisionOssClient movisionOssClient;
 
     @Transactional
-    public void commitAfterService(String userid, String orderid, String addressid, String goodsid, String afterstatue,
-                                   String amountdue, String remark, MultipartFile imgfile1, MultipartFile imgfile2, MultipartFile imgfile3) {
+    public Map<String, Object> commitAfterService(String userid, String orderid, String addressid, String goodsid, String afterstatue,
+                                                  String amountdue, String remark, MultipartFile imgfile1, MultipartFile imgfile2, MultipartFile imgfile3) {
+        Map<String, Object> map = new HashMap<>();
         //查询订单配送方式
         Orders orders = orderService.getOrderById(Integer.parseInt(orderid));
         int takeway = orders.getTakeway();
@@ -94,5 +95,16 @@ public class AfterServiceFacade {
             afterServiceImg.setHeight(String.valueOf(m.get("height")));
             afterServcieServcie.insertAfterServiceImg(afterServiceImg);
         }
+        map.put("afterserviceid", afterserviceid);
+        map.put("applytime", new Date());
+        if (afterstatue.equals("1")) {
+            map.put("type", "退货");
+        } else if (afterstatue.equals("2")) {
+            map.put("type", "退款");
+        } else if (afterstatue.equals("3")) {
+            map.put("type", "换货");
+        }
+
+        return map;
     }
 }
