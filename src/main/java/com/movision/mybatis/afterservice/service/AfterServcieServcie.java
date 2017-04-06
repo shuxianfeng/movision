@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 /**
  * @Author zhurui
  * @Date 2017/3/21 11:34
@@ -47,6 +49,19 @@ public class AfterServcieServcie {
             afterServiceImgMapper.insertSelective(afterServiceImg);
         } catch (Exception e) {
             logger.error("插入售后单中上传的图片失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 用户在APP端取消售后申请
+     */
+    public int cancelAfterService(Map<String, Object> parammap) {
+        try {
+            logger.info("用户取消售后申请");
+            return afterserviceMapper.cancelAfterService(parammap);
+        } catch (Exception e) {
+            logger.error("用户取消售后申请失败");
             throw e;
         }
     }

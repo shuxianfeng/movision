@@ -49,4 +49,21 @@ public class AppAfterServiceController {
         }
         return response;
     }
+
+    @ApiOperation(value = "APP取消售后申请接口", notes = "用于用户在APP对已申请售后的商品取消申请操作的接口", response = Response.class)
+    @RequestMapping(value = "cancelAfterService", method = RequestMethod.POST)
+    public Response cancelAfterService(@ApiParam(value = "用户id") @RequestParam String userid,
+                                       @ApiParam(value = "售后单号afterserviceid") @RequestParam String afterserviceid) {
+        Response response = new Response();
+
+        int count = afterServiceFacade.cancelAfterService(userid, afterserviceid);
+
+        if (response.getCode() == 200 && count == 1) {
+            response.setMessage("取消成功");
+        } else {
+            response.setCode(300);
+            response.setMessage("售后申请不存在或无操作权限,取消失败");
+        }
+        return response;
+    }
 }

@@ -107,4 +107,12 @@ public class AfterServiceFacade {
 
         return map;
     }
+
+    public int cancelAfterService(String userid, String afterserviceid) {
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("userid", Integer.parseInt(userid));
+        parammap.put("afterserviceid", Integer.parseInt(afterserviceid));
+
+        return afterServcieServcie.cancelAfterService(parammap);
+    }
 }
