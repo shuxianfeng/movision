@@ -352,6 +352,7 @@
   </select>
 
   <insert id="insertComment" parameterType="com.movision.mybatis.comment.entity.CommentVo">
+    insert into yw_post_comment
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
