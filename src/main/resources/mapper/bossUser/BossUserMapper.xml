@@ -290,7 +290,7 @@
     </select>
 
     <select id="queryUserIdBySpeciallyGuest" resultType="java.lang.Integer" parameterType="java.lang.Integer">
-        SELECT contributing FROM yw_admin_user WHERE phone=(SELECT phone FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}) AND contributing=1
+        SELECT contributing FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER}) AND contributing=1
     </select>
 
     <select id="queryUserByAdministrator" parameterType="java.lang.Integer"
