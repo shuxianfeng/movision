@@ -57,6 +57,10 @@ public class DateUtils {
         return targetStr;
     }
 
+    public static Date str2Date(String target) {
+        return str2Date(target, "yyyy-MM-dd");
+    }
+
     public static Date str2Date(String target, String pattern) {
         if (null == target) {
             return new Date();
@@ -214,7 +218,7 @@ public class DateUtils {
 //         System.out.println(s);
 
 //        System.out.println(DateUtils.str2Date("20170129023128", "yyyyMMddHHmmss"));
-        System.out.println(str2Date("1991-07-11", "yyyy-MM-dd"));
+        System.out.println(str2Date("1991-07-11"));
 
     }
 }

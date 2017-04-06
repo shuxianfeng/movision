@@ -15,6 +15,7 @@ import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.shiro.realm.BossRealm;
+import com.movision.utils.DateUtils;
 import com.movision.utils.propertiesLoader.LoginPropertiesLoader;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -208,7 +209,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 ShiroUser loginInfo = new ShiroUser(loginUser.getId(), loginUser.getPhone(), loginUser.getStatus(), loginUser.getRole(),
                         loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(),
                         loginUser.getPhone(), loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(),
-                        loginUser.getAccid(), loginUser.getImtoken(), loginUser.getSign(), loginUser.getBirthday());
+                        loginUser.getAccid(), loginUser.getImtoken(), loginUser.getSign(), DateUtils.date2Str(loginUser.getBirthday()));
                 //判断登录信息是否改变,若改变了则更新session，
 
                 //判断登录信息是否改变,若改变了则更新session，

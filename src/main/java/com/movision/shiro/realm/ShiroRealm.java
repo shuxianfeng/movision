@@ -9,6 +9,7 @@ import com.movision.common.constant.UserConstants;
 import com.movision.facade.user.BossUserFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.user.entity.LoginUser;
+import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.util.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -70,7 +71,7 @@ public class ShiroRealm extends AuthorizingRealm {
         ShiroUser shiroUser = new ShiroUser(loginUser.getId(), loginUser.getPhone(), loginUser.getStatus(), loginUser.getRole(),
                 loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(), loginUser.getPhone(),
                 loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(), loginUser.getAccid(), loginUser.getImtoken(),
-                loginUser.getSign(), loginUser.getBirthday());
+                loginUser.getSign(), DateUtils.date2Str(loginUser.getBirthday()));
 
         // 3 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(shiroUser, // 用户
@@ -157,13 +158,13 @@ public class ShiroRealm extends AuthorizingRealm {
         private String accid;   //云信id
         private String imToken; //云信token
         private String sign;    //个性签名
-        private Date birthday;  //生日
+        private String birthday;  //生日
 
-        public void setBirthday(Date birthday) {
+        public void setBirthday(String birthday) {
             this.birthday = birthday;
         }
 
-        public Date getBirthday() {
+        public String getBirthday() {
 
             return birthday;
         }
@@ -313,7 +314,7 @@ public class ShiroRealm extends AuthorizingRealm {
             return false;
         }
 
-        public ShiroUser(Integer id, String account, Integer status, String role, Date registerTime, String photo, String nickname, Integer level, String phone, String token, Integer points, Integer sex, String accid, String imToken, String sign, Date birthday) {
+        public ShiroUser(Integer id, String account, Integer status, String role, Date registerTime, String photo, String nickname, Integer level, String phone, String token, Integer points, Integer sex, String accid, String imToken, String sign, String birthday) {
             this.id = id;
             this.account = account;
             this.status = status;

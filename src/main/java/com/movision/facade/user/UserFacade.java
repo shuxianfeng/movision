@@ -175,7 +175,7 @@ public class UserFacade {
         User user = new User();
         user.setId(personInfo.getId());
         user.setNickname(personInfo.getNickname());
-        user.setBirthday(DateUtils.str2Date(personInfo.getBirthday(), "yyyy-MM-dd"));
+        user.setBirthday(DateUtils.str2Date(personInfo.getBirthday()));
         user.setPhoto(personInfo.getPhoto());
         user.setSex(personInfo.getSex());
         user.setSign(personInfo.getSign());
