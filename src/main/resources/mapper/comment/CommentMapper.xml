@@ -161,12 +161,12 @@
 
   <select id="findAllqueryCommentsByLsit" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
-    SELECT c.*,u.phone,u.photo,u.nickname,u.level,ad.issuper,ad.common
-    FROM (yw_post_comment c
+    SELECT c.*,u.phone,u.photo,u.nickname,u.level
+    FROM yw_post_comment c
     LEFT JOIN yw_user u
-    ON c.userid=u.id)LEFT JOIN yw_admin_user ad ON ad.phone=u.phone
+    ON c.userid=u.id
     WHERE c.postid= #{postid,jdbcType=INTEGER}
-    AND c.isdel=0
+    AND isdel=0
     -- AND pid is NULL
     <if test="type==0">
       ORDER BY c.intime ASC
