@@ -51,6 +51,9 @@
         #{amountdue,jdbcType=DOUBLE},#{remark,jdbcType=VARCHAR},#{takeway,jdbcType=INTEGER},#{replacementnumber,jdbcType=VARCHAR},#{returnnumber,jdbcType=VARCHAR},#{logisticsway,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.afterservice.entity.Afterservice">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
         insert into yw_afterservice
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

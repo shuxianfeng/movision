@@ -1,5 +1,7 @@
 package com.movision.mybatis.afterservice.service;
 
+import com.movision.mybatis.afterServiceImg.entity.AfterServiceImg;
+import com.movision.mybatis.afterServiceImg.mapper.AfterServiceImgMapper;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.afterservice.mapper.AfterserviceMapper;
 import org.slf4j.Logger;
@@ -18,6 +20,9 @@ public class AfterServcieServcie {
     @Autowired
     private AfterserviceMapper afterserviceMapper;
 
+    @Autowired
+    private AfterServiceImgMapper afterServiceImgMapper;
+
     /**
      * 插入售后信息
      *
@@ -28,7 +33,20 @@ public class AfterServcieServcie {
             logger.info("插入售后信息");
             afterserviceMapper.insertSelective(afterservice);
         } catch (Exception e) {
-            logger.error("查询售后信息异常");
+            logger.error("插入售后信息异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 插入售后图片
+     */
+    public void insertAfterServiceImg(AfterServiceImg afterServiceImg) {
+        try {
+            logger.info("插入售后单中上传的图片");
+            afterServiceImgMapper.insertSelective(afterServiceImg);
+        } catch (Exception e) {
+            logger.error("插入售后单中上传的图片失败");
             throw e;
         }
     }

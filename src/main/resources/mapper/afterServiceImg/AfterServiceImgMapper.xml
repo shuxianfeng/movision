@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.afterServiceImg.mapper.AfterServiceImgMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.afterServiceImg.entity.AfterServiceImg">
+        <result column="afterserviceid" property="afterserviceid" jdbcType="INTEGER"/>
+        <result column="imgurl" property="imgurl" jdbcType="VARCHAR"/>
+        <result column="width" property="width" jdbcType="VARCHAR"/>
+        <result column="height" property="height" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.movision.mybatis.afterServiceImg.entity.AfterServiceImg">
+    insert into yw_after_service_img (afterserviceid, imgurl, width, 
+      height)
+    values (#{afterserviceid,jdbcType=INTEGER}, #{imgurl,jdbcType=VARCHAR}, #{width,jdbcType=VARCHAR}, 
+      #{height,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.afterServiceImg.entity.AfterServiceImg">
+        insert into yw_after_service_img
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="afterserviceid != null">
+                afterserviceid,
+            </if>
+            <if test="imgurl != null">
+                imgurl,
+            </if>
+            <if test="width != null">
+                width,
+            </if>
+            <if test="height != null">
+                height,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="afterserviceid != null">
+                #{afterserviceid,jdbcType=INTEGER},
+            </if>
+            <if test="imgurl != null">
+                #{imgurl,jdbcType=VARCHAR},
+            </if>
+            <if test="width != null">
+                #{width,jdbcType=VARCHAR},
+            </if>
+            <if test="height != null">
+                #{height,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>
