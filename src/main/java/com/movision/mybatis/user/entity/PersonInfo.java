@@ -1,5 +1,6 @@
 package com.movision.mybatis.user.entity;
 
+import com.movision.utils.DateUtils;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
@@ -13,16 +14,22 @@ import java.util.Date;
  */
 @Api("个人资料")
 public class PersonInfo {
+
     @ApiModelProperty(value = "id")
     private Integer id;
+
     @ApiModelProperty(value = "昵称")
     private String nickname;
+
     @ApiModelProperty(value = "性别")
     private Integer sex;
+
     @ApiModelProperty(value = "生日")
-    private Date birthday;
+    private String birthday;
+
     @ApiModelProperty(value = "个人简介")
     private String sign;
+
     @ApiModelProperty(value = "头像")
     private String photo;
 
@@ -32,10 +39,19 @@ public class PersonInfo {
                 "id=" + id +
                 ", nickname='" + nickname + '\'' +
                 ", sex=" + sex +
-                ", birthday=" + birthday +
+                ", birthday='" + birthday + '\'' +
                 ", sign='" + sign + '\'' +
                 ", photo='" + photo + '\'' +
                 '}';
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getBirthday() {
+
+        return birthday;
     }
 
     public void setId(Integer id) {
@@ -50,9 +66,6 @@ public class PersonInfo {
         this.sex = sex;
     }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
 
     public void setSign(String sign) {
         this.sign = sign;
@@ -75,9 +88,6 @@ public class PersonInfo {
         return sex;
     }
 
-    public Date getBirthday() {
-        return birthday;
-    }
 
     public String getSign() {
         return sign;

@@ -213,8 +213,8 @@ public class DateUtils {
 //         String s = DateUtils.str2DateFormat("1468466182000", "yyyy-MM-dd");
 //         System.out.println(s);
 
-        System.out.println(DateUtils.str2Date("20170129023128", "yyyyMMddHHmmss"));
-
+//        System.out.println(DateUtils.str2Date("20170129023128", "yyyyMMddHHmmss"));
+        System.out.println(str2Date("1991-07-11", "yyyy-MM-dd"));
 
     }
 }

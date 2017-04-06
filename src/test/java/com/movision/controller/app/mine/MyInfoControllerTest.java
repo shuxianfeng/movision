@@ -1,20 +1,15 @@
 package com.movision.controller.app.mine;
 
-import com.movision.common.util.ShiroUtil;
 import com.movision.facade.circle.CircleAppFacade;
 import com.movision.facade.coupon.CouponFacade;
 import com.movision.facade.order.OrderAppFacade;
 import com.movision.facade.user.UserFacade;
-import com.movision.mybatis.circle.entity.Circle;
-import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.user.entity.PersonInfo;
 import com.movision.test.SpringTestCase;
-import com.movision.utils.pagination.model.Paging;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @Author zhuangyuhao
@@ -66,7 +61,7 @@ public class MyInfoControllerTest extends SpringTestCase {
     public void updateMyInfo() throws Exception {
         PersonInfo personInfo = new PersonInfo();
         personInfo.setId(10);
-        personInfo.setBirthday(new Date());
+        personInfo.setBirthday("1992-01-01");
         personInfo.setSign("我是一个小鸡鸡");
         personInfo.setSex(0);
         personInfo.setNickname("小鸡鸡JJ");
