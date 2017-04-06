@@ -194,6 +194,15 @@ public class commonalityFacade {
     }
 
 
+    /**
+     * 登录用户查询校验
+     *
+     * @param userid
+     * @param operation
+     * @param kind
+     * @param kindid
+     * @return
+     */
     public Map verifyUserByQueryMethod(Integer userid, Integer operation, Integer kind, Integer kindid) {
         Map map = new HashMap();
         BossUser i = bossUserService.queryUserByAdministrator(userid);//根据登录用户id查询当前用户有哪些权限
@@ -202,13 +211,19 @@ public class commonalityFacade {
             return map;
         } else if (i.getIscircle().equals(JurisdictionConstants.JURISDICTION_TYPE.groupOwner.getCode())
                 && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()))) {//圈主可以查看
-            map.put("resault", 1);
+            map.put("resault", userid);
             return map;
         } else if (i.getCirclemanagement().equals(JurisdictionConstants.JURISDICTION_TYPE.groupManage.getCode())
                 && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()))) {//圈子管理员可以查看
-            map.put("resault", 1);
+            map.put("resault", userid);
+            return map;
+        } else if (i.getContributing().equals(JurisdictionConstants.JURISDICTION_TYPE.speciallyInvite.getCode())
+                && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()))) {//特邀嘉宾可以查看
+            map.put("resault", userid);
+            return map;
+        } else {
+            map.put("resault", -1);
             return map;
         }
-        return map;
     }
 }

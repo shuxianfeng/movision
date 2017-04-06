@@ -295,7 +295,7 @@
 
     <select id="queryUserByAdministrator" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.bossUser.entity.BossUser">
-        SELECT * FROM yw_admin_user WHERE phone=(SELECT phone FROM yw_user WHERE id=#{userid,jdbcType=INTEGER})
+        SELECT * FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER}
     </select>
 
     <select id="queryPostByUserid" parameterType="java.util.Map" resultType="java.lang.Integer">

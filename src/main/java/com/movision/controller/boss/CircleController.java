@@ -52,9 +52,9 @@ public class CircleController {
      */
     @ApiOperation(value = "查询圈子列表", notes = "用于查询圈子列表接口", response = Response.class)
     @RequestMapping(value = "/circle_list", method = RequestMethod.POST)
-    public Response circleByList() {
+    public Response circleByList(@ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        List<CircleIndexList> list = circleFacade.queryCircleByList();
+        List<CircleIndexList> list = circleFacade.queryCircleByList(loginid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
