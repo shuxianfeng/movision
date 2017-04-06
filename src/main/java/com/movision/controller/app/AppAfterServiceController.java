@@ -31,9 +31,9 @@ public class AppAfterServiceController {
                                        @ApiParam(value = "售后类型（1退货2退款3换货）") @RequestParam String afterstatue,
                                        @ApiParam(value = "申请退款金额") @RequestParam(required = false) String amountdue,
                                        @ApiParam(value = "问题描述") @RequestParam String remark,
-                                       @ApiParam(value = "描述图1（最多3张）") @RequestParam(value = "file", required = false) MultipartFile imgfile1,
-                                       @ApiParam(value = "描述图2（最多3张）") @RequestParam(value = "file", required = false) MultipartFile imgfile2,
-                                       @ApiParam(value = "描述图3（最多3张）") @RequestParam(value = "file", required = false) MultipartFile imgfile3) {
+                                       @ApiParam(value = "描述图1（最多3张）") @RequestParam(value = "file1", required = false) MultipartFile imgfile1,
+                                       @ApiParam(value = "描述图2（最多3张）") @RequestParam(value = "file2", required = false) MultipartFile imgfile2,
+                                       @ApiParam(value = "描述图3（最多3张）") @RequestParam(value = "file3", required = false) MultipartFile imgfile3) {
         Response response = new Response();
 
         afterServiceFacade.commitAfterService(userid, orderid, addressid, goodsid, afterstatue, amountdue, remark, imgfile1, imgfile2, imgfile3);
