@@ -179,7 +179,7 @@ public class FacadePost {
                            MultipartFile videofile, String videourl, String proids) {
 
         String url = "";//定义原生视频地址
-        if (videofile != null) {
+        if (!videofile.isEmpty()) {
             //首先调用庄总的视频上传接口
             Map m = movisionOssClient.uploadObject(videofile, "video", "post");
             url = String.valueOf(m.get("url"));//原生视频上传地址

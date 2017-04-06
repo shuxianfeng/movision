@@ -61,7 +61,7 @@ public class AfterServiceFacade {
 
         int afterserviceid = afterservice.getId();//售后单id
         //如果有上传图片，那就上传图片
-        if (imgfile1 != null) {
+        if (!imgfile1.isEmpty()) {
             Map m = movisionOssClient.uploadObject(imgfile1, "img", "afterservice");
             String url1 = String.valueOf(m.get("url"));
 
@@ -72,7 +72,7 @@ public class AfterServiceFacade {
             afterServiceImg.setHeight((String) m.get("height"));
             afterServcieServcie.insertAfterServiceImg(afterServiceImg);
         }
-        if (imgfile2 != null) {
+        if (!imgfile2.isEmpty()) {
             Map m = movisionOssClient.uploadObject(imgfile2, "img", "afterservice");
             String url2 = String.valueOf(m.get("url"));
 
@@ -83,7 +83,7 @@ public class AfterServiceFacade {
             afterServiceImg.setHeight((String) m.get("height"));
             afterServcieServcie.insertAfterServiceImg(afterServiceImg);
         }
-        if (imgfile3 != null) {
+        if (!imgfile3.isEmpty()) {
             Map m = movisionOssClient.uploadObject(imgfile3, "img", "afterservice");
             String url3 = String.valueOf(m.get("url"));
 
