@@ -504,15 +504,15 @@ public class PostController {
      * 特邀嘉宾操作帖子，加入精选池
      *
      * @param postid
-     * @param userid
+     * @param loginid
      * @return
      */
     @ApiOperation(value = "帖子加入精选池", notes = "用于特邀嘉宾操作帖子，加入精选池接口", response = Response.class)
     @RequestMapping(value = "add_post_isessencepool", method = RequestMethod.POST)
     public Response addPostByisessencepool(@ApiParam(value = "帖子id") @RequestParam String postid,
-                                           @ApiParam(value = "操作用户（登录用户）id") @RequestParam String userid) {
+                                           @ApiParam(value = "操作用户（登录用户）id") @RequestParam String loginid) {
         Response response = new Response();
-        Map map = postFacade.addPostByisessencepool(postid, userid);
+        Map map = postFacade.addPostByisessencepool(postid, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

@@ -192,4 +192,23 @@ public class commonalityFacade {
         }
         return map;
     }
+
+
+    public Map verifyUserByQueryMethod(Integer userid, Integer operation, Integer kind, Integer kindid) {
+        Map map = new HashMap();
+        BossUser i = bossUserService.queryUserByAdministrator(userid);//根据登录用户id查询当前用户有哪些权限
+        if (i.getIssuper().equals(1) || i.getCommon().equals(1)) {//操作权限为最高权限
+            map.put("resault", 1);
+            return map;
+        } else if (i.getIscircle().equals(JurisdictionConstants.JURISDICTION_TYPE.groupOwner.getCode())
+                && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()))) {//圈主可以查看
+            map.put("resault", 1);
+            return map;
+        } else if (i.getCirclemanagement().equals(JurisdictionConstants.JURISDICTION_TYPE.groupManage.getCode())
+                && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()))) {//圈子管理员可以查看
+            map.put("resault", 1);
+            return map;
+        }
+        return map;
+    }
 }
