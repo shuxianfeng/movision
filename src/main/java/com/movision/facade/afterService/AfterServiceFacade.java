@@ -2,11 +2,13 @@ package com.movision.facade.afterService;
 
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.afterServiceImg.entity.AfterServiceImg;
+import com.movision.mybatis.afterservice.entity.AfterServiceVo;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.afterservice.service.AfterServcieServcie;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.service.OrderService;
 import com.movision.utils.file.FileUtil;
+import com.movision.utils.oss.ImageUtil;
 import com.movision.utils.oss.MovisionOssClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -114,5 +117,20 @@ public class AfterServiceFacade {
         parammap.put("afterserviceid", Integer.parseInt(afterserviceid));
 
         return afterServcieServcie.cancelAfterService(parammap);
+    }
+
+    public Map<String, Object> queryAfterServiceDetail(String afterserviceid) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        //查询售后基本信息
+        AfterServiceVo vo = afterServcieServcie.queryAfterServiceDetail(Integer.parseInt(afterserviceid));
+        map.put("afterServiceVo", vo);
+
+        //查询售后上传的图片
+        List<AfterServiceImg> afterServiceImgList = afterServcieServcie.queryAfterServiceImgList(Integer.parseInt(afterserviceid));
+        map.put("afterServiceImgList", afterServiceImgList);
+
+        return map;
     }
 }

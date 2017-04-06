@@ -33,6 +33,13 @@
         from yw_afterservice
         where id = #{id,jdbcType=INTEGER}
     </select>
+
+    <!--根据售后id查询售后单基本信息-->
+    <select id="queryAfterServiceDetail" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.afterservice.entity.AfterServiceVo">
+        SELECT * FROM yw_afterservice WHERE id = #{afterserviceid,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_afterservice
         where id = #{id,jdbcType=INTEGER}

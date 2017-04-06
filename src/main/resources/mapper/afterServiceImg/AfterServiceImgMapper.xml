@@ -7,6 +7,13 @@
         <result column="width" property="width" jdbcType="VARCHAR"/>
         <result column="height" property="height" jdbcType="VARCHAR"/>
     </resultMap>
+
+    <!--根据售后id查询售后单图片列表-->
+    <select id="queryAfterServiceImgList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.afterServiceImg.entity.AfterServiceImg">
+        SELECT * FROM yw_after_service_img WHERE afterserviceid = #{afterserviceid,jdbcType=INTEGER}
+    </select>
+
     <insert id="insert" parameterType="com.movision.mybatis.afterServiceImg.entity.AfterServiceImg">
     insert into yw_after_service_img (afterserviceid, imgurl, width, 
       height)

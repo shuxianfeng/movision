@@ -1,5 +1,6 @@
 package com.movision.mybatis.afterservice.mapper;
 
+import com.movision.mybatis.afterservice.entity.AfterServiceVo;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,8 @@ public interface AfterserviceMapper {
     int insertSelective(Afterservice record);
 
     int cancelAfterService(Map<String, Object> parammap);
+
+    AfterServiceVo queryAfterServiceDetail(int afterserviceid);
 
     Afterservice selectByPrimaryKey(Integer id);
 
