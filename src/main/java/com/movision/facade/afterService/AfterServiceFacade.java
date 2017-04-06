@@ -68,8 +68,8 @@ public class AfterServiceFacade {
             AfterServiceImg afterServiceImg = new AfterServiceImg();
             afterServiceImg.setAfterserviceid(afterserviceid);
             afterServiceImg.setImgurl(url1);
-            afterServiceImg.setWidth((String) m.get("width"));
-            afterServiceImg.setHeight((String) m.get("height"));
+            afterServiceImg.setWidth(String.valueOf(m.get("width")));
+            afterServiceImg.setHeight(String.valueOf(m.get("height")));
             afterServcieServcie.insertAfterServiceImg(afterServiceImg);
         }
         if (!imgfile2.isEmpty()) {
@@ -79,8 +79,8 @@ public class AfterServiceFacade {
             AfterServiceImg afterServiceImg = new AfterServiceImg();
             afterServiceImg.setAfterserviceid(afterserviceid);
             afterServiceImg.setImgurl(url2);
-            afterServiceImg.setWidth((String) m.get("width"));
-            afterServiceImg.setHeight((String) m.get("height"));
+            afterServiceImg.setWidth(String.valueOf(m.get("width")));
+            afterServiceImg.setHeight(String.valueOf(m.get("height")));
             afterServcieServcie.insertAfterServiceImg(afterServiceImg);
         }
         if (!imgfile3.isEmpty()) {
@@ -90,8 +90,8 @@ public class AfterServiceFacade {
             AfterServiceImg afterServiceImg = new AfterServiceImg();
             afterServiceImg.setAfterserviceid(afterserviceid);
             afterServiceImg.setImgurl(url3);
-            afterServiceImg.setWidth((String) m.get("width"));
-            afterServiceImg.setHeight((String) m.get("height"));
+            afterServiceImg.setWidth(String.valueOf(m.get("width")));
+            afterServiceImg.setHeight(String.valueOf(m.get("height")));
             afterServcieServcie.insertAfterServiceImg(afterServiceImg);
         }
     }
