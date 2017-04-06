@@ -254,4 +254,12 @@
         logisticsway=#{logisticsway,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <!--用户在APP端取消售后申请-->
+    <update id="cancelAfterService" parameterType="java.util.Map">
+        UPDATE yw_afterservice
+        SET aftersalestatus = '2'
+        WHERE id = #{afterserviceid,jdbcType=INTEGER}
+          AND userid = #{userid,jdbcType=INTEGER}
+    </update>
 </mapper>
