@@ -52,14 +52,6 @@ import java.util.*;
  */
 @Service
 public class PostFacade {
-    @Value("#{configProperties['img.domain']}")
-    private String imgdomain;
-
-    @Value("#{configProperties['vidfeld.domain']}")
-    private String viddomain;
-
-    @Value("#{configProperties['vidbnner.domain']}")
-    private String vidbannerdomain;
 
     @Autowired
     private PostService postService;
@@ -497,9 +489,9 @@ public class PostFacade {
     public Map auditComment(String commentid, String userid) {
         Map map = new HashedMap();
         //查询该用户是否是超管或普管
-        Integer user = bossUserService.queryUserByAdministrator(Integer.parseInt(userid));
+        BossUser user = bossUserService.queryUserByAdministrator(Integer.parseInt(userid));
         if (user != null) {
-            if (user == 1) {//是管理员
+            if (user.getIssuper() == 1 || user.getCommon() == 1) {//是管理员
                 Integer resault = commentService.updateCommentAudit(Integer.parseInt(commentid));
                 map.put("massege", "审核成功");
                 map.put("resault", resault);
@@ -1574,6 +1566,17 @@ public class PostFacade {
             map.put("resault", -1);
             return map;
         }
+    }
+
+    /**
+     * 查询精选池帖子列表
+     *
+     * @param loginid
+     * @param pager
+     * @return
+     */
+    public List queryPostByIsessencepoolList(String loginid, Paging<PostList> pager) {
+        return postService.queryPostByIsessencepoolList(pager);
     }
 
 }

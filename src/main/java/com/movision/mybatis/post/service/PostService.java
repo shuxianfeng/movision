@@ -956,4 +956,20 @@ public class PostService {
             throw e;
         }
     }
+
+    /**
+     * 查询精选池帖子列表
+     *
+     * @param pager
+     * @return
+     */
+    public List<PostList> queryPostByIsessencepoolList(Paging<PostList> pager) {
+        try {
+            log.info("查询精选池帖子列表");
+            return postMapper.findAllqueryPostByIsessencepoolList(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询精选池帖子列表异常");
+            throw e;
+        }
+    }
 }

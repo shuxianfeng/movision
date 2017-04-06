@@ -172,4 +172,6 @@ public interface PostMapper {
 
     Integer addPostByisessencepool(Integer postid);//特邀嘉宾操作帖子，加入精选池
 
+    List<PostList> findAllqueryPostByIsessencepoolList(RowBounds rowBounds);
+
 }

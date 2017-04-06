@@ -520,6 +520,27 @@ public class PostController {
         return response;
     }
 
+    /**
+     * 查询精选池帖子列表
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询精选池帖子列表", notes = "用于查询精选池帖子列表", response = Response.class)
+    @RequestMapping(value = "query_post_isessencepool_list", method = RequestMethod.POST)
+    public Response queryPostByIsessencepoolList(@ApiParam(value = "登录用户") @RequestParam String loginid,
+                                                 @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                 @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostList> list = postFacade.queryPostByIsessencepoolList(loginid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
 
     /**
      * 帖子加精数据回显
