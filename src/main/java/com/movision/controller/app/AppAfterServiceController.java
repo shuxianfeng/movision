@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
+
 /**
  * @Author shuxf
  * @Date 2017/4/6 11:18
@@ -36,10 +38,11 @@ public class AppAfterServiceController {
                                        @ApiParam(value = "描述图3（最多3张）") @RequestParam(value = "file3", required = false) MultipartFile imgfile3) {
         Response response = new Response();
 
-        afterServiceFacade.commitAfterService(userid, orderid, addressid, goodsid, afterstatue, amountdue, remark, imgfile1, imgfile2, imgfile3);
+        Map<String, Object> map = afterServiceFacade.commitAfterService(userid, orderid, addressid, goodsid, afterstatue, amountdue, remark, imgfile1, imgfile2, imgfile3);
 
         if (response.getCode() == 200) {
             response.setMessage("申请成功");
+            response.setData(map);
         } else {
             response.setCode(300);
             response.setMessage("申请失败");
