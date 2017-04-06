@@ -1,5 +1,6 @@
 package com.movision.facade.boss;
 
+import com.movision.common.constant.JurisdictionConstants;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.category.entity.Category;
@@ -34,36 +35,25 @@ import java.util.*;
 @Service
 public class CircleFacade {
     Logger logger = LoggerFactory.getLogger(CircleFacade.class);
-    @Value("#{configProperties['bannerimg.domain']}")
-    private String imgdomain;
-
-    @Value("#{configProperties['circlecategory.domain']}")
-    private String categoryurl;
 
     @Autowired
-    CircleService circleService;
-    @Autowired
-    PostService postService;
-     @Autowired
-    UserService userService;
+    private CircleService circleService;
 
     @Autowired
-    SharesService sharesService;
+    private PostService postService;
 
     @Autowired
-    RewardedService rewardedService;
+    private UserService userService;
 
     @Autowired
-    AccusationService accusationService;
+    private ManagerServcie managerService;
 
     @Autowired
-    ManagerServcie managerService;
+    private CategoryService categoryService;
 
     @Autowired
-    CategoryService categoryService;
+    private commonalityFacade commonalityFacade;
 
-    @Autowired
-    MovisionOssClient movisionOssClient;
 
     /**
      * 圈子首页列表查询
@@ -186,20 +176,27 @@ public class CircleFacade {
      * @param circleid
      * @return
      */
-    public Map<String, Integer> updateDiscover(String circleid, String orderid) {
+    public Map updateDiscover(String circleid, String orderid, String loginid) {
         Integer discover = circleService.queryCircleDiscover(circleid);//查询圈子是否推荐发现页
-        Map<String, Integer> map = new HashedMap();
+        Map map = new HashedMap();
         Map<String, Integer> spread = new HashedMap();
-        spread.put("circleid", Integer.parseInt(circleid));
-        spread.put("orderid", Integer.parseInt(orderid));
-        if (discover == 0) {
-            Integer i = circleService.updateDiscover(spread);
-            map.put("resault", i);
+        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.update.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circle.getCode(), Integer.parseInt(circleid));
+        if (res.get("resault").equals(1)) {
+            spread.put("circleid", Integer.parseInt(circleid));
+            spread.put("orderid", Integer.parseInt(orderid));
+            if (discover == 0) {
+                Integer i = circleService.updateDiscover(spread);
+                map.put("resault", i);
+            } else {
+                Integer n = circleService.updateDiscoverDel(circleid);
+                map.put("resault", n);
+            }
+            return map;
         } else {
-            Integer n = circleService.updateDiscoverDel(circleid);
-            map.put("resault", n);
+            map.put("resault", -1);
+            map.put("message", "权限不足");
+            return map;
         }
-        return map;
     }
 
     /**
@@ -208,17 +205,24 @@ public class CircleFacade {
      * @param circleid
      * @return
      */
-    public Map<String, Integer> updateCircleIndex(String circleid) {
+    public Map updateCircleIndex(String circleid, String loginid) {
         Integer recommend = circleService.queryCircleRecommendIndex(circleid);
-        Map<String, Integer> map = new HashedMap();
-        if (recommend == 0) {
-            Integer l = circleService.updateCircleIndex(Integer.parseInt(circleid));
-            map.put("resault", 1);
-        } else if (recommend == 1) {
-            Integer n = circleService.updateCircleIndexDel(circleid);
-            map.put("resault", 2);
+        Map map = new HashedMap();
+        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.update.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circle.getCode(), Integer.parseInt(circleid));
+        if (res.get("resault").equals(1)) {
+            if (recommend == 0) {
+                Integer l = circleService.updateCircleIndex(Integer.parseInt(circleid));
+                map.put("resault", 1);
+            } else if (recommend == 1) {
+                Integer n = circleService.updateCircleIndexDel(circleid);
+                map.put("resault", 2);
+            }
+            return map;
+        } else {
+            map.put("resault", -1);
+            map.put("message", "权限不足");
+            return map;
         }
-        return map;
     }
 
     /**
@@ -244,56 +248,62 @@ public class CircleFacade {
      * @return
      */
     public Map<String, Integer> updateCircle(String id, String name, String category, String circlemanid,
-                                             String circleadmin, String photo, String introduction, String maylikeimg, String permission) {
+                                             String circleadmin, String photo, String introduction, String maylikeimg, String permission, String loginuser) {
         CircleDetails circleDetails = new CircleDetails();
         Map<String, Integer> map = new HashedMap();
         Integer circleid = null;
-        if (!StringUtils.isEmpty(id)) {
+        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginuser), JurisdictionConstants.JURISDICTION_TYPE.update.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circle.getCode(), Integer.parseInt(id));
+        if (res.get("resault").equals(1)) {
+            if (!StringUtils.isEmpty(id)) {
                 circleid = Integer.parseInt(id);
                 circleDetails.setId(Integer.parseInt(id));
             }
-        if (!StringUtils.isEmpty(name)) {
+            if (!StringUtils.isEmpty(name)) {
                 circleDetails.setName(name);
             }
-        if (!StringUtils.isEmpty(category)) {
+            if (!StringUtils.isEmpty(category)) {
                 circleDetails.setCategory(Integer.parseInt(category));
             }
-        if (!StringUtils.isEmpty(circleadmin)) {//管理员列表
+            if (!StringUtils.isEmpty(circleadmin)) {//管理员列表
                 //待定
-            String[] ary = circleadmin.split(",");//以逗号分隔接收数据
+                String[] ary = circleadmin.split(",");//以逗号分隔接收数据
                 managerService.deleteManagerToCircleid(circleid);//删除圈子的所有管理员
-            for (String itm : ary) {//循环添加
-                Map<String, Integer> mapd = new HashedMap();
-                mapd.put("circleid", circleid);
-                mapd.put("userid", Integer.parseInt(itm));
-                managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
+                for (String itm : ary) {//循环添加
+                    Map<String, Integer> mapd = new HashedMap();
+                    mapd.put("circleid", circleid);
+                    mapd.put("userid", Integer.parseInt(itm));
+                    managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
+                }
             }
+            if (!StringUtils.isEmpty(circlemanid)) {
+                //查询圈主
+                String pon = userService.queryUserbyPhoneByUserid(Integer.parseInt(circlemanid));
+                circleDetails.setPhone(pon);
             }
-        if (!StringUtils.isEmpty(circlemanid)) {
-            //查询圈主
-            String pon = userService.queryUserbyPhoneByUserid(Integer.parseInt(circlemanid));
-            circleDetails.setPhone(pon);
+            if (!StringUtils.isEmpty(photo)) {
+                circleDetails.setPhoto(photo);
             }
-        if (!StringUtils.isEmpty(photo)) {
-            circleDetails.setPhoto(photo);
+            if (!StringUtils.isEmpty(introduction)) {
+                circleDetails.setIntroduction(introduction);
             }
-        if (!StringUtils.isEmpty(introduction)) {
-            circleDetails.setIntroduction(introduction);
+            if (!StringUtils.isEmpty(maylikeimg)) {
+                circleDetails.setMaylikeimg(maylikeimg);
             }
-        if (!StringUtils.isEmpty(maylikeimg)) {
-            circleDetails.setMaylikeimg(maylikeimg);
-        }
-        if (!StringUtils.isEmpty(permission)) {
-            circleDetails.setPermission(Integer.parseInt(permission));
-        }
-        Integer s = circleService.updateCircle(circleDetails);
-        if (s == 1) {
-            map.put("resault", s);
+            if (!StringUtils.isEmpty(permission)) {
+                circleDetails.setPermission(Integer.parseInt(permission));
+            }
+            Integer s = circleService.updateCircle(circleDetails);
+            if (s == 1) {
+                map.put("resault", s);
+            } else {
+                Integer t = 0;
+                map.put("resault", t);
+            }
+            return map;
         } else {
-            Integer t = 0;
-            map.put("resault", t);
+            map.put("resault", -1);
+            return map;
         }
-        return map;
     }
 
     /**
@@ -338,60 +348,68 @@ public class CircleFacade {
      * @param maylikeimg
      * @return
      */
-    public Map<String, Integer> addCircle(String name, String category, String userid, String circleadmin,
-                                          String circlemanid, String photo, String maylikeimg, String introduction) {
+    public Map addCircle(String name, String category, String userid, String circleadmin,
+                         String circlemanid, String photo, String maylikeimg, String introduction, String loginid) {
         CircleDetails circleDetails = new CircleDetails();
-        Map<String, Integer> map = new HashedMap();
-        if (!StringUtils.isEmpty(category)) {
-            circleDetails.setName(name);
+        Map map = new HashedMap();
+        //登录用户，操作，操作种类，种类id
+        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.add.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circle.getCode(), null);
+        if (res.get("resault").equals(1)) {
+            if (!StringUtils.isEmpty(category)) {
+                circleDetails.setName(name);
             }
-        if (!StringUtils.isEmpty(category)) {
-            circleDetails.setCategory(Integer.parseInt(category));
+            if (!StringUtils.isEmpty(category)) {
+                circleDetails.setCategory(Integer.parseInt(category));
             }
 
-        if (!StringUtils.isEmpty(circlemanid)) {//添加创建人
-            circleDetails.setUserid(circlemanid);
+            if (!StringUtils.isEmpty(circlemanid)) {//添加创建人
+                circleDetails.setUserid(circlemanid);
             }
-        if (!StringUtils.isEmpty(userid)) {
-            //查询圈主手机号
-            String pon = userService.queryUserbyPhoneByUserid(Integer.parseInt(userid));
-            circleDetails.setPhone(pon);//设置圈主手机号
+            if (!StringUtils.isEmpty(userid)) {
+                //查询圈主手机号
+                String pon = userService.queryUserbyPhoneByUserid(Integer.parseInt(userid));
+                circleDetails.setPhone(pon);//设置圈主手机号
             }
             circleDetails.setCreatetime(new Date());
-        if (!StringUtils.isEmpty(photo)) {
-            circleDetails.setPhoto(photo);
+            if (!StringUtils.isEmpty(photo)) {
+                circleDetails.setPhoto(photo);
             }
-        if (!StringUtils.isEmpty(introduction)) {
-            circleDetails.setIntroduction(introduction);
+            if (!StringUtils.isEmpty(introduction)) {
+                circleDetails.setIntroduction(introduction);
             }
-        if (!StringUtils.isEmpty(maylikeimg)) {//圈子首页展示小方块
-            circleDetails.setMaylikeimg(maylikeimg);
-        }
-        circleDetails.setScope(2);//设置默认圈子贷方范围，对所有人开放
-        circleDetails.setStatus(0);//设置审核状态，初始值为待审核：0
-        circleDetails.setOrderid(0);//设置精选排序，初始值：0
-        circleDetails.setIsrecommend(0);//设置是否被推荐，初始值0
-        circleDetails.setPermission(1);//设置其他用户是否可以发帖，初始值：1是
+            if (!StringUtils.isEmpty(maylikeimg)) {//圈子首页展示小方块
+                circleDetails.setMaylikeimg(maylikeimg);
+            }
+            circleDetails.setScope(2);//设置默认圈子贷方范围，对所有人开放
+            circleDetails.setStatus(0);//设置审核状态，初始值为待审核：0
+            circleDetails.setOrderid(0);//设置精选排序，初始值：0
+            circleDetails.setIsrecommend(0);//设置是否被推荐，初始值0
+            circleDetails.setPermission(1);//设置其他用户是否可以发帖，初始值：1是
             Integer s = circleService.insertCircle(circleDetails);
             Integer cirid = circleDetails.getId();
-        if (!StringUtils.isEmpty(circleadmin)) {//管理员列表
+            if (!StringUtils.isEmpty(circleadmin)) {//管理员列表
                 //待定
-            String ary[] = circleadmin.split(",");//以逗号分隔接收数据
-            for (int ad = 0; ad < ary.length; ad++) {//循环添加
-                Map<String, Integer> mapd = new HashedMap();
-                String ads = ary[ad];
-                mapd.put("circleid", cirid);
-                mapd.put("userid", Integer.parseInt(ads));
-                managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
+                String ary[] = circleadmin.split(",");//以逗号分隔接收数据
+                for (int ad = 0; ad < ary.length; ad++) {//循环添加
+                    Map<String, Integer> mapd = new HashedMap();
+                    String ads = ary[ad];
+                    mapd.put("circleid", cirid);
+                    mapd.put("userid", Integer.parseInt(ads));
+                    managerService.addManagerToCircleAndUserid(mapd);//添加圈子所用管理员
+                }
             }
-        }
             if (s == 1) {
                 map.put("resault", s);
             } else {
                 Integer t = 0;
                 map.put("resault", t);
             }
-        return map;
+            return map;
+        } else {
+            map.put("resault", -1);
+            map.put("message", "权限不足");
+            return map;
+        }
     }
 
 
@@ -438,15 +456,23 @@ public class CircleFacade {
      * @param discoverpageurl
      * @return
      */
-    public Map<String, Integer> addCircleType(String typename, String discoverpageurl) {
-        Map<String, Integer> map = new HashedMap();
+    public Map addCircleType(String typename, String discoverpageurl, String loginid) {
+        Map map = new HashedMap();
         Map packaging = new HashedMap();
-        packaging.put("categoryname", typename);
-        packaging.put("intime", new Date());
-        packaging.put("discoverpageurl", discoverpageurl);
-        int i = categoryService.addCircleType(packaging);
-        map.put("resault", i);
-        return map;
+        //登录用户，操作，操作类型，类型id
+        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.add.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode(), null);
+        if (res.get("resault").equals(1)) {
+            packaging.put("categoryname", typename);
+            packaging.put("intime", new Date());
+            packaging.put("discoverpageurl", discoverpageurl);
+            int i = categoryService.addCircleType(packaging);
+            map.put("resault", i);
+            return map;
+        } else {
+            map.put("resault", -1);
+            map.put("message", "权限不足");
+            return map;
+        }
     }
 
     /**
@@ -468,20 +494,28 @@ public class CircleFacade {
      * @param discoverpageurl
      * @return
      */
-    public Map updateCircleCategory(String categoryid, String category, String discoverpageurl) {
+    public Map updateCircleCategory(String categoryid, String category, String discoverpageurl, String loginid) {
         Map map = new HashedMap();
-        map.put("categoryid", categoryid);
-        map.put("categoryname", category);
-        map.put("intime", new Date());
-        map.put("imgurl", discoverpageurl);
-        int i = categoryService.updateCircleCategory(map);
-        Map m = new HashedMap();
-        if (i == 1) {
-            m.put("resault", i);
-            return m;
+        //登录用户，操作，操作类型，操作id
+        Map ma = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.update.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode(), null);
+        if (ma.get("resault").equals(1)) {
+            map.put("categoryid", categoryid);
+            map.put("categoryname", category);
+            map.put("intime", new Date());
+            map.put("imgurl", discoverpageurl);
+            int i = categoryService.updateCircleCategory(map);
+            Map m = new HashedMap();
+            if (i == 1) {
+                m.put("resault", i);
+                return m;
+            } else {
+                m.put("resault", 0);
+                return m;
+            }
         } else {
-            m.put("resault", 0);
-            return m;
+            map.put("resault", -1);
+            map.put("message", "权限不足");
+            return map;
         }
     }
 
@@ -704,14 +738,22 @@ public class CircleFacade {
      * @param status
      * @return
      */
-    public Map updateAuditCircle(String circleid, String status) {
+    public Map updateAuditCircle(String circleid, String status, String loginid) {
         Map map = new HashedMap();
         Map m = new HashedMap();
-        map.put("circleid", circleid);
-        map.put("status", status);
-        int i = circleService.updateAuditCircle(map);
-        m.put("resault", i);
-        return m;
+        //登录用户，操作，操作类型，类型id
+        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.update.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circleAudit.getCode(), null);
+        if (res.get("resault").equals(1)) {
+            map.put("circleid", circleid);
+            map.put("status", status);
+            int i = circleService.updateAuditCircle(map);
+            m.put("resault", i);
+            return m;
+        } else {
+            map.put("resault", -1);
+            map.put("message", "权限不足");
+            return map;
+        }
     }
 
     /**

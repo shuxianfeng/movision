@@ -49,6 +49,10 @@ public interface BossUserMapper {
 
     Integer queryUserIdBySpeciallyGuest(Integer userid);
 
-    Integer queryUserByAdministrator(Integer userid);
+    BossUser queryUserByAdministrator(Integer userid);
+
+    List<Integer> queryPostByUserid(Map map);
+
+    List<Integer> queryCommentByUserid(Map map);
 
 }

@@ -110,9 +110,10 @@ public class CircleController {
     @ApiOperation(value = "圈子推荐到发现页", notes = "用于把圈子推荐到发现页排序的接口", response = Response.class)
     @RequestMapping(value = "update_circle_orderid", method = RequestMethod.POST)
     public Response updateDiscover(@ApiParam(value = "圈子id") @RequestParam String circleid,
-                                   @ApiParam(value = "排序id") @RequestParam String orderid) {
+                                   @ApiParam(value = "排序id") @RequestParam String orderid,
+                                   @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.updateDiscover(circleid, orderid);
+        Map<String, Integer> map = circleFacade.updateDiscover(circleid, orderid, loginid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -128,9 +129,10 @@ public class CircleController {
      */
     @ApiOperation(value = "圈子推荐首页", notes = "用于圈子推荐到首页的接口", response = Response.class)
     @RequestMapping(value = "update_circle_index", method = RequestMethod.POST)
-    public Response updateCircleIndex(@ApiParam(value = "圈子id") @RequestParam String circleid) {
+    public Response updateCircleIndex(@ApiParam(value = "圈子id") @RequestParam String circleid,
+                                      @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.updateCircleIndex(circleid);
+        Map map = circleFacade.updateCircleIndex(circleid, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -194,9 +196,10 @@ public class CircleController {
                                  @ApiParam(value = "圈子否封面") @RequestParam String photo,
                                  @ApiParam(value = "圈子简介") @RequestParam String introduction,
                                  @ApiParam(value = "圈子首页方形图") @RequestParam String maylikeimg,
-                                 @ApiParam(value = "发帖权限") @RequestParam(required = false) String permission) {
+                                 @ApiParam(value = "发帖权限") @RequestParam(required = false) String permission,
+                                 @ApiParam(value = "登录用户") @RequestParam String loginuser) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.updateCircle(id, name, category, userid, circleadmin, photo, introduction, maylikeimg, permission);
+        Map<String, Integer> map = circleFacade.updateCircle(id, name, category, userid, circleadmin, photo, introduction, maylikeimg, permission, loginuser);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -243,9 +246,10 @@ public class CircleController {
                               @ApiParam(value = "创建人") @RequestParam String circlemanid,
                               @ApiParam(value = "圈子否封面") @RequestParam String photo,
                               @ApiParam(value = "圈子首页方形图") @RequestParam String maylikeimg,
-                              @ApiParam(value = "圈子简介") @RequestParam String introduction) {
+                              @ApiParam(value = "圈子简介") @RequestParam String introduction,
+                              @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.addCircle(name, category, userid, circleadmin, circlemanid, photo, maylikeimg, introduction);
+        Map<String, Integer> map = circleFacade.addCircle(name, category, userid, circleadmin, circlemanid, photo, maylikeimg, introduction, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -296,9 +300,10 @@ public class CircleController {
     @ApiOperation(value = "添加圈子分类", notes = "用于添加圈子分类接口", response = Response.class)
     @RequestMapping(value = "add_circle_type", method = RequestMethod.POST)
     public Response addCircleType(@ApiParam(value = "圈子类型名称") @RequestParam String typename,
-                                  @ApiParam(value = "圈子分类banner图") @RequestParam String discoverpageurl) {
+                                  @ApiParam(value = "圈子分类banner图") @RequestParam String discoverpageurl,
+                                  @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.addCircleType(typename, discoverpageurl);
+        Map<String, Integer> map = circleFacade.addCircleType(typename, discoverpageurl, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -335,9 +340,10 @@ public class CircleController {
     @RequestMapping(value = "update_circle_category", method = RequestMethod.POST)
     public Response updateCircleCategory(@ApiParam(value = "圈子类型id") @RequestParam String categoryid,
                                          @ApiParam(value = "圈子类型名称") @RequestParam String category,
-                                         @ApiParam(value = "圈子分类banner图") @RequestParam String discoverpageurl) {
+                                         @ApiParam(value = "圈子分类banner图") @RequestParam String discoverpageurl,
+                                         @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map map = circleFacade.updateCircleCategory(categoryid, category, discoverpageurl);
+        Map map = circleFacade.updateCircleCategory(categoryid, category, discoverpageurl, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -469,9 +475,11 @@ public class CircleController {
      */
     @ApiOperation(value = "审核圈子", notes = "用于审核圈子接口", response = Response.class)
     @RequestMapping(value = "update_audit_circle", method = RequestMethod.POST)
-    public Response updateAuditCircle(@ApiParam(value = "圈子id") @RequestParam String circleid, @ApiParam(value = "审核状态 1:通过，2：未通过") @RequestParam String status) {
+    public Response updateAuditCircle(@ApiParam(value = "圈子id") @RequestParam String circleid,
+                                      @ApiParam(value = "审核状态 1:通过，2：未通过") @RequestParam String status,
+                                      @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map map = circleFacade.updateAuditCircle(circleid, status);
+        Map map = circleFacade.updateAuditCircle(circleid, status, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

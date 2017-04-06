@@ -2,6 +2,7 @@ package com.movision.mybatis.bossUser.service;
 
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.mapper.BossUserMapper;
+import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -239,12 +240,44 @@ public class BossUserService {
      * @param userid
      * @return
      */
-    public Integer queryUserByAdministrator(Integer userid) {
+    public BossUser queryUserByAdministrator(Integer userid) {
         try {
             log.info("查询用户是否是管理员");
             return bossUserMapper.queryUserByAdministrator(userid);
         } catch (Exception e) {
             log.error("查询用户是否是管理员异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询用户操作帖子范畴
+     *
+     * @param ma
+     * @return
+     */
+    public List<Integer> queryPostByUserid(Map ma) {
+        try {
+            log.info("查询用户操作帖子范畴");
+            return bossUserMapper.queryPostByUserid(ma);
+        } catch (Exception e) {
+            log.error("查询用户操作帖子范畴异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询用户可操作的帖子评论
+     *
+     * @param ma
+     * @return
+     */
+    public List<Integer> queryCommentByUserid(Map ma) {
+        try {
+            log.info("查询用户可操作的帖子评论");
+            return bossUserMapper.queryCommentByUserid(ma);
+        } catch (Exception e) {
+            log.error("查询用户可操作的帖子评论异常");
             throw e;
         }
     }
