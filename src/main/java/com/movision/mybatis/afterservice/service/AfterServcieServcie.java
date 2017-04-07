@@ -87,6 +87,19 @@ public class AfterServcieServcie {
     }
 
     /**
+     * 根据物流公司id查询物流公司名称
+     */
+    public String queryLogisticName(int id) {
+        try {
+            logger.info("根据物流公司id查询物流公司名称");
+            return afterserviceMapper.queryLogisticName(id);
+        } catch (Exception e) {
+            logger.error("根据物流公司id查询物流公司名称失败");
+            throw e;
+        }
+    }
+
+    /**
      * 根据售后id查询售后图片列表
      */
     public List<AfterServiceImg> queryAfterServiceImgList(int afterserviceid) {

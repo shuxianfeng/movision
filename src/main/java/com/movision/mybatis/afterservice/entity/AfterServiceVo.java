@@ -55,6 +55,20 @@ public class AfterServiceVo {
 
     private String remark;
 
+    private Integer logisticsway;
+
+    private String logisticsname;//物流公司名称
+
+    public String returnnumber;
+
+    public String getReturnnumber() {
+        return returnnumber;
+    }
+
+    public void setReturnnumber(String returnnumber) {
+        this.returnnumber = returnnumber;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -322,5 +336,21 @@ public class AfterServiceVo {
 
     public void setAmountdue(Double amountdue) {
         this.amountdue = amountdue;
+    }
+
+    public Integer getLogisticsway() {
+        return logisticsway;
+    }
+
+    public void setLogisticsway(Integer logisticsway) {
+        this.logisticsway = logisticsway;
+    }
+
+    public String getLogisticsname() {
+        return logisticsname;
+    }
+
+    public void setLogisticsname(String logisticsname) {
+        this.logisticsname = logisticsname;
     }
 }

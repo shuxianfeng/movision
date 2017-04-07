@@ -131,6 +131,9 @@ public class AfterServiceFacade {
 
         //查询售后基本信息
         AfterServiceVo vo = afterServcieServcie.queryAfterServiceDetail(Integer.parseInt(afterserviceid));
+        //根据物流公司id查询物流公司名称
+        String logisticsname = afterServcieServcie.queryLogisticName(vo.getLogisticsway());
+        vo.setLogisticsname(logisticsname);
         map.put("afterServiceVo", vo);
 
         //查询售后上传的图片

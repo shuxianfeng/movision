@@ -40,6 +40,11 @@
         SELECT * FROM yw_afterservice WHERE id = #{afterserviceid,jdbcType=INTEGER}
     </select>
 
+    <!--根据物流公司id查询物流公司名称-->
+    <select id="queryLogisticName" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT logisticscompany FROM yw_logistics_company WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_afterservice
         where id = #{id,jdbcType=INTEGER}

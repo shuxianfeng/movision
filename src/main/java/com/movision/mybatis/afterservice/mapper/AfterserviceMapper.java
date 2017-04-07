@@ -18,6 +18,8 @@ public interface AfterserviceMapper {
 
     AfterServiceVo queryAfterServiceDetail(int afterserviceid);
 
+    String queryLogisticName(int id);
+
     void commitReturnLogisticInfo(Map<String, Object> parammap);
 
     Afterservice selectByPrimaryKey(Integer id);
