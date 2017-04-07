@@ -3,6 +3,7 @@ package com.movision.controller.app;
 import com.movision.common.Response;
 import com.movision.facade.address.AddressFacade;
 import com.movision.facade.afterService.AfterServiceFacade;
+import com.movision.facade.boss.LogisticsInquiryFacade;
 import com.movision.facade.order.OrderAppFacade;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -27,6 +28,9 @@ public class AppOrdersController {
 
     @Autowired
     private AddressFacade addressFacade;
+
+    @Autowired
+    private LogisticsInquiryFacade logisticsInquiryFacade;
 
     @ApiOperation(value = "确认订单页面（点击提交订单前）更换可用地址时动态调用", notes = "根据前台App用户选择的定位地点和用户选择的可用收货地址计算用户购物车中运费总和", response = Response.class)
     @RequestMapping(value = "calculateLogisticsfee", method = RequestMethod.POST)
@@ -106,6 +110,35 @@ public class AppOrdersController {
             response.setCode(300);
             response.setMessage("订单详情查询失败");
         }
+        return response;
+    }
+
+    /**
+     * 查询物流接口
+     *
+     * @param
+     * @return
+     */
+    @ApiOperation(value = "查询物流接口", notes = "查询物流接口", response = Response.class)
+    @RequestMapping(value = "queryLogistics", method = RequestMethod.POST)
+    public Response queryLogistics(@ApiParam(value = "订单号") @RequestParam String ordernumber,
+                                   @ApiParam(value = "type(0:用户退回,1：换货,2：订单)") @RequestParam int type) {
+        Response response = new Response();
+        Map<String, Object> parammap = logisticsInquiryFacade.LogisticInquiry(ordernumber, type);
+        if (response.getCode() == 200 && parammap.get("message").equals("ok")) {
+            response.setMessage("物流信息返回成功");
+        } else if (parammap.get("returnCode").equals("500")) {
+            response.setMessage("查询无结果，请隔段时间再查");
+        } else if (parammap.get("returnCode").equals("400")) {
+            response.setMessage("提交的数据不完整，或者贵公司没授权");
+        } else if (parammap.get("returnCode").equals("501")) {
+            response.setMessage("服务器错误，快递100服务器压力过大或需要升级，暂停服务");
+        } else if (parammap.get("returnCode").equals("502")) {
+            response.setMessage("服务器繁忙");
+        } else if (parammap.get("returnCode").equals("503")) {
+            response.setMessage("验证签名失败。");
+        }
+        response.setData(parammap);
         return response;
     }
 }
