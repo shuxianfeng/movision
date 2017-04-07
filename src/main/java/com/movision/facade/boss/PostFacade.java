@@ -1,5 +1,6 @@
 package com.movision.facade.boss;
 
+import com.movision.common.constant.JurisdictionConstants;
 import com.movision.common.util.ShiroUtil;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.accusation.service.AccusationService;
@@ -87,7 +88,7 @@ public class PostFacade {
     private GoodsService goodsService;
 
     @Autowired
-    private CategoryService categoryService;
+    private commonalityFacade commonalityFacade;
 
     @Autowired
     private JsoupCompressImg jsoupCompressImg;
@@ -370,52 +371,53 @@ public class PostFacade {
      * 后台管理-帖子列表-帖子评论列表-添加评论
      *
      * @param postid
-     * @param userid
+     * @param loginid
      * @param content
      * @return
      */
     @Transactional
-    public Map<String, Integer> addPostAppraise(String postid, String userid, String content) {
+    public Map addPostAppraise(String postid, String content, String loginid) {
+        Integer id = Integer.parseInt(loginid);
         CommentVo comm = new CommentVo();
-        Map<String, Integer> map = new HashedMap();
-        Integer uid = Integer.parseInt(userid);
-        Integer iscontribute = bossUserService.queryUserByIscontribute(uid);//查询当前登录用户是否是特邀嘉宾
+        Map map = new HashedMap();
+        //Integer speciall= bossUserService.queryUserIdBySpeciallyGuest(id);
+        Map res = commonalityFacade.verifyUserJurisdiction(id, JurisdictionConstants.JURISDICTION_TYPE.add.getCode(), JurisdictionConstants.JURISDICTION_TYPE.comment.getCode(), null);
+        Integer uid = Integer.parseInt(loginid);
         comm.setPostid(Integer.parseInt(postid));
         comm.setIntime(new Date());
         comm.setContent(content);
-        if (iscontribute != null) {
-            if (iscontribute == 1) {//如果是特邀嘉宾
-                comm.setIscontribute(iscontribute);//设置为特邀嘉宾评论
-                comm.setIsdel("1");//设置状态为删除
-                comm.setStatus(0);//设置审核状态
-            } else {
-                Integer iscircle = bossUserService.queryUserByiscircle(uid);//查询当前登录用户是否是圈主
-                if (iscircle == 1) {
-                    comm.setIscontribute(0);
-                } else {
-                    Integer circlemanagement = bossUserService.queryUserBycirclemanagements(uid);//查询当前登录用户是否是圈子管理员
-                    if (circlemanagement == 1) {
-                        comm.setIscontribute(0);
-                    } else {
-                        map.put("status", -1);
-                        return map;
-                    }
-                }
-            }
-
             Integer u = bossUserService.queryUserById(uid);//根据用户id查询前台对应用户id
             comm.setUserid(u);
             comm.setIntime(new Date());
-            int status;
+        if (res.get("resault").equals(1)) {//特邀嘉宾发帖子评论
+            comm.setIscontribute(1);//特邀嘉宾
+            comm.setStatus(0);
+            comm.setIsdel("1");
             int c = commentService.insertComment(comm);//添加评论
             if (c == 1) {
                 postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子的评论数
-                status = 2;
-                map.put("status", status);
+                map.put("resault", 1);
+                return map;
+            } else {
+                map.put("resault", -1);
+                return map;
             }
-            return map;
+        } else if (res.get("resault").equals(2)) {//管理员发帖子评论
+            comm.setIscontribute(0);//不是特邀嘉宾
+            comm.setStatus(null);
+            comm.setIsdel("0");
+            int c = commentService.insertComment(comm);//添加评论
+            if (c == 1) {
+                postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子的评论数
+                map.put("resault", 1);
+                return map;
+            } else {
+                map.put("resault", -1);
+                return map;
+            }
         } else {
-            map.put("status", -1);
+            map.put("resault", -1);
+            map.put("message", "权限不足");
             return map;
         }
     }

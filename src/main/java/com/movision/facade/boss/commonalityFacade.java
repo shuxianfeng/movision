@@ -34,12 +34,12 @@ public class commonalityFacade {
     public Map verifyUserJurisdiction(Integer userid, Integer operation, Integer kind, Integer kindid) {
         Map map = new HashMap();
         BossUser i = bossUserService.queryUserByAdministrator(userid);//根据登录用户id查询当前用户有哪些权限
-        if (i.getIssuper().equals(1) || i.getCommon().equals(1)) {//操作权限为最高权限
-            map.put("resault", 1);
-            return map;
-        } else if (i.getIscircle().equals(JurisdictionConstants.JURISDICTION_TYPE.groupOwner.getCode())) {//圈主
-            if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//圈主可以在自己圈子中添加帖子
+        if (i.getIscircle().equals(JurisdictionConstants.JURISDICTION_TYPE.groupOwner.getCode())) {//圈主
+            if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//圈主可以在自己圈子中添加评论
                 map.put("resault", 1);
+                return map;
+            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//添加评论
+                map.put("resault", 2);
                 return map;
             } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.delete.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())))) {//圈主可以删除该圈子的帖子和评论
                 Map ma = new HashedMap();
@@ -105,8 +105,19 @@ public class commonalityFacade {
                 return map;
             }
         } else if (i.getCirclemanagement().equals(JurisdictionConstants.JURISDICTION_TYPE.groupManage.getCode())) {//圈子管理员
-            if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//圈主可以在自己圈子中添加帖子
-                map.put("resault", 1);
+            if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode())) {//圈主可以在自己圈子中添加帖子
+                if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//添加帖子
+                    map.put("resault", 1);
+                    return map;
+                } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//添加评论
+                    map.put("resault", 2);
+                    return map;
+                } else {
+                    map.put("resault", -1);
+                    return map;
+                }
+            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//添加评论
+                map.put("resault", 2);
                 return map;
             } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.delete.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())))) {//圈主可以删除该圈子的帖子和评论
                 Map ma = new HashedMap();
@@ -177,7 +188,7 @@ public class commonalityFacade {
         } else if (i.getContributing().equals(JurisdictionConstants.JURISDICTION_TYPE.speciallyInvite.getCode())) {//特邀嘉宾
             //只能设置帖子为精选池和评论帖子
             if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && operation.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//添加评论
-                map.put("resault", 1);
+                map.put("resault", 2);
                 return map;
             } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.update.getCode()) && operation.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//操作帖子加入精选池
                 map.put("resault", 1);
@@ -186,6 +197,9 @@ public class commonalityFacade {
                 map.put("resault", -1);
                 return map;
             }
+        } else if (i.getIssuper().equals(1) || i.getCommon().equals(1)) {//操作权限为最高权限
+            map.put("resault", 1);
+            return map;
         } else {
             map.put("resault", -1);
             return map;

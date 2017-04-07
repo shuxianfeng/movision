@@ -237,17 +237,17 @@ public class PostController {
      * 添加评论接口
      *
      * @param postid
-     * @param userid
+     * @param loginid
      * @param content
      * @return
      */
     @ApiOperation(value = "添加评论", notes = "用于添加评论接口", response = Response.class)
     @RequestMapping(value = "add_post_comment", method = RequestMethod.POST)
     public Response addPostAppraise(@ApiParam(value = "帖子id") @RequestParam String postid,
-                                    @ApiParam(value = "评论人") @RequestParam String userid,
-                                    @ApiParam(value = "评论内容") @RequestParam String content) {
+                                    @ApiParam(value = "评论内容") @RequestParam String content,
+                                    @ApiParam(value = "登录用户(评论人)") @RequestParam String loginid) {
         Response response = new Response();
-        Map<String, Integer> status = postFacade.addPostAppraise(postid, userid, content);
+        Map status = postFacade.addPostAppraise(postid, content, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
