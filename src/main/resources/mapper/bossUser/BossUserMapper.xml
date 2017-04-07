@@ -223,19 +223,22 @@
 
     <select id="findAllBossUser" resultType="java.util.HashMap" parameterType="java.util.HashMap">
         SELECT
-        id, name, phone, username, issuper, status, isdel,
-        iscircle, circlemanagement, contributing, common,
-        date_format(createtime,'%Y-%m-%d %H:%i:%s') createtime,
-        date_format(afterlogintime,'%Y-%m-%d %H:%i:%s') afterlogintime,
-        date_format(beforelogintime,'%Y-%m-%d %H:%i:%s') beforelogintime
+        u.id, u.name, u.phone, u.username, u.issuper, u.status, u.isdel,
+        u.iscircle, u.circlemanagement, u.contributing, u.common,
+        date_format(u.createtime,'%Y-%m-%d %H:%i:%s') createtime,
+        date_format(u.afterlogintime,'%Y-%m-%d %H:%i:%s') afterlogintime,
+        date_format(u.beforelogintime,'%Y-%m-%d %H:%i:%s') beforelogintime,
+        r.rolename, r.id as roleid
         FROM
-        yw_admin_user
-        where status = 0 and isdel = 0
+        yw_admin_user u
+        LEFT join yw_admin_user_role ur on u.id=ur.userid
+        LEFT JOIN yw_admin_role r ON r.id = ur.roleid
+        where u.status = 0 and u.isdel = 0
         <if test="phone != null and phone != ''">
-            phone = #{phone}
+            u.phone = #{phone}
         </if>
         <if test="username != null and username != ''">
-            username = #{username}
+            u.username = #{username}
         </if>
 
     </select>

@@ -32,7 +32,11 @@ public class MenuFacade {
     private MenuService menuService;
 
     public Boolean addMenu(Menu menu) {
+        //1 校验菜单名称是否已经存在
         this.validateMenuNameIsExist(menu);
+        //2 判断是否增加的是子菜单，如果是子菜单，应该判断父菜单是否在对应的角色关系中，若在，则子菜单也加入进去
+
+
         return menuService.addAdminMenu(menu);
     }
 
