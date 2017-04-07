@@ -3,6 +3,7 @@ package com.movision.mybatis.rewarded.service;
 import com.movision.mybatis.rewarded.entity.Rewarded;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.rewarded.mapper.RewardedMapper;
+import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,7 @@ public class RewardedService {
     /**
      * 帖子打赏
      *
-     * @param postid
+     * @param
      * @param pager
      * @return
      */
@@ -50,6 +51,38 @@ public class RewardedService {
             return rewardedMapper.findAllqueryPostAward(map, pager.getRowBounds());
         } catch (Exception e) {
             log.error("帖子打赏列表加载失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 根据用户查询打赏
+     *
+     * @param userid
+     * @return
+     */
+    public RewardedVo queryRewardByUserid(String userid) {
+        try {
+            log.info("根据用户查询打赏");
+            return rewardedMapper.queryRewardByUserid(userid);
+        } catch (Exception e) {
+            log.error("根据用户查询打赏失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 根据用户查询打赏
+     *
+     * @param userid
+     * @return
+     */
+    public List<RewardedVo> findAllRewarded(String userid, Paging<RewardedVo> paging) {
+        try {
+            log.info("根据用户查询打赏");
+            return rewardedMapper.findAllRewarded(userid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据用户查询打赏失败");
             throw e;
         }
     }

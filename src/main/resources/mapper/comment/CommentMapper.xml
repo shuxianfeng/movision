@@ -424,5 +424,16 @@
     SET isdel=0,status=1
     where id = #{id,jdbcType=INTEGER} AND iscontribute=1
   </update>
-
+    <select id="queryCommentByUserid" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
+        SELECT c.intime,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u
+        ON c.userid=u.id WHERE postid IN (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} and isdel=0)
+        AND isdel=0 and pid is NULL ORDER BY intime DESC limit 0,1
+    </select>
+    <select id="findAllQueryComment" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
+        SELECT c.*,u.phone,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u
+        ON c.userid=u.id WHERE postid IN (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} and isdel=0)
+        AND isdel=0 and pid is NULL ORDER BY intime DESC
+    </select>
 </mapper>

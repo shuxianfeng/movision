@@ -81,4 +81,16 @@
         intime = #{intime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="queryByUserid" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecordVo">
+        SELECT u.nickname,t.intime FROM yw_post_comment_zan_record t LEFT JOIN yw_user u ON t.userid=u.id WHERE
+        t.commentid IN (SELECT id FROM yw_post_comment WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0) ORDER BY
+        t.intime DESC LIMIT 0,1
+    </select>
+    <select id="findAllCommentZanList" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT u.nickname,t.intime,u.photo,t.commentid FROM yw_post_comment_zan_record t LEFT JOIN yw_user u ON
+        t.userid=u.id
+        WHERE t.commentid IN (SELECT id FROM yw_post_comment WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0) ORDER
+        BY t.intime
+    </select>
 </mapper>

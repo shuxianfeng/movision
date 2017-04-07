@@ -2,6 +2,7 @@ package com.movision.mybatis.rewarded.mapper;
 
 import com.movision.mybatis.rewarded.entity.Rewarded;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
+import com.movision.utils.L;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -23,5 +24,9 @@ public interface RewardedMapper {
     List<RewardedVo> findAllqueryPostAward(Map map, RowBounds rowBounds);
 
     int insertRewardRecord(Map map);
+
+    RewardedVo queryRewardByUserid(String userid);
+
+    List<RewardedVo> findAllRewarded(String userid, RowBounds rowBounds);
 
 }

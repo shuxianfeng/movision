@@ -60,4 +60,8 @@ public interface CommentMapper {
     int insertComment(CommentVo commentVo);
 
     Integer updateCommentAudit(Integer commentid);
+
+    CommentVo queryCommentByUserid(String userid);//根据userid查询评论
+
+    List<CommentVo> findAllQueryComment(String userid, RowBounds rowBounds);
 }

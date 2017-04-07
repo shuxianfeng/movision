@@ -79,4 +79,13 @@
         intime = #{intime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="queryByUserid" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.PostZanRecord.entity.PostZanRecordVo">
+ SELECT r.intime,u.nickname FROM yw_post_zan_record r LEFT JOIN yw_user u
+    ON r.userid=u.id WHERE r.postid IN (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} and isdel=0)
+    </select>
+    <select id="findAllZanList" parameterType="java.lang.String" resultType="java.util.Map">
+         SELECT r.intime,u.nickname,u.photo,r.postid FROM yw_post_zan_record r LEFT JOIN yw_user u
+    ON r.userid=u.id WHERE r.postid IN (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} and isdel=0) ORDER BY r.intime DESC
+    </select>
 </mapper>

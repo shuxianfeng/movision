@@ -135,7 +135,6 @@
     <select id="selectAll" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
         SELECT *
         FROM yw_im_system_informs
-        group BY body
         ORDER BY inform_time DESC
     </select>
     <select id="findAllSystemInform" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform"
@@ -148,5 +147,8 @@
         <if test="pai==0">
             ORDER BY inform_time DESC
         </if>
+    </select>
+    <select id="queryByUserid" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
+        SELECT body,inform_time FROM yw_im_system_informs ORDER BY inform_time DESC LIMIT 0,1
     </select>
 </mapper>
