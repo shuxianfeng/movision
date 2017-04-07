@@ -121,7 +121,7 @@ public class AppOrdersController {
      */
     @ApiOperation(value = "查询物流接口", notes = "查询物流接口", response = Response.class)
     @RequestMapping(value = "queryLogistics", method = RequestMethod.POST)
-    public Response queryLogistics(@ApiParam(value = "订单号") @RequestParam String ordernumber,
+    public Response queryLogistics(@ApiParam(value = "订单编号（14位的订单编号）") @RequestParam String ordernumber,
                                    @ApiParam(value = "type(0:用户退回,1：换货,2：订单)") @RequestParam int type) {
         Response response = new Response();
         Map<String, Object> parammap = logisticsInquiryFacade.LogisticInquiry(ordernumber, type);
