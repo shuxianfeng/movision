@@ -57,11 +57,12 @@ public class PostController {
      */
     @ApiOperation(value = "查询帖子列表", notes = "查询帖子列表", response = Response.class)
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public Response queryPostByList(@RequestParam(required = false, defaultValue = "1") String pageNo,
+    public Response queryPostByList(@ApiParam(value = "登录用户") @RequestParam String loginid,
+                                    @RequestParam(required = false, defaultValue = "1") String pageNo,
                                     @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostList> list = postFacade.queryPostByList(pager);
+        List<PostList> list = postFacade.queryPostByList(loginid, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成");
         }

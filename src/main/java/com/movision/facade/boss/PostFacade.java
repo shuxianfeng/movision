@@ -102,9 +102,21 @@ public class PostFacade {
      * @param pager
      * @return
      */
-    public List<PostList> queryPostByList(Paging<PostList> pager) {
-        List<PostList> list = postService.queryPostByList(pager);
-        return list;
+    public List<PostList> queryPostByList(String loginid, Paging<PostList> pager) {
+        Integer userid = Integer.parseInt(loginid);
+        Map res = commonalityFacade.verifyUserByQueryMethod(userid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), null);
+        List<PostList> list = new ArrayList<>();
+        if (res.get("resault").equals(userid)) {
+            //查询用户管理的圈子id
+            Integer circleid = circleService.queryCIrcleIdByUserId(userid);
+            list = postService.queryPostByList(circleid, pager);
+            return list;
+        } else if (res.get("resault").equals(-1)) {
+            return null;
+        } else {
+            list = postService.queryPostByList(null, pager);
+            return list;
+        }
     }
 
 
@@ -389,7 +401,7 @@ public class PostFacade {
             Integer u = bossUserService.queryUserById(uid);//根据用户id查询前台对应用户id
             comm.setUserid(u);
             comm.setIntime(new Date());
-        if (res.get("resault").equals(1)) {//特邀嘉宾发帖子评论
+        if (res.get("resault").equals(2)) {//特邀嘉宾发帖子评论
             comm.setIscontribute(1);//特邀嘉宾
             comm.setStatus(0);
             comm.setIsdel("1");
@@ -402,7 +414,7 @@ public class PostFacade {
                 map.put("resault", -1);
                 return map;
             }
-        } else if (res.get("resault").equals(2)) {//管理员发帖子评论
+        } else if (res.get("resault").equals(1)) {//管理员发帖子评论
             comm.setIscontribute(0);//不是特邀嘉宾
             comm.setStatus(null);
             comm.setIsdel("0");

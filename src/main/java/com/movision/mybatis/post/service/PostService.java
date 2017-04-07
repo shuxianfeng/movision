@@ -301,10 +301,10 @@ public class PostService {
      * @param pager
      * @return
      */
-    public List<PostList> queryPostByList(Paging<PostList> pager) {
+     public List<PostList> queryPostByList(Integer circleid, Paging<PostList> pager) {
         try {
             log.info("查询帖子列表");
-            return postMapper.findAllqueryPostByList(pager.getRowBounds());
+            return postMapper.findAllqueryPostByList(circleid, pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询帖子列表异常");
             throw e;

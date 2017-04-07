@@ -1051,7 +1051,11 @@
         (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS circlename,
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
-        WHERE p.isdel=0 AND p.isactive=0 ORDER BY p.intime DESC
+        WHERE p.isdel=0 AND p.isactive=0
+        <if test="circleid!=null">
+            AND p.circleid=#{circleid,jdbcType=INTEGER}
+        </if>
+        ORDER BY p.intime DESC
     </select>
 
     <select id="findAllqueryPostByCircleId" parameterType="java.util.Map"

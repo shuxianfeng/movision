@@ -808,4 +808,8 @@
             resultType="com.movision.mybatis.category.entity.Category">
         SELECT * FROM yw_circle_category WHERE id=#{categoryid,jdbcType=INTEGER}
     </select>
+
+    <select id="queryCIrcleIdByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT id FROM yw_circle WHERE phone=(SELECT phone FROM yw_user WHERE id=#{userid,jdbcType=INTEGER})
+    </select>
 </mapper>

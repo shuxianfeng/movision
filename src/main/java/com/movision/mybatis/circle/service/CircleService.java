@@ -490,4 +490,20 @@ public class CircleService {
             throw e;
         }
     }
+
+    /**
+     * 根据用户id查询圈子id
+     *
+     * @param userid
+     * @return
+     */
+    public Integer queryCIrcleIdByUserId(Integer userid) {
+        try {
+            log.info("根据用户id查询圈子id");
+            return circleMapper.queryCIrcleIdByUserId(userid);
+        } catch (Exception e) {
+            log.error("根据用户id查询圈子id异常");
+            throw e;
+        }
+    }
 }

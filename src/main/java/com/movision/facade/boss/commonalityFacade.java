@@ -187,10 +187,10 @@ public class commonalityFacade {
             }
         } else if (i.getContributing().equals(JurisdictionConstants.JURISDICTION_TYPE.speciallyInvite.getCode())) {//特邀嘉宾
             //只能设置帖子为精选池和评论帖子
-            if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && operation.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//添加评论
+            if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//添加评论
                 map.put("resault", 2);
                 return map;
-            } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.update.getCode()) && operation.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//操作帖子加入精选池
+            } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.update.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//操作帖子加入精选池
                 map.put("resault", 1);
                 return map;
             } else {
@@ -220,10 +220,7 @@ public class commonalityFacade {
     public Map verifyUserByQueryMethod(Integer userid, Integer operation, Integer kind, Integer kindid) {
         Map map = new HashMap();
         BossUser i = bossUserService.queryUserByAdministrator(userid);//根据登录用户id查询当前用户有哪些权限
-        if (i.getIssuper().equals(1) || i.getCommon().equals(1)) {//操作权限为最高权限
-            map.put("resault", 1);
-            return map;
-        } else if (i.getIscircle().equals(JurisdictionConstants.JURISDICTION_TYPE.groupOwner.getCode())
+        if (i.getIscircle().equals(JurisdictionConstants.JURISDICTION_TYPE.groupOwner.getCode())
                 && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()))) {//圈主可以查看
             map.put("resault", userid);
             return map;
@@ -234,6 +231,9 @@ public class commonalityFacade {
         } else if (i.getContributing().equals(JurisdictionConstants.JURISDICTION_TYPE.speciallyInvite.getCode())
                 && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()))) {//特邀嘉宾可以查看
             map.put("resault", userid);
+            return map;
+        } else if (i.getIssuper().equals(1) || i.getCommon().equals(1)) {//操作权限为最高权限
+            map.put("resault", 1);
             return map;
         } else {
             map.put("resault", -1);

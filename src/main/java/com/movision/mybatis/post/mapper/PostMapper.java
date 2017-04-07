@@ -98,7 +98,7 @@ public interface PostMapper {
 
     int updatePostBycommentsum(int postid);
 
-    List<PostList> findAllqueryPostByList(RowBounds rowBounds);
+    List<PostList> findAllqueryPostByList(Integer circleid, RowBounds rowBounds);
 
     List<PostList> findAllqueryPostByCircleId(Map map, RowBounds rowBounds);
 
