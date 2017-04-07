@@ -103,4 +103,22 @@ public class AppAfterServiceController {
         }
         return response;
     }
+
+    @ApiOperation(value = "APP提交商品退回的物流信息的接口", notes = "APP提交商品退回的物流信息的接口(含物流类型和物流单号)", response = Response.class)
+    @RequestMapping(value = "commitReturnLogisticInfo", method = RequestMethod.POST)
+    public Response commitReturnLogisticInfo(@ApiParam(value = "售后单id") @RequestParam String id,
+                                             @ApiParam(value = "物流类别id") @RequestParam String logisticid,
+                                             @ApiParam(value = "商品退回物流单号") @RequestParam String returnnumber) {
+        Response response = new Response();
+
+        afterServiceFacade.commitReturnLogisticInfo(id, logisticid, returnnumber);
+
+        if (response.getCode() == 200) {
+            response.setMessage("提交成功");
+        } else {
+            response.setCode(300);
+            response.setMessage("提交失败");
+        }
+        return response;
+    }
 }

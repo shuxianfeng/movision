@@ -149,4 +149,12 @@ public class AfterServiceFacade {
     public List<LogisticsCompany> queryLogisticType() {
         return afterServcieServcie.queryLogisticType();
     }
+
+    public void commitReturnLogisticInfo(String id, String logisticid, String returnnumber) {
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("id", id);
+        parammap.put("logisticid", logisticid);
+        parammap.put("returnnumber", returnnumber);
+        afterServcieServcie.commitReturnLogisticInfo(parammap);
+    }
 }

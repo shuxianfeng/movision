@@ -111,4 +111,17 @@ public class AfterServcieServcie {
             throw e;
         }
     }
+
+    /**
+     * APP用户在售后单中提交商品退回的物流信息
+     */
+    public void commitReturnLogisticInfo(Map<String, Object> parammap) {
+        try {
+            logger.info("APP用户在售后单中提交商品退回的物流信息");
+            afterserviceMapper.commitReturnLogisticInfo(parammap);
+        } catch (Exception e) {
+            logger.error("APP用户在售后单中提交商品退回的物流信息失败");
+            throw e;
+        }
+    }
 }

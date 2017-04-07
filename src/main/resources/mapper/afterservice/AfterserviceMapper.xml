@@ -269,4 +269,12 @@
         WHERE id = #{afterserviceid,jdbcType=INTEGER}
           AND userid = #{userid,jdbcType=INTEGER}
     </update>
+
+    <!--用户在APP端提交商品退回的物流信息-->
+    <update id="commitReturnLogisticInfo" parameterType="java.util.Map">
+        UPDATE yw_afterservice
+        SET returnnumber = #{returnnumber,jdbcType=INTEGER},
+            logisticsway = #{logisticid,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>
