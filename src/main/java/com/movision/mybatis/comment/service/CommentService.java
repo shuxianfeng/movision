@@ -284,7 +284,7 @@ public class CommentService {
      * @param pager
      * @return
      */
-    public List<CommentVo> findAllQueryComment(String userid, Paging<CommentVo> pager) {
+    public List<CommentVo> findAllQueryComment(Integer userid, Paging<CommentVo> pager) {
         try {
             log.info("根据用户id查询用户帖子被评论的评论列表");
             return commentMapper.findAllQueryComment(userid, pager.getRowBounds());
@@ -317,7 +317,7 @@ public class CommentService {
      * @param userid
      * @return
      */
-    public CommentVo queryCommentByUserid(String userid) {
+    public CommentVo queryCommentByUserid(Integer userid) {
         try {
             log.info("根据用户查询评论");
             return commentMapper.queryCommentByUserid(userid);

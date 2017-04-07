@@ -61,7 +61,7 @@ public class RewardedService {
      * @param userid
      * @return
      */
-    public RewardedVo queryRewardByUserid(String userid) {
+    public RewardedVo queryRewardByUserid(Integer userid) {
         try {
             log.info("根据用户查询打赏");
             return rewardedMapper.queryRewardByUserid(userid);
@@ -77,7 +77,7 @@ public class RewardedService {
      * @param userid
      * @return
      */
-    public List<RewardedVo> findAllRewarded(String userid, Paging<RewardedVo> paging) {
+    public List<RewardedVo> findAllRewarded(Integer userid, Paging<RewardedVo> paging) {
         try {
             log.info("根据用户查询打赏");
             return rewardedMapper.findAllRewarded(userid, paging.getRowBounds());

@@ -52,7 +52,7 @@ public class MsgCenterFacade {
      *
      * @return
      */
-    public Map getMsgCenterList(String userid) {
+    public Map getMsgCenterList(Integer userid) {
         //都是查找最新的消息
         Map reMap = new HashedMap();
         //1 赞消息 。包含：帖子，活动，评论，快问（后期）
@@ -108,7 +108,7 @@ public class MsgCenterFacade {
      * @param pager
      * @return
      */
-    public List<CommentVo> getMsgCommentList(String userid, Paging<CommentVo> pager) {
+    public List<CommentVo> getMsgCommentList(Integer userid, Paging<CommentVo> pager) {
         List<CommentVo> comments = commentService.findAllQueryComment(userid, pager);
         return comments;
     }
@@ -120,7 +120,7 @@ public class MsgCenterFacade {
      * @param pager
      * @return
      */
-    public List<RewardedVo> getMsgRewardedList(String userid, Paging<RewardedVo> pager) {
+    public List<RewardedVo> getMsgRewardedList(Integer userid, Paging<RewardedVo> pager) {
         List<RewardedVo> rewardedVos = rewardedService.findAllRewarded(userid, pager);
         return rewardedVos;
     }
@@ -131,7 +131,7 @@ public class MsgCenterFacade {
      * @param userid
      * @return
      */
-    public List<Map> getMsgZanList(String userid, Paging<Map> pager) {
+    public List<Map> getMsgZanList(Integer userid, Paging<Map> pager) {
         List<Map> postCommentZanRecords = postCommentZanRecordService.findAllCommentZanList(userid, pager);
         List<Map> postZanRecordVos = postZanRecordService.findAllZanList(userid, pager);
         List list = new ArrayList();

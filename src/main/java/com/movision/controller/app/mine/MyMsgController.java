@@ -33,10 +33,10 @@ public class MyMsgController {
 
     @ApiOperation(value = "获取我的消息中心列表", notes = "获取我的消息中心列表", response = Response.class)
     @RequestMapping(value = {"/get_my_msg_center_list"}, method = RequestMethod.GET)
-    public Response getMyMsgCenterList(@ApiParam(value = "用户id") @RequestParam(required = false) String userid) {
+    public Response getMyMsgCenterList() {
 
         Response response = new Response();
-        Map map = msgCenterFacade.getMsgCenterList(userid);
+        Map map = msgCenterFacade.getMsgCenterList(ShiroUtil.getAppUserID());
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -59,11 +59,11 @@ public class MyMsgController {
     @ApiOperation(value = "获取我的消息中心的评论列表", notes = "获取我的消息中心的评论列表", response = Response.class)
     @RequestMapping(value = {"/get_my_msg_center_comment_list"}, method = RequestMethod.GET)
     public Response getMyMsgCenterCommentList(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                              @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
-                                              @ApiParam(value = "用户id") @RequestParam(required = false) String userid) {
+                                              @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize
+    ) {
         Response response = new Response();
         Paging<CommentVo> paging = new Paging<CommentVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<CommentVo> list = msgCenterFacade.getMsgCommentList(userid, paging);
+        List<CommentVo> list = msgCenterFacade.getMsgCommentList(ShiroUtil.getAppUserID(), paging);
         paging.result(list);
         response.setData(paging);
         return response;
@@ -72,11 +72,11 @@ public class MyMsgController {
     @ApiOperation(value = "获取我的消息中心的打赏列表", notes = "获取我的消息中心的打赏列表", response = Response.class)
     @RequestMapping(value = {"/get_my_msg_center_rewarded_list"}, method = RequestMethod.GET)
     public Response getMyMsgCenterRewardedList(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                               @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
-                                               @ApiParam(value = "用户id") @RequestParam(required = false) String userid) {
+                                               @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize
+    ) {
         Response response = new Response();
         Paging<RewardedVo> paging = new Paging<RewardedVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<RewardedVo> list = msgCenterFacade.getMsgRewardedList(userid, paging);
+        List<RewardedVo> list = msgCenterFacade.getMsgRewardedList(ShiroUtil.getAppUserID(), paging);
         paging.result(list);
         response.setData(paging);
         return response;
@@ -85,11 +85,11 @@ public class MyMsgController {
     @ApiOperation(value = "获取我的消息中心的赞列表", notes = "获取我的消息中心的赞列表", response = Response.class)
     @RequestMapping(value = {"/get_my_msg_center_zan_list"}, method = RequestMethod.GET)
     public Response getMsgZanList(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                  @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
-                                  @ApiParam(value = "用户id") @RequestParam(required = false) String userid) {
+                                  @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize
+    ) {
         Response response = new Response();
         Paging<Map> paging = new Paging<Map>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<Map> list = msgCenterFacade.getMsgZanList(userid, paging);
+        List<Map> list = msgCenterFacade.getMsgZanList(ShiroUtil.getAppUserID(), paging);
         paging.result(list);
         response.setData(paging);
         return response;

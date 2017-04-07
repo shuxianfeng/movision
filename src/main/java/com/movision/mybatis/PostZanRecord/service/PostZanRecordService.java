@@ -31,7 +31,7 @@ public class PostZanRecordService {
      * @param userid
      * @return
      */
-    public PostZanRecordVo queryByUserid(String userid) {
+    public PostZanRecordVo queryByUserid(Integer userid) {
         try {
             log.info("根据用户id查询");
             return recordMapper.queryByUserid(userid);
@@ -48,7 +48,7 @@ public class PostZanRecordService {
      * @param pager
      * @return
      */
-    public List<Map> findAllZanList(String userid, Paging<Map> pager) {
+    public List<Map> findAllZanList(Integer userid, Paging<Map> pager) {
         try {
             log.info("查询全部");
             return recordMapper.findAllZanList(userid, pager.getRowBounds());

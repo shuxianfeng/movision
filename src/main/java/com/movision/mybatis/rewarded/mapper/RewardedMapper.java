@@ -25,8 +25,8 @@ public interface RewardedMapper {
 
     int insertRewardRecord(Map map);
 
-    RewardedVo queryRewardByUserid(String userid);
+    RewardedVo queryRewardByUserid(Integer userid);
 
-    List<RewardedVo> findAllRewarded(String userid, RowBounds rowBounds);
+    List<RewardedVo> findAllRewarded(Integer userid, RowBounds rowBounds);
 
 }

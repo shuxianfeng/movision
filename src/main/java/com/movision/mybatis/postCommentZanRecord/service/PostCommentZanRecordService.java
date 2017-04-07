@@ -33,7 +33,7 @@ public class PostCommentZanRecordService {
      * @param userid
      * @return
      */
-    public PostCommentZanRecordVo queryByUserid(String userid) {
+    public PostCommentZanRecordVo queryByUserid(Integer userid) {
         try {
             log.info("根据用户id查询");
             return recordMapper.queryByUserid(userid);
@@ -50,7 +50,7 @@ public class PostCommentZanRecordService {
      * @param pager
      * @return
      */
-    public List<Map> findAllCommentZanList(String userid, Paging<Map> pager) {
+    public List<Map> findAllCommentZanList(Integer userid, Paging<Map> pager) {
         try {
             log.info("查询全部");
             return recordMapper.findAllCommentZanList(userid, pager.getRowBounds());

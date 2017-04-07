@@ -61,7 +61,7 @@ public interface CommentMapper {
 
     Integer updateCommentAudit(Integer commentid);
 
-    CommentVo queryCommentByUserid(String userid);//根据userid查询评论
+    CommentVo queryCommentByUserid(Integer userid);//根据userid查询评论
 
-    List<CommentVo> findAllQueryComment(String userid, RowBounds rowBounds);
+    List<CommentVo> findAllQueryComment(Integer userid, RowBounds rowBounds);
 }

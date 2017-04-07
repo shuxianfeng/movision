@@ -21,7 +21,7 @@ public interface PostZanRecordMapper {
 
     int updateByPrimaryKey(PostZanRecord record);
 
-    PostZanRecordVo queryByUserid(String userid);
+    PostZanRecordVo queryByUserid(Integer userid);
 
-    List<Map> findAllZanList(String userid, RowBounds rowBounds);
+    List<Map> findAllZanList(Integer userid, RowBounds rowBounds);
 }
