@@ -18,10 +18,12 @@
         <result column="banknum" property="banknum" jdbcType="VARCHAR"/>
         <result column="code" property="code" jdbcType="VARCHAR"/>
         <result column="onlystatue" property="onlystatue" jdbcType="INTEGER"/>
+        <result column="logisticsnumber" property="logisticsnumber" jdbcType="VARCHAR"/>
+        <result column="logisticsway" property="logisticsway" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, orderid, head, addressid, phone, money, name,
-        kind,content,companyname,rigaddress,rigphone,bank,banknum,code,onlystatue
+        kind,content,companyname,rigaddress,rigphone,bank,banknum,code,onlystatue,logisticsnumber,logisticsway
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -43,12 +45,12 @@
     <insert id="insert" parameterType="com.movision.mybatis.invoice.entity.Invoice">
         insert into yw_invoice (id, orderid, head,
         addressid, phone, money,
-        name, kind,content,companyname,rigaddress,rigphone,bank,banknum,code,onlystatue)
+        name, kind,content,companyname,rigaddress,rigphone,bank,banknum,code,onlystatue,logisticsnumber,logisticsway)
         values (#{id,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER}, #{head,jdbcType=VARCHAR},
         #{addressid,jdbcType=INTEGER}, #{phone,jdbcType=INTEGER}, #{money,jdbcType=DOUBLE},
         #{name,jdbcType=VARCHAR},
         #{kind,jdbcType=INTEGER},#{content,jdbcType=VARCHAR},#{companyname,jdbcType=VARCHAR},#{rigaddress,jdbcType=VARCHAR},#{rigphone,jdbcType=VARCHAR},
-        #{bank,jdbcType=VARCHAR},#{banknum,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{onlystatue,jdbcType=INTEGER})
+        #{bank,jdbcType=VARCHAR},#{banknum,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{onlystatue,jdbcType=INTEGER},#{logisticsnumber,jdbcType=VARCHAR},#{logisticsway,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.invoice.entity.Invoice">
         insert into yw_invoice
@@ -101,6 +103,12 @@
             <if test="onlystatue != null">
                 onlystatue,
             </if>
+            <if test="logisticsnumber != null">
+                logisticsnumber,
+            </if>
+            <if test="logisticsway != null">
+                logisticsway,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -151,6 +159,12 @@
             <if test="onlystatue != null">
                 #{onlystatue,jdbcType=INTEGER},
             </if>
+            <if test="logisticsnumber != null">
+                #{logisticsnumber,jdbcType=VARCHAR},
+            </if>
+            <if test="logisticsway != null">
+                #{logisticsway,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.invoice.entity.Invoice">
@@ -199,7 +213,13 @@
                 code = #{code,jdbcType=VARCHAR},
             </if>
             <if test="onlystatue != null">
-                onlystatue = #{code,jdbcType=INTEGER},
+                onlystatue = #{onlystatue,jdbcType=INTEGER},
+            </if>
+            <if test="logisticsnumber != null">
+                logisticsnumber = #{logisticsnumber,jdbcType=VARCHAR},
+            </if>
+            <if test="logisticsway != null">
+                logisticsway = #{logisticsway,jdbcType=INTEGER},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -220,7 +240,9 @@
         bank = #{bank,jdbcType=VARCHAR},
         banknum = #{banknum,jdbcType=VARCHAR},
         code = #{code,jdbcType=VARCHAR},
-        onlystatue = #{onlystatue,jdbcType=INTEGER}
+        onlystatue = #{onlystatue,jdbcType=INTEGER},
+        logisticsnumber = #{logisticsnumber,jdbcType=VARCHAR},
+        logisticsway = #{logisticsway,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

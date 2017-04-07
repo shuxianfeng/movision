@@ -17,14 +17,6 @@ public class InvoiceVo {
 
     private Integer onlystatue;
 
-    public Integer getOnlystatue() {
-        return onlystatue;
-    }
-
-    public void setOnlystatue(Integer onlystatue) {
-        this.onlystatue = onlystatue;
-    }
-
     private Integer phone;
 
     private Double money;
@@ -41,6 +33,38 @@ public class InvoiceVo {
 
     private Integer takeway;
 
+    private String city;
+
+    private Integer logisticid;
+
+    private Date intime;
+
+    private String companyname;
+
+    private String rigaddress;
+
+    private String rigphone;
+
+    private String code;
+
+    private String bank;
+
+    private String banknum;
+
+    private String content;
+
+    private String logisticsnumber;
+
+    private Integer logisticsway;
+
+    public Integer getOnlystatue() {
+        return onlystatue;
+    }
+
+    public void setOnlystatue(Integer onlystatue) {
+        this.onlystatue = onlystatue;
+    }
+
     public Integer getTakeway() {
         return takeway;
     }
@@ -48,14 +72,6 @@ public class InvoiceVo {
     public void setTakeway(Integer takeway) {
         this.takeway = takeway;
     }
-
-    private String city;
-    private Integer logisticid;
-    private Date intime;
-
-    private String companyname;
-    private String rigaddress;
-    private String rigphone;
 
     public String getCompanyname() {
         return companyname;
@@ -104,11 +120,6 @@ public class InvoiceVo {
     public void setBanknum(String banknum) {
         this.banknum = banknum;
     }
-
-    private String code;
-    private String bank;
-    private String banknum;
-    private String content;
 
     public String getContent() {
         return content;
@@ -228,5 +239,21 @@ public class InvoiceVo {
 
     public void setKind(Integer kind) {
         this.kind = kind;
+    }
+
+    public String getLogisticsnumber() {
+        return logisticsnumber;
+    }
+
+    public void setLogisticsnumber(String logisticsnumber) {
+        this.logisticsnumber = logisticsnumber;
+    }
+
+    public Integer getLogisticsway() {
+        return logisticsway;
+    }
+
+    public void setLogisticsway(Integer logisticsway) {
+        this.logisticsway = logisticsway;
     }
 }

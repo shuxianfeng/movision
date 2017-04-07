@@ -13,6 +13,32 @@ public class Invoice {
 
     private Integer onlystatue;
 
+    private Integer phone;
+
+    private Double money;
+
+    private String name;
+
+    private String code;
+
+    private String bank;
+
+    private String banknum;
+
+    private String content;
+
+    private Integer kind;
+
+    private String companyname;
+
+    private String rigaddress;
+
+    private String rigphone;
+
+    private String logisticsnumber;//快递单号
+
+    private Integer logisticsway;//快递方式
+
     public Integer getOnlystatue() {
         return onlystatue;
     }
@@ -20,23 +46,6 @@ public class Invoice {
     public void setOnlystatue(Integer onlystatue) {
         this.onlystatue = onlystatue;
     }
-
-    private Integer phone;
-
-    private Double money;
-
-    private String name;
-    private String code;
-    private String bank;
-    private String banknum;
-    private String content;
-
-    private Integer kind;
-
-
-    private String companyname;
-    private String rigaddress;
-    private String rigphone;
 
     public String getCompanyname() {
         return companyname;
@@ -157,5 +166,21 @@ public class Invoice {
 
     public void setKind(Integer kind) {
         this.kind = kind;
+    }
+
+    public String getLogisticsnumber() {
+        return logisticsnumber;
+    }
+
+    public void setLogisticsnumber(String logisticsnumber) {
+        this.logisticsnumber = logisticsnumber;
+    }
+
+    public Integer getLogisticsway() {
+        return logisticsway;
+    }
+
+    public void setLogisticsway(Integer logisticsway) {
+        this.logisticsway = logisticsway;
     }
 }
