@@ -656,7 +656,7 @@ WHERE  o.id=#{id,jdbcType=INTEGER}
         u.id=f.userid
         LEFT JOIN yw_goods_img g ON g.goodsid=f.goodsid LEFT JOIN yw_category e on e.protype=s.protype LEFT JOIN
         yw_afterservice_stream t ON t.afterserviceid=f.id
-        WHERE f.id=1 AND g.type=2 AND f.id=#{id,jdbcType=INTEGER} GROUP BY f.id
+        WHERE g.type=2 AND f.id=#{id,jdbcType=INTEGER} GROUP BY f.id
     </select>
 
     <select id="findAllOrderByConditionAfterService" parameterType="java.util.Map"
