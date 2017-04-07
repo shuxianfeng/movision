@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.shop.mapper.ShopMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.shop.entity.Shop">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="owner" property="owner" jdbcType="VARCHAR"/>
+        <result column="returnnote" property="returnnote" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, name, phone, owner, returnnote
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_shop
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!--根据售后单id查询店铺相关信息-->
+    <select id="queryShopInfo" parameterType="java.lang.Integer" resultType="com.movision.mybatis.shop.entity.Shop">
+    SELECT name, phone, owner, returnnote FROM yw_shop
+    WHERE id = (
+      SELECT shopid FROM yw_goods WHERE id = (
+        SELECT goodsid FROM yw_afterservice WHERE id = #{afterserviceid,jdbcType=INTEGER}
+      )
+    )
+  </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_shop
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.shop.entity.Shop">
+    insert into yw_shop (id, name, phone, 
+      owner, returnnote)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{owner,jdbcType=VARCHAR}, #{returnnote,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.shop.entity.Shop">
+        insert into yw_shop
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="owner != null">
+                owner,
+            </if>
+            <if test="returnnote != null">
+                returnnote,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="owner != null">
+                #{owner,jdbcType=VARCHAR},
+            </if>
+            <if test="returnnote != null">
+                #{returnnote,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.shop.entity.Shop">
+        update yw_shop
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="owner != null">
+                owner = #{owner,jdbcType=VARCHAR},
+            </if>
+            <if test="returnnote != null">
+                returnnote = #{returnnote,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.shop.entity.Shop">
+    update yw_shop
+    set name = #{name,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      owner = #{owner,jdbcType=VARCHAR},
+      returnnote = #{returnnote,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
