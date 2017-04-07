@@ -5,6 +5,8 @@ import com.movision.mybatis.afterServiceImg.mapper.AfterServiceImgMapper;
 import com.movision.mybatis.afterservice.entity.AfterServiceVo;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.afterservice.mapper.AfterserviceMapper;
+import com.movision.mybatis.logisticsCompany.entity.LogisticsCompany;
+import com.movision.mybatis.logisticsCompany.mapper.LogisticsCompanyMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class AfterServcieServcie {
 
     @Autowired
     private AfterServiceImgMapper afterServiceImgMapper;
+
+    @Autowired
+    private LogisticsCompanyMapper logisticsCompanyMapper;
 
     /**
      * 插入售后信息
@@ -90,6 +95,19 @@ public class AfterServcieServcie {
             return afterServiceImgMapper.queryAfterServiceImgList(afterserviceid);
         } catch (Exception e) {
             logger.error("根据售后id查询售后图片列表失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询售后中APP用户下拉物流类型选择时的所有支持的物流枚举值列表
+     */
+    public List<LogisticsCompany> queryLogisticType() {
+        try {
+            logger.info("查询物流下拉选择枚举");
+            return logisticsCompanyMapper.queryLogisticType();
+        } catch (Exception e) {
+            logger.error("查询物流下拉选择枚举失败");
             throw e;
         }
     }

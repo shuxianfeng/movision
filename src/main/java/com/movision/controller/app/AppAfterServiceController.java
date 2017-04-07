@@ -3,6 +3,7 @@ package com.movision.controller.app;
 import com.movision.common.Response;
 import com.movision.facade.afterService.AfterServiceFacade;
 import com.movision.mybatis.afterservice.entity.AfterServiceVo;
+import com.movision.mybatis.logisticsCompany.entity.LogisticsCompany;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -78,6 +80,23 @@ public class AppAfterServiceController {
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
             response.setData(map);
+        } else {
+            response.setCode(300);
+            response.setMessage("查询失败");
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "APP售后下拉选择商品退回的物流类别接口", notes = "用于用户在APP对已受理的售后单下拉选择物流列表枚举值的接口", response = Response.class)
+    @RequestMapping(value = "queryLogisticType", method = RequestMethod.POST)
+    public Response queryLogisticType() {
+        Response response = new Response();
+
+        List<LogisticsCompany> logisticsCompanyList = afterServiceFacade.queryLogisticType();
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+            response.setData(logisticsCompanyList);
         } else {
             response.setCode(300);
             response.setMessage("查询失败");

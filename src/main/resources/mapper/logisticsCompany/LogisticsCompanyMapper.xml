@@ -15,6 +15,11 @@
         from yw_logistics_company
         where id = #{id,jdbcType=INTEGER}
     </select>
+
+    <select id="queryLogisticType" resultType="com.movision.mybatis.logisticsCompany.entity.LogisticsCompany">
+        SELECT code, logisticscompany FROM yw_logistics_company
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_logistics_company
         where id = #{id,jdbcType=INTEGER}

@@ -5,6 +5,7 @@ import com.movision.mybatis.afterServiceImg.entity.AfterServiceImg;
 import com.movision.mybatis.afterservice.entity.AfterServiceVo;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.afterservice.service.AfterServcieServcie;
+import com.movision.mybatis.logisticsCompany.entity.LogisticsCompany;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.service.OrderService;
 import com.movision.mybatis.shop.entity.Shop;
@@ -143,5 +144,9 @@ public class AfterServiceFacade {
         }
 
         return map;
+    }
+
+    public List<LogisticsCompany> queryLogisticType() {
+        return afterServcieServcie.queryLogisticType();
     }
 }
