@@ -490,6 +490,13 @@
         WHERE id=#{couponsid,jdbcType=INTEGER}
     </update>
 
+    <!--APP端根据14位订单编号对订单进行确认收货-->
+    <update id="confirmReceipt" parameterType="java.lang.String">
+        UPDATE yw_orders
+        SET status = '4'
+        WHERE ordernumber = #{ordernumber,jdbcType=VARCHAR}
+    </update>
+
     <select id="queryOrdersListByTradingAccount" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT id FROM yw_orders WHERE paycode=#{tradingAccount,jdbcType=VARCHAR} AND isdel=0
     </select>

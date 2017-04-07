@@ -150,6 +150,16 @@ public class OrderService {
         }
     }
 
+    public void confirmReceipt(String ordernumber) {
+        try {
+            log.info("APP端根据14位订单编号对订单进行确认");
+            ordersMapper.confirmReceipt(ordernumber);
+        } catch (Exception e) {
+            log.error("APP端根据14位订单编号对订单进行确认失败");
+            throw e;
+        }
+    }
+
     public void updateOrder(Map<String, Object> parammap) {
         try {
             log.info("支付回调更新订单信息");

@@ -141,4 +141,23 @@ public class AppOrdersController {
         response.setData(parammap);
         return response;
     }
+
+    /**
+     * APP端用户确认收货接口
+     */
+    @ApiOperation(value = "APP端用户确认收货接口", notes = "APP端用户确认收货接口", response = Response.class)
+    @RequestMapping(value = "confirmReceipt", method = RequestMethod.POST)
+    public Response confirmReceipt(@ApiParam(value = "订单编号（14位的订单编号）") @RequestParam String ordernumber) {
+        Response response = new Response();
+
+        orderAppFacade.confirmReceipt(ordernumber);
+
+        if (response.getCode() == 200) {
+            response.setMessage("确认成功");
+        } else {
+            response.setCode(300);
+            response.setMessage("确认失败");
+        }
+        return response;
+    }
 }

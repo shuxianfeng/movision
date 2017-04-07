@@ -21,6 +21,8 @@ public interface OrdersMapper {
 
     void updateOrder(Map<String, Object> parammap);
 
+    void confirmReceipt(String ordernumber);
+
     Orders selectByPrimaryKey(Integer id);
 
     String queryMaxOrderNumber(String paramstr);

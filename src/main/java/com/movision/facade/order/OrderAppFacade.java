@@ -708,4 +708,11 @@ public class OrderAppFacade {
 
         return map;
     }
+
+    /**
+     * APP端用户根据14位订单编号对订单进行确认收货
+     */
+    public void confirmReceipt(String ordernumber) {
+        orderService.confirmReceipt(ordernumber);
+    }
 }
