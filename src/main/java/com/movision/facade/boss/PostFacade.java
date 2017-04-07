@@ -113,7 +113,7 @@ public class PostFacade {
                 list = postService.queryPostByList2(circleid, pager);
             }
             return list;
-        } else if (res.get("resault").equals(1)) {
+        } else if (res.get("resault").equals(0)) {
             if (circleid != null) {
                 list = postService.queryPostByList(circleid, pager);
             }
