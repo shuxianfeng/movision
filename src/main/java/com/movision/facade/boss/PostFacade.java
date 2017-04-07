@@ -405,6 +405,7 @@ public class PostFacade {
 
             Integer u = bossUserService.queryUserById(uid);//根据用户id查询前台对应用户id
             comm.setUserid(u);
+            comm.setIntime(new Date());
             int status;
             int c = commentService.insertComment(comm);//添加评论
             if (c == 1) {

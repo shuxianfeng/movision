@@ -384,6 +384,9 @@
         <if test="begintime!=null and endtime!=null">
             AND createtime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}
         </if>
+        <if test="userid!=null">
+            AND c.phone=(SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
+        </if>
         ORDER BY category
         <if test="pai==null">
             ,c.createtime DESC
