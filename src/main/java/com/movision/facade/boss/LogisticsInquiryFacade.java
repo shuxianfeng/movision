@@ -1,5 +1,6 @@
 package com.movision.facade.boss;
 
+import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.bossOrders.servic.BossOrderService;
 import com.movision.mybatis.orderLogistics.entity.OrderLogistics;
 import com.movision.mybatis.orderSubLogistics.entity.OrderSubLogistics;
@@ -42,8 +43,10 @@ public class LogisticsInquiryFacade {
             logisticscode = orderService.queryLogisticsCode(logisticsid);//物流code
         }
         if (type == 0) {
-            logisticsid = orderService.queryReturnLogistics(ordernumber);
-            logisticscode = orderService.queryReturnWay(ordernumber);//物流code
+            Afterservice afterservice = orderService.queryReturnLogistics(ordernumber);
+            Integer logisticsS = afterservice.getLogisticsway();
+            logisticsid = afterservice.getReturnnumber();
+            logisticscode = orderService.queryReturnWay(logisticsS);//物流code
         }
 
         if (type == 1) {

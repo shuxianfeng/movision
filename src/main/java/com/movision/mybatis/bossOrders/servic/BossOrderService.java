@@ -700,7 +700,7 @@ public class BossOrderService {
      * @param ordernumber
      * @return
      */
-    public String queryReturnLogistics(String ordernumber) {
+    public Afterservice queryReturnLogistics(String ordernumber) {
         try {
             loger.info("根据订单号查询快递单号(tuihui)");
             return bossOrdersMapper.queryReturnLogistics(ordernumber);
@@ -747,13 +747,13 @@ public class BossOrderService {
     /**
      * 根据订单号查询快递code(tuihui)
      *
-     * @param ordernumber
+     * @param logisticsS
      * @return
      */
-    public String queryReturnWay(String ordernumber) {
+    public String queryReturnWay(Integer logisticsS) {
         try {
             loger.info("根据订单号查询快递code(tuihui)");
-            return bossOrdersMapper.queryReturnWay(ordernumber);
+            return bossOrdersMapper.queryReturnWay(logisticsS);
         } catch (Exception e) {
             loger.error("根据订单号查询快递code(tuihui)失败", e);
             throw e;

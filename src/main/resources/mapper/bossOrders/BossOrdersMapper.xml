@@ -971,11 +971,13 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
         </set>
         WHERE id=#{id,jdbcType=INTEGER}
     </update>
-    <select id="queryReturnLogistics" resultType="java.lang.String" parameterType="java.lang.String">
-        SELECT a.returnnumber FROM yw_afterservice a LEFT JOIN yw_orders o  ON o.id=a.orderid WHERE o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
+    <select id="queryReturnLogistics" resultType="com.movision.mybatis.afterservice.entity.Afterservice"
+            parameterType="java.lang.String">
+        SELECT a.returnnumber,a.logisticsway FROM yw_afterservice a LEFT JOIN yw_orders o ON o.id=a.orderid WHERE
+        o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
     </select>
-    <select id="queryReturnWay" resultType="java.lang.String" parameterType="java.lang.String">
-        SELECT a.logisticsway FROM yw_afterservice a LEFT JOIN yw_orders o  ON o.id=a.orderid WHERE o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
+    <select id="queryReturnWay" resultType="java.lang.String" parameterType="java.lang.Integer">
+        SELECT code FROM yw_logistics_company WHERE id=#{logisticsS,jdbcType=INTEGER}
     </select>
     <select id="queryReplaceLogistic" resultType="java.lang.String" parameterType="java.lang.String">
         SELECT a.replacementnumber FROM yw_afterservice a LEFT JOIN yw_orders o  ON o.id=a.orderid WHERE o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
