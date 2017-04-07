@@ -2,6 +2,7 @@ package com.movision.mybatis.afterservice.service;
 
 import com.movision.mybatis.afterServiceImg.entity.AfterServiceImg;
 import com.movision.mybatis.afterServiceImg.mapper.AfterServiceImgMapper;
+import com.movision.mybatis.afterservice.entity.AfterServiceVo;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.afterservice.mapper.AfterserviceMapper;
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,6 +64,32 @@ public class AfterServcieServcie {
             return afterserviceMapper.cancelAfterService(parammap);
         } catch (Exception e) {
             logger.error("用户取消售后申请失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询售后单基本信息
+     */
+    public AfterServiceVo queryAfterServiceDetail(int afterserviceid) {
+        try {
+            logger.info("查询售后单基本信息");
+            return afterserviceMapper.queryAfterServiceDetail(afterserviceid);
+        } catch (Exception e) {
+            logger.error("查询售后单基本信息失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 根据售后id查询售后图片列表
+     */
+    public List<AfterServiceImg> queryAfterServiceImgList(int afterserviceid) {
+        try {
+            logger.info("根据售后id查询售后图片列表");
+            return afterServiceImgMapper.queryAfterServiceImgList(afterserviceid);
+        } catch (Exception e) {
+            logger.error("根据售后id查询售后图片列表失败");
             throw e;
         }
     }

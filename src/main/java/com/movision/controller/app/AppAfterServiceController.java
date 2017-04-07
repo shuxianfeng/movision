@@ -2,6 +2,7 @@ package com.movision.controller.app;
 
 import com.movision.common.Response;
 import com.movision.facade.afterService.AfterServiceFacade;
+import com.movision.mybatis.afterservice.entity.AfterServiceVo;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,23 @@ public class AppAfterServiceController {
         } else {
             response.setCode(300);
             response.setMessage("售后申请不存在或无操作权限,取消失败");
+        }
+        return response;
+    }
+
+    @ApiOperation(value = "APP售后单详情接口", notes = "用于用户在APP对已申请售后的商品取消申请操作的接口", response = Response.class)
+    @RequestMapping(value = "queryAfterServiceDetail", method = RequestMethod.POST)
+    public Response queryAfterServiceDetail(@ApiParam(value = "售后单号afterserviceid") @RequestParam String afterserviceid) {
+        Response response = new Response();
+
+        Map<String, Object> map = afterServiceFacade.queryAfterServiceDetail(afterserviceid);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+            response.setData(map);
+        } else {
+            response.setCode(300);
+            response.setMessage("查询失败");
         }
         return response;
     }
