@@ -165,14 +165,12 @@
     FROM yw_post_comment c
     LEFT JOIN yw_user u
     ON c.userid=u.id
-    WHERE c.postid= #{postid,jdbcType=INTEGER}
+    WHERE c.postid= #{postid,jdbcType=INTEGER} ORDER BY iscontribute
     -- AND pid is NULL
     <if test="type==0">
-      ORDER BY c.intime ASC
+      ,c.intime ASC
     </if>
-    <if test="type==null">
-      ORDER BY c.intime DESC
-    </if>
+    DESC
   </select>
 
   <!--根据父评论id查询评论实体-->
