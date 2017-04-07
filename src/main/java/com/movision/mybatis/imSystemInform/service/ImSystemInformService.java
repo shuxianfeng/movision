@@ -104,4 +104,19 @@ public class ImSystemInformService {
             throw e;
         }
     }
+
+    /**
+     * 查询最新一条记录
+     *
+     * @return
+     */
+    public ImSystemInform queryByUserid() {
+        try {
+            log.info("查询最新一条记录");
+            return imSystemInformMapper.queryByUserid();
+        } catch (Exception e) {
+            log.error("查询最新一条记录失败", e);
+            throw e;
+        }
+    }
 }

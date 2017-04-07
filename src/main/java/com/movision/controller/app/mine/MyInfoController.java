@@ -222,24 +222,6 @@ public class MyInfoController {
         return response;
     }
 
-    /**
-     * 分页
-     *
-     * @param pageNo
-     * @param pageSize
-     * @return
-     */
-    @ApiOperation(value = "查询系统通知列表", notes = "查询系统通知列表", response = Response.class)
-    @RequestMapping(value = "query_system_inform_list", method = RequestMethod.GET)
-    public Response querySystemInformList(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                          @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
-        Response response = new Response();
-        Paging<ImSystemInform> paging = new Paging<ImSystemInform>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<ImSystemInform> list = imFacade.queryAllSystemInform(paging);
-        paging.result(list);
-        response.setData(paging);
-        return response;
-    }
 
 
 

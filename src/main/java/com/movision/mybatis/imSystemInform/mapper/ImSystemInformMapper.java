@@ -24,4 +24,6 @@ public interface ImSystemInformMapper {
     List<ImSystemInform> findAllSystemInform(Map map, RowBounds rowBounds);//条件搜索
 
     ImSystemInform queryBodyAll(Integer id);//查询全部内容
+
+    ImSystemInform queryByUserid();//查询最新一条记录
 }
