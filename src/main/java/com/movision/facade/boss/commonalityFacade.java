@@ -230,7 +230,7 @@ public class commonalityFacade {
             return map;
         } else if (i.getContributing().equals(JurisdictionConstants.JURISDICTION_TYPE.speciallyInvite.getCode())
                 && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()))) {//特邀嘉宾可以查看
-            map.put("resault", userid);
+            map.put("resault", 1);
             return map;
         } else if (i.getIssuper().equals(1) || i.getCommon().equals(1)) {//操作权限为最高权限
             map.put("resault", 1);

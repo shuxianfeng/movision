@@ -106,10 +106,17 @@ public class PostFacade {
         Integer userid = Integer.parseInt(loginid);
         Map res = commonalityFacade.verifyUserByQueryMethod(userid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), null);
         List<PostList> list = new ArrayList<>();
+        List<Integer> circleid = circleService.queryCIrcleIdByUserId(userid);
         if (res.get("resault").equals(userid)) {
             //查询用户管理的圈子id
-            Integer circleid = circleService.queryCIrcleIdByUserId(userid);
-            list = postService.queryPostByList(circleid, pager);
+            if (circleid != null) {
+                list = postService.queryPostByList2(circleid, pager);
+            }
+            return list;
+        } else if (res.get("resault").equals(1)) {
+            if (circleid != null) {
+                list = postService.queryPostByList(circleid, pager);
+            }
             return list;
         } else if (res.get("resault").equals(-1)) {
             return null;

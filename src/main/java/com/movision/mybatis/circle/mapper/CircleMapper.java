@@ -84,5 +84,5 @@ public interface CircleMapper {
 
     Category queryCircleCategoryClassify(String categoryid);
 
-    Integer queryCIrcleIdByUserId(Integer userid);
+    List<Integer> queryCIrcleIdByUserId(Integer userid);
 }

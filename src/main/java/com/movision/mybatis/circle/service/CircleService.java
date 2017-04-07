@@ -497,7 +497,7 @@ public class CircleService {
      * @param userid
      * @return
      */
-    public Integer queryCIrcleIdByUserId(Integer userid) {
+    public List<Integer> queryCIrcleIdByUserId(Integer userid) {
         try {
             log.info("根据用户id查询圈子id");
             return circleMapper.queryCIrcleIdByUserId(userid);

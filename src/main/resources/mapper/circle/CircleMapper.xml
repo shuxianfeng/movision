@@ -810,6 +810,6 @@
     </select>
 
     <select id="queryCIrcleIdByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT id FROM yw_circle WHERE phone=(SELECT phone FROM yw_user WHERE id=#{userid,jdbcType=INTEGER})
+        SELECT id FROM yw_circle WHERE phone=(SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
     </select>
 </mapper>
