@@ -61,7 +61,7 @@ public class commonalityFacade {
                     List<Integer> list = bossUserService.queryCommentByUserid(ma);
                     for (int t = 0; t < list.size(); t++) {
                         if (list.get(t) == kindid) {
-                            map.put("resault", 1);
+                            map.put("resault", 2);
                             return map;
                         } else if (list.size() == t) {//代表最后一条也不匹配
                             map.put("resault", -1);

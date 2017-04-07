@@ -1042,6 +1042,13 @@
         WHERE id=#{postid,jdbcType=INTEGER}
     </update>
 
+    <update id="updatePostBycommentsumT" parameterType="java.lang.Integer">
+        UPDATE yw_post
+        SET commentsum=commentsum+1,
+        oprtime = now()
+        WHERE id=(SELECT postid FROM yw_post_comment WHERE id=#{postid,jdbcType=INTEGER})
+    </update>
+
     <!-- 查询帖子列表 -->
     <select id="findAllqueryPostByList2" parameterType="java.util.List"
             resultType="com.movision.mybatis.post.entity.PostList">

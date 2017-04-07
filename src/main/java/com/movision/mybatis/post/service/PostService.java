@@ -286,6 +286,12 @@ public class PostService {
         }
     }
 
+    /**
+     * 更新帖子评论次数字段
+     *
+     * @param postid
+     * @return
+     */
     public int updatePostBycommentsum(int postid) {
         try {
             log.info("更新帖子的评论数量");
@@ -295,6 +301,23 @@ public class PostService {
             throw e;
         }
     }
+
+    /**
+     * 更新帖子评论次数字段
+     *
+     * @param postid
+     * @return
+     */
+    public int updatePostBycommentsumT(int postid) {
+        try {
+            log.info("更新帖子的评论数量");
+            return postMapper.updatePostBycommentsum(postid);
+        } catch (Exception e) {
+            log.error("帖子更新评论数量异常");
+            throw e;
+        }
+    }
+
      /**
      * 后台管理-查询帖子列表
      *

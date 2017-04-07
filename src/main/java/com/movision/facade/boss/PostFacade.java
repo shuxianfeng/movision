@@ -414,14 +414,14 @@ public class PostFacade {
             comm.setIsdel("1");
             int c = commentService.insertComment(comm);//添加评论
             if (c == 1) {
-                postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子的评论数
+                //postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子的评论数
                 map.put("resault", 1);
                 return map;
             } else {
                 map.put("resault", -1);
                 return map;
             }
-        } else if (res.get("resault").equals(1)) {//管理员发帖子评论
+        } else if (res.get("resault").equals(1)) {//普通用户发帖子评论
             comm.setIscontribute(0);//不是特邀嘉宾
             comm.setStatus(null);
             comm.setIsdel("0");
@@ -515,16 +515,17 @@ public class PostFacade {
         if (user != null) {
             if (user.getIssuper() == 1 || user.getCommon() == 1) {//是管理员
                 Integer resault = commentService.updateCommentAudit(Integer.parseInt(commentid));
+                postService.updatePostBycommentsumT(Integer.parseInt(commentid));//更新帖子的评论数
                 map.put("massege", "审核成功");
                 map.put("resault", resault);
                 return map;
             } else {
-                map.put("massege", "不是特邀嘉宾不可以审核该评论");
+                map.put("massege", "权限不足");
                 map.put("resault", -1);
                 return map;
             }
         } else {
-            map.put("massege", "不是特邀嘉宾不可以审核该评论");
+            map.put("massege", "没有此用户");
             map.put("resault", -1);
             return map;
         }

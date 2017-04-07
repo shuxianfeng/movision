@@ -98,6 +98,8 @@ public interface PostMapper {
 
     int updatePostBycommentsum(int postid);
 
+    int updatePostBycommentsumT(int postid);
+
     List<PostList> findAllqueryPostByList(List item, RowBounds rowBounds);
 
     List<PostList> findAllqueryPostByList2(List item, RowBounds rowBounds);
