@@ -38,6 +38,24 @@
         SELECT * FROM yw_invoice WHERE orderid = #{orderid,jdbcType=INTEGER}
     </select>
 
+    <!--根据订单编号查询发票相关信息-->
+    <select id="queryInvoice" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.invoice.entity.InvoiceVo">
+        SELECT t.* FROM (
+            SELECT t1.orderid, t1.kind, t1.head, t1.content, t2.name, t2.phone,
+            (SELECT name FROM yw_province WHERE code = t2.province) AS province,
+            (SELECT name FROM yw_city WHERE code = t2.city) AS city,
+            (SELECT name FROM yw_area WHERE code = t2.district) AS district,
+            t2.street
+            FROM yw_invoice t1
+            LEFT JOIN yw_address t2
+              ON t1.addressid = t2.id
+          ) t
+        WHERE t.orderid = (
+            SELECT id FROM yw_orders WHERE ordernumber = #{ordernumber,jdbcType=INTEGER}
+        )
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_invoice
         where id = #{id,jdbcType=INTEGER}

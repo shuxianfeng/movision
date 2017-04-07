@@ -12,6 +12,7 @@ import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.goodsDiscount.service.DiscountService;
 import com.movision.mybatis.invoice.entity.Invoice;
+import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.service.OrderService;
 import com.movision.mybatis.pointRecord.service.PointRecordService;
@@ -714,5 +715,12 @@ public class OrderAppFacade {
      */
     public void confirmReceipt(String ordernumber) {
         orderService.confirmReceipt(ordernumber);
+    }
+
+    /**
+     * APP端通过订单查询发票信息接口
+     */
+    public InvoiceVo queryInvoice(String ordernumber) {
+        return orderService.queryInvoice(Integer.parseInt(ordernumber));
     }
 }

@@ -5,6 +5,7 @@ import com.movision.facade.address.AddressFacade;
 import com.movision.facade.afterService.AfterServiceFacade;
 import com.movision.facade.boss.LogisticsInquiryFacade;
 import com.movision.facade.order.OrderAppFacade;
+import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,6 +158,26 @@ public class AppOrdersController {
         } else {
             response.setCode(300);
             response.setMessage("确认失败");
+        }
+        return response;
+    }
+
+    /**
+     * APP端查询订单的发票信息接口
+     */
+    @ApiOperation(value = "APP端查询订单的发票信息接口", notes = "APP端查询订单的发票信息接口", response = Response.class)
+    @RequestMapping(value = "queryInvoice", method = RequestMethod.POST)
+    public Response queryInvoice(@ApiParam(value = "订单编号（14位的订单编号）") @RequestParam String ordernumber) {
+        Response response = new Response();
+
+        InvoiceVo vo = orderAppFacade.queryInvoice(ordernumber);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+            response.setData(vo);
+        } else {
+            response.setCode(300);
+            response.setMessage("查询失败");
         }
         return response;
     }

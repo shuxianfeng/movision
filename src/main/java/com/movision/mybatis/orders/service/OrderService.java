@@ -3,6 +3,7 @@ package com.movision.mybatis.orders.service;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.goods.mapper.GoodsMapper;
 import com.movision.mybatis.invoice.entity.Invoice;
+import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.invoice.mapper.InvoiceMapper;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.mapper.OrdersMapper;
@@ -146,6 +147,16 @@ public class OrderService {
             return invoiceMapper.queryInvoiceInfo(orderid);
         } catch (Exception e) {
             log.error("根据订单id查询发票信息失败");
+            throw e;
+        }
+    }
+
+    public InvoiceVo queryInvoice(int ordernumber) {
+        try {
+            log.info("通过订单编号查询发票相关信息");
+            return invoiceMapper.queryInvoice(ordernumber);
+        } catch (Exception e) {
+            log.error("通过订单编号查询发票相关信息失败");
             throw e;
         }
     }

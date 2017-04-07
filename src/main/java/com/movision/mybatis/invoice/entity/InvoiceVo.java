@@ -25,15 +25,15 @@ public class InvoiceVo {
 
     private Integer kind;
 
+    private String province;
+
+    private String city;
+
     private String district;
 
     private String street;
 
-    private String province;
-
     private Integer takeway;
-
-    private String city;
 
     private Integer logisticid;
 
