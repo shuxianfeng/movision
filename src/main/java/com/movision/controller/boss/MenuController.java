@@ -45,12 +45,8 @@ public class MenuController {
     @RequestMapping(value = "add_menu", method = RequestMethod.POST)
     public Response addMenu(@ApiParam @ModelAttribute Menu menu) {
         Response response = new Response();
-        boolean isAdd = menuFacade.addMenu(menu);
-        if (isAdd) {
-            response.setCode(200);
-        } else {
-            response.setCode(400);
-        }
+        menuFacade.addMenu(menu);
+
         return response;
     }
 

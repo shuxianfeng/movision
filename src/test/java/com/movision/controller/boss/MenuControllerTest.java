@@ -40,10 +40,9 @@ public class MenuControllerTest extends SpringTestCase {
     @Test
     public void addMenu() {
         Menu menu = new Menu();
-        menu.setMenuname("通知管理");
-        menu.setPid(0);
-        boolean isAdd = menuFacade.addMenu(menu);
-        System.out.println(isAdd);
+        menu.setMenuname("订单管理子菜单-测试用");
+        menu.setPid(173);
+        menuFacade.addMenu(menu);
     }
 
 

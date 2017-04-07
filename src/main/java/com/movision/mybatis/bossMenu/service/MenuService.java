@@ -28,11 +28,11 @@ public class MenuService {
     @Autowired
     private MenuMapper menuMapper;
 
-    public Boolean addAdminMenu(Menu menu) {
+    public Integer addAdminMenu(Menu menu) {
         try {
             log.info("新增菜单，menu=" + menu.toString());
-            int n = menuMapper.insertSelective(menu);
-            return n == 1;
+            menuMapper.insertSelective(menu);
+            return menu.getId();
         } catch (Exception e) {
             log.error("新增菜单异常，menu=" + menu.toString(), e);
             throw e;

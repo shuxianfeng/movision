@@ -91,4 +91,14 @@
             (#{roleid}, #{item})
         </foreach>
     </insert>
+
+    <insert id="batchAddWithMultiRoleid" parameterType="java.util.HashMap">
+        INSERT INTO yw_admin_role_menu (roleid, menuid)
+        VALUES
+        <foreach collection="roleids" item="item" separator=",">
+            (#{item}, #{menuid})
+        </foreach>
+    </insert>
+
+
 </mapper>

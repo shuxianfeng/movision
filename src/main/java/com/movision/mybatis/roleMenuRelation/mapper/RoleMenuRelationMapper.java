@@ -23,5 +23,7 @@ public interface RoleMenuRelationMapper {
 
     void batchAddByMenuid(Map<String, Object> map);
 
+    void batchAddWithMultiRoleid(Map<String, Object> map);
+
 
 }

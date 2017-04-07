@@ -177,8 +177,15 @@ public class RoleFacade {
         roleMenuRelationService.batchAddByMenuid(map);
     }
 
-    public List<Role> getRoleByMenuid(Integer id) {
-        return roleService.queryRoleByMenuid(id);
+
+    /**
+     * 根据菜单id查出所有关联的角色
+     *
+     * @param menuid
+     * @return
+     */
+    public List<Role> getRoleByMenuid(Integer menuid) {
+        return roleService.queryRoleByMenuid(menuid);
     }
 
 }

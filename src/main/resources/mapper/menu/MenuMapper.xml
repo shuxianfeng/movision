@@ -33,7 +33,8 @@
         #{url,jdbcType=VARCHAR}, #{isshow}
         )
     </insert>
-    <insert id="insertSelective" parameterType="com.movision.mybatis.bossMenu.entity.Menu">
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.movision.mybatis.bossMenu.entity.Menu">
         insert into yw_admin_menu
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

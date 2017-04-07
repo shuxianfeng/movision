@@ -7,6 +7,10 @@ import com.movision.mybatis.bossMenu.entity.Menu;
 import com.movision.mybatis.bossMenu.entity.MenuDetail;
 import com.movision.mybatis.bossMenu.entity.MenuVo;
 import com.movision.mybatis.bossMenu.service.MenuService;
+import com.movision.mybatis.role.entity.Role;
+import com.movision.mybatis.role.service.RoleService;
+import com.movision.mybatis.roleMenuRelation.service.RoleMenuRelationService;
+import com.movision.utils.ListUtil;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
@@ -14,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +36,39 @@ public class MenuFacade {
     @Autowired
     private MenuService menuService;
 
-    public Boolean addMenu(Menu menu) {
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private RoleMenuRelationService roleMenuRelationService;
+
+    @Transactional
+    public void addMenu(Menu menu) {
         //1 校验菜单名称是否已经存在
         this.validateMenuNameIsExist(menu);
-        //2 判断是否增加的是子菜单，如果是子菜单，应该判断父菜单是否在对应的角色关系中，若在，则子菜单也加入进去
+        //2 新增菜单,返回menuid
+        int menuid = menuService.addAdminMenu(menu);
 
+        //3 判断是否增加的是子菜单，如果是子菜单，应该判断父菜单是否在对应的角色关系中，若在，则子菜单也加入进去
+        int pid = menu.getPid();
+        if (pid != 0) {   //是子菜单
+            //判断父菜单关联的角色，
+            List<Role> roleList = roleService.queryRoleByMenuid(pid);
 
-        return menuService.addAdminMenu(menu);
+            //子菜单也与对应角色关联
+            if (ListUtil.isNotEmpty(roleList)) {
+                Map map = new HashedMap();
+                int len = roleList.size();
+                int[] roleidArr = new int[len];
+                for (int i = 0; i < len; i++) {
+                    roleidArr[i] = roleList.get(i).getId();
+                }
+                map.put("roleids", roleidArr);
+                map.put("menuid", menuid);
+
+                roleMenuRelationService.batchAddWithMultiRoleid(map);
+            }
+        }
     }
 
     /**

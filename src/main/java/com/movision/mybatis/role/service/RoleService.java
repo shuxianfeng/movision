@@ -90,10 +90,10 @@ public class RoleService {
         }
     }
 
-    public List<Role> queryRoleByMenuid(Integer id) {
+    public List<Role> queryRoleByMenuid(Integer menuid) {
         try {
             log.info("根据菜单id查询角色");
-            return roleMapper.selectByMenuid(id);
+            return roleMapper.selectByMenuid(menuid);
         } catch (Exception e) {
             log.error("根据菜单id查询角色失败");
             throw e;

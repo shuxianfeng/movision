@@ -75,10 +75,20 @@ public class RoleMenuRelationService {
 
     public void batchAddByMenuid(Map map) {
         try {
-            log.info("批量增加菜单和权限关系");
+            log.info("批量增加菜单和权限关系（多个菜单，一个角色）");
             roleMenuRelationMapper.batchAddByMenuid(map);
         } catch (Exception e) {
-            log.error("批量增加菜单和权限关系失败");
+            log.error("批量增加菜单和权限关系（多个菜单，一个角色）失败", e);
+            throw e;
+        }
+    }
+
+    public void batchAddWithMultiRoleid(Map map) {
+        try {
+            log.info("批量增加菜单和权限关系（多个角色，一个菜单）");
+            roleMenuRelationMapper.batchAddWithMultiRoleid(map);
+        } catch (Exception e) {
+            log.error("批量增加菜单和权限关系（多个角色，一个菜单）失败", e);
             throw e;
         }
     }
