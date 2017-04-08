@@ -155,7 +155,6 @@ public class MsgCenterFacade {
      */
     public Map getMsgZanList(Integer userid) {
         List<PostCommentZanRecordVo> postCommentZanRecords = postCommentZanRecordService.findAllCommentZanList(userid);
-        int type = 0;
         Map map = new HashedMap();
         if (postCommentZanRecords != null) {
             for (int i = 0; i < postCommentZanRecords.size(); i++) {
