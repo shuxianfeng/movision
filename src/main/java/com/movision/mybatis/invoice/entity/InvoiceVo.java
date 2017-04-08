@@ -17,7 +17,7 @@ public class InvoiceVo {
 
     private Integer onlystatue;
 
-    private Integer phone;
+    private String phone;
 
     private Double money;
 
@@ -209,14 +209,6 @@ public class InvoiceVo {
         this.addressid = addressid;
     }
 
-    public Integer getPhone() {
-        return phone;
-    }
-
-    public void setPhone(Integer phone) {
-        this.phone = phone;
-    }
-
     public Double getMoney() {
         return money;
     }
@@ -255,5 +247,13 @@ public class InvoiceVo {
 
     public void setLogisticsway(Integer logisticsway) {
         this.logisticsway = logisticsway;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

@@ -39,7 +39,7 @@
     </select>
 
     <!--根据订单编号查询发票相关信息-->
-    <select id="queryInvoice" parameterType="java.lang.Integer"
+    <select id="queryInvoice" parameterType="java.lang.String"
             resultType="com.movision.mybatis.invoice.entity.InvoiceVo">
         SELECT t.* FROM (
             SELECT t1.orderid, t1.kind, t1.head, t1.content, t2.name, t2.phone,
@@ -52,7 +52,7 @@
               ON t1.addressid = t2.id
           ) t
         WHERE t.orderid = (
-            SELECT id FROM yw_orders WHERE ordernumber = #{ordernumber,jdbcType=INTEGER}
+        SELECT id FROM yw_orders WHERE ordernumber = #{ordernumber,jdbcType=VARCHAR}
         )
     </select>
 

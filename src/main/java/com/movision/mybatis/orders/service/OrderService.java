@@ -151,7 +151,7 @@ public class OrderService {
         }
     }
 
-    public InvoiceVo queryInvoice(int ordernumber) {
+    public InvoiceVo queryInvoice(String ordernumber) {
         try {
             log.info("通过订单编号查询发票相关信息");
             return invoiceMapper.queryInvoice(ordernumber);

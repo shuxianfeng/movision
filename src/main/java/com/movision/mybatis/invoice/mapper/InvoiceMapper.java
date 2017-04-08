@@ -16,7 +16,7 @@ public interface InvoiceMapper {
 
     Invoice queryInvoiceInfo(int orderid);
 
-    InvoiceVo queryInvoice(int ordernumber);
+    InvoiceVo queryInvoice(String ordernumber);
 
     int updateByPrimaryKeySelective(Invoice record);
 

@@ -721,6 +721,6 @@ public class OrderAppFacade {
      * APP端通过订单查询发票信息接口
      */
     public InvoiceVo queryInvoice(String ordernumber) {
-        return orderService.queryInvoice(Integer.parseInt(ordernumber));
+        return orderService.queryInvoice(ordernumber);
     }
 }
