@@ -230,6 +230,9 @@ public class commonalityFacade {
             } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.update.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//操作帖子加入精选池
                 map.put("resault", 1);
                 return map;
+            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.update.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {
+                map.put("resault", 1);
+                return map;
             } else {
                 map.put("resault", -1);
                 return map;

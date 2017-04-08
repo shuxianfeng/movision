@@ -287,9 +287,9 @@ public class PostController {
     @RequestMapping(value = "/update_post_comment", method = RequestMethod.POST)
     public Response updatePostComment(@ApiParam(value = "这条评论的id") @RequestParam String commentid,
                                       @ApiParam(value = "评论内容") @RequestParam String content,
-                                      @ApiParam(value = "编辑评论者id") @RequestParam String userid) {
+                                      @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map map = postFacade.updatePostComment(commentid, content, userid);
+        Map map = postFacade.updatePostComment(commentid, content, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

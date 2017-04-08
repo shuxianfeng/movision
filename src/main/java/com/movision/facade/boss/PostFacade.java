@@ -467,20 +467,27 @@ public class PostFacade {
      *
      * @param commentid
      * @param content
-     * @param userid
+     * @param loginid
      * @return
      */
-    public Map updatePostComment(String commentid, String content, String userid) {
+    public Map updatePostComment(String commentid, String content, String loginid) {
         Map chuan = new HashedMap();
         Map map = new HashedMap();
-        chuan.put("commentid", commentid);
-        chuan.put("content", content);
-        //查询出前台对应的用户id
-        Integer uid = bossUserService.queryUserById(Integer.parseInt(userid));
-        chuan.put("userid", uid);
-        int i = commentService.updatePostComment(chuan);
-        map.put("resault", i);
-        return map;
+        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.update.getCode(), JurisdictionConstants.JURISDICTION_TYPE.comment.getCode(), Integer.parseInt(commentid));
+        if (res.get("resault").equals(1)) {
+            chuan.put("commentid", commentid);
+            chuan.put("content", content);
+            //查询出前台对应的用户id
+            Integer uid = bossUserService.queryUserById(Integer.parseInt(loginid));
+            chuan.put("userid", uid);
+            int i = commentService.updatePostComment(chuan);
+            map.put("resault", i);
+            return map;
+        } else {
+            map.put("resault", -1);
+            map.put("message", "权限不足");
+            return map;
+        }
     }
 
     /**

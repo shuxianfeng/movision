@@ -312,7 +312,9 @@
     </select>
 
     <select id="queryCircleManageCommentByUserid" parameterType="java.util.Map" resultType="java.lang.Integer">
-       SELECT phone FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=(SELECT postid FROM yw_post_comment WHERE id=#{kindid,jdbcType=INTEGER})) AND isdel=0
+        SELECT id FROM yw_admin_user WHERE phone=(SELECT phone FROM yw_circle WHERE id=(SELECT circleid FROM yw_post
+        WHERE id=(SELECT postid FROM yw_post_comment WHERE id=#{kindid,jdbcType=INTEGER})) AND isdel=0)
+
     </select>
 
     <select id="querySpeciallyCommentByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
