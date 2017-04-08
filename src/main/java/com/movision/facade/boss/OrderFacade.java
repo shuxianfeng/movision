@@ -694,6 +694,7 @@ public class OrderFacade {
         int result = bossOrderService.updateOperater(orderoperation);
         Orders orders = new Orders();
         orders.setLogisticsid(logisticsid);
+        orders.setStatus(2);
         orders.setId(Integer.parseInt(id));
         int res = bossOrderService.addLogistic(orders);
         LogidticsRelation relation = new LogidticsRelation();
