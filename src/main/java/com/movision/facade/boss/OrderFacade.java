@@ -680,7 +680,7 @@ public class OrderFacade {
      * @param logisticsid
      * @return
      */
-    public Map<String, Integer> updateOperater(String id, String remark, String logisticsway, String logisticsid) {
+    public Map<String, Integer> updateOperater(String id, String remark, String logisticsid, String logisticsway) {
         Map<String, Integer> map = new HashMap<>();
         Orderoperation orderoperation = new Orderoperation();
         orderoperation.setOrderid(Integer.parseInt(id));
