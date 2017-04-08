@@ -165,7 +165,7 @@
     FROM yw_post_comment c
     LEFT JOIN yw_user u
     ON c.userid=u.id
-    WHERE c.postid= #{postid,jdbcType=INTEGER} ORDER BY iscontribute DESC
+    WHERE c.postid= #{postid,jdbcType=INTEGER} AND isdel=0 ORDER BY iscontribute DESC
     <if test="type==0">
       ,c.intime ASC
     </if>
