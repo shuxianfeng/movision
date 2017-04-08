@@ -259,7 +259,7 @@
             resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT a.*,b.name AS circlename FROM (
             (
-                SELECT id, circleid, title, subtitle, coverimg, intime
+        SELECT id, circleid, title, subtitle, coverimg, intime, isactive, activetype, type
                 FROM yw_post
                 WHERE circleid IN (
                   SELECT id FROM yw_circle WHERE phone = (
@@ -271,8 +271,8 @@
             )
           UNION
             (
-                SELECT t.id, t.circleid, t.title, t.subtitle, t.coverimg, t1.intime  FROM (
-                    SELECT id, circleid, title, subtitle, coverimg, intime
+        SELECT t.id, t.circleid, t.title, t.subtitle, t.coverimg, t.isactive, t.activetype, t.type, t1.intime FROM (
+        SELECT id, circleid, title, subtitle, coverimg, intime, isactive, activetype, type
                     FROM yw_post
                     WHERE id IN (
                       SELECT postid FROM yw_post_share WHERE userid = #{userid,jdbcType=INTEGER}
@@ -288,7 +288,7 @@
     <select id="findAllPersonActive" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.ActiveVo">
         SELECT * FROM (
-            SELECT t1.id, t1.title, t1.subtitle, t1.coverimg, t2.begintime, t2.endtime
+        SELECT t1.id, t1.title, t1.subtitle, t1.coverimg, t1.isactive, t1.activetype, t1.type, t2.begintime, t2.endtime
             FROM yw_post t1
             LEFT JOIN yw_active_period t2
              ON t1.id = t2.postid
