@@ -101,6 +101,16 @@ public class OrderService {
         }
     }
 
+    public int updateInvoiceInfo(Invoice invoice) {
+        try {
+            log.info("根据发票id更新发票信息");
+            return invoiceMapper.updateByPrimaryKeySelective(invoice);
+        } catch (Exception e) {
+            log.error("根据发票id更新发票信息失败");
+            throw e;
+        }
+    }
+
     public List<Orders> queryOrdersListByIds(int[] ids) {
         try {
             log.info("根据主订单id数组查询所有的主订单列表");

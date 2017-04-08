@@ -723,4 +723,45 @@ public class OrderAppFacade {
     public InvoiceVo queryInvoice(String ordernumber) {
         return orderService.queryInvoice(ordernumber);
     }
+
+    /**
+     * 根据发票id更新发票信息
+     */
+    public int updateInvoiceInfo(String id, String kind, String onlystatue, String head, String content, String invoiceaddressid, String companyname,
+                                 String rigaddress, String rigphone, String bank, String banknum, String code) {
+        //增加发票信息
+        Invoice invoice = new Invoice();
+        invoice.setId(Integer.parseInt(id));
+        if (kind.equals("1")) {
+            invoice.setHead(head);
+        } else if (kind.equals("2")) {
+            invoice.setHead(companyname);
+        }
+        invoice.setAddressid(Integer.parseInt(invoiceaddressid));
+        invoice.setKind(Integer.parseInt(kind));
+        invoice.setContent(content);
+        if (!StringUtils.isEmpty(companyname)) {
+            invoice.setCompanyname(companyname);
+        }
+        if (!StringUtils.isEmpty(rigaddress)) {
+            invoice.setRigaddress(rigaddress);
+        }
+        if (!StringUtils.isEmpty(rigphone)) {
+            invoice.setRigphone(rigphone);
+        }
+        if (!StringUtils.isEmpty(bank)) {
+            invoice.setBank(bank);
+        }
+        if (!StringUtils.isEmpty(banknum)) {
+            invoice.setBanknum(banknum);
+        }
+        if (!StringUtils.isEmpty(code)) {
+            invoice.setCode(code);
+        }
+        if (!StringUtils.isEmpty(onlystatue)) {
+            invoice.setOnlystatue(Integer.parseInt(onlystatue));
+        }
+
+        return orderService.updateInvoiceInfo(invoice);
+    }
 }

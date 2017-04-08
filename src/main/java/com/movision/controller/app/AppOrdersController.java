@@ -212,4 +212,38 @@ public class AppOrdersController {
         response.setData(parammap);
         return response;
     }
+
+    /**
+     * 订单中对于未邮寄的发票是可以修改发票信息的
+     */
+    @ApiOperation(value = "APP端修改订单的发票信息接口", notes = "APP端修改订单的发票信息接口", response = Response.class)
+    @RequestMapping(value = "updateInvoiceInfo", method = RequestMethod.POST)
+    public Response updateInvoiceInfo(@ApiParam(value = "发票id") @RequestParam String id,
+                                      @ApiParam(value = "开票种类：1 普通发票 2 增值税发票") @RequestParam String kind,
+                                      @ApiParam(value = "状态：1 个人 2企业（普通发票时为必填）") @RequestParam(required = false) String onlystatue,
+                                      @ApiParam(value = "发票抬头（个人时取姓名 企业和增值税时取企业名称）（普通发票时为必填）") @RequestParam(required = false) String head,
+                                      @ApiParam(value = "开票内容") @RequestParam String content,
+                                      @ApiParam(value = "发票邮寄地址id") @RequestParam String invoiceaddressid,
+                                      @ApiParam(value = "企业名称(增值税发票时为必填)") @RequestParam(required = false) String companyname,
+                                      @ApiParam(value = "注册地址(增值税发票时为必填)") @RequestParam(required = false) String rigaddress,
+                                      @ApiParam(value = "注册电话(增值税发票时为必填)") @RequestParam(required = false) String rigphone,
+                                      @ApiParam(value = "开户银行(增值税发票时为必填)") @RequestParam(required = false) String bank,
+                                      @ApiParam(value = "银行账户（卡号）(增值税发票时为必填)") @RequestParam(required = false) String banknum,
+                                      @ApiParam(value = "纳税识别码(增值税发票时为必填)") @RequestParam(required = false) String code) {
+        Response response = new Response();
+
+        int count = orderAppFacade.updateInvoiceInfo(id, kind, onlystatue, head, content, invoiceaddressid, companyname, rigaddress, rigphone, bank, banknum, code);
+
+        if (count == 1) {
+            response.setCode(200);
+            response.setMessage("修改成功");
+        } else if (count == 0) {
+            response.setCode(300);
+            response.setMessage("修改失败");
+        } else if (response.getCode() != 200) {
+            response.setCode(500);
+            response.setMessage("系统异常");
+        }
+        return response;
+    }
 }

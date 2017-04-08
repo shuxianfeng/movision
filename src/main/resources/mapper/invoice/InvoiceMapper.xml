@@ -42,8 +42,8 @@
     <select id="queryInvoice" parameterType="java.lang.String"
             resultType="com.movision.mybatis.invoice.entity.InvoiceVo">
         SELECT t.* FROM (
-        SELECT t1.orderid, t1.onlystatue, t1.kind, t1.head, t1.content, t1.logisticsnumber, t1.logisticsway,
-        t1.companyname, t1.rigaddress, t1.rigphone, t1.bank, t1.banknum, t1.code, t2.name, t2.phone,
+        SELECT t1.id, t1.orderid, t1.onlystatue, t1.kind, t1.head, t1.content, t1.logisticsnumber,
+        t1.logisticsway, t1.companyname, t1.rigaddress, t1.rigphone, t1.bank, t1.banknum, t1.code, t2.name, t2.phone,
             (SELECT name FROM yw_province WHERE code = t2.province) AS province,
             (SELECT name FROM yw_city WHERE code = t2.city) AS city,
             (SELECT name FROM yw_area WHERE code = t2.district) AS district,
