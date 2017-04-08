@@ -336,11 +336,18 @@ public class PostFacade {
      * @param postid
      * @return
      */
-    public Map<String, Integer> deletePost(String postid) {
-        int resault = postService.deletePost(Integer.parseInt(postid));
-        Map<String, Integer> map = new HashedMap();
-        map.put("resault", resault);
-        return map;
+    public Map deletePost(String postid, String loginid) {
+        Map map = new HashedMap();
+        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.delete.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(postid));
+        if (res.get("resault").equals(1)) {
+            int resault = postService.deletePost(Integer.parseInt(postid));
+            map.put("resault", resault);
+            return map;
+        } else {
+            map.put("resault", -1);
+            map.put("message", "权限不足");
+            return map;
+        }
     }
 
 
@@ -357,14 +364,7 @@ public class PostFacade {
         map.put("postid", postid);
         map.put("type", type);
         List<CommentVo> co = commentService.queryCommentsByLsit(pager, map);
-        for (int i = 0; i < co.size(); i++) {//主要循环出特约嘉宾的评论并置顶
-            if (co.get(i).getIscontribute() == 1) {
-                commentVo.add(co.get(i));//当评论为特约嘉宾时，放在头部
-            } else {
-                commentVo.add(co.get(i));
-            }
-        }
-        return commentVo;
+        return co;
     }
 
     /**

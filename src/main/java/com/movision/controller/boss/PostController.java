@@ -174,9 +174,10 @@ public class PostController {
      */
     @ApiOperation(value = "逻辑删除帖子", notes = "逻辑删除帖子", response = Response.class)
     @RequestMapping(value = "/delete_post", method = RequestMethod.POST)
-    public Response deletePost(@ApiParam(value = "帖子id") @RequestParam String postid) {
+    public Response deletePost(@ApiParam(value = "帖子id") @RequestParam String postid,
+                               @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map<String, Integer> map = postFacade.deletePost(postid);
+        Map map = postFacade.deletePost(postid, loginid);
         if (response.getCode() == 200) {
             response.setMessage("删除成功");
         }

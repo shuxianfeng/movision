@@ -302,7 +302,8 @@
     </select>
 
     <select id="queryPostByUserid" parameterType="java.util.Map" resultType="java.lang.Integer">
-        SELECT id FROM yw_post WHERE circleid in (SELECT id FROM yw_circle WHERE phone=(SELECT phone FROM yw_user WHERE
+        SELECT id FROM yw_post WHERE circleid in (SELECT id FROM yw_circle WHERE phone=(SELECT phone FROM yw_admin_user
+        WHERE
         id=#{userid,jdbcType=INTEGER}))
     </select>
 
