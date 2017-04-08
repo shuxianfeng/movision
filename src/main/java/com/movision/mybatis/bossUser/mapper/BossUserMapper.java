@@ -1,6 +1,7 @@
 package com.movision.mybatis.bossUser.mapper;
 
 import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.bossUser.entity.BossUserVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
@@ -53,6 +54,10 @@ public interface BossUserMapper {
 
     List<Integer> queryPostByUserid(Map map);
 
-    List<Integer> queryCommentByUserid(Map map);
+    Integer queryCommentByUserid(Map map);
+
+    Integer queryCircleManageCommentByUserid(Map map);
+
+    Integer querySpeciallyCommentByUserid(Integer id);
 
 }

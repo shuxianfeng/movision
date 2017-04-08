@@ -60,7 +60,7 @@ public interface CommentMapper {
 
     int insertComment(CommentVo commentVo);
 
-    Integer updateCommentAudit(Integer commentid);
+    Integer updateCommentAudit(Map map);
 
     CommentVo queryCommentByUserid(Integer userid);//根据userid查询评论
 

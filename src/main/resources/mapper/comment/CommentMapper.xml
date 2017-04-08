@@ -165,7 +165,7 @@
     FROM yw_post_comment c
     LEFT JOIN yw_user u
     ON c.userid=u.id
-    WHERE c.postid= #{postid,jdbcType=INTEGER} ORDER BY iscontribute DESC
+    WHERE c.postid= #{postid,jdbcType=INTEGER} AND isdel=0 ORDER BY iscontribute DESC
     <if test="type==0">
       ,c.intime ASC
     </if>
@@ -206,7 +206,7 @@
 
   <update id="deletePostAppraise" parameterType="java.lang.Integer">
     UPDATE yw_post_comment
-    SET isdel=1
+    SET isdel=1,iscontribute=0
     WHERE id=#{id,jdbcType=INTEGER}
   </update>
 
@@ -417,10 +417,10 @@
     </trim>
   </insert>
 
-  <update id="updateCommentAudit" parameterType="java.lang.Integer">
+  <update id="updateCommentAudit" parameterType="java.util.Map">
     update yw_post_comment
-    SET isdel=0,status=1
-    where id = #{id,jdbcType=INTEGER} AND iscontribute=1
+    SET isdel=0,status=#{type,jdbcType=INTEGER}
+    where id = #{commentid,jdbcType=INTEGER} AND iscontribute=1
   </update>
   <select id="queryCommentByUserid" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">

@@ -1,6 +1,7 @@
 package com.movision.mybatis.bossUser.service;
 
 import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.bossUser.entity.BossUserVo;
 import com.movision.mybatis.bossUser.mapper.BossUserMapper;
 import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
@@ -272,12 +273,44 @@ public class BossUserService {
      * @param ma
      * @return
      */
-    public List<Integer> queryCommentByUserid(Map ma) {
+    public Integer queryCommentByUserid(Map ma) {
         try {
             log.info("查询用户可操作的帖子评论");
             return bossUserMapper.queryCommentByUserid(ma);
         } catch (Exception e) {
             log.error("查询用户可操作的帖子评论异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 根据id查询出是否属于该圈主的帖子评论
+     *
+     * @param map
+     * @return
+     */
+    public Integer queryCircleManageCommentByUserid(Map map) {
+        try {
+            log.info("根据id查询出是否属于该圈主的帖子评论");
+            return bossUserMapper.queryCircleManageCommentByUserid(map);
+        } catch (Exception e) {
+            log.error("根据id查询出是否属于该圈主的帖子评论异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询评论是否为特约嘉宾评论
+     *
+     * @param id
+     * @return
+     */
+    public Integer querySpeciallyCommentByUserid(Integer id) {
+        try {
+            log.info("查询评论是否为特约嘉宾的评论");
+            return bossUserMapper.querySpeciallyCommentByUserid(id);
+        } catch (Exception e) {
+            log.error("查询评论是否是特约嘉宾的评论异常");
             throw e;
         }
     }

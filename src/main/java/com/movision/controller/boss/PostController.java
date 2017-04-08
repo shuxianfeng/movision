@@ -265,12 +265,14 @@ public class PostController {
      */
     @ApiOperation(value = "删除帖子评论", notes = "删除帖子评论", response = Response.class)
     @RequestMapping(value = "/delete_post_appraise", method = RequestMethod.POST)
-    public Response deletePostAppraise(@ApiParam(value = "评论id") @RequestParam String id) {
+    public Response deletePostAppraise(@ApiParam(value = "评论id") @RequestParam String id,
+                                       @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        postFacade.deletePostAppraise(id);
+        Map map = postFacade.deletePostAppraise(id, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
+        response.setData(map);
         return response;
     }
 
@@ -326,9 +328,10 @@ public class PostController {
     @ApiOperation(value = "帖子评论审核", notes = "用于给特约嘉宾评论审核接口", response = Response.class)
     @RequestMapping(value = "update_comment_audit", method = RequestMethod.POST)
     public Response auditComment(@ApiParam(value = "评论id") @RequestParam String commentid,
-                                 @ApiParam(value = "登录用户id") @RequestParam String userid) {
+                                 @ApiParam(value = "登录用户id") @RequestParam String loginid,
+                                 @ApiParam(value = "审核状态") @RequestParam String type) {
         Response response = new Response();
-        Map map = postFacade.auditComment(commentid, userid);
+        Map map = postFacade.auditComment(commentid, loginid, type);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
