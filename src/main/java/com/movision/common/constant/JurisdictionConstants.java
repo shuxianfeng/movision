@@ -32,7 +32,9 @@ public class JurisdictionConstants {
 
         speciallyInvite(1),//特邀嘉宾
 
-        circleAudit(1);//圈子审核
+        commentAudit(5),//评论审核
+
+        circleAudit(6);//圈子审核
 
         public final int code;
 

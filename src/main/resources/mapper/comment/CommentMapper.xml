@@ -417,10 +417,10 @@
     </trim>
   </insert>
 
-  <update id="updateCommentAudit" parameterType="java.lang.Integer">
+  <update id="updateCommentAudit" parameterType="java.util.Map">
     update yw_post_comment
-    SET isdel=0,status=1
-    where id = #{id,jdbcType=INTEGER} AND iscontribute=1
+    SET isdel=0,status=#{type,jdbcType=INTEGER}
+    where id = #{commentid,jdbcType=INTEGER} AND iscontribute=1
   </update>
   <select id="queryCommentByUserid" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">

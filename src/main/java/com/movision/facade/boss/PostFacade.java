@@ -519,13 +519,29 @@ public class PostFacade {
      * @param userid
      * @return
      */
-    public Map auditComment(String commentid, String userid) {
+    @Transactional
+    public Map auditComment(String commentid, String userid, String type) {
         Map map = new HashedMap();
         //查询该用户是否是超管或普管
-        BossUser user = bossUserService.queryUserByAdministrator(Integer.parseInt(userid));
-        if (user != null) {
-            if (user.getIssuper() == 1 || user.getCommon() == 1) {//是管理员
-                Integer resault = commentService.updateCommentAudit(Integer.parseInt(commentid));
+        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(userid), JurisdictionConstants.JURISDICTION_TYPE.commentAudit.getCode(), JurisdictionConstants.JURISDICTION_TYPE.comment.getCode(), Integer.parseInt(commentid));
+        if (res.get("resault").equals(1)) {
+            Map map1 = new HashMap();
+            map1.put("commentid", commentid);
+            map1.put("type", type);
+            Integer resault = commentService.updateCommentAudit(map1);
+            postService.updatePostBycommentsumT(Integer.parseInt(commentid));//更新帖子的评论数
+            map.put("resault", 1);
+            return map;
+        } else {
+            map.put("resault", -1);
+            map.put("message", "权限不足");
+            return map;
+        }
+            /*if (user.getIssuper() == 1 || user.getCommon() == 1) {//是管理员
+                Map map1=new HashMap();
+                map1.put("commentid",commentid);
+                map1.put("type",type);
+                Integer resault = commentService.updateCommentAudit(map1);
                 postService.updatePostBycommentsumT(Integer.parseInt(commentid));//更新帖子的评论数
                 map.put("massege", "审核成功");
                 map.put("resault", resault);
@@ -534,12 +550,12 @@ public class PostFacade {
                 map.put("massege", "权限不足");
                 map.put("resault", -1);
                 return map;
-            }
-        } else {
+            }*/
+       /* } else {
             map.put("massege", "没有此用户");
             map.put("resault", -1);
             return map;
-        }
+        }*/
     }
 
 

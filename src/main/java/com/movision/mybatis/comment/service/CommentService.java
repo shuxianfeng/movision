@@ -199,13 +199,13 @@ public class CommentService {
     /**
      * 特约嘉宾评论审核
      *
-     * @param commentid
+     * @param map
      * @return
      */
-    public Integer updateCommentAudit(Integer commentid) {
+    public Integer updateCommentAudit(Map map) {
         try {
             log.info("特约嘉宾评论审核");
-            return commentMapper.updateCommentAudit(commentid);
+            return commentMapper.updateCommentAudit(map);
         } catch (Exception e) {
             log.error("特约嘉宾评论审核异常");
             throw e;
