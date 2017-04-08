@@ -39,8 +39,10 @@
 
     <!--根据订单编号查询发票快递单号信息-->
     <select id="queryInvoiceByOrderNumber" parameterType="java.lang.String"
-            resultType="com.movision.mybatis.invoice.entity.Invoice">
-      SELECT logisticsnumber, logisticsway FROM yw_invoice
+            resultType="com.movision.mybatis.invoice.entity.InvoiceVo">
+        SELECT t1.logisticsnumber,
+        (SELECT code FROM yw_logistics_company WHERE id = t1.logisticsway) AS logisticscode
+        FROM yw_invoice t1
       WHERE orderid = (
           SELECT id FROM yw_orders WHERE ordernumber = #{ordernumber,jdbcType=INTEGER}
       )

@@ -3,6 +3,7 @@ package com.movision.facade.boss;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.bossOrders.servic.BossOrderService;
 import com.movision.mybatis.invoice.entity.Invoice;
+import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.orderLogistics.entity.OrderLogistics;
 import com.movision.mybatis.orderSubLogistics.entity.OrderSubLogistics;
 import com.movision.utils.HttpRequest;
@@ -54,10 +55,10 @@ public class LogisticsInquiryFacade {
             logisticscode = orderService.queryReplaceCode(logisticsid);//物流code
         }
         if (type == 3) {//发票邮寄快递类型
-            Invoice vo = orderService.queryInvoiceByOrderNumber(ordernumber);
+            InvoiceVo vo = orderService.queryInvoiceByOrderNumber(ordernumber);
             if (null != vo.getLogisticsnumber()) {
                 logisticsid = vo.getLogisticsnumber();
-                logisticscode = vo.getLogisticsway().toString();
+                logisticscode = vo.getLogisticscode();
             }
         }
         String param = "{" + "\"com\":\"" + logisticscode + "\"," + //查询的快递公司的编码

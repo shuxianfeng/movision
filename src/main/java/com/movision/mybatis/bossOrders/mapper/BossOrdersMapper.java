@@ -139,7 +139,7 @@ public interface BossOrdersMapper {
 
     String queryReplaceCode(String logisticsid);
 
-    Invoice queryInvoiceByOrderNumber(String ordernumber);
+    InvoiceVo queryInvoiceByOrderNumber(String ordernumber);
 
     Integer updateAfterServiceH(Afterservice afterservice);//退货处理
 

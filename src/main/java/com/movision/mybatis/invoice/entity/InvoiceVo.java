@@ -57,6 +57,8 @@ public class InvoiceVo {
 
     private Integer logisticsway;
 
+    private String logisticscode;//物流类型code
+
     public Integer getOnlystatue() {
         return onlystatue;
     }
@@ -255,5 +257,13 @@ public class InvoiceVo {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getLogisticscode() {
+        return logisticscode;
+    }
+
+    public void setLogisticscode(String logisticscode) {
+        this.logisticscode = logisticscode;
     }
 }
