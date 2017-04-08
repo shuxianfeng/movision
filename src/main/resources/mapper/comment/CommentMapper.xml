@@ -206,7 +206,7 @@
 
   <update id="deletePostAppraise" parameterType="java.lang.Integer">
     UPDATE yw_post_comment
-    SET isdel=1
+    SET isdel=1,iscontribute=0
     WHERE id=#{id,jdbcType=INTEGER}
   </update>
 

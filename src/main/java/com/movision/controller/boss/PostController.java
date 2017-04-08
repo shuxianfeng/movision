@@ -265,12 +265,14 @@ public class PostController {
      */
     @ApiOperation(value = "删除帖子评论", notes = "删除帖子评论", response = Response.class)
     @RequestMapping(value = "/delete_post_appraise", method = RequestMethod.POST)
-    public Response deletePostAppraise(@ApiParam(value = "评论id") @RequestParam String id) {
+    public Response deletePostAppraise(@ApiParam(value = "评论id") @RequestParam String id,
+                                       @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        postFacade.deletePostAppraise(id);
+        Map map = postFacade.deletePostAppraise(id, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
+        response.setData(map);
         return response;
     }
 

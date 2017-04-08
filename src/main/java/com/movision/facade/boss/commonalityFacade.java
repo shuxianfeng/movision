@@ -2,6 +2,7 @@ package com.movision.facade.boss;
 
 import com.movision.common.constant.JurisdictionConstants;
 import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.bossUser.entity.BossUserVo;
 import com.movision.mybatis.bossUser.service.BossUserService;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,18 +63,18 @@ public class commonalityFacade {
                         map.put("message", "权限不足");
                         return map;
                     }
-                } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//帖子评论
-                    ma.put("userid", userid);
-                    List<Integer> list = bossUserService.queryCommentByUserid(ma);
-                    if (list.size() > 0) {
-                        for (int t = 0; t < list.size(); t++) {
-                            if (list.get(t) == kindid) {
-                                map.put("resault", 2);
-                                return map;
-                            } else if (list.size() == t) {//代表最后一条也不匹配
-                                map.put("resault", -1);
-                                return map;
-                            }
+                } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//圈主删除帖子评论
+                    ma.put("kindid", kindid);//评论id
+                    //查出评论是否属于圈主的帖子评论
+                    Integer list = bossUserService.queryCircleManageCommentByUserid(ma);
+                    if (list != null) {
+                        if (list.equals(userid)) {
+                            map.put("resault", 1);
+                            return map;
+                        } else {
+                            map.put("resault", -1);
+                            map.put("resault", "权限不足");
+                            return map;
                         }
                     } else {
                         map.put("resault", -1);
@@ -97,16 +98,22 @@ public class commonalityFacade {
                         }
                     }
                 } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//帖子评论
-                    ma.put("userid", userid);
-                    List<Integer> list = bossUserService.queryCommentByUserid(ma);
-                    for (int t = 0; t < list.size(); t++) {
-                        if (list.get(t) == kindid) {
+                    ma.put("kindid", kindid);
+                    //查询出是否属于圈主的帖子评论
+                    Integer list = bossUserService.queryCircleManageCommentByUserid(ma);
+                    if (list != null) {
+                        if (list.equals(userid)) {
                             map.put("resault", 1);
                             return map;
-                        } else if (list.size() == t) {//代表最后一条也不匹配
+                        } else {
                             map.put("resault", -1);
+                            map.put("resault", "权限不足");
                             return map;
                         }
+                    } else {
+                        map.put("resault", -1);
+                        map.put("message", "权限不足");
+                        return map;
                     }
                 } else {
                     map.put("resault", -1);
@@ -117,17 +124,9 @@ public class commonalityFacade {
                 return map;
             }
         } else if (i.getCirclemanagement().equals(JurisdictionConstants.JURISDICTION_TYPE.groupManage.getCode())) {//圈子管理员
-            if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode())) {//圈主可以在自己圈子中添加帖子
-                if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//添加帖子
-                    map.put("resault", 1);
-                    return map;
-                } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//添加评论
-                    map.put("resault", 2);
-                    return map;
-                } else {
-                    map.put("resault", -1);
-                    return map;
-                }
+            if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//圈主可以在自己圈子中添加评论
+                map.put("resault", 1);
+                return map;
             } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//添加评论
                 map.put("resault", 2);
                 return map;
@@ -137,30 +136,39 @@ public class commonalityFacade {
                     ma.put("userid", userid);
                     //根据操作类型id查询此操作是否属于该用户范畴
                     List<Integer> list = bossUserService.queryPostByUserid(ma);
-                    for (int t = 0; t < list.size(); t++) {
-                        if (list.get(t) == kindid) {
+                    if (list.size() > 0) {
+                        for (int t = 0; t < list.size(); t++) {
+                            if (list.get(t).equals(kindid)) {
+                                map.put("resault", 1);
+                                return map;
+                            } else if (list.size() == t) {//代表最后一条也不匹配
+                                map.put("resault", -1);
+                                return map;
+                            }
+                        }
+                    } else {
+                        map.put("resault", -1);
+                        map.put("message", "权限不足");
+                        return map;
+                    }
+                } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//圈主删除帖子评论
+                    ma.put("kindid", kindid);//评论id
+                    //查出评论是否属于圈主的帖子评论
+                    Integer list = bossUserService.queryCircleManageCommentByUserid(ma);
+                    if (list != null) {
+                        if (list.equals(userid)) {
                             map.put("resault", 1);
                             return map;
-                        } else if (list.size() == t) {//代表最后一条也不匹配
+                        } else {
                             map.put("resault", -1);
+                            map.put("resault", "权限不足");
                             return map;
                         }
+                    } else {
+                        map.put("resault", -1);
+                        map.put("message", "权限不足");
+                        return map;
                     }
-                } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//帖子评论
-                    ma.put("userid", userid);
-                    List<Integer> list = bossUserService.queryCommentByUserid(ma);
-                    for (int t = 0; t < list.size(); t++) {
-                        if (list.get(t) == kindid) {
-                            map.put("resault", 1);
-                            return map;
-                        } else if (list.size() == t) {//代表最后一条也不匹配
-                            map.put("resault", -1);
-                            return map;
-                        }
-                    }
-                } else {
-                    map.put("resault", -1);
-                    return map;
                 }
             } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.update.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()))) {//圈主可以编辑改圈子中的本人帖子
                 Map ma = new HashedMap();
@@ -178,16 +186,22 @@ public class commonalityFacade {
                         }
                     }
                 } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//帖子评论
-                    ma.put("userid", userid);
-                    List<Integer> list = bossUserService.queryCommentByUserid(ma);
-                    for (int t = 0; t < list.size(); t++) {
-                        if (list.get(t) == kindid) {
+                    ma.put("kindid", kindid);
+                    //查询出是否属于圈主的帖子评论
+                    Integer list = bossUserService.queryCircleManageCommentByUserid(ma);
+                    if (list != null) {
+                        if (list.equals(userid)) {
                             map.put("resault", 1);
                             return map;
-                        } else if (list.size() == t) {//代表最后一条也不匹配
+                        } else {
                             map.put("resault", -1);
+                            map.put("resault", "权限不足");
                             return map;
                         }
+                    } else {
+                        map.put("resault", -1);
+                        map.put("message", "权限不足");
+                        return map;
                     }
                 } else {
                     map.put("resault", -1);
@@ -202,6 +216,17 @@ public class commonalityFacade {
             if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//添加评论
                 map.put("resault", 2);
                 return map;
+            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.delete.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//删除评论
+                //查询此评论是否是特邀嘉宾的评论
+                Integer flg = bossUserService.querySpeciallyCommentByUserid(kindid);
+                if (userid.equals(flg)) {//判断是否是当前特约嘉宾的评论
+                    map.put("resault", 1);
+                    return map;
+                } else {
+                    map.put("resault", -1);
+                    map.put("message", "权限不足");
+                    return map;
+                }
             } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.update.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//操作帖子加入精选池
                 map.put("resault", 1);
                 return map;

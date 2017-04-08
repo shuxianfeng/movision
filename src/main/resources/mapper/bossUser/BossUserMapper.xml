@@ -298,7 +298,7 @@
 
     <select id="queryUserByAdministrator" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.bossUser.entity.BossUser">
-        SELECT * FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER}
+        SELECT ad.* FROM yw_admin_user ad WHERE ad.id=#{userid,jdbcType=INTEGER}
     </select>
 
     <select id="queryPostByUserid" parameterType="java.util.Map" resultType="java.lang.Integer">
@@ -308,6 +308,14 @@
     </select>
 
     <select id="queryCommentByUserid" parameterType="java.util.Map" resultType="java.lang.Integer">
-        SELECT id FROM yw_post_comment WHERE postid in (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER})
+        SELECT * FROM yw_admin_user WHERE id=(SELECT userid FROM yw_post_comment WHERE id=#{userid,jdbcType=INTEGER})
+    </select>
+
+    <select id="queryCircleManageCommentByUserid" parameterType="java.util.Map" resultType="java.lang.Integer">
+       SELECT phone FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=(SELECT postid FROM yw_post_comment WHERE id=#{kindid,jdbcType=INTEGER})) AND isdel=0
+    </select>
+
+    <select id="querySpeciallyCommentByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT id FROM yw_admin_user WHERE phone=(SELECT phone FROM yw_user WHERE id=(SELECT userid FROM yw_post_comment WHERE id=#{id,jdbcType=INTEGER})) AND contributing=1
     </select>
 </mapper>

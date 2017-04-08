@@ -7,6 +7,7 @@ import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.activePart.service.ActivePartService;
 import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.bossUser.entity.BossUserVo;
 import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.category.service.CategoryService;
 import com.movision.mybatis.circle.service.CircleService;
@@ -447,8 +448,18 @@ public class PostFacade {
      * @param id
      * @return
      */
-    public int deletePostAppraise(String id) {
-        return commentService.deletePostAppraise(Integer.parseInt(id));
+    public Map deletePostAppraise(String id, String loginid) {
+        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.delete.getCode(), JurisdictionConstants.JURISDICTION_TYPE.comment.getCode(), Integer.parseInt(id));
+        Map map = new HashMap();
+        if (res.get("resault").equals(1)) {
+            commentService.deletePostAppraise(Integer.parseInt(id));
+            map.put("resault", 1);
+            return map;
+        } else {
+            map.put("resault", -1);
+            map.put("message", "权限不足");
+            return map;
+        }
     }
 
     /**
