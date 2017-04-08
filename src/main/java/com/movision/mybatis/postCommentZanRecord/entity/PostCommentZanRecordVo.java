@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class PostCommentZanRecordVo {
     private Integer id;
+    private Integer ctype;
 
     public Integer getCtype() {
         return ctype;
@@ -20,8 +21,6 @@ public class PostCommentZanRecordVo {
     public void setCtype(Integer ctype) {
         this.ctype = ctype;
     }
-
-    private Integer ctype;
 
     private Integer userid;
 
