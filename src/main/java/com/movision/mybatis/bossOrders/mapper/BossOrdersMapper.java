@@ -131,7 +131,7 @@ public interface BossOrdersMapper {
 
     String logisticsCompany(String code);//根据code查快递公司
 
-    Afterservice queryReturnLogistics(String ordernumber);//查询退回单号
+    Afterservice queryReturnLogistics(String ordernumber, String id);//查询退回单号
 
     String queryReturnWay(Integer logisticsS);//查询退回方式
 

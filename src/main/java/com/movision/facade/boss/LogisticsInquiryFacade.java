@@ -36,7 +36,7 @@ public class LogisticsInquiryFacade {
     private BossOrderService orderService;
 
 
-    public Map<String, Object> LogisticInquiry(String ordernumber, int type) {
+    public Map<String, Object> LogisticInquiry(String ordernumber, int type, String id) {
         Map<String, String> map = new HashMap<>();
         String logisticsid = "";
         String logisticscode = "";
@@ -45,7 +45,7 @@ public class LogisticsInquiryFacade {
             logisticscode = orderService.queryLogisticsCode(logisticsid);//物流code
         }
         if (type == 0) {//用户退回类型
-            Afterservice afterservice = orderService.queryReturnLogistics(ordernumber);
+            Afterservice afterservice = orderService.queryReturnLogistics(ordernumber, id);
             Integer logisticsS = afterservice.getLogisticsway();
             logisticsid = afterservice.getReturnnumber();
             logisticscode = orderService.queryReturnWay(logisticsS);//物流code
@@ -99,7 +99,7 @@ public class LogisticsInquiryFacade {
                 orderlogistics.setLogisticsname(company);
                 orderlogistics.setIsdel(0);
                 result = orderService.addLogistics(orderlogistics);
-                int id = orderlogistics.getId();
+                int ida = orderlogistics.getId();
                 String time = "";
                 for (int i = 0; i < jsonArray.size(); i++) {
                     row = jsonArray.getJSONObject(i);
@@ -123,7 +123,7 @@ public class LogisticsInquiryFacade {
                         }
                     }
                     String context = row.get("context").toString();
-                    ordersub.setLogisticsid(id);
+                    ordersub.setLogisticsid(ida);
                     ordersub.setInfo(context);
                     ordersub.setIntime(isessencetime);
                     ordersub.setOrderid(jsonArray.size() - i);
@@ -132,7 +132,7 @@ public class LogisticsInquiryFacade {
 
                 }
                 if (!time.equals("")) {
-                    orderlogistics.setId(id);
+                    orderlogistics.setId(ida);
                     orderlogistics.setIntime(cetime);
                     result = orderService.updateLogistics(orderlogistics);
                 }

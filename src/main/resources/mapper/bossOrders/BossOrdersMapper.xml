@@ -986,7 +986,7 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
     <select id="queryReturnLogistics" resultType="com.movision.mybatis.afterservice.entity.Afterservice"
             parameterType="java.lang.String">
         SELECT a.returnnumber,a.logisticsway FROM yw_afterservice a LEFT JOIN yw_orders o ON o.id=a.orderid WHERE
-        o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
+        o.ordernumber=#{ordernumber,jdbcType=VARCHAR} AND a.id=#{id,jdbcType=INTEGER}
     </select>
     <select id="queryReturnWay" resultType="java.lang.String" parameterType="java.lang.Integer">
         SELECT code FROM yw_logistics_company WHERE id=#{logisticsS,jdbcType=INTEGER}
