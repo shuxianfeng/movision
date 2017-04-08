@@ -36,7 +36,7 @@ public class LogisticsInquiryFacade {
     private BossOrderService orderService;
 
 
-    public Map<String, Object> LogisticInquiry(String ordernumber, int type, String id) {
+    public Map<String, Object> LogisticInquiry(String ordernumber, int type) {
         Map<String, String> map = new HashMap<>();
         String logisticsid = "";
         String logisticscode = "";
@@ -45,7 +45,7 @@ public class LogisticsInquiryFacade {
             logisticscode = orderService.queryLogisticsCode(logisticsid);//物流code
         }
         if (type == 0) {//用户退回类型
-            Afterservice afterservice = orderService.queryReturnLogistics(ordernumber, id);
+            Afterservice afterservice = orderService.queryReturnLogistics(ordernumber);
             Integer logisticsS = afterservice.getLogisticsway();
             logisticsid = afterservice.getReturnnumber();
             logisticscode = orderService.queryReturnWay(logisticsS);//物流code

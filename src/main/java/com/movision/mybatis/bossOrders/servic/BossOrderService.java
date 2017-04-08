@@ -700,10 +700,10 @@ public class BossOrderService {
      * @param ordernumber
      * @return
      */
-    public Afterservice queryReturnLogistics(String ordernumber, String id) {
+    public Afterservice queryReturnLogistics(String ordernumber) {
         try {
             loger.info("根据订单号查询快递单号(tuihui)");
-            return bossOrdersMapper.queryReturnLogistics(ordernumber, id);
+            return bossOrdersMapper.queryReturnLogistics(ordernumber);
         } catch (Exception e) {
             loger.error("根据订单号查询快递单号(tuihui)失败", e);
             throw e;

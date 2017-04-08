@@ -32,10 +32,10 @@ public class LogisticsInquiryController {
     @ApiOperation(value = "查询物流接口", notes = "查询物流接口", response = Response.class)
     @RequestMapping(value = "queryLogistics", method = RequestMethod.POST)
     public Response queryLogistics(@ApiParam(value = "订单号") @RequestParam String ordernumber,
-                                   @ApiParam(value = "type(0:用户退回,1：换货,2：订单)") @RequestParam int type,
-                                   @ApiParam(value = "id(售后单号)") @RequestParam(required = false) String id) {
+                                   @ApiParam(value = "type(0:用户退回,1：换货,2：订单)") @RequestParam int type
+    ) {
         Response response = new Response();
-        Map<String, Object> parammap = logisticsInquiryFacade.LogisticInquiry(ordernumber, type, id);
+        Map<String, Object> parammap = logisticsInquiryFacade.LogisticInquiry(ordernumber, type);
         if (response.getCode() == 200 && parammap.get("message").equals("ok")) {
             response.setMessage("物流信息返回成功");
         } else if (parammap.get("returnCode").equals("500")) {
