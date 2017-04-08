@@ -43,11 +43,14 @@ public class AppAfterServiceController {
 
         Map<String, Object> map = afterServiceFacade.commitAfterService(userid, orderid, addressid, goodsid, afterstatue, amountdue, remark, imgfile1, imgfile2, imgfile3);
 
-        if (response.getCode() == 200) {
+        if (response.getCode() == 200 && (int) map.get("code") == 200) {
             response.setMessage("申请成功");
             response.setData(map);
-        } else {
+        } else if ((int) map.get("code") == 300) {
             response.setCode(300);
+            response.setMessage("重复申请");
+        } else {
+            response.setCode(400);
             response.setMessage("申请失败");
         }
         return response;

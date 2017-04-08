@@ -45,6 +45,11 @@
         SELECT logisticscompany FROM yw_logistics_company WHERE id = #{id,jdbcType=INTEGER}
     </select>
 
+    <!--根据订单id对售后单的唯一性进行校验-->
+    <select id="queryAfterServiceCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_afterservice WHERE orderid = #{orderid,jdbcType=INTEGER} AND isdel = '1'
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_afterservice
         where id = #{id,jdbcType=INTEGER}

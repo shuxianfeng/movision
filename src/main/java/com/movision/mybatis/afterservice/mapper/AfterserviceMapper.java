@@ -22,6 +22,8 @@ public interface AfterserviceMapper {
 
     void commitReturnLogisticInfo(Map<String, Object> parammap);
 
+    int queryAfterServiceCount(int orderid);
+
     Afterservice selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(Afterservice record);

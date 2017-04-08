@@ -137,4 +137,17 @@ public class AfterServcieServcie {
             throw e;
         }
     }
+
+    /**
+     * 对订单对应的售后单的唯一性做校验
+     */
+    public int queryAfterServiceCount(int orderid) {
+        try {
+            logger.info("对订单对应的售后单的唯一性做校验");
+            return afterserviceMapper.queryAfterServiceCount(orderid);
+        } catch (Exception e) {
+            logger.error("对订单对应的售后单的唯一性做校验失败");
+            throw e;
+        }
+    }
 }
