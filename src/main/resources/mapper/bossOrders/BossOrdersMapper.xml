@@ -36,6 +36,16 @@
         from yw_orders
         where id = #{id,jdbcType=INTEGER}
     </select>
+
+    <!--根据订单编号查询发票快递单号信息-->
+    <select id="queryInvoiceByOrderNumber" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.invoice.entity.Invoice">
+      SELECT logisticsnumber, logisticsway FROM yw_invoice
+      WHERE orderid = (
+          SELECT id FROM yw_orders WHERE ordernumber = #{ordernumber,jdbcType=INTEGER}
+      )
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_orders
     where id = #{id,jdbcType=INTEGER}

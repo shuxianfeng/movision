@@ -745,6 +745,19 @@ public class BossOrderService {
     }
 
     /**
+     * 根据订单编号查询发票的快递单号信息
+     */
+    public Invoice queryInvoiceByOrderNumber(String ordernumber) {
+        try {
+            loger.info("根据订单编号查询发票的快递单号信息");
+            return bossOrdersMapper.queryInvoiceByOrderNumber(ordernumber);
+        } catch (Exception e) {
+            loger.error("根据订单编号查询发票的快递单号信息失败");
+            throw e;
+        }
+    }
+
+    /**
      * 根据订单号查询快递code(tuihui)
      *
      * @param logisticsS

@@ -2,6 +2,7 @@ package com.movision.facade.boss;
 
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.bossOrders.servic.BossOrderService;
+import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.orderLogistics.entity.OrderLogistics;
 import com.movision.mybatis.orderSubLogistics.entity.OrderSubLogistics;
 import com.movision.utils.HttpRequest;
@@ -38,20 +39,26 @@ public class LogisticsInquiryFacade {
         Map<String, String> map = new HashMap<>();
         String logisticsid = "";
         String logisticscode = "";
-        if (type == 2) {
+        if (type == 2) {//订单快递类型
             logisticsid = orderService.queryLogisticsid(ordernumber);//快递单号
             logisticscode = orderService.queryLogisticsCode(logisticsid);//物流code
         }
-        if (type == 0) {
+        if (type == 0) {//用户退回类型
             Afterservice afterservice = orderService.queryReturnLogistics(ordernumber);
             Integer logisticsS = afterservice.getLogisticsway();
             logisticsid = afterservice.getReturnnumber();
             logisticscode = orderService.queryReturnWay(logisticsS);//物流code
         }
-
-        if (type == 1) {
+        if (type == 1) {//换货二次发货类型
             logisticsid = orderService.queryReplaceLogistic(ordernumber);
             logisticscode = orderService.queryReplaceCode(logisticsid);//物流code
+        }
+        if (type == 3) {//发票邮寄快递类型
+            Invoice vo = orderService.queryInvoiceByOrderNumber(ordernumber);
+            if (null != vo.getLogisticsnumber()) {
+                logisticsid = vo.getLogisticsnumber();
+                logisticscode = vo.getLogisticsway().toString();
+            }
         }
         String param = "{" + "\"com\":\"" + logisticscode + "\"," + //查询的快递公司的编码
                 "\"num\":\"" + logisticsid + "\"" + //快递单号
