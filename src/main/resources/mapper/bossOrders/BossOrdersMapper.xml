@@ -992,7 +992,8 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
         SELECT code FROM yw_logistics_company WHERE id=#{logisticsS,jdbcType=INTEGER}
     </select>
     <select id="queryReplaceLogistic" resultType="java.lang.String" parameterType="java.lang.String">
-        SELECT a.replacementnumber FROM yw_afterservice a LEFT JOIN yw_orders o  ON o.id=a.orderid WHERE o.ordernumber=#{ordernumber,jdbcType=VARCHAR}
+        SELECT a.replacementnumber FROM yw_afterservice a LEFT JOIN yw_orders o ON o.id=a.orderid WHERE
+        o.ordernumber=#{ordernumber,jdbcType=VARCHAR} AND a.isdel=1
     </select>
     <select id="queryReplaceCode" resultType="java.lang.String" parameterType="java.lang.String">
         SELECT c.code FROM   yw_logidtics_relation  l LEFT JOIN
