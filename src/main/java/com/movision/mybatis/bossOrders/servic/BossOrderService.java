@@ -631,6 +631,18 @@ public class BossOrderService {
         }
     }
 
+    public Integer querystatus(Integer id) {
+        try {
+            loger.info("查询状态");
+            return bossOrdersMapper.querystatus(id);
+        } catch (Exception e) {
+            loger.error("查询状态失败");
+            throw e;
+        }
+    }
+
+
+
     /**
      * 增加快递单号
      *
@@ -647,6 +659,31 @@ public class BossOrderService {
         }
     }
 
+    /**
+     * 增加快递单号
+     *
+     * @param orders
+     * @return
+     */
+    public Integer updateLogistic(Orders orders) {
+        try {
+            loger.info("增加快递单号");
+            return bossOrdersMapper.updateLogistic(orders);
+        } catch (Exception e) {
+            loger.error("增加快递单号失败", e);
+            throw e;
+        }
+    }
+
+    public Integer updateRealtion(LogidticsRelation logidticsRelation) {
+        try {
+            loger.info("增加快递单号");
+            return bossOrdersMapper.updateRealtion(logidticsRelation);
+        } catch (Exception e) {
+            loger.error("增加快递单号失败", e);
+            throw e;
+        }
+    }
     /**
      * 增加物流关系表
      *

@@ -861,10 +861,34 @@ SELECT name FROM yw_area WHERE code=#{code,jdbcType=VARCHAR}
         </set>
         where id=#{id,jdbcType=INTEGER}
     </update>
+    <update id="updateLogistic" parameterType="com.movision.mybatis.orders.entity.Orders">
+        update yw_orders
+        <set>
+            <if test="logisticsid != null">
+                logisticsid = #{logisticsid,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id=#{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateRealtion" parameterType="com.movision.mybatis.logidticsRelation.entity.LogidticsRelation">
+        update yw_logidtics_relation
+        <set>
+            <if test="logisticsid != null">
+                logisticsid = #{logisticsid,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id=#{id,jdbcType=INTEGER}
+    </update>
+    <select id="querystatus" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select status from yw_orders WHERE id=#{id,jdbcType=INTEGER};
+</select>
     <select id="findAllLogisticsCompany" resultType="com.movision.mybatis.logisticsCompany.entity.LogisticsCompany">
         SELECT id,logisticscompany FROM yw_logistics_company
     </select>
     <insert id="addLogisticsRalation" parameterType="com.movision.mybatis.logidticsRelation.entity.LogidticsRelation">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
         insert into yw_logidtics_relation
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

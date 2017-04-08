@@ -682,31 +682,49 @@ public class OrderFacade {
      */
     public Map<String, Integer> updateOperater(String id, String remark, String logisticsid, String logisticsway) {
         Map<String, Integer> map = new HashMap<>();
-        Orderoperation orderoperation = new Orderoperation();
-        orderoperation.setOrderid(Integer.parseInt(id));
-        orderoperation.setLogisticstatue(0);
-        orderoperation.setOrderoperationtime(new Date());
-        orderoperation.setOrderoperation(ShiroUtil.getBossUser().getUsername());
-        orderoperation.setOrderstatue(0);
-        if (!StringUtil.isEmpty(remark)) {
-            orderoperation.setRemark(remark);
-        }
-        int result = bossOrderService.updateOperater(orderoperation);
-        Orders orders = new Orders();
-        orders.setLogisticsid(logisticsid);
-        orders.setStatus(2);
-        orders.setId(Integer.parseInt(id));
-        int res = bossOrderService.addLogistic(orders);
         LogidticsRelation relation = new LogidticsRelation();
-        int red = 0;
-        if (!logisticsway.equals("上门取货") && !logisticsway.equals("商家自行配送")) {
-            relation.setLogisticsid(logisticsid);
-            relation.setCompanyid(Integer.parseInt(logisticsway));
-            red = bossOrderService.addLogisticsRalation(relation);
+        Integer statu = bossOrderService.querystatus(Integer.parseInt(id));
+        int status = 0;
+        if (statu == 1) {
+            Orderoperation orderoperation = new Orderoperation();
+            orderoperation.setOrderid(Integer.parseInt(id));
+            orderoperation.setLogisticstatue(0);
+            orderoperation.setOrderoperationtime(new Date());
+            orderoperation.setOrderoperation(ShiroUtil.getBossUser().getUsername());
+            orderoperation.setOrderstatue(0);
+            if (!StringUtil.isEmpty(remark)) {
+                orderoperation.setRemark(remark);
+            }
+            int result = bossOrderService.updateOperater(orderoperation);
+            Orders orders = new Orders();
+            orders.setLogisticsid(logisticsid);
+            orders.setStatus(2);
+            orders.setId(Integer.parseInt(id));
+            int res = bossOrderService.addLogistic(orders);
+            int red = 0;
+            if (!logisticsway.equals("上门取货") && !logisticsway.equals("商家自行配送")) {
+                relation.setLogisticsid(logisticsid);
+                relation.setCompanyid(Integer.parseInt(logisticsway));
+                red = bossOrderService.addLogisticsRalation(relation);
+            }
+            map.put("red", red);
+            map.put("res", res);
+            map.put("result", result);
         }
-        map.put("result", result);
-        map.put("res", res);
-        map.put("res", red);
+        if (statu != 1) {
+            Orders ordersw = new Orders();
+            ordersw.setLogisticsid(logisticsid);
+            ordersw.setId(Integer.parseInt(id));
+            int rea = 0;
+            status = bossOrderService.updateLogistic(ordersw);
+            if (!logisticsway.equals("上门取货") && !logisticsway.equals("商家自行配送")) {
+                relation.setLogisticsid(logisticsid);
+                relation.setCompanyid(Integer.parseInt(logisticsway));
+                rea = bossOrderService.addLogisticsRalation(relation);
+            }
+            map.put("rea", rea);
+            map.put("status", status);
+        }
         return map;
     }
 

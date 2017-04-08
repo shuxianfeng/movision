@@ -85,7 +85,13 @@ public interface BossOrdersMapper {
 
     int updateOperation(Orderoperation orderoperation);//修改发货状态
 
+    int querystatus(Integer id);
+
     int addLogistic(Orders orders);//增加快递单号
+
+    int updateRealtion(LogidticsRelation logidticsRelation);
+
+    int updateLogistic(Orders orders);
 
     int addLogisticsRalation(LogidticsRelation logidticsRelation);
 
