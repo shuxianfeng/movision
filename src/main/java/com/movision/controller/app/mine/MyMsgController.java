@@ -84,14 +84,11 @@ public class MyMsgController {
 
     @ApiOperation(value = "获取我的消息中心的赞列表", notes = "获取我的消息中心的赞列表", response = Response.class)
     @RequestMapping(value = {"/get_my_msg_center_zan_list"}, method = RequestMethod.GET)
-    public Response getMsgZanList(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                  @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize
+    public Response getMsgZanList(
     ) {
         Response response = new Response();
-        Paging<Map> paging = new Paging<Map>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<Map> list = msgCenterFacade.getMsgZanList(ShiroUtil.getAppUserID(), paging);
-        paging.result(list);
-        response.setData(paging);
+        Map list = msgCenterFacade.getMsgZanList(ShiroUtil.getAppUserID());
+        response.setData(list);
         return response;
     }
 

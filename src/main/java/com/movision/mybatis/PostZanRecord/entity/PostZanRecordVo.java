@@ -56,4 +56,60 @@ public class PostZanRecordVo {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    private String title;
+    private String postcontent;
+    private Integer activetype;
+    private Integer type;
+    private String coverimg;
+
+    private Integer isactive;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getPostcontent() {
+        return postcontent;
+    }
+
+    public void setPostcontent(String postcontent) {
+        this.postcontent = postcontent;
+    }
+
+    public Integer getActivetype() {
+        return activetype;
+    }
+
+    public void setActivetype(Integer activetype) {
+        this.activetype = activetype;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getCoverimg() {
+        return coverimg;
+    }
+
+    public void setCoverimg(String coverimg) {
+        this.coverimg = coverimg;
+    }
+
+    public Integer getIsactive() {
+        return isactive;
+    }
+
+    public void setIsactive(Integer isactive) {
+        this.isactive = isactive;
+    }
 }

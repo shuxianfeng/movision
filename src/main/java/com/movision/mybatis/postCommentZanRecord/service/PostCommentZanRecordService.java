@@ -1,5 +1,7 @@
 package com.movision.mybatis.postCommentZanRecord.service;
 
+import com.movision.mybatis.comment.entity.Comment;
+import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecord;
 import com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecordVo;
@@ -47,15 +49,25 @@ public class PostCommentZanRecordService {
      * 查询全部
      *
      * @param userid
-     * @param pager
+     * @param
      * @return
      */
-    public List<Map> findAllCommentZanList(Integer userid, Paging<Map> pager) {
+    public List<PostCommentZanRecordVo> findAllCommentZanList(Integer userid) {
         try {
             log.info("查询全部");
-            return recordMapper.findAllCommentZanList(userid, pager.getRowBounds());
+            return recordMapper.findAllCommentZanList(userid);
         } catch (Exception e) {
             log.error("查询全部失败");
+            throw e;
+        }
+    }
+
+    public List<CommentVo> queryComment(Integer commentid) {
+        try {
+            log.info("查询评论");
+            return recordMapper.queryComment(commentid);
+        } catch (Exception e) {
+            log.error("查询评论失败");
             throw e;
         }
     }

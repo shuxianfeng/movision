@@ -1,5 +1,6 @@
 package com.movision.mybatis.postCommentZanRecord.mapper;
 
+import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecord;
 import com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecordVo;
 import org.apache.ibatis.session.RowBounds;
@@ -22,5 +23,7 @@ public interface PostCommentZanRecordMapper {
 
     PostCommentZanRecordVo queryByUserid(Integer userid);
 
-    List<Map> findAllCommentZanList(Integer userid, RowBounds rowBounds);
+    List<PostCommentZanRecordVo> findAllCommentZanList(Integer userid);
+
+    List<CommentVo> queryComment(Integer commentid);
 }

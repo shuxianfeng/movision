@@ -1,5 +1,7 @@
 package com.movision.mybatis.comment.entity;
 
+import com.movision.mybatis.post.entity.Post;
+
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +21,62 @@ public class CommentVo {
     private Integer zansum;
 
     private String phone;
+
+    private String title;
+    private String postcontent;
+    private Integer activetype;
+    private Integer type;
+    private String coverimg;
+
+    private Integer isactive;
+
+    public Integer getIsactive() {
+        return isactive;
+    }
+
+    public void setIsactive(Integer isactive) {
+        this.isactive = isactive;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getPostcontent() {
+        return postcontent;
+    }
+
+    public void setPostcontent(String postcontent) {
+        this.postcontent = postcontent;
+    }
+
+    public Integer getActivetype() {
+        return activetype;
+    }
+
+    public void setActivetype(Integer activetype) {
+        this.activetype = activetype;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getCoverimg() {
+        return coverimg;
+    }
+
+    public void setCoverimg(String coverimg) {
+        this.coverimg = coverimg;
+    }
 
     private String nickname;
 
@@ -172,5 +230,19 @@ public class CommentVo {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public List<Post> post;
+
+    public void setVo(CommentVo vo) {
+        this.vo = vo;
+    }
+
+    public List<Post> getPost() {
+        return post;
+    }
+
+    public void setPost(List<Post> post) {
+        this.post = post;
     }
 }

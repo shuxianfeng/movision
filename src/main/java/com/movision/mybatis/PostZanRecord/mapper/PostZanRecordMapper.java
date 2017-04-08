@@ -2,6 +2,7 @@ package com.movision.mybatis.PostZanRecord.mapper;
 
 import com.movision.mybatis.PostZanRecord.entity.PostZanRecord;
 import com.movision.mybatis.PostZanRecord.entity.PostZanRecordVo;
+import com.movision.mybatis.post.entity.Post;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
 
@@ -23,5 +24,7 @@ public interface PostZanRecordMapper {
 
     PostZanRecordVo queryByUserid(Integer userid);
 
-    List<Map> findAllZanList(Integer userid, RowBounds rowBounds);
+    List<PostZanRecordVo> findAllZanList(Integer userid);
+
+    List<Post> queryPost(Integer postid);
 }

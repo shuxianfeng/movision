@@ -87,10 +87,16 @@
         t.commentid IN (SELECT id FROM yw_post_comment WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0) ORDER BY
         t.intime DESC LIMIT 0,1
     </select>
-    <select id="findAllCommentZanList" parameterType="java.lang.Integer" resultType="java.util.Map">
+    <select id="findAllCommentZanList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecordVo">
         SELECT u.nickname,t.intime,u.photo,t.commentid FROM yw_post_comment_zan_record t LEFT JOIN yw_user u ON
         t.userid=u.id
         WHERE t.commentid IN (SELECT id FROM yw_post_comment WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0) ORDER
         BY t.intime
+    </select>
+    <select id="queryComment" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
+        SELECT t.content FROM yw_post_comment t LEFT JOIN yw_post_comment_zan_record z ON z.commentid=t.id
+        WHERE z.commentid=#{commentid,jdbcType=INTEGER}
     </select>
 </mapper>

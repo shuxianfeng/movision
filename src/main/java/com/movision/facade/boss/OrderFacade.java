@@ -151,12 +151,10 @@ public class OrderFacade {
         Map<String, Object> map = new HashMap<>();
         try {
             request.setCharacterEncoding("utf-8");
-
             if (ordernumber != null) {
                 map.put("ordernumber", ordernumber);
             }
             if (province != null) {
-
                 map.put("province", province);
             }
             if (city != null) {
@@ -193,10 +191,10 @@ public class OrderFacade {
             if (paytype != null) {
                 map.put("paytype", paytype);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return bossOrderService.queryAccuracyConditionByOrder(map, pager);
 
     }
@@ -626,7 +624,7 @@ public class OrderFacade {
         Map<String, Integer> map = new HashMap<>();
         Afterservice afterservice = new Afterservice();
         afterservice.setId(Integer.parseInt(id));
-        afterservice.setAftersalestatus(3);
+        afterservice.setAftersalestatus(7);
         afterservice.setProcessingstatus(1);
         afterservice.setReplacementnumber(replacementnumber);
         if (logisticsway.equals("上门取货")) {
@@ -639,7 +637,7 @@ public class OrderFacade {
         AfterserviceStream afterserviceStream = new AfterserviceStream();
         afterserviceStream.setAfterserviceid(Integer.parseInt(id));
         afterserviceStream.setProcessingstatus(1);
-        afterserviceStream.setAftersalestatus(3);
+        afterserviceStream.setAftersalestatus(7);
         afterserviceStream.setOrderid(Integer.parseInt(orderid));
         afterserviceStream.setRemark(remark);
         afterserviceStream.setProcessingpeople(ShiroUtil.getBossUser().getUsername());

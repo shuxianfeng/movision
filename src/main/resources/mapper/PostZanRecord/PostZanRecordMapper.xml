@@ -84,8 +84,14 @@
  SELECT r.intime,u.nickname FROM yw_post_zan_record r LEFT JOIN yw_user u
     ON r.userid=u.id WHERE r.postid IN (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} and isdel=0)
     </select>
-    <select id="findAllZanList" parameterType="java.lang.Integer" resultType="java.util.Map">
+    <select id="findAllZanList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.PostZanRecord.entity.PostZanRecordVo">
          SELECT r.intime,u.nickname,u.photo,r.postid FROM yw_post_zan_record r LEFT JOIN yw_user u
     ON r.userid=u.id WHERE r.postid IN (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} and isdel=0) ORDER BY r.intime DESC
+    </select>
+    <select id="queryPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
+
+        SELECT p.title,p.postcontent,p.activetype,p.type,p.coverimg,p.isactive,p.id FROM yw_post p
+        WHERE p.id=#{postid,jdbcType=INTEGER}
     </select>
 </mapper>
