@@ -1,6 +1,9 @@
 package com.movision.mybatis.PostZanRecord.entity;
 
+import com.movision.mybatis.post.entity.Post;
+
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author zhanglei
@@ -8,6 +11,15 @@ import java.util.Date;
  */
 public class PostZanRecordVo {
     private Integer id;
+    private Integer ctype;
+
+    public Integer getCtype() {
+        return ctype;
+    }
+
+    public void setCtype(Integer ctype) {
+        this.ctype = ctype;
+    }
 
     private Integer userid;
 
@@ -111,5 +123,15 @@ public class PostZanRecordVo {
 
     public void setIsactive(Integer isactive) {
         this.isactive = isactive;
+    }
+
+    public List<Post> posts;
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 }

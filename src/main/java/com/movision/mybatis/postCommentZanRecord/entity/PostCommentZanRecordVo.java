@@ -1,6 +1,10 @@
 package com.movision.mybatis.postCommentZanRecord.entity;
 
+import com.movision.mybatis.comment.entity.Comment;
+import com.movision.mybatis.comment.entity.CommentVo;
+
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author zhanglei
@@ -8,6 +12,16 @@ import java.util.Date;
  */
 public class PostCommentZanRecordVo {
     private Integer id;
+
+    public Integer getCtype() {
+        return ctype;
+    }
+
+    public void setCtype(Integer ctype) {
+        this.ctype = ctype;
+    }
+
+    private Integer ctype;
 
     private Integer userid;
 
@@ -132,5 +146,15 @@ public class PostCommentZanRecordVo {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public List<CommentVo> comment;
+
+    public List<CommentVo> getComment() {
+        return comment;
+    }
+
+    public void setComment(List<CommentVo> comment) {
+        this.comment = comment;
     }
 }

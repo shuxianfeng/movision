@@ -294,6 +294,16 @@ public class CommentService {
         }
     }
 
+    public List<CommentVo> queryPidComment(Integer pid) {
+        try {
+            log.info("查询父评论");
+            return commentMapper.queryPidComment(pid);
+        } catch (Exception e) {
+            log.error("查询父评论失败");
+            throw e;
+        }
+    }
+
     /**
      * 查询用户评论帖子的评论列表
      *

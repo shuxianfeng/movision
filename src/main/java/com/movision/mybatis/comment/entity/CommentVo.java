@@ -1,15 +1,16 @@
 package com.movision.mybatis.comment.entity;
 
 import com.movision.mybatis.post.entity.Post;
+import com.movision.utils.L;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class CommentVo {
     private Integer id;
 
     private Integer userid;
-
     private Integer pid;
 
     private  Integer postid;
@@ -23,12 +24,46 @@ public class CommentVo {
     private String phone;
 
     private String title;
+
     private String postcontent;
+
     private Integer activetype;
+
     private Integer type;
+
     private String coverimg;
 
     private Integer isactive;
+
+    private String nickname;
+
+    private Integer level;//用户等级：0 普通用户 >=1为大V
+
+    private String photo;
+
+    private String isdel;
+
+    private Integer iscontribute;//是否为特邀嘉宾的评论：0否 1是
+
+    private Integer status;//审核状态：0待审核 1审核通过 2审核不通过（iscontribute为1时不为空）
+
+    private Integer isZan;//该用户是否已赞该帖子/活动 0 否 1 是
+
+    private List<CommentVo> soncomment;
+
+    private CommentVo vo;
+
+    public List<Post> post;
+
+    public List<CommentVo> commentVos;
+
+    public List<Post> getPost() {
+        return post;
+    }
+
+    public void setPost(List<Post> post) {
+        this.post = post;
+    }
 
     public Integer getIsactive() {
         return isactive;
@@ -77,24 +112,6 @@ public class CommentVo {
     public void setCoverimg(String coverimg) {
         this.coverimg = coverimg;
     }
-
-    private String nickname;
-
-    private Integer level;//用户等级：0 普通用户 >=1为大V
-
-    private String photo;
-
-    private String isdel;
-
-    private Integer iscontribute;//是否为特邀嘉宾的评论：0否 1是
-
-    private Integer status;//审核状态：0待审核 1审核通过 2审核不通过（iscontribute为1时不为空）
-
-    private Integer isZan;//该用户是否已赞该帖子/活动 0 否 1 是
-
-    private List<CommentVo> soncomment;
-
-    private CommentVo vo;
 
     public List<CommentVo> getSoncomment() {
         return soncomment;
@@ -232,17 +249,16 @@ public class CommentVo {
         this.level = level;
     }
 
-    public List<Post> post;
-
     public void setVo(CommentVo vo) {
         this.vo = vo;
     }
 
-    public List<Post> getPost() {
-        return post;
+
+    public List<CommentVo> getCommentVos() {
+        return commentVos;
     }
 
-    public void setPost(List<Post> post) {
-        this.post = post;
+    public void setCommentVos(List<CommentVo> commentVos) {
+        this.commentVos = commentVos;
     }
 }

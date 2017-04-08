@@ -511,11 +511,11 @@ public class OrderFacade {
         afterservice.setId(Integer.parseInt(id));
         if (processingstatus == 1 && refundamount != null) {
             afterservice.setProcessingstatus(1);
-            afterservice.setAftersalestatus(4);
+            afterservice.setAftersalestatus(6);
         }
         if (processingstatus == 1 && refundamount == null) {
             afterservice.setProcessingstatus(1);
-            afterservice.setAftersalestatus(3);
+            afterservice.setAftersalestatus(6);
         }
         if (processingstatus == 2) {
             afterservice.setProcessingstatus(1);

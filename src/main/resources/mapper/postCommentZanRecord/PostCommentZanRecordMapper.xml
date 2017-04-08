@@ -96,7 +96,7 @@
     </select>
     <select id="queryComment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
-        SELECT t.content FROM yw_post_comment t LEFT JOIN yw_post_comment_zan_record z ON z.commentid=t.id
-        WHERE z.commentid=#{commentid,jdbcType=INTEGER}
+        SELECT t.content FROM yw_post_comment t
+        WHERE t.id=#{commentid,jdbcType=INTEGER}
     </select>
 </mapper>

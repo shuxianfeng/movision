@@ -2,6 +2,7 @@ package com.movision.mybatis.comment.mapper;
 
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
@@ -64,4 +65,6 @@ public interface CommentMapper {
     CommentVo queryCommentByUserid(Integer userid);//根据userid查询评论
 
     List<CommentVo> findAllQueryComment(Integer userid, RowBounds rowBounds);
+
+    List<CommentVo> queryPidComment(Integer pid);
 }

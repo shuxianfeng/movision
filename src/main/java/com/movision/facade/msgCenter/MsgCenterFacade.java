@@ -113,9 +113,15 @@ public class MsgCenterFacade {
         List<CommentVo> comments = commentService.findAllQueryComment(userid, pager);
         if (comments != null) {
             for (int i = 0; i < comments.size(); i++) {
-                Integer postid = comments.get(i).getPostid();
-                List<Post> post = postZanRecordService.queryPost(postid);
-                comments.get(i).setPost(post);
+                Integer pid = comments.get(i).getPid();
+                if (pid == null) {
+                    Integer postid = comments.get(i).getPostid();
+                    List<Post> post = postZanRecordService.queryPost(postid);
+                    comments.get(i).setPost(post);
+                } else if (pid != null) {
+                    List<CommentVo> commentVos = commentService.queryPidComment(pid);
+                    comments.get(i).setCommentVos(commentVos);
+                }
             }
         }
         return comments;
@@ -149,12 +155,14 @@ public class MsgCenterFacade {
      */
     public Map getMsgZanList(Integer userid) {
         List<PostCommentZanRecordVo> postCommentZanRecords = postCommentZanRecordService.findAllCommentZanList(userid);
+        int type = 0;
         Map map = new HashedMap();
         if (postCommentZanRecords != null) {
             for (int i = 0; i < postCommentZanRecords.size(); i++) {
                 Integer commentid = postCommentZanRecords.get(i).getCommentid();
                 List<CommentVo> commentVo = postCommentZanRecordService.queryComment(commentid);
-                map.put("commentVo", commentVo);
+                postCommentZanRecords.get(i).setComment(commentVo);
+                postCommentZanRecords.get(i).setCtype(1);
             }
         }
         List<PostZanRecordVo> postZanRecordVos = postZanRecordService.findAllZanList(userid);
@@ -162,7 +170,8 @@ public class MsgCenterFacade {
             for (int i = 0; i < postZanRecordVos.size(); i++) {
                 Integer postid = postZanRecordVos.get(i).getPostid();
                 List<Post> post = postZanRecordService.queryPost(postid);
-                map.put("post", post);
+                postZanRecordVos.get(i).setPosts(post);
+                postZanRecordVos.get(i).setCtype(2);
             }
         }
         map.put("postCommentZanRecords", postCommentZanRecords);
