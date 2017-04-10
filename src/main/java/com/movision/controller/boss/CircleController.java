@@ -197,9 +197,9 @@ public class CircleController {
                                  @ApiParam(value = "圈子简介") @RequestParam String introduction,
                                  @ApiParam(value = "圈子首页方形图") @RequestParam String maylikeimg,
                                  @ApiParam(value = "发帖权限") @RequestParam(required = false) String permission,
-                                 @ApiParam(value = "登录用户") @RequestParam String loginuser) {
+                                 @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.updateCircle(id, name, category, userid, circleadmin, photo, introduction, maylikeimg, permission, loginuser);
+        Map map = circleFacade.updateCircle(id, name, category, userid, circleadmin, photo, introduction, maylikeimg, permission, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -412,9 +412,10 @@ public class CircleController {
                                            @ApiParam(value = "圈子类型") @RequestParam(required = false) String type,
                                            @ApiParam(value = "圈子状态：0 待审核 1 审核通过 2 审核不通过") @RequestParam(required = false) String status,
                                            @ApiParam(value = "圈子创建开始时间") @RequestParam(required = false) String begintime,
-                                           @ApiParam(value = "圈子创建结束时间") @RequestParam(required = false) String endtime) {
+                                           @ApiParam(value = "圈子创建结束时间") @RequestParam(required = false) String endtime,
+                                           @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        List<CircleIndexList> list = circleFacade.queryCircleByCondition(pai, circleid, circleman, type, status, begintime, endtime);
+        Map list = circleFacade.queryCircleByCondition(pai, circleid, circleman, type, status, begintime, endtime, loginid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

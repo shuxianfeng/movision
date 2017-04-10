@@ -237,7 +237,9 @@ public class commonalityFacade {
                 map.put("resault", -1);
                 return map;
             }
-        } else if (i.getIssuper().equals(1) || i.getCommon().equals(1) || operation.equals(JurisdictionConstants.JURISDICTION_TYPE.commentAudit.getCode())) {//操作权限为最高权限,可以审核
+        } else if (i.getIssuper().equals(1) || i.getCommon().equals(1) ||
+                operation.equals(JurisdictionConstants.JURISDICTION_TYPE.commentAudit.getCode()) ||
+                (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.update.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()))) {//操作权限为最高权限,可以审核,可以修改圈子
             map.put("resault", 1);
             return map;
         } else {
