@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -63,6 +64,22 @@ public class AppPostController {
             response.setMessage("查询成功");
         }
         response.setData(active);
+        return response;
+    }
+
+    @ApiOperation(value = "往期精选右上角点击选择的日期枚举", notes = "列出所有有内容的精选日期", response = Response.class)
+    @RequestMapping(value = "queryDateSelect", method = RequestMethod.POST)
+    public Response queryDateSelect(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                    @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "15") String pageSize) {
+        Response response = new Response();
+
+        Paging<Date> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<Date> dateList = facadePost.queryDateSelect(pager);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(dateList);
         return response;
     }
 

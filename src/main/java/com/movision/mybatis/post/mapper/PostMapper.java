@@ -9,6 +9,7 @@ import com.movision.mybatis.video.entity.Video;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -77,6 +78,8 @@ public interface PostMapper {
     ActiveVo queryNoticeActive(Map<String, Object> parammap);
 
     List<ActiveVo> queryFourHotActive();
+
+    List<Date> findAllDateSelect(RowBounds rowBounds);
 
     int queryPostByCircleid(int id);
 

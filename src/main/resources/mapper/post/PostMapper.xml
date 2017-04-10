@@ -322,6 +322,11 @@
         SELECT * FROM yw_post WHERE isactive='1' ORDER BY intime DESC limit 0,4
     </select>
 
+    <!--查询往期精选右上角选择的日期枚举-->
+    <select id="findAllDateSelect" resultType="java.util.Date">
+        SELECT DISTINCT essencedate FROM yw_post WHERE isdel = '0' AND (essencedate != 'NULL' AND essencedate != '') ORDER BY essencedate
+    </select>
+
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_post

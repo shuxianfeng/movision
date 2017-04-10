@@ -177,6 +177,16 @@ public class PostService {
         }
     }
 
+    public List<Date> queryDateSelect(Paging<Date> pager) {
+        try {
+            log.info("查询往期精选右上角点击选择日期枚举");
+            return postMapper.findAllDateSelect(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询往期精选右上角点击选择日期枚举失败");
+            throw e;
+        }
+    }
+
     //查询某个帖子所属圈子
     public int queryPostByCircleid(String postid) {
         try {

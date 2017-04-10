@@ -125,6 +125,10 @@ public class FacadePost {
         return active;
     }
 
+    public List<Date> queryDateSelect(Paging<Date> pager) {
+        return postService.queryDateSelect(pager);
+    }
+
     public Map<String, Object> queryPastPostDetail(String date) {
         Map<String, Object> parammap = new HashMap();
         Map<String, Object> map = new HashMap();
