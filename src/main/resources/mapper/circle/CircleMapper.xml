@@ -599,7 +599,7 @@
         u.id as circlemanid,u.nickname as nickname,ue.username as username
         FROM yw_circle AS c LEFT JOIN yw_user AS u ON u.phone=c.phone
         LEFT JOIN yw_admin_user ue ON c.userid=ue.id
-        WHERE c.id=#{circleid,jdbcType=INTEGER} AND c.status=1 AND c.isdel=0
+        WHERE c.id=#{circleid,jdbcType=INTEGER}
     </select>
 
     <select id="queryCircleByOrderidList" resultType="java.lang.Integer">
