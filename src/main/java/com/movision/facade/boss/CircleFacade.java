@@ -57,14 +57,15 @@ public class CircleFacade {
 
     /**
      * 圈子首页列表查询
-     *
+     *List<CircleIndexList>
      * @return
      */
-    public List<CircleIndexList> queryCircleByList(String loginid) {
+    public Map queryCircleByList(String loginid) {
         Map tm = new HashedMap();
         Integer id = Integer.parseInt(loginid);
+        Map map1 = new HashMap();
         Map res = commonalityFacade.verifyUserByQueryMethod(id, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circle.getCode(), null);
-        if (res.get("resault").equals(1) || res.get("resault") == id) {
+        if (res.get("resault").equals(1)) {
             tm.put("categoryid", null);
             List<CircleIndexList> circlenum = circleService.queryListByCircleCategory(tm);//查询圈子所有分类
             for (int i = 0; i < circlenum.size(); i++) {
@@ -72,9 +73,9 @@ public class CircleFacade {
                 Map map = new HashedMap();
                 map.put("type", circlenum.get(i).getCategory());
                 List<CircleVo> listt = new ArrayList<>();
-                if (res.get("resault").equals(1)) {
+                if (res.get("resault").equals(2)) {
                     listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
-                } else if (res.get("resault") == id) {
+                } else if (res.get("resault").equals(1)) {
                     map.put("userid", loginid);
                     listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
                 }
@@ -139,9 +140,12 @@ public class CircleFacade {
                 }
                 circlenum.get(i).setClassify(circleVoslist);
             }
-            return circlenum;
+            map1.put("resault", circlenum);
+            return map1;
         } else {
-            return null;
+            map1.put("resault", -1);
+            map1.put("message", "权限不足");
+            return map1;
         }
     }
 

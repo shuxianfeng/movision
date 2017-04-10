@@ -47,14 +47,14 @@ public class CircleController {
 
     /**
      * 后台管理-查询圈子列表
-     *
+     *List<CircleIndexList>
      * @return
      */
     @ApiOperation(value = "查询圈子列表", notes = "用于查询圈子列表接口", response = Response.class)
     @RequestMapping(value = "/circle_list", method = RequestMethod.POST)
     public Response circleByList(@ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        List<CircleIndexList> list = circleFacade.queryCircleByList(loginid);
+        Map list = circleFacade.queryCircleByList(loginid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
