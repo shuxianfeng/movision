@@ -333,7 +333,9 @@ public class CircleFacade {
         Map<String, CircleDetails> map = new HashedMap();
         CircleDetails circleDetails = circleService.queryCircleByShow(Integer.parseInt(circleid));//查询出圈子信息
         List<User> list = userService.queryCircleManagerList(Integer.parseInt(circleid));//查询出圈子管理员列表
-        circleDetails.setAdmin(list);
+        if (list != null) {
+            circleDetails.setAdmin(list);
+        }
         List<Integer> ords = circleService.queryCircleByOrderidList();//查询圈子推荐发现页排序
         List<Integer> h = new ArrayList<>();
         for (int k = 1; k < 10; k++) {
