@@ -87,8 +87,6 @@ public class FacadeComments {
                 vo.setIsdel("0");
                 vo.setIscontribute(0);
                 type = commentService.insertComment(vo);//添加评论
-                //更新用户最后操作时间和帖子评论总次数
-                postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子表的评论次数字段
             } else {//表示是其他评论的子评论，不算评论次数
                 CommentVo vo = new CommentVo();
                 vo.setContent(content);
@@ -101,6 +99,8 @@ public class FacadeComments {
                 vo.setPid(Integer.parseInt(fuid));
                 type = commentService.insertComment(vo);//添加评论
             }
+            //更新用户最后操作时间和帖子评论总次数
+            postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子表的评论次数字段
             return type;
         }
     }
