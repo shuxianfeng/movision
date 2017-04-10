@@ -65,7 +65,7 @@ public class CircleFacade {
         Integer id = Integer.parseInt(loginid);
         Map map1 = new HashMap();
         Map res = commonalityFacade.verifyUserByQueryMethod(id, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circle.getCode(), null);
-        if (res.get("resault").equals(1)) {
+        if (res.get("resault").equals(1) || res.get("resault").equals(2)) {
             tm.put("categoryid", null);
             List<CircleIndexList> circlenum = circleService.queryListByCircleCategory(tm);//查询圈子所有分类
             for (int i = 0; i < circlenum.size(); i++) {
