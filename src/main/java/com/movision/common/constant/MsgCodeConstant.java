@@ -330,4 +330,13 @@ public interface MsgCodeConstant {
 	 */
 	int send_system_msg_fail = 30101;
 
+	/**
+	 * 新增搜索帖子记录失败
+	 */
+	int add_search_post_record_fail = 30102;
+
+	/**
+	 * 新增搜索商品记录失败
+	 */
+	int add_search_good_record_fail = 30102;
 }

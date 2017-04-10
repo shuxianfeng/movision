@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.searchPostRecord.mapper.SearchPostRecordMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.searchPostRecord.entity.SearchPostRecord">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="keyword" property="keyword" jdbcType="VARCHAR"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, userid, keyword, intime
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_search_post_record
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from t_search_post_record
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.searchPostRecord.entity.SearchPostRecord">
+        insert into t_search_post_record (id, userid, keyword,
+        intime)
+        values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{keyword,jdbcType=VARCHAR},
+        #{intime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.movision.mybatis.searchPostRecord.entity.SearchPostRecord">
+        insert into t_search_post_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="keyword != null">
+                keyword,
+            </if>
+            intime,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="keyword != null">
+                #{keyword,jdbcType=VARCHAR},
+            </if>
+            now(),
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.movision.mybatis.searchPostRecord.entity.SearchPostRecord">
+        update t_search_post_record
+        <set>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="keyword != null">
+                keyword = #{keyword,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.searchPostRecord.entity.SearchPostRecord">
+        update t_search_post_record
+        set userid = #{userid,jdbcType=INTEGER},
+        keyword = #{keyword,jdbcType=VARCHAR},
+        intime = #{intime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectPostSearchHotWord" resultType="java.util.HashMap">
+        SELECT keyword, COUNT(1) AS COUNT
+        FROM t_search_post_record GROUP BY keyword
+        ORDER BY COUNT DESC
+    </select>
+
+    <select id="selectHistoryRecord" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+        select keyword
+        FROM t_search_post_record
+        WHERE userid=#{userid}
+        GROUP BY keyword
+        order BY intime DESC
+    </select>
+</mapper>

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.Map;
 
-
 /**
  * @Author shuxf
  * @Date 2017/1/17 15:25
@@ -81,6 +80,15 @@ public class AppIndexController {
             log.error("searchProducts error >>>", e);
         }
 
+        return response;
+    }
+
+    @RequestMapping(value = {"get_post_hot_search_word_and_history"}, method = RequestMethod.GET)
+    @ApiOperation(value = "查询帖子热门搜索词和搜索历史记录", notes = "查询热门搜索词和搜索历史记录", response = Response.class)
+    public Response getHotSearchWordAndHistory() {
+
+        Response response = new Response();
+        response.setData(postSearchService.getHotwordAndHistory());
         return response;
     }
 

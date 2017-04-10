@@ -240,5 +240,14 @@ public class AppGoodsController {
         return response;
     }
 
+    @RequestMapping(value = {"get_goods_hot_search_word_and_history"}, method = RequestMethod.GET)
+    @ApiOperation(value = "查询商品热门搜索词和搜索历史记录", notes = "查询商品热门搜索词和搜索历史记录", response = Response.class)
+    public Response getHotSearchWordAndHistory() {
+
+        Response response = new Response();
+        response.setData(goodsSearchService.getHotwordAndHistory());
+        return response;
+    }
+
 
 }

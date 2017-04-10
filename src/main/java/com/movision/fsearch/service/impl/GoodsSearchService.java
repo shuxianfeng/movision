@@ -1,5 +1,6 @@
 package com.movision.fsearch.service.impl;
 
+import com.movision.common.util.ShiroUtil;
 import com.movision.fsearch.pojo.ProductGroup;
 import com.movision.fsearch.pojo.spec.GoodsSearchSpec;
 import com.movision.fsearch.service.IGoodsSearchService;
@@ -8,7 +9,10 @@ import com.movision.fsearch.service.Searcher;
 import com.movision.fsearch.service.exception.ServiceException;
 import com.movision.fsearch.utils.*;
 import com.movision.mybatis.goods.entity.GoodsSearchEntity;
+import com.movision.mybatis.searchGoodsRecord.entity.SearchGoodsRecord;
+import com.movision.mybatis.searchGoodsRecord.service.SearchGoodsRecordService;
 import com.movision.utils.DateUtils;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +27,9 @@ public class GoodsSearchService implements IGoodsSearchService {
 
     @Autowired
     private IWordService wordService;
+
+    @Autowired
+    private SearchGoodsRecordService searchGoodsRecordService;
 
     @Override
     public Map<String, Object> search(GoodsSearchSpec spec)
@@ -39,6 +46,12 @@ public class GoodsSearchService implements IGoodsSearchService {
         if (brandid > 0) {
             Searcher.wrapEqualQuery(query, "brandid", brandid);
         }
+
+        //如果搜索的关键词不为空，则入库保存
+        if (StringUtil.isNotBlank(spec.getQ())) {
+            searchGoodsRecordService.add(spec.getQ());
+        }
+
         // 向query中添加新的键值对：key=_s
         spec.setQ(StringUtil.emptyToNull(spec.getQ()));
         if (spec.getQ() != null) {
@@ -172,6 +185,22 @@ public class GoodsSearchService implements IGoodsSearchService {
 
         sortFields.add(sortField);
         return sortFields;
+    }
+
+    /**
+     * 获取商品热门搜索词和搜索历史记录
+     *
+     * @return
+     */
+    public Map<String, Object> getHotwordAndHistory() {
+
+        Map map = new HashedMap();
+
+        map.put("hotWordList", searchGoodsRecordService.selectPostSearchHotWord());
+
+        map.put("historyList", searchGoodsRecordService.selectHistoryRecord(ShiroUtil.getAppUserID()));
+
+        return map;
     }
 
 }
