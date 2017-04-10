@@ -79,6 +79,7 @@ public class FacadePost {
         }
         if (vo.getUserid() != -1) {//发帖人为普通用户时查询发帖人昵称和手机号
             User user = userService.queryUserB(vo.getUserid());
+            vo.setUserid(user.getId());
             vo.setNickname(user.getNickname());
             vo.setPhone(user.getPhone());
         }

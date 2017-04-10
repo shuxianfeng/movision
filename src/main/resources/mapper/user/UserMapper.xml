@@ -439,7 +439,7 @@
     </select>
 
     <select id="findAllUser" resultType="com.movision.mybatis.user.entity.User" parameterType="java.lang.Integer">
-        SELECT u.nickname,u.phone FROM yw_user u WHERE u.id=#{id,jdbcType=INTEGER}
+        SELECT u.id,u.nickname,u.phone FROM yw_user u WHERE u.id=#{id,jdbcType=INTEGER}
     </select>
     <select id="findAlllikeQueryPostByNickname" resultType="com.movision.mybatis.user.entity.UserLike"
             parameterType="java.lang.String">
