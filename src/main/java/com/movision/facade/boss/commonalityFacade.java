@@ -47,17 +47,10 @@ public class commonalityFacade {
                 if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//帖子
                     ma.put("userid", userid);
                     //根据操作类型id查询此操作是否属于该用户范畴
-                    List<Integer> list = bossUserService.queryPostByUserid(ma);
-                    if (list.size() > 0) {
-                        for (int t = 0; t < list.size(); t++) {
-                            if (list.get(t).equals(kindid)) {
-                                map.put("resault", 1);
-                                return map;
-                            } else if (list.size() == t) {//代表最后一条也不匹配
-                                map.put("resault", -1);
-                                return map;
-                            }
-                        }
+                    Integer list = bossUserService.queryPostByUserid(ma);
+                    if (list > 0) {
+                        map.put("resault", 1);
+                        return map;
                     } else {
                         map.put("resault", -1);
                         map.put("message", "权限不足");
@@ -86,17 +79,16 @@ public class commonalityFacade {
                 Map ma = new HashedMap();
                 if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//帖子
                     ma.put("userid", userid);
+                    ma.put("kindid", kindid);
                     //根据操作类型id查询此操作是否属于该用户范畴
-                    List<Integer> list = bossUserService.queryPostByUserid(ma);
-                    for (int t = 0; t < list.size(); t++) {
-                        if (list.get(t) == kindid) {
+                    Integer list = bossUserService.queryPostByUserid(ma);
+                    if (list > 0) {
                             map.put("resault", 1);
                             return map;
-                        } else if (list.size() == t) {//代表最后一条也不匹配
+                    } else {//代表最后一条也不匹配
                             map.put("resault", -1);
                             return map;
                         }
-                    }
                 } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//帖子评论
                     ma.put("kindid", kindid);
                     //查询出是否属于圈主的帖子评论
@@ -135,17 +127,10 @@ public class commonalityFacade {
                 if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//帖子
                     ma.put("userid", userid);
                     //根据操作类型id查询此操作是否属于该用户范畴
-                    List<Integer> list = bossUserService.queryPostByUserid(ma);
-                    if (list.size() > 0) {
-                        for (int t = 0; t < list.size(); t++) {
-                            if (list.get(t).equals(kindid)) {
-                                map.put("resault", 1);
-                                return map;
-                            } else if (list.size() == t) {//代表最后一条也不匹配
-                                map.put("resault", -1);
-                                return map;
-                            }
-                        }
+                    Integer list = bossUserService.queryPostByUserid(ma);
+                    if (list > 0) {
+                        map.put("resault", 1);
+                        return map;
                     } else {
                         map.put("resault", -1);
                         map.put("message", "权限不足");
@@ -175,16 +160,14 @@ public class commonalityFacade {
                 if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//帖子
                     ma.put("userid", userid);
                     //根据操作类型id查询此操作是否属于该用户范畴
-                    List<Integer> list = bossUserService.queryPostByUserid(ma);
-                    for (int t = 0; t < list.size(); t++) {
-                        if (list.get(t) == kindid) {
+                    Integer list = bossUserService.queryPostByUserid(ma);
+                    if (list > 0) {
                             map.put("resault", 1);
                             return map;
-                        } else if (list.size() == t) {//代表最后一条也不匹配
+                    } else {//代表最后一条也不匹配
                             map.put("resault", -1);
                             return map;
                         }
-                    }
                 } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//帖子评论
                     ma.put("kindid", kindid);
                     //查询出是否属于圈主的帖子评论

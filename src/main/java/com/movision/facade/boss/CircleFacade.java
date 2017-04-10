@@ -693,7 +693,14 @@ public class CircleFacade {
                 /////////////////////分类列表////////////////////////
                 circlenum = circleService.queryListByCircleCategory(tm);//查询指定圈子分类
                 for (int f = 0; f < circlenum.size(); f++) {
-                    List<CircleVo> listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
+                    //List<CircleVo> listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
+                    List<CircleVo> listt = new ArrayList<>();
+                    if (res.get("resault").equals(2)) {
+                        listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
+                    } else if (res.get("resault").equals(1)) {
+                        map.put("userid", loginid);
+                        listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
+                    }
                     List<CircleVo> circleVoslist = new ArrayList<>();
                     List<User> adminlist = new ArrayList();//用于存储类型中所有圈子的管理员
                     List username = new ArrayList();//用于存放类型中所有圈主

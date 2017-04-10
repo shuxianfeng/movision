@@ -257,7 +257,7 @@ public class BossUserService {
      * @param ma
      * @return
      */
-    public List<Integer> queryPostByUserid(Map ma) {
+    public Integer queryPostByUserid(Map ma) {
         try {
             log.info("查询用户操作帖子范畴");
             return bossUserMapper.queryPostByUserid(ma);

@@ -52,7 +52,7 @@ public interface BossUserMapper {
 
     BossUser queryUserByAdministrator(Integer userid);
 
-    List<Integer> queryPostByUserid(Map map);
+    Integer queryPostByUserid(Map map);
 
     Integer queryCommentByUserid(Map map);
 

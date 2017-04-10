@@ -59,6 +59,16 @@ public class PostTo {
 
     private String iscontribute;//是否投稿
 
+    private Date oprtime;//用户最后参与时间
+
+    public Date getOprtime() {
+        return oprtime;
+    }
+
+    public void setOprtime(Date oprtime) {
+        this.oprtime = oprtime;
+    }
+
     public String getIscontribute() {
         return iscontribute;
     }
