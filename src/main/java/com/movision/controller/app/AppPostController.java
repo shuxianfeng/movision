@@ -75,11 +75,12 @@ public class AppPostController {
 
         Paging<Date> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List<Date> dateList = facadePost.queryDateSelect(pager);
+        pager.result(dateList);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(dateList);
+        response.setData(pager);
         return response;
     }
 
