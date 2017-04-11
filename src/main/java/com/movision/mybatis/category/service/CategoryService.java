@@ -2,6 +2,7 @@ package com.movision.mybatis.category.service;
 
 import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.category.mapper.CategoryMapper;
+import com.movision.utils.L;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +26,29 @@ public class CategoryService {
      *
      * @return
      */
-    public List<Category> queryCircleTypeList() {
+    public List<Category> queryCircleTypeList(Integer userid) {
         try {
             logger.info("查询圈子分类列表");
-            return categoryMapper.queryCircleTypeList();
+            return categoryMapper.queryCircleTypeList(userid);
         } catch (Exception e) {
             logger.error("查询圈子分类列表异常");
+            throw e;
+        }
+    }
+
+
+    /**
+     * 根据用户id查询所属圈子分类列表
+     *
+     * @param userid
+     * @return
+     */
+    public List<Category> queryCircleTytpeListByUserid(Integer userid) {
+        try {
+            logger.info("根据用户id查询所属圈子分类列表");
+            return categoryMapper.queryCircleTytpeListByUserid(userid);
+        } catch (Exception e) {
+            logger.error("根据用户id查询所属圈子分类列表异常");
             throw e;
         }
     }

@@ -22,7 +22,9 @@ public interface CategoryMapper {
 
     List<Category> queryGoodsCategory();
 
-    List<Category> queryCircleTypeList();
+    List<Category> queryCircleTypeList(Integer userid);
+
+    List<Category> queryCircleTytpeListByUserid(Integer userid);
 
     int addCircleType(Map map);
 

@@ -451,9 +451,18 @@ public class CircleFacade {
      *
      * @return
      */
-    public List<Category> queryCircleTypeList() {
-        List<Category> list = categoryService.queryCircleTypeList();
-        return list;
+    public List<Category> queryCircleTypeList(String loginid) {
+        Integer loid = Integer.parseInt(loginid);
+        Map res = commonalityFacade.verifyUserByQueryMethod(loid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circle.getCode(), null);
+        if (res.get("resault").equals(1)) {
+            List<Category> list = categoryService.queryCircleTytpeListByUserid(loid);
+            return list;
+        } else if (res.get("resault").equals(2)) {
+            List<Category> list = categoryService.queryCircleTypeList(null);
+            return list;
+        } else {
+            return null;
+        }
     }
 
     /**

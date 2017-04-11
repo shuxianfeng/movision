@@ -112,10 +112,20 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-    <select id="queryCircleTypeList" resultType="com.movision.mybatis.category.entity.Category">
+    <select id="queryCircleTypeList" resultType="com.movision.mybatis.category.entity.Category"
+            parameterType="java.lang.Integer">
         SELECT id,categoryname FROM yw_circle_category
+        <if test="userid!=null">
+            WHERE userid=#{userid,jdbcType=INTEGER}
+        </if>
     </select>
 
+    <select id="queryCircleTytpeListByUserid" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.category.entity.Category">
+        SELECT * FROM yw_circle_category WHERE id in(
+        SELECT category FROM yw_circle WHERE phone=(
+        SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER}) GROUP BY category)
+    </select>
     <insert id="addCircleType" parameterType="java.util.Map">
         insert into yw_circle_category
         <trim prefix="(" suffix=")" suffixOverrides=",">

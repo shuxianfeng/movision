@@ -78,8 +78,8 @@ public class PostController {
      */
     @ApiOperation(value = "查询圈子分类", notes = "用于查询圈子分类接口", response = Response.class)
     @RequestMapping(value = "query_circle_type_list", method = RequestMethod.POST)
-    public Response queryCircleTypeList() {
-        List<Category> map = circleFacade.queryCircleTypeList();
+    public Response queryCircleTypeList(@ApiParam(value = "登录用户") @RequestParam String loginid) {
+        List<Category> map = circleFacade.queryCircleTypeList(loginid);
         Response response = new Response();
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
