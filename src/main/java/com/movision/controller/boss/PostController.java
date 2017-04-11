@@ -429,10 +429,10 @@ public class PostController {
                             @ApiParam(value = "圈子精选") @RequestParam(required = false) String ishot,//精选池中的帖子圈子精选贴
                             @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,//精选排序
                             @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String time,//精选日期
-                            @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid) {
+                            @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid, @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map<String, Integer> resaut = postFacade.addPost(request, title, subtitle, type, circleid, userid, coverimg, vid, bannerimgurl, postcontent,
-                isessence, ishot, orderid, time, goodsid);
+        Map resaut = postFacade.addPost(request, title, subtitle, type, circleid, userid, coverimg, vid, bannerimgurl, postcontent,
+                isessence, ishot, orderid, time, goodsid, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

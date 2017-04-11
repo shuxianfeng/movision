@@ -60,4 +60,8 @@ public interface BossUserMapper {
 
     Integer querySpeciallyCommentByUserid(Integer id);
 
+    Integer queryCircleIdToCircle(Integer circleid);
+
+    Integer queryCircleManageIdToCircle(Map map);
+
 }

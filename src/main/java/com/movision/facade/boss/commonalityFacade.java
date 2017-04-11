@@ -37,8 +37,21 @@ public class commonalityFacade {
         BossUser i = bossUserService.queryUserByAdministrator(userid);//根据登录用户id查询当前用户有哪些权限
         if (i.getIscircle().equals(JurisdictionConstants.JURISDICTION_TYPE.groupOwner.getCode())) {//圈主
             if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//圈主可以在自己圈子中添加评论
-                map.put("resault", 1);
-                return map;
+                Integer resault = bossUserService.queryCircleIdToCircle(kindid);//判断需要添加的帖子是否在本圈内
+                if (resault != null) {
+                    if (resault.equals(userid)) {
+                        map.put("resault", 1);
+                        return map;
+                    } else {
+                        map.put("resault", -1);
+                        map.put("message", "权限不足");
+                        return map;
+                    }
+                } else {
+                    map.put("resault", -1);
+                    map.put("message", "权限不足");
+                    return map;
+                }
             } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//添加评论
                 map.put("resault", 2);
                 return map;
@@ -91,10 +104,10 @@ public class commonalityFacade {
                         }
                 } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//帖子评论
                     ma.put("kindid", kindid);
-                    //查询出是否属于圈主的帖子评论
+                    //查询出评论发布人
                     Integer list = bossUserService.queryCircleManageCommentByUserid(ma);
                     if (list != null) {
-                        if (list.equals(userid)) {
+                        if (list.equals(userid)) {//判断发布人和登录用户是否是同一人
                             map.put("resault", 1);
                             return map;
                         } else {
@@ -117,8 +130,24 @@ public class commonalityFacade {
             }
         } else if (i.getCirclemanagement().equals(JurisdictionConstants.JURISDICTION_TYPE.groupManage.getCode())) {//圈子管理员
             if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//圈主可以在自己圈子中添加评论
-                map.put("resault", 1);
-                return map;
+                Map map1 = new HashMap();
+                map1.put("userid", userid);
+                map1.put("kindid", kindid);
+                Integer resault = bossUserService.queryCircleManageIdToCircle(map1);//判断需要添加的帖子是否在本圈内
+                if (resault != null) {
+                    if (resault.equals(userid)) {
+                        map.put("resault", 1);
+                        return map;
+                    } else {
+                        map.put("resault", -1);
+                        map.put("message", "权限不足");
+                        return map;
+                    }
+                } else {
+                    map.put("resault", -1);
+                    map.put("message", "权限不足");
+                    return map;
+                }
             } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//添加评论
                 map.put("resault", 2);
                 return map;

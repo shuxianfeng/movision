@@ -660,47 +660,49 @@ public class PostFacade {
      * @return
      */
     @Transactional
-    public Map<String, Integer> addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid,
-                                        String userid, String coverimg, String vid, String bannerimgurl,
-                                        String postcontent, String isessence, String ishot, String orderid, String time, String goodsid) {
+    public Map addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid,
+                       String userid, String coverimg, String vid, String bannerimgurl,
+                       String postcontent, String isessence, String ishot, String orderid, String time, String goodsid, String loginid) {
         PostTo post = new PostTo();
-        Map<String, Integer> map = new HashedMap();
-        if (StringUtil.isNotEmpty(title)) {
-            post.setTitle(title);//帖子标题
-        }
-        if (StringUtil.isNotEmpty(subtitle)) {
-            post.setSubtitle(subtitle);//帖子副标题
-        }
-        if (StringUtil.isNotEmpty(type)) {
-            post.setType(type);//帖子类型
-        }
-        if (StringUtil.isNotEmpty(circleid)) {
-            post.setCircleid(circleid);//圈子id
-        }
-        if (StringUtil.isNotEmpty(bannerimgurl)) {
-            post.setCoverimg(bannerimgurl);//添加帖子封面
-        }
-        post.setIsactive("0");//设置状态为帖子
-        if (StringUtil.isNotEmpty(postcontent)) {
-            //内容转换
-            Map con = jsoupCompressImg.compressImg(request, postcontent);
-            System.out.println(con);
-            if ((int) con.get("code") == 200) {
-                String str = con.get("content").toString();
-                str = str.replace("\\", "");
-                post.setPostcontent(str);//帖子内容
-            } else {
-                logger.error("帖子内容转换异常");
-                post.setPostcontent(postcontent);
+        Map map = new HashedMap();
+        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.add.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(circleid));
+        if (res.get("resault").equals(1)) {
+            if (StringUtil.isNotEmpty(title)) {
+                post.setTitle(title);//帖子标题
             }
-        }
-        post.setIntime(new Date());//插入时间
-        if (StringUtil.isNotEmpty(ishot)) {
-            post.setIshot(ishot);//是否为圈子精选
-        }
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date d = null;
-        if (StringUtil.isNotEmpty(isessence)) {
+            if (StringUtil.isNotEmpty(subtitle)) {
+                post.setSubtitle(subtitle);//帖子副标题
+            }
+            if (StringUtil.isNotEmpty(type)) {
+                post.setType(type);//帖子类型
+            }
+            if (StringUtil.isNotEmpty(circleid)) {
+                post.setCircleid(circleid);//圈子id
+            }
+            if (StringUtil.isNotEmpty(bannerimgurl)) {
+                post.setCoverimg(bannerimgurl);//添加帖子封面
+            }
+            post.setIsactive("0");//设置状态为帖子
+            if (StringUtil.isNotEmpty(postcontent)) {
+                //内容转换
+                Map con = jsoupCompressImg.compressImg(request, postcontent);
+                System.out.println(con);
+                if ((int) con.get("code") == 200) {
+                    String str = con.get("content").toString();
+                    str = str.replace("\\", "");
+                    post.setPostcontent(str);//帖子内容
+                } else {
+                    logger.error("帖子内容转换异常");
+                    post.setPostcontent(postcontent);
+                }
+            }
+            post.setIntime(new Date());//插入时间
+            if (StringUtil.isNotEmpty(ishot)) {
+                post.setIshot(ishot);//是否为圈子精选
+            }
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = null;
+            if (StringUtil.isNotEmpty(isessence)) {
                 if (isessence != "0") {//判断是否为加精
                     post.setIsessence(isessence);//是否为首页精选
                     if (StringUtil.isNotEmpty(orderid)) {
@@ -719,42 +721,47 @@ public class PostFacade {
 
                 }
             }
-        post.setCoverimg(coverimg);//插入图片地址
-        post.setUserid(userid);
-        int result = postService.addPost(post);//添加帖子
-        if (result == 1) {
-            Integer in = 0;
-            Integer pid = post.getId();//获取到刚刚添加的帖子id
-            if (type.equals("1")) {
-                Video vide = new Video();
-                vide.setPostid(pid);
-                vide.setVideourl(vid);
-                vide.setBannerimgurl(bannerimgurl);
-                vide.setIntime(new Date());
-                in = videoService.insertVideoById(vide);//添加视频表
-            } else if (type.equals("2")) {//分享视频贴
-                Video vide = new Video();
-                vide.setPostid(pid);
-                vide.setVideourl(vid);
-                vide.setBannerimgurl(coverimg);//分享视频贴的视频封面是帖子封面
-                vide.setIntime(new Date());
-                in = videoService.insertVideoById(vide);//添加视频表
-            }
-            if (StringUtil.isNotEmpty(goodsid)) {//帖子添加商品
-                String[] lg = goodsid.split(",");//以逗号分隔
-                for (int i = 0; i < lg.length; i++) {
-                    Map addgoods = new HashedMap();
-                    addgoods.put("postid", pid);
-                    addgoods.put("goodsid", lg[i]);
-                    int goods = postService.insertGoods(addgoods);//添加帖子分享的商品
-                    if (goods == 1 && in == 1) {//添加视频和添加帖子同时成功
-                        map.put("result", goods);
+            post.setCoverimg(coverimg);//插入图片地址
+            post.setUserid(userid);
+            int result = postService.addPost(post);//添加帖子
+            if (result == 1) {
+                Integer in = 0;
+                Integer pid = post.getId();//获取到刚刚添加的帖子id
+                if (type.equals("1")) {
+                    Video vide = new Video();
+                    vide.setPostid(pid);
+                    vide.setVideourl(vid);
+                    vide.setBannerimgurl(bannerimgurl);
+                    vide.setIntime(new Date());
+                    in = videoService.insertVideoById(vide);//添加视频表
+                } else if (type.equals("2")) {//分享视频贴
+                    Video vide = new Video();
+                    vide.setPostid(pid);
+                    vide.setVideourl(vid);
+                    vide.setBannerimgurl(coverimg);//分享视频贴的视频封面是帖子封面
+                    vide.setIntime(new Date());
+                    in = videoService.insertVideoById(vide);//添加视频表
+                }
+                if (StringUtil.isNotEmpty(goodsid)) {//帖子添加商品
+                    String[] lg = goodsid.split(",");//以逗号分隔
+                    for (int i = 0; i < lg.length; i++) {
+                        Map addgoods = new HashedMap();
+                        addgoods.put("postid", pid);
+                        addgoods.put("goodsid", lg[i]);
+                        int goods = postService.insertGoods(addgoods);//添加帖子分享的商品
+                        if (goods == 1 && in == 1) {//添加视频和添加帖子同时成功
+                            map.put("result", goods);
+                        }
                     }
                 }
             }
+            map.put("resault", 1);
+            return map;
+        } else {
+            map.put("resault", -1);
+            map.put("massge", "权限不足");
+            return map;
         }
-        return map;
-
     }
 
     /**

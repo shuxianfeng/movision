@@ -252,6 +252,37 @@ public class BossUserService {
     }
 
     /**
+     * 查询要添加的帖子是否属于本圈子
+     * @param circleid
+     * @return
+     */
+    public Integer queryCircleIdToCircle(Integer circleid) {
+        try {
+            log.info("查询要添加的帖子是否属于本圈子");
+            return bossUserMapper.queryCircleIdToCircle(circleid);
+        } catch (Exception e) {
+            log.error("查询要添加的帖子是否属于本圈子异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询是否属于管理员管辖
+     *
+     * @param map
+     * @return
+     */
+    public Integer queryCircleManageIdToCircle(Map map) {
+        try {
+            log.info("查询是否属于管理员管辖");
+            return bossUserMapper.queryCircleManageIdToCircle(map);
+        } catch (Exception e) {
+            log.error("查询是否属于管理员管辖异常");
+            throw e;
+        }
+    }
+
+    /**
      * 查询用户操作帖子范畴
      *
      * @param ma

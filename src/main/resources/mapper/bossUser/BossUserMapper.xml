@@ -314,11 +314,19 @@
 
     <select id="queryCircleManageCommentByUserid" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT id FROM yw_admin_user WHERE phone=(SELECT phone FROM yw_circle WHERE id=(SELECT circleid FROM yw_post
-        WHERE id=(SELECT postid FROM yw_post_comment WHERE id=#{kindid,jdbcType=INTEGER})) AND isdel=0)
-
+        WHERE id=(SELECT postid FROM yw_post_comment WHERE id=#{kindid,jdbcType=INTEGER}) AND isactive=0) AND isdel=0)
     </select>
 
     <select id="querySpeciallyCommentByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT id FROM yw_admin_user WHERE phone=(SELECT phone FROM yw_user WHERE id=(SELECT userid FROM yw_post_comment WHERE id=#{id,jdbcType=INTEGER})) AND contributing=1
+    </select>
+
+    <select id="queryCircleIdToCircle" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT id FROM yw_admin_user WHERE phone=(SELECT phone FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER})
+    </select>
+
+    <select id="queryCircleManageIdToCircle" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT id FROM yw_admin_user WHERE phone in (SELECT phone FROM yw_user WHERE id in (SELECT userid FROM
+        yw_circle_manager WHERE circleid=#{kindid,jdbcType=INTEGER})) AND id=#{userid,jdbcType=INTEGER}
     </select>
 </mapper>

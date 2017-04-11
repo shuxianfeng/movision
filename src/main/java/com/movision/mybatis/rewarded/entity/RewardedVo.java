@@ -8,6 +8,18 @@ import java.util.List;
 public class RewardedVo {
     private Integer id;
     private String photo;
+    private String title;
+    private String postcontent;
+    private Integer activetype;
+    private Integer type;
+    private String coverimg;
+    private Integer isactive;
+    private Integer postid;
+    private Integer userid;
+    private Integer points;
+    private Date intime;
+    private String nickname;
+    public List<Post> posts;
 
     public String getPhoto() {
         return photo;
@@ -16,16 +28,6 @@ public class RewardedVo {
     public void setPhoto(String photo) {
         this.photo = photo;
     }
-
-    private Integer postid;
-
-    private Integer userid;
-
-    private Integer points;
-
-    private Date intime;
-
-    private String nickname;
 
     public String getNickname() {
         return nickname;
@@ -75,8 +77,6 @@ public class RewardedVo {
         this.intime = intime;
     }
 
-    public List<Post> posts;
-
     public List<Post> getPosts() {
         return posts;
     }
@@ -84,14 +84,6 @@ public class RewardedVo {
     public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
-
-    private String title;
-    private String postcontent;
-    private Integer activetype;
-    private Integer type;
-    private String coverimg;
-
-    private Integer isactive;
 
     public String getTitle() {
         return title;
