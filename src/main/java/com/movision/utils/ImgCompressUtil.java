@@ -156,8 +156,16 @@ public class ImgCompressUtil {
                 // System.out.println("final_w="+final_w);
                 // System.out.println("final_h="+final_h);
 
-                BufferedImage image_to_save = new BufferedImage(final_w, final_h,
-                        bufferedImage.getType());
+//                BufferedImage image_to_save = new BufferedImage(final_w, final_h,
+//                        bufferedImage.getType());//-----------------------注释此处使用下面这段代码
+
+                BufferedImage image_to_save;//------------------------------解决压缩后图片变红的问题20170411 13:46 shuxf
+                if (bufferedImage.isAlphaPremultiplied()) {
+                    image_to_save = new BufferedImage(final_w, final_h, BufferedImage.TRANSLUCENT);
+                } else {
+                    image_to_save = new BufferedImage(final_w, final_h, BufferedImage.TYPE_INT_RGB);
+                }
+
                 image_to_save.getGraphics().drawImage(
                         bufferedImage.getScaledInstance(final_w, final_h,
                                 Image.SCALE_SMOOTH), 0, 0, null);
