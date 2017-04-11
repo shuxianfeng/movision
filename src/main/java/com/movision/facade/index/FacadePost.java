@@ -274,6 +274,20 @@ public class FacadePost {
         }
     }
 
+    public int delPost(String userid, String postid) {
+
+        int flag = 0;
+
+        //首先校验用户的删除权限
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("userid", Integer.parseInt(userid));
+        parammap.put("postid", Integer.parseInt(postid));
+
+        flag = postService.delPost(parammap);
+
+        return flag;
+    }
+
     public Map<String, Object> queryRecommendGoodsList(String userid, String pageNo, String pageSize) {
 
         Paging<Goods> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));

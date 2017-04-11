@@ -135,7 +135,7 @@ public class AppPostController {
     }
 
 
-    @ApiOperation(value = "APP端发布帖子", notes = "用于APP端发布普通帖子的接口", response = Response.class)
+    @ApiOperation(value = "APP端发布帖子", notes = "用于APP端发布帖子的接口", response = Response.class)
     @RequestMapping(value = "releasePost", method = RequestMethod.POST)
     public Response releasePost(@ApiParam(value = "用户id") @RequestParam String userid,
                                 @ApiParam(value = "帖子类型：0 普通图文帖 1 原生视频帖 2 分享视频贴( isactive为0时该字段不为空)") @RequestParam String type,
@@ -164,6 +164,25 @@ public class AppPostController {
         }
         return response;
     }
+
+    @ApiOperation(value = "APP端删除帖子", notes = "用于APP端删除帖子的接口", response = Response.class)
+    @RequestMapping(value = "delPost", method = RequestMethod.POST)
+    public Response delPost(@ApiParam(value = "当前登录的用户id") @RequestParam String userid,
+                            @ApiParam(value = "帖子id") @RequestParam String postid) {
+        Response response = new Response();
+
+        int flag = facadePost.delPost(userid, postid);
+
+        if (flag == 1) {
+            response.setCode(200);
+            response.setMessage("删除成功");
+        } else if (flag == 0) {
+            response.setCode(300);
+            response.setMessage("用户不具备删除权限");
+        }
+        return response;
+    }
+
 
     @ApiOperation(value = "发帖选择推荐商品接口", notes = "APP发布普通帖选择推荐商品时调用此接口，选择收藏的商品列表和全部商品列表", response = Response.class)
     @RequestMapping(value = "recommendGoodsList", method = RequestMethod.POST)

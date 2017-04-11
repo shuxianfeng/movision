@@ -333,6 +333,13 @@
         where id = #{id,jdbcType=INTEGER}
     </delete>
 
+    <!--APP端删除帖子接口-->
+    <delete id="delPost" parameterType="java.util.Map">
+        DELETE FROM yw_post
+        WHERE id = #{postid,jdbcType=INTEGER}
+        AND userid = #{userid,jdbcType=INTEGER}
+    </delete>
+
     <!--基础插入语句（无判断全量）-->
     <insert id="insert" parameterType="com.movision.mybatis.post.entity.Post">
     insert into yw_post (id, circleid, title, 

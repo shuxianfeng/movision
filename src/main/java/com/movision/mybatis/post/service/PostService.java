@@ -221,6 +221,17 @@ public class PostService {
         }
     }
 
+    //APP端用户删除帖子接口
+    public int delPost(Map<String, Object> parammap) {
+        try {
+            log.info("APP端用户删除帖子接口");
+            return postMapper.delPost(parammap);
+        } catch (Exception e) {
+            log.error("APP端用户删除帖子接口失败");
+            throw e;
+        }
+    }
+
     //根据userid查询用户收藏的所有商品列表
     public List<Goods> queryCollectGoodsList(int userid) {
         try {

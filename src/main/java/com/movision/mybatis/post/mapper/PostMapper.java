@@ -87,6 +87,8 @@ public interface PostMapper {
 
     void insertPostShareGoods(List<PostShareGoods> postShareGoodsList);
 
+    int delPost(Map<String, Object> parammap);
+
     List<Goods> queryCollectGoodsList(int userid);
 
     List<Goods> findAllGoodsList(RowBounds rowBounds);
