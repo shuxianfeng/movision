@@ -451,6 +451,10 @@
             AND category=#{categoryid,jdbcType=INTEGER}
         </if>
     </select>
+    <select id="queryListByCircleListByUserid" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.circle.entity.Circle">
+        SELECT id,name,category FROM yw_circle WHERE phone=(SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER}) AND isdel=0 AND status=1 AND category=#{categoryid,jdbcType=INTEGER}
+    </select>
 
     <select id="queryCircleUserList" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.user.entity.User">

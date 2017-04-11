@@ -280,9 +280,10 @@ public class CircleController {
      */
     @ApiOperation(value = "选择圈子", notes = "用于选择圈子接口", response = Response.class)
     @RequestMapping(value = "/query_list_circle_type", method = RequestMethod.POST)
-    public Response queryListByCircleType(@ApiParam(value = "圈子类型id") @RequestParam(required = false) String categoryid) {
+    public Response queryListByCircleType(@ApiParam(value = "圈子类型id") @RequestParam(required = false) String categoryid,
+                                          @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        List<Circle> list = circleFacade.queryListByCircleType(categoryid);
+        List<Circle> list = circleFacade.queryListByCircleType(categoryid, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

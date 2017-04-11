@@ -244,6 +244,22 @@ public class CircleService {
     }
 
     /**
+     * 根据用户id查询所属圈子名称
+     *
+     * @param map
+     * @return
+     */
+    public List<Circle> queryListByCircleListByUserid(Map map) {
+        try {
+            log.info("根据用户id查询所属圈子名称");
+            return circleMapper.queryListByCircleListByUserid(map);
+        } catch (Exception e) {
+            log.error("根据用户id查询所属圈子名称异常");
+            throw e;
+        }
+    }
+
+    /**
      * 查询发现页排序
      *
      * @return

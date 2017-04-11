@@ -453,7 +453,7 @@ public class CircleFacade {
      */
     public List<Category> queryCircleTypeList(String loginid) {
         Integer loid = Integer.parseInt(loginid);
-        Map res = commonalityFacade.verifyUserByQueryMethod(loid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circle.getCode(), null);
+        Map res = commonalityFacade.verifyUserByQueryMethod(loid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode(), null);
         if (res.get("resault").equals(1)) {
             List<Category> list = categoryService.queryCircleTytpeListByUserid(loid);
             return list;
@@ -470,11 +470,23 @@ public class CircleFacade {
      * @param categoryid
      * @return
      */
-    public List<Circle> queryListByCircleType(String categoryid) {
-        Map map = new HashedMap();
-        map.put("categoryid", categoryid);
-        List<Circle> circle = circleService.queryListByCircleList(map);//用于查询圈子名称
-        return circle;
+    public List<Circle> queryListByCircleType(String categoryid, String loginid) {
+        Integer loid = Integer.parseInt(loginid);
+        Map res = commonalityFacade.verifyUserByQueryMethod(loid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circle.getCode(), Integer.parseInt(categoryid));
+        if (res.get("resault").equals(1)) {
+            Map map = new HashedMap();
+            map.put("categoryid", categoryid);
+            map.put("userid", loid);
+            List<Circle> circle = circleService.queryListByCircleListByUserid(map);//用于查询圈子名称
+            return circle;
+        } else if (res.get("resault").equals(2)) {
+            Map map = new HashMap();
+            map.put("categoryid", categoryid);
+            List<Circle> circle = circleService.queryListByCircleList(map);
+            return circle;
+        } else {
+            return null;
+        }
     }
 
     /**

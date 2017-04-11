@@ -275,11 +275,13 @@ public class commonalityFacade {
         Map map = new HashMap();
         BossUser i = bossUserService.queryUserByAdministrator(userid);//根据登录用户id查询当前用户有哪些权限
         if (i.getIscircle().equals(JurisdictionConstants.JURISDICTION_TYPE.groupOwner.getCode())//圈主
-                && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()))) {//圈主可以查看
+                && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())
+                || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//圈主可以查看
             map.put("resault", 1);
             return map;
         } else if (i.getCirclemanagement().equals(JurisdictionConstants.JURISDICTION_TYPE.groupManage.getCode())//圈子管理员
-                && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()))) {//圈子管理员可以查看
+                && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())
+                || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//圈子管理员可以查看
             map.put("resault", 1);
             return map;
         } else if (i.getContributing().equals(JurisdictionConstants.JURISDICTION_TYPE.speciallyInvite.getCode())//特邀嘉宾

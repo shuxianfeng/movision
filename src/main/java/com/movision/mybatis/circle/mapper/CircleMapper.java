@@ -52,6 +52,8 @@ public interface CircleMapper {
 
     List<Circle> queryListByCircleList(Map categoryid);
 
+    List<Circle> queryListByCircleListByUserid(Map categoryid);
+
     List<Circle> queryDiscoverList();
 
     Integer queryCircleDiscover(String circleid);
