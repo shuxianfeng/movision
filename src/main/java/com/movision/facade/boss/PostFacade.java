@@ -107,17 +107,17 @@ public class PostFacade {
         Integer userid = Integer.parseInt(loginid);
         Map res = commonalityFacade.verifyUserByQueryMethod(userid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), null);
         List<PostList> list = new ArrayList<>();
-        List<Integer> circleid = circleService.queryCIrcleIdByUserId(userid);
+        BossUser logintype = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
         if (res.get("resault").equals(1)) {//查询当前登录用户的帖子列表
             //查询用户管理的圈子id
-            if (circleid != null) {
-                list = postService.queryPostByList2(circleid, pager);
+            if (logintype.getCirclemanagement() == 1) {//圈子管理员
+                list = postService.queryPostByManageByList(Integer.parseInt(loginid), pager);
+            } else if (logintype.getIscircle() == 1) {//圈主
+                list = postService.queryPostByList2(Integer.parseInt(loginid), pager);
             }
             return list;
         } else if (res.get("resault").equals(2)) {//权限最大查询所有帖子列表
-            if (circleid != null) {
-                list = postService.queryPostByList(circleid, pager);
-            }
+            list = postService.queryPostByList(pager);
             return list;
         } else {
             return null;
@@ -1322,10 +1322,25 @@ public class PostFacade {
         if (!StringUtils.isEmpty(pai)) {
             map.put("pai", pai);
         }
-        List<PostList> list = postService.postSearch(map, pager);
-        return list;
+        Integer louser = Integer.parseInt(loginid);
+        BossUser logintype = bossUserService.queryUserByAdministrator(louser);//根据登录用户id查询当前用户有哪些权限
+        Map res = commonalityFacade.verifyUserByQueryMethod(louser, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), null);
+        List<PostList> list = new ArrayList<>();
+        if (res.get("resault").equals(2)) {
+            list = postService.postSearch(map, pager);
+            return list;
+        } else if (res.get("resault").equals(1)) {
+            //查询用户管理的圈子id
+            if (logintype.getCirclemanagement() == 1) {//圈子管理员
+                list = postService.queryPostByManageByList(louser, pager);
+            } else if (logintype.getIscircle() == 1) {//圈主
+                list = postService.queryPostByList2(louser, pager);
+            }
+            return list;
+        } else {
+            return list;
         }
-
+    }
 
     /**
      * 评论列表根据点赞人气排序
