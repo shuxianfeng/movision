@@ -1,10 +1,13 @@
 package com.movision.facade.user;
 
 import com.movision.common.constant.MsgCodeConstant;
+import com.movision.common.constant.UserConstants;
 import com.movision.exception.BusinessException;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.entity.BossUserVo;
 import com.movision.mybatis.bossUser.service.BossUserService;
+import com.movision.mybatis.role.entity.Role;
+import com.movision.mybatis.role.service.RoleService;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
@@ -12,6 +15,7 @@ import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +28,9 @@ public class BossUserFacade {
 
     @Autowired
     private BossUserService bossUserService;
+
+    @Autowired
+    private RoleService roleService;
 
     public List<Map<String, Object>> queryBossUserList(Paging<Map<String, Object>> pager, String username, String phone) {
 
@@ -168,6 +175,30 @@ public class BossUserFacade {
 
     public BossUser getUserByPhone(String phone) {
         return bossUserService.queryAdminUserByPhone(phone);
+    }
+
+
+    public Map<String, Object> getRolesRangeByIdentity(String name) {
+
+        Map map = new HashedMap();
+        if (UserConstants.USER_IDENTITY.COMMON.getCode().equals(name)) {
+            //如果是普通管理员身份
+            map.put("roles", roleService.selectCommonAdmin());
+        } else if (UserConstants.USER_IDENTITY.ISSUPER.getCode().equals(name)) {
+
+            map.put("roles", roleService.select4StaticRole("超级管理员"));
+        } else if (UserConstants.USER_IDENTITY.CIRCLEMANAGEMENT.getCode().equals(name)) {
+
+            map.put("roles", roleService.select4StaticRole("圈子管理员"));
+        } else if (UserConstants.USER_IDENTITY.ISCIRCLE.getCode().equals(name)) {
+
+            map.put("roles", roleService.select4StaticRole("圈主"));
+
+        } else {
+            map.put("roles", roleService.select4StaticRole("特约嘉宾"));
+        }
+        return map;
+
     }
 
 

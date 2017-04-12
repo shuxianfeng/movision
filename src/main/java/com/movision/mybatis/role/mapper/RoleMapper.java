@@ -31,5 +31,9 @@ public interface RoleMapper {
 
     int isExistSameName(Role role);
 
+    List<Map<String, Object>> selectCommonAdmin();
+
+    List<Map<String, Object>> select4StaticRole(@Param("rolename") String rolename);
+
 
 }

@@ -143,10 +143,20 @@ public class BossUserController {
 
     @RequestMapping(value = "get_boss_user_detail", method = RequestMethod.GET)
     @ApiOperation(value = "用户详情", notes = "用户详情", response = Response.class)
-    public Response getBossUserDetail(@ApiParam(value = "用户id") @RequestParam(required = true) Integer id) {
+    public Response getBossUserDetail(@ApiParam(value = "用户id") @RequestParam Integer id) {
         Response response = new Response();
         Map<String, Object> result = bossUserFacade.getBossUserDetail(id);
         response.setData(result);
+        return response;
+    }
+
+    @RequestMapping(value = "get_roles_range_by_identity", method = RequestMethod.GET)
+    @ApiOperation(value = "根据身份获取角色范围", notes = "根据身份获取角色范围", response = Response.class)
+    public Response getRoleRangeByIdentity(@ApiParam(value = "身份") @RequestParam String identityName) {
+        Response response = new Response();
+
+        response.setData(bossUserFacade.getRolesRangeByIdentity(identityName));
+
         return response;
     }
 

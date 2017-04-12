@@ -128,4 +128,20 @@
         </if>
     </select>
 
+    <select id="selectCommonAdmin" resultType="java.util.HashMap">
+        SELECT a.id,a.rolename FROM yw_admin_role a
+        WHERE
+        NOT EXISTS
+        (SELECT b.id FROM yw_admin_role b WHERE b.rolename IN ('超级管理员', '圈主', '圈子管理员', '特约嘉宾')
+        AND a.id = b.id)
+        AND a.isdel = 0
+    </select>
+
+    <select id="select4StaticRole" resultType="java.util.HashMap" parameterType="java.lang.String">
+        select id, rolename
+        from yw_admin_role
+        where rolename = #{rolename}
+        and isdel = 0
+    </select>
+
 </mapper>

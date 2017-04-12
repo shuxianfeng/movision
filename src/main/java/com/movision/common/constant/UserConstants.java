@@ -41,6 +41,31 @@ public class UserConstants {
         }
     }
 
+    public enum USER_IDENTITY {
+
+        ISSUPER("issuper"), //超管
+        ISCIRCLE("iscircle"),   //圈主
+        CIRCLEMANAGEMENT("circlemanagement"),   //圈子管理员
+        CONTRIBUTING("contributing"),   //特约嘉宾
+        COMMON("common");   //普通管理员
+
+        public final String name;
+
+        USER_IDENTITY(String name) {
+            this.name = name;
+        }
+
+        public String getCode() {
+            return name;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.name);
+        }
+
+    }
+
 
     public static void main(String[] args) {
 

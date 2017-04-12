@@ -110,5 +110,25 @@ public class RoleService {
         }
     }
 
+    public List<Map<String, Object>> selectCommonAdmin() {
+        try {
+            log.info("查询普通管理员身份下的所有角色");
+            return roleMapper.selectCommonAdmin();
+        } catch (Exception e) {
+            log.error("查询普通管理员身份下的所有角色失败", e);
+            throw e;
+        }
+    }
+
+    public List<Map<String, Object>> select4StaticRole(String rolename) {
+        try {
+            log.info("查询4中固定角色的其中一种");
+            return roleMapper.select4StaticRole(rolename);
+        } catch (Exception e) {
+            log.error("查询4中固定角色的其中一种失败", e);
+            throw e;
+        }
+    }
+
 
 }
