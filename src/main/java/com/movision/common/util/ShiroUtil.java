@@ -114,6 +114,28 @@ public class ShiroUtil {
     }
 
     /**
+     * 获取boss用户对应的角色id
+     * @return
+     */
+    public static Integer getBossUserRoleId() {
+        Integer roleid = null;
+        try {
+            Subject currentUser = SecurityUtils.getSubject();
+            Session session = currentUser.getSession(false);
+            if (session != null) {
+                BossRealm.ShiroBossUser principal = (BossRealm.ShiroBossUser) session.getAttribute(SessionConstant.BOSS_USER);
+                if (principal != null) {
+                    roleid = principal.getRole();
+                }
+            }
+        } catch (Exception e) {
+            log.error("从session中获取boss用户对应的角色id失败!", e);
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return roleid;
+    }
+
+    /**
      * 实时更新登录者在session中的信息
      * 
      */

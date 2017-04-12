@@ -15,7 +15,7 @@ public interface UserRoleRelationMapper {
 
     int updateByPrimaryKey(UserRoleRelation record);
 
-    int selectRoleidByUserid(Integer userid);
+    Integer selectRoleidByUserid(Integer userid);
 
     void deleteRelationsbyUserid(int[] userids);
 

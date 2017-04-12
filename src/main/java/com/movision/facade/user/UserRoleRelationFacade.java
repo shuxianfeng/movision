@@ -39,7 +39,7 @@ public class UserRoleRelationFacade {
         return userRoleRelationService.addRelation(userRoleRelation);
     }
 
-    public int getRoleidByUserid(int userid) {
+    public Integer getRoleidByUserid(int userid) {
         return userRoleRelationService.getRoleidByUserid(userid);
     }
 

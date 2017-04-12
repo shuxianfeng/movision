@@ -86,15 +86,25 @@ public class BossUserController {
 
         //1 更新用户信息
         bossUserFacade.updateBySelectiveInfo(bossUserVo);
-
+        //获取角色
         String roleid = bossUserVo.getRoleid();
-        if (StringUtils.isNotEmpty(roleid)) {
-            //2 更新用户的角色
-            UserRoleRelation userRoleRelation = new UserRoleRelation();
-            userRoleRelation.setUserid(Integer.valueOf(bossUserVo.getId()));
-            userRoleRelation.setRoleid(Integer.valueOf(roleid));
-            userRoleRelationFacade.updateByUserid(userRoleRelation);
+        int userid = Integer.valueOf(bossUserVo.getId());
 
+        UserRoleRelation userRoleRelation = new UserRoleRelation();
+        userRoleRelation.setUserid(userid);
+        userRoleRelation.setRoleid(Integer.valueOf(roleid));
+
+        if (StringUtils.isNotEmpty(roleid)) {
+
+            //获取被修改的用户的当前角色
+            Integer origin_roleid = userRoleRelationFacade.getRoleidByUserid(userid);
+            if (null == origin_roleid) {
+                //2 新增用户角色
+                userRoleRelationFacade.addRelation(userRoleRelation);
+            } else {
+                //2 更新用户的角色
+                userRoleRelationFacade.updateByUserid(userRoleRelation);
+            }
         }
 
         return response;

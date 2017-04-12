@@ -31,10 +31,10 @@ public class UserRoleRelationService {
         }
     }
 
-    public int getRoleidByUserid(int userid) {
+    public Integer getRoleidByUserid(int userid) {
         try {
             log.info("查询条件，userid = " + userid);
-            int roleid = userRoleRelationMapper.selectRoleidByUserid(userid);
+            Integer roleid = userRoleRelationMapper.selectRoleidByUserid(userid);
             log.info("查询结果,roleid = " + roleid);
             return roleid;
         } catch (Exception e) {
