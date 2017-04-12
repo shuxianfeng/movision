@@ -62,12 +62,14 @@ public class MsgCenterFacade {
         PostCommentZanRecordVo postCommentZanRecord = postCommentZanRecordService.queryByUserid(userid);
         int use = postCommentZanRecord.getUserid();
         User zusew = postCommentZanRecordService.queryusers(use);
+        postCommentZanRecord.setUser(zusew);
         //2 打赏消息
         RewardedVo rewarded = rewardedService.queryRewardByUserid(userid);
         //3 评论消息
         CommentVo comment = commentService.queryCommentByUserid(userid);
         int usersid = comment.getUserid();
         User ruser = postCommentZanRecordService.queryusers(usersid);
+        comment.setUser(ruser);
         //4 系统通知
         ImSystemInform imSystemInform = imSystemInformService.queryByUserid();
         //5 打招呼消息
@@ -75,8 +77,8 @@ public class MsgCenterFacade {
         //6 客服消息
         reMap.put("imSystemInform", imSystemInform);
         reMap.put("rewarded", rewarded);
-        reMap.put("ruser", ruser);
-        reMap.put("zusew", zusew);
+        reMap.put("comment", comment);
+        reMap.put("postCommentZanRecord", postCommentZanRecord);
         return reMap;
     }
 
