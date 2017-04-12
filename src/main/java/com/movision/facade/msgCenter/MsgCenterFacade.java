@@ -116,13 +116,17 @@ public class MsgCenterFacade {
         if (comments != null) {
             for (int i = 0; i < comments.size(); i++) {
                 Integer pid = comments.get(i).getPid();
+                Integer usersid = comments.get(i).getUserid();
+                User user = postCommentZanRecordService.queryusers(usersid);
                 if (pid == null) {
                     Integer postid = comments.get(i).getPostid();
                     List<Post> post = postZanRecordService.queryPost(postid);
                     comments.get(i).setPost(post);
+                    comments.get(i).setUser(user);
                 } else if (pid != null) {
                     List<CommentVo> commentVos = commentService.queryPidComment(pid);
                     comments.get(i).setCommentVos(commentVos);
+                    comments.get(i).setUser(user);
                 }
             }
         }

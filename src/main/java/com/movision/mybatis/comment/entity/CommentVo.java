@@ -1,6 +1,7 @@
 package com.movision.mybatis.comment.entity;
 
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.user.entity.User;
 import com.movision.utils.L;
 
 import java.util.Date;
@@ -9,9 +10,17 @@ import java.util.Map;
 
 public class CommentVo {
     private Integer id;
-
     private Integer userid;
     private Integer pid;
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     private  Integer postid;
 
