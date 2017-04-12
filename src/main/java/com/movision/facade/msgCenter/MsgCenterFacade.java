@@ -60,36 +60,23 @@ public class MsgCenterFacade {
         Map reMap = new HashedMap();
         //1 赞消息 。包含：帖子，活动，评论，快问（后期）
         PostCommentZanRecordVo postCommentZanRecord = postCommentZanRecordService.queryByUserid(userid);
-        PostZanRecordVo postZanRecord = postZanRecordService.queryByUserid(userid);
-        if (postCommentZanRecord != null && postZanRecord == null) {
-            reMap.put("postCommentZanRecord", postCommentZanRecord);
-        } else if (postCommentZanRecord == null && postZanRecord != null) {
-            reMap.put("postZanRecord", postZanRecord);
-        } else if (postCommentZanRecord != null && postZanRecord != null) {
-            Date time = postCommentZanRecord.getIntime();
-            Date date = postZanRecord.getIntime();
-            if (time != null && date != null) {
-                long begin = time.getTime();
-                long end = date.getTime();
-                if (begin > end) {
-                    reMap.put("postCommentZanRecord", postCommentZanRecord);
-                } else if (end > begin) {
-                    reMap.put("postZanRecord", postZanRecord);
-                }
-            }
-        }
+        int use = postCommentZanRecord.getUserid();
+        User zusew = postCommentZanRecordService.queryusers(use);
         //2 打赏消息
         RewardedVo rewarded = rewardedService.queryRewardByUserid(userid);
         //3 评论消息
         CommentVo comment = commentService.queryCommentByUserid(userid);
+        int usersid = comment.getUserid();
+        User ruser = postCommentZanRecordService.queryusers(usersid);
         //4 系统通知
         ImSystemInform imSystemInform = imSystemInformService.queryByUserid();
         //5 打招呼消息
 
         //6 客服消息
         reMap.put("imSystemInform", imSystemInform);
-        reMap.put("comment", comment);
         reMap.put("rewarded", rewarded);
+        reMap.put("ruser", ruser);
+        reMap.put("zusew", zusew);
         return reMap;
     }
 

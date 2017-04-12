@@ -26,22 +26,6 @@ public class PostZanRecordService {
     @Autowired
     private PostZanRecordMapper recordMapper;
 
-    /**
-     * 根据用户id查询
-     *
-     * @param userid
-     * @return
-     */
-    public PostZanRecordVo queryByUserid(Integer userid) {
-        try {
-            log.info("根据用户id查询");
-            return recordMapper.queryByUserid(userid);
-        } catch (Exception e) {
-            log.error("根据用户id查询失败");
-            throw e;
-        }
-    }
-
 
     public List<Post> queryPost(Integer postid) {
         try {

@@ -424,9 +424,10 @@
   </update>
   <select id="queryCommentByUserid" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
-        SELECT c.intime,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u
-        ON c.userid=u.id WHERE postid IN (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} and isdel=0)
-        AND isdel=0 and pid is NULL ORDER BY intime DESC limit 0,1
+    SELECT * FROM yw_post_comment WHERE id in(SELECT pid FROM yw_post_comment WHERE isdel=0 AND pid IS NOT null) AND
+    userid=#{userid,jdbcType=INTEGER} AND pid IS NULL or
+    ( SELECT id FROM yw_post WHERE id in (SELECT postid FROM yw_post_comment WHERE isdel=0 AND pid IS null) AND
+    userid=#{userid,jdbcType=INTEGER}) ORDER BY intime DESC limit 0,1
     </select>
   <select id="findAllQueryComment" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
