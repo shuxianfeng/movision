@@ -2,6 +2,7 @@ package com.movision.facade.msgCenter;
 
 import com.movision.mybatis.PostZanRecord.entity.PostZanRecord;
 import com.movision.mybatis.PostZanRecord.entity.PostZanRecordVo;
+import com.movision.mybatis.PostZanRecord.entity.ZanRecordVo;
 import com.movision.mybatis.PostZanRecord.service.PostZanRecordService;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
@@ -15,6 +16,7 @@ import com.movision.mybatis.postCommentZanRecord.service.PostCommentZanRecordSer
 import com.movision.mybatis.rewarded.entity.Rewarded;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.rewarded.service.RewardedService;
+import com.movision.mybatis.user.entity.User;
 import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
@@ -147,35 +149,33 @@ public class MsgCenterFacade {
         return rewardedVos;
     }
 
+
     /**
-     * 点赞列表
-     *
+     * 赞列表
      * @param userid
+     * @param pager
      * @return
      */
-    public Map getMsgZanList(Integer userid) {
-        List<PostCommentZanRecordVo> postCommentZanRecords = postCommentZanRecordService.findAllCommentZanList(userid);
-        Map map = new HashedMap();
-        if (postCommentZanRecords != null) {
-            for (int i = 0; i < postCommentZanRecords.size(); i++) {
-                Integer commentid = postCommentZanRecords.get(i).getCommentid();
+    public List<ZanRecordVo> findAllZan(Integer userid, Paging<ZanRecordVo> pager) {
+        List<ZanRecordVo> zanRecordVos = postCommentZanRecordService.findAllZan(userid, pager);
+        User user = postCommentZanRecordService.queryusers(userid);
+        for (int i = 0; i < zanRecordVos.size(); i++) {
+            Integer commentid = zanRecordVos.get(i).getCommentid();
+            Integer postid = zanRecordVos.get(i).getPostid();
+            if (commentid != null) {
                 List<CommentVo> commentVo = postCommentZanRecordService.queryComment(commentid);
-                postCommentZanRecords.get(i).setComment(commentVo);
-                postCommentZanRecords.get(i).setCtype(1);
+                zanRecordVos.get(i).setComment(commentVo);
+                zanRecordVos.get(i).setCtype(1);
+                zanRecordVos.get(i).setUser(user);
             }
-        }
-        List<PostZanRecordVo> postZanRecordVos = postZanRecordService.findAllZanList(userid);
-        if (postZanRecordVos != null) {
-            for (int i = 0; i < postZanRecordVos.size(); i++) {
-                Integer postid = postZanRecordVos.get(i).getPostid();
+            if (postid != null) {
                 List<Post> post = postZanRecordService.queryPost(postid);
-                postZanRecordVos.get(i).setPosts(post);
-                postZanRecordVos.get(i).setCtype(2);
+                zanRecordVos.get(i).setPosts(post);
+                zanRecordVos.get(i).setCtype(2);
+                zanRecordVos.get(i).setUser(user);
             }
         }
-        map.put("postCommentZanRecords", postCommentZanRecords);
-        map.put("postZanRecordVos", postZanRecordVos);
-        return map;
+        return zanRecordVos;
     }
 
 

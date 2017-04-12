@@ -1,8 +1,10 @@
 package com.movision.mybatis.postCommentZanRecord.mapper;
 
+import com.movision.mybatis.PostZanRecord.entity.ZanRecordVo;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecord;
 import com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecordVo;
+import com.movision.mybatis.user.entity.User;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -23,7 +25,10 @@ public interface PostCommentZanRecordMapper {
 
     PostCommentZanRecordVo queryByUserid(Integer userid);
 
-    List<PostCommentZanRecordVo> findAllCommentZanList(Integer userid);
 
     List<CommentVo> queryComment(Integer commentid);
+
+    List<ZanRecordVo> findAllZan(Integer userid, RowBounds rowBounds);
+
+    User queryusers(Integer userid);
 }

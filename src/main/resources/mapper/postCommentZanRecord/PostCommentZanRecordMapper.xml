@@ -87,16 +87,19 @@
         t.commentid IN (SELECT id FROM yw_post_comment WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0) ORDER BY
         t.intime DESC LIMIT 0,1
     </select>
-    <select id="findAllCommentZanList" parameterType="java.lang.Integer"
-            resultType="com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecordVo">
-        SELECT u.nickname,t.intime,u.photo,t.commentid FROM yw_post_comment_zan_record t LEFT JOIN yw_user u ON
-        t.userid=u.id
-        WHERE t.userid=#{userid,jdbcType=INTEGER} ORDER
-        BY t.intime DESC
-    </select>
     <select id="queryComment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
         SELECT t.content FROM yw_post_comment t
         WHERE t.id=#{commentid,jdbcType=INTEGER}
     </select>
+    <select id="findAllZan" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.PostZanRecord.entity.ZanRecordVo">
+    SELECT r.id,r.userid,r.commentid,null AS postid,r.intime FROM yw_post_comment_zan_record r WHERE r.userid=#{userid,jdbcType=INTEGER}
+UNION ALL
+SELECT d.id,d.userid,null AS commentid,d.postid,d.intime  FROM yw_post_zan_record d WHERE d.userid=#{userid,jdbcType=INTEGER} ORDER BY intime DESC
+    </select>
+    <select id="queryusers" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.User">
+        SELECT nickname,photo FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
+    </select>
+
 </mapper>

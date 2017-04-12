@@ -42,22 +42,6 @@ public class PostZanRecordService {
         }
     }
 
-    /**
-     * 查询全部
-     *
-     * @param userid
-     * @param
-     * @return
-     */
-    public List<PostZanRecordVo> findAllZanList(Integer userid) {
-        try {
-            log.info("查询全部");
-            return recordMapper.findAllZanList(userid);
-        } catch (Exception e) {
-            log.error("查询全部失败");
-            throw e;
-        }
-    }
 
     public List<Post> queryPost(Integer postid) {
         try {
