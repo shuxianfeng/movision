@@ -158,10 +158,11 @@ public class MsgCenterFacade {
      */
     public List<ZanRecordVo> findAllZan(Integer userid, Paging<ZanRecordVo> pager) {
         List<ZanRecordVo> zanRecordVos = postCommentZanRecordService.findAllZan(userid, pager);
-        User user = postCommentZanRecordService.queryusers(userid);
         for (int i = 0; i < zanRecordVos.size(); i++) {
             Integer commentid = zanRecordVos.get(i).getCommentid();
             Integer postid = zanRecordVos.get(i).getPostid();
+            Integer usersid = zanRecordVos.get(i).getUserid();
+            User user = postCommentZanRecordService.queryusers(usersid);
             if (commentid != null) {
                 List<CommentVo> commentVo = postCommentZanRecordService.queryComment(commentid);
                 zanRecordVos.get(i).setComment(commentVo);
