@@ -406,8 +406,7 @@
         (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id) AS postnum,
         (SELECT u.nickname FROM yw_user u WHERE phone=c.phone) AS circlename,
         (SELECT u.level FROM yw_user u WHERE phone=c.phone) AS categorylevel
-        FROM yw_circle c WHERE isdel=0 AND c.id IN (SELECT circleid FROM yw_circle_manager WHERE
-        userid=#{userid,jdbcType=INTEGER})
+        FROM yw_circle c WHERE isdel=0
         <if test="type!=null">
             AND category=#{type,jdbcType=INTEGER}
         </if>
@@ -429,9 +428,9 @@
         <if test="begintime!=null and endtime!=null">
             AND createtime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}
         </if>
-        <!--<if test="userid!=null">
+        <if test="userid!=null">
             AND c.id IN (SELECT circleid FROM yw_circle_manager WHERE userid=#{userid,jdbcType=INTEGER})
-        </if>-->
+        </if>
         ORDER BY category
         <if test="pai==null">
             ,c.createtime DESC

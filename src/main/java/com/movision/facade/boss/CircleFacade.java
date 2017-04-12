@@ -72,6 +72,7 @@ public class CircleFacade {
         if (res.get("resault").equals(1) || res.get("resault").equals(2)) {
             tm.put("categoryid", null);
             List<CircleIndexList> circlenum = circleService.queryListByCircleCategory(tm);//查询圈子所有分类
+            BossUser logintype = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
             for (int i = 0; i < circlenum.size(); i++) {
                 /////////////////////分类列表////////////////////////
                 Map map = new HashedMap();
@@ -80,7 +81,6 @@ public class CircleFacade {
                 if (res.get("resault").equals(2)) {
                     listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
                 } else if (res.get("resault").equals(1)) {
-                    BossUser logintype = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
                     if (logintype.getCirclemanagement() == 1) {//圈子管理员
                         map.put("userid", loginid);
                         listt = circleService.queryCircleManagementByLikeList(map);
@@ -646,7 +646,7 @@ public class CircleFacade {
                 Map tm = new HashedMap();
                 tm.put("categoryid", null);
                 circlenum = circleService.queryListByCircleCategory(tm);//查询圈子所有分类
-
+                BossUser logintype = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
                 for (int i = 0; i < circlenum.size(); i++) {
                     /////////////////////分类列表////////////////////////
                     map.put("type", circlenum.get(i).getCategory());
@@ -657,7 +657,6 @@ public class CircleFacade {
                     if (res.get("resault").equals(2)) {
                         listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
                     } else if (res.get("resault").equals(1)) {
-                        BossUser logintype = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
                         if (logintype.getCirclemanagement() == 1) {//圈子管理员
                             map.put("userid", loginid);
                             listt = circleService.queryCircleManagementByLikeList(map);
@@ -731,13 +730,13 @@ public class CircleFacade {
                 tm.put("categoryid", type);
                 /////////////////////分类列表////////////////////////
                 circlenum = circleService.queryListByCircleCategory(tm);//查询指定圈子分类
+                BossUser logintype = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
                 for (int f = 0; f < circlenum.size(); f++) {
                     //List<CircleVo> listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
                     List<CircleVo> listt = new ArrayList<>();
                     if (res.get("resault").equals(2)) {
                         listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
                     } else if (res.get("resault").equals(1)) {
-                        BossUser logintype = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
                         if (logintype.getCirclemanagement() == 1) {//圈子管理员
                             map.put("userid", loginid);
                             listt = circleService.queryCircleManagementByLikeList(map);
