@@ -431,7 +431,8 @@
   <select id="findAllQueryComment" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.*,u.phone,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u
-    ON c.userid=u.id WHERE c.userid=#{userid,jdbcType=INTEGER} ORDER BY c.intime DESC
+    ON c.userid=u.id WHERE postid IN (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} and isdel=0) ORDER
+    BY c.intime DESC
     </select>
   <select id="queryPidComment" resultType="com.movision.mybatis.comment.entity.CommentVo"
           parameterType="java.lang.Integer">

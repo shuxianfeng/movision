@@ -94,9 +94,11 @@
     </select>
     <select id="findAllZan" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.PostZanRecord.entity.ZanRecordVo">
-    SELECT r.id,r.userid,r.commentid,null AS postid,r.intime FROM yw_post_comment_zan_record r WHERE r.userid=#{userid,jdbcType=INTEGER}
+        SELECT r.id,r.userid,r.commentid,null AS postid,r.intime FROM yw_post_comment_zan_record r WHERE r.commentid IN
+        (SELECT id FROM yw_post_comment WHERE userid=#{userid,jdbcType=INTEGER})
 UNION ALL
-SELECT d.id,d.userid,null AS commentid,d.postid,d.intime  FROM yw_post_zan_record d WHERE d.userid=#{userid,jdbcType=INTEGER} ORDER BY intime DESC
+        SELECT d.id,d.userid,null AS commentid,d.postid,d.intime FROM yw_post_zan_record d WHERE d.postid in (SELECT id
+        FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER}) ORDER BY intime DESC
     </select>
     <select id="queryusers" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.User">
         SELECT nickname,photo FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
