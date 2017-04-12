@@ -3,6 +3,7 @@ package com.movision.facade.boss;
 import com.movision.common.constant.JurisdictionConstants;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.category.service.CategoryService;
 import com.movision.mybatis.circle.entity.*;
@@ -54,6 +55,9 @@ public class CircleFacade {
     @Autowired
     private commonalityFacade commonalityFacade;
 
+    @Autowired
+    private BossUserService bossUserService;
+
 
     /**
      * 圈子首页列表查询
@@ -76,8 +80,14 @@ public class CircleFacade {
                 if (res.get("resault").equals(2)) {
                     listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
                 } else if (res.get("resault").equals(1)) {
-                    map.put("userid", loginid);
-                    listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
+                    BossUser logintype = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
+                    if (logintype.getCirclemanagement() == 1) {//圈子管理员
+                        map.put("userid", loginid);
+                        listt = circleService.queryCircleManagementByLikeList(map);
+                    } else if (logintype.getIscircle() == 1) {//圈主
+                        map.put("userid", loginid);
+                        listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
+                    }
                 }
                 List<CircleVo> circleVoslist = new ArrayList<>();
                 List<User> adminlist = new ArrayList();//用于存储类型中所有圈子的管理员
@@ -647,8 +657,14 @@ public class CircleFacade {
                     if (res.get("resault").equals(2)) {
                         listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
                     } else if (res.get("resault").equals(1)) {
-                        map.put("userid", loginid);
-                        listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
+                        BossUser logintype = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
+                        if (logintype.getCirclemanagement() == 1) {//圈子管理员
+                            map.put("userid", loginid);
+                            listt = circleService.queryCircleManagementByLikeList(map);
+                        } else if (logintype.getIscircle() == 1) {//圈主
+                            map.put("userid", loginid);
+                            listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
+                        }
                     }
                     List<CircleVo> circleVoslist = new ArrayList<>();
                     int posts = 0;//总帖子数
@@ -721,8 +737,14 @@ public class CircleFacade {
                     if (res.get("resault").equals(2)) {
                         listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
                     } else if (res.get("resault").equals(1)) {
-                        map.put("userid", loginid);
-                        listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
+                        BossUser logintype = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
+                        if (logintype.getCirclemanagement() == 1) {//圈子管理员
+                            map.put("userid", loginid);
+                            listt = circleService.queryCircleManagementByLikeList(map);
+                        } else if (logintype.getIscircle() == 1) {//圈主
+                            map.put("userid", loginid);
+                            listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
+                        }
                     }
                     List<CircleVo> circleVoslist = new ArrayList<>();
                     List<User> adminlist = new ArrayList();//用于存储类型中所有圈子的管理员

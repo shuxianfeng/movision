@@ -211,6 +211,16 @@ public class CircleService {
         }
     }
 
+    public List<CircleVo> queryCircleManagementByLikeList(Map map) {
+        try {
+            log.info("根据条件查询圈子列表");
+            return circleMapper.queryCircleManagementByLikeList(map);
+        } catch (Exception e) {
+            log.error("根据条件查询圈子列表异常");
+            throw e;
+        }
+    }
+
 
     /**
      * 查询圈子中所有圈子所属分类

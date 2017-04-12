@@ -1564,6 +1564,7 @@
 
     <select id="findAllpostSearch" parameterType="com.movision.mybatis.post.entity.PostSpread"
             resultType="com.movision.mybatis.post.entity.PostList">
+        <if test="cirlceids==null">
         SELECT p.*,u.nickname,
         (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
         (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
@@ -1604,6 +1605,50 @@
         </if>
         <if test="pai==1">
             ORDER BY totalpoint DESC
+        </if>
+        </if>
+        <if test="circleid!=null">
+            SELECT p.*,u.nickname,
+            (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
+            (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
+            (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
+            (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid) AS circlename,
+            (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS category
+            FROM yw_post AS p LEFT JOIN yw_user u ON u.id=p.userid
+            WHERE p.isdel=0 AND p.isactive=0 AND p.circleid IN
+            <foreach collection="array" item="item" open="(" separator="," close=")">
+                #{circleids,jdbcType=INTEGER}
+            </foreach>
+            <if test="uid!=null">
+                AND u.id=#{uid,jdbcType=INTEGER}
+            </if>
+            <if test="price==5">
+                AND p.isactive=0
+            </if>
+            <if test="price==6">
+                AND p.isessence=1
+            </if>
+            <if test="title!=null">
+                AND p.title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="userid!=null">
+                AND p.userid=#{userid,jdbcType=INTEGER}
+            </if>
+            <if test="postcontent!=null">
+                AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="endtime!=null and begintime!=null">
+                AND p.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+            </if>
+            <if test="essencedate!=null">
+                AND p.essencedate=#{essencedate,jdbcType=DATE}
+            </if>
+            <if test="pai==0">
+                ORDER BY intime DESC
+            </if>
+            <if test="pai==1">
+                ORDER BY totalpoint DESC
+            </if>
         </if>
     </select>
 

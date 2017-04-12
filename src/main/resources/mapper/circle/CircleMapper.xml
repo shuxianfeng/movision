@@ -396,6 +396,51 @@
         </if>
     </select>
 
+    <select id="queryCircleManagementByLikeList" resultType="com.movision.mybatis.circle.entity.CircleVo"
+            parameterType="java.util.Map">
+        SELECT c.* ,
+        (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid=c.id) as follownum,
+        (SELECT COUNT(1) FROM yw_follow_circle WHERE circleid=c.id) AS follownewnum,
+        (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id AND date(intime) = curdate()) AS postnewnum,
+        (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id AND isessence=1) AS isessencenum,
+        (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id) AS postnum,
+        (SELECT u.nickname FROM yw_user u WHERE phone=c.phone) AS circlename,
+        (SELECT u.level FROM yw_user u WHERE phone=c.phone) AS categorylevel
+        FROM yw_circle c WHERE isdel=0 AND c.id IN (SELECT circleid FROM yw_circle_manager WHERE
+        userid=#{userid,jdbcType=INTEGER})
+        <if test="type!=null">
+            AND category=#{type,jdbcType=INTEGER}
+        </if>
+        <if test="status==0">
+            AND c.status=0
+        </if>
+        <if test="status==1">
+            AND c.status=1
+        </if>
+        <if test="status==2">
+            AND c.status=2
+        </if>
+        <if test="circleid!=null">
+            AND c.id=#{circleid,jdbcType=INTEGER}
+        </if>
+        <if test="circleman != null">
+            AND (SELECT u.nickname FROM yw_user u WHERE id=c.userid) LIKE concat('%',#{circleman,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="begintime!=null and endtime!=null">
+            AND createtime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}
+        </if>
+        <!--<if test="userid!=null">
+            AND c.id IN (SELECT circleid FROM yw_circle_manager WHERE userid=#{userid,jdbcType=INTEGER})
+        </if>-->
+        ORDER BY category
+        <if test="pai==null">
+            ,c.createtime DESC
+        </if>
+        <if test="pai==1">
+            ,follownum DESC
+        </if>
+    </select>
+
     <select id="queryCircleBycirclemaster" resultType="com.movision.mybatis.user.entity.User"
             parameterType="java.lang.String">
         SELECT u.level,u.nickname FROM yw_user u WHERE u.phone=#{phone,jdbcType=VARCHAR}

@@ -108,22 +108,19 @@ public class PostFacade {
         Map res = commonalityFacade.verifyUserByQueryMethod(userid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), null);
         List<PostList> list = new ArrayList<>();
         List<Integer> circleid = circleService.queryCIrcleIdByUserId(userid);
-        if (res.get("resault").equals(userid)) {
+        if (res.get("resault").equals(1)) {//查询当前登录用户的帖子列表
             //查询用户管理的圈子id
             if (circleid != null) {
                 list = postService.queryPostByList2(circleid, pager);
             }
             return list;
-        } else if (res.get("resault").equals(0)) {
+        } else if (res.get("resault").equals(2)) {//权限最大查询所有帖子列表
             if (circleid != null) {
                 list = postService.queryPostByList(circleid, pager);
             }
             return list;
-        } else if (res.get("resault").equals(-1)) {
-            return null;
         } else {
-            list = postService.queryPostByList(null, pager);
-            return list;
+            return null;
         }
     }
 
@@ -1275,7 +1272,7 @@ public class PostFacade {
      */
     public List<PostList> postSearch(String title, String circleid,
                                      String userid, String postcontent, String endtime,
-                                     String begintime, String pai, String essencedate, String uid, String price, Paging<PostList> pager) {
+                                     String begintime, String pai, String essencedate, String uid, String price, String loginid, Paging<PostList> pager) {
         Map map = new HashedMap();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date end = null;

@@ -48,6 +48,8 @@ public interface CircleMapper {
 
     List<CircleVo> queryCircleByLikeList(Map map);
 
+    List<CircleVo> queryCircleManagementByLikeList(Map map);
+
     List<CircleIndexList> queryListByCircleCategory(Map map);
 
     List<Circle> queryListByCircleList(Map categoryid);
