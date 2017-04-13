@@ -396,7 +396,7 @@ public class ImFacade {
 
     /**
      * @param imMsg
-     * @param addFriendType
+     * @param addFriendType 2:请求加好友   3：接受加好友
      * @param responseMsg
      * @return
      * @throws IOException

@@ -7,6 +7,7 @@ import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class FacadeIndex {
     @Autowired
     private HomepageManageService homepageManageService;
 
+    @Cacheable(value = "indexData", key = "'index_data'")
     public Map<String, Object> queryIndexData(String userid) {
 
         HashMap<String, Object> map = new HashMap();

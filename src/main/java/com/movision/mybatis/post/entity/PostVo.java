@@ -4,6 +4,7 @@ import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.period.entity.Period;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @Author shuxf
  * @Date 2017/1/17 20:01
  */
-public class PostVo {
+public class PostVo implements Serializable {
     private Integer id;
 
     private Integer circleid;

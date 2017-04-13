@@ -133,6 +133,7 @@ public class AppRegisterFacade {
      * @throws IOException
      */
     private void getImuserForReturn(String phone, Map<String, Object> result, int userid) throws IOException {
+
         Boolean isExistImUser = imFacade.isExistAPPImuser(userid);
         if (!isExistImUser) {
             //若不存在，则注册im用户
@@ -143,6 +144,7 @@ public class AppRegisterFacade {
             ImUser newImUser = imFacade.AddImUser(imUser);
             result.put("imuser", newImUser);
         } else {
+            //若存在，则查询im用户
             result.put("imuser", imFacade.getImuserByCurrentAppuser(userid));
         }
     }

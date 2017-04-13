@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -880,6 +881,7 @@ public class PostFacade {
      * @param postid
      * @return
      */
+    @CacheEvict(value = "indexData", key = "'index_data'")
     public Map<String, Integer> addPostChoiceness(String postid, String subtitle, String essencedate, String orderid) {
         Map<String, Integer> map = new HashedMap();
         PostTo p = new PostTo();

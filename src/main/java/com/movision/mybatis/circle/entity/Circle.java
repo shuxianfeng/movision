@@ -1,8 +1,9 @@
 package com.movision.mybatis.circle.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Circle {
+public class Circle implements Serializable {
     private Integer id;
 
     private Integer isofficial;
