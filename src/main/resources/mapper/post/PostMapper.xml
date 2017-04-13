@@ -1265,8 +1265,7 @@
         <if test="orderid!=null">
             orderid=#{orderid,jdbcType=INTEGER},
         </if>
-        isessence=1,
-        isessencepool=0
+        isessence=1
         WHERE id=#{id,jdbcType=INTEGER} AND isessence=0
     </update>
     <select id="findAllPerson" resultType="java.lang.Integer" parameterType="java.lang.Integer">
@@ -1277,8 +1276,7 @@
     <select id="queryPostChoicenesslist" resultType="com.movision.mybatis.post.entity.PostTo"
             parameterType="java.util.Map">
         SELECT orderid,essencedate FROM yw_post WHERE essencedate=#{esdate,jdbcType=DATE} AND isessence=1 AND isdel=0
-        AND isactive=0 GROUP BY
-        orderid
+        GROUP BY orderid
     </select>
 
     <select id="queryPostIsessence" resultType="com.movision.mybatis.post.entity.Post">
@@ -1288,12 +1286,11 @@
 
     <select id="queryPostChoiceness" resultType="com.movision.mybatis.post.entity.PostChoiceness"
             parameterType="java.lang.Integer">
-        SELECT id,subtitle,essencedate,orderid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER} AND isdel=0 AND
-        isactive=0
+        SELECT id,subtitle,essencedate,orderid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER} AND isdel=0
     </select>
 
     <update id="deletePostChoiceness" parameterType="java.lang.Integer">
-        UPDATE yw_post SET isessence=0 WHERE id=#{postid,jdbcType=INTEGER}
+        UPDATE yw_post SET isessence=0,essencedate=null,orderid=0 WHERE id=#{postid,jdbcType=INTEGER}
     </update>
 
 
@@ -1816,7 +1813,7 @@
         <if test="orderid!=null">
             orderid=#{orderid,jdbcType=INTEGER}
         </if>
-        WHERE id=#{id,jdbcType=INTEGER} AND isessence=1 AND isessencepool=0
+        WHERE id=#{id,jdbcType=INTEGER} AND isessence=1 AND isdel=0
     </update>
 
     <select id="findAllQueryCollectPostList" parameterType="java.lang.String"
