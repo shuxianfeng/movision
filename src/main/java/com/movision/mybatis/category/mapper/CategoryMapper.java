@@ -26,6 +26,8 @@ public interface CategoryMapper {
 
     List<Category> queryCircleTytpeListByUserid(Integer userid);
 
+    List<Category> queryCircleTypeListByManage(Integer userid);
+
     int addCircleType(Map map);
 
     Category queryCircleCategory(String category);

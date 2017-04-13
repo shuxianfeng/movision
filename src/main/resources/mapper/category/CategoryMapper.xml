@@ -126,6 +126,12 @@
         SELECT category FROM yw_circle WHERE phone=(
         SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER}) GROUP BY category)
     </select>
+
+    <select id="queryCircleTypeListByManage" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.category.entity.Category">
+        SELECT * FROM yw_circle_category WHERE id in(SELECT category FROM yw_circle
+        WHERE id in (SELECT circleid FROM yw_circle_manager WHERE userid=#{userid,jdbcType=INTEGER}) AND isdel=0 AND status=1 GROUP BY category)
+    </select>
     <insert id="addCircleType" parameterType="java.util.Map">
         insert into yw_circle_category
         <trim prefix="(" suffix=")" suffixOverrides=",">

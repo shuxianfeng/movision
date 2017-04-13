@@ -463,16 +463,21 @@ public class CircleFacade {
      */
     public List<Category> queryCircleTypeList(String loginid) {
         Integer loid = Integer.parseInt(loginid);
+        BossUser userjd = bossUserService.queryUserByAdministrator(loid);//根据登录用户id查询当前用户有哪些权限
         Map res = commonalityFacade.verifyUserByQueryMethod(loid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode(), null);
         if (res.get("resault").equals(1)) {
-            List<Category> list = categoryService.queryCircleTytpeListByUserid(loid);
-            return list;
+            if (userjd.getIscircle() == 1) {//登录用户是圈主
+                List<Category> list = categoryService.queryCircleTytpeListByUserid(loid);
+                return list;
+            } else if (userjd.getCirclemanagement() == 1) {//登录用户是圈子管理员
+                List<Category> list = categoryService.queryCircleTypeListByManage(loid);
+                return list;
+            }
         } else if (res.get("resault").equals(2)) {
             List<Category> list = categoryService.queryCircleTypeList(null);
             return list;
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -482,21 +487,29 @@ public class CircleFacade {
      */
     public List<Circle> queryListByCircleType(String categoryid, String loginid) {
         Integer loid = Integer.parseInt(loginid);
-        Map res = commonalityFacade.verifyUserByQueryMethod(loid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circle.getCode(), Integer.parseInt(categoryid));
+        Map res = commonalityFacade.verifyUserByQueryMethod(loid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circle.getCode(), null);
+        BossUser userjd = bossUserService.queryUserByAdministrator(loid);//根据登录用户id查询当前用户有哪些权限
         if (res.get("resault").equals(1)) {
-            Map map = new HashedMap();
-            map.put("categoryid", categoryid);
-            map.put("userid", loid);
-            List<Circle> circle = circleService.queryListByCircleListByUserid(map);//用于查询圈子名称
-            return circle;
+            if (userjd.getIscircle() == 1) {//代表圈主登录
+                Map map = new HashedMap();
+                map.put("categoryid", categoryid);
+                map.put("userid", loid);
+                List<Circle> circle = circleService.queryListByCircleListByUserid(map);//用于圈主查询圈子名称
+                return circle;
+            } else if (userjd.getCirclemanagement() == 1) {//代表圈子管理员登录
+                Map map = new HashedMap();
+                map.put("categoryid", categoryid);
+                map.put("userid", loid);
+                List<Circle> circle = circleService.queryListByCircleManageListByUserid(map);//用于圈子管理员查询圈子名称
+                return circle;
+            }
         } else if (res.get("resault").equals(2)) {
             Map map = new HashMap();
             map.put("categoryid", categoryid);
             List<Circle> circle = circleService.queryListByCircleList(map);
             return circle;
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
