@@ -80,9 +80,6 @@ public class MsgCenterFacade {
         ImSystemInform imSystemInform = imSystemInformService.queryByUserid();
         //5 打招呼消息
         ImFirstDialogueVo imFirstDialogue = imFirstDialogueService.queryFirst(userid);
-        String fromid = imFirstDialogue.getFromid();
-        ImUser imUser = imFirstDialogueService.queryName(fromid);
-        imFirstDialogue.setImUser(imUser);
         //6 客服消息
         reMap.put("imSystemInform", imSystemInform);
         reMap.put("rewarded", rewarded);

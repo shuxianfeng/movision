@@ -31,15 +31,7 @@ public class ImFirstDialogueVo {
         this.name = name;
     }
 
-    private ImUser imUser;
 
-    public ImUser getImUser() {
-        return imUser;
-    }
-
-    public void setImUser(ImUser imUser) {
-        this.imUser = imUser;
-    }
 
     public Integer getId() {
         return id;
