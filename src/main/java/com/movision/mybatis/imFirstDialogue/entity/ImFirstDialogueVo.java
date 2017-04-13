@@ -21,6 +21,15 @@ public class ImFirstDialogueVo implements Serializable {
     private String body;
 
     private Date createTime;
+    private String icon;
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 
     private String name;
 
