@@ -5,6 +5,7 @@ import com.movision.common.util.ShiroUtil;
 import com.movision.facade.msgCenter.MsgCenterFacade;
 import com.movision.mybatis.PostZanRecord.entity.ZanRecordVo;
 import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogueVo;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.utils.pagination.model.Paging;
@@ -92,6 +93,20 @@ public class MyMsgController {
         Response response = new Response();
         Paging<ZanRecordVo> paging = new Paging<ZanRecordVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<ZanRecordVo> list = msgCenterFacade.findAllZan(ShiroUtil.getAppUserID(), paging);
+        paging.result(list);
+        response.setData(paging);
+        return response;
+    }
+
+
+    @ApiOperation(value = "获取我的消息中心的打招呼列表", notes = "获取我的消息中心的打招呼列表", response = Response.class)
+    @RequestMapping(value = {"/get_my_msg_center_dialogue_list"}, method = RequestMethod.GET)
+    public Response findAllDialogue(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                    @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize
+    ) {
+        Response response = new Response();
+        Paging<ImFirstDialogueVo> paging = new Paging<ImFirstDialogueVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<ImFirstDialogueVo> list = msgCenterFacade.findAllDialogue(ShiroUtil.getAppUserID(), paging);
         paging.result(list);
         response.setData(paging);
         return response;

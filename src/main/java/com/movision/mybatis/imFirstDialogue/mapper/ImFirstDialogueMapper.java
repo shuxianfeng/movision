@@ -3,6 +3,9 @@ package com.movision.mybatis.imFirstDialogue.mapper;
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogueVo;
 import com.movision.mybatis.imuser.entity.ImUser;
+import com.movision.utils.L;
+import com.movision.utils.pagination.model.Paging;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
 
@@ -24,6 +27,8 @@ public interface ImFirstDialogueMapper {
     List<ImFirstDialogue> selectFirstDialog(ImFirstDialogue imFirstDialogue);
 
     ImFirstDialogueVo queryFirst(Integer userid);
+
+    List<ImFirstDialogueVo> findAllDialogue(Integer userid, RowBounds rowBounds);
 
 
 

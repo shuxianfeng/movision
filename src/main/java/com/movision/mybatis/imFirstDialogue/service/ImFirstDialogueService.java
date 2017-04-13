@@ -4,6 +4,7 @@ import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogueVo;
 import com.movision.mybatis.imFirstDialogue.mapper.ImFirstDialogueMapper;
 import com.movision.mybatis.imuser.entity.ImUser;
+import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,16 @@ public class ImFirstDialogueService {
             return imFirstDialogueMapper.queryFirst(userid);
         } catch (Exception e) {
             log.error("查询最新打招呼失败");
+            throw e;
+        }
+    }
+
+    public List<ImFirstDialogueVo> findAllDialogue(Integer userid, Paging<ImFirstDialogueVo> pager) {
+        try {
+            log.info("查询列表");
+            return imFirstDialogueMapper.findAllDialogue(userid, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询列表失败");
             throw e;
         }
     }

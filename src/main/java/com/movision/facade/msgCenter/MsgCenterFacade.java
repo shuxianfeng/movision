@@ -180,6 +180,10 @@ public class MsgCenterFacade {
     }
 
 
+    public List<ImFirstDialogueVo> findAllDialogue(Integer userid, Paging<ImFirstDialogueVo> pager) {
+        List<ImFirstDialogueVo> list = imFirstDialogueService.findAllDialogue(userid, pager);
+        return list;
+    }
 
 
 }
