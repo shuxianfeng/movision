@@ -139,6 +139,7 @@ public class AppRegisterFacade {
             ImUser imUser = new ImUser();
             imUser.setUserid(userid);
             imUser.setAccid(CheckSumBuilder.getAccid(phone));
+            imUser.setName(StrUtil.genDefaultNickNameByPhone(phone));
             ImUser newImUser = imFacade.AddImUser(imUser);
             result.put("imuser", newImUser);
         } else {
