@@ -1,9 +1,12 @@
 package com.movision.mybatis.imFirstDialogue.entity;
 
-
 import java.util.Date;
 
-public class ImFirstDialogue {
+/**
+ * @Author zhanglei
+ * @Date 2017/4/13 11:30
+ */
+public class ImFirstDialogueVo {
     private Integer id;
 
     private Integer userid;
@@ -15,6 +18,16 @@ public class ImFirstDialogue {
     private String body;
 
     private Date createTime;
+
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Integer getId() {
         return id;

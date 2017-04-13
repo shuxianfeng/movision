@@ -1,7 +1,9 @@
 package com.movision.mybatis.imFirstDialogue.service;
 
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
+import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogueVo;
 import com.movision.mybatis.imFirstDialogue.mapper.ImFirstDialogueMapper;
+import com.movision.mybatis.imuser.entity.ImUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +61,16 @@ public class ImFirstDialogueService {
             return imFirstDialogueMapper.selectFirstDialog(imFirstDialogue);
         } catch (Exception e) {
             log.error("查询当前登录人和私信人的第一次会话失败", e);
+            throw e;
+        }
+    }
+
+    public ImFirstDialogueVo queryFirst(Integer userid) {
+        try {
+            log.info("查询最新打招呼");
+            return imFirstDialogueMapper.queryFirst(userid);
+        } catch (Exception e) {
+            log.error("查询最新打招呼失败");
             throw e;
         }
     }

@@ -7,8 +7,12 @@ import com.movision.mybatis.PostZanRecord.service.PostZanRecordService;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
+import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
+import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogueVo;
+import com.movision.mybatis.imFirstDialogue.service.ImFirstDialogueService;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInform.service.ImSystemInformService;
+import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecord;
 import com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecordVo;
@@ -50,6 +54,8 @@ public class MsgCenterFacade {
     private PostCommentZanRecordService postCommentZanRecordService;
     @Autowired
     private PostZanRecordService postZanRecordService;
+    @Autowired
+    private ImFirstDialogueService imFirstDialogueService;
     /**
      * 获取消息中心的列表
      *
@@ -73,12 +79,13 @@ public class MsgCenterFacade {
         //4 系统通知
         ImSystemInform imSystemInform = imSystemInformService.queryByUserid();
         //5 打招呼消息
-
+        ImFirstDialogueVo imFirstDialogue = imFirstDialogueService.queryFirst(userid);
         //6 客服消息
         reMap.put("imSystemInform", imSystemInform);
         reMap.put("rewarded", rewarded);
         reMap.put("comment", comment);
         reMap.put("postCommentZanRecord", postCommentZanRecord);
+        reMap.put("imFirstDialogue", imFirstDialogue);
         return reMap;
     }
 
