@@ -25,5 +25,7 @@ public interface ImFirstDialogueMapper {
 
     ImFirstDialogueVo queryFirst(Integer userid);
 
+    ImUser queryName(String fromid);
+
 
 }

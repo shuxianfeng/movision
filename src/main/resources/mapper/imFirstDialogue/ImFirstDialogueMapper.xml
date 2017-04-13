@@ -119,8 +119,11 @@
     </select>
     <select id="queryFirst" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogueVo">
-SELECT u.userid,u.name,d.create_time FROM yw_im_first_dialogue d LEFT JOIN yw_im_user u ON u.accid=d.toid
-WHERE
-d.toid in (SELECT toid FROM yw_im_first_dialogue WHERE userid=#{userid,jdbcType=INTEGER}) AND u.type=1  ORDER BY d.create_time DESC LIMIT 1
+        SELECT fromid,create_time FROM yw_im_first_dialogue WHERE toid=(SELECT toid FROM yw_im_first_dialogue WHERE
+        userid=#{userid,jdbcType=INTEGER}) ORDER BY create_time DESC LIMIT 1
+
+    </select>
+    <select id="queryName" parameterType="java.lang.String" resultType="com.movision.mybatis.imuser.entity.ImUser">
+        SELECT name FROM yw_im_user WHERE accid=#{fromid,jdbcType=VARCHAR}
     </select>
 </mapper>

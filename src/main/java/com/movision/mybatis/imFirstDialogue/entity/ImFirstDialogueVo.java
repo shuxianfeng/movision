@@ -1,5 +1,7 @@
 package com.movision.mybatis.imFirstDialogue.entity;
 
+import com.movision.mybatis.imuser.entity.ImUser;
+
 import java.util.Date;
 
 /**
@@ -27,6 +29,16 @@ public class ImFirstDialogueVo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    private ImUser imUser;
+
+    public ImUser getImUser() {
+        return imUser;
+    }
+
+    public void setImUser(ImUser imUser) {
+        this.imUser = imUser;
     }
 
     public Integer getId() {

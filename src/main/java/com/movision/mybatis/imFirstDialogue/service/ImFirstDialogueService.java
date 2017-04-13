@@ -76,4 +76,14 @@ public class ImFirstDialogueService {
     }
 
 
+    public ImUser queryName(String fromid) {
+        try {
+            log.info("查询最新打招呼");
+            return imFirstDialogueMapper.queryName(fromid);
+        } catch (Exception e) {
+            log.error("查询最新打招呼失败");
+            throw e;
+        }
+    }
+
 }
