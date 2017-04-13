@@ -1265,7 +1265,8 @@
         <if test="orderid!=null">
             orderid=#{orderid,jdbcType=INTEGER},
         </if>
-        isessence=1
+        isessence=1,
+        isessencepool=0
         WHERE id=#{id,jdbcType=INTEGER} AND isessence=0
     </update>
     <select id="findAllPerson" resultType="java.lang.Integer" parameterType="java.lang.Integer">
@@ -1811,8 +1812,9 @@
             subtitle=#{subtitle,jdbcType=VARCHAR},
         </if>
         <if test="orderid!=null">
-            orderid=#{orderid,jdbcType=INTEGER}
+            orderid=#{orderid,jdbcType=INTEGER},
         </if>
+        isessencepool=0
         WHERE id=#{id,jdbcType=INTEGER} AND isessence=1 AND isdel=0
     </update>
 

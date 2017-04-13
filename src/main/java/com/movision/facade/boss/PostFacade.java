@@ -116,7 +116,7 @@ public class PostFacade {
                 list = postService.queryPostByList2(Integer.parseInt(loginid), pager);
             }
             return list;
-        } else if (res.get("resault").equals(2)) {//权限最大查询所有帖子列表
+        } else if (res.get("resault").equals(2) || res.get("resault").equals(0)) {//权限最大查询所有帖子列表
             list = postService.queryPostByList(pager);
             return list;
         } else {
@@ -900,7 +900,7 @@ public class PostFacade {
             }
             p.setSubtitle(subtitle);
             Integer result = null;
-            int isessence = postService.queryPostByIsessence(postid);
+            int isessence = postService.queryPostByIsessence(postid);//判断是否加精
             if (isessence == 1) {//已经加精,做修改操作
                 p.setId(Integer.parseInt(postid));
                 result = postService.updatePostChoiceness(p);
