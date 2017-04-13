@@ -2,6 +2,7 @@ package com.movision.mybatis.goods.entity;
 
 import com.movision.mybatis.combo.entity.Combo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @Author shuxf
  * @Date 2017/2/15 19:19
  */
-public class GoodsDetail {
+public class GoodsDetail implements Serializable {
     private Integer id;
 
     private String name;

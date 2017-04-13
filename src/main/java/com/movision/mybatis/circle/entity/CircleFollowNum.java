@@ -1,12 +1,14 @@
 package com.movision.mybatis.circle.entity;
 
+import java.io.Serializable;
+
 /**
  * 用于接受，返回根据圈子类型关注数,今日新增关注人数
  *
  * @Author zhurui
  * @Date 2017/2/15 19:19
  */
-public class CircleFollowNum {
+public class CircleFollowNum implements Serializable {
 
     private Integer num;
 

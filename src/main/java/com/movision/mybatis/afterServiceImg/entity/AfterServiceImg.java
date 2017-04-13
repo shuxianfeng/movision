@@ -1,6 +1,8 @@
 package com.movision.mybatis.afterServiceImg.entity;
 
-public class AfterServiceImg {
+import java.io.Serializable;
+
+public class AfterServiceImg implements Serializable {
     private Integer afterserviceid;
 
     private String imgurl;

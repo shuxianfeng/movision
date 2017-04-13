@@ -1,8 +1,9 @@
 package com.movision.mybatis.logisticsfeeCalculateRule.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class LogisticsfeeCalculateRule {
+public class LogisticsfeeCalculateRule implements Serializable {
     private Integer shopid;
 
     private Double startprice;

@@ -1,8 +1,9 @@
 package com.movision.mybatis.homepageManage.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class HomepageManageVo {
+public class HomepageManageVo implements Serializable {
     private Integer id;
 
     //广告位置：0 首页--你可能喜欢--板块banner  1 ‘发现’首页banner

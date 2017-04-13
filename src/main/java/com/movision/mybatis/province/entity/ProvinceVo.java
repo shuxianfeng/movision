@@ -1,6 +1,8 @@
 package com.movision.mybatis.province.entity;
 
-public class ProvinceVo {
+import java.io.Serializable;
+
+public class ProvinceVo implements Serializable {
 
     private String province;//省
 

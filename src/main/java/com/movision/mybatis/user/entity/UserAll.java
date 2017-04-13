@@ -1,12 +1,13 @@
 package com.movision.mybatis.user.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @Author shuxf
  * @Date 2017/2/6 16:54
  */
-public class UserAll {
+public class UserAll implements Serializable {
     private Integer id;
 
     private String phone;//手机号

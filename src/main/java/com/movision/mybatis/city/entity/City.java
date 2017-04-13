@@ -1,6 +1,8 @@
 package com.movision.mybatis.city.entity;
 
-public class City {
+import java.io.Serializable;
+
+public class City implements Serializable {
     private Integer id;
     private String code;
 

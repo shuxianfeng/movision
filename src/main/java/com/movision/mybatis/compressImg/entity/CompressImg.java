@@ -1,6 +1,8 @@
 package com.movision.mybatis.compressImg.entity;
 
-public class CompressImg {
+import java.io.Serializable;
+
+public class CompressImg implements Serializable {
     private String compressimgurl;
 
     private String protoimgurl;

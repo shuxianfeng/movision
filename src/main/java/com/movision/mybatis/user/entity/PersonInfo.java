@@ -4,6 +4,7 @@ import com.movision.utils.DateUtils;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Date;
  * @Date 2017/2/27 16:19
  */
 @Api("个人资料")
-public class PersonInfo {
+public class PersonInfo implements Serializable {
 
     @ApiModelProperty(value = "id")
     private Integer id;

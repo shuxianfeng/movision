@@ -4,6 +4,7 @@ import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.user.entity.User;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @Author zhanglei
  * @Date 2017/4/12 11:42
  */
-public class ZanRecordVo {
+public class ZanRecordVo implements Serializable {
 
 
     public Integer getCtype() {

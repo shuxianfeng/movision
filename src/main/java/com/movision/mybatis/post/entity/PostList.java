@@ -2,6 +2,7 @@ package com.movision.mybatis.post.entity;
 
 import com.movision.mybatis.goods.entity.GoodsVo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @Author zhurui
  * @Date 2017/2/7 9:53
  */
-public class PostList {
+public class PostList implements Serializable {
 
     private Integer id;//帖子id
 

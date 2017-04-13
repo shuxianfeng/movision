@@ -1,5 +1,6 @@
 package com.movision.mybatis.goodscombo.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * @Author zhanglei
  * @Date 2017/3/3 10:04
  */
-public class GoodsComboVo {
+public class GoodsComboVo implements Serializable {
     private Integer id;
 
 

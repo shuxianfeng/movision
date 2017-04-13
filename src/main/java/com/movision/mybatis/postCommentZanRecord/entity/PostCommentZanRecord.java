@@ -1,8 +1,9 @@
 package com.movision.mybatis.postCommentZanRecord.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class PostCommentZanRecord {
+public class PostCommentZanRecord implements Serializable {
     private Integer id;
 
     private Integer userid;

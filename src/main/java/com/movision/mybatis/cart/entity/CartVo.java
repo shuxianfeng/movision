@@ -2,6 +2,7 @@ package com.movision.mybatis.cart.entity;
 
 import com.movision.mybatis.rentdate.entity.Rentdate;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @Author shuxf
  * @Date 2017/2/21 16:50
  */
-public class CartVo {
+public class CartVo implements Serializable {
     private Integer id;
 
     private Integer userid;

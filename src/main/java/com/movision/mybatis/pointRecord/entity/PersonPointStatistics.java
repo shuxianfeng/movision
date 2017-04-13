@@ -1,12 +1,14 @@
 package com.movision.mybatis.pointRecord.entity;
 
+import java.io.Serializable;
+
 /**
  * 个人历史积分统计
  *
  * @Author zhuangyuhao
  * @Date 2017/3/2 11:17
  */
-public class PersonPointStatistics {
+public class PersonPointStatistics implements Serializable {
     private Integer rewardCount;    //个人历史打赏总数
     private Integer postCount;  //个人历史发帖总数
     private Integer commentCount;   //个人历史评论总数

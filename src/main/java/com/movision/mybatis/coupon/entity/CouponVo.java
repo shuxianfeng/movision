@@ -1,8 +1,9 @@
 package com.movision.mybatis.coupon.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class CouponVo {
+public class CouponVo implements Serializable {
     private Integer id;
 
     private String title;//标题

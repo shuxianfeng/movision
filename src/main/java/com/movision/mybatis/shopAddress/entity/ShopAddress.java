@@ -1,9 +1,10 @@
 package com.movision.mybatis.shopAddress.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ShopAddress {
+public class ShopAddress implements Serializable {
     private Integer shopid;
 
     private Integer provincecode;

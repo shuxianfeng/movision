@@ -1,8 +1,9 @@
 package com.movision.mybatis.share.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Shares {
+public class Shares implements Serializable {
     private Integer id;
 
     private Integer userid;

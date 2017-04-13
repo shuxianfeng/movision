@@ -1,12 +1,13 @@
 package com.movision.mybatis.activePart.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @Author zhuangyuhao
  * @Date 2017/2/13 16:10
  */
-public class ActivePartList {
+public class ActivePartList implements Serializable {
 
     private Double moneypay;//实付金额
     private Double moneyying;//应付金额

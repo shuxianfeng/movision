@@ -1,5 +1,6 @@
 package com.movision.mybatis.post.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +11,7 @@ import java.util.Map;
  * @Author zhurui
  * @Date 2017/2/18 17:11
  */
-public class PostChoiceness {
+public class PostChoiceness implements Serializable {
     private Integer id;//帖子id
 
     private String subtitle;//帖子副标题

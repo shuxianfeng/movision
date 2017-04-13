@@ -1,8 +1,9 @@
 package com.movision.mybatis.pointRecord.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class PointRecord {
+public class PointRecord implements Serializable {
     private Integer id;
 
     private Integer userid;

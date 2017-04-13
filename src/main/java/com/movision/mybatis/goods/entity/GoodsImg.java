@@ -1,10 +1,12 @@
 package com.movision.mybatis.goods.entity;
 
+import java.io.Serializable;
+
 /**
  * @Author shuxf
  * @Date 2017/2/15 19:24
  */
-public class GoodsImg {
+public class GoodsImg implements Serializable {
 
     private Integer goodsid;//商品id
 

@@ -1,12 +1,13 @@
 package com.movision.mybatis.couponDistributeManage.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @Author shuxf
  * @Date 2017/2/27 9:44
  */
-public class CouponDistributeManageVo {
+public class CouponDistributeManageVo implements Serializable {
     private Integer id;
 
     private String title;

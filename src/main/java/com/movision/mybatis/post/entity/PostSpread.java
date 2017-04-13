@@ -1,12 +1,13 @@
 package com.movision.mybatis.post.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @Author zhurui
  * @Date 2017/2/21 12:59
  */
-public class PostSpread {
+public class PostSpread implements Serializable {
     private String title;//帖子标题
     private String circleid;//圈子id
     private String userid;//用户id

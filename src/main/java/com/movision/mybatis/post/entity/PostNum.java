@@ -1,12 +1,14 @@
 package com.movision.mybatis.post.entity;
 
+import java.io.Serializable;
+
 /**
  * 用于返回帖子总数和精选帖子数
  *
  * @Author zhurui
  * @Date 2017/2/9 14:36
  */
-public class PostNum {
+public class PostNum implements Serializable {
     private Integer postnum;
     private Integer isessence;
 

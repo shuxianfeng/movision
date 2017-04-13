@@ -1,8 +1,9 @@
 package com.movision.mybatis.submission.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Submission {
+public class Submission implements Serializable {
     private Integer id;
 
     private String title;

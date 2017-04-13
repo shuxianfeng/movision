@@ -1,10 +1,12 @@
 package com.movision.mybatis.postShareGoods.entity;
 
+import java.io.Serializable;
+
 /**
  * @Author shuxf
  * @Date 2017/2/8 15:09
  */
-public class PostShareGoods {
+public class PostShareGoods implements Serializable {
 
     private Integer id;//主键
 

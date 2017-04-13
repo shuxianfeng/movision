@@ -1,12 +1,13 @@
 package com.movision.mybatis.user.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @Author shuxf
  * @Date 2017/2/6 16:54
  */
-public class UserVo {
+public class UserVo implements Serializable {
     private Integer id;
 
     private String openid;

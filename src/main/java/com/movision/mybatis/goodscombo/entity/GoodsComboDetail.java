@@ -1,12 +1,13 @@
 package com.movision.mybatis.goodscombo.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @Author zhanglei
  * @Date 2017/3/3 15:55
  */
-public class GoodsComboDetail {
+public class GoodsComboDetail implements Serializable {
 
     private Integer comboid;
 

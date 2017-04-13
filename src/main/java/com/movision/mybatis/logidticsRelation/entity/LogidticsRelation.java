@@ -1,6 +1,8 @@
 package com.movision.mybatis.logidticsRelation.entity;
 
-public class LogidticsRelation {
+import java.io.Serializable;
+
+public class LogidticsRelation implements Serializable {
     private Integer id;
 
     private String logisticsid;

@@ -1,10 +1,12 @@
 package com.movision.mybatis.subOrder.entity;
 
+import java.io.Serializable;
+
 /**
  * @Author shuxf
  * @Date 2017/4/5 21:06
  */
-public class SubOrderVo {
+public class SubOrderVo implements Serializable {
     private Integer id;
 
     private Integer porderid;

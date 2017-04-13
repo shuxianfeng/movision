@@ -1,8 +1,9 @@
 package com.movision.mybatis.productcategory.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ProductCategory {
+public class ProductCategory implements Serializable {
     private Integer id;
 
     private Integer protype;

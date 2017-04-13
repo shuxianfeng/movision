@@ -2,6 +2,7 @@ package com.movision.mybatis.address.entity;
 
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -9,7 +10,7 @@ import java.util.Date;
  * @Author zhanglei
  * @Date 2017/2/28 11:38
  */
-public class AddressVo {
+public class AddressVo implements Serializable {
 
     private Integer orderid;
     private String phone;

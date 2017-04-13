@@ -1,8 +1,9 @@
 package com.movision.mybatis.record.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class RecordVo {
+public class RecordVo implements Serializable {
     private Integer id;
 
     private Integer userid;

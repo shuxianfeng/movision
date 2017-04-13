@@ -1,8 +1,9 @@
 package com.movision.mybatis.afterservicestream.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class AfterserviceStream {
+public class AfterserviceStream implements Serializable {
     private Integer id;
 
     private Integer orderid;

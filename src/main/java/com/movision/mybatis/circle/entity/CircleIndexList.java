@@ -2,6 +2,7 @@ package com.movision.mybatis.circle.entity;
 
 import com.movision.mybatis.user.entity.User;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @Author zhurui
  * @Date 2017/2/16 11:32
  */
-public class CircleIndexList {
+public class CircleIndexList implements Serializable {
     private Integer category;//圈子分类
     private String categoryname;//圈子分类名称
     private List<User> circlemaster;//圈主

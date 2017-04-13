@@ -1,5 +1,6 @@
 package com.movision.mybatis.homepageManage.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  * @Author zhurui
  * @Date 2017/3/24 14:45
  */
-public class HomepageLinkage {
+public class HomepageLinkage implements Serializable {
 
     private String location;//广告位置
 

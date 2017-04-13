@@ -3,10 +3,11 @@ package com.movision.mybatis.role.entity;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @ApiModel(value = "角色", description = "角色")
-public class Role {
+public class Role implements Serializable {
     private Integer id;
 
     @ApiModelProperty(value = "角色名称", required = true)

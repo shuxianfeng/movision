@@ -1,8 +1,9 @@
 package com.movision.mybatis.collection.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Collection {
+public class Collection implements Serializable {
     private Integer id;
 
     private Integer userid;

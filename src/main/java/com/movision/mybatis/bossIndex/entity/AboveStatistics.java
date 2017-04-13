@@ -1,12 +1,14 @@
 package com.movision.mybatis.bossIndex.entity;
 
+import java.io.Serializable;
+
 /**
  * 后台系统首页上方的统计
  *
  * @Author zhurui
  * @Date 2017/3/29 11:16
  */
-public class AboveStatistics {
+public class AboveStatistics implements Serializable {
 
     private Integer posts;//帖子数
     private Integer orders;//订单数

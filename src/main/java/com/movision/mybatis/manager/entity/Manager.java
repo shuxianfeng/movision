@@ -1,6 +1,8 @@
 package com.movision.mybatis.manager.entity;
 
-public class Manager {
+import java.io.Serializable;
+
+public class Manager implements Serializable {
     private Integer id;
 
     private Integer circleid;

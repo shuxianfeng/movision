@@ -1,8 +1,9 @@
 package com.movision.mybatis.searchGoodsRecord.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class SearchGoodsRecord {
+public class SearchGoodsRecord implements Serializable {
     private Integer id;
 
     private Integer userid;

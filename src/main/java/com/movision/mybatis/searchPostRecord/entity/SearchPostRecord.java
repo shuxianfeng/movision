@@ -1,8 +1,9 @@
 package com.movision.mybatis.searchPostRecord.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class SearchPostRecord {
+public class SearchPostRecord implements Serializable {
     private Integer id;
 
     private Integer userid;

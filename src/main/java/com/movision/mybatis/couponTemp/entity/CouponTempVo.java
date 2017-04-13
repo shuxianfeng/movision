@@ -1,12 +1,13 @@
 package com.movision.mybatis.couponTemp.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @Author shuxf
  * @Date 2017/3/29 20:18
  */
-public class CouponTempVo {
+public class CouponTempVo implements Serializable {
     private Integer id;
 
     private String phone;

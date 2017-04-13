@@ -1,12 +1,13 @@
 package com.movision.mybatis.afterservice.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @Author zhanglei
  * @Date 2017/3/3 18:07
  */
-public class AfterServiceVo {
+public class AfterServiceVo implements Serializable {
     private Integer id;
 
     private Integer orderid;

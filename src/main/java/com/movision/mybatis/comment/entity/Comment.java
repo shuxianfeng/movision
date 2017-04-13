@@ -1,8 +1,9 @@
 package com.movision.mybatis.comment.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Comment {
+public class Comment implements Serializable {
     private Integer id;
 
     private Integer userid;

@@ -1,8 +1,9 @@
 package com.movision.mybatis.bossOrders.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class BossOrdersVo {
+public class BossOrdersVo implements Serializable {
     private Integer id;
 
     private String ordernumber;

@@ -1,8 +1,9 @@
 package com.movision.mybatis.post.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Post {
+public class Post implements Serializable {
     private Integer id;
 
     private Integer circleid;

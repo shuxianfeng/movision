@@ -2,13 +2,14 @@ package com.movision.mybatis.imFirstDialogue.entity;
 
 import com.movision.mybatis.imuser.entity.ImUser;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @Author zhanglei
  * @Date 2017/4/13 11:30
  */
-public class ImFirstDialogueVo {
+public class ImFirstDialogueVo implements Serializable {
     private Integer id;
 
     private Integer userid;

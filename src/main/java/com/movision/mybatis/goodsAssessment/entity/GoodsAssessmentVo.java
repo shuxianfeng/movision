@@ -2,6 +2,7 @@ package com.movision.mybatis.goodsAssessment.entity;
 
 import com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @Author shuxf
  * @Date 2017/2/16 10:11
  */
-public class GoodsAssessmentVo {
+public class GoodsAssessmentVo implements Serializable {
     private Integer id;
 
     private Integer userid;

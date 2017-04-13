@@ -1,6 +1,8 @@
 package com.movision.mybatis.constant.entity;
 
-public class Constant {
+import java.io.Serializable;
+
+public class Constant implements Serializable {
     private Integer id;
 
     private Integer code;

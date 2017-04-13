@@ -1,12 +1,13 @@
 package com.movision.mybatis.goods.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @Author zhanglei
  * @Date 2017/3/3 19:26
  */
-public class GoodsTo {
+public class GoodsTo implements Serializable {
     private Integer id;
 
     private String name;

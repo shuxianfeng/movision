@@ -1,8 +1,9 @@
 package com.movision.mybatis.goodsDiscount.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class GoodsDiscount {
+public class GoodsDiscount implements Serializable {
     private Integer id;
 
     private String name;

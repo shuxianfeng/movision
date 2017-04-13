@@ -1,8 +1,9 @@
 package com.movision.mybatis.brand.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Brand {
+public class Brand implements Serializable {
     private Integer id;
 
     private Integer protype;

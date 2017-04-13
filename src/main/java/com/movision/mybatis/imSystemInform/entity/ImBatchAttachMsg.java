@@ -3,12 +3,14 @@ package com.movision.mybatis.imSystemInform.entity;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 /**
  * @Author zhuangyuhao
  * @Date 2017/3/9 20:22
  */
 @ApiModel(value = "批量发送点对点自定义系统通知")
-public class ImBatchAttachMsg {
+public class ImBatchAttachMsg implements Serializable {
 
     @ApiModelProperty(value = "发送者accid，用户帐号，最大32字符，APP内唯一", required = true)
     private String fromAccid;

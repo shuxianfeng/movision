@@ -1,8 +1,9 @@
 package com.movision.mybatis.rentdate.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Rentdate {
+public class Rentdate implements Serializable {
     private Integer id;
 
     private Integer suborderid;

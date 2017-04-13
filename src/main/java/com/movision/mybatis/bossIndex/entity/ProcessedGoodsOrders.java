@@ -1,10 +1,12 @@
 package com.movision.mybatis.bossIndex.entity;
 
+import java.io.Serializable;
+
 /**
  * @Author zhurui
  * @Date 2017/3/13 11:11
  */
-public class ProcessedGoodsOrders {
+public class ProcessedGoodsOrders implements Serializable {
 
     private Integer addVExamine;//加V审批
 

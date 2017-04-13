@@ -3,11 +3,12 @@ package com.movision.mybatis.address.entity;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Api("地址")
-public class Address {
+public class Address implements Serializable {
     private Integer id;
     private Integer userid;
     @ApiModelProperty(value = "收货人")

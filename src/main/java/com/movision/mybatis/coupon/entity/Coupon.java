@@ -1,8 +1,9 @@
 package com.movision.mybatis.coupon.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Coupon {
+public class Coupon implements Serializable {
     private Integer id;
 
     private Integer userid;

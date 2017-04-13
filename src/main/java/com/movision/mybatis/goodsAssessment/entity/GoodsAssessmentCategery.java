@@ -1,10 +1,12 @@
 package com.movision.mybatis.goodsAssessment.entity;
 
+import java.io.Serializable;
+
 /**
  * @Author shuxf
  * @Date 2017/2/16 15:26
  */
-public class GoodsAssessmentCategery {
+public class GoodsAssessmentCategery implements Serializable {
 
     private String allname;//全部评论名称
 

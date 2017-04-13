@@ -1,8 +1,8 @@
 package com.movision.mybatis.invoice.entity;
 
-import java.util.Date;
+import java.io.Serializable;
 
-public class Invoice {
+public class Invoice implements Serializable {
     private Integer id;
 
     private Integer orderid;

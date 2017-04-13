@@ -1,10 +1,12 @@
 package com.movision.mybatis.category.entity;
 
+import java.io.Serializable;
+
 /**
  * @Author zhurui
  * @Date 2017/2/22 19:31
  */
-public class CircleAndCircle {
+public class CircleAndCircle implements Serializable {
     private Integer circleid;//圈子id
     private String circlename;//圈子名称
     private String nickname;//圈主

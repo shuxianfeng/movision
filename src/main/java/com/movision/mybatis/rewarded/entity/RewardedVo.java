@@ -2,10 +2,11 @@ package com.movision.mybatis.rewarded.entity;
 
 import com.movision.mybatis.post.entity.Post;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class RewardedVo {
+public class RewardedVo implements Serializable {
     private Integer id;
     private String photo;
     private String title;

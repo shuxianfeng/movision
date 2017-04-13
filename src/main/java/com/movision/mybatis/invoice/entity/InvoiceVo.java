@@ -1,12 +1,13 @@
 package com.movision.mybatis.invoice.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @Author zhanglei
  * @Date 2017/3/3 19:06
  */
-public class InvoiceVo {
+public class InvoiceVo implements Serializable {
     private Integer id;
 
     private Integer orderid;

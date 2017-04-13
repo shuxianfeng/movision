@@ -1,6 +1,8 @@
 package com.movision.mybatis.subOrder.entity;
 
-public class SubOrder {
+import java.io.Serializable;
+
+public class SubOrder implements Serializable {
     private Integer id;
 
     private Integer porderid;

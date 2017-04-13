@@ -1,8 +1,9 @@
 package com.movision.mybatis.video.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Video {
+public class Video implements Serializable {
     private Integer id;
 
     private Integer postid;

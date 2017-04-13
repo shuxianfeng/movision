@@ -2,8 +2,10 @@ package com.movision.mybatis.roleMenuRelation.entity;
 
 import com.wordnik.swagger.annotations.ApiModel;
 
+import java.io.Serializable;
+
 @ApiModel(value = "角色菜单关系", description = "角色菜单关系")
-public class RoleMenuRelation {
+public class RoleMenuRelation implements Serializable {
     private Integer id;
 
     private Integer roleid;

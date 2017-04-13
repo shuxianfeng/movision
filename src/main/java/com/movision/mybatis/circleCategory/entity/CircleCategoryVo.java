@@ -3,6 +3,7 @@ package com.movision.mybatis.circleCategory.entity;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleVo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * @Author shuxf
  * @Date 2017/1/21 14:43
  */
-public class CircleCategoryVo {
+public class CircleCategoryVo implements Serializable {
     private Integer id;
 
     private String categoryname;

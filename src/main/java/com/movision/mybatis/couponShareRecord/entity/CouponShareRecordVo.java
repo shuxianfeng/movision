@@ -1,12 +1,13 @@
 package com.movision.mybatis.couponShareRecord.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @Author shuxf
  * @Date 2017/3/27 17:29
  */
-public class CouponShareRecordVo {
+public class CouponShareRecordVo implements Serializable {
     private Integer id;//分享id
 
     private Integer distributeid;//优惠券投放id

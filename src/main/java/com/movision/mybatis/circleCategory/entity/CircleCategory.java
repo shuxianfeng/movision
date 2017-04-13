@@ -1,8 +1,9 @@
 package com.movision.mybatis.circleCategory.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class CircleCategory {
+public class CircleCategory implements Serializable {
     private Integer id;
 
     private String categoryname;

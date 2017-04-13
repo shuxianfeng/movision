@@ -1,6 +1,8 @@
 package com.movision.mybatis.goodsAssessmentImg.entity;
 
-public class GoodsAssessmentImg {
+import java.io.Serializable;
+
+public class GoodsAssessmentImg implements Serializable {
     private Integer id;
 
     private Integer assessmentid;

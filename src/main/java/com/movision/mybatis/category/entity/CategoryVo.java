@@ -2,6 +2,7 @@ package com.movision.mybatis.category.entity;
 
 import com.movision.mybatis.bossUser.entity.BossUser;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @Author zhurui
  * @Date 2017/2/22 19:20
  */
-public class CategoryVo {
+public class CategoryVo implements Serializable {
     private Integer id;
 
     private String categoryname;

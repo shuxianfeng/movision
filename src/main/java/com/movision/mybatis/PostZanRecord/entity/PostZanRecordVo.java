@@ -2,6 +2,7 @@ package com.movision.mybatis.PostZanRecord.entity;
 
 import com.movision.mybatis.post.entity.Post;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @Author zhanglei
  * @Date 2017/4/6 16:45
  */
-public class PostZanRecordVo {
+public class PostZanRecordVo implements Serializable {
     private Integer id;
     private Integer ctype;
 

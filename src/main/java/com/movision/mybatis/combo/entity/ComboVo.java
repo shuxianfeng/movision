@@ -1,12 +1,13 @@
 package com.movision.mybatis.combo.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @Author shuxf
  * @Date 2017/2/20 19:01
  */
-public class ComboVo {
+public class ComboVo implements Serializable {
 
     private Integer id;
 

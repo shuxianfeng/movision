@@ -1,9 +1,10 @@
 package com.movision.mybatis.imFirstDialogue.entity;
 
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ImFirstDialogue {
+public class ImFirstDialogue implements Serializable {
     private Integer id;
 
     private Integer userid;

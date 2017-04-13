@@ -1,8 +1,9 @@
 package com.movision.mybatis.activePart.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ActivePart {
+public class ActivePart implements Serializable {
     private Integer id;
 
     private Integer postid;

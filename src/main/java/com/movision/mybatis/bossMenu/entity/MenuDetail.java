@@ -1,10 +1,12 @@
 package com.movision.mybatis.bossMenu.entity;
 
+import java.io.Serializable;
+
 /**
  * @Author zhuangyuhao
  * @Date 2017/2/14 17:02
  */
-public class MenuDetail {
+public class MenuDetail implements Serializable {
     private Integer id;
     private String menuname;
 

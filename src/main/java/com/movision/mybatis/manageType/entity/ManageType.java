@@ -1,8 +1,9 @@
 package com.movision.mybatis.manageType.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ManageType {
+public class ManageType implements Serializable {
     private Integer id;
 
     private Integer type;

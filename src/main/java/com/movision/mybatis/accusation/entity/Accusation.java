@@ -1,8 +1,9 @@
 package com.movision.mybatis.accusation.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Accusation {
+public class Accusation implements Serializable {
     private Integer id;
 
     private Integer userid;

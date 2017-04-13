@@ -1,6 +1,8 @@
 package com.movision.mybatis.logisticsCompany.entity;
 
-public class LogisticsCompany {
+import java.io.Serializable;
+
+public class LogisticsCompany implements Serializable {
     private Integer id;
 
     private String logisticscompany;

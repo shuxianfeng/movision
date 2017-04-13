@@ -3,6 +3,7 @@ package com.movision.mybatis.circle.entity;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.user.entity.User;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * @Author shuxf
  * @Date 2017/1/19 11:41
  */
-public class CircleVo {
+public class CircleVo implements Serializable {
     private Integer id;
 
     private Integer isofficial;

@@ -1,8 +1,9 @@
 package com.movision.mybatis.period.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Period {
+public class Period implements Serializable {
     private Integer id;
 
     private Integer postid;

@@ -3,8 +3,10 @@ package com.movision.mybatis.bossMenu.entity;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 @ApiModel(value = "菜单", description = "菜单")
-public class Menu {
+public class Menu implements Serializable {
     private Integer id;
     @ApiModelProperty(value = "菜单名称")
     private String menuname;

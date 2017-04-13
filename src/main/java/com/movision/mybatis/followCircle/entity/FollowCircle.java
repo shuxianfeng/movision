@@ -1,6 +1,8 @@
 package com.movision.mybatis.followCircle.entity;
 
-public class FollowCircle {
+import java.io.Serializable;
+
+public class FollowCircle implements Serializable {
     private Integer id;
 
     private Integer userid;

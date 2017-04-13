@@ -2,6 +2,7 @@ package com.movision.mybatis.post.entity;
 
 import com.movision.mybatis.goods.entity.GoodsVo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @Author shuxf
  * @Date 2017/2/3 17:24
  */
-public class ActiveVo {
+public class ActiveVo implements Serializable {
     private Integer id;
 
     private Integer circleid;

@@ -1,8 +1,9 @@
 package com.movision.mybatis.imuser.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ImUser {
+public class ImUser implements Serializable {
     private Integer userid;
 
     private String accid;

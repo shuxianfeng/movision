@@ -1,8 +1,9 @@
 package com.movision.mybatis.rewarded.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Rewarded {
+public class Rewarded implements Serializable {
     private Integer id;
 
     private Integer postid;

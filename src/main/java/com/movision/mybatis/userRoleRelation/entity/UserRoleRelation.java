@@ -2,8 +2,10 @@ package com.movision.mybatis.userRoleRelation.entity;
 
 import com.wordnik.swagger.annotations.ApiModel;
 
+import java.io.Serializable;
+
 @ApiModel(value = "用户角色关系表", description = "用户角色关系表")
-public class UserRoleRelation {
+public class UserRoleRelation implements Serializable {
     private Integer id;
 
     private Integer userid;

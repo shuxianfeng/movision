@@ -1,8 +1,9 @@
 package com.movision.mybatis.goodsAssessment.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class GoodsAssessment {
+public class GoodsAssessment implements Serializable {
     private Integer id;
 
     private Integer userid;

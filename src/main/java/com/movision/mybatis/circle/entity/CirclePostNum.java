@@ -1,12 +1,14 @@
 package com.movision.mybatis.circle.entity;
 
+import java.io.Serializable;
+
 /**
  * 用于接收，返回帖子数量 ，今日新增帖子数量，精贴数量
  *
  * @Author zhurui
  * @Date 2017/2/15 19:21
  */
-public class CirclePostNum {
+public class CirclePostNum implements Serializable {
     private Integer postnum;
 
     private Integer newpostnum;

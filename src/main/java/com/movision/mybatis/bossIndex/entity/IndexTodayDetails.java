@@ -1,10 +1,12 @@
 package com.movision.mybatis.bossIndex.entity;
 
+import java.io.Serializable;
+
 /**
  * @Author zhurui
  * @Date 2017/3/11 15:31
  */
-public class IndexTodayDetails {
+public class IndexTodayDetails implements Serializable {
 
     private String newPost;//今日新帖
 
