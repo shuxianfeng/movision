@@ -120,7 +120,7 @@ public class PostFacade {
             list = postService.queryPostByList(pager);
             return list;
         } else {
-            return null;
+            return list;
         }
     }
 
