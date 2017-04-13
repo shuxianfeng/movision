@@ -379,7 +379,8 @@
             AND c.id=#{circleid,jdbcType=INTEGER}
         </if>
         <if test="circleman != null">
-            AND (SELECT u.nickname FROM yw_user u WHERE id=c.userid) LIKE concat('%',#{circleman,jdbcType=VARCHAR},'%')
+            AND c.phone in (SELECT phone FROM yw_user WHERE nickname
+            LIKE concat('%',#{circleman,jdbcType=VARCHAR},'%'))
         </if>
         <if test="begintime!=null and endtime!=null">
             AND createtime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}
@@ -423,7 +424,8 @@
             AND c.id=#{circleid,jdbcType=INTEGER}
         </if>
         <if test="circleman != null">
-            AND (SELECT u.nickname FROM yw_user u WHERE id=c.userid) LIKE concat('%',#{circleman,jdbcType=VARCHAR},'%')
+            AND c.phone in (SELECT phone FROM yw_user WHERE id=c.userid) LIKE
+            concat('%',#{circleman,jdbcType=VARCHAR},'%')
         </if>
         <if test="begintime!=null and endtime!=null">
             AND createtime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}
