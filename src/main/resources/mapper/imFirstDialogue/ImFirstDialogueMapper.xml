@@ -124,6 +124,6 @@
 
     </select>
     <select id="queryName" parameterType="java.lang.String" resultType="com.movision.mybatis.imuser.entity.ImUser">
-        SELECT name FROM yw_im_user WHERE accid=#{fromid,jdbcType=VARCHAR}
+        SELECT name FROM yw_im_user WHERE accid=#{fromid,jdbcType=VARCHAR} AND type=1
     </select>
 </mapper>
