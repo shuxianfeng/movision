@@ -25,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -180,6 +181,7 @@ public class FacadePost {
     }
 
     @Transactional
+    @CacheEvict(value = "indexData", key = "'index_data'")
     public int releasePost(String userid, String type, String circleid, String title, String postcontent, String isactive, MultipartFile coverimg,
                            MultipartFile videofile, String videourl, String proids) {
 
@@ -274,6 +276,7 @@ public class FacadePost {
         }
     }
 
+    @CacheEvict(value = "indexData", key = "'index_data'")
     public int delPost(String userid, String postid) {
 
         int flag = 0;

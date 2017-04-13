@@ -335,6 +335,7 @@ public class PostFacade {
      * @param postid
      * @return
      */
+    @CacheEvict(value = "indexData", key = "'index_data'")
     public Map deletePost(String postid, String loginid) {
         Map map = new HashedMap();
         Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.delete.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(postid));
@@ -658,6 +659,7 @@ public class PostFacade {
      * @return
      */
     @Transactional
+    @CacheEvict(value = "indexData", key = "'index_data'")
     public Map addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid,
                        String userid, String coverimg, String vid, String bannerimgurl,
                        String postcontent, String isessence, String ishot, String orderid, String time, String goodsid, String loginid) {
@@ -1035,6 +1037,7 @@ public class PostFacade {
      * @return
      */
     @Transactional
+    @CacheEvict(value = "indexData", key = "'index_data'")
     public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String userid, String coverimg, String postcontent, String isessence,
                                                      String orderid, String activefee, String activetype, String iscontribute, String begintime, String endtime, String hotimgurl, String ishot, String essencedate, String goodsid) {
         PostActiveList postActiveList = new PostActiveList();
@@ -1146,6 +1149,7 @@ public class PostFacade {
      * @return
      */
     @Transactional
+    @CacheEvict(value = "indexData", key = "'index_data'")
     public Map updatePostById(HttpServletRequest request, String id, String title, String subtitle, String type,
                               String userid, String circleid, String vid, String bannerimgurl,
                               String coverimg, String postcontent, String isessence, String ishot, String orderid, String time, String goodsid, String loginid) {
