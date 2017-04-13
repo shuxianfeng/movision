@@ -1291,7 +1291,7 @@
     </select>
 
     <update id="deletePostChoiceness" parameterType="java.lang.Integer">
-        UPDATE yw_post SET isessence=0,essencedate=null,orderid=0 WHERE id=#{postid,jdbcType=INTEGER}
+        UPDATE yw_post SET isessence=0,essencedate=null,orderid=NULL WHERE id=#{postid,jdbcType=INTEGER}
     </update>
 
 

@@ -42,6 +42,15 @@ public class PostActiveList {
     private String hotimgurl;//活动首页方形图
     private List<GoodsVo> goodss;
     private String ishot;
+    private Date oprtime;
+
+    public Date getOprtime() {
+        return oprtime;
+    }
+
+    public void setOprtime(Date oprtime) {
+        this.oprtime = oprtime;
+    }
 
     public String getIshot() {
         return ishot;
