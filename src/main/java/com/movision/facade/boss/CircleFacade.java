@@ -108,7 +108,7 @@ public class CircleFacade {
                                 userslist.get(u).setNickname("用户" + userslist.get(u).getPhone().substring(7));
                             }
                             for (int k = 0; k < adminlist.size(); k++) {
-                                adminlist.add(userslist.get(u));//把圈子的管理员遍历出临时存放
+                                //adminlist.add(userslist.get(u));//把圈子的管理员遍历出临时存放
                                 if (userslist.get(u).equals(adminlist.get(k))) {
                                     adminlist.remove(adminlist.get(k));
                                 }
