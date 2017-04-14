@@ -34,6 +34,8 @@ public class PostSearchEntity implements Serializable {
 
     private String imgurl;
 
+    private Integer activetype;
+
     @Override
     public String toString() {
         return "PostSearchEntity{" +
@@ -50,7 +52,17 @@ public class PostSearchEntity implements Serializable {
                 ", begintime=" + begintime +
                 ", endtime=" + endtime +
                 ", imgurl='" + imgurl + '\'' +
+                ", activetype=" + activetype +
                 '}';
+    }
+
+    public void setActivetype(Integer activetype) {
+        this.activetype = activetype;
+    }
+
+    public Integer getActivetype() {
+
+        return activetype;
     }
 
     public void setId(Integer id) {

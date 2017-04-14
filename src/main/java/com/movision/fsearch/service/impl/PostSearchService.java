@@ -112,6 +112,7 @@ public class PostSearchService implements IPostSearchService {
                     product.setPostcontent(FormatUtil.parseString(itemAsMap.get("postcontent")));
                     product.setIsactive(FormatUtil.parseInteger(itemAsMap.get("isactive")));
                     product.setType(FormatUtil.parseInteger(itemAsMap.get("type")));
+                    product.setActivetype(FormatUtil.parseInteger(itemAsMap.get("activetype")));
 
                     product.setCircleid(FormatUtil.parseInteger(itemAsMap.get("circleid")));
                     product.setCirclename(FormatUtil.parseString(itemAsMap.get("circlename")));
