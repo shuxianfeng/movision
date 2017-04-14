@@ -790,13 +790,6 @@ public class CircleFacade {
                     }
 
                     circlenum.get(f).setCirclemanagerlist(userslist);
-                    for (int n = 0; n < username.size(); n++) {
-                        for (int m = 0; m < username.size(); m++) {
-                            if (username.get(n).equals(username.get(m))) {
-                                username.remove(username.get(m));
-                            }
-                        }
-                    }
                     circlenum.get(f).setCirclemaster(username);
                     circlenum.get(f).setPostnum(posts);
                     circlenum.get(f).setPostnewnum(postnews);
