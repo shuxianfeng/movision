@@ -84,7 +84,7 @@ public class AppPostController {
         return response;
     }
 
-    @ApiOperation(value = "查询往期3天的精选帖子列表", notes = "用于返回往期3天的精选帖子列表的接口", response = Response.class)
+    @ApiOperation(value = "查询往期3天的精选帖子(含活动)列表", notes = "用于返回往期3天的精选帖子(含活动)列表的接口", response = Response.class)
     @RequestMapping(value = "pastPost", method = RequestMethod.POST)
     public Response queryPastPostDetail(@ApiParam(value = "查询日期") @RequestParam(required = false) String date) {
         Response response = new Response();
