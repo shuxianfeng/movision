@@ -99,20 +99,14 @@ public class CircleFacade {
                 int isessences = 0;//精贴数
                 for (int e = 0; e < listt.size(); e++) {
                     CircleVo vo = new CircleVo();
-                    Integer circleid = listt.get(e).getId();
-                    List<User> userslist = userService.queryCircleManagerList(circleid);//查询出圈子管理员列表
+                    List<User> userslist = userService.queryCircleManagerList(circlenum.get(i).getCategory());//查询出圈子管理员列表
                     adminlist = userslist;
                     if (userslist != null) {
                         for (int u = 0; u < userslist.size(); u++) {
                             if (userslist.get(u).getNickname() == null) {
                                 userslist.get(u).setNickname("用户" + userslist.get(u).getPhone().substring(7));
                             }
-                            for (int k = 0; k < adminlist.size(); k++) {
-                                //adminlist.add(userslist.get(u));//把圈子的管理员遍历出临时存放
-                                if (userslist.get(u).equals(adminlist.get(k))) {
-                                    adminlist.remove(adminlist.get(k));
-                                }
-                            }
+
                         }
                     }
                     Map m = new HashedMap();

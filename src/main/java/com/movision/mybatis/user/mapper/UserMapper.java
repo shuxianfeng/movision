@@ -46,7 +46,7 @@ public interface UserMapper {
 
     User queryCircleMasterByPhone(String phone);
 
-    List<User> queryCircleManagerList(int circleid);
+    List<User> queryCircleManagerList(int categoryid);
 
 
     List<User> selectAllUser();
