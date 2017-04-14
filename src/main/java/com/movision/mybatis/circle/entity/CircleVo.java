@@ -68,6 +68,8 @@ public class CircleVo implements Serializable {
 
     private String circlename;//圈主名称
 
+    private Integer circleUserid;//圈主id
+
     private List<User> circlemanagerlist;//圈子管理员列表
 
     private Integer isessencenum;//圈子中精贴数
@@ -79,6 +81,14 @@ public class CircleVo implements Serializable {
     private Date intime;//时间
 
     private Integer userid;//用户id
+
+    public Integer getCircleUserid() {
+        return circleUserid;
+    }
+
+    public void setCircleUserid(Integer circleUserid) {
+        this.circleUserid = circleUserid;
+    }
 
     public Integer getUserid() {
         return userid;

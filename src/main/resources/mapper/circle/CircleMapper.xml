@@ -360,9 +360,10 @@
         (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id AND date(intime) = curdate()) AS postnewnum,
         (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id AND isessence=1) AS isessencenum,
         (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id) AS postnum,
-        (SELECT u.nickname FROM yw_user u WHERE phone=c.phone) AS circlename,
-        (SELECT u.level FROM yw_user u WHERE phone=c.phone) AS categorylevel
-        FROM yw_circle c WHERE isdel=0
+        u.nickname AS circlename,
+        u.id AS circleUserid,
+        u.level categorylevel
+        FROM yw_circle c LEFT JOIN yw_user u ON c.phone=u.phone WHERE isdel=0
         <if test="type!=null">
             AND category=#{type,jdbcType=INTEGER}
         </if>
@@ -405,9 +406,10 @@
         (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id AND date(intime) = curdate()) AS postnewnum,
         (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id AND isessence=1) AS isessencenum,
         (SELECT COUNT(1) FROM yw_post WHERE circleid=c.id) AS postnum,
-        (SELECT u.nickname FROM yw_user u WHERE phone=c.phone) AS circlename,
-        (SELECT u.level FROM yw_user u WHERE phone=c.phone) AS categorylevel
-        FROM yw_circle c WHERE isdel=0
+        u.nickname AS circlename,
+        u.id AS circleUserid,
+        u.level categorylevel
+        FROM yw_circle c LEFT JOIN yw_user u ON c.phone=u.phone WHERE isdel=0
         <if test="type!=null">
             AND category=#{type,jdbcType=INTEGER}
         </if>

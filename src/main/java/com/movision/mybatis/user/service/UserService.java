@@ -165,12 +165,34 @@ public class UserService {
         }
     }
 
+    /**
+     * 查询圈子所有管理员列表
+     *
+     * @param categoryid
+     * @return
+     */
     public List<User> queryCircleManagerList(int categoryid) {
         try {
             log.info("查询圈子的所有管理员列表");
             return userMapper.queryCircleManagerList(categoryid);
         } catch (Exception e) {
             log.error("查询圈子的所有管理员列表失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询圈子管理员列表
+     *
+     * @param circleid
+     * @return
+     */
+    public List<User> queryCircleManagerByCircleList(Integer circleid) {
+        try {
+            log.info("查询圈子管理员列表");
+            return userMapper.queryCircleManagerByCircleList(circleid);
+        } catch (Exception e) {
+            log.error("查询圈子管理员列表异常");
             throw e;
         }
     }

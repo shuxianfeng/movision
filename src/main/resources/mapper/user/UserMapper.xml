@@ -69,6 +69,13 @@
         SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER}))
     </select>
 
+    <!-- 查询圈子管理员列表 -->
+    <select id="queryCircleManagerByCircleList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.user.entity.User">
+        SELECT id,photo,nickname,phone,level FROM yw_user WHERE id in(
+        SELECT userid FROM yw_circle_manager WHERE circleid=#{circleid,jdbcType=INTEGER})
+    </select>
+
     <!--根据用户id查询用户积分数-->
     <select id="queryUserPoint" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT points FROM yw_user WHERE id = #{userid,jdbcType=INTEGER}
