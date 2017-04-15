@@ -133,7 +133,7 @@
     </update>
 
     <select id="selectAll" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
-        SELECT *
+        SELECT id,userid,from_accid,body,infrom_time,title,pushcontent,isread
         FROM yw_im_system_informs
         ORDER BY inform_time DESC
     </select>
