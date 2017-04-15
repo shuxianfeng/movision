@@ -30,6 +30,8 @@ public interface ImFirstDialogueMapper {
 
     List<ImFirstDialogueVo> findAllDialogue(Integer userid, RowBounds rowBounds);
 
+    void queryIsread(Integer userid, Integer msgid);
+
 
 
 }

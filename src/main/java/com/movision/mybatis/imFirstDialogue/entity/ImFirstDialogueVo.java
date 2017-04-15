@@ -41,6 +41,15 @@ public class ImFirstDialogueVo implements Serializable {
         this.name = name;
     }
 
+    private Integer isread;
+
+    public Integer getIsread() {
+        return isread;
+    }
+
+    public void setIsread(Integer isread) {
+        this.isread = isread;
+    }
 
 
     public Integer getId() {

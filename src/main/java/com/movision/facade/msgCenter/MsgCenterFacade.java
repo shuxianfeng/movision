@@ -185,5 +185,8 @@ public class MsgCenterFacade {
         return list;
     }
 
+    public void queryIsread(Integer userid, Integer msgid) {
+        imFirstDialogueService.queryIsread(userid, msgid);
+    }
 
 }

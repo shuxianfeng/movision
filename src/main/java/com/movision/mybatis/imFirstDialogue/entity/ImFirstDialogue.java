@@ -17,6 +17,16 @@ public class ImFirstDialogue implements Serializable {
 
     private Date createTime;
 
+    private Integer isread;
+
+    public Integer getIsread() {
+        return isread;
+    }
+
+    public void setIsread(Integer isread) {
+        this.isread = isread;
+    }
+
     public Integer getId() {
         return id;
     }

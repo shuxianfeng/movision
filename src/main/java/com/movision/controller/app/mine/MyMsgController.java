@@ -111,4 +111,15 @@ public class MyMsgController {
         response.setData(paging);
         return response;
     }
+
+
+    @ApiOperation(value = "判断已读未读", notes = "判断已读未读", response = Response.class)
+    @RequestMapping(value = {"/get_my_msg_center_isread_list"}, method = RequestMethod.GET)
+    public Response queryIsread(
+            @ApiParam(value = "消息id") @RequestParam(required = false) Integer msgid
+    ) {
+        Response response = new Response();
+        msgCenterFacade.queryIsread(ShiroUtil.getAppUserID(), msgid);
+        return response;
+    }
 }

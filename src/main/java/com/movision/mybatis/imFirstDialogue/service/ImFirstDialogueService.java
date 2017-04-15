@@ -86,5 +86,15 @@ public class ImFirstDialogueService {
         }
     }
 
+    public void queryIsread(Integer userid, Integer msgid) {
+        try {
+            log.info("判断已读");
+            imFirstDialogueMapper.queryIsread(userid, msgid);
+        } catch (Exception e) {
+            log.error("判断已读失败");
+            throw e;
+        }
+    }
+
 
 }
