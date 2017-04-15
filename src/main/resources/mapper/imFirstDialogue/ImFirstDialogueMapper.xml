@@ -8,9 +8,10 @@
         <result column="toid" property="toid" jdbcType="VARCHAR"/>
         <result column="body" property="body" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="isread" property="isread" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, userid, fromid, toid, body, create_time
+        id, userid, fromid, toid, body, create_time,isread
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -24,10 +25,10 @@
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue">
         insert into yw_im_first_dialogue (id, userid, fromid,
-        toid, body, create_time
+        toid, body, create_time,isread
         )
         values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{fromid,jdbcType=VARCHAR},
-        #{toid,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+        #{toid,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},#{isread,jdbcType=INTEGER}
         )
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue">
@@ -49,6 +50,10 @@
                 body,
             </if>
             create_time,
+            <if test="isread != null">
+                isread,
+            </if>
+
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -67,6 +72,10 @@
                 #{body,jdbcType=VARCHAR},
             </if>
             now(),
+            <if test="isread != null">
+                #{isread,jdbcType=INTEGER},
+            </if>
+
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective"
@@ -88,6 +97,10 @@
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="isread != null">
+                #{isread,jdbcType=INTEGER},
+            </if>
+
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -97,7 +110,8 @@
         fromid = #{fromid,jdbcType=VARCHAR},
         toid = #{toid,jdbcType=VARCHAR},
         body = #{body,jdbcType=VARCHAR},
-        create_time = #{createTime,jdbcType=TIMESTAMP}
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        isread=#{isread,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -119,17 +133,22 @@
     </select>
     <select id="queryFirst" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogueVo">
-        SELECT u.userid,u.name,d.create_time,d.id FROM yw_im_first_dialogue d LEFT JOIN yw_im_user u ON u.accid=d.fromid
+        SELECT u.userid,u.name,d.create_time,d.id,d.isread FROM yw_im_first_dialogue d LEFT JOIN yw_im_user u ON
+        u.accid=d.fromid
         WHERE
         d.toid in (SELECT accid FROM yw_im_user WHERE userid=#{userid,jdbcType=INTEGER}) AND u.type=1 ORDER BY
         d.create_time DESC limit 1
     </select>
     <select id="findAllDialogue" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogueVo">
-        SELECT u.userid,u.name,d.create_time,u.icon,d.body,d.id FROM yw_im_first_dialogue d LEFT JOIN yw_im_user u ON
+        SELECT u.userid,u.name,d.create_time,u.icon,d.body,d.id,d.isread FROM yw_im_first_dialogue d LEFT JOIN
+        yw_im_user u ON
         u.accid=d.fromid
         WHERE
         d.toid in (SELECT accid FROM yw_im_user WHERE userid=#{userid,jdbcType=INTEGER}) AND u.type=1 ORDER BY
         d.create_time DESC
     </select>
+    <update id="queryIsread" parameterType="java.lang.Integer">
+        UPDATE yw_im_first_dialogue SET  isread=1 WHERE id=#{msgid,jdbcType=INTEGER}
+    </update>
 </mapper>
