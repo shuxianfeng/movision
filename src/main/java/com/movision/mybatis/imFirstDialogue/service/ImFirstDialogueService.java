@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhuangyuhao
@@ -86,10 +87,10 @@ public class ImFirstDialogueService {
         }
     }
 
-    public void queryIsread(Integer userid, Integer msgid) {
+    public void queryIsread(Map map) {
         try {
             log.info("判断已读");
-            imFirstDialogueMapper.queryIsread(userid, msgid);
+            imFirstDialogueMapper.queryIsread(map);
         } catch (Exception e) {
             log.error("判断已读失败");
             throw e;

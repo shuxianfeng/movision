@@ -148,7 +148,7 @@
         d.toid in (SELECT accid FROM yw_im_user WHERE userid=#{userid,jdbcType=INTEGER}) AND u.type=1 ORDER BY
         d.create_time DESC
     </select>
-    <update id="queryIsread" parameterType="java.lang.Integer">
-        UPDATE yw_im_first_dialogue SET  isread=1 WHERE id=#{msgid,jdbcType=INTEGER}
+    <update id="queryIsread" parameterType="java.util.Map">
+        UPDATE yw_im_first_dialogue SET isread=1 WHERE userid=#{userid,jdbcType=INTEGER} AND id=#{id,jdbcType=INTEGER}
     </update>
 </mapper>

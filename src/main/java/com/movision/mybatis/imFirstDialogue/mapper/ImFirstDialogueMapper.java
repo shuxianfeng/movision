@@ -8,6 +8,7 @@ import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ImFirstDialogueMapper {
     int deleteByPrimaryKey(Integer id);
@@ -30,7 +31,7 @@ public interface ImFirstDialogueMapper {
 
     List<ImFirstDialogueVo> findAllDialogue(Integer userid, RowBounds rowBounds);
 
-    void queryIsread(Integer userid, Integer msgid);
+    void queryIsread(Map map);
 
 
 

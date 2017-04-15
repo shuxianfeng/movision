@@ -185,8 +185,11 @@ public class MsgCenterFacade {
         return list;
     }
 
-    public void queryIsread(Integer userid, Integer msgid) {
-        imFirstDialogueService.queryIsread(userid, msgid);
+    public void queryIsread(Integer userid, Integer id) {
+        Map map = new HashMap();
+        map.put("userid", userid);
+        map.put("id", id);
+        imFirstDialogueService.queryIsread(map);
     }
 
 }
