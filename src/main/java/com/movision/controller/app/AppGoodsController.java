@@ -255,7 +255,7 @@ public class AppGoodsController {
     @ApiOperation(value = "清除历史记录", notes = "清除历史记录", response = Response.class)
     public Response updateSearchIsdel() {
         Response response = new Response();
-        response.setData(goodsSearchService.updateSearchIsdel(ShiroUtil.getAppUserID()));
+        goodsSearchService.updateSearchIsdel(ShiroUtil.getAppUserID());
         return response;
     }
 

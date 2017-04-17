@@ -98,7 +98,7 @@ public class AppIndexController {
     public Response UpdateSearchIsdel() {
 
         Response response = new Response();
-        response.setData(postSearchService.UpdateSearchIsdel(ShiroUtil.getAppUserID()));
+        postSearchService.UpdateSearchIsdel(ShiroUtil.getAppUserID());
         return response;
     }
 
