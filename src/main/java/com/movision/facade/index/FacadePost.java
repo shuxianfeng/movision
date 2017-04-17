@@ -1,5 +1,6 @@
 package com.movision.facade.index;
 
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.accusation.entity.Accusation;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.circle.entity.Circle;
@@ -18,6 +19,7 @@ import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.DateUtils;
+import com.movision.utils.JsoupCompressImg;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
@@ -63,6 +65,9 @@ public class FacadePost {
 
     @Autowired
     private MovisionOssClient movisionOssClient;
+
+    @Autowired
+    private JsoupCompressImg jsoupCompressImg;
 
     public PostVo queryPostDetail(String postid, String userid, String type) {
 
@@ -182,7 +187,7 @@ public class FacadePost {
 
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
-    public int releasePost(String userid, String type, String circleid, String title, String postcontent, String isactive, MultipartFile coverimg,
+    public int releasePost(HttpServletRequest request, String userid, String type, String circleid, String title, String postcontent, String isactive, MultipartFile coverimg,
                            MultipartFile videofile, String videourl, String proids) {
 
         String url = "";//定义原生视频地址
@@ -212,7 +217,19 @@ public class FacadePost {
                 Post post = new Post();
                 post.setCircleid(Integer.parseInt(circleid));
                 post.setTitle(title);
-                post.setPostcontent(postcontent);
+                if (StringUtil.isNotEmpty(postcontent)) {
+                    //内容转换
+                    Map con = jsoupCompressImg.compressImg(request, postcontent);
+                    System.out.println(con);
+                    if ((int) con.get("code") == 200) {
+                        String str = con.get("content").toString();
+                        str = str.replace("\\", "");
+                        post.setPostcontent(str);//帖子内容
+                    } else {
+                        log.error("APP端帖子图片内容转换异常");
+                        post.setPostcontent(postcontent);
+                    }
+                }
                 post.setZansum(0);//新发帖全部默认为0次
                 post.setCommentsum(0);//被评论次数
                 post.setForwardsum(0);//被转发次数
