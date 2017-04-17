@@ -15,7 +15,7 @@ import java.util.List;
 public class CircleIndexList implements Serializable {
     private Integer category;//圈子分类
     private String categoryname;//圈子分类名称
-    private List<User> circlemaster;//圈主
+    private List circlemaster;//圈主
     private List<User> circlemanagerlist;//圈子管理员列表
     private Integer follownum;//圈子关注数
     private Integer follownewnum;//圈子今日关注数
@@ -50,11 +50,11 @@ public class CircleIndexList implements Serializable {
         this.category = category;
     }
 
-    public List<User> getCirclemaster() {
+    public List getCirclemaster() {
         return circlemaster;
     }
 
-    public void setCirclemaster(List<User> circlemaster) {
+    public void setCirclemaster(List circlemaster) {
         this.circlemaster = circlemaster;
     }
 

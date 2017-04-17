@@ -91,7 +91,7 @@ public class CircleFacade {
                 }
                 List<CircleVo> circleVoslist = new ArrayList<>();
                 //List<User> adminlist = new ArrayList();//用于存储类型中所有圈子的管理员
-                List username = new ArrayList();//用于存放类型中所有圈主
+                List<Map> username = new ArrayList();//用于存放类型中所有圈主
                 int posts = 0;//总帖子数
                 int follows = 0;//关注数
                 int follownews = 0;//今日关注
@@ -136,7 +136,23 @@ public class CircleFacade {
                 }
                 //外层圈子类型列表数据
                 circlenum.get(i).setCirclemanagerlist(userslist);
-                circlenum.get(i).setCirclemaster(username);
+                List<Map> re = new ArrayList<>();
+                for (int n = 0; n < username.size(); n++) {
+                    Map nn = username.get(n);
+                    for (int m = 0; m < re.size(); m++) {
+                        if (re != null) {
+                            Map mm = re.get(n);
+                            if (nn.get("nickname").equals(mm.get("nickname"))) {
+                                continue;
+                            } else {
+                                re.add(nn);
+                            }
+                        } else {
+                            re.add(nn);
+                        }
+                    }
+                }
+                circlenum.get(i).setCirclemaster(re);
                 circlenum.get(i).setPostnum(posts);
                 circlenum.get(i).setPostnewnum(postnews);
                 circlenum.get(i).setFollownum(follows);
