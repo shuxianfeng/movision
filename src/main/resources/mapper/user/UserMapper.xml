@@ -451,7 +451,7 @@
     <select id="findAlllikeQueryPostByNickname" resultType="com.movision.mybatis.user.entity.UserLike"
             parameterType="java.lang.String">
         SELECT u.nickname,u.id FROM yw_user u WHERE nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%') AND
-        u.status=0
+        u.status=0 AND phone IS NOT NULL
     </select>
 
     <update id="updateRegisterUser" parameterType="com.movision.mybatis.user.entity.RegisterUser">
