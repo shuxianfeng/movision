@@ -95,7 +95,8 @@ public class JsoupCompressImg {
                 String filesize = df.format((double) s / 1024 / 1024);
                 log.info("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + filesize + "M");
 
-                if (sum == 0 && s > 400 * 1024) {//如果没压缩过且图片大小超过400kb就进行压缩，压缩过的或大小<=400kb不处理（防止修改帖子时对压缩过的图片进行重复压缩）
+                if (sum == 0 && s > 400 * 1024) {
+                    //如果没压缩过且图片大小超过400kb就进行压缩，压缩过的或大小<=400kb不处理（防止修改帖子时对压缩过的图片进行重复压缩，同时也保证了低质量图片的品质）
 
                     boolean compressFlag = false;
 
@@ -137,8 +138,25 @@ public class JsoupCompressImg {
                             }
                         }
                     }
-                } else {
-                    log.info("帖子中包含的已压缩过的图片>>>>>>>>>>>>>>>>>>>>>>>>>" + imgurl);
+                } else if (sum != 0) {
+                    //虽然图片大于400kb，但是图片压缩过，存在映射关系
+                    log.info("帖子中包含的已处理过的图片（压缩图片表存在映射）>>>>>>>>>>>>>>>>>>>>>>>>>" + imgurl);
+
+                } else if (sum == 0 && s <= 400 * 1024) {
+                    //图片未压缩过，也不存在映射关系，但是图片大小低于400kb
+
+                    //不做图片的压缩，直接使用原图的url当做压缩后的url来存
+                    CompressImg compressImg = new CompressImg();
+                    compressImg.setCompressimgurl(imgurl);
+                    compressImg.setProtoimgurl(imgurl);
+                    compressImg.setProtoimgsize(filesize);
+                    int count = postFacade.queryCount(compressImg);
+                    if (count == 0) {
+                        //如果已经保存过就不再保存
+                        postFacade.addCompressImg(compressImg);//保存缩略图和原图的映射关系到数据库中yw_compress_img
+                    } else {
+                        log.info("原图:" + imgurl + "已进行过压缩，且已存在映射关系");
+                    }
                 }
             }
             String a = doc.html().replaceAll("\\n", "").replaceAll("\\\\", "").replaceAll("<html>", "").replaceAll("<head>", "").replaceAll("<body>", "").replaceAll("</html>", "").replaceAll("</head>", "").replaceAll("</body>", "");
