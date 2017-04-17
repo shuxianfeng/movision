@@ -96,7 +96,6 @@ public class AppIndexController {
     @RequestMapping(value = {"get_post_hot_search_word_and_history_isdel"}, method = RequestMethod.GET)
     @ApiOperation(value = "清除搜索记录", notes = "清除搜索记录", response = Response.class)
     public Response UpdateSearchIsdel() {
-
         Response response = new Response();
         postSearchService.UpdateSearchIsdel(ShiroUtil.getAppUserID());
         return response;
