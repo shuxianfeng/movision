@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.deviceAccid.mapper.DeviceAccidMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.deviceAccid.entity.DeviceAccid">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="deviceid" property="deviceid" jdbcType="VARCHAR"/>
+        <result column="accid" property="accid" jdbcType="VARCHAR"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, deviceid, accid, intime
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_device_accid
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from t_device_accid
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.deviceAccid.entity.DeviceAccid">
+        insert into t_device_accid (id, deviceid, accid,
+        intime)
+        values (#{id,jdbcType=INTEGER}, #{deviceid,jdbcType=VARCHAR}, #{accid,jdbcType=VARCHAR},
+        #{intime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.deviceAccid.entity.DeviceAccid">
+        insert into t_device_accid
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="deviceid != null">
+                deviceid,
+            </if>
+            <if test="accid != null">
+                accid,
+            </if>
+            intime,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="deviceid != null">
+                #{deviceid,jdbcType=VARCHAR},
+            </if>
+            <if test="accid != null">
+                #{accid,jdbcType=VARCHAR},
+            </if>
+            now(),
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.deviceAccid.entity.DeviceAccid">
+        update t_device_accid
+        <set>
+            <if test="deviceid != null">
+                deviceid = #{deviceid,jdbcType=VARCHAR},
+            </if>
+            <if test="accid != null">
+                accid = #{accid,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.deviceAccid.entity.DeviceAccid">
+        update t_device_accid
+        set deviceid = #{deviceid,jdbcType=VARCHAR},
+        accid = #{accid,jdbcType=VARCHAR},
+        intime = #{intime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
+ *
  * @Author zhuangyuhao
  * @Date 2017/2/4 13:58
  */
@@ -140,6 +141,21 @@ public class AppLoginController {
             throw e;
         }
 
+        return response;
+    }
+
+    @ApiOperation(value = "QQ登录", notes = "QQ登录", response = Response.class)
+    @RequestMapping(value = {"/login_by_qq"}, method = RequestMethod.POST)
+    public Response loginByQQ(@ApiParam(value = "qq号") @RequestParam String qq,
+                              @ApiParam(value = "qq的token") @RequestParam String qq_token,
+                              @ApiParam(value = "设备号") @RequestParam String deviceno) throws Exception {
+
+        log.debug("登录信息  qq==" + qq + ",qq_token = " + qq_token + ", deviceno = " + deviceno);
+        Response response = new Response();
+
+        //1 先判断是否存在这条qq用户记录
+
+        //2 若存在，则根据token来
         return response;
     }
 
@@ -261,15 +277,6 @@ public class AppLoginController {
         return response;
     }
 
-    /*@ApiOperation(value = "测试用-获取当前登录人信息", notes = "测试用-获取当前登录人信息", response = Response.class)
-    @RequestMapping(value = {"/testGetAppUserInfo"}, method = RequestMethod.POST)
-    public Response testGetAppUserInfo(@ApiParam @RequestParam String phone) {
-        Response response = new Response();
-        response.setData(userFacade.getLoginUserByPhone(phone));
-        return response;
-    }*/
-
-
     private void shiroLogin(Response response, Subject currentUser, UsernamePasswordToken token) {
         try {
             //登录，即身份验证 , 开始进入shiro的认证流程
@@ -324,6 +331,14 @@ public class AppLoginController {
     public Response logout() throws IOException {
         SecurityUtils.getSubject().logout();
         return new Response();
+    }
+
+    @ApiOperation(value = "新设备打开APP绑定ACCID", notes = "新设备打开APP绑定ACCID", response = Response.class)
+    @RequestMapping(value = "/new_device_binding_accid", method = RequestMethod.POST)
+    public Response newDeviceBindingAccid(@ApiParam(value = "设备号") @RequestParam String deviceid) {
+        Response response = new Response();
+        appRegisterFacade.addDeviceAccid(deviceid);
+        return response;
     }
 
 

@@ -8,6 +8,8 @@ import com.movision.facade.im.ImFacade;
 import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.coupon.service.CouponService;
 import com.movision.mybatis.couponTemp.entity.CouponTemp;
+import com.movision.mybatis.deviceAccid.entity.DeviceAccid;
+import com.movision.mybatis.deviceAccid.service.DeviceAccidService;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
@@ -50,11 +52,14 @@ public class AppRegisterFacade {
     @Autowired
     private CouponService couponService;
 
+    @Autowired
+    private DeviceAccidService deviceAccidService;
+
     /**
-     * 校验登录用户信息：手机号+短信验证码
-     * 若用户不存在，则新增用户信息；
-     * 若用户存在，则更新用户token
-     * 登录成功，则清除session中的验证码，
+     * 1 校验登录用户信息：手机号+短信验证码
+     * 2 若用户不存在，则新增用户信息；
+     *   若用户存在，则更新用户token
+     * 3 登录成功，则清除session中的验证码，
      *
      * @param member
      * @param validateinfo
@@ -235,5 +240,20 @@ public class AppRegisterFacade {
             log.error("register member error", e);
         }
     }
+
+    /**
+     * 新增设备-accid记录
+     *
+     * @param deviceid
+     */
+    public void addDeviceAccid(String deviceid) {
+        DeviceAccid deviceAccid = new DeviceAccid();
+        deviceAccid.setDeviceid(deviceid);
+
+        deviceAccid.setAccid(CheckSumBuilder.getAccid(deviceid));
+        deviceAccidService.add(deviceAccid);
+    }
+
+
 }
 
