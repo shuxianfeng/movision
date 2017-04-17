@@ -119,6 +119,7 @@ public class PostSearchService implements IPostSearchService {
 
                     product.setActivefee(FormatUtil.parseDouble(itemAsMap.get("activefee")));
                     product.setImgurl(FormatUtil.parseString(itemAsMap.get("imgurl")));
+                    product.setCoverimg(FormatUtil.parseString(itemAsMap.get("coverimg")));
 
                 }
                 products.add(product);

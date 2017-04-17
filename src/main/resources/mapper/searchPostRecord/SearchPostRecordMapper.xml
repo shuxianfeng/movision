@@ -102,7 +102,7 @@
     <select id="selectHistoryRecord" parameterType="java.lang.Integer" resultType="java.util.HashMap">
         select keyword
         FROM t_search_post_record
-        WHERE userid=#{userid}
+        WHERE userid=#{userid} AND isdel=0
         GROUP BY keyword
         order BY intime DESC
     </select>
