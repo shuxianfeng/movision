@@ -203,4 +203,8 @@ public class GoodsSearchService implements IGoodsSearchService {
         return map;
     }
 
+    public Integer updateSearchIsdel(Integer userid) {
+        return searchGoodsRecordService.updateSearchIsdel(userid);
+    }
+
 }

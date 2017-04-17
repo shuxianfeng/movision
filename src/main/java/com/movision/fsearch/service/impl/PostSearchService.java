@@ -199,4 +199,8 @@ public class PostSearchService implements IPostSearchService {
         return map;
     }
 
+    public Integer UpdateSearchIsdel(Integer userid) {
+        return searchPostRecordService.UpdateSearchIsdel(userid);
+    }
+
 }

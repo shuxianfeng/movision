@@ -73,5 +73,15 @@ public class SearchPostRecordService {
         }
     }
 
+    public Integer UpdateSearchIsdel(Integer userid) {
+        try {
+            log.info("清楚搜索记录");
+            return searchPostRecordMapper.UpdateSearchIsdel(userid);
+        } catch (Exception e) {
+            log.error("清楚搜索记录失败");
+            throw e;
+        }
+    }
+
 
 }

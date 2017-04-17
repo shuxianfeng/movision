@@ -76,4 +76,14 @@ public class SearchGoodsRecordService {
         }
     }
 
+    public Integer updateSearchIsdel(Integer userid) {
+        try {
+            log.info("清楚搜索记录");
+            return searchGoodsRecordMapper.updateSearchIsdel(userid);
+        } catch (Exception e) {
+            log.error("清楚搜索记录失败");
+            throw e;
+        }
+    }
+
 }

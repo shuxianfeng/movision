@@ -1,6 +1,7 @@
 package com.movision.controller.app;
 
 import com.movision.common.Response;
+import com.movision.common.util.ShiroUtil;
 import com.movision.facade.index.FacadeIndex;
 import com.movision.fsearch.pojo.spec.GoodsSearchSpec;
 import com.movision.fsearch.pojo.spec.PostSearchSpec;
@@ -91,5 +92,15 @@ public class AppIndexController {
         response.setData(postSearchService.getHotwordAndHistory());
         return response;
     }
+
+    @RequestMapping(value = {"get_post_hot_search_word_and_history_isdel"}, method = RequestMethod.GET)
+    @ApiOperation(value = "清除搜索记录", notes = "清除搜索记录", response = Response.class)
+    public Response UpdateSearchIsdel() {
+
+        Response response = new Response();
+        response.setData(postSearchService.UpdateSearchIsdel(ShiroUtil.getAppUserID()));
+        return response;
+    }
+
 
 }

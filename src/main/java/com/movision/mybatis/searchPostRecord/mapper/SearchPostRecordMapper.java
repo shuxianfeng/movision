@@ -22,4 +22,6 @@ public interface SearchPostRecordMapper {
     List<Map<String, Object>> selectPostSearchHotWord();
 
     List<Map<String, Object>> selectHistoryRecord(@Param("userid") Integer userid);
+
+    int UpdateSearchIsdel(Integer userid);
 }

@@ -1,6 +1,7 @@
 package com.movision.controller.app;
 
 import com.movision.common.Response;
+import com.movision.common.util.ShiroUtil;
 import com.movision.facade.Goods.GoodsFacade;
 import com.movision.facade.coupon.CouponFacade;
 import com.movision.fsearch.pojo.spec.GoodsSearchSpec;
@@ -249,5 +250,13 @@ public class AppGoodsController {
         return response;
     }
 
+
+    @RequestMapping(value = {"get_goods_hot_search_word_and_history_isdel"}, method = RequestMethod.GET)
+    @ApiOperation(value = "清除历史记录", notes = "清除历史记录", response = Response.class)
+    public Response updateSearchIsdel() {
+        Response response = new Response();
+        response.setData(goodsSearchService.updateSearchIsdel(ShiroUtil.getAppUserID()));
+        return response;
+    }
 
 }

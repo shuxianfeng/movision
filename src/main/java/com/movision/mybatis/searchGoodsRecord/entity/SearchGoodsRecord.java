@@ -12,6 +12,16 @@ public class SearchGoodsRecord implements Serializable {
 
     private Date intime;
 
+    private Integer isdel;
+
+    public Integer getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(Integer isdel) {
+        this.isdel = isdel;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -22,4 +22,6 @@ public interface SearchGoodsRecordMapper {
     List<Map<String, Object>> selectGoodsSearchHotWord();
 
     List<Map<String, Object>> selectGoodsHistoryRecord(@Param("userid") Integer userid);
+
+    int updateSearchIsdel(Integer userid);
 }
