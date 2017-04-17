@@ -693,7 +693,7 @@ public class PostFacade {
                         str = str.replace("\\", "");
                         post.setPostcontent(str);//帖子内容
                     } else {
-                        logger.error("BOSS后台帖子内容转换异常");
+                        logger.error("帖子内容转换异常");
                         post.setPostcontent(postcontent);
                     }
                 }
