@@ -167,7 +167,7 @@ public class AppPostController {
         return response;
     }
 
-    @ApiOperation(value = "APP端删除帖子", notes = "用于APP端删除帖子的接口", response = Response.class)
+    @ApiOperation(value = "APP端删帖", notes = "用于APP端删除帖子的接口", response = Response.class)
     @RequestMapping(value = "delPost", method = RequestMethod.POST)
     public Response delPost(@ApiParam(value = "当前登录的用户id") @RequestParam String userid,
                             @ApiParam(value = "帖子id") @RequestParam String postid) {
