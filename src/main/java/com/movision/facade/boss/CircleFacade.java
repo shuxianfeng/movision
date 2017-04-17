@@ -136,23 +136,14 @@ public class CircleFacade {
                 }
                 //外层圈子类型列表数据
                 circlenum.get(i).setCirclemanagerlist(userslist);
-                List<Map> re = new ArrayList<>();
-                for (int n = 0; n < username.size(); n++) {
-                    Map nn = username.get(n);
-                    if (re != null) {
-                        for (int m = 0; m < re.size(); m++) {
-                            Map mm = re.get(n);
-                            if (nn.get("nickname").equals(mm.get("nickname"))) {
-                                continue;
-                            } else {
-                                re.add(nn);
-                            }
+                for (int n = 0; n < username.size() - 1; n++) {
+                    for (int m = username.size() - 1; m > n; m--) {
+                        if (username.get(m).equals(username.get(n))) {
+                            username.remove(m);
                         }
-                    } else {
-                        re.add(nn);
                     }
                 }
-                circlenum.get(i).setCirclemaster(re);
+                circlenum.get(i).setCirclemaster(username);
                 circlenum.get(i).setPostnum(posts);
                 circlenum.get(i).setPostnewnum(postnews);
                 circlenum.get(i).setFollownum(follows);
