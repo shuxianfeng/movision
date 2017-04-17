@@ -81,16 +81,23 @@ public class JsoupCompressImg {
                 //通过帖子中的imgurl查询图片压缩关系表中是否存在该图的压缩记录
                 int sum = postFacade.queryIsHaveCompress(imgurl);
 
-                if (sum == 0) {//如果没压缩过就进行压缩，压缩过的不处理（防止修改帖子时对压缩过的图片进行重复压缩）
+                String filename = FileUtil.getPicName(imgurl);
+                log.info("filename=" + filename);
+                //原图的绝对路径
+                String proto_img_dir = savedDir.substring(0, savedDir.lastIndexOf("/")) + PropertiesLoader.getValue("post.proto.img.domain") + filename;
+                log.info("原图的绝对路径，proto_img_dir=" + proto_img_dir);
+
+                //获取原图绝对路径和图片大小
+                File file = new File(proto_img_dir);//获取原图大小
+                FileInputStream fis = new FileInputStream(file);
+                int s = fis.available();
+                DecimalFormat df = new DecimalFormat("######0.00");
+                String filesize = df.format((double) s / 1024 / 1024);
+                log.info("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + filesize + "M");
+
+                if (sum == 0 && s > 400 * 1024) {//如果没压缩过且图片大小超过400kb就进行压缩，压缩过的或大小<=400kb不处理（防止修改帖子时对压缩过的图片进行重复压缩）
 
                     boolean compressFlag = false;
-
-                    String filename = FileUtil.getPicName(imgurl);
-                    log.info("filename=" + filename);
-
-                    //原图的绝对路径
-                    String proto_img_dir = savedDir.substring(0, savedDir.lastIndexOf("/")) + PropertiesLoader.getValue("post.proto.img.domain") + filename;
-                    log.info("原图的绝对路径，proto_img_dir=" + proto_img_dir);
 
                     //根据图片url下载图片存在服务器/WWW/tomcat-8200/apache-tomcat-7.0.73/webapps/images/post/compressimg/目录下
 //                FileUtil.downloadObject(imgurl, tempDir, filename, "img");
@@ -115,14 +122,6 @@ public class JsoupCompressImg {
 
                             //如果压缩保存成功，这里替换文章中的第i个img标签中的src属性
                             titleElms.get(i).attr("src", compress_file_path);
-
-                            //获取原图绝对路径和图片大小
-                            File file = new File(proto_img_dir);//获取原图大小
-                            FileInputStream fis = new FileInputStream(file);
-                            int s = fis.available();
-                            DecimalFormat df = new DecimalFormat("######0.00");
-                            String filesize = df.format((double) s / 1024 / 1024);
-                            log.info("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + filesize + "M");
 
                             //保存缩略图和原图的映射关系到数据库中yw_compress_img
                             CompressImg compressImg = new CompressImg();
