@@ -164,7 +164,7 @@ public class AppLoginController {
      * 1 若app用户未注册，则会报异常：请发送短信验证码登录
      * 2 若app用户已注册，即已存在，则开始比较appToken和serverToken,若相同，则进入shiro的认证流程,
      * 若认证成功， 则在session中缓存当前app用户，并且删除session中的boss用户，
-     * <p>
+     * <p>。。
      * PS：（这里逻辑有点问题，如果一个用户既登录app，又登录boss，怎么办？
      * --其实他们的session不同，所以逻辑没有问题，
      * 因为同一个session当前登录人只能是app用户或者是boss用户的一个。）
