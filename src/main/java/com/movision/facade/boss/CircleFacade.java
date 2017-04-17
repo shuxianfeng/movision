@@ -139,17 +139,17 @@ public class CircleFacade {
                 List<Map> re = new ArrayList<>();
                 for (int n = 0; n < username.size(); n++) {
                     Map nn = username.get(n);
-                    for (int m = 0; m < re.size(); m++) {
-                        if (re != null) {
+                    if (re != null) {
+                        for (int m = 0; m < re.size(); m++) {
                             Map mm = re.get(n);
                             if (nn.get("nickname").equals(mm.get("nickname"))) {
                                 continue;
                             } else {
                                 re.add(nn);
                             }
-                        } else {
-                            re.add(nn);
                         }
+                    } else {
+                        re.add(nn);
                     }
                 }
                 circlenum.get(i).setCirclemaster(re);
