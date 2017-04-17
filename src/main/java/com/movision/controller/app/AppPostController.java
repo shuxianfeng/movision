@@ -138,7 +138,8 @@ public class AppPostController {
 
     @ApiOperation(value = "APP端发布帖子", notes = "用于APP端发布帖子的接口", response = Response.class)
     @RequestMapping(value = "releasePost", method = RequestMethod.POST)
-    public Response releasePost(@ApiParam(value = "用户id") @RequestParam String userid,
+    public Response releasePost(HttpServletRequest request,
+                                @ApiParam(value = "用户id") @RequestParam String userid,
                                 @ApiParam(value = "帖子类型：0 普通图文帖 1 原生视频帖 2 分享视频贴( isactive为0时该字段不为空)") @RequestParam String type,
                                 @ApiParam(value = "所属圈子id") @RequestParam String circleid,
                                 @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
@@ -151,7 +152,7 @@ public class AppPostController {
     ) {
         Response response = new Response();
 
-        int count = facadePost.releasePost(userid, type, circleid, title, postcontent, isactive, coverimg, videofile, videourl, proids);
+        int count = facadePost.releasePost(request, userid, type, circleid, title, postcontent, isactive, coverimg, videofile, videourl, proids);
 
         if (count == 0) {
             response.setCode(300);
