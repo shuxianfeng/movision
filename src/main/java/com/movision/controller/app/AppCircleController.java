@@ -81,10 +81,11 @@ public class AppCircleController {
 
     @ApiOperation(value = "圈子简介/公告接口", notes = "用户点击圈子背景图片进入圈子的简介公告页面（圈主和管理员昵称不为空时显示昵称，昵称为空时显示“用户”+手机号后四位，如：用户1694）", response = Response.class)
     @RequestMapping(value = "circleInfo", method = RequestMethod.POST)
-    public Response queryCircleInfo(@ApiParam(value = "圈子id") @RequestParam String circleid) {
+    public Response queryCircleInfo(@ApiParam(value = "圈子id") @RequestParam String circleid,
+                                    @ApiParam(value = "用户id(登录时为必填)") @RequestParam(required = false) String userid) {
         Response response = new Response();
 
-        CircleVo circleinfo = facadeCircle.queryCircleInfo(circleid);
+        CircleVo circleinfo = facadeCircle.queryCircleInfo(circleid, userid);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");

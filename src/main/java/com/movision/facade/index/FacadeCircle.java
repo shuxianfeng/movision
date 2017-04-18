@@ -1,5 +1,6 @@
 package com.movision.facade.index;
 
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.circleCategory.entity.CircleCategoryVo;
@@ -123,7 +124,7 @@ public class FacadeCircle {
 
     }
 
-    public CircleVo queryCircleInfo(String circleid) {
+    public CircleVo queryCircleInfo(String circleid, String userid) {
         //查询基本信息实体
         CircleVo circleVo = circleService.queryCircleInfo(Integer.parseInt(circleid));
 
@@ -135,6 +136,20 @@ public class FacadeCircle {
         List<User> circlemanagerList = userService.queryCircleManagerList(Integer.parseInt(circleid));
         circleVo.setCirclemanagerlist(circlemanagerList);
 
+        if (StringUtil.isNotEmpty(userid)) {
+            //查询当前用户有没有支持过该圈子
+            Map<String, Object> parammap = new HashMap<>();
+            parammap.put("userid", Integer.parseInt(userid));
+            parammap.put("circleid", Integer.parseInt(circleid));
+            int count = circleService.queryIsSupport(parammap);
+            if (count > 0) {
+                circleVo.setIssupport(1);//已支持 不可支持
+            } else {
+                circleVo.setIssupport(0);//为支持 可支持
+            }
+        } else {
+            circleVo.setIssupport(0);//为支持 可支持
+        }
         return circleVo;
     }
 
