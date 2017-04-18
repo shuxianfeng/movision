@@ -149,6 +149,6 @@
         </if>
     </select>
     <select id="queryByUserid" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
-        SELECT body,inform_time FROM yw_im_system_informs ORDER BY inform_time DESC LIMIT 0,1
+        SELECT body,inform_time,isread FROM yw_im_system_informs ORDER BY inform_time DESC LIMIT 0,1
     </select>
 </mapper>
