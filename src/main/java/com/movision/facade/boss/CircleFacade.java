@@ -97,59 +97,70 @@ public class CircleFacade {
                 int follownews = 0;//今日关注
                 int postnews = 0;//今日新增帖子
                 int isessences = 0;//精贴数
-                List<User> userslist = userService.queryCircleManagerList(circlenum.get(i).getCategory());//查询出圈子所有管理员列表
-                for (int e = 0; e < listt.size(); e++) {//根据圈子遍历
-                    CircleVo vo = new CircleVo();
-                    Integer cid = listt.get(e).getId();//圈子id
-                    Map m = new HashedMap();
-                    m.put("nickname", listt.get(e).getCirclename());
-                    m.put("userid", listt.get(e).getCircleUserid());
-                    username.add(m);//把圈子的圈主遍历出来临时存放
-                    posts += listt.get(e).getPostnum();//圈子帖子和
-                    postnews += listt.get(e).getPostnewnum();//新增帖子和
-                    follows += listt.get(e).getFollownum();//关注和
-                    follownews += listt.get(e).getFollownewnum();//新增关注和
-                    isessences += listt.get(e).getIsessencenum();//精贴和
+                map.put("category", circlenum.get(i).getCategory());
+                List<User> userslist = userService.queryCircleMangerByUseridList(map);//根据用户id查询出圈子所有管理员列表
+                //System.out.println("++++++++++++++++++++++++++"+listt.toString());
+                if (listt.size() > 0) {
+                    for (int e = 0; e < listt.size(); e++) {//根据圈子遍历
+                        CircleVo vo = new CircleVo();
+                        Integer cid = listt.get(e).getId();//圈子id
+                        Map m = new HashedMap();
+                        m.put("nickname", listt.get(e).getCirclename());
+                        m.put("userid", listt.get(e).getCircleUserid());
+                        username.add(m);//把圈子的圈主遍历出来临时存放
+                        posts += listt.get(e).getPostnum();//圈子帖子和
+                        postnews += listt.get(e).getPostnewnum();//新增帖子和
+                        follows += listt.get(e).getFollownum();//关注和
+                        follownews += listt.get(e).getFollownewnum();//新增关注和
+                        isessences += listt.get(e).getIsessencenum();//精贴和
 
-                    //根据圈子id查询圈子的管理员列表
-                    List<User> circleManage = userService.queryCircleManagerByCircleList(cid);
-                    //内层圈子列表
-                    vo.setCirclemanagerlist(circleManage);//圈子管理员列表
-                    vo.setPostnum(listt.get(e).getPostnum());//帖子数量
-                    vo.setPostnewnum(listt.get(e).getPostnewnum());//今日新增帖子数量
-                    vo.setIsessencenum(listt.get(e).getIsessencenum());//精贴数量
-                    vo.setOrderid(listt.get(e).getOrderid());//发现推荐
-                    vo.setFollownum(listt.get(e).getFollownum());//关注数
-                    vo.setFollownewnum(listt.get(e).getFollownewnum());//今日新增关注数
-                    vo.setId(listt.get(e).getId());//圈子id
-                    vo.setName(listt.get(e).getName());//圈子名称
-                    vo.setCategory(listt.get(e).getCategory());//圈子分类
-                    vo.setCategoryname(listt.get(e).getCategoryname());//圈子分类名
-                    vo.setCirclename(listt.get(e).getCirclename());//圈主
-                    vo.setCategorylevel(listt.get(e).getCategorylevel());//判断是否为大V
-                    vo.setSupportnum(listt.get(e).getSupportnum());//支持数
-                    vo.setStatus(listt.get(e).getStatus());//圈子状态：0 待审核 1 审核通过 2 审核不通过
-                    vo.setIsrecommend(listt.get(e).getIsrecommend());//推荐首页
-                    vo.setIsdiscover(listt.get(e).getIsdiscover());//推荐发现
-                    vo.setCreatetime(listt.get(e).getCreatetime());//圈子创建时间
-                    circleVoslist.add(vo);
-                }
-                //外层圈子类型列表数据
-                circlenum.get(i).setCirclemanagerlist(userslist);
-                for (int n = 0; n < username.size() - 1; n++) {
-                    for (int m = username.size() - 1; m > n; m--) {
-                        if (username.get(m).equals(username.get(n))) {
-                            username.remove(m);
+                        //根据圈子id查询圈子的管理员列表
+                        List<User> circleManage = userService.queryCircleManagerByCircleList(cid);
+                        //内层圈子列表
+                        vo.setCirclemanagerlist(circleManage);//圈子管理员列表
+                        vo.setPostnum(listt.get(e).getPostnum());//帖子数量
+                        vo.setPostnewnum(listt.get(e).getPostnewnum());//今日新增帖子数量
+                        vo.setIsessencenum(listt.get(e).getIsessencenum());//精贴数量
+                        vo.setOrderid(listt.get(e).getOrderid());//发现推荐
+                        vo.setFollownum(listt.get(e).getFollownum());//关注数
+                        vo.setFollownewnum(listt.get(e).getFollownewnum());//今日新增关注数
+                        vo.setId(listt.get(e).getId());//圈子id
+                        vo.setName(listt.get(e).getName());//圈子名称
+                        vo.setCategory(listt.get(e).getCategory());//圈子分类
+                        vo.setCategoryname(listt.get(e).getCategoryname());//圈子分类名
+                        vo.setCirclename(listt.get(e).getCirclename());//圈主
+                        vo.setCategorylevel(listt.get(e).getCategorylevel());//判断是否为大V
+                        vo.setSupportnum(listt.get(e).getSupportnum());//支持数
+                        vo.setStatus(listt.get(e).getStatus());//圈子状态：0 待审核 1 审核通过 2 审核不通过
+                        vo.setIsrecommend(listt.get(e).getIsrecommend());//推荐首页
+                        vo.setIsdiscover(listt.get(e).getIsdiscover());//推荐发现
+                        vo.setCreatetime(listt.get(e).getCreatetime());//圈子创建时间
+                        circleVoslist.add(vo);
+                    }
+                    //外层圈子类型列表数据
+                    circlenum.get(i).setCirclemanagerlist(userslist);
+                    for (int n = 0; n < username.size() - 1; n++) {
+                        for (int m = username.size() - 1; m > n; m--) {
+                            if (username.get(m).equals(username.get(n))) {
+                                username.remove(m);
+                            }
                         }
                     }
+                    circlenum.get(i).setCirclemaster(username);
+                    circlenum.get(i).setPostnum(posts);
+                    circlenum.get(i).setPostnewnum(postnews);
+                    circlenum.get(i).setFollownum(follows);
+                    circlenum.get(i).setFollownewnum(follownews);
+                    circlenum.get(i).setIsessencenum(isessences);
+                    circlenum.get(i).setClassify(circleVoslist);
                 }
-                circlenum.get(i).setCirclemaster(username);
-                circlenum.get(i).setPostnum(posts);
-                circlenum.get(i).setPostnewnum(postnews);
-                circlenum.get(i).setFollownum(follows);
-                circlenum.get(i).setFollownewnum(follownews);
-                circlenum.get(i).setIsessencenum(isessences);
-                circlenum.get(i).setClassify(circleVoslist);
+            }
+            for (int n = 0; n < circlenum.size(); ) {
+                if (circlenum.get(n).getClassify() == null) {
+                    circlenum.remove(n);
+                } else {
+                    n++;
+                }
             }
             map1.put("resault", circlenum);
             return map1;
@@ -684,58 +695,69 @@ public class CircleFacade {
                     int follownews = 0;//今日关注
                     int postnews = 0;//今日新增帖子
                     int isessences = 0;//精贴数
-                    List<User> userslist = userService.queryCircleManagerList(circlenum.get(i).getCategory());//查询出圈子管理员列表
-                    for (int e = 0; e < listt.size(); e++) {//遍历所有圈子
-                        CircleVo vo = new CircleVo();
-                        Integer circleid = listt.get(e).getId();
-                        Map m = new HashedMap();
-                        m.put("nickname", listt.get(e).getCirclename());
-                        m.put("userid", listt.get(e).getCircleUserid());
-                        username.add(m);//把圈子的圈主遍历出来临时存放
-                        posts += listt.get(e).getPostnum();//圈子帖子和
-                        postnews += listt.get(e).getPostnewnum();//新增帖子和
-                        follows += listt.get(e).getFollownum();//关注和
-                        follownews += listt.get(e).getFollownewnum();//新增关注和
-                        isessences += listt.get(e).getIsessencenum();//精贴和
+                    map.put("category", circlenum.get(i).getCategory());
+                    List<User> userslist = userService.queryCircleMangerByUseridList(map);//查询出圈子所有管理员列表
+                    //List<User> userslist = userService.queryCircleManagerList(circlenum.get(i).getCategory());//查询出圈子管理员列表
+                    if (listt.size() > 0) {
+                        for (int e = 0; e < listt.size(); e++) {//遍历所有圈子
+                            CircleVo vo = new CircleVo();
+                            Integer circleid = listt.get(e).getId();
+                            Map m = new HashedMap();
+                            m.put("nickname", listt.get(e).getCirclename());
+                            m.put("userid", listt.get(e).getCircleUserid());
+                            username.add(m);//把圈子的圈主遍历出来临时存放
+                            posts += listt.get(e).getPostnum();//圈子帖子和
+                            postnews += listt.get(e).getPostnewnum();//新增帖子和
+                            follows += listt.get(e).getFollownum();//关注和
+                            follownews += listt.get(e).getFollownewnum();//新增关注和
+                            isessences += listt.get(e).getIsessencenum();//精贴和
 
 
-                        //根据圈子id查询圈子的管理员列表
-                        List<User> circleManage = userService.queryCircleManagerByCircleList(circleid);
-                        vo.setCirclemanagerlist(circleManage);
-                        vo.setPostnum(listt.get(e).getPostnum());//帖子数量
-                        vo.setPostnewnum(listt.get(e).getPostnewnum());//今日新增帖子数量
-                        vo.setIsessencenum(listt.get(e).getIsessencenum());//精贴数量
-                        vo.setOrderid(listt.get(e).getOrderid());//发现推荐
-                        vo.setFollownum(listt.get(e).getFollownum());//关注数
-                        vo.setFollownewnum(listt.get(e).getFollownewnum());//今日新增关注数
-                        vo.setId(listt.get(e).getId());//圈子id
-                        vo.setName(listt.get(e).getName());//圈子名称
-                        vo.setCategory(listt.get(e).getCategory());//圈子分类
-                        vo.setCategoryname(listt.get(e).getCategoryname());//圈子分类名
-                        vo.setCirclename(listt.get(e).getCirclename());//圈主
-                        vo.setCategorylevel(listt.get(e).getCategorylevel().toString());//判断是否为大V
-                        vo.setSupportnum(listt.get(e).getSupportnum());//支持数
-                        vo.setStatus(listt.get(e).getStatus());//圈子状态：0 待审核 1 审核通过 2 审核不通过
-                        vo.setIsrecommend(listt.get(e).getIsrecommend());//推荐首页
-                        vo.setIsdiscover(listt.get(e).getIsdiscover());//推荐发现
-                        vo.setCreatetime(listt.get(e).getCreatetime());//圈子创建时间
-                        circleVoslist.add(vo);
-                    }
-                    circlenum.get(i).setCirclemanagerlist(userslist);
-                    for (int n = 0; n < username.size() - 1; n++) {
-                        for (int m = username.size() - 1; m > n; m--) {
-                            if (username.get(m).equals(username.get(n))) {
-                                username.remove(m);
+                            //根据圈子id查询圈子的管理员列表
+                            List<User> circleManage = userService.queryCircleManagerByCircleList(circleid);
+                            vo.setCirclemanagerlist(circleManage);
+                            vo.setPostnum(listt.get(e).getPostnum());//帖子数量
+                            vo.setPostnewnum(listt.get(e).getPostnewnum());//今日新增帖子数量
+                            vo.setIsessencenum(listt.get(e).getIsessencenum());//精贴数量
+                            vo.setOrderid(listt.get(e).getOrderid());//发现推荐
+                            vo.setFollownum(listt.get(e).getFollownum());//关注数
+                            vo.setFollownewnum(listt.get(e).getFollownewnum());//今日新增关注数
+                            vo.setId(listt.get(e).getId());//圈子id
+                            vo.setName(listt.get(e).getName());//圈子名称
+                            vo.setCategory(listt.get(e).getCategory());//圈子分类
+                            vo.setCategoryname(listt.get(e).getCategoryname());//圈子分类名
+                            vo.setCirclename(listt.get(e).getCirclename());//圈主
+                            vo.setCategorylevel(listt.get(e).getCategorylevel().toString());//判断是否为大V
+                            vo.setSupportnum(listt.get(e).getSupportnum());//支持数
+                            vo.setStatus(listt.get(e).getStatus());//圈子状态：0 待审核 1 审核通过 2 审核不通过
+                            vo.setIsrecommend(listt.get(e).getIsrecommend());//推荐首页
+                            vo.setIsdiscover(listt.get(e).getIsdiscover());//推荐发现
+                            vo.setCreatetime(listt.get(e).getCreatetime());//圈子创建时间
+                            circleVoslist.add(vo);
+                        }
+                        circlenum.get(i).setCirclemanagerlist(userslist);
+                        for (int n = 0; n < username.size() - 1; n++) {
+                            for (int m = username.size() - 1; m > n; m--) {
+                                if (username.get(m).equals(username.get(n))) {
+                                    username.remove(m);
+                                }
                             }
                         }
+                        circlenum.get(i).setCirclemaster(username);
+                        circlenum.get(i).setPostnum(posts);
+                        circlenum.get(i).setPostnewnum(postnews);
+                        circlenum.get(i).setFollownum(follows);
+                        circlenum.get(i).setFollownewnum(follownews);
+                        circlenum.get(i).setIsessencenum(isessences);
+                        circlenum.get(i).setClassify(circleVoslist);
                     }
-                    circlenum.get(i).setCirclemaster(username);
-                    circlenum.get(i).setPostnum(posts);
-                    circlenum.get(i).setPostnewnum(postnews);
-                    circlenum.get(i).setFollownum(follows);
-                    circlenum.get(i).setFollownewnum(follownews);
-                    circlenum.get(i).setIsessencenum(isessences);
-                    circlenum.get(i).setClassify(circleVoslist);
+                }
+                for (int n = 0; n < circlenum.size(); ) {
+                    if (circlenum.get(n).getClassify() == null) {
+                        circlenum.remove(n);
+                    } else {
+                        n++;
+                    }
                 }
                 map1.put("resault", circlenum);
                 return map1;
@@ -766,58 +788,68 @@ public class CircleFacade {
                     int follownews = 0;//今日关注
                     int postnews = 0;//今日新增帖子
                     int isessences = 0;//精贴数
-                    List<User> userslist = userService.queryCircleManagerList(circlenum.get(f).getCategory());//查询出圈子管理员列表
-                    for (int e = 0; e < listt.size(); e++) {
-                        CircleVo vo = new CircleVo();
-                        Integer circleid = listt.get(e).getId();
-                        Map m = new HashedMap();
-                        m.put("nickname", listt.get(e).getCirclename());
-                        m.put("userid", listt.get(e).getCircleUserid());
-                        username.add(m);//把圈子的圈主遍历出来临时存放
-                        posts += listt.get(e).getPostnum();//圈子帖子和
-                        postnews += listt.get(e).getPostnewnum();//新增帖子和
-                        follows += listt.get(e).getFollownum();//关注和
-                        follownews += listt.get(e).getFollownewnum();//新增关注和
-                        isessences += listt.get(e).getIsessencenum();//精贴和
+                    List<User> userslist = userService.queryCircleMangerByUseridList(map);//查询出圈子所有管理员列表
+                    //List<User> userslist = userService.queryCircleManagerList(circlenum.get(f).getCategory());//查询出圈子管理员列表
+                    if (listt.size() > 0) {
+                        for (int e = 0; e < listt.size(); e++) {
+                            CircleVo vo = new CircleVo();
+                            Integer circleid = listt.get(e).getId();
+                            Map m = new HashedMap();
+                            m.put("nickname", listt.get(e).getCirclename());
+                            m.put("userid", listt.get(e).getCircleUserid());
+                            username.add(m);//把圈子的圈主遍历出来临时存放
+                            posts += listt.get(e).getPostnum();//圈子帖子和
+                            postnews += listt.get(e).getPostnewnum();//新增帖子和
+                            follows += listt.get(e).getFollownum();//关注和
+                            follownews += listt.get(e).getFollownewnum();//新增关注和
+                            isessences += listt.get(e).getIsessencenum();//精贴和
 
-                        //根据圈子id查询圈子的管理员列表
-                        List<User> circleManage = userService.queryCircleManagerByCircleList(circleid);
-                        vo.setCirclemanagerlist(circleManage);
-                        vo.setPostnum(listt.get(e).getPostnum());//帖子数量
-                        vo.setPostnewnum(listt.get(e).getPostnewnum());//今日新增帖子数量
-                        vo.setIsessencenum(listt.get(e).getIsessencenum());//精贴数量
-                        vo.setOrderid(listt.get(e).getOrderid());//发现推荐
-                        vo.setFollownum(listt.get(e).getFollownum());//关注数
-                        vo.setFollownewnum(listt.get(e).getFollownewnum());//今日新增关注数
-                        vo.setId(listt.get(e).getId());//圈子id
-                        vo.setName(listt.get(e).getName());//圈子名称
-                        vo.setCategory(listt.get(e).getCategory());//圈子分类
-                        vo.setCategoryname(listt.get(e).getCategoryname());//圈子分类名
-                        vo.setCirclename(listt.get(e).getCirclename());//圈主
-                        vo.setCategorylevel(listt.get(e).getCategorylevel().toString());//判断是否为大V
-                        vo.setSupportnum(listt.get(e).getSupportnum());//支持数
-                        vo.setStatus(listt.get(e).getStatus());//圈子状态：0 待审核 1 审核通过 2 审核不通过
-                        vo.setIsrecommend(listt.get(e).getIsrecommend());//推荐首页
-                        vo.setIsdiscover(listt.get(e).getIsdiscover());//推荐发现
-                        vo.setCreatetime(listt.get(e).getCreatetime());//圈子创建时间
-                        circleVoslist.add(vo);
-                    }
+                            //根据圈子id查询圈子的管理员列表
+                            List<User> circleManage = userService.queryCircleManagerByCircleList(circleid);
+                            vo.setCirclemanagerlist(circleManage);
+                            vo.setPostnum(listt.get(e).getPostnum());//帖子数量
+                            vo.setPostnewnum(listt.get(e).getPostnewnum());//今日新增帖子数量
+                            vo.setIsessencenum(listt.get(e).getIsessencenum());//精贴数量
+                            vo.setOrderid(listt.get(e).getOrderid());//发现推荐
+                            vo.setFollownum(listt.get(e).getFollownum());//关注数
+                            vo.setFollownewnum(listt.get(e).getFollownewnum());//今日新增关注数
+                            vo.setId(listt.get(e).getId());//圈子id
+                            vo.setName(listt.get(e).getName());//圈子名称
+                            vo.setCategory(listt.get(e).getCategory());//圈子分类
+                            vo.setCategoryname(listt.get(e).getCategoryname());//圈子分类名
+                            vo.setCirclename(listt.get(e).getCirclename());//圈主
+                            vo.setCategorylevel(listt.get(e).getCategorylevel().toString());//判断是否为大V
+                            vo.setSupportnum(listt.get(e).getSupportnum());//支持数
+                            vo.setStatus(listt.get(e).getStatus());//圈子状态：0 待审核 1 审核通过 2 审核不通过
+                            vo.setIsrecommend(listt.get(e).getIsrecommend());//推荐首页
+                            vo.setIsdiscover(listt.get(e).getIsdiscover());//推荐发现
+                            vo.setCreatetime(listt.get(e).getCreatetime());//圈子创建时间
+                            circleVoslist.add(vo);
+                        }
 
-                    circlenum.get(f).setCirclemanagerlist(userslist);
-                    for (int n = 0; n < username.size() - 1; n++) {
-                        for (int m = username.size() - 1; m > n; m--) {
-                            if (username.get(m).equals(username.get(n))) {
-                                username.remove(m);
+                        circlenum.get(f).setCirclemanagerlist(userslist);
+                        for (int n = 0; n < username.size() - 1; n++) {
+                            for (int m = username.size() - 1; m > n; m--) {
+                                if (username.get(m).equals(username.get(n))) {
+                                    username.remove(m);
+                                }
                             }
                         }
+                        circlenum.get(f).setCirclemaster(username);
+                        circlenum.get(f).setPostnum(posts);
+                        circlenum.get(f).setPostnewnum(postnews);
+                        circlenum.get(f).setFollownum(follows);
+                        circlenum.get(f).setFollownewnum(follownews);
+                        circlenum.get(f).setIsessencenum(isessences);
+                        circlenum.get(f).setClassify(circleVoslist);
                     }
-                    circlenum.get(f).setCirclemaster(username);
-                    circlenum.get(f).setPostnum(posts);
-                    circlenum.get(f).setPostnewnum(postnews);
-                    circlenum.get(f).setFollownum(follows);
-                    circlenum.get(f).setFollownewnum(follownews);
-                    circlenum.get(f).setIsessencenum(isessences);
-                    circlenum.get(f).setClassify(circleVoslist);
+                }
+                for (int n = 0; n < circlenum.size(); ) {
+                    if (circlenum.get(n).getClassify() == null) {
+                        circlenum.remove(n);
+                    } else {
+                        n++;
+                    }
                 }
                 map1.put("resault", circlenum);
                 return map1;

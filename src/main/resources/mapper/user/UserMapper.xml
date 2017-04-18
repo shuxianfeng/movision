@@ -61,12 +61,24 @@
         FROM yw_user WHERE phone = #{phone,jdbcType=VARCHAR}
     </select>
 
-    <!--查询圈子的所有管理员列表-->
+    <!--查询圈子的管理员列表-->
     <select id="queryCircleManagerList" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.user.entity.User">
         SELECT id,photo,nickname,phone,level FROM yw_user WHERE id in(
         SELECT userid FROM yw_circle_manager WHERE circleid in(
         SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER}))
+    </select>
+
+    <!--根据登录用户和圈子类型查询圈子的管理员列表-->
+    <select id="queryCircleMangerByUseridList" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.user.entity.User">
+        SELECT id,photo,nickname,phone,level FROM yw_user WHERE id in(
+        SELECT userid FROM yw_circle_manager WHERE circleid in(
+        SELECT id FROM yw_circle WHERE category=#{category,jdbcType=INTEGER}
+        <if test="userid!=null">
+            AND phone = (SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
+        </if>
+        ))
     </select>
 
     <!-- 查询圈子管理员列表 -->

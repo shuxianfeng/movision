@@ -173,10 +173,20 @@ public class UserService {
      */
     public List<User> queryCircleManagerList(int categoryid) {
         try {
-            log.info("查询圈子的所有管理员列表");
+            log.info("查询圈子所有的管理员列表");
             return userMapper.queryCircleManagerList(categoryid);
         } catch (Exception e) {
-            log.error("查询圈子的所有管理员列表失败");
+            log.error("查询圈子所有的管理员列表异常");
+            throw e;
+        }
+    }
+
+    public List<User> queryCircleMangerByUseridList(Map map) {
+        try {
+            log.info("根据登录用户和圈子类型查询圈子的管理员列表");
+            return userMapper.queryCircleMangerByUseridList(map);
+        } catch (Exception e) {
+            log.error("根据登录用户和圈子类型查询圈子的管理员列表异常");
             throw e;
         }
     }

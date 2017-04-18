@@ -48,6 +48,8 @@ public interface UserMapper {
 
     List<User> queryCircleManagerList(int categoryid);
 
+    List<User> queryCircleMangerByUseridList(Map map);
+
     List<User> queryCircleManagerByCircleList(Integer circleid);
 
     List<User> selectAllUser();
