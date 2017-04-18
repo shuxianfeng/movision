@@ -36,7 +36,7 @@
         (SELECT COUNT(1) FROM yw_orders o WHERE o.status=2 AND o.isdel=0 AND (SELECT COUNT(1) FROM yw_afterservice WHERE orderid=o.ordernumber)=0) AS deliverGoods,
         (SELECT COUNT(1) FROM yw_afterservice WHERE afterstatue=2 AND aftersalestatus=1 AND processingstatus=2 AND isdel=1) AS refund,
         (SELECT COUNT(1) FROM yw_afterservice WHERE afterstatue=1 AND aftersalestatus=1 AND processingstatus=2 AND isdel=1) AS salesReturn,
-        (SELECT COUNT(1) FROM yw_orders WHERE isdel=0 AND status &lt;&gt; 0 AND status &lt;&gt; -1) AS orderQuantity
+        <![CDATA[(SELECT COUNT(1) FROM yw_orders WHERE isdel=0 AND status <> 0 AND status <> -1) AS orderQuantity]]>
         FROM yw_apply_vip_detail WHERE apply_level=0
     </select>
 
