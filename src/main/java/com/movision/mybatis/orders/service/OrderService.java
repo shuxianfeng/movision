@@ -121,10 +121,10 @@ public class OrderService {
         }
     }
 
-    public List<SubOrder> queryAllSubOrderList(int[] ids) {
+    public List<SubOrder> queryAllSubOrderList(int id) {
         try {
             log.info("根据订单id数组查询所有子订单列表");
-            return subOrderMapper.queryAllSubOrderList(ids);
+            return subOrderMapper.queryAllSubOrderList(id);
         } catch (Exception e) {
             log.error("根据订单id数组查询所有子订单列表失败");
             throw e;

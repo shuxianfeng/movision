@@ -19,7 +19,7 @@ public interface SubOrderMapper {
 
     SubOrder selectByPrimaryKey(Integer id);
 
-    List<SubOrder> queryAllSubOrderList(int[] ids);
+    List<SubOrder> queryAllSubOrderList(int id);
 
     List<SubOrderVo> querySubOrderListById(int orderid);
 

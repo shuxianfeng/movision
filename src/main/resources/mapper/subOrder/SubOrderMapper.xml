@@ -32,11 +32,9 @@
   </delete>
 
     <!--根据订单id查询所有订单中的所有子订单列表-->
-    <select id="queryAllSubOrderList" parameterType="int" resultType="com.movision.mybatis.subOrder.entity.SubOrder">
-        SELECT * FROM yw_sub_order WHERE porderid IN
-        <foreach collection="array" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
+    <select id="queryAllSubOrderList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.subOrder.entity.SubOrder">
+        SELECT * FROM yw_sub_order WHERE porderid = #{id,jdbcType=INTEGER}
     </select>
 
     <!--根据订单id查询子订单列表-->

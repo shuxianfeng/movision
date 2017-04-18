@@ -463,10 +463,7 @@
         paytime = #{intime,jdbcType=TIMESTAMP},
         paycode = #{trade_no,jdbcType=VARCHAR},
         status = '1'
-        WHERE id IN
-        <foreach collection="ids" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
+        WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
     <select id="findAllMyOrderList" resultType="com.movision.mybatis.orders.entity.Orders">
