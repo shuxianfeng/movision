@@ -78,7 +78,7 @@ public class AlipayController {
      */
     @ApiOperation(value = "支付宝支付订单的查询", notes = "支付宝支付订单的查询", response = Response.class)
     @RequestMapping(value = "alipay_trade_query", method = RequestMethod.POST)
-    public Response alipayTradeQuery(@ApiParam(value = "订单编号") @RequestParam(required = false) String ordirid) throws AlipayApiException {
+    public Response alipayTradeQuery(@ApiParam(value = "订单号（单个订单号）") @RequestParam String ordirid) throws AlipayApiException {
         Response response = new Response();
         Map map = alipayFacade.alipayTradeQuery(ordirid);
         if (response.getCode() == 200 && (int) map.get("code") == 200) {

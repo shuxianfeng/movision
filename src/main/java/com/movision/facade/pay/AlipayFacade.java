@@ -380,21 +380,13 @@ public class AlipayFacade {
      */
     public Map alipayTradeQuery(String orderid) throws AlipayApiException {
 
-        String[] ordersidstr = orderid.split(",");
-        int[] ids = new int[ordersidstr.length];
-        for (int i = 0; i < ordersidstr.length; i++) {
-            ids[i] = Integer.parseInt(ordersidstr[i]);
-        }
         Map<String, Object> contentmap = new HashedMap();
         //根据订单id查询所有主订单列表
-        List<Orders> ordersList = orderService.queryOrdersListByIds(ids);
+        Orders orders = orderService.getOrderById(Integer.parseInt(orderid));
 
-        if (null != ordersList && ordersList.size() == ordersidstr.length) {//传入的订单均存在且均为待支付的情况下
-            String transactionNumber = null;
-            for (int i = 0; i < ordersList.size(); i++) {
-                //拼接主订单id
-                transactionNumber = ordersList.get(i).getPaycode();
-            }
+        if (null != orders) {//传入的订单均存在且均为待支付的情况下
+
+            String transactionNumber = orders.getPaycode();
 
             SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String app_id = AlipayPropertiesLoader.getValue("app_id");//获取配置文件中的APPID
