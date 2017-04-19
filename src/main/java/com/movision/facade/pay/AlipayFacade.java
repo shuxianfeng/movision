@@ -11,6 +11,7 @@ import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.afterservice.service.AfterServcieServcie;
 import com.movision.mybatis.orders.entity.Orders;
@@ -431,16 +432,18 @@ public class AlipayFacade {
     /**
      * 支付宝交易退款查询
      *
-     * @param tradingAccount
+     * @param orderid
      * @return
      * @throws AlipayApiException
      */
-    public Map tradingRefundQuery(String tradingAccount) throws AlipayApiException {
+    public Map tradingRefundQuery(String orderid) throws AlipayApiException {
 
-        //根据支付宝交易号查询订单号，
-        List ordersList = orderService.queryOrdersListByTradingAccount(tradingAccount);
         Map map = new HashedMap();
-        if (null != ordersList) {//传入的订单均存在且均为待支付的情况下
+
+        //根据订单id查询所有主订单列表
+        Orders orders = orderService.getOrderById(Integer.parseInt(orderid));
+
+        if (StringUtil.isNotEmpty(orderid)) {//如果传入的订单号不为空
             SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String app_id = AlipayPropertiesLoader.getValue("app_id");//获取配置文件中的APPID
             String appprivatekey = AlipayPropertiesLoader.getValue("private_key");//应用私钥（商户的私钥）
@@ -449,12 +452,9 @@ public class AlipayFacade {
             String charset = "GBK";
             String format = "json";
             String sign_type = "RSA2";
-            String outrequestno = "";
-            for (int i = 0; i < ordersList.size(); i++) {
-                outrequestno = outrequestno + ordersList.get(i).toString() + ",";
-            }
-            outrequestno.substring(0, outrequestno.length() - 1);
 
+            String outrequestno = orderid;
+            String tradingAccount = orders.getId().toString();
 
             AlipayClient alipayClient = new DefaultAlipayClient(alipaygateway, app_id, appprivatekey, format, charset, alipublickey, sign_type);
             AlipayTradeFastpayRefundQueryRequest request = new AlipayTradeFastpayRefundQueryRequest();

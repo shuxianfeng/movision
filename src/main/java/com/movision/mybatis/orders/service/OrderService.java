@@ -223,10 +223,10 @@ public class OrderService {
 
     public List<Integer> queryOrdersListByTradingAccount(String tradingAccount) {
         try {
-            log.info("支付宝交易退款查询");
+            log.info("根据订单的支付宝交易号查询在同一次支付的所有订单的主订单号列表");
             return ordersMapper.queryOrdersListByTradingAccount(tradingAccount);
         } catch (Exception e) {
-            log.error("支付宝交易退款查询异常");
+            log.error("根据订单的支付宝交易号查询在同一次支付的所有订单的主订单号列表失败");
             throw e;
         }
     }

@@ -78,9 +78,9 @@ public class AlipayController {
      */
     @ApiOperation(value = "支付宝支付订单的查询", notes = "支付宝支付订单的查询", response = Response.class)
     @RequestMapping(value = "alipay_trade_query", method = RequestMethod.POST)
-    public Response alipayTradeQuery(@ApiParam(value = "订单号（单个订单号）") @RequestParam String ordirid) throws AlipayApiException {
+    public Response alipayTradeQuery(@ApiParam(value = "订单号（单个订单号）") @RequestParam String orderid) throws AlipayApiException {
         Response response = new Response();
-        Map map = alipayFacade.alipayTradeQuery(ordirid);
+        Map map = alipayFacade.alipayTradeQuery(orderid);
         if (response.getCode() == 200 && (int) map.get("code") == 200) {
             response.setMessage("支付宝支付订单的查询成功");
             response.setData(map);
@@ -94,17 +94,18 @@ public class AlipayController {
     /**
      * 支付宝交易退款查询
      *
-     * @param tradingAccount
+     * @param orderid
      * @return
      */
     @ApiOperation(value = "支付宝交易退款查询", notes = "用于支付宝交易退款查询接口", response = Response.class)
     @RequestMapping(value = "trading_refund_query", method = RequestMethod.POST)
-    public Response tradingRefundQuery(@ApiParam(value = "支付宝交易号") @RequestParam String tradingAccount) throws AlipayApiException {
+    public Response tradingRefundQuery(@ApiParam(value = "订单号（单个订单号）") @RequestParam String orderid) throws AlipayApiException {
         Response response = new Response();
-        Map map = alipayFacade.tradingRefundQuery(tradingAccount);
+        Map map = alipayFacade.tradingRefundQuery(orderid);
         if (response.getCode() == 200 && (int) map.get("code") == 200) {
             response.setMessage(map.get("msg").toString());
         } else if ((int) map.get("code") == 300) {
+            response.setCode(300);
             response.setMessage(map.get("msg").toString());
         }
         response.setData(map);
