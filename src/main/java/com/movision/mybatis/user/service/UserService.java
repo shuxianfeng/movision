@@ -326,13 +326,18 @@ public class UserService {
     }
 
 
-
+    /**
+     * 修改app用户token和设备号
+     *
+     * @param registerUser
+     * @return
+     */
     public int updateRegisterUser(RegisterUser registerUser) {
         try {
-            log.info("修改app用户token");
+            log.info("修改app用户token和设备号");
             return userMapper.updateRegisterUser(registerUser);
         } catch (Exception e) {
-            log.error("修改app用户token异常", e);
+            log.error("修改app用户token和设备号异常", e);
             throw e;
         }
     }
@@ -417,7 +422,6 @@ public class UserService {
     /**
      * 查询圈主和管理员
      *
-     * @param pager
      * @return
      */
     public List<User> queryCircleManList() {
@@ -588,10 +592,11 @@ public class UserService {
 
     public void updateUserPoints(Map dispointmoney) {
         try {
-            log.info("");
+            log.info("更新用户积分");
             userMapper.updateUserPoints(dispointmoney);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("更新用户积分失败", e);
+            throw e;
         }
     }
 
@@ -606,7 +611,7 @@ public class UserService {
             log.info("查询用户使用积分");
             return userMapper.queryUserUseIntegral(map);
         } catch (Exception e) {
-            log.error("查询用户使用积分异常");
+            log.error("查询用户使用积分异常", e);
             throw e;
         }
     }
@@ -622,7 +627,7 @@ public class UserService {
             log.info("获取用户的积分");
             return userMapper.queryUserByRewarde(userid);
         } catch (Exception e) {
-            log.error("获取该用户的积分异常");
+            log.error("获取该用户的积分异常", e);
             throw e;
         }
     }
@@ -637,8 +642,51 @@ public class UserService {
             log.info("操作用户积分");
             return userMapper.updateUserPoint(map);
         } catch (Exception e) {
-            log.error("操作用户积分异常");
+            log.error("操作用户积分异常", e);
             throw e;
         }
     }
+
+    public User selectUserByThirdAccount(Map map) {
+        try {
+            log.info("判断是否存在这个qq账号");
+            return userMapper.selectUserByThirdAccount(map);
+        } catch (Exception e) {
+            log.error("判断是否存在这个qq账号失败", e);
+            throw e;
+        }
+    }
+
+    public Integer insertSelective(User user) {
+        try {
+            log.info("新增APP用户");
+            userMapper.insertSelective(user);
+            return user.getId();
+        } catch (Exception e) {
+            log.error("新增APP用户失败", e);
+            throw e;
+        }
+    }
+
+    public LoginUser selectLoginUserByToken(String token) {
+        try {
+            log.info("根据token查询用户信息");
+            return userMapper.selectLoginUserByToken(token);
+        } catch (Exception e) {
+            log.error("根据token查询用户信息失败", e);
+            throw e;
+        }
+    }
+
+    public LoginUser selectLoginuserByUserid(Integer userid) {
+        try {
+            log.info("根据用户id查询LoginUser");
+            return selectLoginuserByUserid(userid);
+        } catch (Exception e) {
+            log.error("根据用户id查询LoginUser失败", e);
+            throw e;
+        }
+    }
+
+
 }

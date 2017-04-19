@@ -1,6 +1,7 @@
 package com.movision.mybatis.deviceAccid.mapper;
 
 import com.movision.mybatis.deviceAccid.entity.DeviceAccid;
+import org.apache.ibatis.annotations.Param;
 
 public interface DeviceAccidMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +15,6 @@ public interface DeviceAccidMapper {
     int updateByPrimaryKeySelective(DeviceAccid record);
 
     int updateByPrimaryKey(DeviceAccid record);
+
+    DeviceAccid selectByDeviceno(@Param("deviceno") String deviceno);
 }

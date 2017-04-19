@@ -39,4 +39,14 @@ public class DeviceAccidService {
         }
     }
 
+    public DeviceAccid selectByDeviceno(String deviceno) {
+        try {
+            log.info("根据设备号获取设备号与accid的关系");
+            return deviceAccidMapper.selectByDeviceno(deviceno);
+        } catch (Exception e) {
+            log.error("根据设备号获取设备号与accid的关系失败", e);
+            throw e;
+        }
+    }
+
 }

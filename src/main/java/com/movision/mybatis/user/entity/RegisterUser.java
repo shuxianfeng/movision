@@ -34,6 +34,17 @@ public class RegisterUser implements Serializable {
     @ApiModelProperty(value = "昵称")
     private String nickname;
 
+    @ApiModelProperty(value = "设备号", required = true)
+    private String deviceno;
+
+    public void setDeviceno(String deviceno) {
+        this.deviceno = deviceno;
+    }
+
+    public String getDeviceno() {
+        return deviceno;
+    }
+
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
@@ -113,6 +124,7 @@ public class RegisterUser implements Serializable {
                 ", status=" + status +
                 ", token='" + token + '\'' +
                 ", nickname='" + nickname + '\'' +
+                ", deviceno='" + deviceno + '\'' +
                 '}';
     }
 }

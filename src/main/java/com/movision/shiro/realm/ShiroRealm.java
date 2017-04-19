@@ -42,9 +42,17 @@ public class ShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         log.info("APP登录认证");
+
+        // 获取token中的username。这里不固定，可能是phone,qq,wx,wb
+        Gson gson = new Gson();
+        String tokenJson = gson.toJson(token);
+        LoginUser loginUser = userFacade.getLoginUserByToken(tokenJson);
+
+        /*
         String loginPhone = (String) token.getPrincipal();
         // 1 获取当前登录的用户信息
-        LoginUser loginUser = userFacade.getLoginUserByPhone(loginPhone);
+        LoginUser loginUser = userFacade.getLoginUserByPhone(loginPhone);*/
+
         log.debug("当前登录APP的用户信息，LoginUser = " + loginUser.toString());
 
         if (loginUser != null) {
@@ -61,7 +69,6 @@ public class ShiroRealm extends AuthorizingRealm {
 
         //获取服务端的密码，并MD5二次加密
         String mytokenStr = loginUser.getToken();
-        Gson gson = new Gson();
         UsernamePasswordToken mytoken = gson.fromJson(mytokenStr, UsernamePasswordToken.class);
         String password = String.valueOf(mytoken.getPassword());
         String pwd = new Md5Hash(password, null, 2).toString();
@@ -71,7 +78,8 @@ public class ShiroRealm extends AuthorizingRealm {
         ShiroUser shiroUser = new ShiroUser(loginUser.getId(), loginUser.getPhone(), loginUser.getStatus(), loginUser.getRole(),
                 loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(), loginUser.getPhone(),
                 loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(), loginUser.getAccid(), loginUser.getImtoken(),
-                loginUser.getSign(), DateUtils.date2Str(loginUser.getBirthday()));
+                loginUser.getSign(), DateUtils.date2Str(loginUser.getBirthday()),
+                loginUser.getQq(), loginUser.getSina(), loginUser.getOpenid());
 
         // 3 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(shiroUser, // 用户
@@ -100,7 +108,7 @@ public class ShiroRealm extends AuthorizingRealm {
                 return null;
             }
             //获取用户的角色
-            LoginUser loginUser = userFacade.getLoginUserByPhone(member.getPhone());
+            LoginUser loginUser = userFacade.getLoginuserByUserid(member.getId());
             String role = loginUser.getRole();
             log.debug("当前登录对象的角色,role=" + role);
             info.addRole(role);
@@ -159,6 +167,33 @@ public class ShiroRealm extends AuthorizingRealm {
         private String imToken; //云信token
         private String sign;    //个性签名
         private String birthday;  //生日
+        private String qq;  //qq
+        private String sina;    //微博
+        private String openid;  //微信
+
+        public void setQq(String qq) {
+            this.qq = qq;
+        }
+
+        public void setSina(String sina) {
+            this.sina = sina;
+        }
+
+        public void setOpenid(String openid) {
+            this.openid = openid;
+        }
+
+        public String getQq() {
+            return qq;
+        }
+
+        public String getSina() {
+            return sina;
+        }
+
+        public String getOpenid() {
+            return openid;
+        }
 
         public void setBirthday(String birthday) {
             this.birthday = birthday;
@@ -314,7 +349,7 @@ public class ShiroRealm extends AuthorizingRealm {
             return false;
         }
 
-        public ShiroUser(Integer id, String account, Integer status, String role, Date registerTime, String photo, String nickname, Integer level, String phone, String token, Integer points, Integer sex, String accid, String imToken, String sign, String birthday) {
+        public ShiroUser(Integer id, String account, Integer status, String role, Date registerTime, String photo, String nickname, Integer level, String phone, String token, Integer points, Integer sex, String accid, String imToken, String sign, String birthday, String qq, String sina, String openid) {
             this.id = id;
             this.account = account;
             this.status = status;
@@ -331,6 +366,9 @@ public class ShiroRealm extends AuthorizingRealm {
             this.imToken = imToken;
             this.sign = sign;
             this.birthday = birthday;
+            this.qq = qq;
+            this.sina = sina;
+            this.openid = openid;
         }
 
         @Override
@@ -351,7 +389,10 @@ public class ShiroRealm extends AuthorizingRealm {
                     ", accid='" + accid + '\'' +
                     ", imToken='" + imToken + '\'' +
                     ", sign='" + sign + '\'' +
-                    ", birthday=" + birthday +
+                    ", birthday='" + birthday + '\'' +
+                    ", qq='" + qq + '\'' +
+                    ", sina='" + sina + '\'' +
+                    ", openid='" + openid + '\'' +
                     '}';
         }
     }

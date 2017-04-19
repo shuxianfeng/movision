@@ -101,7 +101,6 @@ public class AppLoginController {
     }
 
     /**
-     * 调用此接口时，已经确定该手机号在数据库中不存在
      * 验证码校验之后：
      * 1 返回生成的token，保存在app端
      * 2 同时把token放入缓存和数据库
@@ -144,27 +143,59 @@ public class AppLoginController {
         return response;
     }
 
-    @ApiOperation(value = "QQ登录", notes = "QQ登录", response = Response.class)
-    @RequestMapping(value = {"/login_by_qq"}, method = RequestMethod.POST)
-    public Response loginByQQ(@ApiParam(value = "qq号") @RequestParam String qq,
-                              @ApiParam(value = "qq的token") @RequestParam String qq_token,
+    @ApiOperation(value = "注册QQ账号", notes = "注册QQ账号", response = Response.class)
+    @RequestMapping(value = {"/registe_by_qq"}, method = RequestMethod.POST)
+    public Response registeByQQ(@ApiParam(value = "qq号") @RequestParam String qq,
+                                @ApiParam(value = "qq的openid") @RequestParam String openid,
                               @ApiParam(value = "设备号") @RequestParam String deviceno) throws Exception {
 
-        log.debug("登录信息  qq==" + qq + ",qq_token = " + qq_token + ", deviceno = " + deviceno);
+        log.debug("注册qq账号信息：  qq==" + qq + ", deviceno = " + deviceno + ", openid = " + openid);
         Response response = new Response();
-
-        //1 先判断是否存在这条qq用户记录
-
-        //2 若存在，则根据token来
+        try {
+            Map result = appRegisterFacade.registerQQAccount(qq, openid, deviceno);
+            response.setData(result);
+        } catch (Exception e) {
+            log.error("注册操作失败>>>", e);
+            throw e;
+        }
         return response;
     }
+
+    @ApiOperation(value = "APP-QQ登录", notes = "APP-QQ登录", response = Response.class)
+    @RequestMapping(value = {"/login_by_qq"}, method = RequestMethod.POST)
+    public Response loginByQQ(@ApiParam(value = "qq") @RequestParam String qq,
+                              @ApiParam(value = "token") @RequestParam String appToken) throws Exception {
+
+        Response response = new Response();
+        try {
+            //1 校验qq号是否存在
+            Map map = new HashedMap();
+            map.put("qq", qq);
+            User originUser = userFacade.selectUserByThirdAccount(map);
+            if (null == originUser) {
+                log.warn("qq账号不存在,请先注册");
+
+                response.setCode(400);
+                response.setMessage("qq账号不存在,请先注册");
+                response.setMsgCode(MsgCodeConstant.app_account_by_qq_not_exist);
+            } else {
+                handleLoginProcess(appToken, response, originUser);
+            }
+
+        } catch (Exception e) {
+            log.error("登录操作失败>>>", e);
+            throw e;
+        }
+        return response;
+    }
+
 
     /**
      * 该接口用于app端的自动登录，打开app第一个调的接口就是这个
      * 1 若app用户未注册，则会报异常：请发送短信验证码登录
      * 2 若app用户已注册，即已存在，则开始比较appToken和serverToken,若相同，则进入shiro的认证流程,
      * 若认证成功， 则在session中缓存当前app用户，并且删除session中的boss用户，
-     * <p>。。
+     * <p>
      * PS：（这里逻辑有点问题，如果一个用户既登录app，又登录boss，怎么办？
      * --其实他们的session不同，所以逻辑没有问题，
      * 因为同一个session当前登录人只能是app用户或者是boss用户的一个。）
@@ -190,53 +221,7 @@ public class AppLoginController {
                 response.setMessage("用户名不存在,请发送短信验证码登录");
                 response.setMsgCode(MsgCodeConstant.app_user_not_exist);
             } else {
-                //存在该用户
-                //2 校验appToken和serverToken非空
-                String serverToken = this.validateAppTokenAndServerToken(appToken, response, user);
-
-                //3 appToken和serverToken比较
-                if (serverToken.equalsIgnoreCase(appToken)) {
-
-                    Subject currentUser = SecurityUtils.getSubject();
-                    Gson gson = new Gson();
-                    UsernamePasswordToken token = gson.fromJson(appToken, UsernamePasswordToken.class);
-
-                    Map returnMap = new HashedMap();
-                    //4 开始进入shiro的认证流程
-                    this.shiroLogin(response, currentUser, token);
-
-                    //若shiro获取身份验证信息通过，则进行下面操作
-                    if (currentUser.isAuthenticated()) {
-
-                        //5 验证通过则在session中缓存登录用户信息
-                        Session session = currentUser.getSession();
-                        //6 清除session中的boss用户信息
-                        session.removeAttribute(SessionConstant.BOSS_USER);
-                        session.setAttribute(SessionConstant.APP_USER, currentUser.getPrincipal());
-                        //7 返回登录人的信息
-                        ShiroRealm.ShiroUser appuser = (ShiroRealm.ShiroUser) currentUser.getPrincipal();
-                        if (null == appuser) {
-                            response.setMsgCode(0);
-                            response.setMessage("登录失败");
-                            returnMap.put("authorized", false);
-                        } else {
-                            response.setMsgCode(1);
-                            response.setMessage("登录成功");
-                            returnMap.put("authorized", true);
-                            returnMap.put("user", appuser);
-                        }
-
-                        response.setData(returnMap);
-                    } else {
-                        token.clear();
-                    }
-
-                } else {
-                    log.warn("appToken和serverToken不相等");
-                    response.setCode(400);
-                    response.setMessage("appToken和serverToken不相等");
-                    response.setMsgCode(MsgCodeConstant.app_token_not_equal_server_token);
-                }
+                handleLoginProcess(appToken, response, user);
             }
 
         } catch (Exception e) {
@@ -244,6 +229,60 @@ public class AppLoginController {
             throw e;
         }
         return response;
+    }
+
+    /**
+     * 处理登录过程
+     *
+     * @param appToken
+     * @param response
+     * @param user
+     */
+    private void handleLoginProcess(String appToken, Response response, User user) {
+        //2 校验appToken和serverToken非空
+        String serverToken = this.validateAppTokenAndServerToken(appToken, response, user);
+
+        //3 appToken和serverToken比较
+        if (serverToken.equalsIgnoreCase(appToken)) {
+
+            Subject currentUser = SecurityUtils.getSubject();
+            Gson gson = new Gson();
+            UsernamePasswordToken token = gson.fromJson(appToken, UsernamePasswordToken.class);
+
+            Map returnMap = new HashedMap();
+            //4 开始进入shiro的认证流程
+            this.shiroLogin(response, currentUser, token);
+
+            //若shiro获取身份验证信息通过，则进行下面操作
+            if (currentUser.isAuthenticated()) {
+
+                //5 验证通过则在session中缓存登录用户信息
+                Session session = currentUser.getSession();
+                //6 清除session中的boss用户信息
+                session.removeAttribute(SessionConstant.BOSS_USER);
+                session.setAttribute(SessionConstant.APP_USER, currentUser.getPrincipal());
+                //7 返回登录人的信息
+                ShiroRealm.ShiroUser appuser = (ShiroRealm.ShiroUser) currentUser.getPrincipal();
+                if (null == appuser) {
+                    response.setMsgCode(0);
+                    response.setMessage("登录失败");
+                    returnMap.put("authorized", false);
+                } else {
+                    response.setMsgCode(1);
+                    response.setMessage("登录成功");
+                    returnMap.put("authorized", true);
+                    returnMap.put("user", appuser);
+                }
+                response.setData(returnMap);
+            } else {
+                token.clear();
+            }
+        } else {
+            log.warn("appToken和serverToken不相等");
+            response.setCode(400);
+            response.setMessage("appToken和serverToken不相等");
+            response.setMsgCode(MsgCodeConstant.app_token_not_equal_server_token);
+        }
     }
 
     @ApiOperation(value = "判断app用户是否已经登录", notes = "判断app用户是否已经登录", response = Response.class)

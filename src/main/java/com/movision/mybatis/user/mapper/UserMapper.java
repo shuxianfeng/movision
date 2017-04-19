@@ -109,4 +109,9 @@ public interface UserMapper {
 
     int updateUserPoint(Map map);
 
+    User selectUserByThirdAccount(Map map);
+
+    LoginUser selectLoginUserByToken(@Param("token") String token);
+
+    LoginUser selectLoginuserByUserid(@Param("id") Integer id);
 }

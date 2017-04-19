@@ -1,6 +1,7 @@
 package com.movision.facade.user;
 
 import com.google.gson.Gson;
+import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.UserConstants;
 import com.movision.exception.BusinessException;
@@ -14,6 +15,7 @@ import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
+import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.StrUtil;
 import com.movision.utils.im.CheckSumBuilder;
@@ -55,6 +57,9 @@ public class AppRegisterFacade {
     @Autowired
     private DeviceAccidService deviceAccidService;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * 1 校验登录用户信息：手机号+短信验证码
      * 2 若用户不存在，则新增用户信息；
@@ -65,6 +70,11 @@ public class AppRegisterFacade {
      * @param validateinfo
      * @param session
      * @return
+     * {
+     *  token_detail:xxx,
+     *  token:yyy,
+     *  imuser:zzz
+     * }
      */
     public Map<String, Object> validateLoginUser(RegisterUser member, Validateinfo validateinfo, Session session) throws IOException {
 
@@ -85,7 +95,7 @@ public class AppRegisterFacade {
                     UsernamePasswordToken newToken = new UsernamePasswordToken(phone, verifyCode.toCharArray());
                     //校验是否手机号存在
                     Map<String, Object> result = new HashedMap();
-                    //2 注册用户，并把token入库, 放入缓存
+                    //2 注册用户，并把token入库, 放入session缓存
                     Gson gson = new Gson();
                     String json = gson.toJson(newToken);
                     member.setToken(json);
@@ -93,7 +103,7 @@ public class AppRegisterFacade {
                     int userid = 0;
                     User user = userFacade.queryUserByPhone(phone);
                     if (null != user) {
-                        //存在该用户,则更新token
+                        //存在该用户,修改app用户token和设备号
                         this.updateAppRegisterUser(member);
                         userid = user.getId();
                     } else {
@@ -105,8 +115,11 @@ public class AppRegisterFacade {
                     //如果用户当前手机号有领取过H5页面分享的优惠券，那么不管新老用户统一将优惠券临时表yw_coupon_temp中的优惠券信息全部放入优惠券正式表yw_coupon中
                     this.processCoupon(phone, userid);
 
-                    // 判断该userid是否存在一个im用户，
+                    //判断该userid是否存在一个im用户，若不存在，则注册im用户;若存在，则查询
                     this.getImuserForReturn(phone, result, userid);
+
+                    //判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录
+                    deleteSameDevicenoRecord(member.getDeviceno());
 
                     //3 登录成功则清除session中验证码的信息
                     session.removeAttribute("r" + validateinfo.getAccount());
@@ -144,7 +157,7 @@ public class AppRegisterFacade {
             //若不存在，则注册im用户
             ImUser imUser = new ImUser();
             imUser.setUserid(userid);
-            imUser.setAccid(CheckSumBuilder.getAccid(phone));
+            imUser.setAccid(CheckSumBuilder.getAccid(String.valueOf(userid)));  //根据userid生成accid
             imUser.setName(StrUtil.genDefaultNickNameByPhone(phone));
             ImUser newImUser = imFacade.AddImUser(imUser);
             result.put("imuser", newImUser);
@@ -206,18 +219,15 @@ public class AppRegisterFacade {
         try {
             if (member != null) {
                 String phone = member.getPhone();
-                if (StringUtils.isNotEmpty(phone)) {
-                    // 手机默认注册成功
-                    member.setStatus(Integer.parseInt(UserConstants.USER_STATUS.normal.toString()));
-                    // 默认昵称设置
-                    if (StringUtils.isEmpty(member.getNickname())) {
-                        member.setNickname(StrUtil.genDefaultNickNameByPhone(phone));
-                    }
-                }
-                member.setIntime(new Date());
 
-                memberId = userFacade.registerAccount(member);
+                User user = new User();
+                user.setNickname(StrUtil.genDefaultNickNameByPhone(phone)); //昵称
+                user.setPhone(phone);   //手机号
+                user.setToken(member.getToken());   //token
+                user.setDeviceno(member.getDeviceno()); //设备号
+                user.setPoints(35); //积分：注册25+绑定手机15
 
+                memberId = userService.insertSelective(user);
             }
         } catch (Exception e) {
             log.error("register member error", e);
@@ -226,7 +236,7 @@ public class AppRegisterFacade {
     }
 
     /**
-     * 修改app注册用户的token
+     * 修改app用户token和设备号
      *
      * @param member
      */
@@ -252,6 +262,96 @@ public class AppRegisterFacade {
 
         deviceAccid.setAccid(CheckSumBuilder.getAccid(deviceid));
         deviceAccidService.add(deviceAccid);
+    }
+
+
+    /**
+     * 注册QQ账号
+     * <p>
+     * 步骤：
+     * 1 生成新的token
+     * 2 判断qq是否注册过
+     * 若qq从未注册过：a 则注册qq账号; b 注册im用户，
+     * 若qq已经注册过：更新用户记录中的token
+     * 3 判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录；
+     * （方便设置后面的系统推送中的toAccids）
+     * <p>
+     * 下面是token的数据结构
+     * token:{
+     * username: qq,
+     * password: openid+deviceno,
+     * rememberme: false
+     * }
+     *
+     * @param qq
+     * @param openid
+     * @param deviceno
+     * @return
+     * @throws IOException
+     */
+    public Map<String, Object> registerQQAccount(String qq, String openid, String deviceno) throws IOException {
+
+        Map<String, Object> result = new HashedMap();
+        //1 生成新的token
+        UsernamePasswordToken newToken = new UsernamePasswordToken(qq, (openid + deviceno).toCharArray());
+        result.put("token_detail", newToken);
+        Gson gson = new Gson();
+        String tokenJson = gson.toJson(newToken);
+        result.put("token", tokenJson);
+
+        //2 判断是否存在这条qq用户记录
+        Map map = new HashedMap();
+        map.put("qq", qq);
+        User originUser = userService.selectUserByThirdAccount(map);
+
+        if (null == originUser) {
+            //不存在qq账号
+            //3.1 根据QQ注册账号
+            User newUser = new User();
+            newUser.setToken(tokenJson);    //token
+            newUser.setQq(qq);              //qq
+            newUser.setNickname(StrUtil.genDefaultNicknameByQQ(qq));    //昵称
+            newUser.setDeviceno(deviceno);  //设备号
+            newUser.setPoints(25);  //注册25分
+            int userid = userService.insertSelective(newUser);
+
+            //3.2 根据该新的userid注册im用户，即在yw_im_user中新增一条记录
+            ImUser imUser = new ImUser();
+            imUser.setUserid(userid);
+            imUser.setAccid(CheckSumBuilder.getAccid(String.valueOf(userid)));
+            imUser.setName(StrUtil.genDefaultNicknameByQQ(qq));
+            ImUser newImUser = imFacade.AddImUser(imUser);
+            result.put("imuser", newImUser);
+
+        } else {
+            //存在qq账号
+            //3 更新原来的token
+            originUser.setToken(tokenJson);
+            originUser.setDeviceno(deviceno);
+            userService.updateByPrimaryKeySelective(originUser);
+
+            result.put("imuser", imFacade.getImuserByCurrentAppuser(originUser.getId()));
+        }
+
+        //4 判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录；
+        deleteSameDevicenoRecord(deviceno);
+
+        return result;
+    }
+
+    /**
+     * 判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录；
+     *
+     * @param deviceno
+     */
+    private void deleteSameDevicenoRecord(String deviceno) {
+        DeviceAccid deviceAccid = deviceAccidService.selectByDeviceno(deviceno);
+        if (null == deviceAccid) {
+            //不存在，则不操作
+        } else {
+            //删除该条记录
+            deviceAccidService.delete(deviceAccid.getId());
+        }
     }
 
 

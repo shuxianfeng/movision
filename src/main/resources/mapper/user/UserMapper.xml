@@ -26,11 +26,12 @@
         <result column="level" property="level" jdbcType="INTEGER"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="applydate" property="applydate" jdbcType="DATE"/>
+        <result column="deviceno" property="deviceno" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id, openid, qq, sina, phone, email, token, invitecode, referrals, nickname, sign, attention, fans,
-        points, photo, sex, birthday, province, city, intime, growth, level, status, applydate
+        points, photo, sex, birthday, province, city, intime, growth, level, status, applydate, deviceno
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -104,7 +105,7 @@
         fans, points, photo,
         sex, birthday, province,
         city, intime, growth,
-        level, status,applydate)
+        level, status,applydate, deviceno)
         values (#{id,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR},
         #{sina,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},
         #{token,jdbcType=VARCHAR}, #{invitecode,jdbcType=VARCHAR}, #{referrals,jdbcType=VARCHAR},
@@ -112,9 +113,10 @@
         #{fans,jdbcType=INTEGER}, #{points,jdbcType=INTEGER}, #{photo,jdbcType=VARCHAR},
         #{sex,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}, #{province,jdbcType=VARCHAR},
         #{city,jdbcType=VARCHAR}, #{intime,jdbcType=TIMESTAMP}, #{growth,jdbcType=INTEGER},
-        #{level,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{applydate,jdbcType=DATE})
+        #{level,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{applydate,jdbcType=DATE}), #{deviceno}
     </insert>
-    <insert id="insertSelective" parameterType="com.movision.mybatis.user.entity.User">
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.movision.mybatis.user.entity.User">
         insert into yw_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -150,13 +152,9 @@
             <if test="sign != null">
                 sign,
             </if>
-            <if test="attention != null">
                 attention,
-            </if>
-            <if test="fans != null">
                 fans,
-            </if>
-            <if test="points != null">
+            <if test="points!=null">
                 points,
             </if>
             <if test="photo != null">
@@ -174,20 +172,15 @@
             <if test="city != null">
                 city,
             </if>
-            <if test="intime != null">
                 intime,
-            </if>
-            <if test="growth != null">
                 growth,
-            </if>
-            <if test="level != null">
                 level,
-            </if>
-            <if test="status != null">
                 status,
-            </if>
             <if test="applydate!=null">
                 applydate,
+            </if>
+            <if test="deviceno!=null">
+                deviceno,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -224,14 +217,10 @@
             <if test="sign != null">
                 #{sign,jdbcType=VARCHAR},
             </if>
-            <if test="attention != null">
-                #{attention,jdbcType=INTEGER},
-            </if>
-            <if test="fans != null">
-                #{fans,jdbcType=INTEGER},
-            </if>
+            0,
+            0,
             <if test="points != null">
-                #{points,jdbcType=INTEGER},
+                #{points},
             </if>
             <if test="photo != null">
                 #{photo,jdbcType=VARCHAR},
@@ -248,20 +237,15 @@
             <if test="city != null">
                 #{city,jdbcType=VARCHAR},
             </if>
-            <if test="intime != null">
-                #{intime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="growth != null">
-                #{growth,jdbcType=INTEGER},
-            </if>
-            <if test="level != null">
-                #{level,jdbcType=INTEGER},
-            </if>
-            <if test="status != null">
-                #{status,jdbcType=INTEGER},
-            </if>
+            now(),
+            0,
+            1,
+            0,
             <if test="applydate!=null">
                 #{applydate,jdbcType=DATE},
+            </if>
+            <if test="deviceno!=null">
+                #{deviceno},
             </if>
         </trim>
     </insert>
@@ -337,6 +321,9 @@
             <if test="applydate!=null">
                 applydate=#{applydate,jdbcType=DATE},
             </if>
+            <if test="deviceno!=null">
+                deviceno=#{deviceno},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -363,7 +350,8 @@
         intime = #{intime,jdbcType=TIMESTAMP},
         growth = #{growth,jdbcType=INTEGER},
         level = #{level,jdbcType=INTEGER},
-        status = #{status,jdbcType=INTEGER}
+        status = #{status,jdbcType=INTEGER},
+        deviceno = #{deviceno}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -427,8 +415,8 @@
 
     <insert id="registerAccount" parameterType="com.movision.mybatis.user.entity.RegisterUser" useGeneratedKeys="true"
             keyProperty="id">
-        INSERT INTO yw_user (phone, intime, status, token, nickname)
-        VALUES (#{phone}, #{intime}, #{status}, #{token}, #{nickname})
+        INSERT INTO yw_user (phone, intime, status, token, nickname, deviceno)
+        VALUES (#{phone}, #{intime}, #{status}, #{token}, #{nickname}, #{deviceno})
     </insert>
     <select id="queryUserByOpenid" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT u.openid FROM yw_user u WHERE id=#{userid,jdbcType=INTEGER}
@@ -468,7 +456,7 @@
 
     <update id="updateRegisterUser" parameterType="com.movision.mybatis.user.entity.RegisterUser">
         update yw_user
-        SET token = #{token}
+        SET token = #{token}, deviceno = #{deviceno}
         WHERE phone = #{phone}
     </update>
 
@@ -911,5 +899,48 @@
         </if>
         WHERE id=#{userid,jdbcType=INTEGER}
     </update>
+
+    <select id="selectUserByThirdAccount" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.user.entity.User">
+        select *
+        from yw_user
+        <where>
+            <if test="qq!=null and qq!=''">
+                AND qq = #{qq}
+            </if>
+            <if test="sina!=null and sina!=''">
+                and sina = #{sina}
+            </if>
+            <if test="openid!=null and openid!=''">
+                and openid = #{openid}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectLoginUserByToken" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.user.entity.LoginUser">
+        select
+        u.*, i.accid, i.token as imtoken
+        from yw_user u
+        LEFT JOIN yw_im_user i on u.id= i.userid AND i.type = 1
+        <where>
+            <if test="token != null || token != ''">
+                u.token = #{token}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectLoginuserByUserid" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.user.entity.LoginUser">
+        select
+        u.*, i.accid, i.token as imtoken
+        from yw_user u
+        LEFT JOIN yw_im_user i on u.id= i.userid AND i.type = 1
+        <where>
+            <if test="id != null || id != ''">
+                u.id = #{id}
+            </if>
+        </where>
+    </select>
 
 </mapper>

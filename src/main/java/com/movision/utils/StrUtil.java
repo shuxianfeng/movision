@@ -18,8 +18,12 @@ public class StrUtil {
         return "mofo_" + phone.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
     }
 
+    public static String genDefaultNicknameByQQ(String str) {
+        return "mofo_" + str.substring(0, str.length() - (str.substring(3)).length()) + "***" + str.substring(5);
+    }
+
     public static void main(String[] args) {
-        System.out.println(genDefaultNickNameByPhone("18051989558"));
+        System.out.println(genDefaultNicknameByQQ("747369066"));
     }
 
 }

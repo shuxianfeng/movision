@@ -80,7 +80,12 @@ public interface MsgCodeConstant {
     int app_token_not_equal_server_token = 10016;
 
 	/**
-	 * 文件不存在
+     * 该token的app用户不存在
+     */
+    int app_user_not_exist_with_this_token = 10017;
+
+    /**
+     * 文件不存在
 	 */
 	int file_not_exist = 10210;
 
@@ -309,6 +314,11 @@ public interface MsgCodeConstant {
 	 * boss用户名已经存在
 	 */
 	int boss_username_is_exist = 10304;
+
+    /**
+     * qq账号不存在
+     */
+    int app_account_by_qq_not_exist = 10305;
 
 	/**
 	 * app用户编辑我的地址失败

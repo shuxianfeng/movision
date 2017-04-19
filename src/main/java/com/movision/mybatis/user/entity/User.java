@@ -55,6 +55,17 @@ public class User implements Serializable {
 
     private Date applydate;
 
+    private String deviceno;
+
+    public void setDeviceno(String deviceno) {
+        this.deviceno = deviceno;
+    }
+
+    public String getDeviceno() {
+
+        return deviceno;
+    }
+
     public Integer getOrderid() {
         return orderid;
     }
@@ -282,6 +293,8 @@ public class User implements Serializable {
                 ", growth=" + growth +
                 ", level=" + level +
                 ", status=" + status +
+                ", applydate=" + applydate +
+                ", deviceno='" + deviceno + '\'' +
                 '}';
     }
 }

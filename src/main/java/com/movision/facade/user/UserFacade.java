@@ -57,10 +57,21 @@ public class UserFacade {
     }
 
 
+    /**
+     * 注册新的app用户
+     *
+     * @param registerUser
+     * @return
+     */
     public int registerAccount(RegisterUser registerUser) {
         return userService.registerAccount(registerUser);
     }
 
+    /**
+     * 修改app用户token和设备号
+     * @param registerUser
+     * @return
+     */
     public int updateAccount(RegisterUser registerUser) {
         return userService.updateRegisterUser(registerUser);
     }
@@ -109,14 +120,39 @@ public class UserFacade {
             throw new AuthException(MsgCodeConstant.app_user_not_exist, "该手机号的用户不存在");
         }
         //若app用户同时是boss系统用户，则判断该用户是app管理员（可以管理自己的圈子）
-        BossUser bossUser = bossUserService.queryAdminUserByPhone(phone);
-        if (null == bossUser) {
-            loginUser.setRole("200");   //App普通用户
-        } else {
-            loginUser.setRole("100");   //App管理员
-        }
+//        BossUser bossUser = bossUserService.queryAdminUserByPhone(phone);
+//        if (null == bossUser) {
+//            loginUser.setRole("200");   //App普通用户
+//        } else {
+//            loginUser.setRole("100");   //App管理员
+//        }
 
         return loginUser;
+    }
+
+    /**
+     * 根据token获取app登录用户信息
+     *
+     * @param token
+     * @return
+     */
+    public LoginUser getLoginUserByToken(String token) {
+
+        LoginUser loginUser = userService.selectLoginUserByToken(token);
+        if (null == loginUser) {
+            throw new AuthException(MsgCodeConstant.app_user_not_exist_with_this_token, "该token的app用户不存在");
+        }
+        return loginUser;
+    }
+
+    /**
+     * 根据用户id获取Loginuser
+     *
+     * @param userid
+     * @return
+     */
+    public LoginUser getLoginuserByUserid(Integer userid) {
+        return userService.selectLoginuserByUserid(userid);
     }
 
     /**
@@ -235,6 +271,10 @@ public class UserFacade {
         map.put("integral", integral);
         map.put("type", type);
         return userService.updateUserPoint(map);
+    }
+
+    public User selectUserByThirdAccount(Map map) {
+        return userService.selectUserByThirdAccount(map);
     }
 
 }

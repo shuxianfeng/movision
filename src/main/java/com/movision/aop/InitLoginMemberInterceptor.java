@@ -209,7 +209,8 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 ShiroUser loginInfo = new ShiroUser(loginUser.getId(), loginUser.getPhone(), loginUser.getStatus(), loginUser.getRole(),
                         loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(),
                         loginUser.getPhone(), loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(),
-                        loginUser.getAccid(), loginUser.getImtoken(), loginUser.getSign(), DateUtils.date2Str(loginUser.getBirthday()));
+                        loginUser.getAccid(), loginUser.getImtoken(), loginUser.getSign(), DateUtils.date2Str(loginUser.getBirthday()),
+                        loginUser.getQq(), loginUser.getSina(), loginUser.getOpenid());
                 //判断登录信息是否改变,若改变了则更新session，
 
                 //判断登录信息是否改变,若改变了则更新session，
@@ -234,7 +235,10 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 || loginInfo.getToken() != appuser.getToken() || loginInfo.getAccid() != appuser.getAccid()
                 || loginInfo.getImToken() != appuser.getImToken()
                 || loginInfo.getSign() != appuser.getSign()
-                || loginInfo.getBirthday() != appuser.getBirthday();
+                || loginInfo.getBirthday() != appuser.getBirthday()
+                || loginInfo.getQq() != appuser.getQq()
+                || loginInfo.getSina() != appuser.getSina()
+                || loginInfo.getOpenid() != appuser.getOpenid();
         return isChange;
     }
 

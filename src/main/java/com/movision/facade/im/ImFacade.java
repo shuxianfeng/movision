@@ -178,7 +178,7 @@ public class ImFacade {
      */
     public ImUser AddImUser(ImUser imUser) throws IOException {
 
-        registerImUserAndSave(imUser, imUser.getUserid(), ImConstant.TYPE_APP);
+        this.registerImUserAndSave(imUser, imUser.getUserid(), ImConstant.TYPE_APP);
 
         return imUserService.selectByUserid(imUser.getUserid(), ImConstant.TYPE_APP);
     }

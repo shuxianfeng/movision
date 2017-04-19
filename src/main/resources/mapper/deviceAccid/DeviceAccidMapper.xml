@@ -75,4 +75,11 @@
         intime = #{intime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="selectByDeviceno" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.deviceAccid.entity.DeviceAccid">
+        SELECT *
+        FROM t_device_accid
+        where deviceid = #{deviceno}
+    </select>
 </mapper>
