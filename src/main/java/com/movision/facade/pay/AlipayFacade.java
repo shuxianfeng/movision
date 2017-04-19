@@ -278,7 +278,7 @@ public class AlipayFacade {
         Map<String, Object> contentmap = new HashedMap();
         if (null != orders) {//传入的订单均存在且均为待支付的情况下
 
-            //累加实际退款金额
+            //获取实际退款金额
             totalamount = orders.getRealmoney();
             String transactionNumber = orders.getPaycode();
 
