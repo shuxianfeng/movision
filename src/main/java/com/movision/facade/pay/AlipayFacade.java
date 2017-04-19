@@ -22,6 +22,7 @@ import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.L;
 import com.movision.utils.UpdateOrderPayBack;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.collections.map.IdentityMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -270,30 +271,19 @@ public class AlipayFacade {
      */
     public Map<String, Object> tradingARefund(String ordersid) throws AlipayApiException {
         double totalamount = 0;//订单实际支付总金额
-        String[] ordersidstr = ordersid.split(",");
-        int[] ids = new int[ordersidstr.length];
-        for (int i = 0; i < ordersidstr.length; i++) {
-            ids[i] = Integer.parseInt(ordersidstr[i]);
-        }
 
-        //根据订单id查询所有主订单列表
-        List<Orders> ordersList = orderService.queryOrdersListByIds(ids);
+        //根据订单id查询主订单
+        Orders orders = orderService.getOrderById(Integer.parseInt(ordersid));
         Map<String, Object> contentmap = new HashedMap();
-        if (null != ordersList && ordersList.size() == ordersidstr.length) {//传入的订单均存在且均为待支付的情况下
+        if (null != orders) {//传入的订单均存在且均为待支付的情况下
 
-            StringBuffer bodystr = new StringBuffer();
-            String transactionNumber = null;
-            for (int i = 0; i < ordersList.size(); i++) {
-                //拼接主订单id
-                bodystr.append(ordersList.get(i).getId() + ",");
+            //累加实际退款金额
+            totalamount = orders.getRealmoney();
+            String transactionNumber = orders.getPaycode();
 
-                //累加实际退款金额
-                totalamount = totalamount + ordersList.get(i).getRealmoney();
-                transactionNumber = ordersList.get(i).getPaycode();
-            }
             SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String body = bodystr.toString().substring(0, bodystr.toString().length() - 1);//去除末尾逗号
-            log.info("打印订单实际退款总金额=================================>" + totalamount);
+            String body = ordersid;
+            log.info("订单:" + ordersid + "实际退款总金额=================================>" + totalamount);
             String app_id = AlipayPropertiesLoader.getValue("app_id");//获取配置文件中的APPID
             String appprivatekey = AlipayPropertiesLoader.getValue("private_key");//应用私钥（商户的私钥）
             String alipaygateway = AlipayPropertiesLoader.getValue("alipay_gateway");//支付宝请求网关
@@ -325,34 +315,34 @@ public class AlipayFacade {
             if (response.isSuccess()) {
                 System.out.println("调用成功" + response.getBody());
                 //使用的优惠券和积分返还
-                for (int i = 0; i < ordersList.size(); i++) {
-                    if (ordersList.get(i).getIsdiscount() == 1) {//是否使用优惠券
-                        orderService.updateOrderDiscount(ordersList.get(i).getCouponsid());//返还优惠券
-                    }
-                    if (ordersList.get(i).getDispointmoney() != null && ordersList.get(i).getDispointmoney() > 0) {//是否使用了积分
-                        Map m = new HashedMap();
-                        m.put("dispointmoney", ordersList.get(i).getDispointmoney());
-                        m.put("userid", ordersList.get(i).getUserid());
-                        m.put("orderid", ordersList.get(i).getId());
-                        Integer integral = userService.queryUserUseIntegral(m);//查询订单对应用户使用的积分
-                        m.put("integral", integral);
-                        userService.updateUserPoints(m);//把积分返还
-                        m.put("intime", new Date());//生成时间
-                        recordService.addIntegralRecord(m);//增加用户积分操作记录
-                        orderService.updateOrderByIntegral(ordersList.get(i).getId());//修改订单状态
-                    }
-                    Afterservice afterservice = new Afterservice();
-                    afterservice.setOrderid(ordersList.get(i).getId());//订单id
-                    afterservice.setAddressid(ordersList.get(i).getAddressid());//配送地址
-                    afterservice.setAmountdue(ordersList.get(i).getRealmoney());//应退款金额
-                    afterservice.setAfterstatue(2);//售后类型退款
-                    afterservice.setAftersalestatus(1);//销售状态
-                    afterservice.setProcessingstatus(2);//处理状态
-                    afterservice.setProcessingtime(new Date());//处理时间
-                    afterservice.setUserid(ordersList.get(i).getUserid());//用户id
-                    afterservice.setRemark(ordersList.get(i).getRemark());//留言
-                    afterServcieServcie.insertAfterInformation(afterservice);//插入售后详情
+
+                if (orders.getIsdiscount() == 1) {//是否使用优惠券
+                    orderService.updateOrderDiscount(orders.getCouponsid());//返还优惠券
                 }
+                if (orders.getDispointmoney() != null && orders.getDispointmoney() > 0) {//是否使用了积分
+                    Map m = new HashedMap();
+                    m.put("dispointmoney", orders.getDispointmoney());
+                    m.put("userid", orders.getUserid());
+                    m.put("orderid", orders.getId());
+                    Integer integral = userService.queryUserUseIntegral(m);//查询订单对应用户使用的积分
+                    m.put("integral", integral);
+                    userService.updateUserPoints(m);//把积分返还
+                    m.put("intime", new Date());//生成时间
+                    recordService.addIntegralRecord(m);//增加用户积分操作记录
+                    orderService.updateOrderByIntegral(orders.getId());//修改订单状态
+                }
+                Afterservice afterservice = new Afterservice();
+                afterservice.setOrderid(orders.getId());//订单id
+                afterservice.setAddressid(orders.getAddressid());//配送地址
+                afterservice.setAmountdue(orders.getRealmoney());//应退款金额
+                afterservice.setAfterstatue(2);//售后类型退款
+                afterservice.setAftersalestatus(1);//销售状态
+                afterservice.setProcessingstatus(2);//处理状态
+                afterservice.setProcessingtime(new Date());//处理时间
+                afterservice.setUserid(orders.getUserid());//用户id
+                afterservice.setRemark(orders.getRemark());//留言
+                afterServcieServcie.insertAfterInformation(afterservice);//插入售后详情
+
                 contentmap.put("code", 200);
                 contentmap.put("msg", response.getMsg());
                 contentmap.put("type", response);
