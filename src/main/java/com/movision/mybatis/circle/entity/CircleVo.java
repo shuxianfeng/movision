@@ -361,45 +361,4 @@ public class CircleVo implements Serializable {
     public void setIssupport(Integer issupport) {
         this.issupport = issupport;
     }
-
-    @Override
-    public String toString() {
-        return "CircleVo{" +
-                "id=" + id +
-                ", isofficial=" + isofficial +
-                ", scope=" + scope +
-                ", phone='" + phone + '\'' +
-                ", photo='" + photo + '\'' +
-                ", category=" + category +
-                ", categoryname='" + categoryname + '\'' +
-                ", categorylevel='" + categorylevel + '\'' +
-                ", code=" + code +
-                ", name='" + name + '\'' +
-                ", introduction='" + introduction + '\'' +
-                ", notice='" + notice + '\'' +
-                ", permission=" + permission +
-                ", isrecommend=" + isrecommend +
-                ", maylikeimg='" + maylikeimg + '\'' +
-                ", createtime=" + createtime +
-                ", status=" + status +
-                ", supportnum=" + supportnum +
-                ", isdiscover=" + isdiscover +
-                ", orderid=" + orderid +
-                ", hotPostList=" + hotPostList +
-                ", postnum=" + postnum +
-                ", postnewnum=" + postnewnum +
-                ", isfollow=" + isfollow +
-                ", follownum=" + follownum +
-                ", follownewnum=" + follownewnum +
-                ", circlemaster=" + circlemaster +
-                ", circlename='" + circlename + '\'' +
-                ", circleUserid=" + circleUserid +
-                ", circlemanagerlist=" + circlemanagerlist +
-                ", isessencenum=" + isessencenum +
-                ", isdel=" + isdel +
-                ", issupport=" + issupport +
-                ", intime=" + intime +
-                ", userid=" + userid +
-                '}';
-    }
 }
