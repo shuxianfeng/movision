@@ -1187,21 +1187,44 @@ public class PostFacade {
                         post.setCircleid(circleid);//圈子id
                     }
 
+                    Video vide = new Video();
                     Integer in = null;
                     if (type.equals("1")) {//帖子类型为原生视频贴时修改
-                        Video vide = new Video();
-                        vide.setPostid(pid);
-                        vide.setVideourl(vid);
-                        vide.setBannerimgurl(coverimg);//分享视频贴的视频封面是帖子封面
+                        if (!StringUtils.isEmpty(id)) {
+                            vide.setPostid(pid);
+                        }
+                        if (!StringUtils.isEmpty(vid)) {
+                            vide.setVideourl(vid);
+                        }
+                        if (!StringUtils.isEmpty(bannerimgurl)) {
+                            vide.setBannerimgurl(bannerimgurl);
+                        }
                         vide.setIntime(new Date());
-                        in = videoService.updateVideoById(vide);
+                        int tt = videoService.queryVideoByID(pid);//查询帖子是否有发视频
+                        if (tt > 0) {//已经有啦  修改
+                            in = videoService.updateVideoById(vide);
+                        } else {//没有添加
+                            vide.setBannerimgurl(coverimg);
+                            in = videoService.insertVideoById(vide);
+                        }
                     } else if (type.equals("2")) {//帖子为分享视频贴时修改
-                        Video vide = new Video();
-                        vide.setPostid(pid);
-                        vide.setVideourl(vid);
-                        vide.setBannerimgurl(coverimg);//分享视频贴的视频封面是帖子封面
+                        if (!StringUtils.isEmpty(id)) {
+                            vide.setPostid(pid);
+                        }
+                        if (!StringUtils.isEmpty(vid)) {
+                            vide.setVideourl(vid);
+                        }
+                        if (!StringUtils.isEmpty(bannerimgurl)) {
+                            vide.setBannerimgurl(coverimg);//分享视频贴的封面是帖子的封面
+                        }
                         vide.setIntime(new Date());
-                        in = videoService.updateVideoById(vide);
+                        int tt = videoService.queryVideoByID(pid);//查询帖子是否有发视频
+                        if (tt > 0) {//已经有啦  修改
+                            in = videoService.updateVideoById(vide);
+                        } else {//没有添加
+                            vide.setBannerimgurl(coverimg);
+                            in = videoService.insertVideoById(vide);
+                        }
                     }
                     if (!StringUtils.isEmpty(coverimg)) {
                         post.setCoverimg(coverimg);//编辑帖子封面

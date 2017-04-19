@@ -51,4 +51,20 @@ public class VideoService {
             throw e;
         }
     }
+
+    /**
+     * 查询帖子是否发视频
+     *
+     * @param pid
+     * @return
+     */
+    public int queryVideoByID(Integer pid) {
+        try {
+            log.info("查询帖子是否发视频");
+            return videoMapper.queryVideoByID(pid);
+        } catch (Exception e) {
+            log.error("查询帖子是否发视频异常", e);
+            throw e;
+        }
+    }
 }

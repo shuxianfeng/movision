@@ -18,4 +18,6 @@ public interface VideoMapper {
     int updateByPrimaryKey(Video record);
 
     int updateVoid(Video video);
+
+    int queryVideoByID(Integer pid);
 }
