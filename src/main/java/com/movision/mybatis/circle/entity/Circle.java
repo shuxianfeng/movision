@@ -203,30 +203,4 @@ public class Circle implements Serializable {
     public void setStatus(Integer status) {
         this.status = status;
     }
-
-    @Override
-    public String toString() {
-        return "Circle{" +
-                "id=" + id +
-                ", isofficial=" + isofficial +
-                ", scope=" + scope +
-                ", phone='" + phone + '\'' +
-                ", photo='" + photo + '\'' +
-                ", category=" + category +
-                ", code=" + code +
-                ", name='" + name + '\'' +
-                ", introduction='" + introduction + '\'' +
-                ", notice='" + notice + '\'' +
-                ", permission=" + permission +
-                ", isrecommend=" + isrecommend +
-                ", maylikeimg='" + maylikeimg + '\'' +
-                ", createtime=" + createtime +
-                ", status=" + status +
-                ", supportnum=" + supportnum +
-                ", isdiscover=" + isdiscover +
-                ", orderid=" + orderid +
-                ", isdel=" + isdel +
-                ", userid=" + userid +
-                '}';
-    }
 }
