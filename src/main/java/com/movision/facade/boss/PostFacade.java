@@ -1187,30 +1187,19 @@ public class PostFacade {
                         post.setCircleid(circleid);//圈子id
                     }
 
-                    Video vide = new Video();
                     Integer in = null;
                     if (type.equals("1")) {//帖子类型为原生视频贴时修改
-                        if (!StringUtils.isEmpty(id)) {
-                            vide.setPostid(Integer.parseInt(id));
-                        }
-                        if (!StringUtils.isEmpty(vid)) {
-                            vide.setVideourl(vid);
-                        }
-                        if (!StringUtils.isEmpty(bannerimgurl)) {
-                            vide.setBannerimgurl(bannerimgurl);
-                        }
+                        Video vide = new Video();
+                        vide.setPostid(pid);
+                        vide.setVideourl(vid);
+                        vide.setBannerimgurl(coverimg);//分享视频贴的视频封面是帖子封面
                         vide.setIntime(new Date());
                         in = videoService.updateVideoById(vide);
                     } else if (type.equals("2")) {//帖子为分享视频贴时修改
-                        if (!StringUtils.isEmpty(id)) {
-                            vide.setPostid(Integer.parseInt(id));
-                        }
-                        if (!StringUtils.isEmpty(vid)) {
-                            vide.setVideourl(vid);
-                        }
-                        if (!StringUtils.isEmpty(bannerimgurl)) {
-                            vide.setBannerimgurl(coverimg);//分享视频贴的封面是帖子的封面
-                        }
+                        Video vide = new Video();
+                        vide.setPostid(pid);
+                        vide.setVideourl(vid);
+                        vide.setBannerimgurl(coverimg);//分享视频贴的视频封面是帖子封面
                         vide.setIntime(new Date());
                         in = videoService.updateVideoById(vide);
                     }
