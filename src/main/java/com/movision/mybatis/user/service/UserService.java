@@ -78,7 +78,7 @@ public class UserService {
             int n = userMapper.updateUserPointsAdd(mapadd);
             return n == 1;
         } catch (NumberFormatException e) {
-            log.error("给贴主增加积分失败");
+            log.error("给贴主增加积分失败", e);
             throw e;
         }
     }
@@ -89,7 +89,7 @@ public class UserService {
             int n = userMapper.updateUserPointsMinus(map);
             return n == 1;
         } catch (NumberFormatException e) {
-            log.error("减少用户积分操作失败");
+            log.error("减少用户积分操作失败", e);
             throw e;
         }
     }
@@ -99,7 +99,7 @@ public class UserService {
             log.info("查询用户积分是否充足");
             return userMapper.queryUserByPoints(Integer.parseInt(userid));
         } catch (Exception e) {
-            log.error("用户积分查询异常");
+            log.error("用户积分查询异常", e);
             throw e;
         }
     }
@@ -130,7 +130,7 @@ public class UserService {
             log.info("查询用户个人主页--个人信息");
             return userMapper.queryUserInfo(userid);
         } catch (Exception e) {
-            log.error("查询用户个人主页--个人信息失败");
+            log.error("查询用户个人主页--个人信息失败", e);
             throw e;
         }
     }
@@ -140,7 +140,7 @@ public class UserService {
             log.info("查询个人主页中用户发布的历史帖子和用户分享的历史帖子");
             return postMapper.findAllPersonPost(pager.getRowBounds(), userid);
         } catch (Exception e) {
-            log.error("查询个人主页中用户发布的历史帖子和用户分享的历史帖子失败");
+            log.error("查询个人主页中用户发布的历史帖子和用户分享的历史帖子失败", e);
             throw e;
         }
     }
@@ -150,7 +150,7 @@ public class UserService {
             log.info("查询个人主页中用户曾经参与过的所有活动列表");
             return postMapper.findAllPersonActive(pager.getRowBounds(), userid);
         } catch (Exception e) {
-            log.error("查询个人主页中用户曾经参与过的所有活动列表失败");
+            log.error("查询个人主页中用户曾经参与过的所有活动列表失败", e);
             throw e;
         }
     }
@@ -160,7 +160,7 @@ public class UserService {
             log.info("查询圈子所属圈主");
             return userMapper.queryCircleMasterByPhone(phone);
         } catch (Exception e) {
-            log.error("查询圈子所属圈主失败");
+            log.error("查询圈子所属圈主失败", e);
             throw e;
         }
     }
@@ -176,7 +176,7 @@ public class UserService {
             log.info("查询圈子所有的管理员列表");
             return userMapper.queryCircleManagerList(categoryid);
         } catch (Exception e) {
-            log.error("查询圈子所有的管理员列表异常");
+            log.error("查询圈子所有的管理员列表异常", e);
             throw e;
         }
     }
@@ -186,7 +186,7 @@ public class UserService {
             log.info("根据登录用户和圈子类型查询圈子的管理员列表");
             return userMapper.queryCircleMangerByUseridList(map);
         } catch (Exception e) {
-            log.error("根据登录用户和圈子类型查询圈子的管理员列表异常");
+            log.error("根据登录用户和圈子类型查询圈子的管理员列表异常", e);
             throw e;
         }
     }
@@ -202,7 +202,7 @@ public class UserService {
             log.info("查询圈子管理员列表");
             return userMapper.queryCircleManagerByCircleList(circleid);
         } catch (Exception e) {
-            log.error("查询圈子管理员列表异常");
+            log.error("查询圈子管理员列表异常", e);
             throw e;
         }
     }
@@ -222,7 +222,7 @@ public class UserService {
             log.info("查询用户微信id");
             return userMapper.queryUserByOpenid(userid);
         } catch (Exception e) {
-            log.error("用户微信id查询异常");
+            log.error("用户微信id查询异常", e);
             throw e;
         }
     }
@@ -237,7 +237,7 @@ public class UserService {
             log.info("查询用户昵称");
             return userMapper.queryUserByNickname(userid);
         } catch (Exception e) {
-            log.error("查询用户昵称异常");
+            log.error("查询用户昵称异常", e);
             throw e;
         }
     }
@@ -253,7 +253,7 @@ public class UserService {
             log.info("查询用户昵称");
             return userMapper.queryUserByNicknameBy(postid);
         } catch (Exception e) {
-            log.error("查询用户昵称异常");
+            log.error("查询用户昵称异常", e);
             throw e;
         }
     }
@@ -268,7 +268,7 @@ public class UserService {
             log.info("查询成功");
             return  userMapper.findAllUser(id);
         }catch (Exception e){
-            log.error("查询失败");
+            log.error("查询失败", e);
             throw  e;
         }
     }
@@ -278,7 +278,7 @@ public class UserService {
             log.info("查询用户信息");
             return userMapper.queryUser(phone);
         } catch (Exception e) {
-            log.error("查询用户信息异常");
+            log.error("查询用户信息异常", e);
             throw e;
         }
     }
@@ -294,7 +294,7 @@ public class UserService {
             log.info("模糊查询发帖人");
             return userMapper.findAlllikeQueryPostByNickname(name);
         } catch (Exception e) {
-            log.error("模糊查询发帖人异常");
+            log.error("模糊查询发帖人异常", e);
             throw e;
         }
     }
@@ -304,7 +304,7 @@ public class UserService {
             log.info("根据用户id查询用户积分");
             return userMapper.queryUserPoint(userid);
         } catch (Exception e) {
-            log.error("根据用户id查询用户积分失败");
+            log.error("根据用户id查询用户积分失败", e);
             throw e;
         }
     }
@@ -320,7 +320,7 @@ public class UserService {
             log.info("根据用户id查询用户手机号");
             return userMapper.queryUserbyPhoneByUserid(userid);
         } catch (Exception e) {
-            log.error("根据用户id查询用户手机号异常");
+            log.error("根据用户id查询用户手机号异常 userid=" + userid, e);
             throw e;
         }
     }
@@ -354,7 +354,7 @@ public class UserService {
             log.info("查询所有申请加V用户");
             return userMapper.findAllqueryUsers(pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询所有申请加V用户异常");
+            log.error("查询所有申请加V用户异常", e);
             throw e;
         }
     }
@@ -371,7 +371,7 @@ public class UserService {
             log.info("查询所有VIP用户");
             return userMapper.findAllqueryUserVIPByList(pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询所有VIP用户异常");
+            log.error("查询所有VIP用户异常", e);
             throw e;
         }
     }
@@ -388,7 +388,7 @@ public class UserService {
             log.info("根据条件查看VIP列表");
             return userMapper.findAllQueryByConditionvipList(map, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("根据条件查看VIP列表异常");
+            log.error("根据条件查看VIP列表异常", e);
             throw e;
         }
     }
@@ -414,7 +414,7 @@ public class UserService {
             log.info("查询发帖人列表");
             return userMapper.findAllQueryIssuePostManList();
         } catch (Exception e) {
-            log.error("查询发帖人列表异常");
+            log.error("查询发帖人列表异常", e);
             throw e;
         }
     }
@@ -422,6 +422,7 @@ public class UserService {
     /**
      * 查询圈主和管理员
      *
+     * @param pager
      * @return
      */
     public List<User> queryCircleManList() {
@@ -429,7 +430,7 @@ public class UserService {
             log.info("查询圈主和管理员");
             return userMapper.findAllQueryCircleManList();
         } catch (Exception e) {
-            log.error("查询圈主和管理员异常");
+            log.error("查询圈主和管理员异常", e);
             throw e;
         }
     }
@@ -446,7 +447,7 @@ public class UserService {
             log.info("对VIP列表排序");
             return userMapper.findAllqueryAddVSortUser(map, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("对VIP列表排序异常");
+            log.error("对VIP列表排序异常", e);
             throw e;
         }
     }
@@ -463,7 +464,7 @@ public class UserService {
             log.info("条件查询VIP申请用户列表");
             return userMapper.findAllQueryUniteConditionByApply(map, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("条件查询VIP申请用户列表异常");
+            log.error("条件查询VIP申请用户列表异常", e);
             throw e;
         }
     }
@@ -479,7 +480,7 @@ public class UserService {
             log.info("查询所有用户列表");
             return userMapper.findAllqueryAllUserList(pager.getRowBounds(), map);
         } catch (Exception e) {
-            log.error("查询所有用户列表异常");
+            log.error("查询所有用户列表异常", e);
             throw e;
         }
     }
@@ -495,7 +496,7 @@ public class UserService {
             log.info("用户封号");
             return userMapper.deleteUserByid(map);
         } catch (Exception e) {
-            log.error("用户封号异常");
+            log.error("用户封号异常", e);
             throw e;
         }
     }
@@ -511,7 +512,7 @@ public class UserService {
             log.info("对用户加V去V");
             return userMapper.deleteUserLevl(map);
         } catch (Exception e) {
-            log.error("对用户加V去V异常");
+            log.error("对用户加V去V异常", e);
             throw e;
         }
     }
@@ -527,7 +528,7 @@ public class UserService {
             log.info("查询用户详情");
             return userMapper.queryUserParticulars(userid);
         } catch (Exception e) {
-            log.error("查询用户详情异常");
+            log.error("查询用户详情异常 userid=" + userid, e);
             throw e;
         }
     }
@@ -543,7 +544,7 @@ public class UserService {
             log.info("查询地址");
             return userMapper.queryProvinces(userid);
         } catch (Exception e) {
-            log.error("查询地址异常");
+            log.error("查询地址异常 userid=" + userid, e);
             throw e;
         }
     }
@@ -559,7 +560,7 @@ public class UserService {
             log.info("根据id查询用户信息");
             return userMapper.queryUserById(userid);
         } catch (Exception e) {
-            log.error("根据id查询用户信息异常");
+            log.error("根据id查询用户信息异常 userid=" + userid, e);
             throw e;
         }
     }
@@ -575,7 +576,7 @@ public class UserService {
             log.info("根据圈子关注查询用户列表");
             return userMapper.findAllqueryAttentionUserList(map, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("根据圈子关注查询用户列表异常");
+            log.error("根据圈子关注查询用户列表异常", e);
             throw e;
         }
     }
@@ -585,7 +586,7 @@ public class UserService {
             log.info("扣除用户下单使用积分");
             userMapper.deductPoints(parammap);
         } catch (Exception e) {
-            log.error("扣除用户下单使用积分失败");
+            log.error("扣除用户下单使用积分失败", e);
             throw e;
         }
     }

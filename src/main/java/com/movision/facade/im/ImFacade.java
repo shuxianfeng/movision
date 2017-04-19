@@ -221,7 +221,7 @@ public class ImFacade {
 
 
     /**
-     * 查找当前APP用户的IM信息
+     * 根据userid查找当前APP用户的IM信息
      *
      * @param userid
      * @return

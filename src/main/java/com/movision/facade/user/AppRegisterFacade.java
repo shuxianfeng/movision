@@ -282,49 +282,35 @@ public class AppRegisterFacade {
      * password: openid+deviceno,
      * rememberme: false
      * }
-     *
-     * @param qq
+     * @param flag
+     * @param account
      * @param openid
      * @param deviceno
      * @return
      * @throws IOException
      */
-    public Map<String, Object> registerQQAccount(String qq, String openid, String deviceno) throws IOException {
+    public Map<String, Object> registerQQAccount(Integer flag, String account, String openid, String deviceno) throws IOException {
 
         Map<String, Object> result = new HashedMap();
         //1 生成新的token
-        UsernamePasswordToken newToken = new UsernamePasswordToken(qq, (openid + deviceno).toCharArray());
+        UsernamePasswordToken newToken = new UsernamePasswordToken(account, (openid + deviceno).toCharArray());
         result.put("token_detail", newToken);
         Gson gson = new Gson();
         String tokenJson = gson.toJson(newToken);
         result.put("token", tokenJson);
 
-        //2 判断是否存在这条qq用户记录
-        Map map = new HashedMap();
-        map.put("qq", qq);
-        User originUser = userService.selectUserByThirdAccount(map);
+        //2 判断是否存在这条qq/wx/wb用户记录
+        User originUser = queryExistThirdAccountAppUser(flag, account);
 
         if (null == originUser) {
-            //不存在qq账号
-            //3.1 根据QQ注册账号
-            User newUser = new User();
-            newUser.setToken(tokenJson);    //token
-            newUser.setQq(qq);              //qq
-            newUser.setNickname(StrUtil.genDefaultNicknameByQQ(qq));    //昵称
-            newUser.setDeviceno(deviceno);  //设备号
-            newUser.setPoints(25);  //注册25分
-            int userid = userService.insertSelective(newUser);
+            //3.1 根据第三方账号注册APP账号
+            int userid = registerThirdAccountAndReturnUserid(flag, account, deviceno, tokenJson);
 
             //3.2 根据该新的userid注册im用户，即在yw_im_user中新增一条记录
-            ImUser imUser = new ImUser();
-            imUser.setUserid(userid);
-            imUser.setAccid(CheckSumBuilder.getAccid(String.valueOf(userid)));
-            imUser.setName(StrUtil.genDefaultNicknameByQQ(qq));
-            ImUser newImUser = imFacade.AddImUser(imUser);
+            ImUser newImUser = registerNewImuser(account, userid);
             result.put("imuser", newImUser);
 
         } else {
-            //存在qq账号
             //3 更新原来的token
             originUser.setToken(tokenJson);
             originUser.setDeviceno(deviceno);
@@ -332,11 +318,72 @@ public class AppRegisterFacade {
 
             result.put("imuser", imFacade.getImuserByCurrentAppuser(originUser.getId()));
         }
-
         //4 判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录；
         deleteSameDevicenoRecord(deviceno);
 
         return result;
+    }
+
+    /**
+     * 注册新的im用户
+     *
+     * @param account
+     * @param userid
+     * @return
+     * @throws IOException
+     */
+    private ImUser registerNewImuser(String account, int userid) throws IOException {
+        ImUser imUser = new ImUser();
+        imUser.setUserid(userid);
+        imUser.setAccid(CheckSumBuilder.getAccid(String.valueOf(userid)));
+        imUser.setName(StrUtil.genDefaultNicknameByQQ(account));
+        return imFacade.AddImUser(imUser);
+    }
+
+    /**
+     * 查询是否存在第三方账号的APP用户
+     *
+     * @param flag
+     * @param account
+     * @return
+     */
+    public User queryExistThirdAccountAppUser(Integer flag, String account) {
+        Map map = new HashedMap();
+        String key = null;
+        if (flag == 1) {
+            key = "qq";
+        } else if (flag == 2) {
+            key = "wx";
+        } else {
+            key = "wb";
+        }
+        map.put(key, account);
+        return userService.selectUserByThirdAccount(map);
+    }
+
+    /**
+     * 注册第三方账号的App用户并返回userid
+     *
+     * @param flag
+     * @param account
+     * @param deviceno
+     * @param tokenJson
+     * @return
+     */
+    private int registerThirdAccountAndReturnUserid(Integer flag, String account, String deviceno, String tokenJson) {
+        User newUser = new User();
+        newUser.setToken(tokenJson);    //token
+        if (flag == 1) {
+            newUser.setQq(account); //qq
+        } else if (flag == 2) {
+            newUser.setOpenid(account); //微信
+        } else {
+            newUser.setSina(account);   //微博
+        }
+        newUser.setNickname(StrUtil.genDefaultNicknameByQQ(account));    //昵称
+        newUser.setDeviceno(deviceno);  //设备号
+        newUser.setPoints(25);  //注册25分
+        return userService.insertSelective(newUser);
     }
 
     /**

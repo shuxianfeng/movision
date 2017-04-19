@@ -109,9 +109,9 @@ public class AppLoginController {
      * @return
      * @throws Exception
      */
-    @ApiOperation(value = "短信验证码登录", notes = "短信验证码登录", response = Response.class)
-    @RequestMapping(value = {"/login_by_sms_code"}, method = RequestMethod.POST)
-    public Response loginBySmsCode(@ApiParam(value = "会员信息") @ModelAttribute RegisterUser user) throws Exception {
+    @ApiOperation(value = "手机短信验证码注册", notes = "手机短信验证码注册", response = Response.class)
+    @RequestMapping(value = {"/registe_by_phone_sms_code"}, method = RequestMethod.POST)
+    public Response registeByPhoneSMS(@ApiParam(value = "会员信息") @ModelAttribute RegisterUser user) throws Exception {
 
         log.debug("登录信息  mobile==" + user.getPhone() + "mobileCheckCode = " + user.getMobileCheckCode());
         Response response = new Response();
@@ -143,16 +143,23 @@ public class AppLoginController {
         return response;
     }
 
-    @ApiOperation(value = "注册QQ账号", notes = "注册QQ账号", response = Response.class)
-    @RequestMapping(value = {"/registe_by_qq"}, method = RequestMethod.POST)
-    public Response registeByQQ(@ApiParam(value = "qq号") @RequestParam String qq,
-                                @ApiParam(value = "qq的openid") @RequestParam String openid,
-                              @ApiParam(value = "设备号") @RequestParam String deviceno) throws Exception {
-
-        log.debug("注册qq账号信息：  qq==" + qq + ", deviceno = " + deviceno + ", openid = " + openid);
+    @ApiOperation(value = "注册QQ/微信/微博账号", notes = "注册QQ/微信/微博账号", response = Response.class)
+    @RequestMapping(value = {"/registe_by_third_account"}, method = RequestMethod.POST)
+    public Response registeByQQ(@ApiParam(value = "第三方登录方式标示。1:QQ， 2:微信， 3:微博 ") @RequestParam Integer flag,
+                                @ApiParam(value = "QQ号/微信号/微博号") @RequestParam String account,
+                                @ApiParam(value = "唯一标示：openid") @RequestParam String openid,
+                                @ApiParam(value = "当前设备号") @RequestParam String deviceno) throws Exception {
+        if (flag == 1) {
+            log.debug("【QQ注册】");
+        } else if (flag == 2) {
+            log.debug("【微信注册】");
+        } else {
+            log.debug("【微博注册】");
+        }
+        log.debug("注册qq账号信息：  account==" + account + ", deviceno = " + deviceno + ", openid = " + openid);
         Response response = new Response();
         try {
-            Map result = appRegisterFacade.registerQQAccount(qq, openid, deviceno);
+            Map result = appRegisterFacade.registerQQAccount(flag, account, openid, deviceno);
             response.setData(result);
         } catch (Exception e) {
             log.error("注册操作失败>>>", e);
@@ -161,17 +168,15 @@ public class AppLoginController {
         return response;
     }
 
-    @ApiOperation(value = "APP-QQ登录", notes = "APP-QQ登录", response = Response.class)
-    @RequestMapping(value = {"/login_by_qq"}, method = RequestMethod.POST)
-    public Response loginByQQ(@ApiParam(value = "qq") @RequestParam String qq,
+    @ApiOperation(value = "第三方平台账号登录（QQ/Weixin/Weibo）", notes = "第三方平台账号登录（QQ/Weixin/Weibo）", response = Response.class)
+    @RequestMapping(value = {"/login_by_third_account"}, method = RequestMethod.POST)
+    public Response loginByThirdAccont(@ApiParam(value = "第三方登录方式标示。1:QQ， 2:微信， 3:微博 ") @RequestParam Integer flag,
+                                       @ApiParam(value = "QQ/weixin/weibo") @RequestParam String account,
                               @ApiParam(value = "token") @RequestParam String appToken) throws Exception {
 
         Response response = new Response();
         try {
-            //1 校验qq号是否存在
-            Map map = new HashedMap();
-            map.put("qq", qq);
-            User originUser = userFacade.selectUserByThirdAccount(map);
+            User originUser = appRegisterFacade.queryExistThirdAccountAppUser(flag, account);
             if (null == originUser) {
                 log.warn("qq账号不存在,请先注册");
 
@@ -206,8 +211,8 @@ public class AppLoginController {
      * @throws Exception
      */
     @ApiOperation(value = "APP登录", notes = "APP登录", response = Response.class)
-    @RequestMapping(value = {"/auto_login"}, method = RequestMethod.POST)
-    public Response applogin(@ApiParam(value = "手机号") @RequestParam String phone,
+    @RequestMapping(value = {"/login_by_phone"}, method = RequestMethod.POST)
+    public Response loginByPhone(@ApiParam(value = "手机号") @RequestParam String phone,
                              @ApiParam(value = "token") @RequestParam String appToken) throws Exception {
         Response response = new Response();
         try {

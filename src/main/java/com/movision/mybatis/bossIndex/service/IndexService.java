@@ -30,7 +30,7 @@ public class IndexService {
             logger.info("查询后台首页今日详情");
             return indexMapper.queryTheHomepageDetailsToday();
         } catch (Exception e) {
-            logger.error("查询后台首页今日详情异常");
+            logger.error("查询后台首页今日详情异常", e);
             throw e;
         }
     }
@@ -45,7 +45,7 @@ public class IndexService {
             logger.info("查询后台首页待处理、商品、订单");
             return indexMapper.queryProcessedGoodsOrders();
         } catch (Exception e) {
-            logger.error("查询后台首页待处理、商品、订单异常");
+            logger.error("查询后台首页待处理、商品、订单异常", e);
             throw e;
         }
     }
@@ -60,7 +60,7 @@ public class IndexService {
             logger.info("首页上方统计查询");
             return indexMapper.queryAboveStatistics();
         } catch (Exception e) {
-            logger.error("首页上方统计查询异常");
+            logger.error("首页上方统计查询异常", e);
             throw e;
         }
     }
