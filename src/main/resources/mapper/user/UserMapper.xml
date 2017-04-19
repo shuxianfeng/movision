@@ -239,7 +239,7 @@
             </if>
             now(),
             0,
-            1,
+            0,
             0,
             <if test="applydate!=null">
                 #{applydate,jdbcType=DATE},
@@ -908,11 +908,11 @@
             <if test="qq!=null and qq!=''">
                 AND qq = #{qq}
             </if>
-            <if test="sina!=null and sina!=''">
-                and sina = #{sina}
+            <if test="wx!=null and wx!=''">
+                and openid = #{wx}
             </if>
-            <if test="openid!=null and openid!=''">
-                and openid = #{openid}
+            <if test="wb!=null and wb!=''">
+                and sina = #{wb}
             </if>
         </where>
     </select>
