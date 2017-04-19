@@ -34,7 +34,7 @@ public class SharesService {
             log.info("查询帖子分享次数");
             return sharesMapper.querysum(postid);
         } catch (Exception e) {
-            log.error("查询帖子分享次数异常");
+            log.error("查询帖子分享次数异常", e);
             throw e;
         }
     }
@@ -51,7 +51,7 @@ public class SharesService {
             log.info("查询帖子分享列表");
             return sharesMapper.findAllQueryPostShareList(pager.getRowBounds(), map);
         } catch (Exception e) {
-            log.error("查询帖子分享列表异常");
+            log.error("查询帖子分享列表异常", e);
             throw e;
         }
     }
@@ -68,7 +68,7 @@ public class SharesService {
             log.info("根据用户id查询用户被分享的分享列表");
             return sharesMapper.findAllqueryShareList(map, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("根据用户id查询用户被分享的分享列表");
+            log.error("根据用户id查询用户被分享的分享列表", e);
             throw e;
         }
     }
@@ -85,7 +85,7 @@ public class SharesService {
             log.info("查询用户分享帖子的分享列表");
             return sharesMapper.queryUsersSharePostsList(userid, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询用户分享帖子的分享列表异常");
+            log.error("查询用户分享帖子的分享列表异常", e);
             throw e;
         }
     }

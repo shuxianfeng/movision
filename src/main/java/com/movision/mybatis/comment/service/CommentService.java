@@ -32,7 +32,7 @@ public class CommentService {
             log.info("查询某个帖子的评论列表");
             return commentMapper.findAllqueryCommentsByLsit(pager.getRowBounds(), map);
         } catch (Exception e) {
-            log.error("查询帖子评论列表失败");
+            log.error("查询帖子评论列表失败", e);
             throw e;
         }
     }
@@ -42,7 +42,7 @@ public class CommentService {
             log.info("查询该用户是否点赞过该评论");
             return commentMapper.queryIsZan(parammap);
         } catch (Exception e) {
-            log.error("查询该用户是否点赞过该评论失败");
+            log.error("查询该用户是否点赞过该评论失败", e);
             throw e;
         }
     }
@@ -52,7 +52,7 @@ public class CommentService {
             log.info("根据父评论id查询评论实体");
             return commentMapper.queryCommentByPid(pid);
         } catch (Exception e) {
-            log.error("根据父评论id查询评论实体失败");
+            log.error("根据父评论id查询评论实体失败", e);
             throw e;
         }
     }
@@ -68,7 +68,7 @@ public class CommentService {
             log.info("查询评论详情");
             return commentMapper.findAllQueryPostByCommentParticulars(map, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询评论详情异常");
+            log.error("查询评论详情异常", e);
             throw e;
         }
     }
@@ -84,7 +84,7 @@ public class CommentService {
             log.info("查询评论");
             return commentMapper.queryCommentById(map);
         } catch (Exception e) {
-            log.error("查询评论异常");
+            log.error("查询评论异常", e);
             throw e;
         }
     }
@@ -104,7 +104,7 @@ public class CommentService {
             log.info("插入一条评论点赞记录");
             commentMapper.insertCommentZanRecord(parammap);
         } catch (Exception e) {
-            log.error("插入一条评论点赞记录失败");
+            log.error("插入一条评论点赞记录失败", e);
             throw e;
         }
     }
@@ -114,7 +114,7 @@ public class CommentService {
             log.info("更新评论点赞次数");
             return commentMapper.updateCommentZanSum(id);
         } catch (Exception e) {
-            log.error("评论点赞次数更新异常");
+            log.error("评论点赞次数更新异常", e);
             throw e;
         }
     }
@@ -124,7 +124,7 @@ public class CommentService {
             log.info("查看评论次数");
             return commentMapper.queryCommentZanSum(id);
         } catch (Exception e) {
-            log.error("查询评论次数失败");
+            log.error("查询评论次数失败", e);
             throw e;
         }
     }
@@ -134,20 +134,11 @@ public class CommentService {
             log.info("插入帖子评论");
             return commentMapper.insertComment(vo);
         } catch (Exception e) {
-            log.error("帖子评论失败");
+            log.error("帖子评论失败", e);
             throw e;
         }
     }
-/*
-    public List<CommentVo> queryComments(String postid, Paging<CommentVo> pager) {
-        try {
-            log.info("查询评论");
-            return commentMapper.findAllqueryCommentsByLsit(Integer.parseInt(postid), pager.getRowBounds());
-        } catch (NumberFormatException e) {
-            log.error("查询评论异常");
-            throw e;
-        }
-    }*/
+
 
     /**
      * 删除帖子评论
@@ -160,7 +151,7 @@ public class CommentService {
             log.info("删除帖子评论");
             return commentMapper.deletePostAppraise(id);
         } catch (Exception e) {
-            log.error("帖子评论删除异常");
+            log.error("帖子评论删除异常", e);
             throw e;
         }
     }
@@ -176,7 +167,7 @@ public class CommentService {
             log.info("编辑帖子评论");
             return commentMapper.updatePostComment(map);
         } catch (Exception e) {
-            log.error("编辑帖子评论异常");
+            log.error("编辑帖子评论异常", e);
             throw e;
         }
     }
@@ -191,7 +182,7 @@ public class CommentService {
             log.info("回复帖子评论");
             return commentMapper.replyPostComment(map);
         } catch (Exception e) {
-            log.error("回复帖子评论异常");
+            log.error("回复帖子评论异常", e);
             throw e;
         }
     }
@@ -207,7 +198,7 @@ public class CommentService {
             log.info("特约嘉宾评论审核");
             return commentMapper.updateCommentAudit(map);
         } catch (Exception e) {
-            log.error("特约嘉宾评论审核异常");
+            log.error("特约嘉宾评论审核异常", e);
             throw e;
         }
     }
@@ -223,7 +214,7 @@ public class CommentService {
             log.info("查询评论是否可被评论");
             return commentMapper.queryAuthenticationBypid(pid);
         } catch (Exception e) {
-            log.error("查询评论是否可被评论异常");
+            log.error("查询评论是否可被评论异常", e);
             throw e;
         }
     }
@@ -239,7 +230,7 @@ public class CommentService {
             log.info("根据点赞排序评论列表");
             return commentMapper.commentZanSork(postid, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("根据点赞排序评论列表异常");
+            log.error("根据点赞排序评论列表异常", e);
             throw e;
         }
     }
@@ -255,7 +246,7 @@ public class CommentService {
             log.info("查询含有敏感字的帖子");
             return commentMapper.findAllQueryCommentSensitiveWords(map, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询含有敏感字的帖子异常");
+            log.error("查询含有敏感字的帖子异常", e);
             throw e;
         }
     }
@@ -272,7 +263,7 @@ public class CommentService {
             log.info("根据用户id查询用户帖子被评论的评论列表");
             return commentMapper.findAllQueryCommentListByUserid(userid, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("根据用户id查询用户帖子被评论的评论列表异常");
+            log.error("根据用户id查询用户帖子被评论的评论列表异常", e);
             throw e;
         }
     }
@@ -289,7 +280,7 @@ public class CommentService {
             log.info("根据用户id查询用户帖子被评论的评论列表");
             return commentMapper.findAllQueryComment(userid, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("根据用户id查询用户帖子被评论的评论列表异常");
+            log.error("根据用户id查询用户帖子被评论的评论列表异常", e);
             throw e;
         }
     }
@@ -299,7 +290,7 @@ public class CommentService {
             log.info("查询父评论");
             return commentMapper.queryPidComment(pid);
         } catch (Exception e) {
-            log.error("查询父评论失败");
+            log.error("查询父评论失败", e);
             throw e;
         }
     }
@@ -316,7 +307,7 @@ public class CommentService {
             log.info("查询用户评论帖子的评论列表");
             return commentMapper.findAllqueryTheUserComments(userid, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询用户评论帖子的评论列表异常");
+            log.error("查询用户评论帖子的评论列表异常", e);
             throw e;
         }
     }
@@ -332,7 +323,7 @@ public class CommentService {
             log.info("根据用户查询评论");
             return commentMapper.queryCommentByUserid(userid);
         } catch (Exception e) {
-            log.error("根据用户查询评论异常");
+            log.error("根据用户查询评论异常", e);
             throw e;
         }
     }

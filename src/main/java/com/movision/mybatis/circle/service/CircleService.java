@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +39,7 @@ public class CircleService {
             log.info("查询热门圈子列表");
             return circleMapper.queryHotCircleList();
         } catch (Exception e) {
-            log.error("查询热门圈子列表失败");
+            log.error("查询热门圈子列表失败", e);
             throw e;
         }
     }
@@ -48,17 +49,17 @@ public class CircleService {
             log.info("查询圈子详情上半部分数据");
             return circleMapper.queryCircleIndex1(circleid);
         } catch (Exception e) {
-            log.error("查询圈子详情上半部分数据失败");
+            log.error("查询圈子详情上半部分数据失败 circleid=" + circleid, e);
             throw e;
         }
     }
 
     public List<CircleVo> queryCircleByCategory(int categoryid) {
         try {
-            log.info("通过类型查询圈子列表");
+            log.info("通过类型查询圈子列表categoryid=" + categoryid);
             return circleMapper.queryCircleByCategory(categoryid);
         } catch (Exception e) {
-            log.error("通过类型查询圈子列表失败");
+            log.error("通过类型查询圈子列表失败categoryid=" + categoryid, e);
             throw e;
         }
     }
@@ -68,7 +69,7 @@ public class CircleService {
             log.info("查询待审核圈子列表");
             return circleMapper.queryAuditCircle();
         } catch (Exception e) {
-            log.error("查询待审核圈子列表失败");
+            log.error("查询待审核圈子列表失败", e);
             throw e;
         }
     }
@@ -78,17 +79,17 @@ public class CircleService {
             log.info("查询当前用户是否已支持该圈子");
             return circleMapper.queryIsSupport(parammap);
         } catch (Exception e) {
-            log.error("查询当前用户是否已支持该圈子失败");
+            log.error("查询当前用户是否已支持该圈子失败", e);
             throw e;
         }
     }
 
     public CircleVo queryCircleInfo(int circleid) {
         try {
-            log.info("查询圈子信息（包括公告和简介等）");
+            log.info("查询圈子信息（包括公告和简介等）circleid=" + circleid);
             return circleMapper.queryCircleInfo(circleid);
         } catch (Exception e) {
-            log.error("查询圈子信息（包括公告和简介等）失败");
+            log.error("查询圈子信息（包括公告和简介等）失败 circleid=" + circleid, e);
             throw e;
         }
     }
@@ -98,7 +99,7 @@ public class CircleService {
             log.info("查询当前用户是否支持过该圈子");
             return circleMapper.queryIsSupport(parammap);
         } catch (Exception e) {
-            log.error("查询当前用户是否支持过该圈子失败");
+            log.error("查询当前用户是否支持过该圈子失败", e);
             throw e;
         }
     }
@@ -108,7 +109,7 @@ public class CircleService {
             log.info("增加圈子中的支持数+1成功");
             circleMapper.addSupportSum(parammap);
         } catch (Exception e) {
-            log.error("增加圈子中的支持数失败");
+            log.error("增加圈子中的支持数失败", e);
             throw e;
         }
     }
@@ -118,7 +119,7 @@ public class CircleService {
             log.info("增加该用户支持该圈子的记录");
             circleMapper.addSupportRecored(parammap);
         } catch (Exception e) {
-            log.error("增加该用户支持该圈子的记录失败");
+            log.error("增加该用户支持该圈子的记录失败", e);
             throw e;
         }
     }
@@ -128,7 +129,7 @@ public class CircleService {
             log.info("查询当前用户是否关注过该圈子");
             return followCircleMapper.queryCountByFollow(parammap);
         } catch (Exception e) {
-            log.error("查询当前用户是否关注过该圈子失败");
+            log.error("查询当前用户是否关注过该圈子失败", e);
             throw e;
         }
     }
@@ -138,7 +139,7 @@ public class CircleService {
             log.info("当前用户关注该圈子");
             followCircleMapper.followCircle(parammap);
         } catch (Exception e) {
-            log.error("当前用户关注该圈子失败");
+            log.error("当前用户关注该圈子失败", e);
             throw e;
         }
     }
@@ -158,17 +159,17 @@ public class CircleService {
             log.info("查询该用户对当前圈子关注的次数");
             return followCircleMapper.queryCountByFollow(parammap);
         } catch (Exception e) {
-            log.info("查询该用户对当前圈子关注的次数失败");
+            log.info("查询该用户对当前圈子关注的次数失败", e);
             throw e;
         }
     }
 
     public String queryCircleByPhone(int circleid) {
         try {
-            log.info("查询贴主手机号");
+            log.info("查询贴主手机号 circleid=" + circleid);
             return circleMapper.queryCircleByPhone(circleid);
         } catch (Exception e) {
-            log.error("查询手机号失败");
+            log.error("查询手机号失败 circleid=" + circleid, e);
             throw e;
         }
     }
@@ -178,27 +179,27 @@ public class CircleService {
             log.info("查询帖子详情最下方推荐的4个热门圈子");
             return circleMapper.queryHotCircle();
         } catch (Exception e) {
-            log.error("查询帖子详情最下方推荐的4个热门圈子失败");
+            log.error("查询帖子详情最下方推荐的4个热门圈子失败", e);
             throw e;
         }
     }
 
     public int queryCircleScope(int circleid) {
         try {
-            log.info("查询圈子的开放范围scope");
+            log.info("查询圈子的开放范围scope, circleid=" + circleid);
             return circleMapper.queryCircleScope(circleid);
         } catch (Exception e) {
-            log.error("查询圈子的开放范围scope失败");
+            log.error("查询圈子的开放范围scope失败 circleid=" + circleid, e);
             throw e;
         }
     }
 
     public User queryCircleOwner(int circleid) {
         try {
-            log.info("查询圈子的所有者userid");
+            log.info("查询圈子的所有者userid, circleid=" + circleid);
             return circleMapper.queryCircleOwner(circleid);
         } catch (Exception e) {
-            log.error("查询圈子的所有者userid失败");
+            log.error("查询圈子的所有者userid失败 circleid=" + circleid, e);
             throw e;
         }
     }
@@ -213,20 +214,24 @@ public class CircleService {
      */
     public List<CircleVo> queryCircleByLikeList(Map map) {
         try {
-            log.info("根据条件查询圈子列表");
+            if (log.isInfoEnabled()) {
+                log.info("根据条件查询圈子列表");
+            }
             return circleMapper.queryCircleByLikeList(map);
         } catch (Exception e) {
-            log.error("根据条件查询圈子列表");
+            log.error("根据条件查询圈子列表异常", e);
             throw e;
         }
     }
 
     public List<CircleVo> queryCircleManagementByLikeList(Map map) {
         try {
-            log.info("根据条件查询圈子列表");
+            if (log.isInfoEnabled()) {
+                log.info("根据条件查询圈子列表");
+            }
             return circleMapper.queryCircleManagementByLikeList(map);
         } catch (Exception e) {
-            log.error("根据条件查询圈子列表异常");
+            log.error("根据条件查询圈子列表异常", e);
             throw e;
         }
     }
@@ -239,10 +244,13 @@ public class CircleService {
      */
     public List<CircleIndexList> queryListByCircleCategory(Map map) {
         try {
-            log.info("查询圈子中所有圈子所属分类");
+            if (log.isInfoEnabled()) {
+                log.info("查询圈子中所有圈子所属分类");
+            }
+
             return circleMapper.queryListByCircleCategory(map);
         } catch (Exception e) {
-            log.error("查询圈子中所有圈子所属分类异常");
+            log.error("查询圈子中所有圈子所属分类异常", e);
             throw e;
         }
     }
@@ -255,10 +263,12 @@ public class CircleService {
      */
     public List<Circle> queryListByCircleList(Map categoryid) {
         try {
-            log.info("查询圈子名称");
+            if (log.isInfoEnabled()) {
+                log.info("查询圈子名称");
+            }
             return circleMapper.queryListByCircleList(categoryid);
         } catch (Exception e) {
-            log.error("查询圈子名称异常");
+            log.error("查询圈子名称异常", e);
             throw e;
         }
     }
@@ -274,7 +284,7 @@ public class CircleService {
             log.info("根据用户id查询所属圈子名称");
             return circleMapper.queryListByCircleListByUserid(map);
         } catch (Exception e) {
-            log.error("根据用户id查询所属圈子名称异常");
+            log.error("根据用户id查询所属圈子名称异常", e);
             throw e;
         }
     }
@@ -290,7 +300,7 @@ public class CircleService {
             log.info("根据用户id查询所属圈子名称");
             return circleMapper.queryListByCircleManageListByUserid(map);
         } catch (Exception e) {
-            log.error("根据用户id查询所属圈子名称异常");
+            log.error("根据用户id查询所属圈子名称异常", e);
             throw e;
         }
     }
@@ -305,7 +315,7 @@ public class CircleService {
             log.info("查询发现页排序");
             return circleMapper.queryDiscoverList();
         } catch (Exception e) {
-            log.error("查询发现页排序异常");
+            log.error("查询发现页排序异常", e);
             throw e;
         }
     }
@@ -318,10 +328,10 @@ public class CircleService {
      */
     public int queryCircleDiscover(String circleid) {
         try {
-            log.info("查询圈子是否推荐发现页");
+            log.info("查询圈子是否推荐发现页 circleid=" + circleid);
             return circleMapper.queryCircleDiscover(circleid);
         } catch (Exception e) {
-            log.error("查询圈子是否推荐发现页异常");
+            log.error("查询圈子是否推荐发现页异常 circleid=" + circleid, e);
             throw e;
         }
     }
@@ -336,7 +346,7 @@ public class CircleService {
             log.info("圈子推荐到发现页");
             return circleMapper.updateDiscover(map);
         } catch (Exception e) {
-            log.error("圈子推荐到发现页异常");
+            log.error("圈子推荐到发现页异常", e);
             throw e;
         }
     }
@@ -349,10 +359,10 @@ public class CircleService {
      */
     public int updateDiscoverDel(String circleid) {
         try {
-            log.info("取消圈子推荐到发现页");
+            log.info("取消圈子推荐到发现页 circleid=" + circleid);
             return circleMapper.updateDiscoverDel(circleid);
         } catch (Exception e) {
-            log.error("取消圈子推荐到发现页异常");
+            log.error("取消圈子推荐到发现页异常 circleid=" + circleid, e);
             throw e;
         }
     }
@@ -368,7 +378,7 @@ public class CircleService {
             log.info("查询圈子是否推荐到首页");
             return circleMapper.queryCircleRecommendIndex(circleid);
         } catch (Exception e) {
-            log.error("查询圈子是否推荐到首页异常");
+            log.error("查询圈子是否推荐到首页异常", e);
             throw e;
         }
     }
@@ -384,7 +394,7 @@ public class CircleService {
             log.info("圈子推荐到首页");
             return circleMapper.updateCircleIndex(circleid);
         } catch (Exception e) {
-            log.error("圈子推荐到首页异常");
+            log.error("圈子推荐到首页异常", e);
             throw e;
         }
     }
@@ -397,10 +407,10 @@ public class CircleService {
      */
     public int updateCircleIndexDel(String circleid) {
         try {
-            log.info("解除圈子推荐到首页");
+            log.info("解除圈子推荐到首页 circleid=" + circleid);
             return circleMapper.updateCircleIndexDel(circleid);
         } catch (Exception e) {
-            log.error("解除圈子推荐到首页异常");
+            log.error("解除圈子推荐到首页异常 circleid=" + circleid, e);
             throw e;
         }
     }
@@ -416,7 +426,7 @@ public class CircleService {
             log.info("查看圈子详情");
             return circleMapper.quryCircleDetails(circleid);
         } catch (Exception e) {
-            log.error("圈子详情异常");
+            log.error("圈子详情异常", e);
             throw e;
         }
     }
@@ -432,7 +442,7 @@ public class CircleService {
             log.info("编辑圈子");
             return circleMapper.updateCircle(circleDetails);
         } catch (Exception e) {
-            log.error("编辑圈子异常");
+            log.error("编辑圈子异常", e);
             throw e;
         }
     }
@@ -448,7 +458,7 @@ public class CircleService {
             log.info("编辑圈子数据回显");
             return circleMapper.queryCircleByShow(circleid);
         } catch (Exception e) {
-            log.error("编辑圈子数据回显");
+            log.error("编辑圈子数据回显", e);
             throw e;
         }
     }
@@ -463,7 +473,7 @@ public class CircleService {
             log.info("查询圈子推荐发现页排序");
             return circleMapper.queryCircleByOrderidList();
         } catch (Exception e) {
-            log.error("查询圈子推荐发现页排序异常");
+            log.error("查询圈子推荐发现页排序异常", e);
             throw e;
         }
     }
@@ -479,7 +489,7 @@ public class CircleService {
             log.info("添加圈子");
             return circleMapper.insertCircle(circleDetails);
         } catch (Exception e) {
-            log.error("添加圈子异常");
+            log.error("添加圈子异常", e);
             throw e;
         }
     }
@@ -506,26 +516,12 @@ public class CircleService {
             log.info("审核圈子");
             return circleMapper.updateAuditCircle(map);
         } catch (Exception e) {
-            log.error("审核圈子异常");
+            log.error("审核圈子异常", e);
             throw e;
         }
     }
 
-    /**
-     * 修改圈子分类
-     *
-     * @param map
-     * @return
-     */
-/*    public int updateCircleCategoryClassify(Map map) {
-        try {
-            log.info("修改圈子分类");
-            return circleMapper.updateCircleCategoryClassify(map);
-        } catch (Exception e) {
-            log.error("修改圈子分类异常");
-            throw e;
-        }
-    }*/
+
 
     /**
      * 根据类型Id查询圈子类型
@@ -535,10 +531,10 @@ public class CircleService {
      */
     public Category queryCircleCategoryClassify(String categoryid) {
         try {
-            log.info("根据类型id查询圈子类型");
+            log.info("根据类型id查询圈子类型 categoryid=" + categoryid);
             return circleMapper.queryCircleCategoryClassify(categoryid);
         } catch (Exception e) {
-            log.error("根据类型id查询圈子类型异常");
+            log.error("根据类型id查询圈子类型异常 categoryid=" + categoryid, e);
             throw e;
         }
     }
@@ -551,10 +547,10 @@ public class CircleService {
      */
     public List<Integer> queryCIrcleIdByUserId(Integer userid) {
         try {
-            log.info("根据用户id查询圈子id");
+            log.info("根据用户id查询圈子id userid=" + userid);
             return circleMapper.queryCIrcleIdByUserId(userid);
         } catch (Exception e) {
-            log.error("根据用户id查询圈子id异常");
+            log.error("根据用户id查询圈子id异常", e);
             throw e;
         }
     }

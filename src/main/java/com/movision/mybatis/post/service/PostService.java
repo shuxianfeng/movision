@@ -259,7 +259,7 @@ public class PostService {
             log.info("根据缩略图url查询原图url和大小");
             return compressImgMapper.getProtoImg(imgurl);
         } catch (Exception e) {
-            log.error("根据缩略图url查询原图url和大小失败");
+            log.error("根据缩略图url查询原图url和大小失败", e);
             throw e;
         }
     }
@@ -270,7 +270,7 @@ public class PostService {
             log.info("查询当前用户有没有点赞过该帖子");
             return postMapper.queryIsZanPost(parammap);
         } catch (Exception e) {
-            log.error("查询当前用户有没有点赞过该帖子失败");
+            log.error("查询当前用户有没有点赞过该帖子失败", e);
             throw e;
         }
     }
@@ -281,7 +281,7 @@ public class PostService {
             log.info("插入一条用户点赞帖子的记录");
             postMapper.insertZanRecord(parammap);
         } catch (Exception e) {
-            log.error("插入一条用户点赞帖子的记录失败");
+            log.error("插入一条用户点赞帖子的记录失败", e);
             throw e;
         }
     }
@@ -289,20 +289,20 @@ public class PostService {
     //跟新帖子点赞次数
     public int updatePostByZanSum(int id) {
         try {
-            log.info("更新帖子点赞次数");
+            log.info("更新帖子点赞次数 id=" + id);
             return postMapper.updatePostByZanSum(id);
         } catch (Exception e) {
-            log.error("帖子点赞次数更新异常");
+            log.error("帖子点赞次数更新异常 id=" + id, e);
             throw e;
         }
     }
 
     public int queryPostByZanSum(int id) {
         try {
-            log.info("查询帖子点赞次数");
+            log.info("查询帖子点赞次数 id=", id);
             return postMapper.queryPostByZanSum(id);
         } catch (Exception e) {
-            log.info("查看帖子点赞次数异常");
+            log.info("查看帖子点赞次数异常 id=" + id, e);
             throw e;
         }
     }
@@ -321,14 +321,14 @@ public class PostService {
      * 更新帖子评论次数字段
      *
      * @param postid
-     * @return
+     * @return int
      */
     public int updatePostBycommentsum(int postid) {
         try {
-            log.info("更新帖子的评论数量");
+            log.info("更新帖子的评论数量 postid=" + postid);
             return postMapper.updatePostBycommentsum(postid);
         } catch (Exception e) {
-            log.error("帖子更新评论数量异常");
+            log.error("帖子更新评论数量异常 postid=" + postid, e);
             throw e;
         }
     }
@@ -341,10 +341,10 @@ public class PostService {
      */
     public int updatePostBycommentsumT(int postid) {
         try {
-            log.info("更新帖子的评论数量");
+            log.info("更新帖子的评论数量 postid=" + postid);
             return postMapper.updatePostBycommentsum(postid);
         } catch (Exception e) {
-            log.error("帖子更新评论数量异常");
+            log.error("帖子更新评论数量异常 postid=" + postid);
             throw e;
         }
     }
@@ -353,34 +353,48 @@ public class PostService {
      * 后台管理-查询帖子列表
      *
      * @param pager
-     * @return
+      * @return List
      */
      public List<PostList> queryPostByList(Paging<PostList> pager) {
         try {
             log.info("查询帖子列表");
             return postMapper.findAllqueryPostByList(pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询帖子列表异常");
+            log.error("查询帖子列表异常", e);
             throw e;
         }
      }
 
+    /**
+     * 查询帖子列表
+     *
+     * @param userid
+     * @param pager
+     * @return list
+     */
     public List<PostList> queryPostByList2(Integer userid, Paging<PostList> pager) {
         try {
-            log.info("查询帖子列表");
+            log.info("查询帖子列表 userid=" + userid);
             return postMapper.findAllqueryPostByList2(userid, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询帖子列表异常");
+            log.error("查询帖子列表异常 userid=" + userid);
             throw e;
         }
     }
 
+    /**
+     * 查询帖子列表
+     *
+     * @param userid
+     * @param pager
+     * @return list
+     */
     public List<PostList> queryPostByManageByList(Integer userid, Paging<PostList> pager) {
         try {
-            log.info("查询帖子列表");
+            log.info("查询帖子列表userid=" + userid);
             return postMapper.findAllqueryPostByManageByList(userid, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询帖子列表异常");
+            log.error("查询帖子列表异常 userid=" + userid);
             throw e;
         }
     }
@@ -396,7 +410,7 @@ public class PostService {
             log.info("根据圈子id查询帖子列表");
             return postMapper.findAllqueryPostByCircleId(map, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("根据圈子id查询帖子列表异常");
+            log.error("根据圈子id查询帖子列表异常",e);
             throw e;
         }
     }
@@ -411,7 +425,7 @@ public class PostService {
             log.info("根据用户id查询帖子列表");
             return postMapper.findAllQueryPostListByUserid(map, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("根据用户id查询帖子列表");
+            log.error("根据用户id查询帖子列表",e);
             throw e;
         }
     }
@@ -425,10 +439,10 @@ public class PostService {
      */
     public List<PostList> queryCollectionListByUserid(String userid, Paging<PostList> pager) {
         try {
-            log.info("根据用户id查询用户收藏帖子列表");
+            log.info("根据用户id查询用户收藏帖子列表 userid=" + userid);
             return postMapper.findAllQueryCollectionListByUserid(userid, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("根据用户id查询用户收藏帖子列表异常");
+            log.error("根据用户id查询用户收藏帖子列表异常 userid=" + userid,e);
             throw e;
         }
     }
@@ -444,8 +458,8 @@ public class PostService {
             log.info("查询精贴列表");
             return postMapper.findAllIsessenceByList(map, pager.getRowBounds());
 
-        }catch (Exception e){
-            log.error("查询精贴列表异常");
+        }catch (Exception e) {
+            log.error("查询精贴列表异常",e);
             throw  e;
         }
     }
@@ -459,8 +473,8 @@ public class PostService {
         try{
             log.info("查询活动列表");
             return postMapper.findAllActiveByList(pager.getRowBounds());
-        }catch (Exception e){
-            log.error("查询活动列表失败");
+        }catch (Exception e) {
+            log.error("查询活动列表失败",e);
             throw  e;
         }
     }
@@ -474,8 +488,8 @@ public class PostService {
             try{
                 log.info("查询活动列表");
                 return  postMapper.findAllActiveTOByList(pager.getRowBounds());
-            }catch (Exception e){
-                log.error("查询活动列表失败");
+            }catch (Exception e) {
+                log.error("查询活动列表失败",e);
                 throw e;
             }
 
@@ -488,11 +502,11 @@ public class PostService {
      * @return
      */
     public Double queryPostActiveFee(Integer postid){
-        try{
-            log.info("查询单价");
+        try {
+            log.info("查询单价postid=" + postid);
             return postMapper.findAllActivefee(postid);
-        }catch (Exception e){
-            log.error("查询单价失败");
+        }catch (Exception e) {
+            log.error("查询单价失败 postid=" + postid,e);
             throw  e;
         }
 
@@ -504,11 +518,11 @@ public class PostService {
      */
     public int queryPostPerson(Integer postid){
 
-            try{
-                log.info("查询报名人数");
+        try {
+            log.info("查询报名人数 postid=" + postid);
                 return postMapper.findAllPerson(postid);
-            }catch(Exception e){
-                log.error("查询报名人数失败");
+            }catch(Exception e) {
+            log.error("查询报名人数失败 postid=" + postid,e);
                 throw  e;
             }
     }
@@ -520,11 +534,11 @@ public class PostService {
      * @return
      */
     public int addPostActiveList(PostTo post) {
-        try{
-            log.info("增加活动成功");
+        try {
+            log.info("增加活动成功 post="+post);
             return postMapper.insertActivet(post);
-        }catch (Exception e){
-            log.error("增加活动失败");
+        }catch (Exception e) {
+            log.error("增加活动失败 post=" + post,e);
             throw e;
         }
     }
@@ -535,11 +549,11 @@ public class PostService {
      * @return
      */
     public  int addPostPeriod(Period period){
-        try{
-            log.info("增加活动周期");
+        try {
+            log.info("增加活动周期 period" + period);
             return postMapper.insertPerid(period);
-        }catch (Exception e){
-            log.error("增加活动失败");
+        }catch (Exception e) {
+            log.error("增加活动失败 period=" + period,e);
             throw e;
         }
 
@@ -552,10 +566,10 @@ public class PostService {
      */
     public int deletePost(Integer postid) {
         try {
-            log.info("逻辑删除帖子");
+            log.info("逻辑删除帖子 postid=" + postid);
             return postMapper.deletePost(postid);
         } catch (Exception e) {
-            log.error("逻辑删除帖子失败");
+            log.error("逻辑删除帖子失败 postid=" + postid,e);
             throw e;
         }
     }
@@ -569,10 +583,10 @@ public class PostService {
      */
     public PostList queryPostParticulars(Integer postid) {
         try {
-            log.info("帖子预览");
+            log.info("帖子预览 postid=" + postid);
             return postMapper.queryPostParticulars(postid);
         } catch (Exception e) {
-            log.error("帖子预览异常");
+            log.error("帖子预览异常 postid=" + postid,e);
             throw e;
         }
     }
@@ -588,7 +602,7 @@ public class PostService {
             log.info("活动预览");
             return postMapper.queryActivityParticulars(postid);
         } catch (Exception e) {
-            log.error("活动预览异常");
+            log.error("活动预览异常 postid=" + postid,e);
             throw e;
         }
     }
@@ -603,7 +617,7 @@ public class PostService {
             log.info("添加帖子");
             return postMapper.insertSelectivet(map);
         } catch (Exception e) {
-            log.error("添加帖子异常");
+            log.error("添加帖子异常",e);
             throw e;
         }
     }
@@ -618,7 +632,7 @@ public class PostService {
             log.info("帖子添加商品");
             return postMapper.insertGoods(typ);
         } catch (Exception e) {
-            log.error("帖子添加商品异常");
+            log.error("帖子添加商品异常",e);
             throw e;
         }
     }
@@ -634,7 +648,7 @@ public class PostService {
             log.info("添加商城促销类商品");
             return postMapper.insertPromotionGoods(map);
         } catch (Exception e) {
-            log.error("添加商城促销类商品异常");
+            log.error("添加商城促销类商品异常",e);
             throw e;
         }
     }
@@ -665,7 +679,7 @@ public class PostService {
             log.info("根据id查询帖子是否加精");
             return postMapper.queryPostByIsessence(id);
         } catch (Exception e) {
-            log.error("根据id查询帖子是否加精异常");
+            log.error("根据id查询帖子是否加精异常 id="+id,e);
             throw e;
         }
     }
@@ -681,7 +695,7 @@ public class PostService {
             log.info("修改帖子加精");
             return postMapper.updatePostChoiceness(post);
         } catch (Exception e) {
-            log.error("修改帖子加精异常");
+            log.error("修改帖子加精异常 post=" + post,e);
             throw e;
         }
     }
@@ -697,7 +711,7 @@ public class PostService {
             log.info("帖子添加精选");
             return postMapper.addPostChoiceness(postid);
         } catch (Exception e) {
-            log.error("帖子添加精选异常");
+            log.error("帖子添加精选异常 postid=" + postid,e);
             throw e;
         }
     }
@@ -713,7 +727,7 @@ public class PostService {
             log.info("帖子取消加精");
             return postMapper.deletePostChoiceness(postid);
         } catch (Exception e) {
-            log.error("帖子取消加精异常");
+            log.error("帖子取消加精异常 postid=" + postid,e);
             throw e;
         }
     }
@@ -728,7 +742,7 @@ public class PostService {
             log.info("查询当日帖子加精排序列表");
             return postMapper.queryPostChoicenesslist(essencedate);
         } catch (Exception e) {
-            log.error("查询当日帖子加精排序列表异常");
+            log.error("查询当日帖子加精排序列表异常",e);
             throw e;
         }
     }
@@ -759,7 +773,7 @@ public class PostService {
             log.info("查询帖子，返回加精回填数据");
             return postMapper.queryPostChoiceness(postid);
         } catch (Exception e) {
-            log.error("加精数据查询异常");
+            log.error("加精数据查询异常 postid=" + postid,e);
             throw e;
         }
     }
@@ -775,13 +789,24 @@ public class PostService {
             log.info("帖子编辑数据回显");
             return postMapper.queryPostByIdEcho(postid);
         } catch (Exception e) {
-            log.error("帖子编辑数据回显异常");
+            log.error("帖子编辑数据回显异常 postid=" + postid,e);
             throw e;
         }
     }
 
+    /**
+     * 编辑帖子
+     * @param post
+     * @return
+     */
     public Integer updatePostById(PostTo post) {
-        return postMapper.updateByPrimaryKeySelectiveById(post);
+        try {
+            log.info("编辑帖子");
+            return postMapper.updateByPrimaryKeySelectiveById(post);
+        } catch (Exception e) {
+            log.error("编辑帖子异常 postid=" + post, e);
+            throw e;
+        }
     }
 
     /**
@@ -814,7 +839,7 @@ public class PostService {
             log.info("帖子条件查询");
             return postMapper.findAllpostSearch(spread, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("帖子条件查询异常");
+            log.error("帖子条件查询异常",e);
             throw e;
         }
     }
@@ -831,7 +856,7 @@ public class PostService {
             log.info("查询圈子下的帖子列表");
             return postMapper.findAllQueryCircleByPostList(map, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询圈子下的帖子列表异常");
+            log.error("查询圈子下的帖子列表异常",e);
             throw e;
         }
     }
@@ -848,7 +873,7 @@ public class PostService {
             log.info("条件查询成功");
             return postMapper.findAllActivePostCondition(map, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("条件查询失败");
+            log.error("条件查询失败",e);
             throw e;
         }
     }
@@ -891,7 +916,7 @@ public class PostService {
             log.info("根据id查询活动帖子");
             return postMapper.queryActiveById(id);
         } catch (Exception e) {
-            log.error("根据id查询活动帖子失败", e);
+            log.error("根据id查询活动帖子失败 id=" +id, e);
             throw e;
         }
     }
@@ -908,7 +933,7 @@ public class PostService {
             log.info("查询用户收藏的帖子列表");
             return postMapper.findAllQueryCollectPostList(userid, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询用户收藏的帖子列表");
+            log.error("查询用户收藏的帖子列表 userid=" + userid,e);
             throw e;
         }
     }
@@ -921,7 +946,7 @@ public class PostService {
             log.info("判断帖子中当前遍历的图片有没有压缩过");
             return compressImgMapper.queryIsHaveCompress(imgurl);
         } catch (Exception e) {
-            log.error("判断帖子中当前遍历的图片有没有压缩过失败");
+            log.error("判断帖子中当前遍历的图片有没有压缩过失败 imgurl=" + imgurl,e);
             throw e;
         }
     }
@@ -934,7 +959,7 @@ public class PostService {
             log.info("查询帖子中的这张图片在压缩映射关系表中是否存在");
             return compressImgMapper.queryCount(compressImg);
         } catch (Exception e) {
-            log.error("查询帖子中的这张图片在压缩映射关系表中是否存在失败");
+            log.error("查询帖子中的这张图片在压缩映射关系表中是否存在失败 compressImg=" + compressImg,e);
             throw e;
         }
     }
@@ -947,7 +972,7 @@ public class PostService {
             log.info("保存原图和压缩图url对应关系");
             compressImgMapper.insertSelective(compressImg);
         } catch (Exception e) {
-            log.error("保存原图和压缩图url对应关系失败");
+            log.error("保存原图和压缩图url对应关系失败 compressImg=" + compressImg,e);
             throw e;
         }
     }
@@ -963,7 +988,7 @@ public class PostService {
             log.info("是否设为热门");
             return postMapper.updateIshot(id);
         } catch (Exception e) {
-            log.error("是否设为热门失败", e);
+            log.error("是否设为热门失败 id=" +id, e);
             throw e;
         }
     }
@@ -979,7 +1004,7 @@ public class PostService {
             log.info("是否设为热门");
             return postMapper.activeIsHot(id);
         } catch (Exception e) {
-            log.error("是否设为热门失败", e);
+            log.error("是否设为热门失败 id=" +id, e);
             throw e;
         }
     }
@@ -995,7 +1020,7 @@ public class PostService {
             log.info("不是热门");
             return postMapper.updateNoIshot(id);
         } catch (Exception e) {
-            log.error("不是热门热门失败", e);
+            log.error("不是热门热门失败 id=" +id, e);
             throw e;
         }
     }
@@ -1010,7 +1035,7 @@ public class PostService {
             log.info("特邀嘉宾操作帖子，加入精选池");
             return postMapper.addPostByisessencepool(postid);
         } catch (Exception e) {
-            log.error("特邀嘉宾操作帖子，加入精选池异常");
+            log.error("特邀嘉宾操作帖子，加入精选池异常 postid=" + postid,e);
             throw e;
         }
     }
@@ -1026,7 +1051,7 @@ public class PostService {
             log.info("根据帖子id查询用户id");
             return postMapper.queryUserByPostid(postid);
         } catch (Exception e) {
-            log.error("根据帖子id查询用户id异常");
+            log.error("根据帖子id查询用户id异常 postid=" + postid,e);
             throw e;
         }
     }
@@ -1042,7 +1067,7 @@ public class PostService {
             log.info("查询精选池帖子列表");
             return postMapper.findAllqueryPostByIsessencepoolList(pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询精选池帖子列表异常");
+            log.error("查询精选池帖子列表异常",e);
             throw e;
         }
     }

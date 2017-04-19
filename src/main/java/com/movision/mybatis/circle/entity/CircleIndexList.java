@@ -121,4 +121,22 @@ public class CircleIndexList implements Serializable {
     public void setIntime(Date intime) {
         this.intime = intime;
     }
+
+    @Override
+    public String toString() {
+        return "CircleIndexList{" +
+                "category=" + category +
+                ", categoryname='" + categoryname + '\'' +
+                ", circlemaster=" + circlemaster +
+                ", circlemanagerlist=" + circlemanagerlist +
+                ", follownum=" + follownum +
+                ", follownewnum=" + follownewnum +
+                ", postnum=" + postnum +
+                ", postnewnum=" + postnewnum +
+                ", isessencenum=" + isessencenum +
+                ", supportnum=" + supportnum +
+                ", intime=" + intime +
+                ", classify=" + classify +
+                '}';
+    }
 }
