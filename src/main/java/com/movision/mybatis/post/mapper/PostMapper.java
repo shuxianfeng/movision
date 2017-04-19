@@ -101,6 +101,8 @@ public interface PostMapper {
 
     int queryPostByZanSum(int id);
 
+    void updatePostCollectCount(Map<String, Object> parammap);
+
     int updatePostBycommentsum(int postid);
 
     int updatePostBycommentsumT(int postid);

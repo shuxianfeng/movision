@@ -307,6 +307,16 @@ public class PostService {
         }
     }
 
+    public void updatePostCollectCount(Map<String, Object> parammap) {
+        try {
+            log.info("取消帖子收藏后更新帖子被收藏总次数");
+            postMapper.updatePostCollectCount(parammap);
+        } catch (Exception e) {
+            log.error("取消帖子收藏后更新帖子被收藏总次数失败");
+            throw e;
+        }
+    }
+
     /**
      * 更新帖子评论次数字段
      *

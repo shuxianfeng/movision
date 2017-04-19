@@ -1,9 +1,11 @@
 package com.movision.mybatis.followCircle.mapper;
 
 import com.movision.mybatis.followCircle.entity.FollowCircle;
+import org.springframework.stereotype.Repository;
 
 import java.util.Map;
 
+@Repository
 public interface FollowCircleMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -21,4 +23,5 @@ public interface FollowCircleMapper {
 
     void followCircle(Map<String, Object> parammap);
 
+    void cancelFollowCircle(Map<String, Object> parammap);
 }

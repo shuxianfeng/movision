@@ -56,6 +56,26 @@ public class CollectionService {
         }
     }
 
+    public void cancelCollectionPost(Map<String, Object> parammap) {
+        try {
+            log.info("取消收藏帖子活动");
+            collectionMapper.cancelCollectionPost(parammap);
+        } catch (Exception e) {
+            log.error("取消收藏帖子活动失败");
+            throw e;
+        }
+    }
+
+    public void cancelCollectionGoods(Map<String, Object> parammap) {
+        try {
+            log.info("取消收藏商品");
+            collectionMapper.cancelCollectionGoods(parammap);
+        } catch (Exception e) {
+            log.error("取消收藏商品失败");
+            throw e;
+        }
+    }
+
     public void addCollectionSum(int postid) {
         try {
             log.info("被收藏的帖子收藏数+1");

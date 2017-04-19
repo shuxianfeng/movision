@@ -42,6 +42,22 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
 
+    <!--取消收藏帖子删除用户收藏记录-->
+    <delete id="cancelCollectionPost" parameterType="java.util.Map">
+        DELETE FROM yw_collection
+        WHERE userid = #{userid,jdbcType=INTEGER}
+         AND postid = #{postid,jdbcType=INTEGER}
+         AND type = '0'
+    </delete>
+
+    <!--取消收藏商品删除用户收藏记录-->
+    <delete id="cancelCollectionGoods" parameterType="java.util.Map">
+        DELETE FROM yw_collection
+        WHERE userid = #{userid,jdbcType=INTEGER}
+          AND goodsid = #{goodsid,jdbcType=INTEGER}
+          AND type = '1'
+    </delete>
+
     <!--基础插入语句-->
     <insert id="insert" parameterType="com.movision.mybatis.collection.entity.Collection">
     insert into yw_collection (id, userid, postid,

@@ -29,6 +29,14 @@
         delete from yw_follow_circle
     where id = #{id,jdbcType=INTEGER}
   </delete>
+
+    <!--取消关注圈子删除记录-->
+    <delete id="cancelFollowCircle" parameterType="java.util.Map">
+        DELETE FROM yw_follow_circle
+        WHERE userid = #{userid,jdbcType=INTEGER}
+        AND circleid = #{circleid,jdbcType=INTEGER}
+    </delete>
+
     <insert id="insert" parameterType="com.movision.mybatis.followCircle.entity.FollowCircle">
         insert into yw_follow_circle (id, userid, circleid, intime
       )

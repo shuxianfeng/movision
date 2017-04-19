@@ -143,6 +143,16 @@ public class CircleService {
         }
     }
 
+    public void cancelFollowCircle(Map<String, Object> parammap) {
+        try {
+            log.info("用户取消关注圈子");
+            followCircleMapper.cancelFollowCircle(parammap);
+        } catch (Exception e) {
+            log.error("用户取消关注圈子失败");
+            throw e;
+        }
+    }
+
     public int queryCountByFollow(Map<String, Object> parammap) {
         try {
             log.info("查询该用户对当前圈子关注的次数");

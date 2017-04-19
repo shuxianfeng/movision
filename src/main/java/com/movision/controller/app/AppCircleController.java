@@ -129,4 +129,20 @@ public class AppCircleController {
         }
         return response;
     }
+
+    @ApiOperation(value = "取消关注圈子接口", notes = "用于用户取消关注圈子的接口", response = Response.class)
+    @RequestMapping(value = "cancelFollowCircle", method = RequestMethod.POST)
+    public Response cancelFollowCircle(@ApiParam(value = "用户id") @RequestParam String userid,
+                                       @ApiParam(value = "圈子id") @RequestParam String circleid) {
+        Response response = new Response();
+
+        facadeCircle.cancelFollowCircle(userid, circleid);
+
+        if (response.getCode() == 200) {
+            response.setMessage("取消关注成功");
+        } else {
+            response.setMessage("取消关注失败");
+        }
+        return response;
+    }
 }

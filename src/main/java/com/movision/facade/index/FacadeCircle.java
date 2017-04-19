@@ -182,4 +182,11 @@ public class FacadeCircle {
             return 1;//已关注过该圈子
         }
     }
+
+    public void cancelFollowCircle(String userid, String circleid) {
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("userid", Integer.parseInt(userid));
+        parammap.put("circleid", Integer.parseInt(circleid));
+        circleService.cancelFollowCircle(parammap);
+    }
 }

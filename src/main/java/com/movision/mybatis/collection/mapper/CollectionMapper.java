@@ -3,6 +3,8 @@ package com.movision.mybatis.collection.mapper;
 import com.movision.mybatis.collection.entity.Collection;
 import org.springframework.stereotype.Repository;
 
+import java.util.Map;
+
 @Repository
 public interface CollectionMapper {
     int deleteByPrimaryKey(Integer id);
@@ -22,6 +24,10 @@ public interface CollectionMapper {
     int checkIsHaveGoods(Collection collection);
 
     int collectionPost(Collection collection);
+
+    void cancelCollectionPost(Map<String, Object> parammap);
+
+    void cancelCollectionGoods(Map<String, Object> parammap);
 
     void addCollectionSum(int postid);
 }
