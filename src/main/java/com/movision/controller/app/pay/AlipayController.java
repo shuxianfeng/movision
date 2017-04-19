@@ -87,7 +87,6 @@ public class AlipayController {
         } else if ((int) map.get("code") == 300) {
             response.setCode(300);
             response.setMessage(map.get("msg").toString());
-            //response.setData(map);
         }
         return response;
     }
