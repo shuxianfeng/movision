@@ -26,6 +26,13 @@ public class CommentService {
     @Autowired
     public CommentMapper commentMapper;
 
+    /**
+     * 查询某个帖子的评论列表
+     *
+     * @param pager
+     * @param map
+     * @return
+     */
     public List<CommentVo> queryCommentsByLsit(Paging<CommentVo> pager, Map map) {
 
         try {
@@ -37,6 +44,11 @@ public class CommentService {
         }
     }
 
+    /**
+     * 查询该用户是否点赞评论
+     * @param parammap
+     * @return
+     */
     public int queryIsZan(Map<String, Object> parammap) {
         try {
             log.info("查询该用户是否点赞过该评论");
@@ -47,6 +59,11 @@ public class CommentService {
         }
     }
 
+    /**
+     * 根据父评论id查询评论
+     * @param pid
+     * @return
+     */
     public CommentVo queryCommentByPid(int pid) {
         try {
             log.info("根据父评论id查询评论实体");
@@ -99,6 +116,10 @@ public class CommentService {
         }
     }
 
+    /**
+     * 评论点赞
+     * @param parammap
+     */
     public void insertCommentZanRecord(Map<String, Object> parammap) {
         try {
             log.info("插入一条评论点赞记录");

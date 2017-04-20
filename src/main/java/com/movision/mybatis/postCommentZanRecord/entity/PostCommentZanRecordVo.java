@@ -16,6 +16,15 @@ public class PostCommentZanRecordVo implements Serializable {
     private Integer id;
     private Integer ctype;
     private User user;
+    private Integer isread;//是否已读  0否 1是
+
+    public Integer getIsread() {
+        return isread;
+    }
+
+    public void setIsread(Integer isread) {
+        this.isread = isread;
+    }
 
     public User getUser() {
         return user;

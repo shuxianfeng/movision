@@ -32,7 +32,7 @@ public class PostZanRecordService {
             log.info("帖子查询");
             return recordMapper.queryPost(postid);
         } catch (Exception e) {
-            log.error("帖子查询失败");
+            log.error("帖子查询失败", e);
             throw e;
         }
     }

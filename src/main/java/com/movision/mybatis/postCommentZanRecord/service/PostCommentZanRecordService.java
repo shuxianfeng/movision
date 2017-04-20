@@ -42,7 +42,7 @@ public class PostCommentZanRecordService {
             log.info("根据用户id查询");
             return recordMapper.queryByUserid(userid);
         } catch (Exception e) {
-            log.error("根据用户id查询失败");
+            log.error("根据用户id查询失败", e);
             throw e;
         }
     }
@@ -54,7 +54,7 @@ public class PostCommentZanRecordService {
             log.info("查询评论");
             return recordMapper.queryComment(commentid);
         } catch (Exception e) {
-            log.error("查询评论失败");
+            log.error("查询评论失败", e);
             throw e;
         }
     }
@@ -64,7 +64,7 @@ public class PostCommentZanRecordService {
             log.info("查询所有赞");
             return recordMapper.findAllZan(userid, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询所有赞失败");
+            log.error("查询所有赞失败", e);
             throw e;
         }
     }
@@ -74,7 +74,7 @@ public class PostCommentZanRecordService {
             log.info("查询用户");
             return recordMapper.queryusers(userid);
         } catch (Exception e) {
-            log.error("查询用户失败");
+            log.error("查询用户失败", e);
             throw e;
         }
     }

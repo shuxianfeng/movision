@@ -13,19 +13,25 @@ import java.util.List;
 public class PostZanRecordVo implements Serializable {
     private Integer id;
     private Integer ctype;
-
-    public Integer getCtype() {
-        return ctype;
-    }
-
-    public void setCtype(Integer ctype) {
-        this.ctype = ctype;
-    }
-
+    private Date intime;
     private Integer userid;
-
     private Integer postid;
     private String photo;
+    private String title;
+    private String postcontent;
+    private Integer activetype;
+    private Integer type;
+    private String coverimg;
+    private Integer isactive;
+    private Integer isread;//是否已读 0否 1是
+
+    public Integer getIsread() {
+        return isread;
+    }
+
+    public void setIsread(Integer isread) {
+        this.isread = isread;
+    }
 
     public String getPhoto() {
         return photo;
@@ -35,7 +41,13 @@ public class PostZanRecordVo implements Serializable {
         this.photo = photo;
     }
 
-    private Date intime;
+    public Integer getCtype() {
+        return ctype;
+    }
+
+    public void setCtype(Integer ctype) {
+        this.ctype = ctype;
+    }
 
     public Integer getId() {
         return id;
@@ -78,14 +90,6 @@ public class PostZanRecordVo implements Serializable {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
-
-    private String title;
-    private String postcontent;
-    private Integer activetype;
-    private Integer type;
-    private String coverimg;
-
-    private Integer isactive;
 
     public String getTitle() {
         return title;

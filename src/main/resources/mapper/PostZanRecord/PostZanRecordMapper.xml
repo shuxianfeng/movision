@@ -6,9 +6,10 @@
         <result column="userid" property="userid" jdbcType="INTEGER"/>
         <result column="postid" property="postid" jdbcType="INTEGER"/>
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="isread" property="isread" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, userid, postid, intime
+        id, userid, postid, intime, isread
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -22,9 +23,9 @@
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.PostZanRecord.entity.PostZanRecord">
         insert into yw_post_zan_record (id, userid, postid,
-        intime)
+        intime, isread)
         values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER},
-        #{intime,jdbcType=TIMESTAMP})
+        #{intime,jdbcType=TIMESTAMP}, #{isread,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.PostZanRecord.entity.PostZanRecord">
         insert into yw_post_zan_record
@@ -41,6 +42,9 @@
             <if test="intime != null">
                 intime,
             </if>
+            <if test="isread != null">
+                isread,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -54,6 +58,9 @@
             </if>
             <if test="intime != null">
                 #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isread != null">
+                #{isread,jdbcTyp=INTEGER},
             </if>
         </trim>
     </insert>

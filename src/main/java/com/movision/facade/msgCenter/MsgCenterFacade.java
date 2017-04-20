@@ -198,4 +198,23 @@ public class MsgCenterFacade {
         imFirstDialogueService.queryIsread(map);
     }
 
+    public Integer updateisread(String type) {
+        Integer resault = null;
+        if (type.equals("1")) {
+
+        } else if (type.equals("2")) {
+
+        } else if (type.equals("3")) {
+
+        } else if (type.equals("4")) {
+
+        } else if (type.equals("5")) {
+
+        }
+        if (resault > 0) {
+            return null;
+        } else {
+            return null;
+        }
+    }
 }

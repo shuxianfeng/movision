@@ -12,6 +12,16 @@ public class PostZanRecord implements Serializable {
 
     private Date intime;
 
+    private Integer isread;//是否已读 0否 1是
+
+    public Integer getIsread() {
+        return isread;
+    }
+
+    public void setIsread(Integer isread) {
+        this.isread = isread;
+    }
+
     public Integer getId() {
         return id;
     }

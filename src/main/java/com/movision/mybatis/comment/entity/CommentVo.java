@@ -63,9 +63,19 @@ public class CommentVo implements Serializable {
 
     private CommentVo vo;
 
-    public List<Post> post;
+    private List<Post> post;
 
-    public List<CommentVo> commentVos;
+    private List<CommentVo> commentVos;
+
+    private Integer isread;//是否已读 0否 1是
+
+    public Integer getIsread() {
+        return isread;
+    }
+
+    public void setIsread(Integer isread) {
+        this.isread = isread;
+    }
 
     public List<Post> getPost() {
         return post;

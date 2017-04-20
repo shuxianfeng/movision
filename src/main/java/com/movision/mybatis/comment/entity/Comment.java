@@ -24,6 +24,16 @@ public class Comment implements Serializable {
 
     private Integer status;//审核状态：0待审核 1审核通过 2审核不通过（iscontribute为1时不为空）
 
+    private Integer isread;//是否已读 0否 1是
+
+    public Integer getIsread() {
+        return isread;
+    }
+
+    public void setIsread(Integer isread) {
+        this.isread = isread;
+    }
+
     public String getIsdel() {
         return isdel;
     }
