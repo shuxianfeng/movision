@@ -66,16 +66,20 @@ public class MsgCenterFacade {
         Map reMap = new HashedMap();
         //1 赞消息 。包含：帖子，活动，评论，快问（后期）
         PostCommentZanRecordVo postCommentZanRecord = postCommentZanRecordService.queryByUserid(userid);
-        int use = postCommentZanRecord.getUserid();
-        User zusew = postCommentZanRecordService.queryusers(use);
-        postCommentZanRecord.setUser(zusew);
+        if (postCommentZanRecord != null) {
+            int use = postCommentZanRecord.getUserid();
+            User zusew = postCommentZanRecordService.queryusers(use);
+            postCommentZanRecord.setUser(zusew);
+        }
         //2 打赏消息
         RewardedVo rewarded = rewardedService.queryRewardByUserid(userid);
         //3 评论消息
         CommentVo comment = commentService.queryCommentByUserid(userid);
-        int usersid = comment.getUserid();
-        User ruser = postCommentZanRecordService.queryusers(usersid);
-        comment.setUser(ruser);
+        if (comment != null) {
+            int usersid = comment.getUserid();
+            User ruser = postCommentZanRecordService.queryusers(usersid);
+            comment.setUser(ruser);
+        }
         //4 系统通知
         ImSystemInform imSystemInform = imSystemInformService.queryByUserid();
         //5 打招呼消息
@@ -158,22 +162,24 @@ public class MsgCenterFacade {
      */
     public List<ZanRecordVo> findAllZan(Integer userid, Paging<ZanRecordVo> pager) {
         List<ZanRecordVo> zanRecordVos = postCommentZanRecordService.findAllZan(userid, pager);
-        for (int i = 0; i < zanRecordVos.size(); i++) {
-            Integer commentid = zanRecordVos.get(i).getCommentid();
-            Integer postid = zanRecordVos.get(i).getPostid();
-            Integer usersid = zanRecordVos.get(i).getUserid();
-            User user = postCommentZanRecordService.queryusers(usersid);
-            if (commentid != null) {
-                List<CommentVo> commentVo = postCommentZanRecordService.queryComment(commentid);
-                zanRecordVos.get(i).setComment(commentVo);
-                zanRecordVos.get(i).setCtype(1);
-                zanRecordVos.get(i).setUser(user);
-            }
-            if (postid != null) {
-                List<Post> post = postZanRecordService.queryPost(postid);
-                zanRecordVos.get(i).setPosts(post);
-                zanRecordVos.get(i).setCtype(2);
-                zanRecordVos.get(i).setUser(user);
+        if (zanRecordVos != null) {
+            for (int i = 0; i < zanRecordVos.size(); i++) {
+                Integer commentid = zanRecordVos.get(i).getCommentid();
+                Integer postid = zanRecordVos.get(i).getPostid();
+                Integer usersid = zanRecordVos.get(i).getUserid();
+                User user = postCommentZanRecordService.queryusers(usersid);
+                if (commentid != null) {
+                    List<CommentVo> commentVo = postCommentZanRecordService.queryComment(commentid);
+                    zanRecordVos.get(i).setComment(commentVo);
+                    zanRecordVos.get(i).setCtype(1);
+                    zanRecordVos.get(i).setUser(user);
+                }
+                if (postid != null) {
+                    List<Post> post = postZanRecordService.queryPost(postid);
+                    zanRecordVos.get(i).setPosts(post);
+                    zanRecordVos.get(i).setCtype(2);
+                    zanRecordVos.get(i).setUser(user);
+                }
             }
         }
         return zanRecordVos;
