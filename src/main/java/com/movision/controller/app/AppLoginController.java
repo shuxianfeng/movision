@@ -7,9 +7,11 @@ import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.SessionConstant;
 import com.movision.common.util.ShiroUtil;
+import com.movision.exception.BusinessException;
 import com.movision.facade.im.ImFacade;
 import com.movision.facade.user.AppRegisterFacade;
 import com.movision.facade.user.UserFacade;
+import com.movision.mybatis.deviceAccid.entity.DeviceAccid;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
@@ -381,7 +383,14 @@ public class AppLoginController {
     @RequestMapping(value = "/new_device_binding_accid", method = RequestMethod.POST)
     public Response newDeviceBindingAccid(@ApiParam(value = "设备号") @RequestParam String deviceid) {
         Response response = new Response();
-        appRegisterFacade.addDeviceAccid(deviceid);
+        //查询是否存在该设备号，如果存在，则不新增了
+        DeviceAccid deviceAccid = appRegisterFacade.selectByDeviceno(deviceid);
+        if (null == deviceAccid) {
+            appRegisterFacade.addDeviceAccid(deviceid);
+            response.setMessage("绑定设备号成功");
+        } else {
+            response.setMessage("已经存在该设备号的注册记录");
+        }
         return response;
     }
 

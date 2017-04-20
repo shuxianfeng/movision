@@ -264,6 +264,16 @@ public class AppRegisterFacade {
         deviceAccidService.add(deviceAccid);
     }
 
+    /**
+     * 根据设备号查询设备号和accid关系
+     *
+     * @param deviceno
+     * @return
+     */
+    public DeviceAccid selectByDeviceno(String deviceno) {
+        return deviceAccidService.selectByDeviceno(deviceno);
+    }
+
 
     /**
      * 注册QQ账号

@@ -84,7 +84,8 @@ public interface MsgCodeConstant {
      */
     int app_user_not_exist_with_this_token = 10017;
 
-    /**
+
+	/**
      * 文件不存在
 	 */
 	int file_not_exist = 10210;
