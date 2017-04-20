@@ -2,10 +2,8 @@ package com.movision.facade.user;
 
 import com.movision.aop.UserSaveCache;
 import com.movision.common.constant.MsgCodeConstant;
-import com.movision.common.constant.SessionConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.AuthException;
-import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.PostVo;
@@ -15,11 +13,7 @@ import com.movision.mybatis.user.service.UserService;
 import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
-import com.movision.utils.pagination.util.StringUtils;
 import org.apache.commons.collections.map.HashedMap;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +45,13 @@ public class UserFacade {
     @Autowired
     private PostService postService;
 
-
-    public String isExistAccount(String phone) {
+    /**
+     * 判断是否存在该手机号的app用户
+     *
+     * @param phone
+     * @return
+     */
+    public Boolean isExistAccount(String phone) {
         return userService.isExistAccount(phone);
     }
 
@@ -245,7 +244,7 @@ public class UserFacade {
         //1 变更用户表
         userService.updateByPrimaryKeySelective(user);
         //2 更新session中的缓存
-        ShiroUtil.updateShiroUser(newPoint);
+        ShiroUtil.updateAppuserPoint(newPoint);
 
     }
 

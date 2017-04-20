@@ -104,10 +104,10 @@ public class UserService {
         }
     }
 
-    public String isExistAccount(String phone) {
+    public Boolean isExistAccount(String phone) {
         try {
             int n = userMapper.isExistAccount(phone);
-            return n >= 1 ? "isExist" : "";
+            return n >= 1;
         } catch (Exception e) {
             log.error("is exist account ", e);
         }
@@ -682,9 +682,19 @@ public class UserService {
     public LoginUser selectLoginuserByUserid(Integer userid) {
         try {
             log.info("根据用户id查询LoginUser");
-            return selectLoginuserByUserid(userid);
+            return userMapper.selectLoginuserByUserid(userid);
         } catch (Exception e) {
             log.error("根据用户id查询LoginUser失败", e);
+            throw e;
+        }
+    }
+
+    public User selectByPrimaryKey(Integer userid) {
+        try {
+            log.info("根据id查询用户信息User");
+            return userMapper.selectByPrimaryKey(userid);
+        } catch (Exception e) {
+            log.error("根据id查询用户信息User失败", e);
             throw e;
         }
     }

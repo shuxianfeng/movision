@@ -74,33 +74,20 @@ public class AppLoginController {
     @RequestMapping(value = {"/get_mobile_code"}, method = RequestMethod.GET)
     public Response getMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile) throws IOException, ApiException {
         log.debug("获得手机验证码  mobile==" + mobile);
-        Subject currentUser = SecurityUtils.getSubject();
-        Session session = currentUser.getSession(true);
         Response response = new Response();
         // 生成随机字串
         String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE, VerifyCodeUtils.VERIFY_CODES_DIGIT);
-        response.setData(verifyCode);
         log.debug("verifyCode == " + verifyCode);
 
-        Map<String, String> map = new LinkedHashMap<>();
-        map.put("code", verifyCode);
-        map.put("min", Constants.sms_time);
-        Gson gson = new Gson();
-        String json = gson.toJson(map);
+        appRegisterFacade.sendSms(mobile, verifyCode);
 
-        //发送短信服务
-        SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("login_app_sms_template_code"));
+        appRegisterFacade.putValidationInfoToSession(mobile, verifyCode, "r");
 
-        //验证信息放入session保存
-        Validateinfo info = new Validateinfo();
-        info.setCreateTime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
-        info.setCheckCode(verifyCode);
-        info.setAccount(mobile);
-
-        session.setAttribute("r" + mobile, info);
+        response.setData(verifyCode);
 
         return response;
     }
+
 
     /**
      * 验证码校验之后：

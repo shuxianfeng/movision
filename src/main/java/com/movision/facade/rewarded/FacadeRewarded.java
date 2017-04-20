@@ -5,16 +5,13 @@ import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.facade.user.UserFacade;
-import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.constant.entity.Constant;
 import com.movision.mybatis.constant.service.ConstantService;
-import com.movision.mybatis.pointRecord.entity.PointRecord;
 import com.movision.mybatis.pointRecord.service.PointRecordService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.record.service.RecordService;
 import com.movision.mybatis.rewarded.entity.Rewarded;
 import com.movision.mybatis.rewarded.service.RewardedService;
-import com.movision.mybatis.user.service.UserService;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -118,7 +115,7 @@ public class FacadeRewarded {
                 //帖子打赏记录流水
                 rewardedService.insertRewarded(rewarded);
                 //2 更新session中的缓存
-                ShiroUtil.updateShiroUser(in);
+                ShiroUtil.updateAppuserPoint(in);
                 map.put("code", 200);
                 map.put("resault", in);
                 return map;

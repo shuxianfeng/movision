@@ -283,7 +283,7 @@ public interface MsgCodeConstant {
 	/**
 	 * 不存在该会员信息
 	 */
-	int NOT_EXIST_MEMBER = 3010;
+	int NOT_EXIST_APP_ACCOUNT = 3010;
 	
 	/**
 	 * 该订单不存在购买的商品

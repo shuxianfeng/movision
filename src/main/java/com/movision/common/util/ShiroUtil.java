@@ -136,16 +136,32 @@ public class ShiroUtil {
     }
 
     /**
-     * 实时更新登录者在session中的信息
-     * 
+     * 修改session中的app用户的积分
+     * @param point
      */
-    public static void updateShiroUser(int point) {
+    public static void updateAppuserPoint(int point) {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (session != null) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
             //此处可以扩张需要的字段
             principal.setPoints(point);
+            session.setAttribute(SessionConstant.APP_USER, principal);
+        }
+    }
+
+    /**
+     * 修改session中的app用户的手机号（用于绑定手机号场景）
+     *
+     * @param phone
+     */
+    public static void updateAppuserPhone(String phone) {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if (session != null) {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
+            //此处可以扩张需要的字段
+            principal.setPhone(phone);
             session.setAttribute(SessionConstant.APP_USER, principal);
         }
     }
