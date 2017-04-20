@@ -1578,7 +1578,7 @@ public class PostFacade {
         List<Post> postList = postService.queryMyPostList(map);
         if (ListUtil.isNotEmpty(postList)) {
             //1 发帖次数大于50
-            result.put("publist_count_flag", postList.size() >= 50);
+            result.put("publish_count_flag", postList.size() >= 50);
 
             //2 首页精选次数达到10次, 3 被赞次数达到500次， 4 分享总数达到500次
             int selectedCount = 0, supportCount = 0, shareCount = 0;
@@ -1593,6 +1593,11 @@ public class PostFacade {
             result.put("selected_count_flag", selectedCount >= 10);
             result.put("support_count_flag", supportCount >= 500);
             result.put("share_count_flag", shareCount >= 500);
+            //返回次数
+            result.put("publish_count", postList.size());
+            result.put("selected_count", selectedCount);
+            result.put("support_count", supportCount);
+            result.put("share_count", shareCount);
 
         } else {
             result.put("publist_count_flag", false);
