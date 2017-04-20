@@ -14,6 +14,33 @@ import java.util.List;
  */
 public class ZanRecordVo implements Serializable {
 
+    public User user;
+    private Integer commentid;
+    private String title;
+    private String postcontent;
+    private Integer activetype;
+    private Integer type;
+    private String coverimg;
+    private Integer id;
+    private Integer ctype;
+    private Integer userid;
+    private Integer postid;
+    private String photo;
+    private Date intime;
+    public String content;
+    private String nickname;
+    private Integer isactive;
+    private List<Post> posts;
+    private List<CommentVo> comment;
+    private Integer isread;//是否已读 0否 1是
+
+    public Integer getIsread() {
+        return isread;
+    }
+
+    public void setIsread(Integer isread) {
+        this.isread = isread;
+    }
 
     public Integer getCtype() {
         return ctype;
@@ -23,8 +50,6 @@ public class ZanRecordVo implements Serializable {
         this.ctype = ctype;
     }
 
-    public User user;
-
     public User getUser() {
         return user;
     }
@@ -32,9 +57,6 @@ public class ZanRecordVo implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-
-    private Integer commentid;
-
 
     public Integer getId() {
         return id;
@@ -68,7 +90,6 @@ public class ZanRecordVo implements Serializable {
         this.intime = intime;
     }
 
-
     public String getNickname() {
         return nickname;
     }
@@ -76,7 +97,6 @@ public class ZanRecordVo implements Serializable {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
-
 
     public String getPhoto() {
         return photo;
@@ -86,8 +106,6 @@ public class ZanRecordVo implements Serializable {
         this.photo = photo;
     }
 
-    public String content;
-
     public String getContent() {
         return content;
     }
@@ -95,13 +113,6 @@ public class ZanRecordVo implements Serializable {
     public void setContent(String content) {
         this.content = content;
     }
-
-    private String title;
-    private String postcontent;
-    private Integer activetype;
-    private Integer type;
-    private String coverimg;
-
 
     public String getPostcontent() {
         return postcontent;
@@ -152,8 +163,6 @@ public class ZanRecordVo implements Serializable {
         this.title = title;
     }
 
-    public List<CommentVo> comment;
-
     public List<CommentVo> getComment() {
         return comment;
     }
@@ -162,19 +171,6 @@ public class ZanRecordVo implements Serializable {
         this.comment = comment;
     }
 
-    private Integer id;
-    private Integer ctype;
-
-
-    private Integer userid;
-
-    private Integer postid;
-    private String photo;
-
-
-    private Date intime;
-
-
     public Integer getPostid() {
         return postid;
     }
@@ -182,14 +178,6 @@ public class ZanRecordVo implements Serializable {
     public void setPostid(Integer postid) {
         this.postid = postid;
     }
-
-
-    private String nickname;
-
-
-    private Integer isactive;
-
-    public List<Post> posts;
 
     public List<Post> getPosts() {
         return posts;

@@ -122,4 +122,13 @@ public class MyMsgController {
         msgCenterFacade.queryIsread(ShiroUtil.getAppUserID(), id);
         return response;
     }
+
+    @ApiOperation(value = "更新已读/未读状态", notes = "更新已读/未读状态", response = Response.class)
+    @RequestMapping(value = {"/get_my_msg_center_update_read"}, method = RequestMethod.GET)
+    public Response updateisread(@ApiParam(value = "更新类型 1：赞 2：打赏 3：评论 4：系统 5：打招呼") @RequestParam String type) {
+        Response response = new Response();
+        Integer resault = msgCenterFacade.updateisread(type);
+        response.setData(resault);
+        return response;
+    }
 }

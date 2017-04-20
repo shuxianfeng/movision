@@ -7,9 +7,10 @@
         <result column="userid" property="userid" jdbcType="INTEGER"/>
         <result column="points" property="points" jdbcType="INTEGER"/>
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="isread" property="isread" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, postid, userid, points, intime
+        id, postid, userid, points, intime, isread
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -45,6 +46,9 @@
             <if test="intime != null">
                 intime,
             </if>
+            <if test="isread!=null">
+                isread,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -61,6 +65,9 @@
             </if>
             <if test="intime != null">
                 #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isread!=null">
+                #{isread,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -79,6 +86,9 @@
             <if test="intime != null">
                 intime = #{intime,jdbcType=TIMESTAMP},
             </if>
+            <if test="isread!=null">
+                isread=#{isread,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -87,7 +97,8 @@
     set postid = #{postid,jdbcType=INTEGER},
       userid = #{userid,jdbcType=INTEGER},
       points = #{points,jdbcType=INTEGER},
-      intime = #{intime,jdbcType=TIMESTAMP}
+        intime = #{intime,jdbcType=TIMESTAMP},
+        isread=#{isread,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
     <insert id="insertRewarded">

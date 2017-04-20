@@ -132,8 +132,8 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="selectAll" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
-        SELECT id,userid,from_accid,body,infrom_time,title,pushcontent,isread
+    <select id="findAll" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
+        SELECT id,userid,from_accid,body,inform_time,title,pushcontent,isread
         FROM yw_im_system_informs
         ORDER BY inform_time DESC
     </select>

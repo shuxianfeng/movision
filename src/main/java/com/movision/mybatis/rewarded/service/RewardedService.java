@@ -32,7 +32,7 @@ public class RewardedService {
             log.info("添加打赏记录");
             return rewardedMapper.insertSelective(rewarded);
         } catch (Exception e) {
-            log.error("添加打赏记录异常");
+            log.error("添加打赏记录异常", e);
             throw e;
         }
     }
@@ -50,7 +50,7 @@ public class RewardedService {
             log.info("查看帖子打赏列表");
             return rewardedMapper.findAllqueryPostAward(map, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("帖子打赏列表加载失败");
+            log.error("帖子打赏列表加载失败", e);
             throw e;
         }
     }
@@ -66,7 +66,7 @@ public class RewardedService {
             log.info("根据用户查询打赏");
             return rewardedMapper.queryRewardByUserid(userid);
         } catch (Exception e) {
-            log.error("根据用户查询打赏失败");
+            log.error("根据用户查询打赏失败", e);
             throw e;
         }
     }
@@ -82,7 +82,7 @@ public class RewardedService {
             log.info("根据用户查询打赏");
             return rewardedMapper.findAllRewarded(userid, paging.getRowBounds());
         } catch (Exception e) {
-            log.error("根据用户查询打赏失败");
+            log.error("根据用户查询打赏失败", e);
             throw e;
         }
     }

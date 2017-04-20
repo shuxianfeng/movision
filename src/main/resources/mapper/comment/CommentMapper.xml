@@ -12,9 +12,10 @@
     <result column="isdel" property="isdel" jdbcType="VARCHAR"/>
     <result column="iscontribute" property="iscontribute" jdbcType="INTEGER"/>
     <result column="status" property="status" jdbcType="INTEGER"/>
+    <result column="isread" property="isread" jdbcType="INTEGER"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, userid, pid, content, intime, zansum, isdel, iscontribute, status
+    id, userid, pid, content, intime, zansum, isdel, iscontribute, status, isread
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -28,20 +29,20 @@
   </delete>
   <insert id="insert" parameterType="com.movision.mybatis.comment.entity.CommentVo" >
     insert into yw_post_comment (id, userid, pid, postid,
-      content, intime, zansum
+    content, intime, zansum, isread
       )
     values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER},
-      #{content,jdbcType=VARCHAR}, #{intime,jdbcType=TIMESTAMP}, #{zansum,jdbcType=INTEGER}
+    #{content,jdbcType=VARCHAR}, #{intime,jdbcType=TIMESTAMP}, #{zansum,jdbcType=INTEGER},#{isread,jdbcType=INTEGER}
       )
   </insert>
 
   <!--插入用户点赞评论的记录到记录表里-->
   <insert id="insertCommentZanRecord" parameterType="java.util.Map">
       INSERT INTO yw_post_comment_zan_record (
-          userid, commentid, intime
+    userid, commentid, intime, isread
       )
       VALUES (
-          #{userid,jdbcType=INTEGER}, #{commentid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}
+    #{userid,jdbcType=INTEGER}, #{commentid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP},0
       )
   </insert>
 
@@ -78,6 +79,9 @@
       <if test="status != null">
         status,
       </if>
+      <if test="isread!=null">
+        isread,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -109,6 +113,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="isread!=null">
+        #{isread,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -142,6 +149,9 @@
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="isread !=null">
+        isread=#{isread,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -156,6 +166,7 @@
     isdel = #{isdel,jdbcType=VARCHAR},
     iscontribute = #{iscontribute,jdbcType=INTEGER},
     status = #{status,jdbcType=INTEGER},
+    isread=#{isread,jdbcType=INTEGER},
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -206,7 +217,7 @@
 
   <update id="deletePostAppraise" parameterType="java.lang.Integer">
     UPDATE yw_post_comment
-    SET isdel=1,iscontribute=0
+    SET isdel=1,iscontribute=0,isread=0
     WHERE id=#{id,jdbcType=INTEGER}
   </update>
 
@@ -277,6 +288,9 @@
       <if test="status != null">
         status,
       </if>
+      <if test="isread != null">
+        isread,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -308,6 +322,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="isread != null">
+        #{isread,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -382,6 +399,9 @@
       <if test="status != null">
         status,
       </if>
+      <if test="isread!=null">
+        isread,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -414,12 +434,15 @@
       <if test="status != null">
         #{status,jdbcType=INTEGER},
       </if>
+      <if test="isread!=null">
+        #{isread,jdbcType=INTEGER},
+      </if>
     </trim>
   </insert>
 
   <update id="updateCommentAudit" parameterType="java.util.Map">
     update yw_post_comment
-    SET isdel=0,status=#{type,jdbcType=INTEGER}
+    SET isdel=0,status=#{type,jdbcType=INTEGER},isread=1
     where id = #{commentid,jdbcType=INTEGER} AND iscontribute=1
   </update>
   <select id="queryCommentByUserid" parameterType="java.lang.Integer"

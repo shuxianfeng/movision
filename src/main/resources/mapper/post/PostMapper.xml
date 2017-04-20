@@ -445,7 +445,7 @@
             userid,
         </if>
         <if test="oprtime!=null">
-            oprtime
+            oprtime,
         </if>
         )
         VALUES (
@@ -480,7 +480,7 @@
             #{userid,jdbcType=INTEGER},
         </if>
         <if test="oprtime!=null">
-            #{oprtime,jdbcType=TIMESTAMP}
+            #{oprtime,jdbcType=TIMESTAMP},
         </if>
         )
     </insert>
@@ -568,7 +568,7 @@
                 userid,
             </if>
             <if test="oprtime != null">
-                oprtime
+                oprtime,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -648,7 +648,7 @@
                 #{userid,jdbcType=INTEGER},
             </if>
             <if test="oprtime !=null">
-                #{oprtime,jdbcType=TIMESTAMP}
+                #{oprtime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
@@ -733,7 +733,7 @@
                 userid,
             </if>
             <if test="oprtime != null">
-                oprtime
+                oprtime,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -810,7 +810,7 @@
                 #{userid,jdbcType=INTEGER},
             </if>
             <if test="oprtime != null">
-                #{oprtime,jdbcType=TIMESTAMP}
+                #{oprtime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
@@ -892,7 +892,7 @@
                 userid = #{userid,jdbcType=INTEGER},
             </if>
             <if test="oprtime != null">
-                oprtime=#{oprtime,jdbcType=TIMESTAMP},
+                oprtime=#{oprtime,jdbcType=TIMESTAMP}
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -940,7 +940,7 @@
                 ishot=#{ishot,jdbcType=INTEGER},
             </if>
             <if test="oprtime!=null">
-                oprtime=#{oprtime,jdbcType=TIMESTAMP},
+                oprtime=#{oprtime,jdbcType=TIMESTAMP}
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -998,7 +998,7 @@
                 userid = #{userid,jdbcType=INTEGER},
             </if>
             <if test="oprtime!=null">
-                oprtime=#{oprtime,jdbcType=TIMESTAMP},
+                oprtime=#{oprtime,jdbcType=TIMESTAMP}
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}

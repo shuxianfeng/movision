@@ -38,7 +38,7 @@ public class ImSystemInformService {
     public List<ImSystemInform> queryAll(Paging<ImSystemInform> paging) {
         try {
             log.info("查询所有的系统通知");
-            return imSystemInformMapper.selectAll(paging.getRowBounds());
+            return imSystemInformMapper.findAll(paging.getRowBounds());
         } catch (Exception e) {
             log.error("查询所有的系统通知失败", e);
             throw e;
