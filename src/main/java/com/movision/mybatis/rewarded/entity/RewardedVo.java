@@ -21,6 +21,15 @@ public class RewardedVo implements Serializable {
     private Date intime;
     private String nickname;
     public List<Post> posts;
+    private Integer isread;//是否已读 0否1是
+
+    public Integer getIsread() {
+        return isread;
+    }
+
+    public void setIsread(Integer isread) {
+        this.isread = isread;
+    }
 
     public String getPhoto() {
         return photo;
