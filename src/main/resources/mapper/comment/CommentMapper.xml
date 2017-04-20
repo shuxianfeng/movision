@@ -424,17 +424,21 @@
   </update>
   <select id="queryCommentByUserid" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
-    SELECT * FROM yw_post_comment WHERE id in(SELECT pid FROM yw_post_comment WHERE isdel=0 AND pid IS NOT null) AND
-    userid=#{userid,jdbcType=INTEGER} AND pid IS NULL or
-    id in ( SELECT id FROM yw_post WHERE id in (SELECT postid FROM yw_post_comment WHERE isdel=0 AND pid IS null) AND
-    userid=#{userid,jdbcType=INTEGER}) ORDER BY intime DESC limit 0,1
+    SELECT * FROM yw_post_comment WHERE (postid in(SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND
+    isdel=0) AND pid is NULL
+    OR id IN (SELECT id FROM yw_post_comment WHERE postid in(SELECT id FROM yw_post WHERE
+    userid=#{userid,jdbcType=INTEGER} AND isdel=0) AND pid IS NOT NULL) OR
+    id IN (SELECT id FROM yw_post_comment WHERE pid IN (SELECT id FROM yw_post_comment WHERE
+    userid=#{userid,jdbcType=INTEGER} AND pid IS NULL AND isdel=0))) ORDER BY intime DESC LIMIT 1
     </select>
   <select id="findAllQueryComment" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
-    SELECT * FROM yw_post_comment WHERE id in(SELECT pid FROM yw_post_comment WHERE isdel=0 AND pid IS NOT null) AND
-    userid=#{userid,jdbcType=INTEGER} AND pid IS NULL or
-    id in( SELECT id FROM yw_post WHERE id in (SELECT postid FROM yw_post_comment WHERE isdel=0 AND pid IS null) AND
-    userid=#{userid,jdbcType=INTEGER}) ORDER BY intime DESC
+    SELECT * FROM yw_post_comment WHERE (postid in(SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND
+    isdel=0) AND pid is NULL
+    OR id IN (SELECT id FROM yw_post_comment WHERE postid in(SELECT id FROM yw_post WHERE
+    userid=#{userid,jdbcType=INTEGER} AND isdel=0) AND pid IS NOT NULL) OR
+    id IN (SELECT id FROM yw_post_comment WHERE pid IN (SELECT id FROM yw_post_comment WHERE
+    userid=#{userid,jdbcType=INTEGER} AND pid IS NULL AND isdel=0))) ORDER BY intime DESC
     </select>
   <select id="queryPidComment" resultType="com.movision.mybatis.comment.entity.CommentVo"
           parameterType="java.lang.Integer">
