@@ -544,7 +544,6 @@ public class ImFacade {
         imSystemInform.setTitle(title);
         imSystemInform.setPushcontent(pushcontent);
         imSystemInform.setInformTime(new Date());
-        imSystemInform.setIsread(0);
         //每次取500个人
         imSystemInformService.add(imSystemInform);
     }
