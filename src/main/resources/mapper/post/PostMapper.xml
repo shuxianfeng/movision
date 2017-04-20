@@ -263,24 +263,20 @@
             (
         SELECT id, circleid, title, subtitle, coverimg, intime, isactive, activetype, type
                 FROM yw_post
-                WHERE circleid IN (
-                  SELECT id FROM yw_circle WHERE phone = (
-                    SELECT phone FROM yw_user WHERE id = #{userid,jdbcType=INTEGER}
-                  )
-                )
-                AND isactive = '0'
-                AND isdel = '0'
+        WHERE userid = #{userid,jdbcType=INTEGER}
+        AND isactive = '0'
+        AND isdel = '0'
             )
           UNION
             (
         SELECT t.id, t.circleid, t.title, t.subtitle, t.coverimg, t.isactive, t.activetype, t.type, t1.intime FROM (
         SELECT id, circleid, title, subtitle, coverimg, intime, isactive, activetype, type
-                    FROM yw_post
-                    WHERE id IN (
-                      SELECT postid FROM yw_post_share WHERE userid = #{userid,jdbcType=INTEGER}
-                    )
-                    AND isactive = '0'
-                    AND isdel = '0'
+        FROM yw_post
+        WHERE id IN (
+        SELECT postid FROM yw_post_share WHERE userid = #{userid,jdbcType=INTEGER}
+        )
+        AND isactive = '0'
+        AND isdel = '0'
                 ) t LEFT JOIN yw_post_share t1 ON t.id = t1.postid
             )
         ) a LEFT JOIN yw_circle b ON a.circleid = b.id
