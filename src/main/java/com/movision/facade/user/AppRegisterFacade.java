@@ -197,6 +197,67 @@ public class AppRegisterFacade {
     }
 
     /**
+     * 重新绑定新的手机号
+     *
+     * @param phone
+     * @param code
+     * @param validateinfo
+     * @param session
+     * @throws IOException
+     */
+    public void bindNewPhoneProcess(String phone, String code, Validateinfo validateinfo, Session session) throws IOException {
+        //session中缓存的短信验证码
+        String verifyCode = validateinfo.getCheckCode();
+        if (verifyCode != null) {
+
+            Date currentTime = new Date();
+            Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(validateinfo.getCreateTime(), "yyyy-MM-dd HH:mm:ss"), 12, 10);
+            //校验是否在短信验证码有效期内
+            if (currentTime.before(sendSMStime)) {
+
+                log.debug("mobile verifyCode == " + code);
+                //比较服务器端session中的验证码和App端输入的验证码
+                if (validateinfo.getCheckCode().equalsIgnoreCase(code)) {
+                    //1 账户数据中绑定手机号
+                    int userid = ShiroUtil.getAppUserID();
+                    User user = userService.selectByPrimaryKey(userid);
+                    if (null != user) {
+
+                        user.setPhone(phone);
+                        userService.updateByPrimaryKeySelective(user);
+                        //修改原手机号对应的所有的圈子 对应的手机号
+
+                        //查看该手机号是否注册了boss用户，若有，则替换手机号
+
+
+                    } else {
+                        throw new BusinessException(MsgCodeConstant.NOT_EXIST_APP_ACCOUNT, "不存在该APP用户");
+                    }
+                    log.info("【获取userid】:" + userid);
+                    //2 如果用户当前手机号有领取过H5页面分享的优惠券，那么不管新老用户统一将优惠券临时表yw_coupon_temp中的优惠券信息全部放入优惠券正式表yw_coupon中
+                    this.processCoupon(phone, userid);
+
+                    //3 登录成功则清除session中验证码的信息
+                    session.removeAttribute("bind" + validateinfo.getAccount());
+
+                    //4 修改session中的appuser信息
+                    ShiroUtil.updateAppuserPhone(phone);
+
+                } else {
+                    //不需要清除验证码
+                    throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, "手机验证码不正确");
+                }
+            } else {
+                //超过短信验证码有效期，则清除session信息
+                session.removeAttribute("bind" + validateinfo.getAccount());
+                throw new BusinessException(MsgCodeConstant.member_mcode_sms_timeout, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.member_mcode_sms_timeout)));
+            }
+        } else {
+            throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
+        }
+    }
+
+    /**
      * 判断该userid是否存在一个im用户，若不存在，则注册im用户
      * @param phone
      * @param result
@@ -457,7 +518,7 @@ public class AppRegisterFacade {
      *
      * @param deviceno
      */
-    private void deleteSameDevicenoRecord(String deviceno) {
+    public void deleteSameDevicenoRecord(String deviceno) {
         DeviceAccid deviceAccid = deviceAccidService.selectByDeviceno(deviceno);
         if (null == deviceAccid) {
             //不存在，则不操作

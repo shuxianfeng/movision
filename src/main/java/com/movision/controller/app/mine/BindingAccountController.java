@@ -137,5 +137,42 @@ public class BindingAccountController {
         return response;
     }
 
+    @ApiOperation(value = "重新绑定新手机号", notes = "重新绑定新手机号", response = Response.class)
+    @RequestMapping(value = {"/binding_new_phone"}, method = RequestMethod.POST)
+    public Response bindingNewPhone(@ApiParam(value = "新手机号") @RequestParam String phone,
+                                    @ApiParam(value = "短信验证码") @RequestParam String code) throws Exception {
+
+        log.debug("重新绑定新手机号信息  mobile==" + phone + "mobileCheckCode = " + code);
+        Response response = new Response();
+        //先校验手机号是否已经存在
+        if (isExistPhone(phone, response)) return response;
+
+        try {
+            Subject currentUser = SecurityUtils.getSubject();
+            Session session = currentUser.getSession(true);
+            //校验手机验证码是否正确
+            if (code != null) {
+                //获取缓存中的登录的用户信息
+                Validateinfo validateinfo = (Validateinfo) session.getAttribute("bind" + phone);
+                log.info("【短信验证码登录】获取缓存中的用户信息:" + validateinfo.toString());
+                if (null == validateinfo) {
+                    response.setCode(400);
+                    response.setMessage("session中无当前用户");
+                }
+                //业务操作
+                appRegisterFacade.bindPhoneProcess(phone, code, validateinfo, session);
+                response.setMessage("重新绑定新手机号成功！");
+                response.setData(ShiroUtil.getAppUser());
+            } else {
+                response.setCode(400);
+                response.setMessage("请输入手机验证码");
+            }
+        } catch (Exception e) {
+            log.error("重新绑定新手机号失败>>>", e);
+            throw e;
+        }
+        return response;
+    }
+
 
 }
