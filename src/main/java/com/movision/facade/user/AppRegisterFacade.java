@@ -162,7 +162,7 @@ public class AppRegisterFacade {
                 log.debug("mobile verifyCode == " + code);
                 //比较服务器端session中的验证码和App端输入的验证码
                 if (validateinfo.getCheckCode().equalsIgnoreCase(code)) {
-
+                    //1 账户数据中绑定手机号
                     int userid = ShiroUtil.getAppUserID();
                     User user = userService.selectByPrimaryKey(userid);
                     if (null != user) {
@@ -173,8 +173,7 @@ public class AppRegisterFacade {
                         throw new BusinessException(MsgCodeConstant.NOT_EXIST_APP_ACCOUNT, "不存在该APP用户");
                     }
                     log.info("【获取userid】:" + userid);
-                    // TODO: 2017/4/20 是否需要
-                    //如果用户当前手机号有领取过H5页面分享的优惠券，那么不管新老用户统一将优惠券临时表yw_coupon_temp中的优惠券信息全部放入优惠券正式表yw_coupon中
+                    //2 如果用户当前手机号有领取过H5页面分享的优惠券，那么不管新老用户统一将优惠券临时表yw_coupon_temp中的优惠券信息全部放入优惠券正式表yw_coupon中
                     this.processCoupon(phone, userid);
 
                     //3 登录成功则清除session中验证码的信息
