@@ -45,6 +45,9 @@ public class UserFacade {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private AppRegisterFacade appRegisterFacade;
+
     /**
      * 判断是否存在该手机号的app用户
      *
@@ -274,6 +277,20 @@ public class UserFacade {
 
     public User selectUserByThirdAccount(Map map) {
         return userService.selectUserByThirdAccount(map);
+    }
+
+    /**
+     * 绑定第三方账号
+     *
+     * @param flag
+     * @param account
+     */
+    public void bindThirdAccount(Integer flag, String account) {
+        User appUser = userService.selectByPrimaryKey(ShiroUtil.getAppUserID());
+
+        appRegisterFacade.setUserThirdAccount(flag, account, appUser);
+
+        userService.updateByPrimaryKeySelective(appUser);
     }
 
 }

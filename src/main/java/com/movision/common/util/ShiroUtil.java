@@ -167,6 +167,31 @@ public class ShiroUtil {
     }
 
     /**
+     * 修改session中的app用户的第三方账号（用于绑定第三方账号的场景）
+     *
+     * @param flag
+     * @param account
+     */
+    public static void updateAppuserThirdAccount(Integer flag, String account) {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if (session != null) {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
+            //此处可以扩张需要的字段
+            if (flag == 1) {
+                principal.setQq(account); //qq
+            } else if (flag == 2) {
+                principal.setOpenid(account); //微信
+            } else {
+                principal.setSina(account);   //微博
+            }
+
+            session.setAttribute(SessionConstant.APP_USER, principal);
+        }
+    }
+
+
+    /**
      * 获取云信id
      *
      * @return

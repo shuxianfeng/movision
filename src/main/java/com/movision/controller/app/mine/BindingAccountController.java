@@ -5,6 +5,7 @@ import com.movision.common.constant.Constants;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.user.AppRegisterFacade;
 import com.movision.facade.user.UserFacade;
+import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.utils.VerifyCodeUtils;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -100,6 +101,39 @@ public class BindingAccountController {
             log.error("绑定手机失败>>>", e);
             throw e;
         }
+        return response;
+    }
+
+    @ApiOperation(value = "绑定第三方账号", notes = "绑定第三方账号", response = Response.class)
+    @RequestMapping(value = {"/binding_third_account"}, method = RequestMethod.POST)
+    public Response bindingThirdAccount(@ApiParam(value = "第三方登录方式标示。1:QQ， 2:微信， 3:微博 ") @RequestParam Integer flag,
+                                        @ApiParam(value = "QQ号/微信号/微博号") @RequestParam String account) throws Exception {
+
+        if (flag == 1) {
+            log.debug("【绑定QQ】，账号：" + account);
+        } else if (flag == 2) {
+            log.debug("【绑定微信】，账号：" + account);
+        } else {
+            log.debug("【绑定微博】, 账号：" + account);
+        }
+        Response response = new Response();
+        //1 校验是否存在该账号
+        User user = appRegisterFacade.queryExistThirdAccountAppUser(flag, account);
+        if (null == user) {
+            //绑定第三方账号
+            userFacade.bindThirdAccount(flag, account);
+            //更新session信息
+            ShiroUtil.updateAppuserThirdAccount(flag, account);
+
+            response.setCode(200);
+            response.setMessage("绑定成功！");
+        } else {
+            //2 若不存在，则绑定该账号；若存在，则提示换其他账号绑定
+            response.setCode(400);
+            response.setMessage("该账号已经被绑定过，请更换其他账号绑定");
+            response.setData(account);
+        }
+
         return response;
     }
 

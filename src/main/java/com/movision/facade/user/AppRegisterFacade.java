@@ -435,6 +435,14 @@ public class AppRegisterFacade {
     private int registerThirdAccountAndReturnUserid(Integer flag, String account, String deviceno, String tokenJson) {
         User newUser = new User();
         newUser.setToken(tokenJson);    //token
+        setUserThirdAccount(flag, account, newUser);
+        newUser.setNickname(StrUtil.genDefaultNicknameByQQ(account));    //昵称
+        newUser.setDeviceno(deviceno);  //设备号
+        newUser.setPoints(25);  //注册25分
+        return userService.insertSelective(newUser);
+    }
+
+    public void setUserThirdAccount(Integer flag, String account, User newUser) {
         if (flag == 1) {
             newUser.setQq(account); //qq
         } else if (flag == 2) {
@@ -442,10 +450,6 @@ public class AppRegisterFacade {
         } else {
             newUser.setSina(account);   //微博
         }
-        newUser.setNickname(StrUtil.genDefaultNicknameByQQ(account));    //昵称
-        newUser.setDeviceno(deviceno);  //设备号
-        newUser.setPoints(25);  //注册25分
-        return userService.insertSelective(newUser);
     }
 
     /**
@@ -497,7 +501,6 @@ public class AppRegisterFacade {
         info.setAccount(mobile);
         session.setAttribute(sessionPrefix + mobile, info);
     }
-
 
 }
 
