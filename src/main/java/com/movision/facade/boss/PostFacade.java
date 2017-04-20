@@ -3,19 +3,15 @@ package com.movision.facade.boss;
 import com.movision.common.constant.JurisdictionConstants;
 import com.movision.common.util.ShiroUtil;
 import com.movision.fsearch.utils.StringUtil;
-import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.activePart.service.ActivePartService;
 import com.movision.mybatis.bossUser.entity.BossUser;
-import com.movision.mybatis.bossUser.entity.BossUserVo;
 import com.movision.mybatis.bossUser.service.BossUserService;
-import com.movision.mybatis.category.service.CategoryService;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
-import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.period.entity.Period;
@@ -39,7 +35,6 @@ import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -324,7 +319,7 @@ public class PostFacade {
      */
     public User queryPostByPosted(String postid) {
         Integer circleid = postService.queryPostByCircleid(postid);
-        String phone = circleService.queryCircleByPhone(circleid);//获取圈子中的用户手机号
+        String phone = circleService.queryPhoneInCircleByCircleid(circleid);//获取圈子中的用户手机号
         User user = userService.queryUser(phone);
         return user;
     }

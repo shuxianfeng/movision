@@ -8,6 +8,10 @@ import com.movision.common.constant.UserConstants;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
 import com.movision.facade.im.ImFacade;
+import com.movision.mybatis.bossUser.entity.BossUser;
+import com.movision.mybatis.bossUser.service.BossUserService;
+import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.coupon.service.CouponService;
 import com.movision.mybatis.couponTemp.entity.CouponTemp;
@@ -19,6 +23,7 @@ import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.DateUtils;
+import com.movision.utils.ListUtil;
 import com.movision.utils.StrUtil;
 import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
@@ -64,6 +69,12 @@ public class AppRegisterFacade {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CircleService circleService;
+
+    @Autowired
+    private BossUserService bossUserService;
 
     /**
      * 1 校验登录用户信息：手机号+短信验证码
@@ -223,17 +234,19 @@ public class AppRegisterFacade {
                     User user = userService.selectByPrimaryKey(userid);
                     if (null != user) {
 
+                        //1.1 修改原手机号对应的所有圈子的手机号
+                        batchUpdatePhoneInCircle(phone, user);
+                        //1.2 查看该手机号是否注册了boss用户，若有，则替换手机号
+                        updatePhoneInBossuser(phone, user);
+                        //1.3 修改appuser信息中的手机号
                         user.setPhone(phone);
                         userService.updateByPrimaryKeySelective(user);
-                        //修改原手机号对应的所有的圈子 对应的手机号
-
-                        //查看该手机号是否注册了boss用户，若有，则替换手机号
-
 
                     } else {
                         throw new BusinessException(MsgCodeConstant.NOT_EXIST_APP_ACCOUNT, "不存在该APP用户");
                     }
                     log.info("【获取userid】:" + userid);
+
                     //2 如果用户当前手机号有领取过H5页面分享的优惠券，那么不管新老用户统一将优惠券临时表yw_coupon_temp中的优惠券信息全部放入优惠券正式表yw_coupon中
                     this.processCoupon(phone, userid);
 
@@ -254,6 +267,30 @@ public class AppRegisterFacade {
             }
         } else {
             throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.member_mcode_mobile_validate_error)));
+        }
+    }
+
+    private void updatePhoneInBossuser(String phone, User user) {
+        BossUser bossUser = bossUserService.queryAdminUserByPhone(user.getPhone());
+        if (null != bossUser) {
+            bossUser.setPhone(phone);
+            bossUserService.updateUser(bossUser);
+        }
+    }
+
+    private void batchUpdatePhoneInCircle(String phone, User user) {
+        List<Circle> circleList = circleService.queryCircleByPhone(user.getPhone());
+        log.info("修改的手机号涉及的圈子有：" + circleList.toString());
+        if (ListUtil.isNotEmpty(circleList)) {
+            Map map = new HashedMap();
+            int len = circleList.size();
+            int[] arr = new int[len];
+            for (int i = 0; i < len; i++) {
+                arr[i] = circleList.get(i).getId();
+            }
+            map.put("ids", arr);
+            map.put("phone", phone);
+            circleService.batchUpdatePhoneInCircle(map);
         }
     }
 

@@ -38,7 +38,7 @@
     </select>
 
     <!-- 根据圈子id查询手机号 -->
-    <select id="queryCircleByPhone" parameterType="java.lang.Integer" resultType="String">
+    <select id="queryPhoneInCircleByCircleid" parameterType="java.lang.Integer" resultType="String">
         SELECT c.phone
         FROM yw_circle c
         WHERE c.id=#{id,jdbcType=INTEGER}
@@ -876,4 +876,16 @@
     <select id="queryCIrcleIdByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT id FROM yw_circle WHERE phone=(SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
     </select>
+
+    <select id="queryCircleByPhone" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.circle.entity.Circle">
+        SELECT * FROM yw_circle WHERE phone = #{phone}
+    </select>
+
+    <update id="batchUpdatePhoneInCircle" parameterType="java.util.HashMap">
+        UPDATE yw_circle SET phone = #{phone} WHERE id in
+        <foreach collection="ids" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 </mapper>

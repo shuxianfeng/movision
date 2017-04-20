@@ -1,20 +1,17 @@
 package com.movision.mybatis.circle.service;
 
 import com.movision.mybatis.category.entity.Category;
-import com.movision.mybatis.category.entity.CircleAndCircle;
 import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.circle.mapper.CircleMapper;
 import com.movision.mybatis.followCircle.mapper.FollowCircleMapper;
 import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;
-import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -164,10 +161,10 @@ public class CircleService {
         }
     }
 
-    public String queryCircleByPhone(int circleid) {
+    public String queryPhoneInCircleByCircleid(int circleid) {
         try {
             log.info("查询贴主手机号 circleid=" + circleid);
-            return circleMapper.queryCircleByPhone(circleid);
+            return circleMapper.queryPhoneInCircleByCircleid(circleid);
         } catch (Exception e) {
             log.error("查询手机号失败 circleid=" + circleid, e);
             throw e;
@@ -551,6 +548,26 @@ public class CircleService {
             return circleMapper.queryCIrcleIdByUserId(userid);
         } catch (Exception e) {
             log.error("根据用户id查询圈子id异常", e);
+            throw e;
+        }
+    }
+
+    public List<Circle> queryCircleByPhone(String phone) {
+        try {
+            log.info("根据手机号查询对应的圈子信息");
+            return circleMapper.queryCircleByPhone(phone);
+        } catch (Exception e) {
+            log.error("根据手机号查询对应的圈子信息失败", e);
+            throw e;
+        }
+    }
+
+    public int batchUpdatePhoneInCircle(Map map) {
+        try {
+            log.info("批量修改圈子中的手机号");
+            return circleMapper.batchUpdatePhoneInCircle(map);
+        } catch (Exception e) {
+            log.error("批量修改圈子中的手机号失败", e);
             throw e;
         }
     }

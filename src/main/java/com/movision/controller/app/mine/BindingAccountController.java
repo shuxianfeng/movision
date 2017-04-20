@@ -160,7 +160,8 @@ public class BindingAccountController {
                     response.setMessage("session中无当前用户");
                 }
                 //业务操作
-                appRegisterFacade.bindPhoneProcess(phone, code, validateinfo, session);
+                appRegisterFacade.bindNewPhoneProcess(phone, code, validateinfo, session);
+
                 response.setMessage("重新绑定新手机号成功！");
                 response.setData(ShiroUtil.getAppUser());
             } else {

@@ -4,6 +4,7 @@ import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.category.entity.CircleAndCircle;
 import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.user.entity.User;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
@@ -40,7 +41,7 @@ public interface CircleMapper {
 
     int updateByPrimaryKey(Circle record);
 
-    String queryCircleByPhone(int circleid);
+    String queryPhoneInCircleByCircleid(int circleid);
 
     List<Circle> queryHotCircle();
 
@@ -93,4 +94,8 @@ public interface CircleMapper {
     Category queryCircleCategoryClassify(String categoryid);
 
     List<Integer> queryCIrcleIdByUserId(Integer userid);
+
+    List<Circle> queryCircleByPhone(@Param("phone") String phone);
+
+    int batchUpdatePhoneInCircle(Map map);
 }
