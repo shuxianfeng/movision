@@ -185,10 +185,8 @@ public class MyInfoController {
     @RequestMapping(value = "sign", method = RequestMethod.POST)
     public Response sign() {
         Response response = new Response();
-        //签到送积分
+
         pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode());
-        //给个人加积分
-        userFacade.addPersonPointBySign(PointConstant.POINT.sign.getCode());
 
         return response;
     }

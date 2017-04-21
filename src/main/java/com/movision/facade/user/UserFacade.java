@@ -289,26 +289,7 @@ public class UserFacade {
         userService.updateByPrimaryKeySelective(user);
     }
 
-    /**
-     * 新增个人积分
-     *
-     * @param point
-     */
-    public void addPersonPointBySign(int point) {
 
-        ShiroRealm.ShiroUser shiroUser = ShiroUtil.getAppUser();
-        User user = new User();
-        user.setId(ShiroUtil.getAppUserID());
-        int personPoint = null == shiroUser.getPoints() ? 0 : shiroUser.getPoints();
-        int newPoint = personPoint + point;
-        user.setPoints(newPoint);
-
-        //1 变更用户表
-        userService.updateByPrimaryKeySelective(user);
-        //2 更新session中的缓存
-        ShiroUtil.updateAppuserPoint(newPoint);
-
-    }
 
     /**
      * 查询出当前用户积分剩余

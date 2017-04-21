@@ -11,6 +11,9 @@ import com.movision.mybatis.pointRecord.entity.NewTask;
 import com.movision.mybatis.pointRecord.entity.PersonPointStatistics;
 import com.movision.mybatis.pointRecord.entity.PointRecord;
 import com.movision.mybatis.pointRecord.service.PointRecordService;
+import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.service.UserService;
+import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.ListUtil;
 import com.movision.utils.MathUtil;
 import com.movision.utils.pagination.model.Paging;
@@ -37,6 +40,10 @@ public class PointRecordFacade {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private UserService userService;
+
 
 
     /**
@@ -89,7 +96,7 @@ public class PointRecordFacade {
      * @param
      * @return
      */
-    public int addPointRecord(int type) {
+    public void addPointRecord(int type) {
 
         log.info("调用【增加积分流水】接口，本次操作存在积分变动");
         //获取每日的积分数据
@@ -99,9 +106,38 @@ public class PointRecordFacade {
         List<PointRecord> historyList = pointRecordService.queryAllMyPointRecord(ShiroUtil.getAppUserID());
 //        PersonPointStatistics historyStatistics = this.getMyTotalPointStatics(historyList);
 
+        //获取需要新增的积分
         int new_point = getPointByPointType(type, todayStatistics);
         log.info("【增加积分流水】该积分类型type=" + type + ", 该类型对应的积分是：" + new_point);
+        //增加积分流水
+        addPointRecord(type, new_point);
+        //新增个人积分
+        addPersonPointInDbAndSession(new_point);
 
+    }
+
+    /**
+     * 新增个人积分（数据库+session）
+     *
+     * @param point 需要加的积分
+     */
+    public void addPersonPointInDbAndSession(int point) {
+
+        ShiroRealm.ShiroUser shiroUser = ShiroUtil.getAppUser();
+        int personPoint = null == shiroUser.getPoints() ? 0 : shiroUser.getPoints();
+        int newPoint = personPoint + point;
+
+        //1 变更用户表积分信息
+        User user = new User();
+        user.setId(ShiroUtil.getAppUserID());
+        user.setPoints(newPoint);
+        userService.updateByPrimaryKeySelective(user);
+        //2 更新session中的缓存
+        ShiroUtil.updateAppuserPoint(newPoint);
+
+    }
+
+    private void addPointRecord(int type, int new_point) {
         PointRecord pointRecord = new PointRecord();
         pointRecord.setUserid(ShiroUtil.getAppUserID());
         pointRecord.setIsadd(PointConstant.POINT_ADD);
@@ -109,7 +145,7 @@ public class PointRecordFacade {
         pointRecord.setType(type);
         pointRecord.setOrderid(0);
 
-        return pointRecordService.addPointRecord(pointRecord);
+        pointRecordService.addPointRecord(pointRecord);
     }
 
 
