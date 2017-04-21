@@ -147,7 +147,7 @@ public interface PostMapper {
 
     List<PostList> findAllActiveByList(RowBounds rowBounds);
 
-    List<PostActiveList> findAllActiveTOByList(RowBounds rowBounds);
+    List<PostActiveList> findAllActiveTOByList(Map map, RowBounds rowBounds);
 
     int findAllPerson(Integer postid);//查询报名人数
 

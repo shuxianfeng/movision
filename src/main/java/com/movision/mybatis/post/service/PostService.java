@@ -484,10 +484,10 @@ public class PostService {
      * @param pager
      * @return
      */
-    public List<PostActiveList> queryPostActiveToByList(Paging<PostActiveList> pager){
+    public List<PostActiveList> queryPostActiveToByList(Map map, Paging<PostActiveList> pager) {
             try{
                 log.info("查询活动列表");
-                return  postMapper.findAllActiveTOByList(pager.getRowBounds());
+                return postMapper.findAllActiveTOByList(map, pager.getRowBounds());
             }catch (Exception e) {
                 log.error("查询活动列表失败",e);
                 throw e;

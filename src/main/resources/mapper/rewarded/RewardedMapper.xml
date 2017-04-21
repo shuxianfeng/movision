@@ -122,7 +122,7 @@
     </select>
     <select id="queryRewardByUserid" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.rewarded.entity.RewardedVo">
-        SELECT c.points,u.nickname,c.intime FROM yw_post_rewarded c LEFT JOIN yw_user u
+        SELECT c.points,u.nickname,c.intime,c.isread FROM yw_post_rewarded c LEFT JOIN yw_user u
         ON c.userid=u.id WHERE postid IN (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} and isdel=0)
         ORDER BY c.intime desc LIMIT 0,1
     </select>

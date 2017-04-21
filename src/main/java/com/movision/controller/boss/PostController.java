@@ -115,11 +115,12 @@ public class PostController {
      */
     @ApiOperation(value = "查询活动列表", notes = "查询活动列表", response = Response.class)
     @RequestMapping(value = "/list_active_list", method = RequestMethod.POST)
-    public Response queryPostActiveToByList(@RequestParam(required = false, defaultValue = "1") String pageNo,
+    public Response queryPostActiveToByList(@ApiParam(value = "登录用户") @RequestParam String loginid,
+                                            @RequestParam(required = false, defaultValue = "1") String pageNo,
                                             @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<PostActiveList> pager = new Paging<PostActiveList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostActiveList> list = postFacade.queryPostActiveToByList(pager);
+        List<PostActiveList> list = postFacade.queryPostActiveToByList(loginid, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -865,11 +866,12 @@ public class PostController {
                                                 @ApiParam(value = "活动结束日期") @RequestParam(required = false) String endtime,
                                                 @ApiParam(value = "活动状态") @RequestParam(required = false) String statue,
                                                 @ApiParam(value = "排序") @RequestParam(required = false) String pai,
-                                                @RequestParam(required = false) String pageNo,
-                                                @RequestParam(required = false) String pageSize) {
+                                                @ApiParam(value = "登录用户") @RequestParam String loginid,
+                                                @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<PostActiveList> pager = new Paging<PostActiveList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostActiveList> list = postFacade.queryAllActivePostCondition(title, name, content, begintime, endtime, statue, pai, pager);
+        List<PostActiveList> list = postFacade.queryAllActivePostCondition(title, name, content, begintime, endtime, statue, pai, loginid, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

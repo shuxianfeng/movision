@@ -213,11 +213,32 @@ public class PostFacade {
     /**
      * 后台管理-查询活动列表
      *
+     * @param loginid
      * @param pager
      * @return
      */
-    public List<PostActiveList> queryPostActiveToByList(Paging<PostActiveList> pager) {
-        List<PostActiveList> list = postService.queryPostActiveToByList(pager);
+    public List<PostActiveList> queryPostActiveToByList(String loginid, Paging<PostActiveList> pager) {
+
+        Integer userid = Integer.parseInt(loginid);
+
+        Map res = commonalityFacade.verifyUserByQueryMethod(userid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), null);
+        List<PostActiveList> list = new ArrayList<>();
+        BossUser logintype = bossUserService.queryUserByAdministrator(userid);//根据登录用户id查询当前用户有哪些权限
+        if (res.get("resault").equals(1)) {//查询当前登录用户的帖子列表
+            //查询用户管理的圈子id
+            if (logintype.getCirclemanagement() == 1) {//圈子管理员
+                Map map = new HashMap();
+                map.put("loginid", userid);
+                list = postService.queryPostActiveToByList(map, pager);
+            } else if (logintype.getIscircle() == 1) {//圈主
+                Map map = new HashMap();
+                map.put("loginid", userid);
+                list = postService.queryPostActiveToByList(map, pager);
+            }
+        } else if (res.get("resault").equals(2) || res.get("resault").equals(0)) {//权限最大查询所有帖子列表
+            Map map = new HashMap();
+            list = postService.queryPostActiveToByList(map, pager);
+        }
         List<PostActiveList> rewardeds = new ArrayList<>();
         Date date = new Date();
         long str = date.getTime();
@@ -1369,7 +1390,7 @@ public class PostFacade {
         BossUser logintype = bossUserService.queryUserByAdministrator(louser);//根据登录用户id查询当前用户有哪些权限
         Map res = commonalityFacade.verifyUserByQueryMethod(louser, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), null);
         List<PostList> list = new ArrayList<>();
-        if (res.get("resault").equals(2)) {
+        if (res.get("resault").equals(2) || res.get("resault").equals(0)) {
             list = postService.postSearch(map, pager);
             return list;
         } else if (res.get("resault").equals(1)) {
@@ -1433,10 +1454,11 @@ public class PostFacade {
      * @param begintime
      * @param endtime
      * @param statue
+     * @param loginid
      * @param pager
      * @return
      */
-    public List<PostActiveList> queryAllActivePostCondition(String title, String name, String content, String begintime, String endtime, String statue, String pai, Paging<PostActiveList> pager) {
+    public List<PostActiveList> queryAllActivePostCondition(String title, String name, String content, String begintime, String endtime, String statue, String pai, String loginid, Paging<PostActiveList> pager) {
         Map<String, Object> map = new HashedMap();
         if (title != null) {
             map.put("title", title);
@@ -1451,30 +1473,45 @@ public class PostFacade {
 
         Date isessencetime = null;//开始时间
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        if (begintime != null) {
+        if (StringUtil.isNotEmpty(begintime)) {
             try {
                 isessencetime = format.parse(begintime);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-        map.put("mintime", isessencetime);
+        map.put("begintime", isessencetime);
         Date max = null;//最大时间
-        if (endtime != null) {
+        if (StringUtil.isNotEmpty(endtime)) {
             try {
                 max = format.parse(endtime);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-        map.put("maxtime", max);
+        map.put("endtime", max);
         if (!StringUtils.isEmpty(statue)) {
             map.put("statue", statue);
         }
         if (!StringUtils.isEmpty(pai)) {
             map.put("pai", pai);
         }
-        List<PostActiveList> list = postService.queryAllActivePostCondition(map, pager);
+        Integer userid = Integer.parseInt(loginid);
+        Map res = commonalityFacade.verifyUserByQueryMethod(userid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), null);
+        List<PostActiveList> list = new ArrayList<>();
+        BossUser logintype = bossUserService.queryUserByAdministrator(userid);//根据登录用户id查询当前用户有哪些权限
+        if (res.get("resault").equals(1)) {//查询当前登录用户的帖子列表
+            //查询用户管理的圈子id
+            if (logintype.getCirclemanagement() == 1) {//圈子管理员
+                map.put("loginid", userid);
+                list = postService.queryAllActivePostCondition(map, pager);
+            } else if (logintype.getIscircle() == 1) {//圈主
+                map.put("loginid", userid);
+                list = postService.queryAllActivePostCondition(map, pager);
+            }
+        } else if (res.get("resault").equals(2) || res.get("resault").equals(0)) {//权限最大查询所有帖子列表
+            list = postService.queryAllActivePostCondition(map, pager);
+        }
         List<PostActiveList> rewardeds = new ArrayList<>();
         Date date = new Date();
         long str = date.getTime();

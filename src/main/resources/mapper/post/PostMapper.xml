@@ -1207,7 +1207,11 @@
     </select>
     <!--查询活动列表-->
     <select id="findAllActiveTOByList" resultType="com.movision.mybatis.post.entity.PostActiveList">
-        SELECT * FROM yw_post WHERE isdel=0 AND isactive=1 ORDER  BY intime DESC
+        SELECT * FROM yw_post WHERE isdel=0 AND isactive=1
+        <if test="loginid!=null">
+            AND userid=#{loginid,jdbcType=INTEGER}
+        </if>
+        ORDER BY intime DESC
     </select>
     <!-- 逻辑删除帖子 -->
     <update id="deletePost" parameterType="java.lang.Integer">
@@ -1698,23 +1702,33 @@
             AND p.title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
         </if>
         <if test="name!=null">
-            AND p.userid LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+            AND p.userid in(select id from yw_user WHERE nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%'))
         </if>
         <if test="content!=null">
             AND p.postcontent LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
         </if>
+
         <if test="begintime!=null and endtime!=null">
-            AND p.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+            <!--AND p.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}-->
+            AND ((#{begintime,jdbcType=DATE}  <![CDATA[>]]> a.begintime) AND (#{endtime,jdbcType=DATE} <![CDATA[<]]>
+            a.endtime))
         </if>
-        <if test="statue==0">
-            AND a.begintime
-            <![CDATA[>]]> NOW()
-        </if>
+
+        <!-- 未开始 -->
         <if test="statue==1">
-            AND a.endtime  <![CDATA[<]]> NOW()
+            AND a.begintime  <![CDATA[>]]> NOW()
         </if>
+        <!-- 结束 -->
         <if test="statue==2">
-            AND NOW()  <![CDATA[>]]> a.begintime AND Now() <![CDATA[<]]> a.endtime
+            AND NOW() <![CDATA[>]]> a.endtime
+        </if>
+        <!-- 报名中 -->
+        <if test="statue==3">
+            AND ((NOW()  <![CDATA[>]]> a.begintime) AND (NOW() <![CDATA[<]]> a.endtime))
+        </if>
+
+        <if test="loginid!=null">
+            AND userid=#{loginid,jdbcType=INTEGER}
         </if>
         <if test="pai==0">
             ORDER BY p.intime DESC
