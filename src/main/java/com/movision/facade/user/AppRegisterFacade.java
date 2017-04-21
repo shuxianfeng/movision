@@ -448,10 +448,11 @@ public class AppRegisterFacade {
      * 1 生成新的token
      * 2 判断qq是否注册过
      * 若qq从未注册过：a 则注册qq账号; b 注册im用户，
-     * 若qq已经注册过：更新用户记录中的token
+     * 若qq已经注册过：更新用户记录中的token（token根据openid和设备号生成）
      * 3 判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录；
      * （方便设置后面的系统推送中的toAccids）
      * <p>
+     *
      * 下面是token的数据结构
      * token:{
      * username: qq,
@@ -490,6 +491,9 @@ public class AppRegisterFacade {
             pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.new_user_register.getCode());
 
         } else {
+            /**
+             * 存在场景：用户之前在设备A上用QQ注册了APP账户，现在用户换了一个设备B，下载APP，进行QQ登录
+             */
             //3 更新原来的token
             originUser.setToken(tokenJson);
             originUser.setDeviceno(deviceno);
