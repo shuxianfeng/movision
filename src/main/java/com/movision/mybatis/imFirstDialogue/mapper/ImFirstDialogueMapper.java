@@ -33,6 +33,7 @@ public interface ImFirstDialogueMapper {
 
     void queryIsread(Map map);
 
+    Integer updateCallRead(Integer userid);
 
 
 }

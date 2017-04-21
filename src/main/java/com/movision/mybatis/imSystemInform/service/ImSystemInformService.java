@@ -1,6 +1,7 @@
 package com.movision.mybatis.imSystemInform.service;
 
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
+import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.imSystemInform.mapper.ImSystemInformMapper;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
@@ -110,12 +111,28 @@ public class ImSystemInformService {
      *
      * @return
      */
-    public ImSystemInform queryByUserid() {
+    public ImSystemInformVo queryByUserid() {
         try {
             log.info("查询最新一条记录");
             return imSystemInformMapper.queryByUserid();
         } catch (Exception e) {
             log.error("查询最新一条记录失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询是否有未读系统通知
+     *
+     * @param userid
+     * @return
+     */
+    public Integer querySystemPushByUserid(Integer userid) {
+        try {
+            log.info("查询是否有未读系统通知");
+            return imSystemInformMapper.querySystemPushByUserid(userid);
+        } catch (Exception e) {
+            log.error("查询是否有未读系统通知异常", e);
             throw e;
         }
     }

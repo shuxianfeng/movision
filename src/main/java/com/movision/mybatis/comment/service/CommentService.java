@@ -348,4 +348,21 @@ public class CommentService {
             throw e;
         }
     }
+
+
+    /**
+     * 更新评论已读状态
+     *
+     * @param userid
+     * @return
+     */
+    public Integer updateCommentRead(Integer userid) {
+        try {
+            log.info("更新评论已读状态");
+            return commentMapper.updateCommentRead(userid);
+        } catch (Exception e) {
+            log.error("更新评论已读状态异常", e);
+            throw e;
+        }
+    }
 }

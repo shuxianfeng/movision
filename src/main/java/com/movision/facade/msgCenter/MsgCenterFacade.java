@@ -11,7 +11,9 @@ import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogueVo;
 import com.movision.mybatis.imFirstDialogue.service.ImFirstDialogueService;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
+import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.imSystemInform.service.ImSystemInformService;
+import com.movision.mybatis.imSystemInformRead.service.ImSystemInformReadService;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecord;
@@ -50,12 +52,19 @@ public class MsgCenterFacade {
 
     @Autowired
     private RewardedService rewardedService;
+
     @Autowired
     private PostCommentZanRecordService postCommentZanRecordService;
+
     @Autowired
     private PostZanRecordService postZanRecordService;
+
     @Autowired
     private ImFirstDialogueService imFirstDialogueService;
+
+    @Autowired
+    private ImSystemInformReadService imSystemInformReadService;
+
     /**
      * 获取消息中心的列表
      *
@@ -81,7 +90,14 @@ public class MsgCenterFacade {
             comment.setUser(ruser);
         }
         //4 系统通知
-        ImSystemInform imSystemInform = imSystemInformService.queryByUserid();
+        ImSystemInformVo imSystemInform = imSystemInformService.queryByUserid();//查询最新一条
+        //查询是否有未读系统通知
+        Integer system = imSystemInformService.querySystemPushByUserid(userid);
+        if (system > 0) {
+            imSystemInform.setIsRead(0);
+        } else {
+            imSystemInform.setIsRead(1);
+        }
         //5 打招呼消息
         ImFirstDialogueVo imFirstDialogue = imFirstDialogueService.queryFirst(userid);
         //6 客服消息
@@ -198,23 +214,33 @@ public class MsgCenterFacade {
         imFirstDialogueService.queryIsread(map);
     }
 
-    public Integer updateisread(String type) {
+    /**
+     * 更新类型 1：赞 2：打赏 3：评论 4：系统 5：打招呼
+     *
+     * @param type
+     * @return
+     */
+    public Integer updateisread(String type, Integer userid, String informidentity) {
         Integer resault = null;
         if (type.equals("1")) {
-
+            resault = postZanRecordService.updateZanRead(userid);//更新赞已读
         } else if (type.equals("2")) {
-
+            resault = rewardedService.updateRewardRead(userid);//更新打赏已读
         } else if (type.equals("3")) {
-
+            resault = commentService.updateCommentRead(userid);//更新评论已读
         } else if (type.equals("4")) {
-
+            Map map = new HashMap();
+            map.put("userid", userid);
+            map.put("informidentity", informidentity);
+            map.put("intime", new Date());
+            //查询该用户是否查看过此条系统推送
+            Integer check = imSystemInformReadService.queryUserCheckPush(map);
+            if (check != 1) {
+                resault = imSystemInformReadService.updateSystemRead(map);//更新系统消息已读
+            }
         } else if (type.equals("5")) {
-
+            resault = imFirstDialogueService.updateCallRead(userid);//更新打招呼已读
         }
-        if (resault > 0) {
-            return null;
-        } else {
-            return null;
-        }
+        return resault;
     }
 }

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movision.mybatis.imSystemInformRead.mapper.ImSystemInformReadMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.imSystemInformRead.entity.ImSystemInformRead">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="userid" jdbcType="INTEGER" property="userid"/>
+        <result column="intime" jdbcType="TIMESTAMP" property="intime"/>
+        <result column="inform_identity" jdbcType="VARCHAR" property="informIdentity"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, userid, intime, inform_identity
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_im_system_inform_read
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_im_system_inform_read
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.imSystemInformRead.entity.ImSystemInformRead">
+    insert into yw_im_system_inform_read (id, userid, intime, 
+      inform_identity)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}, 
+      #{informIdentity,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.imSystemInformRead.entity.ImSystemInformRead">
+        insert into yw_im_system_inform_read
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="informIdentity != null">
+                inform_identity,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="informIdentity != null">
+                #{informIdentity,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.movision.mybatis.imSystemInformRead.entity.ImSystemInformRead">
+        update yw_im_system_inform_read
+        <set>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="informIdentity != null">
+                inform_identity = #{informIdentity,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.imSystemInformRead.entity.ImSystemInformRead">
+    update yw_im_system_inform_read
+    set userid = #{userid,jdbcType=INTEGER},
+      intime = #{intime,jdbcType=TIMESTAMP},
+      inform_identity = #{informIdentity,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <insert id="updateSystemRead" parameterType="java.util.Map">
+        insert into yw_im_system_inform_read
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userid!=null">
+                userid,
+            </if>
+            <if test="intime!=null">
+                intime,
+            </if>
+            <if test="informidentity!=null">
+                inform_identity,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userid!=null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="intime!=null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="informidentity!=null">
+                #{informidentity,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+
+    <select id="queryUserCheckPush" parameterType="java.util.Map" resultType="java.lang.Integer">
+      SELECT COUNT(1) FROM yw_im_system_inform_read WHERE inform_identity=#{informidentity,jdbcType=VARCHAR} AND userid=#{userid,jdbcType=INTEGER}
+  </select>
+</mapper>

@@ -98,4 +98,20 @@ public class ImFirstDialogueService {
     }
 
 
+    /**
+     * 更新打招呼状态
+     *
+     * @param userid
+     * @return
+     */
+    public Integer updateCallRead(Integer userid) {
+        try {
+            log.info("更新打招呼状态");
+            return imFirstDialogueMapper.updateCallRead(userid);
+        } catch (Exception e) {
+            log.error("更新打招呼状态异常", e);
+            throw e;
+        }
+    }
+
 }

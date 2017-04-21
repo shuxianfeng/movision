@@ -1,6 +1,7 @@
 package com.movision.mybatis.imSystemInform.mapper;
 
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
+import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -25,5 +26,7 @@ public interface ImSystemInformMapper {
 
     ImSystemInform queryBodyAll(Integer id);//查询全部内容
 
-    ImSystemInform queryByUserid();//查询最新一条记录
+    ImSystemInformVo queryByUserid();//查询最新一条记录
+
+    Integer querySystemPushByUserid(Integer userid);//查询是否有未读系统通知
 }

@@ -36,4 +36,21 @@ public class PostZanRecordService {
             throw e;
         }
     }
+
+    /**
+     * 更新点赞已读状态
+     *
+     * @param userid
+     * @return
+     */
+    public Integer updateZanRead(Integer userid) {
+        try {
+            log.info("更新点赞已读状态");
+            recordMapper.updateZanReadByComment(userid);
+            return recordMapper.updateZanReadByPost(userid);
+        } catch (Exception e) {
+            log.error("更新点赞已读状态异常", e);
+            throw e;
+        }
+    }
 }

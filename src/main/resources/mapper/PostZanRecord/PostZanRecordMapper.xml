@@ -102,4 +102,12 @@
         SELECT p.title,p.postcontent,p.activetype,p.type,p.coverimg,p.isactive,p.id FROM yw_post p
         WHERE p.id=#{postid,jdbcType=INTEGER}
     </select>
+
+    <update id="updateZanReadByComment" parameterType="java.lang.Integer">
+        UPDATE yw_post_comment_zan_record SET isread=1 WHERE userid=#{userid,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateZanReadByPost" parameterType="java.lang.Integer">
+        UPDATE yw_post_zan_record SET isread=1 WHERE userid=#{userid,jdbcType=INTEGER}
+    </update>
 </mapper>

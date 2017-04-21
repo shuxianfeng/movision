@@ -152,7 +152,12 @@
             ORDER BY inform_time DESC
         </if>
     </select>
-    <select id="queryByUserid" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
-        SELECT body,inform_time FROM yw_im_system_informs ORDER BY inform_time DESC LIMIT 0,1
+    <select id="queryByUserid" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo">
+        SELECT body,inform_time,inform_identity FROM yw_im_system_informs ORDER BY inform_time DESC LIMIT 0,1
+    </select>
+
+    <select id="querySystemPushByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_im_system_informs WHERE inform_identity <![CDATA[<>]]>(
+        SELECT inform_identity FROM yw_im_system_inform_read WHERE userid=44)
     </select>
 </mapper>

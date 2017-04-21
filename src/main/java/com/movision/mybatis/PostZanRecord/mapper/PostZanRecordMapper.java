@@ -22,6 +22,9 @@ public interface PostZanRecordMapper {
 
     int updateByPrimaryKey(PostZanRecord record);
 
-
     List<Post> queryPost(Integer postid);
+
+    Integer updateZanReadByComment(Integer userid);
+
+    Integer updateZanReadByPost(Integer userid);
 }

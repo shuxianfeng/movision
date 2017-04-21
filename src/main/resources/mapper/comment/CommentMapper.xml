@@ -464,4 +464,8 @@
     <!--SELECT content FROM yw_post_comment WHERE pid=#{pid,jdbcType=INTEGER} AND id=#{id,jdbcType=INTEGER} AND isdel=0-->
     SELECT content FROM yw_post_comment WHERE id=#{pid,jdbcType=INTEGER} AND isdel=0
   </select>
+
+    <update id="updateCommentRead" parameterType="java.lang.Integer">
+        UPDATE yw_post_comment SET isread=1 WHERE userid=#{userid,jdbcType=INTEGER}
+    </update>
 </mapper>

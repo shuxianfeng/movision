@@ -29,4 +29,6 @@ public interface RewardedMapper {
 
     List<RewardedVo> findAllRewarded(Integer userid, RowBounds rowBounds);
 
+    Integer updateRewardRead(Integer userid);
+
 }

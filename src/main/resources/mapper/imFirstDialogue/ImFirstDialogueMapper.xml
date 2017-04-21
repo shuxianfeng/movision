@@ -151,4 +151,8 @@
     <update id="queryIsread" parameterType="java.util.Map">
         UPDATE yw_im_first_dialogue SET isread=1 WHERE userid=#{userid,jdbcType=INTEGER} AND id=#{id,jdbcType=INTEGER}
     </update>
+
+    <update id="updateCallRead" parameterType="java.lang.Integer">
+        UPDATE yw_im_first_dialogue SET isread=1 WHERE userid=#{userid,jdbcType=INTEGER}
+    </update>
 </mapper>

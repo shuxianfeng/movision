@@ -87,4 +87,21 @@ public class RewardedService {
         }
     }
 
+
+    /**
+     * 更新打赏已读状态
+     *
+     * @param userid
+     * @return
+     */
+    public Integer updateRewardRead(Integer userid) {
+        try {
+            log.info("更新打赏已读状态");
+            return rewardedMapper.updateRewardRead(userid);
+        } catch (Exception e) {
+            log.error("更新打赏已读状态异常", e);
+            throw e;
+        }
+    }
+
 }
