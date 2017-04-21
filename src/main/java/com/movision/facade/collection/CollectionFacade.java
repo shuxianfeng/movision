@@ -1,9 +1,13 @@
 package com.movision.facade.collection;
 
+import com.movision.common.constant.PointConstant;
+import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.collection.entity.Collection;
 import com.movision.mybatis.collection.service.CollectionService;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
+import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import com.movision.utils.IdGenerator;
 import org.apache.commons.collections.map.AbstractHashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,12 @@ public class CollectionFacade {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private UserOperationRecordService userOperationRecordService;
+
+    @Autowired
+    private PointRecordFacade pointRecordFacade;
+
     //在帖子中点击收藏帖子调用该方法
     public int collectionPost(String postid, String userid, String type) {
 
@@ -36,6 +46,26 @@ public class CollectionFacade {
         int count = collectionService.checkIsHave(collection);
 
         if (count == 0) {
+
+            //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------start
+            //判断该用户有没有首次关注过圈子或有没有点赞过帖子评论等或有没有收藏过商品帖子活动
+            UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(Integer.parseInt(userid));
+            if (null == entiy || entiy.getIscollect() == 0) {
+                //如果未收藏过帖子或商品的话,首次收藏赠送积分
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.first_collect.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                UserOperationRecord userOperationRecord = new UserOperationRecord();
+                userOperationRecord.setUserid(Integer.parseInt(userid));
+                userOperationRecord.setIscollect(1);
+                if (null == entiy) {
+                    //不存在新增
+                    userOperationRecordService.insertUserOperationRecord(userOperationRecord);
+                } else if (entiy.getIscollect() == 0) {
+                    //存在更新
+                    userOperationRecordService.updateUserOperationRecord(userOperationRecord);
+                }
+            }
+            //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------end
+
             //该帖子的被收藏次数+1
             collectionService.addCollectionSum(Integer.parseInt(postid));
             return collectionService.collectionPost(collection);
@@ -72,6 +102,26 @@ public class CollectionFacade {
         int count = collectionService.checkIsHaveGoods(collection);
 
         if (count == 0) {
+
+            //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------start
+            //判断该用户有没有首次关注过圈子或有没有点赞过帖子评论等或有没有收藏过商品帖子活动
+            UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(Integer.parseInt(userid));
+            if (null == entiy || entiy.getIscollect() == 0) {
+                //如果未收藏过帖子或商品的话,首次收藏赠送积分
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.first_collect.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                UserOperationRecord userOperationRecord = new UserOperationRecord();
+                userOperationRecord.setUserid(Integer.parseInt(userid));
+                userOperationRecord.setIscollect(1);
+                if (null == entiy) {
+                    //不存在新增
+                    userOperationRecordService.insertUserOperationRecord(userOperationRecord);
+                } else if (entiy.getIscollect() == 0) {
+                    //存在更新
+                    userOperationRecordService.updateUserOperationRecord(userOperationRecord);
+                }
+            }
+            //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------end
+
             //加入一条收藏记录(商品表不记收藏总数，直接插入流水即可)
             return collectionService.collectionGoods(collection);
         } else {
