@@ -237,7 +237,9 @@ public class UserFacade {
      * 判断当前用户是否需要添加【完善个人资料】的积分记录
      */
     private void addPointProcess() {
+        //查询是否存在该用户的完善个人资料的积分记录
         PointRecord pointRecord = pointRecordService.selectFinishPersonDataPointRecord(ShiroUtil.getAppUserID());
+        //若不存在，才能进行完善个人资料的积分操作
         if (null == pointRecord) {
             //获取当前用户信息
             User user = userService.selectByPrimaryKey(ShiroUtil.getAppUserID());
@@ -246,16 +248,10 @@ public class UserFacade {
                     && StringUtils.isNotBlank(user.getPhoto())
                     && StringUtils.isNotBlank(String.valueOf(user.getSex()))
                     && StringUtils.isNotBlank(user.getSign())) {
-                //添加完善个人资料积分记录
+
+
                 pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode());
 
-                //修改个人总积分
-                int newPoint = user.getPoints() + PointConstant.POINT.finish_personal_data.getCode();
-                user.setPoints(newPoint);
-                userService.updateByPrimaryKeySelective(user);
-
-                //修改session中的个人信息
-                ShiroUtil.updateAppuser(user);
             }
         }
     }
