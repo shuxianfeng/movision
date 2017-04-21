@@ -80,7 +80,7 @@ public class PointRecordFacade {
 
 
     /**
-     * 增加积分流水
+     * 增加积分流水+增加用户积分+改变session用户积分
      * <p>
      * 下面几种特殊情况，积分会不一样
      * 1 打赏 每日前5次，每次加5分
