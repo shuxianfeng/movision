@@ -239,7 +239,7 @@ public class AlipayFacade {
 
                     //更改订单状态，记录流水号、实际支付金额、交易时间、支付方式
                     int type = 1;//支付宝类型为1  微信为2
-                    updateOrderPayBack.updateOrder(tradenoarray, trade_no, intime, type, total_amount);
+                    updateOrderPayBack.updateOrder(tradenoarray, trade_no, intime, type, total_amount);//公共方法（微信支付宝支付公用）
 
                 } else if (code.equals("20000")) {
                     log.info("返回码code>>>>>>>>>>>" + code + ",处理结果>>>>>>>>>>>>>>" + msg);
