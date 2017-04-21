@@ -33,7 +33,7 @@ public class AppIndexController {
     private PostSearchService postSearchService;
 
 
-    @ApiOperation(value = "首页数据返回接口", notes = "用户返回首页整版数据", response = Response.class)
+    @ApiOperation(value = "首页数据返回接口", notes = "用户返回首页整版数据(活动贴的话 enddays为-1活动还未开始 为0活动已结束 为其他时为距离结束的剩余天数)", response = Response.class)
     @RequestMapping(value = "index", method = RequestMethod.POST)
     public Response queryIndexData(@ApiParam(value = "用户id") @RequestParam(required = false) String userid) {
         Response response = new Response();
