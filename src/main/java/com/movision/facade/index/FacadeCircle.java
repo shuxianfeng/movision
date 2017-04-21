@@ -187,6 +187,7 @@ public class FacadeCircle {
         int count = circleService.queryFollowSum(parammap);
         if (count == 0) {
 
+            //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------start
             //判断该用户有没有首次关注过圈子或有没有点赞过帖子评论等或有没有收藏过商品帖子活动
             UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(Integer.parseInt(userid));
             if (null == entiy || entiy.getIsfollow() == 0) {
@@ -203,6 +204,7 @@ public class FacadeCircle {
                     userOperationRecordService.updateUserOperationRecord(userOperationRecord);
                 }
             }
+            //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------end
 
             circleService.followCircle(parammap);
             return 0;//未关注过该圈子
