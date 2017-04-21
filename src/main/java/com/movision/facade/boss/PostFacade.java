@@ -1464,7 +1464,7 @@ public class PostFacade {
             map.put("title", title);
         }
         if (name != null) {
-            map.put("name", name);
+            map.put("userid", name);
         }
         if (content != null) {
             map.put("content", content);

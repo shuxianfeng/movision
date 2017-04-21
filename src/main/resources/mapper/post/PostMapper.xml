@@ -1701,9 +1701,10 @@
         <if test="title!=null">
             AND p.title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
         </if>
-        <if test="name!=null">
-            AND p.userid in(select id from yw_user WHERE nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%'))
+        <if test="userid!=null">
+            AND p.userid = #{userid,jdbcType=INTEGER}
         </if>
+        <!-- in(select id from yw_user WHERE nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')) -->
         <if test="content!=null">
             AND p.postcontent LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
         </if>
@@ -1715,15 +1716,15 @@
         </if>
 
         <!-- 未开始 -->
-        <if test="statue==1">
+        <if test="statue==0">
             AND a.begintime  <![CDATA[>]]> NOW()
         </if>
         <!-- 结束 -->
-        <if test="statue==2">
+        <if test="statue==1">
             AND NOW() <![CDATA[>]]> a.endtime
         </if>
         <!-- 报名中 -->
-        <if test="statue==3">
+        <if test="statue==2">
             AND ((NOW()  <![CDATA[>]]> a.begintime) AND (NOW() <![CDATA[<]]> a.endtime))
         </if>
 
