@@ -20,14 +20,14 @@ public class ImSystemInform implements Serializable {
 
     private String pushcontent;
 
-    private Integer isread;
+    private String informidentity;
 
-    public Integer getIsread() {
-        return isread;
+    public String getInformidentity() {
+        return informidentity;
     }
 
-    public void setIsread(Integer isread) {
-        this.isread = isread;
+    public void setInformidentity(String informidentity) {
+        this.informidentity = informidentity;
     }
 
     public String getPushcontent() {

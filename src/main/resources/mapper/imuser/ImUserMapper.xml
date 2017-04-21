@@ -77,9 +77,9 @@
     </select>
 
     <select id="selectAllAPPImuser" resultType="com.movision.mybatis.imuser.entity.ImUser">
-        SELECT *
-        FROM yw_im_user
-        WHERE TYPE = 1
-        ORDER BY create_time
+        SELECT u.accid FROM yw_im_user u LEFT JOIN yw_user w ON w.id=u.userid GROUP BY w.deviceno
+        UNION ALL
+        SELECT accid FROM t_device_accid
     </select>
+
 </mapper>

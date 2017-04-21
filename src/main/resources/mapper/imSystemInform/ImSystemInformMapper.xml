@@ -10,9 +10,10 @@
         <result column="inform_time" property="informTime" jdbcType="TIMESTAMP"/>
         <result column="title" property="title" jdbcType="VARCHAR"/>
         <result column="pushcontent" property="pushcontent" jdbcType="VARCHAR"/>
+        <result column="inform_identity" property="inform_identity" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, userid, from_accid, to_accids, body, inform_time, title,pushcontent
+        id, userid, from_accid, to_accids, body, inform_time, title,pushcontent,inform_identity
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -26,11 +27,11 @@
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
         insert into yw_im_system_informs (id, userid, from_accid,
-        to_accids, body, inform_time, title,pushcontent
+        to_accids, body, inform_time, title,pushcontent,inform_identity
         )
         values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{fromAccid,jdbcType=VARCHAR},
         #{toAccids,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, #{informTime,jdbcType=TIMESTAMP},
-        #{title}, #{pushcontent,jdbcType=VARCHAR}
+        #{title}, #{pushcontent,jdbcType=VARCHAR}, #{informidentity,jdbcType=VARCHAR}
         )
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
@@ -58,6 +59,10 @@
             <if test="pushcontent!=null">
                 pushcontent,
             </if>
+            <if test="informidentity!=null">
+                inform_identity,
+            </if>
+
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -82,6 +87,10 @@
             <if test="pushcontent != null">
                 #{pushcontent,jdbcType=VARCHAR},
             </if>
+            <if test="informidentity != null">
+                #{informidentity,jdbcType=VARCHAR},
+            </if>
+
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
@@ -106,8 +115,12 @@
                 title = #{title},
             </if>
             <if test="pushcontent !=null">
-                pushcontent = #{pushcontent,jdbcType=VARCHAR}
+                pushcontent = #{pushcontent,jdbcType=VARCHAR},
             </if>
+            <if test="informidentity !=null">
+                informidentity = #{informidentity,jdbcType=VARCHAR}
+            </if>
+
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -118,12 +131,13 @@
         to_accids = #{toAccids,jdbcType=VARCHAR},
         body = #{body,jdbcType=VARCHAR},
         inform_time = #{informTime,jdbcType=TIMESTAMP},
-        title = #{title},pushcontent = #{pushcontent,jdbcType=VARCHAR}
+        title = #{title},pushcontent = #{pushcontent,jdbcType=VARCHAR},inform_identity =
+        #{informidentity,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
     <select id="findAll" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
-        SELECT id,userid,from_accid,body,inform_time,title,pushcontent
+        SELECT id,userid,from_accid,body,inform_time,title,pushcontent,inform_identity
         FROM yw_im_system_informs
         ORDER BY inform_time DESC
     </select>

@@ -6,6 +6,7 @@ import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
+import com.movision.mybatis.deviceAccid.entity.DeviceAccid;
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
 import com.movision.mybatis.imFirstDialogue.entity.ImMsg;
 import com.movision.mybatis.imFirstDialogue.service.ImFirstDialogueService;
@@ -434,9 +435,9 @@ public class ImFacade {
      * @throws IOException
      */
     public void sendSystemInform(String body, String title, String pushcontent) throws IOException {
-
+        Date date = new Date();
+        long informidentity = date.getTime();
         ImUser imUser = this.getImuserByCurrentBossuser();
-
         List<ImUser> imAppUserList = imUserService.selectAllAPPImuser();
         if (ListUtil.isNotEmpty(imAppUserList)) {
             int size = imAppUserList.size();
@@ -452,11 +453,11 @@ public class ImFacade {
                      *     i=2, 即第1001-1002人，   取两人
                      */
                     int eachSize = i < mutiple ? 500 : size - mutiple * 500;
-                    sendAndRecord(body, imUser, imAppUserList, eachSize, i, title, pushcontent);
+                    sendAndRecord(body, imUser, imAppUserList, eachSize, i, title, pushcontent, informidentity);
                 }
             } else {
                 //不超过500人
-                sendAndRecord(body, imUser, imAppUserList, size, 0, title, pushcontent);
+                sendAndRecord(body, imUser, imAppUserList, size, 0, title, pushcontent, informidentity);
             }
         }
     }
@@ -472,14 +473,14 @@ public class ImFacade {
      * @param multiple
      * @throws IOException
      */
-    private void sendAndRecord(String body, ImUser imUser, List<ImUser> imAppUserList, int size, int multiple, String title, String pushcontent) throws IOException {
+    private void sendAndRecord(String body, ImUser imUser, List<ImUser> imAppUserList, int size, int multiple, String title, String pushcontent, long informidentity) throws IOException {
         //不足500人
         String toAccids = prepareToAccids(imAppUserList, size, multiple);
 
         Map result = this.sendSystemInform(body, imUser.getAccid(), toAccids, pushcontent);
         if (result.get("code").equals(200)) {
             log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
-            this.recordSysInforms(body, imUser.getAccid(), toAccids, title, pushcontent);
+            this.recordSysInforms(body, imUser.getAccid(), toAccids, title, pushcontent, informidentity);
         } else {
             throw new BusinessException(MsgCodeConstant.send_system_msg_fail, "发送系统通知失败");
         }
@@ -534,7 +535,7 @@ public class ImFacade {
      * @param fromaccid
      * @param toAccids
      */
-    public void recordSysInforms(String body, String fromaccid, String toAccids, String title, String pushcontent) {
+    public void recordSysInforms(String body, String fromaccid, String toAccids, String title, String pushcontent, long informidentity) {
 
         ImSystemInform imSystemInform = new ImSystemInform();
         imSystemInform.setBody(body);
@@ -544,6 +545,7 @@ public class ImFacade {
         imSystemInform.setTitle(title);
         imSystemInform.setPushcontent(pushcontent);
         imSystemInform.setInformTime(new Date());
+        imSystemInform.setInformidentity(String.valueOf(informidentity));
         //每次取500个人
         imSystemInformService.add(imSystemInform);
     }
@@ -671,8 +673,8 @@ public class ImFacade {
         int result = systemPushService.addPush(systemPush);
         List<String> list = systemPushService.findAllPhone();
         int pageNo = 1;
-        int pageSize = 17;
-        if (list.size() <= 20) {
+        int pageSize = 200;
+        if (list.size() <= 200) {
             for (int i = 0; i < list.size(); i++) {
                 String mobile = "";
                 mobile += list.get(i) + ",";
@@ -684,7 +686,7 @@ public class ImFacade {
             }
             }
         int totalPageNum = (list.size() + pageSize - 1) / pageSize;
-        if (list.size() > 17) {
+        if (list.size() > 200) {
             for (int j = 0; j <= totalPageNum; j++) {
                 Paging pa = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
                 List<String> phone = systemPushService.findPhone(pa);
