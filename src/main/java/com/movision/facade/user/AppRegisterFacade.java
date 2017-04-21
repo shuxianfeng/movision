@@ -129,9 +129,9 @@ public class AppRegisterFacade {
                         //2.1 手机号不存在,则新增用户信息
                         userid = this.registerMember(member);
                         //2.2 增加新用户注册积分流水
-                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.new_user_register.getCode());
+                        pointRecordFacade.addPointRecordOnly(PointConstant.POINT_TYPE.new_user_register.getCode());
                         //2.3 增加绑定手机号积分流水
-                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.binding_phone.getCode());
+                        pointRecordFacade.addPointRecordOnly(PointConstant.POINT_TYPE.binding_phone.getCode());
                     }
                     log.info("【获取userid】:" + userid);
 
@@ -189,11 +189,11 @@ public class AppRegisterFacade {
                     User user = userService.selectByPrimaryKey(userid);
                     if (null != user) {
                         //1 增加绑定手机号积分流水
-                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.binding_phone.getCode());
+                        pointRecordFacade.addPointRecordOnly(PointConstant.POINT_TYPE.binding_phone.getCode());
 
                         int newPoint = user.getPoints() + PointConstant.POINT.binding_phone.getCode();
-                        user.setPoints(newPoint);
-                        user.setPhone(phone);
+                        user.setPoints(newPoint);   //积分
+                        user.setPhone(phone);   //手机号
                         //2 修改用户基本信息
                         userService.updateByPrimaryKeySelective(user);
                         //3 更新session用户信息
@@ -391,7 +391,7 @@ public class AppRegisterFacade {
                 user.setPhone(phone);   //手机号
                 user.setToken(member.getToken());   //token
                 user.setDeviceno(member.getDeviceno()); //设备号
-                user.setPoints(35); //积分：注册25+绑定手机15
+                user.setPoints(35); //积分：注册+绑定手机
 
                 memberId = userService.insertSelective(user);
             }
@@ -488,7 +488,7 @@ public class AppRegisterFacade {
             result.put("imuser", newImUser);
 
             //3.3 新用户注册需要添加积分记录
-            pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.new_user_register.getCode());
+            pointRecordFacade.addPointRecordOnly(PointConstant.POINT_TYPE.new_user_register.getCode());
 
         } else {
             /**
