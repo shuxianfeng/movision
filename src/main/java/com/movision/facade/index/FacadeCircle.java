@@ -1,5 +1,7 @@
 package com.movision.facade.index;
 
+import com.movision.common.constant.PointConstant;
+import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
@@ -11,6 +13,8 @@ import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
+import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import org.apache.commons.beanutils.converters.IntegerConverter;
 import org.apache.commons.collections.iterators.ObjectArrayIterator;
 import org.apache.commons.collections.map.HashedMap;
@@ -44,6 +48,12 @@ public class FacadeCircle {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserOperationRecordService userOperationRecordService;
+
+    @Autowired
+    private PointRecordFacade pointRecordFacade;
 
     public CircleVo queryCircleIndex1(String circleid, String userid) {
 
@@ -176,6 +186,25 @@ public class FacadeCircle {
         parammap.put("intime", new Date());
         int count = circleService.queryFollowSum(parammap);
         if (count == 0) {
+
+            //判断该用户有没有首次关注过圈子或有没有点赞过帖子评论等或有没有收藏过商品帖子活动
+            UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(Integer.parseInt(userid));
+            if (null == entiy || entiy.getIsfollow() == 0) {
+                //如果未关注过圈子或者人的话,首次关注赠送积分
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.first_focus.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                UserOperationRecord userOperationRecord = new UserOperationRecord();
+                userOperationRecord.setUserid(Integer.parseInt(userid));
+                userOperationRecord.setIsfollow(1);
+                if (null == entiy) {
+                    //不存在新增
+                    userOperationRecordService.insertUserOperationRecord(userOperationRecord);
+                }
+                if (entiy.getIsfollow() == 0) {
+                    //存在更新
+                    userOperationRecordService.updateUserOperationRecord(userOperationRecord);
+                }
+            }
+
             circleService.followCircle(parammap);
             return 0;//未关注过该圈子
         } else {
