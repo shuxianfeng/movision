@@ -496,7 +496,7 @@ public class AppRegisterFacade {
         ImUser imUser = new ImUser();
         imUser.setUserid(userid);
         imUser.setAccid(CheckSumBuilder.getAccid(String.valueOf(userid)));
-        imUser.setName(StrUtil.genDefaultNicknameByQQ(account));
+        imUser.setName(StrUtil.genDefaultNickNameForOpenid());
         return imFacade.AddImUser(imUser);
     }
 
@@ -534,7 +534,7 @@ public class AppRegisterFacade {
         User newUser = new User();
         newUser.setToken(tokenJson);    //token
         setUserThirdAccount(flag, account, newUser);
-        newUser.setNickname(StrUtil.genDefaultNicknameByQQ(account));    //昵称
+        newUser.setNickname(StrUtil.genDefaultNickNameForOpenid());    //昵称
         newUser.setDeviceno(deviceno);  //设备号
         newUser.setPoints(25);  //注册25分
         return userService.insertSelective(newUser);

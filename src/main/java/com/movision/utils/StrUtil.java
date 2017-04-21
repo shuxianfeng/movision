@@ -22,8 +22,12 @@ public class StrUtil {
         return "mofo_" + str.substring(0, str.length() - (str.substring(3)).length()) + "***" + str.substring(5);
     }
 
+    public static String genDefaultNickNameForOpenid() {
+        return "mofo_" + System.currentTimeMillis();
+    }
+
     public static void main(String[] args) {
-        System.out.println(genDefaultNicknameByQQ("747369066"));
+        System.out.println(genDefaultNickNameForOpenid());
     }
 
 }

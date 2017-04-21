@@ -135,7 +135,7 @@ public class AppLoginController {
     @ApiOperation(value = "注册QQ/微信/微博账号", notes = "注册QQ/微信/微博账号", response = Response.class)
     @RequestMapping(value = {"/registe_by_third_account"}, method = RequestMethod.POST)
     public Response registeByQQ(@ApiParam(value = "第三方登录方式标示。1:QQ， 2:微信， 3:微博 ") @RequestParam Integer flag,
-                                @ApiParam(value = "QQ号/微信号/微博号") @RequestParam String account,
+                                @ApiParam(value = "QQ号/微信号/微博号(填对应的openid)") @RequestParam String account,
                                 @ApiParam(value = "唯一标示：openid") @RequestParam String openid,
                                 @ApiParam(value = "当前设备号") @RequestParam String deviceno) throws Exception {
         if (flag == 1) {
@@ -160,8 +160,8 @@ public class AppLoginController {
     @ApiOperation(value = "第三方平台账号登录（QQ/Weixin/Weibo）", notes = "第三方平台账号登录（QQ/Weixin/Weibo）", response = Response.class)
     @RequestMapping(value = {"/login_by_third_account"}, method = RequestMethod.POST)
     public Response loginByThirdAccont(@ApiParam(value = "第三方登录方式标示。1:QQ， 2:微信， 3:微博 ") @RequestParam Integer flag,
-                                       @ApiParam(value = "QQ/weixin/weibo") @RequestParam String account,
-                              @ApiParam(value = "token") @RequestParam String appToken) throws Exception {
+                                       @ApiParam(value = "QQ/weixin/weibo（填对应的openid）") @RequestParam String account,
+                                       @ApiParam(value = "token") @RequestParam String appToken) throws Exception {
 
         Response response = new Response();
         try {
