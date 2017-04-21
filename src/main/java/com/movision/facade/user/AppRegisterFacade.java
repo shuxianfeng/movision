@@ -129,9 +129,9 @@ public class AppRegisterFacade {
                         //2.1 手机号不存在,则新增用户信息
                         userid = this.registerMember(member);
                         //2.2 增加新用户注册积分流水
-                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.new_user_register.getCode(), 0);
+                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.new_user_register.getCode());
                         //2.3 增加绑定手机号积分流水
-                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.binding_phone.getCode(), 0);
+                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.binding_phone.getCode());
                     }
                     log.info("【获取userid】:" + userid);
 
@@ -189,7 +189,7 @@ public class AppRegisterFacade {
                     User user = userService.selectByPrimaryKey(userid);
                     if (null != user) {
                         //1 增加绑定手机号积分流水
-                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.binding_phone.getCode(), 0);
+                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.binding_phone.getCode());
 
                         int newPoint = user.getPoints() + PointConstant.POINT.binding_phone.getCode();
                         user.setPoints(newPoint);
@@ -487,7 +487,7 @@ public class AppRegisterFacade {
             result.put("imuser", newImUser);
 
             //3.3 新用户注册需要添加积分记录
-            pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.new_user_register.getCode(), 0);
+            pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.new_user_register.getCode());
 
         } else {
             //3 更新原来的token

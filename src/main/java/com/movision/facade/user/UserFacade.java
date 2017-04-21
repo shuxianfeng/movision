@@ -247,7 +247,7 @@ public class UserFacade {
                     && StringUtils.isNotBlank(String.valueOf(user.getSex()))
                     && StringUtils.isNotBlank(user.getSign())) {
                 //添加完善个人资料积分记录
-                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode(), 0);
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode());
 
                 //修改个人总积分
                 int newPoint = user.getPoints() + PointConstant.POINT.finish_personal_data.getCode();

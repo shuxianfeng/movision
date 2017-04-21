@@ -86,11 +86,10 @@ public class PointRecordFacade {
      *
      * @param type    积分类型
      *                （无下单送积分，该积分流水已经在下单接口中处理了）
-     * @param orderid 订单id--对应下单赚积分，只要下单赚积分需要传订单号，其他情况只需要传0即可
      * @param
      * @return
      */
-    public int addPointRecord(int type, Integer orderid) {
+    public int addPointRecord(int type) {
 
         log.info("调用【增加积分流水】接口，本次操作存在积分变动");
         //获取每日的积分数据
@@ -98,9 +97,9 @@ public class PointRecordFacade {
         PersonPointStatistics todayStatistics = this.getMyTotalPointStatics(todayList);
         //个人历史积分数据
         List<PointRecord> historyList = pointRecordService.queryAllMyPointRecord(ShiroUtil.getAppUserID());
-        PersonPointStatistics historyStatistics = this.getMyTotalPointStatics(historyList);
+//        PersonPointStatistics historyStatistics = this.getMyTotalPointStatics(historyList);
 
-        int new_point = getPointByPointType(type, todayStatistics, historyStatistics, orderid);
+        int new_point = getPointByPointType(type, todayStatistics);
         log.info("【增加积分流水】该积分类型type=" + type + ", 该类型对应的积分是：" + new_point);
 
         PointRecord pointRecord = new PointRecord();
@@ -108,7 +107,7 @@ public class PointRecordFacade {
         pointRecord.setIsadd(PointConstant.POINT_ADD);
         pointRecord.setPoint(new_point);
         pointRecord.setType(type);
-        pointRecord.setOrderid(orderid);
+        pointRecord.setOrderid(0);
 
         return pointRecordService.addPointRecord(pointRecord);
     }
@@ -122,7 +121,7 @@ public class PointRecordFacade {
      * @param type
      * @return
      */
-    private int getPointByPointType(int type, PersonPointStatistics todayStatistics, PersonPointStatistics historyStatistics, int orderid) {
+    private int getPointByPointType(int type, PersonPointStatistics todayStatistics) {
         int new_point = 0;
         int rewardCount = todayStatistics.getRewardCount(),
                 postCount = todayStatistics.getPostCount(), //今日发帖数
