@@ -1,6 +1,7 @@
 package com.movision.facade.boss;
 
 import com.movision.fsearch.utils.StringUtil;
+import com.movision.mybatis.auditVipDetail.service.AuditVipDetailService;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.province.entity.ProvinceVo;
@@ -21,10 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author zhurui
@@ -43,6 +41,9 @@ public class UserManageFacade {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private AuditVipDetailService auditVipDetailService;
 
 
     //用于返回用户登录状态
@@ -435,6 +436,43 @@ public class UserManageFacade {
         return userService.deleteUserLevl(map);
     }
 
+    /**
+     * 用户加V审核
+     *
+     * @param userid
+     * @param status
+     * @param cause
+     * @return
+     */
+    public Integer updateVipAudit(String userid, String loginid, String appyid, String status, String cause) {
+        if (status.equals("0")) {//通过
+            Map map = new HashMap();
+            map.put("userid", userid);
+            map.put("status", status);
+            map.put("type", 1);
+            map.put("appyid", appyid);
+            map.put("loginid", loginid);
+            map.put("auditTime", new Date());
+            userService.deleteUserLevl(map);//更新用户加V状态
+            return auditVipDetailService.insertVIPDetail(map);
+        } else if (status.equals("1")) {//未通过
+            Map map = new HashMap();
+            map.put("userid", userid);
+            map.put("status", status);
+            map.put("reason", cause);
+            map.put("appyid", appyid);
+            map.put("loginid", loginid);
+            map.put("auditTime", new Date());
+            Integer res = auditVipDetailService.queryVipDetail(map);
+            if (res.equals(1)) {
+                return auditVipDetailService.updateVipDetail(map);
+            } else {
+                return auditVipDetailService.insertVIPDetail(map);
+            }
+        } else {
+            return -1;
+        }
+    }
     /**
      * 查询用户积分流水列表
      *

@@ -466,7 +466,7 @@
 
     <!-- 查看VIP申请列表 -->
     <select id="findAllqueryUsers" resultType="com.movision.mybatis.user.entity.UserVo">
-        SELECT u.id,u.nickname,u.phone,u.level,u.status,
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,vd.id AS appyid,
         (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) AS autonym,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
@@ -478,9 +478,9 @@
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
         (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
         zansum,u.fans,u.applydate
-        FROM (yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id) LEFT JOIN yw_autonym_authentication au ON
+        FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id
-        WHERE vd.userid=u.id AND u.level=0 AND
+        WHERE vd.userid=u.id AND
         u.status=0
     </select>
 
@@ -814,6 +814,19 @@
         WHERE id=#{userid,jdbcType=INTEGER}
     </update>
 
+    <update id="updateVIPDetail" parameterType="java.util.Map">
+        UPDATE yw_audit_vip_detail
+        <set>
+            <if test="status==0">
+                status=#{status,jdbcType=INTEGER},
+            </if>
+            <if test="status==1">
+                status=#{status,jdbcType=INTEGER},
+                reason=#{reason,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE
+    </update>
     <select id="queryUserParticulars" parameterType="java.lang.String"
             resultType="com.movision.mybatis.user.entity.UserParticulars">
         SELECT u.*,vd.audit_time as viptime,aut.name,aut.idnumber,

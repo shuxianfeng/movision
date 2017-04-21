@@ -8,6 +8,7 @@
         <result column="apply_userid" property="applyUserid" jdbcType="INTEGER"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP"/>
+        <result column="reason" property="reason" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, apply_id, userid, apply_userid, status, audit_time
@@ -24,10 +25,11 @@
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.auditVipDetail.entity.AuditVipDetail">
         insert into yw_audit_vip_detail (id, apply_id, userid,
-        apply_userid, status, audit_time
+        apply_userid, status, audit_time, reason
         )
         values (#{id,jdbcType=INTEGER}, #{applyId,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER},
-        #{applyUserid,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{auditTime,jdbcType=TIMESTAMP}
+        #{applyUserid,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},
+        #{auditTime,jdbcType=TIMESTAMP},#{reason,jdbcType=VARCHAR}
         )
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.auditVipDetail.entity.AuditVipDetail">
@@ -51,6 +53,9 @@
             <if test="auditTime != null">
                 audit_time,
             </if>
+            <if test="reason!=null">
+                reason,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -70,6 +75,9 @@
             </if>
             <if test="auditTime != null">
                 #{auditTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="reason!=null">
+                #{reason,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -91,6 +99,9 @@
             <if test="auditTime != null">
                 audit_time = #{auditTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="reason!=null">
+                reason=#{reason,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -100,7 +111,8 @@
         userid = #{userid,jdbcType=INTEGER},
         apply_userid = #{applyUserid,jdbcType=INTEGER},
         status = #{status,jdbcType=INTEGER},
-        audit_time = #{auditTime,jdbcType=TIMESTAMP}
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+        reason=#{reason,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -110,4 +122,83 @@
         FROM yw_audit_vip_detail
         WHERE apply_id = #{apply_id}
     </select>
+
+    <insert id="insertVIPDetail" parameterType="java.util.Map">
+        insert into yw_audit_vip_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="appyid != null">
+                apply_id,
+            </if>
+            <if test="loginid != null">
+                userid,
+            </if>
+            <if test="userid != null">
+                apply_userid,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="auditTime != null">
+                audit_time,
+            </if>
+            <if test="reason!=null">
+                reason,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="appyid != null">
+                #{appyid,jdbcType=INTEGER},
+            </if>
+            <if test="loginid != null">
+                #{loginid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="auditTime != null">
+                #{auditTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="reason!=null">
+                #{reason,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="queryVipDetail" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_audit_vip_detail WHERE apply_userid=#{userid,jdbcType=INTEGER}
+    </select>
+
+    <update id="updateVipDetail" parameterType="java.util.Map">
+        update yw_audit_vip_detail
+        <set>
+            <if test="appyid != null">
+                apply_id = #{appyid,jdbcType=INTEGER},
+            </if>
+            <if test="loginid != null">
+                userid = #{loginid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                apply_userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="auditTime != null">
+                audit_time = #{auditTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="reason!=null">
+                reason=#{reason,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where apply_userid = #{userid,jdbcType=INTEGER}
+    </update>
 </mapper>
