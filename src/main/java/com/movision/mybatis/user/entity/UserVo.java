@@ -80,6 +80,16 @@ public class UserVo implements Serializable {
 
     private Date addVtime;//加V时间
 
+    private Integer appyid;//申请id
+
+    public Integer getAppyid() {
+        return appyid;
+    }
+
+    public void setAppyid(Integer appyid) {
+        this.appyid = appyid;
+    }
+
     public Date getAddVtime() {
         return addVtime;
     }

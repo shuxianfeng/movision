@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
+
 /**
  * @Author zhuangyuhao
  * @Date 2017/4/21 10:20
@@ -30,5 +32,54 @@ public class AuditVipDetailService {
             throw e;
         }
     }
+
+    /**
+     * 加V申请审核
+     *
+     * @param map
+     * @return
+     */
+    public Integer insertVIPDetail(Map map) {
+        try {
+            log.info("加V申请审核");
+            return auditVipDetailMapper.insertVIPDetail(map);
+        } catch (Exception e) {
+            log.error("加V申请审核异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询用户是否申请过加V
+     *
+     * @param map
+     * @return
+     */
+    public Integer queryVipDetail(Map map) {
+        try {
+            log.info("查询用户是否申请过加V");
+            return auditVipDetailMapper.queryVipDetail(map);
+        } catch (Exception e) {
+            log.error("查询用户是否申请过加V异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 更新加V申请
+     *
+     * @param map
+     * @return
+     */
+    public Integer updateVipDetail(Map map) {
+        try {
+            log.info("更新加V申请");
+            return auditVipDetailMapper.updateVipDetail(map);
+        } catch (Exception e) {
+            log.error("更新加V申请异常", e);
+            throw e;
+        }
+    }
+
 
 }

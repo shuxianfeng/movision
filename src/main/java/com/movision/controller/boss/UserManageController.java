@@ -395,6 +395,30 @@ public class UserManageController {
     }
 
     /**
+     * 用户加V审核
+     *
+     * @param userid
+     * @param status
+     * @param cause
+     * @return
+     */
+    @ApiOperation(value = "用户加V审核", notes = "用于用户加V审核接口", response = Response.class)
+    @RequestMapping(value = "update_user_vip_audit", method = RequestMethod.POST)
+    public Response updateVipAudit(@ApiParam(value = "用户id") @RequestParam String userid,
+                                   @ApiParam(value = "登录用户") @RequestParam String loginid,
+                                   @ApiParam(value = "申请表id") @RequestParam String applyid,
+                                   @ApiParam(value = "审核状态 0通过 1未通过") @RequestParam String status,
+                                   @ApiParam(value = "驳回原因") @RequestParam(required = false) String cause) {
+        Response response = new Response();
+        int i = userManageFacade.updateVipAudit(userid, loginid, applyid, status, cause);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(i);
+        return response;
+    }
+
+    /**
      * 查询用户积分流水列表
      *
      * @param pageNo

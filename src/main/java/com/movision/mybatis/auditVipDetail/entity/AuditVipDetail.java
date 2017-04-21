@@ -15,6 +15,16 @@ public class AuditVipDetail {
 
     private Date auditTime;
 
+    private String reason;//审核未通过的理由
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
     public Integer getId() {
         return id;
     }
