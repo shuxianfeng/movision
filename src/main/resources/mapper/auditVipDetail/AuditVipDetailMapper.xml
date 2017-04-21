@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.auditVipDetail.mapper.AuditVipDetailMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.auditVipDetail.entity.AuditVipDetail">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="apply_id" property="applyId" jdbcType="INTEGER"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="apply_userid" property="applyUserid" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, apply_id, userid, apply_userid, status, audit_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_audit_vip_detail
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from yw_audit_vip_detail
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.auditVipDetail.entity.AuditVipDetail">
+        insert into yw_audit_vip_detail (id, apply_id, userid,
+        apply_userid, status, audit_time
+        )
+        values (#{id,jdbcType=INTEGER}, #{applyId,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER},
+        #{applyUserid,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{auditTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.auditVipDetail.entity.AuditVipDetail">
+        insert into yw_audit_vip_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="applyId != null">
+                apply_id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="applyUserid != null">
+                apply_userid,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="auditTime != null">
+                audit_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="applyId != null">
+                #{applyId,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="applyUserid != null">
+                #{applyUserid,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="auditTime != null">
+                #{auditTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.auditVipDetail.entity.AuditVipDetail">
+        update yw_audit_vip_detail
+        <set>
+            <if test="applyId != null">
+                apply_id = #{applyId,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="applyUserid != null">
+                apply_userid = #{applyUserid,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="auditTime != null">
+                audit_time = #{auditTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.auditVipDetail.entity.AuditVipDetail">
+        update yw_audit_vip_detail
+        set apply_id = #{applyId,jdbcType=INTEGER},
+        userid = #{userid,jdbcType=INTEGER},
+        apply_userid = #{applyUserid,jdbcType=INTEGER},
+        status = #{status,jdbcType=INTEGER},
+        audit_time = #{auditTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectByApplyId" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.auditVipDetail.entity.AuditVipDetail">
+        SELECT *
+        FROM yw_audit_vip_detail
+        WHERE apply_id = #{apply_id}
+    </select>
+</mapper>
