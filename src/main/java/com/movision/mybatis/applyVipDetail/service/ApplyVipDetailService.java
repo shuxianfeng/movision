@@ -30,4 +30,16 @@ public class ApplyVipDetailService {
             throw e;
         }
     }
+
+    public ApplyVipDetail selectLatestVipApplyRecord(Integer userid) {
+        try {
+            log.info("查询本人最新申请VIP的一条记录");
+            return applyVipDetailMapper.selectLatestVipApplyRecord(userid);
+        } catch (Exception e) {
+            log.error("查询本人最新申请VIP的一条记录失败", e);
+            throw e;
+        }
+    }
+
+
 }

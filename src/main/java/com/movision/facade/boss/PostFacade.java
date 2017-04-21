@@ -5,6 +5,10 @@ import com.movision.common.util.ShiroUtil;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.activePart.service.ActivePartService;
+import com.movision.mybatis.applyVipDetail.entity.ApplyVipDetail;
+import com.movision.mybatis.applyVipDetail.service.ApplyVipDetailService;
+import com.movision.mybatis.auditVipDetail.entity.AuditVipDetail;
+import com.movision.mybatis.auditVipDetail.service.AuditVipDetailService;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.circle.service.CircleService;
@@ -89,6 +93,12 @@ public class PostFacade {
 
     @Autowired
     private JsoupCompressImg jsoupCompressImg;
+
+    @Autowired
+    private ApplyVipDetailService applyVipDetailService;
+
+    @Autowired
+    private AuditVipDetailService auditVipDetailService;
 
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
@@ -1566,9 +1576,23 @@ public class PostFacade {
      * @return
      */
     public Map getMyVipApplyStatistics() {
+        Map result = new HashedMap();
+
+        queryPostDataAndCount(result);
+
+        queryVipApplyStatus(result);
+
+        return result;
+    }
+
+    /**
+     * 查询帖子的：发帖，首页精选，被赞， 被分享  等情况
+     *
+     * @param result
+     */
+    private void queryPostDataAndCount(Map result) {
         Map map = new HashedMap();
         map.put("userid", ShiroUtil.getAppUserID());
-        Map result = new HashedMap();
 
         List<Post> postList = postService.queryMyPostList(map);
         if (ListUtil.isNotEmpty(postList)) {
@@ -1599,8 +1623,40 @@ public class PostFacade {
             result.put("selected_count_flag", false);
             result.put("support_count_flag", false);
             result.put("share_count_flag", false);
+
+            result.put("publish_count", 0);
+            result.put("selected_count", 0);
+            result.put("support_count", 0);
+            result.put("share_count", 0);
         }
-        return result;
+    }
+
+    /**
+     * 查询申请VIP的状态
+     *
+     * @param result
+     */
+    private void queryVipApplyStatus(Map result) {
+        ApplyVipDetail latestApplyVipDetail = applyVipDetailService.selectLatestVipApplyRecord(ShiroUtil.getAppUserID());
+        if (null == latestApplyVipDetail) {
+            result.put("status_code", "3");
+            result.put("status_msg", "未申请");
+        } else {
+            AuditVipDetail auditVipDetail = auditVipDetailService.selectByApplyId(latestApplyVipDetail.getId());
+            if (null == auditVipDetail) {
+                result.put("status_code", "2");
+                result.put("status_msg", "待审核");
+            } else {
+                Integer status = auditVipDetail.getStatus();
+                if (status == 0) {
+                    result.put("status_code", "0");
+                    result.put("status_msg", "审核通过");
+                } else {
+                    result.put("status_code", "1");
+                    result.put("status_msg", "审核不通过");
+                }
+            }
+        }
     }
 
     /**

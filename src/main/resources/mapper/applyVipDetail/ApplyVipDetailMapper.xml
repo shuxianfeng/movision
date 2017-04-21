@@ -75,5 +75,12 @@
         apply_level = #{applyLevel,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
-
+    <select id="selectLatestVipApplyRecord" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.applyVipDetail.entity.ApplyVipDetail">
+        SELECT *
+        FROM yw_apply_vip_detail
+        WHERE userid = #{userid}
+        order by apply_time DESC
+        limit 1
+    </select>
 </mapper>

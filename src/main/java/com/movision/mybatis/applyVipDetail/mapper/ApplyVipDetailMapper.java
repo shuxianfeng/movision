@@ -1,6 +1,7 @@
 package com.movision.mybatis.applyVipDetail.mapper;
 
 import com.movision.mybatis.applyVipDetail.entity.ApplyVipDetail;
+import org.apache.ibatis.annotations.Param;
 
 public interface ApplyVipDetailMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +15,6 @@ public interface ApplyVipDetailMapper {
     int updateByPrimaryKeySelective(ApplyVipDetail record);
 
     int updateByPrimaryKey(ApplyVipDetail record);
+
+    ApplyVipDetail selectLatestVipApplyRecord(@Param("userid") Integer userid);
 }
