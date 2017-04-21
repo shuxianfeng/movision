@@ -8,10 +8,12 @@ import com.movision.utils.L;
 import org.apache.ibatis.annotations.Param;
 import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public interface UserMapper {
 
     int deleteByPrimaryKey(Integer id);

@@ -2,12 +2,9 @@ package com.movision.mybatis.user.service;
 
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.post.entity.ActiveVo;
-import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.mapper.PostMapper;
 import com.movision.mybatis.province.entity.ProvinceVo;
-import com.movision.mybatis.submission.entity.Submission;
-import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.mapper.UserMapper;
 import com.movision.utils.pagination.model.Paging;
@@ -17,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -422,7 +418,7 @@ public class UserService {
     /**
      * 查询圈主和管理员
      *
-     * @param pager
+     * @param
      * @return
      */
     public List<User> queryCircleManList() {
@@ -698,6 +694,4 @@ public class UserService {
             throw e;
         }
     }
-
-
 }
