@@ -198,8 +198,7 @@ public class FacadeCircle {
                 if (null == entiy) {
                     //不存在新增
                     userOperationRecordService.insertUserOperationRecord(userOperationRecord);
-                }
-                if (entiy.getIsfollow() == 0) {
+                } else if (entiy.getIsfollow() == 0) {
                     //存在更新
                     userOperationRecordService.updateUserOperationRecord(userOperationRecord);
                 }

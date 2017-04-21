@@ -201,6 +201,26 @@ public class OrderService {
         }
     }
 
+    public void addPoints(Map<String, Object> map) {
+        try {
+            log.info("购买租赁商品后增加用户积分数");
+            ordersMapper.addPoints(map);
+        } catch (Exception e) {
+            log.error("购买租赁商品后增加用户积分数失败");
+            throw e;
+        }
+    }
+
+    public void addPointsRecored(Map<String, Object> map) {
+        try {
+            log.info("购买租赁商品后增加用户积分记录");
+            ordersMapper.addPointsRecored(map);
+        } catch (Exception e) {
+            log.error("购买租赁商品后增加用户积分记录失败");
+            throw e;
+        }
+    }
+
     public void updateOrderByIntegral(Integer id) {
         try {
             log.info("退款成功后变更使用优惠券状态");

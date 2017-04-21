@@ -26,7 +26,7 @@ public class UpdateOrderPayBack {
     private OrderService orderService;
 
     @Transactional
-    public void updateOrder(int id, String trade_no, Date intime, int type) {
+    public void updateOrder(int id, String trade_no, Date intime, int type, String total_amount) {
         //type  支付方式：1支付宝 2微信;   ids 订单号int数组;   trade_no 支付流水号; intime 交易时间
         log.info("更新商品订单>>>>>>>>>>>>>>>>>>>");
         Map<String, Object> parammap = new HashMap<>();
@@ -49,7 +49,17 @@ public class UpdateOrderPayBack {
             orderService.updateStock(map);
         }
 
-        System.out.println("");
+        //给用户赠送积分（按实付金额取整）
+        log.info("增加用户积分>>>>>>>>>>>>>>>>>>>");
+        int points = (int) Double.parseDouble(total_amount);//需要增加的积分数
+        if (points >= 1) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", id);
+            map.put("points", points);
+            orderService.addPoints(map);//增加积分
+            orderService.addPointsRecored(map);//增加积分流水
+        }
+        System.out.println("订单信息同步更新成功");
     }
 
 }

@@ -56,6 +56,17 @@
         delete from yw_orders
         where id = #{id,jdbcType=INTEGER}
     </delete>
+
+    <!--用户购买或租赁成功后给用户增加积分流水-->
+    <insert id="addPointsRecored" parameterType="java.util.Map">
+        INSERT INTO yw_points_record(
+            userid, point, isadd, type, orderid, intime, isdel
+        )VALUES (
+            (SELECT userid FROM yw_orders WHERE id = #{id,jdbcType=INTEGER}),
+            #{points,jdbcType=INTEGER}, '0', '18', #{id,jdbcType=INTEGER}, now(), '0'
+        )
+    </insert>
+
     <insert id="insert" parameterType="com.movision.mybatis.orders.entity.Orders">
         insert into yw_orders (id, ordernumber, userid,
         addressid, takeway, position,
@@ -492,6 +503,12 @@
         UPDATE yw_orders
         SET status = '4'
         WHERE ordernumber = #{ordernumber,jdbcType=VARCHAR}
+    </update>
+
+    <!--购买或租赁成功后增加用户积分数-->
+    <update id="addPoints" parameterType="java.util.Map">
+        UPDATE yw_user SET points = points + #{points,jdbcType=INTEGER}
+        WHERE id = (SELECT userid FROM yw_orders WHERE id = #{id,jdbcType=INTEGER})
     </update>
 
     <select id="queryOrdersListByTradingAccount" parameterType="java.lang.String" resultType="java.lang.Integer">

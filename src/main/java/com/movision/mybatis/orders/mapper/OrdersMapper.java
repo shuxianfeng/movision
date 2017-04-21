@@ -33,6 +33,10 @@ public interface OrdersMapper {
 
     List<Orders> findAllMyOrderList(RowBounds rowBounds, Map map);
 
+    void addPoints(Map<String, Object> map);
+
+    void addPointsRecored(Map<String, Object> map);
+
     void updateOrderByIntegral(Integer id);
 
     void updateOrderDiscount(String couponsid);
