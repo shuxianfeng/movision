@@ -1460,13 +1460,13 @@ public class PostFacade {
      */
     public List<PostActiveList> queryAllActivePostCondition(String title, String name, String content, String begintime, String endtime, String statue, String pai, String loginid, Paging<PostActiveList> pager) {
         Map<String, Object> map = new HashedMap();
-        if (title != null) {
+        if (StringUtil.isNotEmpty(title)) {
             map.put("title", title);
         }
-        if (name != null) {
+        if (StringUtil.isNotEmpty(name)) {
             map.put("userid", name);
         }
-        if (content != null) {
+        if (StringUtil.isNotEmpty(content)) {
             map.put("content", content);
         }
 
