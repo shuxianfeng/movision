@@ -11,24 +11,24 @@ public class PointConstant {
      * 获得积分的类型
      */
     public enum POINT_TYPE {
-        new_user_register(1),
-        finish_personal_data(2),
-        binding_phone(3),
-        first_focus(4),
-        first_collect(5),
+        new_user_register(1),   //新用户注册：1手机注册 2第三方注册
+        finish_personal_data(2),    //完善个人资料
+        binding_phone(3),   //绑定手机号：1手机注册 2第三方账号登录绑定手机号
+        first_focus(4), //首次关注
+        first_collect(5),   //首次收藏
         //        first_share(6),
-//        first_comment(7),
-        first_support(8),
+        //        first_comment(7),
+        first_support(8),   //首次点赞
         //        first_post(9),
-        comment_app(10),
-        sign(11),
-        reward(12),
-        post(13),
-        comment(14),
-        share(15),
-        index_selected(16),
-        circle_selected(17),
-        place_order(18);    //下单
+        comment_app(10),    //评价APP
+        sign(11),   //签到--每人每天只能签到一次
+        reward(12), //打赏
+        post(13),   //发帖(指的是APP的发帖)
+        comment(14),    //评论
+        share(15),  //分享
+        index_selected(16), //首页精选
+        circle_selected(17),    //帖子精选
+        place_order(18);    //下单（并成功付款）--在下单接口中处理了
 
         public final int code;
 

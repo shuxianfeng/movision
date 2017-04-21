@@ -85,7 +85,8 @@ public class PointRecordFacade {
      * 其他情况正常加分
      *
      * @param type    积分类型
-     * @param orderid 订单id--对应下单赚积分，只要下单传积分需要传订单号，其他情况只需要传0即可
+     *                （无下单送积分，该积分流水已经在下单接口中处理了）
+     * @param orderid 订单id--对应下单赚积分，只要下单赚积分需要传订单号，其他情况只需要传0即可
      * @param
      * @return
      */
@@ -115,6 +116,8 @@ public class PointRecordFacade {
 
     /**
      * 根据积分类型，分配对应的加分数值
+     *
+     * （无下单送积分，该积分流水已经在下单接口中处理了）
      *
      * @param type
      * @return
@@ -241,14 +244,14 @@ public class PointRecordFacade {
         } else if (type == PointConstant.POINT_TYPE.circle_selected.getCode()) {
             new_point = PointConstant.POINT.circle_selected.getCode();
 
-        } else if (type == PointConstant.POINT_TYPE.place_order.getCode()) {
+        /*} else if (type == PointConstant.POINT_TYPE.place_order.getCode()) {
             //订单赚积分，根据订单的消费总金额折算成积分，100元=1积分
             Orders orders = orderService.getOrderById(orderid);
             if (null == orders) {
                 throw new BusinessException(MsgCodeConstant.NOT_EXIST_ORDER, "不存在该订单");
             }
             double realMoney = null == orders.getRealmoney() ? 0.0 : orders.getRealmoney();
-            new_point = MathUtil.division100ToInteger(realMoney);
+            new_point = MathUtil.division100ToInteger(realMoney);*/
 
         } else {
             throw new BusinessException(MsgCodeConstant.app_point_type_not_exist, "积分类型不存在");

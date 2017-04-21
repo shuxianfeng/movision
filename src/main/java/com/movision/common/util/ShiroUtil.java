@@ -3,6 +3,8 @@ package com.movision.common.util;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.SessionConstant;
 import com.movision.exception.AuthException;
+import com.movision.mybatis.user.entity.User;
+import com.movision.utils.DateUtils;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -165,6 +167,56 @@ public class ShiroUtil {
             session.setAttribute(SessionConstant.APP_USER, principal);
         }
     }
+
+    /**
+     * 修改session中的积分和手机号（用于绑定手机号场景）
+     *
+     * @param phone
+     * @param point
+     */
+    public static void updateAppuserPhoneAndPoints(String phone, Integer point) {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if (session != null) {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
+            //此处可以扩张需要的字段
+            principal.setPhone(phone);
+            principal.setPoints(point);
+            session.setAttribute(SessionConstant.APP_USER, principal);
+        }
+    }
+
+    /**
+     * 更新缓存在session中的app用户信息
+     *
+     * @param user
+     */
+    public static void updateAppuser(User user) {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if (session != null) {
+            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
+
+            principal.setStatus(user.getStatus());
+            principal.setPhoto(user.getPhoto());
+            principal.setNickname(user.getNickname());
+            principal.setLevel(user.getLevel());
+            principal.setPhone(user.getPhone());
+            principal.setToken(user.getToken());
+            principal.setPoints(user.getPoints());
+            principal.setSex(user.getSex());
+            principal.setSign(user.getSign());
+            principal.setBirthday(DateUtils.date2Str(user.getBirthday()));
+            principal.setQq(user.getQq());
+            principal.setSina(user.getSina());
+            principal.setOpenid(user.getOpenid());
+
+            session.setAttribute(SessionConstant.APP_USER, principal);
+        }
+    }
+
+
+
 
     /**
      * 修改session中的app用户的第三方账号（用于绑定第三方账号的场景）

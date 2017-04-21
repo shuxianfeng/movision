@@ -2,9 +2,13 @@ package com.movision.facade.user;
 
 import com.movision.aop.UserSaveCache;
 import com.movision.common.constant.MsgCodeConstant;
+import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.AuthException;
+import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.mybatis.bossUser.service.BossUserService;
+import com.movision.mybatis.pointRecord.entity.PointRecord;
+import com.movision.mybatis.pointRecord.service.PointRecordService;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
@@ -14,6 +18,7 @@ import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +52,12 @@ public class UserFacade {
 
     @Autowired
     private AppRegisterFacade appRegisterFacade;
+
+    @Autowired
+    private PointRecordFacade pointRecordFacade;
+
+    @Autowired
+    private PointRecordService pointRecordService;
 
     /**
      * 判断是否存在该手机号的app用户
@@ -209,7 +220,52 @@ public class UserFacade {
         return users;
     }
 
-    public void updatePersonInfo(PersonInfo personInfo) {
+    /**
+     * 完善个人资料过程
+     *
+     * @param personInfo
+     */
+    public void finishPersonDataProcess(PersonInfo personInfo) {
+
+        updatePersonInfo(personInfo);
+
+        addPointProcess();
+
+    }
+
+    /**
+     * 判断当前用户是否需要添加【完善个人资料】的积分记录
+     */
+    private void addPointProcess() {
+        PointRecord pointRecord = pointRecordService.selectFinishPersonDataPointRecord(ShiroUtil.getAppUserID());
+        if (null == pointRecord) {
+            //获取当前用户信息
+            User user = userService.selectByPrimaryKey(ShiroUtil.getAppUserID());
+            //检查个人资料是否全部完善：生日，头像，性别，签名
+            if (StringUtils.isNotBlank(String.valueOf(user.getBirthday()))
+                    && StringUtils.isNotBlank(user.getPhoto())
+                    && StringUtils.isNotBlank(String.valueOf(user.getSex()))
+                    && StringUtils.isNotBlank(user.getSign())) {
+                //添加完善个人资料积分记录
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode(), 0);
+
+                //修改个人总积分
+                int newPoint = user.getPoints() + PointConstant.POINT.finish_personal_data.getCode();
+                user.setPoints(newPoint);
+                userService.updateByPrimaryKeySelective(user);
+
+                //修改session中的个人信息
+                ShiroUtil.updateAppuser(user);
+            }
+        }
+    }
+
+    /**
+     * 更新个人资料
+     *
+     * @param personInfo
+     */
+    private void updatePersonInfo(PersonInfo personInfo) {
         User user = new User();
         user.setId(personInfo.getId());
         user.setNickname(personInfo.getNickname());
@@ -220,6 +276,7 @@ public class UserFacade {
 
         userService.updateByPrimaryKeySelective(user);
     }
+
 
     /**
      * 记录申请vip的时间
@@ -237,13 +294,15 @@ public class UserFacade {
      *
      * @param point
      */
-    public void addPoint(int point) {
+    public void addPersonPointBySign(int point) {
+
         ShiroRealm.ShiroUser shiroUser = ShiroUtil.getAppUser();
         User user = new User();
         user.setId(ShiroUtil.getAppUserID());
         int personPoint = null == shiroUser.getPoints() ? 0 : shiroUser.getPoints();
         int newPoint = personPoint + point;
         user.setPoints(newPoint);
+
         //1 变更用户表
         userService.updateByPrimaryKeySelective(user);
         //2 更新session中的缓存

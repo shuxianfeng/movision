@@ -9,8 +9,6 @@ import com.movision.test.SpringTestCase;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Date;
-
 /**
  * @Author zhuangyuhao
  * @Date 2017/2/27 14:17
@@ -65,7 +63,7 @@ public class MyInfoControllerTest extends SpringTestCase {
         personInfo.setSign("我是一个小鸡鸡");
         personInfo.setSex(0);
         personInfo.setNickname("小鸡鸡JJ");
-        userFacade.updatePersonInfo(personInfo);
+        userFacade.finishPersonDataProcess(personInfo);
     }
 
 

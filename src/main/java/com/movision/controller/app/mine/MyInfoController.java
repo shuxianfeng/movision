@@ -14,7 +14,6 @@ import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.coupon.entity.Coupon;
-import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.user.entity.PersonInfo;
@@ -154,7 +153,7 @@ public class MyInfoController {
 
         Response response = new Response();
         personInfo.setId(ShiroUtil.getAppUserID());
-        userFacade.updatePersonInfo(personInfo);
+        userFacade.finishPersonDataProcess(personInfo);
         return response;
     }
 
@@ -189,7 +188,8 @@ public class MyInfoController {
         //签到送积分
         pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode(), 0);
         //给个人加积分
-        userFacade.addPoint(PointConstant.POINT.sign.getCode());
+        userFacade.addPersonPointBySign(PointConstant.POINT.sign.getCode());
+
         return response;
     }
 
@@ -214,13 +214,13 @@ public class MyInfoController {
     }
 
 
-    @ApiOperation(value = "模拟评论赚积分", notes = "模拟评论赚积分", response = Response.class)
+    /*@ApiOperation(value = "模拟评论赚积分", notes = "模拟评论赚积分", response = Response.class)
     @RequestMapping(value = "test_add_point_record", method = RequestMethod.POST)
     public Response testAddPointRecord() {
         Response response = new Response();
         pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment.getCode(), 0);
         return response;
-    }
+    }*/
 
 
 

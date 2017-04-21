@@ -96,5 +96,15 @@ public class PointRecordService {
         }
     }
 
+    public PointRecord selectFinishPersonDataPointRecord(Integer id) {
+        try {
+            log.info("查询当前用户的完善个人资料的积分记录");
+            return pointRecordMapper.selectFinishPersonDataPointRecord(id);
+        } catch (Exception e) {
+            log.error("查询当前用户的完善个人资料的积分记录失败", e);
+            throw e;
+        }
+    }
+
 
 }

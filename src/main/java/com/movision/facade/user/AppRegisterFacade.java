@@ -1,13 +1,11 @@
 package com.movision.facade.user;
 
 import com.google.gson.Gson;
-import com.movision.common.constant.Constants;
-import com.movision.common.constant.ImConstant;
-import com.movision.common.constant.MsgCodeConstant;
-import com.movision.common.constant.UserConstants;
+import com.movision.common.constant.*;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
 import com.movision.facade.im.ImFacade;
+import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.circle.entity.Circle;
@@ -76,6 +74,9 @@ public class AppRegisterFacade {
     @Autowired
     private BossUserService bossUserService;
 
+    @Autowired
+    private PointRecordFacade pointRecordFacade;
+
     /**
      * 1 校验登录用户信息：手机号+短信验证码
      * 2 若用户不存在，则新增用户信息；
@@ -92,6 +93,7 @@ public class AppRegisterFacade {
      *  imuser:zzz
      * }
      */
+    @Transactional
     public Map<String, Object> validateLoginUser(RegisterUser member, Validateinfo validateinfo, Session session) throws IOException {
 
         String phone = member.getPhone();
@@ -109,9 +111,9 @@ public class AppRegisterFacade {
                 if (validateinfo.getCheckCode().equalsIgnoreCase(mobileCheckCode)) {
                     //1 生成token
                     UsernamePasswordToken newToken = new UsernamePasswordToken(phone, verifyCode.toCharArray());
-                    //校验是否手机号存在
+
                     Map<String, Object> result = new HashedMap();
-                    //2 注册用户，并把token入库, 放入session缓存
+                    //2 注册用户/修改用户信息
                     Gson gson = new Gson();
                     String json = gson.toJson(newToken);
                     member.setToken(json);
@@ -119,27 +121,33 @@ public class AppRegisterFacade {
                     int userid = 0;
                     User user = userFacade.queryUserByPhone(phone);
                     if (null != user) {
-                        //存在该用户,修改app用户token和设备号
+                        //2.1 存在该用户,修改用户信息：token和设备号
                         this.updateAppRegisterUser(member);
                         userid = user.getId();
+
                     } else {
-                        //手机号不存在,则新增用户，并且新增token
+                        //2.1 手机号不存在,则新增用户信息
                         userid = this.registerMember(member);
+                        //2.2 增加新用户注册积分流水
+                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.new_user_register.getCode(), 0);
+                        //2.3 增加绑定手机号积分流水
+                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.binding_phone.getCode(), 0);
                     }
                     log.info("【获取userid】:" + userid);
 
-                    //如果用户当前手机号有领取过H5页面分享的优惠券，那么不管新老用户统一将优惠券临时表yw_coupon_temp中的优惠券信息全部放入优惠券正式表yw_coupon中
+                    //3 如果用户当前手机号有领取过H5页面分享的优惠券，那么不管新老用户统一将优惠券临时表yw_coupon_temp中的优惠券信息全部放入优惠券正式表yw_coupon中
                     this.processCoupon(phone, userid);
 
-                    //判断该userid是否存在一个im用户，若不存在，则注册im用户;若存在，则查询
+                    //4 判断该userid是否存在一个im用户，若不存在，则注册im用户;若存在，则查询
                     this.getImuserForReturn(phone, result, userid);
 
-                    //判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录
+                    //5 判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录
                     deleteSameDevicenoRecord(member.getDeviceno());
 
-                    //3 登录成功则清除session中验证码的信息
+                    //6 登录成功则清除session中验证码的信息
                     session.removeAttribute("r" + validateinfo.getAccount());
-                    //4 返回token（后期可加密）
+
+                    //7 返回token
                     result.put("token_detail", newToken);
                     result.put("token", json);
                     return result;
@@ -160,6 +168,7 @@ public class AppRegisterFacade {
         }
     }
 
+    @Transactional
     public void bindPhoneProcess(String phone, String code, Validateinfo validateinfo, Session session) throws IOException {
         //session中缓存的短信验证码
         String verifyCode = validateinfo.getCheckCode();
@@ -173,26 +182,32 @@ public class AppRegisterFacade {
                 log.debug("mobile verifyCode == " + code);
                 //比较服务器端session中的验证码和App端输入的验证码
                 if (validateinfo.getCheckCode().equalsIgnoreCase(code)) {
-                    //1 账户数据中绑定手机号
+
                     int userid = ShiroUtil.getAppUserID();
+                    log.info("【获取userid】:" + userid);
+
                     User user = userService.selectByPrimaryKey(userid);
                     if (null != user) {
+                        //1 增加绑定手机号积分流水
+                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.binding_phone.getCode(), 0);
 
+                        int newPoint = user.getPoints() + PointConstant.POINT.binding_phone.getCode();
+                        user.setPoints(newPoint);
                         user.setPhone(phone);
+                        //2 修改用户基本信息
                         userService.updateByPrimaryKeySelective(user);
+                        //3 更新session用户信息
+                        ShiroUtil.updateAppuserPhoneAndPoints(phone, newPoint);
+
+                        //4 如果用户当前手机号有领取过H5页面分享的优惠券，那么不管新老用户统一将优惠券临时表yw_coupon_temp中的优惠券信息全部放入优惠券正式表yw_coupon中
+                        this.processCoupon(phone, userid);
+
+                        //5 登录成功则清除session中验证码的信息
+                        session.removeAttribute("bind" + validateinfo.getAccount());
+
                     } else {
                         throw new BusinessException(MsgCodeConstant.NOT_EXIST_APP_ACCOUNT, "不存在该APP用户");
                     }
-                    log.info("【获取userid】:" + userid);
-                    //2 如果用户当前手机号有领取过H5页面分享的优惠券，那么不管新老用户统一将优惠券临时表yw_coupon_temp中的优惠券信息全部放入优惠券正式表yw_coupon中
-                    this.processCoupon(phone, userid);
-
-                    //3 登录成功则清除session中验证码的信息
-                    session.removeAttribute("bind" + validateinfo.getAccount());
-
-                    //4 修改session中的appuser信息
-                    ShiroUtil.updateAppuserPhone(phone);
-
                 } else {
                     //不需要清除验证码
                     throw new BusinessException(MsgCodeConstant.member_mcode_mobile_validate_error, "手机验证码不正确");
@@ -216,6 +231,7 @@ public class AppRegisterFacade {
      * @param session
      * @throws IOException
      */
+    @Transactional
     public void bindNewPhoneProcess(String phone, String code, Validateinfo validateinfo, Session session) throws IOException {
         //session中缓存的短信验证码
         String verifyCode = validateinfo.getCheckCode();
@@ -469,6 +485,9 @@ public class AppRegisterFacade {
             //3.2 根据该新的userid注册im用户，即在yw_im_user中新增一条记录
             ImUser newImUser = registerNewImuser(account, userid);
             result.put("imuser", newImUser);
+
+            //3.3 新用户注册需要添加积分记录
+            pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.new_user_register.getCode(), 0);
 
         } else {
             //3 更新原来的token

@@ -177,4 +177,12 @@
         ]]>
     </select>
 
+    <select id="selectFinishPersonDataPointRecord" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.pointRecord.entity.PointRecord">
+        SELECT *
+        FROM yw_points_record
+        WHERE userid = #{userid}
+        AND type = 2
+    </select>
+
 </mapper>
