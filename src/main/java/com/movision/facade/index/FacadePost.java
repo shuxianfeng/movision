@@ -290,6 +290,8 @@ public class FacadePost {
                     postService.insertPostShareGoods(postShareGoodsList);
                 }
 
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode());//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
+
                 return flag;
 
             } catch (Exception e) {

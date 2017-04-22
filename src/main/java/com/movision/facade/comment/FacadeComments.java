@@ -131,6 +131,9 @@ public class FacadeComments {
             }
             //更新用户最后操作时间和帖子评论总次数
             postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子表的评论次数字段
+
+            pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment.getCode());//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
+
             return type;
         }
     }

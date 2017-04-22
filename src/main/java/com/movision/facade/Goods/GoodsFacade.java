@@ -1,6 +1,8 @@
 package com.movision.facade.Goods;
 
+import com.movision.common.constant.PointConstant;
 import com.movision.facade.cart.CartFacade;
+import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.cart.entity.CartVo;
 import com.movision.mybatis.cart.service.CartService;
@@ -64,6 +66,9 @@ public class GoodsFacade {
 
     @Autowired
     private ComboService comboService;
+
+    @Autowired
+    private PointRecordFacade pointRecordFacade;
 
     /**
      * 根据商品id查询商品详情
@@ -212,6 +217,8 @@ public class GoodsFacade {
             }
             goodsService.insertGoodAssessmentImg(goodsAssessmentImgList);//插入晒单图片
         }
+
+        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment.getCode());//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
     }
 
     public Map<String, Object> queryCombo(String goodsid, String goodsposition) {

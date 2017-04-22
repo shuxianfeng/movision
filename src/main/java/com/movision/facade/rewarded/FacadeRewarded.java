@@ -114,6 +114,9 @@ public class FacadeRewarded {
                 rewarded.setPoints(integral);//打赏分数
                 //帖子打赏记录流水
                 rewardedService.insertRewarded(rewarded);
+
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.reward.getCode());//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
+
                 //2 更新session中的缓存
                 ShiroUtil.updateAppuserPoint(in);
                 map.put("code", 200);
