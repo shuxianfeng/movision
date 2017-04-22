@@ -109,10 +109,12 @@ public class PointRecordFacade {
         //获取需要新增的积分
         int new_point = getPointByPointType(type, todayStatistics);
         log.info("【增加积分流水】该积分类型type=" + type + ", 该类型对应的积分是：" + new_point);
-        //增加积分流水
-        addPointRecord(type, new_point);
-        //新增个人积分
-        addPersonPointInDbAndSession(new_point);
+        if (new_point != 0) {
+            //增加积分流水
+            addPointRecord(type, new_point);
+            //新增个人积分
+            addPersonPointInDbAndSession(new_point);
+        }
 
     }
 
@@ -152,7 +154,9 @@ public class PointRecordFacade {
         int new_point = getPointByPointType(type, todayStatistics);
         log.info("【增加积分流水】该积分类型type=" + type + ", 该类型对应的积分是：" + new_point);
         //增加积分流水
-        addPointRecord(type, new_point);
+        if (new_point != 0) {
+            addPointRecord(type, new_point);
+        }
 
     }
 
