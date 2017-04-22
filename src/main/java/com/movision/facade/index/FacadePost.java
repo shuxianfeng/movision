@@ -1,5 +1,7 @@
 package com.movision.facade.index;
 
+import com.movision.common.constant.PointConstant;
+import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.accusation.entity.Accusation;
 import com.movision.mybatis.accusation.service.AccusationService;
@@ -16,6 +18,8 @@ import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
+import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.DateUtils;
@@ -68,6 +72,12 @@ public class FacadePost {
 
     @Autowired
     private JsoupCompressImg jsoupCompressImg;
+
+    @Autowired
+    private UserOperationRecordService userOperationRecordService;
+
+    @Autowired
+    private PointRecordFacade pointRecordFacade;
 
     public PostVo queryPostDetail(String postid, String userid, String type) {
 
@@ -337,6 +347,26 @@ public class FacadePost {
         //查询当前用户是否已点赞该帖
         int count = postService.queryIsZanPost(parammap);
         if (count == 0) {
+
+            //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------start
+            //判断该用户有没有首次关注过圈子或有没有点赞过帖子评论等或有没有收藏过商品帖子活动
+            UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(Integer.parseInt(userid));
+            if (null == entiy || entiy.getIszan() == 0) {
+                //如果未收藏过帖子或商品的话,首次收藏赠送积分
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.first_support.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                UserOperationRecord userOperationRecord = new UserOperationRecord();
+                userOperationRecord.setUserid(Integer.parseInt(userid));
+                userOperationRecord.setIszan(1);
+                if (null == entiy) {
+                    //不存在新增
+                    userOperationRecordService.insertUserOperationRecord(userOperationRecord);
+                } else if (entiy.getIszan() == 0) {
+                    //存在更新
+                    userOperationRecordService.updateUserOperationRecord(userOperationRecord);
+                }
+            }
+            //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------end
+
             postService.insertZanRecord(parammap);
             int type = postService.updatePostByZanSum(Integer.parseInt(id));
             if (type == 1) {

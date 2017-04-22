@@ -1,11 +1,15 @@
 package com.movision.facade.comment;
 
+import com.movision.common.constant.PointConstant;
 import com.movision.facade.index.FacadePost;
+import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
+import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +31,10 @@ public class FacadeComments {
     public FacadePost facadePost;
     @Autowired
     public PostService postService;
+    @Autowired
+    private UserOperationRecordService userOperationRecordService;
+    @Autowired
+    private PointRecordFacade pointRecordFacade;
 
     /**
      * 帖子评论列表（二级）
@@ -62,6 +70,26 @@ public class FacadeComments {
     }
 
     public int updateCommentZanSum(String commentid, String userid) {
+
+        //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------start
+        //判断该用户有没有首次关注过圈子或有没有点赞过帖子评论等或有没有收藏过商品帖子活动
+        UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(Integer.parseInt(userid));
+        if (null == entiy || entiy.getIszan() == 0) {
+            //如果未收藏过帖子或商品的话,首次收藏赠送积分
+            pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.first_support.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+            UserOperationRecord userOperationRecord = new UserOperationRecord();
+            userOperationRecord.setUserid(Integer.parseInt(userid));
+            userOperationRecord.setIszan(1);
+            if (null == entiy) {
+                //不存在新增
+                userOperationRecordService.insertUserOperationRecord(userOperationRecord);
+            } else if (entiy.getIszan() == 0) {
+                //存在更新
+                userOperationRecordService.updateUserOperationRecord(userOperationRecord);
+            }
+        }
+        //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------end
+
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("userid", Integer.parseInt(userid));
         parammap.put("commentid", Integer.parseInt(commentid));
