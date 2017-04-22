@@ -111,12 +111,52 @@ public class PointRecordFacade {
         log.info("【增加积分流水】该积分类型type=" + type + ", 该类型对应的积分是：" + new_point);
         if (new_point != 0) {
             //增加积分流水
-            addPointRecord(type, new_point);
+            addPointRecord(type, new_point, ShiroUtil.getAppUserID());
             //新增个人积分
             addPersonPointInDbAndSession(new_point);
         }
-
     }
+
+    /**
+     * 帖子精选，首页精选时的积分操作
+     *
+     * @param type
+     * @param userid 发帖人id
+     */
+    public void addPointForCircleAndIndexSelected(int type, int userid) {
+
+        if (userid != -1) {
+            //走正常积分操作
+            if (PointConstant.POINT_TYPE.circle_selected.getCode() == type) {
+                //圈子精选
+                doSelectedPointProcess(type, userid, PointConstant.POINT.circle_selected.getCode());
+
+            } else {
+                //首页精选
+                doSelectedPointProcess(type, userid, PointConstant.POINT.index_selected.getCode());
+            }
+        }
+    }
+
+    /**
+     * 处理帖子精选，首页精选的积分变动
+     *
+     * @param type
+     * @param userid
+     * @param point
+     */
+    private void doSelectedPointProcess(int type, int userid, int point) {
+        //添加积分流水
+        addPointRecord(type, point, userid);
+        //增加用户积分
+        User user = userService.selectByPrimaryKey(userid);
+        if (null != user) {
+            int originPoint = user.getPoints();
+            user.setPoints(originPoint + point);
+            userService.updateByPrimaryKeySelective(user);
+        }
+    }
+
 
     /**
      * 增加用户积分+改变session用户积分 (数据库+session)
@@ -155,7 +195,7 @@ public class PointRecordFacade {
         log.info("【增加积分流水】该积分类型type=" + type + ", 该类型对应的积分是：" + new_point);
         //增加积分流水
         if (new_point != 0) {
-            addPointRecord(type, new_point);
+            addPointRecord(type, new_point, ShiroUtil.getAppUserID());
         }
 
     }
@@ -166,9 +206,9 @@ public class PointRecordFacade {
      * @param type
      * @param new_point
      */
-    private void addPointRecord(int type, int new_point) {
+    private void addPointRecord(int type, int new_point, int userid) {
         PointRecord pointRecord = new PointRecord();
-        pointRecord.setUserid(ShiroUtil.getAppUserID());
+        pointRecord.setUserid(userid);    //当前操作积分的APP用户
         pointRecord.setIsadd(PointConstant.POINT_ADD);
         pointRecord.setPoint(new_point);
         pointRecord.setType(type);
@@ -302,12 +342,14 @@ public class PointRecordFacade {
         } else if (type == PointConstant.POINT_TYPE.sign.getCode()) {
             new_point = PointConstant.POINT.sign.getCode();
 
-        } else if (type == PointConstant.POINT_TYPE.index_selected.getCode()) {
+            //这两个类型是在后台操作
+        /*} else if (type == PointConstant.POINT_TYPE.index_selected.getCode()) {
             new_point = PointConstant.POINT.index_selected.getCode();
 
         } else if (type == PointConstant.POINT_TYPE.circle_selected.getCode()) {
-            new_point = PointConstant.POINT.circle_selected.getCode();
+            new_point = PointConstant.POINT.circle_selected.getCode();*/
 
+            //这个类型是在下订单的时候操作
         /*} else if (type == PointConstant.POINT_TYPE.place_order.getCode()) {
             //订单赚积分，根据订单的消费总金额折算成积分，100元=1积分
             Orders orders = orderService.getOrderById(orderid);
