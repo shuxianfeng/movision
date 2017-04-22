@@ -70,16 +70,29 @@
         SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER}))
     </select>
 
+    <select id="queryCircleManagerByCircleid" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.user.entity.User">
+        SELECT id,photo,nickname,phone,level FROM yw_user WHERE id in(
+        SELECT userid FROM yw_circle_manager WHERE circleid=#{circleid,jdbcType=INTEGER})
+    </select>
+
     <!--根据登录用户和圈子类型查询圈子的管理员列表-->
     <select id="queryCircleMangerByUseridList" parameterType="java.util.Map"
             resultType="com.movision.mybatis.user.entity.User">
-        SELECT id,photo,nickname,phone,level FROM yw_user WHERE id in(
-        SELECT userid FROM yw_circle_manager WHERE circleid in(
-        SELECT id FROM yw_circle WHERE category=#{category,jdbcType=INTEGER}
-        <if test="userid!=null">
-            AND phone = (SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
+        <if test="userid==null">
+            SELECT id,photo,nickname,phone,level FROM yw_user WHERE id in(
+            SELECT userid FROM yw_circle_manager WHERE circleid in(
+            SELECT id FROM yw_circle
+            WHERE category=#{category,jdbcType=INTEGER})) GROUP BY phone DESC
         </if>
-        ))
+        <if test="userid!=null">
+            SELECT id,photo,nickname,phone,level FROM yw_user WHERE id IN(
+            SELECT userid FROM yw_circle_manager WHERE circleid IN(
+            SELECT id FROM yw_circle WHERE phone=(
+            SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
+            AND category=#{category,jdbcType=INTEGER})) GROUP BY phone DESC
+        </if>
+
     </select>
 
     <!-- 查询圈子管理员列表 -->

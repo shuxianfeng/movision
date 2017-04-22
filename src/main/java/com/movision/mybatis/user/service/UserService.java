@@ -197,6 +197,22 @@ public class UserService {
         }
     }
 
+    /**
+     * 根据圈子id查询出圈子管理员
+     *
+     * @param circleid
+     * @return
+     */
+    public List<User> queryCircleManagerByCircleid(Integer circleid) {
+        try {
+            log.info("根据圈子id查询出圈子管理员");
+            return userMapper.queryCircleManagerByCircleid(circleid);
+        } catch (Exception e) {
+            log.error("根据圈子id查询出圈子管理员异常", e);
+            throw e;
+        }
+    }
+
     public List<User> queryCircleMangerByUseridList(Map map) {
         try {
             log.info("根据登录用户和圈子类型查询圈子的管理员列表");

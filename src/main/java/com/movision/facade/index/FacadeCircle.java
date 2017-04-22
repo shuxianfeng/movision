@@ -143,7 +143,7 @@ public class FacadeCircle {
         circleVo.setCirclemaster(circlemaster);
 
         //查询圈子的所有管理员
-        List<User> circlemanagerList = userService.queryCircleManagerList(Integer.parseInt(circleid));
+        List<User> circlemanagerList = userService.queryCircleManagerByCircleid(Integer.parseInt(circleid));
         circleVo.setCirclemanagerlist(circlemanagerList);
 
         if (StringUtil.isNotEmpty(userid)) {
