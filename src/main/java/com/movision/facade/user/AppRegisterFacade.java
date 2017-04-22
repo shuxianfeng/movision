@@ -466,7 +466,8 @@ public class AppRegisterFacade {
      * @return
      * @throws IOException
      */
-    public Map<String, Object> registerQQAccount(Integer flag, String account, String openid, String deviceno) throws IOException {
+    public Map<String, Object> registerQQAccount(Integer flag, String account, String openid, String deviceno,
+                                                 String url, String nickname, String sex) throws IOException {
 
         Map<String, Object> result = new HashedMap();
         //1 生成新的token
@@ -481,10 +482,10 @@ public class AppRegisterFacade {
 
         if (null == originUser) {
             //3.1 根据第三方账号注册APP账号
-            int userid = registerThirdAccountAndReturnUserid(flag, account, deviceno, tokenJson);
+            int userid = registerThirdAccountAndReturnUserid(flag, account, deviceno, tokenJson, url, nickname, sex);
 
             //3.2 根据该新的userid注册im用户，即在yw_im_user中新增一条记录
-            ImUser newImUser = registerNewImuser(account, userid);
+            ImUser newImUser = registerNewImuser(account, userid, nickname);
             result.put("imuser", newImUser);
 
             //3.3 新用户注册需要添加积分记录
@@ -495,9 +496,7 @@ public class AppRegisterFacade {
              * 存在场景：用户之前在设备A上用QQ注册了APP账户，现在用户换了一个设备B，下载APP，进行QQ登录
              */
             //3 更新原来的token
-            originUser.setToken(tokenJson);
-            originUser.setDeviceno(deviceno);
-            userService.updateByPrimaryKeySelective(originUser);
+            updateUserInfo(deviceno, url, nickname, sex, tokenJson, originUser);
 
             result.put("imuser", imFacade.getImuserByCurrentAppuser(originUser.getId()));
         }
@@ -505,6 +504,15 @@ public class AppRegisterFacade {
         deleteSameDevicenoRecord(deviceno);
 
         return result;
+    }
+
+    private void updateUserInfo(String deviceno, String url, String nickname, String sex, String tokenJson, User originUser) {
+        originUser.setToken(tokenJson);
+        originUser.setDeviceno(deviceno);
+        originUser.setNickname(nickname);
+        originUser.setSex(Integer.valueOf(sex));
+        originUser.setPhoto(url);
+        userService.updateByPrimaryKeySelective(originUser);
     }
 
     /**
@@ -515,11 +523,11 @@ public class AppRegisterFacade {
      * @return
      * @throws IOException
      */
-    private ImUser registerNewImuser(String account, int userid) throws IOException {
+    private ImUser registerNewImuser(String account, int userid, String nickname) throws IOException {
         ImUser imUser = new ImUser();
         imUser.setUserid(userid);
         imUser.setAccid(CheckSumBuilder.getAccid(String.valueOf(userid)));
-        imUser.setName(StrUtil.genDefaultNickNameForOpenid());
+        imUser.setName(nickname);
         return imFacade.AddImUser(imUser);
     }
 
@@ -553,13 +561,16 @@ public class AppRegisterFacade {
      * @param tokenJson
      * @return
      */
-    private int registerThirdAccountAndReturnUserid(Integer flag, String account, String deviceno, String tokenJson) {
+    private int registerThirdAccountAndReturnUserid(Integer flag, String account, String deviceno, String tokenJson,
+                                                    String url, String nickname, String sex) {
         User newUser = new User();
         newUser.setToken(tokenJson);    //token
         setUserThirdAccount(flag, account, newUser);
-        newUser.setNickname(StrUtil.genDefaultNickNameForOpenid());    //昵称
+        newUser.setNickname(nickname);    //昵称
+        newUser.setPhoto(url);  //头像
+        newUser.setSex(Integer.valueOf(sex));   //性别
         newUser.setDeviceno(deviceno);  //设备号
-        newUser.setPoints(25);  //注册25分
+        newUser.setPoints(25);  //积分：注册25分
         return userService.insertSelective(newUser);
     }
 

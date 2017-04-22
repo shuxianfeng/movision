@@ -137,7 +137,10 @@ public class AppLoginController {
     public Response registeByQQ(@ApiParam(value = "第三方登录方式标示。1:QQ， 2:微信， 3:微博 ") @RequestParam Integer flag,
                                 @ApiParam(value = "QQ号/微信号/微博号(填对应的openid)") @RequestParam String account,
                                 @ApiParam(value = "唯一标示：openid") @RequestParam String openid,
-                                @ApiParam(value = "当前设备号") @RequestParam String deviceno) throws Exception {
+                                @ApiParam(value = "当前设备号") @RequestParam String deviceno,
+                                @ApiParam(value = "第三方账号的头像url") @RequestParam String url,
+                                @ApiParam(value = "第三方账号的昵称") @RequestParam String nickname,
+                                @ApiParam(value = "第三方账号的性别,1男 0女") @RequestParam String sex) throws Exception {
         if (flag == 1) {
             log.debug("【QQ注册】");
         } else if (flag == 2) {
@@ -148,7 +151,7 @@ public class AppLoginController {
         log.debug("注册qq账号信息：  account==" + account + ", deviceno = " + deviceno + ", openid = " + openid);
         Response response = new Response();
         try {
-            Map result = appRegisterFacade.registerQQAccount(flag, account, openid, deviceno);
+            Map result = appRegisterFacade.registerQQAccount(flag, account, openid, deviceno, url, nickname, sex);
             response.setData(result);
         } catch (Exception e) {
             log.error("注册操作失败>>>", e);
