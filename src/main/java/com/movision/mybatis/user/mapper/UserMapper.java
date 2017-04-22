@@ -34,6 +34,10 @@ public interface UserMapper {
 
     LoginUser selectLoginUserByPhone(User user);
 
+    void insertPostShare(Map<String, Object> parammap);
+
+    void insertGoodsShare(Map<String, Object> parammap);
+
     int updateUserPointsAdd(Map mapadd);
 
     int updateUserPointsMinus(Map map);

@@ -1071,4 +1071,17 @@ public class PostService {
             throw e;
         }
     }
+
+    /**
+     * 刷新帖子被分享的次数
+     */
+    public void updatePostShareNum(Map<String, Object> parammap) {
+        try {
+            log.info("刷新帖子被分享的次数");
+            postMapper.updatePostShareNum(parammap);
+        } catch (Exception e) {
+            log.error("刷新帖子被分享的次数异常", e);
+            throw e;
+        }
+    }
 }

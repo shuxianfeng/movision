@@ -91,4 +91,22 @@ public class AppUserController {
         }
         return response;
     }
+
+    @ApiOperation(value = "用户在分享成功后调用该接口通知服务端", notes = "用户在分享成功后调用该接口通知服务端（包含个人主页、帖子、活动、商品）", response = Response.class)
+    @RequestMapping(value = "shareSucNotice", method = RequestMethod.POST)
+    public Response shareSucNotice(@ApiParam(value = "分享类型: 0 帖子/活动 1 商品 2 个人主页") @RequestParam String type,
+                                   @ApiParam(value = "用户id") @RequestParam String userid,
+                                   @ApiParam(value = "分享渠道(0 QQ 1 QQ空间 2 微信 3 朋友圈 4 新浪微博 )") @RequestParam String channel,
+                                   @ApiParam(value = "帖子或活动id（type为0时不为空）") @RequestParam(required = false) String postid,
+                                   @ApiParam(value = "商品id（type为1时不为空）") @RequestParam(required = false) String goodsid,
+                                   @ApiParam(value = "被分享的用户id（type为2时不为空）") @RequestParam(required = false) String beshareuserid) {
+        Response response = new Response();
+
+        userFacade.shareSucNotice(type, userid, channel, postid, goodsid, beshareuserid);
+
+        if (response.getCode() == 200) {
+            response.setMessage("调用成功");
+        }
+        return response;
+    }
 }

@@ -187,4 +187,5 @@ public interface PostMapper {
 
     List<PostList> findAllqueryPostByIsessencepoolList(RowBounds rowBounds);
 
+    void updatePostShareNum(Map<String, Object> parammap);
 }

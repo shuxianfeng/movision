@@ -7,6 +7,7 @@ import com.movision.common.util.ShiroUtil;
 import com.movision.exception.AuthException;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.mybatis.bossUser.service.BossUserService;
+import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.pointRecord.entity.PointRecord;
 import com.movision.mybatis.pointRecord.service.PointRecordService;
 import com.movision.mybatis.post.entity.ActiveVo;
@@ -17,6 +18,7 @@ import com.movision.mybatis.user.service.UserService;
 import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.commons.collections.FastHashMap;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -26,10 +28,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * APP用户 facade
@@ -43,9 +42,6 @@ public class UserFacade {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private BossUserService bossUserService;
 
     @Autowired
     private PostService postService;
@@ -118,6 +114,42 @@ public class UserFacade {
 
     public void commetAPP() {
         pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment_app.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+    }
+
+    public void shareSucNotice(String type, String userid, String channel, String postid, String goodsid, String beshareuserid) {
+
+        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.share.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("userid", Integer.parseInt(userid));
+        parammap.put("intime", new Date());
+        if (channel.equals("0")) {
+            parammap.put("channel", "QQ");
+        } else if (channel.equals("1")) {
+            parammap.put("channel", "QQ空间");
+        } else if (channel.equals("2")) {
+            parammap.put("channel", "微信");
+        } else if (channel.equals("3")) {
+            parammap.put("channel", "朋友圈");
+        } else if (channel.equals("4")) {
+            parammap.put("channel", "新浪微博");
+        }
+
+        if (type.equals("0")) {
+            //分享帖子或活动
+            parammap.put("postid", Integer.parseInt(postid));
+            userService.insertPostShare(parammap);//插入帖子分享记录
+            postService.updatePostShareNum(parammap);//增加帖子分享次数
+
+        } else if (type.equals("1")) {
+            //分享商品
+            parammap.put("goodsid", Integer.parseInt(goodsid));
+            userService.insertGoodsShare(parammap);//插入商品分享记录(目前商品表不记录被分享的总次数)
+
+        } else if (type.equals("2")) {
+            //个人主页（自己或他人的）
+            //------------------------------暂时预留，后期可以存主页分享次数
+        }
     }
 
     public User queryUserByPhone(String phone) {

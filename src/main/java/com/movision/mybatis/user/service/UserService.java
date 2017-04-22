@@ -45,6 +45,26 @@ public class UserService {
         }
     }
 
+    public void insertPostShare(Map<String, Object> parammap) {
+        try {
+            log.info("插入帖子分享记录");
+            userMapper.insertPostShare(parammap);
+        } catch (Exception e) {
+            log.error("插入帖子分享记录失败", e);
+            throw e;
+        }
+    }
+
+    public void insertGoodsShare(Map<String, Object> parammap) {
+        try {
+            log.info("插入商品分享记录");
+            userMapper.insertGoodsShare(parammap);
+        } catch (Exception e) {
+            log.error("插入商品分享记录失败", e);
+            throw e;
+        }
+    }
+
     public User queryUserByPhone(String phone) {
         try {
             log.info("根据手机号查询User用户, phone=" + phone);

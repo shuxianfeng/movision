@@ -418,6 +418,19 @@
         INSERT INTO yw_user (phone, intime, status, token, nickname, deviceno)
         VALUES (#{phone}, #{intime}, #{status}, #{token}, #{nickname}, #{deviceno})
     </insert>
+
+    <!--插入帖子活动分享记录-->
+    <insert id="insertPostShare" parameterType="java.util.Map">
+        INSERT INTO yw_post_share (userid, postid, intime, channel)
+        VALUES (#{userid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}, #{channel,jdbcType=VARCHAR})
+    </insert>
+
+    <!--插入商品分享记录-->
+    <insert id="insertGoodsShare" parameterType="java.util.Map">
+        INSERT INTO yw_goods_share (userid, goodsid, intime, channel)
+        VALUES (#{userid,jdbcType=INTEGER}, #{goodsid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}, #{channel,jdbcType=VARCHAR})
+    </insert>
+
     <select id="queryUserByOpenid" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT u.openid FROM yw_user u WHERE id=#{userid,jdbcType=INTEGER}
     </select>
