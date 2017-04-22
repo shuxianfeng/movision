@@ -1718,8 +1718,14 @@
 
         <if test="begintime!=null and endtime!=null">
             <!--AND p.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}-->
-            AND ((#{begintime,jdbcType=DATE}  <![CDATA[>]]> a.begintime) AND (#{endtime,jdbcType=DATE} <![CDATA[<]]>
+            AND (((#{begintime,jdbcType=DATE}  <![CDATA[<]]> a.begintime) AND (#{endtime,jdbcType=DATE} <![CDATA[>]]>
             a.endtime))
+            OR ((#{endtime,jdbcType=DATE} <![CDATA[>]]> a.begintime) AND (#{begintime,jdbcType=DATE} <![CDATA[<]]>
+            a.begintime))
+            OR ((#{endtime,jdbcType=DATE} <![CDATA[>]]> a.endtime) AND (#{begintime,jdbcType=DATE} <![CDATA[<]]>
+            a.endtime))
+            OR ((#{endtime,jdbcType=DATE} <![CDATA[<]]> a.endtime) AND (#{begintime,jdbcType=DATE} <![CDATA[>]]>
+            a.begintime)))
         </if>
 
         <!-- 未开始 -->
