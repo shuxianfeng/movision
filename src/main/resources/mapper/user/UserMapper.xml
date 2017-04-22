@@ -493,7 +493,7 @@
         zansum,u.fans,u.applydate
         FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id
-        WHERE vd.userid=u.id AND
+        WHERE vd.userid=u.id AND vd.isdel=0
         u.status=0
     </select>
 

@@ -1886,4 +1886,5 @@
     FROM yw_post AS p
     WHERE p.isdel=0 AND p.isactive=0 AND p.isessencepool=1 ORDER BY p.intime DESC
     </select>
+
 </mapper>

@@ -80,4 +80,54 @@
         ishot = #{ishot,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="queryPostByIsessenceOrIshot" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.postProcessRecord.entity.PostProcessRecord">
+        SELECT * FROM yw_post_process_record WHERE postid=#{postid,jdbcType=INTEGER} AND isesence=1 OR ishot=1
+    </select>
+
+    <update id="updateProcessRecord" parameterType="com.movision.mybatis.postProcessRecord.entity.PostProcessRecord">
+        UPDATE yw_post_process_record
+        <set>
+            <if test="isesence != null">
+                isesence = #{isesence,jdbcType=INTEGER},
+            </if>
+            <if test="ishot != null">
+                ishot = #{ishot,jdbcType=INTEGER},
+            </if>
+        </set>
+        WHERE postid = #{postid,jdbcType=INTEGER}
+    </update>
+
+    <insert id="insertProcessRecord" parameterType="com.movision.mybatis.postProcessRecord.entity.PostProcessRecord">
+        insert into yw_post_process_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="postid != null">
+                postid,
+            </if>
+            <if test="isesence != null">
+                isesence,
+            </if>
+            <if test="ishot != null">
+                ishot,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="postid != null">
+                #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="isesence != null">
+                #{isesence,jdbcType=INTEGER},
+            </if>
+            <if test="ishot != null">
+                #{ishot,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 </mapper>

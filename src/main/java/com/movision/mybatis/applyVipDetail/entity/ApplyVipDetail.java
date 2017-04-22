@@ -15,6 +15,16 @@ public class ApplyVipDetail implements Serializable {
 
     private Integer applyLevel;
 
+    private Integer isdel;
+
+    public Integer getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(Integer isdel) {
+        this.isdel = isdel;
+    }
+
     public Integer getId() {
         return id;
     }

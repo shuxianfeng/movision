@@ -14,4 +14,10 @@ public interface PostProcessRecordMapper {
     int updateByPrimaryKeySelective(PostProcessRecord record);
 
     int updateByPrimaryKey(PostProcessRecord record);
+
+    PostProcessRecord queryPostByIsessenceOrIshot(Integer postid);
+
+    void updateProcessRecord(PostProcessRecord postProcessRecord);
+
+    void insertProcessRecord(PostProcessRecord postProcessRecord);
 }
