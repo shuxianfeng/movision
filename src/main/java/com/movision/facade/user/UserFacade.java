@@ -116,6 +116,10 @@ public class UserFacade {
         return activeVoList;
     }
 
+    public void commetAPP() {
+        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment_app.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+    }
+
     public User queryUserByPhone(String phone) {
         return userService.queryUserByPhone(phone);
     }

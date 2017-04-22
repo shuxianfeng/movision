@@ -78,4 +78,17 @@ public class AppUserController {
         response.setData(pager);
         return response;
     }
+
+    @ApiOperation(value = "用户在应用商店评价成功后调用该接口奖励积分", notes = "用户在应用商店评价成功后调用该接口奖励积分", response = Response.class)
+    @RequestMapping(value = "commetAPP", method = RequestMethod.POST)
+    public Response commetAPP() {
+        Response response = new Response();
+
+        userFacade.commetAPP();
+
+        if (response.getCode() == 200) {
+            response.setMessage("调用成功");
+        }
+        return response;
+    }
 }
