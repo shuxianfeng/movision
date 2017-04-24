@@ -116,7 +116,7 @@ UNION ALL
         FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER}) ORDER BY intime DESC
     </select>
     <select id="queryusers" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.User">
-        SELECT nickname,photo FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
+        SELECT nickname,photo,id FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
     </select>
 
 </mapper>
