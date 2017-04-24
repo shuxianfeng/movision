@@ -1102,9 +1102,36 @@
         FROM yw_post AS p
         WHERE p.isdel=0 AND p.isactive=0
         AND p.circleid in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone
-        =(SELECT phone FROM yw_admin_user WHERE id=#{loginid,jdbcType=INTEGER})))
+        =(SELECT phone FROM yw_admin_user WHERE id=#{loginid,jdbcType=INTEGER}))) AND isdel=0
+        <if test="uid!=null">
+            AND u.id=#{uid,jdbcType=INTEGER}
+        </if>
+        <if test="price==5">
+            AND p.isactive=0
+        </if>
+        <if test="price==6">
+            AND p.isessence=1
+        </if>
+        <if test="title!=null">
+            AND p.title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="userid!=null">
+            AND p.userid=#{userid,jdbcType=INTEGER}
+        </if>
+        <if test="postcontent!=null">
+            AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="circleid!=null">
+            AND p.circleid=#{circleid,jdbcType=INTEGER}
+        </if>
+        <if test="endtime!=null and begintime!=null">
+            AND p.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
+        <if test="essencedate!=null">
+            AND p.essencedate=#{essencedate,jdbcType=DATE}
+        </if>
         OR p.circleid IN (SELECT id FROM yw_circle WHERE phone=(SELECT phone FROM yw_admin_user WHERE
-        id=#{loginid,jdbcType=INTEGER}))
+        id=#{loginid,jdbcType=INTEGER})) AND isdel =0
         <if test="uid!=null">
             AND u.id=#{uid,jdbcType=INTEGER}
         </if>
