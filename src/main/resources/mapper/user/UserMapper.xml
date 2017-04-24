@@ -86,11 +86,14 @@
             WHERE category=#{category,jdbcType=INTEGER})) GROUP BY phone DESC
         </if>
         <if test="userid!=null">
-            SELECT id,photo,nickname,phone,level FROM yw_user WHERE id IN(
-            SELECT userid FROM yw_circle_manager WHERE circleid IN(
-            SELECT id FROM yw_circle WHERE phone=(
-            SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
-            AND category=#{category,jdbcType=INTEGER})) GROUP BY phone DESC
+            SELECT u.id,u.photo,u.nickname,u.phone,u.level FROM yw_circle_manager m LEFT JOIN yw_user u ON m.userid=u.id
+            WHERE m.circleid in(
+            SELECT c.id
+            FROM yw_circle c WHERE isdel=0
+            AND c.phone=(SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER}) AND
+            c.category=#{category,jdbcType=INTEGER}
+            OR c.id in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone =(SELECT
+            phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER}))) AND c.category=#{category,jdbcType=INTEGER})
         </if>
 
     </select>
