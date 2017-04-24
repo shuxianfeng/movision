@@ -114,9 +114,20 @@ public class MsgCenterFacade {
      *
      * @return
      */
-    public List<ImSystemInform> getMsgInformationList(Paging<ImSystemInform> paging) {
+    public List<ImSystemInformVo> getMsgInformationList(Paging<ImSystemInformVo> paging) {
+        List<ImSystemInformVo> list = imSystemInformService.queryAll(paging);
+        for (int i = 0; i < list.size(); i++) {
+            String indity = list.get(i).getInformidentity();
+            if (indity != null) {
+                Integer iscount = imSystemInformService.queryInform(indity);
+                if (iscount > 0) {
+                    list.get(i).setIsRead(1);
+                } else {
+                    list.get(i).setIsRead(0);
+                }
 
-        List<ImSystemInform> list = imSystemInformService.queryAll(paging);
+            }
+        }
         return list;
     }
 

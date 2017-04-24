@@ -36,7 +36,7 @@ public class ImSystemInformService {
         }
     }
 
-    public List<ImSystemInform> queryAll(Paging<ImSystemInform> paging) {
+    public List<ImSystemInformVo> queryAll(Paging<ImSystemInformVo> paging) {
         try {
             log.info("查询所有的系统通知");
             return imSystemInformMapper.findAll(paging.getRowBounds());
@@ -131,6 +131,23 @@ public class ImSystemInformService {
         try {
             log.info("查询是否有未读系统通知");
             return imSystemInformMapper.querySystemPushByUserid(userid);
+        } catch (Exception e) {
+            log.error("查询是否有未读系统通知异常", e);
+            throw e;
+        }
+    }
+
+
+    /**
+     * 查询是否有未读系统通知
+     *
+     * @param indity
+     * @return
+     */
+    public Integer queryInform(String indity) {
+        try {
+            log.info("查询是否有未读系统通知");
+            return imSystemInformMapper.queryInform(indity);
         } catch (Exception e) {
             log.error("查询是否有未读系统通知异常", e);
             throw e;

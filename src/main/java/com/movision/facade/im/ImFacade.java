@@ -12,6 +12,7 @@ import com.movision.mybatis.imFirstDialogue.entity.ImMsg;
 import com.movision.mybatis.imFirstDialogue.service.ImFirstDialogueService;
 import com.movision.mybatis.imSystemInform.entity.ImBatchAttachMsg;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
+import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.imSystemInform.service.ImSystemInformService;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.imuser.service.ImUserService;
@@ -558,7 +559,7 @@ public class ImFacade {
      * @param paging
      * @return
      */
-    public List<ImSystemInform> queryAllSystemInform(Paging<ImSystemInform> paging) {
+    public List<ImSystemInformVo> queryAllSystemInform(Paging<ImSystemInformVo> paging) {
 
         return imSystemInformService.queryAll(paging);
     }

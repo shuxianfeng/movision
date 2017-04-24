@@ -20,7 +20,7 @@ public interface ImSystemInformMapper {
 
     int updateByPrimaryKey(ImSystemInform record);
 
-    List<ImSystemInform> findAll(RowBounds rowBounds);
+    List<ImSystemInformVo> findAll(RowBounds rowBounds);
 
     List<ImSystemInform> findAllSystemInform(Map map, RowBounds rowBounds);//条件搜索
 
@@ -29,4 +29,6 @@ public interface ImSystemInformMapper {
     ImSystemInformVo queryByUserid();//查询最新一条记录
 
     Integer querySystemPushByUserid(Integer userid);//查询是否有未读系统通知
+
+    Integer queryInform(String indity);
 }

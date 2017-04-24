@@ -7,6 +7,7 @@ import com.movision.mybatis.PostZanRecord.entity.ZanRecordVo;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogueVo;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
+import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -51,8 +52,8 @@ public class MyMsgController {
     public Response getMyMsgCenterInformationList(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                                   @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Paging<ImSystemInform> paging = new Paging<ImSystemInform>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<ImSystemInform> list = msgCenterFacade.getMsgInformationList(paging);
+        Paging<ImSystemInformVo> paging = new Paging<ImSystemInformVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<ImSystemInformVo> list = msgCenterFacade.getMsgInformationList(paging);
         paging.result(list);
         response.setData(paging);
         return response;

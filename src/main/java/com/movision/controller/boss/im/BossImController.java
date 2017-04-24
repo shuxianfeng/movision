@@ -3,6 +3,7 @@ package com.movision.controller.boss.im;
 import com.movision.common.Response;
 import com.movision.facade.im.ImFacade;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
+import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.systemPush.entity.SystemPush;
 import com.movision.mybatis.systemToPush.entity.SystemToPush;
 import com.movision.utils.pagination.model.Paging;
@@ -58,8 +59,8 @@ public class BossImController {
     public Response querySystemInformList(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                           @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Paging<ImSystemInform> paging = new Paging<ImSystemInform>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<ImSystemInform> list = imFacade.queryAllSystemInform(paging);
+        Paging<ImSystemInformVo> paging = new Paging<ImSystemInformVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<ImSystemInformVo> list = imFacade.queryAllSystemInform(paging);
         paging.result(list);
         response.setData(paging);
         return response;
