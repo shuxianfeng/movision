@@ -348,7 +348,7 @@ public class AppLoginController {
      * @param user
      * @return
      */
-    private String validateAppTokenAndServerToken(@ApiParam(value = "token") @RequestParam String appToken, Response response, User user) {
+    private String validateAppTokenAndServerToken(String appToken, Response response, User user) {
         if (StringUtils.isEmpty(appToken)) {
             log.warn("app本地的token丢失");
             response.setCode(400);
