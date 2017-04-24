@@ -350,13 +350,13 @@ public class PostService {
         }
     }
 
-     /**
+    /**
      * 后台管理-查询帖子列表
      *
      * @param pager
-      * @return List
+     * @return List
      */
-     public List<PostList> queryPostByList(Paging<PostList> pager) {
+    public List<PostList> queryPostByList(Paging<PostList> pager) {
         try {
             log.info("查询帖子列表");
             return postMapper.findAllqueryPostByList(pager.getRowBounds());
@@ -364,7 +364,7 @@ public class PostService {
             log.error("查询帖子列表异常", e);
             throw e;
         }
-     }
+    }
 
     /**
      * 查询帖子列表
@@ -485,13 +485,13 @@ public class PostService {
      * @return
      */
     public List<PostActiveList> queryPostActiveToByList(Map map, Paging<PostActiveList> pager) {
-            try{
-                log.info("查询活动列表");
-                return postMapper.findAllActiveTOByList(map, pager.getRowBounds());
-            }catch (Exception e) {
-                log.error("查询活动列表失败",e);
-                throw e;
-            }
+        try {
+            log.info("查询活动列表");
+            return postMapper.findAllActiveTOByList(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询活动列表失败", e);
+            throw e;
+        }
 
     }
 
@@ -520,11 +520,11 @@ public class PostService {
 
         try {
             log.info("查询报名人数 postid=" + postid);
-                return postMapper.findAllPerson(postid);
-            }catch(Exception e) {
+            return postMapper.findAllPerson(postid);
+        } catch (Exception e) {
             log.error("查询报名人数失败 postid=" + postid,e);
-                throw  e;
-            }
+            throw e;
+        }
     }
 
 
@@ -606,13 +606,14 @@ public class PostService {
             throw e;
         }
     }
-     /**
+
+    /**
      * 添加帖子
      *
      * @param map
      * @return
      */
-     public int addPost(PostTo map) {
+    public int addPost(PostTo map) {
         try {
             log.info("添加帖子");
             return postMapper.insertSelectivet(map);

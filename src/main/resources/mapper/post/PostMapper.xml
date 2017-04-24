@@ -1090,6 +1090,7 @@
         ORDER BY p.intime DESC
     </select>
 
+    <!-- 圈子管理员/圈主 -->
     <select id="findAllqueryPostByManageByList" parameterType="java.util.List"
             resultType="com.movision.mybatis.post.entity.PostList">
         SELECT p.*,(SELECT u.nickname FROM yw_user u WHERE u.id=p.userid) as nickname,
@@ -1100,6 +1101,10 @@
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
         WHERE p.isdel=0 AND p.isactive=0
+        AND p.circleid in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone
+        =(SELECT phone FROM yw_admin_user WHERE id=#{loginid,jdbcType=INTEGER})))
+        OR p.circleid IN (SELECT id FROM yw_circle WHERE phone=(SELECT phone FROM yw_admin_user WHERE
+        id=#{loginid,jdbcType=INTEGER}))
         <if test="uid!=null">
             AND u.id=#{uid,jdbcType=INTEGER}
         </if>
@@ -1127,10 +1132,6 @@
         <if test="essencedate!=null">
             AND p.essencedate=#{essencedate,jdbcType=DATE}
         </if>
-        AND p.circleid IN (SELECT circleid FROM yw_circle_manager WHERE userid=#{userid,jdbcType=INTEGER})
-        <!--<foreach collection="list" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>-->
         <if test="pai==0">
             ORDER BY p.intime DESC
         </if>
@@ -1626,7 +1627,6 @@
 
     <select id="findAllpostSearch" parameterType="com.movision.mybatis.post.entity.PostSpread"
             resultType="com.movision.mybatis.post.entity.PostList">
-        <if test="cirlceid==null">
         SELECT p.*,u.nickname,
         (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
         (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
@@ -1640,6 +1640,9 @@
         </if>
         <if test="price==5">
             AND p.isactive=0
+        </if>
+        <if test="circleid!=null">
+            AND p.circleid=#{circleid,jdbcType=INTEGER}
         </if>
         <if test="price==6">
             AND p.isessence=1
@@ -1667,50 +1670,6 @@
         </if>
         <if test="pai==1">
             ORDER BY totalpoint DESC
-        </if>
-        </if>
-        <if test="circleid!=null">
-            SELECT p.*,u.nickname,
-            (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
-            (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
-            (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
-            (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid) AS circlename,
-            (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid) AS category
-            FROM yw_post AS p LEFT JOIN yw_user u ON u.id=p.userid
-            WHERE p.isdel=0 AND p.isactive=0 AND p.circleid IN
-            <foreach collection="array" item="item" open="(" separator="," close=")">
-                #{circleids,jdbcType=INTEGER}
-            </foreach>
-            <if test="uid!=null">
-                AND u.id=#{uid,jdbcType=INTEGER}
-            </if>
-            <if test="price==5">
-                AND p.isactive=0
-            </if>
-            <if test="price==6">
-                AND p.isessence=1
-            </if>
-            <if test="title!=null">
-                AND p.title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
-            </if>
-            <if test="userid!=null">
-                AND p.userid=#{userid,jdbcType=INTEGER}
-            </if>
-            <if test="postcontent!=null">
-                AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
-            </if>
-            <if test="endtime!=null and begintime!=null">
-                AND p.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
-            </if>
-            <if test="essencedate!=null">
-                AND p.essencedate=#{essencedate,jdbcType=DATE}
-            </if>
-            <if test="pai==0">
-                ORDER BY intime DESC
-            </if>
-            <if test="pai==1">
-                ORDER BY totalpoint DESC
-            </if>
         </if>
     </select>
 
