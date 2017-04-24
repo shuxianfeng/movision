@@ -99,7 +99,7 @@
     </select>
     <select id="queryPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
 
-        SELECT p.title,p.postcontent,p.activetype,p.type,p.coverimg,p.isactive,p.id FROM yw_post p
+        SELECT p.title,p.postcontent,p.activetype,p.type,p.coverimg,p.isactive,p.id,p.subtitle FROM yw_post p
         WHERE p.id=#{postid,jdbcType=INTEGER}
     </select>
 
