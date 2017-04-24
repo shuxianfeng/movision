@@ -59,8 +59,6 @@ public interface CircleMapper {
 
     List<Circle> queryListByCircleListByUserid(Map categoryid);
 
-    List<Circle> queryListByCircleManageListByUserid(Map map);
-
     List<Circle> queryDiscoverList();
 
     Integer queryCircleDiscover(String circleid);
@@ -88,8 +86,6 @@ public interface CircleMapper {
     List<Circle> findAllMyFollowCircleList(RowBounds rowBounds, Map map);
 
     int updateAuditCircle(Map map);
-
-   /* int updateCircleCategoryClassify(Map map);*/
 
     Category queryCircleCategoryClassify(String categoryid);
 

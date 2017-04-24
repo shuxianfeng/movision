@@ -432,7 +432,9 @@
             AND createtime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}
         </if>
         <if test="userid!=null">
-            AND c.id IN (SELECT circleid FROM yw_circle_manager WHERE userid=#{userid,jdbcType=INTEGER})
+            AND c.phone=(SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
+            OR c.id in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone =(SELECT
+            phone FROM yw_admin_user WHERE id=id=#{userid,jdbcType=INTEGER})))
         </if>
         ORDER BY category
         <if test="pai==null">
@@ -501,7 +503,9 @@
     <select id="queryListByCircleListByUserid" parameterType="java.util.Map"
             resultType="com.movision.mybatis.circle.entity.Circle">
         SELECT id,name,category FROM yw_circle WHERE phone=(SELECT phone FROM yw_admin_user
-        WHERE id=#{userid,jdbcType=INTEGER}) AND isdel=0 AND status=1
+        WHERE id=61) AND isdel=0 AND status=1 OR id in(SELECT circleid FROM yw_circle_manager
+        WHERE userid=(SELECT id FROM yw_user WHERE phone =(SELECT phone FROM yw_admin_user WHERE
+        id=#{userid,jdbcType=INTEGER})))
         <if test="categoryid!=null">
             AND category=#{categoryid,jdbcType=INTEGER}
         </if>

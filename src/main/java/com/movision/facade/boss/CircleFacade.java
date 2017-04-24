@@ -80,17 +80,11 @@ public class CircleFacade {
                 List<CircleVo> listt = new ArrayList<>();
                 if (res.get("resault").equals(2)) {
                     listt = circleService.queryCircleByLikeList(map);//超管\普管
-                } else if (res.get("resault").equals(1)) {
-                    if (logintype.getCirclemanagement() == 1) {//圈子管理员
+                } else if (res.get("resault").equals(1)) {//圈子管理员,圈主
                         map.put("userid", loginid);
                         listt = circleService.queryCircleManagementByLikeList(map);
-                    } else if (logintype.getIscircle() == 1) {//圈主
-                        map.put("userid", loginid);
-                        listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
-                    }
                 }
                 List<CircleVo> circleVoslist = new ArrayList<>();
-                //List<User> adminlist = new ArrayList();//用于存储类型中所有圈子的管理员
                 List<Map> username = new ArrayList();//用于存放类型中所有圈主
                 int posts = 0;//总帖子数
                 int follows = 0;//关注数
@@ -99,7 +93,6 @@ public class CircleFacade {
                 int isessences = 0;//精贴数
                 map.put("category", circlenum.get(i).getCategory());
                 List<User> userslist = userService.queryCircleMangerByUseridList(map);//根据用户id查询出圈子所有管理员列表
-                //System.out.println("++++++++++++++++++++++++++"+listt.toString());
                 if (listt.size() > 0) {
                     for (int e = 0; e < listt.size(); e++) {//根据圈子遍历
                         CircleVo vo = new CircleVo();
@@ -500,21 +493,12 @@ public class CircleFacade {
     public List<Circle> queryListByCircleType(String categoryid, String loginid) {
         Integer loid = Integer.parseInt(loginid);
         Map res = commonalityFacade.verifyUserByQueryMethod(loid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode(), null);
-        BossUser userjd = bossUserService.queryUserByAdministrator(loid);//根据登录用户id查询当前用户有哪些权限
         if (res.get("resault").equals(1)) {
-            if (userjd.getIscircle() == 1) {//代表圈主登录
                 Map map = new HashedMap();
                 map.put("categoryid", categoryid);
                 map.put("userid", loid);
-                List<Circle> circle = circleService.queryListByCircleListByUserid(map);//用于圈主查询圈子名称
+            List<Circle> circle = circleService.queryListByCircleListByUserid(map);//圈主。圈子管理员
                 return circle;
-            } else if (userjd.getCirclemanagement() == 1) {//代表圈子管理员登录
-                Map map = new HashedMap();
-                map.put("categoryid", categoryid);
-                map.put("userid", loid);
-                List<Circle> circle = circleService.queryListByCircleManageListByUserid(map);//用于圈子管理员查询圈子名称
-                return circle;
-            }
         } else if (res.get("resault").equals(2) || res.get("resault").equals(0)) {//超管，普管，特邀嘉宾
             Map map = new HashMap();
             map.put("categoryid", categoryid);
@@ -680,14 +664,9 @@ public class CircleFacade {
                     List<CircleVo> listt = new ArrayList<>();
                     if (res.get("resault").equals(2) || res.get("resault").equals(0)) {
                         listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
-                    } else if (res.get("resault").equals(1)) {
-                        if (logintype.getCirclemanagement() == 1) {//圈子管理员
+                    } else if (res.get("resault").equals(1)) {//圈子管理员,圈主
                             map.put("userid", loginid);
                             listt = circleService.queryCircleManagementByLikeList(map);
-                        } else if (logintype.getIscircle() == 1) {//圈主
-                            map.put("userid", loginid);
-                            listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
-                        }
                     }
                     List<CircleVo> circleVoslist = new ArrayList<>();
                     int posts = 0;//总帖子数
@@ -772,14 +751,9 @@ public class CircleFacade {
                     List<CircleVo> listt = new ArrayList<>();
                     if (res.get("resault").equals(2) || res.get("resault").equals(0)) {
                         listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
-                    } else if (res.get("resault").equals(1)) {
-                        if (logintype.getCirclemanagement() == 1) {//圈子管理员
+                    } else if (res.get("resault").equals(1)) {//圈子管理员,圈主
                             map.put("userid", loginid);
                             listt = circleService.queryCircleManagementByLikeList(map);
-                        } else if (logintype.getIscircle() == 1) {//圈主
-                            map.put("userid", loginid);
-                            listt = circleService.queryCircleByLikeList(map);//获取圈子分类列表的圈子列表
-                        }
                     }
                     List<CircleVo> circleVoslist = new ArrayList<>();
                     List username = new ArrayList();//用于存放类型中所有圈主
