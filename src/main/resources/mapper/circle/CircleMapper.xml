@@ -434,7 +434,7 @@
         <if test="userid!=null">
             AND c.phone=(SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
             OR c.id in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone =(SELECT
-            phone FROM yw_admin_user WHERE id=id=#{userid,jdbcType=INTEGER})))
+            phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})))
         </if>
         ORDER BY category
         <if test="pai==null">

@@ -81,8 +81,8 @@ public class CircleFacade {
                 if (res.get("resault").equals(2)) {
                     listt = circleService.queryCircleByLikeList(map);//超管\普管
                 } else if (res.get("resault").equals(1)) {//圈子管理员,圈主
-                        map.put("userid", loginid);
-                        listt = circleService.queryCircleManagementByLikeList(map);
+                    map.put("userid", loginid);
+                    listt = circleService.queryCircleManagementByLikeList(map);
                 }
                 List<CircleVo> circleVoslist = new ArrayList<>();
                 List<Map> username = new ArrayList();//用于存放类型中所有圈主
