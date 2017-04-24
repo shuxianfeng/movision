@@ -386,16 +386,15 @@ public class PostService {
     /**
      * 查询帖子列表
      *
-     * @param userid
      * @param pager
      * @return list
      */
-    public List<PostList> queryPostByManageByList(Integer userid, Paging<PostList> pager) {
+    public List<PostList> queryPostByManageByList(Map map, Paging<PostList> pager) {
         try {
-            log.info("查询帖子列表userid=" + userid);
-            return postMapper.findAllqueryPostByManageByList(userid, pager.getRowBounds());
+            log.info("查询帖子列表");
+            return postMapper.findAllqueryPostByManageByList(map, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询帖子列表异常 userid=" + userid);
+            log.error("查询帖子列表异常", e);
             throw e;
         }
     }
@@ -845,6 +844,23 @@ public class PostService {
         }
     }
 
+  /*  *//**
+     * 特邀嘉宾查询帖子列表
+     *
+     * @param map
+     * @param pager
+     * @return
+     *//*
+    public List<PostList> queryPostByContributing(Map map,Paging<PostList> pager){
+        try {
+            log.info("特邀嘉宾查询帖子列表");
+            return postMapper.findAllqueryPostByContributing(map,pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("特邀嘉宾查询帖子列表异常",e);
+            throw e;
+        }
+    }
+*/
     /**
      * 查询圈子下的帖子列表
      *

@@ -159,20 +159,6 @@ public class CircleController {
         return response;
     }
 
-    /**
-     * 圈子类型
-     *
-     * @param circleid
-     * @return
-     */
-    public Response queryCircletype(@ApiParam(value = "圈子id") @RequestParam String circleid) {
-        Response response = new Response();
-        if (response.getCode() == 200) {
-            response.setMessage("操作成功");
-        }
-        response.setData("");
-        return response;
-    }
 
     /**
      * 编辑圈子

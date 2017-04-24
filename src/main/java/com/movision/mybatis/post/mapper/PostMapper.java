@@ -8,6 +8,7 @@ import com.movision.mybatis.postProcessRecord.entity.PostProcessRecord;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.video.entity.Video;
 import org.apache.ibatis.session.RowBounds;
+import org.apache.poi.ss.usermodel.Row;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -112,7 +113,7 @@ public interface PostMapper {
 
     List<PostList> findAllqueryPostByList2(Integer userid, RowBounds rowBounds);
 
-    List<PostList> findAllqueryPostByManageByList(Integer userid, RowBounds rowBounds);
+    List<PostList> findAllqueryPostByManageByList(Map map, RowBounds rowBounds);
 
     List<PostList> findAllqueryPostByCircleId(Map map, RowBounds rowBounds);
 
@@ -159,6 +160,8 @@ public interface PostMapper {
     Integer updateByPrimaryKeySelectiveById(PostTo post);
 
     List<PostList> findAllpostSearch(Map spread, RowBounds rowBounds);
+
+/*    List<PostList> findAllqueryPostByContributing(Map map,RowBounds rowBounds);*/
 
     List<PostList> findAllQueryCircleByPostList(Map map, RowBounds rowBounds);
 

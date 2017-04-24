@@ -1100,11 +1100,43 @@
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
         WHERE p.isdel=0 AND p.isactive=0
+        <if test="uid!=null">
+            AND u.id=#{uid,jdbcType=INTEGER}
+        </if>
+        <if test="price==5">
+            AND p.isactive=0
+        </if>
+        <if test="price==6">
+            AND p.isessence=1
+        </if>
+        <if test="title!=null">
+            AND p.title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="userid!=null">
+            AND p.userid=#{userid,jdbcType=INTEGER}
+        </if>
+        <if test="postcontent!=null">
+            AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="circleid!=null">
+            AND p.circleid=#{circleid,jdbcType=INTEGER}
+        </if>
+        <if test="endtime!=null and begintime!=null">
+            AND p.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
+        <if test="essencedate!=null">
+            AND p.essencedate=#{essencedate,jdbcType=DATE}
+        </if>
         AND p.circleid IN (SELECT circleid FROM yw_circle_manager WHERE userid=#{userid,jdbcType=INTEGER})
         <!--<foreach collection="list" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>-->
-        ORDER BY p.intime DESC
+        <if test="pai==0">
+            ORDER BY p.intime DESC
+        </if>
+        <if test="pai==1">
+            ORDER BY p.totalpoint DESC
+        </if>
     </select>
 
     <!-- 查询帖子列表2 -->
@@ -1594,7 +1626,7 @@
 
     <select id="findAllpostSearch" parameterType="com.movision.mybatis.post.entity.PostSpread"
             resultType="com.movision.mybatis.post.entity.PostList">
-        <if test="cirlceids==null">
+        <if test="cirlceid==null">
         SELECT p.*,u.nickname,
         (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
         (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,

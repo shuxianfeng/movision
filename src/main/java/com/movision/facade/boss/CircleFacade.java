@@ -515,7 +515,7 @@ public class CircleFacade {
                 List<Circle> circle = circleService.queryListByCircleManageListByUserid(map);//用于圈子管理员查询圈子名称
                 return circle;
             }
-        } else if (res.get("resault").equals(2)) {
+        } else if (res.get("resault").equals(2) || res.get("resault").equals(0)) {//超管，普管，特邀嘉宾
             Map map = new HashMap();
             map.put("categoryid", categoryid);
             List<Circle> circle = circleService.queryListByCircleList(map);
