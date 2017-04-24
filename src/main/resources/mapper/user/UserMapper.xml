@@ -94,6 +94,7 @@
             c.category=#{category,jdbcType=INTEGER}
             OR c.id in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone =(SELECT
             phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER}))) AND c.category=#{category,jdbcType=INTEGER})
+            GROUP BY u.nickname
         </if>
 
     </select>
