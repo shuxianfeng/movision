@@ -8,6 +8,8 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
+import com.movision.utils.file.FileUtil;
+import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +36,9 @@ public class AppPostController {
 
     @Autowired
     private FacadePost facadePost;
+
+    @Autowired
+    private MovisionOssClient movisionOssClient;
 
     @ApiOperation(value = "帖子详情数据返回接口", notes = "用于返回请求帖子详情内容", response = Response.class)
     @RequestMapping(value = "detail", method = RequestMethod.POST)
@@ -165,6 +171,26 @@ public class AppPostController {
             response.setMessage("发帖成功");
         }
         return response;
+    }
+
+    /**
+     * 上传帖子内容相关图片
+     *
+     * @param file
+     * @return
+     */
+    @ApiOperation(value = "上传帖子相关图片", notes = "上传帖子相关图片", response = Response.class)
+    @RequestMapping(value = {"/upload_post_img"}, method = RequestMethod.POST)
+    public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file) {
+
+        Map m = movisionOssClient.uploadObject(file, "img", "post");
+        String url = String.valueOf(m.get("url"));
+        Map<String, Object> map = new HashMap<>();
+        map.put("url", url);
+        map.put("name", FileUtil.getFileNameByUrl(url));
+        map.put("width", m.get("width"));
+        map.put("height", m.get("height"));
+        return new Response(map);
     }
 
     @ApiOperation(value = "APP端删帖", notes = "用于APP端删除帖子的接口", response = Response.class)
