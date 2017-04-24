@@ -499,7 +499,7 @@ public class CircleFacade {
      */
     public List<Circle> queryListByCircleType(String categoryid, String loginid) {
         Integer loid = Integer.parseInt(loginid);
-        Map res = commonalityFacade.verifyUserByQueryMethod(loid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circle.getCode(), null);
+        Map res = commonalityFacade.verifyUserByQueryMethod(loid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode(), null);
         BossUser userjd = bossUserService.queryUserByAdministrator(loid);//根据登录用户id查询当前用户有哪些权限
         if (res.get("resault").equals(1)) {
             if (userjd.getIscircle() == 1) {//代表圈主登录
