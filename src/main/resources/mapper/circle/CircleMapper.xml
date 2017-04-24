@@ -411,7 +411,7 @@
         u.level categorylevel
         FROM yw_circle c LEFT JOIN yw_user u ON c.phone=u.phone WHERE isdel=0
         <if test="type!=null">
-            AND category=#{type,jdbcType=INTEGER}
+            AND c.category=#{type,jdbcType=INTEGER}
         </if>
         <if test="status==0">
             AND c.status=0
@@ -433,8 +433,10 @@
         </if>
         <if test="userid!=null">
             AND c.phone=(SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
+            AND c.category=#{type,jdbcType=INTEGER}
             OR c.id in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone =(SELECT
             phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})))
+            AND c.category=#{type,jdbcType=INTEGER}
         </if>
         ORDER BY category
         <if test="pai==null">
