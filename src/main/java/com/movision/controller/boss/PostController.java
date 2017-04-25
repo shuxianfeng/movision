@@ -534,12 +534,20 @@ public class PostController {
      */
     @ApiOperation(value = "查询精选池帖子列表", notes = "用于查询精选池帖子列表", response = Response.class)
     @RequestMapping(value = "query_post_isessencepool_list", method = RequestMethod.POST)
-    public Response queryPostByIsessencepoolList(@ApiParam(value = "登录用户") @RequestParam String loginid,
+    public Response queryPostByIsessencepoolList(@ApiParam(value = "帖子标题") @RequestParam(required = false) String title,
+                                                 @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
+                                                 @ApiParam(value = "发帖人") @RequestParam(required = false) String userid,
+                                                 @ApiParam(value = "帖子内容") @RequestParam(required = false) String postcontent,
+                                                 @ApiParam(value = "结束时间(yyyy-MM-dd)") @RequestParam(required = false) String endtime,
+                                                 @ApiParam(value = "开始时间(yyyy-MM-dd)") @RequestParam(required = false) String begintime,
+                                                 @ApiParam(value = "精选日期（yyyy-MM-dd）") @RequestParam(required = false) String essencedate,
+                                                 @ApiParam(value = "登录用户") @RequestParam String loginid,
+                                                 @ApiParam(value = "排序 0按时间排序") @RequestParam(required = false) String pai,
                                                  @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                                  @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostList> list = postFacade.queryPostByIsessencepoolList(loginid, pager);
+        List<PostList> list = postFacade.queryPostByIsessencepoolList(title, circleid, userid, postcontent, endtime, begintime, essencedate, loginid, pai, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

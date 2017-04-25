@@ -1866,8 +1866,54 @@ public class PostFacade {
      * @param pager
      * @return
      */
-    public List queryPostByIsessencepoolList(String loginid, Paging<PostList> pager) {
-        return postService.queryPostByIsessencepoolList(pager);
+    public List queryPostByIsessencepoolList(String title, String circleid, String userid, String postcontent, String endtime,
+                                             String begintime, String essencedate, String loginid, String pai, Paging<PostList> pager) {
+        Integer uid = Integer.parseInt(loginid);
+        Map res = commonalityFacade.verifyUserByQueryMethod(uid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.choicenesspool.getCode(), null);
+        Map map = new HashMap();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date end = null;
+        Date beg = null;
+        Date ess = null;
+        if (res.get("resault").equals(2)) {
+            //结束时间,开始时间
+            if (!StringUtils.isEmpty(endtime) && !StringUtils.isEmpty(begintime)) {
+                try {
+                    end = format.parse(endtime);
+                    beg = format.parse(begintime);
+                    map.put("endtime", end);
+                    map.put("begintime", beg);
+                } catch (ParseException e) {
+                    log.error("时间格式转换异常");
+                }
+            }
+            if (StringUtil.isNotEmpty(essencedate)) {
+                try {
+                    ess = format.parse(essencedate);
+                    map.put("essencedate", ess);
+                } catch (ParseException e) {
+                    log.error("时间格式转换异常");
+                }
+            }
+            if (StringUtil.isNotEmpty(title)) {
+                map.put("title", title);
+            }
+            if (StringUtil.isNotEmpty(circleid)) {
+                map.put("circleid", circleid);
+            }
+            if (StringUtil.isNotEmpty(userid)) {
+                map.put("userid", userid);
+            }
+            if (StringUtil.isNotEmpty(postcontent)) {
+                map.put("postcontent", postcontent);
+            }
+            if (StringUtil.isNotEmpty(pai)) {
+                map.put("pai", pai);
+            }
+            return postService.queryPostByIsessencepoolList(map, pager);
+        } else {
+            return null;
+        }
     }
 
 }

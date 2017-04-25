@@ -1683,9 +1683,6 @@
         <if test="postcontent!=null">
             AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
         </if>
-        <if test="circleid!=null">
-            AND p.circleid=#{circleid,jdbcType=INTEGER}
-        </if>
         <if test="endtime!=null and begintime!=null">
             AND p.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
         </if>
@@ -1736,13 +1733,13 @@
 
         <if test="begintime!=null and endtime!=null">
             <!--AND p.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}-->
-            AND (((#{begintime,jdbcType=DATE}  <![CDATA[<]]> a.begintime) AND (#{endtime,jdbcType=DATE} <![CDATA[>]]>
+            AND (((#{begintime,jdbcType=DATE}  <![CDATA[<=]]> a.begintime) AND (#{endtime,jdbcType=DATE} <![CDATA[>=]]>
             a.endtime))
-            OR ((#{endtime,jdbcType=DATE} <![CDATA[>]]> a.begintime) AND (#{begintime,jdbcType=DATE} <![CDATA[<]]>
+            OR ((#{endtime,jdbcType=DATE} <![CDATA[>=]]> a.begintime) AND (#{begintime,jdbcType=DATE} <![CDATA[<=]]>
             a.begintime))
-            OR ((#{endtime,jdbcType=DATE} <![CDATA[>]]> a.endtime) AND (#{begintime,jdbcType=DATE} <![CDATA[<]]>
+            OR ((#{endtime,jdbcType=DATE} <![CDATA[>=]]> a.endtime) AND (#{begintime,jdbcType=DATE} <![CDATA[<=]]>
             a.endtime))
-            OR ((#{endtime,jdbcType=DATE} <![CDATA[<]]> a.endtime) AND (#{begintime,jdbcType=DATE} <![CDATA[>]]>
+            OR ((#{endtime,jdbcType=DATE} <![CDATA[<=]]> a.endtime) AND (#{begintime,jdbcType=DATE} <![CDATA[>=]]>
             a.begintime)))
         </if>
 
@@ -1900,7 +1897,8 @@
         UPDATE yw_post SET isessencepool=1 WHERE id=#{postid,jdbcType=INTEGER}
     </update>
 
-    <select id="findAllqueryPostByIsessencepoolList" resultType="com.movision.mybatis.post.entity.PostList">
+    <select id="findAllqueryPostByIsessencepoolList" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.post.entity.PostList">
     SELECT p.*,(SELECT u.nickname FROM yw_user u WHERE u.id=p.userid) as nickname,
     (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
     (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
@@ -1908,7 +1906,31 @@
     (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS circlename,
     (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
     FROM yw_post AS p
-    WHERE p.isdel=0 AND p.isactive=0 AND p.isessencepool=1 ORDER BY p.intime DESC
+        WHERE p.isdel=0 AND p.isactive=0 AND p.isessencepool=1
+        <if test="uid!=null">
+            AND userid=#{uid,jdbcType=INTEGER}
+        </if>
+        <if test="circleid!=null">
+            AND p.circleid=#{circleid,jdbcType=INTEGER}
+        </if>
+        <if test="title!=null">
+            AND p.title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="postcontent!=null">
+            AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="endtime!=null and begintime!=null">
+            AND p.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
+        <if test="essencedate!=null">
+            AND p.essencedate=#{essencedate,jdbcType=DATE}
+        </if>
+        <if test="pai==0">
+            ORDER BY p.intime DESC
+        </if>
+        <if test="pai==1">
+            ORDER BY p.intime ASC
+        </if>
     </select>
 
 

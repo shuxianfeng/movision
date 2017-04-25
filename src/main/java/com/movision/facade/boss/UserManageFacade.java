@@ -456,7 +456,7 @@ public class UserManageFacade {
             userService.deleteUserLevl(map);//更新用户加V状态
             map.put("isdel", 1);
             userService.updateAuditByUser(map);//更新VIP申请
-            return auditVipDetailService.insertVIPDetail(map);
+            return auditVipDetailService.insertVIPDetail(map);//加V申请审核
         } else if (status.equals("1")) {//未通过
             Map map = new HashMap();
             map.put("userid", userid);
@@ -465,11 +465,11 @@ public class UserManageFacade {
             map.put("appyid", appyid);
             map.put("loginid", loginid);
             map.put("auditTime", new Date());
-            Integer res = auditVipDetailService.queryVipDetail(map);
+            Integer res = auditVipDetailService.queryVipDetail(map);//查询该用户之前有没有进行加V审核
             if (res.equals(1)) {
-                return auditVipDetailService.updateVipDetail(map);
+                return auditVipDetailService.updateVipDetail(map);//更新加V审核
             } else {
-                return auditVipDetailService.insertVIPDetail(map);
+                return auditVipDetailService.insertVIPDetail(map);//加V审核
             }
         } else {
             return -1;

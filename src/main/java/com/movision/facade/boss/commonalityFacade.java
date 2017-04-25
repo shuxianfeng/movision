@@ -288,7 +288,7 @@ public class commonalityFacade {
                 && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//特邀嘉宾可以查看
             map.put("resault", 0);
             return map;
-        } else if (i.getIssuper().equals(1) || i.getCommon().equals(1)) {//操作权限为最高权限
+        } else if (i.getIssuper().equals(1) || i.getCommon().equals(1) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.choicenesspool.getCode())) {//操作权限为最高权限
             map.put("resault", 2);
             return map;
         } else {

@@ -510,7 +510,7 @@
         zansum,u.fans,u.applydate
         FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id
-        WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 ORDER BY vd.apply_time DESC
+        WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 AND u.phone IS NOT NULL ORDER BY vd.apply_time DESC
     </select>
 
     <!-- 查看VIP列表-->
@@ -630,7 +630,8 @@
     <!-- 条件查询VIP申请用户列表 -->
     <select id="findAllQueryUniteConditionByApply" parameterType="java.util.Map"
             resultType="com.movision.mybatis.user.entity.UserVo">
-        SELECT u.id,u.nickname,u.phone,u.level,u.status,
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,vd.id AS appyid,
+        (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) AS autonym,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
         (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
@@ -640,10 +641,10 @@
         AND p5.isdel=0)) AS besharesum,
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
         (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
-        zansum,u.fans,u.applydate,aut.authstatus,vd.apply_time AS addVtime
-        FROM (yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id) LEFT JOIN yw_autonym_authentication aut ON
-        aut.userid=u.id
-        WHERE vd.userid=u.id AND u.status=0
+        zansum,u.fans,u.applydate
+        FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id LEFT JOIN yw_autonym_authentication au ON
+        au.userid=u.id
+        WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 AND u.phone IS NOT NULL ORDER BY vd.apply_time DESC
         <if test="username!=null">
             AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
         </if>

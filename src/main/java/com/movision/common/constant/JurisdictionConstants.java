@@ -20,6 +20,8 @@ public class JurisdictionConstants {
 
         post(2),//帖子
 
+        choicenesspool(10),//精选池
+
         comment(3),//评论
 
         circleType(4),//圈子分类
