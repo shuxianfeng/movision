@@ -153,10 +153,12 @@
     </update>
 
     <update id="updateCallRead" parameterType="java.lang.Integer">
-        UPDATE yw_im_first_dialogue SET isread=1 WHERE userid=#{userid,jdbcType=INTEGER}
+        UPDATE yw_im_first_dialogue SET isread=1 WHERE toid=(SELECT accid FROM yw_im_user WHERE
+        userid=#{userid,jdbcType=INTEGER} AND type=1)
     </update>
 
     <select id="queryIsreadByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM yw_im_first_dialogue d LEFT JOIN yw_im_user u ON d.toid=u.accid WHERE u.userid=#{userid,jdbcType=INTEGER} AND d.isread=0
+        SELECT COUNT(1) FROM yw_im_first_dialogue d LEFT JOIN yw_im_user u ON d.toid=u.accid WHERE
+        u.userid=#{userid,jdbcType=INTEGER} AND d.isread=0 AND u.type=1
     </select>
 </mapper>

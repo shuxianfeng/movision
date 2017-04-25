@@ -36,6 +36,21 @@ public class ImSystemInformReadService {
     }
 
     /**
+     * 新增系统消息已读记录
+     * @param map
+     * @return
+     */
+    public Integer insertSystemRead(Map map) {
+        try {
+            log.info("新增系统消息已读记录");
+            return imSystemInformReadMapper.insertSystemRead(map);
+        } catch (Exception e) {
+            log.error("新增系统消息已读记录异常", e);
+            throw e;
+        }
+    }
+
+    /**
      * 查询该用户是否查看过此条系统推送
      *
      * @param map

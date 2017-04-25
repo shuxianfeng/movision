@@ -259,6 +259,8 @@ public class MsgCenterFacade {
             Integer check = imSystemInformReadService.queryUserCheckPush(map);
             if (check != 1) {
                 resault = imSystemInformReadService.updateSystemRead(map);//更新系统消息已读
+            } else {
+                resault = imSystemInformReadService.insertSystemRead(map);//插入消息已读
             }
         } else if (type.equals("5")) {
             resault = imFirstDialogueService.updateCallRead(userid);//更新打招呼已读

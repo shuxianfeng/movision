@@ -19,5 +19,7 @@ public interface ImSystemInformReadMapper {
 
     Integer updateSystemRead(Map map);
 
+    Integer insertSystemRead(Map map);
+
     Integer queryUserCheckPush(Map map);
 }
