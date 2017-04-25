@@ -1911,4 +1911,9 @@
     WHERE p.isdel=0 AND p.isactive=0 AND p.isessencepool=1 ORDER BY p.intime DESC
     </select>
 
+
+    <select id="queryPostByUser" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select userid from yw_post WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
+
 </mapper>

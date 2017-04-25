@@ -718,6 +718,21 @@ public class PostService {
     }
 
     /**
+     * 根据帖子id查询发帖人
+     * @param postid
+     * @return
+     */
+    public Integer queryPostByUser(String postid) {
+        try {
+            log.info("根据帖子id查询发帖人");
+            return postMapper.queryPostByUser(postid);
+        } catch (Exception e) {
+            log.error("根据帖子id查询发帖人异常", e);
+            throw e;
+        }
+    }
+
+    /**
      * 帖子取消加精
      *
      * @param postid

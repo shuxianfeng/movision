@@ -29,6 +29,8 @@ public interface ImFirstDialogueMapper {
 
     ImFirstDialogueVo queryFirst(Integer userid);
 
+    Integer queryIsreadByUserid(Integer userid);
+
     List<ImFirstDialogueVo> findAllDialogue(Integer userid, RowBounds rowBounds);
 
     void queryIsread(Map map);

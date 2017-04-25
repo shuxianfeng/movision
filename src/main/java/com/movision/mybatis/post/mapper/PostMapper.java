@@ -135,6 +135,8 @@ public interface PostMapper {
 
     int addPostChoiceness(PostTo postid);
 
+    Integer queryPostByUser(String postid);
+
     int queryPostByIsessence(String id);
 
     int updatePostChoiceness(PostTo postTo);

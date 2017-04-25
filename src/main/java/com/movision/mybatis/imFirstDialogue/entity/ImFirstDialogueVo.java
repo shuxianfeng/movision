@@ -21,7 +21,12 @@ public class ImFirstDialogueVo implements Serializable {
     private String body;
 
     private Date createTime;
+
     private String icon;
+
+    private Integer isread;
+
+    private String name;
 
     public String getIcon() {
         return icon;
@@ -31,8 +36,6 @@ public class ImFirstDialogueVo implements Serializable {
         this.icon = icon;
     }
 
-    private String name;
-
     public String getName() {
         return name;
     }
@@ -40,8 +43,6 @@ public class ImFirstDialogueVo implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
-    private Integer isread;
 
     public Integer getIsread() {
         return isread;

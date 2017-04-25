@@ -466,6 +466,9 @@
   </select>
 
     <update id="updateCommentRead" parameterType="java.lang.Integer">
-        UPDATE yw_post_comment SET isread=1 WHERE userid=#{userid,jdbcType=INTEGER}
+      UPDATE yw_post_comment SET isread=1 WHERE
+      postid IN (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0) OR
+      id IN (SELECT id FROM (SELECT id FROM yw_post_comment WHERE pid IN (SELECT id FROM yw_post_comment WHERE
+      userid=#{userid,jdbcType=INTEGER} AND pid IS NULL AND isdel=0)) AS a)
     </update>
 </mapper>

@@ -77,6 +77,22 @@ public class ImFirstDialogueService {
         }
     }
 
+    /**
+     * 查询用户消息是否还有未读
+     *
+     * @param userid
+     * @return
+     */
+    public Integer queryIsreadByUserid(Integer userid) {
+        try {
+            log.info("查询用户消息是否还有未读");
+            return imFirstDialogueMapper.queryIsreadByUserid(userid);
+        } catch (Exception e) {
+            log.error("查询用户消息是否还有未读异常", e);
+            throw e;
+        }
+    }
+
     public List<ImFirstDialogueVo> findAllDialogue(Integer userid, Paging<ImFirstDialogueVo> pager) {
         try {
             log.info("查询列表");

@@ -46,8 +46,8 @@ public class PostZanRecordService {
     public Integer updateZanRead(Integer userid) {
         try {
             log.info("更新点赞已读状态");
-            recordMapper.updateZanReadByComment(userid);
-            return recordMapper.updateZanReadByPost(userid);
+            recordMapper.updateZanReadByComment(userid);//评论点赞
+            return recordMapper.updateZanReadByPost(userid);//帖子点赞
         } catch (Exception e) {
             log.error("更新点赞已读状态异常", e);
             throw e;

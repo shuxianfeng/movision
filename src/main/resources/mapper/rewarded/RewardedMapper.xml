@@ -134,6 +134,7 @@
     </select>
 
     <update id="updateRewardRead" parameterType="java.lang.Integer">
-        UPDATE yw_post_rewarded SET isread=1 WHERE userid=#{userid,jdbcType=INTEGER}
+        UPDATE yw_post_rewarded SET isread=1 WHERE postid IN (SELECT id FROM yw_post WHERE
+        userid=#{userid,jdbcType=INTEGER} and isdel=0)
     </update>
 </mapper>

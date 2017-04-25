@@ -794,7 +794,7 @@ public class PostFacade {
                     pprd.setPostid(post.getId());
                     pprd.setIsesence(Integer.parseInt(isessence));
                     postProcessRecordService.insertProcessRecord(pprd);//插入精选、热门记录
-                    pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                    pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
                 }
                 map.put("resault", 1);
                 return map;
@@ -968,18 +968,19 @@ public class PostFacade {
             } else {
                 result = postService.addPostChoiceness(p);
             }
+            Integer userid = postService.queryPostByUser(postid);
             map.put("result", result);
             if (!orderid.equals("0")) {//在加精时操作
                 //查询帖子是否被设为加精活精选
                 PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(postid));
                 if (postProcessRecord != null) {//已经加精过活精选
                     //积分操作
-                    pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.index_selected.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                    pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), userid);//根据不同积分类型赠送积分的公共方法（包括总分和流水）
                     //修改
                     postProcessRecordService.updateProcessRecord(postProcessRecord);
                 } else {
                     //积分操作
-                    pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.index_selected.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                    pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), userid);//根据不同积分类型赠送积分的公共方法（包括总分和流水）
                     //新增
                     PostProcessRecord pprd = new PostProcessRecord();
                     pprd.setPostid(Integer.parseInt(postid));
@@ -1370,7 +1371,7 @@ public class PostFacade {
                     PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));
                     if (postProcessRecord != null) {//已经加精过活精选
                         //积分操作
-                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                        pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
                         //修改
                         PostProcessRecord pprd = new PostProcessRecord();
                         pprd.setIshot(Integer.parseInt(ishot));
@@ -1379,7 +1380,7 @@ public class PostFacade {
                         postProcessRecordService.updateProcessRecord(pprd);
                     } else {
                         //积分操作
-                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                        pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
                         //新增
                         PostProcessRecord pprd = new PostProcessRecord();
                         pprd.setPostid(Integer.parseInt(id));

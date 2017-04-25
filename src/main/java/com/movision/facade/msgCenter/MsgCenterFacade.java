@@ -93,13 +93,24 @@ public class MsgCenterFacade {
         ImSystemInformVo imSystemInform = imSystemInformService.queryByUserid();//查询最新一条
         //查询是否有未读系统通知
         Integer system = imSystemInformService.querySystemPushByUserid(userid);
-        if (system > 0) {
-            imSystemInform.setIsRead(0);
-        } else {
-            imSystemInform.setIsRead(1);
+        if (imSystemInform != null) {
+            if (system > 0) {
+                imSystemInform.setIsRead(0);
+            } else {
+                imSystemInform.setIsRead(1);
+            }
         }
         //5 打招呼消息
         ImFirstDialogueVo imFirstDialogue = imFirstDialogueService.queryFirst(userid);
+        //查询用户打招呼信息是否还有未读
+        Integer isr = imFirstDialogueService.queryIsreadByUserid(userid);
+        if (imFirstDialogue != null) {
+            if (isr > 0) {//还有未读
+                imFirstDialogue.setIsread(0);
+            } else {
+                imFirstDialogue.setIsread(1);
+            }
+        }
         //6 客服消息
         reMap.put("imSystemInform", imSystemInform);
         reMap.put("rewarded", rewarded);
