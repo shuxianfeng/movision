@@ -454,6 +454,8 @@ public class UserManageFacade {
             map.put("loginid", loginid);
             map.put("auditTime", new Date());
             userService.deleteUserLevl(map);//更新用户加V状态
+            map.put("isdel", 1);
+            userService.updateAuditByUser(map);//更新VIP申请
             return auditVipDetailService.insertVIPDetail(map);
         } else if (status.equals("1")) {//未通过
             Map map = new HashMap();

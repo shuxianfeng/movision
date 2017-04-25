@@ -550,6 +550,21 @@ public class UserService {
     }
 
     /**
+     * 更新VIP申请
+     *
+     * @param map
+     * @return
+     */
+    public Integer updateAuditByUser(Map map) {
+        try {
+            log.info("更新VIP申请");
+            return userMapper.updateAuditByUser(map);
+        } catch (Exception e) {
+            log.error("更新VIP申请异常", e);
+            throw e;
+        }
+    }
+    /**
      * 查询用户详情
      *
      * @param userid

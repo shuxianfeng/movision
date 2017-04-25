@@ -843,6 +843,17 @@
         WHERE id=#{userid,jdbcType=INTEGER}
     </update>
 
+    <update id="updateAuditByUser" parameterType="java.util.Map">
+        UPDATE yw_apply_vip_detail
+        <if test="isdel==1">
+            SET isdel=1
+        </if>
+        <if test="isdel==0">
+            SET isdel=0
+        </if>
+        WHERE id=#{appyid,jdbcType=INTEGER}
+    </update>
+
     <update id="updateVIPDetail" parameterType="java.util.Map">
         UPDATE yw_audit_vip_detail
         <set>
