@@ -35,8 +35,8 @@ public class PostSensitiveWordsController {
      */
     @ApiOperation(value = "查询脱敏列表（分页）", notes = "查询脱敏列表（分页）", response = Response.class)
     @RequestMapping(value = "/query_postsenti_list", method = RequestMethod.POST)
-    public Response QueryOrderList(@RequestParam(required = false, defaultValue = "1") String pageNo,
-                                   @RequestParam(required = false, defaultValue = "10") String pageSize) {
+    public Response findAllPostSensitiveWords(@RequestParam(required = false, defaultValue = "1") String pageNo,
+                                              @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<PostSensitiveWords> pager = new Paging<PostSensitiveWords>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<PostSensitiveWords> list = postSensitiveWordsFacade.findAllPostSensitiveWords(pager);
@@ -86,7 +86,7 @@ public class PostSensitiveWordsController {
 
 
     @ApiOperation(value = "查询脱敏列表（分页）", notes = "查询脱敏列表（分页）", response = Response.class)
-    @RequestMapping(value = "/query_postsenti_list", method = RequestMethod.POST)
+    @RequestMapping(value = "/query_postsenti_condition", method = RequestMethod.POST)
     public Response findAllPostCodition(@RequestParam(required = false, defaultValue = "1") String pageNo,
                                         @RequestParam(required = false, defaultValue = "10") String pageSize,
                                         @ApiParam(value = "脱敏词") @RequestParam(required = false) String name) {

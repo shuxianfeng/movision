@@ -78,6 +78,6 @@
     </select>
     <select id="findAllPostSensitiveWords"
             resultType="com.movision.mybatis.postSensitiveWords.entity.PostSensitiveWords">
-        select * from yw_post_sensitive_words
+        select * from yw_post_sensitive_words ORDER BY intime DESC
     </select>
 </mapper>
