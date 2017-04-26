@@ -56,8 +56,6 @@ public class DesensitizationUtil {
             }
         }
 
-        System.out.println("打印处理后的字符串》》》》》》》》》》》》》》》》" + str);
-
         if (flag == 0) {
             map.put("mark", 0);
             map.put("msg", "无敏感词");
