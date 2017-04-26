@@ -35,7 +35,7 @@ public class PostSensitiveWordsService {
     public int insert(PostSensitiveWords postSensitiveWords) {
         try {
             log.info("增加脱敏成功");
-            return postSensitiveWordsMapper.insert(postSensitiveWords);
+            return postSensitiveWordsMapper.insertSelective(postSensitiveWords);
         } catch (Exception e) {
             log.error("增加脱敏失败");
             throw e;

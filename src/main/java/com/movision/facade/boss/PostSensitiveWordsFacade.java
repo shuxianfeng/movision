@@ -35,7 +35,7 @@ public class PostSensitiveWordsFacade {
     public Map<String, Object> insert(String name) {
         Map<String, Object> map = new HashedMap();
         PostSensitiveWords postSensitiveWords = new PostSensitiveWords();
-        if (StringUtil.isEmpty(name)) {
+        if (!StringUtil.isEmpty(name)) {
             postSensitiveWords.setName(name);
         }
         postSensitiveWords.setIntime(new Date());
@@ -48,7 +48,7 @@ public class PostSensitiveWordsFacade {
         Map<String, Object> map = new HashedMap();
         PostSensitiveWords postSensitiveWords = new PostSensitiveWords();
         postSensitiveWords.setId(Integer.parseInt(id));
-        if (StringUtil.isEmpty(name)) {
+        if (!StringUtil.isEmpty(name)) {
             postSensitiveWords.setName(name);
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -72,7 +72,7 @@ public class PostSensitiveWordsFacade {
 
     public List<PostSensitiveWords> findAllPostCodition(String name, Paging<PostSensitiveWords> pager) {
         Map<String, Object> map = new HashedMap();
-        if (StringUtil.isEmpty(name)) {
+        if (!StringUtil.isEmpty(name)) {
             map.put("name", name);
         }
         return postSensitiveWordsService.findAllPostCodition(map, pager);
