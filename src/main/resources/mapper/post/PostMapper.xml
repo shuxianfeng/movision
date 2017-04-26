@@ -1936,7 +1936,7 @@
 
 
     <select id="queryPostByUser" parameterType="java.lang.String" resultType="java.lang.Integer">
-        select userid from yw_post WHERE id=#{postid,jdbcType=INTEGER}
+        select userid from yw_post WHERE id=#{postid,jdbcType=INTEGER} AND circleid IS NOT NULL
     </select>
 
 </mapper>
