@@ -89,7 +89,7 @@ public class FacadeRewarded {
         if (uid != u) {//如果当前登录用户id和打赏帖子的贴主相同，则不可以打赏
             int integral = pointRecordFacade.getIntegral(Integer.parseInt(type));//获取类型对应的积分
             int in = userFacade.queryUserByRewarde(u);//查询出当前用户积分剩余
-            if (in > integral) {
+            if (in >= integral) {
                 int playtour = pointRecordService.queryMyTodayPointSum(u);//查询当天打赏了多少次
                 if (playtour < 5) {
                     //每天打赏次数在五次以内，参加每日活动，给赠送积分者增加5积分,并且增加积分流水记录

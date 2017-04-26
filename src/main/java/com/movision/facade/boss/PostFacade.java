@@ -794,7 +794,12 @@ public class PostFacade {
                     pprd.setPostid(post.getId());
                     pprd.setIsesence(Integer.parseInt(isessence));
                     postProcessRecordService.insertProcessRecord(pprd);//插入精选、热门记录
-                    pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                    if (ishot.equals(1)) {
+                        pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                    }
+                    if (isessence.equals(1)) {
+                        pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                    }
                 }
                 map.put("resault", 1);
                 return map;
@@ -923,7 +928,6 @@ public class PostFacade {
             pprd.setPostid(post.getId());
             pprd.setIsesence(Integer.parseInt(isessence));
             postProcessRecordService.insertProcessRecord(pprd);//插入精选、热门记录
-            pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
             map.put("result", r);
             map.put("result", result);
             return map;
@@ -974,13 +978,13 @@ public class PostFacade {
                 //查询帖子是否被设为加精活精选
                 PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(postid));
                 if (postProcessRecord != null) {//已经加精过活精选
-                    //积分操作
-                    pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), userid);//根据不同积分类型赠送积分的公共方法（包括总分和流水）
                     //修改
                     postProcessRecordService.updateProcessRecord(postProcessRecord);
                 } else {
                     //积分操作
-                    pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), userid);//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                    if (userid != null) {
+                        pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), userid);//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                    }
                     //新增
                     PostProcessRecord pprd = new PostProcessRecord();
                     pprd.setPostid(Integer.parseInt(postid));
@@ -1206,8 +1210,6 @@ public class PostFacade {
 
                 PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));
                 if (postProcessRecord != null) {//已经加精过活精选
-                    //积分操作
-                    pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.index_selected.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
                     //修改
                     PostProcessRecord pprd = new PostProcessRecord();
                     pprd.setIshot(Integer.parseInt(ishot));
@@ -1215,8 +1217,6 @@ public class PostFacade {
                     pprd.setIsesence(Integer.parseInt(isessence));
                     postProcessRecordService.updateProcessRecord(pprd);
                 } else {
-                    //积分操作
-                    pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.index_selected.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
                     //新增
                     PostProcessRecord pprd = new PostProcessRecord();
                     pprd.setPostid(Integer.parseInt(id));
@@ -1370,8 +1370,6 @@ public class PostFacade {
                     }
                     PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));
                     if (postProcessRecord != null) {//已经加精过活精选
-                        //积分操作
-                        pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
                         //修改
                         PostProcessRecord pprd = new PostProcessRecord();
                         pprd.setIshot(Integer.parseInt(ishot));
@@ -1380,7 +1378,12 @@ public class PostFacade {
                         postProcessRecordService.updateProcessRecord(pprd);
                     } else {
                         //积分操作
-                        pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                        if (postProcessRecord.getIshot() == 1) {
+                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                        }
+                        if (postProcessRecord.getIsesence() == 1) {
+                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                        }
                         //新增
                         PostProcessRecord pprd = new PostProcessRecord();
                         pprd.setPostid(Integer.parseInt(id));
@@ -1676,10 +1679,73 @@ public class PostFacade {
         return goodsService.findAllQueryLikeGoods(map, pager);
     }
 
-    public List<Map> findAllMyCollectPostList(Paging<Map> paging, int userid) {
+    public List<Map> findAllMyCollectPostList(Paging<Map> paging, int userid) throws ParseException {
         Map map = new HashedMap();
         map.put("userid", userid);
-        return postService.findAllMyCollectPost(paging, map);
+        List<Map> list = postService.findAllMyCollectPost(paging, map);
+
+        /**
+         * 添加活动距离结束的剩余天数——enddays
+         * 已投稿总数——partsum
+         */
+        for (int i = 0; i < list.size(); i++) {
+            Object begintimeObj = list.get(i).get("begintime");
+            Object endtimeObj = list.get(i).get("endtime");
+            if (null != begintimeObj && null != endtimeObj) {
+
+                getEnddays(list, i, (Date) begintimeObj, (Date) endtimeObj);
+            } else {
+                list.get(i).put("enddays", -2); //表示无活动
+            }
+
+            //计算已投稿总数
+            int isactive = Integer.valueOf(String.valueOf(list.get(i).get("isactive")));
+            int partsum = -1;   //默认-1，表示不是活动
+            if (isactive == 1) {  //该帖子属于活动
+                int postid = Integer.valueOf(String.valueOf(list.get(i).get("id")));//获取活动id
+                partsum = postService.queryActivePartSum(postid);
+            }
+            list.get(i).put("partsum", partsum);
+        }
+
+        return list;
+    }
+
+    /**
+     * 遍历所有的活动开始时间和结束时间，计算活动距离结束的剩余天数
+     *
+     * @param list
+     * @param i
+     * @param begintimeObj
+     * @param endtimeObj
+     * @throws ParseException
+     */
+    private void getEnddays(List<Map> list, int i, Date begintimeObj, Date endtimeObj) throws ParseException {
+        Date begin = begintimeObj;//活动开始时间
+        Date end = endtimeObj;//活动结束时间
+        Date now = new Date();//活动当前时间
+        if (now.before(begin)) {
+            list.get(i).put("enddays", -1);//活动还未开始
+        } else if (end.before(now)) {
+            list.get(i).put("enddays", 0);//活动已结束
+        } else if (begin.before(now) && now.before(end)) {
+            try {
+                log.error("计算活动剩余结束天数");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date a = sdf.parse(sdf.format(now));
+                Date b = sdf.parse(sdf.format(end));
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(a);
+                long time1 = cal.getTimeInMillis();
+                cal.setTime(b);
+                long time2 = cal.getTimeInMillis();
+                long between_days = (time2 - time1) / (1000 * 3600 * 24);
+                list.get(i).put("enddays", Integer.parseInt(String.valueOf(between_days)));
+            } catch (Exception e) {
+                log.error("计算活动剩余结束天数失败", e);
+                throw e;
+            }
+        }
     }
 
     /**
