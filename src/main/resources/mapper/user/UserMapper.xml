@@ -651,6 +651,9 @@
         <if test="phone!=null">
             AND u.phone=#{phone,jdbcType=VARCHAR}
         </if>
+        <if test="authstatus==0">
+            AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id)=#{authstatus,jdbcType=INTEGER}
+        </if>
         <if test="authstatus==1">
             AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id)=#{authstatus,jdbcType=INTEGER}
         </if>
@@ -694,6 +697,9 @@
         </if>
         <if test="phone!=null">
             AND u.phone=#{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="authstatus==0">
+            AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id)=#{authstatus,jdbcType=INTEGER}
         </if>
         <if test="authstatus==1">
             AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id)=#{authstatus,jdbcType=INTEGER}
