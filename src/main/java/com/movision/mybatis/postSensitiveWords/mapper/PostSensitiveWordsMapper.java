@@ -4,6 +4,7 @@ import com.movision.mybatis.postSensitiveWords.entity.PostSensitiveWords;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PostSensitiveWordsMapper {
     int deleteByPrimaryKey(Integer id);
@@ -19,4 +20,6 @@ public interface PostSensitiveWordsMapper {
     int updateByPrimaryKey(PostSensitiveWords record);
 
     List<PostSensitiveWords> findAllPostSensitiveWords(RowBounds rowBounds);
+
+    List<PostSensitiveWords> findAllPostCodition(Map map, RowBounds rowBounds);
 }

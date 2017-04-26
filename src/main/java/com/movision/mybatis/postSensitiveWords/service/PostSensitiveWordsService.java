@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhanglei
@@ -47,6 +48,26 @@ public class PostSensitiveWordsService {
             return postSensitiveWordsMapper.updateByPrimaryKeySelective(postSensitiveWords);
         } catch (Exception e) {
             log.error("修改脱敏");
+            throw e;
+        }
+    }
+
+    public int deleteByPrimaryKey(Integer id) {
+        try {
+            log.info("删除脱敏");
+            return postSensitiveWordsMapper.deleteByPrimaryKey(id);
+        } catch (Exception e) {
+            log.error("删除脱敏失败");
+            throw e;
+        }
+    }
+
+    public List<PostSensitiveWords> findAllPostCodition(Map map, Paging<PostSensitiveWords> pager) {
+        try {
+            log.info("条件搜索");
+            return postSensitiveWordsMapper.findAllPostCodition(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("条件搜索失败");
             throw e;
         }
     }

@@ -69,4 +69,15 @@
         intime = #{intime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="findAllPostCodition" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.postSensitiveWords.entity.PostSensitiveWords">
+        select * from yw_post_sensitive_words WHERE 1=1
+        <if test="name!=null">
+            AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+    </select>
+    <select id="findAllPostSensitiveWords"
+            resultType="com.movision.mybatis.postSensitiveWords.entity.PostSensitiveWords">
+        select * from yw_post_sensitive_words
+    </select>
 </mapper>
