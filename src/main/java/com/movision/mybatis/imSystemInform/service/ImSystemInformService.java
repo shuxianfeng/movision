@@ -36,10 +36,10 @@ public class ImSystemInformService {
         }
     }
 
-    public List<ImSystemInformVo> queryAll(Paging<ImSystemInformVo> paging) {
+    public List<ImSystemInformVo> queryAll(Integer userid, Paging<ImSystemInformVo> paging) {
         try {
             log.info("查询所有的系统通知");
-            return imSystemInformMapper.findAll(paging.getRowBounds());
+            return imSystemInformMapper.findAll(userid, paging.getRowBounds());
         } catch (Exception e) {
             log.error("查询所有的系统通知失败", e);
             throw e;

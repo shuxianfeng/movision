@@ -22,14 +22,14 @@ public class ImSystemInformVo implements Serializable {
 
     private String informidentity;
 
-    private Integer isRead;//是否已读 0否 1是
+    private Integer isread;//是否已读 0否 1是
 
-    public Integer getIsRead() {
-        return isRead;
+    public Integer getIsread() {
+        return isread;
     }
 
-    public void setIsRead(Integer isRead) {
-        this.isRead = isRead;
+    public void setIsread(Integer isread) {
+        this.isread = isread;
     }
 
     public String getInformidentity() {

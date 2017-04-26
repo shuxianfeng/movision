@@ -53,7 +53,7 @@ public class MyMsgController {
                                                   @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<ImSystemInformVo> paging = new Paging<ImSystemInformVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<ImSystemInformVo> list = msgCenterFacade.getMsgInformationList(paging);
+        List<ImSystemInformVo> list = msgCenterFacade.getMsgInformationList(ShiroUtil.getAppUserID(), paging);
         paging.result(list);
         response.setData(paging);
         return response;

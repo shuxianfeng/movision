@@ -1,6 +1,7 @@
 package com.movision.controller.boss.im;
 
 import com.movision.common.Response;
+import com.movision.common.util.ShiroUtil;
 import com.movision.facade.im.ImFacade;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
@@ -60,7 +61,7 @@ public class BossImController {
                                           @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<ImSystemInformVo> paging = new Paging<ImSystemInformVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<ImSystemInformVo> list = imFacade.queryAllSystemInform(paging);
+        List<ImSystemInformVo> list = imFacade.queryAllSystemInform(ShiroUtil.getAppUserID(), paging);
         paging.result(list);
         response.setData(paging);
         return response;

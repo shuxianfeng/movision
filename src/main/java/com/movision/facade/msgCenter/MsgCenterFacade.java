@@ -13,6 +13,7 @@ import com.movision.mybatis.imFirstDialogue.service.ImFirstDialogueService;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.imSystemInform.service.ImSystemInformService;
+import com.movision.mybatis.imSystemInformRead.entity.ImSystemInformRead;
 import com.movision.mybatis.imSystemInformRead.service.ImSystemInformReadService;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.post.entity.Post;
@@ -95,9 +96,9 @@ public class MsgCenterFacade {
         Integer system = imSystemInformService.querySystemPushByUserid(userid);
         if (imSystemInform != null) {
             if (system > 0) {
-                imSystemInform.setIsRead(0);
+                imSystemInform.setIsread(0);
             } else {
-                imSystemInform.setIsRead(1);
+                imSystemInform.setIsread(1);
             }
         }
         //5 打招呼消息
@@ -125,20 +126,8 @@ public class MsgCenterFacade {
      *
      * @return
      */
-    public List<ImSystemInformVo> getMsgInformationList(Paging<ImSystemInformVo> paging) {
-        List<ImSystemInformVo> list = imSystemInformService.queryAll(paging);
-        for (int i = 0; i < list.size(); i++) {
-            String indity = list.get(i).getInformidentity();
-            if (indity != null) {
-                Integer iscount = imSystemInformService.queryInform(indity);
-                if (iscount > 0) {
-                    list.get(i).setIsRead(1);
-                } else {
-                    list.get(i).setIsRead(0);
-                }
-
-            }
-        }
+    public List<ImSystemInformVo> getMsgInformationList(Integer userid, Paging<ImSystemInformVo> paging) {
+        List<ImSystemInformVo> list = imSystemInformService.queryAll(userid, paging);
         return list;
     }
 
@@ -259,7 +248,13 @@ public class MsgCenterFacade {
             Integer check = imSystemInformReadService.queryUserCheckPush(map);
             if (check != 1) {
                 map.put("isread", 1);
-                resault = imSystemInformReadService.updateSystemRead(map);//更新系统消息已读
+                resault = imSystemInformReadService.insertSystemRead(map);//新增系统消息已读记录
+            } else {
+                ImSystemInformRead imSd = imSystemInformReadService.queryInfromRead(map);//查询此条已读状态
+                if (imSd.getIsread() == 0) {
+                    map.put("isread", 1);
+                    resault = imSystemInformReadService.updateSystemRead(map);//更新系统消息已读
+                }
             }
         } else if (type.equals("5")) {
             resault = imFirstDialogueService.updateCallRead(userid);//更新打招呼已读

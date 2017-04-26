@@ -20,7 +20,7 @@ public interface ImSystemInformMapper {
 
     int updateByPrimaryKey(ImSystemInform record);
 
-    List<ImSystemInformVo> findAll(RowBounds rowBounds);
+    List<ImSystemInformVo> findAll(Integer userid, RowBounds rowBounds);
 
     List<ImSystemInform> findAllSystemInform(Map map, RowBounds rowBounds);//条件搜索
 

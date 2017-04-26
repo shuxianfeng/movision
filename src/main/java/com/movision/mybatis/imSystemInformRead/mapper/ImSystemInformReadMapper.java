@@ -17,6 +17,10 @@ public interface ImSystemInformReadMapper {
 
     int updateByPrimaryKey(ImSystemInformRead record);
 
+    Integer insertSystemRead(Map map);
+
+    ImSystemInformRead queryInfromRead(Map map);
+
     Integer updateSystemRead(Map map);
 
     Integer queryUserCheckPush(Map map);

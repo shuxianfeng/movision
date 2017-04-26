@@ -92,7 +92,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-    <insert id="updateSystemRead" parameterType="java.util.Map">
+    <insert id="insertSystemRead" parameterType="java.util.Map">
         insert into yw_im_system_inform_read
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userid!=null">
@@ -123,6 +123,21 @@
             </if>
         </trim>
     </insert>
+
+    <update id="updateSystemRead" parameterType="java.util.Map">
+        update yw_im_system_inform_read
+        <set>
+            <if test="isread != null">
+                isread=#{isread,jdbcType=INTEGER},
+            </if>
+        </set>
+        where userid=#{userid,jdbcType=INTEGER} AND inform_identity = #{informIdentity,jdbcType=VARCHAR} AND isread=0
+    </update>
+
+    <select id="queryInfromRead" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.imSystemInformRead.entity.ImSystemInformRead">
+        SELECT * FROM yw_im_system_inform_read WHERE userid=#{userid,jdbcType=INTEGER} AND inform_identity = #{informIdentity,jdbcType=VARCHAR} GROUP BY inform_identity
+    </select>
 
     <select id="queryUserCheckPush" parameterType="java.util.Map" resultType="java.lang.Integer">
       SELECT COUNT(1) FROM yw_im_system_inform_read WHERE inform_identity=#{informidentity,jdbcType=VARCHAR} AND userid=#{userid,jdbcType=INTEGER}
