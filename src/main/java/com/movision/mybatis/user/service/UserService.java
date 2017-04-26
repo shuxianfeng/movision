@@ -264,7 +264,7 @@ public class UserService {
      * @param userid
      * @return
      */
-    public String queryUserByNickname(Integer userid) {
+    public String queryNicknameByUserid(Integer userid) {
         try {
             log.info("查询用户昵称");
             return userMapper.queryUserByNickname(userid);
@@ -745,4 +745,17 @@ public class UserService {
             throw e;
         }
     }
+
+    public Boolean isExistSameNickname(String nickname) {
+        try {
+            log.info("查看是否存在相同的昵称");
+            boolean flag = userMapper.countByNickname(nickname) > 0;
+            return flag;
+        } catch (Exception e) {
+            log.error("查看是否存在相同的昵称失败", e);
+            throw e;
+        }
+    }
+
+
 }

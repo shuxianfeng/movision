@@ -124,4 +124,6 @@ public interface UserMapper {
     LoginUser selectLoginUserByToken(@Param("token") String token);
 
     LoginUser selectLoginuserByUserid(@Param("id") Integer id);
+
+    Integer countByNickname(@Param("nickname") String nickname);
 }

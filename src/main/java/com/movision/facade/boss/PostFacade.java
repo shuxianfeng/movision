@@ -207,7 +207,7 @@ public class PostFacade {
         for (int i = 0; i < list.size(); i++) {
             PostList postList = new PostList();
             Integer circleid = list.get(i).getCircleid();//获取到圈子id
-            String nickname = userService.queryUserByNickname(circleid);//获取发帖人
+            String nickname = userService.queryNicknameByUserid(circleid);//获取发帖人
             postList.setId(list.get(i).getId());
             postList.setTitle(list.get(i).getTitle());
             postList.setNickname(nickname);

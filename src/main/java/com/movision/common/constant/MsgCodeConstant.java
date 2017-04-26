@@ -84,6 +84,11 @@ public interface MsgCodeConstant {
      */
     int app_user_not_exist_with_this_token = 10017;
 
+	/**
+	 * 该昵称已经存在
+	 */
+	int app_nickname_already_exist = 10018;
+
 
 	/**
      * 文件不存在

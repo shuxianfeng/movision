@@ -997,4 +997,10 @@
         </where>
     </select>
 
+    <select id="countByNickname" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(1)
+        from yw_user
+        where nickname = #{nickname}
+    </select>
+
 </mapper>

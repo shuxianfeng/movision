@@ -5,6 +5,7 @@ import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.AuthException;
+import com.movision.exception.BusinessException;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.goods.service.GoodsService;
@@ -263,10 +264,27 @@ public class UserFacade {
      */
     public void finishPersonDataProcess(PersonInfo personInfo) {
 
+        validateNicknameIsExist(personInfo);
+
         updatePersonInfo(personInfo);
 
         addPointProcess();
 
+    }
+
+    /**
+     * 修改昵称之前，先做重复校验
+     * @param personInfo
+     */
+    private void validateNicknameIsExist(PersonInfo personInfo) {
+        String nickname = personInfo.getNickname();
+        if (StringUtils.isNotBlank(nickname)) {
+            Boolean isExistNickname = userService.isExistSameNickname(nickname);
+            if (isExistNickname) {
+
+                throw new BusinessException(MsgCodeConstant.app_nickname_already_exist, "该昵称已经存在，请换昵称");
+            }
+        }
     }
 
     /**
@@ -300,7 +318,7 @@ public class UserFacade {
     private void updatePersonInfo(PersonInfo personInfo) {
         User user = new User();
         user.setId(personInfo.getId());
-        user.setNickname(personInfo.getNickname());
+        user.setNickname(personInfo.getNickname().trim());  //去除首尾空格
         user.setBirthday(DateUtils.str2Date(personInfo.getBirthday()));
         user.setPhoto(personInfo.getPhoto());
         user.setSex(personInfo.getSex());

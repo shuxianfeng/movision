@@ -1,16 +1,12 @@
 package com.movision.facade.boss;
 
-import com.movision.mybatis.post.entity.Post;
 import com.movision.test.SpringTestCase;
 import com.movision.utils.pagination.model.Paging;
-import javafx.geometry.Pos;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.Assert.*;
 
 /**
  * @Author zhuangyuhao
