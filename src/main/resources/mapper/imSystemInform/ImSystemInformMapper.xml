@@ -10,14 +10,15 @@
         <result column="inform_time" property="informTime" jdbcType="TIMESTAMP"/>
         <result column="title" property="title" jdbcType="VARCHAR"/>
         <result column="pushcontent" property="pushcontent" jdbcType="VARCHAR"/>
-        <result column="inform_identity" property="inform_identity" jdbcType="VARCHAR"/>
+        <result column="inform_identity" property="informidentity" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, userid, from_accid, to_accids, body, inform_time, title,pushcontent,inform_identity
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform"
+            parameterType="java.lang.Integer">
         select
-        <include refid="Base_Column_List"/>
+        *
         from yw_im_system_informs
         where id = #{id,jdbcType=INTEGER}
     </select>
