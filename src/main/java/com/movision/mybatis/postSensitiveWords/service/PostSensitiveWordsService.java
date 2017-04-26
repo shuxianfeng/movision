@@ -71,4 +71,14 @@ public class PostSensitiveWordsService {
             throw e;
         }
     }
+
+    public PostSensitiveWords queryPostSensitive(Integer id) {
+        try {
+            log.info("数据回显");
+            return postSensitiveWordsMapper.queryPostSensitive(id);
+        } catch (Exception e) {
+            log.error("数据回显失败");
+            throw e;
+        }
+    }
 }

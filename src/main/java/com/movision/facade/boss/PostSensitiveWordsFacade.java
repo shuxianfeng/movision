@@ -77,4 +77,8 @@ public class PostSensitiveWordsFacade {
         }
         return postSensitiveWordsService.findAllPostCodition(map, pager);
     }
+
+    public PostSensitiveWords queryPostSensitive(Integer id) {
+        return postSensitiveWordsService.queryPostSensitive(id);
+    }
 }

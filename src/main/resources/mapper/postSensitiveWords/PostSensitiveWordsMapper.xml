@@ -80,4 +80,8 @@
             resultType="com.movision.mybatis.postSensitiveWords.entity.PostSensitiveWords">
         select * from yw_post_sensitive_words ORDER BY intime DESC
     </select>
+    <select id="queryPostSensitive" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.postSensitiveWords.entity.PostSensitiveWords">
+        SELECT  * FROM  yw_post_sensitive_words WHERE id=#{id,jdbcType=INTEGER}
+    </select>
 </mapper>

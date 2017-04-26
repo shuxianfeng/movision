@@ -85,7 +85,7 @@ public class PostSensitiveWordsController {
     }
 
 
-    @ApiOperation(value = "查询脱敏列表（分页）", notes = "查询脱敏列表（分页）", response = Response.class)
+    @ApiOperation(value = "查询脱敏列表搜索（分页）", notes = "查询脱敏列表搜索（分页）", response = Response.class)
     @RequestMapping(value = "/query_postsenti_condition", method = RequestMethod.POST)
     public Response findAllPostCodition(@RequestParam(required = false, defaultValue = "1") String pageNo,
                                         @RequestParam(required = false, defaultValue = "10") String pageSize,
@@ -99,6 +99,18 @@ public class PostSensitiveWordsController {
         }
         pager.result(list);
         response.setData(pager);
+        return response;
+    }
+
+
+    @ApiOperation(value = "数据回显", notes = "数据回显", response = Response.class)
+    @RequestMapping(value = "/query_postsenti", method = RequestMethod.POST)
+    public Response queryPostSensitive(@ApiParam(value = "脱敏id") @RequestParam Integer id) {
+        Response response = new Response();
+        PostSensitiveWords postSensitiveWords = postSensitiveWordsFacade.queryPostSensitive(id);
+        if (response.getCode() == 200) {
+            response.setData(postSensitiveWords);
+        }
         return response;
     }
 }

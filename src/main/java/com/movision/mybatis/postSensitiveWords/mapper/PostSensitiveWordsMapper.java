@@ -22,4 +22,6 @@ public interface PostSensitiveWordsMapper {
     List<PostSensitiveWords> findAllPostSensitiveWords(RowBounds rowBounds);
 
     List<PostSensitiveWords> findAllPostCodition(Map map, RowBounds rowBounds);
+
+    PostSensitiveWords queryPostSensitive(Integer id);
 }
