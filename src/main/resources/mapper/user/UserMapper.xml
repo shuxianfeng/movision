@@ -631,7 +631,7 @@
     <select id="findAllQueryUniteConditionByApply" parameterType="java.util.Map"
             resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT u.id,u.nickname,u.phone,u.level,u.status,vd.id AS appyid,
-        (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) AS autonym,
+        (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) AS authstatus,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
         (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
@@ -652,13 +652,57 @@
             AND u.phone=#{phone,jdbcType=VARCHAR}
         </if>
         <if test="authstatus==1">
-            AND aut.authstatus=#{authstatus,jdbcType=INTEGER}
+            AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id)=#{authstatus,jdbcType=INTEGER}
         </if>
         <if test="authstatus==2">
-            AND aut.authstatus=#{authstatus,jdbcType=INTEGER}
+            AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id)=#{authstatus,jdbcType=INTEGER}
         </if>
         <if test="authstatus==3">
-            AND aut.authstatus IS NULL
+            AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) IS NULL
+        </if>
+        <if test="begintime!=null and endtime!=null">
+            AND vd.apply_time BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
+        <if test="type==1">
+            ORDER BY vd.apply_time DESC
+        </if>
+        <if test="type==2">
+            ORDER BY u.level DESC
+        </if>
+    </select>
+
+    <select id="findAllQueryUserExamineAndVerify" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,vd.id AS appyid,
+        (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) AS autonym,
+        (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
+        (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
+        (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
+        p1.userid=vd.userid AND p1.isdel=0)) AS exceptional,
+        (SELECT COALESCE(SUM(collectsum),0) FROM yw_post p2 WHERE p2.userid=vd.userid AND p2.isdel=0) AS becollectsum,
+        (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid IN (SELECT p5.id FROM yw_post p5 WHERE p5.userid=vd.userid
+        AND p5.isdel=0)) AS besharesum,
+        (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
+        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
+        zansum,u.fans,u.applydate
+        FROM yw_user u LEFT JOIN yw_audit_vip_detail vd ON vd.apply_userid=u.id LEFT JOIN yw_autonym_authentication au
+        ON
+        au.userid=u.id
+        WHERE vd.apply_userid=u.id AND u.status=0 AND u.phone IS NOT NULL
+        <if test="username!=null">
+            AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="phone!=null">
+            AND u.phone=#{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="authstatus==1">
+            AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id)=#{authstatus,jdbcType=INTEGER}
+        </if>
+        <if test="authstatus==2">
+            AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id)=#{authstatus,jdbcType=INTEGER}
+        </if>
+        <if test="authstatus==3">
+            AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) IS NULL
         </if>
         <if test="begintime!=null and endtime!=null">
             AND vd.apply_time BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}

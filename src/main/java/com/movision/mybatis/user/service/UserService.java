@@ -502,6 +502,23 @@ public class UserService {
     }
 
     /**
+     * 条件查询VIP申请用户列表
+     *
+     * @param map
+     * @param pager
+     * @return
+     */
+    public List<UserVo> queryUserExamineAndVerify(Map map, Paging<UserVo> pager) {
+        try {
+            log.info("条件查询VIP申请用户列表");
+            return userMapper.findAllQueryUserExamineAndVerify(map, pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("条件查询VIP申请用户列表异常", e);
+            throw e;
+        }
+    }
+
+    /**
      * 查询所有用户列表
      *
      * @param pager

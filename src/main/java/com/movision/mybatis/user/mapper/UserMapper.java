@@ -93,6 +93,8 @@ public interface UserMapper {
 
     List<UserVo> findAllQueryUniteConditionByApply(Map map, RowBounds rowBounds);
 
+    List<UserVo> findAllQueryUserExamineAndVerify(Map map, RowBounds rowBounds);
+
     List<UserAll> findAllqueryAllUserList(RowBounds rowBounds, Map map);
 
     int deleteUserByid(Map map);

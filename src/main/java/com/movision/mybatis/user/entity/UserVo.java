@@ -82,6 +82,26 @@ public class UserVo implements Serializable {
 
     private Integer appyid;//申请id
 
+    private String reason;//驳回原因
+
+    private Integer auditStatus;//审核状态
+
+    public Integer getAuditStatus() {
+        return auditStatus;
+    }
+
+    public void setAuditStatus(Integer auditStatus) {
+        this.auditStatus = auditStatus;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
     public Integer getAppyid() {
         return appyid;
     }

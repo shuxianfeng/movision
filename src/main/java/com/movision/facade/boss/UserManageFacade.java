@@ -256,6 +256,61 @@ public class UserManageFacade {
         return users;
     }
 
+
+    /**
+     * 条件查询用户VIP审核列表
+     *
+     * @param username
+     * @param phone
+     * @param authstatus
+     * @param begintime
+     * @param endtime
+     * @param type
+     * @param pager
+     * @return
+     */
+    public List<UserVo> queryUserExamineAndVerify(String username, String phone, String authstatus, String begintime, String endtime, String type, Paging<UserVo> pager) {
+        Map map = new HashedMap();
+        Date beg = null;
+        Date end = null;
+        if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                beg = format.parse(begintime);
+                end = format.parse(endtime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        if (StringUtil.isNotEmpty(username)) {
+            map.put("username", username);
+        }
+        if (StringUtil.isNotEmpty(phone)) {
+            map.put("phone", phone);
+        }
+        if (StringUtil.isNotEmpty(authstatus)) {
+            map.put("authstatus", authstatus);
+        }
+        map.put("begintime", beg);
+        map.put("endtime", end);
+        if (StringUtil.isNotEmpty(type)) {
+            map.put("type", type);
+        }
+        List<UserVo> users = userService.queryUserExamineAndVerify(map, pager);
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getAuthstatus() == null) {
+                users.get(i).setAuthstatus(3);
+            }
+            if (users.get(i).getNickname() == null) {//如果查询出的用户昵称为空，拼接默认的昵称显示
+                String p = users.get(i).getPhone();
+                String substr = p.substring(p.length() - 4, p.length());
+                substr = "用户名" + substr;
+                users.get(i).setNickname(substr);
+            }
+        }
+        return users;
+    }
+
     /**
      * 条件查询投稿列表
      *
