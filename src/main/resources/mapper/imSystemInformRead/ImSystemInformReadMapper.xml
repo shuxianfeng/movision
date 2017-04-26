@@ -127,36 +127,4 @@
     <select id="queryUserCheckPush" parameterType="java.util.Map" resultType="java.lang.Integer">
       SELECT COUNT(1) FROM yw_im_system_inform_read WHERE inform_identity=#{informidentity,jdbcType=VARCHAR} AND userid=#{userid,jdbcType=INTEGER}
   </select>
-
-    <insert id="insertSystemRead" parameterType="java.util.Map">
-        insert into yw_im_system_inform_read
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="userid!=null">
-                userid,
-            </if>
-            <if test="intime!=null">
-                intime,
-            </if>
-            <if test="informidentity!=null">
-                inform_identity,
-            </if>
-            <if test="isread != null">
-                isread,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="userid!=null">
-                #{userid,jdbcType=INTEGER},
-            </if>
-            <if test="intime!=null">
-                #{intime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="informidentity!=null">
-                #{informidentity,jdbcType=VARCHAR},
-            </if>
-            <if test="isread != null">
-                #{isread,jdbcType=INTEGER},
-            </if>
-        </trim>
-    </insert>
 </mapper>

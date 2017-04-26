@@ -260,9 +260,6 @@ public class MsgCenterFacade {
             if (check != 1) {
                 map.put("isread", 1);
                 resault = imSystemInformReadService.updateSystemRead(map);//更新系统消息已读
-            } else {
-                map.put("isread", 1);
-                resault = imSystemInformReadService.insertSystemRead(map);//插入消息已读
             }
         } else if (type.equals("5")) {
             resault = imFirstDialogueService.updateCallRead(userid);//更新打招呼已读
