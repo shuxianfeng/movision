@@ -232,6 +232,20 @@ public class UserManageController {
     }
 
     /**
+     * 条件查询用户VIP审核列表
+     *
+     * @return
+     */
+    public Response queryUserExamineAndVerify() {
+        Response response = new Response();
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(1);
+        return response;
+    }
+
+    /**
      * 条件查询投稿列表
      *
      * @param nickname

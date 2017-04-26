@@ -1909,7 +1909,7 @@
     FROM yw_post AS p
         WHERE p.isdel=0 AND p.isactive=0 AND p.isessencepool=1
         <if test="userid!=null">
-            AND userid=#{uid,jdbcType=INTEGER}
+            AND userid=#{userid,jdbcType=INTEGER}
         </if>
         <if test="circleid!=null">
             AND p.circleid=#{circleid,jdbcType=INTEGER}
