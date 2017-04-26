@@ -32,6 +32,16 @@ public class PostSensitiveWordsService {
         }
     }
 
+    public List<PostSensitiveWords> querySensitiveList() {
+        try {
+            log.info("不分页查询所有脱敏词列表");
+            return postSensitiveWordsMapper.querySensitiveList();
+        } catch (Exception e) {
+            log.error("不分页查询所有脱敏词列表失败");
+            throw e;
+        }
+    }
+
     public int insert(PostSensitiveWords postSensitiveWords) {
         try {
             log.info("增加脱敏成功");

@@ -23,6 +23,7 @@ import com.movision.mybatis.userOperationRecord.service.UserOperationRecordServi
 import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.DateUtils;
+import com.movision.utils.DesensitizationUtil;
 import com.movision.utils.JsoupCompressImg;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
@@ -79,6 +80,9 @@ public class FacadePost {
     @Autowired
     private PointRecordFacade pointRecordFacade;
 
+    @Autowired
+    private DesensitizationUtil desensitizationUtil;
+
     public PostVo queryPostDetail(String postid, String userid, String type) {
 
         //通过userid、postid查询该用户有没有关注该圈子的权限
@@ -105,6 +109,12 @@ public class FacadePost {
         //查询帖子中分享的商品
         List<GoodsVo> shareGoodsList = goodsService.queryShareGoodsList(Integer.parseInt(postid));
         vo.setShareGoodsList(shareGoodsList);
+
+        //对帖子内容进行脱敏处理
+        vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));
+        vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));
+        vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));
+
         return vo;
     }
 

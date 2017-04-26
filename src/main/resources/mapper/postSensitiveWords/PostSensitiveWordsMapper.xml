@@ -77,6 +77,12 @@
             resultType="com.movision.mybatis.postSensitiveWords.entity.PostSensitiveWords">
         select * from yw_post_sensitive_words ORDER BY intime DESC
     </select>
+
+    <!--不分页查询所有敏感词列表-->
+    <select id="querySensitiveList" resultType="com.movision.mybatis.postSensitiveWords.entity.PostSensitiveWords">
+        select name from yw_post_sensitive_words
+    </select>
+
     <select id="queryPostSensitive" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.postSensitiveWords.entity.PostSensitiveWords">
         SELECT  * FROM  yw_post_sensitive_words WHERE id=#{id,jdbcType=INTEGER}
