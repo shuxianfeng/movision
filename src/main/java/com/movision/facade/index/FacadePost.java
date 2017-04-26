@@ -111,9 +111,10 @@ public class FacadePost {
         vo.setShareGoodsList(shareGoodsList);
 
         //对帖子内容进行脱敏处理
-        vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));
-        vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));
-        vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));
+        vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
+        vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));//帖子主标题脱敏
+        vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
+        vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
 
         return vo;
     }
@@ -149,6 +150,12 @@ public class FacadePost {
 
         //增加活动详情最下方推荐的四个热门活动
         active.setHotActiveList(postService.queryFourHotActive());
+
+        //对活动内容进行脱敏处理
+        active.setTitle((String) desensitizationUtil.desensitization(active.getTitle()).get("str"));//活动主标题脱敏
+        active.setSubtitle((String) desensitizationUtil.desensitization(active.getSubtitle()).get("str"));//活动副标题脱敏
+        active.setPostcontent((String) desensitizationUtil.desensitization(active.getPostcontent()).get("str"));//活动正文文字脱敏
+
         return active;
     }
 
