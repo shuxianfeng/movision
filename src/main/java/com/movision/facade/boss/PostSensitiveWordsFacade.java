@@ -44,23 +44,14 @@ public class PostSensitiveWordsFacade {
         return map;
     }
 
-    public Map<String, Object> updateByPrimaryKeySelective(String id, String name, String intime) {
+    public Map<String, Object> updateByPrimaryKeySelective(String id, String name) {
         Map<String, Object> map = new HashedMap();
         PostSensitiveWords postSensitiveWords = new PostSensitiveWords();
         postSensitiveWords.setId(Integer.parseInt(id));
         if (!StringUtil.isEmpty(name)) {
             postSensitiveWords.setName(name);
         }
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date estime = null;
-        if (!StringUtil.isEmpty(intime)) {
-            try {
-                estime = format.parse(intime);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            postSensitiveWords.setIntime(estime);
-        }
+
         int result = postSensitiveWordsService.updateByPrimaryKeySelective(postSensitiveWords);
         map.put("result", result);
         return map;

@@ -62,10 +62,10 @@ public class PostSensitiveWordsController {
     @ApiOperation(value = "修改脱敏", notes = "修改脱敏", response = Response.class)
     @RequestMapping(value = "/update_postsenti", method = RequestMethod.POST)
     public Response updateByPrimaryKeySelective(@ApiParam(value = "脱敏id") @RequestParam String id,
-                                                @ApiParam(value = "脱敏词") @RequestParam(required = false) String name,
-                                                @ApiParam(value = "脱敏时间") @RequestParam(required = false) String intime) {
+                                                @ApiParam(value = "脱敏词") @RequestParam(required = false) String name
+    ) {
         Response response = new Response();
-        Map<String, Object> map = postSensitiveWordsFacade.updateByPrimaryKeySelective(id, name, intime);
+        Map<String, Object> map = postSensitiveWordsFacade.updateByPrimaryKeySelective(id, name);
         if (response.getCode() == 200) {
             response.setData(map);
         }

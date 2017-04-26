@@ -57,9 +57,6 @@
             <if test="name != null">
                 name = #{name,jdbcType=VARCHAR},
             </if>
-            <if test="intime != null">
-                intime = #{intime,jdbcType=TIMESTAMP},
-            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
