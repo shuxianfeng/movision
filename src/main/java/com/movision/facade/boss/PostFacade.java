@@ -1671,10 +1671,73 @@ public class PostFacade {
         return goodsService.findAllQueryLikeGoods(map, pager);
     }
 
-    public List<Map> findAllMyCollectPostList(Paging<Map> paging, int userid) {
+    public List<Map> findAllMyCollectPostList(Paging<Map> paging, int userid) throws ParseException {
         Map map = new HashedMap();
         map.put("userid", userid);
-        return postService.findAllMyCollectPost(paging, map);
+        List<Map> list = postService.findAllMyCollectPost(paging, map);
+
+        /**
+         * 添加活动距离结束的剩余天数——enddays
+         * 已投稿总数——partsum
+         */
+        for (int i = 0; i < list.size(); i++) {
+            Object begintimeObj = list.get(i).get("begintime");
+            Object endtimeObj = list.get(i).get("endtime");
+            if (null != begintimeObj && null != endtimeObj) {
+
+                getEnddays(list, i, (Date) begintimeObj, (Date) endtimeObj);
+            } else {
+                list.get(i).put("enddays", -2); //表示无活动
+            }
+
+            //计算已投稿总数
+            int isactive = Integer.valueOf(String.valueOf(list.get(i).get("isactive")));
+            int partsum = -1;   //默认-1，表示不是活动
+            if (isactive == 1) {  //该帖子属于活动
+                int postid = Integer.valueOf(String.valueOf(list.get(i).get("id")));//获取活动id
+                partsum = postService.queryActivePartSum(postid);
+            }
+            list.get(i).put("partsum", partsum);
+        }
+
+        return list;
+    }
+
+    /**
+     * 遍历所有的活动开始时间和结束时间，计算活动距离结束的剩余天数
+     *
+     * @param list
+     * @param i
+     * @param begintimeObj
+     * @param endtimeObj
+     * @throws ParseException
+     */
+    private void getEnddays(List<Map> list, int i, Date begintimeObj, Date endtimeObj) throws ParseException {
+        Date begin = begintimeObj;//活动开始时间
+        Date end = endtimeObj;//活动结束时间
+        Date now = new Date();//活动当前时间
+        if (now.before(begin)) {
+            list.get(i).put("enddays", -1);//活动还未开始
+        } else if (end.before(now)) {
+            list.get(i).put("enddays", 0);//活动已结束
+        } else if (begin.before(now) && now.before(end)) {
+            try {
+                log.error("计算活动剩余结束天数");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date a = sdf.parse(sdf.format(now));
+                Date b = sdf.parse(sdf.format(end));
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(a);
+                long time1 = cal.getTimeInMillis();
+                cal.setTime(b);
+                long time2 = cal.getTimeInMillis();
+                long between_days = (time2 - time1) / (1000 * 3600 * 24);
+                list.get(i).put("enddays", Integer.parseInt(String.valueOf(between_days)));
+            } catch (Exception e) {
+                log.error("计算活动剩余结束天数失败", e);
+                throw e;
+            }
+        }
     }
 
     /**
