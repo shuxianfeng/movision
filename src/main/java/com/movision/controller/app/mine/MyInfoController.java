@@ -93,8 +93,8 @@ public class MyInfoController {
         //获取当前用户id
         int userid = ShiroUtil.getAppUserID();
         // 获取收藏的精选：帖子/活动
-        Paging<Post> postPaging = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<Post> postList = postFacade.findAllMyCollectPostList(postPaging, userid);
+        Paging<Map> postPaging = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Map> postList = postFacade.findAllMyCollectPostList(postPaging, userid);
         postPaging.result(postList);
 
         response.setData(postPaging);

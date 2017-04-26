@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -21,8 +22,8 @@ public class PostFacadeTest extends SpringTestCase {
 
     @Test
     public void findAllMyCollectPostList() throws Exception {
-        Paging<Post> postPaging = new Paging<Post>(1, 10);
-        List<Post> postList = postFacade.findAllMyCollectPostList(postPaging, 1);
+        Paging<Map> postPaging = new Paging<Map>(1, 10);
+        List<Map> postList = postFacade.findAllMyCollectPostList(postPaging, 1);
         postPaging.result(postList);
         System.out.println(postPaging);
     }

@@ -918,7 +918,7 @@ public class PostService {
      * @param map
      * @return
      */
-    public List<Post> findAllMyCollectPost(Paging<Post> paging, Map map) {
+    public List<Map> findAllMyCollectPost(Paging<Map> paging, Map map) {
         try {
             log.info("查询我收藏的帖子/活动列表");
             return postMapper.findAllMyCollectPost(paging.getRowBounds(), map);

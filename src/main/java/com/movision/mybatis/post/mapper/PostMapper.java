@@ -169,7 +169,7 @@ public interface PostMapper {
 
     List<PostActiveList> findAllActivePostCondition(Map map, RowBounds rowBounds);
 
-    List<Post> findAllMyCollectPost(RowBounds rowBounds, Map map);
+    List<Map> findAllMyCollectPost(RowBounds rowBounds, Map map);
 
     List<Post> queryMyPostList(Map map);
 

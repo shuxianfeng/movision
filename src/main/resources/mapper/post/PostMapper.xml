@@ -1823,10 +1823,11 @@
         </trim>
     </insert>
 
-    <select id="findAllMyCollectPost" resultType="com.movision.mybatis.post.entity.Post">
-        SELECT p.*
+    <select id="findAllMyCollectPost" resultType="java.util.HashMap">
+        SELECT p.*, ap.begintime, ap.endtime
         FROM yw_post p
         LEFT JOIN yw_collection c on p.id = c.postid
+        left join yw_active_period ap on ap.postid = p.id
         where c.type = 0
         <if test="userid!=null and userid!=''">
             AND c.userid = #{userid}
