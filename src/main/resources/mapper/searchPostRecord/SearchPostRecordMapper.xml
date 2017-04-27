@@ -97,6 +97,7 @@
         SELECT keyword, COUNT(1) AS COUNT
         FROM t_search_post_record GROUP BY keyword
         ORDER BY COUNT DESC
+        limit 20
     </select>
 
     <select id="selectHistoryRecord" parameterType="java.lang.Integer" resultType="java.util.HashMap">
@@ -105,6 +106,7 @@
         WHERE userid=#{userid} AND isdel=0
         GROUP BY keyword
         order BY intime DESC
+        limit 12
     </select>
     <update id="UpdateSearchIsdel" parameterType="java.lang.Integer">
         UPDATE  t_search_post_record SET  isdel=1 WHERE  userid=#{userid,jdbcType=INTEGER}
