@@ -468,16 +468,10 @@ public class CircleFacade {
      */
     public List<Category> queryCircleTypeList(String loginid) {
         Integer loid = Integer.parseInt(loginid);
-        BossUser userjd = bossUserService.queryUserByAdministrator(loid);//根据登录用户id查询当前用户有哪些权限
         Map res = commonalityFacade.verifyUserByQueryMethod(loid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode(), null);
-        if (res.get("resault").equals(1)) {
-            if (userjd.getIscircle() == 1) {//登录用户是圈主
-                List<Category> list = categoryService.queryCircleTytpeListByUserid(loid);
-                return list;
-            } else if (userjd.getCirclemanagement() == 1) {//登录用户是圈子管理员
-                List<Category> list = categoryService.queryCircleTypeListByManage(loid);
-                return list;
-            }
+        if (res.get("resault").equals(1)) {//圈主或者管理员登录
+            List<Category> list = categoryService.queryCircleTytpeListByUserid(loid);
+            return list;
         } else if (res.get("resault").equals(2)) {
             List<Category> list = categoryService.queryCircleTypeList(null);
             return list;

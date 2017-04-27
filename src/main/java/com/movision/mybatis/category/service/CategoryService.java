@@ -58,23 +58,6 @@ public class CategoryService {
         }
     }
 
-    /**
-     * 根据用户id查询所属圈子分类列表
-     *
-     * @param userid
-     * @return
-     */
-    public List<Category> queryCircleTypeListByManage(Integer userid) {
-        try {
-            if (logger.isInfoEnabled()) {
-                logger.info("根据用户id查询所属圈子分类列表 userid=" + userid);
-            }
-            return categoryMapper.queryCircleTypeListByManage(userid);
-        } catch (Exception e) {
-            logger.error("根据用户id查询所属圈子分类列表异常 userid=" + userid, e);
-            throw e;
-        }
-    }
 
     /**
      * 添加圈子分类
