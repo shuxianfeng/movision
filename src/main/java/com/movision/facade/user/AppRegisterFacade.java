@@ -96,9 +96,9 @@ public class AppRegisterFacade {
     @Transactional
     public Map<String, Object> validateLoginUser(RegisterUser member, Validateinfo validateinfo, Session session) throws IOException {
 
-        String phone = member.getPhone();
-        String verifyCode = validateinfo.getCheckCode();
-        String mobileCheckCode = member.getMobileCheckCode();
+        String phone = member.getPhone();   //输入的手机号
+        String verifyCode = validateinfo.getCheckCode();    //session中的验证码
+        String mobileCheckCode = member.getMobileCheckCode();   //输入的验证码
         if (verifyCode != null) {
 
             Date currentTime = new Date();
@@ -631,7 +631,8 @@ public class AppRegisterFacade {
         info.setCreateTime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
         info.setCheckCode(verifyCode);
         info.setAccount(mobile);
-        session.setAttribute(sessionPrefix + mobile, info);
+        session.setAttribute(sessionPrefix + mobile, info); //缓存短信验证信息
+        session.setAttribute("phone", mobile); //缓存接收短信验证码的手机号
     }
 
 }

@@ -108,10 +108,20 @@ public class AppLoginController {
 
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(true);
-            //校验手机验证码是否正确
+            String session_phone = (String) session.getAttribute("phone");
+            String param_phone = user.getPhone();
+
+            //验证输入错误的手机号正确的验证码登录
+            if (!session_phone.equals(param_phone)) {
+                response.setCode(400);
+                response.setMessage("请输入正确的手机号码");
+                return response;
+            }
+
+            //校验验证码是否正确
             if (user.getMobileCheckCode() != null) {
                 //获取缓存中的登录的用户信息
-                Validateinfo validateinfo = (Validateinfo) session.getAttribute("r" + user.getPhone());
+                Validateinfo validateinfo = (Validateinfo) session.getAttribute("r" + param_phone);
                 log.info("【短信验证码登录】获取缓存中的登录的用户信息:" + validateinfo.toString());
                 if (null == validateinfo) {
                     response.setCode(400);
