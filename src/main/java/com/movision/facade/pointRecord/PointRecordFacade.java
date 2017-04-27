@@ -60,8 +60,11 @@ public class PointRecordFacade {
         if (ListUtil.isNotEmpty(pointRecordList)) {
             for (PointRecord pointRecord : pointRecordList) {
                 int oldtype = null == pointRecord.getType() ? 0 : pointRecord.getType();
+                int isadd = pointRecord.getIsadd();
                 if (oldtype == PointConstant.POINT_TYPE.reward.getCode()) {
-                    rewardCount++;
+                    if (isadd == 1) {
+                        rewardCount++;
+                    }
                 } else if (oldtype == PointConstant.POINT_TYPE.post.getCode()) {
                     postCount++;
                 } else if (oldtype == PointConstant.POINT_TYPE.comment.getCode()) {
@@ -103,11 +106,11 @@ public class PointRecordFacade {
         List<PointRecord> todayList = pointRecordService.queryMyTodayPoint(ShiroUtil.getAppUserID());
         PersonPointStatistics todayStatistics = this.getMyTotalPointStatics(todayList);
         //个人历史积分数据
-//        List<PointRecord> historyList = pointRecordService.queryAllMyPointRecord(ShiroUtil.getAppUserID());
-//        PersonPointStatistics historyStatistics = this.getMyTotalPointStatics(historyList);
+        List<PointRecord> historyList = pointRecordService.queryAllMyPointRecord(ShiroUtil.getAppUserID());
+        PersonPointStatistics historyStatistics = this.getMyTotalPointStatics(historyList);
 
         //获取需要新增的积分
-        int new_point = getPointByPointType(type, todayStatistics);
+        int new_point = getPointByPointType(type, todayStatistics, historyStatistics);
         log.info("【增加积分流水】该积分类型type=" + type + ", 该类型对应的积分是：" + new_point);
         if (new_point != 0) {
             //增加积分流水
@@ -190,8 +193,12 @@ public class PointRecordFacade {
         //获取每日的积分数据
         List<PointRecord> todayList = pointRecordService.queryMyTodayPoint(ShiroUtil.getAppUserID());
         PersonPointStatistics todayStatistics = this.getMyTotalPointStatics(todayList);
+        //获取历史的积分数据
+        List<PointRecord> historyList = pointRecordService.queryAllMyPointRecord(ShiroUtil.getAppUserID());
+        PersonPointStatistics historyStatistics = this.getMyTotalPointStatics(historyList);
+
         //获取需要新增的积分
-        int new_point = getPointByPointType(type, todayStatistics);
+        int new_point = getPointByPointType(type, todayStatistics, historyStatistics);
         log.info("【增加积分流水】该积分类型type=" + type + ", 该类型对应的积分是：" + new_point);
         //增加积分流水
         if (new_point != 0) {
@@ -219,26 +226,26 @@ public class PointRecordFacade {
 
 
     /**
-     * 根据积分类型，分配对应的加分数值
+     * 根据积分类型，计算出对应的加分数值
      *
      * （无下单送积分，该积分流水已经在下单接口中处理了）
      *
      * @param type
      * @return
      */
-    private int getPointByPointType(int type, PersonPointStatistics todayStatistics) {
+    private int getPointByPointType(int type, PersonPointStatistics todayStatistics, PersonPointStatistics historyStatistics) {
         int new_point = 0;
         int rewardCount = todayStatistics.getRewardCount(),
                 postCount = todayStatistics.getPostCount(), //今日发帖数
-                commentCount = todayStatistics.getCommentCount(),
-                shareCount = todayStatistics.getShareCount();
+                commentCount = todayStatistics.getCommentCount(),   //今日评论数
+                shareCount = todayStatistics.getShareCount();   //今日分享数
 
-        int historyPostCount = todayStatistics.getPostCount(),  //历史发帖数
-                historyCommentCount = todayStatistics.getCommentCount(),
-                historyShareCount = todayStatistics.getShareCount();
+        int historyPostCount = historyStatistics.getPostCount(),  //历史发帖数
+                historyCommentCount = historyStatistics.getCommentCount(),  //历史评论数
+                historyShareCount = historyStatistics.getShareCount();  //历史分享数
 
         /**
-         * 根据积分类型，分配对应的加分数值
+         * 打赏的积分
          */
         if (type == PointConstant.POINT_TYPE.reward.getCode()) {
             if (rewardCount >= 0 && rewardCount <= 4) {
@@ -294,7 +301,6 @@ public class PointRecordFacade {
                     new_point = 0;
                 }
             }
-
 
             /**
              *  每日分享和每日发帖同理
