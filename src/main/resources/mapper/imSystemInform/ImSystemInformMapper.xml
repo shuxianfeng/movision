@@ -155,7 +155,7 @@
         </if>
     </select>
     <select id="queryByUserid" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo">
-        SELECT body,inform_time,inform_identity FROM yw_im_system_informs ORDER BY inform_time DESC LIMIT 0,1
+        SELECT title,body,inform_time,inform_identity FROM yw_im_system_informs ORDER BY inform_time DESC LIMIT 0,1
     </select>
 
     <select id="querySystemPushByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
