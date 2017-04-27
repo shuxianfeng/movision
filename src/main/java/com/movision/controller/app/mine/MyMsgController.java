@@ -139,4 +139,21 @@ public class MyMsgController {
         response.setData(resault);
         return response;
     }
+
+    /**
+     * 系统消息全部标记已读
+     *
+     * @return
+     */
+    @ApiOperation(value = "系统消息全部标记已读", notes = "用于系统消息全部标记已读接口", response = Response.class)
+    @RequestMapping(value = "whole_Sign_Read", method = RequestMethod.GET)
+    public Response wholeSignRead() {
+        Response response = new Response();
+        Integer resault = msgCenterFacade.wholeSignRead(ShiroUtil.getAppUserID());
+        if (response.getCode() == 200) {
+            response.setData("操作成功");
+        }
+        response.setData(1);
+        return response;
+    }
 }

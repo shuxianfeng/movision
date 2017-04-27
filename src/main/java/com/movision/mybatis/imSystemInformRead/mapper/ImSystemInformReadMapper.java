@@ -24,4 +24,6 @@ public interface ImSystemInformReadMapper {
     Integer updateSystemRead(Map map);
 
     Integer queryUserCheckPush(Map map);
+
+    Integer wholeSignRead(Map map);
 }

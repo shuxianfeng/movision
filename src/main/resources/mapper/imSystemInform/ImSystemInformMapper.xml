@@ -165,4 +165,9 @@
     <select id="queryInform" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT COUNT(1) from yw_im_system_inform_read WHERE inform_identity=#{indity,jdbcType=VARCHAR}
     </select>
+
+    <select id="queryUnreadSystemMessage" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT inform_identity FROM yw_im_system_informs WHERE inform_identity NOT in
+        (SELECT inform_identity FROM yw_im_system_inform_read WHERE userid= #{userid,jdbcType=INTEGER})
+    </select>
 </mapper>

@@ -153,4 +153,21 @@ public class ImSystemInformService {
             throw e;
         }
     }
+
+    /**
+     * 查询用户未读消息
+     *
+     * @param userid
+     * @return
+     */
+    public List<String> queryUnreadSystemMessage(Integer userid) {
+        try {
+            log.info("查询用户未读消息");
+            return imSystemInformMapper.queryUnreadSystemMessage(userid);
+        } catch (Exception e) {
+            log.error("查询用户未读消息异常", e);
+            throw e;
+        }
+    }
+
 }

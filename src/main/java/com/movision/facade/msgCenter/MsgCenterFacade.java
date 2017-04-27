@@ -270,4 +270,24 @@ public class MsgCenterFacade {
         }
         return resault;
     }
+
+    /**
+     * 系统消息全部置为已读
+     *
+     * @param userid
+     * @return
+     */
+    public Integer wholeSignRead(Integer userid) {
+        List<String> informidentity = imSystemInformService.queryUnreadSystemMessage(userid);
+        Map map = new HashMap();
+        int i;
+        for (i = 0; i < informidentity.size(); i++) {
+            map.put("userid", userid);
+            map.put("intime", new Date());
+            map.put("informidentity", informidentity.get(i));
+            map.put("isread", 1);
+            imSystemInformReadService.wholeSignRead(map);
+        }
+        return i;
+    }
 }

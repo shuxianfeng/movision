@@ -31,4 +31,6 @@ public interface ImSystemInformMapper {
     Integer querySystemPushByUserid(Integer userid);//查询是否有未读系统通知
 
     Integer queryInform(String indity);
+
+    List<String> queryUnreadSystemMessage(Integer userid);
 }

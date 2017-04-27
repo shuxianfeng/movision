@@ -84,4 +84,21 @@ public class ImSystemInformReadService {
             throw e;
         }
     }
+
+
+    /**
+     * 系统消息全部标记已读
+     *
+     * @param map
+     * @return
+     */
+    public Integer wholeSignRead(Map map) {
+        try {
+            log.info("系统消息全部标记已读");
+            return imSystemInformReadMapper.wholeSignRead(map);
+        } catch (Exception e) {
+            log.error("系统消息全部标记已读异常", e);
+            throw e;
+        }
+    }
 }
