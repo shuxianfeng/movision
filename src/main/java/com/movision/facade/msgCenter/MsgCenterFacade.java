@@ -90,7 +90,7 @@ public class MsgCenterFacade {
         CommentVo comment = commentService.queryCommentByUserid(userid);
         if (comment != null) {
             int usersid = comment.getUserid();
-            if (userid != userid) {
+            if (usersid != userid) {
                 User ruser = postCommentZanRecordService.queryusers(usersid);
                 comment.setUser(ruser);
             }
