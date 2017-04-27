@@ -465,7 +465,8 @@ public class PointRecordFacade {
             //初始化计算值
             int rewardCount = 0, postCount = 0, commentCount = 0, shareCount = 0;
             for (PointRecord pointRecord : todayPointList) {
-                int type = pointRecord.getType();
+                int type = pointRecord.getType();   //积分类型
+                int isadd = pointRecord.getIsadd(); //加减（0增加 1减少）
                 if (type == PointConstant.POINT_TYPE.sign.getCode()) {
                     dailyTask.setSign(true);
                     dailyTask.setSignCount(1);
@@ -476,7 +477,10 @@ public class PointRecordFacade {
                     dailyTask.setCircleSelected(true);
                     dailyTask.setCircleSelectedCount(1);
                 } else if (type == PointConstant.POINT_TYPE.reward.getCode()) {
-                    rewardCount++;
+                    if (isadd == 1) {
+                        //只统计打赏别人的次数
+                        rewardCount++;
+                    }
 
                 } else if (type == PointConstant.POINT_TYPE.post.getCode()) {
                     postCount++;
