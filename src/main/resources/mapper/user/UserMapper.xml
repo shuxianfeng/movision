@@ -676,7 +676,7 @@
 
     <select id="findAllQueryUserExamineAndVerify" parameterType="java.util.Map"
             resultType="com.movision.mybatis.user.entity.UserVo">
-        SELECT u.id,u.nickname,u.phone,u.level,u.status,vd.id AS appyid,
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,vd.id AS appyid,vd.audit_time AS audittime,
         (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) AS autonym,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,

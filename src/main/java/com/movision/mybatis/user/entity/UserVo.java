@@ -86,6 +86,16 @@ public class UserVo implements Serializable {
 
     private Integer auditStatus;//审核状态
 
+    private Date audittime;//审核时间
+
+    public Date getAudittime() {
+        return audittime;
+    }
+
+    public void setAudittime(Date audittime) {
+        this.audittime = audittime;
+    }
+
     public Integer getAuditStatus() {
         return auditStatus;
     }

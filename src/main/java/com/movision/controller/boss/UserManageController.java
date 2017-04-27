@@ -236,7 +236,7 @@ public class UserManageController {
      *
      * @return
      */
-    @ApiOperation(value = "条件查询用户VIP申请列表", notes = "用于查询用户VIP审核状态列表", response = Response.class)
+    @ApiOperation(value = "条件查询用户VIP审核列表", notes = "用于查询用户VIP审核状态列表", response = Response.class)
     @RequestMapping(value = "query_user_examine_and_verify", method = RequestMethod.POST)
     public Response queryUserExamineAndVerify(@ApiParam(value = "用户名") @RequestParam(required = false) String username,
                                               @ApiParam(value = "手机号") @RequestParam(required = false) String phone,
