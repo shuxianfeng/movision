@@ -19,6 +19,7 @@ import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -499,6 +500,7 @@ public class UserManageFacade {
      * @param cause
      * @return
      */
+    @Transactional
     public Integer updateVipAudit(String userid, String loginid, String appyid, String status, String cause) {
         if (status.equals("0")) {//通过
             Map map = new HashMap();
@@ -522,8 +524,12 @@ public class UserManageFacade {
             map.put("auditTime", new Date());
             Integer res = auditVipDetailService.queryVipDetail(map);//查询该用户之前有没有进行加V审核
             if (res.equals(1)) {
+                map.put("isdel", 1);
+                userService.updateAuditByUser(map);//更新VIP申请
                 return auditVipDetailService.updateVipDetail(map);//更新加V审核
             } else {
+                map.put("isdel", 1);
+                userService.updateAuditByUser(map);//更新VIP申请
                 return auditVipDetailService.insertVIPDetail(map);//加V审核
             }
         } else {
