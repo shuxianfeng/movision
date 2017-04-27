@@ -1,5 +1,6 @@
 package com.movision.facade.msgCenter;
 
+import com.movision.common.util.ShiroUtil;
 import com.movision.mybatis.PostZanRecord.entity.PostZanRecord;
 import com.movision.mybatis.PostZanRecord.entity.PostZanRecordVo;
 import com.movision.mybatis.PostZanRecord.entity.ZanRecordVo;
@@ -78,8 +79,10 @@ public class MsgCenterFacade {
         PostCommentZanRecordVo postCommentZanRecord = postCommentZanRecordService.queryByUserid(userid);
         if (postCommentZanRecord != null) {
             int use = postCommentZanRecord.getUserid();
-            User zusew = postCommentZanRecordService.queryusers(use);
-            postCommentZanRecord.setUser(zusew);
+            if (use != userid) {
+                User zusew = postCommentZanRecordService.queryusers(use);
+                postCommentZanRecord.setUser(zusew);
+            }
         }
         //2 打赏消息
         RewardedVo rewarded = rewardedService.queryRewardByUserid(userid);
@@ -87,8 +90,10 @@ public class MsgCenterFacade {
         CommentVo comment = commentService.queryCommentByUserid(userid);
         if (comment != null) {
             int usersid = comment.getUserid();
-            User ruser = postCommentZanRecordService.queryusers(usersid);
-            comment.setUser(ruser);
+            if (userid != userid) {
+                User ruser = postCommentZanRecordService.queryusers(usersid);
+                comment.setUser(ruser);
+            }
         }
         //4 系统通知
         ImSystemInformVo imSystemInform = imSystemInformService.queryByUserid();//查询最新一条
@@ -144,16 +149,18 @@ public class MsgCenterFacade {
             for (int i = 0; i < comments.size(); i++) {
                 Integer pid = comments.get(i).getPid();
                 Integer usersid = comments.get(i).getUserid();
-                User user = postCommentZanRecordService.queryusers(usersid);
-                if (pid == null) {
-                    Integer postid = comments.get(i).getPostid();
-                    List<Post> post = postZanRecordService.queryPost(postid);
-                    comments.get(i).setPost(post);
-                    comments.get(i).setUser(user);
-                } else if (pid != null) {
-                    List<CommentVo> commentVos = commentService.queryPidComment(pid);
-                    comments.get(i).setCommentVos(commentVos);
-                    comments.get(i).setUser(user);
+                if (usersid != userid) {
+                    User user = postCommentZanRecordService.queryusers(usersid);
+                    if (pid == null) {
+                        Integer postid = comments.get(i).getPostid();
+                        List<Post> post = postZanRecordService.queryPost(postid);
+                        comments.get(i).setPost(post);
+                        comments.get(i).setUser(user);
+                    } else if (pid != null) {
+                        List<CommentVo> commentVos = commentService.queryPidComment(pid);
+                        comments.get(i).setCommentVos(commentVos);
+                        comments.get(i).setUser(user);
+                    }
                 }
             }
         }
@@ -194,18 +201,20 @@ public class MsgCenterFacade {
                 Integer commentid = zanRecordVos.get(i).getCommentid();
                 Integer postid = zanRecordVos.get(i).getPostid();
                 Integer usersid = zanRecordVos.get(i).getUserid();
-                User user = postCommentZanRecordService.queryusers(usersid);
-                if (commentid != null) {
-                    List<CommentVo> commentVo = postCommentZanRecordService.queryComment(commentid);
-                    zanRecordVos.get(i).setComment(commentVo);
-                    zanRecordVos.get(i).setCtype(1);
-                    zanRecordVos.get(i).setUser(user);
-                }
-                if (postid != null) {
-                    List<Post> post = postZanRecordService.queryPost(postid);
-                    zanRecordVos.get(i).setPosts(post);
-                    zanRecordVos.get(i).setCtype(2);
-                    zanRecordVos.get(i).setUser(user);
+                if (usersid != userid) {
+                    User user = postCommentZanRecordService.queryusers(usersid);
+                    if (commentid != null) {
+                        List<CommentVo> commentVo = postCommentZanRecordService.queryComment(commentid);
+                        zanRecordVos.get(i).setComment(commentVo);
+                        zanRecordVos.get(i).setCtype(1);
+                        zanRecordVos.get(i).setUser(user);
+                    }
+                    if (postid != null) {
+                        List<Post> post = postZanRecordService.queryPost(postid);
+                        zanRecordVos.get(i).setPosts(post);
+                        zanRecordVos.get(i).setCtype(2);
+                        zanRecordVos.get(i).setUser(user);
+                    }
                 }
             }
         }
