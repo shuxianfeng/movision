@@ -25,6 +25,12 @@ public class VipFacade {
         applyVipDetail.setApplyLevel(applyLevel);
         applyVipDetail.setUserid(shiroUser.getId());
 
-        return applyVipDetailService.addVipApplyRecord(applyVipDetail);
+        //查看用户是否申请过加V
+        Integer type = applyVipDetailService.queryApplyVIPByUserid(ShiroUtil.getAppUserID());
+        if (type == 0) {
+            return applyVipDetailService.addVipApplyRecord(applyVipDetail);
+        } else {
+            return -1;
+        }
     }
 }

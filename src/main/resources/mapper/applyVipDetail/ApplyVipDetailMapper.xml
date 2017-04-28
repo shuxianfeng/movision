@@ -95,4 +95,9 @@
         order by apply_time DESC
         limit 1
     </select>
+
+    <select id="queryApplyVIPByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_apply_vip_detail WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=1
+        AND userid=(SELECT apply_userid FROM yw_audit_vip_detail WHERE apply_userid=#{userid,jdbcType=INTEGER})
+    </select>
 </mapper>

@@ -17,4 +17,6 @@ public interface ApplyVipDetailMapper {
     int updateByPrimaryKey(ApplyVipDetail record);
 
     ApplyVipDetail selectLatestVipApplyRecord(@Param("userid") Integer userid);
+
+    Integer queryApplyVIPByUserid(Integer userid);
 }

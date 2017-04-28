@@ -41,5 +41,21 @@ public class ApplyVipDetailService {
         }
     }
 
+    /**
+     * 查看用户是否申请过加V
+     *
+     * @param userid
+     * @return
+     */
+    public Integer queryApplyVIPByUserid(Integer userid) {
+        try {
+            log.info("查看用户是否申请过加V");
+            return applyVipDetailMapper.queryApplyVIPByUserid(userid);
+        } catch (Exception e) {
+            log.error("查看用户是否申请过加V异常", e);
+            throw e;
+        }
+    }
+
 
 }
