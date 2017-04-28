@@ -846,6 +846,8 @@ public class PostFacade {
             if (typee == 0) {
                 if (!StringUtils.isEmpty(activefee)) {
                     post.setActivefee(Double.parseDouble(activefee));//金额
+                } else {
+                    post.setActivefee(0.0);
                 }
             }
 
@@ -1134,6 +1136,8 @@ public class PostFacade {
                 postActiveList.setCoverimg(coverimg);//帖子封面
                 if (!StringUtil.isEmpty(activefee)) {
                     postActiveList.setActivefee(Double.parseDouble(activefee));//费用
+                } else {
+                    postActiveList.setActivefee(0.0);
                 }
                 if (!StringUtils.isEmpty(iscontribute)) {//是否投稿
                     postActiveList.setIscontribute(iscontribute);

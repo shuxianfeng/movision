@@ -692,7 +692,7 @@
         FROM yw_user u LEFT JOIN yw_audit_vip_detail vd ON vd.apply_userid=u.id LEFT JOIN yw_autonym_authentication au
         ON
         au.userid=u.id
-        WHERE vd.apply_userid=u.id AND u.status=0 AND u.phone IS NOT NULL
+        WHERE vd.apply_userid=u.id AND u.phone IS NOT NULL
         <if test="username!=null">
             AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
         </if>
