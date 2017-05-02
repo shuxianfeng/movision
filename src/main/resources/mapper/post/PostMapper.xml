@@ -260,25 +260,11 @@
     <select id="findAllPersonPost" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT a.*,b.name AS circlename FROM (
-            (
-        SELECT id, circleid, title, subtitle, coverimg, isactive, activetype, type, intime
-                FROM yw_post
-        WHERE userid = #{userid,jdbcType=INTEGER}
-        AND isactive = '0'
-        AND isdel = '0'
-            )
-          UNION
-            (
-        SELECT t.id, t.circleid, t.title, t.subtitle, t.coverimg, t.isactive, t.activetype, t.type, t1.intime FROM (
-        SELECT id, circleid, title, subtitle, coverimg, intime, isactive, activetype, type
-        FROM yw_post
-        WHERE id IN (
-        SELECT postid FROM yw_post_share WHERE userid = #{userid,jdbcType=INTEGER}
-        )
-        AND isactive = '0'
-        AND isdel = '0'
-                ) t LEFT JOIN yw_post_share t1 ON t.id = t1.postid
-            )
+            SELECT id, circleid, title, subtitle, coverimg, isactive, activetype, type, intime
+                    FROM yw_post
+            WHERE userid = #{userid,jdbcType=INTEGER}
+            AND isactive = '0'
+            AND isdel = '0'
         ) a LEFT JOIN yw_circle b ON a.circleid = b.id
     </select>
 
