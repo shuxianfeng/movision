@@ -261,7 +261,7 @@
             resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT a.*,b.name AS circlename FROM (
             (
-        SELECT id, circleid, title, subtitle, coverimg, intime, isactive, activetype, type
+        SELECT id, circleid, title, subtitle, coverimg, isactive, activetype, type, intime
                 FROM yw_post
         WHERE userid = #{userid,jdbcType=INTEGER}
         AND isactive = '0'
