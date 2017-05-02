@@ -131,20 +131,20 @@ public class VideoTranscoder {
         // 文件命名
         Calendar c = Calendar.getInstance();
         String savename = String.valueOf(c.getTimeInMillis())+ Math.round(Math.random() * 100000);
-        List<String> commend = new ArrayList<String>();
+        List<String> commend = new ArrayList<>();
         commend.add(ffmpeginstalldir);
-        commend.add("-i");
+        commend.add(" -i ");
         commend.add(oldfilepath);
-        commend.add("-ab");
-        commend.add("56");
-        commend.add("-ar");
-        commend.add("22050");
-        commend.add("-qscale");
-        commend.add("8");
-        commend.add("-r");
-        commend.add("15");
-        commend.add("-s");
-        commend.add("600x500");
+        commend.add(" -ab");
+        commend.add(" 56");
+        commend.add(" -ar");
+        commend.add(" 22050");
+        commend.add(" -qscale");
+        commend.add(" 8");
+        commend.add(" -r");
+        commend.add(" 15");
+        commend.add(" -s");
+        commend.add(" 600x500 ");
         commend.add(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
 
         try {
@@ -152,9 +152,9 @@ public class VideoTranscoder {
             Process proce = null;
             //视频截图命令，封面图。  8是代表第8秒的时候截图
             String cmd = "";
-            String cut = ffmpeginstalldir + "-i"
+            String cut = ffmpeginstalldir + " -i "
                     + oldfilepath
-                    + "   -y   -f   image2   -ss   8   -t   0.001   -s   600x500" + tempvideodir
+                    + "   -y   -f   image2   -ss   8   -t   0.001   -s   600x500 " + tempvideodir
                     + name + ".jpg";
             String cutCmd = cmd + cut;
             proce = runtime.exec(cutCmd);
@@ -173,19 +173,19 @@ public class VideoTranscoder {
     // 对ffmpeg无法解析的文件格式(wmv9，rm，rmvb等), 可以先用别的工具（mencoder）转换为avi(ffmpeg能解析的)格式.
     private static String processAVI(String PATH, String ffmpeginstalldir, String tempvideodir, String name) {
         List<String> commend = new ArrayList<>();
-        commend.add(ffmpeginstalldir);
+        commend.add(ffmpeginstalldir + " ");
         commend.add(PATH);
-        commend.add("-oac");
-        commend.add("lavc");
-        commend.add("-lavcopts");
-        commend.add("acodec=mp3:abitrate=64");
-        commend.add("-ovc");
-        commend.add("xvid");
-        commend.add("-xvidencopts");
-        commend.add("bitrate=600");
-        commend.add("-of");
-        commend.add("avi");
-        commend.add("-o");
+        commend.add(" -oac");
+        commend.add(" lavc");
+        commend.add(" -lavcopts");
+        commend.add(" acodec=mp3:abitrate=64");
+        commend.add(" -ovc");
+        commend.add(" xvid");
+        commend.add(" -xvidencopts");
+        commend.add(" bitrate=600");
+        commend.add(" -of");
+        commend.add(" avi");
+        commend.add(" -o ");
         commend.add(tempvideodir + name + ".avi");
         try {
             //调用线程命令启动转码
