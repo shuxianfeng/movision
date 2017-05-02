@@ -156,7 +156,7 @@ public class VideoTranscoder {
             String cmd = "";
             String cut = ffmpeginstalldir + " -i "
                     + oldfilepath
-                    + "   -y   -f   image2   -ss   8   -t   0.001   -s   600x500 " + tempvideodir
+                    + "   -y   -f   image2   -ss   8   -t   0.001   -s   750x440 " + tempvideodir
                     + name + ".jpg";
             String cutCmd = cmd + cut;
             proce = runtime.exec(cutCmd);
