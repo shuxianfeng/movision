@@ -176,9 +176,11 @@ public class VideoTranscoder {
             String cutCmd = cmd + cut;
             proce = runtime.exec(cutCmd);
             //调用线程命令进行转码
-            ProcessBuilder builder = new ProcessBuilder(commend);
-            builder.command(commend);
-            builder.start();
+//            ProcessBuilder builder = new ProcessBuilder(commend);
+//            builder.command(commend);
+//            builder.start();
+            Process videoproce = null;
+            videoproce = runtime.exec(sb.toString());
 
             return true;
         } catch (Exception e) {
