@@ -45,7 +45,7 @@
             <artifactId>spring-context-support</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        <dependency>
+         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
@@ -500,9 +500,9 @@
         </dependency>
         <!--小米推送jar-->
         <dependency>
-             <groupId>com.googlecode.json-simple</groupId>
-             <artifactId>json-simple</artifactId>
-             <version>1.1.1</version>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
         </dependency>
         <!--小米推送jar-->
         <dependency>
@@ -510,8 +510,36 @@
             <artifactId>MiPush_SDK_Server</artifactId>
             <version>2.2.18</version>
         </dependency>
+        <!--mongodb-->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <version>1.8.0.RELEASE</version>
+        </dependency>
+         <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>2.11.1</version>
+        </dependency>
+
 
     </dependencies>
+
+    <!--<build>-->
+    <!--<finalName>springmvc_mongodb</finalName>-->
+    <!--<plugins>-->
+    <!--<plugin>-->
+    <!--<groupId>org.apache.tomcat.maven</groupId>-->
+    <!--<artifactId>tomcat7-maven-plugin</artifactId>-->
+    <!--<version>2.0-beta-1</version>-->
+    <!--<configuration>-->
+    <!--<uriEncoding>utf-8</uriEncoding>-->
+    <!--<port>8080</port>-->
+    <!--<path>/</path>-->
+    <!--</configuration>-->
+    <!--</plugin>-->
+    <!--</plugins>-->
+    <!--</build>-->
 
     <build>
         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
@@ -613,7 +641,17 @@
                     </dependency>
                 </dependencies>
             </plugin>
-
+            <!--mongodb-->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.0-beta-1</version>
+                <configuration>
+                    <uriEncoding>utf-8</uriEncoding>
+                    <port>8070</port>
+                    <path>/</path>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

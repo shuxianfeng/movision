@@ -15,6 +15,8 @@ import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
+import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
@@ -83,6 +85,9 @@ public class FacadePost {
     @Autowired
     private DesensitizationUtil desensitizationUtil;
 
+    @Autowired
+    private PostAndUserRecordService postAndUserRecordService;
+
     public PostVo queryPostDetail(String postid, String userid, String type) {
 
         //通过userid、postid查询该用户有没有关注该圈子的权限
@@ -103,6 +108,7 @@ public class FacadePost {
             vo.setNickname(user.getNickname());
             vo.setPhone(user.getPhone());
         }
+        Integer circleid=vo.getCircleid();
         //查询帖子详情最下方推荐的4个热门圈子
         List<Circle> hotcirclelist = circleService.queryHotCircle();
         vo.setHotcirclelist(hotcirclelist);
@@ -115,7 +121,14 @@ public class FacadePost {
         vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));//帖子主标题脱敏
         vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
         vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
-
+        //数据插入mongodb
+        PostAndUserRecord postAndUserRecord = new PostAndUserRecord();
+        postAndUserRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
+        postAndUserRecord.setCrileid(circleid);
+        postAndUserRecord.setPostid(Integer.parseInt(postid));
+        postAndUserRecord.setUserid(Integer.parseInt(userid));
+        postAndUserRecord.setIntime(new Date().toLocaleString());
+        postAndUserRecordService.insert(postAndUserRecord);
         return vo;
     }
 
@@ -155,6 +168,15 @@ public class FacadePost {
         active.setTitle((String) desensitizationUtil.desensitization(active.getTitle()).get("str"));//活动主标题脱敏
         active.setSubtitle((String) desensitizationUtil.desensitization(active.getSubtitle()).get("str"));//活动副标题脱敏
         active.setPostcontent((String) desensitizationUtil.desensitization(active.getPostcontent()).get("str"));//活动正文文字脱敏
+
+        //插入mongodb
+        PostAndUserRecord postAndUserRecord = new PostAndUserRecord();
+        postAndUserRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
+        postAndUserRecord.setUserid(Integer.parseInt(userid));
+        postAndUserRecord.setPostid(Integer.parseInt(postid));
+        postAndUserRecord.setCrileid(null);
+        postAndUserRecord.setIntime(new Date().toLocaleString());
+        postAndUserRecordService.insert(postAndUserRecord);
 
         return active;
     }

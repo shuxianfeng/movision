@@ -1,24 +1,23 @@
 package com.movision.fsearch.service.impl;
 
-import com.movision.common.util.ShiroUtil;
-import com.movision.fsearch.pojo.ProductGroup;
-import com.movision.fsearch.pojo.spec.PostSearchSpec;
-import com.movision.fsearch.service.IPostSearchService;
-import com.movision.fsearch.service.IWordService;
-import com.movision.fsearch.service.Searcher;
-import com.movision.fsearch.service.exception.ServiceException;
-import com.movision.fsearch.utils.*;
-import com.movision.mybatis.post.entity.PostSearchEntity;
-import com.movision.mybatis.searchPostRecord.service.SearchPostRecordService;
-import com.movision.utils.DateUtils;
-import org.apache.commons.collections.map.HashedMap;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+        import com.movision.common.util.ShiroUtil;
+        import com.movision.fsearch.pojo.ProductGroup;
+        import com.movision.fsearch.pojo.spec.PostSearchSpec;
+        import com.movision.fsearch.service.IPostSearchService;
+        import com.movision.fsearch.service.IWordService;
+        import com.movision.fsearch.service.Searcher;
+        import com.movision.fsearch.service.exception.ServiceException;
+        import com.movision.fsearch.utils.*;
+        import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTerms;
+        import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
+        import com.movision.mybatis.post.entity.PostSearchEntity;
+        import com.movision.mybatis.searchPostRecord.service.SearchPostRecordService;
+        import com.movision.utils.DateUtils;
+        import org.apache.commons.collections.map.HashedMap;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+        import java.util.*;
 
 /**
  * @Author zhuangyuhao
@@ -26,12 +25,14 @@ import java.util.Map;
  */
 @Service
 public class PostSearchService implements IPostSearchService {
-
     @Autowired
     private IWordService wordService;
 
     @Autowired
     private SearchPostRecordService searchPostRecordService;
+
+    @Autowired
+    private OpularSearchTermsService opularSearchTermsService;
 
     @Override
     public Map<String, Object> search(PostSearchSpec spec)
@@ -42,8 +43,14 @@ public class PostSearchService implements IPostSearchService {
 
         //如果搜索的关键词不为空，则入库保存
         if (StringUtil.isNotBlank(spec.getQ())) {
-
-            searchPostRecordService.add(spec.getQ());
+            OpularSearchTerms opularSearchTerms = new OpularSearchTerms();
+            opularSearchTerms.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
+            opularSearchTerms.setIntime(new Date().toLocaleString());
+            opularSearchTerms.setIsdel(0);
+            opularSearchTerms.setKeywords(spec.getQ());
+            opularSearchTerms.setUserid(ShiroUtil.getAppUserID());
+            opularSearchTermsService.insert(opularSearchTerms);
+            // searchPostRecordService.add(spec.getQ());
         }
 
         // 向query中添加新的键值对：key=_s
@@ -144,7 +151,8 @@ public class PostSearchService implements IPostSearchService {
      * @param result
      * @return
      */
-    private List<Map<String, Object>> setSortFields(PostSearchSpec spec, Map<String, Object> result) {
+    private List<Map<String, Object>> setSortFields(PostSearchSpec spec, Map<String, Object> result)
+    {
         List<Map<String, Object>> sortFields = new ArrayList<Map<String, Object>>(1);
         Map<String, Object> sortField = new HashMap<String, Object>(3);
 
@@ -183,7 +191,6 @@ public class PostSearchService implements IPostSearchService {
         sortFields.add(sortField);
         return sortFields;
     }
-
     /**
      * 获取帖子热门搜索词和搜索历史记录
      *

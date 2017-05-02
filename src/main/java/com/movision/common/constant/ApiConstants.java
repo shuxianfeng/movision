@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 public class ApiConstants {
     @Value("${uploadDir}")
     private  String uploadDir;
-    @Value("${uploadDoc}")
-    private String uploadDoc;
+//    @Value("${uploadDoc}")
+//    private String uploadDoc;
 
     @Value("${uploadPicMaxPostSize}")
     private int uploadPicMaxPostSize;
@@ -45,13 +45,13 @@ public class ApiConstants {
         this.uploadDir = uploadDir;
     }
 
-    public String getUploadDoc() {
-        return uploadDoc;
-    }
-
-    public void setUploadDoc(String uploadDoc) {
-        this.uploadDoc = uploadDoc;
-    }
+//    public String getUploadDoc() {
+//        return uploadDoc;
+//    }
+//
+//    public void setUploadDoc(String uploadDoc) {
+//        this.uploadDoc = uploadDoc;
+//    }
 
     public int getUploadPicMaxPostSize() {
         return uploadPicMaxPostSize;

@@ -9,7 +9,7 @@
         <param-value>
             classpath*:/spring/applicationContext.xml,
             classpath*:/spring/applicationContext-*.xml
-        </param-value>
+         </param-value>
     </context-param>
     <context-param>
         <param-name>defaultHtmlEscape</param-name>
