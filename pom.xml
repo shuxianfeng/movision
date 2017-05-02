@@ -510,7 +510,6 @@
             <artifactId>MiPush_SDK_Server</artifactId>
             <version>2.2.18</version>
         </dependency>
-
     </dependencies>
 
     <build>
