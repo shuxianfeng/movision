@@ -35,6 +35,7 @@ import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
+import com.movision.utils.DateUtils;
 import com.movision.utils.JsoupCompressImg;
 import com.movision.utils.ListUtil;
 import com.movision.utils.pagination.model.Paging;
@@ -1710,6 +1711,11 @@ public class PostFacade {
                 partsum = postService.queryActivePartSum(postid);
             }
             list.get(i).put("partsum", partsum);
+
+            //essencedate 日期2017-04-28转化为毫秒值
+            Date date = (Date) list.get(i).get("essencedate");
+            list.get(i).put("essencedate", date.getTime());
+
         }
 
         return list;
