@@ -145,9 +145,9 @@ public class VideoTranscoder {
         commend.add(" 15");
         commend.add(" -s");
         commend.add(" 600x500 ");
-        commend.add(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
+        commend.add(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + "test123" + ".mp4");
         log.info("测试打印转码命令>>>>>>>>>>>>>>>>>>> " + ffmpeginstalldir + " -i "+oldfilepath+" -ab"+" 56"+" -ar"+" 22050"+" -qscale"+" 8"+" -r"+" 15"+" -s"+" 600x500 "+
-                oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
+                oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + "test123" + ".mp4");
 
         try {
             Runtime runtime = Runtime.getRuntime();
