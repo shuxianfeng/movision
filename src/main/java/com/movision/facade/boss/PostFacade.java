@@ -1713,9 +1713,10 @@ public class PostFacade {
             list.get(i).put("partsum", partsum);
 
             //essencedate 日期2017-04-28转化为毫秒值
-            Date date = (Date) list.get(i).get("essencedate");
-            list.get(i).put("essencedate", date.getTime());
-
+            if (list.get(i).get("essencedate") != null) {
+                Date date = (Date) list.get(i).get("essencedate");
+                list.get(i).put("essencedate", date.getTime());
+            }
         }
 
         return list;
