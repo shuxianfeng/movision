@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -61,7 +62,7 @@ public class AppJUnitTest {
     @ApiOperation(value = "测试视频转码", notes = "测试视频转码", response = Response.class)
     @RequestMapping(value = "videoTranscoder", method = RequestMethod.POST)
     public Response videoTranscoder(HttpServletRequest request,
-                                    @ApiParam(value = "原生视频地址") @RequestParam String videourl) {
+                                    @ApiParam(value = "原生视频地址") @RequestParam String videourl) throws IOException {
         Response response = new Response();
 
         Map<String, Object> resultmap = videoTranscoder.transfer(videourl);
