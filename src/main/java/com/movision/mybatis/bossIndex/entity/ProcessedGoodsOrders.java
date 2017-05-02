@@ -12,6 +12,8 @@ public class ProcessedGoodsOrders implements Serializable {
 
     private Integer shopExamine;//店铺审批
 
+    private Integer choicenessApprove;//每日精选审批
+
     private Integer pendingQuantity;//待处理
 
     private Integer selfSupportGoods;//自营商品数量
@@ -43,6 +45,14 @@ public class ProcessedGoodsOrders implements Serializable {
     private Integer salesReturn;//退货
 
     private Integer orderQuantity;//订单数量
+
+    public Integer getChoicenessApprove() {
+        return choicenessApprove;
+    }
+
+    public void setChoicenessApprove(Integer choicenessApprove) {
+        this.choicenessApprove = choicenessApprove;
+    }
 
     public Integer getDeliverGoods() {
         return deliverGoods;

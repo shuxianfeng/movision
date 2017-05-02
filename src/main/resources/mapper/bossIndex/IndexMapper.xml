@@ -24,6 +24,7 @@
     <select id="queryProcessedGoodsOrders" resultType="com.movision.mybatis.bossIndex.entity.ProcessedGoodsOrders">
         SELECT COUNT(1) AS addVExamine,
         (SELECT COUNT(1) FROM yw_goods WHERE isself=1 AND isdel=0) AS selfSupportGoods,
+        (SELECT COUNT(1) FROM yw_post AS p WHERE p.isdel=0 AND p.isactive=0 AND p.isessencepool=1) AS choicenessApprove,
         (SELECT COUNT(1) FROM yw_goods WHERE isself=0 AND isdel=0) AS tripartiteGoods,
         <![CDATA[ (SELECT COUNT(1) FROM yw_goods WHERE stock<10 AND isdel=0) AS inventoryWarning, ]]>
         (SELECT COUNT(1) FROM yw_goods WHERE ishot=1 AND isdel=0) AS sellLikeHotCakesGoods,
@@ -37,7 +38,8 @@
         (SELECT COUNT(1) FROM yw_afterservice WHERE afterstatue=2 AND aftersalestatus=1 AND processingstatus=2 AND isdel=1) AS refund,
         (SELECT COUNT(1) FROM yw_afterservice WHERE afterstatue=1 AND aftersalestatus=1 AND processingstatus=2 AND isdel=1) AS salesReturn,
         <![CDATA[(SELECT COUNT(1) FROM yw_orders WHERE isdel=0 AND status <> 0 AND status <> -1) AS orderQuantity]]>
-        FROM yw_apply_vip_detail WHERE apply_level=0
+        FROM yw_apply_vip_detail vd LEFT JOIN yw_user u ON vd.userid=u.id WHERE vd.userid=u.id AND vd.isdel=0 AND
+        u.phone IS NOT NULL
     </select>
 
     <select id="queryAboveStatistics" resultType="com.movision.mybatis.bossIndex.entity.AboveStatistics">
