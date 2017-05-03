@@ -147,23 +147,6 @@ public class VideoTranscoder {
         commend.add(" 600x500 ");
         commend.add(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + "test123" + ".mp4");
 
-        StringBuffer sb = new StringBuffer();
-        sb.append(ffmpeginstalldir);
-        sb.append(" -i ");
-        sb.append(oldfilepath);
-        sb.append(" -ab");
-        sb.append(" 56");
-        sb.append(" -ar");
-        sb.append(" 22050");
-        sb.append(" -qscale");
-        sb.append(" 8");
-        sb.append(" -r");
-        sb.append(" 15");
-        sb.append(" -s");
-        sb.append(" 600x500 ");
-        sb.append(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + "test123" + ".mp4");
-        log.info("测试打印转码命令>>>>>>>>>>>>>>>>>>> " + sb.toString());
-
         try {
             Runtime runtime = Runtime.getRuntime();
             Process proce = null;
@@ -176,9 +159,12 @@ public class VideoTranscoder {
             String cutCmd = cmd + cut;
             proce = runtime.exec(cutCmd);
             //调用线程命令进行转码
-            ProcessBuilder builder = new ProcessBuilder(commend);
-            builder.command(commend);
+            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i " + oldfilepath, " -ab" + " 56", " -ar" + " 22050", " -qscale" + " 8", " -r" + " 15", " -s" + " 600x500 ", oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + "test123" + ".mp4");
+//            ProcessBuilder builder = new ProcessBuilder(commend);
+//            builder.command(commend);
             builder.start();
+//            Process videoproce = null;
+//            videoproce = runtime.exec(sb.toString());
 
             return true;
         } catch (Exception e) {
