@@ -66,11 +66,21 @@ public class VideoTranscoder {
 
         String fName = FileUtil.getPicName(PATH);//获取视频文件名
         String name = fName.substring(0, fileName.indexOf("."));//去除文件名后缀
-        File file = new File(PATH);
-        Encoder encoder = new Encoder();
-        MultimediaInfo m = encoder.getInfo(file);
-        int width = m.getVideo().getSize().getWidth();
-        int height = m.getVideo().getSize().getHeight();
+
+        String format = PATH.substring(PATH.lastIndexOf(".") + 1, PATH.length())
+                .toLowerCase();//获取上传的视频格式
+
+        int width = 600;//转换后的视频默认宽
+        int height = 500;//转换后的视频默认高
+        //如果是jdk支持的格式就直接获取原视频的宽高
+        if (!format.equals("flv") && !format.equals("swf")) {
+            File file = new File(PATH);
+            Encoder encoder = new Encoder();
+            MultimediaInfo m = encoder.getInfo(file);
+            width = m.getVideo().getSize().getWidth();
+            height = m.getVideo().getSize().getHeight();
+        }
+
         if (type == 0) {
             log.info("直接将文件转为mp4文件");
             status = processMP4(PATH, ffmpeginstalldir, tempvideodir, name, width, height);// 直接将文件转为mp4文件
@@ -243,7 +253,7 @@ public class VideoTranscoder {
 //        commend.add(" -r");
 //        commend.add(" 15");
 //        commend.add(" -s ");
-//        commend.add(width + "x" + height);
+//        commend.add(String.valueOf(width) + "x" + String.valueOf(height));
 //        commend.add(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
 
         StringBuffer sb = new StringBuffer();
@@ -259,7 +269,7 @@ public class VideoTranscoder {
         sb.append(" -r");
         sb.append(" 15");
         sb.append(" -s ");
-        sb.append(width + "x" + height);
+        sb.append(String.valueOf(width) + "x" + String.valueOf(height));
         sb.append(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
 
         try {
@@ -276,7 +286,7 @@ public class VideoTranscoder {
             proce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
 
             //调用线程命令进行转码
-//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -ab", " 56", " -ar", " 22050", " -qscale", " 12", " -r", " 15", " -s ", width + "x" + height, oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
+//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -ab", " 56", " -ar", " 22050", " -qscale", " 12", " -r", " 15", " -s ", String.valueOf(width) + "x" + String.valueOf(height), oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
 //            ProcessBuilder builder = new ProcessBuilder();
 //            builder.command(commend);
 //            builder.start();
