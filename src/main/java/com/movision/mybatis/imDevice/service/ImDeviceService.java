@@ -22,7 +22,7 @@ public class ImDeviceService {
     @Autowired
     private ImDeviceMapper imDeviceMapper;
 
-    public Boolean isExistDevice(Integer deviceid) {
+    public Boolean isExistDevice(String deviceid) {
         try {
             log.info("判断是否存该设备号的accid");
             Integer count = imDeviceMapper.isExistDevice(deviceid);
@@ -34,7 +34,7 @@ public class ImDeviceService {
         }
     }
 
-    public ImDevice selectByDevice(Integer deviceid) {
+    public ImDevice selectByDevice(String deviceid) {
         try {
             log.info("根据设备号查找对应的云信账户");
             return imDeviceMapper.selectByDevice(deviceid);

@@ -3,7 +3,7 @@
 <mapper namespace="com.movision.mybatis.imDevice.mapper.ImDeviceMapper">
     <resultMap id="BaseResultMap" type="com.movision.mybatis.imDevice.entity.ImDevice">
         <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="deviceid" property="deviceid" jdbcType="INTEGER"/>
+        <result column="deviceid" property="deviceid" jdbcType="VARCHAR"/>
         <result column="accid" property="accid" jdbcType="VARCHAR"/>
         <result column="token" property="token" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
@@ -28,7 +28,7 @@
         insert into yw_im_device (id, deviceid, accid,
         token, name, icon,
         sign, create_time)
-        values (#{id,jdbcType=INTEGER}, #{deviceid,jdbcType=INTEGER}, #{accid,jdbcType=VARCHAR},
+        values (#{id,jdbcType=INTEGER}, #{deviceid,jdbcType=VARCHAR}, #{accid,jdbcType=VARCHAR},
         #{token,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR},
         #{sign,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
     </insert>
@@ -63,7 +63,7 @@
                 #{id,jdbcType=INTEGER},
             </if>
             <if test="deviceid != null">
-                #{deviceid,jdbcType=INTEGER},
+                #{deviceid,jdbcType=VARCHAR},
             </if>
             <if test="accid != null">
                 #{accid,jdbcType=VARCHAR},
@@ -87,7 +87,7 @@
         update yw_im_device
         <set>
             <if test="deviceid != null">
-                deviceid = #{deviceid,jdbcType=INTEGER},
+                deviceid = #{deviceid,jdbcType=VARCHAR},
             </if>
             <if test="accid != null">
                 accid = #{accid,jdbcType=VARCHAR},
@@ -112,7 +112,7 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.imDevice.entity.ImDevice">
         update yw_im_device
-        set deviceid = #{deviceid,jdbcType=INTEGER},
+        set deviceid = #{deviceid,jdbcType=VARCHAR},
         accid = #{accid,jdbcType=VARCHAR},
         token = #{token,jdbcType=VARCHAR},
         name = #{name,jdbcType=VARCHAR},
@@ -122,13 +122,13 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="isExistDevice" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="isExistDevice" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT count(1)
         FROM yw_im_device
         WHERE deviceid = #{deviceid}
     </select>
 
-    <select id="selectByDevice" parameterType="java.lang.Integer"
+    <select id="selectByDevice" parameterType="java.lang.String"
             resultType="com.movision.mybatis.imDevice.entity.ImDevice">
         SELECT *
         FROM yw_im_device

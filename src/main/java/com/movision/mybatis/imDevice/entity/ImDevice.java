@@ -5,7 +5,7 @@ import java.util.Date;
 public class ImDevice {
     private Integer id;
 
-    private Integer deviceid;
+    private String deviceid;
 
     private String accid;
 
@@ -27,11 +27,11 @@ public class ImDevice {
         this.id = id;
     }
 
-    public Integer getDeviceid() {
+    public String getDeviceid() {
         return deviceid;
     }
 
-    public void setDeviceid(Integer deviceid) {
+    public void setDeviceid(String deviceid) {
         this.deviceid = deviceid;
     }
 
