@@ -79,7 +79,7 @@
     <select id="selectAllAPPImuser" resultType="com.movision.mybatis.imuser.entity.ImUser">
         SELECT u.accid FROM yw_im_user u LEFT JOIN yw_user w ON w.id=u.userid GROUP BY w.deviceno
         UNION ALL
-        SELECT accid FROM t_device_accid
+        SELECT accid FROM yw_im_device
     </select>
 
 </mapper>
