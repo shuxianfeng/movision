@@ -1,7 +1,8 @@
 package com.movision.utils.videotransfer;
 
-import com.groupbyinc.common.apache.commons.net.ftp.FTPClient;
-import com.groupbyinc.common.apache.commons.net.ftp.FTPReply;
+import it.sauronsoftware.jave.Encoder;
+import it.sauronsoftware.jave.EncoderException;
+import it.sauronsoftware.jave.MultimediaInfo;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import org.slf4j.Logger;
@@ -9,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.net.SocketException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
@@ -24,7 +24,7 @@ public class VideoTranscoder {
 
     private static final Logger log = LoggerFactory.getLogger(VideoTranscoder.class);
 
-    public Map<String, Object> transfer(String videourl) throws IOException{
+    public Map<String, Object> transfer(String videourl) throws IOException, EncoderException {
 
         Map<String, Object> resultmap = new HashMap<>();
 
@@ -66,13 +66,18 @@ public class VideoTranscoder {
 
         String fName = FileUtil.getPicName(PATH);//获取视频文件名
         String name = fName.substring(0, fileName.indexOf("."));//去除文件名后缀
+        File file = new File(PATH);
+        Encoder encoder = new Encoder();
+        MultimediaInfo m = encoder.getInfo(file);
+        int width = m.getVideo().getSize().getWidth();
+        int height = m.getVideo().getSize().getHeight();
         if (type == 0) {
             log.info("直接将文件转为mp4文件");
-            status = processMP4(PATH, ffmpeginstalldir, tempvideodir, name);// 直接将文件转为mp4文件
+            status = processMP4(PATH, ffmpeginstalldir, tempvideodir, name, width, height);// 直接将文件转为mp4文件
         } else if (type == 1) {
             String avifilepath = processAVI(PATH, ffmpeginstalldir, tempvideodir, name);
             if (avifilepath == null)
-                status = processMP4(avifilepath, ffmpeginstalldir, tempvideodir, name);// 将视频文件转为mp4
+                status = processMP4(avifilepath, ffmpeginstalldir, tempvideodir, name, width, height);// 将视频文件转为mp4
         }
 
         //再上传转换后的视频文件到静态资源服务器中
@@ -166,10 +171,9 @@ public class VideoTranscoder {
 
         //删除截取的封面文件和临时文件
         log.info("删除临时文件>>>>>>>>>>>>>>>>>>");
-        String format = PATH.substring(PATH.lastIndexOf(".") + 1, PATH.length()).toLowerCase();
         File videofile = new File(PATH);
         videofile.delete();
-        File imgfile = new File(PATH.substring(0, PATH.lastIndexOf(".") +1) + format);
+        File imgfile = new File(PATH.substring(0, PATH.lastIndexOf(".") +1) + "jpg");
         imgfile.delete();
 
         //返回新视频文件的地址
@@ -213,7 +217,7 @@ public class VideoTranscoder {
     }
 
     // ffmpeg能解析的格式：（asx，asf，mpg，wmv，3gp，mp4，mov，avi，flv等）
-    private static boolean processMP4(String oldfilepath, String ffmpeginstalldir, String tempvideodir, String name) {
+    private static boolean processMP4(String oldfilepath, String ffmpeginstalldir, String tempvideodir, String name, int width, int height) {
 
         //服务器上ffmpeg的程序路径
         String watermarkimg = PropertiesLoader.getValue("video.watermark.domain");
@@ -228,18 +232,18 @@ public class VideoTranscoder {
         String savename = String.valueOf(c.getTimeInMillis())+ Math.round(Math.random() * 100000);
 //        List<String> commend = new ArrayList<>();
 //        commend.add(ffmpeginstalldir);
-//        commend.add("-i");
+//        commend.add(" -i ");
 //        commend.add(oldfilepath);
-//        commend.add("-ab");
-//        commend.add("56");
-//        commend.add("-ar");
-//        commend.add("22050");
-//        commend.add("-qscale");
-//        commend.add("12");
-//        commend.add("-r");
-//        commend.add("15");
-//        commend.add("-s");
-//        commend.add("600x500 ");
+//        commend.add(" -ab");
+//        commend.add(" 56");
+//        commend.add(" -ar");
+//        commend.add(" 22050");
+//        commend.add(" -qscale");
+//        commend.add(" 12");
+//        commend.add(" -r");
+//        commend.add(" 15");
+//        commend.add(" -s ");
+//        commend.add(width + "x" + height);
 //        commend.add(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
 
         StringBuffer sb = new StringBuffer();
@@ -254,8 +258,8 @@ public class VideoTranscoder {
         sb.append(" 12");
         sb.append(" -r");
         sb.append(" 15");
-        sb.append(" -s");
-        sb.append(" 600x500 ");
+        sb.append(" -s ");
+        sb.append(width + "x" + height);
         sb.append(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
 
         try {
@@ -272,7 +276,7 @@ public class VideoTranscoder {
             proce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
 
             //调用线程命令进行转码
-//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -ab", " 56", " -ar", " 22050", " -qscale", " 12", " -r", " 15", " -s", " 600x500 ", oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
+//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -ab", " 56", " -ar", " 22050", " -qscale", " 12", " -r", " 15", " -s ", width + "x" + height, oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
 //            ProcessBuilder builder = new ProcessBuilder();
 //            builder.command(commend);
 //            builder.start();
@@ -342,6 +346,7 @@ public class VideoTranscoder {
 //            builder.command(commend);
 //            builder.start();
             Process videoproce = runtime.exec(sb.toString());
+            videoproce.waitFor();
 
             return tempvideodir + name + ".avi";
         } catch (Exception e) {
