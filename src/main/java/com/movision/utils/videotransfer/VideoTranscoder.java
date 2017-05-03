@@ -287,7 +287,7 @@ public class VideoTranscoder {
             str.append(" -i ");
             str.append(watermarkimg);
             str.append(" -filter_complex ");
-            str.append(" overlay ");
+            str.append(" overlay=W-w ");
             str.append(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + "test123" + ".mp4");
 
             Process watermarkproce = runtime.exec(str.toString());
