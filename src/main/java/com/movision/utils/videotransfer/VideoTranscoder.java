@@ -166,8 +166,7 @@ public class VideoTranscoder {
 
         //删除截取的封面文件和临时文件
         log.info("删除临时文件>>>>>>>>>>>>>>>>>>");
-        String format = PATH.substring(PATH.lastIndexOf(".") + 1, PATH.length())
-                .toLowerCase();
+        String format = PATH.substring(PATH.lastIndexOf(".") + 1, PATH.length()).toLowerCase();
         File videofile = new File(PATH);
         videofile.delete();
         File imgfile = new File(PATH.substring(0, PATH.lastIndexOf(".") +1) + format);
