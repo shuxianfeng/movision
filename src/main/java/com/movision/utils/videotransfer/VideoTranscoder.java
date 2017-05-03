@@ -1,15 +1,15 @@
 package com.movision.utils.videotransfer;
 
+import com.groupbyinc.common.apache.commons.net.ftp.FTPClient;
+import com.groupbyinc.common.apache.commons.net.ftp.FTPReply;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.SocketException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
@@ -24,7 +24,7 @@ public class VideoTranscoder {
 
     private static final Logger log = LoggerFactory.getLogger(VideoTranscoder.class);
 
-    public Map<String, Object> transfer(String videourl) throws IOException {
+    public Map<String, Object> transfer(String videourl) throws IOException{
 
         Map<String, Object> resultmap = new HashMap<>();
 
@@ -67,20 +67,112 @@ public class VideoTranscoder {
         String fName = FileUtil.getPicName(PATH);//获取视频文件名
         String name = fName.substring(0, fileName.indexOf("."));//去除文件名后缀
         if (type == 0) {
-            System.out.println("直接将文件转为mp4文件");
+            log.info("直接将文件转为mp4文件");
             status = processMP4(PATH, ffmpeginstalldir, tempvideodir, name);// 直接将文件转为mp4文件
         } else if (type == 1) {
             String avifilepath = processAVI(PATH, ffmpeginstalldir, tempvideodir, name);
             if (avifilepath == null)
-                status = processMP4(avifilepath, ffmpeginstalldir, tempvideodir, name);// 将avi转为mp4
+                status = processMP4(avifilepath, ffmpeginstalldir, tempvideodir, name);// 将视频文件转为mp4
         }
 
         //再上传转换后的视频文件到静态资源服务器中
+//        String uploadpath = PropertiesLoader.getValue("post.video.domain");//新文件上传的静态资源服务器目录
+//
+//        log.info("新文件上传路径>>>>>>>>>>>>>>" + uploadpath + "待上传的文件路径>>>>>>>>" + tempvideodir + name + ".mp4");
+//        File file = new File(tempvideodir + name + ".mp4");
+//        FTPClient ftpClient = new FTPClient();
+//        ftpClient.setControlEncoding("GBK");
+//        String hostname = PropertiesLoader.getValue("resource.hostname.domain");//静态资源服务器IP
+//        int port = Integer.parseInt(PropertiesLoader.getValue("resource.port.domain"));//FTP默认端口21   SFTP的默认端口22
+//        String username = PropertiesLoader.getValue("resource.username.domain");//root用户名
+//        String password = PropertiesLoader.getValue("resource.password.domain");//root密码
+//        try {
+//            //链接ftp服务器
+//            ftpClient.connect(hostname, port);
+//            //登录ftp
+//            ftpClient.login(username, password);
+//            int  reply = ftpClient.getReplyCode();
+//            log.info("检测静态资源服务器连接状态(如果reply返回230就算成功,如果返回530密码用户名错误或当前用户无权限下面有详细的解释)>>>>>>>" + reply);
+//
+//            if (!FTPReply.isPositiveCompletion(reply)) {
+//                ftpClient.disconnect();
+//                log.info("FTP服务器连接异常");
+//            }
+//            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+//
+//            ftpClient.changeWorkingDirectory(uploadpath);//给ftp指定新文件上传到静态资源服务器的指定目录
+//            String remoteFileName = name + ".mp4";
+//            InputStream input = new FileInputStream(file);
+//            ftpClient.storeFile(remoteFileName, input);//文件你若是不指定就会上传到root目录下
+//            input.close();
+//            ftpClient.logout();
+//
+////            110  重新启动标记应答。在这种情况下文本是确定的，它必须是：MARK   yyyy=mmmm，其中yyyy是用户进程数据流标记，mmmm是服务器标记。
+////            120     服务在nnn分钟内准备好
+////            125     数据连接已打开，准备传送
+////            150     文件状态良好，打开数据连接
+////            200     命令成功
+////            202     命令未实现
+////            211     系统状态或系统帮助响应
+////            212     目录状态
+////            213     文件状态
+////            214     帮助信息，信息仅对人类用户有用
+////            215     名字系统类型
+////            220     对新用户服务准备好
+////            221     服务关闭控制连接，可以退出登录
+////            225     数据连接打开，无传输正在进行
+////            226     关闭数据连接，请求的文件操作成功
+////            227     进入被动模式
+////            230     用户登录
+////            250     请求的文件操作完成
+////            257     创建 "PATHNAME "
+////            331     用户名正确，需要口令
+////            332     登录时需要帐户信息
+////            350     请求的文件操作需要进一步命令
+////            421     不能提供服务，关闭控制连接
+////            425     不能打开数据连接
+////            426     关闭连接，中止传输
+////            450     请求的文件操作未执行
+////            451     中止请求的操作：有本地错误
+////            452     未执行请求的操作：系统存储空间不足
+////            500     格式错误，命令不可识别
+////            501     参数语法错误
+////            502     命令未实现
+////            503     命令顺序错误
+////            504     此参数下的命令功能未实现
+////            530     未登录（用户名或密码错误，1、FTP密码修改了？2、用户名/密码输入错误？先仔细检查有无输入错误   如复制的时候误复制了空格！！）
+////            532     存储文件需要帐户信息
+////            550     未执行请求的操作
+////            551     请求操作中止：页类型未知
+////            552     请求的文件操作中止，存储分配溢出
+////            553     未执行请求的操作：文件名不合法
+//
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }finally {
+//            if (ftpClient.isConnected()) {
+//                try {
+//
+//                    ftpClient.disconnect();
+//
+//                } catch (IOException ioe) {
+//
+//                    ioe.printStackTrace();
+//                }
+//            }
+//        }
 
         //上传成功后删除videourl路径下的源视频文件
 
-        //返回新视频文件的地址
+        //删除截取的封面文件和临时文件
+        log.info("删除临时文件>>>>>>>>>>>>>>>>>>");
+        String format = PATH.substring(PATH.lastIndexOf(".") + 1, PATH.length()).toLowerCase();
+        File videofile = new File(PATH);
+        videofile.delete();
+        File imgfile = new File(PATH.substring(0, PATH.lastIndexOf(".") +1) + format);
+        imgfile.delete();
 
+        //返回新视频文件的地址
 
         return resultmap;
     }
@@ -181,6 +273,7 @@ public class VideoTranscoder {
 //            builder.command(commend);
 //            builder.start();
             Process videoproce = runtime.exec(sb.toString());
+            videoproce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
 
             return true;
         } catch (Exception e) {

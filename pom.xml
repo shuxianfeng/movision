@@ -510,6 +510,12 @@
             <artifactId>MiPush_SDK_Server</artifactId>
             <version>2.2.18</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.groupbyinc</groupId>
+            <artifactId>common-net</artifactId>
+            <version>90</version>
+        </dependency>
         <!--mongodb-->
         <dependency>
             <groupId>org.springframework.data</groupId>
