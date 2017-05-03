@@ -83,11 +83,11 @@ public class VideoTranscoder {
 
         if (type == 0) {
             log.info("直接将文件转为mp4文件");
-            status = processMP4(PATH, ffmpeginstalldir, tempvideodir, name, width, height);// 直接将文件转为mp4文件
+            status = processMP4(PATH, ffmpeginstalldir, tempvideodir, name, String.valueOf(width), String.valueOf(height));// 直接将文件转为mp4文件
         } else if (type == 1) {
             String avifilepath = processAVI(PATH, ffmpeginstalldir, tempvideodir, name);
             if (avifilepath == null)
-                status = processMP4(avifilepath, ffmpeginstalldir, tempvideodir, name, width, height);// 将视频文件转为mp4
+                status = processMP4(avifilepath, ffmpeginstalldir, tempvideodir, name, String.valueOf(width), String.valueOf(height));// 将视频文件转为mp4
         }
 
         //再上传转换后的视频文件到静态资源服务器中
@@ -181,10 +181,10 @@ public class VideoTranscoder {
 
         //删除截取的封面文件和临时文件
         log.info("删除临时文件>>>>>>>>>>>>>>>>>>");
-//        File videofile = new File(PATH);
-//        videofile.delete();
-//        File imgfile = new File(PATH.substring(0, PATH.lastIndexOf(".") +1) + "jpg");
-//        imgfile.delete();
+        File videofile = new File(PATH);
+        videofile.delete();
+        File imgfile = new File(PATH.substring(0, PATH.lastIndexOf(".") +1) + "jpg");
+        imgfile.delete();
 
         //返回新视频文件的地址
 
@@ -227,7 +227,7 @@ public class VideoTranscoder {
     }
 
     // ffmpeg能解析的格式：（asx，asf，mpg，wmv，3gp，mp4，mov，avi，flv等）
-    private static boolean processMP4(String oldfilepath, String ffmpeginstalldir, String tempvideodir, String name, int width, int height) {
+    private static boolean processMP4(String oldfilepath, String ffmpeginstalldir, String tempvideodir, String name, String width, String height) {
 
         //服务器上ffmpeg的程序路径
         String watermarkimg = PropertiesLoader.getValue("video.watermark.domain");
@@ -271,6 +271,8 @@ public class VideoTranscoder {
         sb.append(" -s ");
         sb.append(String.valueOf(width) + "x" + String.valueOf(height));
         sb.append(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
+
+        log.info("执行的视频转化命令行>>>>>>>>>>>>>>>>> " + sb.toString());
 
         try {
             Runtime runtime = Runtime.getRuntime();
