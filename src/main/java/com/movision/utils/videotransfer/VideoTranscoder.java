@@ -253,7 +253,7 @@ public class VideoTranscoder {
 //        commend.add(" -r");
 //        commend.add(" 15");
 //        commend.add(" -s ");
-//        commend.add(String.valueOf(width) + "x" + String.valueOf(height));
+//        commend.add(String.valueOf(width) + "x" + String.valueOf(height) + " ");
 //        commend.add(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
 
         StringBuffer sb = new StringBuffer();
@@ -269,7 +269,7 @@ public class VideoTranscoder {
         sb.append(" -r");
         sb.append(" 15");
         sb.append(" -s ");
-        sb.append(String.valueOf(width) + "x" + String.valueOf(height));
+        sb.append(String.valueOf(width) + "x" + String.valueOf(height) + " ");
         sb.append(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
 
         log.info("执行的视频转化命令行>>>>>>>>>>>>>>>>> " + sb.toString());
@@ -288,7 +288,7 @@ public class VideoTranscoder {
             proce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
 
             //调用线程命令进行转码
-//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -ab", " 56", " -ar", " 22050", " -qscale", " 12", " -r", " 15", " -s ", String.valueOf(width) + "x" + String.valueOf(height), oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
+//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -ab", " 56", " -ar", " 22050", " -qscale", " 12", " -r", " 15", " -s ", String.valueOf(width) + "x" + String.valueOf(height) + " ", oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
 //            ProcessBuilder builder = new ProcessBuilder();
 //            builder.command(commend);
 //            builder.start();
