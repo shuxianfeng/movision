@@ -159,7 +159,7 @@ public class VideoTranscoder {
             String cutCmd = cmd + cut;
             proce = runtime.exec(cutCmd);
             //调用线程命令进行转码
-            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i " + oldfilepath, " -ab" + " 56", " -ar" + " 22050", " -qscale" + " 8", " -r" + " 15", " -s" + " 600x500 ", oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
+            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -ab", " 56", " -ar", " 22050", " -qscale", " 8", " -r", " 15", " -s", " 600x500 ", oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
 //            ProcessBuilder builder = new ProcessBuilder(commend);
 //            builder.command(commend);
             builder.start();
