@@ -215,6 +215,9 @@ public class VideoTranscoder {
     // ffmpeg能解析的格式：（asx，asf，mpg，wmv，3gp，mp4，mov，avi，flv等）
     private static boolean processMP4(String oldfilepath, String ffmpeginstalldir, String tempvideodir, String name) {
 
+        //服务器上ffmpeg的程序路径
+        String watermarkimg = PropertiesLoader.getValue("video.watermark.domain");
+
         if (!checkfile(oldfilepath)) {
             System.out.println(oldfilepath + " is not file");
             return false;
@@ -266,6 +269,7 @@ public class VideoTranscoder {
                     + name + ".jpg";
             String cutCmd = cmd + cut;
             proce = runtime.exec(cutCmd);
+            proce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
 
             //调用线程命令进行转码
 //            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -ab", " 56", " -ar", " 22050", " -qscale", " 12", " -r", " 15", " -s", " 600x500 ", oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
@@ -274,6 +278,20 @@ public class VideoTranscoder {
 //            builder.start();
             Process videoproce = runtime.exec(sb.toString());
             videoproce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
+
+            //调用线程进行视频水印打印
+            StringBuffer str = new StringBuffer();
+            str.append(ffmpeginstalldir);
+            str.append(" -i ");
+            str.append(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
+            str.append(" -i ");
+            str.append(watermarkimg);
+            str.append(" -filter_complex ");
+            str.append(" overlay ");
+            str.append(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + "test123" + ".mp4");
+
+            Process watermarkproce = runtime.exec(str.toString());
+            watermarkproce.waitFor();
 
             return true;
         } catch (Exception e) {
