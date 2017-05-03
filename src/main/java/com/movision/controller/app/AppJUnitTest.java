@@ -5,6 +5,7 @@ import com.movision.utils.JsoupCompressImg;
 import com.movision.utils.videotransfer.VideoTranscoder;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import it.sauronsoftware.jave.EncoderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -62,7 +63,7 @@ public class AppJUnitTest {
     @ApiOperation(value = "测试视频转码", notes = "测试视频转码", response = Response.class)
     @RequestMapping(value = "videoTranscoder", method = RequestMethod.POST)
     public Response videoTranscoder(HttpServletRequest request,
-                                    @ApiParam(value = "原生视频地址") @RequestParam String videourl) throws IOException {
+                                    @ApiParam(value = "原生视频地址") @RequestParam String videourl) throws IOException, EncoderException {
         Response response = new Response();
 
         Map<String, Object> resultmap = videoTranscoder.transfer(videourl);
