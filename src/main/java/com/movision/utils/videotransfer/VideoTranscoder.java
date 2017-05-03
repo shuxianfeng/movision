@@ -273,6 +273,7 @@ public class VideoTranscoder {
 //            builder.command(commend);
 //            builder.start();
             Process videoproce = runtime.exec(sb.toString());
+            videoproce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
 
             return true;
         } catch (Exception e) {
