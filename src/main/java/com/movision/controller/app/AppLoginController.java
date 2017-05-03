@@ -282,7 +282,7 @@ public class AppLoginController {
                 }
 
                 //8 删除该设备号与accid记录
-                appRegisterFacade.deleteSameDevicenoRecord(user.getDeviceno());
+                appRegisterFacade.deleteSameDeviceIm(user.getDeviceno());
 
                 response.setData(returnMap);
             } else {
@@ -385,16 +385,19 @@ public class AppLoginController {
 
     @ApiOperation(value = "新设备打开APP绑定ACCID", notes = "新设备打开APP绑定ACCID", response = Response.class)
     @RequestMapping(value = "/new_device_binding_accid", method = RequestMethod.POST)
-    public Response newDeviceBindingAccid(@ApiParam(value = "设备号") @RequestParam String deviceid) {
+    public Response newDeviceBindingAccid(@ApiParam(value = "设备号") @RequestParam String deviceid) throws IOException {
         Response response = new Response();
         //查询是否存在该设备号，如果存在，则不新增了
-        DeviceAccid deviceAccid = appRegisterFacade.selectByDeviceno(deviceid);
+        /*DeviceAccid deviceAccid = appRegisterFacade.selectByDeviceno(deviceid);
         if (null == deviceAccid) {
             appRegisterFacade.addDeviceAccid(deviceid);
             response.setMessage("绑定设备号成功");
         } else {
             response.setMessage("已经存在该设备号的注册记录");
-        }
+        }*/
+
+        appRegisterFacade.registerImDevice(Integer.valueOf(deviceid), response);
+
         return response;
     }
 

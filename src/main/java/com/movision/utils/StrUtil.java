@@ -26,6 +26,10 @@ public class StrUtil {
         return "mofo_" + System.currentTimeMillis();
     }
 
+    public static String genNickNameByDevice() {
+        return "mofo_" + System.currentTimeMillis();
+    }
+
     public static void main(String[] args) {
         System.out.println(genDefaultNickNameForOpenid());
     }

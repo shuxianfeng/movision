@@ -7,6 +7,8 @@ import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
 import com.movision.mybatis.deviceAccid.entity.DeviceAccid;
+import com.movision.mybatis.imDevice.entity.ImDevice;
+import com.movision.mybatis.imDevice.service.ImDeviceService;
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
 import com.movision.mybatis.imFirstDialogue.entity.ImMsg;
 import com.movision.mybatis.imFirstDialogue.service.ImFirstDialogueService;
@@ -76,6 +78,9 @@ public class ImFacade {
     private ImSystemInformService imSystemInformService;
     @Autowired
     private SystemToPushService systemToPushService;
+
+    @Autowired
+    private ImDeviceService imDeviceService;
     /**
      * 发起IM请求，获得响应
      *
@@ -171,6 +176,25 @@ public class ImFacade {
         return this.sendImHttpPost(ImConstant.CREATE_USER_URL, params);
     }
 
+    public Map<String, Object> registerIMDevice(ImDevice imDevice) throws IOException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("accid", imDevice.getAccid());
+
+        if (StringUtils.isNotEmpty(imDevice.getName())) {
+            params.put("name", imDevice.getName());
+        }
+
+        if (StringUtils.isNotEmpty(imDevice.getIcon())) {
+            params.put("icon", imDevice.getIcon());
+        }
+
+        if (StringUtils.isNotEmpty(imDevice.getToken())) {
+            params.put("token", imDevice.getToken());
+        }
+
+        return this.sendImHttpPost(ImConstant.CREATE_USER_URL, params);
+    }
+
     /**
      * APP新增IM用户
      *
@@ -218,6 +242,34 @@ public class ImFacade {
 
         } else {
             throw new BusinessException(MsgCodeConstant.create_im_accid_fail, "注册云信用户失败");
+        }
+    }
+
+
+    public void registerImDeviceAndSave(ImDevice imDevice) throws IOException {
+        //注册im用户
+        Map res = this.registerIMDevice(imDevice);
+
+        if (res.get("code").equals(200)) {
+            //返回值
+            String info = JsonUtils.getJsonStringFromObj(res.get("info"));
+            Map infoMap = JsonUtils.getObjectMapFromJsonString(info);
+            String token = String.valueOf(infoMap.get("token"));
+            String accid = String.valueOf(infoMap.get("accid"));
+            String name = String.valueOf(infoMap.get("name"));
+
+            log.info("注册IM用户从服务器返回的值：token=" + token + ",accid=" + accid + ",name=" + name);
+
+            //im用户信息入库
+            ImDevice finalImUser = new ImDevice();
+            finalImUser.setAccid(accid);
+            finalImUser.setToken(token);
+            finalImUser.setName(name);
+            finalImUser.setDeviceid(imDevice.getDeviceid());
+            imDeviceService.add(finalImUser);
+
+        } else {
+            throw new BusinessException(MsgCodeConstant.create_im_accid_fail, "根据设备号注册云信用户失败");
         }
     }
 
