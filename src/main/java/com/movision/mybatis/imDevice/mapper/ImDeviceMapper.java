@@ -16,7 +16,7 @@ public interface ImDeviceMapper {
 
     int updateByPrimaryKey(ImDevice record);
 
-    Integer isExistDevice(@Param("deviceid") Integer deviceid);
+    Integer isExistDevice(@Param("deviceid") String deviceid);
 
-    ImDevice selectByDevice(@Param("deviceid") Integer deviceid);
+    ImDevice selectByDevice(@Param("deviceid") String deviceid);
 }

@@ -346,7 +346,7 @@ public class AppRegisterFacade {
      * @return
      * @throws IOException
      */
-    public ImDevice registerImDevice(Integer deviceid, Response response) throws IOException {
+    public ImDevice registerImDevice(String deviceid, Response response) throws IOException {
 
         Boolean isExistDevice = imDeviceService.isExistDevice(deviceid);
         if (!isExistDevice) {
@@ -637,7 +637,7 @@ public class AppRegisterFacade {
      * @param deviceno
      */
     public void deleteSameDeviceIm(String deviceno) {
-        ImDevice imDevice = imDeviceService.selectByDevice(Integer.valueOf(deviceno));
+        ImDevice imDevice = imDeviceService.selectByDevice(deviceno);
         if (null == imDevice) {
             //不存在，则不操作
         } else {

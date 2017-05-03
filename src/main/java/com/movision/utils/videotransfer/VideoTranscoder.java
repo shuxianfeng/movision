@@ -131,21 +131,37 @@ public class VideoTranscoder {
         // 文件命名
         Calendar c = Calendar.getInstance();
         String savename = String.valueOf(c.getTimeInMillis())+ Math.round(Math.random() * 100000);
-        List<String> commend = new ArrayList<>();
-        commend.add(ffmpeginstalldir);
-        commend.add(" -i ");
-        commend.add(oldfilepath);
-        commend.add(" -ab");
-        commend.add(" 56");
-        commend.add(" -ar");
-        commend.add(" 22050");
-        commend.add(" -qscale");
-        commend.add(" 8");
-        commend.add(" -r");
-        commend.add(" 15");
-        commend.add(" -s");
-        commend.add(" 600x500 ");
-        commend.add(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + "test123" + ".mp4");
+//        List<String> commend = new ArrayList<>();
+//        commend.add(ffmpeginstalldir);
+//        commend.add("-i");
+//        commend.add(oldfilepath);
+//        commend.add("-ab");
+//        commend.add("56");
+//        commend.add("-ar");
+//        commend.add("22050");
+//        commend.add("-qscale");
+//        commend.add("12");
+//        commend.add("-r");
+//        commend.add("15");
+//        commend.add("-s");
+//        commend.add("600x500 ");
+//        commend.add(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
+
+        StringBuffer sb = new StringBuffer();
+        sb.append(ffmpeginstalldir);
+        sb.append(" -i ");
+        sb.append(oldfilepath);
+        sb.append(" -ab");
+        sb.append(" 56");
+        sb.append(" -ar");
+        sb.append(" 22050");
+        sb.append(" -qscale");
+        sb.append(" 12");
+        sb.append(" -r");
+        sb.append(" 15");
+        sb.append(" -s");
+        sb.append(" 600x500 ");
+        sb.append(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
 
         try {
             Runtime runtime = Runtime.getRuntime();
@@ -158,13 +174,13 @@ public class VideoTranscoder {
                     + name + ".jpg";
             String cutCmd = cmd + cut;
             proce = runtime.exec(cutCmd);
+
             //调用线程命令进行转码
-            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i " + oldfilepath, " -ab" + " 56", " -ar" + " 22050", " -qscale" + " 8", " -r" + " 15", " -s" + " 600x500 ", oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + "test123" + ".mp4");
-//            ProcessBuilder builder = new ProcessBuilder(commend);
+//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -ab", " 56", " -ar", " 22050", " -qscale", " 12", " -r", " 15", " -s", " 600x500 ", oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
+//            ProcessBuilder builder = new ProcessBuilder();
 //            builder.command(commend);
-            builder.start();
-//            Process videoproce = null;
-//            videoproce = runtime.exec(sb.toString());
+//            builder.start();
+            Process videoproce = runtime.exec(sb.toString());
 
             return true;
         } catch (Exception e) {
@@ -175,26 +191,47 @@ public class VideoTranscoder {
 
     // 对ffmpeg无法解析的文件格式(wmv9，rm，rmvb等), 可以先用别的工具（mencoder）转换为avi(ffmpeg能解析的)格式.
     private static String processAVI(String PATH, String ffmpeginstalldir, String tempvideodir, String name) {
-        List<String> commend = new ArrayList<>();
-        commend.add(ffmpeginstalldir + " ");
-        commend.add(PATH);
-        commend.add(" -oac");
-        commend.add(" lavc");
-        commend.add(" -lavcopts");
-        commend.add(" acodec=mp3:abitrate=64");
-        commend.add(" -ovc");
-        commend.add(" xvid");
-        commend.add(" -xvidencopts");
-        commend.add(" bitrate=600");
-        commend.add(" -of");
-        commend.add(" avi");
-        commend.add(" -o ");
-        commend.add(tempvideodir + name + ".avi");
+//        List<String> commend = new ArrayList<>();
+//        commend.add(ffmpeginstalldir + " ");
+//        commend.add(PATH);
+//        commend.add(" -oac");
+//        commend.add(" lavc");
+//        commend.add(" -lavcopts");
+//        commend.add(" acodec=mp3:abitrate=64");
+//        commend.add(" -ovc");
+//        commend.add(" xvid");
+//        commend.add(" -xvidencopts");
+//        commend.add(" bitrate=600");
+//        commend.add(" -of");
+//        commend.add(" avi");
+//        commend.add(" -o ");
+//        commend.add(tempvideodir + name + ".avi");
+
+        StringBuffer sb = new StringBuffer();
+        sb.append(ffmpeginstalldir + " ");
+        sb.append(PATH);
+        sb.append(" -oac");
+        sb.append(" lavc");
+        sb.append(" -lavcopts");
+        sb.append(" acodec=mp3:abitrate=64");
+        sb.append(" -ovc");
+        sb.append(" xvid");
+        sb.append(" -xvidencopts");
+        sb.append(" bitrate=600");
+        sb.append(" -of");
+        sb.append(" avi");
+        sb.append(" -o ");
+        sb.append(tempvideodir + name + ".avi");
+
         try {
+            Runtime runtime = Runtime.getRuntime();
+
             //调用线程命令启动转码
-            ProcessBuilder builder = new ProcessBuilder();
-            builder.command(commend);
-            builder.start();
+//            ProcessBuilder builder = new ProcessBuilder();
+//            builder.command(commend);
+//            builder.start();
+            Process videoproce = runtime.exec(sb.toString());
+
             return tempvideodir + name + ".avi";
         } catch (Exception e) {
             e.printStackTrace();
