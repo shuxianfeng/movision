@@ -396,7 +396,7 @@ public class AppLoginController {
             response.setMessage("已经存在该设备号的注册记录");
         }*/
 
-        appRegisterFacade.registerImDevice(Integer.valueOf(deviceid), response);
+        response.setData(appRegisterFacade.registerImDevice(Integer.valueOf(deviceid), response));
 
         return response;
     }
