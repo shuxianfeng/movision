@@ -1,6 +1,7 @@
 package com.movision.facade.user;
 
 import com.google.gson.Gson;
+import com.movision.common.Response;
 import com.movision.common.constant.*;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
@@ -15,6 +16,8 @@ import com.movision.mybatis.coupon.service.CouponService;
 import com.movision.mybatis.couponTemp.entity.CouponTemp;
 import com.movision.mybatis.deviceAccid.entity.DeviceAccid;
 import com.movision.mybatis.deviceAccid.service.DeviceAccidService;
+import com.movision.mybatis.imDevice.entity.ImDevice;
+import com.movision.mybatis.imDevice.service.ImDeviceService;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
@@ -76,6 +79,9 @@ public class AppRegisterFacade {
 
     @Autowired
     private PointRecordFacade pointRecordFacade;
+
+    @Autowired
+    private ImDeviceService imDeviceService;
 
     /**
      * 1 校验登录用户信息：手机号+短信验证码
@@ -142,7 +148,7 @@ public class AppRegisterFacade {
                     this.getImuserForReturn(phone, result, userid);
 
                     //5 判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录
-                    deleteSameDevicenoRecord(member.getDeviceno());
+                    deleteSameDeviceIm(member.getDeviceno());
 
                     //6 登录成功则清除session中验证码的信息
                     session.removeAttribute("r" + validateinfo.getAccount());
@@ -334,6 +340,32 @@ public class AppRegisterFacade {
     }
 
     /**
+     * 判断该设备号是否注册过im用户，若注册过，则返回该im信息，否则注册
+     * @param deviceid
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    public ImDevice registerImDevice(Integer deviceid, Response response) throws IOException {
+
+        Boolean isExistDevice = imDeviceService.isExistDevice(deviceid);
+        if (!isExistDevice) {
+            //若不存在，则根据设备号注册云信账号
+            ImDevice imDevice = new ImDevice();
+            imDevice.setDeviceid(deviceid);
+            imDevice.setAccid(CheckSumBuilder.getAccid(String.valueOf(deviceid)));
+            imDevice.setName(StrUtil.genNickNameByDevice());
+            //注册
+            imFacade.registerImDeviceAndSave(imDevice);
+            response.setMessage("绑定设备号成功");
+        } else {
+            response.setMessage("已经存在该设备号的注册记录");
+        }
+        return imDeviceService.selectByDevice(deviceid);
+    }
+
+
+    /**
      * 如果当前手机号在分享的H5页面领取过优惠券，那么不管新老用户统一在这里将优惠券临时表中的数据同步到优惠券正式表中
      *
      * @param phone
@@ -422,13 +454,13 @@ public class AppRegisterFacade {
      *
      * @param deviceid
      */
-    public void addDeviceAccid(String deviceid) {
+    /*public void addDeviceAccid(String deviceid) {
         DeviceAccid deviceAccid = new DeviceAccid();
         deviceAccid.setDeviceid(deviceid);
 
         deviceAccid.setAccid(CheckSumBuilder.getAccid(deviceid));
         deviceAccidService.add(deviceAccid);
-    }
+    }*/
 
     /**
      * 根据设备号查询设备号和accid关系
@@ -436,9 +468,9 @@ public class AppRegisterFacade {
      * @param deviceno
      * @return
      */
-    public DeviceAccid selectByDeviceno(String deviceno) {
+    /*public DeviceAccid selectByDeviceno(String deviceno) {
         return deviceAccidService.selectByDeviceno(deviceno);
-    }
+    }*/
 
 
     /**
@@ -501,7 +533,7 @@ public class AppRegisterFacade {
             result.put("imuser", imFacade.getImuserByCurrentAppuser(originUser.getId()));
         }
         //4 判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录；
-        deleteSameDevicenoRecord(deviceno);
+        deleteSameDeviceIm(deviceno);
 
         return result;
     }
@@ -589,13 +621,28 @@ public class AppRegisterFacade {
      *
      * @param deviceno
      */
-    public void deleteSameDevicenoRecord(String deviceno) {
+    /*public void deleteSameDevicenoRecord(String deviceno) {
         DeviceAccid deviceAccid = deviceAccidService.selectByDeviceno(deviceno);
         if (null == deviceAccid) {
             //不存在，则不操作
         } else {
             //删除该条记录
             deviceAccidService.delete(deviceAccid.getId());
+        }
+    }*/
+
+    /**
+     * 删除存在的该设备im信息
+     *
+     * @param deviceno
+     */
+    public void deleteSameDeviceIm(String deviceno) {
+        ImDevice imDevice = imDeviceService.selectByDevice(Integer.valueOf(deviceno));
+        if (null == imDevice) {
+            //不存在，则不操作
+        } else {
+            //删除该条记录
+            imDeviceService.delete(imDevice.getId());
         }
     }
 
