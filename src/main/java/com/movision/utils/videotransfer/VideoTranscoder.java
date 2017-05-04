@@ -313,7 +313,7 @@ public class VideoTranscoder {
             watermarkproce.waitFor();
 
             //添加水印成功后，删除加水印前的视频文件，将新文件改为原文件名
-            File tempfile = new File(tempfilename);
+            File tempfile = new File(savepathname);
             tempfile.delete();
             File watermarkfile = new File(watermarkpathname);
             watermarkfile.renameTo(tempfile);//改为原文件名
