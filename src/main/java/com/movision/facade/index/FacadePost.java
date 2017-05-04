@@ -172,7 +172,7 @@ public class FacadePost {
         active.setPostcontent((String) desensitizationUtil.desensitization(active.getPostcontent()).get("str"));//活动正文文字脱敏
 
         //插入mongodb
-        if (userid != null) {
+        if (StringUtil.isNotEmpty(userid)) {
             PostAndUserRecord postAndUserRecord = new PostAndUserRecord();
             postAndUserRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
             postAndUserRecord.setUserid(Integer.parseInt(userid));
