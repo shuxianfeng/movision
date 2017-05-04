@@ -200,7 +200,8 @@ public class PostSearchService implements IPostSearchService {
 
         Map map = new HashedMap();
         //展示前20条
-        map.put("hotWordList", searchPostRecordService.selectPostSearchHotWord());
+        // map.put("hotWordList", searchPostRecordService.selectPostSearchHotWord());
+        map.put("hotWordList", opularSearchTermsService.group());
         //展示前12条
         map.put("historyList", searchPostRecordService.selectHistoryRecord(ShiroUtil.getAppUserID()));
 

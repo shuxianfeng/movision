@@ -18,8 +18,17 @@ public class OpularSearchTerms {
 
     private String keywords;
 
+    private Integer count;
 
-     private String intime;
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    private String intime;
 
     private Integer userid;
 
