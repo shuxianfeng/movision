@@ -589,17 +589,26 @@ public class ImFacade {
      */
     public void recordSysInforms(String body, String fromaccid, String toAccids, String title, String pushcontent, long informidentity) {
 
-        ImSystemInform imSystemInform = new ImSystemInform();
-        imSystemInform.setBody(body);
-        imSystemInform.setFromAccid(fromaccid);
-        imSystemInform.setUserid(ShiroUtil.getBossUserID());
-        imSystemInform.setToAccids(toAccids);
-        imSystemInform.setTitle(title);
-        imSystemInform.setPushcontent(pushcontent);
-        imSystemInform.setInformTime(new Date());
-        imSystemInform.setInformidentity(String.valueOf(informidentity));
-        //每次取500个人
-        imSystemInformService.add(imSystemInform);
+        if (pushcontent == null) {
+            ImSystemInform imSystemInform = new ImSystemInform();
+            imSystemInform.setBody(body);
+            imSystemInform.setFromAccid(fromaccid);
+            imSystemInform.setUserid(ShiroUtil.getBossUserID());
+            imSystemInform.setToAccids(toAccids);
+            imSystemInform.setTitle(title);
+            imSystemInform.setPushcontent(pushcontent);
+            imSystemInform.setInformTime(new Date());
+            imSystemInform.setInformidentity(String.valueOf(informidentity));
+            //每次取500个人
+            imSystemInformService.add(imSystemInform);
+        } else if (pushcontent != null) {
+            SystemToPush systemToPush = new SystemToPush();
+            systemToPush.setBody(body);
+            systemToPush.setTitle(title);
+            systemToPush.setUserid(ShiroUtil.getBossUserID());
+            systemToPush.setInformTime(new Date());
+            systemToPushService.addSystemToPush(systemToPush);//记录流水
+        }
     }
 
 
