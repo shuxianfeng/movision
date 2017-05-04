@@ -91,7 +91,7 @@ public class VideoTranscoder {
                 status = processMP4(avifilepath, ffmpeginstalldir, tempvideodir, name, String.valueOf(width), String.valueOf(height));// 将视频文件转为mp4
         }
 
-        //再上传转换后的视频文件到静态资源服务器中---------------------->>>C.(待使用)
+        //再上传转换后的视频文件到静态资源服务器中---------------------->>>C.(静态资源服务器上传方法----待使用)
 //        String uploadpath = PropertiesLoader.getValue("post.video.domain");//新文件上传的静态资源服务器目录
 //
 //        log.info("新文件上传路径>>>>>>>>>>>>>>" + uploadpath + "待上传的文件路径>>>>>>>>" + tempvideodir + name + ".mp4");
@@ -123,45 +123,45 @@ public class VideoTranscoder {
 //            input.close();
 //            ftpClient.logout();
 //
-////            110  重新启动标记应答。在这种情况下文本是确定的，它必须是：MARK   yyyy=mmmm，其中yyyy是用户进程数据流标记，mmmm是服务器标记。
-////            120     服务在nnn分钟内准备好
-////            125     数据连接已打开，准备传送
-////            150     文件状态良好，打开数据连接
-////            200     命令成功
-////            202     命令未实现
-////            211     系统状态或系统帮助响应
-////            212     目录状态
-////            213     文件状态
-////            214     帮助信息，信息仅对人类用户有用
-////            215     名字系统类型
-////            220     对新用户服务准备好
-////            221     服务关闭控制连接，可以退出登录
-////            225     数据连接打开，无传输正在进行
-////            226     关闭数据连接，请求的文件操作成功
-////            227     进入被动模式
-////            230     用户登录
-////            250     请求的文件操作完成
-////            257     创建 "PATHNAME "
-////            331     用户名正确，需要口令
-////            332     登录时需要帐户信息
-////            350     请求的文件操作需要进一步命令
-////            421     不能提供服务，关闭控制连接
-////            425     不能打开数据连接
-////            426     关闭连接，中止传输
-////            450     请求的文件操作未执行
-////            451     中止请求的操作：有本地错误
-////            452     未执行请求的操作：系统存储空间不足
-////            500     格式错误，命令不可识别
-////            501     参数语法错误
-////            502     命令未实现
-////            503     命令顺序错误
-////            504     此参数下的命令功能未实现
-////            530     未登录（用户名或密码错误，1、FTP密码修改了？2、用户名/密码输入错误？先仔细检查有无输入错误   如复制的时候误复制了空格！！）
-////            532     存储文件需要帐户信息
-////            550     未执行请求的操作
-////            551     请求操作中止：页类型未知
-////            552     请求的文件操作中止，存储分配溢出
-////            553     未执行请求的操作：文件名不合法
+//            110  重新启动标记应答。在这种情况下文本是确定的，它必须是：MARK   yyyy=mmmm，其中yyyy是用户进程数据流标记，mmmm是服务器标记。
+//            120     服务在nnn分钟内准备好
+//            125     数据连接已打开，准备传送
+//            150     文件状态良好，打开数据连接
+//            200     命令成功
+//            202     命令未实现
+//            211     系统状态或系统帮助响应
+//            212     目录状态
+//            213     文件状态
+//            214     帮助信息，信息仅对人类用户有用
+//            215     名字系统类型
+//            220     对新用户服务准备好
+//            221     服务关闭控制连接，可以退出登录
+//            225     数据连接打开，无传输正在进行
+//            226     关闭数据连接，请求的文件操作成功
+//            227     进入被动模式
+//            230     用户登录
+//            250     请求的文件操作完成
+//            257     创建 "PATHNAME "
+//            331     用户名正确，需要口令
+//            332     登录时需要帐户信息
+//            350     请求的文件操作需要进一步命令
+//            421     不能提供服务，关闭控制连接
+//            425     不能打开数据连接
+//            426     关闭连接，中止传输
+//            450     请求的文件操作未执行
+//            451     中止请求的操作：有本地错误
+//            452     未执行请求的操作：系统存储空间不足
+//            500     格式错误，命令不可识别
+//            501     参数语法错误
+//            502     命令未实现
+//            503     命令顺序错误
+//            504     此参数下的命令功能未实现
+//            530     未登录（用户名或密码错误，1、FTP密码修改了？2、用户名/密码输入错误？先仔细检查有无输入错误   如复制的时候误复制了空格！！）
+//            532     存储文件需要帐户信息
+//            550     未执行请求的操作
+//            551     请求操作中止：页类型未知
+//            552     请求的文件操作中止，存储分配溢出
+//            553     未执行请求的操作：文件名不合法
 //
 //        }catch (Exception e){
 //            e.printStackTrace();
@@ -178,7 +178,16 @@ public class VideoTranscoder {
 //            }
 //        }
 
+        //再上传转换后的视频文件到静态资源服务器中---------------------->>>C.(web服务器上传方法----使用中)
+        //(在同服务器下实际就是文件的位置转移)
+        File afile = new File(PATH.substring(0, PATH.lastIndexOf("/")+1) + name + ".mp4");
+        String uploadpath = PropertiesLoader.getValue("post.video.domain");//web服务器视频存放目录
+        File bfile = new File(uploadpath + afile.getName());
+        afile.renameTo(bfile);
+
         //上传成功后删除videourl路径下的源视频文件---------------------->>>D.(待使用)
+        File oldfile = new File(uploadpath + fileName);
+        oldfile.delete();
 
         //删除截取的封面文件和临时文件---------------------->>>E.(待使用)
         log.info("删除临时文件>>>>>>>>>>>>>>>>>>");
@@ -187,7 +196,8 @@ public class VideoTranscoder {
         File imgfile = new File(PATH.substring(0, PATH.lastIndexOf(".") +1) + "jpg");
         imgfile.delete();
 
-        //返回新视频文件的地址---------------------->>>F.
+        //返回新视频文件的地址---------------------->>>F.(待修改)
+        resultmap.put("newurl", uploadpath + afile.getName());
 
         return resultmap;
     }
@@ -234,7 +244,7 @@ public class VideoTranscoder {
         String watermarkimg = PropertiesLoader.getValue("video.watermark.domain");
 
         if (!checkfile(oldfilepath)) {
-            System.out.println(oldfilepath + " is not file");
+            log.info(oldfilepath + " is not file");
             return false;
         }
 
@@ -318,7 +328,7 @@ public class VideoTranscoder {
             File watermarkfile = new File(watermarkpathname);
             watermarkfile.renameTo(tempfile);//改为原文件名
 
-            //另外还要解决runtime的死锁问题
+            //另外还要解决runtime的死锁问题--------------------------------------------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>Remark
 
             return true;
         } catch (Exception e) {
