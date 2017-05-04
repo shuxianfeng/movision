@@ -268,6 +268,10 @@ public class AppLoginController {
                 //6 清除session中的boss用户信息
                 session.removeAttribute(SessionConstant.BOSS_USER);
                 session.setAttribute(SessionConstant.APP_USER, currentUser.getPrincipal());
+
+                log.debug("验证登录接口是否在session中缓存用户id：" + ShiroUtil.getAppUserID());
+                log.debug("验证登录接口是否在session中缓存用户信息：" + ShiroUtil.getAppUser());
+
                 //7 返回登录人的信息
                 ShiroRealm.ShiroUser appuser = (ShiroRealm.ShiroUser) currentUser.getPrincipal();
                 if (null == appuser) {
