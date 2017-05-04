@@ -80,9 +80,13 @@ public class ShiroUtil {
             Session session = currentUser.getSession(false);
             if (session != null) {
                 ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
+                log.debug("session中的用户信息，ShiroUser：" + principal.toString());
                 if (principal != null) {
                     createID = principal.getId();
+                    log.debug("session中的用户id:" + createID);
                 }
+            } else {
+                log.warn("不存在session");
             }
         } catch (Exception e) {
             log.error("get seesion user info error!", e);

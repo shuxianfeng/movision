@@ -222,10 +222,10 @@ public class AppLoginController {
             User user = userFacade.queryUserByPhone(phone);
             if (null == user) {
                 //库中无该用户，需要发送短信验证码
-                log.warn("用户名不存在,请发送短信验证码登录");
+                log.warn("手机号不存在,请发送短信验证码登录");
 
                 response.setCode(400);
-                response.setMessage("用户名不存在,请发送短信验证码登录");
+                response.setMessage("手机号不存在,请发送短信验证码登录");
                 response.setMsgCode(MsgCodeConstant.app_user_not_exist);
             } else {
                 handleLoginProcess(appToken, response, user);
