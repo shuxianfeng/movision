@@ -28,7 +28,8 @@ public class VideoTranscoder {
 
         Map<String, Object> resultmap = new HashMap<>();
 
-        //根据视频上传的地址下载视频文件到服务器本地临时目录
+        //根据视频上传的地址下载视频文件到服务器本地临时目录---------------------->>>A.(待使用)
+
         String tempvideodir = PropertiesLoader.getValue("post.tempvideo.domain");//下载到本地的视频临时存放目录
 
         //服务器上ffmpeg的程序路径
@@ -58,7 +59,7 @@ public class VideoTranscoder {
         os.close();
         in.close();
 
-        //对临时目录中的视频文件进行转码（转码后文件名称不变，只更改后缀）
+        //对临时目录中的视频文件进行转码（转码后文件名称不变，只更改后缀）---------------------->>>B.(核心代码)
         // 判断视频的类型
         int type = checkContentType(tempvideodir + fileName);
         //如果是ffmpeg可以转换的类型直接转码，否则先用mencoder转码成AVI
@@ -90,7 +91,7 @@ public class VideoTranscoder {
                 status = processMP4(avifilepath, ffmpeginstalldir, tempvideodir, name, String.valueOf(width), String.valueOf(height));// 将视频文件转为mp4
         }
 
-        //再上传转换后的视频文件到静态资源服务器中
+        //再上传转换后的视频文件到静态资源服务器中---------------------->>>C.(待使用)
 //        String uploadpath = PropertiesLoader.getValue("post.video.domain");//新文件上传的静态资源服务器目录
 //
 //        log.info("新文件上传路径>>>>>>>>>>>>>>" + uploadpath + "待上传的文件路径>>>>>>>>" + tempvideodir + name + ".mp4");
@@ -177,16 +178,16 @@ public class VideoTranscoder {
 //            }
 //        }
 
-        //上传成功后删除videourl路径下的源视频文件
+        //上传成功后删除videourl路径下的源视频文件---------------------->>>D.(待使用)
 
-        //删除截取的封面文件和临时文件
+        //删除截取的封面文件和临时文件---------------------->>>E.(待使用)
         log.info("删除临时文件>>>>>>>>>>>>>>>>>>");
         File videofile = new File(PATH);
         videofile.delete();
         File imgfile = new File(PATH.substring(0, PATH.lastIndexOf(".") +1) + "jpg");
         imgfile.delete();
 
-        //返回新视频文件的地址
+        //返回新视频文件的地址---------------------->>>F.
 
         return resultmap;
     }
@@ -237,9 +238,8 @@ public class VideoTranscoder {
             return false;
         }
 
-        // 文件命名
-        Calendar c = Calendar.getInstance();
-        String savename = String.valueOf(c.getTimeInMillis())+ Math.round(Math.random() * 100000);
+        // 文件命名(转码后的视频文件路径和名称)
+        String savepathname = oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4";
 //        List<String> commend = new ArrayList<>();
 //        commend.add(ffmpeginstalldir);
 //        commend.add(" -i ");
@@ -254,7 +254,7 @@ public class VideoTranscoder {
 //        commend.add(" 15");
 //        commend.add(" -s ");
 //        commend.add(String.valueOf(width) + "x" + String.valueOf(height) + " ");
-//        commend.add(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
+//        commend.add(savepathname);
 
         StringBuffer sb = new StringBuffer();
         sb.append(ffmpeginstalldir);
@@ -270,14 +270,14 @@ public class VideoTranscoder {
         sb.append(" 15");
         sb.append(" -s ");
         sb.append(String.valueOf(width) + "x" + String.valueOf(height) + " ");
-        sb.append(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
+        sb.append(savepathname);
 
         log.info("执行的视频转化命令行>>>>>>>>>>>>>>>>> " + sb.toString());
 
         try {
             Runtime runtime = Runtime.getRuntime();
             Process proce = null;
-            //视频截图命令，封面图。  8是代表第8秒的时候截图
+            //视频截图命令，封面图。  8是代表第8秒的时候截图------->1
             String cmd = "";
             String cut = ffmpeginstalldir + " -i "
                     + oldfilepath
@@ -287,27 +287,38 @@ public class VideoTranscoder {
             proce = runtime.exec(cutCmd);
             proce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
 
-            //调用线程命令进行转码
-//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -ab", " 56", " -ar", " 22050", " -qscale", " 12", " -r", " 15", " -s ", String.valueOf(width) + "x" + String.valueOf(height) + " ", oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
+            //调用线程命令进行转码------->2
+//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -ab", " 56", " -ar", " 22050", " -qscale", " 12", " -r", " 15", " -s ", String.valueOf(width) + "x" + String.valueOf(height) + " ", savepathname);
 //            ProcessBuilder builder = new ProcessBuilder();
 //            builder.command(commend);
 //            builder.start();
             Process videoproce = runtime.exec(sb.toString());
             videoproce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
 
-            //调用线程进行视频水印打印
+            //调用线程进行视频水印打印------->3
+            String tempfilename = UUID.randomUUID().toString().replace("-", "");//生成32位uuid作为临时文件名
+            String watermarkpathname = oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + tempfilename + ".mp4";//加水印后的视频文件路径和名称
+
             StringBuffer str = new StringBuffer();
             str.append(ffmpeginstalldir);
             str.append(" -i ");
-            str.append(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4");
+            str.append(savepathname);
             str.append(" -i ");
             str.append(watermarkimg);
             str.append(" -filter_complex ");
             str.append(" overlay=W-w ");
-            str.append(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + "test123" + ".mp4");
+            str.append(watermarkpathname);
 
             Process watermarkproce = runtime.exec(str.toString());
             watermarkproce.waitFor();
+
+            //添加水印成功后，删除加水印前的视频文件，将新文件改为原文件名
+            File tempfile = new File(tempfilename);
+            tempfile.delete();
+            File watermarkfile = new File(watermarkpathname);
+            watermarkfile.renameTo(tempfile);//改为原文件名
+
+            //另外还要解决runtime的死锁问题
 
             return true;
         } catch (Exception e) {
