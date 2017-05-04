@@ -178,16 +178,16 @@ public class VideoTranscoder {
 //            }
 //        }
 
-        //再上传转换后的视频文件到静态资源服务器中---------------------->>>C.(web服务器上传方法----使用中)
-        //(在同服务器下实际就是文件的位置转移)
-        File afile = new File(PATH.substring(0, PATH.lastIndexOf("/")+1) + name + ".mp4");
-        String uploadpath = PropertiesLoader.getValue("post.video.domain");//web服务器视频存放目录
-        File bfile = new File(uploadpath + afile.getName());
-        afile.renameTo(bfile);
-
-        //上传成功后删除videourl路径下的源视频文件---------------------->>>D.(待使用)
-        File oldfile = new File(uploadpath + fileName);
-        oldfile.delete();
+//        //再上传转换后的视频文件到静态资源服务器中---------------------->>>C.(web服务器上传方法----使用中)
+//        //(在同服务器下实际就是文件的位置转移)
+//        File afile = new File(PATH.substring(0, PATH.lastIndexOf("/")+1) + name + ".mp4");
+//        String uploadpath = PropertiesLoader.getValue("post.video.domain");//web服务器视频存放目录
+//        File bfile = new File(uploadpath + afile.getName());
+//        afile.renameTo(bfile);
+//
+//        //上传成功后删除videourl路径下的源视频文件---------------------->>>D.(待使用)
+//        File oldfile = new File(uploadpath + fileName);
+//        oldfile.delete();
 
         //删除截取的封面文件和临时文件---------------------->>>E.(待使用)
         log.info("删除临时文件>>>>>>>>>>>>>>>>>>");
@@ -196,8 +196,8 @@ public class VideoTranscoder {
         File imgfile = new File(PATH.substring(0, PATH.lastIndexOf(".") +1) + "jpg");
         imgfile.delete();
 
-        //返回新视频文件的地址---------------------->>>F.(待修改)
-        resultmap.put("newurl", videourl.substring(0, videourl.lastIndexOf("/")+1) + afile.getName());
+//        //返回新视频文件的地址---------------------->>>F.(待修改)
+//        resultmap.put("newurl", videourl.substring(0, videourl.lastIndexOf("/")+1) + afile.getName());
 
         return resultmap;
     }
@@ -305,28 +305,28 @@ public class VideoTranscoder {
             Process videoproce = runtime.exec(sb.toString());
             videoproce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
 
-            //调用线程进行视频水印打印------->3
-            String tempfilename = UUID.randomUUID().toString().replace("-", "");//生成32位uuid作为临时文件名
-            String watermarkpathname = oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + tempfilename + ".mp4";//加水印后的视频文件路径和名称
-
-            StringBuffer str = new StringBuffer();
-            str.append(ffmpeginstalldir);
-            str.append(" -i ");
-            str.append(savepathname);
-            str.append(" -i ");
-            str.append(watermarkimg);
-            str.append(" -filter_complex ");
-            str.append(" overlay=W-w ");
-            str.append(watermarkpathname);
-
-            Process watermarkproce = runtime.exec(str.toString());
-            watermarkproce.waitFor();
-
-            //添加水印成功后，删除加水印前的视频文件，将新文件改为原文件名
-            File tempfile = new File(savepathname);
-            tempfile.delete();
-            File watermarkfile = new File(watermarkpathname);
-            watermarkfile.renameTo(tempfile);//改为原文件名
+//            //调用线程进行视频水印打印------->3
+//            String tempfilename = UUID.randomUUID().toString().replace("-", "");//生成32位uuid作为临时文件名
+//            String watermarkpathname = oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + tempfilename + ".mp4";//加水印后的视频文件路径和名称
+//
+//            StringBuffer str = new StringBuffer();
+//            str.append(ffmpeginstalldir);
+//            str.append(" -i ");
+//            str.append(savepathname);
+//            str.append(" -i ");
+//            str.append(watermarkimg);
+//            str.append(" -filter_complex ");
+//            str.append(" overlay=W-w ");
+//            str.append(watermarkpathname);
+//
+//            Process watermarkproce = runtime.exec(str.toString());
+//            watermarkproce.waitFor();
+//
+//            //添加水印成功后，删除加水印前的视频文件，将新文件改为原文件名
+//            File tempfile = new File(savepathname);
+//            tempfile.delete();
+//            File watermarkfile = new File(watermarkpathname);
+//            watermarkfile.renameTo(tempfile);//改为原文件名
 
             //另外还要解决runtime的死锁问题--------------------------------------------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>Remark
 
