@@ -197,7 +197,7 @@ public class VideoTranscoder {
         imgfile.delete();
 
         //返回新视频文件的地址---------------------->>>F.(待修改)
-        resultmap.put("newurl", uploadpath + afile.getName());
+        resultmap.put("newurl", videourl.substring(0, videourl.lastIndexOf("/")+1) + afile.getName());
 
         return resultmap;
     }
