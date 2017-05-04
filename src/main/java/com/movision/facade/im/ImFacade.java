@@ -529,7 +529,6 @@ public class ImFacade {
     private void sendAndRecord(String body, ImUser imUser, List<ImUser> imAppUserList, int size, int multiple, String title, String pushcontent, long informidentity) throws IOException {
         //不足500人
         String toAccids = prepareToAccids(imAppUserList, size, multiple);
-
         Map result = this.sendSystemInform(body, imUser.getAccid(), toAccids, pushcontent);
         if (result.get("code").equals(200)) {
             log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
