@@ -305,23 +305,25 @@ public class VideoTranscoder {
             Process videoproce = runtime.exec(sb.toString());
             videoproce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
 
-//            //调用线程进行视频水印打印------->3
-//            String tempfilename = UUID.randomUUID().toString().replace("-", "");//生成32位uuid作为临时文件名
-//            String watermarkpathname = oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + tempfilename + ".mp4";//加水印后的视频文件路径和名称
-//
-//            StringBuffer str = new StringBuffer();
-//            str.append(ffmpeginstalldir);
-//            str.append(" -i ");
-//            str.append(savepathname);
-//            str.append(" -i ");
-//            str.append(watermarkimg);
-//            str.append(" -filter_complex ");
-//            str.append(" overlay=W-w ");
-//            str.append(watermarkpathname);
-//
-//            Process watermarkproce = runtime.exec(str.toString());
-//            watermarkproce.waitFor();
-//
+            //调用线程进行视频水印打印------->3
+            String tempfilename = UUID.randomUUID().toString().replace("-", "");//生成32位uuid作为临时文件名
+            String watermarkpathname = oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + tempfilename + ".mp4";//加水印后的视频文件路径和名称
+
+            StringBuffer str = new StringBuffer();
+            str.append(ffmpeginstalldir);
+            str.append(" -i ");
+            str.append(savepathname);
+            str.append(" -i ");
+            str.append(watermarkimg);
+            str.append(" -qscale");
+            str.append(" 1");//帧率1表示最好的质量，数字越大质量越差越模糊
+            str.append(" -filter_complex ");
+            str.append(" overlay=W-w ");
+            str.append(watermarkpathname);
+
+            Process watermarkproce = runtime.exec(str.toString());
+            watermarkproce.waitFor();
+
 //            //添加水印成功后，删除加水印前的视频文件，将新文件改为原文件名
 //            File tempfile = new File(savepathname);
 //            tempfile.delete();
