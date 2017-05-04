@@ -516,6 +516,12 @@
             <artifactId>common-net</artifactId>
             <version>90</version>
         </dependency>
+
+        <dependency>
+            <groupId>it.sauronsoftware.java</groupId>
+            <artifactId>java</artifactId>
+            <version>1.0.2</version>
+        </dependency>
         <!--mongodb-->
         <dependency>
             <groupId>org.springframework.data</groupId>
