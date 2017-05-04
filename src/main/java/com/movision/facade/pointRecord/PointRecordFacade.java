@@ -172,6 +172,7 @@ public class PointRecordFacade {
     public void addPersonPointInDbAndSession(int point) {
 
         ShiroRealm.ShiroUser shiroUser = ShiroUtil.getAppUser();
+
         int personPoint = null == shiroUser.getPoints() ? 0 : shiroUser.getPoints();
         int newPoint = personPoint + point;
 

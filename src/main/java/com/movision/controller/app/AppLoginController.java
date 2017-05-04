@@ -286,7 +286,7 @@ public class AppLoginController {
                 }
 
                 //8 删除该设备号与accid记录
-                appRegisterFacade.deleteSameDeviceIm(user.getDeviceno());
+//                appRegisterFacade.deleteSameDeviceIm(user.getDeviceno());
 
                 response.setData(returnMap);
             } else {

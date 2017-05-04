@@ -147,8 +147,8 @@ public class AppRegisterFacade {
                     //4 判断该userid是否存在一个im用户，若不存在，则注册im用户;若存在，则查询
                     this.getImuserForReturn(phone, result, userid);
 
-                    //5 判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录
-                    deleteSameDeviceIm(member.getDeviceno());
+                    //5 判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录， 不需要
+//                    deleteSameDeviceIm(member.getDeviceno());
 
                     //6 登录成功则清除session中验证码的信息
                     session.removeAttribute("r" + validateinfo.getAccount());
@@ -348,7 +348,9 @@ public class AppRegisterFacade {
      */
     public ImDevice registerImDevice(String deviceid, Response response) throws IOException {
 
+        //判断是否存该设备号的accid
         Boolean isExistDevice = imDeviceService.isExistDevice(deviceid);
+
         if (!isExistDevice) {
             //若不存在，则根据设备号注册云信账号
             ImDevice imDevice = new ImDevice();
@@ -533,7 +535,7 @@ public class AppRegisterFacade {
             result.put("imuser", imFacade.getImuserByCurrentAppuser(originUser.getId()));
         }
         //4 判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录；
-        deleteSameDeviceIm(deviceno);
+//        deleteSameDeviceIm(deviceno);
 
         return result;
     }
