@@ -122,7 +122,8 @@ public class FacadePost {
         vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
         vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
         //数据插入mongodb
-        if (StringUtil.isNotEmpty(userid)) {
+        // TODO: 2017/5/4  暂时注释，验证点击关注，session中无数据的情况
+        /*if (StringUtil.isNotEmpty(userid)) {
             PostAndUserRecord postAndUserRecord = new PostAndUserRecord();
             postAndUserRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
             postAndUserRecord.setCrileid(circleid);
@@ -130,7 +131,7 @@ public class FacadePost {
             postAndUserRecord.setUserid(Integer.parseInt(userid));
             postAndUserRecord.setIntime(new Date().toLocaleString());
             postAndUserRecordService.insert(postAndUserRecord);
-        }
+        }*/
         return vo;
     }
 
