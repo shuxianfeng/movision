@@ -259,7 +259,7 @@ public class VideoTranscoder {
 //        commend.add(" -ar");
 //        commend.add(" 22050");
 //        commend.add(" -qscale");
-//        commend.add(" 12");
+//        commend.add(" 1");
 //        commend.add(" -r");
 //        commend.add(" 15");
 //        commend.add(" -s ");
@@ -275,7 +275,7 @@ public class VideoTranscoder {
         sb.append(" -ar");
         sb.append(" 22050");
         sb.append(" -qscale");
-        sb.append(" 12");
+        sb.append(" 1");//帧率1表示最好的质量，数字越大质量越差越模糊
         sb.append(" -r");
         sb.append(" 15");
         sb.append(" -s ");
@@ -298,7 +298,7 @@ public class VideoTranscoder {
             proce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
 
             //调用线程命令进行转码------->2
-//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -ab", " 56", " -ar", " 22050", " -qscale", " 12", " -r", " 15", " -s ", String.valueOf(width) + "x" + String.valueOf(height) + " ", savepathname);
+//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -ab", " 56", " -ar", " 22050", " -qscale", " 1", " -r", " 15", " -s ", String.valueOf(width) + "x" + String.valueOf(height) + " ", savepathname);
 //            ProcessBuilder builder = new ProcessBuilder();
 //            builder.command(commend);
 //            builder.start();
