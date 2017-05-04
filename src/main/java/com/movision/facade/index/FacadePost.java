@@ -1,6 +1,7 @@
 package com.movision.facade.index;
 
 import com.movision.common.constant.PointConstant;
+import com.movision.common.util.ShiroUtil;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.accusation.entity.Accusation;
@@ -90,6 +91,10 @@ public class FacadePost {
 
     public PostVo queryPostDetail(String postid, String userid, String type) {
 
+
+        log.debug("【queryPostDetail】session中的userid:" + ShiroUtil.getAppUserID());
+        log.debug("【queryPostDetail】session中的用户信息：" + ShiroUtil.getAppUser());
+
         //通过userid、postid查询该用户有没有关注该圈子的权限
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("postid", Integer.parseInt(postid));
@@ -122,8 +127,7 @@ public class FacadePost {
         vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
         vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
         //数据插入mongodb
-        // TODO: 2017/5/4  暂时注释，验证点击关注，session中无数据的情况
-        /*if (StringUtil.isNotEmpty(userid)) {
+        if (StringUtil.isNotEmpty(userid)) {
             PostAndUserRecord postAndUserRecord = new PostAndUserRecord();
             postAndUserRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
             postAndUserRecord.setCrileid(circleid);
@@ -131,7 +135,7 @@ public class FacadePost {
             postAndUserRecord.setUserid(Integer.parseInt(userid));
             postAndUserRecord.setIntime(new Date().toLocaleString());
             postAndUserRecordService.insert(postAndUserRecord);
-        }*/
+        }
         return vo;
     }
 

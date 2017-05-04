@@ -1,6 +1,7 @@
 package com.movision.controller.app;
 
 import com.movision.common.Response;
+import com.movision.common.util.ShiroUtil;
 import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
@@ -48,6 +49,7 @@ public class AppPostController {
         Response response = new Response();
 
         PostVo post = facadePost.queryPostDetail(postid, userid, type);
+
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");

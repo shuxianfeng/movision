@@ -114,8 +114,8 @@ public class PointRecordFacade {
         log.info("【增加积分流水】该积分类型type=" + type + ", 该类型对应的积分是：" + new_point);
         if (new_point != 0) {
             //增加积分流水
-            log.debug("session中的userid:" + ShiroUtil.getAppUserID());
-            log.debug("session中的用户信息：" + ShiroUtil.getAppUser());
+            log.debug("【addPointRecord】session中的userid:" + ShiroUtil.getAppUserID());
+            log.debug("【addPointRecord】session中的用户信息：" + ShiroUtil.getAppUser());
 
             addPointRecord(type, new_point, ShiroUtil.getAppUserID());
             //新增个人积分
