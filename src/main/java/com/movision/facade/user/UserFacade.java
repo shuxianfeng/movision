@@ -114,12 +114,12 @@ public class UserFacade {
     }
 
     public void commetAPP() {
-        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment_app.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment_app.getCode(), ShiroUtil.getAppUserID());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
     }
 
     public void shareSucNotice(String type, String userid, String channel, String postid, String goodsid, String beshareuserid) {
 
-        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.share.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.share.getCode(), Integer.valueOf(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
 
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("userid", Integer.parseInt(userid));
@@ -304,7 +304,7 @@ public class UserFacade {
                     && StringUtils.isNotBlank(user.getSign())) {
 
 
-                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode());
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode(), ShiroUtil.getAppUserID());
 
             }
         }

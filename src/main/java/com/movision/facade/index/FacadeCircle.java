@@ -192,7 +192,7 @@ public class FacadeCircle {
             UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(Integer.parseInt(userid));
             if (null == entiy || entiy.getIsfollow() == 0) {
                 //如果未关注过圈子或者人的话,首次关注赠送积分
-                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.first_focus.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.first_focus.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
                 UserOperationRecord userOperationRecord = new UserOperationRecord();
                 userOperationRecord.setUserid(Integer.parseInt(userid));
                 userOperationRecord.setIsfollow(1);

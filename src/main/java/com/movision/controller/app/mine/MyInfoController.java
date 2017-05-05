@@ -186,7 +186,7 @@ public class MyInfoController {
     public Response sign() {
         Response response = new Response();
 
-        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode());
+        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode(), ShiroUtil.getAppUserID());
 
         return response;
     }

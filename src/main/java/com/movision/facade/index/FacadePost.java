@@ -337,7 +337,7 @@ public class FacadePost {
                     postService.insertPostShareGoods(postShareGoodsList);
                 }
 
-                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode());//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
 
                 return flag;
 
@@ -402,7 +402,7 @@ public class FacadePost {
             UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(Integer.parseInt(userid));
             if (null == entiy || entiy.getIszan() == 0) {
                 //如果未收藏过帖子或商品的话,首次收藏赠送积分
-                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.first_support.getCode());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.first_support.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
                 UserOperationRecord userOperationRecord = new UserOperationRecord();
                 userOperationRecord.setUserid(Integer.parseInt(userid));
                 userOperationRecord.setIszan(1);

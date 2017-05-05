@@ -218,7 +218,7 @@ public class GoodsFacade {
             goodsService.insertGoodAssessmentImg(goodsAssessmentImgList);//插入晒单图片
         }
 
-        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment.getCode());//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
+        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
     }
 
     public Map<String, Object> queryCombo(String goodsid, String goodsposition) {

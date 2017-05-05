@@ -74,7 +74,8 @@ public class ShiroRealm extends AuthorizingRealm {
         String pwd = new Md5Hash(password, null, 2).toString();
         log.debug("服务端的pwd," + password);
 
-        // 2 根据登录用户信息生成ShiroUser用户，PS:这个ShiroUser就是session中存储的app用户对象
+        // 2 根据登录用户信息生成ShiroUser用户，
+        // PS:这个ShiroUser就是session中存储的app用户对象
         ShiroUser shiroUser = new ShiroUser(loginUser.getId(), loginUser.getPhone(), loginUser.getStatus(), loginUser.getRole(),
                 loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(), loginUser.getPhone(),
                 loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(), loginUser.getAccid(), loginUser.getImtoken(),

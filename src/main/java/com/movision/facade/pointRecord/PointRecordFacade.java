@@ -99,14 +99,14 @@ public class PointRecordFacade {
      * @param
      * @return
      */
-    public void addPointRecord(int type) {
+    public void addPointRecord(int type, int userid) {
 
         log.info("调用【增加积分流水】接口，本次操作存在积分变动");
         //获取每日的积分数据
-        List<PointRecord> todayList = pointRecordService.queryMyTodayPoint(ShiroUtil.getAppUserID());
+        List<PointRecord> todayList = pointRecordService.queryMyTodayPoint(userid);
         PersonPointStatistics todayStatistics = this.getMyTotalPointStatics(todayList);
         //个人历史积分数据
-        List<PointRecord> historyList = pointRecordService.queryAllMyPointRecord(ShiroUtil.getAppUserID());
+        List<PointRecord> historyList = pointRecordService.queryAllMyPointRecord(userid);
         PersonPointStatistics historyStatistics = this.getMyTotalPointStatics(historyList);
 
         //获取需要新增的积分
@@ -117,9 +117,9 @@ public class PointRecordFacade {
             log.debug("【addPointRecord】session中的userid:" + ShiroUtil.getAppUserID());
             log.debug("【addPointRecord】session中的用户信息：" + ShiroUtil.getAppUser());
 
-            addPointRecord(type, new_point, ShiroUtil.getAppUserID());
+            addPointRecord(type, new_point, userid);
             //新增个人积分
-            addPersonPointInDbAndSession(new_point);
+            addPersonPointInDbAndSession(new_point, userid);
         }
     }
 
@@ -169,16 +169,14 @@ public class PointRecordFacade {
      *
      * @param point 需要加的积分
      */
-    public void addPersonPointInDbAndSession(int point) {
+    public void addPersonPointInDbAndSession(int point, int userid) {
 
-        ShiroRealm.ShiroUser shiroUser = ShiroUtil.getAppUser();
+        User user = userService.selectByPrimaryKey(userid);
 
-        int personPoint = null == shiroUser.getPoints() ? 0 : shiroUser.getPoints();
+        int personPoint = user.getPoints();
         int newPoint = personPoint + point;
 
         //1 变更用户表积分信息
-        User user = new User();
-        user.setId(ShiroUtil.getAppUserID());
         user.setPoints(newPoint);
         userService.updateByPrimaryKeySelective(user);
         //2 更新session中的缓存
@@ -191,14 +189,14 @@ public class PointRecordFacade {
      *
      * @param type
      */
-    public void addPointRecordOnly(int type) {
+    public void addPointRecordOnly(int type, int userid) {
 
         log.info("调用【增加积分流水】接口，本次操作存在积分变动");
         //获取每日的积分数据
-        List<PointRecord> todayList = pointRecordService.queryMyTodayPoint(ShiroUtil.getAppUserID());
+        List<PointRecord> todayList = pointRecordService.queryMyTodayPoint(userid);
         PersonPointStatistics todayStatistics = this.getMyTotalPointStatics(todayList);
         //获取历史的积分数据
-        List<PointRecord> historyList = pointRecordService.queryAllMyPointRecord(ShiroUtil.getAppUserID());
+        List<PointRecord> historyList = pointRecordService.queryAllMyPointRecord(userid);
         PersonPointStatistics historyStatistics = this.getMyTotalPointStatics(historyList);
 
         //获取需要新增的积分
@@ -206,7 +204,7 @@ public class PointRecordFacade {
         log.info("【增加积分流水】该积分类型type=" + type + ", 该类型对应的积分是：" + new_point);
         //增加积分流水
         if (new_point != 0) {
-            addPointRecord(type, new_point, ShiroUtil.getAppUserID());
+            addPointRecord(type, new_point, userid);
         }
 
     }
