@@ -112,6 +112,10 @@ public class FacadePost {
             vo.setUserid(user.getId());
             vo.setNickname(user.getNickname());
             vo.setPhone(user.getPhone());
+        } else {
+            User user = userService.queryUserB(vo.getUserid());
+            vo.setUserid(user.getId());
+            vo.setNickname(user.getNickname());
         }
         Integer circleid=vo.getCircleid();
         //查询帖子详情最下方推荐的4个热门圈子
