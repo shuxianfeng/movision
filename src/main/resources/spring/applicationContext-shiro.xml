@@ -140,7 +140,7 @@
                 <!--需要登录的接口-->
                 /app/mine/**=authc
                 /app/post/inAccusation = authc
-                /app/post/partActive = authc
+                <!--/app/post/partActive = authc-->
                 /app/post/recommendGoodsList=authc
                 /app/post/releasePost=authc
                 /app/post/updateZan=authc
