@@ -91,10 +91,6 @@ public class FacadePost {
 
     public PostVo queryPostDetail(String postid, String userid, String type) {
 
-
-        log.debug("【queryPostDetail】session中的userid:" + ShiroUtil.getAppUserID());
-        log.debug("【queryPostDetail】session中的用户信息：" + ShiroUtil.getAppUser());
-
         //通过userid、postid查询该用户有没有关注该圈子的权限
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("postid", Integer.parseInt(postid));
