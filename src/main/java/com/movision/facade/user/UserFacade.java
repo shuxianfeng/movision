@@ -292,20 +292,19 @@ public class UserFacade {
      */
     private void addPointProcess() {
         //查询是否存在该用户的完善个人资料的积分记录
-        PointRecord pointRecord = pointRecordService.selectFinishPersonDataPointRecord(ShiroUtil.getAppUserID());
-        //若不存在此记录，则进行完善个人资料的积分操作
-        if (null == pointRecord) {
-            //获取当前用户信息
-            User user = userService.selectByPrimaryKey(ShiroUtil.getAppUserID());
-            //检查个人资料是否全部完善：生日，头像，性别，签名
-            if (StringUtils.isNotBlank(String.valueOf(user.getBirthday()))
-                    && StringUtils.isNotBlank(user.getPhoto())
-                    && StringUtils.isNotBlank(String.valueOf(user.getSex()))
-                    && StringUtils.isNotBlank(user.getSign())) {
+//        PointRecord pointRecord = pointRecordService.selectFinishPersonDataPointRecord(ShiroUtil.getAppUserID());
 
-                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.finish_personal_data.getCode(), ShiroUtil.getAppUserID());
-            }
+        //获取当前用户信息
+        User user = userService.selectByPrimaryKey(ShiroUtil.getAppUserID());
+        //检查个人资料是否全部完善：生日，头像，性别，签名
+        if (StringUtils.isNotBlank(String.valueOf(user.getBirthday()))
+                && StringUtils.isNotBlank(user.getPhoto())
+                && StringUtils.isNotBlank(String.valueOf(user.getSex()))
+                && StringUtils.isNotBlank(user.getSign())) {
+
+            pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.finish_personal_data.getCode(), ShiroUtil.getAppUserID());
         }
+
     }
 
     /**
