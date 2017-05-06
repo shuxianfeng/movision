@@ -293,7 +293,7 @@ public class UserFacade {
     private void addPointProcess() {
         //查询是否存在该用户的完善个人资料的积分记录
         PointRecord pointRecord = pointRecordService.selectFinishPersonDataPointRecord(ShiroUtil.getAppUserID());
-        //若不存在，才能进行完善个人资料的积分操作
+        //若不存在此记录，则进行完善个人资料的积分操作
         if (null == pointRecord) {
             //获取当前用户信息
             User user = userService.selectByPrimaryKey(ShiroUtil.getAppUserID());
@@ -303,9 +303,7 @@ public class UserFacade {
                     && StringUtils.isNotBlank(String.valueOf(user.getSex()))
                     && StringUtils.isNotBlank(user.getSign())) {
 
-
-                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode(), ShiroUtil.getAppUserID());
-
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.finish_personal_data.getCode(), ShiroUtil.getAppUserID());
             }
         }
     }

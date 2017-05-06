@@ -84,7 +84,7 @@ public class ShiroRealm extends AuthorizingRealm {
 
         // 3 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(shiroUser, // 用户
-                pwd,
+                pwd,    //md5加密后
                 getName() // realm name
         );
 

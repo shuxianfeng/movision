@@ -211,17 +211,4 @@ public class MyInfoController {
         return response;
     }
 
-
-    /*@ApiOperation(value = "模拟评论赚积分", notes = "模拟评论赚积分", response = Response.class)
-    @RequestMapping(value = "test_add_point_record", method = RequestMethod.POST)
-    public Response testAddPointRecord() {
-        Response response = new Response();
-        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment.getCode(), 0);
-        return response;
-    }*/
-
-
-
-
-
 }
