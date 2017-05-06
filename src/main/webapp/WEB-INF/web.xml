@@ -106,7 +106,7 @@
         <!--<url-pattern>*.do</url-pattern>-->
     </servlet-mapping>
 
-
+    <!--设置session失效时间：3小时，单位：分钟-->
     <session-config>
         <session-timeout>180</session-timeout>
     </session-config>
