@@ -279,7 +279,7 @@ public class UserFacade {
     private void validateNicknameIsExist(PersonInfo personInfo) {
         String nickname = personInfo.getNickname();
         if (StringUtils.isNotBlank(nickname)) {
-            Boolean isExistNickname = userService.isExistSameNickname(nickname);
+            Boolean isExistNickname = userService.isExistSameNickname(nickname, personInfo.getId());
             if (isExistNickname) {
 
                 throw new BusinessException(MsgCodeConstant.app_nickname_already_exist, "该昵称已经存在，请换昵称");

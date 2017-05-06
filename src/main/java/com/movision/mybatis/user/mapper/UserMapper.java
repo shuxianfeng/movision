@@ -127,5 +127,5 @@ public interface UserMapper {
 
     LoginUser selectLoginuserByUserid(@Param("id") Integer id);
 
-    Integer countByNickname(@Param("nickname") String nickname);
+    Integer countByNickname(Map map);
 }

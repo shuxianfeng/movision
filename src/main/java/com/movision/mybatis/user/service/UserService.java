@@ -8,6 +8,7 @@ import com.movision.mybatis.province.entity.ProvinceVo;
 import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.mapper.UserMapper;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -763,10 +764,13 @@ public class UserService {
         }
     }
 
-    public Boolean isExistSameNickname(String nickname) {
+    public Boolean isExistSameNickname(String nickname, Integer userid) {
         try {
             log.info("查看是否存在相同的昵称");
-            boolean flag = userMapper.countByNickname(nickname) > 0;
+            Map map = new HashedMap();
+            map.put("nickname", nickname);
+            map.put("userid", userid);
+            boolean flag = userMapper.countByNickname(map) > 0;
             return flag;
         } catch (Exception e) {
             log.error("查看是否存在相同的昵称失败", e);
