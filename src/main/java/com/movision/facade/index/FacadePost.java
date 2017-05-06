@@ -105,13 +105,19 @@ public class FacadePost {
         }
         if (vo.getUserid() != -1) {//发帖人为普通用户时查询发帖人昵称和手机号
             User user = userService.queryUserB(vo.getUserid());
-            vo.setUserid(user.getId());
-            vo.setNickname(user.getNickname());
-            vo.setPhone(user.getPhone());
+            if (user != null) {
+                vo.setUserid(user.getId());
+                vo.setNickname(user.getNickname());
+                vo.setPhone(user.getPhone());
+                vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
+            }
         } else {
             User user = userService.queryUserB(vo.getUserid());
-            vo.setUserid(user.getId());
-            vo.setNickname(user.getNickname());
+            if (user != null) {
+                vo.setUserid(user.getId());
+                vo.setNickname(user.getNickname());
+                vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
+            }
         }
         Integer circleid=vo.getCircleid();
         //查询帖子详情最下方推荐的4个热门圈子
@@ -122,7 +128,6 @@ public class FacadePost {
         vo.setShareGoodsList(shareGoodsList);
 
         //对帖子内容进行脱敏处理
-        vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
         vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));//帖子主标题脱敏
         vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
         vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
