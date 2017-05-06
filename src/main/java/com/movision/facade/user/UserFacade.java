@@ -315,8 +315,13 @@ public class UserFacade {
     private void updatePersonInfo(PersonInfo personInfo) {
         User user = new User();
         user.setId(personInfo.getId());
-        user.setNickname(personInfo.getNickname().trim());  //去除首尾空格
-        user.setBirthday(DateUtils.str2Date(personInfo.getBirthday()));
+
+        if (StringUtils.isNotBlank(personInfo.getNickname())) {
+            user.setNickname(personInfo.getNickname().trim());  //去除首尾空格
+        }
+        if (StringUtils.isNotBlank(personInfo.getBirthday())) {
+            user.setBirthday(DateUtils.str2Date(personInfo.getBirthday()));
+        }
         user.setPhoto(personInfo.getPhoto());
         user.setSex(personInfo.getSex());
         user.setSign(personInfo.getSign());
