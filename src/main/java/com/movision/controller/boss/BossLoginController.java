@@ -2,6 +2,7 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.common.constant.SessionConstant;
+import com.movision.common.util.ShiroUtil;
 import com.movision.facade.user.BossUserFacade;
 import com.movision.facade.user.MenuFacade;
 import com.movision.mybatis.bossUser.entity.BossUser;
@@ -79,18 +80,21 @@ public class BossLoginController {
             record.setId(shiroBossUser.getId());
             //更新Boss用户信息
             if (bossUserFacade.updateLoginTime(record)) {
-                log.info("更新Boss用户登录信息成功");
+                log.info("更新boss用户登录时间成功");
             } else {
-                log.warn("更新Boss用户登录信息失败");
+                log.warn("更新boss用户登录时间失败");
             }
 
             //session中存入当前用户信息
             session.setAttribute(SessionConstant.BOSS_USER, shiroBossUser);
             session.removeAttribute(SessionConstant.APP_USER);
 
+            log.debug("session中的boss用户信息：" + ShiroUtil.getBossUser());
+
             //session中存入该用户所属的角色所对应的菜单信息
             List<Map<String, Object>> menuList = menuFacade.getAuthroizeMenu(shiroBossUser.getRole());
             session.setAttribute(SessionConstant.ACCESS_MENU, menuList);
+            log.debug("session中的菜单信息：" + session.getAttribute(SessionConstant.ACCESS_MENU));
 
             jsonResult.setData(shiroBossUser);
             jsonResult.setMessage("登录成功");

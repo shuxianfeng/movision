@@ -134,6 +134,7 @@ public class MenuController {
         Response response = new Response();
 
         BossRealm.ShiroBossUser user = ShiroUtil.getBossUser();
+        log.debug("【查询首页侧边栏】登录人信息：" + user);
         int roleid = user.getRole();
         log.info("查询首页侧边栏, roleid = " + roleid);
         List<MenuVo> list = menuFacade.querySidebar(roleid);

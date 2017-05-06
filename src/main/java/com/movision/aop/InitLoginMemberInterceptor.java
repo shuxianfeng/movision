@@ -91,6 +91,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 /**
                  * 根据点击的菜单中的URL去匹配，当匹配到了此菜单，判断是否有此菜单的权限，没有的话跳转到404页面
                  */
+                log.debug("拦截器，进入boss系统登录分支");
                 int role = bossUser.getRole();
                 if (role == 1) {
                     //超管拥有所有权限
@@ -132,6 +133,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 bossLoginFacade.handleNoPermission(response);
                 return false;
             } else if (bossUser == null && appuser != null) {
+                log.debug("拦截器，进入app登录分支");
                 //app端不做菜单控制, 所以该分支永远不会进入
                 this.initAppUserInfo(currentUser, session);
                 return true;
