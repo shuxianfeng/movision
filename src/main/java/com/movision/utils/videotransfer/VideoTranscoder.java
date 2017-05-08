@@ -277,7 +277,7 @@ public class VideoTranscoder {
         sb.append(" -ab");
         sb.append(" 56");
         sb.append(" -ar");
-        sb.append(" 22050");
+        sb.append(" 44100");
         sb.append(" -qscale");
         sb.append(" 1");//帧率1表示最好的质量，数字越大质量越差越模糊
         sb.append(" -r");
@@ -302,7 +302,7 @@ public class VideoTranscoder {
             proce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
 
             //调用线程命令进行转码------->2
-//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -vcodec ", " copy ", " -ab", " 56", " -ar", " 22050", " -qscale", " 1", " -r", " 15", " -s ", String.valueOf(width) + "x" + String.valueOf(height) + " ", savepathname);
+//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -vcodec ", " copy ", " -ab", " 56", " -ar", " 44100", " -qscale", " 1", " -r", " 15", " -s ", String.valueOf(width) + "x" + String.valueOf(height) + " ", savepathname);
 //            ProcessBuilder builder = new ProcessBuilder();
 //            builder.command(commend);
 //            builder.start();
@@ -329,6 +329,7 @@ public class VideoTranscoder {
 
             log.info("执行的视频打水印命令行>>>>>>>>>>>>>>>>> " + str.toString());
 
+//            --------------------------------------------------------------临时屏蔽   不进行视频水印打码操作，h264编码问题暂时没解决
 //            Process watermarkproce = runtime.exec(str.toString());
 //            watermarkproce.waitFor();
 //
