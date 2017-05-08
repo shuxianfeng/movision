@@ -1,5 +1,6 @@
 package com.movision.mybatis.activityContribute.service;
 
+import com.movision.mybatis.activityContribute.entity.ActivityContribute;
 import com.movision.mybatis.activityContribute.entity.ActivityContributeVo;
 import com.movision.mybatis.activityContribute.mapper.ActivityContributeMapper;
 import com.movision.utils.pagination.model.Paging;
@@ -28,7 +29,23 @@ public class ActivityContributeService {
             log.info("查询活动投稿");
             return activityContributeMapper.findAllQueryActivityContribute(map, pager.getRowBounds());
         } catch (Exception e) {
-            log.error("查询活动投稿异常");
+            log.error("查询活动投稿异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询活动投稿详情
+     *
+     * @param id
+     * @return
+     */
+    public ActivityContribute queryContributeExplain(String id) {
+        try {
+            log.info("查询活动投稿详情");
+            return activityContributeMapper.queryContributeExplain(id);
+        } catch (Exception e) {
+            log.error("查询活动投稿详情异常", e);
             throw e;
         }
     }

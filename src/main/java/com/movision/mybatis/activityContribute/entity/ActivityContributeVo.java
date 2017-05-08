@@ -21,6 +21,26 @@ public class ActivityContributeVo {
 
     private String postName;
 
+    private String nickname;
+
+    private String level;
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     public String getPostName() {
         return postName;
     }

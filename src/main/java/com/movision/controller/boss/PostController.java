@@ -5,6 +5,7 @@ import com.movision.facade.boss.CircleFacade;
 import com.movision.facade.boss.PostFacade;
 import com.movision.facade.boss.UserManageFacade;
 import com.movision.mybatis.activePart.entity.ActivePartList;
+import com.movision.mybatis.activityContribute.entity.ActivityContribute;
 import com.movision.mybatis.activityContribute.entity.ActivityContributeVo;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.category.entity.Category;
@@ -1083,6 +1084,20 @@ public class PostController {
     }
 
 
+    /**
+     * 查询活动投稿列表
+     *
+     * @param userid
+     * @param email
+     * @param type
+     * @param postname
+     * @param begintime
+     * @param endtime
+     * @param pai
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
     @ApiOperation(value = "查询活动投稿列表", notes = "用于条件查询活动投稿列表", response = Response.class)
     @RequestMapping(value = "query_activity_contribute", method = RequestMethod.POST)
     public Response queryActivityContribute(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
@@ -1102,6 +1117,24 @@ public class PostController {
         }
         pager.result(resault);
         response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 查询活动投稿详情
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "查询活动投稿详情", notes = "查询活动投稿详情", response = Response.class)
+    @RequestMapping(value = "query_contribute_explain", method = RequestMethod.POST)
+    public Response queryContributeExplain(@ApiParam(value = "投稿id") @RequestParam String id) {
+        Response response = new Response();
+        ActivityContribute ac = postFacade.queryContributeExplain(id);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(ac);
         return response;
     }
 

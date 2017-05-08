@@ -21,4 +21,6 @@ public interface ActivityContributeMapper {
     int updateByPrimaryKey(ActivityContribute record);
 
     List<ActivityContributeVo> findAllQueryActivityContribute(Map map, RowBounds rowBounds);
+
+    ActivityContribute queryContributeExplain(String id);
 }

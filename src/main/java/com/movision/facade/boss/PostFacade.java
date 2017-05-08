@@ -1,5 +1,6 @@
 package com.movision.facade.boss;
 
+import com.movision.common.Response;
 import com.movision.common.constant.JurisdictionConstants;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
@@ -7,6 +8,7 @@ import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.activePart.service.ActivePartService;
+import com.movision.mybatis.activityContribute.entity.ActivityContribute;
 import com.movision.mybatis.activityContribute.entity.ActivityContributeVo;
 import com.movision.mybatis.activityContribute.service.ActivityContributeService;
 import com.movision.mybatis.applyVipDetail.entity.ApplyVipDetail;
@@ -1997,6 +1999,19 @@ public class PostFacade {
         }
     }
 
+    /**
+     * 查询活动投稿列表
+     *
+     * @param userid
+     * @param email
+     * @param type
+     * @param postname
+     * @param begintime
+     * @param endtime
+     * @param pai
+     * @param pager
+     * @return
+     */
     public List<ActivityContributeVo> findAllQueryActivityContribute(String userid, String email, String type, String postname, String begintime, String endtime, String pai, Paging<ActivityContributeVo> pager) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Map map = new HashMap();
@@ -2028,6 +2043,16 @@ public class PostFacade {
             map.put("pai", pai);
         }
         return activityContributeService.findAllQueryActivityContribute(map, pager);
+    }
+
+    /**
+     * 查询活动投稿详情
+     *
+     * @param id
+     * @return
+     */
+    public ActivityContribute queryContributeExplain(String id) {
+        return activityContributeService.queryContributeExplain(id);
     }
 
 }
