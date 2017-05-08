@@ -3,7 +3,9 @@ package com.movision.controller.boss;
 import com.movision.common.Response;
 import com.movision.facade.boss.CircleFacade;
 import com.movision.facade.boss.PostFacade;
+import com.movision.facade.boss.UserManageFacade;
 import com.movision.mybatis.activePart.entity.ActivePartList;
+import com.movision.mybatis.activityContribute.entity.ActivityContributeVo;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.circle.entity.Circle;
@@ -12,8 +14,11 @@ import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.share.entity.SharesVo;
+import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
+import com.movision.mybatis.video.entity.Video;
+import com.movision.utils.L;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
@@ -45,6 +50,9 @@ public class PostController {
 
     @Autowired
     CircleFacade circleFacade;
+
+    @Autowired
+    UserManageFacade userManageFacade;
 
     @Autowired
     private MovisionOssClient movisionOssClient;
@@ -1037,4 +1045,64 @@ public class PostController {
         response.setData(result);
         return response;
     }
+
+
+    /**
+     * 条件查询原生视频投稿列表
+     *
+     * @param nickname
+     * @param email
+     * @param type
+     * @param vip
+     * @param begintime
+     * @param endtime
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "条件查询原生视频投稿列表", notes = "用于根据条件查询原生视频投稿列表接口", response = Response.class)
+    @RequestMapping(value = "query_unite_condition_contribute", method = RequestMethod.POST)
+    public Response queryUniteConditionByContribute(@ApiParam(value = "用户名") @RequestParam(required = false) String nickname,
+                                                    @ApiParam(value = "邮箱") @RequestParam(required = false) String email,
+                                                    @ApiParam(value = "审核状态 0 待审核 1 审核通过 2 审核未通过") @RequestParam(required = false) String type,
+                                                    @ApiParam(value = "vip") @RequestParam(required = false) String vip,
+                                                    @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
+                                                    @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
+                                                    @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,
+                                                    @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                    @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<SubmissionVo> pager = new Paging<SubmissionVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<SubmissionVo> list = userManageFacade.queryUniteConditionByContribute(nickname, email, type, vip, circleid, begintime, endtime, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(list);
+        response.setData(pager);
+        return response;
+    }
+
+
+    @ApiOperation(value = "查询活动投稿列表", notes = "用于条件查询活动投稿列表", response = Response.class)
+    @RequestMapping(value = "query_activity_contribute", method = RequestMethod.POST)
+    public Response queryActivityContribute(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
+                                            @ApiParam(value = "邮箱") @RequestParam(required = false) String email,
+                                            @ApiParam(value = "审核状态 0 待审核 1 审核通过 2 审核未通过") @RequestParam(required = false) String type,
+                                            @ApiParam(value = "帖子标题") @RequestParam(required = false) String postname,
+                                            @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
+                                            @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,
+                                            @ApiParam(value = "排序方式 0为时间倒叙") @RequestParam(required = false) String pai,
+                                            @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                            @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<ActivityContributeVo> pager = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<ActivityContributeVo> resault = postFacade.findAllQueryActivityContribute(userid, email, type, postname, begintime, endtime, pai, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(resault);
+        response.setData(pager);
+        return response;
+    }
+
 }

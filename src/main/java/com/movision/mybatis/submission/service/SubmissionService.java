@@ -37,21 +37,6 @@ public class SubmissionService {
         }
     }
 
-    /**
-     * 查询投稿列表
-     *
-     * @param pager
-     * @return
-     */
-    public List<SubmissionVo> queryContributeList(Paging<SubmissionVo> pager) {
-        try {
-            log.info("查询投稿列表");
-            return submissionMapper.findAllQueryContributeList(pager.getRowBounds());
-        } catch (Exception e) {
-            log.error("查询投稿列表异常");
-            throw e;
-        }
-    }
 
     /**
      * 查询投稿说明

@@ -172,16 +172,6 @@ public class UserManageFacade {
     }
 
     /**
-     * 查询投稿列表
-     *
-     * @param pager
-     * @return
-     */
-    public List<SubmissionVo> queryContributeList(Paging<SubmissionVo> pager) {
-        return submissionService.queryContributeList(pager);
-    }
-
-    /**
      * 查询投稿说明
      * @param id
      * @return
@@ -322,9 +312,10 @@ public class UserManageFacade {
      * @param begintime
      * @param endtime
      * @param pager
+     * @param circleid
      * @return
      */
-    public List<SubmissionVo> queryUniteConditionByContribute(String nickname, String email, String type, String vip, String begintime, String endtime, Paging<SubmissionVo> pager) {
+    public List<SubmissionVo> queryUniteConditionByContribute(String nickname, String email, String type, String vip, String circleid, String begintime, String endtime, Paging<SubmissionVo> pager) {
         Date beg = null;
         Date end = null;
         //对时间做转换 毫秒转 日期类型
@@ -349,6 +340,9 @@ public class UserManageFacade {
         }
         if (StringUtil.isNotEmpty(vip)) {
             map.put("vip", vip);
+        }
+        if (StringUtil.isNotEmpty(circleid)) {
+            map.put("circleid", circleid);
         }
         map.put("begintime", beg);
         map.put("endtime", end);

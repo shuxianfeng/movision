@@ -24,6 +24,26 @@ public class SubmissionVo implements Serializable {
 
     private String nickname;
 
+    private Integer circleid;
+
+    private String circlename;
+
+    public String getCirclename() {
+        return circlename;
+    }
+
+    public void setCirclename(String circlename) {
+        this.circlename = circlename;
+    }
+
+    public Integer getCircleid() {
+        return circleid;
+    }
+
+    public void setCircleid(Integer circleid) {
+        this.circleid = circleid;
+    }
+
     public String getLevel() {
         return level;
     }

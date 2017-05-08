@@ -10,9 +10,10 @@
         <result column="comment" property="comment" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="circleid" property="circleid" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, title, videourl, userid, email, comment, status, intime
+        id, title, videourl, userid, email, comment, status, intime ,circleid
   </sql>
 
     <!--基础查询语句-->
@@ -30,21 +31,21 @@
 
     <insert id="insert" parameterType="com.movision.mybatis.submission.entity.Submission">
     insert into yw_submission (id, title, videourl, 
-      userid, email, comment, 
-      status, intime)
+      userid, email, comment,
+        status, intime,circleid)
     values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{videourl,jdbcType=VARCHAR}, 
-      #{userid,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP})
+      #{userid,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP},#{circleid,jdbcType=INTEGER})
   </insert>
 
     <!--提交原生视频申请-->
     <insert id="commitSubmission" parameterType="java.util.Map">
     INSERT INTO yw_submission (
-      title, videourl, userid, email, comment, status, intime
+        title, videourl, userid, email, comment, status, intime, circleid
     )
     VALUES (#{title,jdbcType=VARCHAR}, #{videourl,jdbcType=VARCHAR},
       #{userid,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR},
-      #{status,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}
+        #{status,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP},#{circleid,jdbcType=INTEGER}
     )
   </insert>
 
@@ -75,6 +76,9 @@
             <if test="intime != null">
                 intime,
             </if>
+            <if test="circleid !=null">
+                circleid,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -100,6 +104,9 @@
             </if>
             <if test="intime != null">
                 #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="circleid != null">
+                #{circleid,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -128,6 +135,9 @@
             <if test="intime != null">
                 intime = #{intime,jdbcType=TIMESTAMP},
             </if>
+            <if test="circleid != null">
+                circleid=#{circleid,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -139,7 +149,8 @@
       email = #{email,jdbcType=VARCHAR},
       comment = #{comment,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
-      intime = #{intime,jdbcType=TIMESTAMP}
+        intime = #{intime,jdbcType=TIMESTAMP},
+        circleid = #{circleid,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -149,8 +160,9 @@
 
     <select id="findAllqueryUniteConditionByContribute" resultType="com.movision.mybatis.submission.entity.SubmissionVo"
             parameterType="java.util.Map">
-        SELECT s.id,s.title,s.videourl,s.userid,s.email,s.comment,s.status,u.nickname,u.level,s.intime
-        FROM yw_submission s LEFT JOIN yw_user u ON s.userid=u.id
+        SELECT s.id,s.title,s.videourl,s.userid,s.email,s.comment,s.status,u.nickname,u.level,s.intime,s.circleid,c.name
+        AS circlename
+        FROM yw_submission s LEFT JOIN yw_user u ON s.userid=u.id LEFT JOIN yw_circle c ON c.id=s.circleid
         WHERE 1
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
@@ -163,6 +175,9 @@
         </if>
         <if test="vip==0">
             AND u.level=#{vip,jdbcType=INTEGER}
+        </if>
+        <if test="circleid!=null">
+            AND s.circleid=#{circleid,jdbcType=INTEGER}
         </if>
         <if test="vip==1">
             <![CDATA[

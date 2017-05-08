@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.movision.mybatis.activityContribute.mapper.ActivityContributeMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.activityContribute.entity.ActivityContribute">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="userid" jdbcType="INTEGER" property="userid"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="intime" jdbcType="TIMESTAMP" property="intime"/>
+        <result column="postid" jdbcType="INTEGER" property="postid"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, title, userid, comment, status, intime, postid, email
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_activity_contribute
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_activity_contribute
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.activityContribute.entity.ActivityContribute">
+    insert into yw_activity_contribute (id, title, userid,
+      comment, status, intime,
+      postid, email)
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER},
+      #{comment,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP},
+      #{postid,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.activityContribute.entity.ActivityContribute">
+        insert into yw_activity_contribute
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="comment != null">
+                comment,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="postid != null">
+                postid,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="comment != null">
+                #{comment,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="postid != null">
+                #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.movision.mybatis.activityContribute.entity.ActivityContribute">
+        update yw_activity_contribute
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="comment != null">
+                comment = #{comment,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="postid != null">
+                postid = #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.activityContribute.entity.ActivityContribute">
+    update yw_activity_contribute
+    set title = #{title,jdbcType=VARCHAR},
+      userid = #{userid,jdbcType=INTEGER},
+      comment = #{comment,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      intime = #{intime,jdbcType=TIMESTAMP},
+      postid = #{postid,jdbcType=INTEGER},
+      email = #{email,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="findAllQueryActivityContribute" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.activityContribute.entity.ActivityContributeVo">
+        SELECT c.*,p.title AS postName,u.nickname FROM yw_activity_contribute c LEFT JOIN yw_user u ON u.id=c.userid
+        LEFT JOIN yw_post p ON c.postid=p.id WHERE 1
+        <if test="userid != null">
+            AND c.userid=#{userid=jdbcType=INTEGER}
+        </if>
+        <if test="email != null">
+            AND c.email=#{email=jdbcType=VARCHAR}
+        </if>
+        <if test="type != null">
+            AND c.type=#{type=jdbcType=INTEGER}
+        </if>
+        <if test="begintime != null and endtime != null">
+            AND c.intime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="postname != null">
+            AND p.title LIKE concat('%',#{postname,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="pai != null">
+            ORDER BY c.intime DESC
+        </if>
+    </select>
+</mapper>

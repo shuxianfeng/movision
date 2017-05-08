@@ -132,28 +132,6 @@ public class UserManageController {
     }
 
     /**
-     * 查询投稿列表
-     *
-     * @param pageNo
-     * @param pageSize
-     * @return
-     */
-    @ApiOperation(value = "查询投稿列表", notes = "用于查询投稿列表接口", response = Response.class)
-    @RequestMapping(value = "query_contribute_list", method = RequestMethod.POST)
-    public Response queryContributeList(@ApiParam(value = "当前第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                        @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
-        Response response = new Response();
-        Paging<SubmissionVo> pager = new Paging<SubmissionVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<SubmissionVo> list = userManageFacade.queryContributeList(pager);
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
-        }
-        pager.result(list);
-        response.setData(pager);
-        return response;
-    }
-
-    /**
      * 投稿说明
      *
      * @param id
@@ -249,40 +227,6 @@ public class UserManageController {
         Response response = new Response();
         Paging<UserVo> pager = new Paging<UserVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<UserVo> list = userManageFacade.queryUserExamineAndVerify(username, phone, authstatus, begintime, endtime, type, pager);
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
-        }
-        pager.result(list);
-        response.setData(pager);
-        return response;
-    }
-
-    /**
-     * 条件查询投稿列表
-     *
-     * @param nickname
-     * @param email
-     * @param type
-     * @param vip
-     * @param begintime
-     * @param endtime
-     * @param pageNo
-     * @param pageSize
-     * @return
-     */
-    @ApiOperation(value = "条件查询投稿列表", notes = "用于根据条件查询投稿列表接口", response = Response.class)
-    @RequestMapping(value = "query_unite_condition_contribute", method = RequestMethod.POST)
-    public Response queryUniteConditionByContribute(@ApiParam(value = "用户名") @RequestParam(required = false) String nickname,
-                                                    @ApiParam(value = "邮箱") @RequestParam(required = false) String email,
-                                                    @ApiParam(value = "审核状态 0 待审核 1 审核通过 2 审核未通过") @RequestParam(required = false) String type,
-                                                    @ApiParam(value = "vip") @RequestParam(required = false) String vip,
-                                                    @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
-                                                    @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,
-                                                    @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                                    @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
-        Response response = new Response();
-        Paging<SubmissionVo> pager = new Paging<SubmissionVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<SubmissionVo> list = userManageFacade.queryUniteConditionByContribute(nickname, email, type, vip, begintime, endtime, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

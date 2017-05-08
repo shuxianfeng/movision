@@ -7,6 +7,8 @@ import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.activePart.service.ActivePartService;
+import com.movision.mybatis.activityContribute.entity.ActivityContributeVo;
+import com.movision.mybatis.activityContribute.service.ActivityContributeService;
 import com.movision.mybatis.applyVipDetail.entity.ApplyVipDetail;
 import com.movision.mybatis.applyVipDetail.service.ApplyVipDetailService;
 import com.movision.mybatis.auditVipDetail.entity.AuditVipDetail;
@@ -35,7 +37,6 @@ import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
-import com.movision.utils.DateUtils;
 import com.movision.utils.JsoupCompressImg;
 import com.movision.utils.ListUtil;
 import com.movision.utils.pagination.model.Paging;
@@ -107,6 +108,9 @@ public class PostFacade {
 
     @Autowired
     private PostProcessRecordService postProcessRecordService;
+
+    @Autowired
+    private ActivityContributeService activityContributeService;
 
 
     @Autowired
@@ -1991,6 +1995,39 @@ public class PostFacade {
         } else {
             return null;
         }
+    }
+
+    public List<ActivityContributeVo> findAllQueryActivityContribute(String userid, String email, String type, String postname, String begintime, String endtime, String pai, Paging<ActivityContributeVo> pager) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Map map = new HashMap();
+        Date beg = null;
+        Date end = null;
+        try {
+            if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
+                beg = format.parse(begintime);
+                end = format.parse(endtime);
+            }
+            map.put("begintime", beg);
+            map.put("endtime", end);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (StringUtil.isNotEmpty(userid)) {
+            map.put("nickname", userid);
+        }
+        if (StringUtil.isNotEmpty(email)) {
+            map.put("email", email);
+        }
+        if (StringUtil.isNotEmpty(type)) {
+            map.put("type", type);
+        }
+        if (StringUtil.isNotEmpty(postname)) {
+            map.put("postname", postname);
+        }
+        if (StringUtil.isNotEmpty(pai)) {
+            map.put("pai", pai);
+        }
+        return activityContributeService.findAllQueryActivityContribute(map, pager);
     }
 
 }

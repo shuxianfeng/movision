@@ -23,8 +23,6 @@ public interface SubmissionMapper {
 
     int commitSubmission(Map<String, Object> parammap);
 
-    List<SubmissionVo> findAllQueryContributeList(RowBounds rowBounds);
-
     Submission queryContributeBounce(String id);
 
     List<SubmissionVo> findAllqueryUniteConditionByContribute(Map map, RowBounds rowBounds);
