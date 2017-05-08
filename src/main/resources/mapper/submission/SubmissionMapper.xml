@@ -160,9 +160,10 @@
 
     <select id="findAllqueryUniteConditionByContribute" resultType="com.movision.mybatis.submission.entity.SubmissionVo"
             parameterType="java.util.Map">
-        SELECT s.id,s.title,s.videourl,s.userid,s.email,s.comment,s.status,u.nickname,u.level,s.intime,s.circleid,c.name
+        SELECT
+        s.id,s.title,s.videourl,s.userid,s.email,s.comment,s.status,u.nickname,u.level,s.intime,s.circleid,c.categoryname
         AS circlename
-        FROM yw_submission s LEFT JOIN yw_user u ON s.userid=u.id LEFT JOIN yw_circle c ON c.id=s.yw_circle_category
+        FROM yw_submission s LEFT JOIN yw_user u ON s.userid=u.id LEFT JOIN yw_circle_category c ON c.id=s.circleid
         WHERE 1
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
