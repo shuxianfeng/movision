@@ -186,6 +186,7 @@ public class ShiroUtil {
             //此处可以扩张需要的字段
             principal.setPhone(phone);
             principal.setPoints(point);
+            principal.setAccount(phone);
             session.setAttribute(SessionConstant.APP_USER, principal);
         }
     }
