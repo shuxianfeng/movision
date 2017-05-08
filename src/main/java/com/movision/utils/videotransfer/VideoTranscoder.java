@@ -319,8 +319,8 @@ public class VideoTranscoder {
             str.append(savepathname);
             str.append(" -i ");
             str.append(watermarkimg);
-            str.append(" -vcodec ");
-            str.append(" copy ");
+//            str.append(" -vcodec ");//打水印命令不支持这种编码方式
+//            str.append(" copy ");
             str.append(" -qscale");
             str.append(" 1");//帧率1表示最好的质量，数字越大质量越差越模糊
             str.append(" -filter_complex ");
