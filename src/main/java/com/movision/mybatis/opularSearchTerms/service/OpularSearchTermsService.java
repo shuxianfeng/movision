@@ -2,6 +2,7 @@ package com.movision.mybatis.opularSearchTerms.service;
 
 import com.mongodb.*;
  import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTerms;
+import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTermsVo;
 import com.movision.mybatis.opularSearchTerms.mapper.OpularSearchTermsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -38,8 +39,8 @@ import java.util.ArrayList;
                 Aggregation.sort(Sort.Direction.DESC, "count")
 
         );
-        AggregationResults<OpularSearchTerms> list = mongoTemplate.aggregate(aggregation, "opularSearchTerms", OpularSearchTerms.class);
-        List<OpularSearchTerms> list1 = list.getMappedResults();
+        AggregationResults<OpularSearchTermsVo> list = mongoTemplate.aggregate(aggregation, "opularSearchTerms", OpularSearchTermsVo.class);
+        List<OpularSearchTermsVo> list1 = list.getMappedResults();
         return list1;
 
     }
