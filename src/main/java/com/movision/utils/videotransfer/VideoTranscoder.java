@@ -254,6 +254,8 @@ public class VideoTranscoder {
 //        commend.add(ffmpeginstalldir);
 //        commend.add(" -i ");
 //        commend.add(oldfilepath);
+//        commend.add(" -vcodec ");
+//        commend.add(" copy ");
 //        commend.add(" -ab");
 //        commend.add(" 56");
 //        commend.add(" -ar");
@@ -270,6 +272,8 @@ public class VideoTranscoder {
         sb.append(ffmpeginstalldir);
         sb.append(" -i ");
         sb.append(oldfilepath);
+        sb.append(" -vcodec ");
+        sb.append(" copy ");
         sb.append(" -ab");
         sb.append(" 56");
         sb.append(" -ar");
@@ -298,7 +302,7 @@ public class VideoTranscoder {
             proce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
 
             //调用线程命令进行转码------->2
-//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -ab", " 56", " -ar", " 22050", " -qscale", " 1", " -r", " 15", " -s ", String.valueOf(width) + "x" + String.valueOf(height) + " ", savepathname);
+//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -vcodec ", " copy ", " -ab", " 56", " -ar", " 22050", " -qscale", " 1", " -r", " 15", " -s ", String.valueOf(width) + "x" + String.valueOf(height) + " ", savepathname);
 //            ProcessBuilder builder = new ProcessBuilder();
 //            builder.command(commend);
 //            builder.start();
@@ -315,6 +319,8 @@ public class VideoTranscoder {
             str.append(savepathname);
             str.append(" -i ");
             str.append(watermarkimg);
+            str.append(" -vcodec ");
+            str.append(" copy ");
             str.append(" -qscale");
             str.append(" 1");//帧率1表示最好的质量，数字越大质量越差越模糊
             str.append(" -filter_complex ");
@@ -346,6 +352,8 @@ public class VideoTranscoder {
 //        commend.add(PATH);
 //        commend.add(" -oac");
 //        commend.add(" lavc");
+//        commend.add(" -vcodec ");
+//        commend.add(" copy ");
 //        commend.add(" -lavcopts");
 //        commend.add(" acodec=mp3:abitrate=64");
 //        commend.add(" -ovc");
@@ -362,6 +370,8 @@ public class VideoTranscoder {
         sb.append(PATH);
         sb.append(" -oac");
         sb.append(" lavc");
+        sb.append(" -vcodec ");
+        sb.append(" copy ");
         sb.append(" -qscale");
         sb.append(" 1");//帧率1表示最好的质量，数字越大质量越差越模糊
         sb.append(" -lavcopts");
