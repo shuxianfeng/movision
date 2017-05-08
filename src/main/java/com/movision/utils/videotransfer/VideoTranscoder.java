@@ -178,16 +178,17 @@ public class VideoTranscoder {
 //            }
 //        }
 
+        String uploadpath = PropertiesLoader.getValue("post.video.domain");//web服务器视频存放目录
+
+        //先删除videourl路径下的源视频文件（防止叠加上传同名文件死锁的问题）---------------------->>>D.(待使用)
+        File oldfile = new File(uploadpath + fileName);
+        oldfile.delete();
+
         //再上传转换后的视频文件到静态资源服务器中---------------------->>>C.(web服务器上传方法----使用中)
         //(在同服务器下实际就是文件的位置转移)
         File afile = new File(PATH.substring(0, PATH.lastIndexOf("/")+1) + name + ".mp4");
-        String uploadpath = PropertiesLoader.getValue("post.video.domain");//web服务器视频存放目录
         File bfile = new File(uploadpath + afile.getName());
         afile.renameTo(bfile);
-
-        //上传成功后删除videourl路径下的源视频文件---------------------->>>D.(待使用)
-        File oldfile = new File(uploadpath + fileName);
-        oldfile.delete();
 
         //删除截取的封面文件和临时文件---------------------->>>E.(待使用)
         log.info("删除临时文件>>>>>>>>>>>>>>>>>>");
