@@ -185,16 +185,16 @@ public class VideoTranscoder {
         File bfile = new File(uploadpath + afile.getName());
         afile.renameTo(bfile);
 
-        //上传成功后删除videourl路径下的源视频文件---------------------->>>D.(待使用)
-        File oldfile = new File(uploadpath + fileName);
-        oldfile.delete();
-
-        //删除截取的封面文件和临时文件---------------------->>>E.(待使用)
-        log.info("删除临时文件>>>>>>>>>>>>>>>>>>");
-        File videofile = new File(PATH);
-        videofile.delete();
-        File imgfile = new File(PATH.substring(0, PATH.lastIndexOf(".") +1) + "jpg");
-        imgfile.delete();
+//        //上传成功后删除videourl路径下的源视频文件---------------------->>>D.(待使用)
+//        File oldfile = new File(uploadpath + fileName);
+//        oldfile.delete();
+//
+//        //删除截取的封面文件和临时文件---------------------->>>E.(待使用)
+//        log.info("删除临时文件>>>>>>>>>>>>>>>>>>");
+//        File videofile = new File(PATH);
+//        videofile.delete();
+//        File imgfile = new File(PATH.substring(0, PATH.lastIndexOf(".") +1) + "jpg");
+//        imgfile.delete();
 
         //返回新视频文件的地址---------------------->>>F.(待修改)
         resultmap.put("newurl", videourl.substring(0, videourl.lastIndexOf("/")+1) + afile.getName());
