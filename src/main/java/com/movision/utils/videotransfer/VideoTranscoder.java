@@ -329,14 +329,14 @@ public class VideoTranscoder {
 
             log.info("执行的视频打水印命令行>>>>>>>>>>>>>>>>> " + str.toString());
 
-            Process watermarkproce = runtime.exec(str.toString());
-            watermarkproce.waitFor();
-
-            //添加水印成功后，删除加水印前的视频文件，将新文件改为原文件名
-            File tempfile = new File(savepathname);
-            tempfile.delete();
-            File watermarkfile = new File(watermarkpathname);
-            watermarkfile.renameTo(tempfile);//改为原文件名
+//            Process watermarkproce = runtime.exec(str.toString());
+//            watermarkproce.waitFor();
+//
+//            //添加水印成功后，删除加水印前的视频文件，将新文件改为原文件名
+//            File tempfile = new File(savepathname);
+//            tempfile.delete();
+//            File watermarkfile = new File(watermarkpathname);
+//            watermarkfile.renameTo(tempfile);//改为原文件名
 
             //另外还要解决runtime的死锁问题--------------------------------------------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>Remark
 
