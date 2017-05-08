@@ -162,7 +162,7 @@
             parameterType="java.util.Map">
         SELECT s.id,s.title,s.videourl,s.userid,s.email,s.comment,s.status,u.nickname,u.level,s.intime,s.circleid,c.name
         AS circlename
-        FROM yw_submission s LEFT JOIN yw_user u ON s.userid=u.id LEFT JOIN yw_circle c ON c.id=s.circleid
+        FROM yw_submission s LEFT JOIN yw_user u ON s.userid=u.id LEFT JOIN yw_circle c ON c.id=s.yw_circle_category
         WHERE 1
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')

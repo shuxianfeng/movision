@@ -129,7 +129,8 @@
 
     <select id="findAllQueryActivityContribute" parameterType="java.util.Map"
             resultType="com.movision.mybatis.activityContribute.entity.ActivityContributeVo">
-        SELECT c.*,p.title AS postName,u.nickname FROM yw_activity_contribute c LEFT JOIN yw_user u ON u.id=c.userid
+        SELECT c.*,p.title AS postName,u.nickname,u.level FROM yw_activity_contribute c LEFT JOIN yw_user u ON
+        u.id=c.userid
         LEFT JOIN yw_post p ON c.postid=p.id WHERE 1
         <if test="userid != null">
             AND c.userid=#{userid=jdbcType=INTEGER}
@@ -149,5 +150,10 @@
         <if test="pai != null">
             ORDER BY c.intime DESC
         </if>
+    </select>
+
+    <select id="queryContributeExplain" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.activityContribute.entity.ActivityContribute">
+        select * from yw_activity_contribute WHERE id=#{id,jdbcType=INTEGER}
     </select>
 </mapper>
