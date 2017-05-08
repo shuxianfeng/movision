@@ -327,6 +327,8 @@ public class VideoTranscoder {
             str.append(" overlay=W-w ");
             str.append(watermarkpathname);
 
+            log.info("执行的视频打水印命令行>>>>>>>>>>>>>>>>> " + str.toString());
+
             Process watermarkproce = runtime.exec(str.toString());
             watermarkproce.waitFor();
 
