@@ -85,11 +85,11 @@ public class VideoTranscoder {
 
         if (type == 0) {
             log.info("直接将文件转为mp4文件");
-            status = processMP4(PATH, ffmpeginstalldir, tempvideodir, newname, String.valueOf(width), String.valueOf(height));// 直接将文件转为mp4文件
+            status = processMP4(PATH, ffmpeginstalldir, tempvideodir, name, newname, String.valueOf(width), String.valueOf(height));// 直接将文件转为mp4文件
         } else if (type == 1) {
             String avifilepath = processAVI(PATH, ffmpeginstalldir, tempvideodir, name);
             if (avifilepath == null)
-                status = processMP4(avifilepath, ffmpeginstalldir, tempvideodir, newname, String.valueOf(width), String.valueOf(height));// 将视频文件转为mp4
+                status = processMP4(avifilepath, ffmpeginstalldir, tempvideodir, name, newname, String.valueOf(width), String.valueOf(height));// 将视频文件转为mp4
         }
 
         //再上传转换后的视频文件到静态资源服务器中---------------------->>>C.(静态资源服务器上传方法----待使用)
@@ -240,7 +240,7 @@ public class VideoTranscoder {
     }
 
     // ffmpeg能解析的格式：（asx，asf，mpg，wmv，3gp，mp4，mov，avi，flv等）
-    private static boolean processMP4(String oldfilepath, String ffmpeginstalldir, String tempvideodir, String newname, String width, String height) {
+    private static boolean processMP4(String oldfilepath, String ffmpeginstalldir, String tempvideodir, String name, String newname, String width, String height) {
 
         //服务器上水印图片的存放路径
         String watermarkimg = PropertiesLoader.getValue("video.watermark.domain");
@@ -317,7 +317,7 @@ public class VideoTranscoder {
             tempfile.delete();//删除原视频
             imgfile.delete();//删除视频截图
             File newfile = new File(savepathname);
-            newfile.renameTo(tempfile);
+            newfile.renameTo(new File(oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4"));
 
             //调用线程进行视频水印打印------->3
             String tempfilename = getuuid();//生成32位uuid作为临时文件名
