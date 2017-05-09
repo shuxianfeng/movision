@@ -96,7 +96,7 @@ public class PointRecordFacade {
      *
      * @param type    积分类型
      *                （无下单送积分，该积分流水已经在下单接口中处理了）
-     * @param
+     * @param userid  发帖人的id（限定APP用户）
      * @return
      */
     public void addPointRecord(int type, int userid) {
