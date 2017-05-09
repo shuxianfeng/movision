@@ -2002,7 +2002,7 @@ public class PostFacade {
     /**
      * 查询活动投稿列表
      *
-     * @param userid
+     * @param nickname
      * @param email
      * @param type
      * @param postname
@@ -2012,7 +2012,8 @@ public class PostFacade {
      * @param pager
      * @return
      */
-    public List<ActivityContributeVo> findAllQueryActivityContribute(String userid, String email, String type, String postname, String begintime, String endtime, String pai, Paging<ActivityContributeVo> pager) {
+    public List<ActivityContributeVo> findAllQueryActivityContribute(String nickname, String email, String type, String level, String postname, String begintime,
+                                                                     String endtime, String pai, Paging<ActivityContributeVo> pager) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Map map = new HashMap();
         Date beg = null;
@@ -2027,14 +2028,17 @@ public class PostFacade {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (StringUtil.isNotEmpty(userid)) {
-            map.put("nickname", userid);
+        if (StringUtil.isNotEmpty(nickname)) {
+            map.put("nickname", nickname);
         }
         if (StringUtil.isNotEmpty(email)) {
             map.put("email", email);
         }
         if (StringUtil.isNotEmpty(type)) {
             map.put("type", type);
+        }
+        if (StringUtil.isNotEmpty(level)) {
+            map.put("level", level);
         }
         if (StringUtil.isNotEmpty(postname)) {
             map.put("postname", postname);

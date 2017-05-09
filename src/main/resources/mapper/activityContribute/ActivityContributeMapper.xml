@@ -132,14 +132,17 @@
         SELECT c.*,p.title AS postName,u.nickname,u.level FROM yw_activity_contribute c LEFT JOIN yw_user u ON
         u.id=c.userid
         LEFT JOIN yw_post p ON c.postid=p.id WHERE 1
-        <if test="userid != null">
-            AND c.userid=#{userid=jdbcType=INTEGER}
+        <if test="nickname != null">
+            AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>
         <if test="email != null">
             AND c.email=#{email=jdbcType=VARCHAR}
         </if>
         <if test="type != null">
-            AND c.type=#{type=jdbcType=INTEGER}
+            AND c.status=#{type,jdbcType=INTEGER}
+        </if>
+        <if test="level != null">
+            AND u.level=#{level,jdbcType=INTEGER}
         </if>
         <if test="begintime != null and endtime != null">
             AND c.intime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}
@@ -147,8 +150,11 @@
         <if test="postname != null">
             AND p.title LIKE concat('%',#{postname,jdbcType=VARCHAR},'%')
         </if>
-        <if test="pai != null">
+        <if test="pai == 0">
             ORDER BY c.intime DESC
+        </if>
+        <if test="pai == null">
+            ORDER BY c.intime ASC
         </if>
     </select>
 

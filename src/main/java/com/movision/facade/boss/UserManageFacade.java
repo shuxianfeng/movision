@@ -315,7 +315,8 @@ public class UserManageFacade {
      * @param circleid
      * @return
      */
-    public List<SubmissionVo> queryUniteConditionByContribute(String nickname, String email, String type, String vip, String circleid, String begintime, String endtime, Paging<SubmissionVo> pager) {
+    public List<SubmissionVo> queryUniteConditionByContribute(String nickname, String email, String type, String vip, String circleid,
+                                                              String begintime, String endtime, String pai, Paging<SubmissionVo> pager) {
         Date beg = null;
         Date end = null;
         //对时间做转换 毫秒转 日期类型
@@ -343,6 +344,9 @@ public class UserManageFacade {
         }
         if (StringUtil.isNotEmpty(circleid)) {
             map.put("circleid", circleid);
+        }
+        if (StringUtil.isNotEmpty(pai)) {
+            map.put("pai", pai);
         }
         map.put("begintime", beg);
         map.put("endtime", end);

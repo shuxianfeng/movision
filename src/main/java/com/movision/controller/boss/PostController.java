@@ -1070,11 +1070,12 @@ public class PostController {
                                                     @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
                                                     @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
                                                     @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,
+                                                    @ApiParam(value = "排序方式 0为时间倒叙") @RequestParam(required = false) String pai,
                                                     @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                                     @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<SubmissionVo> pager = new Paging<SubmissionVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<SubmissionVo> list = userManageFacade.queryUniteConditionByContribute(nickname, email, type, vip, circleid, begintime, endtime, pager);
+        List<SubmissionVo> list = userManageFacade.queryUniteConditionByContribute(nickname, email, type, vip, circleid, begintime, endtime, pai, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -1087,7 +1088,7 @@ public class PostController {
     /**
      * 查询活动投稿列表
      *
-     * @param userid
+     * @param nickname
      * @param email
      * @param type
      * @param postname
@@ -1100,10 +1101,11 @@ public class PostController {
      */
     @ApiOperation(value = "查询活动投稿列表", notes = "用于条件查询活动投稿列表", response = Response.class)
     @RequestMapping(value = "query_activity_contribute", method = RequestMethod.POST)
-    public Response queryActivityContribute(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
+    public Response queryActivityContribute(@ApiParam(value = "用户名") @RequestParam(required = false) String nickname,
                                             @ApiParam(value = "邮箱") @RequestParam(required = false) String email,
                                             @ApiParam(value = "审核状态 0 待审核 1 审核通过 2 审核未通过") @RequestParam(required = false) String type,
                                             @ApiParam(value = "帖子标题") @RequestParam(required = false) String postname,
+                                            @ApiParam(value = "是否是VIP") @RequestParam(required = false) String vip,
                                             @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
                                             @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,
                                             @ApiParam(value = "排序方式 0为时间倒叙") @RequestParam(required = false) String pai,
@@ -1111,7 +1113,7 @@ public class PostController {
                                             @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<ActivityContributeVo> pager = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<ActivityContributeVo> resault = postFacade.findAllQueryActivityContribute(userid, email, type, postname, begintime, endtime, pai, pager);
+        List<ActivityContributeVo> resault = postFacade.findAllQueryActivityContribute(nickname, email, type, vip, postname, begintime, endtime, pai, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
