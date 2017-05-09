@@ -797,15 +797,26 @@ public class PostFacade {
                     }
 
                     PostProcessRecord pprd = new PostProcessRecord();
-                    pprd.setIshot(Integer.parseInt(ishot));
-                    pprd.setPostid(post.getId());
-                    pprd.setIsesence(Integer.parseInt(isessence));
-                    postProcessRecordService.insertProcessRecord(pprd);//插入精选、热门记录
-                    if (ishot.equals(1)) {
-                        pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                    if (ishot != null) {
+                        pprd.setIshot(Integer.parseInt(ishot));
                     }
-                    if (isessence.equals(1)) {
-                        pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                    pprd.setPostid(post.getId());
+                    if (isessence != null) {
+                        pprd.setIsesence(Integer.parseInt(isessence));
+                    }
+                    postProcessRecordService.insertProcessRecord(pprd);//插入精选、热门记录
+                    if (StringUtil.isNotEmpty(ishot)) {
+                        if (ishot.equals("1")) {
+                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                        }
+                    }
+                    if (StringUtil.isNotEmpty(isessence)) {
+                        if (isessence.equals("1")) {
+                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                        }
+                    }
+                    if (Integer.parseInt(loginid) != -1) {
+                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
                     }
                 }
                 map.put("resault", 1);
