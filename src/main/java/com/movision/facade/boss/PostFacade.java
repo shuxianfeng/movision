@@ -1087,8 +1087,16 @@ public class PostFacade {
      * @param name
      * @return
      */
-    public List<UserLike> likeQueryPostByNickname(String name) {
-        return userService.likeQueryPostByNickname(name);
+    public List<UserLike> likeQueryPostByNickname(String name, String loginid) {
+        Map map = new HashMap();
+        map.put("name", name);
+        Map resault = commonalityFacade.verifyUserByQueryMethod(Integer.parseInt(loginid), null, JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), null);
+        if (resault.get("resault").equals(2)) {
+            return userService.likeQueryPostByNickname(map);
+        } else {
+            map.put("loginid", loginid);
+            return userService.likeQueryPostByNickname(map);
+        }
     }
 
 

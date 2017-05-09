@@ -71,7 +71,7 @@ public interface UserMapper {
     String queryUserByNicknameBy(Integer postid);
     User queryUser(String phone);
 
-    List<UserLike> findAlllikeQueryPostByNickname(String name);
+    List<UserLike> findAlllikeQueryPostByNickname(Map name);
 
     int queryUserPoint(int userid);
 

@@ -617,9 +617,10 @@ public class PostController {
      */
     @ApiOperation(value = "模糊查询发帖人", notes = "用于模糊查询发帖人接口", response = Response.class)
     @RequestMapping(value = "/like_query_post_nickname", method = RequestMethod.POST)
-    public Response likeQueryPostByNickname(@ApiParam(value = "关键字") @RequestParam String name) {
+    public Response likeQueryPostByNickname(@ApiParam(value = "关键字") @RequestParam(required = false) String name,
+                                            @ApiParam(value = "登录用户id") @RequestParam String loginid) {
         Response response = new Response();
-        List<UserLike> list = postFacade.likeQueryPostByNickname(name);
+        List<UserLike> list = postFacade.likeQueryPostByNickname(name, loginid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
