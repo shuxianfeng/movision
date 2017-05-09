@@ -66,7 +66,8 @@ public class VideoTranscoder {
         boolean status = false;
 
         String fName = FileUtil.getPicName(PATH);//获取视频文件名
-        String name = fName.substring(0, fileName.indexOf("."));//去除文件名后缀
+        String name = fName.substring(0, fileName.indexOf("."));//去除文件名后缀的裸文件名
+        String newname = getuuid();
 
         String format = PATH.substring(PATH.lastIndexOf(".") + 1, PATH.length())
                 .toLowerCase();//获取上传的视频格式
@@ -84,11 +85,11 @@ public class VideoTranscoder {
 
         if (type == 0) {
             log.info("直接将文件转为mp4文件");
-            status = processMP4(PATH, ffmpeginstalldir, tempvideodir, name, String.valueOf(width), String.valueOf(height));// 直接将文件转为mp4文件
+            status = processMP4(PATH, ffmpeginstalldir, tempvideodir, newname, String.valueOf(width), String.valueOf(height));// 直接将文件转为mp4文件
         } else if (type == 1) {
             String avifilepath = processAVI(PATH, ffmpeginstalldir, tempvideodir, name);
             if (avifilepath == null)
-                status = processMP4(avifilepath, ffmpeginstalldir, tempvideodir, name, String.valueOf(width), String.valueOf(height));// 将视频文件转为mp4
+                status = processMP4(avifilepath, ffmpeginstalldir, tempvideodir, newname, String.valueOf(width), String.valueOf(height));// 将视频文件转为mp4
         }
 
         //再上传转换后的视频文件到静态资源服务器中---------------------->>>C.(静态资源服务器上传方法----待使用)
@@ -239,7 +240,7 @@ public class VideoTranscoder {
     }
 
     // ffmpeg能解析的格式：（asx，asf，mpg，wmv，3gp，mp4，mov，avi，flv等）
-    private static boolean processMP4(String oldfilepath, String ffmpeginstalldir, String tempvideodir, String name, String width, String height) {
+    private static boolean processMP4(String oldfilepath, String ffmpeginstalldir, String tempvideodir, String newname, String width, String height) {
 
         //服务器上水印图片的存放路径
         String watermarkimg = PropertiesLoader.getValue("video.watermark.domain");
@@ -250,7 +251,7 @@ public class VideoTranscoder {
         }
 
         // 文件命名(转码后的视频文件路径和名称)
-        String savepathname = oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + name + ".mp4";
+        String savepathname = oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + newname + ".mp4";
 //        List<String> commend = new ArrayList<>();
 //        commend.add(ffmpeginstalldir);
 //        commend.add(" -i ");
@@ -297,7 +298,7 @@ public class VideoTranscoder {
             String cut = ffmpeginstalldir + " -i "
                     + oldfilepath
                     + "   -y   -f   image2   -ss   8   -t   0.001   -s   750x440 " + tempvideodir
-                    + name + ".jpg";
+                    + newname + ".jpg";
             String cutCmd = cmd + cut;
             proce = runtime.exec(cutCmd);
             proce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
@@ -310,14 +311,20 @@ public class VideoTranscoder {
             Process videoproce = runtime.exec(sb.toString());
             videoproce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
 
+            //转码成功后删除原文件，修改新文件为原文件名
+            File tempfile = new File(oldfilepath);
+            tempfile.delete();
+            File newfile = new File(savepathname);
+            newfile.renameTo(tempfile);
+
             //调用线程进行视频水印打印------->3
-            String tempfilename = UUID.randomUUID().toString().replace("-", "");//生成32位uuid作为临时文件名
+            String tempfilename = getuuid();//生成32位uuid作为临时文件名
             String watermarkpathname = oldfilepath.substring(0, oldfilepath.lastIndexOf("/")+1) + tempfilename + ".mp4";//加水印后的视频文件路径和名称
 
             StringBuffer str = new StringBuffer();
             str.append(ffmpeginstalldir);
             str.append(" -i ");
-            str.append(savepathname);
+            str.append(tempfile);
             str.append(" -i ");
             str.append(watermarkimg);
 //            str.append(" -vcodec ");//打水印命令不支持这种编码方式
@@ -335,10 +342,10 @@ public class VideoTranscoder {
 //            watermarkproce.waitFor();
 //
 //            //添加水印成功后，删除加水印前的视频文件，将新文件改为原文件名
-//            File tempfile = new File(savepathname);
-//            tempfile.delete();
+//            File temptempfile = new File(tempfile);
+//            temptempfile.delete();
 //            File watermarkfile = new File(watermarkpathname);
-//            watermarkfile.renameTo(tempfile);//改为原文件名
+//            watermarkfile.renameTo(temptempfile);//改为原文件名
 
             //另外还要解决runtime的死锁问题--------------------------------------------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>Remark
 
@@ -412,5 +419,9 @@ public class VideoTranscoder {
             return false;
         }
         return true;
+    }
+
+    private static String getuuid(){
+        return UUID.randomUUID().toString().replace("-", "");
     }
 }
