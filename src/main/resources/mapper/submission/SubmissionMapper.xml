@@ -171,6 +171,9 @@
         <if test="email!=null">
             AND s.email LIKE concat('%',#{email,jdbcType=VARCHAR},'%')
         </if>
+        <if test="title != null">
+            AND s.title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
+        </if>
         <if test="type!=null">
             AND s.status=#{type,jdbcType=INTEGER}
         </if>

@@ -315,7 +315,7 @@ public class UserManageFacade {
      * @param circleid
      * @return
      */
-    public List<SubmissionVo> queryUniteConditionByContribute(String nickname, String email, String type, String vip, String circleid,
+    public List<SubmissionVo> queryUniteConditionByContribute(String nickname, String email, String type, String vip, String circleid, String title,
                                                               String begintime, String endtime, String pai, Paging<SubmissionVo> pager) {
         Date beg = null;
         Date end = null;
@@ -347,6 +347,9 @@ public class UserManageFacade {
         }
         if (StringUtil.isNotEmpty(pai)) {
             map.put("pai", pai);
+        }
+        if (StringUtil.isNotEmpty(title)) {
+            map.put("title", title);
         }
         map.put("begintime", beg);
         map.put("endtime", end);
