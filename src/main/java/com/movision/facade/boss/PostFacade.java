@@ -2013,7 +2013,7 @@ public class PostFacade {
      * @return
      */
     public List<ActivityContributeVo> findAllQueryActivityContribute(String userid, String email, String type, String postname, String begintime, String endtime, String pai, Paging<ActivityContributeVo> pager) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Map map = new HashMap();
         Date beg = null;
         Date end = null;
