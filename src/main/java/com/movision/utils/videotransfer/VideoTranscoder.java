@@ -311,9 +311,11 @@ public class VideoTranscoder {
             Process videoproce = runtime.exec(sb.toString());
             videoproce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
 
-            //转码成功后删除原文件，修改新文件为原文件名
+            //转码成功后删除原文件和视频截图，修改新文件为原文件名
             File tempfile = new File(oldfilepath);
-            tempfile.delete();
+            File imgfile = new File(tempvideodir + newname + ".jpg");
+            tempfile.delete();//删除原视频
+            imgfile.delete();//删除视频截图
             File newfile = new File(savepathname);
             newfile.renameTo(tempfile);
 
