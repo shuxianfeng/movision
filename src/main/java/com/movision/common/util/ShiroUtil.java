@@ -150,9 +150,11 @@ public class ShiroUtil {
         Session session = currentUser.getSession(false);
         if (session != null) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
-            //此处可以扩张需要的字段
-            principal.setPoints(point);
-            session.setAttribute(SessionConstant.APP_USER, principal);
+            if (null != principal) {
+                //此处可以扩张需要的字段
+                principal.setPoints(point);
+                session.setAttribute(SessionConstant.APP_USER, principal);
+            }
         }
     }
 
@@ -166,9 +168,12 @@ public class ShiroUtil {
         Session session = currentUser.getSession(false);
         if (session != null) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
-            //此处可以扩张需要的字段
-            principal.setPhone(phone);
-            session.setAttribute(SessionConstant.APP_USER, principal);
+            if (null != principal) {
+                //此处可以扩张需要的字段
+                principal.setPhone(phone);
+                session.setAttribute(SessionConstant.APP_USER, principal);
+            }
+
         }
     }
 
@@ -183,11 +188,13 @@ public class ShiroUtil {
         Session session = currentUser.getSession(false);
         if (session != null) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
-            //此处可以扩张需要的字段
-            principal.setPhone(phone);
-            principal.setPoints(point);
-            principal.setAccount(phone);
-            session.setAttribute(SessionConstant.APP_USER, principal);
+            if (null != principal) {
+                //此处可以扩张需要的字段
+                principal.setPhone(phone);
+                principal.setPoints(point);
+                principal.setAccount(phone);
+                session.setAttribute(SessionConstant.APP_USER, principal);
+            }
         }
     }
 
@@ -201,22 +208,23 @@ public class ShiroUtil {
         Session session = currentUser.getSession(false);
         if (session != null) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
+            if (null != principal) {
+                principal.setStatus(user.getStatus());
+                principal.setPhoto(user.getPhoto());
+                principal.setNickname(user.getNickname());
+                principal.setLevel(user.getLevel());
+                principal.setPhone(user.getPhone());
+                principal.setToken(user.getToken());
+                principal.setPoints(user.getPoints());
+                principal.setSex(user.getSex());
+                principal.setSign(user.getSign());
+                principal.setBirthday(DateUtils.date2Str(user.getBirthday()));
+                principal.setQq(user.getQq());
+                principal.setSina(user.getSina());
+                principal.setOpenid(user.getOpenid());
 
-            principal.setStatus(user.getStatus());
-            principal.setPhoto(user.getPhoto());
-            principal.setNickname(user.getNickname());
-            principal.setLevel(user.getLevel());
-            principal.setPhone(user.getPhone());
-            principal.setToken(user.getToken());
-            principal.setPoints(user.getPoints());
-            principal.setSex(user.getSex());
-            principal.setSign(user.getSign());
-            principal.setBirthday(DateUtils.date2Str(user.getBirthday()));
-            principal.setQq(user.getQq());
-            principal.setSina(user.getSina());
-            principal.setOpenid(user.getOpenid());
-
-            session.setAttribute(SessionConstant.APP_USER, principal);
+                session.setAttribute(SessionConstant.APP_USER, principal);
+            }
         }
     }
 
@@ -234,16 +242,18 @@ public class ShiroUtil {
         Session session = currentUser.getSession(false);
         if (session != null) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
-            //此处可以扩张需要的字段
-            if (flag == 1) {
-                principal.setQq(account); //qq
-            } else if (flag == 2) {
-                principal.setOpenid(account); //微信
-            } else {
-                principal.setSina(account);   //微博
-            }
+            if (null != principal) {
+                //此处可以扩张需要的字段
+                if (flag == 1) {
+                    principal.setQq(account); //qq
+                } else if (flag == 2) {
+                    principal.setOpenid(account); //微信
+                } else {
+                    principal.setSina(account);   //微博
+                }
 
-            session.setAttribute(SessionConstant.APP_USER, principal);
+                session.setAttribute(SessionConstant.APP_USER, principal);
+            }
         }
     }
 
