@@ -188,6 +188,12 @@
         <if test="begintime!=null and endtime!=null">
             AND s.intime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}
         </if>
+        <if test="pai == 0">
+            ORDER BY s.intime DESC
+        </if>
+        <if test="pai ==null">
+            ORDER BY s.intime ASC
+        </if>
     </select>
 
     <select id="queryContributeBounce" resultType="com.movision.mybatis.submission.entity.Submission"
