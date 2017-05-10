@@ -60,6 +60,12 @@ public class FacadeIndex {
         return map;
     }
 
+    /**
+     * 添加活动剩余天数和投稿总数
+     *
+     * @param postVoList
+     * @return
+     */
     public List<PostVo> processEnddaysPartsum(List<PostVo> postVoList) {
         if (postVoList.size() > 0) {
             for (int i = 0; i < postVoList.size(); i++) {
