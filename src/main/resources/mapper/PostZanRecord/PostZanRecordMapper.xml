@@ -105,9 +105,9 @@
 
     <update id="updateZanReadByComment" parameterType="java.lang.Integer">
         UPDATE yw_post_comment_zan_record SET isread=1 WHERE commentid in (SELECT id FROM yw_post_comment WHERE
-        userid=userid=#{userid,jdbcType=INTEGER})
+        userid=#{userid,jdbcType=INTEGER})
         OR commentid in (SELECT id FROM yw_post_comment WHERE postid in (SELECT id FROM yw_post WHERE userid=
-        userid=userid=#{userid,jdbcType=INTEGER}))
+        userid=#{userid,jdbcType=INTEGER}))
     </update>
 
     <update id="updateZanReadByPost" parameterType="java.lang.Integer">
