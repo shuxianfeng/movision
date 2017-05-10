@@ -138,7 +138,7 @@ public class FacadePost {
             postAndUserRecord.setCrileid(circleid);
             postAndUserRecord.setPostid(Integer.parseInt(postid));
             postAndUserRecord.setUserid(Integer.parseInt(userid));
-            postAndUserRecord.setIntime(new Date().toLocaleString());
+            postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
             postAndUserRecordService.insert(postAndUserRecord);
         }
         return vo;
@@ -188,7 +188,7 @@ public class FacadePost {
             postAndUserRecord.setUserid(Integer.parseInt(userid));
             postAndUserRecord.setPostid(Integer.parseInt(postid));
             postAndUserRecord.setCrileid(null);
-            postAndUserRecord.setIntime(new Date().toLocaleString());
+            postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
             postAndUserRecordService.insert(postAndUserRecord);
         }
         return active;

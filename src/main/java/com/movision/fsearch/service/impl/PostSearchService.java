@@ -11,16 +11,12 @@ package com.movision.fsearch.service.impl;
         import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTerms;
         import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
         import com.movision.mybatis.post.entity.PostSearchEntity;
-        import com.movision.mybatis.post.service.PostService;
         import com.movision.mybatis.searchPostRecord.service.SearchPostRecordService;
         import com.movision.utils.DateUtils;
         import org.apache.commons.collections.map.HashedMap;
-        import org.slf4j.Logger;
-        import org.slf4j.LoggerFactory;
         import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.stereotype.Service;
 
-        import java.text.SimpleDateFormat;
         import java.util.*;
 
 /**
@@ -29,9 +25,6 @@ package com.movision.fsearch.service.impl;
  */
 @Service
 public class PostSearchService implements IPostSearchService {
-
-    private static Logger log = LoggerFactory.getLogger(PostSearchService.class);
-
     @Autowired
     private IWordService wordService;
 
@@ -41,9 +34,6 @@ public class PostSearchService implements IPostSearchService {
     @Autowired
     private OpularSearchTermsService opularSearchTermsService;
 
-    @Autowired
-    private PostService postService;
-
     @Override
     public Map<String, Object> search(PostSearchSpec spec)
             throws ServiceException {
@@ -52,7 +42,16 @@ public class PostSearchService implements IPostSearchService {
         result.put("spec", spec);
 
         //如果搜索的关键词不为空，则入库保存
-        saveKeywordsInMongoDB(spec);
+        if (StringUtil.isNotBlank(spec.getQ())) {
+            OpularSearchTerms opularSearchTerms = new OpularSearchTerms();
+            opularSearchTerms.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
+            opularSearchTerms.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+            opularSearchTerms.setIsdel(0);
+            opularSearchTerms.setKeywords(spec.getQ());
+            opularSearchTerms.setUserid(ShiroUtil.getAppUserID());
+            opularSearchTermsService.insert(opularSearchTerms);
+            // searchPostRecordService.add(spec.getQ());
+        }
 
         // 向query中添加新的键值对：key=_s
         spec.setQ(StringUtil.emptyToNull(spec.getQ()));
@@ -92,7 +91,46 @@ public class PostSearchService implements IPostSearchService {
             ps = Pagination.getEmptyInstance();
         } else {
 
-            List<PostSearchEntity> products = makeProducts(list);
+            List<PostSearchEntity> products = new ArrayList<PostSearchEntity>(list.size());
+            for (Object item : list) {
+                Map<?, ?> itemAsMap = (Map<?, ?>) item;
+
+                PostSearchEntity product = new PostSearchEntity();
+                {
+                    //此处处理应该展示的字段
+                    product.setId(FormatUtil.parseInteger(itemAsMap.get("id")));
+                    product.setTitle(FormatUtil.parseString(itemAsMap.get("title")));
+                    product.setSubtitle(FormatUtil.parseString(itemAsMap.get("subtitle")));
+
+                    product.setIntime(DateUtils.str2Date(String.valueOf(itemAsMap.get("intime1")), "yyyyMMddHHmmss"));
+
+                    if (null == itemAsMap.get("begintime1")) {
+                        product.setBegintime(null);
+                    } else {
+                        product.setBegintime(DateUtils.str2Date(String.valueOf(itemAsMap.get("begintime1")), "yyyyMMddHHmmss"));
+                    }
+
+                    if (null == itemAsMap.get("endtime1")) {
+                        product.setBegintime(null);
+                    } else {
+                        product.setEndtime(DateUtils.str2Date(String.valueOf(itemAsMap.get("endtime1")), "yyyyMMddHHmmss"));
+                    }
+
+                    product.setPostcontent(FormatUtil.parseString(itemAsMap.get("postcontent")));
+                    product.setIsactive(FormatUtil.parseInteger(itemAsMap.get("isactive")));
+                    product.setType(FormatUtil.parseInteger(itemAsMap.get("type")));
+                    product.setActivetype(FormatUtil.parseInteger(itemAsMap.get("activetype")));
+
+                    product.setCircleid(FormatUtil.parseInteger(itemAsMap.get("circleid")));
+                    product.setCirclename(FormatUtil.parseString(itemAsMap.get("circlename")));
+
+                    product.setActivefee(FormatUtil.parseDouble(itemAsMap.get("activefee")));
+                    product.setImgurl(FormatUtil.parseString(itemAsMap.get("imgurl")));
+                    product.setCoverimg(FormatUtil.parseString(itemAsMap.get("coverimg")));
+
+                }
+                products.add(product);
+            }
             @SuppressWarnings("unchecked")
             List<ProductGroup> productGroups = (List<ProductGroup>) psAsMap.get("groups");
 
@@ -104,122 +142,6 @@ public class PostSearchService implements IPostSearchService {
         }
         result.put("ps", ps);
         return result;
-    }
-
-    /**
-     * 把搜索的关键词存入mongoDB
-     *
-     * @param spec
-     */
-    private void saveKeywordsInMongoDB(PostSearchSpec spec) {
-        if (StringUtil.isNotBlank(spec.getQ())) {
-            OpularSearchTerms opularSearchTerms = new OpularSearchTerms();
-            opularSearchTerms.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
-            opularSearchTerms.setIntime(new Date().toLocaleString());
-            opularSearchTerms.setIsdel(0);
-            opularSearchTerms.setKeywords(spec.getQ());
-            opularSearchTerms.setUserid(ShiroUtil.getAppUserID());
-            opularSearchTermsService.insert(opularSearchTerms);
-            // searchPostRecordService.add(spec.getQ());
-        }
-    }
-
-    /**
-     * 根据所搜结果，生成PostSearchEntity集合（分页的第一个参数）
-     *
-     * @param list
-     * @return
-     */
-    private List<PostSearchEntity> makeProducts(List<?> list) {
-        List<PostSearchEntity> products = new ArrayList<PostSearchEntity>(list.size());
-        for (Object item : list) {
-            Map<?, ?> itemAsMap = (Map<?, ?>) item;
-            PostSearchEntity product = new PostSearchEntity();
-            {
-                //获取帖子/活动的id
-                Integer id = FormatUtil.parseInteger(itemAsMap.get("id"));
-                setProductParam(itemAsMap, product, id);
-                //获取开始和结束日期
-                Date begin = getBeginDate(itemAsMap, product);
-                Date end = getEndDate(itemAsMap, product);
-                //获取是否是活动标识
-                Integer isactive = FormatUtil.parseInteger(itemAsMap.get("isactive"));
-                product.setIsactive(isactive);
-                //计算活动结束日期
-                calcActivityEnddays(product, begin, end, isactive);
-                //计算已投稿总数
-                int partsum = postService.queryActivePartSum(id);
-                product.setPartsum(partsum);
-            }
-            products.add(product);
-        }
-        return products;
-    }
-
-    private Date getEndDate(Map<?, ?> itemAsMap, PostSearchEntity product) {
-        Date end = null;
-        if (null == itemAsMap.get("endtime1")) {
-            product.setBegintime(null);
-        } else {
-            end = DateUtils.str2Date(String.valueOf(itemAsMap.get("endtime1")), "yyyyMMddHHmmss");
-            product.setEndtime(end);
-        }
-        return end;
-    }
-
-    private Date getBeginDate(Map<?, ?> itemAsMap, PostSearchEntity product) {
-        Date begin = null;
-        if (null == itemAsMap.get("begintime1")) {
-            product.setBegintime(null);
-        } else {
-            begin = DateUtils.str2Date(String.valueOf(itemAsMap.get("begintime1")), "yyyyMMddHHmmss");
-            product.setBegintime(begin);
-        }
-        return begin;
-    }
-
-    private void setProductParam(Map<?, ?> itemAsMap, PostSearchEntity product, Integer id) {
-        product.setId(id);
-        product.setTitle(FormatUtil.parseString(itemAsMap.get("title")));
-        product.setSubtitle(FormatUtil.parseString(itemAsMap.get("subtitle")));
-        product.setIntime(DateUtils.str2Date(String.valueOf(itemAsMap.get("intime1")), "yyyyMMddHHmmss"));
-        product.setPostcontent(FormatUtil.parseString(itemAsMap.get("postcontent")));
-        product.setType(FormatUtil.parseInteger(itemAsMap.get("type")));
-        product.setActivetype(FormatUtil.parseInteger(itemAsMap.get("activetype")));
-        product.setCircleid(FormatUtil.parseInteger(itemAsMap.get("circleid")));
-        product.setCirclename(FormatUtil.parseString(itemAsMap.get("circlename")));
-        product.setActivefee(FormatUtil.parseDouble(itemAsMap.get("activefee")));
-        product.setImgurl(FormatUtil.parseString(itemAsMap.get("imgurl")));
-        product.setCoverimg(FormatUtil.parseString(itemAsMap.get("coverimg")));
-    }
-
-    /**
-     * 计算活动结束日期
-     *
-     * @param product
-     * @param begin
-     * @param end
-     * @param isactive
-     */
-    private void calcActivityEnddays(PostSearchEntity product, Date begin, Date end, Integer isactive) {
-        if (isactive == 1) {
-            //根据活动开始时间和结束时间，计算活动距离结束的剩余天数
-            Date now = new Date();//活动当前时间
-            if (now.before(begin)) {
-                product.setEnddays(-1);//活动还未开始
-            } else if (end.before(now)) {
-                product.setEnddays(0);//活动已结束
-            } else if (begin.before(now) && now.before(end)) {
-                try {
-                    log.error("计算活动剩余结束天数");
-                    Long between_days = DateUtils.getBetweenDays(now, end);
-                    product.setEnddays(Integer.parseInt(String.valueOf(between_days)));
-                } catch (Exception e) {
-                    log.error("计算活动剩余结束天数失败");
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     /**
