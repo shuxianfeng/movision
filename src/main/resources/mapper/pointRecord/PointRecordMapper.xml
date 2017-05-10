@@ -185,4 +185,8 @@
         AND type = 2
     </select>
 
+    <select id="queryCircleOrIndex" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_points_record WHERE userid=#{code,jdbcType=INTEGER} AND type = #{code,jdbcType=INTEGER} AND date(intime) = curdate()
+    </select>
+
 </mapper>

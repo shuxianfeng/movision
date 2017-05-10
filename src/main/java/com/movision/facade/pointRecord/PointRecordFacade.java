@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -132,14 +133,26 @@ public class PointRecordFacade {
     public void addPointForCircleAndIndexSelected(int type, int userid) {
 
         if (userid != -1) {
+            Map map = new HashMap();
+            map.put("userid", userid);
             //走正常积分操作
             if (PointConstant.POINT_TYPE.circle_selected.getCode() == type) {
-                //圈子精选
-                doSelectedPointProcess(type, userid, PointConstant.POINT.circle_selected.getCode());
+                //查询当天是否设为圈子精选
+                map.put("code", PointConstant.POINT.circle_selected.getCode());
+                Integer integer = pointRecordService.queryCircleOrIndex(map);
+                if (integer == 0) {
+                    //圈子精选
+                    doSelectedPointProcess(type, userid, PointConstant.POINT.circle_selected.getCode());
+                }
 
             } else {
-                //首页精选
-                doSelectedPointProcess(type, userid, PointConstant.POINT.index_selected.getCode());
+                //查询当天是否设为首页精选
+                map.put("code", PointConstant.POINT.index_selected.getCode());
+                Integer integer = pointRecordService.queryCircleOrIndex(map);
+                if (integer == 0) {
+                    //首页精选
+                    doSelectedPointProcess(type, userid, PointConstant.POINT.index_selected.getCode());
+                }
             }
         }
     }

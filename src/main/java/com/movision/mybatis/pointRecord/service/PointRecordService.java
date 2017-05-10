@@ -107,4 +107,20 @@ public class PointRecordService {
     }
 
 
+    /**
+     * 查询当天用户帖子是否设为本圈精华或者首页精选
+     *
+     * @param map
+     * @return
+     */
+    public Integer queryCircleOrIndex(Map map) {
+        try {
+            log.info("查询当天用户帖子是否设为本圈精华或者首页精选");
+            return pointRecordMapper.queryCircleOrIndex(map);
+        } catch (Exception e) {
+            log.error("查询当天用户帖子是否设为本圈精华或者首页精选异常");
+            throw e;
+        }
+    }
+
 }

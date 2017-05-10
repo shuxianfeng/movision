@@ -33,4 +33,6 @@ public interface PointRecordMapper {
     void inserRecord(Map<String, Object> parammap);
 
     PointRecord selectFinishPersonDataPointRecord(@Param("userid") Integer id);
+
+    Integer queryCircleOrIndex(Map map);
 }
