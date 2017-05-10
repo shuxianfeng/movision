@@ -998,8 +998,12 @@ public class PostFacade {
                 //查询帖子是否被设为加精活精选
                 PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(postid));
                 if (postProcessRecord != null) {//已经加精过活精选
-                    //修改
-                    postProcessRecordService.updateProcessRecord(postProcessRecord);
+                    if (postProcessRecord.getIsesence() == 1) {//判断是否首页精选
+                        //修改
+                        postProcessRecordService.updateProcessRecord(postProcessRecord);
+                    } else {
+                        pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), userid);//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                    }
                 } else {
                     //积分操作
                     if (userid != null) {
