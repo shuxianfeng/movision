@@ -50,10 +50,10 @@ public class FacadeIndex {
         }
 
         map.put("homepageMainBanner", homepageMainBanner);
-        map.put("todayEssenceList", processEnddaysPartsum(todayEssenceList));
-        map.put("yesterdayEssenceList", processEnddaysPartsum(yesterdayEssenceList));
-        map.put("beforeYesterdayEssenceList", processEnddaysPartsum(beforeYesterdayEssenceList));
-        map.put("threeDayEssenceList", processEnddaysPartsum(threeDayEssenceList));
+        map.put("todayEssenceList", processEnddaysPartsum(todayEssenceList));//经过processEnddaysPartsum方法处理
+        map.put("yesterdayEssenceList", processEnddaysPartsum(yesterdayEssenceList));//经过processEnddaysPartsum方法处理
+        map.put("beforeYesterdayEssenceList", processEnddaysPartsum(beforeYesterdayEssenceList));//经过processEnddaysPartsum方法处理
+        map.put("threeDayEssenceList", processEnddaysPartsum(threeDayEssenceList));//经过processEnddaysPartsum方法处理
         map.put("homepageManage", homepageManage);
         map.put("mayLikeCircleList", mayLikeCircleList);
 

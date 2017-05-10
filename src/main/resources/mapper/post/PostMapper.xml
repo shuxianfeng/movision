@@ -158,10 +158,13 @@
     <select id="queryPastPostList" parameterType="java.util.Map"
             resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT t.* FROM (
-        SELECT t1.*,t2.category AS category,t2.code AS code,t2.status
+        SELECT t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isessencepool,t1.isdel,t1.essencedate,
+        t1.activetype, t1.activefee, t1.iscontribute,t2.category AS category,t2.code AS code,t2.status,t3.begintime,t3.endtime
         FROM yw_post t1
         LEFT JOIN (SELECT * FROM yw_circle WHERE status = '1') t2
         ON t1.circleid = t2.id
+        LEFT JOIN yw_active_period t3 ON
+        t1.id = t3.postid
         ) t
         WHERE t.essencedate <![CDATA[ = ]]> DATE_ADD(#{date},INTERVAL-#{days} DAY)
         AND t.isdel = '0'

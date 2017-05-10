@@ -89,6 +89,9 @@ public class FacadePost {
     @Autowired
     private PostAndUserRecordService postAndUserRecordService;
 
+    @Autowired
+    private FacadeIndex facadeIndex;
+
     public PostVo queryPostDetail(String postid, String userid, String type) {
 
         //通过userid、postid查询该用户有没有关注该圈子的权限
@@ -217,9 +220,9 @@ public class FacadePost {
         parammap.put("days", 2);
         List<PostVo> twodayagoList = postService.queryPastPostList(parammap);//选择的日期前两天
 
-        map.put("currentList", currentList);
-        map.put("dayagoList", dayagoList);
-        map.put("twodayagoList", twodayagoList);
+        map.put("currentList", facadeIndex.processEnddaysPartsum(currentList));//经过processEnddaysPartsum方法处理
+        map.put("dayagoList", facadeIndex.processEnddaysPartsum(dayagoList));//经过processEnddaysPartsum方法处理
+        map.put("twodayagoList", facadeIndex.processEnddaysPartsum(twodayagoList));//经过processEnddaysPartsum方法处理
         return map;
     }
 
