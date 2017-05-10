@@ -5,6 +5,7 @@ import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,36 +64,10 @@ public class FacadeIndex {
         if (postVoList.size() > 0) {
             for (int i = 0; i < postVoList.size(); i++) {
                 PostVo vo = postVoList.get(i);
+                //如果是活动的话，计算距结束天数和已参与人数
                 if (vo.getIsactive() == 1) {
-                    //如果是活动的话，计算距结束天数和已参与人数
-
                     //遍历所有的活动开始时间和结束时间，计算活动距离结束的剩余天数
-                    Date begin = vo.getBegintime();//活动开始时间
-                    Date end = vo.getEndtime();//活动结束时间
-                    Date now = new Date();//活动当前时间
-                    if (now.before(begin)) {
-                        vo.setEnddays(-1);//活动还未开始
-                    } else if (end.before(now)) {
-                        vo.setEnddays(0);//活动已结束
-                    } else if (begin.before(now) && now.before(end)) {
-                        try {
-                            log.error("计算活动剩余结束天数");
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                            Date a = sdf.parse(sdf.format(now));
-                            Date b = sdf.parse(sdf.format(end));
-                            Calendar cal = Calendar.getInstance();
-                            cal.setTime(a);
-                            long time1 = cal.getTimeInMillis();
-                            cal.setTime(b);
-                            long time2 = cal.getTimeInMillis();
-                            long between_days = (time2 - time1) / (1000 * 3600 * 24);
-                            postVoList.get(i).setEnddays(Integer.parseInt(String.valueOf(between_days)));
-                        } catch (Exception e) {
-                            log.error("计算活动剩余结束天数失败");
-                            e.printStackTrace();
-                        }
-                    }
-
+                    calculateEnddays(postVoList, i, vo);
                     //计算已投稿总数
                     int postid = vo.getId();//获取活动id
                     int partsum = postService.queryActivePartSum(postid);
@@ -102,6 +77,33 @@ public class FacadeIndex {
             return postVoList;
         } else {
             return postVoList;
+        }
+    }
+
+    /**
+     * 计算活动距离结束的剩余天数
+     *
+     * @param postVoList
+     * @param i
+     * @param vo
+     */
+    private void calculateEnddays(List<PostVo> postVoList, int i, PostVo vo) {
+        Date begin = vo.getBegintime();//活动开始时间
+        Date end = vo.getEndtime();//活动结束时间
+        Date now = new Date();//活动当前时间
+        if (now.before(begin)) {
+            vo.setEnddays(-1);//活动还未开始
+        } else if (end.before(now)) {
+            vo.setEnddays(0);//活动已结束
+        } else if (begin.before(now) && now.before(end)) {
+            try {
+                log.error("计算活动剩余结束天数");
+                Long between_days = DateUtils.getBetweenDays(now, end);
+                postVoList.get(i).setEnddays(Integer.parseInt(String.valueOf(between_days)));
+            } catch (Exception e) {
+                log.error("计算活动剩余结束天数失败");
+                e.printStackTrace();
+            }
         }
     }
 

@@ -38,6 +38,27 @@ public class PostSearchEntity implements Serializable {
 
     private String coverimg;
 
+    private Integer enddays;//距离活动结束剩余天数（查询活动时该字段不为空）
+
+    private Integer partsum;//已参与活动总人数
+
+    public void setEnddays(Integer enddays) {
+        this.enddays = enddays;
+    }
+
+    public void setPartsum(Integer partsum) {
+        this.partsum = partsum;
+    }
+
+    public Integer getEnddays() {
+
+        return enddays;
+    }
+
+    public Integer getPartsum() {
+        return partsum;
+    }
+
     @Override
     public String toString() {
         return "PostSearchEntity{" +
@@ -56,6 +77,8 @@ public class PostSearchEntity implements Serializable {
                 ", imgurl='" + imgurl + '\'' +
                 ", activetype=" + activetype +
                 ", coverimg='" + coverimg + '\'' +
+                ", enddays=" + enddays +
+                ", partsum=" + partsum +
                 '}';
     }
 

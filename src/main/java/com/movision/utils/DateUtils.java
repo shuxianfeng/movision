@@ -201,6 +201,34 @@ public class DateUtils {
         return enddays;
     }
 
+    /**
+     * 获取当前距离结束日期的剩余天数
+     *
+     * @param now
+     * @param end
+     * @return
+     */
+    public static Long getBetweenDays(Date now, Date end) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date a = null;
+        Date b = null;
+        try {
+            a = sdf.parse(sdf.format(now));
+            b = sdf.parse(sdf.format(end));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(a);
+        long time1 = cal.getTimeInMillis();
+        cal.setTime(b);
+        long time2 = cal.getTimeInMillis();
+        long between_days = (time2 - time1) / (1000 * 3600 * 24);
+
+        return between_days;
+    }
+
+
     public static void main(String[] args) throws ParseException {
 //        Date date = DateUtils.date2Sub(DateUtils.str2Date("2016-03-02 20:16:21", "yyyy-MM-dd HH:mm:ss"), 12, 10);
 //        System.out.println(date);
