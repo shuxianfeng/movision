@@ -971,7 +971,7 @@
             <if test="orderid != null">
                 orderid=#{orderid,jdbcType=INTEGER},
             </if>
-            <if test="orderid !== null">
+            <if test="orderid == null">
                 orderid=NULL ,
             </if>
             <if test="isessence != null">
