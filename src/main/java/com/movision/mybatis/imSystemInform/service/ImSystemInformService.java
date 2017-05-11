@@ -122,10 +122,10 @@ public class ImSystemInformService {
      *
      * @return
      */
-    public ImSystemInformVo queryByUserid() {
+    public ImSystemInformVo queryByUserid(Map map) {
         try {
             log.info("查询最新一条记录");
-            return imSystemInformMapper.queryByUserid();
+            return imSystemInformMapper.queryByUserid(map);
         } catch (Exception e) {
             log.error("查询最新一条记录失败", e);
             throw e;

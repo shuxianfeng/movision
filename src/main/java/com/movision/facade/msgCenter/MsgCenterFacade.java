@@ -99,7 +99,10 @@ public class MsgCenterFacade {
             }
         }
         //4 系统通知
-        ImSystemInformVo imSystemInform = imSystemInformService.queryByUserid();//查询最新一条
+        Map map = new HashMap();
+        map.put("userid", userid);
+        map.put("informTime", ShiroUtil.getAppUser().getRegisterTime());
+        ImSystemInformVo imSystemInform = imSystemInformService.queryByUserid(map);//查询最新一条
         //查询是否有未读系统通知
         Integer system = imSystemInformService.querySystemPushByUserid(userid);
         if (imSystemInform != null) {
