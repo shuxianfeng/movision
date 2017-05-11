@@ -20,7 +20,6 @@ package com.movision.fsearch.service.impl;
         import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.stereotype.Service;
 
-        import java.text.SimpleDateFormat;
         import java.util.*;
 
 /**
@@ -145,11 +144,8 @@ public class PostSearchService implements IPostSearchService {
                 //获取是否是活动标识
                 Integer isactive = FormatUtil.parseInteger(itemAsMap.get("isactive"));
                 product.setIsactive(isactive);
-                //计算活动结束日期
-                calcActivityEnddays(product, begin, end, isactive);
-                //计算已投稿总数
-                int partsum = postService.queryActivePartSum(id);
-                product.setPartsum(partsum);
+                //计算活动结束日期 和 活动的参与总人数
+                calcActivityEnddaysAndPartSum(product, begin, end, isactive, id);
             }
             products.add(product);
         }
@@ -201,7 +197,7 @@ public class PostSearchService implements IPostSearchService {
      * @param end
      * @param isactive
      */
-    private void calcActivityEnddays(PostSearchEntity product, Date begin, Date end, Integer isactive) {
+    private void calcActivityEnddaysAndPartSum(PostSearchEntity product, Date begin, Date end, Integer isactive, Integer postid) {
         if (isactive == 1) {
             //根据活动开始时间和结束时间，计算活动距离结束的剩余天数
             Date now = new Date();//活动当前时间
@@ -219,6 +215,9 @@ public class PostSearchService implements IPostSearchService {
                     e.printStackTrace();
                 }
             }
+            //计算活动的参与总人数
+            int partsum = postService.queryActivePartSum(postid);
+            product.setPartsum(partsum);
         }
     }
 
