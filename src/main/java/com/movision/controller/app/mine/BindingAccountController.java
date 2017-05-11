@@ -107,7 +107,7 @@ public class BindingAccountController {
     @ApiOperation(value = "绑定第三方账号", notes = "绑定第三方账号", response = Response.class)
     @RequestMapping(value = {"/binding_third_account"}, method = RequestMethod.POST)
     public Response bindingThirdAccount(@ApiParam(value = "第三方登录方式标示。1:QQ， 2:微信， 3:微博 ") @RequestParam Integer flag,
-                                        @ApiParam(value = "QQ号/微信号/微博号") @RequestParam String account) throws Exception {
+                                        @ApiParam(value = "QQ号/微信号/微博号（填第三方账号的openid）") @RequestParam String account) throws Exception {
 
         if (flag == 1) {
             log.debug("【绑定QQ】，账号：" + account);
