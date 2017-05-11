@@ -61,7 +61,7 @@ public class BossImController {
                                           @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<ImSystemInformVo> paging = new Paging<ImSystemInformVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<ImSystemInformVo> list = imFacade.queryAllSystemInform(ShiroUtil.getAppUserID(), paging);
+        List<ImSystemInformVo> list = imFacade.queryAllSystemInform(paging);
         paging.result(list);
         response.setData(paging);
         return response;

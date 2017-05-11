@@ -619,9 +619,9 @@ public class ImFacade {
      * @param paging
      * @return
      */
-    public List<ImSystemInformVo> queryAllSystemInform(Integer userid, Paging<ImSystemInformVo> paging) {
+    public List<ImSystemInformVo> queryAllSystemInform(Paging<ImSystemInformVo> paging) {
 
-        return imSystemInformService.queryAll(userid, paging);
+        return imSystemInformService.queryAll(paging);
     }
 
     public ImSystemInform querySystemInformDetail(Integer id) {

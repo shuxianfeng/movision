@@ -128,4 +128,5 @@ public interface UserMapper {
     LoginUser selectLoginuserByUserid(@Param("id") Integer id);
 
     Integer countByNickname(Map map);
+
 }

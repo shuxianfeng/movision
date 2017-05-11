@@ -50,10 +50,11 @@ public class MyMsgController {
     @ApiOperation(value = "获取我的消息中心的系统通知列表", notes = "获取我的消息中心的系统通知列表", response = Response.class)
     @RequestMapping(value = {"/get_my_msg_center_system_list"}, method = RequestMethod.GET)
     public Response getMyMsgCenterInformationList(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                                  @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                                                  @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize
+    ) {
         Response response = new Response();
         Paging<ImSystemInformVo> paging = new Paging<ImSystemInformVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<ImSystemInformVo> list = msgCenterFacade.getMsgInformationList(ShiroUtil.getAppUserID(), paging);
+        List<ImSystemInformVo> list = msgCenterFacade.getMsgInformationList(ShiroUtil.getAppUserID(), ShiroUtil.getAppUser().getRegisterTime(), paging);
         paging.result(list);
         response.setData(paging);
         return response;

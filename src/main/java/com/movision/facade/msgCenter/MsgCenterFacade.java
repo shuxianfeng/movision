@@ -25,6 +25,7 @@ import com.movision.mybatis.rewarded.entity.Rewarded;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.rewarded.service.RewardedService;
 import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
@@ -67,6 +68,8 @@ public class MsgCenterFacade {
     @Autowired
     private ImSystemInformReadService imSystemInformReadService;
 
+    @Autowired
+    private UserService userService;
     /**
      * 获取消息中心的列表
      *
@@ -131,8 +134,11 @@ public class MsgCenterFacade {
      *
      * @return
      */
-    public List<ImSystemInformVo> getMsgInformationList(Integer userid, Paging<ImSystemInformVo> paging) {
-        List<ImSystemInformVo> list = imSystemInformService.queryAll(userid, paging);
+    public List<ImSystemInformVo> getMsgInformationList(Integer userid, Date informTime, Paging<ImSystemInformVo> paging) {
+        Map map = new HashMap();
+        map.put("userid", userid);
+        map.put("informTime", informTime);
+        List<ImSystemInformVo> list = imSystemInformService.findAllIm(map, paging);
         return list;
     }
 

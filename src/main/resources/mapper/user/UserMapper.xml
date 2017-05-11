@@ -1063,5 +1063,4 @@
         where nickname = #{nickname}
         and id <![CDATA[ <> ]]> #{userid}
     </select>
-
 </mapper>

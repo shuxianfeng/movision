@@ -4,6 +4,7 @@ import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import org.apache.ibatis.session.RowBounds;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public interface ImSystemInformMapper {
 
     int updateByPrimaryKey(ImSystemInform record);
 
-    List<ImSystemInformVo> findAll(Integer userid, RowBounds rowBounds);
+    List<ImSystemInformVo> findAll(RowBounds rowBounds);
 
     List<ImSystemInform> findAllSystemInform(Map map, RowBounds rowBounds);//条件搜索
 
@@ -33,4 +34,6 @@ public interface ImSystemInformMapper {
     Integer queryInform(String indity);
 
     List<String> queryUnreadSystemMessage(Integer userid);
+
+    List<ImSystemInformVo> findAllIm(Map map, RowBounds rowBounds);
 }

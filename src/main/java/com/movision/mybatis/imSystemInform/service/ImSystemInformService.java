@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -36,12 +37,22 @@ public class ImSystemInformService {
         }
     }
 
-    public List<ImSystemInformVo> queryAll(Integer userid, Paging<ImSystemInformVo> paging) {
+    public List<ImSystemInformVo> queryAll(Paging<ImSystemInformVo> paging) {
         try {
             log.info("查询所有的系统通知");
-            return imSystemInformMapper.findAll(userid, paging.getRowBounds());
+            return imSystemInformMapper.findAll(paging.getRowBounds());
         } catch (Exception e) {
             log.error("查询所有的系统通知失败", e);
+            throw e;
+        }
+    }
+
+    public List<ImSystemInformVo> findAllIm(Map map, Paging<ImSystemInformVo> paging) {
+        try {
+            log.info("查询用户收到的系统通知");
+            return imSystemInformMapper.findAllIm(map, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询用户收到的系统通知失败", e);
             throw e;
         }
     }

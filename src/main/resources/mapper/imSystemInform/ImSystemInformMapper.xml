@@ -138,10 +138,7 @@
     </update>
 
     <select id="findAll" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo">
-        SELECT si.*,IFNULL(ir.isread,0) as isread
-        FROM yw_im_system_informs si LEFT JOIN yw_im_system_inform_read ir ON ir.inform_identity=si.inform_identity AND
-        ir.userid=#{userid,jdbcType=INTEGER}
-        GROUP BY inform_identity ORDER BY inform_time DESC
+        SELECT * FROM yw_im_system_informs GROUP BY inform_time DESC
     </select>
     <select id="findAllSystemInform" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform"
             parameterType="java.util.Map">
@@ -169,5 +166,12 @@
     <select id="queryUnreadSystemMessage" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT inform_identity FROM yw_im_system_informs WHERE inform_identity NOT in
         (SELECT inform_identity FROM yw_im_system_inform_read WHERE userid= #{userid,jdbcType=INTEGER})
+    </select>
+    <select id="findAllIm" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo">
+        SELECT si.*,IFNULL(ir.isread,0) as isread
+        FROM yw_im_system_informs si LEFT JOIN yw_im_system_inform_read ir ON ir.inform_identity=si.inform_identity AND
+        ir.userid=#{userid,jdbcType=INTEGER} WHERE si.inform_time >= #{informTime,jdbcType=TIMESTAMP}
+        GROUP BY inform_identity ORDER BY inform_time DESC
     </select>
 </mapper>
