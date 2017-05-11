@@ -1178,27 +1178,27 @@ public class PostFacade {
                     if (postcontent.length() > 2000)
                         postActiveList.setPostcontent(postcontent);//内容
                 }
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                Date estime = null;
                 if (!StringUtil.isEmpty(isessence)) {
                     if (Integer.parseInt(isessence) == 0) {
                         postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
                         postActiveList.setEssencedate(null);
                         postActiveList.setOrderid(null);
                     } else {
+                        if (!StringUtil.isEmpty(essencedate)) {
+                            try {
+                                estime = format.parse(essencedate);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            postActiveList.setEssencedate(estime);
+                        }
+                        if (!StringUtil.isEmpty(orderid)) {
+                            postActiveList.setOrderid(Integer.parseInt(orderid));
+                        }
                         postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
                     }
-                }
-                if (!StringUtil.isEmpty(orderid)) {
-                    postActiveList.setOrderid(Integer.parseInt(orderid));
-                }
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                Date estime = null;
-                if (!StringUtil.isEmpty(essencedate)) {
-                    try {
-                        estime = format.parse(essencedate);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    postActiveList.setEssencedate(estime);
                 }
                 if (!StringUtils.isEmpty(hotimgurl)) {
                     postActiveList.setHotimgurl(hotimgurl);//首页方形图
