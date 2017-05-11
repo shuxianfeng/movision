@@ -118,7 +118,7 @@ public class PostSearchService implements IPostSearchService {
             opularSearchTerms.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
             opularSearchTerms.setIsdel(0);
             opularSearchTerms.setKeywords(spec.getQ());
-            opularSearchTerms.setUserid(ShiroUtil.getAppUserID());
+            opularSearchTerms.setUserid(ShiroUtil.getAppUserID());  //不登录的情况下，返回0
             opularSearchTermsService.insert(opularSearchTerms);
             // searchPostRecordService.add(spec.getQ());
         }
