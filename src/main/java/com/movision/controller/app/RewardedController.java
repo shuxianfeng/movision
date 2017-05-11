@@ -3,9 +3,6 @@ package com.movision.controller.app;
 import com.movision.common.Response;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.facade.rewarded.FacadeRewarded;
-import com.movision.mybatis.comment.entity.CommentVo;
-import com.movision.mybatis.constant.entity.Constant;
-import com.movision.utils.L;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -69,7 +65,7 @@ public class RewardedController {
     @RequestMapping(value = "query_reword_list", method = RequestMethod.POST)
     public Response queryRewordList() {
         Response response = new Response();
-        List<Constant> list = facadeRewarded.queryRewordList();
+        Map list = facadeRewarded.queryRewordList();
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

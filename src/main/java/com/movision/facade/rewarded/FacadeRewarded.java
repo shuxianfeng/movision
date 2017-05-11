@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -139,8 +140,14 @@ public class FacadeRewarded {
      *
      * @return
      */
-    public List<Constant> queryRewordList() {
-        return constantService.queryRewordList();
+    public Map queryRewordList() {
+        Map map = new HashMap();
+        List<Constant> constants = constantService.queryRewordList();
+        //获取当前用户积分
+        Integer reworded = userFacade.queryUserByRewarde(ShiroUtil.getAppUserID());
+        map.put("constants", constants);
+        map.put("reworded", reworded);
+        return map;
     }
 
 
