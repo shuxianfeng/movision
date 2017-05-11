@@ -7,6 +7,7 @@ import com.movision.common.util.ShiroUtil;
 import com.movision.exception.AuthException;
 import com.movision.exception.BusinessException;
 import com.movision.facade.pointRecord.PointRecordFacade;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.pointRecord.entity.PointRecord;
@@ -119,10 +120,14 @@ public class UserFacade {
 
     public void shareSucNotice(String type, String userid, String channel, String postid, String goodsid, String beshareuserid) {
 
-        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.share.getCode(), Integer.valueOf(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+        if (StringUtil.isNotEmpty(userid)) {
+            pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.share.getCode(), Integer.valueOf(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+        }
 
         Map<String, Object> parammap = new HashMap<>();
-        parammap.put("userid", Integer.parseInt(userid));
+        if (StringUtil.isNotEmpty(userid)) {
+            parammap.put("userid", Integer.parseInt(userid));
+        }
         parammap.put("intime", new Date());
         if (channel.equals("0")) {
             parammap.put("channel", "QQ");
@@ -139,14 +144,17 @@ public class UserFacade {
         if (type.equals("0")) {
             //分享帖子或活动
             parammap.put("postid", Integer.parseInt(postid));
-            userService.insertPostShare(parammap);//插入帖子分享记录
+            if (StringUtil.isNotEmpty(userid)) {
+                userService.insertPostShare(parammap);//插入帖子分享记录
+            }
             postService.updatePostShareNum(parammap);//增加帖子分享次数
 
         } else if (type.equals("1")) {
             //分享商品
             parammap.put("goodsid", Integer.parseInt(goodsid));
-            userService.insertGoodsShare(parammap);//插入商品分享记录(目前商品表不记录被分享的总次数)
-
+            if (StringUtil.isNotEmpty(userid)){
+                userService.insertGoodsShare(parammap);//插入商品分享记录(目前商品表不记录被分享的总次数)
+            }
         } else if (type.equals("2")) {
             //个人主页（自己或他人的）
             //------------------------------暂时预留，后期可以存主页分享次数
