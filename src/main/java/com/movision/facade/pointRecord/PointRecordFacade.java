@@ -260,7 +260,7 @@ public class PointRecordFacade {
                 historyShareCount = historyStatistics.getShareCount();  //历史分享数
 
         /**
-         * 打赏的积分
+         * 打赏的积分，前5次加积分
          */
         if (type == PointConstant.POINT_TYPE.reward.getCode()) {
             if (rewardCount >= 0 && rewardCount <= 4) {
@@ -270,7 +270,7 @@ public class PointRecordFacade {
             }
 
             /**
-             * 每日发帖的得分算法
+             * 每日发帖的得分算法,前5次加积分
              */
         } else if (type == PointConstant.POINT_TYPE.post.getCode()) {
             if (historyPostCount == 0) {
