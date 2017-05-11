@@ -297,20 +297,20 @@ public class PointRecordFacade {
             }
 
             /**
-             * 每日评论和每日发帖同理
+             * 每日评论和每日发帖同理，前10次才加积分
              */
         } else if (type == PointConstant.POINT_TYPE.comment.getCode()) {
             if (historyCommentCount == 0) {
                 if (commentCount == 0) {
                     //首次评论
                     new_point = PointConstant.POINT.first_comment.getCode() + PointConstant.POINT.comment.getCode();
-                } else if (commentCount >= 1 && commentCount <= 4) {
+                } else if (commentCount >= 1 && commentCount <= 9) {
                     new_point = PointConstant.POINT.comment.getCode();
                 } else {
                     new_point = 0;
                 }
             } else {
-                if (commentCount >= 0 && commentCount <= 4) {
+                if (commentCount >= 0 && commentCount <= 9) {
                     new_point = PointConstant.POINT.comment.getCode();
                 } else {
                     new_point = 0;
@@ -318,20 +318,20 @@ public class PointRecordFacade {
             }
 
             /**
-             *  每日分享和每日发帖同理
+             *  每日分享和每日发帖同理，前10次才加积分
              */
         } else if (type == PointConstant.POINT_TYPE.share.getCode()) {
             if (historyShareCount == 0) {
                 if (shareCount == 0) {
                     //首次分享
                     new_point = PointConstant.POINT.first_share.getCode() + PointConstant.POINT.share.getCode();
-                } else if (shareCount >= 1 && shareCount <= 4) {
+                } else if (shareCount >= 1 && shareCount <= 9) {
                     new_point = PointConstant.POINT.share.getCode();
                 } else {
                     new_point = 0;
                 }
             } else {
-                if (shareCount >= 0 && shareCount <= 4) {
+                if (shareCount >= 0 && shareCount <= 9) {
                     new_point = PointConstant.POINT.share.getCode();
                 } else {
                     new_point = 0;
