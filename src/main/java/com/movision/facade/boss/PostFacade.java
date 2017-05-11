@@ -1181,7 +1181,13 @@ public class PostFacade {
                         postActiveList.setPostcontent(postcontent);//内容
                 }
                 if (!StringUtil.isEmpty(isessence)) {
-                    postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+                    if (Integer.parseInt(isessence) == 0) {
+                        postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+                        postActiveList.setEssencedate(null);
+                        postActiveList.setOrderid(null);
+                    } else {
+                        postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+                    }
                 }
                 if (!StringUtil.isEmpty(orderid)) {
                     postActiveList.setOrderid(Integer.parseInt(orderid));
@@ -1366,7 +1372,13 @@ public class PostFacade {
                         }
                     }
                     if (!StringUtils.isEmpty(isessence)) {
-                        post.setIsessence(isessence);//是否为首页精选
+                        if (Integer.parseInt(isessence) == 0) {
+                            post.setIsessence(isessence);//是否为首页精选
+                            post.setEssencedate(null);
+                            post.setOrderid(null);
+                        } else {
+                            post.setIsessence(isessence);//是否为首页精选
+                        }
                     }
                     if (!StringUtils.isEmpty(ishot)) {
                         post.setIshot(ishot);//是否为圈子精选
@@ -1405,6 +1417,13 @@ public class PostFacade {
                     }
                     PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));
                     if (postProcessRecord != null) {//已经加精过活精选
+                        //积分操作
+                        if (postProcessRecord.getIshot() == 0 && Integer.parseInt(ishot) == 1) {
+                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                        }
+                        if (postProcessRecord.getIsesence() == 0 && Integer.parseInt(isessence) == 1) {
+                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                        }
                         //修改
                         PostProcessRecord pprd = new PostProcessRecord();
                         pprd.setIshot(Integer.parseInt(ishot));
