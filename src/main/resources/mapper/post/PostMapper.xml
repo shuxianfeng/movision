@@ -971,6 +971,9 @@
             <if test="orderid != null">
                 orderid=#{orderid,jdbcType=INTEGER},
             </if>
+            <if test="orderid !== null">
+                orderid=NULL ,
+            </if>
             <if test="isessence != null">
                 isessence = #{isessence,jdbcType=INTEGER},
             </if>
@@ -982,6 +985,9 @@
             </if>
             <if test="essencedate != null">
                 essencedate = #{essencedate,jdbcType=DATE},
+            </if>
+            <if test="essencedate == null">
+                essencedate = NULL ,
             </if>
             <if test="userid != null">
                 userid = #{userid,jdbcType=INTEGER},

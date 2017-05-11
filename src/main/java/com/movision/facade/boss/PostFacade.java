@@ -748,8 +748,6 @@ public class PostFacade {
                         post.setIsessence(isessence);//是否为首页精选
                         if (StringUtil.isNotEmpty(orderid)) {
                             post.setOrderid(Integer.parseInt(orderid));
-                        } else {
-                            post.setOrderid(0);
                         }
                         if (StringUtil.isNotEmpty(time)) {
                             try {
@@ -1371,31 +1369,32 @@ public class PostFacade {
                             post.setPostcontent(postcontent);
                         }
                     }
+                    post.setIntime(new Date());
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    Date estime = null;
+
                     if (!StringUtils.isEmpty(isessence)) {
                         if (Integer.parseInt(isessence) == 0) {
                             post.setIsessence(isessence);//是否为首页精选
                             post.setEssencedate(null);
                             post.setOrderid(null);
                         } else {
+                            if (!StringUtils.isEmpty(time)) {
+                                try {
+                                    estime = format.parse(time);
+                                    post.setEssencedate(estime);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            if (!StringUtils.isEmpty(orderid)) {
+                                post.setOrderid(Integer.parseInt(orderid));
+                            }
                             post.setIsessence(isessence);//是否为首页精选
                         }
                     }
                     if (!StringUtils.isEmpty(ishot)) {
                         post.setIshot(ishot);//是否为圈子精选
-                    }
-                    post.setIntime(new Date());
-                    if (!StringUtils.isEmpty(orderid)) {
-                        post.setOrderid(Integer.parseInt(orderid));
-                    }
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                    Date estime = null;
-                    if (!StringUtils.isEmpty(time)) {
-                        try {
-                            estime = format.parse(time);
-                            post.setEssencedate(estime);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
                     }
                     post.setUserid(userid);
                     int result = postService.updatePostById(post);//编辑帖子
@@ -1426,9 +1425,13 @@ public class PostFacade {
                         }
                         //修改
                         PostProcessRecord pprd = new PostProcessRecord();
-                        pprd.setIshot(Integer.parseInt(ishot));
+                        if (StringUtil.isNotEmpty(ishot)) {
+                            pprd.setIshot(Integer.parseInt(ishot));
+                        }
                         pprd.setPostid(post.getId());
-                        pprd.setIsesence(Integer.parseInt(isessence));
+                        if (StringUtil.isNotEmpty(isessence)) {
+                            pprd.setIsesence(Integer.parseInt(isessence));
+                        }
                         postProcessRecordService.updateProcessRecord(pprd);
                     } else {
                         //积分操作
@@ -1441,8 +1444,12 @@ public class PostFacade {
                         //新增
                         PostProcessRecord pprd = new PostProcessRecord();
                         pprd.setPostid(Integer.parseInt(id));
-                        pprd.setIsesence(Integer.parseInt(isessence));
-                        pprd.setIshot(Integer.parseInt(ishot));
+                        if (StringUtil.isNotEmpty(isessence)) {
+                            pprd.setIsesence(Integer.parseInt(isessence));
+                        }
+                        if (StringUtil.isNotEmpty(ishot)) {
+                            pprd.setIshot(Integer.parseInt(ishot));
+                        }
                         postProcessRecordService.insertProcessRecord(pprd);
                     }
                 } catch (Exception e) {

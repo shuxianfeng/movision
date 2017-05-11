@@ -63,9 +63,9 @@ public class RewardedController {
      */
     @ApiOperation(value = "查询积分列表", notes = "用于查询打赏的积分数值列表接口", response = Response.class)
     @RequestMapping(value = "query_reword_list", method = RequestMethod.POST)
-    public Response queryRewordList() {
+    public Response queryRewordList(@ApiParam(value = "app用户id") @RequestParam String userid) {
         Response response = new Response();
-        Map list = facadeRewarded.queryRewordList();
+        Map list = facadeRewarded.queryRewordList(userid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

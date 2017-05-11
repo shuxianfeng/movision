@@ -140,11 +140,11 @@ public class FacadeRewarded {
      *
      * @return
      */
-    public Map queryRewordList() {
+    public Map queryRewordList(String userid) {
         Map map = new HashMap();
         List<Constant> constants = constantService.queryRewordList();
         //获取当前用户积分
-        Integer reworded = userFacade.queryUserByRewarde(ShiroUtil.getAppUserID());
+        Integer reworded = userFacade.queryUserByRewarde(Integer.parseInt(userid));
         map.put("constants", constants);
         map.put("reworded", reworded);
         return map;
