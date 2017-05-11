@@ -83,8 +83,7 @@
 
     <select id="queryPostByIsessenceOrIshot" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.postProcessRecord.entity.PostProcessRecord">
-        SELECT * FROM yw_post_process_record WHERE (postid=#{postid,jdbcType=INTEGER} AND isesence=1) OR
-        (postid=#{postid,jdbcType=INTEGER} AND ishot=1)
+        SELECT * FROM yw_post_process_record WHERE postid=#{postid,jdbcType=INTEGER}
     </select>
 
     <update id="updateProcessRecord" parameterType="com.movision.mybatis.postProcessRecord.entity.PostProcessRecord">
