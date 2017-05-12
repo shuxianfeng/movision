@@ -20,6 +20,7 @@ import org.apache.commons.collections.iterators.ObjectArrayIterator;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -178,6 +179,7 @@ public class FacadeCircle {
         }
     }
 
+    @CacheEvict(value = "indexData", key = "'index_data'")
     public int followCircle(String userid, String circleid) {
         //首先查询该用户有没有关注过该圈子
         Map<String, Object> parammap = new HashMap<>();
@@ -213,6 +215,7 @@ public class FacadeCircle {
         }
     }
 
+    @CacheEvict(value = "indexData", key = "'index_data'")
     public void cancelFollowCircle(String userid, String circleid) {
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("userid", Integer.parseInt(userid));
