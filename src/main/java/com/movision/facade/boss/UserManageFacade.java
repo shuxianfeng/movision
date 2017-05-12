@@ -1,5 +1,6 @@
 package com.movision.facade.boss;
 
+import com.movision.common.constant.JurisdictionConstants;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.auditVipDetail.service.AuditVipDetailService;
 import com.movision.mybatis.comment.entity.CommentVo;
@@ -45,6 +46,9 @@ public class UserManageFacade {
 
     @Autowired
     private AuditVipDetailService auditVipDetailService;
+
+    @Autowired
+    private commonalityFacade commonalityFacade;
 
 
     //用于返回用户登录状态
@@ -316,7 +320,7 @@ public class UserManageFacade {
      * @return
      */
     public List<SubmissionVo> queryUniteConditionByContribute(String nickname, String email, String type, String vip, String circleid, String title,
-                                                              String begintime, String endtime, String pai, Paging<SubmissionVo> pager) {
+                                                              String begintime, String endtime, String pai, String loginid, Paging<SubmissionVo> pager) {
         Date beg = null;
         Date end = null;
         //对时间做转换 毫秒转 日期类型
@@ -353,7 +357,17 @@ public class UserManageFacade {
         }
         map.put("begintime", beg);
         map.put("endtime", end);
-        return submissionService.queryUniteConditionByContribute(map, pager);
+        Map res = commonalityFacade.verifyUserByQueryMethod(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), null);
+        if (res.get("resault").equals(2)) {//最高权限可查看所有
+            return submissionService.queryUniteConditionByContribute(map, pager);
+        } else if (res.get("resault").equals(1)) {//圈主，圈子管理员
+            map.put("code", 1);
+            map.put("loginid", loginid);
+            return submissionService.queryUniteConditionByContribute(map, pager);
+        } else if (res.get("resault").equals(0)) {
+            return null;
+        }
+        return null;
     }
 
     /**

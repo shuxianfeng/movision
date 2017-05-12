@@ -1073,11 +1073,12 @@ public class PostController {
                                                     @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
                                                     @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,
                                                     @ApiParam(value = "排序方式 0为时间倒叙") @RequestParam(required = false) String pai,
+                                                    @ApiParam(value = "当前登录用户id") @RequestParam String loginid,
                                                     @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                                     @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<SubmissionVo> pager = new Paging<SubmissionVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<SubmissionVo> list = userManageFacade.queryUniteConditionByContribute(nickname, email, type, vip, circleid, title, begintime, endtime, pai, pager);
+        List<SubmissionVo> list = userManageFacade.queryUniteConditionByContribute(nickname, email, type, vip, circleid, title, begintime, endtime, pai, loginid, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
