@@ -17,7 +17,8 @@
     (SELECT COUNT(1) FROM yw_user WHERE DATE(intime)=CURDATE() AND status=0) AS newMember,
     (SELECT COUNT(1) FROM yw_active_part WHERE DATE(intime)=CURDATE()) AS newActivityApply,
     (SELECT COUNT(1) FROM yw_orders WHERE DATE(paytime)=CURDATE() AND isdel=0) AS newOrderForm,
-    (SELECT COUNT(1) FROM yw_audit_vip_detail WHERE userid = (SELECT id FROM yw_user WHERE DATE(applydate)=CURDATE())) AS applyForNotAudit
+        (SELECT COUNT(1) FROM yw_audit_vip_detail WHERE userid IN (SELECT id FROM yw_user WHERE
+        DATE(applydate)=CURDATE())) AS applyForNotAudit
     FROM yw_post WHERE date(intime)=curdate() AND isdel=0 AND isactive=0
   </select>
 
