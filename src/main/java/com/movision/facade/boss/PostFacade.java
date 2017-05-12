@@ -1019,6 +1019,22 @@ public class PostFacade {
             return map;
         } else {//取消加精
             int i = postService.deletePostChoiceness(Integer.parseInt(postid));
+            Integer userid = postService.queryPostByUser(postid);
+            PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(postid));
+            if (postProcessRecord != null) {//已经加精过活精选
+                if (postProcessRecord.getIsesence() == 0) {//判断是否首页精选
+                    postProcessRecord.setIsesence(0);
+                    //修改
+                    postProcessRecordService.updateProcessRecord(postProcessRecord);
+                }
+            } else {
+                //新增
+                PostProcessRecord pprd = new PostProcessRecord();
+                pprd.setPostid(Integer.parseInt(postid));
+                pprd.setIsesence(0);
+                pprd.setIshot(0);
+                postProcessRecordService.insertProcessRecord(pprd);
+            }
             if (i == 1) {
                 Integer t = 2;
                 map.put("result", t);

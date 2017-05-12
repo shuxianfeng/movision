@@ -138,7 +138,7 @@ public class PointRecordFacade {
             //走正常积分操作
             if (PointConstant.POINT_TYPE.circle_selected.getCode() == type) {
                 //查询当天是否设为圈子精选
-                map.put("code", PointConstant.POINT.circle_selected.getCode());
+                map.put("code", PointConstant.POINT_TYPE.circle_selected.getCode());
                 Integer integer = pointRecordService.queryCircleOrIndex(map);
                 if (integer == 0) {
                     //圈子精选
@@ -147,7 +147,7 @@ public class PointRecordFacade {
 
             } else {
                 //查询当天是否设为首页精选
-                map.put("code", PointConstant.POINT.index_selected.getCode());
+                map.put("code", PointConstant.POINT_TYPE.index_selected.getCode());
                 Integer integer = pointRecordService.queryCircleOrIndex(map);
                 if (integer == 0) {
                     //首页精选
