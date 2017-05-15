@@ -1,7 +1,9 @@
 package com.movision.facade.circle;
 
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.circle.entity.MyCircle;
 import com.movision.mybatis.circle.service.CircleService;
+import com.movision.mybatis.post.service.PostService;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +21,19 @@ public class CircleAppFacade {
     @Autowired
     private CircleService circleService;
 
-    public List<Circle> findAllMyFollowCircleList(Paging<Circle> paging, int userid) {
+    @Autowired
+    private PostService postService;
+
+    public List<MyCircle> findAllMyFollowCircleList(Paging<MyCircle> paging, int userid) {
         Map map = new HashedMap();
         map.put("userid", userid);
-        return circleService.findAllMyFollowCircleList(paging, map);
+        List<MyCircle> list = circleService.findAllMyFollowCircleList(paging, map);
+
+        for (MyCircle circle : list) {
+            int circleid = circle.getId();
+            int postnum = postService.queryPostNumByCircleid(circleid);
+            circle.setPostnewnum(postnum);
+        }
+        return list;
     }
 }

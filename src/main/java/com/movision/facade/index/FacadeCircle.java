@@ -101,6 +101,8 @@ public class FacadeCircle {
 
                 //将帖子数量加入圈子对象CircleVo中
                 circlelist.get(j).setPostnum(postnum);
+                //计算圈子中更新的帖子数量，目前该值与帖子数量一致
+                circlelist.get(j).setPostnewnum(postnum);
             }
 
             //将圈子列表加入分类对象CircleCategoryVo中

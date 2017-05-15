@@ -83,7 +83,7 @@ public interface CircleMapper {
 
     int insertCircle(CircleDetails circleDetails);
 
-    List<Circle> findAllMyFollowCircleList(RowBounds rowBounds, Map map);
+    List<MyCircle> findAllMyFollowCircleList(RowBounds rowBounds, Map map);
 
     int updateAuditCircle(Map map);
 

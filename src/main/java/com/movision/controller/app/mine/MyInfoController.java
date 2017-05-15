@@ -13,6 +13,7 @@ import com.movision.facade.order.OrderAppFacade;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.circle.entity.MyCircle;
 import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.post.entity.Post;
@@ -131,8 +132,8 @@ public class MyInfoController {
     public Response getMyFollowCircleList(@RequestParam(required = false, defaultValue = "1") String pageNo,
                                           @RequestParam(required = false, defaultValue = "10") String pageSize) throws Exception {
         Response response = new Response();
-        Paging<Circle> paging = new Paging<Circle>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<Circle> circleList = circleAppFacade.findAllMyFollowCircleList(paging, ShiroUtil.getAppUserID());
+        Paging<MyCircle> paging = new Paging<MyCircle>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<MyCircle> circleList = circleAppFacade.findAllMyFollowCircleList(paging, ShiroUtil.getAppUserID());
         paging.result(circleList);
         response.setData(paging);
         return response;

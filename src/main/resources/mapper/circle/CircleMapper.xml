@@ -806,7 +806,7 @@
         </trim>
     </insert>
 
-    <select id="findAllMyFollowCircleList" resultType="com.movision.mybatis.circle.entity.Circle">
+    <select id="findAllMyFollowCircleList" resultType="com.movision.mybatis.circle.entity.MyCircle">
         SELECT c.*
         FROM yw_circle c
         LEFT JOIN yw_follow_circle f on c.id = f.circleid
