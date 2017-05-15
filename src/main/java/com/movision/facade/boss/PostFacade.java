@@ -876,21 +876,13 @@ public class PostFacade {
             if (!StringUtils.isEmpty(isessence)) {
                 if (Integer.parseInt(isessence) != 0) {//判断是否为加精
                     post.setIsessence(isessence);//是否为首页精选
-                    if (orderid != null) {
-                        if (!orderid.isEmpty()) {
+                    if (StringUtil.isNotEmpty(orderid)) {
                             post.setOrderid(Integer.parseInt(orderid));
                         } else {
                             post.setOrderid(0);
                         }
-                    } else {
-                        Map map1 = new HashMap();
-                        map1.put("resault", -4);
-                        map1.put("massge", "请选择精选日期和精选排序");
-                        return map1;
-                    }
                     Date d = null;
-                    if (essencedate != null) {
-                        if (!StringUtils.isEmpty(essencedate)) {
+                    if (StringUtil.isNotEmpty(essencedate)) {
                             try {
                                 d = format.parse(essencedate);
                                 post.setEssencedate(d);
@@ -899,12 +891,6 @@ public class PostFacade {
                             }
 
                         }
-                    } else {
-                        Map map1 = new HashMap();
-                        map1.put("resault", -4);
-                        map1.put("massge", "请选择精选日期和精选排序");
-                        return map1;
-                    }
                 }
             }
 
@@ -1216,7 +1202,7 @@ public class PostFacade {
                         postActiveList.setEssencedate(null);
                         postActiveList.setOrderid(null);
                     } else {
-                        if (!StringUtil.isEmpty(essencedate)) {
+                        if (StringUtil.isNotEmpty(essencedate)) {
                             try {
                                 estime = format.parse(essencedate);
                             } catch (ParseException e) {
@@ -1224,7 +1210,7 @@ public class PostFacade {
                             }
                             postActiveList.setEssencedate(estime);
                         }
-                        if (!StringUtil.isEmpty(orderid)) {
+                        if (StringUtil.isNotEmpty(orderid)) {
                             postActiveList.setOrderid(Integer.parseInt(orderid));
                         }
                         postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
@@ -1409,7 +1395,7 @@ public class PostFacade {
                             post.setEssencedate(null);
                             post.setOrderid(null);
                         } else {
-                            if (!StringUtils.isEmpty(time)) {
+                            if (StringUtil.isNotEmpty(time)) {
                                 try {
                                     estime = format.parse(time);
                                     post.setEssencedate(estime);
@@ -1417,7 +1403,7 @@ public class PostFacade {
                                     e.printStackTrace();
                                 }
                             }
-                            if (!StringUtils.isEmpty(orderid)) {
+                            if (StringUtil.isNotEmpty(orderid)) {
                                 post.setOrderid(Integer.parseInt(orderid));
                             }
                             post.setIsessence(isessence);//是否为首页精选
