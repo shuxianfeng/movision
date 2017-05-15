@@ -848,6 +848,7 @@ public class PostFacade {
      * @return
      */
     @Transactional
+    @CacheEvict(value = "indexData", key = "'index_data'")
     public Map<String, Integer> addPostActive(String title, String subtitle, String activetype, String iscontribute, String activefee,
                                               String coverimg, String postcontent, String isessence, String orderid, String essencedate,
                                               String begintime, String endtime, String userid, String hotimgurl, String ishot, String goodsid) {
@@ -875,22 +876,35 @@ public class PostFacade {
             if (!StringUtils.isEmpty(isessence)) {
                 if (Integer.parseInt(isessence) != 0) {//判断是否为加精
                     post.setIsessence(isessence);//是否为首页精选
-                    if (!orderid.isEmpty()) {
-                        post.setOrderid(Integer.parseInt(orderid));
+                    if (orderid != null) {
+                        if (!orderid.isEmpty()) {
+                            post.setOrderid(Integer.parseInt(orderid));
+                        } else {
+                            post.setOrderid(0);
+                        }
                     } else {
-                        post.setOrderid(0);
+                        Map map1 = new HashMap();
+                        map1.put("resault", -4);
+                        map1.put("massge", "请选择精选日期和精选排序");
+                        return map1;
                     }
                     Date d = null;
-                    if (!StringUtils.isEmpty(essencedate)) {
-                        try {
-                            d = format.parse(essencedate);
-                            post.setEssencedate(d);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                    if (essencedate != null) {
+                        if (!StringUtils.isEmpty(essencedate)) {
+                            try {
+                                d = format.parse(essencedate);
+                                post.setEssencedate(d);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
                         }
-
+                    } else {
+                        Map map1 = new HashMap();
+                        map1.put("resault", -4);
+                        map1.put("massge", "请选择精选日期和精选排序");
+                        return map1;
                     }
-
                 }
             }
 
