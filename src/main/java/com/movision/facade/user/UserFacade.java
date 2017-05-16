@@ -311,8 +311,10 @@ public class UserFacade {
                 && StringUtils.isNotBlank(user.getSign())
                 && null == pointRecord) {
 
-            log.info("需要进行【完善个人资料】积分操作");
+            log.debug("需要进行【完善个人资料】积分操作");
             pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.finish_personal_data.getCode(), ShiroUtil.getAppUserID());
+        } else {
+            log.debug("不需要进行【完善个人资料】积分操作");
         }
 
     }
