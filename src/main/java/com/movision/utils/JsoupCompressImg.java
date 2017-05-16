@@ -30,7 +30,7 @@ import java.util.*;
 /**
  * @Author shuxf
  * @Date 2017/3/15 16:09
- * 通过jsoup解析帖子表中的content字段，解析html，处理帖子中的img，进行压缩处理
+ * 通过jsoup解析帖子表中的content字段，解析html标签，处理帖子中的img，进行压缩处理
  */
 @Service
 public class JsoupCompressImg {
