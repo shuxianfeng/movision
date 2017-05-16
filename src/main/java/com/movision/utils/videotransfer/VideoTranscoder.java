@@ -265,7 +265,7 @@ public class VideoTranscoder {
 //        commend.add(" -qscale");
 //        commend.add(" 1");
 //        commend.add(" -r");
-//        commend.add(" 15");
+//        commend.add(" 29.97");
 //        commend.add(" -s ");
 //        commend.add(String.valueOf(width) + "x" + String.valueOf(height) + " ");
 //        commend.add(savepathname);
@@ -276,14 +276,20 @@ public class VideoTranscoder {
         sb.append(oldfilepath);
         sb.append(" -vcodec ");
         sb.append(" copy ");
-        sb.append(" -ab");
-        sb.append(" 56");
-        sb.append(" -ar");
-        sb.append(" 44100");
         sb.append(" -qscale");
         sb.append(" 1");//帧率1表示最好的质量，数字越大质量越差越模糊
+        sb.append(" -acodec ");
+        sb.append(" copy ");
+        sb.append(" -ac ");
+        sb.append(" 2");
+        sb.append(" -ar");
+        sb.append(" 24000");
+        sb.append(" -ab");
+        sb.append(" 128");
+        sb.append(" -vol");
+        sb.append(" 100");
         sb.append(" -r");
-        sb.append(" 15");
+        sb.append(" 29.97");
         sb.append(" -s ");
         sb.append(String.valueOf(width) + "x" + String.valueOf(height) + " ");
         sb.append(savepathname);
@@ -304,7 +310,7 @@ public class VideoTranscoder {
             proce.waitFor();//让程序同步（非异步，执行完所有转码才会执行下一行代码）
 
             //调用线程命令进行转码------->2
-//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -vcodec ", " copy ", " -ab", " 56", " -ar", " 44100", " -qscale", " 1", " -r", " 15", " -s ", String.valueOf(width) + "x" + String.valueOf(height) + " ", savepathname);
+//            ProcessBuilder builder = new ProcessBuilder(ffmpeginstalldir, " -i ", oldfilepath, " -vcodec ", " copy ", " -ab", " 56", " -ar", " 44100", " -qscale", " 1", " -r", " 29.97", " -s ", String.valueOf(width) + "x" + String.valueOf(height) + " ", savepathname);
 //            ProcessBuilder builder = new ProcessBuilder();
 //            builder.command(commend);
 //            builder.start();
