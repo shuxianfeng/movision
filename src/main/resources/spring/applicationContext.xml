@@ -19,14 +19,14 @@
     </context:component-scan>
 
 
-    <!--properties-->
+    <!--配置文件properties-->
     <context:property-placeholder
             ignore-unresolvable="true" location="classpath*:/spring/application.properties,
                 classpath*:web/message.properties,classpath*:web/config.properties,
                 classpath*:web/pay.properties"/>
 
 
-
+    <!--mysql分页-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="configLocation" value="classpath:/mybatis/mybatis-configuration.xml"/>
@@ -39,7 +39,7 @@
     </bean>
 
 
-
+    <!--mysql分页-->
     <bean id="pageConfig" class="com.movision.utils.pagination.PaginationInterceptor">
         <property name="properties">
             <props>
@@ -48,13 +48,13 @@
             </props>
         </property>
     </bean>
-
+    <!--事务-->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
 
-    <!-- mybatis -->
+    <!-- mybatis接口扫描路径 -->
     <mybatis:scan base-package="com.movision.mybatis"/>
 
     <!-- 使用annotation定义事务 -->
@@ -97,15 +97,19 @@
 
     </bean>
 
+    <!--TransactionAwareDataSourceProxy-->
     <bean id="transactionAwareDataSource"
           class="org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy">
         <constructor-arg ref="dataSource"/>
     </bean>
 
+    <!--DataSourceTransactionManager-->
     <bean id="jdbcTM"
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="transactionAwareDataSource"/>
     </bean>
+
+    <!--***********************************************分割线*********************************************************-->
 
     <!-- 启用缓存注解功能(请将其配置在Spring主配置文件中) -->
     <!-- redis缓存配置-->
@@ -113,8 +117,11 @@
 
     <!--redis配置 用于缓存-->
     <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <!--最大空闲连接数-->
         <property name="maxIdle" value="${redis.maxIdle}"/>
+        <!--获取连接时的最大等待毫秒数-->
         <property name="maxWaitMillis" value="${redis.maxWait}"/>
+        <!--在获取连接的时候检查有效性-->
         <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
     </bean>
 
@@ -142,6 +149,8 @@
         <constructor-arg ref="redisTemplate"/>
     </bean>
 
+    <!--***********************************************分割线*********************************************************-->
+
     <!-- 文件上传表单的视图解析器-->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <!-- 上传大小10G -->
@@ -153,15 +162,18 @@
     <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="locations">
             <list>
-
                 <value>classpath:web/config.properties</value>
             </list>
         </property>
     </bean>
 
+    <!--***********************************************分割线*********************************************************-->
+
     <bean id="jdbcTemplate" class="com.movision.fsearch.repository.db.JdbcTemplate">
         <constructor-arg ref="transactionAwareDataSource"/>
     </bean>
+
+    <!--***********************************************分割线*********************************************************-->
 
     <import resource="classpath*:mongodb/mongodb.xml"/>
 </beans>

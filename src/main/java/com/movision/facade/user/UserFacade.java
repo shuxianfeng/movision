@@ -300,7 +300,7 @@ public class UserFacade {
      */
     private void addPointProcess() {
         //查询是否存在该用户的完善个人资料的积分记录
-//        PointRecord pointRecord = pointRecordService.selectFinishPersonDataPointRecord(ShiroUtil.getAppUserID());
+        PointRecord pointRecord = pointRecordService.selectFinishPersonDataPointRecord(ShiroUtil.getAppUserID());
 
         //获取当前用户信息
         User user = userService.selectByPrimaryKey(ShiroUtil.getAppUserID());
@@ -308,7 +308,8 @@ public class UserFacade {
         if (StringUtils.isNotBlank(String.valueOf(user.getBirthday()))
                 && StringUtils.isNotBlank(user.getPhoto())
                 && StringUtils.isNotBlank(String.valueOf(user.getSex()))
-                && StringUtils.isNotBlank(user.getSign())) {
+                && StringUtils.isNotBlank(user.getSign())
+                && null == pointRecord) {
 
             pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.finish_personal_data.getCode(), ShiroUtil.getAppUserID());
         }
