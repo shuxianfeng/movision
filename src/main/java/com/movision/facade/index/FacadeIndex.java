@@ -105,7 +105,7 @@ public class FacadeIndex {
             try {
                 log.error("计算活动剩余结束天数");
                 Long between_days = DateUtils.getBetweenDays(now, end);
-                postVoList.get(i).setEnddays(Integer.parseInt(String.valueOf(between_days)));
+                postVoList.get(i).setEnddays(Integer.parseInt(String.valueOf(between_days)) - 1);
             } catch (Exception e) {
                 log.error("计算活动剩余结束天数失败");
                 e.printStackTrace();
