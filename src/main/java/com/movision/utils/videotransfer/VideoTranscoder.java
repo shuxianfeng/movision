@@ -286,8 +286,6 @@ public class VideoTranscoder {
         sb.append(" 24000");
         sb.append(" -ab");
         sb.append(" 128");
-        sb.append(" -vol");
-        sb.append(" 100");
         sb.append(" -r");
         sb.append(" 29.97");
         sb.append(" -s ");
