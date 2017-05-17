@@ -330,7 +330,7 @@ public class AppRegisterFacade {
             ImUser imUser = new ImUser();
             imUser.setUserid(userid);
             imUser.setAccid(CheckSumBuilder.getAccid(String.valueOf(userid)));  //根据userid生成accid
-            imUser.setName(StrUtil.genDefaultNickNameByPhone(phone));
+            imUser.setName(StrUtil.genDefaultNickNameByPhone());
             ImUser newImUser = imFacade.AddImUser(imUser);
             result.put("imuser", newImUser);
         } else {
@@ -421,7 +421,7 @@ public class AppRegisterFacade {
                 String phone = member.getPhone();
 
                 User user = new User();
-                user.setNickname(StrUtil.genDefaultNickNameByPhone(phone)); //昵称
+                user.setNickname(StrUtil.genDefaultNickNameByPhone()); //昵称
                 user.setPhone(phone);   //手机号
                 user.setToken(member.getToken());   //token
                 user.setDeviceno(member.getDeviceno()); //设备号

@@ -11,11 +11,11 @@ public class StrUtil {
     /**
      * 生成app用户的默认的昵称
      *
-     * @param phone
      * @return mofo_180****9558
      */
-    public static String genDefaultNickNameByPhone(String phone) {
-        return "mofo_" + phone.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
+    public static String genDefaultNickNameByPhone() {
+        return "mofo_" + System.currentTimeMillis();
+//        return "mofo_" + phone.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
     }
 
     public static String genDefaultNicknameByQQ(String str) {
@@ -31,7 +31,7 @@ public class StrUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(genDefaultNickNameForOpenid());
+        System.out.println(genNickNameByDevice());
     }
 
 }
