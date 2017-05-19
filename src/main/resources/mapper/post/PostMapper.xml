@@ -127,7 +127,7 @@
      <!--查询帖子详情-->
     <select id="queryPostDetail" parameterType="java.util.Map"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT t1.*,t2.category AS category,t2.code AS code, t2.name AS circlename,t2.introduction
+        SELECT t1.*,t2.category AS category,t2.code AS code, t2.name AS circlename,t2.introduction AS introduction
         <if test="userid != null">
             (SELECT count(*) FROM yw_follow_circle
             WHERE userid = #{userid,jdbcType=INTEGER}
