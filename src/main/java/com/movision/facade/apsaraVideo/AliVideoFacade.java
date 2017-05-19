@@ -2,6 +2,17 @@ package com.movision.facade.apsaraVideo;
 
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -101,7 +112,7 @@ public class AliVideoFacade {
      * @param date
      * @return
      */
-    private static String formatIso8601Date(Date date) {
+    private String formatIso8601Date(Date date) {
         SimpleDateFormat df = new SimpleDateFormat(ISO8601_DATE_FORMAT);
         df.setTimeZone(new SimpleTimeZone(0, "GMT"));
         return df.format(date);
@@ -114,10 +125,65 @@ public class AliVideoFacade {
      * @return
      * @throws UnsupportedEncodingException
      */
-    public static String percentEncode(String value) throws UnsupportedEncodingException {
+    public String percentEncode(String value) throws UnsupportedEncodingException {
         if (value == null) return null;
         return java.net.URLEncoder.encode(value, ENCODE_TYPE).replace("+", "%20").replace("*", "%2A").replace("%7E", "~");
     }
+
+    public Map<String, String> doGet(String url) {
+        if (StringUtils.isBlank(url)) {
+            log.error("请求地址为空！");
+            return null;
+        }
+        Map<String, String> rspMap = new HashMap<String, String>();
+        CloseableHttpClient httpClient;
+        try {
+
+            RequestConfig config = RequestConfig
+                    .custom()
+                    .setConnectTimeout(60000)
+                    .setSocketTimeout(15000)
+                    .build();
+
+            httpClient = HttpClientBuilder
+                    .create()
+                    .setDefaultRequestConfig(config)
+                    .build();
+
+            HttpGet httpGet = new HttpGet(url);
+            log.info("【GET请求的URL】=" + url);
+            CloseableHttpResponse response = httpClient.execute(httpGet);
+            int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode != 200) {
+                httpGet.abort();
+                rspMap.put("status", String.valueOf(statusCode));
+                rspMap.put("result", "HTTP GET ERROR! " + String.valueOf(statusCode));
+                return rspMap;
+//                throw new RuntimeException("HttpClient,error status code :" + statusCode);
+            }
+            HttpEntity entity = response.getEntity();
+            String result = null;
+            if (entity != null) {
+                result = EntityUtils.toString(entity, "utf-8");
+            }
+            EntityUtils.consume(entity);
+            response.close();
+
+            rspMap.put("status", String.valueOf(statusCode));
+            rspMap.put("result", result);
+
+            return rspMap;
+
+        } catch (Exception e) {
+            log.error("HTTP GET 请求异常：" + e);
+            rspMap.put("status", String.valueOf(500));
+            rspMap.put("result", "HTTP GET ERROR! " + e.getMessage());
+            return rspMap;
+        }
+    }
+
+
+
 
 
 }
