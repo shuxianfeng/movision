@@ -95,6 +95,16 @@ public class PostVo implements Serializable {
 
     private Integer isZan;//该用户是否已赞该帖子/活动 0 否 1 是
 
+    private String introduction;//圈子简介
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
     public Integer getUserid() {
         return userid;
     }
