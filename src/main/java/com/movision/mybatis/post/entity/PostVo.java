@@ -13,6 +13,9 @@ import java.util.List;
  * @Date 2017/1/17 20:01
  */
 public class PostVo implements Serializable {
+
+    private static final long serialVersionUID = 8888633313164601558L;
+
     private Integer id;
 
     private Integer circleid;
