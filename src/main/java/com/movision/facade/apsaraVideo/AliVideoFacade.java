@@ -1,7 +1,6 @@
 package com.movision.facade.apsaraVideo;
 
 import com.movision.utils.propertiesLoader.PropertiesLoader;
-import com.sun.deploy.net.URLEncoder;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +12,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.crypto.dsig.SignatureMethod;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
