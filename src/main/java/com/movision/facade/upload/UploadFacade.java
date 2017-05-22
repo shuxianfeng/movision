@@ -99,7 +99,6 @@ public class UploadFacade {
                          */
                         //data = imgDomain + "/upload/" + chann + "/video/" + fileName;
                         data = voidD + fileName;
-                        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++" + data);
                     } else {
                         saveDirectory = apiConstants.getUploadDir();
                         maxPostSize = apiConstants.getUploadVideoMaxPostSize();
