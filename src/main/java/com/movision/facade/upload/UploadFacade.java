@@ -49,6 +49,7 @@ public class UploadFacade {
             String saveDirectory;
             long maxPostSize;
             String imgDomain = PropertiesLoader.getValue("upload.img.domain");
+            String voidD = PropertiesLoader.getValue("post.video.domain");
 //            String docDomain = PropertiesLoader.getValue("doc.domain");
             String fileName = FileUtil.renameFile(file.getOriginalFilename());
             Map returnMap = new HashedMap();
@@ -96,7 +97,9 @@ public class UploadFacade {
                          * 这是外界访问该视频的地址
                          * 其中data = http://120.77.214.187:8100/upload/$chan/video/$filename
                          */
-                        data = imgDomain + "/upload/" + chann + "/video/" + fileName;
+                        //data = imgDomain + "/upload/" + chann + "/video/" + fileName;
+                        data = voidD + fileName;
+                        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++" + data);
                     } else {
                         saveDirectory = apiConstants.getUploadDir();
                         maxPostSize = apiConstants.getUploadVideoMaxPostSize();
