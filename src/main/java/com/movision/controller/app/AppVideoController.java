@@ -5,6 +5,7 @@ import com.movision.common.Response;
 import com.movision.common.constant.AliVideoConstant;
 import com.movision.facade.apsaraVideo.AliVideoFacade;
 import com.movision.utils.CommonUtils;
+import com.movision.utils.VideoUploadUtil;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.apache.commons.collections.map.HashedMap;
@@ -28,6 +29,10 @@ public class AppVideoController {
     @Autowired
     private AliVideoFacade aliVideoFacade;
 
+    @Autowired
+    private VideoUploadUtil videoUploadUtil;
+
+
 
     @ApiOperation(value = "获取视频播放凭证", notes = "获取视频播放凭证", response = Response.class)
     @RequestMapping(value = "get_video_play_auth", method = RequestMethod.POST)
@@ -43,6 +48,22 @@ public class AppVideoController {
             }
         }
         response.setData(result);
+        return response;
+    }
+
+    @ApiOperation(value = "视频上传接口", notes = "视频上传接口", response = Response.class)
+    @RequestMapping(value = "get_video_upload", method = RequestMethod.POST)
+    public Response getVideoUpload(@ApiParam("上传文件所在的绝对路径(必须包含扩展名)") @RequestParam String fileName,
+                                   @ApiParam("视频标题") @RequestParam String title,
+                                   @ApiParam("视频描述") @RequestParam String description,
+                                   @ApiParam("封面URL") @RequestParam String coverimg,
+                                   @ApiParam("视频标签,多个用逗号分隔") @RequestParam String tatges) {
+        Response response = new Response();
+        String videoid = videoUploadUtil.videoUpload(fileName, title, description, coverimg, tatges);
+        if (response.getCode() == 200) {
+            response.setData(videoid);
+            response.setMessage("调用成功");
+        }
         return response;
     }
 
