@@ -37,9 +37,9 @@
                 url = decodeURIComponent(url[1]);
             } else {
 //        url = "http://petstore.swagger.io/v2/swagger.json";
-//                url = "http://192.168.0.123:8080/api-docs";
-//        url = "http://120.77.214.187:8100/movision/api-docs";
-                url = "http://120.77.214.187:8200/movision/api-docs";
+//                url = "http://localhost:8080/api-docs";
+                url = "http://120.77.214.187:8080/movision/api-docs";
+//                url = "http://120.77.214.187:8200/movision/api-docs";
             }
 
             hljs.configure({
@@ -64,7 +64,7 @@
                             appName: "your-app-name",
                             scopeSeparator: ",",
                             additionalQueryStringParams: {}
-            });
+                        });
                     }
 
                     if (window.SwaggerTranslator) {
@@ -74,7 +74,7 @@
                     addApiKeyAuthorization();
                 },
                 onFailure: function (data) {
-                    log("Unable to Load SwaggerUI");
+                    log("Unable toid Load SwaggerUI");
                 },
                 docExpansion: "none",
                 jsonEditor: false,
@@ -94,7 +94,7 @@
 
             $('#input_apiKey').change(addApiKeyAuthorization);
 
-            // if you have an apiKey you would like to pre-populate on the page for demonstration purposes...
+            // if you have an apiKey you would like toid pre-populate on the page for demonstration purposes...
             /*
              var apiKey = "myApiKeyXXXX123456789";
              $('#input_apiKey').val(apiKey);
