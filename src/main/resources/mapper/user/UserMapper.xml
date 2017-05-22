@@ -877,7 +877,7 @@
                 ORDER BY u.intime DESC
             </if>
             <if test="pai==2">
-                ORDER BY u.level ASC
+                ORDER BY u.level DESC
             </if>
         </if>
     </select>
