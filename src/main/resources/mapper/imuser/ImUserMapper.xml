@@ -82,4 +82,9 @@
         SELECT accid FROM yw_im_device
     </select>
 
+
+    <select id="queryUserByAccid" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT userid FROM yw_im_user WHERE accid=#{accid,jdbcType=VARCHAR}
+    </select>
+
 </mapper>

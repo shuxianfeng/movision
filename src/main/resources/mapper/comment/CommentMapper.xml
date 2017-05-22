@@ -471,4 +471,10 @@
       id IN (SELECT id FROM (SELECT id FROM yw_post_comment WHERE pid IN (SELECT id FROM yw_post_comment WHERE
       userid=#{userid,jdbcType=INTEGER} AND pid IS NULL AND isdel=0)) AS a)
     </update>
+
+
+    <select id="queryUseridByComment" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT p.userid FROM yw_post_comment c LEFT JOIN yw_post p ON p.id=c.postid WHERE
+        c.id=#{commentid,jdbcType=INTEGER}
+    </select>
 </mapper>

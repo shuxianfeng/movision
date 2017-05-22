@@ -18,6 +18,8 @@ import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.imSystemInform.service.ImSystemInformService;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.imuser.service.ImUserService;
+import com.movision.mybatis.newInformation.entity.NewInformation;
+import com.movision.mybatis.newInformation.service.NewInformationService;
 import com.movision.mybatis.systemPush.entity.SystemPush;
 import com.movision.mybatis.systemPush.service.SystemPushService;
 import com.movision.mybatis.systemToPush.entity.SystemToPush;
@@ -81,6 +83,9 @@ public class ImFacade {
 
     @Autowired
     private ImDeviceService imDeviceService;
+
+    @Autowired
+    private NewInformationService newInformationService;
     /**
      * 发起IM请求，获得响应
      *
@@ -461,6 +466,26 @@ public class ImFacade {
         Map sendMsgResult = this.sendMsg(imMsg);
         Object code_1 = sendMsgResult.get("code");
 
+        //************************查询用户打招呼的最新通知
+        Integer isread = newInformationService.queryCollByNewInformation(imMsg.getTo());
+        NewInformation news = new NewInformation();
+        //更新被打招呼最新消息
+        if (isread != null) {
+            news.setIsread(0);
+            news.setIntime(new Date());
+            news.setUserid(isread);
+            newInformationService.updateUserByNewInformation(news);
+        } else {
+            //查询被打招呼人id
+            Integer uid = imUserService.queryUserByAccid(imMsg.getTo());
+            //新增被打招呼最新消息
+            news.setIsread(0);
+            news.setIntime(new Date());
+            news.setUserid(uid);
+            newInformationService.insertUserByNewInformation(news);
+        }
+        //******************************************************************
+
         /**
          *  addFriendType=2 请求加好友
          *  addFriendType=3 接受加好友
@@ -530,6 +555,28 @@ public class ImFacade {
         //不足500人
         String toAccids = prepareToAccids(imAppUserList, size, multiple);
         Map result = this.sendSystemInform(body, imUser.getAccid(), toAccids, pushcontent);
+
+
+        //************************查询用户是否有最新系统通知消息
+        Integer isread = newInformationService.querySystemByNewInformation(imUser.getAccid());
+        NewInformation news = new NewInformation();
+        //更新系统通知最新消息
+        if (isread != null) {
+            news.setIsread(0);
+            news.setIntime(new Date());
+            news.setUserid(isread);
+            newInformationService.updateUserByNewInformation(news);
+        } else {
+            //查询被点赞的帖子发帖人
+            Integer uid = imUserService.queryUserByAccid(imUser.getAccid());
+            //新增系统通知最新消息
+            news.setIsread(0);
+            news.setIntime(new Date());
+            news.setUserid(uid);
+            newInformationService.insertUserByNewInformation(news);
+        }
+        //******************************************************************
+
         if (result.get("code").equals(200)) {
             log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
             this.recordSysInforms(body, imUser.getAccid(), toAccids, title, pushcontent, informidentity);

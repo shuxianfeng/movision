@@ -30,4 +30,6 @@ public interface CollectionMapper {
     void cancelCollectionGoods(Map<String, Object> parammap);
 
     void addCollectionSum(int postid);
+
+    Integer queryPostCollectByUser(Integer postid);
 }

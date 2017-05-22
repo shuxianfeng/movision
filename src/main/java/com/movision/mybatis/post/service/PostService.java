@@ -1117,4 +1117,20 @@ public class PostService {
             throw e;
         }
     }
+
+    /**
+     * 查询被点赞的帖子发帖人
+     *
+     * @param postid
+     * @return
+     */
+    public Integer queryPosterActivity(Integer postid) {
+        try {
+            log.info("查询被点赞的帖子发帖人");
+            return postMapper.queryPosterActivity(postid);
+        } catch (Exception e) {
+            log.error("查询被点赞的帖子发帖人异常", e);
+            throw e;
+        }
+    }
 }

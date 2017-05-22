@@ -194,4 +194,6 @@ public interface PostMapper {
     List<PostList> findAllqueryPostByIsessencepoolList(Map map, RowBounds rowBounds);
 
     void updatePostShareNum(Map<String, Object> parammap);
+
+    Integer queryPosterActivity(Integer postid);
 }

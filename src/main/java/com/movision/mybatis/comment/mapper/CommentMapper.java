@@ -69,4 +69,6 @@ public interface CommentMapper {
     List<CommentVo> queryPidComment(Integer pid);
 
     Integer updateCommentRead(Integer userid);
+
+    Integer queryUseridByComment(Integer commentid);
 }

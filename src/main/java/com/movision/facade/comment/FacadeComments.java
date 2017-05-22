@@ -7,6 +7,8 @@ import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
+import com.movision.mybatis.newInformation.entity.NewInformation;
+import com.movision.mybatis.newInformation.service.NewInformationService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
@@ -35,6 +37,8 @@ public class FacadeComments {
     private UserOperationRecordService userOperationRecordService;
     @Autowired
     private PointRecordFacade pointRecordFacade;
+    @Autowired
+    private NewInformationService newInformationService;
 
     /**
      * 帖子评论列表（二级）
@@ -97,6 +101,26 @@ public class FacadeComments {
         commentService.insertCommentZanRecord(parammap);
         commentService.updateCommentZanSum(Integer.parseInt(commentid));//更新评论点赞次数
         int sum = commentService.queryCommentZanSum(Integer.parseInt(commentid));//查询点赞次数
+
+        //************************查询被点赞人的帖子评论是否被设为最新消息通知用户
+        Integer isread = newInformationService.queryUserByNewInformationByCommentid(Integer.parseInt(commentid));
+        NewInformation news = new NewInformation();
+        //更新被点赞人的帖子评论最新消息
+        if (isread != null) {
+            news.setIsread(0);
+            news.setIntime(new Date());
+            news.setUserid(isread);
+            newInformationService.updateUserByNewInformation(news);
+        } else {
+            //查询被点赞的评论用户
+            Integer uid = commentService.queryUseridByComment(Integer.parseInt(commentid));
+            //新增被点在人的帖子评论最新消息
+            news.setIsread(0);
+            news.setIntime(new Date());
+            news.setUserid(uid);
+            newInformationService.insertUserByNewInformation(news);
+        }
+        //******************************************************************
         return sum;
     }
 
@@ -116,6 +140,26 @@ public class FacadeComments {
                 vo.setStatus(0);
                 vo.setIscontribute(0);
                 type = commentService.insertComment(vo);//添加评论
+
+                //************************查询被评论的帖子是否被设为最新消息通知用户
+                Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
+                NewInformation news = new NewInformation();
+                //更新被点赞人的帖子最新消息
+                if (isread != null) {
+                    news.setIsread(0);
+                    news.setIntime(new Date());
+                    news.setUserid(isread);
+                    newInformationService.updateUserByNewInformation(news);
+                } else {
+                    //查询被点赞的帖子发帖人
+                    Integer uid = postService.queryPosterActivity(Integer.parseInt(postid));
+                    //新增被点在人的帖子最新消息
+                    news.setIsread(0);
+                    news.setIntime(new Date());
+                    news.setUserid(uid);
+                    newInformationService.insertUserByNewInformation(news);
+                }
+                //******************************************************************
             } else {//表示是其他评论的子评论，不算评论次数
                 CommentVo vo = new CommentVo();
                 vo.setContent(content);
@@ -128,6 +172,24 @@ public class FacadeComments {
                 vo.setIscontribute(0);
                 vo.setPid(Integer.parseInt(fuid));
                 type = commentService.insertComment(vo);//添加评论
+
+                //************************查询被评论的帖子是否被设为最新消息通知用户
+                Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
+                NewInformation news = new NewInformation();
+                //更新被评论的帖子最新消息
+                if (isread != null) {
+                    news.setIsread(0);
+                    news.setIntime(new Date());
+                    news.setUserid(isread);
+                    newInformationService.updateUserByNewInformation(news);
+                } else {
+                    //新增被评论的最新消息
+                    news.setIsread(0);
+                    news.setIntime(new Date());
+                    news.setUserid(Integer.parseInt(userid));
+                    newInformationService.insertUserByNewInformation(news);
+                }
+                //******************************************************************
             }
             //更新用户最后操作时间和帖子评论总次数
             postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子表的评论次数字段

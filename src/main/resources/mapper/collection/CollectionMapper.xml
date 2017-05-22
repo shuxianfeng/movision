@@ -146,4 +146,9 @@
         SET collectsum = collectsum + 1
         WHERE id = #{postid,jdbcType=INTEGER}
     </update>
+
+    <!-- 查询帖子被收藏的用户  -->
+    <select id="queryPostCollectByUser" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT userid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
 </mapper>

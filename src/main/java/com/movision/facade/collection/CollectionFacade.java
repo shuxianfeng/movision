@@ -5,6 +5,8 @@ import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.collection.entity.Collection;
 import com.movision.mybatis.collection.service.CollectionService;
+import com.movision.mybatis.newInformation.entity.NewInformation;
+import com.movision.mybatis.newInformation.service.NewInformationService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
@@ -13,6 +15,7 @@ import org.apache.commons.collections.map.AbstractHashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +38,9 @@ public class CollectionFacade {
     @Autowired
     private PointRecordFacade pointRecordFacade;
 
+    @Autowired
+    private NewInformationService newInformationService;
+
     //在帖子中点击收藏帖子调用该方法
     public int collectionPost(String postid, String userid, String type) {
 
@@ -54,6 +60,28 @@ public class CollectionFacade {
 
             //该帖子的被收藏次数+1
             collectionService.addCollectionSum(Integer.parseInt(postid));
+
+
+            //************************查询被收藏人的帖子是否被设为最新消息通知用户
+            Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
+            NewInformation news = new NewInformation();
+            //更新被收藏人的帖子最新消息
+            if (isread != null) {
+                news.setIsread(0);
+                news.setIntime(new Date());
+                news.setUserid(isread);
+                newInformationService.updateUserByNewInformation(news);
+            } else {
+                //获取被收藏人
+                Integer uid = collectionService.queryPostCollectByUser(Integer.parseInt(postid));
+                //新增被收藏人的帖子最新消息
+                news.setIsread(0);
+                news.setIntime(new Date());
+                news.setUserid(uid);
+                newInformationService.insertUserByNewInformation(news);
+            }
+            //******************************************************************
+
             return collectionService.collectionPost(collection);
         } else {
             return -1;

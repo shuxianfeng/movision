@@ -54,5 +54,20 @@ public class ImUserService {
         }
     }
 
+    /**
+     * 根据accid查询用户id
+     *
+     * @param accid
+     * @return
+     */
+    public Integer queryUserByAccid(String accid) {
+        try {
+            log.info("根据ACCID查询用户id");
+            return imUserMapper.queryUserByAccid(accid);
+        } catch (Exception e) {
+            log.error("根据ACCI查询用户id异常", e);
+            throw e;
+        }
+    }
 
 }

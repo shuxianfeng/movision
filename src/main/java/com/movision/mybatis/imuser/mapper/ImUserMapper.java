@@ -15,4 +15,6 @@ public interface ImUserMapper {
 
     List<ImUser> selectAllAPPImuser();
 
+    Integer queryUserByAccid(String accid);
+
 }

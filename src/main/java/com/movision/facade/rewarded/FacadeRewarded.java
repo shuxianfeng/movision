@@ -7,6 +7,8 @@ import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.constant.entity.Constant;
 import com.movision.mybatis.constant.service.ConstantService;
+import com.movision.mybatis.newInformation.entity.NewInformation;
+import com.movision.mybatis.newInformation.service.NewInformationService;
 import com.movision.mybatis.pointRecord.service.PointRecordService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.record.service.RecordService;
@@ -29,25 +31,28 @@ import java.util.Map;
 @Service
 public class FacadeRewarded {
     @Autowired
-    PointRecordFacade pointRecordFacade;
+    private PointRecordFacade pointRecordFacade;
 
     @Autowired
-    PostService postService;
+    private PostService postService;
 
     @Autowired
-    ConstantService constantService;
+    private ConstantService constantService;
 
     @Autowired
-    PointRecordService pointRecordService;
+    private PointRecordService pointRecordService;
 
     @Autowired
-    UserFacade userFacade;
+    private UserFacade userFacade;
 
     @Autowired
-    RecordService recordService;
+    private RecordService recordService;
 
     @Autowired
-    RewardedService rewardedService;
+    private RewardedService rewardedService;
+
+    @Autowired
+    private NewInformationService newInformationService;
 
 
     /**
@@ -123,6 +128,25 @@ public class FacadeRewarded {
                 ShiroUtil.updateAppuserPoint(in);
                 map.put("code", 200);
                 map.put("resault", in);
+
+
+                //************************查询被打赏人是否被设为最新消息通知用户
+                Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
+                NewInformation news = new NewInformation();
+                //更新被打赏人的最新消息
+                if (isread != null) {
+                    news.setIsread(0);
+                    news.setIntime(new Date());
+                    news.setUserid(isread);
+                    newInformationService.updateUserByNewInformation(news);
+                } else {
+                    //新增被点在人的帖子最新消息
+                    news.setIsread(0);
+                    news.setIntime(new Date());
+                    news.setUserid(uid);
+                    newInformationService.insertUserByNewInformation(news);
+                }
+                //******************************************************************
                 return map;
             } else {
                 map.put("code", 300);

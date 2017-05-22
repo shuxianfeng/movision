@@ -365,4 +365,21 @@ public class CommentService {
             throw e;
         }
     }
+
+
+    /**
+     * 查询被点赞的评论的用户
+     *
+     * @param commentid
+     * @return
+     */
+    public Integer queryUseridByComment(Integer commentid) {
+        try {
+            log.info("查询被点赞评论的用户");
+            return commentMapper.queryUseridByComment(commentid);
+        } catch (Exception e) {
+            log.error("查询被点赞评论的用", e);
+            throw e;
+        }
+    }
 }

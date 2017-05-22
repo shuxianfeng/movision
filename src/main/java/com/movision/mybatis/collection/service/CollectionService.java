@@ -95,4 +95,14 @@ public class CollectionService {
             throw e;
         }
     }
+
+    public Integer queryPostCollectByUser(Integer postid) {
+        try {
+            log.info("查询被收藏帖子的用户");
+            return collectionMapper.queryPostCollectByUser(postid);
+        } catch (Exception e) {
+            log.error("查询被收藏帖子的用户异常", e);
+            throw e;
+        }
+    }
 }

@@ -3,8 +3,10 @@ package com.movision.controller.app.im;
 import com.movision.common.Response;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.im.ImFacade;
+import com.movision.facade.newInformation.NewInformationsFacade;
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
 import com.movision.mybatis.imFirstDialogue.entity.ImMsg;
+import com.movision.mybatis.newInformation.entity.NewInformation;
 import com.movision.utils.ListUtil;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -30,6 +32,9 @@ public class ImController {
 
     @Autowired
     private ImFacade imFacade;
+
+    @Autowired
+    private NewInformationsFacade newInformationsFacade;
 
     /**
      * 打招呼接口
@@ -101,5 +106,28 @@ public class ImController {
         return response;
     }
 
+    @ApiOperation(value = "更最新消息已读", notes = "更新用户最新消息为已读", response = Response.class)
+    @RequestMapping(value = "/update_new_informations", method = RequestMethod.POST)
+    public Response UpdateNewInformations() {
+        Response response = new Response();
+        newInformationsFacade.updateNewInformtions(ShiroUtil.getAppUserID());
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        return response;
+    }
+
+
+    @ApiOperation(value = "查询用户最新消息", notes = "查询用户最新消息", response = Response.class)
+    @RequestMapping(value = "/query_new_informations", method = RequestMethod.POST)
+    public Response QueryNewInformations() {
+        Response response = new Response();
+        NewInformation res = newInformationsFacade.queryNewInformations(ShiroUtil.getAppUserID());
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(res);
+        return response;
+    }
 
 }

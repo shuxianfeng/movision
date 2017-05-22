@@ -1940,4 +1940,7 @@
         select userid from yw_post WHERE id=#{postid,jdbcType=INTEGER} AND circleid IS NOT NULL
     </select>
 
+    <select id="queryPosterActivity" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select userid from yw_post WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
 </mapper>
