@@ -18,6 +18,7 @@ import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
+import com.movision.utils.ValidateUtils;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.VerifyCodeUtils;
 import com.movision.utils.im.CheckSumBuilder;
@@ -75,15 +76,22 @@ public class AppLoginController {
     public Response getMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile) throws IOException, ApiException {
         log.debug("获得手机验证码  mobile==" + mobile);
         Response response = new Response();
-        // 生成随机字串
-        String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE, VerifyCodeUtils.VERIFY_CODES_DIGIT);
-        log.debug("verifyCode == " + verifyCode);
+        if (ValidateUtils.isMobile(mobile)) {
+            // 生成随机字串
+            String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE, VerifyCodeUtils.VERIFY_CODES_DIGIT);
+            log.debug("verifyCode == " + verifyCode);
 
-        appRegisterFacade.sendSms(mobile, verifyCode);
+            appRegisterFacade.sendSms(mobile, verifyCode);
 
-        appRegisterFacade.putValidationInfoToSession(mobile, verifyCode, "r");
+            appRegisterFacade.putValidationInfoToSession(mobile, verifyCode, "r");
 
-        response.setData(verifyCode);
+            response.setCode(200);
+            response.setData(verifyCode);
+        } else {
+            log.error("手机号不正确！");
+            response.setCode(400);
+            response.setMessage("请输入正确的手机号！");
+        }
 
         return response;
     }
