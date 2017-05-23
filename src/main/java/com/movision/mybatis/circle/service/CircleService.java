@@ -287,6 +287,20 @@ public class CircleService {
     }
 
     /**
+     * 首页查询圈子列表
+     * @return
+     */
+    public List<Circle> queryCircleList() {
+        try {
+            log.info("首页查询圈子");
+            return circleMapper.queryCircleList();
+        } catch (Exception e) {
+            log.error("首页查询圈子列表异常", e);
+            throw e;
+        }
+    }
+
+    /**
      * 查询发现页排序
      *
      * @return

@@ -503,6 +503,14 @@ public class CircleFacade {
     }
 
     /**
+     * 用于首页查询圈子列表
+     * @return
+     */
+    public List<Circle> queryCircleList() {
+        return circleService.queryCircleList();//圈主。圈子管理员
+    }
+
+    /**
      * 添加圈子分类
      *
      * @param typename

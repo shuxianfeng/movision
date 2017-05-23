@@ -1,6 +1,7 @@
 package com.movision.controller.app;
 
 import com.movision.common.Response;
+import com.movision.facade.boss.CircleFacade;
 import com.movision.facade.index.FacadeCircle;
 import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.circle.entity.CircleVo;
@@ -32,6 +33,9 @@ public class AppCircleController {
 
     @Autowired
     private FacadePost facadePost;
+
+    @Autowired
+    private CircleFacade circleFacade;
 
     @ApiOperation(value = "圈子详情页1", notes = "用户返回圈子详情页上半版数据，圈子首页上半部分内容", response = Response.class)
     @RequestMapping(value = "index1", method = RequestMethod.POST)
@@ -143,6 +147,20 @@ public class AppCircleController {
         } else {
             response.setMessage("取消关注失败");
         }
+        return response;
+    }
+
+    @ApiOperation(value = "查询圈子", notes = "用于首页发帖查询圈子列表接口", response = Response.class)
+    @RequestMapping(value = "queryCircle", method = RequestMethod.POST)
+    public Response queryCircleList() {
+        Response response = new Response();
+        List list = circleFacade.queryCircleList();
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        } else {
+            response.setMessage("查询失败");
+        }
+        response.setData(list);
         return response;
     }
 }
