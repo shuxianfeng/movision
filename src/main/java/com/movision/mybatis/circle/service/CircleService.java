@@ -301,7 +301,7 @@ public class CircleService {
      * 首页查询圈子列表
      * @return
      */
-    public List<Circle> queryCircleListByUserRole(UserRole ur) {
+    public List<CircleVo> queryCircleListByUserRole(UserRole ur) {
         try {
             log.info("首页查询圈子");
             return circleMapper.queryCircleListByUserRole(ur);
@@ -317,7 +317,7 @@ public class CircleService {
      *
      * @return
      */
-    public List<Circle> queryCircleList() {
+    public List<CircleVo> queryCircleList() {
         try {
             log.info("首页查询所有圈子");
             return circleMapper.queryCircleList();

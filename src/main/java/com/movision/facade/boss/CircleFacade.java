@@ -507,8 +507,8 @@ public class CircleFacade {
      * 用于首页查询圈子列表
      * @return
      */
-    public List<Circle> queryCircleList(String loginid, String categoryid, Integer type) {
-        List<Circle> circleList = null;
+    public List<CircleVo> queryCircleList(String loginid, String categoryid, Integer type) {
+        List<CircleVo> circleList = null;
         //查询当前用户角色
         Integer vip = userService.queryUserIsVip(loginid);//是否为大V
         UserRole ur = userService.queryUserRole(loginid);//用户角色
@@ -534,7 +534,7 @@ public class CircleFacade {
      * @param loginid
      * @return
      */
-    public List<Circle> queryCategoryList(String loginid) {
+    public List<CircleVo> queryCategoryList(String loginid) {
         return queryCircleList(loginid, null, 5);
     }
 

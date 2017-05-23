@@ -518,7 +518,7 @@
     </select>
 
     <select id="queryCircleListByUserRole" parameterType="com.movision.mybatis.user.entity.UserRole"
-            resultType="com.movision.mybatis.circle.entity.Circle">
+            resultType="com.movision.mybatis.circle.entity.CircleVo">
         SELECT c.id,c.scope,c.name,c.category,cc.categoryname FROM yw_circle c LEFT JOIN yw_circle_category cc ON
         cc.id=c.category WHERE
         (

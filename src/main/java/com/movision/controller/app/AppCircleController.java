@@ -157,7 +157,7 @@ public class AppCircleController {
     public Response queryCircleAllList(@ApiParam(value = "类型id") @RequestParam String categoryid,
                                        @ApiParam(value = "用户id") @RequestParam String loginid) {
         Response response = new Response();
-        List<Circle> list = circleFacade.queryCircleList(loginid, categoryid, 0);
+        List<CircleVo> list = circleFacade.queryCircleList(loginid, categoryid, 0);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         } else {
@@ -171,7 +171,7 @@ public class AppCircleController {
     @RequestMapping(value = "queryCategory", method = RequestMethod.POST)
     public Response queryCategoryList(@ApiParam(value = "用户id") @RequestParam String loginid) {
         Response response = new Response();
-        List<Circle> list = circleFacade.queryCategoryList(loginid);
+        List<CircleVo> list = circleFacade.queryCategoryList(loginid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         } else {

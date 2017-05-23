@@ -62,9 +62,9 @@ public interface CircleMapper {
 
     List<Circle> queryListByCircleListByUserid(Map categoryid);
 
-    List<Circle> queryCircleListByUserRole(UserRole ur);
+    List<CircleVo> queryCircleListByUserRole(UserRole ur);
 
-    List<Circle> queryCircleList();
+    List<CircleVo> queryCircleList();
 
     List<Circle> queryDiscoverList();
 
