@@ -546,6 +546,9 @@
             c.scope=#{vip,jdbcType=INTEGER} OR
         </if>
         c.scope=2
+        <if test="type == 5">
+            GROUP BY c.category
+        </if>
     </select>
 
     <select id="queryCircleList" resultType="com.movision.mybatis.circle.entity.Circle">
