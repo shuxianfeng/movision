@@ -81,6 +81,7 @@ public class VideoTranscoder {
             MultimediaInfo m = encoder.getInfo(file);
             width = m.getVideo().getSize().getWidth();
             height = m.getVideo().getSize().getHeight();
+            //long duration = m.getDuration();//视频时长，单位毫秒ms
         }
 
         if (type == 0) {
