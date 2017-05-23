@@ -1063,4 +1063,13 @@
         where nickname = #{nickname}
         and id <![CDATA[ <> ]]> #{userid}
     </select>
+
+    <select id="queryUserIsVip" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT level FROM yw_user WHERE id=#{loginid,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryUserRole" resultType="com.movision.mybatis.user.entity.UserRole" parameterType="java.lang.Integer">
+        SELECT u.id AS userid,au.iscircle,au.circlemanagement,au.contributing,au.common
+        FROM yw_user u LEFT JOIN yw_admin_user au ON u.phone=au.phone WHERE u.id=#{loginid,jdbcType=INTEGER}
+    </select>
 </mapper>

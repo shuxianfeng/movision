@@ -778,5 +778,36 @@ public class UserService {
         }
     }
 
+    /**
+     * 查询用户是否为VIP
+     *
+     * @param loginid
+     * @return
+     */
+    public Integer queryUserIsVip(String loginid) {
+        try {
+            log.info("查询用户是否为VIP");
+            return userMapper.queryUserIsVip(Integer.parseInt(loginid));
+        } catch (Exception e) {
+            log.error("查询用户是否为VIP异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询用户角色
+     *
+     * @param loginid
+     * @return
+     */
+    public UserRole queryUserRole(String loginid) {
+        try {
+            log.info("查询用户角色");
+            return userMapper.queryUserRole(Integer.parseInt(loginid));
+        } catch (Exception e) {
+            log.error("查询用户角色异常", e);
+            throw e;
+        }
+    }
 
 }

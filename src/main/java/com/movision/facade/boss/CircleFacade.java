@@ -14,6 +14,7 @@ import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.rewarded.service.RewardedService;
 import com.movision.mybatis.share.service.SharesService;
 import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserRole;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.L;
 import com.movision.utils.oss.MovisionOssClient;
@@ -275,11 +276,11 @@ public class CircleFacade {
      * @param circleadmin
      * @param photo
      * @param introduction
-     * @param permission
+     * @param scope
      * @return
      */
     public Map updateCircle(String id, String name, String category, String circlemanid,
-                            String circleadmin, String photo, String introduction, String maylikeimg, String permission, String loginuser) {
+                            String circleadmin, String photo, String introduction, String maylikeimg, String scope, String loginuser) {
         CircleDetails circleDetails = new CircleDetails();
         Map map = new HashedMap();
         Integer circleid = null;
@@ -320,8 +321,8 @@ public class CircleFacade {
             if (!StringUtils.isEmpty(maylikeimg)) {
                 circleDetails.setMaylikeimg(maylikeimg);
             }
-            if (!StringUtils.isEmpty(permission)) {
-                circleDetails.setPermission(Integer.parseInt(permission));
+            if (!StringUtils.isEmpty(scope)) {
+                circleDetails.setScope(Integer.parseInt(scope));
             }
             Integer s = circleService.updateCircle(circleDetails);
             if (s == 1) {
@@ -506,8 +507,35 @@ public class CircleFacade {
      * 用于首页查询圈子列表
      * @return
      */
-    public List<Circle> queryCircleList() {
-        return circleService.queryCircleList();//圈主。圈子管理员
+    public List<Circle> queryCircleList(String loginid, String categoryid, Integer type) {
+        List<Circle> circleList = null;
+        //查询当前用户角色
+        Integer vip = userService.queryUserIsVip(loginid);//是否为大V
+        UserRole ur = userService.queryUserRole(loginid);//用户角色
+        ur.setUserid(Integer.parseInt(loginid));
+        if (categoryid != null) {
+            ur.setCategoryid(Integer.parseInt(categoryid));
+        }
+        ur.setType(type);
+        if (vip > 0) {
+            ur.setVip(1);
+        }
+        if (ur.getIscircle() == 1 || ur.getCirclemanagement() == 1) {
+            circleList = circleService.queryCircleListByUserRole(ur);//查询用户可发帖的圈子列表
+        } else if (ur.getCommon() == 1 || loginid == "-1") {
+            circleList = circleService.queryCircleList();//查询所有圈子列表
+        }
+        return circleList;
+    }
+
+    /**
+     * 查询圈子类型
+     *
+     * @param loginid
+     * @return
+     */
+    public List<Circle> queryCategoryList(String loginid) {
+        return queryCircleList(loginid, null, 5);
     }
 
     /**

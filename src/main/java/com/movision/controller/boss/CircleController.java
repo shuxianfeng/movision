@@ -169,7 +169,7 @@ public class CircleController {
      * @param circleadmin
      * @param photo
      * @param introduction
-     * @param permission
+     * @param scope
      * @return
      */
     @ApiOperation(value = "圈子编辑", notes = "用于圈子编辑接口", response = Response.class)
@@ -182,10 +182,10 @@ public class CircleController {
                                  @ApiParam(value = "圈子否封面") @RequestParam String photo,
                                  @ApiParam(value = "圈子简介") @RequestParam String introduction,
                                  @ApiParam(value = "圈子首页方形图") @RequestParam String maylikeimg,
-                                 @ApiParam(value = "发帖权限") @RequestParam(required = false) String permission,
+                                 @ApiParam(value = "发帖权限") @RequestParam(required = false) String scope,
                                  @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map map = circleFacade.updateCircle(id, name, category, userid, circleadmin, photo, introduction, maylikeimg, permission, loginid);
+        Map map = circleFacade.updateCircle(id, name, category, userid, circleadmin, photo, introduction, maylikeimg, scope, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

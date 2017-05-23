@@ -517,8 +517,29 @@
         </if>
     </select>
 
+    <select id="queryCircleListByUserRole" parameterType="com.movision.mybatis.user.entity.UserRole"
+            resultType="com.movision.mybatis.circle.entity.Circle">
+        SELECT c.id,c.scope,c.name,c.category,cc.categoryname FROM yw_circle c LEFT JOIN yw_circle_category cc ON
+        cc.id=c.category WHERE
+        (
+        <if test="vip == 1">
+            c.scope=#{vip,jdbcType=INTEGER} OR
+        </if>
+        c.scope=2)
+        AND(
+        c.id=(SELECT id FROM yw_circle WHERE phone=(SELECT phone FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}))
+        OR c.id IN (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone=(SELECT
+        phone FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}))))
+        <if test="categoryid != null">
+            AND c.category=#{categoryid,jdbcType=INTEGER}
+        </if>
+        <if test="type == 5">
+            GROUP BY c.category
+        </if>
+    </select>
+
     <select id="queryCircleList" resultType="com.movision.mybatis.circle.entity.Circle">
-        SELECT id,name FROM yw_circle
+        SELECT id,scope,name,category FROM yw_circle
     </select>
 
     <select id="queryListByCircleManageListByUserid" parameterType="java.util.Map"
@@ -649,8 +670,8 @@
             <if test="introduction!=null">
                 introduction = #{introduction,jdbcType=VARCHAR},
             </if>
-            <if test="permission!=null">
-                permission = #{permission,jdbcType=INTEGER},
+            <if test="scope!=null">
+                scope = #{scope,jdbcType=INTEGER},
             </if>
             <if test="createtime!=null">
                 createtime = #{createtime,jdbcType=TIMESTAMP},

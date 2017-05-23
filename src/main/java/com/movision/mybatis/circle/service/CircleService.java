@@ -5,6 +5,7 @@ import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.circle.mapper.CircleMapper;
 import com.movision.mybatis.followCircle.mapper.FollowCircleMapper;
 import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserRole;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -300,12 +301,28 @@ public class CircleService {
      * 首页查询圈子列表
      * @return
      */
-    public List<Circle> queryCircleList() {
+    public List<Circle> queryCircleListByUserRole(UserRole ur) {
         try {
             log.info("首页查询圈子");
-            return circleMapper.queryCircleList();
+            return circleMapper.queryCircleListByUserRole(ur);
         } catch (Exception e) {
             log.error("首页查询圈子列表异常", e);
+            throw e;
+        }
+    }
+
+
+    /**
+     * 首页查询所有圈子
+     *
+     * @return
+     */
+    public List<Circle> queryCircleList() {
+        try {
+            log.info("首页查询所有圈子");
+            return circleMapper.queryCircleList();
+        } catch (Exception e) {
+            log.error("首页查询所有圈子异常", e);
             throw e;
         }
     }

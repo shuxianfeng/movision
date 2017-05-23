@@ -4,6 +4,8 @@ import com.movision.common.Response;
 import com.movision.facade.boss.CircleFacade;
 import com.movision.facade.index.FacadeCircle;
 import com.movision.facade.index.FacadePost;
+import com.movision.mybatis.category.entity.Category;
+import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.circleCategory.entity.CircleCategoryVo;
@@ -152,9 +154,24 @@ public class AppCircleController {
 
     @ApiOperation(value = "查询圈子", notes = "用于首页发帖查询圈子列表接口", response = Response.class)
     @RequestMapping(value = "queryCircle", method = RequestMethod.POST)
-    public Response queryCircleList() {
+    public Response queryCircleAllList(@ApiParam(value = "类型id") @RequestParam String categoryid,
+                                       @ApiParam(value = "用户id") @RequestParam String loginid) {
         Response response = new Response();
-        List list = circleFacade.queryCircleList();
+        List<Circle> list = circleFacade.queryCircleList(loginid, categoryid, 0);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        } else {
+            response.setMessage("查询失败");
+        }
+        response.setData(list);
+        return response;
+    }
+
+    @ApiOperation(value = "首页查询圈子类型", notes = "用于首页发帖查询圈子类型列表接口", response = Response.class)
+    @RequestMapping(value = "queryCategory", method = RequestMethod.POST)
+    public Response queryCategoryList(@ApiParam(value = "用户id") @RequestParam String loginid) {
+        Response response = new Response();
+        List<Circle> list = circleFacade.queryCategoryList(loginid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         } else {

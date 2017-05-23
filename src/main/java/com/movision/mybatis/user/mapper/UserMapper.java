@@ -129,4 +129,8 @@ public interface UserMapper {
 
     Integer countByNickname(Map map);
 
+    Integer queryUserIsVip(Integer loginid);
+
+    UserRole queryUserRole(Integer loginid);
+
 }
