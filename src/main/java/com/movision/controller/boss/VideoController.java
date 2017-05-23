@@ -43,14 +43,15 @@ public class VideoController {
     @ApiOperation(value = "作为上传视频测试使用", notes = "作为上传视频测试使用", response = Response.class)
     @RequestMapping(value = "boss/video/upload_video", method = RequestMethod.POST)
     public Response queryApplyVipList(@RequestParam(value = "file", required = false) MultipartFile file) throws ServletException, IOException {
-        Map m = movisionOssClient.uploadObject(file, "video", "test");
+        /*Map m = movisionOssClient.uploadObject(file, "video", "test");
         String url = String.valueOf(m.get("url"));
         Map<String, Object> map = new HashMap<>();
         map.put("url", url);
         map.put("name", FileUtil.getFileNameByUrl(url));
         map.put("width", m.get("width"));
         map.put("height", m.get("height"));
-        return new Response(map);
+        return new Response(map);*/
+        return new Response();
 
         /*Map map = videoFacade.newUploadVideo(request, "video", response);
         return new Response(map);*/

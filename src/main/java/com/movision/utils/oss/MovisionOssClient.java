@@ -58,6 +58,7 @@ public class MovisionOssClient {
 
             case "movision":
                 // 上传到测试服务器，返回url
+                log.debug("上传到测试服务器");
                 Map<String, Object> map2 = uploadFacade.upload(file, type, chann);
                 Map<String, Object> dataMap = (Map<String, Object>) map2.get("data");
                 log.info("【dataMap】=" + dataMap);
