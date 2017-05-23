@@ -542,10 +542,14 @@
             parameterType="java.util.Map">
         SELECT c.id,c.scope,c.name,c.category,cc.categoryname FROM yw_circle c LEFT JOIN yw_circle_category cc ON
         cc.id=c.category WHERE
+        (
         <if test="vip == 1">
             c.scope=#{vip,jdbcType=INTEGER} OR
         </if>
-        c.scope=2
+        c.scope=2)
+        <if test="categoryid != null">
+            AND c.category=#{categoryid,jdbcType=INTEGER}
+        </if>
         <if test="type == 5">
             GROUP BY c.category
         </if>
