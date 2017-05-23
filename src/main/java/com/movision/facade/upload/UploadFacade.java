@@ -58,6 +58,7 @@ public class UploadFacade {
             String fileName = FileUtil.renameFile(file.getOriginalFilename());
             Map returnMap = new HashedMap();
             String data;
+            String absolutePath = null;
             switch (type) {
                 case "img":
                     if (chann != null) {
@@ -92,14 +93,19 @@ public class UploadFacade {
                     if (chann != null) {
                         saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/video";
                         /**
-                         * 这是外界访问该视频的地址
+                         * 这是外界访问该视频的地址（绝对路径）
                          * 其中data = http://120.77.214.187:8100/upload/$chan/video/$filename
                          */
+
                         //data = imgDomain + "/upload/" + chann + "/video/" + fileName;
-                        data = voidD + fileName;
+                        absolutePath = imgDomain + "/upload/" + chann + "/video/" + fileName;
+                        log.warn("--------------[absolutePath] = " + absolutePath);
+//                        data = voidD + fileName;
+                        data = voidD + "/upload/" + chann + "/video/" + fileName;
                     } else {
                         saveDirectory = apiConstants.getUploadDir();
                         data = imgDomain + "/upload/" + fileName;
+                        absolutePath = data;
                     }
                     maxPostSize = apiConstants.getUploadVideoMaxPostSize();
                     log.info("最大大小上传限制为=" + maxPostSize);
@@ -120,7 +126,7 @@ public class UploadFacade {
             File upfile = new File(saveDirectory + "/" + fileName);
             file.transferTo(upfile);
             //视频时长校验
-            videoDurationValidation(type, maxVideoDuration, data);
+            videoDurationValidation(type, maxVideoDuration, absolutePath);
 
             result.put("status", "success");
             returnMap.put("url", data);
