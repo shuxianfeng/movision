@@ -328,6 +328,22 @@ public class CircleService {
     }
 
     /**
+     * 查询只有所有人可发帖或大V可发帖的圈子
+     *
+     * @param vip
+     * @return
+     */
+    public List<CircleVo> queryCircleListTo(Map vip) {
+        try {
+            log.info("查询只有所有人可发帖或大V可发帖的圈子");
+            return circleMapper.queryCircleListTo(vip);
+        } catch (Exception e) {
+            log.error("查询只有所有人可发帖或大V可发帖的圈子异常", e);
+            throw e;
+        }
+    }
+
+    /**
      * 查询发现页排序
      *
      * @return

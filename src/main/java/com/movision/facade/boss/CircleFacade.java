@@ -520,10 +520,16 @@ public class CircleFacade {
         if (vip > 0) {
             ur.setVip(1);
         }
-        if (ur.getIscircle() == 1 || ur.getCirclemanagement() == 1) {
-            circleList = circleService.queryCircleListByUserRole(ur);//查询用户可发帖的圈子列表
-        } else if (ur.getCommon() == 1 || loginid == "-1") {
-            circleList = circleService.queryCircleList();//查询所有圈子列表
+        if (ur.getIscircle() != null && ur.getCirclemanagement() != null && ur.getCommon() != null) {
+            if (ur.getIscircle() == 1 || ur.getCirclemanagement() == 1) {
+                circleList = circleService.queryCircleListByUserRole(ur);//查询用户可发帖的圈子列表
+            } else if (ur.getCommon() == 1 || loginid == "-1") {
+                circleList = circleService.queryCircleList();//查询所有圈子列表
+            }
+        } else {
+            Map map = new HashMap();
+            map.put("vip", vip);
+            circleList = circleService.queryCircleListTo(map);
         }
         return circleList;
     }

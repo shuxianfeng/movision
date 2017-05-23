@@ -538,6 +538,16 @@
         </if>
     </select>
 
+    <select id="queryCircleListTo" resultType="com.movision.mybatis.circle.entity.CircleVo"
+            parameterType="java.util.Map">
+        SELECT c.id,c.scope,c.name,c.category,cc.categoryname FROM yw_circle c LEFT JOIN yw_circle_category cc ON
+        cc.id=c.category WHERE
+        <if test="vip == 1">
+            c.scope=#{vip,jdbcType=INTEGER} OR
+        </if>
+        c.scope=2
+    </select>
+
     <select id="queryCircleList" resultType="com.movision.mybatis.circle.entity.Circle">
         SELECT id,scope,name,category FROM yw_circle
     </select>

@@ -66,6 +66,8 @@ public interface CircleMapper {
 
     List<CircleVo> queryCircleList();
 
+    List<CircleVo> queryCircleListTo(Map vip);
+
     List<Circle> queryDiscoverList();
 
     Integer queryCircleDiscover(String circleid);
