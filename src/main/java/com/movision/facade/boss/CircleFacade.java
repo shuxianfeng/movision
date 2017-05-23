@@ -529,7 +529,7 @@ public class CircleFacade {
         } else {
             Map map = new HashMap();
             map.put("vip", vip);
-            map.put("type", 5);
+            map.put("type", type);
             map.put("categoryid", categoryid);
             circleList = circleService.queryCircleListTo(map);
         }
