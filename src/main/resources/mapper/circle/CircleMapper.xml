@@ -902,4 +902,7 @@
             #{item}
         </foreach>
     </update>
+    <select id="queryCircleName" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT `name` FROM yw_circle WHERE id = #{circleid,jdbcType=INTEGER}
+    </select>
 </mapper>

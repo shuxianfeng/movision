@@ -41,6 +41,8 @@ import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.JsoupCompressImg;
 import com.movision.utils.ListUtil;
+import com.movision.utils.VideoUploadUtil;
+import com.movision.utils.file.FileUtil;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
 import org.apache.commons.collections.map.HashedMap;
@@ -62,7 +64,8 @@ import java.util.*;
  */
 @Service
 public class PostFacade {
-
+    @Autowired
+    private VideoUploadUtil videoUploadUtil;
     @Autowired
     private PostService postService;
 
@@ -762,21 +765,26 @@ public class PostFacade {
                 }
                 post.setCoverimg(coverimg);//插入图片地址
                 post.setUserid(userid);
+                post.setIsdel("1");
                 int result = postService.addPost(post);//添加帖子
+                String fName = FileUtil.getPicName(vid);//获取视频文件名
+                //查询圈子名称
+                String circlename = circleService.queryCircleName(Integer.parseInt(circleid));
+                String vedioid = videoUploadUtil.videoUpload(vid, fName, "", bannerimgurl, circlename);
                 if (result == 1) {
                     Integer in = 0;
                     Integer pid = post.getId();//获取到刚刚添加的帖子id
                     if (type.equals("1")) {
                         Video vide = new Video();
                         vide.setPostid(pid);
-                        vide.setVideourl(vid);
+                        vide.setVideourl(vedioid);
                         vide.setBannerimgurl(bannerimgurl);
                         vide.setIntime(new Date());
                         in = videoService.insertVideoById(vide);//添加视频表
                     } else if (type.equals("2")) {//分享视频贴
                         Video vide = new Video();
                         vide.setPostid(pid);
-                        vide.setVideourl(vid);
+                        vide.setVideourl(vedioid);
                         vide.setBannerimgurl(coverimg);//分享视频贴的视频封面是帖子封面
                         vide.setIntime(new Date());
                         in = videoService.insertVideoById(vide);//添加视频表
@@ -818,6 +826,7 @@ public class PostFacade {
                     }
                 }
                 map.put("resault", 1);
+                map.put("vedioid", vedioid);
                 return map;
             } else {
                 map.put("resault", -2);
@@ -1331,12 +1340,16 @@ public class PostFacade {
 
                     Video vide = new Video();
                     Integer in = null;
+                    String fName = FileUtil.getPicName(vid);//获取视频文件名
+                    //查询圈子名称
+                    String circlename = circleService.queryCircleName(Integer.parseInt(circleid));
+                    String videoid = videoUploadUtil.videoUpload(vid, fName, "", bannerimgurl, circlename);
                     if (type.equals("1")) {//帖子类型为原生视频贴时修改
                         if (!StringUtils.isEmpty(id)) {
                             vide.setPostid(pid);
                         }
-                        if (!StringUtils.isEmpty(vid)) {
-                            vide.setVideourl(vid);
+                        if (!StringUtils.isEmpty(videoid)) {
+                            vide.setVideourl(videoid);
                         }
                         if (!StringUtils.isEmpty(bannerimgurl)) {
                             vide.setBannerimgurl(bannerimgurl);
@@ -1353,8 +1366,8 @@ public class PostFacade {
                         if (!StringUtils.isEmpty(id)) {
                             vide.setPostid(pid);
                         }
-                        if (!StringUtils.isEmpty(vid)) {
-                            vide.setVideourl(vid);
+                        if (!StringUtils.isEmpty(videoid)) {
+                            vide.setVideourl(videoid);
                         }
                         if (!StringUtils.isEmpty(bannerimgurl)) {
                             vide.setBannerimgurl(coverimg);//分享视频贴的封面是帖子的封面
@@ -1415,6 +1428,7 @@ public class PostFacade {
                     post.setUserid(userid);
                     int result = postService.updatePostById(post);//编辑帖子
                     map.put("result", result);
+                    map.put("videoid", videoid);
                     if (goodsid != null && goodsid != "") {//添加商品
                         String[] lg = goodsid.split(",");//以逗号分隔
                         int de = goodsService.deletePostyByGoods(Integer.parseInt(id));//删除帖子分享的商品

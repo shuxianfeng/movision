@@ -212,6 +212,15 @@ public class PostService {
         }
     }
 
+    public int updatePostIsdel(String vid) {
+        try {
+            log.info("更改上架");
+            return postMapper.updatePostIsdel(vid);
+        } catch (Exception e) {
+            log.error("更改上架失败", e);
+            throw e;
+        }
+    }
     //保存发布的帖子中分享的所有商品
     public void insertPostShareGoods(List<PostShareGoods> postShareGoodsList) {
         try {

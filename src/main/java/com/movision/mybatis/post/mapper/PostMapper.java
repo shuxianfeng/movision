@@ -87,6 +87,8 @@ public interface PostMapper {
 
     int releasePost(Post post);
 
+    int updatePostIsdel(String vid);
+
     void insertPostShareGoods(List<PostShareGoods> postShareGoodsList);
 
     int delPost(Map<String, Object> parammap);

@@ -49,6 +49,8 @@ public interface CircleMapper {
 
     User queryCircleOwner(int circleid);
 
+    String queryCircleName(int circleid);
+
     List<CircleVo> queryCircleByLikeList(Map map);
 
     List<CircleVo> queryCircleManagementByLikeList(Map map);

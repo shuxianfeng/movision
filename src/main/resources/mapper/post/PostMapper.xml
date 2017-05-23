@@ -1943,4 +1943,7 @@
     <select id="queryPosterActivity" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select userid from yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
+    <update id="updatePostIsdel" parameterType="java.lang.String">
+       UPDATE yw_post SET isdel=0 WHERE id=(SELECT postid FROM yw_video   WHERE  videourl= #{vid,jdbcType=VARCHAR})
+    </update>
 </mapper>

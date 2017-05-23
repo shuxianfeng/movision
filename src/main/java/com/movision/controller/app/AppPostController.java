@@ -160,17 +160,34 @@ public class AppPostController {
     ) {
         Response response = new Response();
 
-        int count = facadePost.releasePost(request, userid, type, circleid, title, postcontent, isactive, coverimg, videofile, videourl, proids);
+        Map count = facadePost.releasePost(request, userid, type, circleid, title, postcontent, isactive, coverimg, videofile, videourl, proids);
 
-        if (count == 0) {
+        if (count.get("error").equals("0")) {
             response.setCode(300);
             response.setMessage("系统异常，APP发帖失败");
-        } else if (count == -1) {
+        } else if (count.get("isflag").equals("-1")) {
             response.setCode(201);
             response.setMessage("用户不具备发帖权限");
         } else {
             response.setCode(200);
             response.setMessage("发帖成功");
+        }
+        return response;
+    }
+
+    /**
+     * 修改上架
+     *
+     * @return
+     */
+    @ApiOperation(value = "修改上架", notes = "修改上架", response = Response.class)
+    @RequestMapping(value = {"/update_post_isdel"}, method = RequestMethod.POST)
+    public Response updatePostIsdel(@ApiParam(value = "返回的vid") @RequestParam String vid) {
+        Response response = new Response();
+        int isdel = facadePost.updatePostIsdel(vid);
+        if (response.getCode() == 200) {
+            response.setMessage("修改成功");
+            response.setData(isdel);
         }
         return response;
     }

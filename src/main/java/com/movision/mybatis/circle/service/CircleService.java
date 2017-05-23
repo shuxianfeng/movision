@@ -201,6 +201,16 @@ public class CircleService {
         }
     }
 
+    public String queryCircleName(int circleid) {
+        try {
+            log.info("查询圈子的名称");
+            return circleMapper.queryCircleName(circleid);
+        } catch (Exception e) {
+            log.error("查询圈子名称失败", e);
+            throw e;
+        }
+    }
+
 
 
     /**
