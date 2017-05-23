@@ -5,6 +5,9 @@ import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.BusinessException;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.file.FileUtil;
+import it.sauronsoftware.jave.Encoder;
+import it.sauronsoftware.jave.EncoderException;
+import it.sauronsoftware.jave.MultimediaInfo;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +50,8 @@ public class UploadFacade {
              * saveDirectory = /WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/upload/$chan/img
              */
             String saveDirectory;
-            long maxPostSize;
+            long maxPostSize;   //上传的文件大小
+            long maxVideoDuration = 0;  //上传的视频时长
             String imgDomain = PropertiesLoader.getValue("upload.img.domain");
             String voidD = PropertiesLoader.getValue("post.video.domain");
 //            String docDomain = PropertiesLoader.getValue("doc.domain");
@@ -58,7 +62,6 @@ public class UploadFacade {
                 case "img":
                     if (chann != null) {
                         saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/img";
-                        maxPostSize = apiConstants.getUploadPicMaxPostSize();
                         /**
                          * 这是外界访问该图片的地址
                          * 其中data = http://120.77.214.187:8100/upload/$chan/img/$filename
@@ -66,9 +69,9 @@ public class UploadFacade {
                         data = imgDomain + "/upload/" + chann + "/img/" + fileName;
                     } else {
                         saveDirectory = apiConstants.getUploadDir();
-                        maxPostSize = apiConstants.getUploadPicMaxPostSize();
                         data = imgDomain + "/upload/" + fileName;
                     }
+                    maxPostSize = apiConstants.getUploadPicMaxPostSize();
                     //获取图片的宽高
                     BufferedImage bi = ImageIO.read(file.getInputStream());
                     returnMap.put("width", bi.getWidth());
@@ -78,21 +81,16 @@ public class UploadFacade {
                 case "doc":
                     if (chann != null) {
                         saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/doc";
-                        maxPostSize = apiConstants.getUploadDocMaxPostSize();
-                        /*if (chann.equals("tech")) {
-                            maxPostSize = apiConstants.getUploadTechMaxPostSize();
-                        }*/
                     } else {
                         saveDirectory = apiConstants.getUploadDir();
-                        maxPostSize = apiConstants.getUploadDocMaxPostSize();
                     }
+                    maxPostSize = apiConstants.getUploadDocMaxPostSize();
+                    log.info("最大大小上传限制为=" + maxPostSize);
                     data = fileName;
                     break;
                 case "video":
                     if (chann != null) {
                         saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/video";
-                        maxPostSize = apiConstants.getUploadVideoMaxPostSize();
-                        log.info("最大上传限制为=" + maxPostSize);
                         /**
                          * 这是外界访问该视频的地址
                          * 其中data = http://120.77.214.187:8100/upload/$chan/video/$filename
@@ -101,55 +99,28 @@ public class UploadFacade {
                         data = voidD + fileName;
                     } else {
                         saveDirectory = apiConstants.getUploadDir();
-                        maxPostSize = apiConstants.getUploadVideoMaxPostSize();
                         data = imgDomain + "/upload/" + fileName;
                     }
+                    maxPostSize = apiConstants.getUploadVideoMaxPostSize();
+                    log.info("最大大小上传限制为=" + maxPostSize);
+                    maxVideoDuration = apiConstants.getUploadVideoMaxDuration();
+                    log.info("最大视频时长上传限制为=" + maxPostSize);
                     break;
-
-                //简历压缩包上传
-                /*case "zip":
-                    if (chann != null && chann.equals("51job")){
-                        saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/zip";
-                        maxPostSize = apiConstants.getUploadTechMaxPostSize();
-                    }else if (chann != null && chann.equals("zhilian")){
-                        saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/zip";
-                        maxPostSize = apiConstants.getUploadTechMaxPostSize();
-                    }else if (chann != null && chann.equals("rencai")){
-                        saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/zip";
-                        maxPostSize = apiConstants.getUploadTechMaxPostSize();
-                    }else if (chann != null && chann.equals("liepin")){
-                        saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/zip";
-                        maxPostSize = apiConstants.getUploadTechMaxPostSize();
-                    }
-                    else {
-                        saveDirectory = apiConstants.getUploadDir();
-                        maxPostSize = apiConstants.getUploadDocMaxPostSize();
-                    }
-                    data = fileName;
-                    break;*/
 
                 default:
                     log.error("上传类型不支持");
                     throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传类型不支持");
             }
 
-
             //目录不存在则创建
-            log.info("【saveDirectory】=" + saveDirectory);
-            File dir = new File(saveDirectory);
-            if (!dir.exists() && !dir.isDirectory()) {
-                dir.mkdirs();
-                log.info("mk dir susscess dirName = " + saveDirectory);
-            }
-
-            long size = file.getSize();
-            if (size > maxPostSize) {
-                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过限制");
-            }
-
-            File upfile = new File(saveDirectory + "/" + fileName);
+            createDir(saveDirectory);
+            //大小校验
+            fileSizeValidation(file, maxPostSize);
             //使用transferTo（dest）方法将上传文件写到服务器上指定的文件
+            File upfile = new File(saveDirectory + "/" + fileName);
             file.transferTo(upfile);
+            //视频时长校验
+            videoDurationValidation(type, maxVideoDuration, data);
 
             result.put("status", "success");
             returnMap.put("url", data);
@@ -161,5 +132,33 @@ public class UploadFacade {
             result.put("status", "fail");
         }
         return result;
+    }
+
+    private void createDir(String saveDirectory) {
+        log.info("【saveDirectory】=" + saveDirectory);
+        File dir = new File(saveDirectory);
+        if (!dir.exists() && !dir.isDirectory()) {
+            dir.mkdirs();
+            log.info("【mk dir susscess】, dirName = " + saveDirectory);
+        }
+    }
+
+    private void fileSizeValidation(MultipartFile file, long maxPostSize) {
+        long size = file.getSize();
+        if (size > maxPostSize) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过限制");
+        }
+    }
+
+    private void videoDurationValidation(String type, long maxVideoDuration, String data) throws EncoderException {
+        if ("video".equals(type)) {
+            Encoder encoder = new Encoder();
+            File newFile = new File(data);
+            MultimediaInfo m = encoder.getInfo(newFile);
+            long duration = m.getDuration();    //视频时长
+            if (duration > maxVideoDuration) {
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "视频时长大小超过限制");
+            }
+        }
     }
 }

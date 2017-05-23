@@ -11,22 +11,47 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ApiConstants {
+    /**
+     * 上传文件的服务器的绝对路径
+     */
     @Value("${uploadDir}")
     private  String uploadDir;
 //    @Value("${uploadDoc}")
 //    private String uploadDoc;
 
+    /**
+     * 图片最大大小
+     */
     @Value("${uploadPicMaxPostSize}")
     private int uploadPicMaxPostSize;
 
+    /**
+     * 文件最大大小
+     */
     @Value("${uploadDocMaxPostSize}")
     private int uploadDocMaxPostSize;
 
+    /**
+     * 视频最大大小（单位：B）
+     */
     @Value("${uploadVideoMaxPostSize}")
     private Long uploadVideoMaxPostSize;
 
-    @Value("${uploadTechMaxPostSize}")
-    private Integer uploadTechMaxPostSize;
+    /**
+     * 视频最大时长（单位：毫秒）
+     */
+    @Value("${uploadVideoMaxDuration}")
+    private Long uploadVideoMaxDuration;
+
+
+    public void setUploadVideoMaxDuration(Long uploadVideoMaxDuration) {
+        this.uploadVideoMaxDuration = uploadVideoMaxDuration;
+    }
+
+    public Long getUploadVideoMaxDuration() {
+
+        return uploadVideoMaxDuration;
+    }
 
     public void setUploadVideoMaxPostSize(Long uploadVideoMaxPostSize) {
         this.uploadVideoMaxPostSize = uploadVideoMaxPostSize;
@@ -69,11 +94,5 @@ public class ApiConstants {
         this.uploadDocMaxPostSize = uploadDocMaxPostSize;
     }
 
-    public Integer getUploadTechMaxPostSize() {
-        return uploadTechMaxPostSize;
-    }
 
-    public void setUploadTechMaxPostSize(Integer uploadTechMaxPostSize) {
-        this.uploadTechMaxPostSize = uploadTechMaxPostSize;
-    }
 }

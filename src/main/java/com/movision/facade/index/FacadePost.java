@@ -257,7 +257,8 @@ public class FacadePost {
 
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
-    public int releasePost(HttpServletRequest request, String userid, String type, String circleid, String title, String postcontent, String isactive, MultipartFile coverimg,
+    public int releasePost(HttpServletRequest request, String userid, String type, String circleid, String title,
+                           String postcontent, String isactive, MultipartFile coverimg,
                            MultipartFile videofile, String videourl, String proids) {
 
         String url = "";//定义原生视频地址
