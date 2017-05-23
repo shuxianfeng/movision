@@ -145,10 +145,7 @@ public class AppRegisterFacade {
                     this.processCoupon(phone, userid);
 
                     //4 判断该userid是否存在一个im用户，若不存在，则注册im用户;若存在，则查询
-                    this.getImuserForReturn(phone, result, userid);
-
-                    //5 判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录， 不需要
-//                    deleteSameDeviceIm(member.getDeviceno());
+                    this.getImuserForReturn(result, userid);
 
                     //6 登录成功则清除session中验证码的信息
                     session.removeAttribute("r" + validateinfo.getAccount());
@@ -318,11 +315,10 @@ public class AppRegisterFacade {
 
     /**
      * 判断该userid是否存在一个im用户，若不存在，则注册im用户
-     * @param phone
      * @param result
      * @throws IOException
      */
-    private void getImuserForReturn(String phone, Map<String, Object> result, int userid) throws IOException {
+    private void getImuserForReturn(Map<String, Object> result, int userid) throws IOException {
 
         Boolean isExistImUser = imFacade.isExistAPPImuser(userid);
         if (!isExistImUser) {
@@ -534,8 +530,6 @@ public class AppRegisterFacade {
 
             result.put("imuser", imFacade.getImuserByCurrentAppuser(originUser.getId()));
         }
-        //4 判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录；
-//        deleteSameDeviceIm(deviceno);
 
         return result;
     }
@@ -638,7 +632,7 @@ public class AppRegisterFacade {
      *
      * @param deviceno
      */
-    public void deleteSameDeviceIm(String deviceno) {
+    /*public void deleteSameDeviceIm(String deviceno) {
         ImDevice imDevice = imDeviceService.selectByDevice(deviceno);
         if (null == imDevice) {
             //不存在，则不操作
@@ -646,7 +640,7 @@ public class AppRegisterFacade {
             //删除该条记录
             imDeviceService.delete(imDevice.getId());
         }
-    }
+    }*/
 
 
     /**

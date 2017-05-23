@@ -1,7 +1,5 @@
 package com.movision.utils;
 
-import javax.servlet.http.HttpServletRequest;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,11 +38,8 @@ public class ValidateUtils {
         return p.matcher(money).matches();
     }
 
-    public static void main(String[] args) {
-        System.out.println(ValidateUtils.validateMoney("0.0"));
-    }
 
-    public static String getIpAddr(HttpServletRequest request) {
+    /*public static String getIpAddr(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
@@ -56,6 +51,12 @@ public class ValidateUtils {
             ip = request.getRemoteAddr();
         }
         return ip;
+    }*/
+
+    public static void main(String[] args) {
+//        System.out.println(ValidateUtils.validateMoney("0.0"));
+        System.out.println(isMobile(""));
     }
+
 
 }

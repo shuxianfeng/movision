@@ -292,10 +292,6 @@ public class AppLoginController {
                     returnMap.put("authorized", true);
                     returnMap.put("user", appuser);
                 }
-
-                //8 删除该设备号与accid记录
-//                appRegisterFacade.deleteSameDeviceIm(user.getDeviceno());
-
                 response.setData(returnMap);
             } else {
                 token.clear();
