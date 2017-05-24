@@ -335,8 +335,7 @@ public class FacadePost {
                 //上传视频
                 String videoid = videoUploadUtil.videoUpload(url, fName, "", coverurl, circlename);
                 int isdel = 0;
-                if (videoid != null) {
-                    if (!type.equals("0")) {
+                if (!type.equals("0")) {
                     Video video = new Video();
                     video.setPostid(flag);
                     video.setIsrecommend(0);
@@ -350,7 +349,6 @@ public class FacadePost {
                     video.setIntime(new Date());
                     //向帖子视频表中插入一条视频记录
                     videoService.insertVideoById(video);
-                }
                 }
                 //再保存帖子中分享的商品列表(如果商品id字段不为空)
                 if (!StringUtils.isEmpty(proids)) {
@@ -371,18 +369,18 @@ public class FacadePost {
 
                 map.put("flag", flag);
                 map.put("videoid", videoid);
-                map.put("error", 0);
-                map.put("isflag", 1);
                 map.put("isdel", isdel);
                 return map;
 
             } catch (Exception e) {
                 log.error("系统异常，APP发帖失败");
+                map.put("error", 0);
                 e.printStackTrace();
                 return map;
             }
         } else {
             log.info("该用户不具备发帖权限");
+            map.put("isflag", 1);
             return map;
         }
     }
