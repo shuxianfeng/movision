@@ -102,7 +102,7 @@ public class VideoUploadUtil {
             //可选，视频描述
             request.setDescription(description);
             //可选，视频上传所在区域IP
-            request.setIP("127.0.0.1");
+            //request.setIP("127.0.0.1");
             response = client.getAcsResponse(request);
         } catch (ServerException e) {
             System.out.println("CreateUploadVideoRequest Server Exception:");
