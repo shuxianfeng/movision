@@ -84,9 +84,9 @@ public class AppVideoController {
 
         Map videoid = videoUploadUtil.createUploadVideo(aliyunClient, fileName, description, tatges, title);
         if (response.getCode() == 200) {
-            response.setData(videoid);
             response.setMessage("调用成功");
         }
+        response.setData(videoid);
         return response;
     }
 
