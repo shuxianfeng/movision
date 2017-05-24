@@ -36,7 +36,7 @@ public class AliOSSClient {
     // 链接地址是：https://help.aliyun.com/document_detail/oss/user_guide/oss_concept/endpoint.html?spm=5176.docoss/user_guide/endpoint_region
     // endpoint的格式形如“http://oss-cn-hangzhou.aliyuncs.com/”，注意http://后不带bucket名称，
     // 比如“http://bucket-name.oss-cn-hangzhou.aliyuncs.com”，是错误的endpoint，请去掉其中的“bucket-name”。
-    private static String endpoint = "http://mofo-oss.oss-cn-shenzhen.aliyuncs.com";//"http://mofo-oss.oss-cn-shenzhen.aliyuncs.com";MOFO
+    private static String endpoint = "http://oss-cn-shenzhen.aliyuncs.com";//"http://mofo.oss-cn-shenzhen.aliyuncs.com";MOFO
 
     // accessKeyId和accessKeySecret是OSS的访问密钥，您可以在控制台上创建和查看，
     // 创建和查看访问密钥的链接地址是：https://ak-console.aliyun.com/#/。
@@ -46,7 +46,7 @@ public class AliOSSClient {
 
     // Bucket用来管理所存储Object的存储空间，详细描述请参看“开发人员指南 > 基本概念 > OSS基本概念介绍”。
     // Bucket命名规范如下：只能包括小写字母，数字和短横线（-），必须以小写字母或者数字开头，长度必须在3-63字节之间。
-    private static String bucketName = "mofo-oss";//MOFO
+    private static String bucketName = "mofo";//MOFO
 
     // Object是OSS存储数据的基本单元，称为OSS的对象，也被称为OSS的文件。详细描述请参看“开发人员指南 > 基本概念 > OSS基本概念介绍”。
     // Object命名规范如下：使用UTF-8编码，长度必须在1-1023字节之间，不能以“/”或者“\”字符开头。
@@ -71,7 +71,7 @@ public class AliOSSClient {
             // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/manage_bucket.html?spm=5176.docoss/sdk/java-sdk/init
             if (ossClient.doesBucketExist(bucketName)) {
                 log.debug("您已经创建Bucket：" + bucketName + "。");
-            } else {
+            }else {
                 log.debug("您的Bucket不存在，创建Bucket：" + bucketName + "。");
                 // 创建Bucket。详细请参看“SDK手册 > Java-SDK > 管理Bucket”。
                 // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/manage_bucket.html?spm=5176.docoss/sdk/java-sdk/init
@@ -230,8 +230,8 @@ public class AliOSSClient {
             String data = "";
             if (type.equals("img")) {
                 bucketName = PropertiesLoader.getValue("img.bucket");
-                domain = PropertiesLoader.getValue("img.domain");
-                data = "//" + domain + "/" + fileKey;
+                domain = PropertiesLoader.getValue("ali.domain");
+                data = domain + "/" + fileKey;
                 String maxSize = PropertiesLoader.getValue("uploadPicMaxPostSize");
                 if (size > Long.valueOf(maxSize)) {
                     throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
