@@ -696,10 +696,7 @@
             <name>workstation</name>
             <url>http://192.168.0.172:8081/nexus/content/groups/public</url>
         </repository>
-    </repositories>
-
-    <!--上传凭证-->
-    <repositories>
+        <!--上传凭证-->
         <repository>
             <id>sonatype-nexus-staging</id>
             <name>Sonatype Nexus Staging</name>
@@ -712,6 +709,7 @@
             </snapshots>
         </repository>
     </repositories>
+
 
     <profiles>
         <profile>
