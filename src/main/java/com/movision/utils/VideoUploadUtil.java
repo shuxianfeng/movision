@@ -14,6 +14,9 @@ import com.aliyuncs.vod.model.v20170321.RefreshUploadVideoResponse;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * @Author zhanglei
@@ -81,11 +84,12 @@ public class VideoUploadUtil {
      * @param title
      * @return
      */
-    public static String createUploadVideo(DefaultAcsClient client, String filename, String description, String targes, String title) {
+    public static Map createUploadVideo(DefaultAcsClient client, String filename, String description, String targes, String title) {
         CreateUploadVideoRequest request = new CreateUploadVideoRequest();
         CreateUploadVideoResponse response = null;
+        Map map = new HashMap();
         try {
-                          /*必选，视频源文件名称（必须带后缀, 支持 "3GP","AVI","FLV","MP4","M3U8","MPG","ASF","WMV","MKV","MOV","TS",    "WebM","MPEG","RM","RMVB","DAT","ASX","WVX","MPE","MPA","F4V","MTS","VOB","GIF"）*/
+            /*必选，视频源文件名称（必须带后缀, 支持 "3GP","AVI","FLV","MP4","M3U8","MPG","ASF","WMV","MKV","MOV","TS",    "WebM","MPEG","RM","RMVB","DAT","ASX","WVX","MPE","MPA","F4V","MTS","VOB","GIF"）*/
             request.setFileName(filename);
             //必选，视频源文件字节数
             request.setFileSize(0L);
@@ -110,7 +114,13 @@ public class VideoUploadUtil {
         System.out.println("RequestId:" + response.getRequestId());
         System.out.println("UploadAuth:" + response.getUploadAuth());
         System.out.println("UploadAddress:" + response.getUploadAddress());
-        return response.getVideoId();
+        String videoid = response.getVideoId();
+        String UploadAuth = response.getUploadAuth();
+        String UploadAddress = response.getUploadAddress();
+        map.put("videoid", videoid);
+        map.put("UploadAuth", UploadAuth);
+        map.put("UploadAddress", UploadAddress);
+        return map;
     }
 
     /**
@@ -140,11 +150,12 @@ public class VideoUploadUtil {
         DefaultAcsClient aliyunClient;
         aliyunClient = new DefaultAcsClient(
                 DefaultProfile.getProfile("cn-shanghai", accessKeyId, accessKeySecret));
-        String videoId = VideoUploadUtil.createUploadVideo(aliyunClient, "c://f304196fa9ed1e9de8d4ff9a643042fa.mp4", " ", " ", "多的");
-        String videoIds = VideoUploadUtil.createUploadVideo(aliyunClient, "c://f304196fa9ed1e9de8d4ff9a643042fa.mp4", " ", " ", "多的");
+        Map videoId = VideoUploadUtil.createUploadVideo(aliyunClient, "c://f304196fa9ed1e9de8d4ff9a643042fa.mp4", " ", " ", "多的");
+        Map videoIds = VideoUploadUtil.createUploadVideo(aliyunClient, "c://f304196fa9ed1e9de8d4ff9a643042fa.mp4", " ", " ", "多的");
         System.out.println("VideoId:" + videoId);
         System.out.println("VideoId:" + videoIds);
-        refreshUploadVideo(aliyunClient, videoId);
+        String viod = String.valueOf(videoId.get("videoId"));
+        refreshUploadVideo(aliyunClient, viod);
     }
 
 }

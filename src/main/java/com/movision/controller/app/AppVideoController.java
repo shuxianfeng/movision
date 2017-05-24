@@ -82,7 +82,7 @@ public class AppVideoController {
         aliyunClient = new DefaultAcsClient(
                 DefaultProfile.getProfile("cn-shanghai", videoUploadUtil.accessKeyId, videoUploadUtil.accessKeySecret));
 
-        String videoid = videoUploadUtil.createUploadVideo(aliyunClient, fileName, description, tatges, title);
+        Map videoid = videoUploadUtil.createUploadVideo(aliyunClient, fileName, description, tatges, title);
         if (response.getCode() == 200) {
             response.setData(videoid);
             response.setMessage("调用成功");
