@@ -90,20 +90,38 @@ public class VideoUploadUtil {
         Map map = new HashMap();
         try {
             /*必选，视频源文件名称（必须带后缀, 支持 "3GP","AVI","FLV","MP4","M3U8","MPG","ASF","WMV","MKV","MOV","TS",    "WebM","MPEG","RM","RMVB","DAT","ASX","WVX","MPE","MPA","F4V","MTS","VOB","GIF"）*/
-            request.setFileName(filename);
-            //必选，视频源文件字节数
-            request.setFileSize(0L);
-            //必选，视频标题
-            request.setTitle(title);
-            //可选，分类ID
-            request.setCateId(0);
-            //可选，视频标签，多个用逗号分隔
-            request.setTags(targes);
-            //可选，视频描述
-            request.setDescription(description);
-            //可选，视频上传所在区域IP
-            //request.setIP("127.0.0.1");
-            response = client.getAcsResponse(request);
+            int index = filename.lastIndexOf(".") + 1;
+            String subFile = filename.substring(index);
+            if (subFile.equalsIgnoreCase("3GP") || subFile.equalsIgnoreCase("AVI") || subFile.equalsIgnoreCase("FLV") || subFile.equalsIgnoreCase("MP4") || subFile.equalsIgnoreCase("M3U8") || subFile.equalsIgnoreCase("MPG") || subFile.equalsIgnoreCase("ASF") || subFile.equalsIgnoreCase("ASX")
+                    || subFile.equalsIgnoreCase("WMV") || subFile.equalsIgnoreCase("MKV") || subFile.equalsIgnoreCase("MOV") || subFile.equalsIgnoreCase("TS") || subFile.equalsIgnoreCase("WebM")
+                    || subFile.equalsIgnoreCase("DAT") || subFile.equalsIgnoreCase("RMVB") || subFile.equalsIgnoreCase("RM") || subFile.equalsIgnoreCase("MPEG") || subFile.equalsIgnoreCase("WVX") || subFile.equalsIgnoreCase("MPE") || subFile.equalsIgnoreCase("VOB") || subFile.equalsIgnoreCase("GIF")
+                    || subFile.equalsIgnoreCase("MPA") || subFile.equalsIgnoreCase("F4V") || subFile.equalsIgnoreCase("MTS")) {
+                request.setFileName(filename);
+                //必选，视频源文件字节数
+                request.setFileSize(0L);
+                //必选，视频标题
+                request.setTitle(title);
+                //可选，分类ID
+                request.setCateId(0);
+                //可选，视频标签，多个用逗号分隔
+                request.setTags(targes);
+                //可选，视频描述
+                request.setDescription(description);
+                //可选，视频上传所在区域IP
+                //request.setIP("127.0.0.1");
+                response = client.getAcsResponse(request);
+                String videoid = response.getVideoId();
+                String UploadAuth = response.getUploadAuth();
+                String UploadAddress = response.getUploadAddress();
+                map.put("videoid", videoid);
+                map.put("UploadAuth", UploadAuth);
+                map.put("UploadAddress", UploadAddress);
+                System.out.println("RequestId:" + response.getRequestId());
+                System.out.println("UploadAuth:" + response.getUploadAuth());
+                System.out.println("UploadAddress:" + response.getUploadAddress());
+            } else {
+                map.put("error", 0);
+            }
         } catch (ServerException e) {
             System.out.println("CreateUploadVideoRequest Server Exception:");
             e.printStackTrace();
@@ -111,15 +129,6 @@ public class VideoUploadUtil {
             System.out.println("CreateUploadVideoRequest Client Exception:");
             e.printStackTrace();
         }
-        System.out.println("RequestId:" + response.getRequestId());
-        System.out.println("UploadAuth:" + response.getUploadAuth());
-        System.out.println("UploadAddress:" + response.getUploadAddress());
-        String videoid = response.getVideoId();
-        String UploadAuth = response.getUploadAuth();
-        String UploadAddress = response.getUploadAddress();
-        map.put("videoid", videoid);
-        map.put("UploadAuth", UploadAuth);
-        map.put("UploadAddress", UploadAddress);
         return map;
     }
 
