@@ -999,9 +999,9 @@ public class PostController {
     public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file,
                                   @ApiParam(value = "用于选择上传位置（1:封面 2:内容图片）") @RequestParam String type) {
         Map m = new HashMap();
-        if (type.equals(1)) {
+        if (type.equals("1")) {
             m = movisionOssClient.uploadObject(file, "img", "postCover");
-        } else if (type.equals(2)) {
+        } else if (type.equals("2")) {
             m = movisionOssClient.uploadObject(file, "img", "post");
         }
         String url = String.valueOf(m.get("url"));
