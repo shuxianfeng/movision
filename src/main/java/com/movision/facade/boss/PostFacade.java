@@ -728,7 +728,8 @@ public class PostFacade {
                 }
                 post.setIsactive("0");//设置状态为帖子
                 if (StringUtil.isNotEmpty(postcontent)) {
-                    //内容转换
+
+                    /*//内容转换
                     Map con = jsoupCompressImg.compressImg(request, postcontent);
                     System.out.println(con);
                     if ((int) con.get("code") == 200) {
@@ -738,7 +739,9 @@ public class PostFacade {
                     } else {
                         logger.error("帖子内容转换异常");
                         post.setPostcontent(postcontent);
-                    }
+                    }*/
+
+                    post.setPostcontent(postcontent);
                 }
                 post.setIntime(new Date());//插入时间
                 if (StringUtil.isNotEmpty(ishot)) {
@@ -1386,8 +1389,10 @@ public class PostFacade {
                     }
                     post.setIsactive("0");//设置状态为帖子
                     if (StringUtil.isNotEmpty(postcontent)) {
+
+
                         //内容转换
-                        Map con = jsoupCompressImg.compressImg(request, postcontent);
+                        /*Map con = jsoupCompressImg.compressImg(request, postcontent);
                         if ((int) con.get("code") == 200) {
                             System.out.println(con);
                             String str = con.get("content").toString();
@@ -1396,7 +1401,9 @@ public class PostFacade {
                         } else {
                             logger.error("帖子内容转换异常");
                             post.setPostcontent(postcontent);
-                        }
+                        }*/
+                        post.setPostcontent(postcontent);
+
                     }
                     post.setIntime(new Date());
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
