@@ -1,13 +1,17 @@
 package com.movision.utils;
 
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.movision.facade.boss.PostFacade;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.AliOSSClient;
+import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.ueditor.ImageUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -41,6 +45,9 @@ public class JsoupCompressImg {
     @Autowired
     private PostFacade postFacade;
 
+    @Autowired
+    private MovisionOssClient movisionOssClient;
+
     private static final Logger log = LoggerFactory.getLogger(JsoupCompressImg.class);
 
     /**
@@ -60,7 +67,7 @@ public class JsoupCompressImg {
             Document doc = Jsoup.parse(content);
             Elements titleElms = doc.getElementsByTag("img");
 
-            String compress_dir_path = PropertiesLoader.getValue("post.img.domain");//压缩图片路径url
+            String compress_dir_path = PropertiesLoader.getValue("post.tempimg.domain");//压缩图片路径url
 
             String compress_dir_local_path = PropertiesLoader.getValue("post.img.local.domain");//获取项目根目录/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision
 
@@ -78,17 +85,38 @@ public class JsoupCompressImg {
                 String imgurl = titleElms.get(i).attr("src");
                 log.info("压缩前的原图url，imgurl=" + imgurl);
 
+                //从阿里云服务器下载到本地
+                String tempvideodir = PropertiesLoader.getValue("post.tempimg.domain");//下载到本地的视频临时存放目录
+                log.info("本地图片临时存放目录>>>>>>>>>" + tempvideodir);
+                File dirFile = new File(tempvideodir);
+                if(!dirFile.exists()){//文件路径不存在时，自动创建目录
+                    dirFile.mkdir();
+                }
+                String filename = FileUtil.getPicName(imgurl);//获取图片文件名
+                log.info("filename=" + filename);
+                String PATH = tempvideodir + filename;//服务器上下载的临时图片路径（待处理文件）
+                //从服务器上获取文件并保存
+                URL theURL = new URL(imgurl);//下载链接
+                URLConnection connection = theURL.openConnection();
+                InputStream in = connection.getInputStream();
+                FileOutputStream os = new FileOutputStream(PATH);
+                byte[] buffer = new byte[4 * 1024];
+                int read;
+                while ((read = in.read(buffer)) > 0) {
+                    os.write(buffer, 0, read);
+                }
+                os.close();
+                in.close();
+
                 //通过帖子中的imgurl查询图片压缩关系表中是否存在该图的压缩记录
                 int sum = postFacade.queryIsHaveCompress(imgurl);
 
-                String filename = FileUtil.getPicName(imgurl);
-                log.info("filename=" + filename);
                 //原图的绝对路径
-                String proto_img_dir = savedDir.substring(0, savedDir.lastIndexOf("/")) + PropertiesLoader.getValue("post.proto.img.domain") + filename;
-                log.info("原图的绝对路径，proto_img_dir=" + proto_img_dir);
+//                String proto_img_dir = savedDir.substring(0, savedDir.lastIndexOf("/")) + PropertiesLoader.getValue("post.proto.img.domain") + filename;
+//                log.info("原图的绝对路径，proto_img_dir=" + proto_img_dir);
 
                 //获取原图绝对路径和图片大小
-                File file = new File(proto_img_dir);//获取原图大小
+                File file = new File(PATH);//获取原图大小
                 FileInputStream fis = new FileInputStream(file);
                 int s = fis.available();
                 DecimalFormat df = new DecimalFormat("######0.00");
@@ -106,13 +134,14 @@ public class JsoupCompressImg {
                     if (StringUtils.isNotEmpty(imgurl)) {
 
                         // 1 生成压缩后的图片的url
-                        String compress_file_path = compress_dir_path + filename;
+                        String tempfilename = UUID.randomUUID().toString() + filename.substring(filename.lastIndexOf("."), filename.length()-1);
+                        String compress_file_path = compress_dir_path + tempfilename;
                         log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
 
                         // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
                         if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
                             // 压缩核心算法
-                            compressFlag = compressJpgOrPng(w, h, compressFlag, filename, proto_img_dir, tempDir);
+                            compressFlag = compressJpgOrPng(w, h, compressFlag, filename, PATH, tempDir);
                             // 处理过的图片加入到已处理集合，防止重复压缩图片
                             existFileList.add(filename);
                         } else {
@@ -120,13 +149,16 @@ public class JsoupCompressImg {
                             log.info("该图片已存在，不需要压缩，filename=" + filename);
                         }
                         if (compressFlag) {
+                            //上传到阿里云OSS
+                            Map m = movisionOssClient.uploadFileObject(file, "img", "postCompressImg");
+                            String compressurl = String.valueOf(m.get("url"));//压缩图片上传阿里云的返回url
 
                             //如果压缩保存成功，这里替换文章中的第i个img标签中的src属性
-                            titleElms.get(i).attr("src", compress_file_path);
+                            titleElms.get(i).attr("src", compressurl);
 
                             //保存缩略图和原图的映射关系到数据库中yw_compress_img
                             CompressImg compressImg = new CompressImg();
-                            compressImg.setCompressimgurl(compress_file_path);
+                            compressImg.setCompressimgurl(compressurl);
                             compressImg.setProtoimgurl(imgurl);
                             compressImg.setProtoimgsize(filesize);
                             int count = postFacade.queryCount(compressImg);

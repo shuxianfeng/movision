@@ -198,7 +198,7 @@ public class AppPostController {
      * @param file
      * @return
      */
-    @ApiOperation(value = "上传帖子内容相关图片", notes = "上传帖子内容相关图片", response = Response.class)
+    @ApiOperation(value = "上传帖子内容相关图片", notes = "上传帖子内容相关图片（上传帖子内容中的图片）", response = Response.class)
     @RequestMapping(value = {"/upload_post_img"}, method = RequestMethod.POST)
     public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file) {
 
