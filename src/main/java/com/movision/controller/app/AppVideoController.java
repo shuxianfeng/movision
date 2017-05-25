@@ -77,7 +77,7 @@ public class AppVideoController {
             @ApiParam("视频标题") @RequestParam String title,
             @ApiParam("视频描述") @RequestParam(required = false) String description,
             @ApiParam("视频标签,多个用逗号分隔") @RequestParam(required = false) String tatges,
-            @ApiParam("必选，视频源文件字节数") @RequestParam(required = false) long filesize) {
+            @ApiParam("必选，视频源文件字节数") @RequestParam long filesize) {
         Response response = new Response();
         DefaultAcsClient aliyunClient;
         aliyunClient = new DefaultAcsClient(
