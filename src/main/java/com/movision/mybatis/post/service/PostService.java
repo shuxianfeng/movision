@@ -10,6 +10,7 @@ import com.movision.mybatis.post.mapper.PostMapper;
 import com.movision.mybatis.postProcessRecord.entity.PostProcessRecord;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
@@ -93,7 +94,7 @@ public class PostService {
         }
     }
 
-    public List<User> queryRewardPersonNickname(String postid) {
+    public List<UserLike> queryRewardPersonNickname(String postid) {
         try {
             log.info("查询打赏帖子的昵称");
             return postMapper.queryRewardPersonNickname(postid);

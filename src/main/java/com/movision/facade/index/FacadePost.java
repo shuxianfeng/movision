@@ -22,6 +22,7 @@ import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
 import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
@@ -114,7 +115,7 @@ public class FacadePost {
         PostVo vo = postService.queryPostDetail(parammap);
         int rewardsum = postService.queryRewardSum(postid);//查询帖子被打赏的次数
         vo.setRewardsum(rewardsum);
-        List<User> nicknamelist = postService.queryRewardPersonNickname(postid);
+        List<UserLike> nicknamelist = postService.queryRewardPersonNickname(postid);
         vo.setRewardpersonnickname(nicknamelist);
         if (type.equals("1") || type.equals("2")) {
             Video video = postService.queryVideoUrl(Integer.parseInt(postid));
