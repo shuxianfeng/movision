@@ -82,6 +82,26 @@ public class PostService {
         }
     }
 
+    public Integer queryRewardSum(String postid) {
+        try {
+            log.info("查询帖子被打赏次数");
+            return postMapper.queryRewardSum(postid);
+        } catch (Exception e) {
+            log.error("查询帖子被打赏次数失败");
+            throw e;
+        }
+    }
+
+    public List<String> queryRewardPersonNickname(String postid) {
+        try {
+            log.info("查询打赏帖子的昵称");
+            return postMapper.queryRewardPersonNickname(postid);
+        } catch (Exception e) {
+            log.error("查询打赏帖子的昵称失败");
+            throw e;
+        }
+    }
+
     public Video queryVideoUrl(int postid) {
         try {
             log.info("查询原生帖子详情");

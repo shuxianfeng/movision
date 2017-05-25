@@ -116,6 +116,8 @@ public class VideoUploadUtil {
                 map.put("videoid", videoid);
                 map.put("UploadAuth", UploadAuth);
                 map.put("UploadAddress", UploadAddress);
+                map.put("accessKeyId", VideoUploadUtil.accessKeyId);
+                map.put("accessKeySecret", VideoUploadUtil.accessKeySecret);
                 System.out.println("RequestId:" + response.getRequestId());
                 System.out.println("UploadAuth:" + response.getUploadAuth());
                 System.out.println("UploadAddress:" + response.getUploadAddress());

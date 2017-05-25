@@ -61,6 +61,9 @@ public interface PostMapper {
 
     PostVo queryPostDetail(Map<String, Object> parammap);
 
+    int queryRewardSum(String postid);
+
+    List<String> queryRewardPersonNickname(String postid);
     Video queryVideoUrl(int postid);
 
     List<PostVo> queryPastPostList(Map<String, Object> parammap);

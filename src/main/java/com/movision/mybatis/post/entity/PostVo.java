@@ -100,6 +100,25 @@ public class PostVo implements Serializable {
 
     private String introduction;//圈子简介
 
+    private Integer rewardsum;//打赏热人数
+    private List<String> rewardpersonnickname;//打赏的10个人的昵称
+
+    public Integer getRewardsum() {
+        return rewardsum;
+    }
+
+    public void setRewardsum(Integer rewardsum) {
+        this.rewardsum = rewardsum;
+    }
+
+    public List<String> getRewardpersonnickname() {
+        return rewardpersonnickname;
+    }
+
+    public void setRewardpersonnickname(List<String> rewardpersonnickname) {
+        this.rewardpersonnickname = rewardpersonnickname;
+    }
+
     public String getIntroduction() {
         return introduction;
     }
