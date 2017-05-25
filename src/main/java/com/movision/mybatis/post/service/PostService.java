@@ -9,6 +9,8 @@ import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.mapper.PostMapper;
 import com.movision.mybatis.postProcessRecord.entity.PostProcessRecord;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
+import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
@@ -78,6 +80,26 @@ public class PostService {
             return postMapper.queryPostDetail(parammap);
         } catch (Exception e) {
             log.error("查询帖子详情失败");
+            throw e;
+        }
+    }
+
+    public Integer queryRewardSum(String postid) {
+        try {
+            log.info("查询帖子被打赏次数");
+            return postMapper.queryRewardSum(postid);
+        } catch (Exception e) {
+            log.error("查询帖子被打赏次数失败");
+            throw e;
+        }
+    }
+
+    public List<UserLike> queryRewardPersonNickname(String postid) {
+        try {
+            log.info("查询打赏帖子的昵称");
+            return postMapper.queryRewardPersonNickname(postid);
+        } catch (Exception e) {
+            log.error("查询打赏帖子的昵称失败");
             throw e;
         }
     }

@@ -36,7 +36,7 @@ public class RewardedController {
     @ApiOperation(value = "积分操作", notes = "返回是否成功", response = Response.class)
     @RequestMapping(value = "rewarded", method = RequestMethod.POST)
     public Response queryCircleIndex1(@ApiParam(value = "帖子id") @RequestParam String postid,
-                                      @ApiParam(value = "打赏积分类型") @RequestParam String type,
+                                      @ApiParam(value = "打赏积分") @RequestParam String type,
                                       @ApiParam(value = "打赏用户id") @RequestParam String userid) {
         Response response = new Response();
         Map flag = facadeRewarded.updateRewarded(postid, type, userid);

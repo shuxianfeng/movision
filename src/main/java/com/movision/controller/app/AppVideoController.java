@@ -76,17 +76,18 @@ public class AppVideoController {
             @ApiParam("必选，视频源文件名称（必须带后缀, 支持 \"3GP\",\"AVI\",\"FLV\",\"MP4\",\"M3U8\",\"MPG\",\"ASF\",\"WMV\",\"MKV\",\"MOV\",\"TS\",    \"WebM\",\"MPEG\",\"RM\",\"RMVB\",\"DAT\",\"ASX\",\"WVX\",\"MPE\",\"MPA\",\"F4V\",\"MTS\",\"VOB\",\"GIF\"）") @RequestParam String fileName,
             @ApiParam("视频标题") @RequestParam String title,
             @ApiParam("视频描述") @RequestParam(required = false) String description,
-            @ApiParam("视频标签,多个用逗号分隔") @RequestParam(required = false) String tatges) {
+            @ApiParam("视频标签,多个用逗号分隔") @RequestParam(required = false) String tatges,
+            @ApiParam("必选，视频源文件字节数") @RequestParam long filesize) {
         Response response = new Response();
         DefaultAcsClient aliyunClient;
         aliyunClient = new DefaultAcsClient(
                 DefaultProfile.getProfile("cn-shanghai", videoUploadUtil.accessKeyId, videoUploadUtil.accessKeySecret));
 
-        Map videoid = videoUploadUtil.createUploadVideo(aliyunClient, fileName, description, tatges, title);
+        Map videoid = videoUploadUtil.createUploadVideo(aliyunClient, fileName, description, tatges, title, filesize);
         if (response.getCode() == 200) {
-            response.setData(videoid);
             response.setMessage("调用成功");
         }
+        response.setData(videoid);
         return response;
     }
 
