@@ -104,4 +104,22 @@ public class AppVideoController {
         return response;
     }
 
+
+    /**
+     * 删除视频
+     *
+     * @param videoid
+     * @return
+     */
+    @ApiOperation(value = " 删除视频", notes = " 删除视频", response = Response.class)
+    @RequestMapping(value = "get_delete_video", method = RequestMethod.POST)
+    public Response deleteVideo(@ApiParam("视频唯一id") @RequestParam String videoid) {
+        Response response = new Response();
+        String result = videoUploadUtil.deleteVideo(videoid);
+        if (response.getCode() == 200) {
+            response.setMessage("删除成功");
+        }
+        response.setData(result);
+        return response;
+    }
 }
