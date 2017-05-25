@@ -154,13 +154,13 @@ public class AppPostController {
                                 @ApiParam(value = "帖子内容") @RequestParam String postcontent,
                                 @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,
                                 @ApiParam(value = "帖子封面图片") @RequestParam MultipartFile coverimg,
-                                @ApiParam(value = "原生视频文件（手机本地视频文件，type为1时必填）") @RequestParam(required = false) MultipartFile videofile,
+                                @ApiParam(value = "原生视频上传到阿里云后的vid（type为1时必填）") @RequestParam(required = false) String vid,
                                 @ApiParam(value = "第三方视频地址url（type为2时必填，直接把分享的第三方视频网址传到这里）") @RequestParam(required = false) String videourl,
                                 @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids
     ) {
         Response response = new Response();
 
-        Map count = facadePost.releasePost(request, userid, type, circleid, title, postcontent, isactive, coverimg, videofile, videourl, proids);
+        Map count = facadePost.releasePost(request, userid, type, circleid, title, postcontent, isactive, coverimg, vid, videourl, proids);
 
         if (count.get("error").equals("0")) {
             response.setCode(300);

@@ -275,14 +275,8 @@ public class FacadePost {
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map releasePost(HttpServletRequest request, String userid, String type, String circleid, String title, String postcontent, String isactive, MultipartFile coverimg,
-                           MultipartFile videofile, String videourl, String proids) {
+                           String vid, String videourl, String proids) {
         Map map = new HashMap();
-        String url = "";//定义原生视频地址
-        if (videofile != null) {
-            //首先调用庄总的视频上传接口
-            Map m = movisionOssClient.uploadObject(videofile, "video", "post");
-            url = String.valueOf(m.get("url"));//原生视频上传地址
-        }
 
         //上传帖子封面图片
         Map m = movisionOssClient.uploadObject(coverimg, "img", "post");
@@ -294,8 +288,6 @@ public class FacadePost {
         //查询当前圈子的所有者(返回所有者的用户id)
         User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
         int lev = owner.getLevel();//用户等级
-        //查询圈子名称
-        String circlename = circleService.queryCircleName(Integer.parseInt(circleid));
         //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.所有者和大V可发时，发帖用户即为大V
         if (scope == 0 || Integer.parseInt(userid) == owner.getId() || (scope == 1 && lev >= 1)) {
 
@@ -336,10 +328,6 @@ public class FacadePost {
                 postService.releasePost(post);
 
                 int flag = post.getId();//返回的主键--帖子id
-                String fName = FileUtil.getPicName(url);//获取视频文件名
-                //上传视频
-                String videoid = videoUploadUtil.videoUpload(url, fName, "", coverurl, circlename);
-                int isdel = 0;
                 if (!type.equals("0")) {
                     Video video = new Video();
                     video.setPostid(flag);
@@ -347,9 +335,9 @@ public class FacadePost {
                     video.setIsbanner(0);
                     video.setBannerimgurl(coverurl);//简化APP，直接取帖子封面图片为原生视频的封面(运营后台不变)
                     if (type.equals("1")) {
-                        video.setVideourl(videoid);//原生视频上传链接
+                        video.setVideourl(vid);//原生视频上传链接
                     } else if (type.equals("2")) {
-                        video.setVideourl(videoid);//分享视频链接
+                        video.setVideourl(videourl);//分享视频链接
                     }
                     video.setIntime(new Date());
                     //向帖子视频表中插入一条视频记录
@@ -373,8 +361,6 @@ public class FacadePost {
                 pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
 
                 map.put("flag", flag);
-                map.put("videoid", videoid);
-                map.put("isdel", isdel);
                 return map;
 
             } catch (Exception e) {
