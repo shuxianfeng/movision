@@ -3,6 +3,7 @@ package com.movision.mybatis.post.entity;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.period.entity.Period;
+import com.movision.mybatis.user.entity.User;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -101,7 +102,7 @@ public class PostVo implements Serializable {
     private String introduction;//圈子简介
 
     private Integer rewardsum;//打赏热人数
-    private List<String> rewardpersonnickname;//打赏的10个人的昵称
+    private List<User> rewardpersonnickname;//打赏的10个人的昵称
 
     public Integer getRewardsum() {
         return rewardsum;
@@ -111,11 +112,11 @@ public class PostVo implements Serializable {
         this.rewardsum = rewardsum;
     }
 
-    public List<String> getRewardpersonnickname() {
+    public List<User> getRewardpersonnickname() {
         return rewardpersonnickname;
     }
 
-    public void setRewardpersonnickname(List<String> rewardpersonnickname) {
+    public void setRewardpersonnickname(List<User> rewardpersonnickname) {
         this.rewardpersonnickname = rewardpersonnickname;
     }
 

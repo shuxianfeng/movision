@@ -6,6 +6,7 @@ import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.postProcessRecord.entity.PostProcessRecord;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
+import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.video.entity.Video;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.poi.ss.usermodel.Row;
@@ -63,7 +64,7 @@ public interface PostMapper {
 
     int queryRewardSum(String postid);
 
-    List<String> queryRewardPersonNickname(String postid);
+    List<User> queryRewardPersonNickname(String postid);
     Video queryVideoUrl(int postid);
 
     List<PostVo> queryPastPostList(Map<String, Object> parammap);

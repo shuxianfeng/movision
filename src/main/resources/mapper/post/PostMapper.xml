@@ -1950,8 +1950,9 @@
         SELECT COUNT(1) FROM yw_post_rewarded WHERE postid=#{postid,jdbcType=VARCHAR}
     </select>
 
-    <select id="queryRewardPersonNickname" parameterType="java.lang.String" resultType="java.lang.String">
-        SELECT u.nickname FROM yw_post_rewarded r LEFT JOIN yw_user u ON u.id=r.userid WHERE
+    <select id="queryRewardPersonNickname" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.user.entity.User">
+        SELECT u.nickname,u.id FROM yw_post_rewarded r LEFT JOIN yw_user u ON u.id=r.userid WHERE
         r.postid=#{postid,jdbcType=VARCHAR} ORDER BY r.intime LIMIT 10
     </select>
 </mapper>

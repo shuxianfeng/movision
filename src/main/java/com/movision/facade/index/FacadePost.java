@@ -114,7 +114,7 @@ public class FacadePost {
         PostVo vo = postService.queryPostDetail(parammap);
         int rewardsum = postService.queryRewardSum(postid);//查询帖子被打赏的次数
         vo.setRewardsum(rewardsum);
-        List<String> nicknamelist = postService.queryRewardPersonNickname(postid);
+        List<User> nicknamelist = postService.queryRewardPersonNickname(postid);
         vo.setRewardpersonnickname(nicknamelist);
         if (type.equals("1") || type.equals("2")) {
             Video video = postService.queryVideoUrl(Integer.parseInt(postid));
