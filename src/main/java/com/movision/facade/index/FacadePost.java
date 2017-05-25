@@ -321,7 +321,7 @@ public class FacadePost {
                 post.setIsessencepool(0);//是否设为精选池中的帖子
                 post.setIntime(new Date());//帖子发布时间
                 post.setTotalpoint(0);//帖子综合评分
-                post.setIsdel(1);//下架
+                post.setIsdel(0);//上架
                 post.setCoverimg(coverurl);//帖子封面
                 post.setUserid(Integer.parseInt(userid));
                 //插入帖子
