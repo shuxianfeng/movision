@@ -421,11 +421,11 @@ public class CircleController {
     public Response uploadImg(@RequestParam(value = "file", required = false) MultipartFile file,
                               @ApiParam(value = "用于选择上传位置（1:首页 2:封面 3:类型封面）") @RequestParam String type) {
         Map m = new HashMap();
-        if (type.equals(1)) {
+        if (type.equals("1")) {
             m = movisionOssClient.uploadObject(file, "img", "circleIndex");
-        } else if (type.equals(2)) {
+        } else if (type.equals("2")) {
             m = movisionOssClient.uploadObject(file, "img", "circleCover");
-        } else if (type.equals(3)) {
+        } else if (type.equals("3")) {
             m = movisionOssClient.uploadObject(file, "img", "circleType");
         }
         String url = String.valueOf(m.get("url"));

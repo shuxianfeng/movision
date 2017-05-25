@@ -666,9 +666,9 @@ public class GoodsController {
     public Response updateMyInfo(@RequestParam(value = "file", required = false) MultipartFile file,
                                  @ApiParam(value = "用于选择上传位置（1:封面 2:商品图）") @RequestParam String type) {
         Map m = new HashMap();
-        if (type.equals(1)) {
+        if (type.equals("1")) {
             m = movisionOssClient.uploadObject(file, "img", "goodBanner");
-        } else if (type.equals(2)) {
+        } else if (type.equals("2")) {
             m = movisionOssClient.uploadObject(file, "img", "good");
         }
         String url = String.valueOf(m.get("url"));
