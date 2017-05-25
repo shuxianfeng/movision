@@ -84,7 +84,7 @@ public class VideoUploadUtil {
      * @param title
      * @return
      */
-    public static Map createUploadVideo(DefaultAcsClient client, String filename, String description, String targes, String title) {
+    public static Map createUploadVideo(DefaultAcsClient client, String filename, String description, String targes, String title, long filesize) {
         CreateUploadVideoRequest request = new CreateUploadVideoRequest();
         CreateUploadVideoResponse response = null;
         Map map = new HashMap();
@@ -98,7 +98,7 @@ public class VideoUploadUtil {
                     || subFile.equalsIgnoreCase("MPA") || subFile.equalsIgnoreCase("F4V") || subFile.equalsIgnoreCase("MTS")) {
                 request.setFileName(filename);
                 //必选，视频源文件字节数
-                request.setFileSize(0L);
+                request.setFileSize(filesize);
                 //必选，视频标题
                 request.setTitle(title);
                 //可选，分类ID
@@ -161,8 +161,8 @@ public class VideoUploadUtil {
         DefaultAcsClient aliyunClient;
         aliyunClient = new DefaultAcsClient(
                 DefaultProfile.getProfile("cn-shanghai", accessKeyId, accessKeySecret));
-        Map videoId = VideoUploadUtil.createUploadVideo(aliyunClient, "c://f304196fa9ed1e9de8d4ff9a643042fa.mp4", " ", " ", "多的");
-        Map videoIds = VideoUploadUtil.createUploadVideo(aliyunClient, "c://f304196fa9ed1e9de8d4ff9a643042fa.mp4", " ", " ", "多的");
+        Map videoId = VideoUploadUtil.createUploadVideo(aliyunClient, "c://f304196fa9ed1e9de8d4ff9a643042fa.mp4", " ", " ", "多的", 100);
+        Map videoIds = VideoUploadUtil.createUploadVideo(aliyunClient, "c://f304196fa9ed1e9de8d4ff9a643042fa.mp4", " ", " ", "多的", 100);
         System.out.println("VideoId:" + videoId);
         System.out.println("VideoId:" + videoIds);
         String viod = String.valueOf(videoId.get("videoId"));

@@ -1952,7 +1952,7 @@
 
     <select id="queryRewardPersonNickname" parameterType="java.lang.String"
             resultType="com.movision.mybatis.user.entity.UserLike">
-        SELECT u.nickname,u.id FROM yw_post_rewarded r LEFT JOIN yw_user u ON u.id=r.userid WHERE
-        r.postid=#{postid,jdbcType=VARCHAR} ORDER BY r.intime LIMIT 10
+        SELECT DISTINCT(u.id),u.nickname FROM yw_post_rewarded r LEFT JOIN yw_user u ON u.id=r.userid WHERE
+        postid=#{postid,jdbcType=VARCHAR} ORDER BY r.intime DESC LIMIT 10
     </select>
 </mapper>
