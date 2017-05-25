@@ -996,9 +996,14 @@ public class PostController {
      */
     @ApiOperation(value = "上传帖子相关图片", notes = "上传帖子相关图片", response = Response.class)
     @RequestMapping(value = {"/upload_post_img"}, method = RequestMethod.POST)
-    public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file) {
-
-        Map m = movisionOssClient.uploadObject(file, "img", "post");
+    public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file,
+                                  @ApiParam(value = "用于选择上传位置（1:封面 2:内容图片）") @RequestParam String type) {
+        Map m = new HashMap();
+        if (type.equals(1)) {
+            m = movisionOssClient.uploadObject(file, "img", "postCover");
+        } else if (type.equals(2)) {
+            m = movisionOssClient.uploadObject(file, "img", "post");
+        }
         String url = String.valueOf(m.get("url"));
         Map<String, Object> map = new HashMap<>();
         map.put("url", url);
