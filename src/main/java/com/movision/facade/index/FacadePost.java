@@ -297,19 +297,18 @@ public class FacadePost {
                 Post post = new Post();
                 post.setCircleid(Integer.parseInt(circleid));
                 post.setTitle(title);
-                if (StringUtil.isNotEmpty(postcontent)) {
-                    //内容转换
-                    Map con = jsoupCompressImg.compressImg(request, postcontent);
-                    System.out.println(con);
-                    if ((int) con.get("code") == 200) {
-                        String str = con.get("content").toString();
-                        str = str.replace("\\", "");
-                        post.setPostcontent(str);//帖子内容
-                    } else {
-                        log.error("APP端帖子图片内容转换异常");
-                        post.setPostcontent(postcontent);
-                    }
-                }
+//                if (StringUtil.isNotEmpty(postcontent)) {
+//                    //内容转换
+//                    Map con = jsoupCompressImg.compressImg(request, postcontent);
+//                    System.out.println(con);
+//                    if ((int) con.get("code") == 200) {
+//                        String str = con.get("content").toString();
+//                        postcontent = str.replace("\\", "");
+//                    } else {
+//                        log.error("APP端帖子图片内容转换异常");
+//                    }
+//                }
+                post.setPostcontent(postcontent);//帖子内容
                 post.setZansum(0);//新发帖全部默认为0次
                 post.setCommentsum(0);//被评论次数
                 post.setForwardsum(0);//被转发次数
