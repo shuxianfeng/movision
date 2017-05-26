@@ -151,7 +151,7 @@ public class JsoupCompressImg {
                         if (compressFlag) {
                             //上传到阿里云OSS
                             Map m = movisionOssClient.uploadFileObject(file, "img", "postCompressImg");
-                            String compressurl = String.valueOf(m.get("url"));//压缩图片上传阿里云的返回url
+                            String compressurl = (String)m.get("url");//压缩图片上传阿里云的返回url
 
                             //如果压缩保存成功，这里替换文章中的第i个img标签中的src属性
                             titleElms.get(i).attr("src", compressurl);
