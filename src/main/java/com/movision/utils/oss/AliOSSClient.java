@@ -243,7 +243,6 @@ public class AliOSSClient {
 
             } else if (type.equals("doc")) {
                 bucketName = PropertiesLoader.getValue("file.bucket");
-//                domain = PropertiesLoader.getValue("file.domain");
                 data = fileName2;
                 String maxSize = PropertiesLoader.getValue("uploadDocMaxPostSize");
                 if (size > Long.valueOf(maxSize)) {
@@ -293,7 +292,6 @@ public class AliOSSClient {
         try {
             // 文件存储入OSS，Object的名称为fileKey。详细请参看“SDK手册 > Java-SDK > 上传文件”。
             // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/upload_object.html?spm=5176.docoss/user_guide/upload_object
-//            File file = new File(fileName);
             String fileKey;
             String domain;
             String fileName = FileUtil.renameFile(file).getName();
@@ -316,7 +314,6 @@ public class AliOSSClient {
 
             } else if (type.equals("doc")) {
                 bucketName = PropertiesLoader.getValue("file.bucket");
-//                domain = PropertiesLoader.getValue("file.domain");
                 data = fileName;
             }
 
