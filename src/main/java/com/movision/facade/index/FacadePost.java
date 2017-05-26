@@ -279,7 +279,7 @@ public class FacadePost {
         Map map = new HashMap();
 
         //上传帖子封面图片
-        Map m = movisionOssClient.uploadObject(coverimg, "img", "post");
+        Map m = movisionOssClient.uploadObject(coverimg, "img", "postCover");
         String coverurl = String.valueOf(m.get("url"));
 
         //这里需要根据userid判断当前登录的用户是否有发帖权限
@@ -289,7 +289,7 @@ public class FacadePost {
         User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
         int lev = owner.getLevel();//用户等级
         //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.所有者和大V可发时，发帖用户即为大V
-        if (scope == 0 || Integer.parseInt(userid) == owner.getId() || (scope == 1 && lev >= 1)) {
+        if (scope == 2 || Integer.parseInt(userid) == owner.getId() || (scope == 1 && lev >= 1)) {
 
             try {
                 log.info("APP前端用户开始请求发帖");
