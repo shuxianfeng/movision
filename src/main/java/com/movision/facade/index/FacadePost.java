@@ -148,7 +148,9 @@ public class FacadePost {
 
         //对帖子内容进行脱敏处理
         vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));//帖子主标题脱敏
-        vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
+        if (null != vo.getSubtitle()) {
+            vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
+        }
         vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
         //数据插入mongodb
         if (StringUtil.isNotEmpty(userid)) {
