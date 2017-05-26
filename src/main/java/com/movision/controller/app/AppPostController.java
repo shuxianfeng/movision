@@ -162,10 +162,10 @@ public class AppPostController {
 
         Map count = facadePost.releasePost(request, userid, type, circleid, title, postcontent, isactive, coverimg, vid, videourl, proids);
 
-        if (count.get("error").equals("0")) {
+        if (count.get("error").equals(0)) {
             response.setCode(300);
             response.setMessage("系统异常，APP发帖失败");
-        } else if (count.get("isflag").equals("-1")) {
+        } else if (count.get("isflag").equals(-1)) {
             response.setCode(201);
             response.setMessage("用户不具备发帖权限");
         } else {
