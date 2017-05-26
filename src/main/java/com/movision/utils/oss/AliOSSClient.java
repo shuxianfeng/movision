@@ -308,6 +308,11 @@ public class AliOSSClient {
                 bucketName = PropertiesLoader.getValue("img.bucket");
                 domain = PropertiesLoader.getValue("img.domain");
                 data = "//" + domain + "/" + fileKey;
+                //返回图片的宽高
+                InputStream is = new FileInputStream(file);
+                BufferedImage src = ImageIO.read(is);
+                result.put("width", src.getWidth());
+                result.put("height", src.getHeight());
 
             } else if (type.equals("doc")) {
                 bucketName = PropertiesLoader.getValue("file.bucket");
@@ -317,9 +322,10 @@ public class AliOSSClient {
 
             ossClient.putObject(bucketName, fileKey, file);
             log.debug("Object：" + fileKey + "存入OSS成功。");
+            log.info("【上传Alioss的返回值】：" + result.toString());
             result.put("status", "success");
 
-            result.put("data", data);
+            result.put("url", data);
 
         } catch (OSSException oe) {
             oe.printStackTrace();
