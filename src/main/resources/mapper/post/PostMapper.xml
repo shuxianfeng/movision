@@ -1948,7 +1948,7 @@
        UPDATE yw_post SET isdel=0 WHERE id=(SELECT postid FROM yw_video   WHERE  videourl= #{vid,jdbcType=VARCHAR})
     </update>
     <select id="queryRewardSum" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM yw_post_rewarded WHERE postid=#{postid,jdbcType=VARCHAR}
+        SELECT COUNT(DISTINCT(userid)) AS count FROM yw_post_rewarded WHERE postid=#{postid,jdbcType=VARCHAR}
     </select>
 
     <select id="queryRewardPersonNickname" parameterType="java.lang.String"
