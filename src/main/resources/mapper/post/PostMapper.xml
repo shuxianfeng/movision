@@ -275,14 +275,15 @@
     <select id="findAllPersonActive" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.ActiveVo">
         SELECT * FROM (
-        SELECT t1.id, t1.title, t1.subtitle, t1.coverimg, t1.isactive, t1.activetype, t1.type, t2.begintime, t2.endtime
+        SELECT t1.id, t1.title, t1.subtitle, t1.coverimg, t1.isactive, t1.activetype, t1.type, t1.isdel, t2.begintime, t2.endtime
             FROM yw_post t1
             LEFT JOIN yw_active_period t2
              ON t1.id = t2.postid
             ) t
-        WHERE t.id IN (
+        WHERE t.isdel = '0'
+          AND t.id IN (
              SELECT postid FROM yw_active_part WHERE userid = #{userid,jdbcType=INTEGER}
-         )
+          )
     </select>
 
     <!--根据userid查询用户所有收藏的商品列表-->
