@@ -79,7 +79,7 @@ public class MovisionOssClient {
      * @param chann 频道类型  post | person | ....
      * @return url | filename
      */
-    public Map<String, String> uploadFileObject(File file, String type, String chann) {
+    public Map<String, Object> uploadFileObject(File file, String type, String chann) {
 
         String uploadMode = PropertiesLoader.getValue("upload.mode");
         //判断是否为允许的上传文件后缀
@@ -90,7 +90,7 @@ public class MovisionOssClient {
 
         switch (uploadMode) {
             case "alioss":
-                Map<String, String> map = aliOSSClient.uploadLocalFile(file, type, chann);
+                Map<String, Object> map = aliOSSClient.uploadLocalFile(file, type, chann);
                 String status = String.valueOf(map.get("status"));
                 if (status.equals("success")) {
                     return map;

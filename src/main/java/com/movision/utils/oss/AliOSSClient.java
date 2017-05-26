@@ -284,8 +284,8 @@ public class AliOSSClient {
      * @param chann 频道
      * @return
      */
-    public Map<String, String> uploadLocalFile(File file, String type, String chann) {
-        Map<String, String> result = new HashMap<>();
+    public Map<String, Object> uploadLocalFile(File file, String type, String chann) {
+        Map<String, Object> result = new HashMap<>();
 
         log.info("阿里云OSS上传Started");
         OSSClient ossClient = init();
@@ -397,7 +397,7 @@ public class AliOSSClient {
         AliOSSClient client = new AliOSSClient();
         String fileName = "/Users/zhuangyuhao/Downloads/1111.jpg";
         File file = new File(fileName);
-        Map<String, String> result = client.uploadLocalFile(file, "doc", null);
+        Map<String, Object> result = client.uploadLocalFile(file, "doc", null);
         System.out.println(result);
 //        String name = file.getName();
 //        String a = FileUtil.renameFile(name);
