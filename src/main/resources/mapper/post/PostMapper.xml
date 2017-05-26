@@ -1830,7 +1830,7 @@
         FROM yw_post p
         LEFT JOIN yw_collection c on p.id = c.postid
         left join yw_active_period ap on ap.postid = p.id
-        where c.type = 0
+        where c.type = 0 and p.isdel = 0
         <if test="userid!=null and userid!=''">
             AND c.userid = #{userid}
         </if>
