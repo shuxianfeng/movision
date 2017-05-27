@@ -768,7 +768,7 @@ public class PostFacade {
                 }
                 post.setCoverimg(coverimg);//插入图片地址
                 post.setUserid(userid);
-                post.setIsdel("1");
+                post.setIsdel("0");
                 int result = postService.addPost(post);//添加帖子
                 //String fName = FileUtil.getPicName(vid);//获取视频文件名
                 //查询圈子名称
