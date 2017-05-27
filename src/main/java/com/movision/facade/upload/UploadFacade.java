@@ -47,7 +47,7 @@ public class UploadFacade {
         try {
             /**
              * 这是测试环境上传的图片的路径
-             * saveDirectory = /WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/upload/$chan/img
+             * saveDirectory = /WWW/apache-tomcat-7.0.73/webapps/upload/$chan/img
              */
             String saveDirectory;
             long maxPostSize;   //上传的文件大小
@@ -65,7 +65,7 @@ public class UploadFacade {
                         saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/img";
                         /**
                          * 这是外界访问该图片的地址
-                         * 其中data = http://120.77.214.187:8100/upload/$chan/img/$filename
+                         * 其中data = http://39.108.84.156:8100/upload/$chan/img/$filename
                          */
                         data = imgDomain + "/upload/" + chann + "/img/" + fileName;
                     } else {
@@ -94,7 +94,7 @@ public class UploadFacade {
                         saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/video";
                         /**
                          * 这是外界访问该视频的地址（绝对路径）
-                         * 其中data = http://120.77.214.187:8100/upload/$chan/video/$filename
+                         * 其中data = http://39.108.84.156:8100/upload/$chan/video/$filename
                          */
 
                         //data = imgDomain + "/upload/" + chann + "/video/" + fileName;
