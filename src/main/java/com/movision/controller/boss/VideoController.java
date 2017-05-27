@@ -2,13 +2,17 @@ package com.movision.controller.boss;
 
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.profile.DefaultProfile;
+import com.google.gson.Gson;
 import com.movision.common.Response;
+import com.movision.common.constant.AliVideoConstant;
+import com.movision.facade.apsaraVideo.AliVideoFacade;
 import com.movision.facade.video.VideoFacade;
 import com.movision.utils.VideoUploadUtil;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +35,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("boss/video/")
 public class VideoController {
+
+    @Autowired
+    private AliVideoFacade aliVideoFacade;
 
     @Autowired
     private MovisionOssClient movisionOssClient;
@@ -136,5 +143,20 @@ public class VideoController {
         return response;
     }
 
-
+    @ApiOperation(value = "获取视频播放凭证", notes = "获取视频播放凭证", response = Response.class)
+    @RequestMapping(value = "get_video_play_auth", method = RequestMethod.POST)
+    public Response getVideoPlayAuth(@ApiParam("vid, ali视频id") @RequestParam String vid) throws Exception {
+        Response response = new Response();
+        String url = aliVideoFacade.generateRequestUrl(AliVideoConstant.GetVideoPlayAuth, vid);
+        Map<String, String> reMap = aliVideoFacade.doGet(url);
+        Map result = new HashedMap();
+        if (!reMap.isEmpty()) {
+            if ("200".equals(reMap.get("status"))) {
+                Gson gson = new Gson();
+                result = gson.fromJson(reMap.get("result"), Map.class);
+            }
+        }
+        response.setData(result);
+        return response;
+    }
 }
