@@ -35,7 +35,7 @@ public class AppCollectionController {
             response.setMessage("收藏成功");
         } else if (count == -1) {
             response.setCode(300);
-            response.setMessage("已收藏过该帖子");
+            response.setMessage("已收藏该帖子，请刷新重试");
         }
         return response;
     }

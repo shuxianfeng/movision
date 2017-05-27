@@ -131,7 +131,7 @@ public class AppCircleController {
             response.setMessage("关注成功");
         } else if (flag == 1) {
             response.setCode(300);
-            response.setMessage("已关注过该圈子");
+            response.setMessage("已关注该圈子，请刷新重试");
         }
         return response;
     }

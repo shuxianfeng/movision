@@ -276,12 +276,12 @@ public class AppPostController {
         Response response = new Response();
         int sum = facadePost.updatePostByZanSum(id, userid);
         if (response.getCode() == 200) {
-            response.setMessage("操作成功");
+            response.setMessage("点赞成功");
             response.setData(sum);
         }
         if (sum == -1) {
             response.setCode(300);
-            response.setMessage("重复操作");
+            response.setMessage("已点赞，请刷新重试");
         }
         return response;
     }
