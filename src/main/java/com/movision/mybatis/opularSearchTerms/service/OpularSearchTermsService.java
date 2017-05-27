@@ -35,11 +35,12 @@ import java.util.ArrayList;
     public List group() {
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.group("keywords").count().as("count"),
-                Aggregation.limit(20),
-                Aggregation.sort(Sort.Direction.DESC, "count")
+                Aggregation.sort(Sort.Direction.DESC, "count"),
+                Aggregation.limit(20)
 
         );
         AggregationResults<OpularSearchTermsVo> list = mongoTemplate.aggregate(aggregation, "opularSearchTerms", OpularSearchTermsVo.class);
+        System.out.print(aggregation);
         List<OpularSearchTermsVo> list1 = list.getMappedResults();
         return list1;
 
