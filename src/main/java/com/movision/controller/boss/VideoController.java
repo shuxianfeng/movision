@@ -29,6 +29,7 @@ import java.util.Map;
  * @Date 2017/3/3 10:37
  */
 @RestController
+@RequestMapping("boss/video/")
 public class VideoController {
 
     @Autowired
@@ -47,7 +48,7 @@ public class VideoController {
      * @throws IOException
      */
     @ApiOperation(value = "作为上传视频测试使用", notes = "作为上传视频测试使用", response = Response.class)
-    @RequestMapping(value = "boss/video/upload_video", method = RequestMethod.POST)
+    @RequestMapping(value = "upload_video", method = RequestMethod.POST)
     public Response queryApplyVipList(@RequestParam(value = "file", required = false) MultipartFile file) throws ServletException, IOException {
         Map m = movisionOssClient.uploadObject(file, "video", "test");
         String url = String.valueOf(m.get("url"));
