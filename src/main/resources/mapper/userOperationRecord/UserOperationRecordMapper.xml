@@ -121,4 +121,10 @@
         </set>
         where userid = #{userid,jdbcType=INTEGER}
     </update>
+    <select id="selectAccid" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT accid FROM yw_im_user WHERE userid=#{userid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectNickname" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT nickname FROM yw_user WHERE id=#{userid,jdbcType=VARCHAR}
+    </select>
 </mapper>

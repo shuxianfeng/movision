@@ -1,8 +1,10 @@
 package com.movision.facade.rewarded;
 
 
+import com.google.gson.Gson;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
+import com.movision.facade.im.ImFacade;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.constant.entity.Constant;
@@ -14,6 +16,7 @@ import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.record.service.RecordService;
 import com.movision.mybatis.rewarded.entity.Rewarded;
 import com.movision.mybatis.rewarded.service.RewardedService;
+import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +57,10 @@ public class FacadeRewarded {
     @Autowired
     private NewInformationService newInformationService;
 
+    @Autowired
+    private ImFacade imFacade;
+    @Autowired
+    private UserOperationRecordService userOperationRecordService;
 
     /**
      * 公共方法 保存积分流水记录
@@ -148,6 +155,23 @@ public class FacadeRewarded {
                     newInformationService.insertUserByNewInformation(news);
                 }
                 //******************************************************************
+
+                try {
+                    String fromaccid = userOperationRecordService.selectAccid(userid);
+                    String to = postService.selectToAccid(Integer.parseInt(postid));
+                    String nickname = userOperationRecordService.selectNickname(userid);
+                    String pinnickname = nickname + "打赏了你";
+                    Map mapa = new HashMap();
+                    mapa.put("body", pinnickname);
+                    Gson gson = new Gson();
+                    String json = gson.toJson(map);
+                    Map map1 = new HashMap();
+                    map1.put("pushcontent", pinnickname);
+                    String json1 = gson.toJson(map1);
+                    imFacade.sendMsgInform(json, fromaccid, to, json1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 return map;
             } else {
                 map.put("code", 300);

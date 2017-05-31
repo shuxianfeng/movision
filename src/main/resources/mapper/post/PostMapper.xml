@@ -1956,4 +1956,7 @@
         SELECT DISTINCT(u.id),u.nickname FROM yw_user u LEFT JOIN yw_post_rewarded r ON u.id=r.userid WHERE
         r.postid=#{postid,jdbcType=VARCHAR} ORDER BY r.intime DESC LIMIT 10
     </select>
+    <select id="selectToAccid" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select  yw_im_user.accid from yw_post LEFT JOIN yw_im_user ON yw_im_user.userid=yw_post.userid WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
 </mapper>

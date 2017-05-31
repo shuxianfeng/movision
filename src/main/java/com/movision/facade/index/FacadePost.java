@@ -1,7 +1,9 @@
 package com.movision.facade.index;
 
+import com.google.gson.Gson;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
+import com.movision.facade.im.ImFacade;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.accusation.entity.Accusation;
@@ -103,6 +105,9 @@ public class FacadePost {
 
     @Autowired
     private VideoUploadUtil videoUploadUtil;
+
+    @Autowired
+    private ImFacade imFacade;
 
     public PostVo queryPostDetail(String postid, String userid, String type) {
 
@@ -464,34 +469,56 @@ public class FacadePost {
                     userOperationRecordService.updateUserOperationRecord(userOperationRecord);
                 }
             }
+            //****************************************
+            //查询被点赞人的帖子是否被设为最新消息通知用户
+            Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(id));
+            NewInformation news = new NewInformation();
+
+            //更新被点赞人的帖子最新消息
+            if (isread != null) {
+                news.setIsread(0);
+                news.setIntime(new Date());
+                news.setUserid(isread);
+                newInformationService.updateUserByNewInformation(news);
+            } else {
+                Integer uid = postService.queryPosterActivity(Integer.parseInt(id));  //查询被点赞的帖子发帖人
+                //新增被点在人的帖子最新消息
+                news.setIsread(0);
+                news.setIntime(new Date());
+                news.setUserid(uid);
+                newInformationService.insertUserByNewInformation(news);
+            }
+            //*****************************************
+
+
             //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------end
 
             postService.insertZanRecord(parammap);
             int type = postService.updatePostByZanSum(Integer.parseInt(id));
             if (type == 1) {
-                //****************************************
-                //查询被点赞人的帖子是否被设为最新消息通知用户
-                Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(id));
-                NewInformation news = new NewInformation();
-                //更新被点赞人的帖子最新消息
-                if (isread != null) {
-                    news.setIsread(0);
-                    news.setIntime(new Date());
-                    news.setUserid(isread);
-                    newInformationService.updateUserByNewInformation(news);
-                } else {
-                    //查询被点赞的帖子发帖人
-                    Integer uid = postService.queryPosterActivity(Integer.parseInt(id));
-                    //新增被点在人的帖子最新消息
-                    news.setIsread(0);
-                    news.setIntime(new Date());
-                    news.setUserid(uid);
-                    newInformationService.insertUserByNewInformation(news);
+                postService.queryPostByZanSum(Integer.parseInt(id));
+                try {
+                    String fromaccid = userOperationRecordService.selectAccid(userid);
+                    String to = postService.selectToAccid(Integer.parseInt(id));
+                    String nickname = userOperationRecordService.selectNickname(userid);
+                    String pinnickname = nickname + "赞了你";
+                    Map map = new HashMap();
+                    map.put("body", pinnickname);
+                    Gson gson = new Gson();
+                    String json = gson.toJson(map);
+                    Map map1 = new HashMap();
+                    map1.put("pushcontent", pinnickname);
+                    String json1 = gson.toJson(map1);
+                    imFacade.sendMsgInform(json, fromaccid, to, json1);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                //*****************************************
-                return postService.queryPostByZanSum(Integer.parseInt(id));
+                return 1;
             }
         }
+
+
+
         return -1;
     }
 

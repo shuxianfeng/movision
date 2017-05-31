@@ -48,4 +48,25 @@ public class UserOperationRecordService {
             throw e;
         }
     }
+
+    public String selectAccid(String userid) {
+        try {
+            log.info("查询accid");
+            return userOperationRecordMapper.selectAccid(userid);
+        } catch (Exception e) {
+            log.error("查询accid失败");
+            throw e;
+        }
+    }
+
+    public String selectNickname(String userid) {
+        try {
+            log.info("查询accid昵称");
+            return userOperationRecordMapper.selectNickname(userid);
+        } catch (Exception e) {
+            log.error("查询accid昵称失败");
+            throw e;
+        }
+    }
+
 }

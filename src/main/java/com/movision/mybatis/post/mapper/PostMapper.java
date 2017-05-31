@@ -203,4 +203,6 @@ public interface PostMapper {
     void updatePostShareNum(Map<String, Object> parammap);
 
     Integer queryPosterActivity(Integer postid);
+
+    String selectToAccid(Integer postid);
 }
