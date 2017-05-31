@@ -302,9 +302,21 @@ public class FacadePost {
         int scope = circleService.queryCircleScope(Integer.parseInt(circleid));
         //查询当前圈子的所有者(返回所有者的用户id)
         User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
+        //查询当前圈子的所有管理员列表
+        List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
+
+        int mark = 0;//定义一个userid比对标志位
+        if (manageList.size() > 0){
+            for (int i = 0; i < manageList.size(); i++){
+                if (manageList.get(i).getId() == Integer.parseInt(userid)){
+                    //是圈子管理员时赋值为1
+                    mark = 1;
+                }
+            }
+        }
         int lev = owner.getLevel();//用户等级
         //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.所有者和大V可发时，发帖用户即为大V
-        if (scope == 2 || Integer.parseInt(userid) == owner.getId() || (scope == 1 && lev >= 1)) {
+        if (scope == 2 || (Integer.parseInt(userid) == owner.getId() || mark == 1) || (scope == 1 && lev >= 1)) {
 
             try {
                 log.info("APP前端用户开始请求发帖");
