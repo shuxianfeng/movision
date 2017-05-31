@@ -65,7 +65,7 @@ public class UploadFacade {
                         saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/img";
                         /**
                          * 这是外界访问该图片的地址
-                         * 其中data = http://39.108.84.156:8100/upload/$chan/img/$filename
+                         * 其中data = http://39.108.84.156:9100/upload/$chan/img/$filename
                          */
                         data = imgDomain + "/upload/" + chann + "/img/" + fileName;
                     } else {
@@ -94,7 +94,7 @@ public class UploadFacade {
                         saveDirectory = apiConstants.getUploadDir() + "/" + chann + "/video";
                         /**
                          * 这是外界访问该视频的地址（绝对路径）
-                         * 其中data = http://39.108.84.156:8100/upload/$chan/video/$filename
+                         * 其中data = http://39.108.84.156:9100/upload/$chan/video/$filename
                          */
 
                         //data = imgDomain + "/upload/" + chann + "/video/" + fileName;
