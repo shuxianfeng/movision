@@ -260,8 +260,21 @@ public class FacadePost {
         int scope = circleService.queryCircleScope(Integer.parseInt(circleid));
         //查询当前圈子的所有者(返回所有者的用户id)
         User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
+        //查询当前圈子的所有管理员列表
+        List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
+
+        int flag = 0;//定义一个userid比对标志位
+        if (manageList.size() > 0){
+            for (int i = 0; i < manageList.size(); i++){
+                if (manageList.get(i).getId() == Integer.parseInt(userid)){
+                    //是圈子管理员时赋值为1
+                    flag = 1;
+                }
+            }
+        }
         int lev = owner.getLevel();//用户等级
-        if (scope == 0 || Integer.parseInt(userid) == owner.getId() || (scope == 1 && lev >= 1)) {
+        //所有人均可发或当前用户为圈子所有者或管理员或当前圈子只有大V可发而当前用户正式大V
+        if (scope == 2 || (Integer.parseInt(userid) == owner.getId() || flag == 1) || (scope == 1 && lev >= 1)) {
             return 1;//有发帖权限
         } else {
             return -1;//无发帖权限
@@ -362,18 +375,17 @@ public class FacadePost {
                 pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
 
                 map.put("flag", flag);
-                map.put("ok", 2);
                 return map;
 
             } catch (Exception e) {
                 log.error("系统异常，APP发帖失败");
-                map.put("error", 0);
+                map.put("flag", -2);
                 e.printStackTrace();
                 return map;
             }
         } else {
             log.info("该用户不具备发帖权限");
-            map.put("isflag", 1);
+            map.put("flag", -1);
             return map;
         }
     }
