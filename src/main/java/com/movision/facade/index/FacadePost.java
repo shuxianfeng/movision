@@ -445,29 +445,28 @@ public class FacadePost {
             postService.insertZanRecord(parammap);
             int type = postService.updatePostByZanSum(Integer.parseInt(id));
             if (type == 1) {
+                //****************************************
+                //查询被点赞人的帖子是否被设为最新消息通知用户
+                Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(id));
+                NewInformation news = new NewInformation();
+                //更新被点赞人的帖子最新消息
+                if (isread != null) {
+                    news.setIsread(0);
+                    news.setIntime(new Date());
+                    news.setUserid(isread);
+                    newInformationService.updateUserByNewInformation(news);
+                } else {
+                    //查询被点赞的帖子发帖人
+                    Integer uid = postService.queryPosterActivity(Integer.parseInt(id));
+                    //新增被点在人的帖子最新消息
+                    news.setIsread(0);
+                    news.setIntime(new Date());
+                    news.setUserid(uid);
+                    newInformationService.insertUserByNewInformation(news);
+                }
+                //*****************************************
                 return postService.queryPostByZanSum(Integer.parseInt(id));
             }
-
-            //****************************************
-            //查询被点赞人的帖子是否被设为最新消息通知用户
-            Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(id));
-            NewInformation news = new NewInformation();
-            //更新被点赞人的帖子最新消息
-            if (isread != null) {
-                news.setIsread(0);
-                news.setIntime(new Date());
-                news.setUserid(isread);
-                newInformationService.updateUserByNewInformation(news);
-            } else {
-                //查询被点赞的帖子发帖人
-                Integer uid = postService.queryPosterActivity(Integer.parseInt(id));
-                //新增被点在人的帖子最新消息
-                news.setIsread(0);
-                news.setIntime(new Date());
-                news.setUserid(uid);
-                newInformationService.insertUserByNewInformation(news);
-            }
-            //*****************************************
         }
         return -1;
     }
