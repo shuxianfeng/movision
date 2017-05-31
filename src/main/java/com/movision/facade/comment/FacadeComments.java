@@ -208,10 +208,8 @@ public class FacadeComments {
                 map.put("body", pinnickname);
                 Gson gson = new Gson();
                 String json = gson.toJson(map);
-                Map map1 = new HashMap();
-                map1.put("pushcontent", pinnickname);
-                String json1 = gson.toJson(map1);
-                imFacade.sendMsgInform(json, fromaccid, to, json1);
+                String pushcontent = nickname + "评论了你";
+                imFacade.sendMsgInform(json, fromaccid, to, pushcontent);
             } catch (Exception e) {
                 e.printStackTrace();
             }
