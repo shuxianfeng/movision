@@ -129,6 +129,7 @@ public class UserFacade {
             parammap.put("userid", Integer.parseInt(userid));
         }
         parammap.put("intime", new Date());
+        log.debug("测试分享渠道值>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>!!!!!!!!!!>>>>>>>>>>>>>>>>>"+channel);
         if (channel.equals("0")) {
             parammap.put("channel", "QQ");
         } else if (channel.equals("1")) {

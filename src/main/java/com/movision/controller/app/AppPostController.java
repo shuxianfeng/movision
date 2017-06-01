@@ -162,13 +162,13 @@ public class AppPostController {
 
         Map count = facadePost.releasePost(request, userid, type, circleid, title, postcontent, isactive, coverimg, vid, videourl, proids);
 
-        if (count.get("error").equals("0")) {
+        if (count.get("flag").equals(-2)) {
             response.setCode(300);
             response.setMessage("系统异常，APP发帖失败");
-        } else if (count.get("isflag").equals("-1")) {
+        } else if (count.get("flag").equals(-1)) {
             response.setCode(201);
             response.setMessage("用户不具备发帖权限");
-        } else {
+        }else{
             response.setCode(200);
             response.setMessage("发帖成功");
         }
@@ -198,7 +198,7 @@ public class AppPostController {
      * @param file
      * @return
      */
-    @ApiOperation(value = "上传帖子内容相关图片", notes = "上传帖子内容相关图片", response = Response.class)
+    @ApiOperation(value = "上传帖子内容相关图片", notes = "上传帖子内容相关图片（上传帖子内容中的图片）", response = Response.class)
     @RequestMapping(value = {"/upload_post_img"}, method = RequestMethod.POST)
     public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file) {
 
@@ -276,12 +276,12 @@ public class AppPostController {
         Response response = new Response();
         int sum = facadePost.updatePostByZanSum(id, userid);
         if (response.getCode() == 200) {
-            response.setMessage("操作成功");
+            response.setMessage("点赞成功");
             response.setData(sum);
         }
         if (sum == -1) {
             response.setCode(300);
-            response.setMessage("重复操作");
+            response.setMessage("已点赞，请刷新重试");
         }
         return response;
     }

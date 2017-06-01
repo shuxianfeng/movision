@@ -63,7 +63,7 @@ public class CollectionFacade {
 
 
             //************************查询被收藏人的帖子是否被设为最新消息通知用户
-            Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
+           /* Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
             NewInformation news = new NewInformation();
             //更新被收藏人的帖子最新消息
             if (isread != null) {
@@ -79,7 +79,7 @@ public class CollectionFacade {
                 news.setIntime(new Date());
                 news.setUserid(uid);
                 newInformationService.insertUserByNewInformation(news);
-            }
+            }*/
             //******************************************************************
 
             return collectionService.collectionPost(collection);

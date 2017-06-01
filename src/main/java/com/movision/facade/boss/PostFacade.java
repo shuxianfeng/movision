@@ -728,6 +728,7 @@ public class PostFacade {
                 }
                 post.setIsactive("0");//设置状态为帖子
                 if (StringUtil.isNotEmpty(postcontent)) {
+
                     //内容转换
                     Map con = jsoupCompressImg.compressImg(request, postcontent);
                     System.out.println(con);
@@ -739,6 +740,8 @@ public class PostFacade {
                         logger.error("帖子内容转换异常");
                         post.setPostcontent(postcontent);
                     }
+
+                    /*post.setPostcontent(postcontent);*/
                 }
                 post.setIntime(new Date());//插入时间
                 if (StringUtil.isNotEmpty(ishot)) {
@@ -765,7 +768,7 @@ public class PostFacade {
                 }
                 post.setCoverimg(coverimg);//插入图片地址
                 post.setUserid(userid);
-                post.setIsdel("1");
+                post.setIsdel("0");
                 int result = postService.addPost(post);//添加帖子
                 //String fName = FileUtil.getPicName(vid);//获取视频文件名
                 //查询圈子名称
@@ -1386,6 +1389,8 @@ public class PostFacade {
                     }
                     post.setIsactive("0");//设置状态为帖子
                     if (StringUtil.isNotEmpty(postcontent)) {
+
+
                         //内容转换
                         Map con = jsoupCompressImg.compressImg(request, postcontent);
                         if ((int) con.get("code") == 200) {
@@ -1397,6 +1402,8 @@ public class PostFacade {
                             logger.error("帖子内容转换异常");
                             post.setPostcontent(postcontent);
                         }
+                        /*post.setPostcontent(postcontent);*/
+
                     }
                     post.setIntime(new Date());
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");

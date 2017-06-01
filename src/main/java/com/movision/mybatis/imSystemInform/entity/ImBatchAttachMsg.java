@@ -18,6 +18,16 @@ public class ImBatchAttachMsg implements Serializable {
     @ApiModelProperty(value = "[\"aaa\",\"bbb\"]（JSONArray对应的accid, 最大限500人", required = true)
     private String toAccids;
 
+    private String to;
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
+    }
+
     @ApiModelProperty(value = "自定义通知内容，第三方组装的字符串，建议是JSON串，最大长度4096字符")
     private String attach;
 
@@ -41,6 +51,16 @@ public class ImBatchAttachMsg implements Serializable {
             "2. needPushNick: 推送文案是否需要带上昵称，不设置该参数时默认false(ps:注意与sendBatchMsg.action接口有别)。\n" +
             "3. route: 该消息是否需要抄送第三方；默认true (需要app开通消息抄送功能)")
     private String option;
+
+    private Integer msgtype;
+
+    public Integer getMsgtype() {
+        return msgtype;
+    }
+
+    public void setMsgtype(Integer msgtype) {
+        this.msgtype = msgtype;
+    }
 
     public void setFromAccid(String fromAccid) {
         this.fromAccid = fromAccid;

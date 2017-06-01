@@ -202,6 +202,16 @@ public class CircleService {
         }
     }
 
+    public List<User> queryCircleManage(int circleid){
+        try {
+            log.info("查询圈子的所有管理员列表");
+            return circleMapper.queryCircleManage(circleid);
+        }catch (Exception e){
+            log.error("查询圈子的所有管理员列表失败");
+            throw e;
+        }
+    }
+
     public String queryCircleName(int circleid) {
         try {
             log.info("查询圈子的名称");

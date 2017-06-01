@@ -1,7 +1,9 @@
 package com.movision.facade.index;
 
+import com.google.gson.Gson;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
+import com.movision.facade.im.ImFacade;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.accusation.entity.Accusation;
@@ -104,6 +106,9 @@ public class FacadePost {
     @Autowired
     private VideoUploadUtil videoUploadUtil;
 
+    @Autowired
+    private ImFacade imFacade;
+
     public PostVo queryPostDetail(String postid, String userid, String type) {
 
         //通过userid、postid查询该用户有没有关注该圈子的权限
@@ -148,7 +153,9 @@ public class FacadePost {
 
         //对帖子内容进行脱敏处理
         vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));//帖子主标题脱敏
-        vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
+        if (null != vo.getSubtitle()) {
+            vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
+        }
         vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
         //数据插入mongodb
         if (StringUtil.isNotEmpty(userid)) {
@@ -258,8 +265,21 @@ public class FacadePost {
         int scope = circleService.queryCircleScope(Integer.parseInt(circleid));
         //查询当前圈子的所有者(返回所有者的用户id)
         User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
+        //查询当前圈子的所有管理员列表
+        List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
+
+        int flag = 0;//定义一个userid比对标志位
+        if (manageList.size() > 0){
+            for (int i = 0; i < manageList.size(); i++){
+                if (manageList.get(i).getId() == Integer.parseInt(userid)){
+                    //是圈子管理员时赋值为1
+                    flag = 1;
+                }
+            }
+        }
         int lev = owner.getLevel();//用户等级
-        if (scope == 0 || Integer.parseInt(userid) == owner.getId() || (scope == 1 && lev >= 1)) {
+        //所有人均可发或当前用户为圈子所有者或管理员或当前圈子只有大V可发而当前用户正式大V
+        if (scope == 2 || (Integer.parseInt(userid) == owner.getId() || flag == 1) || (scope == 1 && lev >= 1)) {
             return 1;//有发帖权限
         } else {
             return -1;//无发帖权限
@@ -279,7 +299,7 @@ public class FacadePost {
         Map map = new HashMap();
 
         //上传帖子封面图片
-        Map m = movisionOssClient.uploadObject(coverimg, "img", "post");
+        Map m = movisionOssClient.uploadObject(coverimg, "img", "postCover");
         String coverurl = String.valueOf(m.get("url"));
 
         //这里需要根据userid判断当前登录的用户是否有发帖权限
@@ -287,9 +307,21 @@ public class FacadePost {
         int scope = circleService.queryCircleScope(Integer.parseInt(circleid));
         //查询当前圈子的所有者(返回所有者的用户id)
         User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
+        //查询当前圈子的所有管理员列表
+        List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
+
+        int mark = 0;//定义一个userid比对标志位
+        if (manageList.size() > 0){
+            for (int i = 0; i < manageList.size(); i++){
+                if (manageList.get(i).getId() == Integer.parseInt(userid)){
+                    //是圈子管理员时赋值为1
+                    mark = 1;
+                }
+            }
+        }
         int lev = owner.getLevel();//用户等级
         //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.所有者和大V可发时，发帖用户即为大V
-        if (scope == 0 || Integer.parseInt(userid) == owner.getId() || (scope == 1 && lev >= 1)) {
+        if (scope == 2 || (Integer.parseInt(userid) == owner.getId() || mark == 1) || (scope == 1 && lev >= 1)) {
 
             try {
                 log.info("APP前端用户开始请求发帖");
@@ -303,13 +335,12 @@ public class FacadePost {
                     System.out.println(con);
                     if ((int) con.get("code") == 200) {
                         String str = con.get("content").toString();
-                        str = str.replace("\\", "");
-                        post.setPostcontent(str);//帖子内容
+                        postcontent = str.replace("\\", "");
                     } else {
                         log.error("APP端帖子图片内容转换异常");
-                        post.setPostcontent(postcontent);
                     }
                 }
+                post.setPostcontent(postcontent);//帖子内容
                 post.setZansum(0);//新发帖全部默认为0次
                 post.setCommentsum(0);//被评论次数
                 post.setForwardsum(0);//被转发次数
@@ -365,13 +396,13 @@ public class FacadePost {
 
             } catch (Exception e) {
                 log.error("系统异常，APP发帖失败");
-                map.put("error", 0);
+                map.put("flag", -2);
                 e.printStackTrace();
                 return map;
             }
         } else {
             log.info("该用户不具备发帖权限");
-            map.put("isflag", 1);
+            map.put("flag", -1);
             return map;
         }
     }
@@ -438,18 +469,11 @@ public class FacadePost {
                     userOperationRecordService.updateUserOperationRecord(userOperationRecord);
                 }
             }
-            //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------end
-
-            postService.insertZanRecord(parammap);
-            int type = postService.updatePostByZanSum(Integer.parseInt(id));
-            if (type == 1) {
-                return postService.queryPostByZanSum(Integer.parseInt(id));
-            }
-
             //****************************************
             //查询被点赞人的帖子是否被设为最新消息通知用户
             Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(id));
             NewInformation news = new NewInformation();
+
             //更新被点赞人的帖子最新消息
             if (isread != null) {
                 news.setIsread(0);
@@ -457,8 +481,7 @@ public class FacadePost {
                 news.setUserid(isread);
                 newInformationService.updateUserByNewInformation(news);
             } else {
-                //查询被点赞的帖子发帖人
-                Integer uid = postService.queryPosterActivity(Integer.parseInt(id));
+                Integer uid = postService.queryPosterActivity(Integer.parseInt(id));  //查询被点赞的帖子发帖人
                 //新增被点在人的帖子最新消息
                 news.setIsread(0);
                 news.setIntime(new Date());
@@ -466,7 +489,34 @@ public class FacadePost {
                 newInformationService.insertUserByNewInformation(news);
             }
             //*****************************************
+
+
+            //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------end
+
+            postService.insertZanRecord(parammap);
+            int type = postService.updatePostByZanSum(Integer.parseInt(id));
+            if (type == 1) {
+                postService.queryPostByZanSum(Integer.parseInt(id));
+                try {
+                    String fromaccid = userOperationRecordService.selectAccid(userid);
+                    String to = postService.selectToAccid(Integer.parseInt(id));
+                    String nickname = userOperationRecordService.selectNickname(userid);
+                    String pinnickname = nickname + "赞了你";
+                    Map map = new HashMap();
+                    map.put("body", pinnickname);
+                    Gson gson = new Gson();
+                    String json = gson.toJson(map);
+                    String pushcontent = nickname + "赞了你";
+                    imFacade.sendMsgInform(json, fromaccid, to, pushcontent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return 1;
+            }
         }
+
+
+
         return -1;
     }
 

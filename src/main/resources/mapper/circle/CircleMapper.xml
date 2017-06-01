@@ -84,6 +84,12 @@
         )
     </select>
 
+    <!--查询圈子的所有管理员列表-->
+    <select id="queryCircleManage" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.User" >
+        SELECT id FROM yw_circle_manager
+        WHERE circleid = #{circleid,jdbcType=INTEGER}
+    </select>
+
     <!--查询帖子详情最下方推荐的4个热门圈子-->
     <select id="queryHotCircle" resultType="com.movision.mybatis.circle.entity.Circle">
         SELECT t1.id,t1.name,t1.maylikeimg

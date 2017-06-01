@@ -275,14 +275,15 @@
     <select id="findAllPersonActive" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.ActiveVo">
         SELECT * FROM (
-        SELECT t1.id, t1.title, t1.subtitle, t1.coverimg, t1.isactive, t1.activetype, t1.type, t2.begintime, t2.endtime
+        SELECT t1.id, t1.title, t1.subtitle, t1.coverimg, t1.isactive, t1.activetype, t1.type, t1.isdel, t2.begintime, t2.endtime
             FROM yw_post t1
             LEFT JOIN yw_active_period t2
              ON t1.id = t2.postid
             ) t
-        WHERE t.id IN (
+        WHERE t.isdel = '0'
+          AND t.id IN (
              SELECT postid FROM yw_active_part WHERE userid = #{userid,jdbcType=INTEGER}
-         )
+          )
     </select>
 
     <!--根据userid查询用户所有收藏的商品列表-->
@@ -1829,7 +1830,7 @@
         FROM yw_post p
         LEFT JOIN yw_collection c on p.id = c.postid
         left join yw_active_period ap on ap.postid = p.id
-        where c.type = 0
+        where c.type = 0 and p.isdel = 0
         <if test="userid!=null and userid!=''">
             AND c.userid = #{userid}
         </if>
@@ -1947,12 +1948,15 @@
        UPDATE yw_post SET isdel=0 WHERE id=(SELECT postid FROM yw_video   WHERE  videourl= #{vid,jdbcType=VARCHAR})
     </update>
     <select id="queryRewardSum" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM yw_post_rewarded WHERE postid=#{postid,jdbcType=VARCHAR}
+        SELECT COUNT(DISTINCT(userid)) AS count FROM yw_post_rewarded WHERE postid=#{postid,jdbcType=VARCHAR}
     </select>
 
     <select id="queryRewardPersonNickname" parameterType="java.lang.String"
             resultType="com.movision.mybatis.user.entity.UserLike">
-        SELECT DISTINCT(u.id),u.nickname FROM yw_post_rewarded r LEFT JOIN yw_user u ON u.id=r.userid WHERE
-        postid=#{postid,jdbcType=VARCHAR} ORDER BY r.intime DESC LIMIT 10
+        SELECT DISTINCT(u.id),u.nickname FROM yw_user u LEFT JOIN yw_post_rewarded r ON u.id=r.userid WHERE
+        r.postid=#{postid,jdbcType=VARCHAR} ORDER BY r.intime DESC LIMIT 10
+    </select>
+    <select id="selectToAccid" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select  yw_im_user.accid from yw_post LEFT JOIN yw_im_user ON yw_im_user.userid=yw_post.userid WHERE id=#{postid,jdbcType=INTEGER}
     </select>
 </mapper>

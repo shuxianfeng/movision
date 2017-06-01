@@ -243,7 +243,6 @@ public class AliOSSClient {
 
             } else if (type.equals("doc")) {
                 bucketName = PropertiesLoader.getValue("file.bucket");
-//                domain = PropertiesLoader.getValue("file.domain");
                 data = fileName2;
                 String maxSize = PropertiesLoader.getValue("uploadDocMaxPostSize");
                 if (size > Long.valueOf(maxSize)) {
@@ -284,8 +283,8 @@ public class AliOSSClient {
      * @param chann 频道
      * @return
      */
-    public Map<String, String> uploadLocalFile(File file, String type, String chann) {
-        Map<String, String> result = new HashMap<>();
+    public Map<String, Object> uploadLocalFile(File file, String type, String chann) {
+        Map<String, Object> result = new HashMap<>();
 
         log.info("阿里云OSS上传Started");
         OSSClient ossClient = init();
@@ -293,7 +292,6 @@ public class AliOSSClient {
         try {
             // 文件存储入OSS，Object的名称为fileKey。详细请参看“SDK手册 > Java-SDK > 上传文件”。
             // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/upload_object.html?spm=5176.docoss/user_guide/upload_object
-//            File file = new File(fileName);
             String fileKey;
             String domain;
             String fileName = FileUtil.renameFile(file).getName();
@@ -306,20 +304,25 @@ public class AliOSSClient {
             String data = "";
             if (type.equals("img")) {
                 bucketName = PropertiesLoader.getValue("img.bucket");
-                domain = PropertiesLoader.getValue("img.domain");
-                data = "//" + domain + "/" + fileKey;
+                domain = PropertiesLoader.getValue("ali.domain");
+                data = domain + "/" + fileKey;
+                //返回图片的宽高
+                InputStream is = new FileInputStream(file);
+                BufferedImage src = ImageIO.read(is);
+                result.put("width", src.getWidth());
+                result.put("height", src.getHeight());
 
             } else if (type.equals("doc")) {
                 bucketName = PropertiesLoader.getValue("file.bucket");
-//                domain = PropertiesLoader.getValue("file.domain");
                 data = fileName;
             }
 
             ossClient.putObject(bucketName, fileKey, file);
             log.debug("Object：" + fileKey + "存入OSS成功。");
+            log.info("【上传Alioss的返回值】：" + result.toString());
             result.put("status", "success");
 
-            result.put("data", data);
+            result.put("url", data);
 
         } catch (OSSException oe) {
             oe.printStackTrace();
@@ -397,7 +400,7 @@ public class AliOSSClient {
         AliOSSClient client = new AliOSSClient();
         String fileName = "/Users/zhuangyuhao/Downloads/1111.jpg";
         File file = new File(fileName);
-        Map<String, String> result = client.uploadLocalFile(file, "doc", null);
+        Map<String, Object> result = client.uploadLocalFile(file, "doc", null);
         System.out.println(result);
 //        String name = file.getName();
 //        String a = FileUtil.renameFile(name);

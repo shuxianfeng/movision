@@ -626,6 +626,27 @@ public class ImFacade {
         return this.sendImHttpPost(ImConstant.SEND_BATCH_ATTACH_MSG, BeanUtil.ImBeanToMap(imBatchAttachMsg));
     }
 
+    /**
+     * 发送系统通知
+     * 打赏  评论  点赞
+     *
+     * @param fromaccid
+     * @param body
+     * @param to
+     * @return
+     * @throws IOException
+     */
+    public Map sendMsgInform(String body, String fromaccid, String to, String pushcontent) throws IOException {
+        //发系统通知打赏评论点赞
+        ImBatchAttachMsg imBatchAttachMsg = new ImBatchAttachMsg();
+        imBatchAttachMsg.setFromAccid(fromaccid);
+        imBatchAttachMsg.setAttach(body);
+        imBatchAttachMsg.setPushcontent(pushcontent);
+        imBatchAttachMsg.setTo(to);
+        imBatchAttachMsg.setMsgtype(0);
+        return this.sendImHttpPost(ImConstant.SEND_MSG_BATCH, BeanUtil.ImBeanToMap(imBatchAttachMsg));
+    }
+
 
     /**
      * 记录发消息的流水

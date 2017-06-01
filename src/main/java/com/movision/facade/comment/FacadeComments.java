@@ -1,6 +1,8 @@
 package com.movision.facade.comment;
 
+import com.google.gson.Gson;
 import com.movision.common.constant.PointConstant;
+import com.movision.facade.im.ImFacade;
 import com.movision.facade.index.FacadePost;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
@@ -39,6 +41,8 @@ public class FacadeComments {
     private PointRecordFacade pointRecordFacade;
     @Autowired
     private NewInformationService newInformationService;
+    @Autowired
+    private ImFacade imFacade;
 
     /**
      * 帖子评论列表（二级）
@@ -195,7 +199,20 @@ public class FacadeComments {
             postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子表的评论次数字段
 
             pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
-
+            try {
+                String fromaccid = userOperationRecordService.selectAccid(userid);
+                String to = postService.selectToAccid(Integer.parseInt(postid));
+                String nickname = userOperationRecordService.selectNickname(userid);
+                String pinnickname = nickname + "评论了你";
+                Map map = new HashMap();
+                map.put("body", pinnickname);
+                Gson gson = new Gson();
+                String json = gson.toJson(map);
+                String pushcontent = nickname + "评论了你";
+                imFacade.sendMsgInform(json, fromaccid, to, pushcontent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return type;
         }
     }

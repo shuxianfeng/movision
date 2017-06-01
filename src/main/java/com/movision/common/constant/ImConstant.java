@@ -62,4 +62,7 @@ public class ImConstant {
      */
     public static final String SEND_BATCH_ATTACH_MSG = ImPropertiesLoader.getPropertyValue("send_batch_attach_msg");
 
+
+    public static final String SEND_MSG_BATCH = ImPropertiesLoader.getPropertyValue("send_msg_attach");
+
 }

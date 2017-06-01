@@ -20,4 +20,8 @@ public interface UserOperationRecordMapper {
     int updateByPrimaryKeySelective(UserOperationRecord record);
 
     int updateByPrimaryKey(UserOperationRecord record);
+
+    String selectAccid(String userid);
+
+    String selectNickname(String userid);
 }

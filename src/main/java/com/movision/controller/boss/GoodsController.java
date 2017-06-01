@@ -664,12 +664,18 @@ public class GoodsController {
     @ApiOperation(value = "上传商品图片", notes = "上传商品图片", response = Response.class)
     @RequestMapping(value = {"/upload_good_pic"}, method = RequestMethod.POST)
     public Response updateMyInfo(@RequestParam(value = "file", required = false) MultipartFile file,
-                                 @ApiParam(value = "用于选择上传位置（1:封面 2:商品图）") @RequestParam String type) {
+                                 @ApiParam(value = "用于选择上传位置（1:缩略图 2:轮播图 3:描述图 4:参数图 5:分类图）") @RequestParam String type) {
         Map m = new HashMap();
-        if (type.equals(1)) {
+        if (type.equals("1")) {
             m = movisionOssClient.uploadObject(file, "img", "goodBanner");
-        } else if (type.equals(2)) {
-            m = movisionOssClient.uploadObject(file, "img", "good");
+        } else if (type.equals("2")) {
+            m = movisionOssClient.uploadObject(file, "img", "goodCirculation");
+        } else if (type.equals("3")) {
+            m = movisionOssClient.uploadObject(file, "img", "goodDescribe");
+        } else if (type.equals("4")) {
+            m = movisionOssClient.uploadObject(file, "img", "goodParameter");
+        } else if (type.equals("5")) {
+            m = movisionOssClient.uploadObject(file, "img", "goodClassify");
         }
         String url = String.valueOf(m.get("url"));
         Map<String, Object> map = new HashMap<>();

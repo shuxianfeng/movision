@@ -352,7 +352,7 @@ public class FileUtil {
 
 	/**
 	 * 判断上传文件 是否允许的后缀名
-	 * 
+	 *
 	 * @param fileName
 	 * @param type
 	 * @return

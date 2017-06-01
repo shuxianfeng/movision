@@ -1164,4 +1164,21 @@ public class PostService {
             throw e;
         }
     }
+
+
+    /**
+     * 查询被点赞的帖子发帖人accid
+     *
+     * @param postid
+     * @return
+     */
+    public String selectToAccid(Integer postid) {
+        try {
+            log.info("查询被点赞的帖子发帖人accid");
+            return postMapper.selectToAccid(postid);
+        } catch (Exception e) {
+            log.error("查询被点赞的帖子发帖人accid异常", e);
+            throw e;
+        }
+    }
 }
