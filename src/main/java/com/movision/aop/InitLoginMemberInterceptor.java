@@ -28,6 +28,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import com.movision.shiro.realm.ShiroRealm;
 import com.movision.shiro.realm.ShiroRealm.ShiroUser;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -84,73 +85,74 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
             // shiro管理的session
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
-            BossRealm.ShiroBossUser bossUser = (BossRealm.ShiroBossUser) session.getAttribute(SessionConstant.BOSS_USER);
-            ShiroUser appuser = (ShiroUser) session.getAttribute(SessionConstant.APP_USER);
-            if (bossUser != null && appuser == null) {
-                // 判断是否拥有当前点击菜单的权限（内部过滤,防止通过url进入跳过菜单权限）
-                /**
-                 * 根据点击的菜单中的URL去匹配，当匹配到了此菜单，判断是否有此菜单的权限，没有的话跳转到404页面
-                 */
-                log.debug("拦截器，进入boss系统登录分支");
-                int role = bossUser.getRole();
-                if (role == 1) {
-                    //超管拥有所有权限
-                    return true;
-                }
-
-                //获取授权的菜单列表
-                List<Map<String, Object>> menuList = (List) session.getAttribute(SessionConstant.ACCESS_MENU);
-                log.info("获取授权的菜单列表：" + menuList.toString());
-                //遍历菜单列表
-                for (int i = 0; i < menuList.size(); i++) {
-                    //获取一个map中的父菜单
-                    AuthMenu parentMenu = (AuthMenu) menuList.get(i).get("parent_menu");
-                    //父菜单的url
-                    String parentUrl = parentMenu.getUrl();
-                    /*if (path.contains(parentUrl) && parentMenu.getAuthroize()) {
-                        this.initBossUserInfo(currentUser, session);
+            if (null != session) {
+                //todo 半个小时后这里的session失效，session配置3小时没有效果
+                BossRealm.ShiroBossUser bossUser = (BossRealm.ShiroBossUser) session.getAttribute(SessionConstant.BOSS_USER);
+                ShiroUser appuser = (ShiroUser) session.getAttribute(SessionConstant.APP_USER);
+                if (bossUser != null && appuser == null) {
+                    // 判断是否拥有当前点击菜单的权限（内部过滤,防止通过url进入跳过菜单权限）
+                    /**
+                     * 根据点击的菜单中的URL去匹配，当匹配到了此菜单，判断是否有此菜单的权限，没有的话跳转到404页面
+                     */
+                    log.debug("拦截器，进入boss系统登录分支");
+                    int role = bossUser.getRole();
+                    if (role == 1) {
+                        //超管拥有所有权限
                         return true;
-                    }*/
-                    //获取一个map钟的子菜单集合
-                    List<AuthMenu> childrenList = (List<AuthMenu>) menuList.get(i).get("child_menu");
-                    //遍历子菜单
-                    for (int j = 0; j < childrenList.size(); j++) {
-                        //子菜单的url
-                        String childUrl = childrenList.get(j).getUrl();
-                        //
-                        /**
-                         * 若请求的url包含父菜单的url，并且 子菜单url包含父菜单url， 并且 该菜单属于授权菜单，
-                         * 则通过拦截器
-                         */
-                        if (path.contains(parentUrl) && childUrl.contains(parentUrl) && childrenList.get(j).getAuthroize()) {
-                            this.initBossUserInfo(currentUser, session);
-                            return true;
+                    }
+                    //获取授权的菜单列表
+                    List<Map<String, Object>> menuList = (List) session.getAttribute(SessionConstant.ACCESS_MENU);
+                    log.info("获取授权的菜单列表：" + menuList.toString());
+                    //遍历菜单列表
+                    for (int i = 0; i < menuList.size(); i++) {
+                        //获取一个map中的父菜单
+                        AuthMenu parentMenu = (AuthMenu) menuList.get(i).get("parent_menu");
+                        //父菜单的url
+                        String parentUrl = parentMenu.getUrl();
+                        //获取一个map钟的子菜单集合
+                        List<AuthMenu> childrenList = (List<AuthMenu>) menuList.get(i).get("child_menu");
+                        //遍历子菜单
+                        for (int j = 0; j < childrenList.size(); j++) {
+                            //子菜单的url
+                            String childUrl = childrenList.get(j).getUrl();
+                            //
+                            /**
+                             * 若请求的url包含父菜单的url，并且 子菜单url包含父菜单url， 并且 该菜单属于授权菜单，
+                             * 则通过拦截器
+                             */
+                            if (path.contains(parentUrl) && childUrl.contains(parentUrl) && childrenList.get(j).getAuthroize()) {
+                                this.initBossUserInfo(currentUser, session);
+                                return true;
+                            }
                         }
                     }
-                }
-                //需要返回：无权限访问该请求
+                    //需要返回：无权限访问该请求
 //                response.sendRedirect(request.getContextPath() + "rest/exception/error_401");
-                bossLoginFacade.handleNoPermission(response);
-                return false;
-            } else if (bossUser == null && appuser != null) {
-                log.debug("拦截器，进入app登录分支");
-                //app端不做菜单控制, 所以该分支永远不会进入
-                this.initAppUserInfo(currentUser, session);
-                return true;
-
-            } else {
-
-                log.error("请登录");
-                bossLoginFacade.handleNotLogin(response);
-                return false;
-                //跳转到登录界面
+                    bossLoginFacade.handleNoPermission(response);
+                    return false;
+                } else if (bossUser == null && appuser != null) {
+                    log.debug("拦截器，进入app登录分支");
+                    //app端不做菜单控制, 所以该分支永远不会进入
+                    this.initAppUserInfo(currentUser, session);
+                    return true;
+                } else {
+                    return reLogin(response);
+                    //跳转到登录界面
 //                String str=SmartConfig.getString("smart.login");
 //                response.sendRedirect(request.getContextPath() + "app/login");
 //                log.info("sendRedirect的路径："+request.getContextPath() + "app/login");
 //                throw new AuthException(MsgCodeConstant.un_login, "请先登录");
-
+                }
+            } else {
+                return reLogin(response);
             }
         }
+    }
+
+    private boolean reLogin(HttpServletResponse response) throws IOException {
+        log.error("请登录");
+        bossLoginFacade.handleNotLogin(response);
+        return false;
     }
 
 
