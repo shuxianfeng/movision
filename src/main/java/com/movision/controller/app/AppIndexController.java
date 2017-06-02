@@ -71,6 +71,7 @@ public class AppIndexController {
         response.setCode(200);
         Map<String, Object> ret;
         try {
+            log.debug("测试搜索词汉字是否乱码>>>>>>"+spec.getQ());
             ret = postSearchService.search(spec);
             response.setMsgCode(1);
             response.setMessage("OK!");
