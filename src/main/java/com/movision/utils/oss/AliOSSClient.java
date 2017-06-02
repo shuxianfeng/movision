@@ -200,7 +200,7 @@ public class AliOSSClient {
      * @param chann 频道
      * @return
      */
-    public Map<String, Object> uploadFileStream(MultipartFile file, String type, String chann) {
+    public Map<String, Object> uploadFileStream(MultipartFile file, String type, String chann, String domain) {
         //返回值
         Map<String, Object> result = new HashMap<>();
 
@@ -209,7 +209,7 @@ public class AliOSSClient {
         try {
             long size = file.getSize();
             // 上传文件流
-            String domain;
+//            String domain;
             InputStream in = file.getInputStream();
             String fileName = file.getOriginalFilename();
             String fileKey;
@@ -230,7 +230,8 @@ public class AliOSSClient {
             String data = "";
             if (type.equals("img")) {
                 bucketName = PropertiesLoader.getValue("img.bucket");
-                domain = PropertiesLoader.getValue("ali.domain");
+//                domain = PropertiesLoader.getValue("ali.domain");
+//                domain = PropertiesLoader.getValue("formal.img.domain");
                 data = domain + "/" + fileKey;
                 String maxSize = PropertiesLoader.getValue("uploadPicMaxPostSize");
                 if (size > Long.valueOf(maxSize)) {
