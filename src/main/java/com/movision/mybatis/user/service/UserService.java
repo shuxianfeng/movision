@@ -715,10 +715,10 @@ public class UserService {
 
     public User selectUserByThirdAccount(Map map) {
         try {
-            log.info("判断是否存在这个qq账号");
+            log.info("判断是否存在这个第三方账号");
             return userMapper.selectUserByThirdAccount(map);
         } catch (Exception e) {
-            log.error("判断是否存在这个qq账号失败", e);
+            log.error("判断是否存在这个第三方账号失败", e);
             throw e;
         }
     }

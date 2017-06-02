@@ -108,9 +108,9 @@ public class ImController {
 
     @ApiOperation(value = "更最新消息已读", notes = "更新用户最新消息为已读", response = Response.class)
     @RequestMapping(value = "/update_new_informations", method = RequestMethod.POST)
-    public Response UpdateNewInformations() {
+    public Response UpdateNewInformations(@ApiParam(value = "登录用户id") @RequestParam String userid) {
         Response response = new Response();
-        newInformationsFacade.updateNewInformtions(ShiroUtil.getAppUserID());
+        newInformationsFacade.updateNewInformtions(Integer.parseInt(userid));
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -120,9 +120,9 @@ public class ImController {
 
     @ApiOperation(value = "查询用户最新消息", notes = "查询用户最新消息", response = Response.class)
     @RequestMapping(value = "/query_new_informations", method = RequestMethod.POST)
-    public Response QueryNewInformations() {
+    public Response QueryNewInformations(@ApiParam(value = "登录用户id") @RequestParam String userid) {
         Response response = new Response();
-        NewInformation res = newInformationsFacade.queryNewInformations(ShiroUtil.getAppUserID());
+        NewInformation res = newInformationsFacade.queryNewInformations(Integer.parseInt(userid));
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
