@@ -25,9 +25,9 @@
         <!--<jdbcConnection driverClass="${jdbc_driver}"
         connectionURL="${jdbc_url}" userId="${jdbc_user}" password="${jdbc_password}" />-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://120.77.214.187:3306/movision?useUnicode=true&amp;characterEncoding=utf-8"
+                        connectionURL="jdbc:mysql://39.108.84.156:3306/movision?useUnicode=true&amp;characterEncoding=utf-8"
                         userId="root"
-                        password="test123456"/>
+                        password="123456"/>
 
         <!-- 类型转换 -->
         <javaTypeResolver>
