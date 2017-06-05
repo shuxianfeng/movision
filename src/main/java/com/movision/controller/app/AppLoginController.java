@@ -409,5 +409,26 @@ public class AppLoginController {
         return response;
     }
 
+    /*@ApiOperation(value = "H5邀请页面注册", notes = "H5邀请页面注册", response = Response.class)
+    @RequestMapping(value = {"/registe_h5_user"}, method = RequestMethod.POST)
+    public Response registerH5User(@ApiParam(value = "手机号") @RequestParam String phone,
+                                   @ApiParam(value = "邀请人的userid") @RequestParam Integer inviteId) throws Exception {
+
+        log.debug("登录信息  mobile=" + phone + ", 邀请人的userid=" + inviteId );
+        Response response = new Response();
+        try {
+            //业务操作
+            Map result = appRegisterFacade.validateLoginUser();
+            response.setData(result);
+
+        } catch (Exception e) {
+            log.error("注册操作失败>>>", e);
+            throw e;
+        }
+
+        return response;
+    }*/
+
+
 
 }
