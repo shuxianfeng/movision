@@ -620,7 +620,9 @@ public class ImFacade {
         //发系统通知
         Gson gson = new Gson();
         Map map = new HashMap();
+        map.put("badge", false);
         map.put("needPushNick", false);
+        map.put("route", false);
         String option = gson.toJson(map);
         ImBatchAttachMsg imBatchAttachMsg = new ImBatchAttachMsg();
         imBatchAttachMsg.setFromAccid(fromaccid);
