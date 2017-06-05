@@ -673,6 +673,8 @@ public class ImFacade {
             SystemToPush systemToPush = new SystemToPush();
             systemToPush.setBody(body);
             systemToPush.setTitle(title);
+            systemToPush.setFromAccid(fromaccid);
+            systemToPush.setToAccids(toAccids);
             systemToPush.setUserid(ShiroUtil.getBossUserID());
             systemToPush.setInformTime(new Date());
             systemToPushService.addSystemToPush(systemToPush);//记录流水
