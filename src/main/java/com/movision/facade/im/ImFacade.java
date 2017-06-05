@@ -618,11 +618,16 @@ public class ImFacade {
      */
     public Map sendSystemInform(String body, String fromaccid, String toAccids, String pushcontent) throws IOException {
         //发系统通知
+        Gson gson = new Gson();
+        Map map = new HashMap();
+        map.put("needPushNick", false);
+        String option = gson.toJson(map);
         ImBatchAttachMsg imBatchAttachMsg = new ImBatchAttachMsg();
         imBatchAttachMsg.setFromAccid(fromaccid);
         imBatchAttachMsg.setAttach(body);
         imBatchAttachMsg.setPushcontent(pushcontent);
         imBatchAttachMsg.setToAccids(toAccids);
+        imBatchAttachMsg.setOption(option);
         return this.sendImHttpPost(ImConstant.SEND_BATCH_ATTACH_MSG, BeanUtil.ImBeanToMap(imBatchAttachMsg));
     }
 
