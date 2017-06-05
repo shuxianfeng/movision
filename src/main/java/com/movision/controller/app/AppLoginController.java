@@ -117,7 +117,9 @@ public class AppLoginController {
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(true);
             String session_phone = (String) session.getAttribute("phone");
+            log.debug("session_phone:" + session_phone);
             String param_phone = user.getPhone();
+            log.debug("param_phone:" + param_phone);
 
             //验证输入错误的手机号正确的验证码登录
             if (!session_phone.equals(param_phone)) {
