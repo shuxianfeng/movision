@@ -521,7 +521,7 @@ public class AppRegisterFacade {
             result.put("imuser", newImUser);
 
             //3.3 新用户注册需要添加积分记录
-            pointRecordFacade.addPointRecordOnly(PointConstant.POINT_TYPE.new_user_register.getCode(), userid);
+            pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.new_user_register.getCode(), PointConstant.POINT.new_user_register.getCode(), userid);
 
         } else {
             /**
