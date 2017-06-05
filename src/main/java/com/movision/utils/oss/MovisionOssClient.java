@@ -48,26 +48,37 @@ public class MovisionOssClient {
 
         switch (uploadMode) {
             case "alioss":
-                Map<String, Object> map = aliOSSClient.uploadFileStream(file, type, chann);
-                String status = String.valueOf(map.get("status"));
-                if (status.equals("success")) {
-                    return map;
-                } else {
-                    log.error("上传失败");
-                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传失败");
-                }
+                String domain = PropertiesLoader.getValue("formal.img.domain");
+
+                return aliossUpload(file, type, chann, domain);
 
             case "movision":
                 // 上传到测试服务器，返回url
-                log.debug("上传到测试服务器");
-                Map<String, Object> map2 = uploadFacade.upload(file, type, chann);
-                Map<String, Object> dataMap = (Map<String, Object>) map2.get("data");
-                log.info("【dataMap】=" + dataMap);
-                return dataMap;
+//                log.debug("上传到测试服务器");
+//                Map<String, Object> map2 = uploadFacade.upload(file, type, chann);
+//                Map<String, Object> dataMap = (Map<String, Object>) map2.get("data");
+//                log.info("【dataMap】=" + dataMap);
+//                return dataMap;
+
+                //还是上传到alioss，只是域名不同
+                String domain2 = PropertiesLoader.getValue("test.img.domain");
+
+                return aliossUpload(file, type, chann, domain2);
 
             default:
                 log.error("上传模式不正确");
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传模式不正确");
+        }
+    }
+
+    private Map<String, Object> aliossUpload(MultipartFile file, String type, String chann, String domain) {
+        Map<String, Object> map = aliOSSClient.uploadFileStream(file, type, chann, domain);
+        String status = String.valueOf(map.get("status"));
+        if (status.equals("success")) {
+            return map;
+        } else {
+            log.error("上传失败");
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传失败");
         }
     }
 
