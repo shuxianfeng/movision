@@ -153,6 +153,12 @@
             <if test="title != null">
                 title,
             </if>
+            <if test="fromAccid != null">
+                from_accid,
+            </if>
+            <if test="toAccids != null">
+                to_accids,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -169,6 +175,12 @@
             </if>
             <if test="title != null">
                 #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="fromAccid != null">
+                #{fromAccid,jdbcType=VARCHAR},
+            </if>
+            <if test="toAccids != null">
+                #{toAccids,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
