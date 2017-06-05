@@ -222,13 +222,14 @@ public class PointRecordFacade {
 
     }
 
+
     /**
      * 增加积分流水
      *
      * @param type
      * @param new_point
      */
-    private void addPointRecord(int type, int new_point, int userid) {
+    public void addPointRecord(int type, int new_point, int userid) {
         PointRecord pointRecord = new PointRecord();
         pointRecord.setUserid(userid);    //当前操作积分的APP用户
         pointRecord.setIsadd(PointConstant.POINT_ADD);
