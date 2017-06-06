@@ -547,9 +547,9 @@ public class AppRegisterFacade {
     private void updateUserInfo(String deviceno, String url, String nickname, String sex, String tokenJson, User originUser) {
         originUser.setToken(tokenJson);
         originUser.setDeviceno(deviceno);
-        originUser.setNickname(nickname);
-        originUser.setSex(Integer.valueOf(sex));
-        originUser.setPhoto(url);
+//        originUser.setNickname(nickname);
+//        originUser.setSex(Integer.valueOf(sex));
+//        originUser.setPhoto(url);
         userService.updateByPrimaryKeySelective(originUser);
     }
 
