@@ -116,7 +116,7 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <select id="findAllSystemToPush" resultType="com.movision.mybatis.systemToPush.entity.SystemToPush">
-        select * from  yw_system_push
+        select * from yw_system_push ORDER BY inform_time DESC
     </select>
     <select id="findAllSystemCondition" parameterType="java.util.Map"
             resultType="com.movision.mybatis.systemToPush.entity.SystemToPush">
