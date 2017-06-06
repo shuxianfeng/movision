@@ -1072,4 +1072,5 @@
         SELECT u.id AS userid,au.iscircle,au.circlemanagement,au.contributing,au.common
         FROM yw_user u LEFT JOIN yw_admin_user au ON u.phone=au.phone WHERE u.id=#{loginid,jdbcType=INTEGER}
     </select>
+
 </mapper>

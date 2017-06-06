@@ -398,4 +398,8 @@ public class UserFacade {
         userService.updateByPrimaryKeySelective(appUser);
     }
 
+    public User selectByPrimaryKey(Integer userid) {
+        return userService.selectByPrimaryKey(userid);
+    }
+
 }
