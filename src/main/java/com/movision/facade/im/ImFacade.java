@@ -634,7 +634,7 @@ public class ImFacade {
     }
 
     /**
-     * 发送系统通知
+     * 发送系统通知 
      * 打赏  评论  点赞
      *
      * @param fromaccid
