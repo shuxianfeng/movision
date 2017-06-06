@@ -134,9 +134,10 @@ public class MyMsgController {
     @ApiOperation(value = "更新已读/未读状态", notes = "更新已读/未读状态", response = Response.class)
     @RequestMapping(value = {"/get_my_msg_center_update_read"}, method = RequestMethod.GET)
     public Response updateisread(@ApiParam(value = "更新类型 1：赞 2：打赏 3：评论 4：系统 5：打招呼") @RequestParam String type,
+                                 @ApiParam(value = "用户id") @RequestParam String userid,
                                  @ApiParam(value = "推送唯一标识") @RequestParam(required = false) String informidentity) {
         Response response = new Response();
-        Integer resault = msgCenterFacade.updateisread(type, ShiroUtil.getAppUserID(), informidentity);
+        Integer resault = msgCenterFacade.updateisread(type, Integer.parseInt(userid), informidentity);
         response.setData(resault);
         return response;
     }
