@@ -26,6 +26,7 @@ import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.ListUtil;
 import com.movision.utils.StrUtil;
+import com.movision.utils.UUIDGenerator;
 import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
@@ -424,6 +425,13 @@ public class AppRegisterFacade {
                 user.setDeviceno(member.getDeviceno()); //设备号
                 user.setPoints(35); //积分：注册+绑定手机
 
+                //若有邀请码，则记录相关的邀请码
+                if (StringUtils.isNotBlank(member.getReferrals())) {
+                    user.setReferrals(member.getReferrals());
+                }
+                //生成自己的邀请码
+                user.setInvitecode(UUIDGenerator.gen6Uuid());
+
                 memberId = userService.insertSelective(user);
             }
         } catch (Exception e) {
@@ -601,6 +609,7 @@ public class AppRegisterFacade {
         newUser.setSex(Integer.valueOf(sex));   //性别
         newUser.setDeviceno(deviceno);  //设备号
         newUser.setPoints(25);  //积分：注册25分
+        newUser.setInvitecode(UUIDGenerator.gen6Uuid());    //自己的邀请码
         return userService.insertSelective(newUser);
     }
 
@@ -680,51 +689,6 @@ public class AppRegisterFacade {
         session.setAttribute("phone", mobile); //缓存接收短信验证码的手机号
     }
 
-
-   /* @Transactional
-    public Map<String, Object> validateLoginUser(String phone, Integer inviteId) throws IOException {
-
-        //1 生成token
-        UsernamePasswordToken newToken = new UsernamePasswordToken(phone, "123456".toCharArray());
-
-        Map<String, Object> result = new HashedMap();
-        //2 注册用户/修改用户信息
-        Gson gson = new Gson();
-        String json = gson.toJson(newToken);
-        member.setToken(json);
-
-        int userid = 0;
-        User user = userFacade.queryUserByPhone(phone);
-        if (null != user) {
-            //2.1 存在该用户,修改用户信息：token和设备号
-            this.updateAppRegisterUser(member);
-            userid = user.getId();
-
-        } else {
-            //2.1 手机号不存在,则新增用户信息
-            userid = this.registerMember(member);
-            //2.2 增加新用户注册积分流水
-            pointRecordFacade.addPointRecordOnly(PointConstant.POINT_TYPE.new_user_register.getCode(), userid);
-            //2.3 增加绑定手机号积分流水
-            pointRecordFacade.addPointRecordOnly(PointConstant.POINT_TYPE.binding_phone.getCode(), userid);
-        }
-        log.info("【获取userid】:" + userid);
-
-        //3 如果用户当前手机号有领取过H5页面分享的优惠券，那么不管新老用户统一将优惠券临时表yw_coupon_temp中的优惠券信息全部放入优惠券正式表yw_coupon中
-        this.processCoupon(phone, userid);
-
-        //4 判断该userid是否存在一个im用户，若不存在，则注册im用户;若存在，则查询
-        this.getImuserForReturn(result, userid);
-
-        //6 登录成功则清除session中验证码的信息
-        session.removeAttribute("r" + validateinfo.getAccount());
-
-        //7 返回token
-        result.put("token_detail", newToken);
-        result.put("token", json);
-        return result;
-
-    }*/
 
 }
 

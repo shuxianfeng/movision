@@ -47,7 +47,6 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- *
  * @Author zhuangyuhao
  * @Date 2017/2/4 13:58
  */
@@ -154,13 +153,13 @@ public class AppLoginController {
 
     @ApiOperation(value = "注册QQ/微信/微博账号", notes = "注册QQ/微信/微博账号", response = Response.class)
     @RequestMapping(value = {"/registe_by_third_account"}, method = RequestMethod.POST)
-    public Response registeByQQ(@ApiParam(value = "第三方登录方式标示。1:QQ， 2:微信， 3:微博 ") @RequestParam Integer flag,
-                                @ApiParam(value = "QQ号/微信号/微博号(填对应的openid)") @RequestParam String account,
-                                @ApiParam(value = "唯一标示：openid") @RequestParam String openid,
-                                @ApiParam(value = "当前设备号") @RequestParam String deviceno,
-                                @ApiParam(value = "第三方账号的头像url") @RequestParam String url,
-                                @ApiParam(value = "第三方账号的昵称") @RequestParam String nickname,
-                                @ApiParam(value = "第三方账号的性别,1男 0女") @RequestParam String sex) throws Exception {
+    public Response registeByThirdAccount(@ApiParam(value = "第三方登录方式标示。1:QQ， 2:微信， 3:微博 ") @RequestParam Integer flag,
+                                          @ApiParam(value = "QQ号/微信号/微博号(填对应的openid)") @RequestParam String account,
+                                          @ApiParam(value = "唯一标示：openid") @RequestParam String openid,
+                                          @ApiParam(value = "当前设备号") @RequestParam String deviceno,
+                                          @ApiParam(value = "第三方账号的头像url") @RequestParam String url,
+                                          @ApiParam(value = "第三方账号的昵称") @RequestParam String nickname,
+                                          @ApiParam(value = "第三方账号的性别,1男 0女") @RequestParam String sex) throws Exception {
         if (flag == 1) {
             log.debug("【QQ注册】");
         } else if (flag == 2) {
@@ -225,7 +224,7 @@ public class AppLoginController {
     @ApiOperation(value = "APP登录", notes = "APP登录", response = Response.class)
     @RequestMapping(value = {"/login_by_phone"}, method = RequestMethod.POST)
     public Response loginByPhone(@ApiParam(value = "手机号") @RequestParam String phone,
-                             @ApiParam(value = "token") @RequestParam String appToken) throws Exception {
+                                 @ApiParam(value = "token") @RequestParam String appToken) throws Exception {
         Response response = new Response();
         try {
             //1 校验手机号是否存在
@@ -403,26 +402,17 @@ public class AppLoginController {
         return response;
     }
 
-    /*@ApiOperation(value = "H5邀请页面注册", notes = "H5邀请页面注册", response = Response.class)
-    @RequestMapping(value = {"/registe_h5_user"}, method = RequestMethod.POST)
-    public Response registerH5User(@ApiParam(value = "手机号") @RequestParam String phone,
-                                   @ApiParam(value = "邀请人的userid") @RequestParam Integer inviteId) throws Exception {
+    @ApiOperation(value = "获取邀请人的信息", notes = "获取邀请人的信息", response = Response.class)
+    @RequestMapping(value = {"/get_invite_userinfo"}, method = RequestMethod.POST)
+    public Response getInviteUserInfo(@ApiParam(value = "邀请人的userid") @RequestParam Integer inviteId) throws Exception {
 
-        log.debug("登录信息  mobile=" + phone + ", 邀请人的userid=" + inviteId );
+        log.debug("邀请人的userid=" + inviteId);
         Response response = new Response();
-        try {
-            //业务操作
-            Map result = appRegisterFacade.validateLoginUser();
-            response.setData(result);
-
-        } catch (Exception e) {
-            log.error("注册操作失败>>>", e);
-            throw e;
-        }
+        User user = userFacade.selectByPrimaryKey(inviteId);
+        response.setData(user);
 
         return response;
-    }*/
-
+    }
 
 
 }
