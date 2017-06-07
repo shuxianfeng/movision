@@ -67,6 +67,7 @@ import java.util.ArrayList;
 
 
     public Integer updateColData(int userid) {
+
         try {
             MongoClient mClient = new MongoClient("39.108.84.156:27017");
             DB db = mClient.getDB("searchRecord");
