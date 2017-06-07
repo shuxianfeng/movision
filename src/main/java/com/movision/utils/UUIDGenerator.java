@@ -80,6 +80,23 @@ public class UUIDGenerator {
         return shortBuffer.toString();
 
     }
+
+    /**
+     * 获取6位UUID
+     *
+     * @return
+     */
+    public static String gen6Uuid() {
+        StringBuilder shortBuffer = new StringBuilder();
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        for (int i = 0; i < 6; i++) {
+            String str = uuid.substring(i * 4, i * 4 + 4);
+            int x = Integer.parseInt(str, 16);
+            shortBuffer.append(chars[x % 0x3E]);
+        }
+        return shortBuffer.toString();
+
+    }
     
 
     public static void main(String[] args) {
@@ -87,6 +104,6 @@ public class UUIDGenerator {
 //        for (int i = 0; i < ss.length; i++) {
 //            System.out.println("ss["+i+"]====="+ss[i]);
 //        }
-        System.out.println(genShortUuid());
+        System.out.println(gen6Uuid());
     }
 }

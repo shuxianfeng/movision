@@ -738,7 +738,7 @@
         (SELECT COUNT(1) FROM yw_coupon WHERE isdel=0 AND userid=u.id) AS coupon,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isactive=0) AS postsum,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1 AND isactive=0) AS isessencesum
-        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE 1 AND u.phone IS NOT NULL
+        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE 1
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>
@@ -1072,4 +1072,5 @@
         SELECT u.id AS userid,au.iscircle,au.circlemanagement,au.contributing,au.common
         FROM yw_user u LEFT JOIN yw_admin_user au ON u.phone=au.phone WHERE u.id=#{loginid,jdbcType=INTEGER}
     </select>
+
 </mapper>

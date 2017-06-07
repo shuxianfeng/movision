@@ -116,7 +116,7 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <select id="findAllSystemToPush" resultType="com.movision.mybatis.systemToPush.entity.SystemToPush">
-        select * from  yw_system_push
+        select * from yw_system_push ORDER BY inform_time DESC
     </select>
     <select id="findAllSystemCondition" parameterType="java.util.Map"
             resultType="com.movision.mybatis.systemToPush.entity.SystemToPush">
@@ -153,6 +153,12 @@
             <if test="title != null">
                 title,
             </if>
+            <if test="fromAccid != null">
+                from_accid,
+            </if>
+            <if test="toAccids != null">
+                to_accids,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -169,6 +175,12 @@
             </if>
             <if test="title != null">
                 #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="fromAccid != null">
+                #{fromAccid,jdbcType=VARCHAR},
+            </if>
+            <if test="toAccids != null">
+                #{toAccids,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>

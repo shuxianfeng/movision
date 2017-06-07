@@ -47,7 +47,6 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- *
  * @Author zhuangyuhao
  * @Date 2017/2/4 13:58
  */
@@ -117,13 +116,26 @@ public class AppLoginController {
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(true);
             String session_phone = (String) session.getAttribute("phone");
+            log.debug("session_phone:" + session_phone);
             String param_phone = user.getPhone();
+            log.debug("param_phone:" + param_phone);
 
             //验证输入错误的手机号正确的验证码登录
             if (!session_phone.equals(param_phone)) {
                 response.setCode(400);
                 response.setMessage("请输入正确的手机号码");
                 return response;
+            }
+            //此分支是为了6月11号做的H5邀请注册页面
+            if (StringUtils.isNotBlank(user.getReferrals())) {
+                //有邀请码
+                User appuser = userFacade.queryUserByPhone(user.getPhone());
+                //若该手机号已经注册过，则返回408
+                if (null != appuser) {
+                    response.setCode(408);
+                    response.setMessage("你已经注册过，请下载美番APP直接登录");
+                    return response;
+                }
             }
 
             //校验验证码是否正确
@@ -152,13 +164,13 @@ public class AppLoginController {
 
     @ApiOperation(value = "注册QQ/微信/微博账号", notes = "注册QQ/微信/微博账号", response = Response.class)
     @RequestMapping(value = {"/registe_by_third_account"}, method = RequestMethod.POST)
-    public Response registeByQQ(@ApiParam(value = "第三方登录方式标示。1:QQ， 2:微信， 3:微博 ") @RequestParam Integer flag,
-                                @ApiParam(value = "QQ号/微信号/微博号(填对应的openid)") @RequestParam String account,
-                                @ApiParam(value = "唯一标示：openid") @RequestParam String openid,
-                                @ApiParam(value = "当前设备号") @RequestParam String deviceno,
-                                @ApiParam(value = "第三方账号的头像url") @RequestParam String url,
-                                @ApiParam(value = "第三方账号的昵称") @RequestParam String nickname,
-                                @ApiParam(value = "第三方账号的性别,1男 0女") @RequestParam String sex) throws Exception {
+    public Response registeByThirdAccount(@ApiParam(value = "第三方登录方式标示。1:QQ， 2:微信， 3:微博 ") @RequestParam Integer flag,
+                                          @ApiParam(value = "QQ号/微信号/微博号(填对应的openid)") @RequestParam String account,
+                                          @ApiParam(value = "唯一标示：openid") @RequestParam String openid,
+                                          @ApiParam(value = "当前设备号") @RequestParam String deviceno,
+                                          @ApiParam(value = "第三方账号的头像url") @RequestParam String url,
+                                          @ApiParam(value = "第三方账号的昵称") @RequestParam String nickname,
+                                          @ApiParam(value = "第三方账号的性别,1男 0女") @RequestParam String sex) throws Exception {
         if (flag == 1) {
             log.debug("【QQ注册】");
         } else if (flag == 2) {
@@ -223,7 +235,7 @@ public class AppLoginController {
     @ApiOperation(value = "APP登录", notes = "APP登录", response = Response.class)
     @RequestMapping(value = {"/login_by_phone"}, method = RequestMethod.POST)
     public Response loginByPhone(@ApiParam(value = "手机号") @RequestParam String phone,
-                             @ApiParam(value = "token") @RequestParam String appToken) throws Exception {
+                                 @ApiParam(value = "token") @RequestParam String appToken) throws Exception {
         Response response = new Response();
         try {
             //1 校验手机号是否存在
@@ -395,16 +407,20 @@ public class AppLoginController {
     @RequestMapping(value = "/new_device_binding_accid", method = RequestMethod.POST)
     public Response newDeviceBindingAccid(@ApiParam(value = "设备号") @RequestParam String deviceid) throws IOException {
         Response response = new Response();
-        //查询是否存在该设备号，如果存在，则不新增了
-        /*DeviceAccid deviceAccid = appRegisterFacade.selectByDeviceno(deviceid);
-        if (null == deviceAccid) {
-            appRegisterFacade.addDeviceAccid(deviceid);
-            response.setMessage("绑定设备号成功");
-        } else {
-            response.setMessage("已经存在该设备号的注册记录");
-        }*/
 
         response.setData(appRegisterFacade.registerImDevice(deviceid, response));
+
+        return response;
+    }
+
+    @ApiOperation(value = "获取邀请人的信息", notes = "获取邀请人的信息", response = Response.class)
+    @RequestMapping(value = {"/get_invite_userinfo"}, method = RequestMethod.POST)
+    public Response getInviteUserInfo(@ApiParam(value = "邀请人的userid") @RequestParam Integer inviteId) throws Exception {
+
+        log.debug("邀请人的userid=" + inviteId);
+        Response response = new Response();
+        User user = userFacade.selectByPrimaryKey(inviteId);
+        response.setData(user);
 
         return response;
     }

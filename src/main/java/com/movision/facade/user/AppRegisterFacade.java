@@ -26,6 +26,7 @@ import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.ListUtil;
 import com.movision.utils.StrUtil;
+import com.movision.utils.UUIDGenerator;
 import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
@@ -86,17 +87,16 @@ public class AppRegisterFacade {
     /**
      * 1 校验登录用户信息：手机号+短信验证码
      * 2 若用户不存在，则新增用户信息；
-     *   若用户存在，则更新用户token
+     * 若用户存在，则更新用户token
      * 3 登录成功，则清除session中的验证码，
      *
      * @param member
      * @param validateinfo
      * @param session
-     * @return
-     * {
-     *  token_detail:xxx,
-     *  token:yyy,
-     *  imuser:zzz
+     * @return {
+     * token_detail:xxx,
+     * token:yyy,
+     * imuser:zzz
      * }
      */
     @Transactional
@@ -127,6 +127,7 @@ public class AppRegisterFacade {
                     int userid = 0;
                     User user = userFacade.queryUserByPhone(phone);
                     if (null != user) {
+
                         //2.1 存在该用户,修改用户信息：token和设备号
                         this.updateAppRegisterUser(member);
                         userid = user.getId();
@@ -135,9 +136,9 @@ public class AppRegisterFacade {
                         //2.1 手机号不存在,则新增用户信息
                         userid = this.registerMember(member);
                         //2.2 增加新用户注册积分流水
-                        pointRecordFacade.addPointRecordOnly(PointConstant.POINT_TYPE.new_user_register.getCode(), userid);
+                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.new_user_register.getCode(), PointConstant.POINT.new_user_register.getCode(), userid);
                         //2.3 增加绑定手机号积分流水
-                        pointRecordFacade.addPointRecordOnly(PointConstant.POINT_TYPE.binding_phone.getCode(), userid);
+                        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.binding_phone.getCode(), PointConstant.POINT.binding_phone.getCode(), userid);
                     }
                     log.info("【获取userid】:" + userid);
 
@@ -315,6 +316,7 @@ public class AppRegisterFacade {
 
     /**
      * 判断该userid是否存在一个im用户，若不存在，则注册im用户
+     *
      * @param result
      * @throws IOException
      */
@@ -337,6 +339,7 @@ public class AppRegisterFacade {
 
     /**
      * 判断该设备号是否注册过im用户，若注册过，则返回该im信息，否则注册
+     *
      * @param deviceid
      * @param response
      * @return
@@ -423,6 +426,13 @@ public class AppRegisterFacade {
                 user.setDeviceno(member.getDeviceno()); //设备号
                 user.setPoints(35); //积分：注册+绑定手机
 
+                //若有邀请码，则记录相关的邀请码
+                if (StringUtils.isNotBlank(member.getReferrals())) {
+                    user.setReferrals(member.getReferrals());
+                }
+                //生成自己的邀请码
+                user.setInvitecode(UUIDGenerator.gen6Uuid());
+
                 memberId = userService.insertSelective(user);
             }
         } catch (Exception e) {
@@ -482,13 +492,14 @@ public class AppRegisterFacade {
      * 3 判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录；
      * （方便设置后面的系统推送中的toAccids）
      * <p>
-     *
+     * <p>
      * 下面是token的数据结构
      * token:{
      * username: qq,
      * password: openid+deviceno,
      * rememberme: false
      * }
+     *
      * @param flag
      * @param account
      * @param openid
@@ -519,7 +530,7 @@ public class AppRegisterFacade {
             result.put("imuser", newImUser);
 
             //3.3 新用户注册需要添加积分记录
-            pointRecordFacade.addPointRecordOnly(PointConstant.POINT_TYPE.new_user_register.getCode(), userid);
+            pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.new_user_register.getCode(), PointConstant.POINT.new_user_register.getCode(), userid);
 
         } else {
             /**
@@ -537,9 +548,9 @@ public class AppRegisterFacade {
     private void updateUserInfo(String deviceno, String url, String nickname, String sex, String tokenJson, User originUser) {
         originUser.setToken(tokenJson);
         originUser.setDeviceno(deviceno);
-        originUser.setNickname(nickname);
-        originUser.setSex(Integer.valueOf(sex));
-        originUser.setPhoto(url);
+//        originUser.setNickname(nickname);
+//        originUser.setSex(Integer.valueOf(sex));
+//        originUser.setPhoto(url);
         userService.updateByPrimaryKeySelective(originUser);
     }
 
@@ -599,6 +610,7 @@ public class AppRegisterFacade {
         newUser.setSex(Integer.valueOf(sex));   //性别
         newUser.setDeviceno(deviceno);  //设备号
         newUser.setPoints(25);  //积分：注册25分
+        newUser.setInvitecode(UUIDGenerator.gen6Uuid());    //自己的邀请码
         return userService.insertSelective(newUser);
     }
 
@@ -677,6 +689,7 @@ public class AppRegisterFacade {
         session.setAttribute(sessionPrefix + mobile, info); //缓存短信验证信息
         session.setAttribute("phone", mobile); //缓存接收短信验证码的手机号
     }
+
 
 }
 

@@ -71,6 +71,19 @@ public class BossUserController {
         return response;
     }
 
+    @RequestMapping(value = "create_admin_imuser", method = RequestMethod.POST)
+    @ApiOperation(value = "生成admin的imuser", notes = "生成admin的imuser", response = Response.class)
+    public Response createAdminImuser() throws IOException {
+        Response response = new Response();
+        ImUser imUser = new ImUser();
+        imUser.setName("admin");
+        imUser.setAccid(CheckSumBuilder.getAccid("admin"));    //此处是根据username来创建accid
+        imFacade.registerImUserAndSave(imUser, 1, ImConstant.TYPE_BOSS);
+        return response;
+    }
+
+
+
     /**
      * 修改boss用户
      * PS:不能修改手机号

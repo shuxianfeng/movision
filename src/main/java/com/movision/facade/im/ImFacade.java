@@ -618,16 +618,23 @@ public class ImFacade {
      */
     public Map sendSystemInform(String body, String fromaccid, String toAccids, String pushcontent) throws IOException {
         //发系统通知
+        Gson gson = new Gson();
+        Map map = new HashMap();
+        map.put("badge", false);
+        map.put("needPushNick", false);
+        map.put("route", false);
+        String option = gson.toJson(map);
         ImBatchAttachMsg imBatchAttachMsg = new ImBatchAttachMsg();
         imBatchAttachMsg.setFromAccid(fromaccid);
         imBatchAttachMsg.setAttach(body);
         imBatchAttachMsg.setPushcontent(pushcontent);
         imBatchAttachMsg.setToAccids(toAccids);
+        imBatchAttachMsg.setOption(option);
         return this.sendImHttpPost(ImConstant.SEND_BATCH_ATTACH_MSG, BeanUtil.ImBeanToMap(imBatchAttachMsg));
     }
 
     /**
-     * 发送系统通知
+     * 发送系统通知 
      * 打赏  评论  点赞
      *
      * @param fromaccid
@@ -673,6 +680,8 @@ public class ImFacade {
             SystemToPush systemToPush = new SystemToPush();
             systemToPush.setBody(body);
             systemToPush.setTitle(title);
+            systemToPush.setFromAccid(fromaccid);
+            systemToPush.setToAccids(toAccids);
             systemToPush.setUserid(ShiroUtil.getBossUserID());
             systemToPush.setInformTime(new Date());
             systemToPushService.addSystemToPush(systemToPush);//记录流水

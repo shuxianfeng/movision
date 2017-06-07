@@ -37,6 +37,18 @@ public class RegisterUser implements Serializable {
     @ApiModelProperty(value = "设备号", required = true)
     private String deviceno;
 
+    @ApiModelProperty(value = "别人的邀请码")
+    private String referrals;
+
+    public void setReferrals(String referrals) {
+        this.referrals = referrals;
+    }
+
+    public String getReferrals() {
+
+        return referrals;
+    }
+
     public void setDeviceno(String deviceno) {
         this.deviceno = deviceno;
     }
@@ -125,6 +137,7 @@ public class RegisterUser implements Serializable {
                 ", token='" + token + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", deviceno='" + deviceno + '\'' +
+                ", referrals='" + referrals + '\'' +
                 '}';
     }
 }

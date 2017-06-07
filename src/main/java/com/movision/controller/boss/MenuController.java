@@ -134,14 +134,18 @@ public class MenuController {
         Response response = new Response();
 
         BossRealm.ShiroBossUser user = ShiroUtil.getBossUser();
-        log.debug("【查询首页侧边栏】登录人信息：" + user);
-        int roleid = user.getRole();
-        log.info("查询首页侧边栏, roleid = " + roleid);
-        List<MenuVo> list = menuFacade.querySidebar(roleid);
-        if (response.getCode() == 200) {
+        if (null == user) {
+            response.setCode(400);
+            response.setMessage("登录超时，请重新登录");
+        } else {
+            log.debug("【查询首页侧边栏】登录人信息：" + user);
+            int roleid = user.getRole();
+            log.info("查询首页侧边栏, roleid = " + roleid);
+            List<MenuVo> list = menuFacade.querySidebar(roleid);
             response.setMessage("查询成功");
+            response.setData(list);
         }
-        response.setData(list);
+
         return response;
     }
 

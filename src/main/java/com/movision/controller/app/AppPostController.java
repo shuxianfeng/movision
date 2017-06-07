@@ -175,6 +175,57 @@ public class AppPostController {
         return response;
     }
 
+    @ApiOperation(value = "PC官网发布帖子", notes = "用于官网发布帖子的接口", response = Response.class)
+    @RequestMapping(value = "releasePostByPC", method = RequestMethod.POST)
+    public Response releasePostByPC(HttpServletRequest request,
+                                @ApiParam(value = "用户id") @RequestParam String userid,
+                                @ApiParam(value = "帖子类型：0 普通图文帖 1 原生视频帖 2 分享视频贴( isactive为0时该字段不为空)") @RequestParam String type,
+                                @ApiParam(value = "所属圈子id") @RequestParam String circleid,
+                                @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
+                                @ApiParam(value = "帖子内容") @RequestParam String postcontent,
+                                @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,
+                                @ApiParam(value = "帖子封面图片url字符串") @RequestParam String coverimg,
+                                @ApiParam(value = "原生视频上传到阿里云后的vid（type为1时必填）") @RequestParam(required = false) String vid,
+                                @ApiParam(value = "第三方视频地址url（type为2时必填，直接把分享的第三方视频网址传到这里）") @RequestParam(required = false) String videourl,
+                                @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids
+    ) {
+        Response response = new Response();
+
+        Map count = facadePost.releasePostByPC(request, userid, type, circleid, title, postcontent, isactive, coverimg, vid, videourl, proids);
+
+        if (count.get("flag").equals(-2)) {
+            response.setCode(300);
+            response.setMessage("系统异常，APP发帖失败");
+        } else if (count.get("flag").equals(-1)) {
+            response.setCode(201);
+            response.setMessage("用户不具备发帖权限");
+        }else{
+            response.setCode(200);
+            response.setMessage("发帖成功");
+        }
+        return response;
+    }
+
+    /**
+     * PC官网上传帖子封面图片
+     *
+     * @param file
+     * @return
+     */
+    @ApiOperation(value = "PC官网上传帖子封面图片", notes = "PC官网上传帖子封面图片", response = Response.class)
+    @RequestMapping(value = {"/updateCoverImgByPC"}, method = RequestMethod.POST)
+    public Response updateCoverImgByPC(@RequestParam(value = "file", required = false) MultipartFile file) {
+
+        Map m = movisionOssClient.uploadObject(file, "img", "postCover");
+        String url = String.valueOf(m.get("url"));
+        Map<String, Object> map = new HashMap<>();
+        map.put("url", url);
+        map.put("name", FileUtil.getFileNameByUrl(url));
+        map.put("width", m.get("width"));
+        map.put("height", m.get("height"));
+        return new Response(map);
+    }
+
     /**
      * 修改上架
      *
