@@ -128,6 +128,12 @@
         isdel = #{isdel,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+    
+    <select id="queryIsComment" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+        SELECT count(*) FROM yw_points_record
+        WHERE userid = #{userid,jdbcType=INTEGER}
+          AND type = '10'
+    </select>
 
     <select id="queryMyAllTypePoint" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.pointRecord.entity.PointRecord">

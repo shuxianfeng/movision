@@ -25,6 +25,16 @@ public class PointRecordService {
     @Autowired
     private PointRecordMapper pointRecordMapper;
 
+    public int queryIsComment(int userid){
+        try {
+            log.info("通过userid查询用户是否领取过评价APP的新手任务积分");
+            return pointRecordMapper.queryIsComment(userid);
+        }catch (Exception e){
+            log.error("通过userid查询用户是否领取过评价APP的新手任务积分失败", e);
+            throw e;
+        }
+    }
+
     public int addPointRecord(PointRecord pointRecord) {
         try {
             log.info("增加积分记录");

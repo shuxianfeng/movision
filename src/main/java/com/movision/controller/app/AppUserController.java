@@ -81,10 +81,10 @@ public class AppUserController {
 
     @ApiOperation(value = "用户在应用商店评价成功后调用该接口奖励积分", notes = "用户在应用商店评价成功后调用该接口奖励积分", response = Response.class)
     @RequestMapping(value = "commetAPP", method = RequestMethod.POST)
-    public Response commetAPP() {
+    public Response commetAPP(@ApiParam(value = "用户id") @RequestParam String userid) {
         Response response = new Response();
 
-        userFacade.commetAPP();
+        userFacade.commetAPP(userid);
 
         if (response.getCode() == 200) {
             response.setMessage("调用成功");

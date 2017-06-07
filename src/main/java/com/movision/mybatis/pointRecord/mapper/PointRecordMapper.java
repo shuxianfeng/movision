@@ -3,14 +3,17 @@ package com.movision.mybatis.pointRecord.mapper;
 import com.movision.mybatis.pointRecord.entity.PointRecord;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
-
+@Repository
 public interface PointRecordMapper {
     int deleteByPrimaryKey(Integer id);
 
     int insert(PointRecord record);
+
+    int queryIsComment(int userid);
 
     int insertSelective(PointRecord record);
 

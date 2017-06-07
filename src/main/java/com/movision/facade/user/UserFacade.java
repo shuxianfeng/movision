@@ -114,8 +114,13 @@ public class UserFacade {
         return activeVoList;
     }
 
-    public void commetAPP() {
-        pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment_app.getCode(), ShiroUtil.getAppUserID());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+    public void commetAPP(String userid) {
+        //查询当前用户之前是否获得过评价APP的新手任务积分
+        int count = pointRecordService.queryIsComment(Integer.parseInt(userid));
+
+        if (count == 0) {
+            pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment_app.getCode(), ShiroUtil.getAppUserID());//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+        }
     }
 
     public void shareSucNotice(String type, String userid, String channel, String postid, String goodsid, String beshareuserid) {
