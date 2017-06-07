@@ -428,7 +428,7 @@ public class UserService {
 
     public int updateByPrimaryKeySelective(User user) {
         try {
-            log.info("修改个人资料");
+            log.info("修改个人资料, 传参：" + user.toString());
             return userMapper.updateByPrimaryKeySelective(user);
         } catch (Exception e) {
             log.error("修改个人资料失败", e);
