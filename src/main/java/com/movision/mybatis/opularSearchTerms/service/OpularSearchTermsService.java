@@ -57,7 +57,7 @@ import java.util.ArrayList;
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("keywords", 1);
-            DBCursor obj = collection.find(queryObject, keys).limit(12);
+            DBCursor obj = collection.find(queryObject, keys).limit(12).sort(new BasicDBObject("intime", -1));
             list = obj.toArray();
         } catch (Exception e) {
             e.printStackTrace();
