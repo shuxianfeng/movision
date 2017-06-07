@@ -49,7 +49,7 @@ import java.util.ArrayList;
     public List histroyWords(int userid) {
         List<DBObject> list = null;
         try {
-            MongoClient mClient = new MongoClient("120.77.214.187:27017");
+            MongoClient mClient = new MongoClient("39.108.84.156:27017");
             DB db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("opularSearchTerms");
             BasicDBObject queryObject = new BasicDBObject("userid", userid);
