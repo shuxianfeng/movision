@@ -52,7 +52,7 @@ import java.util.ArrayList;
             MongoClient mClient = new MongoClient("39.108.84.156:27017");
             DB db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("opularSearchTerms");
-            BasicDBObject queryObject = new BasicDBObject("userid", userid);
+            BasicDBObject queryObject = new BasicDBObject("userid", userid).append("isdel", 0);
             //指定需要显示列
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
@@ -64,5 +64,25 @@ import java.util.ArrayList;
         }
         return list;
     }
- }
+
+
+    public Integer updateColData(int userid) {
+
+        try {
+            MongoClient mClient = new MongoClient("39.108.84.156:27017");
+            DB db = mClient.getDB("searchRecord");
+            DBCollection dbCol = db.getCollection("opularSearchTerms");
+            DBCursor ret = dbCol.find();
+            BasicDBObject doc = new BasicDBObject();
+            BasicDBObject res = new BasicDBObject();
+            res.put("isdel", 1);
+            System.out.println("将数据集中的所有文档的isdel修改成1！");
+            doc.put("$set", res);
+            dbCol.update(new BasicDBObject("userid", userid), doc, false, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 1;
+    }
+}
 

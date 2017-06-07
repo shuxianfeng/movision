@@ -286,7 +286,7 @@ public class PostSearchService implements IPostSearchService {
     }
 
     public Integer UpdateSearchIsdel(Integer userid) {
-        return searchPostRecordService.UpdateSearchIsdel(userid);
+        return opularSearchTermsService.updateColData(userid);
     }
 
 }

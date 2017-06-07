@@ -6,6 +6,7 @@ import com.movision.facade.index.FacadeIndex;
 import com.movision.fsearch.pojo.spec.GoodsSearchSpec;
 import com.movision.fsearch.pojo.spec.PostSearchSpec;
 import com.movision.fsearch.service.impl.PostSearchService;
+import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
@@ -31,6 +32,9 @@ public class AppIndexController {
 
     @Autowired
     private PostSearchService postSearchService;
+    @Autowired
+    private OpularSearchTermsService opularSearchTermsService;
+
 
 
     @ApiOperation(value = "首页数据返回接口", notes = "用户返回首页整版数据(活动贴的话 enddays为-1活动还未开始 为0活动已结束 为其他时为距离结束的剩余天数)", response = Response.class)
