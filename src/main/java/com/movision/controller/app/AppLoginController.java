@@ -126,6 +126,17 @@ public class AppLoginController {
                 response.setMessage("请输入正确的手机号码");
                 return response;
             }
+            //此分支是为了6月11号做的H5邀请注册页面
+            if (StringUtils.isNotBlank(user.getReferrals())) {
+                //有邀请码
+                User appuser = userFacade.queryUserByPhone(user.getPhone());
+                //若该手机号已经注册过，则返回408
+                if (null != appuser) {
+                    response.setCode(408);
+                    response.setMessage("你已经注册过，请下载美番APP直接登录");
+                    return response;
+                }
+            }
 
             //校验验证码是否正确
             if (user.getMobileCheckCode() != null) {

@@ -127,6 +127,7 @@ public class AppRegisterFacade {
                     int userid = 0;
                     User user = userFacade.queryUserByPhone(phone);
                     if (null != user) {
+
                         //2.1 存在该用户,修改用户信息：token和设备号
                         this.updateAppRegisterUser(member);
                         userid = user.getId();
