@@ -153,18 +153,19 @@ public class JsoupCompressImg {
                             Map m = movisionOssClient.uploadFileObject(file, "img", "postCompressImg");
                             String compressurl = String.valueOf(m.get("url"));//压缩图片上传阿里云的返回url
 
+                            String newimgurl = "";
                             //拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接
                             for(int j = 0; j < 3; j++){
                                 compressurl = compressurl.substring(compressurl.indexOf("/")+1 );
                             }
-                            compressurl = PropertiesLoader.getValue("formal.img.domain") + "/" + compressurl;//拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接，如："http://pic.mofo.shop" + "/upload/postCompressImg/img/yDi0T2nY1496812117357.png"
+                            newimgurl = PropertiesLoader.getValue("formal.img.domain") + "/" + compressurl;//拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接，如："http://pic.mofo.shop" + "/upload/postCompressImg/img/yDi0T2nY1496812117357.png"
 
                             //如果压缩保存成功，这里替换文章中的第i个img标签中的src属性
-                            titleElms.get(i).attr("src", compressurl);
+                            titleElms.get(i).attr("src", newimgurl);
 
                             //保存缩略图和原图的映射关系到数据库中yw_compress_img
                             CompressImg compressImg = new CompressImg();
-                            compressImg.setCompressimgurl(compressurl);
+                            compressImg.setCompressimgurl(newimgurl);
                             compressImg.setProtoimgurl(imgurl);
                             compressImg.setProtoimgsize(filesize);
                             int count = postFacade.queryCount(compressImg);
