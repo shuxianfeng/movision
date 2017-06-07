@@ -367,7 +367,7 @@ public class UserService {
      */
     public int updateRegisterUser(RegisterUser registerUser) {
         try {
-            log.info("修改app用户token和设备号");
+            log.info("修改app用户token和设备号，传参：" + registerUser.toString());
             return userMapper.updateRegisterUser(registerUser);
         } catch (Exception e) {
             log.error("修改app用户token和设备号异常", e);
