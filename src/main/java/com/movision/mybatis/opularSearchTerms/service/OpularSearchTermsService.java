@@ -53,8 +53,11 @@ import java.util.ArrayList;
             DB db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("opularSearchTerms");
             BasicDBObject queryObject = new BasicDBObject("userid", userid);
-            BasicDBObject key = new BasicDBObject("keywords", 1);//指定需要显示列
-            DBCursor obj = collection.find(queryObject, key).limit(12);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("keywords", 1);
+            DBCursor obj = collection.find(queryObject, keys).limit(12);
             list = obj.toArray();
         } catch (Exception e) {
             e.printStackTrace();
