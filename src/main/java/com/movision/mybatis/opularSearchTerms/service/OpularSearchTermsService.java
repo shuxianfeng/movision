@@ -46,6 +46,20 @@ import java.util.ArrayList;
 
     }
 
-
-
+    public List histroyWords(int userid) {
+        List<DBObject> list = null;
+        try {
+            MongoClient mClient = new MongoClient("120.77.214.187:27017");
+            DB db = mClient.getDB("searchRecord");
+            DBCollection collection = db.getCollection("opularSearchTerms");
+            BasicDBObject queryObject = new BasicDBObject("userid", userid);
+            BasicDBObject key = new BasicDBObject("keywords", 1);//指定需要显示列
+            DBCursor obj = collection.find(queryObject, key).limit(12);
+            list = obj.toArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
  }
+

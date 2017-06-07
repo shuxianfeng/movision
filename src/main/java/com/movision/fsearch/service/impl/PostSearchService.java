@@ -280,7 +280,7 @@ public class PostSearchService implements IPostSearchService {
         // map.put("hotWordList", searchPostRecordService.selectPostSearchHotWord());
         map.put("hotWordList", opularSearchTermsService.group());
         //展示前12条
-        map.put("historyList", searchPostRecordService.selectHistoryRecord(ShiroUtil.getAppUserID()));
+        map.put("historyList", opularSearchTermsService.histroyWords(ShiroUtil.getAppUserID()));
 
         return map;
     }
