@@ -210,7 +210,7 @@ public class AliOSSClient {
         try {
             File f = new File(file);
             long size = file.length();
-            URL u = new URL(file);
+            //URL u = new URL(file);
             // 上传文件流
 //            String domain;
             InputStream in = new FileInputStream(file);
