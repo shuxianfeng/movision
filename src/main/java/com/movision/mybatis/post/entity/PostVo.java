@@ -90,6 +90,8 @@ public class PostVo implements Serializable {
 
     private String circlename;//所属圈子名称
 
+    private String maylikeimg;//圈子方形图url
+
     private Integer userid;//用户id(发帖人用户id)
 
     private String nickname;//发帖人昵称
@@ -465,5 +467,13 @@ public class PostVo implements Serializable {
 
     public void setVideocoverimgurl(String videocoverimgurl) {
         this.videocoverimgurl = videocoverimgurl;
+    }
+
+    public String getMaylikeimg() {
+        return maylikeimg;
+    }
+
+    public void setMaylikeimg(String maylikeimg) {
+        this.maylikeimg = maylikeimg;
     }
 }
