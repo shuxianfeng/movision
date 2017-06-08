@@ -59,7 +59,7 @@ public class JsoupCompressImg {
     public Map<String, Object> compressImg(HttpServletRequest request, String content) {//content为带有img和html标签的富文本内容
 
         int w = 750;//图片压缩后的宽度
-        int h = 425;//图片压缩后的高度
+        int h = 850;//图片压缩后的高度425
 
         //通过jsoup解析html
         Map<String, Object> map = new LinkedHashMap<>();
