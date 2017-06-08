@@ -226,6 +226,20 @@ public class AppPostController {
         return new Response(map);
     }
 
+    @ApiOperation(value = "切割图片上传", notes = "用于图片切割并上传接口", response = Response.class)
+    @RequestMapping(value = "/imger_incision_upload", method = RequestMethod.POST)
+    public Response uploadImgerAndIncision(@ApiParam(value = "上传图片") @RequestParam String file,
+                                           @ApiParam(value = "X坐标") @RequestParam String x,
+                                           @ApiParam(value = "Y坐标") @RequestParam String y,
+                                           @ApiParam(value = "宽") @RequestParam String w,
+                                           @ApiParam(value = "高") @RequestParam String h) {
+        Response response = new Response();
+        Map map = movisionOssClient.uploadImgerAndIncision(file, x, y, w, h);
+        response.setMessage("操作成功");
+        response.setData(map);
+        return response;
+    }
+
     /**
      * 修改上架
      *

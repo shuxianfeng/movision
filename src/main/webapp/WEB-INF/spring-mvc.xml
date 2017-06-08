@@ -102,7 +102,7 @@
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
           p:maxUploadSize="512000000"
-          p:maxInMemorySize="1024000"
+          p:maxInMemorySize="1"
           p:defaultEncoding="UTF-8"/>
 
 
