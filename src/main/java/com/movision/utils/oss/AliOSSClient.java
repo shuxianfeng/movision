@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -209,9 +210,10 @@ public class AliOSSClient {
         try {
             File f = new File(file);
             long size = file.length();
+            URL u = new URL(file);
             // 上传文件流
 //            String domain;
-            FileInputStream in = new FileInputStream(file);
+            BufferedInputStream in = new BufferedInputStream(u.openStream());
             String fileName = f.getName();
             String fileKey;
             String fileName2 = FileUtil.renameFile(fileName);
