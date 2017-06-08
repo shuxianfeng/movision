@@ -123,14 +123,14 @@ public class PointConstant {
         first_comment(10),
         first_support(5),
         first_post(20),
-        comment_app(100),
+        comment_app(30),
         sign(5),
-        reward(5),
+        reward(1),
         post(5),
         comment(2),
         share(5),
-        index_selected(40),
-        circle_selected(20);
+        index_selected(500),
+        circle_selected(100);
 //        place_order();    //下单
 
         public final int code;
