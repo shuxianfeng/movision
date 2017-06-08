@@ -123,7 +123,7 @@ public class JsoupCompressImg {
                 String filesize = df.format((double) s / 1024 / 1024);
                 log.info("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + filesize + "M");
 
-                if (sum == 0 && s > 400 * 1024) {
+                if (sum == 0 && s > 800 * 1024) {
                     //如果没压缩过且图片大小超过400kb就进行压缩，压缩过的或大小<=400kb不处理（防止修改帖子时对压缩过的图片进行重复压缩，同时也保证了低质量图片的品质）
 
                     boolean compressFlag = false;
