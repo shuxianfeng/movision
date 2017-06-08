@@ -251,13 +251,13 @@ public class MsgCenterFacade {
      */
     public Integer updateisread(String type, Integer userid, String informidentity) {
         Integer resault = null;
-        if (type.equals("1")) {
+        if (type.equals("1") || type.equals(1)) {
             resault = postZanRecordService.updateZanRead(userid);//更新赞已读
-        } else if (type.equals("2")) {
+        } else if (type.equals("2") || type.equals(2)) {
             resault = rewardedService.updateRewardRead(userid);//更新打赏已读
-        } else if (type.equals("3")) {
+        } else if (type.equals("3") || type.equals(3)) {
             resault = commentService.updateCommentRead(userid);//更新评论已读
-        } else if (type.equals("4")) {
+        } else if (type.equals("4") || type.equals(4)) {
             Map map = new HashMap();
             map.put("userid", userid);
             map.put("informidentity", informidentity);
@@ -274,7 +274,7 @@ public class MsgCenterFacade {
                     resault = imSystemInformReadService.updateSystemRead(map);//更新系统消息已读
                 }
             }
-        } else if (type.equals("5")) {
+        } else if (type.equals("5") || type.equals(5)) {
             resault = imFirstDialogueService.updateCallRead(userid);//更新打招呼已读
         }
         return resault;

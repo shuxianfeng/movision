@@ -907,7 +907,7 @@ public class PostFacade {
             }
 
             post.setIntime(new Date());
-            if (orderid != null) {
+            if (StringUtil.isNotEmpty(orderid)) {
                 post.setOrderid(Integer.parseInt(orderid));//排序精选
             }
             post.setUserid(userid);//发帖人
@@ -921,7 +921,7 @@ public class PostFacade {
             int result = postService.addPostActiveList(post);//新建活动
             Period period = new Period();
             Date begin = null;//开始时间
-            if (begintime != null) {
+            if (StringUtil.isNotEmpty(begintime)) {
                 try {
                     begin = format.parse(begintime);
                 } catch (ParseException e) {
@@ -929,7 +929,7 @@ public class PostFacade {
                 }
             }
             Date end = null;
-            if (endtime != null) {
+            if (StringUtil.isNotEmpty(endtime)) {
                 try {
                     end = format.parse(endtime);
                 } catch (ParseException e) {
