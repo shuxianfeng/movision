@@ -343,8 +343,10 @@ public class UserFacade {
         user.setPhoto(personInfo.getPhoto());
         user.setSex(personInfo.getSex());
         user.setSign(personInfo.getSign());
-
+        //修改数据库中个人信息
         userService.updateByPrimaryKeySelective(user);
+        //修改session 中的个人信息
+        ShiroUtil.updateAppuser(user);
     }
 
 
