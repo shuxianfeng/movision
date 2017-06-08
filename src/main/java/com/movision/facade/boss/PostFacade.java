@@ -982,7 +982,7 @@ public class PostFacade {
         Date esdate = null;
         if (Integer.parseInt(orderid) > 0) {//加精动作
             p.setId(Integer.parseInt(postid));
-            if (essencedate != null && essencedate != "") {
+            if (StringUtil.isNotEmpty(essencedate)) {
                 try {
                     esdate = format.parse(essencedate);
                     p.setEssencedate(esdate);

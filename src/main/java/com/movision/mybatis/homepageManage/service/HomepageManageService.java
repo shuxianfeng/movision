@@ -78,6 +78,24 @@ public class HomepageManageService {
         }
     }
 
+
+    /**
+     * 查询广告位置是否可以添加广告
+     *
+     * @param map
+     * @return
+     */
+    public int queryIsAdd(Map map) {
+        try {
+            log.info("查询广告位置是否可以添加广告");
+            return homepageManageMapper.queryIsAdd(map);
+        } catch (Exception e) {
+            log.error("查询广告位置是否可以添加广告异常", e);
+            throw e;
+        }
+    }
+
+
     /**
      * 添加广告
      *

@@ -69,7 +69,13 @@ public class HomepageManageFacade {
         map.put("clicksum", 0);
         map.put("ordersum", 0);
         map.put("isdel", 0);
-        return homepageManageService.addAdvertisement(map);
+        //查询广告位置是否可以添加广告
+        int resault = homepageManageService.queryIsAdd(map);
+        if (resault == 1) {
+            return homepageManageService.addAdvertisement(map);
+        } else {
+            return -1;
+        }
     }
 
     /**

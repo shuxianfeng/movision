@@ -30,6 +30,8 @@ public interface HomepageManageMapper {
 
     int addAdvertisement(Map map);
 
+    int queryIsAdd(Map map);
+
     int updateAdvertisement(Map map);
 
     List<HomepageManageVo> findAllQueryAdvertisementLike(Map map, RowBounds rowBounds);

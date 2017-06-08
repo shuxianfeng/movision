@@ -183,6 +183,10 @@
         m.id=#{id,jdbcType=INTEGER} AND m.isdel=0
     </select>
 
+    <select id="queryIsAdd" resultType="java.lang.Integer" parameterType="java.util.Map">
+    SELECT COUNT(1) FROM yw_homepage_manage_type WHERE quantity>(SELECT COUNT(1) FROM yw_homepage_manage WHERE topictype=#{topictype,jdbcType=INTEGER}) AND type=#{topictype,jdbcType=INTEGER}
+    </select>
+
     <insert id="addAdvertisement" parameterType="java.util.Map">
         insert into yw_homepage_manage
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -254,8 +258,6 @@
             <if test="isdel!=null">
                 #{isdel,jdbcType=INTEGER}
             </if>
-            WHERE
-            <![CDATA[(SELECT COUNT(1) FROM yw_homepage_manage WHERE topictype=#{topictype,jdbcType=INTEGER}) < (SELECT quantity FROM yw_homepage_manage_type WHERE type=#{topictype,jdbcType=INTEGER})]]>
         </trim>
     </insert>
 
