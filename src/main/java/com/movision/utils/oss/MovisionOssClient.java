@@ -202,6 +202,9 @@ public class MovisionOssClient {
             incise += uuid + "." + suffix;
             //保存新图片
             ImageIO.write(bi, "jpg", new File(incise));
+            String domain = PropertiesLoader.getValue("formal.img.domain");
+
+            aliOSSClient.uploadInciseStream(file, "img", "coverIncise", domain);
             map.put("url", incise);
         } catch (IOException e) {
             e.printStackTrace();

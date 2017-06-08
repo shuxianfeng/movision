@@ -200,6 +200,92 @@ public class AliOSSClient {
      * @param chann 频道
      * @return
      */
+    public Map<String, Object> uploadInciseStream(String file, String type, String chann, String domain) {
+        //返回值
+        Map<String, Object> result = new HashMap<>();
+
+        log.info("阿里云OSS上传Started");
+        OSSClient ossClient = init();
+        try {
+            File f = new File(file);
+            long size = file.length();
+            // 上传文件流
+//            String domain;
+            FileInputStream in = new FileInputStream(file);
+            String fileName = f.getName();
+            String fileKey;
+            String fileName2 = FileUtil.renameFile(fileName);
+            if (chann != null) {
+                fileKey = "upload/" + chann + "/" + type + "/" + fileName2;
+
+                if (type.equals("doc") && chann.equals("tech")) {
+                    String maxSize = PropertiesLoader.getValue("uploadTechMaxPostSize");
+                    if (size > Long.valueOf(maxSize)) {
+                        throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
+                    }
+                }
+            } else {
+                fileKey = "upload/" + fileName2;
+            }
+
+            String data = "";
+            if (type.equals("img")) {
+                bucketName = PropertiesLoader.getValue("img.bucket");
+//                domain = PropertiesLoader.getValue("ali.domain");
+//                domain = PropertiesLoader.getValue("formal.img.domain");
+                data = domain + "/" + fileKey;
+                String maxSize = PropertiesLoader.getValue("uploadPicMaxPostSize");
+                if (size > Long.valueOf(maxSize)) {
+                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
+                }
+                //返回图片的宽高
+                BufferedImage bi = ImageIO.read(in);
+                result.put("width", bi.getWidth());
+                result.put("height", bi.getHeight());
+
+            } else if (type.equals("doc")) {
+                bucketName = PropertiesLoader.getValue("file.bucket");
+                data = fileName2;
+                String maxSize = PropertiesLoader.getValue("uploadDocMaxPostSize");
+                if (size > Long.valueOf(maxSize)) {
+                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
+                }
+
+            }
+
+            ossClient.putObject(bucketName, fileKey, in);
+
+            log.debug("Object：" + fileKey + "存入OSS成功。");
+            log.info("【上传Alioss的返回值】：" + result.toString());
+            result.put("status", "success");
+            result.put("url", data);
+
+        } catch (OSSException oe) {
+            oe.printStackTrace();
+            result.put("status", "fail");
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("status", "fail");
+            return result;
+        } finally {
+            ossClient.shutdown();
+        }
+
+        log.info("阿里云OSS上传Completed");
+
+        return result;
+    }
+
+
+    /**
+     * 上传文件流
+     *
+     * @param file
+     * @param type
+     * @param chann 频道
+     * @return
+     */
     public Map<String, Object> uploadFileStream(MultipartFile file, String type, String chann, String domain) {
         //返回值
         Map<String, Object> result = new HashMap<>();
