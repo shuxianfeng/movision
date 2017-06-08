@@ -199,7 +199,7 @@ public class MovisionOssClient {
             BufferedImage bi = reader.read(0, param);
             UUID uuid = UUID.randomUUID();
             String incise = PropertiesLoader.getValue("post.incise.domain");
-            incise += uuid + suffix;
+            incise += uuid + "." + suffix;
             //保存新图片
             ImageIO.write(bi, "jpg", new File(incise));
             map.put("url", incise);
