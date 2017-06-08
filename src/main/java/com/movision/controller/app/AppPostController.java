@@ -214,31 +214,23 @@ public class AppPostController {
      */
     @ApiOperation(value = "PC官网上传帖子封面图片", notes = "PC官网上传帖子封面图片", response = Response.class)
     @RequestMapping(value = {"/updateCoverImgByPC"}, method = RequestMethod.POST)
-    public Response updateCoverImgByPC(@RequestParam(value = "file", required = false) MultipartFile file) {
+    public Response updateCoverImgByPC(@RequestParam(value = "file", required = false) MultipartFile file,
+                                       @ApiParam(value = "X坐标") @RequestParam String x,
+                                       @ApiParam(value = "Y坐标") @RequestParam String y,
+                                       @ApiParam(value = "宽") @RequestParam String w,
+                                       @ApiParam(value = "高") @RequestParam String h) {
 
         Map m = movisionOssClient.uploadObject(file, "img", "postCover");
-        String url = String.valueOf(m.get("url"));
-        Map<String, Object> map = new HashMap<>();
-        map.put("url", url);
-        map.put("name", FileUtil.getFileNameByUrl(url));
-        map.put("width", m.get("width"));
-        map.put("height", m.get("height"));
-        return new Response(map);
+        Map map = movisionOssClient.uploadImgerAndIncision(String.valueOf(m.get("url")), x, y, w, h);
+        String url = String.valueOf(map.get("url"));
+        Map<String, Object> map1 = new HashMap<>();
+        map1.put("url", url);
+        map1.put("name", FileUtil.getFileNameByUrl(url));
+        map1.put("width", map.get("width"));
+        map1.put("height", map.get("height"));
+        return new Response(map1);
     }
 
-    @ApiOperation(value = "切割图片上传", notes = "用于图片切割并上传接口", response = Response.class)
-    @RequestMapping(value = "/imger_incision_upload", method = RequestMethod.POST)
-    public Response uploadImgerAndIncision(@ApiParam(value = "上传图片") @RequestParam String file,
-                                           @ApiParam(value = "X坐标") @RequestParam String x,
-                                           @ApiParam(value = "Y坐标") @RequestParam String y,
-                                           @ApiParam(value = "宽") @RequestParam String w,
-                                           @ApiParam(value = "高") @RequestParam String h) {
-        Response response = new Response();
-        Map map = movisionOssClient.uploadImgerAndIncision(file, x, y, w, h);
-        response.setMessage("操作成功");
-        response.setData(map);
-        return response;
-    }
 
     /**
      * 修改上架
