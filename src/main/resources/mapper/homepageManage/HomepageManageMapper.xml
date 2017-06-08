@@ -184,7 +184,8 @@
     </select>
 
     <select id="queryIsAdd" resultType="java.lang.Integer" parameterType="java.util.Map">
-    SELECT COUNT(1) FROM yw_homepage_manage_type WHERE quantity>(SELECT COUNT(1) FROM yw_homepage_manage WHERE topictype=#{topictype,jdbcType=INTEGER}) AND type=#{topictype,jdbcType=INTEGER}
+        SELECT COUNT(1) FROM yw_homepage_manage_type WHERE quantity>(SELECT COUNT(1) FROM yw_homepage_manage WHERE
+        topictype=#{topictype,jdbcType=INTEGER} AND isdel=0) AND type=#{topictype,jdbcType=INTEGER}
     </select>
 
     <insert id="addAdvertisement" parameterType="java.util.Map">
