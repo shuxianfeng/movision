@@ -213,7 +213,7 @@ public class AliOSSClient {
             URL u = new URL(file);
             // 上传文件流
 //            String domain;
-            BufferedInputStream in = new BufferedInputStream(u.openStream());
+            InputStream in = new FileInputStream(file);
             String fileName = f.getName();
             String fileKey;
             String fileName2 = FileUtil.renameFile(fileName);
