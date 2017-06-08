@@ -194,76 +194,58 @@ public class AliOSSClient {
 
 
     /**
-     * 上传文件流
+     * 上传本地切割文件流
      *
      * @param file
      * @param type
      * @param chann 频道
      * @return
      */
-    public Map<String, Object> uploadInciseStream(String file, String type, String chann, String domain) {
-        //返回值
+    public Map<String, Object> uploadInciseStream(String file, String type, String chann) {
         Map<String, Object> result = new HashMap<>();
 
         log.info("阿里云OSS上传Started");
         OSSClient ossClient = init();
-        try {
-            File f = new File(file);
-            long size = file.length();
-            //URL u = new URL(file);
-            // 上传文件流
-//            String domain;
-            InputStream in = new FileInputStream(file);
-            String fileName = f.getName();
-            String fileKey;
-            String fileName2 = FileUtil.renameFile(fileName);
-            if (chann != null) {
-                fileKey = "upload/" + chann + "/" + type + "/" + fileName2;
 
-                if (type.equals("doc") && chann.equals("tech")) {
-                    String maxSize = PropertiesLoader.getValue("uploadTechMaxPostSize");
-                    if (size > Long.valueOf(maxSize)) {
-                        throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
-                    }
-                }
+        File fil = new File(file);
+        try {
+            // 文件存储入OSS，Object的名称为fileKey。详细请参看“SDK手册 > Java-SDK > 上传文件”。
+            // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/upload_object.html?spm=5176.docoss/user_guide/upload_object
+            String fileKey;
+            String domain;
+            String fileName = FileUtil.renameFile(fil).getName();
+            if (chann != null) {
+                fileKey = "upload/" + chann + "/" + type + "/" + fileName;
             } else {
-                fileKey = "upload/" + fileName2;
+                fileKey = "upload/" + fileName;
             }
 
             String data = "";
             if (type.equals("img")) {
                 bucketName = PropertiesLoader.getValue("img.bucket");
-//                domain = PropertiesLoader.getValue("ali.domain");
-//                domain = PropertiesLoader.getValue("formal.img.domain");
+                domain = PropertiesLoader.getValue("ali.domain");
                 data = domain + "/" + fileKey;
-                String maxSize = PropertiesLoader.getValue("uploadPicMaxPostSize");
-                if (size > Long.valueOf(maxSize)) {
-                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
-                }
                 //返回图片的宽高
-                BufferedImage bi = ImageIO.read(in);
-                result.put("width", bi.getWidth());
-                result.put("height", bi.getHeight());
+                InputStream is = new FileInputStream(file);
+                BufferedImage src = ImageIO.read(is);
+                result.put("width", src.getWidth());
+                result.put("height", src.getHeight());
 
             } else if (type.equals("doc")) {
                 bucketName = PropertiesLoader.getValue("file.bucket");
-                data = fileName2;
-                String maxSize = PropertiesLoader.getValue("uploadDocMaxPostSize");
-                if (size > Long.valueOf(maxSize)) {
-                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
-                }
-
+                data = fileName;
             }
 
-            ossClient.putObject(bucketName, fileKey, in);
-
+            ossClient.putObject(bucketName, fileKey, fil);
             log.debug("Object：" + fileKey + "存入OSS成功。");
             log.info("【上传Alioss的返回值】：" + result.toString());
             result.put("status", "success");
+
             result.put("url", data);
 
         } catch (OSSException oe) {
             oe.printStackTrace();
+            log.error(oe.getErrorCode() + ":" + oe.getErrorMessage());
             result.put("status", "fail");
             return result;
         } catch (Exception e) {
