@@ -219,8 +219,9 @@ public class AppPostController {
                                        @ApiParam(value = "Y坐标") @RequestParam String y,
                                        @ApiParam(value = "宽") @RequestParam String w,
                                        @ApiParam(value = "高") @RequestParam String h) {
-
-        Map m = movisionOssClient.uploadObject(file, "img", "postCover");
+        //上传到服务器
+        Map m = movisionOssClient.uploadMultipartFileObject(file, "img", "postCover");
+        //从服务器获取文件并剪切，删除原图，上传剪切后图片上传阿里云
         Map map = movisionOssClient.uploadImgerAndIncision(String.valueOf(m.get("url")), x, y, w, h);
         String url = String.valueOf(map.get("url"));
         Map<String, Object> map1 = new HashMap<>();
