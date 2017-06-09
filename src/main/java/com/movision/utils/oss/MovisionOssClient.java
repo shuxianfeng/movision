@@ -193,7 +193,8 @@ public class MovisionOssClient {
                 map.put("url", path);
                 file.transferTo(new File(path));
             } catch (IOException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
+                System.out.println("原图上传报错");
                 return null;
             }
         }
