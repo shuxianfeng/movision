@@ -257,6 +257,14 @@ public class MsgCenterFacade {
                     String str = post.get(j).getPostcontent();
                     String a = MsgCenterFacade.removeHtmlTag(str);
                     String b = a.replaceAll("  ", "");
+                    if (StringUtil.isBlank(b)) {
+                        String nickname = postCommentZanRecordService.queryPostNickname(postid);
+                        String text = nickname + "的帖子";
+                        rewardedVos.get(i).setContent(text);
+                        post.get(j).setPostcontent("");
+                    } else {
+                        post.get(j).setPostcontent(b);
+                    }
                     post.get(j).setPostcontent(b);
                 }
                 rewardedVos.get(i).setPosts(post);

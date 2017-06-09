@@ -22,6 +22,15 @@ public class RewardedVo implements Serializable {
     private String nickname;
     public List<Post> posts;
     private Integer isread;//是否已读 0否1是
+    private String content;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     public Integer getIsread() {
         return isread;
