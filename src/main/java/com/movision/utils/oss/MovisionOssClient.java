@@ -254,32 +254,36 @@ public class MovisionOssClient {
              * 的左上顶点的坐标（x，y）、宽度和高度可以定义这个区域。
              */
             Rectangle rect = null;
-            //去除小数
-            String xz = null;
-            String yz = null;
-            String with = null;
-            String high = null;
-            if (x.indexOf(".") != -1) {
-                xz = x.substring(0, x.lastIndexOf("."));
-            } else {
-                xz = x;
-            }
-            if (y.indexOf(".") != -1) {
-                yz = x.substring(0, y.lastIndexOf("."));
-            } else {
-                yz = y;
-            }
-            if (w.indexOf(".") != -1) {
-                with = x.substring(0, w.lastIndexOf("."));
-            } else {
-                with = w;
-            }
-            if (h.indexOf(".") != -1) {
-                high = x.substring(0, h.lastIndexOf("."));
-            } else {
-                high = h;
-            }
+
             if (StringUtil.isNotEmpty(x) && StringUtil.isNotEmpty(y) && StringUtil.isNotEmpty(w) && StringUtil.isNotEmpty(h)) {
+                //去除小数
+                String xz = null;
+                String yz = null;
+                String with = null;
+                String high = null;
+                if (x.indexOf(".") != -1) {
+                    xz = x.substring(0, x.lastIndexOf("."));
+                } else {
+                    xz = x;
+                }
+
+                if (y.indexOf(".") != -1) {
+                    yz = y.substring(0, y.lastIndexOf("."));
+                } else {
+                    yz = y;
+                }
+
+                if (w.indexOf(".") != -1) {
+                    with = w.substring(0, w.lastIndexOf("."));
+                } else {
+                    with = w;
+                }
+
+                if (h.indexOf(".") != -1) {
+                    high = h.substring(0, h.lastIndexOf("."));
+                } else {
+                    high = h;
+                }
                 rect = new Rectangle(Integer.parseInt(xz), Integer.parseInt(yz), Integer.parseInt(with), Integer.parseInt(high));
             }
 
