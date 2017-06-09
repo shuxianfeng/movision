@@ -178,20 +178,23 @@ public class AppPostController {
     @ApiOperation(value = "PC官网发布帖子", notes = "用于官网发布帖子的接口", response = Response.class)
     @RequestMapping(value = "releasePostByPC", method = RequestMethod.POST)
     public Response releasePostByPC(HttpServletRequest request,
-                                @ApiParam(value = "用户id") @RequestParam String userid,
-                                @ApiParam(value = "帖子类型：0 普通图文帖 1 原生视频帖 2 分享视频贴( isactive为0时该字段不为空)") @RequestParam String type,
-                                @ApiParam(value = "所属圈子id") @RequestParam String circleid,
-                                @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
-                                @ApiParam(value = "帖子内容") @RequestParam String postcontent,
-                                @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,
-                                @ApiParam(value = "帖子封面图片url字符串") @RequestParam String coverimg,
-                                @ApiParam(value = "原生视频上传到阿里云后的vid（type为1时必填）") @RequestParam(required = false) String vid,
-                                @ApiParam(value = "第三方视频地址url（type为2时必填，直接把分享的第三方视频网址传到这里）") @RequestParam(required = false) String videourl,
-                                @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids
-    ) {
+                                    @ApiParam(value = "用户id") @RequestParam String userid,
+                                    @ApiParam(value = "帖子类型：0 普通图文帖 1 原生视频帖 2 分享视频贴( isactive为0时该字段不为空)") @RequestParam String type,
+                                    @ApiParam(value = "所属圈子id") @RequestParam String circleid,
+                                    @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
+                                    @ApiParam(value = "帖子内容") @RequestParam String postcontent,
+                                    @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,
+                                    @ApiParam(value = "原生视频上传到阿里云后的vid（type为1时必填）") @RequestParam(required = false) String vid,
+                                    @ApiParam(value = "第三方视频地址url（type为2时必填，直接把分享的第三方视频网址传到这里）") @RequestParam(required = false) String videourl,
+                                    @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids,
+                                    @RequestParam(value = "file", required = false) MultipartFile file,
+                                    @ApiParam(value = "X坐标") @RequestParam String x,
+                                    @ApiParam(value = "Y坐标") @RequestParam String y,
+                                    @ApiParam(value = "宽") @RequestParam String w,
+                                    @ApiParam(value = "高") @RequestParam String h) {
         Response response = new Response();
 
-        Map count = facadePost.releasePostByPC(request, userid, type, circleid, title, postcontent, isactive, coverimg, vid, videourl, proids);
+        Map count = facadePost.releasePostByPC(request, userid, type, circleid, title, postcontent, isactive, file, vid, videourl, proids, x, y, w, h);
 
         if (count.get("flag").equals(-2)) {
             response.setCode(300);

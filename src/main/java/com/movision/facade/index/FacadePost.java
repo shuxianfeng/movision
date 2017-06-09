@@ -424,8 +424,8 @@ public class FacadePost {
      */
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
-    public Map releasePostByPC(HttpServletRequest request, String userid, String type, String circleid, String title, String postcontent, String isactive, String coverimg,
-                           String vid, String videourl, String proids) {
+    public Map releasePostByPC(HttpServletRequest request, String userid, String type, String circleid, String title, String postcontent, String isactive, MultipartFile coverimg,
+                               String vid, String videourl, String proids, String x, String y, String w, String h) {
         Map map = new HashMap();
 
         //这里需要根据userid判断当前登录的用户是否有发帖权限
@@ -466,6 +466,20 @@ public class FacadePost {
                         log.error("APP端帖子图片内容转换异常");
                     }
                 }
+
+
+                //上传到服务器
+                Map m = movisionOssClient.uploadMultipartFileObject(coverimg, "img");
+                //从服务器获取文件并剪切，删除原图，上传剪切后图片上传阿里云
+                Map tmap = movisionOssClient.uploadImgerAndIncision(String.valueOf(m.get("url")), x, y, w, h);
+                String urls = String.valueOf(tmap.get("url"));
+                /*Map<String, Object> map1 = new HashMap<>();
+                map1.put("url", url);
+                map1.put("name", FileUtil.getFileNameByUrl(url));
+                map1.put("width", tmap.get("width"));
+                map1.put("height", tmap.get("height"));*/
+
+
                 post.setPostcontent(postcontent);//帖子内容
                 post.setZansum(0);//新发帖全部默认为0次
                 post.setCommentsum(0);//被评论次数
@@ -479,7 +493,7 @@ public class FacadePost {
                 post.setIntime(new Date());//帖子发布时间
                 post.setTotalpoint(0);//帖子综合评分
                 post.setIsdel(0);//上架
-                post.setCoverimg(coverimg);//帖子封面
+                post.setCoverimg(urls);//帖子封面
                 post.setUserid(Integer.parseInt(userid));
                 //插入帖子
                 postService.releasePost(post);
@@ -490,7 +504,7 @@ public class FacadePost {
                     video.setPostid(flag);
                     video.setIsrecommend(0);
                     video.setIsbanner(0);
-                    video.setBannerimgurl(coverimg);//简化APP，直接取帖子封面图片为原生视频的封面(运营后台不变)
+                    video.setBannerimgurl(urls);//简化APP，直接取帖子封面图片为原生视频的封面(运营后台不变)
                     if (type.equals("1")) {
                         video.setVideourl(vid);//原生视频上传链接
                     } else if (type.equals("2")) {
