@@ -187,11 +187,12 @@ public class MovisionOssClient {
         Map map = new HashMap();
         if (file.getSize() > 0) {
             try {
-                String path = PropertiesLoader.getValue("post.incise.domain") + filename + hz;
+                String path = PropertiesLoader.getValue("post.incise.domain") + filename;
                 //SaveFileFromInputStream(file.getInputStream(), PropertiesLoader.getValue("post.incise.domain"), filename);
                 map.put("status", "success");
                 map.put("url", path);
                 file.transferTo(new File(path));
+                return map;
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("原图上传报错");
