@@ -174,7 +174,7 @@ public class MsgCenterFacade {
                             if (StringUtil.isBlank(b)) {
                                 String nickname = postCommentZanRecordService.queryPostNickname(postid);
                                 String text = nickname + "的帖子";
-                                comments.get(i).setNickname(text);
+                                comments.get(i).setContent(text);
                                 post.get(j).setPostcontent("");
                             } else {
                                 post.get(j).setPostcontent(b);
@@ -298,7 +298,7 @@ public class MsgCenterFacade {
                             if (StringUtil.isBlank(b)) {
                                 String nickname = postCommentZanRecordService.queryPostNickname(postid);
                                 String text = nickname + "的帖子";
-                                zanRecordVos.get(i).setNickname(text);
+                                zanRecordVos.get(i).setContent(text);
                                 post.get(j).setPostcontent("");
                             } else {
                                 post.get(j).setPostcontent(b);
