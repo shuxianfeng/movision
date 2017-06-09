@@ -255,10 +255,30 @@ public class MovisionOssClient {
              */
             Rectangle rect = null;
             //去除小数
-            String xz = x.substring(0, x.lastIndexOf("."));
-            String yz = x.substring(0, y.lastIndexOf("."));
-            String with = x.substring(0, w.lastIndexOf("."));
-            String high = x.substring(0, h.lastIndexOf("."));
+            String xz = null;
+            String yz = null;
+            String with = null;
+            String high = null;
+            if (x.indexOf(".") != -1) {
+                xz = x.substring(0, x.lastIndexOf("."));
+            } else {
+                xz = x;
+            }
+            if (y.indexOf(".") != -1) {
+                yz = x.substring(0, y.lastIndexOf("."));
+            } else {
+                yz = y;
+            }
+            if (w.indexOf(".") != -1) {
+                with = x.substring(0, w.lastIndexOf("."));
+            } else {
+                with = w;
+            }
+            if (h.indexOf(".") != -1) {
+                high = x.substring(0, h.lastIndexOf("."));
+            } else {
+                high = h;
+            }
             if (StringUtil.isNotEmpty(x) && StringUtil.isNotEmpty(y) && StringUtil.isNotEmpty(w) && StringUtil.isNotEmpty(h)) {
                 rect = new Rectangle(Integer.parseInt(xz), Integer.parseInt(yz), Integer.parseInt(with), Integer.parseInt(high));
             }
