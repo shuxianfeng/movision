@@ -182,8 +182,6 @@ public class MovisionOssClient {
     public Map uploadMultipartFile(MultipartFile file) {
         //获取文件名
         String filename = file.getOriginalFilename();
-        //获取文件后缀
-        String hz = file.getContentType();
         Map map = new HashMap();
         if (file.getSize() > 0) {
             try {
@@ -214,14 +212,15 @@ public class MovisionOssClient {
      */
     public Map uploadImgerAndIncision(String file, String x, String y, String w, String h) {
 
-        BufferedInputStream is = null;
+        FileInputStream is = null;
         ImageInputStream iis = null;
         Map map = new HashMap();
 
         try {
-            URL u = new URL(file);
+            //URL u = new URL(file);
             //读取图片文件
-            is = new BufferedInputStream(u.openStream());
+            is = new FileInputStream(file);
+            //is = new BufferedInputStream(u.openStream());
 
             /**//*
              * 返回包含所有当前已注册 ImageReader 的 Iterator，这些 ImageReader
