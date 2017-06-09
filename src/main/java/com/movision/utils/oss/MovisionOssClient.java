@@ -18,9 +18,7 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -143,10 +141,9 @@ public class MovisionOssClient {
      *
      * @param file  file
      * @param type  img | doc | video
-     * @param chann 频道类型  post | person | ....
      * @return url | filename
      */
-    public Map<String, Object> uploadMultipartFileObject(MultipartFile file, String type, String chann) {
+    public Map<String, Object> uploadMultipartFileObject(MultipartFile file, String type) {
 
         String uploadMode = PropertiesLoader.getValue("upload.mode");
         //判断是否为允许的上传文件后缀
@@ -157,7 +154,7 @@ public class MovisionOssClient {
 
         switch (uploadMode) {
             case "alioss":
-                Map<String, Object> map = aliOSSClient.uploadMultipartFileObject(file, type, chann);
+                Map<String, Object> map = uploadMultipartFile(file);
                 String status = String.valueOf(map.get("status"));
                 if (status.equals("success")) {
                     return map;
@@ -176,7 +173,60 @@ public class MovisionOssClient {
         }
     }
 
+    /**
+     * 图片上传到本地服务器
+     *
+     * @param file
+     * @return
+     */
+    public Map<String, Object> uploadMultipartFile(MultipartFile file) {
+        //获取文件名
+        String filename = file.getOriginalFilename();
+        Map map = new HashMap();
+        if (file.getSize() > 0) {
+            try {
+                SaveFileFromInputStream(file.getInputStream(), PropertiesLoader.getValue("post.incise.domain"), filename);
+                map.put("status", "success");
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+                return null;
+            }
+        }
+        return map;
+    }
 
+    /**
+     * 上传流
+     *
+     * @param stream
+     * @param path
+     * @param filename
+     * @throws IOException
+     */
+    public void SaveFileFromInputStream(InputStream stream, String path, String filename) throws IOException {
+        FileOutputStream fs = new FileOutputStream(path + "/" + filename);
+        byte[] buffer = new byte[1024 * 1024];
+        int bytesum = 0;
+        int byteread = 0;
+        while ((byteread = stream.read(buffer)) != -1) {
+            bytesum += byteread;
+            fs.write(buffer, 0, byteread);
+            fs.flush();
+        }
+        fs.close();
+        stream.close();
+    }
+
+
+    /**
+     * 帖子封面切割并上传
+     * @param file
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @return
+     */
     public Map uploadImgerAndIncision(String file, String x, String y, String w, String h) {
 
         BufferedInputStream is = null;
