@@ -254,8 +254,13 @@ public class MovisionOssClient {
              * 的左上顶点的坐标（x，y）、宽度和高度可以定义这个区域。
              */
             Rectangle rect = null;
+            //去除小数
+            String xz = x.substring(0, x.lastIndexOf("."));
+            String yz = x.substring(0, y.lastIndexOf("."));
+            String with = x.substring(0, w.lastIndexOf("."));
+            String high = x.substring(0, h.lastIndexOf("."));
             if (StringUtil.isNotEmpty(x) && StringUtil.isNotEmpty(y) && StringUtil.isNotEmpty(w) && StringUtil.isNotEmpty(h)) {
-                rect = new Rectangle(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(w), Integer.parseInt(h));
+                rect = new Rectangle(Integer.parseInt(xz), Integer.parseInt(yz), Integer.parseInt(with), Integer.parseInt(high));
             }
 
 
