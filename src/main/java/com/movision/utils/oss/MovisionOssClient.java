@@ -150,7 +150,7 @@ public class MovisionOssClient {
 
         String uploadMode = PropertiesLoader.getValue("upload.mode");
         //判断是否为允许的上传文件后缀
-        boolean allowed = FileUtil.isAllowed(file.getName(), type);
+        boolean allowed = FileUtil.isAllowed(file.getOriginalFilename(), type);
         if (!allowed) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "不允许的上传类型");
         }
