@@ -234,6 +234,18 @@ public class PostService {
         }
     }
 
+    //模块式发帖
+    public int releaseModularPost(Post post) {
+        try {
+            log.info("模块式发帖发布成功");
+
+            return postMapper.releaseModularPost(post);
+
+        } catch (Exception e) {
+            log.error("模块式发帖发布失败");
+            throw e;
+        }
+    }
     public int updatePostIsdel(String vid) {
         try {
             log.info("更改上架");

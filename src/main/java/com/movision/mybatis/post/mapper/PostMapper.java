@@ -92,6 +92,8 @@ public interface PostMapper {
 
     int releasePost(Post post);
 
+    int releaseModularPost(Post post);
+
     int updatePostIsdel(String vid);
 
     void insertPostShareGoods(List<PostShareGoods> postShareGoodsList);

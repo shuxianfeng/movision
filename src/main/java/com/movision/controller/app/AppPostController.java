@@ -419,4 +419,46 @@ public class AppPostController {
 
         return response;
     }
+
+    /**
+     * 模块式老年乐发布帖子
+     *
+     * @param request
+     * @param userid
+     * @param circleid
+     * @param title
+     * @param postcontent
+     * @param isactive
+     * @param coverimg
+     * @param proids
+     * @return
+     */
+    @ApiOperation(value = "模块式发布帖子", notes = "模块式发布帖子", response = Response.class)
+    @RequestMapping(value = "releaseModularPost", method = RequestMethod.POST)
+    public Response releaseModularPost(HttpServletRequest request,
+                                       @ApiParam(value = "用户id") @RequestParam String userid,
+                                       @ApiParam(value = "所属圈子id") @RequestParam String circleid,
+                                       @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
+                                       @ApiParam(value = "帖子内容") @RequestParam String postcontent,
+                                       @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,
+                                       @ApiParam(value = "帖子封面图片url字符串") @RequestParam String coverimg,
+                                       @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids) {
+
+
+        Response response = new Response();
+
+        Map count = facadePost.releaseModularPost(request, userid, circleid, title, postcontent, isactive, coverimg, proids);
+
+        if (count.get("flag").equals(-2)) {
+            response.setCode(300);
+            response.setMessage("系统异常，APP发帖失败");
+        } else if (count.get("flag").equals(-1)) {
+            response.setCode(201);
+            response.setMessage("用户不具备发帖权限");
+        } else {
+            response.setCode(200);
+            response.setMessage("发帖成功");
+        }
+        return response;
+    }
 }

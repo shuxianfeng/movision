@@ -79,4 +79,13 @@ public class PostCommentZanRecordService {
         }
     }
 
+    public String queryPostNickname(Integer postid) {
+        try {
+            log.info("查询用户");
+            return recordMapper.queryPostNickname(postid);
+        } catch (Exception e) {
+            log.error("查询用户失败", e);
+            throw e;
+        }
+    }
 }

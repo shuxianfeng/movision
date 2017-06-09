@@ -370,6 +370,25 @@
         )
     </insert>
 
+    <!--模塊式老年樂發帖-->
+    <insert id="releaseModularPost" parameterType="com.movision.mybatis.post.entity.Post">
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO yw_post (circleid, title,
+        postcontent, zansum, commentsum, forwardsum,
+        collectsum, isactive, ishot, isessence,
+        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime
+        )
+        VALUES (
+        #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=VARCHAR},
+        #{zansum,jdbcType=INTEGER},#{commentsum,jdbcType=INTEGER},#{forwardsum,jdbcType=INTEGER},
+        #{collectsum,jdbcType=INTEGER},#{isactive,jdbcType=INTEGER},
+        #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
+        #{coverimg,jdbcType=VARCHAR},#{intime,jdbcType=TIMESTAMP},#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},
+        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{oprtime,jdbcType=TIMESTAMP}
+        )
+    </insert>
     <!--插入一条用户参与活动的记录-->
     <insert id="saveActiveRecord" parameterType="java.util.Map">
       INSERT INTO yw_active_part (

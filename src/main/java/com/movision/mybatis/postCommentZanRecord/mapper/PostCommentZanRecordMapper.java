@@ -31,4 +31,6 @@ public interface PostCommentZanRecordMapper {
     List<ZanRecordVo> findAllZan(Integer userid, RowBounds rowBounds);
 
     User queryusers(Integer userid);
+
+    String queryPostNickname(Integer postid);
 }

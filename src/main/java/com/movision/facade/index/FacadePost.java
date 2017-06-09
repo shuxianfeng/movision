@@ -750,4 +750,113 @@ public class FacadePost {
             return -1;
         }
     }
+
+    /**
+     * 模块化老年乐发帖
+     *
+     * @param request
+     * @param userid
+     * @param circleid
+     * @param title
+     * @param postcontent
+     * @param isactive
+     * @param coverimg
+     * @param proids
+     * @return
+     */
+    @Transactional
+    @CacheEvict(value = "indexData", key = "'index_data'")
+    public Map releaseModularPost(HttpServletRequest request, String userid, String circleid, String title, String postcontent, String isactive, String coverimg, String proids) {
+        Map map = new HashMap();
+        //这里需要根据userid判断当前登录的用户是否有发帖权限
+        //查询当前圈子的开放范围
+        int scope = circleService.queryCircleScope(Integer.parseInt(circleid));
+        //查询当前圈子的所有者(返回所有者的用户id)
+        User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
+        //查询当前圈子的所有管理员列表
+        List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
+
+        int mark = 0;//定义一个userid比对标志位
+        if (manageList.size() > 0) {
+            for (int i = 0; i < manageList.size(); i++) {
+                if (manageList.get(i).getId() == Integer.parseInt(userid)) {
+                    //是圈子管理员时赋值为1
+                    mark = 1;
+                }
+            }
+        }
+        int lev = owner.getLevel();//用户等级
+        //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.所有者和大V可发时，发帖用户即为大V
+        if (scope == 2 || (Integer.parseInt(userid) == owner.getId() || mark == 1) || (scope == 1 && lev >= 1)) {
+
+            try {
+                log.info("APP前端用户开始请求发帖");
+
+                Post post = new Post();
+                post.setCircleid(Integer.parseInt(circleid));
+                post.setTitle(title);
+                if (StringUtil.isNotEmpty(postcontent)) {
+                    //内容转换
+                    Map con = jsoupCompressImg.compressImg(request, postcontent);
+                    System.out.println(con);
+                    if ((int) con.get("code") == 200) {
+                        String str = con.get("content").toString();
+                        postcontent = str.replace("\\", "");
+                    } else {
+                        log.error("APP端帖子图片内容转换异常");
+                    }
+                }
+                post.setPostcontent(postcontent);//帖子内容
+                post.setZansum(0);//新发帖全部默认为0次
+                post.setCommentsum(0);//被评论次数
+                post.setForwardsum(0);//被转发次数
+                post.setCollectsum(0);//被收藏次数
+                post.setIsactive(Integer.parseInt(isactive));//是否为活动 0 帖子 1 活动
+                // post.setType(Integer.parseInt(type));//帖子类型 0 普通图文帖 1 原生视频帖 2 分享视频帖
+                post.setIshot(0);//是否设为热门：默认0否
+                post.setIsessence(0);//是否设为精选：默认0否
+                post.setIsessencepool(0);//是否设为精选池中的帖子
+                post.setIntime(new Date());//帖子发布时间
+                post.setTotalpoint(0);//帖子综合评分
+                post.setIsdel(0);//上架
+                post.setCoverimg(coverimg);//帖子封面
+                post.setUserid(Integer.parseInt(userid));
+                //插入帖子
+                postService.releaseModularPost(post);
+                int flag = post.getId();//返回的主键--帖子id
+                //再保存帖子中分享的商品列表(如果商品id字段不为空)
+                if (!StringUtils.isEmpty(proids)) {
+                    String[] proidstr = proids.split(",");
+                    List<PostShareGoods> postShareGoodsList = new ArrayList<>();
+                    for (int i = 0; i < proidstr.length; i++) {
+                        PostShareGoods postShareGoods = new PostShareGoods();
+                        int postid = flag;
+                        int goodsid = Integer.parseInt(proidstr[i]);
+                        postShareGoods.setPostid(postid);
+                        postShareGoods.setGoodsid(goodsid);
+                        postShareGoodsList.add(postShareGoods);
+                    }
+                    postService.insertPostShareGoods(postShareGoodsList);
+                }
+
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
+
+                map.put("flag", flag);
+                return map;
+
+            } catch (Exception e) {
+                log.error("系统异常，APP发帖失败");
+                map.put("flag", -2);
+                e.printStackTrace();
+                return map;
+            }
+        } else {
+            log.info("该用户不具备发帖权限");
+            map.put("flag", -1);
+            return map;
+        }
+    }
+
+
+
 }

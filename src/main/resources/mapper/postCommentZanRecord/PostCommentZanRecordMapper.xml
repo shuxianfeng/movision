@@ -120,5 +120,7 @@ UNION ALL
     <select id="queryusers" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.User">
         SELECT nickname,photo,id FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
     </select>
-
+    <select id="queryPostNickname" parameterType="java.lang.Integer" resultType="java.lang.String">
+SELECT u.nickname FROM yw_user u LEFT JOIN yw_post p ON p.userid=u.id WHERE p.id=#{postid,jdbcType=INTEGER}
+</select>
 </mapper>
