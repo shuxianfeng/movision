@@ -182,10 +182,13 @@ public class MovisionOssClient {
     public Map<String, Object> uploadMultipartFile(MultipartFile file) {
         //获取文件名
         String filename = file.getOriginalFilename();
+        String hz = file.getContentType();
         Map map = new HashMap();
         if (file.getSize() > 0) {
             try {
-                SaveFileFromInputStream(file.getInputStream(), PropertiesLoader.getValue("post.incise.domain"), filename);
+                String path = PropertiesLoader.getValue("post.incise.domain") + filename + hz;
+                //SaveFileFromInputStream(file.getInputStream(), PropertiesLoader.getValue("post.incise.domain"), filename);
+                file.transferTo(new File(path));
                 map.put("status", "success");
             } catch (IOException e) {
                 System.out.println(e.getMessage());
@@ -193,28 +196,6 @@ public class MovisionOssClient {
             }
         }
         return map;
-    }
-
-    /**
-     * 上传流
-     *
-     * @param stream
-     * @param path
-     * @param filename
-     * @throws IOException
-     */
-    public void SaveFileFromInputStream(InputStream stream, String path, String filename) throws IOException {
-        FileOutputStream fs = new FileOutputStream(path + "/" + filename);
-        byte[] buffer = new byte[1024 * 1024];
-        int bytesum = 0;
-        int byteread = 0;
-        while ((byteread = stream.read(buffer)) != -1) {
-            bytesum += byteread;
-            fs.write(buffer, 0, byteread);
-            fs.flush();
-        }
-        fs.close();
-        stream.close();
     }
 
 
