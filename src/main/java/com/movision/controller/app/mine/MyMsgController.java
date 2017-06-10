@@ -155,7 +155,7 @@ public class MyMsgController {
         if (response.getCode() == 200) {
             response.setData("操作成功");
         }
-        response.setData(1);
+        response.setData(resault);
         return response;
     }
 }
