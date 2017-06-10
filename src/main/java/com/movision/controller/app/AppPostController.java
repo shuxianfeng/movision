@@ -9,6 +9,7 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
+import com.movision.utils.CoverImgCompressUtil;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
@@ -37,6 +38,9 @@ public class AppPostController {
 
     @Autowired
     private FacadePost facadePost;
+
+    @Autowired
+    private CoverImgCompressUtil coverImgCompressUtil;
 
     @Autowired
     private MovisionOssClient movisionOssClient;
@@ -233,6 +237,16 @@ public class AppPostController {
         map1.put("width", map.get("width"));
         map1.put("height", map.get("height"));
         return new Response(map1);
+    }
+
+    @ApiOperation(value = "图片压缩", notes = "用于图片压缩测试", response = Response.class)
+    @RequestMapping(value = "/coverImgCompressUtil", method = RequestMethod.POST)
+    public Response coverImgCompressUtil(@RequestParam String file) {
+        Response response = new Response();
+        String str = coverImgCompressUtil.ImgCompress(file);
+        response.setMessage("操作成功");
+        response.setData(str);
+        return response;
     }
 
 
