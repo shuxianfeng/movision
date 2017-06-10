@@ -70,7 +70,7 @@ public class CoverImgCompressUtil {
         }
         if (compressFlag) {
             //压缩成功后返回图片压缩后的url
-            return compress_file_path + tempfilename;
+            return compress_file_path + filename;
         }
 
         return null;
