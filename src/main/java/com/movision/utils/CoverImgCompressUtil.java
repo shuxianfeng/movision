@@ -89,18 +89,16 @@ public class CoverImgCompressUtil {
 
         if (size < 200) {
             String PATH = file;
-            //获取文件名
-            String tempDir = file.substring(0, file.lastIndexOf("/")) + compress_dir_local_path;
             String filename = FileUtil.getPicName(file);//获取图片文件名
             // 1 生成压缩后的图片的url
-            String tempfilename = UUID.randomUUID().toString() + filename.substring(filename.lastIndexOf("."), filename.length() - 1);
+            String tempfilename = filename + filename.substring(filename.lastIndexOf("."), filename.length() - 1);
             String compress_file_path = compress_dir_path + tempfilename;
             log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
 
             // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
             if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
                 // 压缩核心算法
-                compressFlag = compressJpgOrPng(w, h, compressFlag, filename, PATH, tempDir);
+                compressFlag = compressJpgOrPng(w, h, compressFlag, filename, PATH, compress_dir_path);
                 // 处理过的图片加入到已处理集合，防止重复压缩图片
                 existFileList.add(filename);
             } else {
@@ -167,7 +165,7 @@ public class CoverImgCompressUtil {
     private static int width;
     private static int height;
 
-//==========================================================================================================================================
+//======================================================以下作废====================================================================================
 
     /**
      * 构造函数
