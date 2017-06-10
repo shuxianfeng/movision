@@ -107,8 +107,8 @@ public class FacadeRewarded {
                 int playtour = pointRecordService.queryMyTodayPointSum(u);//查询当天打赏了多少次
                 if (playtour < 5) {
                     //每天打赏次数在五次以内，参加每日活动，给赠送积分者增加5积分,并且增加积分流水记录
-                    userFacade.updateUserPoint(u, 5, PointConstant.POINT_ADD);//给用户增加每日活动积分
-                    rewardRecord(u, 5, PointConstant.POINT_ADD);//保存积分流水记录
+                    userFacade.updateUserPoint(u, 1, PointConstant.POINT_ADD);//给用户增加每日活动积分
+                    rewardRecord(u, 1, PointConstant.POINT_ADD);//保存积分流水记录
                     in += 5;//为当前登录用户增加活动积分
                 }
                 //为打赏者减去积分
