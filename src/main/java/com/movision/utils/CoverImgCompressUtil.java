@@ -55,13 +55,13 @@ public class CoverImgCompressUtil {
 
 
         // 1 生成压缩后的图片的url
-        String compress_file_path = compress_dir_path + tempfilename;
+        String compress_file_path = compress_dir_path;
         log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
 
         // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
         if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
             // 压缩核心算法
-            compressFlag = compressJpgOrPng(w, h, compressFlag, filename, PATH, file.getContentType());
+            compressFlag = compressJpgOrPng(w, h, compressFlag, filename, PATH, compress_file_path);
             // 处理过的图片加入到已处理集合，防止重复压缩图片
             existFileList.add(filename);
         } else {
@@ -70,7 +70,7 @@ public class CoverImgCompressUtil {
         }
         if (compressFlag) {
             //压缩成功后返回图片压缩后的url
-            return compress_file_path;
+            return compress_file_path + tempfilename;
         }
 
         return null;
