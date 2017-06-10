@@ -147,6 +147,11 @@
           AND t1.circleid = t2.id
     </select>
 
+    <!--根据帖子封面原图url查询帖子封面压缩图url-->
+    <select id="queryCompressUrl" parameterType="java.lang.String" resultType="java.lang.String" >
+        SELECT compressimgurl FROM yw_compress_img WHERE protoimgurl = #{coverimg,jdbcType=VARCHAR}
+    </select>
+
     <!-- 查询指定帖子所属圈子的id -->
     <select id="queryPostByCircleid" parameterType="java.lang.Integer" resultType="Integer">
         SELECT p.circleid

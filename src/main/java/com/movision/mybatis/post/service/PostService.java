@@ -69,7 +69,7 @@ public class PostService {
             log.info("查询圈子中更新的帖子数");
             return postMapper.queryPostNumByCircleid(circleid);
         } catch (Exception e) {
-            log.error("查询圈子中更新的帖子数失败");
+            log.error("查询圈子中更新的帖子数失败", e);
             throw e;
         }
     }
@@ -79,7 +79,17 @@ public class PostService {
             log.info("查询帖子详情");
             return postMapper.queryPostDetail(parammap);
         } catch (Exception e) {
-            log.error("查询帖子详情失败");
+            log.error("查询帖子详情失败", e);
+            throw e;
+        }
+    }
+
+    public String queryCompressUrl(String coverimg){
+        try {
+            log.info("根据帖子封面原图路径url查询帖子封面压缩图url");
+            return postMapper.queryCompressUrl(coverimg);
+        }catch (Exception e){
+            log.error("根据帖子封面原图路径url查询帖子封面压缩图url失败", e);
             throw e;
         }
     }
@@ -89,7 +99,7 @@ public class PostService {
             log.info("查询帖子被打赏次数");
             return postMapper.queryRewardSum(postid);
         } catch (Exception e) {
-            log.error("查询帖子被打赏次数失败");
+            log.error("查询帖子被打赏次数失败", e);
             throw e;
         }
     }

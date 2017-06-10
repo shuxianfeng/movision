@@ -63,6 +63,8 @@ public interface PostMapper {
 
     PostVo queryPostDetail(Map<String, Object> parammap);
 
+    String queryCompressUrl(String coverimg);
+
     int queryRewardSum(String postid);
 
     List<UserLike> queryRewardPersonNickname(String postid);

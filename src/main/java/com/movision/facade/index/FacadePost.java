@@ -118,6 +118,12 @@ public class FacadePost {
             parammap.put("userid", Integer.parseInt(userid));
         }
         PostVo vo = postService.queryPostDetail(parammap);
+        //根据帖子封面原图url查询封面压缩图url，如果存在替换，不存在就用原图
+        String compressurl = postService.queryCompressUrl(vo.getCoverimg());
+        if (null != compressurl && !compressurl.equals("") && !compressurl.equals("null")){
+            vo.setCoverimg(compressurl);
+        }
+
         int rewardsum = postService.queryRewardSum(postid);//查询帖子被打赏的次数
         vo.setRewardsum(rewardsum);
         List<UserLike> nicknamelist = postService.queryRewardPersonNickname(postid);
