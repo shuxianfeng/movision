@@ -80,11 +80,11 @@ public class CoverImgCompressUtil {
         File f = new File(file);
         Long size = f.length();//获取文件大小
 
-        if (size < 200 * 1024) {
+        if (size > 200) {
             String PATH = file;
             String filename = FileUtil.getPicName(file);//获取图片文件名
             // 1 生成压缩后的图片的url
-            String tempfilename = filename + filename.substring(filename.lastIndexOf("."), filename.length() - 1);
+            String tempfilename = filename + filename.substring(filename.lastIndexOf("."), filename.length() - 1);//获取文件名称+后缀
             String compress_file_path = compress_dir_path + tempfilename;
             log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
 

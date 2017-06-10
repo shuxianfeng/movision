@@ -485,7 +485,8 @@ public class FacadePost {
                 Map tmap = movisionOssClient.uploadImgerAndIncision(String.valueOf(m.get("url")), x, y, w, h);
                 String incisionUrl = String.valueOf(tmap.get("url"));
                 //获取本地服务器中切割完成后的图片
-                String tmpurl = String.valueOf(tmap.get("incision"));
+                String tmpurl = String.valueOf(tmap.get("incise"));
+                System.out.println("切割完成后的url===" + tmpurl);
                 //对本地服务器中切割好的图片进行压缩处理
                 String compressUrl = coverImgCompressUtil.ImgCompress(tmpurl);
                 //删除本地服务器切割的图片文件
