@@ -187,6 +187,8 @@ public class MsgCenterFacade {
                         comments.get(i).setCommentVos(commentVos);
                         comments.get(i).setUser(user);
                     }
+                } else {
+                    comments.remove(i);
                 }
             }
         }
