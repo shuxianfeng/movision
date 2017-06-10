@@ -302,13 +302,11 @@ public class MovisionOssClient {
             //保存新图片
             ImageIO.write(bi, "jpg", new File(incise));
             //String domain = PropertiesLoader.getValue("formal.img.domain");
-            File fdel = new File(file);
-            fdel.delete();//删除上传到本地的原图片文件
             //上传本地服务器切割完成的图片到阿里云
             map = aliOSSClient.uploadInciseStream(incise, "img", "coverIncise");
-            //删除本地服务器切割的图片文件
-            File fdel2 = new File(incise);
-            fdel2.delete();
+            map.put("incise", incise);
+            map.put("file", file);
+
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

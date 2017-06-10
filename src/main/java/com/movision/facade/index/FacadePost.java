@@ -11,6 +11,7 @@ import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
+import com.movision.mybatis.compressImg.service.CompressImgService;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
@@ -30,10 +31,7 @@ import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
-import com.movision.utils.DateUtils;
-import com.movision.utils.DesensitizationUtil;
-import com.movision.utils.JsoupCompressImg;
-import com.movision.utils.VideoUploadUtil;
+import com.movision.utils.*;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
@@ -49,6 +47,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -108,6 +107,12 @@ public class FacadePost {
 
     @Autowired
     private ImFacade imFacade;
+
+    @Autowired
+    private CoverImgCompressUtil coverImgCompressUtil;
+
+    @Autowired
+    private CompressImgService compressImgService;
 
     public PostVo queryPostDetail(String postid, String userid, String type) {
 
@@ -478,13 +483,31 @@ public class FacadePost {
                 Map m = movisionOssClient.uploadMultipartFileObject(coverimg, "img");
                 //从服务器获取文件并剪切，删除原图，上传剪切后图片上传阿里云
                 Map tmap = movisionOssClient.uploadImgerAndIncision(String.valueOf(m.get("url")), x, y, w, h);
-                String urls = String.valueOf(tmap.get("url"));
+                String incisionUrl = String.valueOf(tmap.get("url"));
+                //获取本地服务器中切割完成后的图片
+                String tmpurl = String.valueOf(tmap.get("incision"));
+                //对本地服务器中切割好的图片进行压缩处理
+                String compressUrl = coverImgCompressUtil.ImgCompress(tmpurl);
+                //删除本地服务器切割的图片文件
+                File fdel2 = new File(tmpurl);
+                fdel2.delete();
+                File fdel = new File(String.valueOf(tmap.get("file")));
+                long l = fdel.length();
+                l = l / 1024;
+                String imgsize = l + "";
+                fdel.delete();//删除上传到本地的原图片文件
                 /*Map<String, Object> map1 = new HashMap<>();
                 map1.put("url", url);
                 map1.put("name", FileUtil.getFileNameByUrl(url));
                 map1.put("width", tmap.get("width"));
                 map1.put("height", tmap.get("height"));*/
 
+                //把切割好的原图和压缩图分别存放数据库中
+                CompressImg compressImg = new CompressImg();
+                compressImg.setCompressimgurl(compressUrl);
+                compressImg.setProtoimgsize(imgsize);
+                compressImg.setProtoimgurl(String.valueOf(tmap.get("url")));
+                compressImgService.insert(compressImg);
 
                 post.setPostcontent(postcontent);//帖子内容
                 post.setZansum(0);//新发帖全部默认为0次
@@ -499,7 +522,7 @@ public class FacadePost {
                 post.setIntime(new Date());//帖子发布时间
                 post.setTotalpoint(0);//帖子综合评分
                 post.setIsdel(0);//上架
-                post.setCoverimg(urls);//帖子封面
+                post.setCoverimg(incisionUrl);//帖子封面
                 post.setUserid(Integer.parseInt(userid));
                 //插入帖子
                 postService.releasePost(post);
@@ -510,7 +533,7 @@ public class FacadePost {
                     video.setPostid(flag);
                     video.setIsrecommend(0);
                     video.setIsbanner(0);
-                    video.setBannerimgurl(urls);//简化APP，直接取帖子封面图片为原生视频的封面(运营后台不变)
+                    video.setBannerimgurl(incisionUrl);//简化APP，直接取帖子封面图片为原生视频的封面(运营后台不变)
                     if (type.equals("1")) {
                         video.setVideourl(vid);//原生视频上传链接
                     } else if (type.equals("2")) {
