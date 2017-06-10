@@ -115,9 +115,6 @@ public class PointRecordFacade {
         log.info("【增加积分流水】该积分类型type=" + type + ", 该类型对应的积分是：" + new_point);
         if (new_point != 0) {
             //增加积分流水
-//            log.debug("【addPointRecord】session中的userid:" + ShiroUtil.getAppUserID());
-//            log.debug("【addPointRecord】session中的用户信息：" + ShiroUtil.getAppUser());
-
             addPointRecord(type, new_point, userid);
             //新增个人积分
             addPersonPointInDbAndSession(new_point, userid);
@@ -244,7 +241,9 @@ public class PointRecordFacade {
     /**
      * 根据积分类型，计算出对应的加分数值
      *
-     * （无下单送积分，该积分流水已经在下单接口中处理了）
+     * 注意：1 无下单送积分，该积分流水已经在下单接口中处理了；
+     *      2  无首页精选，在boss后台操作
+     *      3  无圈子精选，在boss后台操作
      *
      * @param type
      * @return
