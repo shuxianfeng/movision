@@ -240,7 +240,7 @@ public class AppPostController {
     }
 
     @ApiOperation(value = "图片压缩", notes = "用于图片压缩测试", response = Response.class)
-    @RequestMapping(value = "/coverImgCompressUtil", method = RequestMethod.POST)
+    @RequestMapping(value = "coverImgCompressUtil", method = RequestMethod.POST)
     public Response coverImgCompressUtil(@RequestParam MultipartFile file) {
         Response response = new Response();
         String str = coverImgCompressUtil.ImgCompressto(file);
