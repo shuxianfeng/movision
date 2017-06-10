@@ -243,7 +243,7 @@ public class AppPostController {
     @RequestMapping(value = "coverImgCompressUtil", method = RequestMethod.POST)
     public Response coverImgCompressUtil(@RequestParam MultipartFile file) {
         Response response = new Response();
-        String str = coverImgCompressUtil.ImgCompressto(file);
+        String str = coverImgCompressUtil.ImgCompress(file);
         response.setMessage("操作成功");
         response.setData(str);
         return response;
