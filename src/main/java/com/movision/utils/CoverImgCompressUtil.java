@@ -4,6 +4,8 @@ import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -252,8 +254,8 @@ public class CoverImgCompressUtil {
         File destFile = new File(path);
         FileOutputStream out = new FileOutputStream(destFile); // 输出到文件流
         // 可以正常实现bmp、png、gif转jpg
-        /*JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-        encoder.encode(image); // JPEG编码*/
+        JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+        encoder.encode(image); // JPEG编码
         out.close();
         return null;
     }
