@@ -84,7 +84,7 @@ public class CoverImgCompressUtil {
             String PATH = file;
             String filename = FileUtil.getPicName(file);//获取图片文件名
             // 1 生成压缩后的图片的url
-            String tempfilename = filename.substring(filename.lastIndexOf(".") + 1);//获取文件名称+后缀
+            String tempfilename = file.substring(file.lastIndexOf("/") + 1);//获取文件名称+后缀
             String compress_file_path = compress_dir_path + tempfilename;
             log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
 
@@ -103,7 +103,7 @@ public class CoverImgCompressUtil {
                 return compress_file_path;
             }
         } else {
-
+            return file;
         }
 
         return null;
