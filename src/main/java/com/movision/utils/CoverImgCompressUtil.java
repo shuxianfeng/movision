@@ -196,7 +196,7 @@ public class CoverImgCompressUtil {
             height = image.getHeight();  // 得到源图长
             int w = 750;//图片压缩后的宽度
             int h = 440;//图片压缩后的高度440
-            String tye = fileName.getContentType();
+            String tye = fileName.getOriginalFilename();
             return resizeFix(w, h, tye);
         } catch (IOException e) {
             e.printStackTrace();
