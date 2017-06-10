@@ -89,6 +89,7 @@ public class CoverImgCompressUtil {
 
         if (size < 200) {
             String PATH = file;
+            //获取文件名
             String tempDir = file.substring(0, file.lastIndexOf("/")) + compress_dir_local_path;
             String filename = FileUtil.getPicName(file);//获取图片文件名
             // 1 生成压缩后的图片的url
@@ -171,14 +172,38 @@ public class CoverImgCompressUtil {
     /**
      * 构造函数
      */
-    public void ImgCompressto(String fileName) throws IOException {
-        File file = new File(fileName);// 读入文件
-        img = ImageIO.read(file);      // 构造Image对象
-        width = img.getWidth(null);    // 得到源图宽
-        height = img.getHeight(null);  // 得到源图长
-        int w = 750;//图片压缩后的宽度
-        int h = 440;//图片压缩后的高度440
-        resize(w, h);
+    public String ImgCompressto(String fileName) {
+        try {
+            File file = new File(fileName);// 读入文件
+            img = ImageIO.read(file);      // 构造Image对象
+            width = img.getWidth(null);    // 得到源图宽
+            height = img.getHeight(null);  // 得到源图长
+            int w = 750;//图片压缩后的宽度
+            int h = 440;//图片压缩后的高度440
+            String type = fileName.substring(fileName.lastIndexOf(".") + 1);
+            return resize(w, h, type);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 构造函数
+     */
+    public String ImgCompressto(MultipartFile fileName) {
+        try {
+            BufferedImage image = ImageIO.read(fileName.getInputStream());
+            width = image.getWidth();    // 得到源图宽
+            height = image.getHeight();  // 得到源图长
+            int w = 750;//图片压缩后的宽度
+            int h = 440;//图片压缩后的高度440
+            String tye = fileName.getContentType();
+            return resizeFix(w, h, tye);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -187,11 +212,11 @@ public class CoverImgCompressUtil {
      * @param w int 最大宽度
      * @param h int 最大高度
      */
-    public void resizeFix(int w, int h) throws IOException {
+    public String resizeFix(int w, int h, String tye) throws IOException {
         if (width / height > w / h) {
-            resizeByWidth(w);
+            return resizeByWidth(w, tye);
         } else {
-            resizeByHeight(h);
+            return resizeByHeight(h, tye);
         }
     }
 
@@ -200,9 +225,9 @@ public class CoverImgCompressUtil {
      *
      * @param w int 新宽度
      */
-    public void resizeByWidth(int w) throws IOException {
+    public String resizeByWidth(int w, String type) throws IOException {
         int h = (int) (height * w / width);
-        resize(w, h);
+        return resize(w, h, type);
     }
 
     /**
@@ -210,9 +235,9 @@ public class CoverImgCompressUtil {
      *
      * @param h int 新高度
      */
-    public void resizeByHeight(int h) throws IOException {
+    public String resizeByHeight(int h, String type) throws IOException {
         int w = (int) (width * h / height);
-        resize(w, h);
+        return resize(w, h, type);
     }
 
     /**
@@ -221,11 +246,12 @@ public class CoverImgCompressUtil {
      * @param w int 新宽度
      * @param h int 新高度
      */
-    public String resize(int w, int h) throws IOException {
+    public String resize(int w, int h, String type) throws IOException {
         // SCALE_SMOOTH 的缩略算法 生成缩略图片的平滑度的 优先级比速度高 生成的图片质量比较好 但速度慢
         BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         image.getGraphics().drawImage(img, 0, 0, w, h, null); // 绘制缩小后的图
-        File destFile = new File("D:\\1\\bbt3.jpg");
+        String path = PropertiesLoader.getValue("post.incise.domain") + UUID.randomUUID() + type;
+        File destFile = new File(path);
         FileOutputStream out = new FileOutputStream(destFile); // 输出到文件流
         // 可以正常实现bmp、png、gif转jpg
         JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
