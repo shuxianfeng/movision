@@ -318,6 +318,8 @@ public class MsgCenterFacade {
                         zanRecordVos.get(i).setUser(user);
                         zanRecordVos.get(i).setPosts(post);
                     }
+                } else {
+                    zanRecordVos.remove(i);
                 }
             }
         }
