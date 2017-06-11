@@ -53,6 +53,17 @@ public class AppVideoController {
         return response;
     }
 
+    /**
+     * 废弃不用
+     * 原因：上传文件所在的绝对路径，获取不到
+     *
+     * @param fileName
+     * @param title
+     * @param description
+     * @param coverimg
+     * @param tatges
+     * @return
+     */
     @ApiOperation(value = "视频上传接口", notes = "视频上传接口", response = Response.class)
     @RequestMapping(value = "get_video_upload", method = RequestMethod.POST)
     public Response getVideoUpload(@ApiParam("上传文件所在的绝对路径(必须包含扩展名)") @RequestParam String fileName,
@@ -81,9 +92,9 @@ public class AppVideoController {
         Response response = new Response();
         DefaultAcsClient aliyunClient;
         aliyunClient = new DefaultAcsClient(
-                DefaultProfile.getProfile("cn-shanghai", videoUploadUtil.accessKeyId, videoUploadUtil.accessKeySecret));
+                DefaultProfile.getProfile("cn-shanghai", VideoUploadUtil.accessKeyId, VideoUploadUtil.accessKeySecret));
 
-        Map videoid = videoUploadUtil.createUploadVideo(aliyunClient, fileName, description, tatges, title, filesize);
+        Map videoid = VideoUploadUtil.createUploadVideo(aliyunClient, fileName, description, tatges, title, filesize);
         if (response.getCode() == 200) {
             response.setMessage("调用成功");
         }
@@ -99,8 +110,8 @@ public class AppVideoController {
         Response response = new Response();
         DefaultAcsClient aliyunClient;
         aliyunClient = new DefaultAcsClient(
-                DefaultProfile.getProfile("cn-shanghai", videoUploadUtil.accessKeyId, videoUploadUtil.accessKeySecret));
-        videoUploadUtil.refreshUploadVideo(aliyunClient, videoid);
+                DefaultProfile.getProfile("cn-shanghai", VideoUploadUtil.accessKeyId, VideoUploadUtil.accessKeySecret));
+        VideoUploadUtil.refreshUploadVideo(aliyunClient, videoid);
         return response;
     }
 
@@ -115,7 +126,7 @@ public class AppVideoController {
     @RequestMapping(value = "get_delete_video", method = RequestMethod.POST)
     public Response deleteVideo(@ApiParam("视频唯一id") @RequestParam String videoid) {
         Response response = new Response();
-        String result = videoUploadUtil.deleteVideo(videoid);
+        String result = VideoUploadUtil.deleteVideo(videoid);
         if (response.getCode() == 200) {
             response.setMessage("删除成功");
         }
