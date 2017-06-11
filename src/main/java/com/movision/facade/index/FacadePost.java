@@ -33,6 +33,7 @@ import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.*;
 import com.movision.utils.file.FileUtil;
+import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
@@ -113,6 +114,9 @@ public class FacadePost {
 
     @Autowired
     private CompressImgService compressImgService;
+
+    @Autowired
+    private AliOSSClient aliOSSClient;
 
     public PostVo queryPostDetail(String postid, String userid, String type) {
 
@@ -489,14 +493,17 @@ public class FacadePost {
                 System.out.println("切割完成后的url===" + tmpurl);
                 //对本地服务器中切割好的图片进行压缩处理
                 String compressUrl = coverImgCompressUtil.ImgCompress(tmpurl);
+
+                //对压缩完的图片上传到阿里云
+                Map compressmap = aliOSSClient.uploadInciseStream(tmpurl, "img", "coverIncise");
                 //删除本地服务器切割的图片文件
                 File fdel2 = new File(tmpurl);
-                fdel2.delete();
+                //fdel2.delete();
                 File fdel = new File(String.valueOf(tmap.get("file")));
                 long l = fdel.length();
                 l = l / 1024;
                 String imgsize = l + "";
-                fdel.delete();//删除上传到本地的原图片文件
+                //fdel.delete();//删除上传到本地的原图片文件
                 /*Map<String, Object> map1 = new HashMap<>();
                 map1.put("url", url);
                 map1.put("name", FileUtil.getFileNameByUrl(url));
@@ -505,7 +512,7 @@ public class FacadePost {
 
                 //把切割好的原图和压缩图分别存放数据库中
                 CompressImg compressImg = new CompressImg();
-                compressImg.setCompressimgurl(compressUrl);
+                compressImg.setCompressimgurl(String.valueOf(compressmap.get("url")));
                 compressImg.setProtoimgsize(imgsize);
                 compressImg.setProtoimgurl(String.valueOf(tmap.get("url")));
                 compressImgService.insert(compressImg);
