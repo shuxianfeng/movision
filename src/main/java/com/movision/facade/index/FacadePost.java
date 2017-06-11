@@ -483,20 +483,24 @@ public class FacadePost {
                 }
 
 
-                //上传到服务器
+                //1上传到本地服务器
                 Map m = movisionOssClient.uploadMultipartFileObject(coverimg, "img");
-                //从服务器获取文件并剪切，删除原图，上传剪切后图片上传阿里云
+
+                //2从服务器获取文件并剪切，删除原图，上传剪切后图片上传阿里云
                 Map tmap = movisionOssClient.uploadImgerAndIncision(String.valueOf(m.get("url")), x, y, w, h);
                 String incisionUrl = String.valueOf(tmap.get("url"));
-                //获取本地服务器中切割完成后的图片
+
+                //3获取本地服务器中切割完成后的图片
                 String tmpurl = String.valueOf(tmap.get("incise"));
                 System.out.println("切割完成后的url===" + tmpurl);
-                //对本地服务器中切割好的图片进行压缩处理
+
+                //4对本地服务器中切割好的图片进行压缩处理
                 String compressUrl = coverImgCompressUtil.ImgCompress(tmpurl);
 
-                //对压缩完的图片上传到阿里云
-                Map compressmap = aliOSSClient.uploadInciseStream(tmpurl, "img", "coverIncise");
-                //删除本地服务器切割的图片文件
+                //5对压缩完的图片上传到阿里云
+                Map compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
+
+                //6删除本地服务器切割的图片文件
                 File fdel2 = new File(tmpurl);
                 //fdel2.delete();
                 File fdel = new File(String.valueOf(tmap.get("file")));
