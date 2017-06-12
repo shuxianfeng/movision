@@ -637,12 +637,12 @@ public class PostFacade {
         String str = null;
         if (postList != null) {
             Map map = new HashMap();
-            map.put("url", postList.getBannerimgurl());
+            map.put("url", postList.getCoverimg());
             //查找是否有缩略图，有显示缩略图，否则显示原图
             str = compressImgService.queryUrlIsCompress(map);
         }
         if (str != null) {
-            postList.setBannerimgurl(str);
+            postList.setCoverimg(str);
         }
         List<GoodsVo> goodses = null;
         if (postList != null) {
