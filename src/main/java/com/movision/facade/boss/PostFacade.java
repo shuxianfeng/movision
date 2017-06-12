@@ -1170,7 +1170,7 @@ public class PostFacade {
         String str = null;
         if (postCompile != null) {
             Map map = new HashMap();
-            map.put("url", postCompile.getBannerimgurl());
+            map.put("url", postCompile.getCoverimg());
             str = compressImgService.queryUrlIsCompress(map);
         }
         if (str != null) {
