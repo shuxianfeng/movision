@@ -82,21 +82,21 @@ public class CoverImgCompressUtil {
 
         if (size > 200) {
             String PATH = file;
-            String filename = FileUtil.getPicName(file);//获取图片文件名
+            //String filename = FileUtil.getPicName(file);//获取图片文件名
             // 1 生成压缩后的图片的url
             String tempfilename = file.substring(file.lastIndexOf("/") + 1);//获取文件名称+后缀
             String compress_file_path = compress_dir_path + tempfilename;
             log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
 
             // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
-            if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
+            if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(tempfilename)) {
                 // 压缩核心算法
-                compressFlag = compressJpgOrPng(w, h, compressFlag, filename, PATH, compress_dir_path);
+                compressFlag = compressJpgOrPng(w, h, compressFlag, tempfilename, PATH, compress_dir_path);
                 // 处理过的图片加入到已处理集合，防止重复压缩图片
-                existFileList.add(filename);
+                existFileList.add(tempfilename);
             } else {
                 compressFlag = true;
-                log.info("该图片已存在，不需要压缩，filename=" + filename);
+                log.info("该图片已存在，不需要压缩，filename=" + tempfilename);
             }
             if (compressFlag) {
                 //压缩成功后返回图片压缩后的url
