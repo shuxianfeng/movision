@@ -1174,7 +1174,7 @@ public class PostFacade {
             str = compressImgService.queryUrlIsCompress(map);
         }
         if (str != null) {
-            postCompile.setBannerimgurl(str);
+            postCompile.setCoverimg(str);
         }
         List<GoodsVo> goodses = null;
         if (postCompile != null) {
