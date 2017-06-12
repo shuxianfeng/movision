@@ -188,8 +188,8 @@ public class MsgCenterFacade {
                         comments.get(i).setUser(user);
                     }
                 } else {
-
                     comments.remove(i);
+                    i--;
                 }
             }
         }
@@ -320,6 +320,7 @@ public class MsgCenterFacade {
                     }
                 } else {
                     zanRecordVos.remove(i);
+                    i--;
                 }
             }
         }
