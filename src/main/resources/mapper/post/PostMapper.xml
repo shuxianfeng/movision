@@ -145,6 +145,7 @@
         FROM yw_post t1,yw_circle t2
         WHERE t1.id = #{postid,jdbcType=INTEGER}
           AND t1.circleid = t2.id
+          AND t1.isdel = '0'
     </select>
 
     <!--根据帖子封面原图url查询帖子封面压缩图url-->
