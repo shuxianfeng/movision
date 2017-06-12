@@ -128,60 +128,63 @@ public class FacadePost {
             parammap.put("userid", Integer.parseInt(userid));
         }
         PostVo vo = postService.queryPostDetail(parammap);
-        //根据帖子封面原图url查询封面压缩图url，如果存在替换，不存在就用原图
-        String compressurl = postService.queryCompressUrl(vo.getCoverimg());
-        if (null != compressurl && !compressurl.equals("") && !compressurl.equals("null")){
-            vo.setCoverimg(compressurl);
-        }
 
-        int rewardsum = postService.queryRewardSum(postid);//查询帖子被打赏的次数
-        vo.setRewardsum(rewardsum);
-        List<UserLike> nicknamelist = postService.queryRewardPersonNickname(postid);
-        vo.setRewardpersonnickname(nicknamelist);
-        if (type.equals("1") || type.equals("2")) {
-            Video video = postService.queryVideoUrl(Integer.parseInt(postid));
-            vo.setVideourl(video.getVideourl());
-            vo.setVideocoverimgurl(video.getBannerimgurl());
-        }
-        if (vo.getUserid() != -1) {//发帖人为普通用户时查询发帖人昵称和手机号
-            User user = userService.queryUserB(vo.getUserid());
-            if (user != null) {
-                vo.setUserid(user.getId());
-                vo.setNickname(user.getNickname());
-                vo.setPhone(user.getPhone());
-                vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
+        if (null != vo) {
+            //根据帖子封面原图url查询封面压缩图url，如果存在替换，不存在就用原图
+            String compressurl = postService.queryCompressUrl(vo.getCoverimg());
+            if (null != compressurl && !compressurl.equals("") && !compressurl.equals("null")) {
+                vo.setCoverimg(compressurl);
             }
-        } else {
-            User user = userService.queryUserB(vo.getUserid());
-            if (user != null) {
-                vo.setUserid(user.getId());
-                vo.setNickname(user.getNickname());
-                vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
-            }
-        }
-        Integer circleid=vo.getCircleid();
-        //查询帖子详情最下方推荐的4个热门圈子
-        List<Circle> hotcirclelist = circleService.queryHotCircle();
-        vo.setHotcirclelist(hotcirclelist);
-        //查询帖子中分享的商品
-        List<GoodsVo> shareGoodsList = goodsService.queryShareGoodsList(Integer.parseInt(postid));
-        vo.setShareGoodsList(shareGoodsList);
 
-        //对帖子内容进行脱敏处理
-        vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));//帖子主标题脱敏
-        if (null != vo.getSubtitle()) {
-            vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
-        }
-        vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
-        //数据插入mongodb
-        if (StringUtil.isNotEmpty(userid)) {
-            PostAndUserRecord postAndUserRecord = new PostAndUserRecord();
-            postAndUserRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
-            postAndUserRecord.setCrileid(circleid);
-            postAndUserRecord.setPostid(Integer.parseInt(postid));
-            postAndUserRecord.setUserid(Integer.parseInt(userid));
-            postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
-            postAndUserRecordService.insert(postAndUserRecord);
+            int rewardsum = postService.queryRewardSum(postid);//查询帖子被打赏的次数
+            vo.setRewardsum(rewardsum);
+            List<UserLike> nicknamelist = postService.queryRewardPersonNickname(postid);
+            vo.setRewardpersonnickname(nicknamelist);
+            if (type.equals("1") || type.equals("2")) {
+                Video video = postService.queryVideoUrl(Integer.parseInt(postid));
+                vo.setVideourl(video.getVideourl());
+                vo.setVideocoverimgurl(video.getBannerimgurl());
+            }
+            if (vo.getUserid() != -1) {//发帖人为普通用户时查询发帖人昵称和手机号
+                User user = userService.queryUserB(vo.getUserid());
+                if (user != null) {
+                    vo.setUserid(user.getId());
+                    vo.setNickname(user.getNickname());
+                    vo.setPhone(user.getPhone());
+                    vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
+                }
+            } else {
+                User user = userService.queryUserB(vo.getUserid());
+                if (user != null) {
+                    vo.setUserid(user.getId());
+                    vo.setNickname(user.getNickname());
+                    vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
+                }
+            }
+            Integer circleid = vo.getCircleid();
+            //查询帖子详情最下方推荐的4个热门圈子
+            List<Circle> hotcirclelist = circleService.queryHotCircle();
+            vo.setHotcirclelist(hotcirclelist);
+            //查询帖子中分享的商品
+            List<GoodsVo> shareGoodsList = goodsService.queryShareGoodsList(Integer.parseInt(postid));
+            vo.setShareGoodsList(shareGoodsList);
+
+            //对帖子内容进行脱敏处理
+            vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));//帖子主标题脱敏
+            if (null != vo.getSubtitle()) {
+                vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
+            }
+            vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
+            //数据插入mongodb
+            if (StringUtil.isNotEmpty(userid)) {
+                PostAndUserRecord postAndUserRecord = new PostAndUserRecord();
+                postAndUserRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
+                postAndUserRecord.setCrileid(circleid);
+                postAndUserRecord.setPostid(Integer.parseInt(postid));
+                postAndUserRecord.setUserid(Integer.parseInt(userid));
+                postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                postAndUserRecordService.insert(postAndUserRecord);
+            }
         }
         return vo;
     }
