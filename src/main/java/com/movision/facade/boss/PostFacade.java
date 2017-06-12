@@ -634,6 +634,11 @@ public class PostFacade {
      */
     public PostList queryPostParticulars(String postid) {
         PostList postList = postService.queryPostParticulars(Integer.parseInt(postid));
+        //查找是否有缩略图，有显示缩略图，否则显示原图
+        String str = compressImgService.queryUrlIsCompress(postList.getBannerimgurl());
+        if (str != null) {
+            postList.setBannerimgurl(str);
+        }
         List<GoodsVo> goodses = null;
         if (postList != null) {
             goodses = goodsService.queryGoods(postList.getId());
@@ -1156,6 +1161,11 @@ public class PostFacade {
      */
     public PostCompile queryPostByIdEcho(String postid) {
         PostCompile postCompile = postService.queryPostByIdEcho(Integer.parseInt(postid));//帖子编辑数据回显
+        //查找是否有缩略图，有显示缩略图，否则显示原图
+        String str = compressImgService.queryUrlIsCompress(postCompile.getBannerimgurl());
+        if (str != null) {
+            postCompile.setBannerimgurl(str);
+        }
         List<GoodsVo> goodses = null;
         if (postCompile != null) {
             goodses = goodsService.queryGoods(postCompile.getId());//根据帖子id查询被分享的商品
@@ -1364,13 +1374,7 @@ public class PostFacade {
                             vide.setVideourl(vid);
                         }
                         if (!StringUtils.isEmpty(bannerimgurl)) {
-                            //查找是否有缩略图，有显示缩略图，否则显示原图
-                            String str = compressImgService.queryUrlIsCompress(bannerimgurl);
-                            if (str != null) {
-                                vide.setBannerimgurl(str);
-                            } else {
-                                vide.setBannerimgurl(bannerimgurl);
-                            }
+                            vide.setBannerimgurl(bannerimgurl);
                         }
                         vide.setIntime(new Date());
                         int tt = videoService.queryVideoByID(pid);//查询帖子是否有发视频
