@@ -14,4 +14,6 @@ public interface CompressImgMapper {
     CompressImg getProtoImg(String imgurl);
 
     int queryCount(CompressImg compressImg);
+
+    String queryUrlIsCompress(String url);
 }

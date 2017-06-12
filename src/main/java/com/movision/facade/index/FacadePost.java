@@ -502,12 +502,12 @@ public class FacadePost {
 
                 //6删除本地服务器切割的图片文件
                 File fdel2 = new File(tmpurl);
-                //fdel2.delete();
+                fdel2.delete();
                 File fdel = new File(String.valueOf(tmap.get("file")));
                 long l = fdel.length();
                 l = l / 1024;
                 String imgsize = l + "";
-                //fdel.delete();//删除上传到本地的原图片文件
+                fdel.delete();//删除上传到本地的原图片文件
                 /*Map<String, Object> map1 = new HashMap<>();
                 map1.put("url", url);
                 map1.put("name", FileUtil.getFileNameByUrl(url));
