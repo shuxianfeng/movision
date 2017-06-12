@@ -62,4 +62,8 @@
             </if>
         </trim>
     </insert>
+
+    <select id="" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT compressimgurl FROM yw_compress_img WHERE protoimgurl=#{url,jdbcType=VARCHAR}
+    </select>
 </mapper>

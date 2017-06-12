@@ -28,4 +28,20 @@ public class CompressImgService {
             throw e;
         }
     }
+
+    /**
+     * 查询是否有缩略图
+     *
+     * @param url
+     * @return
+     */
+    public String queryUrlIsCompress(String url) {
+        try {
+            logger.info("查询是否有缩略图");
+            return compressImgMapper.queryUrlIsCompress(url);
+        } catch (Exception e) {
+            logger.error("查询帖子封面是否有缩略图异常", e);
+            throw e;
+        }
+    }
 }

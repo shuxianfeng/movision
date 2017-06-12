@@ -22,6 +22,7 @@ import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
+import com.movision.mybatis.compressImg.service.CompressImgService;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.period.entity.Period;
@@ -117,9 +118,11 @@ public class PostFacade {
     @Autowired
     private ActivityContributeService activityContributeService;
 
-
     @Autowired
     private PointRecordFacade pointRecordFacade;
+
+    @Autowired
+    private CompressImgService compressImgService;
 
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
@@ -631,7 +634,15 @@ public class PostFacade {
      */
     public PostList queryPostParticulars(String postid) {
         PostList postList = postService.queryPostParticulars(Integer.parseInt(postid));
-        List<GoodsVo> goodses = goodsService.queryGoods(postList.getId());
+        //查找是否有缩略图，有显示缩略图，否则显示原图
+        String str = compressImgService.queryUrlIsCompress(postList.getBannerimgurl());
+        if (str != null) {
+            postList.setBannerimgurl(str);
+        }
+        List<GoodsVo> goodses = null;
+        if (postList != null) {
+            goodses = goodsService.queryGoods(postList.getId());
+        }
         if (goodses != null) {
             postList.setPromotionGoods(goodses);
         }
@@ -1149,8 +1160,16 @@ public class PostFacade {
      * @return
      */
     public PostCompile queryPostByIdEcho(String postid) {
-        PostCompile postCompile = postService.queryPostByIdEcho(Integer.parseInt(postid));
-        List<GoodsVo> goodses = goodsService.queryGoods(postCompile.getId());
+        PostCompile postCompile = postService.queryPostByIdEcho(Integer.parseInt(postid));//帖子编辑数据回显
+        //查找是否有缩略图，有显示缩略图，否则显示原图
+        String str = compressImgService.queryUrlIsCompress(postCompile.getBannerimgurl());
+        if (str != null) {
+            postCompile.setBannerimgurl(str);
+        }
+        List<GoodsVo> goodses = null;
+        if (postCompile != null) {
+            goodses = goodsService.queryGoods(postCompile.getId());//根据帖子id查询被分享的商品
+        }
         if (goodses != null) {
             postCompile.setGoodses(goodses);
         }
@@ -1949,7 +1968,10 @@ public class PostFacade {
      */
     public PostActiveList queryActiveById(Integer id) {
         PostActiveList postActiveList = postService.queryActiveById(id);
-        List<GoodsVo> goodses = goodsService.queryGoods(postActiveList.getId());
+        List<GoodsVo> goodses = null;
+        if (postActiveList != null) {
+            goodses = goodsService.queryGoods(postActiveList.getId());
+        }
         postActiveList.setGoodss(goodses);
         return postActiveList;
     }

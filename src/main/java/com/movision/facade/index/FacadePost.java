@@ -49,6 +49,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -502,22 +503,18 @@ public class FacadePost {
 
                 //6删除本地服务器切割的图片文件
                 File fdel2 = new File(tmpurl);
-                //fdel2.delete();
+                fdel2.delete();
                 File fdel = new File(String.valueOf(tmap.get("file")));
                 long l = fdel.length();
-                l = l / 1024;
-                String imgsize = l + "";
-                //fdel.delete();//删除上传到本地的原图片文件
-                /*Map<String, Object> map1 = new HashMap<>();
-                map1.put("url", url);
-                map1.put("name", FileUtil.getFileNameByUrl(url));
-                map1.put("width", tmap.get("width"));
-                map1.put("height", tmap.get("height"));*/
+                float size = (float) l / 1024 / 1024;
+                DecimalFormat df = new DecimalFormat("0.00");//格式化小数，不足的补0
+                String filesize = df.format(size);//返回的是String类型的
+                fdel.delete();//删除上传到本地的原图片文件
 
                 //把切割好的原图和压缩图分别存放数据库中
                 CompressImg compressImg = new CompressImg();
                 compressImg.setCompressimgurl(String.valueOf(compressmap.get("url")));
-                compressImg.setProtoimgsize(imgsize);
+                compressImg.setProtoimgsize(filesize);
                 compressImg.setProtoimgurl(String.valueOf(tmap.get("url")));
                 compressImgService.insert(compressImg);
 

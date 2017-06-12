@@ -1351,13 +1351,13 @@ public class GoodsService {
     /**
      * 根据帖子id查询被分享的商品
      *
-     * @param goodsid
+     * @param postid
      * @return
      */
-    public List<GoodsVo> queryGoods(Integer goodsid) {
+    public List<GoodsVo> queryGoods(Integer postid) {
         try {
             log.info("根据帖子id查询被分享的商品");
-            return goodsMapper.queryGoods(goodsid);
+            return goodsMapper.queryGoods(postid);
         } catch (Exception e) {
             log.error("根据帖子id查询被分享的商品异常");
             throw e;

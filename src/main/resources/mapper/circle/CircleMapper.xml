@@ -532,10 +532,9 @@
             c.scope=#{vip,jdbcType=INTEGER} OR
         </if>
         c.scope=2)
-        AND(
+        OR (
         c.id=(SELECT id FROM yw_circle WHERE phone=(SELECT phone FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}))
-        OR c.id IN (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone=(SELECT
-        phone FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}))))
+        OR c.id IN (SELECT circleid FROM yw_circle_manager WHERE userid=#{userid,jdbcType=INTEGER})))
         <if test="categoryid != null">
             AND c.category=#{categoryid,jdbcType=INTEGER}
         </if>

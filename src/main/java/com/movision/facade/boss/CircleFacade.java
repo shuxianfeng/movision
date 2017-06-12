@@ -525,6 +525,12 @@ public class CircleFacade {
                 circleList = circleService.queryCircleListByUserRole(ur);//查询用户可发帖的圈子列表
             } else if (ur.getCommon() == 1 || loginid == "-1") {
                 circleList = circleService.queryCircleList();//查询所有圈子列表
+            } else {
+                Map map = new HashMap();
+                map.put("vip", vip);
+                map.put("type", type);
+                map.put("categoryid", categoryid);
+                circleList = circleService.queryCircleListTo(map);
             }
         } else {
             Map map = new HashMap();
