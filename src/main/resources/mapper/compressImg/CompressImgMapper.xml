@@ -63,7 +63,7 @@
         </trim>
     </insert>
 
-    <select id="" resultType="java.lang.String" parameterType="java.lang.String">
+    <select id="queryUrlIsCompress" resultType="java.lang.String" parameterType="java.util.Map">
         SELECT compressimgurl FROM yw_compress_img WHERE protoimgurl=#{url,jdbcType=VARCHAR}
     </select>
 </mapper>

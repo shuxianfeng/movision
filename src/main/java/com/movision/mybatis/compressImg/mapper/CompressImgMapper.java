@@ -3,6 +3,8 @@ package com.movision.mybatis.compressImg.mapper;
 import com.movision.mybatis.compressImg.entity.CompressImg;
 import org.springframework.stereotype.Repository;
 
+import java.util.Map;
+
 @Repository
 public interface CompressImgMapper {
     int insert(CompressImg record);
@@ -15,5 +17,5 @@ public interface CompressImgMapper {
 
     int queryCount(CompressImg compressImg);
 
-    String queryUrlIsCompress(String url);
+    String queryUrlIsCompress(Map map);
 }

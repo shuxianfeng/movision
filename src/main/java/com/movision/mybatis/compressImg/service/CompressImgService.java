@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 /**
  * @Author zhurui
  * @Date 2017/6/10 19:04
@@ -32,13 +34,13 @@ public class CompressImgService {
     /**
      * 查询是否有缩略图
      *
-     * @param url
+     * @param map
      * @return
      */
-    public String queryUrlIsCompress(String url) {
+    public String queryUrlIsCompress(Map map) {
         try {
             logger.info("查询是否有缩略图");
-            return compressImgMapper.queryUrlIsCompress(url);
+            return compressImgMapper.queryUrlIsCompress(map);
         } catch (Exception e) {
             logger.error("查询帖子封面是否有缩略图异常", e);
             throw e;

@@ -634,8 +634,13 @@ public class PostFacade {
      */
     public PostList queryPostParticulars(String postid) {
         PostList postList = postService.queryPostParticulars(Integer.parseInt(postid));
-        //查找是否有缩略图，有显示缩略图，否则显示原图
-        String str = compressImgService.queryUrlIsCompress(postList.getBannerimgurl());
+        String str = null;
+        if (postList != null) {
+            Map map = new HashMap();
+            map.put("url", postList.getBannerimgurl());
+            //查找是否有缩略图，有显示缩略图，否则显示原图
+            str = compressImgService.queryUrlIsCompress(map);
+        }
         if (str != null) {
             postList.setBannerimgurl(str);
         }
@@ -1162,7 +1167,12 @@ public class PostFacade {
     public PostCompile queryPostByIdEcho(String postid) {
         PostCompile postCompile = postService.queryPostByIdEcho(Integer.parseInt(postid));//帖子编辑数据回显
         //查找是否有缩略图，有显示缩略图，否则显示原图
-        String str = compressImgService.queryUrlIsCompress(postCompile.getBannerimgurl());
+        String str = null;
+        if (postCompile != null) {
+            Map map = new HashMap();
+            map.put("url", postCompile.getBannerimgurl());
+            str = compressImgService.queryUrlIsCompress(map);
+        }
         if (str != null) {
             postCompile.setBannerimgurl(str);
         }
