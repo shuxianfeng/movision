@@ -45,7 +45,7 @@ public class AppPostController {
     @Autowired
     private MovisionOssClient movisionOssClient;
 
-    @ApiOperation(value = "口帖子详情数据返回接", notes = "用于返回请求帖子详情内容", response = Response.class)
+    @ApiOperation(value = "帖子详情数据返回接口", notes = "用于返回请求帖子详情内容", response = Response.class)
     @RequestMapping(value = "detail", method = RequestMethod.POST)
     public Response queryPostDetail(@ApiParam(value = "帖子id") @RequestParam String postid,
                                     @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid,
