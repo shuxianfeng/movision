@@ -115,6 +115,12 @@ public class AppLoginController {
 
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(true);
+            if (null == session) {
+                log.warn("获取session为null");
+                response.setCode(400);
+                response.setMessage("请重新获取验证码");
+                return response;
+            }
             String session_phone = (String) session.getAttribute("phone");
             log.debug("session_phone:" + session_phone);
             String param_phone = user.getPhone();
