@@ -33,7 +33,7 @@ import java.util.Map;
  * @Date 2017/3/3 10:37
  */
 @RestController
-@RequestMapping("boss/video/")
+@RequestMapping("boss/post/video/")
 public class VideoController {
 
     @Autowired
@@ -101,9 +101,9 @@ public class VideoController {
         Response response = new Response();
         DefaultAcsClient aliyunClient;
         aliyunClient = new DefaultAcsClient(
-                DefaultProfile.getProfile("cn-shanghai", videoUploadUtil.accessKeyId, videoUploadUtil.accessKeySecret));
+                DefaultProfile.getProfile("cn-shanghai", VideoUploadUtil.accessKeyId, VideoUploadUtil.accessKeySecret));
 
-        Map videoid = videoUploadUtil.createUploadVideo(aliyunClient, fileName, description, tatges, title, filesize);
+        Map videoid = VideoUploadUtil.createUploadVideo(aliyunClient, fileName, description, tatges, title, filesize);
         if (response.getCode() == 200) {
             response.setMessage("调用成功");
         }
@@ -119,8 +119,8 @@ public class VideoController {
         Response response = new Response();
         DefaultAcsClient aliyunClient;
         aliyunClient = new DefaultAcsClient(
-                DefaultProfile.getProfile("cn-shanghai", videoUploadUtil.accessKeyId, videoUploadUtil.accessKeySecret));
-        videoUploadUtil.refreshUploadVideo(aliyunClient, videoid);
+                DefaultProfile.getProfile("cn-shanghai", VideoUploadUtil.accessKeyId, VideoUploadUtil.accessKeySecret));
+        VideoUploadUtil.refreshUploadVideo(aliyunClient, videoid);
         return response;
     }
 
@@ -135,7 +135,7 @@ public class VideoController {
     @RequestMapping(value = "get_delete_video", method = RequestMethod.POST)
     public Response deleteVideo(@ApiParam("视频唯一id") @RequestParam String videoid) {
         Response response = new Response();
-        String result = videoUploadUtil.deleteVideo(videoid);
+        String result = VideoUploadUtil.deleteVideo(videoid);
         if (response.getCode() == 200) {
             response.setMessage("删除成功");
         }
