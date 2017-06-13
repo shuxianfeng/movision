@@ -525,22 +525,32 @@
 
     <select id="queryCircleListByUserRole" parameterType="com.movision.mybatis.user.entity.UserRole"
             resultType="com.movision.mybatis.circle.entity.CircleVo">
-        SELECT c.id,c.scope,c.name,c.category,cc.categoryname FROM yw_circle c LEFT JOIN yw_circle_category cc ON
-        cc.id=c.category WHERE
-        (
+        SELECT c.id,c.category,c.name,c.scope,cc.categoryname
+        FROM yw_circle c LEFT JOIN yw_circle_category cc ON cc.id=c.category
+        WHERE (
         <if test="vip == 1">
-            c.scope=#{vip,jdbcType=INTEGER} OR
+            (c.scope=#{vip,jdbcType=INTEGER} AND c.status<![CDATA[ <> ]]>0
+            <if test="categoryid != null">
+                AND c.category=#{categoryid,jdbcType=INTEGER}
+            </if>) OR
         </if>
-        c.scope=2)
-        OR (
-        c.id=(SELECT id FROM yw_circle WHERE phone=(SELECT phone FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}))
-        OR c.id IN (SELECT circleid FROM yw_circle_manager WHERE userid=#{userid,jdbcType=INTEGER})))
+        (c.scope=2
         <if test="categoryid != null">
             AND c.category=#{categoryid,jdbcType=INTEGER}
         </if>
+        AND c.status<![CDATA[ <> ]]>0)
+        )
+        OR
+        (c.userid=#{userid,jdbcType=INTEGER} OR c.id IN (SELECT circleid FROM yw_circle_manager WHERE
+        userid=#{userid,jdbcType=INTEGER}))
+        <if test="categoryid != null">
+            AND c.category=#{categoryid,jdbcType=INTEGER}
+        </if>
+        AND c.status<![CDATA[ <> ]]>0
         <if test="type == 5">
             GROUP BY c.category
         </if>
+
     </select>
 
     <select id="queryCircleListTo" resultType="com.movision.mybatis.circle.entity.CircleVo"
