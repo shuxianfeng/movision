@@ -503,6 +503,7 @@ public class FacadePost {
                 String compressUrl = coverImgCompressUtil.ImgCompress(tmpurl);
                 System.out.println("压缩完的切割图片url==" + compressUrl);
 
+
                 //5对压缩完的图片上传到阿里云
                 Map compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
 
@@ -562,6 +563,159 @@ public class FacadePost {
                     //向帖子视频表中插入一条视频记录
                     videoService.insertVideoById(video);
                 }
+                //再保存帖子中分享的商品列表(如果商品id字段不为空)
+                if (!StringUtils.isEmpty(proids)) {
+                    String[] proidstr = proids.split(",");
+                    List<PostShareGoods> postShareGoodsList = new ArrayList<>();
+                    for (int i = 0; i < proidstr.length; i++) {
+                        PostShareGoods postShareGoods = new PostShareGoods();
+                        int postid = flag;
+                        int goodsid = Integer.parseInt(proidstr[i]);
+                        postShareGoods.setPostid(postid);
+                        postShareGoods.setGoodsid(goodsid);
+                        postShareGoodsList.add(postShareGoods);
+                    }
+                    postService.insertPostShareGoods(postShareGoodsList);
+                }
+
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
+
+                map.put("flag", flag);
+                return map;
+
+            } catch (Exception e) {
+                log.error("系统异常，APP发帖失败");
+                map.put("flag", -2);
+                e.printStackTrace();
+                return map;
+            }
+        } else {
+            log.info("该用户不具备发帖权限");
+            map.put("flag", -1);
+            return map;
+        }
+    }
+
+
+    @Transactional
+    @CacheEvict(value = "indexData", key = "'index_data'")
+    public Map releasePostByPCTest(String userid, String circleid, String title, String postcontent, String isactive, String proids) {
+        Map map = new HashMap();
+
+        //这里需要根据userid判断当前登录的用户是否有发帖权限
+        //查询当前圈子的开放范围
+        int scope = circleService.queryCircleScope(Integer.parseInt(circleid));
+        //查询当前圈子的所有者(返回所有者的用户id)
+        User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
+        //查询当前圈子的所有管理员列表
+        List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
+
+        int mark = 0;//定义一个userid比对标志位
+        if (manageList.size() > 0) {
+            for (int i = 0; i < manageList.size(); i++) {
+                if (manageList.get(i).getId() == Integer.parseInt(userid)) {
+                    //是圈子管理员时赋值为1
+                    mark = 1;
+                }
+            }
+        }
+        int lev = owner.getLevel();//用户等级
+        //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.所有者和大V可发时，发帖用户即为大V
+        if (scope == 2 || (Integer.parseInt(userid) == owner.getId() || mark == 1) || (scope == 1 && lev >= 1)) {
+
+            try {
+                log.info("APP前端用户开始请求发帖");
+
+                Post post = new Post();
+                post.setCircleid(Integer.parseInt(circleid));
+                post.setTitle(title);
+               /* if (StringUtil.isNotEmpty(postcontent)) {
+                    //内容转换
+                    Map con = jsoupCompressImg.compressImg(request, postcontent);
+                    System.out.println(con);
+                    if ((int) con.get("code") == 200) {
+                        String str = con.get("content").toString();
+                        postcontent = str.replace("\\", "");
+                    } else {
+                        log.error("APP端帖子图片内容转换异常");
+                    }
+                }*/
+
+
+             /*   //1上传到本地服务器
+                Map m = movisionOssClient.uploadMultipartFileObject(coverimg, "img");
+
+                //2从服务器获取文件并剪切，删除原图，上传剪切后图片上传阿里云
+                Map tmap = movisionOssClient.uploadImgerAndIncision(String.valueOf(m.get("url")), x, y, w, h);
+                String incisionUrl = String.valueOf(tmap.get("url"));
+                System.out.println("原图url==" + String.valueOf(tmap.get("file")));
+
+                //3获取本地服务器中切割完成后的图片
+                String tmpurl = String.valueOf(tmap.get("incise"));
+                System.out.println("切割完成后的图片url===" + tmpurl);
+
+                //4对本地服务器中切割好的图片进行压缩处理
+                String compressUrl = coverImgCompressUtil.ImgCompress(tmpurl);
+                System.out.println("压缩完的切割图片url==" + compressUrl);
+
+
+                //5对压缩完的图片上传到阿里云
+                Map compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
+
+                //6删除本地服务器切割的图片文件
+                //----(1)
+                File fdel2 = new File(tmpurl);
+                fdel2.delete();//切割后的原图删除
+                //----(2)
+                File fdel = new File(String.valueOf(tmap.get("file")));
+                long l = fdel.length();
+                float size = (float) l / 1024 / 1024;
+                DecimalFormat df = new DecimalFormat("0.00");//格式化小数，不足的补0
+                String filesize = df.format(size);//返回的是String类型的
+                fdel.delete();//删除上传到本地的原图片文件
+                //----(3)
+                File fdel3 = new File(compressUrl);
+                fdel3.delete();//删除压缩完成的图片
+*/
+                //把切割好的原图和压缩图分别存放数据库中
+               /* CompressImg compressImg = new CompressImg();
+                compressImg.setCompressimgurl(String.valueOf(compressmap.get("url")));
+                compressImg.setProtoimgsize(filesize);
+                compressImg.setProtoimgurl(String.valueOf(tmap.get("url")));
+                compressImgService.insert(compressImg);*/
+
+                post.setPostcontent(postcontent);//帖子内容
+                post.setZansum(0);//新发帖全部默认为0次
+                post.setCommentsum(0);//被评论次数
+                post.setForwardsum(0);//被转发次数
+                post.setCollectsum(0);//被收藏次数
+                post.setIsactive(Integer.parseInt(isactive));//是否为活动 0 帖子 1 活动
+                post.setIshot(0);//是否设为热门：默认0否
+                post.setIsessence(0);//是否设为精选：默认0否
+                post.setIsessencepool(0);//是否设为精选池中的帖子
+                post.setIntime(new Date());//帖子发布时间
+                post.setTotalpoint(0);//帖子综合评分
+                post.setIsdel(0);//上架
+                post.setUserid(Integer.parseInt(userid));
+                //插入帖子
+                postService.releasePost(post);
+
+                int flag = post.getId();//返回的主键--帖子id
+                /*if (!type.equals("0")) {
+                    Video video = new Video();
+                    video.setPostid(flag);
+                    video.setIsrecommend(0);
+                    video.setIsbanner(0);
+                    video.setBannerimgurl(incisionUrl);//简化APP，直接取帖子封面图片为原生视频的封面(运营后台不变)
+                    if (type.equals("1")) {
+                        video.setVideourl(vid);//原生视频上传链接
+                    } else if (type.equals("2")) {
+                        video.setVideourl(videourl);//分享视频链接
+                    }
+                    video.setIntime(new Date());
+                    //向帖子视频表中插入一条视频记录
+                    videoService.insertVideoById(video);
+                }*/
                 //再保存帖子中分享的商品列表(如果商品id字段不为空)
                 if (!StringUtils.isEmpty(proids)) {
                     String[] proidstr = proids.split(",");
@@ -903,6 +1057,25 @@ public class FacadePost {
             map.put("flag", -1);
             return map;
         }
+    }
+
+    public Map updateCoverImgByPC(MultipartFile file, String x, String y, String w, String h) {
+        //1上传到服务器
+        Map m = movisionOssClient.uploadMultipartFileObject(file, "img");
+        //2从服务器获取文件并剪切，删除原图，上传剪切后图片上传阿里云
+        Map map = movisionOssClient.uploadImgerAndIncision(String.valueOf(m.get("url")), x, y, w, h);
+        String url = String.valueOf(map.get("url"));
+        //3获取本地服务器中切割完成后的图片
+        String tmpurl = String.valueOf(map.get("incise"));
+        System.out.println("切割完成后的图片url===" + tmpurl);
+
+        //4对本地服务器中切割好的图片进行压缩处理
+        String compressUrl = coverImgCompressUtil.ImgCompress(tmpurl);
+        System.out.println("压缩完的切割图片url==" + compressUrl);
+
+        //5对压缩完的图片上传到阿里云
+        Map compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
+        return compressmap;
     }
 
 

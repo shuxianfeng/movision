@@ -217,6 +217,32 @@ public class AppPostController {
         return response;
     }
 
+
+    @ApiOperation(value = "PC官网发布帖子(改版)", notes = "用于官网发布帖子的接口（改版）", response = Response.class)
+    @RequestMapping(value = "releasePostByPC_Test", method = RequestMethod.POST)
+    public Response releasePostByPCTest(@ApiParam(value = "用户id") @RequestParam String userid,
+                                        @ApiParam(value = "所属圈子id") @RequestParam String circleid,
+                                        @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
+                                        @ApiParam(value = "帖子内容") @RequestParam String postcontent,
+                                        @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,
+                                        @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids) {
+        Response response = new Response();
+
+        Map count = facadePost.releasePostByPCTest(userid, circleid, title, postcontent, isactive, proids);
+
+        if (count.get("flag").equals(-2)) {
+            response.setCode(300);
+            response.setMessage("系统异常，APP发帖失败");
+        } else if (count.get("flag").equals(-1)) {
+            response.setCode(201);
+            response.setMessage("用户不具备发帖权限");
+        } else {
+            response.setCode(200);
+            response.setMessage("发帖成功");
+        }
+        return response;
+    }
+
     /**
      * PC官网上传帖子封面图片
      *
@@ -230,17 +256,8 @@ public class AppPostController {
                                        @ApiParam(value = "Y坐标") @RequestParam String y,
                                        @ApiParam(value = "宽") @RequestParam String w,
                                        @ApiParam(value = "高") @RequestParam String h) {
-        //上传到服务器
-        Map m = movisionOssClient.uploadMultipartFileObject(file, "img");
-        //从服务器获取文件并剪切，删除原图，上传剪切后图片上传阿里云
-        Map map = movisionOssClient.uploadImgerAndIncision(String.valueOf(m.get("url")), x, y, w, h);
-        String url = String.valueOf(map.get("url"));
-        Map<String, Object> map1 = new HashMap<>();
-        map1.put("url", url);
-        map1.put("name", FileUtil.getFileNameByUrl(url));
-        map1.put("width", map.get("width"));
-        map1.put("height", map.get("height"));
-        return new Response(map1);
+        Map map = facadePost.updateCoverImgByPC(file, x, y, w, h);
+        return new Response(map);
     }
 
     @ApiOperation(value = "图片压缩", notes = "用于图片压缩测试", response = Response.class)
