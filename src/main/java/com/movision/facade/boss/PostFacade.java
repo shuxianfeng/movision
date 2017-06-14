@@ -46,6 +46,8 @@ import com.movision.utils.VideoUploadUtil;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -844,6 +846,162 @@ public class PostFacade {
                         pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
                     }
                 }
+                map.put("resault", 1);
+                // map.put("vedioid", vedioid);
+                return map;
+            } else {
+                map.put("resault", -2);
+                return map;
+            }
+        } else {
+            map.put("resault", -1);
+            map.put("massge", "权限不足");
+            return map;
+        }
+    }
+
+    /**
+     * 改版发帖
+     *
+     * @param request
+     * @param title
+     * @param subtitle
+     * @param circleid
+     * @param userid
+     * @param postcontent
+     * @param isessence
+     * @param ishot
+     * @param orderid
+     * @param time
+     * @param goodsid
+     * @param loginid
+     * @return
+     */
+    @Transactional
+    @CacheEvict(value = "indexData", key = "'index_data'")
+    public Map addPostTest(HttpServletRequest request, String title, String subtitle, String circleid,
+                           String userid, String postcontent, String isessence, String ishot, String orderid, String time, String goodsid, String loginid) {
+        PostTo post = new PostTo();
+        Map map = new HashedMap();
+        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.add.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(circleid));
+        if (res.get("resault").equals(1)) {
+            if (postcontent.length() < 20000) {
+                if (StringUtil.isNotEmpty(title)) {
+                    post.setTitle(title);//帖子标题
+                }
+                if (StringUtil.isNotEmpty(subtitle)) {
+                    post.setSubtitle(subtitle);//帖子副标题
+                }
+                post.setIsactive("0");//设置状态为帖子
+                if (StringUtil.isNotEmpty(postcontent)) {
+
+                    //内容转换
+                    Map con = jsoupCompressImg.compressImg(request, postcontent);
+                    System.out.println(con);
+                    if ((int) con.get("code") == 200) {
+                        String str = con.get("content").toString();
+                        str = str.replace("\\", "");
+                        post.setPostcontent(str);//帖子内容
+                    } else {
+                        logger.error("帖子内容转换异常");
+                        post.setPostcontent(postcontent);
+                    }
+                }
+                post.setIntime(new Date());//插入时间
+                if (StringUtil.isNotEmpty(ishot)) {
+                    post.setIshot(ishot);//是否为圈子精选
+                }
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                Date d = null;
+                if (StringUtil.isNotEmpty(isessence)) {
+                    if (isessence != "0") {//判断是否为加精
+                        post.setIsessence(isessence);//是否为首页精选
+                        if (StringUtil.isNotEmpty(orderid)) {
+                            post.setOrderid(Integer.parseInt(orderid));
+                        }
+                        if (StringUtil.isNotEmpty(time)) {
+                            try {
+                                d = format.parse(time);
+                                post.setEssencedate(d);
+                            } catch (ParseException e) {
+                                log.error("时间插入异常");
+                            }
+                        }
+
+                    }
+                }
+
+                //-------解析JSON字符串，把视频路径，图片路径分别存放
+                /*String vid=null;
+                String vurl=null;
+                // Map<String,List<Map<String,String>>> postmap=new HashMap<>();模型
+                JSONObject J=JSONObject.fromObject(postcontent);//转换为json对象
+                JSONArray jsonArray=JSONArray.fromObject(J.get("postcontent"));//取出json中list集合数组
+                for (int i = 0; i<jsonArray.size(); i++){
+                    JSONObject jsonObject=jsonArray.getJSONObject(i);//遍历出每一个list元素
+                    //String orderids=jsonObject.get("orderid").toString();
+                    String types=jsonObject.getString("type").toString();//类型
+                    ///String value=jsonObject.getString("value").toString();
+                    String whs=jsonObject.getString("wh").toString();//宽高
+                    //String dirs=jsonObject.getString("dir").toString();
+                    if (StringUtil.isBlank(whs) && types.equals(2)){//没有宽高，是视频,保存视频记录
+                        //把必要字段存放在变量中，当帖子发布完成后添加视频表中
+                    }
+                    if (StringUtil.isNotBlank(types)){
+                        if (types.equals(2)){//代表是视频贴
+                            post.setType("1");
+                        }else {
+                            post.setType("0");
+                        }
+                    }
+                }*/
+                post.setUserid(userid);
+                post.setIsdel("0");
+                postService.addPost(post);//添加帖子
+                /*Integer pid = post.getId();//获取到刚刚添加的帖子id
+                Video vide = new Video();
+                vide.setPostid(pid);
+                vide.setVideourl(vid);
+                vide.setBannerimgurl("");
+                vide.setIntime(new Date());
+                videoService.insertVideoById(vide);//添加视频表*/
+                //查询圈子名称
+                Integer in = 0;
+                if (StringUtil.isNotEmpty(goodsid)) {//帖子添加商品
+                    Integer pid = post.getId();//获取到刚刚添加的帖子id
+                    String[] lg = goodsid.split(",");//以逗号分隔
+                    for (int i = 0; i < lg.length; i++) {
+                        Map addgoods = new HashedMap();
+                        addgoods.put("postid", pid);
+                        addgoods.put("goodsid", lg[i]);
+                        int goods = postService.insertGoods(addgoods);//添加帖子分享的商品
+                        map.put("result", goods);
+                    }
+                }
+
+                PostProcessRecord pprd = new PostProcessRecord();
+                if (ishot != null) {
+                    pprd.setIshot(Integer.parseInt(ishot));
+                }
+                pprd.setPostid(post.getId());
+                if (isessence != null) {
+                    pprd.setIsesence(Integer.parseInt(isessence));
+                }
+                postProcessRecordService.insertProcessRecord(pprd);//插入精选、热门记录
+                if (StringUtil.isNotEmpty(ishot)) {
+                    if (ishot.equals("1")) {
+                        pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                    }
+                }
+                if (StringUtil.isNotEmpty(isessence)) {
+                    if (isessence.equals("1")) {
+                        pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                    }
+                }
+                if (Integer.parseInt(loginid) != -1) {
+                    pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                }
+
                 map.put("resault", 1);
                 // map.put("vedioid", vedioid);
                 return map;

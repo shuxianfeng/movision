@@ -451,6 +451,31 @@ public class PostController {
         return response;
     }
 
+
+    @ApiOperation(value = "添加帖子", notes = "添加帖子", response = Response.class)
+    @RequestMapping(value = "/add_post_test", method = RequestMethod.POST)
+    public Response addPostTest(HttpServletRequest request,
+                                @ApiParam(value = "帖子标题") @RequestParam String title,//帖子标题
+                                @ApiParam(value = "帖子副标题") @RequestParam String subtitle,//帖子副标题
+                                @ApiParam(value = "圈子id") @RequestParam String circleid,//圈子id
+                                @ApiParam(value = "发帖人") @RequestParam String userid,//发帖人
+                                @ApiParam(value = "内容") @RequestParam String postcontent,//帖子内容
+                                @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
+                                @ApiParam(value = "圈子精选") @RequestParam(required = false) String ishot,//精选池中的帖子圈子精选贴
+                                @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,//精选排序
+                                @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String time,//精选日期
+                                @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
+                                @ApiParam(value = "登录用户") @RequestParam String loginid) {
+        Response response = new Response();
+        Map resaut = postFacade.addPostTest(request, title, subtitle, circleid, userid, postcontent,
+                isessence, ishot, orderid, time, goodsid, loginid);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(resaut);
+        return response;
+    }
+
     /**
      * 后台管理-添加活动帖子
      * @param title
@@ -996,13 +1021,17 @@ public class PostController {
      */
     @ApiOperation(value = "上传帖子相关图片", notes = "上传帖子相关图片", response = Response.class)
     @RequestMapping(value = {"/upload_post_img"}, method = RequestMethod.POST)
-    public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file,
+    public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile[] file,
                                   @ApiParam(value = "用于选择上传位置（1:封面 2:内容图片）") @RequestParam String type) {
         Map m = new HashMap();
         if (type.equals("1")) {
-            m = movisionOssClient.uploadObject(file, "img", "postCover");
+            for (int i = 0; i < file.length; i++) {
+                m = movisionOssClient.uploadObject(file[i], "img", "postCover");
+            }
         } else if (type.equals("2")) {
-            m = movisionOssClient.uploadObject(file, "img", "post");
+            for (int i = 0; i < file.length; i++) {
+                m = movisionOssClient.uploadObject(file[i], "img", "post");
+            }
         }
         String url = String.valueOf(m.get("url"));
         Map<String, Object> map = new HashMap<>();
