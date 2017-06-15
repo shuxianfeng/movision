@@ -223,9 +223,9 @@ public class JsoupCompressImg {
         //转json字符串为json对象
         Map<String, Object> map = new LinkedHashMap<>();
         try {
-            JSONObject responseJson = JSONObject.parseObject(content);
-            String moduleContent = (String)responseJson.get("postcontent");//正文模块字符串
-            JSONArray moduleArray = JSONArray.fromObject(moduleContent);
+//            JSONObject responseJson = JSONObject.parseObject(content);
+//            String moduleContent = (String)responseJson.get("postcontent");//正文模块字符串
+            JSONArray moduleArray = JSONArray.fromObject(content);
 
             String compress_dir_path = PropertiesLoader.getValue("post.tempimg.domain");//压缩图片路径url
 
