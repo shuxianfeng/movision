@@ -6,7 +6,7 @@
         <result column="circleid" jdbcType="INTEGER" property="circleid"/>
         <result column="title" jdbcType="VARCHAR" property="title"/>
         <result column="subtitle" jdbcType="VARCHAR" property="subtitle"/>
-        <result column="postcontent" jdbcType="VARCHAR" property="postcontent"/>
+        <result column="postcontent" jdbcType="LONGVARCHAR" property="postcontent"/>
         <result column="zansum" jdbcType="INTEGER" property="zansum"/>
         <result column="commentsum" jdbcType="INTEGER" property="commentsum"/>
         <result column="forwardsum" jdbcType="INTEGER" property="forwardsum"/>
@@ -344,8 +344,8 @@
         isessence, isessencepool, coverimg, hotimgurl,
         intime, totalpoint, isdel, essencedate,userid,oprtime
       )
-    values (#{id,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
-      #{subtitle,jdbcType=VARCHAR}, #{postcontent,jdbcType=VARCHAR}, #{zansum,jdbcType=INTEGER},
+        values (#{id,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
+        #{subtitle,jdbcType=VARCHAR}, #{postcontent,jdbcType=LONGVARCHAR}, #{zansum,jdbcType=INTEGER},
         #{commentsum,jdbcType=INTEGER}, #{forwardsum,jdbcType=INTEGER}, #{collectsum,jdbcType=INTEGER},
         #{isactive,jdbcType=INTEGER}, #{activetype,jdbcType=INTEGER}, #{activefee,jdbcType=DOUBLE},
         #{iscontribute,jdbcType=INTEGER},#{type,jdbcType=INTEGER},
@@ -367,7 +367,7 @@
         isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime
         )
         VALUES (
-          #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=VARCHAR},
+        #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=LONGVARCHAR},
           #{zansum,jdbcType=INTEGER},#{commentsum,jdbcType=INTEGER},#{forwardsum,jdbcType=INTEGER},
           #{collectsum,jdbcType=INTEGER},#{isactive,jdbcType=INTEGER},#{type,jdbcType=INTEGER},
           #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
@@ -387,7 +387,7 @@
         isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime
         )
         VALUES (
-        #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=VARCHAR},
+        #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=LONGVARCHAR},
         #{zansum,jdbcType=INTEGER},#{commentsum,jdbcType=INTEGER},#{forwardsum,jdbcType=INTEGER},
         #{collectsum,jdbcType=INTEGER},#{isactive,jdbcType=INTEGER},
         #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
@@ -480,7 +480,7 @@
             #{man,jdbcType=VARCHAR},
         </if>
         <if test="postcontent != null">
-            #{postcontent,jdbcType=VARCHAR},
+            #{postcontent,jdbcType=LONGVARCHAR},
         </if>
         <if test="isessence != null">
             #{isessence,jdbcType=INTEGER},
@@ -600,7 +600,7 @@
                 #{subtitle,jdbcType=VARCHAR},
             </if>
             <if test="postcontent != null">
-                #{postcontent,jdbcType=VARCHAR},
+                #{postcontent,jdbcType=LONGVARCHAR},
             </if>
             <if test="zansum != null">
                 #{zansum,jdbcType=INTEGER},
@@ -765,7 +765,7 @@
                 #{subtitle,jdbcType=VARCHAR},
             </if>
             <if test="postcontent != null">
-                #{postcontent,jdbcType=VARCHAR},
+                #{postcontent,jdbcType=LONGVARCHAR},
             </if>
             <if test="zansum != null">
                 #{zansum,jdbcType=INTEGER},
@@ -844,7 +844,7 @@
                 subtitle = #{subtitle,jdbcType=VARCHAR},
             </if>
             <if test="postcontent != null">
-                postcontent = #{postcontent,jdbcType=VARCHAR},
+                postcontent = #{postcontent,jdbcType=LONGVARCHAR},
             </if>
             <if test="zansum != null">
                 zansum = #{zansum,jdbcType=INTEGER},
@@ -922,7 +922,7 @@
                 subtitle = #{subtitle,jdbcType=VARCHAR},
             </if>
             <if test="postcontent != null">
-                postcontent = #{postcontent,jdbcType=VARCHAR},
+                postcontent = #{postcontent,jdbcType=LONGVARCHAR},
             </if>
             <if test="activetype != null">
                 activetype = #{activetype,jdbcType=INTEGER},
@@ -991,7 +991,7 @@
                 subtitle = #{subtitle,jdbcType=VARCHAR},
             </if>
             <if test="postcontent != null">
-                postcontent = #{postcontent,jdbcType=VARCHAR},
+                postcontent = #{postcontent,jdbcType=LONGVARCHAR},
             </if>
 
             <if test="type != null">
@@ -1037,7 +1037,7 @@
     set circleid = #{circleid,jdbcType=INTEGER},
       title = #{title,jdbcType=VARCHAR},
       subtitle = #{subtitle,jdbcType=VARCHAR},
-      postcontent = #{postcontent,jdbcType=VARCHAR},
+        postcontent = #{postcontent,jdbcType=LONGVARCHAR},
       zansum = #{zansum,jdbcType=INTEGER},
       commentsum = #{commentsum,jdbcType=INTEGER},
       forwardsum = #{forwardsum,jdbcType=INTEGER},
@@ -1146,7 +1146,7 @@
             AND p.userid=#{userid,jdbcType=INTEGER}
         </if>
         <if test="postcontent!=null">
-            AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
+            AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=LONGVARCHAR},'%')
         </if>
         <if test="circleid!=null">
             AND p.circleid=#{circleid,jdbcType=INTEGER}
@@ -1474,7 +1474,7 @@
             </if>
 
             <if test="postcontent != null">
-                #{postcontent,jdbcType=VARCHAR},
+                #{postcontent,jdbcType=LONGVARCHAR},
             </if>
             <if test="isactive != null">
                 #{isactive,jdbcType=INTEGER},
@@ -1594,7 +1594,7 @@
                 #{coverimg,jdbcType=VARCHAR},
             </if>
             <if test="postcontent != null">
-                #{postcontent,jdbcType=VARCHAR},
+                #{postcontent,jdbcType=LONGVARCHAR},
             </if>
             <if test="isessence != null">
                 #{isessence,jdbcType=INTEGER},
@@ -1708,7 +1708,7 @@
             AND p.userid=#{userid,jdbcType=INTEGER}
         </if>
         <if test="postcontent!=null">
-            AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
+            AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=LONGVARCHAR},'%')
         </if>
         <if test="endtime!=null and begintime!=null">
             AND p.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
@@ -1755,7 +1755,7 @@
         </if>
         <!-- in(select id from yw_user WHERE nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')) -->
         <if test="content!=null">
-            AND p.postcontent LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
+            AND p.postcontent LIKE concat('%',#{content,jdbcType=LONGVARCHAR},'%')
         </if>
 
         <if test="begintime!=null and endtime!=null">
@@ -1945,7 +1945,7 @@
             AND p.title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
         </if>
         <if test="postcontent!=null">
-            AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
+            AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=LONGVARCHAR},'%')
         </if>
         <if test="endtime!=null and begintime!=null">
             AND p.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
