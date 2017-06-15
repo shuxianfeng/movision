@@ -51,7 +51,8 @@ public class JsoupCompressImg {
      * jsoup解析html字符串，处理img
      *
      * @param content
-     * @return
+     * @input 富文本标签带压缩前图片img
+     * @return  富文本标签带压缩后图片img
      */
     public Map<String, Object> compressImg(HttpServletRequest request, String content) {//content为带有img和html标签的富文本内容
 
@@ -213,6 +214,8 @@ public class JsoupCompressImg {
      * 解析json字符串，压缩替换img
      * @param request
      * @param content
+     * @input [{"orderid": 0,"type": 0,"value": "测试发帖","wh": "","dir": ""},{"orderid": 1,"type": 1,"value": "http://pic.mofo.shop/upload/post/img/UUKD5Qws1497260964776.jpg","wh": "750x440","dir": "/var/temp/fime0/tewsdvsd/test.jpg"},{"orderid": 2,"type": 2,"value": "36e7fea5ddc347588fc19c0b75d7930c","wh": "","dir": "/var/temp/fime0/tewsdvsd/test.mov"}]
+     * @output [{"orderid":0,"type":0,"value":"测试发帖","wh":"","dir":""},{"wh":"750x440","orderid":1,"type":1,"dir":"/var/temp/fime0/tewsdvsd/test.jpg","value":"http://pic.mofo.shop/upload/postCompressImg/img/nowuIRJV1497527940181.jpg"},{"orderid":2,"type":2,"value":"36e7fea5ddc347588fc19c0b75d7930c","wh":"","dir":"/var/temp/fime0/tewsdvsd/test.mov"}]
      * @return
      */
     public Map<String, Object> newCompressImg(HttpServletRequest request, String content) {//content为存储帖子正文的josn字符串
@@ -292,7 +295,7 @@ public class JsoupCompressImg {
                     log.info("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + filesize + "M");
 
                     if (sum == 0 && s > 800 * 1024) {
-                        //如果没压缩过且图片大小超过400kb就进行压缩，压缩过的或大小<=400kb不处理（防止修改帖子时对压缩过的图片进行重复压缩，同时也保证了低质量图片的品质）
+                        //如果没压缩过且图片大小超过800kb就进行压缩，压缩过的或大小<=800kb不处理（防止修改帖子时对压缩过的图片进行重复压缩，同时也保证了低质量图片的品质）
 
                         boolean compressFlag = false;
 
