@@ -1065,18 +1065,6 @@ public class PostController {
                                   @ApiParam(value = "用于选择上传位置（1:封面 2:内容图片）") @RequestParam String type) {
         Map m = new HashMap();
         List<Map<String, Object>> list = new ArrayList<>();
-        if (type.equals("1")) {
-            for (int i = 0; i < file.length; i++) {
-                m = movisionOssClient.uploadObject(file[i], "img", "postCover");
-                String url = String.valueOf(m.get("url"));
-                Map<String, Object> map = new HashMap<>();
-                map.put("url", url);
-                map.put("name", FileUtil.getFileNameByUrl(url));
-                map.put("width", m.get("width"));
-                map.put("height", m.get("height"));
-                list.add(map);
-            }
-        } else if (type.equals("2")) {
             for (int i = 0; i < file.length; i++) {
                 m = movisionOssClient.uploadObject(file[i], "img", "post");
                 String url = String.valueOf(m.get("url"));
@@ -1086,7 +1074,6 @@ public class PostController {
                 map.put("width", m.get("width"));
                 map.put("height", m.get("height"));
                 list.add(map);
-            }
         }
         return new Response(list);
     }
