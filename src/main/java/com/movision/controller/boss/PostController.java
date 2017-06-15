@@ -1061,8 +1061,7 @@ public class PostController {
      */
     @ApiOperation(value = "上传帖子相关图片（改版）", notes = "上传帖子相关图片", response = Response.class)
     @RequestMapping(value = {"/upload_post_img_test"}, method = RequestMethod.POST)
-    public Response updatePostImgTest(@RequestParam(value = "file", required = false) MultipartFile[] file,
-                                  @ApiParam(value = "用于选择上传位置（1:封面 2:内容图片）") @RequestParam String type) {
+    public Response updatePostImgTest(@RequestParam(value = "file", required = false) MultipartFile[] file) {
         Map m = new HashMap();
         List<Map<String, Object>> list = new ArrayList<>();
             for (int i = 0; i < file.length; i++) {
