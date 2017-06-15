@@ -326,6 +326,7 @@ public class JsoupCompressImg {
 
                                 //如果压缩保存成功，这里替换文章中的第i个模块中的value属性
                                 String objstr = JSONObject.parseObject(moduleArray.get(i).toString()).put("value", newimgurl).toString();
+                                System.out.println("测试替换前的json字符串>>>>>>>"+objstr);
                                 moduleArray = JSONArray.fromObject(objstr);
 
                                 //保存缩略图和原图的映射关系到数据库中yw_compress_img
