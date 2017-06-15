@@ -470,7 +470,8 @@ public class PostController {
      */
     @ApiOperation(value = "添加帖子(改版)", notes = "添加帖子（改版）", response = Response.class)
     @RequestMapping(value = "/add_post_test", method = RequestMethod.POST)
-    public Response addPostTest(@ApiParam(value = "帖子标题") @RequestParam String title,//帖子标题
+    public Response addPostTest(HttpServletRequest request,
+                                @ApiParam(value = "帖子标题") @RequestParam String title,//帖子标题
                                 @ApiParam(value = "帖子副标题") @RequestParam String subtitle,//帖子副标题
                                 @ApiParam(value = "圈子id") @RequestParam String circleid,//圈子id
                                 @ApiParam(value = "发帖人") @RequestParam String userid,//发帖人
@@ -482,7 +483,7 @@ public class PostController {
                                 @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
                                 @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map resaut = postFacade.addPostTest(title, subtitle, circleid, userid, postcontent,
+        Map resaut = postFacade.addPostTest(request, title, subtitle, circleid, userid, postcontent,
                 isessence, ishot, orderid, time, goodsid, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
@@ -768,7 +769,7 @@ public class PostController {
 
     @ApiOperation(value = "编辑帖子(改版)", notes = "用于帖子编辑接口(改版)", response = Response.class)
     @RequestMapping(value = "update_post_test", method = RequestMethod.POST)
-    public Response updatePostByIdTest(@ApiParam(value = "帖子id（必填）") @RequestParam String id,
+    public Response updatePostByIdTest(HttpServletRequest request, @ApiParam(value = "帖子id（必填）") @RequestParam String id,
                                        @ApiParam(value = "帖子标题") @RequestParam(required = false) String title,//帖子标题
                                        @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,//帖子副标题
                                        @ApiParam(value = "发帖人（必填且必须是管理员-1）") @RequestParam String userid,//发帖人
@@ -781,7 +782,7 @@ public class PostController {
                                        @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
                                        @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map map = postFacade.updatePostByIdTest(id, title, subtitle, userid, circleid, postcontent, isessence, ishot, orderid, time, goodsid, loginid);
+        Map map = postFacade.updatePostByIdTest(request, id, title, subtitle, userid, circleid, postcontent, isessence, ishot, orderid, time, goodsid, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -1062,17 +1063,10 @@ public class PostController {
     @ApiOperation(value = "上传帖子相关图片（改版）", notes = "上传帖子相关图片", response = Response.class)
     @RequestMapping(value = {"/upload_post_img_test"}, method = RequestMethod.POST)
     public Response updatePostImgTest(@RequestParam(value = "file", required = false) MultipartFile[] file) {
-        Map m = new HashMap();
         List<Map<String, Object>> list = new ArrayList<>();
-            for (int i = 0; i < file.length; i++) {
-                m = movisionOssClient.uploadObject(file[i], "img", "post");
-                String url = String.valueOf(m.get("url"));
-                Map<String, Object> map = new HashMap<>();
-                map.put("url", url);
-                map.put("name", FileUtil.getFileNameByUrl(url));
-                map.put("width", m.get("width"));
-                map.put("height", m.get("height"));
-                list.add(map);
+        for (int i = 0; i < file.length; i++) {
+            Map map = postFacade.updatePostImgTest(file[i]);
+            list.add(map);
         }
         return new Response(list);
     }

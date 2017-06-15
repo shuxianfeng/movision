@@ -220,7 +220,8 @@ public class AppPostController {
 
     @ApiOperation(value = "PC官网发布帖子(改版)", notes = "用于官网发布帖子的接口（改版）", response = Response.class)
     @RequestMapping(value = "releasePostByPC_Test", method = RequestMethod.POST)
-    public Response releasePostByPCTest(@ApiParam(value = "用户id") @RequestParam String userid,
+    public Response releasePostByPCTest(HttpServletRequest request,
+                                        @ApiParam(value = "用户id") @RequestParam String userid,
                                         @ApiParam(value = "所属圈子id") @RequestParam String circleid,
                                         @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
                                         @ApiParam(value = "帖子内容") @RequestParam String postcontent,
@@ -228,7 +229,7 @@ public class AppPostController {
                                         @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids) {
         Response response = new Response();
 
-        Map count = facadePost.releasePostByPCTest(userid, circleid, title, postcontent, isactive, proids);
+        Map count = facadePost.releasePostByPCTest(request, userid, circleid, title, postcontent, isactive, proids);
 
         if (count.get("flag").equals(-2)) {
             response.setCode(300);
@@ -252,19 +253,24 @@ public class AppPostController {
     @ApiOperation(value = "PC官网上传帖子封面图片", notes = "PC官网上传帖子封面图片", response = Response.class)
     @RequestMapping(value = {"/updateCoverImgByPC"}, method = RequestMethod.POST)
     public Response updateCoverImgByPC(@RequestParam(value = "file", required = false) MultipartFile file,
-                                       @ApiParam(value = "X坐标") @RequestParam String x,
-                                       @ApiParam(value = "Y坐标") @RequestParam String y,
+                                       @ApiParam(value = "X坐标") @RequestParam(required = false) String x,
+                                       @ApiParam(value = "Y坐标") @RequestParam(required = false) String y,
                                        @ApiParam(value = "宽") @RequestParam String w,
-                                       @ApiParam(value = "高") @RequestParam String h) {
-        Map map = facadePost.updateCoverImgByPC(file, x, y, w, h);
+                                       @ApiParam(value = "高") @RequestParam String h,
+                                       @ApiParam(value = "1帖子封面 2活动方形图") @RequestParam String type) {
+        Map map = facadePost.updateCoverImgByPC(file, x, y, w, h, type);
         return new Response(map);
     }
 
-    @ApiOperation(value = "图片压缩", notes = "用于图片压缩测试", response = Response.class)
+    @ApiOperation(value = "图片压缩", notes = "用于图片压缩", response = Response.class)
     @RequestMapping(value = "coverImgCompressUtil", method = RequestMethod.POST)
-    public Response coverImgCompressUtil(@RequestParam MultipartFile file) {
+    public Response coverImgCompressUtil(@ApiParam(value = "上传文件") @RequestParam MultipartFile file,
+                                         @ApiParam(value = "要求文件宽") @RequestParam String w,
+                                         @ApiParam(value = "要求文件高") @RequestParam String h) {
         Response response = new Response();
-        String str = coverImgCompressUtil.ImgCompress(file);
+        /*int w = 750;//图片压缩后的宽度
+        int h = 440;//图片压缩后的高度440*/
+        String str = coverImgCompressUtil.ImgCompress(file, Integer.parseInt(w), Integer.parseInt(h));
         response.setMessage("操作成功");
         response.setData(str);
         return response;

@@ -30,9 +30,7 @@ public class CoverImgCompressUtil {
     @Autowired
     private MovisionOssClient movisionOssClient;
 
-    public String ImgCompress(MultipartFile file) {
-        int w = 750;//图片压缩后的宽度
-        int h = 440;//图片压缩后的高度440
+    public String ImgCompress(MultipartFile file, int w, int h) {
         Boolean compressFlag = false;
         String compress_dir_path = PropertiesLoader.getValue("post.incise.domain");//压缩图片路径url
         List<String> existFileList = getExistFiles(compress_dir_path);//获取文件夹下的所有文件名
@@ -75,9 +73,7 @@ public class CoverImgCompressUtil {
         return null;
     }
 
-    public String ImgCompress(String file) {
-        int w = 750;//图片压缩后的宽度
-        int h = 440;//图片压缩后的高度440
+    public String ImgCompress(String file, int w, int h) {
         Boolean compressFlag = false;
         String compress_dir_path = PropertiesLoader.getValue("post.incise.domain");//压缩图片路径url
         String compress_dir_local_path = PropertiesLoader.getValue("post.img.local.domain");//获取项目根目录/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision

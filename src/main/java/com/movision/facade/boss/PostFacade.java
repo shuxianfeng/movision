@@ -40,12 +40,16 @@ import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
+import com.movision.utils.CoverImgCompressUtil;
 import com.movision.utils.JsoupCompressImg;
 import com.movision.utils.ListUtil;
 import com.movision.utils.VideoUploadUtil;
 import com.movision.utils.file.FileUtil;
+import com.movision.utils.oss.AliOSSClient;
+import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.map.HashedMap;
@@ -55,8 +59,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -125,6 +136,15 @@ public class PostFacade {
 
     @Autowired
     private CompressImgService compressImgService;
+
+    @Autowired
+    private MovisionOssClient movisionOssClient;
+
+    @Autowired
+    private CoverImgCompressUtil coverImgCompressUtil;
+
+    @Autowired
+    private AliOSSClient aliOSSClient;
 
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
@@ -863,7 +883,6 @@ public class PostFacade {
     /**
      * 改版发帖
      *
-     * @param request
      * @param title
      * @param subtitle
      * @param circleid
@@ -879,7 +898,7 @@ public class PostFacade {
      */
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
-    public Map addPostTest(String title, String subtitle, String circleid,
+    public Map addPostTest(HttpServletRequest request, String title, String subtitle, String circleid,
                            String userid, String postcontent, String isessence, String ishot, String orderid, String time, String goodsid, String loginid) {
         PostTo post = new PostTo();
         Map map = new HashedMap();
@@ -896,16 +915,16 @@ public class PostFacade {
                 if (StringUtil.isNotEmpty(postcontent)) {
 
                     //内容转换
-                   /* Map con = jsoupCompressImg.compressImg(request, postcontent);
+                    Map con = jsoupCompressImg.newCompressImg(request, postcontent);
                     System.out.println(con);
                     if ((int) con.get("code") == 200) {
                         String str = con.get("content").toString();
                         str = str.replace("\\", "");
                         post.setPostcontent(str);//帖子内容
                     } else {
-                        logger.error("帖子内容转换异常");*/
+                        logger.error("帖子内容转换异常");
                         post.setPostcontent(postcontent);
-                    /*}*/
+                    }
                 }
                 post.setIntime(new Date());//插入时间
                 if (StringUtil.isNotEmpty(ishot)) {
@@ -930,41 +949,9 @@ public class PostFacade {
 
                     }
                 }
-
-                //-------解析JSON字符串，把视频路径，图片路径分别存放
-                /*String vid=null;
-                String vurl=null;
-                // Map<String,List<Map<String,String>>> postmap=new HashMap<>();模型
-                JSONObject J=JSONObject.fromObject(postcontent);//转换为json对象
-                JSONArray jsonArray=JSONArray.fromObject(J.get("postcontent"));//取出json中list集合数组
-                for (int i = 0; i<jsonArray.size(); i++){
-                    JSONObject jsonObject=jsonArray.getJSONObject(i);//遍历出每一个list元素
-                    //String orderids=jsonObject.get("orderid").toString();
-                    String types=jsonObject.getString("type").toString();//类型
-                    ///String value=jsonObject.getString("value").toString();
-                    String whs=jsonObject.getString("wh").toString();//宽高
-                    //String dirs=jsonObject.getString("dir").toString();
-                    if (StringUtil.isBlank(whs) && types.equals(2)){//没有宽高，是视频,保存视频记录
-                        //把必要字段存放在变量中，当帖子发布完成后添加视频表中
-                    }
-                    if (StringUtil.isNotBlank(types)){
-                        if (types.equals(2)){//代表是视频贴
-                            post.setType("1");
-                        }else {
-                            post.setType("0");
-                        }
-                    }
-                }*/
                 post.setUserid(userid);
                 post.setIsdel("0");
                 postService.addPost(post);//添加帖子
-                /*Integer pid = post.getId();//获取到刚刚添加的帖子id
-                Video vide = new Video();
-                vide.setPostid(pid);
-                vide.setVideourl(vid);
-                vide.setBannerimgurl("");
-                vide.setIntime(new Date());
-                videoService.insertVideoById(vide);//添加视频表*/
                 //查询圈子名称
                 Integer in = 0;
                 if (StringUtil.isNotEmpty(goodsid)) {//帖子添加商品
@@ -1589,8 +1576,6 @@ public class PostFacade {
                             logger.error("帖子内容转换异常");
                             post.setPostcontent(postcontent);
                         }
-                        /*post.setPostcontent(postcontent);*/
-
                     }
                     post.setIntime(new Date());
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -1693,7 +1678,7 @@ public class PostFacade {
 
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
-    public Map updatePostByIdTest(String id, String title, String subtitle,
+    public Map updatePostByIdTest(HttpServletRequest request, String id, String title, String subtitle,
                                   String userid, String circleid, String postcontent, String isessence, String ishot, String orderid, String time, String goodsid, String loginid) {
         PostTo post = new PostTo();
         Map map = new HashedMap();
@@ -1713,18 +1698,16 @@ public class PostFacade {
                     post.setIsactive("0");//设置状态为帖子
                     if (StringUtil.isNotEmpty(postcontent)) {
                         //内容转换
-                        /*Map con = jsoupCompressImg.compressImg(request, postcontent);
+                        Map con = jsoupCompressImg.newCompressImg(request, postcontent);
                         if ((int) con.get("code") == 200) {
                             System.out.println(con);
                             String str = con.get("content").toString();
                             str = str.replace("\\", "");
                             post.setPostcontent(str);//帖子内容
                         } else {
-                            logger.error("帖子内容转换异常");*/
-                        post.setPostcontent(postcontent);
-                        /*}*/
-                        /*post.setPostcontent(postcontent);*/
-
+                            logger.error("帖子内容转换异常");
+                            post.setPostcontent(postcontent);
+                        }
                     }
                     post.setIntime(new Date());
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -2471,6 +2454,25 @@ public class PostFacade {
      */
     public ActivityContribute queryContributeExplain(String id) {
         return activityContributeService.queryContributeExplain(id);
+    }
+
+
+    /**
+     * 上传帖子相关图片
+     *
+     * @param file
+     * @return
+     */
+    public Map<String, Object> updatePostImgTest(MultipartFile file) {
+        Map m = new HashMap();
+        m = movisionOssClient.uploadObject(file, "img", "post");
+        String url = String.valueOf(m.get("url"));
+        Map<String, Object> map = new HashMap<>();
+        map.put("url", url);
+        map.put("name", FileUtil.getFileNameByUrl(url));
+        map.put("width", m.get("width"));
+        map.put("height", m.get("height"));
+        return map;
     }
 
 }
