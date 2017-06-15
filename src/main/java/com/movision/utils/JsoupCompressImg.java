@@ -324,8 +324,9 @@ public class JsoupCompressImg {
                                 }
                                 newimgurl = PropertiesLoader.getValue("formal.img.domain") + "/" + compressurl;//拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接，如："http://pic.mofo.shop" + "/upload/postCompressImg/img/yDi0T2nY1496812117357.png"
 
-                                //如果压缩保存成功，这里替换文章中的第i个img标签中的src属性
-                                JSONObject.parseObject(moduleArray.get(i).toString()).put("value", newimgurl);
+                                //如果压缩保存成功，这里替换文章中的第i个模块中的value属性
+                                Object obj = JSONObject.parseObject(moduleArray.get(i).toString()).put("value", newimgurl);
+                                moduleArray = JSONArray .fromObject(obj);
 
                                 //保存缩略图和原图的映射关系到数据库中yw_compress_img
                                 CompressImg compressImg = new CompressImg();
