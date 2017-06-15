@@ -338,8 +338,7 @@ public class JsoupCompressImg {
                                 res.put("wh", wh);
                                 res.put("dir", dir);
                                 moduleArray.add(i, res);
-//                                moduleArray.add(i, JSONObject.parseObject(moduleArray.get(i).toString()).put("value", newimgurl));
-                                System.out.println("测试替换后的json字符串>>>>>>>"+moduleArray.toString());
+                                log.info("测试替换后的json字符串>>>>>>>"+moduleArray.toString());
 
                                 //保存缩略图和原图的映射关系到数据库中yw_compress_img
                                 CompressImg compressImg = new CompressImg();
