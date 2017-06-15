@@ -242,11 +242,15 @@ public class JsoupCompressImg {
 
                 //从img中获取type属性
                 JSONObject moduleobj = JSONObject.parseObject(moduleArray.get(i).toString());
+                Integer orderid = (Integer) moduleobj.get("orderid");
                 Integer type = (Integer) moduleobj.get("type");
+                String value = (String) moduleobj.get("value");
+                String wh = (String) moduleobj.get("wh");
+                String dir = (String) moduleobj.get("dir");
                 //0 文字 1 图片 2 视频
                 if (type == 1) {
 
-                    String imgurl = (String) moduleobj.get("value");
+                    String imgurl = value;
                     log.info("压缩前的原图url，imgurl=" + imgurl);
 
                     //从阿里云服务器下载到本地
@@ -325,9 +329,17 @@ public class JsoupCompressImg {
                                 newimgurl = PropertiesLoader.getValue("formal.img.domain") + "/" + compressurl;//拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接，如："http://pic.mofo.shop" + "/upload/postCompressImg/img/yDi0T2nY1496812117357.png"
 
                                 //如果压缩保存成功，这里替换文章中的第i个模块中的value属性
-                                JSONObject.parseObject(moduleArray.get(i).toString()).remove("value");
-                                Object obj = JSONObject.parseObject(moduleArray.get(i).toString()).put("value", newimgurl);
-                                System.out.println("测试替换后的json字符串>>>>>>>"+obj.toString());
+//                                Object obj = JSONObject.parseObject(moduleArray.get(i).toString()).put("value", newimgurl);
+                                moduleArray.remove(i);
+                                Map<String, Object> res = new HashMap<>();
+                                res.put("orderid", orderid);
+                                res.put("type", type);
+                                res.put("value", newimgurl);
+                                res.put("wh", wh);
+                                res.put("dir", dir);
+                                moduleArray.add(i, res);
+//                                moduleArray.add(i, JSONObject.parseObject(moduleArray.get(i).toString()).put("value", newimgurl));
+                                System.out.println("测试替换后的json字符串>>>>>>>"+moduleArray.toString());
 
                                 //保存缩略图和原图的映射关系到数据库中yw_compress_img
                                 CompressImg compressImg = new CompressImg();
