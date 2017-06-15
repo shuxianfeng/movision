@@ -45,11 +45,34 @@ public class AppJUnitTest {
         Map<String, Object> resultmap = jsoupCompressImg.compressImg(request, content);
 
         if (response.getCode() == 200) {
-            response.setMessage("生成成功");
+            response.setMessage("压缩成功");
             response.setData(resultmap);
         } else {
             response.setCode(300);
-            response.setMessage("生成失败");
+            response.setMessage("压缩失败");
+        }
+        return response;
+    }
+
+    /**
+     * 测试新版模块化发帖图片压缩功能
+     *
+     * @return
+     */
+    @ApiOperation(value = "测试新版模块化发帖图片压缩功能", notes = "测试新版模块化发帖图片压缩功能", response = Response.class)
+    @RequestMapping(value = "testNewCompressImg", method = RequestMethod.POST)
+    public Response testNewCompressImg(HttpServletRequest request,
+                                    @ApiParam(value = "帖子内容(json)") @RequestParam String content) {
+        Response response = new Response();
+
+        Map<String, Object> resultmap = jsoupCompressImg.newCompressImg(request, content);
+
+        if (response.getCode() == 200) {
+            response.setMessage("压缩成功");
+            response.setData(resultmap);
+        } else {
+            response.setCode(300);
+            response.setMessage("压缩失败");
         }
         return response;
     }
