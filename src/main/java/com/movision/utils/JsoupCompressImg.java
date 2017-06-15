@@ -242,9 +242,9 @@ public class JsoupCompressImg {
 
                 //从img中获取type属性
                 JSONObject moduleobj = JSONObject.parseObject(moduleArray.get(i).toString());
-                String type = (String) moduleobj.get("type");
+                Integer type = (Integer) moduleobj.get("type");
                 //0 文字 1 图片 2 视频
-                if (type.equals("1")) {
+                if (type == 1) {
 
                     String imgurl = (String) moduleobj.get("value");
                     log.info("压缩前的原图url，imgurl=" + imgurl);
