@@ -617,7 +617,7 @@ public class FacadePost {
         File fdel2 = new File(url);
         fdel2.delete();//切割后的原图删除
         //----(2)
-        File fdel = new File(String.valueOf(file));
+        File fdel = new File(String.valueOf(url));
         long l = fdel.length();
         float size = (float) l / 1024 / 1024;
         DecimalFormat df = new DecimalFormat("0.00");//格式化小数，不足的补0
