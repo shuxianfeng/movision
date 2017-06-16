@@ -603,7 +603,7 @@ public class FacadePost {
 
     public Map uploadPostFacePic(MultipartFile file) {
         Map m = new HashMap();
-        m = movisionOssClient.uploadObject(file, "img", "postfaceCover");
+        m = movisionOssClient.uploadObject(file, "img", "postCover");
         String url = String.valueOf(m.get("url"));
         Map map = new HashMap();
         int wt = 750;//图片压缩后的宽度
@@ -611,7 +611,7 @@ public class FacadePost {
         String compressUrl = coverImgCompressUtil.ImgCompress(url, wt, ht);
         System.out.println("压缩完的切割图片url==" + compressUrl);
         // 对压缩完的图片上传到阿里云
-        Map compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverInciseface");
+        Map compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
         //6删除本地服务器切割的图片文件
         //----(1)
         // File fdel2 = new File(url);
