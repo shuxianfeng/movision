@@ -1354,7 +1354,7 @@ public class FacadePost {
     public DBCursor userRefulshListMongodb(int userid) {
         DBCursor obj = null;
         try {
-            MongoClient mClient = new MongoClient("localhost:27017");
+            MongoClient mClient = new MongoClient("120.77.214.187:27017");
             DB db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("userRefreshRecord");//表名
             BasicDBObject queryObject = new BasicDBObject("userid", userid);
