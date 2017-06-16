@@ -9,6 +9,8 @@ import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.video.entity.Video;
+import com.movision.utils.L;
+import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.poi.ss.usermodel.Row;
 import org.springframework.stereotype.Repository;
@@ -209,4 +211,10 @@ public interface PostMapper {
     Integer queryPosterActivity(Integer postid);
 
     String selectToAccid(Integer postid);
+
+    List<Post> findAllPostListRefulsh();
+
+    int queryCrileid(int postid);
+
+    int queryIsIsessence(int postid);
 }
