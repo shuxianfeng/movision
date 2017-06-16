@@ -603,7 +603,7 @@ public class FacadePost {
 
     public Map uploadPostFacePic(MultipartFile file) {
         Map m = new HashMap();
-        m = movisionOssClient.uploadObject(file, "img", "postCover");
+        m = movisionOssClient.uploadMultipartFileObject(file, "img");
         String url = String.valueOf(m.get("url"));
         Map map = new HashMap();
         int wt = 750;//图片压缩后的宽度
