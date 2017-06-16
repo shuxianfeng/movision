@@ -305,10 +305,17 @@ public class AppPostController {
      */
     @ApiOperation(value = "上传帖子内容相关图片", notes = "上传帖子内容相关图片（上传帖子内容中的图片）", response = Response.class)
     @RequestMapping(value = {"/upload_post_img"}, method = RequestMethod.POST)
-    public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file,
-                                  @ApiParam(value = "用于选择上传位置（1:封面 2:内容图片）") @RequestParam String type) {
+    public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file) {
+        Map m = movisionOssClient.uploadObject(file, "img", "post");
+        String url = String.valueOf(m.get("url"));
+        Map<String, Object> map = new HashMap<>();
+        map.put("url", url);
+        map.put("name", FileUtil.getFileNameByUrl(url));
+        map.put("width", m.get("width"));
+        map.put("height", m.get("height"));
+        return new Response(map);
 
-        Map m = new HashMap();
+        /**Map m = new HashMap();
         String url = "";
         Map<String, Object> map = new HashMap<>();
         Map compressmap = null;
@@ -321,7 +328,7 @@ public class AppPostController {
              String compressUrl = coverImgCompressUtil.ImgCompress(url, wt, ht);
              System.out.println("压缩完的切割图片url==" + compressUrl);
              //5对压缩完的图片上传到阿里云
-             compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");*/
+         compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
             compressmap = facadePost.uploadPostFacePic(file);
             map.put("compressmap", compressmap);
         } else if (type.equals("2")) {
@@ -332,6 +339,24 @@ public class AppPostController {
             map.put("width", m.get("width"));
             map.put("height", m.get("height"));
         }
+         return new Response(map);*/
+    }
+
+    /**
+     * 上传帖子封面相关图片
+     *
+     * @param file
+     * @return
+     */
+    @ApiOperation(value = "上传帖子封面相关图片", notes = "上传帖子封面相关图片（上传帖子封面相关图片）", response = Response.class)
+    @RequestMapping(value = {"/upload_postface_img"}, method = RequestMethod.POST)
+    public Response updatePostImgFace(@RequestParam(value = "file", required = false) MultipartFile file
+    ) {
+
+        Map<String, Object> map = new HashMap<>();
+        Map compressmap = facadePost.uploadPostFacePic(file);
+        map.put("compressmap", compressmap);
+
         return new Response(map);
     }
 
