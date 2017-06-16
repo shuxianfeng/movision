@@ -549,7 +549,7 @@ public class AppPostController {
         return response;
     }
 
-    @ApiOperation(value = "模块化帖子详情数据返回接口", notes = "模块化帖子详情数据返回接口", response = Response.class)
+    /** @ApiOperation(value = "模块化帖子详情数据返回接口", notes = "模块化帖子详情数据返回接口", response = Response.class)
     @RequestMapping(value = "modulardetail", method = RequestMethod.POST)
     public Response queryModularPostDetail(@ApiParam(value = "帖子id") @RequestParam String postid,
                                            @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid
@@ -568,5 +568,5 @@ public class AppPostController {
         }
         response.setData(post);
         return response;
-    }
+                                           }*/
 }
