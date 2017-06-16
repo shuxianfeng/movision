@@ -11,6 +11,7 @@ import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.utils.CoverImgCompressUtil;
 import com.movision.utils.file.FileUtil;
+import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -44,6 +45,8 @@ public class AppPostController {
 
     @Autowired
     private MovisionOssClient movisionOssClient;
+    @Autowired
+    private AliOSSClient aliOSSClient;
 
     @ApiOperation(value = "帖子详情数据返回接口", notes = "用于返回请求帖子详情内容", response = Response.class)
     @RequestMapping(value = "detail", method = RequestMethod.POST)
@@ -302,15 +305,33 @@ public class AppPostController {
      */
     @ApiOperation(value = "上传帖子内容相关图片", notes = "上传帖子内容相关图片（上传帖子内容中的图片）", response = Response.class)
     @RequestMapping(value = {"/upload_post_img"}, method = RequestMethod.POST)
-    public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file) {
+    public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file,
+                                  @ApiParam(value = "用于选择上传位置（1:封面 2:内容图片）") @RequestParam String type) {
 
-        Map m = movisionOssClient.uploadObject(file, "img", "post");
-        String url = String.valueOf(m.get("url"));
+        Map m = new HashMap();
+        String url = "";
         Map<String, Object> map = new HashMap<>();
-        map.put("url", url);
-        map.put("name", FileUtil.getFileNameByUrl(url));
-        map.put("width", m.get("width"));
-        map.put("height", m.get("height"));
+        Map compressmap = null;
+        if (type.equals("1")) {
+            /**  m = movisionOssClient.uploadObject(file, "img", "postCover");
+             url = String.valueOf(m.get("url"));
+             //4对本地服务器中切割好的图片进行压缩处理
+             int wt = 750;//图片压缩后的宽度
+             int ht = 440;//图片压缩后的高度440
+             String compressUrl = coverImgCompressUtil.ImgCompress(url, wt, ht);
+             System.out.println("压缩完的切割图片url==" + compressUrl);
+             //5对压缩完的图片上传到阿里云
+             compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");*/
+            compressmap = facadePost.uploadPostFacePic(file);
+            map.put("compressmap", compressmap);
+        } else if (type.equals("2")) {
+            m = movisionOssClient.uploadObject(file, "img", "post");
+            url = String.valueOf(m.get("url"));
+            map.put("url", url);
+            map.put("name", FileUtil.getFileNameByUrl(url));
+            map.put("width", m.get("width"));
+            map.put("height", m.get("height"));
+        }
         return new Response(map);
     }
 
@@ -500,6 +521,27 @@ public class AppPostController {
             response.setCode(200);
             response.setMessage("发帖成功");
         }
+        return response;
+    }
+
+    @ApiOperation(value = "模块化帖子详情数据返回接口", notes = "模块化帖子详情数据返回接口", response = Response.class)
+    @RequestMapping(value = "modulardetail", method = RequestMethod.POST)
+    public Response queryModularPostDetail(@ApiParam(value = "帖子id") @RequestParam String postid,
+                                           @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid
+    ) {
+        Response response = new Response();
+
+        PostVo post = facadePost.queryModularPostDetail(postid, userid);
+
+
+        if (null != post) {
+            response.setCode(200);
+            response.setMessage("查询成功");
+        } else if (null == post) {
+            response.setCode(300);
+            response.setMessage("该帖已删除");
+        }
+        response.setData(post);
         return response;
     }
 }

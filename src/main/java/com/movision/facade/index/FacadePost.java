@@ -1,8 +1,8 @@
 package com.movision.facade.index;
 
 import com.google.gson.Gson;
+import com.mongodb.*;
 import com.movision.common.constant.PointConstant;
-import com.movision.common.util.ShiroUtil;
 import com.movision.facade.im.ImFacade;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
@@ -29,10 +29,11 @@ import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
+import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
+import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.*;
-import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
@@ -45,7 +46,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -108,7 +108,7 @@ public class FacadePost {
     private NewInformationService newInformationService;
 
     @Autowired
-    private VideoUploadUtil videoUploadUtil;
+    private UserRefreshRecordService userRefreshRecordService;
 
     @Autowired
     private ImFacade imFacade;
@@ -598,6 +598,42 @@ public class FacadePost {
             map.put("flag", -1);
             return map;
         }
+    }
+
+
+    public Map uploadPostFacePic(MultipartFile file) {
+        Map m = new HashMap();
+        m = movisionOssClient.uploadObject(file, "img", "postCover");
+        String url = String.valueOf(m.get("url"));
+        Map map = new HashMap();
+        int wt = 750;//图片压缩后的宽度
+        int ht = 440;//图片压缩后的高度440
+        String compressUrl = coverImgCompressUtil.ImgCompress(url, wt, ht);
+        System.out.println("压缩完的切割图片url==" + compressUrl);
+        // 对压缩完的图片上传到阿里云
+        Map compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
+        //6删除本地服务器切割的图片文件
+        //----(1)
+        File fdel2 = new File(url);
+        fdel2.delete();//切割后的原图删除
+        //----(2)
+        File fdel = new File(String.valueOf(file));
+        long l = fdel.length();
+        float size = (float) l / 1024 / 1024;
+        DecimalFormat df = new DecimalFormat("0.00");//格式化小数，不足的补0
+        String filesize = df.format(size);//返回的是String类型的
+        fdel.delete();//删除上传到本地的原图片文件
+        //----(3)
+        File fdel3 = new File(compressUrl);
+        fdel3.delete();//删除压缩完成的图片
+        //把切割好的原图和压缩图分别存放数据库中
+        CompressImg compressImg = new CompressImg();
+        compressImg.setCompressimgurl(String.valueOf(compressmap.get("url")));
+        compressImg.setProtoimgsize(filesize);
+        compressImg.setProtoimgurl(url);
+        compressImgService.insert(compressImg);
+        map.put("compressmap", compressmap.get("url"));
+        return map;
     }
 
 
@@ -1127,6 +1163,225 @@ public class FacadePost {
     }
 
 
+    /**
+     * 模块化发帖详情
+     *
+     * @param postid
+     * @param userid
+     * @param
+     * @return
+     */
+    public PostVo queryModularPostDetail(String postid, String userid) {
 
-}
+        //通过userid、postid查询该用户有没有关注该圈子的权限
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("postid", Integer.parseInt(postid));
+        if (!StringUtils.isEmpty(userid)) {
+            parammap.put("userid", Integer.parseInt(userid));
+        }
+        PostVo vo = postService.queryPostDetail(parammap);
+
+        if (null != vo) {
+            //根据帖子封面原图url查询封面压缩图url，如果存在替换，不存在就用原图
+            String compressurl = postService.queryCompressUrl(vo.getCoverimg());
+            if (null != compressurl && !compressurl.equals("") && !compressurl.equals("null")) {
+                vo.setCoverimg(compressurl);
+            }
+
+            int rewardsum = postService.queryRewardSum(postid);//查询帖子被打赏的次数
+            vo.setRewardsum(rewardsum);
+            List<UserLike> nicknamelist = postService.queryRewardPersonNickname(postid);
+            vo.setRewardpersonnickname(nicknamelist);
+            /**  if (type.equals("1") || type.equals("2")) {
+             Video video = postService.queryVideoUrl(Integer.parseInt(postid));
+             vo.setVideourl(video.getVideourl());
+             vo.setVideocoverimgurl(video.getBannerimgurl());
+             }*/
+            if (vo.getUserid() != -1) {//发帖人为普通用户时查询发帖人昵称和手机号
+                User user = userService.queryUserB(vo.getUserid());
+                if (user != null) {
+                    vo.setUserid(user.getId());
+                    vo.setNickname(user.getNickname());
+                    vo.setPhone(user.getPhone());
+                    vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
+                }
+            } else {
+                User user = userService.queryUserB(vo.getUserid());
+                if (user != null) {
+                    vo.setUserid(user.getId());
+                    vo.setNickname(user.getNickname());
+                    vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
+                }
+            }
+            Integer circleid = vo.getCircleid();
+            //查询帖子详情最下方推荐的4个热门圈子
+            List<Circle> hotcirclelist = circleService.queryHotCircle();
+            vo.setHotcirclelist(hotcirclelist);
+            //查询帖子中分享的商品
+            List<GoodsVo> shareGoodsList = goodsService.queryShareGoodsList(Integer.parseInt(postid));
+            vo.setShareGoodsList(shareGoodsList);
+
+            //对帖子内容进行脱敏处理
+            vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));//帖子主标题脱敏
+            if (null != vo.getSubtitle()) {
+                vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
+            }
+            vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
+            //数据插入mongodb
+            if (StringUtil.isNotEmpty(userid)) {
+                PostAndUserRecord postAndUserRecord = new PostAndUserRecord();
+                postAndUserRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
+                postAndUserRecord.setCrileid(circleid);
+                postAndUserRecord.setPostid(Integer.parseInt(postid));
+                postAndUserRecord.setUserid(Integer.parseInt(userid));
+                postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                postAndUserRecordService.insert(postAndUserRecord);
+            }
+        }
+        return vo;
+    }
+
+    /**
+     * 用户刷新列表
+     *
+     * @param userid
+     * @return
+     */
+    public Map userRefreshList(String userid) {
+        Map map = new HashMap();
+        List<Post> list = postService.findAllPostListRefulsh();//查询所有帖子
+        List<Post> notbrowsed = null;//
+        List<Post> isessences = null;//精选
+        List<Post> isnotisessence = null;//不是精选
+        //未登录状态下
+        if (userid == null) {
+            if (list != null) {
+                for (int i = 0; i < list.size(); i++) {
+                    int pid = list.get(i).getId();//帖子id
+                    //查询有精选帖子
+                    int isessence = postService.queryIsIsessence(pid);
+                    if (isessence == 1) {
+                        isessences.add(list.get(i));
+                    } else {
+                        isnotisessence.add(list.get(i));
+                    }
+                }
+                /**for (int j=0;j<isessences.size();j++){
+                 if (j<10){
+                 isnotisessence.add(j,isessences.get(j));
+                 }
+                 }*/
+                isessences.addAll(isnotisessence);
+                List listten = null;
+                for (int i = 0; i < isessences.size(); i++) {
+                    listten = isessences.subList(0, 9);
+                    //isessences.remove(listten);
+                }
+                list.remove(listten);
+                map.put("listten", listten);
+            }
+            //登录状态下
+        } else {
+            //循环mysql帖子表中所有的帖子id和mongodb的用户刷新记录表比对得出用户没有浏览过的帖子
+            int postid = 0;
+            int mongodbpostid = 0;
+            int crileid = 0;
+            //查询出mongodb中用户刷新的帖子
+            DBCursor listmongodb = userRefulshListMongodb(Integer.parseInt(userid));
+            //mogodb不为空
+            if (listmongodb != null) {
+                //mysql不为空
+                if (list != null) {
+                    while (listmongodb.hasNext()) {
+                        DBObject dbObj = listmongodb.next();
+                        mongodbpostid = Integer.parseInt(dbObj.get("postid").toString());
+                    }
+                    //循环帖子id对比挑出未刷新的帖子
+                    for (int i = 0; i < list.size(); i++) {
+                        postid = list.get(i).getId();
+                        //查询帖子是哪个圈子
+                        crileid = postService.queryCrileid(postid);
+                        if (postid == mongodbpostid) {
+                            list.remove(list.get(i));
+                        } else {
+                            notbrowsed.add(list.get(i));
+                        }
+                    }
+                    for (int i = 0; i < notbrowsed.size(); i++) {
+                        //剔除浏览过的记录进行时间排序取前10条
+                        Date date = notbrowsed.get(i).getIntime();//帖子的发布时间
+                        int psid = notbrowsed.get(i).getId();//剩下的帖子id
+                        //查询剩下的帖子中有没有精选的
+                        int senense = postService.queryIsIsessence(psid);
+                        if (senense == 1) {//剩下的帖子是精选
+                            isessences.add(notbrowsed.get(i));//精选
+                        } else {//不是精选
+                            isnotisessence.add(notbrowsed.get(i));//不是精选
+                        }
+                    }
+                }
+            } else {
+                //如果用户刚进来没有任何刷新记录
+                map.put("list", list);
+            }
+            //把刷新记录插入mongodb
+            if (StringUtil.isNotEmpty(userid)) {
+                UserRefreshRecord userRefreshRecord = new UserRefreshRecord();
+                userRefreshRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
+                userRefreshRecord.setUserid(Integer.parseInt(userid));
+                userRefreshRecord.setPostid(postid);
+                userRefreshRecord.setCrileid(crileid);
+                userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                userRefreshRecordService.insert(userRefreshRecord);
+            }
+            long count = mongodbCount();
+            // int count=Integer.parseInt(String.valueOf(num));
+            if (count >= 1000) {
+                //表中浏览数据大于等于1000条的时候开始用户行为分析
+
+            }
+
+        }
+        return map;
+    }
+
+    /**
+     * 在mongodb中查询用户刷新浏览过的列表
+     *
+     * @param userid
+     * @return
+     */
+    public DBCursor userRefulshListMongodb(int userid) {
+        DBCursor obj = null;
+        try {
+            MongoClient mClient = new MongoClient("localhost:27017");
+            DB db = mClient.getDB("searchRecord");
+            DBCollection collection = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject queryObject = new BasicDBObject("userid", userid);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            obj = collection.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return obj;
+    }
+
+    public long mongodbCount() {
+        long count = 0;
+        try {
+            MongoClient mClient = new MongoClient("120.77.214.187:27017");
+            DB db = mClient.getDB("searchRecord");
+            DBCollection collection = db.getCollection("userRefreshRecord");//表名
+            count = collection.count();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+
+ }
 
