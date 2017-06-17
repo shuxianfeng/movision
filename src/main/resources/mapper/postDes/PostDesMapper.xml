@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.postDes.mapper.PostDesMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.postDes.entity.PostDes">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="circleid" property="circleid" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="subtitle" property="subtitle" jdbcType="VARCHAR"/>
+        <result column="zansum" property="zansum" jdbcType="INTEGER"/>
+        <result column="commentsum" property="commentsum" jdbcType="INTEGER"/>
+        <result column="forwardsum" property="forwardsum" jdbcType="INTEGER"/>
+        <result column="collectsum" property="collectsum" jdbcType="INTEGER"/>
+        <result column="isactive" property="isactive" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="ishot" property="ishot" jdbcType="INTEGER"/>
+        <result column="isessence" property="isessence" jdbcType="INTEGER"/>
+        <result column="orderid" property="orderid" jdbcType="INTEGER"/>
+        <result column="coverimg" property="coverimg" jdbcType="VARCHAR"/>
+        <result column="hotimgurl" property="hotimgurl" jdbcType="VARCHAR"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="totalpoint" property="totalpoint" jdbcType="INTEGER"/>
+        <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+        <result column="isessencepool" property="isessencepool" jdbcType="INTEGER"/>
+        <result column="activetype" property="activetype" jdbcType="INTEGER"/>
+        <result column="activefee" property="activefee" jdbcType="DOUBLE"/>
+        <result column="iscontribute" property="iscontribute" jdbcType="INTEGER"/>
+        <result column="essencedate" property="essencedate" jdbcType="DATE"/>
+        <result column="userid" property="userid" jdbcType="VARCHAR"/>
+        <result column="oprtime" property="oprtime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.movision.mybatis.postDes.entity.PostDes" extends="BaseResultMap">
+        <result column="postcontent" property="postcontent" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, circleid, title, subtitle, zansum, commentsum, forwardsum, collectsum, isactive,
+        type, ishot, isessence, orderid, coverimg, hotimgurl, intime, totalpoint, isdel,
+        isessencepool, activetype, activefee, iscontribute, essencedate, userid, oprtime
+    </sql>
+    <sql id="Blob_Column_List">
+        postcontent
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from yw_post_des
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from yw_post_des
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.postDes.entity.PostDes">
+        insert into yw_post_des (id, circleid, title,
+        subtitle, zansum, commentsum,
+        forwardsum, collectsum, isactive,
+        type, ishot, isessence,
+        orderid, coverimg, hotimgurl,
+        intime, totalpoint, isdel,
+        isessencepool, activetype, activefee,
+        iscontribute, essencedate, userid,
+        oprtime, postcontent)
+        values (#{id,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
+        #{subtitle,jdbcType=VARCHAR}, #{zansum,jdbcType=INTEGER}, #{commentsum,jdbcType=INTEGER},
+        #{forwardsum,jdbcType=INTEGER}, #{collectsum,jdbcType=INTEGER}, #{isactive,jdbcType=INTEGER},
+        #{type,jdbcType=INTEGER}, #{ishot,jdbcType=INTEGER}, #{isessence,jdbcType=INTEGER},
+        #{orderid,jdbcType=INTEGER}, #{coverimg,jdbcType=VARCHAR}, #{hotimgurl,jdbcType=VARCHAR},
+        #{intime,jdbcType=TIMESTAMP}, #{totalpoint,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER},
+        #{isessencepool,jdbcType=INTEGER}, #{activetype,jdbcType=INTEGER}, #{activefee,jdbcType=DOUBLE},
+        #{iscontribute,jdbcType=INTEGER}, #{essencedate,jdbcType=DATE}, #{userid,jdbcType=VARCHAR},
+        #{oprtime,jdbcType=TIMESTAMP}, #{postcontent,jdbcType=LONGVARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.postDes.entity.PostDes">
+        insert into yw_post_des
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="circleid != null">
+                circleid,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="subtitle != null">
+                subtitle,
+            </if>
+            <if test="zansum != null">
+                zansum,
+            </if>
+            <if test="commentsum != null">
+                commentsum,
+            </if>
+            <if test="forwardsum != null">
+                forwardsum,
+            </if>
+            <if test="collectsum != null">
+                collectsum,
+            </if>
+            <if test="isactive != null">
+                isactive,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="ishot != null">
+                ishot,
+            </if>
+            <if test="isessence != null">
+                isessence,
+            </if>
+            <if test="orderid != null">
+                orderid,
+            </if>
+            <if test="coverimg != null">
+                coverimg,
+            </if>
+            <if test="hotimgurl != null">
+                hotimgurl,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="totalpoint != null">
+                totalpoint,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+            <if test="isessencepool != null">
+                isessencepool,
+            </if>
+            <if test="activetype != null">
+                activetype,
+            </if>
+            <if test="activefee != null">
+                activefee,
+            </if>
+            <if test="iscontribute != null">
+                iscontribute,
+            </if>
+            <if test="essencedate != null">
+                essencedate,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="oprtime != null">
+                oprtime,
+            </if>
+            <if test="postcontent != null">
+                postcontent,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="circleid != null">
+                #{circleid,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="subtitle != null">
+                #{subtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="zansum != null">
+                #{zansum,jdbcType=INTEGER},
+            </if>
+            <if test="commentsum != null">
+                #{commentsum,jdbcType=INTEGER},
+            </if>
+            <if test="forwardsum != null">
+                #{forwardsum,jdbcType=INTEGER},
+            </if>
+            <if test="collectsum != null">
+                #{collectsum,jdbcType=INTEGER},
+            </if>
+            <if test="isactive != null">
+                #{isactive,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="ishot != null">
+                #{ishot,jdbcType=INTEGER},
+            </if>
+            <if test="isessence != null">
+                #{isessence,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="coverimg != null">
+                #{coverimg,jdbcType=VARCHAR},
+            </if>
+            <if test="hotimgurl != null">
+                #{hotimgurl,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="totalpoint != null">
+                #{totalpoint,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="isessencepool != null">
+                #{isessencepool,jdbcType=INTEGER},
+            </if>
+            <if test="activetype != null">
+                #{activetype,jdbcType=INTEGER},
+            </if>
+            <if test="activefee != null">
+                #{activefee,jdbcType=DOUBLE},
+            </if>
+            <if test="iscontribute != null">
+                #{iscontribute,jdbcType=INTEGER},
+            </if>
+            <if test="essencedate != null">
+                #{essencedate,jdbcType=DATE},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=VARCHAR},
+            </if>
+            <if test="oprtime != null">
+                #{oprtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="postcontent != null">
+                #{postcontent,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.postDes.entity.PostDes">
+        update yw_post_des
+        <set>
+            <if test="circleid != null">
+                circleid = #{circleid,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="subtitle != null">
+                subtitle = #{subtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="zansum != null">
+                zansum = #{zansum,jdbcType=INTEGER},
+            </if>
+            <if test="commentsum != null">
+                commentsum = #{commentsum,jdbcType=INTEGER},
+            </if>
+            <if test="forwardsum != null">
+                forwardsum = #{forwardsum,jdbcType=INTEGER},
+            </if>
+            <if test="collectsum != null">
+                collectsum = #{collectsum,jdbcType=INTEGER},
+            </if>
+            <if test="isactive != null">
+                isactive = #{isactive,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="ishot != null">
+                ishot = #{ishot,jdbcType=INTEGER},
+            </if>
+            <if test="isessence != null">
+                isessence = #{isessence,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                orderid = #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="coverimg != null">
+                coverimg = #{coverimg,jdbcType=VARCHAR},
+            </if>
+            <if test="hotimgurl != null">
+                hotimgurl = #{hotimgurl,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="totalpoint != null">
+                totalpoint = #{totalpoint,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="isessencepool != null">
+                isessencepool = #{isessencepool,jdbcType=INTEGER},
+            </if>
+            <if test="activetype != null">
+                activetype = #{activetype,jdbcType=INTEGER},
+            </if>
+            <if test="activefee != null">
+                activefee = #{activefee,jdbcType=DOUBLE},
+            </if>
+            <if test="iscontribute != null">
+                iscontribute = #{iscontribute,jdbcType=INTEGER},
+            </if>
+            <if test="essencedate != null">
+                essencedate = #{essencedate,jdbcType=DATE},
+            </if>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=VARCHAR},
+            </if>
+            <if test="oprtime != null">
+                oprtime = #{oprtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="postcontent != null">
+                postcontent = #{postcontent,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.movision.mybatis.postDes.entity.PostDes">
+        update yw_post_des
+        set circleid = #{circleid,jdbcType=INTEGER},
+        title = #{title,jdbcType=VARCHAR},
+        subtitle = #{subtitle,jdbcType=VARCHAR},
+        zansum = #{zansum,jdbcType=INTEGER},
+        commentsum = #{commentsum,jdbcType=INTEGER},
+        forwardsum = #{forwardsum,jdbcType=INTEGER},
+        collectsum = #{collectsum,jdbcType=INTEGER},
+        isactive = #{isactive,jdbcType=INTEGER},
+        type = #{type,jdbcType=INTEGER},
+        ishot = #{ishot,jdbcType=INTEGER},
+        isessence = #{isessence,jdbcType=INTEGER},
+        orderid = #{orderid,jdbcType=INTEGER},
+        coverimg = #{coverimg,jdbcType=VARCHAR},
+        hotimgurl = #{hotimgurl,jdbcType=VARCHAR},
+        intime = #{intime,jdbcType=TIMESTAMP},
+        totalpoint = #{totalpoint,jdbcType=INTEGER},
+        isdel = #{isdel,jdbcType=INTEGER},
+        isessencepool = #{isessencepool,jdbcType=INTEGER},
+        activetype = #{activetype,jdbcType=INTEGER},
+        activefee = #{activefee,jdbcType=DOUBLE},
+        iscontribute = #{iscontribute,jdbcType=INTEGER},
+        essencedate = #{essencedate,jdbcType=DATE},
+        userid = #{userid,jdbcType=VARCHAR},
+        oprtime = #{oprtime,jdbcType=TIMESTAMP},
+        postcontent = #{postcontent,jdbcType=LONGVARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.postDes.entity.PostDes">
+        update yw_post_des
+        set circleid = #{circleid,jdbcType=INTEGER},
+        title = #{title,jdbcType=VARCHAR},
+        subtitle = #{subtitle,jdbcType=VARCHAR},
+        zansum = #{zansum,jdbcType=INTEGER},
+        commentsum = #{commentsum,jdbcType=INTEGER},
+        forwardsum = #{forwardsum,jdbcType=INTEGER},
+        collectsum = #{collectsum,jdbcType=INTEGER},
+        isactive = #{isactive,jdbcType=INTEGER},
+        type = #{type,jdbcType=INTEGER},
+        ishot = #{ishot,jdbcType=INTEGER},
+        isessence = #{isessence,jdbcType=INTEGER},
+        orderid = #{orderid,jdbcType=INTEGER},
+        coverimg = #{coverimg,jdbcType=VARCHAR},
+        hotimgurl = #{hotimgurl,jdbcType=VARCHAR},
+        intime = #{intime,jdbcType=TIMESTAMP},
+        totalpoint = #{totalpoint,jdbcType=INTEGER},
+        isdel = #{isdel,jdbcType=INTEGER},
+        isessencepool = #{isessencepool,jdbcType=INTEGER},
+        activetype = #{activetype,jdbcType=INTEGER},
+        activefee = #{activefee,jdbcType=DOUBLE},
+        iscontribute = #{iscontribute,jdbcType=INTEGER},
+        essencedate = #{essencedate,jdbcType=DATE},
+        userid = #{userid,jdbcType=VARCHAR},
+        oprtime = #{oprtime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+
+    <insert id="batchAdd" parameterType="java.util.List">
+        insert into yw_post_des (id, circleid, title,
+        subtitle, zansum, commentsum,
+        forwardsum, collectsum, isactive,
+        type, ishot, isessence,
+        orderid, coverimg, hotimgurl,
+        intime, totalpoint, isdel,
+        isessencepool, activetype, activefee,
+        iscontribute, essencedate, userid,
+        oprtime, postcontent)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=INTEGER}, #{item.circleid,jdbcType=INTEGER}, #{item.title,jdbcType=VARCHAR},
+            #{item.subtitle,jdbcType=VARCHAR}, #{item.zansum,jdbcType=INTEGER}, #{item.commentsum,jdbcType=INTEGER},
+            #{item.forwardsum,jdbcType=INTEGER}, #{item.collectsum,jdbcType=INTEGER}, #{item.isactive,jdbcType=INTEGER},
+            #{item.type,jdbcType=INTEGER}, #{item.ishot,jdbcType=INTEGER}, #{item.isessence,jdbcType=INTEGER},
+            #{item.orderid,jdbcType=INTEGER}, #{item.coverimg,jdbcType=VARCHAR}, #{item.hotimgurl,jdbcType=VARCHAR},
+            #{item.intime,jdbcType=TIMESTAMP}, #{item.totalpoint,jdbcType=INTEGER}, #{item.isdel,jdbcType=INTEGER},
+            #{item.isessencepool,jdbcType=INTEGER}, #{item.activetype,jdbcType=INTEGER},
+            #{item.activefee,jdbcType=DOUBLE},
+            #{item.iscontribute,jdbcType=INTEGER}, #{item.essencedate,jdbcType=DATE}, #{item.userid,jdbcType=VARCHAR},
+            #{item.oprtime,jdbcType=TIMESTAMP}, #{item.postcontent,jdbcType=LONGVARCHAR})
+        </foreach>
+    </insert>
+
+
+    <insert id="addFromPost" parameterType="com.movision.mybatis.post.entity.Post">
+        insert into yw_post_des (id, circleid, title,
+        subtitle, zansum, commentsum,
+        forwardsum, collectsum, isactive,
+        type, ishot, isessence,
+        orderid, coverimg, hotimgurl,
+        intime, totalpoint, isdel,
+        isessencepool, activetype, activefee,
+        iscontribute, essencedate, userid,
+        oprtime, postcontent)
+        values (#{id,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
+        #{subtitle,jdbcType=VARCHAR}, #{zansum,jdbcType=INTEGER}, #{commentsum,jdbcType=INTEGER},
+        #{forwardsum,jdbcType=INTEGER}, #{collectsum,jdbcType=INTEGER}, #{isactive,jdbcType=INTEGER},
+        #{type,jdbcType=INTEGER}, #{ishot,jdbcType=INTEGER}, #{isessence,jdbcType=INTEGER},
+        #{orderid,jdbcType=INTEGER}, #{coverimg,jdbcType=VARCHAR}, #{hotimgurl,jdbcType=VARCHAR},
+        #{intime,jdbcType=TIMESTAMP}, #{totalpoint,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER},
+        #{isessencepool,jdbcType=INTEGER}, #{activetype,jdbcType=INTEGER}, #{activefee,jdbcType=DOUBLE},
+        #{iscontribute,jdbcType=INTEGER}, #{essencedate,jdbcType=DATE}, #{userid,jdbcType=VARCHAR},
+        #{oprtime,jdbcType=TIMESTAMP}, #{postcontent,jdbcType=LONGVARCHAR})
+    </insert>
+</mapper>

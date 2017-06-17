@@ -552,6 +552,13 @@
             <artifactId>aliyun-sdk-oss</artifactId>
             <version>2.6.0</version>
         </dependency>
+
+        <!--根据url(http://pic.mofo.shop/upload/post/img/5f0K3m491496883825116.jpg)获取图片的宽高-->
+        <dependency>
+            <groupId>third.util</groupId>
+            <artifactId>get-pic-wh</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <!--<build>-->
@@ -681,6 +688,8 @@
                     <path>/</path>
                 </configuration>
             </plugin>
+
+
         </plugins>
     </build>
 

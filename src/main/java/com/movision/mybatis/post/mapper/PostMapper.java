@@ -217,4 +217,6 @@ public interface PostMapper {
     int queryCrileid(int postid);
 
     int queryIsIsessence(int postid);
+
+    List<Post> selectAllPost();
 }

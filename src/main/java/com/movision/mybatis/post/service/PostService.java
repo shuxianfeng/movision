@@ -1248,4 +1248,16 @@ public class PostService {
 
     }
 
+    public List<Post> selectAllPost() {
+        try {
+            log.info("查询所有的post");
+            return postMapper.selectAllPost();
+        } catch (Exception e) {
+            log.error("查询所有的post，失败", e);
+            throw e;
+        }
+    }
+
+
+
 }

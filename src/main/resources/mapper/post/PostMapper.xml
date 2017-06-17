@@ -1993,4 +1993,8 @@
     <select id="queryIsIsessence" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM yw_post WHERE isessence=1 AND ishot=1 AND id=#{postid,jdbcType=INTEGER}
     </select>
+
+    <select id="selectAllPost" resultType="com.movision.mybatis.post.entity.Post">
+        SELECT * from yw_post
+    </select>
 </mapper>
