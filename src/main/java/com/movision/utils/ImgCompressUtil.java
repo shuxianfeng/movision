@@ -169,6 +169,7 @@ public class ImgCompressUtil {
                 image_to_save.getGraphics().drawImage(
                         bufferedImage.getScaledInstance(final_w, final_h,
                                 Image.SCALE_SMOOTH), 0, 0, null);
+                log.info("第二次测试压缩核心方法中压缩后的图片存储路径>>>>>>>>>>>>>>>>" + tempDir + name);
                 FileOutputStream fos = new FileOutputStream(tempDir + name); // 输出到文件流
 
                 // 旧的使用 jpeg classes进行处理的方法

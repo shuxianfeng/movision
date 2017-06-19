@@ -297,6 +297,7 @@ public class JsoupCompressImg {
                     int s = fis.available();
                     DecimalFormat df = new DecimalFormat("######0.00");
                     String filesize = df.format((double) s / 1024 / 1024);
+                    log.info("第一次测试原图存储路径>>>>>>>>>>>>>>>>>>>>" + PATH);
                     log.info("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + filesize + "M");
 
                     if (sum == 0 && s > 800 * 1024) {
