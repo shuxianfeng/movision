@@ -2,6 +2,7 @@ package com.movision.controller.app;
 
 import com.movision.common.Response;
 import com.movision.common.util.ShiroUtil;
+import com.movision.facade.boss.PostFacade;
 import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
@@ -16,6 +17,7 @@ import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.omg.CORBA.PRIVATE_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,10 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author shuxf
@@ -47,6 +46,9 @@ public class AppPostController {
     private MovisionOssClient movisionOssClient;
     @Autowired
     private AliOSSClient aliOSSClient;
+
+    @Autowired
+    private PostFacade postFacade;
 
     @ApiOperation(value = "帖子详情数据返回接口", notes = "用于返回请求帖子详情内容", response = Response.class)
     @RequestMapping(value = "detail", method = RequestMethod.POST)
@@ -228,11 +230,11 @@ public class AppPostController {
                                         @ApiParam(value = "所属圈子id") @RequestParam String circleid,
                                         @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
                                         @ApiParam(value = "帖子内容") @RequestParam String postcontent,
-                                        @ApiParam(value = "帖子封面") @RequestParam String coverimg,
+                                        @ApiParam(value = "帖子封面") @RequestParam String isactive,
                                         @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids) {
         Response response = new Response();
 
-        Map count = facadePost.releasePostByPCTest(request, userid, circleid, title, postcontent, coverimg, proids);
+        Map count = facadePost.releasePostByPCTest(request, userid, circleid, title, postcontent, isactive, proids);
 
         if (count.get("flag").equals(-2)) {
             response.setCode(300);
@@ -253,7 +255,7 @@ public class AppPostController {
      * @param file
      * @return
      */
-    @ApiOperation(value = "PC官网上传帖子封面图片", notes = "PC官网上传帖子封面图片", response = Response.class)
+    @ApiOperation(value = "PC官网上传帖子封面图片（改版）", notes = "PC官网上传帖子封面图片（改版）", response = Response.class)
     @RequestMapping(value = {"/updateCoverImgByPC"}, method = RequestMethod.POST)
     public Response updateCoverImgByPC(@RequestParam(value = "file", required = false) MultipartFile file,
                                        @ApiParam(value = "X坐标") @RequestParam(required = false) String x,
@@ -265,19 +267,37 @@ public class AppPostController {
         return new Response(map);
     }
 
-    @ApiOperation(value = "图片压缩", notes = "用于图片压缩", response = Response.class)
+    /**
+     * 上传帖子相关图片
+     *
+     * @param file
+     * @return
+     */
+    @ApiOperation(value = "PC官网上传帖子相关图片（改版）", notes = "上传帖子相关图片", response = Response.class)
+    @RequestMapping(value = {"/upload_post_img_test"}, method = RequestMethod.POST)
+    public Response updatePostImgTest(@RequestParam(value = "file", required = false) MultipartFile[] file) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (int i = 0; i < file.length; i++) {
+            Map map = postFacade.updatePostImgTest(file[i]);
+            list.add(map);
+        }
+        return new Response(list);
+    }
+
+
+/*    @ApiOperation(value = "图片压缩", notes = "用于图片压缩", response = Response.class)
     @RequestMapping(value = "coverImgCompressUtil", method = RequestMethod.POST)
     public Response coverImgCompressUtil(@ApiParam(value = "上传文件") @RequestParam MultipartFile file,
                                          @ApiParam(value = "要求文件宽") @RequestParam String w,
                                          @ApiParam(value = "要求文件高") @RequestParam String h) {
         Response response = new Response();
-        /*int w = 750;//图片压缩后的宽度
-        int h = 440;//图片压缩后的高度440*/
+        *//*int w = 750;//图片压缩后的宽度
+        int h = 440;//图片压缩后的高度440*//*
         String str = coverImgCompressUtil.ImgCompress(file, Integer.parseInt(w), Integer.parseInt(h));
         response.setMessage("操作成功");
         response.setData(str);
         return response;
-    }
+    }*/
 
 
     /**
@@ -348,7 +368,7 @@ public class AppPostController {
      * @param file
      * @return
      */
-    @ApiOperation(value = "上传帖子封面相关图片", notes = "上传帖子封面相关图片（上传帖子封面相关图片）", response = Response.class)
+    @ApiOperation(value = "App上传帖子封面相关图片", notes = "上传帖子封面相关图片（上传帖子封面相关图片）", response = Response.class)
     @RequestMapping(value = {"/upload_postface_img"}, method = RequestMethod.POST)
     public Response updatePostImgFace(@RequestParam(value = "file", required = false) MultipartFile file
     ) {

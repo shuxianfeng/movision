@@ -37,6 +37,7 @@ import com.movision.utils.*;
 import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -612,6 +613,15 @@ public class FacadePost {
         System.out.println("压缩完的切割图片url==" + compressUrl);
         // 对压缩完的图片上传到阿里云
         Map compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
+        String newurl = String.valueOf(compressmap.get("url"));
+        //对上传到阿里云的图片url重拼
+        String newimgurl = "";
+        //拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接
+        for (int j = 0; j < 3; j++) {
+            newurl = newurl.substring(newurl.indexOf("/") + 1);
+        }
+        newimgurl = PropertiesLoader.getValue("formal.img.domain") + "/" + newurl;//拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接，如："http://pic.mofo.shop" + "/upload/postCompressImg/img/yDi0T2nY1496812117357.png"
+
         //6删除本地服务器切割的图片文件
         //----(1)
         // File fdel2 = new File(url);
@@ -628,11 +638,11 @@ public class FacadePost {
         fdel3.delete();//删除压缩完成的图片
         //把切割好的原图和压缩图分别存放数据库中
         CompressImg compressImg = new CompressImg();
-        compressImg.setCompressimgurl(String.valueOf(compressmap.get("url")));
+        compressImg.setCompressimgurl(newimgurl);
         compressImg.setProtoimgsize(filesize);
         compressImg.setProtoimgurl(url);
         compressImgService.insert(compressImg);
-        map.put("compressmap", compressmap.get("url"));
+        map.put("compressmap", newimgurl);
         return map;
     }
 
@@ -1139,6 +1149,15 @@ public class FacadePost {
 
         //5对压缩完的图片上传到阿里云
         compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
+        String newurl = String.valueOf(compressmap.get("url"));
+        String newimgurl = "";
+        //拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接
+        for (int j = 0; j < 3; j++) {
+            newurl = newurl.substring(newurl.indexOf("/") + 1);
+        }
+        newimgurl = PropertiesLoader.getValue("formal.img.domain") + "/" + newurl;//拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接，如："http://pic.mofo.shop" + "/upload/postCompressImg/img/yDi0T2nY1496812117357.png"
+        compressmap.put("url", newimgurl);
+
         File f = new File(url);
         f.length();
         File fdel = new File(url);
@@ -1148,7 +1167,7 @@ public class FacadePost {
         String filesize = df.format(size);//返回的是String类型的
         //把切好的原图和压缩图存放表中
         CompressImg compressImg = new CompressImg();
-        compressImg.setCompressimgurl(String.valueOf(compressmap.get("url")));
+        compressImg.setCompressimgurl(newimgurl);
         compressImg.setProtoimgsize(filesize);
         compressImg.setProtoimgurl(url);
         compressImgService.insert(compressImg);

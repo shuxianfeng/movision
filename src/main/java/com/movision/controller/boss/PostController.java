@@ -4,6 +4,7 @@ import com.movision.common.Response;
 import com.movision.facade.boss.CircleFacade;
 import com.movision.facade.boss.PostFacade;
 import com.movision.facade.boss.UserManageFacade;
+import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.activityContribute.entity.ActivityContribute;
 import com.movision.mybatis.activityContribute.entity.ActivityContributeVo;
@@ -58,6 +59,9 @@ public class PostController {
 
     @Autowired
     private MovisionOssClient movisionOssClient;
+
+    @Autowired
+    private FacadePost facadePost;
     /**
      * 后台管理-查询帖子列表
      *
@@ -1069,6 +1073,29 @@ public class PostController {
             list.add(map);
         }
         return new Response(list);
+    }
+
+    /**
+     * boss上传帖子封面图
+     *
+     * @param file
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @param type
+     * @return
+     */
+    @ApiOperation(value = "上传帖子封面图片（改版）", notes = "PC官网上传帖子封面图片（改版）", response = Response.class)
+    @RequestMapping(value = {"/updateCoverImgByPC"}, method = RequestMethod.POST)
+    public Response updateCoverImgByPC(@RequestParam(value = "file", required = false) MultipartFile file,
+                                       @ApiParam(value = "X坐标") @RequestParam(required = false) String x,
+                                       @ApiParam(value = "Y坐标") @RequestParam(required = false) String y,
+                                       @ApiParam(value = "宽") @RequestParam String w,
+                                       @ApiParam(value = "高") @RequestParam String h,
+                                       @ApiParam(value = "1帖子封面 2活动方形图") @RequestParam String type) {
+        Map map = facadePost.updateCoverImgByPC(file, x, y, w, h, type);
+        return new Response(map);
     }
 
 

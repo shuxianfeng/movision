@@ -304,7 +304,17 @@ public class MovisionOssClient {
             //String domain = PropertiesLoader.getValue("formal.img.domain");
             //上传本地服务器切割完成的图片到阿里云
             map = aliOSSClient.uploadInciseStream(incise, "img", "coverIncise");
-            map.put("incise", incise);
+            //把上传至阿里云的图片路径更改为http://pic.mofo.shop开头
+            String newurl = String.valueOf(map.get("url"));//返回阿里云的路径
+
+            String newimgurl = "";
+            //拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接
+            for (int j = 0; j < 3; j++) {
+                newurl = newurl.substring(newurl.indexOf("/") + 1);
+            }
+            newimgurl = PropertiesLoader.getValue("formal.img.domain") + "/" + newurl;//拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接，如："http://pic.mofo.shop" + "/upload/postCompressImg/img/yDi0T2nY1496812117357.png"
+
+            map.put("incise", newimgurl);
             map.put("file", file);
 
         } catch (IOException e) {
