@@ -4,6 +4,8 @@ import com.lowagie.text.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -189,15 +191,57 @@ public class SimpleImageInfo {
     }
 
     public static String getWH(String url) throws Exception {
+        /** java.io.File file = new java.io.File(url);
+         //   Map map = getWhBYOnlineUrl(url);
+         Map map = new HashMap();
+         int width=getImgWidth(file);
+         int height=getImgHeight(file);
+         // String w = String.valueOf(map.get("w"));
+         //  String h = String.valueOf(map.get("h"));
+         String wh = width + "x" + height;
+         log.debug("wh:" + wh);*/
+        String wh = "";
+        BufferedImage image = getBufferedImage(url);
+        if (image != null) {
+            int width = image.getHeight();
+            int height = image.getWidth();
+            wh = width + "x" + height;
+            log.debug("wh:" + wh);
 
-        Map map = getWhBYOnlineUrl(url);
+        } else {
+            System.out.println("图片不存在！");
+        }
 
-        String w = String.valueOf(map.get("w"));
-        String h = String.valueOf(map.get("h"));
-        String wh = w + "x" + h;
-        log.debug("wh:" + wh);
         return wh;
     }
+
+    /**
+     * @param imgUrl 图片地址
+     * @return
+     */
+    public static BufferedImage getBufferedImage(String imgUrl) {
+        URL url = null;
+        InputStream is = null;
+        BufferedImage img = null;
+        try {
+            url = new URL(imgUrl);
+            is = url.openStream();
+            img = ImageIO.read(is);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return img;
+    }
+
 
 
     public static void main(String[] args) throws IOException {

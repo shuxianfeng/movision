@@ -72,7 +72,7 @@ public class PostcontentDataMove {
 
     private void parseForVideo(Post post, List<PostContent> postContents) {
         //判断是否有视频,
-        if (1 == post.getType()) {
+        if (null != post.getType() && 1 == post.getType()) {
             //如果是原生视频贴则进行下面的操作
             List<Video> videoList = videoService.queryByPostid(post.getId());
             if (ListUtil.isNotEmpty(videoList)) {
