@@ -228,11 +228,11 @@ public class AppPostController {
                                         @ApiParam(value = "所属圈子id") @RequestParam String circleid,
                                         @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
                                         @ApiParam(value = "帖子内容") @RequestParam String postcontent,
-                                        @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,
+                                        @ApiParam(value = "帖子封面") @RequestParam String coverimg,
                                         @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids) {
         Response response = new Response();
 
-        Map count = facadePost.releasePostByPCTest(request, userid, circleid, title, postcontent, isactive, proids);
+        Map count = facadePost.releasePostByPCTest(request, userid, circleid, title, postcontent, coverimg, proids);
 
         if (count.get("flag").equals(-2)) {
             response.setCode(300);

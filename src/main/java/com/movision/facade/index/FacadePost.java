@@ -639,7 +639,7 @@ public class FacadePost {
 
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
-    public Map releasePostByPCTest(HttpServletRequest request, String userid, String circleid, String title, String postcontent, String isactive, String proids) {
+    public Map releasePostByPCTest(HttpServletRequest request, String userid, String circleid, String title, String postcontent, String coverimg, String proids) {
         Map map = new HashMap();
 
         //这里需要根据userid判断当前登录的用户是否有发帖权限
@@ -729,7 +729,7 @@ public class FacadePost {
                 post.setCommentsum(0);//被评论次数
                 post.setForwardsum(0);//被转发次数
                 post.setCollectsum(0);//被收藏次数
-                post.setIsactive(Integer.parseInt(isactive));//是否为活动 0 帖子 1 活动
+                post.setCoverimg(coverimg);//是否为活动 0 帖子 1 活动
                 post.setIshot(0);//是否设为热门：默认0否
                 post.setIsessence(0);//是否设为精选：默认0否
                 post.setIsessencepool(0);//是否设为精选池中的帖子
