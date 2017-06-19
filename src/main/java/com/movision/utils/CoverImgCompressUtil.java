@@ -76,7 +76,6 @@ public class CoverImgCompressUtil {
     public String ImgCompress(String file, int w, int h) {
         Boolean compressFlag = false;
         String compress_dir_path = PropertiesLoader.getValue("post.incise.domain");//压缩图片路径url
-        String compress_dir_local_path = PropertiesLoader.getValue("post.img.local.domain");//获取项目根目录/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision
         List<String> existFileList = getExistFiles(compress_dir_path);//获取文件夹下的所有文件名
 
         File f = new File(file);

@@ -299,6 +299,7 @@ public class MovisionOssClient {
             UUID uuid = UUID.randomUUID();
             String incise = PropertiesLoader.getValue("post.incise.domain");
             incise += uuid + "." + suffix;
+            System.out.println("切割图片的本体图片位置：" + incise);
             //保存新图片
             ImageIO.write(bi, "jpg", new File(incise));
             //String domain = PropertiesLoader.getValue("formal.img.domain");
@@ -306,15 +307,8 @@ public class MovisionOssClient {
             map = aliOSSClient.uploadInciseStream(incise, "img", "coverIncise");
             //把上传至阿里云的图片路径更改为http://pic.mofo.shop开头
             String newurl = String.valueOf(map.get("url"));//返回阿里云的路径
-
-            String newimgurl = "";
-            //拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接
-            for (int j = 0; j < 3; j++) {
-                newurl = newurl.substring(newurl.indexOf("/") + 1);
-            }
-            newimgurl = PropertiesLoader.getValue("formal.img.domain") + "/" + newurl;//拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接，如："http://pic.mofo.shop" + "/upload/postCompressImg/img/yDi0T2nY1496812117357.png"
-
-            map.put("incise", newimgurl);
+            System.out.println("切割图片上传到阿里云的url" + newurl);
+            map.put("incise", newurl);
             map.put("file", file);
 
         } catch (IOException e) {
