@@ -209,7 +209,7 @@ public class SimpleImageInfo {
             log.debug("wh:" + wh);
 
         } else {
-            System.out.println("图片不存在！");
+            log.error("图片不存在！");
         }
 
         return wh;
@@ -241,7 +241,6 @@ public class SimpleImageInfo {
         }
         return img;
     }
-
 
 
     public static void main(String[] args) throws IOException {

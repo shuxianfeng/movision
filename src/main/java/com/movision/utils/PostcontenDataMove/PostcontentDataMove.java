@@ -125,6 +125,13 @@ public class PostcontentDataMove {
         return imgContents;
     }
 
+    /**
+     * 废弃
+     *
+     * @param doc
+     * @param allList
+     * @throws Exception
+     */
     private static void parseForP(Document doc, List<PostContent> allList) throws Exception {
         Elements pElms = doc.select("p:has(span),p:has(img)");
         if (pElms.size() > 0) {
