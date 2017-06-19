@@ -729,7 +729,8 @@ public class FacadePost {
                 post.setCommentsum(0);//被评论次数
                 post.setForwardsum(0);//被转发次数
                 post.setCollectsum(0);//被收藏次数
-                post.setCoverimg(coverimg);//是否为活动 0 帖子 1 活动
+                post.setCoverimg(coverimg);//帖子封面
+                post.setIsactive(0);//是否为活动 0 帖子 1活动
                 post.setIshot(0);//是否设为热门：默认0否
                 post.setIsessence(0);//是否设为精选：默认0否
                 post.setIsessencepool(0);//是否设为精选池中的帖子
