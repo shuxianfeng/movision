@@ -1995,6 +1995,8 @@
     </select>
 
     <select id="selectAllPost" resultType="com.movision.mybatis.post.entity.Post">
-        SELECT * from yw_post
+        <![CDATA[
+        SELECT * from yw_post where id = 105
+        ]]>
     </select>
 </mapper>

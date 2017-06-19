@@ -223,7 +223,8 @@ public class SimpleImageInfo {
 
         try {
 //            Map map = getWhBYOnlineUrl("http://pic.mofo.shop/upload/post/img/5f0K3m491496883825116.jpg");
-            getWH("http://pic.mofo.shop/upload/post/img/ksk2PVjD1496883846771.jpg");
+            String url = "http://pic.mofo.shop/upload/activity/img/aMp906YA1496897737441.jpg";
+            getWH(url);
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();

@@ -50,26 +50,11 @@ public class PostcontentDataMove {
             String postcontent = post.getPostcontent();
             Document doc = Jsoup.parse(postcontent);
             log.debug(doc.toString());
+            //封装所有img实体
             List<PostContent> postContents = parseForImg(doc);
+            //封装视频（若存在）
+            parseForVideo(post, postContents);
 
-            //判断是否有视频
-            Integer type = post.getType();
-            Integer pid = post.getId();
-            if (1 == type) {    //如果是原生视频贴则进行下面的操作
-                List<Video> videoList = videoService.queryByPostid(pid);
-                if (ListUtil.isNotEmpty(videoList)) {
-                    //如果有视频，则添加到集合中
-                    String vid = videoList.get(0).getVideourl();    //获取视频vid
-                    PostContent pc = new PostContent();
-                    pc.setType(2);
-                    pc.setOrderid(postContents.size() + 1);
-                    pc.setValue(vid);
-                    pc.setDir("");
-                    pc.setWh("");
-
-                    postContents.add(pc);
-                }
-            }
             Gson gson = new Gson();
             String finalPostContent = gson.toJson(postContents);
             log.debug("[添加转化成字符串的newPostContent]" + finalPostContent);
@@ -83,6 +68,26 @@ public class PostcontentDataMove {
         //最后把post集合全部插入yw_post_des表中
 //        postDesService.batchAdd(postList);
 
+    }
+
+    private void parseForVideo(Post post, List<PostContent> postContents) {
+        //判断是否有视频,
+        if (1 == post.getType()) {
+            //如果是原生视频贴则进行下面的操作
+            List<Video> videoList = videoService.queryByPostid(post.getId());
+            if (ListUtil.isNotEmpty(videoList)) {
+                //如果有视频，则添加到集合中
+                String vid = videoList.get(0).getVideourl();    //获取视频vid
+                PostContent pc = new PostContent();
+                pc.setType(2);
+                pc.setOrderid(postContents.size() + 1);
+                pc.setValue(vid);
+                pc.setDir("");
+                pc.setWh("");
+
+                postContents.add(pc);
+            }
+        }
     }
 
 
