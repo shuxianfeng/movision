@@ -635,8 +635,8 @@ public class FacadePost {
 
         //6删除本地服务器切割的图片文件
         //----(1)
-        // File fdel2 = new File(url);
-        //fdel2.delete();//切割后的原图删除
+        File fdel2 = new File(compressUrl);
+        fdel2.delete();//删除压缩图
         //----(2)
         File fdel = new File(String.valueOf(url));
         long l = fdel.length();
