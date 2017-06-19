@@ -1177,6 +1177,9 @@ public class FacadePost {
         compressImg.setProtoimgsize(filesize);
         compressImg.setProtoimgurl(rawimg);
         compressImgService.insert(compressImg);
+        log.info("帖子上传封面本地原图=========", url);
+        log.info("帖子上传封面本地切割图=========", tmpurl);
+        log.info("帖子上传封面本地压缩图=========", compressUrl);
 
         //6删除本地原图，切割图，压缩图
         File f1 = new File(url);

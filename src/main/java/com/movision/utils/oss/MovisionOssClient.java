@@ -309,7 +309,7 @@ public class MovisionOssClient {
             String newurl = String.valueOf(map.get("url"));//返回阿里云的路径
             System.out.println("切割图片上传到阿里云的url" + newurl);
             map.put("incise", newurl);
-            map.put("file", file);
+            map.put("file", incise);
 
         } catch (IOException e) {
             e.printStackTrace();
