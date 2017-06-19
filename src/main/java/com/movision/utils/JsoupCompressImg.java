@@ -84,7 +84,7 @@ public class JsoupCompressImg {
                 log.info("压缩前的原图url，imgurl=" + imgurl);
 
                 //从阿里云服务器下载到本地
-                String tempvideodir = PropertiesLoader.getValue("post.tempimg.domain");//下载到本地的视频临时存放目录
+                String tempvideodir = PropertiesLoader.getValue("post.tempimg.domain");//下载到本地的图片临时存放目录
                 log.info("本地图片临时存放目录>>>>>>>>>" + tempvideodir);
                 File dirFile = new File(tempvideodir);
                 if(!dirFile.exists()){//文件路径不存在时，自动创建目录
@@ -262,7 +262,7 @@ public class JsoupCompressImg {
                     log.info("压缩前的原图url，imgurl=" + imgurl);
 
                     //从阿里云服务器下载到本地
-                    String tempvideodir = PropertiesLoader.getValue("post.tempimg.domain");//下载到本地的视频临时存放目录
+                    String tempvideodir = PropertiesLoader.getValue("post.tempimg.domain");//下载到本地的图片临时存放目录
                     log.info("本地图片临时存放目录>>>>>>>>>" + tempvideodir);
                     File dirFile = new File(tempvideodir);
                     if (!dirFile.exists()) {//文件路径不存在时，自动创建目录
