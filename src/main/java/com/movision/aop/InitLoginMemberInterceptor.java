@@ -102,7 +102,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                     }
                     //获取授权的菜单列表
                     List<Map<String, Object>> menuList = (List) session.getAttribute(SessionConstant.ACCESS_MENU);
-                    log.info("获取授权的菜单列表：" + menuList.toString());
+                    log.debug("获取授权的菜单列表：" + menuList.toString());
                     //遍历菜单列表
                     for (int i = 0; i < menuList.size(); i++) {
                         //获取一个map中的父菜单
