@@ -1144,6 +1144,7 @@ public class FacadePost {
         //3获取本地服务器中切割完成后的图片
         String tmpurl = String.valueOf(map.get("file"));
         System.out.println("切割完成后的本地图片绝对路径===" + tmpurl);
+        String rawimg = String.valueOf(map.get("incise"));
 
         //4对本地服务器中切割好的图片进行压缩处理
         int wt = 0;//图片压缩后的宽度
@@ -1174,7 +1175,7 @@ public class FacadePost {
         CompressImg compressImg = new CompressImg();
         compressImg.setCompressimgurl(newurl);
         compressImg.setProtoimgsize(filesize);
-        compressImg.setProtoimgurl(url);
+        compressImg.setProtoimgurl(rawimg);
         compressImgService.insert(compressImg);
 
         //6删除本地原图，切割图，压缩图
