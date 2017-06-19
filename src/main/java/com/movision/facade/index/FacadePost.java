@@ -604,8 +604,19 @@ public class FacadePost {
 
     public Map uploadPostFacePic(MultipartFile file) {
         Map m = new HashMap();
+        //上传到本地服务器
         m = movisionOssClient.uploadMultipartFileObject(file, "img");
         String url = String.valueOf(m.get("url"));
+        //把本地服务器原图上传至阿里云
+        //对上传到阿里云的图片url重拼
+        String newalurl = "";//原图
+        Map al = aliOSSClient.uploadInciseStream(url, "img", "coverIncise");
+        String alurl = String.valueOf(al);
+        for (int j = 0; j < 3; j++) {
+            alurl = alurl.substring(alurl.indexOf("/") + 1);
+        }
+        newalurl = PropertiesLoader.getValue("formal.img.domain") + "/" + alurl;//拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接，如："http://pic.mofo.shop" + "/upload/postCompressImg/img/yDi0T2nY1496812117357.png"
+
         Map map = new HashMap();
         int wt = 750;//图片压缩后的宽度
         int ht = 440;//图片压缩后的高度440
@@ -615,7 +626,7 @@ public class FacadePost {
         Map compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
         String newurl = String.valueOf(compressmap.get("url"));
         //对上传到阿里云的图片url重拼
-        String newimgurl = "";
+        String newimgurl = "";//压缩图
         //拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接
         for (int j = 0; j < 3; j++) {
             newurl = newurl.substring(newurl.indexOf("/") + 1);
@@ -640,7 +651,7 @@ public class FacadePost {
         CompressImg compressImg = new CompressImg();
         compressImg.setCompressimgurl(newimgurl);
         compressImg.setProtoimgsize(filesize);
-        compressImg.setProtoimgurl(url);
+        compressImg.setProtoimgurl(newalurl);
         compressImgService.insert(compressImg);
         map.put("compressmap", newimgurl);
         return map;
