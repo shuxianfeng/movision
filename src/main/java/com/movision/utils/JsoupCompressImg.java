@@ -134,6 +134,7 @@ public class JsoupCompressImg {
                         // 1 生成压缩后的图片的url
                         String tempfilename = UUID.randomUUID().toString() + filename.substring(filename.lastIndexOf("."), filename.length()-1);
                         String compress_file_path = compress_dir_path + tempfilename;
+                        File compressfile = new File(compress_file_path);
                         log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
 
                         // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
@@ -147,8 +148,8 @@ public class JsoupCompressImg {
                             log.info("该图片已存在，不需要压缩，filename=" + filename);
                         }
                         if (compressFlag) {
-                            //上传到阿里云OSS
-                            Map m = movisionOssClient.uploadFileObject(file, "img", "postCompressImg");
+                            //上传压缩图到阿里云OSS
+                            Map m = movisionOssClient.uploadFileObject(compressfile, "img", "postCompressImg");//----file----->compressfile------shuxf 20170619
                             String compressurl = String.valueOf(m.get("url"));//压缩图片上传阿里云的返回url
 
                             String newimgurl = "";
@@ -174,6 +175,10 @@ public class JsoupCompressImg {
                                 log.info("原图:" + imgurl + "已进行过压缩，且已存在映射关系");
                             }
                         }
+
+                        //压缩上传存储完成后，删除ECS下载的原图和压缩图的临时文件 compress_file_path 和 PATH
+                        compressfile.delete();//删除压缩图
+                        file.delete();//删除原图
                     }
                 } else if (sum != 0) {
                     //虽然图片大于400kb，但是图片压缩过，存在映射关系
@@ -307,6 +312,7 @@ public class JsoupCompressImg {
                             // 1 生成压缩后的图片的url
                             String tempfilename = UUID.randomUUID().toString() + filename.substring(filename.lastIndexOf("."), filename.length() - 1);
                             String compress_file_path = compress_dir_path + tempfilename;
+                            File compressfile = new File(compress_file_path);
                             log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
 
                             // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
@@ -320,8 +326,8 @@ public class JsoupCompressImg {
                                 log.info("该图片已存在，不需要压缩，filename=" + filename);
                             }
                             if (compressFlag) {
-                                //上传到阿里云OSS
-                                Map m = movisionOssClient.uploadFileObject(file, "img", "postCompressImg");
+                                //上传压缩图到阿里云OSS
+                                Map m = movisionOssClient.uploadFileObject(compressfile, "img", "postCompressImg");
                                 String compressurl = String.valueOf(m.get("url"));//压缩图片上传阿里云的返回url
 
                                 String newimgurl = "";
@@ -356,6 +362,10 @@ public class JsoupCompressImg {
                                     log.info("原图:" + imgurl + "已进行过压缩，且已存在映射关系");
                                 }
                             }
+
+                            //压缩上传存储完成后，删除ECS下载的原图和压缩图的临时文件 compress_file_path 和 PATH
+                            compressfile.delete();//删除压缩图
+                            file.delete();//删除原图
                         }
                     } else if (sum != 0) {
                         //虽然图片大于400kb，但是图片压缩过，存在映射关系
