@@ -177,7 +177,8 @@ public class JsoupCompressImg {
                         }
 
                         //压缩上传存储完成后，删除ECS下载的原图和压缩图的临时文件 compress_file_path 和 PATH
-                        compressfile.delete();//删除压缩图
+                        //实际原图的路径和文件名与压缩后的图片路径和文件名一模一样，所以会被覆盖，因此下面方法执行一个即可
+//                        compressfile.delete();//删除压缩图
                         file.delete();//删除原图
                     }
                 } else if (sum != 0) {
@@ -365,7 +366,8 @@ public class JsoupCompressImg {
                             }
 
                             //压缩上传存储完成后，删除ECS下载的原图和压缩图的临时文件 compress_file_path 和 PATH
-                            compressfile.delete();//删除压缩图
+                            //实际原图的路径和文件名与压缩后的图片路径和文件名一模一样，所以会被覆盖，因此下面方法执行一个即可
+//                            compressfile.delete();//删除压缩图
                             file.delete();//删除原图
                         }
                     } else if (sum != 0) {
