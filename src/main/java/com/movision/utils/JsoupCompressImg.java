@@ -149,7 +149,7 @@ public class JsoupCompressImg {
                         }
                         if (compressFlag) {
                             //上传压缩图到阿里云OSS
-                            Map m = movisionOssClient.uploadFileObject(compressfile, "img", "postCompressImg");//----file----->compressfile------shuxf 20170619
+                            Map m = movisionOssClient.uploadFileObject(file, "img", "postCompressImg");//----file----->compressfile------shuxf 20170619
                             String compressurl = String.valueOf(m.get("url"));//压缩图片上传阿里云的返回url
 
                             String newimgurl = "";
@@ -327,7 +327,7 @@ public class JsoupCompressImg {
                             }
                             if (compressFlag) {
                                 //上传压缩图到阿里云OSS
-                                Map m = movisionOssClient.uploadFileObject(compressfile, "img", "postCompressImg");
+                                Map m = movisionOssClient.uploadFileObject(file, "img", "postCompressImg");
                                 String compressurl = String.valueOf(m.get("url"));//压缩图片上传阿里云的返回url
 
                                 String newimgurl = "";
