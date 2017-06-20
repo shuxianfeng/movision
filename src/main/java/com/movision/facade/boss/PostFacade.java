@@ -955,7 +955,7 @@ public class PostFacade {
                     }
                 }
                 post.setUserid(userid);
-                if (con.get("flag") == 0) {
+                if ((int) con.get("flag") == 0) {
                     post.setIsdel("0");
                 } else {
                     post.setIsdel("2");
@@ -1754,7 +1754,7 @@ public class PostFacade {
                         post.setIshot(ishot);//是否为圈子精选
                     }
                     post.setUserid(userid);
-                    if (con.get("flag") != 0) {
+                    if ((int) con.get("flag") != 0) {
                         post.setIsdel("2");
                     }
                     int result = postService.updatePostById(post);//编辑帖子
