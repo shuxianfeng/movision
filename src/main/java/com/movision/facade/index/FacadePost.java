@@ -709,49 +709,6 @@ public class FacadePost {
                     }
                 }
 
-
-             /*   //1上传到本地服务器
-                Map m = movisionOssClient.uploadMultipartFileObject(coverimg, "img");
-
-                //2从服务器获取文件并剪切，删除原图，上传剪切后图片上传阿里云
-                Map tmap = movisionOssClient.uploadImgerAndIncision(String.valueOf(m.get("url")), x, y, w, h);
-                String incisionUrl = String.valueOf(tmap.get("url"));
-                System.out.println("原图url==" + String.valueOf(tmap.get("file")));
-
-                //3获取本地服务器中切割完成后的图片
-                String tmpurl = String.valueOf(tmap.get("incise"));
-                System.out.println("切割完成后的图片url===" + tmpurl);
-
-                //4对本地服务器中切割好的图片进行压缩处理
-                String compressUrl = coverImgCompressUtil.ImgCompress(tmpurl);
-                System.out.println("压缩完的切割图片url==" + compressUrl);
-
-
-                //5对压缩完的图片上传到阿里云
-                Map compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
-
-                //6删除本地服务器切割的图片文件
-                //----(1)
-                File fdel2 = new File(tmpurl);
-                fdel2.delete();//切割后的原图删除
-                //----(2)
-                File fdel = new File(String.valueOf(tmap.get("file")));
-                long l = fdel.length();
-                float size = (float) l / 1024 / 1024;
-                DecimalFormat df = new DecimalFormat("0.00");//格式化小数，不足的补0
-                String filesize = df.format(size);//返回的是String类型的
-                fdel.delete();//删除上传到本地的原图片文件
-                //----(3)
-                File fdel3 = new File(compressUrl);
-                fdel3.delete();//删除压缩完成的图片
-*/
-                //把切割好的原图和压缩图分别存放数据库中
-               /* CompressImg compressImg = new CompressImg();
-                compressImg.setCompressimgurl(String.valueOf(compressmap.get("url")));
-                compressImg.setProtoimgsize(filesize);
-                compressImg.setProtoimgurl(String.valueOf(tmap.get("url")));
-                compressImgService.insert(compressImg);*/
-
                 post.setPostcontent(postcontent);//帖子内容
                 post.setZansum(0);//新发帖全部默认为0次
                 post.setCommentsum(0);//被评论次数
@@ -770,21 +727,6 @@ public class FacadePost {
                 postService.releasePost(post);
 
                 int flag = post.getId();//返回的主键--帖子id
-                /*if (!type.equals("0")) {
-                    Video video = new Video();
-                    video.setPostid(flag);
-                    video.setIsrecommend(0);
-                    video.setIsbanner(0);
-                    video.setBannerimgurl(incisionUrl);//简化APP，直接取帖子封面图片为原生视频的封面(运营后台不变)
-                    if (type.equals("1")) {
-                        video.setVideourl(vid);//原生视频上传链接
-                    } else if (type.equals("2")) {
-                        video.setVideourl(videourl);//分享视频链接
-                    }
-                    video.setIntime(new Date());
-                    //向帖子视频表中插入一条视频记录
-                    videoService.insertVideoById(video);
-                }*/
                 //再保存帖子中分享的商品列表(如果商品id字段不为空)
                 if (!StringUtils.isEmpty(proids)) {
                     String[] proidstr = proids.split(",");
