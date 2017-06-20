@@ -722,7 +722,7 @@ public class FacadePost {
                 post.setIsessencepool(0);//是否设为精选池中的帖子
                 post.setIntime(new Date());//帖子发布时间
                 post.setTotalpoint(0);//帖子综合评分
-                if (con.get("flag") != 0) {
+                if ((int) con.get("flag") != 0) {
                     post.setIsdel(2);//视频
                 } else {
                     post.setIsdel(0);//图文
@@ -994,7 +994,6 @@ public class FacadePost {
         User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
         //查询当前圈子的所有管理员列表
         List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
-        int flag = 0;
         int mark = 0;//定义一个userid比对标志位
         if (manageList.size() > 0) {
             for (int i = 0; i < manageList.size(); i++) {
@@ -1010,17 +1009,16 @@ public class FacadePost {
 
             try {
                 log.info("APP前端用户开始请求发帖");
-
+                Map con = null;
                 Post post = new Post();
                 post.setCircleid(Integer.parseInt(circleid));
                 post.setTitle(title);
                 if (StringUtil.isNotEmpty(postcontent)) {
                     //内容转换
-                    Map con = jsoupCompressImg.newCompressImg(request, postcontent);
+                    con = jsoupCompressImg.newCompressImg(request, postcontent);
                     System.out.println(con);
                     if ((int) con.get("code") == 200) {
                         String str = con.get("content").toString();
-                        flag = Integer.parseInt(con.get("flag").toString());
                         postcontent = str.replace("\\", "");
                     } else {
                         log.error("APP端帖子图片内容转换异常");
@@ -1038,23 +1036,23 @@ public class FacadePost {
                 post.setIsessencepool(0);//是否设为精选池中的帖子
                 post.setIntime(new Date());//帖子发布时间
                 post.setTotalpoint(0);//帖子综合评分
-                if (flag == 0) {
+                if ((int) con.get("flag") == 0) {
                     post.setIsdel(0);//上架
-                } else if (flag > 0) {
+                } else if ((int) con.get("flag") > 0) {
                     post.setIsdel(2);
                 }
                 post.setCoverimg(coverimg);//帖子封面
                 post.setUserid(Integer.parseInt(userid));
                 //插入帖子
                 postService.releaseModularPost(post);
-                int flagg = post.getId();//返回的主键--帖子id
+                int flag = post.getId();//返回的主键--帖子id
                 //再保存帖子中分享的商品列表(如果商品id字段不为空)
                 if (!StringUtils.isEmpty(proids)) {
                     String[] proidstr = proids.split(",");
                     List<PostShareGoods> postShareGoodsList = new ArrayList<>();
                     for (int i = 0; i < proidstr.length; i++) {
                         PostShareGoods postShareGoods = new PostShareGoods();
-                        int postid = flagg;
+                        int postid = flag;
                         int goodsid = Integer.parseInt(proidstr[i]);
                         postShareGoods.setPostid(postid);
                         postShareGoods.setGoodsid(goodsid);
@@ -1065,7 +1063,7 @@ public class FacadePost {
 
                 pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
 
-                map.put("flagg", flagg);
+                map.put("flagg", flag);
                 return map;
 
             } catch (Exception e) {
