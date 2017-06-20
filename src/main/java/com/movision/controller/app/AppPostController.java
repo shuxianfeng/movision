@@ -569,24 +569,4 @@ public class AppPostController {
         return response;
     }
 
-    /** @ApiOperation(value = "模块化帖子详情数据返回接口", notes = "模块化帖子详情数据返回接口", response = Response.class)
-    @RequestMapping(value = "modulardetail", method = RequestMethod.POST)
-    public Response queryModularPostDetail(@ApiParam(value = "帖子id") @RequestParam String postid,
-                                           @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid
-    ) {
-        Response response = new Response();
-
-        PostVo post = facadePost.queryModularPostDetail(postid, userid);
-
-
-        if (null != post) {
-            response.setCode(200);
-            response.setMessage("查询成功");
-        } else if (null == post) {
-            response.setCode(300);
-            response.setMessage("该帖已删除");
-        }
-        response.setData(post);
-        return response;
-                                           }*/
 }

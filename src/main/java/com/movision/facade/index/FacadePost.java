@@ -1199,83 +1199,7 @@ public class FacadePost {
     }
 
 
-    /**
-     * 模块化发帖详情
-     *
-     * @param postid
-     * @param userid
-     * @param
-     * @return
-     */
-    public PostVo queryModularPostDetail(String postid, String userid) {
 
-        //通过userid、postid查询该用户有没有关注该圈子的权限
-        Map<String, Object> parammap = new HashMap<>();
-        parammap.put("postid", Integer.parseInt(postid));
-        if (!StringUtils.isEmpty(userid)) {
-            parammap.put("userid", Integer.parseInt(userid));
-        }
-        PostVo vo = postService.queryPostDetail(parammap);
-
-        if (null != vo) {
-            //根据帖子封面原图url查询封面压缩图url，如果存在替换，不存在就用原图
-            String compressurl = postService.queryCompressUrl(vo.getCoverimg());
-            if (null != compressurl && !compressurl.equals("") && !compressurl.equals("null")) {
-                vo.setCoverimg(compressurl);
-            }
-
-            int rewardsum = postService.queryRewardSum(postid);//查询帖子被打赏的次数
-            vo.setRewardsum(rewardsum);
-            List<UserLike> nicknamelist = postService.queryRewardPersonNickname(postid);
-            vo.setRewardpersonnickname(nicknamelist);
-            /**  if (type.equals("1") || type.equals("2")) {
-             Video video = postService.queryVideoUrl(Integer.parseInt(postid));
-             vo.setVideourl(video.getVideourl());
-             vo.setVideocoverimgurl(video.getBannerimgurl());
-             }*/
-            if (vo.getUserid() != -1) {//发帖人为普通用户时查询发帖人昵称和手机号
-                User user = userService.queryUserB(vo.getUserid());
-                if (user != null) {
-                    vo.setUserid(user.getId());
-                    vo.setNickname(user.getNickname());
-                    vo.setPhone(user.getPhone());
-                    vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
-                }
-            } else {
-                User user = userService.queryUserB(vo.getUserid());
-                if (user != null) {
-                    vo.setUserid(user.getId());
-                    vo.setNickname(user.getNickname());
-                    vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
-                }
-            }
-            Integer circleid = vo.getCircleid();
-            //查询帖子详情最下方推荐的4个热门圈子
-            List<Circle> hotcirclelist = circleService.queryHotCircle();
-            vo.setHotcirclelist(hotcirclelist);
-            //查询帖子中分享的商品
-            List<GoodsVo> shareGoodsList = goodsService.queryShareGoodsList(Integer.parseInt(postid));
-            vo.setShareGoodsList(shareGoodsList);
-
-            //对帖子内容进行脱敏处理
-            vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));//帖子主标题脱敏
-            if (null != vo.getSubtitle()) {
-                vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
-            }
-            vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
-            //数据插入mongodb
-            if (StringUtil.isNotEmpty(userid)) {
-                PostAndUserRecord postAndUserRecord = new PostAndUserRecord();
-                postAndUserRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
-                postAndUserRecord.setCrileid(circleid);
-                postAndUserRecord.setPostid(Integer.parseInt(postid));
-                postAndUserRecord.setUserid(Integer.parseInt(userid));
-                postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
-                postAndUserRecordService.insert(postAndUserRecord);
-            }
-        }
-        return vo;
-    }
 
     /**
      * 用户刷新列表
@@ -1289,6 +1213,7 @@ public class FacadePost {
         List<Post> notbrowsed = null;//
         List<Post> isessences = null;//精选
         List<Post> isnotisessence = null;//不是精选
+        List listten = null;
         //未登录状态下
         if (userid == null) {
             if (list != null) {
@@ -1308,13 +1233,12 @@ public class FacadePost {
                  }
                  }*/
                 isessences.addAll(isnotisessence);
-                List listten = null;
-                for (int i = 0; i < isessences.size(); i++) {
-                    listten = isessences.subList(0, 9);
+                /**  for (int i = 0; i < isessences.size(); i++) {
                     //isessences.remove(listten);
-                }
-                list.remove(listten);
+                 }*/
+                listten = isessences.subList(0, 9);
                 map.put("listten", listten);
+                list.subList(0, 9).clear();
             }
             //登录状态下
         } else {
@@ -1355,9 +1279,16 @@ public class FacadePost {
                             isnotisessence.add(notbrowsed.get(i));//不是精选
                         }
                     }
+                    isessences.addAll(isnotisessence);
+                    listten = isessences.subList(0, 9);
+                    map.put("listten", listten);
+                    list.subList(0, 9).clear();
                 }
             } else {
                 //如果用户刚进来没有任何刷新记录
+                if (list != null) {
+
+                }
                 map.put("list", list);
             }
             //把刷新记录插入mongodb
