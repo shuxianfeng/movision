@@ -232,6 +232,8 @@ public class JsoupCompressImg {
         //转json字符串为json对象
         Map<String, Object> map = new LinkedHashMap<>();
         try {
+            //定义是否是视频贴的标志位
+            int flag = 0;//0 图文贴 >0 视频贴（视频的个数）
 //            JSONObject responseJson = JSONObject.parseObject(content);
 //            String moduleContent = (String)responseJson.get("postcontent");//正文模块字符串
             JSONArray moduleArray = JSONArray.fromObject(content);
@@ -390,11 +392,14 @@ public class JsoupCompressImg {
                             log.info("原图:" + imgurl + "已进行过压缩，且已存在映射关系");
                         }
                     }
+                }else if (type == 2){
+                    flag = flag + 1;
                 }
             }
             String a = moduleArray.toString();
             log.info("测试返回的content字符串:::::::::>" + a);
             map.put("code", 200);
+            map.put("flag", flag);
             map.put("msg", "帖子所有图片压缩完成");
             map.put("content", a);//压缩后的帖子内容为json字符串，json数组模块化
 
