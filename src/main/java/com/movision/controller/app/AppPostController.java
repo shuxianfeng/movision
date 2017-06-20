@@ -53,11 +53,10 @@ public class AppPostController {
     @ApiOperation(value = "帖子详情数据返回接口", notes = "用于返回请求帖子详情内容", response = Response.class)
     @RequestMapping(value = "detail", method = RequestMethod.POST)
     public Response queryPostDetail(@ApiParam(value = "帖子id") @RequestParam String postid,
-                                    @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid,
-                                    @ApiParam(value = "帖子类型：0 普通帖 1 原生视频帖( isactive为0时该字段不为空) 2 分享视频帖") @RequestParam String type) {
+                                    @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid) {
         Response response = new Response();
 
-        PostVo post = facadePost.queryPostDetail(postid, userid, type);
+        PostVo post = facadePost.queryPostDetail(postid, userid);
 
 
         if (null != post) {

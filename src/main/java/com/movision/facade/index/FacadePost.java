@@ -123,7 +123,7 @@ public class FacadePost {
     @Autowired
     private AliOSSClient aliOSSClient;
 
-    public PostVo queryPostDetail(String postid, String userid, String type) {
+    public PostVo queryPostDetail(String postid, String userid) {
 
         //通过userid、postid查询该用户有没有关注该圈子的权限
         Map<String, Object> parammap = new HashMap<>();
@@ -150,11 +150,11 @@ public class FacadePost {
             vo.setRewardsum(rewardsum);
             List<UserLike> nicknamelist = postService.queryRewardPersonNickname(postid);
             vo.setRewardpersonnickname(nicknamelist);
-            if (type.equals("1") || type.equals("2")) {
+            /**   if (type.equals("1") || type.equals("2")) {
                 Video video = postService.queryVideoUrl(Integer.parseInt(postid));
                 vo.setVideourl(video.getVideourl());
                 vo.setVideocoverimgurl(video.getBannerimgurl());
-            }
+             }*/
             if (vo.getUserid() != -1) {//发帖人为普通用户时查询发帖人昵称和手机号
                 User user = userService.queryUserB(vo.getUserid());
                 if (user != null) {
@@ -1206,8 +1206,8 @@ public class FacadePost {
                     while (listmongodb.hasNext()) {
                         DBObject dbObj = listmongodb.next();
                         mongodbpostid = Integer.parseInt(dbObj.get("postid").toString());
-                    //循环帖子id对比挑出未刷新的帖子
-                    for (int i = 0; i < list.size(); i++) {
+                        //循环帖子id对比挑出未刷新的帖子
+                        for (int i = 0; i < list.size(); i++) {
                         postid = list.get(i).getId();
                         //查询帖子是哪个圈子
                         crileid = postService.queryCrileid(postid);
