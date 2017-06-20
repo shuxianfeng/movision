@@ -1311,6 +1311,13 @@ public class PostFacade {
      */
     public PostCompile queryPostByIdEcho(String postid) {
         PostCompile postCompile = postService.queryPostByIdEcho(Integer.parseInt(postid));//帖子编辑数据回显
+
+        //-----帖子内容格式转换
+        String pcstr = postCompile.getPostcontent();
+        JSONArray jsonArray = JSONArray.fromObject(pcstr);
+        //-----将转换完的数据封装返回
+        postCompile.setPostcontents(jsonArray);
+
         //查找是否有缩略图，有显示缩略图，否则显示原图
         String str = null;
         if (postCompile != null) {

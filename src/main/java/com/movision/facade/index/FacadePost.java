@@ -132,6 +132,13 @@ public class FacadePost {
             parammap.put("userid", Integer.parseInt(userid));
         }
         PostVo vo = postService.queryPostDetail(parammap);
+
+        //-----帖子内容格式转换
+        String str = vo.getPostcontent();
+        JSONArray jsonArray = JSONArray.fromObject(str);
+        //-----将转换完的数据封装返回
+        vo.setPostcontents(jsonArray);
+
         if (null != vo) {
             //根据帖子封面原图url查询封面压缩图url，如果存在替换，不存在就用原图
             String compressurl = postService.queryCompressUrl(vo.getCoverimg());
