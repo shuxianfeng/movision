@@ -523,9 +523,9 @@ public class CircleFacade {
         if (ur.getIscircle() != null && ur.getCirclemanagement() != null && ur.getCommon() != null) {
             if (ur.getIscircle() == 1 || ur.getCirclemanagement() == 1) {
                 circleList = circleService.queryCircleListByUserRole(ur);//查询用户可发帖的圈子列表
-            } else if (ur.getCommon() == 1 || loginid == "-1") {
+            }/* else if (ur.getCommon() == 1 || loginid == "-1") {
                 circleList = circleService.queryCircleList();//查询所有圈子列表
-            } else {
+            } */ else {
                 Map map = new HashMap();
                 map.put("vip", vip);
                 map.put("type", type);

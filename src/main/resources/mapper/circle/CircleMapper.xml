@@ -541,12 +541,18 @@
         AND c.status<![CDATA[ <> ]]>0)
         )
         OR
-        (c.userid=#{userid,jdbcType=INTEGER} OR c.id IN (SELECT circleid FROM yw_circle_manager WHERE
+        ((c.userid=#{userid,jdbcType=INTEGER} OR c.id IN (SELECT circleid FROM yw_circle_manager WHERE
         userid=#{userid,jdbcType=INTEGER}))
         <if test="categoryid != null">
             AND c.category=#{categoryid,jdbcType=INTEGER}
         </if>
+        AND c.status<![CDATA[ <> ]]>0)
+        OR (c.phone=(select phone from yw_user WHERE id=#{userid,jdbcType=INTEGER})
+        <if test="categoryid != null">
+            AND c.category=#{categoryid,jdbcType=INTEGER}
+        </if>
         AND c.status<![CDATA[ <> ]]>0
+        )
         <if test="type == 5">
             GROUP BY c.category
         </if>
@@ -558,13 +564,22 @@
         SELECT c.id,c.scope,c.name,c.category,cc.categoryname FROM yw_circle c LEFT JOIN yw_circle_category cc ON
         cc.id=c.category WHERE
         (
-        <if test="vip == 1">
-            c.scope=#{vip,jdbcType=INTEGER} OR
+        <if test="vip >0">
+            (c.scope=#{vip,jdbcType=INTEGER} AND c.status<![CDATA[ <> ]]>0
+            <if test="categoryid != null">
+                AND c.category=#{categoryid,jdbcType=INTEGER}
+            </if>) OR
         </if>
-        c.scope=2)
+        (c.scope=2
         <if test="categoryid != null">
             AND c.category=#{categoryid,jdbcType=INTEGER}
         </if>
+        AND c.status<![CDATA[ <> ]]>0)
+        )
+        <if test="categoryid != null">
+            AND c.category=#{categoryid,jdbcType=INTEGER}
+        </if>
+        AND c.status<![CDATA[ <> ]]>0
         <if test="type == 5">
             GROUP BY c.category
         </if>
