@@ -78,7 +78,7 @@ public class AppLoginController {
         if (ValidateUtils.isMobile(mobile)) {
             // 生成随机字串
             String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE, VerifyCodeUtils.VERIFY_CODES_DIGIT);
-            log.debug("verifyCode == " + verifyCode);
+            log.info("verifyCode == " + verifyCode);
 
             appRegisterFacade.sendSms(mobile, verifyCode);
 
