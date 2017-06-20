@@ -723,6 +723,11 @@ public class PostFacade {
                 postList.setPromotionGoods(li);//封装活动促销类商品
             }
         }
+
+        //对改版后的帖子内容进行内容转换
+        JSONArray jsonArray = JSONArray.fromObject(postList.getPostcontent());
+        postList.setPostcontents(jsonArray);
+
         return postList;
     }
 
@@ -912,10 +917,10 @@ public class PostFacade {
                     post.setSubtitle(subtitle);//帖子副标题
                 }
                 post.setIsactive("0");//设置状态为帖子
+                Map con = null;
                 if (StringUtil.isNotEmpty(postcontent)) {
-
                     //内容转换
-                    Map con = jsoupCompressImg.newCompressImg(request, postcontent);
+                    con = jsoupCompressImg.newCompressImg(request, postcontent);
                     System.out.println(con);
                     if ((int) con.get("code") == 200) {
                         String str = con.get("content").toString();
@@ -950,7 +955,11 @@ public class PostFacade {
                     }
                 }
                 post.setUserid(userid);
-                post.setIsdel("0");
+                if (con.get("flag") == 0) {
+                    post.setIsdel("0");
+                } else {
+                    post.setIsdel("2");
+                }
                 postService.addPost(post);//添加帖子
                 //查询圈子名称
                 Integer in = 0;
@@ -1703,9 +1712,10 @@ public class PostFacade {
                     }
                     Integer in = null;
                     post.setIsactive("0");//设置状态为帖子
+                    Map con = null;
                     if (StringUtil.isNotEmpty(postcontent)) {
                         //内容转换
-                        Map con = jsoupCompressImg.newCompressImg(request, postcontent);
+                        con = jsoupCompressImg.newCompressImg(request, postcontent);
                         if ((int) con.get("code") == 200) {
                             System.out.println(con);
                             String str = con.get("content").toString();
@@ -1744,6 +1754,9 @@ public class PostFacade {
                         post.setIshot(ishot);//是否为圈子精选
                     }
                     post.setUserid(userid);
+                    if (con.get("flag") != 0) {
+                        post.setIsdel("2");
+                    }
                     int result = postService.updatePostById(post);//编辑帖子
                     map.put("result", result);
                     // map.put("videoid", videoid);

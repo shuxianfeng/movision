@@ -697,9 +697,10 @@ public class FacadePost {
                 Post post = new Post();
                 post.setCircleid(Integer.parseInt(circleid));
                 post.setTitle(title);
+                Map con = null;
                 if (StringUtil.isNotEmpty(postcontent)) {
                     //内容转换
-                    Map con = jsoupCompressImg.newCompressImg(request, postcontent);
+                    con = jsoupCompressImg.newCompressImg(request, postcontent);
                     System.out.println(con);
                     if ((int) con.get("code") == 200) {
                         String str = con.get("content").toString();
@@ -721,7 +722,12 @@ public class FacadePost {
                 post.setIsessencepool(0);//是否设为精选池中的帖子
                 post.setIntime(new Date());//帖子发布时间
                 post.setTotalpoint(0);//帖子综合评分
-                post.setIsdel(0);//上架
+                if (con.get("flag") != 0) {
+                    post.setIsdel(2);//视频
+                } else {
+                    post.setIsdel(0);//图文
+                }
+
                 post.setUserid(Integer.parseInt(userid));
                 //插入帖子
                 postService.releasePost(post);
