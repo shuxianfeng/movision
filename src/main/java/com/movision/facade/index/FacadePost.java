@@ -25,6 +25,7 @@ import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
 import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserAll;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
@@ -994,6 +995,8 @@ public class FacadePost {
         User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
         //查询当前圈子的所有管理员列表
         List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
+        //通过userid查询当前登录用户的用户等级
+        UserAll user = userService.queryUserById(Integer.parseInt(userid));
         int mark = 0;//定义一个userid比对标志位
         if (manageList.size() > 0) {
             for (int i = 0; i < manageList.size(); i++) {
@@ -1003,7 +1006,7 @@ public class FacadePost {
                 }
             }
         }
-        int lev = owner.getLevel();//用户等级
+        int lev = user.getLevel();//用户等级
         //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.所有者和大V可发时，发帖用户即为大V
         if (scope == 2 || (Integer.parseInt(userid) == owner.getId() || mark == 1) || (scope == 1 && lev >= 1)) {
 
