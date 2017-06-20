@@ -571,7 +571,7 @@
     </select>
 
     <select id="queryCircleList" resultType="com.movision.mybatis.circle.entity.Circle">
-        SELECT id,scope,name,category FROM yw_circle
+        SELECT id,scope,name,category FROM yw_circle AND status <![CDATA[ <> ]]> 0
     </select>
 
     <select id="queryListByCircleManageListByUserid" parameterType="java.util.Map"
