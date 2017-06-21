@@ -229,6 +229,7 @@ public class JsoupCompressImg {
         int w = 750;//图片压缩后的宽度
         int h = 850;//图片压缩后的高度425
 
+        log.info("帖子内图片压缩工具接收到的正文json内容>>>>>>>>" + content);
         //转json字符串为json对象
         Map<String, Object> map = new LinkedHashMap<>();
         try {
