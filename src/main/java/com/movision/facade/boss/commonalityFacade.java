@@ -1,6 +1,7 @@
 package com.movision.facade.boss;
 
 import com.movision.common.constant.JurisdictionConstants;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.entity.BossUserVo;
 import com.movision.mybatis.bossUser.service.BossUserService;
@@ -275,25 +276,30 @@ public class commonalityFacade {
         Map map = new HashMap();
         BossUser i = bossUserService.queryUserByAdministrator(userid);//根据登录用户id查询当前用户有哪些权限
         if (i != null) {
-            if (i.getIscircle().equals(JurisdictionConstants.JURISDICTION_TYPE.groupOwner.getCode())//圈主
-                    && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())
-                    || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//圈主可以查看
-                map.put("resault", 1);
-                return map;
-            } else if (i.getCirclemanagement().equals(JurisdictionConstants.JURISDICTION_TYPE.groupManage.getCode())//圈子管理员
-                    && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())
-                    || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//圈子管理员可以查看
-                map.put("resault", 1);
-                return map;
-            } else if (i.getContributing().equals(JurisdictionConstants.JURISDICTION_TYPE.speciallyInvite.getCode())//特邀嘉宾
-                    && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//特邀嘉宾可以查看
-                map.put("resault", 0);
-                return map;
-            } else if (i.getIssuper().equals(1) || i.getCommon().equals(1) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.choicenesspool.getCode())) {//操作权限为最高权限
-                map.put("resault", 2);
-                return map;
+            if (StringUtil.isNotEmpty(i.getIscircle().toString()) && StringUtil.isNotEmpty(i.getCirclemanagement().toString()) && StringUtil.isNotEmpty(i.getContributing().toString()) && StringUtil.isNotEmpty(i.getIssuper().toString())) {
+                if (i.getIscircle().equals(JurisdictionConstants.JURISDICTION_TYPE.groupOwner.getCode())//圈主
+                        && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())
+                        || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//圈主可以查看
+                    map.put("resault", 1);
+                    return map;
+                } else if (i.getCirclemanagement().equals(JurisdictionConstants.JURISDICTION_TYPE.groupManage.getCode())//圈子管理员
+                        && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())
+                        || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//圈子管理员可以查看
+                    map.put("resault", 1);
+                    return map;
+                } else if (i.getContributing().equals(JurisdictionConstants.JURISDICTION_TYPE.speciallyInvite.getCode())//特邀嘉宾
+                        && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//特邀嘉宾可以查看
+                    map.put("resault", 0);
+                    return map;
+                } else if (i.getIssuper().equals(1) || i.getCommon().equals(1) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.choicenesspool.getCode())) {//操作权限为最高权限
+                    map.put("resault", 2);
+                    return map;
+                } else {
+                    map.put("resault", -1);
+                    return map;
+                }
             } else {
-                map.put("resault", -1);
+                map.put("resault", -3);
                 return map;
             }
         } else {
