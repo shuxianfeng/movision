@@ -916,6 +916,7 @@ public class PostFacade {
                 if (StringUtil.isNotEmpty(subtitle)) {
                     post.setSubtitle(subtitle);//帖子副标题
                 }
+                post.setCircleid(circleid);
                 post.setIsactive("0");//设置状态为帖子
                 Map con = null;
                 if (StringUtil.isNotEmpty(postcontent)) {
