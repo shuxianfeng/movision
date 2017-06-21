@@ -2485,13 +2485,20 @@ public class PostFacade {
      */
     public Map<String, Object> updatePostImgTest(MultipartFile file) {
         Map m = new HashMap();
-        m = movisionOssClient.uploadObject(file, "img", "post");
-        String url = String.valueOf(m.get("url"));
-        Map<String, Object> map = new HashMap<>();
-        map.put("url", url);
-        map.put("name", FileUtil.getFileNameByUrl(url));
-        map.put("width", m.get("width"));
-        map.put("height", m.get("height"));
+        Map<String, Object> map = null;
+        try {
+            m = movisionOssClient.uploadObject(file, "img", "post");
+            String url = String.valueOf(m.get("url"));
+            map = new HashMap<>();
+            map.put("url", url);
+            map.put("name", FileUtil.getFileNameByUrl(url));
+            map.put("width", m.get("width"));
+            map.put("height", m.get("height"));
+            map.put("status", "2000");
+        } catch (Exception e) {
+            map.put("status", "4000");
+            e.printStackTrace();
+        }
         return map;
     }
 
