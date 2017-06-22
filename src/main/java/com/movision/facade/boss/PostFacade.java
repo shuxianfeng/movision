@@ -1647,7 +1647,9 @@ public class PostFacade {
                     } else {
                         Map postid = new HashMap();
                         postid.put("pid", pid);
-                        goodsService.deletePostyByGoods(postid);//删除帖子分享的商品
+                        if (pid != null) {
+                            goodsService.deletePostyByGoods(postid);//删除帖子分享的商品
+                        }
                     }
                     PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));
                     if (postProcessRecord != null) {//已经加精过活精选
@@ -1702,6 +1704,24 @@ public class PostFacade {
     }
 
 
+    /**
+     * 编辑帖子操作（改版）
+     *
+     * @param request
+     * @param id
+     * @param title
+     * @param subtitle
+     * @param userid
+     * @param circleid
+     * @param postcontent
+     * @param isessence
+     * @param ishot
+     * @param orderid
+     * @param time
+     * @param goodsid
+     * @param loginid
+     * @return
+     */
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map updatePostByIdTest(HttpServletRequest request, String id, String title, String subtitle,
@@ -1720,7 +1740,6 @@ public class PostFacade {
                     if (!StringUtils.isEmpty(circleid)) {
                         post.setCircleid(circleid);//圈子id
                     }
-                    Integer in = null;
                     post.setIsactive("0");//设置状态为帖子
                     Map con = null;
                     if (StringUtil.isNotEmpty(postcontent)) {
@@ -1779,15 +1798,15 @@ public class PostFacade {
                             Map addgoods = new HashedMap();
                             addgoods.put("postid", pid);
                             addgoods.put("goodsid", lg[i]);
-                            if (pid != null) {
-                                postService.insertGoods(addgoods);//添加帖子分享的商品
-                            }
+                            postService.insertGoods(addgoods);//添加帖子分享的商品
                             map.put("resault", 1);
                         }
                     } else {
                         Map postid = new HashMap();
                         postid.put("pid", pid);
-                        goodsService.deletePostyByGoods(postid);//删除帖子分享的商品
+                        if (pid != null) {
+                            goodsService.deletePostyByGoods(postid);//删除帖子分享的商品
+                        }
                     }
                     PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));
                     if (postProcessRecord != null) {//已经加精过活精选
