@@ -1828,7 +1828,7 @@ public class PostFacade {
                         }
                         postProcessRecordService.updateProcessRecord(pprd);
                     } else {
-                        //新增
+                        //新增帖子精选操作记录表
                         PostProcessRecord pprd = new PostProcessRecord();
                         pprd.setPostid(Integer.parseInt(id));
                         if (StringUtil.isNotEmpty(isessence)) {
