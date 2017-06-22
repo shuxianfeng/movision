@@ -282,9 +282,6 @@ public class commonalityFacade {
                         || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//圈主可以查看
                     map.put("resault", 1);
                     return map;
-                } else {
-                    map.put("resault", -3);
-                    return map;
                 }
             }
             if (StringUtil.isNotEmpty(i.getCirclemanagement().toString())) {
@@ -293,18 +290,12 @@ public class commonalityFacade {
                         || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//圈子管理员可以查看
                     map.put("resault", 1);
                     return map;
-                } else {
-                    map.put("resault", -3);
-                    return map;
                 }
             }
             if (StringUtil.isNotEmpty(i.getContributing().toString())) {
                 if (i.getContributing().equals(JurisdictionConstants.JURISDICTION_TYPE.speciallyInvite.getCode())//特邀嘉宾
                         && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//特邀嘉宾可以查看
                     map.put("resault", 0);
-                    return map;
-                } else {
-                    map.put("resault", -3);
                     return map;
                 }
             }
