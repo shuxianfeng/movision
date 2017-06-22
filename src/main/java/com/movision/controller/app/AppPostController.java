@@ -26,6 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 /**
@@ -44,6 +47,7 @@ public class AppPostController {
 
     @Autowired
     private MovisionOssClient movisionOssClient;
+
     @Autowired
     private AliOSSClient aliOSSClient;
 
@@ -53,7 +57,7 @@ public class AppPostController {
     @ApiOperation(value = "帖子详情数据返回接口", notes = "用于返回请求帖子详情内容", response = Response.class)
     @RequestMapping(value = "detail", method = RequestMethod.POST)
     public Response queryPostDetail(@ApiParam(value = "帖子id") @RequestParam String postid,
-                                    @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid) {
+                                    @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         Response response = new Response();
 
         PostVo post = facadePost.queryPostDetail(postid, userid);

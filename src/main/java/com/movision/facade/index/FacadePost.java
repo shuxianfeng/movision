@@ -54,6 +54,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -124,7 +127,10 @@ public class FacadePost {
     @Autowired
     private AliOSSClient aliOSSClient;
 
-    public PostVo queryPostDetail(String postid, String userid) {
+    @Autowired
+    private VideoCoverURL videoCoverURL;
+
+    public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
 
         //通过userid、postid查询该用户有没有关注该圈子的权限
         Map<String, Object> parammap = new HashMap<>();
@@ -137,6 +143,10 @@ public class FacadePost {
         //-----帖子内容格式转换
         String str = vo.getPostcontent();
         JSONArray jsonArray = JSONArray.fromObject(str);
+
+        //因为视频封面会有播放权限失效限制，过期失效，所以这里每请求一次都需要对帖子内容中包含的视频封面重新请求
+        jsonArray = videoCoverURL.getVideoCover(jsonArray);
+
         //-----将转换完的数据封装返回
         vo.setPostcontents(jsonArray);
 
