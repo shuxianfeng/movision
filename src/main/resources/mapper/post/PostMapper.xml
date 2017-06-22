@@ -1127,7 +1127,7 @@
         (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS circlename,
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
-        WHERE p.isdel=0 AND p.isactive=0
+        WHERE p.isdel <![CDATA[<>]]> 1 AND p.isactive=0
         AND p.circleid in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone
         =(SELECT phone FROM yw_admin_user WHERE id=#{loginid,jdbcType=INTEGER}))) AND isdel=0
         <if test="uid!=null">
@@ -1203,7 +1203,7 @@
         (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS circlename,
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
-        WHERE p.isdel=0 AND p.isactive=0
+        WHERE p.isdel <![CDATA[<>]]> 1 AND p.isactive=0
         ORDER BY p.intime DESC
     </select>
 
@@ -1331,7 +1331,7 @@
         isdel=0))) AS categoryname,
         v.videourl vid,v.bannerimgurl
         FROM yw_post p LEFT JOIN yw_video as v ON p.id=v.postid
-        WHERE p.id=#{postid,jdbcType=INTEGER} AND p.isactive=0 AND p.isdel=0
+        WHERE p.id=#{postid,jdbcType=INTEGER} AND p.isactive=0 AND p.isdel <![CDATA[<>]]> 1
     </select>
 
     <select id="queryActivityParticulars" resultType="com.movision.mybatis.post.entity.PostList"
