@@ -906,7 +906,6 @@ public class PostFacade {
         Map map = new HashedMap();
         Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.add.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(circleid));
         if (res.get("resault").equals(1)) {
-            if (postcontent.length() < 20000) {
                 if (StringUtil.isNotEmpty(title)) {
                     post.setTitle(title);//帖子标题
                 }
@@ -1000,10 +999,6 @@ public class PostFacade {
                 map.put("resault", 1);
                 // map.put("vedioid", vedioid);
                 return map;
-            } else {
-                map.put("resault", -2);
-                return map;
-            }
         } else {
             map.put("resault", -1);
             map.put("massge", "权限不足");
