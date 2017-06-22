@@ -1675,7 +1675,7 @@
         (SELECT nickname FROM yw_user WHERE id=p.userid) as nickname,p.coverimg,
         p.isessence,p.essencedate as time,p.orderid,p.postcontent,v.videourl vid,v.bannerimgurl
         FROM yw_post as p LEFT JOIN yw_video as v ON p.id=v.postid WHERE p.id=#{postid,jdbcType=INTEGER} AND
-        p.isactive=0 AND p.isdel=0
+        p.isactive=0 AND p.isdel <![CDATA[<>]]> 1
     </select>
 
 
