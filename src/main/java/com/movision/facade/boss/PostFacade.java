@@ -40,10 +40,7 @@ import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
-import com.movision.utils.CoverImgCompressUtil;
-import com.movision.utils.JsoupCompressImg;
-import com.movision.utils.ListUtil;
-import com.movision.utils.VideoUploadUtil;
+import com.movision.utils.*;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
@@ -68,6 +65,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -145,6 +144,9 @@ public class PostFacade {
 
     @Autowired
     private AliOSSClient aliOSSClient;
+
+    @Autowired
+    private VideoCoverURL videoCoverURL;
 
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
@@ -637,6 +639,25 @@ public class PostFacade {
      */
     public PostList queryPostParticulars(String postid) {
         PostList postList = postService.queryPostParticulars(Integer.parseInt(postid));
+
+        try {
+            //-----帖子内容格式转换
+            String s = postList.getPostcontent();
+            JSONArray jsonArray = JSONArray.fromObject(s);
+
+            //因为视频封面会有播放权限失效限制，过期失效，所以这里每请求一次都需要对帖子内容中包含的视频封面重新请求
+            //增加这个工具类 videoCoverURL.getVideoCover(jsonArray); 进行封面url重新请求
+            jsonArray = videoCoverURL.getVideoCover(jsonArray);
+            //-----将转换完的数据封装返回
+            postList.setPostcontent(jsonArray.toString());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         String str = null;
         if (postList != null) {
             Map map = new HashMap();
@@ -1298,6 +1319,24 @@ public class PostFacade {
      */
     public PostCompile queryPostByIdEcho(String postid) {
         PostCompile postCompile = postService.queryPostByIdEcho(Integer.parseInt(postid));//帖子编辑数据回显
+
+        try {
+            //-----帖子内容格式转换
+            String s = postCompile.getPostcontent();
+            JSONArray jsonArray = JSONArray.fromObject(s);
+
+            //因为视频封面会有播放权限失效限制，过期失效，所以这里每请求一次都需要对帖子内容中包含的视频封面重新请求
+            //增加这个工具类 videoCoverURL.getVideoCover(jsonArray); 进行封面url重新请求
+            jsonArray = videoCoverURL.getVideoCover(jsonArray);
+            //-----将转换完的数据封装返回
+            postCompile.setPostcontent(jsonArray.toString());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //查找是否有缩略图，有显示缩略图，否则显示原图
         String str = null;
