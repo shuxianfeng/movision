@@ -139,16 +139,6 @@ public class FacadePost {
             parammap.put("userid", Integer.parseInt(userid));
         }
         PostVo vo = postService.queryPostDetail(parammap);
-
-        //-----帖子内容格式转换
-        String str = vo.getPostcontent();
-        JSONArray jsonArray = JSONArray.fromObject(str);
-
-        //因为视频封面会有播放权限失效限制，过期失效，所以这里每请求一次都需要对帖子内容中包含的视频封面重新请求
-        //增加这个工具类 videoCoverURL.getVideoCover(jsonArray); 进行封面url重新请求
-        //-----将转换完的数据封装返回
-        vo.setPostcontents(videoCoverURL.getVideoCover(jsonArray));
-
         if (null != vo) {
             //根据帖子封面原图url查询封面压缩图url，如果存在替换，不存在就用原图
             String compressurl = postService.queryCompressUrl(vo.getCoverimg());
@@ -190,11 +180,11 @@ public class FacadePost {
             vo.setShareGoodsList(shareGoodsList);
 
             //对帖子内容进行脱敏处理
-//            vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));//帖子主标题脱敏
-//            if (null != vo.getSubtitle()) {
-//                vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
-//            }
-//            vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
+            vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));//帖子主标题脱敏
+            if (null != vo.getSubtitle()) {
+                vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
+            }
+            vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
             //数据插入mongodb
             if (StringUtil.isNotEmpty(userid)) {
                 PostAndUserRecord postAndUserRecord = new PostAndUserRecord();

@@ -105,17 +105,6 @@ public class PostVo implements Serializable {
     private String introduction;//圈子简介
 
     private Integer rewardsum;//打赏热人数
-
-    private List postcontents;//用于返回帖子内容数据
-
-    public List getPostcontents() {
-        return postcontents;
-    }
-
-    public void setPostcontents(List postcontents) {
-        this.postcontents = postcontents;
-    }
-
     private List<UserLike> rewardpersonnickname;//打赏的10个人的昵称
 
     public Integer getRewardsum() {

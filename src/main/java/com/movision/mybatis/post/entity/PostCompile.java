@@ -51,16 +51,6 @@ public class PostCompile implements Serializable {
 
     private List<GoodsVo> goodses;//商品
 
-    private List postcontents;//用于帖子内容转换数后据
-
-    public List getPostcontents() {
-        return postcontents;
-    }
-
-    public void setPostcontents(List postcontents) {
-        this.postcontents = postcontents;
-    }
-
     public List<GoodsVo> getGoodses() {
         return goodses;
     }

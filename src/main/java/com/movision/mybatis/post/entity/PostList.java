@@ -101,16 +101,6 @@ public class PostList implements Serializable {
 
     private List<GoodsVo> promotionGoods;//活动促销商品
 
-    private List postcontents;//用于改版后查看帖子内容
-
-    public List getPostcontents() {
-        return postcontents;
-    }
-
-    public void setPostcontents(List postcontents) {
-        this.postcontents = postcontents;
-    }
-
     public String getCategoryname() {
         return categoryname;
     }

@@ -611,25 +611,6 @@ public class PostFacade {
             map.put("message", "权限不足");
             return map;
         }
-            /*if (user.getIssuper() == 1 || user.getCommon() == 1) {//是管理员
-                Map map1=new HashMap();
-                map1.put("commentid",commentid);
-                map1.put("type",type);
-                Integer resault = commentService.updateCommentAudit(map1);
-                postService.updatePostBycommentsumT(Integer.parseInt(commentid));//更新帖子的评论数
-                map.put("massege", "审核成功");
-                map.put("resault", resault);
-                return map;
-            } else {
-                map.put("massege", "权限不足");
-                map.put("resault", -1);
-                return map;
-            }*/
-       /* } else {
-            map.put("massege", "没有此用户");
-            map.put("resault", -1);
-            return map;
-        }*/
     }
 
 
@@ -723,11 +704,6 @@ public class PostFacade {
                 postList.setPromotionGoods(li);//封装活动促销类商品
             }
         }
-
-        //对改版后的帖子内容进行内容转换
-        JSONArray jsonArray = JSONArray.fromObject(postList.getPostcontent());
-        postList.setPostcontents(jsonArray);
-
         return postList;
     }
 
@@ -1321,12 +1297,6 @@ public class PostFacade {
      */
     public PostCompile queryPostByIdEcho(String postid) {
         PostCompile postCompile = postService.queryPostByIdEcho(Integer.parseInt(postid));//帖子编辑数据回显
-
-        //-----帖子内容格式转换
-        String pcstr = postCompile.getPostcontent();
-        JSONArray jsonArray = JSONArray.fromObject(pcstr);
-        //-----将转换完的数据封装返回
-        postCompile.setPostcontents(jsonArray);
 
         //查找是否有缩略图，有显示缩略图，否则显示原图
         String str = null;
