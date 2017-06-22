@@ -1828,13 +1828,6 @@ public class PostFacade {
                         }
                         postProcessRecordService.updateProcessRecord(pprd);
                     } else {
-                        //积分操作
-                        if (postProcessRecord.getIshot() == 1) {
-                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                        }
-                        if (postProcessRecord.getIsesence() == 1) {
-                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                        }
                         //新增
                         PostProcessRecord pprd = new PostProcessRecord();
                         pprd.setPostid(Integer.parseInt(id));
@@ -1845,6 +1838,15 @@ public class PostFacade {
                             pprd.setIshot(Integer.parseInt(ishot));
                         }
                         postProcessRecordService.insertProcessRecord(pprd);
+
+                        postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));//查询出帖子是否被设为精选
+                        //积分操作
+                        if (postProcessRecord.getIshot() == 1) {
+                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                        }
+                        if (postProcessRecord.getIsesence() == 1) {
+                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                        }
                     }
                 } catch (Exception e) {
                     log.error("帖子编辑异常", e);
