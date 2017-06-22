@@ -1370,7 +1370,7 @@ public class GoodsService {
      * @param postid
      * @return
      */
-    public int deletePostyByGoods(Integer postid) {
+    public int deletePostyByGoods(Map postid) {
         try {
             log.info("删除帖子分享的商品");
             return goodsMapper.deletePostyByGoods(postid);
