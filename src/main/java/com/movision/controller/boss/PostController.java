@@ -479,6 +479,7 @@ public class PostController {
                                 @ApiParam(value = "帖子副标题") @RequestParam String subtitle,//帖子副标题
                                 @ApiParam(value = "圈子id") @RequestParam String circleid,//圈子id
                                 @ApiParam(value = "发帖人") @RequestParam String userid,//发帖人
+                                @ApiParam(value = "帖子封面") @RequestParam String coverimg,//帖子封面
                                 @ApiParam(value = "内容") @RequestParam String postcontent,//帖子内容
                                 @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
                                 @ApiParam(value = "圈子精选") @RequestParam(required = false) String ishot,//精选池中的帖子圈子精选贴
@@ -487,7 +488,7 @@ public class PostController {
                                 @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
                                 @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map resaut = postFacade.addPostTest(request, title, subtitle, circleid, userid, postcontent,
+        Map resaut = postFacade.addPostTest(request, title, subtitle, circleid, userid, coverimg, postcontent,
                 isessence, ishot, orderid, time, goodsid, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");

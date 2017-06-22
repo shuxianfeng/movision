@@ -879,8 +879,8 @@ public class PostFacade {
      */
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
-    public Map addPostTest(HttpServletRequest request, String title, String subtitle, String circleid,
-                           String userid, String postcontent, String isessence, String ishot, String orderid, String time, String goodsid, String loginid) {
+    public Map addPostTest(HttpServletRequest request, String title, String subtitle, String circleid, String userid,
+                           String coverimg, String postcontent, String isessence, String ishot, String orderid, String time, String goodsid, String loginid) {
         PostTo post = new PostTo();
         Map map = new HashedMap();
         Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.add.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(circleid));
@@ -892,7 +892,8 @@ public class PostFacade {
                 if (StringUtil.isNotEmpty(subtitle)) {
                     post.setSubtitle(subtitle);//帖子副标题
                 }
-                post.setCircleid(circleid);
+                post.setCircleid(circleid);//圈子id
+                post.setCoverimg(coverimg);//帖子封面
                 post.setIsactive("0");//设置状态为帖子
                 Map con = null;
                 if (StringUtil.isNotEmpty(postcontent)) {
