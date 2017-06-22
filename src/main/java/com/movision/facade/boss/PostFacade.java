@@ -1767,22 +1767,22 @@ public class PostFacade {
                     if ((int) con.get("flag") != 0) {
                         post.setIsdel("2");
                     }
-                    int result = postService.updatePostById(post);//编辑帖子
-                    map.put("result", result);
-                    // map.put("videoid", videoid);
+                    postService.updatePostById(post);//编辑帖子
                     if (goodsid != null && goodsid != "") {//添加商品
                         String[] lg = goodsid.split(",");//以逗号分隔
                         Map postid = new HashMap();
                         postid.put("pid", pid);
-                        goodsService.deletePostyByGoods(postid);//删除帖子分享的商品
+                        if (pid != null) {
+                            goodsService.deletePostyByGoods(postid);//删除帖子分享的商品
+                        }
                         for (int i = 0; i < lg.length; i++) {
                             Map addgoods = new HashedMap();
                             addgoods.put("postid", pid);
                             addgoods.put("goodsid", lg[i]);
-                            int goods = postService.insertGoods(addgoods);//添加帖子分享的商品
-                            if (goods == 1 && in == 1) {//修改帖子和修改视频文件成功
-                                map.put("result", goods);
+                            if (pid != null) {
+                                postService.insertGoods(addgoods);//添加帖子分享的商品
                             }
+                            map.put("resault", 1);
                         }
                     } else {
                         Map postid = new HashMap();

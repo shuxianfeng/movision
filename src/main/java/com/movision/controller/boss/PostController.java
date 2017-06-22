@@ -78,7 +78,7 @@ public class PostController {
         Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<PostList> list = postFacade.queryPostByList(loginid, pager);
         if (response.getCode() == 200) {
-            response.setMessage("查询成");
+            response.setMessage("查询成功");
         }
         pager.result(list);
         response.setData(pager);
