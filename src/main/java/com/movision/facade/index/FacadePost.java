@@ -305,6 +305,8 @@ public class FacadePost {
         int scope = circleService.queryCircleScope(Integer.parseInt(circleid));
         //查询当前圈子的所有者(返回所有者的用户id)
         User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
+        //通过userid查询当前登录用户的用户等级
+        UserAll user = userService.queryUserById(Integer.parseInt(userid));
         //查询当前圈子的所有管理员列表
         List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
 
@@ -317,7 +319,7 @@ public class FacadePost {
                 }
             }
         }
-        int lev = owner.getLevel();//用户等级
+        int lev = user.getLevel();//用户等级
         //所有人均可发或当前用户为圈子所有者或管理员或当前圈子只有大V可发而当前用户正式大V
         if (scope == 2 || (Integer.parseInt(userid) == owner.getId() || flag == 1) || (scope == 1 && lev >= 1)) {
             return 1;//有发帖权限
