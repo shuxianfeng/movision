@@ -1732,7 +1732,6 @@ public class PostFacade {
         Integer pid = Integer.parseInt(id);
         Map res = commonalityFacade.verifyUserJurisdiction(lgid, JurisdictionConstants.JURISDICTION_TYPE.update.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), pid);
         if (res.get("resault").equals(1)) {
-            if (postcontent.length() < 30000) {
                 try {
                     post.setId(pid);//帖子id
                     post.setTitle(title);//帖子标题
@@ -1851,9 +1850,6 @@ public class PostFacade {
                 } catch (Exception e) {
                     log.error("帖子编辑异常", e);
                 }
-            } else {
-                map.put("resault", -2);
-            }
             return map;
         } else {
             map.put("resault", -1);
