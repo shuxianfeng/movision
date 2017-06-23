@@ -710,7 +710,6 @@ public class PostFacade {
         Map map = new HashedMap();
         Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.add.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(circleid));
         if (res.get("resault").equals(1)) {
-            if (postcontent.length() < 20000) {
                 if (StringUtil.isNotEmpty(title)) {
                     post.setTitle(title);//帖子标题
                 }
@@ -821,6 +820,7 @@ public class PostFacade {
                     }
                     if (StringUtil.isNotEmpty(isessence)) {
                         if (isessence.equals("1")) {
+                            log.info("发帖人----------------------------------------", userid);
                             pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
                         }
                     }
@@ -831,10 +831,6 @@ public class PostFacade {
                 map.put("resault", 1);
                 // map.put("vedioid", vedioid);
                 return map;
-            } else {
-                map.put("resault", -2);
-                return map;
-            }
         } else {
             map.put("resault", -1);
             map.put("massge", "权限不足");
