@@ -11,6 +11,7 @@ import com.movision.mybatis.activityContribute.entity.ActivityContributeVo;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.post.entity.*;
@@ -93,7 +94,7 @@ public class PostController {
     @ApiOperation(value = "查询圈子分类", notes = "用于查询圈子分类接口", response = Response.class)
     @RequestMapping(value = "query_circle_type_list", method = RequestMethod.POST)
     public Response queryCircleTypeList(@ApiParam(value = "登录用户") @RequestParam String loginid) {
-        List<Category> map = circleFacade.queryCircleTypeList(loginid);
+        List<CircleCategory> map = circleFacade.queryCircleTypeList(loginid);
         Response response = new Response();
         if (response.getCode() == 200) {
             response.setMessage("操作成功");

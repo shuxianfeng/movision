@@ -125,6 +125,8 @@ public class MsgCenterFacade {
             } else {
                 imFirstDialogue.setIsread(1);
             }
+        } else {
+            imFirstDialogue.setIsread(1);
         }
         //6 客服消息
         reMap.put("imSystemInform", imSystemInform);
