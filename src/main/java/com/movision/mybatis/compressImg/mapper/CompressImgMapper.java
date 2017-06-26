@@ -18,4 +18,6 @@ public interface CompressImgMapper {
     int queryCount(CompressImg compressImg);
 
     String queryUrlIsCompress(Map map);
+
+    CompressImg queryProtoBycompress(CompressImg com);
 }

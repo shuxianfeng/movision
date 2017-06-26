@@ -1999,4 +1999,8 @@
         SELECT * from yw_post where id > 245
         ]]>
     </select>
+
+    <select id="queryPostContentById" parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT postcontent FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
 </mapper>

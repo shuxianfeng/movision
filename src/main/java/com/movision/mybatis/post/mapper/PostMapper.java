@@ -219,4 +219,6 @@ public interface PostMapper {
     int queryIsIsessence(int postid);
 
     List<Post> selectAllPost();
+
+    String queryPostContentById(Map postid);
 }

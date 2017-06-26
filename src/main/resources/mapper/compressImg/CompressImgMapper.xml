@@ -66,4 +66,9 @@
     <select id="queryUrlIsCompress" resultType="java.lang.String" parameterType="java.util.Map">
         SELECT compressimgurl FROM yw_compress_img WHERE protoimgurl=#{url,jdbcType=VARCHAR}
     </select>
+
+    <select id="queryProtoBycompress" resultType="com.movision.mybatis.compressImg.entity.CompressImg"
+            parameterType="com.movision.mybatis.compressImg.entity.CompressImg">
+        SELECT protoimgurl,protoimgsize FROM yw_compress_img WHERE compressimgurl=#{compressimgurl,jdbcType=VARCHAR}
+    </select>
 </mapper>

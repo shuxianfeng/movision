@@ -572,4 +572,13 @@ public class AppPostController {
         return response;
     }
 
+
+    @ApiOperation(value = "查询帖子中所有图片url", response = Response.class)
+    @RequestMapping(value = "queryPostImgById", method = RequestMethod.POST)
+    public Response queryPostImgById(@RequestParam String postid) {
+        Response response = new Response();
+        List<Map> resault = facadePost.queryPostImgById(postid);
+        response.setData(resault);
+        return response;
+    }
 }

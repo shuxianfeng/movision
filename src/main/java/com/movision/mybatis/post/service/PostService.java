@@ -1259,5 +1259,17 @@ public class PostService {
     }
 
 
+    /**
+     * 根据id查询帖子内容
+     *
+     * @param postid
+     * @return
+     */
+    public String queryPostContentById(String postid) {
+        Map map = new HashMap();
+        map.put("postid", Integer.parseInt(postid));
+        return postMapper.queryPostContentById(map);
+    }
+
 
 }

@@ -46,4 +46,14 @@ public class CompressImgService {
             throw e;
         }
     }
+
+    /**
+     * 根据缩略图查询图片信息
+     *
+     * @param com
+     * @return
+     */
+    public CompressImg queryProtoBycompress(CompressImg com) {
+        return compressImgMapper.queryProtoBycompress(com);
+    }
 }

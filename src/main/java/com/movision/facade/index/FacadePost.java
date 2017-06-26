@@ -1322,5 +1322,30 @@ public class FacadePost {
     }
 
 
+    public List<Map> queryPostImgById(String postid) {
+        List<Map> list = new ArrayList<>();
+        //查询出帖子内容
+        String postcontent = postService.queryPostContentById(postid);
+        JSONArray array = JSONArray.fromObject(postcontent);
+        for (int i = 0; i < array.size(); i++) {
+            Map map = new HashMap();//用于做内层封装
+            JSONObject object = JSONObject.fromObject(array.get(i));
+            if (object.getString("type").equals("1")) {//代表模块是图片
+                CompressImg compressImg = new CompressImg();
+                compressImg.setCompressimgurl(object.getString("value"));
+                //根据压缩图片查询出原图和图片大小
+                compressImg = compressImgService.queryProtoBycompress(compressImg);
+                map.put("protoimgurl", compressImg.getProtoimgurl());//原图
+                map.put("protoimgsize", compressImg.getProtoimgsize());//原图大小
+                map.put("compressimgurl", object.getString("value"));//缩略图大小
+                map.put("wh", object.getString("wh"));//图片宽高
+                list.add(map);
+            }
+        }
+
+        return list;
+    }
+
+
  }
 
