@@ -1029,7 +1029,6 @@ public class PostFacade {
                                               String coverimg, String postcontent, String isessence, String orderid, String essencedate,
                                               String begintime, String endtime, String userid, String hotimgurl, String ishot, String goodsid) {
         PostTo post = new PostTo();
-        if (postcontent.length() < 20000) {
             Map<String, Integer> map = new HashedMap();
             post.setTitle(title);//帖子标题
             post.setSubtitle(subtitle);//帖子副标题
@@ -1125,11 +1124,6 @@ public class PostFacade {
             map.put("result", r);
             map.put("result", result);
             return map;
-        } else {
-            Map map = new HashMap();
-            map.put("resault", -2);
-            return map;
-        }
     }
 
     /**
@@ -1378,7 +1372,6 @@ public class PostFacade {
                                                      String orderid, String activefee, String activetype, String iscontribute, String begintime, String endtime, String hotimgurl, String ishot, String essencedate, String goodsid) {
         PostActiveList postActiveList = new PostActiveList();
         Map<String, Integer> map = new HashedMap();
-        if (postcontent.length() < 20000) {
             try {
                 postActiveList.setId(Integer.parseInt(id));//帖子id
                 postActiveList.setTitle(title);//帖子标题
@@ -1399,8 +1392,7 @@ public class PostFacade {
                     postActiveList.setUserid(Integer.parseInt(userid));
                 }
                 if (StringUtil.isNotEmpty(postcontent)) {
-                    if (postcontent.length() > 2000)
-                        postActiveList.setPostcontent(postcontent);//内容
+                    postActiveList.setPostcontent(postcontent);//内容
                 }
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 Date estime = null;
@@ -1491,10 +1483,6 @@ public class PostFacade {
             } catch (Exception e) {
                 log.error("帖子编辑异常", e);
             }
-        } else {
-            map.put("resault", -2);
-        }
-
         return map;
     }
     /**
