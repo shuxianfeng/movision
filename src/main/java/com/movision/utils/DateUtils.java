@@ -230,6 +230,16 @@ public class DateUtils {
         return between_days;
     }
 
+    /**
+     * 获取当前系统的时间戳 （精确到毫秒）ex：2017-06-27 10:57:08 039
+     *
+     * @return
+     */
+    public static String getCurrentDate() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
+        return df.format(new Date());
+    }
+
 
     public static void main(String[] args) throws ParseException {
 //        Date date = DateUtils.date2Sub(DateUtils.str2Date("2016-03-02 20:16:21", "yyyy-MM-dd HH:mm:ss"), 12, 10);
@@ -248,7 +258,7 @@ public class DateUtils {
 //         System.out.println(s);
 
 //        System.out.println(DateUtils.str2Date("20170129023128", "yyyyMMddHHmmss"));
-        System.out.println(str2Date("1991-07-11"));
-
+//        System.out.println(str2Date("1991-07-11"));
+        System.out.println(getCurrentDate());
     }
 }
