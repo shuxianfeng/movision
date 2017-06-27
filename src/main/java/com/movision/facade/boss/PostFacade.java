@@ -303,6 +303,7 @@ public class PostFacade {
             postList.setId(list.get(i).getId());
             postList.setTitle(list.get(i).getTitle());//主题
             postList.setNickname(nickname);//昵称
+            postList.setIscontribute(list.get(i).getIscontribute());//是否投稿
             postList.setActivetype(list.get(i).getActivetype());//活动类型
             postList.setActivefee(activefee);//活动费用
             postList.setEssencedate(list.get(i).getEssencedate());//精选日期
