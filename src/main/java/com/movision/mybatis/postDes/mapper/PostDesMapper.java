@@ -23,4 +23,6 @@ public interface PostDesMapper {
     void batchAdd(List<Post> postList);
 
     int addFromPost(Post post);
+
+    List<Post> selectAll();
 }

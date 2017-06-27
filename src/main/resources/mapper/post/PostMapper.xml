@@ -1996,7 +1996,7 @@
 
     <select id="selectAllPost" resultType="com.movision.mybatis.post.entity.Post">
         <![CDATA[
-        SELECT * from yw_post where id > 245
+        SELECT * from yw_post
         ]]>
     </select>
 

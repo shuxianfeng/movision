@@ -420,4 +420,9 @@
         #{iscontribute,jdbcType=INTEGER}, #{essencedate,jdbcType=DATE}, #{userid,jdbcType=VARCHAR},
         #{oprtime,jdbcType=TIMESTAMP}, #{postcontent,jdbcType=LONGVARCHAR})
     </insert>
+
+
+    <select id="selectAll" resultType="com.movision.mybatis.post.entity.Post">
+        SELECT * from yw_post_des
+    </select>
 </mapper>

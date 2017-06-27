@@ -43,5 +43,15 @@ public class PostDesService {
         }
     }
 
+    public List<Post> selectAll() {
+        try {
+            log.info("从yw_post_des中查出所有数据");
+            return postDesMapper.selectAll();
+        } catch (Exception e) {
+            log.error("从yw_post_des中查出所有数据,失败", e);
+            throw e;
+        }
+    }
+
 
 }
