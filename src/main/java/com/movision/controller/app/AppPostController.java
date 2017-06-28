@@ -74,6 +74,26 @@ public class AppPostController {
         return response;
     }
 
+    @ApiOperation(value = "帖子详情数据返回接口（老版,只用于改版数据割接使用）", notes = "用于返回请求帖子详情内容（老版,只用于改版数据割接使用）", response = Response.class)
+    @RequestMapping(value = "olddetail", method = RequestMethod.POST)
+    public Response queryOldPostDetail(@ApiParam(value = "帖子id") @RequestParam String postid,
+                                    @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+        Response response = new Response();
+
+        PostVo post = facadePost.queryOldPostDetail(postid, userid);
+
+
+        if (null != post) {
+            response.setCode(200);
+            response.setMessage("查询成功");
+        }else if (null == post){
+            response.setCode(300);
+            response.setMessage("该帖已删除");
+        }
+        response.setData(post);
+        return response;
+    }
+
     @ApiOperation(value = "活动详情数据返回接口", notes = "用于返回请求活动详情内容", response = Response.class)
     @RequestMapping(value = "activeDetail", method = RequestMethod.POST)
     public Response queryActiveDetail(@ApiParam(value = "活动id") @RequestParam String postid,
