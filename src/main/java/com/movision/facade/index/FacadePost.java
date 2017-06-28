@@ -788,7 +788,7 @@ public class FacadePost {
                     System.out.println(con);
                     if ((int) con.get("code") == 200) {
                         String str = con.get("content").toString();
-                        postcontent = str.replace("\\", "");
+                        postcontent = str;
                     } else {
                         log.error("APP端帖子图片内容转换异常");
                     }
