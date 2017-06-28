@@ -1713,7 +1713,7 @@ public class PostFacade {
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map updatePostByIdTest(HttpServletRequest request, String id, String title, String subtitle,
-                                  String userid, String circleid, String postcontent, String isessence, String ishot, String orderid, String time, String goodsid, String loginid) {
+                                  String userid, String circleid, String coverimg, String postcontent, String isessence, String ishot, String orderid, String time, String goodsid, String loginid) {
         PostTo post = new PostTo();
         Map map = new HashedMap();
         Integer lgid = Integer.parseInt(loginid);
@@ -1726,6 +1726,9 @@ public class PostFacade {
                     post.setSubtitle(subtitle);//帖子副标题
                     if (!StringUtils.isEmpty(circleid)) {
                         post.setCircleid(circleid);//圈子id
+                    }
+                    if (StringUtil.isNotEmpty(coverimg)) {
+                        post.setCoverimg(coverimg);
                     }
                     post.setIsactive("0");//设置状态为帖子
                     Map con = null;

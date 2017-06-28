@@ -780,6 +780,7 @@ public class PostController {
                                        @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,//帖子副标题
                                        @ApiParam(value = "发帖人（必填且必须是管理员-1）") @RequestParam String userid,//发帖人
                                        @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,//圈子id
+                                       @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam String coverimg,//帖子封面
                                        @ApiParam(value = "帖子内容（必填）") @RequestParam String postcontent,//帖子内容
                                        @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
                                        @ApiParam(value = "圈子精选") @RequestParam(required = false) String ishot,//本圈精华
@@ -788,7 +789,7 @@ public class PostController {
                                        @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
                                        @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map map = postFacade.updatePostByIdTest(request, id, title, subtitle, userid, circleid, postcontent, isessence, ishot, orderid, time, goodsid, loginid);
+        Map map = postFacade.updatePostByIdTest(request, id, title, subtitle, userid, circleid, coverimg, postcontent, isessence, ishot, orderid, time, goodsid, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
