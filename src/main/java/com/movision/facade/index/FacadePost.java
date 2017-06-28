@@ -1405,10 +1405,17 @@ public class FacadePost {
                 compressImg.setCompressimgurl(object.getString("value"));
                 //根据压缩图片查询出原图和图片大小
                 compressImg = compressImgService.queryProtoBycompress(compressImg);
-                map.put("protoimgurl", compressImg.getProtoimgurl());//原图
-                map.put("protoimgsize", compressImg.getProtoimgsize());//原图大小
-                map.put("compressimgurl", object.getString("value"));//缩略图大小
-                map.put("wh", object.getString("wh"));//图片宽高
+                if (null != compressImg) {
+                    map.put("protoimgurl", compressImg.getProtoimgurl());//原图
+                    map.put("protoimgsize", compressImg.getProtoimgsize());//原图大小
+                    map.put("compressimgurl", object.getString("value"));//缩略图大小
+                    map.put("wh", object.getString("wh"));//图片宽高
+                }else{
+                    map.put("protoimgurl", object.getString("value"));//直接去压缩图的url
+                    map.put("protoimgsize", "");//直接去压缩图的url
+                    map.put("compressimgurl", object.getString("value"));//缩略图大小
+                    map.put("wh", "");//图片宽高
+                }
                 list.add(map);
             }
         }
