@@ -923,7 +923,7 @@ public class PostFacade {
                     System.out.println(con);
                     if ((int) con.get("code") == 200) {
                         String str = con.get("content").toString();
-                        str = str.replace("\\", "");
+//                        str = str.replace("\\", "");//和web IOS 安卓调试需去掉shuxf
                         post.setPostcontent(str);//帖子内容
                     } else {
                         logger.error("帖子内容转换异常");
@@ -1736,7 +1736,7 @@ public class PostFacade {
                         if ((int) con.get("code") == 200) {
                             System.out.println(con);
                             String str = con.get("content").toString();
-                            str = str.replace("\\", "");
+//                            str = str.replace("\\", "");//---------------------和web IOS 安卓调试 需去掉shuxf
                             post.setPostcontent(str);//帖子内容
                         } else {
                             logger.error("帖子内容转换异常");
