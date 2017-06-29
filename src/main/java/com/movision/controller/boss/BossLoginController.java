@@ -143,7 +143,7 @@ public class BossLoginController {
                 if (oldpwdEncryptDB.equals(oldPwdParam)) {
                     //4 检验传参的新密码和二次输入的新密码是否相同
                     if (newPassword.equals(validPassword)) {
-                        String newPwdEncrypt = new Md5Hash(oldPassword, null, 2).toString();    //新密码加密后
+                        String newPwdEncrypt = new Md5Hash(newPassword, null, 2).toString();    //新密码加密后
                         //5 修改DB用户信息
                         bossUserFacade.updataBossuserByPwd(id, newPwdEncrypt);
                         //6 修改Session用户信息
