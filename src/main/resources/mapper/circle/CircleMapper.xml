@@ -416,6 +416,13 @@
         u.id AS circleUserid,
         u.level categorylevel
         FROM yw_circle c LEFT JOIN yw_user u ON c.phone=u.phone WHERE isdel=0
+        <if test="userid!=null">
+            AND c.phone=(SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
+            AND c.category=#{type,jdbcType=INTEGER}
+            OR c.id in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone =(SELECT
+            phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})))
+            AND c.category=#{type,jdbcType=INTEGER}
+        </if>
         <if test="type!=null">
             AND c.category=#{type,jdbcType=INTEGER}
         </if>
@@ -436,13 +443,6 @@
         </if>
         <if test="begintime!=null and endtime!=null">
             AND createtime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}
-        </if>
-        <if test="userid!=null">
-            AND c.phone=(SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
-            AND c.category=#{type,jdbcType=INTEGER}
-            OR c.id in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone =(SELECT
-            phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})))
-            AND c.category=#{type,jdbcType=INTEGER}
         </if>
         ORDER BY category
         <if test="pai==null">
