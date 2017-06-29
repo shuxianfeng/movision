@@ -3,27 +3,18 @@ package com.movision.controller.app;
 import com.google.gson.Gson;
 import com.movision.common.Response;
 import com.movision.common.constant.Constants;
-import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.SessionConstant;
 import com.movision.common.util.ShiroUtil;
-import com.movision.exception.BusinessException;
-import com.movision.facade.im.ImFacade;
 import com.movision.facade.user.AppRegisterFacade;
 import com.movision.facade.user.UserFacade;
-import com.movision.mybatis.deviceAccid.entity.DeviceAccid;
-import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.shiro.realm.ShiroRealm;
-import com.movision.utils.DateUtils;
 import com.movision.utils.ValidateUtils;
-import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.VerifyCodeUtils;
-import com.movision.utils.im.CheckSumBuilder;
-import com.movision.utils.propertiesLoader.PropertiesLoader;
-import com.movision.utils.sms.SDKSendSms;
+import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.taobao.api.ApiException;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -44,7 +35,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author zhuangyuhao

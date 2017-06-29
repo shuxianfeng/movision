@@ -15,6 +15,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -114,6 +115,67 @@ public class BossLoginController {
         Response jsonResult = new Response();
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JsonUtils.getJsonStringFromObj(jsonResult));
+    }
+
+    @RequestMapping(value = "/boss/modify_password", method = RequestMethod.POST)
+    @ApiOperation(value = "修改密码", notes = "修改密码", response = Response.class)
+    public Response modPassword(@ApiParam("用户id") @RequestParam Integer id,
+                                @ApiParam("旧密码") @RequestParam String oldPassword,
+                                @ApiParam("新密码") @RequestParam String newPassword,
+                                @ApiParam("校验的新密码") @RequestParam String validPassword) {
+        Response response = new Response();
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession();
+        //1 先检验是否登录
+        if (null == session) {
+            log.error("修改密码需要先登录！");
+            response.setCode(400);
+            response.setMessage("请登录");
+            return response;
+        } else {
+            Integer userid = ShiroUtil.getBossUserID();
+            //2 再检验传参id是否是当前登录人的id
+            if (null != userid && userid.intValue() == id.intValue()) {
+                BossRealm.ShiroBossUser bossUser = (BossRealm.ShiroBossUser) session.getAttribute(SessionConstant.BOSS_USER);
+                String oldpwdEncryptDB = bossUser.getPassword();
+                String oldPwdParam = new Md5Hash(oldPassword, null, 2).toString();
+                //3 检验传参的旧密码是否正确
+                if (oldpwdEncryptDB.equals(oldPwdParam)) {
+                    //4 检验传参的新密码和二次输入的新密码是否相同
+                    if (newPassword.equals(validPassword)) {
+                        String newPwdEncrypt = new Md5Hash(oldPassword, null, 2).toString();    //新密码加密后
+                        //5 修改DB用户信息
+                        bossUserFacade.updataBossuserByPwd(id, newPwdEncrypt);
+                        //6 修改Session用户信息
+                        ShiroUtil.updateBossuserPwd(newPwdEncrypt);
+
+                        response.setData(ShiroUtil.getBossUser());
+                        response.setMessage("修改密码成功！");
+                    } else {
+                        log.error("两次输入的新密码不一致");
+                        response.setCode(400);
+                        response.setMessage("两次输入的新密码不一致");
+                        return response;
+                    }
+
+                } else {
+                    log.error("输入的旧密码不正确，旧密码：" + oldPassword);
+                    response.setCode(400);
+                    response.setMessage("输入的旧密码不正确");
+                    return response;
+                }
+
+            } else {
+                log.error("请联系管理员：传参id与当前登录用户id不相等, param[id]=" + id + ", user[id]=" + userid);
+                response.setCode(400);
+                response.setMessage("请联系管理员：传参id与当前登录用户id不相等");
+                response.setData("传参param[id]=" + id + ", 当前登录user[id]=" + userid);
+                return response;
+            }
+
+        }
+
+        return response;
     }
 
 }

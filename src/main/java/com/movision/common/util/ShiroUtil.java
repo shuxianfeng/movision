@@ -141,6 +141,26 @@ public class ShiroUtil {
         return roleid;
     }
 
+
+    /**
+     * 修改session中的bossuser的pwd
+     *
+     * @param pwd
+     */
+    public static void updateBossuserPwd(String pwd) {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession(false);
+        if (session != null) {
+            BossRealm.ShiroBossUser principal = (BossRealm.ShiroBossUser) session.getAttribute(SessionConstant.BOSS_USER);
+            if (null != principal) {
+                //此处可以扩张需要的字段
+                principal.setPassword(pwd);
+                session.setAttribute(SessionConstant.BOSS_USER, principal);
+            }
+
+        }
+    }
+
     /**
      * 修改session中的app用户的积分
      * @param point

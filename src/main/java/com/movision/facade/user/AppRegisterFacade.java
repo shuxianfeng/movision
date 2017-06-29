@@ -2,7 +2,9 @@ package com.movision.facade.user;
 
 import com.google.gson.Gson;
 import com.movision.common.Response;
-import com.movision.common.constant.*;
+import com.movision.common.constant.Constants;
+import com.movision.common.constant.MsgCodeConstant;
+import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
 import com.movision.facade.im.ImFacade;
@@ -14,7 +16,6 @@ import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.coupon.service.CouponService;
 import com.movision.mybatis.couponTemp.entity.CouponTemp;
-import com.movision.mybatis.deviceAccid.entity.DeviceAccid;
 import com.movision.mybatis.deviceAccid.service.DeviceAccidService;
 import com.movision.mybatis.imDevice.entity.ImDevice;
 import com.movision.mybatis.imDevice.service.ImDeviceService;
@@ -31,7 +32,6 @@ import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.sms.SDKSendSms;
-import com.wordnik.swagger.annotations.ApiParam;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.util.*;
@@ -458,30 +457,6 @@ public class AppRegisterFacade {
     }
 
     /**
-     * 新增设备-accid记录
-     *
-     * @param deviceid
-     */
-    /*public void addDeviceAccid(String deviceid) {
-        DeviceAccid deviceAccid = new DeviceAccid();
-        deviceAccid.setDeviceid(deviceid);
-
-        deviceAccid.setAccid(CheckSumBuilder.getAccid(deviceid));
-        deviceAccidService.add(deviceAccid);
-    }*/
-
-    /**
-     * 根据设备号查询设备号和accid关系
-     *
-     * @param deviceno
-     * @return
-     */
-    /*public DeviceAccid selectByDeviceno(String deviceno) {
-        return deviceAccidService.selectByDeviceno(deviceno);
-    }*/
-
-
-    /**
      * 注册QQ账号
      * <p>
      * 步骤：
@@ -489,14 +464,12 @@ public class AppRegisterFacade {
      * 2 判断qq是否注册过
      * 若qq从未注册过：a 则注册qq账号; b 注册im用户，
      * 若qq已经注册过：更新用户记录中的token（token根据openid和设备号生成）
-     * 3 判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录；
-     * （方便设置后面的系统推送中的toAccids）
      * <p>
      * <p>
      * 下面是token的数据结构
      * token:{
      * username: qq,
-     * password: openid+deviceno,
+     * password: openid+deviceno,   //这个是变化的
      * rememberme: false
      * }
      *
@@ -623,37 +596,6 @@ public class AppRegisterFacade {
             newUser.setSina(account);   //微博
         }
     }
-
-    /**
-     * 判断t_device_accid中是否存在该设备号的记录，若存在，则删除该记录；
-     *
-     * @param deviceno
-     */
-    /*public void deleteSameDevicenoRecord(String deviceno) {
-        DeviceAccid deviceAccid = deviceAccidService.selectByDeviceno(deviceno);
-        if (null == deviceAccid) {
-            //不存在，则不操作
-        } else {
-            //删除该条记录
-            deviceAccidService.delete(deviceAccid.getId());
-        }
-    }*/
-
-    /**
-     * 删除存在的该设备im信息
-     *
-     * @param deviceno
-     */
-    /*public void deleteSameDeviceIm(String deviceno) {
-        ImDevice imDevice = imDeviceService.selectByDevice(deviceno);
-        if (null == imDevice) {
-            //不存在，则不操作
-        } else {
-            //删除该条记录
-            imDeviceService.delete(imDevice.getId());
-        }
-    }*/
-
 
     /**
      * 发送短信

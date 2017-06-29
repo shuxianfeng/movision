@@ -1,10 +1,7 @@
 package com.movision.mybatis.imuser.entity;
 
-import com.movision.mybatis.deviceAccid.entity.DeviceAccid;
-
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 public class ImUser implements Serializable {
     private Integer userid;
@@ -22,16 +19,6 @@ public class ImUser implements Serializable {
     private Date createTime;
 
     private Integer type;
-
-    private List<DeviceAccid> deviceAccid;
-
-    public List<DeviceAccid> getDeviceAccid() {
-        return deviceAccid;
-    }
-
-    public void setDeviceAccid(List<DeviceAccid> deviceAccid) {
-        this.deviceAccid = deviceAccid;
-    }
 
     public void setType(Integer type) {
         this.type = type;

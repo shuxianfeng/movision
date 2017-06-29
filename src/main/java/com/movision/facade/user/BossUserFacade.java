@@ -10,6 +10,7 @@ import com.movision.mybatis.role.entity.Role;
 import com.movision.mybatis.role.service.RoleService;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.bcel.generic.INEG;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +46,30 @@ public class BossUserFacade {
     }
 
 
+    /**
+     * 有选择的修改用户信息
+     *
+     * @param bossUser
+     * @return
+     */
     public Boolean updateUser(BossUser bossUser) {
         return bossUserService.updateUser(bossUser);
     }
+
+    /**
+     * 根据id, pwd 修改用户信息
+     *
+     * @param id
+     * @param pwd
+     * @return
+     */
+    public Boolean updataBossuserByPwd(Integer id, String pwd) {
+        BossUser bossUser = new BossUser();
+        bossUser.setId(id);
+        bossUser.setPassword(pwd);
+        return this.updateUser(bossUser);
+    }
+
 
     public BossUser getByUsername(String username) {
         return bossUserService.getBossUserByUsername(username);
