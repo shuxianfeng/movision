@@ -1,6 +1,7 @@
 package com.movision.facade.boss;
 
 import com.movision.common.constant.JurisdictionConstants;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.service.BossUserService;
@@ -285,7 +286,7 @@ public class CircleFacade {
      * @return
      */
     public Map updateCircle(String id, String name, String category, String circlemanid,
-                            String circleadmin, String photo, String introduction, String maylikeimg, String scope, String loginuser) {
+                            String circleadmin, String photo, String introduction, String notice, String maylikeimg, String scope, String loginuser) {
         CircleDetails circleDetails = new CircleDetails();
         Map map = new HashedMap();
         Integer circleid = null;
@@ -300,6 +301,9 @@ public class CircleFacade {
             }
             if (!StringUtils.isEmpty(category)) {
                 circleDetails.setCategory(Integer.parseInt(category));
+            }
+            if (StringUtil.isNotEmpty(notice)) {
+                circleDetails.setNotice(notice);
             }
             if (!StringUtils.isEmpty(circleadmin)) {//管理员列表
                 //待定
@@ -389,7 +393,7 @@ public class CircleFacade {
      * @return
      */
     public Map addCircle(String name, String category, String userid, String circleadmin,
-                         String circlemanid, String photo, String maylikeimg, String introduction, String loginid) {
+                         String circlemanid, String photo, String maylikeimg, String introduction, String notice, String loginid) {
         CircleDetails circleDetails = new CircleDetails();
         Map map = new HashedMap();
         //登录用户，操作，操作种类，种类id
@@ -404,6 +408,9 @@ public class CircleFacade {
 
             if (!StringUtils.isEmpty(circlemanid)) {//添加创建人
                 circleDetails.setUserid(circlemanid);
+            }
+            if (StringUtil.isNotEmpty(notice)) {//圈子公告
+                circleDetails.setNotice(notice);
             }
             if (!StringUtils.isEmpty(userid)) {
                 //查询圈主手机号
@@ -425,7 +432,7 @@ public class CircleFacade {
             circleDetails.setOrderid(0);//设置精选排序，初始值：0
             circleDetails.setIsrecommend(0);//设置是否被推荐，初始值0
             circleDetails.setPermission(1);//设置其他用户是否可以发帖，初始值：1是
-            Integer s = circleService.insertCircle(circleDetails);
+            Integer s = circleService.insertCircle(circleDetails);//创建圈子
             Integer cirid = circleDetails.getId();
             if (!StringUtils.isEmpty(circleadmin)) {//管理员列表
                 //待定

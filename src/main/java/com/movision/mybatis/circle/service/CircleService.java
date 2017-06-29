@@ -622,4 +622,20 @@ public class CircleService {
             throw e;
         }
     }
+
+    /**
+     * 用于权限查询圈子是否属于本人
+     *
+     * @param map
+     * @return
+     */
+    public Integer queryCircleIdByIsUser(Map map) {
+        try {
+            log.info("查询圈子是否属于本人");
+            return circleMapper.queryCircleIdByIsUser(map);
+        } catch (Exception e) {
+            log.error("查询圈子是否属于本人异常", e);
+            throw e;
+        }
+    }
 }

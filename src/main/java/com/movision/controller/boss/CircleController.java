@@ -182,11 +182,12 @@ public class CircleController {
                                  @ApiParam(value = "管理员列表") @RequestParam String circleadmin,
                                  @ApiParam(value = "圈子否封面") @RequestParam String photo,
                                  @ApiParam(value = "圈子简介") @RequestParam String introduction,
+                                 @ApiParam(value = "圈子公告") @RequestParam String notice,
                                  @ApiParam(value = "圈子首页方形图") @RequestParam String maylikeimg,
                                  @ApiParam(value = "发帖权限") @RequestParam(required = false) String scope,
                                  @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map map = circleFacade.updateCircle(id, name, category, userid, circleadmin, photo, introduction, maylikeimg, scope, loginid);
+        Map map = circleFacade.updateCircle(id, name, category, userid, circleadmin, photo, introduction, notice, maylikeimg, scope, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -234,9 +235,10 @@ public class CircleController {
                               @ApiParam(value = "圈子否封面") @RequestParam String photo,
                               @ApiParam(value = "圈子首页方形图") @RequestParam String maylikeimg,
                               @ApiParam(value = "圈子简介") @RequestParam String introduction,
+                              @ApiParam(value = "圈子公告") @RequestParam String notice,
                               @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.addCircle(name, category, userid, circleadmin, circlemanid, photo, maylikeimg, introduction, loginid);
+        Map<String, Integer> map = circleFacade.addCircle(name, category, userid, circleadmin, circlemanid, photo, maylikeimg, introduction, notice, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

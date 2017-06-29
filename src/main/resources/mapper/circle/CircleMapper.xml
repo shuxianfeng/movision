@@ -774,6 +774,9 @@
             <if test="isrecommend!=null">
                 isrecommend = #{isrecommend,jdbcType=INTEGER},
             </if>
+            <if test="notice != null">
+                notice = #{notice,jdbcType=VARCHAR},
+            </if>
             <if test="orderid!=null">
                 orderid = #{orderid,jdbcType=INTEGER},
             </if>
@@ -1017,5 +1020,16 @@
     </update>
     <select id="queryCircleName" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT `name` FROM yw_circle WHERE id = #{circleid,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryCircleIdByIsUser" resultType="java.lang.Integer" parameterType="java.util.Map">
+        <if test="master==1">
+            SELECT COUNT(1) FROM yw_circle WHERE id = #{id,jdbcType=INTEGER} AND phone = (SELECT phone FROM
+            yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
+        </if>
+        <if test="manage == 1">
+            SELECT COUNT(1) FROM yw_circle_manager WHERE userid =(SELECT id FROM yw_user WHERE phone=(SELECT phone FROM
+            yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})) AND circleid = #{id,jdbcType=INTEGER}
+        </if>
     </select>
 </mapper>
