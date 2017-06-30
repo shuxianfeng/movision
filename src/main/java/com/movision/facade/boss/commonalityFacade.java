@@ -81,6 +81,8 @@ public class commonalityFacade {
                 Map ma = new HashedMap();
                 if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//帖子
                     ma.put("userid", userid);
+                    ma.put("kindid", kindid);
+                    ma.put("identity", 1);//身份圈主1
                     //根据操作类型id查询此操作是否属于该用户范畴
                     Integer list = bossUserService.queryPostByUserid(ma);
                     if (list > 0) {
@@ -116,6 +118,7 @@ public class commonalityFacade {
                 if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//帖子
                     ma.put("userid", userid);
                     ma.put("kindid", kindid);
+                    ma.put("identity", 1);//身份圈主1
                     //根据操作类型id查询此操作是否属于该用户范畴
                     Integer list = bossUserService.queryPostByUserid(ma);
                     if (list > 0) {
@@ -190,10 +193,12 @@ public class commonalityFacade {
             } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//添加评论
                 map.put("resault", 2);
                 return map;
-            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.delete.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())))) {//圈主可以删除该圈子的帖子和评论
+            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.delete.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())))) {//管理员可以删除该圈子的帖子和评论
                 Map ma = new HashedMap();
-                if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//帖子
+                if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//管理员可以删除帖子
                     ma.put("userid", userid);
+                    ma.put("kindid", kindid);
+                    ma.put("identity", 2);//身份管理员2
                     //根据操作类型id查询此操作是否属于该用户范畴
                     Integer list = bossUserService.queryPostByUserid(ma);
                     if (list > 0) {
@@ -204,7 +209,7 @@ public class commonalityFacade {
                         map.put("message", "权限不足");
                         return map;
                     }
-                } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//圈主删除帖子评论
+                } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//管理员删除帖子评论
                     ma.put("kindid", kindid);//评论id
                     //查出评论是否属于圈主的帖子评论
                     Integer list = bossUserService.queryCircleManageCommentByUserid(ma);
@@ -223,10 +228,12 @@ public class commonalityFacade {
                         return map;
                     }
                 }
-            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.update.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()))) {//圈主可以编辑改圈子中的本人帖子
+            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.update.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()))) {//管理员可以编辑改圈子中的本人帖子
                 Map ma = new HashedMap();
-                if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//帖子
+                if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//编辑帖子
                     ma.put("userid", userid);
+                    ma.put("kindid", kindid);
+                    ma.put("identity", 2);//身份管理员2
                     //根据操作类型id查询此操作是否属于该用户范畴
                     Integer list = bossUserService.queryPostByUserid(ma);
                     if (list > 0) {
