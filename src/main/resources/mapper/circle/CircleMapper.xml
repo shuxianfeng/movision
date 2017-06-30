@@ -563,6 +563,7 @@
         OR id in(SELECT circleid FROM yw_circle_manager
         WHERE userid=(SELECT id FROM yw_user WHERE phone =(SELECT phone FROM yw_admin_user WHERE
         id=#{userid,jdbcType=INTEGER})))
+        AND status =1
         <if test="categoryid!=null">
             AND category=#{categoryid,jdbcType=INTEGER}
         </if>
