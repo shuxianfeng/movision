@@ -315,7 +315,7 @@ public class JsoupCompressImg {
                         if (StringUtils.isNotEmpty(imgurl)) {
 
                             // 1 生成压缩后的图片的url
-                            String tempfilename = UUID.randomUUID().toString() + filename.substring(filename.lastIndexOf("."), filename.length() - 1);
+                            String tempfilename = UUID.randomUUID().toString() + filename.substring(filename.lastIndexOf("."), filename.length());
                             String compress_file_path = compress_dir_path + tempfilename;
                             File compressfile = new File(compress_file_path);
                             log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
