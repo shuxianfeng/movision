@@ -112,21 +112,21 @@ public class CoverImgCompressUtil {
 
 
     public boolean compressJpgOrPng(int w, int h, boolean compressFlag, String filename, String filePath, String tempDir) {
-        if (filename.endsWith(".jpg")) {
+        if (filename.toLowerCase().endsWith(".jpg")) {
 
             log.info("压缩jpg图片，filepath=" + filePath);
             compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
         }
-        if (filename.endsWith(".png")) {
+        if (filename.toLowerCase().endsWith(".png")) {
             log.info("压缩png图片，filepath=" + filePath);
             compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
         }
-        if (filename.endsWith(".jpeg")) {
+        if (filename.toLowerCase().endsWith(".jpeg")) {
 
             log.info("压缩jpeg图片，filepath=" + filePath);
             compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
         }
-        if (filename.endsWith(".bmp")) {
+        if (filename.toLowerCase().endsWith(".bmp")) {
 
             log.info("压缩bmp图片，filepath=" + filePath);
             compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
