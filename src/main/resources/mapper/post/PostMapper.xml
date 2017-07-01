@@ -223,7 +223,7 @@
         FROM yw_post t1
         LEFT JOIN yw_active_period t2
         ON t1.id = t2.postid
-        ) t WHERE t.isactive = '1'
+        ) t WHERE t.isactive = '1' AND t.isdel = '0'
         ORDER BY t.intime DESC
     </select>
 
@@ -1127,7 +1127,7 @@
         (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS circlename,
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
-        WHERE p.isdel=0 AND p.isactive=0
+        WHERE p.isdel <![CDATA[<>]]> 1 AND p.isactive=0
         AND p.circleid in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone
         =(SELECT phone FROM yw_admin_user WHERE id=#{loginid,jdbcType=INTEGER}))) AND isdel=0
         <if test="uid!=null">
@@ -1203,7 +1203,7 @@
         (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS circlename,
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
-        WHERE p.isdel=0 AND p.isactive=0
+        WHERE p.isdel <![CDATA[<>]]> 1 AND p.isactive=0
         ORDER BY p.intime DESC
     </select>
 
@@ -1331,7 +1331,7 @@
         isdel=0))) AS categoryname,
         v.videourl vid,v.bannerimgurl
         FROM yw_post p LEFT JOIN yw_video as v ON p.id=v.postid
-        WHERE p.id=#{postid,jdbcType=INTEGER} AND p.isactive=0 AND p.isdel=0
+        WHERE p.id=#{postid,jdbcType=INTEGER} AND p.isactive=0 AND p.isdel <![CDATA[<>]]> 1
     </select>
 
     <select id="queryActivityParticulars" resultType="com.movision.mybatis.post.entity.PostList"
@@ -1675,7 +1675,7 @@
         (SELECT nickname FROM yw_user WHERE id=p.userid) as nickname,p.coverimg,
         p.isessence,p.essencedate as time,p.orderid,p.postcontent,v.videourl vid,v.bannerimgurl
         FROM yw_post as p LEFT JOIN yw_video as v ON p.id=v.postid WHERE p.id=#{postid,jdbcType=INTEGER} AND
-        p.isactive=0 AND p.isdel=0
+        p.isactive=0 AND p.isdel <![CDATA[<>]]> 1
     </select>
 
 
@@ -1983,5 +1983,24 @@
     </select>
     <select id="selectToAccid" parameterType="java.lang.Integer" resultType="java.lang.String">
         select  yw_im_user.accid from yw_post LEFT JOIN yw_im_user ON yw_im_user.userid=yw_post.userid WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="findAllPostListRefulsh" parameterType="com.movision.mybatis.post.entity.Post">
+        SELECT * FROM yw_post WHERE isdel=0 ORDER BY intime DESC
+    </select>
+    <select id="queryCrileid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT circleid FROM yw_post WHERE isdel=0 AND id=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="queryIsIsessence" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post WHERE isessence=1 AND ishot=1 AND id=#{postid,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectAllPost" resultType="com.movision.mybatis.post.entity.Post">
+        <![CDATA[
+        SELECT * from yw_post where id > 245
+        ]]>
+    </select>
+
+    <select id="queryPostContentById" parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT postcontent FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
 </mapper>
