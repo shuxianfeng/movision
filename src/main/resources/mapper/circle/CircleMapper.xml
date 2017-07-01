@@ -416,33 +416,78 @@
         u.id AS circleUserid,
         u.level categorylevel
         FROM yw_circle c LEFT JOIN yw_user u ON c.phone=u.phone WHERE isdel=0
-        <if test="type!=null">
-            AND c.category=#{type,jdbcType=INTEGER}
-        </if>
-        <if test="status==0">
-            AND c.status=0
-        </if>
-        <if test="status==1">
-            AND c.status=1
-        </if>
-        <if test="status==2">
-            AND c.status=2
-        </if>
-        <if test="circleid!=null">
-            AND c.id=#{circleid,jdbcType=INTEGER}
-        </if>
-        <if test="circleman != null">
-            AND c.phone in(SELECT phone FROM yw_user WHERE nickname LIKE concat('%',#{circleman,jdbcType=VARCHAR},'%'))
-        </if>
-        <if test="begintime!=null and endtime!=null">
-            AND createtime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}
-        </if>
         <if test="userid!=null">
             AND c.phone=(SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
-            AND c.category=#{type,jdbcType=INTEGER}
+            <if test="type!=null">
+                AND c.category=#{type,jdbcType=INTEGER}
+            </if>
+            <if test="status==0">
+                AND c.status=0
+            </if>
+            <if test="status==1">
+                AND c.status=1
+            </if>
+            <if test="status==2">
+                AND c.status=2
+            </if>
+            <if test="circleid!=null">
+                AND c.id=#{circleid,jdbcType=INTEGER}
+            </if>
+            <if test="circleman != null">
+                AND c.phone in(SELECT phone FROM yw_user WHERE nickname LIKE
+                concat('%',#{circleman,jdbcType=VARCHAR},'%'))
+            </if>
+            <if test="begintime!=null and endtime!=null">
+                AND createtime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}
+            </if>
             OR c.id in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone =(SELECT
             phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})))
-            AND c.category=#{type,jdbcType=INTEGER}
+            <if test="type!=null">
+                AND c.category=#{type,jdbcType=INTEGER}
+            </if>
+            <if test="status==0">
+                AND c.status=0
+            </if>
+            <if test="status==1">
+                AND c.status=1
+            </if>
+            <if test="status==2">
+                AND c.status=2
+            </if>
+            <if test="circleid!=null">
+                AND c.id=#{circleid,jdbcType=INTEGER}
+            </if>
+            <if test="circleman != null">
+                AND c.phone in(SELECT phone FROM yw_user WHERE nickname LIKE
+                concat('%',#{circleman,jdbcType=VARCHAR},'%'))
+            </if>
+            <if test="begintime!=null and endtime!=null">
+                AND createtime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}
+            </if>
+        </if>
+        <if test="userid == null">
+            <if test="type!=null">
+                AND c.category=#{type,jdbcType=INTEGER}
+            </if>
+            <if test="status==0">
+                AND c.status=0
+            </if>
+            <if test="status==1">
+                AND c.status=1
+            </if>
+            <if test="status==2">
+                AND c.status=2
+            </if>
+            <if test="circleid!=null">
+                AND c.id=#{circleid,jdbcType=INTEGER}
+            </if>
+            <if test="circleman != null">
+                AND c.phone in(SELECT phone FROM yw_user WHERE nickname LIKE
+                concat('%',#{circleman,jdbcType=VARCHAR},'%'))
+            </if>
+            <if test="begintime!=null and endtime!=null">
+                AND createtime BETWEEN #{begintime,jdbcType=TIMESTAMP} AND #{endtime,jdbcType=TIMESTAMP}
+            </if>
         </if>
         ORDER BY category
         <if test="pai==null">
@@ -518,6 +563,7 @@
         OR id in(SELECT circleid FROM yw_circle_manager
         WHERE userid=(SELECT id FROM yw_user WHERE phone =(SELECT phone FROM yw_admin_user WHERE
         id=#{userid,jdbcType=INTEGER})))
+        AND status =1
         <if test="categoryid!=null">
             AND category=#{categoryid,jdbcType=INTEGER}
         </if>
@@ -525,23 +571,38 @@
 
     <select id="queryCircleListByUserRole" parameterType="com.movision.mybatis.user.entity.UserRole"
             resultType="com.movision.mybatis.circle.entity.CircleVo">
-        SELECT c.id,c.scope,c.name,c.category,cc.categoryname FROM yw_circle c LEFT JOIN yw_circle_category cc ON
-        cc.id=c.category WHERE
-        (
+        SELECT c.id,c.category,c.name,c.scope,cc.categoryname
+        FROM yw_circle c LEFT JOIN yw_circle_category cc ON cc.id=c.category
+        WHERE (
         <if test="vip == 1">
-            c.scope=#{vip,jdbcType=INTEGER} OR
+            (c.scope=#{vip,jdbcType=INTEGER} AND c.status<![CDATA[ <> ]]>0
+            <if test="categoryid != null">
+                AND c.category=#{categoryid,jdbcType=INTEGER}
+            </if>) OR
         </if>
-        c.scope=2)
-        AND(
-        c.id=(SELECT id FROM yw_circle WHERE phone=(SELECT phone FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}))
-        OR c.id IN (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone=(SELECT
-        phone FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}))))
+        (c.scope=2
         <if test="categoryid != null">
             AND c.category=#{categoryid,jdbcType=INTEGER}
         </if>
+        AND c.status<![CDATA[ <> ]]>0)
+        )
+        OR
+        ((c.userid=#{userid,jdbcType=INTEGER} OR c.id IN (SELECT circleid FROM yw_circle_manager WHERE
+        userid=#{userid,jdbcType=INTEGER}))
+        <if test="categoryid != null">
+            AND c.category=#{categoryid,jdbcType=INTEGER}
+        </if>
+        AND c.status<![CDATA[ <> ]]>0)
+        OR (c.phone=(select phone from yw_user WHERE id=#{userid,jdbcType=INTEGER})
+        <if test="categoryid != null">
+            AND c.category=#{categoryid,jdbcType=INTEGER}
+        </if>
+        AND c.status<![CDATA[ <> ]]>0
+        )
         <if test="type == 5">
             GROUP BY c.category
         </if>
+
     </select>
 
     <select id="queryCircleListTo" resultType="com.movision.mybatis.circle.entity.CircleVo"
@@ -549,20 +610,29 @@
         SELECT c.id,c.scope,c.name,c.category,cc.categoryname FROM yw_circle c LEFT JOIN yw_circle_category cc ON
         cc.id=c.category WHERE
         (
-        <if test="vip == 1">
-            c.scope=#{vip,jdbcType=INTEGER} OR
+        <if test="vip >0">
+            (c.scope=#{vip,jdbcType=INTEGER} AND c.status = 1
+            <if test="categoryid != null">
+                AND c.category=#{categoryid,jdbcType=INTEGER}
+            </if>) OR
         </if>
-        c.scope=2)
+        (c.scope=2
         <if test="categoryid != null">
             AND c.category=#{categoryid,jdbcType=INTEGER}
         </if>
+        AND c.status = 1)
+        )
+        <if test="categoryid != null">
+            AND c.category=#{categoryid,jdbcType=INTEGER}
+        </if>
+        AND c.status = 1
         <if test="type == 5">
             GROUP BY c.category
         </if>
     </select>
 
     <select id="queryCircleList" resultType="com.movision.mybatis.circle.entity.Circle">
-        SELECT id,scope,name,category FROM yw_circle
+        SELECT id,scope,name,category FROM yw_circle AND status <![CDATA[ <> ]]> 0
     </select>
 
     <select id="queryListByCircleManageListByUserid" parameterType="java.util.Map"
@@ -704,6 +774,9 @@
             </if>
             <if test="isrecommend!=null">
                 isrecommend = #{isrecommend,jdbcType=INTEGER},
+            </if>
+            <if test="notice != null">
+                notice = #{notice,jdbcType=VARCHAR},
             </if>
             <if test="orderid!=null">
                 orderid = #{orderid,jdbcType=INTEGER},
@@ -948,5 +1021,16 @@
     </update>
     <select id="queryCircleName" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT `name` FROM yw_circle WHERE id = #{circleid,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryCircleIdByIsUser" resultType="java.lang.Integer" parameterType="java.util.Map">
+        <if test="master==1">
+            SELECT COUNT(1) FROM yw_circle WHERE id = #{id,jdbcType=INTEGER} AND phone = (SELECT phone FROM
+            yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
+        </if>
+        <if test="manage == 1">
+            SELECT COUNT(1) FROM yw_circle_manager WHERE userid =(SELECT id FROM yw_user WHERE phone=(SELECT phone FROM
+            yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})) AND circleid = #{id,jdbcType=INTEGER}
+        </if>
     </select>
 </mapper>

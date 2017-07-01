@@ -1,8 +1,8 @@
 package com.movision.facade.index;
 
 import com.google.gson.Gson;
+import com.mongodb.*;
 import com.movision.common.constant.PointConstant;
-import com.movision.common.util.ShiroUtil;
 import com.movision.facade.im.ImFacade;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
@@ -25,30 +25,39 @@ import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
 import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserAll;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
+import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
+import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.*;
-import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
+import net.sf.json.JSON;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -104,7 +113,7 @@ public class FacadePost {
     private NewInformationService newInformationService;
 
     @Autowired
-    private VideoUploadUtil videoUploadUtil;
+    private UserRefreshRecordService userRefreshRecordService;
 
     @Autowired
     private ImFacade imFacade;
@@ -118,7 +127,10 @@ public class FacadePost {
     @Autowired
     private AliOSSClient aliOSSClient;
 
-    public PostVo queryPostDetail(String postid, String userid, String type) {
+    @Autowired
+    private VideoCoverURL videoCoverURL;
+
+    public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
 
         //通过userid、postid查询该用户有没有关注该圈子的权限
         Map<String, Object> parammap = new HashMap<>();
@@ -127,60 +139,143 @@ public class FacadePost {
             parammap.put("userid", Integer.parseInt(userid));
         }
         PostVo vo = postService.queryPostDetail(parammap);
-        //根据帖子封面原图url查询封面压缩图url，如果存在替换，不存在就用原图
-        String compressurl = postService.queryCompressUrl(vo.getCoverimg());
-        if (null != compressurl && !compressurl.equals("") && !compressurl.equals("null")){
-            vo.setCoverimg(compressurl);
-        }
 
-        int rewardsum = postService.queryRewardSum(postid);//查询帖子被打赏的次数
-        vo.setRewardsum(rewardsum);
-        List<UserLike> nicknamelist = postService.queryRewardPersonNickname(postid);
-        vo.setRewardpersonnickname(nicknamelist);
-        if (type.equals("1") || type.equals("2")) {
-            Video video = postService.queryVideoUrl(Integer.parseInt(postid));
-            vo.setVideourl(video.getVideourl());
-            vo.setVideocoverimgurl(video.getBannerimgurl());
-        }
-        if (vo.getUserid() != -1) {//发帖人为普通用户时查询发帖人昵称和手机号
-            User user = userService.queryUserB(vo.getUserid());
-            if (user != null) {
-                vo.setUserid(user.getId());
-                vo.setNickname(user.getNickname());
-                vo.setPhone(user.getPhone());
-                vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
-            }
-        } else {
-            User user = userService.queryUserB(vo.getUserid());
-            if (user != null) {
-                vo.setUserid(user.getId());
-                vo.setNickname(user.getNickname());
-                vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
-            }
-        }
-        Integer circleid=vo.getCircleid();
-        //查询帖子详情最下方推荐的4个热门圈子
-        List<Circle> hotcirclelist = circleService.queryHotCircle();
-        vo.setHotcirclelist(hotcirclelist);
-        //查询帖子中分享的商品
-        List<GoodsVo> shareGoodsList = goodsService.queryShareGoodsList(Integer.parseInt(postid));
-        vo.setShareGoodsList(shareGoodsList);
+        //-----帖子内容格式转换
+        String str = vo.getPostcontent();
+        JSONArray jsonArray = JSONArray.fromObject(str);
 
-        //对帖子内容进行脱敏处理
-        vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));//帖子主标题脱敏
-        if (null != vo.getSubtitle()) {
-            vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
+        //因为视频封面会有播放权限失效限制，过期失效，所以这里每请求一次都需要对帖子内容中包含的视频封面重新请求
+        //增加这个工具类 videoCoverURL.getVideoCover(jsonArray); 进行封面url重新请求
+        jsonArray = videoCoverURL.getVideoCover(jsonArray);
+        //-----将转换完的数据封装返回
+        vo.setPostcontent(jsonArray.toString());
+
+        if (null != vo) {
+            //根据帖子封面原图url查询封面压缩图url，如果存在替换，不存在就用原图
+            String compressurl = postService.queryCompressUrl(vo.getCoverimg());
+            if (null != compressurl && !compressurl.equals("") && !compressurl.equals("null")) {
+                vo.setCoverimg(compressurl);
+            }
+
+            int rewardsum = postService.queryRewardSum(postid);//查询帖子被打赏的次数
+            vo.setRewardsum(rewardsum);
+            List<UserLike> nicknamelist = postService.queryRewardPersonNickname(postid);
+            vo.setRewardpersonnickname(nicknamelist);
+            /**   if (type.equals("1") || type.equals("2")) {
+                Video video = postService.queryVideoUrl(Integer.parseInt(postid));
+                vo.setVideourl(video.getVideourl());
+                vo.setVideocoverimgurl(video.getBannerimgurl());
+             }*/
+            if (vo.getUserid() != -1) {//发帖人为普通用户时查询发帖人昵称和手机号
+                User user = userService.queryUserB(vo.getUserid());
+                if (user != null) {
+                    vo.setUserid(user.getId());
+                    vo.setNickname(user.getNickname());
+                    vo.setPhone(user.getPhone());
+                    vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
+                }
+            } else {
+                User user = userService.queryUserB(vo.getUserid());
+                if (user != null) {
+                    vo.setUserid(user.getId());
+                    vo.setNickname(user.getNickname());
+                    vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
+                }
+            }
+            Integer circleid = vo.getCircleid();
+            //查询帖子详情最下方推荐的4个热门圈子
+            List<Circle> hotcirclelist = circleService.queryHotCircle();
+            vo.setHotcirclelist(hotcirclelist);
+            //查询帖子中分享的商品
+            List<GoodsVo> shareGoodsList = goodsService.queryShareGoodsList(Integer.parseInt(postid));
+            vo.setShareGoodsList(shareGoodsList);
+
+            //对帖子内容进行脱敏处理
+            vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));//帖子主标题脱敏
+            if (null != vo.getSubtitle()) {
+                vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
+            }
+            vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
+            //数据插入mongodb
+            if (StringUtil.isNotEmpty(userid)) {
+                PostAndUserRecord postAndUserRecord = new PostAndUserRecord();
+                postAndUserRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
+                postAndUserRecord.setCrileid(circleid);
+                postAndUserRecord.setPostid(Integer.parseInt(postid));
+                postAndUserRecord.setUserid(Integer.parseInt(userid));
+                postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                postAndUserRecordService.insert(postAndUserRecord);
+            }
         }
-        vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
-        //数据插入mongodb
-        if (StringUtil.isNotEmpty(userid)) {
-            PostAndUserRecord postAndUserRecord = new PostAndUserRecord();
-            postAndUserRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
-            postAndUserRecord.setCrileid(circleid);
-            postAndUserRecord.setPostid(Integer.parseInt(postid));
-            postAndUserRecord.setUserid(Integer.parseInt(userid));
-            postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
-            postAndUserRecordService.insert(postAndUserRecord);
+        return vo;
+    }
+
+    public PostVo queryOldPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+
+        //通过userid、postid查询该用户有没有关注该圈子的权限
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("postid", Integer.parseInt(postid));
+        if (!StringUtils.isEmpty(userid)) {
+            parammap.put("userid", Integer.parseInt(userid));
+        }
+        PostVo vo = postService.queryPostDetail(parammap);
+
+        if (null != vo) {
+            //根据帖子封面原图url查询封面压缩图url，如果存在替换，不存在就用原图
+            String compressurl = postService.queryCompressUrl(vo.getCoverimg());
+            if (null != compressurl && !compressurl.equals("") && !compressurl.equals("null")) {
+                vo.setCoverimg(compressurl);
+            }
+
+            int rewardsum = postService.queryRewardSum(postid);//查询帖子被打赏的次数
+            vo.setRewardsum(rewardsum);
+            List<UserLike> nicknamelist = postService.queryRewardPersonNickname(postid);
+            vo.setRewardpersonnickname(nicknamelist);
+            /**   if (type.equals("1") || type.equals("2")) {
+             Video video = postService.queryVideoUrl(Integer.parseInt(postid));
+             vo.setVideourl(video.getVideourl());
+             vo.setVideocoverimgurl(video.getBannerimgurl());
+             }*/
+            if (vo.getUserid() != -1) {//发帖人为普通用户时查询发帖人昵称和手机号
+                User user = userService.queryUserB(vo.getUserid());
+                if (user != null) {
+                    vo.setUserid(user.getId());
+                    vo.setNickname(user.getNickname());
+                    vo.setPhone(user.getPhone());
+                    vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
+                }
+            } else {
+                User user = userService.queryUserB(vo.getUserid());
+                if (user != null) {
+                    vo.setUserid(user.getId());
+                    vo.setNickname(user.getNickname());
+                    vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
+                }
+            }
+            Integer circleid = vo.getCircleid();
+            //查询帖子详情最下方推荐的4个热门圈子
+            List<Circle> hotcirclelist = circleService.queryHotCircle();
+            vo.setHotcirclelist(hotcirclelist);
+            //查询帖子中分享的商品
+            List<GoodsVo> shareGoodsList = goodsService.queryShareGoodsList(Integer.parseInt(postid));
+            vo.setShareGoodsList(shareGoodsList);
+
+            //对帖子内容进行脱敏处理
+            vo.setTitle((String) desensitizationUtil.desensitization(vo.getTitle()).get("str"));//帖子主标题脱敏
+            if (null != vo.getSubtitle()) {
+                vo.setSubtitle((String) desensitizationUtil.desensitization(vo.getSubtitle()).get("str"));//帖子副标题脱敏
+            }
+            vo.setPostcontent((String) desensitizationUtil.desensitization(vo.getPostcontent()).get("str"));//帖子正文文字脱敏
+            //数据插入mongodb
+            if (StringUtil.isNotEmpty(userid)) {
+                PostAndUserRecord postAndUserRecord = new PostAndUserRecord();
+                postAndUserRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
+                postAndUserRecord.setCrileid(circleid);
+                postAndUserRecord.setPostid(Integer.parseInt(postid));
+                postAndUserRecord.setUserid(Integer.parseInt(userid));
+                postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                postAndUserRecordService.insert(postAndUserRecord);
+            }
         }
         return vo;
     }
@@ -280,6 +375,8 @@ public class FacadePost {
         int scope = circleService.queryCircleScope(Integer.parseInt(circleid));
         //查询当前圈子的所有者(返回所有者的用户id)
         User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
+        //通过userid查询当前登录用户的用户等级
+        UserAll user = userService.queryUserById(Integer.parseInt(userid));
         //查询当前圈子的所有管理员列表
         List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
 
@@ -292,7 +389,7 @@ public class FacadePost {
                 }
             }
         }
-        int lev = owner.getLevel();//用户等级
+        int lev = user.getLevel();//用户等级
         //所有人均可发或当前用户为圈子所有者或管理员或当前圈子只有大V可发而当前用户正式大V
         if (scope == 2 || (Integer.parseInt(userid) == owner.getId() || flag == 1) || (scope == 1 && lev >= 1)) {
             return 1;//有发帖权限
@@ -489,35 +586,41 @@ public class FacadePost {
                 //2从服务器获取文件并剪切，删除原图，上传剪切后图片上传阿里云
                 Map tmap = movisionOssClient.uploadImgerAndIncision(String.valueOf(m.get("url")), x, y, w, h);
                 String incisionUrl = String.valueOf(tmap.get("url"));
+                System.out.println("原图url==" + String.valueOf(tmap.get("file")));
 
                 //3获取本地服务器中切割完成后的图片
                 String tmpurl = String.valueOf(tmap.get("incise"));
-                System.out.println("切割完成后的url===" + tmpurl);
+                System.out.println("切割完成后的图片url===" + tmpurl);
 
                 //4对本地服务器中切割好的图片进行压缩处理
-                String compressUrl = coverImgCompressUtil.ImgCompress(tmpurl);
+                int wt = 750;//图片压缩后的宽度
+                int ht = 440;//图片压缩后的高度440
+                String compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, wt, ht);
+                System.out.println("压缩完的切割图片url==" + compressUrl);
+
 
                 //5对压缩完的图片上传到阿里云
                 Map compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
 
                 //6删除本地服务器切割的图片文件
+                //----(1)
                 File fdel2 = new File(tmpurl);
-                //fdel2.delete();
+                fdel2.delete();//切割后的原图删除
+                //----(2)
                 File fdel = new File(String.valueOf(tmap.get("file")));
                 long l = fdel.length();
-                l = l / 1024;
-                String imgsize = l + "";
-                //fdel.delete();//删除上传到本地的原图片文件
-                /*Map<String, Object> map1 = new HashMap<>();
-                map1.put("url", url);
-                map1.put("name", FileUtil.getFileNameByUrl(url));
-                map1.put("width", tmap.get("width"));
-                map1.put("height", tmap.get("height"));*/
+                float size = (float) l / 1024 / 1024;
+                DecimalFormat df = new DecimalFormat("0.00");//格式化小数，不足的补0
+                String filesize = df.format(size);//返回的是String类型的
+                fdel.delete();//删除上传到本地的原图片文件
+                //----(3)
+                File fdel3 = new File(compressUrl);
+                fdel3.delete();//删除压缩完成的图片
 
                 //把切割好的原图和压缩图分别存放数据库中
                 CompressImg compressImg = new CompressImg();
                 compressImg.setCompressimgurl(String.valueOf(compressmap.get("url")));
-                compressImg.setProtoimgsize(imgsize);
+                compressImg.setProtoimgsize(filesize);
                 compressImg.setProtoimgurl(String.valueOf(tmap.get("url")));
                 compressImgService.insert(compressImg);
 
@@ -555,6 +658,165 @@ public class FacadePost {
                     //向帖子视频表中插入一条视频记录
                     videoService.insertVideoById(video);
                 }
+                //再保存帖子中分享的商品列表(如果商品id字段不为空)
+                if (!StringUtils.isEmpty(proids)) {
+                    String[] proidstr = proids.split(",");
+                    List<PostShareGoods> postShareGoodsList = new ArrayList<>();
+                    for (int i = 0; i < proidstr.length; i++) {
+                        PostShareGoods postShareGoods = new PostShareGoods();
+                        int postid = flag;
+                        int goodsid = Integer.parseInt(proidstr[i]);
+                        postShareGoods.setPostid(postid);
+                        postShareGoods.setGoodsid(goodsid);
+                        postShareGoodsList.add(postShareGoods);
+                    }
+                    postService.insertPostShareGoods(postShareGoodsList);
+                }
+
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
+
+                map.put("flag", flag);
+                return map;
+
+            } catch (Exception e) {
+                log.error("系统异常，APP发帖失败");
+                map.put("flag", -2);
+                e.printStackTrace();
+                return map;
+            }
+        } else {
+            log.info("该用户不具备发帖权限");
+            map.put("flag", -1);
+            return map;
+        }
+    }
+
+
+    public Map uploadPostFacePic(MultipartFile file) {
+        Map m = new HashMap();
+        //上传到本地服务器
+        m = movisionOssClient.uploadMultipartFileObject(file, "img");
+        String url = String.valueOf(m.get("url"));
+        //把本地服务器原图上传至阿里云
+        //对上传到阿里云的图片url重拼
+        String newalurl = "";//原图
+        Map al = aliOSSClient.uploadInciseStream(url, "img", "coverIncise");
+        String alurl = String.valueOf(al);
+        for (int j = 0; j < 3; j++) {
+            alurl = alurl.substring(alurl.indexOf("/") + 1);
+        }
+        newalurl = PropertiesLoader.getValue("formal.img.domain") + "/" + alurl;//拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接，如："http://pic.mofo.shop" + "/upload/postCompressImg/img/yDi0T2nY1496812117357.png"
+
+        Map map = new HashMap();
+        int wt = 750;//图片压缩后的宽度
+        int ht = 440;//图片压缩后的高度440
+        String compressUrl = coverImgCompressUtil.ImgCompress(url, wt, ht);
+        System.out.println("压缩完的切割图片url==" + compressUrl);
+        // 对压缩完的图片上传到阿里云
+        Map compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
+        String newurl = String.valueOf(compressmap.get("url"));
+        //对上传到阿里云的图片url重拼
+        String newimgurl = "";//压缩图
+        //拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接
+        for (int j = 0; j < 3; j++) {
+            newurl = newurl.substring(newurl.indexOf("/") + 1);
+        }
+        newimgurl = PropertiesLoader.getValue("formal.img.domain") + "/" + newurl;//拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接，如："http://pic.mofo.shop" + "/upload/postCompressImg/img/yDi0T2nY1496812117357.png"
+
+        //6删除本地服务器切割的图片文件
+        //----(1)
+        File fdel2 = new File(compressUrl);
+        fdel2.delete();//删除压缩图
+        //----(2)
+        File fdel = new File(String.valueOf(url));
+        long l = fdel.length();
+        float size = (float) l / 1024 / 1024;
+        DecimalFormat df = new DecimalFormat("0.00");//格式化小数，不足的补0
+        String filesize = df.format(size);//返回的是String类型的
+        fdel.delete();//删除上传到本地的原图片文件
+        //----(3)
+        File fdel3 = new File(compressUrl);
+        fdel3.delete();//删除压缩完成的图片
+        //把切割好的原图和压缩图分别存放数据库中
+        CompressImg compressImg = new CompressImg();
+        compressImg.setCompressimgurl(newimgurl);
+        compressImg.setProtoimgsize(filesize);
+        compressImg.setProtoimgurl(newalurl);
+        compressImgService.insert(compressImg);
+        map.put("compressmap", newimgurl);
+        return map;
+    }
+
+
+    @Transactional
+    @CacheEvict(value = "indexData", key = "'index_data'")
+    public Map releasePostByPCTest(HttpServletRequest request, String userid, String circleid, String title, String postcontent, String coverimg, String proids) {
+        Map map = new HashMap();
+
+        //这里需要根据userid判断当前登录的用户是否有发帖权限
+        //查询当前圈子的开放范围
+        int scope = circleService.queryCircleScope(Integer.parseInt(circleid));
+        //查询当前圈子的所有者(返回所有者的用户id)
+        User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
+        //查询当前圈子的所有管理员列表
+        List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
+        //通过userid查询当前登录用户的用户等级
+        UserAll user = userService.queryUserById(Integer.parseInt(userid));
+        int mark = 0;//定义一个userid比对标志位
+        if (manageList.size() > 0) {
+            for (int i = 0; i < manageList.size(); i++) {
+                if (manageList.get(i).getId() == Integer.parseInt(userid)) {
+                    //是圈子管理员时赋值为1
+                    mark = 1;
+                }
+            }
+        }
+        int lev = user.getLevel();//当前登录用户的等级
+        //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.所有者和大V可发时，发帖用户即为大V
+        if (scope == 2 || (Integer.parseInt(userid) == owner.getId() || mark == 1) || (scope == 1 && lev >= 1)) {
+
+            try {
+                log.info("APP前端用户开始请求发帖");
+
+                Post post = new Post();
+                post.setCircleid(Integer.parseInt(circleid));
+                post.setTitle(title);
+                Map con = null;
+                if (StringUtil.isNotEmpty(postcontent)) {
+                    //内容转换
+                    con = jsoupCompressImg.newCompressImg(request, postcontent);
+                    System.out.println(con);
+                    if ((int) con.get("code") == 200) {
+                        String str = con.get("content").toString();
+                        postcontent = str;
+                    } else {
+                        log.error("APP端帖子图片内容转换异常");
+                    }
+                }
+
+                post.setPostcontent(postcontent);//帖子内容
+                post.setZansum(0);//新发帖全部默认为0次
+                post.setCommentsum(0);//被评论次数
+                post.setForwardsum(0);//被转发次数
+                post.setCollectsum(0);//被收藏次数
+                post.setCoverimg(coverimg);//帖子封面
+                post.setIsactive(0);//是否为活动 0 帖子 1活动
+                post.setIshot(0);//是否设为热门：默认0否
+                post.setIsessence(0);//是否设为精选：默认0否
+                post.setIsessencepool(0);//是否设为精选池中的帖子
+                post.setIntime(new Date());//帖子发布时间
+                post.setTotalpoint(0);//帖子综合评分
+                if ((int) con.get("flag") != 0) {
+                    post.setIsdel(2);//视频
+                } else {
+                    post.setIsdel(0);//图文
+                }
+
+                post.setUserid(Integer.parseInt(userid));
+                //插入帖子
+                postService.releasePost(post);
+
+                int flag = post.getId();//返回的主键--帖子id
                 //再保存帖子中分享的商品列表(如果商品id字段不为空)
                 if (!StringUtils.isEmpty(proids)) {
                     String[] proidstr = proids.split(",");
@@ -816,7 +1078,8 @@ public class FacadePost {
         User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
         //查询当前圈子的所有管理员列表
         List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
-
+        //通过userid查询当前登录用户的用户等级
+        UserAll user = userService.queryUserById(Integer.parseInt(userid));
         int mark = 0;//定义一个userid比对标志位
         if (manageList.size() > 0) {
             for (int i = 0; i < manageList.size(); i++) {
@@ -826,23 +1089,23 @@ public class FacadePost {
                 }
             }
         }
-        int lev = owner.getLevel();//用户等级
+        int lev = user.getLevel();//用户等级
         //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.所有者和大V可发时，发帖用户即为大V
         if (scope == 2 || (Integer.parseInt(userid) == owner.getId() || mark == 1) || (scope == 1 && lev >= 1)) {
 
             try {
                 log.info("APP前端用户开始请求发帖");
-
+                Map con = null;
                 Post post = new Post();
                 post.setCircleid(Integer.parseInt(circleid));
                 post.setTitle(title);
                 if (StringUtil.isNotEmpty(postcontent)) {
                     //内容转换
-                    Map con = jsoupCompressImg.compressImg(request, postcontent);
+                    con = jsoupCompressImg.newCompressImg(request, postcontent);
                     System.out.println(con);
                     if ((int) con.get("code") == 200) {
                         String str = con.get("content").toString();
-                        postcontent = str.replace("\\", "");
+                        postcontent = str;
                     } else {
                         log.error("APP端帖子图片内容转换异常");
                     }
@@ -859,7 +1122,11 @@ public class FacadePost {
                 post.setIsessencepool(0);//是否设为精选池中的帖子
                 post.setIntime(new Date());//帖子发布时间
                 post.setTotalpoint(0);//帖子综合评分
-                post.setIsdel(0);//上架
+                if ((int) con.get("flag") == 0) {
+                    post.setIsdel(0);//上架
+                } else if ((int) con.get("flag") > 0) {
+                    post.setIsdel(2);
+                }
                 post.setCoverimg(coverimg);//帖子封面
                 post.setUserid(Integer.parseInt(userid));
                 //插入帖子
@@ -898,7 +1165,264 @@ public class FacadePost {
         }
     }
 
+    /**
+     * 上传帖子封面图片
+     *
+     * @param file 上传文件
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @return
+     */
+    public Map updateCoverImgByPC(MultipartFile file, String x, String y, String w, String h, String type) {
+        //1上传到服务器
+        Map m = movisionOssClient.uploadMultipartFileObject(file, "img");
+        String url = String.valueOf(m.get("url"));//获取上传到服务器上的原图
+        System.out.println("上传封面的原图url=="+ url);
+
+        Map compressmap = null;
+        //2从服务器获取文件并剪切,上传剪切后图片上传阿里云
+        Map map = movisionOssClient.uploadImgerAndIncision(url, x, y, w, h);
+
+        //3获取本地服务器中切割完成后的图片
+        String tmpurl = String.valueOf(map.get("file"));
+        System.out.println("切割完成后的本地图片绝对路径===" + tmpurl);
+        String rawimg = String.valueOf(map.get("incise"));
+
+        //4对本地服务器中切割好的图片进行压缩处理
+        int wt = 0;//图片压缩后的宽度
+        int ht = 0;//图片压缩后的高度440
+        if (type.equals(1) || type.equals("1")) {//用于区分上传帖子封面还是活动方形图
+            wt = 750;
+            ht = 440;
+        } else {
+            wt = 440;
+            ht = 440;
+        }
+        String compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, wt, ht);
+        System.out.println("压缩完的切割图片url==" + compressUrl);
+
+        //5对压缩完的图片上传到阿里云
+        compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
+        String newurl = String.valueOf(compressmap.get("url"));
+        compressmap.put("url", newurl);
+
+        File f = new File(url);
+        f.length();
+        File fdel = new File(url);
+        long l = fdel.length();
+        float size = (float) l / 1024 / 1024;
+        DecimalFormat df = new DecimalFormat("0.00");//格式化小数，不足的补0
+        String filesize = df.format(size);//返回的是String类型的
+        //把切好的原图和压缩图存放表中
+        CompressImg compressImg = new CompressImg();
+        compressImg.setCompressimgurl(newurl);
+        compressImg.setProtoimgsize(filesize);
+        compressImg.setProtoimgurl(rawimg);
+        compressImgService.insert(compressImg);
+        log.info("帖子上传封面本地原图=========", url);
+        log.info("帖子上传封面本地切割图=========", tmpurl);
+        log.info("帖子上传封面本地压缩图=========", compressUrl);
+
+        //6删除本地原图，切割图，压缩图
+        File f1 = new File(url);
+        f1.delete();
+        File f2 = new File(tmpurl);
+        f2.delete();
+        File f3 = new File(compressUrl);
+        f3.delete();
+        return compressmap;
+    }
 
 
-}
+
+
+    /**
+     * 用户刷新列表
+     *
+     * @param userid
+     * @return
+     */
+    public Map userRefreshList(String userid) {
+        Map map = new HashMap();
+        List<Post> list = postService.findAllPostListRefulsh();//查询所有帖子
+        List<Post> notbrowsed = null;//
+        List<Post> isessences = null;//精选
+        List<Post> isnotisessence = null;//不是精选
+        List listten = null;
+        //未登录状态下
+        if (userid == null) {
+            if (list != null) {
+                for (int i = 0; i < list.size(); i++) {
+                    int pid = list.get(i).getId();//帖子id
+                    //查询有精选帖子
+                    int isessence = postService.queryIsIsessence(pid);
+                    if (isessence == 1) {
+                        isessences.add(list.get(i));
+                    } else {
+                        isnotisessence.add(list.get(i));
+                    }
+                }
+                /**for (int j=0;j<isessences.size();j++){
+                 if (j<10){
+                 isnotisessence.add(j,isessences.get(j));
+                 }
+                 }*/
+                isessences.addAll(isnotisessence);
+                /**  for (int i = 0; i < isessences.size(); i++) {
+                    //isessences.remove(listten);
+                 }*/
+                listten = isessences.subList(0, 9);
+                map.put("listten", listten);
+                list.subList(0, 9).clear();
+            }
+            //登录状态下
+        } else {
+            //循环mysql帖子表中所有的帖子id和mongodb的用户刷新记录表比对得出用户没有浏览过的帖子
+            int postid = 0;
+            int mongodbpostid = 0;
+            int crileid = 0;
+            //查询出mongodb中用户刷新的帖子
+            DBCursor listmongodb = userRefulshListMongodb(Integer.parseInt(userid));
+            //mogodb不为空
+            if (listmongodb != null) {
+                //mysql不为空
+                if (list != null) {
+                    while (listmongodb.hasNext()) {
+                        DBObject dbObj = listmongodb.next();
+                        mongodbpostid = Integer.parseInt(dbObj.get("postid").toString());
+                        //循环帖子id对比挑出未刷新的帖子
+                        for (int i = 0; i < list.size(); i++) {
+                        postid = list.get(i).getId();
+                        //查询帖子是哪个圈子
+                        crileid = postService.queryCrileid(postid);
+                        if (postid == mongodbpostid) {
+                            list.remove(list.get(i));
+                        } else {
+                            notbrowsed.add(list.get(i));
+                        }
+                    }
+                    }
+                    for (int i = 0; i < notbrowsed.size(); i++) {
+                        //剔除浏览过的记录进行时间排序取前10条
+                        Date date = notbrowsed.get(i).getIntime();//帖子的发布时间
+                        int psid = notbrowsed.get(i).getId();//剩下的帖子id
+                        //查询剩下的帖子中有没有精选的
+                        int senense = postService.queryIsIsessence(psid);
+                        if (senense == 1) {//剩下的帖子是精选
+                            isessences.add(notbrowsed.get(i));//精选
+                        } else {//不是精选
+                            isnotisessence.add(notbrowsed.get(i));//不是精选
+                        }
+                    }
+                    isessences.addAll(isnotisessence);
+                    listten = isessences.subList(0, 9);
+                    map.put("listten", listten);
+                    list.subList(0, 9).clear();
+                }
+            } else {
+                //如果用户刚进来没有任何刷新记录
+                if (list != null) {
+
+                }
+                map.put("list", list);
+            }
+            //把刷新记录插入mongodb
+            if (StringUtil.isNotEmpty(userid)) {
+                UserRefreshRecord userRefreshRecord = new UserRefreshRecord();
+                userRefreshRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
+                userRefreshRecord.setUserid(Integer.parseInt(userid));
+                userRefreshRecord.setPostid(postid);
+                userRefreshRecord.setCrileid(crileid);
+                userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                userRefreshRecordService.insert(userRefreshRecord);
+            }
+            long count = mongodbCount();
+            // int count=Integer.parseInt(String.valueOf(num));
+            if (count >= 1000) {
+                //表中浏览数据大于等于1000条的时候开始用户行为分析
+
+            }
+
+        }
+        return map;
+    }
+
+    /**
+     * 在mongodb中查询用户刷新浏览过的列表
+     *
+     * @param userid
+     * @return
+     */
+    public DBCursor userRefulshListMongodb(int userid) {
+        DBCursor obj = null;
+        try {
+            MongoClient mClient = new MongoClient("120.77.214.187:27017");
+            DB db = mClient.getDB("searchRecord");
+            DBCollection collection = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject queryObject = new BasicDBObject("userid", userid);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            obj = collection.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return obj;
+    }
+
+    /**
+     * 查询用户刷新记录表的总记录数
+     *
+     * @return
+     */
+    public long mongodbCount() {
+        long count = 0;
+        try {
+            MongoClient mClient = new MongoClient("120.77.214.187:27017");
+            DB db = mClient.getDB("searchRecord");
+            DBCollection collection = db.getCollection("userRefreshRecord");//表名
+            count = collection.count();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+
+    public List<Map> queryPostImgById(String postid) {
+        List<Map> list = new ArrayList<>();
+        //查询出帖子内容
+        String postcontent = postService.queryPostContentById(postid);
+        JSONArray array = JSONArray.fromObject(postcontent);
+        for (int i = 0; i < array.size(); i++) {
+            Map map = new HashMap();//用于做内层封装
+            JSONObject object = JSONObject.fromObject(array.get(i));
+            if (object.getString("type").equals("1")) {//代表模块是图片
+                CompressImg compressImg = new CompressImg();
+                compressImg.setCompressimgurl(object.getString("value"));
+                //根据压缩图片查询出原图和图片大小
+                compressImg = compressImgService.queryProtoBycompress(compressImg);
+                if (null != compressImg) {
+                    map.put("protoimgurl", compressImg.getProtoimgurl());//原图
+                    map.put("protoimgsize", compressImg.getProtoimgsize());//原图大小
+                    map.put("compressimgurl", object.getString("value"));//缩略图大小
+                    map.put("wh", object.getString("wh"));//图片宽高
+                }else{
+                    map.put("protoimgurl", object.getString("value"));//直接去压缩图的url
+                    map.put("protoimgsize", "");//直接去压缩图的url
+                    map.put("compressimgurl", object.getString("value"));//缩略图大小
+                    map.put("wh", "");//图片宽高
+                }
+                list.add(map);
+            }
+        }
+
+        return list;
+    }
+
+
+ }
 

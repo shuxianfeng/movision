@@ -195,4 +195,8 @@
     <select id="queryVideoByID" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select COUNT(1) from yw_video WHERE postid=#{pid,jdbcType=INTEGER};
     </select>
+
+    <select id="queryByPostid" parameterType="java.lang.Integer" resultType="com.movision.mybatis.video.entity.Video">
+        select * from yw_video WHERE postid=#{pid,jdbcType=INTEGER}
+    </select>
 </mapper>

@@ -188,7 +188,7 @@ public interface GoodsMapper {
 
     List<GoodsVo> queryGoods(Integer goodsId);
 
-    int deletePostyByGoods(Integer postid);
+    int deletePostyByGoods(Map postid);
 
     int deleteActivityByGoods(Integer postid);
 

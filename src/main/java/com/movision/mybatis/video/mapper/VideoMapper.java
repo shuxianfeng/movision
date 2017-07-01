@@ -1,7 +1,10 @@
 package com.movision.mybatis.video.mapper;
 
+import com.movision.fsearch.repository.db.ListHandler;
 import com.movision.mybatis.video.entity.Video;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface VideoMapper {
@@ -20,4 +23,6 @@ public interface VideoMapper {
     int updateVoid(Video video);
 
     int queryVideoByID(Integer pid);
+
+    List<Video> queryByPostid(Integer pid);
 }

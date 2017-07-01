@@ -93,4 +93,77 @@
       discoverpageurl = #{discoverpageurl,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <insert id="addCircleType" parameterType="com.movision.mybatis.circleCategory.entity.CircleCategory">
+        insert into yw_circle_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="categoryname != null">
+                categoryname,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="discoverpageurl != null">
+                discoverpageurl,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="categoryname != null">
+                #{categoryname,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="discoverpageurl != null">
+                discoverpageurl = #{discoverpageurl,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="queryCircleCategory" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.circleCategory.entity.CircleCategory">
+        select * from yw_circle_category WHERE id=#{categoryid,jdbcType=INTEGER}
+    </select>
+
+
+    <update id="updateCircleCategory" parameterType="com.movision.mybatis.circleCategory.entity.CircleCategory">
+        update yw_circle_category
+        <set>
+            <if test="categoryname != null">
+                categoryname = #{categoryname,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="discoverpageurl != null">
+                discoverpageurl = #{discoverpageurl,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="queryCircleTytpeListByUserid" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.circleCategory.entity.CircleCategory">
+        SELECT * FROM yw_circle_category WHERE id in (
+        SELECT category FROM yw_circle WHERE phone=(SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
+        ) OR id in (
+        SELECT category FROM yw_circle WHERE id in (
+        SELECT circleid FROM yw_circle_manager WHERE userid in (SELECT u.id FROM yw_user u LEFT JOIN yw_admin_user a ON
+        a.phone=u.phone WHERE a.id=#{userid,jdbcType=INTEGER}))
+        )
+    </select>
+
+    <select id="queryCircleTypeList" resultType="com.movision.mybatis.circleCategory.entity.CircleCategory"
+            parameterType="java.lang.Integer">
+        SELECT id,categoryname FROM yw_circle_category
+        <if test="userid!=null">
+            WHERE userid=#{userid,jdbcType=INTEGER}
+        </if>
+    </select>
 </mapper>

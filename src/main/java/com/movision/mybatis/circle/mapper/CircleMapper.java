@@ -105,4 +105,6 @@ public interface CircleMapper {
     List<Circle> queryCircleByPhone(@Param("phone") String phone);
 
     int batchUpdatePhoneInCircle(Map map);
+
+    Integer queryCircleIdByIsUser(Map map);
 }

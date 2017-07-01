@@ -1,6 +1,7 @@
 package com.movision.mybatis.category.mapper;
 
 import com.movision.mybatis.category.entity.Category;
+import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,14 +22,4 @@ public interface CategoryMapper {
     int updateByPrimaryKey(Category record);
 
     List<Category> queryGoodsCategory();
-
-    List<Category> queryCircleTypeList(Integer userid);
-
-    List<Category> queryCircleTytpeListByUserid(Integer userid);
-
-    int addCircleType(Map map);
-
-    Category queryCircleCategory(String category);
-
-    int updateCircleCategory(Map map);
 }

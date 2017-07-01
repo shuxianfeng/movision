@@ -156,6 +156,7 @@
         <!-- 上传大小10G -->
         <property name="defaultEncoding" value="UTF-8"/>
         <property name="maxUploadSize" value="10485760000"/>
+        <property name="resolveLazily" value="true"/>
     </bean>
 
     <!--配置配置文件信息（包括图片上传的服务器地址等信息）-->

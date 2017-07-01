@@ -223,7 +223,7 @@ public class AliOSSClient {
             String data = "";
             if (type.equals("img")) {
                 bucketName = PropertiesLoader.getValue("img.bucket");
-                domain = PropertiesLoader.getValue("ali.domain");
+                domain = PropertiesLoader.getValue("formal.img.domain");//http://pic.mofo.shop
                 data = domain + "/" + fileKey;
                 //返回图片的宽高
                 InputStream is = new FileInputStream(file);

@@ -1,6 +1,5 @@
 package com.movision.mybatis.imuser.mapper;
 
-import com.movision.mybatis.deviceAccid.entity.DeviceAccid;
 import com.movision.mybatis.imuser.entity.ImUser;
 import org.apache.ibatis.annotations.Param;
 

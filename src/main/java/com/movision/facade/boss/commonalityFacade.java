@@ -1,9 +1,11 @@
 package com.movision.facade.boss;
 
 import com.movision.common.constant.JurisdictionConstants;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.entity.BossUserVo;
 import com.movision.mybatis.bossUser.service.BossUserService;
+import com.movision.mybatis.circle.service.CircleService;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,9 @@ public class commonalityFacade {
     @Autowired
     private BossUserService bossUserService;
 
+    @Autowired
+    private CircleService circleService;
+
 
     /**
      * @param userid    登录用户
@@ -36,7 +41,23 @@ public class commonalityFacade {
         Map map = new HashMap();
         BossUser i = bossUserService.queryUserByAdministrator(userid);//根据登录用户id查询当前用户有哪些权限
         if (i.getIscircle().equals(JurisdictionConstants.JURISDICTION_TYPE.groupOwner.getCode())) {//圈主
-            if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//圈主可以在自己圈子中添加评论
+            //圈主可以编辑自己的圈子
+            if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.update.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode())) {
+                //判断是否是自己所管理的圈子
+                Map map1 = new HashMap();
+                map1.put("userid", userid);
+                map1.put("id", kindid);
+                map1.put("master", 1);
+                Integer in = circleService.queryCircleIdByIsUser(map1);
+                if (in > 0) {
+                    map.put("resault", 1);
+                    return map;
+                } else {
+                    map.put("resault", -1);
+                    map.put("message", "权限不足");
+                    return map;
+                }
+            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//圈主可以在自己圈子中添加评论
                 Integer resault = bossUserService.queryCircleIdToCircle(kindid);//判断需要添加的帖子是否在本圈内
                 if (resault != null) {
                     if (resault.equals(userid)) {
@@ -55,10 +76,13 @@ public class commonalityFacade {
             } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//添加评论
                 map.put("resault", 2);
                 return map;
-            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.delete.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())))) {//圈主可以删除该圈子的帖子和评论
+            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.delete.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())
+                    || (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())))) {//圈主可以删除该圈子的帖子和评论
                 Map ma = new HashedMap();
                 if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//帖子
                     ma.put("userid", userid);
+                    ma.put("kindid", kindid);
+                    ma.put("identity", 1);//身份圈主1
                     //根据操作类型id查询此操作是否属于该用户范畴
                     Integer list = bossUserService.queryPostByUserid(ma);
                     if (list > 0) {
@@ -88,11 +112,13 @@ public class commonalityFacade {
                         return map;
                     }
                 }
-            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.update.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()))) {//圈主可以编辑改圈子中的本人帖子
+            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.update.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())
+                    || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()))) {//圈主可以编辑改圈子中的本人帖子
                 Map ma = new HashedMap();
                 if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//帖子
                     ma.put("userid", userid);
                     ma.put("kindid", kindid);
+                    ma.put("identity", 1);//身份圈主1
                     //根据操作类型id查询此操作是否属于该用户范畴
                     Integer list = bossUserService.queryPostByUserid(ma);
                     if (list > 0) {
@@ -129,7 +155,23 @@ public class commonalityFacade {
                 return map;
             }
         } else if (i.getCirclemanagement().equals(JurisdictionConstants.JURISDICTION_TYPE.groupManage.getCode())) {//圈子管理员
-            if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//圈主可以在自己圈子中添加评论
+            //圈子管理员可以编辑自己的圈子
+            if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.update.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode())) {
+                //判断是否是自己所管理的圈子
+                Map map1 = new HashMap();
+                map1.put("userid", userid);
+                map1.put("id", kindid);
+                map1.put("manage", 1);
+                Integer in = circleService.queryCircleIdByIsUser(map1);
+                if (in > 0) {
+                    map.put("resault", 1);
+                    return map;
+                } else {
+                    map.put("resault", -1);
+                    map.put("message", "权限不足");
+                    return map;
+                }
+            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//圈子管理员可以在自己圈子中添加评论
                 Map map1 = new HashMap();
                 map1.put("userid", userid);
                 map1.put("kindid", kindid);
@@ -151,10 +193,12 @@ public class commonalityFacade {
             } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.add.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//添加评论
                 map.put("resault", 2);
                 return map;
-            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.delete.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())))) {//圈主可以删除该圈子的帖子和评论
+            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.delete.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())))) {//管理员可以删除该圈子的帖子和评论
                 Map ma = new HashedMap();
-                if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//帖子
+                if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//管理员可以删除帖子
                     ma.put("userid", userid);
+                    ma.put("kindid", kindid);
+                    ma.put("identity", 2);//身份管理员2
                     //根据操作类型id查询此操作是否属于该用户范畴
                     Integer list = bossUserService.queryPostByUserid(ma);
                     if (list > 0) {
@@ -165,7 +209,7 @@ public class commonalityFacade {
                         map.put("message", "权限不足");
                         return map;
                     }
-                } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//圈主删除帖子评论
+                } else if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())) {//管理员删除帖子评论
                     ma.put("kindid", kindid);//评论id
                     //查出评论是否属于圈主的帖子评论
                     Integer list = bossUserService.queryCircleManageCommentByUserid(ma);
@@ -184,10 +228,12 @@ public class commonalityFacade {
                         return map;
                     }
                 }
-            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.update.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()))) {//圈主可以编辑改圈子中的本人帖子
+            } else if (operation.equals(JurisdictionConstants.JURISDICTION_TYPE.update.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()))) {//管理员可以编辑改圈子中的本人帖子
                 Map ma = new HashedMap();
-                if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//帖子
+                if (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())) {//编辑帖子
                     ma.put("userid", userid);
+                    ma.put("kindid", kindid);
+                    ma.put("identity", 2);//身份管理员2
                     //根据操作类型id查询此操作是否属于该用户范畴
                     Integer list = bossUserService.queryPostByUserid(ma);
                     if (list > 0) {
@@ -275,27 +321,41 @@ public class commonalityFacade {
         Map map = new HashMap();
         BossUser i = bossUserService.queryUserByAdministrator(userid);//根据登录用户id查询当前用户有哪些权限
         if (i != null) {
-            if (i.getIscircle().equals(JurisdictionConstants.JURISDICTION_TYPE.groupOwner.getCode())//圈主
-                    && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())
-                    || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//圈主可以查看
-                map.put("resault", 1);
-                return map;
-            } else if (i.getCirclemanagement().equals(JurisdictionConstants.JURISDICTION_TYPE.groupManage.getCode())//圈子管理员
-                    && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())
-                    || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//圈子管理员可以查看
-                map.put("resault", 1);
-                return map;
-            } else if (i.getContributing().equals(JurisdictionConstants.JURISDICTION_TYPE.speciallyInvite.getCode())//特邀嘉宾
-                    && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//特邀嘉宾可以查看
-                map.put("resault", 0);
-                return map;
-            } else if (i.getIssuper().equals(1) || i.getCommon().equals(1) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.choicenesspool.getCode())) {//操作权限为最高权限
-                map.put("resault", 2);
-                return map;
-            } else {
-                map.put("resault", -1);
-                return map;
+            if (StringUtil.isNotEmpty(i.getIscircle().toString())) {
+                if (i.getIscircle().equals(JurisdictionConstants.JURISDICTION_TYPE.groupOwner.getCode())//圈主
+                        && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())
+                        || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//圈主可以查看
+                    map.put("resault", 1);
+                    return map;
+                }
             }
+            if (StringUtil.isNotEmpty(i.getCirclemanagement().toString())) {
+                if (i.getCirclemanagement().equals(JurisdictionConstants.JURISDICTION_TYPE.groupManage.getCode())//圈子管理员
+                        && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())
+                        || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//圈子管理员可以查看
+                    map.put("resault", 1);
+                    return map;
+                }
+            }
+            if (StringUtil.isNotEmpty(i.getContributing().toString())) {
+                if (i.getContributing().equals(JurisdictionConstants.JURISDICTION_TYPE.speciallyInvite.getCode())//特邀嘉宾
+                        && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//特邀嘉宾可以查看
+                    map.put("resault", 0);
+                    return map;
+                }
+            }
+            if (StringUtil.isNotEmpty(i.getIssuper().toString())) {
+                if (i.getIssuper().equals(1) || i.getCommon().equals(1) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.choicenesspool.getCode())) {//操作权限为最高权限
+                    map.put("resault", 2);
+                    return map;
+                } else {
+                    map.put("resault", -1);
+                    return map;
+                }
+            } else {
+                map.put("resault", -3);
+                    return map;
+                }
         } else {
             map.put("resault", -3);
             return map;

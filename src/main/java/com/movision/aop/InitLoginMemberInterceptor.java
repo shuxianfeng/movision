@@ -86,7 +86,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
             if (null != session) {
-                //todo 半个小时后这里的session失效，session配置3小时没有效果
+                //session配置3小时
                 BossRealm.ShiroBossUser bossUser = (BossRealm.ShiroBossUser) session.getAttribute(SessionConstant.BOSS_USER);
                 ShiroUser appuser = (ShiroUser) session.getAttribute(SessionConstant.APP_USER);
                 if (bossUser != null && appuser == null) {
@@ -102,7 +102,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                     }
                     //获取授权的菜单列表
                     List<Map<String, Object>> menuList = (List) session.getAttribute(SessionConstant.ACCESS_MENU);
-                    log.info("获取授权的菜单列表：" + menuList.toString());
+                    log.debug("获取授权的菜单列表：" + menuList.toString());
                     //遍历菜单列表
                     for (int i = 0; i < menuList.size(); i++) {
                         //获取一个map中的父菜单
