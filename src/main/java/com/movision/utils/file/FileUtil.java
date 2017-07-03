@@ -4,6 +4,7 @@ import com.movision.common.Response;
 import com.movision.common.constant.ApiConstants;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.BusinessException;
+import com.movision.facade.upload.UploadFacade;
 import com.movision.utils.oss.UploadUtil;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
@@ -31,6 +32,9 @@ public class FileUtil {
 
 	@Autowired
 	ApiConstants apiConstants;
+
+	@Autowired
+	private UploadFacade uploadFacade;
 
 	/**
 	 * 下载文件(图片及doc文件下载工具类)
@@ -193,7 +197,7 @@ public class FileUtil {
 	 * @return
 	 */
 	public boolean isExistFile(String fileName, String type, String chann) {
-		String uploadMode = UploadUtil.getConfigVar("upload.mode");
+		String uploadMode = uploadFacade.getConfigVar("upload.mode");
 		switch (uploadMode) {
 		case "alioss":
 			Map<String, Object> map = aliOSSClient.downloadStream(fileName, type, chann);

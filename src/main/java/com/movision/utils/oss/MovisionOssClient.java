@@ -49,7 +49,7 @@ public class MovisionOssClient {
      */
     public Map<String, Object> uploadObject(MultipartFile file, String type, String chann) {
 
-        String uploadMode = UploadUtil.getConfigVar("upload.mode");
+        String uploadMode = uploadFacade.getConfigVar("upload.mode");
         //判断是否为允许的上传文件后缀
         boolean allowed = FileUtil.isAllowed(file.getOriginalFilename(), type);
         if (!allowed) {
@@ -102,7 +102,7 @@ public class MovisionOssClient {
      */
     public Map<String, Object> uploadFileObject(File file, String type, String chann) {
 
-        String uploadMode = UploadUtil.getConfigVar("upload.mode");
+        String uploadMode = uploadFacade.getConfigVar("upload.mode");
         //判断是否为允许的上传文件后缀
         boolean allowed = FileUtil.isAllowed(file.getName(), type);
         if (!allowed) {
@@ -144,7 +144,7 @@ public class MovisionOssClient {
      */
     public Map<String, Object> uploadMultipartFileObject(MultipartFile file, String type) {
 
-        String uploadMode = UploadUtil.getConfigVar("upload.mode");
+        String uploadMode = uploadFacade.getConfigVar("upload.mode");
         //判断是否为允许的上传文件后缀
         boolean allowed = FileUtil.isAllowed(file.getOriginalFilename(), type);
         if (!allowed) {
@@ -184,8 +184,8 @@ public class MovisionOssClient {
         Map map = new HashMap();
         if (file.getSize() > 0) {
             try {
-                String path = UploadUtil.getConfigVar("post.incise.domain") + filename;
-                //SaveFileFromInputStream(file.getInputStream(), UploadUtil.getConfigVar("post.incise.domain"), filename);
+                String path = uploadFacade.getConfigVar("post.incise.domain") + filename;
+                //SaveFileFromInputStream(file.getInputStream(), uploadFacade.getConfigVar("post.incise.domain"), filename);
                 map.put("status", "success");
                 map.put("url", path);
                 file.transferTo(new File(path));
@@ -296,7 +296,7 @@ public class MovisionOssClient {
              */
             BufferedImage bi = reader.read(0, param);
             UUID uuid = UUID.randomUUID();
-            String incise = UploadUtil.getConfigVar("post.incise.domain");
+            String incise = uploadFacade.getConfigVar("post.incise.domain");
             incise += uuid + "." + suffix;
             System.out.println("切割图片的本体图片位置：" + incise);
             //保存新图片
