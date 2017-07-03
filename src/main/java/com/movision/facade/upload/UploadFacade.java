@@ -1,14 +1,18 @@
 package com.movision.facade.upload;
 
 import com.movision.common.constant.ApiConstants;
+import com.movision.common.constant.Constants;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.BusinessException;
+import com.movision.utils.propertiesLoader.FormalEnvPropertiesLoader;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.file.FileUtil;
+import com.movision.utils.propertiesLoader.TestEnvPropertiesLoader;
 import it.sauronsoftware.jave.Encoder;
 import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.MultimediaInfo;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -167,4 +173,5 @@ public class UploadFacade {
             }
         }
     }
+
 }

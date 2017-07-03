@@ -1,16 +1,8 @@
 package com.movision.utils.ueditor.upload;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.oss.AliOSSClient;
+import com.movision.utils.oss.UploadUtil;
 import com.movision.utils.ueditor.PathFormat;
 import com.movision.utils.ueditor.define.AppInfo;
 import com.movision.utils.ueditor.define.BaseState;
@@ -19,11 +11,17 @@ import com.movision.utils.ueditor.define.State;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 public class BinaryUploader {
 
-
     public static final State saveToObject(HttpServletRequest request, Map<String, Object> conf) {
-        String uploadMode = PropertiesLoader.getValue("upload.mode");
+        String uploadMode = UploadUtil.getConfigVar("upload.mode");
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         MultipartFile upfile = multipartRequest.getFile("upfile");
         if ("zhb".equals(uploadMode)) {

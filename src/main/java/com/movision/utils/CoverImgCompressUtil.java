@@ -2,6 +2,7 @@ package com.movision.utils;
 
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
+import com.movision.utils.oss.UploadUtil;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ public class CoverImgCompressUtil {
 
     public String ImgCompress(MultipartFile file, int w, int h) {
         Boolean compressFlag = false;
-        String compress_dir_path = PropertiesLoader.getValue("post.incise.domain");//压缩图片路径url
+        String compress_dir_path = UploadUtil.getConfigVar("post.incise.domain");//压缩图片路径url
         List<String> existFileList = getExistFiles(compress_dir_path);//获取文件夹下的所有文件名
 
         //上传到本地服务器
@@ -75,7 +76,7 @@ public class CoverImgCompressUtil {
 
     public String ImgCompress(String file, int w, int h) {
         Boolean compressFlag = false;
-        String compress_dir_path = PropertiesLoader.getValue("post.incise.domain");//压缩图片路径url
+        String compress_dir_path = UploadUtil.getConfigVar("post.incise.domain");//压缩图片路径url
         List<String> existFileList = getExistFiles(compress_dir_path);//获取文件夹下的所有文件名
 
         File f = new File(file);

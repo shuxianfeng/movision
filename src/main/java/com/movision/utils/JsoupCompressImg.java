@@ -11,6 +11,7 @@ import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
+import com.movision.utils.oss.UploadUtil;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import net.sf.json.JSONArray;
 import org.apache.commons.collections.CollectionUtils;
@@ -65,7 +66,7 @@ public class JsoupCompressImg {
             Document doc = Jsoup.parse(content);
             Elements titleElms = doc.getElementsByTag("img");
 
-            String compress_dir_path = PropertiesLoader.getValue("post.tempimg.domain");//压缩图片路径url
+            String compress_dir_path = UploadUtil.getConfigVar("post.tempimg.domain");//压缩图片路径url
 
             String compress_dir_local_path = PropertiesLoader.getValue("post.img.local.domain");//获取项目根目录/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision
 
@@ -84,7 +85,7 @@ public class JsoupCompressImg {
                 log.info("压缩前的原图url，imgurl=" + imgurl);
 
                 //从阿里云服务器下载到本地
-                String tempvideodir = PropertiesLoader.getValue("post.tempimg.domain");//下载到本地的图片临时存放目录
+                String tempvideodir = UploadUtil.getConfigVar("post.tempimg.domain");//下载到本地的图片临时存放目录
                 log.info("本地图片临时存放目录>>>>>>>>>" + tempvideodir);
                 File dirFile = new File(tempvideodir);
                 if(!dirFile.exists()){//文件路径不存在时，自动创建目录
@@ -239,7 +240,7 @@ public class JsoupCompressImg {
 //            String moduleContent = (String)responseJson.get("postcontent");//正文模块字符串
             JSONArray moduleArray = JSONArray.fromObject(content);
 
-            String compress_dir_path = PropertiesLoader.getValue("post.tempimg.domain");//压缩图片路径url
+            String compress_dir_path = UploadUtil.getConfigVar("post.tempimg.domain");//压缩图片路径url
 
             String compress_dir_local_path = PropertiesLoader.getValue("post.img.local.domain");//获取项目根目录/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision
 
@@ -266,7 +267,7 @@ public class JsoupCompressImg {
                     log.info("压缩前的原图url，imgurl=" + imgurl);
 
                     //从阿里云服务器下载到本地
-                    String tempvideodir = PropertiesLoader.getValue("post.tempimg.domain");//下载到本地的图片临时存放目录
+                    String tempvideodir = UploadUtil.getConfigVar("post.tempimg.domain");//下载到本地的图片临时存放目录
                     log.info("本地图片临时存放目录>>>>>>>>>" + tempvideodir);
                     File dirFile = new File(tempvideodir);
                     if (!dirFile.exists()) {//文件路径不存在时，自动创建目录

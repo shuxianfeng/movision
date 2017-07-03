@@ -1,5 +1,7 @@
 package com.movision.common.constant;
 
+import com.movision.utils.propertiesLoader.PropertiesLoader;
+
 public class Constants {
     /**
      * 短信验证时间 10分钟
@@ -21,4 +23,13 @@ public class Constants {
      * 不是默认地址
      */
     public static final Integer NOT_DEFAULT_ADDRESS = 0;
+
+    /**
+     * 测试服务器的ip
+     */
+    public static final String TEST_SERVER_IP = PropertiesLoader.getValue("test.server.ip");
+    /**
+     * 正式服务器的ip
+     */
+    public static final String FORMAL_SERVER_IP = PropertiesLoader.getValue("formal.server.ip");
 }
