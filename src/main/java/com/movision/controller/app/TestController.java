@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * 这是一个用于测试的控制器
+ *
+ *
  * @Author zhurui
  * @Date 2017/6/8 11:34
  */
