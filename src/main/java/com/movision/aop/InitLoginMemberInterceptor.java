@@ -126,7 +126,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                              * parentUrl=/boss/role
                              * childUrl=
                              */
-                            if (path.contains(parentUrl)
+                            if (childUrl.equals(path)
                                     && childUrl.contains(parentUrl)
                                     && childrenList.get(j).getAuthroize()) {
                                 log.debug("【-------------有权限-------------】");
