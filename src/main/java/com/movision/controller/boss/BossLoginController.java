@@ -53,7 +53,7 @@ public class BossLoginController {
         log.info("boss login post 登录校验");
         Response jsonResult = new Response();
         Subject currentUser = SecurityUtils.getSubject();
-        UsernamePasswordToken token = null;
+        UsernamePasswordToken token;
         try {
             //核心代码
             token = new UsernamePasswordToken(username, password.toCharArray());

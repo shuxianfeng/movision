@@ -115,12 +115,21 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                         for (int j = 0; j < childrenList.size(); j++) {
                             //子菜单的url
                             String childUrl = childrenList.get(j).getUrl();
-                            //
+                            log.debug("父菜单的url:" + parentUrl);
+                            log.debug("子菜单的url:" + childUrl);
+                            log.debug("子菜单是否获取权限:" + childrenList.get(j).getAuthroize());
                             /**
                              * 若请求的url包含父菜单的url，并且 子菜单url包含父菜单url， 并且 该菜单属于授权菜单，
                              * 则通过拦截器
+                             * 比如
+                             * 请求的url path=/boss/role/role_list
+                             * parentUrl=/boss/role
+                             * childUrl=
                              */
-                            if (path.contains(parentUrl) && childUrl.contains(parentUrl) && childrenList.get(j).getAuthroize()) {
+                            if (path.contains(parentUrl)
+                                    && childUrl.contains(parentUrl)
+                                    && childrenList.get(j).getAuthroize()) {
+                                log.debug("【-------------有权限-------------】");
                                 this.initBossUserInfo(currentUser, session);
                                 return true;
                             }
