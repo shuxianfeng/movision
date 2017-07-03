@@ -31,6 +31,7 @@ public class CoverImgCompressUtil {
     @Autowired
     private MovisionOssClient movisionOssClient;
 
+
     public String ImgCompress(MultipartFile file, int w, int h) {
         Boolean compressFlag = false;
         String compress_dir_path = UploadUtil.getConfigVar("post.incise.domain");//压缩图片路径url
