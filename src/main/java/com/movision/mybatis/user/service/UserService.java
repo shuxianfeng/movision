@@ -436,6 +436,17 @@ public class UserService {
         }
     }
 
+    public Boolean updateAppuserLogintime(User user) {
+        try {
+            log.info("更新用户的登录时间，user:" + user.toString());
+            int n = userMapper.updateByPrimaryKeySelective(user);
+            return n == 1;
+        } catch (Exception e) {
+            log.error("更新用户的登录时间失败", e);
+            throw e;
+        }
+    }
+
     /**
      * 查询发帖人列表
      *
