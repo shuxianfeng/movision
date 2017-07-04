@@ -52,6 +52,9 @@ public class BossLoginController {
                           @ApiParam(value = "密码") @RequestParam String password) throws IOException {
         log.info("boss login post 登录校验");
         Response jsonResult = new Response();
+        //前置校验
+//        if (bossUserFacade.preAccountValidation(username, jsonResult)) return jsonResult;
+
         Subject currentUser = SecurityUtils.getSubject();
         UsernamePasswordToken token;
         try {
@@ -65,34 +68,38 @@ public class BossLoginController {
             return jsonResult;
         } catch (LockedAccountException e) {
             jsonResult.setCode(400);
-            jsonResult.setMessage("帐户状态异常");
+            jsonResult.setMessage("账号状态异常");
             return jsonResult;
+
         } catch (AuthenticationException e) {
             jsonResult.setCode(400);
             jsonResult.setMessage("用户名或密码错误");
             return jsonResult;
         }
 
+        /**
+         *  下面是通过shiro身份验证后，进行的业务操作
+         */
         if (currentUser.isAuthenticated()) {
             Session session = currentUser.getSession();
             BossUser record = new BossUser();
             //当前principle
             BossRealm.ShiroBossUser shiroBossUser = (BossRealm.ShiroBossUser) currentUser.getPrincipal();
             record.setId(shiroBossUser.getId());
-            //更新Boss用户信息
+            //1 更新Boss用户信息
             if (bossUserFacade.updateLoginTime(record)) {
                 log.info("更新boss用户登录时间成功");
             } else {
                 log.warn("更新boss用户登录时间失败");
             }
 
-            //session中存入当前用户信息
+            //2 session中存入当前用户信息
             session.setAttribute(SessionConstant.BOSS_USER, shiroBossUser);
             session.removeAttribute(SessionConstant.APP_USER);
 
             log.debug("session中的boss用户信息：" + ShiroUtil.getBossUser());
 
-            //session中存入该用户所属的角色所对应的菜单信息
+            //3 session中存入该用户所属的角色所对应的菜单信息
             List<Map<String, Object>> menuList = menuFacade.getAuthroizeMenu(shiroBossUser.getRole());
             session.setAttribute(SessionConstant.ACCESS_MENU, menuList);
             log.debug("session中的菜单信息：" + session.getAttribute(SessionConstant.ACCESS_MENU));
@@ -107,6 +114,7 @@ public class BossLoginController {
 
         return jsonResult;
     }
+
 
     @RequestMapping(value = "/boss/logout", method = RequestMethod.GET)
     @ApiOperation(value = "登出", notes = "登出", response = Response.class)
