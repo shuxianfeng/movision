@@ -78,7 +78,7 @@ public class BossUserService {
             return bossUserMapper.selectByUsername(username);
 
         } catch (Exception e) {
-            log.error("获取boss用户信息失败, username" + username);
+            log.error("获取boss用户信息失败, username" + username, e);
             throw e;
         }
     }
@@ -89,7 +89,7 @@ public class BossUserService {
             int n = bossUserMapper.updateBossUserLoginTime(bossUser);
             return n == 1;
         } catch (Exception e) {
-            log.error("更新boss用户登录时间失败");
+            log.error("更新boss用户登录时间失败", e);
             throw e;
         }
     }
@@ -99,7 +99,7 @@ public class BossUserService {
             log.info("删除用户 " + ids);
             bossUserMapper.delBossUser(ids);
         } catch (Exception e) {
-            log.error("删除用户失败");
+            log.error("删除用户失败", e);
             throw e;
         }
     }

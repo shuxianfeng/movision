@@ -5,6 +5,7 @@ import com.movision.common.Response;
 import com.movision.common.constant.Constants;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.PointConstant;
+import com.movision.common.constant.SessionConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
 import com.movision.facade.im.ImFacade;
@@ -24,6 +25,7 @@ import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
 import com.movision.utils.ListUtil;
 import com.movision.utils.StrUtil;
@@ -35,6 +37,9 @@ import com.movision.utils.sms.SDKSendSms;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -327,7 +332,7 @@ public class AppRegisterFacade {
             ImUser imUser = new ImUser();
             imUser.setUserid(userid);
             imUser.setAccid(CheckSumBuilder.getAccid(String.valueOf(userid)));  //根据userid生成accid
-            imUser.setName(StrUtil.genDefaultNickNameByPhone());
+            imUser.setName(StrUtil.genDefaultNickNameByTime());
             ImUser newImUser = imFacade.AddImUser(imUser);
             result.put("imuser", newImUser);
         } else {
@@ -419,7 +424,7 @@ public class AppRegisterFacade {
                 String phone = member.getPhone();
 
                 User user = new User();
-                user.setNickname(StrUtil.genDefaultNickNameByPhone()); //昵称
+                user.setNickname(StrUtil.genDefaultNickNameByTime()); //昵称
                 user.setPhone(phone);   //手机号
                 user.setToken(member.getToken());   //token
                 user.setDeviceno(member.getDeviceno()); //设备号
@@ -510,7 +515,7 @@ public class AppRegisterFacade {
              * 存在场景：用户之前在设备A上用QQ注册了APP账户，现在用户换了一个设备B，下载APP，进行QQ登录
              */
             //3 更新原来的token
-            updateUserInfo(deviceno, url, nickname, sex, tokenJson, originUser);
+            updateUserInfo(deviceno, tokenJson, originUser);
 
             result.put("imuser", imFacade.getImuserByCurrentAppuser(originUser.getId()));
         }
@@ -518,12 +523,9 @@ public class AppRegisterFacade {
         return result;
     }
 
-    private void updateUserInfo(String deviceno, String url, String nickname, String sex, String tokenJson, User originUser) {
+    private void updateUserInfo(String deviceno, String tokenJson, User originUser) {
         originUser.setToken(tokenJson);
         originUser.setDeviceno(deviceno);
-//        originUser.setNickname(nickname);
-//        originUser.setSex(Integer.valueOf(sex));
-//        originUser.setPhoto(url);
         userService.updateByPrimaryKeySelective(originUser);
     }
 
@@ -578,12 +580,24 @@ public class AppRegisterFacade {
         User newUser = new User();
         newUser.setToken(tokenJson);    //token
         setUserThirdAccount(flag, account, newUser);
-        newUser.setNickname(nickname);    //昵称
+
         newUser.setPhoto(url);  //头像
         newUser.setSex(Integer.valueOf(sex));   //性别
         newUser.setDeviceno(deviceno);  //设备号
         newUser.setPoints(25);  //积分：注册25分
         newUser.setInvitecode(UUIDGenerator.gen6Uuid());    //自己的邀请码
+
+        /**
+         * 此处要判断是否具有相同的昵称
+         * 比如：某人的qq已经注册过，nickname = a,
+         * 当他的微信的nickname也是a的时候，如果他用微信注册，则把它的nickname修改成mofo_xxxxxxxxxx
+         */
+        if (userService.queryIsExistSameNickname(nickname)) {
+            newUser.setNickname(StrUtil.genDefaultNickNameByTime());    //昵称
+        } else {
+            newUser.setNickname(nickname);    //昵称
+        }
+
         return userService.insertSelective(newUser);
     }
 
@@ -630,6 +644,134 @@ public class AppRegisterFacade {
         info.setAccount(mobile);
         session.setAttribute(sessionPrefix + mobile, info); //缓存短信验证信息
         session.setAttribute("phone", mobile); //缓存接收短信验证码的手机号
+    }
+
+    public void shiroLogin(Response response, Subject currentUser, UsernamePasswordToken token) {
+        try {
+            //登录，即身份验证 , 开始进入shiro的认证流程
+            currentUser.login(token);
+
+        } catch (UnknownAccountException e) {
+            log.warn("用户名不存在");
+            response.setCode(400);
+            response.setMessage(MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.app_user_not_exist)));
+            response.setMsgCode(MsgCodeConstant.app_user_not_exist);
+        } catch (LockedAccountException e) {
+            log.warn("帐户状态异常");
+            response.setCode(400);
+            response.setMessage(MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.app_account_status_error)));
+            response.setMsgCode(MsgCodeConstant.app_account_status_error);
+        } catch (AuthenticationException e) {
+            log.warn("用户名或验证码错误");
+            response.setCode(400);
+            response.setMessage(MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.app_account_name_error)));
+            response.setMsgCode(MsgCodeConstant.app_account_name_error);
+        }
+    }
+
+    /**
+     * 处理登录过程
+     *
+     * @param appToken
+     * @param response
+     * @param user
+     */
+    public void handleLoginProcess(String appToken, Response response, User user) {
+        //2 校验appToken和serverToken非空
+        String serverToken = this.validateAppTokenAndServerToken(appToken, response, user);
+
+        //3 appToken和serverToken比较
+        if (serverToken.equalsIgnoreCase(appToken)) {
+
+            Subject currentUser = SecurityUtils.getSubject();
+            Gson gson = new Gson();
+            UsernamePasswordToken token = gson.fromJson(appToken, UsernamePasswordToken.class);
+
+            Map returnMap = new HashedMap();
+            //4 开始进入shiro的认证流程
+            shiroLogin(response, currentUser, token);
+
+            /**
+             *  若shiro获取身份验证信息通过，则进行下面操作
+             */
+            if (currentUser.isAuthenticated()) {
+
+                //5 验证通过则在session中缓存登录用户信息
+                Session session = currentUser.getSession();
+                //6 清除session中的boss用户信息
+                session.removeAttribute(SessionConstant.BOSS_USER);
+                session.setAttribute(SessionConstant.APP_USER, currentUser.getPrincipal());
+
+                int appuserid = ShiroUtil.getAppUserID();
+                //登录验证成功后，更新登录时间
+                updateLogintime(appuserid);
+
+                log.debug("验证登录接口是否在session中缓存用户id：" + appuserid);
+                log.debug("验证登录接口是否在session中缓存用户信息：" + ShiroUtil.getAppUser());
+
+                //7 返回登录人的信息
+                ShiroRealm.ShiroUser appuser = (ShiroRealm.ShiroUser) currentUser.getPrincipal();
+                if (null == appuser) {
+                    response.setMsgCode(0);
+                    response.setMessage("登录失败");
+                    returnMap.put("authorized", false);
+                } else {
+                    response.setMsgCode(1);
+                    response.setMessage("登录成功");
+                    returnMap.put("authorized", true);
+                    returnMap.put("user", appuser);
+                }
+                response.setData(returnMap);
+            } else {
+                token.clear();
+            }
+        } else {
+            log.warn("appToken和serverToken不相等");
+            response.setCode(400);
+            response.setMessage("appToken和serverToken不相等");
+            response.setMsgCode(MsgCodeConstant.app_token_not_equal_server_token);
+        }
+    }
+
+    private void updateLogintime(int appuserid) {
+        User u = new User();
+        u.setId(appuserid);
+        u.setLoginTime(new Date());
+        if (updateAppuserLogintime(u)) {
+            log.info("更新用户登录时间成功");
+        } else {
+            log.warn("更新用户登录时间失败");
+        }
+    }
+
+    /**
+     * 校验app_token和Server_token是否都存在
+     *
+     * @param appToken
+     * @param response
+     * @param user
+     * @return
+     */
+    private String validateAppTokenAndServerToken(String appToken, Response response, User user) {
+        if (StringUtils.isEmpty(appToken)) {
+            log.warn("app本地的token丢失");
+            response.setCode(400);
+            response.setMessage(MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.app_token_missing)));
+            response.setMsgCode(MsgCodeConstant.app_token_missing);
+        }
+
+        String serverToken = user.getToken();
+        if (StringUtils.isEmpty(serverToken)) {
+            log.warn("服务器存储的token丢失");
+            response.setCode(400);
+            response.setMessage(MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.server_token_missing)));
+            response.setMsgCode(MsgCodeConstant.server_token_missing);
+        }
+        return serverToken;
+    }
+
+    public Boolean updateAppuserLogintime(User user) {
+        return userService.updateAppuserLogintime(user);
     }
 
 

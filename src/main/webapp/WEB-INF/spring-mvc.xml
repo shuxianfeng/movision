@@ -10,7 +10,8 @@
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
-    <!-- 开启controller注解支持 -->
+    <!-- 开启controller注解支持
+     在springMVC配置文件中将Service注解给去掉-->
     <context:component-scan base-package="com.movision"
                             use-default-filters="false">
         <context:include-filter type="annotation"

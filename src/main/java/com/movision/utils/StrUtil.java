@@ -13,7 +13,7 @@ public class StrUtil {
      *
      * @return mofo_180****9558
      */
-    public static String genDefaultNickNameByPhone() {
+    public static String genDefaultNickNameByTime() {
         return "mofo_" + System.currentTimeMillis();
 //        return "mofo_" + phone.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
     }

@@ -57,6 +57,17 @@ public class User implements Serializable {
 
     private String deviceno;
 
+    private Date loginTime;
+
+    public void setLoginTime(Date loginTime) {
+        this.loginTime = loginTime;
+    }
+
+    public Date getLoginTime() {
+
+        return loginTime;
+    }
+
     public void setDeviceno(String deviceno) {
         this.deviceno = deviceno;
     }
@@ -295,6 +306,7 @@ public class User implements Serializable {
                 ", status=" + status +
                 ", applydate=" + applydate +
                 ", deviceno='" + deviceno + '\'' +
+                ", loginTime=" + loginTime +
                 '}';
     }
 }

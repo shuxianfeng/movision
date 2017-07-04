@@ -326,8 +326,19 @@ public interface MsgCodeConstant {
      */
     int app_account_by_qq_not_exist = 10305;
 
+
+    /**
+     * boss用户已经冻结
+     */
+    int boss_account_is_frozen = 10306;
+
 	/**
-	 * app用户编辑我的地址失败
+     * boss用户已经被删除（逻辑删）
+     */
+    int boss_account_is_del = 10307;
+
+    /**
+     * app用户编辑我的地址失败
 	 */
 	int app_edit_my_address_fail = 20000;
 

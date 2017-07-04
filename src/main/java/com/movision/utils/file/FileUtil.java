@@ -4,6 +4,8 @@ import com.movision.common.Response;
 import com.movision.common.constant.ApiConstants;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.BusinessException;
+import com.movision.facade.upload.UploadFacade;
+import com.movision.utils.oss.UploadUtil;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.UUIDGenerator;
@@ -30,6 +32,9 @@ public class FileUtil {
 
 	@Autowired
 	ApiConstants apiConstants;
+
+	@Autowired
+	private UploadFacade uploadFacade;
 
 	/**
 	 * 下载文件(图片及doc文件下载工具类)
@@ -192,8 +197,8 @@ public class FileUtil {
 	 * @return
 	 */
 	public boolean isExistFile(String fileName, String type, String chann) {
-        String uploadMode = PropertiesLoader.getValue("upload.mode");
-        switch (uploadMode) {
+		String uploadMode = uploadFacade.getConfigVar("upload.mode");
+		switch (uploadMode) {
 		case "alioss":
 			Map<String, Object> map = aliOSSClient.downloadStream(fileName, type, chann);
 			String status = (String) map.get("status");
@@ -241,7 +246,7 @@ public class FileUtil {
 	 * @throws IOException
 	 */
 	public static List<String> readfileName(String filepath, String suffix)
-			throws FileNotFoundException, IOException {
+			throws IOException {
 		List<String> list = new ArrayList<String>();
 		try {
 			File file = new File(filepath);
@@ -297,7 +302,7 @@ public class FileUtil {
 	 * @throws IOException
 	 */
 	public static List<String> readfile(String filepath, String suffix)
-			throws FileNotFoundException, IOException {
+			throws IOException {
 		List<String> list = new ArrayList<String>();
 		try {
 			File file = new File(filepath);
