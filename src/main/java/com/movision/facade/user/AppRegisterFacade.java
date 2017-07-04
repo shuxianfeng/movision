@@ -332,7 +332,7 @@ public class AppRegisterFacade {
             ImUser imUser = new ImUser();
             imUser.setUserid(userid);
             imUser.setAccid(CheckSumBuilder.getAccid(String.valueOf(userid)));  //根据userid生成accid
-            imUser.setName(StrUtil.genDefaultNickNameByPhone());
+            imUser.setName(StrUtil.genDefaultNickNameByTime());
             ImUser newImUser = imFacade.AddImUser(imUser);
             result.put("imuser", newImUser);
         } else {
@@ -424,7 +424,7 @@ public class AppRegisterFacade {
                 String phone = member.getPhone();
 
                 User user = new User();
-                user.setNickname(StrUtil.genDefaultNickNameByPhone()); //昵称
+                user.setNickname(StrUtil.genDefaultNickNameByTime()); //昵称
                 user.setPhone(phone);   //手机号
                 user.setToken(member.getToken());   //token
                 user.setDeviceno(member.getDeviceno()); //设备号
@@ -515,7 +515,7 @@ public class AppRegisterFacade {
              * 存在场景：用户之前在设备A上用QQ注册了APP账户，现在用户换了一个设备B，下载APP，进行QQ登录
              */
             //3 更新原来的token
-            updateUserInfo(deviceno, url, nickname, sex, tokenJson, originUser);
+            updateUserInfo(deviceno, tokenJson, originUser);
 
             result.put("imuser", imFacade.getImuserByCurrentAppuser(originUser.getId()));
         }
@@ -523,12 +523,9 @@ public class AppRegisterFacade {
         return result;
     }
 
-    private void updateUserInfo(String deviceno, String url, String nickname, String sex, String tokenJson, User originUser) {
+    private void updateUserInfo(String deviceno, String tokenJson, User originUser) {
         originUser.setToken(tokenJson);
         originUser.setDeviceno(deviceno);
-//        originUser.setNickname(nickname);
-//        originUser.setSex(Integer.valueOf(sex));
-//        originUser.setPhoto(url);
         userService.updateByPrimaryKeySelective(originUser);
     }
 
@@ -583,12 +580,24 @@ public class AppRegisterFacade {
         User newUser = new User();
         newUser.setToken(tokenJson);    //token
         setUserThirdAccount(flag, account, newUser);
-        newUser.setNickname(nickname);    //昵称
+
         newUser.setPhoto(url);  //头像
         newUser.setSex(Integer.valueOf(sex));   //性别
         newUser.setDeviceno(deviceno);  //设备号
         newUser.setPoints(25);  //积分：注册25分
         newUser.setInvitecode(UUIDGenerator.gen6Uuid());    //自己的邀请码
+
+        /**
+         * 此处要判断是否具有相同的昵称
+         * 比如：某人的qq已经注册过，nickname = a,
+         * 当他的微信的nickname也是a的时候，如果他用微信注册，则把它的nickname修改成mofo_xxxxxxxxxx
+         */
+        if (userService.queryIsExistSameNickname(nickname)) {
+            newUser.setNickname(StrUtil.genDefaultNickNameByTime());    //昵称
+        } else {
+            newUser.setNickname(nickname);    //昵称
+        }
+
         return userService.insertSelective(newUser);
     }
 

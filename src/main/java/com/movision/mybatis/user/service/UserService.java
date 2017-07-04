@@ -348,7 +348,7 @@ public class UserService {
      * @param userid
      * @return
      */
-    public String queryUserbyPhoneByUserid(Integer userid) {
+    public java.lang.String queryUserbyPhoneByUserid(Integer userid) {
         try {
             log.info("根据用户id查询用户手机号");
             return userMapper.queryUserbyPhoneByUserid(userid);
@@ -817,6 +817,17 @@ public class UserService {
             return userMapper.queryUserRole(Integer.parseInt(loginid));
         } catch (Exception e) {
             log.error("查询用户角色异常", e);
+            throw e;
+        }
+    }
+
+    public Boolean queryIsExistSameNickname(String nickname) {
+        try {
+            log.info("判断是否具有重名的nickname, 入参：" + nickname);
+            int n = userMapper.queryCountByNickname(nickname);
+            return n > 0;
+        } catch (Exception e) {
+            log.error("判断是否具有重名的nickname", e);
             throw e;
         }
     }

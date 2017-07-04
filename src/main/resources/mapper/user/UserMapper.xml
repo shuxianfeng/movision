@@ -1067,4 +1067,8 @@
         FROM yw_user u LEFT JOIN yw_admin_user au ON u.phone=au.phone WHERE u.id=#{loginid,jdbcType=INTEGER}
     </select>
 
+    <select id="queryCountByNickname" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select COUNT(1) from yw_user where nickname = #{nickname}
+    </select>
+
 </mapper>

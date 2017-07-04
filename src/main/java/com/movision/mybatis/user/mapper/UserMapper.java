@@ -2,11 +2,8 @@ package com.movision.mybatis.user.mapper;
 
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.province.entity.ProvinceVo;
-import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.user.entity.*;
-import com.movision.utils.L;
 import org.apache.ibatis.annotations.Param;
-import org.apache.xmlbeans.impl.xb.xsdschema.Attribute;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
@@ -132,5 +129,7 @@ public interface UserMapper {
     Integer queryUserIsVip(Integer loginid);
 
     UserRole queryUserRole(Integer loginid);
+
+    Integer queryCountByNickname(@Param("nickname") String nickname);
 
 }
