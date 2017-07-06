@@ -272,8 +272,10 @@ public class AppLoginController {
                 response.setMsgCode(1);
                 response.setMessage("welcome you!");
                 map.put("authorized", true);
+
                 map.put("user", appuser);
             }
+            log.info("【调用app/login/authc接口，返回的appuser】：" + appuser);
         }
         response.setData(map);
         log.debug("/app/login/authc is called,msgcode=[" + response.getMsgCode() + "],Message=[" + response.getMessage() + "].");
