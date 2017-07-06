@@ -1208,8 +1208,24 @@ public class FacadePost {
             compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, wt, ht);
             System.out.println("压缩完的切割图片url==" + compressUrl);
         } else {
-            compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, Integer.parseInt(w), Integer.parseInt(h));
-            System.out.println("压缩完的切割图片url==" + compressUrl);
+            //对宽高值去除小数点
+            String ww = null;
+            String hh = null;
+            if (StringUtil.isNotEmpty(w) && StringUtil.isNotEmpty(h)) {
+                if (w.indexOf(".") != -1) {
+                    ww = w.substring(0, w.lastIndexOf("."));
+                } else {
+                    ww = x;
+                }
+
+                if (h.indexOf(".") != -1) {
+                    hh = h.substring(0, h.lastIndexOf("."));
+                } else {
+                    hh = h;
+                }
+                compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, Integer.parseInt(ww), Integer.parseInt(hh));
+                System.out.println("压缩完的切割图片url==" + compressUrl);
+            }
         }
         //5对压缩完的图片上传到阿里云
         compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
