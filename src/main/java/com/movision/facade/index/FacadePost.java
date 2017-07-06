@@ -1200,9 +1200,17 @@ public class FacadePost {
             wt = 440;
             ht = 440;
         }
-        String compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, wt, ht);
-        System.out.println("压缩完的切割图片url==" + compressUrl);
-
+        //新增压缩部分
+        File fs = new File(tmpurl);
+        Long fsize = fs.length();//获取文件大小
+        String compressUrl = null;
+        if (fsize > 200 * 1024) {
+            compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, wt, ht);
+            System.out.println("压缩完的切割图片url==" + compressUrl);
+        } else {
+            compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, Integer.parseInt(w), Integer.parseInt(h));
+            System.out.println("压缩完的切割图片url==" + compressUrl);
+        }
         //5对压缩完的图片上传到阿里云
         compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
         String newurl = String.valueOf(compressmap.get("url"));
