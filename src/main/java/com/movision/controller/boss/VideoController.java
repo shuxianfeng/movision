@@ -218,4 +218,23 @@ public class VideoController {
         response.setData(result);
         return response;
     }
+
+
+    /**
+     * 微信分享获取签名
+     *
+     * @param
+     * @return
+     */
+    @ApiOperation(value = " 微信分享获取签名", notes = " 微信分享获取签名", response = Response.class)
+    @RequestMapping(value = "get_ticket", method = RequestMethod.POST)
+    public Response getticket(@ApiParam("acctoken") @RequestParam String acctoken) {
+        Response response = new Response();
+        String result = VideoUploadUtil.getticket(acctoken);
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+        }
+        response.setData(result);
+        return response;
+    }
 }
