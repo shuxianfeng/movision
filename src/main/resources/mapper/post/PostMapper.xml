@@ -1984,14 +1984,14 @@
     <select id="selectToAccid" parameterType="java.lang.Integer" resultType="java.lang.String">
         select  yw_im_user.accid from yw_post LEFT JOIN yw_im_user ON yw_im_user.userid=yw_post.userid WHERE id=#{postid,jdbcType=INTEGER}
     </select>
-    <select id="findAllPostListRefulsh" parameterType="com.movision.mybatis.post.entity.Post">
-        SELECT * FROM yw_post WHERE isdel=0 ORDER BY intime DESC
+    <select id="findAllPostListRefulsh" resultType="com.movision.mybatis.post.entity.Post">
+        SELECT * FROM yw_post WHERE isdel=0 and isactive=0 ORDER BY intime DESC
     </select>
     <select id="queryCrileid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT circleid FROM yw_post WHERE isdel=0 AND id=#{postid,jdbcType=INTEGER}
     </select>
     <select id="queryIsIsessence" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM yw_post WHERE isessence=1 AND ishot=1 AND id=#{postid,jdbcType=INTEGER}
+        SELECT COUNT(1) FROM yw_post WHERE isessence=1 AND isdel=0 AND id=#{postid,jdbcType=INTEGER}
     </select>
 
     <select id="selectAllPost" resultType="com.movision.mybatis.post.entity.Post">
@@ -2002,5 +2002,20 @@
 
     <select id="queryPostContentById" parameterType="java.util.Map" resultType="java.lang.String">
         SELECT postcontent FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="queryPostSessen" resultType="com.movision.mybatis.post.entity.Post">
+        SELECT * FROM yw_post WHERE isessence=1 AND isdel=0 AND isactive=0  ORDER BY intime DESC
+    </select>
+    <select id="queryNOPostSessen" resultType="com.movision.mybatis.post.entity.Post">
+ SELECT * FROM yw_post WHERE isessence=0 AND isdel=0 AND isactive=0  ORDER BY intime DESC
+    </select>
+    <select id="queryCrileidPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
+        SELECT * from yw_post WHERE  isdel=0 and isactive=0 AND isessence=1 AND  circleid=#{crileid,jdbcType=INTEGER}  ORDER BY intime DESC
+    </select>
+    <select id="queryNoCrileidPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
+        SELECT * from yw_post WHERE  isdel=0 and isactive=0 AND isessence=0 AND  circleid=#{crileid,jdbcType=INTEGER}  ORDER BY intime DESC
+    </select>
+    <select id="queryoverCrileidPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
+     SELECT * from yw_post WHERE  isdel=0 and isactive=0  AND  circleid!=#{crileid,jdbcType=INTEGER}  ORDER BY intime DESC
     </select>
 </mapper>

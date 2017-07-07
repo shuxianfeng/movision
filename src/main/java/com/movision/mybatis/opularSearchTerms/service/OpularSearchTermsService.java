@@ -4,11 +4,13 @@ import com.mongodb.*;
  import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTerms;
 import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTermsVo;
 import com.movision.mybatis.opularSearchTerms.mapper.OpularSearchTermsMapper;
+import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
  import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -36,13 +38,29 @@ import java.util.ArrayList;
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.group("keywords").count().as("count"),
                 Aggregation.sort(Sort.Direction.DESC, "count"),
-                Aggregation.limit(20)
+                 Aggregation.limit(20)
 
         );
         AggregationResults<OpularSearchTermsVo> list = mongoTemplate.aggregate(aggregation, "opularSearchTerms", OpularSearchTermsVo.class);
-        System.out.print(aggregation);
         List<OpularSearchTermsVo> list1 = list.getMappedResults();
         return list1;
+
+    }
+
+    /**
+     * 查询
+     * @return
+     */
+    public List  userFlush(int userid) {
+              Aggregation aggregation = Aggregation.newAggregation(
+                    Aggregation.match(Criteria.where("userid").is(userid)),
+                    Aggregation.group("crileid").count().as("count"),
+                    Aggregation.sort(Sort.Direction.DESC, "count"),
+                    Aggregation.limit(1)
+            );
+            AggregationResults<UserRefreshRecordVo> list = mongoTemplate.aggregate(aggregation, "userRefreshRecord", UserRefreshRecordVo.class);
+            List<UserRefreshRecordVo> list1 = list.getMappedResults();
+            return list1;
 
     }
 
@@ -72,7 +90,6 @@ import java.util.ArrayList;
             MongoClient mClient = new MongoClient("39.108.84.156:27017");
             DB db = mClient.getDB("searchRecord");
             DBCollection dbCol = db.getCollection("opularSearchTerms");
-            DBCursor ret = dbCol.find();
             BasicDBObject doc = new BasicDBObject();
             BasicDBObject res = new BasicDBObject();
             res.put("isdel", 1);
@@ -84,5 +101,5 @@ import java.util.ArrayList;
         }
         return 1;
     }
-}
+ }
 

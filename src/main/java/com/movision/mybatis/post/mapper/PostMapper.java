@@ -221,4 +221,13 @@ public interface PostMapper {
     List<Post> selectAllPost();
 
     String queryPostContentById(Map postid);
+
+    List<Post> queryPostSessen();
+
+    List<Post> queryNOPostSessen();
+
+    List<Post> queryCrileidPost(int crileid);
+
+    List<Post> queryNoCrileidPost(int crileid);
+    List<Post> queryoverCrileidPost(int crileid);
 }

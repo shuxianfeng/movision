@@ -1,5 +1,7 @@
 package com.movision.common.constant;
 
+import com.movision.utils.propertiesLoader.PropertiesLoader;
+
 import java.util.Date;
 
 /**
@@ -7,6 +9,12 @@ import java.util.Date;
  * @Date 2017/1/18 14:59
  */
 public class UserConstants {
+
+    /**
+     * app 用户注册时的默认头像
+     */
+    public static final String DEFAULT_APPUSER_PHOTO = PropertiesLoader.getValue("default_appuser_photo");
+
 
     public enum USER_STATUS {
         normal(0),

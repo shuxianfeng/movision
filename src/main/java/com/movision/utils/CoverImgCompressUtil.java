@@ -87,7 +87,7 @@ public class CoverImgCompressUtil {
         File f = new File(file);
         Long size = f.length();//获取文件大小
 
-        if (size > 200 * 1024) {
+        /*if (size > 200 * 1024) {*/
             String PATH = file;
             //String filename = FileUtil.getPicName(file);//获取图片文件名
             // 1 生成压缩后的图片的url
@@ -109,9 +109,9 @@ public class CoverImgCompressUtil {
                 //压缩成功后返回图片压缩后的url
                 return compress_file_path;
             }
-        } else {
+       /* } else {
             return file;
-        }
+        }*/
 
         return null;
     }

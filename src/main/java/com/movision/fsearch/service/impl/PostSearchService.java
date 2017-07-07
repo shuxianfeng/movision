@@ -12,6 +12,7 @@ package com.movision.fsearch.service.impl;
         import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
         import com.movision.mybatis.post.entity.PostSearchEntity;
         import com.movision.mybatis.post.service.PostService;
+        import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
         import com.movision.mybatis.searchPostRecord.service.SearchPostRecordService;
         import com.movision.utils.DateUtils;
         import org.apache.commons.collections.map.HashedMap;
@@ -43,6 +44,8 @@ public class PostSearchService implements IPostSearchService {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private PostAndUserRecordService postAndUserRecordService;
     @Override
     public Map<String, Object> search(PostSearchSpec spec)
             throws ServiceException {
@@ -283,6 +286,17 @@ public class PostSearchService implements IPostSearchService {
         map.put("historyList", opularSearchTermsService.histroyWords(ShiroUtil.getAppUserID()));
 
         return map;
+    }
+
+    /**
+     * 查询用户浏览历史
+     * @return
+     */
+    public Map<String,Object> getUserLookingHistory(int page,int pageSize){
+        Map map = new HashMap();
+        map.put("userLookHistory",postAndUserRecordService.UserLookingHistory(ShiroUtil.getAppUserID(),page,pageSize));
+        return map;
+
     }
 
     public Integer UpdateSearchIsdel(Integer userid) {
