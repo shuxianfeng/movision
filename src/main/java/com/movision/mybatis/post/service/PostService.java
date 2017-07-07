@@ -13,15 +13,14 @@ import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.utils.pagination.model.Paging;
+import javafx.geometry.Pos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author shuxf
@@ -676,6 +675,7 @@ public class PostService {
         }
     }
 
+
     /**
      * 帖子添加商品
      * @param typ
@@ -1203,4 +1203,73 @@ public class PostService {
             throw e;
         }
     }
+
+    /**
+     * 查询所有的帖子
+     *
+     * @param
+     * @return
+     */
+    public List<Post> findAllPostListRefulsh() {
+        try {
+            log.info("查询所有的帖子");
+            return postMapper.findAllPostListRefulsh();
+        } catch (Exception e) {
+            log.error("查询所有的帖子失败");
+            throw e;
+        }
+    }
+
+    public int queryCrileid(int postid) {
+        try {
+            log.info("查询帖子属于哪个圈子");
+            return postMapper.queryCrileid(postid);
+        } catch (Exception e) {
+            log.error("查询帖子属于哪个圈子失败");
+            throw e;
+        }
+    }
+
+    /**
+     * 查询是否为精选
+     *
+     * @param postid
+     * @return
+     */
+    public int queryIsIsessence(int postid) {
+        try {
+            log.info("查询是否为精选");
+            return postMapper.queryIsIsessence(postid);
+        } catch (Exception e) {
+
+            log.error("查询是否为精选失败");
+            throw e;
+        }
+
+    }
+
+    public List<Post> selectAllPost() {
+        try {
+            log.info("查询所有的post");
+            return postMapper.selectAllPost();
+        } catch (Exception e) {
+            log.error("查询所有的post，失败", e);
+            throw e;
+        }
+    }
+
+
+    /**
+     * 根据id查询帖子内容
+     *
+     * @param postid
+     * @return
+     */
+    public String queryPostContentById(String postid) {
+        Map map = new HashMap();
+        map.put("postid", Integer.parseInt(postid));
+        return postMapper.queryPostContentById(map);
+    }
+
+
 }

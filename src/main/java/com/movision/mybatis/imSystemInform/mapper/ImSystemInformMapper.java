@@ -29,7 +29,7 @@ public interface ImSystemInformMapper {
 
     ImSystemInformVo queryByUserid(Map map);//查询最新一条记录
 
-    Integer querySystemPushByUserid(Integer userid);//查询是否有未读系统通知
+    Integer querySystemPushByUserid(Map map);//查询是否有未读系统通知
 
     Integer queryInform(String indity);
 

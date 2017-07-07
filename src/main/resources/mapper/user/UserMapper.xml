@@ -27,11 +27,12 @@
         <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="applydate" property="applydate" jdbcType="DATE"/>
         <result column="deviceno" property="deviceno" jdbcType="VARCHAR"/>
+        <result column="login_time" property="loginTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id, openid, qq, sina, phone, email, token, invitecode, referrals, nickname, sign, attention, fans,
-        points, photo, sex, birthday, province, city, intime, growth, level, status, applydate, deviceno
+        points, photo, sex, birthday, province, city, intime, growth, level, status, applydate, deviceno, login_time
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -122,7 +123,7 @@
         fans, points, photo,
         sex, birthday, province,
         city, intime, growth,
-        level, status,applydate, deviceno)
+        level, status,applydate, deviceno, login_time)
         values (#{id,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR},
         #{sina,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},
         #{token,jdbcType=VARCHAR}, #{invitecode,jdbcType=VARCHAR}, #{referrals,jdbcType=VARCHAR},
@@ -130,7 +131,8 @@
         #{fans,jdbcType=INTEGER}, #{points,jdbcType=INTEGER}, #{photo,jdbcType=VARCHAR},
         #{sex,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}, #{province,jdbcType=VARCHAR},
         #{city,jdbcType=VARCHAR}, #{intime,jdbcType=TIMESTAMP}, #{growth,jdbcType=INTEGER},
-        #{level,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{applydate,jdbcType=DATE}), #{deviceno}
+        #{level,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{applydate,jdbcType=DATE}), #{deviceno},
+        #{loginTime}
     </insert>
     <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.movision.mybatis.user.entity.User">
@@ -199,6 +201,9 @@
             <if test="deviceno!=null">
                 deviceno,
             </if>
+            <if test="loginTime!=null">
+                login_time,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -263,6 +268,9 @@
             </if>
             <if test="deviceno!=null">
                 #{deviceno},
+            </if>
+            <if test="loginTime!=null">
+                #{loginTime},
             </if>
         </trim>
     </insert>
@@ -341,6 +349,9 @@
             <if test="deviceno!=null">
                 deviceno=#{deviceno},
             </if>
+            <if test="loginTime!=null">
+                login_time=#{loginTime},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -368,7 +379,8 @@
         growth = #{growth,jdbcType=INTEGER},
         level = #{level,jdbcType=INTEGER},
         status = #{status,jdbcType=INTEGER},
-        deviceno = #{deviceno}
+        deviceno = #{deviceno},
+        login_time = #{loginTime}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -615,24 +627,6 @@
         </if>
         <if test="grade!=null">
             FROM yw_user u WHERE u.level>0 AND u.status=0 ORDER BY u.level DESC
-        </if>
-    </select>
-
-    <select id="">
-        SELECT u.id,u.nickname,u.phone,u.level,u.status,
-        (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
-        (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
-        (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
-        p1.userid=vd.userid AND p1.isdel=0)) AS exceptional,
-        (SELECT COALESCE(SUM(collectsum),0) FROM yw_post p2 WHERE p2.userid=vd.userid AND p2.isdel=0) AS becollectsum,
-        (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid IN (SELECT p5.id FROM yw_post p5 WHERE p5.userid=vd.userid
-        AND p5.isdel=0)) AS besharesum,
-        (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
-        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
-        zansum,u.fans,u.applydate
-        FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id WHERE vd.userid=u.id AND u.status=0
-        <if test="">
-            AND u.nickname LIKE concat('%',#{,jdbcType=VARCHAR},'%')
         </if>
     </select>
 
@@ -1071,6 +1065,10 @@
     <select id="queryUserRole" resultType="com.movision.mybatis.user.entity.UserRole" parameterType="java.lang.Integer">
         SELECT u.id AS userid,au.iscircle,au.circlemanagement,au.contributing,au.common
         FROM yw_user u LEFT JOIN yw_admin_user au ON u.phone=au.phone WHERE u.id=#{loginid,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryCountByNickname" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select COUNT(1) from yw_user where nickname = #{nickname}
     </select>
 
 </mapper>

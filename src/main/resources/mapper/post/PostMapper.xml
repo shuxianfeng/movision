@@ -6,7 +6,7 @@
         <result column="circleid" jdbcType="INTEGER" property="circleid"/>
         <result column="title" jdbcType="VARCHAR" property="title"/>
         <result column="subtitle" jdbcType="VARCHAR" property="subtitle"/>
-        <result column="postcontent" jdbcType="VARCHAR" property="postcontent"/>
+        <result column="postcontent" jdbcType="LONGVARCHAR" property="postcontent"/>
         <result column="zansum" jdbcType="INTEGER" property="zansum"/>
         <result column="commentsum" jdbcType="INTEGER" property="commentsum"/>
         <result column="forwardsum" jdbcType="INTEGER" property="forwardsum"/>
@@ -223,7 +223,7 @@
         FROM yw_post t1
         LEFT JOIN yw_active_period t2
         ON t1.id = t2.postid
-        ) t WHERE t.isactive = '1'
+        ) t WHERE t.isactive = '1' AND t.isdel = '0'
         ORDER BY t.intime DESC
     </select>
 
@@ -344,8 +344,8 @@
         isessence, isessencepool, coverimg, hotimgurl,
         intime, totalpoint, isdel, essencedate,userid,oprtime
       )
-    values (#{id,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
-      #{subtitle,jdbcType=VARCHAR}, #{postcontent,jdbcType=VARCHAR}, #{zansum,jdbcType=INTEGER},
+        values (#{id,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
+        #{subtitle,jdbcType=VARCHAR}, #{postcontent,jdbcType=LONGVARCHAR}, #{zansum,jdbcType=INTEGER},
         #{commentsum,jdbcType=INTEGER}, #{forwardsum,jdbcType=INTEGER}, #{collectsum,jdbcType=INTEGER},
         #{isactive,jdbcType=INTEGER}, #{activetype,jdbcType=INTEGER}, #{activefee,jdbcType=DOUBLE},
         #{iscontribute,jdbcType=INTEGER},#{type,jdbcType=INTEGER},
@@ -367,7 +367,7 @@
         isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime
         )
         VALUES (
-          #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=VARCHAR},
+        #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=LONGVARCHAR},
           #{zansum,jdbcType=INTEGER},#{commentsum,jdbcType=INTEGER},#{forwardsum,jdbcType=INTEGER},
           #{collectsum,jdbcType=INTEGER},#{isactive,jdbcType=INTEGER},#{type,jdbcType=INTEGER},
           #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
@@ -387,7 +387,7 @@
         isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime
         )
         VALUES (
-        #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=VARCHAR},
+        #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=LONGVARCHAR},
         #{zansum,jdbcType=INTEGER},#{commentsum,jdbcType=INTEGER},#{forwardsum,jdbcType=INTEGER},
         #{collectsum,jdbcType=INTEGER},#{isactive,jdbcType=INTEGER},
         #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
@@ -480,7 +480,7 @@
             #{man,jdbcType=VARCHAR},
         </if>
         <if test="postcontent != null">
-            #{postcontent,jdbcType=VARCHAR},
+            #{postcontent,jdbcType=LONGVARCHAR},
         </if>
         <if test="isessence != null">
             #{isessence,jdbcType=INTEGER},
@@ -600,7 +600,7 @@
                 #{subtitle,jdbcType=VARCHAR},
             </if>
             <if test="postcontent != null">
-                #{postcontent,jdbcType=VARCHAR},
+                #{postcontent,jdbcType=LONGVARCHAR},
             </if>
             <if test="zansum != null">
                 #{zansum,jdbcType=INTEGER},
@@ -765,7 +765,7 @@
                 #{subtitle,jdbcType=VARCHAR},
             </if>
             <if test="postcontent != null">
-                #{postcontent,jdbcType=VARCHAR},
+                #{postcontent,jdbcType=LONGVARCHAR},
             </if>
             <if test="zansum != null">
                 #{zansum,jdbcType=INTEGER},
@@ -844,7 +844,7 @@
                 subtitle = #{subtitle,jdbcType=VARCHAR},
             </if>
             <if test="postcontent != null">
-                postcontent = #{postcontent,jdbcType=VARCHAR},
+                postcontent = #{postcontent,jdbcType=LONGVARCHAR},
             </if>
             <if test="zansum != null">
                 zansum = #{zansum,jdbcType=INTEGER},
@@ -922,7 +922,7 @@
                 subtitle = #{subtitle,jdbcType=VARCHAR},
             </if>
             <if test="postcontent != null">
-                postcontent = #{postcontent,jdbcType=VARCHAR},
+                postcontent = #{postcontent,jdbcType=LONGVARCHAR},
             </if>
             <if test="activetype != null">
                 activetype = #{activetype,jdbcType=INTEGER},
@@ -991,7 +991,7 @@
                 subtitle = #{subtitle,jdbcType=VARCHAR},
             </if>
             <if test="postcontent != null">
-                postcontent = #{postcontent,jdbcType=VARCHAR},
+                postcontent = #{postcontent,jdbcType=LONGVARCHAR},
             </if>
 
             <if test="type != null">
@@ -1037,7 +1037,7 @@
     set circleid = #{circleid,jdbcType=INTEGER},
       title = #{title,jdbcType=VARCHAR},
       subtitle = #{subtitle,jdbcType=VARCHAR},
-      postcontent = #{postcontent,jdbcType=VARCHAR},
+        postcontent = #{postcontent,jdbcType=LONGVARCHAR},
       zansum = #{zansum,jdbcType=INTEGER},
       commentsum = #{commentsum,jdbcType=INTEGER},
       forwardsum = #{forwardsum,jdbcType=INTEGER},
@@ -1127,7 +1127,7 @@
         (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS circlename,
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
-        WHERE p.isdel=0 AND p.isactive=0
+        WHERE p.isdel <![CDATA[<>]]> 1 AND p.isactive=0
         AND p.circleid in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone
         =(SELECT phone FROM yw_admin_user WHERE id=#{loginid,jdbcType=INTEGER}))) AND isdel=0
         <if test="uid!=null">
@@ -1146,7 +1146,7 @@
             AND p.userid=#{userid,jdbcType=INTEGER}
         </if>
         <if test="postcontent!=null">
-            AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
+            AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=LONGVARCHAR},'%')
         </if>
         <if test="circleid!=null">
             AND p.circleid=#{circleid,jdbcType=INTEGER}
@@ -1203,7 +1203,7 @@
         (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS circlename,
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
-        WHERE p.isdel=0 AND p.isactive=0
+        WHERE p.isdel <![CDATA[<>]]> 1 AND p.isactive=0
         ORDER BY p.intime DESC
     </select>
 
@@ -1331,7 +1331,7 @@
         isdel=0))) AS categoryname,
         v.videourl vid,v.bannerimgurl
         FROM yw_post p LEFT JOIN yw_video as v ON p.id=v.postid
-        WHERE p.id=#{postid,jdbcType=INTEGER} AND p.isactive=0 AND p.isdel=0
+        WHERE p.id=#{postid,jdbcType=INTEGER} AND p.isactive=0 AND p.isdel <![CDATA[<>]]> 1
     </select>
 
     <select id="queryActivityParticulars" resultType="com.movision.mybatis.post.entity.PostList"
@@ -1474,7 +1474,7 @@
             </if>
 
             <if test="postcontent != null">
-                #{postcontent,jdbcType=VARCHAR},
+                #{postcontent,jdbcType=LONGVARCHAR},
             </if>
             <if test="isactive != null">
                 #{isactive,jdbcType=INTEGER},
@@ -1594,7 +1594,7 @@
                 #{coverimg,jdbcType=VARCHAR},
             </if>
             <if test="postcontent != null">
-                #{postcontent,jdbcType=VARCHAR},
+                #{postcontent,jdbcType=LONGVARCHAR},
             </if>
             <if test="isessence != null">
                 #{isessence,jdbcType=INTEGER},
@@ -1675,7 +1675,7 @@
         (SELECT nickname FROM yw_user WHERE id=p.userid) as nickname,p.coverimg,
         p.isessence,p.essencedate as time,p.orderid,p.postcontent,v.videourl vid,v.bannerimgurl
         FROM yw_post as p LEFT JOIN yw_video as v ON p.id=v.postid WHERE p.id=#{postid,jdbcType=INTEGER} AND
-        p.isactive=0 AND p.isdel=0
+        p.isactive=0 AND p.isdel <![CDATA[<>]]> 1
     </select>
 
 
@@ -1708,7 +1708,7 @@
             AND p.userid=#{userid,jdbcType=INTEGER}
         </if>
         <if test="postcontent!=null">
-            AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
+            AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=LONGVARCHAR},'%')
         </if>
         <if test="endtime!=null and begintime!=null">
             AND p.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
@@ -1755,7 +1755,7 @@
         </if>
         <!-- in(select id from yw_user WHERE nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')) -->
         <if test="content!=null">
-            AND p.postcontent LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
+            AND p.postcontent LIKE concat('%',#{content,jdbcType=LONGVARCHAR},'%')
         </if>
 
         <if test="begintime!=null and endtime!=null">
@@ -1945,7 +1945,7 @@
             AND p.title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
         </if>
         <if test="postcontent!=null">
-            AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=VARCHAR},'%')
+            AND p.postcontent LIKE concat('%',#{postcontent,jdbcType=LONGVARCHAR},'%')
         </if>
         <if test="endtime!=null and begintime!=null">
             AND p.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
@@ -1983,5 +1983,24 @@
     </select>
     <select id="selectToAccid" parameterType="java.lang.Integer" resultType="java.lang.String">
         select  yw_im_user.accid from yw_post LEFT JOIN yw_im_user ON yw_im_user.userid=yw_post.userid WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="findAllPostListRefulsh" parameterType="com.movision.mybatis.post.entity.Post">
+        SELECT * FROM yw_post WHERE isdel=0 ORDER BY intime DESC
+    </select>
+    <select id="queryCrileid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT circleid FROM yw_post WHERE isdel=0 AND id=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="queryIsIsessence" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post WHERE isessence=1 AND ishot=1 AND id=#{postid,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectAllPost" resultType="com.movision.mybatis.post.entity.Post">
+        <![CDATA[
+        SELECT * from yw_post where id > 245
+        ]]>
+    </select>
+
+    <select id="queryPostContentById" parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT postcontent FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
 </mapper>

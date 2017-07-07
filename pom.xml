@@ -454,12 +454,6 @@
 
         <dependency>
             <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-core</artifactId>
-            <version>2.2.6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.aliyun</groupId>
             <artifactId>aliyun-java-sdk-green</artifactId>
             <version>1.1.0</version>
         </dependency>
@@ -552,6 +546,7 @@
             <artifactId>aliyun-sdk-oss</artifactId>
             <version>2.6.0</version>
         </dependency>
+
     </dependencies>
 
     <!--<build>-->
@@ -573,6 +568,7 @@
     <build>
         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
         <outputDirectory>${basedir}/target/classes</outputDirectory>
+        <!--配置资源文件位置-->
         <resources>
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
@@ -653,6 +649,7 @@
                 </configuration>
             </plugin>
 
+            <!--mybatis自动生成文件的插件-->
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
@@ -681,16 +678,20 @@
                     <path>/</path>
                 </configuration>
             </plugin>
+
+
         </plugins>
     </build>
 
     <!--两个存储库-->
     <repositories>
+        <!--测试服务器的仓库地址-->
         <repository>
             <id>releases</id>
             <name>releases</name>
             <url>http://120.77.214.187:8081/nexus/content/groups/public</url>
         </repository>
+        <!--公司的仓库地址-->
         <repository>
             <id>workstation</id>
             <name>workstation</name>
@@ -713,6 +714,7 @@
 
     <profiles>
         <profile>
+            <!--本地开发/测试环境-->
             <id>development</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -722,6 +724,7 @@
             </properties>
         </profile>
         <profile>
+            <!--生产环境-->
             <id>production</id>
             <properties>
                 <cfg.portablePath>/zhb/etc</cfg.portablePath>

@@ -264,4 +264,15 @@ public class Post implements Serializable {
     public void setOprtime(Date oprtime) {
         this.oprtime = oprtime;
     }
+
+    /**
+     * 重写equals方法，用于比对
+     *
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Post && this.id != null && this.id.equals(((Post) obj).getId());
+    }
 }

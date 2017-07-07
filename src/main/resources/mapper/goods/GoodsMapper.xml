@@ -1493,7 +1493,7 @@
         select MAX(comboid) from yw_combo
     </select>
 
-    <delete id="deletePostyByGoods" parameterType="java.lang.Integer">
+    <delete id="deletePostyByGoods" parameterType="java.util.Map">
         DELETE FROM yw_post_share_goods WHERE postid=#{postid,jdbcType=INTEGER}
     </delete>
 

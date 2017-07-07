@@ -107,7 +107,7 @@ public class MsgCenterFacade {
         map.put("informTime", ShiroUtil.getAppUser().getRegisterTime());
         ImSystemInformVo imSystemInform = imSystemInformService.queryByUserid(map);//查询最新一条
         //查询是否有未读系统通知
-        Integer system = imSystemInformService.querySystemPushByUserid(userid);
+        Integer system = imSystemInformService.querySystemPushByUserid(map);
         if (imSystemInform != null) {
             if (system > 0) {
                 imSystemInform.setIsread(0);

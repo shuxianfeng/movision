@@ -2,6 +2,7 @@ package com.movision.controller.app;
 
 import com.movision.common.Response;
 import com.movision.common.util.ShiroUtil;
+import com.movision.facade.boss.PostFacade;
 import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
@@ -11,10 +12,12 @@ import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.utils.CoverImgCompressUtil;
 import com.movision.utils.file.FileUtil;
+import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.omg.CORBA.PRIVATE_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,10 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
 
 /**
  * @Author shuxf
@@ -45,14 +48,39 @@ public class AppPostController {
     @Autowired
     private MovisionOssClient movisionOssClient;
 
-    @ApiOperation(value = "口帖子详情数据返回接", notes = "用于返回请求帖子详情内容", response = Response.class)
+    @Autowired
+    private AliOSSClient aliOSSClient;
+
+    @Autowired
+    private PostFacade postFacade;
+
+    @ApiOperation(value = "帖子详情数据返回接口", notes = "用于返回请求帖子详情内容", response = Response.class)
     @RequestMapping(value = "detail", method = RequestMethod.POST)
     public Response queryPostDetail(@ApiParam(value = "帖子id") @RequestParam String postid,
-                                    @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid,
-                                    @ApiParam(value = "帖子类型：0 普通帖 1 原生视频帖( isactive为0时该字段不为空) 2 分享视频帖") @RequestParam String type) {
+                                    @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         Response response = new Response();
 
-        PostVo post = facadePost.queryPostDetail(postid, userid, type);
+        PostVo post = facadePost.queryPostDetail(postid, userid);
+
+
+        if (null != post) {
+            response.setCode(200);
+            response.setMessage("查询成功");
+        }else if (null == post){
+            response.setCode(300);
+            response.setMessage("该帖已删除");
+        }
+        response.setData(post);
+        return response;
+    }
+
+    @ApiOperation(value = "帖子详情数据返回接口（老版,只用于改版数据割接使用）", notes = "用于返回请求帖子详情内容（老版,只用于改版数据割接使用）", response = Response.class)
+    @RequestMapping(value = "olddetail", method = RequestMethod.POST)
+    public Response queryOldPostDetail(@ApiParam(value = "帖子id") @RequestParam String postid,
+                                    @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+        Response response = new Response();
+
+        PostVo post = facadePost.queryOldPostDetail(postid, userid);
 
 
         if (null != post) {
@@ -217,41 +245,82 @@ public class AppPostController {
         return response;
     }
 
+
+    @ApiOperation(value = "PC官网发布帖子(改版)", notes = "用于官网发布帖子的接口（改版）", response = Response.class)
+    @RequestMapping(value = "releasePostByPC_Test", method = RequestMethod.POST)
+    public Response releasePostByPCTest(HttpServletRequest request,
+                                        @ApiParam(value = "用户id") @RequestParam String userid,
+                                        @ApiParam(value = "所属圈子id") @RequestParam String circleid,
+                                        @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
+                                        @ApiParam(value = "帖子内容") @RequestParam String postcontent,
+                                        @ApiParam(value = "帖子封面") @RequestParam String coverimg,
+                                        @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids) {
+        Response response = new Response();
+
+        Map count = facadePost.releasePostByPCTest(request, userid, circleid, title, postcontent, coverimg, proids);
+
+        if (count.get("flag").equals(-2)) {
+            response.setCode(300);
+            response.setMessage("系统异常，APP发帖失败");
+        } else if (count.get("flag").equals(-1)) {
+            response.setCode(201);
+            response.setMessage("用户不具备发帖权限");
+        } else {
+            response.setCode(200);
+            response.setMessage("发帖成功");
+        }
+        return response;
+    }
+
     /**
      * PC官网上传帖子封面图片
      *
      * @param file
      * @return
      */
-    @ApiOperation(value = "PC官网上传帖子封面图片", notes = "PC官网上传帖子封面图片", response = Response.class)
+    @ApiOperation(value = "PC官网上传帖子封面图片（改版）", notes = "PC官网上传帖子封面图片（改版）", response = Response.class)
     @RequestMapping(value = {"/updateCoverImgByPC"}, method = RequestMethod.POST)
     public Response updateCoverImgByPC(@RequestParam(value = "file", required = false) MultipartFile file,
-                                       @ApiParam(value = "X坐标") @RequestParam String x,
-                                       @ApiParam(value = "Y坐标") @RequestParam String y,
+                                       @ApiParam(value = "X坐标") @RequestParam(required = false) String x,
+                                       @ApiParam(value = "Y坐标") @RequestParam(required = false) String y,
                                        @ApiParam(value = "宽") @RequestParam String w,
-                                       @ApiParam(value = "高") @RequestParam String h) {
-        //上传到服务器
-        Map m = movisionOssClient.uploadMultipartFileObject(file, "img");
-        //从服务器获取文件并剪切，删除原图，上传剪切后图片上传阿里云
-        Map map = movisionOssClient.uploadImgerAndIncision(String.valueOf(m.get("url")), x, y, w, h);
-        String url = String.valueOf(map.get("url"));
-        Map<String, Object> map1 = new HashMap<>();
-        map1.put("url", url);
-        map1.put("name", FileUtil.getFileNameByUrl(url));
-        map1.put("width", map.get("width"));
-        map1.put("height", map.get("height"));
-        return new Response(map1);
+                                       @ApiParam(value = "高") @RequestParam String h,
+                                       @ApiParam(value = "1帖子封面 2活动方形图") @RequestParam String type) {
+        Map map = facadePost.updateCoverImgByPC(file, x, y, w, h, type);
+        return new Response(map);
     }
 
-    @ApiOperation(value = "图片压缩", notes = "用于图片压缩测试", response = Response.class)
+    /**
+     * 上传帖子相关图片
+     *
+     * @param file
+     * @return
+     */
+    @ApiOperation(value = "PC官网上传帖子相关图片（改版）", notes = "上传帖子相关图片", response = Response.class)
+    @RequestMapping(value = {"/upload_post_img_test"}, method = RequestMethod.POST)
+    public Response updatePostImgTest(@RequestParam(value = "file", required = false) MultipartFile[] file) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (int i = 0; i < file.length; i++) {
+            Map map = postFacade.updatePostImgTest(file[i]);
+            list.add(map);
+        }
+        return new Response(list);
+    }
+
+
+/*    @ApiOperation(value = "图片压缩", notes = "用于图片压缩", response = Response.class)
     @RequestMapping(value = "coverImgCompressUtil", method = RequestMethod.POST)
-    public Response coverImgCompressUtil(@RequestParam String file) {
+    public Response coverImgCompressUtil(@ApiParam(value = "上传文件") @RequestParam MultipartFile file,
+                                         @ApiParam(value = "要求文件宽") @RequestParam String w,
+                                         @ApiParam(value = "要求文件高") @RequestParam String h) {
         Response response = new Response();
-        String str = coverImgCompressUtil.ImgCompress(file);
+        *//*int w = 750;//图片压缩后的宽度
+        int h = 440;//图片压缩后的高度440*//*
+        String str = coverImgCompressUtil.ImgCompress(file, Integer.parseInt(w), Integer.parseInt(h));
         response.setMessage("操作成功");
         response.setData(str);
         return response;
-    }
+    }*/
 
 
     /**
@@ -280,7 +349,6 @@ public class AppPostController {
     @ApiOperation(value = "上传帖子内容相关图片", notes = "上传帖子内容相关图片（上传帖子内容中的图片）", response = Response.class)
     @RequestMapping(value = {"/upload_post_img"}, method = RequestMethod.POST)
     public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file) {
-
         Map m = movisionOssClient.uploadObject(file, "img", "post");
         String url = String.valueOf(m.get("url"));
         Map<String, Object> map = new HashMap<>();
@@ -288,6 +356,50 @@ public class AppPostController {
         map.put("name", FileUtil.getFileNameByUrl(url));
         map.put("width", m.get("width"));
         map.put("height", m.get("height"));
+        return new Response(map);
+
+        /**Map m = new HashMap();
+        String url = "";
+        Map<String, Object> map = new HashMap<>();
+        Map compressmap = null;
+        if (type.equals("1")) {
+            /**  m = movisionOssClient.uploadObject(file, "img", "postCover");
+             url = String.valueOf(m.get("url"));
+             //4对本地服务器中切割好的图片进行压缩处理
+             int wt = 750;//图片压缩后的宽度
+             int ht = 440;//图片压缩后的高度440
+             String compressUrl = coverImgCompressUtil.ImgCompress(url, wt, ht);
+             System.out.println("压缩完的切割图片url==" + compressUrl);
+             //5对压缩完的图片上传到阿里云
+         compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
+            compressmap = facadePost.uploadPostFacePic(file);
+            map.put("compressmap", compressmap);
+        } else if (type.equals("2")) {
+            m = movisionOssClient.uploadObject(file, "img", "post");
+            url = String.valueOf(m.get("url"));
+            map.put("url", url);
+            map.put("name", FileUtil.getFileNameByUrl(url));
+            map.put("width", m.get("width"));
+            map.put("height", m.get("height"));
+        }
+         return new Response(map);*/
+    }
+
+    /**
+     * 上传帖子封面相关图片
+     *
+     * @param file
+     * @return
+     */
+    @ApiOperation(value = "App上传帖子封面相关图片", notes = "上传帖子封面相关图片（上传帖子封面相关图片）", response = Response.class)
+    @RequestMapping(value = {"/upload_postface_img"}, method = RequestMethod.POST)
+    public Response updatePostImgFace(@RequestParam(value = "file", required = false) MultipartFile file
+    ) {
+
+        Map<String, Object> map = new HashMap<>();
+        Map compressmap = facadePost.uploadPostFacePic(file);
+        map.put("compressmap", compressmap);
+
         return new Response(map);
     }
 
@@ -477,6 +589,16 @@ public class AppPostController {
             response.setCode(200);
             response.setMessage("发帖成功");
         }
+        return response;
+    }
+
+
+    @ApiOperation(value = "查询帖子中所有图片url", response = Response.class)
+    @RequestMapping(value = "queryPostImgById", method = RequestMethod.POST)
+    public Response queryPostImgById(@RequestParam String postid) {
+        Response response = new Response();
+        List<Map> resault = facadePost.queryPostImgById(postid);
+        response.setData(resault);
         return response;
     }
 }

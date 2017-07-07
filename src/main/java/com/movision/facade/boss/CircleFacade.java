@@ -1,6 +1,7 @@
 package com.movision.facade.boss;
 
 import com.movision.common.constant.JurisdictionConstants;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.service.BossUserService;
@@ -8,6 +9,8 @@ import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.category.service.CategoryService;
 import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.circle.service.CircleService;
+import com.movision.mybatis.circleCategory.entity.CircleCategory;
+import com.movision.mybatis.circleCategory.service.CircleCategoryService;
 import com.movision.mybatis.manager.service.ManagerServcie;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.post.service.PostService;
@@ -58,6 +61,9 @@ public class CircleFacade {
 
     @Autowired
     private BossUserService bossUserService;
+
+    @Autowired
+    private CircleCategoryService circleCategoryService;
 
 
     /**
@@ -280,7 +286,7 @@ public class CircleFacade {
      * @return
      */
     public Map updateCircle(String id, String name, String category, String circlemanid,
-                            String circleadmin, String photo, String introduction, String maylikeimg, String scope, String loginuser) {
+                            String circleadmin, String photo, String introduction, String notice, String maylikeimg, String scope, String loginuser) {
         CircleDetails circleDetails = new CircleDetails();
         Map map = new HashedMap();
         Integer circleid = null;
@@ -295,6 +301,9 @@ public class CircleFacade {
             }
             if (!StringUtils.isEmpty(category)) {
                 circleDetails.setCategory(Integer.parseInt(category));
+            }
+            if (StringUtil.isNotEmpty(notice)) {
+                circleDetails.setNotice(notice);
             }
             if (!StringUtils.isEmpty(circleadmin)) {//管理员列表
                 //待定
@@ -384,7 +393,7 @@ public class CircleFacade {
      * @return
      */
     public Map addCircle(String name, String category, String userid, String circleadmin,
-                         String circlemanid, String photo, String maylikeimg, String introduction, String loginid) {
+                         String circlemanid, String photo, String maylikeimg, String introduction, String notice, String loginid) {
         CircleDetails circleDetails = new CircleDetails();
         Map map = new HashedMap();
         //登录用户，操作，操作种类，种类id
@@ -399,6 +408,9 @@ public class CircleFacade {
 
             if (!StringUtils.isEmpty(circlemanid)) {//添加创建人
                 circleDetails.setUserid(circlemanid);
+            }
+            if (StringUtil.isNotEmpty(notice)) {//圈子公告
+                circleDetails.setNotice(notice);
             }
             if (!StringUtils.isEmpty(userid)) {
                 //查询圈主手机号
@@ -420,7 +432,7 @@ public class CircleFacade {
             circleDetails.setOrderid(0);//设置精选排序，初始值：0
             circleDetails.setIsrecommend(0);//设置是否被推荐，初始值0
             circleDetails.setPermission(1);//设置其他用户是否可以发帖，初始值：1是
-            Integer s = circleService.insertCircle(circleDetails);
+            Integer s = circleService.insertCircle(circleDetails);//创建圈子
             Integer cirid = circleDetails.getId();
             if (!StringUtils.isEmpty(circleadmin)) {//管理员列表
                 //待定
@@ -467,14 +479,14 @@ public class CircleFacade {
      *
      * @return
      */
-    public List<Category> queryCircleTypeList(String loginid) {
+    public List<CircleCategory> queryCircleTypeList(String loginid) {
         Integer loid = Integer.parseInt(loginid);
         Map res = commonalityFacade.verifyUserByQueryMethod(loid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode(), null);
         if (res.get("resault").equals(1)) {//圈主或者管理员登录
-            List<Category> list = categoryService.queryCircleTytpeListByUserid(loid);
+            List<CircleCategory> list = circleCategoryService.queryCircleTytpeListByUserid(loid);
             return list;
         } else if (res.get("resault").equals(2)) {
-            List<Category> list = categoryService.queryCircleTypeList(null);
+            List<CircleCategory> list = categoryService.queryCircleTypeList(null);
             return list;
         }
         return null;
@@ -523,8 +535,14 @@ public class CircleFacade {
         if (ur.getIscircle() != null && ur.getCirclemanagement() != null && ur.getCommon() != null) {
             if (ur.getIscircle() == 1 || ur.getCirclemanagement() == 1) {
                 circleList = circleService.queryCircleListByUserRole(ur);//查询用户可发帖的圈子列表
-            } else if (ur.getCommon() == 1 || loginid == "-1") {
+            }/* else if (ur.getCommon() == 1 || loginid == "-1") {
                 circleList = circleService.queryCircleList();//查询所有圈子列表
+            } */ else {
+                Map map = new HashMap();
+                map.put("vip", vip);
+                map.put("type", type);
+                map.put("categoryid", categoryid);
+                circleList = circleService.queryCircleListTo(map);
             }
         } else {
             Map map = new HashMap();
@@ -555,15 +573,16 @@ public class CircleFacade {
      */
     public Map addCircleType(String typename, String discoverpageurl, String loginid) {
         Map map = new HashedMap();
-        Map packaging = new HashedMap();
+        /*Map packaging = new HashedMap();*/
+        CircleCategory category = new CircleCategory();
         //登录用户，操作，操作类型，类型id
         Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.add.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode(), null);
         if (res.get("resault").equals(1)) {
-            packaging.put("categoryname", typename);
-            packaging.put("intime", new Date());
-            packaging.put("discoverpageurl", discoverpageurl);
-            int i = categoryService.addCircleType(packaging);
-            map.put("resault", i);
+            category.setCategoryname(typename);
+            category.setIntime(new Date());
+            category.setDiscoverpageurl(discoverpageurl);
+            circleCategoryService.addCircleType(category);
+            map.put("resault", 200);
             return map;
         } else {
             map.put("resault", -1);
@@ -579,7 +598,9 @@ public class CircleFacade {
      * @return
      */
     public Category queryCircleCategory(String category) {
-        return categoryService.queryCircleCategory(category);
+        Map map = new HashMap();
+        map.put("categoryid", Integer.parseInt(category));
+        return circleCategoryService.queryCircleCategory(map);
     }
 
 
@@ -587,20 +608,25 @@ public class CircleFacade {
      * 编辑圈子类型接口
      *
      * @param categoryid
-     * @param category
+     * @param
      * @param discoverpageurl
      * @return
      */
-    public Map updateCircleCategory(String categoryid, String category, String discoverpageurl, String loginid) {
+    public Map updateCircleCategory(String categoryid, String categoryname, String discoverpageurl, String loginid) {
         Map map = new HashedMap();
         //登录用户，操作，操作类型，操作id
         Map ma = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.update.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode(), null);
         if (ma.get("resault").equals(1)) {
-            map.put("categoryid", categoryid);
-            map.put("categoryname", category);
+            /*map.put("categoryid", categoryid);
+            map.put("categoryname", categoryname);
             map.put("intime", new Date());
-            map.put("imgurl", discoverpageurl);
-            int i = categoryService.updateCircleCategory(map);
+            map.put("imgurl", discoverpageurl);*/
+            CircleCategory circleCategory = new CircleCategory();
+            circleCategory.setDiscoverpageurl(discoverpageurl);
+            circleCategory.setCategoryname(categoryname);
+            circleCategory.setIntime(new Date());
+            circleCategory.setId(Integer.parseInt(categoryid));
+            int i = circleCategoryService.updateCircleCategory(circleCategory);
             Map m = new HashedMap();
             if (i == 1) {
                 m.put("resault", i);

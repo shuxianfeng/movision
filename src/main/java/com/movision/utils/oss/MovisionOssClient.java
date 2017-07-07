@@ -19,7 +19,6 @@ import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -50,7 +49,7 @@ public class MovisionOssClient {
      */
     public Map<String, Object> uploadObject(MultipartFile file, String type, String chann) {
 
-        String uploadMode = PropertiesLoader.getValue("upload.mode");
+        String uploadMode = uploadFacade.getConfigVar("upload.mode");
         //判断是否为允许的上传文件后缀
         boolean allowed = FileUtil.isAllowed(file.getOriginalFilename(), type);
         if (!allowed) {
@@ -103,7 +102,7 @@ public class MovisionOssClient {
      */
     public Map<String, Object> uploadFileObject(File file, String type, String chann) {
 
-        String uploadMode = PropertiesLoader.getValue("upload.mode");
+        String uploadMode = uploadFacade.getConfigVar("upload.mode");
         //判断是否为允许的上传文件后缀
         boolean allowed = FileUtil.isAllowed(file.getName(), type);
         if (!allowed) {
@@ -145,7 +144,7 @@ public class MovisionOssClient {
      */
     public Map<String, Object> uploadMultipartFileObject(MultipartFile file, String type) {
 
-        String uploadMode = PropertiesLoader.getValue("upload.mode");
+        String uploadMode = uploadFacade.getConfigVar("upload.mode");
         //判断是否为允许的上传文件后缀
         boolean allowed = FileUtil.isAllowed(file.getOriginalFilename(), type);
         if (!allowed) {
@@ -185,8 +184,8 @@ public class MovisionOssClient {
         Map map = new HashMap();
         if (file.getSize() > 0) {
             try {
-                String path = PropertiesLoader.getValue("post.incise.domain") + filename;
-                //SaveFileFromInputStream(file.getInputStream(), PropertiesLoader.getValue("post.incise.domain"), filename);
+                String path = uploadFacade.getConfigVar("post.incise.domain") + filename;
+                //SaveFileFromInputStream(file.getInputStream(), uploadFacade.getConfigVar("post.incise.domain"), filename);
                 map.put("status", "success");
                 map.put("url", path);
                 file.transferTo(new File(path));
@@ -297,15 +296,19 @@ public class MovisionOssClient {
              */
             BufferedImage bi = reader.read(0, param);
             UUID uuid = UUID.randomUUID();
-            String incise = PropertiesLoader.getValue("post.incise.domain");
+            String incise = uploadFacade.getConfigVar("post.incise.domain");
             incise += uuid + "." + suffix;
+            System.out.println("切割图片的本体图片位置：" + incise);
             //保存新图片
             ImageIO.write(bi, "jpg", new File(incise));
             //String domain = PropertiesLoader.getValue("formal.img.domain");
             //上传本地服务器切割完成的图片到阿里云
             map = aliOSSClient.uploadInciseStream(incise, "img", "coverIncise");
-            map.put("incise", incise);
-            map.put("file", file);
+            //把上传至阿里云的图片路径更改为http://pic.mofo.shop开头
+            String newurl = String.valueOf(map.get("url"));//返回阿里云的路径
+            System.out.println("切割图片上传到阿里云的url" + newurl);
+            map.put("incise", newurl);
+            map.put("file", incise);
 
         } catch (IOException e) {
             e.printStackTrace();

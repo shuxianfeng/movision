@@ -1,21 +1,22 @@
 package com.movision.facade.user;
 
+import com.movision.common.Response;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.UserConstants;
 import com.movision.exception.BusinessException;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.entity.BossUserVo;
 import com.movision.mybatis.bossUser.service.BossUserService;
-import com.movision.mybatis.role.entity.Role;
 import com.movision.mybatis.role.service.RoleService;
-import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.shiro.crypto.hash.Md5Hash;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,8 @@ import java.util.Map;
  */
 @Service
 public class BossUserFacade {
+
+    private static Logger log = LoggerFactory.getLogger(BossUserFacade.class);
 
     @Autowired
     private BossUserService bossUserService;
@@ -45,9 +48,30 @@ public class BossUserFacade {
     }
 
 
+    /**
+     * 有选择的修改用户信息
+     *
+     * @param bossUser
+     * @return
+     */
     public Boolean updateUser(BossUser bossUser) {
         return bossUserService.updateUser(bossUser);
     }
+
+    /**
+     * 根据id, pwd 修改用户信息
+     *
+     * @param id
+     * @param pwd
+     * @return
+     */
+    public Boolean updataBossuserByPwd(Integer id, String pwd) {
+        BossUser bossUser = new BossUser();
+        bossUser.setId(id);
+        bossUser.setPassword(pwd);
+        return this.updateUser(bossUser);
+    }
+
 
     public BossUser getByUsername(String username) {
         return bossUserService.getBossUserByUsername(username);
@@ -199,6 +223,35 @@ public class BossUserFacade {
         }
         return map;
 
+    }
+
+    /**
+     * 前置校验账号是否被删除，是否被冻结
+     *
+     * @param username
+     * @param jsonResult
+     * @return
+     */
+    public boolean preAccountValidation(String username, Response jsonResult) {
+        BossUser bossUser = getByUsername(username);
+        if (bossUser != null) {
+            log.info("该用户在数据库中存在");
+
+            if (bossUser.getIsdel() == 1) {
+                jsonResult.setCode(400);
+                jsonResult.setMessage("该账号已经被删除");
+                log.warn("该账号已经被删除");
+                return true;
+            }
+
+        } else {
+            //  用户不存在
+            jsonResult.setCode(400);
+            jsonResult.setMessage("用户名不存在");
+            log.warn("用户名不存在");
+            return true;
+        }
+        return false;
     }
 
 

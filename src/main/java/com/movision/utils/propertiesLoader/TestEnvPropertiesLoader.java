@@ -7,14 +7,14 @@ import java.util.Properties;
 
 /**
  * @Author zhuangyuhao
- * @Date 2017/3/10 10:33
+ * @Date 2017/7/3 11:15
  */
-public class BossPropertiesLoader {
+public class TestEnvPropertiesLoader {
     private static Properties properties = null;
 
     static {
         try {
-            properties = PropertiesLoaderUtils.loadAllProperties("web/boss.properties");
+            properties = PropertiesLoaderUtils.loadAllProperties("web/test_env.properties");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -24,7 +24,12 @@ public class BossPropertiesLoader {
         return properties.getProperty(key);
     }
 
+    /**
+     * 测试一下
+     *
+     * @param args
+     */
     public static void main(String[] args) {
-        System.out.println(LoginPropertiesLoader.getValue("boss_superadmin_role"));
+        System.out.println(TestEnvPropertiesLoader.getValue("post.incise.domain"));
     }
 }

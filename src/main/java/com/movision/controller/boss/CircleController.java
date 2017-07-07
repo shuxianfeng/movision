@@ -9,6 +9,7 @@ import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleDetails;
 import com.movision.mybatis.circle.entity.CircleIndexList;
 import com.movision.mybatis.circle.entity.CircleVo;
+import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserAll;
@@ -39,11 +40,11 @@ import java.util.Map;
 @RequestMapping("/boss/circle")
 public class CircleController {
     @Autowired
-    CircleFacade circleFacade;
+    private CircleFacade circleFacade;
     @Autowired
-    MovisionOssClient movisionOssClient;
+    private MovisionOssClient movisionOssClient;
     @Autowired
-    UserManageFacade userManageFacade;
+    private UserManageFacade userManageFacade;
 
     /**
      * 后台管理-查询圈子列表
@@ -181,11 +182,12 @@ public class CircleController {
                                  @ApiParam(value = "管理员列表") @RequestParam String circleadmin,
                                  @ApiParam(value = "圈子否封面") @RequestParam String photo,
                                  @ApiParam(value = "圈子简介") @RequestParam String introduction,
+                                 @ApiParam(value = "圈子公告") @RequestParam String notice,
                                  @ApiParam(value = "圈子首页方形图") @RequestParam String maylikeimg,
                                  @ApiParam(value = "发帖权限") @RequestParam(required = false) String scope,
                                  @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map map = circleFacade.updateCircle(id, name, category, userid, circleadmin, photo, introduction, maylikeimg, scope, loginid);
+        Map map = circleFacade.updateCircle(id, name, category, userid, circleadmin, photo, introduction, notice, maylikeimg, scope, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -233,9 +235,10 @@ public class CircleController {
                               @ApiParam(value = "圈子否封面") @RequestParam String photo,
                               @ApiParam(value = "圈子首页方形图") @RequestParam String maylikeimg,
                               @ApiParam(value = "圈子简介") @RequestParam String introduction,
+                              @ApiParam(value = "圈子公告") @RequestParam String notice,
                               @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.addCircle(name, category, userid, circleadmin, circlemanid, photo, maylikeimg, introduction, loginid);
+        Map<String, Integer> map = circleFacade.addCircle(name, category, userid, circleadmin, circlemanid, photo, maylikeimg, introduction, notice, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -250,7 +253,7 @@ public class CircleController {
     @ApiOperation(value = "查询圈子分类", notes = "用于查询圈子分类接口", response = Response.class)
     @RequestMapping(value = "query_circle_type_list", method = RequestMethod.POST)
     public Response queryCircleTypeList(@ApiParam(value = "登录用户") @RequestParam String loginid) {
-        List<Category> map = circleFacade.queryCircleTypeList(loginid);
+        List<CircleCategory> map = circleFacade.queryCircleTypeList(loginid);
         Response response = new Response();
         if (response.getCode() == 200) {
             response.setMessage("操作成功");

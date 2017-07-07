@@ -42,7 +42,7 @@ public class BindingAccountController {
     public Response getMsgCodeByPhone(@ApiParam(value = "验证的手机号") @RequestParam String mobile) {
 
         Response response = new Response();
-        log.debug("获得手机验证码  mobile==" + mobile);
+        log.info("获得手机验证码  mobile==" + mobile);
         //先校验手机号是否已经存在
         if (isExistPhone(mobile, response)) return response;
 

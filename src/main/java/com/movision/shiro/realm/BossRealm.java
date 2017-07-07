@@ -49,9 +49,11 @@ public class BossRealm extends AuthorizingRealm {
         String userName = (String) token.getPrincipal();    //用户名
         BossUser bossUser = bossUserFacade.getByUsername(userName);
         if (bossUser != null) {
-            log.info("该用户存在");
+            log.info("该用户在数据库中存在");
+            if (bossUser.getIsdel() == 1) {
+                throw new LockedAccountException("该账号已经被删除");
+            }
         }  else{
-            //  用户名不存在
             throw new UnknownAccountException();
         }
         // 获取用户的角色

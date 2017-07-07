@@ -135,13 +135,13 @@ public class ImSystemInformService {
     /**
      * 查询是否有未读系统通知
      *
-     * @param userid
+     * @param map
      * @return
      */
-    public Integer querySystemPushByUserid(Integer userid) {
+    public Integer querySystemPushByUserid(Map map) {
         try {
             log.info("查询是否有未读系统通知");
-            return imSystemInformMapper.querySystemPushByUserid(userid);
+            return imSystemInformMapper.querySystemPushByUserid(map);
         } catch (Exception e) {
             log.error("查询是否有未读系统通知异常", e);
             throw e;

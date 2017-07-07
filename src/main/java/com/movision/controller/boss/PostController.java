@@ -4,12 +4,14 @@ import com.movision.common.Response;
 import com.movision.facade.boss.CircleFacade;
 import com.movision.facade.boss.PostFacade;
 import com.movision.facade.boss.UserManageFacade;
+import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.activityContribute.entity.ActivityContribute;
 import com.movision.mybatis.activityContribute.entity.ActivityContributeVo;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.post.entity.*;
@@ -35,6 +37,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +60,9 @@ public class PostController {
 
     @Autowired
     private MovisionOssClient movisionOssClient;
+
+    @Autowired
+    private FacadePost facadePost;
     /**
      * 后台管理-查询帖子列表
      *
@@ -73,7 +79,7 @@ public class PostController {
         Paging<PostList> pager = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
         List<PostList> list = postFacade.queryPostByList(loginid, pager);
         if (response.getCode() == 200) {
-            response.setMessage("查询成");
+            response.setMessage("查询成功");
         }
         pager.result(list);
         response.setData(pager);
@@ -88,7 +94,7 @@ public class PostController {
     @ApiOperation(value = "查询圈子分类", notes = "用于查询圈子分类接口", response = Response.class)
     @RequestMapping(value = "query_circle_type_list", method = RequestMethod.POST)
     public Response queryCircleTypeList(@ApiParam(value = "登录用户") @RequestParam String loginid) {
-        List<Category> map = circleFacade.queryCircleTypeList(loginid);
+        List<CircleCategory> map = circleFacade.queryCircleTypeList(loginid);
         Response response = new Response();
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
@@ -452,6 +458,47 @@ public class PostController {
     }
 
     /**
+     * 改版后的发帖
+     *
+     * @param title
+     * @param subtitle
+     * @param circleid
+     * @param userid
+     * @param postcontent
+     * @param isessence
+     * @param ishot
+     * @param orderid
+     * @param time
+     * @param goodsid
+     * @param loginid
+     * @return
+     */
+    @ApiOperation(value = "添加帖子(改版)", notes = "添加帖子（改版）", response = Response.class)
+    @RequestMapping(value = "/add_post_test", method = RequestMethod.POST)
+    public Response addPostTest(HttpServletRequest request,
+                                @ApiParam(value = "帖子标题") @RequestParam String title,//帖子标题
+                                @ApiParam(value = "帖子副标题") @RequestParam String subtitle,//帖子副标题
+                                @ApiParam(value = "圈子id") @RequestParam String circleid,//圈子id
+                                @ApiParam(value = "发帖人") @RequestParam String userid,//发帖人
+                                @ApiParam(value = "帖子封面") @RequestParam String coverimg,//帖子封面
+                                @ApiParam(value = "内容") @RequestParam String postcontent,//帖子内容
+                                @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
+                                @ApiParam(value = "圈子精选") @RequestParam(required = false) String ishot,//精选池中的帖子圈子精选贴
+                                @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,//精选排序
+                                @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String time,//精选日期
+                                @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
+                                @ApiParam(value = "登录用户") @RequestParam String loginid) {
+        Response response = new Response();
+        Map resaut = postFacade.addPostTest(request, title, subtitle, circleid, userid, coverimg, postcontent,
+                isessence, ishot, orderid, time, goodsid, loginid);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(resaut);
+        return response;
+    }
+
+    /**
      * 后台管理-添加活动帖子
      * @param title
      * @param subtitle
@@ -725,6 +772,32 @@ public class PostController {
         return response;
     }
 
+
+    @ApiOperation(value = "编辑帖子(改版)", notes = "用于帖子编辑接口(改版)", response = Response.class)
+    @RequestMapping(value = "update_post_test", method = RequestMethod.POST)
+    public Response updatePostByIdTest(HttpServletRequest request, @ApiParam(value = "帖子id（必填）") @RequestParam String id,
+                                       @ApiParam(value = "帖子标题") @RequestParam(required = false) String title,//帖子标题
+                                       @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,//帖子副标题
+                                       @ApiParam(value = "发帖人（必填且必须是管理员-1）") @RequestParam String userid,//发帖人
+                                       @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,//圈子id
+                                       @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam String coverimg,//帖子封面
+                                       @ApiParam(value = "帖子内容（必填）") @RequestParam String postcontent,//帖子内容
+                                       @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
+                                       @ApiParam(value = "圈子精选") @RequestParam(required = false) String ishot,//本圈精华
+                                       @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,//精选排序
+                                       @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String time,
+                                       @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
+                                       @ApiParam(value = "登录用户") @RequestParam String loginid) {
+        Response response = new Response();
+        Map map = postFacade.updatePostByIdTest(request, id, title, subtitle, userid, circleid, coverimg, postcontent, isessence, ishot, orderid, time, goodsid, loginid);
+        if (response.getCode() == 200) {
+            response.setMessage("操作成功");
+        }
+        response.setData(map);
+        return response;
+    }
+
+
     /**
      * 编辑活动
      *
@@ -994,6 +1067,47 @@ public class PostController {
      * @param file
      * @return
      */
+    @ApiOperation(value = "上传帖子相关图片（改版）", notes = "上传帖子相关图片", response = Response.class)
+    @RequestMapping(value = {"/upload_post_img_test"}, method = RequestMethod.POST)
+    public Response updatePostImgTest(@RequestParam(value = "file", required = false) MultipartFile[] file) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (int i = 0; i < file.length; i++) {
+            Map map = postFacade.updatePostImgTest(file[i]);
+            list.add(map);
+        }
+        return new Response(list);
+    }
+
+    /**
+     * boss上传帖子封面图
+     *
+     * @param file
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @param type
+     * @return
+     */
+    @ApiOperation(value = "上传帖子封面图片（改版）", notes = "PC官网上传帖子封面图片（改版）", response = Response.class)
+    @RequestMapping(value = {"/updateCoverImgByPC"}, method = RequestMethod.POST)
+    public Response updateCoverImgByPC(@RequestParam(value = "file", required = false) MultipartFile file,
+                                       @ApiParam(value = "X坐标") @RequestParam(required = false) String x,
+                                       @ApiParam(value = "Y坐标") @RequestParam(required = false) String y,
+                                       @ApiParam(value = "宽") @RequestParam String w,
+                                       @ApiParam(value = "高") @RequestParam String h,
+                                       @ApiParam(value = "1帖子封面 2活动方形图") @RequestParam String type) {
+        Map map = facadePost.updateCoverImgByPC(file, x, y, w, h, type);
+        return new Response(map);
+    }
+
+
+    /**
+     * 上传帖子相关图片
+     *
+     * @param file
+     * @return
+     */
     @ApiOperation(value = "上传帖子相关图片", notes = "上传帖子相关图片", response = Response.class)
     @RequestMapping(value = {"/upload_post_img"}, method = RequestMethod.POST)
     public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file,
@@ -1005,13 +1119,14 @@ public class PostController {
             m = movisionOssClient.uploadObject(file, "img", "post");
         }
         String url = String.valueOf(m.get("url"));
-        Map<String, Object> map = new HashMap<>();
-        map.put("url", url);
+        Map map = new HashMap();
+        m.put("url", url);
         map.put("name", FileUtil.getFileNameByUrl(url));
         map.put("width", m.get("width"));
         map.put("height", m.get("height"));
         return new Response(map);
     }
+
 
 
     /**

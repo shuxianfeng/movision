@@ -86,7 +86,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(false);
             if (null != session) {
-                //todo 半个小时后这里的session失效，session配置3小时没有效果
+                //session配置3小时
                 BossRealm.ShiroBossUser bossUser = (BossRealm.ShiroBossUser) session.getAttribute(SessionConstant.BOSS_USER);
                 ShiroUser appuser = (ShiroUser) session.getAttribute(SessionConstant.APP_USER);
                 if (bossUser != null && appuser == null) {
@@ -102,7 +102,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                     }
                     //获取授权的菜单列表
                     List<Map<String, Object>> menuList = (List) session.getAttribute(SessionConstant.ACCESS_MENU);
-                    log.info("获取授权的菜单列表：" + menuList.toString());
+                    log.debug("获取授权的菜单列表：" + menuList.toString());
                     //遍历菜单列表
                     for (int i = 0; i < menuList.size(); i++) {
                         //获取一个map中的父菜单
@@ -115,10 +115,16 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                         for (int j = 0; j < childrenList.size(); j++) {
                             //子菜单的url
                             String childUrl = childrenList.get(j).getUrl();
-                            //
+                            log.debug("父菜单的url:" + parentUrl);
+                            log.debug("子菜单的url:" + childUrl);
+                            log.debug("子菜单是否获取权限:" + childrenList.get(j).getAuthroize());
                             /**
                              * 若请求的url包含父菜单的url，并且 子菜单url包含父菜单url， 并且 该菜单属于授权菜单，
                              * 则通过拦截器
+                             * 比如
+                             * 请求的url path=/boss/role/role_list
+                             * parentUrl=/boss/role
+                             * childUrl=
                              */
                             if (path.contains(parentUrl) && childUrl.contains(parentUrl) && childrenList.get(j).getAuthroize()) {
                                 this.initBossUserInfo(currentUser, session);

@@ -14,6 +14,8 @@ import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.movision.fsearch.utils.HttpClient;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
@@ -36,6 +38,8 @@ import java.util.*;
  */
 @Service
 public class VideoUploadUtil {
+
+    private static final Logger log = LoggerFactory.getLogger(VideoUploadUtil.class);
 
     public static String accessKeyId = PropertiesLoader.getValue("access.key.id");
     public static String accessKeySecret = PropertiesLoader.getValue("access.key.secret");
@@ -128,17 +132,17 @@ public class VideoUploadUtil {
                 map.put("UploadAddress", UploadAddress);
                 map.put("accessKeyId", VideoUploadUtil.accessKeyId);
                 map.put("accessKeySecret", VideoUploadUtil.accessKeySecret);
-                System.out.println("RequestId:" + response.getRequestId());
-                System.out.println("UploadAuth:" + response.getUploadAuth());
-                System.out.println("UploadAddress:" + response.getUploadAddress());
+                log.debug("RequestId:" + response.getRequestId());
+                log.debug("UploadAuth:" + response.getUploadAuth());
+                log.debug("UploadAddress:" + response.getUploadAddress());
             } else {
                 map.put("error", 0);
             }
         } catch (ServerException e) {
-            System.out.println("CreateUploadVideoRequest Server Exception:");
+            log.error("CreateUploadVideoRequest Server Exception:", e);
             e.printStackTrace();
         } catch (ClientException e) {
-            System.out.println("CreateUploadVideoRequest Client Exception:");
+            log.error("CreateUploadVideoRequest Client Exception:", e);
             e.printStackTrace();
         }
         return map;

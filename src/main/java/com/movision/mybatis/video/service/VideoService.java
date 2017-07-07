@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -64,6 +65,16 @@ public class VideoService {
             return videoMapper.queryVideoByID(pid);
         } catch (Exception e) {
             log.error("查询帖子是否发视频异常", e);
+            throw e;
+        }
+    }
+
+    public List<Video> queryByPostid(Integer pid) {
+        try {
+            log.info("根据帖子id查询对应的视频信息");
+            return videoMapper.queryByPostid(pid);
+        } catch (Exception e) {
+            log.error("根据帖子id查询对应的视频信息,异常", e);
             throw e;
         }
     }

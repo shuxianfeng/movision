@@ -1,6 +1,5 @@
 package com.movision.mybatis.imuser.service;
 
-import com.movision.mybatis.deviceAccid.entity.DeviceAccid;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.imuser.mapper.ImUserMapper;
 import org.slf4j.Logger;
