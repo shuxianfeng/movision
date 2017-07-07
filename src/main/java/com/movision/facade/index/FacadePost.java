@@ -1274,35 +1274,35 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    public Map userRefreshList(String userid,int page) {
+    public Map userRefreshList(String userid, int page) {
         Map map = new HashMap();
         List<Post> list = postService.findAllPostListRefulsh();//查询所有帖子
         List isessences = new ArrayList();//精选
         List isnotisessence = new ArrayList();//不是精选
         List<Post> listten = null;
-        List<UserRefreshRecordVo> result=null;
-        List<DBObject> listmongodba=null;
-        if(userid!=null) {
-           listmongodba = userRefulshListMongodb(Integer.parseInt(userid));
+        List<UserRefreshRecordVo> result = null;
+        List<DBObject> listmongodba = null;
+        if (userid != null) {
+            listmongodba = userRefulshListMongodb(Integer.parseInt(userid));
         }
         long count = mongodbCount();
         List<Post> posts = new ArrayList<>();
-          //未登录状态下
+        //未登录状态下
         if (userid == null) {
             //查询出精选帖子
-            isessences=postService.queryPostSessen();
+            isessences = postService.queryPostSessen();
             //查询出非精选帖子
-            isnotisessence=postService.queryNOPostSessen();
+            isnotisessence = postService.queryNOPostSessen();
             //合并
             isessences.addAll(isnotisessence);
-            listten=getPageList(isessences,page);
-           // listten = isessences.subList(0, 10);
+            listten = getPageList(isessences, page);
+            // listten = isessences.subList(0, 10);
             map.put("listten", listten);
             //登录状态下
         } else {
-            if(count>1000&&listmongodba.size()!=0) {
+            if (count > 1000 && listmongodba.size() != 0) {
                 //循环mysql帖子表中所有的帖子id和mongodb的用户刷新记录表比对得出用户没有浏览过的帖子
-                 Integer crileid = 0;
+                Integer crileid = 0;
                 //查询出mongodb中用户刷新的帖子
                 List<DBObject> listmongodb = userRefulshListMongodb(Integer.parseInt(userid));
                 //mogodb不为空
@@ -1320,7 +1320,7 @@ public class FacadePost {
                                 //剔除浏览过的记录进行时间排序取前10条
                                 Date date = list.get(i).getIntime();//帖子的发布时间
                                 int psid = list.get(i).getId();//剩下的帖子id
-                                 //查询剩下的帖子中有没有精选的
+                                //查询剩下的帖子中有没有精选的
                                 int senense = postService.queryIsIsessence(psid);
                                 if (senense == 1) {//剩下的帖子是精选
                                     isessences.add(list.get(i));//精选
@@ -1330,9 +1330,9 @@ public class FacadePost {
                             }
                             isessences.addAll(isnotisessence);
                             //listten = getPageList(isessences, page);
-                            if(isessences.size()>=10) {
+                            if (isessences.size() >= 10) {
                                 listten = isessences.subList(0, 10);
-                            }else if(isessences.size()<10){
+                            } else if (isessences.size() < 10) {
                                 listten = isessences.subList(0, isessences.size());
                             }
                             if (listten != null) {
@@ -1350,14 +1350,14 @@ public class FacadePost {
                 } else {
                     //如果用户刚进来没有任何刷新记录
                     //查询出精选帖子
-                    isessences=postService.queryPostSessen();
+                    isessences = postService.queryPostSessen();
                     //查询出非精选帖子
-                    isnotisessence=postService.queryNOPostSessen();
+                    isnotisessence = postService.queryNOPostSessen();
                     //合并
                     isessences.addAll(isnotisessence);
-                   // listten=SubList(isessences,page);
+                    // listten=SubList(isessences,page);
                     listten = isessences.subList(0, 10);
-                    if(listten!=null) {
+                    if (listten != null) {
                         for (int i = 0; i < listten.size(); i++) {
                             int lisid = listten.get(i).getId();
                             //查询帖子是哪个圈子
@@ -1366,22 +1366,22 @@ public class FacadePost {
                             insertMongoDB(userid, lisid, crileid);
                         }
                     }
-                 map.put("listten", listten);
+                    map.put("listten", listten);
                 }
-            }else {
+            } else {
                 // int count=Integer.parseInt(String.valueOf(num));
                 //表中浏览数据大于等于1000条的时候开始用户行为分析
                 //查询每个用户喜欢看的圈子
-                result=opularSearchTermsService.userFlush(Integer.parseInt(userid));
+                result = opularSearchTermsService.userFlush(Integer.parseInt(userid));
 
-                int crileid=0;
-                for (int i=0;i<result.size();i++){
-                    crileid=result.get(i).getCrileid();
-                 }
-                List<Post> ispost=postService.queryCrileidPost(crileid);//这个圈子中的精选帖子
-                List<Post> isnotpost=postService.queryNoCrileidPost(crileid);//这个圈子中的帖子
+                int crileid = 0;
+                for (int i = 0; i < result.size(); i++) {
+                    crileid = result.get(i).getCrileid();
+                }
+                List<Post> ispost = postService.queryCrileidPost(crileid);//这个圈子中的精选帖子
+                List<Post> isnotpost = postService.queryNoCrileidPost(crileid);//这个圈子中的帖子
                 ispost.addAll(isnotpost);
-                List<Post> isoverpost=postService.queryoverCrileidPost(crileid);//剩下的帖子
+                List<Post> isoverpost = postService.queryoverCrileidPost(crileid);//剩下的帖子
                 ispost.addAll(isoverpost);
                 //查询出mongodb中用户刷新的帖子
                 List<DBObject> listmongodb = userRefulshListMongodb(Integer.parseInt(userid));
@@ -1392,13 +1392,13 @@ public class FacadePost {
                 }
                 ispost.removeAll(posts);//现在的ispost就是剩下的帖子
 
-                if(ispost.size()>=10) {
+                if (ispost.size() >= 10) {
                     listten = ispost.subList(0, 10);
-                }else if(ispost.size()<10){
+                } else if (ispost.size() < 10) {
                     listten = ispost.subList(0, ispost.size());
                 }
-                if(listten!=null){
-                    for (int i=0;i<listten.size();i++){
+                if (listten != null) {
+                    for (int i = 0; i < listten.size(); i++) {
                         int lisid = listten.get(i).getId();
                         //查询帖子是哪个圈子
                         crileid = postService.queryCrileid(lisid);
@@ -1406,13 +1406,12 @@ public class FacadePost {
                         insertMongoDB(userid, lisid, crileid);
                     }
                 }
-                map.put("listten",listten);
+                map.put("listten", listten);
             }
 
         }
         return map;
     }
-
 
 
     /**
@@ -1423,22 +1422,22 @@ public class FacadePost {
      * @return
      */
     public static List getPageList(List list, int pageNo) {
-        int pageSize=10;//每页显示数
+        int pageSize = 10;//每页显示数
         List<Object> result = new ArrayList<Object>();
-        if(list != null && list.size() > 0){
+        if (list != null && list.size() > 0) {
             int allCount = list.size();//总记录数
-            int pageCount = (allCount + pageSize-1) / pageSize;//总页数
-             if(pageNo > pageCount){
-                 result=null;
-                 return result;
+            int pageCount = (allCount + pageSize - 1) / pageSize;//总页数
+            if (pageNo > pageCount) {
+                result = null;
+                return result;
                 //pageNo = pageCount;
             }
-            int start = (pageNo-1) * pageSize;
+            int start = (pageNo - 1) * pageSize;
             int end = pageNo * pageSize;
-            if(end >= allCount){
+            if (end >= allCount) {
                 end = allCount;
             }
-            for(int i = start; i < end; i ++){
+            for (int i = start; i < end; i++) {
                 result.add(list.get(i));
             }
         }
@@ -1453,8 +1452,8 @@ public class FacadePost {
      * @return
      */
     public List userRefulshListMongodb(int userid) {
-         List<DBObject> list=null;
-         try {
+        List<DBObject> list = null;
+        try {
             MongoClient mClient = new MongoClient("localhost:27017");
             DB db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("userRefreshRecord");//表名
@@ -1464,8 +1463,8 @@ public class FacadePost {
             keys.put("_id", 0);
             keys.put("postid", 1);
             DBCursor obj = collection.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
-            list =obj.toArray();
-          } catch (Exception e) {
+            list = obj.toArray();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
@@ -1491,11 +1490,12 @@ public class FacadePost {
 
     /**
      * 插入刷新记录
+     *
      * @param userid
      * @param postid
      * @param crileid
      */
-    public void insertMongoDB(String userid,int postid,int crileid){
+    public void insertMongoDB(String userid, int postid, int crileid) {
         //把刷新记录插入mongodb
         if (StringUtil.isNotEmpty(userid)) {
             UserRefreshRecord userRefreshRecord = new UserRefreshRecord();
@@ -1526,7 +1526,7 @@ public class FacadePost {
                     map.put("protoimgsize", compressImg.getProtoimgsize());//原图大小
                     map.put("compressimgurl", object.getString("value"));//缩略图大小
                     map.put("wh", object.getString("wh"));//图片宽高
-                }else{
+                } else {
                     map.put("protoimgurl", object.getString("value"));//直接去压缩图的url
                     map.put("protoimgsize", "");//直接去压缩图的url
                     map.put("compressimgurl", object.getString("value"));//缩略图大小
@@ -1540,7 +1540,5 @@ public class FacadePost {
     }
 
 
-
-
- }
+}
 
