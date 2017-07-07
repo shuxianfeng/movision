@@ -97,6 +97,16 @@ public class AppIndexController {
         response.setData(postSearchService.getHotwordAndHistory());
         return response;
     }
+    @RequestMapping(value = {"get_userlookhistory"}, method = RequestMethod.GET)
+    @ApiOperation(value = "查询用户浏览历史", notes = "查询用户浏览历史", response = Response.class)
+    public Response getUserLookingHistory(@RequestParam(required = false, defaultValue = "1") int page,
+                                          @RequestParam(required = false, defaultValue = "10") int pageSize) {
+
+        Response response = new Response();
+        response.setData(postSearchService.getUserLookingHistory(page,pageSize));
+        return response;
+    }
+
 
     @RequestMapping(value = {"get_post_hot_search_word_and_history_isdel"}, method = RequestMethod.GET)
     @ApiOperation(value = "清除搜索记录", notes = "清除搜索记录", response = Response.class)

@@ -1270,11 +1270,11 @@ public class FacadePost {
      */
     public Map userRefreshList(String userid) {
         Map map = new HashMap();
-        List<Post> list = postService.findAllPostListRefulsh();//查询所有帖子
+        List<Post> list =postService.findAllPostListRefulsh();//查询所有帖子
         List<Post> notbrowsed = null;//
-        List<Post> isessences = null;//精选
-        List<Post> isnotisessence = null;//不是精选
-        List listten = null;
+        List  isessences = null;//精选
+        List  isnotisessence = null;//不是精选
+        List<Post> listten = null;
         //未登录状态下
         if (userid == null) {
             if (list != null) {
@@ -1299,7 +1299,7 @@ public class FacadePost {
                  }*/
                 listten = isessences.subList(0, 9);
                 map.put("listten", listten);
-                list.subList(0, 9).clear();
+                isessences.subList(0, 9).clear();
             }
             //登录状态下
         } else {
@@ -1308,59 +1308,75 @@ public class FacadePost {
             int mongodbpostid = 0;
             int crileid = 0;
             //查询出mongodb中用户刷新的帖子
-            DBCursor listmongodb = userRefulshListMongodb(Integer.parseInt(userid));
+            List<DBObject> listmongodb = userRefulshListMongodb(Integer.parseInt(userid));
             //mogodb不为空
-            if (listmongodb != null) {
+            if (listmongodb.size()!=0) {
                 //mysql不为空
                 if (list != null) {
-                    while (listmongodb.hasNext()) {
-                        DBObject dbObj = listmongodb.next();
-                        mongodbpostid = Integer.parseInt(dbObj.get("postid").toString());
+                    for (int j =0;j<listmongodb.size();j++)  {
+                         mongodbpostid=Integer.parseInt(listmongodb.get(j).get("postid").toString());
                         //循环帖子id对比挑出未刷新的帖子
                         for (int i = 0; i < list.size(); i++) {
                         postid = list.get(i).getId();
-                        //查询帖子是哪个圈子
-                        crileid = postService.queryCrileid(postid);
                         if (postid == mongodbpostid) {
                             list.remove(list.get(i));
                         } else {
-                            notbrowsed.add(list.get(i));
+                            notbrowsed.add(list.get(i));//没有浏览过的帖子
                         }
                     }
                     }
-                    for (int i = 0; i < notbrowsed.size(); i++) {
-                        //剔除浏览过的记录进行时间排序取前10条
-                        Date date = notbrowsed.get(i).getIntime();//帖子的发布时间
-                        int psid = notbrowsed.get(i).getId();//剩下的帖子id
-                        //查询剩下的帖子中有没有精选的
-                        int senense = postService.queryIsIsessence(psid);
-                        if (senense == 1) {//剩下的帖子是精选
-                            isessences.add(notbrowsed.get(i));//精选
-                        } else {//不是精选
-                            isnotisessence.add(notbrowsed.get(i));//不是精选
+                    if(notbrowsed!=null) {
+                        for (int i = 0; i < notbrowsed.size(); i++) {
+                            //剔除浏览过的记录进行时间排序取前10条
+                            Date date = notbrowsed.get(i).getIntime();//帖子的发布时间
+                            int psid = notbrowsed.get(i).getId();//剩下的帖子id
+                            //查询剩下的帖子中有没有精选的
+                            int senense = postService.queryIsIsessence(psid);
+                            if (senense == 1) {//剩下的帖子是精选
+                                isessences.add(notbrowsed.get(i));//精选
+                            } else {//不是精选
+                                isnotisessence.add(notbrowsed.get(i));//不是精选
+                            }
                         }
+                        isessences.addAll(isnotisessence);
+                        listten = isessences.subList(0, 9);
+                        for (int i=0;i<listten.size();i++){
+                            int id=listten.get(i).getId();
+                            //查询帖子是哪个圈子
+                            crileid = postService.queryCrileid(id);
+                            //刷新记录插入mongodb
+                            insertMongoDB(userid,id,crileid);
+                        }
+                        map.put("listten", listten);
+                        isessences.subList(0, 9).clear();
                     }
-                    isessences.addAll(isnotisessence);
-                    listten = isessences.subList(0, 9);
-                    map.put("listten", listten);
-                    list.subList(0, 9).clear();
                 }
             } else {
                 //如果用户刚进来没有任何刷新记录
                 if (list != null) {
-
+                    for (int i=0;i<list.size();i++){
+                        int nologgid=list.get(i).getId();//帖子id
+                        int isessence=postService.queryIsIsessence(nologgid);
+                        Post post=list.get(i);
+                        log.info(post.toString());
+                        if(isessence==1){
+                            isessences.add(list.get(i));//精选
+                        }else {
+                            isnotisessence.add(list.get(i));//不是精选
+                        }
+                    }
+                    isessences.addAll(isnotisessence);
+                    listten=isessences.subList(0,9);
+                    for (int i=0;i<listten.size();i++){
+                        int lisid=listten.get(i).getId();
+                        //查询帖子是哪个圈子
+                        crileid = postService.queryCrileid(lisid);
+                        //插入记录到mongodb
+                        insertMongoDB(userid,lisid,crileid);
+                    }
+                    map.put("listten",listten);
+                    isessences.subList(0,9).clear();
                 }
-                map.put("list", list);
-            }
-            //把刷新记录插入mongodb
-            if (StringUtil.isNotEmpty(userid)) {
-                UserRefreshRecord userRefreshRecord = new UserRefreshRecord();
-                userRefreshRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
-                userRefreshRecord.setUserid(Integer.parseInt(userid));
-                userRefreshRecord.setPostid(postid);
-                userRefreshRecord.setCrileid(crileid);
-                userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
-                userRefreshRecordService.insert(userRefreshRecord);
             }
             long count = mongodbCount();
             // int count=Integer.parseInt(String.valueOf(num));
@@ -1379,10 +1395,10 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    public DBCursor userRefulshListMongodb(int userid) {
-        DBCursor obj = null;
-        try {
-            MongoClient mClient = new MongoClient("120.77.214.187:27017");
+    public List userRefulshListMongodb(int userid) {
+         List<DBObject> list=null;
+         try {
+            MongoClient mClient = new MongoClient("localhost:27017");
             DB db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("userRefreshRecord");//表名
             BasicDBObject queryObject = new BasicDBObject("userid", userid);
@@ -1390,11 +1406,12 @@ public class FacadePost {
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("postid", 1);
-            obj = collection.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
-        } catch (Exception e) {
+            DBCursor obj = collection.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
+            list =obj.toArray();
+          } catch (Exception e) {
             e.printStackTrace();
         }
-        return obj;
+        return list;
     }
 
     /**
@@ -1405,7 +1422,7 @@ public class FacadePost {
     public long mongodbCount() {
         long count = 0;
         try {
-            MongoClient mClient = new MongoClient("120.77.214.187:27017");
+            MongoClient mClient = new MongoClient("localhost:27017");
             DB db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("userRefreshRecord");//表名
             count = collection.count();
@@ -1415,6 +1432,24 @@ public class FacadePost {
         return count;
     }
 
+    /**
+     * 插入刷新记录
+     * @param userid
+     * @param postid
+     * @param crileid
+     */
+    public void insertMongoDB(String userid,int postid,int crileid){
+        //把刷新记录插入mongodb
+        if (StringUtil.isNotEmpty(userid)) {
+            UserRefreshRecord userRefreshRecord = new UserRefreshRecord();
+            userRefreshRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
+            userRefreshRecord.setUserid(Integer.parseInt(userid));
+            userRefreshRecord.setPostid(postid);
+            userRefreshRecord.setCrileid(crileid);
+            userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+            userRefreshRecordService.insert(userRefreshRecord);
+        }
+    }
 
     public List<Map> queryPostImgById(String postid) {
         List<Map> list = new ArrayList<>();
