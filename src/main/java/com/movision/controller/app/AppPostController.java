@@ -608,8 +608,7 @@ public class AppPostController {
     @ApiOperation(value = "下拉刷新", notes = "下拉刷新", response = Response.class)
     @RequestMapping(value = "userRefreshList", method = RequestMethod.POST)
     public Response userRefreshList(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
-                                    @ApiParam(value = "页数") @RequestParam(required = false) int page
-                                   ){
+                                    @ApiParam(value = "页数") @RequestParam(required = false) int page) {
         Response response = new Response();
         Map map=facadePost.userRefreshList(userid,page);
         if (response.getCode() == 200) {
