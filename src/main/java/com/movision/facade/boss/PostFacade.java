@@ -911,6 +911,13 @@ public class PostFacade {
         PostTo post = new PostTo();
         Map map = new HashedMap();
         Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.add.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(circleid));
+        //-----------------添加开始
+        BossUser bu = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
+        if (bu.getIscircle() > 0 || bu.getCirclemanagement() > 0) {
+            Integer isc = userService.queryUserIsCricle(Integer.parseInt(loginid));//查询用户对应前台用户id
+            userid = isc.toString();
+        }
+        //======================添加结束
         if (res.get("resault").equals(1)) {
                 if (StringUtil.isNotEmpty(title)) {
                     post.setTitle(title);//帖子标题
@@ -1517,6 +1524,13 @@ public class PostFacade {
         Integer lgid = Integer.parseInt(loginid);
         Integer pid = Integer.parseInt(id);
         Map res = commonalityFacade.verifyUserJurisdiction(lgid, JurisdictionConstants.JURISDICTION_TYPE.update.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), pid);
+        //-----------------添加开始
+        BossUser bu = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
+        if (bu.getIscircle() > 0 || bu.getCirclemanagement() > 0) {
+            Integer isc = userService.queryUserIsCricle(Integer.parseInt(loginid));//查询用户对应前台用户id
+            userid = isc.toString();
+        }
+        //======================添加结束
         if (res.get("resault").equals(1)) {
             if (postcontent.length() < 30000) {
                 try {
@@ -1724,6 +1738,13 @@ public class PostFacade {
         Integer lgid = Integer.parseInt(loginid);
         Integer pid = Integer.parseInt(id);
         Map res = commonalityFacade.verifyUserJurisdiction(lgid, JurisdictionConstants.JURISDICTION_TYPE.update.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), pid);
+        //-----------------添加开始
+        BossUser bu = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
+        if (bu.getIscircle() > 0 || bu.getCirclemanagement() > 0) {
+            Integer isc = userService.queryUserIsCricle(Integer.parseInt(loginid));//查询用户对应前台用户id
+            userid = isc.toString();
+        }
+        //======================添加结束
         if (res.get("resault").equals(1)) {
                 try {
                     post.setId(pid);//帖子id
