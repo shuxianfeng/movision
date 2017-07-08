@@ -2532,11 +2532,10 @@ public class PostFacade {
      */
     public Map<String, Object> updatePostImgTest(MultipartFile file) {
         Map m = new HashMap();
-        Map<String, Object> map = null;
+        Map<String, Object> map = new HashMap<>();
         try {
             m = movisionOssClient.uploadObject(file, "img", "post");
             String url = String.valueOf(m.get("url"));
-            map = new HashMap<>();
             map.put("url", url);
             map.put("name", FileUtil.getFileNameByUrl(url));
             map.put("width", m.get("width"));
