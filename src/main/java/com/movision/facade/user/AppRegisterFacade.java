@@ -2,10 +2,7 @@ package com.movision.facade.user;
 
 import com.google.gson.Gson;
 import com.movision.common.Response;
-import com.movision.common.constant.Constants;
-import com.movision.common.constant.MsgCodeConstant;
-import com.movision.common.constant.PointConstant;
-import com.movision.common.constant.SessionConstant;
+import com.movision.common.constant.*;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
 import com.movision.facade.im.ImFacade;
@@ -429,6 +426,7 @@ public class AppRegisterFacade {
                 user.setToken(member.getToken());   //token
                 user.setDeviceno(member.getDeviceno()); //设备号
                 user.setPoints(35); //积分：注册+绑定手机
+                user.setPhoto(UserConstants.DEFAULT_APPUSER_PHOTO); //默认头像
 
                 //若有邀请码，则记录相关的邀请码
                 if (StringUtils.isNotBlank(member.getReferrals())) {

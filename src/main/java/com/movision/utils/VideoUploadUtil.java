@@ -287,7 +287,196 @@ public class VideoUploadUtil {
         return result;
     }
 
+    //https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx1c1271e74ce1e62e&secret=860727cf207180fe319b44f6a247730c&code=011Mymla2w8vqR0kAPma2g5pla2Mymlp&grant_type=authorization_code
+    public static String weixinRegistic(String code) {
+        String result = "";
+        BufferedReader in = null;
+        String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx1c1271e74ce1e62e&secret=860727cf207180fe319b44f6a247730c&code=" + code + "&grant_type=authorization_code";
+        try {
+            URL realUrl = new URL(url.toString());
+            // 打开和URL之间的连接
+            URLConnection connection = realUrl.openConnection();
+            // 设置通用的请求属性
+            connection.setRequestProperty("accept", "*/*");
+            connection.setRequestProperty("connection", "Keep-Alive");
+            connection.setRequestProperty("user-agent",
+                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            // 建立实际的连接
+            connection.connect();
+            // 遍历所有的响应头字段
+            // 定义 BufferedReader输入流来读取URL的响应
+            in = new BufferedReader(new InputStreamReader(
+                    connection.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result += line;
+            }
+        } catch (Exception e) {
+            System.out.println("发送GET请求出现异常！" + e);
+            e.printStackTrace();
+        }
+        // 使用finally块来关闭输入流
+        finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return result;
 
+
+    }
+
+    /**
+     * 获取用户信息
+     *
+     * @param acctoken
+     * @param openid
+     * @return
+     */
+    public static String getUserInformation(String acctoken, String openid) {
+        String result = "";
+        BufferedReader in = null;
+        String url = "https://api.weixin.qq.com/sns/userinfo?access_token=" + acctoken + "&openid=" + openid + "&lang=zh_CN";
+        try {
+            URL realUrl = new URL(url.toString());
+            // 打开和URL之间的连接
+            URLConnection connection = realUrl.openConnection();
+            // 设置通用的请求属性
+            connection.setRequestProperty("accept", "*/*");
+            connection.setRequestProperty("connection", "Keep-Alive");
+            connection.setRequestProperty("user-agent",
+                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            // 建立实际的连接
+            connection.connect();
+            // 遍历所有的响应头字段
+            // 定义 BufferedReader输入流来读取URL的响应
+            in = new BufferedReader(new InputStreamReader(
+                    connection.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result += line;
+            }
+        } catch (Exception e) {
+            System.out.println("发送GET请求出现异常！" + e);
+            e.printStackTrace();
+        }
+        // 使用finally块来关闭输入流
+        finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return result;
+
+    }
+
+
+    /**
+     * 获取r
+     *
+     * @param refulshtoken
+     * @param openid
+     * @return
+     */
+    public static String getrefulshtoken(String refulshtoken, String openid) {
+        String result = "";
+        BufferedReader in = null;
+        String url = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=" + openid + "&grant_type=refresh_token&refresh_token=" + refulshtoken + "";
+        try {
+            URL realUrl = new URL(url.toString());
+            // 打开和URL之间的连接
+            URLConnection connection = realUrl.openConnection();
+            // 设置通用的请求属性
+            connection.setRequestProperty("accept", "*/*");
+            connection.setRequestProperty("connection", "Keep-Alive");
+            connection.setRequestProperty("user-agent",
+                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            // 建立实际的连接
+            connection.connect();
+            // 遍历所有的响应头字段
+            // 定义 BufferedReader输入流来读取URL的响应
+            in = new BufferedReader(new InputStreamReader(
+                    connection.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result += line;
+            }
+        } catch (Exception e) {
+            System.out.println("发送GET请求出现异常！" + e);
+            e.printStackTrace();
+        }
+        // 使用finally块来关闭输入流
+        finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return result;
+
+    }
+
+
+    //https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi
+
+    /**
+     * 获取签名
+     *
+     * @param acctoken
+     * @param
+     * @return
+     */
+    public static String getticket(String acctoken) {
+        String result = "";
+        BufferedReader in = null;
+        String url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + acctoken + "&type=jsapi";
+        try {
+            URL realUrl = new URL(url.toString());
+            // 打开和URL之间的连接
+            URLConnection connection = realUrl.openConnection();
+            // 设置通用的请求属性
+            connection.setRequestProperty("accept", "*/*");
+            connection.setRequestProperty("connection", "Keep-Alive");
+            connection.setRequestProperty("user-agent",
+                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            // 建立实际的连接
+            connection.connect();
+            // 遍历所有的响应头字段
+            // 定义 BufferedReader输入流来读取URL的响应
+            in = new BufferedReader(new InputStreamReader(
+                    connection.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result += line;
+            }
+        } catch (Exception e) {
+            System.out.println("发送GET请求出现异常！" + e);
+            e.printStackTrace();
+        }
+        // 使用finally块来关闭输入流
+        finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return result;
+
+    }
 
     public static void main(String[] args) {
         /**DefaultAcsClient aliyunClient;
@@ -299,6 +488,7 @@ public class VideoUploadUtil {
         System.out.println("VideoId:" + videoIds);
         String viod = String.valueOf(videoId.get("videoId"));
          refreshUploadVideo(aliyunClient, viod);*/
-        VideoUploadUtil.deleteVideo("a8cf01c12cf748e2b4e997b24cf3edfd");
+        //VideoUploadUtil.deleteVideo("a8cf01c12cf748e2b4e997b24cf3edfd");
+        VideoUploadUtil.weixinRegistic("0019as7h02ZZXz1Kgk7h0nlC7h09as7f");
     }
 }

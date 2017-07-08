@@ -188,7 +188,7 @@ public class MsgCenterFacade {
                         comments.get(i).setUser(user);
                     }
                 } else {
-                    comments.remove(i);
+                    comments.remove(comments.get(i));
                     i--;
                 }
             }
@@ -319,7 +319,7 @@ public class MsgCenterFacade {
                         zanRecordVos.get(i).setPosts(post);
                     }
                 } else {
-                    zanRecordVos.remove(i);
+                    zanRecordVos.remove(zanRecordVos.get(i));
                     i--;
                 }
             }

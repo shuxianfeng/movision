@@ -1271,5 +1271,73 @@ public class PostService {
         return postMapper.queryPostContentById(map);
     }
 
+    /**
+     * 查询精选贴
+     * @return
+     */
+    public List<Post> queryPostSessen(){
+        try {
+            log.info("查询精选贴");
+            return postMapper.queryPostSessen();
+        }catch (Exception e){
+            log.error("查询精选贴失败", e);
+            throw e;
+        }
+    }
 
+    /**
+     * 查询非精选贴
+     * @return
+     */
+    public List<Post> queryNOPostSessen(){
+        try {
+            log.info("查询非精选贴");
+            return postMapper.queryNOPostSessen();
+        }catch (Exception e){
+            log.error("查询非精选贴失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据圈子id查询圈子的帖子
+     * @return
+     */
+    public List<Post> queryCrileidPost(int crileid){
+        try {
+            log.info("根据圈子id查询圈子的帖子");
+            return postMapper.queryCrileidPost(crileid);
+        }catch (Exception e){
+            log.error("根据圈子id查询圈子的帖子失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据圈子id查询圈子的帖子
+     * @return
+     */
+    public List<Post> queryNoCrileidPost(int crileid){
+        try {
+            log.info("根据圈子id查询圈子的帖子");
+            return postMapper.queryNoCrileidPost(crileid);
+        }catch (Exception e){
+            log.error("根据圈子id查询圈子的帖子失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据圈子id查询圈子的剩下帖子
+     * @return
+     */
+    public List<Post> queryoverCrileidPost(int crileid){
+        try {
+            log.info("根据圈子id查询圈子的剩下帖子");
+            return postMapper.queryoverCrileidPost(crileid);
+        }catch (Exception e){
+            log.error("根据圈子id查询圈子的剩下帖子失败", e);
+            throw e;
+        }
+    }
 }
