@@ -867,6 +867,7 @@ public class PostFacade {
                     }
                     if (Integer.parseInt(loginid) != -1) {
                         log.info("发帖人（个人积分）----------------------------------------", userid);
+                        log.info("登录人id--------------------------------" + loginid);
                         pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
                     }
                 }
