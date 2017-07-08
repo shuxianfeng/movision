@@ -1221,13 +1221,13 @@ public class FacadePost {
             String hh = null;
             if (StringUtil.isNotEmpty(w) && StringUtil.isNotEmpty(h)) {
                 if (w.indexOf(".") != -1) {
-                    ww = w.substring(0, w.indexOf("."));
+                    ww = w.substring(0, w.lastIndexOf("."));
                 } else {
-                    ww = x;
+                    ww = w;
                 }
 
                 if (h.indexOf(".") != -1) {
-                    hh = h.substring(0, h.indexOf("."));
+                    hh = h.substring(0, h.lastIndexOf("."));
                 } else {
                     hh = h;
                 }
