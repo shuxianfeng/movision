@@ -832,4 +832,20 @@ public class UserService {
         }
     }
 
+    /**
+     * 查询用户对应前台用户id
+     *
+     * @param user
+     * @return
+     */
+    public Integer queryUserIsCricle(Integer user) {
+        try {
+            log.info("查询用户对应前台用户id");
+            return userMapper.queryUserIsCricle(user);
+        } catch (Exception e) {
+            log.error("查询用户对应前台用户id异常", e);
+            throw e;
+        }
+    }
+
 }
