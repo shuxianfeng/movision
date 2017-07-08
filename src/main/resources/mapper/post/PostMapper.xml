@@ -1129,7 +1129,8 @@
         FROM yw_post AS p
         WHERE p.isdel <![CDATA[<>]]> 1 AND p.isactive=0
         AND p.circleid in (SELECT circleid FROM yw_circle_manager WHERE userid=(SELECT id FROM yw_user WHERE phone
-        =(SELECT phone FROM yw_admin_user WHERE id=#{loginid,jdbcType=INTEGER}))) AND isdel=0
+        =(SELECT phone FROM yw_admin_user WHERE id=#{loginid,jdbcType=INTEGER})))
+        AND p.isdel <![CDATA[<>]]> 1
         <if test="uid!=null">
             AND u.id=#{uid,jdbcType=INTEGER}
         </if>
