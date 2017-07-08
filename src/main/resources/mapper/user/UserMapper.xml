@@ -1071,4 +1071,8 @@
         select COUNT(1) from yw_user where nickname = #{nickname}
     </select>
 
+    <select id="queryUserIsCricle" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT u.id FROM yw_user u LEFT JOIN yw_admin_user au ON au.phone = u.phone WHERE au.id = #{userid}
+    </select>
+
 </mapper>

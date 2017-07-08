@@ -132,4 +132,6 @@ public interface UserMapper {
 
     Integer queryCountByNickname(@Param("nickname") String nickname);
 
+    Integer queryUserIsCricle(@Param("userid") Integer userid);
+
 }
