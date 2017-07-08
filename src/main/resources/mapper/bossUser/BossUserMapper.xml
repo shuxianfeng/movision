@@ -301,18 +301,21 @@
         SELECT ad.* FROM yw_admin_user ad WHERE ad.id=#{userid,jdbcType=INTEGER}
     </select>
 
+    <!-- SELECT COUNT(1) FROM yw_circle_manager WHERE userid = (SELECT id FROM yw_user WHERE phone =(SELECT phone
+            FROM yw_admin_user WHERE id = id = #{userid,jdbcType=INTEGER}))
+            AND circleid = (SELECT circleid FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.id =
+            #{kindid,jdbcType=INTEGER} AND p.isdel = 0 AND c.isdel = 0 AND c.status = 1) -->
     <select id="queryPostByUserid" parameterType="java.util.Map" resultType="java.lang.Integer">
         <if test="identity == 1">
             SELECT COUNT(1) FROM yw_circle
-            WHERE id = (SELECT circleid FROM yw_post WHERE id = #{kindid,jdbcType=INTEGER} AND isdel = 0)
+            WHERE id = (SELECT circleid FROM yw_post WHERE id = #{kindid,jdbcType=INTEGER} AND isdel <![CDATA[<>]]> 1)
             AND phone = (SELECT phone FROM yw_admin_user WHERE id = #{userid,jdbcType=INTEGER})
             AND isdel =0 AND status =1
         </if>
         <if test="identity == 2">
-            SELECT COUNT(1) FROM yw_circle_manager WHERE userid = (SELECT id FROM yw_user WHERE phone =(SELECT phone
-            FROM yw_admin_user WHERE id = id = #{userid,jdbcType=INTEGER}))
-            AND circleid = (SELECT circleid FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.id =
-            #{kindid,jdbcType=INTEGER} AND p.isdel = 0 AND c.isdel = 0 AND c.status = 1)
+            SELECT COUNT(1) FROM yw_circle_manager WHERE userid = (SELECT u.id FROM yw_user u LEFT JOIN yw_admin_user au
+            ON u.phone=au.phone WHERE au.id =#{userid,jdbcType=INTEGER})
+            AND circleid = (SELECT circleid FROM yw_post WHERE id=#{kindid,jdbcType=INTEGER} AND isdel <![CDATA[<>]]> 1)
         </if>
     </select>
 
