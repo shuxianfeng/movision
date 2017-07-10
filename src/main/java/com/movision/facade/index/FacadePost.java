@@ -710,7 +710,7 @@ public class FacadePost {
         //对上传到阿里云的图片url重拼
         String newalurl = "";//原图
         Map al = aliOSSClient.uploadInciseStream(url, "img", "coverIncise");
-        String alurl = String.valueOf(al);
+        String alurl = String.valueOf(al.get("url"));
         for (int j = 0; j < 3; j++) {
             alurl = alurl.substring(alurl.indexOf("/") + 1);
         }
