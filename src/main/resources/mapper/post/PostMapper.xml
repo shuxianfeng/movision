@@ -2024,13 +2024,18 @@
         SELECT * FROM yw_post WHERE isactive=0 AND isdel=0 ORDER BY heat_value DESC
     </select>
     <select id="findAllPostListHeat" resultType="com.movision.mybatis.post.entity.Post">
-         SELECT * FROM yw_post WHERE isactive=0 AND isdel=0 ORDER BY heat_value DESC
+        SELECT * FROM yw_post WHERE isactive=0 AND isdel=0 ORDER BY heat_value DESC
     </select>
     <select id="queryPostCricle" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
-SELECT * FROM yw_post WHERE isactive=0 AND isdel=0 AND circleid=#{crileid,jdbcType=INTEGER} ORDER BY heat_value DESC
+        SELECT * FROM yw_post WHERE isactive=0 AND isdel=0 AND circleid=#{crileid,jdbcType=INTEGER} ORDER BY heat_value
+        DESC
     </select>
     <select id="queryoverPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
         SELECT * from yw_post WHERE isdel=0 and isactive=0 AND circleid!=#{crileid,jdbcType=INTEGER} ORDER BY heat_value
         DESC
+    </select>
+    <select id="queryPostDetailById" resultType="com.movision.mybatis.post.entity.Post"
+            parameterType="java.lang.Integer">
+        SELECT * FROM yw_post WHERE id=#{id,jdbcType=INTEGER}
     </select>
 </mapper>

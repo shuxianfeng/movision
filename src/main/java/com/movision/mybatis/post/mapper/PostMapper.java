@@ -11,6 +11,7 @@ import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
+import javafx.geometry.Pos;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.poi.ss.usermodel.Row;
 import org.springframework.stereotype.Repository;
@@ -238,4 +239,6 @@ public interface PostMapper {
     List<Post> queryPostCricle(int crileid);
 
     List<Post> queryoverPost(int crileid);
+
+    List<Post> queryPostDetailById(int id);
 }

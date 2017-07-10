@@ -1386,4 +1386,20 @@ public class PostService {
         }
 
     }
+
+    /**
+     * 根据id查询帖子详情
+     *
+     * @param id
+     * @return
+     */
+    public List<Post> queryPostDetailById(int id) {
+        try {
+            log.info("根据id查询帖子详情");
+            return postMapper.queryPostDetailById(id);
+        } catch (Exception e) {
+            log.error("根据id查询帖子详情失败");
+            throw e;
+        }
+    }
 }
