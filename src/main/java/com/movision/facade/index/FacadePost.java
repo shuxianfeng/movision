@@ -1413,6 +1413,13 @@ public class FacadePost {
         return map;
     }
 
+    public Map userRefreshListNew(String userid) {
+        Map map = new HashMap();
+
+        return map;
+
+    }
+
 
     /**
      * 分页
