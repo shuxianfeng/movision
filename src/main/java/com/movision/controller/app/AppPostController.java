@@ -619,6 +619,13 @@ public class AppPostController {
 
     }
 
+    /**
+     * 最新下拉刷新
+     *
+     * @return
+     */
+    @ApiOperation(value = "最新下拉刷新", notes = "最新下拉刷新", response = Response.class)
+    @RequestMapping(value = "userRefreshListNew", method = RequestMethod.POST)
     public Response userRefreshListNew(@ApiParam(value = "用户id") @RequestParam(required = false) int userid,
                                        @RequestParam(required = false, defaultValue = "1") String pageNo,
                                        @RequestParam(required = false, defaultValue = "10") String pageSize) {
