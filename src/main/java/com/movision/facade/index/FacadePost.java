@@ -1413,13 +1413,109 @@ public class FacadePost {
         return map;
     }
 
-    public Map userRefreshListNew(String userid) {
-        Map map = new HashMap();
-
-        return map;
-
+    /**
+     * 最新的用户刷新
+     *
+     * @param userid
+     * @param paging
+     * @return
+     */
+    public List userRefreshListNew(int userid, Paging<Post> paging) {
+        long count = mongodbCount();
+        List<DBObject> listmongodba = null;
+        List<UserRefreshRecordVo> result = null;
+        List<Post> list = null;
+        List<Post> alllist = postService.findAllPostListHeat();//查询所有帖子
+        List<Post> posts = new ArrayList<>();
+        if (String.valueOf(userid) != null) {
+            listmongodba = userRefulshListMongodb(userid);
+        }
+        //未登录
+        if (String.valueOf(userid) == null) {
+            list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+            return list;
+        } else {
+            //已登录
+            if (alllist != null) {
+                if (count < 1000 && listmongodba.size() != 0) {
+                    //mongodb的里面的刷新记录大于等于1000条记录的时候进行用户分析
+                    listmongodba = userRefulshListMongodb(userid);//查询用户刷新列表
+                    if (listmongodba.size() != 0) {
+                        for (int j = 0; j < listmongodba.size(); j++) {
+                            Post post = new Post();
+                            post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
+                            posts.add(post);//把mongodb转为post实体
+                        }
+                        //把看过的帖子过滤掉
+                        alllist.removeAll(posts);//alllist是剩余的帖子
+                        if (alllist != null) {
+                            //如果不为空
+                            if (alllist.size() >= 10) {
+                                list = alllist.subList(0, 10);
+                            } else if (alllist.size() < 10) {
+                                list = alllist.subList(0, alllist.size());
+                            }
+                            insertmongo(list, userid);
+                            return list;
+                        }
+                    } else {
+                        //登录情况下但是mongodb里面没有刷新记录
+                        list = postService.queryPostHeatValue(paging);
+                        insertmongo(list, userid);
+                        return list;
+                    }
+                } else if (count >= 1000 && listmongodba.size() != 0) {
+                    //查询用户最喜欢的圈子
+                    result = opularSearchTermsService.userFlush(userid);
+                    int crileid = 0;
+                    for (int i = 0; i < result.size(); i++) {
+                        crileid = result.get(i).getCrileid();
+                    }
+                    List<Post> criclelist = postService.queryPostCricle(crileid);//这个圈子的帖子（根据热度值排序）
+                    List<Post> overPost = postService.queryoverPost(crileid);//查询剩下的所有帖子
+                    criclelist.addAll(overPost);//所有帖子
+                    //查询出mongodb中用户刷新的帖子
+                    List<DBObject> listmongodb = userRefulshListMongodb(userid);
+                    for (int j = 0; j < listmongodb.size(); j++) {
+                        Post post = new Post();
+                        post.setId(Integer.parseInt(listmongodb.get(j).get("postid").toString()));
+                        posts.add(post);//把mongodb转为post实体
+                    }
+                    criclelist.removeAll(posts);//剩下的帖子
+                    if (criclelist != null) {
+                        //如果不为空
+                        if (criclelist.size() >= 10) {
+                            list = criclelist.subList(0, 10);
+                        } else if (criclelist.size() < 10) {
+                            list = criclelist.subList(0, criclelist.size());
+                        }
+                        insertmongo(list, userid);
+                        return list;
+                    }
+                }
+            }
+        }
+        return list;
     }
 
+    /**
+     * 插入
+     *
+     * @param list
+     * @param userid
+     */
+    public void insertmongo(List<Post> list, int userid) {
+        int crileid = 0;//圈子id
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                int id = list.get(i).getId();
+                //查询帖子是哪个圈子
+                crileid = postService.queryCrileid(id);
+                //刷新记录插入mongodb
+                insertMongoDB(String.valueOf(userid), id, crileid);
+            }
+        }
+    }
 
     /**
      * 分页

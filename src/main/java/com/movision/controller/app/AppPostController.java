@@ -619,4 +619,15 @@ public class AppPostController {
 
     }
 
+    public Response userRefreshListNew(@ApiParam(value = "用户id") @RequestParam(required = false) int userid,
+                                       @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                       @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<Post> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List map = facadePost.userRefreshListNew(userid, pager);
+        pager.result(map);
+        response.setData(pager);
+        return response;
+    }
+
 }

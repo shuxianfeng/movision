@@ -28,12 +28,13 @@
         <result column="essencedate" jdbcType="DATE" property="essencedate"/>
         <result column="userid" jdbcType="INTEGER" property="userid"/>
         <result column="oprtime" jdbcType="TIMESTAMP" property="oprtime"/>
+        <result column="heat_value" jdbcType="INTEGER" property="heatvalue"/>
     </resultMap>
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
         isactive, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
-        hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime
+        hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value
   </sql>
 
     <!--基础查询语句-->
@@ -2018,5 +2019,18 @@
     </select>
     <select id="queryoverCrileidPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
      SELECT * from yw_post WHERE  isdel=0 and isactive=0  AND  circleid!=#{crileid,jdbcType=INTEGER}  ORDER BY intime DESC
+    </select>
+    <select id="queryPostHeatValue" resultType="com.movision.mybatis.post.entity.Post">
+        SELECT * FROM yw_post WHERE isactive=0 AND isdel=0 ORDER BY heat_value DESC
+    </select>
+    <select id="findAllPostListHeat" resultType="com.movision.mybatis.post.entity.Post">
+         SELECT * FROM yw_post WHERE isactive=0 AND isdel=0 ORDER BY heat_value DESC
+    </select>
+    <select id="queryPostCricle" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
+SELECT * FROM yw_post WHERE isactive=0 AND isdel=0 AND circleid=#{crileid,jdbcType=INTEGER} ORDER BY heat_value DESC
+    </select>
+    <select id="queryoverPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
+        SELECT * from yw_post WHERE isdel=0 and isactive=0 AND circleid!=#{crileid,jdbcType=INTEGER} ORDER BY heat_value
+        DESC
     </select>
 </mapper>

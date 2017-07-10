@@ -54,6 +54,15 @@ public class Post implements Serializable {
 
     private Date oprtime;//用户最后参与时间
 
+    private Integer heatvalue;//热度值
+
+    public Integer getHeatvalue() {
+        return heatvalue;
+    }
+
+    public void setHeatvalue(Integer heatvalue) {
+        this.heatvalue = heatvalue;
+    }
 
     private Integer userid;//用户id
 

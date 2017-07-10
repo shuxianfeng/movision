@@ -1220,6 +1220,21 @@ public class PostService {
         }
     }
 
+    /**
+     * 查询所有的帖子
+     *
+     * @param
+     * @return
+     */
+    public List<Post> findAllPostListHeat() {
+        try {
+            log.info("查询所有的帖子");
+            return postMapper.findAllPostListHeat();
+        } catch (Exception e) {
+            log.error("查询所有的帖子失败");
+            throw e;
+        }
+    }
     public int queryCrileid(int postid) {
         try {
             log.info("查询帖子属于哪个圈子");
@@ -1339,5 +1354,36 @@ public class PostService {
             log.error("根据圈子id查询圈子的剩下帖子失败", e);
             throw e;
         }
+    }
+
+    public List<Post> queryPostHeatValue(Paging<Post> paging) {
+        try {
+            log.info("查询帖子热度值");
+            return postMapper.queryPostHeatValue(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询帖子热度值失败");
+            throw e;
+        }
+    }
+
+    public List<Post> queryPostCricle(int crileid) {
+        try {
+            log.info("根据圈子查询帖子");
+            return postMapper.queryPostCricle(crileid);
+        } catch (Exception e) {
+            log.error("根据圈子查询帖子失败");
+            throw e;
+        }
+    }
+
+    public List<Post> queryoverPost(int crileid) {
+        try {
+            log.info("查询除了这个圈子外的帖子");
+            return postMapper.queryoverPost(crileid);
+        } catch (Exception e) {
+            log.error("查询除了这个圈子外的帖子失败");
+            throw e;
+        }
+
     }
 }

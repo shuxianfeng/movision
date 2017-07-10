@@ -230,4 +230,12 @@ public interface PostMapper {
 
     List<Post> queryNoCrileidPost(int crileid);
     List<Post> queryoverCrileidPost(int crileid);
+
+    List<Post> queryPostHeatValue(RowBounds rowBounds);//查询帖子的热度值
+
+    List<Post> findAllPostListHeat();
+
+    List<Post> queryPostCricle(int crileid);
+
+    List<Post> queryoverPost(int crileid);
 }
