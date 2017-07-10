@@ -336,17 +336,17 @@ public class commonalityFacade {
             }
             if (StringUtil.isNotEmpty(i.getCirclemanagement().toString())) {
                 if (i.getCirclemanagement().equals(JurisdictionConstants.JURISDICTION_TYPE.groupManage.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())
-                        || i.getCirclemanagement().equals(JurisdictionConstants.JURISDICTION_TYPE.groupManage.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode()) || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())
+                        || i.getCirclemanagement().equals(JurisdictionConstants.JURISDICTION_TYPE.groupManage.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circle.getCode())
+                        || i.getCirclemanagement().equals(JurisdictionConstants.JURISDICTION_TYPE.groupManage.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())
                         || i.getCirclemanagement().equals(JurisdictionConstants.JURISDICTION_TYPE.groupManage.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//圈子管理员可以查看
                     map.put("resault", 1);
                     return map;
                 }
             }
             if (StringUtil.isNotEmpty(i.getContributing().toString())) {
-                if (i.getContributing().equals(JurisdictionConstants.JURISDICTION_TYPE.speciallyInvite.getCode())
-                        && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())
-                        || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())
-                        || kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//特邀嘉宾可以查看
+                if (i.getContributing().equals(JurisdictionConstants.JURISDICTION_TYPE.speciallyInvite.getCode()) && (kind.equals(JurisdictionConstants.JURISDICTION_TYPE.post.getCode())
+                        || i.getContributing().equals(JurisdictionConstants.JURISDICTION_TYPE.speciallyInvite.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.comment.getCode())
+                        || i.getContributing().equals(JurisdictionConstants.JURISDICTION_TYPE.speciallyInvite.getCode()) && kind.equals(JurisdictionConstants.JURISDICTION_TYPE.circleType.getCode()))) {//特邀嘉宾可以查看
                     map.put("resault", 0);
                     return map;
                 }

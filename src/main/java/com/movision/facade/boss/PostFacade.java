@@ -1306,7 +1306,7 @@ public class PostFacade {
         if (resault.get("resault").equals(2)) {
             return userService.likeQueryPostByNickname(map);
         } else {
-            map.put("loginid", loginid);
+            map.put("loginid", Integer.parseInt(loginid));
             return userService.likeQueryPostByNickname(map);
         }
     }

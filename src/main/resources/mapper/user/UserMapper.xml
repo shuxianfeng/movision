@@ -501,7 +501,7 @@
         </if>
         AND u.status=0 AND phone IS NOT NULL
         <if test="loginid != null">
-            AND u.id NOT IN (-1)
+            AND u.phone =(SELECT phone FROM yw_admin_user WHERE id = #{loginid})
         </if>
     </select>
 
