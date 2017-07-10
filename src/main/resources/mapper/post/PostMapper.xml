@@ -272,7 +272,7 @@
         SELECT a.*,b.name AS circlename FROM (
             SELECT id, circleid, title, subtitle, coverimg, isactive, activetype, type, intime
                     FROM yw_post
-        WHERE userid = 426
+        WHERE userid = #{userid,jdbcType=INTEGER}
             AND isactive = '0'
             AND isdel = '0'
         ) a LEFT JOIN yw_circle b ON a.circleid = b.id ORDER BY intime DESC
