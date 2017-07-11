@@ -2044,4 +2044,10 @@
     <update id="updatePostHeatValue" parameterType="java.lang.Integer">
        UPDATE yw_post SET heat_value=heat_value+#{points,jdbcType=INTEGER} WHERE id=#{postid,jdbcType=INTEGER}
     </update>
+    <select id="selectUserLevel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT yw_user.`level` FROM yw_user LEFT JOIN yw_post ON yw_post.userid=yw_user.id WHERE yw_post.id=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="queryPostHotHeat" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT ishot FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
 </mapper>

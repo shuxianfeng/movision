@@ -1413,12 +1413,32 @@ public class PostService {
         }
     }
 
+
+    public Integer queryPostHotHeat(int postid) {
+        try {
+            log.info("根据id查询是否为精选");
+            return postMapper.queryPostHotHeat(postid);
+        } catch (Exception e) {
+            log.error("根据id查询是否为精选失败");
+            throw e;
+        }
+    }
     public int updatePostHeatValue(int points, int postid) {
         try {
             log.info("修改热度");
             return postMapper.updatePostHeatValue(points, postid);
         } catch (Exception e) {
             log.error("修改热度失败");
+            throw e;
+        }
+    }
+
+    public int selectUserLevel(int postid) {
+        try {
+            log.info("查询发帖人级别");
+            return postMapper.selectUserLevel(postid);
+        } catch (Exception e) {
+            log.error("查询发帖人级别失败");
             throw e;
         }
     }
