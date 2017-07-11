@@ -773,5 +773,41 @@ public class AppRegisterFacade {
     }
 
 
+    /**
+     * 校验手机号
+     *
+     * @param phone
+     * @return
+     */
+    public static String phones = PropertiesLoader.getValue("phone");
+    public static String phonesfour = PropertiesLoader.getValue("phones");
+
+    public static String verifyCellPhoneNumber(String phone) {
+        String result = "手机号不存在";
+        String subphone = phone.substring(0, 3);
+        String subfor = phone.substring(0, 4);
+        String[] pho = phones.split(",");
+        String[] phos = phonesfour.split(",");
+        for (int i = 0; i < pho.length; i++) {
+            if (subphone.equals(pho[i])) {
+                result = "手机号存在";
+                return result;
+            }
+        }
+        for (int i = 0; i < phos.length; i++) {
+            if (subfor.equals(phos[i])) {
+                result = "手机号存在";
+                return result;
+            }
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(AppRegisterFacade.verifyCellPhoneNumber("1705501287"));
+    }
+
+
 }
 
