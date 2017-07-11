@@ -3,6 +3,7 @@ package com.movision.controller.app;
 import com.movision.common.Response;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.boss.PostFacade;
+import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
@@ -42,17 +43,16 @@ public class AppPostController {
     @Autowired
     private FacadePost facadePost;
 
-    @Autowired
-    private CoverImgCompressUtil coverImgCompressUtil;
 
     @Autowired
     private MovisionOssClient movisionOssClient;
 
-    @Autowired
-    private AliOSSClient aliOSSClient;
 
     @Autowired
     private PostFacade postFacade;
+
+    @Autowired
+    private FacadeHeatValue facadeHeatValue;
 
     @ApiOperation(value = "帖子详情数据返回接口", notes = "用于返回请求帖子详情内容", response = Response.class)
     @RequestMapping(value = "detail", method = RequestMethod.POST)
@@ -634,6 +634,26 @@ public class AppPostController {
         List map = facadePost.userRefreshListNew(userid, pager);
         pager.result(map);
         response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 热度
+     *
+     * @param postid
+     * @param type
+     * @return
+     */
+    @ApiOperation(value = "热度", notes = "热度", response = Response.class)
+    @RequestMapping(value = "addHeatValue", method = RequestMethod.POST)
+    public Response addHeatValue(@ApiParam(value = "帖子id") @RequestParam(required = false) int postid,
+                                 @ApiParam(value = "类型") @RequestParam(required = false) int type) {
+        Response response = new Response();
+        int result = facadeHeatValue.addHeatValue(postid, type);
+        if (response.getCode() == 200) {
+            response.setMessage("成功");
+        }
+        response.setData(result);
         return response;
     }
 

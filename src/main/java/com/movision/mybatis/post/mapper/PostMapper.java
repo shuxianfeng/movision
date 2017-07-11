@@ -241,4 +241,8 @@ public interface PostMapper {
     List<Post> queryoverPost(int crileid);
 
     List<Post> queryPostDetailById(int id);
+
+    int queryPostIsessenceHeat(int postid);
+
+    int updatePostHeatValue(int points, int postid);//修改热度
 }

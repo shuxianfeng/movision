@@ -162,7 +162,7 @@ public class MsgCenterFacade {
                 Integer pid = comments.get(i).getPid();
                 Integer usersid = comments.get(i).getUserid();
 
-                if (usersid != userid) {
+                if (!usersid.equals(userid)) {
                     User user = postCommentZanRecordService.queryusers(usersid);
                     if (pid == null) {
                         Integer postid = comments.get(i).getPostid();
@@ -291,7 +291,7 @@ public class MsgCenterFacade {
                 Integer commentid = zanRecordVos.get(i).getCommentid();
                 Integer postid = zanRecordVos.get(i).getPostid();
                 Integer usersid = zanRecordVos.get(i).getUserid();
-                if (usersid != userid) {
+                if (!usersid.equals(userid)) {
                     User user = postCommentZanRecordService.queryusers(usersid);
                     if (commentid != null) {
                         List<CommentVo> commentVo = postCommentZanRecordService.queryComment(commentid);
