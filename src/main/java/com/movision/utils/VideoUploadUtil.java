@@ -291,7 +291,7 @@ public class VideoUploadUtil {
     public static String weixinRegistic(String code) {
         String result = "";
         BufferedReader in = null;
-        String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx1c1271e74ce1e62e&secret=860727cf207180fe319b44f6a247730c&code=" + code + "&grant_type=authorization_code";
+        String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxfe9eb21fdb46a1a6&secret=c20dc2afd2d8e38a4c49abebf4d0f532&code=" + code + "&grant_type=authorization_code";
         try {
             URL realUrl = new URL(url.toString());
             // 打开和URL之间的连接
@@ -489,6 +489,6 @@ public class VideoUploadUtil {
         String viod = String.valueOf(videoId.get("videoId"));
          refreshUploadVideo(aliyunClient, viod);*/
         //VideoUploadUtil.deleteVideo("a8cf01c12cf748e2b4e997b24cf3edfd");
-        VideoUploadUtil.weixinRegistic("0019as7h02ZZXz1Kgk7h0nlC7h09as7f");
+        VideoUploadUtil.weixinRegistic("081h3Qdi2QsP2F0iW8gi2L0Ldi2h3Qd3");
     }
 }
