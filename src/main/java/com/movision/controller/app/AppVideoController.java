@@ -147,8 +147,8 @@ public class AppVideoController {
         Map result = VideoUploadUtil.weixinRegistic(code);
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
+            response.setData(result);
         }
-        response.setData(result);
         return response;
     }
 
@@ -167,8 +167,8 @@ public class AppVideoController {
         Map result = VideoUploadUtil.getUserInformation(acctoken, openid);
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
+            response.setData(result);
         }
-        response.setData(result);
         return response;
     }
 
@@ -187,8 +187,8 @@ public class AppVideoController {
         Map result = VideoUploadUtil.getrefulshtoken(fuflshtoken, openid);
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
+            response.setData(result);
         }
-        response.setData(result);
         return response;
     }
 
@@ -206,8 +206,8 @@ public class AppVideoController {
         Map result = VideoUploadUtil.getticket(acctoken);
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
+            response.setData(result);
         }
-        response.setData(result);
         return response;
     }
 }
