@@ -388,13 +388,13 @@ public class VideoUploadUtil {
      * 获取r
      *
      * @param refulshtoken
-     * @param openid
+     * @param
      * @return
      */
-    public static Map getrefulshtoken(String refulshtoken, String openid) {
+    public static Map getrefulshtoken(String refulshtoken) {
         String result = "";
         BufferedReader in = null;
-        String url = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=" + openid + "&grant_type=refresh_token&refresh_token=" + refulshtoken + "";
+        String url = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=wxfe9eb21fdb46a1a6&grant_type=refresh_token&refresh_token=" + refulshtoken + "";
         try {
             URL realUrl = new URL(url.toString());
             // 打开和URL之间的连接
