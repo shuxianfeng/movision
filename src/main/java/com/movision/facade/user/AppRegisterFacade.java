@@ -804,10 +804,6 @@ public class AppRegisterFacade {
         return result;
     }
 
-    public static void main(String[] args) {
-        System.out.println(AppRegisterFacade.verifyCellPhoneNumber("1705501287"));
-    }
-
 
 }
 
