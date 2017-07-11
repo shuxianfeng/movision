@@ -7,6 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @Author zhanglei
  * @Date 2017/7/11 11:05
@@ -21,38 +24,45 @@ public class FacadeHeatValue {
     /**
      * 增加帖子热度值
      */
-    public int addHeatValue(int postid, int type) {
-        int new_point = 0;
+    public void addHeatValue(int postid, int type) {
+        int points = 0;
+        Map map = new HashMap();
+        map.put("postid", postid);
         if (type == 1) {//首页精选
             int isessence = postService.queryPostIsessenceHeat(postid);
             if (isessence == 1) {//首页精选
-                new_point = HeatValueConstant.POINT.home_page_selection.getCode();
-                postService.updatePostHeatValue(new_point, postid);
+                points = HeatValueConstant.POINT.home_page_selection.getCode();
+                map.put("points", points);
+                postService.updatePostHeatValue(map);
             }
         } else if (type == 2) {//帖子精选
             int hot = postService.queryPostHotHeat(postid);
             if (hot == 1) {
-                new_point = HeatValueConstant.POINT.post_selection.getCode();
-                postService.updatePostHeatValue(new_point, postid);
+                points = HeatValueConstant.POINT.post_selection.getCode();
+                map.put("points", points);
+                postService.updatePostHeatValue(map);
             }
         } else if (type == 3) {//点赞
             int level = userLevel(postid);
-            new_point = level * HeatValueConstant.POINT.zan_number.getCode();
-            postService.updatePostHeatValue(new_point, postid);
+            points = level * HeatValueConstant.POINT.zan_number.getCode();
+            map.put("points", points);
+            postService.updatePostHeatValue(map);
         } else if (type == 4) {//评论
             int level = userLevel(postid);
-            new_point = level * HeatValueConstant.POINT.comments_number.getCode();
-            postService.updatePostHeatValue(new_point, postid);
+            points = level * HeatValueConstant.POINT.comments_number.getCode();
+            map.put("points", points);
+            postService.updatePostHeatValue(map);
         } else if (type == 5) {//转发
             int level = userLevel(postid);
-            new_point = level * HeatValueConstant.POINT.forwarding_number.getCode();
-            postService.updatePostHeatValue(new_point, postid);
+            points = level * HeatValueConstant.POINT.forwarding_number.getCode();
+            map.put("points", points);
+            postService.updatePostHeatValue(map);
         } else if (type == 6) {//收藏
             int level = userLevel(postid);
-            new_point = level * HeatValueConstant.POINT.collection_number.getCode();
-            postService.updatePostHeatValue(new_point, postid);
+            points = level * HeatValueConstant.POINT.collection_number.getCode();
+            map.put("points", points);
+            postService.updatePostHeatValue(map);
         }
-        return new_point;
     }
 
     /**
