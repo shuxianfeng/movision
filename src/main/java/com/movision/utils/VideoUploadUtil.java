@@ -10,10 +10,13 @@ import com.aliyuncs.vod.model.v20170321.CreateUploadVideoRequest;
 import com.aliyuncs.vod.model.v20170321.CreateUploadVideoResponse;
 import com.aliyuncs.vod.model.v20170321.RefreshUploadVideoRequest;
 import com.aliyuncs.vod.model.v20170321.RefreshUploadVideoResponse;
+import com.google.gson.Gson;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.movision.fsearch.utils.HttpClient;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
+import net.sf.json.JSON;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -288,7 +291,7 @@ public class VideoUploadUtil {
     }
 
     //https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx1c1271e74ce1e62e&secret=860727cf207180fe319b44f6a247730c&code=011Mymla2w8vqR0kAPma2g5pla2Mymlp&grant_type=authorization_code
-    public static String weixinRegistic(String code) {
+    public static Map weixinRegistic(String code) {
         String result = "";
         BufferedReader in = null;
         String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxfe9eb21fdb46a1a6&secret=c20dc2afd2d8e38a4c49abebf4d0f532&code=" + code + "&grant_type=authorization_code";
@@ -325,7 +328,8 @@ public class VideoUploadUtil {
                 e2.printStackTrace();
             }
         }
-        return result;
+        net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
+        return jsonObject;
 
 
     }
@@ -337,7 +341,7 @@ public class VideoUploadUtil {
      * @param openid
      * @return
      */
-    public static String getUserInformation(String acctoken, String openid) {
+    public static Map getUserInformation(String acctoken, String openid) {
         String result = "";
         BufferedReader in = null;
         String url = "https://api.weixin.qq.com/sns/userinfo?access_token=" + acctoken + "&openid=" + openid + "&lang=zh_CN";
@@ -374,7 +378,8 @@ public class VideoUploadUtil {
                 e2.printStackTrace();
             }
         }
-        return result;
+        net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
+        return jsonObject;
 
     }
 
@@ -386,7 +391,7 @@ public class VideoUploadUtil {
      * @param openid
      * @return
      */
-    public static String getrefulshtoken(String refulshtoken, String openid) {
+    public static Map getrefulshtoken(String refulshtoken, String openid) {
         String result = "";
         BufferedReader in = null;
         String url = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=" + openid + "&grant_type=refresh_token&refresh_token=" + refulshtoken + "";
@@ -423,7 +428,8 @@ public class VideoUploadUtil {
                 e2.printStackTrace();
             }
         }
-        return result;
+        net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
+        return jsonObject;
 
     }
 
@@ -437,7 +443,7 @@ public class VideoUploadUtil {
      * @param
      * @return
      */
-    public static String getticket(String acctoken) {
+    public static Map getticket(String acctoken) {
         String result = "";
         BufferedReader in = null;
         String url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + acctoken + "&type=jsapi";
@@ -474,7 +480,8 @@ public class VideoUploadUtil {
                 e2.printStackTrace();
             }
         }
-        return result;
+        net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
+        return jsonObject;
 
     }
 
@@ -489,6 +496,6 @@ public class VideoUploadUtil {
         String viod = String.valueOf(videoId.get("videoId"));
          refreshUploadVideo(aliyunClient, viod);*/
         //VideoUploadUtil.deleteVideo("a8cf01c12cf748e2b4e997b24cf3edfd");
-        VideoUploadUtil.weixinRegistic("081h3Qdi2QsP2F0iW8gi2L0Ldi2h3Qd3");
+        VideoUploadUtil.weixinRegistic("011fWkFd2Z0IJA0AgvBd2rIVEd2fWkFV");
     }
 }

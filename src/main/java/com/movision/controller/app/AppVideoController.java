@@ -144,7 +144,7 @@ public class AppVideoController {
     @RequestMapping(value = "get_weixin_registic", method = RequestMethod.POST)
     public Response weixinRegistic(@ApiParam("code") @RequestParam String code) {
         Response response = new Response();
-        String result = VideoUploadUtil.weixinRegistic(code);
+        Map result = VideoUploadUtil.weixinRegistic(code);
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
         }
@@ -164,7 +164,7 @@ public class AppVideoController {
     public Response getUserInformation(@ApiParam("acctoken") @RequestParam String acctoken,
                                        @ApiParam("openid") @RequestParam String openid) {
         Response response = new Response();
-        String result = VideoUploadUtil.getUserInformation(acctoken, openid);
+        Map result = VideoUploadUtil.getUserInformation(acctoken, openid);
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
         }
@@ -184,7 +184,7 @@ public class AppVideoController {
     public Response getrefulshtoken(@ApiParam("acctoken") @RequestParam String fuflshtoken,
                                     @ApiParam("openid") @RequestParam String openid) {
         Response response = new Response();
-        String result = VideoUploadUtil.getrefulshtoken(fuflshtoken, openid);
+        Map result = VideoUploadUtil.getrefulshtoken(fuflshtoken, openid);
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
         }
@@ -203,7 +203,7 @@ public class AppVideoController {
     @RequestMapping(value = "get_ticket", method = RequestMethod.POST)
     public Response getticket(@ApiParam("acctoken") @RequestParam String acctoken) {
         Response response = new Response();
-        String result = VideoUploadUtil.getticket(acctoken);
+        Map result = VideoUploadUtil.getticket(acctoken);
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
         }

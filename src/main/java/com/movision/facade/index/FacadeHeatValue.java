@@ -29,9 +29,11 @@ public class FacadeHeatValue {
                 new_point = HeatValueConstant.POINT.home_page_selection.getCode();
                 postService.updatePostHeatValue(new_point, postid);
             }
-        } else if (type == 2) {//帖子精选
+        } else if (type == 2) {//帖子设为圈子精选
+
 
         } else if (type == 3) {//发帖人级别
+
 
         } else if (type == 4) {//点赞
 
