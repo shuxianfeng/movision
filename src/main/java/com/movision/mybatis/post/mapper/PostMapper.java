@@ -245,4 +245,9 @@ public interface PostMapper {
     int queryPostIsessenceHeat(int postid);
 
     int updatePostHeatValue(int points, int postid);//修改热度
+
+    int selectUserLevel(int postid);//查询发帖人级别
+
+    int queryPostHotHeat(int postid);
+
 }
