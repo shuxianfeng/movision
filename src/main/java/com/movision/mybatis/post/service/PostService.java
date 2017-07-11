@@ -1402,4 +1402,24 @@ public class PostService {
             throw e;
         }
     }
+
+    public Integer queryPostIsessenceHeat(int postid) {
+        try {
+            log.info("根据id查询是否为精选");
+            return postMapper.queryPostIsessenceHeat(postid);
+        } catch (Exception e) {
+            log.error("根据id查询是否为精选失败");
+            throw e;
+        }
+    }
+
+    public int updatePostHeatValue(int points, int postid) {
+        try {
+            log.info("修改热度");
+            return postMapper.updatePostHeatValue(points, postid);
+        } catch (Exception e) {
+            log.error("修改热度失败");
+            throw e;
+        }
+    }
 }

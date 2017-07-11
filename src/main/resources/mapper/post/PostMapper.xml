@@ -2038,4 +2038,10 @@
             parameterType="java.lang.Integer">
         SELECT * FROM yw_post WHERE id=#{id,jdbcType=INTEGER}
     </select>
+    <select id="queryPostIsessenceHeat" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT isessence FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
+    <update id="updatePostHeatValue" parameterType="java.lang.Integer">
+       UPDATE yw_post SET heat_value=heat_value+#{points,jdbcType=INTEGER} WHERE id=#{postid,jdbcType=INTEGER}
+    </update>
 </mapper>
