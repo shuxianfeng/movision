@@ -250,4 +250,8 @@ public interface PostMapper {
 
     int queryPostHotHeat(int postid);
 
+    int updateZanPostHeatValue(Map map);//修改热度
+
+
+
 }

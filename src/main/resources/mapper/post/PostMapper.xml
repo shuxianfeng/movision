@@ -2050,4 +2050,7 @@
     <select id="queryPostHotHeat" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT ishot FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
+    <update id="updateZanPostHeatValue" parameterType="java.util.Map">
+        UPDATE yw_post SET heat_value=heat_value-#{points,jdbcType=INTEGER} WHERE id=#{postid,jdbcType=INTEGER}
+    </update>
 </mapper>
