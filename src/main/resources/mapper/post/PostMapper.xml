@@ -1013,9 +1013,6 @@
             <if test="coverimg != null">
                 coverimg = #{coverimg,jdbcType=VARCHAR},
             </if>
-            <if test="intime != null">
-                intime = #{intime,jdbcType=TIMESTAMP},
-            </if>
             <if test="essencedate != null">
                 essencedate = #{essencedate,jdbcType=DATE},
             </if>

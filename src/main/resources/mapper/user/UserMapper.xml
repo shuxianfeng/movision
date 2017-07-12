@@ -112,6 +112,11 @@
         SELECT points FROM yw_user WHERE id = #{userid,jdbcType=INTEGER}
     </select>
 
+    <!--查询当前用户使用的APP最新版本号-->
+    <select id="queryVersion" parameterType="java.lang.Integer" resultType="java.lang.String" >
+        SELECT version FROM yw_app_version WHERE type = #{type,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_user
         where id = #{id,jdbcType=INTEGER}

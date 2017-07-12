@@ -134,4 +134,6 @@ public interface UserMapper {
 
     Integer queryUserIsCricle(@Param("userid") Integer userid);
 
+    String queryVersion(Integer type);
+
 }

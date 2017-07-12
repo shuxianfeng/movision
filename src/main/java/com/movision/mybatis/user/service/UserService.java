@@ -848,4 +848,20 @@ public class UserService {
         }
     }
 
+    /**
+     * 查询当前用户登录的这个APP的最新版本号是多少
+     *
+     * @param type
+     * @return
+     */
+    public String queryVersion(int type){
+        try {
+            log.info("判断当前手机用户所使用的APP最新版本号");
+            return userMapper.queryVersion(type);
+        }catch (Exception e){
+            log.error("判断当前手机用户所使用的APP最新版本号失败", e);
+            throw e;
+        }
+    }
+
 }
