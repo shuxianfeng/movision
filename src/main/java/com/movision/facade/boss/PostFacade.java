@@ -1606,7 +1606,7 @@ public class PostFacade {
                             post.setPostcontent(postcontent);
                         }
                     }
-                    post.setIntime(new Date());
+//                    post.setIntime(new Date());//编辑帖子时不应该更新发帖时间，临时屏蔽---shuxf 2017/07/12
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     Date estime = null;
 
@@ -1770,7 +1770,7 @@ public class PostFacade {
                             post.setPostcontent(postcontent);
                         }
                     }
-                    post.setIntime(new Date());
+//                    post.setIntime(new Date());//编辑帖子时不应该更新发帖时间，临时屏蔽---shuxf 2017/07/12
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     Date estime = null;
 
