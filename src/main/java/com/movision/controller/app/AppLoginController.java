@@ -72,7 +72,7 @@ public class AppLoginController {
             response.setData(verifyCode);
         } else {
             log.error("手机号不正确！");
-            response.setCode(400);
+            response.setCode(300);
             response.setMessage("请输入正确的手机号！");
         }
 
