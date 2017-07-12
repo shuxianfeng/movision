@@ -348,6 +348,7 @@ public class MsgCenterFacade {
      */
     public Integer updateisread(String type, Integer userid, String informidentity) {
         Integer resault = null;
+        System.out.println("用户----------" + userid + "唯一标识-------------" + informidentity);
         if (type.equals("1") || type.equals(1)) {
             resault = postZanRecordService.updateZanRead(userid);//更新赞已读
         } else if (type.equals("2") || type.equals(2)) {

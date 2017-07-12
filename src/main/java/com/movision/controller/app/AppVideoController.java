@@ -181,10 +181,9 @@ public class AppVideoController {
      */
     @ApiOperation(value = " 获取fuflshtoken", notes = " 获取fuflshtoken", response = Response.class)
     @RequestMapping(value = "get_fulshtoken", method = RequestMethod.POST)
-    public Response getrefulshtoken(@ApiParam("acctoken") @RequestParam String fuflshtoken,
-                                    @ApiParam("openid") @RequestParam String openid) {
+    public Response getrefulshtoken(@ApiParam("fuflshtoken") @RequestParam String fuflshtoken) {
         Response response = new Response();
-        Map result = VideoUploadUtil.getrefulshtoken(fuflshtoken, openid);
+        Map result = VideoUploadUtil.getrefulshtoken(fuflshtoken);
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
             response.setData(result);

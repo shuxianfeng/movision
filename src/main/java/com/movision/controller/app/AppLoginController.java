@@ -311,5 +311,17 @@ public class AppLoginController {
         return response;
     }
 
+    @ApiOperation(value = "验证手机号", notes = "验证手机号", response = Response.class)
+    @RequestMapping(value = {"/verifyCellPhoneNumber"}, method = RequestMethod.POST)
+    public Response verifyCellPhoneNumber(@ApiParam(value = "手机号") @RequestParam String phone) {
+        Response response = new Response();
+        String result = appRegisterFacade.verifyCellPhoneNumber(phone);
+        if (response.getCode() == 200) {
+            response.setMessage("成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
 
 }

@@ -649,11 +649,10 @@ public class AppPostController {
     public Response addHeatValue(@ApiParam(value = "帖子id") @RequestParam(required = false) int postid,
                                  @ApiParam(value = "类型") @RequestParam(required = false) int type) {
         Response response = new Response();
-        int result = facadeHeatValue.addHeatValue(postid, type);
+        facadeHeatValue.addHeatValue(postid, type);
         if (response.getCode() == 200) {
             response.setMessage("成功");
         }
-        response.setData(result);
         return response;
     }
 

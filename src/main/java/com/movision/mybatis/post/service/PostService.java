@@ -1423,15 +1423,27 @@ public class PostService {
             throw e;
         }
     }
-    public int updatePostHeatValue(int points, int postid) {
+
+    public int updatePostHeatValue(Map map) {
         try {
             log.info("修改热度");
-            return postMapper.updatePostHeatValue(points, postid);
+            return postMapper.updatePostHeatValue(map);
         } catch (Exception e) {
             log.error("修改热度失败");
             throw e;
         }
     }
+
+    public int updateZanPostHeatValue(Map map) {
+        try {
+            log.info("修改热度");
+            return postMapper.updateZanPostHeatValue(map);
+        } catch (Exception e) {
+            log.error("修改热度失败");
+            throw e;
+        }
+    }
+
 
     public int selectUserLevel(int postid) {
         try {

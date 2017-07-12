@@ -153,7 +153,7 @@
     </select>
     <select id="queryByUserid" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo"
             parameterType="java.util.Map">
-        SELECT si.*,IFNULL(ir.isread,0) as isread
+        SELECT si.body,si.inform_time,si.title,si.pushcontent,si.inform_identity,IFNULL(ir.isread,0) as isread
         FROM yw_im_system_informs si LEFT JOIN yw_im_system_inform_read ir ON ir.inform_identity=si.inform_identity AND
         ir.userid=#{userid,jdbcType=INTEGER} WHERE si.inform_time >= #{informTime,jdbcType=TIMESTAMP}
         GROUP BY inform_identity ORDER BY inform_time DESC LIMIT 0,1
@@ -174,7 +174,7 @@
     </select>
     <select id="findAllIm" parameterType="java.util.Map"
             resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo">
-        SELECT si.*,IFNULL(ir.isread,0) as isread
+        SELECT si.body,si.inform_time,si.title,si.pushcontent,si.inform_identity,IFNULL(ir.isread,0) as isread
         FROM yw_im_system_informs si LEFT JOIN yw_im_system_inform_read ir ON ir.inform_identity=si.inform_identity AND
         ir.userid=#{userid,jdbcType=INTEGER} WHERE si.inform_time >= #{informTime,jdbcType=TIMESTAMP}
         GROUP BY inform_identity ORDER BY inform_time DESC

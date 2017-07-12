@@ -2041,7 +2041,7 @@
     <select id="queryPostIsessenceHeat" resultType="java.lang.Integer" parameterType="java.lang.Integer">
         SELECT isessence FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
-    <update id="updatePostHeatValue" parameterType="java.lang.Integer">
+    <update id="updatePostHeatValue" parameterType="java.util.Map">
        UPDATE yw_post SET heat_value=heat_value+#{points,jdbcType=INTEGER} WHERE id=#{postid,jdbcType=INTEGER}
     </update>
     <select id="selectUserLevel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
@@ -2050,4 +2050,7 @@
     <select id="queryPostHotHeat" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT ishot FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
+    <update id="updateZanPostHeatValue" parameterType="java.util.Map">
+        UPDATE yw_post SET heat_value=heat_value-#{points,jdbcType=INTEGER} WHERE id=#{postid,jdbcType=INTEGER}
+    </update>
 </mapper>
