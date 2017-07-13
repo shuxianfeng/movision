@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -24,6 +25,7 @@ import java.util.concurrent.TimeUnit;
  * @since 16/6/27.
  */
 @Component
+@Service
 public class RedisClient {
 
     private static final Logger log = LoggerFactory.getLogger(RedisClient.class);
