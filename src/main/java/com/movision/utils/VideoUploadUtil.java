@@ -312,7 +312,6 @@ public class VideoUploadUtil {
     static String APPSECRET = "c20dc2afd2d8e38a4c49abebf4d0f532";
 
     public Map<String, String> getUserInfoAccessToken(String code) {
-        VideoUploadUtil videoUploadUtil = new VideoUploadUtil();
         Map<String, String> data = new HashMap();
         try {
             String url = String.format("https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code",
@@ -329,18 +328,8 @@ public class VideoUploadUtil {
             data.put("refresh_token", jsonObject.get("refresh_token").toString());
             String acctoken = jsonObject.get("access_token").toString();
             String refresh_token = jsonObject.get("refresh_token").toString();
-            boolean a = redisClient.set("acctoken", acctoken);
-            boolean b = redisClient.set("refresh_token", refresh_token);
-            System.out.print(a);
-            System.out.print(b);
-            String dd = redisClient.get("acctoken").toString();
-            //  Map map=getrefulshtoken(redisClient.get("refresh_token").toString());
-            //   JSONObject jsonObjects =new JSONObject(map);
-            //   String newacctoken=jsonObjects.get("access_token").toString();
-            //     boolean c=redisClient.set("newaccess_token",newacctoken);
-            System.out.print(dd + "-89646546------------------------------------------------");
-            // String tick= videoUploadUtil.getticket(dd);
-            //  System.out.print(tick);
+            redisClient.set("acctoken", acctoken);
+            redisClient.set("refresh_token", refresh_token);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

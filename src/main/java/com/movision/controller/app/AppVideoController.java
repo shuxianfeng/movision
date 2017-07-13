@@ -174,23 +174,6 @@ public class AppVideoController {
     }
 
 
-    /**
-     * 微信分享获取签名
-     *
-     * @param
-     * @return
-     */
-    @ApiOperation(value = " 微信分享获取签名", notes = " 微信分享获取签名", response = Response.class)
-    @RequestMapping(value = "get_ticket", method = RequestMethod.POST)
-    public Response getticket(@ApiParam("acctoken") @RequestParam String acctoken) {
-        Response response = new Response();
-        String result = videoUploadUtil.getticket(acctoken);
-        if (response.getCode() == 200) {
-            response.setMessage("获取成功");
-            response.setData(result);
-        }
-        return response;
-    }
 
     /**
      * 微信分享获取签名
@@ -203,6 +186,24 @@ public class AppVideoController {
     public Response getaccesstoken() {
         Response response = new Response();
         Map result = videoUploadUtil.getaccesstoken();
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+            response.setData(result);
+        }
+        return response;
+    }
+
+    /**
+     * 获取临时acctoken
+     *
+     * @param
+     * @return
+     */
+    @ApiOperation(value = " 获取临时acctoken", notes = " 获取临时acctoken", response = Response.class)
+    @RequestMapping(value = "get_weiacctoken", method = RequestMethod.POST)
+    public Response getUserInfoAccessToken(@ApiParam("code") @RequestParam String code) {
+        Response response = new Response();
+        Map result = videoUploadUtil.getUserInfoAccessToken(code);
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
             response.setData(result);
