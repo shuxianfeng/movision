@@ -10,17 +10,24 @@ import com.aliyuncs.vod.model.v20170321.CreateUploadVideoRequest;
 import com.aliyuncs.vod.model.v20170321.CreateUploadVideoResponse;
 import com.aliyuncs.vod.model.v20170321.RefreshUploadVideoRequest;
 import com.aliyuncs.vod.model.v20170321.RefreshUploadVideoResponse;
-import com.google.gson.Gson;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.SimpleTimeZone;
-import com.movision.fsearch.utils.HttpClient;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
-import net.sf.json.JSON;
+import com.movision.utils.redis.RedisClient;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.util.EntityUtils;
+import org.apache.ibatis.ognl.Token;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import redis.clients.jedis.Jedis;
+import sun.security.krb5.internal.Ticket;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
@@ -32,6 +39,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 
@@ -47,6 +56,8 @@ public class VideoUploadUtil {
     public static String accessKeyId = PropertiesLoader.getValue("access.key.id");
     public static String accessKeySecret = PropertiesLoader.getValue("access.key.secret");
 
+    @Autowired
+    private RedisClient redisClient;
 
     public String videoUpload(String fileName, String title, String description, String coverimg, String tatges) {
 
@@ -290,13 +301,67 @@ public class VideoUploadUtil {
         return result;
     }
 
-    //https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx1c1271e74ce1e62e&secret=860727cf207180fe319b44f6a247730c&code=011Mymla2w8vqR0kAPma2g5pla2Mymlp&grant_type=authorization_code
-    public static Map weixinRegistic(String code) {
+
+    /**
+     * 获取请求用户信息的access_token
+     *
+     * @param code
+     * @return
+     */
+    static String APPID = "wxfe9eb21fdb46a1a6";
+    static String APPSECRET = "c20dc2afd2d8e38a4c49abebf4d0f532";
+
+    public Map<String, String> getUserInfoAccessToken(String code) {
+        VideoUploadUtil videoUploadUtil = new VideoUploadUtil();
+        Map<String, String> data = new HashMap();
+        try {
+            String url = String.format("https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code",
+                    APPID, APPSECRET, code);
+            org.apache.http.impl.client.DefaultHttpClient httpClient = new org.apache.http.impl.client.DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(url);
+            HttpResponse httpResponse = httpClient.execute(httpGet);
+            HttpEntity httpEntity = httpResponse.getEntity();
+            String tokens = EntityUtils.toString(httpEntity, "utf-8");
+            System.out.print(tokens);
+            JSONObject jsonObject = new JSONObject(tokens);
+            data.put("openid", jsonObject.get("openid").toString());
+            data.put("access_token", jsonObject.get("access_token").toString());
+            data.put("refresh_token", jsonObject.get("refresh_token").toString());
+            String acctoken = jsonObject.get("access_token").toString();
+            String refresh_token = jsonObject.get("refresh_token").toString();
+            boolean a = redisClient.set("acctoken", acctoken);
+            boolean b = redisClient.set("refresh_token", refresh_token);
+            System.out.print(a);
+            System.out.print(b);
+            String dd = redisClient.get("acctoken").toString();
+            //  Map map=getrefulshtoken(redisClient.get("refresh_token").toString());
+            //   JSONObject jsonObjects =new JSONObject(map);
+            //   String newacctoken=jsonObjects.get("access_token").toString();
+            //     boolean c=redisClient.set("newaccess_token",newacctoken);
+            System.out.print(dd + "-89646546------------------------------------------------");
+            // String tick= videoUploadUtil.getticket(dd);
+            //  System.out.print(tick);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return data;
+    }
+
+    // https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxfe9eb21fdb46a1a6&secret=c20dc2afd2d8e38a4c49abebf4d0f532
+
+    /**
+     * 获取全局acctoken
+     *
+     * @param
+     * @param
+     * @return
+     */
+    public Map getaccesstoken() {
         String result = "";
         BufferedReader in = null;
-        String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxfe9eb21fdb46a1a6&secret=c20dc2afd2d8e38a4c49abebf4d0f532&code=" + code + "&grant_type=authorization_code";
+        String urls = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + APPID + "&secret=" + APPSECRET + "";
         try {
-            URL realUrl = new URL(url.toString());
+            URL realUrl = new URL(urls.toString());
             // 打开和URL之间的连接
             URLConnection connection = realUrl.openConnection();
             // 设置通用的请求属性
@@ -329,9 +394,57 @@ public class VideoUploadUtil {
             }
         }
         net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
-        return jsonObject;
+        String acctoken = jsonObject.get("access_token").toString();
+        String expires_in = jsonObject.get("expires_in").toString();
+        redisClient.set("acctoken", acctoken);
+        redisClient.set("expires_in", expires_in);
+        String tick = getticket(redisClient.get("acctoken").toString());
+        net.sf.json.JSONObject jsonObjects = net.sf.json.JSONObject.fromObject(tick);
+        String ticket = jsonObjects.get("ticket").toString();
+        String noncestr = UUID.randomUUID().toString();
+        String jsapi_ticket = ticket;
+        String timestamp = Long.toString(System.currentTimeMillis() / 1000);
+        String url = "http://mp.weixin.qq.com?params=value";
+        String string1 = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + noncestr + "&timestamp=" + timestamp + "&url=" + url + "";
+        String signature = getSha1(string1);
+        Map map = new HashMap();
+        map.put("noncestr", noncestr);
+        map.put("timestamp", timestamp);
+        map.put("signature", signature);
+        return map;
+
+    }
 
 
+    /**
+     * 加密
+     *
+     * @param str
+     * @return
+     */
+    public static String getSha1(String str) {
+        if (null == str || 0 == str.length()) {
+            return null;
+        }
+        char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                'a', 'b', 'c', 'd', 'e', 'f'};
+        try {
+            MessageDigest mdTemp = MessageDigest.getInstance("SHA1");
+            mdTemp.update(str.getBytes("UTF-8"));
+
+            byte[] md = mdTemp.digest();
+            int j = md.length;
+            char[] buf = new char[j * 2];
+            int k = 0;
+            for (int i = 0; i < j; i++) {
+                byte byte0 = md[i];
+                buf[k++] = hexDigits[byte0 >>> 4 & 0xf];
+                buf[k++] = hexDigits[byte0 & 0xf];
+            }
+            return new String(buf);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
@@ -387,14 +500,14 @@ public class VideoUploadUtil {
     /**
      * 获取r
      *
-     * @param refulshtoken
+     * @param
      * @param
      * @return
      */
-    public static Map getrefulshtoken(String refulshtoken) {
+    public static Map getrefulshtoken(String retoken) {
         String result = "";
         BufferedReader in = null;
-        String url = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=wxfe9eb21fdb46a1a6&grant_type=refresh_token&refresh_token=" + refulshtoken + "";
+        String url = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=wxfe9eb21fdb46a1a6&grant_type=refresh_token&refresh_token=" + retoken+ "";
         try {
             URL realUrl = new URL(url.toString());
             // 打开和URL之间的连接
@@ -434,16 +547,14 @@ public class VideoUploadUtil {
     }
 
 
-    //https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi
-
     /**
      * 获取签名
      *
-     * @param acctoken
+     * @param
      * @param
      * @return
      */
-    public static Map getticket(String acctoken) {
+    public String getticket(String acctoken) {
         String result = "";
         BufferedReader in = null;
         String url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + acctoken + "&type=jsapi";
@@ -480,8 +591,7 @@ public class VideoUploadUtil {
                 e2.printStackTrace();
             }
         }
-        net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
-        return jsonObject;
+        return result;
 
     }
 
@@ -496,6 +606,11 @@ public class VideoUploadUtil {
         String viod = String.valueOf(videoId.get("videoId"));
          refreshUploadVideo(aliyunClient, viod);*/
         //VideoUploadUtil.deleteVideo("a8cf01c12cf748e2b4e997b24cf3edfd");
-        VideoUploadUtil.weixinRegistic("011fWkFd2Z0IJA0AgvBd2rIVEd2fWkFV");
+        // VideoUploadUtil videoUploadUtil = new VideoUploadUtil();
+        //videoUploadUtil.getUserInfoAccessToken("0418ZbBa28AWoS0HRxBa2hfvBa28ZbBE");
+        // VideoUploadUtil.getrefulshtoken();
+        VideoUploadUtil videoUploadUtil = new VideoUploadUtil();
+        //   videoUploadUtil.getticket("bCANmBh3eg9XtfRZ75Wy6ko3sn8KXajggGzxUfpGoyME82ON5umkP-hm8cZbw2JvZYnNUWNyg6VdtQi6r-UyF7Dr10w3a4z5xWyslJVeyvc");
+        videoUploadUtil.getaccesstoken();
     }
 }

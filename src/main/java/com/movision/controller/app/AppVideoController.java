@@ -134,24 +134,6 @@ public class AppVideoController {
         return response;
     }
 
-    /**
-     * 获取微信acctoken
-     *
-     * @param code
-     * @return
-     */
-    @ApiOperation(value = " 获取微信acctoken", notes = " 获取微信acctoken", response = Response.class)
-    @RequestMapping(value = "get_weixin_registic", method = RequestMethod.POST)
-    public Response weixinRegistic(@ApiParam("code") @RequestParam String code) {
-        Response response = new Response();
-        Map result = VideoUploadUtil.weixinRegistic(code);
-        if (response.getCode() == 200) {
-            response.setMessage("获取成功");
-            response.setData(result);
-        }
-        return response;
-    }
-
 
     /**
      * 获取用户信息
@@ -202,11 +184,31 @@ public class AppVideoController {
     @RequestMapping(value = "get_ticket", method = RequestMethod.POST)
     public Response getticket(@ApiParam("acctoken") @RequestParam String acctoken) {
         Response response = new Response();
-        Map result = VideoUploadUtil.getticket(acctoken);
+        String result = videoUploadUtil.getticket(acctoken);
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
             response.setData(result);
         }
         return response;
     }
+
+    /**
+     * 微信分享获取签名
+     *
+     * @param
+     * @return
+     */
+    @ApiOperation(value = " 微信分享获取签名", notes = " 微信分享获取签名", response = Response.class)
+    @RequestMapping(value = "get_wei", method = RequestMethod.POST)
+    public Response getaccesstoken() {
+        Response response = new Response();
+        Map result = videoUploadUtil.getaccesstoken();
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+            response.setData(result);
+        }
+        return response;
+    }
+
+
 }
