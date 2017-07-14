@@ -16,7 +16,11 @@ import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.redis.RedisClient;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.ibatis.ognl.Token;
 import org.json.JSONObject;
@@ -34,6 +38,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.crypto.dsig.SignatureMethod;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -338,19 +343,11 @@ public class VideoUploadUtil {
 
     // https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxfe9eb21fdb46a1a6&secret=c20dc2afd2d8e38a4c49abebf4d0f532
 
-    /**
-     * 获取全局acctoken
-     *
-     * @param
-     * @param
-     * @return
-     */
-    public Map getaccesstoken() {
+    public String GetHttp(String url) {
         String result = "";
         BufferedReader in = null;
-        String urls = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + APPID + "&secret=" + APPSECRET + "";
         try {
-            URL realUrl = new URL(urls.toString());
+            URL realUrl = new URL(url.toString());
             // 打开和URL之间的连接
             URLConnection connection = realUrl.openConnection();
             // 设置通用的请求属性
@@ -382,29 +379,61 @@ public class VideoUploadUtil {
                 e2.printStackTrace();
             }
         }
+        return result;
+    }
+
+    /**
+     * 获取全局acctoken
+     *
+     * @param
+     * @param
+     * @return
+     */
+    public String getaccesstoken() {
+        String urls = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + APPID + "&secret=" + APPSECRET + "";
+        String result = GetHttp(urls);
         net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
         String acctoken = jsonObject.get("access_token").toString();
         String expires_in = jsonObject.get("expires_in").toString();
-        redisClient.set("acctoken", acctoken);
+        redisClient.set("acctokens", acctoken);
         redisClient.set("expires_in", expires_in);
-        String tick = getticket(redisClient.get("acctoken").toString());
-        net.sf.json.JSONObject jsonObjects = net.sf.json.JSONObject.fromObject(tick);
-        String ticket = jsonObjects.get("ticket").toString();
+        redisClient.set("acctokendata", new Date());
+        return acctoken;
+    }
+
+
+    /**
+     * 生成签名
+     *
+     * @param urls
+     * @return
+     */
+    public Map getSignature(String urls) {
+        boolean flag = redisClient.exists("tickets");
+        String tick = "";
+        if (flag) {//如果有缓存
+            String date = redisClient.get("ticketdate").toString();
+            Date date1 = new Date(date);
+            if ((new Date().getTime() - date1.getTime()) >= (7000 * 1000)) {//过期
+                tick = getticket();
+            } else {//没过期
+                tick = redisClient.get("tickets").toString();
+            }
+        } else {//没有缓存
+            tick = getticket();
+        }
         String noncestr = UUID.randomUUID().toString();
-        String jsapi_ticket = ticket;
+        String jsapi_ticket = tick;
         String timestamp = Long.toString(System.currentTimeMillis() / 1000);
-        String url = "http://mp.weixin.qq.com?params=value";
-        String string1 = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + noncestr + "&timestamp=" + timestamp + "&url=" + url + "";
+        String string1 = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + noncestr + "&timestamp=" + timestamp + "&url=" + urls + "";
         String signature = getSha1(string1);
         Map map = new HashMap();
         map.put("noncestr", noncestr);
         map.put("timestamp", timestamp);
         map.put("signature", signature);
-        return map;
-
+        map.put("tick", tick);
+        return  map;
     }
-
-
     /**
      * 加密
      *
@@ -543,46 +572,34 @@ public class VideoUploadUtil {
      * @param
      * @return
      */
-    public String getticket(String acctoken) {
+    public String getticket() {
         String result = "";
-        BufferedReader in = null;
-        String url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + acctoken + "&type=jsapi";
-        try {
-            URL realUrl = new URL(url.toString());
-            // 打开和URL之间的连接
-            URLConnection connection = realUrl.openConnection();
-            // 设置通用的请求属性
-            connection.setRequestProperty("accept", "*/*");
-            connection.setRequestProperty("connection", "Keep-Alive");
-            connection.setRequestProperty("user-agent",
-                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-            // 建立实际的连接
-            connection.connect();
-            // 遍历所有的响应头字段
-            // 定义 BufferedReader输入流来读取URL的响应
-            in = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
-            String line;
-            while ((line = in.readLine()) != null) {
-                result += line;
+        String url = "";
+        // redisClient.remove("acctoken");
+        boolean flag = redisClient.exists("acctokens");
+        if (flag) {//如果有缓存
+            String date = redisClient.get("acctokendata").toString();
+            Date date1 = new Date(date);
+            if ((new Date().getTime() - date1.getTime()) >= (7000 * 1000)) {//过期
+                String acc = getaccesstoken();
+                url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + acc + "&type=jsapi";
+            } else {//没过期
+                url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + redisClient.get("acctokens") + "&type=jsapi";
             }
-        } catch (Exception e) {
-            System.out.println("发送GET请求出现异常！" + e);
-            e.printStackTrace();
+        } else {//没有缓存
+            String acc = getaccesstoken();
+            url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + acc + "&type=jsapi";
         }
-        // 使用finally块来关闭输入流
-        finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        }
-        return result;
-
+        result = GetHttp(url);
+        net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
+        String ticket = jsonObject.get("ticket").toString();
+        String expires_in = jsonObject.get("expires_in").toString();
+        redisClient.set("tickets", ticket);
+        redisClient.set("expires_in", expires_in);
+        redisClient.set("ticketdate", new Date());
+        return ticket;
     }
+
 
     public static void main(String[] args) {
         /**DefaultAcsClient aliyunClient;

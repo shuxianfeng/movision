@@ -173,25 +173,23 @@ public class AppVideoController {
         return response;
     }
 
-
-
     /**
-     * 微信分享获取签名
-     *
-     * @param
+     * 获取getSignature
+     * @param url
      * @return
      */
-    @ApiOperation(value = " 微信分享获取签名", notes = " 微信分享获取签名", response = Response.class)
-    @RequestMapping(value = "get_wei", method = RequestMethod.POST)
-    public Response getaccesstoken() {
+    @ApiOperation(value = " 获取getSignature", notes = " 获取getSignature", response = Response.class)
+    @RequestMapping(value = "getSignature", method = RequestMethod.POST)
+    public Response getSignature(@ApiParam("url") @RequestParam String url) {
         Response response = new Response();
-        Map result = videoUploadUtil.getaccesstoken();
+        Map result = videoUploadUtil.getSignature(url);
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
             response.setData(result);
         }
         return response;
     }
+
 
     /**
      * 获取临时acctoken
