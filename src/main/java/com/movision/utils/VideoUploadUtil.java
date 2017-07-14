@@ -395,7 +395,7 @@ public class VideoUploadUtil {
         net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
         String acctoken = jsonObject.get("access_token").toString();
         String expires_in = jsonObject.get("expires_in").toString();
-        redisClient.set("acctoken", acctoken);
+        redisClient.set("acctokens", acctoken);
         redisClient.set("expires_in", expires_in);
         redisClient.set("acctokendata", new Date());
         return acctoken;
@@ -563,7 +563,7 @@ public class VideoUploadUtil {
         String result = "";
         String url = "";
         // redisClient.remove("acctoken");
-        boolean flag = redisClient.exists("acctoken");
+        boolean flag = redisClient.exists("acctokens");
         if (flag) {//如果有缓存
             String date = redisClient.get("acctokendata").toString();
             Date date1 = new Date(date);
@@ -571,7 +571,7 @@ public class VideoUploadUtil {
                 String acc = getaccesstoken();
                 url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + acc + "&type=jsapi";
             } else {//没过期
-                url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + redisClient.get("acctoken") + "&type=jsapi";
+                url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + redisClient.get("acctokens") + "&type=jsapi";
             }
         } else {//没有缓存
             String acc = getaccesstoken();
