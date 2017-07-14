@@ -430,6 +430,7 @@ public class VideoUploadUtil {
         map.put("noncestr", noncestr);
         map.put("timestamp", timestamp);
         map.put("signature", signature);
+        map.put("tick", tick);
         return  map;
     }
     /**
