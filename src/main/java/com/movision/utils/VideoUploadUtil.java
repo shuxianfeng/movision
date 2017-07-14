@@ -562,7 +562,7 @@ public class VideoUploadUtil {
     public String getticket() {
         String result = "";
         String url = "";
-        redisClient.remove("acctoken");
+        // redisClient.remove("acctoken");
         boolean flag = redisClient.exists("acctoken");
         if (flag) {//如果有缓存
             String date = redisClient.get("acctokendata").toString();
