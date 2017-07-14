@@ -409,7 +409,18 @@ public class VideoUploadUtil {
      * @return
      */
     public Map getSignature(String urls) {
-        String tick = getticket();
+        boolean flag = redisClient.exists("tickets");
+        String tick = "";
+        if (flag) {//如果有缓存
+            String date = redisClient.get("ticketdate").toString();
+            Date date1 = new Date(date);
+            if ((new Date().getTime() - date1.getTime()) >= (7000 * 1000)) {//过期
+                tick = getticket();
+            } else {//没过期
+            }
+        } else {//没有缓存
+            tick = getticket();
+        }
         String noncestr = UUID.randomUUID().toString();
         String jsapi_ticket = tick;
         String timestamp = Long.toString(System.currentTimeMillis() / 1000);
@@ -581,7 +592,7 @@ public class VideoUploadUtil {
         net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
         String ticket = jsonObject.get("ticket").toString();
         String expires_in = jsonObject.get("expires_in").toString();
-        redisClient.set("ticket", ticket);
+        redisClient.set("tickets", ticket);
         redisClient.set("expires_in", expires_in);
         redisClient.set("ticketdate", new Date());
         return ticket;
