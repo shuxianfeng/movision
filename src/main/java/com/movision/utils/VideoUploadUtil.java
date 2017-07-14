@@ -563,16 +563,16 @@ public class VideoUploadUtil {
         String result = "";
         String url = "";
         boolean flag = redisClient.exists("acctoken");
-        if (flag) {//如果没缓存
+        if (flag) {//如果有缓存
             String date = redisClient.get("acctokendata").toString();
             Date date1 = new Date(date);
             if ((new Date().getTime() - date1.getTime()) >= (7000 * 1000)) {//过期
-                url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + getaccesstoken() + "&type=jsapi";
+                String acc = getaccesstoken();
+                url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + acc + "&type=jsapi";
             } else {//没过期
-                String bb = redisClient.get("acctoken").toString();
                 url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + redisClient.get("acctoken") + "&type=jsapi";
             }
-        } else {//有缓存
+        } else {//没有缓存
             String acc = getaccesstoken();
             url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + acc + "&type=jsapi";
         }
