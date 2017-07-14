@@ -417,7 +417,7 @@ public class VideoUploadUtil {
             if ((new Date().getTime() - date1.getTime()) >= (7000 * 1000)) {//过期
                 tick = getticket();
             } else {//没过期
-                tick = redisClient.get("ticketdate").toString();
+                tick = redisClient.get("tickets").toString();
             }
         } else {//没有缓存
             tick = getticket();
