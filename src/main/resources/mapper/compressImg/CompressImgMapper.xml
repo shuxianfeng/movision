@@ -5,6 +5,7 @@
         <result column="compressimgurl" property="compressimgurl" jdbcType="VARCHAR"/>
         <result column="protoimgurl" property="protoimgurl" jdbcType="VARCHAR"/>
         <result column="protoimgsize" property="protoimgsize" jdbcType="VARCHAR"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <!--遍历帖子中图片压缩处理前先查询当前url有没有压缩过-->
@@ -49,6 +50,9 @@
             <if test="protoimgsize != null">
                 protoimgsize,
             </if>
+            <if test="intime != null">
+                intime,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="compressimgurl != null">
@@ -59,6 +63,9 @@
             </if>
             <if test="protoimgsize != null">
                 #{protoimgsize,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>

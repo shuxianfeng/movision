@@ -1,6 +1,7 @@
 package com.movision.mybatis.compressImg.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class CompressImg implements Serializable {
     private String compressimgurl;
@@ -8,6 +9,8 @@ public class CompressImg implements Serializable {
     private String protoimgurl;
 
     private String protoimgsize;
+
+    private Date intime;
 
     public String getCompressimgurl() {
         return compressimgurl;
@@ -31,5 +34,13 @@ public class CompressImg implements Serializable {
 
     public void setProtoimgsize(String protoimgsize) {
         this.protoimgsize = protoimgsize == null ? null : protoimgsize.trim();
+    }
+
+    public Date getIntime() {
+        return intime;
+    }
+
+    public void setIntime(Date intime) {
+        this.intime = intime;
     }
 }
