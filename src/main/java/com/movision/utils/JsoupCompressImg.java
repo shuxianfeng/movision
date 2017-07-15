@@ -364,6 +364,7 @@ public class JsoupCompressImg {
                                 compressImg.setCompressimgurl(newimgurl);
                                 compressImg.setProtoimgurl(imgurl);
                                 compressImg.setProtoimgsize(filesize);
+                                compressImg.setIntime(new Date());
                                 int count = postFacade.queryCount(compressImg);
                                 if (count == 0) {
                                     //如果已经保存过就不再保存
