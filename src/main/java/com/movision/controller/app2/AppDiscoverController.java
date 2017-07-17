@@ -18,7 +18,7 @@ import java.util.Map;
  * 美番2.0发现页所有的接口类
  */
 @RestController
-@RequestMapping("/app2/discover/")
+@RequestMapping("/app/discover2/")
 public class AppDiscoverController {
 
     @Autowired
