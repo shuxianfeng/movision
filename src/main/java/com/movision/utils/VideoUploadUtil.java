@@ -412,11 +412,21 @@ public class VideoUploadUtil {
         boolean flag = redisClient.exists("tickets");
         String tick = "";
         if (flag) {//如果有缓存
-            String date = redisClient.get("ticketdate").toString();
-            Date date1 = new Date(date);
-            if ((new Date().getTime() - date1.getTime()) >= (7000 * 1000)) {//过期
+            Date date = (Date) redisClient.get("ticketdate");
+            String dateq = null;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                dateq = sdf.format(date);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //Date date1 = new Date(date);
+            log.info("缓存日期-------------------" + dateq);
+            if ((new Date().getTime() - date.getTime()) >= (7000 * 1000)) {//过期
+                log.info("ticket过期");
                 tick = getticket();
             } else {//没过期
+                log.info("ticket没过期");
                 tick = redisClient.get("tickets").toString();
             }
         } else {//没有缓存
@@ -578,12 +588,23 @@ public class VideoUploadUtil {
         // redisClient.remove("acctoken");
         boolean flag = redisClient.exists("acctokens");
         if (flag) {//如果有缓存
-            String date = redisClient.get("acctokendata").toString();
-            Date date1 = new Date(date);
-            if ((new Date().getTime() - date1.getTime()) >= (7000 * 1000)) {//过期
+            Date date = (Date) redisClient.get("acctokendata");
+            String dateq = null;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                dateq = sdf.format(date);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //Date date1 = new Date(date);
+            log.info("缓存token日期-------------------" + dateq);
+            //Date date1 = new Date(date);
+            if ((new Date().getTime() - date.getTime()) >= (7000 * 1000)) {//过期
+                log.info("token过期");
                 String acc = getaccesstoken();
                 url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + acc + "&type=jsapi";
             } else {//没过期
+                log.info("token没过期");
                 url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + redisClient.get("acctokens") + "&type=jsapi";
             }
         } else {//没有缓存
