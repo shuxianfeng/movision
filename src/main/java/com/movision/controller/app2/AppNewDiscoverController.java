@@ -3,24 +3,21 @@ package com.movision.controller.app2;
 import com.movision.common.Response;
 import com.movision.facade.index.FacadeDiscover;
 import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
 /**
  * @Author shuxf
- * @Date 2017/7/17 9:59
- * 美番2.0发现页所有的接口类
+ * @Date 2017/7/17 20:54
+ * 用户返回美番2.0发现页所有数据的接口控制器
  */
 @RestController
-@RequestMapping("/app2/discover/")
-public class AppDiscoverController {
-
+@RequestMapping("/app/discover2/")
+public class AppNewDiscoverController {
     @Autowired
     private FacadeDiscover facadeDiscover;
 
