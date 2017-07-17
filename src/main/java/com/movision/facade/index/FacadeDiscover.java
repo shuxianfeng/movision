@@ -8,6 +8,9 @@ import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserVo;
+import com.movision.mybatis.user.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +37,9 @@ public class FacadeDiscover {
 
     @Autowired
     private CircleService circleService;
+
+    @Autowired
+    private UserService userService;
 
     public Map<String, Object> queryDiscoverIndexData(String userid) {
 
@@ -79,4 +85,26 @@ public class FacadeDiscover {
         return pmap;
     }
 
+    public Map<String, Object> queryDiscoverIndexData2Up(){
+
+        Map<String, Object> map = new HashMap<>();
+        List<HomepageManage> homepageManageList = homepageManageService.queryBannerList(1);//查询发现页顶部banner轮播图
+        List<Post> hotActiveList = postService.queryHotActiveList();//查询发现页热门活动列表
+        List<UserVo> hotUserList = userService.queryHotUserList();//查询发现页热门作者列表
+
+        //循环查询作者的发帖数
+        for (int i = 0; i < hotUserList.size(); i++){
+            UserVo vo = hotUserList.get(i);
+            int userid = vo.getId();
+            //根据userid查询该用户的总发帖数
+            int postsum = postService.queryPostNumByUserid(userid);
+            vo.setPostsum(postsum);
+            hotUserList.set(i, vo);
+        }
+
+        map.put("homepageManageList", homepageManageList);
+        map.put("hotActiveList", hotActiveList);
+        map.put("hotUserList", hotUserList);
+        return map;
+    }
 }

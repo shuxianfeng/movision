@@ -136,4 +136,6 @@ public interface UserMapper {
 
     String queryVersion(Integer type);
 
+    List<UserVo> queryHotUserList();
+
 }

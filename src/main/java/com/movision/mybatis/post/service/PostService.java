@@ -57,6 +57,16 @@ public class PostService {
         return postMapper.queryHotActiveList();
     }
 
+    public int queryPostNumByUserid(int userid){
+        try {
+            log.info("通过用户id查询当前用户的发帖总数");
+            return postMapper.queryPostNumByUserid(userid);
+        }catch (Exception e){
+            log.error("通过用户id查询当前用户的发帖总数失败", e);
+            throw e;
+        }
+    }
+
     public List<Post> queryCircleSubPost(Map<String, Object> map) {
         return postMapper.queryCircleSubPost(map);
     }
