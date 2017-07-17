@@ -117,6 +117,15 @@
         SELECT version FROM yw_app_version WHERE type = #{type,jdbcType=INTEGER}
     </select>
 
+    <!--美番2.0发现页查询热门作者-->
+    <select id="queryHotUserList" resultType="com.movision.mybatis.user.entity.UserVo" >
+        SELECT t1.id, t1.nickname, t1.photo, t1.fans FROM (
+            (SELECT * FROM yw_user WHERE isrecommend = '1')
+            UNION
+            (SELECT * FROM yw_user ORDER BY heat_value DESC limit 10)
+        ) t1 limit 10
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_user
         where id = #{id,jdbcType=INTEGER}

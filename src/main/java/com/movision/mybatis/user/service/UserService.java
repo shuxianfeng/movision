@@ -864,4 +864,17 @@ public class UserService {
         }
     }
 
+    /**
+     * 美番2.0发现页的热门作者查询
+     */
+    public List<UserVo> queryHotUserList(){
+        try {
+            log.info("2.0发现页的热门作者列表查询");
+            return userMapper.queryHotUserList();
+        }catch (Exception e){
+            log.error("2.0发现页的热门作者列表查询失败", e);
+            throw e;
+        }
+    }
+
 }

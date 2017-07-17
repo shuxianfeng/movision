@@ -56,6 +56,8 @@ public interface PostMapper {
 
     List<Post> queryHotActiveList();
 
+    int queryPostNumByUserid(int userid);
+
     List<Post> queryCircleSubPost(Map<String, Object> map);
 
     List<PostVo> findAllPersonPost(RowBounds rowBounds, int userid);

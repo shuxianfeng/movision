@@ -323,6 +323,11 @@
         now() > essencedate) ORDER BY essencedate DESC
     </select>
 
+    <!--根据用户id查询当前用户发帖总数-->
+    <select id="queryPostNumByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+        SELECT count(*) FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER}
+    </select>
+
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_post
