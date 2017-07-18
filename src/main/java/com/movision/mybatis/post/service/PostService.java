@@ -9,6 +9,7 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.mapper.PostMapper;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postProcessRecord.entity.PostProcessRecord;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.User;
@@ -1548,4 +1549,15 @@ public class PostService {
             throw e;
         }
     }
+
+    public List<PostLabel> queryPostLabel(int postid) {
+        try {
+            log.info("根据id查询标签");
+            return postMapper.queryPostLabel(postid);
+        } catch (Exception e) {
+            log.error("根据id查询标签失败", e);
+            throw e;
+        }
+    }
+
 }

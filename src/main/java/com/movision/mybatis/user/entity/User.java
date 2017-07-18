@@ -59,6 +59,16 @@ public class User implements Serializable {
 
     private Date loginTime;
 
+    private Integer heat_value;
+
+    public Integer getHeat_value() {
+        return heat_value;
+    }
+
+    public void setHeat_value(Integer heat_value) {
+        this.heat_value = heat_value;
+    }
+
     public void setLoginTime(Date loginTime) {
         this.loginTime = loginTime;
     }

@@ -1,7 +1,9 @@
 package com.movision.facade.index;
 
 import com.movision.common.constant.HeatValueConstant;
+import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,10 @@ public class FacadeHeatValue {
 
     @Autowired
     private PostService postService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private CommentService commentService;
 
     /**
      * 增加帖子热度值
@@ -83,6 +89,79 @@ public class FacadeHeatValue {
 
     }
 
+
+    /**
+     * 用户热度
+     * @param type
+     * @param userid
+     */
+    public void addUserHeatValue(int type, int userid) {
+        int points = 0;
+        Map map = new HashMap();
+        map.put("userid", userid);
+        if (type == 1) {//用户粉丝数
+            int level = userLevels(userid);
+            points = level * HeatValueConstant.POINT.fan_count.getCode();
+            map.put("points", points);
+            userService.updateUserHeatValue(map);
+        } else if (type == 2) {//发帖数
+            int level = userLevels(userid);
+            points = level * HeatValueConstant.POINT.posts_count.getCode();
+            map.put("points", points);
+            userService.updateUserHeatValue(map);
+        }
+    }
+
+    /**
+     * 评论的热度
+     *
+     * @param type
+     * @param commentid
+     */
+    public void addCommentHeatValue(int type, int commentid) {
+        int points = 0;
+        Map map = new HashMap();
+        map.put("userid", commentid);
+        if (type == 1) {//回覆的評論數
+            int level = commentUserLevels(commentid);
+            points = level * HeatValueConstant.POINT.reply_comment_number.getCode();
+            map.put("points", points);
+            commentService.updateCommentHeatValue(map);
+        } else if (type == 2) {//評論的點贊數
+            int level = commentUserLevels(commentid);
+            points = level * HeatValueConstant.POINT.comment_zan_count.getCode();
+            map.put("points", points);
+            commentService.updateCommentHeatValue(map);
+        }
+    }
+
+
+    /**
+     * 查詢評論人等級
+     *
+     * @param commentid
+     * @return
+     */
+    public int commentUserLevels(int commentid) {
+        int level = commentService.queryCommentLevel(commentid);
+        level(level);
+        return level;
+    }
+
+
+    /**
+     * 查询用户等级
+     *
+     * @param userid
+     * @return
+     */
+    public int userLevels(int userid) {
+        //查询发帖人级别
+        int level = userService.queryUserLevel(userid);
+        level(level);
+        return level;
+    }
+
     /**
      * 查询发帖人级别
      *
@@ -92,6 +171,17 @@ public class FacadeHeatValue {
     public int userLevel(int postid) {
         //查询发帖人级别
         int level = postService.selectUserLevel(postid);
+        level(level);
+        return level;
+    }
+
+    /**
+     * 等级
+     *
+     * @param level
+     * @return
+     */
+    public int level(int level){
         if (level == 0) {
             level = 1;
         } else if (level == 1) {

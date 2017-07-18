@@ -28,11 +28,13 @@
         <result column="applydate" property="applydate" jdbcType="DATE"/>
         <result column="deviceno" property="deviceno" jdbcType="VARCHAR"/>
         <result column="login_time" property="loginTime" jdbcType="TIMESTAMP"/>
+        <result column="heat_value" property="heatvalue" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id, openid, qq, sina, phone, email, token, invitecode, referrals, nickname, sign, attention, fans,
-        points, photo, sex, birthday, province, city, intime, growth, level, status, applydate, deviceno, login_time
+        points, photo, sex, birthday, province, city, intime, growth, level, status, applydate, deviceno,
+        login_time,heat_value
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -1090,5 +1092,11 @@
     </select>
     <select id="findUser" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.UserLike">
         SELECT  * FROM  yw_user WHERE id=#{userid,jdbcType=INTEGER}
+    </select>
+    <update id="updateUserHeatValue" parameterType="java.util.Map">
+        UPDATE yw_user SET heat_value=heat_value+#{points,jdbcType=INTEGER} WHERE id=#{userid,jdbcType=INTEGER}
+    </update>
+    <select id="queryUserLevel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT level FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
     </select>
 </mapper>

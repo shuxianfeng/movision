@@ -894,4 +894,25 @@ public class UserService {
 
     }
 
+
+    public Integer updateUserHeatValue(Map map) {
+        try {
+            log.info("修改用户热度");
+            return userMapper.updateUserHeatValue(map);
+        } catch (Exception e) {
+            log.error("修改用户热度失败", e);
+            throw e;
+        }
+    }
+
+    public int queryUserLevel(int userid) {
+        try {
+            log.info("查询用户等级");
+            return userMapper.queryUserLevel(userid);
+        } catch (Exception e) {
+            log.error("查询用户等级失败", e);
+            throw e;
+        }
+    }
+
 }

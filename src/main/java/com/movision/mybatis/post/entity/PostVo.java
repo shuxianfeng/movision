@@ -3,6 +3,7 @@ package com.movision.mybatis.post.entity;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.period.entity.Period;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
 
@@ -505,4 +506,14 @@ public class PostVo implements Serializable {
     }
 
     private Integer heatvalue;//热度
+
+    public List<PostLabel> postLabels;
+
+    public List<PostLabel> getPostLabels() {
+        return postLabels;
+    }
+
+    public void setPostLabels(List<PostLabel> postLabels) {
+        this.postLabels = postLabels;
+    }
 }

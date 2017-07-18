@@ -6,6 +6,7 @@ import com.movision.mybatis.followUser.entity.FollowUser;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postProcessRecord.entity.PostProcessRecord;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.User;
@@ -275,5 +276,6 @@ public interface PostMapper {
 
     List<PostVo> queryCityPost(String citycode);//
 
+    List<PostLabel> queryPostLabel(int postid);
 
 }

@@ -140,4 +140,10 @@ public interface UserMapper {
 
     List<UserLike> findUser(int userid);
 
+
+    Integer updateUserHeatValue(Map map);
+
+    int queryUserLevel(int userid);
+
+
 }

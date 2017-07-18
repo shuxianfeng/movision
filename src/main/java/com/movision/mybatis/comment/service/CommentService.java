@@ -382,4 +382,25 @@ public class CommentService {
             throw e;
         }
     }
+
+    public Integer updateCommentHeatValue(Map map) {
+        try {
+            log.info("修改評論的熱度");
+            return commentMapper.updateCommentHeatValue(map);
+        } catch (Exception e) {
+            log.error("修改評論的熱度失敗", e);
+            throw e;
+        }
+    }
+
+    public Integer queryCommentLevel(int commentid) {
+        try {
+            log.info("根據評論id查詢用戶等級");
+            return commentMapper.queryCommentLevel(commentid);
+        } catch (Exception e) {
+            log.error("根據評論id查詢用戶等級失敗", e);
+            throw e;
+        }
+    }
+
 }

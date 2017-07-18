@@ -71,4 +71,9 @@ public interface CommentMapper {
     Integer updateCommentRead(Integer userid);
 
     Integer queryUseridByComment(Integer commentid);
+
+    Integer updateCommentHeatValue(Map map);
+
+    int queryCommentLevel(int commentid);
+
 }

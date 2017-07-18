@@ -13,9 +13,10 @@
     <result column="iscontribute" property="iscontribute" jdbcType="INTEGER"/>
     <result column="status" property="status" jdbcType="INTEGER"/>
     <result column="isread" property="isread" jdbcType="INTEGER"/>
+      <result column="heat_value" property="heatvalue" jdbcType="INTEGER"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, userid, pid, content, intime, zansum, isdel, iscontribute, status, isread
+      id, userid, pid, content, intime, zansum, isdel, iscontribute, status, isread,heat_value
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -476,5 +477,13 @@
     <select id="queryUseridByComment" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT p.userid FROM yw_post_comment c LEFT JOIN yw_post p ON p.id=c.postid WHERE
         c.id=#{commentid,jdbcType=INTEGER}
+    </select>
+    <update id="updateCommentHeatValue" parameterType="java.util.Map">
+        UPDATE yw_post_comment SET heat_value=heat_value+#{points,jdbcType=INTEGER} WHERE
+        commentid=#{commentid,jdbcType=INTEGER}
+    </update>
+    <select id="queryCommentLevel" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT yw_user.`level` FROM yw_post_comment LEFT JOIN yw_user ON yw_user.id=yw_post_comment.userid WHERE isdel=0
+        AND yw_post_comment.id=#{commentid,jdbcType=INTEGER}
     </select>
 </mapper>
