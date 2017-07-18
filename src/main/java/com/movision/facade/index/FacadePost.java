@@ -1513,6 +1513,7 @@ public class FacadePost {
             } else {//登录但是刷新列表中没有帖子
                 list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
+                insertmongo(list, userid);
                 return list;
             }
         }
@@ -1549,6 +1550,7 @@ public class FacadePost {
             } else {//登录但是刷新列表中没有帖子
                 list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
+                insertmongo(list, userid);
                 return list;
             }
         }
