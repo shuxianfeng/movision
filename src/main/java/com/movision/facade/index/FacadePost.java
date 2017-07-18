@@ -13,8 +13,6 @@ import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.compressImg.service.CompressImgService;
-import com.movision.mybatis.followCircle.entity.FollowCircle;
-import com.movision.mybatis.followUser.entity.FollowUser;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
@@ -37,7 +35,6 @@ import com.movision.mybatis.userOperationRecord.service.UserOperationRecordServi
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
-import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.*;
 import com.movision.utils.oss.AliOSSClient;
@@ -218,7 +215,7 @@ public class FacadePost {
         return vo;
     }
 
-    public PostVo queryOldPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+    /*public PostVo queryOldPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
 
         //通过userid、postid查询该用户有没有关注该圈子的权限
         Map<String, Object> parammap = new HashMap<>();
@@ -239,11 +236,13 @@ public class FacadePost {
             vo.setRewardsum(rewardsum);
             List<UserLike> nicknamelist = postService.queryRewardPersonNickname(postid);
             vo.setRewardpersonnickname(nicknamelist);
-            /**   if (type.equals("1") || type.equals("2")) {
+            */
+
+    /**   if (type.equals("1") || type.equals("2")) {
              Video video = postService.queryVideoUrl(Integer.parseInt(postid));
              vo.setVideourl(video.getVideourl());
              vo.setVideocoverimgurl(video.getBannerimgurl());
-             }*/
+     }*//*
             if (vo.getUserid() != -1) {//发帖人为普通用户时查询发帖人昵称和手机号
                 User user = userService.queryUserB(vo.getUserid());
                 if (user != null) {
@@ -286,7 +285,7 @@ public class FacadePost {
             }
         }
         return vo;
-    }
+    }*/
 
     public ActiveVo queryActiveDetail(String postid, String userid, String activetype) {
 
@@ -997,7 +996,7 @@ public class FacadePost {
     }
 
     /**
-     * 模块化老年乐发帖
+     * 模块化发帖
      *
      * @param request
      * @param userid
@@ -1242,152 +1241,6 @@ public class FacadePost {
         return compressmap;
     }
 
-
-    /**
-     * 用户刷新列表
-     *
-     * @param userid
-     * @return
-     */
-    public Map userRefreshList(String userid, int page) {
-        Map map = new HashMap();
-        List<Post> list = postService.findAllPostListRefulsh();//查询所有帖子
-        List isessences = new ArrayList();//精选
-        List isnotisessence = new ArrayList();//不是精选
-        List<Post> listten = null;
-        List<UserRefreshRecordVo> result = null;
-        List<DBObject> listmongodba = null;
-        if (userid != null) {
-            listmongodba = userRefulshListMongodb(Integer.parseInt(userid));
-        }
-        long count = mongodbCount();
-        List<Post> posts = new ArrayList<>();
-        //未登录状态下
-        if (userid == null) {
-            //查询出精选帖子
-            isessences = postService.queryPostSessen();
-            //查询出非精选帖子
-            isnotisessence = postService.queryNOPostSessen();
-            //合并
-            isessences.addAll(isnotisessence);
-            listten = getPageList(isessences, page);
-            // listten = isessences.subList(0, 10);
-            map.put("listten", listten);
-            //登录状态下
-        } else {
-            if (count > 1000 && listmongodba.size() != 0) {
-                //循环mysql帖子表中所有的帖子id和mongodb的用户刷新记录表比对得出用户没有浏览过的帖子
-                Integer crileid = 0;
-                //查询出mongodb中用户刷新的帖子
-                List<DBObject> listmongodb = userRefulshListMongodb(Integer.parseInt(userid));
-                //mogodb不为空
-                if (listmongodb.size() != 0) {
-                    //mysql不为空
-                    if (list != null) {
-                        for (int j = 0; j < listmongodb.size(); j++) {
-                            Post post = new Post();
-                            post.setId(Integer.parseInt(listmongodb.get(j).get("postid").toString()));
-                            posts.add(post);//把mongodb转为post实体
-                        }
-                        list.removeAll(posts);//现在的list就是剩下的帖子
-                        if (list != null) {
-                            for (int i = 0; i < list.size(); i++) {
-                                //剔除浏览过的记录进行时间排序取前10条
-                                Date date = list.get(i).getIntime();//帖子的发布时间
-                                int psid = list.get(i).getId();//剩下的帖子id
-                                //查询剩下的帖子中有没有精选的
-                                int senense = postService.queryIsIsessence(psid);
-                                if (senense == 1) {//剩下的帖子是精选
-                                    isessences.add(list.get(i));//精选
-                                } else {//不是精选
-                                    isnotisessence.add(list.get(i));//不是精选
-                                }
-                            }
-                            isessences.addAll(isnotisessence);
-                            //listten = getPageList(isessences, page);
-                            if (isessences.size() >= 10) {
-                                listten = isessences.subList(0, 10);
-                            } else if (isessences.size() < 10) {
-                                listten = isessences.subList(0, isessences.size());
-                            }
-                            if (listten != null) {
-                                for (int i = 0; i < listten.size(); i++) {
-                                    int id = listten.get(i).getId();
-                                    //查询帖子是哪个圈子
-                                    crileid = postService.queryCrileid(id);
-                                    //刷新记录插入mongodb
-                                    insertMongoDB(userid, id, crileid);
-                                }
-                            }
-                            map.put("listten", listten);
-                        }
-                    }
-                } else {
-                    //如果用户刚进来没有任何刷新记录
-                    //查询出精选帖子
-                    isessences = postService.queryPostSessen();
-                    //查询出非精选帖子
-                    isnotisessence = postService.queryNOPostSessen();
-                    //合并
-                    isessences.addAll(isnotisessence);
-                    // listten=SubList(isessences,page);
-                    listten = isessences.subList(0, 10);
-                    if (listten != null) {
-                        for (int i = 0; i < listten.size(); i++) {
-                            int lisid = listten.get(i).getId();
-                            //查询帖子是哪个圈子
-                            crileid = postService.queryCrileid(lisid);
-                            //插入记录到mongodb
-                            insertMongoDB(userid, lisid, crileid);
-                        }
-                    }
-                    map.put("listten", listten);
-                }
-            } else {
-                // int count=Integer.parseInt(String.valueOf(num));
-                //表中浏览数据大于等于1000条的时候开始用户行为分析
-                //查询每个用户喜欢看的圈子
-                result = opularSearchTermsService.userFlush(Integer.parseInt(userid));
-
-                int crileid = 0;
-                for (int i = 0; i < result.size(); i++) {
-                    crileid = result.get(i).getCrileid();
-                }
-                List<Post> ispost = postService.queryCrileidPost(crileid);//这个圈子中的精选帖子
-                List<Post> isnotpost = postService.queryNoCrileidPost(crileid);//这个圈子中非精选的帖子
-                ispost.addAll(isnotpost);
-                List<Post> isoverpost = postService.queryoverCrileidPost(crileid);//剩下的帖子
-                ispost.addAll(isoverpost);
-                //查询出mongodb中用户刷新的帖子
-                List<DBObject> listmongodb = userRefulshListMongodb(Integer.parseInt(userid));
-                for (int j = 0; j < listmongodb.size(); j++) {
-                    Post post = new Post();
-                    post.setId(Integer.parseInt(listmongodb.get(j).get("postid").toString()));
-                    posts.add(post);//把mongodb转为post实体
-                }
-                ispost.removeAll(posts);//现在的ispost就是剩下的帖子
-
-                if (ispost.size() >= 10) {
-                    listten = ispost.subList(0, 10);
-                } else if (ispost.size() < 10) {
-                    listten = ispost.subList(0, ispost.size());
-                }
-                if (listten != null) {
-                    for (int i = 0; i < listten.size(); i++) {
-                        int lisid = listten.get(i).getId();
-                        //查询帖子是哪个圈子
-                        crileid = postService.queryCrileid(lisid);
-                        //插入记录到mongodb
-                        insertMongoDB(userid, lisid, crileid);
-                    }
-                }
-                map.put("listten", listten);
-            }
-
-        }
-        return map;
-    }
-
     /**
      * 推荐
      *
@@ -1402,8 +1255,9 @@ public class FacadePost {
         List<PostVo> list = null;
         List<PostVo> alllist = postService.findAllPostListHeat();//查询所有帖子
         List<PostVo> posts = new ArrayList<>();
-        //未登录
+
         if (userid == null) {
+            //未登录
             list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
             findUser(list);
             return list;
@@ -1411,45 +1265,73 @@ public class FacadePost {
             //已登录
             if (alllist != null) {
                 if (count < 1000) {
-                    //mongodb的里面的刷新记录大于等于1000条记录的时候进行用户分析
-                    listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//查询用户刷新列表
-                    if (listmongodba.size() != 0) {
-                        for (int j = 0; j < listmongodba.size(); j++) {
-                            PostVo post = new PostVo();
-                            post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
-                            posts.add(post);//把mongodb转为post实体
-                        }
-                        //把看过的帖子过滤掉
-                        alllist.removeAll(posts);//alllist是剩余的帖子
-                        retuenList(alllist, userid);
-                    } else {
-                        //登录情况下但是mongodb里面没有刷新记录
-                        list = postService.queryPostHeatValue(paging);
-                        findUser(list);
-                        insertmongo(list, userid);
-                        return list;
-                    }
+                    //mongodb的里面的刷新记录小于1000条记录的时候进行用户分析
+                    list = userAnalysisSmall(userid, paging, alllist, posts);
+                    if (list != null) return list;
                 } else if (count >= 1000) {
-                    //查询用户最喜欢的圈子
-                    result = opularSearchTermsService.userFlush(Integer.parseInt(userid));
-                    int crileid = 0;
-                    for (int i = 0; i < result.size(); i++) {
-                        crileid = result.get(i).getCrileid();
-                    }
-                    List<PostVo> criclelist = postService.queryPostCricle(crileid);//这个圈子的帖子（根据热度值排序）
-                    List<PostVo> overPost = postService.queryoverPost(crileid);//查询剩下的所有帖子
-                    criclelist.addAll(overPost);//所有帖子
-                    //查询出mongodb中用户刷新的帖子
-                    List<DBObject> listmongodb = userRefulshListMongodb(Integer.parseInt(userid));
-                    for (int j = 0; j < listmongodb.size(); j++) {
-                        PostVo post = new PostVo();
-                        post.setId(Integer.parseInt(listmongodb.get(j).get("postid").toString()));
-                            posts.add(post);//把mongodb转为post实体
-                        }
-                    criclelist.removeAll(posts);//剩下的帖子
-                    retuenList(criclelist, userid);
+                    //mongodb的里面的刷新记录大于等于1000条记录的时候进行用户分析
+                    userAnalysisBig(userid, posts);
                 }
             }
+        }
+        return null;
+    }
+
+    /**
+     * mongodb的里面的刷新记录  大于等于   1000条记录的时候进行用户分析
+     *
+     * @param userid
+     * @param posts
+     */
+    private void userAnalysisBig(String userid, List<PostVo> posts) {
+        List<UserRefreshRecordVo> result;//查询用户最喜欢的圈子
+        result = opularSearchTermsService.userFlush(Integer.parseInt(userid));
+        int crileid = 0;
+        for (int i = 0; i < result.size(); i++) {
+            crileid = result.get(i).getCrileid();
+        }
+        List<PostVo> criclelist = postService.queryPostCricle(crileid);//这个圈子的帖子（根据热度值排序）
+        List<PostVo> overPost = postService.queryoverPost(crileid);//查询剩下的所有帖子
+        criclelist.addAll(overPost);//所有帖子
+        //查询出mongodb中用户刷新的帖子
+        List<DBObject> listmongodb = userRefulshListMongodb(Integer.parseInt(userid));
+        for (int j = 0; j < listmongodb.size(); j++) {
+            PostVo post = new PostVo();
+            post.setId(Integer.parseInt(listmongodb.get(j).get("postid").toString()));
+            posts.add(post);//把mongodb转为post实体
+        }
+        criclelist.removeAll(posts);//剩下的帖子
+        retuenList(criclelist, userid);
+    }
+
+    /**
+     * mongodb的里面的刷新记录  小于1000  条记录的时候进行用户分析
+     *
+     * @param userid
+     * @param paging
+     * @param alllist
+     * @param posts
+     * @return
+     */
+    private List userAnalysisSmall(String userid, Paging<PostVo> paging, List<PostVo> alllist, List<PostVo> posts) {
+        List<DBObject> listmongodba;
+        List<PostVo> list;
+        listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//查询用户刷新列表
+        if (listmongodba.size() != 0) {
+            for (int j = 0; j < listmongodba.size(); j++) {
+                PostVo post = new PostVo();
+                post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
+                posts.add(post);//把mongodb转为post实体
+            }
+            //把看过的帖子过滤掉
+            alllist.removeAll(posts);//alllist是剩余的帖子
+            retuenList(alllist, userid);
+        } else {
+            //登录情况下但是mongodb里面没有刷新记录
+            list = postService.queryPostHeatValue(paging);
+            findUser(list);
+            insertmongo(list, userid);
+            return list;
         }
         return null;
     }
