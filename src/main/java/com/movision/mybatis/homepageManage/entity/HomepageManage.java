@@ -11,7 +11,7 @@ public class HomepageManage implements Serializable {
     //4 商城--一周热销banner  5 商城--每日神器推荐banner',
     private Integer topictype;
 
-    private Integer type;//发现页banner类型 0 帖子 1 活动（活动贴） 2 外链广告H5
+    private Integer mark;//发现页banner类型 0 帖子 1 活动（活动贴） 2 外链广告H5
 
     private String content;//内容主标题
 
@@ -73,12 +73,12 @@ public class HomepageManage implements Serializable {
         this.topictype = topictype;
     }
 
-    public Integer getType() {
-        return type;
+    public Integer getMark() {
+        return mark;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setMark(Integer type) {
+        this.mark = mark;
     }
 
     public String getContent() {
