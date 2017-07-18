@@ -1,6 +1,7 @@
 package com.movision.mybatis.post.entity;
 
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.postLabel.entity.PostLabel;
@@ -515,5 +516,15 @@ public class PostVo implements Serializable {
 
     public void setPostLabels(List<PostLabel> postLabels) {
         this.postLabels = postLabels;
+    }
+
+    public Comment comments;
+
+    public Comment getComments() {
+        return comments;
+    }
+
+    public void setComments(Comment comments) {
+        this.comments = comments;
     }
 }

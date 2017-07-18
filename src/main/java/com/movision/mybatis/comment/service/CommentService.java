@@ -403,4 +403,14 @@ public class CommentService {
         }
     }
 
+    public List<Comment> queryCommentByPost(int postid) {
+        try {
+            log.info("根據帖子id查詢所有評論");
+            return commentMapper.queryCommentByPost(postid);
+        } catch (Exception e) {
+            log.error("根據帖子id查詢所有評論失敗", e);
+            throw e;
+        }
+    }
+
 }

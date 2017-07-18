@@ -11,6 +11,8 @@ import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
+import com.movision.mybatis.comment.entity.Comment;
+import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.compressImg.service.CompressImgService;
 import com.movision.mybatis.goods.entity.Goods;
@@ -130,7 +132,8 @@ public class FacadePost {
     private VideoCoverURL videoCoverURL;
     @Autowired
     private  OpularSearchTermsService opularSearchTermsService;
-
+    @Autowired
+    private CommentService commentService;
     @Autowired
     private FacadeHeatValue facadeHeatValue;
     @Autowired
@@ -1262,6 +1265,7 @@ public class FacadePost {
             list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
             findUser(list);
             findPostLabel(list);
+            findHotComment(list);
             return list;
         } else {
             //已登录
@@ -1333,6 +1337,7 @@ public class FacadePost {
             list = postService.queryPostHeatValue(paging);
             findUser(list);
             insertmongo(list, userid);
+            findHotComment(list);
             return list;
         }
         return null;
@@ -1353,6 +1358,7 @@ public class FacadePost {
             list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
             findUser(list);
             findPostLabel(list);
+            findHotComment(list);
             return list;
         } else {//已登录
             //根据地区查询帖子
@@ -1374,6 +1380,7 @@ public class FacadePost {
                 findUser(list);
                 findPostLabel(list);
                 insertmongo(list, userid);
+                findHotComment(list);
                 return list;
             }
         }
@@ -1395,6 +1402,7 @@ public class FacadePost {
             list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
             findUser(list);
             findPostLabel(list);
+            findHotComment(list);
             return list;
         } else {
             listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//用户有没有看过
@@ -1413,6 +1421,7 @@ public class FacadePost {
                 list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
                 findPostLabel(list);
+                findHotComment(list);
                 insertmongo(list, userid);
                 return list;
             }
@@ -1435,6 +1444,7 @@ public class FacadePost {
             list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
             findUser(list);
             findPostLabel(list);
+            findHotComment(list);
             return list;
         } else {
             listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//用户有没有看过
@@ -1466,6 +1476,7 @@ public class FacadePost {
                 list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
                 findPostLabel(list);
+                findHotComment(list);
                 insertmongo(list, userid);
                 return list;
             }
@@ -1488,10 +1499,12 @@ public class FacadePost {
                 list = lists.subList(0, 10);
                 findUser(list);
                 findPostLabel(list);
+                findHotComment(list);
             } else {
                 list = lists.subList(0, lists.size());
                 findUser(list);
                 findPostLabel(list);
+                findHotComment(list);
             }
             insertmongo(list, userid);
         }
@@ -1533,6 +1546,27 @@ public class FacadePost {
         return list;
     }
 
+    /**
+     * 精選評論
+     *
+     * @param list
+     * @return
+     */
+    public List findHotComment(List<PostVo> list) {
+        List<Comment> comments = null;
+        for (int i = 0; i < list.size(); i++) {
+            int postid = list.get(i).getId();
+            //根據帖子id去查所有評論
+            comments = commentService.queryCommentByPost(postid);
+            for (int j = 0; j < comments.size(); j++) {
+                int heatvalue = comments.get(i).getHeatvalue();
+                if (heatvalue > 80) {
+                    list.get(i).setComments(comments.get(j));
+                }
+            }
+        }
+        return list;
+    }
     /***
      * 下拉刷新
      * @param userid

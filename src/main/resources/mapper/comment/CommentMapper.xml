@@ -486,4 +486,8 @@
         SELECT yw_user.`level` FROM yw_post_comment LEFT JOIN yw_user ON yw_user.id=yw_post_comment.userid WHERE isdel=0
         AND yw_post_comment.id=#{commentid,jdbcType=INTEGER}
     </select>
+    <select id="queryCommentByPost" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.Comment">
+        SELECT * FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER} ORDER  BY  heat_value DESC
+    </select>
 </mapper>

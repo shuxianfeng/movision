@@ -26,14 +26,14 @@ public class Comment implements Serializable {
 
     private Integer isread;//是否已读 0否 1是
 
-    private Integer heat_value;
+    private Integer heatvalue;
 
-    public Integer getHeat_value() {
-        return heat_value;
+    public Integer getHeatvalue() {
+        return heatvalue;
     }
 
-    public void setHeat_value(Integer heat_value) {
-        this.heat_value = heat_value;
+    public void setHeatvalue(Integer heatvalue) {
+        this.heatvalue = heatvalue;
     }
 
     public Integer getIsread() {
