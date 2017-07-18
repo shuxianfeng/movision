@@ -388,15 +388,7 @@ public class FacadePost {
         //查询当前圈子的所有管理员列表
         List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
 
-        int flag = 0;//定义一个userid比对标志位
-        if (manageList.size() > 0) {
-            for (int i = 0; i < manageList.size(); i++) {
-                if (manageList.get(i).getId() == Integer.parseInt(userid)) {
-                    //是圈子管理员时赋值为1
-                    flag = 1;
-                }
-            }
-        }
+        int flag = getMarkIsCircleAdmin(userid, manageList);
         int lev = user.getLevel();//用户等级
         //所有人均可发或当前用户为圈子所有者或管理员或当前圈子只有大V可发而当前用户正式大V
         if (scope == 2 || (Integer.parseInt(userid) == owner.getId() || flag == 1) || (scope == 1 && lev >= 1)) {
@@ -412,7 +404,7 @@ public class FacadePost {
     }
 
 
-    @Transactional
+    /*@Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map releasePost(HttpServletRequest request, String userid, String type, String circleid, String title, String postcontent, String isactive, MultipartFile coverimg,
                            String vid, String videourl, String proids) {
@@ -430,15 +422,7 @@ public class FacadePost {
         //查询当前圈子的所有管理员列表
         List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
 
-        int mark = 0;//定义一个userid比对标志位
-        if (manageList.size() > 0) {
-            for (int i = 0; i < manageList.size(); i++) {
-                if (manageList.get(i).getId() == Integer.parseInt(userid)) {
-                    //是圈子管理员时赋值为1
-                    mark = 1;
-                }
-            }
-        }
+        int mark = getMarkIsCircleAdmin(userid, manageList);
         int lev = owner.getLevel();//用户等级
         //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.所有者和大V可发时，发帖用户即为大V
         if (scope == 2 || (Integer.parseInt(userid) == owner.getId() || mark == 1) || (scope == 1 && lev >= 1)) {
@@ -495,19 +479,7 @@ public class FacadePost {
                     videoService.insertVideoById(video);
                 }
                 //再保存帖子中分享的商品列表(如果商品id字段不为空)
-                if (!StringUtils.isEmpty(proids)) {
-                    String[] proidstr = proids.split(",");
-                    List<PostShareGoods> postShareGoodsList = new ArrayList<>();
-                    for (int i = 0; i < proidstr.length; i++) {
-                        PostShareGoods postShareGoods = new PostShareGoods();
-                        int postid = flag;
-                        int goodsid = Integer.parseInt(proidstr[i]);
-                        postShareGoods.setPostid(postid);
-                        postShareGoods.setGoodsid(goodsid);
-                        postShareGoodsList.add(postShareGoods);
-                    }
-                    postService.insertPostShareGoods(postShareGoodsList);
-                }
+                insertPostShareGoods(proids, flag);
 
                 pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
 
@@ -525,25 +497,9 @@ public class FacadePost {
             map.put("flag", -1);
             return map;
         }
-    }
+    }*/
 
-    /**
-     * PC官网发帖
-     *
-     * @param request
-     * @param userid
-     * @param type
-     * @param circleid
-     * @param title
-     * @param postcontent
-     * @param isactive
-     * @param coverimg
-     * @param vid
-     * @param videourl
-     * @param proids
-     * @return
-     */
-    @Transactional
+    /*@Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map releasePostByPC(HttpServletRequest request, String userid, String type, String circleid, String title, String postcontent, String isactive, MultipartFile coverimg,
                                String vid, String videourl, String proids, String x, String y, String w, String h) {
@@ -557,15 +513,7 @@ public class FacadePost {
         //查询当前圈子的所有管理员列表
         List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
 
-        int mark = 0;//定义一个userid比对标志位
-        if (manageList.size() > 0) {
-            for (int i = 0; i < manageList.size(); i++) {
-                if (manageList.get(i).getId() == Integer.parseInt(userid)) {
-                    //是圈子管理员时赋值为1
-                    mark = 1;
-                }
-            }
-        }
+        int mark = getMarkIsCircleAdmin(userid, manageList);
         int lev = owner.getLevel();//用户等级
         //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.所有者和大V可发时，发帖用户即为大V
         if (scope == 2 || (Integer.parseInt(userid) == owner.getId() || mark == 1) || (scope == 1 && lev >= 1)) {
@@ -668,19 +616,7 @@ public class FacadePost {
                     videoService.insertVideoById(video);
                 }
                 //再保存帖子中分享的商品列表(如果商品id字段不为空)
-                if (!StringUtils.isEmpty(proids)) {
-                    String[] proidstr = proids.split(",");
-                    List<PostShareGoods> postShareGoodsList = new ArrayList<>();
-                    for (int i = 0; i < proidstr.length; i++) {
-                        PostShareGoods postShareGoods = new PostShareGoods();
-                        int postid = flag;
-                        int goodsid = Integer.parseInt(proidstr[i]);
-                        postShareGoods.setPostid(postid);
-                        postShareGoods.setGoodsid(goodsid);
-                        postShareGoodsList.add(postShareGoods);
-                    }
-                    postService.insertPostShareGoods(postShareGoodsList);
-                }
+                insertPostShareGoods(proids, flag);
 
                 pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
 
@@ -698,7 +634,7 @@ public class FacadePost {
             map.put("flag", -1);
             return map;
         }
-    }
+    }*/
 
 
     public Map uploadPostFacePic(MultipartFile file) {
@@ -771,15 +707,8 @@ public class FacadePost {
         List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
         //通过userid查询当前登录用户的用户等级
         UserAll user = userService.queryUserById(Integer.parseInt(userid));
-        int mark = 0;//定义一个userid比对标志位
-        if (manageList.size() > 0) {
-            for (int i = 0; i < manageList.size(); i++) {
-                if (manageList.get(i).getId() == Integer.parseInt(userid)) {
-                    //是圈子管理员时赋值为1
-                    mark = 1;
-                }
-            }
-        }
+        //判断该用户是否是圈子管理员
+        int mark = getMarkIsCircleAdmin(userid, manageList);
         int lev = user.getLevel();//当前登录用户的等级
         //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.所有者和大V可发时，发帖用户即为大V
         if (scope == 2 || (Integer.parseInt(userid) == owner.getId() || mark == 1) || (scope == 1 && lev >= 1)) {
@@ -787,59 +716,13 @@ public class FacadePost {
             try {
                 log.info("APP前端用户开始请求发帖");
 
-                Post post = new Post();
-                post.setCircleid(Integer.parseInt(circleid));
-                post.setTitle(title);
-                Map con = null;
-                if (StringUtil.isNotEmpty(postcontent)) {
-                    //内容转换
-                    con = jsoupCompressImg.newCompressImg(request, postcontent);
-                    System.out.println(con);
-                    if ((int) con.get("code") == 200) {
-                        String str = con.get("content").toString();
-                        postcontent = str;
-                    } else {
-                        log.error("APP端帖子图片内容转换异常");
-                    }
-                }
-
-                post.setPostcontent(postcontent);//帖子内容
-                post.setZansum(0);//新发帖全部默认为0次
-                post.setCommentsum(0);//被评论次数
-                post.setForwardsum(0);//被转发次数
-                post.setCollectsum(0);//被收藏次数
-                post.setCoverimg(coverimg);//帖子封面
-                post.setIsactive(0);//是否为活动 0 帖子 1活动
-                post.setIshot(0);//是否设为热门：默认0否
-                post.setIsessence(0);//是否设为精选：默认0否
-                post.setIsessencepool(0);//是否设为精选池中的帖子
-                post.setIntime(new Date());//帖子发布时间
-                post.setTotalpoint(0);//帖子综合评分
-                if ((int) con.get("flag") != 0) {
-                    post.setIsdel(2);//视频
-                } else {
-                    post.setIsdel(0);//图文
-                }
-
-                post.setUserid(Integer.parseInt(userid));
+                Post post = preparePost4PC(request, userid, circleid, title, postcontent, coverimg);
                 //插入帖子
                 postService.releasePost(post);
 
                 int flag = post.getId();//返回的主键--帖子id
                 //再保存帖子中分享的商品列表(如果商品id字段不为空)
-                if (!StringUtils.isEmpty(proids)) {
-                    String[] proidstr = proids.split(",");
-                    List<PostShareGoods> postShareGoodsList = new ArrayList<>();
-                    for (int i = 0; i < proidstr.length; i++) {
-                        PostShareGoods postShareGoods = new PostShareGoods();
-                        int postid = flag;
-                        int goodsid = Integer.parseInt(proidstr[i]);
-                        postShareGoods.setPostid(postid);
-                        postShareGoods.setGoodsid(goodsid);
-                        postShareGoodsList.add(postShareGoods);
-                    }
-                    postService.insertPostShareGoods(postShareGoodsList);
-                }
+                insertPostShareGoods(proids, flag);
 
                 pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
 
@@ -857,6 +740,56 @@ public class FacadePost {
             map.put("flag", -1);
             return map;
         }
+    }
+
+    /**
+     * 官网模块发帖-准备post实体
+     *
+     * @param request
+     * @param userid
+     * @param circleid
+     * @param title
+     * @param postcontent
+     * @param coverimg
+     * @return
+     */
+    private Post preparePost4PC(HttpServletRequest request, String userid, String circleid, String title, String postcontent, String coverimg) {
+        Post post = new Post();
+        post.setCircleid(Integer.parseInt(circleid));
+        post.setTitle(title);
+        Map con = null;
+        if (StringUtil.isNotEmpty(postcontent)) {
+            //内容转换
+            con = jsoupCompressImg.newCompressImg(request, postcontent);
+            System.out.println(con);
+            if ((int) con.get("code") == 200) {
+                String str = con.get("content").toString();
+                postcontent = str;
+            } else {
+                log.error("APP端帖子图片内容转换异常");
+            }
+        }
+
+        post.setPostcontent(postcontent);//帖子内容
+        post.setZansum(0);//新发帖全部默认为0次
+        post.setCommentsum(0);//被评论次数
+        post.setForwardsum(0);//被转发次数
+        post.setCollectsum(0);//被收藏次数
+        post.setCoverimg(coverimg);//帖子封面
+        post.setIsactive(0);//是否为活动 0 帖子 1活动
+        post.setIshot(0);//是否设为热门：默认0否
+        post.setIsessence(0);//是否设为精选：默认0否
+        post.setIsessencepool(0);//是否设为精选池中的帖子
+        post.setIntime(new Date());//帖子发布时间
+        post.setTotalpoint(0);//帖子综合评分
+        if ((int) con.get("flag") != 0) {
+            post.setIsdel(2);//视频
+        } else {
+            post.setIsdel(0);//图文
+        }
+
+        post.setUserid(Integer.parseInt(userid));
+        return post;
     }
 
     @CacheEvict(value = "indexData", key = "'index_data'")
@@ -1089,72 +1022,21 @@ public class FacadePost {
         List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
         //通过userid查询当前登录用户的用户等级
         UserAll user = userService.queryUserById(Integer.parseInt(userid));
-        int mark = 0;//定义一个userid比对标志位
-        if (manageList.size() > 0) {
-            for (int i = 0; i < manageList.size(); i++) {
-                if (manageList.get(i).getId() == Integer.parseInt(userid)) {
-                    //是圈子管理员时赋值为1
-                    mark = 1;
-                }
-            }
-        }
+        int mark = getMarkIsCircleAdmin(userid, manageList);
         int lev = user.getLevel();//用户等级
         //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.所有者和大V可发时，发帖用户即为大V
         if (scope == 2 || (Integer.parseInt(userid) == owner.getId() || mark == 1) || (scope == 1 && lev >= 1)) {
 
             try {
                 log.info("APP前端用户开始请求发帖");
-                Map con = null;
-                Post post = new Post();
-                post.setCircleid(Integer.parseInt(circleid));
-                post.setTitle(title);
-                if (StringUtil.isNotEmpty(postcontent)) {
-                    //内容转换
-                    con = jsoupCompressImg.newCompressImg(request, postcontent);
-                    System.out.println(con);
-                    if ((int) con.get("code") == 200) {
-                        String str = con.get("content").toString();
-                        postcontent = str;
-                    } else {
-                        log.error("APP端帖子图片内容转换异常");
-                    }
-                }
-                post.setPostcontent(postcontent);//帖子内容
-                post.setZansum(0);//新发帖全部默认为0次
-                post.setCommentsum(0);//被评论次数
-                post.setForwardsum(0);//被转发次数
-                post.setCollectsum(0);//被收藏次数
-                post.setIsactive(Integer.parseInt(isactive));//是否为活动 0 帖子 1 活动
-                // post.setType(Integer.parseInt(type));//帖子类型 0 普通图文帖 1 原生视频帖 2 分享视频帖
-                post.setIshot(0);//是否设为热门：默认0否
-                post.setIsessence(0);//是否设为精选：默认0否
-                post.setIsessencepool(0);//是否设为精选池中的帖子
-                post.setIntime(new Date());//帖子发布时间
-                post.setTotalpoint(0);//帖子综合评分
-                if ((int) con.get("flag") == 0) {
-                    post.setIsdel(0);//上架
-                } else if ((int) con.get("flag") > 0) {
-                    post.setIsdel(2);
-                }
-                post.setCoverimg(coverimg);//帖子封面
-                post.setUserid(Integer.parseInt(userid));
+                Map contentMap = null;
+
+                Post post = preparePostJavaBean(request, userid, circleid, title, postcontent, isactive, coverimg, contentMap);
                 //插入帖子
                 postService.releaseModularPost(post);
                 int flag = post.getId();//返回的主键--帖子id
                 //再保存帖子中分享的商品列表(如果商品id字段不为空)
-                if (!StringUtils.isEmpty(proids)) {
-                    String[] proidstr = proids.split(",");
-                    List<PostShareGoods> postShareGoodsList = new ArrayList<>();
-                    for (int i = 0; i < proidstr.length; i++) {
-                        PostShareGoods postShareGoods = new PostShareGoods();
-                        int postid = flag;
-                        int goodsid = Integer.parseInt(proidstr[i]);
-                        postShareGoods.setPostid(postid);
-                        postShareGoods.setGoodsid(goodsid);
-                        postShareGoodsList.add(postShareGoods);
-                    }
-                    postService.insertPostShareGoods(postShareGoodsList);
-                }
+                insertPostShareGoods(proids, flag);
 
                 pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
 
@@ -1171,6 +1053,98 @@ public class FacadePost {
             log.info("该用户不具备发帖权限");
             map.put("flag", -1);
             return map;
+        }
+    }
+
+    /**
+     * 判断该用户是否是圈子管理员
+     *
+     * @param userid
+     * @param manageList
+     * @return
+     */
+    private int getMarkIsCircleAdmin(String userid, List<User> manageList) {
+        int mark = 0;//定义一个userid比对标志位
+        if (manageList.size() > 0) {
+            for (int i = 0; i < manageList.size(); i++) {
+                if (manageList.get(i).getId() == Integer.parseInt(userid)) {
+                    //是圈子管理员时赋值为1
+                    mark = 1;
+                }
+            }
+        }
+        return mark;
+    }
+
+    /**
+     * 根据请求中的参数准备Post实体
+     *
+     * @param request
+     * @param userid
+     * @param circleid
+     * @param title
+     * @param postcontent
+     * @param isactive
+     * @param coverimg
+     * @param contentMap
+     * @return
+     */
+    private Post preparePostJavaBean(HttpServletRequest request, String userid, String circleid, String title, String postcontent, String isactive, String coverimg, Map contentMap) {
+        Post post = new Post();
+        post.setCircleid(Integer.parseInt(circleid));
+        post.setTitle(title);
+        if (StringUtil.isNotEmpty(postcontent)) {
+            //内容转换
+            contentMap = jsoupCompressImg.newCompressImg(request, postcontent);
+            log.debug("转换后的帖子内容是：" + contentMap);
+            if ((int) contentMap.get("code") == 200) {
+                String str = contentMap.get("content").toString();
+                postcontent = str;
+            } else {
+                log.error("APP端帖子图片内容转换异常");
+            }
+        }
+        post.setPostcontent(postcontent);//帖子内容
+        post.setZansum(0);//新发帖全部默认为0次
+        post.setCommentsum(0);//被评论次数
+        post.setForwardsum(0);//被转发次数
+        post.setCollectsum(0);//被收藏次数
+        post.setIsactive(Integer.parseInt(isactive));//是否为活动 0 帖子 1 活动
+        // post.setType(Integer.parseInt(type));//帖子类型 0 普通图文帖 1 原生视频帖 2 分享视频帖
+        post.setIshot(0);//是否设为热门：默认0否
+        post.setIsessence(0);//是否设为精选：默认0否
+        post.setIsessencepool(0);//是否设为精选池中的帖子
+        post.setIntime(new Date());//帖子发布时间
+        post.setTotalpoint(0);//帖子综合评分
+        if ((int) contentMap.get("flag") == 0) {
+            post.setIsdel(0);//上架
+        } else if ((int) contentMap.get("flag") > 0) {
+            post.setIsdel(2);
+        }
+        post.setCoverimg(coverimg);//帖子封面
+        post.setUserid(Integer.parseInt(userid));
+        return post;
+    }
+
+    /**
+     * 保存帖子中分享的商品列表(如果商品id字段不为空)
+     *
+     * @param proids
+     * @param flag
+     */
+    private void insertPostShareGoods(String proids, int flag) {
+        if (!StringUtils.isEmpty(proids)) {
+            String[] proidstr = proids.split(",");
+            List<PostShareGoods> postShareGoodsList = new ArrayList<>();
+            for (int i = 0; i < proidstr.length; i++) {
+                PostShareGoods postShareGoods = new PostShareGoods();
+                int postid = flag;
+                int goodsid = Integer.parseInt(proidstr[i]);
+                postShareGoods.setPostid(postid);
+                postShareGoods.setGoodsid(goodsid);
+                postShareGoodsList.add(postShareGoods);
+            }
+            postService.insertPostShareGoods(postShareGoodsList);
         }
     }
 
