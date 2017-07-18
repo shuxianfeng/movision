@@ -12,7 +12,7 @@ public class UserRefreshRecord {
 
     private int postid;
 
-    private int crileid;
+    private String crileid;
 
     private String intime;
 
@@ -48,11 +48,11 @@ public class UserRefreshRecord {
         this.postid = postid;
     }
 
-    public int getCrileid() {
+    public String getCrileid() {
         return crileid;
     }
 
-    public void setCrileid(int crileid) {
+    public void setCrileid(String crileid) {
         this.crileid = crileid;
     }
 }
