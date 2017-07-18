@@ -18,7 +18,7 @@ public interface HomepageManageMapper {
 
     HomepageManage queryBanner(int type);
 
-    List<HomepageManage> queryBannerList(int type);
+    List<HomepageManage> queryBannerList(int topictype);
 
     int updateByPrimaryKeySelective(HomepageManage record);
 
