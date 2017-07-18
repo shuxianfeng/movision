@@ -66,24 +66,21 @@ public class FacadeHeatValue {
     }
 
     /**
-     * 取消赞和收藏时减少热度
+     * 取消收藏时减少热度
      *
      * @param postid
      */
-    public void zanLessenHeatValue(int postid, int type) {
+    public void zanLessenHeatValue(int postid) {
         int points = 0;
         Map map = new HashMap();
-        if (type == 1) {//点赞
-            int level = userLevel(postid);
-            points = level * HeatValueConstant.POINT.zan_number.getCode();
-            map.put("points", points);
-            postService.updatePostHeatValue(map);
-        } else if (type == 2) {//收藏
+        int heatvalue = postService.selectPostHeatValue(postid);
+        if (heatvalue != 0) {
             int level = userLevel(postid);
             points = level * HeatValueConstant.POINT.collection_number.getCode();
             map.put("points", points);
-            postService.updatePostHeatValue(map);
+            postService.updateZanPostHeatValue(map);
         }
+
     }
 
     /**

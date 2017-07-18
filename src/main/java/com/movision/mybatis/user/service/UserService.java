@@ -877,4 +877,21 @@ public class UserService {
         }
     }
 
+    /**
+     * 查询用户名称头像
+     *
+     * @param userid
+     * @return
+     */
+    public List<UserLike> findUser(int userid) {
+        try {
+            log.info("查询用户");
+            return userMapper.findUser(userid);
+        } catch (Exception e) {
+            log.error("查询用户失败", e);
+            throw e;
+        }
+
+    }
+
 }

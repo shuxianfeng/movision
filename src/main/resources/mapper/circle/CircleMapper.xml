@@ -22,11 +22,12 @@
         <result column="orderid" property="orderid" jdbcType="INTEGER"/>
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
         <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="heat_value" property="heatvalue" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, isofficial, scope, phone, photo, category, code, name, introduction, notice,
         permission, isrecommend, maylikeimg, createtime, status, supportnum, isdiscover, orderid,
-        isdel,userid
+        isdel,userid,heat_value
     </sql>
 
     <!--基础查询语句-->
@@ -1033,4 +1034,16 @@
             yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})) AND circleid = #{id,jdbcType=INTEGER}
         </if>
     </select>
+    <select id="queryAllCircle" resultType="com.movision.mybatis.circle.entity.CircleVo">
+       SELECT * FROM yw_circle WHERE status=1
+    </select>
+    <select id="queryHeatValueById" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT  heat_value FROM  yw_post WHERE circleid=#{id,jdbcType=INTEGER} AND isdel=0
+    </select>
+    <select id="queryHeatValue" resultType="com.movision.mybatis.circle.entity.CircleVo">
+        SELECT  id,name FROM  yw_circle WHERE status=1 ORDER  BY  heat_value DESC
+    </select>
+    <update id="updateCircleHeatValue" parameterType="java.util.Map">
+        UPDATE  yw_circle SET  heat_value=#{sum,jdbcType=INTEGER} WHERE id=#{id,jdbcType=INTEGER}
+    </update>
 </mapper>

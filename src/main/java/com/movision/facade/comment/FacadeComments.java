@@ -3,6 +3,7 @@ package com.movision.facade.comment;
 import com.google.gson.Gson;
 import com.movision.common.constant.PointConstant;
 import com.movision.facade.im.ImFacade;
+import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
@@ -43,7 +44,8 @@ public class FacadeComments {
     private NewInformationService newInformationService;
     @Autowired
     private ImFacade imFacade;
-
+    @Autowired
+    private FacadeHeatValue facadeHeatValue;
     /**
      * 帖子评论列表（二级）
      *
@@ -144,7 +146,8 @@ public class FacadeComments {
                 vo.setStatus(0);
                 vo.setIscontribute(0);
                 type = commentService.insertComment(vo);//添加评论
-
+                //增加热度
+                facadeHeatValue.addHeatValue(Integer.parseInt(postid), 4);
                 //************************查询被评论的帖子是否被设为最新消息通知用户
                 Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
                 NewInformation news = new NewInformation();

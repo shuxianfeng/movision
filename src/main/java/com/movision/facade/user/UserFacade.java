@@ -6,6 +6,7 @@ import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.AuthException;
 import com.movision.exception.BusinessException;
+import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.bossUser.service.BossUserService;
@@ -57,6 +58,8 @@ public class UserFacade {
     @Autowired
     private PointRecordService pointRecordService;
 
+    @Autowired
+    private FacadeHeatValue facadeHeatValue;
     /**
      * 判断是否存在该手机号的app用户
      *
@@ -154,7 +157,8 @@ public class UserFacade {
                 userService.insertPostShare(parammap);//插入帖子分享记录
             }
             postService.updatePostShareNum(parammap);//增加帖子分享次数
-
+            //增加热度
+            facadeHeatValue.addHeatValue(Integer.parseInt(postid), 5);
         } else if (type.equals("1")) {
             //分享商品
             parammap.put("goodsid", Integer.parseInt(goodsid));

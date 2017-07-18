@@ -4,6 +4,7 @@ import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.circle.mapper.CircleMapper;
 import com.movision.mybatis.followCircle.mapper.FollowCircleMapper;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserRole;
 import com.movision.utils.pagination.model.Paging;
@@ -637,5 +638,51 @@ public class CircleService {
             log.error("查询圈子是否属于本人异常", e);
             throw e;
         }
+    }
+
+    /**
+     * 查询所有圈子
+     *
+     * @return
+     */
+    public List<CircleVo> queryAllCircle() {
+        try {
+            log.info("查询所有圈子");
+            return circleMapper.queryAllCircle();
+        } catch (Exception e) {
+            log.error("查询所有圈子异常", e);
+            throw e;
+        }
+    }
+
+    public List<Integer> queryHeatValueById(int id) {
+        try {
+            log.info("根据圈子id查询所有热度合");
+            return circleMapper.queryHeatValueById(id);
+        } catch (Exception e) {
+            log.error("根据圈子id查询所有热度合异常", e);
+            throw e;
+        }
+    }
+
+    public List<CircleVo> queryHeatValue() {
+        try {
+            log.info("根据热度查询圈子");
+            return circleMapper.queryHeatValue();
+        } catch (Exception e) {
+            log.error("根据热度查询圈子失败", e);
+            throw e;
+        }
+    }
+
+    public Integer updateCircleHeatValue(Map map) {
+        try {
+            log.info("根据圈子id改变表中热度值");
+            return circleMapper.updateCircleHeatValue(map);
+        } catch (Exception e) {
+            log.error("根据圈子id改变表中热度值失败", e);
+            throw e;
+        }
+
     }
 }

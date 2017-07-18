@@ -29,12 +29,13 @@
         <result column="userid" jdbcType="INTEGER" property="userid"/>
         <result column="oprtime" jdbcType="TIMESTAMP" property="oprtime"/>
         <result column="heat_value" jdbcType="INTEGER" property="heatvalue"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
     </resultMap>
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
         isactive, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
-        hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value
+        hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,city
   </sql>
 
     <!--基础查询语句-->
@@ -2008,33 +2009,34 @@
         SELECT postcontent FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
     <select id="queryPostSessen" resultType="com.movision.mybatis.post.entity.Post">
-        SELECT * FROM yw_post WHERE isessence=1 AND isdel=0 AND isactive=0  ORDER BY intime DESC
+        SELECT * FROM yw_post WHERE isessence=1 AND isdel=0 ORDER BY heat_value DESC
     </select>
     <select id="queryNOPostSessen" resultType="com.movision.mybatis.post.entity.Post">
- SELECT * FROM yw_post WHERE isessence=0 AND isdel=0 AND isactive=0  ORDER BY intime DESC
+        SELECT * FROM yw_post WHERE isessence=0 AND isdel=0 ORDER BY heat_value DESC
     </select>
     <select id="queryCrileidPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
-        SELECT * from yw_post WHERE  isdel=0 and isactive=0 AND isessence=1 AND  circleid=#{crileid,jdbcType=INTEGER}  ORDER BY intime DESC
+        SELECT * from yw_post WHERE isdel=0 AND circleid=#{crileid,jdbcType=INTEGER} ORDER BY heat_value DESC
     </select>
     <select id="queryNoCrileidPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
-        SELECT * from yw_post WHERE  isdel=0 and isactive=0 AND isessence=0 AND  circleid=#{crileid,jdbcType=INTEGER}  ORDER BY intime DESC
+        SELECT * from yw_post WHERE isdel=0 AND isessence=0 AND circleid=#{crileid,jdbcType=INTEGER} ORDER BY heat_value
+        DESC
     </select>
     <select id="queryoverCrileidPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
-     SELECT * from yw_post WHERE  isdel=0 and isactive=0  AND  circleid!=#{crileid,jdbcType=INTEGER}  ORDER BY intime DESC
+        SELECT * from yw_post WHERE isdel=0 ORDER BY heat_value DESC
     </select>
-    <select id="queryPostHeatValue" resultType="com.movision.mybatis.post.entity.Post">
-        SELECT * FROM yw_post WHERE isactive=0 AND isdel=0 ORDER BY heat_value DESC
+    <select id="queryPostHeatValue" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post WHERE isdel=0 ORDER BY heat_value DESC
     </select>
-    <select id="findAllPostListHeat" resultType="com.movision.mybatis.post.entity.Post">
-        SELECT * FROM yw_post WHERE isactive=0 AND isdel=0 ORDER BY heat_value DESC
+    <select id="findAllPostListHeat" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post WHERE isdel=0 ORDER BY heat_value DESC
     </select>
-    <select id="queryPostCricle" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
-        SELECT * FROM yw_post WHERE isactive=0 AND isdel=0 AND circleid=#{crileid,jdbcType=INTEGER} ORDER BY heat_value
+    <select id="queryPostCricle" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.lang.Integer">
+        SELECT * FROM yw_post WHERE isdel=0 AND circleid=#{crileid,jdbcType=INTEGER} ORDER BY heat_value
         DESC
     </select>
-    <select id="queryoverPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
-        SELECT * from yw_post WHERE isdel=0 and isactive=0 AND circleid!=#{crileid,jdbcType=INTEGER} ORDER BY heat_value
-        DESC
+    <select id="queryoverPost" resultType="com.movision.mybatis.post.entity.Post">
+        SELECT * from yw_post WHERE isdel=0 AND circleid!=#{crileid,jdbcType=INTEGER} OR (circleid IS NULL AND isdel=0)
+        ORDER BY heat_value DESC
     </select>
     <select id="queryPostDetailById" resultType="com.movision.mybatis.post.entity.Post"
             parameterType="java.lang.Integer">
@@ -2055,4 +2057,39 @@
     <update id="updateZanPostHeatValue" parameterType="java.util.Map">
         UPDATE yw_post SET heat_value=heat_value-#{points,jdbcType=INTEGER} WHERE id=#{postid,jdbcType=INTEGER}
     </update>
+    <select id="selectPostHeatValue" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT heat_value from yw_post WHERE isdel=0 AND id=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="queryFollowCricle" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT circleid FROM yw_follow_circle WHERE userid=#{userid,jdbcType=INTEGER}
+    </select>
+    <select id="queryFollowUser" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT interestedusers FROM yw_follow_user WHERE userid=#{userid,jdbcType=INTEGER}
+    </select>
+    <select id="queryUserPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
+        select * from yw_post WHERE userid=#{interestedusers,jdbcType=INTEGER} ORDER BY heat_value DESC
+    </select>
+    <select id="queryPostListByIds" parameterType="java.util.List" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post WHERE circleid IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ORDER BY heat_value DESC
+    </select>
+    <select id="queryUserListByIds" parameterType="java.util.List" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post WHERE userid IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ORDER BY heat_value DESC
+    </select>
+    <select id="queryPostCrile" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+        select * from yw_post where circleid=#{circleid,jdbcType=INTEGER} and isdel=0 order by heat_value desc
+    </select>
+    <select id="queryCityCode" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT code FROM yw_city WHERE  name=#{area,jdbcType=VARCHAR}
+    </select>
+    <select id="queryCityPost" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.lang.String">
+        SELECT  * FROM  yw_post WHERE isdel=0 AND city=#{citycode,jdbcType=VARCHAR} ORDER BY  heat_value DESC
+    </select>
 </mapper>

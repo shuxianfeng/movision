@@ -1,6 +1,7 @@
 package com.movision.facade.collection;
 
 import com.movision.common.constant.PointConstant;
+import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.collection.entity.Collection;
@@ -41,6 +42,9 @@ public class CollectionFacade {
     @Autowired
     private NewInformationService newInformationService;
 
+    @Autowired
+    private FacadeHeatValue facadeHeatValue;
+
     //在帖子中点击收藏帖子调用该方法
     public int collectionPost(String postid, String userid, String type) {
 
@@ -60,7 +64,8 @@ public class CollectionFacade {
 
             //该帖子的被收藏次数+1
             collectionService.addCollectionSum(Integer.parseInt(postid));
-
+            //增加熱度
+            facadeHeatValue.addHeatValue(Integer.parseInt(postid), 6);
 
             //************************查询被收藏人的帖子是否被设为最新消息通知用户
            /* Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
@@ -97,6 +102,8 @@ public class CollectionFacade {
             parammap.put("postid", Integer.parseInt(postid));
             collectionService.cancelCollectionPost(parammap);
             postService.updatePostCollectCount(parammap);
+            //減少熱度
+            facadeHeatValue.zanLessenHeatValue(Integer.parseInt(postid));
         } else if (type.equals("1")) {
             //取消收藏商品
             Map<String, Object> parammap = new HashMap<>();

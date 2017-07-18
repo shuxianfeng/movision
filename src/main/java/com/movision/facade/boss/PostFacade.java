@@ -4,6 +4,7 @@ import com.movision.common.Response;
 import com.movision.common.constant.JurisdictionConstants;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
+import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.activePart.entity.ActivePartList;
@@ -140,11 +141,7 @@ public class PostFacade {
     private MovisionOssClient movisionOssClient;
 
     @Autowired
-    private CoverImgCompressUtil coverImgCompressUtil;
-
-    @Autowired
-    private AliOSSClient aliOSSClient;
-
+    private FacadeHeatValue facadeHeatValue;
     @Autowired
     private VideoCoverURL videoCoverURL;
 
@@ -824,6 +821,12 @@ public class PostFacade {
                 if (result == 1) {
                     Integer in = 0;
                     Integer pid = post.getId();//获取到刚刚添加的帖子id
+                    if (StringUtil.isNotEmpty(ishot)) {
+                        if (Integer.parseInt(ishot) == 1) {
+                            //增加热度
+                            facadeHeatValue.addHeatValue(pid, 2);
+                        }
+                    }
                     if (type.equals("1")) {
                         Video vide = new Video();
                         vide.setPostid(pid);
@@ -975,6 +978,12 @@ public class PostFacade {
                 Integer in = 0;
                 if (StringUtil.isNotEmpty(goodsid)) {//帖子添加商品
                     Integer pid = post.getId();//获取到刚刚添加的帖子id
+                    if (StringUtil.isNotEmpty(ishot)) {
+                        if (Integer.parseInt(ishot) == 1) {
+                            //增加热度
+                            facadeHeatValue.addHeatValue(pid, 2);
+                        }
+                    }
                     String[] lg = goodsid.split(",");//以逗号分隔
                     for (int i = 0; i < lg.length; i++) {
                         Map addgoods = new HashedMap();
@@ -1163,6 +1172,8 @@ public class PostFacade {
             if (orderid != null) {
                 p.setOrderid(Integer.parseInt(orderid));
             }
+            //增加热度
+            facadeHeatValue.addHeatValue(Integer.parseInt(postid), 1);
             p.setSubtitle(subtitle);
             Integer result = null;
             int isessence = postService.queryPostByIsessence(postid);//判断是否加精
@@ -1632,6 +1643,12 @@ public class PostFacade {
                     }
                     if (!StringUtils.isEmpty(ishot)) {
                         post.setIshot(ishot);//是否为圈子精选
+                    }
+                    if (StringUtil.isNotEmpty(ishot)) {
+                        if (Integer.parseInt(ishot) == 1) {
+                            //增加热度
+                            facadeHeatValue.addHeatValue(Integer.parseInt(id), 2);
+                        }
                     }
                     post.setUserid(userid);
                     int result = postService.updatePostById(post);//编辑帖子

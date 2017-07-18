@@ -1088,5 +1088,7 @@
     <select id="queryUserIsCricle" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT u.id FROM yw_user u LEFT JOIN yw_admin_user au ON au.phone = u.phone WHERE au.id = #{userid}
     </select>
-
+    <select id="findUser" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.UserLike">
+        SELECT  * FROM  yw_user WHERE id=#{userid,jdbcType=INTEGER}
+    </select>
 </mapper>

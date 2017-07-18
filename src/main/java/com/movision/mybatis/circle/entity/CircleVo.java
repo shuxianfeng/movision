@@ -81,6 +81,15 @@ public class CircleVo implements Serializable {
     private Date intime;//时间
 
     private Integer userid;//用户id
+    private Integer heatvalue;
+
+    public Integer getHeatvalue() {
+        return heatvalue;
+    }
+
+    public void setHeatvalue(Integer heatvalue) {
+        this.heatvalue = heatvalue;
+    }
 
     public Integer getCircleUserid() {
         return circleUserid;

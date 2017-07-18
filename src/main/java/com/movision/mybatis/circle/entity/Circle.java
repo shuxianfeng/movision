@@ -44,6 +44,16 @@ public class Circle implements Serializable {
 
     private Integer userid;
 
+    private Integer heatvalue;
+
+    public Integer getHeatvalue() {
+        return heatvalue;
+    }
+
+    public void setHeatvalue(Integer heatvalue) {
+        this.heatvalue = heatvalue;
+    }
+
     public Integer getUserid() {
         return userid;
     }

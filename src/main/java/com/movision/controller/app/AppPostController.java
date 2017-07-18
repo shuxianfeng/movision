@@ -619,41 +619,5 @@ public class AppPostController {
 
     }
 
-    /**
-     * 最新下拉刷新
-     *
-     * @return
-     */
-    @ApiOperation(value = "最新下拉刷新", notes = "最新下拉刷新", response = Response.class)
-    @RequestMapping(value = "userRefreshListNew", method = RequestMethod.POST)
-    public Response userRefreshListNew(@ApiParam(value = "用户id") @RequestParam(required = false) int userid,
-                                       @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                       @RequestParam(required = false, defaultValue = "10") String pageSize) {
-        Response response = new Response();
-        Paging<Post> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List map = facadePost.userRefreshListNew(userid, pager);
-        pager.result(map);
-        response.setData(pager);
-        return response;
-    }
-
-    /**
-     * 热度
-     *
-     * @param postid
-     * @param type
-     * @return
-     */
-    @ApiOperation(value = "热度", notes = "热度", response = Response.class)
-    @RequestMapping(value = "addHeatValue", method = RequestMethod.POST)
-    public Response addHeatValue(@ApiParam(value = "帖子id") @RequestParam(required = false) int postid,
-                                 @ApiParam(value = "类型") @RequestParam(required = false) int type) {
-        Response response = new Response();
-        facadeHeatValue.addHeatValue(postid, type);
-        if (response.getCode() == 200) {
-            response.setMessage("成功");
-        }
-        return response;
-    }
 
 }

@@ -3,6 +3,7 @@ package com.movision.mybatis.circle.mapper;
 import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.category.entity.CircleAndCircle;
 import com.movision.mybatis.circle.entity.*;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserRole;
 import org.apache.ibatis.annotations.Param;
@@ -107,4 +108,12 @@ public interface CircleMapper {
     int batchUpdatePhoneInCircle(Map map);
 
     Integer queryCircleIdByIsUser(Map map);
+
+    List<CircleVo> queryAllCircle();
+
+    List<Integer> queryHeatValueById(int id);
+
+    List<CircleVo> queryHeatValue();
+
+    int updateCircleHeatValue(Map map);
 }

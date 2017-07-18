@@ -138,4 +138,6 @@ public interface UserMapper {
 
     List<UserVo> queryHotUserList();
 
+    List<UserLike> findUser(int userid);
+
 }
