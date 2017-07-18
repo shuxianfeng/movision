@@ -1,6 +1,8 @@
 package com.movision.mybatis.post.mapper;
 
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.followCircle.entity.FollowCircle;
+import com.movision.mybatis.followUser.entity.FollowUser;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
@@ -217,7 +219,7 @@ public interface PostMapper {
 
     List<Post> findAllPostListRefulsh();
 
-    int queryCrileid(int postid);
+    Integer queryCrileid(int postid);
 
     int queryIsIsessence(int postid);
 
@@ -234,13 +236,13 @@ public interface PostMapper {
     List<Post> queryNoCrileidPost(int crileid);
     List<Post> queryoverCrileidPost(int crileid);
 
-    List<Post> queryPostHeatValue(RowBounds rowBounds);//查询帖子的热度值
+    List<PostVo> queryPostHeatValue(RowBounds rowBounds);//查询帖子的热度值
 
-    List<Post> findAllPostListHeat();
+    List<PostVo> findAllPostListHeat();
 
-    List<Post> queryPostCricle(int crileid);
+    List<PostVo> queryPostCricle(int crileid);
 
-    List<Post> queryoverPost(int crileid);
+    List<PostVo> queryoverPost(int crileid);
 
     List<Post> queryPostDetailById(int id);
 
@@ -254,6 +256,24 @@ public interface PostMapper {
 
     int updateZanPostHeatValue(Map map);//修改热度
 
+    int selectPostHeatValue(int postid);
+
+    //查询用户关注的圈子
+    List<Integer> queryFollowCricle(int userid);
+
+    List<Integer> queryFollowUser(int userid);
+
+
+    List<PostVo> queryPostListByIds(List ids);
+
+    List<PostVo> queryUserListByIds(List ids);
+
+    //根据圈子id查询帖子
+    List<PostVo> queryPostCrile(int circleid);
+
+    String queryCityCode(String area);//查询code
+
+    List<PostVo> queryCityPost(String citycode);//
 
 
 }

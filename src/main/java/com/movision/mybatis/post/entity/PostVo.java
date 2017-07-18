@@ -106,6 +106,15 @@ public class PostVo implements Serializable {
 
     private Integer rewardsum;//打赏热人数
     private List<UserLike> rewardpersonnickname;//打赏的10个人的昵称
+    private String city;//城市code
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 
     public Integer getRewardsum() {
         return rewardsum;
@@ -476,4 +485,24 @@ public class PostVo implements Serializable {
     public void setMaylikeimg(String maylikeimg) {
         this.maylikeimg = maylikeimg;
     }
+
+    public List<UserLike> userlike;
+
+    public List<UserLike> getUserlike() {
+        return userlike;
+    }
+
+    public void setUserlike(List<UserLike> userlike) {
+        this.userlike = userlike;
+    }
+
+    public Integer getHeatvalue() {
+        return heatvalue;
+    }
+
+    public void setHeatvalue(Integer heatvalue) {
+        this.heatvalue = heatvalue;
+    }
+
+    private Integer heatvalue;//热度
 }

@@ -3,6 +3,8 @@ package com.movision.mybatis.post.service;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.compressImg.mapper.CompressImgMapper;
+import com.movision.mybatis.followCircle.entity.FollowCircle;
+import com.movision.mybatis.followUser.entity.FollowUser;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
@@ -1236,7 +1238,7 @@ public class PostService {
      * @param
      * @return
      */
-    public List<Post> findAllPostListHeat() {
+    public List<PostVo> findAllPostListHeat() {
         try {
             log.info("查询所有的帖子");
             return postMapper.findAllPostListHeat();
@@ -1245,7 +1247,8 @@ public class PostService {
             throw e;
         }
     }
-    public int queryCrileid(int postid) {
+
+    public Integer queryCrileid(int postid) {
         try {
             log.info("查询帖子属于哪个圈子");
             return postMapper.queryCrileid(postid);
@@ -1366,32 +1369,32 @@ public class PostService {
         }
     }
 
-    public List<Post> queryPostHeatValue(Paging<Post> paging) {
+    public List<PostVo> queryPostHeatValue(Paging<PostVo> paging) {
         try {
             log.info("查询帖子热度值");
             return postMapper.queryPostHeatValue(paging.getRowBounds());
         } catch (Exception e) {
-            log.error("查询帖子热度值失败");
+            log.error("查询帖子热度值失败", e);
             throw e;
         }
     }
 
-    public List<Post> queryPostCricle(int crileid) {
+    public List<PostVo> queryPostCricle(int crileid) {
         try {
             log.info("根据圈子查询帖子");
             return postMapper.queryPostCricle(crileid);
         } catch (Exception e) {
-            log.error("根据圈子查询帖子失败");
+            log.error("根据圈子查询帖子失败", e);
             throw e;
         }
     }
 
-    public List<Post> queryoverPost(int crileid) {
+    public List<PostVo> queryoverPost(int crileid) {
         try {
             log.info("查询除了这个圈子外的帖子");
             return postMapper.queryoverPost(crileid);
         } catch (Exception e) {
-            log.error("查询除了这个圈子外的帖子失败");
+            log.error("查询除了这个圈子外的帖子失败", e);
             throw e;
         }
 
@@ -1408,7 +1411,7 @@ public class PostService {
             log.info("根据id查询帖子详情");
             return postMapper.queryPostDetailById(id);
         } catch (Exception e) {
-            log.error("根据id查询帖子详情失败");
+            log.error("根据id查询帖子详情失败", e);
             throw e;
         }
     }
@@ -1418,7 +1421,7 @@ public class PostService {
             log.info("根据id查询是否为精选");
             return postMapper.queryPostIsessenceHeat(postid);
         } catch (Exception e) {
-            log.error("根据id查询是否为精选失败");
+            log.error("根据id查询是否为精选失败", e);
             throw e;
         }
     }
@@ -1429,7 +1432,7 @@ public class PostService {
             log.info("根据id查询是否为精选");
             return postMapper.queryPostHotHeat(postid);
         } catch (Exception e) {
-            log.error("根据id查询是否为精选失败");
+            log.error("根据id查询是否为精选失败", e);
             throw e;
         }
     }
@@ -1439,7 +1442,7 @@ public class PostService {
             log.info("修改热度");
             return postMapper.updatePostHeatValue(map);
         } catch (Exception e) {
-            log.error("修改热度失败");
+            log.error("修改热度失败", e);
             throw e;
         }
     }
@@ -1449,7 +1452,7 @@ public class PostService {
             log.info("修改热度");
             return postMapper.updateZanPostHeatValue(map);
         } catch (Exception e) {
-            log.error("修改热度失败");
+            log.error("修改热度失败", e);
             throw e;
         }
     }
@@ -1460,7 +1463,88 @@ public class PostService {
             log.info("查询发帖人级别");
             return postMapper.selectUserLevel(postid);
         } catch (Exception e) {
-            log.error("查询发帖人级别失败");
+            log.error("查询发帖人级别失败", e);
+            throw e;
+        }
+    }
+
+    public int selectPostHeatValue(int postid) {
+        try {
+            log.info("查询提子热度值");
+            return postMapper.selectPostHeatValue(postid);
+        } catch (Exception e) {
+            log.error("查询提子热度值失败", e);
+            throw e;
+        }
+    }
+
+    public List<Integer> queryFollowCricle(int userid) {
+        try {
+            log.info("查询用户关注的圈子");
+            return postMapper.queryFollowCricle(userid);
+        } catch (Exception e) {
+            log.error("查询用户关注的圈子失败", e);
+            throw e;
+        }
+    }
+
+    public List<Integer> queryFollowUser(int userid) {
+        try {
+            log.info("查询用户关注的作者");
+            return postMapper.queryFollowUser(userid);
+        } catch (Exception e) {
+            log.error("查询用户关注的作者失败", e);
+            throw e;
+        }
+    }
+
+
+    public List<PostVo> queryPostListByIds(List ids) {
+        try {
+            log.info("查询圈子的帖子");
+            return postMapper.queryPostListByIds(ids);
+        } catch (Exception e) {
+            log.error("查询圈子的帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> queryUserListByIds(List ids) {
+        try {
+            log.info("查询作者的帖子");
+            return postMapper.queryUserListByIds(ids);
+        } catch (Exception e) {
+            log.error("查询作者的帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> queryPostCrile(int circleid) {
+        try {
+            log.info("根据圈子id查询帖子");
+            return postMapper.queryPostCrile(circleid);
+        } catch (Exception e) {
+            log.error("根据圈子id查询帖子失败", e);
+            throw e;
+        }
+    }
+
+    public String queryCityCode(String area) {
+        try {
+            log.info("查询city的code");
+            return postMapper.queryCityCode(area);
+        } catch (Exception e) {
+            log.error("查询city的code失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> queryCityPost(String citycode) {
+        try {
+            log.info("根据地区查询帖子");
+            return postMapper.queryCityPost(citycode);
+        } catch (Exception e) {
+            log.error("根据地区查询帖子失败", e);
             throw e;
         }
     }

@@ -56,6 +56,16 @@ public class Post implements Serializable {
 
     private Integer heatvalue;//热度值
 
+    private String city;//城市code
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
     public Integer getHeatvalue() {
         return heatvalue;
     }
