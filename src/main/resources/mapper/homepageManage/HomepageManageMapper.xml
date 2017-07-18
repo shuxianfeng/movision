@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.movision.mybatis.homepageManage.entity.HomepageManage">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="topictype" jdbcType="INTEGER" property="topictype"/>
-        <result column="mark" jdbcType="INTEGER" property="type"/>
+        <result column="mark" jdbcType="INTEGER" property="mark"/>
         <result column="content" jdbcType="VARCHAR" property="content"/>
         <result column="subcontent" jdbcType="VARCHAR" property="subcontent"/>
         <result column="postid" jdbcType="INTEGER" property="postid"/>
