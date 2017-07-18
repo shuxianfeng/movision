@@ -488,13 +488,13 @@ public class PostVo implements Serializable {
         this.maylikeimg = maylikeimg;
     }
 
-    public List<UserLike> userlike;
+    public UserLike userlike;
 
-    public List<UserLike> getUserlike() {
+    public UserLike getUserlike() {
         return userlike;
     }
 
-    public void setUserlike(List<UserLike> userlike) {
+    public void setUserlike(UserLike userlike) {
         this.userlike = userlike;
     }
 

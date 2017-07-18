@@ -1521,7 +1521,7 @@ public class FacadePost {
      * @return
      */
     public List findUser(List<PostVo> list) {
-        List<UserLike> userLikes = null;
+        UserLike userLikes = null;
         for (int i = 0; i < list.size(); i++) {
             int userid = list.get(i).getUserid();
             userLikes = userService.findUser(userid);
@@ -1560,7 +1560,7 @@ public class FacadePost {
             comments = commentService.queryCommentByPost(postid);
             for (int j = 0; j < comments.size(); j++) {
                 int heatvalue = comments.get(i).getHeatvalue();
-                if (heatvalue > 80) {
+                if (heatvalue >= 50) {
                     list.get(i).setComments(comments.get(j));
                 }
             }

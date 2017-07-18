@@ -883,7 +883,7 @@ public class UserService {
      * @param userid
      * @return
      */
-    public List<UserLike> findUser(int userid) {
+    public UserLike findUser(int userid) {
         try {
             log.info("查询用户");
             return userMapper.findUser(userid);
