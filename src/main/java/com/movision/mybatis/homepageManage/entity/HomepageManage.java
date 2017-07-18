@@ -77,7 +77,7 @@ public class HomepageManage implements Serializable {
         return mark;
     }
 
-    public void setMark(Integer type) {
+    public void setMark(Integer mark) {
         this.mark = mark;
     }
 

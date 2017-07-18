@@ -17,7 +17,7 @@
         <result column="isdel" jdbcType="INTEGER" property="isdel"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, topictype, content, subcontent, url, transurl, orderid, intime,clicksum,ordersum,isdel
+        id, topictype, mark, content, subcontent, postid, url, transurl, orderid, intime,clicksum,ordersum,isdel
     </sql>
 
     <!--基础查询语句-->
