@@ -4,8 +4,10 @@
     <resultMap id="BaseResultMap" type="com.movision.mybatis.homepageManage.entity.HomepageManage">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="topictype" jdbcType="INTEGER" property="topictype"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
         <result column="content" jdbcType="VARCHAR" property="content"/>
         <result column="subcontent" jdbcType="VARCHAR" property="subcontent"/>
+        <result column="postid" jdbcType="INTEGER" property="postid"/>
         <result column="url" jdbcType="VARCHAR" property="url"/>
         <result column="transurl" jdbcType="VARCHAR" property="transurl"/>
         <result column="orderid" jdbcType="VARCHAR" property="orderid"/>
@@ -30,8 +32,8 @@
         SELECT * FROM yw_homepage_manage WHERE topictype = #{type,jdbcType=INTEGER}
     </select>
 
-    <select id="queryBannerList" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
-        SELECT * FROM yw_homepage_manage WHERE topictype = #{type,jdbcType=INTEGER} ORDER BY orderid
+    <select id="queryBannerList" parameterType="java.lang.Integer" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
+        SELECT * FROM yw_homepage_manage WHERE topictype = #{topictype,jdbcType=INTEGER} ORDER BY orderid
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
