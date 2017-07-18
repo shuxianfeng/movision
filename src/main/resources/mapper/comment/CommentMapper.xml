@@ -447,10 +447,10 @@
   </update>
   <select id="queryCommentByUserid" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
-    SELECT * FROM yw_post_comment WHERE (postid in(SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND
+      SELECT * FROM yw_post_comment WHERE (postid in(SELECT id FROM yw_post WHERE userid!=#{userid,jdbcType=INTEGER} AND
     isdel=0) OR
     id IN (SELECT id FROM yw_post_comment WHERE pid IN (SELECT id FROM yw_post_comment WHERE
-    userid=#{userid,jdbcType=INTEGER} AND pid IS NULL AND isdel=0))) ORDER BY intime DESC LIMIT 1
+      userid!=#{userid,jdbcType=INTEGER} AND pid IS NULL AND isdel=0))) ORDER BY intime DESC LIMIT 1
   </select>
   <select id="findAllQueryComment" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
