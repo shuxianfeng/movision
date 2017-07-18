@@ -147,7 +147,7 @@ public class FacadeComments {
                 vo.setIscontribute(0);
                 type = commentService.insertComment(vo);//添加评论
                 //增加热度
-                facadeHeatValue.addHeatValue(Integer.parseInt(postid), 4);
+                //facadeHeatValue.addHeatValue(Integer.parseInt(postid), 4);
                 //************************查询被评论的帖子是否被设为最新消息通知用户
                 Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
                 NewInformation news = new NewInformation();

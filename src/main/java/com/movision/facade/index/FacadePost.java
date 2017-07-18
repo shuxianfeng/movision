@@ -837,7 +837,7 @@ public class FacadePost {
         int count = postService.queryIsZanPost(parammap);
         if (count == 0) {
             //增加热度
-            facadeHeatValue.addHeatValue(Integer.parseInt(id), 3);
+            //facadeHeatValue.addHeatValue(Integer.parseInt(id), 3);
             //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------start
             //判断该用户有没有首次关注过圈子或有没有点赞过帖子评论等或有没有收藏过商品帖子活动
             UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(Integer.parseInt(userid));
