@@ -3,10 +3,11 @@ package com.movision.mybatis.homepageManage.mapper;
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.entity.HomepageManageVo;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
-
+@Repository
 public interface HomepageManageMapper {
     int deleteByPrimaryKey(Integer id);
 
