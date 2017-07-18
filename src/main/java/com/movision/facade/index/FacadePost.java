@@ -1447,18 +1447,7 @@ public class FacadePost {
                         }
                         //把看过的帖子过滤掉
                         alllist.removeAll(posts);//alllist是剩余的帖子
-                        if (alllist != null) {
-                            //如果不为空
-                            if (alllist.size() >= 10) {
-                                list = alllist.subList(0, 10);
-                                findUser(list);
-                            } else if (alllist.size() < 10) {
-                                list = alllist.subList(0, alllist.size());
-                                findUser(list);
-                            }
-                            insertmongo(list, userid);
-                            return list;
-                        }
+                        retuenList(alllist, userid);
                     } else {
                         //登录情况下但是mongodb里面没有刷新记录
                         list = postService.queryPostHeatValue(paging);
@@ -1484,19 +1473,8 @@ public class FacadePost {
                             posts.add(post);//把mongodb转为post实体
                         }
                     criclelist.removeAll(posts);//剩下的帖子
-                    if (criclelist != null) {
-                            //如果不为空
-                        if (criclelist.size() >= 10) {
-                            list = criclelist.subList(0, 10);
-                            findUser(list);
-                        } else if (criclelist.size() < 10) {
-                            list = criclelist.subList(0, criclelist.size());
-                            findUser(list);
-                            }
-                            insertmongo(list, userid);
-                            return list;
-                        }
-                    }
+                    retuenList(criclelist, userid);
+                }
             }
         }
         return null;
@@ -1530,7 +1508,8 @@ public class FacadePost {
                 String citycode = postService.queryCityCode(area);
                 //根据city查询帖子
                 List<PostVo> postVos = postService.queryCityPost(citycode);
-
+                postVos.removeAll(posts);
+                retuenList(postVos, userid);
             } else {//登录但是刷新列表中没有帖子
                 list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
@@ -1566,17 +1545,7 @@ public class FacadePost {
                 //根据圈子id查询帖子
                 List<PostVo> postVos = postService.queryPostCrile(circleid);
                 postVos.removeAll(posts);
-                if (postVos != null) {
-                    if (postVos.size() >= 10) {
-                        list = postVos.subList(0, 10);
-                        findUser(list);
-                    } else if (postVos.size() < 10) {
-                        list = postVos.subList(0, postVos.size());
-                        findUser(list);
-                    }
-                    insertmongo(list, userid);
-                    return list;
-                }
+                retuenList(postVos, userid);
             } else {//登录但是刷新列表中没有帖子
                 list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
@@ -1619,7 +1588,6 @@ public class FacadePost {
                 int heatvalue = crileidPost.get(i).getHeatvalue();
 
             }
-
             if (listmongodba.size() != 0) {//刷新有记录
                 for (int j = 0; j < listmongodba.size(); j++) {
                     PostVo post = new PostVo();
@@ -1627,17 +1595,7 @@ public class FacadePost {
                     posts.add(post);//把mongodb转为post实体
                 }
                 crileidPost.removeAll(posts);//过滤掉看过的帖子crileidPost就是剩下的帖子
-                if (crileidPost != null) {
-                    if (crileidPost.size() >= 10) {
-                        list = crileidPost.subList(0, 10);
-                        findUser(list);
-                    } else {
-                        list = crileidPost.subList(0, crileidPost.size());
-                        findUser(list);
-                    }
-                    insertmongo(list, userid);
-                    return list;
-                }
+                retuenList(crileidPost, userid);
             } else {
                 list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
@@ -1647,6 +1605,32 @@ public class FacadePost {
         }
         return null;
     }
+
+
+    /**
+     * 返回数据
+     *
+     * @param lists
+     * @param userid
+     * @return
+     */
+    public List retuenList(List<PostVo> lists, String userid) {
+        List<PostVo> list = null;
+        if (lists != null) {
+            if (lists.size() >= 10) {
+                list = lists.subList(0, 10);
+                findUser(list);
+            } else {
+                list = lists.subList(0, lists.size());
+                findUser(list);
+            }
+            insertmongo(list, userid);
+        }
+        return list;
+    }
+
+
+
 
     /**
      * 查询用户信息
@@ -1673,7 +1657,7 @@ public class FacadePost {
      * @return
      */
     public List userRefreshListNew(String userid, Paging<PostVo> paging, int type, String area, int circleid) {
-        List<Post> list = null;
+        List<PostVo> list = null;
         if (type == 1) {//推荐
             list = recommendPost(userid, paging);
         } else if (type == 2) {//关注

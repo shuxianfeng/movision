@@ -37,10 +37,11 @@ public class AppWaterfallController {
                                     @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                     @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
                                     @ApiParam(value = "类型 1：推荐2：关注3：本地") @RequestParam(required = false) int type,
-                                    @ApiParam(value = "地区") @RequestParam(required = false) String area) {
+                                    @ApiParam(value = "地区") @RequestParam(required = false) String area,
+                                    @ApiParam(value = "圈子id") @RequestParam(required = false) int circleid) {
         Response response = new Response();
-        Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List map = facadePost.userRefreshListNew(userid, pager, type, area);
+        Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List map = facadePost.userRefreshListNew(userid, pager, type, area, circleid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
