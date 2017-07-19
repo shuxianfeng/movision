@@ -28,6 +28,7 @@ import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
 import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.postLabel.entity.PostLabelVo;
 import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
@@ -1478,7 +1479,7 @@ public class FacadePost {
             crileidPost.addAll(userPost);
             log.info("" + crileidPost.size());
             ComparatorChain chain = new ComparatorChain();
-            chain.addComparator(new BeanComparator("heatvalue"), false);//true,fase正序反序
+            chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
             Collections.sort(crileidPost, chain);
             log.info("dddddddddddddddddddddddddddddd" + JSONArray.fromObject(crileidPost));
             if (listmongodba.size() != 0) {//刷新有记录
@@ -1704,7 +1705,7 @@ public class FacadePost {
      * @return
      */
     public static List getPageList(List list, int pageNo) {
-        int pageSize = 10;//每页显示数
+        int pageSize = 15;//每页显示数
         List<Object> result = new ArrayList<Object>();
         if (list != null && list.size() > 0) {
             int allCount = list.size();//总记录数
@@ -1844,6 +1845,7 @@ public class FacadePost {
             sum = 0;
             //根据圈子id改变圈子表热度值
             int result = circleService.updateCircleHeatValue(map);
+            log.info("结构钢事实宿舍上" + result);
         }
         //查询所有标签
         List<PostLabel> postLabels = postLabelService.queryLabelName();
@@ -1854,23 +1856,45 @@ public class FacadePost {
             for (int j = 0; j < labelpost.size(); j++) {
                 sum += labelpost.get(j);
             }
-            map.put("id", labelid);
+            map.put("labelid", labelid);
             map.put("sum", sum);
             sum = 0;
             //根据id改变标签的热度值
             int result = postLabelService.updateLabelHeatValue(map);
+            log.info("结构钢事实上" + result);
         }
         //根据热度排序查询圈子
         List<CircleVo> list = circleService.queryHeatValue();
         //根据热度排序查询标签
         List<PostLabel> postLabelss = postLabelService.queryLabelHeatValue();
-        List sumList = new ArrayList();
-        sumList.add(list);
-        sumList.add(postLabelss);
-        for (int i = 0; i < sumList.size(); i++) {
 
+        List<PostLabelVo> postvo = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            PostLabelVo pos = new PostLabelVo();
+            int circleid = list.get(i).getId();
+            String circleName = list.get(i).getName();
+            int circleHeatvalue = list.get(i).getHeatvalue();
+            log.info("d   " + circleHeatvalue);
+            pos.setHeatvalue(circleHeatvalue);
+            pos.setId(circleid);
+            pos.setName(circleName);
+            postvo.add(pos);
         }
-        return list;
+        for (int i = 0; i < postLabelss.size(); i++) {
+            PostLabelVo pos = new PostLabelVo();
+            int labelid = postLabelss.get(i).getId();
+            String labelName = postLabelss.get(i).getName();
+            int labelHeatvalue = postLabelss.get(i).getHeatValue();
+            pos.setHeatvalue(labelHeatvalue);
+            pos.setId(labelid);
+            pos.setName(labelName);
+            postvo.add(pos);
+        }
+        ComparatorChain chain = new ComparatorChain();
+        chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
+        Collections.sort(postvo, chain);
+        List<PostLabelVo> finals = getPageList(postvo, 1);
+        return finals;
     }
 
 

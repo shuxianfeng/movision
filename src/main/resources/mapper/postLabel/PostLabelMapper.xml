@@ -93,7 +93,7 @@
   <select id="queryLableName" resultType="com.movision.mybatis.postLabel.entity.PostLabel">
     SELECT * FROM  yw_post_label
   </select>
-  <update id="updateLabelHeatValue" parameterType="java.lang.Integer">
+  <update id="updateLabelHeatValue" parameterType="java.util.Map">
     UPDATE yw_post_label SET heat_value=#{sum,jdbcType=INTEGER} WHERE id=#{labelid,jdbcType=INTEGER}
   </update>
   <select id="queryLabelHeatValue" resultType="com.movision.mybatis.postLabel.entity.PostLabel">

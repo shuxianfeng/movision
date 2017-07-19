@@ -1054,7 +1054,7 @@
         SELECT  heat_value FROM  yw_post WHERE circleid=#{id,jdbcType=INTEGER} AND isdel=0
     </select>
     <select id="queryHeatValue" resultType="com.movision.mybatis.circle.entity.CircleVo">
-        SELECT  id,name FROM  yw_circle WHERE status=1 ORDER  BY  heat_value DESC
+        SELECT id,name,heat_value FROM yw_circle WHERE status=1 ORDER BY heat_value DESC
     </select>
     <update id="updateCircleHeatValue" parameterType="java.util.Map">
         UPDATE  yw_circle SET  heat_value=#{sum,jdbcType=INTEGER} WHERE id=#{id,jdbcType=INTEGER}
