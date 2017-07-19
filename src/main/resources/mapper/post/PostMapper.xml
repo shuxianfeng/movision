@@ -2095,7 +2095,7 @@
     <select id="queryPostComment" resultType="java.lang.Integer" parameterType="java.lang.Integer">
         SELECT heat_value FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER}
     </select>
-    <select id="queryPostUserHeatValue" resultType="java.lang.Integer" resultMap="java.lang.Integer">
+    <select id="queryPostUserHeatValue" resultType="java.lang.Integer" parameterType="java.lang.Integer">
         SELECT heat_value FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER}
     </select>
     <select id="queryPostLabel" parameterType="java.lang.Integer"
@@ -2103,5 +2103,9 @@
         SELECT yw_post_label.`NAME` FROM yw_post_label_relation LEFT JOIN yw_post_label ON
         yw_post_label.id=yw_post_label_relation.labelid
         WHERE yw_post_label_relation.postid=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="queryLabelPost" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT yw_post.heat_value FROM yw_post_label_relation LEFT JOIN yw_post ON yw_post.id=yw_post_label_relation.postid WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER}
+
     </select>
 </mapper>

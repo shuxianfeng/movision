@@ -120,4 +120,5 @@ public interface CircleMapper {
     List<CircleVo> queryHeatValue();
 
     int updateCircleHeatValue(Map map);
+
 }

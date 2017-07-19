@@ -275,4 +275,9 @@ public interface PostMapper {
 
     List<Integer> queryPostUserHeatValue(int userid);
 
+    List<Integer> queryLabelPost(int labelid);
+
+
+
+
 }

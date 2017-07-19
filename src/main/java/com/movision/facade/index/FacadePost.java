@@ -28,6 +28,7 @@ import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
 import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.User;
@@ -140,6 +141,8 @@ public class FacadePost {
     private FacadeHeatValue facadeHeatValue;
     @Autowired
     private UserService userService;
+    @Autowired
+    private PostLabelService postLabelService;
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
 
@@ -1794,10 +1797,24 @@ public class FacadePost {
             //根据圈子id改变圈子表热度值
             int result = circleService.updateCircleHeatValue(map);
         }
-        //标签
-
+        //查询所有标签
+        List<PostLabel> postLabels = postLabelService.queryLabelName();
+        for (int i = 0; i < postLabels.size(); i++) {
+            int labelid = postLabels.get(i).getId();
+            //根据标签id查询标签的帖子
+            List<Integer> labelpost = postService.queryLabelPost(labelid);
+            for (int j = 0; j < labelpost.size(); j++) {
+                sum += labelpost.get(j);
+            }
+            map.put("id", labelid);
+            map.put("sum", sum);
+            sum = 0;
+            //根据id改变标签的热度值
+            int resu = postLabelService.updateLabelHeatValue(map);
+        }
         //根据热度排序查询圈子
         List<CircleVo> list = circleService.queryHeatValue();
+        //根据热度排序查询标签
         return list;
     }
 
