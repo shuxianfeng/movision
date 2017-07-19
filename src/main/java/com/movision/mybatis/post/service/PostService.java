@@ -7,6 +7,7 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.mapper.PostMapper;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.UserLike;
@@ -1545,7 +1546,7 @@ public class PostService {
         }
     }
 
-    public List<PostLabelRelation> queryPostLabel(int postid) {
+    public List<PostLabel> queryPostLabel(int postid) {
         try {
             log.info("根据id查询标签");
             return postMapper.queryPostLabel(postid);

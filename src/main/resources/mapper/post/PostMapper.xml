@@ -2099,7 +2099,7 @@
         SELECT heat_value FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER}
     </select>
     <select id="queryPostLabel" parameterType="java.lang.Integer"
-            resultType="com.movision.mybatis.postLabelRelation.entity.PostLabelRelation">
+            resultType="com.movision.mybatis.postLabel.entity.PostLabel">
         SELECT yw_post_label.`NAME` FROM yw_post_label_relation LEFT JOIN yw_post_label ON
         yw_post_label.id=yw_post_label_relation.labelid
         WHERE yw_post_label_relation.postid=#{postid,jdbcType=INTEGER}

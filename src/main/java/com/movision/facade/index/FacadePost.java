@@ -27,6 +27,7 @@ import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
 import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.User;
@@ -35,6 +36,7 @@ import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
+import com.movision.mybatis.userRefreshRecord.entity.UesrreflushCount;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
@@ -1266,6 +1268,7 @@ public class FacadePost {
             findUser(list);
             findPostLabel(list);
             findHotComment(list);
+            countView(list);
             return list;
         } else {
             //已登录
@@ -1336,8 +1339,10 @@ public class FacadePost {
             //登录情况下但是mongodb里面没有刷新记录
             list = postService.queryPostHeatValue(paging);
             findUser(list);
+            findPostLabel(list);
             insertmongo(list, userid);
             findHotComment(list);
+            countView(list);
             return list;
         }
         return null;
@@ -1359,6 +1364,7 @@ public class FacadePost {
             findUser(list);
             findPostLabel(list);
             findHotComment(list);
+            countView(list);
             return list;
         } else {//已登录
             //根据地区查询帖子
@@ -1381,6 +1387,7 @@ public class FacadePost {
                 findPostLabel(list);
                 insertmongo(list, userid);
                 findHotComment(list);
+                countView(list);
                 return list;
             }
         }
@@ -1403,6 +1410,7 @@ public class FacadePost {
             findUser(list);
             findPostLabel(list);
             findHotComment(list);
+            countView(list);
             return list;
         } else {
             listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//用户有没有看过
@@ -1423,6 +1431,7 @@ public class FacadePost {
                 findPostLabel(list);
                 findHotComment(list);
                 insertmongo(list, userid);
+                countView(list);
                 return list;
             }
         }
@@ -1445,6 +1454,7 @@ public class FacadePost {
             findUser(list);
             findPostLabel(list);
             findHotComment(list);
+            countView(list);
             return list;
         } else {
             listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//用户有没有看过
@@ -1478,6 +1488,7 @@ public class FacadePost {
                 findPostLabel(list);
                 findHotComment(list);
                 insertmongo(list, userid);
+                countView(list);
                 return list;
             }
         }
@@ -1500,11 +1511,13 @@ public class FacadePost {
                 findUser(list);
                 findPostLabel(list);
                 findHotComment(list);
+                countView(list);
             } else {
                 list = lists.subList(0, lists.size());
                 findUser(list);
                 findPostLabel(list);
                 findHotComment(list);
+                countView(list);
             }
             insertmongo(list, userid);
         }
@@ -1531,13 +1544,31 @@ public class FacadePost {
     }
 
     /**
+     * 帖子浏览量
+     * @param list
+     * @return
+     */
+    public List countView(List<PostVo> list) {
+        int count = 0;
+        for (int i = 0; i < list.size(); i++) {
+            int postid = list.get(i).getId();
+            List<UesrreflushCount> uesrreflushCounts = userRefreshRecordService.postcount(postid);
+            for (int j = 0; i < uesrreflushCounts.size(); j++) {
+                count = uesrreflushCounts.get(j).getCount();
+                list.get(i).setCountview(count);
+            }
+        }
+        return list;
+    }
+
+    /**
      * 查询帖子标签
      *
      * @param list
      * @return
      */
     public List findPostLabel(List<PostVo> list) {
-        List<PostLabelRelation> postLabels = null;
+        List<PostLabel> postLabels = null;
         for (int i = 0; i < list.size(); i++) {
             int postid = list.get(i).getId();
             postLabels = postService.queryPostLabel(postid);

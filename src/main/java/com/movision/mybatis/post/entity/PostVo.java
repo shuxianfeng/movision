@@ -3,6 +3,7 @@ package com.movision.mybatis.post.entity;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.goods.entity.GoodsVo;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.user.entity.UserLike;
 
@@ -21,6 +22,16 @@ public class PostVo implements Serializable {
     private Integer id;
 
     private Integer circleid;
+
+    private Integer countview;//帖子浏览量
+
+    public Integer getCountview() {
+        return countview;
+    }
+
+    public void setCountview(Integer countview) {
+        this.countview = countview;
+    }
 
     private String title;
 
@@ -506,13 +517,13 @@ public class PostVo implements Serializable {
 
     private Integer heatvalue;//热度
 
-    public List<PostLabelRelation> postLabels;
+    public List<PostLabel> postLabels;
 
-    public List<PostLabelRelation> getPostLabels() {
+    public List<PostLabel> getPostLabels() {
         return postLabels;
     }
 
-    public void setPostLabels(List<PostLabelRelation> postLabels) {
+    public void setPostLabels(List<PostLabel> postLabels) {
         this.postLabels = postLabels;
     }
 

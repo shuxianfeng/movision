@@ -1,11 +1,17 @@
 package com.movision.mybatis.postLabel.entity;
 
+import java.util.Date;
+
 public class PostLabel {
     private Integer id;
 
     private String name;
 
-    private Integer postid;
+    private Integer heatValue;
+
+    private Integer userid;
+
+    private Date intime;
 
     public Integer getId() {
         return id;
@@ -23,11 +29,27 @@ public class PostLabel {
         this.name = name == null ? null : name.trim();
     }
 
-    public Integer getPostid() {
-        return postid;
+    public Integer getHeatValue() {
+        return heatValue;
     }
 
-    public void setPostid(Integer postid) {
-        this.postid = postid;
+    public void setHeatValue(Integer heatValue) {
+        this.heatValue = heatValue;
+    }
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
+
+    public Date getIntime() {
+        return intime;
+    }
+
+    public void setIntime(Date intime) {
+        this.intime = intime;
     }
 }

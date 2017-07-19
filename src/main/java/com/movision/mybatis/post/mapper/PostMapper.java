@@ -4,6 +4,7 @@ import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.UserLike;
@@ -268,7 +269,7 @@ public interface PostMapper {
 
     List<PostVo> queryCityPost(String citycode);//
 
-    List<PostLabelRelation> queryPostLabel(int postid);
+    List<PostLabel> queryPostLabel(int postid);
 
     List<Integer> queryPostComment(int postid);
 
