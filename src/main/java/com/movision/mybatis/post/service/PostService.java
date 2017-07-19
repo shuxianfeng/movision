@@ -1586,4 +1586,14 @@ public class PostService {
         }
     }
 
+    public List<PostVo> queryLabelAllPost(int labelid) {
+        try {
+            log.info("根据标签查询帖子");
+            return postMapper.queryLabelAllPost(labelid);
+        } catch (Exception e) {
+            log.error("根据标签查询帖子失败", e);
+            throw e;
+        }
+    }
+
 }

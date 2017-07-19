@@ -536,4 +536,15 @@ public class PostVo implements Serializable {
     public void setComments(Comment comments) {
         this.comments = comments;
     }
+
+    /**
+     * 重写equals方法，用于比对
+     *
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof PostVo && this.id != null && this.id.equals(((PostVo) obj).getId());
+    }
 }

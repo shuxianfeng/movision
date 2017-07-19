@@ -49,6 +49,8 @@ import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.beanutils.BeanComparator;
+import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -1286,7 +1288,7 @@ public class FacadePost {
                 }
             }
         }
-        return null;
+        return list;
     }
 
     /**
@@ -1327,7 +1329,7 @@ public class FacadePost {
      */
     private List userAnalysisSmall(String userid, Paging<PostVo> paging, List<PostVo> alllist, List<PostVo> posts) {
         List<DBObject> listmongodba;
-        List<PostVo> list;
+        List<PostVo> list = null;
         listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//查询用户刷新列表
         if (listmongodba.size() != 0) {
             for (int j = 0; j < listmongodba.size(); j++) {
@@ -1348,7 +1350,7 @@ public class FacadePost {
             countView(list);
             return list;
         }
-        return null;
+        return list;
     }
 
     /**
@@ -1394,7 +1396,7 @@ public class FacadePost {
                 return list;
             }
         }
-        return null;
+        return list;
     }
 
     /**
@@ -1438,7 +1440,7 @@ public class FacadePost {
                 return list;
             }
         }
-        return null;
+        return list;
     }
 
     /**
@@ -1472,11 +1474,13 @@ public class FacadePost {
                 userPost = postService.queryUserListByIds(followUsers);
             }
             crileidPost.removeAll(userPost);
+            log.info("" + crileidPost.size());
             crileidPost.addAll(userPost);
-            for (int i = 0; i < crileidPost.size(); i++) {
-                int heatvalue = crileidPost.get(i).getHeatvalue();
-
-            }
+            log.info("" + crileidPost.size());
+            ComparatorChain chain = new ComparatorChain();
+            chain.addComparator(new BeanComparator("heatvalue"), false);//true,fase正序反序
+            Collections.sort(crileidPost, chain);
+            log.info("dddddddddddddddddddddddddddddd" + JSONArray.fromObject(crileidPost));
             if (listmongodba.size() != 0) {//刷新有记录
                 for (int j = 0; j < listmongodba.size(); j++) {
                     PostVo post = new PostVo();
@@ -1484,6 +1488,7 @@ public class FacadePost {
                     posts.add(post);//把mongodb转为post实体
                 }
                 crileidPost.removeAll(posts);//过滤掉看过的帖子crileidPost就是剩下的帖子
+                log.info("" + crileidPost.size());
                 retuenList(crileidPost, userid);
             } else {
                 list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
@@ -1495,7 +1500,49 @@ public class FacadePost {
                 return list;
             }
         }
-        return null;
+        return list;
+    }
+
+    /**
+     * 标签帖子
+     *
+     * @return
+     */
+    public List labelPost(String userid, int labelid, Paging<PostVo> paging) {
+        List<PostVo> list = null;
+        List<DBObject> listmongodba = null;
+        List<PostVo> posts = new ArrayList<>();
+        if (userid == null) {
+            list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+            findUser(list);
+            findPostLabel(list);
+            findHotComment(list);
+            countView(list);
+            return list;
+        } else {
+            listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//用户有没有看过
+            if (listmongodba.size() != 0) {
+                for (int j = 0; j < listmongodba.size(); j++) {
+                    PostVo post = new PostVo();
+                    post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
+                    posts.add(post);//把mongodb转为post实体
+                }
+                //根据标签查询帖子
+                List<PostVo> postVos = postService.queryLabelAllPost(labelid);
+                postVos.removeAll(posts);
+                retuenList(postVos, userid);
+            } else {
+                //登录但是刷新列表中没有帖子
+                list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+                findUser(list);
+                findPostLabel(list);
+                findHotComment(list);
+                insertmongo(list, userid);
+                countView(list);
+                return list;
+            }
+            return list;
+        }
     }
 
 
@@ -1593,12 +1640,13 @@ public class FacadePost {
             //根據帖子id去查所有評論
             comments = commentService.queryCommentByPost(postid);
             for (int j = 0; j < comments.size(); j++) {
-                int heatvalue = comments.get(i).getHeatvalue();
+                int heatvalue = comments.get(j).getHeatvalue();
                 if (heatvalue >= 50) {
-                    list.get(i).setComments(comments.get(j));
+                    list.get(j).setComments(comments.get(j));
                 }
             }
         }
+
         return list;
     }
     /***
@@ -1609,7 +1657,7 @@ public class FacadePost {
      * @param area
      * @return
      */
-    public List userRefreshListNew(String userid, Paging<PostVo> paging, int type, String area, int circleid) {
+    public List userRefreshListNew(String userid, Paging<PostVo> paging, int type, String area, String circleid, String labelid) {
         List<PostVo> list = null;
         if (type == 1) {//推荐
             list = recommendPost(userid, paging);
@@ -1618,9 +1666,9 @@ public class FacadePost {
         } else if (type == 3) {//本地
             list = localhostPost(userid, paging, area);
         } else if (type == 4) {//圈子c
-            list = circleRefulsh(userid, paging, circleid);
+            list = circleRefulsh(userid, paging, Integer.parseInt(circleid));
         } else if (type == 5) {//标签
-
+            list = labelPost(userid, Integer.parseInt(labelid), paging);
         }
         return list;
      }
@@ -1810,12 +1858,18 @@ public class FacadePost {
             map.put("sum", sum);
             sum = 0;
             //根据id改变标签的热度值
-            int resu = postLabelService.updateLabelHeatValue(map);
+            int result = postLabelService.updateLabelHeatValue(map);
         }
         //根据热度排序查询圈子
         List<CircleVo> list = circleService.queryHeatValue();
         //根据热度排序查询标签
         List<PostLabel> postLabelss = postLabelService.queryLabelHeatValue();
+        List sumList = new ArrayList();
+        sumList.add(list);
+        sumList.add(postLabelss);
+        for (int i = 0; i < sumList.size(); i++) {
+
+        }
         return list;
     }
 
