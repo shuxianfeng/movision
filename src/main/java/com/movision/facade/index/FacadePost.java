@@ -1455,14 +1455,6 @@ public class FacadePost {
         List<PostVo> posts = new ArrayList<>();
         List<PostVo> crileidPost = null;
         List<PostVo> userPost = null;
-        if (userid == null) {
-            list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
-            findUser(list);
-            findPostLabel(list);
-            findHotComment(list);
-            countView(list);
-            return list;
-        } else {
             listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//用户有没有看过
             List<Integer> followCricle = postService.queryFollowCricle(Integer.parseInt(userid));//查询用户关注的圈子
             List<Integer> followUsers = postService.queryFollowUser(Integer.parseInt(userid));//用户关注的作者
@@ -1499,7 +1491,6 @@ public class FacadePost {
                 insertmongo(list, userid);
                 countView(list);
                 return list;
-            }
         }
         return list;
     }
