@@ -43,10 +43,10 @@ public class PostLabelService {
 
     public List<PostLabel> queryLabelHeatValue() {
         try {
-            log.info("修改热度");
+            log.info("根据热度排序");
             return postLabelMapper.queryLabelHeatValue();
         } catch (Exception e) {
-            log.error("修改热度失败", e);
+            log.error("根据热度排序失败", e);
             throw e;
         }
     }

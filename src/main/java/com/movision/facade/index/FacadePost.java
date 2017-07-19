@@ -1815,6 +1815,7 @@ public class FacadePost {
         //根据热度排序查询圈子
         List<CircleVo> list = circleService.queryHeatValue();
         //根据热度排序查询标签
+        List<PostLabel> postLabelss = postLabelService.queryLabelHeatValue();
         return list;
     }
 

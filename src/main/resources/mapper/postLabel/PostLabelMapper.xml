@@ -96,4 +96,7 @@
   <update id="updateLabelHeatValue" parameterType="java.lang.Integer">
     UPDATE yw_post_label SET heat_value=#{sum,jdbcType=INTEGER} WHERE id=#{labelid,jdbcType=INTEGER}
   </update>
+  <select id="queryLabelHeatValue" resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+    SELECT * FROM  yw_post_label ORDER  BY heat_value DESC
+  </select>
 </mapper>
