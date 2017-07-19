@@ -946,9 +946,9 @@
     
     <select id="findAllHotCircleList" resultType="com.movision.mybatis.circle.entity.CircleVo" >
         SELECT t.* FROM (
-            (SELECT id, photo, name, isrecommend, heat_value FROM yw_circle WHERE isrecommend = '1' AND status = '1' AND isdel = '0')
+            (SELECT id, photo, maylikeimg, name, isrecommend, heat_value FROM yw_circle WHERE isrecommend = '1' AND status = '1' AND isdel = '0')
             UNION
-            (SELECT id, photo, name, isrecommend, heat_value FROM yw_circle WHERE isrecommend = '0' AND status = '1' AND isdel = '0')
+            (SELECT id, photo, maylikeimg, name, isrecommend, heat_value FROM yw_circle WHERE isrecommend = '0' AND status = '1' AND isdel = '0')
         ) t ORDER BY t.isrecommend DESC, t.heat_value DESC
     </select>
 
