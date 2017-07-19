@@ -108,7 +108,7 @@
     <!--查询yw_post表中所有热门活动列表-->
     <select id="queryHotActiveList" resultType="com.movision.mybatis.post.entity.Post">
         SELECT
-        t1.id,t1.title,t1.subtitle,t1.postcontent,t1.isactive,t1.activetype,t1.activefee,t1.iscontribute,t1.ishot,t1.hotimgurl,t1.intime
+        t1.id,t1.title,t1.subtitle,t1.postcontent,t1.isactive,t1.activetype,t1.activefee,t1.iscontribute,t1.ishot,t1.coverimg,t1.hotimgurl,t1.intime
         FROM yw_post t1 WHERE t1.isactive = '1' AND t1.ishot = '1' AND t1.isdel = '0'
         ORDER BY intime DESC
     </select>

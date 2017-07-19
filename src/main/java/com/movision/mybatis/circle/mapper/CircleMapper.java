@@ -97,6 +97,10 @@ public interface CircleMapper {
 
     List<MyCircle> findAllMyFollowCircleList(RowBounds rowBounds, Map map);
 
+    List<CircleVo> findAllHotCircleList(RowBounds rowBounds);
+
+    int queryCircleFollownum(int circleid);
+
     int updateAuditCircle(Map map);
 
     Category queryCircleCategoryClassify(String categoryid);

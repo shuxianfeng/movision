@@ -803,6 +803,11 @@
         orderid DESC
     </select>
 
+    <!--根据圈子id查询圈子的总关注数-->
+    <select id="queryCircleFollownum" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+        SELECT count(*) FROM yw_follow_circle WHERE circleid = #{circleid,jdbcType=INTEGER}
+    </select>
+
     <insert id="insertCircle" parameterType="com.movision.mybatis.circle.entity.CircleDetails">
         <selectKey keyProperty="id" order="AFTER" resultType="Integer">
             select LAST_INSERT_ID()
@@ -937,6 +942,14 @@
         <if test="userid!=null and userid!=''">
             and f.userid = #{userid}
         </if>
+    </select>
+    
+    <select id="findAllHotCircleList" resultType="com.movision.mybatis.circle.entity.CircleVo" >
+        SELECT t.* FROM (
+            (SELECT id, photo, name, isrecommend, heat_value FROM yw_circle WHERE isrecommend = '1' AND status = '1' AND isdel = '0')
+            UNION
+            (SELECT id, photo, name, isrecommend, heat_value FROM yw_circle WHERE isrecommend = '0' AND status = '1' AND isdel = '0')
+        ) t ORDER BY t.isrecommend DESC, t.heat_value DESC
     </select>
 
     <select id="queryCircleAwaitAudit" parameterType="java.util.Map"

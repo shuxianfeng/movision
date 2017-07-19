@@ -56,7 +56,7 @@ public class CircleVo implements Serializable {
 
     private Integer postnum;//圈子帖子数
 
-    private Integer postnewnum;//圈子今日更新帖子数
+    private Integer postnewnum;//圈子更新帖子数(暂时所有未看过的都算更新数)
 
     private Integer isfollow;//该圈子是否被关注 0 可关注  1 已关注
 

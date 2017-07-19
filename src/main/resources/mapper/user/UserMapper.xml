@@ -122,9 +122,9 @@
     <!--美番2.0发现页查询热门作者-->
     <select id="queryHotUserList" resultType="com.movision.mybatis.user.entity.UserVo" >
         SELECT t1.id, t1.nickname, t1.photo, t1.fans FROM (
-            (SELECT * FROM yw_user WHERE isrecommend = '1')
+            (SELECT * FROM yw_user WHERE isrecommend = '1' AND id != '-1')
             UNION
-            (SELECT * FROM yw_user ORDER BY heat_value DESC limit 10)
+            (SELECT * FROM yw_user WHERE id != '-1' ORDER BY heat_value DESC limit 10)
         ) t1 limit 10
     </select>
 

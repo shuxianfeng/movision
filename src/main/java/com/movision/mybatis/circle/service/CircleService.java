@@ -553,6 +553,26 @@ public class CircleService {
         }
     }
 
+    public List<CircleVo> findAllHotCircleList(Paging<CircleVo> pager){
+        try {
+            log.info("查询所有必推圈子和热度值排名靠前的圈子列表");
+            return circleMapper.findAllHotCircleList(pager.getRowBounds());
+        }catch (Exception e){
+            log.error("查询所有必推圈子和热度值排名靠前的圈子列表失败", e);
+            throw e;
+        }
+    }
+
+    public int queryCircleFollownum(int circleid){
+        try {
+            log.info("根据圈子id查询当前圈子被关注数");
+            return circleMapper.queryCircleFollownum(circleid);
+        }catch (Exception e){
+           log.error("根据圈子id查询当前圈子被关注数失败", e);
+            throw e;
+        }
+    }
+
 
     /**
      * 审核圈子
