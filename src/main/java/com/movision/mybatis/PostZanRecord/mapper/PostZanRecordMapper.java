@@ -27,4 +27,5 @@ public interface PostZanRecordMapper {
     Integer updateZanReadByComment(Integer userid);
 
     Integer updateZanReadByPost(Integer userid);
+
 }

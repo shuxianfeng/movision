@@ -1,22 +1,14 @@
 package com.movision.mybatis.post.mapper;
 
 import com.movision.mybatis.circle.entity.Circle;
-import com.movision.mybatis.followCircle.entity.FollowCircle;
-import com.movision.mybatis.followUser.entity.FollowUser;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
-import com.movision.mybatis.postLabel.entity.PostLabel;
-import com.movision.mybatis.postProcessRecord.entity.PostProcessRecord;
+import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
-import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.video.entity.Video;
-import com.movision.utils.L;
-import com.movision.utils.pagination.model.Paging;
-import javafx.geometry.Pos;
 import org.apache.ibatis.session.RowBounds;
-import org.apache.poi.ss.usermodel.Row;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -276,6 +268,10 @@ public interface PostMapper {
 
     List<PostVo> queryCityPost(String citycode);//
 
-    List<PostLabel> queryPostLabel(int postid);
+    List<PostLabelRelation> queryPostLabel(int postid);
+
+    List<Integer> queryPostComment(int postid);
+
+    List<Integer> queryPostUserHeatValue(int userid);
 
 }

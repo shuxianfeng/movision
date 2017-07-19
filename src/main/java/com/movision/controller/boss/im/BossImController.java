@@ -1,15 +1,16 @@
 package com.movision.controller.boss.im;
 
 import com.movision.common.Response;
-import com.movision.common.util.ShiroUtil;
 import com.movision.facade.im.ImFacade;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.systemPush.entity.SystemPush;
 import com.movision.mybatis.systemToPush.entity.SystemToPush;
+import com.movision.utils.MiPushUtils;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +31,8 @@ public class BossImController {
     @Autowired
     private ImFacade imFacade;
 
+    @Autowired
+    private MiPushUtils miPushUtils;
     /**
      * 该接口给系统管理员调用
      *
@@ -291,11 +294,12 @@ public class BossImController {
      */
     @ApiOperation(value = "系统推送 ", notes = "系统推送", response = Response.class)
     @RequestMapping(value = "add_systemtopush", method = RequestMethod.POST)
-    public Response addSystemToPush(@ApiParam(value = "系统推送内容") @RequestParam String body,
+    public Response addSystemToPush(JSONObject jsonObjectPayload,
+                                    @ApiParam(value = "系统推送内容") @RequestParam String body,
                                     @ApiParam(value = "系统推送标题") @RequestParam String title) throws Exception {
 
         Response response = new Response();
-        imFacade.systemPushMessage(body, title);
+        imFacade.systemPushMessage(body, title, jsonObjectPayload, 0);
         if (response.getCode() == 200) {
             response.setMessage("系统推送成功");
         }

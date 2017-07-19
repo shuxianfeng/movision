@@ -25,13 +25,13 @@ import com.movision.mybatis.systemToPush.entity.SystemToPush;
 import com.movision.mybatis.systemToPush.service.SystemToPushService;
 import com.movision.utils.JsonUtils;
 import com.movision.utils.ListUtil;
+import com.movision.utils.MiPushUtils;
 import com.movision.utils.SignUtil;
 import com.movision.utils.convert.BeanUtil;
 import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.sms.SDKSendSms;
-import com.xiaomi.xmpush.server.Message;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -43,11 +43,11 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.*;
@@ -79,6 +79,8 @@ public class ImFacade {
 
     @Autowired
     private ImDeviceService imDeviceService;
+    @Autowired
+    private MiPushUtils miPushUtils;
 
     @Autowired
     private NewInformationService newInformationService;
@@ -880,35 +882,14 @@ public class ImFacade {
         systemToPushService.addSystemToPush(systemToPush);//记录流水
     }
 
-
-    /**
-     * 系统推送
-     *
-     * @param body
-     * @param title
-     * @return
-     */
-    public Message buildMessage(String body, String title) throws Exception {
-        String PACKAGENAME = "com.syjm.movision";
-        Message message = new Message.Builder()
-                .title(title)
-                .description(body).payload(body)
-                .restrictedPackageName(PACKAGENAME)
-                .passThrough(1)  //消息使用透传方式
-                .notifyType(1)     // 使用默认提示音提示
-                .extra("flow_control", "4000")     // 设置平滑推送, 推送速度4000每秒(qps=4000)
-                .build();
-        return message;
-    }
-
     /**
      * 系统推送
      *
      * @param body
      * @param title
      */
-    public void systemPushMessage(String body, String title) throws Exception {
-        buildMessage(body, title);
+    public void systemPushMessage(String body, String title, JSONObject jsonObjectPayload, int deviceType) throws Exception {
+        miPushUtils.sendBroadcastAll(body, title, jsonObjectPayload, deviceType);
         addSystemToPush(body, title);
     }
 

@@ -23,7 +23,11 @@ public class HeatValueConstant {
         posts_count(8),//发帖数
         //评论的热度
         comment_zan_count(9),//評論的點贊數
-        reply_comment_number(10);//回复评论数
+        reply_comment_number(10),//回复评论数
+
+        reward_post(11),//打赏帖子
+
+        read_post(12);//帖子浏览数
 
         public final int code;
 
@@ -57,7 +61,10 @@ public class HeatValueConstant {
         posts_count(8),//发帖数
         //评论的热度
         comment_zan_count(3),//評論的點贊數
-        reply_comment_number(7);//回复评论数
+        reply_comment_number(7),//回复评论数
+
+        reward_post(4),//打赏帖子
+        read_post(11);//帖子浏览数
         public final int code;
 
         POINT(int code) {

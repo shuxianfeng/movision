@@ -1,15 +1,24 @@
 package com.movision.facade.index;
 
 import com.movision.common.constant.HeatValueConstant;
+import com.movision.mybatis.PostZanRecord.service.PostZanRecordService;
 import com.movision.mybatis.comment.service.CommentService;
+import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTermsVo;
+import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.mybatis.userRefreshRecord.entity.UesrreflushCount;
+import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,49 +35,70 @@ public class FacadeHeatValue {
     private UserService userService;
     @Autowired
     private CommentService commentService;
-
+    @Autowired
+    private UserRefreshRecordService userRefreshRecordService;
     /**
      * 增加帖子热度值
      */
-    public void addHeatValue(int postid, int type) {
+    public void addHeatValue(int postid, int type, int userid) {
         int points = 0;
         Map map = new HashMap();
         map.put("postid", postid);
         if (type == 1) {//首页精选
             int isessence = postService.queryPostIsessenceHeat(postid);
-            if (isessence == 1) {//首页精选
+            if (isessence == 1) {//首页精选(实时)
                 points = HeatValueConstant.POINT.home_page_selection.getCode();
                 map.put("points", points);
                 postService.updatePostHeatValue(map);
             }
-        } else if (type == 2) {//帖子精选
+        } else if (type == 2) {//帖子精选(实时)
             int hot = postService.queryPostHotHeat(postid);
             if (hot == 1) {
                 points = HeatValueConstant.POINT.post_selection.getCode();
                 map.put("points", points);
                 postService.updatePostHeatValue(map);
             }
-        } else if (type == 3) {//点赞
-            int level = userLevel(postid);
+        } else if (type == 3) {//点赞(实时)
+            int level = userLevels(userid);//
             points = level * HeatValueConstant.POINT.zan_number.getCode();
             map.put("points", points);
             postService.updatePostHeatValue(map);
         } else if (type == 4) {//评论
-            int level = userLevel(postid);
-            points = level * HeatValueConstant.POINT.comments_number.getCode();
-            map.put("points", points);
-            postService.updatePostHeatValue(map);
-        } else if (type == 5) {//转发
-            int level = userLevel(postid);
+            //查询这个帖子的所有评论的热度值
+            List<Integer> list = postService.queryPostComment(postid);
+            for (int i = 0; i < list.size(); i++) {
+                points += list.get(i);//热度值加起来
+            }
+            int point = (int) (points * 0.2);
+            map.put("points", point);
+            // postService.updatePostHeatValue(map);
+        } else if (type == 5) {//转发(实时)
+            int level = userLevels(userid);
             points = level * HeatValueConstant.POINT.forwarding_number.getCode();
             map.put("points", points);
             postService.updatePostHeatValue(map);
-        } else if (type == 6) {//收藏
-            int level = userLevel(postid);
+        } else if (type == 6) {//收藏(实时)
+            int level = userLevels(userid);
             points = level * HeatValueConstant.POINT.collection_number.getCode();
             map.put("points", points);
             postService.updatePostHeatValue(map);
+        } else if (type == 7) {//打赏(实时)
+            int level = userLevels(userid);
+            points = level * HeatValueConstant.POINT.reward_post.getCode();
+            map.put("points", points);
+            postService.updatePostHeatValue(map);
+        } else if (type == 8) {//帖子浏览数
+            List<UesrreflushCount> list = userRefreshRecordService.postcount(postid);
+            int count = 0;
+            for (int i = 0; i < list.size(); i++) {
+                count = list.get(i).getCount();
+            }
+            points = count * HeatValueConstant.POINT.read_post.getCode();
+            int point = (int) (points * 0.1);
+            map.put("points", point);
+            //postService.updatePostHeatValue(map);
         }
+
     }
 
     /**
@@ -76,12 +106,12 @@ public class FacadeHeatValue {
      *
      * @param postid
      */
-    public void zanLessenHeatValue(int postid) {
+    public void zanLessenHeatValue(int postid, int userid) {
         int points = 0;
         Map map = new HashMap();
         int heatvalue = postService.selectPostHeatValue(postid);
         if (heatvalue != 0) {
-            int level = userLevel(postid);
+            int level = userLevels(userid);
             points = level * HeatValueConstant.POINT.collection_number.getCode();
             map.put("points", points);
             postService.updateZanPostHeatValue(map);
@@ -105,10 +135,13 @@ public class FacadeHeatValue {
             map.put("points", points);
             userService.updateUserHeatValue(map);
         } else if (type == 2) {//发帖数
-            int level = userLevels(userid);
-            points = level * HeatValueConstant.POINT.posts_count.getCode();
-            map.put("points", points);
-            userService.updateUserHeatValue(map);
+            //查询用户发的所有帖子
+            List<Integer> list = postService.queryPostUserHeatValue(userid);
+            for (int i = 0; i < list.size(); i++) {
+                points += list.get(i);
+            }
+            int point = (int) (points * 0.1);
+            map.put("points", point);
         }
     }
 
@@ -162,18 +195,6 @@ public class FacadeHeatValue {
         return level;
     }
 
-    /**
-     * 查询发帖人级别
-     *
-     * @param postid
-     * @return
-     */
-    public int userLevel(int postid) {
-        //查询发帖人级别
-        int level = postService.selectUserLevel(postid);
-        level(level);
-        return level;
-    }
 
     /**
      * 等级
@@ -205,4 +226,6 @@ public class FacadeHeatValue {
         }
         return level;
     }
+
+
 }

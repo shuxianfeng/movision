@@ -27,7 +27,7 @@ import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
 import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
-import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserAll;
@@ -1537,8 +1537,8 @@ public class FacadePost {
      * @return
      */
     public List findPostLabel(List<PostVo> list) {
-        List<PostLabel> postLabels = null;
-        for (int i = 0; i < postLabels.size(); i++) {
+        List<PostLabelRelation> postLabels = null;
+        for (int i = 0; i < list.size(); i++) {
             int postid = list.get(i).getId();
             postLabels = postService.queryPostLabel(postid);
             list.get(i).setPostLabels(postLabels);
@@ -1585,6 +1585,8 @@ public class FacadePost {
             list = localhostPost(userid, paging, area);
         } else if (type == 4) {//圈子c
             list = circleRefulsh(userid, paging, circleid);
+        } else if (type == 5) {//标签
+
         }
         return list;
      }
@@ -1761,6 +1763,8 @@ public class FacadePost {
             //根据圈子id改变圈子表热度值
             int result = circleService.updateCircleHeatValue(map);
         }
+        //标签
+
         //根据热度排序查询圈子
         List<CircleVo> list = circleService.queryHeatValue();
         return list;

@@ -3,20 +3,15 @@ package com.movision.mybatis.post.service;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.compressImg.mapper.CompressImgMapper;
-import com.movision.mybatis.followCircle.entity.FollowCircle;
-import com.movision.mybatis.followUser.entity.FollowUser;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.mapper.PostMapper;
-import com.movision.mybatis.postLabel.entity.PostLabel;
-import com.movision.mybatis.postProcessRecord.entity.PostProcessRecord;
+import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
-import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.utils.pagination.model.Paging;
-import javafx.geometry.Pos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1550,12 +1545,32 @@ public class PostService {
         }
     }
 
-    public List<PostLabel> queryPostLabel(int postid) {
+    public List<PostLabelRelation> queryPostLabel(int postid) {
         try {
             log.info("根据id查询标签");
             return postMapper.queryPostLabel(postid);
         } catch (Exception e) {
             log.error("根据id查询标签失败", e);
+            throw e;
+        }
+    }
+
+    public List<Integer> queryPostComment(int postid) {
+        try {
+            log.info("查询帖子的所有评论");
+            return postMapper.queryPostComment(postid);
+        } catch (Exception e) {
+            log.error("查询帖子的所有评论失败", e);
+            throw e;
+        }
+    }
+
+    public List<Integer> queryPostUserHeatValue(int userid) {
+        try {
+            log.info("查询用户发的所有帖子的热度");
+            return postMapper.queryPostUserHeatValue(userid);
+        } catch (Exception e) {
+            log.error("查询用户发的所有帖子的热度失败", e);
             throw e;
         }
     }
