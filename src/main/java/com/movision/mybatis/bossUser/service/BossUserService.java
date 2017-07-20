@@ -78,7 +78,7 @@ public class BossUserService {
             return bossUserMapper.selectByUsername(username);
 
         } catch (Exception e) {
-            log.error("获取boss用户信息失败, username" + username, e);
+            log.error("获取boss用户信息失败, username=" + username, e);
             throw e;
         }
     }

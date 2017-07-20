@@ -28,8 +28,8 @@ import java.util.Map;
  * @Date 2017/3/4 17:21
  */
 @RestController
-@RequestMapping("/boss/advertisement")
-public class AdvertisementController {
+@RequestMapping("/boss/guang_gao")
+public class GuangGaoController {
 
     @Autowired
     HomepageManageFacade homepageManageFacade;
@@ -46,7 +46,7 @@ public class AdvertisementController {
      * @return
      */
     @ApiOperation(value = "查询广告列表", notes = "用于查询广告列表接口", response = Response.class)
-    @RequestMapping(value = "query_advertisement_list", method = RequestMethod.POST)
+    @RequestMapping(value = "query_guang_gao_list", method = RequestMethod.POST)
     public Response queryAdvertisementList(@ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                            @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
@@ -63,6 +63,7 @@ public class AdvertisementController {
 
     /**
      * 根据条件查询广告列表
+     *
      * @param name
      * @param type
      * @param pageNo
@@ -70,7 +71,7 @@ public class AdvertisementController {
      * @return
      */
     @ApiOperation(value = "模糊查询广告列表", notes = "用于条件查询广告接口", response = Response.class)
-    @RequestMapping(value = "query_advertisement_like", method = RequestMethod.POST)
+    @RequestMapping(value = "query_guang_gao_like", method = RequestMethod.POST)
     public Response queryAdvertisementLike(@ApiParam(value = "广告位置") @RequestParam(required = false) String name,
                                            @ApiParam(value = "排序（传1按时间正序，默认倒叙)") @RequestParam(required = false) String type,
                                            @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
@@ -92,7 +93,7 @@ public class AdvertisementController {
      * @return
      */
     @ApiOperation(value = "根据广告位置类型查询排序", notes = "根据广告位置类型查询排序", response = Response.class)
-    @RequestMapping(value = "query_advertisement_location", method = RequestMethod.POST)
+    @RequestMapping(value = "query_guang_gao_location", method = RequestMethod.POST)
     public Response queryAdvertisementLocation(@ApiParam(value = "广告位置类型") @RequestParam String type,
                                                @ApiParam(value = "排序id") @RequestParam(required = false) String orderid) {
         Response response = new Response();
@@ -110,7 +111,7 @@ public class AdvertisementController {
      * @return
      */
     @ApiOperation(value = "操作广告排序位置", notes = "用于操作广告排序位置接口", response = Response.class)
-    @RequestMapping(value = "operation_advertisement_orderid", method = RequestMethod.POST)
+    @RequestMapping(value = "operation_guang_gao_orderid", method = RequestMethod.POST)
     public Response operationAdvertisementOrderid(@ApiParam(value = "操作方式0 删除 1添加") @RequestParam String type,
                                                   @ApiParam(value = "广告id") @RequestParam String id,
                                                   @ApiParam(value = "排序id") @RequestParam(required = false) String orderid) {
@@ -135,7 +136,7 @@ public class AdvertisementController {
      * @return
      */
     @ApiOperation(value = "添加广告", notes = "用于添加广告接口", response = Response.class)
-    @RequestMapping(value = "add_advertisement", method = RequestMethod.POST)
+    @RequestMapping(value = "add_guang_gao", method = RequestMethod.POST)
     public Response addAdvertisement(@ApiParam(value = "广告位置（传位置code）") @RequestParam String topictype,
                                      @ApiParam(value = "排序") @RequestParam(required = false) String orderid,
                                      @ApiParam(value = "主标题") @RequestParam String content,
@@ -158,7 +159,7 @@ public class AdvertisementController {
      * @return
      */
     @ApiOperation(value = "查询广告详情", notes = "查询广告详情", response = Response.class)
-    @RequestMapping(value = "query_avertisement_particulars", method = RequestMethod.POST)
+    @RequestMapping(value = "query_guang_gao_particulars", method = RequestMethod.POST)
     public Response queryAvertisementById(@ApiParam(value = "广告id") @RequestParam String id) {
         Response response = new Response();
         HomepageManageVo particulars = homepageManageFacade.queryAvertisementById(id);
@@ -176,7 +177,7 @@ public class AdvertisementController {
      * @return
      */
     @ApiOperation(value = "编辑广告", notes = "用于编辑广告接口", response = Response.class)
-    @RequestMapping(value = "update_advertisement", method = RequestMethod.POST)
+    @RequestMapping(value = "update_guang_gao", method = RequestMethod.POST)
     public Response updateAdvertisement(@ApiParam(value = "广告id") @RequestParam String id,
                                         @ApiParam(value = "排序") @RequestParam(required = false) String orderid,
                                         @ApiParam(value = "主标题") @RequestParam String content,
@@ -199,7 +200,7 @@ public class AdvertisementController {
      * @return
      */
     @ApiOperation(value = "删除广告", notes = "用于删除广告接口", response = Response.class)
-    @RequestMapping(value = "delete_advertisement", method = RequestMethod.POST)
+    @RequestMapping(value = "delete_guang_gao", method = RequestMethod.POST)
     public Response deleteAdvertisement(@ApiParam(value = "广告id") @RequestParam String id) {
         Response response = new Response();
         Map map = homepageManageFacade.deleteAdvertisement(id);
@@ -217,7 +218,7 @@ public class AdvertisementController {
      * @return
      */
     @ApiOperation(value = "查询广告类型列表", notes = "用于查询广告类型列表接口", response = Response.class)
-    @RequestMapping(value = "query_advertisement_type", method = RequestMethod.POST)
+    @RequestMapping(value = "query_guang_gao_type", method = RequestMethod.POST)
     public Response queryAdvertisementTypeList(@ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                                @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
@@ -268,7 +269,7 @@ public class AdvertisementController {
      * @return
      */
     @ApiOperation(value = "添加广告类型", notes = "用于添加广告类型接口", response = Response.class)
-    @RequestMapping(value = "add_advertisement_type", method = RequestMethod.POST)
+    @RequestMapping(value = "add_guang_gao_type", method = RequestMethod.POST)
     public Response addAdvertisementType(@ApiParam(value = "广告位置名称") @RequestParam String name,
                                          @ApiParam(value = "广告宽度") @RequestParam String wide,
                                          @ApiParam(value = "广告高度") @RequestParam String high,
@@ -310,7 +311,7 @@ public class AdvertisementController {
      * @return
      */
     @ApiOperation(value = "编辑广告类型", notes = "编辑广告类型", response = Response.class)
-    @RequestMapping(value = "update_advertisement_type", method = RequestMethod.POST)
+    @RequestMapping(value = "update_guang_gao_type", method = RequestMethod.POST)
     public Response updateAdvertisementType(@ApiParam(value = "广告位置id") @RequestParam String id,
                                             @ApiParam(value = "广告位置名称") @RequestParam(required = false) String name,
                                             @ApiParam(value = "广告宽度") @RequestParam(required = false) String wide,
@@ -332,7 +333,7 @@ public class AdvertisementController {
      * @return
      */
     @ApiOperation(value = "上传广告相关图片", notes = "上传广告相关图片", response = Response.class)
-    @RequestMapping(value = {"/upload_advertisement_img"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/upload_guang_gao_img"}, method = RequestMethod.POST)
     public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file) {
 
         Map m = movisionOssClient.uploadObject(file, "img", "advertisement");
