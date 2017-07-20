@@ -1467,13 +1467,10 @@ public class FacadePost {
                 userPost = postService.queryUserListByIds(followUsers);
             }
             crileidPost.removeAll(userPost);
-            log.info("" + crileidPost.size());
             crileidPost.addAll(userPost);
-            log.info("" + crileidPost.size());
             ComparatorChain chain = new ComparatorChain();
             chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
             Collections.sort(crileidPost, chain);
-            log.info("dddddddddddddddddddddddddddddd" + JSONArray.fromObject(crileidPost));
             if (listmongodba.size() != 0) {//刷新有记录
                 for (int j = 0; j < listmongodba.size(); j++) {
                     PostVo post = new PostVo();
@@ -1481,7 +1478,6 @@ public class FacadePost {
                     posts.add(post);//把mongodb转为post实体
                 }
                 crileidPost.removeAll(posts);//过滤掉看过的帖子crileidPost就是剩下的帖子
-                log.info("" + crileidPost.size());
                 retuenList(crileidPost, userid);
             } else {
                 list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
@@ -1885,6 +1881,30 @@ public class FacadePost {
         Collections.sort(postvo, chain);
         List<PostLabelVo> finals = getPageList(postvo, 1);
         return finals;
+    }
+
+
+    /**
+     * 用户刷新的历史记录列表
+     *
+     * @param userid
+     * @return
+     */
+    public List UserReflushHishtoryRecord(String userid, Paging<PostVo> paging) {
+        List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid));
+        List<PostVo> postVos = null;
+        if (list.size() != 0) {
+            for (int i = 0; i < list.size(); i++) {
+                int postid = Integer.parseInt(list.get(i).get("postid").toString());
+                //根据postid查询帖子
+                postVos = postService.queryPostByid(postid, paging);
+                findUser(postVos);
+                findPostLabel(postVos);
+                findHotComment(postVos);
+                countView(postVos);
+            }
+        }
+        return postVos;
     }
 
 

@@ -67,4 +67,27 @@ public class AppWaterfallController {
         response.setData(list);
         return response;
     }
+
+    /**
+     * 用户刷新的历史列表
+     *
+     * @param userid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "用户刷新的历史记录列表", notes = "用户刷新的历史记录列表", response = Response.class)
+    @RequestMapping(value = "userReflushHishtoryRecord", method = RequestMethod.POST)
+    public Response UserReflushHishtoryRecord(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
+                                              @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                              @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List map = facadePost.UserReflushHishtoryRecord(userid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(map);
+        return response;
+    }
 }

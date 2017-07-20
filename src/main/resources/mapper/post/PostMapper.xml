@@ -2112,4 +2112,7 @@
 SELECT yw_post.* FROM yw_post LEFT JOIN yw_post_label_relation ON yw_post_label_relation.postid=yw_post.id
 WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_post.heat_value DESC
     </select>
+    <select id="queryPostByid" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
 </mapper>

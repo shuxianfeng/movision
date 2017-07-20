@@ -1596,4 +1596,14 @@ public class PostService {
         }
     }
 
+    public List<PostVo> queryPostByid(int postid, Paging<PostVo> paging) {
+        try {
+            log.info("根据id查询帖子");
+            return postMapper.queryPostByid(postid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据id查询帖子失败", e);
+            throw e;
+        }
+    }
+
 }

@@ -279,6 +279,8 @@ public interface PostMapper {
 
     List<PostVo> queryLabelAllPost(int labelid);
 
+    List<PostVo> queryPostByid(int postid, RowBounds rowBounds);
+
 
 
 }
