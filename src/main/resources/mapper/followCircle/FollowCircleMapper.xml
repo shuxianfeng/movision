@@ -26,7 +26,7 @@
     </select>
 
     <!--根据用户id查询当前用户已关注的圈子数-->
-    <select id="queryFollowSumByUser" parameterType="java.lang.Integer" parameterMap="java.lang.Integer" >
+    <select id="queryFollowSumByUser" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
         SELECT count(*) FROM yw_follow_circle WHERE userid = #{userid,jdbcType=INTEGER}
     </select>
 
