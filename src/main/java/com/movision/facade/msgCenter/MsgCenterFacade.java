@@ -397,4 +397,33 @@ public class MsgCenterFacade {
         }
         return i;
     }
+
+
+    /**
+     * 查询用户所有未读消息
+     *
+     * @param userid
+     * @return
+     */
+    public Integer queryUserAllUnreadMessage(String userid) {
+        int count = 0;
+        if (userid == null) {
+            //用户未登录状态下全部返回0
+            return count;
+        } else {
+            //用户登录状态下
+            //点赞未读数
+            //评论未读数
+            //打赏未读数
+            //系统通知未读数
+            //打招呼未读数
+            //聊天未读数
+        }
+        return count;
+
+    }
+
+
+
+
 }
