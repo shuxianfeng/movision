@@ -265,4 +265,9 @@
         ORDER BY orderid, id
     </select>
 
+    <update id="updateChildMenuByParentMenu" parameterType="java.util.HashMap">
+        update yw_admin_menu set url = REPLACE(url, #{old_pmenu_url}, #{new_pmenu_url})
+        where pid = #{id}
+    </update>
+
 </mapper>

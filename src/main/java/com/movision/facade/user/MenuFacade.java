@@ -84,9 +84,46 @@ public class MenuFacade {
         }
     }
 
+    /**
+     * 修改菜单
+     *
+     * @param menu
+     * @return
+     */
     public Boolean updateMenu(Menu menu) {
+        //1 校验菜单名不能重复
         this.validateMenuNameIsExist(menu);
+
+        //2 判断要修改的是父菜单还是子菜单，如果是父菜单，
+        int id = menu.getId();
+        Menu oldMenu = menuService.selectByPrimaryKey(id);
+        if (0 == oldMenu.getPid()) {
+
+            String old_pmenu_url = oldMenu.getUrl();
+            String new_pmenu_url = menu.getUrl();
+            //3 判断是否修改了url，若是，则需要同步修改它包含的子菜单
+            if (!old_pmenu_url.equals(new_pmenu_url)) {
+
+                Boolean flag = updateChildMenuByParentMenu(id, old_pmenu_url, new_pmenu_url);
+                if (flag) {
+                    log.info("修改父菜单时，同步修改子菜单成功！");
+                } else {
+                    log.error("修改父菜单时，同步修改子菜单失败！");
+                    return false;
+                }
+            }
+        }
+
         return menuService.updateMenu(menu);
+    }
+
+    private Boolean updateChildMenuByParentMenu(Integer id, String old_pmenu_url, String new_pmenu_url) {
+        Map map = new HashedMap();
+        map.put("id", id);
+        map.put("old_pmenu_url", old_pmenu_url);
+        map.put("new_pmenu_url", new_pmenu_url);
+
+        return menuService.updateChildMenuByParentMenu(map);
     }
 
     public Boolean delMenu(Integer id) {
@@ -97,12 +134,12 @@ public class MenuFacade {
     }
 
     public MenuDetail queryMenuDetail(int id) {
-        Menu menu = menuService.queryMenu(id);
+        Menu menu = menuService.selectByPrimaryKey(id);
         int pid = menu.getPid();
         String pname = null;
         if (pid != 0) {
             //查询父菜单
-            Menu pmenu = menuService.queryMenu(pid);
+            Menu pmenu = menuService.selectByPrimaryKey(pid);
             pname = pmenu.getMenuname();
         }
         MenuDetail menuDetail = new MenuDetail(

@@ -51,7 +51,7 @@ public class MenuService {
     }
 
     //    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public Menu queryMenu(int id) {
+    public Menu selectByPrimaryKey(int id) {
         try {
             log.info("查询菜单详情，id=" + id);
             return menuMapper.selectByPrimaryKey(id);
@@ -191,6 +191,17 @@ public class MenuService {
             return menuMapper.selectAllChildrenMenuSideBar();
         } catch (Exception e) {
             log.error("查询所有子级菜单失败", e);
+            throw e;
+        }
+    }
+
+    public Boolean updateChildMenuByParentMenu(Map map) {
+        try {
+            log.info("根据父菜单修改子菜单的url");
+            int n = menuMapper.updateChildMenuByParentMenu(map);
+            return n > 0;
+        } catch (Exception e) {
+            log.error("根据父菜单修改子菜单的url失败", e);
             throw e;
         }
     }
