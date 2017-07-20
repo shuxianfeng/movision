@@ -1865,9 +1865,8 @@ public class FacadePost {
             int circleid = list.get(i).getId();
             String circleName = list.get(i).getName();
             int circleHeatvalue = list.get(i).getHeatvalue();
-            log.info("d   " + circleHeatvalue);
             pos.setHeatvalue(circleHeatvalue);
-            pos.setId(circleid);
+            pos.setCircleid(circleid);
             pos.setName(circleName);
             postvo.add(pos);
         }
@@ -1877,7 +1876,7 @@ public class FacadePost {
             String labelName = postLabelss.get(i).getName();
             int labelHeatvalue = postLabelss.get(i).getHeatValue();
             pos.setHeatvalue(labelHeatvalue);
-            pos.setId(labelid);
+            pos.setLabelid(labelid);
             pos.setName(labelName);
             postvo.add(pos);
         }

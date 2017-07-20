@@ -5,16 +5,25 @@ package com.movision.mybatis.postLabel.entity;
  * @Date 2017/7/19 19:52
  */
 public class PostLabelVo {
-    public Integer id;
+    public Integer circleid;
+    public Integer labelid;
     public String name;
     public Integer heatvalue;
 
-    public Integer getId() {
-        return id;
+    public Integer getCircleid() {
+        return circleid;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setCircleid(Integer circleid) {
+        this.circleid = circleid;
+    }
+
+    public Integer getLabelid() {
+        return labelid;
+    }
+
+    public void setLabelid(Integer labelid) {
+        this.labelid = labelid;
     }
 
     public String getName() {
