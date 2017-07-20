@@ -47,5 +47,7 @@ public interface MenuMapper {
 
     List<MenuVo> selectAllChildrenMenuSideBar();
 
-    int updateChildMenuByParentMenu(Map map);
+    int updateChildmenuUrlByParentMenu(Map map);
+
+    int updateChildmenuIsshowByParentmenu(Map map);
 }

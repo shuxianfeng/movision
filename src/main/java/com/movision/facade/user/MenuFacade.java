@@ -98,32 +98,58 @@ public class MenuFacade {
         int id = menu.getId();
         Menu oldMenu = menuService.selectByPrimaryKey(id);
         if (0 == oldMenu.getPid()) {
-
-            String old_pmenu_url = oldMenu.getUrl();
-            String new_pmenu_url = menu.getUrl();
             //3 判断是否修改了url，若是，则需要同步修改它包含的子菜单
-            if (!old_pmenu_url.equals(new_pmenu_url)) {
-
-                Boolean flag = updateChildMenuByParentMenu(id, old_pmenu_url, new_pmenu_url);
-                if (flag) {
-                    log.info("修改父菜单时，同步修改子菜单成功！");
-                } else {
-                    log.error("修改父菜单时，同步修改子菜单失败！");
-                    return false;
-                }
-            }
+            if (validateModUrl(menu, id, oldMenu)) return false;
+            //4 判断是否修改了isshow, 若修改了，则需要同步修改子菜单
+            if (validateModIsshow(menu, id)) return false;
         }
 
         return menuService.updateMenu(menu);
     }
 
-    private Boolean updateChildMenuByParentMenu(Integer id, String old_pmenu_url, String new_pmenu_url) {
+    private boolean validateModUrl(Menu menu, int id, Menu oldMenu) {
+        String old_pmenu_url = oldMenu.getUrl();
+        String new_pmenu_url = menu.getUrl();
+        if (!old_pmenu_url.equals(new_pmenu_url)) {
+
+            Boolean flag = updateChildmenuUrlByParentMenu(id, old_pmenu_url, new_pmenu_url);
+            if (flag) {
+                log.info("修改父菜单时，同步修改子菜单url成功！");
+            } else {
+                log.error("修改父菜单时，同步修改子菜单url失败！");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean validateModIsshow(Menu menu, int id) {
+        int new_isshow = menu.getIsshow();
+        Boolean flag = updateChildmenuIsshowByParentmenu(id, new_isshow);
+        if (flag) {
+            log.info("修改父菜单时，同步修改子菜单isshow成功！");
+        } else {
+            log.error("修改父菜单时，同步修改子菜单isshow失败！");
+            return true;
+        }
+        return false;
+    }
+
+    private Boolean updateChildmenuUrlByParentMenu(Integer id, String old_pmenu_url, String new_pmenu_url) {
         Map map = new HashedMap();
         map.put("id", id);
         map.put("old_pmenu_url", old_pmenu_url);
         map.put("new_pmenu_url", new_pmenu_url);
 
-        return menuService.updateChildMenuByParentMenu(map);
+        return menuService.updateChildmenuUrlByParentMenu(map);
+    }
+
+    private Boolean updateChildmenuIsshowByParentmenu(Integer id, Integer isshow) {
+        Map map = new HashedMap();
+        map.put("id", id);
+        map.put("isshow", isshow);
+
+        return menuService.updateChildmenuIsshowByParentmenu(map);
     }
 
     public Boolean delMenu(Integer id) {

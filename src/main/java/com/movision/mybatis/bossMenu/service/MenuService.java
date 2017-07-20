@@ -195,13 +195,24 @@ public class MenuService {
         }
     }
 
-    public Boolean updateChildMenuByParentMenu(Map map) {
+    public Boolean updateChildmenuUrlByParentMenu(Map map) {
         try {
             log.info("根据父菜单修改子菜单的url");
-            int n = menuMapper.updateChildMenuByParentMenu(map);
+            int n = menuMapper.updateChildmenuUrlByParentMenu(map);
             return n > 0;
         } catch (Exception e) {
             log.error("根据父菜单修改子菜单的url失败", e);
+            throw e;
+        }
+    }
+
+    public Boolean updateChildmenuIsshowByParentmenu(Map map) {
+        try {
+            log.info("根据父菜单修改子菜单的isshow");
+            int n = menuMapper.updateChildmenuIsshowByParentmenu(map);
+            return n > 0;
+        } catch (Exception e) {
+            log.error("根据父菜单修改子菜单的isshow失败", e);
             throw e;
         }
     }
