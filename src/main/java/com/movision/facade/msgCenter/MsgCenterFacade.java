@@ -30,6 +30,7 @@ import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.shiro.crypto.hash.Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -406,6 +407,7 @@ public class MsgCenterFacade {
      * @return
      */
     public Integer queryUserAllUnreadMessage(String userid) {
+        Map map = new HashMap();
         int count = 0;
         if (userid == null) {
             //用户未登录状态下全部返回0
@@ -413,14 +415,19 @@ public class MsgCenterFacade {
         } else {
             //用户登录状态下
             //点赞未读数
+            int zanNumber = postZanRecordService.queryZanNumber(Integer.parseInt(userid));
             //评论未读数
-            //打赏未读数
+            int commentIsRead = commentService.queryCommentIsRead(Integer.parseInt(userid));
             //系统通知未读数
-            //打招呼未读数
+            map.put("userid", userid);
+            map.put("informTime", ShiroUtil.getAppUser().getRegisterTime());
+            int imsysIsRead = imSystemInformService.querySystemPushByUserid(map);
             //聊天未读数
+
+            //计算总数
+            count = zanNumber + commentIsRead + imsysIsRead;
         }
         return count;
-
     }
 
 

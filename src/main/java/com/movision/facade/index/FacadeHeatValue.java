@@ -88,12 +88,8 @@ public class FacadeHeatValue {
             map.put("points", points);
             postService.updatePostHeatValue(map);
         } else if (type == 8) {//帖子浏览数
-            List<UesrreflushCount> list = userRefreshRecordService.postcount(postid);
-            int count = 0;
-            for (int i = 0; i < list.size(); i++) {
-                count = list.get(i).getCount();
-            }
-            points = count * HeatValueConstant.POINT.read_post.getCode();
+            int list = userRefreshRecordService.postcount(postid);
+            points = list * HeatValueConstant.POINT.read_post.getCode();
             int point = (int) (points * 0.1);
             map.put("points", point);
             //postService.updatePostHeatValue(map);

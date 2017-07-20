@@ -137,4 +137,7 @@
         UPDATE yw_post_rewarded SET isread=1 WHERE postid IN (SELECT id FROM yw_post WHERE
         userid=#{userid,jdbcType=INTEGER} and isdel=0)
     </update>
+    <select id="queryRewardIsRead" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post_rewarded WHERE userid=#{userid,jdbcType=INTEGER} AND isread=0
+    </select>
 </mapper>

@@ -100,7 +100,7 @@ public class AppWaterfallController {
      * 所有未读消息
      * @param userid
      * @return
-
+     */
      @ApiOperation(value = "所有未读消息", notes = "所有未读消息", response = Response.class)
      @RequestMapping(value = "queryUserAllUnreadMessage", method = RequestMethod.POST)
      public Response queryUserAllUnreadMessage(@ApiParam(value = "用户id") @RequestParam(required = false) String userid){
@@ -111,5 +111,5 @@ public class AppWaterfallController {
      }
      response.setData(count);
         return response;
-     }*/
+     }
 }

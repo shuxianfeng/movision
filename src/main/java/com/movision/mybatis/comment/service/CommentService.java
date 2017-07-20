@@ -413,5 +413,16 @@ public class CommentService {
         }
     }
 
+    public Integer queryCommentIsRead(int userid) {
+        try {
+            log.info("查询评论未读");
+            return commentMapper.queryCommentIsRead(userid);
+        } catch (Exception e) {
+            log.error("查询评论未读失敗", e);
+            throw e;
+        }
+    }
+
+
 
 }

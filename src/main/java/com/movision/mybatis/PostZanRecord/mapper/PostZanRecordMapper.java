@@ -28,4 +28,6 @@ public interface PostZanRecordMapper {
 
     Integer updateZanReadByPost(Integer userid);
 
+    Integer queryZanNumber(int userid);
+
 }

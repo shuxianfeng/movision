@@ -104,4 +104,14 @@ public class RewardedService {
         }
     }
 
+    public Integer queryRewardIsRead(int userid) {
+        try {
+            log.info("查看打赏未读");
+            return rewardedMapper.queryRewardIsRead(userid);
+        } catch (Exception e) {
+            log.error("查看打赏未读异常", e);
+            throw e;
+        }
+    }
+
 }

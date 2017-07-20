@@ -79,4 +79,5 @@ public interface CommentMapper {
 
     List<Comment> queryCommentByPost(int postid);
 
+    Integer queryCommentIsRead(int userid);//查询评论未读
 }

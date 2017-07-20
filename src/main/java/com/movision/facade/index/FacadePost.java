@@ -1589,14 +1589,10 @@ public class FacadePost {
      * @return
      */
     public List countView(List<PostVo> list) {
-        int count = 0;
         for (int i = 0; i < list.size(); i++) {
             int postid = list.get(i).getId();
-            List<UesrreflushCount> uesrreflushCounts = userRefreshRecordService.postcount(postid);
-            for (int j = 0; j < uesrreflushCounts.size(); j++) {
-                count = uesrreflushCounts.get(j).getCount();
-                list.get(j).setCountview(count);
-            }
+            int uesrreflushCounts = userRefreshRecordService.postcount(postid);
+            list.get(i).setCountview(uesrreflushCounts);
         }
         return list;
     }

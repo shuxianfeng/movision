@@ -1,5 +1,6 @@
 package com.movision.mybatis.userRefreshRecord.service;
 
+import com.mongodb.*;
 import com.movision.mybatis.userRefreshRecord.entity.UesrreflushCount;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
@@ -35,16 +36,18 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
      *根据postid查询帖子的流浪量
      * @return
      */
-    public List postcount(int postid) {
-        Aggregation aggregation = Aggregation.newAggregation(
-                Aggregation.match(Criteria.where("postid").is(postid)),
-                Aggregation.group("postid").count().as("count"),
-                Aggregation.sort(Sort.Direction.DESC, "count"),
-                Aggregation.limit(1)
-        );
-        AggregationResults<UesrreflushCount> list = mongoTemplate.aggregate(aggregation, "UesrreflushCount", UesrreflushCount.class);
-        List<UesrreflushCount> list1 = list.getMappedResults();
-        return list1;
+    public Integer postcount(int postid) {
+        int obj = 0;
+        try {
+            MongoClient mClient = new MongoClient("localhost:27017");
+            DB db = mClient.getDB("searchRecord");
+            DBCollection collection = db.getCollection("userRefreshRecord");
+            BasicDBObject queryObject = new BasicDBObject("postid", postid);
+            obj = collection.find(queryObject).count();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return obj;
 
     }
 }
