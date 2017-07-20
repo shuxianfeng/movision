@@ -3,6 +3,7 @@ package com.movision.controller.app2;
 import com.movision.common.Response;
 import com.movision.facade.index.FacadePost;
 import com.movision.facade.msgCenter.MsgCenterFacade;
+import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.utils.pagination.model.Paging;
@@ -29,6 +30,8 @@ public class AppWaterfallController {
 
     @Autowired
     private MsgCenterFacade msgCenterFacade;
+    @Autowired
+    private UserFacade userFacade;
 
     /**
      * 下拉刷新
@@ -110,6 +113,18 @@ public class AppWaterfallController {
      response.setMessage("返回成功");
      }
      response.setData(count);
+         return response;
+     }
+
+    /**
+     * @return
+     */
+    @ApiOperation(value = "所有未读消息", notes = "所有未读消息", response = Response.class)
+    @RequestMapping(value = "queryPersonalHomepage", method = RequestMethod.POST)
+    public Response queryPersonalHomepage(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
+                                          @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                          @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
         return response;
      }
 }

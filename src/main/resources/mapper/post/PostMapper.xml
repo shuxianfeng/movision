@@ -2066,9 +2066,6 @@
     <select id="queryFollowUser" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT interestedusers FROM yw_follow_user WHERE userid=#{userid,jdbcType=INTEGER}
     </select>
-    <select id="queryUserPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
-        select * from yw_post WHERE userid=#{interestedusers,jdbcType=INTEGER} ORDER BY heat_value DESC
-    </select>
     <select id="queryPostListByIds" parameterType="java.util.List" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT * FROM yw_post WHERE circleid IN
         <foreach collection="list" item="item" open="(" separator="," close=")">
@@ -2114,5 +2111,26 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
     </select>
     <select id="queryPostByid" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT * FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="queryUserPostList" resultType="com.movision.mybatis.post.entity.PostVo"
+            parameterType="java.lang.Integer">
+        SELECT * FROM  yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0 AND isactive=0 ORDER  BY intime DESC
+    </select>
+    <select id="queryUserActive" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.lang.Integer">
+        SELECT * FROM  yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0 AND isactive=1 ORDER  BY intime DESC
+    </select>
+    <select id="queryCollectionListByIds" parameterType="java.util.List"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post WHERE postid IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ORDER BY intime DESC
+    </select>
+    <select id="queryUserPostCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select COUNT(1) from yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0 AND isactive=0
+    </select>
+    <select id="queryUserActiveCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select COUNT(1) from yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0 AND isactive=1
     </select>
 </mapper>

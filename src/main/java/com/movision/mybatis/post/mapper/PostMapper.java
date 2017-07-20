@@ -262,6 +262,7 @@ public interface PostMapper {
 
     List<PostVo> queryUserListByIds(List ids);
 
+    List<PostVo> queryCollectionListByIds(List ids, RowBounds rowBounds);
     //根据圈子id查询帖子
     List<PostVo> queryPostCrile(int circleid);
 
@@ -282,5 +283,12 @@ public interface PostMapper {
     List<PostVo> queryPostByid(int postid, RowBounds rowBounds);
 
 
+    List<PostVo> queryUserPostList(int userid, RowBounds rowBounds);
+
+    List<PostVo> queryUserActive(int userid, RowBounds rowBounds);
+
+    int queryUserPostCount(int userid);
+
+    int queryUserActiveCount(int userid);
 
 }

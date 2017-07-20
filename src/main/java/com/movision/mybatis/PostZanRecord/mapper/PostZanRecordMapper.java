@@ -30,4 +30,6 @@ public interface PostZanRecordMapper {
 
     Integer queryZanNumber(int userid);
 
+    int userPostZan(int userid);
+
 }

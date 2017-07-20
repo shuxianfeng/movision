@@ -151,4 +151,14 @@
     <select id="queryPostCollectByUser" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT userid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
+    <select id="queryUserPost" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT  postid FROM yw_collection WHERE userid=#{userid,jdbcType=INTEGER} AND type=0
+    </select>
+    <select id="queryCollectionCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM  yw_collection WHERE userid=#{userid,jdbcType=INTEGER} AND type=0
+    </select>
+    <select id="userPostCollection" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_collection LEFT JOIN yw_post ON yw_post.id=yw_collection.postid
+    WHERE yw_collection.postid in (SELECT id FROM  yw_post WHERE userid=#{userid,jdbcType=INTEGER}) AND yw_collection.type=0
+    </select>
 </mapper>

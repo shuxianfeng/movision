@@ -64,6 +64,16 @@ public class PostZanRecordService {
         }
     }
 
+    public Integer userPostZan(int userid) {
+        try {
+            log.info("用户被收藏的帖子数");
+            return recordMapper.userPostZan(userid);
+        } catch (Exception e) {
+            log.error("用户被收藏的帖子数异常", e);
+            throw e;
+        }
+    }
+
 
 
 }

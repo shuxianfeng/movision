@@ -66,6 +66,25 @@ public class UserVo implements Serializable {
 
     private Integer postsum;//帖子数量
 
+    public Integer activecount;//活动帖子数
+    public Integer collectioncount;//收藏帖子数
+
+    public Integer getActivecount() {
+        return activecount;
+    }
+
+    public void setActivecount(Integer activecount) {
+        this.activecount = activecount;
+    }
+
+    public Integer getCollectioncount() {
+        return collectioncount;
+    }
+
+    public void setCollectioncount(Integer collectioncount) {
+        this.collectioncount = collectioncount;
+    }
+
     private Integer isessencesum;//精贴数量
 
     private Integer exceptional;//被打赏积分

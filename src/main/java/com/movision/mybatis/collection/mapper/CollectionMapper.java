@@ -3,6 +3,7 @@ package com.movision.mybatis.collection.mapper;
 import com.movision.mybatis.collection.entity.Collection;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -32,4 +33,10 @@ public interface CollectionMapper {
     void addCollectionSum(int postid);
 
     Integer queryPostCollectByUser(Integer postid);
+
+    List<Integer> queryUserPost(int userid);
+
+    int queryCollectionCount(int userid);
+
+    int userPostCollection(int userid);
 }

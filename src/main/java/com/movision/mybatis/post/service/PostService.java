@@ -1516,6 +1516,16 @@ public class PostService {
         }
     }
 
+    public List<PostVo> queryCollectionListByIds(List ids, Paging<PostVo> paging) {
+        try {
+            log.info("查询收藏的帖子");
+            return postMapper.queryCollectionListByIds(ids, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询收藏的帖子失败", e);
+            throw e;
+        }
+    }
+
     public List<PostVo> queryPostCrile(int circleid) {
         try {
             log.info("根据圈子id查询帖子");
@@ -1602,6 +1612,47 @@ public class PostService {
             return postMapper.queryPostByid(postid, paging.getRowBounds());
         } catch (Exception e) {
             log.error("根据id查询帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> queryUserPostList(int userid, Paging<PostVo> paging) {
+        try {
+            log.info("根据id查询帖子");
+            return postMapper.queryUserPostList(userid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据id查询帖子失败", e);
+            throw e;
+        }
+    }
+
+
+    public List<PostVo> queryUserActive(int userid, Paging<PostVo> paging) {
+        try {
+            log.info("根据id查询活动");
+            return postMapper.queryUserActive(userid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据id查询活动失败", e);
+            throw e;
+        }
+    }
+
+    public int queryUserPostCount(int userid) {
+        try {
+            log.info("查询用户发帖数");
+            return postMapper.queryUserPostCount(userid);
+        } catch (Exception e) {
+            log.error("查询用户发帖数失败", e);
+            throw e;
+        }
+    }
+
+    public int queryUserActiveCount(int userid) {
+        try {
+            log.info("查询用户发活动数");
+            return postMapper.queryUserActiveCount(userid);
+        } catch (Exception e) {
+            log.error("查询用户发活动数失败", e);
             throw e;
         }
     }

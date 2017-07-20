@@ -145,5 +145,7 @@ public interface UserMapper {
 
     int queryUserLevel(int userid);
 
+    UserVo queryUserInfoHompage(int userid);
+
 
 }

@@ -915,4 +915,13 @@ public class UserService {
         }
     }
 
+    public UserVo queryUserInfoHompage(int userid) {
+        try {
+            log.info("查询用户信息");
+            return userMapper.queryUserInfoHompage(userid);
+        } catch (Exception e) {
+            log.error("查询用户信息失败", e);
+            throw e;
+        }
+    }
 }

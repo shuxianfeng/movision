@@ -1099,4 +1099,8 @@
     <select id="queryUserLevel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT level FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
     </select>
+    <select id="queryUserInfoHompage" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.user.entity.UserVo">
+
+    </select>
 </mapper>

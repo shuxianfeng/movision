@@ -7,9 +7,12 @@ import com.movision.common.util.ShiroUtil;
 import com.movision.exception.AuthException;
 import com.movision.exception.BusinessException;
 import com.movision.facade.index.FacadeHeatValue;
+import com.movision.facade.index.FacadePost;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
+import com.movision.mybatis.PostZanRecord.service.PostZanRecordService;
 import com.movision.mybatis.bossUser.service.BossUserService;
+import com.movision.mybatis.collection.service.CollectionService;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.pointRecord.entity.PointRecord;
 import com.movision.mybatis.pointRecord.service.PointRecordService;
@@ -20,6 +23,7 @@ import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
+import com.movision.utils.IntegerUtil;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.FastHashMap;
 import org.apache.commons.collections.map.HashedMap;
@@ -60,6 +64,13 @@ public class UserFacade {
 
     @Autowired
     private FacadeHeatValue facadeHeatValue;
+
+    @Autowired
+    private FacadePost facadePost;
+    @Autowired
+    private CollectionService collectionService;
+    @Autowired
+    private PostZanRecordService postZanRecordService;
     /**
      * 判断是否存在该手机号的app用户
      *
@@ -412,5 +423,68 @@ public class UserFacade {
     public User selectByPrimaryKey(Integer userid) {
         return userService.selectByPrimaryKey(userid);
     }
+
+
+    /**
+     * 我的接口上半部分(*)
+     *
+     * @param userid
+     * @return
+     */
+    public UserVo queryPersonalHomepage(String userid) {
+        //查询用户信息
+        UserVo user = userService.queryUserInfoHompage(Integer.parseInt(userid));
+        //查询发的帖子总数
+        int postcount = postService.queryUserPostCount(Integer.parseInt(userid));
+        user.setPostsum(postcount);
+        //查询发的活动总数
+        int activecount = postService.queryUserActiveCount(Integer.parseInt(userid));
+        user.setActivecount(activecount);
+        //收藏帖子数
+        int collectioncount = collectionService.queryCollectionCount(Integer.parseInt(userid));
+        user.setCollectioncount(collectioncount);
+        //被赞数
+        int zansum = postZanRecordService.userPostZan(Integer.parseInt(userid));
+        user.setZansum(zansum);
+        //被收藏数
+        int collectionsum = collectionService.userPostCollection(Integer.parseInt(userid));
+        user.setBecollectsum(collectionsum);
+        return user;
+    }
+
+    /**
+     * 我的下半部分
+     *
+     * @param type
+     * @param userid
+     * @param paging
+     * @return
+     */
+    public List MineBottle(int type, String userid, Paging<PostVo> paging) {
+        List<PostVo> list = null;
+        if (type == 1) {//帖子
+            //查询用户发的帖子
+            list = postService.queryUserPostList(Integer.parseInt(userid), paging);
+            for (int i = 0; i < list.size(); i++) {
+                facadePost.countView(list);
+            }
+        } else if (type == 2) {//活动
+            //活动帖子
+            list = postService.queryUserActive(Integer.parseInt(userid), paging);
+            for (int i = 0; i < list.size(); i++) {
+                facadePost.countView(list);
+            }
+        } else if (type == 3) {//收藏
+            //用户收藏的帖子
+            List<Integer> collection = collectionService.queryUserPost(Integer.parseInt(userid));
+            //收藏的id查帖子
+            list = postService.queryCollectionListByIds(collection, paging);
+            for (int i = 0; i < list.size(); i++) {
+                facadePost.countView(list);
+            }
+        }
+        return list;
+    }
+
 
 }
