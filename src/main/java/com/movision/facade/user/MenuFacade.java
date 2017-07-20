@@ -100,8 +100,8 @@ public class MenuFacade {
         if (0 == oldMenu.getPid()) {
             //3 判断是否修改了url，若是，则需要同步修改它包含的子菜单
             if (validateModUrl(menu, id, oldMenu)) return false;
-            //4 判断是否修改了isshow, 若修改了，则需要同步修改子菜单
-            if (validateModIsshow(menu, id)) return false;
+            //4 判断是否修改了isshow, 若修改了，则需要同步修改子菜单 --没有必要，因为父菜单不显示后，子菜单即使设置了显示，在界面上还是显示不出来
+//            if (validateModIsshow(menu, id)) return false;
         }
 
         return menuService.updateMenu(menu);
