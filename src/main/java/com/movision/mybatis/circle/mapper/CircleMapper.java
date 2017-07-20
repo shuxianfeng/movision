@@ -33,7 +33,7 @@ public interface CircleMapper {
 
     int queryIsSupport(Map<String, Object> parammap);
 
-    List<CircleVo> queryMyFollowCircleList(int userid);
+    List<CircleVo> queryMyFollowCircleList(Map<String, Object> parammap);
 
     void addSupportSum(Map<String, Object> parammap);
 

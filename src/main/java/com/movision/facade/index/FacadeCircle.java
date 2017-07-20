@@ -139,7 +139,9 @@ public class FacadeCircle {
         //查询我关注的圈子列表
         if (StringUtils.isNotEmpty(userid)){
             //登录状态下查询用户关注过的所有圈子列表
-            myfollowlist = circleService.queryMyFollowCircleList(Integer.parseInt(userid));
+            Map<String, Object> parammap = new HashMap<>();
+            parammap.put("userid", Integer.parseInt(userid));
+            myfollowlist = circleService.queryMyFollowCircleList(parammap);
         }
         myFollowCircle.setCircleList(myfollowlist);
         categoryList.add(myFollowCircle);

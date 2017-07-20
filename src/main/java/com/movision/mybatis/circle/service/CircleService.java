@@ -83,10 +83,10 @@ public class CircleService {
         }
     }
 
-    public List<CircleVo> queryMyFollowCircleList(int userid){
+    public List<CircleVo> queryMyFollowCircleList(Map<String, Object> parammap){
         try {
             log.info("查询当前用户关注的所有圈子列表");
-            return circleMapper.queryMyFollowCircleList(userid);
+            return circleMapper.queryMyFollowCircleList(parammap);
         }catch (Exception e){
             log.error("查询当前用户关注的所有圈子列表失败", e);
             throw e;
