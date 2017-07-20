@@ -943,6 +943,17 @@
             and f.userid = #{userid}
         </if>
     </select>
+
+    <select id="queryMyFollowCircleList" parameterType="java.lang.Integer" resultType="com.movision.mybatis.circle.entity.CircleVo">
+        SELECT c.*
+        FROM yw_circle c
+        LEFT JOIN yw_follow_circle f on c.id = f.circleid
+        WHERE c.isdel = 0
+        AND c.status = 1
+        <if test="userid!=null and userid!=''">
+            and f.userid = #{userid,jdbcType=INTEGER}
+        </if>
+    </select>
     
     <select id="findAllHotCircleList" resultType="com.movision.mybatis.circle.entity.CircleVo" >
         SELECT t.* FROM (

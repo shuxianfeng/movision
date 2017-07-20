@@ -83,6 +83,16 @@ public class CircleService {
         }
     }
 
+    public List<CircleVo> queryMyFollowCircleList(int userid){
+        try {
+            log.info("查询当前用户关注的所有圈子列表");
+            return circleMapper.queryMyFollowCircleList(userid);
+        }catch (Exception e){
+            log.error("查询当前用户关注的所有圈子列表失败", e);
+            throw e;
+        }
+    }
+
     public CircleVo queryCircleInfo(int circleid) {
         try {
             log.info("查询圈子信息（包括公告和简介等）circleid=" + circleid);

@@ -4,6 +4,7 @@ import com.movision.common.constant.PointConstant;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.circle.entity.CircleVo;
+import com.movision.mybatis.circle.entity.MyCircle;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.circleCategory.entity.CircleCategoryVo;
 import com.movision.mybatis.circleCategory.service.CircleCategoryService;
@@ -23,10 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author shuxf
@@ -133,8 +131,19 @@ public class FacadeCircle {
         circleCategoryVo.setCircleList(list);
         categoryList.add(circleCategoryVo);
 
+        //美番2.0增加 “我关注” 条目
+        CircleCategoryVo myFollowCircle = new CircleCategoryVo();
+        myFollowCircle.setId(-2);//categoryid为-2时查询我关注的圈子
+        myFollowCircle.setCategoryname("我关注");
+        List<CircleVo> myfollowlist = new ArrayList<>();
+        //查询我关注的圈子列表
+        if (StringUtils.isNotEmpty(userid)){
+            //登录状态下查询用户关注过的所有圈子列表
+            myfollowlist = circleService.queryMyFollowCircleList(Integer.parseInt(userid));
+        }
+        myFollowCircle.setCircleList(myfollowlist);
+        categoryList.add(myFollowCircle);
         return categoryList;
-
     }
 
     public CircleVo queryCircleInfo(String circleid, String userid) {
