@@ -229,10 +229,22 @@ public class FacadeCircle {
     }
 
     @CacheEvict(value = "indexData", key = "'index_data'")
-    public void cancelFollowCircle(String userid, String circleid) {
-        Map<String, Object> parammap = new HashMap<>();
-        parammap.put("userid", Integer.parseInt(userid));
-        parammap.put("circleid", Integer.parseInt(circleid));
-        circleService.cancelFollowCircle(parammap);
+    public int cancelFollowCircle(String userid, String circleid) {
+        //定义一个返回标志位
+        int mark = 0;
+
+        //就美番2.0的改写，在取消关注圈子时需要做还剩几个圈子的判断
+        //用户至少需要保留关注一个圈子，当前取消的是最后一个圈子时，不让取消关注
+        int sum = circleService.queryFollowSumByUser(Integer.parseInt(userid));
+
+        if (sum > 1) {
+            Map<String, Object> parammap = new HashMap<>();
+            parammap.put("userid", Integer.parseInt(userid));
+            parammap.put("circleid", Integer.parseInt(circleid));
+            circleService.cancelFollowCircle(parammap);
+        }else{
+            mark = -1;
+        }
+        return mark;
     }
 }

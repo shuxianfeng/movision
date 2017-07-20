@@ -142,11 +142,16 @@ public class AppCircleController {
                                        @ApiParam(value = "圈子id") @RequestParam String circleid) {
         Response response = new Response();
 
-        facadeCircle.cancelFollowCircle(userid, circleid);
+        int mark = facadeCircle.cancelFollowCircle(userid, circleid);
 
-        if (response.getCode() == 200) {
+        if (response.getCode() == 200 && mark == 0) {
+            response.setCode(200);
             response.setMessage("取消关注成功");
+        } else if (response.getCode() == 200 && mark == -1){
+            response.setCode(300);
+            response.setMessage("至少关注一个圈子，已经是最后一个圈子啦");
         } else {
+            response.setCode(400);
             response.setMessage("取消关注失败");
         }
         return response;

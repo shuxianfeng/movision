@@ -153,6 +153,16 @@ public class CircleService {
         }
     }
 
+    public int queryFollowSumByUser(int userid){
+        try {
+            log.info("根据用户id查询该用户当前已关注的圈子数");
+            return followCircleMapper.queryFollowSumByUser(userid);
+        }catch (Exception e){
+            log.error("根据用户id查询该用户当前已关注的圈子数失败", e);
+            throw e;
+        }
+    }
+
     public void cancelFollowCircle(Map<String, Object> parammap) {
         try {
             log.info("用户取消关注圈子");
