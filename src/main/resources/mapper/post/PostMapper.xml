@@ -2117,7 +2117,17 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         SELECT * FROM  yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0 AND isactive=0 ORDER  BY intime DESC
     </select>
     <select id="queryUserActive" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.lang.Integer">
-        SELECT * FROM  yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0 AND isactive=1 ORDER  BY intime DESC
+        SELECT * FROM (
+        SELECT t1.*
+        FROM yw_post t1
+        LEFT JOIN yw_active_period t2
+        ON t1.id = t2.postid
+        ) t
+        WHERE t.isdel = '0'
+        AND t.id IN (
+        SELECT postid FROM yw_active_part WHERE userid = #{userid,jdbcType=INTEGER}
+        )
+
     </select>
     <select id="queryCollectionListByIds" parameterType="java.util.List"
             resultType="com.movision.mybatis.post.entity.PostVo">
@@ -2131,6 +2141,16 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         select COUNT(1) from yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0 AND isactive=0
     </select>
     <select id="queryUserActiveCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        select COUNT(1) from yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0 AND isactive=1
+        SELECT COUNT(1) FROM (
+        SELECT t1.*
+        FROM yw_post t1
+        LEFT JOIN yw_active_period t2
+        ON t1.id = t2.postid
+        ) t
+        WHERE t.isdel = '0'
+        AND t.id IN (
+        SELECT postid FROM yw_active_part WHERE userid = #{userid,jdbcType=INTEGER}
+        )
+
     </select>
 </mapper>
