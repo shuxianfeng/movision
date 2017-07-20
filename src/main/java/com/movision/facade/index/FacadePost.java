@@ -1576,9 +1576,7 @@ public class FacadePost {
     public List findUser(List<PostVo> list) {
         UserLike userLikes = null;
         for (int i = 0; i < list.size(); i++) {
-            int postid = list.get(i).getId();
             int userid = list.get(i).getUserid();
-            log.info(postid + "sssss");
             userLikes = userService.findUser(userid);
             list.get(i).setUserlike(userLikes);
         }
@@ -1894,7 +1892,7 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    public List UserReflushHishtoryRecord(String userid, Paging<PostVo> paging) {
+    public List userReflushHishtoryRecord(String userid, Paging<PostVo> paging) {
         List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid));
         List<PostVo> postVos = null;
         if (list.size() != 0) {
