@@ -1591,9 +1591,9 @@ public class FacadePost {
         for (int i = 0; i < list.size(); i++) {
             int postid = list.get(i).getId();
             List<UesrreflushCount> uesrreflushCounts = userRefreshRecordService.postcount(postid);
-            for (int j = 0; i < uesrreflushCounts.size(); j++) {
+            for (int j = 0; j < uesrreflushCounts.size(); j++) {
                 count = uesrreflushCounts.get(j).getCount();
-                list.get(i).setCountview(count);
+                list.get(j).setCountview(count);
             }
         }
         return list;
