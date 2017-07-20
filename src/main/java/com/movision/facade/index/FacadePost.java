@@ -1279,13 +1279,13 @@ public class FacadePost {
         } else {
             //已登录
             if (alllist != null) {
-                if (count < 1000) {
+                if (count < 10) {
                     //mongodb的里面的刷新记录小于1000条记录的时候进行用户分析
                     list = userAnalysisSmall(userid, paging, alllist, posts);
                     if (list != null) return list;
-                } else if (count >= 1000) {
+                } else if (count >= 30) {
                     //mongodb的里面的刷新记录大于等于1000条记录的时候进行用户分析
-                    userAnalysisBig(userid, posts);
+                    list = userAnalysisBig(userid, posts);
                 }
             }
         }
@@ -1298,7 +1298,8 @@ public class FacadePost {
      * @param userid
      * @param posts
      */
-    private void userAnalysisBig(String userid, List<PostVo> posts) {
+    private List userAnalysisBig(String userid, List<PostVo> posts) {
+        List<PostVo> list = null;
         List<UserRefreshRecordVo> result;//查询用户最喜欢的圈子
         result = opularSearchTermsService.userFlush(Integer.parseInt(userid));
         int crileid = 0;
@@ -1316,7 +1317,8 @@ public class FacadePost {
             posts.add(post);//把mongodb转为post实体
         }
         criclelist.removeAll(posts);//剩下的帖子
-        retuenList(criclelist, userid);
+        list = retuenList(criclelist, userid);
+        return list;
     }
 
     /**
@@ -1340,7 +1342,7 @@ public class FacadePost {
             }
             //把看过的帖子过滤掉
             alllist.removeAll(posts);//alllist是剩余的帖子
-            retuenList(alllist, userid);
+            list = retuenList(alllist, userid);
         } else {
             //登录情况下但是mongodb里面没有刷新记录
             list = postService.queryPostHeatValue(paging);
@@ -1386,7 +1388,7 @@ public class FacadePost {
                 //根据city查询帖子
                 List<PostVo> postVos = postService.queryCityPost(citycode);
                 postVos.removeAll(posts);
-                retuenList(postVos, userid);
+                list = retuenList(postVos, userid);
             } else {//登录但是刷新列表中没有帖子
                 list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
@@ -1429,7 +1431,7 @@ public class FacadePost {
                 //根据圈子id查询帖子
                 List<PostVo> postVos = postService.queryPostCrile(circleid);
                 postVos.removeAll(posts);
-                retuenList(postVos, userid);
+                list = retuenList(postVos, userid);
             } else {
                 //登录但是刷新列表中没有帖子
                 list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
@@ -1478,7 +1480,7 @@ public class FacadePost {
                     posts.add(post);//把mongodb转为post实体
                 }
                 crileidPost.removeAll(posts);//过滤掉看过的帖子crileidPost就是剩下的帖子
-                retuenList(crileidPost, userid);
+                list = retuenList(crileidPost, userid);
             } else {
                 list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
@@ -1518,7 +1520,7 @@ public class FacadePost {
                 //根据标签查询帖子
                 List<PostVo> postVos = postService.queryLabelAllPost(labelid);
                 postVos.removeAll(posts);
-                retuenList(postVos, userid);
+                list = retuenList(postVos, userid);
             } else {
                 //登录但是刷新列表中没有帖子
                 list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
@@ -1574,7 +1576,9 @@ public class FacadePost {
     public List findUser(List<PostVo> list) {
         UserLike userLikes = null;
         for (int i = 0; i < list.size(); i++) {
+            int postid = list.get(i).getId();
             int userid = list.get(i).getUserid();
+            log.info(postid + "sssss");
             userLikes = userService.findUser(userid);
             list.get(i).setUserlike(userLikes);
         }

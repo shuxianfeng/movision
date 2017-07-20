@@ -2034,7 +2034,7 @@
         SELECT * FROM yw_post WHERE isdel=0 AND circleid=#{crileid,jdbcType=INTEGER} ORDER BY heat_value
         DESC
     </select>
-    <select id="queryoverPost" resultType="com.movision.mybatis.post.entity.Post">
+    <select id="queryoverPost" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT * from yw_post WHERE isdel=0 AND circleid!=#{crileid,jdbcType=INTEGER} OR (circleid IS NULL AND isdel=0)
         ORDER BY heat_value DESC
     </select>
