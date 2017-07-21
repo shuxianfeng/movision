@@ -83,11 +83,11 @@ public class AppNewDiscoverController {
 
 //        List<Author> authorList = userFacade.getHotAuthor(pager, ShiroUtil.getAppUserID());//传入当前登录用户的userid
         List<Author> authorList = userFacade.getHotAuthor(pager, userid);//传入当前登录用户的userid
+        pager.result(authorList);
         if (response.getCode() == 200){
             response.setMessage("查询成功");
         }
-
-        response.setData(authorList);
+        response.setData(pager);
         return response;
     }
 
