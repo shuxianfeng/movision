@@ -41,7 +41,7 @@ public class AppWaterfallController {
      */
     @ApiOperation(value = "下拉刷新", notes = "下拉刷新", response = Response.class)
     @RequestMapping(value = "userRefreshListNew", method = RequestMethod.POST)
-    public Response userRefreshList(@ApiParam(value = "用户id type为2的时候必填") @RequestParam(required = false) String userid,
+    public Response userRefreshList(@ApiParam(value = "用户id ") @RequestParam(required = false) String userid,
                                     @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                     @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
                                     @ApiParam(value = "类型 1：推荐2：关注3：本地 4：圈子 5：标签") @RequestParam(required = false) int type,
