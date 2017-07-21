@@ -460,7 +460,7 @@ public class UserFacade {
      * @param paging
      * @return
      */
-    public List MineBottle(int type, String userid, Paging<PostVo> paging) {
+    public List mineBottle(int type, String userid, Paging<PostVo> paging) {
         List<PostVo> list = null;
         if (type == 1) {//帖子
             //查询用户发的帖子

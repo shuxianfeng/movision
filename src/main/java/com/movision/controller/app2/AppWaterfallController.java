@@ -137,13 +137,13 @@ public class AppWaterfallController {
      */
     @ApiOperation(value = "个人主页下半部分", notes = "个人主页下半部分", response = Response.class)
     @RequestMapping(value = "mineBottle", method = RequestMethod.POST)
-    public Response MineBottle(@ApiParam(value = "类型 1 帖子 2 收藏") @RequestParam(required = false) int type,
+    public Response mineBottle(@ApiParam(value = "类型 1 帖子 2 收藏") @RequestParam(required = false) int type,
                                @ApiParam(value = "用户id") @RequestParam(required = false) String userid,
                                @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List list = userFacade.MineBottle(type, userid, pager);
+        List list = userFacade.mineBottle(type, userid, pager);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
