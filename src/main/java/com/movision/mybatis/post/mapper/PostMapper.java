@@ -287,7 +287,7 @@ public interface PostMapper {
 
     List<PostVo> queryUserActive(int userid, RowBounds rowBounds);
 
-    List<Post> querPostListByUser(int id);
+    List<Post> querPostListByUser(int userid);
 
     int queryUserPostCount(int userid);
 

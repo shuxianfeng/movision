@@ -1637,10 +1637,10 @@ public class PostService {
         }
     }
 
-    public List<Post> querPostListByUser(int id){
+    public List<Post> querPostListByUser(int userid){
         try {
             log.info("根据作者用户id查询当前作者发布的最新的三个帖子");
-            return postMapper.querPostListByUser(id);
+            return postMapper.querPostListByUser(userid);
         }catch (Exception e){
             log.error("根据作者用户id查询当前作者发布的最新的三个帖子失败", e);
             throw e;

@@ -439,13 +439,14 @@ public class UserFacade {
         List<Author> authorList = userService.getHotAuthor(pager, map);
 
         //遍历查询作者发布的最新的三个帖子
-        for (int i = 0; i < authorList.size(); i++){
-            Author author = new Author();
-            int id = authorList.get(i).getId();//作者的用户ID
-            List<Post> postList = postService.querPostListByUser(id);
-            author.setPostListByAuthor(postList);
-            authorList.add(i, author);
-        }
+//        for (int i = 0; i < authorList.size(); i++){
+//            Author author = new Author();
+//            int id = authorList.get(i).getId();//作者的用户ID
+//            List<Post> postList = postService.querPostListByUser(id);
+//            author.setPostListByAuthor(postList);
+//            authorList.add(i, author);
+//        }
+        System.out.println("检查用户未关注过的推荐作者数量>>>>>>>>"+authorList.size());
 
         return authorList;
 
