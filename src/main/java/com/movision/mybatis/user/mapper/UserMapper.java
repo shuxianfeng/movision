@@ -3,6 +3,7 @@ package com.movision.mybatis.user.mapper;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.province.entity.ProvinceVo;
 import com.movision.mybatis.user.entity.*;
+import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
@@ -20,6 +21,8 @@ public interface UserMapper {
     int insertSelective(User record);
 
     User selectByPrimaryKey(Integer id);
+
+    List<Author> getHotAuthor(RowBounds rowBounds, int userid);
 
     int updateByPrimaryKeySelective(User record);
 

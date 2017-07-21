@@ -775,6 +775,16 @@ public class UserService {
         }
     }
 
+    public List<Author> getHotAuthor(Paging<Author> pager, int userid){
+        try {
+            log.info("查询用户未关注过的推荐作者");
+            return userMapper.getHotAuthor(pager.getRowBounds(), userid);
+        }catch (Exception e){
+            log.error("查询用户未关注过的推荐作者失败", e);
+            throw e;
+        }
+    }
+
     public Boolean isExistSameNickname(String nickname, Integer userid) {
         try {
             log.info("查看是否存在相同的昵称");

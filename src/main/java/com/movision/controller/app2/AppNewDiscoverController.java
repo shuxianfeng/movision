@@ -1,12 +1,18 @@
 package com.movision.controller.app2;
 
 import com.movision.common.Response;
+import com.movision.common.util.ShiroUtil;
 import com.movision.facade.circle.CircleAppFacade;
 import com.movision.facade.index.FacadeDiscover;
+import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.CircleVo;
+import com.movision.mybatis.user.entity.Author;
+import com.movision.mybatis.user.entity.UserVo;
+import com.movision.utils.IntegerUtil;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +37,9 @@ public class AppNewDiscoverController {
 
     @Autowired
     private CircleAppFacade circleAppFacade;
+
+    @Autowired
+    private UserFacade userFacade;
 
     @ApiOperation(value = "美番2.0发现页上半部分数据返回接口", notes = "用于返回发现页首页的全版数据", response = Response.class)
     @RequestMapping(value = "index", method = RequestMethod.POST)
@@ -61,4 +71,51 @@ public class AppNewDiscoverController {
         response.setData(pager);
         return response;
     }
+
+    @ApiOperation(value = "发现页--热门作者--更多（发现作者）--推荐作者接口，点击更多跳转到二级页面--作者列表页推荐模块接口", notes = "用于返回‘发现作者’列表页推荐模块数据的接口", response = Response.class)
+    @RequestMapping(value = "getRecommendAuthor", method = RequestMethod.POST)
+    public Response getRecommendAuthor(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                       @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize){
+        Response response = new Response();
+
+        Paging<Author> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));//默认第一页三条
+
+        List<Author> authorList = userFacade.getHotAuthor(pager, ShiroUtil.getAppUserID());//传入当前登录用户的userid
+        if (response.getCode() == 200){
+            response.setMessage("查询成功");
+        }
+
+        response.setData(authorList);
+        return response;
+    }
+
+//    @ApiOperation(value = "发现页--热门作者--更多（发现作者）--兴趣作者接口，点击更多跳转到二级页面--作者列表页兴趣模块接口", notes = "用于返回‘发现作者’列表页兴趣模块数据的接口", response = Response.class)
+//    @RequestMapping(value = "getInterestAuthor", method = RequestMethod.POST)
+//    public Response getInterestAuthor(@ApiParam(value = "经度（如118.7935942346943）") @RequestParam(required = false) String lng,
+//                                      @ApiParam(value = "纬度（如32.05606138741064）") @RequestParam(required = false) String lat){
+//        Response response = new Response();
+//
+//        Map<String, Object> hotAuthorMap = userFacade.getHotAuthor(lng, lat, ShiroUtil.getAppUserID());//传入当前登录用户的userid
+//        if (response.getCode() == 200){
+//            response.setMessage("查询成功");
+//        }
+//
+//        response.setData(hotAuthorMap);
+//        return response;
+//    }
+//
+//    @ApiOperation(value = "发现页--热门作者--更多（发现作者）--附近作者接口，点击更多跳转到二级页面--作者列表页附近模块接口", notes = "用于返回‘发现作者’列表页附近模块数据的接口", response = Response.class)
+//    @RequestMapping(value = "getNearAuthor", method = RequestMethod.POST)
+//    public Response getNearAuthor(@ApiParam(value = "经度（如118.7935942346943）") @RequestParam(required = false) String lng,
+//                                  @ApiParam(value = "纬度（如32.05606138741064）") @RequestParam(required = false) String lat){
+//        Response response = new Response();
+//
+//        Map<String, Object> hotAuthorMap = userFacade.getHotAuthor(lng, lat, ShiroUtil.getAppUserID());//传入当前登录用户的userid
+//        if (response.getCode() == 200){
+//            response.setMessage("查询成功");
+//        }
+//
+//        response.setData(hotAuthorMap);
+//        return response;
+//    }
 }

@@ -424,6 +424,29 @@ public class UserFacade {
         return userService.selectByPrimaryKey(userid);
     }
 
+    /**
+     * 根据当前登录的用户查询推荐的作者列表、关注列表和附近的作者列表
+     * @param pager
+     * @param userid
+     * @return
+     */
+    public List<Author> getHotAuthor(Paging<Author> pager, int userid){
+        //首先查询推荐的作者列表（返回作者的phone字段，用于app端比对是不是通讯录好友的提示）
+        List<Author> authorList = userService.getHotAuthor(pager, userid);
+
+
+
+
+
+        return authorList;
+
+        //再查询当前登录的用户感兴趣的作者列表
+        //如果用户没登录怎么办？
+
+        //最后通过登录的用户位置查询附近的作者列表
+        //如果用户没有允许开启获取当前位置的权限怎么办？
+    }
+
 
     /**
      * 我的接口上半部分(*)

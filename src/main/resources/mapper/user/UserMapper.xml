@@ -127,11 +127,29 @@
             (SELECT * FROM yw_user WHERE id != '-1' ORDER BY heat_value DESC limit 10)
         ) t1 limit 10
     </select>
+    
+    <!--美番2.0发现作者页查询推荐作者列表-->
+    <select id="getHotAuthor" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.Author" >
+        SELECT t1.id, t1.nickname, t1.photo, t1.phone FROM (
+            (SELECT * FROM yw_user WHERE isrecommend = '1' AND id != '-1')
+            UNION
+            (SELECT * FROM yw_user WHERE id != '-1' AND heat_value > '0' ORDER BY heat_value DESC)
+        ) t1
+        <where>
+            <if test="userid != null || userid != ''">
+                t1.id NOT IN (
+                  SELECT interestedusers FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER}
+                )
+                AND t1.id != #{userid,jdbcType=INTEGER}
+            </if>
+        </where>
+        ORDER BY t1.isrecommend DESC,t1.heat_value DESC
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_user
         where id = #{id,jdbcType=INTEGER}
-    </delete>
+    </delete>                                                                                                             
     <insert id="insert" parameterType="com.movision.mybatis.user.entity.User">
         insert into yw_user (id, openid, qq, sina, phone, email,
         token, invitecode, referrals,
