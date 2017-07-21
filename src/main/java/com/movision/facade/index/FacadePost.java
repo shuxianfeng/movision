@@ -1461,18 +1461,20 @@ public class FacadePost {
             List<Integer> followCricle = postService.queryFollowCricle(Integer.parseInt(userid));//查询用户关注的圈子
             List<Integer> followUsers = postService.queryFollowUser(Integer.parseInt(userid));//用户关注的作者
             //根据圈子查询所有帖子
-            if (followCricle != null) {
+        if (followCricle.size() != 0) {
                 crileidPost = postService.queryPostListByIds(followCricle);
             }
             //根据作者查询所有帖子
-            if (followUsers != null) {
+        if (followUsers.size() != 0) {
                 userPost = postService.queryUserListByIds(followUsers);
             }
+        if (crileidPost != null) {
             crileidPost.removeAll(userPost);
             crileidPost.addAll(userPost);
             ComparatorChain chain = new ComparatorChain();
             chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
             Collections.sort(crileidPost, chain);
+        }
             if (listmongodba.size() != 0) {//刷新有记录
                 for (int j = 0; j < listmongodba.size(); j++) {
                     PostVo post = new PostVo();
