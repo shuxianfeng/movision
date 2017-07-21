@@ -66,7 +66,7 @@ public class UserVo implements Serializable {
 
     private Integer postsum;//帖子数量
 
-    public Integer activecount;//活动帖子数
+    public Integer activecount;//参加活动数
     public Integer collectioncount;//收藏帖子数
 
     public Integer getActivecount() {
