@@ -21,7 +21,7 @@ public interface UserMapper {
 
     User selectByPrimaryKey(Integer id);
 
-    List<Author> getHotAuthor(RowBounds rowBounds, Integer userid);
+    List<Author> getHotAuthor(RowBounds rowBounds, Map<String, Object> map);
 
     int updateByPrimaryKeySelective(User record);
 
