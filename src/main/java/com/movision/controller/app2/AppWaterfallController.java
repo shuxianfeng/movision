@@ -136,7 +136,7 @@ public class AppWaterfallController {
      * @return
      */
     @ApiOperation(value = "个人主页下半部分", notes = "个人主页下半部分", response = Response.class)
-    @RequestMapping(value = "queryPersonalHomepage", method = RequestMethod.POST)
+    @RequestMapping(value = "mineBottle", method = RequestMethod.POST)
     public Response MineBottle(@ApiParam(value = "类型 1 帖子 2 收藏") @RequestParam(required = false) int type,
                                @ApiParam(value = "用户id") @RequestParam(required = false) String userid,
                                @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
