@@ -59,7 +59,59 @@ public class User implements Serializable {
 
     private Date loginTime;
 
+    private Integer isrecommend;
+
     private Integer heat_value;
+
+    private String longitude;
+
+    private String latitude;
+
+    private String ip;
+
+    private String ip_city;
+
+    public void setIsrecommend(Integer isrecommend) {
+        this.isrecommend = isrecommend;
+    }
+
+    public Integer getIsrecommend() {
+
+        return isrecommend;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public void setIp_city(String ip_city) {
+        this.ip_city = ip_city;
+    }
+
+    public String getLongitude() {
+
+        return longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public String getIp_city() {
+        return ip_city;
+    }
 
     public Integer getHeat_value() {
         return heat_value;
@@ -317,6 +369,12 @@ public class User implements Serializable {
                 ", applydate=" + applydate +
                 ", deviceno='" + deviceno + '\'' +
                 ", loginTime=" + loginTime +
+                ", isrecommend=" + isrecommend +
+                ", heat_value=" + heat_value +
+                ", longitude='" + longitude + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", ip='" + ip + '\'' +
+                ", ip_city='" + ip_city + '\'' +
                 '}';
     }
 }

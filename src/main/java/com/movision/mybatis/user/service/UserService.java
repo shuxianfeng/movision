@@ -78,39 +78,6 @@ public class UserService {
         }
     }
 
-    public boolean insertUser(User user) {
-        try {
-            log.info("插入用户表，user=" + user.toString());
-            int n = userMapper.insert(user);
-            return n == 1;
-        } catch (Exception e) {
-            log.error("插入用户表异常，user=" + user.toString(), e);
-            throw e;
-        }
-    }
-
-    public boolean updateUserPointsAdd(Map mapadd) {
-        try {
-            log.info("根据手机号给贴主增加积分");
-            int n = userMapper.updateUserPointsAdd(mapadd);
-            return n == 1;
-        } catch (NumberFormatException e) {
-            log.error("给贴主增加积分失败", e);
-            throw e;
-        }
-    }
-
-    public boolean updateUserPointsMinus(Map map) {
-        try {
-            log.info("根据用户id操作用户积分减操作");
-            int n = userMapper.updateUserPointsMinus(map);
-            return n == 1;
-        } catch (NumberFormatException e) {
-            log.error("减少用户积分操作失败", e);
-            throw e;
-        }
-    }
-
     public int queryUserByPoints(String userid) {
         try {
             log.info("查询用户积分是否充足");
@@ -183,22 +150,6 @@ public class UserService {
     }
 
     /**
-     * 查询圈子所有管理员列表
-     *
-     * @param categoryid
-     * @return
-     */
-    public List<User> queryCircleManagerList(int categoryid) {
-        try {
-            log.info("查询圈子所有的管理员列表");
-            return userMapper.queryCircleManagerList(categoryid);
-        } catch (Exception e) {
-            log.error("查询圈子所有的管理员列表异常", e);
-            throw e;
-        }
-    }
-
-    /**
      * 根据圈子id查询出圈子管理员
      *
      * @param circleid
@@ -238,10 +189,6 @@ public class UserService {
             log.error("查询圈子管理员列表异常", e);
             throw e;
         }
-    }
-
-    public List<User> selectAllUser() {
-        return userMapper.selectAllUser();
     }
 
     /**
@@ -436,13 +383,13 @@ public class UserService {
         }
     }
 
-    public Boolean updateAppuserLogintime(User user) {
+    public Boolean updateLoginappuserInfo(User user) {
         try {
-            log.info("更新用户的登录时间，user:" + user.toString());
+            log.info("更新登录的用户信息，user:" + user.toString());
             int n = userMapper.updateByPrimaryKeySelective(user);
             return n == 1;
         } catch (Exception e) {
-            log.error("更新用户的登录时间失败", e);
+            log.error("更新登录的用户信息失败", e);
             throw e;
         }
     }

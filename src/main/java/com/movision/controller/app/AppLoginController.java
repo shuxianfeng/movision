@@ -184,7 +184,10 @@ public class AppLoginController {
     @RequestMapping(value = {"/login_by_third_account"}, method = RequestMethod.POST)
     public Response loginByThirdAccont(@ApiParam(value = "第三方登录方式标示。1:QQ， 2:微信， 3:微博 ") @RequestParam Integer flag,
                                        @ApiParam(value = "QQ/weixin/weibo（填对应的openid）") @RequestParam String account,
-                                       @ApiParam(value = "token") @RequestParam String appToken) throws Exception {
+                                       @ApiParam(value = "token") @RequestParam String appToken,
+                                       @ApiParam(value = "登录的ip") @RequestParam String ip,
+                                       @ApiParam(value = "登录人的经度") @RequestParam(required = false) String longitude,
+                                       @ApiParam(value = "登录人的纬度") @RequestParam(required = false) String latitude) throws Exception {
 
         Response response = new Response();
         try {
@@ -196,7 +199,7 @@ public class AppLoginController {
                 response.setMessage("qq账号不存在,请先注册");
                 response.setMsgCode(MsgCodeConstant.app_account_by_qq_not_exist);
             } else {
-                appRegisterFacade.handleLoginProcess(appToken, response, originUser);
+                appRegisterFacade.handleLoginProcess(appToken, response, originUser, ip, longitude, latitude);
             }
 
         } catch (Exception e) {
@@ -225,7 +228,10 @@ public class AppLoginController {
     @ApiOperation(value = "通过手机号登录", notes = "通过手机号登录", response = Response.class)
     @RequestMapping(value = {"/login_by_phone"}, method = RequestMethod.POST)
     public Response loginByPhone(@ApiParam(value = "手机号") @RequestParam String phone,
-                                 @ApiParam(value = "token") @RequestParam String appToken) throws Exception {
+                                 @ApiParam(value = "token") @RequestParam String appToken,
+                                 @ApiParam(value = "登录的ip") @RequestParam String ip,
+                                 @ApiParam(value = "登录人的经度") @RequestParam(required = false) String longitude,
+                                 @ApiParam(value = "登录人的纬度") @RequestParam(required = false) String latitude) throws Exception {
         Response response = new Response();
         try {
             //1 校验手机号是否存在
@@ -238,7 +244,7 @@ public class AppLoginController {
                 response.setMessage("手机号不存在,请发送短信验证码登录");
                 response.setMsgCode(MsgCodeConstant.app_user_not_exist);
             } else {
-                appRegisterFacade.handleLoginProcess(appToken, response, user);
+                appRegisterFacade.handleLoginProcess(appToken, response, user, ip, longitude, latitude);
             }
 
         } catch (Exception e) {
@@ -315,7 +321,7 @@ public class AppLoginController {
     @RequestMapping(value = {"/verifyCellPhoneNumber"}, method = RequestMethod.POST)
     public Response verifyCellPhoneNumber(@ApiParam(value = "手机号") @RequestParam String phone) {
         Response response = new Response();
-        String result = appRegisterFacade.verifyCellPhoneNumber(phone);
+        String result = AppRegisterFacade.verifyCellPhoneNumber(phone);
         if (response.getCode() == 200) {
             response.setMessage("成功");
         }

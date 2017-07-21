@@ -23,10 +23,7 @@ import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.shiro.realm.ShiroRealm;
-import com.movision.utils.DateUtils;
-import com.movision.utils.ListUtil;
-import com.movision.utils.StrUtil;
-import com.movision.utils.UUIDGenerator;
+import com.movision.utils.*;
 import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
@@ -673,8 +670,11 @@ public class AppRegisterFacade {
      * @param appToken
      * @param response
      * @param user
+     * @param ip
+     * @param longitude
+     * @param latitude
      */
-    public void handleLoginProcess(String appToken, Response response, User user) {
+    public void handleLoginProcess(String appToken, Response response, User user, String ip, String longitude, String latitude) {
         //2 校验appToken和serverToken非空
         String serverToken = this.validateAppTokenAndServerToken(appToken, response, user);
 
@@ -701,8 +701,8 @@ public class AppRegisterFacade {
                 session.setAttribute(SessionConstant.APP_USER, currentUser.getPrincipal());
 
                 int appuserid = ShiroUtil.getAppUserID();
-                //登录验证成功后，更新登录时间
-                updateLogintime(appuserid);
+                //登录验证成功后，更新用户信息
+                updateLoginUserInfo(appuserid, longitude, latitude, ip);
 
                 log.debug("验证登录接口是否在session中缓存用户id：" + appuserid);
                 log.debug("验证登录接口是否在session中缓存用户信息：" + ShiroUtil.getAppUser());
@@ -731,16 +731,30 @@ public class AppRegisterFacade {
         }
     }
 
-    private void updateLogintime(int appuserid) {
+    /**
+     * 登录成功后，更新用户的部分信息：
+     * 登录时间， ip， ip所在城市，经度， 纬度
+     *
+     * @param appuserid
+     * @param longitude
+     * @param latitude
+     * @param ip
+     */
+    private void updateLoginUserInfo(int appuserid, String longitude, String latitude, String ip) {
         User u = new User();
         u.setId(appuserid);
         u.setLoginTime(new Date());
-        if (updateAppuserLogintime(u)) {
-            log.info("更新用户登录时间成功");
-        } else {
-            log.warn("更新用户登录时间失败");
-        }
+
+        u.setIp(ip);    //登录的ip
+        u.setLongitude(longitude);  //登录的经度
+        u.setLatitude(latitude);    //登录的纬度
+
+        String ip_city = IpUtil.getCitycode("ip=" + ip, "utf-8");
+        u.setIp_city(ip_city);  //登录的ip城市code
+
+        updateLoginappuserInfo(u);
     }
+
 
     /**
      * 校验app_token和Server_token是否都存在
@@ -768,10 +782,9 @@ public class AppRegisterFacade {
         return serverToken;
     }
 
-    public Boolean updateAppuserLogintime(User user) {
-        return userService.updateAppuserLogintime(user);
+    public Boolean updateLoginappuserInfo(User user) {
+        return userService.updateLoginappuserInfo(user);
     }
-
 
     /**
      * 校验手机号

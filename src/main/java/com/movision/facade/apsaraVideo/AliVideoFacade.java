@@ -159,7 +159,6 @@ public class AliVideoFacade {
                 rspMap.put("status", String.valueOf(statusCode));
                 rspMap.put("result", "HTTP GET ERROR! " + String.valueOf(statusCode));
                 return rspMap;
-//                throw new RuntimeException("HttpClient,error status code :" + statusCode);
             }
             HttpEntity entity = response.getEntity();
             String result = null;

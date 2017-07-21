@@ -3,7 +3,6 @@ package com.movision.mybatis.user.mapper;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.province.entity.ProvinceVo;
 import com.movision.mybatis.user.entity.*;
-import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
@@ -38,10 +37,6 @@ public interface UserMapper {
 
     void insertGoodsShare(Map<String, Object> parammap);
 
-    int updateUserPointsAdd(Map mapadd);
-
-    int updateUserPointsMinus(Map map);
-
     int queryUserByPoints(int id);
 
     int isExistAccount(@Param("phone") String phone);
@@ -52,17 +47,11 @@ public interface UserMapper {
 
     User queryCircleMasterByPhone(String phone);
 
-    List<User> queryCircleManagerList(int categoryid);
-
     List<User> queryCircleManagerByCircleid(Integer circleid);
 
     List<User> queryCircleMangerByUseridList(Map map);
 
     List<User> queryCircleManagerByCircleList(Integer circleid);
-
-    List<User> selectAllUser();
-
-    int isAppAdminUser(@Param("phone") String phone);
 
     String queryUserByOpenid(Integer userid);
 
@@ -143,12 +132,10 @@ public interface UserMapper {
 
     UserLike findUser(int userid);
 
-
     Integer updateUserHeatValue(Map map);
 
     int queryUserLevel(int userid);
 
     UserVo queryUserInfoHompage(int userid);
-
 
 }

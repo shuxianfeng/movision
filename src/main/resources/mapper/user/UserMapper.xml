@@ -28,13 +28,18 @@
         <result column="applydate" property="applydate" jdbcType="DATE"/>
         <result column="deviceno" property="deviceno" jdbcType="VARCHAR"/>
         <result column="login_time" property="loginTime" jdbcType="TIMESTAMP"/>
-        <result column="heat_value" property="heatvalue" jdbcType="INTEGER"/>
+        <result column="isrecommend" property="isrecommend" jdbcType="INTEGER"/>
+        <result column="heat_value" property="heat_value" jdbcType="INTEGER"/>
+        <result column="longitude" property="longitude" jdbcType="VARCHAR"/>
+        <result column="latitude" property="latitude" jdbcType="VARCHAR"/>
+        <result column="ip" property="ip" jdbcType="VARCHAR"/>
+        <result column="ip_city" property="ip_city" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id, openid, qq, sina, phone, email, token, invitecode, referrals, nickname, sign, attention, fans,
         points, photo, sex, birthday, province, city, intime, growth, level, status, applydate, deviceno,
-        login_time,heat_value
+        login_time, isrecommend, heat_value, longitude, latitude, ip, ip_city
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -63,14 +68,6 @@
             resultType="com.movision.mybatis.user.entity.User">
         SELECT id, photo, nickname, phone, sign
         FROM yw_user WHERE phone = #{phone,jdbcType=VARCHAR}
-    </select>
-
-    <!--查询圈子的管理员列表-->
-    <select id="queryCircleManagerList" parameterType="java.lang.Integer"
-            resultType="com.movision.mybatis.user.entity.User">
-        SELECT id,photo,nickname,phone,level FROM yw_user WHERE id in(
-        SELECT userid FROM yw_circle_manager WHERE circleid in(
-        SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER}))
     </select>
 
     <select id="queryCircleManagerByCircleid" parameterType="java.lang.Integer"
@@ -238,6 +235,24 @@
             <if test="loginTime!=null">
                 login_time,
             </if>
+            <if test="deviceno!=null">
+                isrecommend,
+            </if>
+            <if test="deviceno!=null">
+                heat_value,
+            </if>
+            <if test="deviceno!=null">
+                longitude,
+            </if>
+            <if test="deviceno!=null">
+                latitude,
+            </if>
+            <if test="deviceno!=null">
+                ip,
+            </if>
+            <if test="deviceno!=null">
+                ip_city,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -305,6 +320,24 @@
             </if>
             <if test="loginTime!=null">
                 #{loginTime},
+            </if>
+            <if test="isrecommend!=null">
+                #{isrecommend},
+            </if>
+            <if test="heat_value!=null">
+                #{heat_value},
+            </if>
+            <if test="longitude!=null">
+                #{longitude},
+            </if>
+            <if test="latitude!=null">
+                #{latitude},
+            </if>
+            <if test="ip!=null">
+                #{ip},
+            </if>
+            <if test="ip_city!=null">
+                #{ip_city},
             </if>
         </trim>
     </insert>
@@ -386,6 +419,24 @@
             <if test="loginTime!=null">
                 login_time=#{loginTime},
             </if>
+            <if test="isrecommend!=null">
+                isrecommend=#{isrecommend},
+            </if>
+            <if test="heat_value!=null">
+                heat_value=#{heat_value},
+            </if>
+            <if test="longitude!=null">
+                longitude=#{longitude},
+            </if>
+            <if test="latitude!=null">
+                latitude=#{latitude},
+            </if>
+            <if test="ip!=null">
+                ip=#{ip},
+            </if>
+            <if test="ip_city!=null">
+                ip_city=#{ip_city},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -447,20 +498,6 @@
 
     </select>
 
-    <update id="updateUserPointsAdd" parameterType="java.util.Map">
-        update yw_user
-        set
-        points =points+#{integral,jdbcType=INTEGER}
-        where phone = #{phone,jdbcType=VARCHAR}
-    </update>
-
-    <update id="updateUserPointsMinus" parameterType="java.util.Map">
-        update yw_user
-        set
-        points =points-#{integral,jdbcType=INTEGER}
-        where id = #{userid,jdbcType=INTEGER}
-    </update>
-
     <select id="queryUserByPoints" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT u.points
         FROM yw_user u
@@ -498,12 +535,6 @@
         SELECT u.openid FROM yw_user u WHERE id=#{userid,jdbcType=INTEGER}
     </select>
 
-    <select id="selectAllUser" resultType="com.movision.mybatis.user.entity.User">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM yw_user
-    </select>
-
     <select id="queryUserByNickname" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT u.nickname FROM yw_user u WHERE u.id=#{userid,jdbcType=INTEGER}
     </select>
@@ -513,12 +544,6 @@
     </select>
     <select id="queryUser" resultType="com.movision.mybatis.user.entity.User" parameterType="java.lang.String">
         SELECT * FROM yw_user WHERE phone=#{phone,jdbcType=VARCHAR}
-    </select>
-
-    <select id="isAppAdminUser" parameterType="java.lang.String" resultType="int">
-        SELECT count(1) FROM yw_user appuser LEFT JOIN yw_admin_user bossuser
-        ON appuser.phone = bossuser.phone
-        WHERE appuser.phone = #{phone}
     </select>
 
     <select id="findAllUser" resultType="com.movision.mybatis.user.entity.User" parameterType="java.lang.Integer">
