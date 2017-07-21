@@ -722,7 +722,7 @@ public class UserService {
         }
     }
 
-    public List<Author> getHotAuthor(Paging<Author> pager, int userid){
+    public List<Author> getHotAuthor(Paging<Author> pager, Integer userid){
         try {
             log.info("查询用户未关注过的推荐作者");
             return userMapper.getHotAuthor(pager.getRowBounds(), userid);
