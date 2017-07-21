@@ -75,12 +75,14 @@ public class AppNewDiscoverController {
     @ApiOperation(value = "发现页--热门作者--更多（发现作者）--推荐作者接口，点击更多跳转到二级页面--作者列表页推荐模块接口", notes = "用于返回‘发现作者’列表页推荐模块数据的接口", response = Response.class)
     @RequestMapping(value = "getRecommendAuthor", method = RequestMethod.POST)
     public Response getRecommendAuthor(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                       @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize){
+                                       @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                       @ApiParam(value = "用户id（登录状态下一定不能为空，非登录状态下可不传）") @RequestParam(required = false) String userid){
         Response response = new Response();
 
         Paging<Author> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));//默认第一页三条
 
-        List<Author> authorList = userFacade.getHotAuthor(pager, ShiroUtil.getAppUserID());//传入当前登录用户的userid
+//        List<Author> authorList = userFacade.getHotAuthor(pager, ShiroUtil.getAppUserID());//传入当前登录用户的userid
+        List<Author> authorList = userFacade.getHotAuthor(pager, userid);//传入当前登录用户的userid
         if (response.getCode() == 200){
             response.setMessage("查询成功");
         }

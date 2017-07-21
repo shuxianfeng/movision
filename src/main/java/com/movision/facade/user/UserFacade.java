@@ -432,10 +432,10 @@ public class UserFacade {
      * @param userid
      * @return
      */
-    public List<Author> getHotAuthor(Paging<Author> pager, Integer userid){
+    public List<Author> getHotAuthor(Paging<Author> pager, String userid){
         //首先查询推荐的作者列表（返回作者的phone字段，用于app端比对是不是通讯录好友的提示）
         Map<String, Object> map = new HashMap<>();
-        map.put("userid", userid);
+        map.put("userid", Integer.parseInt(userid));
         List<Author> authorList = userService.getHotAuthor(pager, map);
 
         //遍历查询作者发布的最新的三个帖子
