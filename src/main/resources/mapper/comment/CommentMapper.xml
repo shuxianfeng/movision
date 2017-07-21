@@ -488,7 +488,7 @@
     </select>
     <select id="queryCommentByPost" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.Comment">
-        SELECT * FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER} ORDER  BY  heat_value DESC
+      SELECT * FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER} AND isdel=0 ORDER BY heat_value DESC LIMIT 1
     </select>
   <select id="queryCommentIsRead" parameterType="java.lang.Integer" resultType="java.lang.Integer">
      SELECT COUNT(1) FROM(
