@@ -329,6 +329,11 @@
         SELECT count(*) FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER}
     </select>
 
+    <!--根据作者用户id查询当前作者最新发的三篇帖子-->
+    <select id="querPostListByUser" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.Post" >
+        SELECT id, title, subtitle, postcontent, coverimg FROM yw_post WHERE userid = #{id,jdbcType=INTEGER}
+    </select>
+
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_post

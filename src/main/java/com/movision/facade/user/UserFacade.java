@@ -17,6 +17,7 @@ import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.pointRecord.entity.PointRecord;
 import com.movision.mybatis.pointRecord.service.PointRecordService;
 import com.movision.mybatis.post.entity.ActiveVo;
+import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.entity.*;
@@ -25,6 +26,7 @@ import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
 import com.movision.utils.IntegerUtil;
 import com.movision.utils.pagination.model.Paging;
+import javafx.geometry.Pos;
 import org.apache.commons.collections.FastHashMap;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
@@ -434,9 +436,14 @@ public class UserFacade {
         //首先查询推荐的作者列表（返回作者的phone字段，用于app端比对是不是通讯录好友的提示）
         List<Author> authorList = userService.getHotAuthor(pager, userid);
 
-
-
-
+        //遍历查询作者发布的最新的三个帖子
+        for (int i = 0; i < authorList.size(); i++){
+            Author author = new Author();
+            int id = authorList.get(i).getId();//作者的用户ID
+            List<Post> postList = postService.querPostListByUser(id);
+            author.setPostListByAuthor(postList);
+            authorList.add(i, author);
+        }
 
         return authorList;
 
