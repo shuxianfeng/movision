@@ -1101,6 +1101,6 @@
     </select>
     <select id="queryUserInfoHompage" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.user.entity.UserVo">
-
+        SELECT * FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
     </select>
 </mapper>
