@@ -146,7 +146,7 @@
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_user
         where id = #{id,jdbcType=INTEGER}
-    </delete>                                                                                                             
+    </delete>
     <insert id="insert" parameterType="com.movision.mybatis.user.entity.User">
         insert into yw_user (id, openid, qq, sina, phone, email,
         token, invitecode, referrals,
