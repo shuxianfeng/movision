@@ -443,9 +443,9 @@ public class UserFacade {
             Author author = new Author();
             int id = authorList.get(i).getId();//作者的用户ID
             System.out.println("检查作者用户ID>>>>>>>>"+id);
-//            List<Post> postList = postService.querPostListByUser(id);
-//            author.setPostListByAuthor(postList);
-//            authorList.add(i, author);
+            List<Post> postList = postService.querPostListByUser(id);
+            author.setPostListByAuthor(postList);
+            authorList.add(i, author);
         }
         System.out.println("检查用户未关注过的推荐作者数量>>>>>>>>"+authorList.size());
 
