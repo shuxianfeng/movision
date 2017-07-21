@@ -432,7 +432,7 @@ public class UserFacade {
      * @param userid
      * @return
      */
-    public List<Author> getHotAuthor(Paging<Author> pager, int userid){
+    public List<Author> getHotAuthor(Paging<Author> pager, Integer userid){
         //首先查询推荐的作者列表（返回作者的phone字段，用于app端比对是不是通讯录好友的提示）
         List<Author> authorList = userService.getHotAuthor(pager, userid);
 
