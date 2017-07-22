@@ -332,7 +332,7 @@
     <!--根据作者用户id查询当前作者最新发的三篇帖子-->
     <select id="querPostListByUser" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.Post" >
         SELECT id, title, subtitle, postcontent, coverimg
-        FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER}
+        FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER} ORDER BY intime DESC limit 3
     </select>
 
     <!--基础删除语句-->
