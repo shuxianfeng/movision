@@ -440,12 +440,11 @@ public class UserFacade {
 
         //遍历查询作者发布的最新的三个帖子
         for (int i = 0; i < authorList.size(); i++){
-            Author author = new Author();
-            int id = authorList.get(i).getId();//作者的用户ID
-            System.out.println("检查作者用户ID>>>>>>>>"+id);
+            Author ao = authorList.get(i);
+            int id = ao.getId();//作者的用户ID
             List<Post> postList = postService.querPostListByUser(id);
-            author.setPostListByAuthor(postList);
-            authorList.add(i, author);
+            ao.setPostListByAuthor(postList);
+            authorList.add(i, ao);
         }
         System.out.println("检查用户未关注过的推荐作者数量>>>>>>>>"+authorList.size());
 
