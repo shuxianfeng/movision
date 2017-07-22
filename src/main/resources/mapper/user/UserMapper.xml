@@ -143,6 +143,33 @@
         ORDER BY t1.isrecommend DESC,t1.heat_value DESC
     </select>
 
+    <!--美番2.0发现作者页查询兴趣作者列表-->
+    <select id="getInterestAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author" >
+        SELECT t.* FROM (
+            (SELECT id, nickname, photo, phone, heat_value FROM yw_user WHERE id IN (
+                SELECT userid FROM yw_post WHERE circleid IN (
+                  SELECT circleid FROM yw_follow_circle WHERE userid = #{userid,jdbcType=INTEGER}
+                )
+              )
+            )
+            UNION
+            (
+            SELECT id, nickname, photo, phone, heat_value FROM yw_user WHERE id IN (
+                SELECT DISTINCT userid FROM yw_post WHERE id IN (
+                    SELECT DISTINCT postid FROM yw_post_label_relation WHERE labelid IN (
+                      SELECT labelid FROM yw_follow_label WHERE userid = #{userid,jdbcType=INTEGER}
+                    )
+                )
+              )
+            )
+        ) t
+        WHERE t.id NOT IN (
+            SELECT interestedusers FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER}
+        )
+        AND t.id != #{userid,jdbcType=INTEGER}
+        ORDER BY t.heat_value DESC
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_user
         where id = #{id,jdbcType=INTEGER}

@@ -732,6 +732,16 @@ public class UserService {
         }
     }
 
+    public List<Author> getInterestAuthor(Paging<Author> pager, Map<String, Object> map){
+        try {
+            log.info("查询用户关注的圈子和关注的标签中的作者（并且这个用户还没关注过他的）");
+            return userMapper.getInterestAuthor(pager.getRowBounds(), map);
+        }catch (Exception e){
+            log.error("查询用户关注的圈子和关注的标签中的作者（并且这个用户还没关注过他的）失败", e);
+            throw e;
+        }
+    }
+
     public Boolean isExistSameNickname(String nickname, Integer userid) {
         try {
             log.info("查看是否存在相同的昵称");

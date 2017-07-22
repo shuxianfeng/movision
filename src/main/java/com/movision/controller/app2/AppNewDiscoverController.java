@@ -79,9 +79,8 @@ public class AppNewDiscoverController {
                                        @ApiParam(value = "用户id（登录状态下一定不能为空，非登录状态下可不传）") @RequestParam(required = false) String userid){
         Response response = new Response();
 
-        Paging<Author> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));//默认第一页三条
+        Paging<Author> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
 
-//        List<Author> authorList = userFacade.getHotAuthor(pager, ShiroUtil.getAppUserID());//传入当前登录用户的userid
         List<Author> authorList = userFacade.getHotAuthor(pager, userid);//传入当前登录用户的userid
         pager.result(authorList);
         if (response.getCode() == 200){
@@ -91,21 +90,24 @@ public class AppNewDiscoverController {
         return response;
     }
 
-//    @ApiOperation(value = "发现页--热门作者--更多（发现作者）--兴趣作者接口，点击更多跳转到二级页面--作者列表页兴趣模块接口", notes = "用于返回‘发现作者’列表页兴趣模块数据的接口", response = Response.class)
-//    @RequestMapping(value = "getInterestAuthor", method = RequestMethod.POST)
-//    public Response getInterestAuthor(@ApiParam(value = "经度（如118.7935942346943）") @RequestParam(required = false) String lng,
-//                                      @ApiParam(value = "纬度（如32.05606138741064）") @RequestParam(required = false) String lat){
-//        Response response = new Response();
-//
-//        Map<String, Object> hotAuthorMap = userFacade.getHotAuthor(lng, lat, ShiroUtil.getAppUserID());//传入当前登录用户的userid
-//        if (response.getCode() == 200){
-//            response.setMessage("查询成功");
-//        }
-//
-//        response.setData(hotAuthorMap);
-//        return response;
-//    }
-//
+    @ApiOperation(value = "发现页--热门作者--更多（发现作者）--兴趣作者接口，点击更多跳转到二级页面--作者列表页兴趣模块接口", notes = "用于返回‘发现作者’列表页兴趣模块数据的接口", response = Response.class)
+    @RequestMapping(value = "getInterestAuthor", method = RequestMethod.POST)
+    public Response getInterestAuthor(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                      @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                      @ApiParam(value = "用户id（登录状态下一定不能为空，非登录状态下可不传）") @RequestParam String userid){
+        Response response = new Response();
+
+        Paging<Author> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+
+        List<Author> interestAuthorList = userFacade.getInterestAuthor(pager, userid);//传入当前登录用户的userid
+        if (response.getCode() == 200){
+            response.setMessage("查询成功");
+        }
+
+        response.setData(interestAuthorList);
+        return response;
+    }
+
 //    @ApiOperation(value = "发现页--热门作者--更多（发现作者）--附近作者接口，点击更多跳转到二级页面--作者列表页附近模块接口", notes = "用于返回‘发现作者’列表页附近模块数据的接口", response = Response.class)
 //    @RequestMapping(value = "getNearAuthor", method = RequestMethod.POST)
 //    public Response getNearAuthor(@ApiParam(value = "经度（如118.7935942346943）") @RequestParam(required = false) String lng,

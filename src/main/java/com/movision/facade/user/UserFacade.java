@@ -427,7 +427,7 @@ public class UserFacade {
     }
 
     /**
-     * 根据当前登录的用户查询推荐的作者列表、关注列表和附近的作者列表
+     * 根据当前登录的用户查询推荐的作者列表
      * @param pager
      * @param userid
      * @return
@@ -439,6 +439,32 @@ public class UserFacade {
         List<Author> authorList = userService.getHotAuthor(pager, map);
 
         //遍历查询作者发布的最新的三个帖子
+        authorList = queryNewThreePost(authorList);
+        return authorList;
+    }
+
+    /**
+     * 根据当前登录的用户查询用户感兴趣的作者列表
+     */
+    public List<Author> getInterestAuthor(Paging<Author> pager, String userid){
+        //首先查询用户感兴趣的圈子里的作者和感兴趣的标签里的作者，根据热度值倒叙
+        Map<String, Object> map = new HashMap<>();
+        map.put("userid", Integer.parseInt(userid));
+        List<Author> authorList = userService.getInterestAuthor(pager, map);
+
+        //遍历查询作者发布的最新的三个帖子
+        authorList = queryNewThreePost(authorList);
+        return authorList;
+    }
+
+    /**
+     * 根据当前登录的用户查询附近的作者列表
+     */
+
+    /**
+     * 根据传入的作者列表便利查询作者发布的最新的三个帖子
+     */
+    public List<Author> queryNewThreePost(List<Author> authorList){
         for (int i = 0; i < authorList.size(); i++){
             Author ao = authorList.get(i);
             int id = ao.getId();//作者的用户ID
@@ -446,17 +472,8 @@ public class UserFacade {
             ao.setPostListByAuthor(postList);
             authorList.set(i, ao);
         }
-        System.out.println("检查用户未关注过的推荐作者数量>>>>>>>>"+authorList.size());
-
         return authorList;
-
-        //再查询当前登录的用户感兴趣的作者列表
-        //如果用户没登录怎么办？
-
-        //最后通过登录的用户位置查询附近的作者列表
-        //如果用户没有允许开启获取当前位置的权限怎么办？
     }
-
 
     /**
      * 我的接口上半部分(*)
