@@ -12,6 +12,7 @@
         <result column="forwardsum" jdbcType="INTEGER" property="forwardsum"/>
         <result column="collectsum" jdbcType="INTEGER" property="collectsum"/>
         <result column="isactive" jdbcType="INTEGER" property="isactive"/>
+        <result column="partsum_enddays" jdbcType="INTEGER" property="partsum_enddays"/>
         <result column="activetype" jdbcType="INTEGER" property="activetype"/>
         <result column="activefee" jdbcType="DOUBLE" property="activefee"/>
         <result column="iscontribute" jdbcType="INTEGER" property="iscontribute"/>
@@ -35,9 +36,9 @@
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
-        isactive, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
+        isactive, partsum_enddays, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
         hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid
-  </sql>
+    </sql>
 
     <!--基础查询语句-->
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
