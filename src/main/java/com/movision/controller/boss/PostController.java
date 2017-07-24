@@ -529,9 +529,10 @@ public class PostController {
             @ApiParam(value = "发帖人") @RequestParam String userid,
             @ApiParam(value = "方形图片url") @RequestParam(required = false) String hotimgurl,
             @ApiParam(value = "是否设为热门（0 否  1 是）") @RequestParam(required = false) String ishot,
+            @ApiParam(value = "热门排序") @RequestParam(required = false) String ishotorder,
             @ApiParam(value = "分享商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Integer> result = postFacade.addPostActive(title, subtitle, activetype, iscontribute, activefee, coverimg, postcontent, isessence, orderid, essencedate, begintime, endtime, userid, hotimgurl, ishot, goodsid);
+        Map<String, Integer> result = postFacade.addPostActive(title, subtitle, activetype, iscontribute, activefee, coverimg, postcontent, isessence, orderid, essencedate, begintime, endtime, userid, hotimgurl, ishot, ishotorder, goodsid);
         if(response.getCode()==200){
             response.setMessage("添加成功");
         }
@@ -832,11 +833,12 @@ public class PostController {
             @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,
             @ApiParam(value = "方形图片url") @RequestParam(required = false) String hotimgurl,
             @ApiParam(value = "是否设为热门（0 否  1 是）") @RequestParam(required = false) String ishot,
+            @ApiParam(value = "热门排序") @RequestParam(required = false) String ishotorder,
             @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String essencedate,
             @ApiParam(value = "编辑商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
 
-        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, userid, coverimg, postcontent, isessence, orderid, activefee, activetype, iscontribute, begintime, endtime, hotimgurl, ishot, essencedate, goodsid);
+        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, userid, coverimg, postcontent, isessence, orderid, activefee, activetype, iscontribute, begintime, endtime, hotimgurl, ishot, ishotorder, essencedate, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

@@ -47,6 +47,23 @@ public class PostActiveList implements Serializable {
     private Date oprtime;
     private Integer apply;//报名数
     private Integer activeid;//投稿数
+    private Integer ishotorder;//活动热门排序
+
+    public Integer getActiveid() {
+        return activeid;
+    }
+
+    public void setActiveid(Integer activeid) {
+        this.activeid = activeid;
+    }
+
+    public Integer getIshotorder() {
+        return ishotorder;
+    }
+
+    public void setIshotorder(Integer ishotorder) {
+        this.ishotorder = ishotorder;
+    }
 
     public Integer getApply() {
         return apply;
@@ -54,14 +71,6 @@ public class PostActiveList implements Serializable {
 
     public void setApply(Integer apply) {
         this.apply = apply;
-    }
-
-    public Integer getContribute() {
-        return activeid;
-    }
-
-    public void setContribute(Integer contribute) {
-        this.activeid = contribute;
     }
 
     public Date getOprtime() {

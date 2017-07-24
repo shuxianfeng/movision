@@ -62,6 +62,16 @@ public class Post implements Serializable {
 
     private Integer activeid;//活动id
 
+    private Integer ishotorder;//活动设为热门的排序
+
+    public Integer getIshotorder() {
+        return ishotorder;
+    }
+
+    public void setIshotorder(Integer ishotorder) {
+        this.ishotorder = ishotorder;
+    }
+
     public Integer getActiveid() {
         return activeid;
     }

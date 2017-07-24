@@ -1043,7 +1043,7 @@ public class PostFacade {
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map<String, Integer> addPostActive(String title, String subtitle, String activetype, String iscontribute, String activefee,
                                               String coverimg, String postcontent, String isessence, String orderid, String essencedate,
-                                              String begintime, String endtime, String userid, String hotimgurl, String ishot, String goodsid) {
+                                              String begintime, String endtime, String userid, String hotimgurl, String ishot, String ishotorder, String goodsid) {
         PostTo post = new PostTo();
             Map<String, Integer> map = new HashedMap();
             post.setTitle(title);//帖子标题
@@ -1100,6 +1100,9 @@ public class PostFacade {
             }
             if (!StringUtil.isEmail(ishot)) {
                 post.setIshot(ishot);//是否设为热门
+                if (StringUtil.isNotEmpty(ishotorder) && ishot.equals("1")) {
+                    post.setIshotorder(Integer.parseInt(ishotorder));
+                }
             }
             post.setIsactive("1");
             int result = postService.addPostActiveList(post);//新建活动
@@ -1392,7 +1395,8 @@ public class PostFacade {
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String userid, String coverimg, String postcontent, String isessence,
-                                                     String orderid, String activefee, String activetype, String iscontribute, String begintime, String endtime, String hotimgurl, String ishot, String essencedate, String goodsid) {
+                                                     String orderid, String activefee, String activetype, String iscontribute, String begintime, String endtime,
+                                                     String hotimgurl, String ishot, String ishotorder, String essencedate, String goodsid) {
         PostActiveList postActiveList = new PostActiveList();
         Map<String, Integer> map = new HashedMap();
             try {
@@ -1449,7 +1453,12 @@ public class PostFacade {
                     postActiveList.setHotimgurl(hotimgurl);//首页方形图
                 }
                 if (!StringUtil.isEmpty(ishot)) {
-                    postActiveList.setIshot(ishot);
+                    postActiveList.setIshot(ishot);//设为热门
+                    if (StringUtil.isNotEmpty(ishotorder) && ishot.equals("1")) {
+                        postActiveList.setIshotorder(Integer.parseInt(ishotorder));//热门排序
+                    } else if (StringUtil.isNotEmpty(ishotorder) && ishot.equals("0")) {
+                        postActiveList.setIshotorder(0);//热门排序
+                    }
                 }
                 int result = postService.updateActivePostById(postActiveList);//编辑活动帖子
                 Period period = new Period();

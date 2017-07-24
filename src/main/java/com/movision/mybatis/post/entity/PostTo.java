@@ -64,6 +64,16 @@ public class PostTo implements Serializable {
 
     private Date oprtime;//用户最后参与时间
 
+    private Integer ishotorder;//热门排序
+
+    public Integer getIshotorder() {
+        return ishotorder;
+    }
+
+    public void setIshotorder(Integer ishotorder) {
+        this.ishotorder = ishotorder;
+    }
+
     public Date getOprtime() {
         return oprtime;
     }
