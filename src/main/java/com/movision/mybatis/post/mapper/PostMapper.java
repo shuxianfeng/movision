@@ -9,6 +9,7 @@ import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.video.entity.Video;
+import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
@@ -280,7 +281,7 @@ public interface PostMapper {
 
     List<PostVo> queryLabelAllPost(int labelid);
 
-    List<PostVo> queryPostByid(int postid, RowBounds rowBounds);
+    List<PostVo> queryPostByid(List postid, RowBounds rowBounds);
 
 
     List<PostVo> queryUserPostList(int userid, RowBounds rowBounds);

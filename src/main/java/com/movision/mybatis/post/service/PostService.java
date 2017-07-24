@@ -1606,7 +1606,7 @@ public class PostService {
         }
     }
 
-    public List<PostVo> queryPostByid(int postid, Paging<PostVo> paging) {
+    public List<PostVo> queryPostByid(List postid, Paging<PostVo> paging) {
         try {
             log.info("根据id查询帖子");
             return postMapper.queryPostByid(postid, paging.getRowBounds());

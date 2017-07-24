@@ -1901,19 +1901,21 @@ public class FacadePost {
      */
     public List userReflushHishtoryRecord(String userid, Paging<PostVo> paging) {
         List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid));
-        List<PostVo> postVos = null;
+        List<Integer> postVos = new ArrayList<>();
+        List<PostVo> postVo = null;
         if (list.size() != 0) {
             for (int i = 0; i < list.size(); i++) {
                 int postid = Integer.parseInt(list.get(i).get("postid").toString());
-                //根据postid查询帖子
-                postVos = postService.queryPostByid(postid, paging);
-                findUser(postVos);
-                findPostLabel(postVos);
-                findHotComment(postVos);
-                countView(postVos);
+                postVos.add(postid);
             }
+            //根据postid查询帖子
+            postVo = postService.queryPostByid(postVos, paging);
+            findUser(postVo);
+            findPostLabel(postVo);
+            findHotComment(postVo);
+            countView(postVo);
         }
-        return postVos;
+        return postVo;
     }
 
 
