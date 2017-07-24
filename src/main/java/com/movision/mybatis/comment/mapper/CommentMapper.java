@@ -62,7 +62,7 @@ public interface CommentMapper {
 
     Integer updateCommentAudit(Map map);
 
-    CommentVo queryCommentByUserid(Integer userid);//根据userid查询评论
+    List<CommentVo> queryCommentByUserid(Integer userid);//根据userid查询评论
 
     List<CommentVo> findAllQueryComment(Integer userid, RowBounds rowBounds);
 

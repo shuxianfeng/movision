@@ -339,7 +339,7 @@ public class CommentService {
      * @param userid
      * @return
      */
-    public CommentVo queryCommentByUserid(Integer userid) {
+    public List<CommentVo> queryCommentByUserid(Integer userid) {
         try {
             log.info("根据用户查询评论");
             return commentMapper.queryCommentByUserid(userid);

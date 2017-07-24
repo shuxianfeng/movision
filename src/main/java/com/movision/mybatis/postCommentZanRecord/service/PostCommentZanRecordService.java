@@ -37,7 +37,7 @@ public class PostCommentZanRecordService {
      * @param userid
      * @return
      */
-    public PostCommentZanRecordVo queryByUserid(Integer userid) {
+    public List<PostCommentZanRecordVo> queryByUserid(Integer userid) {
         try {
             log.info("根据用户id查询");
             return recordMapper.queryByUserid(userid);

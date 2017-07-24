@@ -82,25 +82,21 @@ public class MsgCenterFacade {
     public Map getMsgCenterList(Integer userid) {
         //都是查找最新的消息
         Map reMap = new HashedMap();
+        CommentVo comment = null;
+        PostCommentZanRecordVo postCommentZanRecord = null;
         //1 赞消息 。包含：帖子，活动，评论，快问（后期）
-        PostCommentZanRecordVo postCommentZanRecord = postCommentZanRecordService.queryByUserid(userid);
-        if (postCommentZanRecord != null) {
-            int use = postCommentZanRecord.getUserid();
-            if (use != userid) {
-                User zusew = postCommentZanRecordService.queryusers(use);
-                postCommentZanRecord.setUser(zusew);
-            }
+        List<PostCommentZanRecordVo> postCommentZanRecordVos = zan(userid);
+        for (int i = 0; i < postCommentZanRecordVos.size(); i++) {
+            postCommentZanRecord = postCommentZanRecordVos.get(i);
+            break;
         }
         //2 打赏消息
         RewardedVo rewarded = rewardedService.queryRewardByUserid(userid);
         //3 评论消息
-        CommentVo comment = commentService.queryCommentByUserid(userid);
-        if (comment != null) {
-            int usersid = comment.getUserid();
-            if (usersid != userid) {
-                User ruser = postCommentZanRecordService.queryusers(usersid);
-                comment.setUser(ruser);
-            }
+        List<CommentVo> commentVos = comm(userid);
+        for (int i = 0; i < commentVos.size(); i++) {
+            comment = commentVos.get(i);
+            break;
         }
         //4 系统通知
         Map map = new HashMap();
@@ -135,6 +131,54 @@ public class MsgCenterFacade {
         reMap.put("imFirstDialogue", imFirstDialogue);
         return reMap;
     }
+
+    /**
+     * 评论
+     *
+     * @param userid
+     * @return
+     */
+    public List comm(int userid) {
+        List<CommentVo> commentVos = commentService.queryCommentByUserid(userid);
+        if (commentVos != null) {
+            for (int i = 0; i < commentVos.size(); i++) {
+                int usersid = commentVos.get(i).getUserid();
+                if (usersid != userid) {
+                    User ruser = postCommentZanRecordService.queryusers(usersid);
+                    commentVos.get(i).setUser(ruser);
+                } else {
+                    commentVos.remove(commentVos.get(i));
+                    i--;
+                }
+            }
+
+        }
+        return commentVos;
+    }
+
+    /**
+     * 赞
+     *
+     * @param userid
+     * @return
+     */
+    public List zan(int userid) {
+        List<PostCommentZanRecordVo> postCommentZanRecordVos = postCommentZanRecordService.queryByUserid(userid);
+        if (postCommentZanRecordVos != null) {
+            for (int i = 0; i < postCommentZanRecordVos.size(); i++) {
+                int use = postCommentZanRecordVos.get(i).getUserid();
+                if (use != userid) {
+                    User zusew = postCommentZanRecordService.queryusers(use);
+                    postCommentZanRecordVos.get(i).setUser(zusew);
+                } else {
+                    postCommentZanRecordVos.remove(postCommentZanRecordVos.get(i));
+                    i--;
+                }
+            }
+        }
+        return postCommentZanRecordVos;
+    }
+
 
     /**
      * 获取系统通知列表

@@ -23,7 +23,7 @@ public interface PostCommentZanRecordMapper {
 
     int updateByPrimaryKey(PostCommentZanRecord record);
 
-    PostCommentZanRecordVo queryByUserid(Integer userid);
+    List<PostCommentZanRecordVo> queryByUserid(Integer userid);
 
 
     List<CommentVo> queryComment(Integer commentid);
