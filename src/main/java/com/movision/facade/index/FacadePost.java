@@ -1262,8 +1262,6 @@ public class FacadePost {
      */
     public List recommendPost(String userid, Paging<PostVo> paging) {
         long count = mongodbCount();
-        List<DBObject> listmongodba = null;
-        List<UserRefreshRecordVo> result = null;
         List<PostVo> list = null;
         List<PostVo> alllist = postService.findAllPostListHeat();//查询所有帖子
         List<PostVo> posts = new ArrayList<>();
@@ -1279,13 +1277,13 @@ public class FacadePost {
         } else {
             //已登录
             if (alllist != null) {
-                if (count < 10) {
+                if (count < 1000) {
                     //mongodb的里面的刷新记录小于1000条记录的时候进行用户分析
                     list = userAnalysisSmall(userid, paging, alllist, posts);
                     if (list != null) return list;
-                } else if (count >= 30) {
+                } else if (count >= 1000) {
                     //mongodb的里面的刷新记录大于等于1000条记录的时候进行用户分析
-                    list = userAnalysisBig(userid, posts);
+                    list = userAnalysisBig(userid, posts, paging);
                 }
             }
         }
@@ -1298,27 +1296,38 @@ public class FacadePost {
      * @param userid
      * @param posts
      */
-    private List userAnalysisBig(String userid, List<PostVo> posts) {
+    private List userAnalysisBig(String userid, List<PostVo> posts, Paging<PostVo> paging) {
         List<PostVo> list = null;
         List<UserRefreshRecordVo> result;//查询用户最喜欢的圈子
-        result = opularSearchTermsService.userFlush(Integer.parseInt(userid));
-        int crileid = 0;
-        for (int i = 0; i < result.size(); i++) {
-            crileid = result.get(i).getCrileid();
+        List<DBObject> listmongodb;
+        listmongodb = userRefulshListMongodb(Integer.parseInt(userid));//查询用户刷新列表
+        if (listmongodb.size() != 0) {
+            result = opularSearchTermsService.userFlush(Integer.parseInt(userid));
+            int crileid = 0;
+            for (int i = 0; i < result.size(); i++) {
+                crileid = result.get(i).getCrileid();
+            }
+            List<PostVo> criclelist = postService.queryPostCricle(crileid);//这个圈子的帖子（根据热度值排序）
+            List<PostVo> overPost = postService.queryoverPost(crileid);//查询剩下的所有帖子
+            criclelist.addAll(overPost);//所有帖子
+            //查询出mongodb中用户刷新的帖子
+            for (int j = 0; j < listmongodb.size(); j++) {
+                PostVo post = new PostVo();
+                post.setId(Integer.parseInt(listmongodb.get(j).get("postid").toString()));
+                posts.add(post);//把mongodb转为post实体
+            }
+            criclelist.removeAll(posts);//剩下的帖子
+            list = retuenList(criclelist, userid);
+            return list;
+        } else {
+            list = postService.queryPostHeatValue(paging);
+            findUser(list);
+            findPostLabel(list);
+            insertmongo(list, userid);
+            findHotComment(list);
+            countView(list);
+            return list;
         }
-        List<PostVo> criclelist = postService.queryPostCricle(crileid);//这个圈子的帖子（根据热度值排序）
-        List<PostVo> overPost = postService.queryoverPost(crileid);//查询剩下的所有帖子
-        criclelist.addAll(overPost);//所有帖子
-        //查询出mongodb中用户刷新的帖子
-        List<DBObject> listmongodb = userRefulshListMongodb(Integer.parseInt(userid));
-        for (int j = 0; j < listmongodb.size(); j++) {
-            PostVo post = new PostVo();
-            post.setId(Integer.parseInt(listmongodb.get(j).get("postid").toString()));
-            posts.add(post);//把mongodb转为post实体
-        }
-        criclelist.removeAll(posts);//剩下的帖子
-        list = retuenList(criclelist, userid);
-        return list;
     }
 
     /**
