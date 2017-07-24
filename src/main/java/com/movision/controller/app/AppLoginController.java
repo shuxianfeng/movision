@@ -187,9 +187,9 @@ public class AppLoginController {
     public Response loginByThirdAccont(@ApiParam(value = "第三方登录方式标示。1:QQ， 2:微信， 3:微博 ") @RequestParam Integer flag,
                                        @ApiParam(value = "QQ/weixin/weibo（填对应的openid）") @RequestParam String account,
                                        @ApiParam(value = "token") @RequestParam String appToken,
-                                       @ApiParam(value = "登录的ip") @RequestParam String ip,
                                        @ApiParam(value = "登录人的经度") @RequestParam(required = false) String longitude,
-                                       @ApiParam(value = "登录人的纬度") @RequestParam(required = false) String latitude) throws Exception {
+                                       @ApiParam(value = "登录人的纬度") @RequestParam(required = false) String latitude,
+                                       HttpServletRequest request) throws Exception {
 
         Response response = new Response();
         try {
@@ -201,6 +201,8 @@ public class AppLoginController {
                 response.setMessage("qq账号不存在,请先注册");
                 response.setMsgCode(MsgCodeConstant.app_account_by_qq_not_exist);
             } else {
+                String ip = IpUtil.getRequestClientIp(request);
+                log.info("获取的ip=" + ip);
                 appRegisterFacade.handleLoginProcess(appToken, response, originUser, ip, longitude, latitude);
             }
 
@@ -247,7 +249,7 @@ public class AppLoginController {
                 response.setMsgCode(MsgCodeConstant.app_user_not_exist);
             } else {
                 String ip = IpUtil.getRequestClientIp(request);
-                log.debug("获取的ip=" + ip);
+                log.info("获取的ip=" + ip);
                 appRegisterFacade.handleLoginProcess(appToken, response, user, ip, longitude, latitude);
             }
 
