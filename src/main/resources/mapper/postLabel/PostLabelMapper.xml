@@ -7,9 +7,11 @@
     <result column="heat_value" property="heatValue" jdbcType="INTEGER"/>
     <result column="userid" property="userid" jdbcType="INTEGER"/>
     <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+    <result column="type" property="type" jdbcType="INTEGER"/>
+    <result column="photo" property="photo" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List">
-    id, NAME, heat_value, userid, intime
+    id, NAME, heat_value, userid, intime, type, photo
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
     select
@@ -45,6 +47,12 @@
       <if test="intime != null">
         intime,
       </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="photo != null">
+        photo,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -61,6 +69,12 @@
       </if>
       <if test="intime != null">
         #{intime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null">
+        #{type},
+      </if>
+      <if test="photo != null">
+        #{photo},
       </if>
     </trim>
   </insert>
@@ -79,6 +93,12 @@
       <if test="intime != null">
         intime = #{intime,jdbcType=TIMESTAMP},
       </if>
+      <if test="type != null">
+        type = #{type},
+      </if>
+      <if test="photo != null">
+        photo = #{photo},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -87,7 +107,9 @@
     set NAME = #{name,jdbcType=VARCHAR},
       heat_value = #{heatValue,jdbcType=INTEGER},
       userid = #{userid,jdbcType=INTEGER},
-      intime = #{intime,jdbcType=TIMESTAMP}
+    intime = #{intime,jdbcType=TIMESTAMP},
+    type = #{type},
+    photo = #{photo}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="queryLableName" resultType="com.movision.mybatis.postLabel.entity.PostLabel">

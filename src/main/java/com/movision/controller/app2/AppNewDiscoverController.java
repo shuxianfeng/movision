@@ -122,4 +122,14 @@ public class AppNewDiscoverController {
 //        response.setData(hotAuthorMap);
 //        return response;
 //    }
+
+    @ApiOperation(value = "热门排行帖子-达人评论-总排行", notes = "热门排行帖子-达人评论-总排行", response = Response.class)
+    @RequestMapping(value = "search_hot_comment_post_in_all", method = RequestMethod.GET)
+    public Response searchHotCommentPostInAll(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                              @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+
+
+        return response;
+    }
 }

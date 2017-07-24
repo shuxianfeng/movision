@@ -13,6 +13,27 @@ public class PostLabel {
 
     private Date intime;
 
+    private Integer type;
+
+    private String photo;
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public Integer getType() {
+
+        return type;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
     public Integer getId() {
         return id;
     }
