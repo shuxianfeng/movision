@@ -6,6 +6,7 @@ import com.movision.facade.circle.CircleAppFacade;
 import com.movision.facade.index.FacadeDiscover;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.CircleVo;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.user.entity.Author;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.utils.IntegerUtil;
@@ -133,6 +134,8 @@ public class AppNewDiscoverController {
     public Response searchHotCommentPostInAll(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
                                               @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
+        Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<PostVo> list = facadeDiscover.searchHotCommentPostInAll(pager);
 
 
         return response;

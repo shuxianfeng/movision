@@ -7,10 +7,14 @@ import com.movision.mybatis.circleCategory.service.CircleCategoryService;
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.user.entity.Author;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.utils.pagination.model.Paging;
+import javafx.geometry.Pos;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -107,4 +111,13 @@ public class FacadeDiscover {
         map.put("hotUserList", hotUserList);
         return map;
     }
+
+    public List<PostVo> searchHotCommentPostInAll(Paging<PostVo> pager) {
+
+
+        return null;
+    }
+
+
+
 }

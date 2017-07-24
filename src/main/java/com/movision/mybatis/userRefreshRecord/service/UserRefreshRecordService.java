@@ -33,7 +33,7 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
 
     /**
      * 查询
-     *根据postid查询帖子的流浪量
+     *根据postid查询帖子的浏览量
      * @return
      */
     public Integer postcount(int postid) {

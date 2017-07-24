@@ -10,6 +10,7 @@ import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.shiro.realm.ShiroRealm;
+import com.movision.utils.IpUtil;
 import com.movision.utils.ValidateUtils;
 import com.movision.utils.VerifyCodeUtils;
 import com.taobao.api.ApiException;
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -229,9 +231,9 @@ public class AppLoginController {
     @RequestMapping(value = {"/login_by_phone"}, method = RequestMethod.POST)
     public Response loginByPhone(@ApiParam(value = "手机号") @RequestParam String phone,
                                  @ApiParam(value = "token") @RequestParam String appToken,
-                                 @ApiParam(value = "登录的ip") @RequestParam String ip,
                                  @ApiParam(value = "登录人的经度") @RequestParam(required = false) String longitude,
-                                 @ApiParam(value = "登录人的纬度") @RequestParam(required = false) String latitude) throws Exception {
+                                 @ApiParam(value = "登录人的纬度") @RequestParam(required = false) String latitude,
+                                 HttpServletRequest request) throws Exception {
         Response response = new Response();
         try {
             //1 校验手机号是否存在
@@ -244,6 +246,8 @@ public class AppLoginController {
                 response.setMessage("手机号不存在,请发送短信验证码登录");
                 response.setMsgCode(MsgCodeConstant.app_user_not_exist);
             } else {
+                String ip = IpUtil.getRequestClientIp(request);
+                log.debug("获取的ip=" + ip);
                 appRegisterFacade.handleLoginProcess(appToken, response, user, ip, longitude, latitude);
             }
 
