@@ -1679,7 +1679,7 @@ public class FacadePost {
      */
     public void insertmongo(List<PostVo> list, String userid) {
         int crileid = 0;//圈子id
-        if (list != null && String.valueOf(userid)!=null) {
+        if (list != null && userid != null) {
             for (int i = 0; i < list.size(); i++) {
                 int id = list.get(i).getId();
                 //查询帖子是哪个圈子
