@@ -47,6 +47,7 @@ import com.movision.utils.*;
 import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -1733,7 +1734,7 @@ public class FacadePost {
     public List userRefulshListMongodb(int userid) {
         List<DBObject> list = null;
         try {
-            MongoClient mClient = new MongoClient("localhost:27017");
+            MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             DB db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("userRefreshRecord");//表名
             BasicDBObject queryObject = new BasicDBObject("userid", userid);
@@ -1757,7 +1758,7 @@ public class FacadePost {
     public long mongodbCount() {
         long count = 0;
         try {
-            MongoClient mClient = new MongoClient("localhost:27017");
+            MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             DB db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("userRefreshRecord");//表名
             count = collection.count();
