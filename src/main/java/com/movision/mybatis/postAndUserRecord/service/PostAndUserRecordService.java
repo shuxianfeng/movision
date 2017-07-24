@@ -5,6 +5,7 @@ import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTermsVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
 import com.movision.mybatis.postAndUserRecord.mapper.PostAndUserRecordMapper;
+import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class PostAndUserRecordService implements PostAndUserRecordMapper {
       public List UserLookingHistory(int userid,int page,int pageSize ){
          List<DBObject> list = null;
         try {
-            MongoClient mClient = new MongoClient("localhost:27017");
+            MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             DB db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("postAndUserRecord");
 
