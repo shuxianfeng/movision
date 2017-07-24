@@ -179,14 +179,14 @@
                       POW(
                         SIN(
                             (
-                              #{lng,jdbcType=DOUBLE} * PI() / 180 - latitude * PI() / 180
+                              #{lat,jdbcType=DOUBLE} * PI() / 180 - latitude * PI() / 180
                             ) / 2
                         ),
                         2
-                    ) + COS(#{lng,jdbcType=DOUBLE} * PI() / 180) * COS(latitude * PI() / 180) * POW(
+                    ) + COS(#{lat,jdbcType=DOUBLE} * PI() / 180) * COS(latitude * PI() / 180) * POW(
                             SIN(
                                 (
-                                    #{lat,jdbcType=DOUBLE} * PI() / 180 - longitude * PI() / 180
+                                    #{lng,jdbcType=DOUBLE} * PI() / 180 - longitude * PI() / 180
                                 ) / 2
                             ),
                           2
