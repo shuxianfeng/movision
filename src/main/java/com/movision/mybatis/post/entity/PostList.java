@@ -61,6 +61,8 @@ public class PostList implements Serializable {
 
     private Integer isactive;
 
+    private Integer partsum_enddays;//当前活动显示参与人数还是显示剩余结束天数 0 显示结束天数 1 显示活动参与人数
+
     private Integer activetype;
 
     private Double activefee;
@@ -422,5 +424,13 @@ public class PostList implements Serializable {
 
     public void setIscontribute(Integer iscontribute) {
         this.iscontribute = iscontribute;
+    }
+
+    public Integer getPartsum_enddays() {
+        return partsum_enddays;
+    }
+
+    public void setPartsum_enddays(Integer partsum_enddays) {
+        this.partsum_enddays = partsum_enddays;
     }
 }

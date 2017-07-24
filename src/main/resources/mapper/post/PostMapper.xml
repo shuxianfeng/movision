@@ -12,6 +12,7 @@
         <result column="forwardsum" jdbcType="INTEGER" property="forwardsum"/>
         <result column="collectsum" jdbcType="INTEGER" property="collectsum"/>
         <result column="isactive" jdbcType="INTEGER" property="isactive"/>
+        <result column="partsum_enddays" jdbcType="INTEGER" property="partsum_enddays"/>
         <result column="activetype" jdbcType="INTEGER" property="activetype"/>
         <result column="activefee" jdbcType="DOUBLE" property="activefee"/>
         <result column="iscontribute" jdbcType="INTEGER" property="iscontribute"/>
@@ -34,7 +35,7 @@
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
-        isactive, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
+        isactive, partsum_enddays, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
         hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,city
   </sql>
 
@@ -57,7 +58,7 @@
     <select id="queryTodayEssence" resultType="com.movision.mybatis.post.entity.PostVo">
         select * from (
         select
-        t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isessencepool,t1.isdel,t1.essencedate,
+        t1.id,t1.title,t1.subtitle,t1.isactive,t1.partsum_enddays,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isessencepool,t1.isdel,t1.essencedate,
         t1.activetype, t1.activefee, t1.iscontribute, t2.category AS category,t2.code AS code, t3.begintime, t3.endtime
         from yw_post t1
         LEFT JOIN yw_circle t2 ON
