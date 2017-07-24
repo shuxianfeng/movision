@@ -112,7 +112,6 @@ public class FacadeDiscover {
         //循环查询活动的参与人数和活动的距离结束天数
         for (int i = 0; i < hotActiveList.size(); i++) {
             ActiveVo ao = hotActiveList.get(i);
-            System.out.println("测试partsum_enddays>>>>>>>>"+ao.getPartsum_enddays());
             //计算距离结束时间
             Date begin = ao.getBegintime();
             Date end = ao.getEndtime();
