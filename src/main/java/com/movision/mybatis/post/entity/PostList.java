@@ -103,6 +103,16 @@ public class PostList implements Serializable {
 
     private List<GoodsVo> promotionGoods;//活动促销商品
 
+    private Integer activeid;//活动id
+
+    public Integer getActiveid() {
+        return activeid;
+    }
+
+    public void setActiveid(Integer activeid) {
+        this.activeid = activeid;
+    }
+
     public String getCategoryname() {
         return categoryname;
     }

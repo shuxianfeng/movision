@@ -13,10 +13,7 @@ import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
-import com.movision.mybatis.post.entity.PostActiveList;
-import com.movision.mybatis.post.entity.PostChoiceness;
-import com.movision.mybatis.post.entity.PostCompile;
-import com.movision.mybatis.post.entity.PostList;
+import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.share.entity.SharesVo;
 import com.movision.mybatis.submission.entity.SubmissionVo;
@@ -1241,6 +1238,29 @@ public class PostController {
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
+        pager.result(resault);
+        response.setData(pager);
+        return response;
+    }
+
+
+    /**
+     * 点击投稿数值跳转到这个活动下投的所有帖子列表页
+     *
+     * @param activityid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "查询活动投稿的帖子列表", notes = "点击投稿数值跳转到这个活动下投的所有帖子列表页", response = Response.class)
+    @RequestMapping(value = "queryActivitycontributeListById", method = RequestMethod.POST)
+    public Response queryActivitycontributeListById(@ApiParam(value = "活动id") @RequestParam String activityid,
+                                                    @ApiParam(value = "当前页") @RequestParam(defaultValue = "1") String pageNo,
+                                                    @ApiParam(value = "每页几条") @RequestParam(defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<Post> pager = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<Post> resault = postFacade.findAllQueryActivitycontributeListById(activityid, pager);
+        response.setMessage("查询成功");
         pager.result(resault);
         response.setData(pager);
         return response;

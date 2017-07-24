@@ -46,7 +46,7 @@ public class PostActiveList implements Serializable {
     private String ishot;
     private Date oprtime;
     private Integer apply;//报名数
-    private Integer contribute;//投稿数
+    private Integer activeid;//投稿数
 
     public Integer getApply() {
         return apply;
@@ -57,11 +57,11 @@ public class PostActiveList implements Serializable {
     }
 
     public Integer getContribute() {
-        return contribute;
+        return activeid;
     }
 
     public void setContribute(Integer contribute) {
-        this.contribute = contribute;
+        this.activeid = contribute;
     }
 
     public Date getOprtime() {

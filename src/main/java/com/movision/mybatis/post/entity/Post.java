@@ -60,6 +60,16 @@ public class Post implements Serializable {
 
     private String city;//城市code
 
+    private Integer activeid;//活动id
+
+    public Integer getActiveid() {
+        return activeid;
+    }
+
+    public void setActiveid(Integer activeid) {
+        this.activeid = activeid;
+    }
+
     public String getCity() {
         return city;
     }

@@ -12,7 +12,6 @@
         <result column="forwardsum" jdbcType="INTEGER" property="forwardsum"/>
         <result column="collectsum" jdbcType="INTEGER" property="collectsum"/>
         <result column="isactive" jdbcType="INTEGER" property="isactive"/>
-        <result column="partsum_enddays" jdbcType="INTEGER" property="partsum_enddays"/>
         <result column="activetype" jdbcType="INTEGER" property="activetype"/>
         <result column="activefee" jdbcType="DOUBLE" property="activefee"/>
         <result column="iscontribute" jdbcType="INTEGER" property="iscontribute"/>
@@ -31,12 +30,13 @@
         <result column="oprtime" jdbcType="TIMESTAMP" property="oprtime"/>
         <result column="heat_value" jdbcType="INTEGER" property="heatvalue"/>
         <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="activeid" jdbcType="INTEGER" property="activeid"/>
     </resultMap>
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
-        isactive, partsum_enddays, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
-        hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,city
+        isactive, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
+        hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid
   </sql>
 
     <!--基础查询语句-->
@@ -58,7 +58,7 @@
     <select id="queryTodayEssence" resultType="com.movision.mybatis.post.entity.PostVo">
         select * from (
         select
-        t1.id,t1.title,t1.subtitle,t1.isactive,t1.partsum_enddays,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isessencepool,t1.isdel,t1.essencedate,
+        t1.id,t1.title,t1.subtitle,t1.isactive,t1.type,t1.coverimg,t1.orderid,t1.intime,t1.isessence,t1.isessencepool,t1.isdel,t1.essencedate,
         t1.activetype, t1.activefee, t1.iscontribute, t2.category AS category,t2.code AS code, t3.begintime, t3.endtime
         from yw_post t1
         LEFT JOIN yw_circle t2 ON
@@ -1890,7 +1890,7 @@
             resultType="com.movision.mybatis.post.entity.PostActiveList">
         SELECT p.*,a.begintime,a.endtime,u.nickname,
         (SELECT COUNT(1) FROM yw_active_period WHERE postid = p.id AND p.activetype = 2) AS apply,
-        (SELECT COUNT(1) FROM yw_active_period WHERE postid = p.id AND p.activetype = 0 AND p.iscontribute = 1)
+        (SELECT COUNT(1) FROM yw_post WHERE activeid = p.id AND p.activetype = 0 AND p.iscontribute = 1 AND isdel = 0)
         AS contribute
         FROM yw_post p LEFT JOIN yw_active_period a ON a.postid=p.id LEFT
         JOIN yw_user u ON u.id=p.userid
@@ -2173,5 +2173,10 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         SELECT postid FROM yw_active_part WHERE userid = #{userid,jdbcType=INTEGER}
         )
 
+    </select>
+
+    <select id="findAllQueryActivitycontributeListById" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.Post">
+        SELECT * FROM yw_post WHERE activeid = #{id,jdbcType=INTEGER} AND isactive = 0 AND isdel = 0
     </select>
 </mapper>

@@ -1,6 +1,5 @@
 package com.movision.facade.boss;
 
-import com.movision.common.Response;
 import com.movision.common.constant.JurisdictionConstants;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
@@ -41,15 +40,15 @@ import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
-import com.movision.utils.*;
+import com.movision.utils.JsoupCompressImg;
+import com.movision.utils.ListUtil;
+import com.movision.utils.VideoCoverURL;
+import com.movision.utils.VideoUploadUtil;
 import com.movision.utils.file.FileUtil;
-import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
-import com.movision.utils.propertiesLoader.PropertiesLoader;
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,12 +59,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -2540,6 +2534,17 @@ public class PostFacade {
             map.put("title", title);
         }
         return activityContributeService.findAllQueryActivityContribute(map, pager);
+    }
+
+    /**
+     * 查询活动投稿的帖子列表
+     *
+     * @param id
+     * @param pag
+     * @return
+     */
+    public List<Post> findAllQueryActivitycontributeListById(String id, Paging<Post> pag) {
+        return postService.findAllQueryActivitycontributeListById(Integer.parseInt(id), pag);
     }
 
     /**

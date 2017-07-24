@@ -121,6 +121,8 @@ public class PostVo implements Serializable {
     private List<UserLike> rewardpersonnickname;//打赏的10个人的昵称
     private String city;//城市code
 
+    private Integer activeid;//活动id
+
     public String getCity() {
         return city;
     }

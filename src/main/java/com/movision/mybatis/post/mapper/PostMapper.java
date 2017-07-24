@@ -294,4 +294,6 @@ public interface PostMapper {
 
     int queryUserActiveCount(int userid);
 
+    List<Post> findAllQueryActivitycontributeListById(Integer id, RowBounds rowBounds);
+
 }

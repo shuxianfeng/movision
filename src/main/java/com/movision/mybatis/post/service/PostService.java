@@ -1673,4 +1673,21 @@ public class PostService {
         }
     }
 
+    /**
+     * 查询活动投稿的帖子列表
+     *
+     * @param id
+     * @param pag
+     * @return
+     */
+    public List<Post> findAllQueryActivitycontributeListById(Integer id, Paging<Post> pag) {
+        try {
+            log.info("查询活动投稿的帖子列表");
+            return postMapper.findAllQueryActivitycontributeListById(id, pag.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询活动投稿的帖子列表异常", e);
+            throw e;
+        }
+    }
+
 }
