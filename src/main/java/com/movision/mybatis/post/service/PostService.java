@@ -53,7 +53,13 @@ public class PostService {
     }
 
     public List<ActiveVo> queryHotActiveList() {
-        return postMapper.queryHotActiveList();
+        try {
+            log.info("发现页查询最热门的10个帖子");
+            return postMapper.queryHotActiveList();
+        }catch (Exception e){
+            log.error("发现页查询最热门的10个帖子失败", e);
+            throw e;
+        }
     }
 
     public int queryPostNumByUserid(int userid){
