@@ -69,9 +69,19 @@ public class Author implements Serializable {
 
     private Integer heat_value;
 
+    private String longitude;
+
+    private String latitude;
+
+    private String ip;
+
+    private String ip_city;
+
     private Integer befollowsum;//被关注的次数（粉丝数）
 
     private List<Post> postListByAuthor;//该作者最热门的三个帖子
+
+    private Integer distance;//附近的作者，相隔的距离，单位米
 
     public Integer getId() {
         return id;
@@ -311,5 +321,45 @@ public class Author implements Serializable {
 
     public void setPostListByAuthor(List<Post> postListByAuthor) {
         this.postListByAuthor = postListByAuthor;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getIp_city() {
+        return ip_city;
+    }
+
+    public void setIp_city(String ip_city) {
+        this.ip_city = ip_city;
+    }
+
+    public Integer getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Integer distance) {
+        this.distance = distance;
     }
 }

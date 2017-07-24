@@ -172,8 +172,8 @@
 
     <!--美番2.0发现作者页查询附近作者列表-->
     <select id="getNearAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author" >
-        SELECT* FROM
-            (SELECT *, ROUND(
+        SELECT t.* FROM
+            (SELECT id, nickname, photo, phone, ROUND(
                 6378.138 * 2 * ASIN(
                     SQRT(
                       POW(
