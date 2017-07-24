@@ -12,7 +12,7 @@
         <result column="forwardsum" jdbcType="INTEGER" property="forwardsum"/>
         <result column="collectsum" jdbcType="INTEGER" property="collectsum"/>
         <result column="isactive" jdbcType="INTEGER" property="isactive"/>
-        <result column="partsum_enddays" jdbcType="INTEGER" property="partsum_enddays"/>
+        <result column="partsum_enddays" jdbcType="INTEGER" property="partsumEnddays"/>
         <result column="activetype" jdbcType="INTEGER" property="activetype"/>
         <result column="activefee" jdbcType="DOUBLE" property="activefee"/>
         <result column="iscontribute" jdbcType="INTEGER" property="iscontribute"/>
