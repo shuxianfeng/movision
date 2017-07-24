@@ -1,10 +1,12 @@
 package com.movision.mybatis.userRefreshRecord.service;
 
 import com.mongodb.*;
+import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTermsVo;
 import com.movision.mybatis.userRefreshRecord.entity.UesrreflushCount;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
 import com.movision.mybatis.userRefreshRecord.mapper.UserRefreshRecordMapper;
+import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -25,7 +27,6 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-
     public void insert(UserRefreshRecord userRefreshRecord) {
 
         mongoTemplate.insert(userRefreshRecord);
@@ -39,7 +40,7 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
     public Integer postcount(int postid) {
         int obj = 0;
         try {
-            MongoClient mClient = new MongoClient("localhost:27017");
+            MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             DB db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("userRefreshRecord");
             BasicDBObject queryObject = new BasicDBObject("postid", postid);
@@ -50,4 +51,16 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
         return obj;
 
     }
+
+    public List group() {
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.group("postid").count().as("count"),
+                Aggregation.sort(Sort.Direction.DESC, "count")
+        );
+        AggregationResults<UesrreflushCount> list = mongoTemplate.aggregate(aggregation, "userRefreshRecord", UesrreflushCount.class);
+        List<UesrreflushCount> list1 = list.getMappedResults();
+        return list1;
+
+    }
+
 }

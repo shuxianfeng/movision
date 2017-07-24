@@ -5,6 +5,7 @@ import com.mongodb.*;
 import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTermsVo;
 import com.movision.mybatis.opularSearchTerms.mapper.OpularSearchTermsMapper;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
+import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
  import org.springframework.data.mongodb.core.MongoTemplate;
@@ -67,7 +68,7 @@ import java.util.ArrayList;
     public List histroyWords(int userid) {
         List<DBObject> list = null;
         try {
-            MongoClient mClient = new MongoClient("39.108.84.156:27017");
+            MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             DB db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("opularSearchTerms");
             BasicDBObject queryObject = new BasicDBObject("userid", userid).append("isdel", 0);
@@ -87,7 +88,7 @@ import java.util.ArrayList;
     public Integer updateColData(int userid) {
 
         try {
-            MongoClient mClient = new MongoClient("39.108.84.156:27017");
+            MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             DB db = mClient.getDB("searchRecord");
             DBCollection dbCol = db.getCollection("opularSearchTerms");
             BasicDBObject doc = new BasicDBObject();
