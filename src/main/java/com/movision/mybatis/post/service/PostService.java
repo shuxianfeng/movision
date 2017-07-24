@@ -52,7 +52,7 @@ public class PostService {
         return postMapper.queryRecommendCircle();
     }
 
-    public List<Post> queryHotActiveList() {
+    public List<ActiveVo> queryHotActiveList() {
         return postMapper.queryHotActiveList();
     }
 

@@ -6,6 +6,7 @@ import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.circleCategory.service.CircleCategoryService;
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
+import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
@@ -13,12 +14,14 @@ import com.movision.mybatis.user.entity.Author;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
 import javafx.geometry.Pos;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +53,7 @@ public class FacadeDiscover {
         HashMap<String, Object> pmap = new HashMap();
         List<HomepageManage> homepageManageList = homepageManageService.queryBannerList(1);//查询发现页顶部banner轮播图 type=1
         List<CircleCategory> circleCategoryList = circleCategoryService.queryCircleCategoryList();//查询发现页次banner所有圈子类别轮播图
-        List<Post> hotActiveList = postService.queryHotActiveList();//查询发现页热门活动列表
+        List<ActiveVo> hotActiveList = postService.queryHotActiveList();//查询发现页热门活动列表
 
         List<CircleVo> hotCircleList;
         hotCircleList = circleService.queryHotCircleList();//查询发现页被设置为发现页展示的圈子
@@ -93,7 +96,7 @@ public class FacadeDiscover {
 
         Map<String, Object> map = new HashMap<>();
         List<HomepageManage> homepageManageList = homepageManageService.queryBannerList(1);//查询发现页顶部banner轮播图
-        List<Post> hotActiveList = postService.queryHotActiveList();//查询发现页热门活动列表
+        List<ActiveVo> hotActiveList = postService.queryHotActiveList();//查询发现页热门活动列表
         List<UserVo> hotUserList = userService.queryHotUserList();//查询发现页热门作者列表
 
         //循环查询作者的发帖数
@@ -104,6 +107,21 @@ public class FacadeDiscover {
             int postsum = postService.queryPostNumByUserid(userid);
             vo.setPostsum(postsum);
             hotUserList.set(i, vo);
+        }
+
+        //循环查询活动的参与人数和活动的距离结束天数
+        for (int i = 0; i < hotActiveList.size(); i++) {
+            ActiveVo ao = hotActiveList.get(i);
+            //计算距离结束时间
+            Date begin = ao.getBegintime();
+            Date end = ao.getEndtime();
+            Date now = new Date();
+            int enddays = DateUtils.activeEndDays(now, begin, end);
+            ao.setEnddays(enddays);
+            //查询活动参与总人数
+            int partsum = postService.queryActivePartSum(ao.getId());
+            ao.setPartsum(partsum);
+            hotActiveList.set(i, ao);
         }
 
         map.put("homepageManageList", homepageManageList);

@@ -1,27 +1,21 @@
 package com.movision.controller.app2;
 
 import com.movision.common.Response;
-import com.movision.common.util.ShiroUtil;
 import com.movision.facade.circle.CircleAppFacade;
 import com.movision.facade.index.FacadeDiscover;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.user.entity.Author;
-import com.movision.mybatis.user.entity.UserVo;
-import com.movision.utils.IntegerUtil;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

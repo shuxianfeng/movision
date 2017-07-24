@@ -51,7 +51,7 @@ public interface PostMapper {
 
     List<Circle> queryRecommendCircle();
 
-    List<Post> queryHotActiveList();
+    List<ActiveVo> queryHotActiveList();
 
     int queryPostNumByUserid(int userid);
 
