@@ -44,6 +44,24 @@ public class PostActiveList implements Serializable {
     private List<GoodsVo> goodss;
     private String ishot;
     private Date oprtime;
+    private Integer apply;//报名数
+    private Integer contribute;//投稿数
+
+    public Integer getApply() {
+        return apply;
+    }
+
+    public void setApply(Integer apply) {
+        this.apply = apply;
+    }
+
+    public Integer getContribute() {
+        return contribute;
+    }
+
+    public void setContribute(Integer contribute) {
+        this.contribute = contribute;
+    }
 
     public Date getOprtime() {
         return oprtime;

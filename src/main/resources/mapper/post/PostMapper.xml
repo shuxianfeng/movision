@@ -1887,7 +1887,11 @@
     </select>
     <select id="queryActiveById" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostActiveList">
-        SELECT p.*,a.begintime,a.endtime,u.nickname FROM yw_post p LEFT JOIN yw_active_period a ON a.postid=p.id LEFT
+        SELECT p.*,a.begintime,a.endtime,u.nickname,
+        (SELECT COUNT(1) FROM yw_active_period WHERE postid = p.id AND p.activetype = 2) AS apply,
+        (SELECT COUNT(1) FROM yw_active_period WHERE postid = p.id AND p.activetype = 0 AND p.iscontribute = 1)
+        AS contribute
+        FROM yw_post p LEFT JOIN yw_active_period a ON a.postid=p.id LEFT
         JOIN yw_user u ON u.id=p.userid
         WHERE p.isdel=0 AND p.isactive=1 AND p.id=#{id,jdbcType=INTEGER}
     </select>
