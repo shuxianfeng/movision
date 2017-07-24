@@ -26,6 +26,8 @@ public interface UserMapper {
 
     List<Author> getInterestAuthor(RowBounds rowBounds, Map<String, Object> map);
 
+    List<Author> getNearAuthor(RowBounds rowBounds, Map<String, Object> map);
+
     int updateByPrimaryKeySelective(User record);
 
     int updateRegisterUser(RegisterUser registerUser);

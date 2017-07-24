@@ -27,6 +27,7 @@ import com.movision.utils.DateUtils;
 import com.movision.utils.IntegerUtil;
 import com.movision.utils.pagination.model.Paging;
 import javafx.geometry.Pos;
+import org.apache.commons.beanutils.converters.DoubleConverter;
 import org.apache.commons.collections.FastHashMap;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
@@ -439,7 +440,9 @@ public class UserFacade {
         List<Author> authorList = userService.getHotAuthor(pager, map);
 
         //遍历查询作者发布的最新的三个帖子
-        authorList = queryNewThreePost(authorList);
+        if (authorList.size() > 0) {
+            authorList = queryNewThreePost(authorList);
+        }
         return authorList;
     }
 
@@ -453,16 +456,32 @@ public class UserFacade {
         List<Author> authorList = userService.getInterestAuthor(pager, map);
 
         //遍历查询作者发布的最新的三个帖子
-        authorList = queryNewThreePost(authorList);
+        if (authorList.size() > 0) {
+            authorList = queryNewThreePost(authorList);
+        }
         return authorList;
     }
 
     /**
      * 根据当前登录的用户查询附近的作者列表
      */
+    public List<Author> getNearAuthor(Paging<Author> pager, String lng, String lat, String userid){
+        //根据传入的经纬度查询距离当前经纬度30公里的所有作者（发过帖子的）
+        Map<String, Object> map = new HashMap<>();
+        map.put("lng", Double.parseDouble(lng));
+        map.put("lat", Double.parseDouble(lat));
+        map.put("userid", Integer.parseInt(userid));
+        List<Author> authorList = userService.getNearAuthor(pager, map);
+
+        //遍历查询作者发布的最新的三个帖子
+        if (authorList.size() > 0) {
+            authorList = queryNewThreePost(authorList);
+        }
+        return authorList;
+    }
 
     /**
-     * 根据传入的作者列表便利查询作者发布的最新的三个帖子
+     * 根据传入的作者列表遍历查询作者发布的最新的三个帖子
      */
     public List<Author> queryNewThreePost(List<Author> authorList){
         for (int i = 0; i < authorList.size(); i++){

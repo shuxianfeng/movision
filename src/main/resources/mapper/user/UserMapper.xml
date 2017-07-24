@@ -170,6 +170,38 @@
         ORDER BY t.heat_value DESC
     </select>
 
+    <!--美番2.0发现作者页查询附近作者列表-->
+    <select id="getNearAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author" >
+        SELECT *, ROUND(
+            6378.138 * 2 * ASIN(
+                SQRT(
+                    POW(
+                        SIN(
+                            (
+                                #{lng,jdbcType=DOUBLE} * PI() / 180 - latitude * PI() / 180
+                            ) / 2
+                        ),
+                        2
+                    ) + COS(#{lng,jdbcType=DOUBLE} * PI() / 180) * COS(latitude * PI() / 180) * POW(
+                        SIN(
+                            (
+                                #{lat,jdbcType=DOUBLE} * PI() / 180 - longitude * PI() / 180
+                            ) / 2
+                        ),
+                        2
+                    )
+                )
+            ) * 1000
+        ) AS distance FROM yw_user
+        <where>
+            30000 > distance
+            <if test="userid != null || userid != ''">
+                AND id != #{userid,jdbcType=INTEGER}
+            </if>
+        </where>
+        ORDER BY distance DESC
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_user
         where id = #{id,jdbcType=INTEGER}
