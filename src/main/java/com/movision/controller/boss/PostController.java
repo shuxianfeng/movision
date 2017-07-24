@@ -9,19 +9,19 @@ import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.activityContribute.entity.ActivityContribute;
 import com.movision.mybatis.activityContribute.entity.ActivityContributeVo;
 import com.movision.mybatis.bossUser.entity.BossUser;
-import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
-import com.movision.mybatis.post.entity.*;
+import com.movision.mybatis.post.entity.PostActiveList;
+import com.movision.mybatis.post.entity.PostChoiceness;
+import com.movision.mybatis.post.entity.PostCompile;
+import com.movision.mybatis.post.entity.PostList;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.share.entity.SharesVo;
 import com.movision.mybatis.submission.entity.SubmissionVo;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
-import com.movision.mybatis.video.entity.Video;
-import com.movision.utils.L;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
@@ -519,8 +519,8 @@ public class PostController {
     public Response addPostActiveList(
             @ApiParam(value = "活动标题") @RequestParam String title,
             @ApiParam(value = "活动副标题") @RequestParam String subtitle,
-            @ApiParam(value = "活动类型：0 告知类活动 1 商城促销类活动") @RequestParam String activetype,
-            @ApiParam(value = "是否需要投稿 0,投,1不投") @RequestParam String iscontribute,
+            @ApiParam(value = "活动类型：0 告知类活动 1 商城促销类活动 2 组织类活动") @RequestParam String activetype,
+            @ApiParam(value = "是否需要投稿 0,投,1不投") @RequestParam(required = false) String iscontribute,
             @ApiParam(value = "单价") @RequestParam(required = false) String activefee,
             @ApiParam(value = "活动封面") @RequestParam(required = false) String coverimg,
             @ApiParam(value = "内容") @RequestParam String postcontent,
@@ -829,7 +829,7 @@ public class PostController {
             @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,
             @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,
             @ApiParam(value = "费用") @RequestParam(required = false) String activefee,
-            @ApiParam(value = "活动类型") @RequestParam(required = false) String activetype,
+            @ApiParam(value = "活动类型0 告知类活动 1 商城促销类活动 2 组织类活动") @RequestParam(required = false) String activetype,
             @ApiParam(value = "是否需要投稿 0,投,1不投") @RequestParam(required = false) String iscontribute,
             @ApiParam(value = "开始时间") @RequestParam(required = false) String begintime,
             @ApiParam(value = "结束时间") @RequestParam(required = false) String endtime,

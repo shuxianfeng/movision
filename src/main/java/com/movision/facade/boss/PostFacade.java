@@ -1030,15 +1030,16 @@ public class PostFacade {
     /**
      * 后台管理--增加活动
      *
-     * @param title
-     * @param subtitle
-     * @param
-     * @param
-     * @param coverimg
-     * @param postcontent
-     * @param isessence
-     * @param orderid
-     * @param essencedate
+     * @param title 活动标题
+     * @param subtitle 活动副标题
+     * @param activetype 活动类型：0 告知类活动 1 商城促销类活动 2 组织类活动
+     * @param iscontribute 是否需要投稿 0,投,1不投
+     * @param activefee 单价
+     * @param coverimg 活动封面
+     * @param postcontent 内容
+     * @param isessence 首页精选
+     * @param orderid 精选排序
+     * @param essencedate 精选日期
      * @param begintime
      * @param endtime
      * @param userid
@@ -1053,17 +1054,22 @@ public class PostFacade {
             Map<String, Integer> map = new HashedMap();
             post.setTitle(title);//帖子标题
             post.setSubtitle(subtitle);//帖子副标题
+        if (StringUtil.isNotEmpty(activetype)) {
             Integer typee = Integer.parseInt(activetype);
-            post.setActivetype(activetype);
-            post.setIscontribute(iscontribute);//是否投稿，必填
-            if (typee == 0) {
+            post.setActivetype(activetype); //活动类型
+            if (typee == 0) {//告知类活动
+                post.setIscontribute(iscontribute);//是否投稿，必填
+                    post.setActivefee(0.0);
+            } else if (typee == 2) {//组织类活动
                 if (!StringUtils.isEmpty(activefee)) {
                     post.setActivefee(Double.parseDouble(activefee));//金额
+                    post.setIscontribute("0");//是否投稿
                 } else {
                     post.setActivefee(0.0);
+                    post.setIscontribute("0");
+                }
                 }
             }
-
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             post.setCoverimg(coverimg);
             if (StringUtil.isNotEmpty(postcontent)) {
@@ -1399,18 +1405,24 @@ public class PostFacade {
                 postActiveList.setId(Integer.parseInt(id));//帖子id
                 postActiveList.setTitle(title);//帖子标题
                 postActiveList.setSubtitle(subtitle);//帖子副标题
-                if (!StringUtil.isEmpty(activetype)) {
+                if (StringUtil.isNotEmpty(activetype)) {//活动类型是否为空
                     postActiveList.setActivetype(Integer.parseInt(activetype));
+                    if (activetype.equals("2")) {//组织类活动
+                        if (StringUtil.isNotBlank(activefee)) {
+                            postActiveList.setActivefee(Double.parseDouble(activefee));//费用
+                            postActiveList.setIscontribute("0");
+                        } else {
+                            postActiveList.setActivefee(0.0);
+                            postActiveList.setIscontribute("0");
+                        }
+                    } else if (activetype.equals("0")) {//告知类活动
+                        if (StringUtil.isNotBlank(iscontribute)) {//是否投稿
+                            postActiveList.setIscontribute(iscontribute);
+                            postActiveList.setActivefee(0.0);
+                        }
+                    }
                 }
                 postActiveList.setCoverimg(coverimg);//帖子封面
-                if (!StringUtil.isEmpty(activefee)) {
-                    postActiveList.setActivefee(Double.parseDouble(activefee));//费用
-                } else {
-                    postActiveList.setActivefee(0.0);
-                }
-                if (!StringUtils.isEmpty(iscontribute)) {//是否投稿
-                    postActiveList.setIscontribute(iscontribute);
-                }
                 if (!StringUtil.isEmpty(userid)) {
                     postActiveList.setUserid(Integer.parseInt(userid));
                 }
