@@ -109,7 +109,7 @@
 
     <!--查询yw_post表中所有热门活动列表-->
     <select id="queryHotActiveList" resultType="com.movision.mybatis.post.entity.ActiveVo">
-        SELECT t.id,t.title,t.subtitle,t.postcontent,t.isactive,t.partsum_enddays AS partsum_enddays,t.activetype,t.activefee,
+        SELECT t.id,t.title,t.subtitle,t.postcontent,t.isactive,t.partsum_enddays AS partsumEnddays,t.activetype,t.activefee,
             t.iscontribute,t.ishot,t.coverimg,t.hotimgurl,t.intime,t.isdel,t.begintime,t.endtime
         FROM (
             SELECT
