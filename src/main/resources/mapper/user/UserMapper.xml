@@ -197,6 +197,7 @@
             ) t
         <where>
             30000 > t.distance
+            AND t.id != '-1'
             <if test="userid != null || userid != ''">
                 AND t.id != #{userid,jdbcType=INTEGER}
             </if>
