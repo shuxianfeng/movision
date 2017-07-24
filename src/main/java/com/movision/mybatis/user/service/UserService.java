@@ -901,4 +901,66 @@ public class UserService {
             throw e;
         }
     }
+
+    public List<UserVo> findAllMostFansAuthorInAll(Paging<UserVo> paging) {
+        try {
+            log.info("查询粉丝数最多的作者集合");
+            return userMapper.findAllMostFansAuthorInAll(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询粉丝数最多的作者集合失败", e);
+            throw e;
+        }
+    }
+
+    public List<UserVo> findAllMostFansAuthorInCurrentMonth(Paging<UserVo> paging) {
+        try {
+            log.info("查询当月粉丝数最多的作者集合");
+            return userMapper.findAllMostFansAuthorInCurrentMonth(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询当月粉丝数最多的作者集合失败", e);
+            throw e;
+        }
+    }
+
+    public List<UserVo> findAllMostCommentAuthorInAll(Paging<UserVo> paging) {
+        try {
+            log.info("查询评论最多的作者集合");
+            return userMapper.findAllMostCommentAuthorInAll(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询评论最多的作者集合失败", e);
+            throw e;
+        }
+    }
+
+    public List<UserVo> findAllMostCommentAuthorInCurrentMonth(Paging<UserVo> paging) {
+        try {
+            log.info("查询当月评论最多的作者集合");
+            return userMapper.findAllMostCommentAuthorInCurrentMonth(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询当月评论最多的作者集合失败", e);
+            throw e;
+        }
+    }
+
+
+    public List<UserVo> findAllMostPostAuthorInAll(Paging<UserVo> paging) {
+        try {
+            log.info("查询发帖最多的作者集合");
+            return userMapper.findAllMostPostAuthorInAll(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询发帖最多的作者集合失败", e);
+            throw e;
+        }
+    }
+
+
+    public List<UserVo> findAllMostPostAuthorInCurrentMonth(Paging<UserVo> paging) {
+        try {
+            log.info("查询当月发帖最多的作者集合");
+            return userMapper.findAllMostPostAuthorInCurrentMonth(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询当月发帖最多的作者集合失败", e);
+            throw e;
+        }
+    }
 }

@@ -1690,4 +1690,64 @@ public class PostService {
         }
     }
 
+    public List<PostVo> findAllHotCommentPostInAll(Paging<PostVo> pager) {
+        try {
+            log.info("查询评论最多的帖子");
+            return postMapper.findAllHotCommentPostInAll(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询评论最多的帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllHotCommentPostInCurrentMonth(Paging<PostVo> pager) {
+        try {
+            log.info("查询当月评论最多的帖子");
+            return postMapper.findAllHotCommentPostInCurrentMonth(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询当月评论最多的帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllMostZanPostInAll(Paging<PostVo> paging) {
+        try {
+            log.info("查询得赞最多的帖子列表");
+            return postMapper.findAllMostZanPostInAll(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询得赞最多的帖子列表失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllMostZanPostInCurrentMonth(Paging<PostVo> paging) {
+        try {
+            log.info("查询当月得赞最多的帖子列表");
+            return postMapper.findAllMostZanPostInCurrentMonth(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询当月得赞最多的帖子列表失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllMostCollectInAll(Paging<PostVo> paging) {
+        try {
+            log.info("查询收藏最多的帖子列表");
+            return postMapper.findAllMostCollectInAll(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询收藏最多的帖子列表失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllMostCollectInCurrentMonth(Paging<PostVo> paging) {
+        try {
+            log.info("查询收藏最多的帖子列表");
+            return postMapper.findAllMostCollectInCurrentMonth(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询收藏最多的帖子列表失败", e);
+            throw e;
+        }
+    }
+
 }

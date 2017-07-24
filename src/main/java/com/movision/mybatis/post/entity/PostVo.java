@@ -23,15 +23,7 @@ public class PostVo implements Serializable {
 
     private Integer circleid;
 
-    private Integer countview;//帖子浏览量
-
-    public Integer getCountview() {
-        return countview;
-    }
-
-    public void setCountview(Integer countview) {
-        this.countview = countview;
-    }
+    private Integer countview;  //帖子浏览量
 
     private String title;
 
@@ -111,6 +103,8 @@ public class PostVo implements Serializable {
 
     private String phone;//发帖人手机号
 
+    private String photo;   //发帖人的头像
+
     private Integer isCollect;//该用户是否已收藏该帖子/活动 0 否 1 是
 
     private Integer isZan;//该用户是否已赞该帖子/活动 0 否 1 是
@@ -118,8 +112,27 @@ public class PostVo implements Serializable {
     private String introduction;//圈子简介
 
     private Integer rewardsum;//打赏热人数
+
     private List<UserLike> rewardpersonnickname;//打赏的10个人的昵称
+
     private String city;//城市code
+
+    public UserLike userlike;
+
+    private Integer heatvalue;//热度
+
+    public Comment comments;
+
+    public List<PostLabel> postLabels;
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public String getPhoto() {
+
+        return photo;
+    }
 
     private Integer activeid;//活动id
 
@@ -501,8 +514,6 @@ public class PostVo implements Serializable {
         this.maylikeimg = maylikeimg;
     }
 
-    public UserLike userlike;
-
     public UserLike getUserlike() {
         return userlike;
     }
@@ -519,10 +530,6 @@ public class PostVo implements Serializable {
         this.heatvalue = heatvalue;
     }
 
-    private Integer heatvalue;//热度
-
-    public List<PostLabel> postLabels;
-
     public List<PostLabel> getPostLabels() {
         return postLabels;
     }
@@ -531,14 +538,20 @@ public class PostVo implements Serializable {
         this.postLabels = postLabels;
     }
 
-    public Comment comments;
-
     public Comment getComments() {
         return comments;
     }
 
     public void setComments(Comment comments) {
         this.comments = comments;
+    }
+
+    public Integer getCountview() {
+        return countview;
+    }
+
+    public void setCountview(Integer countview) {
+        this.countview = countview;
     }
 
     public Integer getPartsum_enddays() {

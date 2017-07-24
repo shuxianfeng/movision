@@ -7,6 +7,7 @@ import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.user.entity.Author;
+import com.movision.mybatis.user.entity.UserVo;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -124,14 +125,162 @@ public class AppNewDiscoverController {
     }
 
     @ApiOperation(value = "热门排行帖子-达人评论-总排行", notes = "热门排行帖子-达人评论-总排行", response = Response.class)
-    @RequestMapping(value = "search_hot_comment_post_in_all", method = RequestMethod.GET)
+    @RequestMapping(value = "hot_range/search_hot_comment_post_in_all", method = RequestMethod.GET)
     public Response searchHotCommentPostInAll(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
                                               @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List<PostVo> list = facadeDiscover.searchHotCommentPostInAll(pager);
-
+        pager.result(list);
+        response.setData(pager);
 
         return response;
     }
+
+    @ApiOperation(value = "热门排行帖子-达人评论-月排行", notes = "热门排行帖子-达人评论-月排行", response = Response.class)
+    @RequestMapping(value = "hot_range/search_hot_comment_post_in_current_month", method = RequestMethod.GET)
+    public Response searchHotCommentPostInCurrentMonth(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                       @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<PostVo> list = facadeDiscover.searchHotCommentPostInCurrentMonth(pager);
+        pager.result(list);
+        response.setData(pager);
+
+        return response;
+    }
+
+    @ApiOperation(value = "热门排行帖子-得赞最多-总排行", notes = "热门排行帖子-得赞最多-总排行", response = Response.class)
+    @RequestMapping(value = "hot_range/search_most_zan_post_in_all", method = RequestMethod.GET)
+    public Response searchMostZanPostInAll(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                           @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<PostVo> list = facadeDiscover.searchMostZanPostListInAll(pager);
+        pager.result(list);
+        response.setData(pager);
+
+        return response;
+    }
+
+    @ApiOperation(value = "热门排行帖子-得赞最多-月排行", notes = "热门排行帖子-得赞最多-月排行", response = Response.class)
+    @RequestMapping(value = "hot_range/search_most_zan_post_in_current_month", method = RequestMethod.GET)
+    public Response searchMostZanPostInCurrentMonth(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                    @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<PostVo> list = facadeDiscover.searchMostZanPostListInCurrentMonth(pager);
+        pager.result(list);
+        response.setData(pager);
+
+        return response;
+    }
+
+    @ApiOperation(value = "热门排行帖子-收藏最多-总排行", notes = "热门排行帖子-收藏最多-总排行", response = Response.class)
+    @RequestMapping(value = "hot_range/search_most_collect_post_in_all", method = RequestMethod.GET)
+    public Response searchMostCollectPostInAll(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                               @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<PostVo> list = facadeDiscover.searchMostCollectPostListInAll(pager);
+        pager.result(list);
+        response.setData(pager);
+
+        return response;
+    }
+
+    @ApiOperation(value = "热门排行帖子-收藏最多-月排行", notes = "热门排行帖子-收藏最多-月排行", response = Response.class)
+    @RequestMapping(value = "hot_range/search_most_collect_post_in_current_month", method = RequestMethod.GET)
+    public Response searchMostCollectPostInCurrentMonth(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                        @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<PostVo> list = facadeDiscover.searchMostCollectPostListInCurrentMonth(pager);
+        pager.result(list);
+        response.setData(pager);
+
+        return response;
+    }
+
+    @ApiOperation(value = "热门排行作者-粉丝最多-总排行", notes = "热门排行作者-粉丝最多-总排行", response = Response.class)
+    @RequestMapping(value = "hot_range/search_most_fans_author_in_all", method = RequestMethod.GET)
+    public Response searchMostFansAuthorInAll(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                              @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<UserVo> pager = new Paging<UserVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<UserVo> list = facadeDiscover.searchMostFansAuthorInAll(pager);
+        pager.result(list);
+        response.setData(pager);
+
+        return response;
+    }
+
+    @ApiOperation(value = "热门排行作者-粉丝最多-月排行", notes = "热门排行作者-粉丝最多-月排行", response = Response.class)
+    @RequestMapping(value = "hot_range/search_most_fans_author_in_current_month", method = RequestMethod.GET)
+    public Response searchMostFansAuthorInCurrentMonth(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                       @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<UserVo> pager = new Paging<UserVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<UserVo> list = facadeDiscover.searchMostFansAuthorInCurrentMonth(pager);
+        pager.result(list);
+        response.setData(pager);
+
+        return response;
+    }
+
+    @ApiOperation(value = "热门排行作者-评论最多-总排行", notes = "热门排行作者-评论最多-总排行", response = Response.class)
+    @RequestMapping(value = "hot_range/search_most_comment_author_in_all", method = RequestMethod.GET)
+    public Response searchMostCommentAuthorInAll(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                 @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<UserVo> pager = new Paging<UserVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<UserVo> list = facadeDiscover.searchMostCommentAuthorInAll(pager);
+        pager.result(list);
+        response.setData(pager);
+
+        return response;
+    }
+
+    @ApiOperation(value = "热门排行作者-评论最多-月排行", notes = "热门排行作者-评论最多-月排行", response = Response.class)
+    @RequestMapping(value = "hot_range/search_most_comment_author_in_current_month", method = RequestMethod.GET)
+    public Response searchMostCommentAuthorInCurrentMonth(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                          @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<UserVo> pager = new Paging<UserVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<UserVo> list = facadeDiscover.searchMostCommentAuthorInCurrentMonth(pager);
+        pager.result(list);
+        response.setData(pager);
+
+        return response;
+    }
+
+    @ApiOperation(value = "热门排行作者-最爱发帖-总排行", notes = "热门排行作者-最爱发帖-总排行", response = Response.class)
+    @RequestMapping(value = "hot_range/search_most_post_author_in_all", method = RequestMethod.GET)
+    public Response searchMostPostAuthorInAll(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                              @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<UserVo> pager = new Paging<UserVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<UserVo> list = facadeDiscover.searchMostPostAuthorInAll(pager);
+        pager.result(list);
+        response.setData(pager);
+
+        return response;
+    }
+
+    @ApiOperation(value = "热门排行作者-最爱发帖-月排行", notes = "热门排行作者-最爱发帖-月排行", response = Response.class)
+    @RequestMapping(value = "hot_range/search_most_post_author_in_current_month", method = RequestMethod.GET)
+    public Response searchMostPostAuthorInCurrentMonth(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                       @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<UserVo> pager = new Paging<UserVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<UserVo> list = facadeDiscover.searchMostPostAuthorInCurrentMonth(pager);
+        pager.result(list);
+        response.setData(pager);
+
+        return response;
+    }
+
+
+
+
 }

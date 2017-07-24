@@ -22,6 +22,12 @@ public class IpUtil {
     private static final Logger log = LoggerFactory.getLogger(IpUtil.class);
 
 
+    /**
+     * 获取请求的客户端的公网ip（本地localhost调试不可用）
+     *
+     * @param request
+     * @return
+     */
     public static String getRequestClientIp(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
         if (StringUtils.isNotEmpty(ip) && !"unKnown".equalsIgnoreCase(ip)) {
@@ -43,6 +49,8 @@ public class IpUtil {
 
 
     /***
+     * 调用淘宝ip库
+     *
      * @param urlStr    请求的地址
      * @param content   请求的参数 格式为：name=xxx&pwd=xxx
      * @param encoding  服务器端请求编码。如GBK,UTF-8等

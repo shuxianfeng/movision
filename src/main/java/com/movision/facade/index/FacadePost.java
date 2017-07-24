@@ -1596,7 +1596,8 @@ public class FacadePost {
     }
 
     /**
-     * 帖子浏览量
+     * 帖子浏览量 (公共方法)
+     *
      * @param list
      * @return
      */

@@ -143,4 +143,18 @@ public interface UserMapper {
 
     UserVo queryUserInfoHompage(int userid);
 
+    List<UserVo> findAllMostFansAuthorInAll(RowBounds rowBounds);
+
+    List<UserVo> findAllMostFansAuthorInCurrentMonth(RowBounds rowBounds);
+
+    List<UserVo> findAllMostCommentAuthorInAll(RowBounds rowBounds);
+
+    List<UserVo> findAllMostCommentAuthorInCurrentMonth(RowBounds rowBounds);
+
+    List<UserVo> findAllMostPostAuthorInAll(RowBounds rowBounds);
+
+    List<UserVo> findAllMostPostAuthorInCurrentMonth(RowBounds rowBounds);
+
+
+
 }
