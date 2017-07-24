@@ -12,6 +12,7 @@
         <result column="forwardsum" jdbcType="INTEGER" property="forwardsum"/>
         <result column="collectsum" jdbcType="INTEGER" property="collectsum"/>
         <result column="isactive" jdbcType="INTEGER" property="isactive"/>
+        <result column="partsum_enddays" jdbcType="INTEGER" property="partsum_enddays"/>
         <result column="activetype" jdbcType="INTEGER" property="activetype"/>
         <result column="activefee" jdbcType="DOUBLE" property="activefee"/>
         <result column="iscontribute" jdbcType="INTEGER" property="iscontribute"/>
@@ -36,9 +37,9 @@
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
-        isactive, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
+        isactive, partsum_enddays, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
         hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,ishot_order
-  </sql>
+    </sql>
 
     <!--基础查询语句-->
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -981,10 +982,7 @@
                 ishot=#{ishot,jdbcType=INTEGER},
             </if>
             <if test="oprtime!=null">
-                oprtime=#{oprtime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="ishotorder != null">
-                ishot_order = #{ishotorder,jdbcType=INTEGER}
+                oprtime=#{oprtime,jdbcType=TIMESTAMP}
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -1322,15 +1320,11 @@
     </select>
     <!--查询活动列表-->
     <select id="findAllActiveTOByList" resultType="com.movision.mybatis.post.entity.PostActiveList">
-        SELECT *,
-        (SELECT COUNT(1) FROM yw_active_period WHERE postid = p.id AND p.activetype = 2) AS apply,
-        (SELECT COUNT(1) FROM yw_post WHERE activeid = p.id AND p.activetype = 0 AND p.iscontribute = 1 AND isdel = 0)
-        AS contribute p
-        FROM yw_post WHERE p.isdel=0 AND p.isactive=1
+        SELECT * FROM yw_post WHERE isdel=0 AND isactive=1
         <if test="loginid!=null">
-            AND p.userid=#{loginid,jdbcType=INTEGER}
+            AND userid=#{loginid,jdbcType=INTEGER}
         </if>
-        ORDER BY p.intime DESC
+        ORDER BY intime DESC
     </select>
     <!-- 逻辑删除帖子 -->
     <update id="deletePost" parameterType="java.lang.Integer">
@@ -1596,10 +1590,7 @@
                 ishot,
             </if>
             <if test="oprtime!=null">
-                oprtime,
-            </if>
-            <if test="ishotorder != null">
-                ishot_order
+                oprtime
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -1652,10 +1643,7 @@
                 #{ishot,jdbcType=INTEGER},
             </if>
             <if test="oprtime!=null">
-                #{oprtime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="ishotorder != null">
-                #{ishotorder,jdbcType=INTEGER}
+                #{oprtime,jdbcType=TIMESTAMP}
             </if>
         </trim>
     </insert>
