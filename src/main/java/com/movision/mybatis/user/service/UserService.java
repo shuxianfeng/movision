@@ -744,7 +744,7 @@ public class UserService {
 
     public List<Author> getNearAuthor(Paging<Author> pager, Map<String, Object> map){
         try {
-            log.info("根据传入的手机丁可为经纬度查询当前用户周边30公里内的所有作者");
+            log.info("根据传入的手机定位经纬度查询当前用户周边30公里内的所有作者");
             return userMapper.getNearAuthor(pager.getRowBounds(), map);
         }catch (Exception e){
             log.error("根据传入的手机定位经纬度查询当前用户周边30公里内的所有作者失败", e);
