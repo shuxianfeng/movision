@@ -109,11 +109,12 @@
     <!--查询yw_post表中所有热门活动列表-->
     <select id="queryHotActiveList" resultType="com.movision.mybatis.post.entity.ActiveVo">
         SELECT t.* FROM (
-        SELECT
-        t1.id,t1.title,t1.subtitle,t1.postcontent,t1.isactive,t1.activetype,t1.activefee,t1.iscontribute,t1.ishot,t1.coverimg,t1.hotimgurl,t1.intime,t1.isdel,t2.begintime,t2.endtime
-        FROM yw_post t1
-        LEFT JOIN yw_active_period t2
-        ON t1.id = t2.postid
+            SELECT
+            t1.id,t1.title,t1.subtitle,t1.postcontent,t1.isactive,t1.partsum_enddays,t1.activetype,t1.activefee,
+            t1.iscontribute,t1.ishot,t1.coverimg,t1.hotimgurl,t1.intime,t1.isdel,t2.begintime,t2.endtime
+            FROM yw_post t1
+            LEFT JOIN yw_active_period t2
+            ON t1.id = t2.postid
         ) t
         WHERE t.isactive = '1' AND t.ishot = '1' AND t.isdel = '0'
         ORDER BY t.intime DESC
