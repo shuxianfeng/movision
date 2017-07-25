@@ -12,7 +12,7 @@
         <result column="forwardsum" jdbcType="INTEGER" property="forwardsum"/>
         <result column="collectsum" jdbcType="INTEGER" property="collectsum"/>
         <result column="isactive" jdbcType="INTEGER" property="isactive"/>
-        <result column="partsum_enddays" jdbcType="INTEGER" property="partsum_enddays"/>
+        <result column="partsum_enddays" jdbcType="INTEGER" property="partsumEnddays"/>
         <result column="activetype" jdbcType="INTEGER" property="activetype"/>
         <result column="activefee" jdbcType="DOUBLE" property="activefee"/>
         <result column="iscontribute" jdbcType="INTEGER" property="iscontribute"/>
@@ -38,7 +38,7 @@
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
         isactive, partsum_enddays, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
-        hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,ishot_order
+        hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid
     </sql>
 
     <!--基础查询语句-->
@@ -111,11 +111,12 @@
     <!--查询yw_post表中所有热门活动列表-->
     <select id="queryHotActiveList" resultType="com.movision.mybatis.post.entity.ActiveVo">
         SELECT t.* FROM (
-        SELECT
-        t1.id,t1.title,t1.subtitle,t1.postcontent,t1.isactive,t1.activetype,t1.activefee,t1.iscontribute,t1.ishot,t1.coverimg,t1.hotimgurl,t1.intime,t1.isdel,t2.begintime,t2.endtime
-        FROM yw_post t1
-        LEFT JOIN yw_active_period t2
-        ON t1.id = t2.postid
+            SELECT
+            t1.id,t1.title,t1.subtitle,t1.postcontent,t1.isactive,t1.partsum_enddays,t1.activetype,t1.activefee,
+            t1.iscontribute,t1.ishot,t1.coverimg,t1.hotimgurl,t1.intime,t1.isdel,t2.begintime,t2.endtime
+            FROM yw_post t1
+            LEFT JOIN yw_active_period t2
+            ON t1.id = t2.postid
         ) t
         WHERE t.isactive = '1' AND t.ishot = '1' AND t.isdel = '0'
         ORDER BY t.intime DESC
@@ -2117,7 +2118,8 @@
             resultType="com.movision.mybatis.postLabel.entity.PostLabel">
         SELECT yw_post_label.* FROM yw_post_label_relation LEFT JOIN yw_post_label ON
         yw_post_label.id=yw_post_label_relation.labelid
-        WHERE yw_post_label_relation.postid=#{postid,jdbcType=INTEGER}
+        WHERE yw_post_label_relation.postid=#{postid}
+        ORDER by yw_post_label.type
     </select>
     <select id="queryLabelPost" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     SELECT yw_post.heat_value FROM yw_post_label_relation LEFT JOIN yw_post ON yw_post.id=yw_post_label_relation.postid WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER}
@@ -2181,6 +2183,67 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
             resultType="com.movision.mybatis.post.entity.Post">
         SELECT * FROM yw_post WHERE activeid = #{id,jdbcType=INTEGER} AND isactive = 0 AND isdel = 0
     </select>
+
+    <select id="findAllHotCommentPostInAll" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.id, p.title, p.commentsum, p.coverimg,
+        p.userid, u.nickname, u.photo
+        FROM yw_post p
+        LEFT JOIN yw_user u ON p.userid = u.id
+        WHERE p.isdel = 0
+        ORDER BY p.commentsum DESC
+    </select>
+
+
+    <select id="findAllHotCommentPostInCurrentMonth" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.id, p.title, COUNT(c.id) AS commentCount, p.coverimg,
+        p.userid, p.intime, u.nickname, u.photo
+        FROM yw_post p
+        LEFT JOIN yw_post_comment c ON p.id = c.postid
+        LEFT JOIN yw_user u ON p.userid = u.id
+        WHERE DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+        AND p.isdel = 0
+        GROUP BY p.id ORDER BY commentCount DESC
+    </select>
+
+    <select id="findAllMostZanPostInAll" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.id, p.title, p.coverimg, p.zansum,
+        p.userid, u.nickname, u.photo
+        FROM yw_post p
+        LEFT JOIN yw_user u ON p.userid = u.id
+        WHERE p.isdel = 0
+        ORDER BY p.zansum DESC
+    </select>
+
+    <select id="findAllMostZanPostInCurrentMonth" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.id, p.title, p.coverimg, p.zansum,
+        p.userid, u.nickname, u.photo
+        FROM yw_post p
+        LEFT JOIN yw_user u ON p.userid = u.id
+        WHERE p.isdel = 0
+        AND DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+        ORDER BY p.zansum DESC
+    </select>
+
+    <select id="findAllMostCollectInAll" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.id, p.title, p.coverimg, p.collectsum,
+        p.userid, u.nickname, u.photo
+        FROM yw_post p
+        LEFT JOIN yw_user u ON p.userid = u.id
+        WHERE p.isdel = 0
+        ORDER BY p.collectsum DESC
+    </select>
+
+    <select id="findAllMostCollectInCurrentMonth" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.id, p.title, p.coverimg, p.collectsum,
+        p.userid, u.nickname, u.photo
+        FROM yw_post p
+        LEFT JOIN yw_user u ON p.userid = u.id
+        WHERE p.isdel = 0
+        AND DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+        ORDER BY p.collectsum DESC
+    </select>
+
+
 
     <select id="queryActiveByOrderid" resultType="java.lang.Integer">
         SELECT ishot_order FROM yw_post WHERE isactive = 1 AND circleid IS NULL AND isdel = 0 AND ishot =1 AND ishot_order IS NOT NULL

@@ -48,6 +48,9 @@ public class FacadeDiscover {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private FacadePost facadePost;
+
     public Map<String, Object> queryDiscoverIndexData(String userid) {
 
         HashMap<String, Object> pmap = new HashMap();
@@ -112,7 +115,6 @@ public class FacadeDiscover {
         //循环查询活动的参与人数和活动的距离结束天数
         for (int i = 0; i < hotActiveList.size(); i++) {
             ActiveVo ao = hotActiveList.get(i);
-            System.out.println("测试partsum_enddays>>>>>>>>"+ao.getPartsum_enddays());
             //计算距离结束时间
             Date begin = ao.getBegintime();
             Date end = ao.getEndtime();
@@ -131,12 +133,100 @@ public class FacadeDiscover {
         return map;
     }
 
+    /**
+     * 查询评论最多的帖子
+     *
+     * @param pager
+     * @return
+     */
     public List<PostVo> searchHotCommentPostInAll(Paging<PostVo> pager) {
+        //1 查找最热帖子集合
+        List<PostVo> postVoList = postService.findAllHotCommentPostInAll(pager);
 
+        AddCountViewAndLabel(postVoList);
 
-        return null;
+        return postVoList;
     }
 
+    /**
+     * 统计浏览数和标签
+     *
+     * @param postVoList
+     */
+    private void AddCountViewAndLabel(List<PostVo> postVoList) {
+        //2 统计浏览数（循环）
+        facadePost.countView(postVoList);
+        //3 统计标签（循环）
+        facadePost.findPostLabel(postVoList);
+    }
 
+    /**
+     * 查询当月评论最多的帖子
+     *
+     * @param pager
+     * @return
+     */
+    public List<PostVo> searchHotCommentPostInCurrentMonth(Paging<PostVo> pager) {
+        List<PostVo> postVoList = postService.findAllHotCommentPostInCurrentMonth(pager);
 
+        AddCountViewAndLabel(postVoList);
+
+        return postVoList;
+    }
+
+    public List<PostVo> searchMostZanPostListInAll(Paging<PostVo> paging) {
+        List<PostVo> postVoList = postService.findAllMostZanPostInAll(paging);
+
+        AddCountViewAndLabel(postVoList);
+
+        return postVoList;
+    }
+
+    public List<PostVo> searchMostZanPostListInCurrentMonth(Paging<PostVo> paging) {
+        List<PostVo> postVoList = postService.findAllMostZanPostInCurrentMonth(paging);
+
+        AddCountViewAndLabel(postVoList);
+
+        return postVoList;
+    }
+
+    public List<PostVo> searchMostCollectPostListInAll(Paging<PostVo> paging) {
+        List<PostVo> postVoList = postService.findAllMostCollectInAll(paging);
+
+        AddCountViewAndLabel(postVoList);
+
+        return postVoList;
+    }
+
+    public List<PostVo> searchMostCollectPostListInCurrentMonth(Paging<PostVo> paging) {
+        List<PostVo> postVoList = postService.findAllMostCollectInCurrentMonth(paging);
+
+        AddCountViewAndLabel(postVoList);
+
+        return postVoList;
+    }
+
+    public List<UserVo> searchMostFansAuthorInAll(Paging<UserVo> paging) {
+        return userService.findAllMostFansAuthorInAll(paging);
+    }
+
+    public List<UserVo> searchMostFansAuthorInCurrentMonth(Paging<UserVo> paging) {
+        return userService.findAllMostFansAuthorInCurrentMonth(paging);
+    }
+
+    public List<UserVo> searchMostCommentAuthorInAll(Paging<UserVo> paging) {
+        return userService.findAllMostCommentAuthorInAll(paging);
+    }
+
+    public List<UserVo> searchMostCommentAuthorInCurrentMonth(Paging<UserVo> paging) {
+        return userService.findAllMostCommentAuthorInCurrentMonth(paging);
+    }
+
+    public List<UserVo> searchMostPostAuthorInAll(Paging<UserVo> paging) {
+        return userService.findAllMostPostAuthorInAll(paging);
+    }
+
+    public List<UserVo> searchMostPostAuthorInCurrentMonth(Paging<UserVo> paging) {
+        return userService.findAllMostPostAuthorInCurrentMonth(paging);
+    }
 }

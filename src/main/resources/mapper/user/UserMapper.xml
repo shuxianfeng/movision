@@ -112,30 +112,30 @@
     </select>
 
     <!--查询当前用户使用的APP最新版本号-->
-    <select id="queryVersion" parameterType="java.lang.Integer" resultType="java.lang.String" >
+    <select id="queryVersion" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT version FROM yw_app_version WHERE type = #{type,jdbcType=INTEGER}
     </select>
 
     <!--美番2.0发现页查询热门作者-->
-    <select id="queryHotUserList" resultType="com.movision.mybatis.user.entity.UserVo" >
+    <select id="queryHotUserList" resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT t1.id, t1.nickname, t1.photo, t1.fans FROM (
             (SELECT * FROM yw_user WHERE isrecommend = '1' AND id != '-1')
             UNION
             (SELECT * FROM yw_user WHERE id != '-1' ORDER BY heat_value DESC limit 10)
         ) t1 limit 10
     </select>
-    
+
     <!--美番2.0发现作者页查询推荐作者列表-->
-    <select id="getHotAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author" >
+    <select id="getHotAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author">
         SELECT t1.id, t1.nickname, t1.photo, t1.phone FROM (
-            (SELECT * FROM yw_user WHERE isrecommend = '1' AND id != '-1')
-            UNION
-            (SELECT * FROM yw_user WHERE id != '-1' AND heat_value > '0' ORDER BY heat_value DESC)
+        (SELECT * FROM yw_user WHERE isrecommend = '1' AND id != '-1')
+        UNION
+        (SELECT * FROM yw_user WHERE id != '-1' AND heat_value > '0' ORDER BY heat_value DESC)
         ) t1
         <where>
             <if test="userid != null || userid != ''">
                 t1.id NOT IN (
-                  SELECT interestedusers FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER}
+                SELECT interestedusers FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER}
                 )
                 AND t1.id != #{userid,jdbcType=INTEGER}
             </if>
@@ -144,7 +144,7 @@
     </select>
 
     <!--美番2.0发现作者页查询兴趣作者列表-->
-    <select id="getInterestAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author" >
+    <select id="getInterestAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author">
         SELECT t.* FROM (
             (SELECT id, nickname, photo, phone, heat_value FROM yw_user WHERE id IN (
                 SELECT userid FROM yw_post WHERE circleid IN (
@@ -171,30 +171,30 @@
     </select>
 
     <!--美番2.0发现作者页查询附近作者列表-->
-    <select id="getNearAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author" >
+    <select id="getNearAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author">
         SELECT t.* FROM
-            (SELECT id, nickname, photo, phone, ROUND(
-                6378.138 * 2 * ASIN(
-                    SQRT(
-                      POW(
-                        SIN(
-                            (
-                              #{lat,jdbcType=DOUBLE} * PI() / 180 - latitude * PI() / 180
-                            ) / 2
-                        ),
-                        2
-                    ) + COS(#{lat,jdbcType=DOUBLE} * PI() / 180) * COS(latitude * PI() / 180) * POW(
-                            SIN(
-                                (
-                                    #{lng,jdbcType=DOUBLE} * PI() / 180 - longitude * PI() / 180
-                                ) / 2
-                            ),
-                          2
-                        )
-                      )
-                ) * 1000
-              ) AS distance FROM yw_user
-            ) t
+        (SELECT id, nickname, photo, phone, ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        #{lat,jdbcType=DOUBLE} * PI() / 180 - latitude * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS(#{lat,jdbcType=DOUBLE} * PI() / 180) * COS(latitude * PI() / 180) * POW(
+        SIN(
+        (
+        #{lng,jdbcType=DOUBLE} * PI() / 180 - longitude * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        ) AS distance FROM yw_user
+        ) t
         <where>
             30000 > t.distance
             AND t.id != '-1'
@@ -264,8 +264,8 @@
             <if test="sign != null">
                 sign,
             </if>
-                attention,
-                fans,
+            attention,
+            fans,
             <if test="points!=null">
                 points,
             </if>
@@ -284,10 +284,10 @@
             <if test="city != null">
                 city,
             </if>
-                intime,
-                growth,
-                level,
-                status,
+            intime,
+            growth,
+            level,
+            status,
             <if test="applydate!=null">
                 applydate,
             </if>
@@ -1208,4 +1208,66 @@
             resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT * FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
     </select>
+
+    <select id="findAllMostFansAuthorInAll" resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT id, nickname, photo, fans
+        FROM yw_user
+        WHERE STATUS = 0
+        ORDER BY fans DESC
+    </select>
+
+    <select id="findAllMostFansAuthorInCurrentMonth" resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT u.id, u.nickname, u.photo, u.fans
+        FROM yw_user u
+        JOIN yw_follow_user fu ON u.id = fu.interestedusers
+        WHERE u.status = 0
+        AND DATE_FORMAT( fu.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+        GROUP BY u.id
+        ORDER BY u.fans DESC
+    </select>
+
+    <select id="findAllMostCommentAuthorInAll" resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT u.id, u.nickname, u.photo, COUNT(c.id) AS commentCount
+        FROM yw_user u
+        LEFT JOIN yw_post_comment c ON u.id = c.userid
+        WHERE u.status = 0
+        AND c.isdel = 0
+        AND c.status = 1
+        GROUP BY u.id
+        ORDER BY commentCount DESC
+    </select>
+
+    <select id="findAllMostCommentAuthorInCurrentMonth" resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT u.id, u.nickname, u.photo, COUNT(c.id) AS commentCount
+        FROM yw_user u
+        LEFT JOIN yw_post_comment c ON u.id = c.userid
+        WHERE u.status = 0
+        AND c.isdel = 0
+        AND c.status = 1
+        AND DATE_FORMAT( c.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+        GROUP BY u.id
+        ORDER BY commentCount DESC
+    </select>
+
+    <select id="findAllMostPostAuthorInAll" resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT u.id, u.nickname, u.photo, COUNT(p.id) AS postsum
+        FROM yw_user u
+        LEFT JOIN yw_post p ON u.id = p.userid
+        WHERE u.status = 0
+        AND p.isdel = 1 AND p.isactive = 0
+        GROUP BY u.id
+        ORDER BY postsum DESC
+    </select>
+
+    <select id="findAllMostPostAuthorInCurrentMonth" resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT u.id, u.nickname, u.photo, COUNT(p.id) AS postsum
+        FROM yw_user u
+        LEFT JOIN yw_post p ON u.id = p.userid
+        WHERE u.status = 0
+        AND p.isdel = 1 AND p.isactive = 0
+        AND DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+        GROUP BY u.id
+        ORDER BY postsum DESC
+    </select>
+
 </mapper>
