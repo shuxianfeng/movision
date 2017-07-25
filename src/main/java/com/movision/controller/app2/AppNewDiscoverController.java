@@ -129,7 +129,7 @@ public class AppNewDiscoverController {
         return response;
     }
 
-    @ApiOperation(value = "热门排行帖子-达人评论-总排行", notes = "热门排行帖子-达人评论-总排行", response = Response.class)
+    /*@ApiOperation(value = "热门排行帖子-达人评论-总排行", notes = "热门排行帖子-达人评论-总排行", response = Response.class)
     @RequestMapping(value = "hot_range/search_hot_comment_post_in_all", method = RequestMethod.GET)
     public Response searchHotCommentPostInAll(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
                                               @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
@@ -295,6 +295,22 @@ public class AppNewDiscoverController {
         pager.setRows(list);
         log.debug("paging实体:" + pager.toString());
         response.setData(pager);
+
+        return response;
+    }*/
+
+    @ApiOperation(value = "热门排行帖子", notes = "热门排行帖子", response = Response.class)
+    @RequestMapping(value = "hot_range", method = RequestMethod.GET)
+    public Response searchHotRange(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                   @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                   @ApiParam("统计类型。总排行：0， 月排行：1") @RequestParam(required = false, defaultValue = "0") int type,
+                                   @ApiParam("统计标题。帖子评论最多：0， 帖子浏览最多：1， 帖子点赞最多：2， 帖子收藏最多：3，" +
+                                           "作者粉丝最多：4， 作者评论最多：5， 作者发帖最多：6")
+                                   @RequestParam(required = false, defaultValue = "0") int title) {
+
+        Response response = new Response();
+
+        response.setData(facadeDiscover.searchHotRange(pageNo, pageSize, title, type));
 
         return response;
     }

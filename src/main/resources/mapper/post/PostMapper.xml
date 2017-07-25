@@ -1321,11 +1321,17 @@
     </select>
     <!--查询活动列表-->
     <select id="findAllActiveTOByList" resultType="com.movision.mybatis.post.entity.PostActiveList">
-        SELECT * FROM yw_post WHERE isdel=0 AND isactive=1
+        SELECT p.id,p.circleid,p.title,p.subtitle,p.postcontent,p.zansum,p.commentsum,
+        p.forwardsum,p.collectsum,p.isactive,p.partsum_enddays,p.type,p.ishot,
+        p.isessence,p.orderid,p.coverimg,p.hotimgurl,p.intime,p.totalpoint,p.isdel,
+        p.isessencepool,p.activetype,p.activefee,p.iscontribute,p.essencedate,p.userid,
+        p.oprtime,p.heat_value,p.city,p.ishot_order,
+        (SELECT COUNT(1) FROM yw_post WHERE activeid = p.id) AS activeid
+        FROM yw_post p WHERE p.isdel=0 AND p.isactive=1
         <if test="loginid!=null">
-            AND userid=#{loginid,jdbcType=INTEGER}
+            AND p.userid=#{loginid,jdbcType=INTEGER}
         </if>
-        ORDER BY intime DESC
+        ORDER BY p.intime DESC
     </select>
     <!-- 逻辑删除帖子 -->
     <update id="deletePost" parameterType="java.lang.Integer">
@@ -2103,7 +2109,7 @@
         select * from yw_post where circleid=#{circleid,jdbcType=INTEGER} and isdel=0 order by heat_value desc
     </select>
     <select id="queryCityCode" parameterType="java.lang.String" resultType="java.lang.String">
-        SELECT code FROM yw_city WHERE  name=#{area,jdbcType=VARCHAR}
+        SELECT code FROM yw_city WHERE name LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
     </select>
     <select id="queryCityPost" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.lang.String">
         SELECT  * FROM  yw_post WHERE isdel=0 AND city=#{citycode,jdbcType=VARCHAR} ORDER BY  heat_value DESC

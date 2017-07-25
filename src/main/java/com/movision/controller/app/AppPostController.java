@@ -550,7 +550,7 @@ public class AppPostController {
     }
 
     /**
-     * 模块式老年乐发布帖子
+     * 模块式发布帖子
      *
      * @param request
      * @param userid
@@ -571,14 +571,13 @@ public class AppPostController {
                                        @ApiParam(value = "帖子内容") @RequestParam String postcontent,
                                        @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,
                                        @ApiParam(value = "帖子封面图片url字符串") @RequestParam String coverimg,
-                                       @ApiParam(value = "发布帖子时所在的城市，传中文") @RequestParam String cityname,
-                                       @ApiParam(value = "帖子标签名称，以逗号分隔") @RequestParam String labels,
+                                       @ApiParam(value = "标签实体集合，json字符串形式") @RequestParam String labellist,
                                        @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids) {
 
 
         Response response = new Response();
 
-        Map count = facadePost.releaseModularPost(request, userid, circleid, title, postcontent, isactive, coverimg, proids);
+        Map count = facadePost.releaseModularPost(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist);
 
         if (count.get("flag").equals(-2)) {
             response.setCode(300);

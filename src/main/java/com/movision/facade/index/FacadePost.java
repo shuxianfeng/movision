@@ -145,8 +145,7 @@ public class FacadePost {
     private  OpularSearchTermsService opularSearchTermsService;
     @Autowired
     private CommentService commentService;
-    @Autowired
-    private FacadeHeatValue facadeHeatValue;
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -1029,7 +1028,8 @@ public class FacadePost {
      */
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
-    public Map releaseModularPost(HttpServletRequest request, String userid, String circleid, String title, String postcontent, String isactive, String coverimg, String proids) {
+    public Map releaseModularPost(HttpServletRequest request, String userid, String circleid, String title,
+                                  String postcontent, String isactive, String coverimg, String proids, String labellist) {
         Map map = new HashMap();
         //这里需要根据userid判断当前登录的用户是否有发帖权限
         //查询当前圈子的开放范围
@@ -1055,6 +1055,22 @@ public class FacadePost {
                 int flag = post.getId();//返回的主键--帖子id
                 //再保存帖子中分享的商品列表(如果商品id字段不为空)
                 insertPostShareGoods(proids, flag);
+                //插入标签表数据
+                Gson gson = new Gson();
+                List<PostLabel> postLabelList = gson.fromJson(labellist, List.class);
+                postLabelService.batchInsert(postLabelList);
+                //插入标签和帖子关系数据
+                List<PostLabelRelation> postLabelRelationList = new ArrayList<>();
+                for (PostLabel postLabel : postLabelList) {
+                    PostLabelRelation relation = new PostLabelRelation();
+                    relation.setPostid(flag);
+                    //查询新增的标签id，放入关系实体 // TODO: 2017/7/25  
+
+                    postLabelRelationList.add(relation);
+                }
+                postLabelRelationService.batchAdd(postLabelRelationList);
+
+
 
                 pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
 
@@ -1275,11 +1291,8 @@ public class FacadePost {
 
         if (userid == null) {
             //未登录
-            list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
-            findUser(list);
-            findPostLabel(list);
-            findHotComment(list);
-            countView(list);
+            list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+            list = NotLoginretuenList(list, paging);
             return list;
         } else {
             //已登录
@@ -1324,15 +1337,11 @@ public class FacadePost {
                 posts.add(post);//把mongodb转为post实体
             }
             criclelist.removeAll(posts);//剩下的帖子
-            list = retuenList(criclelist, userid);
+            list = retuenList(criclelist, userid, paging);
             return list;
         } else {
-            list = postService.findAllPostHeatValue(paging);
-            findUser(list);
-            findPostLabel(list);
-            insertmongo(list, userid);
-            findHotComment(list);
-            countView(list);
+            list = postService.findAllPostHeatValue();
+            list = retuenList(list, userid, paging);
             return list;
         }
     }
@@ -1358,15 +1367,11 @@ public class FacadePost {
             }
             //把看过的帖子过滤掉
             alllist.removeAll(posts);//alllist是剩余的帖子
-            list = retuenList(alllist, userid);
+            list = retuenList(alllist, userid, paging);
         } else {
             //登录情况下但是mongodb里面没有刷新记录
-            list = postService.findAllPostHeatValue(paging);
-            findUser(list);
-            findPostLabel(list);
-            insertmongo(list, userid);
-            findHotComment(list);
-            countView(list);
+            list = postService.findAllPostHeatValue();
+            list = retuenList(list, userid, paging);
             return list;
         }
         return list;
@@ -1384,11 +1389,8 @@ public class FacadePost {
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
         if (userid == null) {//未登录
-            list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
-            findUser(list);
-            findPostLabel(list);
-            findHotComment(list);
-            countView(list);
+            list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+            list = NotLoginretuenList(list, paging);
             return list;
         } else {//已登录
             //根据地区查询帖子
@@ -1404,14 +1406,10 @@ public class FacadePost {
                 //根据city查询帖子
                 List<PostVo> postVos = postService.queryCityPost(citycode);
                 postVos.removeAll(posts);
-                list = retuenList(postVos, userid);
+                list = retuenList(postVos, userid, paging);
             } else {//登录但是刷新列表中没有帖子
-                list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
-                findUser(list);
-                findPostLabel(list);
-                insertmongo(list, userid);
-                findHotComment(list);
-                countView(list);
+                list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+                list = retuenList(list, userid, paging);
                 return list;
             }
         }
@@ -1430,11 +1428,8 @@ public class FacadePost {
         List<PostVo> posts = new ArrayList<>();
         List<PostVo> list = null;
         if (userid == null) {
-            list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
-            findUser(list);
-            findPostLabel(list);
-            findHotComment(list);
-            countView(list);
+            list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+            list = NotLoginretuenList(list, paging);
             return list;
         } else {
             listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//用户有没有看过
@@ -1447,15 +1442,11 @@ public class FacadePost {
                 //根据圈子id查询帖子
                 List<PostVo> postVos = postService.queryPostCrile(circleid);
                 postVos.removeAll(posts);
-                list = retuenList(postVos, userid);
+                list = retuenList(postVos, userid, paging);
             } else {
                 //登录但是刷新列表中没有帖子
-                list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
-                findUser(list);
-                findPostLabel(list);
-                findHotComment(list);
-                insertmongo(list, userid);
-                countView(list);
+                list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+                list = retuenList(list, userid, paging);
                 return list;
             }
         }
@@ -1498,14 +1489,10 @@ public class FacadePost {
                     posts.add(post);//把mongodb转为post实体
                 }
                 crileidPost.removeAll(posts);//过滤掉看过的帖子crileidPost就是剩下的帖子
-                list = retuenList(crileidPost, userid);
+                list = retuenList(crileidPost, userid, paging);
             } else {
-                list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
-                findUser(list);
-                findPostLabel(list);
-                findHotComment(list);
-                insertmongo(list, userid);
-                countView(list);
+                list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+                list = retuenList(list, userid, paging);
                 return list;
         }
         return list;
@@ -1521,11 +1508,8 @@ public class FacadePost {
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
         if (userid == null) {
-            list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
-            findUser(list);
-            findPostLabel(list);
-            findHotComment(list);
-            countView(list);
+            list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+            list = NotLoginretuenList(list, paging);
             return list;
         } else {
             listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//用户有没有看过
@@ -1538,15 +1522,11 @@ public class FacadePost {
                 //根据标签查询帖子
                 List<PostVo> postVos = postService.queryLabelAllPost(labelid);
                 postVos.removeAll(posts);
-                list = retuenList(postVos, userid);
+                list = retuenList(postVos, userid, paging);
             } else {
                 //登录但是刷新列表中没有帖子
-                list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
-                findUser(list);
-                findPostLabel(list);
-                findHotComment(list);
-                insertmongo(list, userid);
-                countView(list);
+                list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+                list = retuenList(list, userid, paging);
                 return list;
             }
             return list;
@@ -1561,27 +1541,39 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    public List retuenList(List<PostVo> lists, String userid) {
+    public List retuenList(List<PostVo> lists, String userid, Paging<PostVo> paging) {
         List<PostVo> list = null;
         if (lists != null) {
-            if (lists.size() >= 10) {
-                list = lists.subList(0, 10);
+            paging.setTotal(lists.size());
+            list = getPageList(lists, paging.getCurPage(), paging.getPageSize());
                 findUser(list);
                 findPostLabel(list);
                 findHotComment(list);
                 countView(list);
-            } else {
-                list = lists.subList(0, lists.size());
-                findUser(list);
-                findPostLabel(list);
-                findHotComment(list);
-                countView(list);
-            }
             insertmongo(list, userid);
         }
         return list;
     }
 
+    /**
+     * 返回数据
+     *
+     * @param lists
+     * @param
+     * @return
+     */
+    public List NotLoginretuenList(List<PostVo> lists, Paging<PostVo> paging) {
+        List<PostVo> list = null;
+        if (lists != null) {
+            paging.setTotal(lists.size());
+            list = getPageList(lists, paging.getCurPage(), paging.getPageSize());
+            findUser(list);
+            findPostLabel(list);
+            findHotComment(list);
+            countView(list);
+        }
+        return list;
+    }
 
 
 
@@ -1593,10 +1585,12 @@ public class FacadePost {
      */
     public List findUser(List<PostVo> list) {
         UserLike userLikes = null;
-        for (int i = 0; i < list.size(); i++) {
-            int userid = list.get(i).getUserid();
-            userLikes = userService.findUser(userid);
-            list.get(i).setUserlike(userLikes);
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                int userid = list.get(i).getUserid();
+                userLikes = userService.findUser(userid);
+                list.get(i).setUserlike(userLikes);
+            }
         }
         return list;
     }
@@ -1608,10 +1602,12 @@ public class FacadePost {
      * @return
      */
     public List countView(List<PostVo> list) {
-        for (int i = 0; i < list.size(); i++) {
-            int postid = list.get(i).getId();
-            int uesrreflushCounts = userRefreshRecordService.postcount(postid);
-            list.get(i).setCountview(uesrreflushCounts);
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                int postid = list.get(i).getId();
+                int uesrreflushCounts = userRefreshRecordService.postcount(postid);
+                list.get(i).setCountview(uesrreflushCounts);
+            }
         }
         return list;
     }
@@ -1624,10 +1620,12 @@ public class FacadePost {
      */
     public List findPostLabel(List<PostVo> list) {
         List<PostLabel> postLabels = null;
-        for (int i = 0; i < list.size(); i++) {
-            int postid = list.get(i).getId();
-            postLabels = postService.queryPostLabel(postid);
-            list.get(i).setPostLabels(postLabels);
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                int postid = list.get(i).getId();
+                postLabels = postService.queryPostLabel(postid);
+                list.get(i).setPostLabels(postLabels);
+            }
         }
         return list;
     }
@@ -1640,14 +1638,16 @@ public class FacadePost {
      */
     public List findHotComment(List<PostVo> list) {
         List<Comment> comments = null;
-        for (int i = 0; i < list.size(); i++) {
-            int postid = list.get(i).getId();
-            //根據帖子id去查所有評論
-            comments = commentService.queryCommentByPost(postid);
-            for (int j = 0; j < comments.size(); j++) {
-                int heatvalue = comments.get(j).getHeatvalue();
-                if (heatvalue >= 50) {
-                    list.get(j).setComments(comments.get(j));
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                int postid = list.get(i).getId();
+                //根據帖子id去查所有評論
+                comments = commentService.queryCommentByPost(postid);
+                for (int j = 0; j < comments.size(); j++) {
+                    int heatvalue = comments.get(j).getHeatvalue();
+                    if (heatvalue >= 50) {
+                        list.get(j).setComments(comments.get(j));
+                    }
                 }
             }
         }

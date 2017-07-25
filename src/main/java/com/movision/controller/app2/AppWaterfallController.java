@@ -55,7 +55,7 @@ public class AppWaterfallController {
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        pager.result(map);
+        pager.setRows(map);
         response.setData(pager);
         return response;
 

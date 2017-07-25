@@ -30,4 +30,10 @@ public interface PostLabelMapper {
     List<PostLabelDetails> findAllQueryPostLabelList(PostLabel label, RowBounds rowBounds);
 
     PostLabelTz queryName(int labelid);
+
+    int batchInsert(List<PostLabel> postLabelList);
+
+    PostLabelDetails queryPostLabelById(PostLabel label);
+
+    void deletePostLabel(PostLabel label);
 }

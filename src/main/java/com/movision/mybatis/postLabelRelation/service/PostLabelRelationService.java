@@ -1,6 +1,7 @@
 package com.movision.mybatis.postLabelRelation.service;
 
 import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.postLabelRelation.mapper.PostLabelRelationMapper;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
@@ -69,6 +70,16 @@ public class PostLabelRelationService {
             return postLabelRelationMapper.postIseecen(postid, paging.getRowBounds());
         } catch (Exception e) {
             log.error("查询帖子失败", e);
+            throw e;
+        }
+    }
+
+    public int batchAdd(List<PostLabelRelation> postLabelRelationList) {
+        try {
+            log.info("批量增加帖子和标签的关系数据");
+            return postLabelRelationMapper.batchInsert(postLabelRelationList);
+        } catch (Exception e) {
+            log.error("批量增加帖子和标签的关系数据失败", e);
             throw e;
         }
     }
