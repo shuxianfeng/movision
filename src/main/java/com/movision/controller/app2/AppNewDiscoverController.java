@@ -303,9 +303,10 @@ public class AppNewDiscoverController {
     @RequestMapping(value = "hot_range", method = RequestMethod.GET)
     public Response searchHotRange(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
                                    @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize,
-                                   @ApiParam("统计类型。总排行：0， 月排行：1") @RequestParam() int type,
+                                   @ApiParam("统计类型。总排行：0， 月排行：1") @RequestParam(required = false, defaultValue = "0") int type,
                                    @ApiParam("统计标题。帖子评论最多：0， 帖子浏览最多：1， 帖子点赞最多：2， 帖子收藏最多：3，" +
-                                           "作者粉丝最多：4， 作者评论最多：5， 作者发帖最多：6") @RequestParam() int title) {
+                                           "作者粉丝最多：4， 作者评论最多：5， 作者发帖最多：6")
+                                   @RequestParam(required = false, defaultValue = "0") int title) {
 
         Response response = new Response();
 
