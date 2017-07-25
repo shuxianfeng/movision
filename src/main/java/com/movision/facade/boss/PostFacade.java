@@ -29,6 +29,9 @@ import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.period.service.PeriodService;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.postLabel.entity.PostLabelDetails;
+import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.postProcessRecord.entity.PostProcessRecord;
 import com.movision.mybatis.postProcessRecord.service.PostProcessRecordService;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
@@ -138,6 +141,10 @@ public class PostFacade {
     private FacadeHeatValue facadeHeatValue;
     @Autowired
     private VideoCoverURL videoCoverURL;
+
+    @Autowired
+    private PostLabelService postLabelService;
+
 
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
@@ -2550,7 +2557,7 @@ public class PostFacade {
         //查询活动排序
         List<Integer> list = postService.queryActiveByOrderid();
         List<Integer> tem = new ArrayList<>();
-        for (int i = 1; i < 20; i++) {
+        for (int i = 1; i < 10; i++) {
             tem.add(i);
         }
         for (int k = tem.size() - 1; k > 0; k--) {
@@ -2607,6 +2614,33 @@ public class PostFacade {
             e.printStackTrace();
         }
         return map;
+    }
+
+    //=============================分隔 （帖子标签）===================================
+
+
+    /**
+     * 查询帖子标签列表
+     *
+     * @param name
+     * @param type
+     * @param userid
+     * @param pag
+     * @return
+     */
+    public List<PostLabelDetails> findAllQueryPostLabelList(String name, String type, String userid, Paging<PostLabelDetails> pag) {
+        PostLabel label = new PostLabel();
+        if (StringUtil.isNotEmpty(name)) {
+            label.setName(name);
+        }
+        if (StringUtil.isNotEmpty(type)) {
+            label.setType(Integer.parseInt(type));
+        }
+        if (StringUtil.isNotEmpty(userid)) {
+            label.setUserid(Integer.parseInt(userid));
+        }
+        List<PostLabelDetails> labelDetailses = postLabelService.findAllQueryPostLabelList(label, pag);
+        return labelDetailses;
     }
 
 }

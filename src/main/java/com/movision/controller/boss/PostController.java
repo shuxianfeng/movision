@@ -14,6 +14,9 @@ import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.post.entity.*;
+import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.postLabel.entity.PostLabelDetails;
+import com.movision.mybatis.postLabel.entity.PostLabelVo;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.share.entity.SharesVo;
 import com.movision.mybatis.submission.entity.SubmissionVo;
@@ -1250,7 +1253,7 @@ public class PostController {
      *
      * @return
      */
-    @ApiOperation(value = "查询活动热门可排序", notes = "用于查询活动中当天可排序", response = Response.class)
+    @ApiOperation(value = "查询活动热门可排序", notes = "用于查询活动热门可排序", response = Response.class)
     @RequestMapping(value = "queryActiveByOrderid", method = RequestMethod.POST)
     public Response queryActiveByOrderid() {
         Response response = new Response();
@@ -1298,6 +1301,32 @@ public class PostController {
             response.setMessage("查询成功");
         }
         response.setData(ac);
+        return response;
+    }
+
+    /**
+     * 条件查询帖子标签列表
+     *
+     * @param name
+     * @param type
+     * @param userid
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "条件查询帖子标签列表", notes = "用于查询帖子标签列表", response = Response.class)
+    @RequestMapping(value = "queryPostLabelList", method = RequestMethod.POST)
+    public Response queryPostLabelList(@ApiParam(value = "标签名称") @RequestParam(required = false) String name,
+                                       @ApiParam(value = "标签类型") @RequestParam(required = false) String type,
+                                       @ApiParam(value = "创建人") @RequestParam(required = false) String userid,
+                                       @ApiParam(value = "当前页") @RequestParam(defaultValue = "1") String pageNo,
+                                       @ApiParam(value = "每页几条") @RequestParam(defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostLabelDetails> pag = new Paging<PostLabelDetails>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostLabelDetails> labels = postFacade.findAllQueryPostLabelList(name, type, userid, pag);
+        pag.result(labels);
+        response.setMessage("查询成功");
+        response.setData(pag);
         return response;
     }
 

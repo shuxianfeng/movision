@@ -2,6 +2,8 @@ package com.movision.mybatis.postLabel.mapper;
 
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabel.entity.PostLabelTz;
+import com.movision.mybatis.postLabel.entity.PostLabelDetails;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,8 @@ public interface PostLabelMapper {
     int updateLabelHeatValue(Map map);
 
     List<PostLabel> queryLabelHeatValue();
+
+    List<PostLabelDetails> findAllQueryPostLabelList(PostLabel label, RowBounds rowBounds);
 
     PostLabelTz queryName(int labelid);
 }

@@ -1,8 +1,10 @@
 package com.movision.mybatis.postLabel.service;
 
 import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.postLabel.entity.PostLabelDetails;
 import com.movision.mybatis.postLabel.entity.PostLabelTz;
 import com.movision.mybatis.postLabel.mapper.PostLabelMapper;
+import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +61,23 @@ public class PostLabelService {
             return postLabelMapper.queryName(labelid);
         } catch (Exception e) {
             log.error("查询名称失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询帖子标签列表
+     *
+     * @param label
+     * @param pag
+     * @return
+     */
+    public List<PostLabelDetails> findAllQueryPostLabelList(PostLabel label, Paging<PostLabelDetails> pag) {
+        try {
+            log.info("查询帖子标签列表");
+            return postLabelMapper.findAllQueryPostLabelList(label, pag.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询帖子标签列表异常", e);
             throw e;
         }
     }
