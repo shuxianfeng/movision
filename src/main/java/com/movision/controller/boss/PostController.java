@@ -1330,4 +1330,81 @@ public class PostController {
         return response;
     }
 
+
+    /**
+     * 新增标签
+     *
+     * @param name
+     * @param type
+     * @param userid
+     * @param photo
+     * @return
+     */
+    @ApiOperation(value = "新增标签", notes = "用于新增标签接口", response = Response.class)
+    @RequestMapping(value = "addPostLabel", method = RequestMethod.POST)
+    public Response insertPostLabel(@ApiParam(value = "标签名称") @RequestParam String name,
+                                    @ApiParam(value = "标签类型0：圈子，1：活动，2：地理，3：其他") @RequestParam String type,
+                                    @ApiParam(value = "创建人登录用户") @RequestParam String userid,
+                                    @ApiParam(value = "标签头像") @RequestParam(required = false) String photo) {
+        Response response = new Response();
+        postFacade.insertPostLabel(name, type, userid, photo);
+        response.setMessage("操作成功");
+        response.setData(1);
+        return response;
+    }
+
+    /**
+     * 查询标签详情
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "查询标签详情", response = Response.class)
+    @RequestMapping(value = "queryPostLabelById", method = RequestMethod.POST)
+    public Response queryPostLabelById(@ApiParam(value = "标签id") @RequestParam String id) {
+        Response response = new Response();
+        PostLabelDetails label = postFacade.queryPostLabelById(id);
+        response.setMessage("查询成功");
+        response.setData(label);
+        return response;
+    }
+
+    /**
+     * 修改帖子标签
+     *
+     * @param id
+     * @param name
+     * @param type
+     * @param userid
+     * @param photo
+     * @return
+     */
+    @ApiOperation(value = "编辑修改帖子标签", response = Response.class)
+    @RequestMapping(value = "updatePostLabel", method = RequestMethod.POST)
+    public Response updatePostLabel(@ApiParam(value = "标签id") @RequestParam String id,
+                                    @ApiParam(value = "标签名称") @RequestParam String name,
+                                    @ApiParam(value = "标签类型0：圈子，1：活动，2：地理，3：其他") @RequestParam String type,
+                                    @ApiParam(value = "创建人登录用户") @RequestParam String userid,
+                                    @ApiParam(value = "标签头像") @RequestParam(required = false) String photo) {
+        Response response = new Response();
+        postFacade.updatePostLabel(id, name, type, userid, photo);
+        response.setMessage("操作成功");
+        response.setData(1);
+        return response;
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "删除帖子标签", response = Response.class)
+    @RequestMapping(value = "deletePostLabel", method = RequestMethod.POST)
+    public Response deletePostLabel(@ApiParam(value = "标签id") @RequestParam String id) {
+        Response response = new Response();
+        postFacade.deletePostLabel(id);
+        response.setMessage("操作成功");
+        response.setData(1);
+        return response;
+    }
+
 }

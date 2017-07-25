@@ -83,6 +83,67 @@ public class PostLabelService {
         }
     }
 
+    /**
+     * 新增标签
+     *
+     * @param label
+     */
+    public void insertPostLabel(PostLabel label) {
+        try {
+            log.info("新增标签");
+            postLabelMapper.insertSelective(label);
+        } catch (Exception e) {
+            log.error("新增标签异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询标签详情
+     *
+     * @param label
+     * @return
+     */
+    public PostLabelDetails queryPostLabelById(PostLabel label) {
+        try {
+            log.info("查询标签详情");
+            return postLabelMapper.queryPostLabelById(label);
+        } catch (Exception e) {
+            log.error("查询标签详情异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 修改帖子标签
+     *
+     * @param label
+     */
+    public void updatePostLabel(PostLabel label) {
+        try {
+            log.info("修改帖子标签");
+            postLabelMapper.updateByPrimaryKeySelective(label);
+        } catch (Exception e) {
+            log.error("修改帖子标签异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 删除帖子标签
+     *
+     * @param label
+     */
+    public void deletePostLabel(PostLabel label) {
+        try {
+            log.info("删除帖子标签");
+            postLabelMapper.deletePostLabel(label);
+        } catch (Exception e) {
+            log.error("删除帖子标签异常", e);
+            throw e;
+        }
+    }
+
 
     public List<PostLabelCount> queryCountLabelName(int labelid) {
         try {

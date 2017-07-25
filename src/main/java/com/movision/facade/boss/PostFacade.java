@@ -2643,4 +2643,84 @@ public class PostFacade {
         return labelDetailses;
     }
 
+    /**
+     * 新增标签
+     *
+     * @param name
+     * @param type
+     * @param userid
+     * @param photo
+     */
+    @Transactional
+    public void insertPostLabel(String name, String type, String userid, String photo) {
+        PostLabel label = new PostLabel();
+        if (StringUtil.isNotEmpty(name)) {
+            label.setName(name);
+        }
+        if (StringUtil.isNotEmpty(type)) {
+            label.setType(Integer.parseInt(type));
+        }
+        if (StringUtil.isNotEmpty(userid)) {
+            label.setUserid(Integer.parseInt(userid));
+        }
+        if (StringUtil.isNotEmpty(photo)) {
+            label.setPhoto(photo);
+        }
+        label.setIntime(new Date());
+        postLabelService.insertPostLabel(label);
+    }
+
+    /**
+     * 查询标签详情
+     *
+     * @param id
+     * @return
+     */
+    public PostLabelDetails queryPostLabelById(String id) {
+        PostLabel label = new PostLabel();
+        label.setId(Integer.parseInt(id));
+        return postLabelService.queryPostLabelById(label);
+    }
+
+    /**
+     * 修改帖子标签
+     *
+     * @param id
+     * @param name
+     * @param type
+     * @param userid
+     * @param photo
+     */
+    public void updatePostLabel(String id, String name, String type, String userid, String photo) {
+        PostLabel label = new PostLabel();
+        if (StringUtil.isNotEmpty(id)) {
+            label.setId(Integer.parseInt(id));
+        }
+        if (StringUtil.isNotEmpty(name)) {
+            label.setName(name);
+        }
+        if (StringUtil.isNotEmpty(type)) {
+            label.setType(Integer.parseInt(type));
+        }
+        if (StringUtil.isNotEmpty(userid)) {
+            label.setUserid(Integer.parseInt(userid));
+        }
+        if (StringUtil.isNotEmpty(photo)) {
+            label.setPhoto(photo);
+        }
+        postLabelService.updatePostLabel(label);
+    }
+
+
+    /**
+     * 删除帖子标签
+     *
+     * @param id
+     */
+    public void deletePostLabel(String id) {
+        PostLabel label = new PostLabel();
+        label.setId(Integer.parseInt(id));
+        postLabelService.deletePostLabel(label);
+    }
+
 }

@@ -33,4 +33,8 @@ public interface PostLabelMapper {
     PostLabelTz queryName(int labelid);
 
     List<PostLabelCount> queryCountLabelName(int labelid);
+
+    PostLabelDetails queryPostLabelById(PostLabel label);
+
+    void deletePostLabel(PostLabel label);
 }
