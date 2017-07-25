@@ -577,7 +577,7 @@ public class AppPostController {
 
         Response response = new Response();
 
-        Map count = facadePost.releaseModularPost(request, userid, circleid, title, postcontent, isactive, coverimg, proids);
+        Map count = facadePost.releaseModularPost(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist);
 
         if (count.get("flag").equals(-2)) {
             response.setCode(300);

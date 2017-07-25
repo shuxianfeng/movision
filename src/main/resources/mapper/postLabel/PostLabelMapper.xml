@@ -28,8 +28,6 @@
   <insert id="insert" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
       insert into yw_post_label (id, NAME, heat_value,
       userid, intime,isdel)
-      insert into yw_post_label (id, name, heat_value,
-      userid, intime)
       values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{heatValue,jdbcType=INTEGER},
       #{userid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
   </insert>
@@ -182,4 +180,17 @@
         SET isdel = 1
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO yw_post_label (
+        name, heat_value, userid, intime, type, photo, isdel, citycode
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.name}, #{item.heat_value},
+            #{item.userid}, #{item.intime}, #{item.TYPE},
+            #{item.photo}, #{item.isdel}, #{item.citycode},
+            )
+        </foreach>
+    </insert>
 </mapper>
