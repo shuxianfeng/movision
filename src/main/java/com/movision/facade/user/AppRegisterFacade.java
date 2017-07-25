@@ -641,6 +641,7 @@ public class AppRegisterFacade {
         session.setAttribute("phone", mobile); //缓存接收短信验证码的手机号
     }
 
+
     public void shiroLogin(Response response, Subject currentUser, UsernamePasswordToken token) {
         try {
             //登录，即身份验证 , 开始进入shiro的认证流程

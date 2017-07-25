@@ -220,7 +220,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                         loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(),
                         loginUser.getPhone(), loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(),
                         loginUser.getAccid(), loginUser.getImtoken(), loginUser.getSign(), DateUtils.date2Str(loginUser.getBirthday()),
-                        loginUser.getQq(), loginUser.getSina(), loginUser.getOpenid());
+                        loginUser.getQq(), loginUser.getSina(), loginUser.getOpenid(), loginUser.getHeatValue(), loginUser.getIpCity());
                 //判断登录信息是否改变,若改变了则更新session，
 
                 //判断登录信息是否改变,若改变了则更新session，
@@ -248,7 +248,9 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 || loginInfo.getBirthday() != appuser.getBirthday()
                 || loginInfo.getQq() != appuser.getQq()
                 || loginInfo.getSina() != appuser.getSina()
-                || loginInfo.getOpenid() != appuser.getOpenid();
+                || loginInfo.getOpenid() != appuser.getOpenid()
+                || loginInfo.getHeatValue() != appuser.getHeatValue()
+                || loginInfo.getIpCity() != appuser.getIpCity();
         return isChange;
     }
 

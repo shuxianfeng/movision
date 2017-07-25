@@ -97,13 +97,11 @@
         AND isdel=0 AND (isessence=1 OR ishot=1) order BY heat_value DESC
     </select>
 
-    <insert id="batchInsert" parameterType="java.util.List">
-        INSERT INTO yw_post_label (
-        labelid, postid
-        )
+    <insert id="batchInsert" parameterType="java.util.HashMap">
+        INSERT INTO yw_post_label_relation (labelid, postid)
         VALUES
-        <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.labelid}, #{item.postid}
+        <foreach collection="labelids" item="item" separator=",">
+            (#{item}, #{postid}
             )
         </foreach>
     </insert>

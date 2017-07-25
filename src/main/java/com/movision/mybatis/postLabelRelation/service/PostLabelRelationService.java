@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhanglei
@@ -74,10 +75,10 @@ public class PostLabelRelationService {
         }
     }
 
-    public int batchAdd(List<PostLabelRelation> postLabelRelationList) {
+    public int batchAdd(Map map) {
         try {
             log.info("批量增加帖子和标签的关系数据");
-            return postLabelRelationMapper.batchInsert(postLabelRelationList);
+            return postLabelRelationMapper.batchInsert(map);
         } catch (Exception e) {
             log.error("批量增加帖子和标签的关系数据失败", e);
             throw e;
