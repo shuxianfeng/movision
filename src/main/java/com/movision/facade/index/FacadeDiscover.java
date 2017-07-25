@@ -1,5 +1,8 @@
 package com.movision.facade.index;
 
+import com.movision.common.constant.DiscoverConstant;
+import com.movision.common.constant.MsgCodeConstant;
+import com.movision.exception.BusinessException;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.circleCategory.entity.CircleCategory;
@@ -21,6 +24,7 @@ import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
 import javafx.geometry.Pos;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -259,5 +263,126 @@ public class FacadeDiscover {
         paging.setTotal(resultList.size());
 
         return facadePost.getPageList(resultList, paging.getCurPage(), paging.getPageSize());
+    }
+
+    public Paging<?> searchHotRange(String pageNo, String pageSize, int title, int type) {
+        //总排行
+        if (DiscoverConstant.HOT_RANGE_TYPE.total_range.getCode() == type) {
+            if (DiscoverConstant.HOT_RANGE_TITLE.post_comment_list.getCode() == title) {
+
+                Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+                List<PostVo> list = searchHotCommentPostInAll(pager);
+                pager.result(list);
+                return pager;
+
+            } else if (DiscoverConstant.HOT_RANGE_TITLE.post_view_list.getCode() == title) {
+
+                Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+                List<PostVo> list = searchMostViewPostInAll(pager);
+                pager.setRows(list);
+                log.debug("paging实体:" + pager.toString());
+                return pager;
+
+            } else if (DiscoverConstant.HOT_RANGE_TITLE.post_zan_list.getCode() == title) {
+
+                Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+                List<PostVo> list = searchMostZanPostListInAll(pager);
+                pager.result(list);
+                return pager;
+
+            } else if (DiscoverConstant.HOT_RANGE_TITLE.post_collect_list.getCode() == title) {
+
+                Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+                List<PostVo> list = searchMostCollectPostListInAll(pager);
+                pager.result(list);
+                return pager;
+
+            } else if (DiscoverConstant.HOT_RANGE_TITLE.author_fans_list.getCode() == title) {
+
+                Paging<UserVo> pager = new Paging<UserVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+                List<UserVo> list = searchMostFansAuthorInAll(pager);
+                pager.result(list);
+                return pager;
+
+            } else if (DiscoverConstant.HOT_RANGE_TITLE.author_comment_list.getCode() == title) {
+
+                Paging<UserVo> pager = new Paging<UserVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+                List<UserVo> list = searchMostCommentAuthorInAll(pager);
+                pager.result(list);
+                return pager;
+
+            } else if (DiscoverConstant.HOT_RANGE_TITLE.author_post_list.getCode() == title) {
+
+                Paging<UserVo> pager = new Paging<UserVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+                List<UserVo> list = searchMostPostAuthorInAll(pager);
+                pager.result(list);
+                return pager;
+
+
+            } else {
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "发现页-热门排行-导航栏标题传参错误");
+            }
+        }
+
+        //月排行
+        if (DiscoverConstant.HOT_RANGE_TYPE.month_range.getCode() == type) {
+            if (DiscoverConstant.HOT_RANGE_TITLE.post_comment_list.getCode() == title) {
+
+                Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+                List<PostVo> list = searchHotCommentPostInCurrentMonth(pager);
+                pager.result(list);
+                return pager;
+
+            } else if (DiscoverConstant.HOT_RANGE_TITLE.post_view_list.getCode() == title) {
+                // TODO: 2017/7/25
+                Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+                List<PostVo> list = searchMostViewPostInAll(pager);
+                pager.setRows(list);
+                log.debug("paging实体:" + pager.toString());
+                return pager;
+
+            } else if (DiscoverConstant.HOT_RANGE_TITLE.post_zan_list.getCode() == title) {
+
+                Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+                List<PostVo> list = searchMostZanPostListInCurrentMonth(pager);
+                pager.result(list);
+                return pager;
+
+            } else if (DiscoverConstant.HOT_RANGE_TITLE.post_collect_list.getCode() == title) {
+
+                Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+                List<PostVo> list = searchMostCollectPostListInCurrentMonth(pager);
+                pager.result(list);
+                return pager;
+
+            } else if (DiscoverConstant.HOT_RANGE_TITLE.author_fans_list.getCode() == title) {
+
+                Paging<UserVo> pager = new Paging<UserVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+                List<UserVo> list = searchMostFansAuthorInCurrentMonth(pager);
+                pager.result(list);
+                return pager;
+
+            } else if (DiscoverConstant.HOT_RANGE_TITLE.author_comment_list.getCode() == title) {
+
+                Paging<UserVo> pager = new Paging<UserVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+                List<UserVo> list = searchMostCommentAuthorInCurrentMonth(pager);
+                pager.result(list);
+                return pager;
+
+            } else if (DiscoverConstant.HOT_RANGE_TITLE.author_post_list.getCode() == title) {
+
+                Paging<UserVo> pager = new Paging<UserVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+                List<UserVo> list = searchMostPostAuthorInCurrentMonth(pager);
+                pager.result(list);
+                return pager;
+
+
+            } else {
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "发现页-热门排行-导航栏标题传参错误");
+            }
+        }
+
+        return null;
+
     }
 }
