@@ -5,6 +5,7 @@ import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PostLabelRelationMapper {
     int deleteByPrimaryKey(Integer id);
@@ -29,6 +30,7 @@ public interface PostLabelRelationMapper {
 
     List<PostVo> postIseecen(List postid, RowBounds rowBounds);
 
-    int batchInsert(List<PostLabelRelation> postLabelRelationList);
+    int batchInsert(Map map);
+
 
 }

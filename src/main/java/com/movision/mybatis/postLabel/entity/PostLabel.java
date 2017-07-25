@@ -19,6 +19,8 @@ public class PostLabel {
 
     private Integer isdel;
 
+    private String citycode;
+
     public Integer getIsdel() {
         return isdel;
     }
@@ -26,9 +28,6 @@ public class PostLabel {
     public void setIsdel(Integer isdel) {
         this.isdel = isdel;
     }
-
-
-    private String citycode;
 
     public void setCitycode(String citycode) {
         this.citycode = citycode;

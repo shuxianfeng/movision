@@ -68,6 +68,26 @@ public class LoginUser implements Serializable {
 
     private String imtoken;
 
+    private Integer heatValue;  //作者热度
+    private String ipCity; //根据用户登录的ip获取的所在的城市代码,对应yw_city的code
+
+    public void setHeatValue(Integer heatValue) {
+        this.heatValue = heatValue;
+    }
+
+    public void setIpCity(String ipCity) {
+        this.ipCity = ipCity;
+    }
+
+    public Integer getHeatValue() {
+
+        return heatValue;
+    }
+
+    public String getIpCity() {
+        return ipCity;
+    }
+
     public void setApplydate(Date applydate) {
         this.applydate = applydate;
     }
@@ -319,6 +339,8 @@ public class LoginUser implements Serializable {
                 ", role='" + role + '\'' +
                 ", accid='" + accid + '\'' +
                 ", imtoken='" + imtoken + '\'' +
+                ", heatValue=" + heatValue +
+                ", ipCity='" + ipCity + '\'' +
                 '}';
     }
 }

@@ -1,8 +1,10 @@
 package com.movision.facade.index;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mongodb.*;
 import com.movision.common.constant.PointConstant;
+import com.movision.common.util.ShiroUtil;
 import com.movision.facade.im.ImFacade;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
@@ -1048,30 +1050,20 @@ public class FacadePost {
             try {
                 log.info("APP前端用户开始请求发帖");
                 Map contentMap = null;
-
+                //封装帖子实体
                 Post post = preparePostJavaBean(request, userid, circleid, title, postcontent, isactive, coverimg, contentMap);
+//                Post post = new Post();
+//                post.setTitle("测试标签发帖" + DateUtils.getCurrentDate());
+                
                 //插入帖子
                 postService.releaseModularPost(post);
-                int flag = post.getId();//返回的主键--帖子id
+                //返回的主键--帖子id
+                int flag = post.getId();
                 //再保存帖子中分享的商品列表(如果商品id字段不为空)
                 insertPostShareGoods(proids, flag);
-                //插入标签表数据
-                Gson gson = new Gson();
-                List<PostLabel> postLabelList = gson.fromJson(labellist, List.class);
-                postLabelService.batchInsert(postLabelList);
-                //插入标签和帖子关系数据
-                List<PostLabelRelation> postLabelRelationList = new ArrayList<>();
-                for (PostLabel postLabel : postLabelList) {
-                    PostLabelRelation relation = new PostLabelRelation();
-                    relation.setPostid(flag);
-                    //查询新增的标签id，放入关系实体 // TODO: 2017/7/25  
-
-                    postLabelRelationList.add(relation);
-                }
-                postLabelRelationService.batchAdd(postLabelRelationList);
-
-
-
+                //标签业务逻辑处理
+                addLabelProcess(labellist, flag);
+                //积分处理
                 pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
 
                 map.put("flag", flag);
@@ -1088,6 +1080,36 @@ public class FacadePost {
             map.put("flag", -1);
             return map;
         }
+    }
+
+    /**
+     * 发帖-标签业务逻辑处理
+     *
+     * @param labellist
+     * @param flag
+     */
+    private void addLabelProcess(String labellist, int flag) {
+        //插入标签表数据
+        Gson gson = new Gson();
+        List<PostLabel> postLabelList = gson.fromJson(labellist, new TypeToken<List<PostLabel>>() {
+        }.getType());    //字符串为为list
+        log.debug("接口传入的标签集合：" + postLabelList.toString());
+
+        postLabelService.batchInsert(postLabelList);
+        //插入标签和帖子关系数据
+        String[] labelNameStr = new String[postLabelList.size()];
+        for (int i = 0; i < postLabelList.size(); i++) {
+            labelNameStr[i] = postLabelList.get(i).getName();
+        }
+        log.debug("新插入的标签的名称集合是：" + labelNameStr.toString());
+
+        List<Integer> newLabelIdList = postLabelService.queryLabelIdList(labelNameStr);
+        log.debug("新插入的标签的id集合是：" + newLabelIdList.toString());
+
+        Map postlabelrelationMap = new HashedMap();
+        postlabelrelationMap.put("postid", flag);
+        postlabelrelationMap.put("labelids", newLabelIdList.toArray());
+        postLabelRelationService.batchAdd(postlabelrelationMap);
     }
 
     /**
@@ -1123,7 +1145,8 @@ public class FacadePost {
      * @param contentMap
      * @return
      */
-    private Post preparePostJavaBean(HttpServletRequest request, String userid, String circleid, String title, String postcontent, String isactive, String coverimg, Map contentMap) {
+    private Post preparePostJavaBean(HttpServletRequest request, String userid, String circleid, String title,
+                                     String postcontent, String isactive, String coverimg, Map contentMap) {
         Post post = new Post();
         post.setCircleid(Integer.parseInt(circleid));
         post.setTitle(title);
@@ -1157,6 +1180,8 @@ public class FacadePost {
         }
         post.setCoverimg(coverimg);//帖子封面
         post.setUserid(Integer.parseInt(userid));
+        post.setCity(ShiroUtil.getIpCity());
+
         return post;
     }
 

@@ -154,6 +154,16 @@ public class PostLabelService {
         }
     }
 
+    public List<Integer> queryLabelIdList(String[] strings) {
+        try {
+            log.info("根据标签名称集合查询标签id集合");
+            return postLabelMapper.queryLabelIdList(strings);
+        } catch (Exception e) {
+            log.error("根据标签名称集合查询标签id集合失败", e);
+            throw e;
+        }
+    }
+
 
     public List<PostLabelCount> queryCountLabelName(int labelid) {
         try {

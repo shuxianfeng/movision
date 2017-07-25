@@ -39,4 +39,6 @@ public interface PostLabelMapper {
     PostLabelDetails queryPostLabelById(PostLabel label);
 
     void deletePostLabel(PostLabel label);
+
+    List<Integer> queryLabelIdList(String[] nameStr);
 }

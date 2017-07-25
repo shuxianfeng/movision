@@ -80,7 +80,8 @@ public class ShiroRealm extends AuthorizingRealm {
                 loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(), loginUser.getPhone(),
                 loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(), loginUser.getAccid(), loginUser.getImtoken(),
                 loginUser.getSign(), DateUtils.date2Str(loginUser.getBirthday()),
-                loginUser.getQq(), loginUser.getSina(), loginUser.getOpenid());
+                loginUser.getQq(), loginUser.getSina(), loginUser.getOpenid(), loginUser.getHeatValue(), loginUser.getIpCity()
+        );
 
         // 3 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(shiroUser, // 用户
@@ -171,6 +172,25 @@ public class ShiroRealm extends AuthorizingRealm {
         private String qq;  //qq
         private String sina;    //微博
         private String openid;  //微信
+        private Integer heatValue;  //作者热度
+        private String ipCity; //根据用户登录的ip获取的所在的城市代码,对应yw_city的code
+
+        public void setHeatValue(Integer heatValue) {
+            this.heatValue = heatValue;
+        }
+
+        public void setIpCity(String ipCity) {
+            this.ipCity = ipCity;
+        }
+
+        public Integer getHeatValue() {
+
+            return heatValue;
+        }
+
+        public String getIpCity() {
+            return ipCity;
+        }
 
         public void setQq(String qq) {
             this.qq = qq;
@@ -350,7 +370,7 @@ public class ShiroRealm extends AuthorizingRealm {
             return false;
         }
 
-        public ShiroUser(Integer id, String account, Integer status, String role, Date registerTime, String photo, String nickname, Integer level, String phone, String token, Integer points, Integer sex, String accid, String imToken, String sign, String birthday, String qq, String sina, String openid) {
+        public ShiroUser(Integer id, String account, Integer status, String role, Date registerTime, String photo, String nickname, Integer level, String phone, String token, Integer points, Integer sex, String accid, String imToken, String sign, String birthday, String qq, String sina, String openid, Integer heatValue, String ipCity) {
             this.id = id;
             this.account = account;
             this.status = status;
@@ -370,6 +390,8 @@ public class ShiroRealm extends AuthorizingRealm {
             this.qq = qq;
             this.sina = sina;
             this.openid = openid;
+            this.heatValue = heatValue;
+            this.ipCity = ipCity;
         }
 
         @Override
@@ -394,6 +416,8 @@ public class ShiroRealm extends AuthorizingRealm {
                     ", qq='" + qq + '\'' +
                     ", sina='" + sina + '\'' +
                     ", openid='" + openid + '\'' +
+                    ", heatValue=" + heatValue +
+                    ", ipCity='" + ipCity + '\'' +
                     '}';
         }
     }

@@ -413,7 +413,7 @@
         #{zansum,jdbcType=INTEGER},#{commentsum,jdbcType=INTEGER},#{forwardsum,jdbcType=INTEGER},
         #{collectsum,jdbcType=INTEGER},#{isactive,jdbcType=INTEGER},
         #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
-        #{coverimg,jdbcType=VARCHAR},#{intime,jdbcType=TIMESTAMP},#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},
+        #{coverimg,jdbcType=VARCHAR},now(),#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},
         #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{oprtime,jdbcType=TIMESTAMP}
         )
     </insert>
