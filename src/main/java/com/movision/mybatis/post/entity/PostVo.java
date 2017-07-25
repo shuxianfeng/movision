@@ -580,14 +580,6 @@ public class PostVo implements Serializable {
         this.partsumEnddays = partsumEnddays;
     }
 
-    public Integer getActiveid() {
-        return activeid;
-    }
-
-    public void setActiveid(Integer activeid) {
-        this.activeid = activeid;
-    }
-
     /**
      * 重写equals方法，用于比对
      *
