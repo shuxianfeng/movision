@@ -543,7 +543,7 @@ public class UserFacade {
             for (int i = 0; i < list.size(); i++) {
                 facadePost.countView(list);
             }
-         }else if (type == 2) {//收藏
+         }else if (type == 3) {//收藏
             //用户收藏的帖子
             List<Integer> collection = collectionService.queryUserPost(Integer.parseInt(userid));
             //收藏的id查帖子
