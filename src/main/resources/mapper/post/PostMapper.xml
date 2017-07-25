@@ -2103,7 +2103,7 @@
         select * from yw_post where circleid=#{circleid,jdbcType=INTEGER} and isdel=0 order by heat_value desc
     </select>
     <select id="queryCityCode" parameterType="java.lang.String" resultType="java.lang.String">
-        SELECT code FROM yw_city WHERE  name=#{area,jdbcType=VARCHAR}
+        SELECT code FROM yw_city WHERE name LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
     </select>
     <select id="queryCityPost" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.lang.String">
         SELECT  * FROM  yw_post WHERE isdel=0 AND city=#{citycode,jdbcType=VARCHAR} ORDER BY  heat_value DESC
