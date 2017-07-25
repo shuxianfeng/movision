@@ -69,4 +69,25 @@
         postid = #{postid,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="labelPost" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post_label_relation  WHERE labelid=#{labelid,jdbcType=INTEGER}
+    </select>
+    <select id="postList" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT postid FROM yw_post_label_relation WHERE labelid=#{labelid,jdbcType=INTEGER}
+    </select>
+    <select id="post" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post WHERE id IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND isdel=0 order BY intime DESC
+    </select>
+    <select id="postHeatValue" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post WHERE id IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND isdel=0 order BY heat_value DESC
+    </select>
+
 </mapper>

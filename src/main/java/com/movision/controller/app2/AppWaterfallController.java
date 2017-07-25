@@ -86,7 +86,7 @@ public class AppWaterfallController {
      */
     @ApiOperation(value = "用户刷新的历史记录列表", notes = "用户刷新的历史记录列表", response = Response.class)
     @RequestMapping(value = "userReflushHishtoryRecord", method = RequestMethod.POST)
-    public Response userReflushHishtoryRecord(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
+    public Response userReflushHishtoryRecord(@ApiParam(value = "用户id") @RequestParam String userid,
                                               @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                               @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
@@ -122,7 +122,7 @@ public class AppWaterfallController {
      */
     @ApiOperation(value = "个人主页上半部分", notes = "个人主页上半部分", response = Response.class)
     @RequestMapping(value = "queryPersonalHomepage", method = RequestMethod.POST)
-    public Response queryPersonalHomepage(@ApiParam(value = "用户id") @RequestParam(required = false) String userid) {
+    public Response queryPersonalHomepage(@ApiParam(value = "用户id") @RequestParam String userid) {
         Response response = new Response();
         UserVo list = userFacade.queryPersonalHomepage(userid);
         if (response.getCode() == 200) {
@@ -150,4 +150,22 @@ public class AppWaterfallController {
         response.setData(list);
         return response;
     }
+
+    /**
+     * @return
+     */
+    @ApiOperation(value = "关注标签", notes = "关注标签", response = Response.class)
+    @RequestMapping(value = "attentionLabel", method = RequestMethod.POST)
+    public Response attentionLabel(@ApiParam(value = "标签id") @RequestParam int labelid,
+                                   @ApiParam(value = "用户id ") @RequestParam int userid) {
+        Response response = new Response();
+        int result = facadePost.attentionLabel(userid, labelid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
+
 }

@@ -529,17 +529,17 @@ public class UserFacade {
      * @param paging
      * @return
      */
-    public List mineBottle(int type, String userid, Paging<PostVo> paging) {
+    public List<PostVo> mineBottle(int type, String userid, Paging<PostVo> paging) {
         List<PostVo> list = null;
         if (type == 1) {//帖子
             //查询用户发的帖子
-            list = postService.queryUserPostList(Integer.parseInt(userid), paging);
+            list = postService.findAllUserPostList(Integer.parseInt(userid), paging);
             for (int i = 0; i < list.size(); i++) {
                 facadePost.countView(list);
             }
         } else if (type == 2) {//活动
             //活动帖子
-            list = postService.queryUserActive(Integer.parseInt(userid), paging);
+            list = postService.findAllUserActive(Integer.parseInt(userid), paging);
             for (int i = 0; i < list.size(); i++) {
                 facadePost.countView(list);
             }
@@ -547,7 +547,7 @@ public class UserFacade {
             //用户收藏的帖子
             List<Integer> collection = collectionService.queryUserPost(Integer.parseInt(userid));
             //收藏的id查帖子
-            list = postService.queryCollectionListByIds(collection, paging);
+            list = postService.findAllCollectionListByIds(collection, paging);
             for (int i = 0; i < list.size(); i++) {
                 facadePost.countView(list);
             }

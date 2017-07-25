@@ -1,12 +1,14 @@
 package com.movision.mybatis.postLabel.service;
 
 import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.postLabel.entity.PostLabelTz;
 import com.movision.mybatis.postLabel.mapper.PostLabelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.peer.LabelPeer;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +49,16 @@ public class PostLabelService {
             return postLabelMapper.queryLabelHeatValue();
         } catch (Exception e) {
             log.error("根据热度排序失败", e);
+            throw e;
+        }
+    }
+
+    public PostLabelTz queryName(int labelid) {
+        try {
+            log.info("查询名称");
+            return postLabelMapper.queryName(labelid);
+        } catch (Exception e) {
+            log.error("查询名称失败", e);
             throw e;
         }
     }
