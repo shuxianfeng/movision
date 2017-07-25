@@ -19,6 +19,16 @@ public class PostLabelDetails {
 
     private String userName;
 
+    private Integer isdel;
+
+    public Integer getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(Integer isdel) {
+        this.isdel = isdel;
+    }
+
     public String getUserName() {
         return userName;
     }

@@ -17,6 +17,16 @@ public class PostLabel {
 
     private String photo;
 
+    private Integer isdel;
+
+    public Integer getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(Integer isdel) {
+        this.isdel = isdel;
+    }
+
 
     private String citycode;
 

@@ -10,9 +10,10 @@
     <result column="type" property="type" jdbcType="INTEGER"/>
     <result column="photo" property="photo" jdbcType="VARCHAR"/>
     <result column="citycode" property="citycode" jdbcType="VARCHAR"/>
+      <result column="isdel" property="isdel" jdbcType="INTEGER"/>
   </resultMap>
   <sql id="Base_Column_List">
-    id, name, heat_value, userid, intime, type, photo, citycode
+      id, name, heat_value, userid, intime, type, photo, citycode,isdel
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
     select
@@ -25,10 +26,12 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
-    insert into yw_post_label (id, name, heat_value, 
+      insert into yw_post_label (id, NAME, heat_value,
+      userid, intime,isdel)
+      insert into yw_post_label (id, name, heat_value,
       userid, intime)
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{heatValue,jdbcType=INTEGER}, 
-      #{userid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP})
+      values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{heatValue,jdbcType=INTEGER},
+      #{userid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
     insert into yw_post_label
@@ -57,6 +60,9 @@
       <if test="citycode != null">
         citycode,
       </if>
+        <if test="isdel != null">
+            isdel,
+        </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -83,6 +89,9 @@
       <if test="citycode != null">
         #{citycode},
       </if>
+        <if test="isdel != null">
+            #{isdel,jdbcType=INTEGER},
+        </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
@@ -109,6 +118,9 @@
       <if test="citycode != null">
         citycode = #{citycode},
       </if>
+        <if test="isdel != null">
+            isdel = #{isdel,jdbcType=INTEGER},
+        </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -120,6 +132,8 @@
     intime = #{intime,jdbcType=TIMESTAMP},
     type = #{type},
     photo = #{photo},
+      isdel = #{isdel,jdbcType=INTEGER},
+      photo = #{photo},
     citycode = #{citycode}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -142,7 +156,7 @@
         SELECT l.*,
         (SELECT u.nickname FROM yw_user u WHERE u.id = l.userid) AS userName
         FROM yw_post_label l
-        WHERE 1
+        WHERE isdel = 0
         <if test="name != null">
             AND l.name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
@@ -154,4 +168,18 @@
         </if>
         ORDER BY heat_value DESC
     </select>
+
+    <select id="queryPostLabelById" parameterType="com.movision.mybatis.postLabel.entity.PostLabel"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabelDetails">
+    SELECT l.*,
+        (SELECT u.nickname FROM yw_user u WHERE u.id = l.userid) AS userName
+        FROM yw_post_label l
+        WHERE id = #{id,jdbcType=INTEGER} AND isdel = 0
+  </select>
+
+    <update id="deletePostLabel" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
+        UPDATE yw_post_label
+        SET isdel = 1
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>
