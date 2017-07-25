@@ -17,6 +17,18 @@ public class PostLabel {
 
     private String photo;
 
+
+    private String citycode;
+
+    public void setCitycode(String citycode) {
+        this.citycode = citycode;
+    }
+
+    public String getCitycode() {
+
+        return citycode;
+    }
+
     public void setType(Integer type) {
         this.type = type;
     }
