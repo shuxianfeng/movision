@@ -294,19 +294,18 @@ public interface PostMapper {
     int queryUserActiveCount(int userid);
 
     List<PostVo> findAllHotCommentPostInAll(RowBounds rowBounds);
-
     List<PostVo> findAllHotCommentPostInCurrentMonth(RowBounds rowBounds);
 
     List<PostVo> findAllMostZanPostInAll(RowBounds rowBounds);
-
     List<PostVo> findAllMostZanPostInCurrentMonth(RowBounds rowBounds);
 
     List<PostVo> findAllMostCollectInAll(RowBounds rowBounds);
-
     List<PostVo> findAllMostCollectInCurrentMonth(RowBounds rowBounds);
 
+    List<PostVo> queryPostInAll();
 
     List<Post> findAllQueryActivitycontributeListById(Integer id, RowBounds rowBounds);
+
 
     List<Integer> queryActiveByOrderid();
 

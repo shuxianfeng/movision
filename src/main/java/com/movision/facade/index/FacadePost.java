@@ -1708,8 +1708,7 @@ public class FacadePost {
      * @param pageNo
      * @return
      */
-    public static List getPageList(List list, int pageNo) {
-        int pageSize = 15;//每页显示数
+    public List getPageList(List list, int pageNo, int pageSize) {
         List<Object> result = new ArrayList<Object>();
         if (list != null && list.size() > 0) {
             int allCount = list.size();//总记录数
@@ -1896,7 +1895,7 @@ public class FacadePost {
         ComparatorChain chain = new ComparatorChain();
         chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
         Collections.sort(postvo, chain);
-        List<PostLabelVo> finals = getPageList(postvo, 1);
+        List<PostLabelVo> finals = getPageList(postvo, 1, 15);
         return finals;
     }
 

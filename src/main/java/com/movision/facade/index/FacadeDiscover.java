@@ -14,17 +14,19 @@ import com.movision.mybatis.user.entity.Author;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.mybatis.userRefreshRecord.entity.UesrreflushCount;
+import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
+import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
 import javafx.geometry.Pos;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author shuxf
@@ -32,6 +34,8 @@ import java.util.Map;
  */
 @Service
 public class FacadeDiscover {
+
+    private static Logger log = LoggerFactory.getLogger(FacadeDiscover.class);
 
     @Autowired
     private HomepageManageService homepageManageService;
@@ -50,6 +54,9 @@ public class FacadeDiscover {
 
     @Autowired
     private FacadePost facadePost;
+
+    @Autowired
+    private UserRefreshRecordService userRefreshRecordService;
 
     public Map<String, Object> queryDiscoverIndexData(String userid) {
 
@@ -95,7 +102,7 @@ public class FacadeDiscover {
         return pmap;
     }
 
-    public Map<String, Object> queryDiscoverIndexData2Up(){
+    public Map<String, Object> queryDiscoverIndexData2Up() {
 
         Map<String, Object> map = new HashMap<>();
         List<HomepageManage> homepageManageList = homepageManageService.queryBannerList(1);//查询发现页顶部banner轮播图
@@ -103,7 +110,7 @@ public class FacadeDiscover {
         List<UserVo> hotUserList = userService.queryHotUserList();//查询发现页热门作者列表
 
         //循环查询作者的发帖数
-        for (int i = 0; i < hotUserList.size(); i++){
+        for (int i = 0; i < hotUserList.size(); i++) {
             UserVo vo = hotUserList.get(i);
             int userid = vo.getId();
             //根据userid查询该用户的总发帖数
@@ -228,5 +235,29 @@ public class FacadeDiscover {
 
     public List<UserVo> searchMostPostAuthorInCurrentMonth(Paging<UserVo> paging) {
         return userService.findAllMostPostAuthorInCurrentMonth(paging);
+    }
+
+    public List<PostVo> searchMostViewPostInAll(Paging<PostVo> paging) {
+
+        List<PostVo> postVoList = postService.queryPostInAll();
+        List<UesrreflushCount> uesrreflushCountList = userRefreshRecordService.group();
+
+        List<PostVo> resultList = new ArrayList<>();
+        int size = uesrreflushCountList.size();
+        int total = postVoList.size();
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < total; j++) {
+                if (uesrreflushCountList.get(i).getPostid().intValue() == postVoList.get(j).getId().intValue()) {
+
+                    postVoList.get(j).setCountview(uesrreflushCountList.get(i).getCount());
+                    resultList.add(postVoList.get(j));
+                }
+            }
+        }
+
+        paging.setTotal(resultList.size());
+
+        return facadePost.getPageList(resultList, paging.getCurPage(), paging.getPageSize());
     }
 }

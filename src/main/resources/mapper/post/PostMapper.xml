@@ -2189,7 +2189,7 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         p.userid, u.nickname, u.photo
         FROM yw_post p
         LEFT JOIN yw_user u ON p.userid = u.id
-        WHERE p.isdel = 0
+        WHERE p.isdel = 0 and p.isactive = 0
         ORDER BY p.commentsum DESC
     </select>
 
@@ -2201,7 +2201,7 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         LEFT JOIN yw_post_comment c ON p.id = c.postid
         LEFT JOIN yw_user u ON p.userid = u.id
         WHERE DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
-        AND p.isdel = 0
+        AND p.isdel = 0 and p.isactive = 0
         GROUP BY p.id ORDER BY commentCount DESC
     </select>
 
@@ -2210,7 +2210,7 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         p.userid, u.nickname, u.photo
         FROM yw_post p
         LEFT JOIN yw_user u ON p.userid = u.id
-        WHERE p.isdel = 0
+        WHERE p.isdel = 0 and p.isactive = 0
         ORDER BY p.zansum DESC
     </select>
 
@@ -2219,7 +2219,7 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         p.userid, u.nickname, u.photo
         FROM yw_post p
         LEFT JOIN yw_user u ON p.userid = u.id
-        WHERE p.isdel = 0
+        WHERE p.isdel = 0 and p.isactive = 0
         AND DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
         ORDER BY p.zansum DESC
     </select>
@@ -2229,7 +2229,7 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         p.userid, u.nickname, u.photo
         FROM yw_post p
         LEFT JOIN yw_user u ON p.userid = u.id
-        WHERE p.isdel = 0
+        WHERE p.isdel = 0 and p.isactive = 0
         ORDER BY p.collectsum DESC
     </select>
 
@@ -2238,9 +2238,16 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         p.userid, u.nickname, u.photo
         FROM yw_post p
         LEFT JOIN yw_user u ON p.userid = u.id
-        WHERE p.isdel = 0
+        WHERE p.isdel = 0 and p.isactive = 0
         AND DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
         ORDER BY p.collectsum DESC
+    </select>
+
+    <select id="queryPostInAll" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.id, p.title, p.coverimg,p.userid, u.nickname, u.photo
+        FROM yw_post p
+        LEFT JOIN yw_user u ON p.userid = u.id
+        WHERE p.isdel = 0 and p.isactive = 0
     </select>
 
 

@@ -1270,4 +1270,5 @@
         ORDER BY postsum DESC
     </select>
 
+
 </mapper>

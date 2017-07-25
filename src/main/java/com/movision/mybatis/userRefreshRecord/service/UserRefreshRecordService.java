@@ -52,7 +52,7 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
 
     }
 
-    public List group() {
+    public List<UesrreflushCount> group() {
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.group("postid").count().as("count"),
                 Aggregation.sort(Sort.Direction.DESC, "count")

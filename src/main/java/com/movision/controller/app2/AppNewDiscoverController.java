@@ -11,6 +11,8 @@ import com.movision.mybatis.user.entity.UserVo;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +30,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/app/discover2/")
 public class AppNewDiscoverController {
+
+    private static Logger log = LoggerFactory.getLogger(AppNewDiscoverController.class);
+
     @Autowired
     private FacadeDiscover facadeDiscover;
 
@@ -280,7 +285,19 @@ public class AppNewDiscoverController {
         return response;
     }
 
+    @ApiOperation(value = "热门排行帖子-浏览最多-总排行", notes = "热门排行帖子-浏览最多-总排行", response = Response.class)
+    @RequestMapping(value = "hot_range/search_most_view_post_in_all", method = RequestMethod.GET)
+    public Response searchMostViewPostInAll(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                            @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<PostVo> list = facadeDiscover.searchMostViewPostInAll(pager);
+        pager.setRows(list);
+        log.debug("paging实体:" + pager.toString());
+        response.setData(pager);
 
+        return response;
+    }
 
 
 }

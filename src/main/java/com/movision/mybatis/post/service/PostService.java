@@ -1757,10 +1757,20 @@ public class PostService {
 
     public List<PostVo> findAllMostCollectInCurrentMonth(Paging<PostVo> paging) {
         try {
-            log.info("查询收藏最多的帖子列表");
+            log.info("查询当月收藏最多的帖子列表");
             return postMapper.findAllMostCollectInCurrentMonth(paging.getRowBounds());
         } catch (Exception e) {
-            log.error("查询收藏最多的帖子列表失败", e);
+            log.error("查询当月收藏最多的帖子列表失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> queryPostInAll() {
+        try {
+            log.info("查询所有帖子");
+            return postMapper.queryPostInAll();
+        } catch (Exception e) {
+            log.error("查询所有帖子失败", e);
             throw e;
         }
     }
