@@ -540,9 +540,21 @@ public class UserFacade {
         } else if (type == 2) {//活动
             //活动帖子
             list = postService.findAllUserActive(Integer.parseInt(userid), paging);
+            //遍历活动获取活动参与人数和活动剩余结束天数
             for (int i = 0; i < list.size(); i++) {
-                facadePost.countView(list);
+                PostVo ao = list.get(i);
+                //计算距离结束时间
+                Date begin = ao.getBegintime();
+                Date end = ao.getEndtime();
+                Date now = new Date();
+                int enddays = DateUtils.activeEndDays(now, begin, end);
+                ao.setEnddays(enddays);
+                //查询活动参与总人数
+                int partsum = postService.queryActivePartSum(ao.getId());
+                ao.setPartsum(partsum);
+                list.set(i, ao);
             }
+
          }else if (type == 3) {//收藏
             //用户收藏的帖子
             List<Integer> collection = collectionService.queryUserPost(Integer.parseInt(userid));
