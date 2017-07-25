@@ -495,7 +495,7 @@ public class UserFacade {
     }
 
     /**
-     * 我的接口上半部分(*)
+     * 美番2.0我的接口上半部分(*)
      *
      * @param userid
      * @return
@@ -522,7 +522,7 @@ public class UserFacade {
     }
 
     /**
-     * 我的下半部分
+     * 美番2.0我的下半部分
      *
      * @param type
      * @param userid
@@ -537,14 +537,13 @@ public class UserFacade {
             for (int i = 0; i < list.size(); i++) {
                 facadePost.countView(list);
             }
-        } /**else if (type == 2) {//活动
+        } else if (type == 2) {//活动
             //活动帖子
             list = postService.queryUserActive(Integer.parseInt(userid), paging);
             for (int i = 0; i < list.size(); i++) {
                 facadePost.countView(list);
             }
-         } */
-        else if (type == 2) {//收藏
+         }else if (type == 2) {//收藏
             //用户收藏的帖子
             List<Integer> collection = collectionService.queryUserPost(Integer.parseInt(userid));
             //收藏的id查帖子
