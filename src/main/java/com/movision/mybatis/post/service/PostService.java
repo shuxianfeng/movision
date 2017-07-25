@@ -1690,4 +1690,19 @@ public class PostService {
         }
     }
 
+    /**
+     * 查询当日可选热门排序
+     *
+     * @return
+     */
+    public List<Integer> queryActiveByOrderid() {
+        try {
+            log.info("查询当日可选热门排序");
+            return postMapper.queryActiveByOrderid();
+        } catch (Exception e) {
+            log.error("查询当日可选热门排序异常", e);
+            throw e;
+        }
+    }
+
 }

@@ -296,4 +296,6 @@ public interface PostMapper {
 
     List<Post> findAllQueryActivitycontributeListById(Integer id, RowBounds rowBounds);
 
+    List<Integer> queryActiveByOrderid();
+
 }

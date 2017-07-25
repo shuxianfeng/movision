@@ -1245,6 +1245,21 @@ public class PostController {
         return response;
     }
 
+    /**
+     * 查询活动热门排序
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询活动热门可排序", notes = "用于查询活动中当天可排序", response = Response.class)
+    @RequestMapping(value = "queryActiveByOrderid", method = RequestMethod.POST)
+    public Response queryActiveByOrderid() {
+        Response response = new Response();
+        List<Integer> list = postFacade.queryActiveByOrderid();
+        response.setMessage("查询成功");
+        response.setData(list);
+        return response;
+    }
+
 
     /**
      * 点击投稿数值跳转到这个活动下投的所有帖子列表页

@@ -2181,4 +2181,8 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
             resultType="com.movision.mybatis.post.entity.Post">
         SELECT * FROM yw_post WHERE activeid = #{id,jdbcType=INTEGER} AND isactive = 0 AND isdel = 0
     </select>
+
+    <select id="queryActiveByOrderid" resultType="java.lang.Integer">
+        SELECT ishot_order FROM yw_post WHERE isactive = 1 AND circleid IS NULL AND isdel = 0 AND ishot =1 AND ishot_order IS NOT NULL
+    </select>
 </mapper>

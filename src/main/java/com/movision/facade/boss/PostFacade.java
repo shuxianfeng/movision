@@ -2545,6 +2545,24 @@ public class PostFacade {
         return activityContributeService.findAllQueryActivityContribute(map, pager);
     }
 
+
+    public List<Integer> queryActiveByOrderid() {
+        //查询活动排序
+        List<Integer> list = postService.queryActiveByOrderid();
+        List<Integer> tem = new ArrayList<>();
+        for (int i = 1; i < 20; i++) {
+            tem.add(i);
+        }
+        for (int k = tem.size() - 1; k > 0; k--) {
+            for (int l = 0; l < list.size(); l++) {
+                if (list.get(l) == tem.get(k)) {
+                    tem.remove(k);
+                }
+            }
+        }
+        return tem;
+    }
+
     /**
      * 查询活动投稿的帖子列表
      *
