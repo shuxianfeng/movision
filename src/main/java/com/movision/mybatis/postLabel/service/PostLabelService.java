@@ -1,6 +1,7 @@
 package com.movision.mybatis.postLabel.service;
 
 import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.postLabel.entity.PostLabelCount;
 import com.movision.mybatis.postLabel.entity.PostLabelDetails;
 import com.movision.mybatis.postLabel.entity.PostLabelTz;
 import com.movision.mybatis.postLabel.mapper.PostLabelMapper;
@@ -81,4 +82,16 @@ public class PostLabelService {
             throw e;
         }
     }
+
+
+    public List<PostLabelCount> queryCountLabelName(int labelid) {
+        try {
+            log.info("查询帖子标签列表");
+            return postLabelMapper.queryCountLabelName(labelid);
+        } catch (Exception e) {
+            log.error("查询帖子标签列表异常", e);
+            throw e;
+        }
+    }
+
 }

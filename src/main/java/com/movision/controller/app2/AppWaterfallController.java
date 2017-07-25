@@ -2,6 +2,7 @@ package com.movision.controller.app2;
 
 import com.movision.common.Response;
 import com.movision.facade.index.FacadePost;
+import com.movision.facade.label.LabelFacade;
 import com.movision.facade.msgCenter.MsgCenterFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.CircleVo;
@@ -35,6 +36,8 @@ public class AppWaterfallController {
     @Autowired
     private UserFacade userFacade;
 
+    @Autowired
+    private LabelFacade labelFacade;
     /**
      * 下拉刷新
      *
@@ -163,7 +166,7 @@ public class AppWaterfallController {
     public Response attentionLabel(@ApiParam(value = "标签id") @RequestParam int labelid,
                                    @ApiParam(value = "用户id ") @RequestParam int userid) {
         Response response = new Response();
-        int result = facadePost.attentionLabel(userid, labelid);
+        int result = labelFacade.attentionLabel(userid, labelid);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
@@ -181,7 +184,7 @@ public class AppWaterfallController {
     @RequestMapping(value = "labelPage", method = RequestMethod.POST)
     public Response labelPage(@ApiParam(value = "标签id") @RequestParam int labelid) {
         Response response = new Response();
-        PostLabelTz result = facadePost.labelPage(labelid);
+        PostLabelTz result = labelFacade.labelPage(labelid);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
@@ -203,12 +206,30 @@ public class AppWaterfallController {
                                   @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List result = facadePost.postLabelList(labelid, pager, type);
+        List result = labelFacade.postLabelList(labelid, pager, type);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
         pager.result(result);
         response.setData(pager);
+        return response;
+    }
+
+
+    /**
+     * 标签达人
+     *
+     * @return
+     */
+    @ApiOperation(value = "标签达人", notes = "标签达人", response = Response.class)
+    @RequestMapping(value = "tagMan", method = RequestMethod.POST)
+    public Response tagMan(@ApiParam(value = "标签id") @RequestParam int labelid) {
+        Response response = new Response();
+        List result = labelFacade.tagMan(labelid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
         return response;
     }
 
