@@ -2043,7 +2043,7 @@
     <select id="queryoverCrileidPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
         SELECT * from yw_post WHERE isdel=0 ORDER BY heat_value DESC
     </select>
-    <select id="queryPostHeatValue" resultType="com.movision.mybatis.post.entity.PostVo">
+    <select id="findAllPostHeatValue" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT * FROM yw_post WHERE isdel=0 ORDER BY heat_value DESC
     </select>
     <select id="findAllPostListHeat" resultType="com.movision.mybatis.post.entity.PostVo">
@@ -2129,18 +2129,19 @@
 SELECT yw_post.* FROM yw_post LEFT JOIN yw_post_label_relation ON yw_post_label_relation.postid=yw_post.id
 WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_post.heat_value DESC
     </select>
-    <select id="queryPostByid" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+    <select id="findAllPostByid" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT * FROM yw_post WHERE id IN
         <foreach collection="list" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
         AND isdel=0
     </select>
-    <select id="queryUserPostList" resultType="com.movision.mybatis.post.entity.PostVo"
+    <select id="findAllUserPostList" resultType="com.movision.mybatis.post.entity.PostVo"
             parameterType="java.lang.Integer">
         SELECT * FROM  yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0 AND isactive=0 ORDER  BY intime DESC
     </select>
-    <select id="queryUserActive" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.lang.Integer">
+    <select id="findAllUserActive" resultType="com.movision.mybatis.post.entity.PostVo"
+            parameterType="java.lang.Integer">
         SELECT * FROM (
         SELECT t1.*
         FROM yw_post t1
@@ -2153,14 +2154,13 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         )
 
     </select>
-    <select id="queryCollectionListByIds" parameterType="java.util.List"
+    <select id="findAllCollectionListByIds" parameterType="java.util.List"
             resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT * FROM yw_post WHERE id IN
         <foreach collection="list" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
-        AND isdel=0
-        ORDER BY intime DESC
+        AND isdel=0 ORDER BY intime DESC
     </select>
     <select id="queryUserPostCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select COUNT(1) from yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0 AND isactive=0

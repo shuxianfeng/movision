@@ -15,6 +15,8 @@ import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.compressImg.service.CompressImgService;
+import com.movision.mybatis.followLabel.entity.FollowLabel;
+import com.movision.mybatis.followLabel.service.FollowLabelService;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
@@ -28,9 +30,11 @@ import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
 import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.postLabel.entity.PostLabelTz;
 import com.movision.mybatis.postLabel.entity.PostLabelVo;
 import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
+import com.movision.mybatis.postLabelRelation.service.PostLabelRelationService;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserAll;
@@ -94,7 +98,7 @@ public class FacadePost {
     private CircleService circleService;
 
     @Autowired
-    private VideoService videoService;
+    private PostLabelRelationService postLabelRelationService;
 
     @Autowired
     private MovisionOssClient movisionOssClient;
@@ -147,6 +151,8 @@ public class FacadePost {
     private UserService userService;
     @Autowired
     private PostLabelService postLabelService;
+    @Autowired
+    private FollowLabelService followLabelService;
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
 
@@ -1269,7 +1275,7 @@ public class FacadePost {
 
         if (userid == null) {
             //未登录
-            list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+            list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
             findUser(list);
             findPostLabel(list);
             findHotComment(list);
@@ -1321,7 +1327,7 @@ public class FacadePost {
             list = retuenList(criclelist, userid);
             return list;
         } else {
-            list = postService.queryPostHeatValue(paging);
+            list = postService.findAllPostHeatValue(paging);
             findUser(list);
             findPostLabel(list);
             insertmongo(list, userid);
@@ -1355,7 +1361,7 @@ public class FacadePost {
             list = retuenList(alllist, userid);
         } else {
             //登录情况下但是mongodb里面没有刷新记录
-            list = postService.queryPostHeatValue(paging);
+            list = postService.findAllPostHeatValue(paging);
             findUser(list);
             findPostLabel(list);
             insertmongo(list, userid);
@@ -1378,7 +1384,7 @@ public class FacadePost {
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
         if (userid == null) {//未登录
-            list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+            list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
             findUser(list);
             findPostLabel(list);
             findHotComment(list);
@@ -1400,7 +1406,7 @@ public class FacadePost {
                 postVos.removeAll(posts);
                 list = retuenList(postVos, userid);
             } else {//登录但是刷新列表中没有帖子
-                list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+                list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
                 findPostLabel(list);
                 insertmongo(list, userid);
@@ -1424,7 +1430,7 @@ public class FacadePost {
         List<PostVo> posts = new ArrayList<>();
         List<PostVo> list = null;
         if (userid == null) {
-            list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+            list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
             findUser(list);
             findPostLabel(list);
             findHotComment(list);
@@ -1444,7 +1450,7 @@ public class FacadePost {
                 list = retuenList(postVos, userid);
             } else {
                 //登录但是刷新列表中没有帖子
-                list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+                list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
                 findPostLabel(list);
                 findHotComment(list);
@@ -1494,7 +1500,7 @@ public class FacadePost {
                 crileidPost.removeAll(posts);//过滤掉看过的帖子crileidPost就是剩下的帖子
                 list = retuenList(crileidPost, userid);
             } else {
-                list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+                list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
                 findPostLabel(list);
                 findHotComment(list);
@@ -1515,7 +1521,7 @@ public class FacadePost {
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
         if (userid == null) {
-            list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+            list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
             findUser(list);
             findPostLabel(list);
             findHotComment(list);
@@ -1535,7 +1541,7 @@ public class FacadePost {
                 list = retuenList(postVos, userid);
             } else {
                 //登录但是刷新列表中没有帖子
-                list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+                list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
                 findPostLabel(list);
                 findHotComment(list);
@@ -1911,15 +1917,93 @@ public class FacadePost {
                 postVos.add(postid);
             }
             //根据postid查询帖子
-            postVo = postService.queryPostByid(postVos, paging);
-            findUser(postVo);
-            findPostLabel(postVo);
-            findHotComment(postVo);
-            countView(postVo);
+            postVo = postService.findAllPostByid(postVos, paging);
+            if (postVo != null) {
+                findUser(postVo);
+                findPostLabel(postVo);
+                findHotComment(postVo);
+                countView(postVo);
+            }
         }
         return postVo;
     }
 
+
+    /**
+     * 点击标签页上部分
+     *
+     * @param labelid
+     * @return
+     */
+    public PostLabelTz labelPage(int labelid) {
+        //查询头像和名称
+        PostLabelTz postLabel = postLabelService.queryName(labelid);
+        //根据id查询帖子数量
+        int count = postLabelRelationService.labelPost(labelid);
+        postLabel.setCount(count);
+        return postLabel;
+    }
+
+
+    /**
+     * 点击标签页下部分
+     *
+     * @param type
+     * @param paging
+     * @param labelid
+     * @return
+     */
+    public List postLabelList(int type, Paging<PostVo> paging, int labelid) {
+        List list = null;
+        //根据标签id查询帖子
+        List<Integer> postid = postLabelRelationService.postList(labelid);
+        if (type == 1) {//综合
+
+        } else if (type == 2) {//最新
+            //根据所有的id查询帖子按时间排序
+            list = postLabelRelationService.post(postid, paging);
+            list = labelResult(list);
+        } else if (type == 3) {//最热
+            //根据所有的id查询帖子按热度排序
+            list = postLabelRelationService.postHeatValue(postid, paging);
+            list = labelResult(list);
+        }
+        return list;
+    }
+
+
+    /**
+     * 关注标签
+     *
+     * @param userid
+     * @param labelid
+     * @return
+     */
+    public int attentionLabel(int userid, int labelid) {
+        FollowLabel followLabel = new FollowLabel();
+        followLabel.setUserid(userid);
+        followLabel.setLabelid(labelid);
+        followLabel.setIntime(new Date());
+        int result = followLabelService.insertSelective(followLabel);
+        return result;
+    }
+
+    /**
+     * 返回数据
+     *
+     * @param
+     * @param
+     * @return
+     */
+    public List labelResult(List<PostVo> list) {
+        if (list != null) {
+            findUser(list);
+            findPostLabel(list);
+            findHotComment(list);
+            countView(list);
+        }
+        return list;
+    }
 
 }
 

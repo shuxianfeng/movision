@@ -502,7 +502,7 @@ public class PostService {
      *
      * @param userid
      * @param pager
-     * @return
+     * @returnLis
      */
     public List<PostList> queryCollectionListByUserid(String userid, Paging<PostList> pager) {
         try {
@@ -1372,10 +1372,10 @@ public class PostService {
         }
     }
 
-    public List<PostVo> queryPostHeatValue(Paging<PostVo> paging) {
+    public List<PostVo> findAllPostHeatValue(Paging<PostVo> paging) {
         try {
             log.info("查询帖子热度值");
-            return postMapper.queryPostHeatValue(paging.getRowBounds());
+            return postMapper.findAllPostHeatValue(paging.getRowBounds());
         } catch (Exception e) {
             log.error("查询帖子热度值失败", e);
             throw e;
@@ -1522,10 +1522,10 @@ public class PostService {
         }
     }
 
-    public List<PostVo> queryCollectionListByIds(List ids, Paging<PostVo> paging) {
+    public List<PostVo> findAllCollectionListByIds(List ids, Paging<PostVo> paging) {
         try {
             log.info("查询收藏的帖子");
-            return postMapper.queryCollectionListByIds(ids, paging.getRowBounds());
+            return postMapper.findAllCollectionListByIds(ids, paging.getRowBounds());
         } catch (Exception e) {
             log.error("查询收藏的帖子失败", e);
             throw e;
@@ -1612,20 +1612,20 @@ public class PostService {
         }
     }
 
-    public List<PostVo> queryPostByid(List postid, Paging<PostVo> paging) {
+    public List<PostVo> findAllPostByid(List postid, Paging<PostVo> paging) {
         try {
             log.info("根据id查询帖子");
-            return postMapper.queryPostByid(postid, paging.getRowBounds());
+            return postMapper.findAllPostByid(postid, paging.getRowBounds());
         } catch (Exception e) {
             log.error("根据id查询帖子失败", e);
             throw e;
         }
     }
 
-    public List<PostVo> queryUserPostList(int userid, Paging<PostVo> paging) {
+    public List<PostVo> findAllUserPostList(int userid, Paging<PostVo> paging) {
         try {
             log.info("根据id查询帖子");
-            return postMapper.queryUserPostList(userid, paging.getRowBounds());
+            return postMapper.findAllUserPostList(userid, paging.getRowBounds());
         } catch (Exception e) {
             log.error("根据id查询帖子失败", e);
             throw e;
@@ -1633,10 +1633,10 @@ public class PostService {
     }
 
 
-    public List<PostVo> queryUserActive(int userid, Paging<PostVo> paging) {
+    public List<PostVo> findAllUserActive(int userid, Paging<PostVo> paging) {
         try {
             log.info("根据id查询活动");
-            return postMapper.queryUserActive(userid, paging.getRowBounds());
+            return postMapper.findAllUserActive(userid, paging.getRowBounds());
         } catch (Exception e) {
             log.error("根据id查询活动失败", e);
             throw e;

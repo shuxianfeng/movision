@@ -54,7 +54,8 @@ public class AppWaterfallController {
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(map);
+        pager.result(map);
+        response.setData(pager);
         return response;
 
     }
@@ -86,7 +87,7 @@ public class AppWaterfallController {
      */
     @ApiOperation(value = "用户刷新的历史记录列表", notes = "用户刷新的历史记录列表", response = Response.class)
     @RequestMapping(value = "userReflushHishtoryRecord", method = RequestMethod.POST)
-    public Response userReflushHishtoryRecord(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
+    public Response userReflushHishtoryRecord(@ApiParam(value = "用户id") @RequestParam String userid,
                                               @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                               @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
@@ -95,7 +96,8 @@ public class AppWaterfallController {
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(map);
+        pager.result(map);
+        response.setData(pager);
         return response;
     }
 
@@ -122,7 +124,7 @@ public class AppWaterfallController {
      */
     @ApiOperation(value = "个人主页上半部分", notes = "个人主页上半部分", response = Response.class)
     @RequestMapping(value = "queryPersonalHomepage", method = RequestMethod.POST)
-    public Response queryPersonalHomepage(@ApiParam(value = "用户id") @RequestParam(required = false) String userid) {
+    public Response queryPersonalHomepage(@ApiParam(value = "用户id") @RequestParam String userid) {
         Response response = new Response();
         UserVo list = userFacade.queryPersonalHomepage(userid);
         if (response.getCode() == 200) {
@@ -137,8 +139,8 @@ public class AppWaterfallController {
      */
     @ApiOperation(value = "个人主页下半部分", notes = "个人主页下半部分", response = Response.class)
     @RequestMapping(value = "mineBottle", method = RequestMethod.POST)
-    public Response mineBottle(@ApiParam(value = "类型 1 帖子 2 收藏") @RequestParam(required = false) int type,
-                               @ApiParam(value = "用户id") @RequestParam(required = false) String userid,
+    public Response mineBottle(@ApiParam(value = "类型 1 帖子 2 活动 3 收藏（必填）") @RequestParam int type,
+                               @ApiParam(value = "用户id（必填，被查看的这个人的userid，被被被！！！）") @RequestParam String userid,
                                @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
@@ -147,7 +149,26 @@ public class AppWaterfallController {
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
-        response.setData(list);
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
+
+    /**
+     * @return
+     */
+    @ApiOperation(value = "关注标签", notes = "关注标签", response = Response.class)
+    @RequestMapping(value = "attentionLabel", method = RequestMethod.POST)
+    public Response attentionLabel(@ApiParam(value = "标签id") @RequestParam int labelid,
+                                   @ApiParam(value = "用户id ") @RequestParam int userid) {
+        Response response = new Response();
+        int result = facadePost.attentionLabel(userid, labelid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
+
 }

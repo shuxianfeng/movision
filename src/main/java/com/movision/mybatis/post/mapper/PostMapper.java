@@ -231,7 +231,7 @@ public interface PostMapper {
     List<Post> queryNoCrileidPost(int crileid);
     List<Post> queryoverCrileidPost(int crileid);
 
-    List<PostVo> queryPostHeatValue(RowBounds rowBounds);//查询帖子的热度值
+    List<PostVo> findAllPostHeatValue(RowBounds rowBounds);//查询帖子的热度值
 
     List<PostVo> findAllPostListHeat();
 
@@ -263,7 +263,7 @@ public interface PostMapper {
 
     List<PostVo> queryUserListByIds(List ids);
 
-    List<PostVo> queryCollectionListByIds(List ids, RowBounds rowBounds);
+    List<PostVo> findAllCollectionListByIds(List ids, RowBounds rowBounds);
     //根据圈子id查询帖子
     List<PostVo> queryPostCrile(int circleid);
 
@@ -281,12 +281,12 @@ public interface PostMapper {
 
     List<PostVo> queryLabelAllPost(int labelid);
 
-    List<PostVo> queryPostByid(List postid, RowBounds rowBounds);
+    List<PostVo> findAllPostByid(List postid, RowBounds rowBounds);
 
 
-    List<PostVo> queryUserPostList(int userid, RowBounds rowBounds);
+    List<PostVo> findAllUserPostList(int userid, RowBounds rowBounds);
 
-    List<PostVo> queryUserActive(int userid, RowBounds rowBounds);
+    List<PostVo> findAllUserActive(int userid, RowBounds rowBounds);
 
     List<Post> querPostListByUser(int userid);
 

@@ -1,6 +1,7 @@
 package com.movision.mybatis.postLabel.mapper;
 
 import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.postLabel.entity.PostLabelTz;
 
 import java.util.List;
 import java.util.Map;
@@ -23,4 +24,6 @@ public interface PostLabelMapper {
     int updateLabelHeatValue(Map map);
 
     List<PostLabel> queryLabelHeatValue();
+
+    PostLabelTz queryName(int labelid);
 }
