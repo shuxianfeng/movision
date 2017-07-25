@@ -29,4 +29,6 @@ public interface PostLabelRelationMapper {
 
     List<PostVo> postIseecen(List postid, RowBounds rowBounds);
 
+    int batchInsert(List<PostLabelRelation> postLabelRelationList);
+
 }

@@ -83,6 +83,16 @@ public class PostLabelService {
         }
     }
 
+    public int batchInsert(List<PostLabel> postLabelList) {
+        try {
+            log.info("新增帖子标签");
+            return postLabelMapper.batchInsert(postLabelList);
+        } catch (Exception e) {
+            log.error("新增帖子标签失败", e);
+            throw e;
+        }
+    }
+
     /**
      * 新增标签
      *

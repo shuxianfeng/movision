@@ -145,8 +145,7 @@ public class FacadePost {
     private  OpularSearchTermsService opularSearchTermsService;
     @Autowired
     private CommentService commentService;
-    @Autowired
-    private FacadeHeatValue facadeHeatValue;
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -1029,7 +1028,8 @@ public class FacadePost {
      */
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
-    public Map releaseModularPost(HttpServletRequest request, String userid, String circleid, String title, String postcontent, String isactive, String coverimg, String proids) {
+    public Map releaseModularPost(HttpServletRequest request, String userid, String circleid, String title,
+                                  String postcontent, String isactive, String coverimg, String proids, String labellist) {
         Map map = new HashMap();
         //这里需要根据userid判断当前登录的用户是否有发帖权限
         //查询当前圈子的开放范围
@@ -1055,6 +1055,22 @@ public class FacadePost {
                 int flag = post.getId();//返回的主键--帖子id
                 //再保存帖子中分享的商品列表(如果商品id字段不为空)
                 insertPostShareGoods(proids, flag);
+                //插入标签表数据
+                Gson gson = new Gson();
+                List<PostLabel> postLabelList = gson.fromJson(labellist, List.class);
+                postLabelService.batchInsert(postLabelList);
+                //插入标签和帖子关系数据
+                List<PostLabelRelation> postLabelRelationList = new ArrayList<>();
+                for (PostLabel postLabel : postLabelList) {
+                    PostLabelRelation relation = new PostLabelRelation();
+                    relation.setPostid(flag);
+                    //查询新增的标签id，放入关系实体 // TODO: 2017/7/25  
+
+                    postLabelRelationList.add(relation);
+                }
+                postLabelRelationService.batchAdd(postLabelRelationList);
+
+
 
                 pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
 

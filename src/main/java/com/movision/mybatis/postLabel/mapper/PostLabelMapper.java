@@ -34,6 +34,8 @@ public interface PostLabelMapper {
 
     List<PostLabelCount> queryCountLabelName(int labelid);
 
+    int batchInsert(List<PostLabel> postLabelList);
+
     PostLabelDetails queryPostLabelById(PostLabel label);
 
     void deletePostLabel(PostLabel label);
