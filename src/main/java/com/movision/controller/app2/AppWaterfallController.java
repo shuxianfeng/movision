@@ -6,6 +6,7 @@ import com.movision.facade.msgCenter.MsgCenterFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.postLabel.entity.PostLabelTz;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -170,5 +171,45 @@ public class AppWaterfallController {
         return response;
     }
 
+
+    /**
+     * 点击标签页上半部分
+     *
+     * @return
+     */
+    @ApiOperation(value = "点击标签页上半部分", notes = "点击标签页上半部分", response = Response.class)
+    @RequestMapping(value = "labelPage", method = RequestMethod.POST)
+    public Response labelPage(@ApiParam(value = "标签id") @RequestParam int labelid) {
+        Response response = new Response();
+        PostLabelTz result = facadePost.labelPage(labelid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
+
+    /**
+     * 点击标签页下半部分
+     *
+     * @return
+     */
+    @ApiOperation(value = "点击标签页下半部分", notes = "点击标签页下半部分", response = Response.class)
+    @RequestMapping(value = "postLabelList", method = RequestMethod.POST)
+    public Response postLabelList(@ApiParam(value = "标签id") @RequestParam int labelid,
+                                  @ApiParam(value = "类型 1 推荐 2 最新 3精华 ") @RequestParam int type,
+                                  @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                  @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List result = facadePost.postLabelList(labelid, pager, type);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        pager.result(result);
+        response.setData(pager);
+        return response;
+    }
 
 }

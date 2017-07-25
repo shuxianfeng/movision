@@ -27,4 +27,6 @@ public interface PostLabelRelationMapper {
 
     List<PostVo> postHeatValue(List postid, RowBounds rowBounds);
 
+    List<PostVo> postIseecen(List postid, RowBounds rowBounds);
+
 }

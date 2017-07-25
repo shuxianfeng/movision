@@ -89,5 +89,12 @@
         </foreach>
         AND isdel=0 order BY heat_value DESC
     </select>
+    <select id="postIseecen" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post WHERE id IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND isdel=0 AND (isessence=1 OR ishot=1) order BY heat_value DESC
+    </select>
 
 </mapper>

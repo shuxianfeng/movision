@@ -62,4 +62,16 @@ public class PostLabelRelationService {
         }
     }
 
+
+    public List<PostVo> postIseecen(List postid, Paging<PostVo> paging) {
+        try {
+            log.info("查询帖子");
+            return postLabelRelationMapper.postIseecen(postid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询帖子失败", e);
+            throw e;
+        }
+    }
+
+
 }

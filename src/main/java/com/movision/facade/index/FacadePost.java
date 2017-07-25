@@ -1956,15 +1956,16 @@ public class FacadePost {
         List list = null;
         //根据标签id查询帖子
         List<Integer> postid = postLabelRelationService.postList(labelid);
-        if (type == 1) {//综合
-
+        if (type == 1) {//推荐
+            //根据所有的id查询帖子按热度排序
+            list = postLabelRelationService.postHeatValue(postid, paging);
+            list = labelResult(list);
         } else if (type == 2) {//最新
             //根据所有的id查询帖子按时间排序
             list = postLabelRelationService.post(postid, paging);
             list = labelResult(list);
-        } else if (type == 3) {//最热
-            //根据所有的id查询帖子按热度排序
-            list = postLabelRelationService.postHeatValue(postid, paging);
+        } else if (type == 3) {//精华
+            list = postLabelRelationService.postIseecen(postid, paging);
             list = labelResult(list);
         }
         return list;
