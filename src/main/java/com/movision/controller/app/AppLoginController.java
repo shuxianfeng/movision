@@ -58,8 +58,10 @@ public class AppLoginController {
      */
     @ApiOperation(value = "手机注册账号时发送的验证码", notes = "手机注册账号时发送的验证码", response = Response.class)
     @RequestMapping(value = {"/get_mobile_code"}, method = RequestMethod.GET)
-    public Response getMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile) throws IOException, ApiException {
+    public Response getMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile,
+                                  HttpServletRequest request) throws IOException, ApiException {
         log.debug("获得手机验证码  mobile==" + mobile);
+        log.info("获取到的request method>>>>"+request.getMethod());
         Response response = new Response();
         if (ValidateUtils.isMobile(mobile)) {
             // 生成随机字串
