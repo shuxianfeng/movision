@@ -231,7 +231,7 @@ public interface PostMapper {
     List<Post> queryNoCrileidPost(int crileid);
     List<Post> queryoverCrileidPost(int crileid);
 
-    List<PostVo> queryPostHeatValue(RowBounds rowBounds);//查询帖子的热度值
+    List<PostVo> findAllPostHeatValue(RowBounds rowBounds);//查询帖子的热度值
 
     List<PostVo> findAllPostListHeat();
 

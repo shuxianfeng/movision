@@ -54,7 +54,8 @@ public class AppWaterfallController {
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(map);
+        pager.result(map);
+        response.setData(pager);
         return response;
 
     }
@@ -95,7 +96,8 @@ public class AppWaterfallController {
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(map);
+        pager.result(map);
+        response.setData(pager);
         return response;
     }
 
@@ -147,7 +149,8 @@ public class AppWaterfallController {
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
-        response.setData(list);
+        pager.result(list);
+        response.setData(pager);
         return response;
     }
 

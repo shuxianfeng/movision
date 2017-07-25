@@ -1372,10 +1372,10 @@ public class PostService {
         }
     }
 
-    public List<PostVo> queryPostHeatValue(Paging<PostVo> paging) {
+    public List<PostVo> findAllPostHeatValue(Paging<PostVo> paging) {
         try {
             log.info("查询帖子热度值");
-            return postMapper.queryPostHeatValue(paging.getRowBounds());
+            return postMapper.findAllPostHeatValue(paging.getRowBounds());
         } catch (Exception e) {
             log.error("查询帖子热度值失败", e);
             throw e;

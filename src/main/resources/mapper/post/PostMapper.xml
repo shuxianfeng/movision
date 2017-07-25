@@ -2044,7 +2044,7 @@
     <select id="queryoverCrileidPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
         SELECT * from yw_post WHERE isdel=0 ORDER BY heat_value DESC
     </select>
-    <select id="queryPostHeatValue" resultType="com.movision.mybatis.post.entity.PostVo">
+    <select id="findAllPostHeatValue" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT * FROM yw_post WHERE isdel=0 ORDER BY heat_value DESC
     </select>
     <select id="findAllPostListHeat" resultType="com.movision.mybatis.post.entity.PostVo">
@@ -2161,8 +2161,7 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         <foreach collection="list" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
-        AND isdel=0
-        ORDER BY intime DESC
+        AND isdel=0 ORDER BY intime DESC
     </select>
     <select id="queryUserPostCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select COUNT(1) from yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0 AND isactive=0

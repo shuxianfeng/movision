@@ -1275,7 +1275,7 @@ public class FacadePost {
 
         if (userid == null) {
             //未登录
-            list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+            list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
             findUser(list);
             findPostLabel(list);
             findHotComment(list);
@@ -1327,7 +1327,7 @@ public class FacadePost {
             list = retuenList(criclelist, userid);
             return list;
         } else {
-            list = postService.queryPostHeatValue(paging);
+            list = postService.findAllPostHeatValue(paging);
             findUser(list);
             findPostLabel(list);
             insertmongo(list, userid);
@@ -1361,7 +1361,7 @@ public class FacadePost {
             list = retuenList(alllist, userid);
         } else {
             //登录情况下但是mongodb里面没有刷新记录
-            list = postService.queryPostHeatValue(paging);
+            list = postService.findAllPostHeatValue(paging);
             findUser(list);
             findPostLabel(list);
             insertmongo(list, userid);
@@ -1384,7 +1384,7 @@ public class FacadePost {
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
         if (userid == null) {//未登录
-            list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+            list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
             findUser(list);
             findPostLabel(list);
             findHotComment(list);
@@ -1406,7 +1406,7 @@ public class FacadePost {
                 postVos.removeAll(posts);
                 list = retuenList(postVos, userid);
             } else {//登录但是刷新列表中没有帖子
-                list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+                list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
                 findPostLabel(list);
                 insertmongo(list, userid);
@@ -1430,7 +1430,7 @@ public class FacadePost {
         List<PostVo> posts = new ArrayList<>();
         List<PostVo> list = null;
         if (userid == null) {
-            list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+            list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
             findUser(list);
             findPostLabel(list);
             findHotComment(list);
@@ -1450,7 +1450,7 @@ public class FacadePost {
                 list = retuenList(postVos, userid);
             } else {
                 //登录但是刷新列表中没有帖子
-                list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+                list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
                 findPostLabel(list);
                 findHotComment(list);
@@ -1500,7 +1500,7 @@ public class FacadePost {
                 crileidPost.removeAll(posts);//过滤掉看过的帖子crileidPost就是剩下的帖子
                 list = retuenList(crileidPost, userid);
             } else {
-                list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+                list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
                 findPostLabel(list);
                 findHotComment(list);
@@ -1521,7 +1521,7 @@ public class FacadePost {
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
         if (userid == null) {
-            list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+            list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
             findUser(list);
             findPostLabel(list);
             findHotComment(list);
@@ -1541,7 +1541,7 @@ public class FacadePost {
                 list = retuenList(postVos, userid);
             } else {
                 //登录但是刷新列表中没有帖子
-                list = postService.queryPostHeatValue(paging);//根据热度值排序查询帖子
+                list = postService.findAllPostHeatValue(paging);//根据热度值排序查询帖子
                 findUser(list);
                 findPostLabel(list);
                 findHotComment(list);

@@ -547,9 +547,11 @@ public class UserFacade {
             //用户收藏的帖子
             List<Integer> collection = collectionService.queryUserPost(Integer.parseInt(userid));
             //收藏的id查帖子
-            list = postService.findAllCollectionListByIds(collection, paging);
-            for (int i = 0; i < list.size(); i++) {
-                facadePost.countView(list);
+            if (collection.size() != 0) {
+                list = postService.findAllCollectionListByIds(collection, paging);
+                for (int i = 0; i < list.size(); i++) {
+                    facadePost.countView(list);
+                }
             }
         }
         return list;
