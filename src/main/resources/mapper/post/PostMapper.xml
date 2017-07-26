@@ -983,7 +983,10 @@
                 ishot=#{ishot,jdbcType=INTEGER},
             </if>
             <if test="oprtime!=null">
-                oprtime=#{oprtime,jdbcType=TIMESTAMP}
+                oprtime=#{oprtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ishotorder != null">
+                ishot_order = #{ishotorder,jdbcType=INTEGER}
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -1597,7 +1600,10 @@
                 ishot,
             </if>
             <if test="oprtime!=null">
-                oprtime
+                oprtime,
+            </if>
+            <if test="ishotorder != null">
+                ishot_order
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -1650,7 +1656,10 @@
                 #{ishot,jdbcType=INTEGER},
             </if>
             <if test="oprtime!=null">
-                #{oprtime,jdbcType=TIMESTAMP}
+                #{oprtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ishotorder != null">
+                #{ishotorder,jdbcType=INTEGER}
             </if>
         </trim>
     </insert>
