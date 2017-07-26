@@ -1474,11 +1474,13 @@ public class PostFacade {
                 System.out.println("是否热门===========" + ishot);
                 if (StringUtil.isNotEmpty(ishot)) {
                     postActiveList.setIshot(Integer.parseInt(ishot));//设为热门
+                    System.out.println("热门排序=============" + ishotorder);
                     if (StringUtil.isNotEmpty(ishotorder) && ishot.equals("1") || ishot.equals(1)) {
                         if (!StringUtils.isEmpty(hotimgurl)) {
                             postActiveList.setHotimgurl(hotimgurl);//首页方形图
                         }
                         postActiveList.setIshotorder(Integer.parseInt(ishotorder));//热门排序
+                        System.out.println("热门排序=============" + ishotorder);
                     } else if (ishot.equals("0") || ishot.equals(0)) {
                         postActiveList.setIshotorder(0);//热门排序
                     }
