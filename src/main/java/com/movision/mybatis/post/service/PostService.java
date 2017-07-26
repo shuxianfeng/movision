@@ -900,10 +900,10 @@ public class PostService {
      * @param postActiveList
      * @return
      */
-    public Integer updateActivePostById(PostTo postActiveList) {
+    public Integer updateActivePostById(Post postActiveList) {
         try {
             log.info("编辑活动");
-            return postMapper.updateActiveById(postActiveList);
+            return postMapper.updateByPrimaryKeySelective(postActiveList);
         } catch (Exception e) {
             log.error("编辑活动异常", e);
             throw e;

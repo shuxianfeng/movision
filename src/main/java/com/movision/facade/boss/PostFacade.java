@@ -1419,32 +1419,32 @@ public class PostFacade {
     public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String userid, String coverimg, String postcontent, String isessence,
                                                      String orderid, String activefee, String activetype, String iscontribute, String begintime, String endtime,
                                                      String hotimgurl, String ishot, String ishotorder, String essencedate, String goodsid) {
-        PostTo postActiveList = new PostTo();
+        Post postActiveList = new Post();
         Map<String, Integer> map = new HashedMap();
             try {
                 postActiveList.setId(Integer.parseInt(id));//帖子id
                 postActiveList.setTitle(title);//帖子标题
                 postActiveList.setSubtitle(subtitle);//帖子副标题
                 if (StringUtil.isNotEmpty(activetype)) {//活动类型是否为空
-                    postActiveList.setActivetype(activetype);
+                    postActiveList.setActivetype(Integer.parseInt(activetype));
                     if (activetype.equals("2")) {//组织类活动
                         if (StringUtil.isNotBlank(activefee)) {
                             postActiveList.setActivefee(Double.parseDouble(activefee));//费用
-                            postActiveList.setIscontribute("0");
+                            postActiveList.setIscontribute(0);
                         } else {
                             postActiveList.setActivefee(0.0);
-                            postActiveList.setIscontribute("0");
+                            postActiveList.setIscontribute(0);
                         }
                     } else if (activetype.equals("0")) {//告知类活动
                         if (StringUtil.isNotBlank(iscontribute)) {//是否投稿
-                            postActiveList.setIscontribute(iscontribute);
+                            postActiveList.setIscontribute(Integer.parseInt(iscontribute));
                             postActiveList.setActivefee(0.0);
                         }
                     }
                 }
                 postActiveList.setCoverimg(coverimg);//帖子封面
                 if (!StringUtil.isEmpty(userid)) {
-                    postActiveList.setUserid(userid);
+                    postActiveList.setUserid(Integer.parseInt(userid));
                 }
                 if (StringUtil.isNotEmpty(postcontent)) {
                     postActiveList.setPostcontent(postcontent);//内容
@@ -1453,7 +1453,7 @@ public class PostFacade {
                 Date estime = null;
                 if (!StringUtil.isEmpty(isessence)) {
                     if (Integer.parseInt(isessence) == 0) {
-                        postActiveList.setIsessence(isessence);//是否为首页精选
+                        postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
                         postActiveList.setEssencedate(null);
                         postActiveList.setOrderid(null);
                     } else {
@@ -1468,12 +1468,12 @@ public class PostFacade {
                         if (StringUtil.isNotEmpty(orderid)) {
                             postActiveList.setOrderid(Integer.parseInt(orderid));
                         }
-                        postActiveList.setIsessence(isessence);//是否为首页精选
+                        postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
                     }
                 }
                 System.out.println("是否热门===========" + ishot);
                 if (StringUtil.isNotEmpty(ishot)) {
-                    postActiveList.setIshot(ishot);//设为热门
+                    postActiveList.setIshot(Integer.parseInt(ishot));//设为热门
                     if (StringUtil.isNotEmpty(ishotorder) && ishot.equals("1") || ishot.equals(1)) {
                         if (!StringUtils.isEmpty(hotimgurl)) {
                             postActiveList.setHotimgurl(hotimgurl);//首页方形图
