@@ -297,22 +297,22 @@
             <if test="loginTime!=null">
                 login_time,
             </if>
-            <if test="deviceno!=null">
+            <if test="isrecommend!=null">
                 isrecommend,
             </if>
-            <if test="deviceno!=null">
+            <if test="heat_value!=null">
                 heat_value,
             </if>
-            <if test="deviceno!=null">
+            <if test="longitude!=null">
                 longitude,
             </if>
-            <if test="deviceno!=null">
+            <if test="latitude!=null">
                 latitude,
             </if>
-            <if test="deviceno!=null">
+            <if test="ip!=null">
                 ip,
             </if>
-            <if test="deviceno!=null">
+            <if test="ip_city!=null">
                 ip_city,
             </if>
         </trim>

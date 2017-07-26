@@ -1098,6 +1098,14 @@ public class FacadePost {
         }.getType());    //字符串为为list
         log.debug("接口传入的标签集合：" + postLabelList.toString());
 
+        //从缓存中获取userid，citycode, 并且根据标签类型，获取标签的头像
+        for (PostLabel p : postLabelList) {
+            p.setUserid(ShiroUtil.getAppUserID());
+            p.setCitycode(ShiroUtil.getIpCity());
+            //todo 根据标签类型，获取标签的头像
+
+        }
+
         postLabelService.batchInsert(postLabelList);
         //插入标签和帖子关系数据
         String[] labelNameStr = new String[postLabelList.size()];
