@@ -83,6 +83,40 @@ public class AppLoginController {
         return response;
     }
 
+    @ApiOperation(value = "H5邀请注册页面-发送手机验证码", notes = "H5邀请注册页面-发送手机验证码", response = Response.class)
+    @RequestMapping(value = {"/H5_get_mobile_code"}, method = RequestMethod.GET)
+    public Response getMobileCodeForH5(@ApiParam(value = "验证的手机号") @RequestParam String mobile) throws IOException, ApiException {
+        log.debug("获得手机验证码  mobile==" + mobile);
+        Response response = new Response();
+        if (ValidateUtils.isMobile(mobile)) {
+            //校验该手机号是否注册过
+            User appuser = userFacade.queryUserByPhone(mobile);
+            //若该手机号已经注册过，则返回408
+            if (null != appuser) {
+                response.setCode(408);
+                response.setMessage("你已经注册过，请下载美番APP直接登录");
+                return response;
+            }
+
+            // 生成随机字串
+            String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE, VerifyCodeUtils.VERIFY_CODES_DIGIT);
+            log.info("verifyCode == " + verifyCode);
+
+            appRegisterFacade.sendSms(mobile, verifyCode);
+
+            appRegisterFacade.putValidationInfoToSession(mobile, verifyCode, "r");
+
+            response.setCode(200);
+            response.setData(verifyCode);
+        } else {
+            log.error("手机号不正确！");
+            response.setCode(300);
+            response.setMessage("请输入正确的手机号！");
+        }
+
+        return response;
+    }
+
 
     /**
      * 验证码校验之后：
