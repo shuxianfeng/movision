@@ -62,7 +62,7 @@ public class CircleAppFacade {
 
             //圈子内用户未看过的总更新数
             //根据圈子id查询帖子
-            List<PostVo> postVos = postService.queryPostCrile(circleid);
+            List<PostVo> postVos = postService.findAllPostCrile(circleid);
 
             if (StringUtil.isNotEmpty(userid)){
                 //不为空查询当前用户未看过的总更新数
