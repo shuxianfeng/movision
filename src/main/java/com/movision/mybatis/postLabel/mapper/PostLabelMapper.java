@@ -1,5 +1,6 @@
 package com.movision.mybatis.postLabel.mapper;
 
+import com.movision.mybatis.circle.entity.CircleCount;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.*;
@@ -52,4 +53,6 @@ public interface PostLabelMapper {
     List<PostVo> findAllNewPost(int circleid, RowBounds rowBounds);
 
     List<PostVo> findAllIsencePost(int circleid, RowBounds rowBounds);
+
+    List<CircleCount> queryCirclePeople(int circleid);
 }

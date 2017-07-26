@@ -1,5 +1,6 @@
 package com.movision.mybatis.postLabel.service;
 
+import com.movision.mybatis.circle.entity.CircleCount;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.*;
@@ -231,6 +232,16 @@ public class PostLabelService {
             return postLabelMapper.findAllIsencePost(circleid, paging.getRowBounds());
         } catch (Exception e) {
             log.error("圈子里的精华帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<CircleCount> queryCirclePeople(int circleid) {
+        try {
+            log.info("圈子达人");
+            return postLabelMapper.queryCirclePeople(circleid);
+        } catch (Exception e) {
+            log.error("圈子达人失败", e);
             throw e;
         }
     }
