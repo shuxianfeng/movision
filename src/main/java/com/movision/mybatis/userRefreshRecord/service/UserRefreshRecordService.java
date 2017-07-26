@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,6 +62,26 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
         AggregationResults<UesrreflushCount> list = mongoTemplate.aggregate(aggregation, "userRefreshRecord", UesrreflushCount.class);
         List<UesrreflushCount> list1 = list.getMappedResults();
         return list1;
+
+    }
+
+
+    public List mongoList(String begintime, String endtime) {
+        List<DBObject> list = null;
+        BasicDBList condList = new BasicDBList();//存放查询条件的集合
+        BasicDBObject searchQuery = new BasicDBObject();
+        try {
+            MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            DB db = mClient.getDB("searchRecord");
+            DBCollection collection = db.getCollection("userRefreshRecord");
+            searchQuery.put("intime", BasicDBObjectBuilder.start("$gte", begintime + " 00:00:00").add("$lte", endtime + " 23:59:59").get());
+            condList.add(searchQuery);
+            DBCursor dbCursor = collection.find(condList);
+            list = dbCursor.toArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
 
     }
 

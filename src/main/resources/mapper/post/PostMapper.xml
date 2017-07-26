@@ -38,7 +38,7 @@
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
         isactive, partsum_enddays, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
-        hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid
+        hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,city
     </sql>
 
     <!--基础查询语句-->
@@ -2261,4 +2261,17 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
     <select id="queryActiveByOrderid" resultType="java.lang.Integer">
         SELECT ishot_order FROM yw_post WHERE isactive = 1 AND circleid IS NULL AND isdel = 0 AND ishot =1 AND ishot_order IS NOT NULL
     </select>
+
+    <select id="activeSum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post WHERE activeid=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="findAllActivePost" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post WHERE activeid=#{postid,jdbcType=INTEGER} ORDER BY heat_value DESC
+    </select>
+    <select id="findAllActivePostIntime" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post WHERE activeid=#{postid,jdbcType=INTEGER} ORDER BY intime DESC
+    </select>
+
 </mapper>

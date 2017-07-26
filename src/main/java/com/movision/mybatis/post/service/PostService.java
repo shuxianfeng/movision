@@ -1775,4 +1775,35 @@ public class PostService {
         }
     }
 
+    public Integer activeSum(int postid) {
+        try {
+            log.info("活动参与总人数");
+            return postMapper.activeSum(postid);
+        } catch (Exception e) {
+            log.error("活动参与总人数失败", e);
+            throw e;
+        }
+    }
+
+
+    public List<PostVo> findAllActivePost(int postid) {
+        try {
+            log.info("查询活动里面最热的帖子");
+            return postMapper.findAllActivePost(postid);
+        } catch (Exception e) {
+            log.error("查询活动里面最热的帖子", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllActivePostIntime(int postid) {
+        try {
+            log.info("查询活动里面最新的帖子");
+            return postMapper.findAllActivePostIntime(postid);
+        } catch (Exception e) {
+            log.error("查询活动里面最新的帖子", e);
+            throw e;
+        }
+    }
+
 }

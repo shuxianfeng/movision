@@ -123,4 +123,5 @@ public interface CircleMapper {
 
     int updateCircleHeatValue(Map map);
 
+
 }

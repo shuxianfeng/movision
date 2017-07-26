@@ -100,9 +100,6 @@ public class FacadePost {
     private CircleService circleService;
 
     @Autowired
-    private PostLabelRelationService postLabelRelationService;
-
-    @Autowired
     private MovisionOssClient movisionOssClient;
 
     @Autowired
@@ -147,13 +144,12 @@ public class FacadePost {
     private  OpularSearchTermsService opularSearchTermsService;
     @Autowired
     private CommentService commentService;
-
+    @Autowired
+    private PostLabelRelationService postLabelRelationService;
     @Autowired
     private UserService userService;
     @Autowired
     private PostLabelService postLabelService;
-    @Autowired
-    private FollowLabelService followLabelService;
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
 
@@ -164,7 +160,8 @@ public class FacadePost {
             parammap.put("userid", Integer.parseInt(userid));
         }
         PostVo vo = postService.queryPostDetail(parammap);
-
+        List<PostLabel> postLabels = postService.queryPostLabel(Integer.parseInt(postid));
+        vo.setPostLabels(postLabels);
         //-----帖子内容格式转换
         String str = vo.getPostcontent();
         JSONArray jsonArray = JSONArray.fromObject(str);
@@ -182,10 +179,10 @@ public class FacadePost {
                 vo.setCoverimg(compressurl);
             }
 
-            int rewardsum = postService.queryRewardSum(postid);//查询帖子被打赏的次数
+            /** int rewardsum = postService.queryRewardSum(postid);//查询帖子被打赏的次数
             vo.setRewardsum(rewardsum);
             List<UserLike> nicknamelist = postService.queryRewardPersonNickname(postid);
-            vo.setRewardpersonnickname(nicknamelist);
+             vo.setRewardpersonnickname(nicknamelist);*/
             /**   if (type.equals("1") || type.equals("2")) {
              Video video = postService.queryVideoUrl(Integer.parseInt(postid));
              vo.setVideourl(video.getVideourl());
@@ -209,8 +206,8 @@ public class FacadePost {
             }
             Integer circleid = vo.getCircleid();
             //查询帖子详情最下方推荐的4个热门圈子
-            List<Circle> hotcirclelist = circleService.queryHotCircle();
-            vo.setHotcirclelist(hotcirclelist);
+            /**List<Circle> hotcirclelist = circleService.queryHotCircle();
+             vo.setHotcirclelist(hotcirclelist);*/
             //查询帖子中分享的商品
             List<GoodsVo> shareGoodsList = goodsService.queryShareGoodsList(Integer.parseInt(postid));
             vo.setShareGoodsList(shareGoodsList);
@@ -316,6 +313,8 @@ public class FacadePost {
             parammap.put("userid", Integer.parseInt(userid));
         }
         ActiveVo active = postService.queryNoticeActive(parammap);
+        /**List<PostLabel> postLabels = postService.queryPostLabel(Integer.parseInt(postid));
+         active.setPostLabels(postLabels);*/
 
         //计算距离结束时间
         Date begin = active.getBegintime();
@@ -323,11 +322,11 @@ public class FacadePost {
         Date now = new Date();
         int enddays = DateUtils.activeEndDays(now, begin, end);
         active.setEnddays(enddays);
-
+        //List<PostVo> postVos=postService
         //查询活动参与总人数
-        int partsum = postService.queryActivePartSum(Integer.parseInt(postid));
+        //int partsum = postService.queryActivePartSum(Integer.parseInt(postid));
+        int partsum = postService.activeSum(Integer.parseInt(postid));
         active.setPartsum(partsum);
-
         //如果为商城促销类活动，需要在此基础上增加促销类商品列表
         if (activetype.equals("1")) {
 
@@ -337,7 +336,7 @@ public class FacadePost {
         }
 
         //增加活动详情最下方推荐的四个热门活动
-        active.setHotActiveList(postService.queryFourHotActive());
+        //  active.setHotActiveList(postService.queryFourHotActive());
 
         //对活动内容进行脱敏处理
         active.setTitle((String) desensitizationUtil.desensitization(active.getTitle()).get("str"));//活动主标题脱敏
@@ -1621,6 +1620,25 @@ public class FacadePost {
     }
 
     /**
+     * 查询用户信息
+     *
+     * @param
+     * @return
+     */
+    public List findCircleName(List<PostVo> list) {
+        String circlename = null;
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                int circleid = list.get(i).getCircleid();
+                circlename = circleService.queryCircleName(circleid);
+                list.get(i).setCirclename(circlename);
+            }
+        }
+        return list;
+    }
+
+
+    /**
      * 帖子浏览量 (公共方法)
      *
      * @param list
@@ -1950,6 +1968,29 @@ public class FacadePost {
             }
         }
         return postVo;
+    }
+
+    /**
+     * 活动详情里的最热最新
+     *
+     * @param type
+     * @param postid
+     * @return
+     */
+    public List activePostDetailHot(int type, String postid) {
+        List<PostVo> list = null;
+        if (type == 1) {//最热
+            list = postService.findAllActivePost(Integer.parseInt(postid));
+            countView(list);
+            findUser(list);
+            findCircleName(list);
+        } else if (type == 2) {//最新
+            list = postService.findAllActivePostIntime(Integer.parseInt(postid));
+            countView(list);
+            findUser(list);
+            findCircleName(list);
+        }
+        return list;
     }
 }
 

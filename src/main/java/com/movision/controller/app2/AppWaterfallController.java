@@ -9,6 +9,7 @@ import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.PostLabelTz;
 import com.movision.mybatis.user.entity.UserVo;
+import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -38,6 +39,8 @@ public class AppWaterfallController {
 
     @Autowired
     private LabelFacade labelFacade;
+    @Autowired
+    UserRefreshRecordService userRefreshRecordService;
     /**
      * 下拉刷新
      *
@@ -226,6 +229,32 @@ public class AppWaterfallController {
     public Response tagMan(@ApiParam(value = "标签id") @RequestParam int labelid) {
         Response response = new Response();
         List result = labelFacade.tagMan(labelid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
+    @ApiOperation(value = "时间", notes = "时间", response = Response.class)
+    @RequestMapping(value = "mongoList", method = RequestMethod.POST)
+    public Response mongoList() {
+        Response response = new Response();
+        List result = userRefreshRecordService.mongoList("2017-07-01", "2017-08-01");
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
+
+    @ApiOperation(value = "活动详情中的最热最新", notes = "活动详情中的最热最新", response = Response.class)
+    @RequestMapping(value = "activePostDetailHot", method = RequestMethod.POST)
+    public Response activePostDetailHot(@ApiParam(value = "类型 1 最热 2 最新") @RequestParam int type,
+                                        @ApiParam(value = "活动id") @RequestParam String postid) {
+        Response response = new Response();
+        List result = facadePost.activePostDetailHot(type, postid);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }

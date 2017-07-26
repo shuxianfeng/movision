@@ -309,4 +309,10 @@ public interface PostMapper {
 
     List<Integer> queryActiveByOrderid();
 
+    List<PostVo> findAllActivePost(int postid);
+
+    List<PostVo> findAllActivePostIntime(int postid);
+
+    Integer activeSum(int postid);
+
 }
