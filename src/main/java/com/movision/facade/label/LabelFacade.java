@@ -6,9 +6,7 @@ import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.followLabel.entity.FollowLabel;
 import com.movision.mybatis.followLabel.service.FollowLabelService;
 import com.movision.mybatis.post.entity.PostVo;
-import com.movision.mybatis.postLabel.entity.PostLabel;
-import com.movision.mybatis.postLabel.entity.PostLabelCount;
-import com.movision.mybatis.postLabel.entity.PostLabelTz;
+import com.movision.mybatis.postLabel.entity.*;
 import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.postLabelRelation.service.PostLabelRelationService;
 import com.movision.utils.pagination.model.Paging;
@@ -131,20 +129,43 @@ public class LabelFacade {
     /**
      * 圈子标签上半部分
      *
-     * @param postid
+     * @param
      * @return
      */
-    public CircleVo queryCircleByPostid(String postid) {
-        //根据帖子id查询圈子
-        CircleVo circleVo = postLabelService.queryCircleByPostid(Integer.parseInt(postid));
+    public CircleVo queryCircleByPostid(String circleid) {
+        //根据id查询圈子所有
+        CircleVo circleVo = postLabelService.queryCircleByPostid(Integer.parseInt(circleid));
         //根据圈子查询今日这个圈子的发帖数
-        int circleid = circleVo.getId();
-        int todayPost = postLabelService.postInCircle(circleid);
+        int todayPost = postLabelService.postInCircle(Integer.parseInt(circleid));
         circleVo.setTodayPost(todayPost);
         //查询圈子下所有帖子用的标签
-        List<PostLabel> postLabels = postLabelService.queryLabelCircle(circleid);
+        List<PostLabel> postLabels = postLabelService.queryLabelCircle(Integer.parseInt(circleid));
         circleVo.setPostLabels(postLabels);
         return circleVo;
+    }
+
+
+    /**
+     * 圈子标签下半部分
+     *
+     * @param type
+     * @param paging
+     * @param circleid
+     * @return
+     */
+    public List queryCircleBotton(int type, Paging<PostVo> paging, String circleid) {
+        List<PostVo> list = null;
+        if (type == 1) {//最热
+            list = postLabelService.findAllHotPost(Integer.parseInt(circleid), paging);
+            list = labelResult(list);
+        } else if (type == 2) {//最新
+            list = postLabelService.findAllNewPost(Integer.parseInt(circleid), paging);
+            list = labelResult(list);
+        } else if (type == 3) {//精华
+            list = postLabelService.findAllIsencePost(Integer.parseInt(circleid), paging);
+            list = labelResult(list);
+        }
+        return list;
     }
 
 

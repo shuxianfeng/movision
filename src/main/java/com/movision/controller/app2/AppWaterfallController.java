@@ -277,15 +277,38 @@ public class AppWaterfallController {
     }
 
 
-    @ApiOperation(value = "圈子标签的上半部分", notes = "圈子标签的上半部分", response = Response.class)
+    @ApiOperation(value = "点击圈子标签页上半部分", notes = "点击圈子标签页上半部分", response = Response.class)
     @RequestMapping(value = "queryCircleByPostid", method = RequestMethod.POST)
-    public Response queryCircleByPostid(@ApiParam(value = "帖子id") @RequestParam String postid) {
+    public Response queryCircleByPostid(@ApiParam(value = "圈子id") @RequestParam String circleid) {
         Response response = new Response();
-        CircleVo result = labelFacade.queryCircleByPostid(postid);
+        CircleVo result = labelFacade.queryCircleByPostid(circleid);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
         response.setData(result);
+        return response;
+    }
+
+
+    /**
+     * 点击圈子标签页下半部分
+     *
+     * @return
+     */
+    @ApiOperation(value = "点击圈子标签页下半部分", notes = "点击圈子标签页下半部分", response = Response.class)
+    @RequestMapping(value = "queryCircleBotton", method = RequestMethod.POST)
+    public Response queryCircleBotton(@ApiParam(value = "圈子id") @RequestParam String circleid,
+                                      @ApiParam(value = "类型 1 推荐 2 最新 3精华 ") @RequestParam int type,
+                                      @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                      @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List result = labelFacade.queryCircleBotton(type, pager, circleid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        pager.result(result);
+        response.setData(pager);
         return response;
     }
 

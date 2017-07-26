@@ -2,6 +2,8 @@ package com.movision.mybatis.circle.entity;
 
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.postLabel.entity.PostLabelDetails;
+import com.movision.mybatis.postLabel.entity.PostLabelVo;
 import com.movision.mybatis.user.entity.User;
 
 import java.io.Serializable;

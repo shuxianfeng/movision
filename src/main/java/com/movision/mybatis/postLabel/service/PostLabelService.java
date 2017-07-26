@@ -1,10 +1,8 @@
 package com.movision.mybatis.postLabel.service;
 
 import com.movision.mybatis.circle.entity.CircleVo;
-import com.movision.mybatis.postLabel.entity.PostLabel;
-import com.movision.mybatis.postLabel.entity.PostLabelCount;
-import com.movision.mybatis.postLabel.entity.PostLabelDetails;
-import com.movision.mybatis.postLabel.entity.PostLabelTz;
+import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.postLabel.entity.*;
 import com.movision.mybatis.postLabel.mapper.PostLabelMapper;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
@@ -176,10 +174,10 @@ public class PostLabelService {
         }
     }
 
-    public CircleVo queryCircleByPostid(int postid) {
+    public CircleVo queryCircleByPostid(int circleid) {
         try {
             log.info("根据帖子id查询圈子标签");
-            return postLabelMapper.queryCircleByPostid(postid);
+            return postLabelMapper.queryCircleByPostid(circleid);
         } catch (Exception e) {
             log.error("根据帖子id查询圈子标签异常", e);
             throw e;
@@ -202,7 +200,37 @@ public class PostLabelService {
             log.info("圈子里的标签");
             return postLabelMapper.queryLabelCircle(circleid);
         } catch (Exception e) {
-            log.error("圈子里的标签", e);
+            log.error("圈子里的标签异常", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllHotPost(int circleid, Paging<PostVo> paging) {
+        try {
+            log.info("圈子里的最热帖子");
+            return postLabelMapper.findAllHotPost(circleid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("圈子里的最热帖子异常", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllNewPost(int circleid, Paging<PostVo> paging) {
+        try {
+            log.info("圈子里的最新帖子");
+            return postLabelMapper.findAllNewPost(circleid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("圈子里的最新帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllIsencePost(int circleid, Paging<PostVo> paging) {
+        try {
+            log.info("圈子里的精华帖子");
+            return postLabelMapper.findAllIsencePost(circleid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("圈子里的精华帖子失败", e);
             throw e;
         }
     }

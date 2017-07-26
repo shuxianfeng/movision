@@ -1,10 +1,8 @@
 package com.movision.mybatis.postLabel.mapper;
 
 import com.movision.mybatis.circle.entity.CircleVo;
-import com.movision.mybatis.postLabel.entity.PostLabel;
-import com.movision.mybatis.postLabel.entity.PostLabelCount;
-import com.movision.mybatis.postLabel.entity.PostLabelTz;
-import com.movision.mybatis.postLabel.entity.PostLabelDetails;
+import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.postLabel.entity.*;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -43,9 +41,15 @@ public interface PostLabelMapper {
 
     List<Integer> queryLabelIdList(String[] nameStr);
 
-    CircleVo queryCircleByPostid(int postid);
+    CircleVo queryCircleByPostid(int circleid);
 
-    int postInCircle(int circleid);
+    Integer postInCircle(int circleid);
 
     List<PostLabel> queryLabelCircle(int circleid);
+
+    List<PostVo> findAllHotPost(int circleid, RowBounds rowBounds);
+
+    List<PostVo> findAllNewPost(int circleid, RowBounds rowBounds);
+
+    List<PostVo> findAllIsencePost(int circleid, RowBounds rowBounds);
 }
