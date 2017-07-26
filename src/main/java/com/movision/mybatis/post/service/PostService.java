@@ -1793,20 +1793,20 @@ public class PostService {
     }
 
 
-    public List<PostVo> findAllActivePost(int postid) {
+    public List<PostVo> findAllActivePost(int postid, Paging<PostVo> paging) {
         try {
             log.info("查询活动里面最热的帖子");
-            return postMapper.findAllActivePost(postid);
+            return postMapper.findAllActivePost(postid, paging.getRowBounds());
         } catch (Exception e) {
             log.error("查询活动里面最热的帖子", e);
             throw e;
         }
     }
 
-    public List<PostVo> findAllActivePostIntime(int postid) {
+    public List<PostVo> findAllActivePostIntime(int postid, Paging<PostVo> paging) {
         try {
             log.info("查询活动里面最新的帖子");
-            return postMapper.findAllActivePostIntime(postid);
+            return postMapper.findAllActivePostIntime(postid, paging.getRowBounds());
         } catch (Exception e) {
             log.error("查询活动里面最新的帖子", e);
             throw e;

@@ -1991,15 +1991,15 @@ public class FacadePost {
      * @param postid
      * @return
      */
-    public List activePostDetailHot(int type, String postid) {
+    public List activePostDetailHot(int type, String postid, Paging<PostVo> paging) {
         List<PostVo> list = null;
         if (type == 1) {//最热
-            list = postService.findAllActivePost(Integer.parseInt(postid));
+            list = postService.findAllActivePost(Integer.parseInt(postid), paging);
             countView(list);
             findUser(list);
             findCircleName(list);
         } else if (type == 2) {//最新
-            list = postService.findAllActivePostIntime(Integer.parseInt(postid));
+            list = postService.findAllActivePostIntime(Integer.parseInt(postid), paging);
             countView(list);
             findUser(list);
             findCircleName(list);
