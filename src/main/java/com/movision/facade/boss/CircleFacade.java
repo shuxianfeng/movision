@@ -135,6 +135,7 @@ public class CircleFacade {
                         vo.setIsrecommend(listt.get(e).getIsrecommend());//推荐首页
                         vo.setIsdiscover(listt.get(e).getIsdiscover());//推荐发现
                         vo.setCreatetime(listt.get(e).getCreatetime());//圈子创建时间
+                        vo.setHeatvalue(listt.get(e).getHeatvalue());//圈子热度
                         circleVoslist.add(vo);
                     }
                     //外层圈子类型列表数据
@@ -432,6 +433,7 @@ public class CircleFacade {
             circleDetails.setOrderid(0);//设置精选排序，初始值：0
             circleDetails.setIsrecommend(0);//设置是否被推荐，初始值0
             circleDetails.setPermission(1);//设置其他用户是否可以发帖，初始值：1是
+            circleDetails.setHeatvalue(0);//圈子热度
             Integer s = circleService.insertCircle(circleDetails);//创建圈子
             Integer cirid = circleDetails.getId();
             if (!StringUtils.isEmpty(circleadmin)) {//管理员列表
