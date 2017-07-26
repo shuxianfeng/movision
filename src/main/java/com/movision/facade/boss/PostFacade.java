@@ -2588,10 +2588,10 @@ public class PostFacade {
         for (int i = 1; i < 10; i++) {
             tem.add(i);
         }
-        for (int k = tem.size() - 1; k > 0; k--) {
-            for (int l = 0; l < list.size(); l++) {
-                if (list.get(l) == tem.get(k)) {
-                    tem.remove(k);
+        for (int k = 0; k < list.size(); k++) {
+            for (int l = 0; l < tem.size(); l++) {
+                if (tem.get(l) == list.get(k)) {
+                    tem.remove(tem.get(l));
                 }
             }
         }
