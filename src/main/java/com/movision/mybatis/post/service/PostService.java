@@ -1553,10 +1553,10 @@ public class PostService {
         }
     }
 
-    public List<PostVo> queryCityPost(String citycode) {
+    public List<PostVo> findAllCityPost(String citycode) {
         try {
             log.info("根据地区查询帖子");
-            return postMapper.queryCityPost(citycode);
+            return postMapper.findAllCityPost(citycode);
         } catch (Exception e) {
             log.error("根据地区查询帖子失败", e);
             throw e;

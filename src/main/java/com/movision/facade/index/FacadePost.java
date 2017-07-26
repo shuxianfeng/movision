@@ -1440,7 +1440,7 @@ public class FacadePost {
                 //根据传过来的地区去yw_city查代码
                 String citycode = postService.queryCityCode(area);
                 //根据city查询帖子
-                List<PostVo> postVos = postService.queryCityPost(citycode);
+                List<PostVo> postVos = postService.findAllCityPost(citycode);
                 postVos.removeAll(posts);
                 list = retuenList(postVos, userid, paging);
             } else {//登录但是刷新列表中没有帖子

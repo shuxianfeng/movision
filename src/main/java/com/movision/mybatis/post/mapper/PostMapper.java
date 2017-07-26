@@ -269,7 +269,7 @@ public interface PostMapper {
 
     String queryCityCode(String area);//查询code
 
-    List<PostVo> queryCityPost(String citycode);//
+    List<PostVo> findAllCityPost(String citycode);//
 
     List<PostLabel> queryPostLabel(int postid);
 
