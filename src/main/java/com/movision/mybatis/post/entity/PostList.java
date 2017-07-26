@@ -105,6 +105,26 @@ public class PostList implements Serializable {
 
     private Integer activeid;//活动id
 
+    private Integer heatvalue;//热度值
+
+    private Integer click;//点击量
+
+    public Integer getClick() {
+        return click;
+    }
+
+    public void setClick(Integer click) {
+        this.click = click;
+    }
+
+    public Integer getHeatvalue() {
+        return heatvalue;
+    }
+
+    public void setHeatvalue(Integer heatvalue) {
+        this.heatvalue = heatvalue;
+    }
+
     public Integer getActiveid() {
         return activeid;
     }

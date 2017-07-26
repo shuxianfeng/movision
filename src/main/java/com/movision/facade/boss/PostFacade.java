@@ -41,6 +41,7 @@ import com.movision.mybatis.share.service.SharesService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.JsoupCompressImg;
@@ -145,6 +146,9 @@ public class PostFacade {
     @Autowired
     private PostLabelService postLabelService;
 
+    @Autowired
+    private UserRefreshRecordService userRefreshRecordService;
+
 
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
@@ -163,9 +167,17 @@ public class PostFacade {
                 Map map = new HashMap();
             map.put("loginid", loginid);
                 list = postService.queryPostByManageByList(map, pager);
+            for (int i = 0; i < list.size(); i++) {
+                Integer click = userRefreshRecordService.postcount(list.get(i).getId());
+                list.get(i).setClick(click);
+            }
             return list;
         } else if (res.get("resault").equals(2) || res.get("resault").equals(0)) {//权限最大查询所有帖子列表
             list = postService.queryPostByList(pager);
+            for (int i = 0; i < list.size(); i++) {//获取帖子的点击次数
+                Integer click = userRefreshRecordService.postcount(list.get(i).getId());
+                list.get(i).setClick(click);
+            }
             return list;
         } else {
             return list;
