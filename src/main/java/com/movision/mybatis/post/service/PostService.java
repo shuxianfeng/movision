@@ -900,7 +900,7 @@ public class PostService {
      * @param postActiveList
      * @return
      */
-    public Integer updateActivePostById(PostActiveList postActiveList) {
+    public Integer updateActivePostById(PostTo postActiveList) {
         try {
             log.info("编辑活动");
             return postMapper.updateActiveById(postActiveList);

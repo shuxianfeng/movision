@@ -934,56 +934,59 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateActiveById" parameterType="com.movision.mybatis.post.entity.PostActiveList">
+    <update id="updateActiveById" parameterType="com.movision.mybatis.post.entity.PostTo">
         update yw_post
         <set>
+            <if test="id != null">
+                id = #{id,jdbcType=INTEGER},
+            </if>
             <if test="title != null">
                 title = #{title,jdbcType=VARCHAR},
             </if>
             <if test="subtitle != null">
                 subtitle = #{subtitle,jdbcType=VARCHAR},
             </if>
-            <if test="postcontent != null">
-                postcontent = #{postcontent,jdbcType=LONGVARCHAR},
-            </if>
             <if test="activetype != null">
                 activetype = #{activetype,jdbcType=INTEGER},
-            </if>
-            <if test="orderid != null">
-                orderid=#{orderid,jdbcType=INTEGER},
-            </if>
-            <if test="orderid == null">
-                orderid= NULL ,
-            </if>
-            <if test="isessence != null">
-                isessence = #{isessence,jdbcType=INTEGER},
-            </if>
-            <if test="coverimg != null">
-                coverimg = #{coverimg,jdbcType=VARCHAR},
-            </if>
-            <if test="essencedate != null">
-                essencedate = #{essencedate,jdbcType=TIMESTAMP},
-            </if>
-            <if test="essencedate == null">
-                essencedate = NULL ,
-            </if>
-            <if test="userid != null">
-                userid = #{userid,jdbcType=INTEGER},
             </if>
             <if test="activefee != null">
                 activefee = #{activefee,jdbcType=DOUBLE},
             </if>
+            <if test="coverimg != null">
+                coverimg = #{coverimg,jdbcType=VARCHAR},
+            </if>
+            <if test="postcontent != null">
+                postcontent = #{postcontent,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="isessence != null">
+                isessence = #{isessence,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                orderid = #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="essencedate != null">
+                essencedate = #{essencedate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isactive != null">
+                isactive = #{isactive,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userid!=null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
             <if test="iscontribute!=null">
-                iscontribute=#{iscontribute,jdbcType=INTEGER},
+                iscontribute = #{iscontribute,jdbcType=INTEGER},
             </if>
             <if test="hotimgurl!=null">
-                hotimgurl=#{hotimgurl,jdbcType=VARCHAR},
+                hotimgurl = #{hotimgurl,jdbcType=VARCHAR},
             </if>
             <if test="ishot!=null">
-                ishot=#{ishot,jdbcType=INTEGER},
+                ishot = #{ishot,jdbcType=INTEGER},
             </if>
             <if test="oprtime!=null">
-                oprtime=#{oprtime,jdbcType=TIMESTAMP},
+                oprtime = #{oprtime,jdbcType=TIMESTAMP},
             </if>
             <if test="ishotorder != null">
                 ishot_order = #{ishotorder,jdbcType=INTEGER}

@@ -186,7 +186,7 @@ public interface PostMapper {
 
     List<Post> queryMyPostList(Map map);
 
-    Integer updateActiveById(PostActiveList postActiveList);//编辑活动帖子
+    Integer updateActiveById(PostTo postActiveList);//编辑活动帖子
 
     Integer updateActiveByIdP(Period period);//编辑活动帖子
 

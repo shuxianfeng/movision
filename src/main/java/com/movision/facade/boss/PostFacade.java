@@ -1419,14 +1419,14 @@ public class PostFacade {
     public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String userid, String coverimg, String postcontent, String isessence,
                                                      String orderid, String activefee, String activetype, String iscontribute, String begintime, String endtime,
                                                      String hotimgurl, String ishot, String ishotorder, String essencedate, String goodsid) {
-        PostActiveList postActiveList = new PostActiveList();
+        PostTo postActiveList = new PostTo();
         Map<String, Integer> map = new HashedMap();
             try {
                 postActiveList.setId(Integer.parseInt(id));//帖子id
                 postActiveList.setTitle(title);//帖子标题
                 postActiveList.setSubtitle(subtitle);//帖子副标题
                 if (StringUtil.isNotEmpty(activetype)) {//活动类型是否为空
-                    postActiveList.setActivetype(Integer.parseInt(activetype));
+                    postActiveList.setActivetype(activetype);
                     if (activetype.equals("2")) {//组织类活动
                         if (StringUtil.isNotBlank(activefee)) {
                             postActiveList.setActivefee(Double.parseDouble(activefee));//费用
@@ -1444,7 +1444,7 @@ public class PostFacade {
                 }
                 postActiveList.setCoverimg(coverimg);//帖子封面
                 if (!StringUtil.isEmpty(userid)) {
-                    postActiveList.setUserid(Integer.parseInt(userid));
+                    postActiveList.setUserid(userid);
                 }
                 if (StringUtil.isNotEmpty(postcontent)) {
                     postActiveList.setPostcontent(postcontent);//内容
@@ -1453,7 +1453,7 @@ public class PostFacade {
                 Date estime = null;
                 if (!StringUtil.isEmpty(isessence)) {
                     if (Integer.parseInt(isessence) == 0) {
-                        postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+                        postActiveList.setIsessence(isessence);//是否为首页精选
                         postActiveList.setEssencedate(null);
                         postActiveList.setOrderid(null);
                     } else {
@@ -1468,7 +1468,7 @@ public class PostFacade {
                         if (StringUtil.isNotEmpty(orderid)) {
                             postActiveList.setOrderid(Integer.parseInt(orderid));
                         }
-                        postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+                        postActiveList.setIsessence(isessence);//是否为首页精选
                     }
                 }
                 System.out.println("是否热门===========" + ishot);
