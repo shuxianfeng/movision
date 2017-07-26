@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -86,5 +87,32 @@ public class CircleAppFacade {
             hotCircleList.set(i, vo);
         }
         return hotCircleList;
+    }
+
+    /**
+     * 发现页--关注--关注的圈子列表查询
+     */
+    public List<CircleVo> getMineFollowCircle(String userid, Paging<CircleVo> pager){
+
+        //首先查询当前用户已关注的圈子列表
+        Map<String, Object> paramap = new HashMap<>();
+        paramap.put("userid", Integer.parseInt(userid));
+        List<CircleVo> myFollowCircleList = circleService.getMineFollowCircle(paramap, pager);
+
+        for (int i=0; i<myFollowCircleList.size(); i++){
+            CircleVo vo = myFollowCircleList.get(i);
+            //循环获取圈子中包含的帖子数
+            int circleid = vo.getId();
+            int postsum = postService.queryPostNumByCircleid(circleid);
+            vo.setPostnum(postsum);
+
+            //循环获取当前用户是否已关注该圈子
+            paramap.put("circleid", circleid);
+            int count = circleService.querySupportSum(paramap);
+            vo.setIsfollow(count);
+            myFollowCircleList.set(i, vo);
+        }
+
+        return myFollowCircleList;
     }
 }

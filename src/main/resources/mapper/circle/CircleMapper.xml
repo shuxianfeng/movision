@@ -944,8 +944,21 @@
         </if>
     </select>
 
+    <!--查询用户关注的圈子列表，无分页-->
     <select id="queryMyFollowCircleList" resultType="com.movision.mybatis.circle.entity.CircleVo">
         SELECT c.*
+        FROM yw_circle c
+        LEFT JOIN yw_follow_circle f on c.id = f.circleid
+        WHERE c.isdel = 0
+        AND c.status = 1
+        <if test="userid!=null and userid!=''">
+            and f.userid = #{userid}
+        </if>
+    </select>
+
+    <!--2.0查询用户关注的圈子列表，有分页-->
+    <select id="getMineFollowCircle" resultType="com.movision.mybatis.circle.entity.CircleVo" >
+        SELECT c.id, c.name, c.maylikeimg
         FROM yw_circle c
         LEFT JOIN yw_follow_circle f on c.id = f.circleid
         WHERE c.isdel = 0
