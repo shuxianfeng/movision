@@ -49,6 +49,15 @@ public class PostActiveList implements Serializable {
     private Integer activeid;//活动id
     private Integer contribute;//投稿数
     private Integer ishotorder;//活动热门排序
+    private Integer heatvalue;//热度值
+
+    public Integer getHeatvalue() {
+        return heatvalue;
+    }
+
+    public void setHeatvalue(Integer heatvalue) {
+        this.heatvalue = heatvalue;
+    }
 
     public Integer getContribute() {
         return contribute;

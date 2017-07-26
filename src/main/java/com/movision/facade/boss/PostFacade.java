@@ -310,6 +310,9 @@ public class PostFacade {
             postList.setEndtime(endtime);//结束时间
             postList.setPersum(persum);//报名人数
             postList.setSumfree(sumfree);//总费用
+            postList.setIshotorder(list.get(i).getIshotorder());//排序
+            postList.setHeatvalue(list.get(i).getHeatvalue());//热度值
+            postList.setContribute(list.get(i).getContribute());//投稿数
             String activeStatue = "";
             if (begintime != null && endtime != null) {
                 long begin = begintime.getTime();
