@@ -747,5 +747,13 @@ public class CircleService {
 
     }
 
-
+    public List<Map<String, Object>> selectCircleInCatagory() {
+        try {
+            log.info("查询发帖-圈子种类");
+            return circleMapper.selectCircleInCatagory();
+        } catch (Exception e) {
+            log.error("查询发帖-圈子种类失败", e);
+            throw e;
+        }
+    }
 }

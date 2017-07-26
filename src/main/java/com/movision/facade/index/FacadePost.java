@@ -13,6 +13,9 @@ import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
+import com.movision.mybatis.circleCategory.entity.CircleCategory;
+import com.movision.mybatis.circleCategory.entity.CircleCategoryVo;
+import com.movision.mybatis.circleCategory.service.CircleCategoryService;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
@@ -154,6 +157,9 @@ public class FacadePost {
     private PostLabelService postLabelService;
     @Autowired
     private FollowUserService followUserService;
+
+    @Autowired
+    private CircleCategoryService circleCategoryService;
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
 
@@ -2025,5 +2031,39 @@ public class FacadePost {
         int result = followUserService.insertSelective(followUser);
         return result;
     }
+
+    public List<Map> getCircleInCatagory() {
+        // 所有的圈子类型
+        List<Map<String, Object>> list = circleService.selectCircleInCatagory();
+        // 所有的catagory
+        List<CircleCategory> circleCategoryVoList = circleCategoryService.queryCircleCategoryList();
+
+        List<Map> resultList = new ArrayList<>();
+        //1 需要把圈子按照不同的category进行分组
+        for (CircleCategory c : circleCategoryVoList) {
+
+            List<Map> circlelist = new ArrayList<>();
+            for (Map m : list) {
+                //若是同一个category，则放到一个集合中
+                if (c.getId() == (int) m.get("cid")) {
+
+                    Map map = new HashedMap();
+                    map.put("circle_id", m.get("circleid"));
+                    map.put("circle_name", m.get("circlename"));
+                    circlelist.add(map);
+                }
+            }
+            Map categoryMap = new HashedMap();
+            categoryMap.put("category_id", c.getId());
+            categoryMap.put("category_name", c.getCategoryname());
+            categoryMap.put("category_circles", circlelist);
+
+            resultList.add(categoryMap);
+        }
+        log.debug("返回的resultList：" + resultList);
+        return resultList;
+    }
+
+
 }
 

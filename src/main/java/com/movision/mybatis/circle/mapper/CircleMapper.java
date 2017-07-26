@@ -126,5 +126,5 @@ public interface CircleMapper {
 
     int updateCircleHeatValue(Map map);
 
-
+    List<Map<String, Object>> selectCircleInCatagory();
 }

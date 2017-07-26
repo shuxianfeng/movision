@@ -166,4 +166,5 @@
             WHERE userid=#{userid,jdbcType=INTEGER}
         </if>
     </select>
+
 </mapper>

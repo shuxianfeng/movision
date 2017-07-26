@@ -24,6 +24,11 @@ public class FacadePostTest extends SpringTestCase {
     private FacadePost facadePost;
 
     @Test
+    public void getCircleInCatagory() throws Exception {
+        facadePost.getCircleInCatagory();
+    }
+
+    @Test
     public void releaseModularPost() throws Exception {
 
         String userid = "323";  //18051989558

@@ -1083,4 +1083,12 @@
     <update id="updateCircleHeatValue" parameterType="java.util.Map">
         UPDATE  yw_circle SET  heat_value=#{sum,jdbcType=INTEGER} WHERE id=#{id,jdbcType=INTEGER}
     </update>
+
+    <select id="selectCircleInCatagory" resultType="java.util.HashMap">
+        SELECT c.id as circleid,c.name AS circlename,
+        a.id as cid, a.categoryname FROM yw_circle c
+        JOIN yw_circle_category a ON c.category = a.id
+        WHERE c.status = '1' AND c.isdel = 0
+        ORDER BY a.id
+    </select>
 </mapper>

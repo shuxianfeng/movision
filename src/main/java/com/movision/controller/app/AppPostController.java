@@ -602,5 +602,14 @@ public class AppPostController {
         return response;
     }
 
+    @ApiOperation(value = "发帖-查询圈子目录", notes = "发帖-查询圈子目录", response = Response.class)
+    @RequestMapping(value = "get_circle_category_when_post", method = RequestMethod.GET)
+    public Response getCircleCategoryWhenPost() {
+        Response response = new Response();
+        List<Map> resault = facadePost.getCircleInCatagory();
+        response.setData(resault);
+        return response;
+    }
+
 
 }
