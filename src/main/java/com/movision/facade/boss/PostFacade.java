@@ -1471,6 +1471,7 @@ public class PostFacade {
                         postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
                     }
                 }
+                System.out.println("活动id=================" + id);
                 System.out.println("是否热门===========" + ishot);
                 if (StringUtil.isNotEmpty(ishot)) {
                     postActiveList.setIshot(Integer.parseInt(ishot));//设为热门
