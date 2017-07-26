@@ -901,7 +901,13 @@ public class PostService {
      * @return
      */
     public Integer updateActivePostById(PostActiveList postActiveList) {
-        return postMapper.updateActiveById(postActiveList);
+        try {
+            log.info("编辑活动");
+            return postMapper.updateActiveById(postActiveList);
+        } catch (Exception e) {
+            log.error("编辑活动异常", e);
+            throw e;
+        }
     }
 
     /**

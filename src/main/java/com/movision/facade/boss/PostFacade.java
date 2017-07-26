@@ -1476,9 +1476,9 @@ public class PostFacade {
                 }
                 if (!StringUtil.isEmpty(ishot)) {
                     postActiveList.setIshot(ishot);//设为热门
-                    if (StringUtil.isNotEmpty(ishotorder) && ishot.equals("1")) {
+                    if (StringUtil.isNotEmpty(ishotorder) && ishot.equals("1") || ishot.equals(1)) {
                         postActiveList.setIshotorder(Integer.parseInt(ishotorder));//热门排序
-                    } else if (StringUtil.isNotEmpty(ishotorder) && ishot.equals("0")) {
+                    } else if (StringUtil.isNotEmpty(ishotorder) && ishot.equals("0") || ishot.equals(0)) {
                         postActiveList.setIshotorder(0);//热门排序
                     }
                 }

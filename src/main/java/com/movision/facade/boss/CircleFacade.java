@@ -98,6 +98,7 @@ public class CircleFacade {
                 int follownews = 0;//今日关注
                 int postnews = 0;//今日新增帖子
                 int isessences = 0;//精贴数
+                int heatvalue = 0;//热度
                 map.put("category", circlenum.get(i).getCategory());
                 List<User> userslist = userService.queryCircleMangerByUseridList(map);//根据用户id查询出圈子所有管理员列表
                 if (listt.size() > 0) {
@@ -113,6 +114,7 @@ public class CircleFacade {
                         follows += listt.get(e).getFollownum();//关注和
                         follownews += listt.get(e).getFollownewnum();//新增关注和
                         isessences += listt.get(e).getIsessencenum();//精贴和
+                        heatvalue += listt.get(e).getHeatvalue();//热度
 
                         //根据圈子id查询圈子的管理员列表
                         List<User> circleManage = userService.queryCircleManagerByCircleList(cid);
@@ -154,6 +156,7 @@ public class CircleFacade {
                     circlenum.get(i).setFollownewnum(follownews);
                     circlenum.get(i).setIsessencenum(isessences);
                     circlenum.get(i).setClassify(circleVoslist);
+                    circlenum.get(i).setHeatvaluenum(heatvalue);
                 }
             }
             for (int n = 0; n < circlenum.size(); ) {
