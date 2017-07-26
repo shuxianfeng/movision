@@ -2170,17 +2170,8 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
     </select>
     <select id="findAllUserActive" resultType="com.movision.mybatis.post.entity.PostVo"
             parameterType="java.lang.Integer">
-        SELECT * FROM (
-        SELECT t1.*,t2.begintime,t2.endtime
-        FROM yw_post t1
-        LEFT JOIN yw_active_period t2
-        ON t1.id = t2.postid
-        ) t
-        WHERE t.isdel = '0'
-        AND t.id IN (
-        SELECT postid FROM yw_active_part WHERE userid = #{userid,jdbcType=INTEGER}
-        )
-
+        SELECT p.*,r.begintime,r.endtime FROM yw_post p LEFT JOIN yw_active_period r ON r.postid=p.id WHERE
+        p.userid=#{userid,jdbcType=INTEGER} AND p.activeid IS NOT NULL AND p.isdel=0
     </select>
     <select id="findAllCollectionListByIds" parameterType="java.util.List"
             resultType="com.movision.mybatis.post.entity.PostVo">
@@ -2194,17 +2185,7 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         select COUNT(1) from yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0 AND isactive=0
     </select>
     <select id="queryUserActiveCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM (
-        SELECT t1.*
-        FROM yw_post t1
-        LEFT JOIN yw_active_period t2
-        ON t1.id = t2.postid
-        ) t
-        WHERE t.isdel = '0'
-        AND t.id IN (
-        SELECT postid FROM yw_active_part WHERE userid = #{userid,jdbcType=INTEGER}
-        )
-
+        SELECT COUNT(1) FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND activeid IS NOT NULL AND isdel=0
     </select>
 
     <select id="findAllQueryActivitycontributeListById" parameterType="java.lang.Integer"

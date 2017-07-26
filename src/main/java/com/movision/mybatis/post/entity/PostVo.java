@@ -125,6 +125,10 @@ public class PostVo implements Serializable {
 
     public List<PostLabel> postLabels;
 
+    private Integer ishotorder;//活动设为热门排序字段
+
+    private Integer activeid;//活动id
+
     public void setPhoto(String photo) {
         this.photo = photo;
     }
@@ -133,10 +137,6 @@ public class PostVo implements Serializable {
 
         return photo;
     }
-
-    private Integer ishotorder;//活动设为热门排序字段
-
-    private Integer activeid;//活动id
 
     public Integer getIshotorder() {
         return ishotorder;
