@@ -1,6 +1,7 @@
 package com.movision.mybatis.circle.entity;
 
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.user.entity.User;
 
 import java.io.Serializable;
@@ -82,6 +83,26 @@ public class CircleVo implements Serializable {
 
     private Integer userid;//用户id
     private Integer heatvalue;
+
+    private Integer todayPost;//今日发帖数
+
+    private List<PostLabel> postLabels;//标签
+
+    public List<PostLabel> getPostLabels() {
+        return postLabels;
+    }
+
+    public void setPostLabels(List<PostLabel> postLabels) {
+        this.postLabels = postLabels;
+    }
+
+    public Integer getTodayPost() {
+        return todayPost;
+    }
+
+    public void setTodayPost(Integer todayPost) {
+        this.todayPost = todayPost;
+    }
 
     public Integer getHeatvalue() {
         return heatvalue;

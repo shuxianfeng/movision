@@ -1,9 +1,12 @@
 package com.movision.facade.label;
 
 import com.movision.facade.index.FacadePost;
+import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.followLabel.entity.FollowLabel;
 import com.movision.mybatis.followLabel.service.FollowLabelService;
 import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabel.entity.PostLabelCount;
 import com.movision.mybatis.postLabel.entity.PostLabelTz;
 import com.movision.mybatis.postLabel.service.PostLabelService;
@@ -122,6 +125,26 @@ public class LabelFacade {
         //根据id查询用的最多的用户
         List<PostLabelCount> labelCounts = postLabelService.queryCountLabelName(labelid);
         return labelCounts;
+    }
+
+
+    /**
+     * 圈子标签上半部分
+     *
+     * @param postid
+     * @return
+     */
+    public CircleVo queryCircleByPostid(String postid) {
+        //根据帖子id查询圈子
+        CircleVo circleVo = postLabelService.queryCircleByPostid(Integer.parseInt(postid));
+        //根据圈子查询今日这个圈子的发帖数
+        int circleid = circleVo.getId();
+        int todayPost = postLabelService.postInCircle(circleid);
+        circleVo.setTodayPost(todayPost);
+        //查询圈子下所有帖子用的标签
+        List<PostLabel> postLabels = postLabelService.queryLabelCircle(circleid);
+        circleVo.setPostLabels(postLabels);
+        return circleVo;
     }
 
 
