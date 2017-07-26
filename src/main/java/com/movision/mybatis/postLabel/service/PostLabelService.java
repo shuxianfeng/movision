@@ -1,5 +1,6 @@
 package com.movision.mybatis.postLabel.service;
 
+import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabel.entity.PostLabelCount;
 import com.movision.mybatis.postLabel.entity.PostLabelDetails;
@@ -171,6 +172,37 @@ public class PostLabelService {
             return postLabelMapper.queryCountLabelName(labelid);
         } catch (Exception e) {
             log.error("查询帖子标签列表异常", e);
+            throw e;
+        }
+    }
+
+    public CircleVo queryCircleByPostid(int postid) {
+        try {
+            log.info("根据帖子id查询圈子标签");
+            return postLabelMapper.queryCircleByPostid(postid);
+        } catch (Exception e) {
+            log.error("根据帖子id查询圈子标签异常", e);
+            throw e;
+        }
+    }
+
+
+    public Integer postInCircle(int circleid) {
+        try {
+            log.info("今日在圈子发的帖子");
+            return postLabelMapper.postInCircle(circleid);
+        } catch (Exception e) {
+            log.error("今日在圈子发的帖子异常", e);
+            throw e;
+        }
+    }
+
+    public List<PostLabel> queryLabelCircle(int circleid) {
+        try {
+            log.info("圈子里的标签");
+            return postLabelMapper.queryLabelCircle(circleid);
+        } catch (Exception e) {
+            log.error("圈子里的标签", e);
             throw e;
         }
     }

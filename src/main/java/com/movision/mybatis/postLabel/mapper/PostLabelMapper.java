@@ -1,5 +1,6 @@
 package com.movision.mybatis.postLabel.mapper;
 
+import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabel.entity.PostLabelCount;
 import com.movision.mybatis.postLabel.entity.PostLabelTz;
@@ -41,4 +42,10 @@ public interface PostLabelMapper {
     void deletePostLabel(PostLabel label);
 
     List<Integer> queryLabelIdList(String[] nameStr);
+
+    CircleVo queryCircleByPostid(int postid);
+
+    int postInCircle(int circleid);
+
+    List<PostLabel> queryLabelCircle(int circleid);
 }

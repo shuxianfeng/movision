@@ -201,4 +201,18 @@
 p.id=r.postid LEFT JOIN   yw_post_label l ON l.id=r.labelid LEFT JOIN yw_user u ON u.id=p.userid
 WHERE l.id=#{labelid,jdbcType=INTEGER} GROUP BY p.userid ORDER BY count DESC
   </select>
+    <select id="queryCircleByPostid" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.circle.entity.CircleVo">
+        SELECT yw_circle.* FROM yw_circle LEFT JOIN yw_post ON yw_post.circleid=yw_circle.id WHERE yw_post.id=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="postInCircle" parameterType="java.lang.Integer " resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
+        WHERE to_days(p.intime) = to_days(now()) AND c.id=#{circleid,jdbcType=INTEGER}
+    </select>
+    <select id="queryLabelCircle" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+        SELECT DISTINCT(l.name) FROM
+    yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id LEFT JOIN yw_post_label l ON l.id=r.labelid
+  WHERE p.circleid=#{circleid,jdbcType=INTEGER}
+    </select>
 </mapper>

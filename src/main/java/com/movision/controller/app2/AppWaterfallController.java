@@ -276,4 +276,18 @@ public class AppWaterfallController {
         return response;
     }
 
+
+    @ApiOperation(value = "圈子标签的上半部分", notes = "圈子标签的上半部分", response = Response.class)
+    @RequestMapping(value = "queryCircleByPostid", method = RequestMethod.POST)
+    public Response queryCircleByPostid(@ApiParam(value = "帖子id") @RequestParam String postid) {
+        Response response = new Response();
+        CircleVo result = labelFacade.queryCircleByPostid(postid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
+
 }
