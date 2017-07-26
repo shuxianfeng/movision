@@ -6,6 +6,7 @@ import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserRole;
+import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
@@ -34,6 +35,8 @@ public interface CircleMapper {
     int queryIsSupport(Map<String, Object> parammap);
 
     List<CircleVo> queryMyFollowCircleList(Map<String, Object> parammap);
+
+    List<CircleVo> getMineFollowCircle(Map<String, Object> paramap, RowBounds rowBounds);
 
     void addSupportSum(Map<String, Object> parammap);
 

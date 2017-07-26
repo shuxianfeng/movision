@@ -83,12 +83,33 @@ public class CircleService {
         }
     }
 
+    /**
+     * 无分页
+     * @param parammap
+     * @return
+     */
     public List<CircleVo> queryMyFollowCircleList(Map<String, Object> parammap){
         try {
             log.info("查询当前用户关注的所有圈子列表");
             return circleMapper.queryMyFollowCircleList(parammap);
         }catch (Exception e){
             log.error("查询当前用户关注的所有圈子列表失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 有分页
+     * @param paramap
+     * @param pager
+     * @return
+     */
+    public List<CircleVo> getMineFollowCircle(Map<String, Object> paramap, Paging<CircleVo> pager){
+        try {
+            log.info("美番2.0查询当前用户关注的所有圈子列表");
+            return circleMapper.getMineFollowCircle(paramap, pager.getRowBounds());
+        }catch (Exception e){
+            log.error("美番2.0查询当前用户关注的所有圈子列表失败", e);
             throw e;
         }
     }
