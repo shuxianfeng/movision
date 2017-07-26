@@ -19,6 +19,8 @@ import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.compressImg.service.CompressImgService;
 import com.movision.mybatis.followLabel.entity.FollowLabel;
 import com.movision.mybatis.followLabel.service.FollowLabelService;
+import com.movision.mybatis.followUser.entity.FollowUser;
+import com.movision.mybatis.followUser.service.FollowUserService;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
@@ -150,6 +152,8 @@ public class FacadePost {
     private UserService userService;
     @Autowired
     private PostLabelService postLabelService;
+    @Autowired
+    private FollowUserService followUserService;
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
 
@@ -1991,6 +1995,25 @@ public class FacadePost {
             findCircleName(list);
         }
         return list;
+    }
+
+    /**
+     * 关注用户
+     *
+     * @param userid
+     * @param postid
+     * @return
+     */
+    public int concernedAuthor(int userid, String postid) {
+        //根据postid查询发帖ren
+        int interestedusers = postService.postUserId(Integer.parseInt(postid));
+
+        FollowUser followUser = new FollowUser();
+        followUser.setIntime(new Date());
+        followUser.setInterestedusers(interestedusers);
+        followUser.setUserid(userid);
+        int result = followUserService.insertSelective(followUser);
+        return result;
     }
 }
 

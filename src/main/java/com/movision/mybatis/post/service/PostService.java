@@ -1806,4 +1806,13 @@ public class PostService {
         }
     }
 
+    public int postUserId(int postid) {
+        try {
+            log.info("根据id查询用户");
+            return postMapper.postUserId(postid);
+        } catch (Exception e) {
+            log.error("根据id查询用户失败", e);
+            throw e;
+        }
+    }
 }

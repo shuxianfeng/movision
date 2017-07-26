@@ -262,4 +262,18 @@ public class AppWaterfallController {
         return response;
     }
 
+
+    @ApiOperation(value = "关注作者", notes = "关注作者", response = Response.class)
+    @RequestMapping(value = "concernedAuthor", method = RequestMethod.POST)
+    public Response concernedAuthor(@ApiParam(value = "用户id") @RequestParam int userid,
+                                    @ApiParam(value = "帖子id") @RequestParam String postid) {
+        Response response = new Response();
+        int result = facadePost.concernedAuthor(userid, postid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
 }

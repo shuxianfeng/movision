@@ -315,4 +315,6 @@ public interface PostMapper {
 
     Integer activeSum(int postid);
 
+    int postUserId(int postid);
+
 }
