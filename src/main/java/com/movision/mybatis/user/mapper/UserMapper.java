@@ -145,7 +145,7 @@ public interface UserMapper {
 
     List<UserVo> getMineFollowAuthor(Map<String, Object> paramap, RowBounds rowBounds);
 
-    int queryPostNumByAuthor(int id);
+    int queryPostNumByAuthor(Map<String, Object> paramap);
 
     int queryIsFollowAuthor(Map<String, Object> paramap);
 

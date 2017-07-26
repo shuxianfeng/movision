@@ -582,11 +582,11 @@ public class UserFacade {
             //遍历获取作者的已发帖子数
             UserVo vo = myFollowAuthorList.get(i);
             int id = vo.getId();//查询到的作者userid
-            int count = userService.queryPostNumByAuthor(id);
+            paramap.put("id", id);
+            int count = userService.queryPostNumByAuthor(paramap);
             vo.setPostsum(count);
 
             //获取当前用户是否关注过该作者
-            paramap.put("id", id);
             int sum = userService.queryIsFollowAuthor(paramap);
             vo.setIsfollow(sum);
 

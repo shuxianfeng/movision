@@ -1220,7 +1220,7 @@
     </select>
 
     <!--2.0查询当前作者已发帖子数-->
-    <select id="queryPostNumByAuthor" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.UserVo" >
+    <select id="queryPostNumByAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.UserVo" >
         SELECT count(*) FROM yw_post WHERE userid = #{id,jdbcType=INTEGER}
     </select>
 

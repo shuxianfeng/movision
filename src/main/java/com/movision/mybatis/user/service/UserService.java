@@ -912,10 +912,10 @@ public class UserService {
         }
     }
 
-    public int queryPostNumByAuthor(int id){
+    public int queryPostNumByAuthor(Map<String, Object> paramap){
         try {
             log.info("查询该作者已发帖子数");
-            return userMapper.queryPostNumByAuthor(id);
+            return userMapper.queryPostNumByAuthor(paramap);
         }catch (Exception e){
             log.error("查询该作者已发帖子数失败", e);
             throw e;
