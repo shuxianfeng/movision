@@ -715,12 +715,11 @@
         SELECT isdiscover FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER} AND status=1 AND isdel=0
     </select>
 
-    <update id="updateDiscover" parameterType="java.util.Map">
-        UPDATE yw_circle SET orderid=#{orderid,jdbcType=INTEGER},isdiscover=1 WHERE id=#{circleid,jdbcType=INTEGER}
-    </update>
-
-    <update id="updateDiscoverDel" parameterType="java.lang.String">
-        UPDATE yw_circle SET orderid=0,isdiscover=0 WHERE id=#{circleid,jdbcType=INTEGER}
+    <update id="updateDiscover" parameterType="com.movision.mybatis.circle.entity.Circle">
+        UPDATE yw_circle
+        SET
+        isdiscover=#{isdiscover,jdbcType=INTEGER}
+        WHERE id=#{circleid,jdbcType=INTEGER}
     </update>
 
     <select id="queryCircleRecommendIndex" parameterType="java.lang.String" resultType="java.lang.Integer">

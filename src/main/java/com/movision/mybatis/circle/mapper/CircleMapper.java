@@ -80,9 +80,7 @@ public interface CircleMapper {
 
     Integer queryCircleDiscover(String circleid);
 
-    Integer updateDiscover(Map<String, Integer> map);
-
-    Integer updateDiscoverDel(String circleid);
+    Integer updateDiscover(Circle circle);
 
     Integer queryCircleRecommendIndex(String circleid);
 

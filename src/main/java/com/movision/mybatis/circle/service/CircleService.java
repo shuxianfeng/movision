@@ -431,31 +431,16 @@ public class CircleService {
      *
      * @return
      */
-    public int updateDiscover(Map<String, Integer> map) {
+    public int updateDiscover(Circle circle) {
         try {
             log.info("圈子推荐到发现页");
-            return circleMapper.updateDiscover(map);
+            return circleMapper.updateDiscover(circle);
         } catch (Exception e) {
             log.error("圈子推荐到发现页异常", e);
             throw e;
         }
     }
 
-    /**
-     * 取消圈子推荐到发现页
-     *
-     * @param circleid
-     * @return
-     */
-    public int updateDiscoverDel(String circleid) {
-        try {
-            log.info("取消圈子推荐到发现页 circleid=" + circleid);
-            return circleMapper.updateDiscoverDel(circleid);
-        } catch (Exception e) {
-            log.error("取消圈子推荐到发现页异常 circleid=" + circleid, e);
-            throw e;
-        }
-    }
 
     /**
      * 查询圈子是否推荐到首页

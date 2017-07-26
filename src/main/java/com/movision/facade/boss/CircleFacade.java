@@ -218,27 +218,21 @@ public class CircleFacade {
      * @param circleid
      * @return
      */
-    public Map updateDiscover(String circleid, String orderid, String loginid) {
+    public Map updateDiscover(String circleid) {
+        Circle circle = new Circle();
+        circle.setId(Integer.parseInt(circleid));
         Integer discover = circleService.queryCircleDiscover(circleid);//查询圈子是否推荐发现页
         Map map = new HashedMap();
-        Map<String, Integer> spread = new HashedMap();
-        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.update.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circle.getCode(), Integer.parseInt(circleid));
-        if (res.get("resault").equals(1)) {
-            spread.put("circleid", Integer.parseInt(circleid));
-            spread.put("orderid", Integer.parseInt(orderid));
-            if (discover == 0) {
-                Integer i = circleService.updateDiscover(spread);
-                map.put("resault", i);
-            } else {
-                Integer n = circleService.updateDiscoverDel(circleid);
-                map.put("resault", n);
-            }
-            return map;
-        } else {
-            map.put("resault", -1);
-            map.put("message", "权限不足");
-            return map;
+        if (discover == 0) {//没有
+            circle.setIsdiscover(1);
+            Integer resault = circleService.updateDiscover(circle);
+            map.put("resault", resault);
+        } else {//是
+            circle.setIsdiscover(0);
+            Integer resault = circleService.updateDiscover(circle);
+            map.put("resault", resault);
         }
+        return map;
     }
 
     /**
