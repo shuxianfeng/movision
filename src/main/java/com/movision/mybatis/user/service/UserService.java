@@ -902,6 +902,36 @@ public class UserService {
         }
     }
 
+    public List<UserVo> getMineFollowAuthor(Map<String, Object> paramap, Paging<UserVo> pager){
+        try {
+            log.info("查询当前用户关注的所有作者列表");
+            return userMapper.getMineFollowAuthor(paramap, pager.getRowBounds());
+        }catch (Exception e){
+            log.error("查询当前用户关注的所有作者列表失败", e);
+            throw e;
+        }
+    }
+
+    public int queryPostNumByAuthor(int id){
+        try {
+            log.info("查询该作者已发帖子数");
+            return userMapper.queryPostNumByAuthor(id);
+        }catch (Exception e){
+            log.error("查询该作者已发帖子数失败", e);
+            throw e;
+        }
+    }
+
+    public int queryIsFollowAuthor(Map<String, Object> paramap){
+        try {
+            log.info("查询当前作者有没有被当前登录的用户关注过");
+            return userMapper.queryIsFollowAuthor(paramap);
+        }catch (Exception e){
+            log.error("查询当前作者有没有被当前登录的用户关注过 失败", e);
+            throw e;
+        }
+    }
+
     public List<UserVo> findAllMostFansAuthorInAll(Paging<UserVo> paging) {
         try {
             log.info("查询粉丝数最多的作者集合");

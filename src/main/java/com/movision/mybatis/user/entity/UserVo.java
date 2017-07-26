@@ -107,6 +107,8 @@ public class UserVo implements Serializable {
 
     private Date audittime;//审核时间
 
+    private Integer isfollow;//是否被关注 0 未关注 1 已关注（当前作者有没有被APP当前登录的用户关注过）
+
     public Date getAudittime() {
         return audittime;
     }
@@ -425,5 +427,13 @@ public class UserVo implements Serializable {
 
     public void setBefollowsum(Integer befollowsum) {
         this.befollowsum = befollowsum;
+    }
+
+    public Integer getIsfollow() {
+        return isfollow;
+    }
+
+    public void setIsfollow(Integer isfollow) {
+        this.isfollow = isfollow;
     }
 }

@@ -143,6 +143,12 @@ public interface UserMapper {
 
     UserVo queryUserInfoHompage(int userid);
 
+    List<UserVo> getMineFollowAuthor(Map<String, Object> paramap, RowBounds rowBounds);
+
+    int queryPostNumByAuthor(int id);
+
+    int queryIsFollowAuthor(Map<String, Object> paramap);
+
     List<UserVo> findAllMostFansAuthorInAll(RowBounds rowBounds);
 
     List<UserVo> findAllMostFansAuthorInCurrentMonth(RowBounds rowBounds);

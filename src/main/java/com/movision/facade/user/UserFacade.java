@@ -569,5 +569,31 @@ public class UserFacade {
         return list;
     }
 
+    /**
+     * 我的--关注--关注的作者，点击关注调用的关注的作者列表返回接口
+     */
+    public List<UserVo> getMineFollowAuthor(String userid, Paging<UserVo> pager){
+        //首先查询当前用户关注的作者列表
+        Map<String, Object> paramap = new HashMap<>();
+        paramap.put("userid", Integer.parseInt(userid));
+        List<UserVo> myFollowAuthorList = userService.getMineFollowAuthor(paramap, pager);
+
+        for (int i=0; i<myFollowAuthorList.size(); i++){
+            //遍历获取作者的已发帖子数
+            UserVo vo = myFollowAuthorList.get(i);
+            int id = vo.getId();//查询到的作者userid
+            int count = userService.queryPostNumByAuthor(id);
+            vo.setPostsum(count);
+
+            //获取当前用户是否关注过该作者
+            paramap.put("id", id);
+            int sum = userService.queryIsFollowAuthor(paramap);
+            vo.setIsfollow(sum);
+
+            myFollowAuthorList.set(i, vo);
+        }
+
+        return myFollowAuthorList;
+    }
 
 }
