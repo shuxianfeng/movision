@@ -1940,11 +1940,17 @@
     <select id="activeIsHot" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT ishot FROM yw_post WHERE id=#{id,jdbcType=INTEGER}
     </select>
-    <update id="updateIshot" parameterType="java.lang.Integer">
-        update yw_post SET ishot=1 WHERE id=#{id,jdbcType=INTEGER}
+    <update id="updateIshot" parameterType="com.movision.mybatis.post.entity.Post">
+        update yw_post
+        SET ishot=1,
+        ishot_order = #{ishotorder,jdbcType=INTEGER}
+        WHERE id=#{id,jdbcType=INTEGER}
     </update>
-    <update id="updateNoIshot" parameterType="java.lang.Integer">
-        update yw_post SET ishot=0 WHERE id=#{id,jdbcType=INTEGER}
+    <update id="updateNoIshot" parameterType="com.movision.mybatis.post.entity.Post">
+        update yw_post
+        SET ishot=#{ishot,jdbcType=INTEGER},
+        ishot_order = #{ishotorder,jdbcType=INTEGER}
+        WHERE id=#{id,jdbcType=INTEGER}
     </update>
 
     <select id="queryUserByPostid" parameterType="java.lang.String" resultType="java.lang.Integer">

@@ -11,6 +11,8 @@
     <result column="photo" property="photo" jdbcType="VARCHAR"/>
     <result column="citycode" property="citycode" jdbcType="VARCHAR"/>
       <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+      <result column="postid" property="postid" jdbcType="INTEGER"/>
+      <result column="circleid" property="circleid" jdbcType="INTEGER"/>
   </resultMap>
   <sql id="Base_Column_List">
       id, name, heat_value, userid, intime, type, photo, citycode, isdel

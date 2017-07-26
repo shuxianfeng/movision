@@ -13,6 +13,7 @@ import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.utils.pagination.model.Paging;
+import javafx.geometry.Pos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1084,7 +1085,7 @@ public class PostService {
      * @param id
      * @return
      */
-    public Integer updateIshot(Integer id) {
+    public Integer updateIshot(Post id) {
         try {
             log.info("是否设为热门");
             return postMapper.updateIshot(id);
@@ -1116,7 +1117,7 @@ public class PostService {
      * @param id
      * @return
      */
-    public Integer updateNoIshot(Integer id) {
+    public Integer updateNoIshot(Post id) {
         try {
             log.info("不是热门");
             return postMapper.updateNoIshot(id);

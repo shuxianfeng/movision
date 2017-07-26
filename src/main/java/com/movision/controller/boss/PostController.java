@@ -1160,9 +1160,10 @@ public class PostController {
      */
     @ApiOperation(value = "是否设为热门", notes = "是否设为热门", response = Response.class)
     @RequestMapping(value = "update_ishot", method = RequestMethod.POST)
-    public Response updateIshot(@ApiParam(value = "活动id") @RequestParam(required = false) Integer id) {
+    public Response updateIshot(@ApiParam(value = "活动id") @RequestParam(required = false) Integer id,
+                                @ApiParam(value = "排序值") @RequestParam(required = false) Integer ishotorder) {
         Response response = new Response();
-        int result = postFacade.updateIshot(id);
+        int result = postFacade.updateIshot(id, ishotorder);
         if (response.getCode() == 200) {
             response.setMessage("修改成功");
         }

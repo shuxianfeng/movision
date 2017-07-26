@@ -2408,15 +2408,28 @@ public class PostFacade {
      * @param id
      * @return
      */
-    public Integer updateIshot(Integer id) {
-        int ishot = postService.activeIsHot(id);
-        int result = 0;
-        if (ishot == 0) {
-            result = postService.updateIshot(id);
-        } else if (ishot == 1) {
-            result = postService.updateNoIshot(id);
+    public Integer updateIshot(Integer id, Integer ishotorder) {
+        Post post = new Post();
+        if (id != null) {
+            post.setId(id);
         }
-        return result;
+        if (ishotorder != null) {
+            post.setIshotorder(ishotorder);
+        }
+        /*int ishot = postService.activeIsHot(id);
+        int result = 0;
+        if (ishot == 0) {//设为热门
+            result = postService.updateIshot(post);
+        } else if (ishot == 1) {*/
+        if (ishotorder > 0) {//修改排序
+            post.setIshot(1);
+            postService.updateNoIshot(post);
+        } else {//取消热门
+            post.setIshot(0);
+            postService.updateNoIshot(post);
+            /*}*/
+        }
+        return 1;
     }
 
     /**
