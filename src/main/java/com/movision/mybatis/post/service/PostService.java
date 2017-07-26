@@ -1533,10 +1533,10 @@ public class PostService {
         }
     }
 
-    public List<PostVo> queryPostCrile(int circleid) {
+    public List<PostVo> findAllPostCrile(int circleid) {
         try {
             log.info("根据圈子id查询帖子");
-            return postMapper.queryPostCrile(circleid);
+            return postMapper.findAllPostCrile(circleid);
         } catch (Exception e) {
             log.error("根据圈子id查询帖子失败", e);
             throw e;
@@ -1603,10 +1603,10 @@ public class PostService {
         }
     }
 
-    public List<PostVo> queryLabelAllPost(int labelid) {
+    public List<PostVo> findAllLabelAllPost(int labelid) {
         try {
             log.info("根据标签查询帖子");
-            return postMapper.queryLabelAllPost(labelid);
+            return postMapper.findAllLabelAllPost(labelid);
         } catch (Exception e) {
             log.error("根据标签查询帖子失败", e);
             throw e;
@@ -1816,4 +1816,6 @@ public class PostService {
             throw e;
         }
     }
+
+
 }

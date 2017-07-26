@@ -265,7 +265,7 @@ public interface PostMapper {
 
     List<PostVo> findAllCollectionListByIds(List ids, RowBounds rowBounds);
     //根据圈子id查询帖子
-    List<PostVo> queryPostCrile(int circleid);
+    List<PostVo> findAllPostCrile(int circleid);
 
     String queryCityCode(String area);//查询code
 
@@ -279,7 +279,7 @@ public interface PostMapper {
 
     List<Integer> queryLabelPost(int labelid);
 
-    List<PostVo> queryLabelAllPost(int labelid);
+    List<PostVo> findAllLabelAllPost(int labelid);
 
     List<PostVo> findAllPostByid(List postid, RowBounds rowBounds);
 
@@ -316,5 +316,6 @@ public interface PostMapper {
     Integer activeSum(int postid);
 
     int postUserId(int postid);
+
 
 }
