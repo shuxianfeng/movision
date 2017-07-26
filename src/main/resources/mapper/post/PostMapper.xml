@@ -931,6 +931,9 @@
             <if test="oprtime != null">
                 oprtime=#{oprtime,jdbcType=TIMESTAMP}
             </if>
+            <if test="ishotorder != null">
+                ishot_order = #{ishotorder,jdbcType=INTEGER}
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
