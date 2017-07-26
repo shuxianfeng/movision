@@ -1456,7 +1456,8 @@ public class FacadePost {
         List<PostVo> posts = new ArrayList<>();
         List<PostVo> list = null;
         if (userid == null) {
-            list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+            //这个圈子的帖子
+            list = postService.findAllPostCrile(circleid);//根据热度值排序查询帖子
             list = NotLoginretuenList(list, paging);
             return list;
         } else {
@@ -1468,12 +1469,12 @@ public class FacadePost {
                     posts.add(post);//把mongodb转为post实体
                 }
                 //根据圈子id查询帖子
-                List<PostVo> postVos = postService.queryPostCrile(circleid);
+                List<PostVo> postVos = postService.findAllPostCrile(circleid);
                 postVos.removeAll(posts);
                 list = retuenList(postVos, userid, paging);
             } else {
                 //登录但是刷新列表中没有帖子
-                list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+                list = postService.findAllPostCrile(circleid);//根据热度值排序查询帖子
                 list = retuenList(list, userid, paging);
                 return list;
             }
@@ -1536,7 +1537,7 @@ public class FacadePost {
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
         if (userid == null) {
-            list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+            list = postService.findAllLabelAllPost(labelid);//根据热度值排序查询帖子
             list = NotLoginretuenList(list, paging);
             return list;
         } else {
@@ -1548,12 +1549,12 @@ public class FacadePost {
                     posts.add(post);//把mongodb转为post实体
                 }
                 //根据标签查询帖子
-                List<PostVo> postVos = postService.queryLabelAllPost(labelid);
+                List<PostVo> postVos = postService.findAllLabelAllPost(labelid);
                 postVos.removeAll(posts);
                 list = retuenList(postVos, userid, paging);
             } else {
                 //登录但是刷新列表中没有帖子
-                list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+                list = postService.findAllLabelAllPost(labelid);//根据热度值排序查询帖子
                 list = retuenList(list, userid, paging);
                 return list;
             }

@@ -228,5 +228,11 @@ WHERE l.id=#{labelid,jdbcType=INTEGER} GROUP BY p.userid ORDER BY count DESC
             resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT * FROM yw_post WHERE circleid=#{circleid,jdbcType=INTEGER} AND isdel=0 AND (isessence=1 OR ishot=1) ORDER BY intime DESC
     </select>
+    <select id="queryCirclePeople" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.circle.entity.CircleCount">
+        SELECT COUNT(1) AS count,p.userid,u.nickname FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
+        LEFT JOIN yw_user u ON u.id=p.userid
+        WHERE c.id=#{circleid,jdbcType=INTEGER} GROUP BY p.userid  ORDER BY count DESC
+    </select>
 
 </mapper>

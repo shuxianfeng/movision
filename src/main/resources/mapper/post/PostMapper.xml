@@ -2111,7 +2111,8 @@
         </foreach>
         ORDER BY heat_value DESC
     </select>
-    <select id="queryPostCrile" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+    <select id="findAllPostCrile" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
         select * from yw_post where circleid=#{circleid,jdbcType=INTEGER} and isdel=0 order by heat_value desc
     </select>
     <select id="queryCityCode" parameterType="java.lang.String" resultType="java.lang.String">
@@ -2136,7 +2137,7 @@
     <select id="queryLabelPost" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     SELECT yw_post.heat_value FROM yw_post_label_relation LEFT JOIN yw_post ON yw_post.id=yw_post_label_relation.postid WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER}
     </select>
-    <select id="queryLabelAllPost" parameterType="java.lang.Integer"
+    <select id="findAllLabelAllPost" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
 SELECT yw_post.* FROM yw_post LEFT JOIN yw_post_label_relation ON yw_post_label_relation.postid=yw_post.id
 WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_post.heat_value DESC

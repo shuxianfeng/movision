@@ -2,6 +2,7 @@ package com.movision.facade.label;
 
 import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.circle.entity.CircleCount;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.followLabel.entity.FollowLabel;
 import com.movision.mybatis.followLabel.service.FollowLabelService;
@@ -166,6 +167,18 @@ public class LabelFacade {
             list = labelResult(list);
         }
         return list;
+    }
+
+
+    /**
+     * 圈子达人
+     *
+     * @param circleid
+     * @return
+     */
+    public List circleOfPeople(int circleid) {
+        List<CircleCount> circleCounts = postLabelService.queryCirclePeople(circleid);
+        return circleCounts;
     }
 
 

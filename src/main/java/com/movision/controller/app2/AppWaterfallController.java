@@ -313,4 +313,16 @@ public class AppWaterfallController {
     }
 
 
+    @ApiOperation(value = "圈子达人", notes = "圈子达人", response = Response.class)
+    @RequestMapping(value = "circleOfPeople", method = RequestMethod.POST)
+    public Response circleOfPeople(@ApiParam(value = "圈子id") @RequestParam int circleid) {
+        Response response = new Response();
+        List result = labelFacade.circleOfPeople(circleid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
 }
