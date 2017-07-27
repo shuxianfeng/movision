@@ -932,6 +932,16 @@ public class UserService {
         }
     }
 
+    public List<UserVo> getMineFans(Map<String, Object> parammap, Paging<UserVo> pager){
+        try {
+            log.info("查询当前用户的粉丝列表");
+            return userMapper.getMineFans(parammap, pager.getRowBounds());
+        }catch (Exception e){
+            log.error("查询当前用户的粉丝列表失败", e);
+            throw e;
+        }
+    }
+
     public List<UserVo> findAllMostFansAuthorInAll(Paging<UserVo> paging) {
         try {
             log.info("查询粉丝数最多的作者集合");

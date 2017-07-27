@@ -1229,6 +1229,16 @@
         SELECT count(*) FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER} AND interestedusers = #{id,jdbcType=INTEGER}
     </select>
 
+    <!--2.0查询当前用户的所有粉丝列表-->
+    <select id="getMineFans" resultType="com.movision.mybatis.user.entity.UserVo" >
+        SELECT u.id, u.nickname, u.photo, u.fans
+        FROM yw_user u
+        JOIN yw_follow_user fu ON u.id = fu.userid
+        WHERE u.status = 0
+        AND fu.interestedusers = #{userid}
+        AND u.id != #{userid}
+    </select>
+
     <select id="findAllMostFansAuthorInAll" resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT id, nickname, photo, fans
         FROM yw_user

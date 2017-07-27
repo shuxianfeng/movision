@@ -596,4 +596,37 @@ public class UserFacade {
         return myFollowAuthorList;
     }
 
+    /**
+     * 我的--关注--关注的标签，点击关注调用的关注的标签列表返回接口
+     */
+
+
+    /**
+     * 我的模块——点击粉丝，进入用户被关注的粉丝用户列表接口
+     */
+    public List<UserVo> getMyfans(String userid, Paging<UserVo> pager){
+        //首先查询当前用户的所有粉丝列表
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("userid", Integer.parseInt(userid));
+        List<UserVo> myFansList = userService.getMineFans(parammap, pager);
+
+        for (int i=0; i<myFansList.size(); i++){
+            //遍历获取粉丝的已发帖子数
+            UserVo vo = myFansList.get(i);
+            int id = vo.getId();//查询到的粉丝userid
+            parammap.put("id", id);
+            int count = userService.queryPostNumByAuthor(parammap);
+            vo.setPostsum(count);
+
+            //获取当前用户是否关注过该粉丝
+            int sum = userService.queryIsFollowAuthor(parammap);
+            vo.setIsfollow(sum);
+
+            myFansList.set(i, vo);
+        }
+
+        return myFansList;
+
+    }
+
 }
