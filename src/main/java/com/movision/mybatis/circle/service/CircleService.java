@@ -416,7 +416,7 @@ public class CircleService {
      * @param circleid
      * @return
      */
-    public int queryCircleDiscover(String circleid) {
+    public int queryCircleDiscover(Integer circleid) {
         try {
             log.info("查询圈子是否推荐发现页 circleid=" + circleid);
             return circleMapper.queryCircleDiscover(circleid);

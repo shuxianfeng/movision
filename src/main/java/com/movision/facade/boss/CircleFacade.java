@@ -221,7 +221,7 @@ public class CircleFacade {
     public Map updateDiscover(String circleid) {
         Circle circle = new Circle();
         circle.setId(Integer.parseInt(circleid));
-        Integer discover = circleService.queryCircleDiscover(circleid);//查询圈子是否推荐发现页
+        Integer discover = circleService.queryCircleDiscover(Integer.parseInt(circleid));//查询圈子是否推荐发现页
         Map map = new HashedMap();
         if (discover == 0) {//没有
             circle.setIsdiscover(1);

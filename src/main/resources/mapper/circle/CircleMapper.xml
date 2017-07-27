@@ -711,15 +711,15 @@
         SELECT orderid FROM yw_circle WHERE status=1 AND isdel=0 GROUP BY orderid
     </select>
 
-    <select id="queryCircleDiscover" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT isdiscover FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER} AND status=1 AND isdel=0
+    <select id="queryCircleDiscover" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT isdiscover FROM yw_circle WHERE id=#{id,jdbcType=INTEGER} AND status=1 AND isdel=0
     </select>
 
     <update id="updateDiscover" parameterType="com.movision.mybatis.circle.entity.Circle">
         UPDATE yw_circle
         SET
         isdiscover=#{isdiscover,jdbcType=INTEGER}
-        WHERE id=#{circleid,jdbcType=INTEGER}
+        WHERE id=#{id,jdbcType=INTEGER}
     </update>
 
     <select id="queryCircleRecommendIndex" parameterType="java.lang.String" resultType="java.lang.Integer">

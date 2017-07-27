@@ -78,7 +78,7 @@ public interface CircleMapper {
 
     List<Circle> queryDiscoverList();
 
-    Integer queryCircleDiscover(String circleid);
+    Integer queryCircleDiscover(Integer id);
 
     Integer updateDiscover(Circle circle);
 
