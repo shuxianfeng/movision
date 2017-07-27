@@ -389,6 +389,21 @@ public class UserManageController {
     }
 
     /**
+     * 对作者推荐、取消推荐
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "对作者推荐、取消推荐", notes = "用于对作者推荐、取消推荐操作接口", response = Response.class)
+    @RequestMapping(value = "updateUserByIsrecommend", method = RequestMethod.POST)
+    public Response updateUserByIsrecommend(@ApiParam(value = "用户id") @RequestParam String id) {
+        Response response = new Response();
+        Map map = userManageFacade.updateUserByIsrecommend(id);
+        response.setMessage("操作成功");
+        response.setData(map);
+        return response;
+    }
+
+    /**
      * 查询用户积分流水列表
      *
      * @param pageNo

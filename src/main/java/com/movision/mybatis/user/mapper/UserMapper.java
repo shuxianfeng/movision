@@ -94,6 +94,10 @@ public interface UserMapper {
 
     int deleteUserLevl(Map map);
 
+    Integer queryUserIsrecommend(Integer id);
+
+    Integer updateUserByIsrecommend(User user);
+
     Integer updateAuditByUser(Map map);
 
     UserParticulars queryUserParticulars(String userid);

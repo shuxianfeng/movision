@@ -84,6 +84,26 @@ public class UserParticulars implements Serializable {
 
     private String idnumber;//身份证号
 
+    private Integer heatValue;//作者热度
+
+    private Integer isrecommend;//是否作为发现页必推作者：0 否 1 是'
+
+    public Integer getIsrecommend() {
+        return isrecommend;
+    }
+
+    public void setIsrecommend(Integer isrecommend) {
+        this.isrecommend = isrecommend;
+    }
+
+    public Integer getHeatValue() {
+        return heatValue;
+    }
+
+    public void setHeatValue(Integer heatValue) {
+        this.heatValue = heatValue;
+    }
+
     public String getName() {
         return name;
     }

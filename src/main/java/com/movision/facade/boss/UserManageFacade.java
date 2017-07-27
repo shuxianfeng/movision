@@ -551,6 +551,37 @@ public class UserManageFacade {
             return -1;
         }
     }
+
+    /**
+     * 对作者推荐、取消推荐
+     *
+     * @param id
+     * @return
+     */
+    public Map updateUserByIsrecommend(String id) {
+        User user = new User();
+        Map map = new HashMap();
+        user.setId(Integer.parseInt(id));
+        //查询用户是否被推荐
+        Integer us = userService.queryUserIsrecommend(Integer.parseInt(id));
+        if (us != null) {
+            if (us == 1) {//已经推荐 ，取消操作
+                user.setIsrecommend(0);
+                Integer i = userService.updateUserByIsrecommend(user);
+                map.put("resault", i);
+            } else {//没有推荐，推荐操作
+                user.setIsrecommend(1);
+                Integer i = userService.updateUserByIsrecommend(user);
+                map.put("resault", i);
+            }
+        } else {
+            user.setIsrecommend(1);
+            Integer i = userService.updateUserByIsrecommend(user);
+            map.put("resault", i);
+        }
+        return map;
+    }
+
     /**
      * 查询用户积分流水列表
      *

@@ -526,6 +526,38 @@ public class UserService {
     }
 
     /**
+     * 查询用户是否被推荐
+     *
+     * @param id
+     * @return
+     */
+    public Integer queryUserIsrecommend(Integer id) {
+        try {
+            log.info("查询用户是否被推荐");
+            return userMapper.queryUserIsrecommend(id);
+        } catch (Exception e) {
+            log.error("查询用户是否被推荐异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 更新用户推荐
+     *
+     * @param user
+     * @return
+     */
+    public Integer updateUserByIsrecommend(User user) {
+        try {
+            log.info("更新用户推荐");
+            return userMapper.updateUserByIsrecommend(user);
+        } catch (Exception e) {
+            log.error("更新用户推荐异常", e);
+            throw e;
+        }
+    }
+
+    /**
      * 更新VIP申请
      *
      * @param map

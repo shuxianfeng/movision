@@ -67,7 +67,28 @@ public class UserVo implements Serializable {
     private Integer postsum;//帖子数量
 
     public Integer activecount;//参加活动数
+
     public Integer collectioncount;//收藏帖子数
+
+    private Integer heatValue;//作者热度
+
+    private Integer isrecommend;//是否作为发现页必推作者：0 否 1 是'
+
+    public Integer getHeatValue() {
+        return heatValue;
+    }
+
+    public void setHeatValue(Integer heatValue) {
+        this.heatValue = heatValue;
+    }
+
+    public Integer getIsrecommend() {
+        return isrecommend;
+    }
+
+    public void setIsrecommend(Integer isrecommend) {
+        this.isrecommend = isrecommend;
+    }
 
     public Integer getActivecount() {
         return activecount;
