@@ -611,5 +611,21 @@ public class AppPostController {
         return response;
     }
 
+    @ApiOperation(value = "发帖-新增标签-校验标签", notes = "发帖-新增标签-校验标签", response = Response.class)
+    @RequestMapping(value = "validate_label_when_post", method = RequestMethod.GET)
+    public Response validateLabelWhenPost(@ApiParam("新增标签的名称") @RequestParam String name) {
+        Response response = new Response();
+        if (facadePost.isExistSameNameLabel(name)) {
+            response.setCode(400);
+            response.setData(false);
+            response.setMessage("校验失败--该标签名称已经存在");
+        } else {
+            response.setCode(200);
+            response.setData(true);
+            response.setMessage("校验成功");
+        }
+        return response;
+    }
+
 
 }

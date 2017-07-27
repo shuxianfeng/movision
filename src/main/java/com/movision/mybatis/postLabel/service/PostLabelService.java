@@ -278,4 +278,14 @@ public class PostLabelService {
         }
     }
 
+    public Integer countSameNameLabel(String name) {
+        try {
+            log.info("统计同名标签数量");
+            return postLabelMapper.countSameNameLabel(name);
+        } catch (Exception e) {
+            log.error("统计同名标签数量失败", e);
+            throw e;
+        }
+    }
+
 }

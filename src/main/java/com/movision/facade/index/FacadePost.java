@@ -2064,6 +2064,17 @@ public class FacadePost {
         return resultList;
     }
 
+    public Boolean isExistSameNameLabel(String name) {
+        int sameLabelCount = postLabelService.countSameNameLabel(name);
+        if (sameLabelCount > 0) {
+            log.debug("存在相同的标签名");
+            return true;
+        } else {
+            log.debug("不存在相同的标签名");
+            return false;
+        }
+    }
+
 
 }
 
