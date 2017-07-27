@@ -1146,9 +1146,9 @@ public class FacadePost {
                 log.info("APP前端用户开始请求发帖");
                 Map contentMap = null;
                 //封装帖子实体
-                Post post = preparePostJavaBean(request, userid, circleid, title, postcontent, isactive, coverimg, contentMap);
-//                Post post = new Post();
-//                post.setTitle("测试标签发帖" + DateUtils.getCurrentDate());
+//                Post post = preparePostJavaBean(request, userid, circleid, title, postcontent, isactive, coverimg, contentMap);
+                Post post = new Post();
+                post.setTitle("测试标签发帖" + DateUtils.getCurrentDate());
                 
                 //插入帖子
                 postService.releaseModularPost(post);
@@ -1159,7 +1159,7 @@ public class FacadePost {
                 //标签业务逻辑处理
                 addLabelProcess(labellist, flag);
                 //积分处理
-                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
+//                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
 
                 map.put("flag", flag);
                 return map;
@@ -1184,31 +1184,69 @@ public class FacadePost {
      * @param flag
      */
     private void addLabelProcess(String labellist, int flag) {
-        //插入标签表数据
+        //1 解析数据
         Gson gson = new Gson();
         List<PostLabel> postLabelList = gson.fromJson(labellist, new TypeToken<List<PostLabel>>() {
         }.getType());    //字符串为为list
         log.debug("接口传入的标签集合：" + postLabelList.toString());
 
-        //从缓存中获取userid，citycode, 并且根据标签类型，获取标签的头像
-        for (PostLabel p : postLabelList) {
-            p.setUserid(ShiroUtil.getAppUserID());
-            p.setCitycode(ShiroUtil.getIpCity());
-            //todo 根据标签类型，获取标签的头像
+        //2 需要过滤出新建的标签和已经存在的标签
+        List<PostLabel> newLabels = new ArrayList<>();  //这是新建的标签集合
+        List<PostLabel> existLabels = new ArrayList<>();  //这是非新建的标签集合
 
+        for (PostLabel p : postLabelList) {
+            if (null == p.getId()) {
+                newLabels.add(p);
+            } else {
+                existLabels.add(p);
+            }
         }
 
-        postLabelService.batchInsert(postLabelList);
-        //插入标签和帖子关系数据
-        String[] labelNameStr = new String[postLabelList.size()];
-        for (int i = 0; i < postLabelList.size(); i++) {
-            labelNameStr[i] = postLabelList.get(i).getName();
+        log.debug("新建的标签集合：" + newLabels.toString());
+        log.debug("非新建的标签集合：" + existLabels.toString());
+
+        //3 下面是对新建的标签集合操作
+        processForNewLabel(flag, newLabels);
+
+        //4 下面是对非新建的标签集合操作
+        processForExistLabel(flag, existLabels);
+
+    }
+
+    private void processForExistLabel(int flag, List<PostLabel> existLabels) {
+        //4.1 整理非新建标签的id集合
+        List<Integer> existLabelIdList = new ArrayList<>();
+        for (PostLabel p : existLabels) {
+            existLabelIdList.add(p.getId());
+        }
+        //4.2 插入标签和帖子关系数据
+        batchAddPostLabelRealtionByList(flag, existLabelIdList);
+    }
+
+    private void processForNewLabel(int flag, List<PostLabel> newLabels) {
+        //3.1 从缓存中获取userid，citycode, 并且根据标签类型，获取标签的头像
+        /*for (PostLabel p : newLabels) {
+            p.setUserid(ShiroUtil.getAppUserID());
+            p.setCitycode(ShiroUtil.getIpCity());
+            //todo 根据标签类型，获取标签的头像。 需要等于小双的标签头像
+
+        }*/
+        //3.2 插入标签表数据
+        postLabelService.batchInsert(newLabels);
+        //3.3 插入标签和帖子关系数据
+        String[] labelNameStr = new String[newLabels.size()];
+        for (int i = 0; i < newLabels.size(); i++) {
+            labelNameStr[i] = newLabels.get(i).getName();
         }
         log.debug("新插入的标签的名称集合是：" + labelNameStr.toString());
 
         List<Integer> newLabelIdList = postLabelService.queryLabelIdList(labelNameStr);
         log.debug("新插入的标签的id集合是：" + newLabelIdList.toString());
 
+        batchAddPostLabelRealtionByList(flag, newLabelIdList);
+    }
+
+    private void batchAddPostLabelRealtionByList(int flag, List<Integer> newLabelIdList) {
         Map postlabelrelationMap = new HashedMap();
         postlabelrelationMap.put("postid", flag);
         postlabelrelationMap.put("labelids", newLabelIdList.toArray());

@@ -137,4 +137,21 @@ public class PostLabel {
         return obj instanceof PostLabel && this.id != null && this.id.equals(((PostLabel) obj).getId());
     }
 
+    @Override
+    public String toString() {
+        return "PostLabel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", heatValue=" + heatValue +
+                ", userid=" + userid +
+                ", intime=" + intime +
+                ", type=" + type +
+                ", photo='" + photo + '\'' +
+                ", isdel=" + isdel +
+                ", citycode='" + citycode + '\'' +
+                ", isrecommend=" + isrecommend +
+                ", useCount=" + useCount +
+                ", fans=" + fans +
+                '}';
+    }
 }
