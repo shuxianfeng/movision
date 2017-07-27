@@ -18,6 +18,7 @@ import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.circleCategory.entity.CircleCategoryVo;
 import com.movision.mybatis.circleCategory.service.CircleCategoryService;
 import com.movision.mybatis.comment.entity.Comment;
+import com.movision.mybatis.comment.entity.CommentCount;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
@@ -166,7 +167,7 @@ public class FacadePost {
     private CircleCategoryService circleCategoryService;
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
-
+        CommentCount commentCounts = null;
         //通过userid、postid查询该用户有没有关注该圈子的权限
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("postid", Integer.parseInt(postid));
@@ -175,9 +176,9 @@ public class FacadePost {
         }
         PostVo vo = postService.queryPostDetail(parammap);
         List<PostLabel> postLabels = postService.queryPostLabel(Integer.parseInt(postid));
-        vo.setPostLabels(postLabels);
-        //评论
-
+        if (postLabels.size() != 0) {
+            vo.setPostLabels(postLabels);
+        }
         //-----帖子内容格式转换
         String str = vo.getPostcontent();
         JSONArray jsonArray = JSONArray.fromObject(str);
@@ -187,6 +188,45 @@ public class FacadePost {
         jsonArray = videoCoverURL.getVideoCover(jsonArray);
         //-----将转换完的数据封装返回
         vo.setPostcontent(jsonArray.toString());
+        //评论
+        List<CommentVo> commentVos = commentService.findAllCommentByPost(Integer.parseInt(postid));
+        if (commentVos != null) {
+            List<CommentCount> countss = new ArrayList<>();
+            for (int i = 0; i < commentVos.size(); i++) {
+                int id = commentVos.get(i).getId();
+                //根据id去查评论数
+                commentCounts = commentService.queryCommentZan(id);
+                CommentCount commentCount = new CommentCount();
+                commentCount.setCommentid(id);
+                commentCount.setCount(commentCounts.getCount());
+                countss.add(commentCount);
+            }
+            ComparatorChain chain = new ComparatorChain();
+            chain.addComparator(new BeanComparator("count"), true);//true,fase正序反序
+            Collections.sort(countss, chain);
+            List<CommentCount> finallist = getPageList(countss, 1, 3);
+            List<CommentVo> vos = new ArrayList<>();
+            for (int i = 0; i < finallist.size(); i++) {
+                int comment = finallist.get(i).getCommentid();
+                //根据id查询帖子
+                CommentVo commentVo = commentService.queryCom(comment);
+                vos.add(commentVo);
+            }
+            for (int i = 0; i < vos.size(); i++) {
+                Integer pid = vos.get(i).getPid();
+                Integer usersid = vos.get(i).getUserid();
+                User user = postCommentZanRecordService.queryusers(usersid);
+                if (pid != null) {
+                    List<CommentVo> commentVoss = commentService.queryPidComment(pid);
+                    vos.get(i).setCommentVos(commentVoss);
+                    vos.get(i).setUser(user);
+                } else {
+                    vos.get(i).setUser(user);
+                }
+            }
+            vo.setCommentVos(vos);
+        }
+
 
         if (null != vo) {
             //根据帖子封面原图url查询封面压缩图url，如果存在替换，不存在就用原图
@@ -2167,19 +2207,20 @@ public class FacadePost {
     public List queryCommentByPost(String postid, Paging<CommentVo> paging) {
         //查询这个帖子的所有评论
         List<CommentVo> comments = commentService.findAllCommentByPostId(Integer.parseInt(postid), paging);
-        for (int i = 0; i < comments.size(); i++) {
-            Integer pid = comments.get(i).getPid();
-            Integer usersid = comments.get(i).getUserid();
-            User user = postCommentZanRecordService.queryusers(usersid);
-            if (pid != null) {
-                List<CommentVo> commentVos = commentService.queryPidComment(pid);
-                comments.get(i).setCommentVos(commentVos);
-                comments.get(i).setUser(user);
-            } else {
-                comments.get(i).setUser(user);
+        if (comments != null) {
+            for (int i = 0; i < comments.size(); i++) {
+                Integer pid = comments.get(i).getPid();
+                Integer usersid = comments.get(i).getUserid();
+                User user = postCommentZanRecordService.queryusers(usersid);
+                if (pid != null) {
+                    List<CommentVo> commentVos = commentService.queryPidComment(pid);
+                    comments.get(i).setCommentVos(commentVos);
+                    comments.get(i).setUser(user);
+                } else {
+                    comments.get(i).setUser(user);
+                }
             }
         }
-
         return comments;
     }
 

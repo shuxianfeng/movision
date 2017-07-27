@@ -503,4 +503,15 @@
     SELECT * FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER} AND isdel=0 ORDER BY heat_value DESC
   </select>
 
+  <select id="findAllCommentByPost" parameterType="java.lang.Integer"
+          resultType="com.movision.mybatis.comment.entity.CommentVo">
+    SELECT * FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER} AND isdel=0 ORDER BY heat_value DESC
+  </select>
+  <select id="queryCommentZan" parameterType="java.lang.Integer"
+          resultType="com.movision.mybatis.comment.entity.CommentCount">
+  SELECT commentid,COUNT(1) AS count FROM yw_post_comment_zan_record WHERE commentid=#{id,jdbcType=INTEGER}
+</select>
+  <select id="queryCom" parameterType="java.lang.Integer" resultType="com.movision.mybatis.comment.entity.CommentVo">
+    SELECT  * FROM  yw_post_comment WHERE id=#{commentid,jdbcType=INTEGER}
+  </select>
 </mapper>

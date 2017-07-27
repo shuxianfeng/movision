@@ -1,6 +1,7 @@
 package com.movision.mybatis.comment.service;
 
 import com.movision.mybatis.comment.entity.Comment;
+import com.movision.mybatis.comment.entity.CommentCount;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.mapper.CommentMapper;
 import com.movision.utils.pagination.model.Paging;
@@ -432,6 +433,35 @@ public class CommentService {
         }
     }
 
+    public List<CommentVo> findAllCommentByPost(int postid) {
+        try {
+            log.info("根據帖子id查詢所有評論");
+            return commentMapper.findAllCommentByPost(postid);
+        } catch (Exception e) {
+            log.error("根據帖子id查詢所有評論失敗", e);
+            throw e;
+        }
+    }
+
+    public CommentCount queryCommentZan(int id) {
+        try {
+            log.info("根据评论id查赞");
+            return commentMapper.queryCommentZan(id);
+        } catch (Exception e) {
+            log.error("根据评论id查赞失敗", e);
+            throw e;
+        }
+    }
+
+    public CommentVo queryCom(int commentid) {
+        try {
+            log.info("根据评论id查赞");
+            return commentMapper.queryCom(commentid);
+        } catch (Exception e) {
+            log.error("根据评论id查赞失敗", e);
+            throw e;
+        }
+    }
 
 
 }

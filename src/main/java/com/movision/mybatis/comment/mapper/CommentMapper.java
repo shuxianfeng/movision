@@ -1,6 +1,7 @@
 package com.movision.mybatis.comment.mapper;
 
 import com.movision.mybatis.comment.entity.Comment;
+import com.movision.mybatis.comment.entity.CommentCount;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
@@ -80,5 +81,11 @@ public interface CommentMapper {
     List<Comment> queryCommentByPost(int postid);
 
     List<CommentVo> findAllCommentByPostId(int postid, RowBounds rowBounds);
+
+    List<CommentVo> findAllCommentByPost(int postid);
     Integer queryCommentIsRead(int userid);//查询评论未读
+
+    CommentCount queryCommentZan(int id);
+
+    CommentVo queryCom(int commentid);
 }
