@@ -1146,9 +1146,9 @@ public class FacadePost {
                 log.info("APP前端用户开始请求发帖");
                 Map contentMap = null;
                 //封装帖子实体
-//                Post post = preparePostJavaBean(request, userid, circleid, title, postcontent, isactive, coverimg, contentMap);
-                Post post = new Post();
-                post.setTitle("测试标签发帖" + DateUtils.getCurrentDate());
+                Post post = preparePostJavaBean(request, userid, circleid, title, postcontent, isactive, coverimg, contentMap);
+                /*Post post = new Post();
+                post.setTitle("测试标签发帖" + DateUtils.getCurrentDate());*/
                 
                 //插入帖子
                 postService.releaseModularPost(post);
@@ -1159,7 +1159,7 @@ public class FacadePost {
                 //标签业务逻辑处理
                 addLabelProcess(labellist, flag);
                 //积分处理
-//                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
 
                 map.put("flag", flag);
                 return map;
@@ -1225,12 +1225,12 @@ public class FacadePost {
 
     private void processForNewLabel(int flag, List<PostLabel> newLabels) {
         //3.1 从缓存中获取userid，citycode, 并且根据标签类型，获取标签的头像
-        /*for (PostLabel p : newLabels) {
+        for (PostLabel p : newLabels) {
             p.setUserid(ShiroUtil.getAppUserID());
             p.setCitycode(ShiroUtil.getIpCity());
             //todo 根据标签类型，获取标签的头像。 需要等于小双的标签头像
 
-        }*/
+        }
         //3.2 插入标签表数据
         postLabelService.batchInsert(newLabels);
         //3.3 插入标签和帖子关系数据
