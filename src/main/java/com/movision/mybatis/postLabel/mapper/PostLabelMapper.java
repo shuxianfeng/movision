@@ -59,4 +59,6 @@ public interface PostLabelMapper {
     Integer queryPostLabeIsRecommend(PostLabel label);
 
     void updatePostLabelIsRecommend(PostLabel label);
+
+    Integer countSameNameLabel(String name);
 }

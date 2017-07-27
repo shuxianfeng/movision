@@ -260,4 +260,8 @@ WHERE l.id=#{labelid,jdbcType=INTEGER} GROUP BY p.userid ORDER BY count DESC
         WHERE id = #{id,jdbcType=INTEGER} AND isdel = 0
     </update>
 
+    <select id="countSameNameLabel" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post_label WHERE NAME = #{name}
+    </select>
+
 </mapper>
