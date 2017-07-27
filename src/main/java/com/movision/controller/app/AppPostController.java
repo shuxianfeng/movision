@@ -252,10 +252,11 @@ public class AppPostController {
                                         @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
                                         @ApiParam(value = "帖子内容") @RequestParam String postcontent,
                                         @ApiParam(value = "帖子封面") @RequestParam String coverimg,
+                                        @ApiParam(value = "标签id 多个以逗号分隔") @RequestParam(required = false) String labelid,
                                         @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids) {
         Response response = new Response();
 
-        Map count = facadePost.releasePostByPCTest(request, userid, circleid, title, postcontent, coverimg, proids);
+        Map count = facadePost.releasePostByPCTest(request, userid, circleid, title, postcontent, coverimg, labelid, proids);
 
         if (count.get("flag").equals(-2)) {
             response.setCode(300);

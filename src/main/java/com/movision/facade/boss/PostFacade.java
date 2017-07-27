@@ -32,6 +32,8 @@ import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabel.entity.PostLabelDetails;
 import com.movision.mybatis.postLabel.service.PostLabelService;
+import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
+import com.movision.mybatis.postLabelRelation.service.PostLabelRelationService;
 import com.movision.mybatis.postProcessRecord.entity.PostProcessRecord;
 import com.movision.mybatis.postProcessRecord.service.PostProcessRecordService;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
@@ -148,6 +150,9 @@ public class PostFacade {
 
     @Autowired
     private UserRefreshRecordService userRefreshRecordService;
+
+    @Autowired
+    private PostLabelRelationService postLabelRelationService;
 
 
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
@@ -753,9 +758,11 @@ public class PostFacade {
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid,
                        String userid, String coverimg, String vid, String bannerimgurl,
-                       String postcontent, String isessence, String ishot, String orderid, String time, String goodsid, String loginid) {
+                       String postcontent, String isessence, String ishot, String orderid, String time, String label,
+                       String goodsid, String loginid) {
         PostTo post = new PostTo();
         Map map = new HashedMap();
+        PostLabelRelation labelRelation = new PostLabelRelation();
         Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.add.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(circleid));
         //-----------------添加开始
         BossUser bu = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
@@ -824,6 +831,22 @@ public class PostFacade {
                 post.setUserid(userid);
                 post.setIsdel("0");
                 int result = postService.addPost(post);//添加帖子
+
+            //帖子使用的标签
+            if (StringUtil.isNotEmpty(label)) {
+                String[] str = label.split(",");
+                Map postlabelrelationMap = new HashMap();
+                List<Integer> newLabelIdList = new ArrayList<>();
+                for (int i = 0; i < str.length; i++) {
+                    newLabelIdList.add(Integer.parseInt(str[i]));
+                }
+                postlabelrelationMap.put("postid", post.getId());
+                postlabelrelationMap.put("labelids", newLabelIdList.toArray());
+                //批量新增帖子、标签关系
+                postLabelRelationService.batchAdd(postlabelrelationMap);
+            }
+
+
                 //String fName = FileUtil.getPicName(vid);//获取视频文件名
                 //查询圈子名称
                 //  String circlename = circleService.queryCircleName(Integer.parseInt(circleid));
@@ -1571,7 +1594,8 @@ public class PostFacade {
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map updatePostById(HttpServletRequest request, String id, String title, String subtitle, String type,
                               String userid, String circleid, String vid, String bannerimgurl,
-                              String coverimg, String postcontent, String isessence, String ishot, String orderid, String time, String goodsid, String loginid) {
+                              String coverimg, String postcontent, String isessence, String ishot, String orderid,
+                              String time, String goodsid, String labelid, String loginid) {
         PostTo post = new PostTo();
         Map map = new HashedMap();
         Integer lgid = Integer.parseInt(loginid);
@@ -1694,6 +1718,22 @@ public class PostFacade {
                      }*/
                     post.setUserid(userid);
                     int result = postService.updatePostById(post);//编辑帖子
+
+
+                    //帖子使用的标签
+                    if (StringUtil.isNotEmpty(labelid)) {
+                        String[] str = labelid.split(",");
+                        Map postlabelrelationMap = new HashMap();
+                        List<Integer> newLabelIdList = new ArrayList<>();
+                        for (int i = 0; i < str.length; i++) {
+                            newLabelIdList.add(Integer.parseInt(str[i]));
+                        }
+                        postlabelrelationMap.put("postid", id);
+                        postlabelrelationMap.put("labelids", newLabelIdList.toArray());
+                        //批量新增帖子、标签关系
+                        postLabelRelationService.batchAdd(postlabelrelationMap);
+                    }
+
                     map.put("result", result);
                     // map.put("videoid", videoid);
                     if (goodsid != null && goodsid != "") {//添加商品

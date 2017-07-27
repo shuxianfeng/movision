@@ -446,10 +446,11 @@ public class PostController {
                             @ApiParam(value = "圈子精选") @RequestParam(required = false) String ishot,//精选池中的帖子圈子精选贴
                             @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,//精选排序
                             @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String time,//精选日期
+                            @ApiParam(value = "标签id 多个以逗号分隔") @RequestParam(required = false) String labelid,
                             @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid, @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
         Map resaut = postFacade.addPost(request, title, subtitle, type, circleid, userid, coverimg, vid, bannerimgurl, postcontent,
-                isessence, ishot, orderid, time, goodsid, loginid);
+                isessence, ishot, orderid, time, labelid, goodsid, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -764,9 +765,10 @@ public class PostController {
                                    @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,//精选排序
                                    @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String time,
                                    @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
+                                   @ApiParam(value = "标签id 以逗号分隔") @RequestParam(required = false) String labelid,
                                    @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map map = postFacade.updatePostById(request, id, title, subtitle, type, userid, circleid, vid, bannerimgurl, coverimg, postcontent, isessence, ishot, orderid, time, goodsid, loginid);
+        Map map = postFacade.updatePostById(request, id, title, subtitle, type, userid, circleid, vid, bannerimgurl, coverimg, postcontent, isessence, ishot, orderid, time, goodsid, labelid, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }

@@ -748,7 +748,8 @@ public class FacadePost {
 
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
-    public Map releasePostByPCTest(HttpServletRequest request, String userid, String circleid, String title, String postcontent, String coverimg, String proids) {
+    public Map releasePostByPCTest(HttpServletRequest request, String userid, String circleid, String title,
+                                   String postcontent, String coverimg, String labelid, String proids) {
         Map map = new HashMap();
 
         //这里需要根据userid判断当前登录的用户是否有发帖权限
@@ -772,6 +773,20 @@ public class FacadePost {
                 Post post = preparePost4PC(request, userid, circleid, title, postcontent, coverimg);
                 //插入帖子
                 postService.releasePost(post);
+
+                //帖子使用的标签
+                if (StringUtil.isNotEmpty(labelid)) {
+                    String[] str = labelid.split(",");
+                    Map postlabelrelationMap = new HashMap();
+                    List<Integer> newLabelIdList = new ArrayList<>();
+                    for (int i = 0; i < str.length; i++) {
+                        newLabelIdList.add(Integer.parseInt(str[i]));
+                    }
+                    postlabelrelationMap.put("postid", post.getId());
+                    postlabelrelationMap.put("labelids", newLabelIdList.toArray());
+                    //批量新增帖子、标签关系
+                    postLabelRelationService.batchAdd(postlabelrelationMap);
+                }
 
                 int flag = post.getId();//返回的主键--帖子id
                 //再保存帖子中分享的商品列表(如果商品id字段不为空)
