@@ -413,6 +413,15 @@ public class CommentService {
         }
     }
 
+    public List<CommentVo> findAllCommentByPostId(int postid, Paging<CommentVo> paging) {
+        try {
+            log.info("根據帖子id查詢所有評論");
+            return commentMapper.findAllCommentByPostId(postid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("根據帖子id查詢所有評論失敗", e);
+            throw e;
+        }
+    }
     public Integer queryCommentIsRead(int userid) {
         try {
             log.info("查询评论未读");

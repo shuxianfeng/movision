@@ -6,6 +6,7 @@ import com.movision.facade.label.LabelFacade;
 import com.movision.facade.msgCenter.MsgCenterFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.CircleVo;
+import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.PostLabelTz;
 import com.movision.mybatis.user.entity.UserVo;
@@ -357,5 +358,28 @@ public class AppWaterfallController {
         response.setData(pager);
         return response;
     }
+
+    /**
+     * 帖子详情中的评论列表
+     *
+     * @return
+     */
+    @ApiOperation(value = "帖子详情中的评论列表", notes = "帖子详情中的评论列表", response = Response.class)
+    @RequestMapping(value = "queryCommentByPost", method = RequestMethod.POST)
+    public Response queryCommentByPost(
+            @ApiParam(value = "帖子id ") @RequestParam String postid,
+            @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+            @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<CommentVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List result = facadePost.queryCommentByPost(postid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        pager.result(result);
+        response.setData(pager);
+        return response;
+    }
+
 
 }

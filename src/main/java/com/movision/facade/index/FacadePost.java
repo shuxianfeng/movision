@@ -6,6 +6,7 @@ import com.mongodb.*;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.im.ImFacade;
+import com.movision.facade.msgCenter.MsgCenterFacade;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.accusation.entity.Accusation;
@@ -17,6 +18,7 @@ import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.circleCategory.entity.CircleCategoryVo;
 import com.movision.mybatis.circleCategory.service.CircleCategoryService;
 import com.movision.mybatis.comment.entity.Comment;
+import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.compressImg.service.CompressImgService;
@@ -36,6 +38,7 @@ import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
 import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
+import com.movision.mybatis.postCommentZanRecord.service.PostCommentZanRecordService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabel.entity.PostLabelTz;
 import com.movision.mybatis.postLabel.entity.PostLabelVo;
@@ -157,7 +160,8 @@ public class FacadePost {
     private PostLabelService postLabelService;
     @Autowired
     private FollowUserService followUserService;
-
+    @Autowired
+    private PostCommentZanRecordService postCommentZanRecordService;
     @Autowired
     private CircleCategoryService circleCategoryService;
 
@@ -172,6 +176,8 @@ public class FacadePost {
         PostVo vo = postService.queryPostDetail(parammap);
         List<PostLabel> postLabels = postService.queryPostLabel(Integer.parseInt(postid));
         vo.setPostLabels(postLabels);
+        //评论
+
         //-----帖子内容格式转换
         String str = vo.getPostcontent();
         JSONArray jsonArray = JSONArray.fromObject(str);
@@ -2150,6 +2156,31 @@ public class FacadePost {
             log.debug("不存在相同的标签名");
             return false;
         }
+    }
+
+    /**
+     * 帖子详情的帖子列表
+     *
+     * @param postid
+     * @return
+     */
+    public List queryCommentByPost(String postid, Paging<CommentVo> paging) {
+        //查询这个帖子的所有评论
+        List<CommentVo> comments = commentService.findAllCommentByPostId(Integer.parseInt(postid), paging);
+        for (int i = 0; i < comments.size(); i++) {
+            Integer pid = comments.get(i).getPid();
+            Integer usersid = comments.get(i).getUserid();
+            User user = postCommentZanRecordService.queryusers(usersid);
+            if (pid != null) {
+                List<CommentVo> commentVos = commentService.queryPidComment(pid);
+                comments.get(i).setCommentVos(commentVos);
+                comments.get(i).setUser(user);
+            } else {
+                comments.get(i).setUser(user);
+            }
+        }
+
+        return comments;
     }
 
 

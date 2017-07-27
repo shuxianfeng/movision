@@ -15,13 +15,6 @@ public class CommentVo implements Serializable {
     private Integer pid;
     private User user;
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     private  Integer postid;
 
@@ -68,6 +61,14 @@ public class CommentVo implements Serializable {
     private List<CommentVo> commentVos;
 
     private Integer isread;//是否已读 0否 1是
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Integer getIsread() {
         return isread;
