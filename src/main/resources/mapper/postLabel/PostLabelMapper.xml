@@ -153,6 +153,7 @@
     <select id="findAllQueryPostLabelList" parameterType="com.movision.mybatis.postLabel.entity.PostLabel"
             resultType="com.movision.mybatis.postLabel.entity.PostLabelDetails">
         SELECT l.*,
+        (SELECT c.name FROM yw_city c WHERE c.code = l.citycode) AS cityName,
         (SELECT count(postid) FROM yw_post_label_relation WHERE labelid = l.id) AS useQuantity,
         (SELECT u.nickname FROM yw_user u WHERE u.id = l.userid) AS userName
         FROM yw_post_label l
