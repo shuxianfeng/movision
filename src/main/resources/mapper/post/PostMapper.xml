@@ -2304,6 +2304,8 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         </foreach>
         )AND p.isdel=0 ORDER BY p.heat_value DESC
     </select>
-
+    <select id="queryCityUserCode" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT ip_city FROM  yw_user WHERE id=#{userid,jdbcType=INTEGER}
+    </select>
 
 </mapper>

@@ -1589,6 +1589,16 @@ public class PostService {
         }
     }
 
+    public String queryCityUserCode(int userid) {
+        try {
+            log.info("查询city的code");
+            return postMapper.queryCityUserCode(userid);
+        } catch (Exception e) {
+            log.error("查询city的code失败", e);
+            throw e;
+        }
+    }
+
     public List<PostVo> findAllCityPost(String citycode) {
         try {
             log.info("根据地区查询帖子");

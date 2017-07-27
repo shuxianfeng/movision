@@ -278,6 +278,8 @@ public interface PostMapper {
 
     String queryCityCode(String area);//查询code
 
+    String queryCityUserCode(int userid);
+
     List<PostVo> findAllCityPost(String citycode);//
 
     List<PostLabel> queryPostLabel(int postid);

@@ -1455,6 +1455,13 @@ public class FacadePost {
         List<PostVo> list = null;
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
+        String citycode = "";
+        //根据传过来的地区去yw_city查代码
+        if (area != null) {
+            citycode = postService.queryCityCode(area);
+        } else {
+            citycode = postService.queryCityUserCode(Integer.parseInt(userid));
+        }
         if (userid == null) {//未登录
             list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
             list = NotLoginretuenList(list, paging);
@@ -1468,14 +1475,12 @@ public class FacadePost {
                     post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
                     posts.add(post);//把mongodb转为post实体
                 }
-                //根据传过来的地区去yw_city查代码
-                String citycode = postService.queryCityCode(area);
                 //根据city查询帖子
                 List<PostVo> postVos = postService.findAllCityPost(citycode);
                 postVos.removeAll(posts);
                 list = retuenList(postVos, userid, paging);
             } else {//登录但是刷新列表中没有帖子
-                list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+                list = postService.findAllCityPost(citycode);//根据热度值排序查询帖子
                 list = retuenList(list, userid, paging);
                 return list;
             }
@@ -1533,30 +1538,33 @@ public class FacadePost {
         List<PostVo> crileidPost = null;
         List<PostVo> userPost = null;
         List<PostVo> labelPost = null;
-            listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//用户有没有看过
-            List<Integer> followCricle = postService.queryFollowCricle(Integer.parseInt(userid));//查询用户关注的圈子
-            List<Integer> followUsers = postService.queryFollowUser(Integer.parseInt(userid));//用户关注的作者
+        listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//用户有没有看过
+        List<Integer> followCricle = postService.queryFollowCricle(Integer.parseInt(userid));//查询用户关注的圈子
+        List<Integer> followUsers = postService.queryFollowUser(Integer.parseInt(userid));//用户关注的作者
         List<Integer> followLabel = postLabelService.labelId(Integer.parseInt(userid));//用户关注标签
+        if (followCricle.size() == 0 && followUsers.size() == 0 && followLabel.size() == 0) {
+            list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+            list = NotLoginretuenList(list, paging);
+            return list;
+        } else {
             //根据圈子查询所有帖子
-        if (followCricle.size() != 0) {
+            if (followCricle.size() != 0) {
                 crileidPost = postService.queryPostListByIds(followCricle);
             }
             //根据作者查询所有帖子
-        if (followUsers.size() != 0) {
+            if (followUsers.size() != 0) {
                 userPost = postService.queryUserListByIds(followUsers);
             }
-        if (followLabel.size() != 0) {
-            labelPost = postService.queryLabelListByIds(followLabel);
-        }
-        if (crileidPost != null) {
-            crileidPost.removeAll(userPost);
-            crileidPost.removeAll(labelPost);
+            if (followLabel.size() != 0) {
+                labelPost = postService.queryLabelListByIds(followLabel);
+            }
             crileidPost.addAll(userPost);
             crileidPost.addAll(labelPost);
+            Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(crileidPost);
+            crileidPost = new ArrayList<PostVo>(linkedHashSet);
             ComparatorChain chain = new ComparatorChain();
             chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
             Collections.sort(crileidPost, chain);
-        }
             if (listmongodba.size() != 0) {//刷新有记录
                 for (int j = 0; j < listmongodba.size(); j++) {
                     PostVo post = new PostVo();
@@ -1569,6 +1577,7 @@ public class FacadePost {
                 //list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
                 list = retuenList(crileidPost, userid, paging);
                 return list;
+            }
         }
         return list;
     }

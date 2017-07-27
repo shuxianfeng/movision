@@ -591,4 +591,11 @@ public class PostVo implements Serializable {
     public boolean equals(Object obj) {
         return obj instanceof PostVo && this.id != null && this.id.equals(((PostVo) obj).getId());
     }
+
+    @Override
+    public int hashCode() {
+        return this.getId().hashCode();
+    }
+
+
 }
