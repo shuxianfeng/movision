@@ -14,9 +14,11 @@
       <result column="postid" property="postid" jdbcType="INTEGER"/>
       <result column="circleid" property="circleid" jdbcType="INTEGER"/>
       <result column="isrecommend" property="isrecommend" javaType="INTEGER"/>
+      <result column="use_count" property="useCount" javaType="INTEGER"/>
+      <result column="fans" property="fans" javaType="INTEGER"/>
   </resultMap>
   <sql id="Base_Column_List">
-      id, name, heat_value, userid, intime, type, photo, citycode, isrecommend, isdel
+      id, name, heat_value, userid, intime, type, photo, citycode, isrecommend, isdel, use_count, fans
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
     select
@@ -61,6 +63,8 @@
             isrecommend,
         </if>
             isdel,
+        use_count,
+        fans,
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -87,7 +91,8 @@
             #{isrecommend,jdbcType=INTEGER},
         </if>
         0,
-
+        1,
+        0,
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
@@ -120,6 +125,12 @@
         <if test="isdel != null">
             isdel = #{isdel,jdbcType=INTEGER},
         </if>
+        <if test="useCount != null">
+            #{useCount},
+        </if>
+        <if test="fans != null">
+            #{fans},
+        </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -133,7 +144,9 @@
     photo = #{photo},
       isdel = #{isdel,jdbcType=INTEGER},
       photo = #{photo},
-    citycode = #{citycode}
+      citycode = #{citycode},
+      use_count = #{useCount},
+      fans = #{fans}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="queryLableName" resultType="com.movision.mybatis.postLabel.entity.PostLabel">
@@ -187,7 +200,7 @@
 
     <insert id="batchInsert" parameterType="java.util.List">
         INSERT INTO yw_post_label (
-        name, heat_value, userid, intime, type, photo, isdel, citycode
+        name, heat_value, userid, intime, type, photo, isdel, citycode, isrecommend, use_count, fans
         )
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
@@ -199,7 +212,10 @@
             #{item.type,jdbcType=INTEGER},
             #{item.photo,jdbcType=VARCHAR},
             0,
-            #{item.citycode,jdbcType=VARCHAR}
+            #{item.citycode,jdbcType=VARCHAR},
+            0,
+            1,
+            0
             )
         </foreach>
     </insert>
@@ -213,8 +229,8 @@
     </select>
   <select id="queryCountLabelName" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.postLabel.entity.PostLabelCount">
-    SELECT COUNT(1) AS count,p.userid,p.id,u.nickname FROM yw_post_label_relation r  LEFT JOIN yw_post p ON
-p.id=r.postid LEFT JOIN   yw_post_label l ON l.id=r.labelid LEFT JOIN yw_user u ON u.id=p.userid
+      SELECT COUNT(1) AS count,p.userid,p.id,u.nickname FROM yw_post_label_relation r LEFT JOIN yw_post p ON
+      p.id=r.postid LEFT JOIN yw_post_label l ON l.id=r.labelid LEFT JOIN yw_user u ON u.id=p.userid
       WHERE l.id=#{labelid,jdbcType=INTEGER} AND isdel=0 GROUP BY p.userid ORDER BY count DESC
   </select>
     <select id="queryCircleByPostid" parameterType="java.lang.Integer"

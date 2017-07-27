@@ -1,7 +1,9 @@
 package com.movision.mybatis.postLabel.service;
 
+import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.test.SpringTestCase;
 import org.junit.Test;
+import org.springframework.asm.Label;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -22,6 +24,16 @@ public class PostLabelServiceTest extends SpringTestCase {
         String[] strings = {"活动", "风景"};
         List<Integer> list = postLabelService.queryLabelIdList(strings);
         System.out.println("结果：" + list.toString());
+    }
+
+    @Test
+    public void addOneLabel() throws Exception {
+        PostLabel postLabel = new PostLabel();
+        postLabel.setName("test1");
+        postLabel.setUserid(1);
+        postLabel.setType(3);
+
+        postLabelService.insertPostLabel(postLabel);
     }
 
 }

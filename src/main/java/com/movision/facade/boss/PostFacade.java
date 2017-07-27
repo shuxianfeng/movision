@@ -2742,7 +2742,7 @@ public class PostFacade {
         if (StringUtil.isNotEmpty(photo)) {
             label.setPhoto(photo);
         }
-        label.setIntime(new Date());
+        label.setCitycode("320100");  //这边目前写死--南京 320100，因为是公司内部的管理员操作。
         postLabelService.insertPostLabel(label);
     }
 

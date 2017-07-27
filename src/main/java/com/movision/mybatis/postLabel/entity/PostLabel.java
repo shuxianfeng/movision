@@ -23,6 +23,27 @@ public class PostLabel {
 
     private Integer isrecommend;
 
+    private Integer useCount;
+
+    private Integer fans;
+
+    public void setUseCount(Integer useCount) {
+        this.useCount = useCount;
+    }
+
+    public void setFans(Integer fans) {
+        this.fans = fans;
+    }
+
+    public Integer getUseCount() {
+
+        return useCount;
+    }
+
+    public Integer getFans() {
+        return fans;
+    }
+
     public Integer getIsrecommend() {
         return isrecommend;
     }
