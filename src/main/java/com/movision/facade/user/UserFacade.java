@@ -20,6 +20,7 @@ import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.postLabel.entity.PostLabelVo;
 import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.shiro.realm.ShiroRealm;
@@ -595,11 +596,6 @@ public class UserFacade {
 
         return myFollowAuthorList;
     }
-
-    /**
-     * 我的--关注--关注的标签，点击关注调用的关注的标签列表返回接口
-     */
-
 
     /**
      * 我的模块——点击粉丝，进入用户被关注的粉丝用户列表接口

@@ -70,22 +70,22 @@ public class AppMineController {
         return response;
     }
 
-//    @ApiOperation(value = "我的--关注--关注的标签，点击关注调用的关注的标签接口", notes = "关注的标签部分", response = Response.class)
-//    @RequestMapping(value = "myfollowauthor", method = RequestMethod.POST)
-//    public Response getMineFollowLabel(@ApiParam(value = "用户id(必填，否则无法进入‘我的’页面)") @RequestParam String userid,
-//                                       @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-//                                       @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize){
-//        Response response = new Response();
-//
-//        Paging<PostLabelVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-//        List<PostLabelVo> myFollowCircleList = labelFacade.getMineFollowLabel(userid, pager);
-//
-//        if (response.getCode() == 200) {
-//            response.setMessage("查询成功");
-//            response.setData(myFollowCircleList);
-//        }
-//        return response;
-//    }
+    @ApiOperation(value = "我的--关注--关注的标签，点击关注调用的关注的标签接口", notes = "关注的标签部分", response = Response.class)
+    @RequestMapping(value = "myfollowlabel", method = RequestMethod.POST)
+    public Response getMineFollowLabel(@ApiParam(value = "用户id(必填，否则无法进入‘我的’页面)") @RequestParam String userid,
+                                       @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                       @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize){
+        Response response = new Response();
+
+        Paging<PostLabelVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<PostLabelVo> myFollowCircleList = labelFacade.getMineFollowLabel(userid, pager);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+            response.setData(myFollowCircleList);
+        }
+        return response;
+    }
 
     @ApiOperation(value = "我的模块——点击粉丝，进入用户被关注的粉丝用户列表接口", notes = "用户被关注的粉丝用户列表接口", response = Response.class)
     @RequestMapping(value = "myfans", method = RequestMethod.POST)

@@ -5,10 +5,11 @@ import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.*;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
-
+@Repository
 public interface PostLabelMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -21,6 +22,8 @@ public interface PostLabelMapper {
     int updateByPrimaryKeySelective(PostLabel record);
 
     int updateByPrimaryKey(PostLabel record);
+
+    List<PostLabelVo> getMineFollowLabel(Map<String, Object> parammap, RowBounds rowBounds);
 
     List<PostLabel> queryLableName();
 

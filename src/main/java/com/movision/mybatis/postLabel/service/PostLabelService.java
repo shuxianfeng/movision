@@ -26,6 +26,16 @@ public class PostLabelService {
     @Autowired
     private PostLabelMapper postLabelMapper;
 
+    public List<PostLabelVo> getMineFollowLabel(Map<String, Object> parammap, Paging<PostLabelVo> pager){
+        try {
+            log.info("查询我的--关注--标签（我关注的标签列表）");
+            return postLabelMapper.getMineFollowLabel(parammap, pager.getRowBounds());
+        }catch (Exception e){
+            log.error("查询我的--关注--标签（我关注的标签列表）", e);
+            throw e;
+        }
+    }
+
     public List<PostLabel> queryLabelName() {
         try {
             log.info("查询所有标签");

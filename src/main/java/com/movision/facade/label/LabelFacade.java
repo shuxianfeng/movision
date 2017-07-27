@@ -35,6 +35,28 @@ public class LabelFacade {
     private FacadePost facadePost;
 
     /**
+     * 我的--关注--关注的标签，点击关注调用的关注的标签列表返回接口
+     */
+    public List<PostLabelVo> getMineFollowLabel(String userid, Paging<PostLabelVo> pager){
+        //查询当前用户所关注的所有标签列表
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("userid", Integer.parseInt(userid));
+        List<PostLabelVo> followLabelList = postLabelService.getMineFollowLabel(parammap, pager);
+
+        //遍历查询当前用户是否关注过该标签
+        for (int i=0; i<followLabelList.size(); i++){
+            PostLabelVo vo = followLabelList.get(i);
+            int labelid = vo.getLabelid();
+            parammap.put("labelid", labelid);
+            int sum = followLabelService.yesOrNo(parammap);
+            vo.setIsfollow(sum);
+            followLabelList.set(i, vo);
+        }
+
+        return followLabelList;
+    }
+
+    /**
      * 点击标签页上部分
      *
      * @param labelid
