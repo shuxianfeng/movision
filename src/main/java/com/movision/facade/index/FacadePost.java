@@ -2075,15 +2075,23 @@ public class FacadePost {
      * @return
      */
     public int concernedAuthor(int userid, String postid) {
+        Map map = new HashMap();
         //根据postid查询发帖ren
         int interestedusers = postService.postUserId(Integer.parseInt(postid));
-
-        FollowUser followUser = new FollowUser();
-        followUser.setIntime(new Date());
-        followUser.setInterestedusers(interestedusers);
-        followUser.setUserid(userid);
-        int result = followUserService.insertSelective(followUser);
-        return result;
+        map.put("userid", userid);
+        map.put("interestedusers", interestedusers);
+        //查询该用户有没有关注过
+        int result = followUserService.yesOrNo(map);
+        if (result == 0) {
+            FollowUser followUser = new FollowUser();
+            followUser.setIntime(new Date());
+            followUser.setInterestedusers(interestedusers);
+            followUser.setUserid(userid);
+            int count = followUserService.insertSelective(followUser);
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
     public List<Map> getCircleInCatagory() {

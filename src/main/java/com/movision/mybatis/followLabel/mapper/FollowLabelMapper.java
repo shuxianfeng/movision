@@ -3,6 +3,8 @@ package com.movision.mybatis.followLabel.mapper;
 import com.movision.mybatis.followLabel.entity.FollowLabel;
 import org.springframework.stereotype.Repository;
 
+import java.util.Map;
+
 @Repository
 public interface FollowLabelMapper {
     int deleteByPrimaryKey(Integer id);
@@ -16,4 +18,6 @@ public interface FollowLabelMapper {
     int updateByPrimaryKeySelective(FollowLabel record);
 
     int updateByPrimaryKey(FollowLabel record);
+
+    int yesOrNo(Map map);
 }

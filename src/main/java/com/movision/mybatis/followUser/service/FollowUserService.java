@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 /**
  * @Author zhanglei
  * @Date 2017/7/26 9:53
@@ -27,5 +29,14 @@ public class FollowUserService {
         }
     }
 
+    public int yesOrNo(Map followUser) {
+        try {
+            log.info("是否关注用户");
+            return followUserMapper.yesOrNo(followUser);
+        } catch (Exception e) {
+            log.error("是否关注用户失败", e);
+            throw e;
+        }
+    }
 
 }

@@ -16,9 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Author zhanglei
@@ -88,12 +86,21 @@ public class LabelFacade {
      * @return
      */
     public int attentionLabel(int userid, int labelid) {
-        FollowLabel followLabel = new FollowLabel();
-        followLabel.setUserid(userid);
-        followLabel.setLabelid(labelid);
-        followLabel.setIntime(new Date());
-        int result = followLabelService.insertSelective(followLabel);
-        return result;
+        Map map = new HashMap();
+        //查询当前用户有没有关注过该标签
+        map.put("userid", userid);
+        map.put("labelid", labelid);
+        int result = followLabelService.yesOrNo(map);
+        if (result == 0) {//没有关注
+            FollowLabel followLabel = new FollowLabel();
+            followLabel.setUserid(userid);
+            followLabel.setLabelid(labelid);
+            followLabel.setIntime(new Date());
+            int count = followLabelService.insertSelective(followLabel);
+            return 0;
+        } else {//关注过了
+            return 1;
+        }
     }
 
     /**

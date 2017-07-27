@@ -79,4 +79,7 @@
         intime = #{intime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="yesOrNo" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM  yw_follow_label WHERE userid=#{userid,jdbcType=INTEGER} AND labelid=#{labelid,jdbcType=INTEGER}
+    </select>
 </mapper>

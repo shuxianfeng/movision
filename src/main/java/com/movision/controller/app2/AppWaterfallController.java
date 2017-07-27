@@ -170,10 +170,13 @@ public class AppWaterfallController {
                                    @ApiParam(value = "用户id ") @RequestParam int userid) {
         Response response = new Response();
         int result = labelFacade.attentionLabel(userid, labelid);
-        if (response.getCode() == 200) {
-            response.setMessage("返回成功");
+        if (result == 0) {
+            response.setCode(200);
+            response.setMessage("关注成功");
+        } else if (result == 1) {
+            response.setCode(300);
+            response.setMessage("已关注该标签，请刷新重试");
         }
-        response.setData(result);
         return response;
     }
 
@@ -273,10 +276,13 @@ public class AppWaterfallController {
                                     @ApiParam(value = "帖子id") @RequestParam String postid) {
         Response response = new Response();
         int result = facadePost.concernedAuthor(userid, postid);
-        if (response.getCode() == 200) {
-            response.setMessage("返回成功");
+        if (result == 0) {
+            response.setCode(200);
+            response.setMessage("关注成功");
+        } else if (result == 1) {
+            response.setCode(300);
+            response.setMessage("已关注该作者，请刷新重试");
         }
-        response.setData(result);
         return response;
     }
 

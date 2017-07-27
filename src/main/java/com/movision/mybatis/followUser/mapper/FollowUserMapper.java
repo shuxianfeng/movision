@@ -2,6 +2,8 @@ package com.movision.mybatis.followUser.mapper;
 
 import com.movision.mybatis.followUser.entity.FollowUser;
 
+import java.util.Map;
+
 public interface FollowUserMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,6 @@ public interface FollowUserMapper {
     int updateByPrimaryKeySelective(FollowUser record);
 
     int updateByPrimaryKey(FollowUser record);
+
+    int yesOrNo(Map map);
 }
