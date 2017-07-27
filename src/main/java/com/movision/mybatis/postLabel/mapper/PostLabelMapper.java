@@ -55,4 +55,8 @@ public interface PostLabelMapper {
     List<PostVo> findAllIsencePost(int circleid, RowBounds rowBounds);
 
     List<CircleCount> queryCirclePeople(int circleid);
+
+    Integer queryPostLabeIsRecommend(PostLabel label);
+
+    void updatePostLabelIsRecommend(PostLabel label);
 }

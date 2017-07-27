@@ -21,6 +21,16 @@ public class PostLabel {
 
     private String citycode;
 
+    private Integer isrecommend;
+
+    public Integer getIsrecommend() {
+        return isrecommend;
+    }
+
+    public void setIsrecommend(Integer isrecommend) {
+        this.isrecommend = isrecommend;
+    }
+
     public Integer getIsdel() {
         return isdel;
     }

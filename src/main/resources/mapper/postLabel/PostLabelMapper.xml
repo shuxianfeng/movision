@@ -13,9 +13,10 @@
       <result column="isdel" property="isdel" jdbcType="INTEGER"/>
       <result column="postid" property="postid" jdbcType="INTEGER"/>
       <result column="circleid" property="circleid" jdbcType="INTEGER"/>
+      <result column="isrecommend" property="isrecommend" javaType="INTEGER"/>
   </resultMap>
   <sql id="Base_Column_List">
-      id, name, heat_value, userid, intime, type, photo, citycode, isdel
+      id, name, heat_value, userid, intime, type, photo, citycode, isrecommend, isdel
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
     select
@@ -56,6 +57,9 @@
       <if test="citycode != null">
         citycode,
       </if>
+        <if test="isrecommend != null">
+            isrecommend,
+        </if>
             isdel,
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -79,7 +83,11 @@
       <if test="citycode != null">
         #{citycode},
       </if>
+        <if test="isrecommend != null">
+            #{isrecommend,jdbcType=INTEGER},
+        </if>
         0,
+
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
@@ -106,6 +114,9 @@
       <if test="citycode != null">
         citycode = #{citycode},
       </if>
+        <if test="isrecommend != null">
+            isrecommend = #{isrecommend,jdbcType=INTEGER},
+        </if>
         <if test="isdel != null">
             isdel = #{isdel,jdbcType=INTEGER},
         </if>
@@ -142,6 +153,7 @@
     <select id="findAllQueryPostLabelList" parameterType="com.movision.mybatis.postLabel.entity.PostLabel"
             resultType="com.movision.mybatis.postLabel.entity.PostLabelDetails">
         SELECT l.*,
+        (SELECT count(postid) FROM yw_post_label_relation WHERE labelid = l.id) AS useQuantity,
         (SELECT u.nickname FROM yw_user u WHERE u.id = l.userid) AS userName
         FROM yw_post_label l
         WHERE isdel = 0
@@ -160,6 +172,7 @@
     <select id="queryPostLabelById" parameterType="com.movision.mybatis.postLabel.entity.PostLabel"
             resultType="com.movision.mybatis.postLabel.entity.PostLabelDetails">
     SELECT l.*,
+        (SELECT c.name FROM yw_city c WHERE c.code = l.citycode) AS cityName,
         (SELECT u.nickname FROM yw_user u WHERE u.id = l.userid) AS userName
         FROM yw_post_label l
         WHERE id = #{id,jdbcType=INTEGER} AND isdel = 0
@@ -234,5 +247,17 @@ WHERE l.id=#{labelid,jdbcType=INTEGER} GROUP BY p.userid ORDER BY count DESC
         LEFT JOIN yw_user u ON u.id=p.userid
         WHERE c.id=#{circleid,jdbcType=INTEGER} GROUP BY p.userid  ORDER BY count DESC
     </select>
+
+    <select id="queryPostLabeIsRecommend" parameterType="com.movision.mybatis.postLabel.entity.PostLabel"
+            resultType="java.lang.Integer">
+        SELECT isrecommend FROM yw_post_label WHERE id = #{id,jdbcType=INTEGER} AND isdel = 0
+    </select>
+
+    <update id="updatePostLabelIsRecommend" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
+        UPDATE yw_post_label
+        SET
+        isrecommend = #{isrecommend,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=INTEGER} AND isdel = 0
+    </update>
 
 </mapper>

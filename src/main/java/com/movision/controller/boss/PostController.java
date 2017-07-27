@@ -1346,9 +1346,11 @@ public class PostController {
     public Response insertPostLabel(@ApiParam(value = "标签名称") @RequestParam String name,
                                     @ApiParam(value = "标签类型0：圈子，1：活动，2：地理，3：其他") @RequestParam String type,
                                     @ApiParam(value = "创建人登录用户") @RequestParam String userid,
+                                    @ApiParam(value = "是否推荐首页") @RequestParam String isrecommend,
+                                    @ApiParam(value = "地理当类型为地理时必填") @RequestParam(required = false) String citycode,
                                     @ApiParam(value = "标签头像") @RequestParam(required = false) String photo) {
         Response response = new Response();
-        postFacade.insertPostLabel(name, type, userid, photo);
+        postFacade.insertPostLabel(name, type, userid, isrecommend, citycode, photo);
         response.setMessage("操作成功");
         response.setData(1);
         return response;
@@ -1383,18 +1385,21 @@ public class PostController {
     @ApiOperation(value = "编辑修改帖子标签", response = Response.class)
     @RequestMapping(value = "updatePostLabel", method = RequestMethod.POST)
     public Response updatePostLabel(@ApiParam(value = "标签id") @RequestParam String id,
-                                    @ApiParam(value = "标签名称") @RequestParam String name,
-                                    @ApiParam(value = "标签类型0：圈子，1：活动，2：地理，3：其他") @RequestParam String type,
+                                    @ApiParam(value = "标签名称") @RequestParam(required = false) String name,
+                                    @ApiParam(value = "标签类型0：圈子，1：活动，2：地理，3：其他") @RequestParam(required = false) String type,
                                     @ApiParam(value = "创建人登录用户") @RequestParam String userid,
+                                    @ApiParam(value = "是否推荐首页") @RequestParam(required = false) String isrecommend,
+                                    @ApiParam(value = "地理 类型为时必填") @RequestParam(required = false) String citycode,
                                     @ApiParam(value = "标签头像") @RequestParam(required = false) String photo) {
         Response response = new Response();
-        postFacade.updatePostLabel(id, name, type, userid, photo);
+        postFacade.updatePostLabel(id, name, type, userid, isrecommend, citycode, photo);
         response.setMessage("操作成功");
         response.setData(1);
         return response;
     }
 
     /**
+     * 删除帖子标签
      * @param id
      * @return
      */
@@ -1403,6 +1408,22 @@ public class PostController {
     public Response deletePostLabel(@ApiParam(value = "标签id") @RequestParam String id) {
         Response response = new Response();
         postFacade.deletePostLabel(id);
+        response.setMessage("操作成功");
+        response.setData(1);
+        return response;
+    }
+
+    /**
+     * 推荐标签到首页
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "位标签推荐到首页", notes = "用于手动推荐标签到首页", response = Response.class)
+    @RequestMapping(value = "updatePostLabelIsRecommend", method = RequestMethod.POST)
+    public Response updatePostLabelIsRecommend(@ApiParam(value = "标签id") @RequestParam String id) {
+        Response response = new Response();
+        postFacade.updatePostLabelIsRecommend(id);
         response.setMessage("操作成功");
         response.setData(1);
         return response;

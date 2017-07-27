@@ -21,6 +21,46 @@ public class PostLabelDetails {
 
     private Integer isdel;
 
+    private Integer useQuantity;
+
+    private Integer isrecommend;
+
+    private String citycode;
+
+    private String cityName;
+
+    public String getCitycode() {
+        return citycode;
+    }
+
+    public void setCitycode(String citycode) {
+        this.citycode = citycode;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public Integer getIsrecommend() {
+        return isrecommend;
+    }
+
+    public void setIsrecommend(Integer isrecommend) {
+        this.isrecommend = isrecommend;
+    }
+
+    public Integer getUseQuantity() {
+        return useQuantity;
+    }
+
+    public void setUseQuantity(Integer useQuantity) {
+        this.useQuantity = useQuantity;
+    }
+
     public Integer getIsdel() {
         return isdel;
     }

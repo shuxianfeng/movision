@@ -154,6 +154,38 @@ public class PostLabelService {
         }
     }
 
+    /**
+     * 查询标签是否推荐到首页
+     *
+     * @param label
+     * @return
+     */
+    public Integer queryPostLabeIsRecommend(PostLabel label) {
+        try {
+            log.info("查询标签是否推荐到首页");
+            return postLabelMapper.queryPostLabeIsRecommend(label);
+        } catch (Exception e) {
+            log.error("查询标签是否推荐到首页异常", e);
+            throw e;
+        }
+    }
+
+
+    /**
+     * 标签推荐、取消推荐到发现页
+     *
+     * @param label
+     */
+    public void updatePostLabelIsRecommend(PostLabel label) {
+        try {
+            log.info("标签推荐、取消推荐到发现页");
+            postLabelMapper.updatePostLabelIsRecommend(label);
+        } catch (Exception e) {
+            log.error("标签推荐、取消推荐到发现页异常", e);
+            throw e;
+        }
+    }
+
     public List<Integer> queryLabelIdList(String[] strings) {
         try {
             log.info("根据标签名称集合查询标签id集合");

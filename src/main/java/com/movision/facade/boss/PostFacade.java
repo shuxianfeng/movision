@@ -2684,16 +2684,22 @@ public class PostFacade {
      * @param photo
      */
     @Transactional
-    public void insertPostLabel(String name, String type, String userid, String photo) {
+    public void insertPostLabel(String name, String type, String userid, String isrecommend, String citycode, String photo) {
         PostLabel label = new PostLabel();
         if (StringUtil.isNotEmpty(name)) {
             label.setName(name);
         }
         if (StringUtil.isNotEmpty(type)) {
             label.setType(Integer.parseInt(type));
+            if (StringUtil.isNotEmpty(citycode) && type.equals("2")) {
+                label.setCitycode(citycode);
+            }
         }
         if (StringUtil.isNotEmpty(userid)) {
             label.setUserid(Integer.parseInt(userid));
+        }
+        if (StringUtil.isNotEmpty(isrecommend)) {
+            label.setIsrecommend(Integer.parseInt(isrecommend));
         }
         if (StringUtil.isNotEmpty(photo)) {
             label.setPhoto(photo);
@@ -2723,7 +2729,7 @@ public class PostFacade {
      * @param userid
      * @param photo
      */
-    public void updatePostLabel(String id, String name, String type, String userid, String photo) {
+    public void updatePostLabel(String id, String name, String type, String userid, String isrecommend, String citycode, String photo) {
         PostLabel label = new PostLabel();
         if (StringUtil.isNotEmpty(id)) {
             label.setId(Integer.parseInt(id));
@@ -2733,9 +2739,15 @@ public class PostFacade {
         }
         if (StringUtil.isNotEmpty(type)) {
             label.setType(Integer.parseInt(type));
+            if (StringUtil.isNotEmpty(citycode) && type.equals("2")) {
+                label.setCitycode(citycode);
+            }
         }
         if (StringUtil.isNotEmpty(userid)) {
             label.setUserid(Integer.parseInt(userid));
+        }
+        if (StringUtil.isNotEmpty(isrecommend)) {
+            label.setIsrecommend(Integer.parseInt(isrecommend));
         }
         if (StringUtil.isNotEmpty(photo)) {
             label.setPhoto(photo);
@@ -2753,6 +2765,25 @@ public class PostFacade {
         PostLabel label = new PostLabel();
         label.setId(Integer.parseInt(id));
         postLabelService.deletePostLabel(label);
+    }
+
+    /**
+     * 标签推荐到首页
+     *
+     * @param id
+     */
+    public void updatePostLabelIsRecommend(String id) {
+        PostLabel label = new PostLabel();
+        label.setId(Integer.parseInt(id));
+        //查询标签是否被推荐
+        Integer isRecommend = postLabelService.queryPostLabeIsRecommend(label);
+        if (isRecommend == 1) {//推荐了，取消
+            label.setIsrecommend(0);
+            postLabelService.updatePostLabelIsRecommend(label);
+        } else {//未推荐，推荐操作
+            label.setIsrecommend(1);
+            postLabelService.updatePostLabelIsRecommend(label);
+        }
     }
 
 }
