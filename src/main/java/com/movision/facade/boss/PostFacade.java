@@ -325,6 +325,7 @@ public class PostFacade {
             postList.setIshotorder(list.get(i).getIshotorder());//排序
             postList.setHeatvalue(list.get(i).getHeatvalue());//热度值
             postList.setContribute(list.get(i).getContribute());//投稿数
+            postList.setPartsumEnddays(list.get(i).getPartsumEnddays());
             String activeStatue = "";
             if (begintime != null && endtime != null) {
                 long begin = begintime.getTime();
@@ -346,6 +347,10 @@ public class PostFacade {
             postList.setIntime(list.get(i).getIntime());
             postList.setIshot(list.get(i).getIshot());
             postList.setHotimgurl(list.get(i).getHotimgurl());
+            Integer click = userRefreshRecordService.postcount(postList.getId());
+            System.out.println("点击量=============" + click);
+            postList.setClick(click);//活动点击量
+
             rewardeds.add(postList);
         }
         return rewardeds;
@@ -671,7 +676,9 @@ public class PostFacade {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        Integer click = userRefreshRecordService.postcount(postList.getId());
+        System.out.println("点击量=============" + click);
+        postList.setClick(click);//活动点击量
         String str = null;
         if (postList != null) {
             Map map = new HashMap();
@@ -700,21 +707,9 @@ public class PostFacade {
      */
     public PostList queryPostActiveQ(String postid) {
         PostList postList = postService.queryActivityParticulars(Integer.parseInt(postid));
-        Integer id = postList.getId();
         Date date = new Date();
         long str = date.getTime();
-        Integer share = sharesService.querysum(id);
         Period periods = periodService.queryPostPeriod(Integer.parseInt(postid));
-        String nickname = userService.queryUserByNicknameBy(Integer.parseInt(postid));//获取发帖人
-        postList.setNickname(nickname);
-        postList.setShare(share);//分享次数
-        postList.setTitle(postList.getTitle());//主标题
-        postList.setSubtitle(postList.getSubtitle());//副标题
-        postList.setEssencedate(postList.getEssencedate());//精选日期
-        postList.setZansum(postList.getZansum());//赞
-        postList.setCommentsum(postList.getCommentsum());//评论
-        postList.setCollectsum(postList.getCollectsum());//收藏
-        postList.setActivetype(postList.getActivetype());//活动类型
         Date begintime = periods.getBegintime();
         Date endtime = periods.getEndtime();
         long begin = begintime.getTime();
@@ -727,12 +722,11 @@ public class PostFacade {
         } else if (str > end) {
             activeStatue = "已结束";
         }
+
+        Integer click = userRefreshRecordService.postcount(postList.getId());
+        System.out.println("点击量=============" + click);
+        postList.setClick(click);//活动点击量
         postList.setActivestatue(activeStatue);//活动状态
-        postList.setActivefee(postList.getActivefee());//活动单价
-        Integer persum = postService.queryPostPerson(Integer.parseInt(postid));//查询报名人数
-        postList.setPersum(persum);//报名人数
-        postList.setPostcontent(postList.getPostcontent());//活动内容
-        postList.setIntime(postList.getIntime());//发布时间
         if (postList.getActivetype() == 1) {//含有商城促销类商品
             List<GoodsVo> li = goodsService.queryGoodsByPostid(postList.getId());//查询活动商城促销类商品列表
             if (li != null) {
@@ -1063,7 +1057,7 @@ public class PostFacade {
      */
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
-    public Map<String, Integer> addPostActive(String title, String subtitle, String activetype, String iscontribute, String activefee,
+    public Map<String, Integer> addPostActive(String title, String subtitle, String activetype, String partsumEnddays, String iscontribute, String activefee,
                                               String coverimg, String postcontent, String isessence, String orderid, String essencedate,
                                               String begintime, String endtime, String userid, String hotimgurl, String ishot, String ishotorder, String goodsid) {
         PostTo post = new PostTo();
@@ -1086,6 +1080,10 @@ public class PostFacade {
                 }
                 }
             }
+
+        if (StringUtil.isNotEmpty(partsumEnddays)) {
+            post.setPartsum_enddays(Integer.parseInt(partsumEnddays));
+        }
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             post.setCoverimg(coverimg);
             if (StringUtil.isNotEmpty(postcontent)) {
@@ -1418,7 +1416,7 @@ public class PostFacade {
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map<String, Integer> updateActivePostById(String id, String title, String subtitle, String userid, String coverimg, String postcontent, String isessence,
                                                      String orderid, String activefee, String activetype, String iscontribute, String begintime, String endtime,
-                                                     String hotimgurl, String ishot, String ishotorder, String essencedate, String goodsid) {
+                                                     String hotimgurl, String ishot, String ishotorder, String essencedate, String partsumEnddays, String goodsid) {
         Post postActiveList = new Post();
         Map<String, Integer> map = new HashedMap();
             try {
@@ -1485,6 +1483,9 @@ public class PostFacade {
                     } else if (ishot.equals("0") || ishot.equals(0)) {
                         postActiveList.setIshotorder(0);//热门排序
                     }
+                }
+                if (StringUtil.isNotEmpty(partsumEnddays)) {
+                    postActiveList.setPartsum_enddays(Integer.parseInt(partsumEnddays));
                 }
                 int result = postService.updateActivePostById(postActiveList);//编辑活动帖子
                 Period period = new Period();
@@ -2684,16 +2685,13 @@ public class PostFacade {
      * @param photo
      */
     @Transactional
-    public void insertPostLabel(String name, String type, String userid, String isrecommend, String citycode, String photo) {
+    public void insertPostLabel(String name, String type, String userid, String isrecommend, String photo) {
         PostLabel label = new PostLabel();
         if (StringUtil.isNotEmpty(name)) {
             label.setName(name);
         }
         if (StringUtil.isNotEmpty(type)) {
             label.setType(Integer.parseInt(type));
-            if (StringUtil.isNotEmpty(citycode) && type.equals("2")) {
-                label.setCitycode(citycode);
-            }
         }
         if (StringUtil.isNotEmpty(userid)) {
             label.setUserid(Integer.parseInt(userid));
@@ -2729,7 +2727,7 @@ public class PostFacade {
      * @param userid
      * @param photo
      */
-    public void updatePostLabel(String id, String name, String type, String userid, String isrecommend, String citycode, String photo) {
+    public void updatePostLabel(String id, String name, String type, String userid, String isrecommend, String photo) {
         PostLabel label = new PostLabel();
         if (StringUtil.isNotEmpty(id)) {
             label.setId(Integer.parseInt(id));
@@ -2739,9 +2737,6 @@ public class PostFacade {
         }
         if (StringUtil.isNotEmpty(type)) {
             label.setType(Integer.parseInt(type));
-            if (StringUtil.isNotEmpty(citycode) && type.equals("2")) {
-                label.setCitycode(citycode);
-            }
         }
         if (StringUtil.isNotEmpty(userid)) {
             label.setUserid(Integer.parseInt(userid));

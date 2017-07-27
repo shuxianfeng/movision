@@ -929,10 +929,13 @@
                 userid = #{userid,jdbcType=INTEGER},
             </if>
             <if test="oprtime != null">
-                oprtime=#{oprtime,jdbcType=TIMESTAMP}
+                oprtime=#{oprtime,jdbcType=TIMESTAMP},
             </if>
             <if test="ishotorder != null">
-                ishot_order = #{ishotorder,jdbcType=INTEGER}
+                ishot_order = #{ishotorder,jdbcType=INTEGER},
+            </if>
+            <if test="partsum_enddays != null">
+                partsum_enddays = #{partsum_enddays,jdbcType=INTEGER}
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -1331,7 +1334,7 @@
     <!--查询活动列表-->
     <select id="findAllActiveTOByList" resultType="com.movision.mybatis.post.entity.PostActiveList">
         SELECT p.id,p.circleid,p.title,p.subtitle,p.postcontent,p.zansum,p.commentsum,
-        p.forwardsum,p.collectsum,p.isactive,p.partsum_enddays,p.type,p.ishot,
+        p.forwardsum,p.collectsum,p.isactive,p.partsum_enddays AS partsumEnddays,p.type,p.ishot,
         p.isessence,p.orderid,p.coverimg,p.hotimgurl,p.intime,p.totalpoint,p.isdel,
         p.isessencepool,p.activetype,p.activefee,p.iscontribute,p.essencedate,p.userid,
         p.oprtime,p.heat_value AS heatvalue,p.city,p.ishot_order AS ishotorder,
@@ -1377,6 +1380,11 @@
         (SELECT COALESCE(SUM(num),0) FROM yw_post_accusation WHERE postid =p.id) AS accusation,
         (SELECT nickname FROM yw_user WHERE id=(SELECT userid FROM yw_post WHERE id=p.id AND isactive=1 AND isdel=0)) AS
         nickname,
+        (SELECT COUNT(1) FROM yw_post_share WHERE postid= p.id) AS share,
+        (SELECT COUNT(1) persum FROM yw_active_part WHERE postid = p.id) AS persum,
+        (SELECT COUNT(1) FROM yw_active_period WHERE postid = p.id AND p.activetype = 2) AS apply,
+        (SELECT COUNT(1) FROM yw_post WHERE activeid = p.id AND p.activetype = 0 AND p.iscontribute = 1 AND isdel = 0)
+        AS contribute,
         (SELECT name FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id AND isactive=1 AND isdel=0)) AS
         circlename,
         (SELECT category FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id AND isactive=1 AND
@@ -1609,7 +1617,10 @@
                 oprtime,
             </if>
             <if test="ishotorder != null">
-                ishot_order
+                ishot_order,
+            </if>
+            <if test="partsum_enddays != null">
+                partsum_enddays
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -1665,7 +1676,10 @@
                 #{oprtime,jdbcType=TIMESTAMP},
             </if>
             <if test="ishotorder != null">
-                #{ishotorder,jdbcType=INTEGER}
+                #{ishotorder,jdbcType=INTEGER},
+            </if>
+            <if test="partsum_enddays != null">
+                #{partsum_enddays,jdbcType=INTEGER}
             </if>
         </trim>
     </insert>

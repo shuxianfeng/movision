@@ -406,7 +406,7 @@ public class PostController {
      * @param postid
      * @return
      */
-    @ApiOperation(value = "活动预览", notes = "活动预览", response = Response.class)
+    @ApiOperation(value = "活动预览（查询活动使用，活动详情）", notes = "活动预览", response = Response.class)
     @RequestMapping(value = "/query_post_active", method = RequestMethod.POST)
     public Response queryPostActiveQ(@ApiParam(value = "帖子id") @RequestParam String postid) {
         Response response = new Response();
@@ -520,6 +520,7 @@ public class PostController {
             @ApiParam(value = "活动标题") @RequestParam String title,
             @ApiParam(value = "活动副标题") @RequestParam String subtitle,
             @ApiParam(value = "活动类型：0 告知类活动 1 商城促销类活动 2 组织类活动") @RequestParam String activetype,
+            @ApiParam(value = "1参与人数/0显示剩余结束天数") @RequestParam String partsumEnddays,
             @ApiParam(value = "是否需要投稿 0,投,1不投") @RequestParam(required = false) String iscontribute,
             @ApiParam(value = "单价") @RequestParam(required = false) String activefee,
             @ApiParam(value = "活动封面") @RequestParam(required = false) String coverimg,
@@ -535,7 +536,7 @@ public class PostController {
             @ApiParam(value = "热门排序") @RequestParam(required = false) String ishotorder,
             @ApiParam(value = "分享商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
-        Map<String, Integer> result = postFacade.addPostActive(title, subtitle, activetype, iscontribute, activefee, coverimg, postcontent, isessence, orderid, essencedate, begintime, endtime, userid, hotimgurl, ishot, ishotorder, goodsid);
+        Map<String, Integer> result = postFacade.addPostActive(title, subtitle, activetype, partsumEnddays, iscontribute, activefee, coverimg, postcontent, isessence, orderid, essencedate, begintime, endtime, userid, hotimgurl, ishot, ishotorder, goodsid);
         if(response.getCode()==200){
             response.setMessage("添加成功");
         }
@@ -838,10 +839,11 @@ public class PostController {
             @ApiParam(value = "是否设为热门（0 否  1 是）") @RequestParam(required = false) String ishot,
             @ApiParam(value = "热门排序") @RequestParam(required = false) String ishotorder,
             @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String essencedate,
+            @ApiParam(value = "1参与人数/0显示剩余结束天数") @RequestParam(required = false) String partsumEnddays,
             @ApiParam(value = "编辑商品") @RequestParam(required = false) String goodsid) {
         Response response = new Response();
 
-        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, userid, coverimg, postcontent, isessence, orderid, activefee, activetype, iscontribute, begintime, endtime, hotimgurl, ishot, ishotorder, essencedate, goodsid);
+        Map<String, Integer> map = postFacade.updateActivePostById(id, title, subtitle, userid, coverimg, postcontent, isessence, orderid, activefee, activetype, iscontribute, begintime, endtime, hotimgurl, ishot, ishotorder, essencedate, partsumEnddays, goodsid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -1030,7 +1032,7 @@ public class PostController {
      * @param id
      * @return
      */
-    @ApiOperation(value = "根据id查询活动", notes = "根据id查询活动", response = Response.class)
+    @ApiOperation(value = "根据id查询活动（数据回显使用）", notes = "根据id查询活动", response = Response.class)
     @RequestMapping(value = "query_activeById", method = RequestMethod.POST)
     public Response queryActiveById(@ApiParam(value = "活动id") @RequestParam(required = false) Integer id) {
         Response response = new Response();
@@ -1347,10 +1349,9 @@ public class PostController {
                                     @ApiParam(value = "标签类型0：圈子，1：活动，2：地理，3：其他") @RequestParam String type,
                                     @ApiParam(value = "创建人登录用户") @RequestParam String userid,
                                     @ApiParam(value = "是否推荐首页") @RequestParam String isrecommend,
-                                    @ApiParam(value = "地理当类型为地理时必填") @RequestParam(required = false) String citycode,
                                     @ApiParam(value = "标签头像") @RequestParam(required = false) String photo) {
         Response response = new Response();
-        postFacade.insertPostLabel(name, type, userid, isrecommend, citycode, photo);
+        postFacade.insertPostLabel(name, type, userid, isrecommend, photo);
         response.setMessage("操作成功");
         response.setData(1);
         return response;
@@ -1389,10 +1390,9 @@ public class PostController {
                                     @ApiParam(value = "标签类型0：圈子，1：活动，2：地理，3：其他") @RequestParam(required = false) String type,
                                     @ApiParam(value = "创建人登录用户") @RequestParam String userid,
                                     @ApiParam(value = "是否推荐首页") @RequestParam(required = false) String isrecommend,
-                                    @ApiParam(value = "地理 类型为时必填") @RequestParam(required = false) String citycode,
                                     @ApiParam(value = "标签头像") @RequestParam(required = false) String photo) {
         Response response = new Response();
-        postFacade.updatePostLabel(id, name, type, userid, isrecommend, citycode, photo);
+        postFacade.updatePostLabel(id, name, type, userid, isrecommend, photo);
         response.setMessage("操作成功");
         response.setData(1);
         return response;

@@ -109,6 +109,36 @@ public class PostList implements Serializable {
 
     private Integer click;//点击量
 
+    private Integer apply;//报名数
+
+    private Integer contribute;//投稿数
+
+    private Integer ishotorder;//活动热门排序
+
+    public Integer getApply() {
+        return apply;
+    }
+
+    public void setApply(Integer apply) {
+        this.apply = apply;
+    }
+
+    public Integer getContribute() {
+        return contribute;
+    }
+
+    public void setContribute(Integer contribute) {
+        this.contribute = contribute;
+    }
+
+    public Integer getIshotorder() {
+        return ishotorder;
+    }
+
+    public void setIshotorder(Integer ishotorder) {
+        this.ishotorder = ishotorder;
+    }
+
     public Integer getClick() {
         return click;
     }
