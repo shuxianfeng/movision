@@ -2146,7 +2146,7 @@
             resultType="com.movision.mybatis.postLabel.entity.PostLabel">
         SELECT yw_post_label.* FROM yw_post_label_relation LEFT JOIN yw_post_label ON
         yw_post_label.id=yw_post_label_relation.labelid
-        WHERE yw_post_label_relation.postid=#{postid}
+        WHERE yw_post_label_relation.postid=#{postid} AND yw_post_label.isdel=0
         ORDER by yw_post_label.type
     </select>
     <select id="queryLabelPost" parameterType="java.lang.Integer" resultType="java.lang.Integer">
@@ -2279,4 +2279,20 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
     <select id="postUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT userid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
+    <select id="findUserPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post WHERE userid=#{postuserid,jdbcType=INTEGER} ORDER BY heat_value DESC
+    </select>
+    <select id="findPostByLabelId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT labelid FROM yw_post_label_relation WHERE postid=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="findUserByLabelPost" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        WHERE r.labelid IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND p.isdel=0 ORDER BY p.heat_value DESC
+    </select>
+
 </mapper>

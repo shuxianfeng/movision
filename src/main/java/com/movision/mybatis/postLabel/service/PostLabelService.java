@@ -288,4 +288,16 @@ public class PostLabelService {
         }
     }
 
+
+    public List<PostLabel> isrecommendLabel() {
+        try {
+            log.info("有没有推荐标签");
+            return postLabelMapper.isrecommendLabel();
+        } catch (Exception e) {
+            log.error("有没有推荐标签失败", e);
+            throw e;
+        }
+    }
+
+
 }

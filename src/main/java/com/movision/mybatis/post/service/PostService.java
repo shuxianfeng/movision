@@ -1549,6 +1549,26 @@ public class PostService {
         }
     }
 
+    public List<PostVo> findUserPost(int postuserid) {
+        try {
+            log.info("根据用户id查询帖子");
+            return postMapper.findUserPost(postuserid);
+        } catch (Exception e) {
+            log.error("根据用户id查询帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findUserByLabelPost(List labelid) {
+        try {
+            log.info("根据标签d查询帖子");
+            return postMapper.findUserByLabelPost(labelid);
+        } catch (Exception e) {
+            log.error("根据标签d查询帖子失败", e);
+            throw e;
+        }
+    }
+
     public String queryCityCode(String area) {
         try {
             log.info("查询city的code");
@@ -1823,5 +1843,14 @@ public class PostService {
         }
     }
 
+    public List<Integer> findPostByLabelId(int postid) {
+        try {
+            log.info("根据id查询标签id");
+            return postMapper.findPostByLabelId(postid);
+        } catch (Exception e) {
+            log.error("根据id查询标签id失败", e);
+            throw e;
+        }
+    }
 
 }

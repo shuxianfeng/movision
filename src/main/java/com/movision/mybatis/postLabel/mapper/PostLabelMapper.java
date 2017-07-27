@@ -56,6 +56,8 @@ public interface PostLabelMapper {
 
     List<CircleCount> queryCirclePeople(int circleid);
 
+    List<PostLabel> isrecommendLabel();
+
     Integer queryPostLabeIsRecommend(PostLabel label);
 
     void updatePostLabelIsRecommend(PostLabel label);

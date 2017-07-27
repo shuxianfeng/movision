@@ -267,6 +267,13 @@ public interface PostMapper {
     //根据圈子id查询帖子
     List<PostVo> findAllPostCrile(int circleid);
 
+    //根据用户查帖子
+    List<PostVo> findUserPost(int postuserid);
+
+    List<PostVo> findUserByLabelPost(List labelid);
+
+    List<Integer> findPostByLabelId(int postid);
+
     String queryCityCode(String area);//查询code
 
     List<PostVo> findAllCityPost(String citycode);//

@@ -129,6 +129,7 @@ public class PostVo implements Serializable {
 
     private Integer activeid;//活动id
 
+
     public void setPhoto(String photo) {
         this.photo = photo;
     }

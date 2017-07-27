@@ -104,4 +104,16 @@ public class PostLabel {
     public void setIntime(Date intime) {
         this.intime = intime;
     }
+
+    /**
+     * 重写equals方法，用于比对
+     *
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof PostLabel && this.id != null && this.id.equals(((PostLabel) obj).getId());
+    }
+
 }

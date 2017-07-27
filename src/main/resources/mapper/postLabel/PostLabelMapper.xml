@@ -137,17 +137,17 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="queryLableName" resultType="com.movision.mybatis.postLabel.entity.PostLabel">
-    SELECT * FROM  yw_post_label
+      SELECT * FROM yw_post_label WHERE isdel=0
   </select>
   <update id="updateLabelHeatValue" parameterType="java.util.Map">
     UPDATE yw_post_label SET heat_value=#{sum,jdbcType=INTEGER} WHERE id=#{labelid,jdbcType=INTEGER}
   </update>
   <select id="queryLabelHeatValue" resultType="com.movision.mybatis.postLabel.entity.PostLabel">
-    SELECT * FROM  yw_post_label ORDER  BY heat_value DESC
+      SELECT * FROM yw_post_label WHERE isdel=0 AND isrecommend=0 ORDER BY heat_value DESC
   </select>
     <select id="queryName" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.postLabel.entity.PostLabelTz">
-        SELECT * FROM yw_post_label WHERE id=#{labelid,jdbcType=INTEGER}
+        SELECT * FROM yw_post_label WHERE id=#{labelid,jdbcType=INTEGER} AND isdel=0
     </select>
 
     <select id="findAllQueryPostLabelList" parameterType="com.movision.mybatis.postLabel.entity.PostLabel"
@@ -215,7 +215,7 @@
           resultType="com.movision.mybatis.postLabel.entity.PostLabelCount">
     SELECT COUNT(1) AS count,p.userid,p.id,u.nickname FROM yw_post_label_relation r  LEFT JOIN yw_post p ON
 p.id=r.postid LEFT JOIN   yw_post_label l ON l.id=r.labelid LEFT JOIN yw_user u ON u.id=p.userid
-WHERE l.id=#{labelid,jdbcType=INTEGER} GROUP BY p.userid ORDER BY count DESC
+      WHERE l.id=#{labelid,jdbcType=INTEGER} AND isdel=0 GROUP BY p.userid ORDER BY count DESC
   </select>
     <select id="queryCircleByPostid" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.circle.entity.CircleVo">
@@ -265,4 +265,7 @@ WHERE l.id=#{labelid,jdbcType=INTEGER} GROUP BY p.userid ORDER BY count DESC
         SELECT COUNT(1) FROM yw_post_label WHERE NAME = #{name}
     </select>
 
+    <select id="isrecommendLabel" resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+        SELECT * FROM yw_post_label WHERE isdel=0 AND isrecommend=1
+    </select>
 </mapper>

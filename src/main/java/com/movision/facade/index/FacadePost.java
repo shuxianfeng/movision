@@ -242,6 +242,30 @@ public class FacadePost {
         return vo;
     }
 
+    /**
+     * 相关帖子
+     *
+     * @return
+     */
+    public List queryRelatedPosts(String postid, Paging<PostVo> paging) {
+        //根据帖子查询发帖用户
+        int postuserid = postService.postUserId(Integer.parseInt(postid));
+        //根据帖子id查询圈子
+        int circleid = postService.queryCrileid(Integer.parseInt(postid));
+        List<PostVo> ps = postService.findAllPostCrile(circleid);//圈子中的帖子
+        //这个用户发的帖子
+        List<PostVo> userPost = postService.findUserPost(postuserid);
+        //这个帖子的标签id
+        List<Integer> labids = postService.findPostByLabelId(Integer.parseInt(postid));
+        //根据id查帖子
+        List<PostVo> labpost = postService.findUserByLabelPost(labids);
+        ps.removeAll(userPost);
+        ps.removeAll(labpost);
+        List<PostVo> finpost = NotLoginretuenList(ps, paging);
+        return finpost;
+
+    }
+
     /*public PostVo queryOldPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
 
         //通过userid、postid查询该用户有没有关注该圈子的权限
@@ -1929,11 +1953,12 @@ public class FacadePost {
             int result = postLabelService.updateLabelHeatValue(map);
             log.info("结构钢事实上" + result);
         }
+        //查询有没有手都推荐到首页的
+        List<PostLabel> isrecommend = postLabelService.isrecommendLabel();
         //根据热度排序查询圈子
         List<CircleVo> list = circleService.queryHeatValue();
         //根据热度排序查询标签
         List<PostLabel> postLabelss = postLabelService.queryLabelHeatValue();
-
         List<PostLabelVo> postvo = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             PostLabelVo pos = new PostLabelVo();
@@ -1955,9 +1980,22 @@ public class FacadePost {
             pos.setName(labelName);
             postvo.add(pos);
         }
+
         ComparatorChain chain = new ComparatorChain();
         chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
         Collections.sort(postvo, chain);
+        if (isrecommend != null) {
+            for (int i = 0; i < isrecommend.size(); i++) {
+                PostLabelVo pos = new PostLabelVo();
+                String name = isrecommend.get(i).getName();
+                int heatvalue = isrecommend.get(i).getHeatValue();
+                int id = isrecommend.get(i).getId();
+                pos.setName(name);
+                pos.setLabelid(id);
+                pos.setHeatvalue(heatvalue);
+                postvo.add(0, pos);
+            }
+        }
         List<PostLabelVo> finals = getPageList(postvo, 1, 15);
         return finals;
     }
@@ -2077,4 +2115,7 @@ public class FacadePost {
 
 
 }
+
+
+
 

@@ -59,7 +59,6 @@ public class AppPostController {
     public Response queryPostDetail(@ApiParam(value = "帖子id") @RequestParam String postid,
                                     @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         Response response = new Response();
-
         PostVo post = facadePost.queryPostDetail(postid, userid);
 
 
