@@ -1532,9 +1532,11 @@ public class FacadePost {
         List<PostVo> posts = new ArrayList<>();
         List<PostVo> crileidPost = null;
         List<PostVo> userPost = null;
+        List<PostVo> labelPost = null;
             listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//用户有没有看过
             List<Integer> followCricle = postService.queryFollowCricle(Integer.parseInt(userid));//查询用户关注的圈子
             List<Integer> followUsers = postService.queryFollowUser(Integer.parseInt(userid));//用户关注的作者
+        List<Integer> followLabel = postLabelService.labelId(Integer.parseInt(userid));//用户关注标签
             //根据圈子查询所有帖子
         if (followCricle.size() != 0) {
                 crileidPost = postService.queryPostListByIds(followCricle);
@@ -1543,9 +1545,14 @@ public class FacadePost {
         if (followUsers.size() != 0) {
                 userPost = postService.queryUserListByIds(followUsers);
             }
+        if (followLabel.size() != 0) {
+            labelPost = postService.queryLabelListByIds(followLabel);
+        }
         if (crileidPost != null) {
             crileidPost.removeAll(userPost);
+            crileidPost.removeAll(labelPost);
             crileidPost.addAll(userPost);
+            crileidPost.addAll(labelPost);
             ComparatorChain chain = new ComparatorChain();
             chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
             Collections.sort(crileidPost, chain);
@@ -1559,8 +1566,8 @@ public class FacadePost {
                 crileidPost.removeAll(posts);//过滤掉看过的帖子crileidPost就是剩下的帖子
                 list = retuenList(crileidPost, userid, paging);
             } else {
-                list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
-                list = retuenList(list, userid, paging);
+                //list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+                list = retuenList(crileidPost, userid, paging);
                 return list;
         }
         return list;

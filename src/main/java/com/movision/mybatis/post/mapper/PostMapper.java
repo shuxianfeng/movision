@@ -263,6 +263,8 @@ public interface PostMapper {
 
     List<PostVo> queryUserListByIds(List ids);
 
+    List<PostVo> queryLabelListByIds(List ids);
+
     List<PostVo> findAllCollectionListByIds(List ids, RowBounds rowBounds);
     //根据圈子id查询帖子
     List<PostVo> findAllPostCrile(int circleid);

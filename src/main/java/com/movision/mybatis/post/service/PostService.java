@@ -1529,6 +1529,16 @@ public class PostService {
         }
     }
 
+    public List<PostVo> queryLabelListByIds(List ids) {
+        try {
+            log.info("查询标签的帖子");
+            return postMapper.queryLabelListByIds(ids);
+        } catch (Exception e) {
+            log.error("查询标签的帖子失败", e);
+            throw e;
+        }
+    }
+
     public List<PostVo> findAllCollectionListByIds(List ids, Paging<PostVo> paging) {
         try {
             log.info("查询收藏的帖子");

@@ -300,4 +300,15 @@ public class PostLabelService {
     }
 
 
+    public List<Integer> labelId(int userid) {
+        try {
+            log.info("用户关注标签");
+            return postLabelMapper.labelId(userid);
+        } catch (Exception e) {
+            log.error("用户关注标签失败", e);
+            throw e;
+        }
+    }
+
+
 }

@@ -2295,4 +2295,15 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         AND p.isdel=0 ORDER BY p.heat_value DESC
     </select>
 
+    <select id="queryLabelListByIds" parameterType="java.util.List"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post p WHERE p.id in(
+        SELECT DISTINCT(postid) FROM yw_post_label_relation WHERE labelid in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        )AND p.isdel=0 ORDER BY p.heat_value DESC
+    </select>
+
+
 </mapper>
