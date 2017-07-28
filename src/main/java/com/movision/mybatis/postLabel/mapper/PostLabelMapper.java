@@ -31,7 +31,7 @@ public interface PostLabelMapper {
 
     List<PostLabel> queryLabelHeatValue();
 
-    List<PostLabelDetails> findAllQueryPostLabelList(PostLabel label, RowBounds rowBounds);
+    List<PostLabelDetails> findAllQueryPostLabelList(PostLabelVo label, RowBounds rowBounds);
 
     PostLabelTz queryName(int labelid);
 

@@ -31,6 +31,7 @@ import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabel.entity.PostLabelDetails;
+import com.movision.mybatis.postLabel.entity.PostLabelVo;
 import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.postLabelRelation.service.PostLabelRelationService;
@@ -2697,20 +2698,20 @@ public class PostFacade {
      *
      * @param name
      * @param type
-     * @param userid
+     * @param userName
      * @param pag
      * @return
      */
-    public List<PostLabelDetails> findAllQueryPostLabelList(String name, String type, String userid, Paging<PostLabelDetails> pag) {
-        PostLabel label = new PostLabel();
+    public List<PostLabelDetails> findAllQueryPostLabelList(String name, String type, String userName, Paging<PostLabelDetails> pag) {
+        PostLabelVo label = new PostLabelVo();
         if (StringUtil.isNotEmpty(name)) {
             label.setName(name);
         }
         if (StringUtil.isNotEmpty(type)) {
             label.setType(Integer.parseInt(type));
         }
-        if (StringUtil.isNotEmpty(userid)) {
-            label.setUserid(Integer.parseInt(userid));
+        if (StringUtil.isNotEmpty(userName)) {
+            label.setUserName(userName);
         }
         List<PostLabelDetails> labelDetailses = postLabelService.findAllQueryPostLabelList(label, pag);
         return labelDetailses;

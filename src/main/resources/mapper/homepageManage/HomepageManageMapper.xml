@@ -180,7 +180,8 @@
     <select id="queryAvertisementById" parameterType="java.lang.String"
             resultType="com.movision.mybatis.homepageManage.entity.HomepageManageVo">
         select
-        m.id,m.topictype,m.content,m.subcontent,m.url,m.transurl,m.intime,m.orderid,m.clicksum,m.ordersum,t.name,t.wide,t.high
+        m.id,m.topictype,m.content,m.subcontent,m.url,m.transurl,m.intime,
+        m.orderid,m.clicksum,m.ordersum,t.name,t.wide,t.high,m.mark,m.postid
         from yw_homepage_manage m LEFT JOIN yw_homepage_manage_type t ON m.topictype=t.type WHERE
         m.id=#{id,jdbcType=INTEGER} AND m.isdel=0
     </select>
@@ -224,7 +225,13 @@
                 ordersum,
             </if>
             <if test="isdel!=null">
-                isdel
+                isdel,
+            </if>
+            <if test="type != null">
+                mark,
+            </if>
+            <if test="postid != null">
+                postid
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -259,7 +266,13 @@
                 #{ordersum,jdbcType=INTEGER},
             </if>
             <if test="isdel!=null">
-                #{isdel,jdbcType=INTEGER}
+                #{isdel,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{mark,jdbcType=INTEGER},
+            </if>
+            <if test="postid != null">
+                #{postid,jdbcType=INTEGER}
             </if>
         </trim>
     </insert>

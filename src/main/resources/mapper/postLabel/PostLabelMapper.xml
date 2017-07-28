@@ -163,7 +163,7 @@
         SELECT * FROM yw_post_label WHERE id=#{labelid,jdbcType=INTEGER} AND isdel=0
     </select>
 
-    <select id="findAllQueryPostLabelList" parameterType="com.movision.mybatis.postLabel.entity.PostLabel"
+    <select id="findAllQueryPostLabelList" parameterType="com.movision.mybatis.postLabel.entity.PostLabelVo"
             resultType="com.movision.mybatis.postLabel.entity.PostLabelDetails">
         SELECT l.*,
         (SELECT c.name FROM yw_city c WHERE c.code = l.citycode) AS cityName,
@@ -177,8 +177,8 @@
         <if test="type != null">
             AND l.type = #{type,jdbcType=INTEGER}
         </if>
-        <if test="userid != null">
-            AND l.userid = #{userid,jdbcType=INTEGER}
+        <if test="userName != null">
+            AND l.userid IN (SELECT id FROM yw_user WHERE nickname LIKE concat('%',#{userName,jdbcType=VARCHAR},'%'))
         </if>
         ORDER BY heat_value DESC
     </select>

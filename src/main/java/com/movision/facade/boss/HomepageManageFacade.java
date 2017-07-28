@@ -57,7 +57,20 @@ public class HomepageManageFacade {
         return manageTypeService.queryAdvertisementTypeList(pager);
     }
 
-    public int addAdvertisement(String topictype, String orderid, String content, String subcontent, String url, String transurl) {
+    /**
+     * 添加广告
+     *
+     * @param topictype
+     * @param orderid
+     * @param content
+     * @param subcontent
+     * @param url
+     * @param transurl
+     * @param type
+     * @param postid
+     * @return
+     */
+    public int addAdvertisement(String topictype, String orderid, String content, String subcontent, String url, String transurl, String type, String postid) {
         Map map = new HashedMap();
         map.put("topictype", topictype);
         map.put("orderid", orderid);
@@ -69,6 +82,8 @@ public class HomepageManageFacade {
         map.put("clicksum", 0);
         map.put("ordersum", 0);
         map.put("isdel", 0);
+        map.put("type", type);
+        map.put("postid", postid);
         //查询广告位置是否可以添加广告
         int resault = homepageManageService.queryIsAdd(map);
         if (resault == 1) {

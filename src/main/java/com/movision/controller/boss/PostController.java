@@ -1314,7 +1314,7 @@ public class PostController {
      *
      * @param name
      * @param type
-     * @param userid
+     * @param userName
      * @param pageNo
      * @param pageSize
      * @return
@@ -1323,12 +1323,12 @@ public class PostController {
     @RequestMapping(value = "queryPostLabelList", method = RequestMethod.POST)
     public Response queryPostLabelList(@ApiParam(value = "标签名称") @RequestParam(required = false) String name,
                                        @ApiParam(value = "标签类型") @RequestParam(required = false) String type,
-                                       @ApiParam(value = "创建人") @RequestParam(required = false) String userid,
+                                       @ApiParam(value = "创建人") @RequestParam(required = false) String userName,
                                        @ApiParam(value = "当前页") @RequestParam(defaultValue = "1") String pageNo,
                                        @ApiParam(value = "每页几条") @RequestParam(defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<PostLabelDetails> pag = new Paging<PostLabelDetails>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostLabelDetails> labels = postFacade.findAllQueryPostLabelList(name, type, userid, pag);
+        List<PostLabelDetails> labels = postFacade.findAllQueryPostLabelList(name, type, userName, pag);
         pag.result(labels);
         response.setMessage("查询成功");
         response.setData(pag);

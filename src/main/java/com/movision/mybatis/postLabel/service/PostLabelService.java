@@ -83,7 +83,7 @@ public class PostLabelService {
      * @param pag
      * @return
      */
-    public List<PostLabelDetails> findAllQueryPostLabelList(PostLabel label, Paging<PostLabelDetails> pag) {
+    public List<PostLabelDetails> findAllQueryPostLabelList(PostLabelVo label, Paging<PostLabelDetails> pag) {
         try {
             log.info("查询帖子标签列表");
             return postLabelMapper.findAllQueryPostLabelList(label, pag.getRowBounds());

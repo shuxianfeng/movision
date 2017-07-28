@@ -27,10 +27,19 @@ public class PostLabelVo {
 
     private Integer isfollow;//当前登录用户有没有关注过该标签：0 未关注 1 已关注
 
-    public Integer circleid;
-    public Integer labelid;
-    public String name;
-    public Integer heatvalue;
+    private Integer circleid;
+    private Integer labelid;
+    private String name;
+    private Integer heatvalue;
+    private String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public Integer getUserid() {
         return userid;
