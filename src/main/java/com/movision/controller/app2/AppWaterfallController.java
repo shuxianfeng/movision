@@ -8,6 +8,7 @@ import com.movision.facade.msgCenter.MsgCenterFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.PostLabelTz;
 import com.movision.mybatis.user.entity.UserVo;
@@ -43,6 +44,8 @@ public class AppWaterfallController {
     private LabelFacade labelFacade;
     @Autowired
     private FacadeComments facadeComments;
+    @Autowired
+    private LabelSearchTermsService labelSearchTermsService;
     /**
      * 下拉刷新
      *

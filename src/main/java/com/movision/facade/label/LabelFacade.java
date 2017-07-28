@@ -211,4 +211,17 @@ public class LabelFacade {
     }
 
 
+    /**
+     * 首页点x
+     *
+     * @param type
+     */
+    public void UserDontLike(int type) {
+        if (type == 1) {
+
+        }
+
+    }
+
+
 }
