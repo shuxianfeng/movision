@@ -320,5 +320,14 @@ public class PostLabelService {
         }
     }
 
+    public List<PostLabel> queryHotValueLabelList(Integer n) {
+        try {
+            log.info("查询热门的标签集合");
+            return postLabelMapper.queryHotValueLabelList(n);
+        } catch (Exception e) {
+            log.error("查询热门的标签集合失败", e);
+            throw e;
+        }
+    }
 
 }

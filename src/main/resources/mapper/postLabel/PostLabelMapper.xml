@@ -293,5 +293,10 @@
     </select>
     <select id="labelId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
       SELECT labelid FROM yw_follow_label WHERE userid=#{userid,jdbcType=INTEGER}
-</select>
+    </select>
+
+    <select id="queryHotValueLabelList" resultType="com.movision.mybatis.postLabel.entity.PostLabel"
+            parameterType="java.lang.Integer">
+        select * FROM yw_post_label order by heat_value desc limit #{displayCount}
+    </select>
 </mapper>

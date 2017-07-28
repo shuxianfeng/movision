@@ -68,4 +68,6 @@ public interface PostLabelMapper {
     Integer countSameNameLabel(String name);
 
     List<Integer> labelId(int userid);
+
+    List<PostLabel> queryHotValueLabelList(Integer displayCount);
 }

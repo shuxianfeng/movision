@@ -11,6 +11,7 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.utils.CoverImgCompressUtil;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.AliOSSClient;
@@ -624,6 +625,15 @@ public class AppPostController {
             response.setData(true);
             response.setMessage("校验成功");
         }
+        return response;
+    }
+
+    @ApiOperation(value = "发帖-查询热门标签列表（展示10条）", notes = "发帖-查询热门标签列表（展示10条）", response = Response.class)
+    @RequestMapping(value = "get_hot_label_list_when_post", method = RequestMethod.GET)
+    public Response getHotLabelListWhenPost() {
+        Response response = new Response();
+        List<PostLabel> postLabelList = facadePost.queryHotValueLabelList();
+        response.setData(postLabelList);
         return response;
     }
 

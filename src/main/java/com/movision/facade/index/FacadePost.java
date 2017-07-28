@@ -2262,6 +2262,9 @@ public class FacadePost {
         return comments;
     }
 
+    public List<PostLabel> queryHotValueLabelList() {
+        return postLabelService.queryHotValueLabelList(10);
+    }
 
 }
 
