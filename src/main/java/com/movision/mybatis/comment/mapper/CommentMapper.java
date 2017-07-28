@@ -88,4 +88,8 @@ public interface CommentMapper {
     CommentCount queryCommentZan(int id);
 
     CommentVo queryCom(int commentid);
+
+    int commentCount(Map map);
+
+    int deleteComment(int id);
 }

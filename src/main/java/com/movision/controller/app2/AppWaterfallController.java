@@ -1,6 +1,7 @@
 package com.movision.controller.app2;
 
 import com.movision.common.Response;
+import com.movision.facade.comment.FacadeComments;
 import com.movision.facade.index.FacadePost;
 import com.movision.facade.label.LabelFacade;
 import com.movision.facade.msgCenter.MsgCenterFacade;
@@ -41,7 +42,7 @@ public class AppWaterfallController {
     @Autowired
     private LabelFacade labelFacade;
     @Autowired
-    UserRefreshRecordService userRefreshRecordService;
+    private FacadeComments facadeComments;
     /**
      * 下拉刷新
      *
@@ -370,5 +371,21 @@ public class AppWaterfallController {
         return response;
     }
 
+
+    @ApiOperation(value = "删除评论", notes = "删除评论", response = Response.class)
+    @RequestMapping(value = "deleteComment", method = RequestMethod.POST)
+    public Response deleteComment(@ApiParam(value = "用户id") @RequestParam int userid,
+                                  @ApiParam(value = "评论id") @RequestParam int id) {
+        Response response = new Response();
+        int result = facadeComments.deleteComment(id, userid);
+        if (result == 0) {
+            response.setCode(200);
+            response.setMessage("删除成功");
+        } else if (result == 1) {
+            response.setCode(300);
+            response.setMessage("该评论不是你发的，请刷新重试");
+        }
+        return response;
+    }
 
 }

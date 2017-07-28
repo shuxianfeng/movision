@@ -514,4 +514,11 @@
   <select id="queryCom" parameterType="java.lang.Integer" resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT  * FROM  yw_post_comment WHERE id=#{commentid,jdbcType=INTEGER}
   </select>
+  <select id="commentCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    SELECT COUNT(1) FROM yw_post_comment WHERE userid=#{userid,jdbcType=INTEGER} AND id=#{id,jdbcType=INTEGER}
+  </select>
+  <update id="deleteComment" parameterType="java.lang.Integer">
+      UPDATE yw_post_comment SET isdel=1 WHERE id=#{id,jdbcType=INTEGER}
+  </update>
+
 </mapper>

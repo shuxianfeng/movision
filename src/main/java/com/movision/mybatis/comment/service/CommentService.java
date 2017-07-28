@@ -463,5 +463,24 @@ public class CommentService {
         }
     }
 
+    public int commentCount(Map map) {
+        try {
+            log.info("查询评论是否是自己的");
+            return commentMapper.commentCount(map);
+        } catch (Exception e) {
+            log.error("查询评论是否是自己的失敗", e);
+            throw e;
+        }
+    }
+
+    public int deleteComment(int id) {
+        try {
+            log.info("删除评论");
+            return commentMapper.deleteComment(id);
+        } catch (Exception e) {
+            log.error("删除评论失敗", e);
+            throw e;
+        }
+    }
 
 }

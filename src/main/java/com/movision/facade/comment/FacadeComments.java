@@ -219,4 +219,25 @@ public class FacadeComments {
             return type;
         }
     }
+
+    /**
+     * 删除评论
+     *
+     * @param
+     * @return
+     */
+    public int deleteComment(int id, int userid) {
+        //查询评论是不是自己发的
+        Map map = new HashMap();
+        map.put("id", id);
+        map.put("userid", userid);
+        int count = commentService.commentCount(map);
+        if (count == 0) {//不是自己发的
+            return 1;
+        } else {
+            int result = commentService.deleteComment(id);
+            return 0;
+        }
+    }
+
 }
