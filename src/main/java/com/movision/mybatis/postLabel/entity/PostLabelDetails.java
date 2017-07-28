@@ -29,6 +29,16 @@ public class PostLabelDetails {
 
     private String cityName;
 
+    private Integer useCount;
+
+    public Integer getUseCount() {
+        return useCount;
+    }
+
+    public void setUseCount(Integer useCount) {
+        this.useCount = useCount;
+    }
+
     public String getCitycode() {
         return citycode;
     }
