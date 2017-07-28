@@ -138,6 +138,7 @@ public class LabelFacade {
             facadePost.findPostLabel(list);
             facadePost.findHotComment(list);
             facadePost.countView(list);
+            facadePost.findAllCircleName(list);
         }
         return list;
     }
@@ -218,6 +219,10 @@ public class LabelFacade {
      */
     public void UserDontLike(int type) {
         if (type == 1) {
+
+        } else if (type == 2) {
+
+        } else if (type == 3) {
 
         }
 

@@ -537,6 +537,7 @@ public class UserFacade {
             list = postService.findAllUserPostList(Integer.parseInt(userid), paging);
             for (int i = 0; i < list.size(); i++) {
                 facadePost.countView(list);
+                facadePost.findAllCircleName(list);
             }
         } else if (type == 2) {//活动
             //活动帖子
@@ -564,6 +565,7 @@ public class UserFacade {
                 list = postService.findAllCollectionListByIds(collection, paging);
                 for (int i = 0; i < list.size(); i++) {
                     facadePost.countView(list);
+                    facadePost.findAllCircleName(list);
                 }
             }
         }

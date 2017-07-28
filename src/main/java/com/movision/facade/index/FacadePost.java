@@ -1733,6 +1733,7 @@ public class FacadePost {
                 findPostLabel(list);
                 findHotComment(list);
                 countView(list);
+            findAllCircleName(list);
             insertmongo(list, userid);
         }
         return list;
@@ -1754,6 +1755,7 @@ public class FacadePost {
             findPostLabel(list);
             findHotComment(list);
             countView(list);
+            findAllCircleName(list);
         }
         return list;
     }
@@ -1827,6 +1829,25 @@ public class FacadePost {
                 int postid = list.get(i).getId();
                 postLabels = postService.queryPostLabel(postid);
                 list.get(i).setPostLabels(postLabels);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 查询圈子名称
+     *
+     * @param list
+     * @return
+     */
+    public List findAllCircleName(List<PostVo> list) {
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                Integer circleid = list.get(i).getCircleid();
+                if (circleid != null) {
+                    String circlename = circleService.queryCircleName(circleid);
+                    list.get(i).setCirclename(circlename);
+                }
             }
         }
         return list;
@@ -2157,11 +2178,13 @@ public class FacadePost {
             countView(list);
             findUser(list);
             findCircleName(list);
+            findAllCircleName(list);
         } else if (type == 2) {//最新
             list = postService.findAllActivePostIntime(Integer.parseInt(postid), paging);
             countView(list);
             findUser(list);
             findCircleName(list);
+            findAllCircleName(list);
         }
         return list;
     }
