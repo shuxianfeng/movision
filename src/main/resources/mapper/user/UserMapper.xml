@@ -658,7 +658,7 @@
 
     <!-- 查看VIP列表-->
     <select id="findAllqueryUserVIPByList" resultType="com.movision.mybatis.user.entity.UserVo">
-        SELECT u.id,u.nickname,u.phone,u.level,u.status,u.heat_value AS heatValue,u.isrecommend,u.attention
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,u.heat_value AS heatValue,u.isrecommend,u.attention,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
         (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
