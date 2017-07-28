@@ -7,6 +7,7 @@ import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
 import com.movision.mybatis.userRefreshRecord.mapper.UserRefreshRecordMapper;
 import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -15,6 +16,7 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -69,14 +71,18 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
     public List mongoList(String begintime, String endtime) {
         List<DBObject> list = null;
         BasicDBList condList = new BasicDBList();//存放查询条件的集合
-        BasicDBObject searchQuery = new BasicDBObject();
+        BasicDBObject param = new BasicDBObject();
         try {
             MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             DB db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("userRefreshRecord");
-            searchQuery.put("intime", BasicDBObjectBuilder.start("$gte", begintime + " 00:00:00").add("$lte", endtime + " 23:59:59").get());
-            condList.add(searchQuery);
-            DBCursor dbCursor = collection.find(condList);
+            if (StringUtils.isNotBlank(begintime) && StringUtils.isNotBlank(endtime)) {
+                condList.add(new BasicDBObject("intime", new BasicDBObject("$gte", begintime + " 00:00:00").append("$lte", endtime + " 23:59:59")));
+            }
+            if (condList != null && condList.size() > 0) {
+                param.put("$and", condList);//多条件查询使用and
+            }
+            DBCursor dbCursor = collection.find(param);
             list = dbCursor.toArray();
         } catch (Exception e) {
             e.printStackTrace();

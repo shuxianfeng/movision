@@ -240,17 +240,6 @@ public class AppWaterfallController {
         return response;
     }
 
-    @ApiOperation(value = "时间", notes = "时间", response = Response.class)
-    @RequestMapping(value = "mongoList", method = RequestMethod.POST)
-    public Response mongoList() {
-        Response response = new Response();
-        List result = userRefreshRecordService.mongoList("2017-07-01", "2017-08-01");
-        if (response.getCode() == 200) {
-            response.setMessage("返回成功");
-        }
-        response.setData(result);
-        return response;
-    }
 
 
     @ApiOperation(value = "活动详情中的最热最新", notes = "活动详情中的最热最新", response = Response.class)
