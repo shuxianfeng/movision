@@ -330,4 +330,20 @@ public class PostLabelService {
         }
     }
 
+    /**
+     * 查询标签名称列表
+     *
+     * @param postLabel
+     * @return
+     */
+    public List<PostLabel> queryPostLabelByName(PostLabel postLabel) {
+        try {
+            log.info("查询标签名称列表(boss)");
+            return postLabelMapper.queryPostLabelByName(postLabel);
+        } catch (Exception e) {
+            log.error("查询标签名称列表（boss）异常", e);
+            throw e;
+        }
+    }
+
 }

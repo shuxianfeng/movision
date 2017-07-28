@@ -145,7 +145,7 @@ public class HomepageManageFacade {
      * @param id
      * @return
      */
-    public int updateAdvertisement(String id, String orderid, String content, String subcontent, String url, String transurl) {
+    public int updateAdvertisement(String id, String orderid, String content, String subcontent, String url, String transurl, String type, String postid) {
         Map map = new HashedMap();
         map.put("id", id);
         if (StringUtil.isNotEmpty(orderid)) {
@@ -155,6 +155,8 @@ public class HomepageManageFacade {
         map.put("subcontent", subcontent);
         map.put("url", url);
         map.put("transurl", transurl);
+        map.put("type", type);
+        map.put("postid", postid);
 
         return homepageManageService.updateAdvertisement(map);
     }

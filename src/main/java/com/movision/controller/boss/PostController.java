@@ -1431,4 +1431,20 @@ public class PostController {
         return response;
     }
 
+    /**
+     * 查询标签名称列表
+     *
+     * @param name
+     * @return
+     */
+    @ApiOperation(value = "查询标签名称列表", response = Response.class)
+    @RequestMapping(value = "queryPostLabelByName", method = RequestMethod.POST)
+    public Response queryPostLabelByName(@ApiParam(value = "标签名称") @RequestParam(required = false) String name) {
+        Response response = new Response();
+        List<PostLabel> list = postFacade.queryPostLabelByName(name);
+        response.setMessage("查询成功");
+        response.setData(list);
+        return response;
+    }
+
 }

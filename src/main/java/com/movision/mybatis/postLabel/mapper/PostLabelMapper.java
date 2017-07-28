@@ -70,4 +70,6 @@ public interface PostLabelMapper {
     List<Integer> labelId(int userid);
 
     List<PostLabel> queryHotValueLabelList(Integer displayCount);
+
+    List<PostLabel> queryPostLabelByName(PostLabel postLabel);
 }

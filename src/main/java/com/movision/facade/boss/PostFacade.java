@@ -2822,4 +2822,18 @@ public class PostFacade {
         }
     }
 
+    /**
+     * 查询标签名称列表
+     *
+     * @param name
+     * @return
+     */
+    public List<PostLabel> queryPostLabelByName(String name) {
+        PostLabel postLabel = new PostLabel();
+        if (StringUtil.isNotEmpty(name)) {
+            postLabel.setName(name);
+        }
+        return postLabelService.queryPostLabelByName(postLabel);
+    }
+
 }

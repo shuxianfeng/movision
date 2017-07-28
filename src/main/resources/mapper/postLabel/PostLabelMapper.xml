@@ -299,4 +299,9 @@
             parameterType="java.lang.Integer">
         select * FROM yw_post_label order by heat_value desc limit #{displayCount}
     </select>
+
+    <select id="queryPostLabelByName" parameterType="com.movision.mybatis.postLabel.entity.PostLabel"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+        SELECT id,name,type FROM yw_post_label WHERE type <![CDATA[<>]]> 1 AND isdel = 0
+    </select>
 </mapper>
