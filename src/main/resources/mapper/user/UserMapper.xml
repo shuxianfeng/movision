@@ -850,7 +850,7 @@
     <select id="findAllqueryAllUserList" parameterType="java.util.Map"
             resultType="com.movision.mybatis.user.entity.UserAll">
         SELECT u.id,u.nickname,u.phone,u.level,u.status,u.points,u.fans,u.intime,u.qq,u.sina,
-        u.openid,aut.authstatus,u.heat_value,u.isrecommend,
+        u.openid,aut.authstatus,u.heat_value,u.isrecommend,u.attention,
         (SELECT COUNT(1) FROM yw_coupon WHERE isdel=0 AND userid=u.id) AS coupon,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isactive=0) AS postsum,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1 AND isactive=0) AS isessencesum

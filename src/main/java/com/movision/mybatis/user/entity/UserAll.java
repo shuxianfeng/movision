@@ -26,6 +26,8 @@ public class UserAll implements Serializable {
 
     private Integer status;//状态1 封号
 
+    private String login;//用户登录方式1:qq 2:微信 3: 微博 4：QQ、微信 5：QQ、微博 6：微信、微博 7：QQ、微信、微博
+
     private Integer postsum;//帖子数量
 
     private Integer isessencesum;//精贴数量
@@ -44,6 +46,16 @@ public class UserAll implements Serializable {
 
     private Integer isrecommend;//是否作为发现页必推作者：0 否 1 是'
 
+    private Integer attention;//关注数（用户关注外界的数量）
+
+    public Integer getAttention() {
+        return attention;
+    }
+
+    public void setAttention(Integer attention) {
+        this.attention = attention;
+    }
+
     public Integer getIsrecommend() {
         return isrecommend;
     }
@@ -59,8 +71,6 @@ public class UserAll implements Serializable {
     public void setHeatValue(Integer heatValue) {
         this.heatValue = heatValue;
     }
-
-    private String login;//用户登录方式1:qq 2:微信 3: 微博 4：QQ、微信 5：QQ、微博 6：微信、微博 7：QQ、微信、微博
 
     public String getLogin() {
         return login;
