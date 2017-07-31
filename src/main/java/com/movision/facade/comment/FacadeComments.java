@@ -243,36 +243,22 @@ public class FacadeComments {
 
 
     public List queryNewComment(int postid, Paging<CommentVo> paging) {
-        //根据postid查询所有评论
         List<CommentVo> commentVos = commentService.queryOneComment(postid, paging);
-        //一级评论(评论帖子的评论)
-        List<CommentVo> two = commentService.queryTwoComment(postid);
-        for (int i = 0; i < two.size(); i++) {
-            //查询父评论下面有多少子评论
-            List<CommentVo> thrww = commentService.queryThreeComment(two.get(i).getId());
-            commentVos.get(i).setCommentVos(thrww);
-
+        for (int i = 0; i < commentVos.size(); i++) {
+            commentVos.get(i).setCommentVos(GetCommentVoList(commentVos.get(i).getId()));
         }
-        /**for (int i=0;i<commentVos.size();i++){
-         if(commentVos.get(i).getPid()!=null){
-         List<CommentVo> two=commentService.queryTwoComment(commentVos.get(i).getId());
-         commentVos.get(i).setCommentVos(two);
-         }
-         }*/
         return commentVos;
     }
 
-    /**public List<CommentVo> GetCommentVoList(int postid) {
-     List<CommentVo> commentVoList = commentService.queryTwoComment(postid);
-     for (int i = 0; i < commentVoList.size(); i++) {
-     //创建子集合对象，变量名没想到咋弄 自己改
-     //查询父评论下面有多少子评论
-     List<CommentVo> CommentVozjh = GetCommentVoList((int)commentVoList.get(i).getId());
-     commentVoList[i].commentVos=CommentVozjh;
-     }
-     return commentVoList;
-     }*/
+    public List<CommentVo> GetCommentVoList(int pid) {
+        List<CommentVo> commentVoList = commentService.queryTwoComment(pid);
+        for (int i = 0; i < commentVoList.size(); i++) {
+            //查询父评论下面有多少子评论
+            List<CommentVo> CommentVozjh = GetCommentVoList((int) commentVoList.get(i).getId());
+            commentVoList.get(i).setCommentVos(CommentVozjh);
+        }
+        return commentVoList;
 
-
+    }
 }
 

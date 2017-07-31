@@ -443,4 +443,22 @@ public class AppWaterfallController {
     }
 
 
+    @ApiOperation(value = "评论列表", notes = "评论列表", response = Response.class)
+    @RequestMapping(value = "queryNewComment", method = RequestMethod.POST)
+    public Response queryNewComment(@ApiParam(value = "帖子id") @RequestParam int postid,
+                                    @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                    @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<CommentVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List result = facadeComments.queryNewComment(postid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("dd");
+        }
+        pager.result(result);
+        response.setData(pager);
+        return response;
+    }
+
+
+
 }

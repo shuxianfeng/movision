@@ -95,7 +95,7 @@ public interface CommentMapper {
 
     List<CommentVo> findAllOneComment(int postid, RowBounds rowBounds);
 
-    List<CommentVo> queryTwoComment(int postid);
+    List<CommentVo> queryTwoComment(int pid);
 
     List<CommentVo> queryThreeComment(int id);
 }

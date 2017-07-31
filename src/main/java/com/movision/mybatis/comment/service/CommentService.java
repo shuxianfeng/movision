@@ -493,10 +493,10 @@ public class CommentService {
         }
     }
 
-    public List<CommentVo> queryTwoComment(int postid) {
+    public List<CommentVo> queryTwoComment(int pid) {
         try {
             log.info("一级评论");
-            return commentMapper.queryTwoComment(postid);
+            return commentMapper.queryTwoComment(pid);
         } catch (Exception e) {
             log.error("一级评论失敗", e);
             throw e;
