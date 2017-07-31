@@ -66,11 +66,11 @@ public class HomepageManageFacade {
      * @param subcontent
      * @param url
      * @param transurl
-     * @param type
+     * @param mark
      * @param postid
      * @return
      */
-    public int addAdvertisement(String topictype, String orderid, String content, String subcontent, String url, String transurl, String type, String postid) {
+    public int addAdvertisement(String topictype, String orderid, String content, String subcontent, String url, String transurl, String mark, String postid) {
         Map map = new HashedMap();
         map.put("topictype", topictype);
         map.put("orderid", orderid);
@@ -82,7 +82,7 @@ public class HomepageManageFacade {
         map.put("clicksum", 0);
         map.put("ordersum", 0);
         map.put("isdel", 0);
-        map.put("type", type);
+        map.put("mark", mark);
         map.put("postid", postid);
         //查询广告位置是否可以添加广告
         int resault = homepageManageService.queryIsAdd(map);
@@ -145,7 +145,7 @@ public class HomepageManageFacade {
      * @param id
      * @return
      */
-    public int updateAdvertisement(String id, String orderid, String content, String subcontent, String url, String transurl, String type, String postid) {
+    public int updateAdvertisement(String id, String orderid, String content, String subcontent, String url, String transurl, String mark, String postid) {
         Map map = new HashedMap();
         map.put("id", id);
         if (StringUtil.isNotEmpty(orderid)) {
@@ -155,7 +155,7 @@ public class HomepageManageFacade {
         map.put("subcontent", subcontent);
         map.put("url", url);
         map.put("transurl", transurl);
-        map.put("type", type);
+        map.put("mark", mark);
         map.put("postid", postid);
 
         return homepageManageService.updateAdvertisement(map);
