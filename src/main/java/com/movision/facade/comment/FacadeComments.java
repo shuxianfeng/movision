@@ -262,5 +262,17 @@ public class FacadeComments {
         return commentVos;
     }
 
+    /**public List<CommentVo> GetCommentVoList(int postid) {
+     List<CommentVo> commentVoList = commentService.queryTwoComment(postid);
+     for (int i = 0; i < commentVoList.size(); i++) {
+     //创建子集合对象，变量名没想到咋弄 自己改
+     //查询父评论下面有多少子评论
+     List<CommentVo> CommentVozjh = GetCommentVoList((int)commentVoList.get(i).getId());
+     commentVoList[i].commentVos=CommentVozjh;
+     }
+     return commentVoList;
+     }*/
+
+
 }
 
