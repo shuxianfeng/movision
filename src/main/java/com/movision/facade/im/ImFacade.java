@@ -23,10 +23,7 @@ import com.movision.mybatis.systemPush.entity.SystemPush;
 import com.movision.mybatis.systemPush.service.SystemPushService;
 import com.movision.mybatis.systemToPush.entity.SystemToPush;
 import com.movision.mybatis.systemToPush.service.SystemToPushService;
-import com.movision.utils.JsonUtils;
-import com.movision.utils.ListUtil;
-import com.movision.utils.MiPushUtils;
-import com.movision.utils.SignUtil;
+import com.movision.utils.*;
 import com.movision.utils.convert.BeanUtil;
 import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.pagination.model.Paging;
@@ -48,6 +45,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.*;
@@ -84,6 +83,9 @@ public class ImFacade {
 
     @Autowired
     private NewInformationService newInformationService;
+
+    @Autowired
+    private JsoupCompressImg jsoupCompressImg;
     /**
      * 发起IM请求，获得响应
      *
@@ -538,6 +540,52 @@ public class ImFacade {
         }
     }
 
+    public void addOperationInform(HttpServletRequest request, String body, String title, String coverimg) {
+        try {
+            Date date = new Date();
+            long informidentity = date.getTime();
+            ImUser imUser = this.getImuserByCurrentBossuser();
+            List<ImUser> imAppUserList = imUserService.selectAllAPPImuser();
+            if (ListUtil.isNotEmpty(imAppUserList)) {
+                String str = "";
+                //内容转换
+                Map con = jsoupCompressImg.compressImg(request, body);
+                System.out.println(con);
+                if ((int) con.get("code") == 200) {
+                    str = con.get("content").toString();
+                    str = str.replace("\\", "");
+                    str = "[\"coverimg\":" + coverimg + ",\"boday\"" + str + "]";//把封面封装在内容中
+                    log.info(str);
+                } else {
+                    log.error("内容转换异常");
+                }
+
+
+                int size = imAppUserList.size();
+                log.info("app中的IM用户共" + size + "人！");
+                if (size > 500) {
+                    //人数多于500人，分批次发系统通知
+                    int mutiple = size / 500;   //倍数
+                    for (int i = 0; i <= mutiple; i++) {
+                        /**
+                         * 比如共1002人，
+                         * 那么i=0, 即第0-500人， 取500人
+                         *     i=1, 即第501-1000人，    取500人
+                         *     i=2, 即第1001-1002人，   取两人
+                         */
+                        int eachSize = i < mutiple ? 500 : size - mutiple * 500;
+                        sendInform(str, imUser, imAppUserList, eachSize, i, title, informidentity);
+                    }
+                } else {
+                    //不超过500人
+                    sendInform(str, imUser, imAppUserList, size, 0, title, informidentity);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * 准备toAccids参数,发送系统通知，并且记录
@@ -584,6 +632,40 @@ public class ImFacade {
 
     }
 
+    private void sendInform(String body, ImUser imUser, List<ImUser> imAppUserList, int size, int multiple, String title, long informidentity) throws IOException {
+        //不足500人
+        String toAccids = prepareToAccids(imAppUserList, size, multiple);
+        Map result = this.sendSystemInformTo(body, imUser.getAccid(), toAccids);
+
+
+        //************************查询用户是否有最新系统通知消息
+        Integer isread = newInformationService.querySystemByNewInformation(imUser.getAccid());
+        NewInformation news = new NewInformation();
+        //更新系统通知最新消息
+        if (isread != null) {
+            news.setIsread(0);
+            news.setIntime(new Date());
+            news.setUserid(isread);
+            newInformationService.updateUserByNewInformation(news);
+        } else {
+            //查询被点赞的帖子发帖人
+            Integer uid = imUserService.queryUserByAccid(imUser.getAccid());
+            //新增系统通知最新消息
+            news.setIsread(0);
+            news.setIntime(new Date());
+            news.setUserid(uid);
+            newInformationService.insertUserByNewInformation(news);
+        }
+        //******************************************************************
+
+        if (result.get("code").equals(200)) {
+            log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
+            this.recordSysInformsTo(body, imUser.getAccid(), toAccids, title, informidentity);
+        } else {
+            throw new BusinessException(MsgCodeConstant.send_system_msg_fail, "发送系统通知失败");
+        }
+
+    }
 
 
 
@@ -626,6 +708,22 @@ public class ImFacade {
         imBatchAttachMsg.setFromAccid(fromaccid);
         imBatchAttachMsg.setAttach(body);
         imBatchAttachMsg.setPushcontent(pushcontent);
+        imBatchAttachMsg.setToAccids(toAccids);
+        imBatchAttachMsg.setOption(option);
+        return this.sendImHttpPost(ImConstant.SEND_BATCH_ATTACH_MSG, BeanUtil.ImBeanToMap(imBatchAttachMsg));
+    }
+
+    public Map sendSystemInformTo(String body, String fromaccid, String toAccids) throws IOException {
+        //发系统通知
+        Gson gson = new Gson();
+        Map map = new HashMap();
+        map.put("badge", false);
+        map.put("needPushNick", false);
+        map.put("route", false);
+        String option = gson.toJson(map);
+        ImBatchAttachMsg imBatchAttachMsg = new ImBatchAttachMsg();
+        imBatchAttachMsg.setFromAccid(fromaccid);
+        imBatchAttachMsg.setAttach(body);
         imBatchAttachMsg.setToAccids(toAccids);
         imBatchAttachMsg.setOption(option);
         return this.sendImHttpPost(ImConstant.SEND_BATCH_ATTACH_MSG, BeanUtil.ImBeanToMap(imBatchAttachMsg));
@@ -684,6 +782,19 @@ public class ImFacade {
             systemToPush.setInformTime(new Date());
             systemToPushService.addSystemToPush(systemToPush);//记录流水
         }
+    }
+
+    public void recordSysInformsTo(String body, String fromaccid, String toAccids, String title, long informidentity) {
+        ImSystemInform imSystemInform = new ImSystemInform();
+        imSystemInform.setBody(body);
+        imSystemInform.setFromAccid(fromaccid);
+        imSystemInform.setUserid(ShiroUtil.getBossUserID());
+        imSystemInform.setToAccids(toAccids);
+        imSystemInform.setTitle(title);
+        imSystemInform.setInformTime(new Date());
+        imSystemInform.setInformidentity(String.valueOf(informidentity));
+        //每次取500个人
+        imSystemInformService.add(imSystemInform);
     }
 
 

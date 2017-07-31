@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
@@ -47,6 +48,19 @@ public class BossImController {
         Response response = new Response();
 
         imFacade.sendSystemInform(body, title, pushcontent);
+        return response;
+    }
+
+
+    @ApiOperation(value = "运营发送通知", notes = "运营发送通知", response = Response.class)
+    @RequestMapping(value = {"/addOperationInform"}, method = RequestMethod.POST)
+    public Response addOperationInform(HttpServletRequest request,
+                                       @ApiParam(value = "标题") @RequestParam String title,
+                                       @ApiParam(value = "内容") @RequestParam String body,
+                                       @ApiParam(value = "封面图") @RequestParam String coverimg) {
+        Response response = new Response();
+        imFacade.addOperationInform(request, body, title, coverimg);
+        response.setMessage("推送成功");
         return response;
     }
 

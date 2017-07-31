@@ -22,6 +22,16 @@ public class ImSystemInform implements Serializable {
 
     private String informidentity;
 
+    private String coverimg;//运营通知封面图
+
+    public String getCoverimg() {
+        return coverimg;
+    }
+
+    public void setCoverimg(String coverimg) {
+        this.coverimg = coverimg;
+    }
+
     public String getInformidentity() {
         return informidentity;
     }
