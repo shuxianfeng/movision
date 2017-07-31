@@ -120,6 +120,8 @@ public class LabelFacade {
             followLabel.setLabelid(labelid);
             followLabel.setIntime(new Date());
             int count = followLabelService.insertSelective(followLabel);
+            //增加关注标签数量
+            followLabelService.updatePostLabel(labelid);
             return 0;
         } else {//关注过了
             return 1;

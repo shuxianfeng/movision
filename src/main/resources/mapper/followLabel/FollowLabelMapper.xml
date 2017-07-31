@@ -87,4 +87,7 @@
     <delete id="cancleLabel" parameterType="java.util.Map">
         DELETE  FROM  yw_follow_label WHERE userid=#{userid,jdbcType=INTEGER} AND labelid=#{labelid,jdbcType=INTEGER}
     </delete>
+    <update id="updatePostLabel" parameterType="java.lang.Integer">
+        UPDATE  yw_post_label SET fans=fans+1 WHERE id=#{labelid,jdbcType=INTEGER}
+    </update>
 </mapper>

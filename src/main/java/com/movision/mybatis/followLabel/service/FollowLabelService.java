@@ -50,4 +50,15 @@ public class FollowLabelService {
         }
     }
 
+
+    public int updatePostLabel(int labelid) {
+        try {
+            log.info("增加标签关注数量");
+            return followLabelMapper.updatePostLabel(labelid);
+        } catch (Exception e) {
+            log.error("增加标签关注数量失败");
+            throw e;
+        }
+    }
+
 }
