@@ -2,6 +2,7 @@ package com.movision.mybatis.post.entity;
 
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -50,6 +51,16 @@ public class PostCompile implements Serializable {
     private String postcontent;//帖子内容
 
     private List<GoodsVo> goodses;//商品
+
+    private List<PostLabel> postLabels;//帖子标签
+
+    public List<PostLabel> getPostLabels() {
+        return postLabels;
+    }
+
+    public void setPostLabels(List<PostLabel> postLabels) {
+        this.postLabels = postLabels;
+    }
 
     public List<GoodsVo> getGoodses() {
         return goodses;

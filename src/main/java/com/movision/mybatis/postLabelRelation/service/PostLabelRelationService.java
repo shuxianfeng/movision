@@ -1,6 +1,7 @@
 package com.movision.mybatis.postLabelRelation.service;
 
 import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.postLabelRelation.mapper.PostLabelRelationMapper;
 import com.movision.utils.pagination.model.Paging;
@@ -85,5 +86,20 @@ public class PostLabelRelationService {
         }
     }
 
+    /**
+     * 查询帖子对应标签
+     *
+     * @param relation
+     * @return
+     */
+    public List<PostLabel> queryPostLabelByPostid(PostLabelRelation relation) {
+        try {
+            log.info("根据帖子id查询对应标签");
+            return postLabelRelationMapper.queryPostLabelByPostid(relation);
+        } catch (Exception e) {
+            log.error("查询帖子对应标签异常", e);
+            throw e;
+        }
+    }
 
 }

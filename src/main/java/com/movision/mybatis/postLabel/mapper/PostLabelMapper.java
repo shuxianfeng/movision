@@ -4,6 +4,7 @@ import com.movision.mybatis.circle.entity.CircleCount;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.*;
+import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 

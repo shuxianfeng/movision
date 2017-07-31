@@ -1,6 +1,7 @@
 package com.movision.mybatis.postLabelRelation.mapper;
 
 import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import org.apache.ibatis.session.RowBounds;
 
@@ -32,5 +33,5 @@ public interface PostLabelRelationMapper {
 
     int batchInsert(Map map);
 
-
+    List<PostLabel> queryPostLabelByPostid(PostLabelRelation relation);
 }

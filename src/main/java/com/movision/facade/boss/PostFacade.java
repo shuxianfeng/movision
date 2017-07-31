@@ -47,10 +47,7 @@ import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
-import com.movision.utils.JsoupCompressImg;
-import com.movision.utils.ListUtil;
-import com.movision.utils.VideoCoverURL;
-import com.movision.utils.VideoUploadUtil;
+import com.movision.utils.*;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
@@ -664,6 +661,16 @@ public class PostFacade {
      */
     public PostList queryPostParticulars(String postid) {
         PostList postList = postService.queryPostParticulars(Integer.parseInt(postid));
+
+        if (postList != null) {
+            PostLabelRelation labelRelation = new PostLabelRelation();
+            labelRelation.setPostid(postList.getId());
+            //查询帖子标签
+            List<PostLabel> labels = postLabelRelationService.queryPostLabelByPostid(labelRelation);
+            if (labels != null) {
+                postList.setPostLabels(labels);
+            }
+        }
 
         try {
             //-----帖子内容格式转换
@@ -1378,6 +1385,16 @@ public class PostFacade {
      */
     public PostCompile queryPostByIdEcho(String postid) {
         PostCompile postCompile = postService.queryPostByIdEcho(Integer.parseInt(postid));//帖子编辑数据回显
+
+        if (postCompile != null) {
+            PostLabelRelation labelRelation = new PostLabelRelation();
+            labelRelation.setPostid(postCompile.getId());
+            //查询帖子标签
+            List<PostLabel> labels = postLabelRelationService.queryPostLabelByPostid(labelRelation);
+            if (labels != null) {
+                postCompile.setPostLabels(labels);
+            }
+        }
 
         try {
             //-----帖子内容格式转换

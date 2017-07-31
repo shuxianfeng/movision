@@ -1,6 +1,7 @@
 package com.movision.mybatis.post.entity;
 
 import com.movision.mybatis.goods.entity.GoodsVo;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -114,6 +115,16 @@ public class PostList implements Serializable {
     private Integer contribute;//投稿数
 
     private Integer ishotorder;//活动热门排序
+
+    private List<PostLabel> postLabels;//帖子标签
+
+    public List<PostLabel> getPostLabels() {
+        return postLabels;
+    }
+
+    public void setPostLabels(List<PostLabel> postLabels) {
+        this.postLabels = postLabels;
+    }
 
     public Integer getApply() {
         return apply;

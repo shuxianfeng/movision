@@ -5,6 +5,7 @@ import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.*;
 import com.movision.mybatis.postLabel.mapper.PostLabelMapper;
+import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -345,5 +346,4 @@ public class PostLabelService {
             throw e;
         }
     }
-
 }

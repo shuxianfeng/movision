@@ -106,4 +106,8 @@
         </foreach>
     </insert>
 
+    <select id="queryPostLabelByPostid" parameterType="com.movision.mybatis.postLabelRelation.entity.PostLabelRelation"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+        SELECT l.id,l.name FROM yw_post_label_relation lr LEFT JOIN yw_post_label l ON l.id = lr.labelid WHERE lr.postid = #{postid,jdbcType=INTEGER} AND l.isdel = 0
+    </select>
 </mapper>
