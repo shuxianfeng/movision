@@ -151,7 +151,7 @@ public class AppWaterfallController {
      */
     @ApiOperation(value = "个人主页下半部分", notes = "个人主页下半部分", response = Response.class)
     @RequestMapping(value = "mineBottle", method = RequestMethod.POST)
-    public Response mineBottle(@ApiParam(value = "类型 1 帖子 2 活动 3 收藏（必填）") @RequestParam int type,
+    public Response mineBottle(@ApiParam(value = "类型 0 帖子 1活动 2 收藏（必填）") @RequestParam int type,
                                @ApiParam(value = "用户id（必填，被查看的这个人的userid，被被被！！！）") @RequestParam String userid,
                                @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
@@ -302,7 +302,7 @@ public class AppWaterfallController {
     @ApiOperation(value = "点击圈子标签页下半部分", notes = "点击圈子标签页下半部分", response = Response.class)
     @RequestMapping(value = "queryCircleBotton", method = RequestMethod.POST)
     public Response queryCircleBotton(@ApiParam(value = "圈子id") @RequestParam String circleid,
-                                      @ApiParam(value = "类型 0 推荐 1 最新 2精华 ") @RequestParam int type,
+                                      @ApiParam(value = "类型 1 推荐 2 最新 3精华 ") @RequestParam int type,
                                       @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                       @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
