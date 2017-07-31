@@ -2312,6 +2312,29 @@ public class FacadePost {
         }
     }
 
+
+    /**
+     * 取消关注用户
+     *
+     * @param userid
+     * @param interestedusers
+     * @return
+     */
+    public int cancelFollowUser(int userid, int interestedusers) {
+        //定义一个返回标志位
+        int mark = 0;
+        Map map = new HashMap();
+        map.put("userid", userid);
+        map.put("interestedusers", interestedusers);
+        int result = followUserService.cancleFollowUser(map);
+        if (result == 1) {
+            mark = 1;
+        } else {
+            mark = -1;
+        }
+        return mark;
+    }
+
 }
 
 

@@ -426,4 +426,21 @@ public class AppWaterfallController {
     }
 
 
+    @ApiOperation(value = "取消关注用户", notes = "取消关注用户", response = Response.class)
+    @RequestMapping(value = "cancelFollowUser", method = RequestMethod.POST)
+    public Response cancelFollowUser(@ApiParam(value = "用户id") @RequestParam int userid,
+                                     @ApiParam(value = "被关注人id") @RequestParam int interestedusers) {
+        Response response = new Response();
+        int result = facadePost.cancelFollowUser(userid, interestedusers);
+        if (response.getCode() == 200 && result == 1) {
+            response.setCode(200);
+            response.setMessage("取消关注成功");
+        } else {
+            response.setCode(400);
+            response.setMessage("取消关注失败");
+        }
+        return response;
+    }
+
+
 }

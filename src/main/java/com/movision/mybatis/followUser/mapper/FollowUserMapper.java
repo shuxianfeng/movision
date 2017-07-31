@@ -18,4 +18,6 @@ public interface FollowUserMapper {
     int updateByPrimaryKey(FollowUser record);
 
     int yesOrNo(Map map);
+
+    int cancleFollowUser(Map map);
 }

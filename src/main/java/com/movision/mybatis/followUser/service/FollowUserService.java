@@ -39,4 +39,15 @@ public class FollowUserService {
         }
     }
 
+
+    public int cancleFollowUser(Map followUser) {
+        try {
+            log.info("取消关注用户");
+            return followUserMapper.cancleFollowUser(followUser);
+        } catch (Exception e) {
+            log.error("取消关注用户失败", e);
+            throw e;
+        }
+    }
+
 }
