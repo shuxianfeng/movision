@@ -15,6 +15,7 @@ import com.movision.mybatis.newInformation.service.NewInformationService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
+import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
@@ -74,9 +75,6 @@ public class FacadeComments {
                 //通过pid查询评论实体
                 CommentVo commentVo = commentService.queryCommentByPid(volist.get(i).getPid());
                 volist.get(i).addVo(commentVo);
-                if (null != commentVo.getPid()) {
-
-                }
             }
         }
         return volist;
@@ -243,4 +241,26 @@ public class FacadeComments {
         }
     }
 
+
+    public List queryNewComment(int postid, Paging<CommentVo> paging) {
+        //根据postid查询所有评论
+        List<CommentVo> commentVos = commentService.queryOneComment(postid, paging);
+        //一级评论(评论帖子的评论)
+        List<CommentVo> two = commentService.queryTwoComment(postid);
+        for (int i = 0; i < two.size(); i++) {
+            //查询父评论下面有多少子评论
+            List<CommentVo> thrww = commentService.queryThreeComment(two.get(i).getId());
+            commentVos.get(i).setCommentVos(thrww);
+
+        }
+        /**for (int i=0;i<commentVos.size();i++){
+         if(commentVos.get(i).getPid()!=null){
+         List<CommentVo> two=commentService.queryTwoComment(commentVos.get(i).getId());
+         commentVos.get(i).setCommentVos(two);
+         }
+         }*/
+        return commentVos;
+    }
+
 }
+

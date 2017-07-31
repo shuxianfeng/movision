@@ -1963,9 +1963,10 @@ public class FacadePost {
      */
     public List userRefulshListMongodb(int userid) {
         List<DBObject> list = null;
+        DB db = null;
         try {
             MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
-            DB db = mClient.getDB("searchRecord");
+            db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("userRefreshRecord");//表名
             BasicDBObject queryObject = new BasicDBObject("userid", userid);
             //指定需要显示列
@@ -1976,6 +1977,11 @@ public class FacadePost {
             list = obj.toArray();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+            }
         }
         return list;
     }
@@ -1987,13 +1993,19 @@ public class FacadePost {
      */
     public long mongodbCount() {
         long count = 0;
+        DB db = null;
         try {
             MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
-            DB db = mClient.getDB("searchRecord");
+            db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("userRefreshRecord");//表名
             count = collection.count();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+            }
         }
         return count;
     }

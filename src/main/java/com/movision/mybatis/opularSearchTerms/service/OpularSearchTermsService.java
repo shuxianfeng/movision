@@ -67,9 +67,10 @@ import java.util.ArrayList;
 
     public List histroyWords(int userid) {
         List<DBObject> list = null;
+        DB db = null;
         try {
             MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
-            DB db = mClient.getDB("searchRecord");
+            db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("opularSearchTerms");
             BasicDBObject queryObject = new BasicDBObject("userid", userid).append("isdel", 0);
             //指定需要显示列
@@ -80,16 +81,21 @@ import java.util.ArrayList;
             list = obj.toArray();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+            }
         }
         return list;
     }
 
 
     public Integer updateColData(int userid) {
-
+        DB db = null;
         try {
             MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
-            DB db = mClient.getDB("searchRecord");
+            db = mClient.getDB("searchRecord");
             DBCollection dbCol = db.getCollection("opularSearchTerms");
             BasicDBObject doc = new BasicDBObject();
             BasicDBObject res = new BasicDBObject();
@@ -99,6 +105,11 @@ import java.util.ArrayList;
             dbCol.update(new BasicDBObject("userid", userid), doc, false, true);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+            }
         }
         return 1;
     }

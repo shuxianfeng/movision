@@ -92,4 +92,10 @@ public interface CommentMapper {
     int commentCount(Map map);
 
     int deleteComment(int id);
+
+    List<CommentVo> findAllOneComment(int postid, RowBounds rowBounds);
+
+    List<CommentVo> queryTwoComment(int postid);
+
+    List<CommentVo> queryThreeComment(int id);
 }

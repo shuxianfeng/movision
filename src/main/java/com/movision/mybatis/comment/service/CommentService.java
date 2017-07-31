@@ -483,4 +483,34 @@ public class CommentService {
         }
     }
 
+    public List<CommentVo> queryOneComment(int postid, Paging<CommentVo> paging) {
+        try {
+            log.info("一级评论");
+            return commentMapper.findAllOneComment(postid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("一级评论失敗", e);
+            throw e;
+        }
+    }
+
+    public List<CommentVo> queryTwoComment(int postid) {
+        try {
+            log.info("一级评论");
+            return commentMapper.queryTwoComment(postid);
+        } catch (Exception e) {
+            log.error("一级评论失敗", e);
+            throw e;
+        }
+    }
+
+    public List<CommentVo> queryThreeComment(int id) {
+        try {
+            log.info("一级评论");
+            return commentMapper.queryThreeComment(id);
+        } catch (Exception e) {
+            log.error("一级评论失敗", e);
+            throw e;
+        }
+    }
+
 }

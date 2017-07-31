@@ -42,14 +42,20 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
      */
     public Integer postcount(int postid) {
         int obj = 0;
+        DB db = null;
         try {
             MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
-            DB db = mClient.getDB("searchRecord");
+            db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("userRefreshRecord");
             BasicDBObject queryObject = new BasicDBObject("postid", postid);
             obj = collection.find(queryObject).count();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+            }
         }
         return obj;
 
@@ -69,12 +75,13 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
 
 
     public List mongoList(String begintime, String endtime) {
+        DB db = null;
         List<DBObject> list = null;
         BasicDBList condList = new BasicDBList();//存放查询条件的集合
         BasicDBObject param = new BasicDBObject();
         try {
             MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
-            DB db = mClient.getDB("searchRecord");
+            db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("userRefreshRecord");
             if (StringUtils.isNotBlank(begintime) && StringUtils.isNotBlank(endtime)) {
                 condList.add(new BasicDBObject("intime", new BasicDBObject("$gte", begintime + " 00:00:00").append("$lte", endtime + " 23:59:59")));
@@ -86,6 +93,11 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
             list = dbCursor.toArray();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+            }
         }
         return list;
 

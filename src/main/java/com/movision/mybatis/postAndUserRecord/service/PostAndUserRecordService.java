@@ -37,9 +37,10 @@ public class PostAndUserRecordService implements PostAndUserRecordMapper {
 
       public List UserLookingHistory(int userid,int page,int pageSize ){
          List<DBObject> list = null;
-        try {
+          DB db = null;
+          try {
             MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
-            DB db = mClient.getDB("searchRecord");
+              db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("postAndUserRecord");
 
             BasicDBObject queryObject = new BasicDBObject("userid", userid);
@@ -62,6 +63,11 @@ public class PostAndUserRecordService implements PostAndUserRecordMapper {
              }
          } catch (Exception e) {
             e.printStackTrace();
+          } finally {
+              if (null != db) {
+                  db.requestDone();
+                  db = null;
+              }
         }
         return list;
 
