@@ -554,7 +554,7 @@ public class ImFacade {
                 if ((int) con.get("code") == 200) {
                     str = con.get("content").toString();
                     str = str.replace("\\", "");
-                    str = "[\"coverimg\":" + coverimg + ",\"boday\"" + str + "]";//把封面封装在内容中
+                    //str = "[\"coverimg\":" + coverimg + ",\"boday\"" + str + "]";//把封面封装在内容中
                     log.info(str);
                 } else {
                     log.error("内容转换异常");
@@ -574,11 +574,11 @@ public class ImFacade {
                          *     i=2, 即第1001-1002人，   取两人
                          */
                         int eachSize = i < mutiple ? 500 : size - mutiple * 500;
-                        sendInform(str, imUser, imAppUserList, eachSize, i, title, informidentity);
+                        sendInform(body, coverimg, imUser, imAppUserList, eachSize, i, title, informidentity);
                     }
                 } else {
                     //不超过500人
-                    sendInform(str, imUser, imAppUserList, size, 0, title, informidentity);
+                    sendInform(str, coverimg, imUser, imAppUserList, size, 0, title, informidentity);
                 }
             }
         } catch (IOException e) {
@@ -632,7 +632,7 @@ public class ImFacade {
 
     }
 
-    private void sendInform(String body, ImUser imUser, List<ImUser> imAppUserList, int size, int multiple, String title, long informidentity) throws IOException {
+    private void sendInform(String body, String coverimg, ImUser imUser, List<ImUser> imAppUserList, int size, int multiple, String title, long informidentity) throws IOException {
         //不足500人
         String toAccids = prepareToAccids(imAppUserList, size, multiple);
         Map result = this.sendSystemInformTo(body, imUser.getAccid(), toAccids);
@@ -660,7 +660,7 @@ public class ImFacade {
 
         if (result.get("code").equals(200)) {
             log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
-            this.recordSysInformsTo(body, imUser.getAccid(), toAccids, title, informidentity);
+            this.recordSysInformsTo(body, coverimg, imUser.getAccid(), toAccids, title, informidentity);
         } else {
             throw new BusinessException(MsgCodeConstant.send_system_msg_fail, "发送系统通知失败");
         }
@@ -784,9 +784,10 @@ public class ImFacade {
         }
     }
 
-    public void recordSysInformsTo(String body, String fromaccid, String toAccids, String title, long informidentity) {
+    public void recordSysInformsTo(String body, String coverimg, String fromaccid, String toAccids, String title, long informidentity) {
         ImSystemInform imSystemInform = new ImSystemInform();
         imSystemInform.setBody(body);
+        imSystemInform.setCoverimg(coverimg);
         imSystemInform.setFromAccid(fromaccid);
         imSystemInform.setUserid(ShiroUtil.getBossUserID());
         imSystemInform.setToAccids(toAccids);
