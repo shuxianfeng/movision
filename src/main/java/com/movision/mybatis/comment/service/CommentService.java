@@ -404,7 +404,7 @@ public class CommentService {
         }
     }
 
-    public List<Comment> queryCommentByPost(int postid) {
+    public List<CommentVo> queryCommentByPost(int postid) {
         try {
             log.info("根據帖子id查詢所有評論");
             return commentMapper.queryCommentByPost(postid);

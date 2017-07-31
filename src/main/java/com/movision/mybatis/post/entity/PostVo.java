@@ -122,7 +122,7 @@ public class PostVo implements Serializable {
 
     private Integer heatvalue;//热度
 
-    public Comment comments;
+    public CommentVo comments;
 
     public List<PostLabel> postLabels;
 
@@ -567,11 +567,11 @@ public class PostVo implements Serializable {
         this.postLabels = postLabels;
     }
 
-    public Comment getComments() {
+    public CommentVo getComments() {
         return comments;
     }
 
-    public void setComments(Comment comments) {
+    public void setComments(CommentVo comments) {
         this.comments = comments;
     }
 

@@ -74,6 +74,9 @@ public class FacadeComments {
                 //通过pid查询评论实体
                 CommentVo commentVo = commentService.queryCommentByPid(volist.get(i).getPid());
                 volist.get(i).addVo(commentVo);
+                if (null != commentVo.getPid()) {
+
+                }
             }
         }
         return volist;

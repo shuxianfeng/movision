@@ -1859,7 +1859,7 @@ public class FacadePost {
      * @return
      */
     public List findHotComment(List<PostVo> list) {
-        List<Comment> comments = null;
+        List<CommentVo> comments = null;
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
                 int postid = list.get(i).getId();
@@ -1867,8 +1867,10 @@ public class FacadePost {
                 comments = commentService.queryCommentByPost(postid);
                 for (int j = 0; j < comments.size(); j++) {
                     int heatvalue = comments.get(j).getHeatvalue();
+                    String nickname = comments.get(j).getNickname();
                     if (heatvalue >= 50) {
                         list.get(j).setComments(comments.get(j));
+                        list.get(j).setNickname(nickname);
                     }
                 }
             }
