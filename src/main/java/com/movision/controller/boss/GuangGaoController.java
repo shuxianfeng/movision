@@ -2,11 +2,13 @@ package com.movision.controller.boss;
 
 import com.movision.common.Response;
 import com.movision.facade.boss.HomepageManageFacade;
+import com.movision.facade.boss.PostFacade;
 import com.movision.mybatis.homepageManage.entity.HomepageLinkage;
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.entity.HomepageManageVo;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.manageType.entity.ManageType;
+import com.movision.mybatis.post.entity.Post;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
@@ -32,10 +34,13 @@ import java.util.Map;
 public class GuangGaoController {
 
     @Autowired
-    HomepageManageFacade homepageManageFacade;
+    private HomepageManageFacade homepageManageFacade;
 
     @Autowired
-    MovisionOssClient movisionOssClient;
+    private MovisionOssClient movisionOssClient;
+
+    @Autowired
+    private PostFacade postFacade;
 
 
     /**
@@ -194,6 +199,25 @@ public class GuangGaoController {
             response.setMessage("操作成功");
         }
         response.setData(i);
+        return response;
+    }
+
+
+    /**
+     * 根据名称查询帖子、活动列表
+     *
+     * @param postid
+     * @param type
+     * @return
+     */
+    @ApiOperation(value = "根据名称查询帖子、活动列表", notes = "用于根据名称查询帖子、活动列表", response = Response.class)
+    @RequestMapping(value = "queryPostListByName", method = RequestMethod.POST)
+    public Response queryPostListByName(@ApiParam(value = "帖子、活动id") @RequestParam(required = false) String postid,
+                                        @ApiParam(value = "帖子1 活动2") @RequestParam String type) {
+        Response response = new Response();
+        List<Post> posts = postFacade.queryPostListByName(postid, type);
+        response.setMessage("查询成功");
+        response.setData(posts);
         return response;
     }
 

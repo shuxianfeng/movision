@@ -328,5 +328,7 @@ public interface PostMapper {
 
     int postUserId(int postid);
 
+    List<Post> queryPostListByName(Map map);
+
 
 }

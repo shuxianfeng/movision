@@ -1873,4 +1873,20 @@ public class PostService {
         }
     }
 
+    /**
+     * 根据名称查询帖子、活动列表
+     *
+     * @param map
+     * @return
+     */
+    public List<Post> queryPostListByName(Map map) {
+        try {
+            log.info("根据名称查询帖子、活动列表");
+            return postMapper.queryPostListByName(map);
+        } catch (Exception e) {
+            log.error("根据名称查询帖子、活动列表异常", e);
+            throw e;
+        }
+    }
+
 }

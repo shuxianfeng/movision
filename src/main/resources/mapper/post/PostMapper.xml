@@ -2322,4 +2322,18 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         SELECT ip_city FROM  yw_user WHERE id=#{userid,jdbcType=INTEGER}
     </select>
 
+    <select id="queryPostListByName" parameterType="java.util.Map" resultType="com.movision.mybatis.post.entity.Post">
+        SELECT id,title FROM yw_post WHERE
+        isdel = 0
+        <if test="name != null">
+            AND title LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="type == 1">
+            AND isactive = 0
+        </if>
+        <if test="type ==2">
+            AND isactive =1
+        </if>
+    </select>
+
 </mapper>

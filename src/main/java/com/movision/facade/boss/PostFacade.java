@@ -2836,4 +2836,18 @@ public class PostFacade {
         return postLabelService.queryPostLabelByName(postLabel);
     }
 
+    /**
+     * 根据名称查询帖子、活动列表
+     *
+     * @param name
+     * @param type
+     * @return
+     */
+    public List<Post> queryPostListByName(String name, String type) {
+        Map map = new HashMap();
+        map.put("name", name);
+        map.put("type", type);
+        return postService.queryPostListByName(map);
+    }
+
 }
