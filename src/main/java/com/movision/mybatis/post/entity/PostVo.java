@@ -130,10 +130,21 @@ public class PostVo implements Serializable {
 
     private Integer activeid;//活动id
 
+    private String activename;  //活动名称
+
     private List<CommentVo> commentVos;
 
     public List<CommentVo> getCommentVos() {
         return commentVos;
+    }
+
+    public void setActivename(String activename) {
+        this.activename = activename;
+    }
+
+    public String getActivename() {
+
+        return activename;
     }
 
     public void setCommentVos(List<CommentVo> commentVos) {
