@@ -14,6 +14,7 @@ import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -226,6 +227,29 @@ public class LabelFacade {
 
         }
 
+    }
+
+
+    /**
+     * 取消关注标签
+     *
+     * @param userid
+     * @param labelid
+     * @return
+     */
+    public int cancelFollowLabel(String userid, String labelid) {
+        //定义一个返回标志位
+        int mark = 0;
+        Map map = new HashMap();
+        map.put("userid", userid);
+        map.put("labelid", labelid);
+        int result = followLabelService.cancleLabel(map);
+        if (result == 1) {
+            mark = 1;
+        } else {
+            mark = -1;
+        }
+        return mark;
     }
 
 

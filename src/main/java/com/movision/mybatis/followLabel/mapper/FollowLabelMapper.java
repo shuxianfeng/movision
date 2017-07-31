@@ -20,4 +20,6 @@ public interface FollowLabelMapper {
     int updateByPrimaryKey(FollowLabel record);
 
     int yesOrNo(Map map);
+
+    int cancleLabel(Map map);
 }

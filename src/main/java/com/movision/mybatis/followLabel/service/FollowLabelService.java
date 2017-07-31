@@ -40,4 +40,14 @@ public class FollowLabelService {
         }
     }
 
+    public int cancleLabel(Map map) {
+        try {
+            log.info("取消关注标签");
+            return followLabelMapper.cancleLabel(map);
+        } catch (Exception e) {
+            log.error("取消关注标签失败");
+            throw e;
+        }
+    }
+
 }

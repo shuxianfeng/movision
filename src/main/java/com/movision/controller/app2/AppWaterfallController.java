@@ -408,4 +408,22 @@ public class AppWaterfallController {
         return response;
     }
 
+
+    @ApiOperation(value = "取消关注标签", notes = "取消关注标签", response = Response.class)
+    @RequestMapping(value = "cancelFollowLabel", method = RequestMethod.POST)
+    public Response cancelFollowLabel(@ApiParam(value = "用户id") @RequestParam String userid,
+                                      @ApiParam(value = "标签id") @RequestParam String labelid) {
+        Response response = new Response();
+        int result = labelFacade.cancelFollowLabel(userid, labelid);
+        if (response.getCode() == 200 && result == 1) {
+            response.setCode(200);
+            response.setMessage("取消关注成功");
+        } else {
+            response.setCode(400);
+            response.setMessage("取消关注失败");
+        }
+        return response;
+    }
+
+
 }
