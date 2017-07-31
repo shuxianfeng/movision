@@ -76,6 +76,21 @@ public class PostLabelRelationService {
         }
     }
 
+    /**
+     * 删除帖子和标签关系
+     *
+     * @param postid
+     */
+    public void deletePostLabelRelaton(Integer postid) {
+        try {
+            log.info("删除帖子和标签关系");
+            postLabelRelationMapper.deletePostLabelRelaton(postid);
+        } catch (Exception e) {
+            log.error("删除帖子和标签关系异常", e);
+            throw e;
+        }
+    }
+
     public int batchAdd(Map map) {
         try {
             log.info("批量增加帖子和标签的关系数据");

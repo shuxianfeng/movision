@@ -31,6 +31,8 @@ public interface PostLabelRelationMapper {
 
     List<PostVo> postIseecen(List postid, RowBounds rowBounds);
 
+    void deletePostLabelRelaton(Integer postid);
+
     int batchInsert(Map map);
 
     List<PostLabel> queryPostLabelByPostid(PostLabelRelation relation);

@@ -111,4 +111,9 @@
         SELECT l.id,l.name FROM yw_post_label_relation lr LEFT JOIN yw_post_label l ON l.id = lr.labelid WHERE lr.postid
         = #{postid,jdbcType=INTEGER} AND l.isdel = 0 AND l.type <![CDATA[<>]]> 0
     </select>
+
+    <delete id="deletePostLabelRelaton" parameterType="java.lang.Integer">
+         delete from yw_post_label_relation
+        where postid = #{postid,jdbcType=INTEGER}
+    </delete>
 </mapper>

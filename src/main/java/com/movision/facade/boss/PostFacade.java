@@ -1627,15 +1627,14 @@ public class PostFacade {
         }
         //======================添加结束
         if (res.get("resault").equals(1)) {
-            if (postcontent.length() < 30000) {
                 try {
                     post.setId(pid);//帖子id
                     post.setTitle(title);//帖子标题
                     post.setSubtitle(subtitle);//帖子副标题
-                    if (!StringUtils.isEmpty(type)) {
+                    if (StringUtil.isNotEmpty(type)) {
                         post.setType(type);//帖子类型
                     }
-                    if (!StringUtils.isEmpty(circleid)) {
+                    if (StringUtil.isNotEmpty(circleid)) {
                         post.setCircleid(circleid);//圈子id
                     }
 
@@ -1746,8 +1745,10 @@ public class PostFacade {
                         for (int i = 0; i < str.length; i++) {
                             newLabelIdList.add(Integer.parseInt(str[i]));
                         }
+                        //删除帖子和标签关系
+                        postLabelRelationService.deletePostLabelRelaton(Integer.parseInt(id));
                         postlabelrelationMap.put("postid", id);
-                        postlabelrelationMap.put("labelids", newLabelIdList.toArray());
+                        postlabelrelationMap.put("labelids", newLabelIdList);
                         //批量新增帖子、标签关系
                         postLabelRelationService.batchAdd(postlabelrelationMap);
                     }
@@ -1816,9 +1817,6 @@ public class PostFacade {
                 } catch (Exception e) {
                     log.error("帖子编辑异常", e);
                 }
-            } else {
-                map.put("resault", -2);
-            }
             return map;
         } else {
             map.put("resault", -1);
