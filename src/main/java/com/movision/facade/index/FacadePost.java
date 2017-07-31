@@ -2296,31 +2296,6 @@ public class FacadePost {
         }
     }
 
-    /**
-     * 帖子详情的帖子列表
-     *
-     * @param postid
-     * @return
-     */
-    public List queryCommentByPost(String postid, Paging<CommentVo> paging) {
-        //查询这个帖子的所有评论
-        List<CommentVo> comments = commentService.findAllCommentByPostId(Integer.parseInt(postid), paging);
-        if (comments != null) {
-            for (int i = 0; i < comments.size(); i++) {
-                Integer pid = comments.get(i).getPid();
-                Integer usersid = comments.get(i).getUserid();
-                User user = postCommentZanRecordService.queryusers(usersid);
-                if (pid != null) {
-                    List<CommentVo> commentVos = commentService.queryPidComment(pid);
-                    comments.get(i).setCommentVos(commentVos);
-                    comments.get(i).setUser(user);
-                } else {
-                    comments.get(i).setUser(user);
-                }
-            }
-        }
-        return comments;
-    }
 
     public List<PostLabel> queryHotValueLabelList() {
         return postLabelService.queryHotValueLabelList(10);
