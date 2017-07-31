@@ -1229,7 +1229,8 @@
 
     <!--查询该作者有没有被当前登录的用户关注过-->
     <select id="queryIsFollowAuthor" parameterType="java.util.Map" resultType="java.lang.Integer" >
-        SELECT count(*) FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER} AND interestedusers = #{id,jdbcType=INTEGER}
+        SELECT count(1) FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER} AND interestedusers =
+        #{id,jdbcType=INTEGER}
     </select>
 
     <!--2.0查询当前用户的所有粉丝列表-->

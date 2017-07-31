@@ -97,6 +97,7 @@ public class AppIndexController {
         response.setData(postSearchService.getHotwordAndHistory());
         return response;
     }
+
     @RequestMapping(value = {"get_userlookhistory"}, method = RequestMethod.GET)
     @ApiOperation(value = "查询用户浏览历史", notes = "查询用户浏览历史", response = Response.class)
     public Response getUserLookingHistory(@RequestParam(required = false, defaultValue = "1") int page,

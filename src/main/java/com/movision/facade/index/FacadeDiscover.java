@@ -2,6 +2,7 @@ package com.movision.facade.index;
 
 import com.movision.common.constant.DiscoverConstant;
 import com.movision.common.constant.MsgCodeConstant;
+import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
@@ -218,27 +219,67 @@ public class FacadeDiscover {
     }
 
     public List<UserVo> searchMostFansAuthorInAll(Paging<UserVo> paging) {
-        return userService.findAllMostFansAuthorInAll(paging);
+        List<UserVo> list = userService.findAllMostFansAuthorInAll(paging);
+
+        addIsFollow(list);
+
+        return list;
+    }
+
+    /**
+     * 增加 UserVo 是否关注 属性
+     *
+     * @param list
+     */
+    private void addIsFollow(List<UserVo> list) {
+        int userid = ShiroUtil.getAppUserID();
+        if (userid == 0) {
+            //未登录
+            for (UserVo u : list) {
+                u.setIsfollow(0);   //未登录，则显示未登录
+            }
+        } else {
+            //已登录，则根据关注用户表获取是否已关注作者
+            Map<String, Object> parammap = new HashMap<>();
+            parammap.put("userid", userid);
+
+            for (UserVo u : list) {
+                parammap.put("id", u.getId());
+                //获取当前用户是否关注过该粉丝
+                int sum = userService.queryIsFollowAuthor(parammap);
+                u.setIsfollow(sum);
+            }
+        }
     }
 
     public List<UserVo> searchMostFansAuthorInCurrentMonth(Paging<UserVo> paging) {
-        return userService.findAllMostFansAuthorInCurrentMonth(paging);
+        List<UserVo> list = userService.findAllMostFansAuthorInCurrentMonth(paging);
+        addIsFollow(list);
+        return list;
     }
 
     public List<UserVo> searchMostCommentAuthorInAll(Paging<UserVo> paging) {
-        return userService.findAllMostCommentAuthorInAll(paging);
+        List<UserVo> list = userService.findAllMostCommentAuthorInAll(paging);
+        addIsFollow(list);
+        return list;
     }
 
     public List<UserVo> searchMostCommentAuthorInCurrentMonth(Paging<UserVo> paging) {
-        return userService.findAllMostCommentAuthorInCurrentMonth(paging);
+        List<UserVo> list = userService.findAllMostCommentAuthorInCurrentMonth(paging);
+        addIsFollow(list);
+        return list;
     }
 
     public List<UserVo> searchMostPostAuthorInAll(Paging<UserVo> paging) {
-        return userService.findAllMostPostAuthorInAll(paging);
+        List<UserVo> list = userService.findAllMostPostAuthorInAll(paging);
+        addIsFollow(list);
+        return list;
     }
 
     public List<UserVo> searchMostPostAuthorInCurrentMonth(Paging<UserVo> paging) {
-        return userService.findAllMostPostAuthorInCurrentMonth(paging);
+        List<UserVo> list = userService.findAllMostPostAuthorInCurrentMonth(paging);
+        addIsFollow(list);
+        return list;
     }
 
     public List<PostVo> searchMostViewPostInAll(Paging<PostVo> paging) {

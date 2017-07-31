@@ -8,6 +8,7 @@ import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
@@ -54,6 +55,9 @@ public class AppPostController {
 
     @Autowired
     private FacadeHeatValue facadeHeatValue;
+
+    @Autowired
+    private LabelSearchTermsService labelSearchTermsService;
 
     @ApiOperation(value = "帖子详情数据返回接口", notes = "用于返回请求帖子详情内容", response = Response.class)
     @RequestMapping(value = "detail", method = RequestMethod.POST)
@@ -636,6 +640,17 @@ public class AppPostController {
         response.setData(postLabelList);
         return response;
     }
+
+    @ApiOperation(value = "发帖-查询历史搜索标签列表（展示12条）", notes = "发帖-查询历史搜索标签列表（展示12条）", response = Response.class)
+    @RequestMapping(value = "get_history_label_list_when_post", method = RequestMethod.GET)
+    public Response getHistoryLabelListWhenPost() {
+        Response response = new Response();
+        List postLabelList = labelSearchTermsService.histroyWordsLabel(ShiroUtil.getAppUserID());
+        response.setData(postLabelList);
+        return response;
+    }
+
+
 
 
 }
