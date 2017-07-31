@@ -2184,7 +2184,7 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
     </select>
     <select id="findAllUserActive" resultType="com.movision.mybatis.post.entity.PostVo"
             parameterType="java.lang.Integer">
-        SELECT p.*,r.begintime,r.endtime FROM yw_post p LEFT JOIN yw_active_period r ON r.postid=p.id WHERE
+        SELECT p.*,r.begintime,r.endtime FROM yw_post p LEFT JOIN yw_active_period r ON r.postid=p.activeid WHERE
         p.userid=#{userid,jdbcType=INTEGER} AND p.activeid IS NOT NULL AND p.isdel=0
     </select>
     <select id="findAllCollectionListByIds" parameterType="java.util.List"
