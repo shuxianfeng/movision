@@ -1873,6 +1873,16 @@ public class PostService {
         }
     }
 
+    public Post selectTitleById(Integer id) {
+        try {
+            log.info("根据id查询名称");
+            return postMapper.selectTitleById(id);
+        } catch (Exception e) {
+            log.error("根据id查询名称失败", e);
+            throw e;
+        }
+    }
+
     /**
      * 根据名称查询帖子、活动列表
      *

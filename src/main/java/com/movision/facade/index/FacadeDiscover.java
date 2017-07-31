@@ -282,28 +282,44 @@ public class FacadeDiscover {
         return list;
     }
 
+    /**
+     * 统计浏览最多的帖子排行
+     *
+     * @param paging
+     * @return
+     */
     public List<PostVo> searchMostViewPostInAll(Paging<PostVo> paging) {
-
+        //查询所有帖子
         List<PostVo> postVoList = postService.queryPostInAll();
+
+        //查询mongo中的用户浏览帖子记录（已经按照浏览数从大到小排列）
         List<UesrreflushCount> uesrreflushCountList = userRefreshRecordService.group();
 
         List<PostVo> resultList = new ArrayList<>();
         int size = uesrreflushCountList.size();
         int total = postVoList.size();
-
+        //生成最后的结果
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < total; j++) {
                 if (uesrreflushCountList.get(i).getPostid().intValue() == postVoList.get(j).getId().intValue()) {
-
+                    //统计浏览数
                     postVoList.get(j).setCountview(uesrreflushCountList.get(i).getCount());
+
+
                     resultList.add(postVoList.get(j));
                 }
             }
         }
-
+        //计算Paging中的分页参数
         paging.setTotal(resultList.size());
 
-        return facadePost.getPageList(resultList, paging.getCurPage(), paging.getPageSize());
+        //代码层分页操作
+        List list = facadePost.getPageList(resultList, paging.getCurPage(), paging.getPageSize());
+
+        //统计标签
+        facadePost.findPostLabel(list);
+
+        return list;
     }
 
     public Paging<?> searchHotRange(String pageNo, String pageSize, int title, int type) {

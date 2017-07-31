@@ -4,27 +4,22 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mongodb.*;
 import com.movision.common.constant.PointConstant;
+import com.movision.common.constant.PostLabelConstants;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.im.ImFacade;
-import com.movision.facade.msgCenter.MsgCenterFacade;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.accusation.entity.Accusation;
 import com.movision.mybatis.accusation.service.AccusationService;
-import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.circleCategory.entity.CircleCategory;
-import com.movision.mybatis.circleCategory.entity.CircleCategoryVo;
 import com.movision.mybatis.circleCategory.service.CircleCategoryService;
-import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentCount;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.mybatis.compressImg.service.CompressImgService;
-import com.movision.mybatis.followLabel.entity.FollowLabel;
-import com.movision.mybatis.followLabel.service.FollowLabelService;
 import com.movision.mybatis.followUser.entity.FollowUser;
 import com.movision.mybatis.followUser.service.FollowUserService;
 import com.movision.mybatis.goods.entity.Goods;
@@ -41,10 +36,8 @@ import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
 import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
 import com.movision.mybatis.postCommentZanRecord.service.PostCommentZanRecordService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
-import com.movision.mybatis.postLabel.entity.PostLabelTz;
 import com.movision.mybatis.postLabel.entity.PostLabelVo;
 import com.movision.mybatis.postLabel.service.PostLabelService;
-import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.postLabelRelation.service.PostLabelRelationService;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.User;
@@ -53,11 +46,9 @@ import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
-import com.movision.mybatis.userRefreshRecord.entity.UesrreflushCount;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
-import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.*;
 import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
@@ -1823,15 +1814,50 @@ public class FacadePost {
      * @return
      */
     public List findPostLabel(List<PostVo> list) {
-        List<PostLabel> postLabels = null;
+
         if (list != null) {
+
             for (int i = 0; i < list.size(); i++) {
+                List<PostLabel> postLabels = new ArrayList<>();
+                //帖子的id
                 int postid = list.get(i).getId();
-                postLabels = postService.queryPostLabel(postid);
+                //先获取帖子对应的圈子
+                addCircleToLabellist(list, i, postLabels);
+                //帖子对应的活动
+                addActiveToLabellist(list, i, postLabels);
+                //根据帖子id查询对应的标签
+                List<PostLabel> labelInDB = postService.queryPostLabel(postid);
+
+                postLabels.addAll(labelInDB);
+
                 list.get(i).setPostLabels(postLabels);
             }
         }
         return list;
+    }
+
+    private void addActiveToLabellist(List<PostVo> list, int i, List<PostLabel> postLabels) {
+        Integer activeid = list.get(i).getActiveid();
+        if (activeid != null) {
+            PostLabel label = new PostLabel();
+            label.setId(activeid);
+            label.setType(PostLabelConstants.TYPE.active.getCode());
+            //查询该帖子属于活动的名称
+            Post active = postService.selectTitleById(activeid);
+            label.setName(active.getTitle());
+            postLabels.add(label);
+        }
+    }
+
+    private void addCircleToLabellist(List<PostVo> list, int i, List<PostLabel> postLabels) {
+        Integer circleid = list.get(i).getCircleid();
+        if (circleid != null) {
+            PostLabel label = new PostLabel();
+            label.setId(circleid);
+            label.setType(PostLabelConstants.TYPE.circle.getCode());
+            label.setName(list.get(i).getCirclename());
+            postLabels.add(label);
+        }
     }
 
     /**

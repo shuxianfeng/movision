@@ -330,5 +330,5 @@ public interface PostMapper {
 
     List<Post> queryPostListByName(Map map);
 
-
+    Post selectTitleById(Integer id);
 }
