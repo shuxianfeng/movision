@@ -302,7 +302,7 @@ public class AppWaterfallController {
     @ApiOperation(value = "点击圈子标签页下半部分", notes = "点击圈子标签页下半部分", response = Response.class)
     @RequestMapping(value = "queryCircleBotton", method = RequestMethod.POST)
     public Response queryCircleBotton(@ApiParam(value = "圈子id") @RequestParam String circleid,
-                                      @ApiParam(value = "类型 1 推荐 2 最新 3精华 ") @RequestParam int type,
+                                      @ApiParam(value = "类型 0 推荐 1 最新 2精华 ") @RequestParam int type,
                                       @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                       @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
@@ -387,6 +387,23 @@ public class AppWaterfallController {
         } else if (result == 1) {
             response.setCode(300);
             response.setMessage("该评论不是你发的，请刷新重试");
+        }
+        return response;
+    }
+
+
+    @ApiOperation(value = "关注用户", notes = "关注用户", response = Response.class)
+    @RequestMapping(value = "concernedAuthorUser", method = RequestMethod.POST)
+    public Response concernedAuthorUser(@ApiParam(value = "用户id") @RequestParam int userid,
+                                        @ApiParam(value = "被关注的id") @RequestParam int interestedusers) {
+        Response response = new Response();
+        int result = facadePost.concernedAuthorUser(userid, interestedusers);
+        if (result == 0) {
+            response.setCode(200);
+            response.setMessage("关注成功");
+        } else if (result == 1) {
+            response.setCode(300);
+            response.setMessage("已关注该作者，请刷新重试");
         }
         return response;
     }

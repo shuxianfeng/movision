@@ -532,14 +532,14 @@ public class UserFacade {
      */
     public List<PostVo> mineBottle(int type, String userid, Paging<PostVo> paging) {
         List<PostVo> list = null;
-        if (type == 1) {//帖子
+        if (type == 0) {//帖子
             //查询用户发的帖子
             list = postService.findAllUserPostList(Integer.parseInt(userid), paging);
             for (int i = 0; i < list.size(); i++) {
                 facadePost.countView(list);
                 facadePost.findAllCircleName(list);
             }
-        } else if (type == 2) {//活动
+        } else if (type == 1) {//活动
             //活动帖子
             list = postService.findAllUserActive(Integer.parseInt(userid), paging);
             //遍历活动获取活动参与人数和活动剩余结束天数
@@ -557,7 +557,7 @@ public class UserFacade {
                 list.set(i, ao);
             }
 
-         }else if (type == 3) {//收藏
+        } else if (type == 2) {//收藏
             //用户收藏的帖子
             List<Integer> collection = collectionService.queryUserPost(Integer.parseInt(userid));
             //收藏的id查帖子

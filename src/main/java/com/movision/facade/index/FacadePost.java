@@ -1836,7 +1836,6 @@ public class FacadePost {
 
     /**
      * 查询圈子名称
-     *
      * @param list
      * @return
      */
@@ -2135,8 +2134,6 @@ public class FacadePost {
         List<PostLabelVo> finals = getPageList(postvo, 1, 15);
         return finals;
     }
-
-
     /**
      * 用户刷新的历史记录列表
      *
@@ -2287,6 +2284,32 @@ public class FacadePost {
 
     public List<PostLabel> queryHotValueLabelList() {
         return postLabelService.queryHotValueLabelList(10);
+    }
+
+
+    /**
+     * 关注作者
+     *
+     * @param userid
+     * @param
+     * @return
+     */
+    public int concernedAuthorUser(int userid, int interestedusers) {
+        Map map = new HashMap();
+        map.put("userid", userid);
+        map.put("interestedusers", interestedusers);
+        //查询该用户有没有关注过
+        int result = followUserService.yesOrNo(map);
+        if (result == 0) {
+            FollowUser followUser = new FollowUser();
+            followUser.setIntime(new Date());
+            followUser.setInterestedusers(interestedusers);
+            followUser.setUserid(userid);
+            int count = followUserService.insertSelective(followUser);
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
 }
