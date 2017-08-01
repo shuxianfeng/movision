@@ -566,6 +566,7 @@ public class UserFacade {
                 for (int i = 0; i < list.size(); i++) {
                     facadePost.countView(list);
                     facadePost.findAllCircleName(list);
+                    facadePost.findUser(list);
                 }
             }
         }
