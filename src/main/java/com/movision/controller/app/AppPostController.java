@@ -3,29 +3,23 @@ package com.movision.controller.app;
 import com.movision.common.Response;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.boss.PostFacade;
-import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
-import com.movision.mybatis.accusation.service.AccusationService;
+import com.movision.fsearch.pojo.spec.NormalSearchSpec;
+import com.movision.fsearch.service.impl.LabelSearchService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
-import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
 import com.movision.mybatis.post.entity.ActiveVo;
-import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.PostLabel;
-import com.movision.utils.CoverImgCompressUtil;
 import com.movision.utils.file.FileUtil;
-import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import org.omg.CORBA.PRIVATE_MEMBER;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +36,8 @@ import java.util.*;
 @RequestMapping("/app/post/")
 public class AppPostController {
 
+    private static Logger log = LoggerFactory.getLogger(AppPostController.class);
+
     @Autowired
     private FacadePost facadePost;
 
@@ -54,10 +50,10 @@ public class AppPostController {
     private PostFacade postFacade;
 
     @Autowired
-    private FacadeHeatValue facadeHeatValue;
+    private LabelSearchTermsService labelSearchTermsService;
 
     @Autowired
-    private LabelSearchTermsService labelSearchTermsService;
+    private LabelSearchService labelSearchService;
 
     @ApiOperation(value = "帖子详情数据返回接口", notes = "用于返回请求帖子详情内容", response = Response.class)
     @RequestMapping(value = "detail", method = RequestMethod.POST)
@@ -647,6 +643,31 @@ public class AppPostController {
         Response response = new Response();
         List postLabelList = labelSearchTermsService.histroyWordsLabel(ShiroUtil.getAppUserID());
         response.setData(postLabelList);
+        return response;
+    }
+
+    @RequestMapping(value = {"search_post_label"}, method = RequestMethod.GET)
+    @ApiOperation(value = "搜索帖子标签", notes = "搜索帖子标签", response = Response.class)
+    public Response searchPostLabel(@ApiParam @ModelAttribute NormalSearchSpec spec) throws IOException {
+
+        if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
+            spec.setLimit(12);
+        }
+        Response response = new Response();
+        response.setCode(200);
+        Map<String, Object> ret;
+        try {
+            log.debug("测试搜索词汉字是否乱码>>>>>>" + spec.getQ());
+            ret = labelSearchService.search(spec);
+            response.setMsgCode(1);
+            response.setMessage("OK!");
+            response.setData(ret);
+        } catch (Exception e) {
+            response.setMsgCode(0);
+            response.setMessage("search error!");
+            log.error("searchProducts error >>>", e);
+        }
+
         return response;
     }
 
