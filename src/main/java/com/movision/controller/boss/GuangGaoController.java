@@ -189,7 +189,7 @@ public class GuangGaoController {
                                         @ApiParam(value = "排序") @RequestParam(required = false) String orderid,
                                         @ApiParam(value = "主标题") @RequestParam String content,
                                         @ApiParam(value = "副标题") @RequestParam String subcontent,
-                                        @ApiParam(value = "广告类型 0 帖子 1 活动 2 H5") @RequestParam String mark,
+                                        @ApiParam(value = "广告类型 0 帖子 1 活动 2 H5") @RequestParam(required = false) String mark,
                                         @ApiParam(value = "帖子或活动id") @RequestParam(required = false) String postid,
                                         @ApiParam(value = "图片URL") @RequestParam(required = false) String url,
                                         @ApiParam(value = "跳转链接URL") @RequestParam(required = false) String transurl) {
