@@ -1,10 +1,8 @@
 package com.movision.mybatis.userRefreshRecord.service;
 
 import com.mongodb.*;
-import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTermsVo;
 import com.movision.mybatis.userRefreshRecord.entity.UesrreflushCount;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
-import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
 import com.movision.mybatis.userRefreshRecord.mapper.UserRefreshRecordMapper;
 import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
 import org.apache.commons.lang.StringUtils;
@@ -13,11 +11,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -74,7 +69,7 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
     }
 
 
-    public List mongoList(String begintime, String endtime) {
+    public List getMongoListByTimeRange(String begintime, String endtime) {
         DB db = null;
         List<DBObject> list = null;
         BasicDBList condList = new BasicDBList();//存放查询条件的集合

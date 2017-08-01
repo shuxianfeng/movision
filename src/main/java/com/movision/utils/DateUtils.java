@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.SimpleTimeZone;
 
 public class DateUtils {
 
@@ -240,8 +239,39 @@ public class DateUtils {
         return df.format(new Date());
     }
 
+    /**
+     * 获取当前月份的第一天 如：2017-08-01
+     *
+     * @return
+     */
+    public static String getCurrentMonthFirstDay() {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MONTH, 0);
+        c.set(Calendar.DAY_OF_MONTH, 1);//设置为1号,当前日期既为本月第一天
+        String first = DATE_FORMAT.format(c.getTime());
+        log.debug("===============first:" + first);
+        return first;
+    }
+
+    /**
+     * 获取当前月份最后一天 如：2017-08-31
+     *
+     * @return
+     */
+    public static String getCurrentMonthLastDay() {
+        Calendar ca = Calendar.getInstance();
+        ca.set(Calendar.DAY_OF_MONTH, ca.getActualMaximum(Calendar.DAY_OF_MONTH));
+        String last = DATE_FORMAT.format(ca.getTime());
+        log.debug("===============last:" + last);
+        return last;
+    }
+
 
     public static void main(String[] args) throws ParseException {
+
+//        getCurrentMonthFirstDay();
+        getCurrentMonthLastDay();
+
 //        Date date = DateUtils.date2Sub(DateUtils.str2Date("2016-03-02 20:16:21", "yyyy-MM-dd HH:mm:ss"), 12, 10);
 //        System.out.println(date);
         // Date date1 = new Date();
@@ -259,6 +289,6 @@ public class DateUtils {
 
 //        System.out.println(DateUtils.str2Date("20170129023128", "yyyyMMddHHmmss"));
 //        System.out.println(str2Date("1991-07-11"));
-        System.out.println(getCurrentDate());
+//        System.out.println(getCurrentDate());
     }
 }

@@ -1,5 +1,6 @@
 package com.movision.facade.index;
 
+import com.mongodb.DBObject;
 import com.movision.common.constant.DiscoverConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.util.ShiroUtil;
@@ -14,18 +15,13 @@ import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
-import com.movision.mybatis.user.entity.Author;
-import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userRefreshRecord.entity.UesrreflushCount;
-import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
-import javafx.geometry.Pos;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -322,6 +318,74 @@ public class FacadeDiscover {
         return list;
     }
 
+    public List<PostVo> searchMostViewPostInCurrentMonth(Paging<PostVo> paging) {
+        //查询所有帖子
+        List<PostVo> postVoList = postService.queryPostInAll();
+        //核心算法
+        List<UesrreflushCount> countList = handlePostViewListFromMongoDB();
+
+        List<PostVo> resultList = new ArrayList<>();
+        int size = countList.size();
+        int total = postVoList.size();
+        //生成最后的结果
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < total; j++) {
+                if (countList.get(i).getPostid() == postVoList.get(j).getId().intValue()) {
+                    //统计浏览数
+                    postVoList.get(j).setCountview(countList.get(i).getCount());
+
+                    resultList.add(postVoList.get(j));
+                }
+            }
+        }
+        //计算Paging中的分页参数
+        paging.setTotal(resultList.size());
+        //代码层分页操作
+        List list = facadePost.getPageList(resultList, paging.getCurPage(), paging.getPageSize());
+        //统计标签
+        facadePost.findPostLabel(list);
+
+        return list;
+    }
+
+    /**
+     * 处理来自mongoDB中的帖子浏览数据
+     * 先筛选出当月的数据，再统计出每个帖子的浏览次数，最后排序
+     *
+     * @return
+     */
+    private List<UesrreflushCount> handlePostViewListFromMongoDB() {
+        //系统的当前的月份的第一天
+        String firstDay = DateUtils.getCurrentMonthFirstDay();
+//        String firstDay = "2017-07-01";
+        //系统的当前月份的最后一天
+        String lastDay = DateUtils.getCurrentMonthLastDay();
+//        String lastDay = "2017-07-31";
+        //查询mongo中的当前月份的用户浏览帖子记录
+        List<DBObject> viewListInMongoDB = userRefreshRecordService.getMongoListByTimeRange(firstDay, lastDay);
+        //统计其中的帖子浏览次数，并按照从大到小排列
+        List<UesrreflushCount> countList = new ArrayList<>();
+        int len = viewListInMongoDB.size();
+        for (int i = 0; i < len; i++) {
+            int postid = (Integer) viewListInMongoDB.get(i).get("postid");
+            UesrreflushCount c = new UesrreflushCount();
+            c.setPostid(postid);
+            int count = 0;
+            for (int j = 0; j < len; j++) {
+
+                if (postid == (Integer) viewListInMongoDB.get(j).get("postid")) {
+                    count++;
+                }
+            }
+            c.setCount(count);
+            countList.add(c);
+        }
+        //排序
+        Collections.sort(countList, UesrreflushCount.countComparator);
+        return countList;
+    }
+
+
     public Paging<?> searchHotRange(String pageNo, String pageSize, int title, int type) {
         //总排行
         if (DiscoverConstant.HOT_RANGE_TYPE.total_range.getCode() == type) {
@@ -391,9 +455,9 @@ public class FacadeDiscover {
                 return pager;
 
             } else if (DiscoverConstant.HOT_RANGE_TITLE.post_view_list.getCode() == title) {
-                // TODO: 2017/7/25
+
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-                List<PostVo> list = searchMostViewPostInAll(pager);
+                List<PostVo> list = searchMostViewPostInCurrentMonth(pager);
                 pager.setRows(list);
                 log.debug("paging实体:" + pager.toString());
                 return pager;
