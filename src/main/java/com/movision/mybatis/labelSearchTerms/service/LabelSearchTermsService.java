@@ -39,7 +39,7 @@ public class LabelSearchTermsService implements LabelSearchTermsMapper {
             MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("labelSearchTerms");
-            BasicDBObject queryObject = new BasicDBObject("userid", userid);
+            BasicDBObject queryObject = new BasicDBObject("userid", userid).append("isdel", 0);
             //指定需要显示列
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
@@ -55,5 +55,29 @@ public class LabelSearchTermsService implements LabelSearchTermsMapper {
             }
         }
         return list;
+    }
+
+
+    public Integer updateColData(int userid) {
+        DB db = null;
+        try {
+            MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mClient.getDB("searchRecord");
+            DBCollection dbCol = db.getCollection("labelSearchTerms");
+            BasicDBObject doc = new BasicDBObject();
+            BasicDBObject res = new BasicDBObject();
+            res.put("isdel", 1);
+            System.out.println("将数据集中的所有文档的isdel修改成1！");
+            doc.put("$set", res);
+            dbCol.update(new BasicDBObject("userid", userid), doc, false, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+            }
+        }
+        return 1;
     }
 }

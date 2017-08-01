@@ -194,8 +194,12 @@ public class LabelSearchService implements ILabelSearchService {
             labelSearchTerms.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
             labelSearchTerms.setName(spec.getQ());
             labelSearchTerms.setUserid(ShiroUtil.getAppUserID());  //不登录的情况下，返回0
-
+            labelSearchTerms.setIsdel(0);
             labelSearchTermsService.insert(labelSearchTerms);
         }
+    }
+
+    public Integer UpdateSearchIsdel(Integer userid) {
+        return labelSearchTermsService.updateColData(userid);
     }
 }

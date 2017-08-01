@@ -12,6 +12,16 @@ public class LabelSearchTerms {
     private String intime;
     private String name;
 
+    private int isdel;
+
+    public int getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(int isdel) {
+        this.isdel = isdel;
+    }
+
     public String getName() {
         return name;
     }

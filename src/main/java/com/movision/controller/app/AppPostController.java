@@ -671,7 +671,13 @@ public class AppPostController {
         return response;
     }
 
-
+    @RequestMapping(value = {"get_label_search_isdel"}, method = RequestMethod.GET)
+    @ApiOperation(value = "清除标签搜索记录", notes = "清除标签搜索记录", response = Response.class)
+    public Response UpdateSearchIsdel() {
+        Response response = new Response();
+        labelSearchService.UpdateSearchIsdel(ShiroUtil.getAppUserID());
+        return response;
+    }
 
 
 }
