@@ -220,7 +220,7 @@ public class LabelFacade {
      *
      * @param type
      */
-    public void UserDontLike(int type) {
+    public void userDontLike(int type) {
         if (type == 1) {
 
         } else if (type == 2) {
