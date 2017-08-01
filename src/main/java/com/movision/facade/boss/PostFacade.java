@@ -951,7 +951,8 @@ public class PostFacade {
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map addPostTest(HttpServletRequest request, String title, String subtitle, String circleid, String userid,
-                           String coverimg, String postcontent, String isessence, String ishot, String orderid, String time, String goodsid, String loginid) {
+                           String coverimg, String postcontent, String isessence, String ishot, String orderid,
+                           String time, String label, String goodsid, String loginid) {
         PostTo post = new PostTo();
         Map map = new HashedMap();
         Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.add.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(circleid));
@@ -1015,6 +1016,21 @@ public class PostFacade {
                     post.setIsdel("2");
                 }
                 postService.addPost(post);//添加帖子
+
+            //帖子使用的标签
+            if (StringUtil.isNotEmpty(label)) {
+                String[] str = label.split(",");
+                Map postlabelrelationMap = new HashMap();
+                List<Integer> newLabelIdList = new ArrayList<>();
+                for (int i = 0; i < str.length; i++) {
+                    newLabelIdList.add(Integer.parseInt(str[i]));
+                }
+                postlabelrelationMap.put("postid", post.getId());
+                postlabelrelationMap.put("labelids", newLabelIdList.toArray());
+                //批量新增帖子、标签关系
+                postLabelRelationService.batchAdd(postlabelrelationMap);
+            }
+
                 //查询圈子名称
                 Integer in = 0;
                 if (StringUtil.isNotEmpty(goodsid)) {//帖子添加商品
@@ -1848,7 +1864,8 @@ public class PostFacade {
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map updatePostByIdTest(HttpServletRequest request, String id, String title, String subtitle,
-                                  String userid, String circleid, String coverimg, String postcontent, String isessence, String ishot, String orderid, String time, String goodsid, String loginid) {
+                                  String userid, String circleid, String coverimg, String postcontent,
+                                  String isessence, String ishot, String orderid, String time, String labelid, String goodsid, String loginid) {
         PostTo post = new PostTo();
         Map map = new HashedMap();
         Integer lgid = Integer.parseInt(loginid);
@@ -1918,6 +1935,25 @@ public class PostFacade {
                         post.setIsdel("2");
                     }
                     postService.updatePostById(post);//编辑帖子
+
+
+                    System.out.println("!!!!!!!!!!!!!!!!!!============================" + labelid);
+                    //帖子使用的标签
+                    if (StringUtil.isNotEmpty(labelid)) {
+                        String[] str = labelid.split(",");
+                        Map postlabelrelationMap = new HashMap();
+                        List<Integer> newLabelIdList = new ArrayList<>();
+                        for (int i = 0; i < str.length; i++) {
+                            newLabelIdList.add(Integer.parseInt(str[i]));
+                        }
+                        //删除帖子和标签关系
+                        postLabelRelationService.deletePostLabelRelaton(Integer.parseInt(id));
+                        postlabelrelationMap.put("postid", id);
+                        postlabelrelationMap.put("labelids", newLabelIdList);
+                        //批量新增帖子、标签关系
+                        postLabelRelationService.batchAdd(postlabelrelationMap);
+                    }
+
                     if (goodsid != null && goodsid != "") {//添加商品
                         String[] lg = goodsid.split(",");//以逗号分隔
                         Map postid = new HashMap();
