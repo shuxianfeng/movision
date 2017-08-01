@@ -1771,24 +1771,6 @@ public class FacadePost {
         return list;
     }
 
-    /**
-     * 查询用户信息
-     *
-     * @param
-     * @return
-     */
-    public List findCircleName(List<PostVo> list) {
-        String circlename = null;
-        if (list != null) {
-            for (int i = 0; i < list.size(); i++) {
-                int circleid = list.get(i).getCircleid();
-                circlename = circleService.queryCircleName(circleid);
-                list.get(i).setCirclename(circlename);
-            }
-        }
-        return list;
-    }
-
 
     /**
      * 帖子浏览量 (公共方法)
@@ -2214,13 +2196,13 @@ public class FacadePost {
             list = postService.findAllActivePost(Integer.parseInt(postid), paging);
             countView(list);
             findUser(list);
-            findCircleName(list);
+            findPostLabel(list);
             findAllCircleName(list);
         } else if (type == 2) {//最新
             list = postService.findAllActivePostIntime(Integer.parseInt(postid), paging);
             countView(list);
             findUser(list);
-            findCircleName(list);
+            findPostLabel(list);
             findAllCircleName(list);
         }
         return list;
