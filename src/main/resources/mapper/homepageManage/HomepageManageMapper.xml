@@ -173,7 +173,9 @@
     </update>
 
     <select id="findAllqueryAdvertisementList" resultType="com.movision.mybatis.homepageManage.entity.HomepageManageVo">
-        select m.*,t.name from yw_homepage_manage m LEFT JOIN yw_homepage_manage_type t ON m.topictype=t.type
+        select m.*,t.name,
+        (SELECT p.title FROM yw_post p WHERE p.id = m.postid) AS postTitle
+        from yw_homepage_manage m LEFT JOIN yw_homepage_manage_type t ON m.topictype=t.type
         WHERE m.isdel=0
         ORDER BY m.intime DESC
     </select>
@@ -182,7 +184,8 @@
             resultType="com.movision.mybatis.homepageManage.entity.HomepageManageVo">
         select
         m.id,m.topictype,m.content,m.subcontent,m.url,m.transurl,m.intime,
-        m.orderid,m.clicksum,m.ordersum,t.name,t.wide,t.high,m.mark,m.postid
+        m.orderid,m.clicksum,m.ordersum,t.name,t.wide,t.high,m.mark,m.postid,
+        (SELECT p.title FROM yw_post p WHERE p.id = m.postid) AS postTitle
         from yw_homepage_manage m LEFT JOIN yw_homepage_manage_type t ON m.topictype=t.type WHERE
         m.id=#{id,jdbcType=INTEGER} AND m.isdel=0
     </select>
@@ -323,7 +326,8 @@
 
     <select id="findAllQueryAdvertisementLike" resultType="com.movision.mybatis.homepageManage.entity.HomepageManageVo"
             parameterType="java.util.Map">
-        select m.*,t.name,t.type from yw_homepage_manage m LEFT JOIN yw_homepage_manage_type t ON m.topictype=t.type
+        select m.*,t.name,t.type,(SELECT p.title FROM yw_post p WHERE p.id = m.postid) AS postTitle
+        from yw_homepage_manage m LEFT JOIN yw_homepage_manage_type t ON m.topictype=t.type
         WHERE m.isdel=0
         <if test="name!=null">
             AND name LIKE CONCAT('%',#{name,jdbcType=VARCHAR},'%')

@@ -41,6 +41,16 @@ public class HomepageManageVo implements Serializable {
 
     private Integer isdel;//是否删除 1是 0否
 
+    private String postTitle;//帖子或活动标题
+
+    public String getPostTitle() {
+        return postTitle;
+    }
+
+    public void setPostTitle(String postTitle) {
+        this.postTitle = postTitle;
+    }
+
     public Integer getMark() {
         return mark;
     }
