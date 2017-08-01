@@ -431,7 +431,7 @@ public class AppWaterfallController {
         Paging<CommentVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List result = facadeComments.queryNewComment(postid, pager);
         if (response.getCode() == 200) {
-            response.setMessage("dd");
+            response.setMessage("查询成功");
         }
         pager.result(result);
         response.setData(pager);
