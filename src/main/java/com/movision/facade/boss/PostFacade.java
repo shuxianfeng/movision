@@ -1737,6 +1737,7 @@ public class PostFacade {
                     int result = postService.updatePostById(post);//编辑帖子
 
 
+                    System.out.println("!!!!!!!!!!!!!!!!!!============================" + labelid);
                     //帖子使用的标签
                     if (StringUtil.isNotEmpty(labelid)) {
                         String[] str = labelid.split(",");
