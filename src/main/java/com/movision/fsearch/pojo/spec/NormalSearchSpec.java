@@ -6,7 +6,7 @@ import java.io.Serializable;
  * @Author zhuangyuhao
  * @Date 2017/3/27 16:30
  */
-public class PostSearchSpec implements Serializable {
+public class NormalSearchSpec implements Serializable {
 
     /**
      * 搜索的词(输入框中的词)
@@ -27,7 +27,7 @@ public class PostSearchSpec implements Serializable {
 
     @Override
     public String toString() {
-        return "PostSearchSpec{" +
+        return "NormalSearchSpec{" +
                 "q='" + q + '\'' +
                 ", sort='" + sort + '\'' +
                 ", sortorder='" + sortorder + '\'' +

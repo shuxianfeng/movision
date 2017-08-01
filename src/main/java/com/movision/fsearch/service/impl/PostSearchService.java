@@ -2,7 +2,7 @@ package com.movision.fsearch.service.impl;
 
         import com.movision.common.util.ShiroUtil;
         import com.movision.fsearch.pojo.ProductGroup;
-        import com.movision.fsearch.pojo.spec.PostSearchSpec;
+        import com.movision.fsearch.pojo.spec.NormalSearchSpec;
         import com.movision.fsearch.service.IPostSearchService;
         import com.movision.fsearch.service.IWordService;
         import com.movision.fsearch.service.Searcher;
@@ -13,7 +13,6 @@ package com.movision.fsearch.service.impl;
         import com.movision.mybatis.post.entity.PostSearchEntity;
         import com.movision.mybatis.post.service.PostService;
         import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
-        import com.movision.mybatis.searchPostRecord.service.SearchPostRecordService;
         import com.movision.utils.DateUtils;
         import org.apache.commons.collections.map.HashedMap;
         import org.slf4j.Logger;
@@ -36,9 +35,6 @@ public class PostSearchService implements IPostSearchService {
     private IWordService wordService;
 
     @Autowired
-    private SearchPostRecordService searchPostRecordService;
-
-    @Autowired
     private OpularSearchTermsService opularSearchTermsService;
 
     @Autowired
@@ -47,7 +43,7 @@ public class PostSearchService implements IPostSearchService {
     @Autowired
     private PostAndUserRecordService postAndUserRecordService;
     @Override
-    public Map<String, Object> search(PostSearchSpec spec)
+    public Map<String, Object> search(NormalSearchSpec spec)
             throws ServiceException {
         Map<String, Map<String, Object>> query = new HashMap<String, Map<String, Object>>();
         Map<String, Object> result = new HashMap<String, Object>();
@@ -113,7 +109,7 @@ public class PostSearchService implements IPostSearchService {
      *
      * @param spec
      */
-    private void saveKeywordsInMongoDB(PostSearchSpec spec) {
+    private void saveKeywordsInMongoDB(NormalSearchSpec spec) {
         if (StringUtil.isNotBlank(spec.getQ())) {
             OpularSearchTerms opularSearchTerms = new OpularSearchTerms();
             opularSearchTerms.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
@@ -231,7 +227,7 @@ public class PostSearchService implements IPostSearchService {
      * @param result
      * @return
      */
-    private List<Map<String, Object>> setSortFields(PostSearchSpec spec, Map<String, Object> result)
+    private List<Map<String, Object>> setSortFields(NormalSearchSpec spec, Map<String, Object> result)
     {
         List<Map<String, Object>> sortFields = new ArrayList<Map<String, Object>>(1);
         Map<String, Object> sortField = new HashMap<String, Object>(3);

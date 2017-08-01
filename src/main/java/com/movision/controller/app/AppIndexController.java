@@ -3,8 +3,7 @@ package com.movision.controller.app;
 import com.movision.common.Response;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.index.FacadeIndex;
-import com.movision.fsearch.pojo.spec.GoodsSearchSpec;
-import com.movision.fsearch.pojo.spec.PostSearchSpec;
+import com.movision.fsearch.pojo.spec.NormalSearchSpec;
 import com.movision.fsearch.service.impl.PostSearchService;
 import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -66,7 +65,7 @@ public class AppIndexController {
 
     @RequestMapping(value = {"searchPostAndActivity"}, method = RequestMethod.GET)
     @ApiOperation(value = "搜索帖子/活动", notes = "搜索帖子/活动", response = Response.class)
-    public Response search_post_and_activity(@ApiParam @ModelAttribute PostSearchSpec spec) throws IOException {
+    public Response search_post_and_activity(@ApiParam @ModelAttribute NormalSearchSpec spec) throws IOException {
 
         if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
             spec.setLimit(12);

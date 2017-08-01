@@ -7,8 +7,8 @@ import java.util.Map;
 
 /**
  * @Author zhuangyuhao
- * @Date 2017/3/27 16:29
+ * @Date 2017/8/1 10:06
  */
-public interface IPostSearchService {
+public interface ILabelSearchService {
     Map<String, Object> search(NormalSearchSpec spec) throws ServiceException;
 }
