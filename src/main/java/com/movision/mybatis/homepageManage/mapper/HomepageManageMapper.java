@@ -29,11 +29,11 @@ public interface HomepageManageMapper {
 
     HomepageManageVo queryAvertisementById(String id);
 
-    int addAdvertisement(Map map);
+    int addAdvertisement(HomepageManage manage);
 
-    int queryIsAdd(Map map);
+    int queryIsAdd(HomepageManage manage);
 
-    int updateAdvertisement(Map map);
+    int updateAdvertisement(HomepageManage manage);
 
     List<HomepageManageVo> findAllQueryAdvertisementLike(Map map, RowBounds rowBounds);
 

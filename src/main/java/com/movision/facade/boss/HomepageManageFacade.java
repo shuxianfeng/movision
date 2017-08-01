@@ -71,23 +71,40 @@ public class HomepageManageFacade {
      * @return
      */
     public int addAdvertisement(String topictype, String orderid, String content, String subcontent, String url, String transurl, String mark, String postid) {
-        Map map = new HashedMap();
-        map.put("topictype", topictype);
-        map.put("orderid", orderid);
-        map.put("content", content);
-        map.put("subcontent", subcontent);
-        map.put("url", url);
-        map.put("transurl", transurl);
-        map.put("intime", new Date());
-        map.put("clicksum", 0);
-        map.put("ordersum", 0);
-        map.put("isdel", 0);
-        map.put("mark", mark);
-        map.put("postid", postid);
+        HomepageManage manage = new HomepageManage();
+        if (StringUtil.isNotBlank(topictype)) {
+            manage.setTopictype(Integer.parseInt(topictype));
+        }
+        if (StringUtil.isNotBlank(orderid)) {
+            manage.setOrderid(Integer.parseInt(orderid));
+        }
+        if (StringUtil.isNotBlank(content)) {
+            manage.setContent(content);
+        }
+        if (StringUtil.isNotBlank(subcontent)) {
+            manage.setSubcontent(subcontent);
+        }
+        if (StringUtil.isNotBlank(url)) {
+            manage.setUrl(url);
+        }
+        if (StringUtil.isNotBlank(transurl)) {
+            manage.setTransurl(transurl);
+        }
+        manage.setIntime(new Date());
+        manage.setClicksum(0);
+        manage.setOrdersum(0);
+        manage.setIsdel(0);
+        if (StringUtil.isNotBlank(mark)) {
+            manage.setMark(Integer.parseInt(mark));
+        }
+        if (StringUtil.isNotBlank(postid)) {
+            manage.setPostid(Integer.parseInt(postid));
+        }
+
         //查询广告位置是否可以添加广告
-        int resault = homepageManageService.queryIsAdd(map);
+        int resault = homepageManageService.queryIsAdd(manage);
         if (resault == 1) {
-            return homepageManageService.addAdvertisement(map);
+            return homepageManageService.addAdvertisement(manage);
         } else {
             return -1;
         }
@@ -146,19 +163,31 @@ public class HomepageManageFacade {
      * @return
      */
     public int updateAdvertisement(String id, String orderid, String content, String subcontent, String url, String transurl, String mark, String postid) {
-        Map map = new HashedMap();
-        map.put("id", id);
-        if (StringUtil.isNotEmpty(orderid)) {
-            map.put("orderid", orderid);
+        HomepageManage manage = new HomepageManage();
+        manage.setId(Integer.parseInt(id));
+        if (StringUtil.isNotBlank(orderid)) {
+            manage.setOrderid(Integer.parseInt(orderid));
         }
-        map.put("content", content);
-        map.put("subcontent", subcontent);
-        map.put("url", url);
-        map.put("transurl", transurl);
-        map.put("mark", mark);
-        map.put("postid", postid);
+        if (StringUtil.isNotBlank(content)) {
+            manage.setContent(content);
+        }
+        if (StringUtil.isNotBlank(subcontent)) {
+            manage.setSubcontent(subcontent);
+        }
+        if (StringUtil.isNotBlank(url)) {
+            manage.setUrl(url);
+        }
+        if (StringUtil.isNotBlank(transurl)) {
+            manage.setTransurl(transurl);
+        }
+        if (StringUtil.isNotBlank(mark)) {
+            manage.setMark(Integer.parseInt(mark));
+        }
+        if (StringUtil.isNotBlank(postid)) {
+            manage.setPostid(Integer.parseInt(postid));
+        }
 
-        return homepageManageService.updateAdvertisement(map);
+        return homepageManageService.updateAdvertisement(manage);
     }
 
     /**

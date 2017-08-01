@@ -190,12 +190,13 @@
         m.id=#{id,jdbcType=INTEGER} AND m.isdel=0
     </select>
 
-    <select id="queryIsAdd" resultType="java.lang.Integer" parameterType="java.util.Map">
+    <select id="queryIsAdd" resultType="java.lang.Integer"
+            parameterType="com.movision.mybatis.homepageManage.entity.HomepageManage">
         SELECT COUNT(1) FROM yw_homepage_manage_type WHERE quantity>(SELECT COUNT(1) FROM yw_homepage_manage WHERE
         topictype=#{topictype,jdbcType=INTEGER} AND isdel=0) AND type=#{topictype,jdbcType=INTEGER}
     </select>
 
-    <insert id="addAdvertisement" parameterType="java.util.Map">
+    <insert id="addAdvertisement" parameterType="com.movision.mybatis.homepageManage.entity.HomepageManage">
         insert into yw_homepage_manage
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -281,7 +282,7 @@
         </trim>
     </insert>
 
-    <update id="updateAdvertisement" parameterType="java.util.Map">
+    <update id="updateAdvertisement" parameterType="com.movision.mybatis.homepageManage.entity.HomepageManage">
         update yw_homepage_manage
         <set>
             <if test="topictype != null">
