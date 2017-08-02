@@ -531,6 +531,6 @@
   </select>
   <select id="queryThreeComment" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
-    SELECT * FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER} AND pid IS NULL ORDER BY intime DESC
+    SELECT * FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER} AND pid IS NULL ORDER BY zansum DESC LIMIT 3
   </select>
 </mapper>

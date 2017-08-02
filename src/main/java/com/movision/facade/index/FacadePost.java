@@ -184,42 +184,8 @@ public class FacadePost {
         vo.setPostcontent(jsonArray.toString());
         //评论
         List<CommentVo> co = facadeComments.queryPostNewComment(Integer.parseInt(postid));
-        List<CommentCount> countss = new ArrayList<>();
         if (co != null) {
-            for (int i = 0; i < co.size(); i++) {
-                int id = co.get(i).getId();
-                //根据id去查评论数
-                commentCounts = commentService.queryCommentZan(id);
-                CommentCount commentCount = new CommentCount();
-                commentCount.setCommentid(id);
-                commentCount.setCount(commentCounts.getCount());
-                countss.add(commentCount);
-            }
-            ComparatorChain chain = new ComparatorChain();
-            chain.addComparator(new BeanComparator("count"), true);//true,fase正序反序
-            Collections.sort(countss, chain);
-            List<CommentCount> finallist = getPageList(countss, 1, 3);
-            /** List<CommentVo> vos = new ArrayList<>();
-            for (int i = 0; i < finallist.size(); i++) {
-                int comment = finallist.get(i).getCommentid();
-                //根据id查询帖子
-                CommentVo commentVo = commentService.queryCom(comment);
-                vos.add(commentVo);
-            }
-            for (int i = 0; i < vos.size(); i++) {
-             Integer pid = vos.get(i).getId();
-                Integer usersid = vos.get(i).getUserid();
-                User user = postCommentZanRecordService.queryusers(usersid);
-                if (pid != null) {
-                    List<CommentVo> commentVoss = commentService.queryPidComment(pid);
-                    vos.get(i).setCommentVos(commentVoss);
-                    vos.get(i).setUser(user);
-                } else {
-                    vos.get(i).setUser(user);
-                }
-             }*/
-            List<CommentVo> cos = facadeComments.queryPostNewComment(Integer.parseInt(postid));
-            vo.setCommentVos(cos);
+            vo.setCommentVos(co);
         }
         if (null != vo) {
             //根据帖子封面原图url查询封面压缩图url，如果存在替换，不存在就用原图
@@ -298,8 +264,13 @@ public class FacadePost {
         List<Integer> labids = postService.findPostByLabelId(Integer.parseInt(postid));
         //根据id查帖子
         List<PostVo> labpost = postService.findUserByLabelPost(labids);
-        ps.removeAll(userPost);
-        ps.removeAll(labpost);
+        ps.addAll(userPost);
+        ps.addAll(labpost);
+        Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(ps);
+        ps = new ArrayList<PostVo>(linkedHashSet);
+        ComparatorChain chain = new ComparatorChain();
+        chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
+        Collections.sort(ps, chain);
         List<PostVo> finpost = NotLoginretuenList(ps, paging);
         return finpost;
 
