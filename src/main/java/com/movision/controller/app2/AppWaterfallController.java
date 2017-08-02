@@ -264,7 +264,7 @@ public class AppWaterfallController {
     }
 
 
-    @ApiOperation(value = "关注作者", notes = "关注作者", response = Response.class)
+    /** @ApiOperation(value = "关注作者", notes = "关注作者", response = Response.class)
     @RequestMapping(value = "concernedAuthor", method = RequestMethod.POST)
     public Response concernedAuthor(@ApiParam(value = "用户id") @RequestParam int userid,
                                     @ApiParam(value = "帖子id") @RequestParam String postid) {
@@ -278,7 +278,7 @@ public class AppWaterfallController {
             response.setMessage("已关注该作者，请刷新重试");
         }
         return response;
-    }
+                                    }*/
 
 
     @ApiOperation(value = "点击圈子标签页上半部分", notes = "点击圈子标签页上半部分", response = Response.class)
