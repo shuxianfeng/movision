@@ -196,7 +196,7 @@
     <select id="findAllOperationInformList" parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform"
             resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
         SELECT *
-        FROM yw_im_system_informs WHERE 1
+        FROM yw_im_system_informs WHERE coverimg IS NOT NULL
         <if test="title != null">
             AND title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
         </if>
