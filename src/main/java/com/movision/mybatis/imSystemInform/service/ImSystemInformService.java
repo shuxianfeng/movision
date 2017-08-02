@@ -191,4 +191,37 @@ public class ImSystemInformService {
         }
     }
 
+    /**
+     * 查询运营通知列表
+     *
+     * @param inform
+     * @param pag
+     * @return
+     */
+    public List<ImSystemInformVo> queryOperationInformList(ImSystemInform inform, Paging<ImSystemInformVo> pag) {
+        try {
+            log.info("查询运营通知列表");
+            return imSystemInformMapper.findAllOperationInformList(inform, pag.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询运用用纸列表异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询运营通知详情
+     *
+     * @param imSystemInform
+     * @return
+     */
+    public ImSystemInformVo queryOperationInformById(ImSystemInform imSystemInform) {
+        try {
+            log.info("查询运营通知详情");
+            return imSystemInformMapper.queryOperationInformById(imSystemInform);
+        } catch (Exception e) {
+            log.error("查询运营通知详情异常");
+            throw e;
+        }
+    }
+
 }

@@ -28,6 +28,16 @@ public class ImSystemInformVo implements Serializable {
 
     private Integer isoperation;//代表是否为运营通知
 
+    private String username;//发表用户名称
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public Integer getIsoperation() {
         return isoperation;
     }

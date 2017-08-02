@@ -6,6 +6,7 @@ import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.imDevice.entity.ImDevice;
 import com.movision.mybatis.imDevice.service.ImDeviceService;
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
@@ -583,6 +584,37 @@ public class ImFacade {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 条件查询运营通知列表
+     *
+     * @param title
+     * @param body
+     * @param pag
+     * @return
+     */
+    public List<ImSystemInformVo> queryOperationInformList(String title, String body, Paging<ImSystemInformVo> pag) {
+        ImSystemInform inform = new ImSystemInform();
+        if (StringUtil.isNotEmpty(title)) {
+            inform.setTitle(title);
+        }
+        if (StringUtil.isNotEmpty(body)) {
+            inform.setBody(body);
+        }
+        return imSystemInformService.queryOperationInformList(inform, pag);
+    }
+
+    /**
+     * 查询运营通知详情
+     *
+     * @param id
+     * @return
+     */
+    public ImSystemInformVo queryOperationInformById(String id) {
+        ImSystemInform inform = new ImSystemInform();
+        inform.setId(Integer.parseInt(id));
+        return imSystemInformService.queryOperationInformById(inform);
     }
 
 

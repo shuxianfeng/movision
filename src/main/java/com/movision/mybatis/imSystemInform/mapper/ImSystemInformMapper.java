@@ -38,4 +38,8 @@ public interface ImSystemInformMapper {
     List<ImSystemInformVo> findAllIm(Map map, RowBounds rowBounds);
 
     ImSystemInformVo queryMyMsgInforDetails(ImSystemInform imSystemInform);
+
+    List<ImSystemInformVo> findAllOperationInformList(ImSystemInform inform, RowBounds rowBounds);
+
+    ImSystemInformVo queryOperationInformById(ImSystemInform imSystemInform);
 }

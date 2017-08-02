@@ -73,6 +73,46 @@ public class BossImController {
         return response;
     }
 
+    /**
+     * 查询运营通知列表
+     *
+     * @param title
+     * @param body
+     * @param pageNo
+     * @param pageSiz
+     * @return
+     */
+    @ApiOperation(value = "查询运营通知列表", notes = "用于条件查询运营通知列表接口", response = Response.class)
+    @RequestMapping(value = "queryOperationInformList", method = RequestMethod.POST)
+    public Response queryOperationInformList(@ApiParam(value = "标题") @RequestParam(required = false) String title,
+                                             @ApiParam(value = "内容") @RequestParam(required = false) String body,
+                                             @ApiParam(value = "当前页") @RequestParam(defaultValue = "1") String pageNo,
+                                             @ApiParam(value = "每页几条") @RequestParam(defaultValue = "10") String pageSiz) {
+        Response response = new Response();
+        Paging<ImSystemInformVo> pag = new Paging<ImSystemInformVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSiz));
+        List<ImSystemInformVo> list = imFacade.queryOperationInformList(title, body, pag);
+        pag.result(list);
+        response.setMessage("查询成功");
+        response.setData(pag);
+        return response;
+    }
+
+    /**
+     * 查询运营通知详情
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "查询运营通知详情", notes = "用于查询运营通知详情", response = Response.class)
+    @RequestMapping(value = "queryOperationInformById", method = RequestMethod.POST)
+    public Response queryOperationInformById(@ApiParam(value = "id") @RequestParam String id) {
+        Response response = new Response();
+        ImSystemInformVo inform = imFacade.queryOperationInformById(id);
+        response.setMessage("查询成功");
+        response.setData(inform);
+        return response;
+    }
+
 
     /**
      * 分页

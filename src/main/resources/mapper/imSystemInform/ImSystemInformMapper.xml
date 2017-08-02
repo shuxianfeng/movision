@@ -192,4 +192,26 @@
             parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
         SELECT * FROM yw_im_system_informs WHERE id = #{id,jdbcType=INTEGER}
     </select>
+
+    <select id="findAllOperationInformList" parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform"
+            resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo">
+        SELECT isi.*,
+        (SELECT nickname FROM yw_user WHERE phone = ((SELECT au.phone FROM yw_admin_user au WHERE au.id = isi.userid)))
+        AS username
+        FROM yw_im_system_informs isi WHERE 1
+        <if test="title != null">
+            AND isi.title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="body != null">
+            AND isi.body LIKE concat('%',#{body,jdbcType=VARCHAR},'%')
+        </if>
+        ORDER BY isi.inform_time DESC
+    </select>
+
+    <select id="queryOperationInformById" parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform"
+            resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo">
+        SELECT isi.*,
+          (SELECT nickname FROM yw_user WHERE phone = ((SELECT au.phone FROM yw_admin_user au WHERE au.id = isi.userid))) AS username
+          FROM yw_im_system_informs isi WHERE isi.id = #{id,jdbcType=INTEGER}
+    </select>
 </mapper>
