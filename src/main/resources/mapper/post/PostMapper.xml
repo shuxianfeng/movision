@@ -2142,7 +2142,8 @@
     </select>
     <select id="findAllPostCrile" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        select * from yw_post where circleid=#{circleid,jdbcType=INTEGER} and isdel=0 order by heat_value desc
+        select yw_post.*,yw_user.nickname,yw_user.photo from yw_post LEFT JOIN yw_user ON yw_user.id=yw_post.userid
+        where yw_post.circleid=#{circleid,jdbcType=INTEGER} and yw_post.isdel=0 order by yw_post.heat_value desc
     </select>
     <select id="queryCityCode" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT code FROM yw_city WHERE name LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
@@ -2314,14 +2315,16 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         SELECT userid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
     <select id="findUserPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT * FROM yw_post WHERE userid=#{postuserid,jdbcType=INTEGER} ORDER BY heat_value DESC
+        select yw_post.*,yw_user.nickname,yw_user.photo from yw_post LEFT JOIN yw_user ON yw_user.id=yw_post.userid
+        WHERE yw_post.userid=#{postuserid,jdbcType=INTEGER} ORDER BY yw_post.heat_value DESC
     </select>
     <select id="findPostByLabelId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT labelid FROM yw_post_label_relation WHERE postid=#{postid,jdbcType=INTEGER}
     </select>
     <select id="findUserByLabelPost" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT * FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        SELECT p.*,yw_user.photo,yw_user.nickname FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        LEFT JOIN yw_user ON yw_user.id=p.userid
         WHERE r.labelid IN
         <foreach collection="list" item="item" open="(" separator="," close=")">
             #{item}
