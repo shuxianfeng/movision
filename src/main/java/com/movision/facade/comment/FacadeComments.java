@@ -242,6 +242,13 @@ public class FacadeComments {
     }
 
 
+    /**
+     * 所有评论
+     *
+     * @param postid
+     * @param paging
+     * @return
+     */
     public List queryNewComment(int postid, Paging<CommentVo> paging) {
         List<CommentVo> commentVos = commentService.queryOneComment(postid, paging);
         for (int i = 0; i < commentVos.size(); i++) {
@@ -255,6 +262,26 @@ public class FacadeComments {
         for (int i = 0; i < commentVoList.size(); i++) {
             //查询父评论下面有多少子评论
             List<CommentVo> CommentVozjh = GetCommentVoList((int) commentVoList.get(i).getId());
+            commentVoList.get(i).setCommentVos(CommentVozjh);
+        }
+        return commentVoList;
+
+    }
+
+
+    public List queryPostNewComment(int postid) {
+        List<CommentVo> commentVos = commentService.queryThreeComment(postid);
+        for (int i = 0; i < commentVos.size(); i++) {
+            commentVos.get(i).setCommentVos(pCommentVoList(commentVos.get(i).getId()));
+        }
+        return commentVos;
+    }
+
+    public List<CommentVo> pCommentVoList(int pid) {
+        List<CommentVo> commentVoList = commentService.queryTwoComment(pid);
+        for (int i = 0; i < commentVoList.size(); i++) {
+            //查询父评论下面有多少子评论
+            List<CommentVo> CommentVozjh = pCommentVoList((int) commentVoList.get(i).getId());
             commentVoList.get(i).setCommentVos(CommentVozjh);
         }
         return commentVoList;

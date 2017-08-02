@@ -443,7 +443,7 @@ public class AppWaterfallController {
     @RequestMapping(value = "userDontLike", method = RequestMethod.POST)
     public Response userDontLike(@ApiParam(value = "帖子id") @RequestParam int postid,
                                  @ApiParam(value = "用户id") @RequestParam int userid,
-                                 @ApiParam(value = "类型") @RequestParam int type) {
+                                 @ApiParam(value = "类型 1 内容差 2 不喜欢作者 3 不喜欢圈子 4 就是不喜欢") @RequestParam int type) {
         Response response = new Response();
         int result = labelFacade.userDontLike(type, userid, postid);
         if (response.getCode() == 200) {

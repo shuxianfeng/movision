@@ -503,14 +503,15 @@ public class CommentService {
         }
     }
 
-    public List<CommentVo> queryThreeComment(int id) {
+    public List<CommentVo> queryThreeComment(int postid) {
         try {
             log.info("一级评论");
-            return commentMapper.queryThreeComment(id);
+            return commentMapper.queryThreeComment(postid);
         } catch (Exception e) {
             log.error("一级评论失敗", e);
             throw e;
         }
     }
+
 
 }

@@ -6,6 +6,7 @@ import com.mongodb.*;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.constant.PostLabelConstants;
 import com.movision.common.util.ShiroUtil;
+import com.movision.facade.comment.FacadeComments;
 import com.movision.facade.im.ImFacade;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
@@ -153,9 +154,11 @@ public class FacadePost {
     @Autowired
     private FollowUserService followUserService;
     @Autowired
-    private PostCommentZanRecordService postCommentZanRecordService;
+    private FacadeComments facadeComments;
     @Autowired
     private CircleCategoryService circleCategoryService;
+    @Autowired
+    private PostCommentZanRecordService postCommentZanRecordService;
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         CommentCount commentCounts = null;
@@ -180,11 +183,11 @@ public class FacadePost {
         //-----将转换完的数据封装返回
         vo.setPostcontent(jsonArray.toString());
         //评论
-        List<CommentVo> commentVos = commentService.findAllCommentByPost(Integer.parseInt(postid));
-        if (commentVos != null) {
-            List<CommentCount> countss = new ArrayList<>();
-            for (int i = 0; i < commentVos.size(); i++) {
-                int id = commentVos.get(i).getId();
+        List<CommentVo> co = facadeComments.queryPostNewComment(Integer.parseInt(postid));
+        List<CommentCount> countss = new ArrayList<>();
+        if (co != null) {
+            for (int i = 0; i < co.size(); i++) {
+                int id = co.get(i).getId();
                 //根据id去查评论数
                 commentCounts = commentService.queryCommentZan(id);
                 CommentCount commentCount = new CommentCount();
@@ -196,7 +199,7 @@ public class FacadePost {
             chain.addComparator(new BeanComparator("count"), true);//true,fase正序反序
             Collections.sort(countss, chain);
             List<CommentCount> finallist = getPageList(countss, 1, 3);
-            List<CommentVo> vos = new ArrayList<>();
+            /** List<CommentVo> vos = new ArrayList<>();
             for (int i = 0; i < finallist.size(); i++) {
                 int comment = finallist.get(i).getCommentid();
                 //根据id查询帖子
@@ -204,7 +207,7 @@ public class FacadePost {
                 vos.add(commentVo);
             }
             for (int i = 0; i < vos.size(); i++) {
-                Integer pid = vos.get(i).getPid();
+             Integer pid = vos.get(i).getId();
                 Integer usersid = vos.get(i).getUserid();
                 User user = postCommentZanRecordService.queryusers(usersid);
                 if (pid != null) {
@@ -214,11 +217,10 @@ public class FacadePost {
                 } else {
                     vos.get(i).setUser(user);
                 }
-            }
-            vo.setCommentVos(vos);
+             }*/
+            List<CommentVo> cos = facadeComments.queryPostNewComment(Integer.parseInt(postid));
+            vo.setCommentVos(cos);
         }
-
-
         if (null != vo) {
             //根据帖子封面原图url查询封面压缩图url，如果存在替换，不存在就用原图
             String compressurl = postService.queryCompressUrl(vo.getCoverimg());
