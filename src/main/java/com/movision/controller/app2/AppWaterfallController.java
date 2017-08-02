@@ -14,6 +14,7 @@ import com.movision.mybatis.postLabel.entity.PostLabelTz;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.pagination.model.ServicePaging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class AppWaterfallController {
                                     @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
                                     @ApiParam(value = "标签id") @RequestParam(required = false) String labelid) {
         Response response = new Response();
-        Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        ServicePaging<PostVo> pager = new ServicePaging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List map = facadePost.userRefreshListNew(userid, pager, type, area, circleid, labelid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
@@ -342,7 +343,7 @@ public class AppWaterfallController {
             @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
             @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        ServicePaging<PostVo> pager = new ServicePaging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List result = facadePost.queryRelatedPosts(postid, pager);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");

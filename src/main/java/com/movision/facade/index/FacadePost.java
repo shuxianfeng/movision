@@ -55,6 +55,7 @@ import com.movision.utils.*;
 import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.pagination.model.ServicePaging;
 import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import net.sf.json.JSONArray;
@@ -256,7 +257,7 @@ public class FacadePost {
      *
      * @return
      */
-    public List queryRelatedPosts(String postid, Paging<PostVo> paging) {
+    public List queryRelatedPosts(String postid, ServicePaging<PostVo> paging) {
         //根据帖子查询发帖用户
         int postuserid = postService.postUserId(Integer.parseInt(postid));
         //根据帖子id查询圈子
@@ -1417,7 +1418,7 @@ public class FacadePost {
      * @param paging
      * @return
      */
-    public List recommendPost(String userid, Paging<PostVo> paging) {
+    public List recommendPost(String userid, ServicePaging<PostVo> paging) {
         long count = mongodbCount();
         List<PostVo> list = null;
         List<PostVo> alllist = postService.findAllPostListHeat();//查询所有帖子
@@ -1450,7 +1451,7 @@ public class FacadePost {
      * @param userid
      * @param posts
      */
-    private List userAnalysisBig(String userid, List<PostVo> posts, Paging<PostVo> paging) {
+    private List userAnalysisBig(String userid, List<PostVo> posts, ServicePaging<PostVo> paging) {
         List<PostVo> list = null;
         List<UserRefreshRecordVo> result;//查询用户最喜欢的圈子
         List<DBObject> listmongodb;
@@ -1489,7 +1490,7 @@ public class FacadePost {
      * @param posts
      * @return
      */
-    private List userAnalysisSmall(String userid, Paging<PostVo> paging, List<PostVo> alllist, List<PostVo> posts) {
+    private List userAnalysisSmall(String userid, ServicePaging<PostVo> paging, List<PostVo> alllist, List<PostVo> posts) {
         List<DBObject> listmongodba;
         List<PostVo> list = null;
         listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//查询用户刷新列表
@@ -1518,7 +1519,7 @@ public class FacadePost {
      * @param
      * @return
      */
-    public List localhostPost(String userid, Paging<PostVo> paging, String area) {
+    public List localhostPost(String userid, ServicePaging<PostVo> paging, String area) {
         List<PostVo> list = null;
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
@@ -1562,7 +1563,7 @@ public class FacadePost {
      * @param paging
      * @return
      */
-    public List circleRefulsh(String userid, Paging<PostVo> paging, int circleid) {
+    public List circleRefulsh(String userid, ServicePaging<PostVo> paging, int circleid) {
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
         List<PostVo> list = null;
@@ -1598,7 +1599,7 @@ public class FacadePost {
      *
      * @return
      */
-    public List followPost(String userid, Paging<PostVo> paging) {
+    public List followPost(String userid, ServicePaging<PostVo> paging) {
         List<PostVo> list = null;
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
@@ -1654,7 +1655,7 @@ public class FacadePost {
      *
      * @return
      */
-    public List labelPost(String userid, int labelid, Paging<PostVo> paging) {
+    public List labelPost(String userid, int labelid, ServicePaging<PostVo> paging) {
         List<PostVo> list = null;
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
@@ -1692,7 +1693,7 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    public List retuenList(List<PostVo> lists, String userid, Paging<PostVo> paging) {
+    public List retuenList(List<PostVo> lists, String userid, ServicePaging<PostVo> paging) {
         List<PostVo> list = null;
         if (lists != null) {
             paging.setTotal(lists.size());
@@ -1714,7 +1715,7 @@ public class FacadePost {
      * @param
      * @return
      */
-    public List NotLoginretuenList(List<PostVo> lists, Paging<PostVo> paging) {
+    public List NotLoginretuenList(List<PostVo> lists, ServicePaging<PostVo> paging) {
         List<PostVo> list = null;
         if (lists != null) {
             paging.setTotal(lists.size());
@@ -1853,7 +1854,7 @@ public class FacadePost {
                 for (int j = 0; j < comments.size(); j++) {
                     int heatvalue = comments.get(j).getHeatvalue();
                     if (heatvalue >= 50) {
-                        list.get(j).setComments(comments.get(j));
+                        list.get(i).setComments(comments.get(j));
                     }
                 }
             }
@@ -1869,7 +1870,7 @@ public class FacadePost {
      * @param area
      * @return
      */
-    public List userRefreshListNew(String userid, Paging<PostVo> paging, int type, String area, String circleid, String labelid) {
+    public List userRefreshListNew(String userid, ServicePaging<PostVo> paging, int type, String area, String circleid, String labelid) {
         List<PostVo> list = null;
         if (type == 1) {//推荐
             list = recommendPost(userid, paging);

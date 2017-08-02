@@ -22,11 +22,11 @@ public class PageFacade {
         List<Object> result = new ArrayList<Object>();
         if (list != null && list.size() > 0) {
             int allCount = list.size();//总记录数
-            int pageCount = (allCount + pageSize - 1) / pageSize;//总页数
+            int pageCount = allCount / pageSize + 1;//总页数
             if (pageNo > pageCount) {
                 result = null;
                 return result;
-                //pageNo = pageCount;
+                //pageCount = pageNo;
             }
             int start = (pageNo - 1) * pageSize;
             int end = pageNo * pageSize;
