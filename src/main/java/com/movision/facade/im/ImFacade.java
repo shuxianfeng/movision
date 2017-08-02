@@ -617,6 +617,30 @@ public class ImFacade {
         return imSystemInformService.queryOperationInformById(inform);
     }
 
+    /**
+     * 更新运营通知
+     *
+     * @param id
+     * @param title
+     * @param body
+     * @param coverimg
+     */
+    public void updateOperationInformById(String id, String title, String body, String coverimg) {
+        ImSystemInform inform = new ImSystemInform();
+        inform.setId(Integer.parseInt(id));
+        if (StringUtil.isNotEmpty(title)) {
+            inform.setTitle(title);
+        }
+        if (StringUtil.isNotEmpty(body)) {
+            inform.setBody(body);
+        }
+        if (StringUtil.isNotEmpty(coverimg)) {
+            inform.setCoverimg(coverimg);
+        }
+        inform.setInformTime(new Date());
+        imSystemInformService.updateOperationInformById(inform);
+    }
+
 
     /**
      * 准备toAccids参数,发送系统通知，并且记录

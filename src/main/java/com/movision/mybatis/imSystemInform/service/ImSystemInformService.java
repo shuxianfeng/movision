@@ -224,4 +224,19 @@ public class ImSystemInformService {
         }
     }
 
+    /**
+     * 更新运营通知
+     *
+     * @param inform
+     */
+    public void updateOperationInformById(ImSystemInform inform) {
+        try {
+            log.info("更新运营通知");
+            imSystemInformMapper.updateByPrimaryKeySelective(inform);
+        } catch (Exception e) {
+            log.error("更新运营通知异常", e);
+            throw e;
+        }
+    }
+
 }

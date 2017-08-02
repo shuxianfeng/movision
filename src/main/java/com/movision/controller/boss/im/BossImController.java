@@ -113,6 +113,28 @@ public class BossImController {
         return response;
     }
 
+    /**
+     * 更新运营通知
+     *
+     * @param id
+     * @param title
+     * @param body
+     * @param coverimg
+     * @return
+     */
+    @ApiOperation(value = "更新运营通知", response = Response.class)
+    @RequestMapping(value = "updateOperationInformById", method = RequestMethod.POST)
+    public Response updateOperationInformById(@ApiParam(value = "id") @RequestParam String id,
+                                              @ApiParam(value = "标题") @RequestParam(required = false) String title,
+                                              @ApiParam(value = "内容") @RequestParam(required = false) String body,
+                                              @ApiParam(value = "封面图") @RequestParam(required = false) String coverimg) {
+        Response response = new Response();
+        imFacade.updateOperationInformById(id, title, body, coverimg);
+        response.setMessage("操作成功");
+        response.setData(1);
+        return response;
+    }
+
 
     /**
      * 分页
