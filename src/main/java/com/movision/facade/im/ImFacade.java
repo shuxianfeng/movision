@@ -638,7 +638,6 @@ public class ImFacade {
         if (StringUtil.isNotEmpty(coverimg)) {
             inform.setCoverimg(coverimg);
         }
-        inform.setInformTime(new Date());
         imSystemInformService.updateOperationInformById(inform);
     }
 
