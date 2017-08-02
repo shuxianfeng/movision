@@ -39,7 +39,7 @@ public interface ImSystemInformMapper {
 
     ImSystemInformVo queryMyMsgInforDetails(ImSystemInform imSystemInform);
 
-    List<ImSystemInformVo> findAllOperationInformList(ImSystemInform inform, RowBounds rowBounds);
+    List<ImSystemInform> findAllOperationInformList(ImSystemInform inform, RowBounds rowBounds);
 
-    ImSystemInformVo queryOperationInformById(ImSystemInform imSystemInform);
+    ImSystemInform queryOperationInformById(ImSystemInform imSystemInform);
 }

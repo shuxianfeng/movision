@@ -89,8 +89,8 @@ public class BossImController {
                                              @ApiParam(value = "当前页") @RequestParam(defaultValue = "1") String pageNo,
                                              @ApiParam(value = "每页几条") @RequestParam(defaultValue = "10") String pageSiz) {
         Response response = new Response();
-        Paging<ImSystemInformVo> pag = new Paging<ImSystemInformVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSiz));
-        List<ImSystemInformVo> list = imFacade.queryOperationInformList(title, body, pag);
+        Paging<ImSystemInform> pag = new Paging<ImSystemInform>(Integer.valueOf(pageNo), Integer.valueOf(pageSiz));
+        List<ImSystemInform> list = imFacade.queryOperationInformList(title, body, pag);
         pag.result(list);
         response.setMessage("查询成功");
         response.setData(pag);
@@ -107,7 +107,7 @@ public class BossImController {
     @RequestMapping(value = "queryOperationInformById", method = RequestMethod.POST)
     public Response queryOperationInformById(@ApiParam(value = "id") @RequestParam String id) {
         Response response = new Response();
-        ImSystemInformVo inform = imFacade.queryOperationInformById(id);
+        ImSystemInform inform = imFacade.queryOperationInformById(id);
         response.setMessage("查询成功");
         response.setData(inform);
         return response;

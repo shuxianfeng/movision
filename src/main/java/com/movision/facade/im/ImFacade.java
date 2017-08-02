@@ -544,6 +544,7 @@ public class ImFacade {
     public void addOperationInform(HttpServletRequest request, String body, String title, String coverimg) {
         try {
             Date date = new Date();
+            //通知唯一标识
             long informidentity = date.getTime();
             ImUser imUser = this.getImuserByCurrentBossuser();
           /*  List<ImUser> imAppUserList = imUserService.selectAllAPPImuser();
@@ -594,7 +595,7 @@ public class ImFacade {
      * @param pag
      * @return
      */
-    public List<ImSystemInformVo> queryOperationInformList(String title, String body, Paging<ImSystemInformVo> pag) {
+    public List<ImSystemInform> queryOperationInformList(String title, String body, Paging<ImSystemInform> pag) {
         ImSystemInform inform = new ImSystemInform();
         if (StringUtil.isNotEmpty(title)) {
             inform.setTitle(title);
@@ -611,7 +612,7 @@ public class ImFacade {
      * @param id
      * @return
      */
-    public ImSystemInformVo queryOperationInformById(String id) {
+    public ImSystemInform queryOperationInformById(String id) {
         ImSystemInform inform = new ImSystemInform();
         inform.setId(Integer.parseInt(id));
         return imSystemInformService.queryOperationInformById(inform);
@@ -841,6 +842,7 @@ public class ImFacade {
 
     public void recordSysInformsTo(String body, String coverimg, String fromaccid, String title, long informidentity) {
         ImSystemInform imSystemInform = new ImSystemInform();
+        imSystemInform.setUserid(-1);
         imSystemInform.setBody(body);
         imSystemInform.setCoverimg(coverimg);
         imSystemInform.setFromAccid(fromaccid);

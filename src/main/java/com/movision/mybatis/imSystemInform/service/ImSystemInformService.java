@@ -198,7 +198,7 @@ public class ImSystemInformService {
      * @param pag
      * @return
      */
-    public List<ImSystemInformVo> queryOperationInformList(ImSystemInform inform, Paging<ImSystemInformVo> pag) {
+    public List<ImSystemInform> queryOperationInformList(ImSystemInform inform, Paging<ImSystemInform> pag) {
         try {
             log.info("查询运营通知列表");
             return imSystemInformMapper.findAllOperationInformList(inform, pag.getRowBounds());
@@ -214,7 +214,7 @@ public class ImSystemInformService {
      * @param imSystemInform
      * @return
      */
-    public ImSystemInformVo queryOperationInformById(ImSystemInform imSystemInform) {
+    public ImSystemInform queryOperationInformById(ImSystemInform imSystemInform) {
         try {
             log.info("查询运营通知详情");
             return imSystemInformMapper.queryOperationInformById(imSystemInform);
