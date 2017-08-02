@@ -11,9 +11,10 @@
         <result column="title" property="title" jdbcType="VARCHAR"/>
         <result column="pushcontent" property="pushcontent" jdbcType="VARCHAR"/>
         <result column="inform_identity" property="informidentity" jdbcType="VARCHAR"/>
+        <result column="coverimg" property="coverimg" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, userid, from_accid, to_accids, body, inform_time, title,pushcontent,inform_identity
+        id, userid, from_accid, to_accids, body, inform_time, title,pushcontent,inform_identity,coverimg
     </sql>
     <select id="selectByPrimaryKey" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform"
             parameterType="java.lang.Integer">
@@ -63,6 +64,9 @@
             <if test="informidentity!=null">
                 inform_identity,
             </if>
+            <if test="coverimg != null">
+                coverimg,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -90,6 +94,9 @@
             </if>
             <if test="informidentity != null">
                 #{informidentity,jdbcType=VARCHAR},
+            </if>
+            <if test="coverimg != null">
+                #{coverimg,jdbcType=VARCHAR},
             </if>
 
         </trim>
@@ -174,7 +181,8 @@
     </select>
     <select id="findAllIm" parameterType="java.util.Map"
             resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo">
-        SELECT si.body,si.inform_time,si.title,si.pushcontent,si.inform_identity,IFNULL(ir.isread,0) as isread
+        SELECT si.id,si.body,si.inform_time,si.title,si.pushcontent,si.inform_identity,si.coverimg,IFNULL(ir.isread,0)
+        as isread
         FROM yw_im_system_informs si LEFT JOIN yw_im_system_inform_read ir ON ir.inform_identity=si.inform_identity AND
         ir.userid=#{userid,jdbcType=INTEGER} WHERE si.inform_time >= #{informTime,jdbcType=TIMESTAMP}
         GROUP BY inform_identity ORDER BY inform_time DESC

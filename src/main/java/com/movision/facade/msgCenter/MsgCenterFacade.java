@@ -190,6 +190,13 @@ public class MsgCenterFacade {
         map.put("userid", userid);
         map.put("informTime", informTime);
         List<ImSystemInformVo> list = imSystemInformService.findAllIm(map, paging);
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getCoverimg() != null) {//代表是运营通知
+                list.get(i).setIsoperation(1);
+            } else {//代表是系统通知
+                list.get(i).setIsoperation(0);
+            }
+        }
         return list;
     }
 

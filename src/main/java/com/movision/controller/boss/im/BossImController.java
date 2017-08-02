@@ -52,6 +52,15 @@ public class BossImController {
     }
 
 
+    /**
+     * 运营发送通知
+     *
+     * @param request
+     * @param title
+     * @param body
+     * @param coverimg
+     * @return
+     */
     @ApiOperation(value = "运营发送通知", notes = "运营发送通知", response = Response.class)
     @RequestMapping(value = {"/addOperationInform"}, method = RequestMethod.POST)
     public Response addOperationInform(HttpServletRequest request,

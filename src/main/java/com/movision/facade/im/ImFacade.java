@@ -545,8 +545,8 @@ public class ImFacade {
             Date date = new Date();
             long informidentity = date.getTime();
             ImUser imUser = this.getImuserByCurrentBossuser();
-            List<ImUser> imAppUserList = imUserService.selectAllAPPImuser();
-            if (ListUtil.isNotEmpty(imAppUserList)) {
+          /*  List<ImUser> imAppUserList = imUserService.selectAllAPPImuser();
+            if (ListUtil.isNotEmpty(imAppUserList)) {*/
                 String str = "";
                 //内容转换
                 Map con = jsoupCompressImg.compressImg(request, body);
@@ -554,33 +554,32 @@ public class ImFacade {
                 if ((int) con.get("code") == 200) {
                     str = con.get("content").toString();
                     str = str.replace("\\", "");
-                    //str = "[\"coverimg\":" + coverimg + ",\"boday\"" + str + "]";//把封面封装在内容中
                     log.info(str);
                 } else {
                     log.error("内容转换异常");
                 }
 
 
-                int size = imAppUserList.size();
+               /* int size = imAppUserList.size();
                 log.info("app中的IM用户共" + size + "人！");
                 if (size > 500) {
                     //人数多于500人，分批次发系统通知
                     int mutiple = size / 500;   //倍数
                     for (int i = 0; i <= mutiple; i++) {
-                        /**
+                        *//**
                          * 比如共1002人，
                          * 那么i=0, 即第0-500人， 取500人
                          *     i=1, 即第501-1000人，    取500人
                          *     i=2, 即第1001-1002人，   取两人
-                         */
+             *//*
                         int eachSize = i < mutiple ? 500 : size - mutiple * 500;
                         sendInform(body, coverimg, imUser, imAppUserList, eachSize, i, title, informidentity);
                     }
                 } else {
-                    //不超过500人
-                    sendInform(str, coverimg, imUser, imAppUserList, size, 0, title, informidentity);
-                }
-            }
+                    //不超过500人*/
+            sendInform(str, coverimg, imUser, 0, title, informidentity);
+                /*}*/
+            /*}*/
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -632,10 +631,10 @@ public class ImFacade {
 
     }
 
-    private void sendInform(String body, String coverimg, ImUser imUser, List<ImUser> imAppUserList, int size, int multiple, String title, long informidentity) throws IOException {
+    private void sendInform(String body, String coverimg, ImUser imUser, int multiple, String title, long informidentity) throws IOException {
         //不足500人
-        String toAccids = prepareToAccids(imAppUserList, size, multiple);
-        Map result = this.sendSystemInformTo(body, imUser.getAccid(), toAccids);
+       /* String toAccids = prepareToAccids(imAppUserList, size, multiple);
+        Map result = this.sendSystemInformTo(body, imUser.getAccid(), toAccids);*/
 
 
         //************************查询用户是否有最新系统通知消息
@@ -658,12 +657,12 @@ public class ImFacade {
         }
         //******************************************************************
 
-        if (result.get("code").equals(200)) {
-            log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
-            this.recordSysInformsTo(body, coverimg, imUser.getAccid(), toAccids, title, informidentity);
-        } else {
+       /* if (result.get("code").equals(200)) {
+            log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);*/
+        this.recordSysInformsTo(body, coverimg, imUser.getAccid(), title, informidentity);
+       /* } else {
             throw new BusinessException(MsgCodeConstant.send_system_msg_fail, "发送系统通知失败");
-        }
+        }*/
 
     }
 
@@ -784,13 +783,12 @@ public class ImFacade {
         }
     }
 
-    public void recordSysInformsTo(String body, String coverimg, String fromaccid, String toAccids, String title, long informidentity) {
+    public void recordSysInformsTo(String body, String coverimg, String fromaccid, String title, long informidentity) {
         ImSystemInform imSystemInform = new ImSystemInform();
         imSystemInform.setBody(body);
         imSystemInform.setCoverimg(coverimg);
         imSystemInform.setFromAccid(fromaccid);
         imSystemInform.setUserid(ShiroUtil.getBossUserID());
-        imSystemInform.setToAccids(toAccids);
         imSystemInform.setTitle(title);
         imSystemInform.setInformTime(new Date());
         imSystemInform.setInformidentity(String.valueOf(informidentity));

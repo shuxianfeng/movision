@@ -24,6 +24,26 @@ public class ImSystemInformVo implements Serializable {
 
     private Integer isread;//是否已读 0否 1是
 
+    private String coverimg;//运营通知封面图
+
+    private Integer isoperation;//代表是否为运营通知
+
+    public Integer getIsoperation() {
+        return isoperation;
+    }
+
+    public void setIsoperation(Integer isoperation) {
+        this.isoperation = isoperation;
+    }
+
+    public String getCoverimg() {
+        return coverimg;
+    }
+
+    public void setCoverimg(String coverimg) {
+        this.coverimg = coverimg;
+    }
+
     public Integer getIsread() {
         return isread;
     }
