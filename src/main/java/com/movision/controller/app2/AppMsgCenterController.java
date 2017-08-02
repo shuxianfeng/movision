@@ -40,4 +40,21 @@ public class AppMsgCenterController {
         return response;
     }
 
+    /**
+     * 查询通知详情接口
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "查询通知详情", notes = "用于查询通知详情接口", response = Response.class)
+    @RequestMapping(value = "queryMyMsgInforDetails", method = RequestMethod.POST)
+    public Response queryMyMsgInforDetails(@ApiParam(value = "通知id") @RequestParam String id) {
+        Response response = new Response();
+        ImSystemInformVo im = msgCenterFacade.queryMyMsgInforDetails(id);
+        response.setMessage("查询成功");
+        response.setData(im);
+        return response;
+    }
+
+
 }

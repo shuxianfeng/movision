@@ -57,6 +57,16 @@ public class ImSystemInformService {
         }
     }
 
+    public ImSystemInformVo queryMyMsgInforDetails(ImSystemInform imSystemInform) {
+        try {
+            log.info("查询通知详情接口");
+            return imSystemInformMapper.queryMyMsgInforDetails(imSystemInform);
+        } catch (Exception e) {
+            log.error("查询通知详情接口异常", e);
+            throw e;
+        }
+    }
+
     public ImSystemInform queryDetail(Integer id) {
         try {
             log.info("查询系统通知详情");

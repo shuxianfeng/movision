@@ -187,4 +187,9 @@
         ir.userid=#{userid,jdbcType=INTEGER} WHERE si.inform_time >= #{informTime,jdbcType=TIMESTAMP}
         GROUP BY inform_identity ORDER BY inform_time DESC
     </select>
+
+    <select id="queryMyMsgInforDetails" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo"
+            parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
+        SELECT * FROM yw_im_system_informs WHERE id = #{id,jdbcType=INTEGER}
+    </select>
 </mapper>

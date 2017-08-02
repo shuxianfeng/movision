@@ -201,6 +201,20 @@ public class MsgCenterFacade {
     }
 
     /**
+     * 查询通知详情接口
+     *
+     * @param id
+     * @return
+     */
+    public ImSystemInformVo queryMyMsgInforDetails(String id) {
+        ImSystemInform im = new ImSystemInform();
+        im.setId(Integer.parseInt(id));
+        //获取当前登录用户
+        Integer userid = ShiroUtil.getAppUser().getId();
+        return imSystemInformService.queryMyMsgInforDetails(im);
+    }
+
+    /**
      * 获取评论列表
      *
      * @param userid
