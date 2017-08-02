@@ -1848,10 +1848,8 @@ public class FacadePost {
                 comments = commentService.queryCommentByPost(postid);
                 for (int j = 0; j < comments.size(); j++) {
                     int heatvalue = comments.get(j).getHeatvalue();
-                    String nickname = comments.get(j).getNickname();
                     if (heatvalue >= 50) {
                         list.get(j).setComments(comments.get(j));
-                        list.get(j).setNickname(nickname);
                     }
                 }
             }

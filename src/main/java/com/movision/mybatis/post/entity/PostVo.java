@@ -133,7 +133,6 @@ public class PostVo implements Serializable {
     private String activename;  //活动名称
 
     private List<CommentVo> commentVos;
-
     public List<CommentVo> getCommentVos() {
         return commentVos;
     }
