@@ -14,8 +14,6 @@ public class CommentVo implements Serializable {
     private Integer userid;
     private Integer pid;
     private User user;
-
-
     private  Integer postid;
 
     private String content;
@@ -63,6 +61,7 @@ public class CommentVo implements Serializable {
     private Integer isread;//是否已读 0否 1是
 
     private Integer heatvalue;
+
 
     public Integer getHeatvalue() {
         return heatvalue;

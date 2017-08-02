@@ -1,12 +1,14 @@
 package com.movision.mybatis.followUser.service;
 
 import com.movision.mybatis.followUser.entity.FollowUser;
+import com.movision.mybatis.followUser.entity.FollowUserVo;
 import com.movision.mybatis.followUser.mapper.FollowUserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,6 +48,16 @@ public class FollowUserService {
             return followUserMapper.cancleFollowUser(followUser);
         } catch (Exception e) {
             log.error("取消关注用户失败", e);
+            throw e;
+        }
+    }
+
+    public List<FollowUserVo> selectFollowUserVoList(Integer userid) {
+        try {
+            log.info("查询关注我的人的列表");
+            return followUserMapper.selectFollowUserVoList(userid);
+        } catch (Exception e) {
+            log.error("查询关注我的人的列表失败", e);
             throw e;
         }
     }

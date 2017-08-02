@@ -1,7 +1,9 @@
 package com.movision.mybatis.followUser.mapper;
 
 import com.movision.mybatis.followUser.entity.FollowUser;
+import com.movision.mybatis.followUser.entity.FollowUserVo;
 
+import java.util.List;
 import java.util.Map;
 
 public interface FollowUserMapper {
@@ -20,4 +22,6 @@ public interface FollowUserMapper {
     int yesOrNo(Map map);
 
     int cancleFollowUser(Map map);
+
+    List<FollowUserVo> selectFollowUserVoList(Integer userid);
 }

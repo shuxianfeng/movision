@@ -5,6 +5,7 @@ import com.movision.common.constant.DiscoverConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
+import com.movision.facade.paging.PageFacade;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.circleCategory.entity.CircleCategory;
@@ -37,6 +38,9 @@ import java.util.*;
 public class FacadeDiscover {
 
     private static Logger log = LoggerFactory.getLogger(FacadeDiscover.class);
+
+    @Autowired
+    private PageFacade pageFacade;
 
     @Autowired
     private HomepageManageService homepageManageService;
@@ -310,7 +314,7 @@ public class FacadeDiscover {
         paging.setTotal(resultList.size());
 
         //代码层分页操作
-        List list = facadePost.getPageList(resultList, paging.getCurPage(), paging.getPageSize());
+        List list = pageFacade.getPageList(resultList, paging.getCurPage(), paging.getPageSize());
 
         //统计标签
         facadePost.findPostLabel(list);
@@ -341,7 +345,7 @@ public class FacadeDiscover {
         //计算Paging中的分页参数
         paging.setTotal(resultList.size());
         //代码层分页操作
-        List list = facadePost.getPageList(resultList, paging.getCurPage(), paging.getPageSize());
+        List list = pageFacade.getPageList(resultList, paging.getCurPage(), paging.getPageSize());
         //统计标签
         facadePost.findPostLabel(list);
 

@@ -85,4 +85,16 @@
     <delete id="cancleFollowUser" parameterType="java.util.Map">
         DELETE FROM yw_follow_user WHERE userid=#{userid,jdbcType=INTEGER} AND interestedusers=#{interestedusers,jdbcType=INTEGER}
     </delete>
+
+    <select id="selectFollowUserVoList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.followUser.entity.FollowUserVo">
+        SELECT u.id, u.userid, u.interestedusers, u.intime,
+        yu.nickname AS username, yu.photo AS userphoto, IF(u2.id = '' OR u2.id IS NULL, 0, 1) AS isfollow
+        FROM yw_follow_user u
+        LEFT JOIN yw_user yu ON u.userid = yu.id
+        LEFT JOIN yw_follow_user u2 ON u.userid = u2.interestedusers AND u2.userid = #{userid}
+        WHERE u.interestedusers = #{userid}
+        ORDER BY intime DESC
+        limit 10
+    </select>
 </mapper>

@@ -8,6 +8,7 @@ import com.movision.common.constant.PostLabelConstants;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.comment.FacadeComments;
 import com.movision.facade.im.ImFacade;
+import com.movision.facade.paging.PageFacade;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.accusation.entity.Accusation;
@@ -87,6 +88,9 @@ import java.util.*;
 public class FacadePost {
 
     private static Logger log = LoggerFactory.getLogger(FacadePost.class);
+
+    @Autowired
+    private PageFacade pageFacade;
 
     @Autowired
     private PostService postService;
@@ -1692,7 +1696,7 @@ public class FacadePost {
         List<PostVo> list = null;
         if (lists != null) {
             paging.setTotal(lists.size());
-            list = getPageList(lists, paging.getCurPage(), paging.getPageSize());
+            list = pageFacade.getPageList(lists, paging.getCurPage(), paging.getPageSize());
                 findUser(list);
                 findPostLabel(list);
                 findHotComment(list);
@@ -1714,7 +1718,7 @@ public class FacadePost {
         List<PostVo> list = null;
         if (lists != null) {
             paging.setTotal(lists.size());
-            list = getPageList(lists, paging.getCurPage(), paging.getPageSize());
+            list = pageFacade.getPageList(lists, paging.getCurPage(), paging.getPageSize());
             findUser(list);
             findPostLabel(list);
             findHotComment(list);
@@ -1904,34 +1908,7 @@ public class FacadePost {
         }
     }
 
-    /**
-     * 分页
-     *
-     * @param list
-     * @param pageNo
-     * @return
-     */
-    public List getPageList(List list, int pageNo, int pageSize) {
-        List<Object> result = new ArrayList<Object>();
-        if (list != null && list.size() > 0) {
-            int allCount = list.size();//总记录数
-            int pageCount = (allCount + pageSize - 1) / pageSize;//总页数
-            if (pageNo > pageCount) {
-                result = null;
-                return result;
-                //pageNo = pageCount;
-            }
-            int start = (pageNo - 1) * pageSize;
-            int end = pageNo * pageSize;
-            if (end >= allCount) {
-                end = allCount;
-            }
-            for (int i = start; i < end; i++) {
-                result.add(list.get(i));
-            }
-        }
-        return (result != null && result.size() > 0) ? result : null;
-    }
+
 
 
     /**
@@ -2124,7 +2101,7 @@ public class FacadePost {
                 postvo.add(0, pos);
             }
         }
-        List<PostLabelVo> finals = getPageList(postvo, 1, 15);
+        List<PostLabelVo> finals = pageFacade.getPageList(postvo, 1, 15);
         return finals;
     }
     /**

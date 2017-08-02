@@ -1,6 +1,8 @@
 package com.movision.facade.msgCenter;
 
+import com.movision.common.pojo.InstantInfo;
 import com.movision.common.util.ShiroUtil;
+import com.movision.facade.paging.PageFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.PostZanRecord.entity.PostZanRecord;
 import com.movision.mybatis.PostZanRecord.entity.PostZanRecordVo;
@@ -9,6 +11,8 @@ import com.movision.mybatis.PostZanRecord.service.PostZanRecordService;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
+import com.movision.mybatis.followUser.entity.FollowUserVo;
+import com.movision.mybatis.followUser.service.FollowUserService;
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogueVo;
 import com.movision.mybatis.imFirstDialogue.service.ImFirstDialogueService;
@@ -49,7 +53,8 @@ import java.util.regex.Pattern;
 @Service
 public class MsgCenterFacade {
 
-    private static Logger log = LoggerFactory.getLogger(MsgCenterFacade.class);
+    @Autowired
+    private PageFacade pageFacade;
 
     @Autowired
     private ImSystemInformService imSystemInformService;
@@ -73,7 +78,8 @@ public class MsgCenterFacade {
     private ImSystemInformReadService imSystemInformReadService;
 
     @Autowired
-    private UserService userService;
+    private FollowUserService followUserService;
+
     /**
      * 获取消息中心的列表
      *
@@ -138,6 +144,83 @@ public class MsgCenterFacade {
         return reMap;
     }
 
+    public List getInstantInfo(Paging<InstantInfo> paging) {
+        List<InstantInfo> list = new ArrayList<>();
+
+        //一 评论： 1 评论帖子， 2 评论回复
+        handleCommentlist(list);
+        //二 赞
+        handleZanlist(list);
+        //三 关注 1 关注人 2 关注帖子 3 关注标签
+        getFollowList(list, ShiroUtil.getAppUserID());
+        //排序
+        Collections.sort(list, InstantInfo.intimeComparator);
+        //计算Paging中的分页参数
+        paging.setTotal(list.size());
+        //代码层分页操作
+        List resultList = pageFacade.getPageList(list, paging.getCurPage(), paging.getPageSize());
+
+        return resultList;
+
+    }
+
+    private void handleCommentlist(List<InstantInfo> list) {
+        List<CommentVo> commentList = comm(ShiroUtil.getAppUserID());
+        int len = commentList.size();
+        if (len > 10) {
+            for (int i = 0; i < 10; i++) {
+                getInstantInfoFromCommentlist(list, commentList, i);
+            }
+        } else {
+            for (int i = 0; i < len; i++) {
+                getInstantInfoFromCommentlist(list, commentList, i);
+            }
+        }
+    }
+
+    private void handleZanlist(List<InstantInfo> list) {
+        List<PostCommentZanRecordVo> zanlist = zan(ShiroUtil.getAppUserID());
+
+        int zanLength = zanlist.size();
+        if (zanLength > 10) {
+            for (int i = 0; i < 10; i++) {
+                getInstantInfoFromZanlist(list, zanlist, i);
+            }
+        } else {
+            for (int i = 0; i < zanLength; i++) {
+                getInstantInfoFromZanlist(list, zanlist, i);
+            }
+        }
+    }
+
+    /**
+     * 从评论列表中获取动态消息
+     * @param list
+     * @param zanlist
+     * @param i
+     */
+    private void getInstantInfoFromCommentlist(List<InstantInfo> list, List<CommentVo> zanlist, int i) {
+        InstantInfo instantInfo = new InstantInfo();
+        instantInfo.setObject(zanlist.get(i));
+        instantInfo.setIntime(zanlist.get(i).getIntime());
+        list.add(instantInfo);
+    }
+
+
+    /**
+     * 从点赞列表中获取动态信息
+     *
+     * @param list
+     * @param zanlist
+     * @param i
+     */
+    private void getInstantInfoFromZanlist(List<InstantInfo> list, List<PostCommentZanRecordVo> zanlist, int i) {
+        InstantInfo instantInfo = new InstantInfo();
+        instantInfo.setObject(zanlist.get(i));
+        instantInfo.setIntime(zanlist.get(i).getIntime());
+        list.add(instantInfo);
+    }
+
     /**
      * 评论
      *
@@ -160,6 +243,16 @@ public class MsgCenterFacade {
 
         }
         return commentVos;
+    }
+
+    public void getFollowList(List<InstantInfo> infoList, int userid) {
+        List<FollowUserVo> list = followUserService.selectFollowUserVoList(userid);
+        for (int i = 0; i < list.size(); i++) {
+            InstantInfo instantInfo = new InstantInfo();
+            instantInfo.setIntime(list.get(i).getIntime());
+            instantInfo.setObject(list.get(i));
+            infoList.add(instantInfo);
+        }
     }
 
     /**
