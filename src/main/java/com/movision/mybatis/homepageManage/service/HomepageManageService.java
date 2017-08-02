@@ -208,4 +208,17 @@ public class HomepageManageService {
         }
     }
 
+    /**
+     * 美番2.0邀请好友详情页面--邀请送现金页查询宣传图片和邀请规则图片url
+     */
+    public String myinvite(int topictype){
+        try {
+            log.info("邀请好友宣传图片送现金宣传图url获取");
+            return homepageManageMapper.myinvite(topictype);
+        }catch (Exception e){
+            log.error("邀请好友宣传图片送现金宣传图url获取失败", e);
+            throw e;
+        }
+    }
+
 }

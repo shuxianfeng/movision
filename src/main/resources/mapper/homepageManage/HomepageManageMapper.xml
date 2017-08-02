@@ -35,6 +35,10 @@
     <select id="queryBannerList" parameterType="java.lang.Integer" resultType="com.movision.mybatis.homepageManage.entity.HomepageManage">
         SELECT * FROM yw_homepage_manage WHERE topictype = #{topictype,jdbcType=INTEGER} ORDER BY orderid
     </select>
+    
+    <select id="myinvite" parameterType="java.lang.Integer" resultType="java.lang.String" >
+        SELECT url FROM yw_homepage_manage WHERE topictype = #{topictype,jdbcType=INTEGER}
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_homepage_manage

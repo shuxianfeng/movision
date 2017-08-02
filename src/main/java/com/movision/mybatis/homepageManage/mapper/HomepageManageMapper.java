@@ -11,6 +11,8 @@ import java.util.Map;
 public interface HomepageManageMapper {
     int deleteByPrimaryKey(Integer id);
 
+    String myinvite(int topictype);
+
     int insert(HomepageManage record);
 
     int insertSelective(HomepageManage record);

@@ -1307,6 +1307,12 @@
     <select id="queryUserIsrecommend" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT isrecommend FROM yw_user WHERE id = #{id,jdbcType=INTEGER} AND status = 0
     </select>
+    
+    <select id="queryInviteNum" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+        SELECT count(*) FROM yw_user WHERE referrals = (
+          SELECT invitecode FROM yw_user WHERE id = #{userid,jdbcType=INTEGER}
+        )
+    </select>
 
     <update id="updateUserByIsrecommend" parameterType="com.movision.mybatis.user.entity.User">
         UPDATE yw_user

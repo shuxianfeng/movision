@@ -14,6 +14,7 @@ import com.movision.mybatis.PostZanRecord.service.PostZanRecordService;
 import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.collection.service.CollectionService;
 import com.movision.mybatis.goods.service.GoodsService;
+import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.pointRecord.entity.PointRecord;
 import com.movision.mybatis.pointRecord.service.PointRecordService;
 import com.movision.mybatis.post.entity.ActiveVo;
@@ -27,6 +28,7 @@ import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
 import com.movision.utils.IntegerUtil;
 import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
 import javafx.geometry.Pos;
 import org.apache.commons.beanutils.converters.DoubleConverter;
 import org.apache.commons.collections.FastHashMap;
@@ -75,6 +77,9 @@ public class UserFacade {
     private CollectionService collectionService;
     @Autowired
     private PostZanRecordService postZanRecordService;
+
+    @Autowired
+    HomepageManageService homepageManageService;
     /**
      * 判断是否存在该手机号的app用户
      *
@@ -626,6 +631,29 @@ public class UserFacade {
 
         return myFansList;
 
+    }
+
+    /**
+     * 我的邀请页面--邀请送现金页面数据返回接口
+     */
+    public Map<String, Object> myinvite(String userid){
+        Map<String, Object> map = new HashMap<>();
+
+        //邀请好友宣传图片送现金宣传图url获取
+        //测试环境上的邀请好友页面的topictype为9，生产环境上待定
+        int topictype = 9;
+        String inviteimgurl = homepageManageService.myinvite(topictype);
+        map.put("inviteimgurl", inviteimgurl);
+
+        //获取当前用户的邀请链接
+        String inviteurl = PropertiesLoader.getValue("inviteprefix")+userid;
+        map.put("inviteurl", inviteurl);
+
+        //查询当前登录的用户已邀请的好友数量
+        int invitenum = userService.queryInviteNum(Integer.parseInt(userid));
+        map.put("invitenum", invitenum);
+
+        return map;
     }
 
 }

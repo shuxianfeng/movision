@@ -166,6 +166,6 @@ public interface UserMapper {
 
     List<UserVo> findAllMostPostAuthorInCurrentMonth(RowBounds rowBounds);
 
-
+    int queryInviteNum(int userid);
 
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author shuxf
@@ -101,6 +102,20 @@ public class AppMineController {
             response.setMessage("查询成功");
             response.setData(myFansList);
         }
+        return response;
+    }
+
+    @ApiOperation(value = "我的模块——邀请好友，选择邀请渠道后的子页面数据返回接口", notes = "邀请送现金页面", response = Response.class)
+    @RequestMapping(value = "myinvite", method = RequestMethod.POST)
+    public Response myinvite(@ApiParam(value = "用户id(必填，否则无法进入‘我的’页面)") @RequestParam String userid){
+        Response response = new Response();
+
+        Map<String, Object> map = userFacade.myinvite(userid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+            response.setData(map);
+        }
+
         return response;
     }
 }

@@ -1035,4 +1035,14 @@ public class UserService {
             throw e;
         }
     }
+
+    public int queryInviteNum(int userid){
+        try {
+            log.info("查询当前登录用户已邀请人数");
+            return userMapper.queryInviteNum(userid);
+        }catch (Exception e){
+            log.error("查询当前登录用户已邀请人数失败", e);
+            throw e;
+        }
+    }
 }
