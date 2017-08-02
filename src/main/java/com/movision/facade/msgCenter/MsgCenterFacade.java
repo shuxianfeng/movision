@@ -86,18 +86,24 @@ public class MsgCenterFacade {
         PostCommentZanRecordVo postCommentZanRecord = null;
         //1 赞消息 。包含：帖子，活动，评论，快问（后期）
         List<PostCommentZanRecordVo> postCommentZanRecordVos = zan(userid);
-        for (int i = 0; i < postCommentZanRecordVos.size(); i++) {
+        if (postCommentZanRecordVos.size() > 0) {
+            postCommentZanRecord = postCommentZanRecordVos.get(0);
+        }
+        /**for (int i = 0; i < postCommentZanRecordVos.size(); i++) {
             postCommentZanRecord = postCommentZanRecordVos.get(i);
             break;
-        }
+         }*/
         //2 打赏消息
         RewardedVo rewarded = rewardedService.queryRewardByUserid(userid);
         //3 评论消息
         List<CommentVo> commentVos = comm(userid);
-        for (int i = 0; i < commentVos.size(); i++) {
+        if (commentVos.size() > 0) {
+            comment = commentVos.get(0);
+        }
+        /**for (int i = 0; i < commentVos.size(); i++) {
             comment = commentVos.get(i);
             break;
-        }
+         }*/
         //4 系统通知
         Map map = new HashMap();
         map.put("userid", userid);
