@@ -144,6 +144,12 @@ public class MsgCenterFacade {
         return reMap;
     }
 
+    /**
+     * 获取消息中心-动态消息
+     *
+     * @param paging
+     * @return
+     */
     public List getInstantInfo(Paging<InstantInfo> paging) {
         List<InstantInfo> list = new ArrayList<>();
 

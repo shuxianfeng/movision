@@ -110,7 +110,7 @@
         <property name="passwordParam" value="password"/>
         <!-- 记住我input的名称,默认为rememberMe -->
         <property name="rememberMeParam" value="rememberMe"/>
-        <property name="loginUrl" value="/auth/login.html"/>
+        <property name="loginUrl" value="/auth/login"/>
     </bean>
     <bean id="orRolesAuthorizationFilter"
           class="com.movision.shiro.filter.OrRolesAuthorizationFilter">
@@ -149,6 +149,7 @@
                 /app/cart/**=authc
                 /app/submission/commitSubmission=authc
                 /app/collection/**=authc
+                /app/msg_center/**=authc
 
                 /app/** = anon
 

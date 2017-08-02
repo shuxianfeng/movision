@@ -1,9 +1,11 @@
 package com.movision.controller.app2;
 
 import com.movision.common.Response;
+import com.movision.common.pojo.InstantInfo;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.msgCenter.MsgCenterFacade;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -53,6 +55,21 @@ public class AppMsgCenterController {
         ImSystemInformVo im = msgCenterFacade.queryMyMsgInforDetails(id);
         response.setMessage("查询成功");
         response.setData(im);
+        return response;
+    }
+
+    @ApiOperation(value = "获取消息中心-动态列表", notes = "获取消息中心-动态列表", response = Response.class)
+    @RequestMapping(value = "get_msg_center_instant_info_list", method = RequestMethod.GET)
+    public Response getMsgCenterInstantInfoList(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                                @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+
+        Paging<InstantInfo> pager = new Paging<InstantInfo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List list = msgCenterFacade.getInstantInfo(pager);
+        pager.setRows(list);
+
+        response.setMessage("查询成功");
+        response.setData(pager);
         return response;
     }
 
