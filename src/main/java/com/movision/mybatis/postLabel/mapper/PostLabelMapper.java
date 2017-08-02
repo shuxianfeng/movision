@@ -73,4 +73,22 @@ public interface PostLabelMapper {
     List<PostLabel> queryHotValueLabelList(Integer displayCount);
 
     List<PostLabel> queryPostLabelByName(PostLabel postLabel);
+
+    int updatePostHeatValue(int postid);
+
+    int queryPostHeatValue(int postid);
+
+    int heatvale(int postid);
+
+    int queryUserid(int postid);
+
+    int queryUserHeatValue(int userids);
+
+    int updateUserHeatValue(int userids);
+
+    int userHeatVale(int userids);
+
+    int queryCircleid(int postid);
+
+    List<PostVo> queryCircleByPost(int circleid);
 }

@@ -10,6 +10,9 @@ import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.*;
 import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.postLabelRelation.service.PostLabelRelationService;
+import com.movision.mybatis.userDontLike.entity.UserDontLike;
+import com.movision.mybatis.userDontLike.service.UserDontLikeService;
+import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +37,8 @@ public class LabelFacade {
     private FollowLabelService followLabelService;
     @Autowired
     private FacadePost facadePost;
+    @Autowired
+    private UserDontLikeService userDontLikeService;
 
     /**
      * 我的--关注--关注的标签，点击关注调用的关注的标签列表返回接口
@@ -220,15 +225,63 @@ public class LabelFacade {
      *
      * @param type
      */
-    public void userDontLike(int type) {
-        if (type == 1) {
-
-        } else if (type == 2) {
-
-        } else if (type == 3) {
-
+    public int userDontLike(int type, int userid, int postid) {
+        int count = 0;
+        if (type == 1) {//内容差
+            //查询该帖子的热度值
+            int heat_value = postLabelService.queryPostHeatValue(postid);
+            if (heat_value >= 10) {
+                //根据帖子id降低热度值
+                count = postLabelService.updatePostHeatValue(postid);
+            } else {
+                count = postLabelService.heatvale(postid);
+            }
+        } else if (type == 2) {//不喜欢该作者
+            //根据帖子id查询作者
+            int userids = postLabelService.queryUserid(postid);
+            //根据id查询热度
+            int heats = postLabelService.queryUserHeatValue(userids);
+            if (heats >= 10) {
+                //根据id降低热度值
+                count = postLabelService.updateUserHeatValue(userids);
+            } else {
+                count = postLabelService.userHeatVale(userids);
+            }
+        } else if (type == 3) {//不喜欢该圈子
+            //根据帖子id查询该圈子
+            int circleid = postLabelService.queryCircleid(postid);
+            //根据圈子id查询帖子
+            List<PostVo> list = postLabelService.queryCircleByPost(circleid);
+            for (int i = 0; i < list.size(); i++) {
+                int post = list.get(i).getId();
+                //查询该帖子的热度值
+                int heat_value = postLabelService.queryPostHeatValue(post);
+                if (heat_value >= 10) {
+                    //根据帖子id降低热度值
+                    count = postLabelService.updatePostHeatValue(post);
+                } else {
+                    count = postLabelService.heatvale(post);
+                }
+            }
+        } else if (type == 4) {//就是不喜欢
+            //查询该帖子的热度值
+            int heat_value = postLabelService.queryPostHeatValue(postid);
+            if (heat_value >= 10) {
+                //根据帖子id降低热度值
+                count = postLabelService.updatePostHeatValue(postid);
+            } else {
+                count = postLabelService.heatvale(postid);
+            }
         }
-
+        //插入mongodb
+        UserDontLike userDontLike = new UserDontLike();
+        userDontLike.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
+        userDontLike.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        userDontLike.setPostid(postid);
+        userDontLike.setUserid(userid);  //不登录的情况下，返回0
+        userDontLike.setType(type);
+        userDontLikeService.insert(userDontLike);
+        return count;
     }
 
 

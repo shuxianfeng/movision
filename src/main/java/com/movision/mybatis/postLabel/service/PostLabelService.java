@@ -346,4 +346,97 @@ public class PostLabelService {
             throw e;
         }
     }
+
+    public int updatePostHeatValue(int postid) {
+        try {
+            log.info("根据帖子id减低热度值");
+            return postLabelMapper.updatePostHeatValue(postid);
+        } catch (Exception e) {
+            log.error("根据帖子id减低热度值）异常", e);
+            throw e;
+        }
+    }
+
+    public int updateUserHeatValue(int userids) {
+        try {
+            log.info("根据id减低热度值");
+            return postLabelMapper.updateUserHeatValue(userids);
+        } catch (Exception e) {
+            log.error("根据id减低热度值）异常", e);
+            throw e;
+        }
+    }
+
+    public int queryPostHeatValue(int postid) {
+        try {
+            log.info("查询贴热度值");
+            return postLabelMapper.queryPostHeatValue(postid);
+        } catch (Exception e) {
+            log.error("查询贴热度值异常", e);
+            throw e;
+        }
+    }
+
+    public int heatvale(int postid) {
+        try {
+            log.info("查询贴热度值");
+            return postLabelMapper.heatvale(postid);
+        } catch (Exception e) {
+            log.error("查询贴热度值异常", e);
+            throw e;
+        }
+    }
+
+    public int userHeatVale(int userids) {
+        try {
+            log.info("查询贴热度值");
+            return postLabelMapper.userHeatVale(userids);
+        } catch (Exception e) {
+            log.error("查询贴热度值异常", e);
+            throw e;
+        }
+    }
+
+    public int queryCircleid(int userids) {
+        try {
+            log.info("根据帖子id查询圈子");
+            return postLabelMapper.queryCircleid(userids);
+        } catch (Exception e) {
+            log.error("根据帖子id查询圈子异常", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> queryCircleByPost(int circleid) {
+        try {
+            log.info("根据帖子id查询圈子");
+            return postLabelMapper.queryCircleByPost(circleid);
+        } catch (Exception e) {
+            log.error("根据帖子id查询圈子异常", e);
+            throw e;
+        }
+    }
+
+
+    public int queryUserid(int postid) {
+        try {
+            log.info("根据帖子id查询作者");
+            return postLabelMapper.queryUserid(postid);
+        } catch (Exception e) {
+            log.error("根据帖子id查询作者异常", e);
+            throw e;
+        }
+    }
+
+
+    public int queryUserHeatValue(int userids) {
+        try {
+            log.info("根据帖子id查询作者");
+            return postLabelMapper.queryUserHeatValue(userids);
+        } catch (Exception e) {
+            log.error("根据帖子id查询作者异常", e);
+            throw e;
+        }
+    }
+
 }

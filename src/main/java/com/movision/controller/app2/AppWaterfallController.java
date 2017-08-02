@@ -439,5 +439,18 @@ public class AppWaterfallController {
     }
 
 
+    @ApiOperation(value = "首页点X", notes = "首页点X", response = Response.class)
+    @RequestMapping(value = "userDontLike", method = RequestMethod.POST)
+    public Response userDontLike(@ApiParam(value = "帖子id") @RequestParam int postid,
+                                 @ApiParam(value = "用户id") @RequestParam int userid,
+                                 @ApiParam(value = "类型") @RequestParam int type) {
+        Response response = new Response();
+        int result = labelFacade.userDontLike(type, userid, postid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(result);
+        return response;
+    }
 
 }
