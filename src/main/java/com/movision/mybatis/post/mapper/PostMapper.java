@@ -188,8 +188,6 @@ public interface PostMapper {
 
     Integer updateActiveById(PostTo postActiveList);//编辑活动帖子
 
-    Integer updateActiveByIdP(Period period);//编辑活动帖子
-
     PostActiveList queryActiveById(Integer id);//根据id查询帖子
 
     List<PostList> findAllQueryCollectPostList(String userid, RowBounds rowBounds);

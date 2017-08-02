@@ -114,4 +114,9 @@
     <select id="findAllPeriod" parameterType="java.lang.Integer" resultType="com.movision.mybatis.period.entity.Period" >
         SELECT * FROM yw_active_period WHERE postid=#{postid,jdbcType=INTEGER}
     </select>
+
+    <delete id="deleteActiveePostPer" parameterType="com.movision.mybatis.period.entity.Period">
+         delete from yw_active_period
+    where postid = #{postid,jdbcType=INTEGER}
+    </delete>
 </mapper>

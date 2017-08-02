@@ -1566,7 +1566,10 @@ public class PostFacade {
                 }
                 period.setEndtime(enstime);
                 if (enstime != null && bstime != null) {
-                    int res = postService.updateActivePostPerById(period);
+                    //删除活动周期
+                    periodService.deleteActiveePostPer(period);
+                    //更改活动周期
+                    periodService.insertActivePostPer(period);
                 }
                 if (!StringUtils.isEmpty(goodsid)) {
                     String[] lg = goodsid.split(",");//以逗号分隔

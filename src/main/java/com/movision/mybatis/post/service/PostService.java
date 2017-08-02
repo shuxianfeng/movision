@@ -910,15 +910,6 @@ public class PostService {
         }
     }
 
-    /**
-     * 编辑活动帖子
-     *
-     * @param period
-     * @return
-     */
-    public Integer updateActivePostPerById(Period period) {
-        return postMapper.updateActiveByIdP(period);
-    }
 
     /**
      * 帖子按条件查询
