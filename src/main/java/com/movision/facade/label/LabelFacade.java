@@ -182,6 +182,9 @@ public class LabelFacade {
         //查询圈子下所有帖子用的标签
         List<PostLabel> postLabels = postLabelService.queryLabelCircle(Integer.parseInt(circleid));
         circleVo.setPostLabels(postLabels);
+        //圈子关注数
+        int followCircle = postLabelService.followCircle(Integer.parseInt(circleid));
+        circleVo.setFollownum(followCircle);
         return circleVo;
     }
 

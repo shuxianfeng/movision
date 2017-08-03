@@ -91,4 +91,6 @@ public interface PostLabelMapper {
     int queryCircleid(int postid);
 
     List<PostVo> queryCircleByPost(int circleid);
+
+    int followCircle(int circleid);
 }

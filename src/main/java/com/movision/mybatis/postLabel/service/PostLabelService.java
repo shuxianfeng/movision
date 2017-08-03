@@ -439,4 +439,14 @@ public class PostLabelService {
         }
     }
 
+
+    public int followCircle(int circleid) {
+        try {
+            log.info("圈子关注数");
+            return postLabelMapper.followCircle(circleid);
+        } catch (Exception e) {
+            log.error("圈子关注数异常", e);
+            throw e;
+        }
+    }
 }

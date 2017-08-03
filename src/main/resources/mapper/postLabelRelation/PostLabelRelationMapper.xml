@@ -70,7 +70,8 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <select id="labelPost" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM yw_post_label_relation  WHERE labelid=#{labelid,jdbcType=INTEGER}
+        SELECT COUNT(1) FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        WHERE r.labelid=#{labelid,jdbcType=INTEGER} AND to_days(p.intime) = to_days(now())
     </select>
     <select id="postList" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT postid FROM yw_post_label_relation WHERE labelid=#{labelid,jdbcType=INTEGER}
