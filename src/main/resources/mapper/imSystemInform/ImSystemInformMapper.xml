@@ -145,7 +145,7 @@
     </update>
 
     <select id="findAll" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo">
-        SELECT * FROM yw_im_system_informs GROUP BY inform_time DESC
+        SELECT * FROM yw_im_system_informs WHERE coverimg IS NULL GROUP BY inform_time DESC
     </select>
     <select id="findAllSystemInform" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform"
             parameterType="java.util.Map">
