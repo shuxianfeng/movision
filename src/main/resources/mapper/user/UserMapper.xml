@@ -1313,6 +1313,24 @@
           SELECT invitecode FROM yw_user WHERE id = #{userid,jdbcType=INTEGER}
         )
     </select>
+    
+    <!--查询当前用户邀请的好友列表-->
+    <select id="myInviteList" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.InviteUserVo" >
+        SELECT id, nickname, photo FROM yw_user WHERE referrals = (
+          SELECT invitecode FROM yw_user WHERE id = #{userid,jdbcType=INTEGER}
+        )
+    </select>
+
+    <!--查询我的模块邀请好友页面里的邀请好友排行榜数据-->
+    <select id="getInviteRank" resultType="com.movision.mybatis.user.entity.InviteUserVo" >
+        SELECT T.* FROM(
+            SELECT t.*, (SELECT count(*) FROM yw_user WHERE t.invitecode = referrals) AS invitenum
+            FROM
+            (SELECT t1.id, t1.nickname, t1.photo, t1.invitecode, t1.referrals FROM yw_user t1) t
+        ) T
+        WHERE T.invitenum > 0 AND T.id !='-1'
+        ORDER BY T.invitenum DESC
+    </select>
 
     <update id="updateUserByIsrecommend" parameterType="com.movision.mybatis.user.entity.User">
         UPDATE yw_user

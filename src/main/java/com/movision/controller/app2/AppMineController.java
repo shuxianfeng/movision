@@ -6,6 +6,7 @@ import com.movision.facade.label.LabelFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.postLabel.entity.PostLabelVo;
+import com.movision.mybatis.user.entity.InviteUserVo;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -105,7 +106,7 @@ public class AppMineController {
         return response;
     }
 
-    @ApiOperation(value = "我的模块——邀请好友，选择邀请渠道后的子页面数据返回接口", notes = "邀请送现金页面", response = Response.class)
+    @ApiOperation(value = "我的模块——邀请好友，选择邀请渠道后的子页面上半部分数据返回接口", notes = "邀请送现金页面上半部分数据接口", response = Response.class)
     @RequestMapping(value = "myinvite", method = RequestMethod.POST)
     public Response myinvite(@ApiParam(value = "用户id(必填，否则无法进入‘我的’页面)") @RequestParam String userid){
         Response response = new Response();
@@ -115,7 +116,23 @@ public class AppMineController {
             response.setMessage("查询成功");
             response.setData(map);
         }
+        return response;
+    }
 
+    @ApiOperation(value = "我的模块——邀请好友，选择邀请渠道后的子页面下半部分数据返回接口", notes = "邀请送现金页面下半部分数据接口", response = Response.class)
+    @RequestMapping(value = "myInviteList", method = RequestMethod.POST)
+    public Response myInviteList(@ApiParam(value = "用户id(必填，否则无法进入‘我的’页面)") @RequestParam String userid,
+                                 @ApiParam(value = "查询类型：0 我的邀请 1 排行榜") @RequestParam String type,
+                                 @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                 @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize){
+        Response response = new Response();
+
+        Paging<InviteUserVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<InviteUserVo> inviteUserList = userFacade.myInviteList(userid, type, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+            response.setData(inviteUserList);
+        }
         return response;
     }
 }

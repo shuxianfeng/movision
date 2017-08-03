@@ -168,4 +168,8 @@ public interface UserMapper {
 
     int queryInviteNum(int userid);
 
+    List<InviteUserVo> myInviteList(int userid, RowBounds rowBounds);
+
+    List<InviteUserVo> getInviteRank(RowBounds rowBounds);
+
 }

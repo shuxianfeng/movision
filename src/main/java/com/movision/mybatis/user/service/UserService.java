@@ -1045,4 +1045,24 @@ public class UserService {
             throw e;
         }
     }
+
+    public List<InviteUserVo> myInviteList(int userid, Paging<InviteUserVo> pager){
+        try {
+            log.info("查询当前用户邀请的好友列表");
+            return userMapper.myInviteList(userid, pager.getRowBounds());
+        }catch (Exception e){
+            log.error("查询当前用户邀请的好友列表失败");
+            throw e;
+        }
+    }
+
+    public List<InviteUserVo> getInviteRank(Paging<InviteUserVo> pager){
+        try {
+            log.info("查询邀请好友排行榜列表");
+            return userMapper.getInviteRank(pager.getRowBounds());
+        }catch (Exception e){
+            log.error("查询邀请好友排行榜列表失败");
+            throw e;
+        }
+    }
 }

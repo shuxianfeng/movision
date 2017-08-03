@@ -656,4 +656,19 @@ public class UserFacade {
         return map;
     }
 
+    /**
+     * 我的邀请页面--邀请送现金页面下半部分数据返回接口
+     */
+    public List<InviteUserVo> myInviteList(String userid, String type, Paging<InviteUserVo> pager){
+        List<InviteUserVo> inviteUserList = null;
+        if (type.equals("0")){
+            //我邀请的用户列表
+            inviteUserList = userService.myInviteList(Integer.parseInt(userid), pager);
+        }else if (type.equals("1")){
+            //邀请好友排行榜
+            inviteUserList = userService.getInviteRank(pager);
+        }
+        return inviteUserList;
+    }
+
 }
