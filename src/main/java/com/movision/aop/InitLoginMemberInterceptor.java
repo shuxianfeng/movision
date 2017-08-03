@@ -1,8 +1,5 @@
 package com.movision.aop;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.SessionConstant;
 import com.movision.facade.boss.BossLoginFacade;
@@ -15,6 +12,8 @@ import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.shiro.realm.BossRealm;
+import com.movision.shiro.realm.ShiroRealm;
+import com.movision.shiro.realm.ShiroRealm.ShiroUser;
 import com.movision.utils.DateUtils;
 import com.movision.utils.propertiesLoader.LoginPropertiesLoader;
 import org.apache.shiro.SecurityUtils;
@@ -25,9 +24,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.movision.shiro.realm.ShiroRealm;
-import com.movision.shiro.realm.ShiroRealm.ShiroUser;
-
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;

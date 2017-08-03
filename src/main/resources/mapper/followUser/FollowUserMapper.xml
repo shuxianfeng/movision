@@ -6,9 +6,10 @@
         <result column="userid" property="userid" jdbcType="INTEGER"/>
         <result column="interestedusers" property="interestedusers" jdbcType="INTEGER"/>
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="isread" property="isread" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, userid, interestedusers, intime
+        id, userid, interestedusers, intime, isread
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -76,7 +77,8 @@
         update yw_follow_user
         set userid = #{userid,jdbcType=INTEGER},
         interestedusers = #{interestedusers,jdbcType=INTEGER},
-        intime = #{intime,jdbcType=TIMESTAMP}
+        intime = #{intime,jdbcType=TIMESTAMP},
+        isread = #{isread,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
     <select id="yesOrNo" parameterType="java.util.Map" resultType="java.lang.Integer">
@@ -88,7 +90,7 @@
 
     <select id="selectFollowUserVoList" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.followUser.entity.FollowUserVo">
-        SELECT u.id, u.userid, u.interestedusers, u.intime,
+        SELECT u.id, u.userid, u.interestedusers, u.intime, u.isread,
         yu.nickname AS username, yu.photo AS userphoto, IF(u2.id = '' OR u2.id IS NULL, 0, 1) AS isfollow
         FROM yw_follow_user u
         LEFT JOIN yw_user yu ON u.userid = yu.id
@@ -97,4 +99,5 @@
         ORDER BY intime DESC
         limit 10
     </select>
+
 </mapper>

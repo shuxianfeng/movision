@@ -1,7 +1,5 @@
 package com.movision.mybatis.address.entity;
 
-import com.wordnik.swagger.annotations.ApiModelProperty;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;

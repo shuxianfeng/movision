@@ -1,19 +1,17 @@
 package com.movision.facade.msgCenter;
 
+import com.movision.common.constant.MsgCenterConstant;
+import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.pojo.InstantInfo;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.paging.PageFacade;
 import com.movision.fsearch.utils.StringUtil;
-import com.movision.mybatis.PostZanRecord.entity.PostZanRecord;
-import com.movision.mybatis.PostZanRecord.entity.PostZanRecordVo;
 import com.movision.mybatis.PostZanRecord.entity.ZanRecordVo;
 import com.movision.mybatis.PostZanRecord.service.PostZanRecordService;
-import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.followUser.entity.FollowUserVo;
 import com.movision.mybatis.followUser.service.FollowUserService;
-import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogueVo;
 import com.movision.mybatis.imFirstDialogue.service.ImFirstDialogueService;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
@@ -21,27 +19,21 @@ import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.imSystemInform.service.ImSystemInformService;
 import com.movision.mybatis.imSystemInformRead.entity.ImSystemInformRead;
 import com.movision.mybatis.imSystemInformRead.service.ImSystemInformReadService;
-import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.post.entity.Post;
-import com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecord;
 import com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecordVo;
 import com.movision.mybatis.postCommentZanRecord.service.PostCommentZanRecordService;
-import com.movision.mybatis.rewarded.entity.Rewarded;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.rewarded.service.RewardedService;
 import com.movision.mybatis.user.entity.User;
-import com.movision.mybatis.user.service.UserService;
-import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.pagination.model.ServicePaging;
 import org.apache.commons.collections.map.HashedMap;
-import org.apache.shiro.crypto.hash.Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -52,6 +44,8 @@ import java.util.regex.Pattern;
  */
 @Service
 public class MsgCenterFacade {
+
+    private static Logger log = LoggerFactory.getLogger(MsgCenterFacade.class);
 
     @Autowired
     private PageFacade pageFacade;
@@ -150,7 +144,7 @@ public class MsgCenterFacade {
      * @param paging
      * @return
      */
-    public List getInstantInfo(Paging<InstantInfo> paging) {
+    public List getInstantInfo(ServicePaging<InstantInfo> paging) {
         List<InstantInfo> list = new ArrayList<>();
 
         //一 评论： 1 评论帖子， 2 评论回复
@@ -163,8 +157,12 @@ public class MsgCenterFacade {
         Collections.sort(list, InstantInfo.intimeComparator);
         //计算Paging中的分页参数
         paging.setTotal(list.size());
+
         //代码层分页操作
         List resultList = pageFacade.getPageList(list, paging.getCurPage(), paging.getPageSize());
+        int size = resultList == null ? 0 : resultList.size();
+        log.debug("【row中list的数量】：" + size);
+        //操作已读未读处理
 
         return resultList;
 
@@ -202,13 +200,14 @@ public class MsgCenterFacade {
     /**
      * 从评论列表中获取动态消息
      * @param list
-     * @param zanlist
+     * @param commentVoList
      * @param i
      */
-    private void getInstantInfoFromCommentlist(List<InstantInfo> list, List<CommentVo> zanlist, int i) {
+    private void getInstantInfoFromCommentlist(List<InstantInfo> list, List<CommentVo> commentVoList, int i) {
         InstantInfo instantInfo = new InstantInfo();
-        instantInfo.setObject(zanlist.get(i));
-        instantInfo.setIntime(zanlist.get(i).getIntime());
+        instantInfo.setObject(commentVoList.get(i));
+        instantInfo.setIntime(commentVoList.get(i).getIntime());
+        instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.comment.getCode());
         list.add(instantInfo);
     }
 
@@ -224,6 +223,7 @@ public class MsgCenterFacade {
         InstantInfo instantInfo = new InstantInfo();
         instantInfo.setObject(zanlist.get(i));
         instantInfo.setIntime(zanlist.get(i).getIntime());
+        instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.zan.getCode());
         list.add(instantInfo);
     }
 
@@ -257,6 +257,7 @@ public class MsgCenterFacade {
             InstantInfo instantInfo = new InstantInfo();
             instantInfo.setIntime(list.get(i).getIntime());
             instantInfo.setObject(list.get(i));
+            instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.follow.getCode());
             infoList.add(instantInfo);
         }
     }

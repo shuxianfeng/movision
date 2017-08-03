@@ -29,7 +29,6 @@ import java.util.Map;
 @RequestMapping("/app/discover2/")
 public class AppNewDiscoverController {
 
-    private static Logger log = LoggerFactory.getLogger(AppNewDiscoverController.class);
 
     @Autowired
     private FacadeDiscover facadeDiscover;

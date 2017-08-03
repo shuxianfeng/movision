@@ -5,8 +5,8 @@ import com.movision.common.pojo.InstantInfo;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.msgCenter.MsgCenterFacade;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
-import com.movision.mybatis.post.entity.PostVo;
 import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.pagination.model.ServicePaging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +64,7 @@ public class AppMsgCenterController {
                                                 @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
 
-        Paging<InstantInfo> pager = new Paging<InstantInfo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        ServicePaging<InstantInfo> pager = new ServicePaging<InstantInfo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List list = msgCenterFacade.getInstantInfo(pager);
         pager.setRows(list);
 

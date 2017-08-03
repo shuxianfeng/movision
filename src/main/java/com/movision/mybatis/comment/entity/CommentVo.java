@@ -2,12 +2,10 @@ package com.movision.mybatis.comment.entity;
 
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.user.entity.User;
-import com.movision.utils.L;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class CommentVo implements Serializable {
     private Integer id;

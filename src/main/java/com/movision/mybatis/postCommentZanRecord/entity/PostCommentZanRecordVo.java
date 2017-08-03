@@ -1,6 +1,5 @@
 package com.movision.mybatis.postCommentZanRecord.entity;
 
-import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.user.entity.User;
 

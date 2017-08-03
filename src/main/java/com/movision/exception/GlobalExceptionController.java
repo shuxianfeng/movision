@@ -1,15 +1,13 @@
 package com.movision.exception;
 
-import javax.servlet.http.HttpServletResponse;
-
+import com.movision.common.Response;
 import com.movision.facade.boss.BossLoginFacade;
 import com.wordnik.swagger.annotations.ApiOperation;
-import com.movision.common.Response;
-import com.movision.utils.JsonUtils;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 异常控制器

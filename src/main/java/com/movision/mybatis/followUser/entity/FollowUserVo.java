@@ -19,6 +19,7 @@ public class FollowUserVo {
     private Integer isFollow;   //是否关注对方，即B是否关注A。 0：未关注； 1：已关注
 
     private Date intime;
+    private Integer isread; //是否已读，0：未读，1：已读
 
     public void setUserid(Integer userid) {
         this.userid = userid;
@@ -46,6 +47,14 @@ public class FollowUserVo {
         return interestedusers;
     }
 
+    public void setIsread(Integer isread) {
+        this.isread = isread;
+    }
+
+    public Integer getIsread() {
+
+        return isread;
+    }
 
     public Integer getIsFollow() {
         return isFollow;
@@ -82,6 +91,7 @@ public class FollowUserVo {
                 ", interestedusers=" + interestedusers +
                 ", isFollow=" + isFollow +
                 ", intime=" + intime +
+                ", isread=" + isread +
                 '}';
     }
 

@@ -1,6 +1,5 @@
 package com.movision.common.pojo;
 
-import com.groupbyinc.common.apache.commons.net.ProtocolCommandListener;
 import com.movision.test.SpringTestCase;
 import com.movision.utils.DateUtils;
 import org.junit.Test;

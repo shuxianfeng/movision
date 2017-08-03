@@ -1,8 +1,5 @@
 package com.movision.mybatis.applyVipDetail.entity;
 
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiModel;
-
 import java.io.Serializable;
 import java.util.Date;
 

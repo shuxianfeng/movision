@@ -11,14 +11,25 @@ import java.util.Date;
  */
 public class InstantInfo {
     private Date intime;
+    private Integer type;   //动态消息类型，0：评论， 1：赞， 2：关注
     private Object object;
 
-    public InstantInfo(Date intime, Object object) {
+    public InstantInfo(Date intime, Integer type, Object object) {
         this.intime = intime;
+        this.type = type;
         this.object = object;
     }
 
     public InstantInfo() {
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getType() {
+
+        return type;
     }
 
     public void setIntime(Date intime) {
@@ -54,6 +65,7 @@ public class InstantInfo {
     public String toString() {
         return "InstantInfo{" +
                 "intime=" + intime +
+                ", type=" + type +
                 ", object=" + object +
                 '}';
     }
