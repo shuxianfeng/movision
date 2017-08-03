@@ -116,4 +116,7 @@
          delete from yw_post_label_relation
         where postid = #{postid,jdbcType=INTEGER}
     </delete>
+    <select id="followlabel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_follow_label WHERE labelid=#{labelid,jdbcType=INTEGER}
+    </select>
 </mapper>

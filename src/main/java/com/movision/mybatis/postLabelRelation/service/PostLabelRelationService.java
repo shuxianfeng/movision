@@ -117,4 +117,14 @@ public class PostLabelRelationService {
         }
     }
 
+    public int followlabel(int labelid) {
+        try {
+            log.info("关注标签认识");
+            return postLabelRelationMapper.followlabel(labelid);
+        } catch (Exception e) {
+            log.error("关注标签认识异常", e);
+            throw e;
+        }
+    }
+
 }

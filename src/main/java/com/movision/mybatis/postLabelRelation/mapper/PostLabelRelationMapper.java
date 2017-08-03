@@ -36,4 +36,6 @@ public interface PostLabelRelationMapper {
     int batchInsert(Map map);
 
     List<PostLabel> queryPostLabelByPostid(PostLabelRelation relation);
+
+    int followlabel(int labelid);
 }

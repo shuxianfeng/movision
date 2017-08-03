@@ -23,6 +23,16 @@ public class PostLabelTz {
     private String photo;
     private Integer count;
 
+    private Integer follow;
+
+    public Integer getFollow() {
+        return follow;
+    }
+
+    public void setFollow(Integer follow) {
+        this.follow = follow;
+    }
+
     public Integer getCount() {
         return count;
     }

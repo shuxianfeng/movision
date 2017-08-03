@@ -74,6 +74,9 @@ public class LabelFacade {
         //根据id查询帖子数量
         int count = postLabelRelationService.labelPost(labelid);
         postLabel.setCount(count);
+        //多少人关注
+        int follow = postLabelRelationService.followlabel(labelid);
+        postLabel.setFollow(follow);
         return postLabel;
     }
 
@@ -144,7 +147,6 @@ public class LabelFacade {
         if (list != null) {
             facadePost.findUser(list);
             facadePost.findPostLabel(list);
-            facadePost.findHotComment(list);
             facadePost.countView(list);
             facadePost.findAllCircleName(list);
         }
