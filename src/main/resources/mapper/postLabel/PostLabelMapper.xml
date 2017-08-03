@@ -246,7 +246,7 @@
     </select>
     <select id="postInCircle" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
-        WHERE to_days(p.intime) = to_days(now()) AND c.id=#{circleid,jdbcType=INTEGER}
+        WHERE to_days(p.intime) = to_days(now()) AND c.id=#{circleid,jdbcType=INTEGER} AND p.isdel=0
     </select>
     <select id="queryLabelCircle" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.postLabel.entity.PostLabel">
