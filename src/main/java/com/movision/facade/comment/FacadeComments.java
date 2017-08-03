@@ -148,6 +148,9 @@ public class FacadeComments {
                 vo.setIscontribute(0);
                 type = commentService.insertComment(vo);//添加评论
                 //增加热度
+                //更新用户最后操作时间和帖子评论总次数
+                postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子表的评论次数字段
+
                 //facadeHeatValue.addHeatValue(Integer.parseInt(postid), 4);
                 //************************查询被评论的帖子是否被设为最新消息通知用户
                 Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
@@ -199,8 +202,6 @@ public class FacadeComments {
                 }
                 //******************************************************************
             }
-            //更新用户最后操作时间和帖子评论总次数
-            postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子表的评论次数字段
 
             pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
             try {
