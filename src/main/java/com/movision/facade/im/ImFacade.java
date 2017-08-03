@@ -863,7 +863,7 @@ public class ImFacade {
      * @param
      * @param informidentity
      */
-    public void activeMessage(String body, String fromaccid, long informidentity, String toAccids) {
+    public void activeMessage(String body, String fromaccid, long informidentity, String toAccids, String title, int activeid) {
         ImSystemInform imSystemInform = new ImSystemInform();
         imSystemInform.setUserid(-1);
         imSystemInform.setBody(body);
@@ -872,6 +872,8 @@ public class ImFacade {
         imSystemInform.setInformTime(new Date());
         imSystemInform.setInformidentity(String.valueOf(informidentity));
         imSystemInform.setToAccids(toAccids);
+        imSystemInform.setTitle(title);
+        imSystemInform.setActiveid(activeid);
         //每次取500个人
         imSystemInformService.add(imSystemInform);
     }
@@ -1088,7 +1090,7 @@ public class ImFacade {
      *
      * @param
      */
-    public void activeMessage(String body, int postid) {
+    public void activeMessage(String title, String body, int postid) {
         try {
             Date date = new Date();
             //通知唯一标识
@@ -1110,11 +1112,11 @@ public class ImFacade {
                          *     i=2, 即第1001-1002人，   取两人
                          */
                         int eachSize = i < mutiple ? 500 : size - mutiple * 500;
-                        activeSendInform(body, imAppUserList, eachSize, imUser, i, informidentity);
+                        activeSendInform(body, imAppUserList, eachSize, imUser, i, informidentity, title, postid);
                     }
                 } else {
                     //不超过500人
-                    activeSendInform(body, imAppUserList, size, imUser, 0, informidentity);
+                    activeSendInform(body, imAppUserList, size, imUser, 0, informidentity, title, postid);
                 }
             }
         } catch (Exception e) {
@@ -1131,7 +1133,7 @@ public class ImFacade {
      * @param informidentity
      * @throws IOException
      */
-    private void activeSendInform(String body, List<ImUser> imAppUserList, int size, ImUser imUser, int multiple, long informidentity) throws IOException {
+    private void activeSendInform(String body, List<ImUser> imAppUserList, int size, ImUser imUser, int multiple, long informidentity, String title, int activeid) throws IOException {
         //不足500人
         String toAccids = prepareToAccids(imAppUserList, size, multiple);
         Map result = this.sendSystemInformTo(body, imUser.getAccid(), toAccids);
@@ -1159,13 +1161,56 @@ public class ImFacade {
 
         if (result.get("code").equals(200)) {
             log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
-            this.activeMessage(body, imUser.getAccid(), informidentity, toAccids);
+            this.activeMessage(body, imUser.getAccid(), informidentity, toAccids, title, activeid);
         } else {
             throw new BusinessException(MsgCodeConstant.send_system_msg_fail, "发送系统通知失败");
         }
 
     }
 
+
+    /**
+     * 查询活动通知列表
+     *
+     * @param activeid
+     * @return
+     */
+    public List<ImSystemInform> findAllActiveMessage(int activeid, Paging<ImSystemInform> paging) {
+        return imSystemInformService.findAllActiveMessage(activeid, paging);
+    }
+
+
+    /**
+     * 修改活动通知
+     *
+     * @param id
+     * @return
+     */
+    public int updateActiveMessage(int id, String title, String body) {
+        ImSystemInform imSystemInform = new ImSystemInform();
+        if (String.valueOf(id) != null) {
+            imSystemInform.setId(id);
+        }
+        if (title != null) {
+            imSystemInform.setTitle(title);
+        }
+        if (body != null) {
+            imSystemInform.setBody(body);
+        }
+        int re = imSystemInformService.updateActiveMessage(imSystemInform);
+        return re;
+    }
+
+    /**
+     * 活动通知回显
+     *
+     * @param id
+     * @return
+     */
+    public ImSystemInform queryActiveMessageById(int id) {
+        ImSystemInform imSystemInform = imSystemInformService.queryActiveById(id);
+        return imSystemInform;
+    }
 
 
 }

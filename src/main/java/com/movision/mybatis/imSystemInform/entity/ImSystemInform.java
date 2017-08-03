@@ -24,6 +24,16 @@ public class ImSystemInform implements Serializable {
 
     private String coverimg;//运营通知封面图
 
+    private Integer activeid;//活动id
+
+    public Integer getActiveid() {
+        return activeid;
+    }
+
+    public void setActiveid(Integer activeid) {
+        this.activeid = activeid;
+    }
+
     public String getCoverimg() {
         return coverimg;
     }

@@ -12,9 +12,10 @@
         <result column="pushcontent" property="pushcontent" jdbcType="VARCHAR"/>
         <result column="inform_identity" property="informidentity" jdbcType="VARCHAR"/>
         <result column="coverimg" property="coverimg" jdbcType="VARCHAR"/>
+        <result column="activeid" property="activeid" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, userid, from_accid, to_accids, body, inform_time, title,pushcontent,inform_identity,coverimg
+        id, userid, from_accid, to_accids, body, inform_time, title,pushcontent,inform_identity,coverimg,activeid
     </sql>
     <select id="selectByPrimaryKey" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform"
             parameterType="java.lang.Integer">
@@ -67,6 +68,9 @@
             <if test="coverimg != null">
                 coverimg,
             </if>
+            <if test="activeid != null">
+                activeid,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -97,6 +101,9 @@
             </if>
             <if test="coverimg != null">
                 #{coverimg,jdbcType=VARCHAR},
+            </if>
+            <if test="activeid != null">
+                #{activeid,jdbcType=INTEGER},
             </if>
 
         </trim>
@@ -139,8 +146,9 @@
         to_accids = #{toAccids,jdbcType=LONGVARCHAR},
         body = #{body,jdbcType=VARCHAR},
         inform_time = #{informTime,jdbcType=TIMESTAMP},
-        title = #{title},pushcontent = #{pushcontent,jdbcType=VARCHAR},inform_identity =
-        #{informidentity,jdbcType=VARCHAR}
+        title = #{title},pushcontent = #{pushcontent,jdbcType=VARCHAR},
+        inform_identity =#{informidentity,jdbcType=VARCHAR},
+        activeid =#{activeid,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -209,5 +217,25 @@
     <select id="queryOperationInformById" parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform"
             resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
         SELECT * FROM yw_im_system_informs WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="findAllActiveMessage" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
+        select * from yw_im_system_informs WHERE activeid=#{activeid,jdbcType=INTEGER}
+    </select>
+    <update id="updateActiveMessage" parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
+        update yw_im_system_informs
+        <set>
+            <if test="body != null">
+                body = #{body,jdbcType=VARCHAR},
+            </if>
+            <if test="title !=null">
+                title = #{title}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="queryActiveById" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
+        SELECT  * FROM  yw_im_system_informs WHERE  id=#{id,jdbcType=INTEGER}
     </select>
 </mapper>

@@ -397,15 +397,68 @@ public class BossImController {
     @RequestMapping(value = "activeMessage", method = RequestMethod.POST)
     public Response activeMessage(
             @ApiParam(value = "系统推送内容") @RequestParam String body,
-            @ApiParam(value = "活动id") @RequestParam int postid) throws Exception {
+            @ApiParam(value = "活动id") @RequestParam int postid,
+            @ApiParam(value = "系统推送标题") @RequestParam String title) throws Exception {
 
         Response response = new Response();
-        imFacade.activeMessage(body, postid);
+        imFacade.activeMessage(body, title, postid);
         if (response.getCode() == 200) {
-            response.setMessage("系统推送成功");
+            response.setMessage("活动通知成功");
         }
         return response;
 
     }
+
+
+    @ApiOperation(value = "查询活动通知", notes = "查询活动通知", response = Response.class)
+    @RequestMapping(value = "findAllActiveMessage", method = RequestMethod.POST)
+    public Response findAllActiveMessage(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                         @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                         @ApiParam(value = "活动id") @RequestParam int activeid) {
+        Response response = new Response();
+        Paging<ImSystemInform> paging = new Paging<ImSystemInform>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<ImSystemInform> list = imFacade.findAllActiveMessage(activeid, paging);
+        if (response.getCode() == 200) {
+            response.setMessage("查询活动通知成功");
+        }
+        paging.result(list);
+        response.setData(paging);
+        return response;
+    }
+
+
+    @ApiOperation(value = "修改活动通知 ", notes = "修改活动通知", response = Response.class)
+    @RequestMapping(value = "updateActiveMessage", method = RequestMethod.POST)
+    public Response updateActiveMessage(
+            @ApiParam(value = "自增长id") @RequestParam int id,
+            @ApiParam(value = "活动标题") @RequestParam(required = false) String title,
+            @ApiParam(value = "活动内容") @RequestParam(required = false) String body) throws Exception {
+
+        Response response = new Response();
+        int re = imFacade.updateActiveMessage(id, title, body);
+        if (response.getCode() == 200) {
+            response.setMessage("修改活动通知成功");
+        }
+        response.setData(re);
+        return response;
+
+    }
+
+
+    @ApiOperation(value = "活动通知回显 ", notes = "活动通知回显", response = Response.class)
+    @RequestMapping(value = "queryActiveMessageById", method = RequestMethod.POST)
+    public Response queryActiveMessageById(
+            @ApiParam(value = "自增长id") @RequestParam int id) throws Exception {
+
+        Response response = new Response();
+        ImSystemInform re = imFacade.queryActiveMessageById(id);
+        if (response.getCode() == 200) {
+            response.setMessage("活动通知回显成功");
+        }
+        response.setData(re);
+        return response;
+
+    }
+
 
 }

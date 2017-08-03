@@ -42,4 +42,10 @@ public interface ImSystemInformMapper {
     List<ImSystemInform> findAllOperationInformList(ImSystemInform inform, RowBounds rowBounds);
 
     ImSystemInform queryOperationInformById(ImSystemInform imSystemInform);
+
+    List<ImSystemInform> findAllActiveMessage(int activeid, RowBounds rowBounds);
+
+    int updateActiveMessage(ImSystemInform imSystemInform);
+
+    ImSystemInform queryActiveById(int id);
 }

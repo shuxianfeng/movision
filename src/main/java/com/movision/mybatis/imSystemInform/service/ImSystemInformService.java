@@ -239,4 +239,52 @@ public class ImSystemInformService {
         }
     }
 
+    /**
+     * 查询活动列表
+     *
+     * @param activeid
+     * @return
+     */
+    public List<ImSystemInform> findAllActiveMessage(int activeid, Paging<ImSystemInform> paging) {
+        try {
+            log.info("查询活动列表");
+            return imSystemInformMapper.findAllActiveMessage(activeid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询活动列表失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 修改活动通知
+     *
+     * @param imSystemInform
+     * @return
+     */
+    public int updateActiveMessage(ImSystemInform imSystemInform) {
+        try {
+            log.info("修改活动通知");
+            return imSystemInformMapper.updateActiveMessage(imSystemInform);
+        } catch (Exception e) {
+            log.error("修改活动通知失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 活动通知回显
+     *
+     * @param id
+     * @return
+     */
+    public ImSystemInform queryActiveById(int id) {
+        try {
+            log.info("活动通知回显");
+            return imSystemInformMapper.queryActiveById(id);
+        } catch (Exception e) {
+            log.error("活动通知回显失败", e);
+            throw e;
+        }
+    }
+
 }
