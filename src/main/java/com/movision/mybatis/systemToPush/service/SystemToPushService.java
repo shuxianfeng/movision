@@ -1,8 +1,12 @@
 package com.movision.mybatis.systemToPush.service;
 
+import com.movision.mybatis.imuser.entity.ImUser;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.systemPush.service.SystemPushService;
 import com.movision.mybatis.systemToPush.entity.SystemToPush;
 import com.movision.mybatis.systemToPush.mapper.SystemToPushMapper;
+import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserVo;
 import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
@@ -108,5 +112,14 @@ public class SystemToPushService {
         }
     }
 
+    public List<ImUser> queryUser(int postid) {
+        try {
+            log.info("根据活动id查询用户");
+            return systemToPushMapper.queryUser(postid);
+        } catch (Exception e) {
+            log.error("根据活动id查询用户失败", e);
+            throw e;
+        }
+    }
 
 }

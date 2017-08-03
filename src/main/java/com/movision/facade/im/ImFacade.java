@@ -20,10 +20,12 @@ import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.imuser.service.ImUserService;
 import com.movision.mybatis.newInformation.entity.NewInformation;
 import com.movision.mybatis.newInformation.service.NewInformationService;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.systemPush.entity.SystemPush;
 import com.movision.mybatis.systemPush.service.SystemPushService;
 import com.movision.mybatis.systemToPush.entity.SystemToPush;
 import com.movision.mybatis.systemToPush.service.SystemToPushService;
+import com.movision.mybatis.user.entity.UserVo;
 import com.movision.utils.*;
 import com.movision.utils.convert.BeanUtil;
 import com.movision.utils.im.CheckSumBuilder;
@@ -853,6 +855,26 @@ public class ImFacade {
         imSystemInformService.add(imSystemInform);
     }
 
+    /**
+     * 活动通知
+     *
+     * @param body
+     * @param fromaccid
+     * @param
+     * @param informidentity
+     */
+    public void activeMessage(String body, String fromaccid, long informidentity, String toAccids) {
+        ImSystemInform imSystemInform = new ImSystemInform();
+        imSystemInform.setUserid(-1);
+        imSystemInform.setBody(body);
+        imSystemInform.setFromAccid(fromaccid);
+        imSystemInform.setUserid(ShiroUtil.getBossUserID());
+        imSystemInform.setInformTime(new Date());
+        imSystemInform.setInformidentity(String.valueOf(informidentity));
+        imSystemInform.setToAccids(toAccids);
+        //每次取500个人
+        imSystemInformService.add(imSystemInform);
+    }
 
 
     /**
@@ -1059,6 +1081,91 @@ public class ImFacade {
         miPushUtils.sendBroadcastAll(body, title, jsonObjectPayload, deviceType);
         addSystemToPush(body, title);
     }
+
+
+    /**
+     * 活动通知
+     *
+     * @param
+     */
+    public void activeMessage(String body, int postid) {
+        try {
+            Date date = new Date();
+            //通知唯一标识
+            long informidentity = date.getTime();
+            ImUser imUser = this.getImuserByCurrentBossuser();
+            //查询参加活动的人
+            List<ImUser> imAppUserList = systemToPushService.queryUser(postid);
+            if (ListUtil.isNotEmpty(imAppUserList)) {
+                int size = imAppUserList.size();
+                log.info("app中的IM用户共" + size + "人！");
+                if (size > 500) {
+                    //人数多于500人，分批次发系统通知
+                    int mutiple = size / 500;   //倍数
+                    for (int i = 0; i <= mutiple; i++) {
+                        /**
+                         * 比如共1002人，
+                         * 那么i=0, 即第0-500人， 取500人
+                         *     i=1, 即第501-1000人，    取500人
+                         *     i=2, 即第1001-1002人，   取两人
+                         */
+                        int eachSize = i < mutiple ? 500 : size - mutiple * 500;
+                        activeSendInform(body, imAppUserList, eachSize, imUser, i, informidentity);
+                    }
+                } else {
+                    //不超过500人
+                    activeSendInform(body, imAppUserList, size, imUser, 0, informidentity);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 活动
+     *
+     * @param body
+     * @param imUser
+     * @param multiple
+     * @param informidentity
+     * @throws IOException
+     */
+    private void activeSendInform(String body, List<ImUser> imAppUserList, int size, ImUser imUser, int multiple, long informidentity) throws IOException {
+        //不足500人
+        String toAccids = prepareToAccids(imAppUserList, size, multiple);
+        Map result = this.sendSystemInformTo(body, imUser.getAccid(), toAccids);
+
+
+        //************************查询用户是否有最新系统通知消息
+        Integer isread = newInformationService.querySystemByNewInformation(imUser.getAccid());
+        NewInformation news = new NewInformation();
+        //更新系统通知最新消息
+        if (isread != null) {
+            news.setIsread(0);
+            news.setIntime(new Date());
+            news.setUserid(isread);
+            newInformationService.updateUserByNewInformation(news);
+        } else {
+            //查询被点赞的帖子发帖人
+            Integer uid = imUserService.queryUserByAccid(imUser.getAccid());
+            //新增系统通知最新消息
+            news.setIsread(0);
+            news.setIntime(new Date());
+            news.setUserid(uid);
+            newInformationService.insertUserByNewInformation(news);
+        }
+        //******************************************************************
+
+        if (result.get("code").equals(200)) {
+            log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
+            this.activeMessage(body, imUser.getAccid(), informidentity, toAccids);
+        } else {
+            throw new BusinessException(MsgCodeConstant.send_system_msg_fail, "发送系统通知失败");
+        }
+
+    }
+
 
 
 }

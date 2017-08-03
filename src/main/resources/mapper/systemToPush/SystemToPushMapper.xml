@@ -184,5 +184,7 @@
             </if>
         </trim>
     </insert>
-
+    <select id="queryUser" parameterType="java.lang.Integer" resultType="com.movision.mybatis.imuser.entity.ImUser">
+        SELECT u.accid FROM yw_post p LEFT JOIN yw_im_user u ON u.userid=p.userid WHERE p.activeid=#{postid,jdbcType=INTEGER}
+    </select>
 </mapper>
