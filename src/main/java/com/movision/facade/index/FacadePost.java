@@ -1229,8 +1229,8 @@ public class FacadePost {
         for (PostLabel p : newLabels) {
             p.setUserid(ShiroUtil.getAppUserID());
             p.setCitycode(ShiroUtil.getIpCity());
-            //todo 根据标签类型，获取标签的头像。 需要等于小双的标签头像
-
+            //根据标签类型，获取标签的头像
+            setDefaultPhotoByLabelType(p);
         }
         //3.2 插入标签表数据
         postLabelService.batchInsert(newLabels);
@@ -1245,6 +1245,24 @@ public class FacadePost {
         log.debug("新插入的标签的id集合是：" + newLabelIdList.toString());
 
         batchAddPostLabelRealtionByList(flag, newLabelIdList);
+    }
+
+    /**
+     * 根据标签类型，获取标签的头像
+     *
+     * @param p
+     */
+    private void setDefaultPhotoByLabelType(PostLabel p) {
+        int type = p.getType();
+        p.setType(type);
+        if (type == PostLabelConstants.TYPE.geog.getCode()) {
+            p.setPhoto(PostLabelConstants.DEFAULT_GEOG_PHOTO);
+
+        } else if (type == PostLabelConstants.TYPE.normal.getCode()) {
+            p.setPhoto(PostLabelConstants.DEFAULT_NORMAL_PHOTO);
+        } else {
+            log.error("不支持的标签类型");
+        }
     }
 
     private void batchAddPostLabelRealtionByList(int flag, List<Integer> newLabelIdList) {

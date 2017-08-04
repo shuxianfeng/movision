@@ -27,4 +27,13 @@ public class PostLabelConstants {
             return String.valueOf(this.code);
         }
     }
+
+    /**
+     * 默认普通标签头像
+     */
+    public static final String DEFAULT_NORMAL_PHOTO = "http://pic.mofo.shop/upload/coverIncise/img/biaoqian_morentu.png";
+    /**
+     * 默认地理标签头像
+     */
+    public static final String DEFAULT_GEOG_PHOTO = "http://pic.mofo.shop/upload/coverIncise/img/biaoqian_weizhi.png";
 }
