@@ -294,6 +294,8 @@ public class FacadeComments {
                 //查询父评论下面有多少子评论
                 List<CommentVo> CommentVozjh = pCommentVoList((int) commentVoList.get(i).getId());
                 commentVoList.get(i).setCommentVos(CommentVozjh);
+                int repliesNumber = commentService.repliesNumber(commentVoList.get(i).getId());
+                commentVoList.get(i).setRepliesnumber(repliesNumber);
             }
         }
         return commentVoList;
