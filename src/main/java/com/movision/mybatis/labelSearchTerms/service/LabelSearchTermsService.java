@@ -44,6 +44,9 @@ public class LabelSearchTermsService implements LabelSearchTermsMapper {
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("name", 1);
+            keys.put("type", 1);
+            keys.put("labelid", 1);
+
             DBCursor obj = collection.find(queryObject, keys).limit(12).sort(new BasicDBObject("intime", -1));
             list = obj.toArray();
         } catch (Exception e) {

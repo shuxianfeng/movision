@@ -637,7 +637,7 @@ public class AppPostController {
         return response;
     }
 
-    @ApiOperation(value = "发帖-查询历史搜索标签列表（展示12条）", notes = "发帖-查询历史搜索标签列表（展示12条）", response = Response.class)
+    @ApiOperation(value = "发帖-查询历史使用标签列表（展示12条）", notes = "发帖-查询历史使用标签列表（展示12条）", response = Response.class)
     @RequestMapping(value = "get_history_label_list_when_post", method = RequestMethod.GET)
     public Response getHistoryLabelListWhenPost() {
         Response response = new Response();

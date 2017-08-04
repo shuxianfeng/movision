@@ -42,8 +42,6 @@ public class LabelSearchService implements ILabelSearchService {
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("spec", spec);
 
-        //如果搜索的关键词不为空，则入库保存
-        saveKeywordsInMongoDB(spec);
 
         // 向query中添加新的键值对：key=_s
         spec.setQ(StringUtil.emptyToNull(spec.getQ()));
@@ -181,23 +179,7 @@ public class LabelSearchService implements ILabelSearchService {
         label.setFans(FormatUtil.parseInteger(itemAsMap.get("fans")));
     }
 
-    /**
-     * 把搜索的关键词存入mongoDB
-     *
-     * @param spec
-     */
-    private void saveKeywordsInMongoDB(NormalSearchSpec spec) {
-        if (StringUtil.isNotBlank(spec.getQ())) {
-            LabelSearchTerms labelSearchTerms = new LabelSearchTerms();
 
-            labelSearchTerms.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
-            labelSearchTerms.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
-            labelSearchTerms.setName(spec.getQ());
-            labelSearchTerms.setUserid(ShiroUtil.getAppUserID());  //不登录的情况下，返回0
-            labelSearchTerms.setIsdel(0);
-            labelSearchTermsService.insert(labelSearchTerms);
-        }
-    }
 
     public Integer UpdateSearchIsdel(Integer userid) {
         return labelSearchTermsService.updateColData(userid);

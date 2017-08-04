@@ -10,6 +10,7 @@ import com.movision.facade.comment.FacadeComments;
 import com.movision.facade.im.ImFacade;
 import com.movision.facade.paging.PageFacade;
 import com.movision.facade.pointRecord.PointRecordFacade;
+import com.movision.fsearch.pojo.spec.NormalSearchSpec;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.accusation.entity.Accusation;
 import com.movision.mybatis.accusation.service.AccusationService;
@@ -29,6 +30,8 @@ import com.movision.mybatis.followUser.service.FollowUserService;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
+import com.movision.mybatis.labelSearchTerms.entity.LabelSearchTerms;
+import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
 import com.movision.mybatis.newInformation.entity.NewInformation;
 import com.movision.mybatis.newInformation.service.NewInformationService;
 import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
@@ -91,6 +94,9 @@ import java.util.*;
 public class FacadePost {
 
     private static Logger log = LoggerFactory.getLogger(FacadePost.class);
+
+    @Autowired
+    private LabelSearchTermsService labelSearchTermsService;
 
     @Autowired
     private PageFacade pageFacade;
@@ -1182,6 +1188,30 @@ public class FacadePost {
         //4 下面是对非新建的标签集合操作
         processForExistLabel(flag, existLabels);
 
+        //5 记录此次发帖标签使用的历史
+        existLabels.addAll(newLabels);
+        for (PostLabel label : existLabels) {
+            saveKeywordsInMongoDB(label);
+        }
+
+    }
+
+    /**
+     * 把使用过的标签 存入mongoDB
+     */
+    private void saveKeywordsInMongoDB(PostLabel label) {
+        if (StringUtil.isNotBlank(label.getName())) {
+            LabelSearchTerms labelSearchTerms = new LabelSearchTerms();
+
+            labelSearchTerms.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
+            labelSearchTerms.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));  //日期
+            labelSearchTerms.setName(label.getName());  //标签名称
+            labelSearchTerms.setType(label.getType());  //标签类型
+            labelSearchTerms.setLabelid(label.getId());  //标签id
+            labelSearchTerms.setUserid(ShiroUtil.getAppUserID());  //不登录的情况下，返回0
+            labelSearchTerms.setIsdel(0);
+            labelSearchTermsService.insert(labelSearchTerms);
+        }
     }
 
     private void processForExistLabel(int flag, List<PostLabel> existLabels) {

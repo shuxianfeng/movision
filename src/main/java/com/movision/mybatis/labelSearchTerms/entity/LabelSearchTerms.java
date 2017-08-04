@@ -6,6 +6,7 @@ package com.movision.mybatis.labelSearchTerms.entity;
  */
 public class LabelSearchTerms {
     private String id;
+    private Integer labelid;
 
     private int userid;
 
@@ -13,6 +14,25 @@ public class LabelSearchTerms {
     private String name;
 
     private int isdel;
+    private int type;
+
+    public void setLabelid(Integer labelid) {
+        this.labelid = labelid;
+    }
+
+    public Integer getLabelid() {
+
+        return labelid;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getType() {
+
+        return type;
+    }
 
     public int getIsdel() {
         return isdel;
@@ -53,4 +73,6 @@ public class LabelSearchTerms {
     public void setIntime(String intime) {
         this.intime = intime;
     }
+
+
 }
