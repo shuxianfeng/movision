@@ -1,5 +1,6 @@
 package com.movision.mybatis.activePart.service;
 
+import com.movision.mybatis.activePart.entity.ActivePart;
 import com.movision.mybatis.activePart.entity.ActivePartList;
 import com.movision.mybatis.activePart.mapper.ActivePartMapper;
 import com.movision.mybatis.post.entity.PostActiveList;
@@ -40,6 +41,16 @@ public class ActivePartService {
         }catch (Exception e){
             log.error("查询报名列表失败");
             throw  e;
+        }
+    }
+
+    public int insertSelective(ActivePart activePart) {
+        try {
+            log.info("插入报名");
+            return activePartMapper.insertSelective(activePart);
+        } catch (Exception e) {
+            log.error("插入报名失败");
+            throw e;
         }
     }
 }

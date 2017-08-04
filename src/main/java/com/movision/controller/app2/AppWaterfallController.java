@@ -454,4 +454,22 @@ public class AppWaterfallController {
         return response;
     }
 
+
+    @ApiOperation(value = "活动详情中的报名", notes = "活动详情中的报名", response = Response.class)
+    @RequestMapping(value = "takePartInPost", method = RequestMethod.POST)
+    public Response takePartInPost(
+            @ApiParam(value = "用户id") @RequestParam String userid,
+            @ApiParam(value = "微信") @RequestParam(required = false) String weixin,
+            @ApiParam(value = "QQ") @RequestParam(required = false) String QQ,
+            @ApiParam(value = "手机") @RequestParam(required = false) String phone,
+            @ApiParam(value = "帖子id") @RequestParam String postid) {
+        Response response = new Response();
+        int result = facadePost.takePartInPost(userid, weixin, QQ, phone, postid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
 }

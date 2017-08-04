@@ -13,6 +13,8 @@ import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.accusation.entity.Accusation;
 import com.movision.mybatis.accusation.service.AccusationService;
+import com.movision.mybatis.activePart.entity.ActivePart;
+import com.movision.mybatis.activePart.service.ActivePartService;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.circleCategory.entity.CircleCategory;
@@ -163,7 +165,7 @@ public class FacadePost {
     @Autowired
     private CircleCategoryService circleCategoryService;
     @Autowired
-    private PostCommentZanRecordService postCommentZanRecordService;
+    private ActivePartService activePartService;
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         CommentCount commentCounts = null;
@@ -374,9 +376,9 @@ public class FacadePost {
         //List<PostVo> postVos=postService
         //查询活动参与总人数
         int partsum = postService.queryActivePartSum(Integer.parseInt(postid));
-        int postpartsum = postService.activeSum(Integer.parseInt(postid));//投稿类参与人数
+        //int postpartsum = postService.activeSum(Integer.parseInt(postid));//投稿类参与人数
         active.setPartsum(partsum);
-        active.setPostpartsum(postpartsum);
+        //active.setPostpartsum(postpartsum);
         //如果为商城促销类活动，需要在此基础上增加促销类商品列表
         if (activetype.equals("1")) {
 
@@ -2279,6 +2281,25 @@ public class FacadePost {
             mark = -1;
         }
         return mark;
+    }
+
+
+    /**
+     * 告知类活动的报名
+     *
+     * @param userid
+     * @param weixin
+     * @param QQ
+     * @param phone
+     * @return
+     */
+    public int takePartInPost(String userid, String weixin, String QQ, String phone, String postid) {
+        ActivePart activePart = new ActivePart();
+        activePart.setUserid(Integer.parseInt(userid));
+        activePart.setPostid(Integer.parseInt(postid));
+        activePart.setIntime(new Date());
+        int result = activePartService.insertSelective(activePart);
+        return result;
     }
 
 }
