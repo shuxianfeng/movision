@@ -99,5 +99,7 @@ public interface CommentMapper {
 
     List<CommentVo> queryThreeComment(int postid);
 
+    int repliesNumber(int id);
+
 
 }

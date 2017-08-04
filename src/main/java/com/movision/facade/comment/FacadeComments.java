@@ -279,6 +279,9 @@ public class FacadeComments {
         if (commentVos != null) {
             for (int i = 0; i < commentVos.size(); i++) {
                 commentVos.get(i).setCommentVos(pCommentVoList(commentVos.get(i).getId()));
+                int repliesNumber = commentService.repliesNumber(commentVos.get(i).getId());
+                //根据id查询里面回复条数
+                commentVos.get(i).setRepliesnumber(repliesNumber);
             }
         }
         return commentVos;

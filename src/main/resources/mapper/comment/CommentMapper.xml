@@ -533,4 +533,7 @@
           resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT * FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER} AND pid IS NULL ORDER BY zansum DESC LIMIT 3
   </select>
+  <select id="repliesNumber" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT COUNT(1) FROM yw_post_comment WHERE pid=#{id,jdbcType=INTEGER}
+  </select>
 </mapper>

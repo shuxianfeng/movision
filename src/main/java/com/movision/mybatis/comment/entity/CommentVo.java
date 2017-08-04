@@ -13,6 +13,7 @@ public class CommentVo implements Serializable {
     private Integer pid;
     private User user;
     private  Integer postid;
+    private Integer repliesnumber;
 
     private String content;
 
@@ -60,6 +61,13 @@ public class CommentVo implements Serializable {
 
     private Integer heatvalue;
 
+    public Integer getRepliesnumber() {
+        return repliesnumber;
+    }
+
+    public void setRepliesnumber(Integer repliesnumber) {
+        this.repliesnumber = repliesnumber;
+    }
 
     public Integer getHeatvalue() {
         return heatvalue;

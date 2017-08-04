@@ -514,4 +514,15 @@ public class CommentService {
     }
 
 
+    public int repliesNumber(int id) {
+        try {
+            log.info("回复条数");
+            return commentMapper.repliesNumber(id);
+        } catch (Exception e) {
+            log.error("回复条数失敗", e);
+            throw e;
+        }
+    }
+
+
 }
