@@ -2305,11 +2305,13 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
     </select>
     <select id="findAllActivePost" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT * FROM yw_post WHERE activeid=#{postid,jdbcType=INTEGER} AND isdel=0 ORDER BY heat_value DESC
+        SELECT p.*,u.nickname,u.photo FROM yw_post p LEFT JOIN yw_user u ON u.id=p.userid WHERE
+        p.activeid=#{postid,jdbcType=INTEGER} AND p.isdel=0 ORDER BY p.heat_value DESC
     </select>
     <select id="findAllActivePostIntime" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT * FROM yw_post WHERE activeid=#{postid,jdbcType=INTEGER} AND isdel=0 ORDER BY intime DESC
+        SELECT p.*,u.nickname,u.photo FROM yw_post p LEFT JOIN yw_user u ON u.id=p.userid WHERE
+        p.activeid=#{postid,jdbcType=INTEGER} AND p.isdel=0 ORDER BY p.intime DESC
     </select>
     <select id="postUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT userid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
