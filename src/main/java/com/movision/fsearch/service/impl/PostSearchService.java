@@ -1,27 +1,26 @@
 package com.movision.fsearch.service.impl;
 
-        import com.movision.common.util.ShiroUtil;
-        import com.movision.fsearch.pojo.ProductGroup;
-        import com.movision.fsearch.pojo.spec.PostSearchSpec;
-        import com.movision.fsearch.service.IPostSearchService;
-        import com.movision.fsearch.service.IWordService;
-        import com.movision.fsearch.service.Searcher;
-        import com.movision.fsearch.service.exception.ServiceException;
-        import com.movision.fsearch.utils.*;
-        import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTerms;
-        import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
-        import com.movision.mybatis.post.entity.PostSearchEntity;
-        import com.movision.mybatis.post.service.PostService;
-        import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
-        import com.movision.mybatis.searchPostRecord.service.SearchPostRecordService;
-        import com.movision.utils.DateUtils;
-        import org.apache.commons.collections.map.HashedMap;
-        import org.slf4j.Logger;
-        import org.slf4j.LoggerFactory;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.stereotype.Service;
+import com.movision.common.util.ShiroUtil;
+import com.movision.fsearch.pojo.ProductGroup;
+import com.movision.fsearch.pojo.spec.NormalSearchSpec;
+import com.movision.fsearch.service.IPostSearchService;
+import com.movision.fsearch.service.IWordService;
+import com.movision.fsearch.service.Searcher;
+import com.movision.fsearch.service.exception.ServiceException;
+import com.movision.fsearch.utils.*;
+import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTerms;
+import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
+import com.movision.mybatis.post.entity.PostSearchEntity;
+import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.postAndUserRecord.service.PostAndUserRecordService;
+import com.movision.utils.DateUtils;
+import org.apache.commons.collections.map.HashedMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-        import java.util.*;
+import java.util.*;
 
 /**
  * @Author zhuangyuhao
@@ -36,9 +35,6 @@ public class PostSearchService implements IPostSearchService {
     private IWordService wordService;
 
     @Autowired
-    private SearchPostRecordService searchPostRecordService;
-
-    @Autowired
     private OpularSearchTermsService opularSearchTermsService;
 
     @Autowired
@@ -46,8 +42,9 @@ public class PostSearchService implements IPostSearchService {
 
     @Autowired
     private PostAndUserRecordService postAndUserRecordService;
+
     @Override
-    public Map<String, Object> search(PostSearchSpec spec)
+    public Map<String, Object> search(NormalSearchSpec spec)
             throws ServiceException {
         Map<String, Map<String, Object>> query = new HashMap<String, Map<String, Object>>();
         Map<String, Object> result = new HashMap<String, Object>();
@@ -113,7 +110,7 @@ public class PostSearchService implements IPostSearchService {
      *
      * @param spec
      */
-    private void saveKeywordsInMongoDB(PostSearchSpec spec) {
+    private void saveKeywordsInMongoDB(NormalSearchSpec spec) {
         if (StringUtil.isNotBlank(spec.getQ())) {
             OpularSearchTerms opularSearchTerms = new OpularSearchTerms();
             opularSearchTerms.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
@@ -122,7 +119,6 @@ public class PostSearchService implements IPostSearchService {
             opularSearchTerms.setKeywords(spec.getQ());
             opularSearchTerms.setUserid(ShiroUtil.getAppUserID());  //不登录的情况下，返回0
             opularSearchTermsService.insert(opularSearchTerms);
-            // searchPostRecordService.add(spec.getQ());
         }
     }
 
@@ -177,19 +173,22 @@ public class PostSearchService implements IPostSearchService {
         return begin;
     }
 
-    private void setProductParam(Map<?, ?> itemAsMap, PostSearchEntity product, Integer id) {
-        product.setId(id);
-        product.setTitle(FormatUtil.parseString(itemAsMap.get("title")));
-        product.setSubtitle(FormatUtil.parseString(itemAsMap.get("subtitle")));
-        product.setIntime(DateUtils.str2Date(String.valueOf(itemAsMap.get("intime1")), "yyyyMMddHHmmss"));
-        product.setPostcontent(FormatUtil.parseString(itemAsMap.get("postcontent")));
-        product.setType(FormatUtil.parseInteger(itemAsMap.get("type")));
-        product.setActivetype(FormatUtil.parseInteger(itemAsMap.get("activetype")));
-        product.setCircleid(FormatUtil.parseInteger(itemAsMap.get("circleid")));
-        product.setCirclename(FormatUtil.parseString(itemAsMap.get("circlename")));
-        product.setActivefee(FormatUtil.parseDouble(itemAsMap.get("activefee")));
-        product.setImgurl(FormatUtil.parseString(itemAsMap.get("imgurl")));
-        product.setCoverimg(FormatUtil.parseString(itemAsMap.get("coverimg")));
+    private void setProductParam(Map<?, ?> itemAsMap, PostSearchEntity postSearchEntity, Integer id) {
+
+        postSearchEntity.setId(id);
+        postSearchEntity.setTitle(FormatUtil.parseString(itemAsMap.get("title")));
+        postSearchEntity.setSubtitle(FormatUtil.parseString(itemAsMap.get("subtitle")));
+        postSearchEntity.setIntime(DateUtils.str2Date(String.valueOf(itemAsMap.get("intime1")), "yyyyMMddHHmmss"));
+        postSearchEntity.setPostcontent(FormatUtil.parseString(itemAsMap.get("postcontent")));
+        postSearchEntity.setType(FormatUtil.parseInteger(itemAsMap.get("type")));
+        postSearchEntity.setActivetype(FormatUtil.parseInteger(itemAsMap.get("activetype")));
+        postSearchEntity.setCircleid(FormatUtil.parseInteger(itemAsMap.get("circleid")));
+        postSearchEntity.setCirclename(FormatUtil.parseString(itemAsMap.get("circlename")));
+        postSearchEntity.setActivefee(FormatUtil.parseDouble(itemAsMap.get("activefee")));
+        postSearchEntity.setImgurl(FormatUtil.parseString(itemAsMap.get("imgurl")));
+        postSearchEntity.setCoverimg(FormatUtil.parseString(itemAsMap.get("coverimg")));
+        postSearchEntity.setUserid(FormatUtil.parseInteger(itemAsMap.get("userid")));
+        postSearchEntity.setNickname(FormatUtil.parseString(itemAsMap.get("nickname")));
     }
 
     /**
@@ -231,8 +230,7 @@ public class PostSearchService implements IPostSearchService {
      * @param result
      * @return
      */
-    private List<Map<String, Object>> setSortFields(PostSearchSpec spec, Map<String, Object> result)
-    {
+    private List<Map<String, Object>> setSortFields(NormalSearchSpec spec, Map<String, Object> result) {
         List<Map<String, Object>> sortFields = new ArrayList<Map<String, Object>>(1);
         Map<String, Object> sortField = new HashMap<String, Object>(3);
 
@@ -271,6 +269,7 @@ public class PostSearchService implements IPostSearchService {
         sortFields.add(sortField);
         return sortFields;
     }
+
     /**
      * 获取帖子热门搜索词和搜索历史记录
      *
@@ -290,11 +289,12 @@ public class PostSearchService implements IPostSearchService {
 
     /**
      * 查询用户浏览历史
+     *
      * @return
      */
-    public Map<String,Object> getUserLookingHistory(int page,int pageSize){
+    public Map<String, Object> getUserLookingHistory(int page, int pageSize) {
         Map map = new HashMap();
-        map.put("userLookHistory",postAndUserRecordService.UserLookingHistory(ShiroUtil.getAppUserID(),page,pageSize));
+        map.put("userLookHistory", postAndUserRecordService.UserLookingHistory(ShiroUtil.getAppUserID(), page, pageSize));
         return map;
 
     }
