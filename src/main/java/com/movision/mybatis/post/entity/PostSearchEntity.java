@@ -44,6 +44,27 @@ public class PostSearchEntity implements Serializable {
 
     private Integer partsum;//已参与活动总人数
 
+    private Integer userid;
+
+    private String nickname;
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public Integer getUserid() {
+
+        return userid;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
     public void setEnddays(Integer enddays) {
         this.enddays = enddays;
     }
@@ -71,6 +92,7 @@ public class PostSearchEntity implements Serializable {
                 ", subtitle='" + subtitle + '\'' +
                 ", postcontent='" + postcontent + '\'' +
                 ", isactive=" + isactive +
+                ", partsum_enddays=" + partsum_enddays +
                 ", type=" + type +
                 ", intime=" + intime +
                 ", activefee=" + activefee +
@@ -81,6 +103,8 @@ public class PostSearchEntity implements Serializable {
                 ", coverimg='" + coverimg + '\'' +
                 ", enddays=" + enddays +
                 ", partsum=" + partsum +
+                ", userid=" + userid +
+                ", nickname='" + nickname + '\'' +
                 '}';
     }
 

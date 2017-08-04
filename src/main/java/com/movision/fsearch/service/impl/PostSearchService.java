@@ -118,7 +118,6 @@ public class PostSearchService implements IPostSearchService {
             opularSearchTerms.setKeywords(spec.getQ());
             opularSearchTerms.setUserid(ShiroUtil.getAppUserID());  //不登录的情况下，返回0
             opularSearchTermsService.insert(opularSearchTerms);
-            // searchPostRecordService.add(spec.getQ());
         }
     }
 
@@ -173,19 +172,22 @@ public class PostSearchService implements IPostSearchService {
         return begin;
     }
 
-    private void setProductParam(Map<?, ?> itemAsMap, PostSearchEntity product, Integer id) {
-        product.setId(id);
-        product.setTitle(FormatUtil.parseString(itemAsMap.get("title")));
-        product.setSubtitle(FormatUtil.parseString(itemAsMap.get("subtitle")));
-        product.setIntime(DateUtils.str2Date(String.valueOf(itemAsMap.get("intime1")), "yyyyMMddHHmmss"));
-        product.setPostcontent(FormatUtil.parseString(itemAsMap.get("postcontent")));
-        product.setType(FormatUtil.parseInteger(itemAsMap.get("type")));
-        product.setActivetype(FormatUtil.parseInteger(itemAsMap.get("activetype")));
-        product.setCircleid(FormatUtil.parseInteger(itemAsMap.get("circleid")));
-        product.setCirclename(FormatUtil.parseString(itemAsMap.get("circlename")));
-        product.setActivefee(FormatUtil.parseDouble(itemAsMap.get("activefee")));
-        product.setImgurl(FormatUtil.parseString(itemAsMap.get("imgurl")));
-        product.setCoverimg(FormatUtil.parseString(itemAsMap.get("coverimg")));
+    private void setProductParam(Map<?, ?> itemAsMap, PostSearchEntity postSearchEntity, Integer id) {
+
+        postSearchEntity.setId(id);
+        postSearchEntity.setTitle(FormatUtil.parseString(itemAsMap.get("title")));
+        postSearchEntity.setSubtitle(FormatUtil.parseString(itemAsMap.get("subtitle")));
+        postSearchEntity.setIntime(DateUtils.str2Date(String.valueOf(itemAsMap.get("intime1")), "yyyyMMddHHmmss"));
+        postSearchEntity.setPostcontent(FormatUtil.parseString(itemAsMap.get("postcontent")));
+        postSearchEntity.setType(FormatUtil.parseInteger(itemAsMap.get("type")));
+        postSearchEntity.setActivetype(FormatUtil.parseInteger(itemAsMap.get("activetype")));
+        postSearchEntity.setCircleid(FormatUtil.parseInteger(itemAsMap.get("circleid")));
+        postSearchEntity.setCirclename(FormatUtil.parseString(itemAsMap.get("circlename")));
+        postSearchEntity.setActivefee(FormatUtil.parseDouble(itemAsMap.get("activefee")));
+        postSearchEntity.setImgurl(FormatUtil.parseString(itemAsMap.get("imgurl")));
+        postSearchEntity.setCoverimg(FormatUtil.parseString(itemAsMap.get("coverimg")));
+        postSearchEntity.setUserid(FormatUtil.parseInteger(itemAsMap.get("userid")));
+        postSearchEntity.setNickname(FormatUtil.parseString(itemAsMap.get("nickname")));
     }
 
     /**
