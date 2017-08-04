@@ -145,7 +145,6 @@ public class LabelFacade {
      */
     public List labelResult(List<PostVo> list) {
         if (list != null) {
-            facadePost.findUser(list);
             facadePost.findPostLabel(list);
             facadePost.countView(list);
             facadePost.findAllCircleName(list);
