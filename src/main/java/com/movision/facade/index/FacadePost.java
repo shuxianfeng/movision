@@ -2191,13 +2191,13 @@ public class FacadePost {
      */
     public List activePostDetailHot(int type, String postid, Paging<PostVo> paging) {
         List<PostVo> list = null;
-        if (type == 1) {//最热
+        if (type == 0) {//最热
             list = postService.findAllActivePost(Integer.parseInt(postid), paging);
             countView(list);
             findUser(list);
             findPostLabel(list);
             findAllCircleName(list);
-        } else if (type == 2) {//最新
+        } else if (type == 1) {//最新
             list = postService.findAllActivePostIntime(Integer.parseInt(postid), paging);
             countView(list);
             findUser(list);

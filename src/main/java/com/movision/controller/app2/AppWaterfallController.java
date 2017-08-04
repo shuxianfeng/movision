@@ -249,7 +249,7 @@ public class AppWaterfallController {
 
     @ApiOperation(value = "活动详情中的最热最新", notes = "活动详情中的最热最新", response = Response.class)
     @RequestMapping(value = "activePostDetailHot", method = RequestMethod.POST)
-    public Response activePostDetailHot(@ApiParam(value = "类型 1 最热 2 最新") @RequestParam int type,
+    public Response activePostDetailHot(@ApiParam(value = "类型 0 最热 1 最新") @RequestParam int type,
                                         @ApiParam(value = "活动id") @RequestParam String postid,
                                         @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                         @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
