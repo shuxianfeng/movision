@@ -865,7 +865,6 @@ public class ImFacade {
      */
     public void activeMessage(String body, String fromaccid, long informidentity, String toAccids, String title, int activeid) {
         ImSystemInform imSystemInform = new ImSystemInform();
-        imSystemInform.setUserid(-1);
         imSystemInform.setBody(body);
         imSystemInform.setFromAccid(fromaccid);
         imSystemInform.setUserid(ShiroUtil.getBossUserID());

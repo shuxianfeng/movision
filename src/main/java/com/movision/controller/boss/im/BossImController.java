@@ -396,12 +396,12 @@ public class BossImController {
     @ApiOperation(value = "活动通知 ", notes = "活动通知", response = Response.class)
     @RequestMapping(value = "activeMessage", method = RequestMethod.POST)
     public Response activeMessage(
+            @ApiParam(value = "系统推送标题") @RequestParam String title,
             @ApiParam(value = "系统推送内容") @RequestParam String body,
-            @ApiParam(value = "活动id") @RequestParam int postid,
-            @ApiParam(value = "系统推送标题") @RequestParam String title) throws Exception {
+            @ApiParam(value = "活动id") @RequestParam int postid) throws Exception {
 
         Response response = new Response();
-        imFacade.activeMessage(body, title, postid);
+        imFacade.activeMessage(title, body, postid);
         if (response.getCode() == 200) {
             response.setMessage("活动通知成功");
         }
