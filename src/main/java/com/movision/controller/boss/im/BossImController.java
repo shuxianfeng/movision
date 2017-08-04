@@ -414,10 +414,11 @@ public class BossImController {
     @RequestMapping(value = "findAllActiveMessage", method = RequestMethod.POST)
     public Response findAllActiveMessage(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                          @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
-                                         @ApiParam(value = "活动id") @RequestParam int activeid) {
+                                         @ApiParam(value = "内容") @RequestParam(required = false) String body,
+                                         @ApiParam(value = "排序") @RequestParam(required = false) String pai) {
         Response response = new Response();
         Paging<ImSystemInform> paging = new Paging<ImSystemInform>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<ImSystemInform> list = imFacade.findAllActiveMessage(activeid, paging);
+        List<ImSystemInform> list = imFacade.findAllActiveMessage(body, pai, paging);
         if (response.getCode() == 200) {
             response.setMessage("查询活动通知成功");
         }
@@ -452,6 +453,22 @@ public class BossImController {
 
         Response response = new Response();
         ImSystemInform re = imFacade.queryActiveMessageById(id);
+        if (response.getCode() == 200) {
+            response.setMessage("活动通知回显成功");
+        }
+        response.setData(re);
+        return response;
+
+    }
+
+
+    @ApiOperation(value = "查询活动内容 ", notes = "查询活动内容", response = Response.class)
+    @RequestMapping(value = "queryActiveBody", method = RequestMethod.POST)
+    public Response queryActiveBody(
+            @ApiParam(value = "自增长id") @RequestParam int id) throws Exception {
+
+        Response response = new Response();
+        String re = imFacade.queryActiveBody(id);
         if (response.getCode() == 200) {
             response.setMessage("活动通知回显成功");
         }

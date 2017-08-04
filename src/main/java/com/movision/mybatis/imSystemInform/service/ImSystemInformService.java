@@ -242,13 +242,13 @@ public class ImSystemInformService {
     /**
      * 查询活动列表
      *
-     * @param activeid
+     * @param
      * @return
      */
-    public List<ImSystemInform> findAllActiveMessage(int activeid, Paging<ImSystemInform> paging) {
+    public List<ImSystemInform> findAllActiveMessage(Map map, Paging<ImSystemInform> paging) {
         try {
             log.info("查询活动列表");
-            return imSystemInformMapper.findAllActiveMessage(activeid, paging.getRowBounds());
+            return imSystemInformMapper.findAllActiveMessage(map, paging.getRowBounds());
         } catch (Exception e) {
             log.error("查询活动列表失败", e);
             throw e;
@@ -286,5 +286,17 @@ public class ImSystemInformService {
             throw e;
         }
     }
+
+
+    public String queryActiveBody(int id) {
+        try {
+            log.info("查询活动内容");
+            return imSystemInformMapper.queryActiveBody(id);
+        } catch (Exception e) {
+            log.error("查询活动内容失败", e);
+            throw e;
+        }
+    }
+
 
 }

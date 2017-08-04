@@ -1172,11 +1172,18 @@ public class ImFacade {
     /**
      * 查询活动通知列表
      *
-     * @param activeid
+     * @param
      * @return
      */
-    public List<ImSystemInform> findAllActiveMessage(int activeid, Paging<ImSystemInform> paging) {
-        return imSystemInformService.findAllActiveMessage(activeid, paging);
+    public List<ImSystemInform> findAllActiveMessage(String body, String pai, Paging<ImSystemInform> paging) {
+        Map map = new HashMap();
+        if (StringUtil.isNotEmpty(body)) {
+            map.put("body", body);
+        }
+        if (StringUtil.isNotEmpty(pai)) {
+            map.put("pai", pai);
+        }
+        return imSystemInformService.findAllActiveMessage(map, paging);
     }
 
 
@@ -1210,6 +1217,17 @@ public class ImFacade {
     public ImSystemInform queryActiveMessageById(int id) {
         ImSystemInform imSystemInform = imSystemInformService.queryActiveById(id);
         return imSystemInform;
+    }
+
+    /**
+     * 查询活动内容
+     *
+     * @param id
+     * @return
+     */
+    public String queryActiveBody(int id) {
+        String imsys = imSystemInformService.queryActiveBody(id);
+        return imsys;
     }
 
 

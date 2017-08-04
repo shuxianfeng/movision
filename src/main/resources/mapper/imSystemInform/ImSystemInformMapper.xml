@@ -220,7 +220,13 @@
     </select>
     <select id="findAllActiveMessage" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
-        select * from yw_im_system_informs WHERE activeid=#{activeid,jdbcType=INTEGER}
+        select * from yw_im_system_informs WHERE activeid is NOT NULL
+        <if test="body!=null">
+            AND body LIKE concat('%',#{body,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="pai==0">
+            ORDER BY inform_time DESC
+        </if>
     </select>
     <update id="updateActiveMessage" parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
         update yw_im_system_informs
@@ -237,5 +243,8 @@
     <select id="queryActiveById" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
         SELECT  * FROM  yw_im_system_informs WHERE  id=#{id,jdbcType=INTEGER}
+    </select>
+    <select id="queryActiveBody" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT body FROM  yw_im_system_informs WHERE  id=#{id,jdbcType=INTEGER}
     </select>
 </mapper>

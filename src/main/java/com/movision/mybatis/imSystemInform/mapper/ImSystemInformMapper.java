@@ -43,9 +43,11 @@ public interface ImSystemInformMapper {
 
     ImSystemInform queryOperationInformById(ImSystemInform imSystemInform);
 
-    List<ImSystemInform> findAllActiveMessage(int activeid, RowBounds rowBounds);
+    List<ImSystemInform> findAllActiveMessage(Map map, RowBounds rowBounds);
 
     int updateActiveMessage(ImSystemInform imSystemInform);
 
     ImSystemInform queryActiveById(int id);
+
+    String queryActiveBody(int id);
 }
