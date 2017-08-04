@@ -62,4 +62,17 @@ public class FollowUserService {
         }
     }
 
+    public int updateFollowuserVo(FollowUserVo followUserVo) {
+        try {
+            log.info("更新关注用户表数据");
+            return followUserMapper.updateFollowuserVo(followUserVo);
+        } catch (Exception e) {
+            log.error("更新关注用户表数据失败", e);
+            throw e;
+        }
+
+    }
+
+
+
 }

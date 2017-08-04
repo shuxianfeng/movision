@@ -55,8 +55,8 @@ public class InstantInfo {
             InstantInfo u1 = (InstantInfo) o1;
             InstantInfo u2 = (InstantInfo) o2;
 
-            return (u1.getIntime().before(u2.getIntime()) ? -1 :
-                    (u1.getIntime().equals(u2.getIntime()) ? 0 : 1));
+            return (u2.getIntime().before(u1.getIntime()) ? -1 :
+                    (u2.getIntime().equals(u1.getIntime()) ? 0 : 1));
         }
 
     };

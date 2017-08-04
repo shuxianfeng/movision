@@ -19,7 +19,7 @@ public interface PostCommentZanRecordMapper {
 
     PostCommentZanRecord selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(PostCommentZanRecord record);
+    int updateByPrimaryKeySelective(PostCommentZanRecordVo record);
 
     int updateByPrimaryKey(PostCommentZanRecord record);
 

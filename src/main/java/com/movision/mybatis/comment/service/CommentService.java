@@ -513,6 +513,16 @@ public class CommentService {
         }
     }
 
+    public int updateCommentVo(CommentVo commentVo) {
+        try {
+            log.info("更新评论数据");
+            return commentMapper.updateByPrimaryKeySelective(commentVo);
+        } catch (Exception e) {
+            log.error("更新评论数据失败", e);
+            throw e;
+        }
+    }
+
 
     public int repliesNumber(int id) {
         try {

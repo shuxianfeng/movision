@@ -73,6 +73,24 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <update id="updateFollowuserVo" parameterType="com.movision.mybatis.followUser.entity.FollowUserVo">
+        update yw_follow_user
+        <set>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="interestedusers != null">
+                interestedusers = #{interestedusers,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isread != null">
+                isread = #{isread,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
     <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.followUser.entity.FollowUser">
         update yw_follow_user
         set userid = #{userid,jdbcType=INTEGER},

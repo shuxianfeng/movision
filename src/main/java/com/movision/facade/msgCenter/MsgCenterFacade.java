@@ -159,13 +159,45 @@ public class MsgCenterFacade {
         paging.setTotal(list.size());
 
         //代码层分页操作
-        List resultList = pageFacade.getPageList(list, paging.getCurPage(), paging.getPageSize());
+        List<InstantInfo> resultList = pageFacade.getPageList(list, paging.getCurPage(), paging.getPageSize());
+
         int size = resultList == null ? 0 : resultList.size();
         log.debug("【row中list的数量】：" + size);
+        log.debug("【row中的list】：" + resultList.toString());
         //操作已读未读处理
+        setDataIsRead(resultList);
 
         return resultList;
 
+    }
+
+    /**
+     * 操作已读未读处理
+     *
+     * @param resultList
+     */
+    private void setDataIsRead(List<InstantInfo> resultList) {
+        for (InstantInfo info : resultList) {
+            int type = info.getType();
+            if (MsgCenterConstant.INSTANT_INFO_TYPE.comment.getCode() == type) {
+                CommentVo commentVo = (CommentVo) info.getObject();
+                commentVo.setIsread(1); //已读
+                commentService.updateCommentVo(commentVo);
+
+            } else if (MsgCenterConstant.INSTANT_INFO_TYPE.zan.getCode() == type) {
+                PostCommentZanRecordVo postCommentZanRecordVo = (PostCommentZanRecordVo) info.getObject();
+                postCommentZanRecordVo.setIsread(1);    //已读
+                postCommentZanRecordService.updatePostCommentZanRecordVo(postCommentZanRecordVo);
+
+            } else if (MsgCenterConstant.INSTANT_INFO_TYPE.follow.getCode() == type) {
+                FollowUserVo followUserVo = (FollowUserVo) info.getObject();
+                followUserVo.setIsread(1);  //已读
+                followUserService.updateFollowuserVo(followUserVo);
+
+            } else {
+                log.warn("非正常的动态消息类型");
+            }
+        }
     }
 
     private void handleCommentlist(List<InstantInfo> list) {

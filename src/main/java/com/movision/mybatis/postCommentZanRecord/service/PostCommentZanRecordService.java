@@ -88,4 +88,14 @@ public class PostCommentZanRecordService {
             throw e;
         }
     }
+
+    public int updatePostCommentZanRecordVo(PostCommentZanRecordVo postCommentZanRecordVo) {
+        try {
+            log.info("更新帖子评论点赞记录数据");
+            return recordMapper.updateByPrimaryKeySelective(postCommentZanRecordVo);
+        } catch (Exception e) {
+            log.error("更新帖子评论点赞记录数据失败", e);
+            throw e;
+        }
+    }
 }

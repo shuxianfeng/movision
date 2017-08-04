@@ -65,7 +65,7 @@
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective"
-            parameterType="com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecord">
+            parameterType="com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecordVo">
         update yw_post_comment_zan_record
         <set>
             <if test="userid != null">

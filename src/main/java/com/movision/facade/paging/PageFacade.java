@@ -1,5 +1,6 @@
 package com.movision.facade.paging;
 
+import com.movision.common.pojo.InstantInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,4 +40,5 @@ public class PageFacade {
         }
         return (result != null && result.size() > 0) ? result : null;
     }
+
 }

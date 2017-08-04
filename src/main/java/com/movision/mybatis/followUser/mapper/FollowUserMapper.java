@@ -17,6 +17,8 @@ public interface FollowUserMapper {
 
     int updateByPrimaryKeySelective(FollowUser record);
 
+    int updateFollowuserVo(FollowUserVo followUserVo);
+
     int updateByPrimaryKey(FollowUser record);
 
     int yesOrNo(Map map);
