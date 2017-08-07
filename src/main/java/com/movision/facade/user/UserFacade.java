@@ -691,10 +691,10 @@ public class UserFacade {
         //计算升至下一级缺少多少经验值
         talentUserVo.setLackxp(nextlevpoint-point);
 
-        double rate = (1-(nextlevpoint-point)/(nextlevpoint - upperlevpoint))*100;
-        BigDecimal b = new BigDecimal(rate);
-        double f1 = b.setScale(1,BigDecimal.ROUND_HALF_UP).doubleValue();
-        talentUserVo.setRate(f1);
+        double rate = ((point-upperlevpoint)/(nextlevpoint - upperlevpoint))*100;
+//        BigDecimal b = new BigDecimal(rate);
+//        double f1 = b.setScale(1,BigDecimal.ROUND_HALF_UP).doubleValue();
+        talentUserVo.setRate(rate);
 
         map.put("talentUserVo", talentUserVo);//----------------------------------------------------->1.个人信息，昵称等级经验值等
 
