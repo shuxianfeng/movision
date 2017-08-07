@@ -1046,6 +1046,16 @@ public class UserService {
         }
     }
 
+    public int queryFinishUserInfo(int userid){
+        try {
+            log.info("查询当前用户个人资料是否完整");
+            return userMapper.queryFinishUserInfo(userid);
+        }catch (Exception e){
+            log.error("查询当前用户个人资料是否完整失败", e);
+            throw e;
+        }
+    }
+
     public List<InviteUserVo> myInviteList(int userid, Paging<InviteUserVo> pager){
         try {
             log.info("查询当前用户邀请的好友列表");

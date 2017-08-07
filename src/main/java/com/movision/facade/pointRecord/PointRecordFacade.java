@@ -479,7 +479,7 @@ public class PointRecordFacade {
      *
      * @return
      */
-    private DailyTask getDailyTask() {
+    public DailyTask getDailyTask() {
         DailyTask dailyTask = new DailyTask(0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false);
         List<PointRecord> todayPointList = pointRecordService.queryMyTodayPoint(ShiroUtil.getAppUserID());
         if (ListUtil.isNotEmpty(todayPointList)) {

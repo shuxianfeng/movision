@@ -24,6 +24,7 @@
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
         <result column="growth" property="growth" jdbcType="INTEGER"/>
         <result column="level" property="level" jdbcType="INTEGER"/>
+        <result column="isdv" property="isdv" jdbcType="INTEGER"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="applydate" property="applydate" jdbcType="DATE"/>
         <result column="deviceno" property="deviceno" jdbcType="VARCHAR"/>
@@ -1312,6 +1313,16 @@
         SELECT count(*) FROM yw_user WHERE referrals = (
           SELECT invitecode FROM yw_user WHERE id = #{userid,jdbcType=INTEGER}
         )
+    </select>
+    
+    <select id="queryFinishUserInfo" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+        SELECT count(*) FROM yw_user
+        WHERE id = #{userid,jdbcType=INTEGER}
+          AND photo IS NOT NULL
+          AND nickname IS NOT NULL
+          AND sex IS NOT NULL
+          AND birthday IS NOT NULL
+          AND SIGN IS NOT NULL
     </select>
     
     <!--查询当前用户邀请的好友列表-->

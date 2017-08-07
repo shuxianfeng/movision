@@ -55,6 +55,12 @@ public interface PostMapper {
 
     int queryPostNumByUserid(int userid);
 
+    int queryCommentByUserid(int userid);
+
+    int queryZanSumByUserid(int userid);
+
+    int queryEssencesumByUserid(int userid);
+
     List<Post> queryCircleSubPost(Map<String, Object> map);
 
     List<PostVo> findAllPersonPost(RowBounds rowBounds, int userid);

@@ -135,4 +135,18 @@ public class AppMineController {
         }
         return response;
     }
+
+    @ApiOperation(value = "我的模块--某某的达人之路接口（含等级升级、徽章和升级经验的获取）", notes = "某某的达人之路页面数据返回", response = Response.class)
+    @RequestMapping(value = "myTalentInfo", method = RequestMethod.POST)
+    public Response myTalentInfo(@ApiParam(value = "用户id(必填，否则无法进入‘我的’页面)") @RequestParam String userid){
+        Response response = new Response();
+
+        Map<String, Object> map = userFacade.myTalentInfo(userid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+            response.setData(map);
+        }
+
+        return response;
+    }
 }

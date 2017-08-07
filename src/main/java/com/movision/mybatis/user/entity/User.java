@@ -49,7 +49,9 @@ public class User implements Serializable {
 
     private Integer growth;
 
-    private Integer level;
+    private Integer level;//2.0后改为用户等级
+
+    private Integer isdv;//是否为大V：0 否 1 是
 
     private Integer status;
 
@@ -329,6 +331,14 @@ public class User implements Serializable {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public Integer getIsdv() {
+        return isdv;
+    }
+
+    public void setIsdv(Integer isdv) {
+        this.isdv = isdv;
     }
 
     public Integer getStatus() {

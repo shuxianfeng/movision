@@ -73,6 +73,36 @@ public class PostService {
         }
     }
 
+    public int queryCommentByUserid(int userid){
+        try {
+            log.info("通过用户id查询当前用户的评论总数");
+            return postMapper.queryCommentByUserid(userid);
+        }catch (Exception e){
+            log.error("通过用户id查询当前用户的评论总数失败", e);
+            throw e;
+        }
+    }
+
+    public int queryZanSumByUserid(int userid){
+        try {
+            log.info("通过用户id查询当前用户的点赞总数");
+            return postMapper.queryZanSumByUserid(userid);
+        }catch (Exception e){
+            log.error("通过用户id查询当前用户的点赞总数失败", e);
+            throw e;
+        }
+    }
+
+    public int queryEssencesumByUserid(int userid){
+        try {
+            log.info("查询当前用户被选为精选的帖子数");
+            return postMapper.queryEssencesumByUserid(userid);
+        }catch (Exception e){
+            log.error("查询当前用户被选为精选的帖子数失败", e);
+            throw e;
+        }
+    }
+
     public List<Post> queryCircleSubPost(Map<String, Object> map) {
         return postMapper.queryCircleSubPost(map);
     }

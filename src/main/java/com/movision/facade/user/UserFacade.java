@@ -11,27 +11,21 @@ import com.movision.facade.index.FacadePost;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.PostZanRecord.service.PostZanRecordService;
-import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.collection.service.CollectionService;
-import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
+import com.movision.mybatis.pointRecord.entity.DailyTask;
 import com.movision.mybatis.pointRecord.entity.PointRecord;
 import com.movision.mybatis.pointRecord.service.PointRecordService;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
-import com.movision.mybatis.postLabel.entity.PostLabelVo;
 import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.service.UserService;
-import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
-import com.movision.utils.IntegerUtil;
+import com.movision.utils.ListUtil;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
-import javafx.geometry.Pos;
-import org.apache.commons.beanutils.converters.DoubleConverter;
-import org.apache.commons.collections.FastHashMap;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -41,6 +35,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -79,7 +74,7 @@ public class UserFacade {
     private PostZanRecordService postZanRecordService;
 
     @Autowired
-    HomepageManageService homepageManageService;
+    private HomepageManageService homepageManageService;
     /**
      * 判断是否存在该手机号的app用户
      *
@@ -669,6 +664,180 @@ public class UserFacade {
             inviteUserList = userService.getInviteRank(pager);
         }
         return inviteUserList;
+    }
+
+    /**
+     * 我的模块--XX的达人之路页面数据返回
+     */
+    public Map<String, Object> myTalentInfo(String userid){
+
+        Map<String, Object> map = new HashMap<>();
+
+        //首先查询用户头像昵称等级等内容
+        User user = userService.selectByPrimaryKey(Integer.parseInt(userid));
+        TalentUserVo talentUserVo = new TalentUserVo();
+        talentUserVo.setId(user.getId());
+        talentUserVo.setNickname(user.getNickname());
+        talentUserVo.setPhoto(user.getPhoto());
+
+        int point = user.getPoints();//用户当前积分，2.0版本中作为经验值来使用
+        //判断用户整十等级
+        int lev = 0;
+//        int lev10 = Integer.parseInt(PropertiesLoader.getValue("lev10"));
+//        int lev20 = Integer.parseInt(PropertiesLoader.getValue("lev20"));
+//        int lev30 = Integer.parseInt(PropertiesLoader.getValue("lev30"));
+//        int lev40 = Integer.parseInt(PropertiesLoader.getValue("lev40"));
+//        int lev50 = Integer.parseInt(PropertiesLoader.getValue("lev50"));
+//        int lev60 = Integer.parseInt(PropertiesLoader.getValue("lev60"));
+//        int lev70 = Integer.parseInt(PropertiesLoader.getValue("lev70"));
+//        int lev80 = Integer.parseInt(PropertiesLoader.getValue("lev80"));
+//        int lev90 = Integer.parseInt(PropertiesLoader.getValue("lev90"));
+//
+//        if (point < lev10){
+//            lev = 0;
+//        }else if (point < lev20){
+//            lev = 1;
+//        }else if (point < lev30){
+//            lev = 2;
+//        }else if (point < lev40){
+//            lev = 3;
+//        }else if (point < lev50){
+//            lev = 4;
+//        }else if (point < lev60){
+//            lev = 5;
+//        }else if (point < lev70){
+//            lev = 6;
+//        }else if (point < lev80){
+//            lev = 7;
+//        }else if (point < lev90){
+//            lev = 8;
+//        }else {
+//            lev = 9;
+//        }
+
+        //根据当前经验值计算等级
+        for (int i = 1; i < 100; i++ ){
+            if (lev == 0) {
+                String key = lev + String.valueOf(i);
+                int levpoint = Integer.parseInt(PropertiesLoader.getValue(key));
+                if (point < levpoint) {
+                    lev = i;
+                }
+            }
+        }
+        talentUserVo.setLevel(lev);
+
+        //获取上下级经验数值
+        String upperkey = "lev" + String.valueOf(lev);
+        String nextkey = "lev" + String.valueOf(lev-1);
+        int upperlevpoint = Integer.parseInt(PropertiesLoader.getValue(upperkey));
+        int nextlevpoint = Integer.parseInt(PropertiesLoader.getValue(nextkey));
+        //计算升至下一级缺少多少经验值
+        talentUserVo.setLackxp(nextlevpoint-point);
+
+        double rate = (1-(nextlevpoint-point)/(nextlevpoint - upperlevpoint))*100;
+        BigDecimal b = new BigDecimal(rate);
+        double f1 = b.setScale(1,BigDecimal.ROUND_HALF_UP).doubleValue();
+        talentUserVo.setRate(f1);
+
+        map.put("talentUserVo", talentUserVo);//----------------------------------------------------->1.个人信息，昵称等级经验值等
+
+        //再查询用户的所有徽章详情
+        //a.发帖数(1/10/50)
+        int postsum = postService.queryPostNumByUserid(Integer.parseInt(userid));
+        //b.用户总评论数(10/50/100)
+        int commentsum = postService.queryCommentByUserid(Integer.parseInt(userid));
+        //c.点赞数(50/100/200)
+        int zansum = postService.queryZanSumByUserid(Integer.parseInt(userid));
+        //d.邀请总人数(1/10/50)
+        int invitesum = userService.queryInviteNum(Integer.parseInt(userid));
+        //e.个人资料完善情况(0/1)
+        int flag = userService.queryFinishUserInfo(Integer.parseInt(userid));
+        //f.精选数(1/5/10)
+        int essencesum = postService.queryEssencesumByUserid(Integer.parseInt(userid));
+        //g.达人认证徽章(0/1)
+        int isdv = user.getIsdv();
+        //h.足迹徽章(1000KM/5000KM/10000KM)
+        int footprint = -1;//敬请期待
+        //i.实名认证徽章(0/1)
+        int rnauth = -1;//敬请期待
+        //j.消费徽章(0/1)
+        int consume = -1;//敬请期待
+
+        UserBadge userBadge = new UserBadge();
+        if (postsum == 0) {
+            userBadge.setPostsum(0);
+        }else if (postsum >= 1 && postsum < 10){
+            userBadge.setPostsum(1);
+        }else if (postsum >= 10 && postsum < 50){
+            userBadge.setPostsum(2);
+        }else if (postsum >= 50){
+            userBadge.setPostsum(3);
+        }
+
+        if (commentsum < 10) {
+            userBadge.setCommentsum(0);
+        }else if (commentsum >= 10 && commentsum < 50){
+            userBadge.setCommentsum(1);
+        }else if (commentsum >= 50 && commentsum < 100){
+            userBadge.setCommentsum(2);
+        }else if (commentsum >= 100){
+            userBadge.setCommentsum(3);
+        }
+
+        if (zansum < 50) {
+            userBadge.setZansum(0);
+        }else if (zansum >= 50 && zansum < 100){
+            userBadge.setZansum(1);
+        }else if (zansum >= 100 && zansum < 200){
+            userBadge.setZansum(2);
+        }else if (zansum >= 200){
+            userBadge.setZansum(3);
+        }
+
+        if (invitesum < 1) {
+            userBadge.setInvitesum(0);
+        }else if (invitesum >= 1 && invitesum < 10){
+            userBadge.setInvitesum(1);
+        }else if (invitesum >= 10 && invitesum < 50){
+            userBadge.setInvitesum(2);
+        }else if (invitesum >= 50){
+            userBadge.setInvitesum(3);
+        }
+
+        if (flag == 0){
+            userBadge.setFinishuserinfo(0);
+        }else if (flag == 1){
+            userBadge.setFinishuserinfo(1);
+        }
+
+        if (essencesum < 1) {
+            userBadge.setEssencesum(0);
+        }else if (essencesum >= 1 && essencesum < 5){
+            userBadge.setEssencesum(1);
+        }else if (essencesum >= 5 && essencesum < 10){
+            userBadge.setEssencesum(2);
+        }else if (essencesum >= 10){
+            userBadge.setEssencesum(3);
+        }
+
+        if (isdv == 0){
+            userBadge.setIsdv(0);
+        }else if (isdv == 1){
+            userBadge.setIsdv(1);
+        }
+
+        userBadge.setFootprint(footprint);
+        userBadge.setRnauth(rnauth);
+        userBadge.setConsume(consume);
+
+        map.put("userBadge", userBadge);//----------------------------------------------------->2.徽章信息
+
+        //最后查询用户的每日任务的升级情况
+        DailyTask dailyTask = pointRecordFacade.getDailyTask();
+        map.put("dailyTask", dailyTask);//------------------------------------------------------>3.获取每日任务完成情况
+
+        return map;
     }
 
 }
