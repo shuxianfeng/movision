@@ -829,6 +829,7 @@ public class UserFacade {
             int lev9 = Integer.parseInt(PropertiesLoader.getValue("lev9"));
             if (point < lev1){
                 lev = 0;
+                uppoint = 0;
                 nextpoint = lev1;
             }else if (point < lev2){
                 lev = 1;
