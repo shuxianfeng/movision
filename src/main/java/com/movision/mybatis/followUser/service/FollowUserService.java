@@ -52,6 +52,16 @@ public class FollowUserService {
         }
     }
 
+    public int insertUserFans(int interestedusers) {
+        try {
+            log.info("用户粉丝数加1");
+            return followUserMapper.insertUserFans(interestedusers);
+        } catch (Exception e) {
+            log.error("用户粉丝数加1失败", e);
+            throw e;
+        }
+    }
+
     public List<FollowUserVo> selectFollowUserVoList(Integer userid) {
         try {
             log.info("查询关注我的人的列表");

@@ -2300,6 +2300,8 @@ public class FacadePost {
             followUser.setInterestedusers(interestedusers);
             followUser.setUserid(userid);
             int count = followUserService.insertSelective(followUser);
+            //该用户的粉丝数加1
+            int fans = followUserService.insertUserFans(interestedusers);
             return 0;
         } else {
             return 1;
