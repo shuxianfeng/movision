@@ -36,12 +36,14 @@ public class PostAndUserRecordService implements PostAndUserRecordMapper {
 
 
       public List UserLookingHistory(int userid,int page,int pageSize ){
-         List<DBObject> list = null;
+          MongoClient mongoClient = null;
+          List<DBObject> list = null;
           DB db = null;
+          DBCursor cursor = null;
           try {
-            MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
-              db = mClient.getDB("searchRecord");
-            DBCollection collection = db.getCollection("postAndUserRecord");
+              mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+              db = mongoClient.getDB("searchRecord");
+              DBCollection table = db.getCollection("postAndUserRecord");
 
             BasicDBObject queryObject = new BasicDBObject("userid", userid);
             //指定需要显示列
@@ -52,8 +54,8 @@ public class PostAndUserRecordService implements PostAndUserRecordMapper {
             keys.put("crileid", 1);
             keys.put("intime", 1);*/
           //  List sum=collection.distinct("postid",queryObject).skip((page - 1) * 10).sort(new BasicDBObject("intime", -1)).limit(pageSize);
-            DBCursor obj = collection.find(queryObject).skip((page - 1) * 10).sort(new BasicDBObject("intime", -1)).limit(pageSize);
-             list = obj.toArray();
+              cursor = table.find(queryObject).skip((page - 1) * 10).sort(new BasicDBObject("intime", -1)).limit(pageSize);
+              list = cursor.toArray();
             for (int i =0;i<list.size();i++){
                 for (int j =list.size()-1;j>i;j--){
                     if(list.get(i).get("postid").equals(list.get(j).get("postid"))){
@@ -61,12 +63,14 @@ public class PostAndUserRecordService implements PostAndUserRecordMapper {
                     }
                 }
              }
+              cursor.close();
          } catch (Exception e) {
-            e.printStackTrace();
+              log.error("查询用户浏览历史失败", e);
           } finally {
               if (null != db) {
                   db.requestDone();
-                  db = null;
+                  cursor.close();
+                  mongoClient.close();
               }
         }
         return list;

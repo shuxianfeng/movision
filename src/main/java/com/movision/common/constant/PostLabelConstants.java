@@ -7,10 +7,10 @@ package com.movision.common.constant;
 public class PostLabelConstants {
 
     public enum TYPE {
-        geog(0),
-        normal(1),
-        circle(2),
-        active(3);
+        geog(0),    //地理
+        normal(1),  //普通
+        circle(2),  //圈子
+        active(3);  //活动
 
         public final int code;
 

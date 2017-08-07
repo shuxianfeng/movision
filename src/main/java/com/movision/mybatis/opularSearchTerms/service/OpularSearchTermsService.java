@@ -5,7 +5,10 @@ import com.mongodb.*;
 import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTermsVo;
 import com.movision.mybatis.opularSearchTerms.mapper.OpularSearchTermsMapper;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
+import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
  import org.springframework.data.mongodb.core.MongoTemplate;
@@ -25,12 +28,14 @@ import java.util.ArrayList;
 @Repository
  public class OpularSearchTermsService implements OpularSearchTermsMapper {
 
+    private static Logger log = LoggerFactory.getLogger(OpularSearchTermsService.class);
+
     @Autowired
       private MongoTemplate mongoTemplate;
 
     @Override
      public void insert(OpularSearchTerms opularSearchTerms) {
-        // TODO Auto-generated method stub
+
         mongoTemplate.insert(opularSearchTerms);
     }
 
@@ -66,10 +71,12 @@ import java.util.ArrayList;
     }
 
     public List histroyWords(int userid) {
+        MongoClient mClient = null;
         List<DBObject> list = null;
         DB db = null;
+        DBCursor cursor = null;
         try {
-            MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("opularSearchTerms");
             BasicDBObject queryObject = new BasicDBObject("userid", userid).append("isdel", 0);
@@ -77,14 +84,16 @@ import java.util.ArrayList;
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("keywords", 1);
-            DBCursor obj = collection.find(queryObject, keys).limit(12).sort(new BasicDBObject("intime", -1));
-            list = obj.toArray();
+            cursor = collection.find(queryObject, keys).limit(12).sort(new BasicDBObject("intime", -1));
+            list = cursor.toArray();
+            cursor.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("获取帖子热门搜索词失败", e);
         } finally {
             if (null != db) {
                 db.requestDone();
-                db = null;
+                cursor.close();
+                mClient.close();
             }
         }
         return list;
@@ -92,23 +101,24 @@ import java.util.ArrayList;
 
 
     public Integer updateColData(int userid) {
+        MongoClient mongoClient = null;
         DB db = null;
         try {
-            MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
-            db = mClient.getDB("searchRecord");
-            DBCollection dbCol = db.getCollection("opularSearchTerms");
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("opularSearchTerms");
             BasicDBObject doc = new BasicDBObject();
             BasicDBObject res = new BasicDBObject();
             res.put("isdel", 1);
             System.out.println("将数据集中的所有文档的isdel修改成1！");
             doc.put("$set", res);
-            dbCol.update(new BasicDBObject("userid", userid), doc, false, true);
+            table.update(new BasicDBObject("userid", userid), doc, false, true);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("清除首页搜索历史失败", e);
         } finally {
             if (null != db) {
                 db.requestDone();
-                db = null;
+                mongoClient.close();
             }
         }
         return 1;

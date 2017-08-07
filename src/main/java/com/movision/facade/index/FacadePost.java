@@ -1969,25 +1969,30 @@ public class FacadePost {
      * @return
      */
     public List userRefulshListMongodb(int userid) {
+        MongoClient mongoClient = null;
         List<DBObject> list = null;
         DB db = null;
+        DBCursor dbCursor = null;
         try {
-            MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
-            db = mClient.getDB("searchRecord");
-            DBCollection collection = db.getCollection("userRefreshRecord");//表名
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
             BasicDBObject queryObject = new BasicDBObject("userid", userid);
             //指定需要显示列
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("postid", 1);
-            DBCursor obj = collection.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
-            list = obj.toArray();
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
+            list = dbCursor.toArray();
+            dbCursor.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
         } finally {
             if (null != db) {
                 db.requestDone();
                 db = null;
+                dbCursor.close();
+                mongoClient.close();
             }
         }
         return list;
@@ -1999,19 +2004,21 @@ public class FacadePost {
      * @return
      */
     public long mongodbCount() {
+        MongoClient mongoClient = null;
         long count = 0;
         DB db = null;
         try {
-            MongoClient mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
-            db = mClient.getDB("searchRecord");
-            DBCollection collection = db.getCollection("userRefreshRecord");//表名
-            count = collection.count();
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
+            count = table.count();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("查询用户刷新记录表的总记录数失败", e);
         } finally {
             if (null != db) {
                 db.requestDone();
                 db = null;
+                mongoClient.close();
             }
         }
         return count;
