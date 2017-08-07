@@ -1015,10 +1015,10 @@
     <update id="deleteUserLevl" parameterType="java.util.Map">
         UPDATE yw_user
         <if test="type==1">
-            SET level=1
+            SET isdv=1
         </if>
         <if test="type==0">
-            SET level=0
+            SET isdv=0
         </if>
         WHERE id=#{userid,jdbcType=INTEGER}
     </update>
