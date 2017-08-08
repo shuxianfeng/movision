@@ -16,7 +16,7 @@ public class TalentUserVo implements Serializable{
 
     private Integer level;//用户等级
 
-    private Integer lackxp;//升到下一级需要的经验值
+    private Double lackxp;//升到下一级需要的经验值
 
     private Double rate;//当前拥有的经验所占百分比
 
@@ -52,11 +52,11 @@ public class TalentUserVo implements Serializable{
         this.level = level;
     }
 
-    public Integer getLackxp() {
+    public Double getLackxp() {
         return lackxp;
     }
 
-    public void setLackxp(Integer lackxp) {
+    public void setLackxp(Double lackxp) {
         this.lackxp = lackxp;
     }
 

@@ -686,16 +686,15 @@ public class UserFacade {
         talentUserVo.setLevel(resmap.get("lev"));
 
         //获取上下级经验数值
-        int upperlevpoint = resmap.get("uppoint");
-        int nextlevpoint = resmap.get("nextpoint");
+        double upperlevpoint = (double)resmap.get("uppoint");
+        double nextlevpoint = (double)resmap.get("nextpoint");
         //计算升至下一级缺少多少经验值
         talentUserVo.setLackxp(nextlevpoint-point);
 
         double rate = ((point-upperlevpoint)/(nextlevpoint - upperlevpoint))*100;
-//        BigDecimal b = new BigDecimal(rate);
-//        double f1 = b.setScale(1,BigDecimal.ROUND_HALF_UP).doubleValue();
-        System.out.println("测测测"+point+"测试"+upperlevpoint+"测试"+nextlevpoint);
-        talentUserVo.setRate(rate);
+        BigDecimal b = new BigDecimal(rate);
+        double f1 = b.setScale(1,BigDecimal.ROUND_HALF_UP).doubleValue();
+        talentUserVo.setRate(f1);
 
         map.put("talentUserVo", talentUserVo);//----------------------------------------------------->1.个人信息，昵称等级经验值等
 
