@@ -107,14 +107,15 @@ public class AddressFacade {
         parammap.put("areacode", Integer.parseInt(areacode));
         Address address = addressService.queryNameByCode(parammap);
 //        String addressStr = address.getProvince() + address.getCity() + address.getDistrict() + street;
+        String addressStr = "乌兹别克斯坦";
         //通过地址计算经纬度
-        String sn = SnCal.getSn(address.getProvince() + address.getCity() + address.getDistrict() + street);
+//        String sn = SnCal.getSn(address.getProvince() + address.getCity() + address.getDistrict() + street);
+        String sn = SnCal.getSn(addressStr);
         String ak = PropertiesLoader.getValue("baidu.ak");
 
         //通过http的get请求url
         String baiduurl = PropertiesLoader.getValue("baidu.url");
         //拼接百度接口的请求url
-        String addressStr = "乌兹别克斯坦";
         System.out.println("addressStr>>>>>>>>>>>>>>>>>>"+addressStr);
         String url = baiduurl + "?address=" + addressStr + "&output=json&ak=" + ak + "&sn=" + sn;
         String result = "";
