@@ -612,7 +612,7 @@ public class AppPostController {
         return response;
     }
 
-    @ApiOperation(value = "发帖-新增标签-校验标签", notes = "发帖-新增标签-校验标签", response = Response.class)
+    /*@ApiOperation(value = "发帖-新增标签-校验标签", notes = "发帖-新增标签-校验标签", response = Response.class)
     @RequestMapping(value = "validate_label_when_post", method = RequestMethod.GET)
     public Response validateLabelWhenPost(@ApiParam("新增标签的名称") @RequestParam String name) {
         Response response = new Response();
@@ -626,7 +626,7 @@ public class AppPostController {
             response.setMessage("校验成功");
         }
         return response;
-    }
+    }*/
 
     @ApiOperation(value = "发帖-查询热门标签列表（展示10条）", notes = "发帖-查询热门标签列表（展示10条）", response = Response.class)
     @RequestMapping(value = "get_hot_label_list_when_post", method = RequestMethod.GET)

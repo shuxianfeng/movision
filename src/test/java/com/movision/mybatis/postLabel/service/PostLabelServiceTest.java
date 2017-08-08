@@ -3,7 +3,6 @@ package com.movision.mybatis.postLabel.service;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.test.SpringTestCase;
 import org.junit.Test;
-import org.springframework.asm.Label;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -34,6 +33,12 @@ public class PostLabelServiceTest extends SpringTestCase {
         postLabel.setType(3);
 
         postLabelService.insertPostLabel(postLabel);
+    }
+
+    @Test
+    public void queryCityListByCityname() throws Exception {
+        List<PostLabel> labels = postLabelService.queryCityListByCityname("京");
+        System.out.println("【结果：】" + labels.toString());
     }
 
 }

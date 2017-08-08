@@ -2357,6 +2357,14 @@ public class FacadePost {
         return result;
     }
 
+    public List<PostLabel> queryCityListByCityname(String name) {
+        return postLabelService.queryCityListByCityname(name);
+    }
+
+    public List<PostLabel> queryGeogLabelByName(String name) {
+        return postLabelService.queryGeogLabelByName(name);
+    }
+
 }
 
 
