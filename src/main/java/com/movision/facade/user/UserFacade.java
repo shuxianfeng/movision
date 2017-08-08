@@ -694,6 +694,7 @@ public class UserFacade {
         double rate = ((point-upperlevpoint)/(nextlevpoint - upperlevpoint))*100;
 //        BigDecimal b = new BigDecimal(rate);
 //        double f1 = b.setScale(1,BigDecimal.ROUND_HALF_UP).doubleValue();
+        System.out.println("测测测"+point+"测试"+upperlevpoint+"测试"+nextlevpoint);
         talentUserVo.setRate(rate);
 
         map.put("talentUserVo", talentUserVo);//----------------------------------------------------->1.个人信息，昵称等级经验值等
