@@ -64,6 +64,7 @@
         SELECT id,name,photo FROM yw_circle
         WHERE category = #{categoryid,jdbcType=INTEGER}
           AND status = '1'
+          AND isdel = '0'
     </select>
 
     <!--查询所有待审核的圈子-->
