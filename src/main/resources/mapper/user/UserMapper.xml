@@ -199,7 +199,7 @@
         <where>
             30000 > t.distance
             AND t.id != '-1'
-            <if test="userid != null || userid != ''">
+            <if test="userid != null and userid != ''">
                 t.id NOT IN (
                 SELECT interestedusers FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER}
                 )
