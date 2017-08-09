@@ -351,4 +351,7 @@
         SELECT * from yw_post_label WHERE NAME LIKE CONCAT('%', #{name}, '%')
         AND TYPE=0
     </select>
+    <select id="followCircle" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT  COUNT(1) FROM  yw_follow_circle WHERE circleid=#{circleid,jdbcType=INTEGER}
+    </select>
 </mapper>
