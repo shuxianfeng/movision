@@ -65,7 +65,7 @@ public class CollectionFacade {
             //该帖子的被收藏次数+1
             collectionService.addCollectionSum(Integer.parseInt(postid));
             //增加熱度
-            //facadeHeatValue.addHeatValue(Integer.parseInt(postid), 6);
+            facadeHeatValue.addHeatValue(Integer.parseInt(postid), 6, userid);
 
             //************************查询被收藏人的帖子是否被设为最新消息通知用户
            /* Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
@@ -103,7 +103,7 @@ public class CollectionFacade {
             collectionService.cancelCollectionPost(parammap);
             postService.updatePostCollectCount(parammap);
             //減少熱度
-            //facadeHeatValue.zanLessenHeatValue(Integer.parseInt(postid));
+            facadeHeatValue.zanLessenHeatValue(Integer.parseInt(postid), Integer.parseInt(userid));
         } else if (type.equals("1")) {
             //取消收藏商品
             Map<String, Object> parammap = new HashMap<>();

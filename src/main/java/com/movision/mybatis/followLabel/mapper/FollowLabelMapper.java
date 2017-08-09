@@ -24,4 +24,6 @@ public interface FollowLabelMapper {
     int cancleLabel(Map map);
 
     int updatePostLabel(int labelid);
+
+    int updateLabelHeatValue(Map map);
 }

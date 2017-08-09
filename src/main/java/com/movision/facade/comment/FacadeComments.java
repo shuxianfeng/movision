@@ -99,6 +99,8 @@ public class FacadeComments {
                 userOperationRecordService.updateUserOperationRecord(userOperationRecord);
             }
         }
+        //增加评论热度
+        facadeHeatValue.addCommentHeatValue(1, Integer.parseInt(commentid));
         //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------end
 
         Map<String, Object> parammap = new HashMap<>();
@@ -147,11 +149,11 @@ public class FacadeComments {
                 vo.setStatus(0);
                 vo.setIscontribute(0);
                 type = commentService.insertComment(vo);//添加评论
-                //增加热度
                 //更新用户最后操作时间和帖子评论总次数
                 postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子表的评论次数字段
-
-                //facadeHeatValue.addHeatValue(Integer.parseInt(postid), 4);
+                //增加帖子热度
+                facadeHeatValue.addHeatValue(Integer.parseInt(postid), 4, userid);
+                //增加用户热度
                 //************************查询被评论的帖子是否被设为最新消息通知用户
                 Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
                 NewInformation news = new NewInformation();
@@ -183,7 +185,8 @@ public class FacadeComments {
                 vo.setIscontribute(0);
                 vo.setPid(Integer.parseInt(fuid));
                 type = commentService.insertComment(vo);//添加评论
-
+                //增加评论热度
+                facadeHeatValue.addCommentHeatValue(1, Integer.parseInt(fuid));
                 //************************查询被评论的帖子是否被设为最新消息通知用户
                 Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
                 NewInformation news = new NewInformation();

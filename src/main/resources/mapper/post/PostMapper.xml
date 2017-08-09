@@ -2379,5 +2379,7 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
     <select id="selectTitleById" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.Post">
         select id, title FROM yw_post where id = #{id,jdbcType=INTEGER}
     </select>
-
+    <select id="updateZeroHeatValue" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        UPDATE yw_post SET heat_value=0 WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
 </mapper>

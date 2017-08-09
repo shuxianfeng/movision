@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.im.ImFacade;
+import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.constant.entity.Constant;
@@ -61,6 +62,8 @@ public class FacadeRewarded {
     private ImFacade imFacade;
     @Autowired
     private UserOperationRecordService userOperationRecordService;
+    @Autowired
+    private FacadeHeatValue facadeHeatValue;
 
     /**
      * 公共方法 保存积分流水记录
@@ -136,8 +139,8 @@ public class FacadeRewarded {
                 ShiroUtil.updateAppuserPoint(in);
                 map.put("code", 200);
                 map.put("resault", in);
-
-
+                //增加帖子打赏热度
+                facadeHeatValue.addHeatValue(Integer.parseInt(postid), 7, userid);
                 //************************查询被打赏人是否被设为最新消息通知用户
                 Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
                 NewInformation news = new NewInformation();

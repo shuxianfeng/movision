@@ -1,5 +1,6 @@
 package com.movision.facade.label;
 
+import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleCount;
@@ -39,6 +40,8 @@ public class LabelFacade {
     private FacadePost facadePost;
     @Autowired
     private UserDontLikeService userDontLikeService;
+    @Autowired
+    private FacadeHeatValue facadeHeatValue;
 
     /**
      * 我的--关注--关注的标签，点击关注调用的关注的标签列表返回接口
@@ -130,6 +133,8 @@ public class LabelFacade {
             int count = followLabelService.insertSelective(followLabel);
             //增加关注标签数量
             followLabelService.updatePostLabel(labelid);
+            //增加标签热度
+            facadeHeatValue.addLabelHeatValue(1, labelid, String.valueOf(userid));
             return 0;
         } else {//关注过了
             return 1;

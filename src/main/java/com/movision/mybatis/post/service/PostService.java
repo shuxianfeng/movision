@@ -1488,6 +1488,16 @@ public class PostService {
         }
     }
 
+    public int updateZeroHeatValue(int postid) {
+        try {
+            log.info("修改热度");
+            return postMapper.updateZeroHeatValue(postid);
+        } catch (Exception e) {
+            log.error("修改热度失败", e);
+            throw e;
+        }
+    }
+
 
     public int selectUserLevel(int postid) {
         try {
