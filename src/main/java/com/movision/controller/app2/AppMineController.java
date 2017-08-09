@@ -5,6 +5,7 @@ import com.movision.facade.circle.CircleAppFacade;
 import com.movision.facade.label.LabelFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.circle.entity.CircleVo;
+import com.movision.mybatis.postLabel.entity.GeographicLabel;
 import com.movision.mybatis.postLabel.entity.PostLabelVo;
 import com.movision.mybatis.user.entity.InviteUserVo;
 import com.movision.mybatis.user.entity.UserVo;
@@ -149,4 +150,18 @@ public class AppMineController {
 
         return response;
     }
+
+//    @ApiOperation(value = "我的模块--点击小脚印--进入用户足迹地图页面接口", notes = "返回当前用户足迹地图中所有的地理标签位置", response = Response.class)
+//    @RequestMapping(value = "getfootmap", method = RequestMethod.POST)
+//    public Response getfootmap(@ApiParam(value = "用户id(必填，否则无法进入‘我的’页面)") @RequestParam String userid){
+//        Response response = new Response();
+//
+//        List<GeographicLabel> geographicList = labelFacade.getfootmap(userid);
+//        if (response.getCode() == 200) {
+//            response.setMessage("查询成功");
+//            response.setData(geographicList);
+//        }
+//
+//        return response;
+//    }
 }

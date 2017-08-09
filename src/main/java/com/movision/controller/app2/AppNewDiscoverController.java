@@ -110,8 +110,8 @@ public class AppNewDiscoverController {
     @RequestMapping(value = "getNearAuthor", method = RequestMethod.POST)
     public Response getNearAuthor(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                   @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
-                                  @ApiParam(value = "经度（如118.7935942346943）") @RequestParam(required = false) String lng,
-                                  @ApiParam(value = "纬度（如32.05606138741064）") @RequestParam(required = false) String lat,
+                                  @ApiParam(value = "经度（如118.7935942346943）") @RequestParam String lng,
+                                  @ApiParam(value = "纬度（如32.05606138741064）") @RequestParam String lat,
                                   @ApiParam(value = "用户id（登录状态下一定不能为空，非登录状态下可不传）") @RequestParam(required = false) String userid){
         Response response = new Response();
 
