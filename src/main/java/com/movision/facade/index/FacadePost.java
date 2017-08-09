@@ -1186,19 +1186,21 @@ public class FacadePost {
         log.debug("非新建的标签集合：" + existLabels.toString());
 
         //3 下面是对新建的标签集合操作
-        processForNewLabel(flag, newLabels);
-
-        //4 下面是对非新建的标签集合操作
-        processForExistLabel(flag, existLabels);
-
-        //5 记录此次发帖标签使用的历史
-        existLabels.addAll(newLabels);
-        for (PostLabel label : existLabels) {
-            saveKeywordsInMongoDB(label);
-            //增加标签热度
-            facadeHeatValue.addLabelHeatValue(2, label.getId(), null);
+        if (CollectionUtil.isNotEmpty(newLabels)) {
+            processForNewLabel(flag, newLabels);
         }
 
+        if (CollectionUtil.isNotEmpty(existLabels)) {
+            //4 下面是对非新建的标签集合操作
+            processForExistLabel(flag, existLabels);
+            //5 记录此次发帖标签使用的历史
+            existLabels.addAll(newLabels);
+            for (PostLabel label : existLabels) {
+                saveKeywordsInMongoDB(label);
+                //增加标签热度
+                facadeHeatValue.addLabelHeatValue(2, label.getId(), null);
+            }
+        }
     }
 
     /**
