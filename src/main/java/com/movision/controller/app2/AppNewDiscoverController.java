@@ -79,7 +79,7 @@ public class AppNewDiscoverController {
 
         Paging<Author> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
 
-        List<Author> authorList = userFacade.getHotAuthor(pager, userid);//传入当前登录用户的userid
+        List<Author> authorList = userFacade.findAllHotAuthor(pager, userid);//传入当前登录用户的userid
         pager.result(authorList);
         if (response.getCode() == 200){
             response.setMessage("查询成功");
@@ -97,12 +97,13 @@ public class AppNewDiscoverController {
 
         Paging<Author> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
 
-        List<Author> interestAuthorList = userFacade.getInterestAuthor(pager, userid);//传入当前登录用户的userid
+        List<Author> interestAuthorList = userFacade.findAllInterestAuthor(pager, userid);//传入当前登录用户的userid
+        pager.result(interestAuthorList);
         if (response.getCode() == 200){
             response.setMessage("查询成功");
         }
 
-        response.setData(interestAuthorList);
+        response.setData(pager);
         return response;
     }
 
@@ -117,12 +118,13 @@ public class AppNewDiscoverController {
 
         Paging<Author> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
 
-        List<Author> nearAuthorList = userFacade.getNearAuthor(pager, lng, lat, userid);//传入当前登录用户的userid
+        List<Author> nearAuthorList = userFacade.findAllNearAuthor(pager, lng, lat, userid);//传入当前登录用户的userid
+        pager.result(nearAuthorList);
         if (response.getCode() == 200){
             response.setMessage("查询成功");
         }
 
-        response.setData(nearAuthorList);
+        response.setData(pager);
         return response;
     }
 

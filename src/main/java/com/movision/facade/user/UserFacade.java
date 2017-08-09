@@ -434,7 +434,7 @@ public class UserFacade {
      * @param userid
      * @return
      */
-    public List<Author> getHotAuthor(Paging<Author> pager, String userid){
+    public List<Author> findAllHotAuthor(Paging<Author> pager, String userid){
         //首先查询推荐的作者列表（返回作者的phone字段，用于app端比对是不是通讯录好友的提示）
         Map<String, Object> map = new HashMap<>();
         if (StringUtil.isNotEmpty(userid)) {
@@ -442,7 +442,7 @@ public class UserFacade {
         }else{
             map.put("userid", "");
         }
-        List<Author> authorList = userService.getHotAuthor(pager, map);
+        List<Author> authorList = userService.findAllHotAuthor(pager, map);
 
         //遍历查询作者发布的最新的三个帖子
         if (authorList.size() > 0) {
@@ -454,11 +454,11 @@ public class UserFacade {
     /**
      * 根据当前登录的用户查询用户感兴趣的作者列表
      */
-    public List<Author> getInterestAuthor(Paging<Author> pager, String userid){
+    public List<Author> findAllInterestAuthor(Paging<Author> pager, String userid){
         //首先查询用户感兴趣的圈子里的作者和感兴趣的标签里的作者，根据热度值倒叙
         Map<String, Object> map = new HashMap<>();
         map.put("userid", Integer.parseInt(userid));
-        List<Author> authorList = userService.getInterestAuthor(pager, map);
+        List<Author> authorList = userService.findAllInterestAuthor(pager, map);
 
         //遍历查询作者发布的最新的三个帖子
         if (authorList.size() > 0) {
@@ -470,7 +470,7 @@ public class UserFacade {
     /**
      * 根据当前登录的用户查询附近的作者列表
      */
-    public List<Author> getNearAuthor(Paging<Author> pager, String lng, String lat, String userid){
+    public List<Author> findAllNearAuthor(Paging<Author> pager, String lng, String lat, String userid){
         //根据传入的经纬度查询距离当前经纬度30公里的所有作者（发过帖子的）
         Map<String, Object> map = new HashMap<>();
         map.put("lng", Double.parseDouble(lng));
@@ -480,7 +480,7 @@ public class UserFacade {
         }else{
             map.put("userid", "");
         }
-        List<Author> authorList = userService.getNearAuthor(pager, map);
+        List<Author> authorList = userService.findAllNearAuthor(pager, map);
 
         //遍历查询作者发布的最新的三个帖子
         if (authorList.size() > 0) {

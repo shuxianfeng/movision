@@ -21,11 +21,11 @@ public interface UserMapper {
 
     User selectByPrimaryKey(Integer id);
 
-    List<Author> getHotAuthor(RowBounds rowBounds, Map<String, Object> map);
+    List<Author> findAllHotAuthor(RowBounds rowBounds, Map<String, Object> map);
 
-    List<Author> getInterestAuthor(RowBounds rowBounds, Map<String, Object> map);
+    List<Author> findAllInterestAuthor(RowBounds rowBounds, Map<String, Object> map);
 
-    List<Author> getNearAuthor(RowBounds rowBounds, Map<String, Object> map);
+    List<Author> findAllNearAuthor(RowBounds rowBounds, Map<String, Object> map);
 
     int updateByPrimaryKeySelective(User record);
 

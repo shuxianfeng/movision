@@ -127,7 +127,7 @@
     </select>
 
     <!--美番2.0发现作者页查询推荐作者列表-->
-    <select id="getHotAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author">
+    <select id="findAllHotAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author">
         SELECT t1.id, t1.nickname, t1.photo, t1.phone FROM (
         (SELECT * FROM yw_user WHERE isrecommend = '1' AND id != '-1')
         UNION
@@ -145,7 +145,7 @@
     </select>
 
     <!--美番2.0发现作者页查询兴趣作者列表-->
-    <select id="getInterestAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author">
+    <select id="findAllInterestAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author">
         SELECT t.* FROM (
             (SELECT id, nickname, photo, phone, heat_value FROM yw_user WHERE id IN (
                 SELECT userid FROM yw_post WHERE circleid IN (
@@ -172,7 +172,7 @@
     </select>
 
     <!--美番2.0发现作者页查询附近作者列表-->
-    <select id="getNearAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author">
+    <select id="findAllNearAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author">
         SELECT t.* FROM
         (SELECT id, nickname, photo, phone, ROUND(
         6378.138 * 2 * ASIN(

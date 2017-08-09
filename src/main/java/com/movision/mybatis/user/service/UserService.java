@@ -754,30 +754,30 @@ public class UserService {
         }
     }
 
-    public List<Author> getHotAuthor(Paging<Author> pager, Map<String, Object> map){
+    public List<Author> findAllHotAuthor(Paging<Author> pager, Map<String, Object> map){
         try {
             log.info("查询用户未关注过的推荐作者");
-            return userMapper.getHotAuthor(pager.getRowBounds(), map);
+            return userMapper.findAllHotAuthor(pager.getRowBounds(), map);
         }catch (Exception e){
             log.error("查询用户未关注过的推荐作者失败", e);
             throw e;
         }
     }
 
-    public List<Author> getInterestAuthor(Paging<Author> pager, Map<String, Object> map){
+    public List<Author> findAllInterestAuthor(Paging<Author> pager, Map<String, Object> map){
         try {
             log.info("查询用户关注的圈子和关注的标签中的作者（并且这个用户还没关注过他的）");
-            return userMapper.getInterestAuthor(pager.getRowBounds(), map);
+            return userMapper.findAllInterestAuthor(pager.getRowBounds(), map);
         }catch (Exception e){
             log.error("查询用户关注的圈子和关注的标签中的作者（并且这个用户还没关注过他的）失败", e);
             throw e;
         }
     }
 
-    public List<Author> getNearAuthor(Paging<Author> pager, Map<String, Object> map){
+    public List<Author> findAllNearAuthor(Paging<Author> pager, Map<String, Object> map){
         try {
             log.info("根据传入的手机定位经纬度查询当前用户周边30公里内的所有作者");
-            return userMapper.getNearAuthor(pager.getRowBounds(), map);
+            return userMapper.findAllNearAuthor(pager.getRowBounds(), map);
         }catch (Exception e){
             log.error("根据传入的手机定位经纬度查询当前用户周边30公里内的所有作者失败", e);
             throw e;
