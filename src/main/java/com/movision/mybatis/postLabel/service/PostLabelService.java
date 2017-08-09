@@ -299,6 +299,16 @@ public class PostLabelService {
         }
     }
 
+    public Integer countSameNormalNameLabel(String name) {
+        try {
+            log.info("统计同名普通标签数量");
+            return postLabelMapper.countSameNormalNameLabel(name);
+        } catch (Exception e) {
+            log.error("统计同名普通标签数量失败", e);
+            throw e;
+        }
+    }
+
 
     public List<PostLabel> isrecommendLabel() {
         try {
@@ -449,4 +459,26 @@ public class PostLabelService {
             throw e;
         }
     }
+
+    public List<PostLabel> queryCityListByCityname(String name) {
+        try {
+            log.info("根据城市名称查询列表");
+            return postLabelMapper.queryCityListByCityname(name);
+        } catch (Exception e) {
+            log.error("根据城市名称查询列表失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostLabel> queryGeogLabelByName(String name) {
+        try {
+            log.info("根据地理名称查询地理标签");
+            return postLabelMapper.queryGeogLabelByName(name);
+        } catch (Exception e) {
+            log.error("根据地理名称查询地理标签失败", e);
+            throw e;
+        }
+    }
+
+
 }

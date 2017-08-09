@@ -68,6 +68,8 @@ public interface PostLabelMapper {
 
     Integer countSameNameLabel(String name);
 
+    Integer countSameNormalNameLabel(String name);
+
     List<Integer> labelId(int userid);
 
     List<PostLabel> queryHotValueLabelList(Integer displayCount);
@@ -93,4 +95,8 @@ public interface PostLabelMapper {
     List<PostVo> queryCircleByPost(int circleid);
 
     int followCircle(int circleid);
+
+    List<PostLabel> queryCityListByCityname(String name);
+
+    List<PostLabel> queryGeogLabelByName(String name);
 }
