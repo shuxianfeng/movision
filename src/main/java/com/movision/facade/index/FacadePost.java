@@ -172,6 +172,8 @@ public class FacadePost {
     private CircleCategoryService circleCategoryService;
     @Autowired
     private ActivePartService activePartService;
+    @Autowired
+    private FacadeHeatValue facadeHeatValue;
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         CommentCount commentCounts = null;
@@ -928,7 +930,7 @@ public class FacadePost {
         int count = postService.queryIsZanPost(parammap);
         if (count == 0) {
             //增加热度
-            //facadeHeatValue.addHeatValue(Integer.parseInt(id), 3);
+            facadeHeatValue.addHeatValue(Integer.parseInt(id), 3, userid);
             //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------start
             //判断该用户有没有首次关注过圈子或有没有点赞过帖子评论等或有没有收藏过商品帖子活动
             UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(Integer.parseInt(userid));
@@ -1137,7 +1139,8 @@ public class FacadePost {
                 addLabelProcess(labellist, flag);
                 //积分处理
                 pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
-
+                //增加用户热度
+                facadeHeatValue.addUserHeatValue(2, Integer.parseInt(userid));
                 map.put("flag", flag);
                 return map;
 
@@ -1192,6 +1195,8 @@ public class FacadePost {
         existLabels.addAll(newLabels);
         for (PostLabel label : existLabels) {
             saveKeywordsInMongoDB(label);
+            //增加标签热度
+            facadeHeatValue.addLabelHeatValue(2, label.getId(), null);
         }
 
     }
@@ -1577,9 +1582,9 @@ public class FacadePost {
         //根据传过来的地区去yw_city查代码
         if (area != null) {
             citycode = postService.queryCityCode(area);
-        } else {
+        } /**else {
             citycode = postService.queryCityUserCode(Integer.parseInt(userid));
-        }
+         }*/
         if (userid == null) {//未登录
             list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
             list = NotLoginretuenList(list, paging);
@@ -1748,10 +1753,10 @@ public class FacadePost {
         if (lists != null) {
             paging.setTotal(lists.size());
             list = pageFacade.getPageList(lists, paging.getCurPage(), paging.getPageSize());
-                findUser(list);
-                findPostLabel(list);
-                findHotComment(list);
-                countView(list);
+            findUser(list);
+            findPostLabel(list);
+            findHotComment(list);
+            countView(list);
             findAllCircleName(list);
             insertmongo(list, userid);
         }
@@ -2101,7 +2106,7 @@ public class FacadePost {
             log.info("结构钢事实宿舍上" + result);
         }
         //查询所有标签
-        List<PostLabel> postLabels = postLabelService.queryLabelName();
+        /** List<PostLabel> postLabels = postLabelService.queryLabelName();
         for (int i = 0; i < postLabels.size(); i++) {
             int labelid = postLabels.get(i).getId();
             //根据标签id查询标签的帖子
@@ -2115,7 +2120,7 @@ public class FacadePost {
             //根据id改变标签的热度值
             int result = postLabelService.updateLabelHeatValue(map);
             log.info("结构钢事实上" + result);
-        }
+         }*/
         //查询有没有手都推荐到首页的
         List<PostLabel> isrecommend = postLabelService.isrecommendLabel();
         //根据热度排序查询圈子
@@ -2309,6 +2314,8 @@ public class FacadePost {
             int count = followUserService.insertSelective(followUser);
             //该用户的粉丝数加1
             int fans = followUserService.insertUserFans(interestedusers);
+            //被关注人增加热度
+            facadeHeatValue.addUserHeatValue(1, interestedusers);
             return 0;
         } else {
             return 1;
