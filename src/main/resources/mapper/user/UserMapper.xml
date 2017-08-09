@@ -134,7 +134,7 @@
         (SELECT * FROM yw_user WHERE id != '-1' AND heat_value > '0' ORDER BY heat_value DESC)
         ) t1
         <where>
-            <if test="userid != null || userid != ''">
+            <if test="userid != null and userid != ''">
                 t1.id NOT IN (
                 SELECT interestedusers FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER}
                 )
