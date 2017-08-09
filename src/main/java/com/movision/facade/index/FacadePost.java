@@ -46,6 +46,8 @@ import com.movision.mybatis.postLabel.entity.PostLabelVo;
 import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.postLabelRelation.service.PostLabelRelationService;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
+import com.movision.mybatis.testintime.entity.TestIntime;
+import com.movision.mybatis.testintime.service.TestIntimeService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserAll;
 import com.movision.mybatis.user.entity.UserLike;
@@ -173,6 +175,8 @@ public class FacadePost {
     private ActivePartService activePartService;
     @Autowired
     private FacadeHeatValue facadeHeatValue;
+    @Autowired
+    private TestIntimeService testIntimeService;
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         CommentCount commentCounts = null;
@@ -2371,6 +2375,13 @@ public class FacadePost {
 
     public List<PostLabel> queryGeogLabelByName(String name) {
         return postLabelService.queryGeogLabelByName(name);
+    }
+
+
+    public int insert() {
+        TestIntime testIntime = new TestIntime();
+        testIntime.setIntime(new Date());
+        return testIntimeService.insert(testIntime);
     }
 
 }

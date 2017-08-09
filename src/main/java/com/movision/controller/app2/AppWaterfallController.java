@@ -472,4 +472,17 @@ public class AppWaterfallController {
         return response;
     }
 
+
+    @ApiOperation(value = "插入", notes = "插入", response = Response.class)
+    @RequestMapping(value = "insert", method = RequestMethod.POST)
+    public Response insert() {
+        Response response = new Response();
+        int result = facadePost.insert();
+        if (response.getCode() == 200) {
+            response.setMessage("插入成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
 }
