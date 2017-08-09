@@ -250,9 +250,9 @@
     </select>
     <select id="queryLabelCircle" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.postLabel.entity.PostLabel">
-        SELECT DISTINCT(l.name) FROM
-    yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id LEFT JOIN yw_post_label l ON l.id=r.labelid
-  WHERE p.circleid=#{circleid,jdbcType=INTEGER}
+        SELECT DISTINCT(l.`name`) FROM yw_post_label_relation r
+        LEFT JOIN yw_post p ON p.id=r.postid LEFT JOIN yw_post_label l ON l.id=r.labelid
+        WHERE p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0
     </select>
     <select id="findAllHotPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT p.*,u.nickname,u.photo FROM yw_post p LEFT JOIN yw_user u ON u.id=p.userid WHERE
