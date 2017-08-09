@@ -439,6 +439,8 @@ public class UserFacade {
         Map<String, Object> map = new HashMap<>();
         if (StringUtil.isNotEmpty(userid)) {
             map.put("userid", Integer.parseInt(userid));
+        }else{
+            map.put("userid", "");
         }
         List<Author> authorList = userService.getHotAuthor(pager, map);
 
@@ -475,6 +477,8 @@ public class UserFacade {
         map.put("lat", Double.parseDouble(lat));
         if (StringUtil.isNotEmpty(userid)) {
             map.put("userid", Integer.parseInt(userid));
+        }else{
+            map.put("userid", "");
         }
         List<Author> authorList = userService.getNearAuthor(pager, map);
 
