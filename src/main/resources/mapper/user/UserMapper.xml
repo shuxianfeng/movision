@@ -200,8 +200,8 @@
             30000 > t.distance
             AND t.id != '-1'
             <if test="userid != null and userid != ''">
-                t.id NOT IN (
-                SELECT interestedusers FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER}
+                AND t.id NOT IN (
+                  SELECT interestedusers FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER}
                 )
                 AND t.id != #{userid,jdbcType=INTEGER}
             </if>
