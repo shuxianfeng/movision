@@ -407,6 +407,8 @@ public class PostLabelService {
         }
     }
 
+//    public
+
     public int queryCircleid(int userids) {
         try {
             log.info("根据帖子id查询圈子");

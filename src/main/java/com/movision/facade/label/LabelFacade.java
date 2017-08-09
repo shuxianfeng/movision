@@ -316,5 +316,12 @@ public class LabelFacade {
         return mark;
     }
 
-
+    /**
+     * 获取足迹地图中国内的地理标签
+     */
+//    public List<GeographicLabel> getfootmap(String userid){
+//
+//        //首先查询当前用户发的所有帖子中包含的地理标签列表
+//        List<GeographicLabel> allGeographicLabelList = postLabelService.getfootmap(Integer.parseInt(userid));
+//    }
 }
