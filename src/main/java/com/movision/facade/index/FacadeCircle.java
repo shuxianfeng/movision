@@ -85,18 +85,16 @@ public class FacadeCircle {
 
     public List<CircleCategoryVo> queryCircleCategoryList(String userid) {
 
-        List<CircleCategoryVo> categoryList = circleCategoryService.queryCircleByCategory();//查询所有圈子的分类
+        List<CircleCategoryVo> categoryList = circleCategoryService.queryCircleByCategory();//查询所有圈子的分类------------实体add2
 
         //递归遍历，查询所有分类下的所有圈子列表放入Vo
         for (int i = 0; i < categoryList.size(); i++) {
             int categoryid = categoryList.get(i).getId();
             List<CircleVo> circlelist = circleService.queryCircleByCategory(categoryid);
-
             //递归遍历查询当前圈子中总共包含的帖子数量
             for (int j = 0; j < circlelist.size(); j++) {
                 int circleid = circlelist.get(j).getId();
                 int postnum = postService.queryPostNumByCircleid(circleid);
-
                 //将帖子数量加入圈子对象CircleVo中
                 circlelist.get(j).setPostnum(postnum);
                 //计算圈子中更新的帖子数量，目前该值与帖子数量一致
@@ -104,7 +102,6 @@ public class FacadeCircle {
             }
             //将圈子列表加入分类对象CircleCategoryVo中
             categoryList.get(i).setCircleList(circlelist);
-
         }
 
         //手动将待审核的圈子全部set到返回的对象中
@@ -126,8 +123,7 @@ public class FacadeCircle {
                 list.get(i).setIssupport(issupport);
             }
         }
-        circleCategoryVo.setCircleList(list);
-//        categoryList.add(circleCategoryVo);
+        circleCategoryVo.setCircleList(list);//----------------------------------实体add3
 
         //美番2.0增加 “我关注” 条目
         CircleCategoryVo myFollowCircle = new CircleCategoryVo();
@@ -141,16 +137,15 @@ public class FacadeCircle {
             parammap.put("userid", Integer.parseInt(userid));
             myfollowlist = circleService.queryMyFollowCircleList(parammap);
         }
-        myFollowCircle.setCircleList(myfollowlist);
-//        categoryList.add(myFollowCircle);
+        myFollowCircle.setCircleList(myfollowlist);//----------------------------------实体add1
 
-        //给圈子分类中，类目调换顺序
+        //给圈子分类中，类目调换顺序---把所有内容重新排序放入输出列表中
         List<CircleCategoryVo> newcategoryList = new ArrayList<>();
-        newcategoryList.add(myFollowCircle);
-        for (int i=0; i<categoryList.size(); i++){
+        newcategoryList.add(myFollowCircle);//-------add我关注
+        for (int i=0; i<categoryList.size(); i++){//--------add普通分类
             newcategoryList.add(i+1,categoryList.get(i));
         }
-        newcategoryList.add(circleCategoryVo);
+        newcategoryList.add(circleCategoryVo);//-------add待审核
         return newcategoryList;
     }
 
