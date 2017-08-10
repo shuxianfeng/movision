@@ -151,7 +151,7 @@ public class FacadeCircle {
             newcategoryList.add(i+1,categoryList.get(i));
         }
         newcategoryList.add(circleCategoryVo);
-        return categoryList;
+        return newcategoryList;
     }
 
     public CircleVo queryCircleInfo(String circleid, String userid) {
