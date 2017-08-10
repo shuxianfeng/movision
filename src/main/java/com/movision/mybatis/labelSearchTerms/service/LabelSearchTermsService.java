@@ -54,8 +54,16 @@ public class LabelSearchTermsService implements LabelSearchTermsMapper {
             keys.put("type", 1);
             keys.put("labelid", 1);
 
-            cursor = table.find(queryObject, keys).limit(12).sort(new BasicDBObject("intime", -1));
+            cursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
             list = cursor.toArray();
+            for (int i = 0; i < list.size(); i++) {
+                for (int j = list.size() - 1; j > i; j--) {
+                    if (list.get(i).get("labelid").equals(list.get(j).get("labelid"))) {
+                        list.remove(j);
+                    }
+                }
+            }
+            list.subList(0, 12);
             cursor.close();
         } catch (Exception e) {
             log.error("查询标签搜索历史记录", e);

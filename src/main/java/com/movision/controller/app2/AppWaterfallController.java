@@ -2,6 +2,7 @@ package com.movision.controller.app2;
 
 import com.movision.common.Response;
 import com.movision.facade.comment.FacadeComments;
+import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
 import com.movision.facade.label.LabelFacade;
 import com.movision.facade.msgCenter.MsgCenterFacade;
@@ -46,7 +47,7 @@ public class AppWaterfallController {
     @Autowired
     private FacadeComments facadeComments;
     @Autowired
-    private LabelSearchTermsService labelSearchTermsService;
+    private FacadeHeatValue facadeHeatValue;
     /**
      * 下拉刷新
      *
@@ -475,9 +476,9 @@ public class AppWaterfallController {
 
     @ApiOperation(value = "插入", notes = "插入", response = Response.class)
     @RequestMapping(value = "insert", method = RequestMethod.POST)
-    public Response insert() {
+    public Response insert(@ApiParam(value = "类型") @RequestParam String type) {
         Response response = new Response();
-        int result = facadePost.insert();
+        int result = facadePost.insert(type);
         if (response.getCode() == 200) {
             response.setMessage("插入成功");
         }

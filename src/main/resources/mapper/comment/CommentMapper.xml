@@ -480,7 +480,7 @@
     </select>
     <update id="updateCommentHeatValue" parameterType="java.util.Map">
         UPDATE yw_post_comment SET heat_value=heat_value+#{points,jdbcType=INTEGER} WHERE
-        commentid=#{commentid,jdbcType=INTEGER}
+      id=#{commentid,jdbcType=INTEGER}
     </update>
     <select id="queryCommentLevel" resultType="java.lang.Integer" parameterType="java.lang.Integer">
         SELECT yw_user.`level` FROM yw_post_comment LEFT JOIN yw_user ON yw_user.id=yw_post_comment.userid WHERE isdel=0
