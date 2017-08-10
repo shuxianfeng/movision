@@ -146,7 +146,7 @@ public class AppVideoController {
     public Response getUserInformation(@ApiParam("acctoken") @RequestParam String acctoken,
                                        @ApiParam("openid") @RequestParam String openid) {
         Response response = new Response();
-        Map result = VideoUploadUtil.getUserInformation(acctoken, openid);
+        Map result = videoUploadUtil.getUserInformation(acctoken, openid);
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
             response.setData(result);
@@ -154,6 +154,24 @@ public class AppVideoController {
         return response;
     }
 
+
+    /**
+     * 点击抽奖
+     *
+     * @param
+     * @return
+     */
+    @ApiOperation(value = " 点击抽奖", notes = " 点击抽奖", response = Response.class)
+    @RequestMapping(value = "choujiang", method = RequestMethod.POST)
+    public Response choujiang(@ApiParam("openid") @RequestParam String openid) {
+        Response response = new Response();
+        Map result = videoUploadUtil.choujiang(openid);
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+            response.setData(result);
+        }
+        return response;
+    }
 
     /**
      * 获取fuflshtoken

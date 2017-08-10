@@ -12,6 +12,8 @@ import com.aliyuncs.vod.model.v20170321.RefreshUploadVideoRequest;
 import com.aliyuncs.vod.model.v20170321.RefreshUploadVideoResponse;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.SimpleTimeZone;
+import com.movision.mybatis.weixinguangzhu.entity.WeixinGuangzhu;
+import com.movision.mybatis.weixinguangzhu.service.WeixinGuangzhuService;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.redis.RedisClient;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
@@ -53,6 +55,9 @@ public class VideoUploadUtil {
 
     @Autowired
     private RedisClient redisClient;
+
+    @Autowired
+    private WeixinGuangzhuService weixinGuangzhuService;
 
     public String videoUpload(String fileName, String title, String description, String coverimg, String tatges) {
 
@@ -472,46 +477,82 @@ public class VideoUploadUtil {
      * @param openid
      * @return
      */
-    public static Map getUserInformation(String acctoken, String openid) {
-        String result = "";
+    public Map getUserInformation(String acctoken, String openid) {
         BufferedReader in = null;
-        String url = "https://api.weixin.qq.com/sns/userinfo?access_token=" + acctoken + "&openid=" + openid + "&lang=zh_CN";
+        String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acctoken + "&openid=" + openid + "&lang=zh_CN";
+        String result = GetHttp(url);
+        Map map = new HashMap();
+        net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
+        String subscribe = jsonObject.get("subscribe").toString();
+        String nickname = jsonObject.get("nickname").toString();
+        String sex = jsonObject.get("sex").toString();
+        String subscribe_time = jsonObject.get("subscribe_time").toString();
+        String headimgurl = jsonObject.get("headimgurl").toString();
+        String openids = jsonObject.get("openid").toString();
+        String city = jsonObject.get("city").toString();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ");
+        Date date = null;
         try {
-            URL realUrl = new URL(url.toString());
-            // 打开和URL之间的连接
-            URLConnection connection = realUrl.openConnection();
-            // 设置通用的请求属性
-            connection.setRequestProperty("accept", "*/*");
-            connection.setRequestProperty("connection", "Keep-Alive");
-            connection.setRequestProperty("user-agent",
-                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-            // 建立实际的连接
-            connection.connect();
-            // 遍历所有的响应头字段
-            // 定义 BufferedReader输入流来读取URL的响应
-            in = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
-            String line;
-            while ((line = in.readLine()) != null) {
-                result += line;
-            }
+            date = sdf.parse(subscribe_time);
         } catch (Exception e) {
-            System.out.println("发送GET请求出现异常！" + e);
             e.printStackTrace();
         }
-        // 使用finally块来关闭输入流
-        finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
+        int many = 0;
+        if (Integer.parseInt(subscribe) == 1) {
+            //查询关注表中有没有记录 只加一次
+            int count = weixinGuangzhuService.selectCount(openids);
+            if (count == 0) {
+                //说明已经关注过了
+                WeixinGuangzhu weixinGuangzhu = new WeixinGuangzhu();
+                weixinGuangzhu.setIntime(date);
+                weixinGuangzhu.setCity(city);
+                weixinGuangzhu.setHeadimgurl(headimgurl);
+                weixinGuangzhu.setNickname(nickname);
+                weixinGuangzhu.setOpenid(openids);
+                weixinGuangzhu.setSex(Integer.parseInt(sex));
+                weixinGuangzhu.setSubscribe(Integer.parseInt(subscribe));
+                weixinGuangzhu.setCount(0);
+                weixinGuangzhu.setMany(4);
+                weixinGuangzhuService.insertSelective(weixinGuangzhu);
+                int id = weixinGuangzhu.getId();//id
+                //修改用户抽奖次数+1
+                weixinGuangzhuService.updateCount(id);
             }
         }
-        net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
-        return jsonObject;
+        //查询用户抽奖次数
+        many = weixinGuangzhuService.overplusMany(openid);
+        map.put("subscribe", subscribe);
+        map.put("nickname", nickname);
+        map.put("subscribe_time", subscribe_time);
+        map.put("headimgurl", headimgurl);
+        map.put("openids", openids);
+        map.put("city", city);
+        map.put("sex", sex);
+        map.put("many", many);
+        return map;
 
+    }
+    //https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID
+
+
+    /**
+     * 用户抽奖
+     *
+     * @param openid
+     * @return
+     */
+    public Map choujiang(String openid) {
+        Map map = new HashMap();
+        //减次数
+        int lessCount = weixinGuangzhuService.lessCount(openid);
+        //剩余抽奖次数
+        int overplus = weixinGuangzhuService.overplusMany(openid);
+        //改用户抽到几等奖
+        int many = weixinGuangzhuService.manyC(openid);
+        map.put("many", many);
+        map.put("overplus", overplus);
+        map.put("lessCount", lessCount);
+        return map;
     }
 
 
