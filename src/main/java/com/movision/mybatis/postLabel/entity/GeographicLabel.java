@@ -12,7 +12,7 @@ public class GeographicLabel implements Serializable {
 
     private Integer id;
 
-    private String name;
+    private String name;//标签名（即市名）
 
     private Integer userid;
 
@@ -29,8 +29,6 @@ public class GeographicLabel implements Serializable {
     private Integer useCount;
 
     private Integer fans;
-
-    private String cityname;//城市名称（二级市）
 
     private String lng;//经度
 
@@ -114,14 +112,6 @@ public class GeographicLabel implements Serializable {
 
     public void setFans(Integer fans) {
         this.fans = fans;
-    }
-
-    public String getCityname() {
-        return cityname;
-    }
-
-    public void setCityname(String cityname) {
-        this.cityname = cityname;
     }
 
     public String getLng() {

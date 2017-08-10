@@ -407,7 +407,15 @@ public class PostLabelService {
         }
     }
 
-//    public
+    public List<GeographicLabel> getfootmap(int userid){
+        try {
+            log.info("查询该作者发布的所有帖子中包含的地理标签列表");
+            return postLabelMapper.getfootmap(userid);
+        }catch (Exception e){
+            log.error("查询该作者发布的所有帖子中包含的地理标签列表失败");
+            throw e;
+        }
+    }
 
     public int queryCircleid(int userids) {
         try {

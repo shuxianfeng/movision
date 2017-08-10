@@ -102,10 +102,8 @@ public class FacadeCircle {
                 //计算圈子中更新的帖子数量，目前该值与帖子数量一致
                 circlelist.get(j).setPostnewnum(postnum);
             }
-
             //将圈子列表加入分类对象CircleCategoryVo中
             categoryList.get(i).setCircleList(circlelist);
-
 
         }
 
@@ -129,7 +127,7 @@ public class FacadeCircle {
             }
         }
         circleCategoryVo.setCircleList(list);
-        categoryList.add(circleCategoryVo);
+//        categoryList.add(circleCategoryVo);
 
         //美番2.0增加 “我关注” 条目
         CircleCategoryVo myFollowCircle = new CircleCategoryVo();
@@ -144,7 +142,15 @@ public class FacadeCircle {
             myfollowlist = circleService.queryMyFollowCircleList(parammap);
         }
         myFollowCircle.setCircleList(myfollowlist);
-        categoryList.add(myFollowCircle);
+//        categoryList.add(myFollowCircle);
+
+
+        List<CircleCategoryVo> newcategoryList = new ArrayList<>();
+        newcategoryList.add(myFollowCircle);
+        for (int i=0; i<categoryList.size(); i++){
+            newcategoryList.add(i+1,categoryList.get(i));
+        }
+        newcategoryList.add(circleCategoryVo);
         return categoryList;
     }
 

@@ -90,6 +90,8 @@ public interface PostLabelMapper {
 
     int userHeatVale(int userids);
 
+    List<GeographicLabel> getfootmap(int userid);
+
     int queryCircleid(int postid);
 
     List<PostVo> queryCircleByPost(int circleid);

@@ -354,4 +354,15 @@
     <select id="followCircle" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT  COUNT(1) FROM  yw_follow_circle WHERE circleid=#{circleid,jdbcType=INTEGER}
     </select>
+
+    <!--通过userid查询该用户发帖使用的所有地理标签-->
+    <select id="getfootmap" parameterType="java.lang.Integer" resultType="com.movision.mybatis.postLabel.entity.GeographicLabel" >
+        SELECT * FROM yw_post_label
+        WHERE type = '0' AND isdel = '0'
+        AND id IN (
+            SELECT DISTINCT labelid FROM yw_post_label_relation WHERE postid IN (
+              SELECT id FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER}
+            )
+        )
+    </select>
 </mapper>

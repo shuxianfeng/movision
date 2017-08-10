@@ -323,5 +323,11 @@ public class LabelFacade {
 //
 //        //首先查询当前用户发的所有帖子中包含的地理标签列表
 //        List<GeographicLabel> allGeographicLabelList = postLabelService.getfootmap(Integer.parseInt(userid));
+//
+//        //使用百度sdk遍历根据所有的地名换算成经纬度
+//        for (int i=0; i<allGeographicLabelList.size(); i++){
+//            String name = allGeographicLabelList.get(i).getName();//市名
+//
+//        }
 //    }
 }
