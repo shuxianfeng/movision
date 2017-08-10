@@ -91,6 +91,16 @@ public class WeixinGuangzhuService {
     }
 
 
+    public String nickn(String openid) {
+        try {
+            log.info("差昵称");
+            return weixinGuangzhuMapperw.nickn(openid);
+        } catch (Exception e) {
+            log.error("差昵称失败", e);
+            throw e;
+        }
+    }
+
     public int updateC(String openid) {
         try {
             log.info("增加抽奖次数");

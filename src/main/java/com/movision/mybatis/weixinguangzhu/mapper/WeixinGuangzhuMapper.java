@@ -28,4 +28,6 @@ public interface WeixinGuangzhuMapper {
     String selectOpenid(int userid);
 
     int updateC(String openid);
+
+    String nickn(String openid);
 }

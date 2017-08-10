@@ -15,6 +15,9 @@ import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.movision.mybatis.weixinguangzhu.entity.WeixinGuangzhu;
 import com.movision.mybatis.weixinguangzhu.service.WeixinGuangzhuService;
+import com.movision.mybatis.weixinlist.entity.WeixinList;
+import com.movision.mybatis.weixinlist.service.WeixinListService;
+import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.redis.RedisClient;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
@@ -59,7 +62,8 @@ public class VideoUploadUtil {
 
     @Autowired
     private WeixinGuangzhuService weixinGuangzhuService;
-
+    @Autowired
+    private WeixinListService weixinListService;
     public String videoUpload(String fileName, String title, String description, String coverimg, String tatges) {
 
         //fileName为上传文件所在的绝对路径(必须包含扩展名)
@@ -551,6 +555,13 @@ public class VideoUploadUtil {
         int overplus = weixinGuangzhuService.overplusMany(openid);
         //改用户抽到几等奖
         int many = weixinGuangzhuService.manyC(openid);
+        //向记录表差数据
+        WeixinList weixinList = new WeixinList();
+        //查询昵称
+        String nickname = weixinGuangzhuService.nickn(openid);
+        weixinList.setRemark("四等奖");
+        weixinList.setNickname(nickname);
+        weixinListService.insertSelective(weixinList);
         map.put("many", many);
         map.put("overplus", overplus);
         map.put("lessCount", lessCount);
@@ -654,6 +665,9 @@ public class VideoUploadUtil {
         return ticket;
     }
 
+    public List findAllList(Paging<WeixinList> paging) {
+        return weixinListService.findAllList(paging);
+    }
 
     public static void main(String[] args) {
         /**DefaultAcsClient aliyunClient;

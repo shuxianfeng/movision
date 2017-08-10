@@ -155,7 +155,7 @@
     <select id="selectCount" parameterType="java.lang.String" resultType="java.lang.Integer">
     SELECT  COUNT(1) FROM yw_weixin_guangzhu WHERE openid=#{openids,jdbcType=VARCHAR}
   </select>
-    <select id="manyC" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="manyC" parameterType="java.lang.String" resultType="java.lang.Integer">
     SELECT many  FROM  yw_weixin_guangzhu WHERE openid=#{openid,jdbcType=VARCHAR}
   </select>
     <select id="overplusMany" parameterType="java.lang.String" resultType="java.lang.Integer">
@@ -171,4 +171,7 @@ SELECT referrals FROM yw_user WHERE id=#{userid,jdbcType=INTEGER})
     <update id="lessCount" parameterType="java.lang.String">
         UPDATE  yw_weixin_guangzhu SET  count =count-1 WHERE openid=#{openid,jdbcType=VARCHAR}
   </update>
+    <select id="nickn" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT nickname FROM yw_weixin_guangzhu WHERE openid=#{openid,jdbcType=VARCHAR}
+    </select>
 </mapper>

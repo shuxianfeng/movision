@@ -7,7 +7,9 @@ import com.movision.common.Response;
 import com.movision.common.constant.AliVideoConstant;
 import com.movision.facade.apsaraVideo.AliVideoFacade;
 
+import com.movision.mybatis.weixinlist.entity.WeixinList;
 import com.movision.utils.VideoUploadUtil;
+import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.apache.commons.collections.map.HashedMap;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -205,6 +208,28 @@ public class AppVideoController {
             response.setMessage("获取成功");
             response.setData(result);
         }
+        return response;
+    }
+
+
+    /**
+     * 查询获奖列表
+     *
+     * @param
+     * @return
+     */
+    @ApiOperation(value = " 查询获奖列表", notes = " 查询获奖列表", response = Response.class)
+    @RequestMapping(value = "findAllList", method = RequestMethod.POST)
+    public Response findAllList(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<WeixinList> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List result = videoUploadUtil.findAllList(pager);
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+        }
+        pager.result(result);
+        response.setData(pager);
         return response;
     }
 
