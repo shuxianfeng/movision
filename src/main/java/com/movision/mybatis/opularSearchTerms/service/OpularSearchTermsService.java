@@ -16,9 +16,11 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.comparator.ComparableComparator;
 
 import java.util.ArrayList;
- import java.util.List;
+import java.util.Comparator;
+import java.util.List;
 
 
 /**
@@ -84,8 +86,15 @@ import java.util.ArrayList;
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("keywords", 1);
-            cursor = collection.find(queryObject, keys).limit(12).sort(new BasicDBObject("intime", -1));
+            cursor = collection.find(queryObject, keys).sort(new BasicDBObject("intime", 1)).limit(12);
             list = cursor.toArray();
+            for (int i = 0; i < list.size(); i++) {
+                for (int j = list.size() - 1; j > i; j--) {
+                    if (list.get(i).get("keywords").equals(list.get(j).get("keywords"))) {
+                        list.remove(j);
+                    }
+                }
+            }
             cursor.close();
         } catch (Exception e) {
             log.error("获取帖子热门搜索词失败", e);
@@ -98,7 +107,6 @@ import java.util.ArrayList;
         }
         return list;
     }
-
 
     public Integer updateColData(int userid) {
         MongoClient mongoClient = null;
