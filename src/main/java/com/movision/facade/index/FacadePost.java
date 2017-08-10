@@ -2378,9 +2378,10 @@ public class FacadePost {
     }
 
 
-    public int insert() {
+    public int insert(String type) {
         TestIntime testIntime = new TestIntime();
         testIntime.setIntime(new Date());
+        testIntime.setType(type);
         return testIntimeService.insert(testIntime);
     }
 

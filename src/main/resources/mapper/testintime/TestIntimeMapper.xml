@@ -4,9 +4,10 @@
     <resultMap id="BaseResultMap" type="com.movision.mybatis.testintime.entity.TestIntime">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, intime
+        id, intime,type
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -19,8 +20,8 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.testintime.entity.TestIntime">
-    insert into yw_test_intime (id, intime)
-    values (#{id,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP})
+        insert into yw_test_intime (id, intime,type)
+        values (#{id,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP},#{type,jdbcType=VARCHAR})
   </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.testintime.entity.TestIntime">
         insert into yw_test_intime

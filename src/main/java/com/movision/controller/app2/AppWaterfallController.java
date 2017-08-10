@@ -475,9 +475,9 @@ public class AppWaterfallController {
 
     @ApiOperation(value = "插入", notes = "插入", response = Response.class)
     @RequestMapping(value = "insert", method = RequestMethod.POST)
-    public Response insert() {
+    public Response insert(@ApiParam(value = "类型") @RequestParam String type) {
         Response response = new Response();
-        int result = facadePost.insert();
+        int result = facadePost.insert(type);
         if (response.getCode() == 200) {
             response.setMessage("插入成功");
         }
