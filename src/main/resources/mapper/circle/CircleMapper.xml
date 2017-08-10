@@ -1083,11 +1083,24 @@
         UPDATE  yw_circle SET  heat_value=#{sum,jdbcType=INTEGER} WHERE id=#{id,jdbcType=INTEGER}
     </update>
 
-    <select id="selectCircleInCatagory" resultType="java.util.HashMap">
-        SELECT c.id as circleid,c.name AS circlename,
-        a.id as cid, a.categoryname FROM yw_circle c
+    <select id="selectCircleInCatagory" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+        SELECT c.id AS circleid,c.name AS circlename,
+        a.id AS cid, a.categoryname ,
+        c.userid, u.nickname, u.level, c.phone, c.scope,
+        IF(m.id IS NULL OR m.id = '',0,1) AS isManager
+        FROM yw_circle c
         JOIN yw_circle_category a ON c.category = a.id
+        LEFT JOIN yw_user u ON c.userid = u.id
+        LEFT JOIN yw_circle_manager m ON m.userid = c.userid
         WHERE c.status = '1' AND c.isdel = 0
-        ORDER BY a.id
+        AND
+        (
+        c.scope=2
+        OR c.userid = #{userid}
+        OR m.id = #{userid}
+        <![CDATA[     OR (c.scope=1 AND u.level   >=  1)  ]]>
+        )
+        GROUP BY c.id
+        ORDER BY a.id, c.id
     </select>
 </mapper>
