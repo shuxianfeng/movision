@@ -144,7 +144,7 @@ public class FacadeCircle {
         myFollowCircle.setCircleList(myfollowlist);
 //        categoryList.add(myFollowCircle);
 
-
+        //给圈子分类中，类目调换顺序
         List<CircleCategoryVo> newcategoryList = new ArrayList<>();
         newcategoryList.add(myFollowCircle);
         for (int i=0; i<categoryList.size(); i++){
