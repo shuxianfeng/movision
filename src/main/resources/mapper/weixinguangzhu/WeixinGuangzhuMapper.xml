@@ -158,7 +158,7 @@
     <select id="manyC" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     SELECT many  FROM  yw_weixin_guangzhu WHERE openid=#{openid,jdbcType=VARCHAR}
   </select>
-    <select id="overplusMany" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="overplusMany" parameterType="java.lang.String" resultType="java.lang.Integer">
     SELECT count FROM yw_weixin_guangzhu WHERE openid=#{openid,jdbcType=VARCHAR}
   </select>
     <select id="selectOpenid" parameterType="java.lang.Integer" resultType="java.lang.String">

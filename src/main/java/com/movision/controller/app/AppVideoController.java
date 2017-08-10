@@ -208,6 +208,23 @@ public class AppVideoController {
         return response;
     }
 
+    /**
+     * 获取getSignature
+     *
+     * @param
+     * @return
+     */
+    @ApiOperation(value = " 获取全局", notes = " 获取全局", response = Response.class)
+    @RequestMapping(value = "getaccesstoken", method = RequestMethod.POST)
+    public Response getaccesstoken() {
+        Response response = new Response();
+        String result = videoUploadUtil.getaccesstoken();
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+            response.setData(result);
+        }
+        return response;
+    }
 
     /**
      * 获取临时acctoken
