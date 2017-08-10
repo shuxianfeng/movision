@@ -2,6 +2,7 @@ package com.movision.controller.app2;
 
 import com.movision.common.Response;
 import com.movision.facade.comment.FacadeComments;
+import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
 import com.movision.facade.label.LabelFacade;
 import com.movision.facade.msgCenter.MsgCenterFacade;
@@ -46,7 +47,7 @@ public class AppWaterfallController {
     @Autowired
     private FacadeComments facadeComments;
     @Autowired
-    private LabelSearchTermsService labelSearchTermsService;
+    private FacadeHeatValue facadeHeatValue;
     /**
      * 下拉刷新
      *

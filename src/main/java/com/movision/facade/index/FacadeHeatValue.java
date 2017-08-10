@@ -194,8 +194,8 @@ public class FacadeHeatValue {
      */
     public int commentUserLevels(int commentid) {
         int level = commentService.queryCommentLevel(commentid);
-        level(level);
-        return level;
+        int le = level(level);
+        return le;
     }
 
 
@@ -206,10 +206,10 @@ public class FacadeHeatValue {
      * @return
      */
     public int userLevels(int userid) {
-        //查询发帖人级别
+
         int level = userService.queryUserLevel(userid);
-        level(level);
-        return level;
+        int level1 = level(level);
+        return level1;
     }
 
 
@@ -243,8 +243,6 @@ public class FacadeHeatValue {
         }
         return level;
     }
-
-
 
 
 }

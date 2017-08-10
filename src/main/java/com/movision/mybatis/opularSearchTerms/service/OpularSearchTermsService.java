@@ -95,6 +95,7 @@ import java.util.List;
                     }
                 }
             }
+            list.subList(0, 12);
             cursor.close();
         } catch (Exception e) {
             log.error("获取帖子热门搜索词失败", e);
