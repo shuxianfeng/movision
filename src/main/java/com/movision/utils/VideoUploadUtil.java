@@ -10,6 +10,7 @@ import com.aliyuncs.vod.model.v20170321.CreateUploadVideoRequest;
 import com.aliyuncs.vod.model.v20170321.CreateUploadVideoResponse;
 import com.aliyuncs.vod.model.v20170321.RefreshUploadVideoRequest;
 import com.aliyuncs.vod.model.v20170321.RefreshUploadVideoResponse;
+import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.movision.mybatis.weixinguangzhu.entity.WeixinGuangzhu;
@@ -486,14 +487,15 @@ public class VideoUploadUtil {
         String subscribe = jsonObject.get("subscribe").toString();
         String nickname = jsonObject.get("nickname").toString();
         String sex = jsonObject.get("sex").toString();
-        String subscribe_time = jsonObject.get("subscribe_time").toString();
+        long subscribe_time = Long.valueOf(jsonObject.get("subscribe_time").toString());
         String headimgurl = jsonObject.get("headimgurl").toString();
         String openids = jsonObject.get("openid").toString();
         String city = jsonObject.get("city").toString();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd ");
-        Date date = null;
+        SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String date = sd.format(new Date(subscribe_time * 1000));
+        Date dates = null;
         try {
-            date = sdf.parse(subscribe_time);
+            dates = sd.parse(date);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -504,7 +506,7 @@ public class VideoUploadUtil {
             if (count == 0) {
                 //说明已经关注过了
                 WeixinGuangzhu weixinGuangzhu = new WeixinGuangzhu();
-                weixinGuangzhu.setIntime(date);
+                weixinGuangzhu.setIntime(dates);
                 weixinGuangzhu.setCity(city);
                 weixinGuangzhu.setHeadimgurl(headimgurl);
                 weixinGuangzhu.setNickname(nickname);
