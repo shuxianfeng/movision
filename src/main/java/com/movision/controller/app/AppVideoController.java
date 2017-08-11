@@ -146,10 +146,9 @@ public class AppVideoController {
      */
     @ApiOperation(value = " 获取用户信息", notes = " 获取用户信息", response = Response.class)
     @RequestMapping(value = "get_user_information", method = RequestMethod.POST)
-    public Response getUserInformation(@ApiParam("acctoken") @RequestParam String acctoken,
-                                       @ApiParam("openid") @RequestParam String openid) {
+    public Response getUserInformation(@ApiParam("openid") @RequestParam String openid) {
         Response response = new Response();
-        Map result = videoUploadUtil.getUserInformation(acctoken, openid);
+        Map result = videoUploadUtil.getUserInformation(openid);
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
             response.setData(result);

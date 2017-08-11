@@ -478,13 +478,38 @@ public class VideoUploadUtil {
     /**
      * 获取用户信息
      *
-     * @param acctoken
+     * @param
      * @param openid
      * @return
      */
-    public Map getUserInformation(String acctoken, String openid) {
+    public Map getUserInformation(String openid) {
         BufferedReader in = null;
-        String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acctoken + "&openid=" + openid + "&lang=zh_CN";
+        String url = "";
+        boolean flag = redisClient.exists("acctokens");
+        if (flag) {//如果有缓存
+            Date date = (Date) redisClient.get("acctokendata");
+            String dateq = null;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                dateq = sdf.format(date);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //Date date1 = new Date(date);
+            log.info("缓存token日期-------------------" + dateq);
+            //Date date1 = new Date(date);
+            if ((new Date().getTime() - date.getTime()) >= (7000 * 1000)) {//过期
+                log.info("token过期");
+                String acc = getaccesstoken();
+                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
+            } else {//没过期
+                log.info("token没过期");
+                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + redisClient.get("acctokens") + "&openid=" + openid + "&lang=zh_CN";
+            }
+        } else {//没有缓存
+            String acc = getaccesstoken();
+            url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
+        }
         String result = GetHttp(url);
         Map map = new HashMap();
         net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
