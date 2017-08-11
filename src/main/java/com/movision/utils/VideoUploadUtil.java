@@ -573,25 +573,27 @@ public class VideoUploadUtil {
      * @param
      * @return
      */
-    public Map choujiang() {
+    public Map choujiang(int type) {
         Map map = new HashMap();
-        String openid = redisClient.get("openids").toString();
-        //减次数
-        int lessCount = weixinGuangzhuService.lessCount(openid);
-        //剩余抽奖次数
-        int overplus = weixinGuangzhuService.overplusMany(openid);
-        //改用户抽到几等奖
-        int many = weixinGuangzhuService.manyC(openid);
-        //向记录表差数据
-        WeixinList weixinList = new WeixinList();
-        //查询昵称
-        String nickname = weixinGuangzhuService.nickn(openid);
-        weixinList.setRemark("四等奖");
-        weixinList.setNickname(nickname);
-        weixinListService.insertSelective(weixinList);
-        map.put("many", many);
-        map.put("overplus", overplus);
-        map.put("lessCount", lessCount);
+        if (type == 0) {
+            String openid = redisClient.get("openids").toString();
+            //减次数
+            int lessCount = weixinGuangzhuService.lessCount(openid);
+            //剩余抽奖次数
+            int overplus = weixinGuangzhuService.overplusMany(openid);
+            //改用户抽到几等奖
+            int many = weixinGuangzhuService.manyC(openid);
+            //向记录表差数据
+            WeixinList weixinList = new WeixinList();
+            //查询昵称
+            String nickname = weixinGuangzhuService.nickn(openid);
+            weixinList.setRemark("四等奖");
+            weixinList.setNickname(nickname);
+            weixinListService.insertSelective(weixinList);
+            map.put("many", many);
+            map.put("overplus", overplus);
+            map.put("lessCount", lessCount);
+        }
         return map;
     }
 
