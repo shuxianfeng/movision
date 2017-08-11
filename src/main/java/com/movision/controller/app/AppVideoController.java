@@ -165,9 +165,9 @@ public class AppVideoController {
      */
     @ApiOperation(value = " 点击抽奖", notes = " 点击抽奖", response = Response.class)
     @RequestMapping(value = "choujiang", method = RequestMethod.POST)
-    public Response choujiang(@ApiParam("openid") @RequestParam String openid) {
+    public Response choujiang() {
         Response response = new Response();
-        Map result = videoUploadUtil.choujiang(openid);
+        Map result = videoUploadUtil.choujiang();
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
             response.setData(result);
