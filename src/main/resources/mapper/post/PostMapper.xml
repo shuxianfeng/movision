@@ -2157,7 +2157,7 @@
     </select>
     <select id="findAllPostCrile" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        select yw_post.*,yw_user.nickname,yw_user.photo,yw_circle.`name` from yw_post LEFT JOIN yw_user ON
+        select yw_post.*,yw_user.nickname,yw_user.photo,yw_circle.`name` AS circlename from yw_post LEFT JOIN yw_user ON
         yw_user.id=yw_post.userid LEFT JOIN yw_circle ON yw_circle.id=yw_post.circleid
         where yw_post.circleid=#{circleid,jdbcType=INTEGER} and yw_post.isdel=0 order by yw_post.heat_value desc
     </select>
@@ -2333,7 +2333,7 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         SELECT userid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
     <select id="findUserPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
-        select yw_post.*,yw_user.nickname,yw_user.photo,yw_circle.`name` from yw_post LEFT JOIN yw_user ON
+        select yw_post.*,yw_user.nickname,yw_user.photo,yw_circle.`name` AS circlename from yw_post LEFT JOIN yw_user ON
         yw_user.id=yw_post.userid LEFT JOIN yw_circle ON yw_circle.id=yw_post.circleid
         WHERE yw_post.userid=#{postuserid,jdbcType=INTEGER} ORDER BY yw_post.heat_value DESC
     </select>
@@ -2342,7 +2342,8 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
     </select>
     <select id="findUserByLabelPost" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT p.*,yw_user.photo,yw_user.nickname,yw_circle.`name` FROM yw_post p LEFT JOIN yw_post_label_relation r ON
+        SELECT p.*,yw_user.photo,yw_user.nickname,yw_circle.`name` AS circlename FROM yw_post p LEFT JOIN
+        yw_post_label_relation r ON
         r.postid=p.id
         LEFT JOIN yw_user ON yw_user.id=p.userid LEFT JOIN yw_circle ON yw_circle.id=p.circleid
         WHERE r.labelid IN
