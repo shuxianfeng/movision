@@ -1,5 +1,6 @@
 package com.movision.facade.index;
 
+import com.mongodb.DBObject;
 import com.movision.common.constant.PointConstant;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
@@ -10,6 +11,7 @@ import com.movision.mybatis.circleCategory.entity.CircleCategoryVo;
 import com.movision.mybatis.circleCategory.service.CircleCategoryService;
 import com.movision.mybatis.followCircle.service.FollowCircleService;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
@@ -54,6 +56,9 @@ public class FacadeCircle {
     @Autowired
     private PointRecordFacade pointRecordFacade;
 
+    @Autowired
+    private FacadePost facadePost;
+
     public CircleVo queryCircleIndex1(String circleid, String userid) {
 
         CircleVo circleVo = circleService.queryCircleIndex1(Integer.parseInt(circleid));//查询圈子详情基础数据
@@ -91,15 +96,16 @@ public class FacadeCircle {
         for (int i = 0; i < categoryList.size(); i++) {
             int categoryid = categoryList.get(i).getId();
             List<CircleVo> circlelist = circleService.queryCircleByCategory(categoryid);
-            //递归遍历查询当前圈子中总共包含的帖子数量
-            for (int j = 0; j < circlelist.size(); j++) {
-                int circleid = circlelist.get(j).getId();
-                int postnum = postService.queryPostNumByCircleid(circleid);
-                //将帖子数量加入圈子对象CircleVo中
-                circlelist.get(j).setPostnum(postnum);
-                //计算圈子中更新的帖子数量，目前该值与帖子数量一致
-                circlelist.get(j).setPostnewnum(postnum);
-            }
+//            //递归遍历查询当前圈子中总共包含的帖子数量
+//            for (int j = 0; j < circlelist.size(); j++) {
+//                int circleid = circlelist.get(j).getId();
+//                int postnum = postService.queryPostNumByCircleid(circleid);
+//                //将帖子数量加入圈子对象CircleVo中
+//                circlelist.get(j).setPostnum(postnum);
+//                //计算圈子中更新的帖子数量，目前该值与帖子数量一致
+//                circlelist.get(j).setPostnewnum(postnum);
+//            }
+            circlelist = getFollowsumNew(circlelist, userid);
             //将圈子列表加入分类对象CircleCategoryVo中
             categoryList.get(i).setCircleList(circlelist);
         }
@@ -137,6 +143,7 @@ public class FacadeCircle {
             parammap.put("userid", Integer.parseInt(userid));
             myfollowlist = circleService.queryMyFollowCircleList(parammap);
         }
+        myfollowlist = getFollowsumNew(myfollowlist, userid);
         myFollowCircle.setCircleList(myfollowlist);//----------------------------------实体add1
 
         //给圈子分类中，类目调换顺序---把所有内容重新排序放入输出列表中
@@ -147,6 +154,49 @@ public class FacadeCircle {
         }
         newcategoryList.add(circleCategoryVo);//-------add待审核
         return newcategoryList;
+    }
+
+    /**
+     * 对圈子列表循环获取 圈子关注数、圈子更新数、是否关注过
+     * @return
+     */
+    public List<CircleVo> getFollowsumNew(List<CircleVo> circlelist, String userid){
+        List<DBObject> listmongodba;
+        List<PostVo> posts = new ArrayList<>();
+
+        for (int i=0; i<circlelist.size(); i++){
+            CircleVo vo = circlelist.get(i);
+            int circleid = circlelist.get(i).getId();
+            //根据圈子id查询圈子被关注数
+            int follownum = circleService.queryCircleFollownum(circleid);
+            vo.setFollownum(follownum);
+
+            //根据圈子id查询圈子该用户的未读更新帖子数
+            //根据圈子id查询帖子
+            List<PostVo> postVos = postService.findAllPostCrile(circleid);
+
+            if (StringUtil.isNotEmpty(userid)){
+                //不为空查询当前用户未看过的总更新数
+                listmongodba = facadePost.userRefulshListMongodb(Integer.parseInt(userid));//查询mongodb中用户看过的帖子列表
+
+                if (listmongodba.size() != 0) {
+                    for (int j = 0; j < listmongodba.size(); j++) {
+                        PostVo post = new PostVo();
+                        post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
+                        posts.add(post);//把mongodb转为post实体
+                    }
+                    postVos.removeAll(posts);
+                    vo.setPostnewnum(postVos.size());
+                }else{
+                    vo.setPostnewnum(postVos.size());
+                }
+            }else{
+                //用户未登录时userid为空时查询这个圈子的总帖子数
+                vo.setPostnewnum(postVos.size());
+            }
+            circlelist.set(i, vo);
+        }
+        return circlelist;
     }
 
     public CircleVo queryCircleInfo(String circleid, String userid) {
