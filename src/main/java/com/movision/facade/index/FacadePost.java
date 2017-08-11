@@ -187,10 +187,15 @@ public class FacadePost {
             parammap.put("userid", Integer.parseInt(userid));
         }
         PostVo vo = postService.queryPostDetail(parammap);
-        List<PostLabel> postLabels = postService.queryPostLabel(Integer.parseInt(postid));
+
+        List<PostVo> array = new ArrayList<>();
+        array.add(vo);
+        findPostLabel(array);
+
+        /**List<PostLabel> postLabels = postService.queryPostLabel(Integer.parseInt(postid));
         if (postLabels.size() != 0) {
             vo.setPostLabels(postLabels);
-        }
+         }*/
         //-----帖子内容格式转换
         String str = vo.getPostcontent();
         JSONArray jsonArray = JSONArray.fromObject(str);
