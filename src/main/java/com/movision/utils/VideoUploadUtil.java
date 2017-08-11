@@ -575,14 +575,17 @@ public class VideoUploadUtil {
      */
     public Map choujiang(int type) {
         Map map = new HashMap();
+        int lessCount = 0;
+        int overplus = 0;
+        int many = 0;
+        String openid = redisClient.get("openids").toString();
         if (type == 0) {
-            String openid = redisClient.get("openids").toString();
             //减次数
-            int lessCount = weixinGuangzhuService.lessCount(openid);
+            lessCount = weixinGuangzhuService.lessCount(openid);
             //剩余抽奖次数
-            int overplus = weixinGuangzhuService.overplusMany(openid);
+            overplus = weixinGuangzhuService.overplusMany(openid);
             //改用户抽到几等奖
-            int many = weixinGuangzhuService.manyC(openid);
+            many = weixinGuangzhuService.manyC(openid);
             //向记录表差数据
             WeixinList weixinList = new WeixinList();
             //查询昵称
@@ -593,6 +596,10 @@ public class VideoUploadUtil {
             map.put("many", many);
             map.put("overplus", overplus);
             map.put("lessCount", lessCount);
+        } else if (type == 1) {
+            //剩余抽奖次数
+            overplus = weixinGuangzhuService.overplusMany(openid);
+            map.put("overplus", overplus);
         }
         return map;
     }
