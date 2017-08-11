@@ -174,7 +174,6 @@ public class FacadeCircle {
             //根据圈子id查询圈子该用户的未读更新帖子数
             //根据圈子id查询帖子
             List<PostVo> postVos = postService.findAllPostCrile(circleid);
-
             if (StringUtil.isNotEmpty(userid)){
                 //不为空查询当前用户未看过的总更新数
                 listmongodba = facadePost.userRefulshListMongodb(Integer.parseInt(userid));//查询mongodb中用户看过的帖子列表
@@ -193,6 +192,17 @@ public class FacadeCircle {
             }else{
                 //用户未登录时userid为空时查询这个圈子的总帖子数
                 vo.setPostnewnum(postVos.size());
+            }
+
+            //再查询该用户是否关注过该圈子
+            if (StringUtil.isNotEmpty(userid)) {
+                Map<String, Object> paramap = new HashMap<>();
+                paramap.put("userid", Integer.parseInt(userid));
+                paramap.put("circleid", circleid);
+                int count = circleService.querySupportSum(paramap);
+                vo.setIsfollow(count);
+            }else{
+                vo.setIsfollow(0);
             }
             circlelist.set(i, vo);
         }
