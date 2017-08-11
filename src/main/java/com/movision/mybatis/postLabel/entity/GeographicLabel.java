@@ -1,6 +1,7 @@
 package com.movision.mybatis.postLabel.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -30,9 +31,9 @@ public class GeographicLabel implements Serializable {
 
     private Integer fans;
 
-    private String lng;//经度
+    private BigDecimal lng;//经度
 
-    private String lat;//维度
+    private BigDecimal lat;//维度
 
     public Integer getId() {
         return id;
@@ -114,19 +115,19 @@ public class GeographicLabel implements Serializable {
         this.fans = fans;
     }
 
-    public String getLng() {
+    public BigDecimal getLng() {
         return lng;
     }
 
-    public void setLng(String lng) {
+    public void setLng(BigDecimal lng) {
         this.lng = lng;
     }
 
-    public String getLat() {
+    public BigDecimal getLat() {
         return lat;
     }
 
-    public void setLat(String lat) {
+    public void setLat(BigDecimal lat) {
         this.lat = lat;
     }
 }

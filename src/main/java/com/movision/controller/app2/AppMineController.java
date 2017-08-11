@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
@@ -151,17 +153,17 @@ public class AppMineController {
         return response;
     }
 
-//    @ApiOperation(value = "我的模块--点击小脚印--进入用户足迹地图页面接口", notes = "返回当前用户足迹地图中所有的地理标签位置", response = Response.class)
-//    @RequestMapping(value = "getfootmap", method = RequestMethod.POST)
-//    public Response getfootmap(@ApiParam(value = "用户id(必填，否则无法进入‘我的’页面)") @RequestParam String userid){
-//        Response response = new Response();
-//
-//        List<GeographicLabel> geographicList = labelFacade.getfootmap(userid);
-//        if (response.getCode() == 200) {
-//            response.setMessage("查询成功");
-//            response.setData(geographicList);
-//        }
-//
-//        return response;
-//    }
+    @ApiOperation(value = "我的模块--点击小脚印--进入用户足迹地图页面接口", notes = "返回当前用户足迹地图中所有的地理标签位置", response = Response.class)
+    @RequestMapping(value = "getfootmap", method = RequestMethod.POST)
+    public Response getfootmap(@ApiParam(value = "用户id(必填，否则无法进入‘我的’页面)") @RequestParam String userid) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        Response response = new Response();
+
+        List<GeographicLabel> geographicList = labelFacade.getfootmap(userid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+            response.setData(geographicList);
+        }
+
+        return response;
+    }
 }

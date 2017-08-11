@@ -1,5 +1,7 @@
 package com.movision.facade.label;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.circle.entity.Circle;
@@ -11,16 +13,28 @@ import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.*;
 import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.postLabelRelation.service.PostLabelRelationService;
+import com.movision.mybatis.shopAddress.entity.ShopAddress;
 import com.movision.mybatis.userDontLike.entity.UserDontLike;
 import com.movision.mybatis.userDontLike.service.UserDontLikeService;
 import com.movision.utils.DateUtils;
+import com.movision.utils.baidu.SnCal;
 import com.movision.utils.pagination.model.Paging;
+import com.movision.utils.propertiesLoader.PropertiesLoader;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 /**
@@ -319,15 +333,56 @@ public class LabelFacade {
     /**
      * 获取足迹地图中国内的地理标签
      */
-//    public List<GeographicLabel> getfootmap(String userid){
-//
-//        //首先查询当前用户发的所有帖子中包含的地理标签列表
-//        List<GeographicLabel> allGeographicLabelList = postLabelService.getfootmap(Integer.parseInt(userid));
-//
-//        //使用百度sdk遍历根据所有的地名换算成经纬度
-//        for (int i=0; i<allGeographicLabelList.size(); i++){
-//            String name = allGeographicLabelList.get(i).getName();//市名
-//
-//        }
-//    }
+    public List<GeographicLabel> getfootmap(String userid) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+
+        //首先查询当前用户发的所有帖子中包含的地理标签列表
+        List<GeographicLabel> allGeographicLabelList = postLabelService.getfootmap(Integer.parseInt(userid));
+
+        //使用百度sdk遍历根据所有的地名换算成经纬度
+        for (int i=0; i<allGeographicLabelList.size(); i++){
+            GeographicLabel GLvo = allGeographicLabelList.get(i);
+            String name = allGeographicLabelList.get(i).getName();//市名
+            String sn = SnCal.getSn(name);
+            String ak = PropertiesLoader.getValue("baidu.ak");
+
+            //通过http的get请求url
+            String baiduurl = PropertiesLoader.getValue("baidu.url");
+
+            //拼接百度接口的请求url
+            String url = baiduurl + "?address=" + name + "&output=json&ak=" + ak + "&sn=" + sn;
+            String result = "";
+            try {
+                // 根据地址获取请求
+                HttpGet httpGet = new HttpGet(url);//这里发送get请求
+                // 获取当前客户端对象
+                CloseableHttpClient httpclient = HttpClients.createDefault();
+                // 通过请求对象获取响应对象
+                CloseableHttpResponse response = httpclient.execute(httpGet);
+
+                // 判断网络连接状态码是否正常(0--200都数正常)
+                if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                    result = EntityUtils.toString(response.getEntity(), "utf-8");
+                }
+                log.info("返回的json结果集>>>>>>>>>>>>>>>>>>>>>" + result);
+
+                JSONObject jsonObject = JSONObject.parseObject(result);
+                int status = (int) jsonObject.get("status");
+                if (status == 0) {
+                    JSONObject re = (JSONObject) JSON.toJSON(jsonObject.get("result"));
+                    JSONObject location = (JSONObject) JSON.toJSON(re.get("location"));
+                    BigDecimal lng = (BigDecimal) JSON.toJSON(location.get("lng"));
+                    BigDecimal lat = (BigDecimal) JSON.toJSON(location.get("lat"));
+                    log.info("经纬度>>>>>>>>" + lng + ">>>>>>>" + lat);
+                    GLvo.setLng(lng);
+                    GLvo.setLat(lat);
+                } else if (status == 1) {
+                    //无相关结果
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            allGeographicLabelList.set(i, GLvo);
+        }
+        return allGeographicLabelList;
+    }
 }
