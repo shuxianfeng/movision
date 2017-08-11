@@ -96,15 +96,6 @@ public class FacadeCircle {
         for (int i = 0; i < categoryList.size(); i++) {
             int categoryid = categoryList.get(i).getId();
             List<CircleVo> circlelist = circleService.queryCircleByCategory(categoryid);
-//            //递归遍历查询当前圈子中总共包含的帖子数量
-//            for (int j = 0; j < circlelist.size(); j++) {
-//                int circleid = circlelist.get(j).getId();
-//                int postnum = postService.queryPostNumByCircleid(circleid);
-//                //将帖子数量加入圈子对象CircleVo中
-//                circlelist.get(j).setPostnum(postnum);
-//                //计算圈子中更新的帖子数量，目前该值与帖子数量一致
-//                circlelist.get(j).setPostnewnum(postnum);
-//            }
             circlelist = getFollowsumNew(circlelist, userid);
             //将圈子列表加入分类对象CircleCategoryVo中
             categoryList.get(i).setCircleList(circlelist);
