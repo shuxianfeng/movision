@@ -1293,7 +1293,7 @@ public class FacadePost {
             citycode = postService.queryCityUserCode(Integer.parseInt(userid));
          }*/
         if (userid == null) {//未登录
-            list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+            list = postService.findAllCityPost(citycode);//根据热度值排序查询帖子
             list = NotLoginretuenList(list, paging);
             return list;
         } else {//已登录

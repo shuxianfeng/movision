@@ -2103,15 +2103,16 @@
         SELECT * FROM yw_post WHERE isdel=0 ORDER BY heat_value DESC
     </select>
     <select id="findAllPostListHeat" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT * FROM yw_post WHERE isdel=0 ORDER BY heat_value DESC
+        SELECT p.*,c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.isdel=0 ORDER BY
+        p.heat_value DESC
     </select>
     <select id="queryPostCricle" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.lang.Integer">
-        SELECT * FROM yw_post WHERE isdel=0 AND circleid=#{crileid,jdbcType=INTEGER} ORDER BY heat_value
-        DESC
+        SELECT p.*, c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.isdel=0 AND
+        p.circleid=#{crileid,jdbcType=INTEGER} ORDER BY p.heat_value DESC
     </select>
     <select id="queryoverPost" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT * from yw_post WHERE isdel=0 AND circleid!=#{crileid,jdbcType=INTEGER} OR (circleid IS NULL AND isdel=0)
-        ORDER BY heat_value DESC
+        SELECT p.*,c.name as circlename from yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.isdel=0 AND
+        p.circleid!=#{crileid,jdbcType=INTEGER} OR (p.circleid IS NULL AND p.isdel=0) ORDER BY p.heat_value DESC
     </select>
     <select id="queryPostDetailById" resultType="com.movision.mybatis.post.entity.Post"
             parameterType="java.lang.Integer">
@@ -2142,18 +2143,18 @@
         SELECT interestedusers FROM yw_follow_user WHERE userid=#{userid,jdbcType=INTEGER}
     </select>
     <select id="queryPostListByIds" parameterType="java.util.List" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT * FROM yw_post WHERE circleid IN
+        SELECT p.*,c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.circleid IN
         <foreach collection="list" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
-        ORDER BY heat_value DESC
+        ORDER BY p.heat_value DESC
     </select>
     <select id="queryUserListByIds" parameterType="java.util.List" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT * FROM yw_post WHERE userid IN
+        SELECT p.*,c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.userid IN
         <foreach collection="list" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
-        ORDER BY heat_value DESC
+        ORDER BY p.heat_value DESC
     </select>
     <select id="findAllPostCrile" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
@@ -2165,7 +2166,8 @@
         SELECT code FROM yw_city WHERE name LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
     </select>
     <select id="findAllCityPost" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.lang.String">
-        SELECT  * FROM  yw_post WHERE isdel=0 AND city=#{citycode,jdbcType=VARCHAR} ORDER BY  heat_value DESC
+        SELECT p.*,c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.isdel=0 AND
+        p.city=#{citycode,jdbcType=VARCHAR} ORDER BY p.heat_value DESC
     </select>
     <select id="queryPostComment" resultType="java.lang.Integer" parameterType="java.lang.Integer">
         SELECT heat_value FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER}
@@ -2185,7 +2187,9 @@
     </select>
     <select id="findAllLabelAllPost" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
-SELECT yw_post.* FROM yw_post LEFT JOIN yw_post_label_relation ON yw_post_label_relation.postid=yw_post.id
+        SELECT yw_post.*,yw_circle.`name` AS circlename FROM yw_post LEFT JOIN yw_post_label_relation ON
+        yw_post_label_relation.postid=yw_post.id
+        LEFT JOIN yw_circle ON yw_circle.id=yw_post.circleid
 WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_post.heat_value DESC
     </select>
     <select id="findAllPostByid" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
@@ -2355,7 +2359,7 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
 
     <select id="queryLabelListByIds" parameterType="java.util.List"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT * FROM yw_post p WHERE p.id in(
+        SELECT p.*,c.name AS circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.id in(
         SELECT DISTINCT(postid) FROM yw_post_label_relation WHERE labelid in
         <foreach collection="list" item="item" open="(" separator="," close=")">
             #{item}
