@@ -552,6 +552,7 @@ public class VideoUploadUtil {
         }
         //查询用户抽奖次数
         many = weixinGuangzhuService.overplusMany(openid);
+        redisClient.set("openids", openids);
         map.put("subscribe", subscribe);
         map.put("nickname", nickname);
         map.put("subscribe_time", subscribe_time);
@@ -569,11 +570,12 @@ public class VideoUploadUtil {
     /**
      * 用户抽奖
      *
-     * @param openid
+     * @param
      * @return
      */
-    public Map choujiang(String openid) {
+    public Map choujiang() {
         Map map = new HashMap();
+        String openid = redisClient.get("openids").toString();
         //减次数
         int lessCount = weixinGuangzhuService.lessCount(openid);
         //剩余抽奖次数
