@@ -108,7 +108,7 @@ public class CircleAppFacade {
 
             //循环获取当前用户是否已关注该圈子
             paramap.put("circleid", circleid);
-            int count = circleService.querySupportSum(paramap);
+            int count = circleService.queryFollowSum(paramap);
             vo.setIsfollow(count);
             myFollowCircleList.set(i, vo);
         }

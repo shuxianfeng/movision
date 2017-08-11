@@ -199,7 +199,7 @@ public class FacadeCircle {
                 Map<String, Object> paramap = new HashMap<>();
                 paramap.put("userid", Integer.parseInt(userid));
                 paramap.put("circleid", circleid);
-                int count = circleService.querySupportSum(paramap);
+                int count = circleService.queryFollowSum(paramap);
                 vo.setIsfollow(count);
             }else{
                 vo.setIsfollow(0);
