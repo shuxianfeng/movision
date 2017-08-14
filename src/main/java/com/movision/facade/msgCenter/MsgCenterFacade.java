@@ -634,6 +634,24 @@ public class MsgCenterFacade {
     }
 
 
+    /**
+     * 判断用户有无未读
+     *
+     * @param userid
+     * @return
+     */
+    public int userHaveIsRead(String userid, int type) {
+        if (type == 1) {
+
+        } else if (type == 2) {
+
+        } else if (type == 3) {
+
+        }
+        return 0;
+
+    }
+
 
 
 }

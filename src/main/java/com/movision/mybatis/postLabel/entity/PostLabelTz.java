@@ -24,6 +24,15 @@ public class PostLabelTz {
     private Integer count;
 
     private Integer follow;
+    private Integer isfollow;//该用户又没有关注该标签
+
+    public Integer getIsfollow() {
+        return isfollow;
+    }
+
+    public void setIsfollow(Integer isfollow) {
+        this.isfollow = isfollow;
+    }
 
     public Integer getFollow() {
         return follow;

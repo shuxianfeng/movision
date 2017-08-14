@@ -123,4 +123,7 @@
     <select id="followlabel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM yw_follow_label WHERE labelid=#{labelid,jdbcType=INTEGER}
     </select>
+    <select id="isFollowLabel" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT  COUNT(1) FROM  yw_follow_label WHERE labelid=#{labelid,jdbcType=INTEGER} AND userid=#{userid,jdbcType=INTEGER}
+    </select>
 </mapper>

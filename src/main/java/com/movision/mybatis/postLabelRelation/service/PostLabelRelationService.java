@@ -127,4 +127,14 @@ public class PostLabelRelationService {
         }
     }
 
+    public int isFollowLabel(Map map) {
+        try {
+            log.info("该用户有没有关注该标签");
+            return postLabelRelationMapper.isFollowLabel(map);
+        } catch (Exception e) {
+            log.error("该用户有没有关注该标签异常", e);
+            throw e;
+        }
+    }
+
 }

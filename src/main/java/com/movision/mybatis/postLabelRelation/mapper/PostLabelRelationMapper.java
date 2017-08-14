@@ -38,4 +38,6 @@ public interface PostLabelRelationMapper {
     List<PostLabel> queryPostLabelByPostid(PostLabelRelation relation);
 
     int followlabel(int labelid);
+
+    int isFollowLabel(Map map);
 }

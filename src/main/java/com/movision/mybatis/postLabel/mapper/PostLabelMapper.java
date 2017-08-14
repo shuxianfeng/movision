@@ -101,4 +101,6 @@ public interface PostLabelMapper {
     List<PostLabel> queryCityListByCityname(String name);
 
     List<PostLabel> queryGeogLabelByName(String name);
+
+    int isFollowCircleid(Map map);
 }

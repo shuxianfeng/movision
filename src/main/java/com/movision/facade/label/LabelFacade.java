@@ -2,6 +2,7 @@ package com.movision.facade.label;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.movision.common.util.ShiroUtil;
 import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
 import com.movision.mybatis.circle.entity.Circle;
@@ -94,6 +95,12 @@ public class LabelFacade {
         //多少人关注
         int follow = postLabelRelationService.followlabel(labelid);
         postLabel.setFollow(follow);
+        //该用户有没有关注该标签
+        Map map = new HashMap();
+        map.put("userid", ShiroUtil.getAppUserID());
+        map.put("labelid", labelid);
+        int isfollow = postLabelRelationService.isFollowLabel(map);
+        postLabel.setIsfollow(isfollow);
         return postLabel;
     }
 
@@ -197,12 +204,18 @@ public class LabelFacade {
         //根据圈子查询今日这个圈子的发帖数
         int todayPost = postLabelService.postInCircle(Integer.parseInt(circleid));
         circleVo.setTodayPost(todayPost);
-        //查询圈子下所有帖子用的标签
+        //查询圈子下所有帖子用的标
         List<PostLabel> postLabels = postLabelService.queryLabelCircle(Integer.parseInt(circleid));
         circleVo.setPostLabels(postLabels);
         //圈子关注数
         int followCircle = postLabelService.followCircle(Integer.parseInt(circleid));
         circleVo.setFollownum(followCircle);
+        //查询用户是否关注该圈子
+        Map map = new HashMap();
+        map.put("circleid", circleid);
+        map.put("userid", ShiroUtil.getAppUserID());
+        int isfollow = postLabelService.isFollowCircleid(map);
+        circleVo.setIsfollow(isfollow);
         return circleVo;
     }
 

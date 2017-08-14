@@ -491,4 +491,14 @@ public class PostLabelService {
     }
 
 
+    public int isFollowCircleid(Map map) {
+        try {
+            log.info("当前用户有没有关注该圈子");
+            return postLabelMapper.isFollowCircleid(map);
+        } catch (Exception e) {
+            log.error("当前用户有没有关注该圈子失败", e);
+            throw e;
+        }
+    }
+
 }

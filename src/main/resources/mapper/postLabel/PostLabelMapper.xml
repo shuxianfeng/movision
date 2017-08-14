@@ -250,7 +250,7 @@
     </select>
     <select id="queryLabelCircle" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.postLabel.entity.PostLabel">
-        SELECT DISTINCT(l.`name`) FROM yw_post_label_relation r
+        SELECT DISTINCT(l.`name`),l.type,l.id FROM yw_post_label_relation r
         LEFT JOIN yw_post p ON p.id=r.postid LEFT JOIN yw_post_label l ON l.id=r.labelid
         WHERE p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0
     </select>
@@ -367,5 +367,8 @@
               SELECT id FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER}
             )
         )
+    </select>
+    <select id="isFollowCircleid" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1) from  yw_follow_circle WHERE userid=#{userid,jdbcType=INTEGER} AND circleid=#{circleid,jdbcType=INTEGER}
     </select>
 </mapper>
