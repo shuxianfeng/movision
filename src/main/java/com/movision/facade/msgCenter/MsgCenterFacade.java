@@ -649,7 +649,6 @@ public class MsgCenterFacade {
 
         }
         return 0;
-
     }
 
 
