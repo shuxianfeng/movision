@@ -100,7 +100,7 @@
         <foreach collection="list" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
-        AND p.isdel=0 AND (p.isessence=1 OR p.ishot=1) ORDER BY p.intime DESC
+        AND p.isdel=0 AND p.isessence=1 ORDER BY p.intime DESC
     </select>
 
     <insert id="batchInsert" parameterType="java.util.HashMap">

@@ -269,7 +269,7 @@
             resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT p.*,u.nickname,u.photo,c.`name` AS circlename FROM yw_post p LEFT JOIN yw_user u ON u.id=p.userid LEFT
         JOIN yw_circle c ON c.id=p.circleid WHERE
-        p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 AND (p.isessence=1 OR p.ishot=1) ORDER BY p.intime DESC
+        p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 AND p.isessence=1 ORDER BY p.intime DESC
     </select>
     <select id="queryCirclePeople" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.circle.entity.CircleCount">
@@ -382,7 +382,8 @@
     <select id="findAllLabelIsessenPost" parameterType="java.util.Map"
             resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT * FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
-        WHERE r.labelid=#{labelid,jdbcType=INTEGER} AND p.circleid=#{circleid,jdbcType=INTEGER} AND (p.isessence=1 OR p.ishot=1) AND p.isdel=0 ORDER  BY p.intime DESC
+        WHERE r.labelid=#{labelid,jdbcType=INTEGER} AND p.circleid=#{circleid,jdbcType=INTEGER} AND p.isessence=1 AND
+        p.isdel=0 ORDER BY p.intime DESC
     </select>
 
 </mapper>
