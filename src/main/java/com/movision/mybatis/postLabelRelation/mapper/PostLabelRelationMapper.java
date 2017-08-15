@@ -25,11 +25,11 @@ public interface PostLabelRelationMapper {
 
     List<Integer> postList(int labelid);
 
-    List<PostVo> post(List postid, RowBounds rowBounds);
+    List<PostVo> findAllPost(List postid, RowBounds rowBounds);
 
-    List<PostVo> postHeatValue(List postid, RowBounds rowBounds);
+    List<PostVo> findAllPostHeatValue(List postid, RowBounds rowBounds);
 
-    List<PostVo> postIseecen(List postid, RowBounds rowBounds);
+    List<PostVo> findAllPostIseecen(List postid, RowBounds rowBounds);
 
     void deletePostLabelRelaton(Integer postid);
 

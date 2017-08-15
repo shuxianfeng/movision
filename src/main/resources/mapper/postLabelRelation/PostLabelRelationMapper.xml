@@ -76,7 +76,7 @@
     <select id="postList" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT postid FROM yw_post_label_relation WHERE labelid=#{labelid,jdbcType=INTEGER}
     </select>
-    <select id="post" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+    <select id="findAllPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT p.*,u.nickname,u.photo,c.`name` AS circlename FROM yw_post p LEFT JOIN yw_user u ON u.id=p.userid LEFT
         JOIN yw_circle c ON c.id=p.circleid WHERE p.id IN
         <foreach collection="list" item="item" open="(" separator="," close=")">
@@ -84,7 +84,8 @@
         </foreach>
         AND p.isdel=0 order BY p.intime DESC
     </select>
-    <select id="postHeatValue" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+    <select id="findAllPostHeatValue" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT p.*,u.nickname,u.photo,c.`name` AS circlename FROM yw_post p LEFT JOIN yw_user u ON u.id=p.userid LEFT
         JOIN yw_circle c ON c.id=p.circleid WHERE p.id IN
         <foreach collection="list" item="item" open="(" separator="," close=")">
@@ -92,7 +93,8 @@
         </foreach>
         AND p.isdel=0 order BY p.heat_value DESC
     </select>
-    <select id="postIseecen" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+    <select id="findAllPostIseecen" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT p.*,u.nickname,u.photo,c.`name` AS circlename FROM yw_post p LEFT JOIN yw_user u ON u.id=p.userid LEFT
         JOIN yw_circle c ON c.id=p.circleid WHERE p.id IN
         <foreach collection="list" item="item" open="(" separator="," close=")">
