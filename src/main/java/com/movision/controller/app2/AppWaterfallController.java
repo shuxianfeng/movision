@@ -306,10 +306,11 @@ public class AppWaterfallController {
     public Response queryCircleBotton(@ApiParam(value = "圈子id") @RequestParam String circleid,
                                       @ApiParam(value = "类型 1 推荐 2 最新 3精华 ") @RequestParam int type,
                                       @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                      @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                                      @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                      @ApiParam(value = "标签id") @RequestParam(required = false) String labelid) {
         Response response = new Response();
         Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List result = labelFacade.queryCircleBotton(type, pager, circleid);
+        List result = labelFacade.queryCircleBotton(type, pager, circleid, labelid);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }

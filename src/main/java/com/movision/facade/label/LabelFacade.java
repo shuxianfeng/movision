@@ -228,17 +228,37 @@ public class LabelFacade {
      * @param circleid
      * @return
      */
-    public List queryCircleBotton(int type, Paging<PostVo> paging, String circleid) {
+    public List queryCircleBotton(int type, Paging<PostVo> paging, String circleid, String labelid) {
         List<PostVo> list = null;
+        Map map = new HashMap();
+        map.put("circleid", circleid);
         if (type == 1) {//最热
-            list = postLabelService.findAllHotPost(Integer.parseInt(circleid), paging);
-            list = labelResult(list);
+            if (labelid == null) {
+                list = postLabelService.findAllHotPost(Integer.parseInt(circleid), paging);
+                list = labelResult(list);
+            } else {
+                map.put("labelid", labelid);
+                list = postLabelService.findAllLabelHotPost(map, paging);
+                list = labelResult(list);
+            }
         } else if (type == 2) {//最新
-            list = postLabelService.findAllNewPost(Integer.parseInt(circleid), paging);
-            list = labelResult(list);
+            if (labelid == null) {
+                list = postLabelService.findAllNewPost(Integer.parseInt(circleid), paging);
+                list = labelResult(list);
+            } else {
+                map.put("labelid", labelid);
+                list = postLabelService.findAllLabelNewPost(map, paging);
+                list = labelResult(list);
+            }
         } else if (type == 3) {//精华
-            list = postLabelService.findAllIsencePost(Integer.parseInt(circleid), paging);
-            list = labelResult(list);
+            if (labelid == null) {
+                list = postLabelService.findAllIsencePost(Integer.parseInt(circleid), paging);
+                list = labelResult(list);
+            } else {
+                map.put("labelid", labelid);
+                list = postLabelService.findAllLabelIsessenPost(map, paging);
+                list = labelResult(list);
+            }
         }
         return list;
     }

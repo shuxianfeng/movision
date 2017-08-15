@@ -501,4 +501,35 @@ public class PostLabelService {
         }
     }
 
+
+    public List<PostVo> findAllLabelHotPost(Map map, Paging<PostVo> paging) {
+        try {
+            log.info("标签帖子");
+            return postLabelMapper.findAllLabelHotPost(map, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("标签帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllLabelNewPost(Map map, Paging<PostVo> paging) {
+        try {
+            log.info("标签最新帖子");
+            return postLabelMapper.findAllLabelNewPost(map, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("标签最新帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllLabelIsessenPost(Map map, Paging<PostVo> paging) {
+        try {
+            log.info("标签精选帖子");
+            return postLabelMapper.findAllLabelIsessenPost(map, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("标签精选帖子失败", e);
+            throw e;
+        }
+    }
+
 }

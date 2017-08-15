@@ -252,7 +252,7 @@
             resultType="com.movision.mybatis.postLabel.entity.PostLabel">
         SELECT DISTINCT(l.`name`),l.type,l.id FROM yw_post_label_relation r
         LEFT JOIN yw_post p ON p.id=r.postid LEFT JOIN yw_post_label l ON l.id=r.labelid
-        WHERE p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0
+        WHERE p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 ORDER BY l.heat_value DESC
     </select>
     <select id="findAllHotPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT p.*,u.nickname,u.photo,c.`name` AS circlename FROM yw_post p LEFT JOIN yw_user u ON u.id=p.userid LEFT
@@ -371,4 +371,18 @@
     <select id="isFollowCircleid" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT COUNT(1) from  yw_follow_circle WHERE userid=#{userid,jdbcType=INTEGER} AND circleid=#{circleid,jdbcType=INTEGER}
     </select>
+    <select id="findAllLabelHotPost" parameterType="java.util.Map" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        WHERE r.labelid=#{labelid,jdbcType=INTEGER} AND p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 ORDER  BY p.heat_value DESC
+     </select>
+    <select id="findAllLabelNewPost" parameterType="java.util.Map" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        WHERE r.labelid=#{labelid,jdbcType=INTEGER} AND p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 ORDER  BY p.intime DESC
+    </select>
+    <select id="findAllLabelIsessenPost" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        WHERE r.labelid=#{labelid,jdbcType=INTEGER} AND p.circleid=#{circleid,jdbcType=INTEGER} AND (p.isessence=1 OR p.ishot=1) AND p.isdel=0 ORDER  BY p.intime DESC
+    </select>
+
 </mapper>

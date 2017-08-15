@@ -103,4 +103,11 @@ public interface PostLabelMapper {
     List<PostLabel> queryGeogLabelByName(String name);
 
     int isFollowCircleid(Map map);
+
+    List<PostVo> findAllLabelHotPost(Map map, RowBounds rowBounds);
+
+    List<PostVo> findAllLabelNewPost(Map map, RowBounds rowBounds);
+
+    List<PostVo> findAllLabelIsessenPost(Map map, RowBounds rowBounds);
+
 }
