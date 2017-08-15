@@ -2392,4 +2392,8 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
     <update id="updateZeroHeatValue" parameterType="java.lang.Integer">
         UPDATE yw_post SET heat_value=0 WHERE id=#{postid,jdbcType=INTEGER}
     </update>
+    <select id="findAllActivePostD" resultType="com.movision.mybatis.post.entity.PostVo"
+            parameterType="java.lang.Integer">
+        SELECT * FROM yw_post p  WHERE p.isactive=1 AND id !=#{id,jdbcType=INTEGER} ORDER BY p.intime DESC
+    </select>
 </mapper>

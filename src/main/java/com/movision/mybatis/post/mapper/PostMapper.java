@@ -337,4 +337,6 @@ public interface PostMapper {
     List<Post> queryPostListByName(Map map);
 
     Post selectTitleById(Integer id);
+
+    List<PostVo> findAllActivePostD(int id, RowBounds rowBounds);
 }

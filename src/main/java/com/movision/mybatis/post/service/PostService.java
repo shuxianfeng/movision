@@ -1930,4 +1930,15 @@ public class PostService {
         }
     }
 
+
+    public List<PostVo> findAllActivePostD(int id, Paging<PostVo> paging) {
+        try {
+            log.info("查询所有活动");
+            return postMapper.findAllActivePostD(id, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询所有活动异常", e);
+            throw e;
+        }
+    }
+
 }

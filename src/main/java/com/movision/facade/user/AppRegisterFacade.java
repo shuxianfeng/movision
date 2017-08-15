@@ -135,11 +135,11 @@ public class AppRegisterFacade {
                         //2.1 手机号不存在,则新增用户信息
                         userid = this.registerMember(member);
                         //邀请成功查询出邀请人的openid给yw_weixin_guangzhu表的转盘次数+1
-                        String openid = weixinGuangzhuService.selectOpenid(userid);
+                        /** String openid = weixinGuangzhuService.selectOpenid(userid);
                         if (openid != null) {
                             //加1
                             weixinGuangzhuService.updateC(openid);
-                        }
+                         }*/
                         //2.2 增加新用户注册积分流水
                         pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.new_user_register.getCode(), PointConstant.POINT.new_user_register.getCode(), userid);
                         //2.3 增加绑定手机号积分流水

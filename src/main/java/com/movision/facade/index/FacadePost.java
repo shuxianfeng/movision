@@ -2087,6 +2087,25 @@ public class FacadePost {
         return testIntimeService.insert(testIntime);
     }
 
+
+    /**
+     * 更多活动
+     *
+     * @return
+     */
+    public List ActivePost(String id, Paging<PostVo> paging) {
+        List<PostVo> postVos = postService.findAllActivePostD(Integer.parseInt(id), paging);
+        for (int i = 0; i < postVos.size(); i++) {
+            int postid = postVos.get(i).getId();
+            int partsum = postService.queryActivePartSum(postid);
+            postVos.get(i).setPartsum(partsum);
+        }
+        ComparatorChain chain = new ComparatorChain();
+        chain.addComparator(new BeanComparator("partsum"), true);//true,fase正序反序
+        Collections.sort(postVos, chain);
+        return postVos;
+    }
+
 }
 
 
