@@ -523,15 +523,18 @@
   </update>
   <select id="findAllOneComment" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
-    SELECT  * FROM  yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER} AND  pid IS NULL ORDER BY intime DESC
+    SELECT c.*,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE
+    c.postid=#{postid,jdbcType=INTEGER} AND c.pid IS NULL ORDER BY c.intime DESC
   </select>
   <select id="queryTwoComment" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
-    SELECT * FROM yw_post_comment WHERE pid=#{pid,jdbcType=INTEGER} ORDER BY intime DESC
+    SELECT * FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE c.pid=#{pid,jdbcType=INTEGER} ORDER BY
+    c.intime DESC
   </select>
   <select id="queryThreeComment" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
-    SELECT * FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER} AND pid IS NULL ORDER BY zansum DESC LIMIT 3
+    SELECT c.*,u.photo,u.nickname FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER} AND pid IS NULL ORDER BY
+    zansum DESC LIMIT 3
   </select>
   <select id="repliesNumber" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     SELECT COUNT(1) FROM yw_post_comment WHERE pid=#{id,jdbcType=INTEGER}
