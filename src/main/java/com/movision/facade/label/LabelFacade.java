@@ -380,6 +380,7 @@ public class LabelFacade {
 
             //通过http的get请求url
             String baiduurl = PropertiesLoader.getValue("baidu.url");
+            System.out.println("123");
 
             //拼接百度接口的请求url
             String url = baiduurl + "?address=" + name + "&output=json&ak=" + ak + "&sn=" + sn;
