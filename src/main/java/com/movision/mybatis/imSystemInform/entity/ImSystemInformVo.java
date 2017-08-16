@@ -28,6 +28,16 @@ public class ImSystemInformVo implements Serializable {
 
     private Integer isoperation;//代表是否为运营通知
 
+    private Integer activeid;
+
+    public Integer getActiveid() {
+        return activeid;
+    }
+
+    public void setActiveid(Integer activeid) {
+        this.activeid = activeid;
+    }
+
     public Integer getIsoperation() {
         return isoperation;
     }
