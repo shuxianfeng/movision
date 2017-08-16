@@ -841,7 +841,9 @@ public class FacadePost {
                 //再保存帖子中分享的商品列表(如果商品id字段不为空)
                 insertPostShareGoods(proids, flag);
                 //标签业务逻辑处理
-                addLabelProcess(labellist, flag);
+                if (StringUtils.isNotBlank(labellist)) {
+                    addLabelProcess(labellist, flag);
+                }
                 //积分处理
                 pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
                 //增加用户热度
