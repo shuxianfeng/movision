@@ -13,6 +13,7 @@ import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.newInformation.entity.NewInformation;
 import com.movision.mybatis.newInformation.service.NewInformationService;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import com.movision.utils.L;
@@ -265,11 +266,14 @@ public class FacadeComments {
 
     public List<CommentVo> GetCommentVoList(int pid) {
         List<CommentVo> commentVoList = commentService.queryTwoComment(pid);
+        //查询子拼轮的父评论user
+        User puser = commentService.queryUserInfor(pid);
         if (commentVoList != null) {
             for (int i = 0; i < commentVoList.size(); i++) {
                 //查询父评论下面有多少子评论
                 List<CommentVo> CommentVozjh = GetCommentVoList((int) commentVoList.get(i).getId());
                 commentVoList.get(i).setCommentVos(CommentVozjh);
+                commentVoList.get(i).setPuser(puser);
             }
         }
         return commentVoList;

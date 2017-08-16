@@ -4,6 +4,7 @@ import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentCount;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.mapper.CommentMapper;
+import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -534,5 +535,14 @@ public class CommentService {
         }
     }
 
+    public User queryUserInfor(int pid) {
+        try {
+            log.info("父用户");
+            return commentMapper.queryUserInfor(pid);
+        } catch (Exception e) {
+            log.error("父用户失敗", e);
+            throw e;
+        }
+    }
 
 }

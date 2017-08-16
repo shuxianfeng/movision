@@ -3,6 +3,7 @@ package com.movision.mybatis.comment.mapper;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentCount;
 import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.mybatis.user.entity.User;
 import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
@@ -98,6 +99,8 @@ public interface CommentMapper {
     List<CommentVo> queryTwoComment(int pid);
 
     List<CommentVo> queryThreeComment(int postid);
+
+    User queryUserInfor(int pid);
 
     int repliesNumber(int id);
 

@@ -14,7 +14,7 @@ public class CommentVo implements Serializable {
     private User user;
     private  Integer postid;
     private Integer repliesnumber;
-
+    private User puser;
     private String content;
 
     private Date intime;
@@ -60,6 +60,14 @@ public class CommentVo implements Serializable {
     private Integer isread;//是否已读 0否 1是
 
     private Integer heatvalue;
+
+    public User getPuser() {
+        return puser;
+    }
+
+    public void setPuser(User puser) {
+        this.puser = puser;
+    }
 
     public Integer getRepliesnumber() {
         return repliesnumber;
