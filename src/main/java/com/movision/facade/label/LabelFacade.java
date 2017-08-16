@@ -222,6 +222,19 @@ public class LabelFacade {
         return circleVo;
     }
 
+    /**
+     * 圈子详情
+     *
+     * @param circleid
+     * @return
+     */
+    public CircleVo queryCircleDetail(String circleid) {
+        //根据id查询圈子所有
+        CircleVo circleVo = postLabelService.queryCircleByPostid(Integer.parseInt(circleid));
+        List<User> circleManager = postLabelService.queryCircleManager(Integer.parseInt(circleid));
+        circleVo.setCirclemanagerlist(circleManager);
+        return circleVo;
+    }
 
     /**
      * 圈子标签下半部分

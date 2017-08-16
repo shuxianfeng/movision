@@ -296,6 +296,19 @@ public class AppWaterfallController {
     }
 
 
+    @ApiOperation(value = "点击圈子标签页上半部分箭头详情", notes = "点击圈子标签页上半部分箭头详情", response = Response.class)
+    @RequestMapping(value = "queryCircleDetail", method = RequestMethod.POST)
+    public Response queryCircleDetail(@ApiParam(value = "圈子id") @RequestParam String circleid) {
+        Response response = new Response();
+        CircleVo result = labelFacade.queryCircleDetail(circleid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
+
     /**
      * 点击圈子标签页下半部分
      *
