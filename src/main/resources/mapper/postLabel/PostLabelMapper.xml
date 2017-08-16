@@ -242,7 +242,9 @@
   </select>
     <select id="queryCircleByPostid" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.circle.entity.CircleVo">
-        SELECT * FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER}
+        SELECT c.*,t.categoryname,u.nickname,u.photo AS userphoto FROM yw_circle c LEFT JOIN yw_circle_category t ON
+        t.id=c.category
+        LEFT JOIN yw_user u ON u.id=c.userid WHERE c.id=#{circleid,jdbcType=INTEGER}
     </select>
     <select id="postInCircle" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
@@ -385,5 +387,8 @@
         WHERE r.labelid=#{labelid,jdbcType=INTEGER} AND p.circleid=#{circleid,jdbcType=INTEGER} AND p.isessence=1 AND
         p.isdel=0 ORDER BY p.intime DESC
     </select>
-
+    <select id="queryCircleManager" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.user.entity.User">
+        SELECT u.id,u.nickname,u.photo FROM yw_circle_manager m LEFT JOIN yw_user u ON u.id=m.userid WHERE m.circleid=#{circleid,jdbcType=INTEGER}
+    </select>
 </mapper>

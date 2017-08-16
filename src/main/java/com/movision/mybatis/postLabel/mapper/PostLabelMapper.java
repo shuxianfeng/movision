@@ -5,6 +5,7 @@ import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.*;
 import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
+import com.movision.mybatis.user.entity.User;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
@@ -47,6 +48,8 @@ public interface PostLabelMapper {
     List<Integer> queryLabelIdList(String[] nameStr);
 
     CircleVo queryCircleByPostid(int circleid);
+
+    List<User> queryCircleManager(int circleid);
 
     Integer postInCircle(int circleid);
 

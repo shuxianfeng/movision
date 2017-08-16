@@ -6,6 +6,7 @@ import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.*;
 import com.movision.mybatis.postLabel.mapper.PostLabelMapper;
 import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
+import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -228,6 +229,15 @@ public class PostLabelService {
         }
     }
 
+    public List<User> queryCircleManager(int circleid) {
+        try {
+            log.info("圈子管理员");
+            return postLabelMapper.queryCircleManager(circleid);
+        } catch (Exception e) {
+            log.error("圈子管理员异常", e);
+            throw e;
+        }
+    }
 
     public Integer postInCircle(int circleid) {
         try {

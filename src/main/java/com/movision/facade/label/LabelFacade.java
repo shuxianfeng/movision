@@ -15,6 +15,7 @@ import com.movision.mybatis.postLabel.entity.*;
 import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.postLabelRelation.service.PostLabelRelationService;
 import com.movision.mybatis.shopAddress.entity.ShopAddress;
+import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.userDontLike.entity.UserDontLike;
 import com.movision.mybatis.userDontLike.service.UserDontLikeService;
 import com.movision.utils.DateUtils;
@@ -201,6 +202,8 @@ public class LabelFacade {
     public CircleVo queryCircleByPostid(String circleid) {
         //根据id查询圈子所有
         CircleVo circleVo = postLabelService.queryCircleByPostid(Integer.parseInt(circleid));
+        List<User> circleManager = postLabelService.queryCircleManager(Integer.parseInt(circleid));
+        circleVo.setCirclemanagerlist(circleManager);
         //根据圈子查询今日这个圈子的发帖数
         int todayPost = postLabelService.postInCircle(Integer.parseInt(circleid));
         circleVo.setTodayPost(todayPost);

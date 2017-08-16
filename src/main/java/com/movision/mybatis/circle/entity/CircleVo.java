@@ -90,6 +90,26 @@ public class CircleVo implements Serializable {
 
     private List<PostLabel> postLabels;//标签
 
+    private String nickname;//圈子创建者姓名
+
+    private String userphoto;//圈子创建者头像
+
+    public String getUserphoto() {
+        return userphoto;
+    }
+
+    public void setUserphoto(String userphoto) {
+        this.userphoto = userphoto;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     public List<PostLabel> getPostLabels() {
         return postLabels;
     }
