@@ -50,10 +50,10 @@ public class AppMineController {
 
         Paging<CircleVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List<CircleVo> myFollowCircleList = circleAppFacade.getMineFollowCircle(userid, pager);
-
+        pager.result(myFollowCircleList);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
-            response.setData(myFollowCircleList);
+            response.setData(pager);
         }
         return response;
     }
@@ -67,10 +67,10 @@ public class AppMineController {
 
         Paging<UserVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List<UserVo> myFollowAuthorList = userFacade.getMineFollowAuthor(userid, pager);
-
+        pager.result(myFollowAuthorList);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
-            response.setData(myFollowAuthorList);
+            response.setData(pager);
         }
         return response;
     }
@@ -84,10 +84,10 @@ public class AppMineController {
 
         Paging<PostLabelVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List<PostLabelVo> myFollowCircleList = labelFacade.getMineFollowLabel(userid, pager);
-
+        pager.result(myFollowCircleList);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
-            response.setData(myFollowCircleList);
+            response.setData(pager);
         }
         return response;
     }
@@ -101,10 +101,10 @@ public class AppMineController {
 
         Paging<UserVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List<UserVo> myFansList = userFacade.getMyfans(userid, pager);
-
+        pager.result(myFansList);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
-            response.setData(myFansList);
+            response.setData(pager);
         }
         return response;
     }
@@ -132,9 +132,10 @@ public class AppMineController {
 
         Paging<InviteUserVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List<InviteUserVo> inviteUserList = userFacade.myInviteList(userid, type, pager);
+        pager.result(inviteUserList);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
-            response.setData(inviteUserList);
+            response.setData(pager);
         }
         return response;
     }
