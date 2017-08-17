@@ -259,31 +259,26 @@ public class FacadeComments {
         List<CommentVo> commentVos = commentService.queryOneComment(postid, paging);//所有父评论
         if (commentVos != null) {
             for (int i = 0; i < commentVos.size(); i++) {
-                commentVos.get(i).setCommentVos(NewCommentVoList(commentVos.get(i).getId()));
+                commentVos.get(i).setCommentVos(NewCommentVoList(commentVos.get(i).getId(), commentVos));
             }
         }
         return commentVos;
     }
 
-    int t = 0;
 
-    public List<CommentVo> NewCommentVoList(int pid) {
+    public List<CommentVo> NewCommentVoList(int pid, List<CommentVo> commentVos) {
         List<CommentVo> commentVoList = commentService.queryTwoComment(pid);//父评论的子评论
         //查询子拼轮的父评论user
         User puser = commentService.queryUserInfor(pid);
-        List<CommentVo> list = null;
-        if (commentVoList != null && t < 2) {
+        if (commentVoList != null) {
             for (int i = 0; i < commentVoList.size(); i++) {
                 //查询子评论下面有多少子评论
-                List<CommentVo> CommentVozjh = NewCommentVoList(commentVoList.get(i).getId());
-                for (int j = 0; j < CommentVozjh.size(); j++) {
-                    list = new ArrayList<>();
-                    list.add(CommentVozjh.get(i));
-                }
-                commentVoList.get(i).setCommentVos(list);
-                commentVoList.get(i).setPuser(puser);
+                List<CommentVo> CommentVozjh = NewCommentVoList(commentVoList.get(i).getId(), commentVos);
+                commentVos.get(i).setCommentVos(CommentVozjh);
+                commentVos.get(i).setPuser(puser);
+                // commentVo.setCommentVos(list);
+                // commentVo.setPuser(puser);
             }
-            t++;
         }
         return commentVoList;
     }

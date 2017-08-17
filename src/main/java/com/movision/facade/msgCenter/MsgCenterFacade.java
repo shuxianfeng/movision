@@ -6,6 +6,7 @@ import com.movision.common.pojo.InstantInfo;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.paging.PageFacade;
 import com.movision.fsearch.utils.StringUtil;
+import com.movision.mybatis.PostZanRecord.entity.PostZanRecord;
 import com.movision.mybatis.PostZanRecord.entity.ZanRecordVo;
 import com.movision.mybatis.PostZanRecord.service.PostZanRecordService;
 import com.movision.mybatis.comment.entity.CommentVo;
@@ -185,7 +186,7 @@ public class MsgCenterFacade {
                 commentService.updateCommentVo(commentVo);
 
             } else if (MsgCenterConstant.INSTANT_INFO_TYPE.zan.getCode() == type) {
-                PostCommentZanRecordVo postCommentZanRecordVo = (PostCommentZanRecordVo) info.getObject();
+                ZanRecordVo postCommentZanRecordVo = (ZanRecordVo) info.getObject();
                 postCommentZanRecordVo.setIsread(1);    //已读
                 postCommentZanRecordService.updatePostCommentZanRecordVo(postCommentZanRecordVo);
 
@@ -201,7 +202,7 @@ public class MsgCenterFacade {
     }
 
     private void handleCommentlist(List<InstantInfo> list) {
-        List<CommentVo> commentList = comm(ShiroUtil.getAppUserID());
+        List<CommentVo> commentList = getCommentList(ShiroUtil.getAppUserID());
         int len = commentList.size();
         if (len > 10) {
             for (int i = 0; i < 10; i++) {
@@ -215,7 +216,7 @@ public class MsgCenterFacade {
     }
 
     private void handleZanlist(List<InstantInfo> list) {
-        List<PostCommentZanRecordVo> zanlist = zan(ShiroUtil.getAppUserID());
+        List<ZanRecordVo> zanlist = findZan(ShiroUtil.getAppUserID());
 
         int zanLength = zanlist.size();
         if (zanLength > 10) {
@@ -251,7 +252,7 @@ public class MsgCenterFacade {
      * @param zanlist
      * @param i
      */
-    private void getInstantInfoFromZanlist(List<InstantInfo> list, List<PostCommentZanRecordVo> zanlist, int i) {
+    private void getInstantInfoFromZanlist(List<InstantInfo> list, List<ZanRecordVo> zanlist, int i) {
         InstantInfo instantInfo = new InstantInfo();
         instantInfo.setObject(zanlist.get(i));
         instantInfo.setIntime(zanlist.get(i).getIntime());
@@ -361,6 +362,55 @@ public class MsgCenterFacade {
      */
     public List<CommentVo> getMsgCommentList(Integer userid, Paging<CommentVo> pager) {
         List<CommentVo> comments = commentService.findAllQueryComment(userid, pager);
+        if (comments != null) {
+            for (int i = 0; i < comments.size(); i++) {
+                Integer pid = comments.get(i).getPid();
+                Integer usersid = comments.get(i).getUserid();
+
+                if (!usersid.equals(userid)) {
+                    User user = postCommentZanRecordService.queryusers(usersid);
+                    if (pid == null) {
+                        Integer postid = comments.get(i).getPostid();
+                        List<Post> post = postZanRecordService.queryPost(postid);
+                        for (int j = 0; j < post.size(); j++) {
+                            String str = post.get(j).getPostcontent();
+                            String a = MsgCenterFacade.removeHtmlTag(str);
+                            String b = a.replaceAll("  ", "");
+                            if (StringUtil.isBlank(b)) {
+                                String nickname = postCommentZanRecordService.queryPostNickname(postid);
+                                String text = nickname + "的帖子";
+                                comments.get(i).setPhoto(text);
+                                post.get(j).setPostcontent("");
+                            } else {
+                                post.get(j).setPostcontent(b);
+                            }
+                        }
+                        comments.get(i).setPost(post);
+                        comments.get(i).setUser(user);
+                    } else if (pid != null) {
+                        List<CommentVo> commentVos = commentService.queryPidComment(pid);
+                        comments.get(i).setCommentVos(commentVos);
+                        comments.get(i).setUser(user);
+                    }
+                } else {
+                    comments.remove(comments.get(i));
+                    i--;
+                }
+            }
+        }
+        return comments;
+    }
+
+
+    /**
+     * 获取评论列表
+     *
+     * @param userid
+     * @param
+     * @return
+     */
+    public List<CommentVo> getCommentList(Integer userid) {
+        List<CommentVo> comments = commentService.findQueryComment(userid);
         if (comments != null) {
             for (int i = 0; i < comments.size(); i++) {
                 Integer pid = comments.get(i).getPid();
@@ -531,7 +581,55 @@ public class MsgCenterFacade {
         return zanRecordVos;
     }
 
-
+    /**
+     * 赞列表
+     *
+     * @param userid
+     * @param
+     * @return
+     */
+    public List<ZanRecordVo> findZan(Integer userid) {
+        List<ZanRecordVo> zanRecordVos = postCommentZanRecordService.findZan(userid);
+        if (zanRecordVos != null) {
+            for (int i = 0; i < zanRecordVos.size(); i++) {
+                Integer commentid = zanRecordVos.get(i).getCommentid();
+                Integer postid = zanRecordVos.get(i).getPostid();
+                Integer usersid = zanRecordVos.get(i).getUserid();
+                if (!usersid.equals(userid)) {
+                    User user = postCommentZanRecordService.queryusers(usersid);
+                    if (commentid != null) {
+                        List<CommentVo> commentVo = postCommentZanRecordService.queryComment(commentid);
+                        zanRecordVos.get(i).setComment(commentVo);
+                        zanRecordVos.get(i).setCtype(1);
+                        zanRecordVos.get(i).setUser(user);
+                    }
+                    if (postid != null) {
+                        List<Post> post = postZanRecordService.queryPost(postid);
+                        zanRecordVos.get(i).setCtype(2);
+                        for (int j = 0; j < post.size(); j++) {
+                            String str = post.get(j).getPostcontent();
+                            String a = MsgCenterFacade.removeHtmlTag(str);
+                            String b = a.replaceAll("  ", "");
+                            if (StringUtil.isBlank(b)) {
+                                String nickname = postCommentZanRecordService.queryPostNickname(postid);
+                                String text = nickname + "的帖子";
+                                zanRecordVos.get(i).setContent(text);
+                                post.get(j).setPostcontent("");
+                            } else {
+                                post.get(j).setPostcontent(b);
+                            }
+                        }
+                        zanRecordVos.get(i).setUser(user);
+                        zanRecordVos.get(i).setPosts(post);
+                    }
+                } else {
+                    zanRecordVos.remove(zanRecordVos.get(i));
+                    i--;
+                }
+            }
+        }
+        return zanRecordVos;
+    }
     public List<ImFirstDialogueVo> findAllDialogue(Integer userid, Paging<ImFirstDialogueVo> pager) {
         List<ImFirstDialogueVo> list = imFirstDialogueService.findAllDialogue(userid, pager);
         return list;

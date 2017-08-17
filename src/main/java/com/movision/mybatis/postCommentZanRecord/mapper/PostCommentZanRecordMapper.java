@@ -1,5 +1,6 @@
 package com.movision.mybatis.postCommentZanRecord.mapper;
 
+import com.movision.mybatis.PostZanRecord.entity.PostZanRecord;
 import com.movision.mybatis.PostZanRecord.entity.ZanRecordVo;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecord;
@@ -19,7 +20,7 @@ public interface PostCommentZanRecordMapper {
 
     PostCommentZanRecord selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(PostCommentZanRecordVo record);
+    int updateByPrimaryKeySelective(ZanRecordVo record);
 
     int updateByPrimaryKey(PostCommentZanRecord record);
 
@@ -30,6 +31,7 @@ public interface PostCommentZanRecordMapper {
 
     List<ZanRecordVo> findAllZan(Integer userid, RowBounds rowBounds);
 
+    List<ZanRecordVo> findZan(Integer userid);
     User queryusers(Integer userid);
 
     String queryPostNickname(Integer postid);

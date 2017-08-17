@@ -308,6 +308,22 @@ public class CommentService {
         }
     }
 
+    /**
+     * 根据用户id查询用户帖子被评论的评论列表
+     *
+     * @param userid
+     * @param
+     * @return
+     */
+    public List<CommentVo> findQueryComment(Integer userid) {
+        try {
+            log.info("根据用户id查询用户帖子被评论的评论列表");
+            return commentMapper.findQueryComment(userid);
+        } catch (Exception e) {
+            log.error("根据用户id查询用户帖子被评论的评论列表异常", e);
+            throw e;
+        }
+    }
     public List<CommentVo> queryPidComment(Integer pid) {
         try {
             log.info("查询父评论");

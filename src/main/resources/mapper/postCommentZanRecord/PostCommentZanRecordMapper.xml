@@ -65,7 +65,7 @@
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective"
-            parameterType="com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecordVo">
+            parameterType="com.movision.mybatis.PostZanRecord.entity.ZanRecordVo">
         update yw_post_comment_zan_record
         <set>
             <if test="userid != null">
@@ -123,4 +123,13 @@ UNION ALL
     <select id="queryPostNickname" parameterType="java.lang.Integer" resultType="java.lang.String">
 SELECT u.nickname FROM yw_user u LEFT JOIN yw_post p ON p.userid=u.id WHERE p.id=#{postid,jdbcType=INTEGER}
 </select>
+    <select id="findZan" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.PostZanRecord.entity.ZanRecordVo">
+                SELECT r.id,r.userid,r.commentid,null AS postid,r.intime FROM yw_post_comment_zan_record r WHERE r.commentid IN
+        (SELECT id FROM yw_post_comment WHERE userid=#{userid,jdbcType=INTEGER})
+UNION ALL
+        SELECT d.id,d.userid,null AS commentid,d.postid,d.intime FROM yw_post_zan_record d WHERE d.postid in (SELECT id
+        FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER}) ORDER BY intime DESC
+
+    </select>
 </mapper>
