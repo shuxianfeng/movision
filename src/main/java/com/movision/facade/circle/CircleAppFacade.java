@@ -6,6 +6,7 @@ import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.entity.MyCircle;
 import com.movision.mybatis.circle.service.CircleService;
+import com.movision.mybatis.followCircle.entity.FollowCircle;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.utils.pagination.model.Paging;
@@ -13,10 +14,7 @@ import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author zhuangyuhao
@@ -114,5 +112,37 @@ public class CircleAppFacade {
         }
 
         return myFollowCircleList;
+    }
+
+
+    /**
+     * 查询所有圈子
+     *
+     * @param paging
+     * @return
+     */
+    public List<CircleVo> findAllCircle(Paging<CircleVo> paging) {
+        return circleService.findAllCircle(paging);
+    }
+
+
+    /**
+     * 用户关注的5个圈子
+     *
+     * @param userid
+     * @param circleid
+     * @return
+     */
+    public Integer followCircleUser(int userid, String circleid) {
+        Map map = new HashMap();
+        String[] str = circleid.split(",");
+        for (int i = 0; i < str.length; i++) {
+            map.put("userid", userid);
+            map.put("circleid", Integer.parseInt(str[i]));
+            map.put("intime", new Date());
+            circleService.followCircle(map);
+        }
+
+        return 1;
     }
 }

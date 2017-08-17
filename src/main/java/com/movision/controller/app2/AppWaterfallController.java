@@ -1,6 +1,7 @@
 package com.movision.controller.app2;
 
 import com.movision.common.Response;
+import com.movision.facade.circle.CircleAppFacade;
 import com.movision.facade.comment.FacadeComments;
 import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
@@ -47,7 +48,7 @@ public class AppWaterfallController {
     @Autowired
     private FacadeComments facadeComments;
     @Autowired
-    private FacadeHeatValue facadeHeatValue;
+    private CircleAppFacade circleAppFacade;
     /**
      * 下拉刷新
      *
@@ -455,6 +456,22 @@ public class AppWaterfallController {
     }
 
 
+    @ApiOperation(value = "评论列表（最新）", notes = "评论列表（最新）", response = Response.class)
+    @RequestMapping(value = "queryLNewComment", method = RequestMethod.POST)
+    public Response queryLNewComment(@ApiParam(value = "帖子id") @RequestParam int postid,
+                                     @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                     @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<CommentVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List result = facadeComments.queryLNewComment(postid, pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(result);
+        response.setData(pager);
+        return response;
+    }
+
     @ApiOperation(value = "首页点X", notes = "首页点X", response = Response.class)
     @RequestMapping(value = "userDontLike", method = RequestMethod.POST)
     public Response userDontLike(@ApiParam(value = "帖子id") @RequestParam int postid,
@@ -514,6 +531,37 @@ public class AppWaterfallController {
         }
         pager.result(result);
         response.setData(pager);
+        return response;
+    }
+
+
+    @ApiOperation(value = "所有圈子", notes = "所有圈子", response = Response.class)
+    @RequestMapping(value = "findAllCircle", method = RequestMethod.POST)
+    public Response findAllCircle(
+            @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+            @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<CircleVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List result = circleAppFacade.findAllCircle(pager);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        pager.result(result);
+        response.setData(pager);
+        return response;
+    }
+
+
+    @ApiOperation(value = "选择5个圈子", notes = "选择5个圈子", response = Response.class)
+    @RequestMapping(value = "followCircleUser", method = RequestMethod.POST)
+    public Response followCircleUser(@ApiParam(value = "用户id") @RequestParam int userid,
+                                     @ApiParam(value = "圈子id") @RequestParam String circleid) {
+        Response response = new Response();
+        int result = circleAppFacade.followCircleUser(userid, circleid);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(result);
         return response;
     }
 

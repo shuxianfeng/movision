@@ -1103,4 +1103,7 @@
         GROUP BY c.id
         ORDER BY a.id, c.id
     </select>
+    <select id="findAllCircle" resultType="com.movision.mybatis.circle.entity.CircleVo">
+         SELECT * FROM  yw_circle WHERE isdel=0 AND status=1 ORDER BY createtime DESC
+    </select>
 </mapper>

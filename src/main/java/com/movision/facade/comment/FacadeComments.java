@@ -248,6 +248,43 @@ public class FacadeComments {
 
 
     /**
+     * 所有评论(现在最新)
+     *
+     * @param postid
+     * @param paging
+     * @return
+     */
+    public List queryLNewComment(int postid, Paging<CommentVo> paging) {
+        List<CommentVo> commentVos = commentService.queryOneComment(postid, paging);
+        if (commentVos != null) {
+            for (int i = 0; i < commentVos.size(); i++) {
+                commentVos.get(i).setCommentVos(NewCommentVoList(commentVos.get(i).getId()));
+            }
+        }
+        return commentVos;
+    }
+
+    public List<CommentVo> NewCommentVoList(int pid) {
+        int t = 0;
+        List<CommentVo> commentVoList = commentService.queryTwoComment(pid);
+        //查询子拼轮的父评论user
+        User puser = commentService.queryUserInfor(pid);
+        if (commentVoList != null && t < 2) {
+            for (int i = 0; i < commentVoList.size(); i++) {
+                //查询父评论下面有多少子评论
+                List<CommentVo> CommentVozjh = NewCommentVoList((int) commentVoList.get(i).getId());
+                commentVoList.get(i).setCommentVos(CommentVozjh);
+                commentVoList.get(i).setPuser(puser);
+            }
+            t++;
+        }
+        return commentVoList;
+    }
+
+
+
+
+    /**
      * 所有评论
      *
      * @param postid
@@ -277,7 +314,6 @@ public class FacadeComments {
             }
         }
         return commentVoList;
-
     }
 
 

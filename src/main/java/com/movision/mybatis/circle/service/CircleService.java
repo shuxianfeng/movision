@@ -741,4 +741,17 @@ public class CircleService {
             throw e;
         }
     }
+
+    public List<CircleVo> findAllCircle(Paging<CircleVo> paging) {
+        try {
+            log.info("所有圈子");
+            return circleMapper.findAllCircle(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("所有圈子失败", e);
+            throw e;
+        }
+    }
+
+
+
 }
