@@ -254,8 +254,9 @@ public class FacadeComments {
      * @param paging
      * @return
      */
+
     public List queryLNewComment(int postid, Paging<CommentVo> paging) {
-        List<CommentVo> commentVos = commentService.queryOneComment(postid, paging);
+        List<CommentVo> commentVos = commentService.queryOneComment(postid, paging);//所有父评论
         if (commentVos != null) {
             for (int i = 0; i < commentVos.size(); i++) {
                 commentVos.get(i).setCommentVos(NewCommentVoList(commentVos.get(i).getId()));
@@ -264,16 +265,22 @@ public class FacadeComments {
         return commentVos;
     }
 
+    int t = 0;
+
     public List<CommentVo> NewCommentVoList(int pid) {
-        int t = 0;
-        List<CommentVo> commentVoList = commentService.queryTwoComment(pid);
+        List<CommentVo> commentVoList = commentService.queryTwoComment(pid);//父评论的子评论
         //查询子拼轮的父评论user
         User puser = commentService.queryUserInfor(pid);
+        List<CommentVo> list = null;
         if (commentVoList != null && t < 2) {
             for (int i = 0; i < commentVoList.size(); i++) {
-                //查询父评论下面有多少子评论
-                List<CommentVo> CommentVozjh = NewCommentVoList((int) commentVoList.get(i).getId());
-                commentVoList.get(i).setCommentVos(CommentVozjh);
+                //查询子评论下面有多少子评论
+                List<CommentVo> CommentVozjh = NewCommentVoList(commentVoList.get(i).getId());
+                for (int j = 0; j < CommentVozjh.size(); j++) {
+                    list = new ArrayList<>();
+                    list.add(CommentVozjh.get(i));
+                }
+                commentVoList.get(i).setCommentVos(list);
                 commentVoList.get(i).setPuser(puser);
             }
             t++;
@@ -335,7 +342,7 @@ public class FacadeComments {
         if (commentVoList != null) {
             for (int i = 0; i < commentVoList.size(); i++) {
                 //查询父评论下面有多少子评论
-                List<CommentVo> CommentVozjh = pCommentVoList((int) commentVoList.get(i).getId());
+                List<CommentVo> CommentVozjh = pCommentVoList(commentVoList.get(i).getId());
                 commentVoList.get(i).setCommentVos(CommentVozjh);
                 int repliesNumber = commentService.repliesNumber(commentVoList.get(i).getId());
                 commentVoList.get(i).setRepliesnumber(repliesNumber);

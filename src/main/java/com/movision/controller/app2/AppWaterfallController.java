@@ -539,7 +539,7 @@ public class AppWaterfallController {
     @RequestMapping(value = "findAllCircle", method = RequestMethod.POST)
     public Response findAllCircle(
             @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-            @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+            @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "12") String pageSize) {
         Response response = new Response();
         Paging<CircleVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List result = circleAppFacade.findAllCircle(pager);
