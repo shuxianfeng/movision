@@ -254,32 +254,56 @@ public class FacadeComments {
      * @param paging
      * @return
      */
-
+    List<CommentVo> list = new ArrayList<>();
     public List queryLNewComment(int postid, Paging<CommentVo> paging) {
         List<CommentVo> commentVos = commentService.queryOneComment(postid, paging);//所有父评论
         if (commentVos != null) {
             for (int i = 0; i < commentVos.size(); i++) {
-                commentVos.get(i).setCommentVos(NewCommentVoList(commentVos.get(i).getId(), commentVos));
+                commentVos.get(i).setCommentVos(NewCommentVoList(commentVos.get(i).getId()));
+                commentVos.get(i).setCommentVos(list);
+                list = new ArrayList();
             }
         }
         return commentVos;
     }
 
+    public List asss(int postid, Paging<CommentVo> paging) {
+        List<CommentVo> commentVoList = queryLNewComment(postid, paging);
+        List<CommentVo> listWithoutDup = null;
+        for (int i = 0; i < commentVoList.size(); i++) {
+            int a = commentVoList.get(i).getCommentVos().size();
+            System.out.print(a);
+            /**  for (int j=0;j<commentVoList.get(i).getCommentVos().size();j++){
+             for (int k=commentVoList.get(i).getCommentVos().size()-1;k>j;k--) {
+             if (commentVoList.get(i).getCommentVos().get(j).getId().equals(commentVoList.get(i).getCommentVos().get(k).getId())) {
+             commentVoList.remove(k);
+             }
+             }
+             }*/
+            listWithoutDup = new ArrayList<CommentVo>(new HashSet<CommentVo>(commentVoList.get(i).getCommentVos()));
+            commentVoList.get(i).setCommentVos(listWithoutDup);
+        }
+        return commentVoList;
+    }
 
-    public List<CommentVo> NewCommentVoList(int pid, List<CommentVo> commentVos) {
-        List<CommentVo> commentVoList = commentService.queryTwoComment(pid);//父评论的子评论
+    public List<CommentVo> NewCommentVoList(int pid) {
+        List<CommentVo> commentVoList = commentService.queryTwoComment(pid);//父评论的子评论2
         //查询子拼轮的父评论user
         User puser = commentService.queryUserInfor(pid);
-        if (commentVoList != null) {
+        if (commentVoList.size() != 0) {
             for (int i = 0; i < commentVoList.size(); i++) {
+                list.addAll(commentVoList);
                 //查询子评论下面有多少子评论
-                List<CommentVo> CommentVozjh = NewCommentVoList(commentVoList.get(i).getId(), commentVos);
-                commentVos.get(i).setCommentVos(CommentVozjh);
-                commentVos.get(i).setPuser(puser);
-                // commentVo.setCommentVos(list);
-                // commentVo.setPuser(puser);
+                NewCommentVoList(commentVoList.get(i).getId());
+                //list=new ArrayList();
+                //list.add(CommentVozjh);
+                //commentVos.get(i).setCommentVos(list);
+                // commentVos.get(i).setPuser(puser);
+                //commentVoList.get(i).setCommentVos(CommentVozjh);
+                //commentVoList.get(i).setPuser(puser);
             }
         }
+
         return commentVoList;
     }
 
@@ -317,7 +341,6 @@ public class FacadeComments {
         }
         return commentVoList;
     }
-
 
     public List queryPostNewComment(int postid) {
         List<CommentVo> commentVos = commentService.queryThreeComment(postid);
