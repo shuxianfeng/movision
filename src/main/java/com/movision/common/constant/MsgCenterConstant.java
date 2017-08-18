@@ -10,10 +10,10 @@ public class MsgCenterConstant {
      * 动态消息类型，0：评论， 1：赞， 2：关注
      */
     public enum INSTANT_INFO_TYPE {
-        comment(0),
-        zan(1),
-        follow(2),
-        replyComment(3);
+        comment(0), //0：评论
+        zan(1), //1：赞，
+        follow(2),  //2：关注
+        replyComment(3);    //3 回复评论
 
         public final int code;
 

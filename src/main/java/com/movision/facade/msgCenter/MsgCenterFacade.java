@@ -171,7 +171,7 @@ public class MsgCenterFacade {
         log.debug("【row中list的数量】：" + size);
         log.debug("【row中的list】：" + resultList.toString());
         //操作已读未读处理
-//        setDataIsRead(resultList);
+        setDataIsRead(resultList);
 
         return resultList;
 
