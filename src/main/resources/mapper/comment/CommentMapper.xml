@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.movision.mybatis.comment.mapper.CommentMapper" >
-  <resultMap id="BaseResultMap" type="com.movision.mybatis.comment.entity.Comment" >
-    <id column="id" property="id" jdbcType="INTEGER" />
+  <resultMap id="BaseResultMap" type="com.movision.mybatis.comment.entity.Comment">
+      <id column="id" property="id" jdbcType="INTEGER" />
     <result column="userid" property="userid" jdbcType="INTEGER" />
     <result column="pid" property="pid" jdbcType="INTEGER" />
     <result column="content" property="content" jdbcType="VARCHAR" />
@@ -550,5 +550,16 @@ SELECT u.photo,u.nickname,u.id FROM yw_user u LEFT JOIN yw_post_comment c ON c.u
     isdel=0) OR
     id IN (SELECT id FROM yw_post_comment WHERE pid IN (SELECT id FROM yw_post_comment WHERE
     userid=#{userid,jdbcType=INTEGER} AND pid IS NULL AND isdel=0))) ORDER BY intime DESC
+  </select>
+
+    <select id="selectReplyCommentList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.ReplyComment">
+        SELECT a.userid, a.`content` as replyContent, a.`intime`, a.pid as originCommentId,
+         b.`content` AS originContent, u.`photo`,u.`nickname`  FROM yw_post_comment a
+    LEFT JOIN yw_post_comment b ON a.pid = b.`id`
+    LEFT JOIN yw_user u ON u.id = a.userid
+    WHERE b.userid = #{userid}
+    AND a.isdel = 0
+    ORDER BY a.intime DESC
   </select>
 </mapper>

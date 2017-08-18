@@ -3,6 +3,7 @@ package com.movision.mybatis.comment.mapper;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentCount;
 import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.mybatis.comment.entity.ReplyComment;
 import com.movision.mybatis.user.entity.User;
 import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
@@ -104,6 +105,8 @@ public interface CommentMapper {
     User queryUserInfor(int pid);
 
     int repliesNumber(int id);
+
+    List<ReplyComment> selectReplyCommentList(Integer userid);
 
 
 }

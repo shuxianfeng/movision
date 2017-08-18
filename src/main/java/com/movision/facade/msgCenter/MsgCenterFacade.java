@@ -10,6 +10,7 @@ import com.movision.mybatis.PostZanRecord.entity.PostZanRecord;
 import com.movision.mybatis.PostZanRecord.entity.ZanRecordVo;
 import com.movision.mybatis.PostZanRecord.service.PostZanRecordService;
 import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.mybatis.comment.entity.ReplyComment;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.followUser.entity.FollowUserVo;
 import com.movision.mybatis.followUser.service.FollowUserService;
@@ -148,12 +149,16 @@ public class MsgCenterFacade {
     public List getInstantInfo(ServicePaging<InstantInfo> paging) {
         List<InstantInfo> list = new ArrayList<>();
 
-        //一 评论： 1 评论帖子， 2 评论回复
+        //一 评论： 1 评论帖子，
         handleCommentlist(list);
+        //二 2 评论回复
+        handleReplyCommentList(list);
         //二 赞
         handleZanlist(list);
         //三 关注 1 关注人 2 关注帖子 3 关注标签
         getFollowList(list, ShiroUtil.getAppUserID());
+
+
         //排序
         Collections.sort(list, InstantInfo.intimeComparator);
         //计算Paging中的分页参数
@@ -166,10 +171,24 @@ public class MsgCenterFacade {
         log.debug("【row中list的数量】：" + size);
         log.debug("【row中的list】：" + resultList.toString());
         //操作已读未读处理
-        setDataIsRead(resultList);
+//        setDataIsRead(resultList);
 
         return resultList;
 
+    }
+
+    private void handleReplyCommentList(List<InstantInfo> list) {
+        List<ReplyComment> replyCommentList = commentService.selectReplyCommentList(ShiroUtil.getAppUserID());
+        int len = replyCommentList.size();
+        if (len > 10) {
+            for (int i = 0; i < 10; i++) {
+                getInstantInfoFromReplyCommentlist(list, replyCommentList, i);
+            }
+        } else {
+            for (int i = 0; i < len; i++) {
+                getInstantInfoFromReplyCommentlist(list, replyCommentList, i);
+            }
+        }
     }
 
     /**
@@ -241,6 +260,14 @@ public class MsgCenterFacade {
         instantInfo.setObject(commentVoList.get(i));
         instantInfo.setIntime(commentVoList.get(i).getIntime());
         instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.comment.getCode());
+        list.add(instantInfo);
+    }
+
+    private void getInstantInfoFromReplyCommentlist(List<InstantInfo> list, List<ReplyComment> replyCommentList, int i) {
+        InstantInfo instantInfo = new InstantInfo();
+        instantInfo.setObject(replyCommentList.get(i));
+        instantInfo.setIntime(replyCommentList.get(i).getIntime());
+        instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.replyComment.getCode());
         list.add(instantInfo);
     }
 

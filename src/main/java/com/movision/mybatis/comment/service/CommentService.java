@@ -3,6 +3,7 @@ package com.movision.mybatis.comment.service;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentCount;
 import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.mybatis.comment.entity.ReplyComment;
 import com.movision.mybatis.comment.mapper.CommentMapper;
 import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;
@@ -557,6 +558,16 @@ public class CommentService {
             return commentMapper.queryUserInfor(pid);
         } catch (Exception e) {
             log.error("父用户失敗", e);
+            throw e;
+        }
+    }
+
+    public List<ReplyComment> selectReplyCommentList(Integer userid) {
+        try {
+            log.info("查询回复评论列表");
+            return commentMapper.selectReplyCommentList(userid);
+        } catch (Exception e) {
+            log.error("查询回复评论列表失败", e);
             throw e;
         }
     }

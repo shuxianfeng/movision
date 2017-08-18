@@ -12,7 +12,8 @@ public class MsgCenterConstant {
     public enum INSTANT_INFO_TYPE {
         comment(0),
         zan(1),
-        follow(2);
+        follow(2),
+        replyComment(3);
 
         public final int code;
 
