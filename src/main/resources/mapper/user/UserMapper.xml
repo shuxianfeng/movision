@@ -1355,7 +1355,7 @@
     <select id="queryUserByName" parameterType="java.lang.String" resultType="com.movision.mybatis.user.entity.User">
         select id, nickname, photo from yw_user
         where status = 0
-        and nickname like concat('%',#{nickname,jdbcType=VARCHAR},'%'))
+        and nickname like concat('%',#{nickname,jdbcType=VARCHAR},'%')
         limit 3
     </select>
 </mapper>
