@@ -93,8 +93,8 @@ public class WechatH5Facade {
                 g.setFont(f);
 
                 //10,20 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
-                g.drawString(manname, 140, 610);//合成男的名字
-                g.drawString(womanname, 140, 790);//合成女的名字
+                g.drawString(manname, 155, 610);//合成男的名字
+                g.drawString(womanname, 155, 690);//合成女的名字
 
                 g.dispose();
 
