@@ -752,6 +752,14 @@ public class CircleService {
         }
     }
 
-
+    public List<Circle> queryCircleByName(String name) {
+        try {
+            log.info("根据名称查询圈子");
+            return circleMapper.queryCircleByName(name);
+        } catch (Exception e) {
+            log.error("根据名称查询圈子失败", e);
+            throw e;
+        }
+    }
 
 }

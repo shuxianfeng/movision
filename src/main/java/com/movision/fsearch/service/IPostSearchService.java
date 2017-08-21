@@ -2,7 +2,9 @@ package com.movision.fsearch.service;
 
 import com.movision.fsearch.pojo.spec.NormalSearchSpec;
 import com.movision.fsearch.service.exception.ServiceException;
+import com.movision.mybatis.post.entity.PostSearchEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,4 +13,6 @@ import java.util.Map;
  */
 public interface IPostSearchService {
     Map<String, Object> search(NormalSearchSpec spec) throws ServiceException;
+
+    List<PostSearchEntity> searchForPost(NormalSearchSpec spec) throws ServiceException;
 }

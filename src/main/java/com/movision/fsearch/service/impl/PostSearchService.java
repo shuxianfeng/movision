@@ -104,6 +104,52 @@ public class PostSearchService implements IPostSearchService {
         return result;
     }
 
+    @Override
+    public List<PostSearchEntity> searchForPost(NormalSearchSpec spec)
+            throws ServiceException {
+        Map<String, Map<String, Object>> query = new HashMap<String, Map<String, Object>>();
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("spec", spec);
+        //如果搜索的关键词不为空，则入库保存
+        saveKeywordsInMongoDB(spec);
+        // 向query中添加新的键值对：key=_s
+        spec.setQ(StringUtil.emptyToNull(spec.getQ()));
+        putQueryParam(spec, query, result);
+        //设置排序字段和排序顺序（正序/倒序）
+        List<Map<String, Object>> sortFields = this.setSortFields(spec, result);
+
+        Map<?, ?> psAsMap = (Map<?, ?>) Searcher.request(
+                "search",
+                CollectionUtil.arrayAsMap("table", "movision_post",
+                        "query", JSONUtil.toJSONString(query),
+                        "sort", JSONUtil.toJSONString(sortFields),
+                        "offset", spec.getOffset(),
+                        "limit", 3));   //只返回前3条
+
+        List<?> list = (List<?>) psAsMap.get("items");
+        //返回值
+        List<PostSearchEntity> products = new ArrayList<>();
+        if (!list.isEmpty()) {
+            products = makeProducts(list);
+        }
+        return products;
+    }
+
+    private void putQueryParam(NormalSearchSpec spec, Map<String, Map<String, Object>> query, Map<String, Object> result) {
+        if (spec.getQ() != null) {
+            String q = spec.getQ();
+            result.put("q", q);
+            List<String> words = wordService.segWords(q);
+            if (!words.isEmpty()) {
+                //以空格为分隔符，形成新的list<String>
+                String formatQ = StringUtil.join(words, " ");
+                query.put("_s", CollectionUtil.arrayAsMap("type", "phrase",
+                        "value", formatQ));
+            }
+        }
+    }
+
+
     /**
      * 把搜索的关键词存入mongoDB
      *

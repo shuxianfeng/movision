@@ -1106,4 +1106,11 @@
     <select id="findAllCircle" resultType="com.movision.mybatis.circle.entity.CircleVo">
          SELECT * FROM  yw_circle WHERE isdel=0 AND status=1 ORDER BY createtime DESC
     </select>
+
+    <select id="queryCircleByName" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.circle.entity.Circle">
+        SELECT id, NAME, photo FROM yw_circle
+        WHERE STATUS = 1 AND isdel = 0
+        AND NAME LIKE concat('%',#{name,jdbcType=VARCHAR},'%')) LIMIT 3
+    </select>
 </mapper>

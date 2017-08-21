@@ -6,6 +6,10 @@ import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
 import com.movision.facade.paging.PageFacade;
+import com.movision.fsearch.pojo.spec.NormalSearchSpec;
+import com.movision.fsearch.service.exception.ServiceException;
+import com.movision.fsearch.service.impl.PostSearchService;
+import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.circleCategory.entity.CircleCategory;
@@ -14,8 +18,12 @@ import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostSearchEntity;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.postLabel.service.PostLabelService;
+import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userRefreshRecord.entity.UesrreflushCount;
@@ -40,6 +48,9 @@ public class FacadeDiscover {
     private static Logger log = LoggerFactory.getLogger(FacadeDiscover.class);
 
     @Autowired
+    private PostLabelService postLabelService;
+
+    @Autowired
     private PageFacade pageFacade;
 
     @Autowired
@@ -62,6 +73,9 @@ public class FacadeDiscover {
 
     @Autowired
     private UserRefreshRecordService userRefreshRecordService;
+
+    @Autowired
+    private PostSearchService postSearchService;
 
     public Map<String, Object> queryDiscoverIndexData(String userid) {
 
@@ -510,4 +524,37 @@ public class FacadeDiscover {
         return null;
 
     }
+
+    public List<Map<String, Object>> searchAll(NormalSearchSpec spec) throws ServiceException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        String name = spec.getQ();
+        //帖子/活动
+        List<PostSearchEntity> postList = postSearchService.searchForPost(spec);
+        Map postMap = new HashMap();
+        postMap.put("name", "帖子");
+        postMap.put("postList", postList);
+        list.add(postMap);
+        //作者
+        List<User> userList = userService.queryUserByName(name);
+        Map userMap = new HashMap();
+        userMap.put("name", "作者");
+        userMap.put("userList", userList);
+        list.add(userMap);
+        //圈子
+        List<Circle> circleList = circleService.queryCircleByName(name);
+        Map circleMap = new HashMap();
+        circleMap.put("name", "圈子");
+        circleMap.put("circleList", circleList);
+        list.add(circleMap);
+        //标签
+        List<PostLabel> labelList = postLabelService.queryLabelByname(name);
+        Map labelMap = new HashMap();
+        labelMap.put("name", "标签");
+        labelMap.put("labelList", labelList);
+        list.add(labelMap);
+
+        return list;
+    }
+
+
 }

@@ -174,4 +174,6 @@ public interface UserMapper {
 
     List<InviteUserVo> getInviteRank(RowBounds rowBounds);
 
+    List<User> queryUserByName(String nickname);
+
 }
