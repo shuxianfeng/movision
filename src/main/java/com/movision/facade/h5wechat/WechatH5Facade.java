@@ -92,7 +92,7 @@ public class WechatH5Facade {
                 g.setColor(Color.BLACK);
 
                 //最后一个参数用来设置字体的大小
-                Font f = new Font("宋体", Font.BOLD, 25);
+                Font f = new Font("宋体", Font.PLAIN, 25);
                 Color mycolor = Color.red;//new Color(0, 0, 255);
                 g.setColor(mycolor);
                 g.setFont(f);
