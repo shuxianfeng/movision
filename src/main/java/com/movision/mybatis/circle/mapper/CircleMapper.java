@@ -128,5 +128,5 @@ public interface CircleMapper {
 
     List<CircleVo> findAllCircle(RowBounds rowBounds);
 
-    List<Circle> queryCircleByName(String name);
+    List<Circle> queryCircleByNameInSearch(String name);
 }

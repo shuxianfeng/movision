@@ -1107,7 +1107,7 @@
          SELECT * FROM  yw_circle WHERE isdel=0 AND status=1 ORDER BY createtime DESC
     </select>
 
-    <select id="queryCircleByName" parameterType="java.lang.String"
+    <select id="queryCircleByNameInSearch" parameterType="java.lang.String"
             resultType="com.movision.mybatis.circle.entity.Circle">
         SELECT id, NAME, photo FROM yw_circle
         WHERE STATUS = 1 AND isdel = 0
