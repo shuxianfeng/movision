@@ -54,7 +54,7 @@ public class WechatH5Facade {
 //        }
 
 //        (String username,String headImg)
-        if (type == 1) {//结婚
+        if (type == 1) {//结婚证
             try {
                 //下面是模板图片的路径
                 String timgurl = PropertiesLoader.getValue("wechat.h5.domain");
