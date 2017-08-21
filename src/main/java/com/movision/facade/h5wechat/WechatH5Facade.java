@@ -1,11 +1,14 @@
 package com.movision.facade.h5wechat;
 
+import com.movision.mybatis.post.service.PostService;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.sun.image.codec.jpeg.ImageFormatException;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageDecoder;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +27,7 @@ import java.util.Map;
  */
 @Service
 public class WechatH5Facade {
+    private static Logger log = LoggerFactory.getLogger(WechatH5Facade.class);
 
     @Autowired
     private MovisionOssClient movisionOssClient;
@@ -66,7 +70,7 @@ public class WechatH5Facade {
                 String timgurl = PropertiesLoader.getValue("wechat.h5.domain");
                 InputStream is = new FileInputStream(timgurl);
                 String newurl = PropertiesLoader.getValue("wechat.newh5.domain");
-
+                log.info(manname, womanname);
                 //通过JPEG图象流创建JPEG数据流解码器
                 JPEGImageDecoder jpegDecoder = JPEGCodec.createJPEGDecoder(is);
                 //解码当前JPEG数据流，返回BufferedImage对象
