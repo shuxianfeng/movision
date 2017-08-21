@@ -1,12 +1,16 @@
 package com.movision.facade.h5wechat;
 
+import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.sun.image.codec.jpeg.ImageFormatException;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageDecoder;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -21,6 +25,8 @@ import java.util.Map;
 @Service
 public class WechatH5Facade {
 
+    @Autowired
+    private MovisionOssClient movisionOssClient;
     public Map<String, Object> imgCompose(String manname, String womanname, int type) {
         Map<String, Object> map = new HashMap<>();
 //        public static void exportImg1(){
@@ -59,7 +65,6 @@ public class WechatH5Facade {
                 //下面是模板图片的路径
                 String timgurl = PropertiesLoader.getValue("wechat.h5.domain");
                 InputStream is = new FileInputStream(timgurl);
-
 
                 //通过JPEG图象流创建JPEG数据流解码器
                 JPEGImageDecoder jpegDecoder = JPEGCodec.createJPEGDecoder(is);
@@ -104,7 +109,7 @@ public class WechatH5Facade {
                 //创键编码器，用于编码内存中的图象数据。
                 JPEGImageEncoder en = JPEGCodec.createJPEGEncoder(os);
                 en.encode(buffImg);
-
+                map.put("buffImg", buffImg);
                 is.close();
                 os.close();
             } catch (FileNotFoundException e) {
