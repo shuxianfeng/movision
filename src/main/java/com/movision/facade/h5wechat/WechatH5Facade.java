@@ -109,7 +109,7 @@ public class WechatH5Facade {
                 //创键编码器，用于编码内存中的图象数据。
                 JPEGImageEncoder en = JPEGCodec.createJPEGEncoder(os);
                 en.encode(buffImg);
-                //map.put("buffImg", buffImg);
+                map.put("buffImg", buffImg);
                 is.close();
                 os.close();
             } catch (FileNotFoundException e) {
