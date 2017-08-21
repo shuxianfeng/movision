@@ -87,7 +87,7 @@ public class WechatH5Facade {
                 g.setColor(Color.BLACK);
 
                 //最后一个参数用来设置字体的大小
-                Font f = new Font("楷体", Font.PLAIN, 25);
+                Font f = new Font("宋体", Font.PLAIN, 25);
                 Color mycolor = Color.red;//new Color(0, 0, 255);
                 g.setColor(mycolor);
                 g.setFont(f);
@@ -98,7 +98,7 @@ public class WechatH5Facade {
 
                 g.dispose();
 
-                OutputStream os;
+                //OutputStream os;
 
                 //os = new FileOutputStream("d:/union.jpg");
                 String shareFileName = System.currentTimeMillis() + ".jpg";
@@ -106,14 +106,14 @@ public class WechatH5Facade {
                 map.put("status", 200);
                 map.put("url", shareFileName);
                 String url = newurl + shareFileName;
-                os = new FileOutputStream(shareFileName);
+                //  os = new FileOutputStream(shareFileName);
                 //创键编码器，用于编码内存中的图象数据。
-                JPEGImageEncoder en = JPEGCodec.createJPEGEncoder(os);
-                en.encode(buffImg);
+                //JPEGImageEncoder en = JPEGCodec.createJPEGEncoder(os);
+                // en.encode(buffImg);
                 ImageIO.write(buffImg, "png", new File(url));//图片的输出路径
                 map.put("newurl", url);
                 is.close();
-                os.close();
+                //  os.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (ImageFormatException e) {
