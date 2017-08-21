@@ -101,7 +101,7 @@ public class WechatH5Facade {
                 OutputStream os;
 
                 //os = new FileOutputStream("d:/union.jpg");
-                String shareFileName = System.currentTimeMillis() + ".jpg";
+                String shareFileName = "\\upload\\" + System.currentTimeMillis() + ".jpg";
 
                 map.put("status", 200);
                 map.put("url", shareFileName);
