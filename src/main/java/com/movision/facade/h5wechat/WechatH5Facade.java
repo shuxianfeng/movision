@@ -65,6 +65,7 @@ public class WechatH5Facade {
                 //下面是模板图片的路径
                 String timgurl = PropertiesLoader.getValue("wechat.h5.domain");
                 InputStream is = new FileInputStream(timgurl);
+                String newurl = PropertiesLoader.getValue("wechat.newh5.domain");
 
                 //通过JPEG图象流创建JPEG数据流解码器
                 JPEGImageDecoder jpegDecoder = JPEGCodec.createJPEGDecoder(is);
@@ -100,16 +101,17 @@ public class WechatH5Facade {
                 OutputStream os;
 
                 //os = new FileOutputStream("d:/union.jpg");
-                String shareFileName = "\\upload\\" + System.currentTimeMillis() + ".jpg";
+                String shareFileName = System.currentTimeMillis() + ".jpg";
 
                 map.put("status", 200);
                 map.put("url", shareFileName);
-
+                String url = newurl + shareFileName;
                 os = new FileOutputStream(shareFileName);
                 //创键编码器，用于编码内存中的图象数据。
                 JPEGImageEncoder en = JPEGCodec.createJPEGEncoder(os);
                 en.encode(buffImg);
-                //map.put("buffImg", buffImg);
+                ImageIO.write(buffImg, "png", new File(url));//图片的输出路径
+                map.put("newurl", url);
                 is.close();
                 os.close();
             } catch (FileNotFoundException e) {
