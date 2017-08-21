@@ -27,10 +27,11 @@ public class WechatH5Controller {
     @ApiOperation(value = "图片合成模板H5接口(结婚证模板)", notes = "图片合成模板H5接口", response = Response.class)
     @RequestMapping(value = "imgCompose", method = RequestMethod.POST)
     public Response imgCompose(@ApiParam(value = "男的名字") @RequestParam String manname,
-                                        @ApiParam(value = "女的名字") @RequestParam String womanname){
+                               @ApiParam(value = "女的名字") @RequestParam String womanname,
+                               @ApiParam(value = "1:结婚证 2 离婚") @RequestParam int type) {
         Response response = new Response();
 
-        Map<String, Object> map = wechatH5Facade.imgCompose(manname, womanname);
+        Map<String, Object> map = wechatH5Facade.imgCompose(manname, womanname, type);
         if ((Integer)map.get("status")==200){
             response.setMessage("合成成功");
             response.setCode((Integer)map.get("status"));
