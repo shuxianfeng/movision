@@ -391,4 +391,11 @@
             resultType="com.movision.mybatis.user.entity.User">
         SELECT u.id,u.nickname,u.photo FROM yw_circle_manager m LEFT JOIN yw_user u ON u.id=m.userid WHERE m.circleid=#{circleid,jdbcType=INTEGER}
     </select>
+
+    <select id="queryLabelByname" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+        SELECT id, NAME, photo, TYPE FROM yw_post_label
+        WHERE isdel = 0
+        AND NAME LIKE concat('%',#{name,jdbcType=VARCHAR},'%')) LIMIT 3
+    </select>
 </mapper>

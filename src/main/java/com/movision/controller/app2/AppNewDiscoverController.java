@@ -144,5 +144,4 @@ public class AppNewDiscoverController {
         return response;
     }
 
-
 }

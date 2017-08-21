@@ -542,4 +542,13 @@ public class PostLabelService {
         }
     }
 
+    public List<PostLabel> queryLabelByname(String name) {
+        try {
+            log.info("根据名称查询帖子标签");
+            return postLabelMapper.queryLabelByname(name);
+        } catch (Exception e) {
+            log.error("根据名称查询帖子标签失败", e);
+            throw e;
+        }
+    }
 }

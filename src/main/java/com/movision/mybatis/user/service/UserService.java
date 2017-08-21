@@ -1075,4 +1075,14 @@ public class UserService {
             throw e;
         }
     }
+
+    public List<User> queryUserByName(String name) {
+        try {
+            log.info("根据昵称查询用户");
+            return userMapper.queryUserByName(name);
+        } catch (Exception e) {
+            log.error("根据昵称查询用户失败", e);
+            throw e;
+        }
+    }
 }

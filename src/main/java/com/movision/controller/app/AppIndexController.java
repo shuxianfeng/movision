@@ -2,9 +2,12 @@ package com.movision.controller.app;
 
 import com.movision.common.Response;
 import com.movision.common.util.ShiroUtil;
+import com.movision.facade.index.FacadeDiscover;
 import com.movision.facade.index.FacadeIndex;
 import com.movision.fsearch.pojo.spec.NormalSearchSpec;
+import com.movision.fsearch.service.exception.ServiceException;
 import com.movision.fsearch.service.impl.PostSearchService;
+import com.movision.fsearch.utils.StringUtil;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
@@ -31,6 +34,9 @@ public class AppIndexController {
     @Autowired
     private PostSearchService postSearchService;
 
+    @Autowired
+    private FacadeDiscover facadeDiscover;
+
     @ApiOperation(value = "首页数据返回接口", notes = "用户返回首页整版数据(活动贴的话 enddays为-1活动还未开始 为0活动已结束 为其他时为距离结束的剩余天数)", response = Response.class)
     @RequestMapping(value = "index", method = RequestMethod.POST)
     public Response queryIndexData(@ApiParam(value = "用户id") @RequestParam(required = false) String userid) {
@@ -45,21 +51,8 @@ public class AppIndexController {
         return response;
     }
 
-    /*@ApiOperation(value = "意见反馈接口", notes = "用户对平台的意见建议", response = Response.class)
-    @RequestMapping(value = "suggestion", method = RequestMethod.POST)
-    public Response insertSuggestion(@ApiParam(value = "用户id") @RequestParam String userid,
-                                     @ApiParam(value = "选填手机号，qq号等") @RequestParam(required = false) String phone,
-                                     @ApiParam(value = "反馈内容") @RequestParam String content) {
-        Response response = new Response();
-        facadeSuggestion.insertSuggestion(userid, phone, content);//用户反馈信息
-        if (response.getCode() == 200) {
-            response.setMessage("操作成功");
-        }
-        return response;
-    }*/
-
-    @RequestMapping(value = {"searchPostAndActivity"}, method = RequestMethod.GET)
-    @ApiOperation(value = "搜索帖子/活动", notes = "搜索帖子/活动", response = Response.class)
+    @RequestMapping(value = {"search_post"}, method = RequestMethod.GET)
+    @ApiOperation(value = "搜索帖子", notes = "搜索帖子", response = Response.class)
     public Response search_post_and_activity(@ApiParam @ModelAttribute NormalSearchSpec spec) throws IOException {
 
         if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
@@ -82,6 +75,24 @@ public class AppIndexController {
 
         return response;
     }
+
+    @RequestMapping(value = {"search_all"}, method = RequestMethod.GET)
+    @ApiOperation(value = "搜索全部", notes = "搜索全部", response = Response.class)
+    public Response searchAll(@ApiParam @ModelAttribute NormalSearchSpec spec) throws IOException, ServiceException {
+        Response response = new Response();
+        spec.setQ(StringUtil.emptyToNull(spec.getQ()));
+        if (spec.getQ() == null) {
+            response.setCode(400);
+            response.setMessage("请输入搜索词");
+            log.warn("搜索词为空！");
+        } else {
+            response.setMessage("搜索成功！");
+            response.setData(facadeDiscover.searchAll(spec));
+        }
+
+        return response;
+    }
+
 
     @RequestMapping(value = {"get_post_hot_search_word_and_history"}, method = RequestMethod.GET)
     @ApiOperation(value = "查询帖子热门搜索词和搜索历史记录", notes = "查询热门搜索词和搜索历史记录", response = Response.class)

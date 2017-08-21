@@ -267,12 +267,10 @@ public class FacadeComments {
         return commentVos;
     }
 
-    public List asss(int postid, Paging<CommentVo> paging) {
+    public List asss(int postid, Paging<CommentVo> paging, String userid) {
         List<CommentVo> commentVoList = queryLNewComment(postid, paging);
         List<CommentVo> listWithoutDup = null;
         for (int i = 0; i < commentVoList.size(); i++) {
-            int a = commentVoList.get(i).getCommentVos().size();
-            System.out.print(a);
             /**  for (int j=0;j<commentVoList.get(i).getCommentVos().size();j++){
              for (int k=commentVoList.get(i).getCommentVos().size()-1;k>j;k--) {
              if (commentVoList.get(i).getCommentVos().get(j).getId().equals(commentVoList.get(i).getCommentVos().get(k).getId())) {
@@ -280,7 +278,28 @@ public class FacadeComments {
              }
              }
              }*/
+            //查询该用户有没有点赞该评论
+            if (!StringUtil.isEmpty(userid)) {
+                Map<String, Object> parammap = new HashMap<>();
+                parammap.put("userid", Integer.parseInt(userid));
+                parammap.put("commentid", commentVoList.get(i).getId());
+                int sum = commentService.queryIsZan(parammap);
+                commentVoList.get(i).setIsZan(sum);
+            } else {
+                commentVoList.get(i).setIsZan(0);
+            }
             listWithoutDup = new ArrayList<CommentVo>(new HashSet<CommentVo>(commentVoList.get(i).getCommentVos()));
+            for (int j = 0; j < listWithoutDup.size(); j++) {
+                if (!StringUtil.isEmpty(userid)) {
+                    Map<String, Object> parammap = new HashMap<>();
+                    parammap.put("userid", Integer.parseInt(userid));
+                    parammap.put("commentid", listWithoutDup.get(j).getId());
+                    int sum = commentService.queryIsZan(parammap);
+                    listWithoutDup.get(j).setIsZan(sum);
+                } else {
+                    listWithoutDup.get(j).setIsZan(0);
+                }
+            }
             commentVoList.get(i).setCommentVos(listWithoutDup);
         }
         return commentVoList;

@@ -1,12 +1,19 @@
 package com.movision.facade.h5wechat;
 
+import com.movision.mybatis.post.service.PostService;
+import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.sun.image.codec.jpeg.ImageFormatException;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageDecoder;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -20,7 +27,10 @@ import java.util.Map;
  */
 @Service
 public class WechatH5Facade {
+    private static Logger log = LoggerFactory.getLogger(WechatH5Facade.class);
 
+    @Autowired
+    private MovisionOssClient movisionOssClient;
     public Map<String, Object> imgCompose(String manname, String womanname, int type) {
         Map<String, Object> map = new HashMap<>();
 //        public static void exportImg1(){
@@ -54,13 +64,14 @@ public class WechatH5Facade {
 //        }
 
 //        (String username,String headImg)
-        if (type == 1) {//结婚
+        if (type == 1) {//结婚证
             try {
                 //下面是模板图片的路径
                 String timgurl = PropertiesLoader.getValue("wechat.h5.domain");
                 InputStream is = new FileInputStream(timgurl);
-
-
+                String newurl = PropertiesLoader.getValue("wechat.newh5.domain");
+                log.info(manname);
+                log.info(womanname);
                 //通过JPEG图象流创建JPEG数据流解码器
                 JPEGImageDecoder jpegDecoder = JPEGCodec.createJPEGDecoder(is);
                 //解码当前JPEG数据流，返回BufferedImage对象
@@ -87,26 +98,27 @@ public class WechatH5Facade {
                 g.setFont(f);
 
                 //10,20 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
-                g.drawString(manname, 100, 35);//合成男的名字
-                g.drawString(womanname, 100, 135);//合成女的名字
+                g.drawString(manname, 160, 610);//合成男的名字new String(message.getBytes("utf8"),"gbk");
+                g.drawString(womanname, 160, 720);//合成女的名字
 
                 g.dispose();
 
-                OutputStream os;
+                //OutputStream os;
 
                 //os = new FileOutputStream("d:/union.jpg");
-                String shareFileName = "\\upload\\" + System.currentTimeMillis() + ".jpg";
+                String shareFileName = System.currentTimeMillis() + ".jpg";
 
                 map.put("status", 200);
                 map.put("url", shareFileName);
-
-                os = new FileOutputStream(shareFileName);
+                String url = newurl + shareFileName;
+                //  os = new FileOutputStream(shareFileName);
                 //创键编码器，用于编码内存中的图象数据。
-                JPEGImageEncoder en = JPEGCodec.createJPEGEncoder(os);
-                en.encode(buffImg);
-
+                //JPEGImageEncoder en = JPEGCodec.createJPEGEncoder(os);
+                // en.encode(buffImg);
+                ImageIO.write(buffImg, "png", new File(url));//图片的输出路径
+                map.put("newurl", url);
                 is.close();
-                os.close();
+                //  os.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (ImageFormatException e) {
