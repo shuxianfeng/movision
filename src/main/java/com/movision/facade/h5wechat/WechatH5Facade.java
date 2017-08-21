@@ -62,17 +62,15 @@ public class WechatH5Facade {
 //                e.printStackTrace();
 //            }
 //        }
+        //下面是模板图片的路径
+        String timgurl = PropertiesLoader.getValue("wechat.h5.domain");
+        String newurl = PropertiesLoader.getValue("wechat.newh5.domain");//新图片路径
+        String headImg = PropertiesLoader.getValue("wechat.erweima.domain");//二维码路径
 
 //        (String username,String headImg)
         if (type == 1) {//结婚证
             try {
-                //下面是模板图片的路径
-                String timgurl = PropertiesLoader.getValue("wechat.h5.domain");
                 InputStream is = new FileInputStream(timgurl);
-                String newurl = PropertiesLoader.getValue("wechat.newh5.domain");
-                String headImg = PropertiesLoader.getValue("wechat.erweima.domain");
-                log.info(manname);
-                log.info(womanname);
                 //通过JPEG图象流创建JPEG数据流解码器
                 JPEGImageDecoder jpegDecoder = JPEGCodec.createJPEGDecoder(is);
                 //解码当前JPEG数据流，返回BufferedImage对象
@@ -127,7 +125,7 @@ public class WechatH5Facade {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else if (type == 2) {//离婚
+        } else if (type == 2) {//离婚证
 
         }
         return map;
