@@ -70,6 +70,7 @@ public class WechatH5Facade {
                 String timgurl = PropertiesLoader.getValue("wechat.h5.domain");
                 InputStream is = new FileInputStream(timgurl);
                 String newurl = PropertiesLoader.getValue("wechat.newh5.domain");
+                String headImg = PropertiesLoader.getValue("wechat.erweima.domain");
                 log.info(manname);
                 log.info(womanname);
                 //通过JPEG图象流创建JPEG数据流解码器
@@ -81,12 +82,12 @@ public class WechatH5Facade {
                 Graphics2D g = (Graphics2D) buffImg.getGraphics();
                 //创建你要附加的图象。//-----------------------------------------------这一段是将小图片合成到大图片上的代码
                 //小图片的路径
-//                ImageIcon imgIcon = new ImageIcon(headImg);
+                ImageIcon imgIcon = new ImageIcon(headImg);
                 //得到Image对象。
-//                Image img = imgIcon.getImage();
+                Image img = imgIcon.getImage();
                 //将小图片绘到大图片上。
                 //5,300 .表示你的小图片在大图片上的位置。
-//                g.drawImage(img,400,15,null);
+                g.drawImage(img, 400, 15, null);
 
                 //设置颜色。
                 g.setColor(Color.BLACK);
