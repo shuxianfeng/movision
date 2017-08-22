@@ -139,13 +139,13 @@ public class WechatH5Facade {
 
             map.put("status", 200);
             map.put("url", shareFileName);
-            String url = newurl + shareFileName;
+            String url = newurl2 + "/wechat/" + shareFileName;
             //  os = new FileOutputStream(shareFileName);
             //创键编码器，用于编码内存中的图象数据。
             //JPEGImageEncoder en = JPEGCodec.createJPEGEncoder(os);
             // en.encode(buffImg);
             ImageIO.write(buffImg, "png", new File(url));//图片的输出路径
-            map.put("newurl", newurl2 + "/wechat" + shareFileName);
+            map.put("newurl", url);
             is.close();
             //  os.close();
         } catch (FileNotFoundException e) {
