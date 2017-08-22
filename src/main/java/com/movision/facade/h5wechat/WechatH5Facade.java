@@ -116,7 +116,7 @@ public class WechatH5Facade {
             //将小图片绘到大图片上。
             //5,300 .表示你的小图片在大图片上的位置。
             g.drawImage(img, 400, 15, null);
-
+            g.rotate(30);
             //设置颜色。
             g.setColor(Color.BLACK);
 

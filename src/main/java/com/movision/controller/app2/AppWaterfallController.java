@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhanglei
@@ -129,7 +130,7 @@ public class AppWaterfallController {
      @RequestMapping(value = "queryUserAllUnreadMessage", method = RequestMethod.POST)
      public Response queryUserAllUnreadMessage(@ApiParam(value = "用户id") @RequestParam(required = false) String userid){
      Response response = new Response();
-     Integer count =msgCenterFacade.queryUserAllUnreadMessage(userid);
+         Map count = msgCenterFacade.queryUserAllUnreadMessage(userid);
      if(response.getCode()==200){
      response.setMessage("返回成功");
      }

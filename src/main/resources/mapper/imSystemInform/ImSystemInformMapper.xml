@@ -175,7 +175,8 @@
     </select>
 
     <select id="querySystemPushByUserid" parameterType="java.util.Map" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM yw_im_system_informs WHERE inform_time >= #{informTime,jdbcType=TIMESTAMP} AND
+        SELECT COUNT(1) FROM yw_im_system_informs WHERE inform_time >= #{informTime,jdbcType=TIMESTAMP} AND activeid IS
+        NULL AND
         inform_identity NOT IN (
         SELECT inform_identity FROM yw_im_system_inform_read WHERE userid=#{userid,jdbcType=INTEGER} AND isread=1)
     </select>

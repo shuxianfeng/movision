@@ -493,10 +493,10 @@
     </select>
   <select id="queryCommentIsRead" parameterType="java.lang.Integer" resultType="java.lang.Integer">
      SELECT COUNT(1) FROM(
-	 SELECT * FROM yw_post_comment WHERE (postid in(SELECT id FROM yw_post WHERE userid!=#{userid,jdbcType=INTEGER} AND
+    SELECT * FROM yw_post_comment WHERE (postid in(SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND
 	 isdel=0) OR
 	 id IN (SELECT id FROM yw_post_comment WHERE pid IN (SELECT id FROM yw_post_comment WHERE
-     userid!=#{userid,jdbcType=INTEGER} AND pid IS NULL AND isdel=0))) ORDER BY intime )tt WHERE tt.isread=0
+    userid=#{userid,jdbcType=INTEGER} AND pid IS NULL AND isdel=0))) ORDER BY intime )tt WHERE tt.isread=0
    </select>
 
   <select id="findAllCommentByPostId" parameterType="java.lang.Integer"

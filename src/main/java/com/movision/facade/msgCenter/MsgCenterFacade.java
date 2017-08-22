@@ -734,12 +734,13 @@ public class MsgCenterFacade {
      * @param userid
      * @return
      */
-    public Integer queryUserAllUnreadMessage(String userid) {
+    public Map queryUserAllUnreadMessage(String userid) {
         Map map = new HashMap();
         int count = 0;
+        map.put("count", count);
         if (userid == null) {
             //用户未登录状态下全部返回0
-            return count;
+            return map;
         } else {
             //用户登录状态下
             //点赞未读数
@@ -754,28 +755,9 @@ public class MsgCenterFacade {
 
             //计算总数
             count = zanNumber + commentIsRead + imsysIsRead;
+            map.put("count", count);
         }
-        return count;
+        return map;
     }
-
-
-    /**
-     * 判断用户有无未读
-     *
-     * @param userid
-     * @return
-     */
-    public int userHaveIsRead(String userid, int type) {
-        if (type == 1) {
-
-        } else if (type == 2) {
-
-        } else if (type == 3) {
-
-        }
-        return 0;
-    }
-
-
 
 }
