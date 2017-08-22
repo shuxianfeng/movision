@@ -283,8 +283,6 @@ public class FacadeComments {
             }
             listWithoutDup = new ArrayList<CommentVo>(new HashSet<CommentVo>(commentVoList.get(i).getCommentVos()));
             for (int j = 0; j < listWithoutDup.size(); j++) {
-                int pid = listWithoutDup.get(j).getPid();
-                int id = commentVoList.get(i).getId();
                 if (listWithoutDup.get(j).getPid().equals(commentVoList.get(i).getId())) {
                     listWithoutDup.get(j).setIspid(0);//第一条
                 } else if (listWithoutDup.get(j).getPid() != commentVoList.get(i).getId()) {
