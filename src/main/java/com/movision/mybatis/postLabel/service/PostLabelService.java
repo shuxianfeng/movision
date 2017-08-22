@@ -8,6 +8,7 @@ import com.movision.mybatis.postLabel.mapper.PostLabelMapper;
 import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;
+import javafx.geometry.Pos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -548,6 +549,16 @@ public class PostLabelService {
             return postLabelMapper.queryLabelByname(name);
         } catch (Exception e) {
             log.error("根据名称查询帖子标签失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostLabel> findAllLabelByName(Paging<PostLabel> paging, Map map) {
+        try {
+            log.info("分页，根据名称查询帖子");
+            return postLabelMapper.findAllLabelByName(map, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("分页，根据名称查询帖子失败", e);
             throw e;
         }
     }

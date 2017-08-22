@@ -762,4 +762,14 @@ public class CircleService {
         }
     }
 
+    public List<Circle> findAllCircleByNameInSearch(Paging<Circle> paging, Map map) {
+        try {
+            log.info("分页，根据名称查找所有的圈子");
+            return circleMapper.findAllCircleByNameInSearch(map, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("分页，根据名称查找所有的圈子失败", e);
+            throw e;
+        }
+    }
+
 }

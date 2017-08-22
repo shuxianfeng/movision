@@ -176,4 +176,6 @@ public interface UserMapper {
 
     List<User> queryUserByName(String nickname);
 
+    List<User> findAllUserByName(Map<String, Object> map, RowBounds rowBounds);
+
 }

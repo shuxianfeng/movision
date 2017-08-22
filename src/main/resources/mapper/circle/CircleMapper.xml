@@ -1113,4 +1113,11 @@
         WHERE STATUS = 1 AND isdel = 0
         AND NAME LIKE concat('%',#{name,jdbcType=VARCHAR},'%') limit 4
     </select>
+
+    <select id="findAllCircleByNameInSearch" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.circle.entity.Circle">
+        SELECT * FROM yw_circle
+        WHERE STATUS = 1 AND isdel = 0
+        AND NAME LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+    </select>
 </mapper>

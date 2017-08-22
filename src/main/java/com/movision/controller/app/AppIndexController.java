@@ -10,6 +10,8 @@ import com.movision.fsearch.service.impl.PostSearchService;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -103,8 +106,35 @@ public class AppIndexController {
                                  @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<Circle> pager = new Paging<Circle>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<Circle> circleList = facadeDiscover.findAllCircleByNameInSearch(pager, name);
+        pager.result(circleList);
+        response.setData(pager);
+        return response;
+    }
 
+    @RequestMapping(value = {"search_user"}, method = RequestMethod.GET)
+    @ApiOperation(value = "查看更多-搜索作者", notes = "查看更多-搜索作者", response = Response.class)
+    public Response searchUser(@ApiParam @RequestParam String name,
+                               @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                               @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<User> pager = new Paging<User>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<User> userList = facadeDiscover.findAllUserByName(pager, name);
+        pager.result(userList);
+        response.setData(pager);
+        return response;
+    }
 
+    @RequestMapping(value = {"search_label"}, method = RequestMethod.GET)
+    @ApiOperation(value = "查看更多-搜索标签", notes = "查看更多-搜索标签", response = Response.class)
+    public Response searchLabel(@ApiParam @RequestParam String name,
+                                @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostLabel> pager = new Paging<PostLabel>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<PostLabel> postLabelList = facadeDiscover.findAllLabelByName(pager, name);
+        pager.result(postLabelList);
+        response.setData(pager);
         return response;
     }
 

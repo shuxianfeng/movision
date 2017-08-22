@@ -114,4 +114,6 @@ public interface PostLabelMapper {
     List<PostVo> findAllLabelIsessenPost(Map map, RowBounds rowBounds);
 
     List<PostLabel> queryLabelByname(String name);
+
+    List<PostLabel> findAllLabelByName(Map<String, Object> map, RowBounds rowBounds);
 }

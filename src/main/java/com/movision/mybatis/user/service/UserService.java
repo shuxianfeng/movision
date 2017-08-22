@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.org.mozilla.javascript.internal.EcmaError;
 
 import java.util.List;
 import java.util.Map;
@@ -1085,4 +1086,17 @@ public class UserService {
             throw e;
         }
     }
+
+    public List<User> findAllUserByName(Paging<User> paging, Map map) {
+        try {
+            log.info("分页，根据名称查找用户");
+            return userMapper.findAllUserByName(map, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("分页，根据名称查找用户失败", e);
+            throw e;
+        }
+    }
+
+
+
 }

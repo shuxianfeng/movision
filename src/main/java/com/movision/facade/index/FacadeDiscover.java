@@ -596,5 +596,23 @@ public class FacadeDiscover {
         list.add(circleMap);
     }
 
+    public List<Circle> findAllCircleByNameInSearch(Paging<Circle> paging, String name) {
+        Map map = new HashMap();
+        map.put("name", name);
+        return circleService.findAllCircleByNameInSearch(paging, map);
+    }
+
+    public List<User> findAllUserByName(Paging<User> paging, String name) {
+        Map map = new HashMap();
+        map.put("name", name);
+        return userService.findAllUserByName(paging, map);
+    }
+
+    public List<PostLabel> findAllLabelByName(Paging<PostLabel> paging, String name) {
+        Map map = new HashMap();
+        map.put("name", name);
+        return postLabelService.findAllLabelByName(paging, map);
+    }
+
 
 }
