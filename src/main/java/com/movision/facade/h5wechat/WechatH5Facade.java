@@ -31,6 +31,7 @@ public class WechatH5Facade {
     //下面是模板图片的路径
     String timgurl = PropertiesLoader.getValue("wechat.h5.domain");
     String newurl = PropertiesLoader.getValue("wechat.newh5.domain");//新图片路径
+    String newurl2 = PropertiesLoader.getValue("test.img.domain");//新图片路径
     String headImg = PropertiesLoader.getValue("wechat.erweima.domain");//二维码路径
     String lihunurl = PropertiesLoader.getValue("wechat.lihun.domain");
 
@@ -144,7 +145,7 @@ public class WechatH5Facade {
             //JPEGImageEncoder en = JPEGCodec.createJPEGEncoder(os);
             // en.encode(buffImg);
             ImageIO.write(buffImg, "png", new File(url));//图片的输出路径
-            map.put("newurl", url);
+            map.put("newurl", newurl2 + "/wechat" + shareFileName);
             is.close();
             //  os.close();
         } catch (FileNotFoundException e) {
