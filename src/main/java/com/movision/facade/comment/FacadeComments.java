@@ -271,13 +271,6 @@ public class FacadeComments {
         List<CommentVo> commentVoList = queryLNewComment(postid, paging);
         List<CommentVo> listWithoutDup = null;
         for (int i = 0; i < commentVoList.size(); i++) {
-            /**  for (int j=0;j<commentVoList.get(i).getCommentVos().size();j++){
-             for (int k=commentVoList.get(i).getCommentVos().size()-1;k>j;k--) {
-             if (commentVoList.get(i).getCommentVos().get(j).getId().equals(commentVoList.get(i).getCommentVos().get(k).getId())) {
-             commentVoList.remove(k);
-             }
-             }
-             }*/
             //查询该用户有没有点赞该评论
             if (!StringUtil.isEmpty(userid)) {
                 Map<String, Object> parammap = new HashMap<>();
@@ -290,6 +283,8 @@ public class FacadeComments {
             }
             listWithoutDup = new ArrayList<CommentVo>(new HashSet<CommentVo>(commentVoList.get(i).getCommentVos()));
             for (int j = 0; j < listWithoutDup.size(); j++) {
+                User puser = commentService.queryUserInfor(listWithoutDup.get(j).getPid());
+                listWithoutDup.get(j).setPuser(puser);
                 if (!StringUtil.isEmpty(userid)) {
                     Map<String, Object> parammap = new HashMap<>();
                     parammap.put("userid", Integer.parseInt(userid));
