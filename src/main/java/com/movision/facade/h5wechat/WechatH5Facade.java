@@ -138,10 +138,10 @@ public class WechatH5Facade extends JPanel {
             // g.drawString(manname, 160, 610);//合成男的名字new String(message.getBytes("utf8"),"gbk");
             //  g.drawString(womanname, 160, 720);//合成女的名字
             for (int i = 0; i < 1; i++) {
-                g.rotate(80 * Math.PI / 180);
+                g.rotate(70 * Math.PI / 180);
                 g.setPaint(mycolor[i % 2]);
-                g.drawString(manname, -550, -600);
-                g.drawString(womanname, -550, -495);
+                g.drawString(manname, -550, -900);
+                g.drawString(womanname, -550, -700);
             }
             g.dispose();
 
