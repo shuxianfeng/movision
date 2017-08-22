@@ -1356,6 +1356,6 @@
         select id, nickname, photo from yw_user
         where status = 0
         and nickname like concat('%',#{nickname,jdbcType=VARCHAR},'%')
-        limit 3
+        limit 4
     </select>
 </mapper>

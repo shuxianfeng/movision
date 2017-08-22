@@ -1111,6 +1111,6 @@
             resultType="com.movision.mybatis.circle.entity.Circle">
         SELECT id, NAME, photo FROM yw_circle
         WHERE STATUS = 1 AND isdel = 0
-        AND NAME LIKE concat('%',#{name,jdbcType=VARCHAR},'%') LIMIT 3
+        AND NAME LIKE concat('%',#{name,jdbcType=VARCHAR},'%') limit 4
     </select>
 </mapper>

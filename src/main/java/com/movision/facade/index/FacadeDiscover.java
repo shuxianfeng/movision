@@ -529,31 +529,71 @@ public class FacadeDiscover {
         List<Map<String, Object>> list = new ArrayList<>();
         String name = spec.getQ();
         //帖子/活动
+        getPosts(spec, list);
+        //作者
+        getUsers(list, name);
+        //圈子
+        getCircles(list, name);
+        //标签
+        getLabels(list, name);
+
+        return list;
+    }
+
+    private void getPosts(NormalSearchSpec spec, List<Map<String, Object>> list) throws ServiceException {
         List<PostSearchEntity> postList = postSearchService.searchForPost(spec);
         Map postMap = new HashMap();
         postMap.put("name", "帖子");
-        postMap.put("postList", postList);
+        if (postList.size() > 3) {
+            postMap.put("isMore", true);
+            postMap.put("postList", postList.subList(0, 3));
+        } else {
+            postMap.put("isMore", false);
+            postMap.put("postList", postList);
+        }
         list.add(postMap);
-        //作者
+    }
+
+    private void getUsers(List<Map<String, Object>> list, String name) {
         List<User> userList = userService.queryUserByName(name);
         Map userMap = new HashMap();
         userMap.put("name", "作者");
-        userMap.put("userList", userList);
+        if (userList.size() > 3) {
+            userMap.put("isMore", true);
+            userMap.put("userList", userList.subList(0, 3));
+        } else {
+            userMap.put("isMore", false);
+            userMap.put("userList", userList);
+        }
         list.add(userMap);
-        //圈子
-        List<Circle> circleList = circleService.queryCircleByName(name);
-        Map circleMap = new HashMap();
-        circleMap.put("name", "圈子");
-        circleMap.put("circleList", circleList);
-        list.add(circleMap);
-        //标签
+    }
+
+    private void getLabels(List<Map<String, Object>> list, String name) {
         List<PostLabel> labelList = postLabelService.queryLabelByname(name);
         Map labelMap = new HashMap();
         labelMap.put("name", "标签");
-        labelMap.put("labelList", labelList);
+        if (labelList.size() > 3) {
+            labelMap.put("isMore", true);
+            labelMap.put("labelList", labelList.subList(0, 3));
+        } else {
+            labelMap.put("isMore", false);
+            labelMap.put("labelList", labelList);
+        }
         list.add(labelMap);
+    }
 
-        return list;
+    private void getCircles(List<Map<String, Object>> list, String name) {
+        List<Circle> circleList = circleService.queryCircleByName(name);
+        Map circleMap = new HashMap();
+        circleMap.put("name", "圈子");
+        if (circleList.size() > 3) {
+            circleMap.put("isMore", true);
+            circleMap.put("circleList", circleList.subList(0, 3));
+        } else {
+            circleMap.put("isMore", false);
+            circleMap.put("circleList", circleList);
+        }
+        list.add(circleMap);
     }
 
 

@@ -8,6 +8,9 @@ import com.movision.fsearch.pojo.spec.NormalSearchSpec;
 import com.movision.fsearch.service.exception.ServiceException;
 import com.movision.fsearch.service.impl.PostSearchService;
 import com.movision.fsearch.utils.StringUtil;
+import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.post.entity.PostVo;
+import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
@@ -52,11 +55,11 @@ public class AppIndexController {
     }
 
     @RequestMapping(value = {"search_post"}, method = RequestMethod.GET)
-    @ApiOperation(value = "搜索帖子", notes = "搜索帖子", response = Response.class)
+    @ApiOperation(value = "查看更多-搜索帖子", notes = "查看更多-搜索帖子", response = Response.class)
     public Response search_post_and_activity(@ApiParam @ModelAttribute NormalSearchSpec spec) throws IOException {
 
         if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
-            spec.setLimit(12);
+            spec.setLimit(10);
         }
         Response response = new Response();
         response.setCode(200);
@@ -89,6 +92,18 @@ public class AppIndexController {
             response.setMessage("搜索成功！");
             response.setData(facadeDiscover.searchAll(spec));
         }
+
+        return response;
+    }
+
+    @RequestMapping(value = {"search_circle"}, method = RequestMethod.GET)
+    @ApiOperation(value = "查看更多-搜索圈子", notes = "查看更多-搜索圈子", response = Response.class)
+    public Response searchCircle(@ApiParam @RequestParam String name,
+                                 @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                 @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<Circle> pager = new Paging<Circle>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+
 
         return response;
     }

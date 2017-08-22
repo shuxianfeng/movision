@@ -124,7 +124,7 @@ public class PostSearchService implements IPostSearchService {
                         "query", JSONUtil.toJSONString(query),
                         "sort", JSONUtil.toJSONString(sortFields),
                         "offset", spec.getOffset(),
-                        "limit", 3));   //只返回前3条
+                        "limit", 4));   //只返回前4条
 
         List<?> list = (List<?>) psAsMap.get("items");
         //返回值
