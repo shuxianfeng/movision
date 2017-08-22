@@ -116,7 +116,7 @@ public class WechatH5Facade {
             //将小图片绘到大图片上。
             //5,300 .表示你的小图片在大图片上的位置。
             g.drawImage(img, 400, 15, null);
-            g.rotate(30);
+            //g.rotate(30);
             //设置颜色。
             g.setColor(Color.BLACK);
 
@@ -127,9 +127,14 @@ public class WechatH5Facade {
             g.setFont(f);
 
             //10,20 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
-            g.drawString(manname, 160, 610);//合成男的名字new String(message.getBytes("utf8"),"gbk");
-            g.drawString(womanname, 160, 720);//合成女的名字
-
+            // g.drawString(manname, 160, 610);//合成男的名字new String(message.getBytes("utf8"),"gbk");
+            //  g.drawString(womanname, 160, 720);//合成女的名字
+            for (int i = 0; i < 12; i++) {
+                g.rotate(30 * Math.PI / 180);
+                // g.setPaint(mycolor[i % 2]);
+                g.drawString(manname, 0, 0);
+                g.drawString(womanname, 0, 0);
+            }
             g.dispose();
 
             //OutputStream os;
