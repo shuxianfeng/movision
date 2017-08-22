@@ -122,8 +122,9 @@ public class WechatH5Facade {
 
             //最后一个参数用来设置字体的大小
             Font f = new Font("宋体", Font.PLAIN, 25);
-            Color mycolor = Color.BLACK;//new Color(0, 0, 255);
-            g.setColor(mycolor);
+            //Color mycolor = Color.BLACK;//new Color(0, 0, 255);
+            Color[] mycolor = {Color.BLACK, Color.LIGHT_GRAY};
+            // g.setColor(mycolor);
             g.setFont(f);
 
             //10,20 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
@@ -131,7 +132,7 @@ public class WechatH5Facade {
             //  g.drawString(womanname, 160, 720);//合成女的名字
             for (int i = 0; i < 12; i++) {
                 g.rotate(30 * Math.PI / 180);
-                // g.setPaint(mycolor[i % 2]);
+                g.setPaint(mycolor[i % 2]);
                 g.drawString(manname, 0, 0);
                 g.drawString(womanname, 0, 0);
             }
