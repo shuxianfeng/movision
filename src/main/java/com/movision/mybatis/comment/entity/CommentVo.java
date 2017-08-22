@@ -61,6 +61,16 @@ public class CommentVo implements Serializable {
 
     private Integer heatvalue;
 
+    private Integer ispid;//是不是
+
+    public Integer getIspid() {
+        return ispid;
+    }
+
+    public void setIspid(Integer ispid) {
+        this.ispid = ispid;
+    }
+
     public User getPuser() {
         return puser;
     }
