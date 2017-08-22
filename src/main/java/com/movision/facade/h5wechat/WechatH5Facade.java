@@ -140,8 +140,8 @@ public class WechatH5Facade extends JPanel {
             for (int i = 0; i < 1; i++) {
                 g.rotate(30 * Math.PI / 180, -55, 40);
                 g.setPaint(mycolor[i % 2]);
-                g.drawString(manname, 50, 0);
-                g.drawString(womanname, 100, 0);
+                g.drawString(manname, 70, 20);
+                g.drawString(womanname, 100, 70);
             }
             g.dispose();
 
