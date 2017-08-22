@@ -115,7 +115,13 @@ public class WechatH5Facade extends JPanel {
             Image img = imgIcon.getImage();
             //将小图片绘到大图片上。
             //5,300 .表示你的小图片在大图片上的位置。
-            g.drawImage(img, 400, 15, null);
+            //g.drawImage(img, 400, 15, null);
+
+            g.fillRect(0, 0, getWidth(), getHeight());
+            int drawX = (getWidth() - img.getWidth(this)) / 2;
+            int drawY = (getHeight() - img.getHeight(this)) / 2;
+            g.rotate(0, getWidth() / 2, getHeight() / 2);
+            g.drawImage(img, drawX, drawY, this);
             //g.rotate(30);
             //设置颜色。
             g.setColor(Color.BLACK);
