@@ -40,13 +40,16 @@ public class AppWaterfallController {
 
     @Autowired
     private MsgCenterFacade msgCenterFacade;
+
     @Autowired
     private UserFacade userFacade;
 
     @Autowired
     private LabelFacade labelFacade;
+
     @Autowired
     private FacadeComments facadeComments;
+
     @Autowired
     private CircleAppFacade circleAppFacade;
     /**
@@ -584,4 +587,17 @@ public class AppWaterfallController {
         return response;
     }
 
+    @ApiOperation(value = "返回APP开屏图或开屏动画", notes = "返回当前APP用户开屏图或开屏动画", response = Response.class)
+    @RequestMapping(value = "getOpenAppImg", method = RequestMethod.POST)
+    public Response getOpenAppImg(){
+        Response response = new Response();
+        String imgurl = circleAppFacade.getOpenAppImg();
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+        }else {
+            response.setMessage("获取失败");
+        }
+        response.setData(imgurl);
+        return response;
+    }
 }

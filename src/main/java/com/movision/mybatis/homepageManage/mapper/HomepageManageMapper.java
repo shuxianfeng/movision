@@ -13,6 +13,8 @@ public interface HomepageManageMapper {
 
     String myinvite(int topictype);
 
+    String getOpenAppImg();
+
     int insert(HomepageManage record);
 
     int insertSelective(HomepageManage record);

@@ -7,6 +7,7 @@ import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.entity.MyCircle;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.followCircle.entity.FollowCircle;
+import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.utils.pagination.model.Paging;
@@ -30,6 +31,9 @@ public class CircleAppFacade {
 
     @Autowired
     private FacadePost facadePost;
+
+    @Autowired
+    private HomepageManageService homepageManageService;
 
     public List<MyCircle> findAllMyFollowCircleList(Paging<MyCircle> paging, int userid) {
         Map map = new HashedMap();
@@ -144,5 +148,12 @@ public class CircleAppFacade {
         }
 
         return 1;
+    }
+
+    /**
+     * 获取APP开屏图接口
+     */
+    public String getOpenAppImg(){
+        return homepageManageService.getOpenAppImg();
     }
 }

@@ -221,4 +221,18 @@ public class HomepageManageService {
         }
     }
 
+    /**
+     * 获取APP开屏图
+     * @return
+     */
+    public String getOpenAppImg(){
+        try {
+            log.info("获取APP开屏图");
+            return homepageManageMapper.getOpenAppImg();
+        }catch (Exception e){
+            log.error("获取APP开屏图失败");
+            throw e;
+        }
+    }
+
 }
