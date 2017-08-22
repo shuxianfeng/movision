@@ -396,6 +396,6 @@
             resultType="com.movision.mybatis.postLabel.entity.PostLabel">
         SELECT id, NAME, photo, TYPE FROM yw_post_label
         WHERE isdel = 0
-        AND NAME LIKE concat('%',#{name,jdbcType=VARCHAR},'%')) LIMIT 3
+        AND NAME LIKE concat('%',#{name,jdbcType=VARCHAR},'%') LIMIT 3
     </select>
 </mapper>
