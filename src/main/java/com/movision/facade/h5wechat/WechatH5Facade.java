@@ -137,8 +137,8 @@ public class WechatH5Facade extends JPanel {
             //10,20 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
             // g.drawString(manname, 160, 610);//合成男的名字new String(message.getBytes("utf8"),"gbk");
             //  g.drawString(womanname, 160, 720);//合成女的名字
-            for (int i = 0; i < 12; i++) {
-                g.rotate(30 * Math.PI / 180);
+            for (int i = 0; i < 1; i++) {
+                g.rotate(30 * Math.PI / 180, -30, -20);
                 g.setPaint(mycolor[i % 2]);
                 g.drawString(manname, 160, 610);
                 g.drawString(womanname, 160, 720);
