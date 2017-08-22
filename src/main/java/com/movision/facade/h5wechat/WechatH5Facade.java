@@ -26,7 +26,7 @@ import java.util.Map;
  * @Date 2017/8/18 15:48
  */
 @Service
-public class WechatH5Facade {
+public class WechatH5Facade extends JPanel {
     private static Logger log = LoggerFactory.getLogger(WechatH5Facade.class);
     //下面是模板图片的路径
     String timgurl = PropertiesLoader.getValue("wechat.h5.domain");
@@ -126,7 +126,8 @@ public class WechatH5Facade {
             Color[] mycolor = {Color.BLACK, Color.LIGHT_GRAY};
             // g.setColor(mycolor);
             g.setFont(f);
-
+            //   平移原点到图形环境的中心
+            g.translate(this.getWidth() / 2, this.getHeight() / 2);
             //10,20 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
             // g.drawString(manname, 160, 610);//合成男的名字new String(message.getBytes("utf8"),"gbk");
             //  g.drawString(womanname, 160, 720);//合成女的名字
@@ -163,5 +164,6 @@ public class WechatH5Facade {
         }
         return map;
     }
+
 
 }
