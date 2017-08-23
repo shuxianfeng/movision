@@ -31,9 +31,6 @@ public class BossImController {
 
     @Autowired
     private ImFacade imFacade;
-
-    @Autowired
-    private MiPushUtils miPushUtils;
     /**
      * 该接口给系统管理员调用
      *
@@ -46,8 +43,11 @@ public class BossImController {
                                      @ApiParam(value = "系统通知标题") @RequestParam String title,
                                      @ApiParam(value = "系统推送内容(填就是推送，不填就是通知)") @RequestParam(required = false) String pushcontent) throws IOException {
         Response response = new Response();
-
+        //调用云信推送
         imFacade.sendSystemInform(body, title, pushcontent);
+        //记录推送流水
+        imFacade.addSystemToPush(body, title);
+
         return response;
     }
 
@@ -372,12 +372,13 @@ public class BossImController {
 
     /**
      * 系统推送
+     * 主要是推送安卓端 --废弃
      *
      * @param body
      * @param title
      * @return
      */
-    @ApiOperation(value = "系统推送 ", notes = "系统推送", response = Response.class)
+    /*@ApiOperation(value = "系统推送 ", notes = "系统推送", response = Response.class)
     @RequestMapping(value = "add_systemtopush", method = RequestMethod.POST)
     public Response addSystemToPush(JSONObject jsonObjectPayload,
                                     @ApiParam(value = "系统推送内容") @RequestParam String body,
@@ -389,8 +390,7 @@ public class BossImController {
             response.setMessage("系统推送成功");
         }
         return response;
-
-    }
+    }*/
 
 
     @ApiOperation(value = "活动通知 ", notes = "活动通知", response = Response.class)

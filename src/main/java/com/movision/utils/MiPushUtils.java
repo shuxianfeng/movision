@@ -108,6 +108,7 @@ public class MiPushUtils {
      * @throws Exception
      */
     public Result sendBroadcastAll(String title, String content, JSONObject jsonObjectPayload, int deviceType) throws Exception {
+
         reStartPush(deviceType);// 准备小米推送
 
         Sender sender = null;

@@ -1061,7 +1061,9 @@ public class ImFacade {
      * @param title
      */
     public void systemPushMessage(String body, String title, JSONObject jsonObjectPayload, int deviceType) throws Exception {
+        //安卓这边是使用小米推送+云信推送
         miPushUtils.sendBroadcastAll(body, title, jsonObjectPayload, deviceType);
+        //记录推送流水
         addSystemToPush(body, title);
     }
 
