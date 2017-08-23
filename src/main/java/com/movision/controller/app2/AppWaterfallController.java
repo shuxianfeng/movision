@@ -144,10 +144,10 @@ public class AppWaterfallController {
      * @param userid
      * @return
      */
-    @ApiOperation(value = "所有未读消息", notes = "所有未读消息", response = Response.class)
+    @ApiOperation(value = "红点", notes = "红点", response = Response.class)
     @RequestMapping(value = "isRead", method = RequestMethod.POST)
-    public Response isRead(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
-                           @ApiParam(value = "1 动态 2 通知") @RequestParam(required = false) int type) {
+    public Response isRead(@ApiParam(value = "用户id") @RequestParam String userid,
+                           @ApiParam(value = "1 动态 2 通知") @RequestParam int type) {
         Response response = new Response();
         Map count = msgCenterFacade.isRead(type, userid);
         if (response.getCode() == 200) {
