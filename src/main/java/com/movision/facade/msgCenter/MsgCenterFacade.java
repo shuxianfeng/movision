@@ -177,6 +177,64 @@ public class MsgCenterFacade {
 
     }
 
+    /**
+     * 更新个人消息中未读
+     *
+     * @param userid
+     * @param type
+     */
+    public Map updateReadByMyMessageCenter(String userid, String type) {
+        Integer id = null;
+        Map m = new HashMap();
+        try {
+            if (StringUtil.isNotEmpty(userid)) {
+                id = Integer.parseInt(userid);
+            }
+            if (StringUtil.isNotEmpty(type)) {
+                //type= 1：动态 2：通知
+                if (type.equals("1")) {
+                    //动态分为：评论、回复评论、谁关注我、点赞帖子、点赞评论
+                    updateComment(id);//更新评论已读
+                    updateZan(id);//更新赞
+                    updateAttention(id);//更新关注
+                } else if (type.equals("2")) {
+                    updateInform(id);
+                }
+            }
+            m.put("resault", 1);
+            return m;
+        } catch (NumberFormatException e) {
+            m.put("resault", 2);
+            return m;
+        }
+
+    }
+
+    public void updateComment(Integer id) {
+        //更新评论
+        commentService.updateCommentIsRead(id);
+    }
+
+    public void updateZan(Integer id) {
+        //更新点赞
+        postZanRecordService.updateZanRead(id);
+    }
+
+    public void updateAttention(Integer userid) {
+        //更新关注我
+        followUserService.updateAttentionIsRead(userid);
+    }
+
+    public void updateInform(Integer userid) {
+        ImSystemInform inform = new ImSystemInform();
+        inform.setInformTime(ShiroUtil.getAppUser().getRegisterTime());//注册时间
+        inform.setUserid(userid);
+        //新增系统通知
+        wholeSignRead(userid);
+        //更新未读通知
+        imSystemInformReadService.updateInform(inform);
+    }
+
     private void handleReplyCommentList(List<InstantInfo> list) {
         List<ReplyComment> replyCommentList = commentService.selectReplyCommentList(ShiroUtil.getAppUserID());
         int len = replyCommentList.size();

@@ -123,4 +123,8 @@
     <select id="queryUserIsRead" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM yw_follow_user WHERE isread=0 AND interestedusers=#{userid,jdbcType=INTEGER}
     </select>
+
+    <update id="updateAttentionIsRead" parameterType="java.lang.Integer">
+        UPDATE yw_follow_user SET isread = 1 WHERE interestedusers = #{userid,jdbcType=INTEGER} AND isread = 0
+    </update>
 </mapper>

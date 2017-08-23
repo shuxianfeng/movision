@@ -1,5 +1,6 @@
 package com.movision.mybatis.imSystemInformRead.mapper;
 
+import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInformRead.entity.ImSystemInformRead;
 
 import java.util.Map;
@@ -26,4 +27,6 @@ public interface ImSystemInformReadMapper {
     Integer queryUserCheckPush(Map map);
 
     Integer wholeSignRead(Map map);
+
+    void updateInform(ImSystemInform inform);
 }

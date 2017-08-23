@@ -108,5 +108,7 @@ public interface CommentMapper {
 
     List<ReplyComment> selectReplyCommentList(Integer userid);
 
+    void updateCommentIsRead(Integer id);
+
 
 }

@@ -95,4 +95,19 @@ public class FollowUserService {
     }
 
 
+    /**
+     * 更新关注
+     *
+     * @param userid
+     */
+    public void updateAttentionIsRead(Integer userid) {
+        try {
+            log.info("更新关注");
+            followUserMapper.updateAttentionIsRead(userid);
+        } catch (Exception e) {
+            log.error("更新关注异常", e);
+            throw e;
+        }
+    }
+
 }

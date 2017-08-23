@@ -549,7 +549,7 @@ SELECT u.photo,u.nickname,u.id FROM yw_user u LEFT JOIN yw_post_comment c ON c.u
     SELECT * FROM yw_post_comment WHERE (postid in(SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND
     isdel=0) OR
     id IN (SELECT id FROM yw_post_comment WHERE pid IN (SELECT id FROM yw_post_comment WHERE
-    userid=#{userid,jdbcType=INTEGER} AND pid IS NULL AND isdel=0))) ORDER BY intime DESC
+    userid=#{userid,jdbcType=INTEGER} AND pid IS NULL AND isdel=0) AND isdel = 0)) ORDER BY intime DESC
   </select>
 
     <select id="selectReplyCommentList" parameterType="java.lang.Integer"
@@ -562,4 +562,9 @@ SELECT u.photo,u.nickname,u.id FROM yw_user u LEFT JOIN yw_post_comment c ON c.u
     AND a.isdel = 0
     ORDER BY a.intime DESC
   </select>
+
+  <update id="updateCommentIsRead" parameterType="java.lang.Integer">
+    UPDATE yw_post_comment AS pc SET pc.isread = 1 WHERE pc.postid IN (SELECT id FROM yw_post WHERE userid = #{id,jdbcType=INTEGER}) AND pc.isread = 0
+    OR pc.pid IN (SELECT id FROM (SELECT id FROM yw_post_comment WHERE userid = #{id,jdbcType=INTEGER}) a) AND pc.isread = 0 AND pc.userid <![CDATA[<>]]> #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

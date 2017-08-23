@@ -572,4 +572,19 @@ public class CommentService {
         }
     }
 
+    /**
+     * 更新评论已读
+     *
+     * @param map
+     */
+    public void updateCommentIsRead(Integer map) {
+        try {
+            log.info("更新评论已读");
+            commentMapper.updateCommentIsRead(map);
+        } catch (Exception e) {
+            log.error("更新评论已读异常", e);
+            throw e;
+        }
+    }
+
 }

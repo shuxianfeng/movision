@@ -175,4 +175,8 @@
             </if>
         </trim>
     </insert>
+
+    <update id="updateInform" parameterType="com.movision.mybatis.imSystemInformRead.entity.ImSystemInformRead">
+        UPDATE yw_im_system_inform_read SET isread = 1 WHERE userid = #{userid,jdbcType=INTEGER} AND isread = 0
+    </update>
 </mapper>

@@ -1,5 +1,6 @@
 package com.movision.mybatis.imSystemInformRead.service;
 
+import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInformRead.entity.ImSystemInformRead;
 import com.movision.mybatis.imSystemInformRead.mapper.ImSystemInformReadMapper;
 import org.slf4j.Logger;
@@ -98,6 +99,21 @@ public class ImSystemInformReadService {
             return imSystemInformReadMapper.wholeSignRead(map);
         } catch (Exception e) {
             log.error("系统消息全部标记已读异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 更新系统通知异常
+     *
+     * @param inform
+     */
+    public void updateInform(ImSystemInform inform) {
+        try {
+            log.info("更新系统通知");
+            imSystemInformReadMapper.updateInform(inform);
+        } catch (Exception e) {
+            log.error("更新系统通知异常", e);
             throw e;
         }
     }

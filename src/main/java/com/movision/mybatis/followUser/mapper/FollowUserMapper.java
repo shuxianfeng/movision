@@ -30,4 +30,6 @@ public interface FollowUserMapper {
     int insertUserFans(int interestedusers);
 
     int queryUserIsRead(int userid);
+
+    void updateAttentionIsRead(Integer userid);
 }
