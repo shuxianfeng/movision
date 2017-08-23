@@ -167,7 +167,7 @@ public class WechatH5Facade extends JPanel {
             //创键编码器，用于编码内存中的图象数据。
             //JPEGImageEncoder en = JPEGCodec.createJPEGEncoder(os);
             // en.encode(buffImg);
-            ImageIO.write(buffImg, "jpg", new File(url));//图片的输出路径
+            ImageIO.write(buffImg, "png", new File(url));//图片的输出路径
             map.put("newurl", newurl2 + "/upload/wechat/" + shareFileName);
             is.close();
             //修改参与次数
