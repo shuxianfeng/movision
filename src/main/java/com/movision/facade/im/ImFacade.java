@@ -664,6 +664,7 @@ public class ImFacade {
 
         if (result.get("code").equals(200)) {
             log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
+            //记录推送流水
             this.recordSysInforms(body, imUser.getAccid(), toAccids, title, pushcontent, informidentity);
         } else {
             throw new BusinessException(MsgCodeConstant.send_system_msg_fail, "发送系统通知失败");

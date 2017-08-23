@@ -45,9 +45,6 @@ public class BossImController {
         Response response = new Response();
         //调用云信推送
         imFacade.sendSystemInform(body, title, pushcontent);
-        //记录推送流水
-        imFacade.addSystemToPush(body, title);
-
         return response;
     }
 
