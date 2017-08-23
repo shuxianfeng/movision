@@ -33,7 +33,7 @@ public class WechatH5Controller {
                                @ApiParam(value = "女") @RequestParam String wsex) {
         Response response = new Response();
 
-        Map<String, Object> map = wechatH5Facade.imgCompose(manname, womanname, type, msex, wsex);
+        Map<String, Object> map = wechatH5Facade.imgCompose(manname, womanname, type);
         if ((Integer)map.get("status")==200){
             response.setMessage("合成成功");
             response.setCode((Integer)map.get("status"));
