@@ -518,8 +518,11 @@ public class ImFacade {
     public void sendSystemInform(String body, String title, String pushcontent) throws IOException {
         Date date = new Date();
         long informidentity = date.getTime();
+        //获取当前boss用户的IM用户信息
         ImUser imUser = this.getImuserByCurrentBossuser();
+        //找到所有的im用户
         List<ImUser> imAppUserList = imUserService.selectAllAPPImuser();
+
         if (ListUtil.isNotEmpty(imAppUserList)) {
             int size = imAppUserList.size();
             log.info("app中的IM用户共" + size + "人！");
@@ -658,27 +661,6 @@ public class ImFacade {
         //不足500人
         String toAccids = prepareToAccids(imAppUserList, size, multiple);
         Map result = this.sendSystemInform(body, imUser.getAccid(), toAccids, pushcontent);
-
-
-        //************************查询用户是否有最新系统通知消息
-        Integer isread = newInformationService.querySystemByNewInformation(imUser.getAccid());
-        NewInformation news = new NewInformation();
-        //更新系统通知最新消息
-        if (isread != null) {
-            news.setIsread(0);
-            news.setIntime(new Date());
-            news.setUserid(isread);
-            newInformationService.updateUserByNewInformation(news);
-        } else {
-            //查询被点赞的帖子发帖人
-            Integer uid = imUserService.queryUserByAccid(imUser.getAccid());
-            //新增系统通知最新消息
-            news.setIsread(0);
-            news.setIntime(new Date());
-            news.setUserid(uid);
-            newInformationService.insertUserByNewInformation(news);
-        }
-        //******************************************************************
 
         if (result.get("code").equals(200)) {
             log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
