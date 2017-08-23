@@ -66,12 +66,9 @@ public class ImConstant {
     public static final String SEND_MSG_BATCH = ImPropertiesLoader.getPropertyValue("send_msg_attach");
 
     public enum PUSH_MESSAGE {
-        system_msg(0),  //系统通知
-        product_msg(1), //商城通知
-        zan_msg(2), //赞
-        comment_msg(3), //评论
-        collect_msg(2), //收藏
-        focus_msg(2);
+        instantinfo_msg(1), //动态通知
+        system_msg(2),  //系统通知
+        product_msg(3); //运营通知
 
         public final int code;
 
