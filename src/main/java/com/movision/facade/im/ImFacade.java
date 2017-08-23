@@ -663,10 +663,10 @@ public class ImFacade {
         //记录推送流水
         int pushid = this.recordSysInforms(body, imUser.getAccid(), toAccids, title, pushcontent, informidentity);
         //封装pushcontent
-        String pushStr = wrapPushcontent(pushcontent, pushid);
-        log.debug("封装的pushcontent:" + pushStr);
+        String payload = wrapPushcontent(pushcontent, pushid);
+        log.debug("封装的 payload:" + payload);
         //调用云信接口发送通知
-        Map result = this.sendSystemInform(body, imUser.getAccid(), toAccids, pushStr);
+        Map result = this.sendSystemInform(body, imUser.getAccid(), toAccids, pushcontent, payload);
 
         if (result.get("code").equals(200)) {
             log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
@@ -675,7 +675,7 @@ public class ImFacade {
             throw new BusinessException(MsgCodeConstant.send_system_msg_fail, "发送系统通知失败");
         }
         //更新推送信息
-        updatePushInfo(pushcontent, pushid, pushStr);
+        updatePushInfo(pushcontent, pushid, payload);
     }
 
     /**
@@ -776,7 +776,7 @@ public class ImFacade {
      * @return
      * @throws IOException
      */
-    public Map sendSystemInform(String body, String fromaccid, String toAccids, String pushcontent) throws IOException {
+    public Map sendSystemInform(String body, String fromaccid, String toAccids, String pushcontent, String payload) throws IOException {
         //发系统通知
         Gson gson = new Gson();
         Map map = new HashMap();
@@ -788,6 +788,7 @@ public class ImFacade {
         imBatchAttachMsg.setFromAccid(fromaccid);
         imBatchAttachMsg.setAttach(body);
         imBatchAttachMsg.setPushcontent(pushcontent);
+        imBatchAttachMsg.setPayload(payload);
         imBatchAttachMsg.setToAccids(toAccids);
         imBatchAttachMsg.setOption(option);
         return this.sendImHttpPost(ImConstant.SEND_BATCH_ATTACH_MSG, BeanUtil.ImBeanToMap(imBatchAttachMsg));
