@@ -138,20 +138,20 @@ public class WechatH5Facade extends JPanel {
             //   平移原点到图形环境的中心
             g.translate(this.getWidth() / 2, this.getHeight() / 2);
             //10,20 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
-            // g.drawString(manname, 160, 610);//合成男的名字new String(message.getBytes("utf8"),"gbk");
-            //  g.drawString(womanname, 160, 720);//合成女的名字
+            g.drawString(msex, 160, 610);//合成男的名字new String(message.getBytes("utf8"),"gbk");
+            g.drawString(wsex, 160, 720);//合成女的名字
             for (int i = 0; i < 1; i++) {
                 g.rotate(70 * Math.PI / 180);
                 g.setPaint(mycolor[i % 2]);
                 g.drawString(manname, -540, -385);
                 g.drawString(womanname, -550, -205);
             }
-            for (int i = 0; i < 1; i++) {
+            /** for (int i = 0; i < 1; i++) {
                 g.rotate(70 * Math.PI / 180);
                 g.setPaint(mycolor[i % 2]);
                 g.drawString(msex, -540, -385);
                 g.drawString(wsex, -550, -205);
-            }
+             }*/
 
             g.dispose();
 
