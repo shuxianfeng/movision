@@ -29,8 +29,8 @@ public class WechatH5Controller {
     public Response imgCompose(@ApiParam(value = "男的名字") @RequestParam String manname,
                                @ApiParam(value = "女的名字") @RequestParam String womanname,
                                @ApiParam(value = "1:结婚证 2 离婚证") @RequestParam int type,
-                               @ApiParam(value = "男") @RequestParam String msex,
-                               @ApiParam(value = "女") @RequestParam String wsex) {
+                               @ApiParam(value = "男") @RequestParam(required = false) String msex,
+                               @ApiParam(value = "女") @RequestParam(required = false) String wsex) {
         Response response = new Response();
 
         Map<String, Object> map = wechatH5Facade.imgCompose(manname, womanname, type);
