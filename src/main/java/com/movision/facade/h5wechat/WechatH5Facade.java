@@ -39,7 +39,8 @@ public class WechatH5Facade extends JPanel {
 
     @Autowired
     private CountService countService;
-    public Map<String, Object> imgCompose(String manname, String womanname, int type) {
+
+    public Map<String, Object> imgCompose(String manname, String womanname, int type, String msex, String wsex) {
         Map<String, Object> map = new HashMap<>();
 //        public static void exportImg1(){
 //            int width = 100;
@@ -75,7 +76,7 @@ public class WechatH5Facade extends JPanel {
         if (type == 1) {//结婚证
             try {
                 InputStream is = new FileInputStream(timgurl);
-                map = He(is, manname, womanname);
+                map = He(is, manname, womanname, msex, wsex);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (ImageFormatException e) {
@@ -86,7 +87,7 @@ public class WechatH5Facade extends JPanel {
         } else if (type == 2) {//离婚证
             try {
                 InputStream is = new FileInputStream(lihunurl);
-                map = He(is, manname, womanname);
+                map = He(is, manname, womanname, msex, wsex);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (ImageFormatException e) {
@@ -99,7 +100,7 @@ public class WechatH5Facade extends JPanel {
     }
 
 
-    public Map He(InputStream is, String manname, String womanname) {
+    public Map He(InputStream is, String manname, String womanname, String msex, String wsex) {
         Map map = new HashMap();
         try {
 
@@ -145,6 +146,13 @@ public class WechatH5Facade extends JPanel {
                 g.drawString(manname, -540, -385);
                 g.drawString(womanname, -550, -205);
             }
+            for (int i = 0; i < 1; i++) {
+                g.rotate(70 * Math.PI / 180);
+                g.setPaint(mycolor[i % 2]);
+                g.drawString(msex, -540, -385);
+                g.drawString(wsex, -550, -205);
+            }
+
             g.dispose();
 
             //OutputStream os;
