@@ -660,17 +660,57 @@ public class ImFacade {
     private void sendAndRecord(String body, ImUser imUser, List<ImUser> imAppUserList, int size, int multiple, String title, String pushcontent, long informidentity) throws IOException {
         //不足500人
         String toAccids = prepareToAccids(imAppUserList, size, multiple);
-        Map result = this.sendSystemInform(body, imUser.getAccid(), toAccids, pushcontent);
+        //记录推送流水
+        int pushid = this.recordSysInforms(body, imUser.getAccid(), toAccids, title, pushcontent, informidentity);
+        //封装pushcontent
+        String pushStr = wrapPushcontent(pushcontent, pushid);
+        log.debug("封装的pushcontent:" + pushStr);
+        //调用云信接口发送通知
+        Map result = this.sendSystemInform(body, imUser.getAccid(), toAccids, pushStr);
 
         if (result.get("code").equals(200)) {
             log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
-            //记录推送流水
-            this.recordSysInforms(body, imUser.getAccid(), toAccids, title, pushcontent, informidentity);
         } else {
+            log.error("发送系统通知失败，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
             throw new BusinessException(MsgCodeConstant.send_system_msg_fail, "发送系统通知失败");
         }
-
+        //更新推送信息
+        updatePushInfo(pushcontent, pushid, pushStr);
     }
+
+    /**
+     * 更新推送信息
+     *
+     * @param pushcontent
+     * @param pushid
+     * @param pushStr
+     */
+    private void updatePushInfo(String pushcontent, int pushid, String pushStr) {
+        if (StringUtils.isNotBlank(pushcontent)) {
+
+            SystemToPush systemToPush = new SystemToPush();
+            systemToPush.setId(pushid);
+            systemToPush.setBody(pushStr);
+            systemToPushService.updateBySelective(systemToPush);
+        }
+    }
+
+    /**
+     * 封装pushcontent
+     *
+     * @param pushcontent
+     * @param pushid
+     * @return
+     */
+    private String wrapPushcontent(String pushcontent, int pushid) {
+        Map map = new HashMap();
+        map.put("type", ImConstant.PUSH_MESSAGE.system_msg.getCode());
+        map.put("id", pushid);
+        map.put("msg", pushcontent);
+        Gson gson = new Gson();
+        return gson.toJson(map);
+    }
+
 
     private void sendInform(String body, String coverimg, ImUser imUser, int multiple, String title, long informidentity) throws IOException {
         //不足500人
@@ -798,9 +838,11 @@ public class ImFacade {
      * @param fromaccid
      * @param toAccids
      */
-    public void recordSysInforms(String body, String fromaccid, String toAccids, String title, String pushcontent, long informidentity) {
+    public Integer recordSysInforms(String body, String fromaccid, String toAccids, String title, String pushcontent, long informidentity) {
 
         if (pushcontent == null) {
+
+            //系统通知表（记录系统通知的发送记录）
             ImSystemInform imSystemInform = new ImSystemInform();
             imSystemInform.setBody(body);
             imSystemInform.setFromAccid(fromaccid);
@@ -812,7 +854,11 @@ public class ImFacade {
             imSystemInform.setInformidentity(String.valueOf(informidentity));
             //每次取500个人
             imSystemInformService.add(imSystemInform);
+            return 0;
+
         } else if (pushcontent != null) {
+
+            //系统推送表
             SystemToPush systemToPush = new SystemToPush();
             systemToPush.setBody(body);
             systemToPush.setTitle(title);
@@ -820,8 +866,9 @@ public class ImFacade {
             systemToPush.setToAccids(toAccids);
             systemToPush.setUserid(ShiroUtil.getBossUserID());
             systemToPush.setInformTime(new Date());
-            systemToPushService.addSystemToPush(systemToPush);//记录流水
+            return systemToPushService.addSystemToPush(systemToPush);
         }
+        return null;
     }
 
     public void recordSysInformsTo(String body, String coverimg, String fromaccid, String title, long informidentity) {
@@ -1046,14 +1093,14 @@ public class ImFacade {
      * @param
      * @return
      */
-    public void addSystemToPush(String body, String title) {
+    /*public void addSystemToPush(String body, String title) {
         SystemToPush systemToPush = new SystemToPush();
         systemToPush.setBody(body);
         systemToPush.setTitle(title);
         systemToPush.setUserid(ShiroUtil.getBossUserID());
         systemToPush.setInformTime(new Date());
         systemToPushService.addSystemToPush(systemToPush);//记录流水
-    }
+    }*/
 
     /**
      * 系统推送
@@ -1061,12 +1108,12 @@ public class ImFacade {
      * @param body
      * @param title
      */
-    public void systemPushMessage(String body, String title, JSONObject jsonObjectPayload, int deviceType) throws Exception {
+    /*public void systemPushMessage(String body, String title, JSONObject jsonObjectPayload, int deviceType) throws Exception {
         //安卓这边是使用小米推送+云信推送
         miPushUtils.sendBroadcastAll(body, title, jsonObjectPayload, deviceType);
         //记录推送流水
         addSystemToPush(body, title);
-    }
+    }*/
 
 
     /**

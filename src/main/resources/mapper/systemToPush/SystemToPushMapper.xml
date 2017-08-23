@@ -135,7 +135,8 @@
     <delete id="deleteSystemToPush" parameterType="java.lang.Integer">
         DELETE  FROM  yw_system_push WHERE  id=#{id,jdbcType=INTEGER}
     </delete>
-    <insert id="addSystemToPush" parameterType="com.movision.mybatis.systemToPush.entity.SystemToPush">
+    <insert id="addSystemToPush" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.movision.mybatis.systemToPush.entity.SystemToPush">
         insert into yw_system_push
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

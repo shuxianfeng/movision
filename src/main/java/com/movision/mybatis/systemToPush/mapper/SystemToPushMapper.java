@@ -32,7 +32,6 @@ public interface SystemToPushMapper {
 
     Integer addSystemToPush(SystemToPush systemToPush);//增加
 
-
     List<ImUser> queryUser(int postid);
 
 

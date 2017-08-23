@@ -105,7 +105,8 @@ public class SystemToPushService {
     public Integer addSystemToPush(SystemToPush systemToPush) {
         try {
             log.info("增加系统推送");
-            return systemToPushMapper.addSystemToPush(systemToPush);
+            systemToPushMapper.addSystemToPush(systemToPush);
+            return systemToPush.getId();
         } catch (Exception e) {
             log.error("增加系统推送失败", e);
             throw e;
@@ -118,6 +119,16 @@ public class SystemToPushService {
             return systemToPushMapper.queryUser(postid);
         } catch (Exception e) {
             log.error("根据活动id查询用户失败", e);
+            throw e;
+        }
+    }
+
+    public int updateBySelective(SystemToPush systemToPush) {
+        try {
+            log.info("有选择的更新系统推送表");
+            return systemToPushMapper.updateByPrimaryKeySelective(systemToPush);
+        } catch (Exception e) {
+            log.error("有选择的更新系统推送表失败", e);
             throw e;
         }
     }
