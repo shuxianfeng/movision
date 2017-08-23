@@ -43,4 +43,17 @@ public class WechatH5Controller {
 
         return response;
     }
+
+
+    @ApiOperation(value = "修改访问数量", notes = "修改访问数量", response = Response.class)
+    @RequestMapping(value = "updateAccessCount", method = RequestMethod.POST)
+    public Response updateAccessCount() {
+        Response response = new Response();
+        int access = wechatH5Facade.updateAccessCount(1077);
+        if (response.getCode() == 200) {
+            response.setMessage("成功");
+            response.setData(access);
+        }
+        return response;
+    }
 }

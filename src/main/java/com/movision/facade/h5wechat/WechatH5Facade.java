@@ -1,5 +1,7 @@
 package com.movision.facade.h5wechat;
 
+import com.movision.mybatis.count.entity.Count;
+import com.movision.mybatis.count.service.CountService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
@@ -36,7 +38,7 @@ public class WechatH5Facade extends JPanel {
     String lihunurl = PropertiesLoader.getValue("wechat.lihun.domain");
 
     @Autowired
-    private MovisionOssClient movisionOssClient;
+    private CountService countService;
     public Map<String, Object> imgCompose(String manname, String womanname, int type) {
         Map<String, Object> map = new HashMap<>();
 //        public static void exportImg1(){
@@ -160,6 +162,9 @@ public class WechatH5Facade extends JPanel {
             ImageIO.write(buffImg, "png", new File(url));//图片的输出路径
             map.put("newurl", newurl2 + "/upload/wechat/" + shareFileName);
             is.close();
+            //修改参与次数
+            int ta = updateTake(1077);
+            map.put("ta", ta);
             //  os.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -170,6 +175,31 @@ public class WechatH5Facade extends JPanel {
         }
         return map;
     }
+
+
+    /**
+     * 修改参与次数
+     *
+     * @param id
+     * @return
+     */
+    public int updateTake(int id) {
+        int takeCount = countService.updateTakeCount(id);
+        return takeCount;
+    }
+
+    /**
+     * 修改访问次数
+     *
+     * @param id
+     * @return
+     */
+    public int updateAccessCount(int id) {
+        int takeCount = countService.updateAccessCount(id);
+        return takeCount;
+    }
+
+
 
 
 }
