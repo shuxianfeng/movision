@@ -120,4 +120,7 @@
     <update id="insertUserFans" parameterType="java.lang.Integer">
         UPDATE  yw_user SET fans=fans+1 WHERE id=#{interestedusers,jdbcType=INTEGER}
     </update>
+    <select id="queryUserIsRead" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_follow_user WHERE isread=0 AND interestedusers=#{userid,jdbcType=INTEGER}
+    </select>
 </mapper>

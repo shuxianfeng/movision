@@ -28,4 +28,6 @@ public interface FollowUserMapper {
     List<FollowUserVo> selectFollowUserVoList(Integer userid);
 
     int insertUserFans(int interestedusers);
+
+    int queryUserIsRead(int userid);
 }

@@ -139,6 +139,25 @@ public class AppWaterfallController {
      }
 
     /**
+     * 所有未读消息
+     *
+     * @param userid
+     * @return
+     */
+    @ApiOperation(value = "所有未读消息", notes = "所有未读消息", response = Response.class)
+    @RequestMapping(value = "isRead", method = RequestMethod.POST)
+    public Response isRead(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
+                           @ApiParam(value = "1 动态 2 通知") @RequestParam(required = false) int type) {
+        Response response = new Response();
+        Map count = msgCenterFacade.isRead(type, userid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(count);
+        return response;
+    }
+
+    /**
      * @return
      */
     @ApiOperation(value = "个人主页上半部分", notes = "个人主页上半部分", response = Response.class)

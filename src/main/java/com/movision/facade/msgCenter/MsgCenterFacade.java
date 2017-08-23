@@ -737,6 +737,10 @@ public class MsgCenterFacade {
     public Map queryUserAllUnreadMessage(String userid) {
         Map map = new HashMap();
         int count = 0;
+        int zanNumber = 0;//赞
+        int commentIsRead = 0;//评论
+        int imsysIsRead = 0;//系统
+        int follow = 0;//关注
         map.put("count", count);
         if (userid == null) {
             //用户未登录状态下全部返回0
@@ -744,18 +748,56 @@ public class MsgCenterFacade {
         } else {
             //用户登录状态下
             //点赞未读数
-            int zanNumber = postZanRecordService.queryZanNumber(Integer.parseInt(userid));
+            zanNumber = postZanRecordService.queryZanNumber(Integer.parseInt(userid));
             //评论未读数
-            int commentIsRead = commentService.queryCommentIsRead(Integer.parseInt(userid));
+            commentIsRead = commentService.queryCommentIsRead(Integer.parseInt(userid));
             //系统通知未读数
             map.put("userid", userid);
             map.put("informTime", ShiroUtil.getAppUser().getRegisterTime());
-            int imsysIsRead = imSystemInformService.querySystemPushByUserid(map);
+            imsysIsRead = imSystemInformService.querySystemPushByUserid(map);
             //聊天未读数
-
+            //关注未读数
+            follow = followUserService.queryUserIsRead(Integer.parseInt(userid));
             //计算总数
-            count = zanNumber + commentIsRead + imsysIsRead;
+            count = zanNumber + commentIsRead + imsysIsRead + follow;
             map.put("count", count);
+        }
+
+        return map;
+    }
+
+
+    public Map isRead(int type, String userid) {
+        Map map = new HashMap();
+        int flag = 0;
+        int zanNumber = 0;//赞
+        int commentIsRead = 0;//评论
+        int imsysIsRead = 0;//系统
+        int follow = 0;//关注
+        zanNumber = postZanRecordService.queryZanNumber(Integer.parseInt(userid));
+        //评论未读数
+        commentIsRead = commentService.queryCommentIsRead(Integer.parseInt(userid));
+        //系统通知未读数
+        map.put("userid", userid);
+        map.put("informTime", ShiroUtil.getAppUser().getRegisterTime());
+        imsysIsRead = imSystemInformService.querySystemPushByUserid(map);
+        //聊天未读数
+        //关注未读数
+        follow = followUserService.queryUserIsRead(Integer.parseInt(userid));
+        if (type == 1) {//动态红点
+            if (zanNumber > 0 || commentIsRead > 0 || follow > 0) {
+                flag = 1;
+                map.put("flag", flag);
+            } else {
+                map.put("flag", flag);
+            }
+        } else if (type == 2) {//系统通知红点
+            if (imsysIsRead > 0) {
+                flag = 1;
+                map.put("flag", flag);
+            } else {
+                map.put("flag", flag);
+            }
         }
         return map;
     }

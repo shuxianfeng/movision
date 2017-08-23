@@ -83,6 +83,16 @@ public class FollowUserService {
 
     }
 
+    public int queryUserIsRead(int userid) {
+        try {
+            log.info("用户关注数");
+            return followUserMapper.queryUserIsRead(userid);
+        } catch (Exception e) {
+            log.error("用户关注数失败", e);
+            throw e;
+        }
+
+    }
 
 
 }
