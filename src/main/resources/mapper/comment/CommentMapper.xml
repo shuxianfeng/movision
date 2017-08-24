@@ -524,12 +524,12 @@
   <select id="findAllOneComment" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.*,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE
-    c.postid=#{postid,jdbcType=INTEGER} AND c.pid IS NULL ORDER BY c.intime DESC
+    c.postid=#{postid,jdbcType=INTEGER} AND c.pid IS NULL AND c.isdel=0 ORDER BY c.intime DESC
   </select>
   <select id="queryTwoComment" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.*,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE
-    c.pid=#{pid,jdbcType=INTEGER} ORDER BY
+    c.pid=#{pid,jdbcType=INTEGER} AND c.isdel=0 ORDER BY
     c.intime DESC
   </select>
   <select id="queryThreeComment" parameterType="java.lang.Integer"
