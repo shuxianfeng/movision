@@ -145,8 +145,8 @@ public class WechatH5Facade extends JPanel {
                 g.setPaint(mycolor[i % 2]);
                 g.drawString(manname, -160, 2200);
                 g.drawString(womanname, -180, 2900);
-                g.drawString(msex, 1300, 2600);
-                g.drawString(wsex, 1300, 2800);
+                g.drawString(msex, 1300, 2800);
+                g.drawString(wsex, 1300, 2500);
 
             }
             /**for (int i = 0; i < 1; i++) {
