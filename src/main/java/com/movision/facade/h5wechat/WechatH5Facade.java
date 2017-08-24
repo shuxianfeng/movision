@@ -124,7 +124,7 @@ public class WechatH5Facade extends JPanel {
             int drawX = (getWidth() - img.getWidth(this)) / 2;
             int drawY = (getHeight() - img.getHeight(this)) / 2;
             g.rotate(30, 900, -15);
-            g.drawImage(img, 400, 15, this);
+            g.drawImage(img, 400, 900, this);
             //g.rotate(30);
             //设置颜色。
             g.setColor(Color.BLACK);
@@ -145,7 +145,7 @@ public class WechatH5Facade extends JPanel {
                 g.setPaint(mycolor[i % 2]);
                 g.drawString(manname, -160, 2200);
                 g.drawString(womanname, -180, 2950);
-                g.drawString(msex, 1300, 2150);
+                g.drawString(msex, 1300, 2250);
                 g.drawString(wsex, 1300, 2950);
 
             }
