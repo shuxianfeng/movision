@@ -436,9 +436,11 @@ public class LabelFacade {
             allGeographicLabelList.set(i, GLvo);
         }
         map.put("allGeographicLabelList", allGeographicLabelList);
+
         //增加足迹点个数
         map.put("footsum", allGeographicLabelList.size());
-        //查询足迹排名
+
+        //查询并计算当前用户的足迹排名
         List<FootRank> footRankList = postLabelService.queryFootMapRank(Integer.parseInt(userid));
         int rank = 0;
         for (int i=0; i<footRankList.size(); i++){
@@ -447,6 +449,7 @@ public class LabelFacade {
             rank++;
         }
         map.put("rank", rank);
+
         return map;
     }
 }
