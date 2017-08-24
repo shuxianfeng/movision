@@ -440,12 +440,12 @@ public class LabelFacade {
         map.put("footsum", allGeographicLabelList.size());
         //查询足迹排名
         List<FootRank> footRankList = postLabelService.queryFootMapRank(Integer.parseInt(userid));
-        int rank = 0;
+        int rank = 1;
         for (int i=0; i<footRankList.size(); i++){
-            rank++;
             if (footRankList.get(i).getUserid() == Integer.parseInt(userid)){
                 continue;//跳出剩余所有循环
             }
+            rank++;
         }
         map.put("rank", rank);
         return map;
