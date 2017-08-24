@@ -1362,6 +1362,6 @@
     <select id="findAllUserByName" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.User">
         select * from yw_user
         where status = 0
-        and nickname like concat('%',#{nickname,jdbcType=VARCHAR},'%')
+        and nickname like concat('%',#{name,jdbcType=VARCHAR},'%')
     </select>
 </mapper>
