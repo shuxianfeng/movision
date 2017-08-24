@@ -955,6 +955,12 @@ public class UserService {
         }
     }
 
+    /**
+     * 查询当前作者有没有被当前登录的用户关注过
+     *
+     * @param paramap
+     * @return
+     */
     public int queryIsFollowAuthor(Map<String, Object> paramap){
         try {
             log.info("查询当前作者有没有被当前登录的用户关注过");

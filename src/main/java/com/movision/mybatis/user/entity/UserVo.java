@@ -74,6 +74,30 @@ public class UserVo implements Serializable {
 
     private Integer isrecommend;//是否作为发现页必推作者：0 否 1 是'
 
+    private Integer isessencesum;//精贴数量
+
+    private Integer exceptional;//被打赏积分
+
+    private Date applydate;//申请时间
+
+    private Integer commentsum;//被评论数
+
+    private Integer zansum;//被点赞数
+
+    private Integer authstatus;//实名认证状态
+
+    private Date addVtime;//加V时间
+
+    private Integer appyid;//申请id
+
+    private String reason;//驳回原因
+
+    private Integer auditStatus;//审核状态
+
+    private Date audittime;//审核时间
+
+    private Integer isfollow;//是否被关注 0 未关注 1 已关注（当前作者有没有被APP当前登录的用户关注过）
+
     public Integer getHeatValue() {
         return heatValue;
     }
@@ -106,29 +130,7 @@ public class UserVo implements Serializable {
         this.collectioncount = collectioncount;
     }
 
-    private Integer isessencesum;//精贴数量
 
-    private Integer exceptional;//被打赏积分
-
-    private Date applydate;//申请时间
-
-    private Integer commentsum;//被评论数
-
-    private Integer zansum;//被点赞数
-
-    private Integer authstatus;//实名认证状态
-
-    private Date addVtime;//加V时间
-
-    private Integer appyid;//申请id
-
-    private String reason;//驳回原因
-
-    private Integer auditStatus;//审核状态
-
-    private Date audittime;//审核时间
-
-    private Integer isfollow;//是否被关注 0 未关注 1 已关注（当前作者有没有被APP当前登录的用户关注过）
 
     public Date getAudittime() {
         return audittime;

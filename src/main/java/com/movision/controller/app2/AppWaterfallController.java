@@ -160,7 +160,7 @@ public class AppWaterfallController {
     /**
      * @return
      */
-    @ApiOperation(value = "个人主页上半部分", notes = "个人主页上半部分", response = Response.class)
+    @ApiOperation(value = "我的主页上半部分", notes = "我的主页上半部分", response = Response.class)
     @RequestMapping(value = "queryPersonalHomepage", method = RequestMethod.POST)
     public Response queryPersonalHomepage(@ApiParam(value = "用户id") @RequestParam String userid) {
         Response response = new Response();
@@ -171,6 +171,18 @@ public class AppWaterfallController {
         response.setData(list);
         return response;
      }
+
+    @ApiOperation(value = "个人主页上半部分", notes = "个人主页上半部分", response = Response.class)
+    @RequestMapping(value = "queryOtherPersonHomepage", method = RequestMethod.POST)
+    public Response queryOtherPersonHomepage(@ApiParam(value = "用户id") @RequestParam String userid) {
+        Response response = new Response();
+        UserVo list = userFacade.queryOtherPersonHomepage(userid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(list);
+        return response;
+    }
 
     /**
      * @return

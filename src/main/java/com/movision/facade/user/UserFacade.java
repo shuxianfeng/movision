@@ -506,10 +506,21 @@ public class UserFacade {
     /**
      * 美番2.0我的接口上半部分(*)
      *
-     * @param userid
+     * @param userid 展示的用户信息
      * @return
      */
     public UserVo queryPersonalHomepage(String userid) {
+        UserVo user = wrapPersonHomepageTopPart(userid);
+        return user;
+    }
+
+    /**
+     * 展示用户信息
+     *
+     * @param userid
+     * @return
+     */
+    private UserVo wrapPersonHomepageTopPart(String userid) {
         //查询用户信息
         UserVo user = userService.queryUserInfoHompage(Integer.parseInt(userid));
         //查询发的帖子总数
@@ -527,6 +538,24 @@ public class UserFacade {
         //被收藏数
         int collectionsum = collectionService.userPostCollection(Integer.parseInt(userid));
         user.setBecollectsum(collectionsum);
+        return user;
+    }
+
+    /**
+     * 查询别人的主页
+     *
+     * @param userid
+     * @return
+     */
+    public UserVo queryOtherPersonHomepage(String userid) {
+        //1 展示用户信息
+        UserVo user = wrapPersonHomepageTopPart(userid);
+        //2 查询isFollow
+       /* Map<String, Object> paramap = new HashMap<>();
+        paramap.put("userid", ShiroUtil.getAppUserID()); //关注动作的主体
+        paramap.put("id", userid);  //被关注的id
+        int sum = userService.queryIsFollowAuthor(paramap);*/
+        user.setIsfollow(0);    //始终保持【关注】按钮显示，即未登录状态
         return user;
     }
 
