@@ -159,10 +159,10 @@ public class AppMineController {
     public Response getfootmap(@ApiParam(value = "用户id(必填，否则无法进入‘我的’页面)") @RequestParam String userid) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         Response response = new Response();
 
-        List<GeographicLabel> geographicList = labelFacade.getfootmap(userid);
+        Map<String, Object> geographicMap = labelFacade.getfootmap(userid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
-            response.setData(geographicList);
+            response.setData(geographicMap);
         }
 
         return response;
