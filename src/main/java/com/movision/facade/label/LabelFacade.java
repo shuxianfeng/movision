@@ -10,6 +10,7 @@ import com.movision.mybatis.circle.entity.CircleCount;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.followLabel.entity.FollowLabel;
 import com.movision.mybatis.followLabel.service.FollowLabelService;
+import com.movision.mybatis.footRank.entity.FootRank;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.*;
 import com.movision.mybatis.postLabel.service.PostLabelService;
@@ -382,7 +383,9 @@ public class LabelFacade {
     /**
      * 获取足迹地图中国内的地理标签
      */
-    public List<GeographicLabel> getfootmap(String userid) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public Map<String, Object> getfootmap(String userid) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+
+        Map<String, Object> map = new HashMap<>();
 
         //首先查询当前用户发的所有帖子中包含的地理标签列表
         List<GeographicLabel> allGeographicLabelList = postLabelService.getfootmap(Integer.parseInt(userid));
@@ -432,6 +435,19 @@ public class LabelFacade {
             }
             allGeographicLabelList.set(i, GLvo);
         }
-        return allGeographicLabelList;
+        map.put("allGeographicLabelList", allGeographicLabelList);
+        //增加足迹点个数
+        map.put("footsum", allGeographicLabelList.size());
+        //查询足迹排名
+        List<FootRank> footRankList = postLabelService.queryFootMapRank(Integer.parseInt(userid));
+        int rank = 0;
+        for (int i=0; i<footRankList.size(); i++){
+            rank++;
+            if (footRankList.get(i).getUserid() == Integer.parseInt(userid)){
+                continue;//跳出剩余所有循环
+            }
+        }
+        map.put("rank", rank);
+        return map;
     }
 }

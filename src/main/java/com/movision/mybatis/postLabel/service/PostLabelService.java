@@ -2,6 +2,8 @@ package com.movision.mybatis.postLabel.service;
 
 import com.movision.mybatis.circle.entity.CircleCount;
 import com.movision.mybatis.circle.entity.CircleVo;
+import com.movision.mybatis.footRank.entity.FootRank;
+import com.movision.mybatis.footRank.mapper.FootRankMapper;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.*;
 import com.movision.mybatis.postLabel.mapper.PostLabelMapper;
@@ -28,6 +30,9 @@ public class PostLabelService {
     private static Logger log = LoggerFactory.getLogger(PostLabelService.class);
     @Autowired
     private PostLabelMapper postLabelMapper;
+
+    @Autowired
+    private FootRankMapper footRankMapper;
 
     public List<PostLabelVo> getMineFollowLabel(Map<String, Object> parammap, Paging<PostLabelVo> pager){
         try {
@@ -424,6 +429,16 @@ public class PostLabelService {
             return postLabelMapper.getfootmap(userid);
         }catch (Exception e){
             log.error("查询该作者发布的所有帖子中包含的地理标签列表失败");
+            throw e;
+        }
+    }
+
+    public List<FootRank> queryFootMapRank(int userid){
+        try {
+            log.info("查询当前用户足迹点数目排名");
+            return footRankMapper.queryFootMapRank(userid);
+        }catch (Exception e){
+            log.error("查询当前用户足迹点数目排名失败", e);
             throw e;
         }
     }
