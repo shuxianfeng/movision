@@ -740,7 +740,7 @@ public class VideoUploadUtil {
                 url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
             } else {//没过期
                 log.info("token没过期");
-                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + redisClient.get("acctokens") + "&openid=" + openid + "&lang=zh_CN";
+                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + "6PGBNOtIXpoc84SR5BAc3y7mSz2qSU8dQSbNIkwoEK9GOS59jGts2L4RMgtbEv0vCTbeO8-kYWl3S8Zvp7Ar64B71_TUe-Ce_xwyysr-pDaZXSyZ_-J3ogRe6Bx0ocCJLIUiAFAXUG" + "&openid=" + openid + "&lang=zh_CN";
             }
         } else {//没有缓存
             String acc = getaccesstoken();
