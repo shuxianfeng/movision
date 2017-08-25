@@ -158,6 +158,24 @@ public class AppVideoController {
 
 
     /**
+     * 获取用户信息H5
+     *
+     * @param
+     * @return
+     */
+    @ApiOperation(value = " 获取用户信息H5", notes = " 获取用户信息H5", response = Response.class)
+    @RequestMapping(value = "getUserInformationH5", method = RequestMethod.POST)
+    public Response getUserInformationH5(@ApiParam("openid") @RequestParam String openid) {
+        Response response = new Response();
+        Map result = videoUploadUtil.getUserInformation(openid);
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+            response.setData(result);
+        }
+        return response;
+    }
+
+    /**
      * 点击抽奖
      *
      * @param

@@ -701,6 +701,63 @@ public class VideoUploadUtil {
         return ticket;
     }
 
+
+    /**
+     * 获取用户信息
+     *
+     * @param
+     * @param openid
+     * @return
+     */
+    public Map getUserInformationH5(String openid) {
+        BufferedReader in = null;
+        String url = "";
+        boolean flag = redisClient.exists("acctokens");
+        if (flag) {//如果有缓存
+            Date date = (Date) redisClient.get("acctokendata");
+            String dateq = null;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                dateq = sdf.format(date);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //Date date1 = new Date(date);
+            log.info("缓存token日期-------------------" + dateq);
+            //Date date1 = new Date(date);
+            if ((new Date().getTime() - date.getTime()) >= (7000 * 1000)) {//过期
+                log.info("token过期");
+                String acc = getaccesstoken();
+                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
+            } else {//没过期
+                log.info("token没过期");
+                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + redisClient.get("acctokens") + "&openid=" + openid + "&lang=zh_CN";
+            }
+        } else {//没有缓存
+            String acc = getaccesstoken();
+            url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
+        }
+        String result = GetHttp(url);
+        Map map = new HashMap();
+        net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
+        String subscribe = jsonObject.get("subscribe").toString();
+        String nickname = jsonObject.get("nickname").toString();
+        String sex = jsonObject.get("sex").toString();
+        long subscribe_time = Long.valueOf(jsonObject.get("subscribe_time").toString());
+        String headimgurl = jsonObject.get("headimgurl").toString();
+        String openids = jsonObject.get("openid").toString();
+        String city = jsonObject.get("city").toString();
+        redisClient.set("openids", openids);
+        map.put("subscribe", subscribe);
+        map.put("nickname", nickname);
+        map.put("subscribe_time", subscribe_time);
+        map.put("headimgurl", headimgurl);
+        map.put("openids", openids);
+        map.put("city", city);
+        map.put("sex", sex);
+        return map;
+    }
+
     public List findAllList(Paging<WeixinList> paging) {
         return weixinListService.findAllList(paging);
     }
