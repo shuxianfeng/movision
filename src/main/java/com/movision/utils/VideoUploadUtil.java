@@ -393,7 +393,8 @@ public class VideoUploadUtil {
         String acctoken = jsonObject.get("access_token").toString();
         String expires_in = jsonObject.get("expires_in").toString();
         log.info("assssssssss" + acctoken);
-        redisClient.set("Nacctokens", acctoken);
+        redisClient.remove("acctokens");
+        redisClient.set("acctokens", acctoken);
         redisClient.set("expires_in", expires_in);
         redisClient.set("acctokendata", new Date());
         return acctoken;
@@ -710,25 +711,17 @@ public class VideoUploadUtil {
     public Map getUserInformationH5(String openid) {
         BufferedReader in = null;
         String url = "";
-        boolean flag = redisClient.exists("Nacctokens");
-        log.info("+sssssssssssssssssssssss" + redisClient.get("Nacctokens").toString());
+        boolean flag = redisClient.exists("acctokens");
+        log.info("+sssssssssssssssssssssss" + redisClient.get("acctokens").toString());
         if (flag) {//如果有缓存
             Date date = (Date) redisClient.get("acctokendata");
             String dateq = null;
-            String dateqs = null;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 dateq = sdf.format(date);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            try {
-                dateqs = sdfs.format(new Date());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            log.info(dateqs);
             //Date date1 = new Date(date);
             log.info("缓存token日期-------------------" + dateq);
             //Date date1 = new Date(date);
