@@ -60,10 +60,9 @@ public class VideoUploadUtil {
     @Autowired
     private RedisClient redisClient;
 
-    @Autowired
+    /** @Autowired
     private WeixinGuangzhuService weixinGuangzhuService;
-    @Autowired
-    private WeixinListService weixinListService;
+    @Autowired private WeixinListService weixinListService;*/
     public String videoUpload(String fileName, String title, String description, String coverimg, String tatges) {
 
         //fileName为上传文件所在的绝对路径(必须包含扩展名)
@@ -528,7 +527,7 @@ public class VideoUploadUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        int many = 0;
+        /** int many = 0;
         if (Integer.parseInt(subscribe) == 1) {
             //查询关注表中有没有记录 只加一次
             int count = weixinGuangzhuService.selectCount(openids);
@@ -551,7 +550,7 @@ public class VideoUploadUtil {
             }
         }
         //查询用户抽奖次数
-        many = weixinGuangzhuService.overplusMany(openid);
+         many = weixinGuangzhuService.overplusMany(openid);*/
         redisClient.set("openids", openids);
         map.put("subscribe", subscribe);
         map.put("nickname", nickname);
@@ -560,7 +559,7 @@ public class VideoUploadUtil {
         map.put("openids", openids);
         map.put("city", city);
         map.put("sex", sex);
-        map.put("many", many);
+        //map.put("many", many);
         return map;
 
     }
@@ -573,7 +572,7 @@ public class VideoUploadUtil {
      * @param
      * @return
      */
-    public Map choujiang(int type) {
+    /** public Map choujiang(int type) {
         Map map = new HashMap();
         int lessCount = 0;
         int overplus = 0;
@@ -602,7 +601,7 @@ public class VideoUploadUtil {
             map.put("overplus", overplus);
         }
         return map;
-    }
+     }*/
 
 
     /**
@@ -758,9 +757,9 @@ public class VideoUploadUtil {
         return map;
     }
 
-    public List findAllList(Paging<WeixinList> paging) {
+    /**public List findAllList(Paging<WeixinList> paging) {
         return weixinListService.findAllList(paging);
-    }
+     }*/
 
     public static void main(String[] args) {
         /**DefaultAcsClient aliyunClient;
