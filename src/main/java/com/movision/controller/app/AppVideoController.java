@@ -181,7 +181,7 @@ public class AppVideoController {
      * @param
      * @return
      */
-    @ApiOperation(value = " 点击抽奖", notes = " 点击抽奖", response = Response.class)
+    /**@ApiOperation(value = " 点击抽奖", notes = " 点击抽奖", response = Response.class)
     @RequestMapping(value = "choujiang", method = RequestMethod.POST)
     public Response choujiang(@ApiParam("type") @RequestParam int type) {
         Response response = new Response();
@@ -191,7 +191,7 @@ public class AppVideoController {
             response.setData(result);
         }
         return response;
-    }
+    }*/
 
     /**
      * 获取fuflshtoken
@@ -235,7 +235,7 @@ public class AppVideoController {
      * @param
      * @return
      */
-    @ApiOperation(value = " 查询获奖列表", notes = " 查询获奖列表", response = Response.class)
+    /** @ApiOperation(value = " 查询获奖列表", notes = " 查询获奖列表", response = Response.class)
     @RequestMapping(value = "findAllList", method = RequestMethod.POST)
     public Response findAllList(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                 @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
@@ -248,7 +248,7 @@ public class AppVideoController {
         pager.result(result);
         response.setData(pager);
         return response;
-    }
+                                }*/
 
     /**
      * 获取getSignature
