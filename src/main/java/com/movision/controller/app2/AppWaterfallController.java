@@ -512,7 +512,7 @@ public class AppWaterfallController {
     public Response asss(@ApiParam(value = "帖子id") @RequestParam int postid,
                          @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                          @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
-                         @ApiParam(value = "用户") @RequestParam String userid
+                         @ApiParam(value = "用户") @RequestParam(required = false) String userid
     ) {
         Response response = new Response();
         Paging<CommentVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
