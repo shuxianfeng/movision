@@ -392,6 +392,7 @@ public class VideoUploadUtil {
         net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
         String acctoken = jsonObject.get("access_token").toString();
         String expires_in = jsonObject.get("expires_in").toString();
+        log.info("assssssssss" + acctoken);
         redisClient.set("acctokens", acctoken);
         redisClient.set("expires_in", expires_in);
         redisClient.set("acctokendata", new Date());
