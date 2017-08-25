@@ -551,11 +551,18 @@ public class UserFacade {
         //1 展示用户信息
         UserVo user = wrapPersonHomepageTopPart(userid);
         //2 查询isFollow
-       /* Map<String, Object> paramap = new HashMap<>();
-        paramap.put("userid", ShiroUtil.getAppUserID()); //关注动作的主体
-        paramap.put("id", userid);  //被关注的id
-        int sum = userService.queryIsFollowAuthor(paramap);*/
-        user.setIsfollow(0);    //始终保持【关注】按钮显示，即未登录状态
+        Map<String, Object> paramap = new HashMap<>();
+        int curLoginId = ShiroUtil.getAppUserID();
+        if (curLoginId == 0) {
+            //未登录
+            user.setIsfollow(0);    //始终保持【关注】按钮显示，即未登录状态
+        } else {
+            //已登录
+            paramap.put("userid", curLoginId); //关注动作的主体
+            paramap.put("id", userid);  //被关注的id
+            int sum = userService.queryIsFollowAuthor(paramap);
+            user.setIsfollow(sum);
+        }
         return user;
     }
 
