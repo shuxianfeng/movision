@@ -374,16 +374,16 @@
         SELECT COUNT(1) from  yw_follow_circle WHERE userid=#{userid,jdbcType=INTEGER} AND circleid=#{circleid,jdbcType=INTEGER}
     </select>
     <select id="findAllLabelHotPost" parameterType="java.util.Map" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT * FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        SELECT p.* FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
         WHERE r.labelid=#{labelid,jdbcType=INTEGER} AND p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 ORDER  BY p.heat_value DESC
      </select>
     <select id="findAllLabelNewPost" parameterType="java.util.Map" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT * FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        SELECT p.* FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
         WHERE r.labelid=#{labelid,jdbcType=INTEGER} AND p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 ORDER  BY p.intime DESC
     </select>
     <select id="findAllLabelIsessenPost" parameterType="java.util.Map"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT * FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        SELECT p.* FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
         WHERE r.labelid=#{labelid,jdbcType=INTEGER} AND p.circleid=#{circleid,jdbcType=INTEGER} AND p.isessence=1 AND
         p.isdel=0 ORDER BY p.intime DESC
     </select>
