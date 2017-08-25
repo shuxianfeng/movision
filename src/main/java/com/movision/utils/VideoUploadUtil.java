@@ -714,12 +714,20 @@ public class VideoUploadUtil {
         if (flag) {//如果有缓存
             Date date = (Date) redisClient.get("acctokendata");
             String dateq = null;
+            String dateqs = null;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 dateq = sdf.format(date);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                dateqs = sdfs.format(new Date());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            log.info(dateqs);
             //Date date1 = new Date(date);
             log.info("缓存token日期-------------------" + dateq);
             //Date date1 = new Date(date);
