@@ -332,8 +332,10 @@ public class VideoUploadUtil {
             data.put("refresh_token", jsonObject.get("refresh_token").toString());
             String acctoken = jsonObject.get("access_token").toString();
             String refresh_token = jsonObject.get("refresh_token").toString();
+            String openid = jsonObject.get("openid").toString();
             redisClient.set("acctoken", acctoken);
             redisClient.set("refresh_token", refresh_token);
+            redisClient.set("openid", openid);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -705,10 +707,10 @@ public class VideoUploadUtil {
      * 获取用户信息
      *
      * @param
-     * @param openid
+     * @param
      * @return
      */
-    public Map getUserInformationH5(String openid) {
+    public Map getUserInformationH5() {
         BufferedReader in = null;
         String url = "";
         boolean flag = redisClient.exists("acctokens");
@@ -727,14 +729,14 @@ public class VideoUploadUtil {
             if ((new Date().getTime() - date.getTime()) >= (7000 * 1000)) {//过期
                 log.info("token过期");
                 String acc = getaccesstoken();
-                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
+                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + redisClient.get("openid") + "&lang=zh_CN";
             } else {//没过期
                 log.info("token没过期");
-                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + redisClient.get("acctokens") + "&openid=" + openid + "&lang=zh_CN";
+                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + redisClient.get("acctokens") + "&openid=" + redisClient.get("openid") + "&lang=zh_CN";
             }
         } else {//没有缓存
             String acc = getaccesstoken();
-            url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
+            url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + redisClient.get("openid") + "&lang=zh_CN";
         }
         String result = GetHttp(url);
         Map map = new HashMap();
