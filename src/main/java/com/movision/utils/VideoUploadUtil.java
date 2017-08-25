@@ -318,15 +318,9 @@ public class VideoUploadUtil {
     public Map<String, String> getUserInfoAccessToken(String code) {
         Map<String, String> data = new HashMap();
         try {
-            String url = String.format("https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code",
-                    APPID, APPSECRET, code);
-            org.apache.http.impl.client.DefaultHttpClient httpClient = new org.apache.http.impl.client.DefaultHttpClient();
-            HttpGet httpGet = new HttpGet(url);
-            HttpResponse httpResponse = httpClient.execute(httpGet);
-            HttpEntity httpEntity = httpResponse.getEntity();
-            String tokens = EntityUtils.toString(httpEntity, "utf-8");
-            System.out.print(tokens);
-            JSONObject jsonObject = new JSONObject(tokens);
+            String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + APPID + "&secret=" + APPSECRET + "&code=" + code + "&grant_type=authorization_code";
+            String result = GetHttp(url);
+            net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
             data.put("openid", jsonObject.get("openid").toString());
             data.put("access_token", jsonObject.get("access_token").toString());
             data.put("refresh_token", jsonObject.get("refresh_token").toString());
@@ -336,8 +330,10 @@ public class VideoUploadUtil {
             redisClient.set("acctoken", acctoken);
             redisClient.set("refresh_token", refresh_token);
             redisClient.set("openid", openid);
+            data.put("code", "200");
         } catch (Exception ex) {
             ex.printStackTrace();
+            data.put("code", "300");
         }
         return data;
     }

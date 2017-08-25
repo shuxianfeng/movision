@@ -279,9 +279,11 @@ public class AppVideoController {
     public Response getUserInfoAccessToken(@ApiParam("code") @RequestParam String code) {
         Response response = new Response();
         Map result = videoUploadUtil.getUserInfoAccessToken(code);
-        if (response.getCode() == 200) {
+        if (result.get("code").toString() == "200") {
             response.setMessage("获取成功");
             response.setData(result);
+        } else if (result.get("code").toString() == "300") {
+            response.setCode(300);
         }
         return response;
     }
