@@ -128,7 +128,7 @@ public class WechatH5Facade extends JPanel {
             g.setColor(Color.BLACK);
 
             //最后一个参数用来设置字体的大小
-            Font f = new Font("宋体", Font.PLAIN, 15);
+            Font f = new Font("宋体", Font.PLAIN, 20);
             Color color = new Color(112, 104, 115);
             Color[] mycolor = {color, Color.LIGHT_GRAY};
             // g.setColor(mycolor);
@@ -143,7 +143,7 @@ public class WechatH5Facade extends JPanel {
                 g.rotate(0 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
                 g.drawString(manname, 130, 625);
-                g.drawString(womanname, 130, 760);
+                g.drawString(womanname, 130, 765);
                 g.drawString(manname, 130, 270);
                 g.drawString(msex, 410, 625);
                 g.drawString(wsex, 410, 765);
