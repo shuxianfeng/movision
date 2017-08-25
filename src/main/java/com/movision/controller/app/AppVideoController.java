@@ -167,7 +167,7 @@ public class AppVideoController {
     @RequestMapping(value = "getUserInformationH5", method = RequestMethod.POST)
     public Response getUserInformationH5(@ApiParam("openid") @RequestParam String openid) {
         Response response = new Response();
-        Map result = videoUploadUtil.getUserInformation(openid);
+        Map result = videoUploadUtil.getUserInformationH5(openid);
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
             response.setData(result);
