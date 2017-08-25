@@ -706,7 +706,7 @@ public class VideoUploadUtil {
      * @param
      * @return
      */
-    public Map getUserInformationH5() {
+    public Map getUserInformationH5(String openid) {
         BufferedReader in = null;
         String url = "";
         boolean flag = redisClient.exists("acctokens");
@@ -725,14 +725,14 @@ public class VideoUploadUtil {
             if ((new Date().getTime() - date.getTime()) >= (7000 * 1000)) {//过期
                 log.info("token过期");
                 String acc = getaccesstoken();
-                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + redisClient.get("openid") + "&lang=zh_CN";
+                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
             } else {//没过期
                 log.info("token没过期");
-                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + redisClient.get("acctokens") + "&openid=" + redisClient.get("openid") + "&lang=zh_CN";
+                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + redisClient.get("acctokens") + "&openid=" + openid + "&lang=zh_CN";
             }
         } else {//没有缓存
             String acc = getaccesstoken();
-            url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + redisClient.get("openid") + "&lang=zh_CN";
+            url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
         }
         String result = GetHttp(url);
         Map map = new HashMap();
