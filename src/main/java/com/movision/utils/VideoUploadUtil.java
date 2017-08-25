@@ -732,6 +732,8 @@ public class VideoUploadUtil {
             log.info("缓存token日期-------------------" + dateq);
             //Date date1 = new Date(date);
             if ((new Date().getTime() - date.getTime()) >= (7000 * 1000)) {//过期
+                log.info(new Date().getTime() + "sdddddddddd");
+                log.info(date.getTime() + "sssssssssssssssssssssssssssssss");
                 log.info("token过期");
                 String acc = getaccesstoken();
                 url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
