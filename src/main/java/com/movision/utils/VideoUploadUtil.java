@@ -710,6 +710,7 @@ public class VideoUploadUtil {
         BufferedReader in = null;
         String url = "";
         boolean flag = redisClient.exists("acctokens");
+        log.info("+sssssssssssssssssssssss" + redisClient.get("acctokens").toString());
         if (flag) {//如果有缓存
             Date date = (Date) redisClient.get("acctokendata");
             String dateq = null;
@@ -734,6 +735,7 @@ public class VideoUploadUtil {
             String acc = getaccesstoken();
             url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
         }
+
         String result = GetHttp(url);
         Map map = new HashMap();
         net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
