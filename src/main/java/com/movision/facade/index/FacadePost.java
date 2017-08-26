@@ -206,7 +206,7 @@ public class FacadePost {
         //-----将转换完的数据封装返回
         vo.setPostcontent(jsonArray.toString());
         //评论
-        List<CommentVo> co = facadeComments.queryPostNewComment(Integer.parseInt(postid));
+        List<CommentVo> co = facadeComments.queryPostNewComment(parammap);
         if (co != null) {
             vo.setCommentVos(co);
         }

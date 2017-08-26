@@ -361,8 +361,8 @@ public class FacadeComments {
         return commentVoList;
     }
 
-    public List queryPostNewComment(int postid) {
-        List<CommentVo> commentVos = commentService.queryThreeComment(postid);
+    public List queryPostNewComment(Map<String, Object> parammap) {
+        List<CommentVo> commentVos = commentService.queryThreeComment(parammap);
         if (commentVos != null) {
             for (int i = 0; i < commentVos.size(); i++) {
                 commentVos.get(i).setCommentVos(pCommentVoList(commentVos.get(i).getId()));

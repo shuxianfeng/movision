@@ -100,7 +100,7 @@ public interface CommentMapper {
 
     List<CommentVo> queryTwoComment(int pid);
 
-    List<CommentVo> queryThreeComment(int postid);
+    List<CommentVo> queryThreeComment(Map<String, Object> parammap);
 
     User queryUserInfor(int pid);
 

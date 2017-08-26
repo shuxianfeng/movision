@@ -47,7 +47,7 @@ public class CommentVo implements Serializable {
 
     private Integer status;//审核状态：0待审核 1审核通过 2审核不通过（iscontribute为1时不为空）
 
-    private Integer isZan;//该用户是否已赞该帖子/活动 0 否 1 是
+    private Integer isZan;//该用户是否已赞该评论 0 否 1 是
 
     private List<CommentVo> soncomment;
 
