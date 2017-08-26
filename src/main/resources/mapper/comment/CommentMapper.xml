@@ -536,8 +536,7 @@
   </select>
 
   <!--增加一个isZan的字段输出，用于判断当前登录的用户是否点赞过这三条热门评论-->
-  <select id="queryThreeComment" parameterType="java.lang.Integer"
-          resultType="com.movision.mybatis.comment.entity.CommentVo">
+  <select id="queryThreeComment" parameterType="java.lang.Integer" resultType="com.movision.mybatis.comment.entity.CommentVo">
       SELECT c.*,u.photo,u.nickname,
         <if test="userid != null">
           (SELECT count(*) FROM yw_post_comment_zan_record WHERE userid = #{userid,jdbcType=INTEGER} AND commentid =
