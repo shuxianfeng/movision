@@ -521,17 +521,21 @@
   <update id="deleteComment" parameterType="java.lang.Integer">
       UPDATE yw_post_comment SET isdel=1 WHERE id=#{id,jdbcType=INTEGER}
   </update>
+
   <select id="findAllOneComment" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.*,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE
     c.postid=#{postid,jdbcType=INTEGER} AND c.pid IS NULL AND c.isdel=0 ORDER BY c.intime DESC
   </select>
+
   <select id="queryTwoComment" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.*,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE
     c.pid=#{pid,jdbcType=INTEGER} AND c.isdel=0 ORDER BY
     c.intime DESC
   </select>
+
+  <!--增加一个isZan的字段输出，用于判断当前登录的用户是否点赞过这三条热门评论-->
   <select id="queryThreeComment" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.comment.entity.CommentVo">
       SELECT c.*,u.photo,u.nickname,
@@ -546,6 +550,7 @@
       c.postid=#{postid,jdbcType=INTEGER} AND c.pid IS NULL ORDER BY
       c.zansum DESC LIMIT 3
   </select>
+
   <select id="repliesNumber" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     SELECT COUNT(1) FROM yw_post_comment WHERE pid=#{id,jdbcType=INTEGER}
   </select>
