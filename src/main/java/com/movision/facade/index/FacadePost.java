@@ -285,10 +285,13 @@ public class FacadePost {
         List<PostVo> userPost = postService.findUserPost(postuserid);
         //这个帖子的标签id
         List<Integer> labids = postService.findPostByLabelId(Integer.parseInt(postid));
+        List<PostVo> labpost = null;
         //根据id查帖子
-        List<PostVo> labpost = postService.findUserByLabelPost(labids);
+        if (labids.size() != 0) {
+            labpost = postService.findUserByLabelPost(labids);
+            ps.addAll(labpost);
+        }
         ps.addAll(userPost);
-        ps.addAll(labpost);
         Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(ps);
         ps = new ArrayList<PostVo>(linkedHashSet);
         ComparatorChain chain = new ComparatorChain();
