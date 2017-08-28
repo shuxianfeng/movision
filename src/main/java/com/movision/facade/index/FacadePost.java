@@ -297,7 +297,7 @@ public class FacadePost {
         ComparatorChain chain = new ComparatorChain();
         chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
         Collections.sort(ps, chain);
-        List<PostVo> finpost = NotLoginretuenList(ps, paging, ShiroUtil.getAppUserID());
+        List<PostVo> finpost = NotLoginretuenListPo(ps, paging, ShiroUtil.getAppUserID());
         return finpost;
 
     }
@@ -1194,7 +1194,7 @@ public class FacadePost {
         if (userid == null) {
             //未登录
             list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
-            list = NotLoginretuenList(list, paging, Integer.parseInt(userid));
+            list = NotLoginretuenList(list, paging);
             return list;
         } else {
             //已登录
@@ -1299,7 +1299,7 @@ public class FacadePost {
          }*/
         if (userid == null) {//未登录
             list = postService.findAllCityPost(citycode);//根据热度值排序查询帖子
-            list = NotLoginretuenList(list, paging, Integer.parseInt(userid));
+            list = NotLoginretuenList(list, paging);
             return list;
         } else {//已登录
             //根据地区查询帖子
@@ -1337,7 +1337,7 @@ public class FacadePost {
         if (userid == null) {
             //这个圈子的帖子
             list = postService.findAllPostCrile(circleid);//根据热度值排序查询帖子
-            list = NotLoginretuenList(list, paging, Integer.parseInt(userid));
+            list = NotLoginretuenList(list, paging);
             return list;
         } else {
             listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//用户有没有看过
@@ -1379,7 +1379,7 @@ public class FacadePost {
         List<Integer> followLabel = postLabelService.labelId(Integer.parseInt(userid));//用户关注标签
         if (followCricle.size() == 0 && followUsers.size() == 0 && followLabel.size() == 0) {
             list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
-            list = NotLoginretuenList(list, paging, Integer.parseInt(userid));
+            list = NotLoginretuenList(list, paging);
             return list;
         } else {
             //根据圈子查询所有帖子
@@ -1428,7 +1428,7 @@ public class FacadePost {
         List<PostVo> posts = new ArrayList<>();
         if (userid == null) {
             list = postService.findAllLabelAllPost(labelid);//根据热度值排序查询帖子
-            list = NotLoginretuenList(list, paging, Integer.parseInt(userid));
+            list = NotLoginretuenList(list, paging);
             return list;
         } else {
             listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//用户有没有看过
@@ -1483,7 +1483,28 @@ public class FacadePost {
      * @param
      * @return
      */
-    public List NotLoginretuenList(List<PostVo> lists, ServicePaging<PostVo> paging, int userid) {
+    public List NotLoginretuenList(List<PostVo> lists, ServicePaging<PostVo> paging) {
+        List<PostVo> list = null;
+        if (lists != null) {
+            paging.setTotal(lists.size());
+            list = pageFacade.getPageList(lists, paging.getCurPage(), paging.getPageSize());
+            findUser(list);
+            findPostLabel(list);
+            findHotComment(list);
+            countView(list);
+            findAllCircleName(list);
+        }
+        return list;
+    }
+
+    /**
+     * 返回数据
+     *
+     * @param lists
+     * @param
+     * @return
+     */
+    public List NotLoginretuenListPo(List<PostVo> lists, ServicePaging<PostVo> paging, int userid) {
         List<PostVo> list = null;
         if (lists != null) {
             paging.setTotal(lists.size());
@@ -1497,8 +1518,6 @@ public class FacadePost {
         }
         return list;
     }
-
-
 
     /**
      * 查询用户信息
