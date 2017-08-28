@@ -131,4 +131,6 @@ public interface CircleMapper {
     List<Circle> queryCircleByNameInSearch(String name);
 
     List<Circle> findAllCircleByNameInSearch(Map<String, Object> map, RowBounds rowBounds);
+
+    int queryCircleid(Map map);
 }

@@ -141,12 +141,17 @@ public class CircleAppFacade {
         Map map = new HashMap();
         String[] str = circleid.split(",");
         for (int i = 0; i < str.length; i++) {
+            //查看用户关注的圈子
             map.put("userid", userid);
             map.put("circleid", Integer.parseInt(str[i]));
-            map.put("intime", new Date());
-            circleService.followCircle(map);
+            int list = circleService.queryCircleid(map);
+            if (list == 0) {
+                map.put("userid", userid);
+                map.put("circleid", Integer.parseInt(str[i]));
+                map.put("intime", new Date());
+                circleService.followCircle(map);
+            }
         }
-
         return 1;
     }
 

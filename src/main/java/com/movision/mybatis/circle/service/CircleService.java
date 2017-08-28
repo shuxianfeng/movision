@@ -772,4 +772,17 @@ public class CircleService {
         }
     }
 
+    public int queryCircleid(Map map) {
+        try {
+            log.info("用户有没有关注过圈子");
+            return circleMapper.queryCircleid(map);
+        } catch (Exception e) {
+            log.error("用户有没有关注过圈子失败", e);
+            throw e;
+        }
+    }
+
+
+
+
 }

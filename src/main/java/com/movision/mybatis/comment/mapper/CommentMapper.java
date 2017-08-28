@@ -96,6 +96,8 @@ public interface CommentMapper {
 
     int deleteComment(int id);
 
+    int lessPostComment(int id);
+
     List<CommentVo> findAllOneComment(int postid, RowBounds rowBounds);
 
     List<CommentVo> queryTwoComment(int pid);

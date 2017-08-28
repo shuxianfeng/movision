@@ -501,6 +501,15 @@ public class CommentService {
         }
     }
 
+    public int lessPostComment(int id) {
+        try {
+            log.info("帖子评论-1");
+            return commentMapper.lessPostComment(id);
+        } catch (Exception e) {
+            log.error("帖子评论失敗", e);
+            throw e;
+        }
+    }
     public List<CommentVo> queryOneComment(int postid, Paging<CommentVo> paging) {
         try {
             log.info("一级评论");

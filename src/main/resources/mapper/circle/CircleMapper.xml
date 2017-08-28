@@ -1120,4 +1120,7 @@
         WHERE STATUS = 1 AND isdel = 0
         AND NAME LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
     </select>
+    <select id="queryCircleid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_follow_circle WHERE circleid=#{circleid,jdbcType=INTEGER} AND userid=#{userid,jdbcType=INTEGER}
+    </select>
 </mapper>
