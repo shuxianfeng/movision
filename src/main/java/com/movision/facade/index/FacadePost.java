@@ -297,7 +297,7 @@ public class FacadePost {
         ComparatorChain chain = new ComparatorChain();
         chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
         Collections.sort(ps, chain);
-        List<PostVo> finpost = NotLoginretuenList(ps, paging);
+        List<PostVo> finpost = NotLoginretuenList(ps, paging, ShiroUtil.getAppUserID());
         return finpost;
 
     }
@@ -1194,7 +1194,7 @@ public class FacadePost {
         if (userid == null) {
             //未登录
             list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
-            list = NotLoginretuenList(list, paging);
+            list = NotLoginretuenList(list, paging, Integer.parseInt(userid));
             return list;
         } else {
             //已登录
@@ -1299,7 +1299,7 @@ public class FacadePost {
          }*/
         if (userid == null) {//未登录
             list = postService.findAllCityPost(citycode);//根据热度值排序查询帖子
-            list = NotLoginretuenList(list, paging);
+            list = NotLoginretuenList(list, paging, Integer.parseInt(userid));
             return list;
         } else {//已登录
             //根据地区查询帖子
@@ -1337,7 +1337,7 @@ public class FacadePost {
         if (userid == null) {
             //这个圈子的帖子
             list = postService.findAllPostCrile(circleid);//根据热度值排序查询帖子
-            list = NotLoginretuenList(list, paging);
+            list = NotLoginretuenList(list, paging, Integer.parseInt(userid));
             return list;
         } else {
             listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//用户有没有看过
@@ -1379,7 +1379,7 @@ public class FacadePost {
         List<Integer> followLabel = postLabelService.labelId(Integer.parseInt(userid));//用户关注标签
         if (followCricle.size() == 0 && followUsers.size() == 0 && followLabel.size() == 0) {
             list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
-            list = NotLoginretuenList(list, paging);
+            list = NotLoginretuenList(list, paging, Integer.parseInt(userid));
             return list;
         } else {
             //根据圈子查询所有帖子
@@ -1428,7 +1428,7 @@ public class FacadePost {
         List<PostVo> posts = new ArrayList<>();
         if (userid == null) {
             list = postService.findAllLabelAllPost(labelid);//根据热度值排序查询帖子
-            list = NotLoginretuenList(list, paging);
+            list = NotLoginretuenList(list, paging, Integer.parseInt(userid));
             return list;
         } else {
             listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//用户有没有看过
@@ -1471,6 +1471,7 @@ public class FacadePost {
             countView(list);
             findAllCircleName(list);
             insertmongo(list, userid);
+            zanIsPost(Integer.parseInt(userid), list);
         }
         return list;
     }
@@ -1482,7 +1483,7 @@ public class FacadePost {
      * @param
      * @return
      */
-    public List NotLoginretuenList(List<PostVo> lists, ServicePaging<PostVo> paging) {
+    public List NotLoginretuenList(List<PostVo> lists, ServicePaging<PostVo> paging, int userid) {
         List<PostVo> list = null;
         if (lists != null) {
             paging.setTotal(lists.size());
@@ -1492,6 +1493,7 @@ public class FacadePost {
             findHotComment(list);
             countView(list);
             findAllCircleName(list);
+            zanIsPost(userid, list);
         }
         return list;
     }
@@ -1585,6 +1587,32 @@ public class FacadePost {
             label.setName(list.get(i).getCirclename());
             postLabels.add(label);
         }
+    }
+
+
+    /**
+     * 该用户有没有点赞该帖子
+     *
+     * @param userid
+     * @param list
+     * @return
+     */
+    public List zanIsPost(int userid, List<PostVo> list) {
+        //根据userid查询该用户有没有点赞
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                Map map = new HashMap();
+                map.put("userid", userid);
+                map.put("postid", list.get(i).getId());
+                int iszan = postService.zanIsPost(map);
+                if (iszan > 0) {
+                    list.get(i).setIsZan(1);
+                } else {
+                    list.get(i).setIsZan(0);
+                }
+            }
+        }
+        return list;
     }
 
     /**

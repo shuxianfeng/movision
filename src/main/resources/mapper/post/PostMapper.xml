@@ -2396,4 +2396,7 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
             parameterType="java.lang.Integer">
         SELECT * FROM yw_post p  WHERE p.isactive=1 AND id !=#{id,jdbcType=INTEGER} ORDER BY p.intime DESC
     </select>
+    <select id="zanIsPost" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post_zan_record WHERE userid=#{userid,jdbcType=INTEGER} AND postid=#{postid,jdbcType=INTEGER}
+    </select>
 </mapper>

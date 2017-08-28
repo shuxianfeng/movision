@@ -339,4 +339,6 @@ public interface PostMapper {
     Post selectTitleById(Integer id);
 
     List<PostVo> findAllActivePostD(int id, RowBounds rowBounds);
+
+    int zanIsPost(Map map);
 }

@@ -1941,4 +1941,16 @@ public class PostService {
         }
     }
 
+
+    public int zanIsPost(Map map) {
+        try {
+            log.info("该用户有没有赞");
+            return postMapper.zanIsPost(map);
+        } catch (Exception e) {
+            log.error("该用户有没有赞异常", e);
+            throw e;
+        }
+    }
+
+
 }
