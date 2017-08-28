@@ -481,15 +481,31 @@ public class UserService {
     /**
      * 查询所有用户列表
      *
-     * @param pager
+     * @param
      * @return
      */
-    public List<UserAll> queryAllUserList(Paging<UserAll> pager, Map map) {
+    public List<UserAll> queryAllUserList(Map map) {
         try {
             log.info("查询所有用户列表");
-            return userMapper.findAllqueryAllUserList(pager.getRowBounds(), map);
+            return userMapper.queryAllUserList(map);
         } catch (Exception e) {
             log.error("查询所有用户列表异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询所有用户数量
+     *
+     * @param map
+     * @return
+     */
+    public Integer queryAllTotal(Map map) {
+        try {
+            log.info("查询所有用户数量");
+            return userMapper.queryAllTotal(map);
+        } catch (Exception e) {
+            log.error("查询所有用户数量异常", e);
             throw e;
         }
     }

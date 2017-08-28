@@ -396,13 +396,15 @@ public class UserManageFacade {
     /**
      * 查询所有用户列表
      *
-     * @param pager
+     * @param
      * @return
      */
-    public List<UserAll> queryAllUserList(Paging<UserAll> pager, String nickname, String phone, String authentication, String vip, String seal,
-                                          String begintime, String endtime, String pointsSort, String postsumSort, String isessenceSort,
-                                          String fansSort, String conditionon, String conditiontwo, String price, String login, String pai) {
+    public Map queryAllUserList(String nickname, String phone, String authentication, String vip, String seal,
+                                String begintime, String endtime, String pointsSort, String postsumSort, String isessenceSort,
+                                String fansSort, String conditionon, String conditiontwo, String price, String login,
+                                String pai, String pageNo, String pageSize) {
         Map map = new HashedMap();
+        Map resa = new HashMap();
         Date beg = null;
         Date end = null;
         if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
@@ -458,7 +460,15 @@ public class UserManageFacade {
         if (StringUtil.isNotEmpty(pai)) {
             map.put("pai", pai);//排序方式
         }
-        List<UserAll> list = userService.queryAllUserList(pager, map);
+        if (StringUtil.isNotEmpty(pageNo)) {
+            map.put("pageNo", (Integer.parseInt(pageNo) - 1) * 10);
+        }
+        if (StringUtil.isNotEmpty(pageSize)) {
+            map.put("pageSize", Integer.parseInt(pageSize));
+        }
+        List<UserAll> list = userService.queryAllUserList(map);
+        //查询用户列表所有用户数量
+        Integer usum = userService.queryAllTotal(map);
         for (int j = 0; j < list.size(); j++) {
             if (list.get(j).getAuthstatus() == null) {
                 list.get(j).setAuthstatus(3);//如果当前用户没有实名认证 返回3作为提示
@@ -476,7 +486,9 @@ public class UserManageFacade {
                 list.get(j).setLogin(resault);
             }
         }
-        return list;
+        resa.put("rows", list);
+        resa.put("total", usum);
+        return resa;
     }
 
     /**

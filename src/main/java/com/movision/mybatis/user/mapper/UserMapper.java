@@ -88,7 +88,9 @@ public interface UserMapper {
 
     List<UserVo> findAllQueryUserExamineAndVerify(Map map, RowBounds rowBounds);
 
-    List<UserAll> findAllqueryAllUserList(RowBounds rowBounds, Map map);
+    List<UserAll> queryAllUserList(Map map);
+
+    Integer queryAllTotal(Map map);
 
     int deleteUserByid(Map map);
 
