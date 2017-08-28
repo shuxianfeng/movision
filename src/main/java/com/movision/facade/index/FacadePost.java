@@ -297,7 +297,7 @@ public class FacadePost {
         ComparatorChain chain = new ComparatorChain();
         chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
         Collections.sort(ps, chain);
-        List<PostVo> finpost = NotLoginretuenListPo(ps, paging, ShiroUtil.getAppUserID());
+        List<PostVo> finpost = NotLoginretuenList(ps, paging);
         return finpost;
 
     }
@@ -1493,28 +1493,6 @@ public class FacadePost {
             findHotComment(list);
             countView(list);
             findAllCircleName(list);
-        }
-        return list;
-    }
-
-    /**
-     * 返回数据
-     *
-     * @param lists
-     * @param
-     * @return
-     */
-    public List NotLoginretuenListPo(List<PostVo> lists, ServicePaging<PostVo> paging, int userid) {
-        List<PostVo> list = null;
-        if (lists != null) {
-            paging.setTotal(lists.size());
-            list = pageFacade.getPageList(lists, paging.getCurPage(), paging.getPageSize());
-            findUser(list);
-            findPostLabel(list);
-            findHotComment(list);
-            countView(list);
-            findAllCircleName(list);
-            zanIsPost(userid, list);
         }
         return list;
     }
