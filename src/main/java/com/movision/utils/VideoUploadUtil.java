@@ -327,6 +327,9 @@ public class VideoUploadUtil {
             String acctoken = jsonObject.get("access_token").toString();
             String refresh_token = jsonObject.get("refresh_token").toString();
             String openid = jsonObject.get("openid").toString();
+            redisClient.remove("acctoken");
+            redisClient.remove("refresh_token");
+            redisClient.remove("openid");
             redisClient.set("acctoken", acctoken);
             redisClient.set("refresh_token", refresh_token);
             redisClient.set("openid", openid);
@@ -392,6 +395,9 @@ public class VideoUploadUtil {
         net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
         String acctoken = jsonObject.get("access_token").toString();
         String expires_in = jsonObject.get("expires_in").toString();
+        redisClient.remove("acctokens");
+        redisClient.remove("expires_in");
+        redisClient.remove("acctokendata");
         redisClient.set("acctokens", acctoken);
         redisClient.set("expires_in", expires_in);
         redisClient.set("acctokendata", new Date());
@@ -692,6 +698,9 @@ public class VideoUploadUtil {
         net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
         String ticket = jsonObject.get("ticket").toString();
         String expires_in = jsonObject.get("expires_in").toString();
+        redisClient.remove("tickets");
+        redisClient.remove("expires_in");
+        redisClient.remove("ticketdate");
         redisClient.set("tickets", ticket);
         redisClient.set("expires_in", expires_in);
         redisClient.set("ticketdate", new Date());
