@@ -461,7 +461,7 @@ public class UserManageFacade {
             map.put("pai", pai);//排序方式
         }
         if (StringUtil.isNotEmpty(pageNo)) {
-            map.put("pageNo", (Integer.parseInt(pageNo) - 1) * 10);
+            map.put("pageNo", (Integer.parseInt(pageNo) - 1) * 12);
         }
         if (StringUtil.isNotEmpty(pageSize)) {
             map.put("pageSize", Integer.parseInt(pageSize));
