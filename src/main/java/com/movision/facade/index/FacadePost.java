@@ -179,7 +179,6 @@ public class FacadePost {
     private TestIntimeService testIntimeService;
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
-        CommentCount commentCounts = null;
         //通过userid、postid查询该用户有没有关注该圈子的权限
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("postid", Integer.parseInt(postid));
@@ -232,6 +231,7 @@ public class FacadePost {
                     vo.setUserid(user.getId());
                     vo.setNickname(user.getNickname());
                     vo.setPhone(user.getPhone());
+                    vo.setPhoto(user.getPhoto());
                     vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
                 }
             } else {
@@ -239,6 +239,7 @@ public class FacadePost {
                 if (user != null) {
                     vo.setUserid(user.getId());
                     vo.setNickname(user.getNickname());
+                    vo.setPhoto(user.getPhoto());
                     vo.setNickname((String) desensitizationUtil.desensitization(vo.getNickname()).get("str"));//昵称脱敏
                 }
             }
