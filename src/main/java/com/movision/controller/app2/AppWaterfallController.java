@@ -103,9 +103,9 @@ public class AppWaterfallController {
      */
     @ApiOperation(value = "用户刷新的历史记录列表", notes = "用户刷新的历史记录列表", response = Response.class)
     @RequestMapping(value = "userReflushHishtoryRecord", method = RequestMethod.POST)
-    public Response userReflushHishtoryRecord(@ApiParam(value = "用户id") @RequestParam String userid,
+    public Response userReflushHishtoryRecord(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
                                               @ApiParam(value = "1：推荐2：关注3：本地 4：圈子 5：标签") @RequestParam int type,
-                                              @ApiParam(value = "设备号") @RequestParam String device,
+                                              @ApiParam(value = "设备号") @RequestParam(required = false) String device,
                                               @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                               @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
