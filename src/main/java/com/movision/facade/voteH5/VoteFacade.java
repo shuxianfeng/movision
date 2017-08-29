@@ -3,8 +3,6 @@ package com.movision.facade.voteH5;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.activeH5.entity.ActiveH5;
 import com.movision.mybatis.activeH5.service.ActiveH5Service;
-import com.movision.mybatis.complainsrecords.entity.Complainsrecords;
-import com.movision.mybatis.complainsrecords.service.ComplainsrecordsService;
 import com.movision.mybatis.take.entity.Take;
 import com.movision.mybatis.take.entity.TakeVo;
 import com.movision.mybatis.take.service.TakeService;
@@ -25,8 +23,6 @@ import java.util.List;
 public class VoteFacade {
     @Autowired
     private ActiveH5Service activeH5Service;
-    @Autowired
-    private ComplainsrecordsService complainsrecordsService;
     @Autowired
     private TakeService takeService;
 
@@ -101,27 +97,6 @@ public class VoteFacade {
         return activeH5Service.findAllActive(paging);
     }
 
-    /**
-     * 插入投诉记录
-     *
-     * @param
-     * @return
-     */
-    public int insertSelectiveCom(String message, String name, String tsid) {
-        Complainsrecords complainsrecords = new Complainsrecords();
-        if (StringUtil.isNotEmpty(message)) {
-            complainsrecords.setMessage(message);
-        }
-        if (StringUtil.isNotEmpty(name)) {
-            complainsrecords.setName(name);
-        }
-        if (StringUtil.isNotEmpty(tsid)) {
-            complainsrecords.setTsid(Integer.parseInt(tsid));
-        }
-        complainsrecords.setIntime(new Date());
-        int result = complainsrecordsService.insertSelectiveCom(complainsrecords);
-        return result;
-    }
 
 
     /**

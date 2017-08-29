@@ -96,27 +96,6 @@ public class VoteController {
         return response;
     }
 
-    /**
-     * 插入投诉记录
-     *
-     * @param message
-     * @param name
-     * @param tsid
-     * @return
-     */
-    @ApiOperation(value = "插入投诉记录", notes = "插入投诉记录", response = Response.class)
-    @RequestMapping(value = "insertSelectiveCom", method = RequestMethod.POST)
-    public Response insertSelectiveCom(@ApiParam(value = "投诉内容") @RequestParam(required = false) String message,
-                                       @ApiParam(value = "投诉人") @RequestParam(required = false) String name,
-                                       @ApiParam(value = "投诉选择id") @RequestParam String tsid) {
-        Response response = new Response();
-        int result = voteFacade.insertSelectiveCom(message, name, tsid);
-        if (response.getCode() == 200) {
-            response.setMessage("返回成功");
-        }
-        response.setData(result);
-        return response;
-    }
 
     /**
      * 添加参赛人员
