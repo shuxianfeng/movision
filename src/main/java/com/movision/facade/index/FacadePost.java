@@ -2209,7 +2209,9 @@ public class FacadePost {
             followUser.setUserid(userid);
             int count = followUserService.insertSelective(followUser);
             //该用户的粉丝数加1
-            int fans = followUserService.insertUserFans(interestedusers);
+            int fans = followUserService.insertUserFans(interestedusers);//被关注人
+            //增加用户总关注数attention
+            userService.updateUserAttention(userid);//关注人
             //被关注人增加热度
             facadeHeatValue.addUserHeatValue(1, interestedusers);
             return 0;

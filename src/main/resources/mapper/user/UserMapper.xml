@@ -1154,6 +1154,13 @@
         </set>
         WHERE
     </update>
+    
+    <update id="updateUserAttention" parameterType="java.lang.Integer" >
+        UPDATE yw_user
+        SET attention = attention + 1
+        WHERE id = #{userid,jdbcType=INTEGER}
+    </update>
+    
     <select id="queryUserParticulars" parameterType="java.lang.String"
             resultType="com.movision.mybatis.user.entity.UserParticulars">
         SELECT u.*,vd.audit_time as viptime,aut.name,aut.idnumber,

@@ -791,6 +791,16 @@ public class UserService {
         }
     }
 
+    public void updateUserAttention(Integer userid){
+        try {
+            log.info("增加用户关注总数");
+            userMapper.updateUserAttention(userid);
+        }catch (Exception e){
+            log.error("增加用户关注总数失败");
+            throw e;
+        }
+    }
+
     public List<Author> findAllNearAuthor(Paging<Author> pager, Map<String, Object> map){
         try {
             log.info("根据传入的手机定位经纬度查询当前用户周边30公里内的所有作者");

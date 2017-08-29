@@ -17,6 +17,7 @@ import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.postLabelRelation.service.PostLabelRelationService;
 import com.movision.mybatis.shopAddress.entity.ShopAddress;
 import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userDontLike.entity.UserDontLike;
 import com.movision.mybatis.userDontLike.service.UserDontLikeService;
 import com.movision.utils.DateUtils;
@@ -59,6 +60,8 @@ public class LabelFacade {
     private UserDontLikeService userDontLikeService;
     @Autowired
     private FacadeHeatValue facadeHeatValue;
+    @Autowired
+    private UserService userService;
 
     /**
      * 我的--关注--关注的标签，点击关注调用的关注的标签列表返回接口
@@ -156,6 +159,8 @@ public class LabelFacade {
             int count = followLabelService.insertSelective(followLabel);
             //增加关注标签数量
             followLabelService.updatePostLabel(labelid);
+            //增加用户总关注数attention
+            userService.updateUserAttention(userid);//关注人
             //增加标签热度
             facadeHeatValue.addLabelHeatValue(1, labelid, String.valueOf(userid));
             return 0;

@@ -274,6 +274,8 @@ public class FacadeCircle {
             //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------end
 
             circleService.followCircle(parammap);
+            //增加用户总关注数attention
+            userService.updateUserAttention(Integer.parseInt(userid));//关注人
             return 0;//未关注过该圈子
         } else {
             return 1;//已关注过该圈子
