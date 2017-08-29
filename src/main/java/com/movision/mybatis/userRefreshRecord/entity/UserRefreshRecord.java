@@ -16,6 +16,25 @@ public class UserRefreshRecord {
 
     private String intime;
 
+    private int type;//1：推荐2：关注3：本地 4：圈子 5：标签
+    private String device;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getDevice() {
+        return device;
+    }
+
+    public void setDevice(String device) {
+        this.device = device;
+    }
+
     public String getIntime() {
         return intime;
     }

@@ -167,7 +167,7 @@ public class FacadeCircle {
             List<PostVo> postVos = postService.findAllPostCrile(circleid);
             if (StringUtil.isNotEmpty(userid)){
                 //不为空查询当前用户未看过的总更新数
-                listmongodba = facadePost.userRefulshListMongodb(Integer.parseInt(userid));//查询mongodb中用户看过的帖子列表
+                listmongodba = facadePost.userRefulshListMongodbs(Integer.parseInt(userid));//查询mongodb中用户看过的帖子列表
 
                 if (listmongodba.size() != 0) {
                     for (int j = 0; j < listmongodba.size(); j++) {
