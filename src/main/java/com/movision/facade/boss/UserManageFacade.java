@@ -460,8 +460,8 @@ public class UserManageFacade {
         if (StringUtil.isNotEmpty(pai)) {
             map.put("pai", pai);//排序方式
         }
-        if (StringUtil.isNotEmpty(pageNo)) {
-            map.put("pageNo", (Integer.parseInt(pageNo) - 1) * 12);
+        if (StringUtil.isNotEmpty(pageNo) && StringUtil.isNotEmpty(pageSize)) {
+            map.put("pageNo", (Integer.parseInt(pageNo) - 1) * Integer.parseInt(pageSize));
         }
         if (StringUtil.isNotEmpty(pageSize)) {
             map.put("pageSize", Integer.parseInt(pageSize));
