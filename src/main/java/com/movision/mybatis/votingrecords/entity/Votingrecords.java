@@ -12,6 +12,15 @@ public class Votingrecords {
     private String name;
 
     private Date intime;
+    private Integer takeid;
+
+    public Integer getTakeid() {
+        return takeid;
+    }
+
+    public void setTakeid(Integer takeid) {
+        this.takeid = takeid;
+    }
 
     public Integer getId() {
         return id;

@@ -15,7 +15,16 @@ public class Take {
 
     private String phone;//电话
 
-    private String photo;//封面
+    private String photo;//作品
+    private String banner;//封面
+
+    public String getBanner() {
+        return banner;
+    }
+
+    public void setBanner(String banner) {
+        this.banner = banner;
+    }
 
     private String describe;//描述
 

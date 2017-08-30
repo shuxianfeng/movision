@@ -2,6 +2,7 @@ package com.movision.mybatis.activeH5.service;
 
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.activeH5.entity.ActiveH5;
+import com.movision.mybatis.activeH5.entity.ActiveH5Vo;
 import com.movision.mybatis.activeH5.mapper.ActiveH5Mapper;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
@@ -40,6 +41,22 @@ public class ActiveH5Service {
         }
     }
 
+    /**
+     * 查询活动详情
+     *
+     * @param id
+     * @return
+     */
+    public ActiveH5 queryActivityById(Integer id) {
+        try {
+            log.info("查询活动详情");
+            return activeH5Mapper.queryActivityById(id);
+        } catch (Exception e) {
+            log.error("查询活动详情接口", e);
+            throw e;
+        }
+    }
+
 
     /**
      * 删除活动
@@ -58,19 +75,67 @@ public class ActiveH5Service {
     }
 
     /**
+     * 更新活动
+     *
+     * @param activeH5
+     */
+    public void updateActivity(ActiveH5 activeH5) {
+        try {
+            log.info("更新活动");
+            activeH5Mapper.updateByPrimaryKeySelective(activeH5);
+        } catch (Exception e) {
+            log.error("更新活动异常", e);
+            throw e;
+        }
+    }
+
+    /**
      * 查询活动
      *
      * @param paging
      * @return
      */
-    public List<ActiveH5> findAllActive(Paging<ActiveH5> paging) {
+    public List<ActiveH5> findAllActive(ActiveH5 activeH5, Paging<ActiveH5> paging) {
         try {
             log.info("查询活动");
-            return activeH5Mapper.findAllActive(paging.getRowBounds());
+            return activeH5Mapper.findAllActive(activeH5, paging.getRowBounds());
         } catch (Exception e) {
             log.error("查询活动失败", e);
             throw e;
         }
     }
 
+
+    /**
+     * 修改访问量
+     *
+     * @param activeid
+     * @return
+     */
+    public int updatePageView(int activeid) {
+        try {
+            log.info("修改访问量");
+            return activeH5Mapper.updatePageView(activeid);
+        } catch (Exception e) {
+            log.error("修改访问量失败", e);
+            throw e;
+        }
+    }
+
+
+    /**
+     * 首页数据
+     *
+     * @param activeid
+     * @return
+     */
+    public ActiveH5Vo querySum(int activeid) {
+        try {
+            log.info("首页数据");
+            return activeH5Mapper.querySum(activeid);
+        } catch (Exception e) {
+            log.error("修首页数据失败", e);
+            throw e;
+        }
+    }
 }

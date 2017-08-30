@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhanglei
@@ -40,6 +41,22 @@ public class TakeService {
         }
     }
 
+    /**
+     * 查询投稿详情
+     *
+     * @param id
+     * @return
+     */
+    public Take queryTakeById(Integer id) {
+        try {
+            log.info("查询投稿详情");
+            return takeMapper.queryTakeById(id);
+        } catch (Exception e) {
+            log.error("查询投稿详情异常", e);
+            throw e;
+        }
+    }
+
 
     /**
      * 删除参赛人员
@@ -64,12 +81,46 @@ public class TakeService {
      * @param paging
      * @return
      */
-    public List<TakeVo> findAllTake(Paging<TakeVo> paging) {
+    public List<TakeVo> findAllTake(Paging<TakeVo> paging, Take take) {
         try {
             log.info("查询全部参赛人员");
-            return takeMapper.findAllTake(paging.getRowBounds());
+            return takeMapper.findAllTake(paging.getRowBounds(), take);
         } catch (Exception e) {
             log.error("查询全部参赛人员失败", e);
+            throw e;
+        }
+    }
+
+
+    /**
+     * 根据编号或名字查询
+     *
+     * @param paging
+     * @param map
+     * @return
+     */
+    public List<TakeVo> findAllTakeCondition(Paging<TakeVo> paging, Map map) {
+        try {
+            log.info("根据编号或名字查询");
+            return takeMapper.findAllTakeCondition(paging.getRowBounds(),map);
+        } catch (Exception e) {
+            log.error("根据编号或名字查询失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 投票排行
+     *
+     * @param paging
+     * @return
+     */
+    public List<TakeVo> voteDesc(Paging<TakeVo> paging) {
+        try {
+            log.info("投票排行");
+            return takeMapper.voteDesc(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("投票排行失败", e);
             throw e;
         }
     }

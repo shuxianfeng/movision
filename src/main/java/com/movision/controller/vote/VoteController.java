@@ -3,8 +3,10 @@ package com.movision.controller.vote;
 import com.movision.common.Response;
 import com.movision.facade.voteH5.VoteFacade;
 import com.movision.mybatis.activeH5.entity.ActiveH5;
+import com.movision.mybatis.activeH5.entity.ActiveH5Vo;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.take.entity.Take;
 import com.movision.mybatis.take.entity.TakeVo;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -35,7 +37,7 @@ public class VoteController {
      * @param photo
      * @param begintime
      * @param endtime
-     * @param company
+     * @param
      * @param activitydescription
      * @return
      */
@@ -45,10 +47,9 @@ public class VoteController {
                                     @ApiParam(value = "活动图片") @RequestParam String photo,
                                     @ApiParam(value = "活动开始时间") @RequestParam String begintime,
                                     @ApiParam(value = "活动结束时间") @RequestParam String endtime,
-                                    @ApiParam(value = "公司") @RequestParam String company,
                                     @ApiParam(value = "活动说明") @RequestParam String activitydescription) {
         Response response = new Response();
-        int result = voteFacade.insertSelective(name, photo, begintime, endtime, company, activitydescription);
+        int result = voteFacade.insertSelective(name, photo, begintime, endtime, activitydescription);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
@@ -77,17 +78,49 @@ public class VoteController {
 
 
     /**
+     * 编辑活动
+     *
+     * @param id
+     * @param name
+     * @param photo
+     * @param explain
+     * @param bigintime
+     * @param endtime
+     * @return
+     */
+    @RequestMapping(value = "updateActivity", method = RequestMethod.POST)
+    @ApiOperation(value = "编辑活动", notes = "编辑活动接口", response = Response.class)
+    public Response updateActivity(@ApiParam(value = "活动id") @RequestParam int id,
+                                   @ApiParam(value = "活动名称") @RequestParam String name,
+                                   @ApiParam(value = "活动封面") @RequestParam String photo,
+                                   @ApiParam(value = "活动说明") @RequestParam String explain,
+                                   @ApiParam(value = "开始时间") @RequestParam String bigintime,
+                                   @ApiParam(value = "结束时间") @RequestParam String endtime) {
+        Response response = new Response();
+        voteFacade.updateActivity(id, name, photo, explain, bigintime, endtime);
+        response.setMessage("操作成功");
+        response.setData(1);
+        return response;
+    }
+
+
+    /**
      * 查询全部活动
      *
+     * @param pageNo
+     * @param pageSize
      * @return
      */
     @ApiOperation(value = "查询全部活动", notes = "查询全部活动", response = Response.class)
     @RequestMapping(value = "findAllActive", method = RequestMethod.POST)
-    public Response findAllActive(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+    public Response findAllActive(@ApiParam(value = "活动名称") @RequestParam(required = false) String name,
+                                  @ApiParam(value = "活动开始时间") @RequestParam(required = false) String bigintime,
+                                  @ApiParam(value = "活动结束时间") @RequestParam(required = false) String endtime,
+                                  @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                   @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<ActiveH5> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List result = voteFacade.findAllActive(pager);
+        List result = voteFacade.findAllActive(name, bigintime, endtime,pager);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
@@ -98,18 +131,25 @@ public class VoteController {
 
 
     /**
-     * 添加参赛人员
+     * 添加投稿
      *
      * @param activeid
      * @param name
      * @return
      */
-    @ApiOperation(value = "添加参赛人员", notes = "添加参赛人员", response = Response.class)
+    @ApiOperation(value = "添加投稿", notes = "添加投稿", response = Response.class)
     @RequestMapping(value = "insertSelectiveTP", method = RequestMethod.POST)
     public Response insertSelectiveTP(@ApiParam(value = "活动id") @RequestParam(required = false) String activeid,
-                                      @ApiParam(value = "参赛人名称") @RequestParam(required = false) String name) {
+                                      @ApiParam(value = "作品名称") @RequestParam(required = false) String name,
+                                      @ApiParam(value = "投稿人电话") @RequestParam(required = false) String phone,
+                                      @ApiParam(value = "投稿内容") @RequestParam(required = false) String photo,
+                                      @ApiParam(value = "投稿描述") @RequestParam(required = false) String describe,
+                                      @ApiParam(value = "投稿人") @RequestParam(required = false) String nickname,
+                                      @ApiParam(value = "banner图") @RequestParam(required = false) String banner,
+                                      @ApiParam(value = "审核") @RequestParam String audit,
+                                      @ApiParam(value = "号码") @RequestParam String mark) {
         Response response = new Response();
-        int result = voteFacade.insertSelectiveTP(activeid, name);
+        int result = voteFacade.insertSelectiveTP(activeid, name, phone, photo, describe, nickname, banner, audit,mark);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
@@ -117,14 +157,30 @@ public class VoteController {
         return response;
     }
 
-
     /**
-     * 删除参赛人员
+     * 查询投稿详情
      *
      * @param id
      * @return
      */
-    @ApiOperation(value = "删除参赛人员", notes = "删除参赛人员", response = Response.class)
+    @RequestMapping(value = "queryTakeById", method = RequestMethod.POST)
+    @ApiOperation(value = "根据id查询投稿详情", notes = "查询投稿详情", response = Response.class)
+    public Response queryTakeById(@ApiParam(value = "投稿id") @RequestParam int id) {
+        Response response = new Response();
+        Take take = voteFacade.queryTakeById(id);
+        response.setMessage("查询成功");
+        response.setData(take);
+        return response;
+    }
+
+
+    /**
+     * 删除投稿
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "删除投稿", notes = "删除投稿", response = Response.class)
     @RequestMapping(value = "deleteTakePeople", method = RequestMethod.POST)
     public Response deleteTakePeople(@ApiParam(value = "参赛人员id") @RequestParam int id) {
         Response response = new Response();
@@ -138,17 +194,19 @@ public class VoteController {
 
 
     /**
-     * 查询全部参赛人员
+     * 条件查询投稿列表
      *
      * @return
      */
-    @ApiOperation(value = "查询全部参赛人员", notes = "查询全部参赛人员", response = Response.class)
+    @ApiOperation(value = "条件查询投稿列表", notes = "条件查询投稿列表", response = Response.class)
     @RequestMapping(value = "findAllTake", method = RequestMethod.POST)
     public Response findAllTake(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                                @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                @ApiParam(value = "编号") @RequestParam(required = false) String mark,
+                                @ApiParam(value = "姓名") @RequestParam(required = false) String nickname) {
         Response response = new Response();
         Paging<TakeVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List result = voteFacade.findAllTake(pager);
+        List result = voteFacade.findAllTakeCondition(pager, mark, nickname);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
@@ -156,4 +214,79 @@ public class VoteController {
         response.setData(pager);
         return response;
     }
+
+    @ApiOperation(value = "投票排行", notes = "投票排行", response = Response.class)
+    @RequestMapping(value = "voteDesc", method = RequestMethod.POST)
+    public Response voteDesc(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                             @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<TakeVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List result = voteFacade.voteDesc(pager);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        pager.result(result);
+        response.setData(pager);
+        return response;
+    }
+
+    /**
+     * 条件查询投稿列表
+     *
+     * @return
+     */
+    @ApiOperation(value = "条件查询投稿列表(后台)", notes = "条件查询投稿列表", response = Response.class)
+    @RequestMapping(value = "findTakeList", method = RequestMethod.POST)
+    public Response findTakeList(@ApiParam(value = "投稿name") @RequestParam(required = false) String name,
+                                 @ApiParam(value = "审核状态 0未审核 1审核通过") @RequestParam(required = false) String audit,
+                                 @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                 @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<TakeVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List result = voteFacade.findAllTake(pager, name, audit);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        pager.result(result);
+        response.setData(pager);
+        return response;
+            }
+
+    /**
+     * 修改访问量
+     *
+     * @param activeid
+     * @return
+     */
+    @ApiOperation(value = "修改访问量", notes = "修改访问量", response = Response.class)
+    @RequestMapping(value = "updatePageView", method = RequestMethod.POST)
+    public Response updatePageView(@ApiParam(value = "活动id") @RequestParam int activeid) {
+        Response response = new Response();
+        int result = voteFacade.updatePageView(activeid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
+
+    /**
+     * 首页数据
+     *
+     * @param activeid
+     * @return
+     */
+    @ApiOperation(value = "首页数据", notes = "首页数据", response = Response.class)
+    @RequestMapping(value = "querySum", method = RequestMethod.POST)
+    public Response querySum(@ApiParam(value = "活动id") @RequestParam int activeid) {
+        Response response = new Response();
+        ActiveH5Vo result = voteFacade.querySum(activeid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
 }

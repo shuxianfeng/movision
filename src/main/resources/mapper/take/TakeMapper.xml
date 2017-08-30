@@ -13,9 +13,10 @@
         <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
         <result column="mark" property="mark" jdbcType="INTEGER"/>
         <result column="audit" property="audit" jdbcType="INTEGER"/>
+        <result column="banner" property="banner" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, activeid, name, isdel, intime, phone, photo, describe, nickname, mark, audit
+        id, activeid, name, isdel, intime, phone, photo, describe, nickname, mark, audit, banner
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -53,6 +54,27 @@
             <if test="intime != null">
                 intime,
             </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="photo != null">
+                photo,
+            </if>
+            <if test="describe != null">
+                describe,
+            </if>
+            <if test="nickname != null">
+                nickname,
+            </if>
+            <if test="mark != null">
+                mark,
+            </if>
+            <if test="audit != null">
+                audit,
+            </if>
+            <if test="banner != null">
+                banner,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -69,6 +91,27 @@
             </if>
             <if test="intime != null">
                 #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="photo != null">
+                #{photo,jdbcType=VARCHAR},
+            </if>
+            <if test="describe != null">
+                #{describe,jdbcType=VARCHAR},
+            </if>
+            <if test="nickname != null">
+                #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="mark != null">
+                #{mark,jdbcType=INTEGER},
+            </if>
+            <if test="audit != null">
+                #{audit,jdbcType=INTEGER},
+            </if>
+            <if test="banner != null">
+                #{banner,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -101,7 +144,31 @@
     <update id="deleteTakePeople" parameterType="java.lang.Integer">
     UPDATE tp_take SET  isdel=1 WHERE id=#{id,jdbcType=INTEGER}
   </update>
-    <select id="findAllTake" resultType="com.movision.mybatis.take.entity.TakeVo">
-    SELECT * FROM tp_take WHERE isdel=0
-  </select>
+    <select id="findAllTake" parameterType="com.movision.mybatis.take.entity.Take"
+            resultType="com.movision.mybatis.take.entity.TakeVo">
+        SELECT * FROM tp_take WHERE isdel=0
+        <if test="name != null">
+            AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="audit != null">
+            AND audit = #{audit,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="findAllTakeCondition" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.take.entity.TakeVo">
+        SELECT t.id,t.activeid,t.mark,t.`name`,t.nickname,t.banner,(SELECT COUNT(1) FROM tp_votingrecords WHERE takeid =
+        t.id) AS
+        votesum FROM tp_take t WHERE t.isdel=0 AND t.audit=1
+        <if test="mark!=null and mark!=''">
+            AND t.mark=#{mark,jdbcType=INTEGER}
+        </if>
+        <if test="nickname!=null and nickname!=''">
+            AND t.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
+        </if>
+    </select>
+    <select id="voteDesc" resultType="com.movision.mybatis.take.entity.TakeVo">
+         SELECT t.id,t.activeid,t.mark,t.`name`,t.nickname,t.banner,(SELECT COUNT(1) FROM tp_votingrecords WHERE takeid =
+        t.id) AS
+        votesum FROM tp_take t WHERE t.isdel=0 AND t.audit=1 ORDER BY votesum DESC
+    </select>
 </mapper>
