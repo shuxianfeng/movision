@@ -215,6 +215,21 @@ public class VoteController {
         return response;
     }
 
+    @ApiOperation(value = "投票排行", notes = "投票排行", response = Response.class)
+    @RequestMapping(value = "voteDesc", method = RequestMethod.POST)
+    public Response voteDesc(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                             @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<TakeVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List result = voteFacade.voteDesc(pager);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        pager.result(result);
+        response.setData(pager);
+        return response;
+    }
+
     /**
      * 条件查询投稿列表
      *

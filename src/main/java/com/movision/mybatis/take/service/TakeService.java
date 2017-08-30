@@ -109,4 +109,20 @@ public class TakeService {
         }
     }
 
+    /**
+     * 投票排行
+     *
+     * @param paging
+     * @return
+     */
+    public List<TakeVo> voteDesc(Paging<TakeVo> paging) {
+        try {
+            log.info("投票排行");
+            return takeMapper.voteDesc(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("投票排行失败", e);
+            throw e;
+        }
+    }
+
 }

@@ -2,6 +2,7 @@ package com.movision.mybatis.activeH5.mapper;
 
 import com.movision.mybatis.activeH5.entity.ActiveH5;
 import com.movision.mybatis.activeH5.entity.ActiveH5Vo;
+import com.movision.mybatis.take.entity.TakeVo;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -28,7 +29,5 @@ public interface ActiveH5Mapper {
     int updatePageView(int activeid);
 
     ActiveH5Vo querySum(int activeid);
-
-
 
 }

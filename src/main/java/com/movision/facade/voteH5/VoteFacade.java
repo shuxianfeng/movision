@@ -277,6 +277,16 @@ public class VoteFacade {
 
 
     /**
+     * 投票排行
+     * @param paging
+     * @return
+     */
+    public List<TakeVo> voteDesc(Paging<TakeVo> paging) {
+
+        return takeService.voteDesc(paging);
+    }
+
+    /**
      * 修改访问量
      *
      * @param activeid
