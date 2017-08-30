@@ -41,6 +41,22 @@ public class TakeService {
         }
     }
 
+    /**
+     * 查询投稿详情
+     *
+     * @param id
+     * @return
+     */
+    public Take queryTakeById(Integer id) {
+        try {
+            log.info("查询投稿详情");
+            return takeMapper.queryTakeById(id);
+        } catch (Exception e) {
+            log.error("查询投稿详情异常", e);
+            throw e;
+        }
+    }
+
 
     /**
      * 删除参赛人员
@@ -58,6 +74,22 @@ public class TakeService {
         }
     }
 
+
+    /**
+     * 查询全部参赛人员
+     *
+     * @param paging
+     * @return
+     */
+    public List<TakeVo> findAllTake(Paging<TakeVo> paging, Take take) {
+        try {
+            log.info("查询全部参赛人员");
+            return takeMapper.findAllTake(paging.getRowBounds(), take);
+        } catch (Exception e) {
+            log.error("查询全部参赛人员失败", e);
+            throw e;
+        }
+    }
 
 
     /**

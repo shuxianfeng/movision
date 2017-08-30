@@ -22,6 +22,9 @@ public interface TakeMapper {
 
     int deleteTakePeople(int id);
 
+    List<TakeVo> findAllTake(RowBounds rowBounds, Take take);
 
     List<TakeVo> findAllTakeCondition(RowBounds rowBounds, Map map);
+
+    Take queryTakeById(Integer id);
 }

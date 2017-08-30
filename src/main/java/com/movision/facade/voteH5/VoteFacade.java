@@ -78,6 +78,15 @@ public class VoteFacade {
     }
 
     /**
+     * 根据id查询活动详情
+     * @param id
+     * @return
+     */
+    public ActiveH5 queryActivityById(Integer id) {
+        return activeH5Service.queryActivityById(id);
+    }
+
+    /**
      * 删除活动
      *
      * @param id
@@ -88,13 +97,79 @@ public class VoteFacade {
     }
 
     /**
+     * 更新活动
+     * @param id
+     * @param name
+     * @param photo
+     * @param explain
+     * @param bigintime
+     * @param endtime
+     */
+    public void updateActivity(Integer id, String name, String photo, String explain, String bigintime, String endtime) {
+        ActiveH5 activeH5 = new ActiveH5();
+        activeH5.setId(id);
+        if (StringUtil.isNotEmpty(name)) {
+            activeH5.setName(name);
+        }
+        if (StringUtil.isNotEmpty(photo)) {
+            activeH5.setPhoto(photo);
+        }
+        if (StringUtil.isNotEmpty(explain)) {
+            activeH5.setActivitydescription(explain);
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date big = null;
+        if (StringUtil.isNotEmpty(bigintime)) {
+            try {
+                big = format.parse(bigintime);
+                activeH5.setBegintime(big);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        Date end = null;
+        if (StringUtil.isNotEmpty(endtime)) {
+            try {
+                end = format.parse(endtime);
+                activeH5.setEndtime(end);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        activeH5Service.updateActivity(activeH5);
+    }
+
+    /**
      * 查询所有活动
      *
      * @param paging
      * @return
      */
     public List<ActiveH5> findAllActive(String name, String bigintime, String endtime, Paging<ActiveH5> paging) {
-        return activeH5Service.findAllActive(paging);
+        ActiveH5 activeH5 = new ActiveH5();
+        if (StringUtil.isNotEmpty(name)) {
+            activeH5.setName(name);
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date beg = null;
+        if (StringUtil.isNotEmpty(bigintime)) {
+            try {
+                beg = format.parse(bigintime);
+                activeH5.setBegintime(beg);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        Date end = null;
+        if (StringUtil.isNotEmpty(endtime)) {
+            try {
+                end = format.parse(endtime);
+                activeH5.setEndtime(end);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return activeH5Service.findAllActive(activeH5, paging);
     }
 
 
@@ -107,7 +182,7 @@ public class VoteFacade {
      * @param
      * @return
      */
-    public int insertSelectiveTP(String activeid, String name, String phone, String photo, String describe, String nickname) {
+    public int insertSelectiveTP(String activeid, String name, String phone, String photo, String describe, String nickname, String banner, String audit, String mark) {
         Take take = new Take();
         if (StringUtil.isNotEmpty(activeid)) {
             take.setActiveid(Integer.parseInt(activeid));
@@ -129,8 +204,27 @@ public class VoteFacade {
         if (StringUtil.isNotEmpty(nickname)) {
             take.setNickname(nickname);
         }
+        if (StringUtil.isNotEmpty(banner)) {
+            take.setBanner(banner);
+        }
+        if (StringUtil.isNotEmpty(audit)) {
+            take.setAudit(Integer.parseInt(audit));
+        }
+        if (StringUtil.isNotEmpty(mark)) {
+            take.setMark(Integer.parseInt(mark));
+        }
         int result = takeService.insertSelectiveTP(take);
         return result;
+    }
+
+
+    /**
+     * 查询投稿详情
+     * @param id
+     * @return
+     */
+    public Take queryTakeById(Integer id) {
+        return takeService.queryTakeById(id);
     }
 
 
@@ -144,6 +238,22 @@ public class VoteFacade {
         return takeService.deleteTakePeople(id);
     }
 
+    /**
+     * 查询所有参赛人员
+     *
+     * @param paging
+     * @return
+     */
+    public List<TakeVo> findAllTake(Paging<TakeVo> paging, String name, String audit) {
+        Take take = new Take();
+        if (StringUtil.isNotEmpty(name)) {
+            take.setName(name);
+        }
+        if (StringUtil.isNotEmpty(audit)) {
+            take.setAudit(Integer.parseInt(audit));
+        }
+        return takeService.findAllTake(paging, take);
+    }
 
 
     /**

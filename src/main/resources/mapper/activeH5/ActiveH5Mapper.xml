@@ -147,4 +147,25 @@
             resultType="com.movision.mybatis.activeH5.entity.ActiveH5Vo">
 SELECT a.id,a.pageview,a.photo,a.begintime,a.endtime,(SELECT COUNT(1) FROM tp_take t WHERE t.activeid=#{activeid,jdbcType=INTEGER}) AS takesum, (SELECT COUNT(1) FROM tp_votingrecords v WHERE v.activeid=#{activeid,jdbcType=INTEGER}) AS votesum FROM tp_activeh5 a WHERE a.id=#{activeid,jdbcType=INTEGER}
     </select>
+    SELECT * FROM tp_activeh5 WHERE isdel=0
+    <if test="name != null">
+        AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="begintime != null and endtime != null">
+        AND (((#{begintime,jdbcType=DATE}  <![CDATA[<=]]> a.begintime) AND (#{endtime,jdbcType=DATE} <![CDATA[<=]]>
+        a.endtime))
+        OR ((#{begintime,jdbcType=DATE}  <![CDATA[>=]]> a.begintime) AND (#{endtime,jdbcType=DATE} <![CDATA[<=]]>
+        a.endtime))
+        OR ((#{begintime,jdbcType=DATE}  <![CDATA[>=]]> a.begintime) AND (#{endtime,jdbcType=DATE} <![CDATA[>=]]>
+        a.endtime))
+        OR ((#{begintime,jdbcType=DATE}  <![CDATA[<=]]> a.begintime) AND (#{endtime,jdbcType=DATE} <![CDATA[>=]]>
+        a.endtime)))
+    </if>
+    ORDER BY intime DESC
+</select>
+
+<select id="queryActivityById" parameterType="java.lang.Integer"
+        resultType="com.movision.mybatis.activeH5.entity.ActiveH5">
+        SELECT * FROM tp_activeh5 WHERE id = #{id,jdbcType=INTEGER} AND isdel = 0
+    </select>
 </mapper>

@@ -16,7 +16,7 @@
         <result column="banner" property="banner" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, activeid, name, isdel, intime, phone, photo, describe, nickname, mark, audit,banner
+        id, activeid, name, isdel, intime, phone, photo, describe, nickname, mark, audit, banner
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -144,6 +144,16 @@
     <update id="deleteTakePeople" parameterType="java.lang.Integer">
     UPDATE tp_take SET  isdel=1 WHERE id=#{id,jdbcType=INTEGER}
   </update>
+    <select id="findAllTake" parameterType="com.movision.mybatis.take.entity.Take"
+            resultType="com.movision.mybatis.take.entity.TakeVo">
+        SELECT * FROM tp_take WHERE isdel=0
+        <if test="name != null">
+            AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="audit != null">
+            AND audit = #{audit,jdbcType=INTEGER}
+        </if>
+    </select>
     <select id="findAllTakeCondition" parameterType="java.util.Map"
             resultType="com.movision.mybatis.take.entity.TakeVo">
         SELECT t.id,t.activeid,t.mark,t.`name`,t.nickname,t.banner,(SELECT COUNT(1) FROM tp_votingrecords WHERE takeid =

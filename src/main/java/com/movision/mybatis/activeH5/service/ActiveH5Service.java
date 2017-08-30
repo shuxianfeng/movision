@@ -41,6 +41,22 @@ public class ActiveH5Service {
         }
     }
 
+    /**
+     * 查询活动详情
+     *
+     * @param id
+     * @return
+     */
+    public ActiveH5 queryActivityById(Integer id) {
+        try {
+            log.info("查询活动详情");
+            return activeH5Mapper.queryActivityById(id);
+        } catch (Exception e) {
+            log.error("查询活动详情接口", e);
+            throw e;
+        }
+    }
+
 
     /**
      * 删除活动
@@ -59,15 +75,30 @@ public class ActiveH5Service {
     }
 
     /**
+     * 更新活动
+     *
+     * @param activeH5
+     */
+    public void updateActivity(ActiveH5 activeH5) {
+        try {
+            log.info("更新活动");
+            activeH5Mapper.updateByPrimaryKeySelective(activeH5);
+        } catch (Exception e) {
+            log.error("更新活动异常", e);
+            throw e;
+        }
+    }
+
+    /**
      * 查询活动
      *
      * @param paging
      * @return
      */
-    public List<ActiveH5> findAllActive(Paging<ActiveH5> paging) {
+    public List<ActiveH5> findAllActive(ActiveH5 activeH5, Paging<ActiveH5> paging) {
         try {
             log.info("查询活动");
-            return activeH5Mapper.findAllActive(paging.getRowBounds());
+            return activeH5Mapper.findAllActive(activeH5, paging.getRowBounds());
         } catch (Exception e) {
             log.error("查询活动失败", e);
             throw e;
