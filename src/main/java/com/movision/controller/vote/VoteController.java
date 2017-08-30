@@ -305,4 +305,22 @@ public class VoteController {
         return response;
     }
 
+    /**
+     * 是否在时间内
+     *
+     * @param activeid
+     * @return
+     */
+    @ApiOperation(value = "是否在时间内", notes = "是否在时间内", response = Response.class)
+    @RequestMapping(value = "isTake", method = RequestMethod.POST)
+    public Response isTake(@ApiParam(value = "活动id") @RequestParam int activeid) {
+        Response response = new Response();
+        int result = voteFacade.isTake(activeid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
 }

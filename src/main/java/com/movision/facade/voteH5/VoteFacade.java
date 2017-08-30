@@ -307,4 +307,26 @@ public class VoteFacade {
         return activeH5Service.queryH5Describe(activeid);
     }
 
+    /**
+     * 时间到期
+     *
+     * @param activeid
+     * @return
+     */
+    public int isTake(int activeid) {
+        //查询活动的时间
+        ActiveH5 activeH5 = activeH5Service.queryActivityById(activeid);
+        Date beg = activeH5.getBegintime();
+        Date end = activeH5.getEndtime();
+        long begintime = beg.getTime();
+        long endtime = end.getTime();
+        Date date = new Date();
+        long str = date.getTime();
+        if (str < begintime || str > endtime) {
+            return 0;//灰色
+        } else if (str > begintime && str < endtime) {
+            return 1;//正常
+        }
+        return -1;
+    }
 }

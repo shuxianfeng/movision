@@ -32,4 +32,5 @@ public interface ActiveH5Mapper {
 
     ActiveH5 queryH5Describe(int activeid);
 
+
 }
