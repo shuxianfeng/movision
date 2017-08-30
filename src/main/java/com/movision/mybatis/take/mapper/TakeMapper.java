@@ -5,6 +5,7 @@ import com.movision.mybatis.take.entity.TakeVo;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TakeMapper {
     int deleteByPrimaryKey(Integer id);
@@ -22,4 +23,6 @@ public interface TakeMapper {
     int deleteTakePeople(int id);
 
     List<TakeVo> findAllTake(RowBounds rowBounds);
+
+    List<TakeVo> findAllTakeCondition(RowBounds rowBounds, Map map);
 }

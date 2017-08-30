@@ -13,9 +13,10 @@
         <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
         <result column="mark" property="mark" jdbcType="INTEGER"/>
         <result column="audit" property="audit" jdbcType="INTEGER"/>
+        <result column="banner" property="banner" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, activeid, name, isdel, intime, phone, photo, describe, nickname, mark, audit
+        id, activeid, name, isdel, intime, phone, photo, describe, nickname, mark, audit,banner
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -71,6 +72,9 @@
             <if test="audit != null">
                 audit,
             </if>
+            <if test="banner != null">
+                banner,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -88,7 +92,6 @@
             <if test="intime != null">
                 #{intime,jdbcType=TIMESTAMP},
             </if>
-
             <if test="phone != null">
                 #{phone,jdbcType=VARCHAR},
             </if>
@@ -98,18 +101,18 @@
             <if test="describe != null">
                 #{describe,jdbcType=VARCHAR},
             </if>
-
             <if test="nickname != null">
                 #{nickname,jdbcType=VARCHAR},
             </if>
             <if test="mark != null">
                 #{mark,jdbcType=INTEGER},
             </if>
-
             <if test="audit != null">
                 #{audit,jdbcType=INTEGER},
             </if>
-
+            <if test="banner != null">
+                #{banner,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.take.entity.Take">
@@ -144,4 +147,8 @@
     <select id="findAllTake" resultType="com.movision.mybatis.take.entity.TakeVo">
     SELECT * FROM tp_take WHERE isdel=0
   </select>
+    <select id="findAllTakeCondition" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.take.entity.TakeVo">
+
+    </select>
 </mapper>

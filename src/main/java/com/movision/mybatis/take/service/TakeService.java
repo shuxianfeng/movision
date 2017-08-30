@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhanglei
@@ -70,6 +71,24 @@ public class TakeService {
             return takeMapper.findAllTake(paging.getRowBounds());
         } catch (Exception e) {
             log.error("查询全部参赛人员失败", e);
+            throw e;
+        }
+    }
+
+
+    /**
+     * 根据编号或名字查询
+     *
+     * @param paging
+     * @param map
+     * @return
+     */
+    public List<TakeVo> findAllTakeCondition(Paging<TakeVo> paging, Map map) {
+        try {
+            log.info("根据编号或名字查询");
+            return takeMapper.findAllTakeCondition(paging.getRowBounds(),map);
+        } catch (Exception e) {
+            log.error("根据编号或名字查询失败", e);
             throw e;
         }
     }

@@ -105,12 +105,12 @@ public class VoteController {
      */
     @ApiOperation(value = "添加参赛人员", notes = "添加参赛人员", response = Response.class)
     @RequestMapping(value = "insertSelectiveTP", method = RequestMethod.POST)
-    public Response insertSelectiveTP(@ApiParam(value = "活动id") @RequestParam(required = false) String activeid,
-                                      @ApiParam(value = "投稿作品名称") @RequestParam(required = false) String name,
-                                      @ApiParam(value = "投稿人电话") @RequestParam(required = false) String phone,
-                                      @ApiParam(value = "投稿内容") @RequestParam(required = false) String photo,
+    public Response insertSelectiveTP(@ApiParam(value = "活动id") @RequestParam String activeid,
+                                      @ApiParam(value = "投稿作品名称") @RequestParam String name,
+                                      @ApiParam(value = "投稿人电话") @RequestParam String phone,
+                                      @ApiParam(value = "投稿内容") @RequestParam String photo,
                                       @ApiParam(value = "投稿描述") @RequestParam(required = false) String describe,
-                                      @ApiParam(value = "参赛人") @RequestParam(required = false) String nickname) {
+                                      @ApiParam(value = "参赛人") @RequestParam String nickname) {
         Response response = new Response();
         int result = voteFacade.insertSelectiveTP(activeid, name, phone, photo, describe, nickname);
         if (response.getCode() == 200) {

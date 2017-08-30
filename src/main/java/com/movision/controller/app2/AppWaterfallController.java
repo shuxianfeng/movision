@@ -597,7 +597,7 @@ public class AppWaterfallController {
         Response response = new Response();
         int result = facadePost.takePartInPost(userid, weixin, QQ, phone, postid);
         if (response.getCode() == 200) {
-            response.setMessage("查询成功");
+            response.setMessage("报名成功");
         }
         response.setData(result);
         return response;

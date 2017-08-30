@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhanglei
@@ -115,7 +117,7 @@ public class VoteFacade {
         take.setIsdel(0);
         take.setIntime(new Date());
         if (StringUtil.isNotEmpty(phone)) {
-            take.setPhoto(photo);
+            take.setPhone(phone);
         }
         if (StringUtil.isNotEmpty(photo)) {
             take.setPhoto(photo);
@@ -149,6 +151,26 @@ public class VoteFacade {
      */
     public List<TakeVo> findAllTake(Paging<TakeVo> paging) {
         return takeService.findAllTake(paging);
+    }
+
+
+    /**
+     * 根据编号或名字查询
+     *
+     * @param paging
+     * @param number
+     * @param nickname
+     * @return
+     */
+    public List<TakeVo> findAllTakeCondition(Paging<TakeVo> paging, String number, String nickname) {
+        Map map = new HashMap();
+        if (StringUtil.isNotEmpty(nickname)) {
+            map.put("number", number);
+        }
+        if (StringUtil.isNotEmpty(nickname)) {
+            map.put("nickname", nickname);
+        }
+        return takeService.findAllTakeCondition(paging, map);
     }
 
 }
