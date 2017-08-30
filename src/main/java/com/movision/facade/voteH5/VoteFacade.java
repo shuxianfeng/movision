@@ -7,6 +7,8 @@ import com.movision.mybatis.activeH5.service.ActiveH5Service;
 import com.movision.mybatis.take.entity.Take;
 import com.movision.mybatis.take.entity.TakeVo;
 import com.movision.mybatis.take.service.TakeService;
+import com.movision.mybatis.votingrecords.entity.Votingrecords;
+import com.movision.mybatis.votingrecords.service.VotingrecordsService;
 import com.movision.utils.pagination.model.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,8 @@ public class VoteFacade {
     private ActiveH5Service activeH5Service;
     @Autowired
     private TakeService takeService;
-
+    @Autowired
+    private VotingrecordsService votingrecordsService;
     /**
      * 插入活动
      *
@@ -328,5 +331,37 @@ public class VoteFacade {
             return 1;//正常
         }
         return -1;
+    }
+
+    /**
+     * 投票记录
+     *
+     * @param
+     * @return
+     */
+    public int insertSelectiveV(String activeid, String name, String takeid, String takenumber) {
+        Votingrecords votingrecords = new Votingrecords();
+        //在投票记录里面有没有此用户
+        int count = votingrecordsService.queryHave(name);
+        int result = 0;
+        if (count == 0) {
+            votingrecords.setIntime(new Date());
+            if (StringUtil.isNotEmpty(name)) {
+                votingrecords.setName(name);
+            }
+            if (StringUtil.isNotEmpty(activeid)) {
+                votingrecords.setActiveid(Integer.parseInt(activeid));
+            }
+            if (StringUtil.isNotEmpty(takeid)) {
+                votingrecords.setTakeid(Integer.parseInt(takeid));
+            }
+            if (StringUtil.isNotEmpty(takenumber)) {
+                votingrecords.setTakenumber(Integer.parseInt(takenumber));
+            }
+            result = votingrecordsService.insertSelective(votingrecords);
+        } else {
+            result = -1;
+        }
+        return result;
     }
 }

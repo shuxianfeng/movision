@@ -323,4 +323,26 @@ public class VoteController {
         return response;
     }
 
+
+    /**
+     * 添加投票记录
+     *
+     * @param activeid
+     * @param name
+     * @return
+     */
+    @ApiOperation(value = "添加投票记录", notes = "添加投票记录", response = Response.class)
+    @RequestMapping(value = "insertSelectiveV", method = RequestMethod.POST)
+    public Response insertSelectiveV(@ApiParam(value = "活动id") @RequestParam(required = false) String activeid,
+                                     @ApiParam(value = "姓名") @RequestParam(required = false) String name,
+                                     @ApiParam(value = "参赛id") @RequestParam(required = false) String takeid,
+                                     @ApiParam(value = "投票号码") @RequestParam(required = false) String takenumber) {
+        Response response = new Response();
+        int result = voteFacade.insertSelectiveV(activeid, name, takeid, takenumber);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
 }

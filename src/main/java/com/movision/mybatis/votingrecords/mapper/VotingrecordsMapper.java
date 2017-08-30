@@ -14,4 +14,7 @@ public interface VotingrecordsMapper {
     int updateByPrimaryKeySelective(Votingrecords record);
 
     int updateByPrimaryKey(Votingrecords record);
+
+    int queryHave(String name);
+
 }
