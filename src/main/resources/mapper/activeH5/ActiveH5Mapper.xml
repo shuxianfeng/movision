@@ -137,16 +137,21 @@
     <update id="deleteActive" parameterType="java.lang.Integer">
     UPDATE  tp_activeh5 SET  isdel=1 WHERE id=#{id,jdbcType=INTEGER}
   </update>
-    <select id="findAllActive" resultType="com.movision.mybatis.activeH5.entity.ActiveH5">
+    <!--<select id="findAllActive" resultType="com.movision.mybatis.activeH5.entity.ActiveH5">
     SELECT * FROM tp_activeh5 WHERE isdel=0 ORDER BY intime DESC
-  </select>
+  </select>-->
     <update id="updatePageView" parameterType="java.lang.Integer">
         UPDATE tp_activeh5 SET pageview=pageview+1 WHERE id=#{activeid,jdbcType=INTEGER}
     </update>
     <select id="querySum" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.activeH5.entity.ActiveH5Vo">
-SELECT a.id,a.pageview,a.photo,a.begintime,a.endtime,(SELECT COUNT(1) FROM tp_take t WHERE t.activeid=#{activeid,jdbcType=INTEGER}) AS takesum, (SELECT COUNT(1) FROM tp_votingrecords v WHERE v.activeid=#{activeid,jdbcType=INTEGER}) AS votesum FROM tp_activeh5 a WHERE a.id=#{activeid,jdbcType=INTEGER}
+        SELECT a.id,a.pageview,a.photo,a.begintime,a.endtime,
+        (SELECT COUNT(1) FROM tp_take t WHERE t.activeid=#{activeid,jdbcType=INTEGER}) AS takesum,
+        (SELECT COUNT(1) FROM tp_votingrecords v WHERE v.activeid=#{activeid,jdbcType=INTEGER}) AS votesum
+        FROM tp_activeh5 a
+        WHERE a.id=#{activeid,jdbcType=INTEGER}
     </select>
+    <select id="findAllActive" resultType="com.movision.mybatis.activeH5.entity.ActiveH5">
     SELECT * FROM tp_activeh5 WHERE isdel=0
     <if test="name != null">
         AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
