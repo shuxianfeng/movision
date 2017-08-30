@@ -182,7 +182,7 @@ public class VoteFacade {
      * @param
      * @return
      */
-    public int insertSelectiveTP(String activeid, String name, String phone, String photo, String describe, String nickname, String banner, String audit, String mark) {
+    public int insertSelectiveTP(String activeid, String name, String phone, String photo, String describe, String nickname, String banner) {
         Take take = new Take();
         if (StringUtil.isNotEmpty(activeid)) {
             take.setActiveid(Integer.parseInt(activeid));
@@ -203,15 +203,6 @@ public class VoteFacade {
         }
         if (StringUtil.isNotEmpty(nickname)) {
             take.setNickname(nickname);
-        }
-        if (StringUtil.isNotEmpty(banner)) {
-            take.setBanner(banner);
-        }
-        if (StringUtil.isNotEmpty(audit)) {
-            take.setAudit(Integer.parseInt(audit));
-        }
-        if (StringUtil.isNotEmpty(mark)) {
-            take.setMark(Integer.parseInt(mark));
         }
         int result = takeService.insertSelectiveTP(take);
         return result;

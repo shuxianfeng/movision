@@ -145,11 +145,9 @@ public class VoteController {
                                       @ApiParam(value = "投稿内容") @RequestParam(required = false) String photo,
                                       @ApiParam(value = "投稿描述") @RequestParam(required = false) String describe,
                                       @ApiParam(value = "投稿人") @RequestParam(required = false) String nickname,
-                                      @ApiParam(value = "banner图") @RequestParam(required = false) String banner,
-                                      @ApiParam(value = "审核") @RequestParam String audit,
-                                      @ApiParam(value = "号码") @RequestParam String mark) {
+                                      @ApiParam(value = "banner图") @RequestParam(required = false) String banner) {
         Response response = new Response();
-        int result = voteFacade.insertSelectiveTP(activeid, name, phone, photo, describe, nickname, banner, audit,mark);
+        int result = voteFacade.insertSelectiveTP(activeid, name, phone, photo, describe, nickname, banner);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
