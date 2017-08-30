@@ -590,12 +590,11 @@ public class AppWaterfallController {
     @RequestMapping(value = "takePartInPost", method = RequestMethod.POST)
     public Response takePartInPost(
             @ApiParam(value = "用户id") @RequestParam String userid,
-            @ApiParam(value = "微信") @RequestParam(required = false) String weixin,
-            @ApiParam(value = "QQ") @RequestParam(required = false) String QQ,
-            @ApiParam(value = "手机") @RequestParam(required = false) String phone,
-            @ApiParam(value = "帖子id") @RequestParam String postid) {
+            @ApiParam(value = "帖子id") @RequestParam String postid,
+            @ApiParam(value = "姓名") @RequestParam String name,
+            @ApiParam(value = "手机号") @RequestParam String phone) {
         Response response = new Response();
-        int result = facadePost.takePartInPost(userid, weixin, QQ, phone, postid);
+        int result = facadePost.takePartInPost(userid, name, postid, phone);
         if (response.getCode() == 200) {
             response.setMessage("报名成功");
         }

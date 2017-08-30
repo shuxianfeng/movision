@@ -2249,15 +2249,17 @@ public class FacadePost {
      * 告知类活动的报名
      *
      * @param userid
-     * @param weixin
-     * @param QQ
-     * @param phone
+     * @param
+     * @param
+     * @param
      * @return
      */
-    public int takePartInPost(String userid, String weixin, String QQ, String phone, String postid) {
+    public int takePartInPost(String userid, String name, String postid, String phone) {
         ActivePart activePart = new ActivePart();
         activePart.setUserid(Integer.parseInt(userid));
         activePart.setPostid(Integer.parseInt(postid));
+        activePart.setName(name);
+        activePart.setPhone(phone);
         activePart.setIntime(new Date());
         int result = activePartService.insertSelective(activePart);
         return result;

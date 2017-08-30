@@ -13,10 +13,12 @@
     <result column="paymoney" property="paymoney" jdbcType="DOUBLE" />
     <result column="paymoneyying" property="paymoneyying" jdbcType="DOUBLE" />
     <result column="paystatue" property="paystatue" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="phone" property="phone" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, postid, userid, title, email, videourl, introduction, intime, paymoney, paymoneyying, 
-    paystatue
+    id, postid, userid, title, email, videourl, introduction, intime, paymoney, paymoneyying,
+    paystatue,name,phone
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -74,6 +76,12 @@
       <if test="paystatue != null" >
         paystatue,
       </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -108,6 +116,12 @@
       </if>
       <if test="paystatue != null" >
         #{paystatue,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
