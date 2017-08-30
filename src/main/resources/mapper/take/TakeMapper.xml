@@ -192,4 +192,8 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="queryTakeById" parameterType="java.lang.Integer" resultType="com.movision.mybatis.take.entity.Take">
+        SELECT * FROM tp_take WHERE isdel = 0 AND id = #{id,jdbcType=INTEGER}
+    </select>
 </mapper>

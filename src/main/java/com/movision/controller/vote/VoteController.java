@@ -57,6 +57,22 @@ public class VoteController {
         return response;
     }
 
+    /**
+     * 根据id查询活动详情
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "queryActivityById", method = RequestMethod.POST)
+    @ApiOperation(value = "查询活动详情", notes = "查询活动详情", response = Response.class)
+    public Response queryActivityById(@ApiParam(value = "活动详情") @RequestParam int id) {
+        Response response = new Response();
+        ActiveH5 activeH5 = voteFacade.queryActivityById(id);
+        response.setMessage("查询成功");
+        response.setData(activeH5);
+        return response;
+    }
+
 
     /**
      * 删除活动
