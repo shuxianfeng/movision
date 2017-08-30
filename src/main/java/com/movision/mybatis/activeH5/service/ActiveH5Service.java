@@ -2,6 +2,7 @@ package com.movision.mybatis.activeH5.service;
 
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.activeH5.entity.ActiveH5;
+import com.movision.mybatis.activeH5.entity.ActiveH5Vo;
 import com.movision.mybatis.activeH5.mapper.ActiveH5Mapper;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
@@ -73,4 +74,37 @@ public class ActiveH5Service {
         }
     }
 
+
+    /**
+     * 修改访问量
+     *
+     * @param activeid
+     * @return
+     */
+    public int updatePageView(int activeid) {
+        try {
+            log.info("修改访问量");
+            return activeH5Mapper.updatePageView(activeid);
+        } catch (Exception e) {
+            log.error("修改访问量失败", e);
+            throw e;
+        }
+    }
+
+
+    /**
+     * 首页数据
+     *
+     * @param activeid
+     * @return
+     */
+    public ActiveH5Vo querySum(int activeid) {
+        try {
+            log.info("首页数据");
+            return activeH5Mapper.querySum(activeid);
+        } catch (Exception e) {
+            log.error("修首页数据失败", e);
+            throw e;
+        }
+    }
 }

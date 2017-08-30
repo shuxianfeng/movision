@@ -3,6 +3,7 @@ package com.movision.controller.vote;
 import com.movision.common.Response;
 import com.movision.facade.voteH5.VoteFacade;
 import com.movision.mybatis.activeH5.entity.ActiveH5;
+import com.movision.mybatis.activeH5.entity.ActiveH5Vo;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.take.entity.TakeVo;
@@ -161,4 +162,42 @@ public class VoteController {
         response.setData(pager);
         return response;
     }
+
+    /**
+     * 修改访问量
+     *
+     * @param activeid
+     * @return
+     */
+    @ApiOperation(value = "修改访问量", notes = "修改访问量", response = Response.class)
+    @RequestMapping(value = "updatePageView", method = RequestMethod.POST)
+    public Response updatePageView(@ApiParam(value = "活动id") @RequestParam int activeid) {
+        Response response = new Response();
+        int result = voteFacade.updatePageView(activeid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
+
+    /**
+     * 首页数据
+     *
+     * @param activeid
+     * @return
+     */
+    @ApiOperation(value = "首页数据", notes = "首页数据", response = Response.class)
+    @RequestMapping(value = "querySum", method = RequestMethod.POST)
+    public Response querySum(@ApiParam(value = "活动id") @RequestParam int activeid) {
+        Response response = new Response();
+        ActiveH5Vo result = voteFacade.querySum(activeid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
 }

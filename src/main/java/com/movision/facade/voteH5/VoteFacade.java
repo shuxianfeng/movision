@@ -2,6 +2,7 @@ package com.movision.facade.voteH5;
 
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.activeH5.entity.ActiveH5;
+import com.movision.mybatis.activeH5.entity.ActiveH5Vo;
 import com.movision.mybatis.activeH5.service.ActiveH5Service;
 import com.movision.mybatis.take.entity.Take;
 import com.movision.mybatis.take.entity.TakeVo;
@@ -162,6 +163,27 @@ public class VoteFacade {
             map.put("nickname", nickname);
         }
         return takeService.findAllTakeCondition(paging, map);
+    }
+
+
+    /**
+     * 修改访问量
+     *
+     * @param activeid
+     * @return
+     */
+    public int updatePageView(int activeid) {
+        return activeH5Service.updatePageView(activeid);
+    }
+
+    /**
+     * 首页数据
+     *
+     * @param activeid
+     * @return
+     */
+    public ActiveH5Vo querySum(int activeid) {
+        return activeH5Service.querySum(activeid);
     }
 
 }
