@@ -155,7 +155,9 @@
         SELECT  postid FROM yw_collection WHERE userid=#{userid,jdbcType=INTEGER} AND type=0
     </select>
     <select id="queryCollectionCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM  yw_collection WHERE userid=#{userid,jdbcType=INTEGER} AND type=0
+        SELECT count(*) FROM yw_post WHERE id IN(
+            SELECT postid FROM  yw_collection WHERE userid='48' AND type=0
+        ) AND isdel = '0'
     </select>
     <select id="userPostCollection" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM yw_collection LEFT JOIN yw_post ON yw_post.id=yw_collection.postid
