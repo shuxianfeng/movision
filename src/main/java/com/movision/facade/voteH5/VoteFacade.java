@@ -297,4 +297,14 @@ public class VoteFacade {
         return activeH5Service.querySum(activeid);
     }
 
+    /**
+     * 查询活动说明
+     *
+     * @param activeid
+     * @return
+     */
+    public ActiveH5 queryH5Describe(int activeid) {
+        return activeH5Service.queryH5Describe(activeid);
+    }
+
 }

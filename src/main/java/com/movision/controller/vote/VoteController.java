@@ -287,4 +287,22 @@ public class VoteController {
         return response;
     }
 
+    /**
+     * 查询活动说明
+     *
+     * @param activeid
+     * @return
+     */
+    @ApiOperation(value = "查询活动说明", notes = "查询活动说明", response = Response.class)
+    @RequestMapping(value = "queryH5Describe", method = RequestMethod.POST)
+    public Response queryH5Describe(@ApiParam(value = "活动id") @RequestParam int activeid) {
+        Response response = new Response();
+        ActiveH5 result = voteFacade.queryH5Describe(activeid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
 }

@@ -30,4 +30,6 @@ public interface ActiveH5Mapper {
 
     ActiveH5Vo querySum(int activeid);
 
+    ActiveH5 queryH5Describe(int activeid);
+
 }

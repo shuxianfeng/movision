@@ -138,4 +138,21 @@ public class ActiveH5Service {
             throw e;
         }
     }
+
+    /**
+     * 查询活动说名
+     *
+     * @param activeid
+     * @return
+     */
+    public ActiveH5 queryH5Describe(int activeid) {
+        try {
+            log.info("查询活动说名");
+            return activeH5Mapper.queryH5Describe(activeid);
+        } catch (Exception e) {
+            log.error("查询活动说名失败", e);
+            throw e;
+        }
+    }
+
 }
