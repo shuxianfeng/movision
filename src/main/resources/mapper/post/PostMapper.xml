@@ -2225,8 +2225,10 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
     <select id="queryUserPostCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select COUNT(1) from yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0 AND isactive=0
     </select>
+
+    <!--查询用户参与的活动总数-->
     <select id="queryUserActiveCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND activeid IS NOT NULL AND isdel=0
+        SELECT COUNT(*) FROM yw_active_part WHERE userid = #{userid,jdbcType=INTEGER}
     </select>
 
     <select id="findAllQueryActivitycontributeListById" parameterType="java.lang.Integer"

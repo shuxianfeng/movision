@@ -526,7 +526,7 @@ public class UserFacade {
         //查询发的帖子总数
         int postcount = postService.queryUserPostCount(Integer.parseInt(userid));
         user.setPostsum(postcount);
-        //查询发的活动总数
+        //查询用户参与的活动总数
         int activecount = postService.queryUserActiveCount(Integer.parseInt(userid));
         user.setActivecount(activecount);
         //收藏帖子数

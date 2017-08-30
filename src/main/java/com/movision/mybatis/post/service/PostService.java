@@ -1743,10 +1743,10 @@ public class PostService {
 
     public int queryUserActiveCount(int userid) {
         try {
-            log.info("查询用户发活动数");
+            log.info("查询用户参与的活动总数");
             return postMapper.queryUserActiveCount(userid);
         } catch (Exception e) {
-            log.error("查询用户发活动数失败", e);
+            log.error("查询用户参与的活动总数失败", e);
             throw e;
         }
     }
