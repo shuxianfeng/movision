@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -43,13 +44,14 @@ public class VoteController {
      */
     @ApiOperation(value = "添加活动", notes = "添加活动", response = Response.class)
     @RequestMapping(value = "insertSelective", method = RequestMethod.POST)
-    public Response insertSelective(@ApiParam(value = "活动名称") @RequestParam String name,
+    public Response insertSelective(HttpServletRequest request,
+                                    @ApiParam(value = "活动名称") @RequestParam String name,
                                     @ApiParam(value = "活动图片") @RequestParam String photo,
                                     @ApiParam(value = "活动开始时间") @RequestParam String begintime,
                                     @ApiParam(value = "活动结束时间") @RequestParam String endtime,
                                     @ApiParam(value = "活动说明") @RequestParam String activitydescription) {
         Response response = new Response();
-        int result = voteFacade.insertSelective(name, photo, begintime, endtime, activitydescription);
+        int result = voteFacade.insertSelective(request, name, photo, begintime, endtime, activitydescription);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
@@ -106,14 +108,15 @@ public class VoteController {
      */
     @RequestMapping(value = "updateActivity", method = RequestMethod.POST)
     @ApiOperation(value = "编辑活动", notes = "编辑活动接口", response = Response.class)
-    public Response updateActivity(@ApiParam(value = "活动id") @RequestParam int id,
+    public Response updateActivity(HttpServletRequest request,
+                                   @ApiParam(value = "活动id") @RequestParam int id,
                                    @ApiParam(value = "活动名称") @RequestParam String name,
                                    @ApiParam(value = "活动封面") @RequestParam String photo,
                                    @ApiParam(value = "活动说明") @RequestParam String explain,
                                    @ApiParam(value = "开始时间") @RequestParam String bigintime,
                                    @ApiParam(value = "结束时间") @RequestParam String endtime) {
         Response response = new Response();
-        voteFacade.updateActivity(id, name, photo, explain, bigintime, endtime);
+        voteFacade.updateActivity(request, id, name, photo, explain, bigintime, endtime);
         response.setMessage("操作成功");
         response.setData(1);
         return response;
@@ -155,7 +158,8 @@ public class VoteController {
      */
     @ApiOperation(value = "添加投稿", notes = "添加投稿", response = Response.class)
     @RequestMapping(value = "insertSelectiveTP", method = RequestMethod.POST)
-    public Response insertSelectiveTP(@ApiParam(value = "活动id") @RequestParam(required = false) String activeid,
+    public Response insertSelectiveTP(HttpServletRequest request,
+                                      @ApiParam(value = "活动id") @RequestParam(required = false) String activeid,
                                       @ApiParam(value = "作品名称") @RequestParam(required = false) String name,
                                       @ApiParam(value = "投稿人电话") @RequestParam(required = false) String phone,
                                       @ApiParam(value = "投稿内容") @RequestParam(required = false) String photo,
@@ -163,7 +167,7 @@ public class VoteController {
                                       @ApiParam(value = "投稿人") @RequestParam(required = false) String nickname,
                                       @ApiParam(value = "banner图") @RequestParam(required = false) String banner) {
         Response response = new Response();
-        int result = voteFacade.insertSelectiveTP(activeid, name, phone, photo, describe, nickname, banner);
+        int result = voteFacade.insertSelectiveTP(request, activeid, name, phone, photo, describe, nickname, banner);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
@@ -187,7 +191,8 @@ public class VoteController {
      */
     @ApiOperation(value = "编辑投稿信息", notes = "编辑投稿", response = Response.class)
     @RequestMapping(value = "updateTakeById", method = RequestMethod.POST)
-    public Response updateTakeById(@ApiParam(value = "作品id") @RequestParam String id,
+    public Response updateTakeById(HttpServletRequest request,
+                                   @ApiParam(value = "作品id") @RequestParam String id,
                                    @ApiParam(value = "活动id") @RequestParam(required = false) String activeid,
                                    @ApiParam(value = "作品名称") @RequestParam(required = false) String name,
                                    @ApiParam(value = "投稿人电话") @RequestParam(required = false) String phone,
@@ -198,7 +203,7 @@ public class VoteController {
                                    @ApiParam(value = "审核") @RequestParam(required = false) String audit,
                                    @ApiParam(value = "号码") @RequestParam(required = false) String mark) {
         Response response = new Response();
-        voteFacade.updateTakeById(id, activeid, name, phone, photo, describe, nickname, banner, audit, mark);
+        voteFacade.updateTakeById(request, id, activeid, name, phone, photo, describe, nickname, banner, audit, mark);
         response.setMessage("操作成功");
         response.setData(1);
         return response;

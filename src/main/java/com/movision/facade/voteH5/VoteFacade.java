@@ -9,10 +9,14 @@ import com.movision.mybatis.take.entity.TakeVo;
 import com.movision.mybatis.take.service.TakeService;
 import com.movision.mybatis.votingrecords.entity.Votingrecords;
 import com.movision.mybatis.votingrecords.service.VotingrecordsService;
+import com.movision.utils.JsoupCompressImg;
 import com.movision.utils.pagination.model.Paging;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,12 +30,22 @@ import java.util.Map;
  */
 @Service
 public class VoteFacade {
+
     @Autowired
     private ActiveH5Service activeH5Service;
+
     @Autowired
     private TakeService takeService;
+
     @Autowired
     private VotingrecordsService votingrecordsService;
+
+    @Autowired
+    private JsoupCompressImg jsoupCompressImg;
+
+    private static Logger logger = LoggerFactory.getLogger(VoteFacade.class);
+
+
     /**
      * 插入活动
      *
@@ -44,7 +58,7 @@ public class VoteFacade {
      * @param
      * @return
      */
-    public int insertSelective(String name, String photo, String begintime, String endtime, String activitydescription) {
+    public int insertSelective(HttpServletRequest request, String name, String photo, String begintime, String endtime, String activitydescription) {
         ActiveH5 activeH5 = new ActiveH5();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (StringUtil.isNotEmpty(name)) {
@@ -72,7 +86,19 @@ public class VoteFacade {
         activeH5.setBegintime(begin);
         activeH5.setEndtime(end);
         if (StringUtil.isNotEmpty(activitydescription)) {
-            activeH5.setActivitydescription(activitydescription);
+
+            //内容转换
+            Map con = jsoupCompressImg.compressImg(request, activitydescription);
+            System.out.println(con);
+            if ((int) con.get("code") == 200) {
+                String str = con.get("content").toString();
+                str = str.replace("\\", "");
+                activeH5.setActivitydescription(str);
+            } else {
+                logger.error("帖子内容转换异常");
+                activeH5.setActivitydescription(activitydescription);
+            }
+
         }
         activeH5.setIsdel(0);
         activeH5.setIntime(new Date());
@@ -108,7 +134,8 @@ public class VoteFacade {
      * @param bigintime
      * @param endtime
      */
-    public void updateActivity(Integer id, String name, String photo, String explain, String bigintime, String endtime) {
+    public void updateActivity(HttpServletRequest request, Integer id, String name, String photo,
+                               String explain, String bigintime, String endtime) {
         ActiveH5 activeH5 = new ActiveH5();
         activeH5.setId(id);
         if (StringUtil.isNotEmpty(name)) {
@@ -118,7 +145,18 @@ public class VoteFacade {
             activeH5.setPhoto(photo);
         }
         if (StringUtil.isNotEmpty(explain)) {
-            activeH5.setActivitydescription(explain);
+            //内容转换
+            Map con = jsoupCompressImg.compressImg(request, explain);
+            System.out.println(con);
+            if ((int) con.get("code") == 200) {
+                String str = con.get("content").toString();
+                str = str.replace("\\", "");
+                activeH5.setActivitydescription(str);
+            } else {
+                logger.error("帖子内容转换异常");
+                activeH5.setActivitydescription(explain);
+            }
+            //activeH5.setActivitydescription(explain);
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date big = null;
@@ -185,7 +223,8 @@ public class VoteFacade {
      * @param
      * @return
      */
-    public int insertSelectiveTP(String activeid, String name, String phone, String photo, String describe, String nickname, String banner) {
+    public int insertSelectiveTP(HttpServletRequest request, String activeid, String name, String phone, String photo,
+                                 String describe, String nickname, String banner) {
         Take take = new Take();
         if (StringUtil.isNotEmpty(activeid)) {
             take.setActiveid(Integer.parseInt(activeid));
@@ -199,13 +238,27 @@ public class VoteFacade {
             take.setPhone(phone);
         }
         if (StringUtil.isNotEmpty(photo)) {
-            take.setPhoto(photo);
+            //内容转换
+            Map con = jsoupCompressImg.compressImg(request, photo);
+            System.out.println(con);
+            if ((int) con.get("code") == 200) {
+                String str = con.get("content").toString();
+                str = str.replace("\\", "");
+                take.setPhoto(str);
+            } else {
+                logger.error("帖子内容转换异常");
+                take.setPhoto(photo);
+            }
+            //take.setPhoto(photo);
         }
         if (StringUtil.isNotEmpty(describe)) {
             take.setDescribe(describe);
         }
         if (StringUtil.isNotEmpty(nickname)) {
             take.setNickname(nickname);
+        }
+        if (StringUtil.isNotEmpty(banner)) {
+            take.setBanner(banner);
         }
         int result = takeService.insertSelectiveTP(take);
         return result;
@@ -225,7 +278,8 @@ public class VoteFacade {
      * @param audit
      * @param mark
      */
-    public void updateTakeById(String id, String activeid, String name, String phone, String photo, String describe, String nickname, String banner, String audit, String mark) {
+    public void updateTakeById(HttpServletRequest request, String id, String activeid, String name, String phone,
+                               String photo, String describe, String nickname, String banner, String audit, String mark) {
         Take take = new Take();
         take.setId(Integer.parseInt(id));
         if (StringUtil.isNotEmpty(activeid)) {
@@ -235,9 +289,21 @@ public class VoteFacade {
             take.setName(name);
         }
         if (StringUtil.isNotEmpty(phone)) {
-            take.setPhoto(photo);
+            //内容转换
+            Map con = jsoupCompressImg.compressImg(request, photo);
+            System.out.println(con);
+            if ((int) con.get("code") == 200) {
+                String str = con.get("content").toString();
+                str = str.replace("\\", "");
+                take.setPhoto(str);
+            } else {
+                logger.error("帖子内容转换异常");
+                take.setPhoto(photo);
+            }
+            //take.setPhoto(photo);
         }
         if (StringUtil.isNotEmpty(photo)) {
+
             take.setPhoto(photo);
         }
         if (StringUtil.isNotEmpty(describe)) {
