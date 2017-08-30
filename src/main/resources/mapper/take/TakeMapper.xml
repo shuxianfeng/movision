@@ -7,9 +7,15 @@
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="photo" property="photo" jdbcType="VARCHAR"/>
+        <result column="describe" property="describe" jdbcType="VARCHAR"/>
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column="mark" property="mark" jdbcType="INTEGER"/>
+        <result column="audit" property="audit" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, activeid, name, isdel, intime
+        id, activeid, name, isdel, intime, phone, photo, describe, nickname, mark, audit
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
