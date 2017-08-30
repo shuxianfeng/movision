@@ -146,9 +146,10 @@
   </update>
     <select id="findAllTakeCondition" parameterType="java.util.Map"
             resultType="com.movision.mybatis.take.entity.TakeVo">
-        SELECT t.mark,t.`name`,t.nickname,t.banner,(SELECT COUNT(1) FROM tp_votingrecords WHERE takeid = t.id) AS
+        SELECT t.id,t.activeid,t.mark,t.`name`,t.nickname,t.banner,(SELECT COUNT(1) FROM tp_votingrecords WHERE takeid =
+        t.id) AS
         votesum FROM tp_take t WHERE t.isdel=0 AND t.audit=1
-        <if test="number!=null and number!=''">
+        <if test="mark!=null and mark!=''">
             AND t.mark=#{mark,jdbcType=INTEGER}
         </if>
         <if test="nickname!=null and nickname!=''">

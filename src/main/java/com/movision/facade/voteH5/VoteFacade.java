@@ -149,14 +149,14 @@ public class VoteFacade {
      * 根据编号或名字查询
      *
      * @param paging
-     * @param number
+     * @param mark
      * @param nickname
      * @return
      */
-    public List<TakeVo> findAllTakeCondition(Paging<TakeVo> paging, String number, String nickname) {
+    public List<TakeVo> findAllTakeCondition(Paging<TakeVo> paging, String mark, String nickname) {
         Map map = new HashMap();
-        if (StringUtil.isNotEmpty(nickname)) {
-            map.put("number", number);
+        if (StringUtil.isNotEmpty(mark)) {
+            map.put("mark", mark);
         }
         if (StringUtil.isNotEmpty(nickname)) {
             map.put("nickname", nickname);
