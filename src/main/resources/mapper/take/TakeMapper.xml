@@ -53,6 +53,24 @@
             <if test="intime != null">
                 intime,
             </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="photo != null">
+                photo,
+            </if>
+            <if test="describe != null">
+                describe,
+            </if>
+            <if test="nickname != null">
+                nickname,
+            </if>
+            <if test="mark != null">
+                mark,
+            </if>
+            <if test="audit != null">
+                audit,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -70,6 +88,28 @@
             <if test="intime != null">
                 #{intime,jdbcType=TIMESTAMP},
             </if>
+
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="photo != null">
+                #{photo,jdbcType=VARCHAR},
+            </if>
+            <if test="describe != null">
+                #{describe,jdbcType=VARCHAR},
+            </if>
+
+            <if test="nickname != null">
+                #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="mark != null">
+                #{mark,jdbcType=INTEGER},
+            </if>
+
+            <if test="audit != null">
+                #{audit,jdbcType=INTEGER},
+            </if>
+
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.take.entity.Take">

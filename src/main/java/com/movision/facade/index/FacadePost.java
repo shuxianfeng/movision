@@ -2744,6 +2744,7 @@ public class FacadePost {
                 findPostLabel(postVo);
                 findHotComment(postVo);
                 countView(postVo);
+                zanIsPost(Integer.parseInt(userid), postVo);
             }
         }
         return postVo;
