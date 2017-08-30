@@ -147,7 +147,7 @@ public class FacadeComments {
                 vo.setIntime(new Date());
                 vo.setZansum(0);
                 vo.setIsdel("0");
-                vo.setStatus(0);
+                vo.setStatus(1);
                 vo.setIscontribute(0);
                 type = commentService.insertComment(vo);//添加评论
                 //更新用户最后操作时间和帖子评论总次数
@@ -182,7 +182,7 @@ public class FacadeComments {
                 vo.setIntime(new Date());
                 vo.setZansum(0);
                 vo.setIsdel("0");
-                vo.setStatus(0);
+                vo.setStatus(1);
                 vo.setIscontribute(0);
                 vo.setPid(Integer.parseInt(fuid));
                 type = commentService.insertComment(vo);//添加评论
