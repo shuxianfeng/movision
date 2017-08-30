@@ -10,9 +10,10 @@
         <result column="activitydescription" property="activitydescription" jdbcType="VARCHAR"/>
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="pageview" property="pageview" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, name, photo, begintime, endtime, activitydescription, isdel,intime
+        id, name, photo, begintime, endtime, activitydescription, isdel,intime,pageview
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -59,6 +60,9 @@
             <if test="intime != null">
                 intime,
             </if>
+            <if test="pageview != null">
+                pageview,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -86,7 +90,9 @@
             <if test="intime != null">
                 #{intime,jdbcType=TIMESTAMP},
             </if>
-
+            <if test="pageview != null">
+                #{pageview,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.activeH5.entity.ActiveH5">

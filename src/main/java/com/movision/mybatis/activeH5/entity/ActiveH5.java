@@ -17,6 +17,15 @@ public class ActiveH5 {
 
     private Integer isdel;
     private Date intime;
+    private Integer pageview;
+
+    public Integer getPageview() {
+        return pageview;
+    }
+
+    public void setPageview(Integer pageview) {
+        this.pageview = pageview;
+    }
 
     public Date getIntime() {
         return intime;
