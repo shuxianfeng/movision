@@ -33,12 +33,12 @@ public class VoteFacade {
      * @param photo
      * @param begintime
      * @param endtime
-     * @param company
+     * @param
      * @param activitydescription
      * @param
      * @return
      */
-    public int insertSelective(String name, String photo, String begintime, String endtime, String company, String activitydescription) {
+    public int insertSelective(String name, String photo, String begintime, String endtime, String activitydescription) {
         ActiveH5 activeH5 = new ActiveH5();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (StringUtil.isNotEmpty(name)) {
@@ -65,9 +65,6 @@ public class VoteFacade {
         }
         activeH5.setBegintime(begin);
         activeH5.setEndtime(end);
-        if (StringUtil.isNotEmpty(company)) {
-            activeH5.setCompany(company);
-        }
         if (StringUtil.isNotEmpty(activitydescription)) {
             activeH5.setActivitydescription(activitydescription);
         }
@@ -93,7 +90,7 @@ public class VoteFacade {
      * @param paging
      * @return
      */
-    public List<ActiveH5> findAllActive(Paging<ActiveH5> paging) {
+    public List<ActiveH5> findAllActive(String name, String bigintime, String endtime, Paging<ActiveH5> paging) {
         return activeH5Service.findAllActive(paging);
     }
 

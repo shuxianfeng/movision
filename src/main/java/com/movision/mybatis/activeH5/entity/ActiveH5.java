@@ -13,8 +13,6 @@ public class ActiveH5 {
 
     private Date endtime;
 
-    private String company;
-
     private String activitydescription;
 
     private Integer isdel;
@@ -66,14 +64,6 @@ public class ActiveH5 {
 
     public void setEndtime(Date endtime) {
         this.endtime = endtime;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company == null ? null : company.trim();
     }
 
     public String getActivitydescription() {

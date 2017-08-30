@@ -7,13 +7,12 @@
         <result column="photo" property="photo" jdbcType="VARCHAR"/>
         <result column="begintime" property="begintime" jdbcType="TIMESTAMP"/>
         <result column="endtime" property="endtime" jdbcType="TIMESTAMP"/>
-        <result column="company" property="company" jdbcType="VARCHAR"/>
         <result column="activitydescription" property="activitydescription" jdbcType="VARCHAR"/>
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, name, photo, begintime, endtime, company, activitydescription, isdel,intime
+        id, name, photo, begintime, endtime, activitydescription, isdel,intime
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -27,10 +26,10 @@
     </delete>
     <insert id="insert" parameterType="com.movision.mybatis.activeH5.entity.ActiveH5">
         insert into tp_activeh5 (id, name, photo,
-        begintime, endtime, company,
+        begintime, endtime,
         activitydescription, isdel,intime)
         values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR},
-        #{begintime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, #{company,jdbcType=VARCHAR},
+        #{begintime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP},
         #{activitydescription,jdbcType=VARCHAR}, #{isdel,jdbcType=INTEGER},#{intime,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.activeH5.entity.ActiveH5">
@@ -50,9 +49,6 @@
             </if>
             <if test="endtime != null">
                 endtime,
-            </if>
-            <if test="company != null">
-                company,
             </if>
             <if test="activitydescription != null">
                 activitydescription,
@@ -81,9 +77,6 @@
             <if test="endtime != null">
                 #{endtime,jdbcType=TIMESTAMP},
             </if>
-            <if test="company != null">
-                #{company,jdbcType=VARCHAR},
-            </if>
             <if test="activitydescription != null">
                 #{activitydescription,jdbcType=VARCHAR},
             </if>
@@ -111,9 +104,6 @@
             <if test="endtime != null">
                 endtime = #{endtime,jdbcType=TIMESTAMP},
             </if>
-            <if test="company != null">
-                company = #{company,jdbcType=VARCHAR},
-            </if>
             <if test="activitydescription != null">
                 activitydescription = #{activitydescription,jdbcType=VARCHAR},
             </if>
@@ -133,7 +123,6 @@
         photo = #{photo,jdbcType=VARCHAR},
         begintime = #{begintime,jdbcType=TIMESTAMP},
         endtime = #{endtime,jdbcType=TIMESTAMP},
-        company = #{company,jdbcType=VARCHAR},
         activitydescription = #{activitydescription,jdbcType=VARCHAR},
         isdel = #{isdel,jdbcType=INTEGER},
         intime = #{intime,jdbcType=TIMESTAMP}

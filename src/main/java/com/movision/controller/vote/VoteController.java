@@ -35,7 +35,7 @@ public class VoteController {
      * @param photo
      * @param begintime
      * @param endtime
-     * @param company
+     * @param
      * @param activitydescription
      * @return
      */
@@ -45,10 +45,9 @@ public class VoteController {
                                     @ApiParam(value = "活动图片") @RequestParam String photo,
                                     @ApiParam(value = "活动开始时间") @RequestParam String begintime,
                                     @ApiParam(value = "活动结束时间") @RequestParam String endtime,
-                                    @ApiParam(value = "公司") @RequestParam String company,
                                     @ApiParam(value = "活动说明") @RequestParam String activitydescription) {
         Response response = new Response();
-        int result = voteFacade.insertSelective(name, photo, begintime, endtime, company, activitydescription);
+        int result = voteFacade.insertSelective(name, photo, begintime, endtime, activitydescription);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
