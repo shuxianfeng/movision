@@ -7,9 +7,10 @@
         <result column="takenumber" property="takenumber" jdbcType="INTEGER"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="takeid" property="takeid" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, activeid, takenumber, name, intime
+        id, activeid, takenumber, name, intime,takeid
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
