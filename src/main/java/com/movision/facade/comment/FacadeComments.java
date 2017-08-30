@@ -186,6 +186,7 @@ public class FacadeComments {
                 vo.setIscontribute(0);
                 vo.setPid(Integer.parseInt(fuid));
                 type = commentService.insertComment(vo);//添加评论
+                postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子表的评论次数字段
                 //增加评论热度
                 facadeHeatValue.addCommentHeatValue(1, Integer.parseInt(fuid));
                 //************************查询被评论的帖子是否被设为最新消息通知用户
