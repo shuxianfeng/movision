@@ -156,6 +156,58 @@ public class VoteController {
     }
 
     /**
+     * 编辑投稿信息
+     * @param id
+     * @param activeid
+     * @param name
+     * @param phone
+     * @param photo
+     * @param describe
+     * @param nickname
+     * @param banner
+     * @param audit
+     * @param mark
+     * @return
+     */
+    @ApiOperation(value = "编辑投稿信息", notes = "编辑投稿", response = Response.class)
+    @RequestMapping(value = "updateTakeById", method = RequestMethod.POST)
+    public Response updateTakeById(@ApiParam(value = "作品id") @RequestParam String id,
+                                   @ApiParam(value = "活动id") @RequestParam(required = false) String activeid,
+                                   @ApiParam(value = "作品名称") @RequestParam(required = false) String name,
+                                   @ApiParam(value = "投稿人电话") @RequestParam(required = false) String phone,
+                                   @ApiParam(value = "投稿内容") @RequestParam(required = false) String photo,
+                                   @ApiParam(value = "投稿描述") @RequestParam(required = false) String describe,
+                                   @ApiParam(value = "投稿人") @RequestParam(required = false) String nickname,
+                                   @ApiParam(value = "banner图") @RequestParam(required = false) String banner,
+                                   @ApiParam(value = "审核") @RequestParam(required = false) String audit,
+                                   @ApiParam(value = "号码") @RequestParam(required = false) String mark) {
+        Response response = new Response();
+        voteFacade.updateTakeById(id, activeid, name, phone, photo, describe, nickname, banner, audit, mark);
+        response.setMessage("操作成功");
+        response.setData(1);
+        return response;
+    }
+
+
+    /**
+     * 投稿审核
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "投稿审核", notes = "用于投稿审核接口", response = Response.class)
+    @RequestMapping(value = "updateTakeByAudit", method = RequestMethod.POST)
+    public Response updateTakeByAudit(@ApiParam(value = "活动id") @RequestParam String activityid,
+                                      @ApiParam(value = "投稿id") @RequestParam String id,
+                                      @ApiParam(value = "号码") @RequestParam String number) {
+        Response response = new Response();
+        voteFacade.updateTakeByAudit(activityid, id, number);
+        response.setMessage("操作成功");
+        response.setData(1);
+        return response;
+    }
+
+    /**
      * 查询投稿详情
      *
      * @param id

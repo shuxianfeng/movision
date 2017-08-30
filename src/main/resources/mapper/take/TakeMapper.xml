@@ -146,19 +146,21 @@
   </update>
     <select id="findAllTake" parameterType="com.movision.mybatis.take.entity.Take"
             resultType="com.movision.mybatis.take.entity.TakeVo">
-        SELECT * FROM tp_take WHERE isdel=0
+        SELECT t.*,a.name AS acname,
+        (SELECT COUNT(1) FROM tp_votingrecords WHERE takeid =t.id) AS votesum
+        FROM tp_take t LEFT JOIN tp_activeh5 a ON a.id = t.activeid WHERE t.isdel=0
         <if test="name != null">
-            AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+            AND t.name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
         <if test="audit != null">
-            AND audit = #{audit,jdbcType=INTEGER}
+            AND t.audit = #{audit,jdbcType=INTEGER}
         </if>
     </select>
     <select id="findAllTakeCondition" parameterType="java.util.Map"
             resultType="com.movision.mybatis.take.entity.TakeVo">
-        SELECT t.id,t.activeid,t.mark,t.`name`,t.nickname,t.banner,(SELECT COUNT(1) FROM tp_votingrecords WHERE takeid =
-        t.id) AS
-        votesum FROM tp_take t WHERE t.isdel=0 AND t.audit=1
+        SELECT t.id,t.activeid,t.mark,t.`name`,t.nickname,t.banner,
+        (SELECT COUNT(1) FROM tp_votingrecords WHERE takeid = t.id) AS votesum
+        FROM tp_take t WHERE t.isdel=0 AND t.audit=1
         <if test="mark!=null and mark!=''">
             AND t.mark=#{mark,jdbcType=INTEGER}
         </if>
@@ -171,4 +173,23 @@
         t.id) AS
         votesum FROM tp_take t WHERE t.isdel=0 AND t.audit=1 ORDER BY votesum DESC
     </select>
+
+    <select id="updateTakeByNumber" parameterType="com.movision.mybatis.take.entity.Take">
+        update tp_take
+          audit = audit+1
+        where id = #{id,jdbcType=INTEGER} AND activeid = #{activeid,jdbcType=INTEGER} AND mark >= #{mark,jdbcType=INTEGER}
+    </select>
+
+    <update id="updateTakeByAudit" parameterType="com.movision.mybatis.take.entity.Take">
+        update tp_take
+        <set>
+            <if test="mark != null">
+                mark = #{mark,jdbcType=INTEGER},
+            </if>
+            <if test="audit != null">
+                audit = #{audit,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

@@ -211,6 +211,73 @@ public class VoteFacade {
         return result;
     }
 
+    /**
+     * 编辑投稿
+     *
+     * @param id
+     * @param activeid
+     * @param name
+     * @param phone
+     * @param photo
+     * @param describe
+     * @param nickname
+     * @param banner
+     * @param audit
+     * @param mark
+     */
+    public void updateTakeById(String id, String activeid, String name, String phone, String photo, String describe, String nickname, String banner, String audit, String mark) {
+        Take take = new Take();
+        take.setId(Integer.parseInt(id));
+        if (StringUtil.isNotEmpty(activeid)) {
+            take.setActiveid(Integer.parseInt(activeid));
+        }
+        if (StringUtil.isNotEmpty(name)) {
+            take.setName(name);
+        }
+        if (StringUtil.isNotEmpty(phone)) {
+            take.setPhoto(photo);
+        }
+        if (StringUtil.isNotEmpty(photo)) {
+            take.setPhoto(photo);
+        }
+        if (StringUtil.isNotEmpty(describe)) {
+            take.setDescribe(describe);
+        }
+        if (StringUtil.isNotEmpty(nickname)) {
+            take.setNickname(nickname);
+        }
+        if (StringUtil.isNotEmpty(banner)) {
+            take.setBanner(banner);
+        }
+        if (StringUtil.isNotEmpty(audit)) {
+            take.setAudit(Integer.parseInt(audit));
+        }
+        if (StringUtil.isNotEmpty(mark)) {
+            take.setMark(Integer.parseInt(mark));
+        }
+        takeService.updateTakeById(take);
+    }
+
+
+    /**
+     * 投稿审核
+     *
+     * @param id
+     * @param number
+     */
+    public void updateTakeByAudit(String activityid, String id, String number) {
+        Take take = new Take();
+        take.setId(Integer.parseInt(id));
+        take.setAudit(1);
+        take.setActiveid(Integer.parseInt(activityid));
+        if (StringUtil.isNotEmpty(number)) {
+            take.setMark(Integer.parseInt(number));
+        }
+        //把当前序号之后的投稿序号+1
+        takeService.updateTakeByNumber(take);
+        takeService.updateTakeByAudit(take);
+    }
+
 
     /**
      * 查询投稿详情

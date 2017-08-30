@@ -16,6 +16,7 @@ public class TakeVo {
     private Integer isdel;
 
     private Date intime;
+
     private String phone;//电话
 
     private String photo;//封面
@@ -27,8 +28,20 @@ public class TakeVo {
     private Integer mark;//排序号
 
     private Integer audit;//审核
+
     private Integer votesum;
+
     private String banner;
+
+    private String acname;//活动名称
+
+    public String getAcname() {
+        return acname;
+    }
+
+    public void setAcname(String acname) {
+        this.acname = acname;
+    }
 
     public String getBanner() {
         return banner;

@@ -4,6 +4,7 @@ import com.movision.mybatis.systemPush.service.SystemPushService;
 import com.movision.mybatis.take.entity.Take;
 import com.movision.mybatis.take.entity.TakeVo;
 import com.movision.mybatis.take.mapper.TakeMapper;
+import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,10 +34,55 @@ public class TakeService {
      */
     public int insertSelectiveTP(Take take) {
         try {
-            log.info("");
+            log.info("添加投稿");
             return takeMapper.insertSelective(take);
         } catch (Exception e) {
             log.error("添加参赛人员失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 编辑投稿
+     *
+     * @param take
+     */
+    public void updateTakeById(Take take) {
+        try {
+            log.info("编辑投稿");
+            takeMapper.updateByPrimaryKeySelective(take);
+        } catch (Exception e) {
+            log.error("编辑投稿异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 投稿序号+1
+     *
+     * @param take
+     */
+    public void updateTakeByNumber(Take take) {
+        try {
+            log.info("投稿序号+1操作");
+            takeMapper.updateTakeByNumber(take);
+        } catch (Exception e) {
+            log.error("投稿序号+1操作异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 投稿审核
+     *
+     * @param take
+     */
+    public void updateTakeByAudit(Take take) {
+        try {
+            log.info("投稿审核");
+            takeMapper.updateTakeByAudit(take);
+        } catch (Exception e) {
+            log.error("投稿审核异常", e);
             throw e;
         }
     }
