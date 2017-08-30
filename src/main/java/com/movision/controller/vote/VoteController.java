@@ -75,6 +75,25 @@ public class VoteController {
     }
 
 
+/*    *//**
+     * 查询全部活动
+     *
+     * @return
+     *//*
+    @ApiOperation(value = "查询全部活动", notes = "查询全部活动", response = Response.class)
+    @RequestMapping(value = "findAllActive", method = RequestMethod.POST)
+    public Response findAllActive(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                  @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<ActiveH5> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List result = voteFacade.findAllActive(pager);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        pager.result(result);
+        response.setData(pager);
+        return response;
+    }*/
 
 
     /**
