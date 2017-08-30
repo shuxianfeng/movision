@@ -143,15 +143,6 @@ public class VoteFacade {
         return takeService.deleteTakePeople(id);
     }
 
-    /**
-     * 查询所有参赛人员
-     *
-     * @param paging
-     * @return
-     */
-    public List<TakeVo> findAllTake(Paging<TakeVo> paging) {
-        return takeService.findAllTake(paging);
-    }
 
 
     /**

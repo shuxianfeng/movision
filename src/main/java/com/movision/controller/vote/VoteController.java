@@ -148,10 +148,12 @@ public class VoteController {
     @ApiOperation(value = "查询全部参赛人员", notes = "查询全部参赛人员", response = Response.class)
     @RequestMapping(value = "findAllTake", method = RequestMethod.POST)
     public Response findAllTake(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                                @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                @ApiParam(value = "编号") @RequestParam(required = false) String number,
+                                @ApiParam(value = "姓名") @RequestParam(required = false) String nickname) {
         Response response = new Response();
         Paging<TakeVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List result = voteFacade.findAllTake(pager);
+        List result = voteFacade.findAllTakeCondition(pager, number, nickname);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }

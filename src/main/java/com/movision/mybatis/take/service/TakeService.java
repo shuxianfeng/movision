@@ -59,22 +59,6 @@ public class TakeService {
     }
 
 
-    /**
-     * 查询全部参赛人员
-     *
-     * @param paging
-     * @return
-     */
-    public List<TakeVo> findAllTake(Paging<TakeVo> paging) {
-        try {
-            log.info("查询全部参赛人员");
-            return takeMapper.findAllTake(paging.getRowBounds());
-        } catch (Exception e) {
-            log.error("查询全部参赛人员失败", e);
-            throw e;
-        }
-    }
-
 
     /**
      * 根据编号或名字查询
