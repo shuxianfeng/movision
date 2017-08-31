@@ -2,9 +2,11 @@ package com.movision.facade.label;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.mongodb.DBObject;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleCount;
 import com.movision.mybatis.circle.entity.CircleVo;
@@ -12,6 +14,7 @@ import com.movision.mybatis.followLabel.entity.FollowLabel;
 import com.movision.mybatis.followLabel.service.FollowLabelService;
 import com.movision.mybatis.footRank.entity.FootRank;
 import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postLabel.entity.*;
 import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.postLabelRelation.service.PostLabelRelationService;
@@ -62,6 +65,8 @@ public class LabelFacade {
     private FacadeHeatValue facadeHeatValue;
     @Autowired
     private UserService userService;
+    @Autowired
+    private PostService postService;
 
     /**
      * 我的--关注--关注的标签，点击关注调用的关注的标签列表返回接口
@@ -205,14 +210,29 @@ public class LabelFacade {
      * @param
      * @return
      */
-    public CircleVo queryCircleByPostid(String circleid) {
+    public CircleVo queryCircleByPostid(String circleid, String userid) {
         //根据id查询圈子所有
+        List<DBObject> listmongodba;
+        List<PostVo> posts = new ArrayList<>();
         CircleVo circleVo = postLabelService.queryCircleByPostid(Integer.parseInt(circleid));
         List<User> circleManager = postLabelService.queryCircleManager(Integer.parseInt(circleid));
         circleVo.setCirclemanagerlist(circleManager);
+        //查询所有帖子
+        List<PostVo> postVos = postService.findAllPostCrile(Integer.parseInt(circleid));
         //根据圈子查询今日这个圈子的发帖数
-        int todayPost = postLabelService.postInCircle(Integer.parseInt(circleid));
-        circleVo.setTodayPost(todayPost);
+        //不为空查询当前用户未看过的总更新数
+        listmongodba = facadePost.userRefulshListMongodbs(Integer.parseInt(userid));//查询mongodb中用户看过的帖子列表
+        if (listmongodba.size() != 0) {
+            for (int j = 0; j < listmongodba.size(); j++) {
+                PostVo post = new PostVo();
+                post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
+                posts.add(post);//把mongodb转为post实体
+            }
+            postVos.removeAll(posts);
+            circleVo.setPostnewnum(postVos.size());
+        } else {
+            circleVo.setPostnewnum(postVos.size());
+        }
         //查询圈子下所有帖子用的标
         List<PostLabel> postLabels = postLabelService.queryLabelCircle(Integer.parseInt(circleid));
         circleVo.setPostLabels(postLabels);
@@ -222,7 +242,7 @@ public class LabelFacade {
         //查询用户是否关注该圈子
         Map map = new HashMap();
         map.put("circleid", circleid);
-        map.put("userid", ShiroUtil.getAppUserID());
+        map.put("userid", Integer.parseInt(userid));
         int isfollow = postLabelService.isFollowCircleid(map);
         circleVo.setIsfollow(isfollow);
         return circleVo;

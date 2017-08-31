@@ -366,9 +366,10 @@ public class AppWaterfallController {
 
     @ApiOperation(value = "点击圈子标签页上半部分", notes = "点击圈子标签页上半部分", response = Response.class)
     @RequestMapping(value = "queryCircleByPostid", method = RequestMethod.POST)
-    public Response queryCircleByPostid(@ApiParam(value = "圈子id") @RequestParam String circleid) {
+    public Response queryCircleByPostid(@ApiParam(value = "圈子id") @RequestParam String circleid,
+                                        @ApiParam(value = "userid") @RequestParam(required = false) String userid) {
         Response response = new Response();
-        CircleVo result = labelFacade.queryCircleByPostid(circleid);
+        CircleVo result = labelFacade.queryCircleByPostid(circleid, userid);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
