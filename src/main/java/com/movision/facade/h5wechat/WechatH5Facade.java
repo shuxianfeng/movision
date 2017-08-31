@@ -287,11 +287,11 @@ public class WechatH5Facade extends JPanel {
             for (int i = 0; i < 1; i++) {
                 g.rotate(5 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
-                g.drawString(manname, 208, 166);
+                g.drawString(manname, 210, 164);
                 g.drawString(womanname, 210, 208);
-                g.drawString(manname, 264, 808);
+                g.drawString(manname, 266, 809);
                 g.drawString(womanname, 620, 812);
-                g.drawString(content, 278, 265);
+                g.drawString(content, 280, 265);
                 g.drawString(year, 120, 847);
                 g.drawString(month, 185, 847);
                 g.drawString(day, 218, 847);
