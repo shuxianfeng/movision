@@ -20,6 +20,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ public class WechatH5Facade extends JPanel {
     String newurl2 = PropertiesLoader.getValue("wechat.h5.mofo");//新图片路径
     String headImg = PropertiesLoader.getValue("wechat.erweima.domain");//二维码路径
     String lihunurl = PropertiesLoader.getValue("wechat.lihun.domain");
+    String lihunxieyiurl = PropertiesLoader.getValue("wechat.lihunxieyi.domain");
 
     @Autowired
     private CountService countService;
@@ -217,7 +219,7 @@ public class WechatH5Facade extends JPanel {
     public Map<String, Object> imgComposeLi(String manname, String womanname, String content) {
         Map<String, Object> map = new HashMap<>();
         try {
-            InputStream is = new FileInputStream(lihunurl);
+            InputStream is = new FileInputStream(lihunxieyiurl);
             map = LiHun(is, manname, womanname, content);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -243,7 +245,10 @@ public class WechatH5Facade extends JPanel {
     public Map LiHun(InputStream is, String manname, String womanname, String content) {
         Map map = new HashMap();
         try {
-
+            Calendar calendar = Calendar.getInstance();
+            String year = calendar.get(Calendar.YEAR) + "";//年份
+            String month = (calendar.get(Calendar.MONTH) + 1) + "";//月份
+            String day = calendar.get(Calendar.DAY_OF_MONTH) + "";
             //通过JPEG图象流创建JPEG数据流解码器
             JPEGImageDecoder jpegDecoder = JPEGCodec.createJPEGDecoder(is);
             //解码当前JPEG数据流，返回BufferedImage对象
@@ -262,7 +267,7 @@ public class WechatH5Facade extends JPanel {
 
             g.fillRect(0, 0, getWidth(), getHeight());
             g.rotate(0, 900, 15);
-            g.drawImage(img, 470, 820, this);
+            g.drawImage(img, 0, 0, this);
             //g.rotate(30);
             //设置颜色。
             g.setColor(Color.BLACK);
@@ -282,11 +287,17 @@ public class WechatH5Facade extends JPanel {
             for (int i = 0; i < 1; i++) {
                 g.rotate(0 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
-                g.drawString(manname, 130, 625);
-                g.drawString(womanname, 130, 765);
-                g.drawString(manname, 130, 270);
-                g.drawString(womanname, 130, 765);
-                g.drawString(content, 410, 765);
+                g.drawString(manname, 0, 0);
+                g.drawString(womanname, 0, 0);
+                g.drawString(manname, 0, 0);
+                g.drawString(womanname, 0, 0);
+                g.drawString(content, 0, 0);
+                g.drawString(year, 0, 0);
+                g.drawString(month, 0, 0);
+                g.drawString(day, 0, 0);
+                g.drawString(year, 0, 0);
+                g.drawString(month, 0, 0);
+                g.drawString(day, 0, 0);
             }
             g.dispose();
 
