@@ -204,6 +204,122 @@ public class WechatH5Facade extends JPanel {
     }
 
 
+    /**
+     * 离婚协议
+     *
+     * @param manname
+     * @param womanname
+     * @param
+     * @param
+     * @param
+     * @return
+     */
+    public Map<String, Object> imgComposeLi(String manname, String womanname, String content) {
+        Map<String, Object> map = new HashMap<>();
+        try {
+            InputStream is = new FileInputStream(lihunurl);
+            map = LiHun(is, manname, womanname, content);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (ImageFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+
+
+    /**
+     * 离婚协议
+     *
+     * @param is
+     * @param manname
+     * @param womanname
+     * @param
+     * @param
+     * @return
+     */
+    public Map LiHun(InputStream is, String manname, String womanname, String content) {
+        Map map = new HashMap();
+        try {
+
+            //通过JPEG图象流创建JPEG数据流解码器
+            JPEGImageDecoder jpegDecoder = JPEGCodec.createJPEGDecoder(is);
+            //解码当前JPEG数据流，返回BufferedImage对象
+            BufferedImage buffImg = jpegDecoder.decodeAsBufferedImage();
+            //得到画笔对象
+            //Graphics g = buffImg.getGraphics();
+            Graphics2D g = (Graphics2D) buffImg.getGraphics();
+            //创建你要附加的图象。//-----------------------------------------------这一段是将小图片合成到大图片上的代码
+            //小图片的路径
+            ImageIcon imgIcon = new ImageIcon(headImg);
+            //得到Image对象。
+            Image img = imgIcon.getImage();
+            //将小图片绘到大图片上。
+            //5,300 .表示你的小图片在大图片上的位置。
+            //g.drawImage(img, 400, 15, null);
+
+            g.fillRect(0, 0, getWidth(), getHeight());
+            g.rotate(0, 900, 15);
+            g.drawImage(img, 470, 820, this);
+            //g.rotate(30);
+            //设置颜色。
+            g.setColor(Color.BLACK);
+
+            //最后一个参数用来设置字体的大小
+            Font f = new Font("签名手写体", Font.PLAIN, 20);
+            Color color = new Color(112, 104, 115);
+            Color[] mycolor = {color, Color.LIGHT_GRAY};
+            // g.setColor(mycolor);
+            g.setFont(f);
+            //   平移原点到图形环境的中心
+            g.translate(this.getWidth() / 2, this.getHeight() / 2);
+            //10,20 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
+            //g.drawString(msex, 160, 610);//合成男的名字new String(message.getBytes("utf8"),"gbk");
+            //g.drawString(manname, 650, 1500);//合成女的名字
+            // g.setColor(color);
+            for (int i = 0; i < 1; i++) {
+                g.rotate(0 * Math.PI / 180, 0, 0);
+                g.setPaint(mycolor[i % 2]);
+                g.drawString(manname, 130, 625);
+                g.drawString(womanname, 130, 765);
+                g.drawString(manname, 130, 270);
+                g.drawString(womanname, 130, 765);
+                g.drawString(content, 410, 765);
+            }
+            g.dispose();
+
+            //OutputStream os;
+
+            //os = new FileOutputStream("d:/union.jpg");
+            String shareFileName = System.currentTimeMillis() + ".jpg";
+
+            map.put("status", 200);
+            map.put("url", shareFileName);
+            String url = newurl + shareFileName;
+            //  os = new FileOutputStream(shareFileName);
+            //创键编码器，用于编码内存中的图象数据。
+            //JPEGImageEncoder en = JPEGCodec.createJPEGEncoder(os);
+            // en.encode(buffImg);
+            ImageIO.write(buffImg, "png", new File(url));//图片的输出路径
+            map.put("newurl", newurl2 + "/upload/wechat/" + shareFileName);
+            is.close();
+            //修改参与次数
+            //int ta = updateTake(1077);
+            //map.put("ta", ta);
+            //  os.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (ImageFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+
+
 
 
 }
