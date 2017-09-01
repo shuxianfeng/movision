@@ -292,7 +292,7 @@ public class WechatH5Facade extends JPanel {
                 g.drawString(womanname, 210, 208);
                 g.drawString(manname, 266, 809);
                 g.drawString(womanname, 620, 812);
-                g.drawString(content, 0, 0);
+                g.drawString(content, 266, 260);
                 g.drawString(year, 105, 850);
                 g.drawString(month, 187, 850);
                 g.drawString(day, 220, 850);
@@ -307,7 +307,7 @@ public class WechatH5Facade extends JPanel {
                 g.setFont(f);
                 g.rotate(5 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
-                g.drawString(text, 150, 880);
+                g.drawString(text, 300, 880);
             }
             g.dispose();
 
