@@ -291,15 +291,15 @@ public class WechatH5Facade extends JPanel {
                 g.setPaint(mycolor[i % 2]);
                 g.drawString(manname, 215, 115);
                 g.drawString(womanname, 215, 158);
-                g.drawString(manname, 272, 685);
-                g.drawString(womanname, 630, 685);
+                g.drawString(manname, 275, 685);
+                g.drawString(womanname, 610, 687);
                 g.drawString(content, 277, 210);
-                g.drawString(year, 145, 725);
-                g.drawString(month, 195, 725);
-                g.drawString(day, 255, 725);
-                g.drawString(year, 445, 730);
-                g.drawString(month, 505, 730);
-                g.drawString(day, 560, 730);
+                g.drawString(year, 145, 715);
+                g.drawString(month, 200, 715);
+                g.drawString(day, 253, 715);
+                g.drawString(year, 442, 725);
+                g.drawString(month, 505, 725);
+                g.drawString(day, 555, 725);
             }
             /**for (int i = 0; i < 1; i++) {
                 Font f = new Font("宋体", Font.PLAIN, 15);
