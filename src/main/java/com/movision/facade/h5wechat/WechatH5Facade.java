@@ -283,7 +283,7 @@ public class WechatH5Facade extends JPanel {
             // g.setColor(color);
             //String text = "扫描二维码查看名下23套房如何分配";
             for (int i = 0; i < 1; i++) {
-                Font f = new Font("方正静蕾简体", Font.BOLD, 30);
+                Font f = new Font("方正静蕾简体", Font.BOLD, 26);
                 Color color = new Color(51, 51, 51);
                 Color[] mycolor = {color, Color.LIGHT_GRAY};
                 g.setFont(f);
