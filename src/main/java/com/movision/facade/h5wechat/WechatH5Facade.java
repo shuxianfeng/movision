@@ -271,21 +271,21 @@ public class WechatH5Facade extends JPanel {
             //g.rotate(30);
             //设置颜色。
             g.setColor(Color.BLACK);
-            log.info(manname);
-            log.info(womanname);
             //最后一个参数用来设置字体的大小
-            Font f = new Font("方正静蕾简体", Font.PLAIN, 30);
-            Color color = new Color(51, 51, 51);
-            Color[] mycolor = {color, Color.LIGHT_GRAY};
             // g.setColor(mycolor);
-            g.setFont(f);
+
             //   平移原点到图形环境的中心
             g.translate(this.getWidth() / 2, this.getHeight() / 2);
             //10,20 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
             //g.drawString(msex, 160, 610);//合成男的名字new String(message.getBytes("utf8"),"gbk");
             //g.drawString(manname, 650, 1500);//合成女的名字
             // g.setColor(color);
+            String text = "扫描二维码查看名下23套房如何分配";
             for (int i = 0; i < 1; i++) {
+                Font f = new Font("方正静蕾简体", Font.BOLD, 30);
+                Color color = new Color(51, 51, 51);
+                Color[] mycolor = {color, Color.LIGHT_GRAY};
+                g.setFont(f);
                 g.rotate(5 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
                 g.drawString(manname, 210, 164);
@@ -299,6 +299,15 @@ public class WechatH5Facade extends JPanel {
                 g.drawString(year, 445, 853);
                 g.drawString(month, 532, 853);
                 g.drawString(day, 571, 853);
+            }
+            for (int i = 0; i < 1; i++) {
+                Font f = new Font("方正静蕾简体", Font.BOLD, 30);
+                Color color = new Color(51, 51, 51);
+                Color[] mycolor = {color, Color.LIGHT_GRAY};
+                g.setFont(f);
+                g.rotate(5 * Math.PI / 180, 0, 0);
+                g.setPaint(mycolor[i % 2]);
+                g.drawString(text, 150, 880);
             }
             g.dispose();
 
