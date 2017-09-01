@@ -617,9 +617,9 @@ public class UserFacade {
                     facadePost.findAllCircleName(list);
                     facadePost.findUser(list);
                 }
-            }
-            if(list.size()==0){
-                list = null;
+                if(list.size()==0){
+                    list = null;
+                }
             }
         }
         return list;
