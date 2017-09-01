@@ -295,11 +295,11 @@ public class WechatH5Facade extends JPanel {
                 g.drawString(womanname, 590, 687);
                 g.drawString(content, 277, 210);
                 g.drawString(year, 145, 715);
-                g.drawString(month, 203, 715);
+                g.drawString(month, 205, 715);
                 g.drawString(day, 253, 715);
-                g.drawString(year, 442, 723);
+                g.drawString(year, 440, 723);
                 g.drawString(month, 505, 723);
-                g.drawString(day, 552, 723);
+                g.drawString(day, 550, 723);
             }
             /**for (int i = 0; i < 1; i++) {
                 Font f = new Font("宋体", Font.PLAIN, 15);
