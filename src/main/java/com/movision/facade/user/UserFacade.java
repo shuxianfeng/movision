@@ -583,6 +583,9 @@ public class UserFacade {
                 facadePost.countView(list);
                 facadePost.findAllCircleName(list);
             }
+            if(list.size()==0){
+                list = null;
+            }
         } else if (type == 1) {//活动
             //活动帖子
             list = postService.findAllUserActive(Integer.parseInt(userid), paging);
@@ -600,7 +603,9 @@ public class UserFacade {
                 ao.setPartsum(partsum);
                 list.set(i, ao);
             }
-
+            if(list.size()==0){
+                list = null;
+            }
         } else if (type == 2) {//收藏
             //用户收藏的帖子
             List<Integer> collection = collectionService.queryUserPost(Integer.parseInt(userid));
@@ -612,6 +617,9 @@ public class UserFacade {
                     facadePost.findAllCircleName(list);
                     facadePost.findUser(list);
                 }
+            }
+            if(list.size()==0){
+                list = null;
             }
         }
         return list;
