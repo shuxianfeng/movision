@@ -38,6 +38,7 @@ public class WechatH5Facade extends JPanel {
     String headImg = PropertiesLoader.getValue("wechat.erweima.domain");//二维码路径
     String lihunurl = PropertiesLoader.getValue("wechat.lihun.domain");
     String lihunxieyiurl = PropertiesLoader.getValue("wechat.lihunxieyi.domain");
+    String e = PropertiesLoader.getValue("wechat.e.domain");
 
     @Autowired
     private CountService countService;
@@ -258,7 +259,7 @@ public class WechatH5Facade extends JPanel {
             Graphics2D g = (Graphics2D) buffImg.getGraphics();
             //创建你要附加的图象。//-----------------------------------------------这一段是将小图片合成到大图片上的代码
             //小图片的路径
-            ImageIcon imgIcon = new ImageIcon(headImg);
+            ImageIcon imgIcon = new ImageIcon(e);
             //得到Image对象。
             Image img = imgIcon.getImage();
             //将小图片绘到大图片上。
