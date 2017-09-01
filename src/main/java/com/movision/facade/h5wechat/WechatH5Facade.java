@@ -293,10 +293,10 @@ public class WechatH5Facade extends JPanel {
                 g.drawString(manname, 266, 809);
                 g.drawString(womanname, 620, 812);
                 g.drawString(content, 290, 270);
-                g.drawString(year, 110, 850);
+                g.drawString(year, 105, 850);
                 g.drawString(month, 187, 850);
                 g.drawString(day, 220, 850);
-                g.drawString(year, 451, 853);
+                g.drawString(year, 445, 853);
                 g.drawString(month, 532, 853);
                 g.drawString(day, 571, 853);
             }
