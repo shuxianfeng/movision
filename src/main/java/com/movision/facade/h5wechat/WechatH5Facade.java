@@ -288,17 +288,17 @@ public class WechatH5Facade extends JPanel {
                 g.setFont(f);
                 //g.rotate(7 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
-                g.drawString(manname, 215, 160);
+                g.drawString(manname, 215, 162);
                 g.drawString(womanname, 215, 210);
-                g.drawString(manname, 290, 805);
-                g.drawString(womanname, 610, 805);
+                g.drawString(manname, 280, 815);
+                g.drawString(womanname, 610, 815);
                 g.drawString(content, 280, 270);
-                g.drawString(year, 135, 847);
-                g.drawString(month, 223, 847);
-                g.drawString(day, 285, 847);
-                g.drawString(year, 485, 842);
-                g.drawString(month, 540, 842);
-                g.drawString(day, 590, 842);
+                g.drawString(year, 125, 850);
+                g.drawString(month, 200, 850);
+                g.drawString(day, 255, 850);
+                g.drawString(year, 470, 845);
+                g.drawString(month, 535, 845);
+                g.drawString(day, 585, 845);
             }
             for (int i = 0; i < 1; i++) {
                 Font f = new Font("宋体", Font.PLAIN, 20);
@@ -307,7 +307,7 @@ public class WechatH5Facade extends JPanel {
                 g.setFont(f);
                 //g.rotate(3 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
-                g.drawString(text, 370, 900);
+                g.drawString(text, 330, 900);
             }
             g.dispose();
 
@@ -327,8 +327,8 @@ public class WechatH5Facade extends JPanel {
             map.put("newurl", newurl2 + "/upload/wechat/" + shareFileName);
             is.close();
             //修改参与次数
-            //int ta = updateTake(1077);
-            //map.put("ta", ta);
+            int ta = updateTake(1077);
+            map.put("ta", ta);
             //  os.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
