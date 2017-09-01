@@ -281,7 +281,7 @@ public class WechatH5Facade extends JPanel {
             //g.drawString(msex, 160, 610);//合成男的名字new String(message.getBytes("utf8"),"gbk");
             //g.drawString(manname, 650, 1500);//合成女的名字
             // g.setColor(color);
-            String text = "扫描二维码查看名下23套房如何分配";
+            //String text = "扫描二维码查看名下23套房如何分配";
             for (int i = 0; i < 1; i++) {
                 Font f = new Font("方正静蕾简体", Font.BOLD, 30);
                 Color color = new Color(51, 51, 51);
@@ -301,7 +301,7 @@ public class WechatH5Facade extends JPanel {
                 g.drawString(month, 528, 853);
                 g.drawString(day, 577, 853);
             }
-            for (int i = 0; i < 1; i++) {
+            /**for (int i = 0; i < 1; i++) {
                 Font f = new Font("宋体", Font.PLAIN, 15);
                 Color color = new Color(112, 104, 115);
                 Color[] mycolor = {color, Color.LIGHT_GRAY};
@@ -309,7 +309,7 @@ public class WechatH5Facade extends JPanel {
                 //g.rotate(3 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
                 g.drawString(text, 330, 915);
-            }
+             }*/
             g.dispose();
 
             //OutputStream os;
