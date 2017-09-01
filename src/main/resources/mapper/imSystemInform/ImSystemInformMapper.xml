@@ -248,4 +248,7 @@
     <select id="queryActiveBody" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT body FROM  yw_im_system_informs WHERE  id=#{id,jdbcType=INTEGER}
     </select>
+    <select id="queryDate" parameterType="java.lang.Integer" resultType="java.util.Date">
+        SELECT intime FROM  yw_user WHERE id=#{userid,jdbcType=INTEGER}
+    </select>
 </mapper>

@@ -146,33 +146,35 @@ public class MsgCenterFacade {
      * @param paging
      * @return
      */
-    public List getInstantInfo(ServicePaging<InstantInfo> paging) {
+    public List getInstantInfo(String userid, ServicePaging<InstantInfo> paging) {
         List<InstantInfo> list = new ArrayList<>();
-
-        //一 评论： 1 评论帖子，
-        handleCommentlist(list);
-        //二 2 评论回复
-        handleReplyCommentList(list);
-        //二 赞
-        handleZanlist(list);
-        //三 关注 1 关注人 2 关注帖子 3 关注标签
-        getFollowList(list, ShiroUtil.getAppUserID());
-
-
-        //排序
-        Collections.sort(list, InstantInfo.intimeComparator);
-        //计算Paging中的分页参数
-        paging.setTotal(list.size());
-
         //代码层分页操作
-        List<InstantInfo> resultList = pageFacade.getPageList(list, paging.getCurPage(), paging.getPageSize());
+        List<InstantInfo> resultList = null;
+        if (StringUtil.isNotEmpty(userid)) {
+            //一 评论： 1 评论帖子，
+            handleCommentlist(list);
+            //二 2 评论回复
+            handleReplyCommentList(list);
+            //二 赞
+            handleZanlist(list);
+            //三 关注 1 关注人 2 关注帖子 3 关注标签
+            getFollowList(list, Integer.parseInt(userid));
 
-        int size = resultList == null ? 0 : resultList.size();
-        log.debug("【row中list的数量】：" + size);
-        log.debug("【row中的list】：" + resultList.toString());
-        //操作已读未读处理
-        setDataIsRead(resultList);
 
+            //排序
+            Collections.sort(list, InstantInfo.intimeComparator);
+            //计算Paging中的分页参数
+            paging.setTotal(list.size());
+
+            //代码层分页操作
+            resultList = pageFacade.getPageList(list, paging.getCurPage(), paging.getPageSize());
+
+            int size = resultList == null ? 0 : resultList.size();
+            log.debug("【row中list的数量】：" + size);
+            log.debug("【row中的list】：" + resultList.toString());
+            //操作已读未读处理
+            setDataIsRead(resultList);
+        }
         return resultList;
 
     }
@@ -410,15 +412,41 @@ public class MsgCenterFacade {
      * @return
      */
     public List<ImSystemInformVo> getMsgInformationList(Integer userid, Date informTime, Paging<ImSystemInformVo> paging) {
+        List<ImSystemInformVo> list = null;
         Map map = new HashMap();
         map.put("userid", userid);
         map.put("informTime", informTime);
-        List<ImSystemInformVo> list = imSystemInformService.findAllIm(map, paging);
+        list = imSystemInformService.findAllIm(map, paging);
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getCoverimg() != null) {//代表是运营通知
                 list.get(i).setIsoperation(1);
             } else {//代表是系统通知
                 list.get(i).setIsoperation(0);
+            }
+        }
+        return list;
+    }
+
+
+    /**
+     * 获取系统通知列表
+     *
+     * @return
+     */
+    public List<ImSystemInformVo> getMsgInformationListNew(String userid, Paging<ImSystemInformVo> paging) {
+        List<ImSystemInformVo> list = null;
+        Map map = new HashMap();
+        if (StringUtil.isNotEmpty(userid)) {
+            Date informTime = imSystemInformService.queryDate(Integer.parseInt(userid));
+            map.put("userid", userid);
+            map.put("informTime", informTime);
+            list = imSystemInformService.findAllIm(map, paging);
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getCoverimg() != null) {//代表是运营通知
+                    list.get(i).setIsoperation(1);
+                } else {//代表是系统通知
+                    list.get(i).setIsoperation(0);
+                }
             }
         }
         return list;

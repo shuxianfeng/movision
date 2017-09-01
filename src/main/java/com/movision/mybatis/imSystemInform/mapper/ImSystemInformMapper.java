@@ -50,4 +50,6 @@ public interface ImSystemInformMapper {
     ImSystemInform queryActiveById(int id);
 
     String queryActiveBody(int id);
+
+    Date queryDate(int userid);
 }

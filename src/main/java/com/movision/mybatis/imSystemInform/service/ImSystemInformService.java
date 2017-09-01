@@ -299,4 +299,14 @@ public class ImSystemInformService {
     }
 
 
+    public Date queryDate(int userid) {
+        try {
+            log.info("查询时间");
+            return imSystemInformMapper.queryDate(userid);
+        } catch (Exception e) {
+            log.info("查询时间失败", e);
+            throw e;
+        }
+    }
+
 }

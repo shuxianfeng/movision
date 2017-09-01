@@ -32,12 +32,13 @@ public class AppMsgCenterController {
 
     @ApiOperation(value = "获取我的消息中心的系统通知列表", notes = "获取我的消息中心的系统通知列表", response = Response.class)
     @RequestMapping(value = {"/get_my_msg_center_system_list"}, method = RequestMethod.GET)
-    public Response getMyMsgCenterInformationList(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+    public Response getMyMsgCenterInformationList(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
+                                                  @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                                   @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize
     ) {
         Response response = new Response();
         Paging<ImSystemInformVo> paging = new Paging<ImSystemInformVo>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<ImSystemInformVo> list = msgCenterFacade.getMsgInformationList(ShiroUtil.getAppUserID(), ShiroUtil.getAppUser().getRegisterTime(), paging);
+        List<ImSystemInformVo> list = msgCenterFacade.getMsgInformationListNew(userid, paging);
         paging.result(list);
         response.setData(paging);
         return response;
@@ -60,13 +61,14 @@ public class AppMsgCenterController {
     }
 
     @ApiOperation(value = "获取消息中心-动态列表", notes = "获取消息中心-动态列表", response = Response.class)
-    @RequestMapping(value = "get_msg_center_instant_info_list", method = RequestMethod.GET)
-    public Response getMsgCenterInstantInfoList(@ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
+    @RequestMapping(value = "get_msg_center_instant_info_list", method = RequestMethod.POST)
+    public Response getMsgCenterInstantInfoList(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
+                                                @ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
                                                 @ApiParam @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
 
         ServicePaging<InstantInfo> pager = new ServicePaging<InstantInfo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List list = msgCenterFacade.getInstantInfo(pager);
+        List list = msgCenterFacade.getInstantInfo(userid, pager);
         pager.setRows(list);
 
         response.setMessage("查询成功");

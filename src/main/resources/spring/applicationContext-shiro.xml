@@ -151,7 +151,7 @@
                 /app/cart/**=authc
                 /app/submission/commitSubmission=authc
                 /app/collection/**=authc
-                /app/msg_center/**=authc
+                <!--/app/msg_center/**=authc-->
 
                 /app/** = anon
 

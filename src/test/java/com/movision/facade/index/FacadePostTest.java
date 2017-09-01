@@ -44,7 +44,7 @@ public class FacadePostTest extends SpringTestCase {
         String labelList = gson.toJson(list);
         System.out.println("labelList=" + labelList);
 
-        facadePost.releaseModularPost(null, userid, circleid, null, null, null, null, null, labelList);
+        facadePost.releaseModularPost(null, userid, circleid, null, null, null, null, null, labelList, null);
     }
 
     private PostLabel createPostLabel(String userid, String namePrefix) {
