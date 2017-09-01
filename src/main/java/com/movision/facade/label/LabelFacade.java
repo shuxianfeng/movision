@@ -220,18 +220,20 @@ public class LabelFacade {
         //查询所有帖子
         List<PostVo> postVos = postService.findAllPostCrile(Integer.parseInt(circleid));
         //根据圈子查询今日这个圈子的发帖数
-        //不为空查询当前用户未看过的总更新数
-        listmongodba = facadePost.userRefulshListMongodbs(Integer.parseInt(userid));//查询mongodb中用户看过的帖子列表
-        if (listmongodba.size() != 0) {
-            for (int j = 0; j < listmongodba.size(); j++) {
-                PostVo post = new PostVo();
-                post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
-                posts.add(post);//把mongodb转为post实体
+        if (StringUtil.isNotEmpty(userid)) {
+            //不为空查询当前用户未看过的总更新数
+            listmongodba = facadePost.userRefulshListMongodbs(Integer.parseInt(userid));//查询mongodb中用户看过的帖子列表
+            if (listmongodba.size() != 0) {
+                for (int j = 0; j < listmongodba.size(); j++) {
+                    PostVo post = new PostVo();
+                    post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
+                    posts.add(post);//把mongodb转为post实体
+                }
+                postVos.removeAll(posts);
+                circleVo.setPostnewnum(postVos.size());
+            } else {
+                circleVo.setPostnewnum(postVos.size());
             }
-            postVos.removeAll(posts);
-            circleVo.setPostnewnum(postVos.size());
-        } else {
-            circleVo.setPostnewnum(postVos.size());
         }
         //查询圈子下所有帖子用的标
         List<PostLabel> postLabels = postLabelService.queryLabelCircle(Integer.parseInt(circleid));
@@ -242,9 +244,13 @@ public class LabelFacade {
         //查询用户是否关注该圈子
         Map map = new HashMap();
         map.put("circleid", circleid);
-        map.put("userid", Integer.parseInt(userid));
-        int isfollow = postLabelService.isFollowCircleid(map);
-        circleVo.setIsfollow(isfollow);
+        if (StringUtil.isNotEmpty(userid)) {
+            map.put("userid", Integer.parseInt(userid));
+            int isfollow = postLabelService.isFollowCircleid(map);
+            circleVo.setIsfollow(isfollow);
+        } else {
+            circleVo.setIsfollow(0);
+        }
         return circleVo;
     }
 
