@@ -301,13 +301,13 @@ public class WechatH5Facade extends JPanel {
                 g.drawString(day, 571, 853);
             }
             for (int i = 0; i < 1; i++) {
-                Font f = new Font("方正静蕾简体", Font.BOLD, 30);
+                Font f = new Font("宋体", Font.BOLD, 20);
                 Color color = new Color(51, 51, 51);
                 Color[] mycolor = {color, Color.LIGHT_GRAY};
                 g.setFont(f);
                 g.rotate(5 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
-                g.drawString(text, 150, 880);
+                g.drawString(text, 380, 880);
             }
             g.dispose();
 
