@@ -439,7 +439,7 @@ public class AppPostController {
     public Response releaseModularPost(HttpServletRequest request,
                                        @ApiParam(value = "用户id") @RequestParam String userid,
                                        @ApiParam(value = "所属圈子id") @RequestParam String circleid,
-                                       @ApiParam(value = "所属活动id") @RequestParam String activeid,
+                                       @ApiParam(value = "所属活动id") @RequestParam(required = false) String activeid,
                                        @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
                                        @ApiParam(value = "帖子内容") @RequestParam String postcontent,
                                        @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,

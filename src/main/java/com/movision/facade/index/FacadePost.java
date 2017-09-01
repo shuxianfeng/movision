@@ -1060,8 +1060,9 @@ public class FacadePost {
         post.setCoverimg(coverimg);//帖子封面
         post.setUserid(Integer.parseInt(userid));
         post.setCity(ShiroUtil.getIpCity());
-        post.setActiveid(Integer.parseInt(activeid));
-
+        if (StringUtils.isNotBlank(activeid)) {
+            post.setActiveid(Integer.parseInt(activeid));
+        }
         return post;
     }
 
