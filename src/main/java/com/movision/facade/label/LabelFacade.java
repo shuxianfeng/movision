@@ -234,6 +234,8 @@ public class LabelFacade {
             } else {
                 circleVo.setPostnewnum(postVos.size());
             }
+        } else {
+            circleVo.setPostnewnum(postVos.size());
         }
         //查询圈子下所有帖子用的标
         List<PostLabel> postLabels = postLabelService.queryLabelCircle(Integer.parseInt(circleid));
