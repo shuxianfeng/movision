@@ -810,7 +810,8 @@ public class FacadePost {
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map releaseModularPost(HttpServletRequest request, String userid, String circleid, String title,
-                                  String postcontent, String isactive, String coverimg, String proids, String labellist) {
+                                  String postcontent, String isactive, String coverimg, String proids, String labellist,
+                                  String activeid) {
         Map map = new HashMap();
         /**
          *  这里需要根据userid判断当前登录的用户是否有发帖权限
@@ -835,7 +836,7 @@ public class FacadePost {
                 log.info("APP前端用户开始请求发帖");
                 Map contentMap = null;
                 //封装帖子实体
-                Post post = preparePostJavaBean(request, userid, circleid, title, postcontent, isactive, coverimg, contentMap);
+                Post post = preparePostJavaBean(request, userid, circleid, title, postcontent, isactive, coverimg, contentMap, activeid);
                 /*Post post = new Post();
                 post.setTitle("测试标签发帖" + DateUtils.getCurrentDate());*/
                 //插入帖子
@@ -1024,7 +1025,7 @@ public class FacadePost {
      * @return
      */
     private Post preparePostJavaBean(HttpServletRequest request, String userid, String circleid, String title,
-                                     String postcontent, String isactive, String coverimg, Map contentMap) {
+                                     String postcontent, String isactive, String coverimg, Map contentMap, String activeid) {
         Post post = new Post();
         post.setCircleid(Integer.parseInt(circleid));
         post.setTitle(title);
@@ -1059,6 +1060,7 @@ public class FacadePost {
         post.setCoverimg(coverimg);//帖子封面
         post.setUserid(Integer.parseInt(userid));
         post.setCity(ShiroUtil.getIpCity());
+        post.setActiveid(Integer.parseInt(activeid));
 
         return post;
     }
