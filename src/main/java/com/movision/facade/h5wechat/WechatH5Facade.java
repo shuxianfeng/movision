@@ -274,8 +274,8 @@ public class WechatH5Facade extends JPanel {
             log.info(manname);
             log.info(womanname);
             //最后一个参数用来设置字体的大小
-            Font f = new Font("方正静蕾简体", Font.PLAIN, 30);
-            Color color = new Color(112, 104, 115);
+            Font f = new Font("方正静蕾简体", Font.BOLD, 30);
+            Color color = new Color(0, 0, 0);
             Color[] mycolor = {color, Color.LIGHT_GRAY};
             // g.setColor(mycolor);
             g.setFont(f);
