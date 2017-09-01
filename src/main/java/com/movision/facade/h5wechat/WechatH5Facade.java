@@ -268,7 +268,7 @@ public class WechatH5Facade extends JPanel {
 
             g.fillRect(0, 0, getWidth(), getHeight());
             g.rotate(5 * Math.PI / 180, 0, 0);
-            g.drawImage(img, 140, 790, this);
+            g.drawImage(img, 140, 750, this);
             //g.rotate(30);
             //设置颜色。
             g.setColor(Color.BLACK);
@@ -289,17 +289,17 @@ public class WechatH5Facade extends JPanel {
                 g.setFont(f);
                 //g.rotate(7 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
-                g.drawString(manname, 215, 135);
-                g.drawString(womanname, 215, 175);
-                g.drawString(manname, 270, 765);
-                g.drawString(womanname, 610, 765);
-                g.drawString(content, 275, 230);
-                g.drawString(year, 105, 850);
-                g.drawString(month, 185, 850);
-                g.drawString(day, 235, 850);
-                g.drawString(year, 450, 853);
-                g.drawString(month, 528, 853);
-                g.drawString(day, 577, 853);
+                g.drawString(manname, 215, 115);
+                g.drawString(womanname, 215, 155);
+                g.drawString(manname, 270, 715);
+                g.drawString(womanname, 610, 715);
+                g.drawString(content, 275, 210);
+                g.drawString(year, 105, 730);
+                g.drawString(month, 185, 730);
+                g.drawString(day, 235, 730);
+                g.drawString(year, 450, 753);
+                g.drawString(month, 528, 753);
+                g.drawString(day, 577, 753);
             }
             /**for (int i = 0; i < 1; i++) {
                 Font f = new Font("宋体", Font.PLAIN, 15);
