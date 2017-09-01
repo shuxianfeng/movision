@@ -267,7 +267,7 @@ public class WechatH5Facade extends JPanel {
 
             g.fillRect(0, 0, getWidth(), getHeight());
             g.rotate(7 * Math.PI / 180, 0, 0);
-            g.drawImage(img, 100, 880, this);
+            g.drawImage(img, 150, 880, this);
             //g.rotate(30);
             //设置颜色。
             g.setColor(Color.BLACK);
@@ -288,17 +288,17 @@ public class WechatH5Facade extends JPanel {
                 g.setFont(f);
                 g.rotate(7 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
-                g.drawString(manname, 217, 140);
-                g.drawString(womanname, 217, 188);
-                g.drawString(manname, 306, 780);
-                g.drawString(womanname, 650, 750);
-                g.drawString(content, 300, 240);
-                g.drawString(year, 150, 800);
-                g.drawString(month, 220, 800);
-                g.drawString(day, 260, 800);
-                g.drawString(year, 490, 800);
-                g.drawString(month, 570, 800);
-                g.drawString(day, 620, 800);
+                g.drawString(manname, 220, 135);
+                g.drawString(womanname, 220, 183);
+                g.drawString(manname, 336, 770);
+                g.drawString(womanname, 680, 770);
+                g.drawString(content, 310, 230);
+                g.drawString(year, 230, 810);
+                g.drawString(month, 250, 810);
+                g.drawString(day, 270, 810);
+                g.drawString(year, 550, 810);
+                g.drawString(month, 620, 810);
+                g.drawString(day, 680, 810);
             }
             for (int i = 0; i < 1; i++) {
                 Font f = new Font("宋体", Font.PLAIN, 20);
@@ -307,7 +307,7 @@ public class WechatH5Facade extends JPanel {
                 g.setFont(f);
                 g.rotate(5 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
-                g.drawString(text, 0, 820);
+                g.drawString(text, 330, 820);
             }
             g.dispose();
 
