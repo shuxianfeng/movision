@@ -267,7 +267,7 @@ public class WechatH5Facade extends JPanel {
             //g.drawImage(img, 400, 15, null);
 
             g.fillRect(0, 0, getWidth(), getHeight());
-            g.rotate(3.5 * Math.PI / 180, 0, 0);
+            g.rotate(5 * Math.PI / 180, 0, 0);
             g.drawImage(img, 140, 750, this);
             //g.rotate(30);
             //设置颜色。
@@ -283,6 +283,7 @@ public class WechatH5Facade extends JPanel {
             // g.setColor(color);
             //String text = "扫描二维码查看名下23套房如何分配";
             for (int i = 0; i < 1; i++) {
+                g.rotate(3.5 * Math.PI / 180, 0, 0);
                 Font f = new Font("方正静蕾简体", Font.BOLD, 26);
                 Color color = new Color(51, 51, 51);
                 Color[] mycolor = {color, Color.LIGHT_GRAY};
