@@ -257,6 +257,7 @@ public class WechatH5Facade extends JPanel {
             //得到画笔对象
             //Graphics g = buffImg.getGraphics();
             Graphics2D g = (Graphics2D) buffImg.getGraphics();
+            Graphics2D g1 = (Graphics2D) buffImg.getGraphics();
             //创建你要附加的图象。//-----------------------------------------------这一段是将小图片合成到大图片上的代码
             //小图片的路径
             ImageIcon imgIcon = new ImageIcon(e);
@@ -268,7 +269,10 @@ public class WechatH5Facade extends JPanel {
 
             g.fillRect(0, 0, getWidth(), getHeight());
             g.rotate(3.5 * Math.PI / 180, 0, 0);
-            g.drawImage(img, 140, 750, this);
+
+            g1.fillRect(0, 0, getWidth(), getHeight());
+            g1.rotate(5.2 * Math.PI / 180, 0, 0);
+            g1.drawImage(img, 140, 750, this);
             //g.rotate(30);
             //设置颜色。
             g.setColor(Color.BLACK);
