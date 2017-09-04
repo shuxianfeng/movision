@@ -39,6 +39,8 @@ public class WechatH5Facade extends JPanel {
     String lihunurl = PropertiesLoader.getValue("wechat.lihun.domain");
     String lihunxieyiurl = PropertiesLoader.getValue("wechat.lihunxieyi.domain");
     String e = PropertiesLoader.getValue("wechat.e.domain");
+    String su = PropertiesLoader.getValue("wechat.xin.domain");
+
 
     @Autowired
     private CountService countService;
@@ -344,7 +346,136 @@ public class WechatH5Facade extends JPanel {
         }
         return map;
     }
+//--------------------------------------------------------------------------------------------
 
+
+    /**
+     * 离婚协议
+     *
+     * @param manname
+     * @param womanname
+     * @param
+     * @param
+     * @param
+     * @return
+     */
+    public Map<String, Object> imgComposeLihun(String manname, String womanname, String content) {
+        Map<String, Object> map = new HashMap<>();
+        try {
+            InputStream is = new FileInputStream(lihunxieyiurl);
+            map = LiHunxiex(is, manname, womanname, content);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (ImageFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+
+    /**
+     * 离婚协议
+     *
+     * @param is
+     * @param manname
+     * @param womanname
+     * @param
+     * @param
+     * @return
+     */
+    public Map LiHunxiex(InputStream is, String manname, String womanname, String content) {
+        Map map = new HashMap();
+        try {
+            Calendar calendar = Calendar.getInstance();
+            String year = calendar.get(Calendar.YEAR) + "";//年份
+            String month = (calendar.get(Calendar.MONTH) + 1) + "";//月份
+            String day = calendar.get(Calendar.DAY_OF_MONTH) + "";
+            //通过JPEG图象流创建JPEG数据流解码器
+            JPEGImageDecoder jpegDecoder = JPEGCodec.createJPEGDecoder(is);
+            //解码当前JPEG数据流，返回BufferedImage对象
+            BufferedImage buffImg = jpegDecoder.decodeAsBufferedImage();
+            //得到画笔对象
+            //Graphics g = buffImg.getGraphics();
+            Graphics2D g = (Graphics2D) buffImg.getGraphics();
+            Graphics2D g1 = (Graphics2D) buffImg.getGraphics();
+            //创建你要附加的图象。//-----------------------------------------------这一段是将小图片合成到大图片上的代码
+            //小图片的路径
+            ImageIcon imgIcon = new ImageIcon(su);
+            //得到Image对象。
+            Image img = imgIcon.getImage();
+            //将小图片绘到大图片上。
+            //5,300 .表示你的小图片在大图片上的位置。
+            //g.drawImage(img, 400, 15, null);
+
+            g.fillRect(0, 0, getWidth(), getHeight());
+            g.rotate(3.5 * Math.PI / 180, 0, 0);
+
+            g1.fillRect(0, 0, getWidth(), getHeight());
+            g1.rotate(5.6 * Math.PI / 180, 0, 0);
+            g1.drawImage(img, 150, 750, this);
+            //g.rotate(30);
+            //设置颜色。
+            g.setColor(Color.BLACK);
+            //最后一个参数用来设置字体的大小
+            // g.setColor(mycolor);
+
+            //   平移原点到图形环境的中心
+            g.translate(this.getWidth() / 2, this.getHeight() / 2);
+            //10,20 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
+            //g.drawString(msex, 160, 610);//合成男的名字new String(message.getBytes("utf8"),"gbk");
+            //g.drawString(manname, 650, 1500);//合成女的名字
+            // g.setColor(color);
+            //String text = "扫描二维码查看名下23套房如何分配";
+            for (int i = 0; i < 1; i++) {
+                Font f = new Font("方正静蕾简体", Font.BOLD, 26);
+                Color color = new Color(51, 51, 51);
+                Color[] mycolor = {color, Color.LIGHT_GRAY};
+                g.setFont(f);
+                //g.rotate(7 * Math.PI / 180, 0, 0);
+                g.setPaint(mycolor[i % 2]);
+                g.drawString(manname, 218, 120);
+                g.drawString(womanname, 218, 162);
+                g.drawString(manname, 275, 693);
+                g.drawString(womanname, 570, 708);
+                g.drawString(content, 280, 212);
+                g.drawString(year, 130, 720);
+                g.drawString(month, 195, 720);
+                g.drawString(day, 233, 723);
+                g.drawString(year, 423, 729);
+                g.drawString(month, 490, 730);
+                g.drawString(day, 530, 734);
+            }
+            g.dispose();
+
+            //OutputStream os;
+
+            //os = new FileOutputStream("d:/union.jpg");
+            String shareFileName = System.currentTimeMillis() + ".jpg";
+
+            map.put("status", 200);
+            map.put("url", shareFileName);
+            String url = newurl + shareFileName;
+            //  os = new FileOutputStream(shareFileName);
+            //创键编码器，用于编码内存中的图象数据。
+            //JPEGImageEncoder en = JPEGCodec.createJPEGEncoder(os);
+            // en.encode(buffImg);
+            ImageIO.write(buffImg, "png", new File(url));//图片的输出路径
+            map.put("newurl", newurl2 + "/upload/wechat/" + shareFileName);
+            is.close();
+            //修改参与次数
+            // int ta = updateTake(1077);
+            //map.put("ta", ta);
+            //  os.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (ImageFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
 
 
 

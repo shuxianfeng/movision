@@ -68,6 +68,26 @@ public class WechatH5Controller {
     }
 
 
+    @ApiOperation(value = "离婚说明", notes = "离婚说明", response = Response.class)
+    @RequestMapping(value = "imgComposeLihun", method = RequestMethod.POST)
+    public Response imgComposeLihun(@ApiParam(value = "男的名字") @RequestParam String manname,
+                                    @ApiParam(value = "女的名字") @RequestParam String womanname,
+                                    @ApiParam(value = "离婚说名") @RequestParam String content) {
+        Response response = new Response();
+
+        Map<String, Object> map = wechatH5Facade.imgComposeLihun(manname, womanname, content);
+        if ((Integer) map.get("status") == 200) {
+            response.setMessage("合成成功");
+            response.setCode((Integer) map.get("status"));
+            response.setData(map);
+        } else {
+            response.setMessage("合成失败");
+            response.setCode((Integer) map.get("status"));
+        }
+
+        return response;
+    }
+
     @ApiOperation(value = "修改访问数量", notes = "修改访问数量", response = Response.class)
     @RequestMapping(value = "updateAccessCount", method = RequestMethod.POST)
     public Response updateAccessCount() {
