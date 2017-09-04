@@ -456,14 +456,16 @@ public class VoteFacade {
         Date end = activeH5.getEndtime();
         long begintime = beg.getTime();
         long endtime = end.getTime();
+        int result = 0;
         Date date = new Date();
         long str = date.getTime();
         if (str < begintime || str > endtime) {
-            return 0;//灰色
+            return result;//灰色
         } else if (str > begintime && str < endtime) {
-            return 1;//正常
+            result = 1;//正常
+            return result;
         }
-        return -1;
+        return result;
     }
 
     /**
