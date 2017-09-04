@@ -1376,18 +1376,18 @@
     </select>
 
     <select id="findAllMostCommentAuthorInAll" resultType="com.movision.mybatis.user.entity.UserVo">
-        SELECT u.id, u.nickname, u.photo, COUNT(c.id) AS commentCount
+        SELECT u.id, u.nickname, u.photo, COUNT(c.id) AS commentsum
         FROM yw_user u
         LEFT JOIN yw_post_comment c ON u.id = c.userid
         WHERE u.status = 0
         AND c.isdel = 0
         AND c.status = 1
         GROUP BY u.id
-        ORDER BY commentCount DESC
+        ORDER BY commentsum DESC
     </select>
 
     <select id="findAllMostCommentAuthorInCurrentMonth" resultType="com.movision.mybatis.user.entity.UserVo">
-        SELECT u.id, u.nickname, u.photo, COUNT(c.id) AS commentCount
+        SELECT u.id, u.nickname, u.photo, COUNT(c.id) AS commentsum
         FROM yw_user u
         LEFT JOIN yw_post_comment c ON u.id = c.userid
         WHERE u.status = 0
@@ -1395,7 +1395,7 @@
         AND c.status = 1
         AND DATE_FORMAT( c.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
         GROUP BY u.id
-        ORDER BY commentCount DESC
+        ORDER BY commentsum DESC
     </select>
 
     <select id="findAllMostPostAuthorInAll" resultType="com.movision.mybatis.user.entity.UserVo">
