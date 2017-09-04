@@ -1413,7 +1413,7 @@
         FROM yw_user u
         LEFT JOIN yw_post p ON u.id = p.userid
         WHERE u.status = 0
-        AND p.isdel = 1 AND p.isactive = 0
+        AND p.isdel = 0 AND p.isactive = 0
         AND DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
         GROUP BY u.id
         ORDER BY postsum DESC
