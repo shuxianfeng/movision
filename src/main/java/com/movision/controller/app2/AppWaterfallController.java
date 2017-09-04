@@ -58,7 +58,7 @@ public class AppWaterfallController {
      *
      * @return
      */
-    /** @ApiOperation(value = "下拉刷新", notes = "下拉刷新", response = Response.class)
+    @ApiOperation(value = "下拉刷新", notes = "下拉刷新", response = Response.class)
     @RequestMapping(value = "userRefreshListNew", method = RequestMethod.POST)
     public Response userRefreshList(@ApiParam(value = "用户id ") @RequestParam(required = false) String userid,
                                     @ApiParam(value = "类型 1：推荐2：关注3：本地 4：圈子 5：标签") @RequestParam(required = false) int type,
@@ -74,13 +74,13 @@ public class AppWaterfallController {
         response.setData(map);
         return response;
 
-                                    }*/
+    }
     /**
      * 下拉刷新
      *
      * @return
      */
-    @ApiOperation(value = "下拉刷新", notes = "下拉刷新", response = Response.class)
+    /**@ApiOperation(value = "下拉刷新", notes = "下拉刷新", response = Response.class)
     @RequestMapping(value = "userRefreshListNew", method = RequestMethod.POST)
     public Response userRefreshList(@ApiParam(value = "用户id ") @RequestParam(required = false) String userid,
                                     @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
@@ -99,7 +99,7 @@ public class AppWaterfallController {
         response.setData(pager);
         return response;
 
-    }
+                                    }*/
     /**
      * 首页滑动列表
      *
@@ -125,7 +125,7 @@ public class AppWaterfallController {
      * @param pageSize
      * @return
      */
-    /**@ApiOperation(value = "用户刷新的历史记录列表", notes = "用户刷新的历史记录列表", response = Response.class)
+    @ApiOperation(value = "用户刷新的历史记录列表", notes = "用户刷新的历史记录列表", response = Response.class)
     @RequestMapping(value = "userReflushHishtoryRecord", method = RequestMethod.POST)
     public Response userReflushHishtoryRecord(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
                                               @ApiParam(value = "1：推荐2：关注3：本地 4：圈子 5：标签") @RequestParam int type,
@@ -141,7 +141,7 @@ public class AppWaterfallController {
         pager.result(map);
         response.setData(pager);
         return response;
-                                              }*/
+    }
     /**
      * 用户刷新的历史列表
      *
@@ -150,7 +150,7 @@ public class AppWaterfallController {
      * @param pageSize
      * @return
      */
-    @ApiOperation(value = "用户刷新的历史记录列表", notes = "用户刷新的历史记录列表", response = Response.class)
+    /**@ApiOperation(value = "用户刷新的历史记录列表", notes = "用户刷新的历史记录列表", response = Response.class)
     @RequestMapping(value = "userReflushHishtoryRecord", method = RequestMethod.POST)
     public Response userReflushHishtoryRecord(@ApiParam(value = "用户id") @RequestParam String userid,
                                               @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
@@ -164,7 +164,7 @@ public class AppWaterfallController {
         pager.result(map);
         response.setData(pager);
         return response;
-    }
+                                              }*/
 
     /**
      * 所有未读消息

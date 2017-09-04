@@ -1189,16 +1189,16 @@ public class FacadePost {
      * @param
      * @return
      */
-    /**public List recommendPost(String userid,String device) {
+    public List recommendPost(String userid, String device) {
         long count = mongodbCount();
         List<PostVo> list = null;
         List<PostVo> alllist = postService.findAllPostListHeat();//查询所有帖子
         List<PostVo> posts = new ArrayList<>();
-     List<DBObject> listmongodb=null;
+        List<DBObject> listmongodb = null;
         if (userid == null) {
             //未登录
             list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
-     listmongodb = userRefulshListMongodbToDevice(device,1);//用户有没有看过
+            listmongodb = userRefulshListMongodbToDevice(device, 1);//用户有没有看过
             if (listmongodb.size() != 0) {
                 for (int j = 0; j < listmongodb.size(); j++) {
                     PostVo post = new PostVo();
@@ -1206,9 +1206,9 @@ public class FacadePost {
                     posts.add(post);//把mongodb转为post实体
                     list.removeAll(posts);
                 }
-     list = NotLoginretuenList(list,1,device);
+                list = NotLoginretuenList(list, 1, device);
             }
-     list = NotLoginretuenList(list,1,device);
+            list = NotLoginretuenList(list, 1, device);
             return list;
         } else {
             //已登录
@@ -1224,7 +1224,7 @@ public class FacadePost {
             }
         }
         return list;
-     }*/
+    }
 
     /**
      * mongodb的里面的刷新记录  大于等于   1000条记录的时候进行用户分析
@@ -1232,7 +1232,7 @@ public class FacadePost {
      * @param userid
      * @param posts
      */
-    /** private List userAnalysisBig(String userid, List<PostVo> posts) {
+    private List userAnalysisBig(String userid, List<PostVo> posts) {
         List<PostVo> list = null;
         List<UserRefreshRecordVo> result;//查询用户最喜欢的圈子
         List<DBObject> listmongodb;
@@ -1253,14 +1253,14 @@ public class FacadePost {
                 posts.add(post);//把mongodb转为post实体
             }
             criclelist.removeAll(posts);//剩下的帖子
-     list = retuenList(criclelist, userid,1,"");
+            list = retuenList(criclelist, userid, 1, "");
             return list;
         } else {
             list = postService.findAllPostHeatValue();
-     list = retuenList(list, userid,1,"");
+            list = retuenList(list, userid, 1, "");
             return list;
         }
-     }*/
+    }
 
     /**
      * mongodb的里面的刷新记录  小于1000  条记录的时候进行用户分析
@@ -1271,7 +1271,7 @@ public class FacadePost {
      * @param posts
      * @return
      */
-    /**  private List userAnalysisSmall(String userid, List<PostVo> alllist, List<PostVo> posts) {
+    private List userAnalysisSmall(String userid, List<PostVo> alllist, List<PostVo> posts) {
         List<DBObject> listmongodba;
         List<PostVo> list = null;
      listmongodba = userRefulshListMongodb(Integer.parseInt(userid),1);//查询用户刷新列表
@@ -1291,7 +1291,7 @@ public class FacadePost {
             return list;
         }
         return list;
-     }*/
+    }
 
     /**
      * 本地
@@ -1300,7 +1300,7 @@ public class FacadePost {
      * @param
      * @return
      */
-    /** public List localhostPost(String userid, String area,String device) {
+    public List localhostPost(String userid, String area, String device) {
         List<PostVo> list = null;
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
@@ -1308,7 +1308,7 @@ public class FacadePost {
         //根据传过来的地区去yw_city查代码
         if (area != null) {
             citycode = postService.queryCityCode(area);
-        } /**else {
+        } else {
             citycode = postService.queryCityUserCode(Integer.parseInt(userid));
      }
         if (userid == null) {//未登录
@@ -1345,7 +1345,7 @@ public class FacadePost {
             }
         }
         return list;
-     }*/
+    }
 
     /**
      * 圈子
@@ -1354,7 +1354,7 @@ public class FacadePost {
      * @param
      * @return
      */
-    /** public List circleRefulsh(String userid, int circleid,String device) {
+    public List circleRefulsh(String userid, int circleid, String device) {
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
         List<PostVo> list = null;
@@ -1393,14 +1393,14 @@ public class FacadePost {
             }
         }
         return list;
-     }*/
+    }
 
     /**
      * 关注
      *
      * @return
      */
-    /** public List followPost(String userid) {
+    public List followPost(String userid) {
         List<PostVo> list = null;
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
@@ -1449,14 +1449,14 @@ public class FacadePost {
             }
         }
         return list;
-     }*/
+    }
 
     /**
      * 标签帖子
      *
      * @return
      */
-    /**public List labelPost(String userid, int labelid, String device) {
+    public List labelPost(String userid, int labelid, String device) {
         List<PostVo> list = null;
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
@@ -1494,7 +1494,7 @@ public class FacadePost {
             }
             return list;
         }
-     }*/
+    }
 
 
     /**
@@ -1504,20 +1504,20 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    /**public List retuenList(List<PostVo> lists, String userid,int type,String device) {
+    public List retuenList(List<PostVo> lists, String userid, int type, String device) {
         List<PostVo> list = null;
         if (lists != null) {
-     list=pageFacade.getPageList(lists, 1, 10);
+            list = pageFacade.getPageList(lists, 1, 10);
             findUser(list);
             findPostLabel(list);
             findHotComment(list);
             countView(list);
             findAllCircleName(list);
-     insertmongo(list, userid,type,device);
+            insertmongo(list, userid, type, device);
             zanIsPost(Integer.parseInt(userid), list);
         }
         return list;
-     }*/
+    }
 
     /**
      * 返回数据
@@ -1526,10 +1526,10 @@ public class FacadePost {
      * @param
      * @return
      */
-    /**public List NotLoginretuenList(List<PostVo> lists,int type,String device) {
+    public List NotLoginretuenList(List<PostVo> lists, int type, String device) {
         List<PostVo> list = null;
         if (lists != null) {
-     list=pageFacade.getPageList(lists, 1, 10);
+            list = pageFacade.getPageList(lists, 1, 10);
             findUser(list);
             findPostLabel(list);
             findHotComment(list);
@@ -1538,7 +1538,7 @@ public class FacadePost {
      insertmongo(list,"",type,device);
         }
         return list;
-     }*/
+    }
 
     /**
      * 返回数据
@@ -1726,7 +1726,7 @@ public class FacadePost {
      * @param area
      * @return
      */
-    /**public List userRefreshListNew(String userid,String device, int type, String area, String circleid, String labelid) {
+    public List userRefreshListNew(String userid, String device, int type, String area, String circleid, String labelid) {
         List<PostVo> list = null;
         if (type == 1) {//推荐
      list = recommendPost(userid,device);
@@ -1740,7 +1740,7 @@ public class FacadePost {
      list = labelPost(userid, Integer.parseInt(labelid),device);
         }
         return list;
-     }*/
+    }
 
     /**
      * 插入
@@ -1748,7 +1748,7 @@ public class FacadePost {
      * @param list
      * @param userid
      */
-    /**public void insertmongo(List<PostVo> list, String userid,int type,String device) {
+    public void insertmongo(List<PostVo> list, String userid, int type, String device) {
         int crileid = 0;//圈子id
         if (list != null && userid != null) {
             for (int i = 0; i < list.size(); i++) {
@@ -1760,10 +1760,10 @@ public class FacadePost {
                     e.printStackTrace();
                 }
                 //刷新记录插入mongodb
-     insertMongoDB(userid, id, crileid,type,device);
+                insertMongoDB(userid, id, crileid, type, device);
              }
         }
-     }*/
+    }
 
 
 
@@ -1774,7 +1774,7 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    /**public List userRefulshListMongodb(int userid,int type) {
+    public List userRefulshListMongodb(int userid, int type) {
         MongoClient mongoClient = null;
         List<DBObject> list = null;
         DB db = null;
@@ -1802,7 +1802,7 @@ public class FacadePost {
             }
         }
         return list;
-     }*/
+    }
 
     /**
      * 在mongodb中查询用户刷新浏览过的列表
@@ -1846,7 +1846,7 @@ public class FacadePost {
      * @param
      * @return
      */
-    /** public List userRefulshListMongodbToDevice(String device,int type) {
+    public List userRefulshListMongodbToDevice(String device, int type) {
         MongoClient mongoClient = null;
         List<DBObject> list = null;
         DB db = null;
@@ -1874,7 +1874,7 @@ public class FacadePost {
             }
         }
         return list;
-     }*/
+    }
     /**
      * 查询用户刷新记录表的总记录数
      *
@@ -1908,7 +1908,7 @@ public class FacadePost {
      * @param postid
      * @param crileid
      */
-    /**public void insertMongoDB(String userid, int postid, int crileid,int type,String device) {
+    public void insertMongoDB(String userid, int postid, int crileid, int type, String device) {
         //把刷新记录插入mongodb
         UserRefreshRecord userRefreshRecord = new UserRefreshRecord();
         if (StringUtil.isNotEmpty(userid)) {
@@ -1928,7 +1928,7 @@ public class FacadePost {
             userRefreshRecord.setDevice(device);
         }
         userRefreshRecordService.insert(userRefreshRecord);
-     }*/
+    }
 
     public List<Map> queryPostImgById(String postid) {
         List<Map> list = new ArrayList<>();
@@ -2054,7 +2054,7 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    /** public List userReflushHishtoryRecord(String userid, Paging<PostVo> paging,int type,String device) {
+    public List userReflushHishtoryRecord(String userid, Paging<PostVo> paging, int type, String device) {
         List<PostVo> postVo = null;
      if(userid!=null) {
      List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid),type);
@@ -2071,6 +2071,7 @@ public class FacadePost {
                     findPostLabel(postVo);
                     findHotComment(postVo);
                     countView(postVo);
+                    zanIsPost(Integer.parseInt(userid), postVo);
                 }
             }
      }else {
@@ -2092,7 +2093,7 @@ public class FacadePost {
             }
         }
         return postVo;
-     }*/
+    }
 
     /**
      * 活动详情里的最热最新
@@ -2311,7 +2312,7 @@ public class FacadePost {
      * @param paging
      * @return
      */
-    public List recommendPost(String userid, ServicePaging<PostVo> paging) {
+    /**public List recommendPost(String userid, ServicePaging<PostVo> paging) {
         long count = mongodbCount();
         List<PostVo> list = null;
         List<PostVo> alllist = postService.findAllPostListHeat();//查询所有帖子
@@ -2336,7 +2337,7 @@ public class FacadePost {
             }
         }
         return list;
-    }
+     }*/
 
     /**
      * mongodb的里面的刷新记录  大于等于   1000条记录的时候进行用户分析
@@ -2344,7 +2345,7 @@ public class FacadePost {
      * @param userid
      * @param posts
      */
-    private List userAnalysisBig(String userid, List<PostVo> posts, ServicePaging<PostVo> paging) {
+    /** private List userAnalysisBig(String userid, List<PostVo> posts, ServicePaging<PostVo> paging) {
         List<PostVo> list = null;
         List<UserRefreshRecordVo> result;//查询用户最喜欢的圈子
         List<DBObject> listmongodb;
@@ -2372,7 +2373,7 @@ public class FacadePost {
             list = retuenList(list, userid, paging);
             return list;
         }
-    }
+     }*/
 
     /**
      * mongodb的里面的刷新记录  小于1000  条记录的时候进行用户分析
@@ -2383,7 +2384,7 @@ public class FacadePost {
      * @param posts
      * @return
      */
-    private List userAnalysisSmall(String userid, ServicePaging<PostVo> paging, List<PostVo> alllist, List<PostVo> posts) {
+    /**  private List userAnalysisSmall(String userid, ServicePaging<PostVo> paging, List<PostVo> alllist, List<PostVo> posts) {
         List<DBObject> listmongodba;
         List<PostVo> list = null;
         listmongodba = userRefulshListMongodb(Integer.parseInt(userid));//查询用户刷新列表
@@ -2403,7 +2404,7 @@ public class FacadePost {
             return list;
         }
         return list;
-    }
+     }*/
 
     /**
      * 本地
@@ -2412,7 +2413,7 @@ public class FacadePost {
      * @param
      * @return
      */
-    public List localhostPost(String userid, ServicePaging<PostVo> paging, String area) {
+    /**public List localhostPost(String userid, ServicePaging<PostVo> paging, String area) {
         List<PostVo> list = null;
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
@@ -2422,7 +2423,7 @@ public class FacadePost {
             citycode = postService.queryCityCode(area);
         } /**else {
          citycode = postService.queryCityUserCode(Integer.parseInt(userid));
-         }*/
+     }
         if (userid == null) {//未登录
             list = postService.findAllCityPost(citycode);//根据热度值排序查询帖子
             list = NotLoginretuenList(list, paging);
@@ -2447,7 +2448,7 @@ public class FacadePost {
             }
         }
         return list;
-    }
+     }*/
 
     /**
      * 圈子
@@ -2456,7 +2457,7 @@ public class FacadePost {
      * @param paging
      * @return
      */
-    public List circleRefulsh(String userid, ServicePaging<PostVo> paging, int circleid) {
+    /**public List circleRefulsh(String userid, ServicePaging<PostVo> paging, int circleid) {
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
         List<PostVo> list = null;
@@ -2485,14 +2486,14 @@ public class FacadePost {
             }
         }
         return list;
-    }
+     }*/
 
     /**
      * 关注
      *
      * @return
      */
-    public List followPost(String userid, ServicePaging<PostVo> paging) {
+    /**public List followPost(String userid, ServicePaging<PostVo> paging) {
         List<PostVo> list = null;
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
@@ -2541,14 +2542,14 @@ public class FacadePost {
             }
         }
         return list;
-    }
+     }*/
 
     /**
      * 标签帖子
      *
      * @return
      */
-    public List labelPost(String userid, int labelid, ServicePaging<PostVo> paging) {
+    /** public List labelPost(String userid, int labelid, ServicePaging<PostVo> paging) {
         List<PostVo> list = null;
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
@@ -2576,7 +2577,7 @@ public class FacadePost {
             }
             return list;
         }
-    }
+     }*/
 
 
     /**
@@ -2586,7 +2587,7 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    public List retuenList(List<PostVo> lists, String userid, ServicePaging<PostVo> paging) {
+    /**public List retuenList(List<PostVo> lists, String userid, ServicePaging<PostVo> paging) {
         List<PostVo> list = null;
         if (lists != null) {
             paging.setTotal(lists.size());
@@ -2600,7 +2601,7 @@ public class FacadePost {
             zanIsPost(Integer.parseInt(userid), list);
         }
         return list;
-    }
+     }*/
 
     /***
      * 下拉刷新
@@ -2610,7 +2611,7 @@ public class FacadePost {
      * @param area
      * @return
      */
-    public List userRefreshListNew(String userid, ServicePaging<PostVo> paging, int type, String area, String circleid, String labelid) {
+    /** public List userRefreshListNew(String userid, ServicePaging<PostVo> paging, int type, String area, String circleid, String labelid) {
         List<PostVo> list = null;
         if (type == 1) {//推荐
             list = recommendPost(userid, paging);
@@ -2624,7 +2625,7 @@ public class FacadePost {
             list = labelPost(userid, Integer.parseInt(labelid), paging);
         }
         return list;
-    }
+     }*/
 
     /**
      * 插入
@@ -2632,7 +2633,7 @@ public class FacadePost {
      * @param list
      * @param userid
      */
-    public void insertmongo(List<PostVo> list, String userid) {
+    /**public void insertmongo(List<PostVo> list, String userid) {
         int crileid = 0;//圈子id
         if (list != null && userid != null) {
             for (int i = 0; i < list.size(); i++) {
@@ -2647,7 +2648,7 @@ public class FacadePost {
                 insertMongoDB(userid, id, crileid);
             }
         }
-    }
+     }*/
 
     /**
      * 在mongodb中查询用户刷新浏览过的列表
@@ -2655,7 +2656,7 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    public List userRefulshListMongodb(int userid) {
+    /**public List userRefulshListMongodb(int userid) {
         MongoClient mongoClient = null;
         List<DBObject> list = null;
         DB db = null;
@@ -2683,7 +2684,7 @@ public class FacadePost {
             }
         }
         return list;
-    }
+     }*/
 
     /**
      * 返回数据
@@ -2692,7 +2693,7 @@ public class FacadePost {
      * @param
      * @return
      */
-    public List NotLoginretuenList(List<PostVo> lists, ServicePaging<PostVo> paging) {
+    /**public List NotLoginretuenList(List<PostVo> lists, ServicePaging<PostVo> paging) {
         List<PostVo> list = null;
         if (lists != null) {
             paging.setTotal(lists.size());
@@ -2704,7 +2705,7 @@ public class FacadePost {
             findAllCircleName(list);
         }
         return list;
-    }
+     }*/
 
     /**
      * 插入刷新记录
@@ -2713,7 +2714,7 @@ public class FacadePost {
      * @param postid
      * @param crileid
      */
-    public void insertMongoDB(String userid, int postid, int crileid) {
+    /** public void insertMongoDB(String userid, int postid, int crileid) {
         //把刷新记录插入mongodb
         if (StringUtil.isNotEmpty(userid)) {
             UserRefreshRecord userRefreshRecord = new UserRefreshRecord();
@@ -2724,7 +2725,7 @@ public class FacadePost {
             userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
             userRefreshRecordService.insert(userRefreshRecord);
         }
-    }
+     }*/
 
     /**
      * 用户刷新的历史记录列表
@@ -2732,7 +2733,7 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    public List userReflushHishtoryRecord(String userid, Paging<PostVo> paging) {
+    /** public List userReflushHishtoryRecord(String userid, Paging<PostVo> paging) {
         List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid));
         List<Integer> postVos = new ArrayList<>();
         List<PostVo> postVo = null;
@@ -2752,7 +2753,7 @@ public class FacadePost {
             }
         }
         return postVo;
-    }
+     }*/
 
 }
 
