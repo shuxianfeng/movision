@@ -1,5 +1,7 @@
 package com.movision.mybatis.systemInformReadRecord.entity;
 
+import org.springframework.data.annotation.Id;
+
 import java.util.Date;
 
 /**
@@ -7,13 +9,15 @@ import java.util.Date;
  * @Date 2017/9/5 15:00
  */
 public class SystemInformReadRecord {
-    private Integer id;
+    @Id
+    private String id;
 
     private Integer userid;
 
     private Date intime;
 
     private String informIdentity;
+
 
     @Override
     public String toString() {
@@ -25,8 +29,13 @@ public class SystemInformReadRecord {
                 '}';
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public String getId() {
+
+        return id;
     }
 
     public void setUserid(Integer userid) {
@@ -41,10 +50,7 @@ public class SystemInformReadRecord {
         this.informIdentity = informIdentity;
     }
 
-    public Integer getId() {
 
-        return id;
-    }
 
     public Integer getUserid() {
         return userid;

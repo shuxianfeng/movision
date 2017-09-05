@@ -54,14 +54,6 @@ public class SystemInformReadRecordService implements SystemInformReadRecordMapp
             //按照intime倒序排列
             cursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
             list = cursor.toArray();
-            for (int i = 0; i < list.size(); i++) {
-                for (int j = list.size() - 1; j > i; j--) {
-                    if (list.get(i).get("inform_identity").equals(list.get(j).get("inform_identity"))) {
-                        list.remove(j);
-                    }
-                }
-            }
-            list.subList(0, 10);
             cursor.close();
         } catch (Exception e) {
             log.error("查询个人已读系统消息记录", e);

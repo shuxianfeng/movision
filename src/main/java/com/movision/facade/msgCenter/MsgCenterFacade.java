@@ -487,6 +487,7 @@ public class MsgCenterFacade {
         //把系统通知插入mongo, 即置为已读
         for (ImSystemInformVo vo : systemInformList) {
             SystemInformReadRecord record = new SystemInformReadRecord();
+            record.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
             record.setInformIdentity(vo.getInformidentity());
             record.setIntime(new Date());
             record.setUserid(ShiroUtil.getAppUserID());
