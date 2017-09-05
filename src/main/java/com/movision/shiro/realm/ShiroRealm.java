@@ -48,11 +48,6 @@ public class ShiroRealm extends AuthorizingRealm {
         String tokenJson = gson.toJson(token);
         LoginUser loginUser = userFacade.getLoginUserByToken(tokenJson);
 
-        /*
-        String loginPhone = (String) token.getPrincipal();
-        // 1 获取当前登录的用户信息
-        LoginUser loginUser = userFacade.getLoginUserByPhone(loginPhone);*/
-
         log.debug("当前登录APP的用户信息，LoginUser = " + loginUser.toString());
 
         if (loginUser != null) {

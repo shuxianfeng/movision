@@ -141,7 +141,8 @@ public class MsgCenterFacade {
     }
 
     /**
-     * 获取消息中心-动态消息
+     * 获取消息中心-动态消息, 动态消息全部置为已读
+     *
      *
      * @param paging
      * @return
@@ -151,6 +152,7 @@ public class MsgCenterFacade {
         //代码层分页操作
         List<InstantInfo> resultList = null;
         if (StringUtil.isNotEmpty(userid)) {
+            int curid = Integer.parseInt(userid);
             //一 评论： 1 评论帖子，
             handleCommentlist(list);
             //二 2 评论回复
@@ -158,22 +160,23 @@ public class MsgCenterFacade {
             //二 赞
             handleZanlist(list);
             //三 关注 1 关注人 2 关注帖子 3 关注标签
-            getFollowList(list, Integer.parseInt(userid));
-
-
-            //排序
+            getFollowList(list, curid);
+            //按照时间倒序排序
             Collections.sort(list, InstantInfo.intimeComparator);
             //计算Paging中的分页参数
             paging.setTotal(list.size());
-
-            //代码层分页操作
+            //代码层分页操作，每次取10条
             resultList = pageFacade.getPageList(list, paging.getCurPage(), paging.getPageSize());
 
             int size = resultList == null ? 0 : resultList.size();
             log.debug("【row中list的数量】：" + size);
             log.debug("【row中的list】：" + resultList.toString());
+
             //操作已读未读处理
-            setDataIsRead(resultList);
+//            setDataIsRead(resultList);
+            updateComment(curid);    //更新评论已读
+            updateZan(curid);  //更新赞
+            updateAttention(curid);    //更新关注
         }
         return resultList;
 
@@ -200,7 +203,9 @@ public class MsgCenterFacade {
                     updateZan(id);//更新赞
                     updateAttention(id);//更新关注
                 } else if (type.equals("2")) {
-                    updateInform(id);
+                    //更新未读的系统消息为 已读
+//                    updateInform(id);
+                    wholeSignRead(id);
                 }
             }
             m.put("resault", 1);
@@ -227,15 +232,15 @@ public class MsgCenterFacade {
         followUserService.updateAttentionIsRead(userid);
     }
 
-    public void updateInform(Integer userid) {
-        ImSystemInform inform = new ImSystemInform();
-        inform.setInformTime(ShiroUtil.getAppUser().getRegisterTime());//注册时间
-        inform.setUserid(userid);
-        //新增系统通知
-        wholeSignRead(userid);
-        //更新未读通知
-        imSystemInformReadService.updateInform(inform);
-    }
+//    public void updateInform(Integer userid) {
+//        ImSystemInform inform = new ImSystemInform();
+//        inform.setInformTime(ShiroUtil.getAppUser().getRegisterTime());//注册时间
+//        inform.setUserid(userid);
+//        //把当前用户的所有的未读的系统消息置为已读
+//        wholeSignRead(userid);
+//        //更新未读通知
+//        imSystemInformReadService.updateInform(inform);
+//    }
 
     private void handleReplyCommentList(List<InstantInfo> list) {
         List<ReplyComment> replyCommentList = commentService.selectReplyCommentList(ShiroUtil.getAppUserID());
@@ -259,17 +264,17 @@ public class MsgCenterFacade {
     private void setDataIsRead(List<InstantInfo> resultList) {
         for (InstantInfo info : resultList) {
             int type = info.getType();
-            if (MsgCenterConstant.INSTANT_INFO_TYPE.comment.getCode() == type) {
+            if (MsgCenterConstant.INSTANT_INFO_TYPE.comment.getCode() == type) {    //评论设为已读
                 CommentVo commentVo = (CommentVo) info.getObject();
                 commentVo.setIsread(1); //已读
                 commentService.updateCommentVo(commentVo);
 
-            } else if (MsgCenterConstant.INSTANT_INFO_TYPE.zan.getCode() == type) {
+            } else if (MsgCenterConstant.INSTANT_INFO_TYPE.zan.getCode() == type) { //赞设为已读
                 ZanRecordVo postCommentZanRecordVo = (ZanRecordVo) info.getObject();
                 postCommentZanRecordVo.setIsread(1);    //已读
                 postCommentZanRecordService.updatePostCommentZanRecordVo(postCommentZanRecordVo);
 
-            } else if (MsgCenterConstant.INSTANT_INFO_TYPE.follow.getCode() == type) {
+            } else if (MsgCenterConstant.INSTANT_INFO_TYPE.follow.getCode() == type) {  //关注设为已读
                 FollowUserVo followUserVo = (FollowUserVo) info.getObject();
                 followUserVo.setIsread(1);  //已读
                 followUserService.updateFollowuserVo(followUserVo);
@@ -281,7 +286,8 @@ public class MsgCenterFacade {
     }
 
     private void handleCommentlist(List<InstantInfo> list) {
-        List<CommentVo> commentList = getCommentList(ShiroUtil.getAppUserID());
+
+        List<CommentVo> commentList = commentService.selectPostComment(ShiroUtil.getAppUserID());
         int len = commentList.size();
         if (len > 10) {
             for (int i = 0; i < 10; i++) {
@@ -418,9 +424,11 @@ public class MsgCenterFacade {
         map.put("informTime", informTime);
         list = imSystemInformService.findAllIm(map, paging);
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getCoverimg() != null) {//代表是运营通知
+            if (list.get(i).getCoverimg() != null) {
+                //代表是运营通知
                 list.get(i).setIsoperation(1);
-            } else {//代表是系统通知
+            } else {
+                //代表是系统通知
                 list.get(i).setIsoperation(0);
             }
         }
@@ -800,9 +808,11 @@ public class MsgCenterFacade {
      * @return
      */
     public Integer wholeSignRead(Integer userid) {
+        //查询出此人所有未读的系统消息
         List<String> informidentity = imSystemInformService.queryUnreadSystemMessage(userid);
         Map map = new HashMap();
         int i;
+        //全部置为已读
         for (i = 0; i < informidentity.size(); i++) {
             map.put("userid", userid);
             map.put("intime", new Date());

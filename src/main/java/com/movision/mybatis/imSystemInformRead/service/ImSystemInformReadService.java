@@ -104,11 +104,11 @@ public class ImSystemInformReadService {
     }
 
     /**
-     * 更新系统通知异常
+     * 更新系统通知
      *
      * @param inform
      */
-    public void updateInform(ImSystemInform inform) {
+    /*public void updateInform(ImSystemInform inform) {
         try {
             log.info("更新系统通知");
             imSystemInformReadMapper.updateInform(inform);
@@ -116,5 +116,5 @@ public class ImSystemInformReadService {
             log.error("更新系统通知异常", e);
             throw e;
         }
-    }
+    }*/
 }

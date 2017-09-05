@@ -104,11 +104,37 @@
     </select>
 
     <update id="updateZanReadByComment" parameterType="java.lang.Integer">
-        UPDATE yw_post_comment_zan_record SET isread=1 WHERE commentid in (SELECT id FROM yw_post_comment WHERE
-        userid=#{userid,jdbcType=INTEGER} AND isdel = 0) AND userid <![CDATA[<>]]> #{userid,jdbcType=INTEGER}
-        OR commentid in (SELECT id FROM yw_post_comment WHERE postid in (SELECT id FROM yw_post WHERE
-        userid=#{userid,jdbcType=INTEGER} AND isdel = 0) AND isdel = 0) AND userid <![CDATA[<>]]>
-        #{userid,jdbcType=INTEGER}
+        UPDATE yw_post_comment_zan_record
+        SET isread = 1
+        WHERE
+        (
+        commentid IN (
+        SELECT
+        id
+        FROM
+        yw_post_comment
+        WHERE
+        userid = #{userid}
+        AND isdel = 0
+        )
+        OR commentid IN (
+        SELECT
+        id
+        FROM
+        yw_post_comment
+        WHERE
+        postid IN (
+        SELECT
+        id
+        FROM
+        yw_post
+        WHERE
+        userid = #{userid}
+        AND isdel = 0
+        )
+        AND isdel = 0
+        ))
+        <![CDATA[ AND userid <> #{userid} ]]>
     </update>
 
     <update id="updateZanReadByPost" parameterType="java.lang.Integer">

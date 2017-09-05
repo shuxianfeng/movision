@@ -30,7 +30,7 @@ public class AppMsgCenterController {
     private MsgCenterFacade msgCenterFacade;
 
 
-    @ApiOperation(value = "获取我的消息中心的系统通知列表", notes = "获取我的消息中心的系统通知列表", response = Response.class)
+    @ApiOperation(value = "获取我的消息中心的系统通知列表（同时会把未读的系统通知置为已读）", notes = "获取我的消息中心的系统通知列表（同时会把未读的系统通知置为已读）", response = Response.class)
     @RequestMapping(value = {"/get_my_msg_center_system_list"}, method = RequestMethod.GET)
     public Response getMyMsgCenterInformationList(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
                                                   @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
@@ -60,7 +60,7 @@ public class AppMsgCenterController {
         return response;
     }
 
-    @ApiOperation(value = "获取消息中心-动态列表", notes = "获取消息中心-动态列表", response = Response.class)
+    @ApiOperation(value = "获取消息中心-动态列表（同时会把未读的动态消息置为已读）", notes = "获取消息中心-动态列表（同时会把未读的动态消息置为已读）", response = Response.class)
     @RequestMapping(value = "get_msg_center_instant_info_list", method = RequestMethod.POST)
     public Response getMsgCenterInstantInfoList(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
                                                 @ApiParam @RequestParam(required = false, defaultValue = "1") String pageNo,
@@ -77,13 +77,13 @@ public class AppMsgCenterController {
     }
 
     /**
-     * 更新个人消息中未读
+     * 更新个人消息中未读 (废弃)
      *
      * @param userid
      * @param type
      * @return
      */
-    @ApiOperation(value = "更新个人消息中未读(去红点)", notes = "更新个人消息中未读", response = Response.class)
+    /*@ApiOperation(value = "更新个人消息中未读(去红点)", notes = "更新个人消息中未读", response = Response.class)
     @RequestMapping(value = "update_read_mymsg_center", method = RequestMethod.GET)
     public Response updateReadByMyMessageCenter(@ApiParam(value = "用户id") @RequestParam String userid,
                                                 @ApiParam(value = "1：动态,2:通知") @RequestParam String type) {
@@ -97,7 +97,7 @@ public class AppMsgCenterController {
             response.setData(-1);
         }
         return response;
-    }
+    }*/
 
 
 }

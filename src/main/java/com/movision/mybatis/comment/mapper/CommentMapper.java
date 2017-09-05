@@ -112,5 +112,5 @@ public interface CommentMapper {
 
     void updateCommentIsRead(Integer id);
 
-
+    List<CommentVo> selectPostComment(Integer id);
 }

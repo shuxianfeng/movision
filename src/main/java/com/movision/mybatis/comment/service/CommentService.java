@@ -596,4 +596,14 @@ public class CommentService {
         }
     }
 
+    public List<CommentVo> selectPostComment(Integer id) {
+        try {
+            log.info("查询当前用户所发的帖子评论");
+            return commentMapper.selectPostComment(id);
+        } catch (Exception e) {
+            log.error("查询当前用户所发的帖子评论失败", e);
+            throw e;
+        }
+    }
+
 }
