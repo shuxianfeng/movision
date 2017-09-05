@@ -1920,7 +1920,6 @@ public class FacadePost {
             userRefreshRecord.setType(type);
      }else {
             userRefreshRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
-            userRefreshRecord.setUserid(0);
             userRefreshRecord.setPostid(postid);
             userRefreshRecord.setCrileid(String.valueOf(crileid));
             userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
