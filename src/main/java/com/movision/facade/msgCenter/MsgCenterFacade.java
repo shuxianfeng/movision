@@ -26,6 +26,8 @@ import com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecordVo;
 import com.movision.mybatis.postCommentZanRecord.service.PostCommentZanRecordService;
 import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.rewarded.service.RewardedService;
+import com.movision.mybatis.systemInformReadRecord.entity.SystemInformReadRecord;
+import com.movision.mybatis.systemInformReadRecord.service.SystemInformReadRecordService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.model.ServicePaging;
@@ -50,6 +52,9 @@ public class MsgCenterFacade {
     private static Logger log = LoggerFactory.getLogger(MsgCenterFacade.class);
 
     @Autowired
+    private SystemInformReadRecordService systemInformReadRecordService;
+
+    @Autowired
     private PageFacade pageFacade;
 
     @Autowired
@@ -69,9 +74,6 @@ public class MsgCenterFacade {
 
     @Autowired
     private ImFirstDialogueService imFirstDialogueService;
-
-    @Autowired
-    private ImSystemInformReadService imSystemInformReadService;
 
     @Autowired
     private FollowUserService followUserService;
@@ -184,11 +186,8 @@ public class MsgCenterFacade {
 
     /**
      * 更新个人消息中未读
-     *
-     * @param userid
-     * @param type
      */
-    public Map updateReadByMyMessageCenter(String userid, String type) {
+    /*public Map updateReadByMyMessageCenter(String userid, String type) {
         Integer id = null;
         Map m = new HashMap();
         try {
@@ -215,7 +214,7 @@ public class MsgCenterFacade {
             return m;
         }
 
-    }
+    }*/
 
     public void updateComment(Integer id) {
         //更新评论
@@ -419,10 +418,7 @@ public class MsgCenterFacade {
      */
     public List<ImSystemInformVo> getMsgInformationList(Integer userid, Date informTime, Paging<ImSystemInformVo> paging) {
         List<ImSystemInformVo> list = null;
-        Map map = new HashMap();
-        map.put("userid", userid);
-        map.put("informTime", informTime);
-        list = imSystemInformService.findAllIm(map, paging);
+        list = imSystemInformService.findAllIm(informTime, paging);
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getCoverimg() != null) {
                 //代表是运营通知
@@ -443,21 +439,57 @@ public class MsgCenterFacade {
      */
     public List<ImSystemInformVo> getMsgInformationListNew(String userid, Paging<ImSystemInformVo> paging) {
         List<ImSystemInformVo> list = null;
-        Map map = new HashMap();
         if (StringUtil.isNotEmpty(userid)) {
+            //获取该用户的注册时间
             Date informTime = imSystemInformService.queryDate(Integer.parseInt(userid));
-            map.put("userid", userid);
-            map.put("informTime", informTime);
-            list = imSystemInformService.findAllIm(map, paging);
+            //获取系统通知和运营通知
+            list = imSystemInformService.findAllIm(informTime, paging);
+            //系统通知
+            List<ImSystemInformVo> systemInformList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).getCoverimg() != null) {//代表是运营通知
+
+                if (list.get(i).getCoverimg() != null) {
+                    //代表是运营通知
                     list.get(i).setIsoperation(1);
-                } else {//代表是系统通知
+                } else {
+                    //代表是系统通知
                     list.get(i).setIsoperation(0);
+                    systemInformList.add(list.get(i));
+                }
+            }
+            int curId = Integer.parseInt(userid);
+            //把所有此人的系统通知置为已读
+            setSystemInfoIsRead(systemInformList, curId);
+        }
+        return list;
+    }
+
+    /**
+     * 把所有此人的系统通知置为已读
+     * (实际上是把系统通知与该人的关系插入到mongo中的systemInformReadRecord)
+     *
+     * @param systemInformList
+     * @param curId
+     */
+    private void setSystemInfoIsRead(List<ImSystemInformVo> systemInformList, int curId) {
+        List<SystemInformReadRecord> systemInformReadRecordList = systemInformReadRecordService.selectPersonSystemInfoRecord(curId);
+        List<ImSystemInformVo> sameList = new ArrayList<>();
+        for (int i = 0; i < systemInformList.size(); i++) {
+            for (int j = 0; j < systemInformReadRecordList.size(); j++) {
+                if (systemInformList.get(i).getInformidentity().equals(systemInformReadRecordList.get(j).getInformIdentity())) {
+                    sameList.add(systemInformList.get(i));
                 }
             }
         }
-        return list;
+        systemInformList.removeAll(sameList);
+        //把系统通知插入mongo, 即置为已读
+        for (ImSystemInformVo vo : systemInformList) {
+            SystemInformReadRecord record = new SystemInformReadRecord();
+            record.setInformIdentity(vo.getInformidentity());
+            record.setIntime(new Date());
+            record.setUserid(ShiroUtil.getAppUserID());
+            systemInformReadRecordService.insert(record);
+        }
     }
 
     /**
@@ -769,7 +801,7 @@ public class MsgCenterFacade {
      * @param type
      * @return
      */
-    public Integer updateisread(String type, Integer userid, String informidentity) {
+    /*public Integer updateisread(String type, Integer userid, String informidentity) {
         Integer resault = null;
         System.out.println("用户----------" + userid + "唯一标识-------------" + informidentity);
         if (type.equals("1") || type.equals(1)) {
@@ -799,7 +831,7 @@ public class MsgCenterFacade {
             resault = imFirstDialogueService.updateCallRead(userid);//更新打招呼已读
         }
         return resault;
-    }
+    }*/
 
     /**
      * 系统消息全部置为已读
@@ -807,7 +839,7 @@ public class MsgCenterFacade {
      * @param userid
      * @return
      */
-    public Integer wholeSignRead(Integer userid) {
+    /*public Integer wholeSignRead(Integer userid) {
         //查询出此人所有未读的系统消息
         List<String> informidentity = imSystemInformService.queryUnreadSystemMessage(userid);
         Map map = new HashMap();
@@ -821,7 +853,7 @@ public class MsgCenterFacade {
             imSystemInformReadService.wholeSignRead(map);
         }
         return i;
-    }
+    }*/
 
 
     /**

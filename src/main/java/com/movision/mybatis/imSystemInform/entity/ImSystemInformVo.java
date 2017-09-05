@@ -1,5 +1,7 @@
 package com.movision.mybatis.imSystemInform.entity;
 
+import com.movision.mybatis.post.entity.Post;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -20,7 +22,7 @@ public class ImSystemInformVo implements Serializable {
 
     private String pushcontent;
 
-    private String informidentity;
+    private String informidentity;  //系统通知唯一标示
 
     private Integer isread;//是否已读 0否 1是
 
@@ -133,5 +135,16 @@ public class ImSystemInformVo implements Serializable {
 
     public void setInformTime(Date informTime) {
         this.informTime = informTime;
+    }
+
+    /**
+     * 重写equals方法，用于比对
+     *
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof ImSystemInformVo && this.informidentity != null && this.informidentity.equals(((ImSystemInformVo) obj).getInformidentity());
     }
 }

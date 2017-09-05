@@ -35,7 +35,7 @@ public interface ImSystemInformMapper {
 
     List<String> queryUnreadSystemMessage(Integer userid);
 
-    List<ImSystemInformVo> findAllIm(Map map, RowBounds rowBounds);
+    List<ImSystemInformVo> findAllIm(Date informTime, RowBounds rowBounds);
 
     ImSystemInformVo queryMyMsgInforDetails(ImSystemInform imSystemInform);
 

@@ -64,7 +64,6 @@ public class LabelSearchService implements ILabelSearchService {
             }
             cityLabels = getNotUsedCityLabel(q);
 
-
             int cityLabelLength = cityLabels.size();
             if (cityLabelLength > 0 && cityLabelLength < 12) {
                 spec.setLimit(12 - cityLabelLength);    //重新设置搜索服务返回的数据量

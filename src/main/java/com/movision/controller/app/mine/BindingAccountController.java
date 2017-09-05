@@ -7,6 +7,7 @@ import com.movision.facade.user.AppRegisterFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
+import com.movision.utils.ValidateUtils;
 import com.movision.utils.VerifyCodeUtils;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -43,16 +44,21 @@ public class BindingAccountController {
 
         Response response = new Response();
         log.info("获得手机验证码  mobile==" + mobile);
-        //先校验手机号是否已经存在
-        if (isExistPhone(mobile, response)) return response;
-
-        // 生成随机字串
-        String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE, VerifyCodeUtils.VERIFY_CODES_DIGIT);
-        log.debug("verifyCode == " + verifyCode);
-        appRegisterFacade.sendSms(mobile, verifyCode);
-        appRegisterFacade.putValidationInfoToSession(mobile, verifyCode, "bind");
-        response.setData(verifyCode);
-
+        if (ValidateUtils.isMobile(mobile)) {
+            //先校验手机号是否已经存在
+            if (isExistPhone(mobile, response)) return response;
+            // 生成随机字串
+            String verifyCode = VerifyCodeUtils.generateVerifyCode(Constants.CHECK_MOBILE_CODE_SIZE, VerifyCodeUtils.VERIFY_CODES_DIGIT);
+            log.debug("verifyCode == " + verifyCode);
+            appRegisterFacade.sendSms(mobile, verifyCode);
+            appRegisterFacade.putValidationInfoToSession(mobile, verifyCode, "bind");
+            response.setCode(200);
+            response.setData(verifyCode);
+        } else {
+            log.error("手机号不正确！");
+            response.setCode(300);
+            response.setMessage("请输入正确的手机号！");
+        }
         return response;
     }
 

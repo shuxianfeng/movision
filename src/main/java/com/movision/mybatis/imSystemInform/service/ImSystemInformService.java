@@ -47,10 +47,10 @@ public class ImSystemInformService {
         }
     }
 
-    public List<ImSystemInformVo> findAllIm(Map map, Paging<ImSystemInformVo> paging) {
+    public List<ImSystemInformVo> findAllIm(Date date, Paging<ImSystemInformVo> paging) {
         try {
             log.info("查询用户收到的系统通知");
-            return imSystemInformMapper.findAllIm(map, paging.getRowBounds());
+            return imSystemInformMapper.findAllIm(date, paging.getRowBounds());
         } catch (Exception e) {
             log.error("查询用户收到的系统通知失败", e);
             throw e;
