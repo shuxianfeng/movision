@@ -1,5 +1,7 @@
 package com.movision.facade.msgCenter;
 
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.movision.common.constant.MsgCenterConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.pojo.InstantInfo;
@@ -472,7 +474,7 @@ public class MsgCenterFacade {
      * @param curId
      */
     private void setSystemInfoIsRead(List<ImSystemInformVo> systemInformList, int curId) {
-        List mongoList = systemInformReadRecordService.selectPersonSystemInfoRecord(curId);
+        List<DBObject> mongoList = systemInformReadRecordService.selectPersonSystemInfoRecord(curId);
         List<ImSystemInformVo> sameList = new ArrayList<>();
         for (int i = 0; i < systemInformList.size(); i++) {
             for (int j = 0; j < mongoList.size(); j++) {
