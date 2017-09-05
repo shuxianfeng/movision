@@ -14,7 +14,7 @@ public class CommentVo implements Serializable {
     private User user;
     private  Integer postid;
     private Integer repliesnumber;
-    private User puser;
+    private User puser;//子评论的用户信息
     private String content;
 
     private Date intime;
