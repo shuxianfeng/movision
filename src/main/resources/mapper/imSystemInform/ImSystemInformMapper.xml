@@ -188,7 +188,7 @@
         SELECT inform_identity FROM yw_im_system_informs WHERE inform_identity NOT in
         (SELECT inform_identity FROM yw_im_system_inform_read WHERE userid= #{userid,jdbcType=INTEGER})
     </select>
-    <select id="findAllIm" parameterType="java.lang.Date"
+    <select id="findAllIm" parameterType="java.util.Date"
             resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo">
         SELECT *
         FROM yw_im_system_informs
