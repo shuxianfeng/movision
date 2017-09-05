@@ -472,11 +472,11 @@ public class MsgCenterFacade {
      * @param curId
      */
     private void setSystemInfoIsRead(List<ImSystemInformVo> systemInformList, int curId) {
-        List<SystemInformReadRecord> systemInformReadRecordList = systemInformReadRecordService.selectPersonSystemInfoRecord(curId);
+        List mongoList = systemInformReadRecordService.selectPersonSystemInfoRecord(curId);
         List<ImSystemInformVo> sameList = new ArrayList<>();
         for (int i = 0; i < systemInformList.size(); i++) {
-            for (int j = 0; j < systemInformReadRecordList.size(); j++) {
-                if (systemInformList.get(i).getInformidentity().equals(systemInformReadRecordList.get(j).getInformIdentity())) {
+            for (int j = 0; j < mongoList.size(); j++) {
+                if (systemInformList.get(i).getInformidentity().equals(mongoList.get(j).get("inform_identity"))) {
                     sameList.add(systemInformList.get(i));
                 }
             }

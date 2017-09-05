@@ -61,7 +61,7 @@ public class SystemInformReadRecordService implements SystemInformReadRecordMapp
                     }
                 }
             }
-            list.subList(0, 12);
+            list.subList(0, 10);
             cursor.close();
         } catch (Exception e) {
             log.error("查询个人已读系统消息记录", e);
