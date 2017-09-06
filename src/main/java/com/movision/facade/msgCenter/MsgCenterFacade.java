@@ -966,9 +966,7 @@ public class MsgCenterFacade {
         //评论未读数
         commentIsRead = commentService.queryCommentIsRead(Integer.parseInt(userid));
         //系统通知未读数
-        map.put("userid", userid);
-        map.put("informTime", ShiroUtil.getAppUser().getRegisterTime());
-        imsysIsRead = imSystemInformService.querySystemPushByUserid(map);
+        imsysIsRead = getImsysIsReadCount(userid, imsysIsRead);
         //聊天未读数
         //关注未读数
         follow = followUserService.queryUserIsRead(Integer.parseInt(userid));
