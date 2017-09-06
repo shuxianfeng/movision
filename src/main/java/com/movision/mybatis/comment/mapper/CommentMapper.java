@@ -86,7 +86,8 @@ public interface CommentMapper {
     List<CommentVo> findAllCommentByPostId(int postid, RowBounds rowBounds);
 
     List<CommentVo> findAllCommentByPost(int postid);
-    Integer queryCommentIsRead(int userid);//查询评论未读
+
+    Integer queryCommentIsRead(int id);//查询评论未读
 
     CommentCount queryCommentZan(int id);
 

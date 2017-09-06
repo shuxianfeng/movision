@@ -492,19 +492,36 @@
       p.postid=#{postid,jdbcType=INTEGER} AND p.isdel=0 ORDER BY p.heat_value DESC LIMIT 1
     </select>
     <select id="queryCommentIsRead" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-     SELECT COUNT(1) FROM(
-        SELECT * FROM yw_post_comment WHERE
+        select count(1)
+        from yw_post_comment pc
+        WHERE
         (
-        postid in (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0)
-        OR
-        id IN (SELECT id FROM yw_post_comment
-        WHERE pid IN
-        (SELECT id FROM yw_post_comment WHERE
-        userid=#{userid,jdbcType=INTEGER} AND pid IS NULL AND isdel=0)
+        pc.postid IN (
+        SELECT
+        id
+        FROM
+        yw_post
+        WHERE
+        userid = #{id}
+        )
+        OR pc.pid IN (
+        SELECT
+        id
+        FROM
+        (
+        SELECT
+        id
+        FROM
+        yw_post_comment
+        WHERE
+        userid = #{id}
+        ) a
         )
         )
-        ORDER BY intime )tt
-        WHERE tt.isread=0
+        AND isdel = 0
+        AND pc.isread = 0
+        <![CDATA[ AND pc.userid <> #{id}
+        ]]>
    </select>
 
     <select id="findAllCommentByPostId" parameterType="java.lang.Integer"
