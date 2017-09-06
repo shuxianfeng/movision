@@ -645,6 +645,11 @@ public class ImFacade {
      * @param imAppUserList
      * @param size
      * @param multiple
+     * @param title
+     * @param pushcontent
+     * @param informidentity
+     * @param type           推送类型
+     * @param coverimg       运营通知的封面图
      * @throws IOException
      */
     private void sendAndRecord(String body, ImUser imUser, List<ImUser> imAppUserList, int size, int multiple, String title,
@@ -788,23 +793,23 @@ public class ImFacade {
 
 
     /**
-     * 记录发消息的流水
+     * 记录通知+推送流水
      *
      * @param body
      * @param fromaccid
      * @param toAccids
+     * @param title
+     * @param pushcontent
+     * @param informidentity
+     * @param coverimg
+     * @return
      */
     public Integer recordSysInforms(String body, String fromaccid, String toAccids, String title, String pushcontent,
                                     long informidentity, String coverimg) {
-        if (pushcontent == null) {
-            //系统通知表:普通通知
-            addImSystemInform(body, fromaccid, toAccids, title, informidentity, coverimg);
-
-        } else if (pushcontent != null) {
-            //推送表(记录系统推送)
-            return addSystemPushInfo(body, fromaccid, toAccids, title);
-        }
-        return 0;
+        //系统通知表:普通通知
+        addImSystemInform(body, fromaccid, toAccids, title, informidentity, coverimg);
+        //推送表(记录系统推送)
+        return addSystemPushInfo(body, fromaccid, toAccids, title);
     }
 
     private Integer addSystemPushInfo(String body, String fromaccid, String toAccids, String title) {

@@ -51,7 +51,7 @@ public class BossImController {
 
 
     /**
-     * 运营发送通知
+     * 运营发送通知/推送
      *
      * @param request
      * @param title
