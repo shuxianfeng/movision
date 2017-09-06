@@ -955,6 +955,13 @@ public class MsgCenterFacade {
     }
 
 
+    /**
+     * 判断消息中心-动态和系统消息 是否显示红点
+     *
+     * @param type
+     * @param userid
+     * @return
+     */
     public Map isRead(int type, String userid) {
         Map map = new HashMap();
         int flag = 0;

@@ -12,15 +12,15 @@ public class ImSystemInform implements Serializable {
 
     private String toAccids;
 
-    private String body;
+    private String body;    //消息内容
 
     private Date informTime;
 
     private String title;
 
-    private String pushcontent;
+    private String pushcontent; //推送内容
 
-    private String informidentity;
+    private String informidentity;  //系统通知的唯一标示
 
     private String coverimg;//运营通知封面图
 

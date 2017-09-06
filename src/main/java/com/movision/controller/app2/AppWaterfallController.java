@@ -53,6 +53,7 @@ public class AppWaterfallController {
 
     @Autowired
     private CircleAppFacade circleAppFacade;
+
     /**
      * 下拉刷新
      *
@@ -81,25 +82,25 @@ public class AppWaterfallController {
      * @return
      */
     /**@ApiOperation(value = "下拉刷新", notes = "下拉刷新", response = Response.class)
-    @RequestMapping(value = "userRefreshListNew", method = RequestMethod.POST)
-    public Response userRefreshList(@ApiParam(value = "用户id ") @RequestParam(required = false) String userid,
-                                    @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                    @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
-                                    @ApiParam(value = "类型 1：推荐2：关注3：本地 4：圈子 5：标签") @RequestParam(required = false) int type,
-                                    @ApiParam(value = "地区") @RequestParam(required = false) String area,
-                                    @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
-                                    @ApiParam(value = "标签id") @RequestParam(required = false) String labelid) {
-        Response response = new Response();
-        ServicePaging<PostVo> pager = new ServicePaging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List map = facadePost.userRefreshListNew(userid, pager, type, area, circleid, labelid);
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
-        }
-        pager.setRows(map);
-        response.setData(pager);
-        return response;
+     @RequestMapping(value = "userRefreshListNew", method = RequestMethod.POST)
+     public Response userRefreshList(@ApiParam(value = "用户id ") @RequestParam(required = false) String userid,
+     @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+     @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
+     @ApiParam(value = "类型 1：推荐2：关注3：本地 4：圈子 5：标签") @RequestParam(required = false) int type,
+     @ApiParam(value = "地区") @RequestParam(required = false) String area,
+     @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
+     @ApiParam(value = "标签id") @RequestParam(required = false) String labelid) {
+     Response response = new Response();
+     ServicePaging<PostVo> pager = new ServicePaging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+     List map = facadePost.userRefreshListNew(userid, pager, type, area, circleid, labelid);
+     if (response.getCode() == 200) {
+     response.setMessage("查询成功");
+     }
+     pager.setRows(map);
+     response.setData(pager);
+     return response;
 
-                                    }*/
+     }*/
     /**
      * 首页滑动列表
      *
@@ -142,46 +143,24 @@ public class AppWaterfallController {
         response.setData(pager);
         return response;
     }
-    /**
-     * 用户刷新的历史列表
-     *
-     * @param userid
-     * @param pageNo
-     * @param pageSize
-     * @return
-     */
-    /**@ApiOperation(value = "用户刷新的历史记录列表", notes = "用户刷新的历史记录列表", response = Response.class)
-    @RequestMapping(value = "userReflushHishtoryRecord", method = RequestMethod.POST)
-    public Response userReflushHishtoryRecord(@ApiParam(value = "用户id") @RequestParam String userid,
-                                              @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                              @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
-        Response response = new Response();
-        Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List map = facadePost.userReflushHishtoryRecord(userid, pager);
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
-        }
-        pager.result(map);
-        response.setData(pager);
-        return response;
-                                              }*/
 
     /**
      * 所有未读消息
+     *
      * @param userid
      * @return
      */
-     @ApiOperation(value = "所有未读消息", notes = "所有未读消息", response = Response.class)
-     @RequestMapping(value = "queryUserAllUnreadMessage", method = RequestMethod.POST)
-     public Response queryUserAllUnreadMessage(@ApiParam(value = "用户id") @RequestParam(required = false) String userid){
-     Response response = new Response();
-         Map count = msgCenterFacade.queryUserAllUnreadMessage(userid);
-     if(response.getCode()==200){
-     response.setMessage("返回成功");
-     }
-     response.setData(count);
-         return response;
-     }
+    @ApiOperation(value = "所有未读消息", notes = "所有未读消息", response = Response.class)
+    @RequestMapping(value = "queryUserAllUnreadMessage", method = RequestMethod.POST)
+    public Response queryUserAllUnreadMessage(@ApiParam(value = "用户id") @RequestParam(required = false) String userid) {
+        Response response = new Response();
+        Map count = msgCenterFacade.queryUserAllUnreadMessage(userid);
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(count);
+        return response;
+    }
 
     /**
      * 所有未读消息
@@ -215,7 +194,7 @@ public class AppWaterfallController {
         }
         response.setData(list);
         return response;
-     }
+    }
 
     @ApiOperation(value = "个人主页上半部分", notes = "个人主页上半部分", response = Response.class)
     @RequestMapping(value = "queryOtherPersonHomepage", method = RequestMethod.POST)
@@ -328,7 +307,6 @@ public class AppWaterfallController {
     }
 
 
-
     @ApiOperation(value = "活动详情中的最热最新", notes = "活动详情中的最热最新", response = Response.class)
     @RequestMapping(value = "activePostDetailHot", method = RequestMethod.POST)
     public Response activePostDetailHot(@ApiParam(value = "类型 0 最热 1 最新") @RequestParam int type,
@@ -347,21 +325,23 @@ public class AppWaterfallController {
     }
 
 
-    /** @ApiOperation(value = "关注作者", notes = "关注作者", response = Response.class)
-    @RequestMapping(value = "concernedAuthor", method = RequestMethod.POST)
-    public Response concernedAuthor(@ApiParam(value = "用户id") @RequestParam int userid,
-                                    @ApiParam(value = "帖子id") @RequestParam String postid) {
-        Response response = new Response();
-        int result = facadePost.concernedAuthor(userid, postid);
-        if (result == 0) {
-            response.setCode(200);
-            response.setMessage("关注成功");
-        } else if (result == 1) {
-            response.setCode(300);
-            response.setMessage("已关注该作者，请刷新重试");
-        }
-        return response;
-                                    }*/
+    /**
+     * @ApiOperation(value = "关注作者", notes = "关注作者", response = Response.class)
+     * @RequestMapping(value = "concernedAuthor", method = RequestMethod.POST)
+     * public Response concernedAuthor(@ApiParam(value = "用户id") @RequestParam int userid,
+     * @ApiParam(value = "帖子id") @RequestParam String postid) {
+     * Response response = new Response();
+     * int result = facadePost.concernedAuthor(userid, postid);
+     * if (result == 0) {
+     * response.setCode(200);
+     * response.setMessage("关注成功");
+     * } else if (result == 1) {
+     * response.setCode(300);
+     * response.setMessage("已关注该作者，请刷新重试");
+     * }
+     * return response;
+     * }
+     */
 
 
     @ApiOperation(value = "点击圈子标签页上半部分", notes = "点击圈子标签页上半部分", response = Response.class)
@@ -449,7 +429,6 @@ public class AppWaterfallController {
         response.setData(pager);
         return response;
     }
-
 
 
     @ApiOperation(value = "删除评论", notes = "删除评论", response = Response.class)
@@ -666,12 +645,12 @@ public class AppWaterfallController {
 
     @ApiOperation(value = "返回APP开屏图或开屏动画", notes = "返回当前APP用户开屏图或开屏动画", response = Response.class)
     @RequestMapping(value = "getOpenAppImg", method = RequestMethod.POST)
-    public Response getOpenAppImg(){
+    public Response getOpenAppImg() {
         Response response = new Response();
         String imgurl = circleAppFacade.getOpenAppImg();
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
-        }else {
+        } else {
             response.setMessage("获取失败");
         }
         response.setData(imgurl);

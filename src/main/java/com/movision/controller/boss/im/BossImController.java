@@ -1,6 +1,7 @@
 package com.movision.controller.boss.im;
 
 import com.movision.common.Response;
+import com.movision.common.constant.ImConstant;
 import com.movision.facade.im.ImFacade;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
@@ -44,7 +45,7 @@ public class BossImController {
                                      @ApiParam(value = "系统推送内容(填就是推送，不填就是通知)") @RequestParam(required = false) String pushcontent) throws IOException {
         Response response = new Response();
         //调用云信推送
-        imFacade.sendSystemInform(body, title, pushcontent);
+        imFacade.sendSystemInform(body, title, pushcontent, ImConstant.PUSH_MESSAGE.system_msg.getCode(), null);
         return response;
     }
 
