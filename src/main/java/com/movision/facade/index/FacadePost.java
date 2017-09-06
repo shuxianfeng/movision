@@ -1626,6 +1626,13 @@ public class FacadePost {
         return list;
     }
 
+    /**
+     * 把该帖子所属于的活动，封装成标签实体，加入到标签列表，方便app端展示。
+     *
+     * @param list
+     * @param i
+     * @param postLabels
+     */
     private void addActiveToLabellist(List<PostVo> list, int i, List<PostLabel> postLabels) {
         Integer activeid = list.get(i).getActiveid();
         if (activeid != null) {
@@ -1639,6 +1646,13 @@ public class FacadePost {
         }
     }
 
+    /**
+     * 把该帖子所属于的圈子，封装成标签实体，加入到标签列表，方便app端展示。
+     *
+     * @param list
+     * @param i
+     * @param postLabels
+     */
     private void addCircleToLabellist(List<PostVo> list, int i, List<PostLabel> postLabels) {
         Integer circleid = list.get(i).getCircleid();
         if (circleid != null) {
