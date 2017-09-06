@@ -134,7 +134,6 @@ public class AppLoginController {
         log.debug("登录信息  mobile==" + user.getPhone() + "mobileCheckCode = " + user.getMobileCheckCode());
         Response response = new Response();
         try {
-
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(true);
             if (null == session) {
@@ -143,12 +142,14 @@ public class AppLoginController {
                 response.setMessage("请重新获取验证码");
                 return response;
             }
+            //缓存的手机号（发送验证码的手机号）
             String session_phone = (String) session.getAttribute("phone");
             log.debug("session_phone:" + session_phone);
+            //输入的手机号
             String param_phone = user.getPhone();
             log.debug("param_phone:" + param_phone);
 
-            //验证输入错误的手机号正确的验证码登录
+            //1 验证输入错误的手机号正确的验证码登录
             if (!session_phone.equals(param_phone)) {
                 response.setCode(400);
                 response.setMessage("请输入正确的手机号码");
@@ -166,28 +167,29 @@ public class AppLoginController {
                 }
             }
 
-            //校验验证码是否正确
+            //2 校验验证码是否正确
             if (user.getMobileCheckCode() != null) {
                 //获取缓存中的登录的用户信息
                 Validateinfo validateinfo = (Validateinfo) session.getAttribute("r" + param_phone);
                 log.info("【短信验证码登录】获取缓存中的登录的用户信息:" + validateinfo.toString());
                 if (null == validateinfo) {
                     response.setCode(400);
-                    response.setMessage("session中无当前用户");
+                    response.setMessage("短信验证码失效，请重新获取短信验证码");
+                    return response;
                 }
                 //业务操作
                 Map result = appRegisterFacade.validateLoginUser(user, validateinfo, session);
                 response.setData(result);
+                return response;
             } else {
                 response.setCode(400);
-                response.setMessage("请输入手机验证码");
+                response.setMessage("手机验证码不能为空，请输入手机验证码");
+                return response;
             }
         } catch (Exception e) {
             log.error("注册操作失败>>>", e);
             throw e;
         }
-
-        return response;
     }
 
     @ApiOperation(value = "注册QQ/微信/微博账号", notes = "注册QQ/微信/微博账号", response = Response.class)
@@ -277,9 +279,8 @@ public class AppLoginController {
             //1 校验手机号是否存在
             User user = userFacade.queryUserByPhone(phone);
             if (null == user) {
-                //库中无该用户，需要发送短信验证码
+                //数据库中无该用户，需要发送短信验证码
                 log.warn("手机号不存在,请发送短信验证码登录");
-
                 response.setCode(400);
                 response.setMessage("手机号不存在,请发送短信验证码登录");
                 response.setMsgCode(MsgCodeConstant.app_user_not_exist);

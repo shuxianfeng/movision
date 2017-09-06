@@ -14,7 +14,6 @@ import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.coupon.service.CouponService;
 import com.movision.mybatis.couponTemp.entity.CouponTemp;
-import com.movision.mybatis.deviceAccid.service.DeviceAccidService;
 import com.movision.mybatis.imDevice.entity.ImDevice;
 import com.movision.mybatis.imDevice.service.ImDeviceService;
 import com.movision.mybatis.imuser.entity.ImUser;
@@ -101,22 +100,19 @@ public class AppRegisterFacade {
     @Transactional
     public Map<String, Object> validateLoginUser(RegisterUser member, Validateinfo validateinfo, Session session) throws IOException {
 
-        String phone = member.getPhone();   //输入的手机号
-        String verifyCode = validateinfo.getCheckCode();    //session中的验证码
+        String phone = member.getPhone();                       //输入的手机号
+        String verifyCode = validateinfo.getCheckCode();        //session中的验证码
         String mobileCheckCode = member.getMobileCheckCode();   //输入的验证码
         if (verifyCode != null) {
-
             Date currentTime = new Date();
             Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(validateinfo.getCreateTime(), "yyyy-MM-dd HH:mm:ss"), 12, 10);
             //校验是否在短信验证码有效期内
             if (currentTime.before(sendSMStime)) {
-
                 log.debug("mobile verifyCode == " + mobileCheckCode);
                 //比较服务器端session中的验证码和App端输入的验证码
                 if (validateinfo.getCheckCode().equalsIgnoreCase(mobileCheckCode)) {
                     //1 生成token
                     UsernamePasswordToken newToken = new UsernamePasswordToken(phone, verifyCode.toCharArray());
-
                     Map<String, Object> result = new HashedMap();
                     //2 注册用户/修改用户信息
                     Gson gson = new Gson();
@@ -153,10 +149,10 @@ public class AppRegisterFacade {
                     //4 判断该userid是否存在一个im用户，若不存在，则注册im用户;若存在，则查询
                     this.getImuserForReturn(result, userid);
 
-                    //6 登录成功则清除session中验证码的信息
+                    //5 登录成功则清除session中验证码的信息
                     session.removeAttribute("r" + validateinfo.getAccount());
 
-                    //7 返回token
+                    //6 返回token
                     result.put("token_detail", newToken);
                     result.put("token", json);
                     return result;
@@ -378,7 +374,7 @@ public class AppRegisterFacade {
      * @param userid
      */
     @Transactional
-    private void processCoupon(String phone, int userid) {
+    void processCoupon(String phone, int userid) {
         //首先检查当前手机号是否领取过优惠券
         List<CouponTemp> couponTempList = couponService.checkIsGetCoupon(phone);
         List<Coupon> couponList = new ArrayList<>();
