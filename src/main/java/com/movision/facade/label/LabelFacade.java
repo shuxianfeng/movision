@@ -12,6 +12,7 @@ import com.movision.mybatis.circle.entity.CircleCount;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.followLabel.entity.FollowLabel;
 import com.movision.mybatis.followLabel.service.FollowLabelService;
+import com.movision.mybatis.followUser.service.FollowUserService;
 import com.movision.mybatis.footRank.entity.FootRank;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
@@ -67,6 +68,8 @@ public class LabelFacade {
     private UserService userService;
     @Autowired
     private PostService postService;
+    @Autowired
+    private FollowUserService followUserService;
 
     /**
      * 我的--关注--关注的标签，点击关注调用的关注的标签列表返回接口
@@ -406,6 +409,10 @@ public class LabelFacade {
         map.put("labelid", labelid);
         int result = followLabelService.cancleLabel(map);
         if (result == 1) {
+            //标签关注-1
+            followLabelService.updatePostLabelLess(Integer.parseInt(labelid));
+            //用户关注数-1
+            followUserService.updateUserAttention(Integer.parseInt(userid));
             mark = 1;
         } else {
             mark = -1;

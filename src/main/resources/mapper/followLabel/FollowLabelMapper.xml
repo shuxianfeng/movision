@@ -90,6 +90,9 @@
     <update id="updatePostLabel" parameterType="java.lang.Integer">
         UPDATE  yw_post_label SET fans=fans+1 WHERE id=#{labelid,jdbcType=INTEGER}
     </update>
+    <update id="updatePostLabelLess" parameterType="java.lang.Integer">
+        UPDATE  yw_post_label SET fans=fans-1 WHERE id=#{labelid,jdbcType=INTEGER}
+    </update>
     <update id="updateLabelHeatValue" parameterType="java.util.Map">
         UPDATE  yw_post_label SET heat_value=heat_value+#{points,jdbcType=INTEGER} WHERE id=#{labelid,jdbcType=INTEGER}
     </update>

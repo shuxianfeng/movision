@@ -62,6 +62,17 @@ public class FollowUserService {
         }
     }
 
+
+    public void insertUserFansLess(int interestedusers) {
+        try {
+            log.info("用户粉丝数-1");
+            followUserMapper.insertUserFansLess(interestedusers);
+        } catch (Exception e) {
+            log.error("用户粉丝数-1失败", e);
+            throw e;
+        }
+    }
+
     public List<FollowUserVo> selectFollowUserVoList(Integer userid) {
         try {
             log.info("查询关注我的人的列表");
@@ -106,6 +117,21 @@ public class FollowUserService {
             followUserMapper.updateAttentionIsRead(userid);
         } catch (Exception e) {
             log.error("更新关注异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 用户关注数-1
+     *
+     * @param userid
+     */
+    public void updateUserAttention(Integer userid) {
+        try {
+            log.info("用户关注-1");
+            followUserMapper.updateUserAttention(userid);
+        } catch (Exception e) {
+            log.error("用户关注-1失败", e);
             throw e;
         }
     }

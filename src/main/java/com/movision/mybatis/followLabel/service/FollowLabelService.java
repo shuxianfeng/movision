@@ -62,6 +62,16 @@ public class FollowLabelService {
     }
 
 
+    public int updatePostLabelLess(int labelid) {
+        try {
+            log.info("减少标签关注数量");
+            return followLabelMapper.updatePostLabelLess(labelid);
+        } catch (Exception e) {
+            log.error("减少标签关注数量失败");
+            throw e;
+        }
+    }
+
     public int updateLabelHeatValue(Map map) {
         try {
             log.info("修改标签热度");

@@ -10,6 +10,7 @@ import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.circleCategory.entity.CircleCategoryVo;
 import com.movision.mybatis.circleCategory.service.CircleCategoryService;
 import com.movision.mybatis.followCircle.service.FollowCircleService;
+import com.movision.mybatis.followUser.service.FollowUserService;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
@@ -58,6 +59,8 @@ public class FacadeCircle {
 
     @Autowired
     private FacadePost facadePost;
+    @Autowired
+    private FollowUserService followUserService;
 
     public CircleVo queryCircleIndex1(String circleid, String userid) {
 
@@ -296,6 +299,7 @@ public class FacadeCircle {
             parammap.put("userid", Integer.parseInt(userid));
             parammap.put("circleid", Integer.parseInt(circleid));
             circleService.cancelFollowCircle(parammap);
+            followUserService.updateUserAttention(Integer.parseInt(userid));
         }else{
             mark = -1;
         }

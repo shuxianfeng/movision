@@ -2240,6 +2240,10 @@ public class FacadePost {
         map.put("interestedusers", interestedusers);
         int result = followUserService.cancleFollowUser(map);
         if (result == 1) {
+            //自己关注的用户-1
+            followUserService.updateUserAttention(userid);
+            //被关注人的粉丝-1
+            followUserService.insertUserFansLess(interestedusers);
             mark = 1;
         } else {
             mark = -1;
