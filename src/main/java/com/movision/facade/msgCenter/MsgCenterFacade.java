@@ -444,26 +444,36 @@ public class MsgCenterFacade {
         if (StringUtil.isNotEmpty(userid)) {
             //获取该用户的注册时间
             Date informTime = imSystemInformService.queryDate(Integer.parseInt(userid));
-            //获取系统通知和运营通知
+            //分页获取系统通知和运营通知
             list = imSystemInformService.findAllIm(informTime, paging);
-            //系统通知
-            List<ImSystemInformVo> systemInformList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
-
                 if (list.get(i).getCoverimg() != null) {
                     //代表是运营通知
                     list.get(i).setIsoperation(1);
                 } else {
                     //代表是系统通知
                     list.get(i).setIsoperation(0);
-                    systemInformList.add(list.get(i));
                 }
             }
+            //获取所有的系统消息
+            List<ImSystemInformVo> systemInformList = getImSystemInformVos(informTime);
             int curId = Integer.parseInt(userid);
             //把所有此人的系统通知置为已读
             setSystemInfoIsRead(systemInformList, curId);
         }
         return list;
+    }
+
+    /**
+     * 获取所有的系统消息
+     *
+     * @param informTime
+     * @return
+     */
+    private List<ImSystemInformVo> getImSystemInformVos(Date informTime) {
+        Paging<ImSystemInformVo> allPaging = new Paging<ImSystemInformVo>(1, 1000);
+        List<ImSystemInformVo> alllist = imSystemInformService.findAllIm(informTime, allPaging);
+        return alllist;
     }
 
     /**
