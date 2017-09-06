@@ -470,10 +470,11 @@ public class MsgCenterFacade {
      * 把所有此人的系统通知置为已读
      * (实际上是把系统通知与该人的关系插入到mongo中的systemInformReadRecord)
      *
-     * @param systemInformList
+     * @param systemInformList  系统通知
      * @param curId
      */
     private void setSystemInfoIsRead(List<ImSystemInformVo> systemInformList, int curId) {
+        //查询个人已读系统消息记
         List<DBObject> mongoList = systemInformReadRecordService.selectPersonSystemInfoRecord(curId);
         List<ImSystemInformVo> sameList = new ArrayList<>();
         for (int i = 0; i < systemInformList.size(); i++) {
@@ -483,8 +484,9 @@ public class MsgCenterFacade {
                 }
             }
         }
+        //过滤掉之前已读的系统通知，得到剩下未读的
         systemInformList.removeAll(sameList);
-        //把系统通知插入mongo, 即置为已读
+        //插入mongo, 即置为已读
         for (ImSystemInformVo vo : systemInformList) {
             SystemInformReadRecord record = new SystemInformReadRecord();
             record.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
@@ -867,12 +869,16 @@ public class MsgCenterFacade {
      */
     public Map queryUserAllUnreadMessage(String userid) {
         Map map = new HashMap();
-        int count = 0;
+        int totalCount = 0;
         int zanNumber = 0;//赞
-        int commentIsRead = 0;//评论
-        int imsysIsRead = 0;//系统
+        int commentIsReadCount = 0;//评论
+        int imsysIsReadCount = 0;//系统
         int follow = 0;//关注
-        map.put("count", count);
+        map.put("count", totalCount);
+        //未登录校验
+        if (ShiroUtil.getAppUserID() == 0) {
+            return map;
+        }
         if (userid == null) {
             //用户未登录状态下全部返回0
             return map;
@@ -881,20 +887,54 @@ public class MsgCenterFacade {
             //点赞未读数
             zanNumber = postZanRecordService.queryZanNumber(Integer.parseInt(userid));
             //评论未读数
-            commentIsRead = commentService.queryCommentIsRead(Integer.parseInt(userid));
+            commentIsReadCount = commentService.queryCommentIsRead(Integer.parseInt(userid));
             //系统通知未读数
-            map.put("userid", userid);
-            map.put("informTime", ShiroUtil.getAppUser().getRegisterTime());
-            imsysIsRead = imSystemInformService.querySystemPushByUserid(map);
+            imsysIsReadCount = getImsysIsReadCount(userid, imsysIsReadCount);
             //聊天未读数
+            // TODO: 2017/9/5   待集成IM聊天
             //关注未读数
             follow = followUserService.queryUserIsRead(Integer.parseInt(userid));
             //计算总数
-            count = zanNumber + commentIsRead + imsysIsRead + follow;
-            map.put("count", count);
+            totalCount = zanNumber + commentIsReadCount + imsysIsReadCount + follow;
+            map.put("count", totalCount);
         }
 
         return map;
+    }
+
+    /**
+     * 统计该用户系统消息未读的数量
+     *
+     * @param userid
+     * @param imsysIsReadCount
+     * @return
+     */
+    private int getImsysIsReadCount(String userid, int imsysIsReadCount) {
+        Paging<ImSystemInformVo> paging = new Paging<ImSystemInformVo>(1, 1000);    //所以取第一页的1000条，目的是获取所有的系统通知
+        if (StringUtil.isNotEmpty(userid)) {
+            //获取该用户的注册时间
+            Date informTime = imSystemInformService.queryDate(Integer.parseInt(userid));
+            //获取系统通知和运营通知
+            List<ImSystemInformVo> list = imSystemInformService.findAllIm(informTime, paging);
+            int curId = Integer.parseInt(userid);
+            //从mongoDB中查询个人已读系统消息记
+            List<DBObject> mongoList = systemInformReadRecordService.selectPersonSystemInfoRecord(curId);
+            List<ImSystemInformVo> sameList = new ArrayList<>();
+            //统计之前已读的系统消息
+            for (int i = 0; i < list.size(); i++) {
+                for (int j = 0; j < mongoList.size(); j++) {
+                    if (list.get(i).getInformidentity().equals(mongoList.get(j).get("inform_identity"))) {
+                        sameList.add(list.get(i));
+                    }
+                }
+            }
+            //过滤掉之前已读的系统通知，得到剩下未读的
+            list.removeAll(sameList);
+            log.debug("该用户未读的系统消息（系统通知+运营通知）=" + list.toString());
+            imsysIsReadCount = list.size();
+            log.debug("该用户未读的系统消息数量（系统通知+运营通知）=" + imsysIsReadCount);
+        }
+        return imsysIsReadCount;
     }
 
 
