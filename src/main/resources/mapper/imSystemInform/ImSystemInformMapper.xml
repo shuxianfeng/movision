@@ -193,6 +193,8 @@
         SELECT *
         FROM yw_im_system_informs
         WHERE inform_time >= #{informTime,jdbcType=TIMESTAMP}
+        and to_accids is not NULL
+        <![CDATA[    and to_accids <> '[null]'   ]]>
         GROUP BY inform_identity ORDER BY inform_time DESC
     </select>
 

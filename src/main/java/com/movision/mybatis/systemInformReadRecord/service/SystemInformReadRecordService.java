@@ -49,7 +49,7 @@ public class SystemInformReadRecordService implements SystemInformReadRecordMapp
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("userid", 1);
-            keys.put("inform_identity", 1);
+            keys.put("informIdentity", 1);
 
             //按照intime倒序排列
             cursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));

@@ -1,7 +1,5 @@
 package com.movision.mybatis.imSystemInform.entity;
 
-import com.movision.mybatis.post.entity.Post;
-
 import java.io.Serializable;
 import java.util.Date;
 

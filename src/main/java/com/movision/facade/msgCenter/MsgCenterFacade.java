@@ -479,7 +479,7 @@ public class MsgCenterFacade {
         List<ImSystemInformVo> sameList = new ArrayList<>();
         for (int i = 0; i < systemInformList.size(); i++) {
             for (int j = 0; j < mongoList.size(); j++) {
-                if (systemInformList.get(i).getInformidentity().equals(mongoList.get(j).get("inform_identity"))) {
+                if (systemInformList.get(i).getInformidentity().equals(mongoList.get(j).get("informIdentity"))) {
                     sameList.add(systemInformList.get(i));
                 }
             }
@@ -870,10 +870,10 @@ public class MsgCenterFacade {
     public Map queryUserAllUnreadMessage(String userid) {
         Map map = new HashMap();
         int totalCount = 0;
-        int zanNumber = 0;//赞
-        int commentIsReadCount = 0;//评论
-        int imsysIsReadCount = 0;//系统
-        int follow = 0;//关注
+        int zanNumber;//赞
+        int commentIsReadCount;//评论
+        int sysInfoNotReadCount = 0;//系统
+        int follow;//关注
         map.put("count", totalCount);
         //未登录校验
         if (ShiroUtil.getAppUserID() == 0) {
@@ -889,13 +889,18 @@ public class MsgCenterFacade {
             //评论未读数
             commentIsReadCount = commentService.queryCommentIsRead(Integer.parseInt(userid));
             //系统通知未读数
-            imsysIsReadCount = getImsysIsReadCount(userid, imsysIsReadCount);
+            sysInfoNotReadCount = getImsysIsReadCount(userid, sysInfoNotReadCount);
             //聊天未读数
             // TODO: 2017/9/5   待集成IM聊天
             //关注未读数
             follow = followUserService.queryUserIsRead(Integer.parseInt(userid));
             //计算总数
-            totalCount = zanNumber + commentIsReadCount + imsysIsReadCount + follow;
+            totalCount = zanNumber + commentIsReadCount + sysInfoNotReadCount + follow;
+            log.debug("zanNumber=" + zanNumber);
+            log.debug("commentIsReadCount=" + commentIsReadCount);
+            log.debug("imsysIsReadCount=" + sysInfoNotReadCount);
+            log.debug("follow=" + follow);
+            log.debug("totalCount=" + totalCount);
             map.put("count", totalCount);
         }
 
@@ -919,15 +924,17 @@ public class MsgCenterFacade {
             int curId = Integer.parseInt(userid);
             //从mongoDB中查询个人已读系统消息记
             List<DBObject> mongoList = systemInformReadRecordService.selectPersonSystemInfoRecord(curId);
+            log.debug("之前已读的系统消息数量：" + mongoList.size());
             List<ImSystemInformVo> sameList = new ArrayList<>();
             //统计之前已读的系统消息
             for (int i = 0; i < list.size(); i++) {
                 for (int j = 0; j < mongoList.size(); j++) {
-                    if (list.get(i).getInformidentity().equals(mongoList.get(j).get("inform_identity"))) {
+                    if (list.get(i).getInformidentity().equals(mongoList.get(j).get("informIdentity"))) {
                         sameList.add(list.get(i));
                     }
                 }
             }
+            log.debug("相同的系统消息数量：" + sameList.size());
             //过滤掉之前已读的系统通知，得到剩下未读的
             list.removeAll(sameList);
             log.debug("该用户未读的系统消息（系统通知+运营通知）=" + list.toString());
