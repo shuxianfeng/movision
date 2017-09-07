@@ -1,6 +1,5 @@
 package com.movision.fsearch.service.impl;
 
-import com.movision.common.util.ShiroUtil;
 import com.movision.fsearch.pojo.ProductGroup;
 import com.movision.fsearch.pojo.spec.GoodsSearchSpec;
 import com.movision.fsearch.service.IGoodsSearchService;
@@ -9,14 +8,15 @@ import com.movision.fsearch.service.Searcher;
 import com.movision.fsearch.service.exception.ServiceException;
 import com.movision.fsearch.utils.*;
 import com.movision.mybatis.goods.entity.GoodsSearchEntity;
-import com.movision.mybatis.searchGoodsRecord.entity.SearchGoodsRecord;
-import com.movision.mybatis.searchGoodsRecord.service.SearchGoodsRecordService;
 import com.movision.utils.DateUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhuangyuhao
@@ -27,9 +27,6 @@ public class GoodsSearchService implements IGoodsSearchService {
 
     @Autowired
     private IWordService wordService;
-
-    @Autowired
-    private SearchGoodsRecordService searchGoodsRecordService;
 
     @Override
     public Map<String, Object> search(GoodsSearchSpec spec)
@@ -48,9 +45,10 @@ public class GoodsSearchService implements IGoodsSearchService {
         }
 
         //如果搜索的关键词不为空，则入库保存
-        if (StringUtil.isNotBlank(spec.getQ())) {
+        // TODO: 2017/9/7 搜素记录插入mongoDB
+        /*if (StringUtil.isNotBlank(spec.getQ())) {
             searchGoodsRecordService.add(spec.getQ());
-        }
+        }*/
 
         // 向query中添加新的键值对：key=_s
         spec.setQ(StringUtil.emptyToNull(spec.getQ()));
@@ -196,15 +194,20 @@ public class GoodsSearchService implements IGoodsSearchService {
 
         Map map = new HashedMap();
 
-        map.put("hotWordList", searchGoodsRecordService.selectPostSearchHotWord());
+        // TODO: 2017/9/7 热门词，查询mongoDB，按照频次排序
+//        map.put("hotWordList", searchGoodsRecordService.selectPostSearchHotWord());
 
-        map.put("historyList", searchGoodsRecordService.selectHistoryRecord(ShiroUtil.getAppUserID()));
+        // TODO: 2017/9/7 历史搜索记录，查询mongoDB 
+//        map.put("historyList", searchGoodsRecordService.selectHistoryRecord(ShiroUtil.getAppUserID()));
 
         return map;
     }
 
+
     public Integer updateSearchIsdel(Integer userid) {
-        return searchGoodsRecordService.updateSearchIsdel(userid);
+        // TODO: 2017/9/7 清除商品搜索记录，修改mongoDB中的数据
+//        return
+        return 0;
     }
 
 }

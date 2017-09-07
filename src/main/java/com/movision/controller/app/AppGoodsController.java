@@ -217,7 +217,7 @@ public class AppGoodsController {
     }
 
 
-    @RequestMapping(value = {"searchProducts"}, method = RequestMethod.GET)
+    /*@RequestMapping(value = {"searchProducts"}, method = RequestMethod.GET)
     @ApiOperation(value = "商品搜索", notes = "商品搜索", response = Response.class)
     public Response searchProducts(@ApiParam @ModelAttribute GoodsSearchSpec spec) throws IOException {
 
@@ -239,24 +239,24 @@ public class AppGoodsController {
         }
 
         return response;
-    }
+    }*/
 
-    @RequestMapping(value = {"get_goods_hot_search_word_and_history"}, method = RequestMethod.GET)
+    /*@RequestMapping(value = {"get_goods_hot_search_word_and_history"}, method = RequestMethod.GET)
     @ApiOperation(value = "查询商品热门搜索词和搜索历史记录", notes = "查询商品热门搜索词和搜索历史记录", response = Response.class)
     public Response getHotSearchWordAndHistory() {
 
         Response response = new Response();
         response.setData(goodsSearchService.getHotwordAndHistory());
         return response;
-    }
+    }*/
 
 
-    @RequestMapping(value = {"get_goods_hot_search_word_and_history_isdel"}, method = RequestMethod.GET)
+    /*@RequestMapping(value = {"get_goods_hot_search_word_and_history_isdel"}, method = RequestMethod.GET)
     @ApiOperation(value = "清除历史记录", notes = "清除历史记录", response = Response.class)
     public Response updateSearchIsdel() {
         Response response = new Response();
         goodsSearchService.updateSearchIsdel(ShiroUtil.getAppUserID());
         return response;
-    }
+    }*/
 
 }
