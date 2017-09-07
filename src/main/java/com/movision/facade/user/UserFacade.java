@@ -714,10 +714,10 @@ public class UserFacade {
         List<InviteUserVo> inviteUserList = null;
         if (type.equals("0")){
             //我邀请的用户列表
-            inviteUserList = userService.myInviteList(Integer.parseInt(userid), pager);
+            inviteUserList = userService.findAllMyInviteList(Integer.parseInt(userid), pager);
         }else if (type.equals("1")){
             //邀请好友排行榜
-            inviteUserList = userService.getInviteRank(pager);
+            inviteUserList = userService.findAllInviteRank(pager);
         }
         return inviteUserList;
     }

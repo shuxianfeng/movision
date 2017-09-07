@@ -1444,14 +1444,14 @@
     </select>
     
     <!--查询当前用户邀请的好友列表-->
-    <select id="myInviteList" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.InviteUserVo" >
+    <select id="findAllMyInviteList" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.InviteUserVo" >
         SELECT id, nickname, photo FROM yw_user WHERE referrals = (
           SELECT invitecode FROM yw_user WHERE id = #{userid,jdbcType=INTEGER}
         )
     </select>
 
     <!--查询我的模块邀请好友页面里的邀请好友排行榜数据-->
-    <select id="getInviteRank" resultType="com.movision.mybatis.user.entity.InviteUserVo" >
+    <select id="findAllInviteRank" resultType="com.movision.mybatis.user.entity.InviteUserVo" >
         SELECT T.* FROM(
             SELECT t.*, (SELECT count(*) FROM yw_user WHERE t.invitecode = referrals) AS invitenum
             FROM
