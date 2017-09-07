@@ -623,7 +623,7 @@ SELECT u.photo,u.nickname,u.id FROM yw_user u LEFT JOIN yw_post_comment c ON c.u
                 ) a
             )
         )
-        AND isdel = 0
+        AND pc.isdel = 0
         AND pc.isread = 0
         <![CDATA[ AND pc.userid <> #{id}
         ]]>
