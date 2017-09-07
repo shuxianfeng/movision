@@ -770,6 +770,7 @@ public class MsgCenterFacade {
                         zanRecordVos.get(i).setComment(commentVo);
                         zanRecordVos.get(i).setCtype(1);
                         zanRecordVos.get(i).setUser(user);
+                        zanRecordVos.get(i).setCommentid(commentid);
                     }
                     if (postid != null) {
                         List<Post> post = postZanRecordService.queryPost(postid);
@@ -789,6 +790,7 @@ public class MsgCenterFacade {
                         }
                         zanRecordVos.get(i).setUser(user);
                         zanRecordVos.get(i).setPosts(post);
+                        zanRecordVos.get(i).setPostid(postid);
                     }
                 } else {
                     zanRecordVos.remove(zanRecordVos.get(i));
