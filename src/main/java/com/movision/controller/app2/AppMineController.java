@@ -65,12 +65,9 @@ public class AppMineController {
                                         @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize){
         Response response = new Response();
 
-        Paging<UserVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List<UserVo> myFollowAuthorList = userFacade.getMineFollowAuthor(userid, pager);
-        pager.result(myFollowAuthorList);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
-            response.setData(pager);
+            response.setData(userFacade.getMineFollowAuthor(userid, pageNo, pageSize));
         }
         return response;
     }
@@ -99,12 +96,9 @@ public class AppMineController {
                               @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize){
         Response response = new Response();
 
-        Paging<UserVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List<UserVo> myFansList = userFacade.getMyfans(userid, pager);
-        pager.result(myFansList);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
-            response.setData(pager);
+            response.setData(userFacade.getMyfans(userid, pageNo, pageSize));
         }
         return response;
     }

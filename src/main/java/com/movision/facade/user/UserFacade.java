@@ -628,7 +628,9 @@ public class UserFacade {
     /**
      * 我的--关注--关注的作者，点击关注调用的关注的作者列表返回接口
      */
-    public List<UserVo> getMineFollowAuthor(String userid, Paging<UserVo> pager){
+    public Paging<UserVo> getMineFollowAuthor(String userid, String pageNo, String pageSize){
+        Paging<UserVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+
         //首先查询当前用户关注的作者列表
         Map<String, Object> paramap = new HashMap<>();
         paramap.put("userid", Integer.parseInt(userid));
@@ -648,14 +650,16 @@ public class UserFacade {
 //
 //            myFollowAuthorList.set(i, vo);
 //        }
-
-        return myFollowAuthorList;
+        pager.result(myFollowAuthorList);
+        return pager;
     }
 
     /**
      * 我的模块——点击粉丝，进入用户被关注的粉丝用户列表接口
      */
-    public List<UserVo> getMyfans(String userid, Paging<UserVo> pager){
+    public Paging<UserVo> getMyfans(String userid, String pageNo, String pageSize){
+        Paging<UserVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+
         //首先查询当前用户的所有粉丝列表
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("userid", Integer.parseInt(userid));
@@ -675,8 +679,8 @@ public class UserFacade {
 //
 //            myFansList.set(i, vo);
 //        }
-
-        return myFansList;
+        pager.result(myFansList);
+        return pager;
 
     }
 
