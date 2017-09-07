@@ -634,7 +634,7 @@ public class UserFacade {
         //首先查询当前用户关注的作者列表
         Map<String, Object> paramap = new HashMap<>();
         paramap.put("userid", Integer.parseInt(userid));
-        List<UserVo> myFollowAuthorList = userService.getMineFollowAuthor(paramap, pager);
+        List<UserVo> myFollowAuthorList = userService.findAllMineFollowAuthor(paramap, pager);
 
 //        for (int i=0; i<myFollowAuthorList.size(); i++){
 //            //遍历获取作者的已发帖子数
@@ -663,7 +663,7 @@ public class UserFacade {
         //首先查询当前用户的所有粉丝列表
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("userid", Integer.parseInt(userid));
-        List<UserVo> myFansList = userService.getMineFans(parammap, pager);
+        List<UserVo> myFansList = userService.findAllMineFans(parammap, pager);
 
 //        for (int i=0; i<myFansList.size(); i++){
 //            //遍历获取粉丝的已发帖子数

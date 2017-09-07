@@ -1328,7 +1328,7 @@
     </select>
 
     <!--2.0查询当前用户关注的所有作者列表-->
-    <select id="getMineFollowAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.UserVo" >
+    <select id="findAllMineFollowAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.UserVo" >
         SELECT u.id, u.nickname, u.photo, u.fans,
           (SELECT count(*) FROM yw_post WHERE userid = u.id) AS postsum,
           (SELECT count(*) FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER} AND interestedusers = u.id) AS isfollow
@@ -1351,7 +1351,7 @@
     <!--</select>-->
 
     <!--2.0查询当前用户的所有粉丝列表-->
-    <select id="getMineFans" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.UserVo" >
+    <select id="findAllMineFans" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.UserVo" >
         SELECT u.id, u.nickname, u.photo, u.fans,
           (SELECT count(*) FROM yw_post WHERE userid = u.id) AS postsum,
           (SELECT count(*) FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER} AND interestedusers = u.id) AS isfollow

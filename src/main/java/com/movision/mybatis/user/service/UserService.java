@@ -961,10 +961,10 @@ public class UserService {
         }
     }
 
-    public List<UserVo> getMineFollowAuthor(Map<String, Object> paramap, Paging<UserVo> pager){
+    public List<UserVo> findAllMineFollowAuthor(Map<String, Object> paramap, Paging<UserVo> pager){
         try {
             log.info("查询当前用户关注的所有作者列表");
-            return userMapper.getMineFollowAuthor(paramap, pager.getRowBounds());
+            return userMapper.findAllMineFollowAuthor(paramap, pager.getRowBounds());
         }catch (Exception e){
             log.error("查询当前用户关注的所有作者列表失败", e);
             throw e;
@@ -997,10 +997,10 @@ public class UserService {
         }
     }
 
-    public List<UserVo> getMineFans(Map<String, Object> parammap, Paging<UserVo> pager){
+    public List<UserVo> findAllMineFans(Map<String, Object> parammap, Paging<UserVo> pager){
         try {
             log.info("查询当前用户的粉丝列表");
-            return userMapper.getMineFans(parammap, pager.getRowBounds());
+            return userMapper.findAllMineFans(parammap, pager.getRowBounds());
         }catch (Exception e){
             log.error("查询当前用户的粉丝列表失败", e);
             throw e;

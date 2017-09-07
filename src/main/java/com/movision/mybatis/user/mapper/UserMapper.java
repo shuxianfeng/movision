@@ -150,13 +150,13 @@ public interface UserMapper {
 
     UserVo queryUserInfoHompage(int userid);
 
-    List<UserVo> getMineFollowAuthor(Map<String, Object> paramap, RowBounds rowBounds);
+    List<UserVo> findAllMineFollowAuthor(Map<String, Object> paramap, RowBounds rowBounds);
 
     int queryPostNumByAuthor(Map<String, Object> paramap);
 
     int queryIsFollowAuthor(Map<String, Object> paramap);
 
-    List<UserVo> getMineFans(Map<String, Object> parammap, RowBounds rowBounds);
+    List<UserVo> findAllMineFans(Map<String, Object> parammap, RowBounds rowBounds);
 
     List<UserVo> findAllMostFansAuthorInAll(RowBounds rowBounds);
 
