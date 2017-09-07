@@ -634,20 +634,20 @@ public class UserFacade {
         paramap.put("userid", Integer.parseInt(userid));
         List<UserVo> myFollowAuthorList = userService.getMineFollowAuthor(paramap, pager);
 
-        for (int i=0; i<myFollowAuthorList.size(); i++){
-            //遍历获取作者的已发帖子数
-            UserVo vo = myFollowAuthorList.get(i);
-            int id = vo.getId();//查询到的作者userid
-            paramap.put("id", id);
-            int count = userService.queryPostNumByAuthor(paramap);
-            vo.setPostsum(count);
-
-            //获取当前用户是否关注过该作者
-            int sum = userService.queryIsFollowAuthor(paramap);
-            vo.setIsfollow(sum);
-
-            myFollowAuthorList.set(i, vo);
-        }
+//        for (int i=0; i<myFollowAuthorList.size(); i++){
+//            //遍历获取作者的已发帖子数
+//            UserVo vo = myFollowAuthorList.get(i);
+//            int id = vo.getId();//查询到的作者userid
+//            paramap.put("id", id);
+//            int count = userService.queryPostNumByAuthor(paramap);
+//            vo.setPostsum(count);
+//
+//            //获取当前用户是否关注过该作者
+//            int sum = userService.queryIsFollowAuthor(paramap);
+//            vo.setIsfollow(sum);
+//
+//            myFollowAuthorList.set(i, vo);
+//        }
 
         return myFollowAuthorList;
     }
@@ -661,20 +661,20 @@ public class UserFacade {
         parammap.put("userid", Integer.parseInt(userid));
         List<UserVo> myFansList = userService.getMineFans(parammap, pager);
 
-        for (int i=0; i<myFansList.size(); i++){
-            //遍历获取粉丝的已发帖子数
-            UserVo vo = myFansList.get(i);
-            int id = vo.getId();//查询到的粉丝userid
-            parammap.put("id", id);
-            int count = userService.queryPostNumByAuthor(parammap);
-            vo.setPostsum(count);
-
-            //获取当前用户是否关注过该粉丝
-            int sum = userService.queryIsFollowAuthor(parammap);
-            vo.setIsfollow(sum);
-
-            myFansList.set(i, vo);
-        }
+//        for (int i=0; i<myFansList.size(); i++){
+//            //遍历获取粉丝的已发帖子数
+//            UserVo vo = myFansList.get(i);
+//            int id = vo.getId();//查询到的粉丝userid
+//            parammap.put("id", id);
+//            int count = userService.queryPostNumByAuthor(parammap);
+//            vo.setPostsum(count);
+//
+//            //获取当前用户是否关注过该粉丝
+//            int sum = userService.queryIsFollowAuthor(parammap);
+//            vo.setIsfollow(sum);
+//
+//            myFansList.set(i, vo);
+//        }
 
         return myFansList;
 
