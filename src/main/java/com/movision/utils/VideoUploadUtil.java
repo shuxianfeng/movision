@@ -53,10 +53,9 @@ import java.util.*;
 public class VideoUploadUtil {
 
     private static final Logger log = LoggerFactory.getLogger(VideoUploadUtil.class);
-
+    //正式
     public static String accessKeyId = PropertiesLoader.getValue("access.key.id");
     public static String accessKeySecret = PropertiesLoader.getValue("access.key.secret");
-
     @Autowired
     private RedisClient redisClient;
 
@@ -312,8 +311,12 @@ public class VideoUploadUtil {
      * @param code
      * @return
      */
-    static String APPID = "wxfe9eb21fdb46a1a6";
-    static String APPSECRET = "c20dc2afd2d8e38a4c49abebf4d0f532";
+    //正式
+    //static String APPID = "wxfe9eb21fdb46a1a6";
+    // static String APPSECRET = "c20dc2afd2d8e38a4c49abebf4d0f532";
+    //测试
+    static String APPID = "wx1a8d32888a41fcb2";
+    static String APPSECRET = "58f2162e7c0253e8486b4d8679e787dd";
 
     public Map<String, String> getUserInfoAccessToken(String code) {
         Map<String, String> data = new HashMap();
