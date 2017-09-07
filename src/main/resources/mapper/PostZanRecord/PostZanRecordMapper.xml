@@ -149,9 +149,8 @@
         left JOIN yw_post_comment c on r.commentid = c.id
         left join yw_post p on p.id = c.postid
         where (c.userid = #{id} or p.userid= #{id})
-        <![CDATA[ and c.userid <> p.userid
             and p.isdel = 0
-            and r.userid <> c.userid ]]>
+        <![CDATA[   and r.userid <> c.userid ]]>
         and r.isread = 0
         UNION ALL
         SELECT d.id,d.userid,null AS commentid,d.postid,d.intime ,d.isread
