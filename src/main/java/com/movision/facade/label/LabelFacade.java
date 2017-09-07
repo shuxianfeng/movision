@@ -78,7 +78,7 @@ public class LabelFacade {
         //查询当前用户所关注的所有标签列表
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("userid", Integer.parseInt(userid));
-        List<PostLabelVo> followLabelList = postLabelService.getMineFollowLabel(parammap, pager);
+        List<PostLabelVo> followLabelList = postLabelService.findAllMineFollowLabel(parammap, pager);
 
         //遍历查询当前用户是否关注过该标签
         for (int i=0; i<followLabelList.size(); i++){

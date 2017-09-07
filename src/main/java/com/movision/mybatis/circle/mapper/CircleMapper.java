@@ -36,7 +36,7 @@ public interface CircleMapper {
 
     List<CircleVo> queryMyFollowCircleList(Map<String, Object> parammap);
 
-    List<CircleVo> getMineFollowCircle(Map<String, Object> paramap, RowBounds rowBounds);
+    List<CircleVo> findAllMineFollowCircle(Map<String, Object> paramap, RowBounds rowBounds);
 
     void addSupportSum(Map<String, Object> parammap);
 

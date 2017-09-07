@@ -956,7 +956,7 @@
     </select>
 
     <!--2.0查询用户关注的圈子列表，有分页-->
-    <select id="getMineFollowCircle" resultType="com.movision.mybatis.circle.entity.CircleVo" >
+    <select id="findAllMineFollowCircle" resultType="com.movision.mybatis.circle.entity.CircleVo" >
         SELECT c.id, c.name, c.maylikeimg
         FROM yw_circle c
         LEFT JOIN yw_follow_circle f on c.id = f.circleid

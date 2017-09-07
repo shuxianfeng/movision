@@ -34,10 +34,10 @@ public class PostLabelService {
     @Autowired
     private FootRankMapper footRankMapper;
 
-    public List<PostLabelVo> getMineFollowLabel(Map<String, Object> parammap, Paging<PostLabelVo> pager){
+    public List<PostLabelVo> findAllMineFollowLabel(Map<String, Object> parammap, Paging<PostLabelVo> pager){
         try {
             log.info("查询我的--关注--标签（我关注的标签列表）");
-            return postLabelMapper.getMineFollowLabel(parammap, pager.getRowBounds());
+            return postLabelMapper.findAllMineFollowLabel(parammap, pager.getRowBounds());
         }catch (Exception e){
             log.error("查询我的--关注--标签（我关注的标签列表）", e);
             throw e;

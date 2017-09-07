@@ -104,10 +104,10 @@ public class CircleService {
      * @param pager
      * @return
      */
-    public List<CircleVo> getMineFollowCircle(Map<String, Object> paramap, Paging<CircleVo> pager){
+    public List<CircleVo> findAllMineFollowCircle(Map<String, Object> paramap, Paging<CircleVo> pager){
         try {
             log.info("美番2.0查询当前用户关注的所有圈子列表");
-            return circleMapper.getMineFollowCircle(paramap, pager.getRowBounds());
+            return circleMapper.findAllMineFollowCircle(paramap, pager.getRowBounds());
         }catch (Exception e){
             log.error("美番2.0查询当前用户关注的所有圈子列表失败", e);
             throw e;

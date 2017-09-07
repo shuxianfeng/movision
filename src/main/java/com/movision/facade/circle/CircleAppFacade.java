@@ -99,7 +99,7 @@ public class CircleAppFacade {
         //首先查询当前用户已关注的圈子列表
         Map<String, Object> paramap = new HashMap<>();
         paramap.put("userid", Integer.parseInt(userid));
-        List<CircleVo> myFollowCircleList = circleService.getMineFollowCircle(paramap, pager);
+        List<CircleVo> myFollowCircleList = circleService.findAllMineFollowCircle(paramap, pager);
 
         for (int i=0; i<myFollowCircleList.size(); i++){
             CircleVo vo = myFollowCircleList.get(i);

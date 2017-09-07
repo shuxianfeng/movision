@@ -25,7 +25,7 @@ public interface PostLabelMapper {
 
     int updateByPrimaryKey(PostLabel record);
 
-    List<PostLabelVo> getMineFollowLabel(Map<String, Object> parammap, RowBounds rowBounds);
+    List<PostLabelVo> findAllMineFollowLabel(Map<String, Object> parammap, RowBounds rowBounds);
 
     List<PostLabel> queryLableName();
 
