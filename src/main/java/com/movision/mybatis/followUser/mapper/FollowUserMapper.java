@@ -26,6 +26,7 @@ public interface FollowUserMapper {
     int cancleFollowUser(Map map);
 
     void updateUserAttention(Integer userid);
+
     List<FollowUserVo> selectFollowUserVoList(Integer userid);
 
     int insertUserFans(int interestedusers);

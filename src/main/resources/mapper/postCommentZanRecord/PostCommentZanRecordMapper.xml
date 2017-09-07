@@ -125,11 +125,21 @@ SELECT u.nickname FROM yw_user u LEFT JOIN yw_post p ON p.userid=u.id WHERE p.id
 </select>
     <select id="findZan" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.PostZanRecord.entity.ZanRecordVo">
-                SELECT r.id,r.userid,r.commentid,null AS postid,r.intime FROM yw_post_comment_zan_record r WHERE r.commentid IN
-        (SELECT id FROM yw_post_comment WHERE userid=#{userid,jdbcType=INTEGER})
-UNION ALL
-        SELECT d.id,d.userid,null AS commentid,d.postid,d.intime FROM yw_post_zan_record d WHERE d.postid in (SELECT id
-        FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER}) ORDER BY intime DESC
-
+        select t.* from (
+        SELECT r.id,r.userid,r.commentid,null AS postid,r.intime
+        FROM yw_post_comment_zan_record r
+        left JOIN yw_post_comment c on r.commentid = c.id
+        left join yw_post p on p.id = c.postid
+        where c.userid = #{userid}
+        and p.isdel = 0
+        <![CDATA[    and r.userid <> c.userid ]]>
+        UNION ALL
+        SELECT d.id,d.userid,null AS commentid,d.postid,d.intime
+        FROM yw_post_zan_record d
+        LEFT JOIN yw_post p2 on p2.id = d.postid
+        where p2.userid = #{userid}
+        and p2.isdel = 0
+        <![CDATA[   and d.userid <> p2.userid ]]>
+        ) t ORDER BY t.intime DESC
     </select>
 </mapper>

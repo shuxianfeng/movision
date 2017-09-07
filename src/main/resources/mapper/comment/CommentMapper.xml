@@ -492,37 +492,26 @@
       p.postid=#{postid,jdbcType=INTEGER} AND p.isdel=0 ORDER BY p.heat_value DESC LIMIT 1
     </select>
     <select id="queryCommentIsRead" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        select count(1)
-        from yw_post_comment pc
-        WHERE
-        (
-        pc.postid IN (
-        SELECT
-        id
-        FROM
-        yw_post
-        WHERE
-        userid = #{id}
-        )
-        OR pc.pid IN (
-        SELECT
-        id
-        FROM
-        (
-        SELECT
-        id
-        FROM
-        yw_post_comment
-        WHERE
-        userid = #{id}
-        ) a
-        )
-        )
-        AND isdel = 0
-        AND pc.isread = 0
-        <![CDATA[ AND pc.userid <> #{id}
-        ]]>
-   </select>
+        select count(t.id) from (
+        select c.*
+        from yw_post_comment c
+        left JOIN yw_post p on c.postid = p.id
+        where p.userid = #{id}
+        <![CDATA[  and p.userid <> c.userid ]]>
+        and p.isdel = 0 and c.isread = 0 and c.isdel = 0
+        and c.pid is null
+        UNION ALL
+        SELECT d.*
+        from yw_post_comment d
+        LEFT JOIN yw_post_comment e on d.pid= e.id
+        left join yw_post f on f.id = e.postid
+        where f.isdel = 0
+        <![CDATA[   and d.userid <> e.userid ]]>
+        and f.userid = #{id}
+        and d.isdel = 0 and d.isread = 0
+        ) t
+
+    </select>
 
     <select id="findAllCommentByPostId" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
@@ -598,10 +587,12 @@ SELECT u.photo,u.nickname,u.id FROM yw_user u LEFT JOIN yw_post_comment c ON c.u
          FROM yw_post_comment a
           LEFT JOIN yw_post_comment b ON a.pid = b.`id`
           LEFT JOIN yw_user u ON u.id = a.userid
+        LEFT JOIN yw_post p on p.id = b.postid
           WHERE b.userid = #{userid}
           AND a.isdel = 0
           AND b.isdel = 0
             <![CDATA[ AND a.userid <> b.userid ]]>
+        and p.isdel = 0
           ORDER BY a.intime DESC
   </select>
 

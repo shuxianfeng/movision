@@ -143,74 +143,25 @@
         #{userid,jdbcType=INTEGER}
     </update>
     <select id="queryZanNumber" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT
-        count(tt.id)
-        FROM
-        (
-        (
-        SELECT
-        r.id,
-        r.userid,
-        r.commentid,
-        NULL AS postid,
-        r.intime,
-        r.isread
-        FROM
-        yw_post_comment_zan_record r
-        WHERE
-        (
-        r.commentid IN (
-        SELECT
-        id
-        FROM
-        yw_post_comment
-        WHERE
-        userid = #{userid}
-        )
-        OR r.commentid IN (
-        SELECT
-        id
-        FROM
-        yw_post_comment
-        WHERE
-        postid IN (
-        SELECT
-        id
-        FROM
-        yw_post
-        WHERE
-        userid = #{userid}
-        )
-        )
-        )
-        <![CDATA[ AND r.userid <> #{userid} ]]>
-        AND r.isread = 0
-        )
+        select count(t.id) from (
+        SELECT r.id,r.userid,r.commentid,null AS postid,r.intime , r.isread
+        FROM yw_post_comment_zan_record r
+        left JOIN yw_post_comment c on r.commentid = c.id
+        left join yw_post p on p.id = c.postid
+        where (c.userid = #{id} or p.userid= #{id})
+        <![CDATA[ and c.userid <> p.userid
+            and p.isdel = 0
+            and r.userid <> c.userid ]]>
+        and r.isread = 0
         UNION ALL
-        (
-        SELECT
-        d.id,
-        d.userid,
-        NULL AS commentid,
-        d.postid,
-        d.intime,
-        d.isread
-        FROM
-        yw_post_zan_record d
-        WHERE
-        d.postid IN (
-        SELECT
-        id
-        FROM
-        yw_post
-        WHERE
-        userid = #{userid}
-        AND isdel = 0
-        )
-        <![CDATA[ AND d.userid <> #{userid} ]]>
-        AND d.isread = 0
-        )
-        ) tt
+        SELECT d.id,d.userid,null AS commentid,d.postid,d.intime ,d.isread
+        FROM yw_post_zan_record d
+        LEFT JOIN yw_post p2 on p2.id = d.postid
+        where p2.userid = #{id}
+        and p2.isdel = 0
+        <![CDATA[ and d.userid <> p2.userid ]]>
+        and d.isread = 0
+        ) t ORDER BY t.intime DESC
     </select>
     <select id="userPostZan" parameterType="java.lang.Integer" resultType="java.lang.Integer">
      SELECT COUNT(1) FROM yw_post_zan_record LEFT JOIN yw_post ON yw_post.id=yw_post_zan_record.postid

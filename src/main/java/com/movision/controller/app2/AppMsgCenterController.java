@@ -75,29 +75,4 @@ public class AppMsgCenterController {
         response.setData(pager);
         return response;
     }
-
-    /**
-     * 更新个人消息中未读 (废弃)
-     *
-     * @param userid
-     * @param type
-     * @return
-     */
-    /*@ApiOperation(value = "更新个人消息中未读(去红点)", notes = "更新个人消息中未读", response = Response.class)
-    @RequestMapping(value = "update_read_mymsg_center", method = RequestMethod.GET)
-    public Response updateReadByMyMessageCenter(@ApiParam(value = "用户id") @RequestParam String userid,
-                                                @ApiParam(value = "1：动态,2:通知") @RequestParam String type) {
-        Response response = new Response();
-        Map map = msgCenterFacade.updateReadByMyMessageCenter(userid, type);
-        if (map.get("resault").equals(1)) {
-            response.setMessage("操作成功");
-            response.setData(1);
-        } else {
-            response.setMessage("操作失败");
-            response.setData(-1);
-        }
-        return response;
-    }*/
-
-
 }

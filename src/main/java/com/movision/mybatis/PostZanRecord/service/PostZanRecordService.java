@@ -56,10 +56,10 @@ public class PostZanRecordService {
 
     public Integer queryZanNumber(int userid) {
         try {
-            log.info("查询点赞数");
+            log.info("查询未读的点赞数");
             return recordMapper.queryZanNumber(userid);//帖子点赞
         } catch (Exception e) {
-            log.error("查询点赞数异常", e);
+            log.error("查询未读的点赞数异常", e);
             throw e;
         }
     }

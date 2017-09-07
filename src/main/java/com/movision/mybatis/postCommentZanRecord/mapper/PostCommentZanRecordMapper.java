@@ -1,6 +1,5 @@
 package com.movision.mybatis.postCommentZanRecord.mapper;
 
-import com.movision.mybatis.PostZanRecord.entity.PostZanRecord;
 import com.movision.mybatis.PostZanRecord.entity.ZanRecordVo;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecord;
@@ -9,7 +8,6 @@ import com.movision.mybatis.user.entity.User;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
-import java.util.Map;
 
 public interface PostCommentZanRecordMapper {
     int deleteByPrimaryKey(Integer id);
@@ -32,6 +30,7 @@ public interface PostCommentZanRecordMapper {
     List<ZanRecordVo> findAllZan(Integer userid, RowBounds rowBounds);
 
     List<ZanRecordVo> findZan(Integer userid);
+
     User queryusers(Integer userid);
 
     String queryPostNickname(Integer postid);

@@ -1,14 +1,11 @@
 package com.movision.facade.msgCenter;
 
-import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.movision.common.constant.MsgCenterConstant;
-import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.pojo.InstantInfo;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.paging.PageFacade;
 import com.movision.fsearch.utils.StringUtil;
-import com.movision.mybatis.PostZanRecord.entity.PostZanRecord;
 import com.movision.mybatis.PostZanRecord.entity.ZanRecordVo;
 import com.movision.mybatis.PostZanRecord.service.PostZanRecordService;
 import com.movision.mybatis.comment.entity.CommentVo;
@@ -21,8 +18,6 @@ import com.movision.mybatis.imFirstDialogue.service.ImFirstDialogueService;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.imSystemInform.service.ImSystemInformService;
-import com.movision.mybatis.imSystemInformRead.entity.ImSystemInformRead;
-import com.movision.mybatis.imSystemInformRead.service.ImSystemInformReadService;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecordVo;
 import com.movision.mybatis.postCommentZanRecord.service.PostCommentZanRecordService;
@@ -159,11 +154,11 @@ public class MsgCenterFacade {
             int curid = Integer.parseInt(userid);
             //一 评论： 1 评论帖子，
             handleCommentlist(list);
-            //二 2 评论回复
+            //2 评论回复
             handleReplyCommentList(list);
-            //二 赞
+            //二 赞 （评论+帖子）
             handleZanlist(list);
-            //三 关注 1 关注人 2 关注帖子 3 关注标签
+            //三 关注 （ 关注人）
             getFollowList(list, curid);
             //按照时间倒序排序
             Collections.sort(list, InstantInfo.intimeComparator);
@@ -175,9 +170,7 @@ public class MsgCenterFacade {
             int size = resultList == null ? 0 : resultList.size();
             log.debug("【row中list的数量】：" + size);
             log.debug("【row中的list】：" + resultList.toString());
-
             //操作已读未读处理
-//            setDataIsRead(resultList);
             updateComment(curid);    //更新评论已读
             updateZan(curid);  //更新赞
             updateAttention(curid);    //更新关注
@@ -185,38 +178,6 @@ public class MsgCenterFacade {
         return resultList;
 
     }
-
-    /**
-     * 更新个人消息中未读
-     */
-    /*public Map updateReadByMyMessageCenter(String userid, String type) {
-        Integer id = null;
-        Map m = new HashMap();
-        try {
-            if (StringUtil.isNotEmpty(userid)) {
-                id = Integer.parseInt(userid);
-            }
-            if (StringUtil.isNotEmpty(type)) {
-                //type= 1：动态 2：通知
-                if (type.equals("1")) {
-                    //动态分为：评论、回复评论、谁关注我、点赞帖子、点赞评论
-                    updateComment(id);//更新评论已读
-                    updateZan(id);//更新赞
-                    updateAttention(id);//更新关注
-                } else if (type.equals("2")) {
-                    //更新未读的系统消息为 已读
-//                    updateInform(id);
-                    wholeSignRead(id);
-                }
-            }
-            m.put("resault", 1);
-            return m;
-        } catch (NumberFormatException e) {
-            m.put("resault", 2);
-            return m;
-        }
-
-    }*/
 
     public void updateComment(Integer id) {
         //更新评论
@@ -233,16 +194,6 @@ public class MsgCenterFacade {
         followUserService.updateAttentionIsRead(userid);
     }
 
-//    public void updateInform(Integer userid) {
-//        ImSystemInform inform = new ImSystemInform();
-//        inform.setInformTime(ShiroUtil.getAppUser().getRegisterTime());//注册时间
-//        inform.setUserid(userid);
-//        //把当前用户的所有的未读的系统消息置为已读
-//        wholeSignRead(userid);
-//        //更新未读通知
-//        imSystemInformReadService.updateInform(inform);
-//    }
-
     private void handleReplyCommentList(List<InstantInfo> list) {
         List<ReplyComment> replyCommentList = commentService.selectReplyCommentList(ShiroUtil.getAppUserID());
         int len = replyCommentList.size();
@@ -253,35 +204,6 @@ public class MsgCenterFacade {
         } else {
             for (int i = 0; i < len; i++) {
                 getInstantInfoFromReplyCommentlist(list, replyCommentList, i);
-            }
-        }
-    }
-
-    /**
-     * 操作已读未读处理
-     *
-     * @param resultList
-     */
-    private void setDataIsRead(List<InstantInfo> resultList) {
-        for (InstantInfo info : resultList) {
-            int type = info.getType();
-            if (MsgCenterConstant.INSTANT_INFO_TYPE.comment.getCode() == type) {    //评论设为已读
-                CommentVo commentVo = (CommentVo) info.getObject();
-                commentVo.setIsread(1); //已读
-                commentService.updateCommentVo(commentVo);
-
-            } else if (MsgCenterConstant.INSTANT_INFO_TYPE.zan.getCode() == type) { //赞设为已读
-                ZanRecordVo postCommentZanRecordVo = (ZanRecordVo) info.getObject();
-                postCommentZanRecordVo.setIsread(1);    //已读
-                postCommentZanRecordService.updatePostCommentZanRecordVo(postCommentZanRecordVo);
-
-            } else if (MsgCenterConstant.INSTANT_INFO_TYPE.follow.getCode() == type) {  //关注设为已读
-                FollowUserVo followUserVo = (FollowUserVo) info.getObject();
-                followUserVo.setIsread(1);  //已读
-                followUserService.updateFollowuserVo(followUserVo);
-
-            } else {
-                log.warn("非正常的动态消息类型");
             }
         }
     }
@@ -522,103 +444,6 @@ public class MsgCenterFacade {
     }
 
     /**
-     * 获取评论列表
-     *
-     * @param userid
-     * @param pager
-     * @return
-     */
-    public List<CommentVo> getMsgCommentList(Integer userid, Paging<CommentVo> pager) {
-        List<CommentVo> comments = commentService.findAllQueryComment(userid, pager);
-        if (comments != null) {
-            for (int i = 0; i < comments.size(); i++) {
-                Integer pid = comments.get(i).getPid();
-                Integer usersid = comments.get(i).getUserid();
-
-                if (!usersid.equals(userid)) {
-                    User user = postCommentZanRecordService.queryusers(usersid);
-                    if (pid == null) {
-                        Integer postid = comments.get(i).getPostid();
-                        List<Post> post = postZanRecordService.queryPost(postid);
-                        for (int j = 0; j < post.size(); j++) {
-                            String str = post.get(j).getPostcontent();
-                            String a = MsgCenterFacade.removeHtmlTag(str);
-                            String b = a.replaceAll("  ", "");
-                            if (StringUtil.isBlank(b)) {
-                                String nickname = postCommentZanRecordService.queryPostNickname(postid);
-                                String text = nickname + "的帖子";
-                                comments.get(i).setPhoto(text);
-                                post.get(j).setPostcontent("");
-                            } else {
-                                post.get(j).setPostcontent(b);
-                            }
-                        }
-                        comments.get(i).setPost(post);
-                        comments.get(i).setUser(user);
-                    } else if (pid != null) {
-                        List<CommentVo> commentVos = commentService.queryPidComment(pid);
-                        comments.get(i).setCommentVos(commentVos);
-                        comments.get(i).setUser(user);
-                    }
-                } else {
-                    comments.remove(comments.get(i));
-                    i--;
-                }
-            }
-        }
-        return comments;
-    }
-
-
-    /**
-     * 获取评论列表
-     *
-     * @param userid
-     * @param
-     * @return
-     */
-    public List<CommentVo> getCommentList(Integer userid) {
-        List<CommentVo> comments = commentService.findQueryComment(userid);
-        if (comments != null) {
-            for (int i = 0; i < comments.size(); i++) {
-                Integer pid = comments.get(i).getPid();
-                Integer usersid = comments.get(i).getUserid();
-
-                if (!usersid.equals(userid)) {
-                    User user = postCommentZanRecordService.queryusers(usersid);
-                    if (pid == null) {
-                        Integer postid = comments.get(i).getPostid();
-                        List<Post> post = postZanRecordService.queryPost(postid);
-                        for (int j = 0; j < post.size(); j++) {
-                            String str = post.get(j).getPostcontent();
-                            String a = MsgCenterFacade.removeHtmlTag(str);
-                            String b = a.replaceAll("  ", "");
-                            if (StringUtil.isBlank(b)) {
-                                String nickname = postCommentZanRecordService.queryPostNickname(postid);
-                                String text = nickname + "的帖子";
-                                comments.get(i).setPhoto(text);
-                                post.get(j).setPostcontent("");
-                            } else {
-                                post.get(j).setPostcontent(b);
-                            }
-                        }
-                        comments.get(i).setPost(post);
-                        comments.get(i).setUser(user);
-                    } else if (pid != null) {
-                        List<CommentVo> commentVos = commentService.queryPidComment(pid);
-                        comments.get(i).setCommentVos(commentVos);
-                        comments.get(i).setUser(user);
-                    }
-                } else {
-                    comments.remove(comments.get(i));
-                    i--;
-                }
-            }
-        }
-        return comments;
-    }
-
-    /**
      * 正則表達式
      * @param inputString
      * @return
@@ -666,212 +491,90 @@ public class MsgCenterFacade {
     }
 
     /**
-     * 获取打赏列表
-     *
-     * @param userid
-     * @param pager
-     * @return
-     */
-    public List<RewardedVo> getMsgRewardedList(Integer userid, Paging<RewardedVo> pager) {
-        List<RewardedVo> rewardedVos = rewardedService.findAllRewarded(userid, pager);
-        if (rewardedVos != null) {
-            for (int i = 0; i < rewardedVos.size(); i++) {
-                Integer postid = rewardedVos.get(i).getPostid();
-                List<Post> post = postZanRecordService.queryPost(postid);
-                for (int j = 0; j < post.size(); j++) {
-                    String str = post.get(j).getPostcontent();
-                    String a = MsgCenterFacade.removeHtmlTag(str);
-                    String b = a.replaceAll("  ", "");
-                    if (StringUtil.isBlank(b)) {
-                        String nickname = postCommentZanRecordService.queryPostNickname(postid);
-                        String text = nickname + "的帖子";
-                        rewardedVos.get(i).setContent(text);
-                        post.get(j).setPostcontent("");
-                    } else {
-                        post.get(j).setPostcontent(b);
-                    }
-                    post.get(j).setPostcontent(b);
-                }
-                rewardedVos.get(i).setPosts(post);
-            }
-        }
-
-        return rewardedVos;
-    }
-
-
-    /**
-     * 赞列表
-     * @param userid
-     * @param pager
-     * @return
-     */
-    public List<ZanRecordVo> findAllZan(Integer userid, Paging<ZanRecordVo> pager) {
-        List<ZanRecordVo> zanRecordVos = postCommentZanRecordService.findAllZan(userid, pager);
-        if (zanRecordVos != null) {
-            for (int i = 0; i < zanRecordVos.size(); i++) {
-                Integer commentid = zanRecordVos.get(i).getCommentid();
-                Integer postid = zanRecordVos.get(i).getPostid();
-                Integer usersid = zanRecordVos.get(i).getUserid();
-                if (!usersid.equals(userid)) {
-                    User user = postCommentZanRecordService.queryusers(usersid);
-                    if (commentid != null) {
-                        List<CommentVo> commentVo = postCommentZanRecordService.queryComment(commentid);
-                        zanRecordVos.get(i).setComment(commentVo);
-                        zanRecordVos.get(i).setCtype(1);
-                        zanRecordVos.get(i).setUser(user);
-                    }
-                    if (postid != null) {
-                        List<Post> post = postZanRecordService.queryPost(postid);
-                        zanRecordVos.get(i).setCtype(2);
-                        for (int j = 0; j < post.size(); j++) {
-                            String str = post.get(j).getPostcontent();
-                            String a = MsgCenterFacade.removeHtmlTag(str);
-                            String b = a.replaceAll("  ", "");
-                            if (StringUtil.isBlank(b)) {
-                                String nickname = postCommentZanRecordService.queryPostNickname(postid);
-                                String text = nickname + "的帖子";
-                                zanRecordVos.get(i).setContent(text);
-                                post.get(j).setPostcontent("");
-                            } else {
-                                post.get(j).setPostcontent(b);
-                            }
-                        }
-                        zanRecordVos.get(i).setUser(user);
-                        zanRecordVos.get(i).setPosts(post);
-                    }
-                } else {
-                    zanRecordVos.remove(zanRecordVos.get(i));
-                    i--;
-                }
-            }
-        }
-        return zanRecordVos;
-    }
-
-    /**
-     * 赞列表
+     * 获取被点赞的消息
+     * 1 评论被点赞
+     * 2 帖子被点赞
+     * 注意： 自己赞自己的点赞信息需要过滤
      *
      * @param userid
      * @param
      * @return
      */
     public List<ZanRecordVo> findZan(Integer userid) {
+        //获取被点赞的消息
         List<ZanRecordVo> zanRecordVos = postCommentZanRecordService.findZan(userid);
+
         if (zanRecordVos != null) {
+            //对点赞信息进行过滤和封装
             for (int i = 0; i < zanRecordVos.size(); i++) {
-                Integer commentid = zanRecordVos.get(i).getCommentid();
-                Integer postid = zanRecordVos.get(i).getPostid();
-                Integer usersid = zanRecordVos.get(i).getUserid();
-                if (!usersid.equals(userid)) {
-                    User user = postCommentZanRecordService.queryusers(usersid);
-                    if (commentid != null) {
-                        List<CommentVo> commentVo = postCommentZanRecordService.queryComment(commentid);
-                        zanRecordVos.get(i).setComment(commentVo);
-                        zanRecordVos.get(i).setCtype(1);
-                        zanRecordVos.get(i).setUser(user);
-                        zanRecordVos.get(i).setCommentid(commentid);
-                    }
-                    if (postid != null) {
-                        List<Post> post = postZanRecordService.queryPost(postid);
-                        zanRecordVos.get(i).setCtype(2);
-                        for (int j = 0; j < post.size(); j++) {
-                            String str = post.get(j).getPostcontent();
-                            String a = MsgCenterFacade.removeHtmlTag(str);
-                            String b = a.replaceAll("  ", "");
-                            if (StringUtil.isBlank(b)) {
-                                String nickname = postCommentZanRecordService.queryPostNickname(postid);
-                                String text = nickname + "的帖子";
-                                zanRecordVos.get(i).setContent(text);
-                                post.get(j).setPostcontent("");
-                            } else {
-                                post.get(j).setPostcontent(b);
-                            }
-                        }
-                        zanRecordVos.get(i).setUser(user);
-                        zanRecordVos.get(i).setPosts(post);
-                        zanRecordVos.get(i).setPostid(postid);
-                    }
-                } else {
-                    zanRecordVos.remove(zanRecordVos.get(i));
-                    i--;
-                }
+                Integer commentid = zanRecordVos.get(i).getCommentid(); //被赞的评论id
+                Integer postid = zanRecordVos.get(i).getPostid();       //被赞的帖子id
+                Integer doZanUserid = zanRecordVos.get(i).getUserid();  //点赞人id
+                //点赞人不能是自己（过滤掉了自己赞自己）
+//                if (!doZanUserid.equals(userid)) {
+                //获取点赞人的个人信息
+                User user = postCommentZanRecordService.queryusers(doZanUserid);
+                zanRecordVos.get(i).setUser(user);
+                //封装被点赞的评论对象
+                wrapBeZanCommentInfo(zanRecordVos, i, commentid);
+                //封装被点赞的帖子对象
+                wrapBeZanPostInfo(zanRecordVos, i, postid);
+//                } else {
+//                    //（过滤掉了自己赞自己）
+//                    zanRecordVos.remove(zanRecordVos.get(i));
+//                    i--;
+//                }
             }
         }
         return zanRecordVos;
     }
-    public List<ImFirstDialogueVo> findAllDialogue(Integer userid, Paging<ImFirstDialogueVo> pager) {
-        List<ImFirstDialogueVo> list = imFirstDialogueService.findAllDialogue(userid, pager);
-        return list;
-    }
 
-    public void queryIsread(Integer userid, Integer id) {
-        Map map = new HashMap();
-        map.put("userid", userid);
-        map.put("id", id);
-        imFirstDialogueService.queryIsread(map);
+    /**
+     * 封装被点赞的评论对象
+     *
+     * @param zanRecordVos
+     * @param i
+     * @param commentid
+     */
+    private void wrapBeZanCommentInfo(List<ZanRecordVo> zanRecordVos, int i, Integer commentid) {
+        if (commentid != null) {
+            List<CommentVo> commentVo = postCommentZanRecordService.queryComment(commentid);
+            zanRecordVos.get(i).setComment(commentVo);
+            zanRecordVos.get(i).setCtype(1);
+            zanRecordVos.get(i).setCommentid(commentid);
+        }
     }
 
     /**
-     * 更新类型 1：赞 2：打赏 3：评论 4：系统 5：打招呼
+     * 封装被点赞的帖子对象
      *
-     * @param type
-     * @return
+     * @param zanRecordVos
+     * @param i
+     * @param postid
      */
-    /*public Integer updateisread(String type, Integer userid, String informidentity) {
-        Integer resault = null;
-        System.out.println("用户----------" + userid + "唯一标识-------------" + informidentity);
-        if (type.equals("1") || type.equals(1)) {
-            resault = postZanRecordService.updateZanRead(userid);//更新赞已读
-        } else if (type.equals("2") || type.equals(2)) {
-            resault = rewardedService.updateRewardRead(userid);//更新打赏已读
-        } else if (type.equals("3") || type.equals(3)) {
-            resault = commentService.updateCommentRead(userid);//更新评论已读
-        } else if (type.equals("4") || type.equals(4)) {
-            Map map = new HashMap();
-            map.put("userid", userid);
-            map.put("informidentity", informidentity);
-            map.put("intime", new Date());
-            //查询该用户是否查看过此条系统推送
-            Integer check = imSystemInformReadService.queryUserCheckPush(map);
-            if (check != 1) {
-                map.put("isread", 1);
-                resault = imSystemInformReadService.insertSystemRead(map);//新增系统消息已读记录
-            } else {
-                ImSystemInformRead imSd = imSystemInformReadService.queryInfromRead(map);//查询此条已读状态
-                if (imSd.getIsread() == 0) {
-                    map.put("isread", 1);
-                    resault = imSystemInformReadService.updateSystemRead(map);//更新系统消息已读
+    private void wrapBeZanPostInfo(List<ZanRecordVo> zanRecordVos, int i, Integer postid) {
+        if (postid != null) {
+            List<Post> post = postZanRecordService.queryPost(postid);
+            zanRecordVos.get(i).setCtype(2);
+
+            for (int j = 0; j < post.size(); j++) {
+                String str = post.get(j).getPostcontent();
+                String a = MsgCenterFacade.removeHtmlTag(str);
+                String b = a.replaceAll("  ", "");
+                if (StringUtil.isBlank(b)) {
+                    String nickname = postCommentZanRecordService.queryPostNickname(postid);
+                    String text = nickname + "的帖子";
+                    zanRecordVos.get(i).setContent(text);
+                    post.get(j).setPostcontent("");
+                } else {
+                    post.get(j).setPostcontent(b);
                 }
             }
-        } else if (type.equals("5") || type.equals(5)) {
-            resault = imFirstDialogueService.updateCallRead(userid);//更新打招呼已读
-        }
-        return resault;
-    }*/
 
-    /**
-     * 系统消息全部置为已读
-     *
-     * @param userid
-     * @return
-     */
-    /*public Integer wholeSignRead(Integer userid) {
-        //查询出此人所有未读的系统消息
-        List<String> informidentity = imSystemInformService.queryUnreadSystemMessage(userid);
-        Map map = new HashMap();
-        int i;
-        //全部置为已读
-        for (i = 0; i < informidentity.size(); i++) {
-            map.put("userid", userid);
-            map.put("intime", new Date());
-            map.put("informidentity", informidentity.get(i));
-            map.put("isread", 1);
-            imSystemInformReadService.wholeSignRead(map);
+            zanRecordVos.get(i).setPosts(post);
+            zanRecordVos.get(i).setPostid(postid);
         }
-        return i;
-    }*/
-
+    }
 
     /**
      * 查询用户所有未读消息
