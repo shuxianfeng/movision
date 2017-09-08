@@ -740,10 +740,10 @@ public class VideoUploadUtil {
             } else {//没过期
                 log.info("token没过期");
                 url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + redisClient.get("acctokens") + "&openid=" + openid + "&lang=zh_CN";
+                log.info(redisClient.get("acctokens").toString());
             }
         } else {//没有缓存
             String acc = getaccesstoken();
-            log.info(acc);
             url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
         }
         log.info(url);
