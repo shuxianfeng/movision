@@ -734,7 +734,7 @@ public class VideoUploadUtil {
             }
             //Date date1 = new Date(date);
             log.info("缓存token日期-------------------" + dateq);
-            if ((new Date().getTime() - date.getTime()) >= (7000 * 1000)) {//过期
+            if ((new Date().getTime() - date.getTime()) >= (7000 * 100)) {//过期
                 log.info("token过期");
                 String acc = getaccesstoken();
                 log.info("过期拿到的---------------------------------" + acc);
