@@ -10,6 +10,7 @@ import com.movision.mybatis.followCircle.entity.FollowCircle;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ public class CircleAppFacade {
 
     @Autowired
     private HomepageManageService homepageManageService;
+    @Autowired
+    private UserService userService;
 
     public List<MyCircle> findAllMyFollowCircleList(Paging<MyCircle> paging, int userid) {
         Map map = new HashedMap();
@@ -150,6 +153,8 @@ public class CircleAppFacade {
                 map.put("circleid", Integer.parseInt(str[i]));
                 map.put("intime", new Date());
                 circleService.followCircle(map);
+                //增加用户总关注数attention
+                userService.updateUserAttention(userid);//关注人
             }
         }
         return 1;
