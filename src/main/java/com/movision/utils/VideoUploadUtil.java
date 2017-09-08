@@ -743,6 +743,7 @@ public class VideoUploadUtil {
             }
         } else {//没有缓存
             String acc = getaccesstoken();
+            log.info(acc);
             url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
         }
         log.info(url);
