@@ -745,7 +745,7 @@ public class VideoUploadUtil {
             String acc = getaccesstoken();
             url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
         }
-
+        log.info(url);
         String result = GetHttp(url);
         Map map = new HashMap();
         net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
