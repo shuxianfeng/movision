@@ -1089,6 +1089,16 @@ public class UserService {
         }
     }
 
+    public int getfootmap(int userid){
+        try {
+            log.info("获取当前用户的足迹点总数");
+            return userMapper.getfootmap(userid);
+        }catch (Exception e){
+            log.error("获取当前用户的足迹点总数失败", e);
+            throw e;
+        }
+    }
+
     public List<InviteUserVo> findAllMyInviteList(int userid, Paging<InviteUserVo> pager){
         try {
             log.info("查询当前用户邀请的好友列表");

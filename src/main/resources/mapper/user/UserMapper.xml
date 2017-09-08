@@ -1479,4 +1479,15 @@
         where status = 0
         and nickname like concat('%',#{name,jdbcType=VARCHAR},'%')
     </select>
+
+    <!--统计当前用户足迹点总数-->
+    <select id="getfootmap" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+        SELECT count(*) FROM yw_post_label
+        WHERE type = '0' AND isdel = '0'
+        AND id IN (
+        SELECT DISTINCT labelid FROM yw_post_label_relation WHERE postid IN (
+        SELECT id FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER}
+        )
+        )
+    </select>
 </mapper>

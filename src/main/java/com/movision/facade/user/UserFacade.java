@@ -771,8 +771,8 @@ public class UserFacade {
         int essencesum = postService.queryEssencesumByUserid(Integer.parseInt(userid));
         //g.达人认证徽章(0/1)
         int isdv = user.getIsdv();
-        //h.足迹徽章(1000KM/5000KM/10000KM)
-        int footprint = -1;//敬请期待
+        //h.足迹徽章(1个足迹/10个足迹/20个足迹)
+        int footprint = userService.getfootmap(Integer.parseInt(userid));
         //i.实名认证徽章(0/1)
         int rnauth = -1;//敬请期待
         //j.消费徽章(0/1)
@@ -841,7 +841,16 @@ public class UserFacade {
             userBadge.setIsdv(1);
         }
 
-        userBadge.setFootprint(footprint);
+        if (footprint < 1){
+            userBadge.setFootprint(0);
+        }else if (footprint >= 1 && footprint < 10){
+            userBadge.setFootprint(1);
+        }else if (footprint >= 10 && footprint < 20){
+            userBadge.setFootprint(2);
+        }else if (footprint >= 20){
+            userBadge.setFootprint(3);
+        }
+
         userBadge.setRnauth(rnauth);
         userBadge.setConsume(consume);
 

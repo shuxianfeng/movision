@@ -174,6 +174,8 @@ public interface UserMapper {
 
     int queryFinishUserInfo(int userid);
 
+    int getfootmap(int userid);
+
     List<InviteUserVo> findAllMyInviteList(int userid, RowBounds rowBounds);
 
     List<InviteUserVo> findAllInviteRank(RowBounds rowBounds);
