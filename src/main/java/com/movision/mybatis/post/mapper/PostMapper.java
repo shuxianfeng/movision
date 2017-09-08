@@ -57,6 +57,8 @@ public interface PostMapper {
 
     int queryCommentByUserid(int userid);
 
+    int queryCollectByUserid(int userid);
+
     int queryZanSumByUserid(int userid);
 
     int queryEssencesumByUserid(int userid);

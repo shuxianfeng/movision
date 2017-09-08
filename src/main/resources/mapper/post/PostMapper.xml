@@ -343,6 +343,19 @@
         SELECT count(*) FROM yw_post_comment WHERE userid = #{userid,jdbcType=INTEGER}
     </select>
 
+    <!--根据用户id查询当前用户被收藏总数-->
+    <select id="queryCollectByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+        SELECT SUM(tt.sum)
+        FROM
+        (
+            (SELECT count(*) AS sum FROM (SELECT DISTINCT t.circleid FROM yw_follow_circle t WHERE userid = #{userid,jdbcType=INTEGER}) t1)
+            UNION ALL
+            (SELECT count(*) sum FROM (SELECT DISTINCT t2.labelid FROM yw_follow_label t2 WHERE userid = #{userid,jdbcType=INTEGER}) t2)
+            UNION ALL
+            (SELECT count(*) sum FROM (SELECT DISTINCT t3.interestedusers FROM yw_follow_user t3 WHERE userid = #{userid,jdbcType=INTEGER}) t4)
+        ) tt
+    </select>
+
     <!--根据用户id查询当前用户点赞总数-->
     <select id="queryZanSumByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
         SELECT count(*) FROM yw_post_zan_record WHERE userid = #{userid,jdbcType=INTEGER}

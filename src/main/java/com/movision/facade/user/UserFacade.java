@@ -758,7 +758,9 @@ public class UserFacade {
         //a.发帖数(1/10/50)
         int postsum = postService.queryPostNumByUserid(Integer.parseInt(userid));
         //b.用户总评论数(10/50/100)
-        int commentsum = postService.queryCommentByUserid(Integer.parseInt(userid));
+//        int commentsum = postService.queryCommentByUserid(Integer.parseInt(userid));
+        //b.用户总收藏数(10/50/100)//---------------运营智障强烈要求修改为被收藏数2017.09.08
+        int collectsum = postService.queryCollectByUserid(Integer.parseInt(userid));
         //c.点赞数(50/100/200)
         int zansum = postService.queryZanSumByUserid(Integer.parseInt(userid));
         //d.邀请总人数(1/10/50)
@@ -787,13 +789,13 @@ public class UserFacade {
             userBadge.setPostsum(3);
         }
 
-        if (commentsum < 10) {
+        if (collectsum < 10) {
             userBadge.setCommentsum(0);
-        }else if (commentsum >= 10 && commentsum < 50){
+        }else if (collectsum >= 10 && collectsum < 50){
             userBadge.setCommentsum(1);
-        }else if (commentsum >= 50 && commentsum < 100){
+        }else if (collectsum >= 50 && collectsum < 100){
             userBadge.setCommentsum(2);
-        }else if (commentsum >= 100){
+        }else if (collectsum >= 100){
             userBadge.setCommentsum(3);
         }
 

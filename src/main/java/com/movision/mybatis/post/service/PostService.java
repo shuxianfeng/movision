@@ -83,6 +83,16 @@ public class PostService {
         }
     }
 
+    public int queryCollectByUserid(int userid){
+        try {
+            log.info("通过用户id查询当前用户被收藏总数");
+            return postMapper.queryCollectByUserid(userid);
+        }catch (Exception e){
+            log.error("通过用户id查询当前用户的被收藏总数失败", e);
+            throw e;
+        }
+    }
+
     public int queryZanSumByUserid(int userid){
         try {
             log.info("通过用户id查询当前用户的点赞总数");
