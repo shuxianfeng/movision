@@ -895,7 +895,7 @@ public class FacadePost {
         List<PostLabel> existLabels = new ArrayList<>();  //这是非新建的标签集合
 
         for (PostLabel p : postLabelList) {
-            if (null == p.getId()) {
+            if (null == p.getId() || p.getId() == 0) {
                 newLabels.add(p);
             } else {
                 existLabels.add(p);
