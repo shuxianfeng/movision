@@ -64,6 +64,7 @@ import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.model.ServicePaging;
 import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
+import javafx.geometry.Pos;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.BeanComparator;
@@ -905,21 +906,27 @@ public class FacadePost {
         log.debug("非新建的标签集合：" + existLabels.toString());
 
         //3 下面是对新建的标签集合操作
+        List<PostLabel> newPostLabelsInDB = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(newLabels)) {
-            processForNewLabel(flag, newLabels);
+            List<PostLabel> list = processForNewLabel(flag, newLabels);
+            newPostLabelsInDB.addAll(list);
         }
 
         if (CollectionUtil.isNotEmpty(existLabels)) {
             //4 下面是对非新建的标签集合操作
             processForExistLabel(flag, existLabels);
-            //5 记录此次发帖标签使用的历史
-            existLabels.addAll(newLabels);
-            for (PostLabel label : existLabels) {
-                saveKeywordsInMongoDB(label);
-                //增加标签热度
-                facadeHeatValue.addLabelHeatValue(2, label.getId(), null);
-            }
         }
+        //5 记录此次发帖标签使用的历史
+        List<PostLabel> allLabels = new ArrayList<>();  //所有的标签集合
+        allLabels.addAll(newPostLabelsInDB);
+        allLabels.addAll(existLabels);
+        for (PostLabel label : allLabels) {
+            //使用过的标签，插入mongoDB
+            saveKeywordsInMongoDB(label);
+            //增加标签热度
+            facadeHeatValue.addLabelHeatValue(2, label.getId(), null);
+        }
+
     }
 
     /**
@@ -950,7 +957,7 @@ public class FacadePost {
         batchAddPostLabelRealtionByList(flag, existLabelIdList);
     }
 
-    private void processForNewLabel(int flag, List<PostLabel> newLabels) {
+    private List<PostLabel> processForNewLabel(int flag, List<PostLabel> newLabels) {
         //3.1 从缓存中获取userid，citycode, 并且根据标签类型，获取标签的头像
         for (PostLabel p : newLabels) {
             p.setUserid(ShiroUtil.getAppUserID());
@@ -971,6 +978,8 @@ public class FacadePost {
         log.debug("新插入的标签的id集合是：" + newLabelIdList.toString());
 
         batchAddPostLabelRealtionByList(flag, newLabelIdList);
+        //返回新增的标签实体集合
+        return postLabelService.queryLabelList(labelNameStr);
     }
 
     /**

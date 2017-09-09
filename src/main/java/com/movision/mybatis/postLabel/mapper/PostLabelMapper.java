@@ -47,6 +47,8 @@ public interface PostLabelMapper {
 
     List<Integer> queryLabelIdList(String[] nameStr);
 
+    List<PostLabel> queryLabelList(String[] nameStr);
+
     CircleVo queryCircleByPostid(int circleid);
 
     List<User> queryCircleManager(int circleid);

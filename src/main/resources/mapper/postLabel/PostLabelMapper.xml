@@ -234,7 +234,17 @@
             #{nameStr}
         </foreach>
     </select>
-  <select id="queryCountLabelName" parameterType="java.lang.Integer"
+
+    <select id="queryLabelList" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+        SELECT * FROM yw_post_label
+        where name IN
+        <foreach item="nameStr" collection="array" open="(" separator="," close=")">
+            #{nameStr}
+        </foreach>
+    </select>
+
+    <select id="queryCountLabelName" parameterType="java.lang.Integer"
           resultType="com.movision.mybatis.postLabel.entity.PostLabelCount">
       SELECT COUNT(1) AS count,p.userid,p.id,u.nickname FROM yw_post_label_relation r LEFT JOIN yw_post p ON
       p.id=r.postid LEFT JOIN yw_post_label l ON l.id=r.labelid LEFT JOIN yw_user u ON u.id=p.userid
