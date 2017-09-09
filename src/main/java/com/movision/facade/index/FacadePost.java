@@ -186,6 +186,13 @@ public class FacadePost {
             parammap.put("userid", Integer.parseInt(userid));
         }
         PostVo vo = postService.queryPostDetail(parammap);
+        Map map = new HashMap();
+        int userids = vo.getUserid();
+        map.put("id", userids);//被关注的
+        map.put("userid", ShiroUtil.getAppUserID());//关注的人
+        int sum = userService.queryIsFollowAuthor(map);
+        vo.setIsfollow(sum + "");
+
 
         List<PostVo> array = new ArrayList<>();
         array.add(vo);
