@@ -169,7 +169,7 @@ public class MsgCenterFacade {
 
             int size = resultList == null ? 0 : resultList.size();
             log.debug("【row中list的数量】：" + size);
-            log.debug("【row中的list】：" + resultList.toString());
+//            log.debug("【row中的list】：" + resultList.toString());
             //操作已读未读处理
             updateComment(curid);    //更新评论已读
             updateZan(curid);  //更新赞
