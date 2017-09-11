@@ -135,7 +135,9 @@
             <if test="informidentity !=null">
                 informidentity = #{informidentity,jdbcType=VARCHAR}
             </if>
-
+            <if test="coverimg !=null">
+                coverimg = #{coverimg,jdbcType=VARCHAR}
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
