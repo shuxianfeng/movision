@@ -118,6 +118,37 @@ public class PostAndUserRecordService implements PostAndUserRecordMapper {
      return map;
 
      }*/
+    /**
+     * 查询
+     * 根据postid查询帖子的浏览量
+     *
+     * @return
+     */
+    public Integer postcount(int postid) {
+        MongoClient mongoClient = null;
+        int obj = 0;
+        DB db = null;
+        DBCursor cursor = null;
+        try {
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection collection = db.getCollection("postAndUserRecord");
+            BasicDBObject queryObject = new BasicDBObject("postid", postid);
+//            obj = collection.find(queryObject).count();
+            cursor = collection.find(queryObject);
+            obj = cursor.count();
+            cursor.close();
+        } catch (Exception e) {
+            log.error("根据postid查询帖子的浏览量失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                cursor.close();
+                mongoClient.close();
+            }
+        }
+        return obj;
 
+    }
 
 }

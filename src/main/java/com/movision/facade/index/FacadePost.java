@@ -1607,7 +1607,9 @@ public class FacadePost {
             for (int i = 0; i < list.size(); i++) {
                 int postid = list.get(i).getId();
                 int uesrreflushCounts = userRefreshRecordService.postcount(postid);
-                list.get(i).setCountview(uesrreflushCounts);
+                int poscount = postAndUserRecordService.postcount(postid);
+                int count = uesrreflushCounts + poscount;
+                list.get(i).setCountview(count);
             }
         }
         return list;
