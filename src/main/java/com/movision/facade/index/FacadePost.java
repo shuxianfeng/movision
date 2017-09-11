@@ -2172,6 +2172,7 @@ public class FacadePost {
      List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid),type);
          List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
             List<Integer> postVos = new ArrayList<>();
+         List<Integer> dontlikes = new ArrayList<>();
             if (list.size() != 0) {
                 for (int i = 0; i < list.size(); i++) {
                     int postid = Integer.parseInt(list.get(i).get("postid").toString());
@@ -2180,9 +2181,10 @@ public class FacadePost {
                 if (dontlike.size() != 0) {
                     for (int i = 0; i < dontlike.size(); i++) {
                         int p = Integer.parseInt(dontlike.get(i).get("postid").toString());
-                        postVos.remove(p);
+                        dontlikes.add(p);
                     }
                 }
+                postVos.removeAll(dontlikes);
                 //根据postid查询帖子
                 postVo = postService.findAllPostByid(postVos, paging);
                 if (postVo != null) {
