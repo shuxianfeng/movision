@@ -18,11 +18,11 @@ import com.movision.mybatis.accusation.entity.Accusation;
 import com.movision.mybatis.accusation.service.AccusationService;
 import com.movision.mybatis.activePart.entity.ActivePart;
 import com.movision.mybatis.activePart.service.ActivePartService;
+import com.movision.mybatis.circle.entity.CirclePost;
 import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.circleCategory.service.CircleCategoryService;
-import com.movision.mybatis.comment.entity.CommentCount;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
@@ -67,7 +67,6 @@ import com.movision.utils.pagination.model.ServicePaging;
 import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.zookeeper.DistributedLock;
-import javafx.geometry.Pos;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.BeanComparator;
@@ -2266,9 +2265,17 @@ public class FacadePost {
         }
     }
 
+    /**
+     * 获取有发帖权限的圈子
+     * <p>
+     * 拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.该用户是圈子管理员  4.所有者和大V可发+发帖用户即为大V
+     *
+     * @return
+     */
     public List<Map> getCircleInCatagory() {
-        // 所有当前用户有权限的圈子类型
-        List<Map<String, Object>> list = circleService.selectCircleInCatagory(ShiroUtil.getAppUserID());
+        //获取有权限的圈子
+        List<CirclePost> anyoneCanPostCircles = getPrivilegeCircles();
+        log.debug("最终的该用户有权限的圈子列表是：" + anyoneCanPostCircles.toString());
         // 所有的catagory
         List<CircleCategory> circleCategoryVoList = circleCategoryService.queryCircleCategoryList();
 
@@ -2277,13 +2284,13 @@ public class FacadePost {
         for (CircleCategory c : circleCategoryVoList) {
 
             List<Map> circlelist = new ArrayList<>();
-            for (Map m : list) {
+            for (CirclePost m : anyoneCanPostCircles) {
                 //若是同一个category，则放到一个集合中
-                if (c.getId() == (int) m.get("cid")) {
+                if (c.getId() == (int) m.getCid()) {
 
                     Map map = new HashedMap();
-                    map.put("circle_id", m.get("circleid"));
-                    map.put("circle_name", m.get("circlename"));
+                    map.put("circle_id", m.getCircleid());
+                    map.put("circle_name", m.getCirclename());
                     circlelist.add(map);
                 }
             }
@@ -2296,6 +2303,34 @@ public class FacadePost {
         }
         log.debug("返回的resultList：" + resultList);
         return resultList;
+    }
+
+    /**
+     * 获取有权限的圈子
+     *
+     * @return
+     */
+    private List<CirclePost> getPrivilegeCircles() {
+        //1 查询所有人都可以发帖的圈子
+        List<CirclePost> anyoneCanPostCircles = circleService.selectCircleScopeEquals2();
+        //2 查询用户是该圈子的所有者的圈子
+        List<CirclePost> createCircles = circleService.selectCircleWhoCreate(ShiroUtil.getAppUserID());
+        //第一次排重合并
+        anyoneCanPostCircles.removeAll(createCircles);
+        anyoneCanPostCircles.addAll(createCircles);
+        //3 查询用户是圈子管理员的圈子
+        List<CirclePost> manageCircles = circleService.selectCircleWhoManage(ShiroUtil.getAppUserID());
+        //第二次排重合并
+        anyoneCanPostCircles.removeAll(manageCircles);
+        anyoneCanPostCircles.addAll(manageCircles);
+        //4 查询所有者可发+发帖用户为大v
+        if (ShiroUtil.getAppUser().getLevel() >= 1) {
+            List<CirclePost> ownerAndBigVCanPostCircles = circleService.selectCircleScopeEquals1();
+            //第三次去重合并
+            anyoneCanPostCircles.removeAll(ownerAndBigVCanPostCircles);
+            anyoneCanPostCircles.addAll(ownerAndBigVCanPostCircles);
+        }
+        return anyoneCanPostCircles;
     }
 
     public Boolean isExistSameNameLabel(String name) {

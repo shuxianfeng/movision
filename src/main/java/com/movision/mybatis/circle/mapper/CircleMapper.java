@@ -1,12 +1,9 @@
 package com.movision.mybatis.circle.mapper;
 
 import com.movision.mybatis.category.entity.Category;
-import com.movision.mybatis.category.entity.CircleAndCircle;
 import com.movision.mybatis.circle.entity.*;
-import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserRole;
-import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
@@ -124,7 +121,13 @@ public interface CircleMapper {
 
     int updateCircleHeatValue(Map map);
 
-    List<Map<String, Object>> selectCircleInCatagory(Integer userid);
+    List<CirclePost> selectCircleScopeEquals2();
+
+    List<CirclePost> selectCircleWhoCreate(Integer userid);
+
+    List<CirclePost> selectCircleWhoManage(Integer userid);
+
+    List<CirclePost> selectCircleScopeEquals1();
 
     List<CircleVo> findAllCircle(RowBounds rowBounds);
 

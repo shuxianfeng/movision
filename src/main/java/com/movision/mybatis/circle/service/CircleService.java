@@ -4,7 +4,6 @@ import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.circle.mapper.CircleMapper;
 import com.movision.mybatis.followCircle.mapper.FollowCircleMapper;
-import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserRole;
 import com.movision.utils.pagination.model.Paging;
@@ -732,15 +731,46 @@ public class CircleService {
 
     }
 
-    public List<Map<String, Object>> selectCircleInCatagory(Integer userid) {
+    public List<CirclePost> selectCircleScopeEquals1() {
         try {
-            log.info("查询发帖-圈子种类");
-            return circleMapper.selectCircleInCatagory(userid);
+            log.info("查询scope=1的圈子");
+            return circleMapper.selectCircleScopeEquals1();
         } catch (Exception e) {
-            log.error("查询发帖-圈子种类失败", e);
+            log.error("查询scope=1的圈子失败", e);
             throw e;
         }
     }
+
+    public List<CirclePost> selectCircleScopeEquals2() {
+        try {
+            log.info("查询scope=2的圈子");
+            return circleMapper.selectCircleScopeEquals2();
+        } catch (Exception e) {
+            log.error("查询scope=2的圈子失败", e);
+            throw e;
+        }
+    }
+
+    public List<CirclePost> selectCircleWhoCreate(Integer userid) {
+        try {
+            log.info("查询该用户创建的圈子");
+            return circleMapper.selectCircleWhoCreate(userid);
+        } catch (Exception e) {
+            log.error("查询该用户创建的圈子失败", e);
+            throw e;
+        }
+    }
+
+    public List<CirclePost> selectCircleWhoManage(Integer userid) {
+        try {
+            log.info("查询该用户是管理员的圈子");
+            return circleMapper.selectCircleWhoManage(userid);
+        } catch (Exception e) {
+            log.error("查询该用户是管理员的圈子失败", e);
+            throw e;
+        }
+    }
+
 
     public List<CircleVo> findAllCircle(Paging<CircleVo> paging) {
         try {
