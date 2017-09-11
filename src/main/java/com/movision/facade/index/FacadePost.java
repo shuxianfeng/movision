@@ -3,9 +3,11 @@ package com.movision.facade.index;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mongodb.*;
+import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.constant.PostLabelConstants;
 import com.movision.common.util.ShiroUtil;
+import com.movision.exception.BusinessException;
 import com.movision.facade.comment.FacadeComments;
 import com.movision.facade.im.ImFacade;
 import com.movision.facade.paging.PageFacade;
@@ -64,6 +66,7 @@ import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.model.ServicePaging;
 import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
+import com.movision.zookeeper.DistributedLock;
 import javafx.geometry.Pos;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -96,6 +99,8 @@ import java.util.*;
 public class FacadePost {
 
     private static Logger log = LoggerFactory.getLogger(FacadePost.class);
+
+    public static final String LOCK_NAME = "release_post";
 
     @Autowired
     private LabelSearchTermsService labelSearchTermsService;
@@ -801,6 +806,45 @@ public class FacadePost {
             return -1;
         }
     }
+
+
+    /**
+     * zk控制下的发帖
+     *
+     * @param request
+     * @param userid
+     * @param circleid
+     * @param title
+     * @param postcontent
+     * @param isactive
+     * @param coverimg
+     * @param proids
+     * @param labellist
+     * @param activeid
+     * @return
+     */
+    public Map postUnderZk(HttpServletRequest request, String userid, String circleid, String title,
+                           String postcontent, String isactive, String coverimg, String proids, String labellist,
+                           String activeid) {
+        DistributedLock lock = null;
+        try {
+            lock = new DistributedLock(LOCK_NAME);
+            //加锁
+            lock.lock();
+            //发帖操作
+            return releaseModularPost(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist, activeid);
+
+        } catch (Exception e) {
+            log.error("执行异常>>>", e);
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "zk控制下的发帖异常");
+        } finally {
+            if (lock != null) {
+                //释放锁
+                lock.unlock();
+            }
+        }
+    }
+
 
     /**
      * 模块化发帖

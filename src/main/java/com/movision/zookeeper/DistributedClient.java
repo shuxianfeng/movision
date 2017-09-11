@@ -37,7 +37,6 @@ public class DistributedClient {
      */
     private CountDownLatch latch = new CountDownLatch(1);
 
-
     /**
      * 连接zookeeper
      */
