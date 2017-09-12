@@ -575,54 +575,59 @@ public class UserFacade {
      * @return
      */
     public List<PostVo> mineBottle(int type, String userid, Paging<PostVo> paging) {
-        List<PostVo> list = null;
-        if (type == 0) {//帖子
-            //查询用户发的帖子
-            list = postService.findAllUserPostList(Integer.parseInt(userid), paging);
-            for (int i = 0; i < list.size(); i++) {
-                facadePost.countView(list);
-                facadePost.findAllCircleName(list);
-            }
-            if(list.size()==0){
-                list = null;
-            }
-        } else if (type == 1) {//活动
-            //活动帖子
-            list = postService.findAllUserActive(Integer.parseInt(userid), paging);
-            //遍历活动获取活动参与人数和活动剩余结束天数
-            for (int i = 0; i < list.size(); i++) {
-                PostVo ao = list.get(i);
-                //计算距离结束时间
-                Date begin = ao.getBegintime();
-                Date end = ao.getEndtime();
-                Date now = new Date();
-                int enddays = DateUtils.activeEndDays(now, begin, end);
-                ao.setEnddays(enddays);
-                //查询活动参与总人数
-                int partsum = postService.queryActivePartSum(ao.getId());
-                ao.setPartsum(partsum);
-                list.set(i, ao);
-            }
-            if(list.size()==0){
-                list = null;
-            }
-        } else if (type == 2) {//收藏
-            //用户收藏的帖子
-            List<Integer> collection = collectionService.queryUserPost(Integer.parseInt(userid));
-            //收藏的id查帖子
-            if (collection.size() != 0) {
-                list = postService.findAllCollectionListByIds(collection, paging);
+        try {
+            List<PostVo> list = null;
+            if (type == 0) {//帖子
+                //查询用户发的帖子
+                list = postService.findAllUserPostList(Integer.parseInt(userid), paging);
                 for (int i = 0; i < list.size(); i++) {
                     facadePost.countView(list);
                     facadePost.findAllCircleName(list);
-                    facadePost.findUser(list);
                 }
-                if(list.size()==0){
+                if (list.size() == 0) {
                     list = null;
                 }
+            } else if (type == 1) {//活动
+                //活动帖子
+                list = postService.findAllUserActive(Integer.parseInt(userid), paging);
+                //遍历活动获取活动参与人数和活动剩余结束天数
+                for (int i = 0; i < list.size(); i++) {
+                    PostVo ao = list.get(i);
+                    //计算距离结束时间
+                    Date begin = ao.getBegintime();
+                    Date end = ao.getEndtime();
+                    Date now = new Date();
+                    int enddays = DateUtils.activeEndDays(now, begin, end);
+                    ao.setEnddays(enddays);
+                    //查询活动参与总人数
+                    int partsum = postService.queryActivePartSum(ao.getId());
+                    ao.setPartsum(partsum);
+                    list.set(i, ao);
+                }
+                if (list.size() == 0) {
+                    list = null;
+                }
+            } else if (type == 2) {//收藏
+                //用户收藏的帖子
+                List<Integer> collection = collectionService.queryUserPost(Integer.parseInt(userid));
+                //收藏的id查帖子
+                if (collection.size() != 0) {
+                    list = postService.findAllCollectionListByIds(collection, paging);
+                    for (int i = 0; i < list.size(); i++) {
+                        facadePost.countView(list);
+                        facadePost.findAllCircleName(list);
+                        facadePost.findUser(list);
+                    }
+                    if (list.size() == 0) {
+                        list = null;
+                    }
+                }
             }
+            return list;
+        }catch (Exception e){
+            log.error("查询我的模块下半部分数据异常", e);
+            throw e;
         }
-        return list;
     }
 
     /**
