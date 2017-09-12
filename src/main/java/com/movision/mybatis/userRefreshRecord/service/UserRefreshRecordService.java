@@ -1,7 +1,7 @@
 package com.movision.mybatis.userRefreshRecord.service;
 
 import com.mongodb.*;
-import com.movision.mybatis.userRefreshRecord.entity.UesrreflushCount;
+import com.movision.mybatis.userRefreshRecord.entity.UserReflushCount;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
 import com.movision.mybatis.userRefreshRecord.mapper.UserRefreshRecordMapper;
 import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
@@ -66,14 +66,14 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
 
     }
 
-    public List<UesrreflushCount> group() {
+    public List<UserReflushCount> group() {
 
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.group("postid").count().as("count"),
                 Aggregation.sort(Sort.Direction.DESC, "count")
         );
-        AggregationResults<UesrreflushCount> list = mongoTemplate.aggregate(aggregation, "userRefreshRecord", UesrreflushCount.class);
-        List<UesrreflushCount> list1 = list.getMappedResults();
+        AggregationResults<UserReflushCount> list = mongoTemplate.aggregate(aggregation, "userRefreshRecord", UserReflushCount.class);
+        List<UserReflushCount> list1 = list.getMappedResults();
         return list1;
 
     }

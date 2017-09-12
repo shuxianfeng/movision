@@ -26,7 +26,7 @@ import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
-import com.movision.mybatis.userRefreshRecord.entity.UesrreflushCount;
+import com.movision.mybatis.userRefreshRecord.entity.UserReflushCount;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
@@ -307,17 +307,17 @@ public class FacadeDiscover {
         List<PostVo> postVoList = postService.queryPostInAll();
 
         //查询mongo中的用户浏览帖子记录（已经按照浏览数从大到小排列）
-        List<UesrreflushCount> uesrreflushCountList = userRefreshRecordService.group();
+        List<UserReflushCount> userReflushCountList = userRefreshRecordService.group();
 
         List<PostVo> resultList = new ArrayList<>();
-        int size = uesrreflushCountList.size();
+        int size = userReflushCountList.size();
         int total = postVoList.size();
         //生成最后的结果
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < total; j++) {
-                if (uesrreflushCountList.get(i).getPostid().intValue() == postVoList.get(j).getId().intValue()) {
+                if (userReflushCountList.get(i).getPostid().intValue() == postVoList.get(j).getId().intValue()) {
                     //统计浏览数
-                    postVoList.get(j).setCountview(uesrreflushCountList.get(i).getCount());
+                    postVoList.get(j).setCountview(userReflushCountList.get(i).getCount());
 
 
                     resultList.add(postVoList.get(j));
@@ -340,7 +340,7 @@ public class FacadeDiscover {
         //查询所有帖子
         List<PostVo> postVoList = postService.queryPostInAll();
         //核心算法
-        List<UesrreflushCount> countList = handlePostViewListFromMongoDB();
+        List<UserReflushCount> countList = handlePostViewListFromMongoDB();
 
         List<PostVo> resultList = new ArrayList<>();
         int size = countList.size();
@@ -372,21 +372,21 @@ public class FacadeDiscover {
      *
      * @return
      */
-    private List<UesrreflushCount> handlePostViewListFromMongoDB() {
+    private List<UserReflushCount> handlePostViewListFromMongoDB() {
         //系统的当前的月份的第一天
         String firstDay = DateUtils.getCurrentMonthFirstDay();
 //        String firstDay = "2017-07-01";
         //系统的当前月份的最后一天
         String lastDay = DateUtils.getCurrentMonthLastDay();
 //        String lastDay = "2017-07-31";
-        //查询mongo中的当前月份的用户浏览帖子记录
+        //查询mongo中的当前月份的用户浏览帖子记录 这个记录中的postid是重复的
         List<DBObject> viewListInMongoDB = userRefreshRecordService.getMongoListByTimeRange(firstDay, lastDay);
         //统计其中的帖子浏览次数，并按照从大到小排列
-        List<UesrreflushCount> countList = new ArrayList<>();
+        List<UserReflushCount> countList = new ArrayList<>();
         int len = viewListInMongoDB.size();
         for (int i = 0; i < len; i++) {
             int postid = (Integer) viewListInMongoDB.get(i).get("postid");
-            UesrreflushCount c = new UesrreflushCount();
+            UserReflushCount c = new UserReflushCount();
             c.setPostid(postid);
             int count = 0;
             for (int j = 0; j < len; j++) {
@@ -399,7 +399,7 @@ public class FacadeDiscover {
             countList.add(c);
         }
         //排序
-        Collections.sort(countList, UesrreflushCount.countComparator);
+        Collections.sort(countList, UserReflushCount.countComparator);
         return countList;
     }
 

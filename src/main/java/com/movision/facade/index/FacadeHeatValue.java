@@ -1,25 +1,17 @@
 package com.movision.facade.index;
 
 import com.movision.common.constant.HeatValueConstant;
-import com.movision.mybatis.PostZanRecord.service.PostZanRecordService;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.followLabel.service.FollowLabelService;
-import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTermsVo;
-import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.service.UserService;
-import com.movision.mybatis.userRefreshRecord.entity.UesrreflushCount;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
