@@ -1963,4 +1963,15 @@ public class PostService {
     }
 
 
+    public int isPostIsdel(int postid) {
+        try {
+            log.info("帖子是否被删除");
+            return postMapper.isPostIsdel(postid);
+        } catch (Exception e) {
+            log.error("帖子是否被删除异常", e);
+            throw e;
+        }
+    }
+
+
 }

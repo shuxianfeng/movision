@@ -184,13 +184,17 @@ public class FacadePost {
     private TestIntimeService testIntimeService;
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+        //查询帖子是否被删除
+        int isdel = postService.isPostIsdel(Integer.parseInt(postid));
+        PostVo vo = null;
+        if (isdel == 0) {
         //通过userid、postid查询该用户有没有关注该圈子的权限
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("postid", Integer.parseInt(postid));
         if (!StringUtils.isEmpty(userid)) {
             parammap.put("userid", Integer.parseInt(userid));
         }
-        PostVo vo = postService.queryPostDetail(parammap);
+            vo = postService.queryPostDetail(parammap);
         Map map = new HashMap();
         int userids = vo.getUserid();
         map.put("id", userids);//被关注的
@@ -279,6 +283,9 @@ public class FacadePost {
                 postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
                 postAndUserRecordService.insert(postAndUserRecord);
             }
+        }
+        } else if (isdel == 1) {
+            vo = null;
         }
         return vo;
     }

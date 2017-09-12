@@ -343,4 +343,6 @@ public interface PostMapper {
     List<PostVo> findAllActivePostD(int id, RowBounds rowBounds);
 
     int zanIsPost(Map map);
+
+    int isPostIsdel(int postid);
 }
