@@ -13,9 +13,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 
 /**
  * @Author zhanglei
@@ -35,8 +39,8 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
     }
 
     /**
-     * 查询
-     *根据postid查询帖子的浏览量
+     * 根据postid查询帖子的浏览量
+     *
      * @return
      */
     public Integer postcount(int postid) {
@@ -49,7 +53,6 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
             db = mongoClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("userRefreshRecord");
             BasicDBObject queryObject = new BasicDBObject("postid", postid);
-//            obj = collection.find(queryObject).count();
             cursor = collection.find(queryObject);
             obj = cursor.count();
             cursor.close();
@@ -66,11 +69,16 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
 
     }
 
-    public List<UserReflushCount> group() {
+    /**
+     * 查询mongo中的用户浏览帖子记录（已经按照浏览数从大到小排列）
+     *
+     * @return
+     */
+    public List<UserReflushCount> groupByPostid() {
 
         Aggregation aggregation = Aggregation.newAggregation(
-                Aggregation.group("postid").count().as("count"),
-                Aggregation.sort(Sort.Direction.DESC, "count")
+                group("postid").count().as("count"),
+                sort(Sort.Direction.DESC, "count")
         );
         AggregationResults<UserReflushCount> list = mongoTemplate.aggregate(aggregation, "userRefreshRecord", UserReflushCount.class);
         List<UserReflushCount> list1 = list.getMappedResults();
@@ -79,20 +87,25 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
     }
 
 
-    public List getMongoListByTimeRange(String begintime, String endtime) {
+    /*public List<DBObject> getMongoListByTimeRange(String begintime, String endtime) {
         MongoClient mongoClient = null;
         DB db = null;
         List<DBObject> list = null;
-        BasicDBList condList = new BasicDBList();//存放查询条件的集合
+        BasicDBList condList = new BasicDBList();   //存放查询条件的集合
         BasicDBObject param = new BasicDBObject();
         DBCursor dbCursor = null;
         try {
             mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             db = mongoClient.getDB("searchRecord");
+            //数据表
             DBCollection table = db.getCollection("userRefreshRecord");
+
             if (StringUtils.isNotBlank(begintime) && StringUtils.isNotBlank(endtime)) {
-                condList.add(new BasicDBObject("intime", new BasicDBObject("$gte", begintime + " 00:00:00").append("$lte", endtime + " 23:59:59")));
+
+                condList.add(new BasicDBObject("intime",
+                        new BasicDBObject("$gte", begintime + " 00:00:00").append("$lte", endtime + " 23:59:59")));
             }
+
             if (condList != null && condList.size() > 0) {
                 param.put("$and", condList);//多条件查询使用and
             }
@@ -110,6 +123,30 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
         }
         return list;
 
+    }*/
+
+    /**
+     * 统计在一个月内 一个帖子的浏览次数
+     *
+     * @param begintime
+     * @param endtime
+     * @return
+     */
+    public List<UserReflushCount> getPostViewRecord(String begintime, String endtime) {
+
+        log.debug("从mongoDB中查询帖子浏览记录");
+        TypedAggregation<UserRefreshRecord> agg = Aggregation.newAggregation(
+                UserRefreshRecord.class,
+                project("postid", "intime")
+                , match(Criteria.where("intime").gte(begintime + " 00:00:00").lte(endtime + " 23:59:59"))
+                , group("postid").count().as("count")
+                , sort(Sort.Direction.DESC, "count")
+        );
+        log.debug("执行语句=" + agg.toString());
+        AggregationResults<UserReflushCount> result = mongoTemplate.aggregate(agg, UserReflushCount.class);
+        log.debug("查询结果=" + result.getMappedResults());
+        return result.getMappedResults();
     }
+
 
 }
