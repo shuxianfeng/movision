@@ -379,27 +379,9 @@ public class FacadeDiscover {
         //系统的当前月份的最后一天
         String lastDay = DateUtils.getCurrentMonthLastDay();
 //        String lastDay = "2017-07-31";
-        //查询mongo中的当前月份的用户浏览帖子记录 这个记录中的postid是重复的
+        //统计在一个月内,每个帖子的浏览次数
         List<UserReflushCount> viewListInMongoDB = userRefreshRecordService.getPostViewRecord(firstDay, lastDay);
-        //统计其中的帖子浏览次数，并按照从大到小排列
-        /*List<UserReflushCount> countList = new ArrayList<>();
-        int len = viewListInMongoDB.size();
-        for (int i = 0; i < len; i++) {
-            int postid = (Integer) viewListInMongoDB.get(i).getPostid();
-            UserReflushCount c = new UserReflushCount();
-            c.setPostid(postid);
-            int count = 0;
-            for (int j = 0; j < len; j++) {
 
-                if (postid == (Integer) viewListInMongoDB.get(j).getPostid()) {
-                    count++;
-                }
-            }
-            c.setCount(count);
-            countList.add(c);
-        }*/
-        //排序
-//        Collections.sort(countList, UserReflushCount.countComparator);
         return viewListInMongoDB;
     }
 

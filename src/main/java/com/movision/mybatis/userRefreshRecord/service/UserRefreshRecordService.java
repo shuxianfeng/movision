@@ -126,7 +126,7 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
     }*/
 
     /**
-     * 统计在一个月内 一个帖子的浏览次数
+     * 统计在一个月内，每个帖子的浏览次数
      *
      * @param begintime
      * @param endtime

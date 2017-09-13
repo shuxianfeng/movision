@@ -11,8 +11,8 @@ import java.util.Comparator;
 public class UserReflushCount {
 
     @Id
-    private Integer postid;
-    private Integer count;
+    private Integer postid; //帖子id
+    private Integer count;  //帖子浏览次数
 
     public Integer getPostid() {
         return postid;
@@ -33,9 +33,6 @@ public class UserReflushCount {
     public UserReflushCount(Integer postid, Integer count) {
         this.postid = postid;
         this.count = count;
-    }
-
-    public UserReflushCount() {
     }
 
     public static Comparator countComparator = new Comparator() {
