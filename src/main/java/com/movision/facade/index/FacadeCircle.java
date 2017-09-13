@@ -167,26 +167,26 @@ public class FacadeCircle {
 
             //根据圈子id查询圈子该用户的未读更新帖子数
             //根据圈子id查询帖子
-            List<PostVo> postVos = postService.findAllPostCrile(circleid);
-            if (StringUtil.isNotEmpty(userid)){
-                //不为空查询当前用户未看过的总更新数
-                listmongodba = facadePost.userRefulshListMongodbs(Integer.parseInt(userid));//查询mongodb中用户看过的帖子列表
-
-                if (listmongodba.size() != 0) {
-                    for (int j = 0; j < listmongodba.size(); j++) {
-                        PostVo post = new PostVo();
-                        post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
-                        posts.add(post);//把mongodb转为post实体
-                    }
-                    postVos.removeAll(posts);
-                    vo.setPostnewnum(postVos.size());
-                }else{
-                    vo.setPostnewnum(postVos.size());
-                }
-            }else{
-                //用户未登录时userid为空时查询这个圈子的总帖子数
-                vo.setPostnewnum(postVos.size());
-            }
+//            List<PostVo> postVos = postService.findAllPostCrile(circleid);
+//            if (StringUtil.isNotEmpty(userid)){
+//                //不为空查询当前用户未看过的总更新数
+//                listmongodba = facadePost.userRefulshListMongodbs(Integer.parseInt(userid));//查询mongodb中用户看过的帖子列表
+//
+//                if (listmongodba.size() != 0) {
+//                    for (int j = 0; j < listmongodba.size(); j++) {
+//                        PostVo post = new PostVo();
+//                        post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
+//                        posts.add(post);//把mongodb转为post实体
+//                    }
+//                    postVos.removeAll(posts);
+//                    vo.setPostnewnum(postVos.size());
+//                }else{
+//                    vo.setPostnewnum(postVos.size());
+//                }
+//            }else{
+//                //用户未登录时userid为空时查询这个圈子的总帖子数
+//                vo.setPostnewnum(postVos.size());
+//            }
 
             //再查询该用户是否关注过该圈子
             if (StringUtil.isNotEmpty(userid)) {
