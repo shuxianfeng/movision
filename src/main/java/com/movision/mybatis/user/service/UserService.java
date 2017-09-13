@@ -1140,5 +1140,14 @@ public class UserService {
     }
 
 
+    public String areaname(String code) {
+        try {
+            log.info("所在城市");
+            return userMapper.areaname(code);
+        } catch (Exception e) {
+            log.error("所在城市失败", e);
+            throw e;
+        }
+    }
 
 }

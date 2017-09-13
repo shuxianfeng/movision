@@ -184,4 +184,6 @@ public interface UserMapper {
 
     List<User> findAllUserByName(Map<String, Object> map, RowBounds rowBounds);
 
+    String areaname(String code);
+
 }

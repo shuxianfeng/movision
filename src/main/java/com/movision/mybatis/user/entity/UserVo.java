@@ -98,6 +98,16 @@ public class UserVo implements Serializable {
 
     private Integer isfollow;//是否被关注 0 未关注 1 已关注（当前作者有没有被APP当前登录的用户关注过）
 
+    private String ipcity;//登录城市
+
+    public String getIpcity() {
+        return ipcity;
+    }
+
+    public void setIpcity(String ipcity) {
+        this.ipcity = ipcity;
+    }
+
     public Integer getHeatValue() {
         return heatValue;
     }
