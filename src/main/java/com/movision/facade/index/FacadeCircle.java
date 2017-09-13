@@ -143,9 +143,9 @@ public class FacadeCircle {
         //给圈子分类中，类目调换顺序---把所有内容重新排序放入输出列表中
         List<CircleCategoryVo> newcategoryList = new ArrayList<>();
 //        newcategoryList.add(myFollowCircle);//-------add我关注
-        for (int i=0; i<categoryList.size(); i++){//--------add普通分类
-            newcategoryList.add(i,categoryList.get(i));
-        }
+//        for (int i=0; i<categoryList.size(); i++){//--------add普通分类
+//            newcategoryList.add(i+1,categoryList.get(i));
+//        }
         newcategoryList.add(circleCategoryVo);//-------add待审核
         return newcategoryList;
     }
