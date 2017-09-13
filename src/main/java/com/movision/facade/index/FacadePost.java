@@ -349,6 +349,12 @@ public class FacadePost {
             int postpartsum = postService.activeSum(Integer.parseInt(postid));//投稿类参与人数
             active.setPartsum(postpartsum);
         }
+        //用户有没有投过稿
+        Map map = new HashMap();
+        map.put("id", Integer.parseInt(postid));
+        map.put("uid", ShiroUtil.getAppUserID());
+        int ispart = postService.isUserContribe(map);
+        active.setIsPart(ispart);
         //如果为商城促销类活动，需要在此基础上增加促销类商品列表
         if (activetype.equals("1")) {
 

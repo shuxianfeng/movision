@@ -85,16 +85,6 @@ public class ActiveVo implements Serializable {
     private List<PostLabel> postLabels;
     private Integer activeid;//活动id
 
-    private Integer postpartsum;
-
-    public Integer getPostpartsum() {
-        return postpartsum;
-    }
-
-    public void setPostpartsum(Integer postpartsum) {
-        this.postpartsum = postpartsum;
-    }
-
     public Integer getActiveid() {
         return activeid;
     }

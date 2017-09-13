@@ -1973,5 +1973,14 @@ public class PostService {
         }
     }
 
+    public int isUserContribe(Map map) {
+        try {
+            log.info("该用户有没有投过稿");
+            return postMapper.isUserContribe(map);
+        } catch (Exception e) {
+            log.error("该用户有没有投过稿失败", e);
+            throw e;
+        }
+    }
 
 }

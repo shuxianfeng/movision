@@ -345,4 +345,6 @@ public interface PostMapper {
     int zanIsPost(Map map);
 
     int isPostIsdel(int postid);
+
+    int isUserContribe(Map map);
 }

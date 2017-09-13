@@ -2420,4 +2420,7 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
     <select id="isPostIsdel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT isdel FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
+    <select id="isUserContribe" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post WHERE activeid=#{id,jdbcType=INTEGER} AND userid=#{uid,jdbcType=INTEGER}
+    </select>
 </mapper>
