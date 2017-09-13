@@ -1491,6 +1491,10 @@
         )
     </select>
     <select id="areaname" parameterType="java.lang.String" resultType="java.lang.String">
-        SELECT name FROM yw_city WHERE code=#{ipcity,jdbcType=VARCHAR}
+        SELECT name FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR}
+    </select>
+    <select id="provicename" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT name FROM yw_province WHERE code=(
+SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
     </select>
 </mapper>

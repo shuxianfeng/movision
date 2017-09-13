@@ -523,12 +523,6 @@ public class UserFacade {
     private UserVo wrapPersonHomepageTopPart(String userid) {
         //查询用户信息
         UserVo user = userService.queryUserInfoHompage(Integer.parseInt(userid));
-        //根据ip_city找出登录诚实
-        String ipcity = user.getIpcity();
-        if (ipcity != null) {
-            String area = userService.areaname(ipcity);
-            user.setIpcity(area);
-        }
         //查询发的帖子总数
         int postcount = postService.queryUserPostCount(Integer.parseInt(userid));
         user.setPostsum(postcount);

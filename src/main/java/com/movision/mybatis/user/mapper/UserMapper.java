@@ -186,4 +186,6 @@ public interface UserMapper {
 
     String areaname(String code);
 
+    String provicename(String citycode);
+
 }

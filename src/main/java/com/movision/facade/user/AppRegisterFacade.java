@@ -755,7 +755,11 @@ public class AppRegisterFacade {
 
         String ip_city = IpUtil.getCitycode("ip=" + ip, "utf-8");
         u.setIp_city(ip_city);  //登录的ip城市code
-
+        String area = userService.areaname(ip_city);//市
+        u.setCity(area);
+        //查询省的name
+        String provice = userService.provicename(ip_city);
+        u.setProvince(provice);
         updateLoginappuserInfo(u);
     }
 
