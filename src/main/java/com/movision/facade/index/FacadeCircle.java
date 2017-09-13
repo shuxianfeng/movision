@@ -99,7 +99,7 @@ public class FacadeCircle {
         for (int i = 0; i < categoryList.size(); i++) {
             int categoryid = categoryList.get(i).getId();
             List<CircleVo> circlelist = circleService.queryCircleByCategory(categoryid);
-//            circlelist = getFollowsumNew(circlelist, userid);
+            circlelist = getFollowsumNew(circlelist, userid);
             //将圈子列表加入分类对象CircleCategoryVo中
             categoryList.get(i).setCircleList(circlelist);
         }
@@ -137,7 +137,7 @@ public class FacadeCircle {
             parammap.put("userid", Integer.parseInt(userid));
             myfollowlist = circleService.queryMyFollowCircleList(parammap);
         }
-//        myfollowlist = getFollowsumNew(myfollowlist, userid);
+        myfollowlist = getFollowsumNew(myfollowlist, userid);
         myFollowCircle.setCircleList(myfollowlist);//----------------------------------实体add1
 
         //给圈子分类中，类目调换顺序---把所有内容重新排序放入输出列表中
