@@ -19,11 +19,14 @@ import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
 
 /**
  * @Author shuxf
@@ -31,6 +34,8 @@ import java.util.*;
  */
 @Service
 public class FacadeCircle {
+
+    private static Logger log = LoggerFactory.getLogger(FacadeCircle.class);
 
     @Autowired
     private CircleService circleService;
@@ -54,12 +59,11 @@ public class FacadeCircle {
     private PointRecordFacade pointRecordFacade;
 
     @Autowired
-    private FacadePost facadePost;
-    @Autowired
     private FollowUserService followUserService;
 
     @Autowired
     private UserRefreshRecordService userRefreshRecordService;
+
 
     public CircleVo queryCircleIndex1(String circleid, String userid) {
 
@@ -217,6 +221,7 @@ public class FacadeCircle {
                 }
                 //剔除已经浏览过的帖子，得到未浏览的帖子，即该圈子中更新的帖子
                 postVos.removeAll(posts);
+                log.debug("未浏览的帖子数量：" + postVos.size());
                 vo.setPostnewnum(postVos.size());
             } else {
                 vo.setPostnewnum(postVos.size());
