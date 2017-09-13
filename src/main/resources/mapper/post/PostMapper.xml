@@ -2081,7 +2081,7 @@
         SELECT * FROM yw_post WHERE isdel=0 and isactive=0 ORDER BY intime DESC
     </select>
     <select id="queryCrileid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT circleid FROM yw_post WHERE isdel=0 AND id=#{postid,jdbcType=INTEGER}
+        SELECT circleid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
     <select id="queryIsIsessence" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM yw_post WHERE isessence=1 AND isdel=0 AND id=#{postid,jdbcType=INTEGER}
@@ -2353,7 +2353,7 @@ WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_pos
         p.activeid=#{postid,jdbcType=INTEGER} AND p.isdel=0 ORDER BY p.intime DESC
     </select>
     <select id="postUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT userid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER} AND isdel=0
+        SELECT userid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
     <select id="findUserPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
         select yw_post.*,yw_user.nickname,yw_user.photo,yw_circle.`name` AS circlename from yw_post LEFT JOIN yw_user ON
