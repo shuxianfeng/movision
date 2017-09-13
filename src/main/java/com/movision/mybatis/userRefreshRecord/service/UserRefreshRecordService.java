@@ -5,7 +5,6 @@ import com.movision.mybatis.userRefreshRecord.entity.UserReflushCount;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
 import com.movision.mybatis.userRefreshRecord.mapper.UserRefreshRecordMapper;
 import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,45 +84,6 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
         return list1;
 
     }
-
-
-    /*public List<DBObject> getMongoListByTimeRange(String begintime, String endtime) {
-        MongoClient mongoClient = null;
-        DB db = null;
-        List<DBObject> list = null;
-        BasicDBList condList = new BasicDBList();   //存放查询条件的集合
-        BasicDBObject param = new BasicDBObject();
-        DBCursor dbCursor = null;
-        try {
-            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
-            db = mongoClient.getDB("searchRecord");
-            //数据表
-            DBCollection table = db.getCollection("userRefreshRecord");
-
-            if (StringUtils.isNotBlank(begintime) && StringUtils.isNotBlank(endtime)) {
-
-                condList.add(new BasicDBObject("intime",
-                        new BasicDBObject("$gte", begintime + " 00:00:00").append("$lte", endtime + " 23:59:59")));
-            }
-
-            if (condList != null && condList.size() > 0) {
-                param.put("$and", condList);//多条件查询使用and
-            }
-            dbCursor = table.find(param);
-            list = dbCursor.toArray();
-            dbCursor.close();
-        } catch (Exception e) {
-            log.error("根据开始和结束时间查询用户浏览记录失败", e);
-        } finally {
-            if (null != db) {
-                db.requestDone();
-                dbCursor.close();
-                mongoClient.close();
-            }
-        }
-        return list;
-
-    }*/
 
     /**
      * 统计在一个月内，每个帖子的浏览次数
