@@ -105,49 +105,49 @@ public class FacadeCircle {
         }
 
         //手动将待审核的圈子全部set到返回的对象中
-//        CircleCategoryVo circleCategoryVo = new CircleCategoryVo();
-//        circleCategoryVo.setId(-1);//categoryid为-1时查询待审核的圈子
-//        circleCategoryVo.setCategoryname("待审核");
-//        List<CircleVo> list = circleService.queryAuditCircle();
-//        if (StringUtils.isEmpty(userid)) {
-//            for (int i = 0; i < list.size(); i++) {
-//                list.get(i).setIssupport(0);
-//            }
-//        } else {
-//            for (int i = 0; i < list.size(); i++) {
-//                int circleid = list.get(i).getId();
-//                Map<String, Object> parammap = new HashMap<>();
-//                parammap.put("userid", Integer.parseInt(userid));
-//                parammap.put("circleid", circleid);
-//                int issupport = circleService.queryIsSupport(parammap);
-//                list.get(i).setIssupport(issupport);
-//            }
-//        }
-//        circleCategoryVo.setCircleList(list);//----------------------------------实体add3
+        CircleCategoryVo circleCategoryVo = new CircleCategoryVo();
+        circleCategoryVo.setId(-1);//categoryid为-1时查询待审核的圈子
+        circleCategoryVo.setCategoryname("待审核");
+        List<CircleVo> list = circleService.queryAuditCircle();
+        if (StringUtils.isEmpty(userid)) {
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).setIssupport(0);
+            }
+        } else {
+            for (int i = 0; i < list.size(); i++) {
+                int circleid = list.get(i).getId();
+                Map<String, Object> parammap = new HashMap<>();
+                parammap.put("userid", Integer.parseInt(userid));
+                parammap.put("circleid", circleid);
+                int issupport = circleService.queryIsSupport(parammap);
+                list.get(i).setIssupport(issupport);
+            }
+        }
+        circleCategoryVo.setCircleList(list);//----------------------------------实体add3
 
         //美番2.0增加 “我关注” 条目
-//        CircleCategoryVo myFollowCircle = new CircleCategoryVo();
-//        myFollowCircle.setId(-2);//categoryid为-2时查询我关注的圈子
-//        myFollowCircle.setCategoryname("我关注");
-//        List<CircleVo> myfollowlist = new ArrayList<>();
-//        //查询我关注的圈子列表
-//        if (StringUtils.isNotEmpty(userid)){
-//            //登录状态下查询用户关注过的所有圈子列表
-//            Map<String, Object> parammap = new HashMap<>();
-//            parammap.put("userid", Integer.parseInt(userid));
-//            myfollowlist = circleService.queryMyFollowCircleList(parammap);
-//        }
-//        myfollowlist = getFollowsumNew(myfollowlist, userid);
-//        myFollowCircle.setCircleList(myfollowlist);//----------------------------------实体add1
+        CircleCategoryVo myFollowCircle = new CircleCategoryVo();
+        myFollowCircle.setId(-2);//categoryid为-2时查询我关注的圈子
+        myFollowCircle.setCategoryname("我关注");
+        List<CircleVo> myfollowlist = new ArrayList<>();
+        //查询我关注的圈子列表
+        if (StringUtils.isNotEmpty(userid)){
+            //登录状态下查询用户关注过的所有圈子列表
+            Map<String, Object> parammap = new HashMap<>();
+            parammap.put("userid", Integer.parseInt(userid));
+            myfollowlist = circleService.queryMyFollowCircleList(parammap);
+        }
+        myfollowlist = getFollowsumNew(myfollowlist, userid);
+        myFollowCircle.setCircleList(myfollowlist);//----------------------------------实体add1
 
         //给圈子分类中，类目调换顺序---把所有内容重新排序放入输出列表中
-//        List<CircleCategoryVo> newcategoryList = new ArrayList<>();
-//        newcategoryList.add(myFollowCircle);//-------add我关注
-//        for (int i=0; i<categoryList.size(); i++){//--------add普通分类
-//            newcategoryList.add(i,categoryList.get(i));
-//        }
-//        newcategoryList.add(circleCategoryVo);//-------add待审核
-        return categoryList;
+        List<CircleCategoryVo> newcategoryList = new ArrayList<>();
+        newcategoryList.add(myFollowCircle);//-------add我关注
+        for (int i=0; i<categoryList.size(); i++){//--------add普通分类
+            newcategoryList.add(i+1,categoryList.get(i));
+        }
+        newcategoryList.add(circleCategoryVo);//-------add待审核
+        return newcategoryList;
     }
 
     /**
