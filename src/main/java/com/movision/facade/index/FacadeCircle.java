@@ -5,7 +5,6 @@ import com.movision.common.constant.PointConstant;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.circle.entity.CircleVo;
-import com.movision.mybatis.circle.entity.MyCircle;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.circleCategory.entity.CircleCategoryVo;
 import com.movision.mybatis.circleCategory.service.CircleCategoryService;
@@ -15,13 +14,10 @@ import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.entity.User;
-import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
-import org.apache.commons.beanutils.converters.IntegerConverter;
-import org.apache.commons.collections.iterators.ObjectArrayIterator;
-import org.apache.commons.collections.map.HashedMap;
+import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -62,6 +58,9 @@ public class FacadeCircle {
     @Autowired
     private FollowUserService followUserService;
 
+    @Autowired
+    private UserRefreshRecordService userRefreshRecordService;
+
     public CircleVo queryCircleIndex1(String circleid, String userid) {
 
         CircleVo circleVo = circleService.queryCircleIndex1(Integer.parseInt(circleid));//查询圈子详情基础数据
@@ -98,13 +97,44 @@ public class FacadeCircle {
         //递归遍历，查询所有分类下的所有圈子列表放入Vo
         for (int i = 0; i < categoryList.size(); i++) {
             int categoryid = categoryList.get(i).getId();
+            //通过类型categoryid查询圈子列表
             List<CircleVo> circlelist = circleService.queryCircleByCategory(categoryid);
+
             circlelist = getFollowsumNew(circlelist, userid);
             //将圈子列表加入分类对象CircleCategoryVo中
             categoryList.get(i).setCircleList(circlelist);
         }
 
         //手动将待审核的圈子全部set到返回的对象中
+        CircleCategoryVo circleCategoryVo = wrapCheckPendingCategoryList(userid);
+
+        //美番2.0增加 “我关注” 条目
+        CircleCategoryVo myFollowCircle = wrapMyFollowCategoryList(userid);
+
+        //给圈子分类中，类目调换顺序---把所有内容重新排序放入输出列表中
+        List<CircleCategoryVo> newcategoryList = sortCategoryList(categoryList, circleCategoryVo, myFollowCircle);
+
+        return newcategoryList;
+    }
+
+    private CircleCategoryVo wrapMyFollowCategoryList(String userid) {
+        CircleCategoryVo myFollowCircle = new CircleCategoryVo();
+        myFollowCircle.setId(-2);//categoryid为-2时查询我关注的圈子
+        myFollowCircle.setCategoryname("我关注");
+        List<CircleVo> myfollowlist = new ArrayList<>();
+        //查询我关注的圈子列表
+        if (StringUtils.isNotEmpty(userid)) {
+            //登录状态下查询用户关注过的所有圈子列表
+            Map<String, Object> parammap = new HashMap<>();
+            parammap.put("userid", Integer.parseInt(userid));
+            myfollowlist = circleService.queryMyFollowCircleList(parammap);
+        }
+        myfollowlist = getFollowsumNew(myfollowlist, userid);
+        myFollowCircle.setCircleList(myfollowlist);//----------------------------------实体add1
+        return myFollowCircle;
+    }
+
+    private CircleCategoryVo wrapCheckPendingCategoryList(String userid) {
         CircleCategoryVo circleCategoryVo = new CircleCategoryVo();
         circleCategoryVo.setId(-1);//categoryid为-1时查询待审核的圈子
         circleCategoryVo.setCategoryname("待审核");
@@ -124,23 +154,10 @@ public class FacadeCircle {
             }
         }
         circleCategoryVo.setCircleList(list);//----------------------------------实体add3
+        return circleCategoryVo;
+    }
 
-        //美番2.0增加 “我关注” 条目
-        CircleCategoryVo myFollowCircle = new CircleCategoryVo();
-        myFollowCircle.setId(-2);//categoryid为-2时查询我关注的圈子
-        myFollowCircle.setCategoryname("我关注");
-        List<CircleVo> myfollowlist = new ArrayList<>();
-        //查询我关注的圈子列表
-        if (StringUtils.isNotEmpty(userid)){
-            //登录状态下查询用户关注过的所有圈子列表
-            Map<String, Object> parammap = new HashMap<>();
-            parammap.put("userid", Integer.parseInt(userid));
-            myfollowlist = circleService.queryMyFollowCircleList(parammap);
-        }
-        myfollowlist = getFollowsumNew(myfollowlist, userid);
-        myFollowCircle.setCircleList(myfollowlist);//----------------------------------实体add1
-
-        //给圈子分类中，类目调换顺序---把所有内容重新排序放入输出列表中
+    private List<CircleCategoryVo> sortCategoryList(List<CircleCategoryVo> categoryList, CircleCategoryVo circleCategoryVo, CircleCategoryVo myFollowCircle) {
         List<CircleCategoryVo> newcategoryList = new ArrayList<>();
         newcategoryList.add(myFollowCircle);//-------add我关注
         for (int i=0; i<categoryList.size(); i++){//--------add普通分类
@@ -151,12 +168,13 @@ public class FacadeCircle {
     }
 
     /**
-     * 对圈子列表循环获取 圈子关注数、圈子更新数、是否关注过
+     * 对圈子列表循环获取 下列数据
+     * 圈子关注数、圈子更新数、是否关注过
+     *
      * @return
      */
     public List<CircleVo> getFollowsumNew(List<CircleVo> circlelist, String userid){
-        List<DBObject> listmongodba;
-        List<PostVo> posts = new ArrayList<>();
+
 
         for (int i=0; i<circlelist.size(); i++){
             CircleVo vo = circlelist.get(i);
@@ -165,42 +183,67 @@ public class FacadeCircle {
             int follownum = circleService.queryCircleFollownum(circleid);
             vo.setFollownum(follownum);
 
-            //根据圈子id查询圈子该用户的未读更新帖子数
-            //根据圈子id查询帖子
-//            List<PostVo> postVos = postService.findAllPostCrile(circleid);
-//            if (StringUtil.isNotEmpty(userid)){
-//                //不为空查询当前用户未看过的总更新数
-//                listmongodba = facadePost.userRefulshListMongodbs(Integer.parseInt(userid));//查询mongodb中用户看过的帖子列表
-//
-//                if (listmongodba.size() != 0) {
-//                    for (int j = 0; j < listmongodba.size(); j++) {
-//                        PostVo post = new PostVo();
-//                        post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
-//                        posts.add(post);//把mongodb转为post实体
-//                    }
-//                    postVos.removeAll(posts);
-//                    vo.setPostnewnum(postVos.size());
-//                }else{
-//                    vo.setPostnewnum(postVos.size());
-//                }
-//            }else{
-//                //用户未登录时userid为空时查询这个圈子的总帖子数
-//                vo.setPostnewnum(postVos.size());
-//            }
+            //查询每一个圈子中，该用户未读的帖子数
+            getNotViewPostNumEachCircle(userid, vo, circleid);
 
             //再查询该用户是否关注过该圈子
-            if (StringUtil.isNotEmpty(userid)) {
-                Map<String, Object> paramap = new HashMap<>();
-                paramap.put("userid", Integer.parseInt(userid));
-                paramap.put("circleid", circleid);
-                int count = circleService.queryFollowSum(paramap);
-                vo.setIsfollow(count);
-            }else{
-                vo.setIsfollow(0);
-            }
+            getIsFollowCircleStatus(userid, vo, circleid);
             circlelist.set(i, vo);
         }
         return circlelist;
+    }
+
+    /**
+     * 查询每一个圈子中，该用户未读的帖子数
+     *
+     * @param userid
+     * @param vo
+     * @param circleid
+     */
+    private void getNotViewPostNumEachCircle(String userid, CircleVo vo, int circleid) {
+        List<PostVo> postVos = postService.findAllPostCrile(circleid);
+        if (StringUtil.isNotEmpty(userid)) {
+            //根据用户id和圈子id查出帖子浏览记录
+            List<DBObject> listmongodba = userRefreshRecordService.getPostViewRecordByUseridAndCircleid(Integer.parseInt(userid), circleid);
+
+            if (listmongodba.size() != 0) {
+
+                List<PostVo> posts = new ArrayList<>();
+                for (int j = 0; j < listmongodba.size(); j++) {
+                    //把mongodb转为PostVo
+                    PostVo post = new PostVo();
+                    post.setId(Integer.parseInt(listmongodba.get(j).get("_id").toString()));
+                    posts.add(post);
+                }
+                //剔除已经浏览过的帖子，得到未浏览的帖子，即该圈子中更新的帖子
+                postVos.removeAll(posts);
+                vo.setPostnewnum(postVos.size());
+            } else {
+                vo.setPostnewnum(postVos.size());
+            }
+        } else {
+            //用户未登录时, userid为空时, 查询这个圈子的总帖子数
+            vo.setPostnewnum(postVos.size());
+        }
+    }
+
+    /**
+     * 查询用户是否关注过该圈子
+     *
+     * @param userid
+     * @param vo
+     * @param circleid
+     */
+    private void getIsFollowCircleStatus(String userid, CircleVo vo, int circleid) {
+        if (StringUtil.isNotEmpty(userid)) {
+            Map<String, Object> paramap = new HashMap<>();
+            paramap.put("userid", Integer.parseInt(userid));
+            paramap.put("circleid", circleid);
+            int count = circleService.queryFollowSum(paramap);
+            vo.setIsfollow(count);
+        } else {
+            vo.setIsfollow(0);
+        }
     }
 
     public CircleVo queryCircleInfo(String circleid, String userid) {

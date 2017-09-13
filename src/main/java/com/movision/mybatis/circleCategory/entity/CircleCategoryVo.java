@@ -1,6 +1,5 @@
 package com.movision.mybatis.circleCategory.entity;
 
-import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.entity.CircleVo;
 
 import java.io.Serializable;

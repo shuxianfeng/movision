@@ -92,7 +92,7 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
      * @param endtime
      * @return
      */
-    public List<UserReflushCount> getPostViewRecord(String begintime, String endtime) {
+    public List<UserReflushCount> getPostViewRecordMonthly(String begintime, String endtime) {
 
         log.debug("从mongoDB中查询帖子浏览记录");
         TypedAggregation<UserRefreshRecord> agg = Aggregation.newAggregation(
@@ -107,6 +107,30 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
         log.debug("查询结果=" + result.getMappedResults());
         return result.getMappedResults();
     }
+
+    /**
+     * 根据用户id和圈子id查出帖子浏览记录
+     *
+     * @param userid
+     * @param circleid
+     * @return
+     */
+    public List getPostViewRecordByUseridAndCircleid(Integer userid, Integer circleid) {
+
+        log.debug("根据用户id和圈子id查出帖子浏览记录");
+        TypedAggregation<UserRefreshRecord> agg = Aggregation.newAggregation(
+                UserRefreshRecord.class,
+                project("postid", "userid", "crileid")
+                , match(Criteria.where("userid").is(userid).and("crileid").is(String.valueOf(circleid)))
+                , group("postid")
+        );
+        log.debug("执行语句=" + agg.toString());
+        AggregationResults<DBObject> result = mongoTemplate.aggregate(agg, DBObject.class);
+        log.debug("查询结果=" + result.getMappedResults());
+        log.debug("查询结果数量=" + result.getMappedResults().size());
+        return result.getMappedResults();
+    }
+
 
 
 }

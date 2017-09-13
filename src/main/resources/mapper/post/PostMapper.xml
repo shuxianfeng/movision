@@ -2174,9 +2174,13 @@
     </select>
     <select id="findAllPostCrile" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        select yw_post.*,yw_user.nickname,yw_user.photo,yw_circle.`name` AS circlename from yw_post LEFT JOIN yw_user ON
-        yw_user.id=yw_post.userid LEFT JOIN yw_circle ON yw_circle.id=yw_post.circleid
-        where yw_post.circleid=#{circleid,jdbcType=INTEGER} and yw_post.isdel=0 order by yw_post.heat_value desc
+        select yw_post.*,yw_user.nickname,yw_user.photo,yw_circle.`name` AS circlename
+        from yw_post
+        LEFT JOIN yw_user ON yw_user.id=yw_post.userid
+        LEFT JOIN yw_circle ON yw_circle.id=yw_post.circleid
+        where yw_post.circleid=#{circleid,jdbcType=INTEGER}
+        and yw_post.isdel=0
+        order by yw_post.heat_value desc
     </select>
     <select id="queryCityCode" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT code FROM yw_city WHERE name LIKE concat('%',#{area,jdbcType=VARCHAR},'%')

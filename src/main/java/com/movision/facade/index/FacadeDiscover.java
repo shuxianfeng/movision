@@ -1,6 +1,5 @@
 package com.movision.facade.index;
 
-import com.mongodb.DBObject;
 import com.movision.common.constant.DiscoverConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.util.ShiroUtil;
@@ -380,7 +379,7 @@ public class FacadeDiscover {
         String lastDay = DateUtils.getCurrentMonthLastDay();
 //        String lastDay = "2017-07-31";
         //统计在一个月内,每个帖子的浏览次数
-        List<UserReflushCount> viewListInMongoDB = userRefreshRecordService.getPostViewRecord(firstDay, lastDay);
+        List<UserReflushCount> viewListInMongoDB = userRefreshRecordService.getPostViewRecordMonthly(firstDay, lastDay);
 
         return viewListInMongoDB;
     }
