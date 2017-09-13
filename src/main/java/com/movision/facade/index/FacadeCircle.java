@@ -144,7 +144,7 @@ public class FacadeCircle {
         List<CircleCategoryVo> newcategoryList = new ArrayList<>();
 //        newcategoryList.add(myFollowCircle);//-------add我关注
         for (int i=0; i<categoryList.size(); i++){//--------add普通分类
-            newcategoryList.add(i+1,categoryList.get(i));
+            newcategoryList.add(i,categoryList.get(i));
         }
         newcategoryList.add(circleCategoryVo);//-------add待审核
         return newcategoryList;
