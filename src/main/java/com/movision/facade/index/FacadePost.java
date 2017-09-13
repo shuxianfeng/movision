@@ -1498,12 +1498,12 @@ public class FacadePost {
             //根据作者查询所有帖子
             if (followUsers.size() != 0) {
                 userPost = postService.queryUserListByIds(followUsers);
+                crileidPost.addAll(userPost);
             }
             if (followLabel.size() != 0) {
                 labelPost = postService.queryLabelListByIds(followLabel);
+                crileidPost.addAll(labelPost);
             }
-            crileidPost.addAll(userPost);
-            crileidPost.addAll(labelPost);
             Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(crileidPost);
             crileidPost = new ArrayList<PostVo>(linkedHashSet);
             ComparatorChain chain = new ComparatorChain();
