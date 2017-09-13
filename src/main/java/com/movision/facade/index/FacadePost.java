@@ -333,7 +333,7 @@ public class FacadePost {
         ActiveVo active = postService.queryNoticeActive(parammap);
         /**List<PostLabel> postLabels = postService.queryPostLabel(Integer.parseInt(postid));
          active.setPostLabels(postLabels);*/
-
+        int iscontribute = active.getIscontribute();
         //计算距离结束时间
         Date begin = active.getBegintime();
         Date end = active.getEndtime();
@@ -342,10 +342,13 @@ public class FacadePost {
         active.setEnddays(enddays);
         //List<PostVo> postVos=postService
         //查询活动参与总人数
-        int partsum = postService.queryActivePartSum(Integer.parseInt(postid));
-        //int postpartsum = postService.activeSum(Integer.parseInt(postid));//投稿类参与人数
-        active.setPartsum(partsum);
-        //active.setPostpartsum(postpartsum);
+        if (iscontribute == 0) {
+            int partsum = postService.queryActivePartSum(Integer.parseInt(postid));
+            active.setPartsum(partsum);
+        } else if (iscontribute == 1) {
+            int postpartsum = postService.activeSum(Integer.parseInt(postid));//投稿类参与人数
+            active.setPartsum(postpartsum);
+        }
         //如果为商城促销类活动，需要在此基础上增加促销类商品列表
         if (activetype.equals("1")) {
 
