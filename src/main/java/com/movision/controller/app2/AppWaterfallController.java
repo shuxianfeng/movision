@@ -460,6 +460,9 @@ public class AppWaterfallController {
         } else if (result == 1) {
             response.setCode(300);
             response.setMessage("已关注该作者，请刷新重试");
+        } else if (result == 2) {
+            response.setCode(400);
+            response.setMessage("自己不能关注自己");
         }
         return response;
     }

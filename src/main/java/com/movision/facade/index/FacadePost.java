@@ -2393,9 +2393,11 @@ public class FacadePost {
                 //被关注人增加热度
                 facadeHeatValue.addUserHeatValue(1, interestedusers);
                 return 0;
+            } else {
+                return 1;
             }
         }
-        return 1;
+        return 2;
     }
 
 
