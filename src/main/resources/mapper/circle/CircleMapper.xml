@@ -60,7 +60,7 @@
     </select>
 
     <!--按照分类id查询圈子列表-->
-    <select id="getAllCircleByCategory" parameterType="java.lang.Integer"
+    <select id="findAllCircleByCategory" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.circle.entity.CircleVo">
         SELECT id,name,photo FROM yw_circle
         WHERE category = #{categoryid,jdbcType=INTEGER}
@@ -68,7 +68,7 @@
     </select>
 
     <!--查询所有待审核的圈子-->
-    <select id="getAllAuditCircle" resultType="com.movision.mybatis.circle.entity.CircleVo">
+    <select id="findAllAuditCircle" resultType="com.movision.mybatis.circle.entity.CircleVo">
         SELECT id,name,photo,supportnum FROM yw_circle
         WHERE status = '0'
     </select>
@@ -944,7 +944,7 @@
     </select>
 
     <!--查询用户关注的圈子列表，无分页-->
-    <select id="getAllMyFollowCircleList" resultType="com.movision.mybatis.circle.entity.CircleVo">
+    <select id="findAllNewMyFollowCircleList" resultType="com.movision.mybatis.circle.entity.CircleVo">
         SELECT c.id, c.name, c.maylikeimg
         FROM yw_circle c
         WHERE c.isdel = 0

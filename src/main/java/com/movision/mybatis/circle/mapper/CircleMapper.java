@@ -27,13 +27,13 @@ public interface CircleMapper {
 
     CircleVo queryCircleIndex1(int circleid);
 
-    List<CircleVo> getAllCircleByCategory(RowBounds rowBounds, int categoryid);
+    List<CircleVo> findAllCircleByCategory(RowBounds rowBounds, int categoryid);
 
-    List<CircleVo> getAllAuditCircle(RowBounds rowBounds);
+    List<CircleVo> findAllAuditCircle(RowBounds rowBounds);
 
     int queryIsSupport(Map<String, Object> parammap);
 
-    List<CircleVo> getAllMyFollowCircleList(RowBounds rowBounds, Map<String, Object> parammap);
+    List<CircleVo> findAllNewMyFollowCircleList(RowBounds rowBounds, Map<String, Object> parammap);
 
     List<CircleVo> findAllMineFollowCircle(Map<String, Object> paramap, RowBounds rowBounds);
 

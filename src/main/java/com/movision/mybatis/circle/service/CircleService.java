@@ -56,7 +56,7 @@ public class CircleService {
     public List<CircleVo> queryCircleByCategory(Paging<PostVo> pager, int categoryid) {
         try {
             log.info("通过类型查询圈子列表categoryid=" + categoryid);
-            return circleMapper.getAllCircleByCategory(pager.getRowBounds(), categoryid);
+            return circleMapper.findAllCircleByCategory(pager.getRowBounds(), categoryid);
         } catch (Exception e) {
             log.error("通过类型查询圈子列表失败categoryid=" + categoryid, e);
             throw e;
@@ -66,7 +66,7 @@ public class CircleService {
     public List<CircleVo> queryAuditCircle(Paging<PostVo> pager) {
         try {
             log.info("查询待审核圈子列表");
-            return circleMapper.getAllAuditCircle(pager.getRowBounds());
+            return circleMapper.findAllAuditCircle(pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询待审核圈子列表失败", e);
             throw e;
@@ -91,7 +91,7 @@ public class CircleService {
     public List<CircleVo> queryMyFollowCircleList(Paging<PostVo> pager, Map<String, Object> parammap){
         try {
             log.info("查询当前用户关注的所有圈子列表");
-            return circleMapper.getAllMyFollowCircleList(pager.getRowBounds(), parammap);
+            return circleMapper.findAllNewMyFollowCircleList(pager.getRowBounds(), parammap);
         }catch (Exception e){
             log.error("查询当前用户关注的所有圈子列表失败", e);
             throw e;
