@@ -2222,6 +2222,7 @@ public class FacadePost {
                     }
                 }
                 postVos.removeAll(dontlikes);
+                log.info("***********************************************" + postVos.size());
                 //根据postid查询帖子
                 postVo = postService.findAllPostByid(postVos, paging);
                 if (postVo != null) {
