@@ -12,6 +12,7 @@ import java.util.Map;
  * @Date 2017/3/27 16:29
  */
 public interface IPostSearchService {
+
     Map<String, Object> search(NormalSearchSpec spec) throws ServiceException;
 
     List<PostSearchEntity> searchForPost(NormalSearchSpec spec) throws ServiceException;
