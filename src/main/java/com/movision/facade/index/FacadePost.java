@@ -2375,26 +2375,27 @@ public class FacadePost {
      */
     public int concernedAuthorUser(int userid, int interestedusers) {
         Map map = new HashMap();
-        map.put("userid", userid);
-        map.put("interestedusers", interestedusers);
-        //查询该用户有没有关注过
-        int result = followUserService.yesOrNo(map);
-        if (result == 0) {
-            FollowUser followUser = new FollowUser();
-            followUser.setIntime(new Date());
-            followUser.setInterestedusers(interestedusers);
-            followUser.setUserid(userid);
-            int count = followUserService.insertSelective(followUser);
-            //该用户的粉丝数加1
-            int fans = followUserService.insertUserFans(interestedusers);//被关注人
-            //增加用户总关注数attention
-            userService.updateUserAttention(userid);//关注人
-            //被关注人增加热度
-            facadeHeatValue.addUserHeatValue(1, interestedusers);
-            return 0;
-        } else {
-            return 1;
+        if (userid != interestedusers) {
+            map.put("userid", userid);
+            map.put("interestedusers", interestedusers);
+            //查询该用户有没有关注过
+            int result = followUserService.yesOrNo(map);
+            if (result == 0) {
+                FollowUser followUser = new FollowUser();
+                followUser.setIntime(new Date());
+                followUser.setInterestedusers(interestedusers);
+                followUser.setUserid(userid);
+                int count = followUserService.insertSelective(followUser);
+                //该用户的粉丝数加1
+                int fans = followUserService.insertUserFans(interestedusers);//被关注人
+                //增加用户总关注数attention
+                userService.updateUserAttention(userid);//关注人
+                //被关注人增加热度
+                facadeHeatValue.addUserHeatValue(1, interestedusers);
+                return 0;
+            }
         }
+        return 1;
     }
 
 
