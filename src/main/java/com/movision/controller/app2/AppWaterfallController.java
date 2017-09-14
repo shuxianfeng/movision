@@ -279,7 +279,7 @@ public class AppWaterfallController {
                                   @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List result = labelFacade.postLabelList(labelid, pager, type);
+        List result = labelFacade.postLabelList(type, pager, labelid);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
