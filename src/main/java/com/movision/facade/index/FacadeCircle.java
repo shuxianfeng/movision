@@ -225,7 +225,7 @@ public class FacadeCircle {
     /**
      * 根据圈子的分类id查询当前分类下的所有圈子列表
      */
-    public List<CircleVo> queryNewCircleList(Paging<PostVo> pager, String id, String userid){
+    public List<CircleVo> queryNewCircleList(Paging<CircleVo> pager, String id, String userid){
         List<CircleVo> circleVoList;
 
         if (Integer.parseInt(id) == -2){//我关注

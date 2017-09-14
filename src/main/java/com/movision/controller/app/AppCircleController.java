@@ -106,13 +106,14 @@ public class AppCircleController {
                                            @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                            @ApiParam(value = "多少条数据") @RequestParam(required = false, defaultValue = "10") String pageSize){
         Response response = new Response();
-        Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        Paging<CircleVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List<CircleVo> circleList = facadeCircle.queryNewCircleList(pager, id, userid);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        response.setData(circleList);
+        pager.result(circleList);
+        response.setData(pager);
         return response;
     }
 

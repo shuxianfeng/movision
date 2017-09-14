@@ -53,7 +53,7 @@ public class CircleService {
         }
     }
 
-    public List<CircleVo> queryCircleByCategory(Paging<PostVo> pager, int categoryid) {
+    public List<CircleVo> queryCircleByCategory(Paging<CircleVo> pager, int categoryid) {
         try {
             log.info("通过类型查询圈子列表categoryid=" + categoryid);
             return circleMapper.findAllCircleByCategory(pager.getRowBounds(), categoryid);
@@ -63,7 +63,7 @@ public class CircleService {
         }
     }
 
-    public List<CircleVo> queryAuditCircle(Paging<PostVo> pager) {
+    public List<CircleVo> queryAuditCircle(Paging<CircleVo> pager) {
         try {
             log.info("查询待审核圈子列表");
             return circleMapper.findAllAuditCircle(pager.getRowBounds());
@@ -88,7 +88,7 @@ public class CircleService {
      * @param parammap
      * @return
      */
-    public List<CircleVo> queryMyFollowCircleList(Paging<PostVo> pager, Map<String, Object> parammap){
+    public List<CircleVo> queryMyFollowCircleList(Paging<CircleVo> pager, Map<String, Object> parammap){
         try {
             log.info("查询当前用户关注的所有圈子列表");
             return circleMapper.findAllNewMyFollowCircleList(pager.getRowBounds(), parammap);
