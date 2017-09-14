@@ -2210,7 +2210,8 @@
         SELECT yw_post.*,yw_circle.`name` AS circlename FROM yw_post LEFT JOIN yw_post_label_relation ON
         yw_post_label_relation.postid=yw_post.id
         LEFT JOIN yw_circle ON yw_circle.id=yw_post.circleid
-WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} ORDER BY yw_post.heat_value DESC
+        WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} AND yw_post.isdel=0 ORDER BY yw_post.heat_value
+        DESC
     </select>
     <select id="findAllPostByid" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT * FROM yw_post WHERE id IN
