@@ -214,8 +214,8 @@ public class FacadeCircle {
             newcategoryList.add(i+1,categoryList.get(i));
         }
         CircleCategoryVo circleCategoryVo = new CircleCategoryVo();
-        myFollowCircle.setId(-1);
-        myFollowCircle.setCategoryname("待审核");
+        circleCategoryVo.setId(-1);
+        circleCategoryVo.setCategoryname("待审核");
         newcategoryList.add(circleCategoryVo);//-------add待审核
 
         return newcategoryList;
