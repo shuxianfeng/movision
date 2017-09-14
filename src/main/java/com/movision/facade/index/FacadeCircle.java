@@ -256,6 +256,8 @@ public class FacadeCircle {
 
         }else{//正常分类
             circleVoList = circleService.queryCircleByCategory(pager, Integer.parseInt(id));
+            //遍历轮训获取圈子关注数，更新数和当前用户是否关注该圈子
+            circleVoList = getFollowsumNew(circleVoList, userid);
         }
         return circleVoList;
     }
