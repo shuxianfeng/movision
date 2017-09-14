@@ -183,6 +183,7 @@ public class FacadePost {
     @Autowired
     private TestIntimeService testIntimeService;
 
+
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         //查询帖子是否被删除
         int isdel = postService.isPostIsdel(Integer.parseInt(postid));
@@ -880,22 +881,27 @@ public class FacadePost {
                                   String postcontent, String isactive, String coverimg, String proids, String labellist,
                                   String activeid) {
         Map map = new HashMap();
+        validateNotNullUseridAndCircleid(userid, circleid);
+
+        int cid = Integer.parseInt(circleid);
+        int uid = Integer.parseInt(userid);
+
         /**
          *  这里需要根据userid判断当前登录的用户是否有发帖权限
          */
         //查询当前圈子的开放范围
-        int scope = circleService.queryCircleScope(Integer.parseInt(circleid));
+        int scope = circleService.queryCircleScope(cid);
         //查询当前圈子的所有者
-        User owner = circleService.queryCircleOwner(Integer.parseInt(circleid));
+        User owner = circleService.queryCircleOwner(cid);
         //查询当前圈子的所有管理员列表
-        List<User> manageList = circleService.queryCircleManage(Integer.parseInt(circleid));
+        List<User> manageList = circleService.queryCircleManage(cid);
         //判断该用户是否是圈子管理员
         int mark = getMarkIsCircleAdmin(userid, manageList);
         int lev = ShiroUtil.getUserLevel();     //用户等级
 
         //拥有权限的：1.该圈所有人均可发帖 2.该用户是该圈所有者 3.该用户是圈子管理员  4.所有者和大V可发时，发帖用户即为大V
         if (scope == 2
-                || Integer.parseInt(userid) == owner.getId()
+                || uid == owner.getId()
                 || mark == 1
                 || (scope == 1 && lev >= 1)) {
 
@@ -903,23 +909,24 @@ public class FacadePost {
                 log.info("APP前端用户开始请求发帖");
                 Map contentMap = null;
                 //封装帖子实体
-                Post post = preparePostJavaBean(request, userid, circleid, title, postcontent, isactive, coverimg, contentMap, activeid);
-                /*Post post = new Post();
-                post.setTitle("测试标签发帖" + DateUtils.getCurrentDate());*/
-                //插入帖子
+                Post post = preparePostJavaBean(request, uid, cid, title, postcontent, isactive, coverimg, contentMap, activeid);
+                //1 插入帖子
                 postService.releaseModularPost(post);
                 //返回的主键--帖子id
                 int flag = post.getId();
-                //再保存帖子中分享的商品列表(如果商品id字段不为空)
+                //2 再保存帖子中分享的商品列表(如果商品id字段不为空)
                 insertPostShareGoods(proids, flag);
-                //标签业务逻辑处理
+                //3 标签业务逻辑处理
                 if (StringUtils.isNotBlank(labellist)) {
                     addLabelProcess(labellist, flag);
                 }
-                //积分处理
-                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                //增加用户热度
-                facadeHeatValue.addUserHeatValue(2, Integer.parseInt(userid));
+                //4 积分处理
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), uid);//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                //5 增加用户热度
+                facadeHeatValue.addUserHeatValue(2, uid);
+                //6 如果是参与活动发帖，则需要记录流水
+                activePartService.addRecord(activeid, uid);
+
                 map.put("flag", flag);
                 return map;
 
@@ -933,6 +940,21 @@ public class FacadePost {
             log.info("该用户不具备发帖权限");
             map.put("flag", -1);
             return map;
+        }
+    }
+
+    /**
+     * 非空校验 userid circleid
+     *
+     * @param userid
+     * @param circleid
+     */
+    private void validateNotNullUseridAndCircleid(String userid, String circleid) {
+        if (StringUtils.isBlank(circleid)) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "发帖的圈子id不能为空");
+        }
+        if (StringUtils.isBlank(userid)) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "发帖的用户id不能为空");
         }
     }
 
@@ -1099,10 +1121,10 @@ public class FacadePost {
      * @param contentMap
      * @return
      */
-    private Post preparePostJavaBean(HttpServletRequest request, String userid, String circleid, String title,
+    private Post preparePostJavaBean(HttpServletRequest request, Integer userid, Integer circleid, String title,
                                      String postcontent, String isactive, String coverimg, Map contentMap, String activeid) {
         Post post = new Post();
-        post.setCircleid(Integer.parseInt(circleid));
+        post.setCircleid(circleid);
         post.setTitle(title);
         if (StringUtil.isNotEmpty(postcontent)) {
             //内容转换
@@ -1133,7 +1155,7 @@ public class FacadePost {
             post.setIsdel(2);
         }
         post.setCoverimg(coverimg);//帖子封面
-        post.setUserid(Integer.parseInt(userid));
+        post.setUserid(userid);
         post.setCity(ShiroUtil.getIpCity());
         if (StringUtils.isNotBlank(activeid)) {
             post.setActiveid(Integer.parseInt(activeid));

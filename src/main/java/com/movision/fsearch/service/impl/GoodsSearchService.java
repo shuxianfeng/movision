@@ -52,17 +52,7 @@ public class GoodsSearchService implements IGoodsSearchService {
 
         // 向query中添加新的键值对：key=_s
         spec.setQ(StringUtil.emptyToNull(spec.getQ()));
-        if (spec.getQ() != null) {
-            String q = spec.getQ();
-            result.put("q", q);
-            List<String> words = wordService.segWords(q);
-            if (!words.isEmpty()) {
-                //以空格为分隔符，形成新的list<String>
-                String formatQ = StringUtil.join(words, " ");
-                query.put("_s", CollectionUtil.arrayAsMap("type", "phrase",
-                        "value", formatQ));
-            }
-        }
+        wrapQuery(spec, query, result);
         //设置排序字段和排序顺序（正序/倒序）
         List<Map<String, Object>> sortFields = this.setSortFields(spec, result);
         /**
@@ -130,6 +120,20 @@ public class GoodsSearchService implements IGoodsSearchService {
         }
         result.put("ps", ps);
         return result;
+    }
+
+    private void wrapQuery(GoodsSearchSpec spec, Map<String, Map<String, Object>> query, Map<String, Object> result) {
+        if (spec.getQ() != null) {
+            String q = spec.getQ();
+            result.put("q", q);
+            List<String> words = wordService.segWords(q);
+            if (!words.isEmpty()) {
+                //以空格为分隔符，形成新的list<String>
+                String formatQ = StringUtil.join(words, " ");
+                query.put("_s", CollectionUtil.arrayAsMap("type", "phrase",
+                        "value", formatQ));
+            }
+        }
     }
 
     /**

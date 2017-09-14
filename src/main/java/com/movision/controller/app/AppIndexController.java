@@ -9,7 +9,6 @@ import com.movision.fsearch.service.exception.ServiceException;
 import com.movision.fsearch.service.impl.PostSearchService;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.circle.entity.Circle;
-import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;

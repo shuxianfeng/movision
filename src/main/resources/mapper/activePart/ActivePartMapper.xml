@@ -64,9 +64,7 @@
       <if test="introduction != null" >
         introduction,
       </if>
-      <if test="intime != null" >
         intime,
-      </if>
       <if test="paymoney != null" >
         paymoney,
       </if>
@@ -105,9 +103,7 @@
       <if test="introduction != null" >
         #{introduction,jdbcType=VARCHAR},
       </if>
-      <if test="intime != null" >
-        #{intime,jdbcType=TIMESTAMP},
-      </if>
+      now(),
       <if test="paymoney != null" >
         #{paymoney,jdbcType=DOUBLE},
       </if>
