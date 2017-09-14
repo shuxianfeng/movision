@@ -766,7 +766,7 @@ public class UserFacade {
         int postsum = postService.queryPostNumByUserid(Integer.parseInt(userid));
         //b.用户总评论数(10/50/100)
 //        int commentsum = postService.queryCommentByUserid(Integer.parseInt(userid));
-        //b.用户总收藏数(10/50/100)//---------------运营智障强烈要求修改为被收藏数2017.09.08
+        //b.用户总被收藏数(10/50/100)//---------------运营智障强烈要求修改为被收藏数2017.09.08
         int collectsum = postService.queryCollectByUserid(Integer.parseInt(userid));
         //c.点赞数(50/100/200)
         int zansum = postService.queryZanSumByUserid(Integer.parseInt(userid));
@@ -867,6 +867,102 @@ public class UserFacade {
         DailyTask dailyTask = pointRecordFacade.getDailyTask();
         map.put("dailyTask", dailyTask);//------------------------------------------------------>3.获取每日任务完成情况
 
+        return map;
+    }
+
+    public Map<String, Object> getBadgeUnlock(String userid, String type){
+        Map<String, Object> map = new HashMap<>();
+        if (type.equals("0")){
+            //旅行者
+            int footprint = userService.getfootmap(Integer.parseInt(userid));//查询当前足迹数
+            if (footprint<=20){
+                map.put("current", footprint);
+            }else{
+                map.put("current", 20);
+            }
+            if (footprint <= 1) {
+                map.put("target", 1);
+            }else if (footprint <= 10){
+                map.put("target", 10);
+            }else {
+                map.put("target", 20);
+            }
+        }else if (type.equals("1")){
+            //引荐人
+            int invitesum = userService.queryInviteNum(Integer.parseInt(userid));//查询邀请总人数
+            if (invitesum<=50){
+                map.put("current", invitesum);
+            }else{
+                map.put("current", 50);
+            }
+            if (invitesum <= 1) {
+                map.put("target", 1);
+            }else if (invitesum <= 10){
+                map.put("target", 10);
+            }else {
+                map.put("target", 50);
+            }
+        }else if (type.equals("2")){
+            //创作者
+            int postsum = postService.queryPostNumByUserid(Integer.parseInt(userid));//查询当前用户发帖总数
+            if (postsum<=50){
+                map.put("current", postsum);
+            }else{
+                map.put("current", 50);
+            }
+            if (postsum <= 1) {
+                map.put("target", 1);
+            }else if (postsum <= 10){
+                map.put("target", 10);
+            }else {
+                map.put("target", 50);
+            }
+        }else if (type.equals("3")){
+            //人气之王
+            int zansum = postService.queryZanSumByUserid(Integer.parseInt(userid));//查询用户所有帖子被点赞总数
+            if (zansum<=200){
+                map.put("current", zansum);
+            }else{
+                map.put("current", 200);
+            }
+            if (zansum <= 50) {
+                map.put("target", 50);
+            }else if (zansum <= 100){
+                map.put("target", 100);
+            }else {
+                map.put("target", 200);
+            }
+        }else if (type.equals("4")){
+            //收藏家
+            int collectsum = postService.queryCollectByUserid(Integer.parseInt(userid));//查询用户所有帖子被收藏总数
+            if (collectsum<=100){
+                map.put("current", collectsum);
+            }else{
+                map.put("current", 100);
+            }
+            if (collectsum <= 10) {
+                map.put("target", 10);
+            }else if (collectsum <= 50){
+                map.put("target", 50);
+            }else {
+                map.put("target", 100);
+            }
+        }else if (type.equals("5")){
+            //精选
+            int essencesum = postService.queryEssencesumByUserid(Integer.parseInt(userid));//查询用户当前所有帖子被精选总数
+            if (essencesum<=10){
+                map.put("current", essencesum);
+            }else{
+                map.put("current", 10);
+            }
+            if (essencesum <= 1) {
+                map.put("target", 1);
+            }else if (essencesum <= 5){
+                map.put("target", 5);
+            }else {
+                map.put("target", 10);
+            }
+        }
         return map;
     }
 

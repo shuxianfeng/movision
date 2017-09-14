@@ -148,6 +148,20 @@ public class AppMineController {
         return response;
     }
 
+    @ApiOperation(value = "徽章解锁条件接口（当前完成数/目标完成数）", notes = "徽章解锁条件", response = Response.class)
+    @RequestMapping(value = "getBadgeUnlock", method = RequestMethod.POST)
+    public Response getBadgeUnlock(@ApiParam(value = "用户id(必填)") @RequestParam String userid,
+                                   @ApiParam(value = "徽章类型：0 旅行者 1 引荐人 2 创作者 3 人气之王 4 收藏家 5 精选") @RequestParam String type){
+        Response response = new Response();
+
+        Map<String, Object> map = userFacade.getBadgeUnlock(userid, type);
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+            response.setData(map);
+        }
+        return response;
+    }
+
     @ApiOperation(value = "我的模块--点击小脚印--进入用户足迹地图页面接口", notes = "返回当前用户足迹地图中所有的地理标签位置", response = Response.class)
     @RequestMapping(value = "getfootmap", method = RequestMethod.POST)
     public Response getfootmap(@ApiParam(value = "用户id(必填，否则无法进入‘我的’页面)") @RequestParam String userid) throws UnsupportedEncodingException, NoSuchAlgorithmException {
