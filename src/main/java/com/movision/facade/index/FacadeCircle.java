@@ -18,6 +18,7 @@ import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
+import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,82 +95,82 @@ public class FacadeCircle {
 
     }
 
-    public List<CircleCategoryVo> queryCircleCategoryList(String userid) {
+//    public List<CircleCategoryVo> queryCircleCategoryList(String userid) {
+//
+//        List<CircleCategoryVo> categoryList = circleCategoryService.queryCircleByCategory();//查询所有圈子的分类------------实体add2
+//
+//        //递归遍历，查询所有分类下的所有圈子列表放入Vo
+//        for (int i = 0; i < categoryList.size(); i++) {
+//            int categoryid = categoryList.get(i).getId();
+//            //通过类型categoryid查询圈子列表
+//            List<CircleVo> circlelist = circleService.queryCircleByCategory(categoryid);
+//
+//            circlelist = getFollowsumNew(circlelist, userid);
+//            //将圈子列表加入分类对象CircleCategoryVo中
+//            categoryList.get(i).setCircleList(circlelist);
+//        }
+//
+//        //手动将待审核的圈子全部set到返回的对象中
+//        CircleCategoryVo circleCategoryVo = wrapCheckPendingCategoryList(userid);
+//
+//        //美番2.0增加 “我关注” 条目
+//        CircleCategoryVo myFollowCircle = wrapMyFollowCategoryList(userid);
+//
+//        //给圈子分类中，类目调换顺序---把所有内容重新排序放入输出列表中
+//        List<CircleCategoryVo> newcategoryList = sortCategoryList(categoryList, circleCategoryVo, myFollowCircle);
+//
+//        return newcategoryList;
+//    }
 
-        List<CircleCategoryVo> categoryList = circleCategoryService.queryCircleByCategory();//查询所有圈子的分类------------实体add2
+//    private CircleCategoryVo wrapMyFollowCategoryList(String userid) {
+//        CircleCategoryVo myFollowCircle = new CircleCategoryVo();
+//        myFollowCircle.setId(-2);//categoryid为-2时查询我关注的圈子
+//        myFollowCircle.setCategoryname("我关注");
+//        List<CircleVo> myfollowlist = new ArrayList<>();
+//        //查询我关注的圈子列表
+//        if (StringUtils.isNotEmpty(userid)) {
+//            //登录状态下查询用户关注过的所有圈子列表
+//            Map<String, Object> parammap = new HashMap<>();
+//            parammap.put("userid", Integer.parseInt(userid));
+//            myfollowlist = circleService.queryMyFollowCircleList(parammap);
+//        }
+//        myfollowlist = getFollowsumNew(myfollowlist, userid);
+//        myFollowCircle.setCircleList(myfollowlist);//----------------------------------实体add1
+//        return myFollowCircle;
+//    }
 
-        //递归遍历，查询所有分类下的所有圈子列表放入Vo
-        for (int i = 0; i < categoryList.size(); i++) {
-            int categoryid = categoryList.get(i).getId();
-            //通过类型categoryid查询圈子列表
-            List<CircleVo> circlelist = circleService.queryCircleByCategory(categoryid);
+//    private CircleCategoryVo wrapCheckPendingCategoryList(String userid) {
+//        CircleCategoryVo circleCategoryVo = new CircleCategoryVo();
+//        circleCategoryVo.setId(-1);//categoryid为-1时查询待审核的圈子
+//        circleCategoryVo.setCategoryname("待审核");
+//        List<CircleVo> list = circleService.queryAuditCircle();
+//        if (StringUtils.isEmpty(userid)) {
+//            for (int i = 0; i < list.size(); i++) {
+//                list.get(i).setIssupport(0);
+//            }
+//        } else {
+//            for (int i = 0; i < list.size(); i++) {
+//                int circleid = list.get(i).getId();
+//                Map<String, Object> parammap = new HashMap<>();
+//                parammap.put("userid", Integer.parseInt(userid));
+//                parammap.put("circleid", circleid);
+//                int issupport = circleService.queryIsSupport(parammap);
+//                list.get(i).setIssupport(issupport);
+//            }
+//        }
+//        circleCategoryVo.setCircleList(list);//----------------------------------实体add3
+//        return circleCategoryVo;
+//    }
 
-            circlelist = getFollowsumNew(circlelist, userid);
-            //将圈子列表加入分类对象CircleCategoryVo中
-            categoryList.get(i).setCircleList(circlelist);
-        }
-
-        //手动将待审核的圈子全部set到返回的对象中
-        CircleCategoryVo circleCategoryVo = wrapCheckPendingCategoryList(userid);
-
-        //美番2.0增加 “我关注” 条目
-        CircleCategoryVo myFollowCircle = wrapMyFollowCategoryList(userid);
-
-        //给圈子分类中，类目调换顺序---把所有内容重新排序放入输出列表中
-        List<CircleCategoryVo> newcategoryList = sortCategoryList(categoryList, circleCategoryVo, myFollowCircle);
-
-        return newcategoryList;
-    }
-
-    private CircleCategoryVo wrapMyFollowCategoryList(String userid) {
-        CircleCategoryVo myFollowCircle = new CircleCategoryVo();
-        myFollowCircle.setId(-2);//categoryid为-2时查询我关注的圈子
-        myFollowCircle.setCategoryname("我关注");
-        List<CircleVo> myfollowlist = new ArrayList<>();
-        //查询我关注的圈子列表
-        if (StringUtils.isNotEmpty(userid)) {
-            //登录状态下查询用户关注过的所有圈子列表
-            Map<String, Object> parammap = new HashMap<>();
-            parammap.put("userid", Integer.parseInt(userid));
-            myfollowlist = circleService.queryMyFollowCircleList(parammap);
-        }
-        myfollowlist = getFollowsumNew(myfollowlist, userid);
-        myFollowCircle.setCircleList(myfollowlist);//----------------------------------实体add1
-        return myFollowCircle;
-    }
-
-    private CircleCategoryVo wrapCheckPendingCategoryList(String userid) {
-        CircleCategoryVo circleCategoryVo = new CircleCategoryVo();
-        circleCategoryVo.setId(-1);//categoryid为-1时查询待审核的圈子
-        circleCategoryVo.setCategoryname("待审核");
-        List<CircleVo> list = circleService.queryAuditCircle();
-        if (StringUtils.isEmpty(userid)) {
-            for (int i = 0; i < list.size(); i++) {
-                list.get(i).setIssupport(0);
-            }
-        } else {
-            for (int i = 0; i < list.size(); i++) {
-                int circleid = list.get(i).getId();
-                Map<String, Object> parammap = new HashMap<>();
-                parammap.put("userid", Integer.parseInt(userid));
-                parammap.put("circleid", circleid);
-                int issupport = circleService.queryIsSupport(parammap);
-                list.get(i).setIssupport(issupport);
-            }
-        }
-        circleCategoryVo.setCircleList(list);//----------------------------------实体add3
-        return circleCategoryVo;
-    }
-
-    private List<CircleCategoryVo> sortCategoryList(List<CircleCategoryVo> categoryList, CircleCategoryVo circleCategoryVo, CircleCategoryVo myFollowCircle) {
-        List<CircleCategoryVo> newcategoryList = new ArrayList<>();
-        newcategoryList.add(myFollowCircle);//-------add我关注
-        for (int i=0; i<categoryList.size(); i++){//--------add普通分类
-            newcategoryList.add(i+1,categoryList.get(i));
-        }
-        newcategoryList.add(circleCategoryVo);//-------add待审核
-        return newcategoryList;
-    }
+//    private List<CircleCategoryVo> sortCategoryList(List<CircleCategoryVo> categoryList, CircleCategoryVo circleCategoryVo, CircleCategoryVo myFollowCircle) {
+//        List<CircleCategoryVo> newcategoryList = new ArrayList<>();
+//        newcategoryList.add(myFollowCircle);//-------add我关注
+//        for (int i=0; i<categoryList.size(); i++){//--------add普通分类
+//            newcategoryList.add(i+1,categoryList.get(i));
+//        }
+//        newcategoryList.add(circleCategoryVo);//-------add待审核
+//        return newcategoryList;
+//    }
 
     /**
      * 对圈子列表循环获取 下列数据
@@ -198,7 +199,7 @@ public class FacadeCircle {
     }
 
     /**
-     * 查询圈子分类列表
+     * 新查询圈子分类列表
      */
     public List<CircleCategoryVo> queryNewCircleCategoryList(){
         List<CircleCategoryVo> categoryList = circleCategoryService.queryCircleByCategory();//查询所有圈子的分类
@@ -219,6 +220,44 @@ public class FacadeCircle {
         newcategoryList.add(circleCategoryVo);//-------add待审核
 
         return newcategoryList;
+    }
+
+    /**
+     * 根据圈子的分类id查询当前分类下的所有圈子列表
+     */
+    public List<CircleVo> queryNewCircleCategory(Paging<PostVo> pager, String id, String userid){
+        List<CircleVo> circleVoList;
+
+        if (Integer.parseInt(id) == -2){//我关注
+            //查询我关注的圈子列表
+            //登录状态下查询用户关注过的所有圈子列表
+            Map<String, Object> parammap = new HashMap<>();
+            parammap.put("userid", Integer.parseInt(userid));
+            circleVoList = circleService.queryMyFollowCircleList(pager, parammap);
+            //遍历轮训获取圈子关注数，更新数和当前用户是否关注该圈子
+            circleVoList = getFollowsumNew(circleVoList, userid);
+
+        }else if (Integer.parseInt(id) == -1){//待审核
+            circleVoList = circleService.queryAuditCircle(pager);
+            if (StringUtils.isEmpty(userid)) {
+                for (int i = 0; i < circleVoList.size(); i++) {
+                    circleVoList.get(i).setIssupport(0);
+                }
+            } else {
+                for (int i = 0; i < circleVoList.size(); i++) {
+                    int circleid = circleVoList.get(i).getId();
+                    Map<String, Object> parammap = new HashMap<>();
+                    parammap.put("userid", Integer.parseInt(userid));
+                    parammap.put("circleid", circleid);
+                    int issupport = circleService.queryIsSupport(parammap);
+                    circleVoList.get(i).setIssupport(issupport);
+                }
+            }
+
+        }else{//正常分类
+            circleVoList = circleService.queryCircleByCategory(pager, Integer.parseInt(id));
+        }
+        return circleVoList;
     }
 
     /**

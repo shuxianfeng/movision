@@ -2,8 +2,10 @@ package com.movision.mybatis.circle.mapper;
 
 import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.circle.entity.*;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserRole;
+import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
@@ -25,13 +27,13 @@ public interface CircleMapper {
 
     CircleVo queryCircleIndex1(int circleid);
 
-    List<CircleVo> queryCircleByCategory(int categoryid);
+    List<CircleVo> getAllCircleByCategory(RowBounds rowBounds, int categoryid);
 
-    List<CircleVo> queryAuditCircle();
+    List<CircleVo> getAllAuditCircle(RowBounds rowBounds);
 
     int queryIsSupport(Map<String, Object> parammap);
 
-    List<CircleVo> queryMyFollowCircleList(Map<String, Object> parammap);
+    List<CircleVo> getAllMyFollowCircleList(RowBounds rowBounds, Map<String, Object> parammap);
 
     List<CircleVo> findAllMineFollowCircle(Map<String, Object> paramap, RowBounds rowBounds);
 

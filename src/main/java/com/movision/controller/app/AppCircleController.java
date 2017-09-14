@@ -71,19 +71,19 @@ public class AppCircleController {
         return response;
     }
 
-    @ApiOperation(value = "圈子分类", notes = "用户返回所有圈子（按类别分类），待审核新增输出issupport 0 可支持 1 已支持", response = Response.class)
-    @RequestMapping(value = "circlelist", method = RequestMethod.POST)
-    public Response queryCircleList(@ApiParam(value = "用户id(用户登录状态下为必填)") @RequestParam(required = false) String userid) {
-        Response response = new Response();
-
-        List<CircleCategoryVo> circleCategoryList = facadeCircle.queryCircleCategoryList(userid);
-
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
-        }
-        response.setData(circleCategoryList);
-        return response;
-    }
+//    @ApiOperation(value = "圈子分类", notes = "用户返回所有圈子（按类别分类），待审核新增输出issupport 0 可支持 1 已支持", response = Response.class)
+//    @RequestMapping(value = "circlelist", method = RequestMethod.POST)
+//    public Response queryCircleList(@ApiParam(value = "用户id(用户登录状态下为必填)") @RequestParam(required = false) String userid) {
+//        Response response = new Response();
+//
+//        List<CircleCategoryVo> circleCategoryList = facadeCircle.queryCircleCategoryList(userid);
+//
+//        if (response.getCode() == 200) {
+//            response.setMessage("查询成功");
+//        }
+//        response.setData(circleCategoryList);
+//        return response;
+//    }
 
     @ApiOperation(value = "新圈子分类", notes = "所有圈子列表接口1--查询所有分类菜单(参照首页逻辑，拆分接口优化查询性能)", response = Response.class)
     @RequestMapping(value = "newcircleCategory", method = RequestMethod.POST)
@@ -99,13 +99,22 @@ public class AppCircleController {
         return response;
     }
 
-//    @ApiOperation(value = "新圈子列表", notes = "所有圈子列表接口2--查询当前分类下的所有圈子(参照首页逻辑，拆分接口优化查询性能)", response = Response.class)
-//    @RequestMapping(value = "newcircleCategory", method = RequestMethod.POST)
-//    public Response queryNewCircleCategory(@ApiParam(value = "用户id(用户登录状态下为必填)") @RequestParam(required = false) String userid,
-//                                           @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-//                                           @ApiParam(value = "多少条数据") @RequestParam(required = false, defaultValue = "10") String pageSize){
-//
-//    }
+    @ApiOperation(value = "新圈子列表", notes = "所有圈子列表接口2--查询当前分类下的所有圈子(参照首页逻辑，拆分接口优化查询性能)", response = Response.class)
+    @RequestMapping(value = "newcircleCategory", method = RequestMethod.POST)
+    public Response queryNewCircleCategory(@ApiParam(value = "分类id(必填)") @RequestParam String id,
+                                           @ApiParam(value = "用户id(用户登录状态下为必填)") @RequestParam(required = false) String userid,
+                                           @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                           @ApiParam(value = "多少条数据") @RequestParam(required = false, defaultValue = "10") String pageSize){
+        Response response = new Response();
+        Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List<CircleVo> circleList = facadeCircle.queryNewCircleCategory(pager, id, userid);
+
+        if (response.getCode() == 200) {
+            response.setMessage("查询成功");
+        }
+        response.setData(circleList);
+        return response;
+    }
 
     @ApiOperation(value = "圈子简介/公告接口", notes = "用户点击圈子背景图片进入圈子的简介公告页面", response = Response.class)
     @RequestMapping(value = "circleInfo", method = RequestMethod.POST)

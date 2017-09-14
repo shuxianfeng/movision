@@ -4,6 +4,7 @@ import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.circle.mapper.CircleMapper;
 import com.movision.mybatis.followCircle.mapper.FollowCircleMapper;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserRole;
 import com.movision.utils.pagination.model.Paging;
@@ -52,20 +53,20 @@ public class CircleService {
         }
     }
 
-    public List<CircleVo> queryCircleByCategory(int categoryid) {
+    public List<CircleVo> queryCircleByCategory(Paging<PostVo> pager, int categoryid) {
         try {
             log.info("通过类型查询圈子列表categoryid=" + categoryid);
-            return circleMapper.queryCircleByCategory(categoryid);
+            return circleMapper.getAllCircleByCategory(pager.getRowBounds(), categoryid);
         } catch (Exception e) {
             log.error("通过类型查询圈子列表失败categoryid=" + categoryid, e);
             throw e;
         }
     }
 
-    public List<CircleVo> queryAuditCircle() {
+    public List<CircleVo> queryAuditCircle(Paging<PostVo> pager) {
         try {
             log.info("查询待审核圈子列表");
-            return circleMapper.queryAuditCircle();
+            return circleMapper.getAllAuditCircle(pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询待审核圈子列表失败", e);
             throw e;
@@ -87,10 +88,10 @@ public class CircleService {
      * @param parammap
      * @return
      */
-    public List<CircleVo> queryMyFollowCircleList(Map<String, Object> parammap){
+    public List<CircleVo> queryMyFollowCircleList(Paging<PostVo> pager, Map<String, Object> parammap){
         try {
             log.info("查询当前用户关注的所有圈子列表");
-            return circleMapper.queryMyFollowCircleList(parammap);
+            return circleMapper.getAllMyFollowCircleList(pager.getRowBounds(), parammap);
         }catch (Exception e){
             log.error("查询当前用户关注的所有圈子列表失败", e);
             throw e;
