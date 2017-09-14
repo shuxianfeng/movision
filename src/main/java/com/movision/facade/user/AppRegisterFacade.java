@@ -723,6 +723,12 @@ public class AppRegisterFacade {
                     returnMap.put("authorized", true);
                     returnMap.put("user", appuser);
                 }
+                if (pointRecordFacade.signToday()) {
+                    returnMap.put("isSign", 1);
+                } else {
+                    pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode(), ShiroUtil.getAppUserID());
+                    returnMap.put("isSign", 0);
+                }
                 response.setData(returnMap);
             } else {
                 token.clear();
