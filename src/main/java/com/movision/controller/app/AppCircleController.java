@@ -100,14 +100,14 @@ public class AppCircleController {
     }
 
     @ApiOperation(value = "新圈子列表", notes = "所有圈子列表接口2--查询当前分类下的所有圈子(参照首页逻辑，拆分接口优化查询性能)", response = Response.class)
-    @RequestMapping(value = "newcircleCategory", method = RequestMethod.POST)
-    public Response queryNewCircleCategory(@ApiParam(value = "分类id(必填)") @RequestParam String id,
+    @RequestMapping(value = "newcircleList", method = RequestMethod.POST)
+    public Response queryNewCircleList(@ApiParam(value = "分类id(必填)") @RequestParam String id,
                                            @ApiParam(value = "用户id(用户登录状态下为必填)") @RequestParam(required = false) String userid,
                                            @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                            @ApiParam(value = "多少条数据") @RequestParam(required = false, defaultValue = "10") String pageSize){
         Response response = new Response();
         Paging<PostVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List<CircleVo> circleList = facadeCircle.queryNewCircleCategory(pager, id, userid);
+        List<CircleVo> circleList = facadeCircle.queryNewCircleList(pager, id, userid);
 
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
