@@ -198,6 +198,30 @@ public class FacadeCircle {
     }
 
     /**
+     * 查询圈子分类列表
+     */
+    public List<CircleCategoryVo> queryNewCircleCategoryList(){
+        List<CircleCategoryVo> categoryList = circleCategoryService.queryCircleByCategory();//查询所有圈子的分类
+
+        List<CircleCategoryVo> newcategoryList = new ArrayList<>();
+
+        CircleCategoryVo myFollowCircle = new CircleCategoryVo();
+        myFollowCircle.setId(-2);
+        myFollowCircle.setCategoryname("我关注");
+        newcategoryList.add(myFollowCircle);//-------add我关注
+
+        for (int i=0; i<categoryList.size(); i++){//--------add普通分类
+            newcategoryList.add(i+1,categoryList.get(i));
+        }
+        CircleCategoryVo circleCategoryVo = new CircleCategoryVo();
+        myFollowCircle.setId(-1);
+        myFollowCircle.setCategoryname("待审核");
+        newcategoryList.add(circleCategoryVo);//-------add待审核
+
+        return newcategoryList;
+    }
+
+    /**
      * 查询每一个圈子中，该用户未读的帖子数
      *
      * @param userid
