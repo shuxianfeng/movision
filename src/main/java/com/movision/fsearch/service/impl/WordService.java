@@ -127,9 +127,11 @@ public class WordService extends JdbcRepository implements IWordService {
             if (str.isEmpty()) {
                 continue;
             }
+            //调用MMseg分词算法
             MMSeg mmSeg = new MMSeg(new StringReader(str), COMPLEX_SEG);
             Word word = null;
             try {
+                //把分出的词加入到wordlist
                 while ((word = mmSeg.next()) != null) {
                     String w = word.getString();
                     if (!wordList.contains(w)) {

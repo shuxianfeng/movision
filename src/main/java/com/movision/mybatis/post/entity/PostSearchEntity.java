@@ -34,8 +34,6 @@ public class PostSearchEntity implements Serializable {
 
     private Date endtime;
 
-    private String imgurl;
-
     private Integer activetype;
 
     private String coverimg;
@@ -82,31 +80,7 @@ public class PostSearchEntity implements Serializable {
         return partsum;
     }
 
-    @Override
-    public String toString() {
-        return "PostSearchEntity{" +
-                "id=" + id +
-                ", circleid=" + circleid +
-                ", circlename='" + circlename + '\'' +
-                ", title='" + title + '\'' +
-                ", subtitle='" + subtitle + '\'' +
-                ", postcontent='" + postcontent + '\'' +
-                ", isactive=" + isactive +
-                ", partsum_enddays=" + partsum_enddays +
-                ", type=" + type +
-                ", intime=" + intime +
-                ", activefee=" + activefee +
-                ", begintime=" + begintime +
-                ", endtime=" + endtime +
-                ", imgurl='" + imgurl + '\'' +
-                ", activetype=" + activetype +
-                ", coverimg='" + coverimg + '\'' +
-                ", enddays=" + enddays +
-                ", partsum=" + partsum +
-                ", userid=" + userid +
-                ", nickname='" + nickname + '\'' +
-                '}';
-    }
+
 
     public void setCoverimg(String coverimg) {
         this.coverimg = coverimg;
@@ -174,9 +148,6 @@ public class PostSearchEntity implements Serializable {
         this.endtime = endtime;
     }
 
-    public void setImgurl(String imgurl) {
-        this.imgurl = imgurl;
-    }
 
     public Integer getId() {
 
@@ -227,9 +198,6 @@ public class PostSearchEntity implements Serializable {
         return endtime;
     }
 
-    public String getImgurl() {
-        return imgurl;
-    }
 
     public Integer getPartsum_enddays() {
         return partsum_enddays;
@@ -237,5 +205,30 @@ public class PostSearchEntity implements Serializable {
 
     public void setPartsum_enddays(Integer partsum_enddays) {
         this.partsum_enddays = partsum_enddays;
+    }
+
+    @Override
+    public String toString() {
+        return "PostSearchEntity{" +
+                "id=" + id +
+                ", circleid=" + circleid +
+                ", circlename='" + circlename + '\'' +
+                ", title='" + title + '\'' +
+                ", subtitle='" + subtitle + '\'' +
+                ", postcontent='" + postcontent + '\'' +
+                ", isactive=" + isactive +
+                ", partsum_enddays=" + partsum_enddays +
+                ", type=" + type +
+                ", intime=" + intime +
+                ", activefee=" + activefee +
+                ", begintime=" + begintime +
+                ", endtime=" + endtime +
+                ", activetype=" + activetype +
+                ", coverimg='" + coverimg + '\'' +
+                ", enddays=" + enddays +
+                ", partsum=" + partsum +
+                ", userid=" + userid +
+                ", nickname='" + nickname + '\'' +
+                '}';
     }
 }

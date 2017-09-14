@@ -46,6 +46,13 @@ public class PostSearchService implements IPostSearchService {
     @Autowired
     private CommonSearchService commonSearchService;
 
+    /**
+     * 查看更多-搜索帖子
+     *
+     * @param spec
+     * @return
+     * @throws ServiceException
+     */
     @Override
     public Map<String, Object> search(NormalSearchSpec spec)
             throws ServiceException {
@@ -106,12 +113,23 @@ public class PostSearchService implements IPostSearchService {
             if (!words.isEmpty()) {
                 //以空格为分隔符，形成新的list<String>
                 String formatQ = StringUtil.join(words, " ");
+                /**
+                 * 如果q=测试标签， 那么分词后为["测试","标签"]
+                 *  query={"_s":{"type":"phrase","value":"测试 标签"}}
+                 */
                 query.put("_s", CollectionUtil.arrayAsMap("type", "phrase",
                         "value", formatQ));
             }
         }
     }
 
+    /**
+     * 搜索帖子
+     *
+     * @param spec
+     * @return
+     * @throws ServiceException
+     */
     @Override
     public List<PostSearchEntity> searchForPost(NormalSearchSpec spec)
             throws ServiceException {
@@ -240,7 +258,6 @@ public class PostSearchService implements IPostSearchService {
         postSearchEntity.setCircleid(FormatUtil.parseInteger(itemAsMap.get("circleid")));
         postSearchEntity.setCirclename(FormatUtil.parseString(itemAsMap.get("circlename")));
         postSearchEntity.setActivefee(FormatUtil.parseDouble(itemAsMap.get("activefee")));
-        postSearchEntity.setImgurl(FormatUtil.parseString(itemAsMap.get("imgurl")));
         postSearchEntity.setCoverimg(FormatUtil.parseString(itemAsMap.get("coverimg")));
         postSearchEntity.setUserid(FormatUtil.parseInteger(itemAsMap.get("userid")));
         postSearchEntity.setNickname(FormatUtil.parseString(itemAsMap.get("nickname")));
