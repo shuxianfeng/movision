@@ -32,10 +32,6 @@ public interface CollectionMapper {
 
     void addCollectionSum(int postid);
 
-    Integer queryPostCollectByUser(Integer postid);
-
-    List<Integer> queryUserPost(int userid);
-
     int queryCollectionCount(int userid);
 
     int userPostCollection(int userid);

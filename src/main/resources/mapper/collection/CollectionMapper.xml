@@ -147,13 +147,6 @@
         WHERE id = #{postid,jdbcType=INTEGER}
     </update>
 
-    <!-- 查询帖子被收藏的用户  -->
-    <select id="queryPostCollectByUser" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT userid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
-    </select>
-    <select id="queryUserPost" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT  postid FROM yw_collection WHERE userid=#{userid,jdbcType=INTEGER} AND type=0
-    </select>
     <select id="queryCollectionCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT count(*) FROM yw_post WHERE id IN(
         SELECT postid FROM yw_collection WHERE userid=#{userid,jdbcType=INTEGER} AND type=0

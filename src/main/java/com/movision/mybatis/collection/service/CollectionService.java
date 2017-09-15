@@ -97,26 +97,6 @@ public class CollectionService {
         }
     }
 
-    public Integer queryPostCollectByUser(Integer postid) {
-        try {
-            log.info("查询被收藏帖子的用户");
-            return collectionMapper.queryPostCollectByUser(postid);
-        } catch (Exception e) {
-            log.error("查询被收藏帖子的用户异常", e);
-            throw e;
-        }
-    }
-
-    public List<Integer> queryUserPost(int userid) {
-        try {
-            log.info("用户收藏的帖子");
-            return collectionMapper.queryUserPost(userid);
-        } catch (Exception e) {
-            log.error("用户收藏的帖子异常", e);
-            throw e;
-        }
-    }
-
 
     public Integer queryCollectionCount(int userid) {
         try {
