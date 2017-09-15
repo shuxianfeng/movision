@@ -223,6 +223,16 @@ public class PostService {
         }
     }
 
+    public List<PostVo> queryCollectPostByUser(int userid){
+        try {
+            log.info("根据userid查询用户收藏的所有帖子");
+            return postMapper.queryCollectPostByUser(userid);
+        }catch (Exception e){
+            log.error("根据userid查询用户收藏的所有帖子失败", e);
+            throw e;
+        }
+    }
+
     public int queryUserPartSum(Map<String, Object> parammap) {
         try {
             log.info("查询该用户有没有参与过该活动");
