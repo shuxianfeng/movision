@@ -875,93 +875,76 @@ public class UserFacade {
         if (type.equals("0")){
             //旅行者
             int footprint = userService.getfootmap(Integer.parseInt(userid));//查询当前足迹数
-            if (footprint<=20){
-                map.put("current", footprint);
-            }else{
-                map.put("current", 20);
-            }
-            if (footprint <= 1) {
-                map.put("target", 1);
-            }else if (footprint <= 10){
-                map.put("target", 10);
-            }else {
-                map.put("target", 20);
-            }
+            int footmap1 = Integer.parseInt(PropertiesLoader.getValue("footmap1"));
+            int footmap2 = Integer.parseInt(PropertiesLoader.getValue("footmap2"));
+            int footmap3 = Integer.parseInt(PropertiesLoader.getValue("footmap3"));
+            map = packageMap(footprint, footmap1, footmap2, footmap3);
+
         }else if (type.equals("1")){
             //引荐人
             int invitesum = userService.queryInviteNum(Integer.parseInt(userid));//查询邀请总人数
-            if (invitesum<=50){
-                map.put("current", invitesum);
-            }else{
-                map.put("current", 50);
-            }
-            if (invitesum <= 1) {
-                map.put("target", 1);
-            }else if (invitesum <= 10){
-                map.put("target", 10);
-            }else {
-                map.put("target", 50);
-            }
+            int invite1 = Integer.parseInt(PropertiesLoader.getValue("invite1"));
+            int invite2 = Integer.parseInt(PropertiesLoader.getValue("invite2"));
+            int invite3 = Integer.parseInt(PropertiesLoader.getValue("invite3"));
+            map = packageMap(invitesum, invite1, invite2, invite3);
+
         }else if (type.equals("2")){
             //创作者
             int postsum = postService.queryPostNumByUserid(Integer.parseInt(userid));//查询当前用户发帖总数
-            if (postsum<=50){
-                map.put("current", postsum);
-            }else{
-                map.put("current", 50);
-            }
-            if (postsum <= 1) {
-                map.put("target", 1);
-            }else if (postsum <= 10){
-                map.put("target", 10);
-            }else {
-                map.put("target", 50);
-            }
+            int post1 = Integer.parseInt(PropertiesLoader.getValue("post1"));
+            int post2 = Integer.parseInt(PropertiesLoader.getValue("post2"));
+            int post3 = Integer.parseInt(PropertiesLoader.getValue("post3"));
+            map = packageMap(postsum, post1, post2, post3);
+
         }else if (type.equals("3")){
             //人气之王
             int zansum = postService.queryZanSumByUserid(Integer.parseInt(userid));//查询用户所有帖子被点赞总数
-            if (zansum<=200){
-                map.put("current", zansum);
-            }else{
-                map.put("current", 200);
-            }
-            if (zansum <= 50) {
-                map.put("target", 50);
-            }else if (zansum <= 100){
-                map.put("target", 100);
-            }else {
-                map.put("target", 200);
-            }
+            int zan1 = Integer.parseInt(PropertiesLoader.getValue("zan1"));
+            int zan2 = Integer.parseInt(PropertiesLoader.getValue("zan2"));
+            int zan3 = Integer.parseInt(PropertiesLoader.getValue("zan3"));
+            map = packageMap(zansum, zan1, zan2, zan3);
+
         }else if (type.equals("4")){
             //收藏家
             int collectsum = postService.queryCollectByUserid(Integer.parseInt(userid));//查询用户所有帖子被收藏总数
-            if (collectsum<=100){
-                map.put("current", collectsum);
-            }else{
-                map.put("current", 100);
-            }
-            if (collectsum <= 10) {
-                map.put("target", 10);
-            }else if (collectsum <= 50){
-                map.put("target", 50);
-            }else {
-                map.put("target", 100);
-            }
+            int collect1 = Integer.parseInt(PropertiesLoader.getValue("collect1"));
+            int collect2 = Integer.parseInt(PropertiesLoader.getValue("collect2"));
+            int collect3 = Integer.parseInt(PropertiesLoader.getValue("collect3"));
+            map = packageMap(collectsum, collect1, collect2, collect3);
+
         }else if (type.equals("5")){
             //精选
             int essencesum = postService.queryEssencesumByUserid(Integer.parseInt(userid));//查询用户当前所有帖子被精选总数
-            if (essencesum<=10){
-                map.put("current", essencesum);
-            }else{
-                map.put("current", 10);
-            }
-            if (essencesum <= 1) {
-                map.put("target", 1);
-            }else if (essencesum <= 5){
-                map.put("target", 5);
-            }else {
-                map.put("target", 10);
-            }
+            int essence1 = Integer.parseInt(PropertiesLoader.getValue("essence1"));
+            int essence2 = Integer.parseInt(PropertiesLoader.getValue("essence2"));
+            int essence3 = Integer.parseInt(PropertiesLoader.getValue("essence3"));
+            map = packageMap(essencesum, essence1, essence2, essence3);
+
+        }
+        return map;
+    }
+
+    /**
+     * 封装一个判断逻辑的公共方法（用于返回封装好的徽章解锁条件）
+     * @param num 当前数值
+     * @param one 一级条件
+     * @param two 二级条件
+     * @param three 三级条件
+     * @return
+     */
+    public Map<String, Object> packageMap(int num, int one, int two, int three){
+        Map<String, Object> map = new HashMap<>();
+        if (num <= three){
+            map.put("current", num);
+        }else{
+            map.put("current", three);
+        }
+        if (num <= one) {
+            map.put("target", one);
+        }else if (num <= two){
+            map.put("target", two);
+        }else {
+            map.put("target", three);
         }
         return map;
     }
