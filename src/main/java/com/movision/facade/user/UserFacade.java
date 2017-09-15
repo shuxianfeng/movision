@@ -623,9 +623,6 @@ public class UserFacade {
 //                }
                 //查询用户收藏的帖子列表
                 list = postService.queryCollectPostByUser(Integer.parseInt(userid));
-                for (int i = 0; i < list.size(); i++) {
-                    facadePost.findUser(list);
-                }
                 if (list.size() == 0) {
                     list = null;
                 }
