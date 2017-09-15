@@ -616,8 +616,6 @@ public class UserFacade {
                 if (collection.size() != 0) {
                     list = postService.findAllCollectionListByIds(collection, paging);
                     for (int i = 0; i < list.size(); i++) {
-                        facadePost.countView(list);
-                        facadePost.findAllCircleName(list);
                         facadePost.findUser(list);
                     }
                     if (list.size() == 0) {
