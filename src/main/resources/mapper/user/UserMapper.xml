@@ -1494,4 +1494,22 @@
         SELECT name FROM yw_province WHERE code=(
 SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
     </select>
+
+    <select id="selectIntervalBetweenLoginAndRegiste" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+        t.*
+        FROM
+        (
+        SELECT
+        id,
+        login_time,
+        intime,
+        UNIX_TIMESTAMP(login_time) - UNIX_TIMESTAMP(intime) AS d
+        FROM
+        yw_user
+        ) t
+        WHERE
+        <![CDATA[  t.d < 10  ]]>
+        AND t.id = #{userid};
+    </select>
 </mapper>

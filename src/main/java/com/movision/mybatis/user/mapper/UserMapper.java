@@ -188,4 +188,6 @@ public interface UserMapper {
 
     String provicename(String citycode);
 
+    Map selectIntervalBetweenLoginAndRegiste(Integer userid);
+
 }

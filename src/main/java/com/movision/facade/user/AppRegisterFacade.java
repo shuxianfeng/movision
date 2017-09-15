@@ -723,12 +723,23 @@ public class AppRegisterFacade {
                     returnMap.put("authorized", true);
                     returnMap.put("user", appuser);
                 }
+                //8 返回当天是否签到
                 if (pointRecordFacade.signToday()) {
                     returnMap.put("isSign", 1);
                 } else {
                     pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode(), ShiroUtil.getAppUserID());
                     returnMap.put("isSign", 0);
                 }
+                //9 返回用户是否是第一次登录（根据登录时间和注册时间的间隔判断，若间隔小于10秒，则认为是第一次登录，否则不是）
+                Map intervalMap = userService.selectIntervalBetweenLoginAndRegiste(appuserid);
+                if (MapUtil.isEmpty(intervalMap)) {
+                    //不存在登录与注册间隔10秒的这个用户，则说明这个用户不是第一次登录
+                    returnMap.put("isFirstLogin", 0);
+                } else {
+                    //说明这个用户是第一次登录
+                    returnMap.put("isFirstLogin", 1);
+                }
+
                 response.setData(returnMap);
             } else {
                 token.clear();

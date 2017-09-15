@@ -114,6 +114,14 @@ public class MapUtil {
 		return result;
 	}
 
+	public static Boolean isEmpty(Map map) {
+		return null == map || map.size() < 1;
+	}
+
+	public static Boolean isNotEmpty(Map map) {
+		return null != map && map.size() >= 1;
+	}
+
 	public static void main(String[] args) {
 		Map map = new HashedMap();
 		map.put("1", 11111);

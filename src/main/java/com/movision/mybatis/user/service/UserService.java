@@ -1160,5 +1160,15 @@ public class UserService {
         }
     }
 
+    public Map selectIntervalBetweenLoginAndRegiste(Integer id) {
+        try {
+            log.info("查询当前用户登录和注册之间的时间间隔秒数");
+            return userMapper.selectIntervalBetweenLoginAndRegiste(id);
+        } catch (Exception e) {
+            log.error("查询当前用户登录和注册之间的时间间隔秒数失败", e);
+            throw e;
+        }
+    }
+
 
 }
