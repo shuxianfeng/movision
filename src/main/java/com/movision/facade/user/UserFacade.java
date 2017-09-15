@@ -609,18 +609,6 @@ public class UserFacade {
                     list = null;
                 }
             } else if (type == 2) {//收藏
-//                //用户收藏的帖子
-//                List<Integer> collection = collectionService.queryUserPost(Integer.parseInt(userid));
-//                //收藏的id查帖子
-//                if (collection.size() != 0) {
-//                    list = postService.findAllCollectionListByIds(collection, paging);
-//                    for (int i = 0; i < list.size(); i++) {
-//                        facadePost.findUser(list);
-//                    }
-//                    if (list.size() == 0) {
-//                        list = null;
-//                    }
-//                }
                 //查询用户收藏的帖子列表
                 list = postService.queryCollectPostByUser(Integer.parseInt(userid));
                 if (list.size() == 0) {
