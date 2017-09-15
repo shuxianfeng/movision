@@ -343,13 +343,8 @@ public class FacadePost {
         active.setEnddays(enddays);
         //List<PostVo> postVos=postService
         //查询活动参与总人数
-        if (iscontribute == 0) {
-            int partsum = postService.queryActivePartSum(Integer.parseInt(postid));
-            active.setPartsum(partsum);
-        } else if (iscontribute == 1) {
-            int postpartsum = postService.activeSum(Integer.parseInt(postid));//投稿类参与人数
-            active.setPartsum(postpartsum);
-        }
+        int partsum = postService.queryActivePartSum(Integer.parseInt(postid));
+        active.setPartsum(partsum);
         //用户有没有投过稿
         /**Map map = new HashMap();
         map.put("id", Integer.parseInt(postid));
