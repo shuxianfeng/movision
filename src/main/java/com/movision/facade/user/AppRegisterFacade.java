@@ -679,10 +679,10 @@ public class AppRegisterFacade {
      * @param latitude
      */
     public void handleLoginProcess(String appToken, Response response, User user, String ip, String longitude, String latitude) {
-        //2 校验appToken和serverToken非空
+        //1 校验appToken和serverToken非空
         String serverToken = this.validateAppTokenAndServerToken(appToken, response, user);
 
-        //3 appToken和serverToken比较
+        //2 检验appToken和serverToken是否相等
         if (serverToken.equalsIgnoreCase(appToken)) {
 
             Subject currentUser = SecurityUtils.getSubject();
@@ -690,11 +690,11 @@ public class AppRegisterFacade {
             UsernamePasswordToken token = gson.fromJson(appToken, UsernamePasswordToken.class);
 
             Map returnMap = new HashedMap();
-            //4 开始进入shiro的认证流程
+            //3 开始进入shiro的认证流程
             shiroLogin(response, currentUser, token);
 
             /**
-             *  若shiro获取身份验证信息通过，则进行下面操作
+             *  4 若shiro获取身份验证信息通过，则进行下面操作
              */
             if (currentUser.isAuthenticated()) {
 
@@ -703,15 +703,20 @@ public class AppRegisterFacade {
                 //6 清除session中的boss用户信息
                 session.removeAttribute(SessionConstant.BOSS_USER);
                 session.setAttribute(SessionConstant.APP_USER, currentUser.getPrincipal());
-
+                //用户id
                 int appuserid = ShiroUtil.getAppUserID();
-                //登录验证成功后，更新用户信息
+                //7 返回用户是否是第一次登录（根据登录时间和注册时间的间隔判断，若间隔小于10秒，则认为是第一次登录，否则不是）
+                Map intervalMap = userService.selectIntervalBetweenLoginAndRegiste(appuserid);
+                if (MapUtil.isEmpty(intervalMap)) {
+                    //不存在登录与注册间隔10秒的这个用户，则说明这个用户不是第一次登录
+                    returnMap.put("isFirstLogin", 0);
+                } else {
+                    //说明这个用户是第一次登录
+                    returnMap.put("isFirstLogin", 1);
+                }
+                //8 登录验证成功后，更新用户信息
                 updateLoginUserInfo(appuserid, longitude, latitude, ip);
-
-                log.debug("验证登录接口是否在session中缓存用户id：" + appuserid);
-                log.debug("验证登录接口是否在session中缓存用户信息：" + ShiroUtil.getAppUser());
-
-                //7 返回登录人的信息
+                //9 返回登录人的信息
                 ShiroRealm.ShiroUser appuser = (ShiroRealm.ShiroUser) currentUser.getPrincipal();
                 if (null == appuser) {
                     response.setMsgCode(0);
@@ -723,21 +728,12 @@ public class AppRegisterFacade {
                     returnMap.put("authorized", true);
                     returnMap.put("user", appuser);
                 }
-                //8 返回当天是否签到
+                //10 返回登录的用户当天是否签到
                 if (pointRecordFacade.signToday()) {
                     returnMap.put("isSign", 1);
                 } else {
                     pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode(), ShiroUtil.getAppUserID());
                     returnMap.put("isSign", 0);
-                }
-                //9 返回用户是否是第一次登录（根据登录时间和注册时间的间隔判断，若间隔小于10秒，则认为是第一次登录，否则不是）
-                Map intervalMap = userService.selectIntervalBetweenLoginAndRegiste(appuserid);
-                if (MapUtil.isEmpty(intervalMap)) {
-                    //不存在登录与注册间隔10秒的这个用户，则说明这个用户不是第一次登录
-                    returnMap.put("isFirstLogin", 0);
-                } else {
-                    //说明这个用户是第一次登录
-                    returnMap.put("isFirstLogin", 1);
                 }
 
                 response.setData(returnMap);
