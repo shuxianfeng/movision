@@ -584,7 +584,6 @@ public class UserFacade {
                 list = postService.findAllUserPostList(Integer.parseInt(userid), paging);
                 for (int i = 0; i < list.size(); i++) {
                     facadePost.countView(list);
-                    facadePost.findAllCircleName(list);
                 }
                 if (list.size() == 0) {
                     list = null;
