@@ -491,6 +491,11 @@
       SELECT p.*,u.nickname FROM yw_post_comment p LEFT JOIN yw_user u ON u.id=p.userid WHERE
       p.postid=#{postid,jdbcType=INTEGER} AND p.isdel=0 ORDER BY p.heat_value DESC LIMIT 1
     </select>
+
+    <!--查询别人对我的帖子的评论（不能包含自己对自己帖子的评论）
+    union all
+        查询别人对我的评论的回复（不能包含自己对自己评论, 父评论可以是自己的帖子）
+    -->
     <select id="queryCommentIsRead" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select count(t.id) from (
         select c.*
@@ -507,7 +512,7 @@
         left join yw_post f on f.id = e.postid
         where f.isdel = 0
         <![CDATA[   and d.userid <> e.userid ]]>
-        and f.userid = #{id}
+        and e.userid = #{id}
         and d.isdel = 0 and d.isread = 0
         ) t
 
