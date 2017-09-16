@@ -356,9 +356,9 @@
         ) tt
     </select>
 
-    <!--根据用户id查询当前用户点赞总数-->
+    <!--根据用户id查询当前用户所有帖子被点赞总数-->
     <select id="queryZanSumByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
-        SELECT count(*) FROM yw_post_zan_record WHERE userid = #{userid,jdbcType=INTEGER}
+        SELECT SUM(zansum) FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER}
     </select>
 
     <!--根据当前用户id查询被选为精选帖总数-->

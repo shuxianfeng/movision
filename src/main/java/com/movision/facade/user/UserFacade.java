@@ -758,7 +758,7 @@ public class UserFacade {
 //        int commentsum = postService.queryCommentByUserid(Integer.parseInt(userid));
         //b.用户总被收藏数(10/50/100)//---------------运营智障强烈要求修改为被收藏数2017.09.08
         int collectsum = postService.queryCollectByUserid(Integer.parseInt(userid));
-        //c.点赞数(50/100/200)
+        //c.被点赞总数(50/100/200)
         int zansum = postService.queryZanSumByUserid(Integer.parseInt(userid));
         //d.邀请总人数(1/10/50)
         int invitesum = userService.queryInviteNum(Integer.parseInt(userid));
