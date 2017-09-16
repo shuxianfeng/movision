@@ -484,8 +484,8 @@ public class LabelFacade {
         List<FootRank> footRankList = postLabelService.queryFootMapRank(Integer.parseInt(userid));
         int rank = 0;
         for (int i=0; i<footRankList.size(); i++){
+            rank++;
             if (footRankList.get(i).getUserid() == Integer.parseInt(userid)) {
-                rank++;
                 continue;//跳出剩余所有循环
             }
         }
