@@ -90,7 +90,7 @@ public interface PostMapper {
 
     int queryActivePartSum(int postid);
 
-    List<PostVo> queryCollectPostByUser(int userid);
+    List<PostVo> findAllCollectPostByUser(int userid, RowBounds rowBounds);
 
     int queryUserPartSum(Map<String, Object> parammap);
 

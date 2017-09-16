@@ -223,10 +223,10 @@ public class PostService {
         }
     }
 
-    public List<PostVo> queryCollectPostByUser(int userid){
+    public List<PostVo> findAllCollectPostByUser(int userid, Paging<PostVo> paging){
         try {
             log.info("根据userid查询用户收藏的所有帖子");
-            return postMapper.queryCollectPostByUser(userid);
+            return postMapper.findAllCollectPostByUser(userid, paging.getRowBounds());
         }catch (Exception e){
             log.error("根据userid查询用户收藏的所有帖子失败", e);
             throw e;

@@ -2245,7 +2245,7 @@
     </select>
 
     <!--美番2.0我的模块根据userid查询用户收藏的所有帖子-->
-    <select id="queryCollectPostByUser" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo" >
+    <select id="findAllCollectPostByUser" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo" >
         SELECT t.*,t3.nickname, t3.photo FROM(
             SELECT t1.id, t1.coverimg, t1.title, t1.postcontent, t1.userid FROM yw_post t1 RIGHT JOIN(
                 SELECT DISTINCT postid FROM yw_collection WHERE userid=#{userid,jdbcType=INTEGER} AND type='0'

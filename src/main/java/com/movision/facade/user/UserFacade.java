@@ -610,7 +610,7 @@ public class UserFacade {
                 }
             } else if (type == 2) {//收藏
                 //查询用户收藏的帖子列表
-                list = postService.queryCollectPostByUser(Integer.parseInt(userid));
+                list = postService.findAllCollectPostByUser(Integer.parseInt(userid), paging);
                 if (list.size() == 0) {
                     list = null;
                 }
