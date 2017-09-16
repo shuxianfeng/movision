@@ -2260,7 +2260,9 @@
 
     <!--查询用户参与的活动总数-->
     <select id="queryUserActiveCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM yw_active_part WHERE userid = #{userid,jdbcType=INTEGER}
+        SELECT count(*) FROM yw_post t1 WHERE id IN (
+            SELECT postid FROM yw_active_part WHERE userid = #{userid,jdbcType=INTEGER}
+        )
     </select>
 
     <select id="findAllQueryActivitycontributeListById" parameterType="java.lang.Integer"
