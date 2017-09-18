@@ -19,6 +19,16 @@ public class UserRefreshRecord {
     private int type;//1：推荐2：关注3：本地 4：圈子 5：标签
     private String device;
 
+    private int labelid;
+
+    public int getLabelid() {
+        return labelid;
+    }
+
+    public void setLabelid(int labelid) {
+        this.labelid = labelid;
+    }
+
     public int getType() {
         return type;
     }
