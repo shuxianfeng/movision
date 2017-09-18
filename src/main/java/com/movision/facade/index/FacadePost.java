@@ -2237,7 +2237,7 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    public List userRefulshListMongodbHistoryCircleid(int userid, int type, int circleid) {
+    public List userRefulshListMongodbHistoryCircleid(int userid, int type, int crileid) {
         MongoClient mongoClient = null;
         List<DBObject> list = null;
         DB db = null;
@@ -2246,7 +2246,7 @@ public class FacadePost {
             mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             db = mongoClient.getDB("searchRecord");
             DBCollection table = db.getCollection("userRefreshRecord");//表名
-            BasicDBObject queryObject = new BasicDBObject("userid", userid).append("type", type).append("circleid", circleid);
+            BasicDBObject queryObject = new BasicDBObject("userid", userid).append("type", type).append("crileid", crileid);
             //指定需要显示列
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
@@ -2282,7 +2282,7 @@ public class FacadePost {
             mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             db = mongoClient.getDB("searchRecord");
             DBCollection table = db.getCollection("userRefreshRecord");//表名
-            BasicDBObject queryObject = new BasicDBObject("device", device).append("type", type).append("circleid", circleid);
+            BasicDBObject queryObject = new BasicDBObject("device", device).append("type", type).append("crileid", circleid);
             //指定需要显示列
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
