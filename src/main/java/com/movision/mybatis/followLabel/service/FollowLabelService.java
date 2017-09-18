@@ -77,7 +77,17 @@ public class FollowLabelService {
             log.info("修改标签热度");
             return followLabelMapper.updateLabelHeatValue(map);
         } catch (Exception e) {
-            log.error("修改标签热度失败");
+            log.error("修改标签热度失败", e);
+            throw e;
+        }
+    }
+
+    public int updateLabelHeatValueByPost(Map map) {
+        try {
+            log.info("发帖时修改标签热度");
+            return followLabelMapper.updateLabelHeatValueByPost(map);
+        } catch (Exception e) {
+            log.error("发帖时修改标签热度失败", e);
             throw e;
         }
     }

@@ -134,6 +134,8 @@ public class FacadeHeatValue {
 
     /**
      * 标签热度
+     * 1 关注标签时；
+     * 2 发帖，使用到标签时；
      *
      * @param type
      * @param
@@ -142,15 +144,17 @@ public class FacadeHeatValue {
         int points = 0;
         Map map = new HashMap();
         map.put("labelid", labelid);
-        if (type == 1) {//关注标签ok
+        if (type == 1) {
+            //关注标签ok
             int level = userLevels(Integer.parseInt(userid));
             points = level * HeatValueConstant.POINT.attention_label.getCode();
             map.put("points", points);
             followLabelService.updateLabelHeatValue(map);
-        } else if (type == 2) {//发帖用到标签ok
+        } else if (type == 2) {
+            //发帖用到标签ok
             points = HeatValueConstant.POINT.using_label.getCode();
             map.put("points", points);
-            followLabelService.updateLabelHeatValue(map);
+            followLabelService.updateLabelHeatValueByPost(map);
         }
     }
 
