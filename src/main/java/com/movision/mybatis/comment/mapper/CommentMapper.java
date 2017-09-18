@@ -114,4 +114,6 @@ public interface CommentMapper {
     void updateCommentIsRead(Integer id);
 
     List<CommentVo> selectPostComment(Integer id);
+
+    int queryFatherComment(int id);
 }

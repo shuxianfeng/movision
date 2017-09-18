@@ -243,10 +243,10 @@ public class FacadeComments {
             return 1;
         } else {
             int result = commentService.deleteComment(id);
-            if (result == 1) {
+            /**if (result == 1) {
                 //帖子评论次数-1
                 commentService.lessPostComment(id);
-            }
+             */
             return 0;
         }
     }

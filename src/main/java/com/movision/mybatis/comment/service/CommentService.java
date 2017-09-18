@@ -606,4 +606,14 @@ public class CommentService {
         }
     }
 
+    public int queryFatherComment(int id) {
+        try {
+            log.info("删除的是否是父评论");
+            return commentMapper.queryFatherComment(id);
+        } catch (Exception e) {
+            log.error("删除的是否是父评论失败", e);
+            throw e;
+        }
+    }
+
 }

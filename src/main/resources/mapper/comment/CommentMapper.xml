@@ -544,13 +544,13 @@
     <select id="findAllOneComment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.*,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE
-    c.postid=#{postid,jdbcType=INTEGER} AND c.pid IS NULL AND c.isdel=0 ORDER BY c.intime DESC
+        c.postid=#{postid,jdbcType=INTEGER} AND c.pid IS NULL ORDER BY c.intime DESC
   </select>
 
     <select id="queryTwoComment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.*,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE
-    c.pid=#{pid,jdbcType=INTEGER} AND c.isdel=0 ORDER BY
+        c.pid=#{pid,jdbcType=INTEGER} ORDER BY
     c.intime DESC
   </select>
 
@@ -650,6 +650,8 @@ SELECT u.photo,u.nickname,u.id FROM yw_user u LEFT JOIN yw_post_comment c ON c.u
     <![CDATA[    and c.userid <> #{id}  ]]>
     AND c.status = 1 ORDER BY c.intime DESC
   </select>
-
+    <select id="queryFatherComment" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post_comment WHERE pid is null AND id=#{id,jdbcType=INTEGER}
+    </select>
 
 </mapper>
