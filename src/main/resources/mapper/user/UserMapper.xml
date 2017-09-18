@@ -1528,4 +1528,11 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         ]]>
     </select>
 
+    <select id="selectRobotUser" resultType="com.movision.mybatis.user.entity.User">
+        SELECT *
+        FROM yw_user where
+        <![CDATA[
+          id >= 10000 and id <= 20000
+        ]]>
+    </select>
 </mapper>

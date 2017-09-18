@@ -1,18 +1,23 @@
 package com.movision.facade.robot;
 
+import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.constant.UserConstants;
+import com.movision.exception.BusinessException;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.DateUtils;
+import com.movision.utils.ListUtil;
 import com.movision.utils.UUIDGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -56,6 +61,26 @@ public class RobotFacade {
             //3)增加绑定手机号积分流水
             pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.binding_phone.getCode(), PointConstant.POINT.binding_phone.getCode(), uid);
         }
+    }
+
+    public void doZanAction(int postid, int num){
+        //1 先查询机器人大军
+        List<User> robots = userService.selectRobotUser();
+        if(ListUtil.isEmpty(robots)){
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人用户数量为0");
+        }
+        //2 随机选取n个机器人
+        List<User> randomRobots = (List<User>) ListUtil.randomList(robots);
+        List<User> robotArmy = new ArrayList<>();
+        int size = robots.size();
+        if(num <= size){
+            robotArmy = randomRobots.subList(0, num);
+        }else{
+            robotArmy = randomRobots;
+        }
+        //3 循环进行点赞操作
+
+
     }
 
 

@@ -1180,4 +1180,13 @@ public class UserService {
         }
     }
 
+    public List<User> selectRobotUser(){
+        try{
+            log.info("查询所有机器人用户");
+            return userMapper.selectRobotUser();
+        }catch (Exception e){
+            log.error("查询所有机器人用户失败", e);
+            throw e;
+        }
+    }
 }
