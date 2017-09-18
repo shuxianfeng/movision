@@ -384,7 +384,6 @@ public class VoteFacade {
 
     public List<TakeVo> findAll() {
         List<TakeVo> list = takeService.findAll();
-        list.subList(0, 10);
         return list;
     }
     /**
