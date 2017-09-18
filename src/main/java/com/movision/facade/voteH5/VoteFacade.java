@@ -1,5 +1,6 @@
 package com.movision.facade.voteH5;
 
+import com.movision.facade.paging.PageFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.activeH5.entity.ActiveH5;
 import com.movision.mybatis.activeH5.entity.ActiveH5Vo;
@@ -43,6 +44,8 @@ public class VoteFacade {
     @Autowired
     private JsoupCompressImg jsoupCompressImg;
 
+    @Autowired
+    private PageFacade pageFacade;
     private static Logger logger = LoggerFactory.getLogger(VoteFacade.class);
 
 
@@ -384,6 +387,7 @@ public class VoteFacade {
 
     public List<TakeVo> findAll() {
         List<TakeVo> list = takeService.findAll();
+        list = pageFacade.getPageList(list, 1, 10);
         return list;
     }
     /**
