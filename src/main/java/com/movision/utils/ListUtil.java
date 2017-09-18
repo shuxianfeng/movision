@@ -41,16 +41,16 @@ public class ListUtil {
      * @param sourceList
      * @return
      */
-    public static List<?> randomList(List<?> sourceList){
+    public static List<?> randomList(List<?> sourceList) {
         if (isEmpty(sourceList)) {
             return sourceList;
         }
 
-        List<Object> randomList = new ArrayList<>( sourceList.size( ) );
-        do{
-            int randomIndex = Math.abs( new Random( ).nextInt( sourceList.size() ) );
-            randomList.add( sourceList.remove( randomIndex ) );
-        }while( sourceList.size( ) > 0 );
+        List<Object> randomList = new ArrayList<>(sourceList.size());
+        do {
+            int randomIndex = Math.abs(new Random().nextInt(sourceList.size()));
+            randomList.add(sourceList.remove(randomIndex));
+        } while (sourceList.size() > 0);
 
         return randomList;
     }

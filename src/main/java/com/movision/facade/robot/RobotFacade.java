@@ -63,19 +63,19 @@ public class RobotFacade {
         }
     }
 
-    public void doZanAction(int postid, int num){
+    public void doZanAction(int postid, int num) {
         //1 先查询机器人大军
         List<User> robots = userService.selectRobotUser();
-        if(ListUtil.isEmpty(robots)){
+        if (ListUtil.isEmpty(robots)) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人用户数量为0");
         }
         //2 随机选取n个机器人
         List<User> randomRobots = (List<User>) ListUtil.randomList(robots);
         List<User> robotArmy = new ArrayList<>();
         int size = robots.size();
-        if(num <= size){
+        if (num <= size) {
             robotArmy = randomRobots.subList(0, num);
-        }else{
+        } else {
             robotArmy = randomRobots;
         }
         //3 循环进行点赞操作

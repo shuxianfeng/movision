@@ -663,20 +663,7 @@ public class FacadePost {
         //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------start
         //判断该用户有没有首次关注过圈子或有没有点赞过帖子评论等或有没有收藏过商品帖子活动
         UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(Integer.parseInt(userid));
-        if (null == entiy || entiy.getIszan() == 0) {
-            //如果未收藏过帖子或商品的话,首次收藏赠送积分
-            pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.first_support.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-            UserOperationRecord userOperationRecord = new UserOperationRecord();
-            userOperationRecord.setUserid(Integer.parseInt(userid));
-            userOperationRecord.setIszan(1);
-            if (null == entiy) {
-                //不存在新增
-                userOperationRecordService.insertUserOperationRecord(userOperationRecord);
-            } else if (entiy.getIszan() == 0) {
-                //存在更新
-                userOperationRecordService.updateUserOperationRecord(userOperationRecord);
-            }
-        }
+        handleZanStatusAndZanPoint(userid, entiy);
         //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------end
 
         //插入点赞历史记录
@@ -695,6 +682,23 @@ public class FacadePost {
         }
 
         return -1;
+    }
+
+    private void handleZanStatusAndZanPoint(String userid, UserOperationRecord entiy) {
+        if (null == entiy || entiy.getIszan() == 0) {
+            //如果未收藏过帖子或商品的话,首次收藏赠送积分
+            pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.first_support.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+            UserOperationRecord userOperationRecord = new UserOperationRecord();
+            userOperationRecord.setUserid(Integer.parseInt(userid));
+            userOperationRecord.setIszan(1);
+            if (null == entiy) {
+                //不存在新增
+                userOperationRecordService.insertUserOperationRecord(userOperationRecord);
+            } else if (entiy.getIszan() == 0) {
+                //存在更新
+                userOperationRecordService.updateUserOperationRecord(userOperationRecord);
+            }
+        }
     }
 
     /**

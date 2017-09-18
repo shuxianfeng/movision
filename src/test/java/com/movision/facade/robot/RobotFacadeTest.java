@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
  * @Author zhuangyuhao
  * @Date 2017/9/18 17:12
  */
-public class RobotFacadeTest extends SpringTestCase{
+public class RobotFacadeTest extends SpringTestCase {
     @Test
     public void doZanAction() throws Exception {
         //随机获取0-16之间的一个随机整数
