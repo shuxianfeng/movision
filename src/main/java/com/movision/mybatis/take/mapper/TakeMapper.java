@@ -33,4 +33,6 @@ public interface TakeMapper {
     void updateTakeByNumber(Take take);
 
     void updateTakeByAudit(Take take);
+
+    List<TakeVo> findAll();
 }

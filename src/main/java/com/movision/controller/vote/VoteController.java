@@ -323,6 +323,18 @@ public class VoteController {
         return response;
             }
 
+    @ApiOperation(value = "所有参赛", notes = "所有参赛", response = Response.class)
+    @RequestMapping(value = "findAll", method = RequestMethod.POST)
+    public Response findAll() {
+        Response response = new Response();
+        List<TakeVo> result = voteFacade.findAll();
+        if (response.getCode() == 200) {
+            response.setMessage("返回成功");
+        }
+        response.setData(result);
+        return response;
+    }
+
     /**
      * 修改访问量
      *

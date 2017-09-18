@@ -382,7 +382,11 @@ public class VoteFacade {
         return takeService.findAllTake(paging, take);
     }
 
-
+    public List<TakeVo> findAll() {
+        List<TakeVo> list = takeService.findAll();
+        list.subList(0, 10);
+        return list;
+    }
     /**
      * 根据编号或名字查询
      *

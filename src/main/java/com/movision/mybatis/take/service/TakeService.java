@@ -137,6 +137,15 @@ public class TakeService {
         }
     }
 
+    public List<TakeVo> findAll() {
+        try {
+            log.info("查询全部参赛人员");
+            return takeMapper.findAll();
+        } catch (Exception e) {
+            log.error("查询全部参赛人员失败", e);
+            throw e;
+        }
+    }
 
     /**
      * 根据编号或名字查询
