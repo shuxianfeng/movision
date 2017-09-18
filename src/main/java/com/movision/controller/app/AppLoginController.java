@@ -178,7 +178,7 @@ public class AppLoginController {
                     return response;
                 }
                 //业务操作
-                Map result = appRegisterFacade.validateLoginUser(user, validateinfo, session);
+                Map result = appRegisterFacade.registeAppUserProcess(user, validateinfo, session);
                 response.setData(result);
                 return response;
             } else {

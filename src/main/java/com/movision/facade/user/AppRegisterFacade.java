@@ -98,7 +98,7 @@ public class AppRegisterFacade {
      * }
      */
     @Transactional
-    public Map<String, Object> validateLoginUser(RegisterUser member, Validateinfo validateinfo, Session session) throws IOException {
+    public Map<String, Object> registeAppUserProcess(RegisterUser member, Validateinfo validateinfo, Session session) throws IOException {
 
         String phone = member.getPhone();                       //输入的手机号
         String verifyCode = validateinfo.getCheckCode();        //session中的验证码
@@ -427,6 +427,7 @@ public class AppRegisterFacade {
                 user.setDeviceno(member.getDeviceno()); //设备号
                 user.setPoints(35); //积分：注册+绑定手机
                 user.setPhoto(UserConstants.DEFAULT_APPUSER_PHOTO); //默认头像
+                user.setIntime(new Date()); //注册时间
 
                 //若有邀请码，则记录相关的邀请码
                 if (StringUtils.isNotBlank(member.getReferrals())) {
@@ -584,6 +585,7 @@ public class AppRegisterFacade {
         newUser.setDeviceno(deviceno);  //设备号
         newUser.setPoints(25);  //积分：注册25分
         newUser.setInvitecode(UUIDGenerator.gen6Uuid());    //自己的邀请码
+        newUser.setIntime(new Date());  //注册时间
 
         /**
          * 此处要判断是否具有相同的昵称

@@ -190,4 +190,5 @@ public interface UserMapper {
 
     Map selectIntervalBetweenLoginAndRegiste(Integer userid);
 
+    Integer selectMaxRobotId();
 }

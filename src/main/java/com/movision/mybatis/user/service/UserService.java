@@ -1170,5 +1170,14 @@ public class UserService {
         }
     }
 
+    public Integer selectMaxRobotId() {
+        try {
+            log.info("查找最大的机器人id");
+            return userMapper.selectMaxRobotId();
+        } catch (Exception e) {
+            log.error("查找最大的机器人id失败", e);
+            throw e;
+        }
+    }
 
 }

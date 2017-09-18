@@ -285,9 +285,12 @@
             <if test="city != null">
                 city,
             </if>
-            intime,
+            <if test="intime != null">
+                intime,
+            </if>
             growth,
             level,
+            isdv,
             status,
             <if test="applydate!=null">
                 applydate,
@@ -371,7 +374,10 @@
             <if test="city != null">
                 #{city,jdbcType=VARCHAR},
             </if>
-            now(),
+            <if test="intime != null">
+                #{intime},
+            </if>
+            0,
             0,
             0,
             0,
@@ -1512,4 +1518,14 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         <![CDATA[  t.d < 10  ]]>
         AND t.id = #{userid};
     </select>
+
+    <select id="selectMaxRobotId" resultType="java.lang.Integer">
+        select max(id)
+        from yw_user
+        where
+        <![CDATA[
+          id >= 10000 and id <= 20000
+        ]]>
+    </select>
+
 </mapper>

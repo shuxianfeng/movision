@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class DateUtils {
@@ -266,11 +267,26 @@ public class DateUtils {
         return last;
     }
 
+    /**
+     * 获取指定的日期
+     * ============date:1990-08-19
+     *
+     * @return
+     */
+    public static Date getDefaultBirthday() {
+        Calendar ca = new GregorianCalendar();
+        ca.set(Calendar.YEAR, 1990);
+        ca.set(Calendar.MONTH, 7);
+        ca.set(Calendar.DATE, 19);
+        log.debug("============date:" + DATE_FORMAT.format(ca.getTime()));
+        return ca.getTime();
+    }
 
     public static void main(String[] args) throws ParseException {
 
 //        getCurrentMonthFirstDay();
-        getCurrentMonthLastDay();
+//        getCurrentMonthLastDay();
+        getDefaultBirthday();
 
     }
 }
