@@ -2187,6 +2187,149 @@ public class FacadePost {
     }
 
     /**
+     * 在mongodb中查询用户刷新浏览过的列表(标签)
+     *
+     * @param userid
+     * @return
+     */
+    public List userRefulshListMongodbHistory(int userid, int type, int labelid) {
+        MongoClient mongoClient = null;
+        List<DBObject> list = null;
+        DB db = null;
+        DBCursor dbCursor = null;
+        try {
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject queryObject = new BasicDBObject("userid", userid).append("type", type).append("labelid", labelid);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
+            list = dbCursor.toArray();
+            dbCursor.close();
+        } catch (Exception e) {
+            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+                dbCursor.close();
+                mongoClient.close();
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 在mongodb中查询用户刷新浏览过的列表(圈子)
+     *
+     * @param userid
+     * @return
+     */
+    public List userRefulshListMongodbHistoryCircleid(int userid, int type, int crileid) {
+        MongoClient mongoClient = null;
+        List<DBObject> list = null;
+        DB db = null;
+        DBCursor dbCursor = null;
+        try {
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject queryObject = new BasicDBObject("userid", userid).append("type", type).append("crileid", crileid);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
+            list = dbCursor.toArray();
+            dbCursor.close();
+        } catch (Exception e) {
+            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+                dbCursor.close();
+                mongoClient.close();
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 在mongodb中查询用户刷新浏览过的列表(圈子)
+     *
+     * @param
+     * @return
+     */
+    public List userRefulshListMongodbToDeviceHistory(String device, int type, int circleid) {
+        MongoClient mongoClient = null;
+        List<DBObject> list = null;
+        DB db = null;
+        DBCursor dbCursor = null;
+        try {
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject queryObject = new BasicDBObject("device", device).append("type", type).append("crileid", circleid);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
+            list = dbCursor.toArray();
+            dbCursor.close();
+        } catch (Exception e) {
+            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+                dbCursor.close();
+                mongoClient.close();
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 在mongodb中查询用户刷新浏览过的列表(标签)
+     *
+     * @param
+     * @return
+     */
+    public List userRefulshListMongodbToDeviceHistoryLabelid(String device, int type, int labelid) {
+        MongoClient mongoClient = null;
+        List<DBObject> list = null;
+        DB db = null;
+        DBCursor dbCursor = null;
+        try {
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject queryObject = new BasicDBObject("device", device).append("type", type).append("labelid", labelid);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
+            list = dbCursor.toArray();
+            dbCursor.close();
+        } catch (Exception e) {
+            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+                dbCursor.close();
+                mongoClient.close();
+            }
+        }
+        return list;
+    }
+    /**
      * 用户刷新的历史记录列表
      *
      * @param userid
