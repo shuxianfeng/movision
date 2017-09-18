@@ -2214,11 +2214,11 @@
         DESC
     </select>
     <select id="findAllPostByid" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT * FROM yw_post WHERE id IN
+        SELECT p.*,c.name AS circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.id IN
         <foreach collection="list" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
-        AND isdel=0
+        AND p.isdel=0
     </select>
     <select id="findAllUserPostList" resultType="com.movision.mybatis.post.entity.PostVo"
             parameterType="java.lang.Integer">
