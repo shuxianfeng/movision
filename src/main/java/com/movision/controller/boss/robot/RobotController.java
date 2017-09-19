@@ -40,4 +40,24 @@ public class RobotController {
         return response;
     }
 
+    @ApiOperation(value = "机器人收藏帖子操作", notes = "机器人收藏帖子操作", response = Response.class)
+    @RequestMapping(value = "/robot_collect_post", method = RequestMethod.POST)
+    public Response robotCollectPost(@ApiParam(value = "需要调用的机器人数量") @RequestParam Integer num,
+                                     @ApiParam(value = "帖子id") @RequestParam Integer postid) throws IOException {
+        Response response = new Response();
+        robotFacade.robotCollectPost(postid, num);
+        return response;
+    }
+
+    @ApiOperation(value = "机器人关注用户操作", notes = "机器人关注用户操作", response = Response.class)
+    @RequestMapping(value = "/robot_follow_user", method = RequestMethod.POST)
+    public Response robotFollowUser(@ApiParam(value = "需要调用的机器人数量") @RequestParam Integer num,
+                                    @ApiParam(value = "被关注的用户id") @RequestParam Integer userid) throws IOException {
+        Response response = new Response();
+        robotFacade.robotFollowUser(userid, num);
+        return response;
+    }
+
+
+
 }

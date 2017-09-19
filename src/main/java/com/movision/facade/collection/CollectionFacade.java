@@ -36,7 +36,14 @@ public class CollectionFacade {
     @Autowired
     private FacadeHeatValue facadeHeatValue;
 
-    //在帖子中点击收藏帖子调用该方法
+    /**
+     * 在帖子中点击收藏帖子调用该方法
+     *
+     * @param postid
+     * @param userid
+     * @param type
+     * @return
+     */
     public int collectionPost(String postid, String userid, String type) {
 
         Collection collection = new Collection();

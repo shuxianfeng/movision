@@ -713,7 +713,7 @@ public class FacadePost {
      */
     public void handleZanStatusAndZanPoint(String userid, UserOperationRecord entiy) {
         if (null == entiy || entiy.getIszan() == 0) {
-            //如果未收藏过帖子或商品的话,首次收藏赠送积分
+            //首次点赞，记录积分流水
             pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.first_support.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
             //用来记录是否首次收藏
             UserOperationRecord userOperationRecord = new UserOperationRecord();
@@ -2633,8 +2633,8 @@ public class FacadePost {
     /**
      * 关注作者
      *
-     * @param userid
-     * @param
+     * @param userid    用户
+     * @param interestedusers   被关注的用户
      * @return
      */
     public int concernedAuthorUser(int userid, int interestedusers) {
@@ -2644,17 +2644,20 @@ public class FacadePost {
             map.put("interestedusers", interestedusers);
             //查询该用户有没有关注过
             int result = followUserService.yesOrNo(map);
+
             if (result == 0) {
+
                 FollowUser followUser = new FollowUser();
                 followUser.setIntime(new Date());
                 followUser.setInterestedusers(interestedusers);
                 followUser.setUserid(userid);
-                int count = followUserService.insertSelective(followUser);
-                //该用户的粉丝数加1
-                int fans = followUserService.insertUserFans(interestedusers);//被关注人
-                //增加用户总关注数attention
+                //1 插入关注用户流水
+                followUserService.insertSelective(followUser);
+                //2 被关注人的粉丝数加1
+                followUserService.insertUserFans(interestedusers);//被关注人
+                //3 增加用户总关注数 attention
                 userService.updateUserAttention(userid);//关注人
-                //被关注人增加热度
+                //4 被关注人增加热度
                 facadeHeatValue.addUserHeatValue(1, interestedusers);
                 return 0;
             } else {

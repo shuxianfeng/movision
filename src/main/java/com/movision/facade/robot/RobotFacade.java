@@ -4,6 +4,7 @@ import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.constant.UserConstants;
 import com.movision.exception.BusinessException;
+import com.movision.facade.collection.CollectionFacade;
 import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
 import com.movision.facade.pointRecord.PointRecordFacade;
@@ -48,6 +49,9 @@ public class RobotFacade {
 
     @Autowired
     private UserOperationRecordService userOperationRecordService;
+
+    @Autowired
+    private CollectionFacade collectionFacade;
 
 
     /**
@@ -104,7 +108,34 @@ public class RobotFacade {
         return robot;
     }
 
+    /**
+     * 机器人帖子点赞操作
+     * <p>
+     * (这里不需要进行手机推送，防止骚扰到用户。
+     * 因为，我们的目的，是想增加某个帖子的点赞数量！)
+     *
+     * @param postid
+     * @param num
+     */
     public void robotZanPost(int postid, int num) {
+        //1 集合机器人大军
+        List<User> robotArmy = assembleRobotArmy(num);
+
+        //2 循环进行帖子点赞操作， 需要注意，点赞不能在同一个时刻
+        for (int i = 0; i < robotArmy.size(); i++) {
+            int userid = robotArmy.get(i).getId();
+            processRobotZanPost(postid, userid);
+        }
+    }
+
+
+    /**
+     * 集合机器人大军
+     *
+     * @param num
+     * @return
+     */
+    private List<User> assembleRobotArmy(int num) {
         //1 先查询机器人大军
         List<User> robots = userService.selectRobotUser();
         if (ListUtil.isEmpty(robots)) {
@@ -119,15 +150,12 @@ public class RobotFacade {
         } else {
             robotArmy = randomRobots;
         }
-        //3 循环进行帖子点赞操作
-        for (int i = 0; i < robotArmy.size(); i++) {
-            int userid = robotArmy.get(i).getId();
-            processRobotZanPost(postid, userid);
-        }
+        return robotArmy;
     }
 
     /**
      * 处理机器人点赞帖子
+     *
      *
      * @param postid
      * @param userid
@@ -153,6 +181,42 @@ public class RobotFacade {
             postService.updatePostByZanSum(postid);
         }
     }
+
+
+    /**
+     * 机器人收藏帖子操作
+     *
+     * @param postid
+     * @param num
+     */
+    public void robotCollectPost(int postid, int num) {
+        //1 集合机器人大军
+        List<User> robotArmy = assembleRobotArmy(num);
+
+        //2 循环进行收藏帖子操作
+        for (int i = 0; i < robotArmy.size(); i++) {
+            int userid = robotArmy.get(i).getId();
+            collectionFacade.collectionPost(String.valueOf(postid), String.valueOf(userid), String.valueOf(0));
+        }
+    }
+
+    /**
+     * 机器人关注用户操作
+     *
+     * @param userid 被关注的人
+     * @param num
+     */
+    public void robotFollowUser(int userid, int num) {
+        //1 集合机器人大军
+        List<User> robotArmy = assembleRobotArmy(num);
+
+        //2 循环进行关注作者操作
+        for (int i = 0; i < robotArmy.size(); i++) {
+            int robotid = robotArmy.get(i).getId();
+            facadePost.concernedAuthorUser(robotid, userid);
+        }
+    }
+
 
 
 }

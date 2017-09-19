@@ -752,6 +752,7 @@ public class ImFacade {
      * @param fromaccid
      * @param body
      * @param to
+     * @param pushcontent 不为空，则是手机推送
      * @return
      * @throws IOException
      */

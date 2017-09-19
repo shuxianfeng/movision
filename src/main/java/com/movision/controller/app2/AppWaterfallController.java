@@ -326,26 +326,6 @@ public class AppWaterfallController {
         return response;
     }
 
-
-    /**
-     * @ApiOperation(value = "关注作者", notes = "关注作者", response = Response.class)
-     * @RequestMapping(value = "concernedAuthor", method = RequestMethod.POST)
-     * public Response concernedAuthor(@ApiParam(value = "用户id") @RequestParam int userid,
-     * @ApiParam(value = "帖子id") @RequestParam String postid) {
-     * Response response = new Response();
-     * int result = facadePost.concernedAuthor(userid, postid);
-     * if (result == 0) {
-     * response.setCode(200);
-     * response.setMessage("关注成功");
-     * } else if (result == 1) {
-     * response.setCode(300);
-     * response.setMessage("已关注该作者，请刷新重试");
-     * }
-     * return response;
-     * }
-     */
-
-
     @ApiOperation(value = "点击圈子标签页上半部分", notes = "点击圈子标签页上半部分", response = Response.class)
     @RequestMapping(value = "queryCircleByPostid", method = RequestMethod.POST)
     public Response queryCircleByPostid(@ApiParam(value = "圈子id") @RequestParam String circleid,
