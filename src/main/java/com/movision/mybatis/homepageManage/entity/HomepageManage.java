@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class HomepageManage implements Serializable {
+
+    private static final long serialVersionUID = 8422786023344311474L;
+
     private Integer id;
 
     //广告位置：0 首页--你可能喜欢--板块banner  1 ‘发现’首页banner
