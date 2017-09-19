@@ -452,10 +452,10 @@ public class VoteController {
         Map m = movisionOssClient.uploadMultipartFile(file, 2);
         String url = String.valueOf(m.get("url"));
         Map map = new HashMap();
-        m.put("url", url);
-        /*map.put("name", FileUtil.getFileNameByUrl(url));
+        map.put("url", url);
+        map.put("name", FileUtil.getFileNameByUrl(url));
         map.put("width", m.get("width"));
-        map.put("height", m.get("height"));*/
+        map.put("height", m.get("height"));
         return new Response(map);
     }
 }

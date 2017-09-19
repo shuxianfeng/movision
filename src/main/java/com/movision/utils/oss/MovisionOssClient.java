@@ -185,14 +185,20 @@ public class MovisionOssClient {
         if (file.getSize() > 0) {
             try {
                 String path = null;
+                String url = null;
                 if (type == 1) {
                     path = uploadFacade.getConfigVar("post.incise.domain") + filename;
                 } else if (type == 2) {
                     path = uploadFacade.getConfigVar("vote.incise.domain") + filename;
+                    url = uploadFacade.getConfigVar("wechat.h5.mofo") + filename;
                 }
                 //SaveFileFromInputStream(file.getInputStream(), uploadFacade.getConfigVar("post.incise.domain"), filename);
                 map.put("status", "success");
-                map.put("url", path);
+                map.put("url", url);
+                //返回图片的宽高
+                BufferedImage bi = ImageIO.read(file.getInputStream());
+                map.put("width", bi.getWidth());
+                map.put("height", bi.getHeight());
                 file.transferTo(new File(path));
                 return map;
             } catch (IOException e) {
