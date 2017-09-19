@@ -46,6 +46,9 @@ public class LabelSearchTermsService implements LabelSearchTermsMapper {
             mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             db = mongoClient.getDB("searchRecord");
             DBCollection table = db.getCollection("labelSearchTerms");
+            if (null == table) {
+                return list;
+            }
             BasicDBObject queryObject = new BasicDBObject("userid", userid).append("isdel", 0);
             //指定需要显示列
             BasicDBObject keys = new BasicDBObject();
