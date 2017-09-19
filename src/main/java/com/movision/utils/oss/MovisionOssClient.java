@@ -190,7 +190,7 @@ public class MovisionOssClient {
                     path = uploadFacade.getConfigVar("post.incise.domain") + filename;
                 } else if (type == 2) {
                     path = uploadFacade.getConfigVar("vote.incise.domain") + filename;
-                    url = uploadFacade.getConfigVar("wechat.h5.mofo") + filename;
+                    url = uploadFacade.getConfigVar("test.51.mofo") + uploadFacade.getConfigVar("vote.img.domain") + filename;
                 }
                 //SaveFileFromInputStream(file.getInputStream(), uploadFacade.getConfigVar("post.incise.domain"), filename);
                 map.put("status", "success");
