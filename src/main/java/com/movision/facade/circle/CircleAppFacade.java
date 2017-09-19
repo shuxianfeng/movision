@@ -164,6 +164,11 @@ public class CircleAppFacade {
      * 获取APP开屏图接口
      */
     public String getOpenAppImg(){
-        return homepageManageService.getOpenAppImg();
+        String url =  homepageManageService.getOpenAppImg();
+        if (StringUtil.isNotEmpty(url)){
+            return url;
+        }else {
+            return "";
+        }
     }
 }
