@@ -1,27 +1,22 @@
 package com.movision.mybatis.opularSearchTerms.service;
 
 import com.mongodb.*;
-import com.movision.facade.index.FacadePost;
 import com.movision.facade.paging.PageFacade;
 import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTerms;
 import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTermsVo;
 import com.movision.mybatis.opularSearchTerms.mapper.OpularSearchTermsMapper;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
-import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
- import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.comparator.ComparableComparator;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 

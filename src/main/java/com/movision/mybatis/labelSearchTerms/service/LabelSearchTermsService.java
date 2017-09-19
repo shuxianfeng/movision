@@ -4,7 +4,6 @@ import com.mongodb.*;
 import com.movision.facade.paging.PageFacade;
 import com.movision.mybatis.labelSearchTerms.entity.LabelSearchTerms;
 import com.movision.mybatis.labelSearchTerms.mapper.LabelSearchTermsMapper;
-import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
