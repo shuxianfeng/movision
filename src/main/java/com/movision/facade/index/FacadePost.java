@@ -1857,7 +1857,7 @@ public class FacadePost {
                 comments = commentService.queryCommentByPost(postid);
                 for (int j = 0; j < comments.size(); j++) {
                     int heatvalue = comments.get(j).getHeatvalue();
-                    if (heatvalue >= 50) {
+                    if (heatvalue >= 80) {
                         list.get(i).setComments(comments.get(j));
                     }
                 }
