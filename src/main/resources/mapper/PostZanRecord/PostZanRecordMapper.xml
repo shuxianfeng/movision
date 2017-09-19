@@ -150,6 +150,7 @@
         left join yw_post p on p.id = c.postid
         where (c.userid = #{id} or p.userid= #{id})
             and p.isdel = 0
+            and c.isdel = 0
         <![CDATA[   and r.userid <> c.userid ]]>
         and r.isread = 0
         UNION ALL
