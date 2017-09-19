@@ -4,7 +4,6 @@ import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.imSystemInform.mapper.ImSystemInformMapper;
 import com.movision.utils.pagination.model.Paging;
-import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,70 +122,6 @@ public class ImSystemInformService {
             return imSystemInformMapper.queryBodyAll(id);
         } catch (Exception e) {
             log.error("查询内容全部失败", e);
-            throw e;
-        }
-    }
-
-    /**
-     * 查询最新一条记录
-     *
-     * @return
-     */
-    public ImSystemInformVo queryByUserid(Map map) {
-        try {
-            log.info("查询最新一条记录");
-            return imSystemInformMapper.queryByUserid(map);
-        } catch (Exception e) {
-            log.error("查询最新一条记录失败", e);
-            throw e;
-        }
-    }
-
-    /**
-     * 查询是否有未读系统通知
-     *
-     * @param map
-     * @return
-     */
-    public Integer querySystemPushByUserid(Map map) {
-        try {
-            log.info("查询是否有未读系统通知");
-            return imSystemInformMapper.querySystemPushByUserid(map);
-        } catch (Exception e) {
-            log.error("查询是否有未读系统通知异常", e);
-            throw e;
-        }
-    }
-
-
-    /**
-     * 查询是否有未读系统通知
-     *
-     * @param indity
-     * @return
-     */
-    public Integer queryInform(String indity) {
-        try {
-            log.info("查询是否有未读系统通知");
-            return imSystemInformMapper.queryInform(indity);
-        } catch (Exception e) {
-            log.error("查询是否有未读系统通知异常", e);
-            throw e;
-        }
-    }
-
-    /**
-     * 查询用户未读消息
-     *
-     * @param userid
-     * @return
-     */
-    public List<String> queryUnreadSystemMessage(Integer userid) {
-        try {
-            log.info("查询用户未读消息");
-            return imSystemInformMapper.queryUnreadSystemMessage(userid);
-        } catch (Exception e) {
-            log.error("查询用户未读消息异常", e);
             throw e;
         }
     }

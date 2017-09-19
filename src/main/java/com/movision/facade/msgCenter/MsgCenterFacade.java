@@ -13,22 +13,16 @@ import com.movision.mybatis.comment.entity.ReplyComment;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.followUser.entity.FollowUserVo;
 import com.movision.mybatis.followUser.service.FollowUserService;
-import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogueVo;
-import com.movision.mybatis.imFirstDialogue.service.ImFirstDialogueService;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.imSystemInform.service.ImSystemInformService;
 import com.movision.mybatis.post.entity.Post;
-import com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecordVo;
 import com.movision.mybatis.postCommentZanRecord.service.PostCommentZanRecordService;
-import com.movision.mybatis.rewarded.entity.RewardedVo;
-import com.movision.mybatis.rewarded.service.RewardedService;
 import com.movision.mybatis.systemInformReadRecord.entity.SystemInformReadRecord;
 import com.movision.mybatis.systemInformReadRecord.service.SystemInformReadRecordService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.model.ServicePaging;
-import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,83 +55,13 @@ public class MsgCenterFacade {
     private CommentService commentService;
 
     @Autowired
-    private RewardedService rewardedService;
-
-    @Autowired
     private PostCommentZanRecordService postCommentZanRecordService;
 
     @Autowired
     private PostZanRecordService postZanRecordService;
 
     @Autowired
-    private ImFirstDialogueService imFirstDialogueService;
-
-    @Autowired
     private FollowUserService followUserService;
-
-    /**
-     * 获取消息中心的列表
-     *
-     * @return
-     */
-    public Map getMsgCenterList(Integer userid) {
-        //都是查找最新的消息
-        Map reMap = new HashedMap();
-        CommentVo comment = null;
-        PostCommentZanRecordVo postCommentZanRecord = null;
-        //1 赞消息 。包含：帖子，活动，评论，快问（后期）
-        List<PostCommentZanRecordVo> postCommentZanRecordVos = zan(userid);
-        if (postCommentZanRecordVos.size() > 0) {
-            postCommentZanRecord = postCommentZanRecordVos.get(0);
-        }
-        /**for (int i = 0; i < postCommentZanRecordVos.size(); i++) {
-            postCommentZanRecord = postCommentZanRecordVos.get(i);
-            break;
-         }*/
-        //2 打赏消息
-        RewardedVo rewarded = rewardedService.queryRewardByUserid(userid);
-        //3 评论消息
-        List<CommentVo> commentVos = comm(userid);
-        if (commentVos.size() > 0) {
-            comment = commentVos.get(0);
-        }
-        /**for (int i = 0; i < commentVos.size(); i++) {
-            comment = commentVos.get(i);
-            break;
-         }*/
-        //4 系统通知
-        Map map = new HashMap();
-        map.put("userid", userid);
-        map.put("informTime", ShiroUtil.getAppUser().getRegisterTime());
-        ImSystemInformVo imSystemInform = imSystemInformService.queryByUserid(map);//查询最新一条
-        //查询是否有未读系统通知
-        Integer system = imSystemInformService.querySystemPushByUserid(map);
-        if (imSystemInform != null) {
-            if (system > 0) {
-                imSystemInform.setIsread(0);
-            } else {
-                imSystemInform.setIsread(1);
-            }
-        }
-        //5 打招呼消息
-        ImFirstDialogueVo imFirstDialogue = imFirstDialogueService.queryFirst(userid);
-        //查询用户打招呼信息是否还有未读
-        Integer isr = imFirstDialogueService.queryIsreadByUserid(userid);
-        if (imFirstDialogue != null) {
-            if (isr > 0) {//还有未读
-                imFirstDialogue.setIsread(0);
-            } else {
-                imFirstDialogue.setIsread(1);
-            }
-        }
-        //6 客服消息
-        reMap.put("imSystemInform", imSystemInform);
-        reMap.put("rewarded", rewarded);
-        reMap.put("comment", comment);
-        reMap.put("postCommentZanRecord", postCommentZanRecord);
-        reMap.put("imFirstDialogue", imFirstDialogue);
-        return reMap;
-    }
 
     /**
      * 获取消息中心-动态消息, 动态消息全部置为已读
@@ -276,29 +200,7 @@ public class MsgCenterFacade {
         list.add(instantInfo);
     }
 
-    /**
-     * 评论
-     *
-     * @param userid
-     * @return
-     */
-    public List comm(int userid) {
-        List<CommentVo> commentVos = commentService.queryCommentByUserid(userid);
-        if (commentVos != null) {
-            for (int i = 0; i < commentVos.size(); i++) {
-                int usersid = commentVos.get(i).getUserid();
-                if (usersid != userid) {
-                    User ruser = postCommentZanRecordService.queryusers(usersid);
-                    commentVos.get(i).setUser(ruser);
-                } else {
-                    commentVos.remove(commentVos.get(i));
-                    i--;
-                }
-            }
 
-        }
-        return commentVos;
-    }
 
     public void getFollowList(List<InstantInfo> infoList, int userid) {
         List<FollowUserVo> list = followUserService.selectFollowUserVoList(userid);
@@ -310,51 +212,6 @@ public class MsgCenterFacade {
             infoList.add(instantInfo);
         }
     }
-
-    /**
-     * 赞
-     *
-     * @param userid
-     * @return
-     */
-    public List zan(int userid) {
-        List<PostCommentZanRecordVo> postCommentZanRecordVos = postCommentZanRecordService.queryByUserid(userid);
-        if (postCommentZanRecordVos != null) {
-            for (int i = 0; i < postCommentZanRecordVos.size(); i++) {
-                int use = postCommentZanRecordVos.get(i).getUserid();
-                if (use != userid) {
-                    User zusew = postCommentZanRecordService.queryusers(use);
-                    postCommentZanRecordVos.get(i).setUser(zusew);
-                } else {
-                    postCommentZanRecordVos.remove(postCommentZanRecordVos.get(i));
-                    i--;
-                }
-            }
-        }
-        return postCommentZanRecordVos;
-    }
-
-
-    /**
-     * 获取系统通知列表
-     *
-     * @return
-     */
-    public List<ImSystemInformVo> getMsgInformationList(Integer userid, Date informTime, Paging<ImSystemInformVo> paging) {
-        List<ImSystemInformVo> list = null;
-        list = imSystemInformService.findAllIm(informTime, paging);
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getCoverimg() != null) {
-                //代表是运营通知
-                list.get(i).setIsoperation(1);
-            } else {
-                //代表是系统通知
-                list.get(i).setIsoperation(0);
-            }
-        }
-        return list;
-    }
-
 
     /**
      * 获取系统通知列表

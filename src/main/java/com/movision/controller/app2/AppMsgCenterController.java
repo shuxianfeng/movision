@@ -2,7 +2,6 @@ package com.movision.controller.app2;
 
 import com.movision.common.Response;
 import com.movision.common.pojo.InstantInfo;
-import com.movision.common.util.ShiroUtil;
 import com.movision.facade.msgCenter.MsgCenterFacade;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.utils.pagination.model.Paging;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author zhuangyuhao
