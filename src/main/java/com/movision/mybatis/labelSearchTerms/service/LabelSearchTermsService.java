@@ -1,6 +1,7 @@
 package com.movision.mybatis.labelSearchTerms.service;
 
 import com.mongodb.*;
+import com.movision.facade.paging.PageFacade;
 import com.movision.mybatis.labelSearchTerms.entity.LabelSearchTerms;
 import com.movision.mybatis.labelSearchTerms.mapper.LabelSearchTermsMapper;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
@@ -24,6 +25,9 @@ public class LabelSearchTermsService implements LabelSearchTermsMapper {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+
+    @Autowired
+    private PageFacade pageFacade;
 
     public void insert(LabelSearchTerms labelSearchTerms) {
 
@@ -66,7 +70,8 @@ public class LabelSearchTermsService implements LabelSearchTermsMapper {
                     }
                 }
             }
-            list.subList(0, 12);
+//            list.subList(0, 12);
+            list = pageFacade.getPageList(list, 1, 12);
             cursor.close();
         } catch (Exception e) {
             log.error("查询标签搜索历史记录", e);

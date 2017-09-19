@@ -1,7 +1,9 @@
 package com.movision.mybatis.opularSearchTerms.service;
 
 import com.mongodb.*;
- import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTerms;
+import com.movision.facade.index.FacadePost;
+import com.movision.facade.paging.PageFacade;
+import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTerms;
 import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTermsVo;
 import com.movision.mybatis.opularSearchTerms.mapper.OpularSearchTermsMapper;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
@@ -33,7 +35,10 @@ import java.util.List;
     private static Logger log = LoggerFactory.getLogger(OpularSearchTermsService.class);
 
     @Autowired
-      private MongoTemplate mongoTemplate;
+    private MongoTemplate mongoTemplate;
+
+    @Autowired
+    private PageFacade pageFacade;
 
     @Override
      public void insert(OpularSearchTerms opularSearchTerms) {
@@ -95,7 +100,8 @@ import java.util.List;
                     }
                 }
             }
-            list.subList(0, 12);
+//            list.subList(0, 12);
+            list = pageFacade.getPageList(list, 1, 12);
             cursor.close();
         } catch (Exception e) {
             log.error("获取帖子热门搜索词失败", e);
