@@ -8,8 +8,7 @@
     <!--<properties resource="mybatis/init.properties" />-->
 
     <!-- 指定数据连接驱动jar地址 -->
-    <classPathEntry location="C:\Users\Administrator\.m2\repository\mysql\mysql-connector-java\5.1.24\mysql-connector-java-5.1.24.jar"/>
-
+    <classPathEntry location="D:\repository\mysql\mysql-connector-java\5.1.24\mysql-connector-java-5.1.24.jar"/>
     <!-- 一个数据库一个context -->
     <context id="infoGuardian">
         <!-- 注释 -->
