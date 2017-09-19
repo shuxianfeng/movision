@@ -264,7 +264,7 @@
             resultType="com.movision.mybatis.postLabel.entity.PostLabel">
         SELECT DISTINCT(l.`name`),l.type,l.id FROM yw_post_label_relation r
         LEFT JOIN yw_post p ON p.id=r.postid LEFT JOIN yw_post_label l ON l.id=r.labelid
-        WHERE p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 ORDER BY l.heat_value DESC
+        WHERE p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 AND l.isdel=0 ORDER BY l.heat_value DESC
     </select>
     <select id="findAllHotPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT p.*,u.nickname,u.photo,c.`name` AS circlename FROM yw_post p LEFT JOIN yw_user u ON u.id=p.userid LEFT
