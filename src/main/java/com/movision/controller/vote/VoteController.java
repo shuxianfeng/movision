@@ -449,7 +449,7 @@ public class VoteController {
     @ApiOperation(value = "上传投票系统相关图片", notes = "上传投票相关图片", response = Response.class)
     @RequestMapping(value = {"/upload_vote_img"}, method = RequestMethod.POST)
     public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file) {
-        Map m = movisionOssClient.uploadObject(file, "img", "vote");
+        Map m = movisionOssClient.uploadMultipartFile(file, 2);
         String url = String.valueOf(m.get("url"));
         Map map = new HashMap();
         m.put("url", url);

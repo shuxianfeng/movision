@@ -153,7 +153,7 @@ public class MovisionOssClient {
 
         switch (uploadMode) {
             case "alioss":
-                Map map = uploadMultipartFile(file);
+                Map map = uploadMultipartFile(file, 1);
                 String status = String.valueOf(map.get("status"));
                 if (status.equals("success")) {
                     return map;
@@ -178,13 +178,18 @@ public class MovisionOssClient {
      * @param file
      * @return
      */
-    public Map uploadMultipartFile(MultipartFile file) {
+    public Map uploadMultipartFile(MultipartFile file, Integer type) {
         //获取文件名
         String filename = file.getOriginalFilename();
         Map map = new HashMap();
         if (file.getSize() > 0) {
             try {
-                String path = uploadFacade.getConfigVar("post.incise.domain") + filename;
+                String path = null;
+                if (type == 1) {
+                    path = uploadFacade.getConfigVar("post.incise.domain") + filename;
+                } else if (type == 2) {
+                    path = uploadFacade.getConfigVar("vote.incise.domain") + filename;
+                }
                 //SaveFileFromInputStream(file.getInputStream(), uploadFacade.getConfigVar("post.incise.domain"), filename);
                 map.put("status", "success");
                 map.put("url", path);
