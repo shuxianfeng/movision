@@ -340,7 +340,7 @@ public class AppPostController {
     public Response updatePostByZanSum(@ApiParam(value = "帖子id") @RequestParam String id,
                                        @ApiParam(value = "用户id") @RequestParam String userid) {
         Response response = new Response();
-        int sum = facadePost.updatePostByZanSum(id, userid);
+        int sum = facadePost.doZanWithPost(id, userid);
         if (response.getCode() == 200) {
             response.setMessage("点赞成功");
             response.setData(sum);

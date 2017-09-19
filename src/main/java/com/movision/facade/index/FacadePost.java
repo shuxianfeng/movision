@@ -646,7 +646,9 @@ public class FacadePost {
         return postService.getProtoImg(imgurl);
     }
 
-    public int updatePostByZanSum(String id, String userid) {
+
+    public int doZanWithPost(String id, String userid) {
+
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("postid", Integer.parseInt(id));
         parammap.put("userid", Integer.parseInt(userid));
@@ -656,64 +658,73 @@ public class FacadePost {
         if (count != 0) return -1;
         //增加热度
         facadeHeatValue.addHeatValue(Integer.parseInt(id), 3, userid);
-        //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------start
-        //判断该用户有没有首次关注过圈子或有没有点赞过帖子评论等或有没有收藏过商品帖子活动
+
+        //查看用户点赞操作行为，并记录积分流水
         UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(Integer.parseInt(userid));
         handleZanStatusAndZanPoint(userid, entiy);
-        //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------end
 
         //插入点赞历史记录
         postService.insertZanRecord(parammap);
         //更新帖子点赞数量字段
         int type = postService.updatePostByZanSum(Integer.parseInt(id));
         //推送
-        if (type == 1) {
-            try {
-                sendPushInfo(id, userid);
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-                e.printStackTrace();
-            }
-            return 1;
-        }
+        if (sendPushInfoByZan(id, userid, type)) return 1;
 
         return -1;
     }
 
-    private void handleZanStatusAndZanPoint(String userid, UserOperationRecord entiy) {
+    /**
+     * 推送赞消息
+     *
+     * @param id
+     * @param userid
+     * @param type
+     * @return
+     */
+    private boolean sendPushInfoByZan(String id, String userid, int type) {
+        if (type == 1) {
+            try {
+                String fromaccid = userOperationRecordService.selectAccid(userid);
+                String to = postService.selectToAccid(Integer.parseInt(id));
+                String nickname = userOperationRecordService.selectNickname(userid);
+                String pinnickname = nickname + "赞了你";
+                Map map = new HashMap();
+                map.put("body", pinnickname);
+                Gson gson = new Gson();
+                String json = gson.toJson(map);
+                String pushcontent = nickname + "赞了你";
+                imFacade.sendMsgInform(json, fromaccid, to, pushcontent);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * “我的”模块个人积分任务 增加积分的公共代码
+     * 判断该用户有没有首次关注过圈子，或有没有点赞过帖子评论，或有没有收藏过商品帖子活动
+     *
+     * @param userid
+     * @param entiy
+     */
+    public void handleZanStatusAndZanPoint(String userid, UserOperationRecord entiy) {
         if (null == entiy || entiy.getIszan() == 0) {
             //如果未收藏过帖子或商品的话,首次收藏赠送积分
             pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.first_support.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+            //用来记录是否首次收藏
             UserOperationRecord userOperationRecord = new UserOperationRecord();
             userOperationRecord.setUserid(Integer.parseInt(userid));
             userOperationRecord.setIszan(1);
             if (null == entiy) {
-                //不存在新增
+                //不存在，新增
                 userOperationRecordService.insertUserOperationRecord(userOperationRecord);
             } else if (entiy.getIszan() == 0) {
-                //存在更新
+                //存在，更新
                 userOperationRecordService.updateUserOperationRecord(userOperationRecord);
             }
         }
-    }
-
-    /**
-     * 发送手机推送--点赞
-     * @param id
-     * @param userid
-     * @throws IOException
-     */
-    private void sendPushInfo(String id, String userid) throws IOException {
-        String fromaccid = userOperationRecordService.selectAccid(userid);
-        String to = postService.selectToAccid(Integer.parseInt(id));
-        String nickname = userOperationRecordService.selectNickname(userid);
-        String pinnickname = nickname + "赞了你";
-        Map map = new HashMap();
-        map.put("body", pinnickname);
-        Gson gson = new Gson();
-        String json = gson.toJson(map);
-        String pushcontent = nickname + "赞了你";
-        imFacade.sendMsgInform(json, fromaccid, to, pushcontent);
     }
 
     /**

@@ -81,56 +81,29 @@ public class FacadeComments {
         return volist;
     }
 
-    public int updateCommentZanSum(String commentid, String userid) {
-
-        //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------start
-        //判断该用户有没有首次关注过圈子或有没有点赞过帖子评论等或有没有收藏过商品帖子活动
+    /**
+     * 评论的点赞操作处理
+     *
+     * @param commentid
+     * @param userid
+     * @return
+     */
+    public int doZanWithComment(String commentid, String userid) {
+        //查看用户点赞操作行为，并记录积分流水
         UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(Integer.parseInt(userid));
-        if (null == entiy || entiy.getIszan() == 0) {
-            //如果未收藏过帖子或商品的话,首次收藏赠送积分
-            pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.first_support.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-            UserOperationRecord userOperationRecord = new UserOperationRecord();
-            userOperationRecord.setUserid(Integer.parseInt(userid));
-            userOperationRecord.setIszan(1);
-            if (null == entiy) {
-                //不存在新增
-                userOperationRecordService.insertUserOperationRecord(userOperationRecord);
-            } else if (entiy.getIszan() == 0) {
-                //存在更新
-                userOperationRecordService.updateUserOperationRecord(userOperationRecord);
-            }
-        }
+        facadePost.handleZanStatusAndZanPoint(userid, entiy);
+
         //增加评论热度
         facadeHeatValue.addCommentHeatValue(1, Integer.parseInt(commentid));
-        //-------------------“我的”模块个人积分任务 增加积分的公共代码----------------------end
 
         Map<String, Object> parammap = new HashMap<>();
         parammap.put("userid", Integer.parseInt(userid));
         parammap.put("commentid", Integer.parseInt(commentid));
         parammap.put("intime", new Date());
-        commentService.insertCommentZanRecord(parammap);
-        commentService.updateCommentZanSum(Integer.parseInt(commentid));//更新评论点赞次数
-        int sum = commentService.queryCommentZanSum(Integer.parseInt(commentid));//查询点赞次数
+        commentService.insertCommentZanRecord(parammap);    //插入评论点赞记录
+        commentService.updateCommentZanSum(Integer.parseInt(commentid));    //更新帖子评论点赞次数
+        int sum = commentService.queryCommentZanSum(Integer.parseInt(commentid));   //查询帖子评论点赞次数
 
-        //************************查询被点赞人的帖子评论是否被设为最新消息通知用户
-        Integer isread = newInformationService.queryUserByNewInformationByCommentid(Integer.parseInt(commentid));
-        NewInformation news = new NewInformation();
-        //更新被点赞人的帖子评论最新消息
-        if (isread != null) {
-            news.setIsread(0);
-            news.setIntime(new Date());
-            news.setUserid(isread);
-            newInformationService.updateUserByNewInformation(news);
-        } else {
-            //查询被点赞的评论用户
-            Integer uid = commentService.queryUseridByComment(Integer.parseInt(commentid));
-            //新增被点在人的帖子评论最新消息
-            news.setIsread(0);
-            news.setIntime(new Date());
-            news.setUserid(uid);
-            newInformationService.insertUserByNewInformation(news);
-        }
-        //******************************************************************
         return sum;
     }
 
@@ -358,7 +331,7 @@ public class FacadeComments {
         if (commentVoList != null) {
             for (int i = 0; i < commentVoList.size(); i++) {
                 //查询父评论下面有多少子评论
-                List<CommentVo> CommentVozjh = GetCommentVoList((int) commentVoList.get(i).getId());
+                List<CommentVo> CommentVozjh = GetCommentVoList(commentVoList.get(i).getId());
                 commentVoList.get(i).setCommentVos(CommentVozjh);
                 commentVoList.get(i).setPuser(puser);
             }

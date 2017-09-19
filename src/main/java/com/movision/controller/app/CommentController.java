@@ -50,7 +50,7 @@ public class CommentController {
     public Response updateCommentZanSum(@ApiParam(value = "评论id") @RequestParam String commentid,
                                         @ApiParam(value = "用户id") @RequestParam String userid) {
         Response response = new Response();
-        int zansum = facadeComments.updateCommentZanSum(commentid, userid);
+        int zansum = facadeComments.doZanWithComment(commentid, userid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
