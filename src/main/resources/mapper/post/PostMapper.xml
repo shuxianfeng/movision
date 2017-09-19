@@ -260,7 +260,7 @@
         LEFT JOIN yw_active_period t2
         ON t1.id = t2.postid
         ) t
-        WHERE t.id = #{postid,jdbcType=INTEGER}
+        WHERE t.id = #{postid,jdbcType=INTEGER} AND t.isdel=0
     </select>
 
     <!--查询该用户有没有参与该活动-->

@@ -185,17 +185,14 @@ public class FacadePost {
 
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
-        //查询帖子是否被删除
-        int isdel = postService.isPostIsdel(Integer.parseInt(postid));
-        PostVo vo = null;
-        if (isdel == 0) {
-            //通过userid、postid查询该用户有没有关注该圈子的权限
+        //通过userid、postid查询该用户有没有关注该圈子的权限
             Map<String, Object> parammap = new HashMap<>();
             parammap.put("postid", Integer.parseInt(postid));
             if (!StringUtils.isEmpty(userid)) {
                 parammap.put("userid", Integer.parseInt(userid));
             }
-            vo = postService.queryPostDetail(parammap);
+        PostVo vo = postService.queryPostDetail(parammap);
+        if (vo != null) {
             Map map = new HashMap();
             int userids = vo.getUserid();
             map.put("id", userids);//被关注的
@@ -285,8 +282,6 @@ public class FacadePost {
                     postAndUserRecordService.insert(postAndUserRecord);
                 }
             }
-        } else if (isdel == 1) {
-            vo = null;
         }
         return vo;
     }
