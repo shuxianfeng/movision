@@ -7,19 +7,14 @@ import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
-import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
-import com.movision.mybatis.newInformation.entity.NewInformation;
-import com.movision.mybatis.newInformation.service.NewInformationService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
-import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,8 +37,7 @@ public class FacadeComments {
     private UserOperationRecordService userOperationRecordService;
     @Autowired
     private PointRecordFacade pointRecordFacade;
-    @Autowired
-    private NewInformationService newInformationService;
+
     @Autowired
     private ImFacade imFacade;
     @Autowired
@@ -128,25 +122,7 @@ public class FacadeComments {
                 //增加帖子热度
                 facadeHeatValue.addHeatValue(Integer.parseInt(postid), 4, userid);
                 //增加用户热度
-                //************************查询被评论的帖子是否被设为最新消息通知用户
-                Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
-                NewInformation news = new NewInformation();
-                //更新被点赞人的帖子最新消息
-                if (isread != null) {
-                    news.setIsread(0);
-                    news.setIntime(new Date());
-                    news.setUserid(isread);
-                    newInformationService.updateUserByNewInformation(news);
-                } else {
-                    //查询被点赞的帖子发帖人
-                    Integer uid = postService.queryPosterActivity(Integer.parseInt(postid));
-                    //新增被点在人的帖子最新消息
-                    news.setIsread(0);
-                    news.setIntime(new Date());
-                    news.setUserid(uid);
-                    newInformationService.insertUserByNewInformation(news);
-                }
-                //******************************************************************
+
             } else {//表示是其他评论的子评论，不算评论次数
                 CommentVo vo = new CommentVo();
                 vo.setContent(content);
@@ -162,23 +138,7 @@ public class FacadeComments {
                 postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子表的评论次数字段
                 //增加评论热度
                 facadeHeatValue.addCommentHeatValue(1, Integer.parseInt(fuid));
-                //************************查询被评论的帖子是否被设为最新消息通知用户
-                Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
-                NewInformation news = new NewInformation();
-                //更新被评论的帖子最新消息
-                if (isread != null) {
-                    news.setIsread(0);
-                    news.setIntime(new Date());
-                    news.setUserid(isread);
-                    newInformationService.updateUserByNewInformation(news);
-                } else {
-                    //新增被评论的最新消息
-                    news.setIsread(0);
-                    news.setIntime(new Date());
-                    news.setUserid(Integer.parseInt(userid));
-                    newInformationService.insertUserByNewInformation(news);
-                }
-                //******************************************************************
+
             }
 
             pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）

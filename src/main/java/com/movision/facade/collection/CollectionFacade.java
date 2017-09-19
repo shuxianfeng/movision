@@ -3,20 +3,14 @@ package com.movision.facade.collection;
 import com.movision.common.constant.PointConstant;
 import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.pointRecord.PointRecordFacade;
-import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.collection.entity.Collection;
 import com.movision.mybatis.collection.service.CollectionService;
-import com.movision.mybatis.newInformation.entity.NewInformation;
-import com.movision.mybatis.newInformation.service.NewInformationService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
-import com.movision.utils.IdGenerator;
-import org.apache.commons.collections.map.AbstractHashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,9 +32,6 @@ public class CollectionFacade {
 
     @Autowired
     private PointRecordFacade pointRecordFacade;
-
-    @Autowired
-    private NewInformationService newInformationService;
 
     @Autowired
     private FacadeHeatValue facadeHeatValue;
@@ -66,26 +57,6 @@ public class CollectionFacade {
             collectionService.addCollectionSum(Integer.parseInt(postid));
             //增加熱度
             facadeHeatValue.addHeatValue(Integer.parseInt(postid), 6, userid);
-
-            //************************查询被收藏人的帖子是否被设为最新消息通知用户
-           /* Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
-            NewInformation news = new NewInformation();
-            //更新被收藏人的帖子最新消息
-            if (isread != null) {
-                news.setIsread(0);
-                news.setIntime(new Date());
-                news.setUserid(isread);
-                newInformationService.updateUserByNewInformation(news);
-            } else {
-                //获取被收藏人
-                Integer uid = collectionService.queryPostCollectByUser(Integer.parseInt(postid));
-                //新增被收藏人的帖子最新消息
-                news.setIsread(0);
-                news.setIntime(new Date());
-                news.setUserid(uid);
-                newInformationService.insertUserByNewInformation(news);
-            }*/
-            //******************************************************************
 
             return collectionService.collectionPost(collection);
         } else {

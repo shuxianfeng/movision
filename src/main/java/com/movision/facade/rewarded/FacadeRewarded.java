@@ -6,12 +6,9 @@ import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.im.ImFacade;
 import com.movision.facade.index.FacadeHeatValue;
-import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.constant.entity.Constant;
 import com.movision.mybatis.constant.service.ConstantService;
-import com.movision.mybatis.newInformation.entity.NewInformation;
-import com.movision.mybatis.newInformation.service.NewInformationService;
 import com.movision.mybatis.pointRecord.service.PointRecordService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.record.service.RecordService;
@@ -34,8 +31,6 @@ import java.util.Map;
  */
 @Service
 public class FacadeRewarded {
-    @Autowired
-    private PointRecordFacade pointRecordFacade;
 
     @Autowired
     private PostService postService;
@@ -54,9 +49,6 @@ public class FacadeRewarded {
 
     @Autowired
     private RewardedService rewardedService;
-
-    @Autowired
-    private NewInformationService newInformationService;
 
     @Autowired
     private ImFacade imFacade;
@@ -141,23 +133,6 @@ public class FacadeRewarded {
                 map.put("resault", in);
                 //增加帖子打赏热度
                 facadeHeatValue.addHeatValue(Integer.parseInt(postid), 7, userid);
-                //************************查询被打赏人是否被设为最新消息通知用户
-                Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
-                NewInformation news = new NewInformation();
-                //更新被打赏人的最新消息
-                if (isread != null) {
-                    news.setIsread(0);
-                    news.setIntime(new Date());
-                    news.setUserid(isread);
-                    newInformationService.updateUserByNewInformation(news);
-                } else {
-                    //新增被点在人的帖子最新消息
-                    news.setIsread(0);
-                    news.setIntime(new Date());
-                    news.setUserid(uid);
-                    newInformationService.insertUserByNewInformation(news);
-                }
-                //******************************************************************
 
                 try {
                     String fromaccid = userOperationRecordService.selectAccid(userid);

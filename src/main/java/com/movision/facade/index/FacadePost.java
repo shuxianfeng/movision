@@ -34,8 +34,6 @@ import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.labelSearchTerms.entity.LabelSearchTerms;
 import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
-import com.movision.mybatis.newInformation.entity.NewInformation;
-import com.movision.mybatis.newInformation.service.NewInformationService;
 import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
@@ -139,9 +137,6 @@ public class FacadePost {
 
     @Autowired
     private FacadeIndex facadeIndex;
-
-    @Autowired
-    private NewInformationService newInformationService;
 
     @Autowired
     private UserRefreshRecordService userRefreshRecordService;
@@ -647,6 +642,13 @@ public class FacadePost {
     }
 
 
+    /**
+     * 帖子点赞操作处理
+     *
+     * @param id
+     * @param userid
+     * @return
+     */
     public int doZanWithPost(String id, String userid) {
 
         Map<String, Object> parammap = new HashMap<>();
@@ -656,7 +658,7 @@ public class FacadePost {
         //查询当前用户是否已点赞该帖
         int count = postService.queryIsZanPost(parammap);
         if (count != 0) return -1;
-        //增加热度
+        //增加帖子热度
         facadeHeatValue.addHeatValue(Integer.parseInt(id), 3, userid);
 
         //查看用户点赞操作行为，并记录积分流水
@@ -666,9 +668,9 @@ public class FacadePost {
         //插入点赞历史记录
         postService.insertZanRecord(parammap);
         //更新帖子点赞数量字段
-        int type = postService.updatePostByZanSum(Integer.parseInt(id));
-        //推送
-        if (sendPushInfoByZan(id, userid, type)) return 1;
+        int updateColumn = postService.updatePostByZanSum(Integer.parseInt(id));
+        //推送点赞事件
+        if (sendPushInfoByZan(id, userid, updateColumn)) return 1;
 
         return -1;
     }
