@@ -92,19 +92,7 @@ public class VoteFacade {
         activeH5.setBegintime(begin);
         activeH5.setEndtime(end);
         if (StringUtil.isNotEmpty(activitydescription)) {
-
-            //内容转换
-            Map con = jsoupCompressImg.compressImg(request, activitydescription);
-            System.out.println(con);
-            if ((int) con.get("code") == 200) {
-                String str = con.get("content").toString();
-                str = str.replace("\\", "");
-                activeH5.setActivitydescription(str);
-            } else {
-                logger.error("帖子内容转换异常");
-                activeH5.setActivitydescription(activitydescription);
-            }
-
+            activeH5.setActivitydescription(activitydescription);
         }
         activeH5.setIsdel(0);
         activeH5.setIntime(new Date());
@@ -244,18 +232,7 @@ public class VoteFacade {
             take.setPhone(phone);
         }
         if (StringUtil.isNotEmpty(photo)) {
-            //内容转换
-            Map con = jsoupCompressImg.compressImg(request, photo);
-            System.out.println(con);
-            if ((int) con.get("code") == 200) {
-                String str = con.get("content").toString();
-                str = str.replace("\\", "");
-                take.setPhoto(str);
-            } else {
-                logger.error("帖子内容转换异常");
-                take.setPhoto(photo);
-            }
-            //take.setPhoto(photo);
+            take.setPhoto(photo);
         }
         if (StringUtil.isNotEmpty(describe)) {
             take.setDescribe(describe);
@@ -294,19 +271,8 @@ public class VoteFacade {
         if (StringUtil.isNotEmpty(name)) {
             take.setName(name);
         }
-        if (StringUtil.isNotEmpty(phone)) {
-            //内容转换
-            Map con = jsoupCompressImg.compressImg(request, photo);
-            System.out.println(con);
-            if ((int) con.get("code") == 200) {
-                String str = con.get("content").toString();
-                str = str.replace("\\", "");
-                take.setPhoto(str);
-            } else {
-                logger.error("帖子内容转换异常");
-                take.setPhoto(photo);
-            }
-            //take.setPhoto(photo);
+        if (StringUtil.isNotEmpty(photo)) {
+            take.setPhoto(photo);
         }
         if (StringUtil.isNotEmpty(photo)) {
 

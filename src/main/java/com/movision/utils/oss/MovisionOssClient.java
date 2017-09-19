@@ -188,6 +188,7 @@ public class MovisionOssClient {
                 String url = null;
                 if (type == 1) {
                     path = uploadFacade.getConfigVar("post.incise.domain") + filename;
+                    url = path;
                 } else if (type == 2) {
                     path = uploadFacade.getConfigVar("vote.incise.domain") + filename;
                     url = uploadFacade.getConfigVar("test.51.mofo") + uploadFacade.getConfigVar("vote.img.domain") + filename;
