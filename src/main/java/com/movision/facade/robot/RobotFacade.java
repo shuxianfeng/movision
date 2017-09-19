@@ -4,9 +4,14 @@ import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.constant.UserConstants;
 import com.movision.exception.BusinessException;
+import com.movision.facade.index.FacadeHeatValue;
+import com.movision.facade.index.FacadePost;
 import com.movision.facade.pointRecord.PointRecordFacade;
+import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
+import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.ListUtil;
 import com.movision.utils.UUIDGenerator;
@@ -15,9 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -34,8 +37,21 @@ public class RobotFacade {
     @Autowired
     private PointRecordFacade pointRecordFacade;
 
+    @Autowired
+    private FacadeHeatValue facadeHeatValue;
+
+    @Autowired
+    private PostService postService;
+
+    @Autowired
+    private FacadePost facadePost;
+
+    @Autowired
+    private UserOperationRecordService userOperationRecordService;
+
+
     /**
-     * 创建num个robot用户
+     * 创建n个robot用户
      *
      * @param num
      */
@@ -46,7 +62,6 @@ public class RobotFacade {
         if (null != maxId) {
             firstId = maxId + 1;    //如果存在最大id， 则第一个id是maxid+1
         }
-//        int lastId = firstId + num;    //最后一个id
         /**
          * 2 循环新增机器人个人信息
          */
@@ -62,27 +77,6 @@ public class RobotFacade {
             pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.binding_phone.getCode(), PointConstant.POINT.binding_phone.getCode(), uid);
         }
     }
-
-    public void doZanAction(int postid, int num) {
-        //1 先查询机器人大军
-        List<User> robots = userService.selectRobotUser();
-        if (ListUtil.isEmpty(robots)) {
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人用户数量为0");
-        }
-        //2 随机选取n个机器人
-        List<User> randomRobots = (List<User>) ListUtil.randomList(robots);
-        List<User> robotArmy = new ArrayList<>();
-        int size = robots.size();
-        if (num <= size) {
-            robotArmy = randomRobots.subList(0, num);
-        } else {
-            robotArmy = randomRobots;
-        }
-        //3 循环进行点赞操作
-
-
-    }
-
 
     /**
      * 创建机器人信息
@@ -109,5 +103,56 @@ public class RobotFacade {
         robot.setIp_city("310100");
         return robot;
     }
+
+    public void robotZanPost(int postid, int num) {
+        //1 先查询机器人大军
+        List<User> robots = userService.selectRobotUser();
+        if (ListUtil.isEmpty(robots)) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人用户数量为0");
+        }
+        //2 随机选取n个机器人
+        List<User> randomRobots = (List<User>) ListUtil.randomList(robots);
+        List<User> robotArmy = new ArrayList<>();
+        int size = robots.size();
+        if (num <= size) {
+            robotArmy = randomRobots.subList(0, num);
+        } else {
+            robotArmy = randomRobots;
+        }
+        //3 循环进行帖子点赞操作
+        for (int i = 0; i < robotArmy.size(); i++) {
+            int userid = robotArmy.get(i).getId();
+            processRobotZanPost(postid, userid);
+        }
+    }
+
+    /**
+     * 处理机器人点赞帖子
+     *
+     * @param postid
+     * @param userid
+     */
+    private void processRobotZanPost(int postid, int userid) {
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("postid", postid);
+        parammap.put("userid", userid);
+        parammap.put("intime", new Date());
+        //查询当前用户是否已点赞该帖
+        int count = postService.queryIsZanPost(parammap);
+        if (count == 0) {
+            //增加帖子热度
+            facadeHeatValue.addHeatValue(postid, 3, String.valueOf(userid));
+
+            //查看用户点赞操作行为，并记录积分流水
+            UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(userid);
+            facadePost.handleZanStatusAndZanPoint(String.valueOf(userid), entiy);
+
+            //插入点赞历史记录
+            postService.insertZanRecord(parammap);
+            //更新帖子点赞数量字段
+            postService.updatePostByZanSum(postid);
+        }
+    }
+
 
 }

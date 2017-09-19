@@ -30,4 +30,14 @@ public class RobotController {
         robotFacade.batchAddRobotUser(num);
         return response;
     }
+
+    @ApiOperation(value = "对指定的帖子进行指定机器人的点赞操作", notes = "对指定的帖子进行指定机器人的点赞操作", response = Response.class)
+    @RequestMapping(value = "/robot_zan_post", method = RequestMethod.POST)
+    public Response robotZanPost(@ApiParam(value = "需要调用的机器人数量") @RequestParam Integer num,
+                                 @ApiParam(value = "帖子id") @RequestParam Integer postid) throws IOException {
+        Response response = new Response();
+        robotFacade.robotZanPost(postid, num);
+        return response;
+    }
+
 }

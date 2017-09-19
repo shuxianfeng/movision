@@ -645,7 +645,7 @@ public class FacadePost {
     /**
      * 帖子点赞操作处理
      *
-     * @param id
+     * @param id    帖子id
      * @param userid
      * @return
      */
