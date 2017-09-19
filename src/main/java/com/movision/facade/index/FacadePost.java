@@ -332,9 +332,9 @@ public class FacadePost {
             parammap.put("userid", Integer.parseInt(userid));
         }
         ActiveVo active = postService.queryNoticeActive(parammap);
+        if (active != null) {
         /**List<PostLabel> postLabels = postService.queryPostLabel(Integer.parseInt(postid));
          active.setPostLabels(postLabels);*/
-        int iscontribute = active.getIscontribute();
         //计算距离结束时间
         Date begin = active.getBegintime();
         Date end = active.getEndtime();
@@ -376,6 +376,7 @@ public class FacadePost {
             postAndUserRecord.setCrileid(null);
             postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
             postAndUserRecordService.insert(postAndUserRecord);
+        }
         }
         return active;
     }

@@ -82,8 +82,12 @@ public class AppPostController {
 
         ActiveVo active = facadePost.queryActiveDetail(postid, userid, activetype);
 
-        if (response.getCode() == 200) {
+        if (null != active) {
+            response.setCode(200);
             response.setMessage("查询成功");
+        } else if (null == active) {
+            response.setCode(300);
+            response.setMessage("该帖已删除");
         }
         response.setData(active);
         return response;
