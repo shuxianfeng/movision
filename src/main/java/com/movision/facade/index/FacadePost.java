@@ -1460,6 +1460,7 @@ public class FacadePost {
             return list;
         } else {
             listmongodba = userRefulshListMongodb(Integer.parseInt(userid), 4);//用户有没有看过
+            listmongodba = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), 4, String.valueOf(circleid));//用户有没有看过
             if (listmongodba.size() != 0) {
                 for (int j = 0; j < listmongodba.size(); j++) {
                     PostVo post = new PostVo();
@@ -1616,6 +1617,7 @@ public class FacadePost {
         }
         return list;
     }
+
 
 
     /**
@@ -2228,7 +2230,7 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    public List userRefulshListMongodbHistoryCircleid(int userid, int type, int crileid) {
+    public List userRefulshListMongodbHistoryCircleid(int userid, int type, String crileid) {
         MongoClient mongoClient = null;
         List<DBObject> list = null;
         DB db = null;
@@ -2383,6 +2385,101 @@ public class FacadePost {
                 }
             }
         }
+     if(userid!=null) {
+         if (StringUtil.isNotEmpty(labelid)) {
+             List<DBObject> list = userRefulshListMongodbHistory(Integer.parseInt(userid), type, Integer.parseInt(labelid));
+             List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
+             List<Integer> postVos = new ArrayList<>();
+             List<Integer> dontlikes = new ArrayList<>();
+             if (list.size() != 0) {
+                 for (int i = 0; i < list.size(); i++) {
+                     int postid = Integer.parseInt(list.get(i).get("postid").toString());
+                     postVos.add(postid);
+                 }
+                 if (dontlike.size() != 0) {
+                     for (int i = 0; i < dontlike.size(); i++) {
+                         int p = Integer.parseInt(dontlike.get(i).get("postid").toString());
+                         dontlikes.add(p);
+                     }
+                 }
+                 postVos.removeAll(dontlikes);
+                 log.info("***********************************************" + postVos.size());
+                 //根据postid查询帖子
+                 postVo = postService.findAllPostByid(postVos, paging);
+                 if (postVo != null) {
+                     findUser(postVo);
+                     findPostLabel(postVo);
+                     findHotComment(postVo);
+                     countView(postVo);
+                     zanIsPost(Integer.parseInt(userid), postVo);
+                 }
+             }
+         } else if (StringUtil.isNotEmpty(circleid)) {
+             List<DBObject> list = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), type, circleid);
+             List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
+             List<Integer> postVos = new ArrayList<>();
+             List<Integer> dontlikes = new ArrayList<>();
+             if (list.size() != 0) {
+                 for (int i = 0; i < list.size(); i++) {
+                     int postid = Integer.parseInt(list.get(i).get("postid").toString());
+                     postVos.add(postid);
+                 }
+                 if (dontlike.size() != 0) {
+                     for (int i = 0; i < dontlike.size(); i++) {
+                         int p = Integer.parseInt(dontlike.get(i).get("postid").toString());
+                         dontlikes.add(p);
+                     }
+                 }
+                 postVos.removeAll(dontlikes);
+                 log.info("***********************************************" + postVos.size());
+                 //根据postid查询帖子
+                 postVo = postService.findAllPostByid(postVos, paging);
+                 if (postVo != null) {
+                     findUser(postVo);
+                     findPostLabel(postVo);
+                     findHotComment(postVo);
+                     countView(postVo);
+                     zanIsPost(Integer.parseInt(userid), postVo);
+                 }
+             }
+         }
+     }else {
+         if (StringUtil.isNotEmpty(labelid)) {
+             List<DBObject> list = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
+             List<Integer> postVos = new ArrayList<>();
+             if (list.size() != 0) {
+                 for (int i = 0; i < list.size(); i++) {
+                     int postid = Integer.parseInt(list.get(i).get("postid").toString());
+                     postVos.add(postid);
+                 }
+                 //根据postid查询帖子
+                 postVo = postService.findAllPostByid(postVos, paging);
+                 if (postVo != null) {
+                     findUser(postVo);
+                     findPostLabel(postVo);
+                     findHotComment(postVo);
+                     countView(postVo);
+                 }
+             }
+         } else if (StringUtil.isNotEmpty(circleid)) {
+             List<Integer> postVos = new ArrayList<>();
+             List<DBObject> list = userRefulshListMongodbToDeviceHistory(device, type, Integer.parseInt(circleid));
+             if (list.size() != 0) {
+                 for (int i = 0; i < list.size(); i++) {
+                     int postid = Integer.parseInt(list.get(i).get("postid").toString());
+                     postVos.add(postid);
+                 }
+                 //根据postid查询帖子
+                 postVo = postService.findAllPostByid(postVos, paging);
+                 if (postVo != null) {
+                     findUser(postVo);
+                     findPostLabel(postVo);
+                     findHotComment(postVo);
+                     countView(postVo);
+                 }
+             }
+         }
+     }
         return postVo;
     }
 
