@@ -8,6 +8,8 @@ import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.take.entity.Take;
 import com.movision.mybatis.take.entity.TakeVo;
+import com.movision.utils.file.FileUtil;
+import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -16,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhanglei
@@ -30,6 +35,9 @@ public class VoteController {
 
     @Autowired
     private VoteFacade voteFacade;
+
+    @Autowired
+    private MovisionOssClient movisionOssClient;
 
     /**
      * 添加活动
@@ -429,5 +437,25 @@ public class VoteController {
         }
         response.setData(result);
         return response;
+    }
+
+
+    /**
+     * 上传投票系统相关图片
+     *
+     * @param file
+     * @return
+     */
+    @ApiOperation(value = "上传投票系统相关图片", notes = "上传投票相关图片", response = Response.class)
+    @RequestMapping(value = {"/upload_vote_img"}, method = RequestMethod.POST)
+    public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file) {
+        Map m = movisionOssClient.uploadObject(file, "img", "vote");
+        String url = String.valueOf(m.get("url"));
+        Map map = new HashMap();
+        m.put("url", url);
+        map.put("name", FileUtil.getFileNameByUrl(url));
+        map.put("width", m.get("width"));
+        map.put("height", m.get("height"));
+        return new Response(map);
     }
 }
