@@ -12,9 +12,38 @@ public class UserRefreshRecord {
 
     private int postid;
 
-    private int crileid;
+    private String crileid;
 
     private String intime;
+
+    private int type;//1：推荐2：关注3：本地 4：圈子 5：标签
+    private String device;
+
+    private int labelid;
+
+    public int getLabelid() {
+        return labelid;
+    }
+
+    public void setLabelid(int labelid) {
+        this.labelid = labelid;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getDevice() {
+        return device;
+    }
+
+    public void setDevice(String device) {
+        this.device = device;
+    }
 
     public String getIntime() {
         return intime;
@@ -48,11 +77,11 @@ public class UserRefreshRecord {
         this.postid = postid;
     }
 
-    public int getCrileid() {
+    public String getCrileid() {
         return crileid;
     }
 
-    public void setCrileid(int crileid) {
+    public void setCrileid(String crileid) {
         this.crileid = crileid;
     }
 }

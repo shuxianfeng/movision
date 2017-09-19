@@ -1,9 +1,11 @@
 package com.movision.mybatis.post.entity;
 
 import com.movision.mybatis.circle.entity.Circle;
+import com.movision.mybatis.comment.entity.Comment;
+import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
-import com.movision.mybatis.period.entity.Period;
-import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.user.entity.UserLike;
 
 import java.io.Serializable;
@@ -22,6 +24,8 @@ public class PostVo implements Serializable {
 
     private Integer circleid;
 
+    private Integer countview;  //帖子浏览量
+
     private String title;
 
     private String subtitle;
@@ -37,6 +41,8 @@ public class PostVo implements Serializable {
     private Integer collectsum;
 
     private Integer isactive;
+
+    private Integer partsumEnddays;//当前活动显示参与人数还是显示剩余结束天数 0 显示结束天数 1 显示活动参与人数
 
     private Integer activetype;
 
@@ -98,6 +104,8 @@ public class PostVo implements Serializable {
 
     private String phone;//发帖人手机号
 
+    private String photo;   //发帖人的头像
+
     private Integer isCollect;//该用户是否已收藏该帖子/活动 0 否 1 是
 
     private Integer isZan;//该用户是否已赞该帖子/活动 0 否 1 是
@@ -105,7 +113,75 @@ public class PostVo implements Serializable {
     private String introduction;//圈子简介
 
     private Integer rewardsum;//打赏热人数
+
     private List<UserLike> rewardpersonnickname;//打赏的10个人的昵称
+
+    private String city;//城市code
+
+    public UserLike userlike;
+
+    private Integer heatvalue;//热度
+
+    public CommentVo comments;
+
+    public List<PostLabel> postLabels;
+
+    private Integer ishotorder;//活动设为热门排序字段
+
+    private Integer activeid;//活动id
+
+    private String activename;  //活动名称
+
+    private List<CommentVo> commentVos;
+    public List<CommentVo> getCommentVos() {
+        return commentVos;
+    }
+
+    public void setActivename(String activename) {
+        this.activename = activename;
+    }
+
+    public String getActivename() {
+
+        return activename;
+    }
+
+    public void setCommentVos(List<CommentVo> commentVos) {
+        this.commentVos = commentVos;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public String getPhoto() {
+
+        return photo;
+    }
+
+    public Integer getIshotorder() {
+        return ishotorder;
+    }
+
+    public void setIshotorder(Integer ishotorder) {
+        this.ishotorder = ishotorder;
+    }
+
+    public Integer getActiveid() {
+        return activeid;
+    }
+
+    public void setActiveid(Integer activeid) {
+        this.activeid = activeid;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 
     public Integer getRewardsum() {
         return rewardsum;
@@ -476,4 +552,70 @@ public class PostVo implements Serializable {
     public void setMaylikeimg(String maylikeimg) {
         this.maylikeimg = maylikeimg;
     }
+
+    public UserLike getUserlike() {
+        return userlike;
+    }
+
+    public void setUserlike(UserLike userlike) {
+        this.userlike = userlike;
+    }
+
+    public Integer getHeatvalue() {
+        return heatvalue;
+    }
+
+    public void setHeatvalue(Integer heatvalue) {
+        this.heatvalue = heatvalue;
+    }
+
+    public List<PostLabel> getPostLabels() {
+        return postLabels;
+    }
+
+    public void setPostLabels(List<PostLabel> postLabels) {
+        this.postLabels = postLabels;
+    }
+
+    public CommentVo getComments() {
+        return comments;
+    }
+
+    public void setComments(CommentVo comments) {
+        this.comments = comments;
+    }
+
+    public Integer getCountview() {
+        return countview;
+    }
+
+    public void setCountview(Integer countview) {
+        this.countview = countview;
+    }
+
+    public Integer getPartsumEnddays() {
+        return partsumEnddays;
+    }
+
+    public void setPartsumEnddays(Integer partsumEnddays) {
+        this.partsumEnddays = partsumEnddays;
+    }
+
+    /**
+     * 重写equals方法，用于比对
+     *
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof PostVo && this.id != null && this.id.equals(((PostVo) obj).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getId().hashCode();
+    }
+
+
 }

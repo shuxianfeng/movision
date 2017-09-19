@@ -1,6 +1,5 @@
 package com.movision.mybatis.postCommentZanRecord.entity;
 
-import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.user.entity.User;
 
@@ -13,10 +12,24 @@ import java.util.List;
  * @Date 2017/4/6 16:46
  */
 public class PostCommentZanRecordVo implements Serializable {
+
     private Integer id;
     private Integer ctype;
     private User user;
     private Integer isread;//是否已读  0否 1是
+    private String title;
+    private String postcontent;
+    private Integer activetype;
+    private Integer type;
+    private String coverimg;
+    private Integer isactive;
+    public String content;
+    private Integer userid;
+    private Integer commentid;
+    private Date intime;
+    private String nickname;
+    private String photo;
+    public List<CommentVo> comment;
 
     public Integer getIsread() {
         return isread;
@@ -41,12 +54,6 @@ public class PostCommentZanRecordVo implements Serializable {
     public void setCtype(Integer ctype) {
         this.ctype = ctype;
     }
-
-    private Integer userid;
-
-    private Integer commentid;
-
-    private Date intime;
 
     public Integer getId() {
         return id;
@@ -80,8 +87,6 @@ public class PostCommentZanRecordVo implements Serializable {
         this.intime = intime;
     }
 
-    private String nickname;
-
     public String getNickname() {
         return nickname;
     }
@@ -89,8 +94,6 @@ public class PostCommentZanRecordVo implements Serializable {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
-
-    private String photo;
 
     public String getPhoto() {
         return photo;
@@ -100,8 +103,6 @@ public class PostCommentZanRecordVo implements Serializable {
         this.photo = photo;
     }
 
-    public String content;
-
     public String getContent() {
         return content;
     }
@@ -109,14 +110,6 @@ public class PostCommentZanRecordVo implements Serializable {
     public void setContent(String content) {
         this.content = content;
     }
-
-    private String title;
-    private String postcontent;
-    private Integer activetype;
-    private Integer type;
-    private String coverimg;
-
-    private Integer isactive;
 
     public String getPostcontent() {
         return postcontent;
@@ -159,15 +152,12 @@ public class PostCommentZanRecordVo implements Serializable {
     }
 
     public String getTitle() {
-
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
-
-    public List<CommentVo> comment;
 
     public List<CommentVo> getComment() {
         return comment;

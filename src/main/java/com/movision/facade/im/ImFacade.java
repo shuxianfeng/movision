@@ -6,6 +6,7 @@ import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.imDevice.entity.ImDevice;
 import com.movision.mybatis.imDevice.service.ImDeviceService;
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
@@ -17,13 +18,12 @@ import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.imSystemInform.service.ImSystemInformService;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.imuser.service.ImUserService;
-import com.movision.mybatis.newInformation.entity.NewInformation;
-import com.movision.mybatis.newInformation.service.NewInformationService;
 import com.movision.mybatis.systemPush.entity.SystemPush;
 import com.movision.mybatis.systemPush.service.SystemPushService;
 import com.movision.mybatis.systemToPush.entity.SystemToPush;
 import com.movision.mybatis.systemToPush.service.SystemToPushService;
 import com.movision.utils.JsonUtils;
+import com.movision.utils.JsoupCompressImg;
 import com.movision.utils.ListUtil;
 import com.movision.utils.SignUtil;
 import com.movision.utils.convert.BeanUtil;
@@ -31,7 +31,6 @@ import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.sms.SDKSendSms;
-import com.xiaomi.xmpush.server.Message;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -48,6 +47,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.*;
@@ -81,7 +81,8 @@ public class ImFacade {
     private ImDeviceService imDeviceService;
 
     @Autowired
-    private NewInformationService newInformationService;
+    private JsoupCompressImg jsoupCompressImg;
+
     /**
      * 发起IM请求，获得响应
      *
@@ -215,7 +216,7 @@ public class ImFacade {
      *
      * @param imUser
      * @param currentUserid 注册IM账号对应的userid
-     * @param systemType 系统类型，1：APP， 0：BOSS
+     * @param systemType    系统类型，1：APP， 0：BOSS
      * @throws IOException
      */
     public void registerImUserAndSave(ImUser imUser, int currentUserid, int systemType) throws IOException {
@@ -461,27 +462,6 @@ public class ImFacade {
         //1 发消息
         Map sendMsgResult = this.sendMsg(imMsg);
         Object code_1 = sendMsgResult.get("code");
-
-        //************************查询用户打招呼的最新通知
-        Integer isread = newInformationService.queryCollByNewInformation(imMsg.getTo());
-        NewInformation news = new NewInformation();
-        //更新被打招呼最新消息
-        if (isread != null) {
-            news.setIsread(0);
-            news.setIntime(new Date());
-            news.setUserid(isread);
-            newInformationService.updateUserByNewInformation(news);
-        } else {
-            //查询被打招呼人id
-            Integer uid = imUserService.queryUserByAccid(imMsg.getTo());
-            //新增被打招呼最新消息
-            news.setIsread(0);
-            news.setIntime(new Date());
-            news.setUserid(uid);
-            newInformationService.insertUserByNewInformation(news);
-        }
-        //******************************************************************
-
         /**
          *  addFriendType=2 请求加好友
          *  addFriendType=3 接受加好友
@@ -506,13 +486,18 @@ public class ImFacade {
      * 发送系统通知并记录
      *
      * @param body
+     * @param title
+     * @param pushcontent
      * @throws IOException
      */
-    public void sendSystemInform(String body, String title, String pushcontent) throws IOException {
+    public void sendSystemInform(String body, String title, String pushcontent, Integer type, String coverimg) throws IOException {
         Date date = new Date();
         long informidentity = date.getTime();
+        //获取当前boss用户的IM用户信息
         ImUser imUser = this.getImuserByCurrentBossuser();
+        //找到所有的im用户
         List<ImUser> imAppUserList = imUserService.selectAllAPPImuser();
+
         if (ListUtil.isNotEmpty(imAppUserList)) {
             int size = imAppUserList.size();
             log.info("app中的IM用户共" + size + "人！");
@@ -527,13 +512,103 @@ public class ImFacade {
                      *     i=2, 即第1001-1002人，   取两人
                      */
                     int eachSize = i < mutiple ? 500 : size - mutiple * 500;
-                    sendAndRecord(body, imUser, imAppUserList, eachSize, i, title, pushcontent, informidentity);
+                    sendAndRecord(body, imUser, imAppUserList, eachSize, i, title, pushcontent, informidentity, type, coverimg);
                 }
             } else {
                 //不超过500人
-                sendAndRecord(body, imUser, imAppUserList, size, 0, title, pushcontent, informidentity);
+                sendAndRecord(body, imUser, imAppUserList, size, 0, title, pushcontent, informidentity, type, coverimg);
             }
         }
+    }
+
+    public void addOperationInform(HttpServletRequest request, String body, String title, String coverimg) {
+        try {
+            //生成运营推送的body内容
+            String str = makePushBody(request, body);
+            //推送业务
+            sendSystemInform(str, title, title, ImConstant.PUSH_MESSAGE.operation_msg.getCode(), coverimg);
+
+        } catch (IOException e) {
+            log.error("发送运营通知失败", e);
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "发送运营通知失败");
+        }
+    }
+
+    /**
+     * 生成运营推送的body内容
+     *
+     * @param request
+     * @param body
+     * @return
+     */
+    private String makePushBody(HttpServletRequest request, String body) {
+        String str = "";
+        //内容转换
+        Map con = jsoupCompressImg.compressImg(request, body);
+        log.debug("压缩后的内容con:" + con);
+        if ((int) con.get("code") == 200) {
+            str = con.get("content").toString();
+            str = str.replace("\\", "");
+            log.debug(str);
+        } else {
+            log.error("内容转换异常");
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "内容转换异常");
+        }
+        return str;
+    }
+
+    /**
+     * 条件查询运营通知列表
+     *
+     * @param title
+     * @param body
+     * @param pag
+     * @return
+     */
+    public List<ImSystemInform> queryOperationInformList(String title, String body, Paging<ImSystemInform> pag) {
+        ImSystemInform inform = new ImSystemInform();
+        if (StringUtil.isNotEmpty(title)) {
+            inform.setTitle(title);
+        }
+        if (StringUtil.isNotEmpty(body)) {
+            inform.setBody(body);
+        }
+        return imSystemInformService.queryOperationInformList(inform, pag);
+    }
+
+    /**
+     * 查询运营通知详情
+     *
+     * @param id
+     * @return
+     */
+    public ImSystemInform queryOperationInformById(String id) {
+        ImSystemInform inform = new ImSystemInform();
+        inform.setId(Integer.parseInt(id));
+        return imSystemInformService.queryOperationInformById(inform);
+    }
+
+    /**
+     * 更新运营通知
+     *
+     * @param id
+     * @param title
+     * @param body
+     * @param coverimg
+     */
+    public void updateOperationInformById(String id, String title, String body, String coverimg) {
+        ImSystemInform inform = new ImSystemInform();
+        inform.setId(Integer.parseInt(id));
+        if (StringUtil.isNotEmpty(title)) {
+            inform.setTitle(title);
+        }
+        if (StringUtil.isNotEmpty(body)) {
+            inform.setBody(body);
+        }
+        if (StringUtil.isNotEmpty(coverimg)) {
+            inform.setCoverimg(coverimg);
+        }
+        imSystemInformService.updateOperationInformById(inform);
     }
 
 
@@ -545,46 +620,70 @@ public class ImFacade {
      * @param imAppUserList
      * @param size
      * @param multiple
+     * @param title
+     * @param pushcontent
+     * @param informidentity
+     * @param type           推送类型
+     * @param coverimg       运营通知的封面图
      * @throws IOException
      */
-    private void sendAndRecord(String body, ImUser imUser, List<ImUser> imAppUserList, int size, int multiple, String title, String pushcontent, long informidentity) throws IOException {
-        //不足500人
+    private void sendAndRecord(String body, ImUser imUser, List<ImUser> imAppUserList, int size, int multiple, String title,
+                               String pushcontent, long informidentity, Integer type, String coverimg) throws IOException {
+        //接受者
         String toAccids = prepareToAccids(imAppUserList, size, multiple);
-        Map result = this.sendSystemInform(body, imUser.getAccid(), toAccids, pushcontent);
-
-
-        //************************查询用户是否有最新系统通知消息
-        Integer isread = newInformationService.querySystemByNewInformation(imUser.getAccid());
-        NewInformation news = new NewInformation();
-        //更新系统通知最新消息
-        if (isread != null) {
-            news.setIsread(0);
-            news.setIntime(new Date());
-            news.setUserid(isread);
-            newInformationService.updateUserByNewInformation(news);
-        } else {
-            //查询被点赞的帖子发帖人
-            Integer uid = imUserService.queryUserByAccid(imUser.getAccid());
-            //新增系统通知最新消息
-            news.setIsread(0);
-            news.setIntime(new Date());
-            news.setUserid(uid);
-            newInformationService.insertUserByNewInformation(news);
-        }
-        //******************************************************************
+        //记录流水(运营消息/推送/系统消息/推送)
+        Integer pushid = this.recordSysInforms(body, imUser.getAccid(), toAccids, title, pushcontent, informidentity, coverimg);
+        //封装payload
+        String payload = wrapPushcontent(type, pushcontent, pushid, coverimg, body);
+        log.debug("封装的 payload:" + payload);
+        //调用云信接口发送通知
+        Map result = this.sendSystemInform(body, imUser.getAccid(), toAccids, pushcontent, payload);
 
         if (result.get("code").equals(200)) {
             log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
-            this.recordSysInforms(body, imUser.getAccid(), toAccids, title, pushcontent, informidentity);
         } else {
+            log.error("发送系统通知失败，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
             throw new BusinessException(MsgCodeConstant.send_system_msg_fail, "发送系统通知失败");
         }
-
+        //更新推送信息记录
+        updatePushInfo(pushcontent, pushid, payload);
     }
 
+    /**
+     * 更新推送信息
+     *
+     * @param pushcontent
+     * @param pushid
+     * @param pushStr
+     */
+    private void updatePushInfo(String pushcontent, int pushid, String pushStr) {
+        if (StringUtils.isNotBlank(pushcontent)) {
 
+            SystemToPush systemToPush = new SystemToPush();
+            systemToPush.setId(pushid);
+            systemToPush.setBody(pushStr);
+            systemToPushService.updateBySelective(systemToPush);
+        }
+    }
 
+    /**
+     * 封装pushcontent
+     *
+     * @param pushcontent
+     * @param pushid
+     * @return
+     */
+    private String wrapPushcontent(Integer type, String pushcontent, Integer pushid, String img, String body) {
+        Map map = new HashMap();
+        map.put("type", ImConstant.PUSH_MESSAGE.system_msg.getCode());
+        map.put("id", pushid);
+        map.put("msg", pushcontent);
+        map.put("img", img);
+        map.put("body", body);
 
+        Gson gson = new Gson();
+        return gson.toJson(map);
+    }
 
     /**
      * 准备toAccids参数
@@ -612,7 +711,7 @@ public class ImFacade {
      * @return
      * @throws IOException
      */
-    public Map sendSystemInform(String body, String fromaccid, String toAccids, String pushcontent) throws IOException {
+    public Map sendSystemInform(String body, String fromaccid, String toAccids, String pushcontent, String payload) throws IOException {
         //发系统通知
         Gson gson = new Gson();
         Map map = new HashMap();
@@ -624,18 +723,36 @@ public class ImFacade {
         imBatchAttachMsg.setFromAccid(fromaccid);
         imBatchAttachMsg.setAttach(body);
         imBatchAttachMsg.setPushcontent(pushcontent);
+        imBatchAttachMsg.setPayload(payload);
+        imBatchAttachMsg.setToAccids(toAccids);
+        imBatchAttachMsg.setOption(option);
+        return this.sendImHttpPost(ImConstant.SEND_BATCH_ATTACH_MSG, BeanUtil.ImBeanToMap(imBatchAttachMsg));
+    }
+
+    public Map sendSystemInformTo(String body, String fromaccid, String toAccids) throws IOException {
+        //发系统通知
+        Gson gson = new Gson();
+        Map map = new HashMap();
+        map.put("badge", false);
+        map.put("needPushNick", false);
+        map.put("route", false);
+        String option = gson.toJson(map);
+        ImBatchAttachMsg imBatchAttachMsg = new ImBatchAttachMsg();
+        imBatchAttachMsg.setFromAccid(fromaccid);
+        imBatchAttachMsg.setAttach(body);
         imBatchAttachMsg.setToAccids(toAccids);
         imBatchAttachMsg.setOption(option);
         return this.sendImHttpPost(ImConstant.SEND_BATCH_ATTACH_MSG, BeanUtil.ImBeanToMap(imBatchAttachMsg));
     }
 
     /**
-     * 发送系统通知 
+     * 发送系统通知
      * 打赏  评论  点赞
      *
      * @param fromaccid
      * @param body
      * @param to
+     * @param pushcontent 不为空，则是手机推送
      * @return
      * @throws IOException
      */
@@ -652,38 +769,94 @@ public class ImFacade {
 
 
     /**
-     * 记录发消息的流水
+     * 记录通知+推送流水
      *
      * @param body
      * @param fromaccid
      * @param toAccids
+     * @param title
+     * @param pushcontent
+     * @param informidentity
+     * @param coverimg
+     * @return
      */
-    public void recordSysInforms(String body, String fromaccid, String toAccids, String title, String pushcontent, long informidentity) {
-
-        if (pushcontent == null) {
-            ImSystemInform imSystemInform = new ImSystemInform();
-            imSystemInform.setBody(body);
-            imSystemInform.setFromAccid(fromaccid);
-            imSystemInform.setUserid(ShiroUtil.getBossUserID());
-            imSystemInform.setToAccids(toAccids);
-            imSystemInform.setTitle(title);
-            imSystemInform.setPushcontent(pushcontent);
-            imSystemInform.setInformTime(new Date());
-            imSystemInform.setInformidentity(String.valueOf(informidentity));
-            //每次取500个人
-            imSystemInformService.add(imSystemInform);
-        } else if (pushcontent != null) {
-            SystemToPush systemToPush = new SystemToPush();
-            systemToPush.setBody(body);
-            systemToPush.setTitle(title);
-            systemToPush.setFromAccid(fromaccid);
-            systemToPush.setToAccids(toAccids);
-            systemToPush.setUserid(ShiroUtil.getBossUserID());
-            systemToPush.setInformTime(new Date());
-            systemToPushService.addSystemToPush(systemToPush);//记录流水
-        }
+    public Integer recordSysInforms(String body, String fromaccid, String toAccids, String title, String pushcontent,
+                                    long informidentity, String coverimg) {
+        //系统通知表:普通通知
+        addImSystemInform(body, fromaccid, toAccids, title, informidentity, coverimg);
+        //推送表(记录系统推送)
+        return addSystemPushInfo(body, fromaccid, toAccids, title);
     }
 
+    private Integer addSystemPushInfo(String body, String fromaccid, String toAccids, String title) {
+        SystemToPush systemToPush = new SystemToPush();
+        systemToPush.setBody(body);
+        systemToPush.setTitle(title);
+        systemToPush.setFromAccid(fromaccid);
+        systemToPush.setToAccids(toAccids);
+        systemToPush.setUserid(ShiroUtil.getBossUserID());
+        systemToPush.setInformTime(new Date());
+        return systemToPushService.addSystemToPush(systemToPush);
+    }
+
+    private void addImSystemInform(String body, String fromaccid, String toAccids, String title,
+                                   long informidentity, String coverimg) {
+        ImSystemInform imSystemInform = new ImSystemInform();
+        imSystemInform.setBody(body);
+        imSystemInform.setFromAccid(fromaccid);
+        imSystemInform.setUserid(ShiroUtil.getBossUserID());
+        imSystemInform.setToAccids(toAccids);
+        imSystemInform.setTitle(title);
+        imSystemInform.setInformTime(new Date());
+        imSystemInform.setInformidentity(String.valueOf(informidentity));
+        imSystemInform.setCoverimg(coverimg);
+        imSystemInformService.add(imSystemInform);
+    }
+
+    /**
+     * 新增系统通知记录
+     *
+     * @param body
+     * @param coverimg
+     * @param fromaccid
+     * @param title
+     * @param informidentity
+     */
+    private void recordSysInformsTo(String body, String coverimg, String fromaccid, String toaccids,
+                                    String title, long informidentity) {
+        ImSystemInform imSystemInform = new ImSystemInform();
+        imSystemInform.setBody(body);
+        imSystemInform.setCoverimg(coverimg);
+        imSystemInform.setFromAccid(fromaccid);
+        imSystemInform.setToAccids(toaccids);
+        imSystemInform.setUserid(ShiroUtil.getBossUserID());
+        imSystemInform.setTitle(title);
+        imSystemInform.setInformTime(new Date());
+        imSystemInform.setInformidentity(String.valueOf(informidentity));
+        imSystemInformService.add(imSystemInform);
+    }
+
+    /**
+     * 活动通知
+     *
+     * @param body
+     * @param fromaccid
+     * @param
+     * @param informidentity
+     */
+    public void activeMessage(String body, String fromaccid, long informidentity, String toAccids, String title, int activeid) {
+        ImSystemInform imSystemInform = new ImSystemInform();
+        imSystemInform.setBody(body);
+        imSystemInform.setFromAccid(fromaccid);
+        imSystemInform.setUserid(ShiroUtil.getBossUserID());
+        imSystemInform.setInformTime(new Date());
+        imSystemInform.setInformidentity(String.valueOf(informidentity));
+        imSystemInform.setToAccids(toAccids);
+        imSystemInform.setTitle(title);
+        imSystemInform.setActiveid(activeid);
+        //每次取500个人
+        imSystemInformService.add(imSystemInform);
+    }
 
 
     /**
@@ -818,7 +991,7 @@ public class ImFacade {
                 String json = gson.toJson(map);
                 SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("propelling_movement_infomation"));
             }
-            }
+        }
         int totalPageNum = (list.size() + pageSize - 1) / pageSize;
         if (list.size() > 200) {
             for (int j = 0; j <= totalPageNum; j++) {
@@ -837,7 +1010,7 @@ public class ImFacade {
             }
 
         }
-        }
+    }
 
 
     public List<SystemToPush> findAllSystemToPush(Paging<SystemToPush> pager) {
@@ -871,45 +1044,151 @@ public class ImFacade {
      * @param
      * @return
      */
-    public void addSystemToPush(String body, String title) {
+    /*public void addSystemToPush(String body, String title) {
         SystemToPush systemToPush = new SystemToPush();
         systemToPush.setBody(body);
         systemToPush.setTitle(title);
         systemToPush.setUserid(ShiroUtil.getBossUserID());
         systemToPush.setInformTime(new Date());
         systemToPushService.addSystemToPush(systemToPush);//记录流水
-    }
-
+    }*/
 
     /**
      * 系统推送
      *
      * @param body
      * @param title
+     */
+    /*public void systemPushMessage(String body, String title, JSONObject jsonObjectPayload, int deviceType) throws Exception {
+        //安卓这边是使用小米推送+云信推送
+        miPushUtils.sendBroadcastAll(body, title, jsonObjectPayload, deviceType);
+        //记录推送流水
+        addSystemToPush(body, title);
+    }*/
+
+
+    /**
+     * 活动通知
+     *
+     * @param
+     */
+    public void activeMessage(String title, String body, int postid) {
+        try {
+            Date date = new Date();
+            //通知唯一标识
+            long informidentity = date.getTime();
+            ImUser imUser = this.getImuserByCurrentBossuser();
+            //查询参加活动的人
+            List<ImUser> imAppUserList = systemToPushService.queryUser(postid);
+            if (ListUtil.isNotEmpty(imAppUserList)) {
+                int size = imAppUserList.size();
+                log.info("app中的IM用户共" + size + "人！");
+                if (size > 500) {
+                    //人数多于500人，分批次发系统通知
+                    int mutiple = size / 500;   //倍数
+                    for (int i = 0; i <= mutiple; i++) {
+                        /**
+                         * 比如共1002人，
+                         * 那么i=0, 即第0-500人， 取500人
+                         *     i=1, 即第501-1000人，    取500人
+                         *     i=2, 即第1001-1002人，   取两人
+                         */
+                        int eachSize = i < mutiple ? 500 : size - mutiple * 500;
+                        activeSendInform(body, imAppUserList, eachSize, imUser, i, informidentity, title, postid);
+                    }
+                } else {
+                    //不超过500人
+                    activeSendInform(body, imAppUserList, size, imUser, 0, informidentity, title, postid);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 活动
+     *
+     * @param body
+     * @param imUser
+     * @param multiple
+     * @param informidentity
+     * @throws IOException
+     */
+    private void activeSendInform(String body, List<ImUser> imAppUserList, int size, ImUser imUser, int multiple, long informidentity, String title, int activeid) throws IOException {
+        //不足500人
+        String toAccids = prepareToAccids(imAppUserList, size, multiple);
+        Map result = this.sendSystemInformTo(body, imUser.getAccid(), toAccids);
+
+        if (result.get("code").equals(200)) {
+            log.info("发送系统通知成功，发送人accid=" + imUser.getAccid() + ",接收人accids=" + toAccids + ",发送内容=" + body);
+            this.activeMessage(body, imUser.getAccid(), informidentity, toAccids, title, activeid);
+        } else {
+            throw new BusinessException(MsgCodeConstant.send_system_msg_fail, "发送系统通知失败");
+        }
+
+    }
+
+
+    /**
+     * 查询活动通知列表
+     *
+     * @param
      * @return
      */
-    public Message buildMessage(String body, String title) throws Exception {
-        String PACKAGENAME = "com.syjm.movision";
-        Message message = new Message.Builder()
-                .title(title)
-                .description(body).payload(body)
-                .restrictedPackageName(PACKAGENAME)
-                .passThrough(1)  //消息使用透传方式
-                .notifyType(1)     // 使用默认提示音提示
-                .extra("flow_control", "4000")     // 设置平滑推送, 推送速度4000每秒(qps=4000)
-                .build();
-        return message;
+    public List<ImSystemInform> findAllActiveMessage(String body, String pai, Paging<ImSystemInform> paging) {
+        Map map = new HashMap();
+        if (StringUtil.isNotEmpty(body)) {
+            map.put("body", body);
+        }
+        if (StringUtil.isNotEmpty(pai)) {
+            map.put("pai", pai);
+        }
+        return imSystemInformService.findAllActiveMessage(map, paging);
+    }
+
+
+    /**
+     * 修改活动通知
+     *
+     * @param id
+     * @return
+     */
+    public int updateActiveMessage(int id, String title, String body) {
+        ImSystemInform imSystemInform = new ImSystemInform();
+        if (String.valueOf(id) != null) {
+            imSystemInform.setId(id);
+        }
+        if (title != null) {
+            imSystemInform.setTitle(title);
+        }
+        if (body != null) {
+            imSystemInform.setBody(body);
+        }
+        int re = imSystemInformService.updateActiveMessage(imSystemInform);
+        return re;
     }
 
     /**
-     * 系统推送
+     * 活动通知回显
      *
-     * @param body
-     * @param title
+     * @param id
+     * @return
      */
-    public void systemPushMessage(String body, String title) throws Exception {
-        buildMessage(body, title);
-        addSystemToPush(body, title);
+    public ImSystemInform queryActiveMessageById(int id) {
+        ImSystemInform imSystemInform = imSystemInformService.queryActiveById(id);
+        return imSystemInform;
+    }
+
+    /**
+     * 查询活动内容
+     *
+     * @param id
+     * @return
+     */
+    public String queryActiveBody(int id) {
+        String imsys = imSystemInformService.queryActiveBody(id);
+        return imsys;
     }
 
 

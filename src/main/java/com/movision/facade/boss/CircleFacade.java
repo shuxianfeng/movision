@@ -98,6 +98,7 @@ public class CircleFacade {
                 int follownews = 0;//今日关注
                 int postnews = 0;//今日新增帖子
                 int isessences = 0;//精贴数
+                int heatvalue = 0;//热度
                 map.put("category", circlenum.get(i).getCategory());
                 List<User> userslist = userService.queryCircleMangerByUseridList(map);//根据用户id查询出圈子所有管理员列表
                 if (listt.size() > 0) {
@@ -113,6 +114,7 @@ public class CircleFacade {
                         follows += listt.get(e).getFollownum();//关注和
                         follownews += listt.get(e).getFollownewnum();//新增关注和
                         isessences += listt.get(e).getIsessencenum();//精贴和
+                        heatvalue += listt.get(e).getHeatvalue();//热度
 
                         //根据圈子id查询圈子的管理员列表
                         List<User> circleManage = userService.queryCircleManagerByCircleList(cid);
@@ -135,6 +137,7 @@ public class CircleFacade {
                         vo.setIsrecommend(listt.get(e).getIsrecommend());//推荐首页
                         vo.setIsdiscover(listt.get(e).getIsdiscover());//推荐发现
                         vo.setCreatetime(listt.get(e).getCreatetime());//圈子创建时间
+                        vo.setHeatvalue(listt.get(e).getHeatvalue());//圈子热度
                         circleVoslist.add(vo);
                     }
                     //外层圈子类型列表数据
@@ -153,6 +156,7 @@ public class CircleFacade {
                     circlenum.get(i).setFollownewnum(follownews);
                     circlenum.get(i).setIsessencenum(isessences);
                     circlenum.get(i).setClassify(circleVoslist);
+                    circlenum.get(i).setHeatvaluenum(heatvalue);
                 }
             }
             for (int n = 0; n < circlenum.size(); ) {
@@ -214,27 +218,21 @@ public class CircleFacade {
      * @param circleid
      * @return
      */
-    public Map updateDiscover(String circleid, String orderid, String loginid) {
-        Integer discover = circleService.queryCircleDiscover(circleid);//查询圈子是否推荐发现页
+    public Map updateDiscover(String circleid) {
+        Circle circle = new Circle();
+        circle.setId(Integer.parseInt(circleid));
+        Integer discover = circleService.queryCircleDiscover(Integer.parseInt(circleid));//查询圈子是否推荐发现页
         Map map = new HashedMap();
-        Map<String, Integer> spread = new HashedMap();
-        Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.update.getCode(), JurisdictionConstants.JURISDICTION_TYPE.circle.getCode(), Integer.parseInt(circleid));
-        if (res.get("resault").equals(1)) {
-            spread.put("circleid", Integer.parseInt(circleid));
-            spread.put("orderid", Integer.parseInt(orderid));
-            if (discover == 0) {
-                Integer i = circleService.updateDiscover(spread);
-                map.put("resault", i);
-            } else {
-                Integer n = circleService.updateDiscoverDel(circleid);
-                map.put("resault", n);
-            }
-            return map;
-        } else {
-            map.put("resault", -1);
-            map.put("message", "权限不足");
-            return map;
+        if (discover == 0) {//没有
+            circle.setIsdiscover(1);
+            Integer resault = circleService.updateDiscover(circle);
+            map.put("resault", resault);
+        } else {//是
+            circle.setIsdiscover(0);
+            Integer resault = circleService.updateDiscover(circle);
+            map.put("resault", resault);
         }
+        return map;
     }
 
     /**
@@ -432,6 +430,7 @@ public class CircleFacade {
             circleDetails.setOrderid(0);//设置精选排序，初始值：0
             circleDetails.setIsrecommend(0);//设置是否被推荐，初始值0
             circleDetails.setPermission(1);//设置其他用户是否可以发帖，初始值：1是
+            circleDetails.setHeatvalue(0);//圈子热度
             Integer s = circleService.insertCircle(circleDetails);//创建圈子
             Integer cirid = circleDetails.getId();
             if (!StringUtils.isEmpty(circleadmin)) {//管理员列表

@@ -10,13 +10,27 @@ public class HeatValueConstant {
      * 获得热度的类型
      */
     public enum HEATVALUE_TYPE {
+        //帖子热度
         home_page_selection(1),//首页精选
         post_selection(2),//帖子精选
-        post_level(3),//发帖人级别
-        zan_number(4),//点赞数
-        comments_number(5),//评论数
-        forwarding_number(6),//转发数
-        collection_number(7);//收藏数
+        zan_number(3),//点赞数
+        comments_number(4),//评论数
+        forwarding_number(5),//转发数
+        collection_number(6),//收藏数
+
+        //用户热度
+        fan_count(7),//粉丝数
+        posts_count(8),//发帖数
+        //评论的热度
+        comment_zan_count(9),//評論的點贊數
+        reply_comment_number(10),//回复评论数
+
+        reward_post(11),//打赏帖子
+
+        read_post(12),//帖子浏览数
+
+        attention_label(13),//关注标签
+        using_label(14);//帖子中使用标签
 
         public final int code;
 
@@ -40,12 +54,22 @@ public class HeatValueConstant {
     public enum POINT {
         home_page_selection(30),//首页精选
         post_selection(20),//帖子精选
-        post_level(10),//发帖人级别
         zan_number(5),//点赞数
         comments_number(5),//评论数
         forwarding_number(5),//转发数
-        collection_number(5);//收藏数
+        collection_number(15),//收藏数
 
+        //用户热度
+        fan_count(2),//粉丝数
+        posts_count(8),//发帖数
+        //评论的热度
+        comment_zan_count(3),//評論的點贊數
+        reply_comment_number(7),//回复评论数
+
+        reward_post(4),//打赏帖子
+        read_post(1),//帖子浏览数
+        attention_label(2),//关注标签
+        using_label(3);//发帖使用标签
         public final int code;
 
         POINT(int code) {

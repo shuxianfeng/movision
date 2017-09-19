@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.postLabel.mapper.PostLabelMapper">
+  <resultMap id="BaseResultMap" type="com.movision.mybatis.postLabel.entity.PostLabel">
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="heat_value" property="heatValue" jdbcType="INTEGER"/>
+    <result column="userid" property="userid" jdbcType="INTEGER"/>
+    <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+    <result column="type" property="type" jdbcType="INTEGER"/>
+    <result column="photo" property="photo" jdbcType="VARCHAR"/>
+    <result column="citycode" property="citycode" jdbcType="VARCHAR"/>
+      <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+      <result column="postid" property="postid" jdbcType="INTEGER"/>
+      <result column="circleid" property="circleid" jdbcType="INTEGER"/>
+      <result column="isrecommend" property="isrecommend" javaType="INTEGER"/>
+      <result column="use_count" property="useCount" javaType="INTEGER"/>
+      <result column="fans" property="fans" javaType="INTEGER"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+      id, name, heat_value, userid, intime, type, photo, citycode, isrecommend, isdel, use_count, fans
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    from yw_post_label
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_post_label
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
+      insert into yw_post_label (id, NAME, heat_value,
+      userid, intime,isdel)
+      values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{heatValue,jdbcType=INTEGER},
+      #{userid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
+    insert into yw_post_label
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+        heat_value,
+      <if test="userid != null">
+        userid,
+      </if>
+        intime,
+      <if test="type != null">
+        type,
+      </if>
+      <if test="photo != null">
+        photo,
+      </if>
+      <if test="citycode != null">
+        citycode,
+      </if>
+        <if test="isrecommend != null">
+            isrecommend,
+        </if>
+            isdel,
+        use_count,
+        fans,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+        1,
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+        now(),
+      <if test="type != null">
+        #{type},
+      </if>
+      <if test="photo != null">
+        #{photo},
+      </if>
+      <if test="citycode != null">
+        #{citycode},
+      </if>
+        <if test="isrecommend != null">
+            #{isrecommend,jdbcType=INTEGER},
+        </if>
+        0,
+        1,
+        0,
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
+    update yw_post_label
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="heatValue != null">
+        heat_value = #{heatValue,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="intime != null">
+        intime = #{intime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null">
+        type = #{type},
+      </if>
+      <if test="photo != null">
+        photo = #{photo},
+      </if>
+      <if test="citycode != null">
+        citycode = #{citycode},
+      </if>
+        <if test="isrecommend != null">
+            isrecommend = #{isrecommend,jdbcType=INTEGER},
+        </if>
+        <if test="isdel != null">
+            isdel = #{isdel,jdbcType=INTEGER},
+        </if>
+        <if test="useCount != null">
+            #{useCount},
+        </if>
+        <if test="fans != null">
+            #{fans},
+        </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
+    update yw_post_label
+    set name = #{name,jdbcType=VARCHAR},
+      heat_value = #{heatValue,jdbcType=INTEGER},
+      userid = #{userid,jdbcType=INTEGER},
+    intime = #{intime,jdbcType=TIMESTAMP},
+    type = #{type},
+    photo = #{photo},
+      isdel = #{isdel,jdbcType=INTEGER},
+      photo = #{photo},
+      citycode = #{citycode},
+      use_count = #{useCount},
+      fans = #{fans}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="queryLableName" resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+      SELECT * FROM yw_post_label WHERE isdel=0
+  </select>
+  <update id="updateLabelHeatValue" parameterType="java.util.Map">
+    UPDATE yw_post_label SET heat_value=#{sum,jdbcType=INTEGER} WHERE id=#{labelid,jdbcType=INTEGER}
+  </update>
+  <select id="queryLabelHeatValue" resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+      SELECT * FROM yw_post_label WHERE isdel=0 AND isrecommend=0 ORDER BY heat_value DESC
+  </select>
+    <select id="queryName" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabelTz">
+        SELECT * FROM yw_post_label WHERE id=#{labelid,jdbcType=INTEGER} AND isdel=0
+    </select>
+
+    <select id="findAllQueryPostLabelList" parameterType="com.movision.mybatis.postLabel.entity.PostLabelVo"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabelDetails">
+        SELECT l.*,
+        (SELECT c.name FROM yw_city c WHERE c.code = l.citycode) AS cityName,
+        (SELECT count(postid) FROM yw_post_label_relation WHERE labelid = l.id) AS useQuantity,
+        (SELECT u.nickname FROM yw_user u WHERE u.id = l.userid) AS userName
+        FROM yw_post_label l
+        WHERE isdel = 0
+        <if test="name != null">
+            AND l.name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="type != null">
+            AND l.type = #{type,jdbcType=INTEGER}
+        </if>
+        <if test="userName != null">
+            AND l.userid IN (SELECT id FROM yw_user WHERE nickname LIKE concat('%',#{userName,jdbcType=VARCHAR},'%'))
+        </if>
+        ORDER BY heat_value DESC
+    </select>
+
+    <!--查询我的.关注.关注的标签列表-->
+    <select id="findAllMineFollowLabel" resultType="com.movision.mybatis.postLabel.entity.PostLabelVo" >
+        SELECT t1.id AS labelid, t1.name, t1.photo, t1.use_count AS useCount, t1.fans FROM yw_post_label t1
+        LEFT JOIN yw_follow_label t2 ON t1.id = t2.labelid
+        WHERE t2.userid = #{userid}
+    </select>
+
+    <select id="queryPostLabelById" parameterType="com.movision.mybatis.postLabel.entity.PostLabel"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabelDetails">
+    SELECT l.*,
+        (SELECT c.name FROM yw_city c WHERE c.code = l.citycode) AS cityName,
+        (SELECT u.nickname FROM yw_user u WHERE u.id = l.userid) AS userName
+        FROM yw_post_label l
+        WHERE id = #{id,jdbcType=INTEGER} AND isdel = 0
+  </select>
+
+    <update id="deletePostLabel" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
+        UPDATE yw_post_label
+        SET isdel = 1
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO yw_post_label (
+        name, heat_value, userid, intime, type, photo, isdel, citycode, isrecommend, use_count, fans
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.name,jdbcType=VARCHAR},
+            1,
+            #{item.userid,jdbcType=INTEGER},
+            now(),
+            #{item.type,jdbcType=INTEGER},
+            #{item.photo,jdbcType=VARCHAR},
+            0,
+            #{item.citycode,jdbcType=VARCHAR},
+            0,
+            1,
+            0
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryLabelIdList" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT id FROM yw_post_label
+        where name IN
+        <foreach item="nameStr" collection="array" open="(" separator="," close=")">
+            #{nameStr}
+        </foreach>
+    </select>
+
+    <select id="queryLabelList" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+        SELECT * FROM yw_post_label
+        where name IN
+        <foreach item="nameStr" collection="array" open="(" separator="," close=")">
+            #{nameStr}
+        </foreach>
+    </select>
+
+    <select id="queryCountLabelName" parameterType="java.lang.Integer"
+          resultType="com.movision.mybatis.postLabel.entity.PostLabelCount">
+      SELECT COUNT(1) AS count,p.userid,p.id,u.nickname FROM yw_post_label_relation r LEFT JOIN yw_post p ON
+      p.id=r.postid LEFT JOIN yw_post_label l ON l.id=r.labelid LEFT JOIN yw_user u ON u.id=p.userid
+      WHERE l.id=#{labelid,jdbcType=INTEGER} AND isdel=0 GROUP BY p.userid ORDER BY count DESC
+  </select>
+    <select id="queryCircleByPostid" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.circle.entity.CircleVo">
+        SELECT c.*,t.categoryname,u.nickname,u.photo AS userphoto FROM yw_circle c LEFT JOIN yw_circle_category t ON
+        t.id=c.category
+        LEFT JOIN yw_user u ON u.id=c.userid WHERE c.id=#{circleid,jdbcType=INTEGER}
+    </select>
+    <select id="postInCircle" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
+        WHERE to_days(p.intime) = to_days(now()) AND c.id=#{circleid,jdbcType=INTEGER} AND p.isdel=0
+    </select>
+    <select id="queryLabelCircle" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+        SELECT DISTINCT(l.`name`),l.type,l.id FROM yw_post_label_relation r
+        LEFT JOIN yw_post p ON p.id=r.postid LEFT JOIN yw_post_label l ON l.id=r.labelid
+        WHERE p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 AND l.isdel=0 ORDER BY l.heat_value DESC
+    </select>
+    <select id="findAllHotPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.*,u.nickname,u.photo,c.`name` AS circlename FROM yw_post p LEFT JOIN yw_user u ON u.id=p.userid LEFT
+        JOIN yw_circle c ON c.id=p.circleid WHERE
+        p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 ORDER BY p.heat_value DESC
+    </select>
+    <select id="findAllNewPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.*,u.nickname,u.photo,c.`name` AS circlename FROM yw_post p LEFT JOIN yw_user u ON u.id=p.userid LEFT
+        JOIN yw_circle c ON c.id=p.circleid WHERE
+        p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 ORDER BY p.intime DESC
+    </select>
+
+    <select id="findAllIsencePost" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.*,u.nickname,u.photo,c.`name` AS circlename FROM yw_post p LEFT JOIN yw_user u ON u.id=p.userid LEFT
+        JOIN yw_circle c ON c.id=p.circleid WHERE
+        p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 AND p.isessence=1 ORDER BY p.intime DESC
+    </select>
+    <select id="queryCirclePeople" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.circle.entity.CircleCount">
+        SELECT COUNT(1) AS count,p.userid,u.nickname FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
+        LEFT JOIN yw_user u ON u.id=p.userid
+        WHERE c.id=#{circleid,jdbcType=INTEGER} GROUP BY p.userid  ORDER BY count DESC
+    </select>
+
+    <select id="queryPostLabeIsRecommend" parameterType="com.movision.mybatis.postLabel.entity.PostLabel"
+            resultType="java.lang.Integer">
+        SELECT isrecommend FROM yw_post_label WHERE id = #{id,jdbcType=INTEGER} AND isdel = 0
+    </select>
+
+    <update id="updatePostLabelIsRecommend" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
+        UPDATE yw_post_label
+        SET
+        isrecommend = #{isrecommend,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=INTEGER} AND isdel = 0
+    </update>
+
+    <select id="countSameNameLabel" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post_label WHERE NAME = #{name}
+    </select>
+    <select id="countSameNormalNameLabel" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post_label WHERE NAME = #{name} and type = 1
+    </select>
+
+    <select id="isrecommendLabel" resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+        SELECT * FROM yw_post_label WHERE isdel=0 AND isrecommend=1
+    </select>
+    <select id="labelId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+      SELECT labelid FROM yw_follow_label WHERE userid=#{userid,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryHotValueLabelList" resultType="com.movision.mybatis.postLabel.entity.PostLabel"
+            parameterType="java.lang.Integer">
+        select * FROM yw_post_label order by heat_value desc limit #{displayCount}
+    </select>
+
+    <select id="queryPostLabelByName" parameterType="com.movision.mybatis.postLabel.entity.PostLabel"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+        SELECT id,name,type FROM yw_post_label WHERE type <![CDATA[<>]]> 0 AND isdel = 0
+    </select>
+    <update id="updatePostHeatValue" parameterType="java.lang.Integer">
+        UPDATE yw_post SET  heat_value=heat_value-10 WHERE id=#{postid,jdbcType=INTEGER} AND  isdel=0
+    </update>
+    <select id="queryPostHeatValue" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT heat_value FROM  yw_post WHERE  id=#{postid,jdbcType=INTEGER} AND  isdel=0
+    </select>
+    <update id="heatvale" parameterType="java.lang.Integer">
+        UPDATE yw_post SET  heat_value=0 WHERE id=#{postid,jdbcType=INTEGER} AND  isdel=0
+    </update>
+    <select id="queryUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT  userid FROM  yw_post WHERE  id=#{postid,jdbcType=INTEGER} AND  isdel=0
+    </select>
+    <select id="queryUserHeatValue" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT  heat_value FROM  yw_user WHERE id=#{userids,jdbcType=INTEGER}
+    </select>
+
+    <update id="updateUserHeatValue" parameterType="java.lang.Integer">
+        UPDATE yw_user SET heat_value=heat_value-10 WHERE id=#{userids,jdbcType=INTEGER}
+    </update>
+
+    <update id="userHeatVale" parameterType="java.lang.Integer">
+        UPDATE yw_user SET heat_value=0 WHERE id=#{userids,jdbcType=INTEGER}
+    </update>
+    <select id="queryCircleid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT circleid FROM  yw_post WHERE  id=#{postid,jdbcType=INTEGER} AND isdel=0
+    </select>
+    <select id="queryCircleByPost" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT  * FROM yw_post WHERE circleid=#{circleid,jdbcType=INTEGER} AND isdel=0
+    </select>
+
+    <select id="queryCityListByCityname" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+        select name, code as citycode from yw_city where name like CONCAT('%', #{name}, '%' )
+    </select>
+
+    <select id="queryGeogLabelByName" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+        SELECT * from yw_post_label WHERE NAME LIKE CONCAT('%', #{name}, '%')
+        AND TYPE=0
+    </select>
+    <select id="followCircle" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT  COUNT(1) FROM  yw_follow_circle WHERE circleid=#{circleid,jdbcType=INTEGER}
+    </select>
+
+    <!--通过userid查询该用户发帖使用的所有地理标签-->
+    <select id="getfootmap" parameterType="java.lang.Integer" resultType="com.movision.mybatis.postLabel.entity.GeographicLabel" >
+        SELECT * FROM yw_post_label
+        WHERE type = '0' AND isdel = '0'
+        AND id IN (
+            SELECT DISTINCT labelid FROM yw_post_label_relation WHERE postid IN (
+              SELECT id FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER}
+            )
+        )
+    </select>
+    <select id="isFollowCircleid" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1) from  yw_follow_circle WHERE userid=#{userid,jdbcType=INTEGER} AND circleid=#{circleid,jdbcType=INTEGER}
+    </select>
+    <select id="findAllLabelHotPost" parameterType="java.util.Map" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.* FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        WHERE r.labelid=#{labelid,jdbcType=INTEGER} AND p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 ORDER  BY p.heat_value DESC
+     </select>
+    <select id="findAllLabelNewPost" parameterType="java.util.Map" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.* FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        WHERE r.labelid=#{labelid,jdbcType=INTEGER} AND p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 ORDER  BY p.intime DESC
+    </select>
+    <select id="findAllLabelIsessenPost" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.* FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        WHERE r.labelid=#{labelid,jdbcType=INTEGER} AND p.circleid=#{circleid,jdbcType=INTEGER} AND p.isessence=1 AND
+        p.isdel=0 ORDER BY p.intime DESC
+    </select>
+    <select id="queryCircleManager" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.user.entity.User">
+        SELECT u.id,u.nickname,u.photo FROM yw_circle_manager m LEFT JOIN yw_user u ON u.id=m.userid WHERE m.circleid=#{circleid,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryLabelByname" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+        SELECT id, NAME, photo, TYPE FROM yw_post_label
+        WHERE isdel = 0
+        AND NAME LIKE concat('%',#{name,jdbcType=VARCHAR},'%') LIMIT 4
+    </select>
+
+    <select id="findAllLabelByName" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+        SELECT * FROM yw_post_label
+        WHERE isdel = 0
+        AND NAME LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+    </select>
+</mapper>

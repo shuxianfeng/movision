@@ -24,4 +24,8 @@ public interface PeriodMapper {
 
     Period findAllPeriod(Integer postid);
 
+    Integer insertActivePostPer(Period period);
+
+    void deleteActiveePostPer(Period period);
+
 }

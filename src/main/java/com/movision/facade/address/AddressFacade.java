@@ -109,7 +109,6 @@ public class AddressFacade {
         String addressStr = address.getProvince() + address.getCity() + address.getDistrict() + street;
         //通过地址计算经纬度
         String sn = SnCal.getSn(address.getProvince() + address.getCity() + address.getDistrict() + street);
-//        String sn = SnCal.getSn(street);
         String ak = PropertiesLoader.getValue("baidu.ak");
 
         //通过http的get请求url

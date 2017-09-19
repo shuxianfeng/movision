@@ -1,21 +1,16 @@
 package com.movision.facade.collection;
 
 import com.movision.common.constant.PointConstant;
+import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.pointRecord.PointRecordFacade;
-import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.collection.entity.Collection;
 import com.movision.mybatis.collection.service.CollectionService;
-import com.movision.mybatis.newInformation.entity.NewInformation;
-import com.movision.mybatis.newInformation.service.NewInformationService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
-import com.movision.utils.IdGenerator;
-import org.apache.commons.collections.map.AbstractHashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,9 +34,16 @@ public class CollectionFacade {
     private PointRecordFacade pointRecordFacade;
 
     @Autowired
-    private NewInformationService newInformationService;
+    private FacadeHeatValue facadeHeatValue;
 
-    //在帖子中点击收藏帖子调用该方法
+    /**
+     * 在帖子中点击收藏帖子调用该方法
+     *
+     * @param postid
+     * @param userid
+     * @param type
+     * @return
+     */
     public int collectionPost(String postid, String userid, String type) {
 
         Collection collection = new Collection();
@@ -60,27 +62,8 @@ public class CollectionFacade {
 
             //该帖子的被收藏次数+1
             collectionService.addCollectionSum(Integer.parseInt(postid));
-
-
-            //************************查询被收藏人的帖子是否被设为最新消息通知用户
-           /* Integer isread = newInformationService.queryUserByNewInformation(Integer.parseInt(postid));
-            NewInformation news = new NewInformation();
-            //更新被收藏人的帖子最新消息
-            if (isread != null) {
-                news.setIsread(0);
-                news.setIntime(new Date());
-                news.setUserid(isread);
-                newInformationService.updateUserByNewInformation(news);
-            } else {
-                //获取被收藏人
-                Integer uid = collectionService.queryPostCollectByUser(Integer.parseInt(postid));
-                //新增被收藏人的帖子最新消息
-                news.setIsread(0);
-                news.setIntime(new Date());
-                news.setUserid(uid);
-                newInformationService.insertUserByNewInformation(news);
-            }*/
-            //******************************************************************
+            //增加熱度
+            facadeHeatValue.addHeatValue(Integer.parseInt(postid), 6, userid);
 
             return collectionService.collectionPost(collection);
         } else {
@@ -97,6 +80,8 @@ public class CollectionFacade {
             parammap.put("postid", Integer.parseInt(postid));
             collectionService.cancelCollectionPost(parammap);
             postService.updatePostCollectCount(parammap);
+            //減少熱度
+            facadeHeatValue.zanLessenHeatValue(Integer.parseInt(postid), Integer.parseInt(userid));
         } else if (type.equals("1")) {
             //取消收藏商品
             Map<String, Object> parammap = new HashMap<>();

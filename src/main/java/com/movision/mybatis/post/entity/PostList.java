@@ -1,6 +1,7 @@
 package com.movision.mybatis.post.entity;
 
 import com.movision.mybatis.goods.entity.GoodsVo;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -61,6 +62,8 @@ public class PostList implements Serializable {
 
     private Integer isactive;
 
+    private Integer partsum_enddays;//当前活动显示参与人数还是显示剩余结束天数 0 显示结束天数 1 显示活动参与人数
+
     private Integer activetype;
 
     private Double activefee;
@@ -100,6 +103,76 @@ public class PostList implements Serializable {
     private String squareimgurl;//活动首页方形图
 
     private List<GoodsVo> promotionGoods;//活动促销商品
+
+    private Integer activeid;//活动id
+
+    private Integer heatvalue;//热度值
+
+    private Integer click;//点击量
+
+    private Integer apply;//报名数
+
+    private Integer contribute;//投稿数
+
+    private Integer ishotorder;//活动热门排序
+
+    private List<PostLabel> postLabels;//帖子标签
+
+    public List<PostLabel> getPostLabels() {
+        return postLabels;
+    }
+
+    public void setPostLabels(List<PostLabel> postLabels) {
+        this.postLabels = postLabels;
+    }
+
+    public Integer getApply() {
+        return apply;
+    }
+
+    public void setApply(Integer apply) {
+        this.apply = apply;
+    }
+
+    public Integer getContribute() {
+        return contribute;
+    }
+
+    public void setContribute(Integer contribute) {
+        this.contribute = contribute;
+    }
+
+    public Integer getIshotorder() {
+        return ishotorder;
+    }
+
+    public void setIshotorder(Integer ishotorder) {
+        this.ishotorder = ishotorder;
+    }
+
+    public Integer getClick() {
+        return click;
+    }
+
+    public void setClick(Integer click) {
+        this.click = click;
+    }
+
+    public Integer getHeatvalue() {
+        return heatvalue;
+    }
+
+    public void setHeatvalue(Integer heatvalue) {
+        this.heatvalue = heatvalue;
+    }
+
+    public Integer getActiveid() {
+        return activeid;
+    }
+
+    public void setActiveid(Integer activeid) {
+        this.activeid = activeid;
+    }
 
     public String getCategoryname() {
         return categoryname;
@@ -422,5 +495,13 @@ public class PostList implements Serializable {
 
     public void setIscontribute(Integer iscontribute) {
         this.iscontribute = iscontribute;
+    }
+
+    public Integer getPartsum_enddays() {
+        return partsum_enddays;
+    }
+
+    public void setPartsum_enddays(Integer partsum_enddays) {
+        this.partsum_enddays = partsum_enddays;
     }
 }

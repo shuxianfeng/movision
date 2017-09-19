@@ -6,9 +6,10 @@
         <result column="userid" property="userid" jdbcType="INTEGER"/>
         <result column="interestedusers" property="interestedusers" jdbcType="INTEGER"/>
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="isread" property="isread" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, userid, interestedusers, intime
+        id, userid, interestedusers, intime, isread
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -72,11 +73,66 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <update id="updateFollowuserVo" parameterType="com.movision.mybatis.followUser.entity.FollowUserVo">
+        update yw_follow_user
+        <set>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="interestedusers != null">
+                interestedusers = #{interestedusers,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isread != null">
+                isread = #{isread,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
     <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.followUser.entity.FollowUser">
         update yw_follow_user
         set userid = #{userid,jdbcType=INTEGER},
         interestedusers = #{interestedusers,jdbcType=INTEGER},
-        intime = #{intime,jdbcType=TIMESTAMP}
+        intime = #{intime,jdbcType=TIMESTAMP},
+        isread = #{isread,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="yesOrNo" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT  COUNT(1) FROM  yw_follow_user WHERE userid=#{userid,jdbcType=INTEGER} AND interestedusers=#{interestedusers,jdbcType=INTEGER}
+    </select>
+    <delete id="cancleFollowUser" parameterType="java.util.Map">
+        DELETE FROM yw_follow_user WHERE userid=#{userid,jdbcType=INTEGER} AND interestedusers=#{interestedusers,jdbcType=INTEGER}
+    </delete>
+
+    <select id="selectFollowUserVoList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.followUser.entity.FollowUserVo">
+        SELECT u.id, u.userid, u.interestedusers, u.intime, u.isread,
+        yu.nickname AS username, yu.photo AS userphoto, IF(u2.id = '' OR u2.id IS NULL, 0, 1) AS isfollow
+        FROM yw_follow_user u
+        LEFT JOIN yw_user yu ON u.userid = yu.id
+        LEFT JOIN yw_follow_user u2 ON u.userid = u2.interestedusers AND u2.userid = #{userid}
+        WHERE u.interestedusers = #{userid}
+        ORDER BY intime DESC
+        limit 10
+    </select>
+    <update id="insertUserFans" parameterType="java.lang.Integer">
+        UPDATE  yw_user SET fans=fans+1 WHERE id=#{interestedusers,jdbcType=INTEGER}
+    </update>
+    <update id="insertUserFansLess" parameterType="java.lang.Integer">
+        UPDATE  yw_user SET fans=fans-1 WHERE id=#{interestedusers,jdbcType=INTEGER}
+    </update>
+    <select id="queryUserIsRead" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_follow_user WHERE isread=0 AND interestedusers=#{userid,jdbcType=INTEGER}
+    </select>
+
+    <update id="updateAttentionIsRead" parameterType="java.lang.Integer">
+        UPDATE yw_follow_user SET isread = 1 WHERE interestedusers = #{userid,jdbcType=INTEGER} AND isread = 0
+    </update>
+    <update id="updateUserAttention" parameterType="java.lang.Integer">
+        UPDATE yw_user
+        SET attention = attention - 1
+        WHERE id = #{userid,jdbcType=INTEGER}
     </update>
 </mapper>

@@ -10,42 +10,38 @@ import com.aliyuncs.vod.model.v20170321.CreateUploadVideoRequest;
 import com.aliyuncs.vod.model.v20170321.CreateUploadVideoResponse;
 import com.aliyuncs.vod.model.v20170321.RefreshUploadVideoRequest;
 import com.aliyuncs.vod.model.v20170321.RefreshUploadVideoResponse;
+import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.SimpleTimeZone;
+import com.movision.mybatis.weixinguangzhu.entity.WeixinGuangzhu;
+import com.movision.mybatis.weixinguangzhu.service.WeixinGuangzhuService;
+import com.movision.mybatis.weixinlist.entity.WeixinList;
+import com.movision.mybatis.weixinlist.service.WeixinListService;
+import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.redis.RedisClient;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.apache.ibatis.ognl.Token;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-import redis.clients.jedis.Jedis;
-import sun.security.krb5.internal.Ticket;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.crypto.dsig.SignatureMethod;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 
@@ -57,13 +53,15 @@ import java.util.*;
 public class VideoUploadUtil {
 
     private static final Logger log = LoggerFactory.getLogger(VideoUploadUtil.class);
-
+    //正式
     public static String accessKeyId = PropertiesLoader.getValue("access.key.id");
     public static String accessKeySecret = PropertiesLoader.getValue("access.key.secret");
-
     @Autowired
     private RedisClient redisClient;
 
+    /** @Autowired
+    private WeixinGuangzhuService weixinGuangzhuService;
+    @Autowired private WeixinListService weixinListService;*/
     public String videoUpload(String fileName, String title, String description, String coverimg, String tatges) {
 
         //fileName为上传文件所在的绝对路径(必须包含扩展名)
@@ -313,30 +311,35 @@ public class VideoUploadUtil {
      * @param code
      * @return
      */
-    static String APPID = "wxfe9eb21fdb46a1a6";
-    static String APPSECRET = "c20dc2afd2d8e38a4c49abebf4d0f532";
+    //正式
+    //static String APPID = "wxfe9eb21fdb46a1a6";
+    // static String APPSECRET = "c20dc2afd2d8e38a4c49abebf4d0f532";
+    //测试
+    static String APPID = "wx1a8d32888a41fcb2";
+    static String APPSECRET = "58f2162e7c0253e8486b4d8679e787dd";
 
     public Map<String, String> getUserInfoAccessToken(String code) {
         Map<String, String> data = new HashMap();
         try {
-            String url = String.format("https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code",
-                    APPID, APPSECRET, code);
-            org.apache.http.impl.client.DefaultHttpClient httpClient = new org.apache.http.impl.client.DefaultHttpClient();
-            HttpGet httpGet = new HttpGet(url);
-            HttpResponse httpResponse = httpClient.execute(httpGet);
-            HttpEntity httpEntity = httpResponse.getEntity();
-            String tokens = EntityUtils.toString(httpEntity, "utf-8");
-            System.out.print(tokens);
-            JSONObject jsonObject = new JSONObject(tokens);
+            String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + APPID + "&secret=" + APPSECRET + "&code=" + code + "&grant_type=authorization_code";
+            String result = GetHttp(url);
+            net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
             data.put("openid", jsonObject.get("openid").toString());
             data.put("access_token", jsonObject.get("access_token").toString());
             data.put("refresh_token", jsonObject.get("refresh_token").toString());
             String acctoken = jsonObject.get("access_token").toString();
             String refresh_token = jsonObject.get("refresh_token").toString();
+            String openid = jsonObject.get("openid").toString();
+            redisClient.remove("acctoken");
+            redisClient.remove("refresh_token");
+            redisClient.remove("openid");
             redisClient.set("acctoken", acctoken);
             redisClient.set("refresh_token", refresh_token);
+            redisClient.set("openid", openid);
+            data.put("code", "200");
         } catch (Exception ex) {
             ex.printStackTrace();
+            data.put("code", "300");
         }
         return data;
     }
@@ -395,6 +398,10 @@ public class VideoUploadUtil {
         net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
         String acctoken = jsonObject.get("access_token").toString();
         String expires_in = jsonObject.get("expires_in").toString();
+        log.info("刚刚拿出来的------------------------------------------" + acctoken);
+        redisClient.remove("acctokens");
+        redisClient.remove("expires_in");
+        redisClient.remove("acctokendata");
         redisClient.set("acctokens", acctoken);
         redisClient.set("expires_in", expires_in);
         redisClient.set("acctokendata", new Date());
@@ -478,51 +485,131 @@ public class VideoUploadUtil {
     /**
      * 获取用户信息
      *
-     * @param acctoken
+     * @param
      * @param openid
      * @return
      */
-    public static Map getUserInformation(String acctoken, String openid) {
-        String result = "";
+    public Map getUserInformation(String openid) {
         BufferedReader in = null;
-        String url = "https://api.weixin.qq.com/sns/userinfo?access_token=" + acctoken + "&openid=" + openid + "&lang=zh_CN";
-        try {
-            URL realUrl = new URL(url.toString());
-            // 打开和URL之间的连接
-            URLConnection connection = realUrl.openConnection();
-            // 设置通用的请求属性
-            connection.setRequestProperty("accept", "*/*");
-            connection.setRequestProperty("connection", "Keep-Alive");
-            connection.setRequestProperty("user-agent",
-                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-            // 建立实际的连接
-            connection.connect();
-            // 遍历所有的响应头字段
-            // 定义 BufferedReader输入流来读取URL的响应
-            in = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
-            String line;
-            while ((line = in.readLine()) != null) {
-                result += line;
+        String url = "";
+        boolean flag = redisClient.exists("acctokens");
+        if (flag) {//如果有缓存
+            Date date = (Date) redisClient.get("acctokendata");
+            String dateq = null;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                dateq = sdf.format(date);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            //Date date1 = new Date(date);
+            log.info("缓存token日期-------------------" + dateq);
+            //Date date1 = new Date(date);
+            if ((new Date().getTime() - date.getTime()) >= (7000 * 1000)) {//过期
+                log.info("token过期");
+                String acc = getaccesstoken();
+                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
+            } else {//没过期
+                log.info("token没过期");
+                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + redisClient.get("acctokens") + "&openid=" + openid + "&lang=zh_CN";
+            }
+        } else {//没有缓存
+            String acc = getaccesstoken();
+            url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
+        }
+        String result = GetHttp(url);
+        Map map = new HashMap();
+        net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
+        String subscribe = jsonObject.get("subscribe").toString();
+        String nickname = jsonObject.get("nickname").toString();
+        String sex = jsonObject.get("sex").toString();
+        long subscribe_time = Long.valueOf(jsonObject.get("subscribe_time").toString());
+        String headimgurl = jsonObject.get("headimgurl").toString();
+        String openids = jsonObject.get("openid").toString();
+        String city = jsonObject.get("city").toString();
+        SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String date = sd.format(new Date(subscribe_time * 1000));
+        Date dates = null;
+        try {
+            dates = sd.parse(date);
         } catch (Exception e) {
-            System.out.println("发送GET请求出现异常！" + e);
             e.printStackTrace();
         }
-        // 使用finally块来关闭输入流
-        finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
+        /** int many = 0;
+        if (Integer.parseInt(subscribe) == 1) {
+            //查询关注表中有没有记录 只加一次
+            int count = weixinGuangzhuService.selectCount(openids);
+            if (count == 0) {
+                //说明已经关注过了
+                WeixinGuangzhu weixinGuangzhu = new WeixinGuangzhu();
+                weixinGuangzhu.setIntime(dates);
+                weixinGuangzhu.setCity(city);
+                weixinGuangzhu.setHeadimgurl(headimgurl);
+                weixinGuangzhu.setNickname(nickname);
+                weixinGuangzhu.setOpenid(openids);
+                weixinGuangzhu.setSex(Integer.parseInt(sex));
+                weixinGuangzhu.setSubscribe(Integer.parseInt(subscribe));
+                weixinGuangzhu.setCount(0);
+                weixinGuangzhu.setMany(4);
+                weixinGuangzhuService.insertSelective(weixinGuangzhu);
+                int id = weixinGuangzhu.getId();//id
+                //修改用户抽奖次数+1
+                weixinGuangzhuService.updateCount(id);
             }
         }
-        net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
-        return jsonObject;
+        //查询用户抽奖次数
+         many = weixinGuangzhuService.overplusMany(openid);*/
+        redisClient.set("openids", openids);
+        map.put("subscribe", subscribe);
+        map.put("nickname", nickname);
+        map.put("subscribe_time", subscribe_time);
+        map.put("headimgurl", headimgurl);
+        map.put("openids", openids);
+        map.put("city", city);
+        map.put("sex", sex);
+        //map.put("many", many);
+        return map;
 
     }
+    //https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID
+
+
+    /**
+     * 用户抽奖
+     *
+     * @param
+     * @return
+     */
+    /** public Map choujiang(int type) {
+        Map map = new HashMap();
+        int lessCount = 0;
+        int overplus = 0;
+        int many = 0;
+        String openid = redisClient.get("openids").toString();
+        if (type == 0) {
+            //减次数
+            lessCount = weixinGuangzhuService.lessCount(openid);
+            //剩余抽奖次数
+            overplus = weixinGuangzhuService.overplusMany(openid);
+            //改用户抽到几等奖
+            many = weixinGuangzhuService.manyC(openid);
+            //向记录表差数据
+            WeixinList weixinList = new WeixinList();
+            //查询昵称
+            String nickname = weixinGuangzhuService.nickn(openid);
+            weixinList.setRemark("四等奖");
+            weixinList.setNickname(nickname);
+            weixinListService.insertSelective(weixinList);
+            map.put("many", many);
+            map.put("overplus", overplus);
+            map.put("lessCount", lessCount);
+        } else if (type == 1) {
+            //剩余抽奖次数
+            overplus = weixinGuangzhuService.overplusMany(openid);
+            map.put("overplus", overplus);
+        }
+        return map;
+     }*/
 
 
     /**
@@ -615,12 +702,78 @@ public class VideoUploadUtil {
         net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
         String ticket = jsonObject.get("ticket").toString();
         String expires_in = jsonObject.get("expires_in").toString();
+        redisClient.remove("tickets");
+        redisClient.remove("expires_in");
+        redisClient.remove("ticketdate");
         redisClient.set("tickets", ticket);
         redisClient.set("expires_in", expires_in);
         redisClient.set("ticketdate", new Date());
         return ticket;
     }
 
+
+    /**
+     * 获取用户信息
+     *
+     * @param
+     * @param
+     * @return
+     */
+    public Map getUserInformationH5(String openid) {
+        BufferedReader in = null;
+        String url = "";
+        boolean flag = redisClient.exists("acctokens");
+        if (flag) {//如果有缓存
+            Date date = (Date) redisClient.get("acctokendata");
+            String dateq = null;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                dateq = sdf.format(date);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //Date date1 = new Date(date);
+            log.info("缓存token日期-------------------" + dateq);
+            if ((new Date().getTime() - date.getTime()) >= (7000 * 1000)) {//过期
+                log.info("token过期");
+                String acc = getaccesstoken();
+                log.info("过期拿到的---------------------------------" + acc);
+                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
+            } else {//没过期
+                log.info("token没过期");
+                url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + redisClient.get("acctokens") + "&openid=" + openid + "&lang=zh_CN";
+                log.info("没过期---------------------------------------" + redisClient.get("acctokens").toString());
+            }
+        } else {//没有缓存
+            String acc = getaccesstoken();
+            url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + acc + "&openid=" + openid + "&lang=zh_CN";
+            log.info("没有缓存---------------------------------" + acc);
+        }
+        log.info(url);
+        String result = GetHttp(url);
+        Map map = new HashMap();
+        net.sf.json.JSONObject jsonObject = net.sf.json.JSONObject.fromObject(result);
+        String subscribe = jsonObject.get("subscribe").toString();
+        String nickname = jsonObject.get("nickname").toString();
+        String sex = jsonObject.get("sex").toString();
+        long subscribe_time = Long.valueOf(jsonObject.get("subscribe_time").toString());
+        String headimgurl = jsonObject.get("headimgurl").toString();
+        String openids = jsonObject.get("openid").toString();
+        String city = jsonObject.get("city").toString();
+        redisClient.set("openids", openids);
+        map.put("subscribe", subscribe);
+        map.put("nickname", nickname);
+        map.put("subscribe_time", subscribe_time);
+        map.put("headimgurl", headimgurl);
+        map.put("openids", openids);
+        map.put("city", city);
+        map.put("sex", sex);
+        return map;
+    }
+
+    /**public List findAllList(Paging<WeixinList> paging) {
+        return weixinListService.findAllList(paging);
+     }*/
 
     public static void main(String[] args) {
         /**DefaultAcsClient aliyunClient;

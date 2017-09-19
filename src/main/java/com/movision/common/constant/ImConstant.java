@@ -65,4 +65,25 @@ public class ImConstant {
 
     public static final String SEND_MSG_BATCH = ImPropertiesLoader.getPropertyValue("send_msg_attach");
 
+    public enum PUSH_MESSAGE {
+        instantinfo_msg(1), //动态通知
+        system_msg(2),  //系统通知
+        operation_msg(3); //运营通知
+
+        public final int code;
+
+        PUSH_MESSAGE(int code) {
+            this.code = code;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
 }

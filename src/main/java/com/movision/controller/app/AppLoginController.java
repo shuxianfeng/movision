@@ -10,6 +10,7 @@ import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.shiro.realm.ShiroRealm;
+import com.movision.utils.IpUtil;
 import com.movision.utils.ValidateUtils;
 import com.movision.utils.VerifyCodeUtils;
 import com.taobao.api.ApiException;
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,8 +58,10 @@ public class AppLoginController {
      */
     @ApiOperation(value = "手机注册账号时发送的验证码", notes = "手机注册账号时发送的验证码", response = Response.class)
     @RequestMapping(value = {"/get_mobile_code"}, method = RequestMethod.GET)
-    public Response getMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile) throws IOException, ApiException {
+    public Response getMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile,
+                                  HttpServletRequest request) throws IOException, ApiException {
         log.debug("获得手机验证码  mobile==" + mobile);
+        log.info("获取到的request method>>>>"+request.getMethod());
         Response response = new Response();
         if (ValidateUtils.isMobile(mobile)) {
             // 生成随机字串
@@ -130,7 +134,6 @@ public class AppLoginController {
         log.debug("登录信息  mobile==" + user.getPhone() + "mobileCheckCode = " + user.getMobileCheckCode());
         Response response = new Response();
         try {
-
             Subject currentUser = SecurityUtils.getSubject();
             Session session = currentUser.getSession(true);
             if (null == session) {
@@ -139,12 +142,14 @@ public class AppLoginController {
                 response.setMessage("请重新获取验证码");
                 return response;
             }
+            //缓存的手机号（发送验证码的手机号）
             String session_phone = (String) session.getAttribute("phone");
             log.debug("session_phone:" + session_phone);
+            //输入的手机号
             String param_phone = user.getPhone();
             log.debug("param_phone:" + param_phone);
 
-            //验证输入错误的手机号正确的验证码登录
+            //1 验证输入错误的手机号正确的验证码登录
             if (!session_phone.equals(param_phone)) {
                 response.setCode(400);
                 response.setMessage("请输入正确的手机号码");
@@ -162,28 +167,29 @@ public class AppLoginController {
                 }
             }
 
-            //校验验证码是否正确
+            //2 校验验证码是否正确
             if (user.getMobileCheckCode() != null) {
                 //获取缓存中的登录的用户信息
                 Validateinfo validateinfo = (Validateinfo) session.getAttribute("r" + param_phone);
                 log.info("【短信验证码登录】获取缓存中的登录的用户信息:" + validateinfo.toString());
                 if (null == validateinfo) {
                     response.setCode(400);
-                    response.setMessage("session中无当前用户");
+                    response.setMessage("短信验证码失效，请重新获取短信验证码");
+                    return response;
                 }
                 //业务操作
-                Map result = appRegisterFacade.validateLoginUser(user, validateinfo, session);
+                Map result = appRegisterFacade.registeAppUserProcess(user, validateinfo, session);
                 response.setData(result);
+                return response;
             } else {
                 response.setCode(400);
-                response.setMessage("请输入手机验证码");
+                response.setMessage("手机验证码不能为空，请输入手机验证码");
+                return response;
             }
         } catch (Exception e) {
             log.error("注册操作失败>>>", e);
             throw e;
         }
-
-        return response;
     }
 
     @ApiOperation(value = "注册QQ/微信/微博账号", notes = "注册QQ/微信/微博账号", response = Response.class)
@@ -218,7 +224,10 @@ public class AppLoginController {
     @RequestMapping(value = {"/login_by_third_account"}, method = RequestMethod.POST)
     public Response loginByThirdAccont(@ApiParam(value = "第三方登录方式标示。1:QQ， 2:微信， 3:微博 ") @RequestParam Integer flag,
                                        @ApiParam(value = "QQ/weixin/weibo（填对应的openid）") @RequestParam String account,
-                                       @ApiParam(value = "token") @RequestParam String appToken) throws Exception {
+                                       @ApiParam(value = "token") @RequestParam String appToken,
+                                       @ApiParam(value = "登录人的经度") @RequestParam(required = false) String longitude,
+                                       @ApiParam(value = "登录人的纬度") @RequestParam(required = false) String latitude,
+                                       HttpServletRequest request) throws Exception {
 
         Response response = new Response();
         try {
@@ -230,7 +239,9 @@ public class AppLoginController {
                 response.setMessage("qq账号不存在,请先注册");
                 response.setMsgCode(MsgCodeConstant.app_account_by_qq_not_exist);
             } else {
-                appRegisterFacade.handleLoginProcess(appToken, response, originUser);
+                String ip = IpUtil.getRequestClientIp(request);
+                log.info("获取的ip=" + ip);
+                appRegisterFacade.handleLoginProcess(appToken, response, originUser, ip, longitude, latitude);
             }
 
         } catch (Exception e) {
@@ -259,20 +270,24 @@ public class AppLoginController {
     @ApiOperation(value = "通过手机号登录", notes = "通过手机号登录", response = Response.class)
     @RequestMapping(value = {"/login_by_phone"}, method = RequestMethod.POST)
     public Response loginByPhone(@ApiParam(value = "手机号") @RequestParam String phone,
-                                 @ApiParam(value = "token") @RequestParam String appToken) throws Exception {
+                                 @ApiParam(value = "token") @RequestParam String appToken,
+                                 @ApiParam(value = "登录人的经度") @RequestParam(required = false) String longitude,
+                                 @ApiParam(value = "登录人的纬度") @RequestParam(required = false) String latitude,
+                                 HttpServletRequest request) throws Exception {
         Response response = new Response();
         try {
             //1 校验手机号是否存在
             User user = userFacade.queryUserByPhone(phone);
             if (null == user) {
-                //库中无该用户，需要发送短信验证码
+                //数据库中无该用户，需要发送短信验证码
                 log.warn("手机号不存在,请发送短信验证码登录");
-
                 response.setCode(400);
                 response.setMessage("手机号不存在,请发送短信验证码登录");
                 response.setMsgCode(MsgCodeConstant.app_user_not_exist);
             } else {
-                appRegisterFacade.handleLoginProcess(appToken, response, user);
+                String ip = IpUtil.getRequestClientIp(request);
+                log.info("获取的ip=" + ip);
+                appRegisterFacade.handleLoginProcess(appToken, response, user, ip, longitude, latitude);
             }
 
         } catch (Exception e) {

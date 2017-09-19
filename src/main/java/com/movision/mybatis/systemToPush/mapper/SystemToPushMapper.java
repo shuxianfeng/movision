@@ -1,6 +1,9 @@
 package com.movision.mybatis.systemToPush.mapper;
 
+import com.movision.mybatis.imuser.entity.ImUser;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.systemToPush.entity.SystemToPush;
+import com.movision.mybatis.user.entity.UserVo;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -28,6 +31,8 @@ public interface SystemToPushMapper {
     Integer deleteSystemToPush(Integer id);
 
     Integer addSystemToPush(SystemToPush systemToPush);//增加
+
+    List<ImUser> queryUser(int postid);
 
 
 }

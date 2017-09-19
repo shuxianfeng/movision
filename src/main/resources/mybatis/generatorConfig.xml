@@ -9,7 +9,6 @@
 
     <!-- 指定数据连接驱动jar地址 -->
     <classPathEntry location="D:\repository\mysql\mysql-connector-java\5.1.24\mysql-connector-java-5.1.24.jar"/>
-
     <!-- 一个数据库一个context -->
     <context id="infoGuardian">
         <!-- 注释 -->
@@ -36,8 +35,8 @@
 
         <!-- 生成实体类地址 -->
 
-        <javaModelGenerator targetPackage="com.movision.mybatis.postDes.entity"
-                            targetProject="E:/maven/movision-1.0.0/src/main/java">
+        <javaModelGenerator targetPackage="com.movision.mybatis.votingrecords.entity"
+                            targetProject="D:\movision1.0\movision-1.0.0\src\main\java">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
             <!-- 是否针对string类型的字段在set的时候进行trim调用 -->
@@ -45,22 +44,22 @@
         </javaModelGenerator>
 
         <!-- 生成mapxml文件 -->
-        <sqlMapGenerator targetPackage="mapper/postDes"
-                         targetProject="E:/maven/movision-1.0.0/src/main/resources">
+        <sqlMapGenerator targetPackage="mapper/votingrecords"
+                         targetProject="D:\movision1.0\movision-1.0.0\src\main\resources">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
         <!-- 生成mapxml对应client，也就是接口dao -->
-        <javaClientGenerator targetPackage="com.movision.mybatis.postDes.mapper"
-                             targetProject="E:/maven/movision-1.0.0/src/main/java" type="XMLMAPPER">
+        <javaClientGenerator targetPackage="com.movision.mybatis.votingrecords.mapper"
+                             targetProject="D:\movision1.0\movision-1.0.0\src\main\java" type="XMLMAPPER">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-        <table tableName="yw_post_des"
-               domainObjectName="PostDes"
+        <table tableName="tp_votingrecords"
+               domainObjectName="Votingrecords"
                enableCountByExample="false"
                enableSelectByExample="false"
                enableUpdateByExample="false"

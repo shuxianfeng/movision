@@ -24,15 +24,23 @@
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
         <result column="growth" property="growth" jdbcType="INTEGER"/>
         <result column="level" property="level" jdbcType="INTEGER"/>
+        <result column="isdv" property="isdv" jdbcType="INTEGER"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="applydate" property="applydate" jdbcType="DATE"/>
         <result column="deviceno" property="deviceno" jdbcType="VARCHAR"/>
         <result column="login_time" property="loginTime" jdbcType="TIMESTAMP"/>
+        <result column="isrecommend" property="isrecommend" jdbcType="INTEGER"/>
+        <result column="heat_value" property="heat_value" jdbcType="INTEGER"/>
+        <result column="longitude" property="longitude" jdbcType="VARCHAR"/>
+        <result column="latitude" property="latitude" jdbcType="VARCHAR"/>
+        <result column="ip" property="ip" jdbcType="VARCHAR"/>
+        <result column="ip_city" property="ip_city" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id, openid, qq, sina, phone, email, token, invitecode, referrals, nickname, sign, attention, fans,
-        points, photo, sex, birthday, province, city, intime, growth, level, status, applydate, deviceno, login_time
+        points, photo, sex, birthday, province, city, intime, growth, level, isdv, status, applydate, deviceno,
+        login_time, isrecommend, heat_value, longitude, latitude, ip, ip_city
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -61,14 +69,6 @@
             resultType="com.movision.mybatis.user.entity.User">
         SELECT id, photo, nickname, phone, sign
         FROM yw_user WHERE phone = #{phone,jdbcType=VARCHAR}
-    </select>
-
-    <!--查询圈子的管理员列表-->
-    <select id="queryCircleManagerList" parameterType="java.lang.Integer"
-            resultType="com.movision.mybatis.user.entity.User">
-        SELECT id,photo,nickname,phone,level FROM yw_user WHERE id in(
-        SELECT userid FROM yw_circle_manager WHERE circleid in(
-        SELECT id FROM yw_circle WHERE category=#{categoryid,jdbcType=INTEGER}))
     </select>
 
     <select id="queryCircleManagerByCircleid" parameterType="java.lang.Integer"
@@ -113,17 +113,97 @@
     </select>
 
     <!--查询当前用户使用的APP最新版本号-->
-    <select id="queryVersion" parameterType="java.lang.Integer" resultType="java.lang.String" >
+    <select id="queryVersion" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT version FROM yw_app_version WHERE type = #{type,jdbcType=INTEGER}
     </select>
 
     <!--美番2.0发现页查询热门作者-->
-    <select id="queryHotUserList" resultType="com.movision.mybatis.user.entity.UserVo" >
+    <select id="queryHotUserList" resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT t1.id, t1.nickname, t1.photo, t1.fans FROM (
-            (SELECT * FROM yw_user WHERE isrecommend = '1')
+            (SELECT * FROM yw_user WHERE isrecommend = '1' AND id != '-1')
             UNION
-            (SELECT * FROM yw_user ORDER BY heat_value DESC limit 10)
+            (SELECT * FROM yw_user WHERE id != '-1' ORDER BY heat_value DESC limit 10)
         ) t1 limit 10
+    </select>
+
+    <!--美番2.0发现作者页查询推荐作者列表-->
+    <select id="findAllHotAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author">
+        SELECT t1.id, t1.nickname, t1.photo, t1.phone, t1.fans FROM (
+        (SELECT * FROM yw_user WHERE isrecommend = '1' AND id != '-1')
+        UNION
+        (SELECT * FROM yw_user WHERE id != '-1' AND heat_value > '0' ORDER BY heat_value DESC)
+        ) t1
+        <where>
+            <if test="userid != null and userid != ''">
+                t1.id NOT IN (
+                SELECT interestedusers FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER}
+                )
+                AND t1.id != #{userid,jdbcType=INTEGER}
+            </if>
+        </where>
+        ORDER BY t1.isrecommend DESC,t1.heat_value DESC
+    </select>
+
+    <!--美番2.0发现作者页查询兴趣作者列表-->
+    <select id="findAllInterestAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author">
+        SELECT t.* FROM (
+            (SELECT id, nickname, photo, phone, heat_value FROM yw_user WHERE id IN (
+                SELECT userid FROM yw_post WHERE circleid IN (
+                  SELECT circleid FROM yw_follow_circle WHERE userid = #{userid,jdbcType=INTEGER}
+                )
+              )
+            )
+            UNION
+            (
+            SELECT id, nickname, photo, phone, heat_value FROM yw_user WHERE id IN (
+                SELECT DISTINCT userid FROM yw_post WHERE id IN (
+                    SELECT DISTINCT postid FROM yw_post_label_relation WHERE labelid IN (
+                      SELECT labelid FROM yw_follow_label WHERE userid = #{userid,jdbcType=INTEGER}
+                    )
+                )
+              )
+            )
+        ) t
+        WHERE t.id NOT IN (
+            SELECT interestedusers FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER}
+        )
+        AND t.id != #{userid,jdbcType=INTEGER}
+        ORDER BY t.heat_value DESC
+    </select>
+
+    <!--美番2.0发现作者页查询附近作者列表-->
+    <select id="findAllNearAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.Author">
+        SELECT t.* FROM(
+            SELECT id, nickname, photo, phone, ROUND(
+                6378.138 * 2 * ASIN(
+                    SQRT(
+                        POW(
+                            SIN(
+                                (
+                                #{lat,jdbcType=DOUBLE} * PI() / 180 - latitude * PI() / 180
+                                ) / 2
+                            ),2)
+                        + COS(#{lat,jdbcType=DOUBLE} * PI() / 180) * COS(latitude * PI() / 180) * POW(
+                            SIN(
+                                (
+                                #{lng,jdbcType=DOUBLE} * PI() / 180 - longitude * PI() / 180
+                                ) / 2
+                            ),2)
+                    )
+                ) * 1000
+            ) AS distance FROM yw_user
+        ) t
+        <where>
+            30000 > t.distance
+            AND t.id != '-1'
+            <if test="userid != null and userid != ''">
+                AND t.id NOT IN (
+                  SELECT interestedusers FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER}
+                )
+                AND t.id != #{userid,jdbcType=INTEGER}
+            </if>
+        </where>
+        ORDER BY t.distance
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -185,8 +265,8 @@
             <if test="sign != null">
                 sign,
             </if>
-                attention,
-                fans,
+            attention,
+            fans,
             <if test="points!=null">
                 points,
             </if>
@@ -205,10 +285,13 @@
             <if test="city != null">
                 city,
             </if>
+            <if test="intime != null">
                 intime,
-                growth,
-                level,
-                status,
+            </if>
+            growth,
+            level,
+            isdv,
+            status,
             <if test="applydate!=null">
                 applydate,
             </if>
@@ -217,6 +300,24 @@
             </if>
             <if test="loginTime!=null">
                 login_time,
+            </if>
+            <if test="isrecommend!=null">
+                isrecommend,
+            </if>
+            <if test="heat_value!=null">
+                heat_value,
+            </if>
+            <if test="longitude!=null">
+                longitude,
+            </if>
+            <if test="latitude!=null">
+                latitude,
+            </if>
+            <if test="ip!=null">
+                ip,
+            </if>
+            <if test="ip_city!=null">
+                ip_city,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -273,7 +374,10 @@
             <if test="city != null">
                 #{city,jdbcType=VARCHAR},
             </if>
-            now(),
+            <if test="intime != null">
+                #{intime},
+            </if>
+            0,
             0,
             0,
             0,
@@ -285,6 +389,24 @@
             </if>
             <if test="loginTime!=null">
                 #{loginTime},
+            </if>
+            <if test="isrecommend!=null">
+                #{isrecommend},
+            </if>
+            <if test="heat_value!=null">
+                #{heat_value},
+            </if>
+            <if test="longitude!=null">
+                #{longitude},
+            </if>
+            <if test="latitude!=null">
+                #{latitude},
+            </if>
+            <if test="ip!=null">
+                #{ip},
+            </if>
+            <if test="ip_city!=null">
+                #{ip_city},
             </if>
         </trim>
     </insert>
@@ -366,6 +488,24 @@
             <if test="loginTime!=null">
                 login_time=#{loginTime},
             </if>
+            <if test="isrecommend!=null">
+                isrecommend=#{isrecommend},
+            </if>
+            <if test="heat_value!=null">
+                heat_value=#{heat_value},
+            </if>
+            <if test="longitude!=null">
+                longitude=#{longitude},
+            </if>
+            <if test="latitude!=null">
+                latitude=#{latitude},
+            </if>
+            <if test="ip!=null">
+                ip=#{ip},
+            </if>
+            <if test="ip_city!=null">
+                ip_city=#{ip_city},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -427,20 +567,6 @@
 
     </select>
 
-    <update id="updateUserPointsAdd" parameterType="java.util.Map">
-        update yw_user
-        set
-        points =points+#{integral,jdbcType=INTEGER}
-        where phone = #{phone,jdbcType=VARCHAR}
-    </update>
-
-    <update id="updateUserPointsMinus" parameterType="java.util.Map">
-        update yw_user
-        set
-        points =points-#{integral,jdbcType=INTEGER}
-        where id = #{userid,jdbcType=INTEGER}
-    </update>
-
     <select id="queryUserByPoints" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT u.points
         FROM yw_user u
@@ -478,12 +604,6 @@
         SELECT u.openid FROM yw_user u WHERE id=#{userid,jdbcType=INTEGER}
     </select>
 
-    <select id="selectAllUser" resultType="com.movision.mybatis.user.entity.User">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM yw_user
-    </select>
-
     <select id="queryUserByNickname" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT u.nickname FROM yw_user u WHERE u.id=#{userid,jdbcType=INTEGER}
     </select>
@@ -495,14 +615,8 @@
         SELECT * FROM yw_user WHERE phone=#{phone,jdbcType=VARCHAR}
     </select>
 
-    <select id="isAppAdminUser" parameterType="java.lang.String" resultType="int">
-        SELECT count(1) FROM yw_user appuser LEFT JOIN yw_admin_user bossuser
-        ON appuser.phone = bossuser.phone
-        WHERE appuser.phone = #{phone}
-    </select>
-
     <select id="findAllUser" resultType="com.movision.mybatis.user.entity.User" parameterType="java.lang.Integer">
-        SELECT u.id,u.nickname,u.phone FROM yw_user u WHERE u.id=#{id,jdbcType=INTEGER}
+        SELECT u.id,u.nickname,u.phone,u.photo FROM yw_user u WHERE u.id=#{id,jdbcType=INTEGER}
     </select>
     <select id="findAlllikeQueryPostByNickname" resultType="com.movision.mybatis.user.entity.UserLike"
             parameterType="java.util.Map">
@@ -531,7 +645,8 @@
 
     <!-- 查看VIP申请列表 -->
     <select id="findAllqueryUsers" resultType="com.movision.mybatis.user.entity.UserVo">
-        SELECT u.id,u.nickname,u.phone,u.level,u.status,vd.id AS appyid,
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,u.attention,vd.id AS appyid,u.heat_value AS
+        heatValue,u.isrecommend,u.isdv,
         (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) AS autonym,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
@@ -550,7 +665,7 @@
 
     <!-- 查看VIP列表-->
     <select id="findAllqueryUserVIPByList" resultType="com.movision.mybatis.user.entity.UserVo">
-        SELECT u.id,u.nickname,u.phone,u.level,u.status,
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,u.heat_value AS heatValue,u.isrecommend,u.attention,u.isdv,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
         (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
@@ -569,7 +684,7 @@
     <!-- 根据条件查询vip列表  -->
     <select id="findAllQueryByConditionvipList" parameterType="java.util.Map"
             resultType="com.movision.mybatis.user.entity.UserVo">
-        SELECT u.id,u.nickname,u.phone,u.level,u.status,
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,u.heat_value AS heatValue,u.isrecommend,u.attention,u.isdv,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
         (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
@@ -624,7 +739,7 @@
 
     <select id="findAllqueryAddVSortUser" resultType="com.movision.mybatis.user.entity.UserVo"
             parameterType="java.util.Map">
-        SELECT u.id,u.nickname,u.phone,u.level,u.status,
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,u.attention,u.isdv,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
         (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
@@ -647,7 +762,8 @@
     <!-- 条件查询VIP申请用户列表 -->
     <select id="findAllQueryUniteConditionByApply" parameterType="java.util.Map"
             resultType="com.movision.mybatis.user.entity.UserVo">
-        SELECT u.id,u.nickname,u.phone,u.level,u.status,vd.id AS appyid,
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,vd.id AS appyid,u.heat_value AS
+        heatValue,u.isrecommend,u.attention,u.isdv,
         (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) AS authstatus,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
@@ -694,7 +810,7 @@
     <select id="findAllQueryUserExamineAndVerify" parameterType="java.util.Map"
             resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT u.id,u.nickname,u.phone,u.level,u.status,vd.id AS appyid,vd.audit_time AS audittime,vd.reason,vd.status
-        AS auditStatus,
+        AS auditStatus,u.heat_value AS heatValue,u.isrecommend,u.attention,u.isdv,
         (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) AS autonym,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
@@ -740,9 +856,10 @@
     </select>
 
 
-    <select id="findAllqueryAllUserList" parameterType="java.util.Map"
+    <select id="queryAllUserList" parameterType="java.util.Map"
             resultType="com.movision.mybatis.user.entity.UserAll">
-        SELECT u.id,u.nickname,u.phone,u.level,u.status,u.points,u.fans,u.intime,u.qq,u.sina,u.openid,aut.authstatus,
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,u.points,u.fans,u.intime,u.qq,u.sina,
+        u.openid,aut.authstatus,u.heat_value,u.isrecommend,u.attention,u.isdv,
         (SELECT COUNT(1) FROM yw_coupon WHERE isdel=0 AND userid=u.id) AS coupon,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isactive=0) AS postsum,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1 AND isactive=0) AS isessencesum
@@ -888,6 +1005,110 @@
                 ORDER BY u.level DESC
             </if>
         </if>
+        LIMIT #{pageNo,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryAllTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(u.id)
+        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE 1
+        <if test="nickname!=null">
+            AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="phone!=null">
+            AND u.phone=#{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="authentication==0">
+            AND aut.authstatus=#{authentication,jdbcType=INTEGER}
+        </if>
+        <if test="authentication==1">
+            AND aut.authstatus=#{authentication,jdbcType=INTEGER}
+        </if>
+        <if test="authentication==2">
+            AND aut.authstatus=#{authentication,jdbcType=INTEGER}
+        </if>
+        <if test="authentication==3">
+            AND aut.authstatus IS NULL
+        </if>
+        <if test="level!=null">
+            AND level=#{level,jdbcType=INTEGER}
+        </if>
+        <if test="status!=null">
+            AND u.status=#{status,jdbcType=INTEGER}
+        </if>
+        <if test="begintime!=null and endtime!=null">
+            AND u.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
+        <if test="price!=null and conditionon!=null and conditiontwo!=null">
+            <if test="conditionon==1">
+                <if test="conditiontwo==3">
+                    AND u.points &gt; #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==2">
+                    AND u.points = #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==1">
+                    AND u.points &lt; #{price,jdbcType=INTEGER}
+                </if>
+            </if>
+            <if test="conditionon==2">
+                <if test="conditiontwo==3">
+                    AND coupon &gt; #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==2">
+                    AND coupon=#{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==1">
+                    AND coupon &lt; #{price,jdbcType=INTEGER}
+                </if>
+            </if>
+            <if test="conditionon==3">
+                <if test="conditiontwo==3">
+                    AND postsum &gt; #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==2">
+                    AND postsum=#{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==1">
+                    AND postsum &lt; #{price,jdbcType=INTEGER}
+                </if>
+            </if>
+            <if test="conditionon==4">
+                <if test="conditiontwo==3">
+                    AND isessencesum &gt; #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==2">
+                    AND isessencesum=#{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==1">
+                    AND isessencesum &lt; #{price,jdbcType=INTEGER}
+                </if>
+            </if>
+            <if test="conditionon==5">
+                <if test="conditiontwo==3">
+                    AND u.fans &gt; #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==2">
+                    AND u.fans = #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==1">
+                    AND u.fans &lt; #{price,jdbcType=INTEGER}
+                </if>
+            </if>
+        </if>
+        <if test="login!=null">
+            <if test="login==1">
+                AND u.phone IS NOT NULL
+            </if>
+            <if test="login==2">
+                AND u.openid IS NOT NULL
+            </if>
+            <if test="login==3">
+                AND u.qq IS NOT NULL
+            </if>
+            <if test="login==4">
+                AND u.sina IS NOT NULL
+            </if>
+        </if>
     </select>
 
     <update id="deleteUserByid" parameterType="java.util.Map">
@@ -904,10 +1125,10 @@
     <update id="deleteUserLevl" parameterType="java.util.Map">
         UPDATE yw_user
         <if test="type==1">
-            SET level=1
+            SET isdv=1
         </if>
         <if test="type==0">
-            SET level=0
+            SET isdv=0
         </if>
         WHERE id=#{userid,jdbcType=INTEGER}
     </update>
@@ -936,6 +1157,13 @@
         </set>
         WHERE
     </update>
+    
+    <update id="updateUserAttention" parameterType="java.lang.Integer" >
+        UPDATE yw_user
+        SET attention = attention + 1
+        WHERE id = #{userid,jdbcType=INTEGER}
+    </update>
+    
     <select id="queryUserParticulars" parameterType="java.lang.String"
             resultType="com.movision.mybatis.user.entity.UserParticulars">
         SELECT u.*,vd.audit_time as viptime,aut.name,aut.idnumber,
@@ -1088,5 +1316,223 @@
     <select id="queryUserIsCricle" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT u.id FROM yw_user u LEFT JOIN yw_admin_user au ON au.phone = u.phone WHERE au.id = #{userid}
     </select>
+    <select id="findUser" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.UserLike">
+        SELECT  * FROM  yw_user WHERE id=#{userid,jdbcType=INTEGER}
+    </select>
+    <update id="updateUserHeatValue" parameterType="java.util.Map">
+        UPDATE yw_user SET heat_value=heat_value+#{points,jdbcType=INTEGER} WHERE id=#{userid,jdbcType=INTEGER}
+    </update>
+    <select id="queryUserLevel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT level FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
+    </select>
+    <select id="queryUserInfoHompage" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT * FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
+    </select>
 
+    <!--2.0查询当前用户关注的所有作者列表-->
+    <select id="findAllMineFollowAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.UserVo" >
+        SELECT u.id, u.nickname, u.photo, u.fans,
+          (SELECT count(*) FROM yw_post WHERE userid = u.id) AS postsum,
+          (SELECT count(*) FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER} AND interestedusers = u.id) AS isfollow
+        FROM yw_user u
+        JOIN yw_follow_user fu ON u.id = fu.interestedusers
+        WHERE u.status = 0
+        AND fu.userid = #{userid,jdbcType=INTEGER}
+        AND u.id != #{userid,jdbcType=INTEGER}
+    </select>
+
+    <!--2.0查询当前作者已发帖子数-->
+    <select id="queryPostNumByAuthor" parameterType="java.util.Map" resultType="java.lang.Integer" >
+        SELECT count(*) FROM yw_post WHERE userid = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!--查询该作者有没有被当前登录的用户关注过-->
+    <select id="queryIsFollowAuthor" parameterType="java.util.Map" resultType="java.lang.Integer" >
+        SELECT count(*) FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER} AND interestedusers =
+        #{id,jdbcType=INTEGER}
+    </select>
+
+    <!--2.0查询当前用户的所有粉丝列表-->
+    <select id="findAllMineFans" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.UserVo" >
+        SELECT u.id, u.nickname, u.photo, u.fans,
+          (SELECT count(*) FROM yw_post WHERE userid = u.id) AS postsum,
+          (SELECT count(*) FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER} AND interestedusers = u.id) AS isfollow
+        FROM yw_user u
+        JOIN yw_follow_user fu ON u.id = fu.userid
+        WHERE u.status = 0
+        AND fu.interestedusers = #{userid,jdbcType=INTEGER}
+        AND u.id != #{userid,jdbcType=INTEGER}
+    </select>
+
+    <select id="findAllMostFansAuthorInAll" resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT id, nickname, photo, fans
+        FROM yw_user
+        WHERE STATUS = 0
+        ORDER BY fans DESC
+    </select>
+
+    <select id="findAllMostFansAuthorInCurrentMonth" resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT u.id, u.nickname, u.photo, u.fans
+        FROM yw_user u
+        JOIN yw_follow_user fu ON u.id = fu.interestedusers
+        WHERE u.status = 0
+        AND DATE_FORMAT( fu.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+        GROUP BY u.id
+        ORDER BY u.fans DESC
+    </select>
+
+    <select id="findAllMostCommentAuthorInAll" resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT u.id, u.nickname, u.photo, COUNT(c.id) AS commentsum
+        FROM yw_user u
+        LEFT JOIN yw_post_comment c ON u.id = c.userid
+        WHERE u.status = 0
+        AND c.isdel = 0
+        AND c.status = 1
+        GROUP BY u.id
+        ORDER BY commentsum DESC
+    </select>
+
+    <select id="findAllMostCommentAuthorInCurrentMonth" resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT u.id, u.nickname, u.photo, COUNT(c.id) AS commentsum
+        FROM yw_user u
+        LEFT JOIN yw_post_comment c ON u.id = c.userid
+        WHERE u.status = 0
+        AND c.isdel = 0
+        AND c.status = 1
+        AND DATE_FORMAT( c.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+        GROUP BY u.id
+        ORDER BY commentsum DESC
+    </select>
+
+    <select id="findAllMostPostAuthorInAll" resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT u.id, u.nickname, u.photo, COUNT(p.id) AS postsum
+        FROM yw_user u
+        LEFT JOIN yw_post p ON u.id = p.userid
+        WHERE u.status = 0
+        AND p.isdel = 0 AND p.isactive = 0
+        GROUP BY u.id
+        ORDER BY postsum DESC
+    </select>
+
+    <select id="findAllMostPostAuthorInCurrentMonth" resultType="com.movision.mybatis.user.entity.UserVo">
+        SELECT u.id, u.nickname, u.photo, COUNT(p.id) AS postsum
+        FROM yw_user u
+        LEFT JOIN yw_post p ON u.id = p.userid
+        WHERE u.status = 0
+        AND p.isdel = 0 AND p.isactive = 0
+        AND DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+        GROUP BY u.id
+        ORDER BY postsum DESC
+    </select>
+
+    <select id="queryUserIsrecommend" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT isrecommend FROM yw_user WHERE id = #{id,jdbcType=INTEGER} AND status = 0
+    </select>
+    
+    <select id="queryInviteNum" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+        SELECT count(*) FROM yw_user WHERE referrals = (
+          SELECT invitecode FROM yw_user WHERE id = #{userid,jdbcType=INTEGER}
+        )
+    </select>
+    
+    <select id="queryFinishUserInfo" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+        SELECT count(*) FROM yw_user
+        WHERE id = #{userid,jdbcType=INTEGER}
+          AND photo IS NOT NULL
+          AND nickname IS NOT NULL
+          AND sex IS NOT NULL
+          AND birthday IS NOT NULL
+          AND SIGN IS NOT NULL
+    </select>
+    
+    <!--查询当前用户邀请的好友列表-->
+    <select id="findAllMyInviteList" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.InviteUserVo" >
+        SELECT id, nickname, photo FROM yw_user WHERE referrals = (
+          SELECT invitecode FROM yw_user WHERE id = #{userid,jdbcType=INTEGER}
+        )
+    </select>
+
+    <!--查询我的模块邀请好友页面里的邀请好友排行榜数据-->
+    <select id="findAllInviteRank" resultType="com.movision.mybatis.user.entity.InviteUserVo" >
+        SELECT T.* FROM(
+            SELECT t.*, (SELECT count(*) FROM yw_user WHERE t.invitecode = referrals) AS invitenum
+            FROM
+            (SELECT t1.id, t1.nickname, t1.photo, t1.invitecode, t1.referrals FROM yw_user t1) t
+        ) T
+        WHERE T.invitenum > 0 AND T.id !='-1'
+        ORDER BY T.invitenum DESC
+    </select>
+
+    <update id="updateUserByIsrecommend" parameterType="com.movision.mybatis.user.entity.User">
+        UPDATE yw_user
+        SET isrecommend = #{isrecommend,jdbcType=INTEGER}
+        WHERE id=#{id,jdbcType=INTEGER} AND status = 0
+    </update>
+
+    <select id="queryUserByName" parameterType="java.lang.String" resultType="com.movision.mybatis.user.entity.User">
+        select id, nickname, photo from yw_user
+        where status = 0
+        and nickname like concat('%',#{nickname,jdbcType=VARCHAR},'%')
+        limit 4
+    </select>
+
+    <select id="findAllUserByName" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.User">
+        select * from yw_user
+        where status = 0
+        and nickname like concat('%',#{name,jdbcType=VARCHAR},'%')
+    </select>
+
+    <!--统计当前用户足迹点总数-->
+    <select id="getfootmap" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+        SELECT count(*) FROM yw_post_label
+        WHERE type = '0' AND isdel = '0'
+        AND id IN (
+        SELECT DISTINCT labelid FROM yw_post_label_relation WHERE postid IN (
+        SELECT id FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER}
+        )
+        )
+    </select>
+    <select id="areaname" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT name FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR}
+    </select>
+    <select id="provicename" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT name FROM yw_province WHERE code=(
+SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
+    </select>
+
+    <select id="selectIntervalBetweenLoginAndRegiste" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+        t.*
+        FROM
+        (
+        SELECT
+        id,
+        login_time,
+        intime,
+        UNIX_TIMESTAMP(login_time) - UNIX_TIMESTAMP(intime) AS d
+        FROM
+        yw_user
+        ) t
+        WHERE
+        <![CDATA[  t.d < 10  ]]>
+        AND t.id = #{userid};
+    </select>
+
+    <select id="selectMaxRobotId" resultType="java.lang.Integer">
+        select max(id)
+        from yw_user
+        where
+        <![CDATA[
+          id >= 10000 and id <= 20000
+        ]]>
+    </select>
+
+    <select id="selectRobotUser" resultType="com.movision.mybatis.user.entity.User">
+        SELECT *
+        FROM yw_user where
+        <![CDATA[
+          id >= 10000 and id <= 20000
+        ]]>
+    </select>
 </mapper>

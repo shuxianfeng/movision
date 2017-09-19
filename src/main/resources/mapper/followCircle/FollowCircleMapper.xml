@@ -25,6 +25,11 @@
         WHERE userid = #{userid,jdbcType=INTEGER} AND circleid = #{circleid,jdbcType=INTEGER}
     </select>
 
+    <!--根据用户id查询当前用户已关注的圈子数-->
+    <select id="queryFollowSumByUser" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+        SELECT count(*) FROM yw_follow_circle WHERE userid = #{userid,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_follow_circle
     where id = #{id,jdbcType=INTEGER}

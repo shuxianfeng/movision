@@ -34,6 +34,7 @@ public class GenerateOrderNum {
         Format format = new SimpleDateFormat("yyyyMMdd");
         paramstr.append(format.format(new Date()));
 
+        //------------------------>这里需要修改,高并发时订单号回重复，建议使用 店铺id+年月日时分秒+8位数字字母随机数
         String maxordernumber = orderService.queryMaxOrderNumber(paramstr.toString() + "%");//根据店铺id+年月日字符串模糊查询最大的订单编号
 
         if ("".equals(maxordernumber) || "null".equals(maxordernumber) || maxordernumber == null) {

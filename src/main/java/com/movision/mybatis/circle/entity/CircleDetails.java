@@ -66,6 +66,16 @@ public class CircleDetails implements Serializable {
 
     private String erweima;//二维码
 
+    private Integer heatvalue;//圈子热度
+
+    public Integer getHeatvalue() {
+        return heatvalue;
+    }
+
+    public void setHeatvalue(Integer heatvalue) {
+        this.heatvalue = heatvalue;
+    }
+
     public Integer getId() {
         return id;
     }

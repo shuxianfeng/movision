@@ -57,8 +57,10 @@ public class MenuController {
         boolean isAdd = menuFacade.updateMenu(menu);
         if (isAdd) {
             response.setCode(200);
+            response.setMessage("修改成功！");
         } else {
             response.setCode(400);
+            response.setMessage("修改失败，请联系管理员");
         }
         return response;
     }

@@ -1,8 +1,11 @@
 package com.movision.mybatis.comment.service;
 
 import com.movision.mybatis.comment.entity.Comment;
+import com.movision.mybatis.comment.entity.CommentCount;
 import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.mybatis.comment.entity.ReplyComment;
 import com.movision.mybatis.comment.mapper.CommentMapper;
+import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -306,6 +309,22 @@ public class CommentService {
         }
     }
 
+    /**
+     * 根据用户id查询用户帖子被评论的评论列表
+     *
+     * @param userid
+     * @param
+     * @return
+     */
+    public List<CommentVo> findQueryComment(Integer userid) {
+        try {
+            log.info("根据用户id查询用户帖子被评论的评论列表");
+            return commentMapper.findQueryComment(userid);
+        } catch (Exception e) {
+            log.error("根据用户id查询用户帖子被评论的评论列表异常", e);
+            throw e;
+        }
+    }
     public List<CommentVo> queryPidComment(Integer pid) {
         try {
             log.info("查询父评论");
@@ -339,7 +358,7 @@ public class CommentService {
      * @param userid
      * @return
      */
-    public CommentVo queryCommentByUserid(Integer userid) {
+    public List<CommentVo> queryCommentByUserid(Integer userid) {
         try {
             log.info("根据用户查询评论");
             return commentMapper.queryCommentByUserid(userid);
@@ -382,4 +401,219 @@ public class CommentService {
             throw e;
         }
     }
+
+    public Integer updateCommentHeatValue(Map map) {
+        try {
+            log.info("修改評論的熱度");
+            return commentMapper.updateCommentHeatValue(map);
+        } catch (Exception e) {
+            log.error("修改評論的熱度失敗", e);
+            throw e;
+        }
+    }
+
+    public Integer queryCommentLevel(int commentid) {
+        try {
+            log.info("根據評論id查詢用戶等級");
+            return commentMapper.queryCommentLevel(commentid);
+        } catch (Exception e) {
+            log.error("根據評論id查詢用戶等級失敗", e);
+            throw e;
+        }
+    }
+
+    public List<CommentVo> queryCommentByPost(int postid) {
+        try {
+            log.info("根據帖子id查詢所有評論");
+            return commentMapper.queryCommentByPost(postid);
+        } catch (Exception e) {
+            log.error("根據帖子id查詢所有評論失敗", e);
+            throw e;
+        }
+    }
+
+    public List<CommentVo> findAllCommentByPostId(int postid, Paging<CommentVo> paging) {
+        try {
+            log.info("根據帖子id查詢所有評論");
+            return commentMapper.findAllCommentByPostId(postid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("根據帖子id查詢所有評論失敗", e);
+            throw e;
+        }
+    }
+    public Integer queryCommentIsRead(int userid) {
+        try {
+            log.info("查询评论未读");
+            return commentMapper.queryCommentIsRead(userid);
+        } catch (Exception e) {
+            log.error("查询评论未读失敗", e);
+            throw e;
+        }
+    }
+
+    public List<CommentVo> findAllCommentByPost(int postid) {
+        try {
+            log.info("根據帖子id查詢所有評論");
+            return commentMapper.findAllCommentByPost(postid);
+        } catch (Exception e) {
+            log.error("根據帖子id查詢所有評論失敗", e);
+            throw e;
+        }
+    }
+
+    public CommentCount queryCommentZan(int id) {
+        try {
+            log.info("根据评论id查赞");
+            return commentMapper.queryCommentZan(id);
+        } catch (Exception e) {
+            log.error("根据评论id查赞失敗", e);
+            throw e;
+        }
+    }
+
+    public CommentVo queryCom(int commentid) {
+        try {
+            log.info("根据评论id查赞");
+            return commentMapper.queryCom(commentid);
+        } catch (Exception e) {
+            log.error("根据评论id查赞失敗", e);
+            throw e;
+        }
+    }
+
+    public int commentCount(Map map) {
+        try {
+            log.info("查询评论是否是自己的");
+            return commentMapper.commentCount(map);
+        } catch (Exception e) {
+            log.error("查询评论是否是自己的失敗", e);
+            throw e;
+        }
+    }
+
+    public int deleteComment(int id) {
+        try {
+            log.info("删除评论");
+            return commentMapper.deleteComment(id);
+        } catch (Exception e) {
+            log.error("删除评论失敗", e);
+            throw e;
+        }
+    }
+
+    public int lessPostComment(int id) {
+        try {
+            log.info("帖子评论-1");
+            return commentMapper.lessPostComment(id);
+        } catch (Exception e) {
+            log.error("帖子评论失敗", e);
+            throw e;
+        }
+    }
+    public List<CommentVo> queryOneComment(int postid, Paging<CommentVo> paging) {
+        try {
+            log.info("一级评论");
+            return commentMapper.findAllOneComment(postid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("一级评论失敗", e);
+            throw e;
+        }
+    }
+
+    public List<CommentVo> queryTwoComment(int pid) {
+        try {
+            log.info("一级评论");
+            return commentMapper.queryTwoComment(pid);
+        } catch (Exception e) {
+            log.error("一级评论失敗", e);
+            throw e;
+        }
+    }
+
+    public List<CommentVo> queryThreeComment(Map<String, Object> parammap) {
+        try {
+            log.info("一级评论");
+            return commentMapper.queryThreeComment(parammap);
+        } catch (Exception e) {
+            log.error("一级评论失敗", e);
+            throw e;
+        }
+    }
+
+    public int updateCommentVo(CommentVo commentVo) {
+        try {
+            log.info("更新评论数据");
+            return commentMapper.updateByPrimaryKeySelective(commentVo);
+        } catch (Exception e) {
+            log.error("更新评论数据失败", e);
+            throw e;
+        }
+    }
+
+
+    public int repliesNumber(int id) {
+        try {
+            log.info("回复条数");
+            return commentMapper.repliesNumber(id);
+        } catch (Exception e) {
+            log.error("回复条数失敗", e);
+            throw e;
+        }
+    }
+
+    public User queryUserInfor(int pid) {
+        try {
+            log.info("父用户");
+            return commentMapper.queryUserInfor(pid);
+        } catch (Exception e) {
+            log.error("父用户失敗", e);
+            throw e;
+        }
+    }
+
+    public List<ReplyComment> selectReplyCommentList(Integer userid) {
+        try {
+            log.info("查询回复评论列表");
+            return commentMapper.selectReplyCommentList(userid);
+        } catch (Exception e) {
+            log.error("查询回复评论列表失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 更新评论已读
+     *
+     * @param map
+     */
+    public void updateCommentIsRead(Integer map) {
+        try {
+            log.info("更新评论已读");
+            commentMapper.updateCommentIsRead(map);
+        } catch (Exception e) {
+            log.error("更新评论已读异常", e);
+            throw e;
+        }
+    }
+
+    public List<CommentVo> selectPostComment(Integer id) {
+        try {
+            log.info("查询当前用户所发的帖子评论");
+            return commentMapper.selectPostComment(id);
+        } catch (Exception e) {
+            log.error("查询当前用户所发的帖子评论失败", e);
+            throw e;
+        }
+    }
+
+    public int queryFatherComment(int id) {
+        try {
+            log.info("删除的是否是父评论");
+            return commentMapper.queryFatherComment(id);
+        } catch (Exception e) {
+            log.error("删除的是否是父评论失败", e);
+            throw e;
+        }
+    }
+
 }

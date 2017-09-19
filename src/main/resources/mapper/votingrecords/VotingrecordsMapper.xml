@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.votingrecords.mapper.VotingrecordsMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.votingrecords.entity.Votingrecords">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="activeid" property="activeid" jdbcType="INTEGER"/>
+        <result column="takenumber" property="takenumber" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="takeid" property="takeid" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, activeid, takenumber, name, intime,takeid
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from tp_votingrecords
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from tp_votingrecords
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.votingrecords.entity.Votingrecords">
+        insert into tp_votingrecords (id, activeid, takenumber,
+        name, intime)
+        values (#{id,jdbcType=INTEGER}, #{activeid,jdbcType=INTEGER}, #{takenumber,jdbcType=INTEGER},
+        #{name,jdbcType=VARCHAR}, #{intime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.votingrecords.entity.Votingrecords">
+        insert into tp_votingrecords
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="activeid != null">
+                activeid,
+            </if>
+            <if test="takenumber != null">
+                takenumber,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="activeid != null">
+                #{activeid,jdbcType=INTEGER},
+            </if>
+            <if test="takenumber != null">
+                #{takenumber,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.votingrecords.entity.Votingrecords">
+        update tp_votingrecords
+        <set>
+            <if test="activeid != null">
+                activeid = #{activeid,jdbcType=INTEGER},
+            </if>
+            <if test="takenumber != null">
+                takenumber = #{takenumber,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.votingrecords.entity.Votingrecords">
+        update tp_votingrecords
+        set activeid = #{activeid,jdbcType=INTEGER},
+        takenumber = #{takenumber,jdbcType=INTEGER},
+        name = #{name,jdbcType=VARCHAR},
+        intime = #{intime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

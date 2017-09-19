@@ -66,6 +66,14 @@ public class UserVo implements Serializable {
 
     private Integer postsum;//帖子数量
 
+    public Integer activecount;//参加活动数
+
+    public Integer collectioncount;//收藏帖子数
+
+    private Integer heatValue;//作者热度
+
+    private Integer isrecommend;//是否作为发现页必推作者：0 否 1 是'
+
     private Integer isessencesum;//精贴数量
 
     private Integer exceptional;//被打赏积分
@@ -87,6 +95,52 @@ public class UserVo implements Serializable {
     private Integer auditStatus;//审核状态
 
     private Date audittime;//审核时间
+
+    private Integer isfollow;//是否被关注 0 未关注 1 已关注（当前作者有没有被APP当前登录的用户关注过）
+
+    private String ipcity;//登录城市
+
+    public String getIpcity() {
+        return ipcity;
+    }
+
+    public void setIpcity(String ipcity) {
+        this.ipcity = ipcity;
+    }
+
+    public Integer getHeatValue() {
+        return heatValue;
+    }
+
+    public void setHeatValue(Integer heatValue) {
+        this.heatValue = heatValue;
+    }
+
+    public Integer getIsrecommend() {
+        return isrecommend;
+    }
+
+    public void setIsrecommend(Integer isrecommend) {
+        this.isrecommend = isrecommend;
+    }
+
+    public Integer getActivecount() {
+        return activecount;
+    }
+
+    public void setActivecount(Integer activecount) {
+        this.activecount = activecount;
+    }
+
+    public Integer getCollectioncount() {
+        return collectioncount;
+    }
+
+    public void setCollectioncount(Integer collectioncount) {
+        this.collectioncount = collectioncount;
+    }
+
+
 
     public Date getAudittime() {
         return audittime;
@@ -406,5 +460,13 @@ public class UserVo implements Serializable {
 
     public void setBefollowsum(Integer befollowsum) {
         this.befollowsum = befollowsum;
+    }
+
+    public Integer getIsfollow() {
+        return isfollow;
+    }
+
+    public void setIsfollow(Integer isfollow) {
+        this.isfollow = isfollow;
     }
 }

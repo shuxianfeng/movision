@@ -30,6 +30,7 @@ public class Paging<E> {
         }
     };
 
+
     public static void setPaginationTotal(int count) {
         PAGINATION_TOTAL.set(count);
     }
@@ -68,6 +69,10 @@ public class Paging<E> {
         this.setTotal(getPaginationTotal());
     }
 
+    public void setRows(List<E> rows) {
+        this.rows = rows;
+    }
+
     public void pages(List<E> rows,int curPage,int pageSize,int total){
         this.rows = rows;
         this.curPage = curPage;
@@ -83,6 +88,9 @@ public class Paging<E> {
         return total;
     }
 
+    /**
+     * 计算maxPage， curPage， firstRow， lastRow
+     */
     public void countMaxPage() {
 
         if (this.total % this.pageSize == 0) {

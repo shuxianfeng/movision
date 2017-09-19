@@ -1,10 +1,11 @@
 package com.movision.mybatis.circle.mapper;
 
 import com.movision.mybatis.category.entity.Category;
-import com.movision.mybatis.category.entity.CircleAndCircle;
 import com.movision.mybatis.circle.entity.*;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserRole;
+import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
@@ -26,11 +27,15 @@ public interface CircleMapper {
 
     CircleVo queryCircleIndex1(int circleid);
 
-    List<CircleVo> queryCircleByCategory(int categoryid);
+    List<CircleVo> findAllCircleByCategory(RowBounds rowBounds, int categoryid);
 
-    List<CircleVo> queryAuditCircle();
+    List<CircleVo> findAllAuditCircle(RowBounds rowBounds);
 
     int queryIsSupport(Map<String, Object> parammap);
+
+    List<CircleVo> findAllNewMyFollowCircleList(RowBounds rowBounds, Map<String, Object> parammap);
+
+    List<CircleVo> findAllMineFollowCircle(Map<String, Object> paramap, RowBounds rowBounds);
 
     void addSupportSum(Map<String, Object> parammap);
 
@@ -72,11 +77,9 @@ public interface CircleMapper {
 
     List<Circle> queryDiscoverList();
 
-    Integer queryCircleDiscover(String circleid);
+    Integer queryCircleDiscover(Integer id);
 
-    Integer updateDiscover(Map<String, Integer> map);
-
-    Integer updateDiscoverDel(String circleid);
+    Integer updateDiscover(Circle circle);
 
     Integer queryCircleRecommendIndex(String circleid);
 
@@ -96,6 +99,10 @@ public interface CircleMapper {
 
     List<MyCircle> findAllMyFollowCircleList(RowBounds rowBounds, Map map);
 
+    List<CircleVo> findAllHotCircleList(RowBounds rowBounds);
+
+    int queryCircleFollownum(int circleid);
+
     int updateAuditCircle(Map map);
 
     Category queryCircleCategoryClassify(String categoryid);
@@ -107,4 +114,28 @@ public interface CircleMapper {
     int batchUpdatePhoneInCircle(Map map);
 
     Integer queryCircleIdByIsUser(Map map);
+
+    List<CircleVo> queryAllCircle();
+
+    List<Integer> queryHeatValueById(int id);
+
+    List<CircleVo> queryHeatValue();
+
+    int updateCircleHeatValue(Map map);
+
+    List<CirclePost> selectCircleScopeEquals2();
+
+    List<CirclePost> selectCircleWhoCreate(Integer userid);
+
+    List<CirclePost> selectCircleWhoManage(Integer userid);
+
+    List<CirclePost> selectCircleScopeEquals1();
+
+    List<CircleVo> findAllCircle(RowBounds rowBounds);
+
+    List<Circle> queryCircleByNameInSearch(String name);
+
+    List<Circle> findAllCircleByNameInSearch(Map<String, Object> map, RowBounds rowBounds);
+
+    int queryCircleid(Map map);
 }

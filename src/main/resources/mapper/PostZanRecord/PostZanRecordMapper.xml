@@ -104,14 +104,67 @@
     </select>
 
     <update id="updateZanReadByComment" parameterType="java.lang.Integer">
-        UPDATE yw_post_comment_zan_record SET isread=1 WHERE commentid in (SELECT id FROM yw_post_comment WHERE
-        userid=#{userid,jdbcType=INTEGER})
-        OR commentid in (SELECT id FROM yw_post_comment WHERE postid in (SELECT id FROM yw_post WHERE
-        userid=#{userid,jdbcType=INTEGER}))
+        UPDATE yw_post_comment_zan_record
+        SET isread = 1
+        WHERE
+        (
+        commentid IN (
+        SELECT
+        id
+        FROM
+        yw_post_comment
+        WHERE
+        userid = #{userid}
+        AND isdel = 0
+        )
+        OR commentid IN (
+        SELECT
+        id
+        FROM
+        yw_post_comment
+        WHERE
+        postid IN (
+        SELECT
+        id
+        FROM
+        yw_post
+        WHERE
+        userid = #{userid}
+        AND isdel = 0
+        )
+        AND isdel = 0
+        ))
+        <![CDATA[ AND userid <> #{userid} ]]>
     </update>
 
     <update id="updateZanReadByPost" parameterType="java.lang.Integer">
         UPDATE yw_post_zan_record SET isread=1 WHERE postid in
-        (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0)
+        (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0) AND userid <![CDATA[<>]]>
+        #{userid,jdbcType=INTEGER}
     </update>
+    <select id="queryZanNumber" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(t.id) from (
+        SELECT r.id,r.userid,r.commentid,null AS postid,r.intime , r.isread
+        FROM yw_post_comment_zan_record r
+        left JOIN yw_post_comment c on r.commentid = c.id
+        left join yw_post p on p.id = c.postid
+        where (c.userid = #{id} or p.userid= #{id})
+            and p.isdel = 0
+            and c.isdel = 0
+        <![CDATA[   and r.userid <> c.userid ]]>
+        and r.isread = 0
+        UNION ALL
+        SELECT d.id,d.userid,null AS commentid,d.postid,d.intime ,d.isread
+        FROM yw_post_zan_record d
+        LEFT JOIN yw_post p2 on p2.id = d.postid
+        where p2.userid = #{id}
+        and p2.isdel = 0
+        <![CDATA[ and d.userid <> p2.userid ]]>
+        and d.isread = 0
+        ) t ORDER BY t.intime DESC
+    </select>
+    <select id="userPostZan" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+     SELECT COUNT(1) FROM yw_post_zan_record LEFT JOIN yw_post ON yw_post.id=yw_post_zan_record.postid
+    WHERE yw_post_zan_record.postid in (SELECT id FROM  yw_post WHERE userid=#{userid,jdbcType=INTEGER})
+    </select>
 </mapper>

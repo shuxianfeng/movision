@@ -53,4 +53,27 @@ public class PostZanRecordService {
             throw e;
         }
     }
+
+    public Integer queryZanNumber(int userid) {
+        try {
+            log.info("查询未读的点赞数");
+            return recordMapper.queryZanNumber(userid);//帖子点赞
+        } catch (Exception e) {
+            log.error("查询未读的点赞数异常", e);
+            throw e;
+        }
+    }
+
+    public Integer userPostZan(int userid) {
+        try {
+            log.info("用户被收藏的帖子数");
+            return recordMapper.userPostZan(userid);
+        } catch (Exception e) {
+            log.error("用户被收藏的帖子数异常", e);
+            throw e;
+        }
+    }
+
+
+
 }

@@ -314,14 +314,14 @@ public class UserManageController {
                                      @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                      @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Paging<UserAll> pager = new Paging<UserAll>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<UserAll> list = userManageFacade.queryAllUserList(pager, nickname, phone, authentication, vip, seal, begintime, endtime, pointsSort,
-                postsumSort, isessenceSort, fansSort, conditionon, conditiontwo, price, login, pai);
+        //Paging<UserAll> pager = new Paging<UserAll>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        Map list = userManageFacade.queryAllUserList(nickname, phone, authentication, vip, seal, begintime, endtime, pointsSort,
+                postsumSort, isessenceSort, fansSort, conditionon, conditiontwo, price, login, pai, pageNo, pageSize);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
-        pager.result(list);
-        response.setData(pager);
+        //pager.result(list);
+        response.setData(list);
         return response;
     }
 
@@ -385,6 +385,21 @@ public class UserManageController {
             response.setMessage("操作成功");
         }
         response.setData(i);
+        return response;
+    }
+
+    /**
+     * 对作者推荐、取消推荐
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "对作者推荐、取消推荐", notes = "用于对作者推荐、取消推荐操作接口", response = Response.class)
+    @RequestMapping(value = "updateUserByIsrecommend", method = RequestMethod.POST)
+    public Response updateUserByIsrecommend(@ApiParam(value = "用户id") @RequestParam String id) {
+        Response response = new Response();
+        Map map = userManageFacade.updateUserByIsrecommend(id);
+        response.setMessage("操作成功");
+        response.setData(map);
         return response;
     }
 

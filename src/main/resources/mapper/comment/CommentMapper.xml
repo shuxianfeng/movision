@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.movision.mybatis.comment.mapper.CommentMapper" >
-  <resultMap id="BaseResultMap" type="com.movision.mybatis.comment.entity.Comment" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="userid" property="userid" jdbcType="INTEGER" />
-    <result column="pid" property="pid" jdbcType="INTEGER" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="intime" property="intime" jdbcType="TIMESTAMP" />
-    <result column="zansum" property="zansum" jdbcType="INTEGER" />
-    <result column="postid" property="postid" jdbcType="INTEGER"/>
-    <result column="isdel" property="isdel" jdbcType="VARCHAR"/>
-    <result column="iscontribute" property="iscontribute" jdbcType="INTEGER"/>
-    <result column="status" property="status" jdbcType="INTEGER"/>
-    <result column="isread" property="isread" jdbcType="INTEGER"/>
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, userid, pid, content, intime, zansum, isdel, iscontribute, status, isread
+<mapper namespace="com.movision.mybatis.comment.mapper.CommentMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.comment.entity.Comment">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="pid" property="pid" jdbcType="INTEGER"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="zansum" property="zansum" jdbcType="INTEGER"/>
+        <result column="postid" property="postid" jdbcType="INTEGER"/>
+        <result column="isdel" property="isdel" jdbcType="VARCHAR"/>
+        <result column="iscontribute" property="iscontribute" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="isread" property="isread" jdbcType="INTEGER"/>
+        <result column="heat_value" property="heatvalue" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+      id, userid, pid, content, intime, zansum, isdel, iscontribute, status, isread,heat_value
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-      from yw_post_comment
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_post_comment
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
       delete from yw_post_comment
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.movision.mybatis.comment.entity.CommentVo" >
+    <insert id="insert" parameterType="com.movision.mybatis.comment.entity.CommentVo">
     insert into yw_post_comment (id, userid, pid, postid,
     content, intime, zansum, isread
       )
@@ -36,8 +37,8 @@
       )
   </insert>
 
-  <!--插入用户点赞评论的记录到记录表里-->
-  <insert id="insertCommentZanRecord" parameterType="java.util.Map">
+    <!--插入用户点赞评论的记录到记录表里-->
+    <insert id="insertCommentZanRecord" parameterType="java.util.Map">
       INSERT INTO yw_post_comment_zan_record (
     userid, commentid, intime, isread
       )
@@ -46,116 +47,116 @@
       )
   </insert>
 
-  <insert id="insertSelective" parameterType="com.movision.mybatis.comment.entity.CommentVo" >
-    insert into yw_post_comment
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="userid != null" >
-        userid,
-      </if>
-      <if test="pid != null" >
-        pid,
-      </if>
-      <if test="postid != null" >
-        postid,
-      </if>
-      <if test="content != null" >
-        content,
-      </if>
-      <if test="intime != null" >
-        intime,
-      </if>
-      <if test="zansum != null" >
-        zansum,
-      </if>
-      <if test="isdel != null">
-        isdel,
-      </if>
-      <if test="iscontribute != null">
-        iscontribute,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="isread!=null">
-        isread,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="userid != null" >
-        #{userid,jdbcType=INTEGER},
-      </if>
-      <if test="pid != null" >
-        #{pid,jdbcType=INTEGER},
-      </if>
-      <if test="postid != null" >
-        #{postid,jdbcType=INTEGER},
-      </if>
-      <if test="content != null" >
-        #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="intime != null" >
-        #{intime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="zansum != null" >
-        #{zansum,jdbcType=INTEGER},
-      </if>
-      <if test="isdel != null">
-        #{isdel,jdbcType=VARCHAR},
-      </if>
-      <if test="iscontribute != null">
-        #{iscontribute,jdbcType=INTEGER},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="isread!=null">
-        #{isread,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.comment.entity.CommentVo" >
-    update yw_post_comment
-    <set >
-      <if test="userid != null" >
-        userid = #{userid,jdbcType=INTEGER},
-      </if>
-      <if test="pid != null" >
-        pid = #{pid,jdbcType=INTEGER},
-      </if>
-      <if test="postid != null" >
-        pid = #{postid,jdbcType=INTEGER},
-      </if>
-      <if test="content != null" >
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="intime != null" >
-        intime = #{intime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="zansum != null" >
-        zansum = #{zansum,jdbcType=INTEGER},
-      </if>
-      <if test="isdel != null">
-        isdel = #{isdel,jdbcType=VARCHAR},
-      </if>
-      <if test="iscontribute != null">
-        iscontribute = #{iscontribute,jdbcType=INTEGER},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="isread !=null">
-        isread=#{isread,jdbcType=INTEGER},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.comment.entity.CommentVo" >
+    <insert id="insertSelective" parameterType="com.movision.mybatis.comment.entity.CommentVo">
+        insert into yw_post_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="pid != null">
+                pid,
+            </if>
+            <if test="postid != null">
+                postid,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="zansum != null">
+                zansum,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+            <if test="iscontribute != null">
+                iscontribute,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="isread!=null">
+                isread,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="pid != null">
+                #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="postid != null">
+                #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="zansum != null">
+                #{zansum,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=VARCHAR},
+            </if>
+            <if test="iscontribute != null">
+                #{iscontribute,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="isread!=null">
+                #{isread,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.comment.entity.CommentVo">
+        update yw_post_comment
+        <set>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="pid != null">
+                pid = #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="postid != null">
+                pid = #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="zansum != null">
+                zansum = #{zansum,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=VARCHAR},
+            </if>
+            <if test="iscontribute != null">
+                iscontribute = #{iscontribute,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="isread !=null">
+                isread=#{isread,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.comment.entity.CommentVo">
     update yw_post_comment
     set userid = #{userid,jdbcType=INTEGER},
       pid = #{pid,jdbcType=INTEGER},
@@ -170,24 +171,24 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="findAllqueryCommentsByLsit" parameterType="java.lang.Integer"
-          resultType="com.movision.mybatis.comment.entity.CommentVo">
-    SELECT c.*,u.phone,u.photo,u.nickname,u.level
-    FROM yw_post_comment c
-    LEFT JOIN yw_user u
-    ON c.userid=u.id
-    WHERE c.postid= #{postid,jdbcType=INTEGER} AND isdel=0 ORDER BY iscontribute DESC
-    <if test="type==0">
-      ,c.intime ASC
-    </if>
-      <if test="type==null">
-      ,intime DESC
-    </if>
-  </select>
+    <select id="findAllqueryCommentsByLsit" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
+        SELECT c.*,u.phone,u.photo,u.nickname,u.level
+        FROM yw_post_comment c
+        LEFT JOIN yw_user u
+        ON c.userid=u.id
+        WHERE c.postid= #{postid,jdbcType=INTEGER} AND isdel=0 ORDER BY iscontribute DESC
+        <if test="type==0">
+            ,c.intime ASC
+        </if>
+        <if test="type==null">
+            ,intime DESC
+        </if>
+    </select>
 
-  <!--根据父评论id查询评论实体-->
-  <select id="queryCommentByPid" parameterType="java.lang.Integer"
-          resultType="com.movision.mybatis.comment.entity.CommentVo">
+    <!--根据父评论id查询评论实体-->
+    <select id="queryCommentByPid" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT t.* FROM (
       SELECT t1.*, t2.photo, t2.nickname FROM yw_post_comment t1
       LEFT JOIN yw_user t2
@@ -196,33 +197,33 @@
     WHERE t.id = #{pid,jdbcType=INTEGER}
   </select>
 
-  <!--查询该用户有没有点赞该评论-->
-  <select id="queryIsZan" parameterType="java.util.Map" resultType="java.lang.Integer">
+    <!--查询该用户有没有点赞该评论-->
+    <select id="queryIsZan" parameterType="java.util.Map" resultType="java.lang.Integer">
     SELECT count(*) FROM yw_post_comment_zan_record
     WHERE userid = #{userid,jdbcType=INTEGER}
       AND commentid = #{commentid,jdbcType=INTEGER}
   </select>
 
-  <update id="updateCommentZanSum" parameterType="java.lang.Integer">
+    <update id="updateCommentZanSum" parameterType="java.lang.Integer">
     UPDATE yw_post_comment
     SET zansum = zansum+1
     WHERE id=#{id,jdbcType=INTEGER}
   </update>
 
-  <select id="queryCommentZanSum" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    <select id="queryCommentZanSum" resultType="java.lang.Integer" parameterType="java.lang.Integer">
     SELECT c.zansum
     FROM yw_post_comment c
     WHERE c.id=#{id,jdbcType=INTEGER}
   </select>
 
-  <update id="deletePostAppraise" parameterType="java.lang.Integer">
+    <update id="deletePostAppraise" parameterType="java.lang.Integer">
     UPDATE yw_post_comment
     SET isdel=1,iscontribute=0,isread=0
     WHERE id=#{id,jdbcType=INTEGER}
   </update>
 
-  <select id="findAllQueryPostByCommentParticulars" parameterType="java.util.Map"
-          resultType="com.movision.mybatis.comment.entity.CommentVo">
+    <select id="findAllQueryPostByCommentParticulars" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.*,u.phone,u.photo,u.nickname
     FROM yw_post_comment c
     LEFT JOIN yw_user u
@@ -231,239 +232,239 @@
     ORDER BY c.intime DESC
   </select>
 
-  <select id="commentZanSork" parameterType="java.lang.Integer"
-          resultType="com.movision.mybatis.comment.entity.CommentVo">
+    <select id="commentZanSork" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT * FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER} AND isdel=0 ORDER BY zansum DESC
   </select>
 
-  <select id="queryCommentById" resultType="com.movision.mybatis.comment.entity.CommentVo"
-          parameterType="java.util.Map">
+    <select id="queryCommentById" resultType="com.movision.mybatis.comment.entity.CommentVo"
+            parameterType="java.util.Map">
     SELECT c.content,u.nickname FROM yw_post_comment as c LEFT JOIN yw_user as u ON c.userid=u.id
     WHERE c.postid=#{postid,jdbcType=INTEGER} AND c.id=#{commentid,jdbcType=INTEGER}
   </select>
 
-  <update id="updatePostComment" parameterType="java.util.Map">
-    update yw_post_comment
-    <set>
-      <if test="userid != null">
-        userid = #{userid,jdbcType=INTEGER},
-      </if>
-      <if test="content != null">
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{commentid,jdbcType=INTEGER} AND userid=#{userid,jdbcType=INTEGER}
-  </update>
+    <update id="updatePostComment" parameterType="java.util.Map">
+        update yw_post_comment
+        <set>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{commentid,jdbcType=INTEGER} AND userid=#{userid,jdbcType=INTEGER}
+    </update>
 
-  <insert id="replyPostComment" parameterType="java.util.Map">
-    insert into yw_post_comment
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="userid != null">
-        userid,
-      </if>
-      <if test="pid != null">
-        pid,
-      </if>
-      <if test="postid != null">
-        postid,
-      </if>
-      <if test="content != null">
-        content,
-      </if>
-      <if test="intime != null">
-        intime,
-      </if>
-      <if test="zansum != null">
-        zansum,
-      </if>
-      <if test="isdel != null">
-        isdel,
-      </if>
-      <if test="iscontribute != null">
-        iscontribute,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="isread != null">
-        isread,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="userid != null">
-        #{userid,jdbcType=INTEGER},
-      </if>
-      <if test="pid != null">
-        #{pid,jdbcType=INTEGER},
-      </if>
-      <if test="postid != null">
-        #{postid,jdbcType=INTEGER},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="intime != null">
-        #{intime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="zansum != null">
-        #{zansum,jdbcType=INTEGER},
-      </if>
-      <if test="isdel != null">
-        #{isdel,jdbcType=VARCHAR},
-      </if>
-      <if test="iscontribute != null">
-        #{iscontribute,jdbcType=INTEGER},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="isread != null">
-        #{isread,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
+    <insert id="replyPostComment" parameterType="java.util.Map">
+        insert into yw_post_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="pid != null">
+                pid,
+            </if>
+            <if test="postid != null">
+                postid,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="zansum != null">
+                zansum,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+            <if test="iscontribute != null">
+                iscontribute,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="isread != null">
+                isread,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="pid != null">
+                #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="postid != null">
+                #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="zansum != null">
+                #{zansum,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=VARCHAR},
+            </if>
+            <if test="iscontribute != null">
+                #{iscontribute,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="isread != null">
+                #{isread,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 
-  <select id="queryAuthenticationBypid" parameterType="java.lang.Integer"
-          resultType="com.movision.mybatis.comment.entity.Comment">
+    <select id="queryAuthenticationBypid" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.Comment">
       SELECT * FROM yw_post_comment WHERE id=#{pid,jdbcType=INTEGER} AND iscontribute=1
   </select>
 
-  <select id="findAllQueryCommentSensitiveWords" parameterType="java.util.Map"
-          resultType="com.movision.mybatis.comment.entity.CommentVo">
-    SELECT c.*,u.phone,u.photo,u.nickname
-    FROM yw_post_comment c
-    LEFT JOIN yw_user u
-    ON c.userid=u.id
-    WHERE isdel=0
-    <if test="content!=null">
-      AND c.content LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
-    </if>
-    <if test="words!=null">
-      AND c.content LIKE concat('%',#{words,jdbcType=VARCHAR},'%')
-    </if>
-    <if test="begintime!=null and endtime!=null">
-      AND c.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
-    </if>
-    ORDER BY c.intime DESC
-  </select>
+    <select id="findAllQueryCommentSensitiveWords" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
+        SELECT c.*,u.phone,u.photo,u.nickname
+        FROM yw_post_comment c
+        LEFT JOIN yw_user u
+        ON c.userid=u.id
+        WHERE isdel=0
+        <if test="content!=null">
+            AND c.content LIKE concat('%',#{content,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="words!=null">
+            AND c.content LIKE concat('%',#{words,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="begintime!=null and endtime!=null">
+            AND c.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
+        ORDER BY c.intime DESC
+    </select>
 
-  <select id="findAllQueryCommentListByUserid" parameterType="java.lang.String"
-          resultType="com.movision.mybatis.comment.entity.CommentVo">
+    <select id="findAllQueryCommentListByUserid" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.*,u.phone,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u
     ON c.userid=u.id WHERE postid IN (SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} and isdel=0)
     AND isdel=0 and pid is NULL ORDER BY intime DESC
   </select>
 
-  <select id="findAllqueryTheUserComments" parameterType="java.lang.String"
-          resultType="com.movision.mybatis.comment.entity.CommentVo">
+    <select id="findAllqueryTheUserComments" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.*,u.phone,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u ON c.userid=u.id  WHERE c.userid=1 AND c.isdel=0
     AND c.pid is NULL ORDER BY c.intime DESC
   </select>
 
-  <insert id="insertComment" parameterType="com.movision.mybatis.comment.entity.CommentVo">
-    insert into yw_post_comment
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="userid != null">
-        userid,
-      </if>
-      <if test="pid != null">
-        pid,
-      </if>
-      <if test="postid != null">
-        postid,
-      </if>
-      <if test="content != null">
-        content,
-      </if>
-      <if test="intime != null">
-        intime,
-      </if>
-      <if test="zansum != null">
-        zansum,
-      </if>
-      <if test="isdel != null">
-        isdel,
-      </if>
-      <if test="iscontribute != null">
-        iscontribute,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="isread!=null">
-        isread,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="userid != null">
-        #{userid,jdbcType=INTEGER},
-      </if>
-      <if test="pid != null">
-        #{pid,jdbcType=INTEGER},
-      </if>
-      <if test="postid != null">
-        #{postid,jdbcType=INTEGER},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="intime != null">
-        #{intime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="zansum != null">
-        #{zansum,jdbcType=INTEGER},
-      </if>
-      <if test="isdel != null">
-        #{isdel,jdbcType=VARCHAR},
-      </if>
-      <if test="iscontribute != null">
-        #{iscontribute,jdbcType=INTEGER},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="isread!=null">
-        #{isread,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
+    <insert id="insertComment" parameterType="com.movision.mybatis.comment.entity.CommentVo">
+        insert into yw_post_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="pid != null">
+                pid,
+            </if>
+            <if test="postid != null">
+                postid,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="zansum != null">
+                zansum,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+            <if test="iscontribute != null">
+                iscontribute,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="isread!=null">
+                isread,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="pid != null">
+                #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="postid != null">
+                #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="zansum != null">
+                #{zansum,jdbcType=INTEGER},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=VARCHAR},
+            </if>
+            <if test="iscontribute != null">
+                #{iscontribute,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="isread!=null">
+                #{isread,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 
-  <update id="updateCommentAudit" parameterType="java.util.Map">
+    <update id="updateCommentAudit" parameterType="java.util.Map">
     update yw_post_comment
     SET isdel=0,status=#{type,jdbcType=INTEGER},isread=1
     where id = #{commentid,jdbcType=INTEGER} AND iscontribute=1
   </update>
-  <select id="queryCommentByUserid" parameterType="java.lang.Integer"
-          resultType="com.movision.mybatis.comment.entity.CommentVo">
-    SELECT * FROM yw_post_comment WHERE (postid in(SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND
-    isdel=0) OR
-    id IN (SELECT id FROM yw_post_comment WHERE pid IN (SELECT id FROM yw_post_comment WHERE
-    userid=#{userid,jdbcType=INTEGER} AND pid IS NULL AND isdel=0))) ORDER BY intime DESC LIMIT 1
-  </select>
-  <select id="findAllQueryComment" parameterType="java.lang.Integer"
-          resultType="com.movision.mybatis.comment.entity.CommentVo">
+    <select id="queryCommentByUserid" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT * FROM yw_post_comment WHERE (postid in(SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND
     isdel=0) OR
     id IN (SELECT id FROM yw_post_comment WHERE pid IN (SELECT id FROM yw_post_comment WHERE
     userid=#{userid,jdbcType=INTEGER} AND pid IS NULL AND isdel=0))) ORDER BY intime DESC
   </select>
-  <select id="queryPidComment" resultType="com.movision.mybatis.comment.entity.CommentVo"
-          parameterType="java.lang.Integer">
-    <!--SELECT content FROM yw_post_comment WHERE pid=#{pid,jdbcType=INTEGER} AND id=#{id,jdbcType=INTEGER} AND isdel=0-->
-    SELECT content FROM yw_post_comment WHERE id=#{pid,jdbcType=INTEGER} AND isdel=0
+    <select id="findAllQueryComment" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
+    SELECT * FROM yw_post_comment WHERE (postid in(SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND
+    isdel=0) OR
+    id IN (SELECT id FROM yw_post_comment WHERE pid IN (SELECT id FROM yw_post_comment WHERE
+    userid=#{userid,jdbcType=INTEGER} AND pid IS NULL AND isdel=0))) ORDER BY intime DESC
   </select>
+    <select id="queryPidComment" resultType="com.movision.mybatis.comment.entity.CommentVo"
+            parameterType="java.lang.Integer">
+        <!--SELECT content FROM yw_post_comment WHERE pid=#{pid,jdbcType=INTEGER} AND id=#{id,jdbcType=INTEGER} AND isdel=0-->
+        SELECT content FROM yw_post_comment WHERE id=#{pid,jdbcType=INTEGER} AND isdel=0
+    </select>
 
     <update id="updateCommentRead" parameterType="java.lang.Integer">
       UPDATE yw_post_comment SET isread=1 WHERE
@@ -477,4 +478,180 @@
         SELECT p.userid FROM yw_post_comment c LEFT JOIN yw_post p ON p.id=c.postid WHERE
         c.id=#{commentid,jdbcType=INTEGER}
     </select>
+    <update id="updateCommentHeatValue" parameterType="java.util.Map">
+        UPDATE yw_post_comment SET heat_value=heat_value+#{points,jdbcType=INTEGER} WHERE
+      id=#{commentid,jdbcType=INTEGER}
+    </update>
+    <select id="queryCommentLevel" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT yw_user.`level` FROM yw_post_comment LEFT JOIN yw_user ON yw_user.id=yw_post_comment.userid WHERE isdel=0
+        AND yw_post_comment.id=#{commentid,jdbcType=INTEGER}
+    </select>
+    <select id="queryCommentByPost" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
+      SELECT p.*,u.nickname FROM yw_post_comment p LEFT JOIN yw_user u ON u.id=p.userid WHERE
+      p.postid=#{postid,jdbcType=INTEGER} AND p.isdel=0 ORDER BY p.heat_value DESC LIMIT 1
+    </select>
+
+    <!--查询别人对我的帖子的评论（不能包含自己对自己帖子的评论）
+    union all
+        查询别人对我的评论的回复（不能包含自己对自己评论, 父评论可以是自己的帖子）
+    -->
+    <select id="queryCommentIsRead" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(t.id) from (
+        select c.*
+        from yw_post_comment c
+        left JOIN yw_post p on c.postid = p.id
+        where p.userid = #{id}
+        <![CDATA[  and p.userid <> c.userid ]]>
+        and p.isdel = 0 and c.isread = 0 and c.isdel = 0
+        and c.pid is null
+        UNION ALL
+        SELECT d.*
+        from yw_post_comment d
+        LEFT JOIN yw_post_comment e on d.pid= e.id
+        left join yw_post f on f.id = e.postid
+        where f.isdel = 0
+        <![CDATA[   and d.userid <> e.userid ]]>
+        and e.userid = #{id}
+        and d.isdel = 0 and d.isread = 0
+        ) t
+
+    </select>
+
+    <select id="findAllCommentByPostId" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
+    SELECT * FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER} AND isdel=0 ORDER BY heat_value DESC
+  </select>
+
+    <select id="findAllCommentByPost" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
+    SELECT * FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER} AND isdel=0 ORDER BY heat_value DESC
+  </select>
+    <select id="queryCommentZan" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.CommentCount">
+  SELECT commentid,COUNT(1) AS count FROM yw_post_comment_zan_record WHERE commentid=#{id,jdbcType=INTEGER}
+</select>
+    <select id="queryCom" parameterType="java.lang.Integer" resultType="com.movision.mybatis.comment.entity.CommentVo">
+    SELECT  * FROM  yw_post_comment WHERE id=#{commentid,jdbcType=INTEGER}
+  </select>
+    <select id="commentCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    SELECT COUNT(1) FROM yw_post_comment WHERE userid=#{userid,jdbcType=INTEGER} AND id=#{id,jdbcType=INTEGER}
+  </select>
+    <update id="deleteComment" parameterType="java.lang.Integer">
+      UPDATE yw_post_comment SET isdel=1 WHERE id=#{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="findAllOneComment" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
+    SELECT c.*,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE
+        c.postid=#{postid,jdbcType=INTEGER} AND c.pid IS NULL ORDER BY c.intime DESC
+  </select>
+
+    <select id="queryTwoComment" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
+    SELECT c.*,u.photo,u.nickname FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE
+        c.pid=#{pid,jdbcType=INTEGER} ORDER BY
+    c.intime DESC
+  </select>
+
+    <!--增加一个isZan的字段输出，用于判断当前登录的用户是否点赞过这三条热门评论-->
+    <select id="queryThreeComment" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
+        SELECT c.*,u.photo,u.nickname,
+        <if test="userid != null">
+            (SELECT count(*) FROM yw_post_comment_zan_record WHERE userid = #{userid,jdbcType=INTEGER} AND commentid =
+            c.id) AS isZan
+        </if>
+        <if test="userid == null">
+            0 AS isZan
+        </if>
+        FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE
+        c.postid=#{postid,jdbcType=INTEGER} AND c.pid IS NULL AND c.isdel=0 ORDER BY
+        c.zansum DESC LIMIT 3
+    </select>
+
+    <select id="repliesNumber" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT COUNT(1) FROM yw_post_comment WHERE pid=#{id,jdbcType=INTEGER}
+  </select>
+    <select id="queryUserInfor" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.User">
+SELECT u.photo,u.nickname,u.id FROM yw_user u LEFT JOIN yw_post_comment c ON c.userid=u.id WHERE c.id= #{pid,jdbcType=INTEGER} ORDER BY
+    c.intime DESC
+  </select>
+    <select id="findQueryComment" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
+    SELECT * FROM yw_post_comment WHERE (postid in(SELECT id FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND
+    isdel=0) OR
+    id IN (SELECT id FROM yw_post_comment WHERE pid IN (SELECT id FROM yw_post_comment WHERE
+    userid=#{userid,jdbcType=INTEGER} AND pid IS NULL AND isdel=0) AND isdel = 0)) ORDER BY intime DESC
+  </select>
+
+    <select id="selectReplyCommentList" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.ReplyComment">
+        SELECT a.userid, a.`content` as replyContent, a.`intime`, a.pid as originCommentId,
+         b.`content` AS originContent, u.`photo`,u.`nickname`
+         FROM yw_post_comment a
+          LEFT JOIN yw_post_comment b ON a.pid = b.`id`
+          LEFT JOIN yw_user u ON u.id = a.userid
+        LEFT JOIN yw_post p on p.id = b.postid
+          WHERE b.userid = #{userid}
+          AND a.isdel = 0
+          AND b.isdel = 0
+            <![CDATA[ AND a.userid <> b.userid ]]>
+        and p.isdel = 0
+          ORDER BY a.intime DESC
+  </select>
+
+    <update id="updateCommentIsRead" parameterType="java.lang.Integer">
+        UPDATE yw_post_comment AS pc
+        SET pc.isread = 1
+        WHERE
+        (
+            pc.postid IN (
+                SELECT
+                id
+                FROM
+                yw_post
+                WHERE
+                userid = #{id}
+            )
+            OR pc.pid IN (
+                SELECT
+                id
+                FROM
+                (
+                    SELECT
+                    id
+                    FROM
+                    yw_post_comment
+                    WHERE
+                    userid = #{id}
+                ) a
+            )
+        )
+        AND pc.isdel = 0
+        AND pc.isread = 0
+        <![CDATA[ AND pc.userid <> #{id}
+        ]]>
+    </update>
+    <update id="lessPostComment" parameterType="java.lang.Integer">
+    UPDATE yw_post p SET p.commentsum=p.commentsum-1 WHERE p.id=(SELECT postid FROM yw_post_comment WHERE yw_post_comment.id=#{id,jdbcType=INTEGER})
+  </update>
+
+    <select id="selectPostComment" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.comment.entity.CommentVo">
+    SELECT c.id, c.content, c.intime, c.userid, c.postid,
+    u.nickname, u.photo,
+    p.title, p.coverimg
+    FROM yw_post_comment c
+    LEFT JOIN yw_user u ON c.userid = u.id
+    LEFT JOIN yw_post p ON c.postid = p.id
+    WHERE c.postid IN(SELECT id FROM yw_post WHERE userid = #{id} AND isdel = 0 AND isactive = 0)
+    AND c.isdel = 0 AND c.pid IS NULL
+    <![CDATA[    and c.userid <> #{id}  ]]>
+    AND c.status = 1 ORDER BY c.intime DESC
+  </select>
+    <select id="queryFatherComment" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post_comment WHERE pid is null AND id=#{id,jdbcType=INTEGER}
+    </select>
+
 </mapper>

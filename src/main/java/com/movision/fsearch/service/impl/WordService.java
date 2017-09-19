@@ -35,9 +35,11 @@ public class WordService extends JdbcRepository implements IWordService {
      * 加载Dictionary
      */
     static {
+        //加载字典文件
         DICT_FILE = new File(G.getConfig().getString("words.tmp.path"));
         if (!DICT_FILE.exists()) {
             try {
+                //确保文件存在，即创造文件
                 FileUtil.ensureFile(DICT_FILE);
             } catch (IOException e) {
                 L.error("Failed to init dictionary", e);
@@ -116,15 +118,20 @@ public class WordService extends JdbcRepository implements IWordService {
 
     @Override
     public List<String> segWords(String s) {
+        //根据，、。,.空格 回车 ，分隔字符串
         String[] strs = s.split("，|、|。|,|\\.| |\t");
+        //创建词集合， size<=10
         List<String> wordList = new ArrayList<String>(Math.min(strs.length, 10));
+
         for (String str : strs) {
             if (str.isEmpty()) {
                 continue;
             }
+            //调用MMseg分词算法
             MMSeg mmSeg = new MMSeg(new StringReader(str), COMPLEX_SEG);
             Word word = null;
             try {
+                //把分出的词加入到wordlist
                 while ((word = mmSeg.next()) != null) {
                     String w = word.getString();
                     if (!wordList.contains(w)) {

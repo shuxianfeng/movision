@@ -36,10 +36,10 @@ public class HomepageManageService {
         }
     }
 
-    public List<HomepageManage> queryBannerList(int type) {
+    public List<HomepageManage> queryBannerList(int topictype) {
         try {
             log.info("根据类型查询banner图列表");
-            return homepageManageMapper.queryBannerList(type);
+            return homepageManageMapper.queryBannerList(topictype);
         } catch (Exception e) {
             log.error("根据类型查询banner图列表失败");
             throw e;
@@ -82,13 +82,13 @@ public class HomepageManageService {
     /**
      * 查询广告位置是否可以添加广告
      *
-     * @param map
+     * @param manage
      * @return
      */
-    public int queryIsAdd(Map map) {
+    public int queryIsAdd(HomepageManage manage) {
         try {
             log.info("查询广告位置是否可以添加广告");
-            return homepageManageMapper.queryIsAdd(map);
+            return homepageManageMapper.queryIsAdd(manage);
         } catch (Exception e) {
             log.error("查询广告位置是否可以添加广告异常", e);
             throw e;
@@ -99,13 +99,13 @@ public class HomepageManageService {
     /**
      * 添加广告
      *
-     * @param map
+     * @param manage
      * @return
      */
-    public int addAdvertisement(Map map) {
+    public int addAdvertisement(HomepageManage manage) {
         try {
             log.info("添加广告");
-            return homepageManageMapper.addAdvertisement(map);
+            return homepageManageMapper.addAdvertisement(manage);
         } catch (Exception e) {
             log.error("添加广告");
             throw e;
@@ -115,13 +115,13 @@ public class HomepageManageService {
     /**
      * 编辑广告
      *
-     * @param map
+     * @param manage
      * @return
      */
-    public int updateAdvertisement(Map map) {
+    public int updateAdvertisement(HomepageManage manage) {
         try {
             log.info("编辑广告");
-            return homepageManageMapper.updateAdvertisement(map);
+            return homepageManageMapper.updateAdvertisement(manage);
         } catch (Exception e) {
             log.error("编辑广告异常");
             throw e;
@@ -204,6 +204,33 @@ public class HomepageManageService {
             return homepageManageMapper.deleteByPrimaryKey(id);
         } catch (Exception e) {
             log.error("根据id删除广告异常");
+            throw e;
+        }
+    }
+
+    /**
+     * 美番2.0邀请好友详情页面--邀请送现金页查询宣传图片和邀请规则图片url
+     */
+    public String myinvite(int topictype){
+        try {
+            log.info("邀请好友宣传图片送现金宣传图url获取");
+            return homepageManageMapper.myinvite(topictype);
+        }catch (Exception e){
+            log.error("邀请好友宣传图片送现金宣传图url获取失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 获取APP开屏图
+     * @return
+     */
+    public String getOpenAppImg(){
+        try {
+            log.info("获取APP开屏图");
+            return homepageManageMapper.getOpenAppImg();
+        }catch (Exception e){
+            log.error("获取APP开屏图失败");
             throw e;
         }
     }

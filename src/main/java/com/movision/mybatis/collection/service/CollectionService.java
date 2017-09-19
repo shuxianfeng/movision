@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -96,13 +97,26 @@ public class CollectionService {
         }
     }
 
-    public Integer queryPostCollectByUser(Integer postid) {
+
+    public Integer queryCollectionCount(int userid) {
         try {
-            log.info("查询被收藏帖子的用户");
-            return collectionMapper.queryPostCollectByUser(postid);
+            log.info("用户收藏的帖子数");
+            return collectionMapper.queryCollectionCount(userid);
         } catch (Exception e) {
-            log.error("查询被收藏帖子的用户异常", e);
+            log.error("用户收藏的帖子数异常", e);
             throw e;
         }
     }
+
+    public Integer userPostCollection(int userid) {
+        try {
+            log.info("用户被收藏的帖子数");
+            return collectionMapper.userPostCollection(userid);
+        } catch (Exception e) {
+            log.error("用户被收藏的帖子数异常", e);
+            throw e;
+        }
+    }
+
+
 }

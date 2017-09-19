@@ -14,7 +14,6 @@ import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.coupon.service.CouponService;
 import com.movision.mybatis.couponTemp.entity.CouponTemp;
-import com.movision.mybatis.deviceAccid.service.DeviceAccidService;
 import com.movision.mybatis.imDevice.entity.ImDevice;
 import com.movision.mybatis.imDevice.service.ImDeviceService;
 import com.movision.mybatis.imuser.entity.ImUser;
@@ -22,11 +21,9 @@ import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.mybatis.weixinguangzhu.service.WeixinGuangzhuService;
 import com.movision.shiro.realm.ShiroRealm;
-import com.movision.utils.DateUtils;
-import com.movision.utils.ListUtil;
-import com.movision.utils.StrUtil;
-import com.movision.utils.UUIDGenerator;
+import com.movision.utils.*;
 import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
@@ -68,7 +65,7 @@ public class AppRegisterFacade {
     private CouponService couponService;
 
     @Autowired
-    private DeviceAccidService deviceAccidService;
+    private WeixinGuangzhuService weixinGuangzhuService;
 
     @Autowired
     private UserService userService;
@@ -101,24 +98,21 @@ public class AppRegisterFacade {
      * }
      */
     @Transactional
-    public Map<String, Object> validateLoginUser(RegisterUser member, Validateinfo validateinfo, Session session) throws IOException {
+    public Map<String, Object> registeAppUserProcess(RegisterUser member, Validateinfo validateinfo, Session session) throws IOException {
 
-        String phone = member.getPhone();   //输入的手机号
-        String verifyCode = validateinfo.getCheckCode();    //session中的验证码
+        String phone = member.getPhone();                       //输入的手机号
+        String verifyCode = validateinfo.getCheckCode();        //session中的验证码
         String mobileCheckCode = member.getMobileCheckCode();   //输入的验证码
         if (verifyCode != null) {
-
             Date currentTime = new Date();
             Date sendSMStime = DateUtils.date2Sub(DateUtils.str2Date(validateinfo.getCreateTime(), "yyyy-MM-dd HH:mm:ss"), 12, 10);
             //校验是否在短信验证码有效期内
             if (currentTime.before(sendSMStime)) {
-
                 log.debug("mobile verifyCode == " + mobileCheckCode);
                 //比较服务器端session中的验证码和App端输入的验证码
                 if (validateinfo.getCheckCode().equalsIgnoreCase(mobileCheckCode)) {
                     //1 生成token
                     UsernamePasswordToken newToken = new UsernamePasswordToken(phone, verifyCode.toCharArray());
-
                     Map<String, Object> result = new HashedMap();
                     //2 注册用户/修改用户信息
                     Gson gson = new Gson();
@@ -136,6 +130,12 @@ public class AppRegisterFacade {
                     } else {
                         //2.1 手机号不存在,则新增用户信息
                         userid = this.registerMember(member);
+                        //邀请成功查询出邀请人的openid给yw_weixin_guangzhu表的转盘次数+1
+                        /** String openid = weixinGuangzhuService.selectOpenid(userid);
+                        if (openid != null) {
+                            //加1
+                            weixinGuangzhuService.updateC(openid);
+                         }*/
                         //2.2 增加新用户注册积分流水
                         pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.new_user_register.getCode(), PointConstant.POINT.new_user_register.getCode(), userid);
                         //2.3 增加绑定手机号积分流水
@@ -149,10 +149,10 @@ public class AppRegisterFacade {
                     //4 判断该userid是否存在一个im用户，若不存在，则注册im用户;若存在，则查询
                     this.getImuserForReturn(result, userid);
 
-                    //6 登录成功则清除session中验证码的信息
+                    //5 登录成功则清除session中验证码的信息
                     session.removeAttribute("r" + validateinfo.getAccount());
 
-                    //7 返回token
+                    //6 返回token
                     result.put("token_detail", newToken);
                     result.put("token", json);
                     return result;
@@ -374,7 +374,7 @@ public class AppRegisterFacade {
      * @param userid
      */
     @Transactional
-    private void processCoupon(String phone, int userid) {
+    void processCoupon(String phone, int userid) {
         //首先检查当前手机号是否领取过优惠券
         List<CouponTemp> couponTempList = couponService.checkIsGetCoupon(phone);
         List<Coupon> couponList = new ArrayList<>();
@@ -427,6 +427,7 @@ public class AppRegisterFacade {
                 user.setDeviceno(member.getDeviceno()); //设备号
                 user.setPoints(35); //积分：注册+绑定手机
                 user.setPhoto(UserConstants.DEFAULT_APPUSER_PHOTO); //默认头像
+                user.setIntime(new Date()); //注册时间
 
                 //若有邀请码，则记录相关的邀请码
                 if (StringUtils.isNotBlank(member.getReferrals())) {
@@ -584,6 +585,7 @@ public class AppRegisterFacade {
         newUser.setDeviceno(deviceno);  //设备号
         newUser.setPoints(25);  //积分：注册25分
         newUser.setInvitecode(UUIDGenerator.gen6Uuid());    //自己的邀请码
+        newUser.setIntime(new Date());  //注册时间
 
         /**
          * 此处要判断是否具有相同的昵称
@@ -644,6 +646,7 @@ public class AppRegisterFacade {
         session.setAttribute("phone", mobile); //缓存接收短信验证码的手机号
     }
 
+
     public void shiroLogin(Response response, Subject currentUser, UsernamePasswordToken token) {
         try {
             //登录，即身份验证 , 开始进入shiro的认证流程
@@ -673,12 +676,15 @@ public class AppRegisterFacade {
      * @param appToken
      * @param response
      * @param user
+     * @param ip
+     * @param longitude
+     * @param latitude
      */
-    public void handleLoginProcess(String appToken, Response response, User user) {
-        //2 校验appToken和serverToken非空
+    public void handleLoginProcess(String appToken, Response response, User user, String ip, String longitude, String latitude) {
+        //1 校验appToken和serverToken非空
         String serverToken = this.validateAppTokenAndServerToken(appToken, response, user);
 
-        //3 appToken和serverToken比较
+        //2 检验appToken和serverToken是否相等
         if (serverToken.equalsIgnoreCase(appToken)) {
 
             Subject currentUser = SecurityUtils.getSubject();
@@ -686,11 +692,11 @@ public class AppRegisterFacade {
             UsernamePasswordToken token = gson.fromJson(appToken, UsernamePasswordToken.class);
 
             Map returnMap = new HashedMap();
-            //4 开始进入shiro的认证流程
+            //3 开始进入shiro的认证流程
             shiroLogin(response, currentUser, token);
 
             /**
-             *  若shiro获取身份验证信息通过，则进行下面操作
+             *  4 若shiro获取身份验证信息通过，则进行下面操作
              */
             if (currentUser.isAuthenticated()) {
 
@@ -699,15 +705,20 @@ public class AppRegisterFacade {
                 //6 清除session中的boss用户信息
                 session.removeAttribute(SessionConstant.BOSS_USER);
                 session.setAttribute(SessionConstant.APP_USER, currentUser.getPrincipal());
-
+                //用户id
                 int appuserid = ShiroUtil.getAppUserID();
-                //登录验证成功后，更新登录时间
-                updateLogintime(appuserid);
-
-                log.debug("验证登录接口是否在session中缓存用户id：" + appuserid);
-                log.debug("验证登录接口是否在session中缓存用户信息：" + ShiroUtil.getAppUser());
-
-                //7 返回登录人的信息
+                //7 返回用户是否是第一次登录（根据登录时间和注册时间的间隔判断，若间隔小于10秒，则认为是第一次登录，否则不是）
+                Map intervalMap = userService.selectIntervalBetweenLoginAndRegiste(appuserid);
+                if (MapUtil.isEmpty(intervalMap)) {
+                    //不存在登录与注册间隔10秒的这个用户，则说明这个用户不是第一次登录
+                    returnMap.put("isFirstLogin", 0);
+                } else {
+                    //说明这个用户是第一次登录
+                    returnMap.put("isFirstLogin", 1);
+                }
+                //8 登录验证成功后，更新用户信息
+                updateLoginUserInfo(appuserid, longitude, latitude, ip);
+                //9 返回登录人的信息
                 ShiroRealm.ShiroUser appuser = (ShiroRealm.ShiroUser) currentUser.getPrincipal();
                 if (null == appuser) {
                     response.setMsgCode(0);
@@ -719,6 +730,14 @@ public class AppRegisterFacade {
                     returnMap.put("authorized", true);
                     returnMap.put("user", appuser);
                 }
+                //10 返回登录的用户当天是否签到
+                if (pointRecordFacade.signToday()) {
+                    returnMap.put("isSign", 1);
+                } else {
+                    pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode(), ShiroUtil.getAppUserID());
+                    returnMap.put("isSign", 0);
+                }
+
                 response.setData(returnMap);
             } else {
                 token.clear();
@@ -731,16 +750,34 @@ public class AppRegisterFacade {
         }
     }
 
-    private void updateLogintime(int appuserid) {
+    /**
+     * 登录成功后，更新用户的部分信息：
+     * 登录时间， ip， ip所在城市，经度， 纬度
+     *
+     * @param appuserid
+     * @param longitude
+     * @param latitude
+     * @param ip
+     */
+    private void updateLoginUserInfo(int appuserid, String longitude, String latitude, String ip) {
         User u = new User();
         u.setId(appuserid);
         u.setLoginTime(new Date());
-        if (updateAppuserLogintime(u)) {
-            log.info("更新用户登录时间成功");
-        } else {
-            log.warn("更新用户登录时间失败");
-        }
+
+        u.setIp(ip);    //登录的ip
+        u.setLongitude(longitude);  //登录的经度
+        u.setLatitude(latitude);    //登录的纬度
+
+        String ip_city = IpUtil.getCitycode("ip=" + ip, "utf-8");
+        u.setIp_city(ip_city);  //登录的ip城市code
+        String area = userService.areaname(ip_city);//市
+        u.setCity(area);
+        //查询省的name
+        String provice = userService.provicename(ip_city);
+        u.setProvince(provice);
+        updateLoginappuserInfo(u);
     }
+
 
     /**
      * 校验app_token和Server_token是否都存在
@@ -768,10 +805,9 @@ public class AppRegisterFacade {
         return serverToken;
     }
 
-    public Boolean updateAppuserLogintime(User user) {
-        return userService.updateAppuserLogintime(user);
+    public Boolean updateLoginappuserInfo(User user) {
+        return userService.updateLoginappuserInfo(user);
     }
-
 
     /**
      * 校验手机号

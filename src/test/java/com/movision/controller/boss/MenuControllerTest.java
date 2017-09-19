@@ -20,7 +20,7 @@ public class MenuControllerTest extends SpringTestCase {
 
 /*
     @Test
-    public void queryMenu() throws Exception {
+    public void selectTitleById() throws Exception {
         MenuDetail menu = menuFacade.queryMenuDetail(2);
         System.out.println(menu.toString());
     }

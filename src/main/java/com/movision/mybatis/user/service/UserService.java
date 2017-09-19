@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.org.mozilla.javascript.internal.EcmaError;
 
 import java.util.List;
 import java.util.Map;
@@ -74,39 +75,6 @@ public class UserService {
             return userMapper.selectByPhone(user);
         } catch (Exception e) {
             log.error("根据手机号查询User用户失败,phone=" + phone, e);
-            throw e;
-        }
-    }
-
-    public boolean insertUser(User user) {
-        try {
-            log.info("插入用户表，user=" + user.toString());
-            int n = userMapper.insert(user);
-            return n == 1;
-        } catch (Exception e) {
-            log.error("插入用户表异常，user=" + user.toString(), e);
-            throw e;
-        }
-    }
-
-    public boolean updateUserPointsAdd(Map mapadd) {
-        try {
-            log.info("根据手机号给贴主增加积分");
-            int n = userMapper.updateUserPointsAdd(mapadd);
-            return n == 1;
-        } catch (NumberFormatException e) {
-            log.error("给贴主增加积分失败", e);
-            throw e;
-        }
-    }
-
-    public boolean updateUserPointsMinus(Map map) {
-        try {
-            log.info("根据用户id操作用户积分减操作");
-            int n = userMapper.updateUserPointsMinus(map);
-            return n == 1;
-        } catch (NumberFormatException e) {
-            log.error("减少用户积分操作失败", e);
             throw e;
         }
     }
@@ -183,22 +151,6 @@ public class UserService {
     }
 
     /**
-     * 查询圈子所有管理员列表
-     *
-     * @param categoryid
-     * @return
-     */
-    public List<User> queryCircleManagerList(int categoryid) {
-        try {
-            log.info("查询圈子所有的管理员列表");
-            return userMapper.queryCircleManagerList(categoryid);
-        } catch (Exception e) {
-            log.error("查询圈子所有的管理员列表异常", e);
-            throw e;
-        }
-    }
-
-    /**
      * 根据圈子id查询出圈子管理员
      *
      * @param circleid
@@ -238,10 +190,6 @@ public class UserService {
             log.error("查询圈子管理员列表异常", e);
             throw e;
         }
-    }
-
-    public List<User> selectAllUser() {
-        return userMapper.selectAllUser();
     }
 
     /**
@@ -436,13 +384,13 @@ public class UserService {
         }
     }
 
-    public Boolean updateAppuserLogintime(User user) {
+    public Boolean updateLoginappuserInfo(User user) {
         try {
-            log.info("更新用户的登录时间，user:" + user.toString());
+            log.info("更新登录的用户信息，user:" + user.toString());
             int n = userMapper.updateByPrimaryKeySelective(user);
             return n == 1;
         } catch (Exception e) {
-            log.error("更新用户的登录时间失败", e);
+            log.error("更新登录的用户信息失败", e);
             throw e;
         }
     }
@@ -533,15 +481,31 @@ public class UserService {
     /**
      * 查询所有用户列表
      *
-     * @param pager
+     * @param
      * @return
      */
-    public List<UserAll> queryAllUserList(Paging<UserAll> pager, Map map) {
+    public List<UserAll> queryAllUserList(Map map) {
         try {
             log.info("查询所有用户列表");
-            return userMapper.findAllqueryAllUserList(pager.getRowBounds(), map);
+            return userMapper.queryAllUserList(map);
         } catch (Exception e) {
             log.error("查询所有用户列表异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询所有用户数量
+     *
+     * @param map
+     * @return
+     */
+    public Integer queryAllTotal(Map map) {
+        try {
+            log.info("查询所有用户数量");
+            return userMapper.queryAllTotal(map);
+        } catch (Exception e) {
+            log.error("查询所有用户数量异常", e);
             throw e;
         }
     }
@@ -574,6 +538,38 @@ public class UserService {
             return userMapper.deleteUserLevl(map);
         } catch (Exception e) {
             log.error("对用户加V去V异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询用户是否被推荐
+     *
+     * @param id
+     * @return
+     */
+    public Integer queryUserIsrecommend(Integer id) {
+        try {
+            log.info("查询用户是否被推荐");
+            return userMapper.queryUserIsrecommend(id);
+        } catch (Exception e) {
+            log.error("查询用户是否被推荐异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 更新用户推荐
+     *
+     * @param user
+     * @return
+     */
+    public Integer updateUserByIsrecommend(User user) {
+        try {
+            log.info("更新用户推荐");
+            return userMapper.updateUserByIsrecommend(user);
+        } catch (Exception e) {
+            log.error("更新用户推荐异常", e);
             throw e;
         }
     }
@@ -775,6 +771,46 @@ public class UserService {
         }
     }
 
+    public List<Author> findAllHotAuthor(Paging<Author> pager, Map<String, Object> map){
+        try {
+            log.info("查询用户未关注过的推荐作者");
+            return userMapper.findAllHotAuthor(pager.getRowBounds(), map);
+        }catch (Exception e){
+            log.error("查询用户未关注过的推荐作者失败", e);
+            throw e;
+        }
+    }
+
+    public List<Author> findAllInterestAuthor(Paging<Author> pager, Map<String, Object> map){
+        try {
+            log.info("查询用户关注的圈子和关注的标签中的作者（并且这个用户还没关注过他的）");
+            return userMapper.findAllInterestAuthor(pager.getRowBounds(), map);
+        }catch (Exception e){
+            log.error("查询用户关注的圈子和关注的标签中的作者（并且这个用户还没关注过他的）失败", e);
+            throw e;
+        }
+    }
+
+    public void updateUserAttention(Integer userid){
+        try {
+            log.info("增加用户关注总数");
+            userMapper.updateUserAttention(userid);
+        }catch (Exception e){
+            log.error("增加用户关注总数失败");
+            throw e;
+        }
+    }
+
+    public List<Author> findAllNearAuthor(Paging<Author> pager, Map<String, Object> map){
+        try {
+            log.info("根据传入的手机定位经纬度查询当前用户周边30公里内的所有作者");
+            return userMapper.findAllNearAuthor(pager.getRowBounds(), map);
+        }catch (Exception e){
+            log.error("根据传入的手机定位经纬度查询当前用户周边30公里内的所有作者失败", e);
+            throw e;
+        }
+    }
+
     public Boolean isExistSameNickname(String nickname, Integer userid) {
         try {
             log.info("查看是否存在相同的昵称");
@@ -877,4 +913,280 @@ public class UserService {
         }
     }
 
+    /**
+     * 查询用户名称头像
+     *
+     * @param userid
+     * @return
+     */
+    public UserLike findUser(int userid) {
+        try {
+            log.info("查询用户");
+            return userMapper.findUser(userid);
+        } catch (Exception e) {
+            log.error("查询用户失败", e);
+            throw e;
+        }
+
+    }
+
+
+    public Integer updateUserHeatValue(Map map) {
+        try {
+            log.info("修改用户热度");
+            return userMapper.updateUserHeatValue(map);
+        } catch (Exception e) {
+            log.error("修改用户热度失败", e);
+            throw e;
+        }
+    }
+
+    public int queryUserLevel(int userid) {
+        try {
+            log.info("查询用户等级");
+            return userMapper.queryUserLevel(userid);
+        } catch (Exception e) {
+            log.error("查询用户等级失败", e);
+            throw e;
+        }
+    }
+
+    public UserVo queryUserInfoHompage(int userid) {
+        try {
+            log.info("查询用户信息");
+            return userMapper.queryUserInfoHompage(userid);
+        } catch (Exception e) {
+            log.error("查询用户信息失败", e);
+            throw e;
+        }
+    }
+
+    public List<UserVo> findAllMineFollowAuthor(Map<String, Object> paramap, Paging<UserVo> pager){
+        try {
+            log.info("查询当前用户关注的所有作者列表");
+            return userMapper.findAllMineFollowAuthor(paramap, pager.getRowBounds());
+        }catch (Exception e){
+            log.error("查询当前用户关注的所有作者列表失败", e);
+            throw e;
+        }
+    }
+
+    public int queryPostNumByAuthor(Map<String, Object> paramap){
+        try {
+            log.info("查询该作者已发帖子数");
+            return userMapper.queryPostNumByAuthor(paramap);
+        }catch (Exception e){
+            log.error("查询该作者已发帖子数失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询当前作者有没有被当前登录的用户关注过
+     *
+     * @param paramap
+     * @return
+     */
+    public int queryIsFollowAuthor(Map<String, Object> paramap){
+        try {
+            log.info("查询当前作者有没有被当前登录的用户关注过");
+            return userMapper.queryIsFollowAuthor(paramap);
+        }catch (Exception e){
+            log.error("查询当前作者有没有被当前登录的用户关注过 失败", e);
+            throw e;
+        }
+    }
+
+    public List<UserVo> findAllMineFans(Map<String, Object> parammap, Paging<UserVo> pager){
+        try {
+            log.info("查询当前用户的粉丝列表");
+            return userMapper.findAllMineFans(parammap, pager.getRowBounds());
+        }catch (Exception e){
+            log.error("查询当前用户的粉丝列表失败", e);
+            throw e;
+        }
+    }
+
+    public List<UserVo> findAllMostFansAuthorInAll(Paging<UserVo> paging) {
+        try {
+            log.info("查询粉丝数最多的作者集合");
+            return userMapper.findAllMostFansAuthorInAll(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询粉丝数最多的作者集合失败", e);
+            throw e;
+        }
+    }
+
+    public List<UserVo> findAllMostFansAuthorInCurrentMonth(Paging<UserVo> paging) {
+        try {
+            log.info("查询当月粉丝数最多的作者集合");
+            return userMapper.findAllMostFansAuthorInCurrentMonth(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询当月粉丝数最多的作者集合失败", e);
+            throw e;
+        }
+    }
+
+    public List<UserVo> findAllMostCommentAuthorInAll(Paging<UserVo> paging) {
+        try {
+            log.info("查询评论最多的作者集合");
+            return userMapper.findAllMostCommentAuthorInAll(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询评论最多的作者集合失败", e);
+            throw e;
+        }
+    }
+
+    public List<UserVo> findAllMostCommentAuthorInCurrentMonth(Paging<UserVo> paging) {
+        try {
+            log.info("查询当月评论最多的作者集合");
+            return userMapper.findAllMostCommentAuthorInCurrentMonth(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询当月评论最多的作者集合失败", e);
+            throw e;
+        }
+    }
+
+
+    public List<UserVo> findAllMostPostAuthorInAll(Paging<UserVo> paging) {
+        try {
+            log.info("查询发帖最多的作者集合");
+            return userMapper.findAllMostPostAuthorInAll(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询发帖最多的作者集合失败", e);
+            throw e;
+        }
+    }
+
+
+    public List<UserVo> findAllMostPostAuthorInCurrentMonth(Paging<UserVo> paging) {
+        try {
+            log.info("查询当月发帖最多的作者集合");
+            return userMapper.findAllMostPostAuthorInCurrentMonth(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询当月发帖最多的作者集合失败", e);
+            throw e;
+        }
+    }
+
+    public int queryInviteNum(int userid){
+        try {
+            log.info("查询当前登录用户已邀请人数");
+            return userMapper.queryInviteNum(userid);
+        }catch (Exception e){
+            log.error("查询当前登录用户已邀请人数失败", e);
+            throw e;
+        }
+    }
+
+    public int queryFinishUserInfo(int userid){
+        try {
+            log.info("查询当前用户个人资料是否完整");
+            return userMapper.queryFinishUserInfo(userid);
+        }catch (Exception e){
+            log.error("查询当前用户个人资料是否完整失败", e);
+            throw e;
+        }
+    }
+
+    public int getfootmap(int userid){
+        try {
+            log.info("获取当前用户的足迹点总数");
+            return userMapper.getfootmap(userid);
+        }catch (Exception e){
+            log.error("获取当前用户的足迹点总数失败", e);
+            throw e;
+        }
+    }
+
+    public List<InviteUserVo> findAllMyInviteList(int userid, Paging<InviteUserVo> pager){
+        try {
+            log.info("查询当前用户邀请的好友列表");
+            return userMapper.findAllMyInviteList(userid, pager.getRowBounds());
+        }catch (Exception e){
+            log.error("查询当前用户邀请的好友列表失败");
+            throw e;
+        }
+    }
+
+    public List<InviteUserVo> findAllInviteRank(Paging<InviteUserVo> pager){
+        try {
+            log.info("查询邀请好友排行榜列表");
+            return userMapper.findAllInviteRank(pager.getRowBounds());
+        }catch (Exception e){
+            log.error("查询邀请好友排行榜列表失败");
+            throw e;
+        }
+    }
+
+    public List<User> queryUserByName(String name) {
+        try {
+            log.info("根据昵称查询用户");
+            return userMapper.queryUserByName(name);
+        } catch (Exception e) {
+            log.error("根据昵称查询用户失败", e);
+            throw e;
+        }
+    }
+
+    public List<User> findAllUserByName(Paging<User> paging, Map map) {
+        try {
+            log.info("分页，根据名称查找用户");
+            return userMapper.findAllUserByName(map, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("分页，根据名称查找用户失败", e);
+            throw e;
+        }
+    }
+
+
+    public String areaname(String code) {
+        try {
+            log.info("所在城市");
+            return userMapper.areaname(code);
+        } catch (Exception e) {
+            log.error("所在城市失败", e);
+            throw e;
+        }
+    }
+
+    public String provicename(String citycode) {
+        try {
+            log.info("所在城市");
+            return userMapper.provicename(citycode);
+        } catch (Exception e) {
+            log.error("所在城市失败", e);
+            throw e;
+        }
+    }
+
+    public Map selectIntervalBetweenLoginAndRegiste(Integer id) {
+        try {
+            log.info("查询当前用户登录和注册之间的时间间隔秒数");
+            return userMapper.selectIntervalBetweenLoginAndRegiste(id);
+        } catch (Exception e) {
+            log.error("查询当前用户登录和注册之间的时间间隔秒数失败", e);
+            throw e;
+        }
+    }
+
+    public Integer selectMaxRobotId() {
+        try {
+            log.info("查找最大的机器人id");
+            return userMapper.selectMaxRobotId();
+        } catch (Exception e) {
+            log.error("查找最大的机器人id失败", e);
+            throw e;
+        }
+    }
+
+    public List<User> selectRobotUser() {
+        try {
+            log.info("查询所有机器人用户");
+            return userMapper.selectRobotUser();
+        } catch (Exception e) {
+            log.error("查询所有机器人用户失败", e);
+            throw e;
+        }
+    }
 }

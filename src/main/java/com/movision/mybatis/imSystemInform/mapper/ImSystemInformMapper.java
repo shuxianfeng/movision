@@ -27,13 +27,21 @@ public interface ImSystemInformMapper {
 
     ImSystemInform queryBodyAll(Integer id);//查询全部内容
 
-    ImSystemInformVo queryByUserid(Map map);//查询最新一条记录
+    List<ImSystemInformVo> findAllIm(Date informTime, RowBounds rowBounds);
 
-    Integer querySystemPushByUserid(Map map);//查询是否有未读系统通知
+    ImSystemInformVo queryMyMsgInforDetails(ImSystemInform imSystemInform);
 
-    Integer queryInform(String indity);
+    List<ImSystemInform> findAllOperationInformList(ImSystemInform inform, RowBounds rowBounds);
 
-    List<String> queryUnreadSystemMessage(Integer userid);
+    ImSystemInform queryOperationInformById(ImSystemInform imSystemInform);
 
-    List<ImSystemInformVo> findAllIm(Map map, RowBounds rowBounds);
+    List<ImSystemInform> findAllActiveMessage(Map map, RowBounds rowBounds);
+
+    int updateActiveMessage(ImSystemInform imSystemInform);
+
+    ImSystemInform queryActiveById(int id);
+
+    String queryActiveBody(int id);
+
+    Date queryDate(int userid);
 }

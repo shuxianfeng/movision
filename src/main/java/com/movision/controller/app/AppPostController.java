@@ -3,27 +3,23 @@ package com.movision.controller.app;
 import com.movision.common.Response;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.boss.PostFacade;
-import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
-import com.movision.mybatis.accusation.service.AccusationService;
+import com.movision.fsearch.pojo.spec.NormalSearchSpec;
+import com.movision.fsearch.service.impl.LabelSearchService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
-import com.movision.mybatis.goods.entity.Goods;
+import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
 import com.movision.mybatis.post.entity.ActiveVo;
-import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
-import com.movision.utils.CoverImgCompressUtil;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.utils.file.FileUtil;
-import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import org.omg.CORBA.PRIVATE_MEMBER;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,47 +36,29 @@ import java.util.*;
 @RequestMapping("/app/post/")
 public class AppPostController {
 
+    private static Logger log = LoggerFactory.getLogger(AppPostController.class);
+
     @Autowired
     private FacadePost facadePost;
 
-
     @Autowired
     private MovisionOssClient movisionOssClient;
-
 
     @Autowired
     private PostFacade postFacade;
 
     @Autowired
-    private FacadeHeatValue facadeHeatValue;
+    private LabelSearchTermsService labelSearchTermsService;
+
+    @Autowired
+    private LabelSearchService labelSearchService;
 
     @ApiOperation(value = "帖子详情数据返回接口", notes = "用于返回请求帖子详情内容", response = Response.class)
     @RequestMapping(value = "detail", method = RequestMethod.POST)
     public Response queryPostDetail(@ApiParam(value = "帖子id") @RequestParam String postid,
                                     @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         Response response = new Response();
-
         PostVo post = facadePost.queryPostDetail(postid, userid);
-
-
-        if (null != post) {
-            response.setCode(200);
-            response.setMessage("查询成功");
-        }else if (null == post){
-            response.setCode(300);
-            response.setMessage("该帖已删除");
-        }
-        response.setData(post);
-        return response;
-    }
-
-    @ApiOperation(value = "帖子详情数据返回接口（老版,只用于改版数据割接使用）", notes = "用于返回请求帖子详情内容（老版,只用于改版数据割接使用）", response = Response.class)
-    @RequestMapping(value = "olddetail", method = RequestMethod.POST)
-    public Response queryOldPostDetail(@ApiParam(value = "帖子id") @RequestParam String postid,
-                                    @ApiParam(value = "用户id(登录状态下不可为空)") @RequestParam(required = false) String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
-        Response response = new Response();
-
-        PostVo post = facadePost.queryOldPostDetail(postid, userid);
 
 
         if (null != post) {
@@ -104,8 +82,12 @@ public class AppPostController {
 
         ActiveVo active = facadePost.queryActiveDetail(postid, userid, activetype);
 
-        if (response.getCode() == 200) {
+        if (null != active) {
+            response.setCode(200);
             response.setMessage("查询成功");
+        } else if (null == active) {
+            response.setCode(300);
+            response.setMessage("该帖已删除");
         }
         response.setData(active);
         return response;
@@ -179,73 +161,6 @@ public class AppPostController {
         return response;
     }
 
-
-    @ApiOperation(value = "APP端发布帖子", notes = "用于APP端发布帖子的接口", response = Response.class)
-    @RequestMapping(value = "releasePost", method = RequestMethod.POST)
-    public Response releasePost(HttpServletRequest request,
-                                @ApiParam(value = "用户id") @RequestParam String userid,
-                                @ApiParam(value = "帖子类型：0 普通图文帖 1 原生视频帖 2 分享视频贴( isactive为0时该字段不为空)") @RequestParam String type,
-                                @ApiParam(value = "所属圈子id") @RequestParam String circleid,
-                                @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
-                                @ApiParam(value = "帖子内容") @RequestParam String postcontent,
-                                @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,
-                                @ApiParam(value = "帖子封面图片") @RequestParam MultipartFile coverimg,
-                                @ApiParam(value = "原生视频上传到阿里云后的vid（type为1时必填）") @RequestParam(required = false) String vid,
-                                @ApiParam(value = "第三方视频地址url（type为2时必填，直接把分享的第三方视频网址传到这里）") @RequestParam(required = false) String videourl,
-                                @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids
-    ) {
-        Response response = new Response();
-
-        Map count = facadePost.releasePost(request, userid, type, circleid, title, postcontent, isactive, coverimg, vid, videourl, proids);
-
-        if (count.get("flag").equals(-2)) {
-            response.setCode(300);
-            response.setMessage("系统异常，APP发帖失败");
-        } else if (count.get("flag").equals(-1)) {
-            response.setCode(201);
-            response.setMessage("用户不具备发帖权限");
-        }else{
-            response.setCode(200);
-            response.setMessage("发帖成功");
-        }
-        return response;
-    }
-
-    @ApiOperation(value = "PC官网发布帖子", notes = "用于官网发布帖子的接口", response = Response.class)
-    @RequestMapping(value = "releasePostByPC", method = RequestMethod.POST)
-    public Response releasePostByPC(HttpServletRequest request,
-                                    @ApiParam(value = "用户id") @RequestParam String userid,
-                                    @ApiParam(value = "帖子类型：0 普通图文帖 1 原生视频帖 2 分享视频贴( isactive为0时该字段不为空)") @RequestParam String type,
-                                    @ApiParam(value = "所属圈子id") @RequestParam String circleid,
-                                    @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
-                                    @ApiParam(value = "帖子内容") @RequestParam String postcontent,
-                                    @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,
-                                    @ApiParam(value = "原生视频上传到阿里云后的vid（type为1时必填）") @RequestParam(required = false) String vid,
-                                    @ApiParam(value = "第三方视频地址url（type为2时必填，直接把分享的第三方视频网址传到这里）") @RequestParam(required = false) String videourl,
-                                    @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids,
-                                    @RequestParam(value = "file", required = false) MultipartFile file,
-                                    @ApiParam(value = "X坐标") @RequestParam String x,
-                                    @ApiParam(value = "Y坐标") @RequestParam String y,
-                                    @ApiParam(value = "宽") @RequestParam String w,
-                                    @ApiParam(value = "高") @RequestParam String h) {
-        Response response = new Response();
-
-        Map count = facadePost.releasePostByPC(request, userid, type, circleid, title, postcontent, isactive, file, vid, videourl, proids, x, y, w, h);
-
-        if (count.get("flag").equals(-2)) {
-            response.setCode(300);
-            response.setMessage("系统异常，APP发帖失败");
-        } else if (count.get("flag").equals(-1)) {
-            response.setCode(201);
-            response.setMessage("用户不具备发帖权限");
-        }else{
-            response.setCode(200);
-            response.setMessage("发帖成功");
-        }
-        return response;
-    }
-
-
     @ApiOperation(value = "PC官网发布帖子(改版)", notes = "用于官网发布帖子的接口（改版）", response = Response.class)
     @RequestMapping(value = "releasePostByPC_Test", method = RequestMethod.POST)
     public Response releasePostByPCTest(HttpServletRequest request,
@@ -254,10 +169,11 @@ public class AppPostController {
                                         @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
                                         @ApiParam(value = "帖子内容") @RequestParam String postcontent,
                                         @ApiParam(value = "帖子封面") @RequestParam String coverimg,
+                                        @ApiParam(value = "标签id 多个以逗号分隔") @RequestParam(required = false) String labelid,
                                         @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids) {
         Response response = new Response();
 
-        Map count = facadePost.releasePostByPCTest(request, userid, circleid, title, postcontent, coverimg, proids);
+        Map count = facadePost.releasePostByPCTest(request, userid, circleid, title, postcontent, coverimg, labelid, proids);
 
         if (count.get("flag").equals(-2)) {
             response.setCode(300);
@@ -307,22 +223,6 @@ public class AppPostController {
         return new Response(list);
     }
 
-
-/*    @ApiOperation(value = "图片压缩", notes = "用于图片压缩", response = Response.class)
-    @RequestMapping(value = "coverImgCompressUtil", method = RequestMethod.POST)
-    public Response coverImgCompressUtil(@ApiParam(value = "上传文件") @RequestParam MultipartFile file,
-                                         @ApiParam(value = "要求文件宽") @RequestParam String w,
-                                         @ApiParam(value = "要求文件高") @RequestParam String h) {
-        Response response = new Response();
-        *//*int w = 750;//图片压缩后的宽度
-        int h = 440;//图片压缩后的高度440*//*
-        String str = coverImgCompressUtil.ImgCompress(file, Integer.parseInt(w), Integer.parseInt(h));
-        response.setMessage("操作成功");
-        response.setData(str);
-        return response;
-    }*/
-
-
     /**
      * 修改上架
      *
@@ -358,31 +258,6 @@ public class AppPostController {
         map.put("height", m.get("height"));
         return new Response(map);
 
-        /**Map m = new HashMap();
-        String url = "";
-        Map<String, Object> map = new HashMap<>();
-        Map compressmap = null;
-        if (type.equals("1")) {
-            /**  m = movisionOssClient.uploadObject(file, "img", "postCover");
-             url = String.valueOf(m.get("url"));
-             //4对本地服务器中切割好的图片进行压缩处理
-             int wt = 750;//图片压缩后的宽度
-             int ht = 440;//图片压缩后的高度440
-             String compressUrl = coverImgCompressUtil.ImgCompress(url, wt, ht);
-             System.out.println("压缩完的切割图片url==" + compressUrl);
-             //5对压缩完的图片上传到阿里云
-         compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
-            compressmap = facadePost.uploadPostFacePic(file);
-            map.put("compressmap", compressmap);
-        } else if (type.equals("2")) {
-            m = movisionOssClient.uploadObject(file, "img", "post");
-            url = String.valueOf(m.get("url"));
-            map.put("url", url);
-            map.put("name", FileUtil.getFileNameByUrl(url));
-            map.put("width", m.get("width"));
-            map.put("height", m.get("height"));
-        }
-         return new Response(map);*/
     }
 
     /**
@@ -465,7 +340,7 @@ public class AppPostController {
     public Response updatePostByZanSum(@ApiParam(value = "帖子id") @RequestParam String id,
                                        @ApiParam(value = "用户id") @RequestParam String userid) {
         Response response = new Response();
-        int sum = facadePost.updatePostByZanSum(id, userid);
+        int sum = facadePost.doZanWithPost(id, userid);
         if (response.getCode() == 200) {
             response.setMessage("点赞成功");
             response.setData(sum);
@@ -551,7 +426,7 @@ public class AppPostController {
     }
 
     /**
-     * 模块式老年乐发布帖子
+     * 模块式发布帖子
      *
      * @param request
      * @param userid
@@ -568,16 +443,18 @@ public class AppPostController {
     public Response releaseModularPost(HttpServletRequest request,
                                        @ApiParam(value = "用户id") @RequestParam String userid,
                                        @ApiParam(value = "所属圈子id") @RequestParam String circleid,
+                                       @ApiParam(value = "所属活动id") @RequestParam(required = false) String activeid,
                                        @ApiParam(value = "帖子主标题(限18个字以内)") @RequestParam String title,
                                        @ApiParam(value = "帖子内容") @RequestParam String postcontent,
                                        @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,
                                        @ApiParam(value = "帖子封面图片url字符串") @RequestParam String coverimg,
+                                       @ApiParam(value = "标签实体集合，json字符串形式") @RequestParam(required = false) String labellist,
                                        @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids) {
 
 
         Response response = new Response();
 
-        Map count = facadePost.releaseModularPost(request, userid, circleid, title, postcontent, isactive, coverimg, proids);
+        Map count = facadePost.postUnderZk(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist, activeid);
 
         if (count.get("flag").equals(-2)) {
             response.setCode(300);
@@ -601,59 +478,66 @@ public class AppPostController {
         response.setData(resault);
         return response;
     }
-    /**
-     *下拉刷新
-     * @return
-     */
-    @ApiOperation(value = "下拉刷新", notes = "下拉刷新", response = Response.class)
-    @RequestMapping(value = "userRefreshList", method = RequestMethod.POST)
-    public Response userRefreshList(@ApiParam(value = "用户id") @RequestParam(required = false) String userid,
-                                    @ApiParam(value = "页数") @RequestParam(required = false) int page) {
-        Response response = new Response();
-        Map map=facadePost.userRefreshList(userid,page);
-        if (response.getCode() == 200) {
-            response.setMessage("查询成功");
-        }
-        response.setData(map);
-        return  response;
 
-    }
-
-    /**
-     * 最新下拉刷新
-     *
-     * @return
-     */
-    @ApiOperation(value = "最新下拉刷新", notes = "最新下拉刷新", response = Response.class)
-    @RequestMapping(value = "userRefreshListNew", method = RequestMethod.POST)
-    public Response userRefreshListNew(@ApiParam(value = "用户id") @RequestParam(required = false) int userid,
-                                       @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                       @RequestParam(required = false, defaultValue = "10") String pageSize) {
+    @ApiOperation(value = "发帖-查询有发帖权限的圈子目录", notes = "发帖-查询有发帖权限的圈子目录", response = Response.class)
+    @RequestMapping(value = "get_circle_category_when_post", method = RequestMethod.GET)
+    public Response getCircleCategoryWhenPost() {
         Response response = new Response();
-        Paging<Post> pager = new Paging<>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List map = facadePost.userRefreshListNew(userid, pager);
-        pager.result(map);
-        response.setData(pager);
+        List<Map> resault = facadePost.getCircleInCatagory();
+        response.setData(resault);
         return response;
     }
 
-    /**
-     * 热度
-     *
-     * @param postid
-     * @param type
-     * @return
-     */
-    @ApiOperation(value = "热度", notes = "热度", response = Response.class)
-    @RequestMapping(value = "addHeatValue", method = RequestMethod.POST)
-    public Response addHeatValue(@ApiParam(value = "帖子id") @RequestParam(required = false) int postid,
-                                 @ApiParam(value = "类型") @RequestParam(required = false) int type) {
+    @ApiOperation(value = "发帖-查询热门标签列表（展示10条）", notes = "发帖-查询热门标签列表（展示10条）", response = Response.class)
+    @RequestMapping(value = "get_hot_label_list_when_post", method = RequestMethod.GET)
+    public Response getHotLabelListWhenPost() {
         Response response = new Response();
-        facadeHeatValue.addHeatValue(postid, type);
-        if (response.getCode() == 200) {
-            response.setMessage("成功");
-        }
+        List<PostLabel> postLabelList = facadePost.queryHotValueLabelList();
+        response.setData(postLabelList);
         return response;
     }
+
+    @ApiOperation(value = "发帖-查询历史使用标签列表（展示12条）", notes = "发帖-查询历史使用标签列表（展示12条）", response = Response.class)
+    @RequestMapping(value = "get_history_label_list_when_post", method = RequestMethod.GET)
+    public Response getHistoryLabelListWhenPost() {
+        Response response = new Response();
+        List postLabelList = labelSearchTermsService.histroyWordsLabel(ShiroUtil.getAppUserID());
+        response.setData(postLabelList);
+        return response;
+    }
+
+    @RequestMapping(value = {"search_post_label"}, method = RequestMethod.GET)
+    @ApiOperation(value = "搜索帖子标签", notes = "搜索帖子标签", response = Response.class)
+    public Response searchPostLabel(@ApiParam @ModelAttribute NormalSearchSpec spec) throws IOException {
+
+        if (spec.getLimit() <= 0 || spec.getLimit() > 100) {
+            spec.setLimit(12);
+        }
+        Response response = new Response();
+        response.setCode(200);
+        Map<String, Object> ret;
+        try {
+            log.debug("测试搜索词汉字是否乱码>>>>>>" + spec.getQ());
+            ret = labelSearchService.search(spec);
+            response.setMsgCode(1);
+            response.setMessage("OK!");
+            response.setData(ret);
+        } catch (Exception e) {
+            response.setMsgCode(0);
+            response.setMessage("search error!");
+            log.error("searchProducts error >>>", e);
+        }
+
+        return response;
+    }
+
+    @RequestMapping(value = {"get_label_search_isdel"}, method = RequestMethod.GET)
+    @ApiOperation(value = "清除标签搜索记录", notes = "清除标签搜索记录", response = Response.class)
+    public Response UpdateSearchIsdel() {
+        Response response = new Response();
+        labelSearchService.UpdateSearchIsdel(ShiroUtil.getAppUserID());
+        return response;
+    }
+
 
 }

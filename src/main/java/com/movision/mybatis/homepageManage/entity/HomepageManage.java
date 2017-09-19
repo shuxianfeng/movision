@@ -11,11 +11,15 @@ public class HomepageManage implements Serializable {
     //4 商城--一周热销banner  5 商城--每日神器推荐banner',
     private Integer topictype;
 
+    private Integer mark;//发现页banner类型 0 帖子 1 活动（活动贴） 2 外链广告H5
+
     private String content;//内容主标题
 
     private String subcontent;//内容副标题
 
     private String url;//图片url
+
+    private Integer postid;//跳转的帖子/活动id
 
     private String transurl;//跳转url
 
@@ -69,6 +73,14 @@ public class HomepageManage implements Serializable {
         this.topictype = topictype;
     }
 
+    public Integer getMark() {
+        return mark;
+    }
+
+    public void setMark(Integer mark) {
+        this.mark = mark;
+    }
+
     public String getContent() {
         return content;
     }
@@ -91,6 +103,14 @@ public class HomepageManage implements Serializable {
 
     public void setUrl(String url) {
         this.url = url == null ? null : url.trim();
+    }
+
+    public Integer getPostid() {
+        return postid;
+    }
+
+    public void setPostid(Integer postid) {
+        this.postid = postid;
     }
 
     public String getTransurl() {

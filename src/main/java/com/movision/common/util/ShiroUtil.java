@@ -301,4 +301,45 @@ public class ShiroUtil {
         return accid;
     }
 
+    public static String getIpCity() {
+        String ipCity = null;
+        try {
+            Subject currentUser = SecurityUtils.getSubject();
+            Session session = currentUser.getSession(false);
+            if (session != null) {
+                ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
+                if (principal != null) {
+                    ipCity = principal.getIpCity();
+                }
+            }
+        } catch (Exception e) {
+            log.error("get seesion user info error!", e);
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return ipCity;
+    }
+
+    /**
+     * 获取app用户等级，0-99， 默认是0
+     *
+     * @return
+     */
+    public static Integer getUserLevel() {
+        Integer level = 0;  //默认是0
+        try {
+            Subject currentUser = SecurityUtils.getSubject();
+            Session session = currentUser.getSession(false);
+            if (session != null) {
+                ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
+                if (principal != null) {
+                    level = principal.getLevel();
+                }
+            }
+        } catch (Exception e) {
+            log.error("get seesion user info error!", e);
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return level;
+    }
+
 }

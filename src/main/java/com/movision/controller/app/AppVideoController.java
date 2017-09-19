@@ -7,7 +7,9 @@ import com.movision.common.Response;
 import com.movision.common.constant.AliVideoConstant;
 import com.movision.facade.apsaraVideo.AliVideoFacade;
 
+import com.movision.mybatis.weixinlist.entity.WeixinList;
 import com.movision.utils.VideoUploadUtil;
+import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.apache.commons.collections.map.HashedMap;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -143,10 +146,9 @@ public class AppVideoController {
      */
     @ApiOperation(value = " 获取用户信息", notes = " 获取用户信息", response = Response.class)
     @RequestMapping(value = "get_user_information", method = RequestMethod.POST)
-    public Response getUserInformation(@ApiParam("acctoken") @RequestParam String acctoken,
-                                       @ApiParam("openid") @RequestParam String openid) {
+    public Response getUserInformation(@ApiParam("openid") @RequestParam String openid) {
         Response response = new Response();
-        Map result = VideoUploadUtil.getUserInformation(acctoken, openid);
+        Map result = videoUploadUtil.getUserInformation(openid);
         if (response.getCode() == 200) {
             response.setMessage("获取成功");
             response.setData(result);
@@ -154,6 +156,42 @@ public class AppVideoController {
         return response;
     }
 
+
+    /**
+     * 获取用户信息H5
+     *
+     * @param
+     * @return
+     */
+    @ApiOperation(value = " 获取用户信息H5", notes = " 获取用户信息H5", response = Response.class)
+    @RequestMapping(value = "getUserInformationH5", method = RequestMethod.POST)
+    public Response getUserInformationH5(@ApiParam("openid") @RequestParam String openid) {
+        Response response = new Response();
+        Map result = videoUploadUtil.getUserInformationH5(openid);
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+            response.setData(result);
+        }
+        return response;
+    }
+
+    /**
+     * 点击抽奖
+     *
+     * @param
+     * @return
+     */
+    /**@ApiOperation(value = " 点击抽奖", notes = " 点击抽奖", response = Response.class)
+    @RequestMapping(value = "choujiang", method = RequestMethod.POST)
+    public Response choujiang(@ApiParam("type") @RequestParam int type) {
+        Response response = new Response();
+        Map result = videoUploadUtil.choujiang(type);
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+            response.setData(result);
+        }
+        return response;
+    }*/
 
     /**
      * 获取fuflshtoken
@@ -192,6 +230,45 @@ public class AppVideoController {
 
 
     /**
+     * 查询获奖列表
+     *
+     * @param
+     * @return
+     */
+    /** @ApiOperation(value = " 查询获奖列表", notes = " 查询获奖列表", response = Response.class)
+    @RequestMapping(value = "findAllList", method = RequestMethod.POST)
+    public Response findAllList(@ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
+                                @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<WeixinList> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        List result = videoUploadUtil.findAllList(pager);
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+        }
+        pager.result(result);
+        response.setData(pager);
+        return response;
+                                }*/
+
+    /**
+     * 获取getSignature
+     *
+     * @param
+     * @return
+     */
+    @ApiOperation(value = " 获取全局", notes = " 获取全局", response = Response.class)
+    @RequestMapping(value = "getaccesstoken", method = RequestMethod.POST)
+    public Response getaccesstoken() {
+        Response response = new Response();
+        String result = videoUploadUtil.getaccesstoken();
+        if (response.getCode() == 200) {
+            response.setMessage("获取成功");
+            response.setData(result);
+        }
+        return response;
+    }
+
+    /**
      * 获取临时acctoken
      *
      * @param
@@ -202,9 +279,11 @@ public class AppVideoController {
     public Response getUserInfoAccessToken(@ApiParam("code") @RequestParam String code) {
         Response response = new Response();
         Map result = videoUploadUtil.getUserInfoAccessToken(code);
-        if (response.getCode() == 200) {
+        if (result.get("code").toString() == "200") {
             response.setMessage("获取成功");
             response.setData(result);
+        } else if (result.get("code").toString() == "300") {
+            response.setCode(300);
         }
         return response;
     }

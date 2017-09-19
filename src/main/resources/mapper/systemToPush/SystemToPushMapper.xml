@@ -135,7 +135,8 @@
     <delete id="deleteSystemToPush" parameterType="java.lang.Integer">
         DELETE  FROM  yw_system_push WHERE  id=#{id,jdbcType=INTEGER}
     </delete>
-    <insert id="addSystemToPush" parameterType="com.movision.mybatis.systemToPush.entity.SystemToPush">
+    <insert id="addSystemToPush" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.movision.mybatis.systemToPush.entity.SystemToPush">
         insert into yw_system_push
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -184,5 +185,10 @@
             </if>
         </trim>
     </insert>
-
+    <select id="queryUser" parameterType="java.lang.Integer" resultType="com.movision.mybatis.imuser.entity.ImUser">
+        <!--SELECT u.accid FROM yw_post p LEFT JOIN yw_im_user u ON u.userid=p.userid WHERE p.activeid=#{postid,jdbcType=INTEGER}-->
+        SELECT u.accid FROM yw_active_part p LEFT JOIN yw_post s ON s.id=p.postid
+        LEFT JOIN yw_im_user u ON u.userid=p.userid
+        WHERE p.postid =#{postid,jdbcType=INTEGER}
+    </select>
 </mapper>

@@ -4,16 +4,13 @@ import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
-import com.movision.mybatis.postProcessRecord.entity.PostProcessRecord;
+import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
-import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.video.entity.Video;
-import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
-import javafx.geometry.Pos;
 import org.apache.ibatis.session.RowBounds;
-import org.apache.poi.ss.usermodel.Row;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -54,9 +51,17 @@ public interface PostMapper {
 
     List<Circle> queryRecommendCircle();
 
-    List<Post> queryHotActiveList();
+    List<ActiveVo> queryHotActiveList();
 
     int queryPostNumByUserid(int userid);
+
+    int queryCommentByUserid(int userid);
+
+    int queryCollectByUserid(int userid);
+
+    int queryZanSumByUserid(int userid);
+
+    int queryEssencesumByUserid(int userid);
 
     List<Post> queryCircleSubPost(Map<String, Object> map);
 
@@ -84,6 +89,8 @@ public interface PostMapper {
     List<PostVo> findAllActive(RowBounds rowBounds);
 
     int queryActivePartSum(int postid);
+
+    List<PostVo> findAllCollectPostByUser(int userid, RowBounds rowBounds);
 
     int queryUserPartSum(Map<String, Object> parammap);
 
@@ -189,19 +196,17 @@ public interface PostMapper {
 
     List<Post> queryMyPostList(Map map);
 
-    Integer updateActiveById(PostActiveList postActiveList);//编辑活动帖子
-
-    Integer updateActiveByIdP(Period period);//编辑活动帖子
+    Integer updateActiveById(PostTo postActiveList);//编辑活动帖子
 
     PostActiveList queryActiveById(Integer id);//根据id查询帖子
 
     List<PostList> findAllQueryCollectPostList(String userid, RowBounds rowBounds);
 
-    Integer updateIshot(Integer id);//设为热门
+    Integer updateIshot(Post id);//设为热门
 
     Integer activeIsHot(Integer id);//查询是不是热门
 
-    Integer updateNoIshot(Integer id);//不是热门
+    Integer updateNoIshot(Post id);//不是热门
 
     Integer queryUserByPostid(String postid);//根据帖子id查询用户id
 
@@ -217,7 +222,7 @@ public interface PostMapper {
 
     List<Post> findAllPostListRefulsh();
 
-    int queryCrileid(int postid);
+    Integer queryCrileid(int postid);
 
     int queryIsIsessence(int postid);
 
@@ -234,13 +239,13 @@ public interface PostMapper {
     List<Post> queryNoCrileidPost(int crileid);
     List<Post> queryoverCrileidPost(int crileid);
 
-    List<Post> queryPostHeatValue(RowBounds rowBounds);//查询帖子的热度值
+    List<PostVo> findAllPostHeatValue();//查询帖子的热度值
 
-    List<Post> findAllPostListHeat();
+    List<PostVo> findAllPostListHeat();
 
-    List<Post> queryPostCricle(int crileid);
+    List<PostVo> queryPostCricle(int crileid);
 
-    List<Post> queryoverPost(int crileid);
+    List<PostVo> queryoverPost(int crileid);
 
     List<Post> queryPostDetailById(int id);
 
@@ -254,6 +259,94 @@ public interface PostMapper {
 
     int updateZanPostHeatValue(Map map);//修改热度
 
+    int updateZeroHeatValue(int postid);
+
+    int selectPostHeatValue(int postid);
+
+    //查询用户关注的圈子
+    List<Integer> queryFollowCricle(int userid);
+
+    List<Integer> queryFollowUser(int userid);
 
 
+    List<PostVo> queryPostListByIds(List ids);
+
+    List<PostVo> queryUserListByIds(List ids);
+
+    List<PostVo> queryLabelListByIds(List ids);
+
+    List<PostVo> findAllCollectionListByIds(List ids, RowBounds rowBounds);
+    //根据圈子id查询帖子
+    List<PostVo> findAllPostCrile(int circleid);
+
+    //根据用户查帖子
+    List<PostVo> findUserPost(int postuserid);
+
+    List<PostVo> findUserByLabelPost(List labelid);
+
+    List<Integer> findPostByLabelId(int postid);
+
+    String queryCityCode(String area);//查询code
+
+    String queryCityUserCode(int userid);
+
+    List<PostVo> findAllCityPost(String citycode);//
+
+    List<PostLabel> queryPostLabel(int postid);
+
+    List<Integer> queryPostComment(int postid);
+
+    List<Integer> queryPostUserHeatValue(int userid);
+
+    List<Integer> queryLabelPost(int labelid);
+
+    List<PostVo> findAllLabelAllPost(int labelid);
+
+    List<PostVo> findAllPostByid(List postid, RowBounds rowBounds);
+
+
+    List<PostVo> findAllUserPostList(int userid, RowBounds rowBounds);
+
+    List<PostVo> findAllUserActive(int userid, RowBounds rowBounds);
+
+    List<Post> querPostListByUser(int userid);
+
+    int queryUserPostCount(int userid);
+    int queryUserActiveCount(int userid);
+
+    List<PostVo> findAllHotCommentPostInAll(RowBounds rowBounds);
+    List<PostVo> findAllHotCommentPostInCurrentMonth(RowBounds rowBounds);
+
+    List<PostVo> findAllMostZanPostInAll(RowBounds rowBounds);
+    List<PostVo> findAllMostZanPostInCurrentMonth(RowBounds rowBounds);
+
+    List<PostVo> findAllMostCollectInAll(RowBounds rowBounds);
+    List<PostVo> findAllMostCollectInCurrentMonth(RowBounds rowBounds);
+
+    List<PostVo> queryPostInAll();
+
+    List<Post> findAllQueryActivitycontributeListById(Integer id, RowBounds rowBounds);
+
+
+    List<Integer> queryActiveByOrderid();
+
+    List<PostVo> findAllActivePost(int postid, RowBounds rowBounds);
+
+    List<PostVo> findAllActivePostIntime(int postid, RowBounds rowBounds);
+
+    Integer activeSum(int postid);
+
+    int postUserId(int postid);
+
+    List<Post> queryPostListByName(Map map);
+
+    Post selectTitleById(Integer id);
+
+    List<PostVo> findAllActivePostD(int id, RowBounds rowBounds);
+
+    int zanIsPost(Map map);
+
+    int isPostIsdel(int postid);
+
+    int isUserContribe(Map map);
 }

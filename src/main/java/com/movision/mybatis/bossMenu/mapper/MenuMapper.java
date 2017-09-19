@@ -25,10 +25,7 @@ public interface MenuMapper {
 
     List<Menu> findAllMenuList(RowBounds rowBounds, Map<String, Object> map);
 
-    void delMenu(int[] ids);
-
     List<Menu> selectByRoleid(@Param("roleid") Integer roleid);
-
 
     List<Menu> selectAllMenu();
 
@@ -49,4 +46,8 @@ public interface MenuMapper {
     List<MenuVo> selectAllParentMenuSideBar();
 
     List<MenuVo> selectAllChildrenMenuSideBar();
+
+    int updateChildmenuUrlByParentMenu(Map map);
+
+    int updateChildmenuIsshowByParentmenu(Map map);
 }

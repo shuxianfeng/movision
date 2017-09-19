@@ -1,6 +1,9 @@
 package com.movision.mybatis.circle.entity;
 
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.postLabel.entity.PostLabel;
+import com.movision.mybatis.postLabel.entity.PostLabelDetails;
+import com.movision.mybatis.postLabel.entity.PostLabelVo;
 import com.movision.mybatis.user.entity.User;
 
 import java.io.Serializable;
@@ -56,7 +59,7 @@ public class CircleVo implements Serializable {
 
     private Integer postnum;//圈子帖子数
 
-    private Integer postnewnum;//圈子今日更新帖子数
+    private Integer postnewnum;//圈子更新帖子数(暂时所有未看过的都算更新数)
 
     private Integer isfollow;//该圈子是否被关注 0 可关注  1 已关注
 
@@ -81,6 +84,55 @@ public class CircleVo implements Serializable {
     private Date intime;//时间
 
     private Integer userid;//用户id
+    private Integer heatvalue;
+
+    private Integer todayPost;//今日发帖数
+
+    private List<PostLabel> postLabels;//标签
+
+    private String nickname;//圈子创建者姓名
+
+    private String userphoto;//圈子创建者头像
+
+    public String getUserphoto() {
+        return userphoto;
+    }
+
+    public void setUserphoto(String userphoto) {
+        this.userphoto = userphoto;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public List<PostLabel> getPostLabels() {
+        return postLabels;
+    }
+
+    public void setPostLabels(List<PostLabel> postLabels) {
+        this.postLabels = postLabels;
+    }
+
+    public Integer getTodayPost() {
+        return todayPost;
+    }
+
+    public void setTodayPost(Integer todayPost) {
+        this.todayPost = todayPost;
+    }
+
+    public Integer getHeatvalue() {
+        return heatvalue;
+    }
+
+    public void setHeatvalue(Integer heatvalue) {
+        this.heatvalue = heatvalue;
+    }
 
     public Integer getCircleUserid() {
         return circleUserid;

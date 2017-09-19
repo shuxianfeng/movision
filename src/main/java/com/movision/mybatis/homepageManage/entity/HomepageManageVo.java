@@ -9,6 +9,10 @@ public class HomepageManageVo implements Serializable {
     //广告位置：0 首页--你可能喜欢--板块banner  1 ‘发现’首页banner
     //2 首页最上方的主banner 3 商城--月度热销banner
     //4 商城--一周热销banner  5 商城--每日神器推荐banner',
+    private Integer mark;//发现页banner类型 0 帖子 1 活动（活动贴） 2 外链广告H5
+
+    private Integer postid;
+
     private Integer topictype;
 
     private String content;//内容主标题
@@ -36,6 +40,32 @@ public class HomepageManageVo implements Serializable {
     private String high;//高
 
     private Integer isdel;//是否删除 1是 0否
+
+    private String postTitle;//帖子或活动标题
+
+    public String getPostTitle() {
+        return postTitle;
+    }
+
+    public void setPostTitle(String postTitle) {
+        this.postTitle = postTitle;
+    }
+
+    public Integer getMark() {
+        return mark;
+    }
+
+    public void setMark(Integer mark) {
+        this.mark = mark;
+    }
+
+    public Integer getPostid() {
+        return postid;
+    }
+
+    public void setPostid(Integer postid) {
+        this.postid = postid;
+    }
 
     public Integer getIsdel() {
         return isdel;

@@ -12,6 +12,7 @@
         <result column="forwardsum" jdbcType="INTEGER" property="forwardsum"/>
         <result column="collectsum" jdbcType="INTEGER" property="collectsum"/>
         <result column="isactive" jdbcType="INTEGER" property="isactive"/>
+        <result column="partsum_enddays" jdbcType="INTEGER" property="partsumEnddays"/>
         <result column="activetype" jdbcType="INTEGER" property="activetype"/>
         <result column="activefee" jdbcType="DOUBLE" property="activefee"/>
         <result column="iscontribute" jdbcType="INTEGER" property="iscontribute"/>
@@ -29,13 +30,16 @@
         <result column="userid" jdbcType="INTEGER" property="userid"/>
         <result column="oprtime" jdbcType="TIMESTAMP" property="oprtime"/>
         <result column="heat_value" jdbcType="INTEGER" property="heatvalue"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="activeid" jdbcType="INTEGER" property="activeid"/>
+        <result column="ishot_order" jdbcType="INTEGER" property="ishotorder"/>
     </resultMap>
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
-        isactive, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
-        hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value
-  </sql>
+        isactive, partsum_enddays, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
+        hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,city,ishotorder
+    </sql>
 
     <!--基础查询语句-->
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -105,11 +109,17 @@
     </select>
 
     <!--查询yw_post表中所有热门活动列表-->
-    <select id="queryHotActiveList" resultType="com.movision.mybatis.post.entity.Post">
-        SELECT
-        t1.id,t1.title,t1.subtitle,t1.postcontent,t1.isactive,t1.activetype,t1.activefee,t1.iscontribute,t1.ishot,t1.hotimgurl,t1.intime
-        FROM yw_post t1 WHERE t1.isactive = '1' AND t1.ishot = '1' AND t1.isdel = '0'
-        ORDER BY intime DESC
+    <select id="queryHotActiveList" resultType="com.movision.mybatis.post.entity.ActiveVo">
+        SELECT t.* FROM (
+            SELECT
+            t1.id,t1.title,t1.subtitle,t1.postcontent,t1.isactive,t1.partsum_enddays,t1.activetype,t1.activefee,
+            t1.iscontribute,t1.ishot,t1.coverimg,t1.hotimgurl,t1.intime,t1.isdel,t2.begintime,t2.endtime
+            FROM yw_post t1
+            LEFT JOIN yw_active_period t2
+            ON t1.id = t2.postid
+        ) t
+        WHERE t.isactive = '1' AND t.ishot = '1' AND t.isdel = '0'
+        ORDER BY t.intime DESC
     </select>
 
     <!--查询发现页下方推荐的十个圈子中推荐的5个最新热门帖-->
@@ -250,7 +260,7 @@
         LEFT JOIN yw_active_period t2
         ON t1.id = t2.postid
         ) t
-        WHERE t.id = #{postid,jdbcType=INTEGER}
+        WHERE t.id = #{postid,jdbcType=INTEGER} AND t.isdel=0
     </select>
 
     <!--查询该用户有没有参与该活动-->
@@ -328,6 +338,41 @@
         SELECT count(*) FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER}
     </select>
 
+    <!--根据用户id查询当前用户评论总数-->
+    <select id="queryCommentByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+        SELECT count(*) FROM yw_post_comment WHERE userid = #{userid,jdbcType=INTEGER}
+    </select>
+
+    <!--根据用户id查询当前用户被收藏总数-->
+    <select id="queryCollectByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+        SELECT SUM(tt.sum)
+        FROM
+        (
+            (SELECT count(*) AS sum FROM (SELECT DISTINCT t.circleid FROM yw_follow_circle t WHERE userid = #{userid,jdbcType=INTEGER}) t1)
+            UNION ALL
+            (SELECT count(*) sum FROM (SELECT DISTINCT t2.labelid FROM yw_follow_label t2 WHERE userid = #{userid,jdbcType=INTEGER}) t2)
+            UNION ALL
+            (SELECT count(*) sum FROM (SELECT DISTINCT t3.interestedusers FROM yw_follow_user t3 WHERE userid = #{userid,jdbcType=INTEGER}) t4)
+        ) tt
+    </select>
+
+    <!--根据用户id查询当前用户所有帖子被点赞总数(sum为NULL时返回0)-->
+    <select id="queryZanSumByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+        SELECT COALESCE(SUM(zansum),0) AS zansum
+        FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER}
+    </select>
+
+    <!--根据当前用户id查询被选为精选帖总数-->
+    <select id="queryEssencesumByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+        SELECT count(*) FROM yw_post WHERE id = #{userid,jdbcType=INTEGER} AND essencedate IS NOT NULL
+    </select>
+
+    <!--根据作者用户id查询当前作者最新发的三篇帖子-->
+    <select id="querPostListByUser" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.Post" >
+        SELECT id, title, subtitle, postcontent, coverimg
+        FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER} ORDER BY intime DESC limit 3
+    </select>
+
     <!--基础删除语句-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from yw_post
@@ -382,7 +427,7 @@
         )
     </insert>
 
-    <!--模塊式老年樂發帖-->
+    <!--模块式发帖-->
     <insert id="releaseModularPost" parameterType="com.movision.mybatis.post.entity.Post">
         <selectKey keyProperty="id" order="AFTER" resultType="Integer">
             select LAST_INSERT_ID()
@@ -390,15 +435,16 @@
         INSERT INTO yw_post (circleid, title,
         postcontent, zansum, commentsum, forwardsum,
         collectsum, isactive, ishot, isessence,
-        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime
+        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime, activeid
         )
         VALUES (
         #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=LONGVARCHAR},
         #{zansum,jdbcType=INTEGER},#{commentsum,jdbcType=INTEGER},#{forwardsum,jdbcType=INTEGER},
         #{collectsum,jdbcType=INTEGER},#{isactive,jdbcType=INTEGER},
         #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
-        #{coverimg,jdbcType=VARCHAR},#{intime,jdbcType=TIMESTAMP},#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},
-        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{oprtime,jdbcType=TIMESTAMP}
+        #{coverimg,jdbcType=VARCHAR},now(),#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},
+        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{oprtime,jdbcType=TIMESTAMP},
+        #{activeid}
         )
     </insert>
     <!--插入一条用户参与活动的记录-->
@@ -913,61 +959,73 @@
                 userid = #{userid,jdbcType=INTEGER},
             </if>
             <if test="oprtime != null">
-                oprtime=#{oprtime,jdbcType=TIMESTAMP}
+                oprtime=#{oprtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ishotorder != null">
+                ishot_order = #{ishotorder,jdbcType=INTEGER},
+            </if>
+            <if test="partsum_enddays != null">
+                partsum_enddays = #{partsum_enddays,jdbcType=INTEGER}
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateActiveById" parameterType="com.movision.mybatis.post.entity.PostActiveList">
+    <update id="updateActiveById" parameterType="com.movision.mybatis.post.entity.PostTo">
         update yw_post
         <set>
+            <if test="id != null">
+                id = #{id,jdbcType=INTEGER},
+            </if>
             <if test="title != null">
                 title = #{title,jdbcType=VARCHAR},
             </if>
             <if test="subtitle != null">
                 subtitle = #{subtitle,jdbcType=VARCHAR},
             </if>
-            <if test="postcontent != null">
-                postcontent = #{postcontent,jdbcType=LONGVARCHAR},
-            </if>
             <if test="activetype != null">
                 activetype = #{activetype,jdbcType=INTEGER},
-            </if>
-            <if test="orderid != null">
-                orderid=#{orderid,jdbcType=INTEGER},
-            </if>
-            <if test="orderid == null">
-                orderid= NULL ,
-            </if>
-            <if test="isessence != null">
-                isessence = #{isessence,jdbcType=INTEGER},
-            </if>
-            <if test="coverimg != null">
-                coverimg = #{coverimg,jdbcType=VARCHAR},
-            </if>
-            <if test="essencedate != null">
-                essencedate = #{essencedate,jdbcType=TIMESTAMP},
-            </if>
-            <if test="essencedate == null">
-                essencedate = NULL ,
-            </if>
-            <if test="userid != null">
-                userid = #{userid,jdbcType=INTEGER},
             </if>
             <if test="activefee != null">
                 activefee = #{activefee,jdbcType=DOUBLE},
             </if>
+            <if test="coverimg != null">
+                coverimg = #{coverimg,jdbcType=VARCHAR},
+            </if>
+            <if test="postcontent != null">
+                postcontent = #{postcontent,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="isessence != null">
+                isessence = #{isessence,jdbcType=INTEGER},
+            </if>
+            <if test="orderid != null">
+                orderid = #{orderid,jdbcType=INTEGER},
+            </if>
+            <if test="essencedate != null">
+                essencedate = #{essencedate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isactive != null">
+                isactive = #{isactive,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userid!=null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
             <if test="iscontribute!=null">
-                iscontribute=#{iscontribute,jdbcType=INTEGER},
+                iscontribute = #{iscontribute,jdbcType=INTEGER},
             </if>
             <if test="hotimgurl!=null">
-                hotimgurl=#{hotimgurl,jdbcType=VARCHAR},
+                hotimgurl = #{hotimgurl,jdbcType=VARCHAR},
             </if>
             <if test="ishot!=null">
-                ishot=#{ishot,jdbcType=INTEGER},
+                ishot = #{ishot,jdbcType=INTEGER},
             </if>
             <if test="oprtime!=null">
-                oprtime=#{oprtime,jdbcType=TIMESTAMP}
+                oprtime = #{oprtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ishotorder != null">
+                ishot_order = #{ishotorder,jdbcType=INTEGER}
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -1305,11 +1363,17 @@
     </select>
     <!--查询活动列表-->
     <select id="findAllActiveTOByList" resultType="com.movision.mybatis.post.entity.PostActiveList">
-        SELECT * FROM yw_post WHERE isdel=0 AND isactive=1
+        SELECT p.id,p.circleid,p.title,p.subtitle,p.postcontent,p.zansum,p.commentsum,
+        p.forwardsum,p.collectsum,p.isactive,p.partsum_enddays AS partsumEnddays,p.type,p.ishot,
+        p.isessence,p.orderid,p.coverimg,p.hotimgurl,p.intime,p.totalpoint,p.isdel,
+        p.isessencepool,p.activetype,p.activefee,p.iscontribute,p.essencedate,p.userid,
+        p.oprtime,p.heat_value AS heatvalue,p.city,p.ishot_order AS ishotorder,
+        (SELECT COUNT(1) FROM yw_post WHERE activeid = p.id) AS contribute
+        FROM yw_post p WHERE p.isdel=0 AND p.isactive=1
         <if test="loginid!=null">
-            AND userid=#{loginid,jdbcType=INTEGER}
+            AND p.userid=#{loginid,jdbcType=INTEGER}
         </if>
-        ORDER BY intime DESC
+        ORDER BY p.intime DESC
     </select>
     <!-- 逻辑删除帖子 -->
     <update id="deletePost" parameterType="java.lang.Integer">
@@ -1346,6 +1410,11 @@
         (SELECT COALESCE(SUM(num),0) FROM yw_post_accusation WHERE postid =p.id) AS accusation,
         (SELECT nickname FROM yw_user WHERE id=(SELECT userid FROM yw_post WHERE id=p.id AND isactive=1 AND isdel=0)) AS
         nickname,
+        (SELECT COUNT(1) FROM yw_post_share WHERE postid= p.id) AS share,
+        (SELECT COUNT(1) persum FROM yw_active_part WHERE postid = p.id) AS persum,
+        (SELECT COUNT(1) FROM yw_active_period WHERE postid = p.id AND p.activetype = 2) AS apply,
+        (SELECT COUNT(1) FROM yw_post WHERE activeid = p.id AND p.activetype = 0 AND p.iscontribute = 1 AND isdel = 0)
+        AS contribute,
         (SELECT name FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id AND isactive=1 AND isdel=0)) AS
         circlename,
         (SELECT category FROM yw_circle WHERE id=(SELECT circleid FROM yw_post WHERE id=p.id AND isactive=1 AND
@@ -1575,7 +1644,13 @@
                 ishot,
             </if>
             <if test="oprtime!=null">
-                oprtime
+                oprtime,
+            </if>
+            <if test="ishotorder != null">
+                ishot_order,
+            </if>
+            <if test="partsum_enddays != null">
+                partsum_enddays
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -1628,7 +1703,13 @@
                 #{ishot,jdbcType=INTEGER},
             </if>
             <if test="oprtime!=null">
-                #{oprtime,jdbcType=TIMESTAMP}
+                #{oprtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ishotorder != null">
+                #{ishotorder,jdbcType=INTEGER},
+            </if>
+            <if test="partsum_enddays != null">
+                #{partsum_enddays,jdbcType=INTEGER}
             </if>
         </trim>
     </insert>
@@ -1673,7 +1754,7 @@
 
     <select id="queryPostByIdEcho" resultType="com.movision.mybatis.post.entity.PostCompile"
             parameterType="java.lang.Integer">
-        SELECT p.id,p.title,p.subtitle,p.type,p.circleid,
+        SELECT p.id,p.title,p.subtitle,p.type,p.circleid,p.postcontent,
         (SELECT name FROM yw_circle WHERE id=p.circleid AND status=1 AND isdel=0) as circleidCN,
         (SELECT category FROM yw_circle WHERE id=p.circleid AND status=1 AND isdel=0)as category,p.ishot,p.userid,
         (SELECT nickname FROM yw_user WHERE id=p.userid) as nickname,p.coverimg,
@@ -1875,7 +1956,11 @@
     </select>
     <select id="queryActiveById" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.post.entity.PostActiveList">
-        SELECT p.*,a.begintime,a.endtime,u.nickname FROM yw_post p LEFT JOIN yw_active_period a ON a.postid=p.id LEFT
+        SELECT p.*,a.begintime,a.endtime,u.nickname,
+        (SELECT COUNT(1) FROM yw_active_period WHERE postid = p.id AND p.activetype = 2) AS apply,
+        (SELECT COUNT(1) FROM yw_post WHERE activeid = p.id AND p.activetype = 0 AND p.iscontribute = 1 AND isdel = 0)
+        AS contribute
+        FROM yw_post p LEFT JOIN yw_active_period a ON a.postid=p.id LEFT
         JOIN yw_user u ON u.id=p.userid
         WHERE p.isdel=0 AND p.isactive=1 AND p.id=#{id,jdbcType=INTEGER}
     </select>
@@ -1914,11 +1999,17 @@
     <select id="activeIsHot" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT ishot FROM yw_post WHERE id=#{id,jdbcType=INTEGER}
     </select>
-    <update id="updateIshot" parameterType="java.lang.Integer">
-        update yw_post SET ishot=1 WHERE id=#{id,jdbcType=INTEGER}
+    <update id="updateIshot" parameterType="com.movision.mybatis.post.entity.Post">
+        update yw_post
+        SET ishot=1,
+        ishot_order = #{ishotorder,jdbcType=INTEGER}
+        WHERE id=#{id,jdbcType=INTEGER}
     </update>
-    <update id="updateNoIshot" parameterType="java.lang.Integer">
-        update yw_post SET ishot=0 WHERE id=#{id,jdbcType=INTEGER}
+    <update id="updateNoIshot" parameterType="com.movision.mybatis.post.entity.Post">
+        update yw_post
+        SET ishot=#{ishot,jdbcType=INTEGER},
+        ishot_order = #{ishotorder,jdbcType=INTEGER}
+        WHERE id=#{id,jdbcType=INTEGER}
     </update>
 
     <select id="queryUserByPostid" parameterType="java.lang.String" resultType="java.lang.Integer">
@@ -1992,7 +2083,7 @@
         SELECT * FROM yw_post WHERE isdel=0 and isactive=0 ORDER BY intime DESC
     </select>
     <select id="queryCrileid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT circleid FROM yw_post WHERE isdel=0 AND id=#{postid,jdbcType=INTEGER}
+        SELECT circleid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
     <select id="queryIsIsessence" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM yw_post WHERE isessence=1 AND isdel=0 AND id=#{postid,jdbcType=INTEGER}
@@ -2008,33 +2099,35 @@
         SELECT postcontent FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
     <select id="queryPostSessen" resultType="com.movision.mybatis.post.entity.Post">
-        SELECT * FROM yw_post WHERE isessence=1 AND isdel=0 AND isactive=0  ORDER BY intime DESC
+        SELECT * FROM yw_post WHERE isessence=1 AND isdel=0 ORDER BY heat_value DESC
     </select>
     <select id="queryNOPostSessen" resultType="com.movision.mybatis.post.entity.Post">
- SELECT * FROM yw_post WHERE isessence=0 AND isdel=0 AND isactive=0  ORDER BY intime DESC
+        SELECT * FROM yw_post WHERE isessence=0 AND isdel=0 ORDER BY heat_value DESC
     </select>
     <select id="queryCrileidPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
-        SELECT * from yw_post WHERE  isdel=0 and isactive=0 AND isessence=1 AND  circleid=#{crileid,jdbcType=INTEGER}  ORDER BY intime DESC
+        SELECT * from yw_post WHERE isdel=0 AND circleid=#{crileid,jdbcType=INTEGER} ORDER BY heat_value DESC
     </select>
     <select id="queryNoCrileidPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
-        SELECT * from yw_post WHERE  isdel=0 and isactive=0 AND isessence=0 AND  circleid=#{crileid,jdbcType=INTEGER}  ORDER BY intime DESC
+        SELECT * from yw_post WHERE isdel=0 AND isessence=0 AND circleid=#{crileid,jdbcType=INTEGER} ORDER BY heat_value
+        DESC
     </select>
     <select id="queryoverCrileidPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
-     SELECT * from yw_post WHERE  isdel=0 and isactive=0  AND  circleid!=#{crileid,jdbcType=INTEGER}  ORDER BY intime DESC
+        SELECT * from yw_post WHERE isdel=0 ORDER BY heat_value DESC
     </select>
-    <select id="queryPostHeatValue" resultType="com.movision.mybatis.post.entity.Post">
-        SELECT * FROM yw_post WHERE isactive=0 AND isdel=0 ORDER BY heat_value DESC
+    <select id="findAllPostHeatValue" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post WHERE isdel=0 ORDER BY heat_value DESC
     </select>
-    <select id="findAllPostListHeat" resultType="com.movision.mybatis.post.entity.Post">
-        SELECT * FROM yw_post WHERE isactive=0 AND isdel=0 ORDER BY heat_value DESC
+    <select id="findAllPostListHeat" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.*,c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.isdel=0 ORDER BY
+        p.heat_value DESC
     </select>
-    <select id="queryPostCricle" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
-        SELECT * FROM yw_post WHERE isactive=0 AND isdel=0 AND circleid=#{crileid,jdbcType=INTEGER} ORDER BY heat_value
-        DESC
+    <select id="queryPostCricle" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.lang.Integer">
+        SELECT p.*, c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.isdel=0 AND
+        p.circleid=#{crileid,jdbcType=INTEGER} ORDER BY p.heat_value DESC
     </select>
-    <select id="queryoverPost" resultType="com.movision.mybatis.post.entity.Post" parameterType="java.lang.Integer">
-        SELECT * from yw_post WHERE isdel=0 and isactive=0 AND circleid!=#{crileid,jdbcType=INTEGER} ORDER BY heat_value
-        DESC
+    <select id="queryoverPost" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.*,c.name as circlename from yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.isdel=0 AND
+        p.circleid!=#{crileid,jdbcType=INTEGER} OR (p.circleid IS NULL AND p.isdel=0) ORDER BY p.heat_value DESC
     </select>
     <select id="queryPostDetailById" resultType="com.movision.mybatis.post.entity.Post"
             parameterType="java.lang.Integer">
@@ -2055,4 +2148,298 @@
     <update id="updateZanPostHeatValue" parameterType="java.util.Map">
         UPDATE yw_post SET heat_value=heat_value-#{points,jdbcType=INTEGER} WHERE id=#{postid,jdbcType=INTEGER}
     </update>
+    <select id="selectPostHeatValue" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT heat_value from yw_post WHERE isdel=0 AND id=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="queryFollowCricle" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT circleid FROM yw_follow_circle WHERE userid=#{userid,jdbcType=INTEGER}
+    </select>
+    <select id="queryFollowUser" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT interestedusers FROM yw_follow_user WHERE userid=#{userid,jdbcType=INTEGER}
+    </select>
+    <select id="queryPostListByIds" parameterType="java.util.List" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.*,c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.circleid IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND p.isdel=0
+        ORDER BY p.heat_value DESC
+    </select>
+    <select id="queryUserListByIds" parameterType="java.util.List" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.*,c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.userid IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND p.isdel=0
+        ORDER BY p.heat_value DESC
+    </select>
+    <select id="findAllPostCrile" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        select yw_post.*,yw_user.nickname,yw_user.photo,yw_circle.`name` AS circlename
+        from yw_post
+        LEFT JOIN yw_user ON yw_user.id=yw_post.userid
+        LEFT JOIN yw_circle ON yw_circle.id=yw_post.circleid
+        where yw_post.circleid=#{circleid,jdbcType=INTEGER}
+        and yw_post.isdel=0
+        order by yw_post.heat_value desc
+    </select>
+    <select id="queryCityCode" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT code FROM yw_city WHERE name LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
+    </select>
+    <select id="findAllCityPost" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.lang.String">
+        SELECT p.*,c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.isdel=0 AND
+        p.city=#{citycode,jdbcType=VARCHAR} ORDER BY p.heat_value DESC
+    </select>
+    <select id="queryPostComment" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT heat_value FROM yw_post_comment WHERE postid=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="queryPostUserHeatValue" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT heat_value FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER}
+    </select>
+    <select id="queryPostLabel" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+        SELECT yw_post_label.* FROM yw_post_label_relation LEFT JOIN yw_post_label ON
+        yw_post_label.id=yw_post_label_relation.labelid
+        WHERE yw_post_label_relation.postid=#{postid} AND yw_post_label.isdel=0
+        ORDER by yw_post_label.type
+    </select>
+    <select id="queryLabelPost" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT yw_post.heat_value FROM yw_post_label_relation LEFT JOIN yw_post ON yw_post.id=yw_post_label_relation.postid WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER}
+    </select>
+    <select id="findAllLabelAllPost" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT yw_post.*,yw_circle.`name` AS circlename FROM yw_post LEFT JOIN yw_post_label_relation ON
+        yw_post_label_relation.postid=yw_post.id
+        LEFT JOIN yw_circle ON yw_circle.id=yw_post.circleid
+        WHERE yw_post_label_relation.labelid=#{labelid,jdbcType=INTEGER} AND yw_post.isdel=0 ORDER BY yw_post.heat_value
+        DESC
+    </select>
+    <select id="findAllPostByid" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.*,c.name AS circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.id IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND p.isdel=0
+    </select>
+    <select id="findAllUserPostList" resultType="com.movision.mybatis.post.entity.PostVo"
+            parameterType="java.lang.Integer">
+        SELECT * FROM  yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0 AND isactive=0 ORDER  BY intime DESC
+    </select>
+    <select id="findAllUserActive" resultType="com.movision.mybatis.post.entity.PostVo"
+            parameterType="java.lang.Integer">
+        SELECT t.* FROM (
+          SELECT p.*,r.begintime,r.endtime FROM yw_post p LEFT JOIN yw_active_period r ON r.postid=p.id
+        ) t
+        WHERE
+        t.id IN (
+          SELECT postid FROM yw_active_part WHERE userid = #{userid,jdbcType=INTEGER}
+        )
+        AND t.isdel=0
+    </select>
+    <select id="findAllCollectionListByIds" parameterType="java.util.List"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post WHERE id IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND isdel=0 ORDER BY intime DESC
+    </select>
+
+    <!--美番2.0我的模块根据userid查询用户收藏的所有帖子-->
+    <select id="findAllCollectPostByUser" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo" >
+        SELECT t.*,t3.nickname, t3.photo FROM(
+            SELECT t1.id, t1.coverimg, t1.title, t1.postcontent, t1.userid FROM yw_post t1 RIGHT JOIN(
+                SELECT DISTINCT postid FROM yw_collection WHERE userid=#{userid,jdbcType=INTEGER} AND type='0'
+            ) t2 ON t1.id = t2.postid
+            WHERE t1.isdel = '0'
+        ) t LEFT JOIN yw_user t3 ON t.userid = t3.id
+    </select>
+    
+    <select id="queryUserPostCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select COUNT(1) from yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0 AND isactive=0
+    </select>
+
+    <!--查询用户参与的活动总数-->
+    <select id="queryUserActiveCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_post t1 WHERE id IN (
+            SELECT postid FROM yw_active_part WHERE userid = #{userid,jdbcType=INTEGER}
+        )
+    </select>
+
+    <select id="findAllQueryActivitycontributeListById" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.Post">
+        SELECT * FROM yw_post WHERE activeid = #{id,jdbcType=INTEGER} AND isactive = 0 AND isdel = 0
+    </select>
+
+    <select id="findAllHotCommentPostInAll" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.id, p.title, p.commentsum, p.coverimg,
+        p.userid, u.nickname, u.photo, p.circleid, p.activeid,
+        c.name AS circlename
+        FROM yw_post p
+        LEFT JOIN yw_user u ON p.userid = u.id
+        LEFT JOIN yw_circle c ON p.circleid = c.id
+        WHERE p.isdel = 0 and p.isactive = 0
+        ORDER BY p.commentsum DESC
+    </select>
+
+
+    <select id="findAllHotCommentPostInCurrentMonth" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.id, p.title, COUNT(c.id) AS commentCount, p.coverimg,
+        p.userid, p.intime, u.nickname, u.photo, p.circleid, p.activeid,
+        ci.name AS circlename
+        FROM yw_post p
+        LEFT JOIN yw_post_comment c ON p.id = c.postid
+        LEFT JOIN yw_user u ON p.userid = u.id
+        LEFT JOIN yw_circle ci ON p.circleid = ci.id
+        WHERE DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+        AND p.isdel = 0 and p.isactive = 0
+        GROUP BY p.id ORDER BY commentCount DESC
+    </select>
+
+    <select id="findAllMostZanPostInAll" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.id, p.title, p.coverimg, p.zansum,
+        p.userid, u.nickname, u.photo, p.circleid, p.activeid,
+        ci.name AS circlename
+        FROM yw_post p
+        LEFT JOIN yw_user u ON p.userid = u.id
+        LEFT JOIN yw_circle ci ON p.circleid = ci.id
+        WHERE p.isdel = 0 and p.isactive = 0
+        ORDER BY p.zansum DESC
+    </select>
+
+    <select id="findAllMostZanPostInCurrentMonth" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.id, p.title, p.coverimg, p.zansum,
+        p.userid, u.nickname, u.photo, p.circleid, p.activeid,
+        ci.name AS circlename
+        FROM yw_post p
+        LEFT JOIN yw_user u ON p.userid = u.id
+        LEFT JOIN yw_circle ci ON p.circleid = ci.id
+        WHERE p.isdel = 0 and p.isactive = 0
+        AND DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+        ORDER BY p.zansum DESC
+    </select>
+
+    <select id="findAllMostCollectInAll" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.id, p.title, p.coverimg, p.collectsum,
+        p.userid, u.nickname, u.photo, p.circleid, p.activeid,
+        ci.name AS circlename
+        FROM yw_post p
+        LEFT JOIN yw_user u ON p.userid = u.id
+        LEFT JOIN yw_circle ci ON p.circleid = ci.id
+        WHERE p.isdel = 0 and p.isactive = 0
+        ORDER BY p.collectsum DESC
+    </select>
+
+    <select id="findAllMostCollectInCurrentMonth" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.id, p.title, p.coverimg, p.collectsum,
+        p.userid, u.nickname, u.photo, p.circleid, p.activeid,
+        ci.name AS circlename
+        FROM yw_post p
+        LEFT JOIN yw_user u ON p.userid = u.id
+        LEFT JOIN yw_circle ci ON p.circleid = ci.id
+        WHERE p.isdel = 0 and p.isactive = 0
+        AND DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+        ORDER BY p.collectsum DESC
+    </select>
+
+    <select id="queryPostInAll" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.id, p.title, p.coverimg,p.userid, u.nickname, u.photo, p.circleid, p.activeid,
+        ci.name AS circlename
+        FROM yw_post p
+        LEFT JOIN yw_user u ON p.userid = u.id
+        LEFT JOIN yw_circle ci ON p.circleid = ci.id
+        WHERE p.isdel = 0 and p.isactive = 0
+    </select>
+
+
+
+    <select id="queryActiveByOrderid" resultType="java.lang.Integer">
+        SELECT ishot_order FROM yw_post WHERE isactive = 1 AND circleid IS NULL AND isdel = 0 AND ishot =1 AND ishot_order IS NOT NULL
+    </select>
+
+    <select id="activeSum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post WHERE activeid=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="findAllActivePost" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.*,u.nickname,u.photo,c.name AS circlename FROM yw_post p LEFT JOIN yw_user u ON u.id=p.userid LEFT JOIN
+        yw_circle c ON c.id=p.circleid WHERE
+        p.activeid=#{postid,jdbcType=INTEGER} AND p.isdel=0 ORDER BY p.heat_value DESC
+    </select>
+    <select id="findAllActivePostIntime" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.*,u.nickname,u.photo,c.name AS circlename FROM yw_post p LEFT JOIN yw_user u ON u.id=p.userid LEFT JOIN
+        yw_circle c ON c.id=p.circleid WHERE
+        p.activeid=#{postid,jdbcType=INTEGER} AND p.isdel=0 ORDER BY p.intime DESC
+    </select>
+    <select id="postUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT userid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="findUserPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+        select yw_post.*,yw_user.nickname,yw_user.photo,yw_circle.`name` AS circlename from yw_post LEFT JOIN yw_user ON
+        yw_user.id=yw_post.userid LEFT JOIN yw_circle ON yw_circle.id=yw_post.circleid
+        WHERE yw_post.userid=#{postuserid,jdbcType=INTEGER} AND yw_post.isdel=0 ORDER BY yw_post.heat_value DESC
+    </select>
+    <select id="findPostByLabelId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT labelid FROM yw_post_label_relation WHERE postid=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="findUserByLabelPost" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.*,yw_user.photo,yw_user.nickname,yw_circle.`name` AS circlename FROM yw_post p LEFT JOIN
+        yw_post_label_relation r ON
+        r.postid=p.id
+        LEFT JOIN yw_user ON yw_user.id=p.userid LEFT JOIN yw_circle ON yw_circle.id=p.circleid
+        WHERE r.labelid IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND p.isdel=0 ORDER BY p.heat_value DESC
+    </select>
+
+    <select id="queryLabelListByIds" parameterType="java.util.List"
+            resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.*,c.name AS circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.id in(
+        SELECT DISTINCT(postid) FROM yw_post_label_relation WHERE labelid in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        )AND p.isdel=0 ORDER BY p.heat_value DESC
+    </select>
+    <select id="queryCityUserCode" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT ip_city FROM  yw_user WHERE id=#{userid,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryPostListByName" parameterType="java.util.Map" resultType="com.movision.mybatis.post.entity.Post">
+        SELECT id,title FROM yw_post WHERE
+        isdel = 0
+        <if test="name != null">
+            AND title LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="type == 1">
+            AND isactive = 0
+        </if>
+        <if test="type ==2">
+            AND isactive =1
+        </if>
+    </select>
+
+    <select id="selectTitleById" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.Post">
+        select id, title FROM yw_post where id = #{id,jdbcType=INTEGER}
+    </select>
+    <update id="updateZeroHeatValue" parameterType="java.lang.Integer">
+        UPDATE yw_post SET heat_value=0 WHERE id=#{postid,jdbcType=INTEGER}
+    </update>
+    <select id="findAllActivePostD" resultType="com.movision.mybatis.post.entity.PostVo"
+            parameterType="java.lang.Integer">
+        SELECT * FROM yw_post p  WHERE p.isactive=1 AND id !=#{id,jdbcType=INTEGER} ORDER BY p.intime DESC
+    </select>
+    <select id="zanIsPost" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post_zan_record WHERE userid=#{userid,jdbcType=INTEGER} AND postid=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="isPostIsdel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT isdel FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
+    </select>
+    <select id="isUserContribe" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_post WHERE activeid=#{id,jdbcType=INTEGER} AND userid=#{uid,jdbcType=INTEGER}
+    </select>
 </mapper>

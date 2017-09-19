@@ -21,6 +21,14 @@ public interface UserMapper {
 
     User selectByPrimaryKey(Integer id);
 
+    List<Author> findAllHotAuthor(RowBounds rowBounds, Map<String, Object> map);
+
+    List<Author> findAllInterestAuthor(RowBounds rowBounds, Map<String, Object> map);
+
+    void updateUserAttention(Integer userid);
+
+    List<Author> findAllNearAuthor(RowBounds rowBounds, Map<String, Object> map);
+
     int updateByPrimaryKeySelective(User record);
 
     int updateRegisterUser(RegisterUser registerUser);
@@ -35,10 +43,6 @@ public interface UserMapper {
 
     void insertGoodsShare(Map<String, Object> parammap);
 
-    int updateUserPointsAdd(Map mapadd);
-
-    int updateUserPointsMinus(Map map);
-
     int queryUserByPoints(int id);
 
     int isExistAccount(@Param("phone") String phone);
@@ -49,17 +53,11 @@ public interface UserMapper {
 
     User queryCircleMasterByPhone(String phone);
 
-    List<User> queryCircleManagerList(int categoryid);
-
     List<User> queryCircleManagerByCircleid(Integer circleid);
 
     List<User> queryCircleMangerByUseridList(Map map);
 
     List<User> queryCircleManagerByCircleList(Integer circleid);
-
-    List<User> selectAllUser();
-
-    int isAppAdminUser(@Param("phone") String phone);
 
     String queryUserByOpenid(Integer userid);
 
@@ -92,11 +90,17 @@ public interface UserMapper {
 
     List<UserVo> findAllQueryUserExamineAndVerify(Map map, RowBounds rowBounds);
 
-    List<UserAll> findAllqueryAllUserList(RowBounds rowBounds, Map map);
+    List<UserAll> queryAllUserList(Map map);
+
+    Integer queryAllTotal(Map map);
 
     int deleteUserByid(Map map);
 
     int deleteUserLevl(Map map);
+
+    Integer queryUserIsrecommend(Integer id);
+
+    Integer updateUserByIsrecommend(User user);
 
     Integer updateAuditByUser(Map map);
 
@@ -138,4 +142,55 @@ public interface UserMapper {
 
     List<UserVo> queryHotUserList();
 
+    UserLike findUser(int userid);
+
+    Integer updateUserHeatValue(Map map);
+
+    int queryUserLevel(int userid);
+
+    UserVo queryUserInfoHompage(int userid);
+
+    List<UserVo> findAllMineFollowAuthor(Map<String, Object> paramap, RowBounds rowBounds);
+
+    int queryPostNumByAuthor(Map<String, Object> paramap);
+
+    int queryIsFollowAuthor(Map<String, Object> paramap);
+
+    List<UserVo> findAllMineFans(Map<String, Object> parammap, RowBounds rowBounds);
+
+    List<UserVo> findAllMostFansAuthorInAll(RowBounds rowBounds);
+
+    List<UserVo> findAllMostFansAuthorInCurrentMonth(RowBounds rowBounds);
+
+    List<UserVo> findAllMostCommentAuthorInAll(RowBounds rowBounds);
+
+    List<UserVo> findAllMostCommentAuthorInCurrentMonth(RowBounds rowBounds);
+
+    List<UserVo> findAllMostPostAuthorInAll(RowBounds rowBounds);
+
+    List<UserVo> findAllMostPostAuthorInCurrentMonth(RowBounds rowBounds);
+
+    int queryInviteNum(int userid);
+
+    int queryFinishUserInfo(int userid);
+
+    int getfootmap(int userid);
+
+    List<InviteUserVo> findAllMyInviteList(int userid, RowBounds rowBounds);
+
+    List<InviteUserVo> findAllInviteRank(RowBounds rowBounds);
+
+    List<User> queryUserByName(String nickname);
+
+    List<User> findAllUserByName(Map<String, Object> map, RowBounds rowBounds);
+
+    String areaname(String code);
+
+    String provicename(String citycode);
+
+    Map selectIntervalBetweenLoginAndRegiste(Integer userid);
+
+    Integer selectMaxRobotId();
+
+    List<User> selectRobotUser();
 }

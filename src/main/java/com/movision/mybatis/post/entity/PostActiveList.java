@@ -34,6 +34,8 @@ public class PostActiveList implements Serializable {
     private Date begintime;
     private Date endtime;
     private Integer isactive;
+    private Integer partsum_enddays;//当前活动显示参与人数还是显示剩余结束天数 0 显示结束天数 1 显示活动参与人数
+    private Integer partsumEnddays;
     private Integer activetype;
     private Double activefee;
     private String activestatue;//活动状态
@@ -44,6 +46,68 @@ public class PostActiveList implements Serializable {
     private List<GoodsVo> goodss;
     private String ishot;
     private Date oprtime;
+    private Integer apply;//报名数
+    private Integer activeid;//活动id
+    private Integer contribute;//投稿数
+    private Integer ishotorder;//活动热门排序
+    private Integer heatvalue;//热度值
+    private Integer click;//点击量
+
+    public Integer getPartsumEnddays() {
+        return partsumEnddays;
+    }
+
+    public void setPartsumEnddays(Integer partsumEnddays) {
+        this.partsumEnddays = partsumEnddays;
+    }
+
+    public Integer getClick() {
+        return click;
+    }
+
+    public void setClick(Integer click) {
+        this.click = click;
+    }
+
+    public Integer getHeatvalue() {
+        return heatvalue;
+    }
+
+    public void setHeatvalue(Integer heatvalue) {
+        this.heatvalue = heatvalue;
+    }
+
+    public Integer getContribute() {
+        return contribute;
+    }
+
+    public void setContribute(Integer contribute) {
+        this.contribute = contribute;
+    }
+
+    public Integer getActiveid() {
+        return activeid;
+    }
+
+    public void setActiveid(Integer activeid) {
+        this.activeid = activeid;
+    }
+
+    public Integer getIshotorder() {
+        return ishotorder;
+    }
+
+    public void setIshotorder(Integer ishotorder) {
+        this.ishotorder = ishotorder;
+    }
+
+    public Integer getApply() {
+        return apply;
+    }
+
+    public void setApply(Integer apply) {
+        this.apply = apply;
+    }
 
     public Date getOprtime() {
         return oprtime;
@@ -314,5 +378,13 @@ public class PostActiveList implements Serializable {
 
     public void setIsessence(Integer isessence) {
         this.isessence = isessence;
+    }
+
+    public Integer getPartsum_enddays() {
+        return partsum_enddays;
+    }
+
+    public void setPartsum_enddays(Integer partsum_enddays) {
+        this.partsum_enddays = partsum_enddays;
     }
 }

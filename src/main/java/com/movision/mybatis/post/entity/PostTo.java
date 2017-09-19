@@ -24,6 +24,8 @@ public class PostTo implements Serializable {
 
     private String isactive;
 
+    private Integer partsum_enddays;//当前活动显示参与人数还是显示剩余结束天数 0 显示结束天数 1 显示活动参与人数
+
     private String activetype;
 
     private Double activefee;
@@ -61,6 +63,16 @@ public class PostTo implements Serializable {
     private String iscontribute;//是否投稿
 
     private Date oprtime;//用户最后参与时间
+
+    private Integer ishotorder;//热门排序
+
+    public Integer getIshotorder() {
+        return ishotorder;
+    }
+
+    public void setIshotorder(Integer ishotorder) {
+        this.ishotorder = ishotorder;
+    }
 
     public Date getOprtime() {
         return oprtime;
@@ -292,5 +304,13 @@ public class PostTo implements Serializable {
 
     public void setActivestatue(String activestatue) {
         this.activestatue = activestatue;
+    }
+
+    public Integer getPartsum_enddays() {
+        return partsum_enddays;
+    }
+
+    public void setPartsum_enddays(Integer partsum_enddays) {
+        this.partsum_enddays = partsum_enddays;
     }
 }

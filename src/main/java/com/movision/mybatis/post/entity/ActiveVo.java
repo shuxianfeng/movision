@@ -1,6 +1,7 @@
 package com.movision.mybatis.post.entity;
 
 import com.movision.mybatis.goods.entity.GoodsVo;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,6 +31,8 @@ public class ActiveVo implements Serializable {
     private Integer collectsum;
 
     private Integer isactive;
+
+    private Integer partsumEnddays;//当前活动显示参与人数还是显示剩余结束天数 0 显示结束天数 1 显示活动参与人数
 
     private Integer activetype;
 
@@ -78,6 +81,25 @@ public class ActiveVo implements Serializable {
     private Integer isZan;//该用户是否已赞该帖子/活动 0 否 1 是
 
     private Integer isPart;//0 未参加可参加 1 已参加不可参加
+
+    private List<PostLabel> postLabels;
+    private Integer activeid;//活动id
+
+    public Integer getActiveid() {
+        return activeid;
+    }
+
+    public void setActiveid(Integer activeid) {
+        this.activeid = activeid;
+    }
+
+    public List<PostLabel> getPostLabels() {
+        return postLabels;
+    }
+
+    public void setPostLabels(List<PostLabel> postLabels) {
+        this.postLabels = postLabels;
+    }
 
     public Integer getId() {
         return id;
@@ -349,5 +371,13 @@ public class ActiveVo implements Serializable {
 
     public void setIsPart(Integer isPart) {
         this.isPart = isPart;
+    }
+
+    public Integer getPartsumEnddays() {
+        return partsumEnddays;
+    }
+
+    public void setPartsumEnddays(Integer partsumEnddays) {
+        this.partsumEnddays = partsumEnddays;
     }
 }

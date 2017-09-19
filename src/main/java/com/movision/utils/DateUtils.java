@@ -7,8 +7,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.SimpleTimeZone;
 
 public class DateUtils {
 
@@ -184,7 +184,7 @@ public class DateUtils {
             enddays = 0;//活动已结束返回0
         } else if (begin.before(now) && now.before(end)) {
             try {
-                log.error("计算活动剩余结束天数");
+                log.info("计算活动剩余结束天数");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Date a = sdf.parse(sdf.format(now));
                 Date b = sdf.parse(sdf.format(end));
@@ -240,25 +240,53 @@ public class DateUtils {
         return df.format(new Date());
     }
 
+    /**
+     * 获取当前月份的第一天 如：2017-08-01
+     *
+     * @return
+     */
+    public static String getCurrentMonthFirstDay() {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MONTH, 0);
+        c.set(Calendar.DAY_OF_MONTH, 1);//设置为1号,当前日期既为本月第一天
+        String first = DATE_FORMAT.format(c.getTime());
+        log.debug("===============first:" + first);
+        return first;
+    }
+
+    /**
+     * 获取当前月份最后一天 如：2017-08-31
+     *
+     * @return
+     */
+    public static String getCurrentMonthLastDay() {
+        Calendar ca = Calendar.getInstance();
+        ca.set(Calendar.DAY_OF_MONTH, ca.getActualMaximum(Calendar.DAY_OF_MONTH));
+        String last = DATE_FORMAT.format(ca.getTime());
+        log.debug("===============last:" + last);
+        return last;
+    }
+
+    /**
+     * 获取指定的日期
+     * ============date:1990-08-19
+     *
+     * @return
+     */
+    public static Date getDefaultBirthday() {
+        Calendar ca = new GregorianCalendar();
+        ca.set(Calendar.YEAR, 1990);
+        ca.set(Calendar.MONTH, 7);
+        ca.set(Calendar.DATE, 19);
+        log.debug("============date:" + DATE_FORMAT.format(ca.getTime()));
+        return ca.getTime();
+    }
 
     public static void main(String[] args) throws ParseException {
-//        Date date = DateUtils.date2Sub(DateUtils.str2Date("2016-03-02 20:16:21", "yyyy-MM-dd HH:mm:ss"), 12, 10);
-//        System.out.println(date);
-        // Date date1 = new Date();
-        // System.out.println(date1);
-        // System.out.println(date1.before(date));
-        // String start = "2016-06-20 16:42:41";
-        // String end = "2017-06-21 00:00:00";
-        // SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-        // Date startTime = sf.parse(start);
-        // Date endTime = sf.parse(end);
-        // long days = dayDiff(startTime, endTime);
-        // System.out.println(days);
-//         String s = DateUtils.str2DateFormat("1468466182000", "yyyy-MM-dd");
-//         System.out.println(s);
 
-//        System.out.println(DateUtils.str2Date("20170129023128", "yyyyMMddHHmmss"));
-//        System.out.println(str2Date("1991-07-11"));
-        System.out.println(getCurrentDate());
+//        getCurrentMonthFirstDay();
+//        getCurrentMonthLastDay();
+        getDefaultBirthday();
+
     }
 }

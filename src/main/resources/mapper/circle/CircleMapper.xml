@@ -22,11 +22,12 @@
         <result column="orderid" property="orderid" jdbcType="INTEGER"/>
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
         <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="heat_value" property="heatvalue" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, isofficial, scope, phone, photo, category, code, name, introduction, notice,
         permission, isrecommend, maylikeimg, createtime, status, supportnum, isdiscover, orderid,
-        isdel,userid
+        isdel,userid,heat_value
     </sql>
 
     <!--基础查询语句-->
@@ -59,7 +60,7 @@
     </select>
 
     <!--按照分类id查询圈子列表-->
-    <select id="queryCircleByCategory" parameterType="java.lang.Integer"
+    <select id="findAllCircleByCategory" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.circle.entity.CircleVo">
         SELECT id,name,photo FROM yw_circle
         WHERE category = #{categoryid,jdbcType=INTEGER}
@@ -68,7 +69,7 @@
     </select>
 
     <!--查询所有待审核的圈子-->
-    <select id="queryAuditCircle" resultType="com.movision.mybatis.circle.entity.CircleVo">
+    <select id="findAllAuditCircle" resultType="com.movision.mybatis.circle.entity.CircleVo">
         SELECT id,name,photo,supportnum FROM yw_circle
         WHERE status = '0'
     </select>
@@ -711,16 +712,15 @@
         SELECT orderid FROM yw_circle WHERE status=1 AND isdel=0 GROUP BY orderid
     </select>
 
-    <select id="queryCircleDiscover" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT isdiscover FROM yw_circle WHERE id=#{circleid,jdbcType=INTEGER} AND status=1 AND isdel=0
+    <select id="queryCircleDiscover" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT isdiscover FROM yw_circle WHERE id=#{id,jdbcType=INTEGER} AND status=1 AND isdel=0
     </select>
 
-    <update id="updateDiscover" parameterType="java.util.Map">
-        UPDATE yw_circle SET orderid=#{orderid,jdbcType=INTEGER},isdiscover=1 WHERE id=#{circleid,jdbcType=INTEGER}
-    </update>
-
-    <update id="updateDiscoverDel" parameterType="java.lang.String">
-        UPDATE yw_circle SET orderid=0,isdiscover=0 WHERE id=#{circleid,jdbcType=INTEGER}
+    <update id="updateDiscover" parameterType="com.movision.mybatis.circle.entity.Circle">
+        UPDATE yw_circle
+        SET
+        isdiscover=#{isdiscover,jdbcType=INTEGER}
+        WHERE id=#{id,jdbcType=INTEGER}
     </update>
 
     <select id="queryCircleRecommendIndex" parameterType="java.lang.String" resultType="java.lang.Integer">
@@ -801,6 +801,11 @@
     <select id="queryCircleByOrderidList" resultType="java.lang.Integer">
         SELECT orderid FROM yw_circle WHERE orderid BETWEEN 1 AND 9 AND isdiscover=1 AND status=1 AND isdel=0 ORDER BY
         orderid DESC
+    </select>
+
+    <!--根据圈子id查询圈子的总关注数-->
+    <select id="queryCircleFollownum" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+        SELECT count(*) FROM yw_follow_circle WHERE circleid = #{circleid,jdbcType=INTEGER}
     </select>
 
     <insert id="insertCircle" parameterType="com.movision.mybatis.circle.entity.CircleDetails">
@@ -939,6 +944,32 @@
         </if>
     </select>
 
+    <!--查询用户关注的圈子列表，无分页-->
+    <select id="findAllNewMyFollowCircleList" resultType="com.movision.mybatis.circle.entity.CircleVo">
+        SELECT c.id, c.name, c.maylikeimg
+        FROM yw_circle c
+        WHERE c.isdel = 0
+        AND c.status = 1
+        AND id IN(SELECT circleid FROM yw_follow_circle WHERE userid = #{userid})
+    </select>
+
+    <!--2.0查询用户关注的圈子列表，有分页-->
+    <select id="findAllMineFollowCircle" resultType="com.movision.mybatis.circle.entity.CircleVo" >
+        SELECT c.id, c.name, c.maylikeimg
+            FROM yw_circle c
+            WHERE c.isdel = 0
+            AND c.status = 1
+            AND id IN(SELECT circleid FROM yw_follow_circle WHERE userid = #{userid})
+    </select>
+    
+    <select id="findAllHotCircleList" resultType="com.movision.mybatis.circle.entity.CircleVo" >
+        SELECT t.* FROM (
+            (SELECT id, photo, maylikeimg, name, isrecommend, heat_value FROM yw_circle WHERE isrecommend = '1' AND status = '1' AND isdel = '0')
+            UNION
+            (SELECT id, photo, maylikeimg, name, isrecommend, heat_value FROM yw_circle WHERE isrecommend = '0' AND status = '1' AND isdel = '0')
+        ) t ORDER BY t.isrecommend DESC, t.heat_value DESC
+    </select>
+
     <select id="queryCircleAwaitAudit" parameterType="java.util.Map"
             resultType="com.movision.mybatis.circle.entity.CircleVo">
         SELECT c.* ,
@@ -1033,5 +1064,86 @@
             SELECT COUNT(1) FROM yw_circle_manager WHERE userid =(SELECT id FROM yw_user WHERE phone=(SELECT phone FROM
             yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})) AND circleid = #{id,jdbcType=INTEGER}
         </if>
+    </select>
+    <select id="queryAllCircle" resultType="com.movision.mybatis.circle.entity.CircleVo">
+       SELECT * FROM yw_circle WHERE status=1
+    </select>
+    <select id="queryHeatValueById" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT  heat_value FROM  yw_post WHERE circleid=#{id,jdbcType=INTEGER} AND isdel=0
+    </select>
+    <select id="queryHeatValue" resultType="com.movision.mybatis.circle.entity.CircleVo">
+        SELECT id,name,heat_value FROM yw_circle WHERE status=1 ORDER BY heat_value DESC
+    </select>
+    <update id="updateCircleHeatValue" parameterType="java.util.Map">
+        UPDATE  yw_circle SET  heat_value=#{sum,jdbcType=INTEGER} WHERE id=#{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectCircleScopeEquals2" resultType="com.movision.mybatis.circle.entity.CirclePost">
+        SELECT c.id AS circleid, c.name AS circlename,
+        a.id AS cid, a.categoryname
+        FROM yw_circle c
+        JOIN yw_circle_category a ON c.category = a.id
+        WHERE c.status = '1' AND c.isdel = 0
+        and c.scope=2
+        GROUP BY c.id
+        ORDER BY a.id, c.id
+    </select>
+
+    <select id="selectCircleWhoCreate" resultType="com.movision.mybatis.circle.entity.CirclePost"
+            parameterType="java.lang.Integer">
+        SELECT c.id AS circleid, c.name AS circlename,
+        a.id AS cid, a.categoryname
+        FROM yw_circle c
+        JOIN yw_circle_category a ON c.category = a.id
+        WHERE c.status = '1' AND c.isdel = 0
+        and c.userid = #{userid}
+        GROUP BY c.id
+        ORDER BY a.id, c.id
+    </select>
+
+    <select id="selectCircleWhoManage" resultType="com.movision.mybatis.circle.entity.CirclePost"
+            parameterType="java.lang.Integer">
+        SELECT c.id AS circleid, c.name AS circlename,
+        a.id AS cid, a.categoryname
+        FROM yw_circle c
+        JOIN yw_circle_category a ON c.category = a.id
+        JOIN yw_circle_manager m on m.circleid = c.id
+        WHERE c.status = '1' AND c.isdel = 0
+        and m.userid = #{userid}
+        GROUP BY c.id
+        ORDER BY a.id, c.id
+    </select>
+
+    <select id="selectCircleScopeEquals1" resultType="com.movision.mybatis.circle.entity.CirclePost">
+        SELECT c.id AS circleid, c.name AS circlename,
+        a.id AS cid, a.categoryname
+        FROM yw_circle c
+        JOIN yw_circle_category a ON c.category = a.id
+        WHERE c.status = '1' AND c.isdel = 0
+        and c.scope=1
+        GROUP BY c.id
+        ORDER BY a.id, c.id
+    </select>
+
+
+    <select id="findAllCircle" resultType="com.movision.mybatis.circle.entity.CircleVo">
+         SELECT * FROM  yw_circle WHERE isdel=0 AND status=1 ORDER BY createtime DESC
+    </select>
+
+    <select id="queryCircleByNameInSearch" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.circle.entity.Circle">
+        SELECT id, NAME, photo FROM yw_circle
+        WHERE STATUS = 1 AND isdel = 0
+        AND NAME LIKE concat('%',#{name,jdbcType=VARCHAR},'%') limit 4
+    </select>
+
+    <select id="findAllCircleByNameInSearch" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.circle.entity.Circle">
+        SELECT * FROM yw_circle
+        WHERE STATUS = 1 AND isdel = 0
+        AND NAME LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+    </select>
+    <select id="queryCircleid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_follow_circle WHERE circleid=#{circleid,jdbcType=INTEGER} AND userid=#{userid,jdbcType=INTEGER}
     </select>
 </mapper>

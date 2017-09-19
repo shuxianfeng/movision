@@ -4,7 +4,6 @@ import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.imSystemInform.mapper.ImSystemInformMapper;
 import com.movision.utils.pagination.model.Paging;
-import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,12 +46,22 @@ public class ImSystemInformService {
         }
     }
 
-    public List<ImSystemInformVo> findAllIm(Map map, Paging<ImSystemInformVo> paging) {
+    public List<ImSystemInformVo> findAllIm(Date date, Paging<ImSystemInformVo> paging) {
         try {
             log.info("查询用户收到的系统通知");
-            return imSystemInformMapper.findAllIm(map, paging.getRowBounds());
+            return imSystemInformMapper.findAllIm(date, paging.getRowBounds());
         } catch (Exception e) {
             log.error("查询用户收到的系统通知失败", e);
+            throw e;
+        }
+    }
+
+    public ImSystemInformVo queryMyMsgInforDetails(ImSystemInform imSystemInform) {
+        try {
+            log.info("查询通知详情接口");
+            return imSystemInformMapper.queryMyMsgInforDetails(imSystemInform);
+        } catch (Exception e) {
+            log.error("查询通知详情接口异常", e);
             throw e;
         }
     }
@@ -118,65 +127,119 @@ public class ImSystemInformService {
     }
 
     /**
-     * 查询最新一条记录
+     * 查询运营通知列表
      *
+     * @param inform
+     * @param pag
      * @return
      */
-    public ImSystemInformVo queryByUserid(Map map) {
+    public List<ImSystemInform> queryOperationInformList(ImSystemInform inform, Paging<ImSystemInform> pag) {
         try {
-            log.info("查询最新一条记录");
-            return imSystemInformMapper.queryByUserid(map);
+            log.info("查询运营通知列表");
+            return imSystemInformMapper.findAllOperationInformList(inform, pag.getRowBounds());
         } catch (Exception e) {
-            log.error("查询最新一条记录失败", e);
+            log.error("查询运用用纸列表异常", e);
             throw e;
         }
     }
 
     /**
-     * 查询是否有未读系统通知
+     * 查询运营通知详情
      *
-     * @param map
+     * @param imSystemInform
      * @return
      */
-    public Integer querySystemPushByUserid(Map map) {
+    public ImSystemInform queryOperationInformById(ImSystemInform imSystemInform) {
         try {
-            log.info("查询是否有未读系统通知");
-            return imSystemInformMapper.querySystemPushByUserid(map);
+            log.info("查询运营通知详情");
+            return imSystemInformMapper.queryOperationInformById(imSystemInform);
         } catch (Exception e) {
-            log.error("查询是否有未读系统通知异常", e);
-            throw e;
-        }
-    }
-
-
-    /**
-     * 查询是否有未读系统通知
-     *
-     * @param indity
-     * @return
-     */
-    public Integer queryInform(String indity) {
-        try {
-            log.info("查询是否有未读系统通知");
-            return imSystemInformMapper.queryInform(indity);
-        } catch (Exception e) {
-            log.error("查询是否有未读系统通知异常", e);
+            log.error("查询运营通知详情异常");
             throw e;
         }
     }
 
     /**
-     * 查询用户未读消息
+     * 更新运营通知
      *
-     * @param userid
+     * @param inform
+     */
+    public void updateOperationInformById(ImSystemInform inform) {
+        try {
+            log.info("更新运营通知");
+            imSystemInformMapper.updateByPrimaryKeySelective(inform);
+        } catch (Exception e) {
+            log.error("更新运营通知异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询活动列表
+     *
+     * @param
      * @return
      */
-    public List<String> queryUnreadSystemMessage(Integer userid) {
+    public List<ImSystemInform> findAllActiveMessage(Map map, Paging<ImSystemInform> paging) {
         try {
-            log.info("查询用户未读消息");
-            return imSystemInformMapper.queryUnreadSystemMessage(userid);
+            log.info("查询活动列表");
+            return imSystemInformMapper.findAllActiveMessage(map, paging.getRowBounds());
         } catch (Exception e) {
-            log.error("查询用户未读消息异常", e);
+            log.error("查询活动列表失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 修改活动通知
+     *
+     * @param imSystemInform
+     * @return
+     */
+    public int updateActiveMessage(ImSystemInform imSystemInform) {
+        try {
+            log.info("修改活动通知");
+            return imSystemInformMapper.updateActiveMessage(imSystemInform);
+        } catch (Exception e) {
+            log.error("修改活动通知失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 活动通知回显
+     *
+     * @param id
+     * @return
+     */
+    public ImSystemInform queryActiveById(int id) {
+        try {
+            log.info("活动通知回显");
+            return imSystemInformMapper.queryActiveById(id);
+        } catch (Exception e) {
+            log.error("活动通知回显失败", e);
+            throw e;
+        }
+    }
+
+
+    public String queryActiveBody(int id) {
+        try {
+            log.info("查询活动内容");
+            return imSystemInformMapper.queryActiveBody(id);
+        } catch (Exception e) {
+            log.error("查询活动内容失败", e);
+            throw e;
+        }
+    }
+
+
+    public Date queryDate(int userid) {
+        try {
+            log.info("查询时间");
+            return imSystemInformMapper.queryDate(userid);
+        } catch (Exception e) {
+            log.info("查询时间失败", e);
             throw e;
         }
     }

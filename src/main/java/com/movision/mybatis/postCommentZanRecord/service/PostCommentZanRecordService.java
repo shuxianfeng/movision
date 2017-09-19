@@ -1,5 +1,6 @@
 package com.movision.mybatis.postCommentZanRecord.service;
 
+import com.movision.mybatis.PostZanRecord.entity.PostZanRecord;
 import com.movision.mybatis.PostZanRecord.entity.ZanRecordVo;
 import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
@@ -37,7 +38,7 @@ public class PostCommentZanRecordService {
      * @param userid
      * @return
      */
-    public PostCommentZanRecordVo queryByUserid(Integer userid) {
+    public List<PostCommentZanRecordVo> queryByUserid(Integer userid) {
         try {
             log.info("根据用户id查询");
             return recordMapper.queryByUserid(userid);
@@ -69,6 +70,16 @@ public class PostCommentZanRecordService {
         }
     }
 
+    public List<ZanRecordVo> findZan(Integer userid) {
+        try {
+            log.info("查询所有赞");
+            return recordMapper.findZan(userid);
+        } catch (Exception e) {
+            log.error("查询所有赞失败", e);
+            throw e;
+        }
+    }
+
     public User queryusers(Integer userid) {
         try {
             log.info("查询用户");
@@ -85,6 +96,16 @@ public class PostCommentZanRecordService {
             return recordMapper.queryPostNickname(postid);
         } catch (Exception e) {
             log.error("查询用户失败", e);
+            throw e;
+        }
+    }
+
+    public int updatePostCommentZanRecordVo(ZanRecordVo postCommentZanRecordVo) {
+        try {
+            log.info("更新帖子评论点赞记录数据");
+            return recordMapper.updateByPrimaryKeySelective(postCommentZanRecordVo);
+        } catch (Exception e) {
+            log.error("更新帖子评论点赞记录数据失败", e);
             throw e;
         }
     }

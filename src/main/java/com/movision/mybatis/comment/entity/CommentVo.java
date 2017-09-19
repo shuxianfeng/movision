@@ -2,29 +2,19 @@ package com.movision.mybatis.comment.entity;
 
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.user.entity.User;
-import com.movision.utils.L;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class CommentVo implements Serializable {
     private Integer id;
     private Integer userid;
     private Integer pid;
     private User user;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     private  Integer postid;
-
+    private Integer repliesnumber;//回复条数
+    private User puser;//子评论的用户信息
     private String content;
 
     private Date intime;
@@ -57,7 +47,7 @@ public class CommentVo implements Serializable {
 
     private Integer status;//审核状态：0待审核 1审核通过 2审核不通过（iscontribute为1时不为空）
 
-    private Integer isZan;//该用户是否已赞该帖子/活动 0 否 1 是
+    private Integer isZan;//该用户是否已赞该评论 0 否 1 是
 
     private List<CommentVo> soncomment;
 
@@ -68,6 +58,50 @@ public class CommentVo implements Serializable {
     private List<CommentVo> commentVos;
 
     private Integer isread;//是否已读 0否 1是
+
+    private Integer heatvalue;
+
+    private Integer ispid;//是不是
+
+    public Integer getIspid() {
+        return ispid;
+    }
+
+    public void setIspid(Integer ispid) {
+        this.ispid = ispid;
+    }
+
+    public User getPuser() {
+        return puser;
+    }
+
+    public void setPuser(User puser) {
+        this.puser = puser;
+    }
+
+    public Integer getRepliesnumber() {
+        return repliesnumber;
+    }
+
+    public void setRepliesnumber(Integer repliesnumber) {
+        this.repliesnumber = repliesnumber;
+    }
+
+    public Integer getHeatvalue() {
+        return heatvalue;
+    }
+
+    public void setHeatvalue(Integer heatvalue) {
+        this.heatvalue = heatvalue;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Integer getIsread() {
         return isread;

@@ -1,8 +1,5 @@
 package com.movision.aop;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.movision.common.constant.ImConstant;
 import com.movision.common.constant.SessionConstant;
 import com.movision.facade.boss.BossLoginFacade;
@@ -15,6 +12,8 @@ import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.shiro.realm.BossRealm;
+import com.movision.shiro.realm.ShiroRealm;
+import com.movision.shiro.realm.ShiroRealm.ShiroUser;
 import com.movision.utils.DateUtils;
 import com.movision.utils.propertiesLoader.LoginPropertiesLoader;
 import org.apache.shiro.SecurityUtils;
@@ -25,9 +24,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.movision.shiro.realm.ShiroRealm;
-import com.movision.shiro.realm.ShiroRealm.ShiroUser;
-
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -220,7 +218,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                         loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(),
                         loginUser.getPhone(), loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(),
                         loginUser.getAccid(), loginUser.getImtoken(), loginUser.getSign(), DateUtils.date2Str(loginUser.getBirthday()),
-                        loginUser.getQq(), loginUser.getSina(), loginUser.getOpenid());
+                        loginUser.getQq(), loginUser.getSina(), loginUser.getOpenid(), loginUser.getHeatValue(), loginUser.getIpCity());
                 //判断登录信息是否改变,若改变了则更新session，
 
                 //判断登录信息是否改变,若改变了则更新session，
@@ -248,7 +246,9 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 || loginInfo.getBirthday() != appuser.getBirthday()
                 || loginInfo.getQq() != appuser.getQq()
                 || loginInfo.getSina() != appuser.getSina()
-                || loginInfo.getOpenid() != appuser.getOpenid();
+                || loginInfo.getOpenid() != appuser.getOpenid()
+                || loginInfo.getHeatValue() != appuser.getHeatValue()
+                || loginInfo.getIpCity() != appuser.getIpCity();
         return isChange;
     }
 

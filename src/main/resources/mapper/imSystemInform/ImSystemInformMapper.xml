@@ -11,9 +11,11 @@
         <result column="title" property="title" jdbcType="VARCHAR"/>
         <result column="pushcontent" property="pushcontent" jdbcType="VARCHAR"/>
         <result column="inform_identity" property="informidentity" jdbcType="VARCHAR"/>
+        <result column="coverimg" property="coverimg" jdbcType="VARCHAR"/>
+        <result column="activeid" property="activeid" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, userid, from_accid, to_accids, body, inform_time, title,pushcontent,inform_identity
+        id, userid, from_accid, to_accids, body, inform_time, title,pushcontent,inform_identity,coverimg,activeid
     </sql>
     <select id="selectByPrimaryKey" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform"
             parameterType="java.lang.Integer">
@@ -63,6 +65,12 @@
             <if test="informidentity!=null">
                 inform_identity,
             </if>
+            <if test="coverimg != null">
+                coverimg,
+            </if>
+            <if test="activeid != null">
+                activeid,
+            </if>
 
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -90,6 +98,12 @@
             </if>
             <if test="informidentity != null">
                 #{informidentity,jdbcType=VARCHAR},
+            </if>
+            <if test="coverimg != null">
+                #{coverimg,jdbcType=VARCHAR},
+            </if>
+            <if test="activeid != null">
+                #{activeid,jdbcType=INTEGER},
             </if>
 
         </trim>
@@ -121,7 +135,9 @@
             <if test="informidentity !=null">
                 informidentity = #{informidentity,jdbcType=VARCHAR}
             </if>
-
+            <if test="coverimg !=null">
+                coverimg = #{coverimg,jdbcType=VARCHAR}
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -132,13 +148,14 @@
         to_accids = #{toAccids,jdbcType=LONGVARCHAR},
         body = #{body,jdbcType=VARCHAR},
         inform_time = #{informTime,jdbcType=TIMESTAMP},
-        title = #{title},pushcontent = #{pushcontent,jdbcType=VARCHAR},inform_identity =
-        #{informidentity,jdbcType=VARCHAR}
+        title = #{title},pushcontent = #{pushcontent,jdbcType=VARCHAR},
+        inform_identity =#{informidentity,jdbcType=VARCHAR},
+        activeid =#{activeid,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
     <select id="findAll" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo">
-        SELECT * FROM yw_im_system_informs GROUP BY inform_time DESC
+        SELECT * FROM yw_im_system_informs WHERE coverimg IS NULL GROUP BY inform_time DESC
     </select>
     <select id="findAllSystemInform" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform"
             parameterType="java.util.Map">
@@ -151,32 +168,69 @@
             ORDER BY inform_time DESC
         </if>
     </select>
-    <select id="queryByUserid" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo"
-            parameterType="java.util.Map">
-        SELECT si.body,si.inform_time,si.title,si.pushcontent,si.inform_identity,IFNULL(ir.isread,0) as isread
-        FROM yw_im_system_informs si LEFT JOIN yw_im_system_inform_read ir ON ir.inform_identity=si.inform_identity AND
-        ir.userid=#{userid,jdbcType=INTEGER} WHERE si.inform_time >= #{informTime,jdbcType=TIMESTAMP}
-        GROUP BY inform_identity ORDER BY inform_time DESC LIMIT 0,1
-    </select>
 
-    <select id="querySystemPushByUserid" parameterType="java.util.Map" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM yw_im_system_informs WHERE inform_time >= #{informTime,jdbcType=TIMESTAMP} AND
-        inform_identity NOT IN (
-        SELECT inform_identity FROM yw_im_system_inform_read WHERE userid=#{userid,jdbcType=INTEGER} AND isread=1)
-    </select>
-    <select id="queryInform" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT COUNT(1) from yw_im_system_inform_read WHERE inform_identity=#{indity,jdbcType=VARCHAR}
-    </select>
-
-    <select id="queryUnreadSystemMessage" parameterType="java.lang.Integer" resultType="java.lang.String">
-        SELECT inform_identity FROM yw_im_system_informs WHERE inform_identity NOT in
-        (SELECT inform_identity FROM yw_im_system_inform_read WHERE userid= #{userid,jdbcType=INTEGER})
-    </select>
-    <select id="findAllIm" parameterType="java.util.Map"
+    <select id="findAllIm" parameterType="java.util.Date"
             resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo">
-        SELECT si.body,si.inform_time,si.title,si.pushcontent,si.inform_identity,IFNULL(ir.isread,0) as isread
-        FROM yw_im_system_informs si LEFT JOIN yw_im_system_inform_read ir ON ir.inform_identity=si.inform_identity AND
-        ir.userid=#{userid,jdbcType=INTEGER} WHERE si.inform_time >= #{informTime,jdbcType=TIMESTAMP}
+        SELECT *
+        FROM yw_im_system_informs
+        WHERE inform_time >= #{informTime,jdbcType=TIMESTAMP}
+        and to_accids is not NULL
+        <![CDATA[    and to_accids <> '[null]'   ]]>
         GROUP BY inform_identity ORDER BY inform_time DESC
+    </select>
+
+    <select id="queryMyMsgInforDetails" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo"
+            parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
+        SELECT * FROM yw_im_system_informs WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="findAllOperationInformList" parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform"
+            resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
+        SELECT *
+        FROM yw_im_system_informs WHERE coverimg IS NOT NULL
+        <if test="title != null">
+            AND title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="body != null">
+            AND body LIKE concat('%',#{body,jdbcType=VARCHAR},'%')
+        </if>
+        ORDER BY inform_time DESC
+    </select>
+
+    <select id="queryOperationInformById" parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform"
+            resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
+        SELECT * FROM yw_im_system_informs WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="findAllActiveMessage" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
+        select * from yw_im_system_informs WHERE activeid is NOT NULL
+        <if test="body!=null">
+            AND title LIKE concat('%',#{body,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="pai==0">
+            ORDER BY inform_time DESC
+        </if>
+    </select>
+    <update id="updateActiveMessage" parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
+        update yw_im_system_informs
+        <set>
+            <if test="body != null">
+                body = #{body,jdbcType=VARCHAR},
+            </if>
+            <if test="title !=null">
+                title = #{title}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="queryActiveById" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
+        SELECT  * FROM  yw_im_system_informs WHERE  id=#{id,jdbcType=INTEGER}
+    </select>
+    <select id="queryActiveBody" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT body FROM  yw_im_system_informs WHERE  id=#{id,jdbcType=INTEGER}
+    </select>
+    <select id="queryDate" parameterType="java.lang.Integer" resultType="java.util.Date">
+        SELECT intime FROM  yw_user WHERE id=#{userid,jdbcType=INTEGER}
     </select>
 </mapper>

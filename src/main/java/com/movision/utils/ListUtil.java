@@ -2,6 +2,7 @@ package com.movision.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 集合工具类
@@ -32,6 +33,26 @@ public class ListUtil {
     public static void main(String[] args) {
         List list = new ArrayList();
         System.out.print(isNotEmpty(list));
+    }
+
+    /**
+     * 打乱ArrayList生成一个随机ArrayList列表
+     *
+     * @param sourceList
+     * @return
+     */
+    public static List<?> randomList(List<?> sourceList) {
+        if (isEmpty(sourceList)) {
+            return sourceList;
+        }
+
+        List<Object> randomList = new ArrayList<>(sourceList.size());
+        do {
+            int randomIndex = Math.abs(new Random().nextInt(sourceList.size()));
+            randomList.add(sourceList.remove(randomIndex));
+        } while (sourceList.size() > 0);
+
+        return randomList;
     }
 
 }

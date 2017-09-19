@@ -20,9 +20,39 @@ public class ImSystemInformVo implements Serializable {
 
     private String pushcontent;
 
-    private String informidentity;
+    private String informidentity;  //系统通知唯一标示
 
     private Integer isread;//是否已读 0否 1是
+
+    private String coverimg;//运营通知封面图
+
+    private Integer isoperation;//代表是否为运营通知
+
+    private Integer activeid;
+
+    public Integer getActiveid() {
+        return activeid;
+    }
+
+    public void setActiveid(Integer activeid) {
+        this.activeid = activeid;
+    }
+
+    public Integer getIsoperation() {
+        return isoperation;
+    }
+
+    public void setIsoperation(Integer isoperation) {
+        this.isoperation = isoperation;
+    }
+
+    public String getCoverimg() {
+        return coverimg;
+    }
+
+    public void setCoverimg(String coverimg) {
+        this.coverimg = coverimg;
+    }
 
     public Integer getIsread() {
         return isread;
@@ -103,5 +133,16 @@ public class ImSystemInformVo implements Serializable {
 
     public void setInformTime(Date informTime) {
         this.informTime = informTime;
+    }
+
+    /**
+     * 重写equals方法，用于比对
+     *
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof ImSystemInformVo && this.informidentity != null && this.informidentity.equals(((ImSystemInformVo) obj).getInformidentity());
     }
 }

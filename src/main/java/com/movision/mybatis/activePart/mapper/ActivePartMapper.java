@@ -2,7 +2,6 @@ package com.movision.mybatis.activePart.mapper;
 
 import com.movision.mybatis.activePart.entity.ActivePart;
 import com.movision.mybatis.activePart.entity.ActivePartList;
-import com.movision.mybatis.post.entity.PostActiveList;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;

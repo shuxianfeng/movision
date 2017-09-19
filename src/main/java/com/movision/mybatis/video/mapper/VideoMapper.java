@@ -1,6 +1,5 @@
 package com.movision.mybatis.video.mapper;
 
-import com.movision.fsearch.repository.db.ListHandler;
 import com.movision.mybatis.video.entity.Video;
 import org.springframework.stereotype.Repository;
 

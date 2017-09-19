@@ -8,7 +8,6 @@ import com.movision.mybatis.user.entity.User;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
-import java.util.Map;
 
 public interface PostCommentZanRecordMapper {
     int deleteByPrimaryKey(Integer id);
@@ -19,16 +18,18 @@ public interface PostCommentZanRecordMapper {
 
     PostCommentZanRecord selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(PostCommentZanRecord record);
+    int updateByPrimaryKeySelective(ZanRecordVo record);
 
     int updateByPrimaryKey(PostCommentZanRecord record);
 
-    PostCommentZanRecordVo queryByUserid(Integer userid);
+    List<PostCommentZanRecordVo> queryByUserid(Integer userid);
 
 
     List<CommentVo> queryComment(Integer commentid);
 
     List<ZanRecordVo> findAllZan(Integer userid, RowBounds rowBounds);
+
+    List<ZanRecordVo> findZan(Integer userid);
 
     User queryusers(Integer userid);
 

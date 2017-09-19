@@ -9,6 +9,16 @@ public class UserLike implements Serializable {
 
     private String nickname;
 
+    private String photo;
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -110,11 +110,9 @@ public class CircleController {
      */
     @ApiOperation(value = "圈子推荐到发现页", notes = "用于把圈子推荐到发现页排序的接口", response = Response.class)
     @RequestMapping(value = "update_circle_orderid", method = RequestMethod.POST)
-    public Response updateDiscover(@ApiParam(value = "圈子id") @RequestParam String circleid,
-                                   @ApiParam(value = "排序id") @RequestParam String orderid,
-                                   @ApiParam(value = "登录用户") @RequestParam String loginid) {
+    public Response updateDiscover(@ApiParam(value = "圈子id") @RequestParam String circleid) {
         Response response = new Response();
-        Map<String, Integer> map = circleFacade.updateDiscover(circleid, orderid, loginid);
+        Map<String, Integer> map = circleFacade.updateDiscover(circleid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

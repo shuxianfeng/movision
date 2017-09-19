@@ -3,10 +3,8 @@ package com.movision.controller.app.im;
 import com.movision.common.Response;
 import com.movision.common.util.ShiroUtil;
 import com.movision.facade.im.ImFacade;
-import com.movision.facade.newInformation.NewInformationsFacade;
 import com.movision.mybatis.imFirstDialogue.entity.ImFirstDialogue;
 import com.movision.mybatis.imFirstDialogue.entity.ImMsg;
-import com.movision.mybatis.newInformation.entity.NewInformation;
 import com.movision.utils.ListUtil;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -33,8 +31,6 @@ public class ImController {
     @Autowired
     private ImFacade imFacade;
 
-    @Autowired
-    private NewInformationsFacade newInformationsFacade;
 
     /**
      * 打招呼接口
@@ -110,7 +106,7 @@ public class ImController {
     @RequestMapping(value = "/update_new_informations", method = RequestMethod.POST)
     public Response UpdateNewInformations(@ApiParam(value = "登录用户id") @RequestParam String userid) {
         Response response = new Response();
-        newInformationsFacade.updateNewInformtions(Integer.parseInt(userid));
+        // TODO: 2017/9/19 使用mongo记录
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -122,11 +118,11 @@ public class ImController {
     @RequestMapping(value = "/query_new_informations", method = RequestMethod.POST)
     public Response QueryNewInformations(@ApiParam(value = "登录用户id") @RequestParam String userid) {
         Response response = new Response();
-        NewInformation res = newInformationsFacade.queryNewInformations(Integer.parseInt(userid));
+        // TODO: 2017/9/19 使用mongo记录
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
-        response.setData(res);
+
         return response;
     }
 

@@ -4,6 +4,7 @@ import com.movision.mybatis.category.entity.Category;
 import com.movision.mybatis.circle.entity.*;
 import com.movision.mybatis.circle.mapper.CircleMapper;
 import com.movision.mybatis.followCircle.mapper.FollowCircleMapper;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserRole;
 import com.movision.utils.pagination.model.Paging;
@@ -52,20 +53,20 @@ public class CircleService {
         }
     }
 
-    public List<CircleVo> queryCircleByCategory(int categoryid) {
+    public List<CircleVo> queryCircleByCategory(Paging<CircleVo> pager, int categoryid) {
         try {
             log.info("通过类型查询圈子列表categoryid=" + categoryid);
-            return circleMapper.queryCircleByCategory(categoryid);
+            return circleMapper.findAllCircleByCategory(pager.getRowBounds(), categoryid);
         } catch (Exception e) {
             log.error("通过类型查询圈子列表失败categoryid=" + categoryid, e);
             throw e;
         }
     }
 
-    public List<CircleVo> queryAuditCircle() {
+    public List<CircleVo> queryAuditCircle(Paging<CircleVo> pager) {
         try {
             log.info("查询待审核圈子列表");
-            return circleMapper.queryAuditCircle();
+            return circleMapper.findAllAuditCircle(pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询待审核圈子列表失败", e);
             throw e;
@@ -78,6 +79,37 @@ public class CircleService {
             return circleMapper.queryIsSupport(parammap);
         } catch (Exception e) {
             log.error("查询当前用户是否已支持该圈子失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 无分页
+     * @param parammap
+     * @return
+     */
+    public List<CircleVo> queryMyFollowCircleList(Paging<CircleVo> pager, Map<String, Object> parammap){
+        try {
+            log.info("查询当前用户关注的所有圈子列表");
+            return circleMapper.findAllNewMyFollowCircleList(pager.getRowBounds(), parammap);
+        }catch (Exception e){
+            log.error("查询当前用户关注的所有圈子列表失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 有分页
+     * @param paramap
+     * @param pager
+     * @return
+     */
+    public List<CircleVo> findAllMineFollowCircle(Map<String, Object> paramap, Paging<CircleVo> pager){
+        try {
+            log.info("美番2.0查询当前用户关注的所有圈子列表");
+            return circleMapper.findAllMineFollowCircle(paramap, pager.getRowBounds());
+        }catch (Exception e){
+            log.error("美番2.0查询当前用户关注的所有圈子列表失败", e);
             throw e;
         }
     }
@@ -138,6 +170,16 @@ public class CircleService {
             followCircleMapper.followCircle(parammap);
         } catch (Exception e) {
             log.error("当前用户关注该圈子失败", e);
+            throw e;
+        }
+    }
+
+    public int queryFollowSumByUser(int userid){
+        try {
+            log.info("根据用户id查询该用户当前已关注的圈子数");
+            return followCircleMapper.queryFollowSumByUser(userid);
+        }catch (Exception e){
+            log.error("根据用户id查询该用户当前已关注的圈子数失败", e);
             throw e;
         }
     }
@@ -374,7 +416,7 @@ public class CircleService {
      * @param circleid
      * @return
      */
-    public int queryCircleDiscover(String circleid) {
+    public int queryCircleDiscover(Integer circleid) {
         try {
             log.info("查询圈子是否推荐发现页 circleid=" + circleid);
             return circleMapper.queryCircleDiscover(circleid);
@@ -389,31 +431,16 @@ public class CircleService {
      *
      * @return
      */
-    public int updateDiscover(Map<String, Integer> map) {
+    public int updateDiscover(Circle circle) {
         try {
             log.info("圈子推荐到发现页");
-            return circleMapper.updateDiscover(map);
+            return circleMapper.updateDiscover(circle);
         } catch (Exception e) {
             log.error("圈子推荐到发现页异常", e);
             throw e;
         }
     }
 
-    /**
-     * 取消圈子推荐到发现页
-     *
-     * @param circleid
-     * @return
-     */
-    public int updateDiscoverDel(String circleid) {
-        try {
-            log.info("取消圈子推荐到发现页 circleid=" + circleid);
-            return circleMapper.updateDiscoverDel(circleid);
-        } catch (Exception e) {
-            log.error("取消圈子推荐到发现页异常 circleid=" + circleid, e);
-            throw e;
-        }
-    }
 
     /**
      * 查询圈子是否推荐到首页
@@ -552,6 +579,26 @@ public class CircleService {
         }
     }
 
+    public List<CircleVo> findAllHotCircleList(Paging<CircleVo> pager){
+        try {
+            log.info("查询所有必推圈子和热度值排名靠前的圈子列表");
+            return circleMapper.findAllHotCircleList(pager.getRowBounds());
+        }catch (Exception e){
+            log.error("查询所有必推圈子和热度值排名靠前的圈子列表失败", e);
+            throw e;
+        }
+    }
+
+    public int queryCircleFollownum(int circleid){
+        try {
+            log.info("根据圈子id查询当前圈子被关注数");
+            return circleMapper.queryCircleFollownum(circleid);
+        }catch (Exception e){
+           log.error("根据圈子id查询当前圈子被关注数失败", e);
+            throw e;
+        }
+    }
+
 
     /**
      * 审核圈子
@@ -638,4 +685,135 @@ public class CircleService {
             throw e;
         }
     }
+
+    /**
+     * 查询所有圈子
+     *
+     * @return
+     */
+    public List<CircleVo> queryAllCircle() {
+        try {
+            log.info("查询所有圈子");
+            return circleMapper.queryAllCircle();
+        } catch (Exception e) {
+            log.error("查询所有圈子异常", e);
+            throw e;
+        }
+    }
+
+    public List<Integer> queryHeatValueById(int id) {
+        try {
+            log.info("根据圈子id查询所有热度合");
+            return circleMapper.queryHeatValueById(id);
+        } catch (Exception e) {
+            log.error("根据圈子id查询所有热度合异常", e);
+            throw e;
+        }
+    }
+
+    public List<CircleVo> queryHeatValue() {
+        try {
+            log.info("根据热度查询圈子");
+            return circleMapper.queryHeatValue();
+        } catch (Exception e) {
+            log.error("根据热度查询圈子失败", e);
+            throw e;
+        }
+    }
+
+    public Integer updateCircleHeatValue(Map map) {
+        try {
+            log.info("根据圈子id改变表中热度值");
+            return circleMapper.updateCircleHeatValue(map);
+        } catch (Exception e) {
+            log.error("根据圈子id改变表中热度值失败", e);
+            throw e;
+        }
+
+    }
+
+    public List<CirclePost> selectCircleScopeEquals1() {
+        try {
+            log.info("查询scope=1的圈子");
+            return circleMapper.selectCircleScopeEquals1();
+        } catch (Exception e) {
+            log.error("查询scope=1的圈子失败", e);
+            throw e;
+        }
+    }
+
+    public List<CirclePost> selectCircleScopeEquals2() {
+        try {
+            log.info("查询scope=2的圈子");
+            return circleMapper.selectCircleScopeEquals2();
+        } catch (Exception e) {
+            log.error("查询scope=2的圈子失败", e);
+            throw e;
+        }
+    }
+
+    public List<CirclePost> selectCircleWhoCreate(Integer userid) {
+        try {
+            log.info("查询该用户创建的圈子");
+            return circleMapper.selectCircleWhoCreate(userid);
+        } catch (Exception e) {
+            log.error("查询该用户创建的圈子失败", e);
+            throw e;
+        }
+    }
+
+    public List<CirclePost> selectCircleWhoManage(Integer userid) {
+        try {
+            log.info("查询该用户是管理员的圈子");
+            return circleMapper.selectCircleWhoManage(userid);
+        } catch (Exception e) {
+            log.error("查询该用户是管理员的圈子失败", e);
+            throw e;
+        }
+    }
+
+
+    public List<CircleVo> findAllCircle(Paging<CircleVo> paging) {
+        try {
+            log.info("所有圈子");
+            return circleMapper.findAllCircle(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("所有圈子失败", e);
+            throw e;
+        }
+    }
+
+    public List<Circle> queryCircleByName(String name) {
+        try {
+            log.info("根据名称查询圈子");
+            return circleMapper.queryCircleByNameInSearch(name);
+        } catch (Exception e) {
+            log.error("根据名称查询圈子失败", e);
+            throw e;
+        }
+    }
+
+    public List<Circle> findAllCircleByNameInSearch(Paging<Circle> paging, Map map) {
+        try {
+            log.info("分页，根据名称查找所有的圈子");
+            return circleMapper.findAllCircleByNameInSearch(map, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("分页，根据名称查找所有的圈子失败", e);
+            throw e;
+        }
+    }
+
+    public int queryCircleid(Map map) {
+        try {
+            log.info("用户有没有关注过圈子");
+            return circleMapper.queryCircleid(map);
+        } catch (Exception e) {
+            log.error("用户有没有关注过圈子失败", e);
+            throw e;
+        }
+    }
+
+
+
+
 }

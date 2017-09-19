@@ -23,8 +23,17 @@ public class CircleIndexList implements Serializable {
     private Integer postnewnum;//圈子今日更新帖子数
     private Integer isessencenum;//圈子中精贴数
     private Integer supportnum;//支持数
+    private Integer heatvaluenum;//热度
     private Date intime;//时间
     private List<CircleVo> classify;//分类列表
+
+    public Integer getHeatvaluenum() {
+        return heatvaluenum;
+    }
+
+    public void setHeatvaluenum(Integer heatvaluenum) {
+        this.heatvaluenum = heatvaluenum;
+    }
 
     public String getCategoryname() {
         return categoryname;

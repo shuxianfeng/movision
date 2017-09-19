@@ -1,7 +1,10 @@
 package com.movision.mybatis.comment.mapper;
 
 import com.movision.mybatis.comment.entity.Comment;
+import com.movision.mybatis.comment.entity.CommentCount;
 import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.mybatis.comment.entity.ReplyComment;
+import com.movision.mybatis.user.entity.User;
 import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
@@ -20,7 +23,7 @@ public interface CommentMapper {
 
     Comment selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(Comment record);
+    int updateByPrimaryKeySelective(CommentVo record);
 
     int updateByPrimaryKey(Comment record);
 
@@ -62,13 +65,55 @@ public interface CommentMapper {
 
     Integer updateCommentAudit(Map map);
 
-    CommentVo queryCommentByUserid(Integer userid);//根据userid查询评论
+    List<CommentVo> queryCommentByUserid(Integer userid);//根据userid查询评论
 
     List<CommentVo> findAllQueryComment(Integer userid, RowBounds rowBounds);
 
+    List<CommentVo> findQueryComment(Integer userid);
     List<CommentVo> queryPidComment(Integer pid);
 
     Integer updateCommentRead(Integer userid);
 
     Integer queryUseridByComment(Integer commentid);
+
+    Integer updateCommentHeatValue(Map map);
+
+    int queryCommentLevel(int commentid);
+
+
+    List<CommentVo> queryCommentByPost(int postid);
+
+    List<CommentVo> findAllCommentByPostId(int postid, RowBounds rowBounds);
+
+    List<CommentVo> findAllCommentByPost(int postid);
+
+    Integer queryCommentIsRead(int id);//查询评论未读
+
+    CommentCount queryCommentZan(int id);
+
+    CommentVo queryCom(int commentid);
+
+    int commentCount(Map map);
+
+    int deleteComment(int id);
+
+    int lessPostComment(int id);
+
+    List<CommentVo> findAllOneComment(int postid, RowBounds rowBounds);
+
+    List<CommentVo> queryTwoComment(int pid);
+
+    List<CommentVo> queryThreeComment(Map<String, Object> parammap);
+
+    User queryUserInfor(int pid);
+
+    int repliesNumber(int id);
+
+    List<ReplyComment> selectReplyCommentList(Integer userid);
+
+    void updateCommentIsRead(Integer id);
+
+    List<CommentVo> selectPostComment(Integer id);
+
+    int queryFatherComment(int id);
 }

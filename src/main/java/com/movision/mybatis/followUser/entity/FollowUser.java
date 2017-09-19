@@ -11,6 +11,17 @@ public class FollowUser {
 
     private Date intime;
 
+    private Integer isread;
+
+    public void setIsread(Integer isread) {
+        this.isread = isread;
+    }
+
+    public Integer getIsread() {
+
+        return isread;
+    }
+
     public Integer getId() {
         return id;
     }

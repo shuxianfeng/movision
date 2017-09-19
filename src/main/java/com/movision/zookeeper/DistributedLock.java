@@ -188,8 +188,11 @@ public class DistributedLock implements Lock, Watcher {
     public void unlock() {
         try {
             log.info("unlock " + myZnode);
+            //删除该节点
             zk.delete(myZnode, -1);
+            //重新初始化myZnode变量
             myZnode = null;
+            //关闭zk连接
             zk.close();
         } catch (InterruptedException | KeeperException e) {
             e.printStackTrace();

@@ -23,5 +23,7 @@ public interface FollowCircleMapper {
 
     void followCircle(Map<String, Object> parammap);
 
+    int queryFollowSumByUser(int userid);
+
     void cancelFollowCircle(Map<String, Object> parammap);
 }

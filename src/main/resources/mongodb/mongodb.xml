@@ -14,10 +14,9 @@
     <!-- <context:property-placeholder location="classpath:config/properties/mongodb.properties" /> -->
     <context:property-placeholder location="classpath:mongodb/mongodb.properties"/>
     <!-- 定义mongo对象，对应的是mongodb官方jar包中的Mongo，replica-set设置集群副本的ip地址和端口 -->
-
-        <mongo:mongo id="mongo"  replica-set="${mongo.hostport}">
-            <!-- 一些连接属性的设置 -->
-            <mongo:options
+    <mongo:mongo id="mongo" replica-set="${mongo.hostport}">
+        <!-- 一些连接属性的设置 -->
+        <mongo:options
                     connections-per-host="${mongo.connectionsPerHost}"
                     threads-allowed-to-block-for-connection-multiplier="${mongo.threadsAllowedToBlockForConnectionMultiplier}"
                     connect-timeout="${mongo.connectTimeout}"
@@ -30,20 +29,26 @@
                     write-timeout="0"
                     write-fsync="true" />
         </mongo:mongo>
-      <mongo:db-factory dbname="${mongo.dbname}"  mongo-ref="mongo" />
+    <mongo:db-factory dbname="${mongo.dbname}" mongo-ref="mongo"/>
 
-     <bean id="defaultMongoTypeMapper"
+    <!-- 默认Mongodb类型映射 -->
+    <bean id="defaultMongoTypeMapper"
           class="org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper">
-        <constructor-arg name="typeKey"><null/></constructor-arg>
+        <constructor-arg name="typeKey">
+            <null/><!-- 这里设置为空,可以把 spring data mongodb 多余保存的_class字段去掉 -->
+        </constructor-arg>
     </bean>
     <bean id="mappingContext"
           class="org.springframework.data.mongodb.core.mapping.MongoMappingContext" />
+    <!-- 配置mongodb映射类型 -->
     <bean id="mappingMongoConverter"
           class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">
         <constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
         <constructor-arg name="mappingContext" ref="mappingContext" />
         <property name="typeMapper" ref="defaultMongoTypeMapper" />
     </bean>
+    <!-- 操作mongodb -->
+    <!-- mongodb的主要操作对象mongoTemplate(Spring Data提供)，所有对mongodb的增删改查的操作都是通过它完成 -->
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
         <constructor-arg name="mongoConverter" ref="mappingMongoConverter" />

@@ -1,6 +1,10 @@
 package com.movision.mybatis.followUser.mapper;
 
 import com.movision.mybatis.followUser.entity.FollowUser;
+import com.movision.mybatis.followUser.entity.FollowUserVo;
+
+import java.util.List;
+import java.util.Map;
 
 public interface FollowUserMapper {
     int deleteByPrimaryKey(Integer id);
@@ -13,5 +17,23 @@ public interface FollowUserMapper {
 
     int updateByPrimaryKeySelective(FollowUser record);
 
+    int updateFollowuserVo(FollowUserVo followUserVo);
+
     int updateByPrimaryKey(FollowUser record);
+
+    int yesOrNo(Map map);
+
+    int cancleFollowUser(Map map);
+
+    void updateUserAttention(Integer userid);
+
+    List<FollowUserVo> selectFollowUserVoList(Integer userid);
+
+    int insertUserFans(int interestedusers);
+
+    void insertUserFansLess(int interestedusers);
+
+    int queryUserIsRead(int userid);
+
+    void updateAttentionIsRead(Integer userid);
 }

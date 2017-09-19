@@ -7,20 +7,21 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.mapper.PostMapper;
-import com.movision.mybatis.postProcessRecord.entity.PostProcessRecord;
+import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
-import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.video.entity.Video;
 import com.movision.utils.pagination.model.Paging;
-import javafx.geometry.Pos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author shuxf
@@ -53,8 +54,14 @@ public class PostService {
         return postMapper.queryRecommendCircle();
     }
 
-    public List<Post> queryHotActiveList() {
-        return postMapper.queryHotActiveList();
+    public List<ActiveVo> queryHotActiveList() {
+        try {
+            log.info("发现页查询最热门的10个帖子");
+            return postMapper.queryHotActiveList();
+        }catch (Exception e){
+            log.error("发现页查询最热门的10个帖子失败", e);
+            throw e;
+        }
     }
 
     public int queryPostNumByUserid(int userid){
@@ -63,6 +70,46 @@ public class PostService {
             return postMapper.queryPostNumByUserid(userid);
         }catch (Exception e){
             log.error("通过用户id查询当前用户的发帖总数失败", e);
+            throw e;
+        }
+    }
+
+    public int queryCommentByUserid(int userid){
+        try {
+            log.info("通过用户id查询当前用户的评论总数");
+            return postMapper.queryCommentByUserid(userid);
+        }catch (Exception e){
+            log.error("通过用户id查询当前用户的评论总数失败", e);
+            throw e;
+        }
+    }
+
+    public int queryCollectByUserid(int userid){
+        try {
+            log.info("通过用户id查询当前用户被收藏总数");
+            return postMapper.queryCollectByUserid(userid);
+        }catch (Exception e){
+            log.error("通过用户id查询当前用户的被收藏总数失败", e);
+            throw e;
+        }
+    }
+
+    public int queryZanSumByUserid(int userid){
+        try {
+            log.info("通过用户id查询当前用户的点赞总数");
+            return postMapper.queryZanSumByUserid(userid);
+        }catch (Exception e){
+            log.error("通过用户id查询当前用户的点赞总数失败", e);
+            throw e;
+        }
+    }
+
+    public int queryEssencesumByUserid(int userid){
+        try {
+            log.info("查询当前用户被选为精选的帖子数");
+            return postMapper.queryEssencesumByUserid(userid);
+        }catch (Exception e){
+            log.error("查询当前用户被选为精选的帖子数失败", e);
             throw e;
         }
     }
@@ -173,6 +220,16 @@ public class PostService {
             return postMapper.queryActivePartSum(postid);
         } catch (Exception e) {
             log.error("查询该活动的参与总人数失败");
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllCollectPostByUser(int userid, Paging<PostVo> paging){
+        try {
+            log.info("根据userid查询用户收藏的所有帖子");
+            return postMapper.findAllCollectPostByUser(userid, paging.getRowBounds());
+        }catch (Exception e){
+            log.error("根据userid查询用户收藏的所有帖子失败", e);
             throw e;
         }
     }
@@ -497,7 +554,7 @@ public class PostService {
      *
      * @param userid
      * @param pager
-     * @return
+     * @returnLis
      */
     public List<PostList> queryCollectionListByUserid(String userid, Paging<PostList> pager) {
         try {
@@ -894,19 +951,16 @@ public class PostService {
      * @param postActiveList
      * @return
      */
-    public Integer updateActivePostById(PostActiveList postActiveList) {
-        return postMapper.updateActiveById(postActiveList);
+    public Integer updateActivePostById(Post postActiveList) {
+        try {
+            log.info("编辑活动");
+            return postMapper.updateByPrimaryKeySelective(postActiveList);
+        } catch (Exception e) {
+            log.error("编辑活动异常", e);
+            throw e;
+        }
     }
 
-    /**
-     * 编辑活动帖子
-     *
-     * @param period
-     * @return
-     */
-    public Integer updateActivePostPerById(Period period) {
-        return postMapper.updateActiveByIdP(period);
-    }
 
     /**
      * 帖子按条件查询
@@ -1079,7 +1133,7 @@ public class PostService {
      * @param id
      * @return
      */
-    public Integer updateIshot(Integer id) {
+    public Integer updateIshot(Post id) {
         try {
             log.info("是否设为热门");
             return postMapper.updateIshot(id);
@@ -1111,7 +1165,7 @@ public class PostService {
      * @param id
      * @return
      */
-    public Integer updateNoIshot(Integer id) {
+    public Integer updateNoIshot(Post id) {
         try {
             log.info("不是热门");
             return postMapper.updateNoIshot(id);
@@ -1236,7 +1290,7 @@ public class PostService {
      * @param
      * @return
      */
-    public List<Post> findAllPostListHeat() {
+    public List<PostVo> findAllPostListHeat() {
         try {
             log.info("查询所有的帖子");
             return postMapper.findAllPostListHeat();
@@ -1245,7 +1299,8 @@ public class PostService {
             throw e;
         }
     }
-    public int queryCrileid(int postid) {
+
+    public Integer queryCrileid(int postid) {
         try {
             log.info("查询帖子属于哪个圈子");
             return postMapper.queryCrileid(postid);
@@ -1366,32 +1421,32 @@ public class PostService {
         }
     }
 
-    public List<Post> queryPostHeatValue(Paging<Post> paging) {
+    public List<PostVo> findAllPostHeatValue() {
         try {
             log.info("查询帖子热度值");
-            return postMapper.queryPostHeatValue(paging.getRowBounds());
+            return postMapper.findAllPostHeatValue();
         } catch (Exception e) {
-            log.error("查询帖子热度值失败");
+            log.error("查询帖子热度值失败", e);
             throw e;
         }
     }
 
-    public List<Post> queryPostCricle(int crileid) {
+    public List<PostVo> queryPostCricle(int crileid) {
         try {
             log.info("根据圈子查询帖子");
             return postMapper.queryPostCricle(crileid);
         } catch (Exception e) {
-            log.error("根据圈子查询帖子失败");
+            log.error("根据圈子查询帖子失败", e);
             throw e;
         }
     }
 
-    public List<Post> queryoverPost(int crileid) {
+    public List<PostVo> queryoverPost(int crileid) {
         try {
             log.info("查询除了这个圈子外的帖子");
             return postMapper.queryoverPost(crileid);
         } catch (Exception e) {
-            log.error("查询除了这个圈子外的帖子失败");
+            log.error("查询除了这个圈子外的帖子失败", e);
             throw e;
         }
 
@@ -1408,7 +1463,7 @@ public class PostService {
             log.info("根据id查询帖子详情");
             return postMapper.queryPostDetailById(id);
         } catch (Exception e) {
-            log.error("根据id查询帖子详情失败");
+            log.error("根据id查询帖子详情失败", e);
             throw e;
         }
     }
@@ -1418,7 +1473,7 @@ public class PostService {
             log.info("根据id查询是否为精选");
             return postMapper.queryPostIsessenceHeat(postid);
         } catch (Exception e) {
-            log.error("根据id查询是否为精选失败");
+            log.error("根据id查询是否为精选失败", e);
             throw e;
         }
     }
@@ -1429,7 +1484,7 @@ public class PostService {
             log.info("根据id查询是否为精选");
             return postMapper.queryPostHotHeat(postid);
         } catch (Exception e) {
-            log.error("根据id查询是否为精选失败");
+            log.error("根据id查询是否为精选失败", e);
             throw e;
         }
     }
@@ -1439,7 +1494,7 @@ public class PostService {
             log.info("修改热度");
             return postMapper.updatePostHeatValue(map);
         } catch (Exception e) {
-            log.error("修改热度失败");
+            log.error("修改热度失败", e);
             throw e;
         }
     }
@@ -1449,7 +1504,17 @@ public class PostService {
             log.info("修改热度");
             return postMapper.updateZanPostHeatValue(map);
         } catch (Exception e) {
-            log.error("修改热度失败");
+            log.error("修改热度失败", e);
+            throw e;
+        }
+    }
+
+    public int updateZeroHeatValue(int postid) {
+        try {
+            log.info("修改热度");
+            return postMapper.updateZeroHeatValue(postid);
+        } catch (Exception e) {
+            log.error("修改热度失败", e);
             throw e;
         }
     }
@@ -1460,8 +1525,473 @@ public class PostService {
             log.info("查询发帖人级别");
             return postMapper.selectUserLevel(postid);
         } catch (Exception e) {
-            log.error("查询发帖人级别失败");
+            log.error("查询发帖人级别失败", e);
             throw e;
         }
     }
+
+    public int selectPostHeatValue(int postid) {
+        try {
+            log.info("查询提子热度值");
+            return postMapper.selectPostHeatValue(postid);
+        } catch (Exception e) {
+            log.error("查询提子热度值失败", e);
+            throw e;
+        }
+    }
+
+    public List<Integer> queryFollowCricle(int userid) {
+        try {
+            log.info("查询用户关注的圈子");
+            return postMapper.queryFollowCricle(userid);
+        } catch (Exception e) {
+            log.error("查询用户关注的圈子失败", e);
+            throw e;
+        }
+    }
+
+    public List<Integer> queryFollowUser(int userid) {
+        try {
+            log.info("查询用户关注的作者");
+            return postMapper.queryFollowUser(userid);
+        } catch (Exception e) {
+            log.error("查询用户关注的作者失败", e);
+            throw e;
+        }
+    }
+
+
+    public List<PostVo> queryPostListByIds(List ids) {
+        try {
+            log.info("查询圈子的帖子");
+            return postMapper.queryPostListByIds(ids);
+        } catch (Exception e) {
+            log.error("查询圈子的帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> queryUserListByIds(List ids) {
+        try {
+            log.info("查询作者的帖子");
+            return postMapper.queryUserListByIds(ids);
+        } catch (Exception e) {
+            log.error("查询作者的帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> queryLabelListByIds(List ids) {
+        try {
+            log.info("查询标签的帖子");
+            return postMapper.queryLabelListByIds(ids);
+        } catch (Exception e) {
+            log.error("查询标签的帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllCollectionListByIds(List ids, Paging<PostVo> paging) {
+        try {
+            log.info("查询收藏的帖子");
+            return postMapper.findAllCollectionListByIds(ids, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询收藏的帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllPostCrile(int circleid) {
+        try {
+            log.info("根据圈子id查询帖子");
+            return postMapper.findAllPostCrile(circleid);
+        } catch (Exception e) {
+            log.error("根据圈子id查询帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findUserPost(int postuserid) {
+        try {
+            log.info("根据用户id查询帖子");
+            return postMapper.findUserPost(postuserid);
+        } catch (Exception e) {
+            log.error("根据用户id查询帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findUserByLabelPost(List labelid) {
+        try {
+            log.info("根据标签d查询帖子");
+            return postMapper.findUserByLabelPost(labelid);
+        } catch (Exception e) {
+            log.error("根据标签d查询帖子失败", e);
+            throw e;
+        }
+    }
+
+    public String queryCityCode(String area) {
+        try {
+            log.info("查询city的code");
+            return postMapper.queryCityCode(area);
+        } catch (Exception e) {
+            log.error("查询city的code失败", e);
+            throw e;
+        }
+    }
+
+    public String queryCityUserCode(int userid) {
+        try {
+            log.info("查询city的code");
+            return postMapper.queryCityUserCode(userid);
+        } catch (Exception e) {
+            log.error("查询city的code失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllCityPost(String citycode) {
+        try {
+            log.info("根据地区查询帖子");
+            return postMapper.findAllCityPost(citycode);
+        } catch (Exception e) {
+            log.error("根据地区查询帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostLabel> queryPostLabel(int postid) {
+        try {
+            log.info("根据id查询标签");
+            return postMapper.queryPostLabel(postid);
+        } catch (Exception e) {
+            log.error("根据id查询标签失败", e);
+            throw e;
+        }
+    }
+
+    public List<Integer> queryPostComment(int postid) {
+        try {
+            log.info("查询帖子的所有评论");
+            return postMapper.queryPostComment(postid);
+        } catch (Exception e) {
+            log.error("查询帖子的所有评论失败", e);
+            throw e;
+        }
+    }
+
+    public List<Integer> queryPostUserHeatValue(int userid) {
+        try {
+            log.info("查询用户发的所有帖子的热度");
+            return postMapper.queryPostUserHeatValue(userid);
+        } catch (Exception e) {
+            log.error("查询用户发的所有帖子的热度失败", e);
+            throw e;
+        }
+    }
+
+    public List<Integer> queryLabelPost(int labelid) {
+        try {
+            log.info("根据标签查询帖子");
+            return postMapper.queryLabelPost(labelid);
+        } catch (Exception e) {
+            log.error("根据标签查询帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllLabelAllPost(int labelid) {
+        try {
+            log.info("根据标签查询帖子");
+            return postMapper.findAllLabelAllPost(labelid);
+        } catch (Exception e) {
+            log.error("根据标签查询帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllPostByid(List postid, Paging<PostVo> paging) {
+        try {
+            log.info("根据id查询帖子");
+            return postMapper.findAllPostByid(postid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据id查询帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllUserPostList(int userid, Paging<PostVo> paging) {
+        try {
+            log.info("根据id查询帖子");
+            return postMapper.findAllUserPostList(userid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据id查询帖子失败", e);
+            throw e;
+        }
+    }
+
+
+    public List<PostVo> findAllUserActive(int userid, Paging<PostVo> paging) {
+        try {
+            log.info("根据id查询活动");
+            return postMapper.findAllUserActive(userid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("根据id查询活动失败", e);
+            throw e;
+        }
+    }
+
+    public List<Post> querPostListByUser(int userid){
+        try {
+            log.info("根据作者用户id查询当前作者发布的最新的三个帖子");
+            return postMapper.querPostListByUser(userid);
+        }catch (Exception e){
+            log.error("根据作者用户id查询当前作者发布的最新的三个帖子失败", e);
+            throw e;
+        }
+    }
+
+    public int queryUserPostCount(int userid) {
+        try {
+            log.info("查询用户发帖数");
+            return postMapper.queryUserPostCount(userid);
+        } catch (Exception e) {
+            log.error("查询用户发帖数失败", e);
+            throw e;
+        }
+    }
+
+    public int queryUserActiveCount(int userid) {
+        try {
+            log.info("查询用户参与的活动总数");
+            return postMapper.queryUserActiveCount(userid);
+        } catch (Exception e) {
+            log.error("查询用户参与的活动总数失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询活动投稿的帖子列表
+     *
+     * @param id
+     * @param pag
+     * @return
+     */
+    public List<Post> findAllQueryActivitycontributeListById(Integer id, Paging<Post> pag) {
+        try {
+            log.info("查询活动投稿的帖子列表");
+            return postMapper.findAllQueryActivitycontributeListById(id, pag.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询活动投稿的帖子列表异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询当日可选热门排序
+     *
+     * @return
+     */
+    public List<Integer> queryActiveByOrderid() {
+        try {
+            log.info("查询当日可选热门排序");
+            return postMapper.queryActiveByOrderid();
+        } catch (Exception e) {
+            log.error("查询当日可选热门排序异常", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllHotCommentPostInAll(Paging<PostVo> pager) {
+        try {
+            log.info("查询评论最多的帖子");
+            return postMapper.findAllHotCommentPostInAll(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询评论最多的帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllHotCommentPostInCurrentMonth(Paging<PostVo> pager) {
+        try {
+            log.info("查询当月评论最多的帖子");
+            return postMapper.findAllHotCommentPostInCurrentMonth(pager.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询当月评论最多的帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllMostZanPostInAll(Paging<PostVo> paging) {
+        try {
+            log.info("查询得赞最多的帖子列表");
+            return postMapper.findAllMostZanPostInAll(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询得赞最多的帖子列表失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllMostZanPostInCurrentMonth(Paging<PostVo> paging) {
+        try {
+            log.info("查询当月得赞最多的帖子列表");
+            return postMapper.findAllMostZanPostInCurrentMonth(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询当月得赞最多的帖子列表失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllMostCollectInAll(Paging<PostVo> paging) {
+        try {
+            log.info("查询收藏最多的帖子列表");
+            return postMapper.findAllMostCollectInAll(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询收藏最多的帖子列表失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllMostCollectInCurrentMonth(Paging<PostVo> paging) {
+        try {
+            log.info("查询当月收藏最多的帖子列表");
+            return postMapper.findAllMostCollectInCurrentMonth(paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询当月收藏最多的帖子列表失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> queryPostInAll() {
+        try {
+            log.info("查询所有帖子");
+            return postMapper.queryPostInAll();
+        } catch (Exception e) {
+            log.error("查询所有帖子失败", e);
+            throw e;
+        }
+    }
+
+    public Integer activeSum(int postid) {
+        try {
+            log.info("活动参与总人数");
+            return postMapper.activeSum(postid);
+        } catch (Exception e) {
+            log.error("活动参与总人数失败", e);
+            throw e;
+        }
+    }
+
+
+    public List<PostVo> findAllActivePost(int postid, Paging<PostVo> paging) {
+        try {
+            log.info("查询活动里面最热的帖子");
+            return postMapper.findAllActivePost(postid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询活动里面最热的帖子", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> findAllActivePostIntime(int postid, Paging<PostVo> paging) {
+        try {
+            log.info("查询活动里面最新的帖子");
+            return postMapper.findAllActivePostIntime(postid, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询活动里面最新的帖子", e);
+            throw e;
+        }
+    }
+
+    public int postUserId(int postid) {
+        try {
+            log.info("根据id查询用户");
+            return postMapper.postUserId(postid);
+        } catch (Exception e) {
+            log.error("根据id查询用户失败", e);
+            throw e;
+        }
+    }
+
+    public List<Integer> findPostByLabelId(int postid) {
+        try {
+            log.info("根据id查询标签id");
+            return postMapper.findPostByLabelId(postid);
+        } catch (Exception e) {
+            log.error("根据id查询标签id失败", e);
+            throw e;
+        }
+    }
+
+    public Post selectTitleById(Integer id) {
+        try {
+            log.info("根据id查询名称");
+            return postMapper.selectTitleById(id);
+        } catch (Exception e) {
+            log.error("根据id查询名称失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据名称查询帖子、活动列表
+     *
+     * @param map
+     * @return
+     */
+    public List<Post> queryPostListByName(Map map) {
+        try {
+            log.info("根据名称查询帖子、活动列表");
+            return postMapper.queryPostListByName(map);
+        } catch (Exception e) {
+            log.error("根据名称查询帖子、活动列表异常", e);
+            throw e;
+        }
+    }
+
+
+    public List<PostVo> findAllActivePostD(int id, Paging<PostVo> paging) {
+        try {
+            log.info("查询所有活动");
+            return postMapper.findAllActivePostD(id, paging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询所有活动异常", e);
+            throw e;
+        }
+    }
+
+
+    public int zanIsPost(Map map) {
+        try {
+            log.info("该用户有没有赞");
+            return postMapper.zanIsPost(map);
+        } catch (Exception e) {
+            log.error("该用户有没有赞异常", e);
+            throw e;
+        }
+    }
+
+
+    public int isPostIsdel(int postid) {
+        try {
+            log.info("帖子是否被删除");
+            return postMapper.isPostIsdel(postid);
+        } catch (Exception e) {
+            log.error("帖子是否被删除异常", e);
+            throw e;
+        }
+    }
+
+    public int isUserContribe(Map map) {
+        try {
+            log.info("该用户有没有投过稿");
+            return postMapper.isUserContribe(map);
+        } catch (Exception e) {
+            log.error("该用户有没有投过稿失败", e);
+            throw e;
+        }
+    }
+
 }

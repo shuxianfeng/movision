@@ -5,6 +5,10 @@ import com.mongodb.*;
 import com.movision.mybatis.opularSearchTerms.entity.OpularSearchTermsVo;
 import com.movision.mybatis.opularSearchTerms.mapper.OpularSearchTermsMapper;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
+import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
+import com.movision.utils.propertiesLoader.MongoDbPropertiesLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
  import org.springframework.data.mongodb.core.MongoTemplate;
@@ -12,9 +16,11 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.comparator.ComparableComparator;
 
 import java.util.ArrayList;
- import java.util.List;
+import java.util.Comparator;
+import java.util.List;
 
 
 /**
@@ -24,12 +30,14 @@ import java.util.ArrayList;
 @Repository
  public class OpularSearchTermsService implements OpularSearchTermsMapper {
 
+    private static Logger log = LoggerFactory.getLogger(OpularSearchTermsService.class);
+
     @Autowired
       private MongoTemplate mongoTemplate;
 
     @Override
      public void insert(OpularSearchTerms opularSearchTerms) {
-        // TODO Auto-generated method stub
+
         mongoTemplate.insert(opularSearchTerms);
     }
 
@@ -65,39 +73,62 @@ import java.util.ArrayList;
     }
 
     public List histroyWords(int userid) {
+        MongoClient mClient = null;
         List<DBObject> list = null;
+        DB db = null;
+        DBCursor cursor = null;
         try {
-            MongoClient mClient = new MongoClient("39.108.84.156:27017");
-            DB db = mClient.getDB("searchRecord");
+            mClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mClient.getDB("searchRecord");
             DBCollection collection = db.getCollection("opularSearchTerms");
             BasicDBObject queryObject = new BasicDBObject("userid", userid).append("isdel", 0);
             //指定需要显示列
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("keywords", 1);
-            DBCursor obj = collection.find(queryObject, keys).limit(12).sort(new BasicDBObject("intime", -1));
-            list = obj.toArray();
+            cursor = collection.find(queryObject, keys).sort(new BasicDBObject("intime", 1)).limit(12);
+            list = cursor.toArray();
+            for (int i = 0; i < list.size(); i++) {
+                for (int j = list.size() - 1; j > i; j--) {
+                    if (list.get(i).get("keywords").equals(list.get(j).get("keywords"))) {
+                        list.remove(j);
+                    }
+                }
+            }
+            list.subList(0, 12);
+            cursor.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("获取帖子热门搜索词失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                cursor.close();
+                mClient.close();
+            }
         }
         return list;
     }
 
-
     public Integer updateColData(int userid) {
-
+        MongoClient mongoClient = null;
+        DB db = null;
         try {
-            MongoClient mClient = new MongoClient("39.108.84.156:27017");
-            DB db = mClient.getDB("searchRecord");
-            DBCollection dbCol = db.getCollection("opularSearchTerms");
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("opularSearchTerms");
             BasicDBObject doc = new BasicDBObject();
             BasicDBObject res = new BasicDBObject();
             res.put("isdel", 1);
             System.out.println("将数据集中的所有文档的isdel修改成1！");
             doc.put("$set", res);
-            dbCol.update(new BasicDBObject("userid", userid), doc, false, true);
+            table.update(new BasicDBObject("userid", userid), doc, false, true);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("清除首页搜索历史失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                mongoClient.close();
+            }
         }
         return 1;
     }

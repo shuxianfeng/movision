@@ -31,4 +31,5 @@ public interface RewardedMapper {
 
     Integer updateRewardRead(Integer userid);
 
+    Integer queryRewardIsRead(int userid);
 }
