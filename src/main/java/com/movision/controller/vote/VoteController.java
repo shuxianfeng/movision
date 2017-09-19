@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,9 +36,6 @@ public class VoteController {
 
     @Autowired
     private VoteFacade voteFacade;
-
-    @Autowired
-    private MovisionOssClient movisionOssClient;
 
     /**
      * 添加活动
@@ -448,14 +446,11 @@ public class VoteController {
      */
     @ApiOperation(value = "上传投票系统相关图片", notes = "上传投票相关图片", response = Response.class)
     @RequestMapping(value = {"/upload_vote_img"}, method = RequestMethod.POST)
-    public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile file) {
-        Map m = movisionOssClient.uploadMultipartFile(file, 2);
-        String url = String.valueOf(m.get("url"));
-        Map map = new HashMap();
-        map.put("url", url);
-        map.put("name", FileUtil.getFileNameByUrl(url));
-        map.put("width", m.get("width"));
-        map.put("height", m.get("height"));
-        return new Response(map);
+    public Response updatePostImg(@RequestParam(value = "file", required = false) MultipartFile[] file) {
+        Response response = new Response();
+        List list = voteFacade.updatePostImgTest(file);
+        response.setMessage("操作成功");
+        response.setData(list);
+        return response;
     }
 }

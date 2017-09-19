@@ -11,19 +11,19 @@ import com.movision.mybatis.take.service.TakeService;
 import com.movision.mybatis.votingrecords.entity.Votingrecords;
 import com.movision.mybatis.votingrecords.service.VotingrecordsService;
 import com.movision.utils.JsoupCompressImg;
+import com.movision.utils.file.FileUtil;
+import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author zhanglei
@@ -43,6 +43,9 @@ public class VoteFacade {
 
     @Autowired
     private JsoupCompressImg jsoupCompressImg;
+
+    @Autowired
+    private MovisionOssClient movisionOssClient;
 
     @Autowired
     private PageFacade pageFacade;
@@ -505,5 +508,27 @@ public class VoteFacade {
             result = -1;
         }
         return result;
+    }
+
+
+    /**
+     * 投票多图上传
+     *
+     * @param file
+     * @return
+     */
+    public List updatePostImgTest(MultipartFile[] file) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (int i = 0; i < file.length; i++) {
+            Map m = movisionOssClient.uploadMultipartFile(file[i], 2);
+            String url = String.valueOf(m.get("url"));
+            Map map = new HashMap();
+            map.put("url", url);
+            map.put("name", FileUtil.getFileNameByUrl(url));
+            map.put("width", m.get("width"));
+            map.put("height", m.get("height"));
+            list.add(map);
+        }
+        return list;
     }
 }
