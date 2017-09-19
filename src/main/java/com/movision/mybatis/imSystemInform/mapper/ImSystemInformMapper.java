@@ -27,14 +27,6 @@ public interface ImSystemInformMapper {
 
     ImSystemInform queryBodyAll(Integer id);//查询全部内容
 
-    ImSystemInformVo queryByUserid(Map map);//查询最新一条记录
-
-    Integer querySystemPushByUserid(Map map);//查询是否有未读系统通知
-
-    Integer queryInform(String indity);
-
-    List<String> queryUnreadSystemMessage(Integer userid);
-
     List<ImSystemInformVo> findAllIm(Date informTime, RowBounds rowBounds);
 
     ImSystemInformVo queryMyMsgInforDetails(ImSystemInform imSystemInform);
