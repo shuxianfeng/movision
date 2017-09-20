@@ -153,7 +153,7 @@
     </select>
     <select id="findAllActive" resultType="com.movision.mybatis.activeH5.entity.ActiveH5Vo">
         SELECT
-        a.id,a.pageview,a.photo,a.begintime,a.endtime,a.name,a.intime,
+        a.id,a.pageview,a.photo,a.begintime,a.endtime AS endime,a.name,a.intime,
         (SELECT COUNT(1) FROM tp_take ta WHERE ta.activeid = a.id) AS takesum,
         (SELECT COUNT(1) FROM tp_votingrecords tp WHERE tp.activeid = a.id) AS votesum
         FROM tp_activeh5 a WHERE a.isdel=0
