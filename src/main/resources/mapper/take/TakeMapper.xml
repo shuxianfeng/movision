@@ -155,6 +155,9 @@
         <if test="audit != null">
             AND t.audit = #{audit,jdbcType=INTEGER}
         </if>
+        <if test="activityid != null">
+            AND t.activeid = #{activityid,jdbcType=INTEGER}
+        </if>
     </select>
     <select id="findAll" resultType="com.movision.mybatis.take.entity.TakeVo">
         SELECT t.*,a.name AS acname,

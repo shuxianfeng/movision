@@ -1535,4 +1535,18 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
           id >= 10000 and id <= 20000
         ]]>
     </select>
+
+    <select id="findAllQueryRobotByList" resultType="com.movision.mybatis.user.entity.User"
+            parameterType="java.lang.String">
+        SELECT *
+        FROM yw_user
+        WHERE  <![CDATA[
+          id >= 10000 and id <= 20000
+        ]]>
+        AND nickname = #{name,jdbcType=VARCHAR}
+    </select>
+
+    <select id="queryRobotById" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.User">
+        SELECT * FROM yw_user WHERE id = #{id,jdbcType=INTEGER} AND status = 0
+    </select>
 </mapper>

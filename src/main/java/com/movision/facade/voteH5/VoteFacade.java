@@ -343,13 +343,16 @@ public class VoteFacade {
      * @param paging
      * @return
      */
-    public List<TakeVo> findAllTake(Paging<TakeVo> paging, String name, String audit) {
+    public List<TakeVo> findAllTake(Paging<TakeVo> paging, String name, String audit, String activityid) {
         Take take = new Take();
         if (StringUtil.isNotEmpty(name)) {
             take.setName(name);
         }
         if (StringUtil.isNotEmpty(audit)) {
             take.setAudit(Integer.parseInt(audit));
+        }
+        if (StringUtil.isNotEmpty(activityid)) {
+            take.setActiveid(Integer.parseInt(activityid));
         }
         return takeService.findAllTake(paging, take);
     }

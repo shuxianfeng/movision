@@ -48,7 +48,7 @@ public class VoteController {
      * @param activitydescription
      * @return
      */
-    @ApiOperation(value = "添加活动", notes = "添加活动", response = Response.class)
+    @ApiOperation(value = "添加活动(后台)", notes = "添加活动", response = Response.class)
     @RequestMapping(value = "insertSelective", method = RequestMethod.POST)
     public Response insertSelective(HttpServletRequest request,
                                     @ApiParam(value = "活动名称") @RequestParam String name,
@@ -72,7 +72,7 @@ public class VoteController {
      * @return
      */
     @RequestMapping(value = "queryActivityById", method = RequestMethod.POST)
-    @ApiOperation(value = "查询活动详情", notes = "查询活动详情", response = Response.class)
+    @ApiOperation(value = "查询活动详情（后台）", notes = "查询活动详情", response = Response.class)
     public Response queryActivityById(@ApiParam(value = "活动详情") @RequestParam int id) {
         Response response = new Response();
         ActiveH5 activeH5 = voteFacade.queryActivityById(id);
@@ -88,7 +88,7 @@ public class VoteController {
      * @param id
      * @return
      */
-    @ApiOperation(value = "删除活动", notes = "删除活动", response = Response.class)
+    @ApiOperation(value = "删除活动（后台）", notes = "删除活动", response = Response.class)
     @RequestMapping(value = "deleteActive", method = RequestMethod.POST)
     public Response deleteActive(@ApiParam(value = "活动id") @RequestParam int id) {
         Response response = new Response();
@@ -113,7 +113,7 @@ public class VoteController {
      * @return
      */
     @RequestMapping(value = "updateActivity", method = RequestMethod.POST)
-    @ApiOperation(value = "编辑活动", notes = "编辑活动接口", response = Response.class)
+    @ApiOperation(value = "编辑活动（后台）", notes = "编辑活动接口", response = Response.class)
     public Response updateActivity(HttpServletRequest request,
                                    @ApiParam(value = "活动id") @RequestParam int id,
                                    @ApiParam(value = "活动名称") @RequestParam String name,
@@ -136,7 +136,7 @@ public class VoteController {
      * @param pageSize
      * @return
      */
-    @ApiOperation(value = "查询全部活动", notes = "查询全部活动", response = Response.class)
+    @ApiOperation(value = "查询全部活动（后台）", notes = "查询全部活动", response = Response.class)
     @RequestMapping(value = "findAllActive", method = RequestMethod.POST)
     public Response findAllActive(@ApiParam(value = "活动名称") @RequestParam(required = false) String name,
                                   @ApiParam(value = "活动开始时间") @RequestParam(required = false) String bigintime,
@@ -222,7 +222,7 @@ public class VoteController {
      * @param id
      * @return
      */
-    @ApiOperation(value = "投稿审核", notes = "用于投稿审核接口", response = Response.class)
+    @ApiOperation(value = "投稿审核（后台）", notes = "用于投稿审核接口", response = Response.class)
     @RequestMapping(value = "updateTakeByAudit", method = RequestMethod.POST)
     public Response updateTakeByAudit(@ApiParam(value = "活动id") @RequestParam String activityid,
                                       @ApiParam(value = "投稿id") @RequestParam String id,
@@ -257,7 +257,7 @@ public class VoteController {
      * @param id
      * @return
      */
-    @ApiOperation(value = "删除投稿", notes = "删除投稿", response = Response.class)
+    @ApiOperation(value = "删除投稿（后台）", notes = "删除投稿", response = Response.class)
     @RequestMapping(value = "deleteTakePeople", method = RequestMethod.POST)
     public Response deleteTakePeople(@ApiParam(value = "参赛人员id") @RequestParam int id) {
         Response response = new Response();
@@ -315,12 +315,13 @@ public class VoteController {
     @ApiOperation(value = "条件查询投稿列表(后台)", notes = "条件查询投稿列表", response = Response.class)
     @RequestMapping(value = "findTakeList", method = RequestMethod.POST)
     public Response findTakeList(@ApiParam(value = "投稿name") @RequestParam(required = false) String name,
+                                 @ApiParam(value = "活动id") @RequestParam(required = false) String activityid,
                                  @ApiParam(value = "审核状态 0未审核 1审核通过") @RequestParam(required = false) String audit,
                                  @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                  @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<TakeVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List result = voteFacade.findAllTake(pager, name, audit);
+        List result = voteFacade.findAllTake(pager, name, audit, activityid);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }

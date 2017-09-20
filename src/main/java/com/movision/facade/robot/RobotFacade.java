@@ -8,14 +8,17 @@ import com.movision.facade.collection.CollectionFacade;
 import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
 import com.movision.facade.pointRecord.PointRecordFacade;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.entity.User;
+import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.ListUtil;
 import com.movision.utils.UUIDGenerator;
+import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -217,6 +220,56 @@ public class RobotFacade {
         }
     }
 
+    /**
+     * 查询机器人列表
+     *
+     * @param name
+     * @param pag
+     * @return
+     */
+    public List<User> QueryRobotByList(String name, Paging<User> pag) {
+        List<User> list = userService.findAllQueryRobotByList(name, pag);
+        return list;
+    }
+
+    /**
+     * 查询全部机器人
+     *
+     * @return
+     */
+    public List<User> QueryRobotByList() {
+        return userService.selectRobotUser();
+    }
+
+    /**
+     * 根据id查询机器人详情
+     *
+     * @param id
+     * @return
+     */
+    public User queryRobotById(String id) {
+        return userService.queryRobotById(Integer.parseInt(id));
+    }
+
+
+    public void updateRoboltById(String id, String email, String nickname, String phone, String photo, String sex) {
+        User user = new User();
+        if (StringUtil.isNotEmpty(id)) {
+            user.setId(Integer.parseInt(id));
+        }
+        if (StringUtil.isEmpty(email)) {
+            user.setEmail(email);
+        }
+        if (StringUtil.isNotEmpty(nickname)) {
+            user.setNickname(nickname);
+        }
+        if (StringUtil.isNotEmpty(phone)) {
+            user.setPhone(phone);
+        }
+        if (StringUtil.isNotEmpty(photo)) {
+            user.setPhoto(photo);
+        }
+    }
 
 
 }
