@@ -22,7 +22,7 @@ public interface TakeMapper {
 
     int deleteTakePeople(int id);
 
-    List<TakeVo> voteDesc(RowBounds rowBounds);
+    List<TakeVo> voteDesc(RowBounds rowBounds, Integer activeid);
 
     List<TakeVo> findAllTake(RowBounds rowBounds, Take take);
 

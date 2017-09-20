@@ -387,9 +387,9 @@ public class VoteFacade {
      * @param paging
      * @return
      */
-    public List<TakeVo> voteDesc(Paging<TakeVo> paging) {
+    public List<TakeVo> voteDesc(Paging<TakeVo> paging, int activeid) {
 
-        return takeService.voteDesc(paging);
+        return takeService.voteDesc(paging, activeid);
     }
 
     /**
