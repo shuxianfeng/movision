@@ -16,7 +16,9 @@ public class ActiveH5 {
     private String activitydescription;
 
     private Integer isdel;
+
     private Date intime;
+
     private Integer pageview;
 
     public Integer getPageview() {

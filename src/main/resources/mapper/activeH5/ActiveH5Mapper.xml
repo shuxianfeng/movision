@@ -151,10 +151,14 @@
         FROM tp_activeh5 a
         WHERE a.id=#{activeid,jdbcType=INTEGER}
     </select>
-    <select id="findAllActive" resultType="com.movision.mybatis.activeH5.entity.ActiveH5">
-    SELECT * FROM tp_activeh5 WHERE isdel=0
-    <if test="name != null">
-        AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+    <select id="findAllActive" resultType="com.movision.mybatis.activeH5.entity.ActiveH5Vo">
+        SELECT
+        a.id,a.pageview,a.photo,a.begintime,a.endtime,a.name,a.intime,
+        (SELECT COUNT(1) FROM tp_take ta WHERE ta.activeid = a.id) AS takesum,
+        (SELECT COUNT(1) FROM tp_votingrecords tp WHERE tp.activeid = a.id) AS votesum
+        FROM tp_activeh5 a WHERE a.isdel=0
+        <if test="name != null">
+            AND a.name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
     </if>
     <if test="begintime != null and endtime != null">
         AND (((#{begintime,jdbcType=DATE}  <![CDATA[<=]]> a.begintime) AND (#{endtime,jdbcType=DATE} <![CDATA[<=]]>

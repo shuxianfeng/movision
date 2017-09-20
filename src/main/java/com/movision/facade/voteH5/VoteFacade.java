@@ -180,7 +180,7 @@ public class VoteFacade {
      * @param paging
      * @return
      */
-    public List<ActiveH5> findAllActive(String name, String bigintime, String endtime, Paging<ActiveH5> paging) {
+    public List<ActiveH5Vo> findAllActive(String name, String bigintime, String endtime, Paging<ActiveH5Vo> paging) {
         ActiveH5 activeH5 = new ActiveH5();
         if (StringUtil.isNotEmpty(name)) {
             activeH5.setName(name);
@@ -387,9 +387,9 @@ public class VoteFacade {
      * @param paging
      * @return
      */
-    public List<TakeVo> voteDesc(Paging<TakeVo> paging) {
+    public List<TakeVo> voteDesc(Paging<TakeVo> paging, int activeid) {
 
-        return takeService.voteDesc(paging);
+        return takeService.voteDesc(paging, activeid);
     }
 
     /**

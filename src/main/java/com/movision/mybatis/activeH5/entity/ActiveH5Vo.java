@@ -7,20 +7,39 @@ import java.util.Date;
  * @Date 2017/8/30 15:19
  */
 public class ActiveH5Vo {
-
     private Integer id;
 
-    private Integer votesum;
+    private Integer votesum;//投稿数量
 
-    private Integer pageview;
+    private Integer pageview;//访问量
 
-    private Integer takesum;
+    private Integer takesum;//报名数量
 
     private String photo;
 
     private Date begintime;
 
     private Date endime;
+
+    private Date intime;
+
+    private String name;
+
+    public Date getIntime() {
+        return intime;
+    }
+
+    public void setIntime(Date intime) {
+        this.intime = intime;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Date getBegintime() {
         return begintime;
