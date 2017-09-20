@@ -193,4 +193,8 @@ public interface UserMapper {
     Integer selectMaxRobotId();
 
     List<User> selectRobotUser();
+
+    List<User> findAllQueryRobotByList(String name, RowBounds rowBounds);
+
+    User queryRobotById(Integer id);
 }

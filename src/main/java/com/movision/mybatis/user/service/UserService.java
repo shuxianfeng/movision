@@ -1189,4 +1189,32 @@ public class UserService {
             throw e;
         }
     }
+
+
+    /**
+     * 查询机器人列表
+     *
+     * @param name
+     * @param pag
+     * @return
+     */
+    public List<User> findAllQueryRobotByList(String name, Paging<User> pag) {
+        try {
+            log.info("查询机器人列表");
+            return userMapper.findAllQueryRobotByList(name, pag.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询机器人列表失败", e);
+            throw e;
+        }
+    }
+
+    public User queryRobotById(Integer id) {
+        try {
+            log.info("根据id查询机器人详情");
+            return userMapper.queryRobotById(id);
+        } catch (Exception e) {
+            log.error("根据id查询机器人详情异常", e);
+            throw e;
+        }
+    }
 }
