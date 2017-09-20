@@ -22,7 +22,7 @@ public interface ActiveH5Mapper {
 
     int deleteActive(int id);
 
-    List<ActiveH5> findAllActive(ActiveH5 activeH5, RowBounds rowBounds);
+    List<ActiveH5Vo> findAllActive(ActiveH5 activeH5, RowBounds rowBounds);
 
     ActiveH5 queryActivityById(Integer id);
 

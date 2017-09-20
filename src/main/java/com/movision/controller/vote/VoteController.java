@@ -144,7 +144,7 @@ public class VoteController {
                                   @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                   @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
-        Paging<ActiveH5> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        Paging<ActiveH5Vo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         List result = voteFacade.findAllActive(name, bigintime, endtime,pager);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");

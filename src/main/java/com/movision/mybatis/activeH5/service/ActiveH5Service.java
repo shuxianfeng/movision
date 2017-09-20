@@ -95,7 +95,7 @@ public class ActiveH5Service {
      * @param paging
      * @return
      */
-    public List<ActiveH5> findAllActive(ActiveH5 activeH5, Paging<ActiveH5> paging) {
+    public List<ActiveH5Vo> findAllActive(ActiveH5 activeH5, Paging<ActiveH5Vo> paging) {
         try {
             log.info("查询活动");
             return activeH5Mapper.findAllActive(activeH5, paging.getRowBounds());

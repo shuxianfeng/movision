@@ -10,11 +10,11 @@ public class ActiveH5Vo {
 
     private Integer id;
 
-    private Integer votesum;
+    private Integer votesum;//投稿数量
 
-    private Integer pageview;
+    private Integer pageview;//访问量
 
-    private Integer takesum;
+    private Integer takesum;//报名数量
 
     private String photo;
 
