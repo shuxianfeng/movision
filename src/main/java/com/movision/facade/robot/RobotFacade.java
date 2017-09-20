@@ -263,6 +263,12 @@ public class RobotFacade {
         if (StringUtil.isNotEmpty(nickname)) {
             user.setNickname(nickname);
         }
+        if (StringUtil.isNotEmpty(phone)) {
+            user.setPhone(phone);
+        }
+        if (StringUtil.isNotEmpty(photo)) {
+            user.setPhoto(photo);
+        }
     }
 
 
