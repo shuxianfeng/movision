@@ -151,7 +151,7 @@
         FROM tp_activeh5 a
         WHERE a.id=#{activeid,jdbcType=INTEGER}
     </select>
-    <select id="findAllActive" resultType="com.movision.mybatis.activeH5.entity.ActiveH5">
+    <select id="findAllActive" resultType="com.movision.mybatis.activeH5.entity.ActiveH5Vo">
         SELECT
         a.id,a.pageview,a.photo,a.begintime,a.endtime,a.name,a.intime,
         (SELECT COUNT(1) FROM tp_take ta WHERE ta.activeid = a.id) AS takesum,
