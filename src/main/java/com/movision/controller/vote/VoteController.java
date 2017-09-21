@@ -44,7 +44,7 @@ public class VoteController {
      * @param photo
      * @param begintime
      * @param endtime
-     * @param explain
+     * @param activitydescription
      * @return
      */
     @ApiOperation(value = "添加活动(后台)", notes = "添加活动", response = Response.class)
@@ -54,9 +54,9 @@ public class VoteController {
                                     @ApiParam(value = "活动图片") @RequestParam String photo,
                                     @ApiParam(value = "活动开始时间") @RequestParam String begintime,
                                     @ApiParam(value = "活动结束时间") @RequestParam String endtime,
-                                    @ApiParam(value = "活动说明") @RequestParam String explain) {
+                                    @ApiParam(value = "活动说明") @RequestParam String activitydescription) {
         Response response = new Response();
-        int result = voteFacade.insertSelective(request, name, photo, begintime, endtime, explain);
+        int result = voteFacade.insertSelective(request, name, photo, begintime, endtime, activitydescription);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
@@ -106,7 +106,7 @@ public class VoteController {
      * @param id
      * @param name
      * @param photo
-     * @param explain
+     * @param activitydescription
      * @param begintime
      * @param endtime
      * @return
@@ -117,11 +117,11 @@ public class VoteController {
                                    @ApiParam(value = "活动id") @RequestParam int id,
                                    @ApiParam(value = "活动名称") @RequestParam String name,
                                    @ApiParam(value = "活动封面") @RequestParam String photo,
-                                   @ApiParam(value = "活动说明") @RequestParam String explain,
+                                   @ApiParam(value = "活动说明") @RequestParam String activitydescription,
                                    @ApiParam(value = "开始时间") @RequestParam String begintime,
                                    @ApiParam(value = "结束时间") @RequestParam String endtime) {
         Response response = new Response();
-        voteFacade.updateActivity(request, id, name, photo, explain, begintime, endtime);
+        voteFacade.updateActivity(request, id, name, photo, activitydescription, begintime, endtime);
         response.setMessage("操作成功");
         response.setData(1);
         return response;
