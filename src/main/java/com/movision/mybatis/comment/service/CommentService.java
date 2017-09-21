@@ -109,15 +109,6 @@ public class CommentService {
         }
     }
 
-    public CommentVo queryChildrenComment(int id){
-        try {
-            log.info("查询子评论");
-            return commentMapper.queryChildrenComment(id);
-        } catch (Exception e) {
-            log.error("查询子评论失败");
-            throw e;
-        }
-    }
 
     /**
      * 评论点赞
@@ -292,48 +283,6 @@ public class CommentService {
         }
     }
 
-    /**
-     * 根据用户id查询用户帖子被评论的评论列表
-     *
-     * @param userid
-     * @param pager
-     * @return
-     */
-    public List<CommentVo> findAllQueryComment(Integer userid, Paging<CommentVo> pager) {
-        try {
-            log.info("根据用户id查询用户帖子被评论的评论列表");
-            return commentMapper.findAllQueryComment(userid, pager.getRowBounds());
-        } catch (Exception e) {
-            log.error("根据用户id查询用户帖子被评论的评论列表异常", e);
-            throw e;
-        }
-    }
-
-    /**
-     * 根据用户id查询用户帖子被评论的评论列表
-     *
-     * @param userid
-     * @param
-     * @return
-     */
-    public List<CommentVo> findQueryComment(Integer userid) {
-        try {
-            log.info("根据用户id查询用户帖子被评论的评论列表");
-            return commentMapper.findQueryComment(userid);
-        } catch (Exception e) {
-            log.error("根据用户id查询用户帖子被评论的评论列表异常", e);
-            throw e;
-        }
-    }
-    public List<CommentVo> queryPidComment(Integer pid) {
-        try {
-            log.info("查询父评论");
-            return commentMapper.queryPidComment(pid);
-        } catch (Exception e) {
-            log.error("查询父评论失败", e);
-            throw e;
-        }
-    }
 
     /**
      * 查询用户评论帖子的评论列表
@@ -352,55 +301,8 @@ public class CommentService {
         }
     }
 
-    /**
-     * 根据用户查询评论
-     *
-     * @param userid
-     * @return
-     */
-    public List<CommentVo> queryCommentByUserid(Integer userid) {
-        try {
-            log.info("根据用户查询评论");
-            return commentMapper.queryCommentByUserid(userid);
-        } catch (Exception e) {
-            log.error("根据用户查询评论异常", e);
-            throw e;
-        }
-    }
 
 
-    /**
-     * 更新评论已读状态
-     *
-     * @param userid
-     * @return
-     */
-    public Integer updateCommentRead(Integer userid) {
-        try {
-            log.info("更新评论已读状态");
-            return commentMapper.updateCommentRead(userid);
-        } catch (Exception e) {
-            log.error("更新评论已读状态异常", e);
-            throw e;
-        }
-    }
-
-
-    /**
-     * 查询被点赞的评论的用户
-     *
-     * @param commentid
-     * @return
-     */
-    public Integer queryUseridByComment(Integer commentid) {
-        try {
-            log.info("查询被点赞评论的用户");
-            return commentMapper.queryUseridByComment(commentid);
-        } catch (Exception e) {
-            log.error("查询被点赞评论的用", e);
-            throw e;
-        }
-    }
 
     public Integer updateCommentHeatValue(Map map) {
         try {
@@ -432,15 +334,6 @@ public class CommentService {
         }
     }
 
-    public List<CommentVo> findAllCommentByPostId(int postid, Paging<CommentVo> paging) {
-        try {
-            log.info("根據帖子id查詢所有評論");
-            return commentMapper.findAllCommentByPostId(postid, paging.getRowBounds());
-        } catch (Exception e) {
-            log.error("根據帖子id查詢所有評論失敗", e);
-            throw e;
-        }
-    }
     public Integer queryCommentIsRead(int userid) {
         try {
             log.info("查询评论未读");
@@ -451,35 +344,6 @@ public class CommentService {
         }
     }
 
-    public List<CommentVo> findAllCommentByPost(int postid) {
-        try {
-            log.info("根據帖子id查詢所有評論");
-            return commentMapper.findAllCommentByPost(postid);
-        } catch (Exception e) {
-            log.error("根據帖子id查詢所有評論失敗", e);
-            throw e;
-        }
-    }
-
-    public CommentCount queryCommentZan(int id) {
-        try {
-            log.info("根据评论id查赞");
-            return commentMapper.queryCommentZan(id);
-        } catch (Exception e) {
-            log.error("根据评论id查赞失敗", e);
-            throw e;
-        }
-    }
-
-    public CommentVo queryCom(int commentid) {
-        try {
-            log.info("根据评论id查赞");
-            return commentMapper.queryCom(commentid);
-        } catch (Exception e) {
-            log.error("根据评论id查赞失敗", e);
-            throw e;
-        }
-    }
 
     public int commentCount(Map map) {
         try {
@@ -606,14 +470,5 @@ public class CommentService {
         }
     }
 
-    public int queryFatherComment(int id) {
-        try {
-            log.info("删除的是否是父评论");
-            return commentMapper.queryFatherComment(id);
-        } catch (Exception e) {
-            log.error("删除的是否是父评论失败", e);
-            throw e;
-        }
-    }
 
 }
