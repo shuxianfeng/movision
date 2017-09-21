@@ -275,8 +275,8 @@ public class VoteFacade {
         if (StringUtil.isNotEmpty(name)) {
             take.setName(name);
         }
-        if (StringUtil.isNotEmpty(photo)) {
-            take.setPhoto(photo);
+        if (StringUtil.isNotEmpty(phone)) {
+            take.setPhone(phone);
         }
         if (StringUtil.isNotEmpty(photo)) {
 
@@ -320,7 +320,7 @@ public class VoteFacade {
             take.setMark(Integer.parseInt(number));
         }
         //把当前序号之后的投稿序号+1
-        takeService.updateTakeByNumber(take);
+        //takeService.updateTakeByNumber(take);
         takeService.updateTakeByAudit(take);
     }
 
