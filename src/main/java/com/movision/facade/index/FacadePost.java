@@ -1005,7 +1005,7 @@ public class FacadePost {
         for (PostLabel label : allLabels) {
             //使用过的标签，插入mongoDB
             saveKeywordsInMongoDB(label);
-            //增加标签热度
+            //增加标签热度,同时老标签的使用次数+1
             facadeHeatValue.addLabelHeatValue(2, label.getId(), null);
         }
 
