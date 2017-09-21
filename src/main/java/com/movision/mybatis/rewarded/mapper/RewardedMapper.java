@@ -23,13 +23,4 @@ public interface RewardedMapper {
 
     List<RewardedVo> findAllqueryPostAward(Map map, RowBounds rowBounds);
 
-    int insertRewardRecord(Map map);
-
-    RewardedVo queryRewardByUserid(Integer userid);
-
-    List<RewardedVo> findAllRewarded(Integer userid, RowBounds rowBounds);
-
-    Integer updateRewardRead(Integer userid);
-
-    Integer queryRewardIsRead(int userid);
 }
