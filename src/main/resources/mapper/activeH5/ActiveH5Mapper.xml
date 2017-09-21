@@ -181,6 +181,10 @@
         <if test="name != null">
             AND a.name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
+        <![CDATA[AND (((now()  <= a.begintime) AND (now() <= a.endtime))
+        OR ((now()  >= a.begintime) AND (now() <= a.endtime))
+        OR ((now()  >= a.begintime) AND (now() >= a.endtime))
+        OR ((now()  <= a.begintime) AND (now() >= a.endtime)))]]>
     </select>
 
     <select id="queryActivityById" parameterType="java.lang.Integer"

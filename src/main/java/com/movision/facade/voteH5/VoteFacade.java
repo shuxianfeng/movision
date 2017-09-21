@@ -239,7 +239,7 @@ public class VoteFacade {
             take.setPhoto(photo);
         }
         if (StringUtil.isNotEmpty(describe)) {
-            take.setDescribe(describe);
+            take.setDescribes(describe);
         }
         if (StringUtil.isNotEmpty(nickname)) {
             take.setNickname(nickname);
@@ -283,7 +283,7 @@ public class VoteFacade {
             take.setPhoto(photo);
         }
         if (StringUtil.isNotEmpty(describe)) {
-            take.setDescribe(describe);
+            take.setDescribes(describe);
         }
         if (StringUtil.isNotEmpty(nickname)) {
             take.setNickname(nickname);

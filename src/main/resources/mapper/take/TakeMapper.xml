@@ -9,14 +9,14 @@
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
         <result column="photo" property="photo" jdbcType="VARCHAR"/>
-        <result column="describe" property="describe" jdbcType="VARCHAR"/>
+        <result column="describes" property="describes" jdbcType="VARCHAR"/>
         <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
         <result column="mark" property="mark" jdbcType="INTEGER"/>
         <result column="audit" property="audit" jdbcType="INTEGER"/>
         <result column="banner" property="banner" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, activeid, name, isdel, intime, phone, photo, describe, nickname, mark, audit, banner
+        id, activeid, name, isdel, intime, phone, photo, describes, nickname, mark, audit, banner
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -60,8 +60,8 @@
             <if test="photo != null">
                 photo,
             </if>
-            <if test="describe != null">
-                describe,
+            <if test="describes != null">
+                describes,
             </if>
             <if test="nickname != null">
                 nickname,
@@ -98,8 +98,8 @@
             <if test="photo != null">
                 #{photo,jdbcType=VARCHAR},
             </if>
-            <if test="describe != null">
-                #{describe,jdbcType=VARCHAR},
+            <if test="describes != null">
+                #{describes,jdbcType=VARCHAR},
             </if>
             <if test="nickname != null">
                 #{nickname,jdbcType=VARCHAR},
