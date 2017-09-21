@@ -1449,4 +1449,20 @@ public class PostController {
         return response;
     }
 
+    /**
+     * 查询帖子详情中原图
+     *
+     * @param compressimgurl
+     * @return
+     */
+    @ApiOperation(value = "查询原图（后台）", notes = "用于查询帖子详情原图url", response = Response.class)
+    @RequestMapping(value = "queryOriginalDrawingUrl", method = RequestMethod.POST)
+    public Response queryOriginalDrawingUrl(@ApiParam(value = "压缩图url") @RequestParam String compressimgurl) {
+        Response response = new Response();
+        String url = postFacade.queryOriginalDrawingUrl(compressimgurl);
+        response.setMessage("查询成功");
+        response.setData(url);
+        return response;
+    }
+
 }

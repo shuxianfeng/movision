@@ -1994,4 +1994,20 @@ public class PostService {
         }
     }
 
+    /**
+     * 查询原图url
+     *
+     * @param compressimgurl
+     * @return
+     */
+    public String queryOriginalDrawingUrl(String compressimgurl) {
+        try {
+            log.info("查询原图url");
+            return postMapper.queryOriginalDrawingUrl(compressimgurl);
+        } catch (Exception e) {
+            log.error("查询原图url异常", e);
+            throw e;
+        }
+    }
+
 }
