@@ -49,8 +49,6 @@ public interface CircleMapper {
 
     String queryPhoneInCircleByCircleid(int circleid);
 
-    List<Circle> queryHotCircle();
-
     int queryCircleScope(int circleid);
 
     User queryCircleOwner(int circleid);
@@ -70,8 +68,6 @@ public interface CircleMapper {
     List<Circle> queryListByCircleListByUserid(Map categoryid);
 
     List<CircleVo> queryCircleListByUserRole(UserRole ur);
-
-    List<CircleVo> queryCircleList();
 
     List<CircleVo> queryCircleListTo(Map vip);
 
@@ -106,8 +102,6 @@ public interface CircleMapper {
     int updateAuditCircle(Map map);
 
     Category queryCircleCategoryClassify(String categoryid);
-
-    List<Integer> queryCIrcleIdByUserId(Integer userid);
 
     List<Circle> queryCircleByPhone(@Param("phone") String phone);
 
