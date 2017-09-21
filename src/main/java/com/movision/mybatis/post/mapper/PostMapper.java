@@ -55,8 +55,6 @@ public interface PostMapper {
 
     int queryPostNumByUserid(int userid);
 
-    int queryCommentByUserid(int userid);
-
     int queryCollectByUserid(int userid);
 
     int queryZanSumByUserid(int userid);
@@ -75,11 +73,6 @@ public interface PostMapper {
 
     String queryCompressUrl(String coverimg);
 
-    int queryRewardSum(String postid);
-
-    List<UserLike> queryRewardPersonNickname(String postid);
-    Video queryVideoUrl(int postid);
-
     List<PostVo> queryPastPostList(Map<String, Object> parammap);
 
     List<PostVo> findAllPostList(RowBounds rowBounds, int circleid);
@@ -97,8 +90,6 @@ public interface PostMapper {
     int saveActiveRecord(Map<String, Object> parammap);
 
     ActiveVo queryNoticeActive(Map<String, Object> parammap);
-
-    List<ActiveVo> queryFourHotActive();
 
     List<Date> findAllDateSelect(RowBounds rowBounds);
 
@@ -124,17 +115,11 @@ public interface PostMapper {
 
     int updatePostByZanSum(int id);
 
-    int queryPostByZanSum(int id);
-
     void updatePostCollectCount(Map<String, Object> parammap);
 
     int updatePostBycommentsum(int postid);
 
-    int updatePostBycommentsumT(int postid);
-
     List<PostList> findAllqueryPostByList(RowBounds rowBounds);
-
-    List<PostList> findAllqueryPostByList2(Integer userid, RowBounds rowBounds);
 
     List<PostList> findAllqueryPostByManageByList(Map map, RowBounds rowBounds);
 
@@ -152,10 +137,6 @@ public interface PostMapper {
 
     PostList queryActivityParticulars(Integer postid);
 
-    int addPost(Map map);
-
-    PostNum queryPostNumAndisessenceByCircleid(Integer circleid);
-
     int addPostChoiceness(PostTo postid);
 
     Integer queryPostByUser(String postid);
@@ -165,8 +146,6 @@ public interface PostMapper {
     int updatePostChoiceness(PostTo postTo);
 
     List<PostTo> queryPostChoicenesslist(Map essencedate);
-
-    List<Post> queryPostIsessence();
 
     PostChoiceness queryPostChoiceness(Integer postid);
 
@@ -186,8 +165,6 @@ public interface PostMapper {
 
     List<PostList> findAllpostSearch(Map spread, RowBounds rowBounds);
 
-/*    List<PostList> findAllqueryPostByContributing(Map map,RowBounds rowBounds);*/
-
     List<PostList> findAllQueryCircleByPostList(Map map, RowBounds rowBounds);
 
     List<PostActiveList> findAllActivePostCondition(Map map, RowBounds rowBounds);
@@ -196,15 +173,9 @@ public interface PostMapper {
 
     List<Post> queryMyPostList(Map map);
 
-    Integer updateActiveById(PostTo postActiveList);//编辑活动帖子
-
     PostActiveList queryActiveById(Integer id);//根据id查询帖子
 
     List<PostList> findAllQueryCollectPostList(String userid, RowBounds rowBounds);
-
-    Integer updateIshot(Post id);//设为热门
-
-    Integer activeIsHot(Integer id);//查询是不是热门
 
     Integer updateNoIshot(Post id);//不是热门
 
@@ -216,28 +187,13 @@ public interface PostMapper {
 
     void updatePostShareNum(Map<String, Object> parammap);
 
-    Integer queryPosterActivity(Integer postid);
-
     String selectToAccid(Integer postid);
 
-    List<Post> findAllPostListRefulsh();
-
     Integer queryCrileid(int postid);
-
-    int queryIsIsessence(int postid);
 
     List<Post> selectAllPost();
 
     String queryPostContentById(Map postid);
-
-    List<Post> queryPostSessen();
-
-    List<Post> queryNOPostSessen();
-
-    List<Post> queryCrileidPost(int crileid);
-
-    List<Post> queryNoCrileidPost(int crileid);
-    List<Post> queryoverCrileidPost(int crileid);
 
     List<PostVo> findAllPostHeatValue();//查询帖子的热度值
 
@@ -252,8 +208,6 @@ public interface PostMapper {
     int queryPostIsessenceHeat(int postid);
 
     int updatePostHeatValue(Map map);//修改热度
-
-    int selectUserLevel(int postid);//查询发帖人级别
 
     int queryPostHotHeat(int postid);
 
@@ -275,7 +229,6 @@ public interface PostMapper {
 
     List<PostVo> queryLabelListByIds(List ids);
 
-    List<PostVo> findAllCollectionListByIds(List ids, RowBounds rowBounds);
     //根据圈子id查询帖子
     List<PostVo> findAllPostCrile(int circleid);
 
@@ -293,12 +246,6 @@ public interface PostMapper {
     List<PostVo> findAllCityPost(String citycode);//
 
     List<PostLabel> queryPostLabel(int postid);
-
-    List<Integer> queryPostComment(int postid);
-
-    List<Integer> queryPostUserHeatValue(int userid);
-
-    List<Integer> queryLabelPost(int labelid);
 
     List<PostVo> findAllLabelAllPost(int labelid);
 
@@ -334,8 +281,6 @@ public interface PostMapper {
 
     List<PostVo> findAllActivePostIntime(int postid, RowBounds rowBounds);
 
-    Integer activeSum(int postid);
-
     int postUserId(int postid);
 
     List<Post> queryPostListByName(Map map);
@@ -345,10 +290,6 @@ public interface PostMapper {
     List<PostVo> findAllActivePostD(int id, RowBounds rowBounds);
 
     int zanIsPost(Map map);
-
-    int isPostIsdel(int postid);
-
-    int isUserContribe(Map map);
 
     String queryOriginalDrawingUrl(String compressimgurl);
 }

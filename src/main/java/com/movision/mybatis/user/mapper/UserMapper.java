@@ -152,8 +152,6 @@ public interface UserMapper {
 
     List<UserVo> findAllMineFollowAuthor(Map<String, Object> paramap, RowBounds rowBounds);
 
-    int queryPostNumByAuthor(Map<String, Object> paramap);
-
     int queryIsFollowAuthor(Map<String, Object> paramap);
 
     List<UserVo> findAllMineFans(Map<String, Object> parammap, RowBounds rowBounds);
