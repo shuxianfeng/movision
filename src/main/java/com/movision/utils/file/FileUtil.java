@@ -291,6 +291,56 @@ public class FileUtil {
 		return list;
 	}
 
+	public static List<String> readFilePath(String filepath, String suffix)
+			throws IOException {
+		List<String> list = new ArrayList<String>();
+		try {
+			File file = new File(filepath);
+			if (!file.isDirectory()) {
+				if (StringUtils.isNotEmpty(suffix)) {
+					if (file.getName().endsWith("." + suffix)) {
+						list.add(file.getAbsolutePath());
+					}
+				} else {
+//					System.out.println("文件");
+//					System.out.println("path=" + file.getPath());
+//					System.out.println("absolutepath=" + file.getAbsolutePath());	//D:\BaiduNetdiskDownload\70000\（精选）娇娇网络头像\test\_837_1028.jpg
+//					System.out.println("name=" + file.getName());	//_837_1028.jpg
+
+					list.add(file.getAbsolutePath());
+				}
+
+			} else if (file.isDirectory()) {
+				System.out.println(filepath + "，是文件夹");
+				String[] filelist = file.list();
+				for (int i = 0; i < filelist.length; i++) {
+
+					File readfile = new File(filepath + "\\" + filelist[i]);
+					if (!readfile.isDirectory()) {
+
+						if (StringUtils.isNotEmpty(suffix)) {
+							if (readfile.getName().endsWith("." + suffix)) {
+								list.add(readfile.getAbsolutePath());
+							}
+						} else {
+							list.add(readfile.getAbsolutePath());
+						}
+
+					} else if (readfile.isDirectory()) {
+
+						readfile(filepath + "\\" + filelist[i], suffix);
+					}
+				}
+			}
+
+		} catch (FileNotFoundException e) {
+			System.out.println("readfile()   Exception:" + e.getMessage());
+		}
+		return list;
+	}
+
+
+
 	/**
 	 * 获取指定文件夹下的文件
 	 *
@@ -375,7 +425,11 @@ public class FileUtil {
 		return fileName;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+
+		List<String> list = readFilePath("D:/BaiduNetdiskDownload/70000/（精选）娇娇网络头像/test", null);
+		System.out.println(list.toString());
+
 		// FileUtil fileUtil = new FileUtil();
 		// boolean bool = fileUtil.isExistFile("111","doc","tech");
 		// System.out.println(bool);
@@ -383,7 +437,6 @@ public class FileUtil {
 		// String a = FileUtil.renameFile(name);
 		// System.out.println(a);
 //		System.out.println(getSuffix("xxxx.xlsx"));
-		System.out.println("1111");
 //		System.out.println(getFileNameByUrl("//image.zhuangyuhao.com/upload/price/img/DBgRcpns1480490323747.png"));
 	}
 }

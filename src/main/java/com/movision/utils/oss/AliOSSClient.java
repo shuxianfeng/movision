@@ -284,18 +284,8 @@ public class AliOSSClient {
             String fileName = file.getOriginalFilename();
             String fileKey;
             String fileName2 = FileUtil.renameFile(fileName);
-            if (chann != null) {
-                fileKey = "upload/" + chann + "/" + type + "/" + fileName2;
-
-                if (type.equals("doc") && chann.equals("tech")) {
-                    String maxSize = PropertiesLoader.getValue("uploadTechMaxPostSize");
-                    if (size > Long.valueOf(maxSize)) {
-                        throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
-                    }
-                }
-            } else {
-                fileKey = "upload/" + fileName2;
-            }
+            //获取fileKey
+            fileKey = getFileKey(type, chann, size, fileName2);
 
             String data = "";
             if (type.equals("img")) {
@@ -319,9 +309,8 @@ public class AliOSSClient {
                 if (size > Long.valueOf(maxSize)) {
                     throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
                 }
-
             }
-
+            //oss api
             ossClient.putObject(bucketName, fileKey, in);
 
             log.debug("Object：" + fileKey + "存入OSS成功。");
@@ -344,6 +333,23 @@ public class AliOSSClient {
         log.info("阿里云OSS上传Completed");
 
         return result;
+    }
+
+    private String getFileKey(String type, String chann, long size, String fileName2) {
+        String fileKey;
+        if (chann != null) {
+            fileKey = "upload/" + chann + "/" + type + "/" + fileName2;
+
+            if (type.equals("doc") && chann.equals("tech")) {
+                String maxSize = PropertiesLoader.getValue("uploadTechMaxPostSize");
+                if (size > Long.valueOf(maxSize)) {
+                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
+                }
+            }
+        } else {
+            fileKey = "upload/" + fileName2;
+        }
+        return fileKey;
     }
 
     /**
@@ -375,7 +381,7 @@ public class AliOSSClient {
             String data = "";
             if (type.equals("img")) {
                 bucketName = PropertiesLoader.getValue("img.bucket");
-                domain = PropertiesLoader.getValue("ali.domain");
+                domain = PropertiesLoader.getValue("formal.img.domain");
                 data = domain + "/" + fileKey;
                 //返回图片的宽高
                 InputStream is = new FileInputStream(file);
