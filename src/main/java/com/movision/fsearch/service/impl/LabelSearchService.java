@@ -65,11 +65,12 @@ public class LabelSearchService implements ILabelSearchService {
                 query.put("_s", CollectionUtil.arrayAsMap("type", "phrase",
                         "value", formatQ));
             }
+            //获取未被使用的城市标签列表
             cityLabels = getNotUsedCityLabel(q);
 
             int cityLabelLength = cityLabels.size();
             if (cityLabelLength > 0 && cityLabelLength < 12) {
-                spec.setLimit(12 - cityLabelLength);    //重新设置搜索服务返回的数据量
+                spec.setLimit(12 - cityLabelLength);    //重新设置搜索服务返回的数据数量
             }
         }
         //设置排序字段和排序顺序（正序/倒序）
@@ -95,7 +96,6 @@ public class LabelSearchService implements ILabelSearchService {
         Pagination<PostLabel, ProductGroup> ps = null;
         List<PostLabel> labels = new ArrayList<>();
         if (!list.isEmpty()) {
-
             labels = makeList(list);
         }
         //处理未使用的标签--包括地理标签和普通标签
@@ -119,12 +119,12 @@ public class LabelSearchService implements ILabelSearchService {
             labels.addAll(cityLabels);
         }
 
-        //获取没有使用的普通标签, 并放在集合第一个位置
+        //获取没有使用的同名普通标签, 并放在集合第一个位置
         if (spec.getQ() != null) {
             String q = spec.getQ();
             int sameNameNormalLabelCount = postLabelService.countSameNormalNameLabel(q);
             if (sameNameNormalLabelCount == 0) {
-                //增加一个标签
+                //增加一个普通标签
                 PostLabel postLabel = new PostLabel();
                 postLabel.setType(PostLabelConstants.TYPE.normal.getCode());
                 postLabel.setName(q);
@@ -141,27 +141,25 @@ public class LabelSearchService implements ILabelSearchService {
      * @return
      */
     private List<PostLabel> getNotUsedCityLabel(String q) {
-        //查询yw_city城市表的数据, 如果有数据，则算在分页的数据里面
+        //查询yw_city城市表的数据, 封装成PostLabel
         List<PostLabel> cityLabels = facadePost.queryCityListByCityname(q);
         //在城市表中的数据里，去除标签表中的相关数据，只留下未被使用的地理标签数据
-        if (CollectionUtil.isNotEmpty(cityLabels)) {
+        if (CollectionUtil.isEmpty(cityLabels)) {
+            return cityLabels;
+        }
+        //标签表中的已经使用过的地理标签
+        List<PostLabel> existPostLabels = facadePost.queryGeogLabelByName(q);
 
-            //标签表中的相关地理标签
-            List<PostLabel> existPostLabels = facadePost.queryGeogLabelByName(q);
-
-            for (Iterator<PostLabel> it = cityLabels.iterator(); it.hasNext(); ) {
-                PostLabel cityLabel = it.next();
-
-                //设置地理标签的type
-                cityLabel.setType(PostLabelConstants.TYPE.geog.getCode());
-
-                for (PostLabel existLabel : existPostLabels) {
-                    if (cityLabel.getName().contains(existLabel.getName())) {
-                        it.remove();
-                    }
+        for (Iterator<PostLabel> it = cityLabels.iterator(); it.hasNext(); ) {
+            PostLabel cityLabel = it.next();
+            //设置type为地理标签
+            cityLabel.setType(PostLabelConstants.TYPE.geog.getCode());
+            //留下未被使用的地理标签数据
+            for (PostLabel existLabel : existPostLabels) {
+                if (cityLabel.getName().contains(existLabel.getName())) {
+                    it.remove();
                 }
             }
-
         }
         return cityLabels;
     }

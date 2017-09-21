@@ -318,7 +318,9 @@
 
     <select id="queryHotValueLabelList" resultType="com.movision.mybatis.postLabel.entity.PostLabel"
             parameterType="java.lang.Integer">
-        select * FROM yw_post_label order by heat_value desc limit #{displayCount}
+        select * FROM yw_post_label
+        WHERE type = 1
+        order by heat_value desc limit #{displayCount}
     </select>
 
     <select id="queryPostLabelByName" parameterType="com.movision.mybatis.postLabel.entity.PostLabel"
@@ -414,5 +416,12 @@
         SELECT * FROM yw_post_label
         WHERE isdel = 0
         AND NAME LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+    </select>
+
+    <select id="selectGeogLabelByCitycode" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+        SELECT * from yw_post_label
+        where isdel = 0
+        and citycode = #{citycode}
     </select>
 </mapper>

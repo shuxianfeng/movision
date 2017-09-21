@@ -14,4 +14,6 @@ public interface CityMapper {
 
     int updateByPrimaryKey(City record);
 
+    City selectCityByCode(String code);
+
 }

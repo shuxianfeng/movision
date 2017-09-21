@@ -23,6 +23,8 @@ import com.movision.mybatis.circle.entity.CircleVo;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.circleCategory.service.CircleCategoryService;
+import com.movision.mybatis.city.entity.City;
+import com.movision.mybatis.city.service.CityService;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.compressImg.entity.CompressImg;
@@ -177,6 +179,8 @@ public class FacadePost {
     private FacadeHeatValue facadeHeatValue;
     @Autowired
     private TestIntimeService testIntimeService;
+    @Autowired
+    private CityService cityService;
 
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
@@ -1038,9 +1042,9 @@ public class FacadePost {
     private List<PostLabel> processForNewLabel(int flag, List<PostLabel> newLabels) {
         //3.1 从缓存中获取userid，citycode, 并且根据标签类型，获取标签的头像
         for (PostLabel p : newLabels) {
+            //标签创建人
             p.setUserid(ShiroUtil.getAppUserID());
-            p.setCitycode(ShiroUtil.getIpCity());
-            //根据标签类型，获取标签的头像
+            //标签的头像
             setDefaultPhotoByLabelType(p);
         }
         //3.2 插入标签表数据
@@ -2632,8 +2636,50 @@ public class FacadePost {
     }
 
 
+    /**
+     * 查询热门标签，
+     * 1 第一个标签是用户所在城市的地理标签；
+     * 如果该标签存在，则正常查出；
+     * 如果该标签不存在，则使用次数0，关注数0；
+     * <p>
+     * 2只查询普通标签，按照热度排序
+     *
+     * @return
+     */
     public List<PostLabel> queryHotValueLabelList() {
-        return postLabelService.queryHotValueLabelList(10);
+
+        String ipcity = ShiroUtil.getAppUser().getIpCity();
+        log.debug("当前登录人的登录城市代码是：" + ipcity);
+        City city = cityService.selectCityByCode(ipcity);
+        String cityname = city.getName();
+        log.debug("当前登录人的登录城市名称是：" + cityname);
+
+        List<PostLabel> list = new ArrayList<>();
+        //查询该citycode对应的地理标签是否已经被使用过
+        PostLabel geogPostLabel = postLabelService.selectGeogLabelByCitycode(ipcity);
+        if (null == geogPostLabel) {
+            //如果该地理标签没有被使用过，则需要实例化一个标签
+            PostLabel p = new PostLabel();
+            p.setCitycode(ipcity);
+            p.setName(cityname);
+            p.setType(PostLabelConstants.TYPE.geog.getCode());
+            p.setFans(0);
+            p.setUseCount(0);
+            log.debug("【标签未使用】未使用当前用户登录城市，对应的热门地理标签：" + p.toString());
+            //置顶
+            list.add(p);
+        } else {
+            log.debug("【标签已使用】未使用当前用户登录城市，对应的热门地理标签：" + geogPostLabel.toString());
+            //置顶
+            list.add(geogPostLabel);
+        }
+
+        //普通热门标签
+        List<PostLabel> normalLabelList = postLabelService.queryHotValueLabelList(10);
+        //添加到热门标签总集合中
+        list.addAll(normalLabelList);
+
+        return list;
     }
 
 
