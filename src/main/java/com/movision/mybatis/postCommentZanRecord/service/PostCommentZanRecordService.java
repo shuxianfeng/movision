@@ -32,22 +32,6 @@ public class PostCommentZanRecordService {
     @Autowired
     private PostCommentZanRecordMapper recordMapper;
 
-    /**
-     * 根据用户id查询
-     *
-     * @param userid
-     * @return
-     */
-    public List<PostCommentZanRecordVo> queryByUserid(Integer userid) {
-        try {
-            log.info("根据用户id查询");
-            return recordMapper.queryByUserid(userid);
-        } catch (Exception e) {
-            log.error("根据用户id查询失败", e);
-            throw e;
-        }
-    }
-
 
 
     public List<CommentVo> queryComment(Integer commentid) {
@@ -60,15 +44,6 @@ public class PostCommentZanRecordService {
         }
     }
 
-    public List<ZanRecordVo> findAllZan(Integer userid, Paging<ZanRecordVo> pager) {
-        try {
-            log.info("查询所有赞");
-            return recordMapper.findAllZan(userid, pager.getRowBounds());
-        } catch (Exception e) {
-            log.error("查询所有赞失败", e);
-            throw e;
-        }
-    }
 
     public List<ZanRecordVo> findZan(Integer userid) {
         try {
@@ -96,16 +71,6 @@ public class PostCommentZanRecordService {
             return recordMapper.queryPostNickname(postid);
         } catch (Exception e) {
             log.error("查询用户失败", e);
-            throw e;
-        }
-    }
-
-    public int updatePostCommentZanRecordVo(ZanRecordVo postCommentZanRecordVo) {
-        try {
-            log.info("更新帖子评论点赞记录数据");
-            return recordMapper.updateByPrimaryKeySelective(postCommentZanRecordVo);
-        } catch (Exception e) {
-            log.error("更新帖子评论点赞记录数据失败", e);
             throw e;
         }
     }

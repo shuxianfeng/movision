@@ -22,12 +22,7 @@ public interface PostCommentZanRecordMapper {
 
     int updateByPrimaryKey(PostCommentZanRecord record);
 
-    List<PostCommentZanRecordVo> queryByUserid(Integer userid);
-
-
     List<CommentVo> queryComment(Integer commentid);
-
-    List<ZanRecordVo> findAllZan(Integer userid, RowBounds rowBounds);
 
     List<ZanRecordVo> findZan(Integer userid);
 
