@@ -2624,18 +2624,6 @@ public class FacadePost {
         return anyoneCanPostCircles;
     }
 
-    public Boolean isExistSameNameLabel(String name) {
-        int sameLabelCount = postLabelService.countSameNameLabel(name);
-        if (sameLabelCount > 0) {
-            log.debug("存在相同的标签名");
-            return true;
-        } else {
-            log.debug("不存在相同的标签名");
-            return false;
-        }
-    }
-
-
     /**
      * 查询热门标签，
      * 1 第一个标签是用户所在城市的地理标签；
@@ -2663,6 +2651,7 @@ public class FacadePost {
             p.setCitycode(ipcity);
             p.setName(cityname);
             p.setType(PostLabelConstants.TYPE.geog.getCode());
+            p.setPhoto(PostLabelConstants.DEFAULT_GEOG_PHOTO);
             p.setFans(0);
             p.setUseCount(0);
             log.debug("【标签未使用】未使用当前用户登录城市，对应的热门地理标签：" + p.toString());
