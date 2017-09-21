@@ -40,12 +40,6 @@ public interface BossUserMapper {
 
     int isExistSameName(BossUser bossUser);
 
-    Integer queryUserByIscontribute(Integer userid);
-
-    Integer queryUserByiscircle(Integer userid);
-
-    Integer queryUserBycirclemanagements(Integer userid);
-
     Integer queryUserById(Integer userid);
 
     Integer queryUserIdBySpeciallyGuest(Integer userid);
@@ -53,8 +47,6 @@ public interface BossUserMapper {
     BossUser queryUserByAdministrator(Integer userid);
 
     Integer queryPostByUserid(Map map);
-
-    Integer queryCommentByUserid(Map map);
 
     Integer queryCircleManageCommentByUserid(Map map);
 

@@ -156,54 +156,6 @@ public class BossUserService {
 
 
     /**
-     * 查询当前登录用户是否是特邀嘉宾
-     *
-     * @param userid
-     * @return
-     */
-    public Integer queryUserByIscontribute(Integer userid) {
-        try {
-            log.info("查询当前登录用户是否是特邀嘉宾");
-            return bossUserMapper.queryUserByIscontribute(userid);
-        } catch (Exception e) {
-            log.error("查询当前登录用户是否是特邀嘉宾异常");
-            throw e;
-        }
-    }
-
-    /**
-     * 查询当前登录用户是否是圈主
-     *
-     * @param userid
-     * @return
-     */
-    public Integer queryUserByiscircle(Integer userid) {
-        try {
-            log.info("查询当前登录用户是否是圈主");
-            return bossUserMapper.queryUserByiscircle(userid);
-        } catch (Exception e) {
-            log.error("查询当前登录用户是否是圈主异常");
-            throw e;
-        }
-    }
-
-    /**
-     * 查询当前登录用户是否是圈子管理员
-     *
-     * @param userid
-     * @return
-     */
-    public Integer queryUserBycirclemanagements(Integer userid) {
-        try {
-            log.info("查询当前登录用户是否是圈子管理员");
-            return bossUserMapper.queryUserBycirclemanagements(userid);
-        } catch (Exception e) {
-            log.error("查询当前登录用户是否是圈子管理员异常");
-            throw e;
-        }
-    }
-
-    /**
      * 根据用户id查询前台对应用户id
      *
      * @param userid
@@ -298,21 +250,6 @@ public class BossUserService {
         }
     }
 
-    /**
-     * 查询用户可操作的帖子评论
-     *
-     * @param ma
-     * @return
-     */
-    public Integer queryCommentByUserid(Map ma) {
-        try {
-            log.info("查询用户可操作的帖子评论");
-            return bossUserMapper.queryCommentByUserid(ma);
-        } catch (Exception e) {
-            log.error("查询用户可操作的帖子评论异常");
-            throw e;
-        }
-    }
 
     /**
      * 根据id查询出是否属于该圈主的帖子评论
