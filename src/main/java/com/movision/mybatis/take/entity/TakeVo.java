@@ -21,7 +21,7 @@ public class TakeVo {
 
     private String photo;//封面
 
-    private String describe;//描述
+    private String describes;//描述
 
     private String nickname;//用户名
 
@@ -67,12 +67,12 @@ public class TakeVo {
         this.photo = photo;
     }
 
-    public String getDescribe() {
-        return describe;
+    public String getDescribes() {
+        return describes;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setDescribes(String describes) {
+        this.describes = describes;
     }
 
     public String getNickname() {
