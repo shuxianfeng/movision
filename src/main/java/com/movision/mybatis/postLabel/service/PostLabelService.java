@@ -44,25 +44,7 @@ public class PostLabelService {
         }
     }
 
-    public List<PostLabel> queryLabelName() {
-        try {
-            log.info("查询所有标签");
-            return postLabelMapper.queryLableName();
-        } catch (Exception e) {
-            log.error("查询所有标签失败", e);
-            throw e;
-        }
-    }
 
-    public Integer updateLabelHeatValue(Map map) {
-        try {
-            log.info("根据标签修改热度");
-            return postLabelMapper.updateLabelHeatValue(map);
-        } catch (Exception e) {
-            log.error("根据标签修改热度失败", e);
-            throw e;
-        }
-    }
 
     public List<PostLabel> queryLabelHeatValue() {
         try {
@@ -255,15 +237,6 @@ public class PostLabelService {
         }
     }
 
-    public Integer postInCircle(int circleid) {
-        try {
-            log.info("今日在圈子发的帖子");
-            return postLabelMapper.postInCircle(circleid);
-        } catch (Exception e) {
-            log.error("今日在圈子发的帖子异常", e);
-            throw e;
-        }
-    }
 
     public List<PostLabel> queryLabelCircle(int circleid) {
         try {
@@ -311,16 +284,6 @@ public class PostLabelService {
             return postLabelMapper.queryCirclePeople(circleid);
         } catch (Exception e) {
             log.error("圈子达人失败", e);
-            throw e;
-        }
-    }
-
-    public Integer countSameNameLabel(String name) {
-        try {
-            log.info("统计同名标签数量");
-            return postLabelMapper.countSameNameLabel(name);
-        } catch (Exception e) {
-            log.error("统计同名标签数量失败", e);
             throw e;
         }
     }
