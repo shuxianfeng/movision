@@ -24,6 +24,7 @@ import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.ListUtil;
+import com.movision.utils.UserBadgeUtil;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import org.apache.commons.collections.map.HashedMap;
@@ -75,6 +76,9 @@ public class UserFacade {
 
     @Autowired
     private HomepageManageService homepageManageService;
+
+    @Autowired
+    private UserBadgeUtil userBadgeUtil;
     /**
      * 判断是否存在该手机号的app用户
      *
@@ -538,7 +542,10 @@ public class UserFacade {
         //被收藏数
         int collectionsum = collectionService.userPostCollection(Integer.parseInt(userid));
         user.setBecollectsum(collectionsum);
-        //图标
+        //获取个人主页中当前用户获取到的徽章总数
+        UserBadge userBadge = userBadgeUtil.judgeBadge(userid, user.getIsdv());//调用公共工具方法获取用户徽章信息
+        int badgenum = UserBadgeUtil.getBadgeNum(userBadge);
+        user.setBadgenum(badgenum);
 
         return user;
     }
@@ -751,106 +758,7 @@ public class UserFacade {
 
         map.put("talentUserVo", talentUserVo);//----------------------------------------------------->1.个人信息，昵称等级经验值等
 
-        //再查询用户的所有徽章详情
-        //a.发帖数(1/10/50)
-        int postsum = postService.queryPostNumByUserid(Integer.parseInt(userid));
-        //b.用户总评论数(10/50/100)
-//        int commentsum = postService.queryCommentByUserid(Integer.parseInt(userid));
-        //b.用户总被收藏数(10/50/100)//---------------运营智障强烈要求修改为被收藏数2017.09.08
-        int collectsum = postService.queryCollectByUserid(Integer.parseInt(userid));
-        //c.被点赞总数(50/100/200)
-        int zansum = postService.queryZanSumByUserid(Integer.parseInt(userid));
-        //d.邀请总人数(1/10/50)
-        int invitesum = userService.queryInviteNum(Integer.parseInt(userid));
-        //e.个人资料完善情况(0/1)
-        int flag = userService.queryFinishUserInfo(Integer.parseInt(userid));
-        //f.精选数(1/5/10)
-        int essencesum = postService.queryEssencesumByUserid(Integer.parseInt(userid));
-        //g.达人认证徽章(0/1)
-        int isdv = user.getIsdv();
-        //h.足迹徽章(1个足迹/10个足迹/20个足迹)
-        int footprint = userService.getfootmap(Integer.parseInt(userid));
-        //i.实名认证徽章(0/1)
-        int rnauth = -1;//敬请期待
-        //j.消费徽章(0/1)
-        int consume = -1;//敬请期待
-
-        UserBadge userBadge = new UserBadge();
-        if (postsum == 0) {
-            userBadge.setPostsum(0);
-        }else if (postsum >= 1 && postsum < 10){
-            userBadge.setPostsum(1);
-        }else if (postsum >= 10 && postsum < 50){
-            userBadge.setPostsum(2);
-        }else if (postsum >= 50){
-            userBadge.setPostsum(3);
-        }
-
-        if (collectsum < 10) {
-            userBadge.setCommentsum(0);
-        }else if (collectsum >= 10 && collectsum < 50){
-            userBadge.setCommentsum(1);
-        }else if (collectsum >= 50 && collectsum < 100){
-            userBadge.setCommentsum(2);
-        }else if (collectsum >= 100){
-            userBadge.setCommentsum(3);
-        }
-
-        if (zansum < 50) {
-            userBadge.setZansum(0);
-        }else if (zansum >= 50 && zansum < 100){
-            userBadge.setZansum(1);
-        }else if (zansum >= 100 && zansum < 200){
-            userBadge.setZansum(2);
-        }else if (zansum >= 200){
-            userBadge.setZansum(3);
-        }
-
-        if (invitesum < 1) {
-            userBadge.setInvitesum(0);
-        }else if (invitesum >= 1 && invitesum < 10){
-            userBadge.setInvitesum(1);
-        }else if (invitesum >= 10 && invitesum < 50){
-            userBadge.setInvitesum(2);
-        }else if (invitesum >= 50){
-            userBadge.setInvitesum(3);
-        }
-
-        if (flag == 0){
-            userBadge.setFinishuserinfo(0);
-        }else if (flag == 1){
-            userBadge.setFinishuserinfo(1);
-        }
-
-        if (essencesum < 1) {
-            userBadge.setEssencesum(0);
-        }else if (essencesum >= 1 && essencesum < 5){
-            userBadge.setEssencesum(1);
-        }else if (essencesum >= 5 && essencesum < 10){
-            userBadge.setEssencesum(2);
-        }else if (essencesum >= 10){
-            userBadge.setEssencesum(3);
-        }
-
-        if (isdv == 0){
-            userBadge.setIsdv(0);
-        }else if (isdv == 1){
-            userBadge.setIsdv(1);
-        }
-
-        if (footprint < 1){
-            userBadge.setFootprint(0);
-        }else if (footprint >= 1 && footprint < 10){
-            userBadge.setFootprint(1);
-        }else if (footprint >= 10 && footprint < 20){
-            userBadge.setFootprint(2);
-        }else if (footprint >= 20){
-            userBadge.setFootprint(3);
-        }
-
-        userBadge.setRnauth(rnauth);
-        userBadge.setConsume(consume);
-
+        UserBadge userBadge = userBadgeUtil.judgeBadge(userid, user.getIsdv());//调用公共工具方法获取用户徽章信息
         map.put("userBadge", userBadge);//----------------------------------------------------->2.徽章信息
 
         //最后查询用户的每日任务的升级情况

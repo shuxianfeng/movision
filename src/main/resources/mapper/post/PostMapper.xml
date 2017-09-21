@@ -2442,4 +2442,8 @@
     <select id="isUserContribe" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM yw_post WHERE activeid=#{id,jdbcType=INTEGER} AND userid=#{uid,jdbcType=INTEGER}
     </select>
+
+    <select id="queryOriginalDrawingUrl" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT protoimgurl FROM yw_compress_img WHERE compressimgurl = #{compressimgurl,jdbcType=VARCHAR}
+    </select>
 </mapper>

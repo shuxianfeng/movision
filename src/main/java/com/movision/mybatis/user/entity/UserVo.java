@@ -52,6 +52,8 @@ public class UserVo implements Serializable {
 
     private Integer level;
 
+    private Integer isdv;
+
     private Integer status;
 
     private Integer livesum;//直播个数
@@ -99,6 +101,8 @@ public class UserVo implements Serializable {
     private Integer isfollow;//是否被关注 0 未关注 1 已关注（当前作者有没有被APP当前登录的用户关注过）
 
     private String ipcity;//登录城市
+
+    private Integer badgenum;//当前用户获取到的徽章总数
 
     public String getIpcity() {
         return ipcity;
@@ -414,6 +418,14 @@ public class UserVo implements Serializable {
         this.level = level;
     }
 
+    public Integer getIsdv() {
+        return isdv;
+    }
+
+    public void setIsdv(Integer isdv) {
+        this.isdv = isdv;
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -468,5 +480,13 @@ public class UserVo implements Serializable {
 
     public void setIsfollow(Integer isfollow) {
         this.isfollow = isfollow;
+    }
+
+    public Integer getBadgenum() {
+        return badgenum;
+    }
+
+    public void setBadgenum(Integer badgenum) {
+        this.badgenum = badgenum;
     }
 }

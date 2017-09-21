@@ -349,4 +349,6 @@ public interface PostMapper {
     int isPostIsdel(int postid);
 
     int isUserContribe(Map map);
+
+    String queryOriginalDrawingUrl(String compressimgurl);
 }

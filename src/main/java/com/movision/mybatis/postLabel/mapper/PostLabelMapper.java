@@ -6,6 +6,7 @@ import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.*;
 import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.user.entity.User;
+import javafx.geometry.Pos;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
@@ -118,4 +119,6 @@ public interface PostLabelMapper {
     List<PostLabel> queryLabelByname(String name);
 
     List<PostLabel> findAllLabelByName(Map<String, Object> map, RowBounds rowBounds);
+
+    PostLabel selectGeogLabelByCitycode(String citycode);
 }

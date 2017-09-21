@@ -325,6 +325,12 @@ public class PostLabelService {
         }
     }
 
+    /**
+     * 统计同名普通标签数量
+     *
+     * @param name
+     * @return
+     */
     public Integer countSameNormalNameLabel(String name) {
         try {
             log.info("统计同名普通标签数量");
@@ -357,6 +363,11 @@ public class PostLabelService {
         }
     }
 
+    /**
+     * 查询热门标签，只查询普通标签，按照热度排序
+     * @param n
+     * @return
+     */
     public List<PostLabel> queryHotValueLabelList(Integer n) {
         try {
             log.info("查询热门的标签集合");
@@ -584,6 +595,16 @@ public class PostLabelService {
             return postLabelMapper.findAllLabelByName(map, paging.getRowBounds());
         } catch (Exception e) {
             log.error("分页，根据名称查询帖子失败", e);
+            throw e;
+        }
+    }
+
+    public PostLabel selectGeogLabelByCitycode(String citycode) {
+        try {
+            log.debug("根据城市编码查询地理标签");
+            return postLabelMapper.selectGeogLabelByCitycode(citycode);
+        } catch (Exception e) {
+            log.error("根据城市编码查询地理标签失败", e);
             throw e;
         }
     }

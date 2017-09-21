@@ -2905,4 +2905,14 @@ public class PostFacade {
         return postService.queryPostListByName(map);
     }
 
+    /**
+     * 查询帖子详情中原图url
+     *
+     * @param compressimgurl
+     * @return
+     */
+    public String queryOriginalDrawingUrl(String compressimgurl) {
+        return postService.queryOriginalDrawingUrl(compressimgurl);
+    }
+
 }

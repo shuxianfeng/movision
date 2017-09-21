@@ -79,4 +79,8 @@
       provincecode = #{provincecode,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectCityByCode" parameterType="java.lang.String" resultType="com.movision.mybatis.city.entity.City">
+    SELECT * from yw_city where code = #{code}
+  </select>
 </mapper>
