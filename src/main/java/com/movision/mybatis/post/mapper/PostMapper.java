@@ -241,6 +241,10 @@ public interface PostMapper {
 
     String queryCityCode(String area);//查询code
 
+    List<PostVo> queryCityPost(String area);
+
+    List<PostVo> queryCityLabel(String area);
+
     String queryCityUserCode(int userid);
 
     List<PostVo> findAllCityPost(String citycode);//

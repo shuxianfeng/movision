@@ -1349,6 +1349,27 @@ public class PostService {
         }
     }
 
+    public List<PostVo> queryCityPost(String area) {
+        try {
+            log.info("查询标题在本地的帖子");
+            return postMapper.queryCityPost(area);
+        } catch (Exception e) {
+            log.error("查询标题在本地的帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> queryCityLabel(String area) {
+        try {
+            log.info("查询标签在本地的帖子");
+            return postMapper.queryCityLabel(area);
+        } catch (Exception e) {
+            log.error("查询标签在本地的帖子失败", e);
+            throw e;
+        }
+    }
+
+
     public String queryCityUserCode(int userid) {
         try {
             log.info("查询city的code");

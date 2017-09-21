@@ -1958,6 +1958,13 @@
     <select id="queryCityCode" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT code FROM yw_city WHERE name LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
     </select>
+    <select id="queryCityPost" parameterType="java.lang.String" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT * FROM yw_post WHERE title LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
+    </select>
+    <select id="queryCityLabel" parameterType="java.lang.String" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.* FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id LEFT JOIN yw_post_label l ON l.id=r.labelid
+      WHERE l.name LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
+    </select>
     <select id="findAllCityPost" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.lang.String">
         SELECT p.*,c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.isdel=0 AND
         p.city=#{citycode,jdbcType=VARCHAR} ORDER BY p.heat_value DESC
