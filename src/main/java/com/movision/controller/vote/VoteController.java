@@ -225,9 +225,10 @@ public class VoteController {
     @RequestMapping(value = "updateTakeByAudit", method = RequestMethod.POST)
     public Response updateTakeByAudit(@ApiParam(value = "活动id") @RequestParam String activityid,
                                       @ApiParam(value = "投稿id") @RequestParam String id,
-                                      @ApiParam(value = "号码") @RequestParam String number) {
+                                      @ApiParam(value = "号码") @RequestParam String number,
+                                      @ApiParam(value = "审核状态") @RequestParam String type) {
         Response response = new Response();
-        voteFacade.updateTakeByAudit(activityid, id, number);
+        voteFacade.updateTakeByAudit(activityid, id, number, type);
         response.setMessage("操作成功");
         response.setData(1);
         return response;

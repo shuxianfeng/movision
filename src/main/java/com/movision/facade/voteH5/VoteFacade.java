@@ -303,10 +303,14 @@ public class VoteFacade {
      * @param id
      * @param number
      */
-    public void updateTakeByAudit(String activityid, String id, String number) {
+    public void updateTakeByAudit(String activityid, String id, String number, String type) {
         Take take = new Take();
         take.setId(Integer.parseInt(id));
-        take.setAudit(1);
+        if (type.equals("1")) {
+            take.setAudit(1);
+        } else if (type.equals("2")) {
+            take.setAudit(2);
+        }
         take.setActiveid(Integer.parseInt(activityid));
         if (StringUtil.isNotEmpty(number)) {
             take.setMark(Integer.parseInt(number));
