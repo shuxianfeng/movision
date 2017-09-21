@@ -2,6 +2,7 @@ package com.movision.controller.vote;
 
 import com.movision.common.Response;
 import com.movision.facade.voteH5.VoteFacade;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.activeH5.entity.ActiveH5;
 import com.movision.mybatis.activeH5.entity.ActiveH5Vo;
 import com.movision.mybatis.circle.entity.CircleVo;
@@ -14,6 +15,7 @@ import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.Scope;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -140,16 +142,22 @@ public class VoteController {
     public Response findAllActive(@ApiParam(value = "活动名称") @RequestParam(required = false) String name,
                                   @ApiParam(value = "活动开始时间") @RequestParam(required = false) String bigintime,
                                   @ApiParam(value = "活动结束时间") @RequestParam(required = false) String endtime,
-                                  @ApiParam(value = "第几页") @RequestParam(required = false, defaultValue = "1") String pageNo,
-                                  @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                                  @ApiParam(value = "第几页") @RequestParam(required = false) String pageNo,
+                                  @ApiParam(value = "每页多少条") @RequestParam(required = false) String pageSize) {
         Response response = new Response();
-        Paging<ActiveH5Vo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List result = voteFacade.findAllActive(name, bigintime, endtime,pager);
+        List resault = new ArrayList();
+        if (StringUtil.isNotEmpty(pageNo) && StringUtil.isNotEmpty(pageSize)) {
+            Paging<ActiveH5Vo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+            resault = voteFacade.findAllActive(name, bigintime, endtime, pager);
+            pager.result(resault);
+            response.setData(pager);
+        } else {
+            resault = voteFacade.queryAllActive(name);
+            response.setData(resault);
+        }
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
-        pager.result(result);
-        response.setData(pager);
         return response;
     }
 

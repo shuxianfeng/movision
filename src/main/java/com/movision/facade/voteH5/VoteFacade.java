@@ -207,6 +207,10 @@ public class VoteFacade {
         return activeH5Service.findAllActive(activeH5, paging);
     }
 
+    public List<ActiveH5Vo> queryAllActive(String name) {
+        return activeH5Service.queryAllActive(name);
+    }
+
 
 
     /**

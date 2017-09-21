@@ -173,7 +173,17 @@
     ORDER BY intime DESC
 </select>
 
-<select id="queryActivityById" parameterType="java.lang.Integer"
+    <select id="queryAllActive" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.activeH5.entity.ActiveH5Vo">
+        SELECT
+        a.id,a.name
+        FROM tp_activeh5 a WHERE a.isdel=0
+        <if test="name != null">
+            AND a.name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+    </select>
+
+    <select id="queryActivityById" parameterType="java.lang.Integer"
         resultType="com.movision.mybatis.activeH5.entity.ActiveH5">
         SELECT * FROM tp_activeh5 WHERE id = #{id,jdbcType=INTEGER} AND isdel = 0
     </select>
