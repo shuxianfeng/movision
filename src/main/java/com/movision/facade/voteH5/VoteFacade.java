@@ -330,7 +330,7 @@ public class VoteFacade {
      * @param id
      * @return
      */
-    public Take queryTakeById(Integer id) {
+    public TakeVo queryTakeById(Integer id) {
         return takeService.queryTakeById(id);
     }
 

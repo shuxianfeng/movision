@@ -202,7 +202,8 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="queryTakeById" parameterType="java.lang.Integer" resultType="com.movision.mybatis.take.entity.Take">
-        SELECT * FROM tp_take WHERE isdel = 0 AND id = #{id,jdbcType=INTEGER}
+    <select id="queryTakeById" parameterType="java.lang.Integer" resultType="com.movision.mybatis.take.entity.TakeVo">
+        SELECT te.*,ah.name AS acname FROM tp_take te LEFT JOIN tp_activeh5 ah ON ah.id = te.activeid WHERE te.isdel = 0
+        AND te.id = #{id,jdbcType=INTEGER}
     </select>
 </mapper>

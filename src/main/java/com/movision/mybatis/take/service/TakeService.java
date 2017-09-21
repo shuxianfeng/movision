@@ -93,7 +93,7 @@ public class TakeService {
      * @param id
      * @return
      */
-    public Take queryTakeById(Integer id) {
+    public TakeVo queryTakeById(Integer id) {
         try {
             log.info("查询投稿详情");
             return takeMapper.queryTakeById(id);

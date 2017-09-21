@@ -252,7 +252,7 @@ public class VoteController {
     @ApiOperation(value = "根据id查询投稿详情", notes = "查询投稿详情", response = Response.class)
     public Response queryTakeById(@ApiParam(value = "投稿id") @RequestParam int id) {
         Response response = new Response();
-        Take take = voteFacade.queryTakeById(id);
+        TakeVo take = voteFacade.queryTakeById(id);
         response.setMessage("查询成功");
         response.setData(take);
         return response;
