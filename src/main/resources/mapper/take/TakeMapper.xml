@@ -191,7 +191,7 @@
         SELECT t.id,t.activeid,t.mark,t.`name`,t.nickname,t.banner,
         <if test="type == 1">
             (SELECT COUNT(1)
-        FROM tp_votingrecords v INNER JOIN tp_take te ON te.mark=v.takenumber
+            FROM tp_votingrecords v INNER JOIN tp_take te ON te.mark=v.takenumber
             WHERE te.activeid=1 AND v.name = #{username,jdbcType=VARCHAR}
             AND te.isdel=0 AND te.audit=1 AND te.mark = t.mark) AS contribute,
         </if>
@@ -206,7 +206,6 @@
         </if>
         (SELECT COUNT(1) FROM tp_votingrecords WHERE takeid = t.id) AS votesum
         FROM tp_take t
-        LEFT JOIN tp_votingrecords vo ON vo.takeid = t.id
         WHERE t.isdel=0 AND t.audit=1 AND t.activeid=#{activeid,jdbcType=INTEGER}
         <if test="mark!=null and mark!=''">
             AND t.mark=#{mark,jdbcType=INTEGER}
