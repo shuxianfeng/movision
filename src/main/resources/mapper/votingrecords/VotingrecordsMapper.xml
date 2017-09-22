@@ -91,4 +91,7 @@
         intime = #{intime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="queryHave" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT  COUNT(1) FROM  tp_votingrecords WHERE activeid=#{activeid,jdbcType=INTEGER} AND takenumber=#{takenumber,jdbcType=INTEGER} AND name=#{name,jdbcType=VARCHAR}
+    </select>
 </mapper>

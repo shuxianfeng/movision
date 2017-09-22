@@ -467,7 +467,11 @@ public class VoteFacade {
     public int insertSelectiveV(String activeid, String name, String takeid, String takenumber) {
         Votingrecords votingrecords = new Votingrecords();
         //在投票记录里面有没有此用户
-        int count = votingrecordsService.queryHave(name);
+        Map map = new HashMap();
+        map.put("activeid", activeid);
+        map.put("name", name);
+        map.put("takenumber", takenumber);
+        int count = votingrecordsService.queryHave(map);
         int result = 0;
         if (count == 0) {
             votingrecords.setIntime(new Date());

@@ -437,10 +437,10 @@ public class VoteController {
      */
     @ApiOperation(value = "添加投票记录", notes = "添加投票记录", response = Response.class)
     @RequestMapping(value = "insertSelectiveV", method = RequestMethod.POST)
-    public Response insertSelectiveV(@ApiParam(value = "活动id") @RequestParam(required = false) String activeid,
-                                     @ApiParam(value = "姓名") @RequestParam(required = false) String name,
-                                     @ApiParam(value = "参赛id") @RequestParam(required = false) String takeid,
-                                     @ApiParam(value = "投票号码") @RequestParam(required = false) String takenumber) {
+    public Response insertSelectiveV(@ApiParam(value = "活动id") @RequestParam String activeid,
+                                     @ApiParam(value = "姓名") @RequestParam String name,
+                                     @ApiParam(value = "参赛id") @RequestParam String takeid,
+                                     @ApiParam(value = "投票号码") @RequestParam String takenumber) {
         Response response = new Response();
         int result = voteFacade.insertSelectiveV(activeid, name, takeid, takenumber);
         if (response.getCode() == 200) {

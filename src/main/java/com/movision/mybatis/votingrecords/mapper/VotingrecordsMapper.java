@@ -2,6 +2,8 @@ package com.movision.mybatis.votingrecords.mapper;
 
 import com.movision.mybatis.votingrecords.entity.Votingrecords;
 
+import java.util.Map;
+
 public interface VotingrecordsMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -15,6 +17,6 @@ public interface VotingrecordsMapper {
 
     int updateByPrimaryKey(Votingrecords record);
 
-    int queryHave(String name);
+    int queryHave(Map map);
 
 }

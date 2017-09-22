@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
+
 /**
  * @Author zhurui
  * @Date 2017/8/30 10:17
@@ -33,13 +35,13 @@ public class VotingrecordsService {
     /**
      * 有没有透过
      *
-     * @param name
+     * @param
      * @return
      */
-    public int queryHave(String name) {
+    public int queryHave(Map map) {
         try {
             log.info("有没有透过");
-            return votingrecordsMapper.queryHave(name);
+            return votingrecordsMapper.queryHave(map);
         } catch (Exception e) {
             log.error("有没有透过失败", e);
             throw e;
