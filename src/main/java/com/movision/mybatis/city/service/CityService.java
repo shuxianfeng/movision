@@ -29,4 +29,16 @@ public class CityService {
             throw e;
         }
     }
+
+    public City selectCityByName(String name) {
+        try {
+            log.debug("根据名称查询code");
+            return cityMapper.selectCityByName(name);
+        } catch (Exception e) {
+            log.error("根据名称查询code失败", e);
+            throw e;
+        }
+    }
+
+
 }

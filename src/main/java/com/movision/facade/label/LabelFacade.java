@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mongodb.DBObject;
 import com.movision.common.util.ShiroUtil;
+import com.movision.facade.address.AddressFacade;
 import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
 import com.movision.fsearch.utils.StringUtil;
@@ -67,6 +68,8 @@ public class LabelFacade {
     private PostService postService;
     @Autowired
     private FollowUserService followUserService;
+    @Autowired
+    private AddressFacade addressFacade;
 
     /**
      * 我的--关注--关注的标签，点击关注调用的关注的标签列表返回接口
@@ -431,11 +434,12 @@ public class LabelFacade {
         for (int i=0; i<allGeographicLabelList.size(); i++){
             GeographicLabel GLvo = allGeographicLabelList.get(i);
             String name = allGeographicLabelList.get(i).getName();//市名
-            String sn = SnCal.getSn(name);
+
+            String sn = SnCal.getSn(addressFacade.wrapSignParam4GeoCoder(name));
             String ak = PropertiesLoader.getValue("baidu.ak");
 
             //通过http的get请求url
-            String baiduurl = PropertiesLoader.getValue("baidu.url");
+            String baiduurl = PropertiesLoader.getValue("baidu.geocoding.api.url");
 
             //拼接百度接口的请求url
             String url = baiduurl + "?address=" + name + "&output=json&ak=" + ak + "&sn=" + sn;
