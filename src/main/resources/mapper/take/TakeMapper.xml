@@ -213,6 +213,7 @@
         <if test="nickname!=null and nickname!=''">
             AND t.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>
+        ORDER BY t.mark
     </select>
     <select id="voteDesc" resultType="com.movision.mybatis.take.entity.TakeVo">
          SELECT t.id,t.activeid,t.mark,t.`name`,t.nickname,t.banner,(SELECT COUNT(1) FROM tp_votingrecords WHERE takeid =
