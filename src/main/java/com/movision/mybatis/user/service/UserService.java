@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sun.org.mozilla.javascript.internal.EcmaError;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -1151,10 +1152,10 @@ public class UserService {
         }
     }
 
-    public Map selectIntervalBetweenLoginAndRegiste(Integer id) {
+    public Map selectIntervalBetweenLoginAndRegiste(Map map) {
         try {
             log.info("查询当前用户登录和注册之间的时间间隔秒数");
-            return userMapper.selectIntervalBetweenLoginAndRegiste(id);
+            return userMapper.selectIntervalBetweenLoginAndRegiste(map);
         } catch (Exception e) {
             log.error("查询当前用户登录和注册之间的时间间隔秒数失败", e);
             throw e;
