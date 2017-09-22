@@ -339,9 +339,9 @@ public class VoteController {
 
     @ApiOperation(value = "所有参赛", notes = "所有参赛", response = Response.class)
     @RequestMapping(value = "findAll", method = RequestMethod.POST)
-    public Response findAll() {
+    public Response findAll(@ApiParam(value = "活动id") @RequestParam int activeid) {
         Response response = new Response();
-        List<TakeVo> result = voteFacade.findAll();
+        List<TakeVo> result = voteFacade.findAll(activeid);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
