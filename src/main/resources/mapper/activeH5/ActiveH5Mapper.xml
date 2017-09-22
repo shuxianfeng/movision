@@ -204,6 +204,7 @@
     </select>
     <select id="queryH5Describe" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.activeH5.entity.ActiveH5">
-       SELECT id,activitydescription FROM  tp_activeh5 WHERE id = #{id,jdbcType=INTEGER} AND isdel = 0
+        SELECT id,activitydescription,awardsSetting,awardsRules FROM tp_activeh5 WHERE id = #{id,jdbcType=INTEGER} AND
+        isdel = 0
     </select>
 </mapper>
