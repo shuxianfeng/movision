@@ -8,6 +8,7 @@ import com.movision.utils.oss.AliOSSClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.util.Map;
  * @Author zhuangyuhao
  * @Date 2017/9/21 16:51
  */
+@Service
 public class PersonPhotoUtil {
 
     private static Logger log = LoggerFactory.getLogger(PersonPhotoUtil.class);
@@ -37,6 +39,7 @@ public class PersonPhotoUtil {
                 AliOSSClient client = new AliOSSClient();
                 String fileName = list.get(i);
                 File file = new File(fileName);
+
                 Map<String, Object> result = client.uploadLocalFile(file, "img", "personPhoto");
 
                 UserPhoto userPhoto = new UserPhoto();
@@ -47,8 +50,5 @@ public class PersonPhotoUtil {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        PersonPhotoUtil personPhotoUtil = new PersonPhotoUtil();
-        personPhotoUtil.addPhotoToOssAndSaveInDB();
-    }
+
 }

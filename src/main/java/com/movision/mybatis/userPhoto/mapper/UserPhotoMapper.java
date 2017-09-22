@@ -1,7 +1,9 @@
 package com.movision.mybatis.userPhoto.mapper;
 
 import com.movision.mybatis.userPhoto.entity.UserPhoto;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface UserPhotoMapper {
     int deleteByPrimaryKey(Integer id);
 

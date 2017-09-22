@@ -7,11 +7,14 @@ import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.*;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.BusinessException;
+import com.movision.mybatis.userPhoto.entity.UserPhoto;
+import com.movision.mybatis.userPhoto.service.UserPhotoService;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.file.FileUtil;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +33,9 @@ import java.util.Map;
  */
 @Service
 public class AliOSSClient {
+    @Autowired
+    private UserPhotoService userPhotoService;
+
     private static final Logger log = LoggerFactory.getLogger(AliOSSClient.class);
 
     // endpoint是访问OSS的域名。如果您已经在OSS的控制台上 创建了Bucket，请在控制台上查看域名。
@@ -381,7 +387,7 @@ public class AliOSSClient {
             String data = "";
             if (type.equals("img")) {
                 bucketName = PropertiesLoader.getValue("img.bucket");
-                domain = PropertiesLoader.getValue("formal.img.domain");
+                domain = PropertiesLoader.getValue("ali.domain");
                 data = domain + "/" + fileKey;
                 //返回图片的宽高
                 InputStream is = new FileInputStream(file);
@@ -396,10 +402,9 @@ public class AliOSSClient {
 
             ossClient.putObject(bucketName, fileKey, file);
             log.debug("Object：" + fileKey + "存入OSS成功。");
-            log.info("【上传Alioss的返回值】：" + result.toString());
             result.put("status", "success");
-
             result.put("url", data);
+            log.info("【上传Alioss的返回值】：" + result.toString());
 
         } catch (OSSException oe) {
             oe.printStackTrace();
@@ -480,6 +485,7 @@ public class AliOSSClient {
         File file = new File(fileName);
         Map<String, Object> result = client.uploadLocalFile(file, "doc", null);
         System.out.println(result);
+
 //        String name = file.getName();
 //        String a = FileUtil.renameFile(name);
 //        System.out.println(a);
