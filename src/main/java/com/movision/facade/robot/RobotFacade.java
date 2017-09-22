@@ -10,6 +10,8 @@ import com.movision.facade.index.FacadePost;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.robotComment.entity.RobotComment;
+import com.movision.mybatis.robotComment.service.RobotCommentService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
@@ -55,6 +57,9 @@ public class RobotFacade {
 
     @Autowired
     private CollectionFacade collectionFacade;
+
+    @Autowired
+    private RobotCommentService robotCommentService;
 
 
     /**
@@ -272,6 +277,16 @@ public class RobotFacade {
         if (StringUtil.isNotEmpty(sex)) {
             user.setSex(Integer.parseInt(sex));
         }
+    }
+
+    /**
+     * 查询机器人评论列表
+     *
+     * @param type
+     * @return
+     */
+    public List<RobotComment> findAllQueryRoboltComment(String type, Paging<RobotComment> pag) {
+        return robotCommentService.findAllQueryRoboltComment(Integer.parseInt(type), pag);
     }
 
 

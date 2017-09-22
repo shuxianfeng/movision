@@ -83,4 +83,8 @@
   <select id="selectCityByCode" parameterType="java.lang.String" resultType="com.movision.mybatis.city.entity.City">
     SELECT * from yw_city where code = #{code}
   </select>
+
+  <select id="selectCityByName" parameterType="java.lang.String" resultType="com.movision.mybatis.city.entity.City">
+    SELECT * from yw_city where name like concat('%',#{name,jdbcType=VARCHAR},'%')
+  </select>
 </mapper>

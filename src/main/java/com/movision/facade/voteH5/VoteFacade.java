@@ -62,7 +62,8 @@ public class VoteFacade {
      * @param activitydescription
      * @return
      */
-    public int insertSelective(String name, String photo, String begintime, String endtime, String activitydescription, String isApply) {
+    public int insertSelective(String name, String photo, String begintime, String endtime, String activitydescription,
+                               String isApply, String awardsSetting, String awardsRules) {
         ActiveH5 activeH5 = new ActiveH5();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (StringUtil.isNotEmpty(name)) {
@@ -78,6 +79,12 @@ public class VoteFacade {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+        }
+        if (StringUtil.isNotEmpty(awardsRules)) {
+            activeH5.setAwardsRules(awardsRules);
+        }
+        if (StringUtil.isNotEmpty(awardsSetting)) {
+            activeH5.setAwardsSetting(awardsSetting);
         }
         Date end = null;
         if (StringUtil.isNotEmpty(endtime)) {
@@ -129,8 +136,8 @@ public class VoteFacade {
      * @param bigintime
      * @param endtime
      */
-    public void updateActivity(Integer id, String name, String photo,
-                               String explain, String bigintime, String endtime, String isApply) {
+    public void updateActivity(Integer id, String name, String photo, String explain, String bigintime, String endtime,
+                               String isApply, String awardsRules, String awardsSetting) {
         ActiveH5 activeH5 = new ActiveH5();
         activeH5.setId(id);
         if (StringUtil.isNotEmpty(name)) {
@@ -163,6 +170,12 @@ public class VoteFacade {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+        }
+        if (StringUtil.isNotEmpty(awardsRules)) {
+            activeH5.setAwardsRules(awardsRules);
+        }
+        if (StringUtil.isNotEmpty(awardsSetting)) {
+            activeH5.setAwardsSetting(awardsSetting);
         }
         activeH5Service.updateActivity(activeH5);
     }
@@ -365,7 +378,7 @@ public class VoteFacade {
      * @param nickname
      * @return
      */
-    public List<TakeVo> findAllTakeCondition(Paging<TakeVo> paging, String mark, String nickname, String activeid) {
+    public List<TakeVo> findAllTakeCondition(Paging<TakeVo> paging, String mark, String nickname, String activeid, String username) {
         Map map = new HashMap();
         if (StringUtil.isNotEmpty(mark)) {
             map.put("mark", mark);
@@ -376,6 +389,14 @@ public class VoteFacade {
         if (StringUtil.isNotEmpty(activeid)) {
             map.put("activeid", activeid);
         }
+        if (StringUtil.isNotEmpty(username)) {
+            map.put("username", username);
+        }
+        //查询当前 活动 投票类型
+        int howvote = votingrecordsService.activeHowToVote(Integer.parseInt(activeid));
+        //if (howvote == 0){//一天一投
+        //(howvote == 1){//一个账号一投
+        map.put("type", howvote);
         return takeService.findAllTakeCondition(paging, map);
     }
 
@@ -453,26 +474,37 @@ public class VoteFacade {
      */
     public int insertSelectiveV(String activeid, String name, String takeid, String takenumber) {
         Votingrecords votingrecords = new Votingrecords();
+        //如何投票
+        int howvote = votingrecordsService.activeHowToVote(Integer.parseInt(activeid));
         //在投票记录里面有没有此用户
-        int count = votingrecordsService.queryHave(name);
+        Map map = new HashMap();
         int result = 0;
-        if (count == 0) {
-            votingrecords.setIntime(new Date());
-            if (StringUtil.isNotEmpty(name)) {
-                votingrecords.setName(name);
+        if (howvote == 1) {
+            map.put("activeid", activeid);
+            map.put("name", name);
+            map.put("takenumber", takenumber);
+            int count = votingrecordsService.queryHave(map);
+            if (count == 0) {
+                votingrecords.setIntime(new Date());
+                if (StringUtil.isNotEmpty(name)) {
+                    votingrecords.setName(name);
+                }
+                if (StringUtil.isNotEmpty(activeid)) {
+                    votingrecords.setActiveid(Integer.parseInt(activeid));
+                }
+                if (StringUtil.isNotEmpty(takeid)) {
+                    votingrecords.setTakeid(Integer.parseInt(takeid));
+                }
+                if (StringUtil.isNotEmpty(takenumber)) {
+                    votingrecords.setTakenumber(Integer.parseInt(takenumber));
+                }
+                result = votingrecordsService.insertSelective(votingrecords);
+            } else {
+                result = -1;
             }
-            if (StringUtil.isNotEmpty(activeid)) {
-                votingrecords.setActiveid(Integer.parseInt(activeid));
-            }
-            if (StringUtil.isNotEmpty(takeid)) {
-                votingrecords.setTakeid(Integer.parseInt(takeid));
-            }
-            if (StringUtil.isNotEmpty(takenumber)) {
-                votingrecords.setTakenumber(Integer.parseInt(takenumber));
-            }
-            result = votingrecordsService.insertSelective(votingrecords);
-        } else {
-            result = -1;
+        } else if (howvote == 0) {
+            //1天投一次
+
         }
         return result;
     }

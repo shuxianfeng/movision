@@ -56,9 +56,11 @@ public class VoteController {
                                     @ApiParam(value = "活动开始时间") @RequestParam String begintime,
                                     @ApiParam(value = "活动结束时间") @RequestParam String endtime,
                                     @ApiParam(value = "活动说明") @RequestParam String activitydescription,
+                                    @ApiParam(value = "评奖规则") @RequestParam String awardsRules,
+                                    @ApiParam(value = "奖项设置") @RequestParam String awardsSetting,
                                     @ApiParam(value = "是否可以投稿 0否 1是") @RequestParam String isApply) {
         Response response = new Response();
-        int result = voteFacade.insertSelective(name, photo, begintime, endtime, activitydescription, isApply);
+        int result = voteFacade.insertSelective(name, photo, begintime, endtime, activitydescription, isApply, awardsSetting, awardsRules);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
@@ -121,9 +123,11 @@ public class VoteController {
                                    @ApiParam(value = "活动说明") @RequestParam String activitydescription,
                                    @ApiParam(value = "开始时间") @RequestParam String begintime,
                                    @ApiParam(value = "结束时间") @RequestParam String endtime,
+                                   @ApiParam(value = "评奖规则") @RequestParam String awardsRules,
+                                   @ApiParam(value = "奖项设置") @RequestParam String awardsSetting,
                                    @ApiParam(value = "是否可以投稿 0 否 1是") @RequestParam String isApply) {
         Response response = new Response();
-        voteFacade.updateActivity(id, name, photo, activitydescription, begintime, endtime, isApply);
+        voteFacade.updateActivity(id, name, photo, activitydescription, begintime, endtime, isApply, awardsRules, awardsSetting);
         response.setMessage("操作成功");
         response.setData(1);
         return response;
@@ -287,10 +291,11 @@ public class VoteController {
                                 @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
                                 @ApiParam(value = "编号") @RequestParam(required = false) String mark,
                                 @ApiParam(value = "姓名") @RequestParam(required = false) String nickname,
-                                @ApiParam(value = "id") @RequestParam String activeid) {
+                                @ApiParam(value = "id") @RequestParam String activeid,
+                                @ApiParam(value = "投票人") @RequestParam(required = false) String username) {
         Response response = new Response();
         Paging<TakeVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List result = voteFacade.findAllTakeCondition(pager, mark, nickname, activeid);
+        List result = voteFacade.findAllTakeCondition(pager, mark, nickname, activeid, username);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
@@ -433,10 +438,10 @@ public class VoteController {
      */
     @ApiOperation(value = "添加投票记录", notes = "添加投票记录", response = Response.class)
     @RequestMapping(value = "insertSelectiveV", method = RequestMethod.POST)
-    public Response insertSelectiveV(@ApiParam(value = "活动id") @RequestParam(required = false) String activeid,
-                                     @ApiParam(value = "姓名") @RequestParam(required = false) String name,
-                                     @ApiParam(value = "参赛id") @RequestParam(required = false) String takeid,
-                                     @ApiParam(value = "投票号码") @RequestParam(required = false) String takenumber) {
+    public Response insertSelectiveV(@ApiParam(value = "活动id") @RequestParam String activeid,
+                                     @ApiParam(value = "姓名") @RequestParam String name,
+                                     @ApiParam(value = "参赛id") @RequestParam String takeid,
+                                     @ApiParam(value = "投票号码") @RequestParam String takenumber) {
         Response response = new Response();
         int result = voteFacade.insertSelectiveV(activeid, name, takeid, takenumber);
         if (response.getCode() == 200) {

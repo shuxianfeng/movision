@@ -23,6 +23,35 @@ public class ActiveH5 {
 
     private Integer isApply;//是否投稿 0否 1是
 
+    private String awardsSetting;//奖项设置
+
+    private String awardsRules;//评奖规则
+    private Integer howvote;//0:1天1次 1:一个账号一次',
+
+    public Integer getHowvote() {
+        return howvote;
+    }
+
+    public void setHowvote(Integer howvote) {
+        this.howvote = howvote;
+    }
+
+    public String getAwardsSetting() {
+        return awardsSetting;
+    }
+
+    public void setAwardsSetting(String awardsSetting) {
+        this.awardsSetting = awardsSetting;
+    }
+
+    public String getAwardsRules() {
+        return awardsRules;
+    }
+
+    public void setAwardsRules(String awardsRules) {
+        this.awardsRules = awardsRules;
+    }
+
     public Integer getIsApply() {
         return isApply;
     }

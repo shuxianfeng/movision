@@ -16,4 +16,6 @@ public interface CityMapper {
 
     City selectCityByCode(String code);
 
+    City selectCityByName(String name);
+
 }

@@ -12,9 +12,13 @@
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
         <result column="pageview" property="pageview" jdbcType="INTEGER"/>
         <result column="isApply" property="isApply" jdbcType="INTEGER"/>
+        <result column="awardsSetting" property="awardsSetting" jdbcType="VARCHAR"/>
+        <result column="awardsRules" property="awardsRules" jdbcType="VARCHAR"/>
+        <result column="howvote" property="howvote" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, name, photo, begintime, endtime, activitydescription, isdel,intime,pageview, isApply
+        id, name, photo, begintime, endtime, activitydescription, isdel,intime,pageview, isApply, awardsRules,
+        awardsSetting,howvote
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -68,6 +72,12 @@
             <if test="isApply != null">
                 isApply,
             </if>
+            <if test="awardsSetting != null">
+                awardsSetting,
+            </if>
+            <if test="awardsRules != null">
+                awardsRules,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -100,6 +110,12 @@
             <if test="isApply != null">
                 #{isApply,jdbcType=INTEGER},
             </if>
+            <if test="awardsSetting != null">
+                #{awardsSetting,jdbcType=VARCHAR},
+            </if>
+            <if test="awardsRules != null">
+                #{awardsRules,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.activeH5.entity.ActiveH5">
@@ -128,6 +144,12 @@
             </if>
             <if test="isApply != null">
                 isApply = #{isApply,jdbcType=INTEGER},
+            </if>
+            <if test="awardsSetting != null">
+                awardsSetting = #{awardsSetting,jdbcType=VARCHAR},
+            </if>
+            <if test="awardsRules != null">
+                awardsRules = #{awardsRules,jdbcType=VARCHAR},
             </if>
 
         </set>
@@ -204,6 +226,7 @@
     </select>
     <select id="queryH5Describe" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.activeH5.entity.ActiveH5">
-       SELECT id,activitydescription FROM  tp_activeh5 WHERE id = #{id,jdbcType=INTEGER} AND isdel = 0
+        SELECT id,activitydescription,awardsSetting,awardsRules FROM tp_activeh5 WHERE id = #{id,jdbcType=INTEGER} AND
+        isdel = 0
     </select>
 </mapper>

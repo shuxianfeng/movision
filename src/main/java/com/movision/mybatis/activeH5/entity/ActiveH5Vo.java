@@ -27,6 +27,26 @@ public class ActiveH5Vo {
 
     private Integer isApply;//是否投稿 0否 1是
 
+    private String awardsSetting;//奖项设置
+
+    private String awardsRules;//评奖规则
+
+    public String getAwardsSetting() {
+        return awardsSetting;
+    }
+
+    public void setAwardsSetting(String awardsSetting) {
+        this.awardsSetting = awardsSetting;
+    }
+
+    public String getAwardsRules() {
+        return awardsRules;
+    }
+
+    public void setAwardsRules(String awardsRules) {
+        this.awardsRules = awardsRules;
+    }
+
     public Integer getIsApply() {
         return isApply;
     }
