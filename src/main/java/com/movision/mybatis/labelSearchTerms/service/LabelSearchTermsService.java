@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,38 +41,40 @@ public class LabelSearchTermsService implements LabelSearchTermsMapper {
      * @param userid
      * @return
      */
-    public List histroyWordsLabel(int userid) {
+    public List<DBObject> histroyWordsLabel(int userid) {
         MongoClient mongoClient = null;
-        List<DBObject> list = null;
+        List<DBObject> list = new ArrayList<>();
         DB db = null;
         DBCursor cursor = null;
         try {
             mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             db = mongoClient.getDB("searchRecord");
             DBCollection table = db.getCollection("labelSearchTerms");
-            if (null == table) {
-                return list;
-            }
-            BasicDBObject queryObject = new BasicDBObject("userid", userid).append("isdel", 0);
-            //指定需要显示列
-            BasicDBObject keys = new BasicDBObject();
-            keys.put("_id", 0);
-            keys.put("name", 1);
-            keys.put("type", 1);
-            keys.put("labelid", 1);
+            if (null != table) {
+                BasicDBObject queryObject = new BasicDBObject("userid", userid).append("isdel", 0);
+                //指定需要显示列
+                BasicDBObject keys = new BasicDBObject();
+                keys.put("_id", 0);
+                keys.put("name", 1);
+                keys.put("type", 1);
+                keys.put("labelid", 1);
 
-            cursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
-            list = cursor.toArray();
-            for (int i = 0; i < list.size(); i++) {
-                for (int j = list.size() - 1; j > i; j--) {
-                    if (list.get(i).get("labelid").equals(list.get(j).get("labelid"))) {
-                        list.remove(j);
+                cursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
+                if (null != cursor) {
+                    list = cursor.toArray();
+                    for (int i = 0; i < list.size(); i++) {
+                        for (int j = list.size() - 1; j > i; j--) {
+                            if (list.get(i).get("labelid").equals(list.get(j).get("labelid"))) {
+                                list.remove(j);
+                            }
+                        }
                     }
+                    //            list.subList(0, 12);
+                    list = pageFacade.getPageList(list, 1, 12);
+                    cursor.close();
                 }
             }
-//            list.subList(0, 12);
-            list = pageFacade.getPageList(list, 1, 12);
-            cursor.close();
+
         } catch (Exception e) {
             log.error("查询标签搜索历史记录", e);
         } finally {

@@ -155,12 +155,7 @@ public class AliOSSClient {
             String fileName = file.getOriginalFilename();
             String fileKey;
             String fileName2 = FileUtil.renameFile(fileName);
-            if (chann != null) {
-                fileKey = "upload/" + chann + "/" + type + "/" + fileName2;
-
-            } else {
-                fileKey = "upload/" + fileName2;
-            }
+            fileKey = defineFileKey(type, chann, fileName2);
 
             String data = "";
             if (type.equals("img")) {
@@ -220,11 +215,7 @@ public class AliOSSClient {
             String fileKey;
             String domain;
             String fileName = FileUtil.renameFile(fil).getName();
-            if (chann != null) {
-                fileKey = "upload/" + chann + "/" + type + "/" + fileName;
-            } else {
-                fileKey = "upload/" + fileName;
-            }
+            fileKey = defineFileKey(type, chann, fileName);
 
             String data = "";
             if (type.equals("img")) {
@@ -378,11 +369,7 @@ public class AliOSSClient {
             String fileKey;
             String domain;
             String fileName = FileUtil.renameFile(file).getName();
-            if (chann != null) {
-                fileKey = "upload/" + chann + "/" + type + "/" + fileName;
-            } else {
-                fileKey = "upload/" + fileName;
-            }
+            fileKey = defineFileKey(type, chann, fileName);
 
             String data = "";
             if (type.equals("img")) {
@@ -425,6 +412,78 @@ public class AliOSSClient {
     }
 
 
+    /**
+     * 上传本地文件
+     *
+     * @param file  本地文件名
+     * @param type  文件类型 IMG:图片 | FILE:其他文件
+     * @param chann 频道
+     * @return
+     */
+    public Map<String, Object> uploadLocalFileByPersonPhoto(File file, String type, String chann) {
+        Map<String, Object> result = new HashMap<>();
+
+        log.info("阿里云OSS上传Started");
+        OSSClient ossClient = init();
+
+        try {
+            // 文件存储入OSS，Object的名称为fileKey。详细请参看“SDK手册 > Java-SDK > 上传文件”。
+            // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/upload_object.html?spm=5176.docoss/user_guide/upload_object
+            String fileKey;
+            String domain;
+            String fileName = FileUtil.renameFile(file).getName();
+            fileKey = defineFileKey(type, chann, fileName);
+
+            String data = "";
+            if (type.equals("img")) {
+                bucketName = PropertiesLoader.getValue("img.bucket");
+                domain = PropertiesLoader.getValue("formal.img.domain");    //正式服 http://pic.mofo.shop
+                data = domain + "/" + fileKey;
+            } else if (type.equals("doc")) {
+                bucketName = PropertiesLoader.getValue("file.bucket");
+                data = fileName;
+            }
+            //核心api
+            ossClient.putObject(bucketName, fileKey, file);
+            log.debug("Object：" + fileKey + "存入OSS成功。");
+            result.put("status", "success");
+            result.put("url", data);
+            log.info("【上传Alioss的返回值】：" + result.toString());
+
+        } catch (OSSException oe) {
+            oe.printStackTrace();
+            log.error(oe.getErrorCode() + ":" + oe.getErrorMessage());
+            result.put("status", "fail");
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("status", "fail");
+            return result;
+        } finally {
+            ossClient.shutdown();
+        }
+        log.info("阿里云OSS上传Completed");
+        return result;
+    }
+
+    /**
+     * 定义fileKey的值，即oss上的存储路径
+     *
+     * @param type
+     * @param chann
+     * @param fileName
+     * @return
+     */
+    private String defineFileKey(String type, String chann, String fileName) {
+        String fileKey;
+        if (chann != null) {
+            fileKey = "upload/" + chann + "/" + type + "/" + fileName;
+        } else {
+            fileKey = "upload/" + fileName;
+        }
+        return fileKey;
+    }
+
 
     /**
      * 下载文件
@@ -447,11 +506,7 @@ public class AliOSSClient {
             }
 
             String objKey;
-            if (chann != null) {
-                objKey = "upload/" + chann + "/" + type + "/" + fileName;
-            } else {
-                objKey = "upload/" + fileName;
-            }
+            objKey = defineFileKey(type, chann, fileName);
 
 
             OSSObject ossObject = ossClient.getObject(bucketName, objKey);
