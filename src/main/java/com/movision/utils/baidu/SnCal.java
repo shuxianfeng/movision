@@ -1,6 +1,8 @@
 package com.movision.utils.baidu;
 
 import com.movision.utils.propertiesLoader.PropertiesLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -14,6 +16,7 @@ import java.util.Map;
  */
 public class SnCal {
 
+    private static Logger log = LoggerFactory.getLogger(SnCal.class);
     /**
      * 秘钥
      */
@@ -28,6 +31,7 @@ public class SnCal {
 
         // 对paramsStr前面拼接上/geocoder/v2/?，后面直接拼接yoursk得到/geocoder/v2/?address=%E7%99%BE%E5%BA%A6%E5%A4%A7%E5%8E%A6&output=json&ak=yourakyoursk
         String wholeStr = new String("/geocoder/v2/?" + paramsStr + BAIDU_MAP_API_SK);
+        log.debug("----------wholeStr----------:" + wholeStr);
 
         // 对上面wholeStr再作utf8编码
         String tempStr = URLEncoder.encode(wholeStr, "UTF-8");
