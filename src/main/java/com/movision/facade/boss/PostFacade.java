@@ -2823,7 +2823,7 @@ public class PostFacade {
      * @param userid
      * @param photo
      */
-    public void updatePostLabel(String id, String name, String type, String userid, String isrecommend, String photo) {
+    public void updatePostLabel(String id, String name, String type, String isrecommend, String photo) {
         PostLabel label = new PostLabel();
         if (StringUtil.isNotEmpty(id)) {
             label.setId(Integer.parseInt(id));
@@ -2833,9 +2833,6 @@ public class PostFacade {
         }
         if (StringUtil.isNotEmpty(type)) {
             label.setType(Integer.parseInt(type));
-        }
-        if (StringUtil.isNotEmpty(userid)) {
-            label.setUserid(Integer.parseInt(userid));
         }
         if (StringUtil.isNotEmpty(isrecommend)) {
             label.setIsrecommend(Integer.parseInt(isrecommend));

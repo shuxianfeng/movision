@@ -1383,7 +1383,6 @@ public class PostController {
      * @param id
      * @param name
      * @param type
-     * @param userid
      * @param photo
      * @return
      */
@@ -1392,11 +1391,10 @@ public class PostController {
     public Response updatePostLabel(@ApiParam(value = "标签id") @RequestParam String id,
                                     @ApiParam(value = "标签名称") @RequestParam(required = false) String name,
                                     @ApiParam(value = "标签类型0：圈子，1：活动，2：地理，3：其他") @RequestParam(required = false) String type,
-                                    @ApiParam(value = "创建人登录用户") @RequestParam String userid,
                                     @ApiParam(value = "是否推荐首页") @RequestParam(required = false) String isrecommend,
                                     @ApiParam(value = "标签头像") @RequestParam(required = false) String photo) {
         Response response = new Response();
-        postFacade.updatePostLabel(id, name, type, userid, isrecommend, photo);
+        postFacade.updatePostLabel(id, name, type, isrecommend, photo);
         response.setMessage("操作成功");
         response.setData(1);
         return response;
