@@ -68,4 +68,12 @@
         type = #{type,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="findAllQueryRoboltComment" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.robotComment.entity.RobotComment">
+        SELECT * FROM yw_comment WHERE 1
+        <if test="type != null">
+            type = #{type,jdbcType=INTEGER}
+        </if>
+    </select>
 </mapper>

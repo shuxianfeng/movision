@@ -3,6 +3,7 @@ package com.movision.controller.boss.robot;
 import com.movision.common.Response;
 import com.movision.facade.robot.RobotFacade;
 import com.movision.mybatis.record.entity.Record;
+import com.movision.mybatis.robotComment.entity.RobotComment;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.utils.pagination.model.Paging;
@@ -142,10 +143,16 @@ public class RobotController {
 
     //**********************************************评论操作
 
-    public Response queryRoboltComment(@ApiParam(value = "评论类型") @RequestParam(required = false) String type) {
+    @ApiOperation(value = "查询评论列表", notes = "用于查询机器人评论列表", response = Response.class)
+    @RequestMapping(value = "query_robolt_comment", method = RequestMethod.POST)
+    public Response queryRoboltComment(@ApiParam(value = "评论类型") @RequestParam(required = false) String type,
+                                       @ApiParam(value = "当前页") @RequestParam(defaultValue = "1") String pageNo,
+                                       @ApiParam(value = "每页几条") @RequestParam(defaultValue = "10") String pageSize) {
         Response response = new Response();
+        Paging<RobotComment> pag = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<RobotComment> list = robotFacade.findAllQueryRoboltComment(type, pag);
         response.setMessage("查询成功");
-        response.setData(1);
+        response.setData(list);
         return response;
     }
 

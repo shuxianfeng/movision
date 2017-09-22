@@ -35,6 +35,16 @@ public class TakeVo {
 
     private String acname;//活动名称
 
+    private Integer contribute;//是否可投稿
+
+    public Integer getContribute() {
+        return contribute;
+    }
+
+    public void setContribute(Integer contribute) {
+        this.contribute = contribute;
+    }
+
     public String getAcname() {
         return acname;
     }

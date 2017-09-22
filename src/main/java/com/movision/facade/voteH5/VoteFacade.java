@@ -392,6 +392,11 @@ public class VoteFacade {
         if (StringUtil.isNotEmpty(username)) {
             map.put("username", username);
         }
+        //查询当前 活动 投票类型
+        int howvote = votingrecordsService.activeHowToVote(Integer.parseInt(activeid));
+        //if (howvote == 0){//一天一投
+        //(howvote == 1){//一个账号一投
+        map.put("type", howvote);
         return takeService.findAllTakeCondition(paging, map);
     }
 
