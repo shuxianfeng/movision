@@ -56,9 +56,11 @@ public class VoteController {
                                     @ApiParam(value = "活动开始时间") @RequestParam String begintime,
                                     @ApiParam(value = "活动结束时间") @RequestParam String endtime,
                                     @ApiParam(value = "活动说明") @RequestParam String activitydescription,
+                                    @ApiParam(value = "评奖规则") @RequestParam String awardsRules,
+                                    @ApiParam(value = "奖项设置") @RequestParam String awardsSetting,
                                     @ApiParam(value = "是否可以投稿 0否 1是") @RequestParam String isApply) {
         Response response = new Response();
-        int result = voteFacade.insertSelective(name, photo, begintime, endtime, activitydescription, isApply);
+        int result = voteFacade.insertSelective(name, photo, begintime, endtime, activitydescription, isApply, awardsSetting, awardsRules);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
@@ -121,9 +123,11 @@ public class VoteController {
                                    @ApiParam(value = "活动说明") @RequestParam String activitydescription,
                                    @ApiParam(value = "开始时间") @RequestParam String begintime,
                                    @ApiParam(value = "结束时间") @RequestParam String endtime,
+                                   @ApiParam(value = "评奖规则") @RequestParam String awardsRules,
+                                   @ApiParam(value = "奖项设置") @RequestParam String awardsSetting,
                                    @ApiParam(value = "是否可以投稿 0 否 1是") @RequestParam String isApply) {
         Response response = new Response();
-        voteFacade.updateActivity(id, name, photo, activitydescription, begintime, endtime, isApply);
+        voteFacade.updateActivity(id, name, photo, activitydescription, begintime, endtime, isApply, awardsRules, awardsSetting);
         response.setMessage("操作成功");
         response.setData(1);
         return response;

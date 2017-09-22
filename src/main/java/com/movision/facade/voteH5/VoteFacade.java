@@ -62,7 +62,8 @@ public class VoteFacade {
      * @param activitydescription
      * @return
      */
-    public int insertSelective(String name, String photo, String begintime, String endtime, String activitydescription, String isApply) {
+    public int insertSelective(String name, String photo, String begintime, String endtime, String activitydescription,
+                               String isApply, String awardsSetting, String awardsRules) {
         ActiveH5 activeH5 = new ActiveH5();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (StringUtil.isNotEmpty(name)) {
@@ -78,6 +79,12 @@ public class VoteFacade {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+        }
+        if (StringUtil.isNotEmpty(awardsRules)) {
+            activeH5.setAwardsRules(awardsRules);
+        }
+        if (StringUtil.isNotEmpty(awardsSetting)) {
+            activeH5.setAwardsSetting(awardsSetting);
         }
         Date end = null;
         if (StringUtil.isNotEmpty(endtime)) {
@@ -129,8 +136,8 @@ public class VoteFacade {
      * @param bigintime
      * @param endtime
      */
-    public void updateActivity(Integer id, String name, String photo,
-                               String explain, String bigintime, String endtime, String isApply) {
+    public void updateActivity(Integer id, String name, String photo, String explain, String bigintime, String endtime,
+                               String isApply, String awardsRules, String awardsSetting) {
         ActiveH5 activeH5 = new ActiveH5();
         activeH5.setId(id);
         if (StringUtil.isNotEmpty(name)) {
@@ -163,6 +170,12 @@ public class VoteFacade {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+        }
+        if (StringUtil.isNotEmpty(awardsRules)) {
+            activeH5.setAwardsRules(awardsRules);
+        }
+        if (StringUtil.isNotEmpty(awardsSetting)) {
+            activeH5.setAwardsSetting(awardsSetting);
         }
         activeH5Service.updateActivity(activeH5);
     }
