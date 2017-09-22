@@ -1,12 +1,10 @@
 package com.movision.utils.baidu;
 
+import com.movision.utils.propertiesLoader.PropertiesLoader;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
-
-import com.movision.utils.propertiesLoader.PropertiesLoader;
-
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**

@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
-import static org.junit.Assert.*;
-
 /**
  * @Author zhuangyuhao
  * @Date 2017/9/22 15:41
