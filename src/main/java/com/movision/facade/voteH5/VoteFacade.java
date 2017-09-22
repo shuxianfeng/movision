@@ -304,20 +304,14 @@ public class VoteFacade {
     /**
      * 投稿审核
      *
-     * @param id
-     * @param number
      */
-    public void updateTakeByAudit(String activityid, String id, String number, String type) {
+    public void updateTakeByAudit(String id, String type) {
         Take take = new Take();
         take.setId(Integer.parseInt(id));
         if (type.equals("1")) {
             take.setAudit(1);
         } else if (type.equals("2")) {
             take.setAudit(2);
-        }
-        take.setActiveid(Integer.parseInt(activityid));
-        if (StringUtil.isNotEmpty(number)) {
-            take.setMark(Integer.parseInt(number));
         }
         //把当前序号之后的投稿序号+1
         //takeService.updateTakeByNumber(take);

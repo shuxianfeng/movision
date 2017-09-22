@@ -231,12 +231,10 @@ public class VoteController {
      */
     @ApiOperation(value = "投稿审核（后台）", notes = "用于投稿审核接口", response = Response.class)
     @RequestMapping(value = "updateTakeByAudit", method = RequestMethod.POST)
-    public Response updateTakeByAudit(@ApiParam(value = "活动id") @RequestParam String activityid,
-                                      @ApiParam(value = "投稿id") @RequestParam String id,
-                                      @ApiParam(value = "号码") @RequestParam String number,
+    public Response updateTakeByAudit(@ApiParam(value = "投稿id") @RequestParam String id,
                                       @ApiParam(value = "审核状态") @RequestParam String type) {
         Response response = new Response();
-        voteFacade.updateTakeByAudit(activityid, id, number, type);
+        voteFacade.updateTakeByAudit(id, type);
         response.setMessage("操作成功");
         response.setData(1);
         return response;
