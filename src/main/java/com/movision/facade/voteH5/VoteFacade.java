@@ -59,12 +59,10 @@ public class VoteFacade {
      * @param photo
      * @param begintime
      * @param endtime
-     * @param
      * @param activitydescription
-     * @param
      * @return
      */
-    public int insertSelective(HttpServletRequest request, String name, String photo, String begintime, String endtime, String activitydescription) {
+    public int insertSelective(String name, String photo, String begintime, String endtime, String activitydescription, String isApply) {
         ActiveH5 activeH5 = new ActiveH5();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (StringUtil.isNotEmpty(name)) {
@@ -88,6 +86,9 @@ public class VoteFacade {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+        }
+        if (StringUtil.isNotEmpty(isApply)) {
+            activeH5.setIsApply(Integer.parseInt(isApply));
         }
         activeH5.setBegintime(begin);
         activeH5.setEndtime(end);
@@ -128,8 +129,8 @@ public class VoteFacade {
      * @param bigintime
      * @param endtime
      */
-    public void updateActivity(HttpServletRequest request, Integer id, String name, String photo,
-                               String explain, String bigintime, String endtime) {
+    public void updateActivity(Integer id, String name, String photo,
+                               String explain, String bigintime, String endtime, String isApply) {
         ActiveH5 activeH5 = new ActiveH5();
         activeH5.setId(id);
         if (StringUtil.isNotEmpty(name)) {
@@ -139,18 +140,10 @@ public class VoteFacade {
             activeH5.setPhoto(photo);
         }
         if (StringUtil.isNotEmpty(explain)) {
-            //内容转换
-            Map con = jsoupCompressImg.compressImg(request, explain);
-            System.out.println(con);
-            if ((int) con.get("code") == 200) {
-                String str = con.get("content").toString();
-                str = str.replace("\\", "");
-                activeH5.setActivitydescription(str);
-            } else {
-                logger.error("帖子内容转换异常");
-                activeH5.setActivitydescription(explain);
-            }
-            //activeH5.setActivitydescription(explain);
+            activeH5.setActivitydescription(explain);
+        }
+        if (StringUtil.isNotEmpty(isApply)) {
+            activeH5.setIsApply(Integer.parseInt(isApply));
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date big = null;

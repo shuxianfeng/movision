@@ -51,14 +51,14 @@ public class VoteController {
      */
     @ApiOperation(value = "添加活动(后台)", notes = "添加活动", response = Response.class)
     @RequestMapping(value = "insertSelective", method = RequestMethod.POST)
-    public Response insertSelective(HttpServletRequest request,
-                                    @ApiParam(value = "活动名称") @RequestParam String name,
+    public Response insertSelective(@ApiParam(value = "活动名称") @RequestParam String name,
                                     @ApiParam(value = "活动图片") @RequestParam String photo,
                                     @ApiParam(value = "活动开始时间") @RequestParam String begintime,
                                     @ApiParam(value = "活动结束时间") @RequestParam String endtime,
-                                    @ApiParam(value = "活动说明") @RequestParam String activitydescription) {
+                                    @ApiParam(value = "活动说明") @RequestParam String activitydescription,
+                                    @ApiParam(value = "是否可以投稿 0否 1是") @RequestParam String isApply) {
         Response response = new Response();
-        int result = voteFacade.insertSelective(request, name, photo, begintime, endtime, activitydescription);
+        int result = voteFacade.insertSelective(name, photo, begintime, endtime, activitydescription, isApply);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
@@ -115,15 +115,15 @@ public class VoteController {
      */
     @RequestMapping(value = "updateActivity", method = RequestMethod.POST)
     @ApiOperation(value = "编辑活动（后台）", notes = "编辑活动接口", response = Response.class)
-    public Response updateActivity(HttpServletRequest request,
-                                   @ApiParam(value = "活动id") @RequestParam int id,
+    public Response updateActivity(@ApiParam(value = "活动id") @RequestParam int id,
                                    @ApiParam(value = "活动名称") @RequestParam String name,
                                    @ApiParam(value = "活动封面") @RequestParam String photo,
                                    @ApiParam(value = "活动说明") @RequestParam String activitydescription,
                                    @ApiParam(value = "开始时间") @RequestParam String begintime,
-                                   @ApiParam(value = "结束时间") @RequestParam String endtime) {
+                                   @ApiParam(value = "结束时间") @RequestParam String endtime,
+                                   @ApiParam(value = "是否可以投稿 0 否 1是") @RequestParam String isApply) {
         Response response = new Response();
-        voteFacade.updateActivity(request, id, name, photo, activitydescription, begintime, endtime);
+        voteFacade.updateActivity(id, name, photo, activitydescription, begintime, endtime, isApply);
         response.setMessage("操作成功");
         response.setData(1);
         return response;

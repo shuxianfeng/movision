@@ -27,6 +27,8 @@ import java.util.List;
 @RequestMapping("boss/robot")
 public class RobotController {
 
+    //**************************************机器人操作
+
     @Autowired
     private RobotFacade robotFacade;
 
@@ -137,5 +139,14 @@ public class RobotController {
         return response;
     }
 
+
+    //**********************************************评论操作
+
+    public Response queryRoboltComment(@ApiParam(value = "评论类型") @RequestParam(required = false) String type) {
+        Response response = new Response();
+        response.setMessage("查询成功");
+        response.setData(1);
+        return response;
+    }
 
 }

@@ -21,6 +21,16 @@ public class ActiveH5 {
 
     private Integer pageview;
 
+    private Integer isApply;//是否投稿 0否 1是
+
+    public Integer getIsApply() {
+        return isApply;
+    }
+
+    public void setIsApply(Integer isApply) {
+        this.isApply = isApply;
+    }
+
     public Integer getPageview() {
         return pageview;
     }
