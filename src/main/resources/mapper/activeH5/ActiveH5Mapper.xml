@@ -145,7 +145,7 @@
     </update>
     <select id="querySum" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.activeH5.entity.ActiveH5Vo">
-        SELECT a.id,a.pageview,a.photo,a.begintime,a.endtime AS endime,
+        SELECT a.id,a.pageview,a.photo,a.begintime,a.endtime AS endime,a.isApply,
         (SELECT COUNT(1) FROM tp_take t WHERE t.activeid=#{activeid,jdbcType=INTEGER}) AS takesum,
         (SELECT COUNT(1) FROM tp_votingrecords v WHERE v.activeid=#{activeid,jdbcType=INTEGER}) AS votesum
         FROM tp_activeh5 a
