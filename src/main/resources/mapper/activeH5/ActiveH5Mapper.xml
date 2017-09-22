@@ -149,7 +149,7 @@
         (SELECT COUNT(1) FROM tp_take t WHERE t.activeid=#{activeid,jdbcType=INTEGER}) AS takesum,
         (SELECT COUNT(1) FROM tp_votingrecords v WHERE v.activeid=#{activeid,jdbcType=INTEGER}) AS votesum
         FROM tp_activeh5 a
-        WHERE a.id=#{activeid,jdbcType=INTEGER}
+        WHERE a.id=#{activeid,jdbcType=INTEGER} AND a.isdel=0
     </select>
     <select id="findAllActive" resultType="com.movision.mybatis.activeH5.entity.ActiveH5Vo">
         SELECT
