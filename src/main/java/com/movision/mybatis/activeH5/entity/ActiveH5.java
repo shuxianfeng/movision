@@ -26,6 +26,15 @@ public class ActiveH5 {
     private String awardsSetting;//奖项设置
 
     private String awardsRules;//评奖规则
+    private Integer howvote;//0:1天1次 1:一个账号一次',
+
+    public Integer getHowvote() {
+        return howvote;
+    }
+
+    public void setHowvote(Integer howvote) {
+        this.howvote = howvote;
+    }
 
     public String getAwardsSetting() {
         return awardsSetting;

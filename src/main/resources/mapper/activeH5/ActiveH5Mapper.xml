@@ -14,10 +14,11 @@
         <result column="isApply" property="isApply" jdbcType="INTEGER"/>
         <result column="awardsSetting" property="awardsSetting" jdbcType="VARCHAR"/>
         <result column="awardsRules" property="awardsRules" jdbcType="VARCHAR"/>
+        <result column="howvote" property="howvote" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, name, photo, begintime, endtime, activitydescription, isdel,intime,pageview, isApply, awardsRules,
-        awardsSetting
+        awardsSetting,howvote
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select

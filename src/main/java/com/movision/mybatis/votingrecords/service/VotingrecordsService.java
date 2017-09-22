@@ -48,4 +48,15 @@ public class VotingrecordsService {
         }
     }
 
+
+    public int activeHowToVote(int activeid) {
+        try {
+            log.info("什么投票方式");
+            return votingrecordsMapper.activeHowToVote(activeid);
+        } catch (Exception e) {
+            log.error("什么投票方式失败", e);
+            throw e;
+        }
+    }
+
 }

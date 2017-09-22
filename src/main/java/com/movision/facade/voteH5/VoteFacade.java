@@ -466,30 +466,37 @@ public class VoteFacade {
      */
     public int insertSelectiveV(String activeid, String name, String takeid, String takenumber) {
         Votingrecords votingrecords = new Votingrecords();
+        //如何投票
+        int howvote = votingrecordsService.activeHowToVote(Integer.parseInt(activeid));
         //在投票记录里面有没有此用户
         Map map = new HashMap();
-        map.put("activeid", activeid);
-        map.put("name", name);
-        map.put("takenumber", takenumber);
-        int count = votingrecordsService.queryHave(map);
         int result = 0;
-        if (count == 0) {
-            votingrecords.setIntime(new Date());
-            if (StringUtil.isNotEmpty(name)) {
-                votingrecords.setName(name);
+        if (howvote == 1) {
+            map.put("activeid", activeid);
+            map.put("name", name);
+            map.put("takenumber", takenumber);
+            int count = votingrecordsService.queryHave(map);
+            if (count == 0) {
+                votingrecords.setIntime(new Date());
+                if (StringUtil.isNotEmpty(name)) {
+                    votingrecords.setName(name);
+                }
+                if (StringUtil.isNotEmpty(activeid)) {
+                    votingrecords.setActiveid(Integer.parseInt(activeid));
+                }
+                if (StringUtil.isNotEmpty(takeid)) {
+                    votingrecords.setTakeid(Integer.parseInt(takeid));
+                }
+                if (StringUtil.isNotEmpty(takenumber)) {
+                    votingrecords.setTakenumber(Integer.parseInt(takenumber));
+                }
+                result = votingrecordsService.insertSelective(votingrecords);
+            } else {
+                result = -1;
             }
-            if (StringUtil.isNotEmpty(activeid)) {
-                votingrecords.setActiveid(Integer.parseInt(activeid));
-            }
-            if (StringUtil.isNotEmpty(takeid)) {
-                votingrecords.setTakeid(Integer.parseInt(takeid));
-            }
-            if (StringUtil.isNotEmpty(takenumber)) {
-                votingrecords.setTakenumber(Integer.parseInt(takenumber));
-            }
-            result = votingrecordsService.insertSelective(votingrecords);
-        } else {
-            result = -1;
+        } else if (howvote == 0) {
+            //1天投一次
+
         }
         return result;
     }

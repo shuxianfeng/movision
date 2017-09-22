@@ -19,4 +19,7 @@ public interface VotingrecordsMapper {
 
     int queryHave(Map map);
 
+    //查询活动是怎么投票的
+    int activeHowToVote(int activeid);
+
 }
