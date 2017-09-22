@@ -378,7 +378,7 @@ public class VoteFacade {
      * @param nickname
      * @return
      */
-    public List<TakeVo> findAllTakeCondition(Paging<TakeVo> paging, String mark, String nickname, String activeid) {
+    public List<TakeVo> findAllTakeCondition(Paging<TakeVo> paging, String mark, String nickname, String activeid, String username) {
         Map map = new HashMap();
         if (StringUtil.isNotEmpty(mark)) {
             map.put("mark", mark);
@@ -388,6 +388,9 @@ public class VoteFacade {
         }
         if (StringUtil.isNotEmpty(activeid)) {
             map.put("activeid", activeid);
+        }
+        if (StringUtil.isNotEmpty(username)) {
+            map.put("username", username);
         }
         return takeService.findAllTakeCondition(paging, map);
     }

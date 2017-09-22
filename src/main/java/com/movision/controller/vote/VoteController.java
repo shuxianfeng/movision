@@ -291,10 +291,11 @@ public class VoteController {
                                 @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
                                 @ApiParam(value = "编号") @RequestParam(required = false) String mark,
                                 @ApiParam(value = "姓名") @RequestParam(required = false) String nickname,
-                                @ApiParam(value = "id") @RequestParam String activeid) {
+                                @ApiParam(value = "id") @RequestParam String activeid,
+                                @ApiParam(value = "投票人") @RequestParam(required = false) String username) {
         Response response = new Response();
         Paging<TakeVo> pager = new Paging<>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List result = voteFacade.findAllTakeCondition(pager, mark, nickname, activeid);
+        List result = voteFacade.findAllTakeCondition(pager, mark, nickname, activeid, username);
         if (response.getCode() == 200) {
             response.setMessage("返回成功");
         }
