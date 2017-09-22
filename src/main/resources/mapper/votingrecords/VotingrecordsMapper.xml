@@ -46,6 +46,9 @@
             <if test="intime != null">
                 intime,
             </if>
+            <if test="takeid != null">
+                takeid,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -62,6 +65,9 @@
             </if>
             <if test="intime != null">
                 #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="takeid != null">
+                #{takeid,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
