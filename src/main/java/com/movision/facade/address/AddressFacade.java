@@ -251,7 +251,7 @@ public class AddressFacade {
         //获取签名
         String sn = SnCal.getSn(wrapSignParam4ReverseGeoCoder(location));
         //拼接百度接口的请求url
-        String url = baiduurl + "?callback=renderReverse" + "&location=" + location + "&output=json&ak=" + BAIDU_MAP_API_AK + "&sn=" + sn;
+        String url = baiduurl + "?callback=renderReverse" + "&location=" + location + "&output=json&ak=" + BAIDU_MAP_API_AK;
         String result = "";
         String citycode = null;
         Map map = new HashMap();
