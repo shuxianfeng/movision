@@ -11,9 +11,10 @@
         <result column="isdel" property="isdel" jdbcType="INTEGER"/>
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
         <result column="pageview" property="pageview" jdbcType="INTEGER"/>
+        <result column="isApply" property="isApply" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, name, photo, begintime, endtime, activitydescription, isdel,intime,pageview
+        id, name, photo, begintime, endtime, activitydescription, isdel,intime,pageview, isApply
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -28,10 +29,11 @@
     <insert id="insert" parameterType="com.movision.mybatis.activeH5.entity.ActiveH5">
         insert into tp_activeh5 (id, name, photo,
         begintime, endtime,
-        activitydescription, isdel,intime)
+        activitydescription, isdel, intime, isApply)
         values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR},
         #{begintime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP},
-        #{activitydescription,jdbcType=VARCHAR}, #{isdel,jdbcType=INTEGER},#{intime,jdbcType=TIMESTAMP})
+        #{activitydescription,jdbcType=VARCHAR}, #{isdel,jdbcType=INTEGER},#{intime,jdbcType=TIMESTAMP},
+        #{isApply,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.activeH5.entity.ActiveH5">
         insert into tp_activeh5
@@ -63,7 +65,9 @@
             <if test="pageview != null">
                 pageview,
             </if>
-
+            <if test="isApply != null">
+                isApply,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -93,6 +97,9 @@
             <if test="pageview != null">
                 #{pageview,jdbcType=INTEGER},
             </if>
+            <if test="isApply != null">
+                #{isApply,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.activeH5.entity.ActiveH5">
@@ -119,6 +126,9 @@
             <if test="intime != null">
                 intime = #{intime,jdbcType=INTEGER},
             </if>
+            <if test="isApply != null">
+                isApply = #{isApply,jdbcType=INTEGER},
+            </if>
 
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -131,7 +141,8 @@
         endtime = #{endtime,jdbcType=TIMESTAMP},
         activitydescription = #{activitydescription,jdbcType=VARCHAR},
         isdel = #{isdel,jdbcType=INTEGER},
-        intime = #{intime,jdbcType=TIMESTAMP}
+        intime = #{intime,jdbcType=TIMESTAMP},
+        isApply = #{isApply,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="deleteActive" parameterType="java.lang.Integer">
@@ -145,15 +156,15 @@
     </update>
     <select id="querySum" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.activeH5.entity.ActiveH5Vo">
-        SELECT a.id,a.pageview,a.photo,a.begintime,a.endtime,
+        SELECT a.id,a.pageview,a.photo,a.begintime,a.endtime AS endime,a.isApply,
         (SELECT COUNT(1) FROM tp_take t WHERE t.activeid=#{activeid,jdbcType=INTEGER}) AS takesum,
         (SELECT COUNT(1) FROM tp_votingrecords v WHERE v.activeid=#{activeid,jdbcType=INTEGER}) AS votesum
         FROM tp_activeh5 a
-        WHERE a.id=#{activeid,jdbcType=INTEGER}
+        WHERE a.id=#{activeid,jdbcType=INTEGER} AND a.isdel=0
     </select>
     <select id="findAllActive" resultType="com.movision.mybatis.activeH5.entity.ActiveH5Vo">
         SELECT
-        a.id,a.pageview,a.photo,a.begintime,a.endtime AS endime,a.name,a.intime,
+        a.id,a.pageview,a.photo,a.begintime,a.endtime AS endime,a.name,a.intime,a.isApply,
         (SELECT COUNT(1) FROM tp_take ta WHERE ta.activeid = a.id) AS takesum,
         (SELECT COUNT(1) FROM tp_votingrecords tp WHERE tp.activeid = a.id) AS votesum
         FROM tp_activeh5 a WHERE a.isdel=0
@@ -173,7 +184,21 @@
     ORDER BY intime DESC
 </select>
 
-<select id="queryActivityById" parameterType="java.lang.Integer"
+    <select id="queryAllActive" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.activeH5.entity.ActiveH5Vo">
+        SELECT
+        a.id,a.name
+        FROM tp_activeh5 a WHERE a.isdel=0
+        <if test="name != null">
+            AND a.name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <![CDATA[AND (((now()  <= a.begintime) AND (now() <= a.endtime))
+        OR ((now()  >= a.begintime) AND (now() <= a.endtime))
+        OR ((now()  >= a.begintime) AND (now() >= a.endtime))
+        OR ((now()  <= a.begintime) AND (now() >= a.endtime)))]]>
+    </select>
+
+    <select id="queryActivityById" parameterType="java.lang.Integer"
         resultType="com.movision.mybatis.activeH5.entity.ActiveH5">
         SELECT * FROM tp_activeh5 WHERE id = #{id,jdbcType=INTEGER} AND isdel = 0
     </select>

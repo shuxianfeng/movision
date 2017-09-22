@@ -92,14 +92,6 @@
         WHERE circleid = #{circleid,jdbcType=INTEGER}
     </select>
 
-    <!--查询帖子详情最下方推荐的4个热门圈子-->
-    <select id="queryHotCircle" resultType="com.movision.mybatis.circle.entity.Circle">
-        SELECT t1.id,t1.name,t1.maylikeimg
-        FROM yw_circle t1 WHERE t1.isdiscover = '1' AND t1.status = '1'
-        ORDER BY orderid
-        LIMIT 4;
-    </select>
-
     <!--查询圈子的信息（包括公告和简介等）-->
     <select id="queryCircleInfo" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.circle.entity.CircleVo">
@@ -633,10 +625,6 @@
         </if>
     </select>
 
-    <select id="queryCircleList" resultType="com.movision.mybatis.circle.entity.Circle">
-        SELECT id,scope,name,category FROM yw_circle AND status <![CDATA[ <> ]]> 0
-    </select>
-
     <select id="queryListByCircleManageListByUserid" parameterType="java.util.Map"
             resultType="com.movision.mybatis.circle.entity.Circle">
         SELECT id,name,category FROM yw_circle WHERE id in(
@@ -1034,10 +1022,6 @@
     <select id="queryCircleCategoryClassify" parameterType="java.lang.String"
             resultType="com.movision.mybatis.category.entity.Category">
         SELECT * FROM yw_circle_category WHERE id=#{categoryid,jdbcType=INTEGER}
-    </select>
-
-    <select id="queryCIrcleIdByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT id FROM yw_circle WHERE phone=(SELECT phone FROM yw_admin_user WHERE id=#{userid,jdbcType=INTEGER})
     </select>
 
     <select id="queryCircleByPhone" parameterType="java.lang.String"

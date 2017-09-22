@@ -37,7 +37,6 @@ public interface CommentMapper {
 
     CommentVo queryCommentById(Map map);
 
-    CommentVo queryChildrenComment(int id);
 
     void insertCommentZanRecord(Map<String, Object> parammap);
 
@@ -65,16 +64,10 @@ public interface CommentMapper {
 
     Integer updateCommentAudit(Map map);
 
-    List<CommentVo> queryCommentByUserid(Integer userid);//根据userid查询评论
 
-    List<CommentVo> findAllQueryComment(Integer userid, RowBounds rowBounds);
 
-    List<CommentVo> findQueryComment(Integer userid);
-    List<CommentVo> queryPidComment(Integer pid);
 
-    Integer updateCommentRead(Integer userid);
 
-    Integer queryUseridByComment(Integer commentid);
 
     Integer updateCommentHeatValue(Map map);
 
@@ -83,15 +76,11 @@ public interface CommentMapper {
 
     List<CommentVo> queryCommentByPost(int postid);
 
-    List<CommentVo> findAllCommentByPostId(int postid, RowBounds rowBounds);
 
-    List<CommentVo> findAllCommentByPost(int postid);
 
     Integer queryCommentIsRead(int id);//查询评论未读
 
-    CommentCount queryCommentZan(int id);
 
-    CommentVo queryCom(int commentid);
 
     int commentCount(Map map);
 
@@ -115,5 +104,4 @@ public interface CommentMapper {
 
     List<CommentVo> selectPostComment(Integer id);
 
-    int queryFatherComment(int id);
 }

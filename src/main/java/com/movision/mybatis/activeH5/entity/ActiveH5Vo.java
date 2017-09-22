@@ -25,6 +25,16 @@ public class ActiveH5Vo {
 
     private String name;
 
+    private Integer isApply;//是否投稿 0否 1是
+
+    public Integer getIsApply() {
+        return isApply;
+    }
+
+    public void setIsApply(Integer isApply) {
+        this.isApply = isApply;
+    }
+
     public Date getIntime() {
         return intime;
     }

@@ -16,7 +16,16 @@ public class Take {
     private String phone;//电话
 
     private String photo;//作品
+
     private String banner;//封面
+
+    private String describes;//描述
+
+    private String nickname;//用户名
+
+    private Integer mark;//排序号
+
+    private Integer audit;//审核
 
     public String getBanner() {
         return banner;
@@ -25,14 +34,6 @@ public class Take {
     public void setBanner(String banner) {
         this.banner = banner;
     }
-
-    private String describe;//描述
-
-    private String nickname;//用户名
-
-    private Integer mark;//排序号
-
-    private Integer audit;//审核
 
     public String getPhone() {
         return phone;
@@ -50,12 +51,12 @@ public class Take {
         this.photo = photo;
     }
 
-    public String getDescribe() {
-        return describe;
+    public String getDescribes() {
+        return describes;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setDescribes(String describes) {
+        this.describes = describes;
     }
 
     public String getNickname() {

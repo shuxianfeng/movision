@@ -105,6 +105,22 @@ public class ActiveH5Service {
         }
     }
 
+    /**
+     * 查询全部活动
+     *
+     * @param name
+     * @return
+     */
+    public List<ActiveH5Vo> queryAllActive(String name) {
+        try {
+            log.info("根据名称查询全部活动");
+            return activeH5Mapper.queryAllActive(name);
+        } catch (Exception e) {
+            log.error("查询全部活动异常", e);
+            throw e;
+        }
+    }
+
 
     /**
      * 修改访问量

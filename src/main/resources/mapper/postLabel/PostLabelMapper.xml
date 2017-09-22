@@ -149,13 +149,7 @@
       fans = #{fans}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="queryLableName" resultType="com.movision.mybatis.postLabel.entity.PostLabel">
-      SELECT * FROM yw_post_label WHERE isdel=0
-  </select>
-  <update id="updateLabelHeatValue" parameterType="java.util.Map">
-    UPDATE yw_post_label SET heat_value=#{sum,jdbcType=INTEGER} WHERE id=#{labelid,jdbcType=INTEGER}
-  </update>
-  <select id="queryLabelHeatValue" resultType="com.movision.mybatis.postLabel.entity.PostLabel">
+    <select id="queryLabelHeatValue" resultType="com.movision.mybatis.postLabel.entity.PostLabel">
       SELECT * FROM yw_post_label WHERE isdel=0 AND isrecommend=0 ORDER BY heat_value DESC
   </select>
     <select id="queryName" parameterType="java.lang.Integer"
@@ -256,10 +250,6 @@
         t.id=c.category
         LEFT JOIN yw_user u ON u.id=c.userid WHERE c.id=#{circleid,jdbcType=INTEGER}
     </select>
-    <select id="postInCircle" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
-        WHERE to_days(p.intime) = to_days(now()) AND c.id=#{circleid,jdbcType=INTEGER} AND p.isdel=0
-    </select>
     <select id="queryLabelCircle" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.postLabel.entity.PostLabel">
         SELECT DISTINCT(l.`name`),l.type,l.id FROM yw_post_label_relation r
@@ -302,9 +292,6 @@
         WHERE id = #{id,jdbcType=INTEGER} AND isdel = 0
     </update>
 
-    <select id="countSameNameLabel" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM yw_post_label WHERE NAME = #{name}
-    </select>
     <select id="countSameNormalNameLabel" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM yw_post_label WHERE NAME = #{name} and type = 1
     </select>
@@ -386,16 +373,19 @@
         SELECT COUNT(1) from  yw_follow_circle WHERE userid=#{userid,jdbcType=INTEGER} AND circleid=#{circleid,jdbcType=INTEGER}
     </select>
     <select id="findAllLabelHotPost" parameterType="java.util.Map" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT p.* FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        SELECT p.*,c.name AS circlename FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        LEFT JOIN yw_circle c ON c.id=p.circleid
         WHERE r.labelid=#{labelid,jdbcType=INTEGER} AND p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 ORDER  BY p.heat_value DESC
      </select>
     <select id="findAllLabelNewPost" parameterType="java.util.Map" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT p.* FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        SELECT p.*,c.name AS circlename FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        LEFT JOIN yw_circle c ON c.id=p.circleid
         WHERE r.labelid=#{labelid,jdbcType=INTEGER} AND p.circleid=#{circleid,jdbcType=INTEGER} AND p.isdel=0 ORDER  BY p.intime DESC
     </select>
     <select id="findAllLabelIsessenPost" parameterType="java.util.Map"
             resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT p.* FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        SELECT p.*,c.name AS circlename FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id
+        LEFT JOIN yw_circle c ON c.id=p.circleid
         WHERE r.labelid=#{labelid,jdbcType=INTEGER} AND p.circleid=#{circleid,jdbcType=INTEGER} AND p.isessence=1 AND
         p.isdel=0 ORDER BY p.intime DESC
     </select>

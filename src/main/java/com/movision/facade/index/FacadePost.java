@@ -1005,7 +1005,7 @@ public class FacadePost {
         for (PostLabel label : allLabels) {
             //使用过的标签，插入mongoDB
             saveKeywordsInMongoDB(label);
-            //增加标签热度
+            //增加标签热度,同时老标签的使用次数+1
             facadeHeatValue.addLabelHeatValue(2, label.getId(), null);
         }
 
@@ -1302,8 +1302,8 @@ public class FacadePost {
                     PostVo post = new PostVo();
                     post.setId(Integer.parseInt(listmongodb.get(j).get("postid").toString()));
                     posts.add(post);//把mongodb转为post实体
-                    list.removeAll(posts);
                 }
+                list.removeAll(posts);
                 list = NotLoginretuenList(list, 1, device, -1);
             }
             list = NotLoginretuenList(list, 1, device, -1);
@@ -1403,22 +1403,37 @@ public class FacadePost {
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
         String citycode = "";
+        List<PostVo> cityPost = null;
+        List<PostVo> labelPost = null;
         //根据传过来的地区去yw_city查代码
         if (area != null) {
             citycode = postService.queryCityCode(area);
-        } else {
-            citycode = postService.queryCityUserCode(Integer.parseInt(userid));
+            //标题带南京
+            cityPost = postService.queryCityPost(area);
+            //标签有本地
+            labelPost = postService.queryCityLabel(area);
         }
         if (userid == null) {//未登录
             list = postService.findAllCityPost(citycode);//根据热度值排序查询帖子
             listmongodba = userRefulshListMongodbToDevice(device, 3);//用户有没有看过
+            if (cityPost.size() != 0) {
+                list.addAll(cityPost);
+            }
+            if (labelPost.size() != 0) {
+                list.addAll(labelPost);
+            }
             if (listmongodba.size() != 0) {
                 for (int j = 0; j < listmongodba.size(); j++) {
                     PostVo post = new PostVo();
                     post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
                     posts.add(post);//把mongodb转为post实体
-                    list.removeAll(posts);
                 }
+                list.removeAll(posts);
+                Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
+                list = new ArrayList<PostVo>(linkedHashSet);
+                ComparatorChain chain = new ComparatorChain();
+                chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
+                Collections.sort(list, chain);
                 list = NotLoginretuenList(list, 3, device, -1);
             }
             list = NotLoginretuenList(list, 3, device, -1);
@@ -1426,18 +1441,40 @@ public class FacadePost {
         } else {//已登录
             //根据地区查询帖子
             listmongodba = userRefulshListMongodb(Integer.parseInt(userid), 3);//用户有没有看过
+            //根据city查询帖子
+            List<PostVo> postVos = postService.findAllCityPost(citycode);
+            if (cityPost.size() != 0) {
+                postVos.addAll(cityPost);
+            }
+            if (labelPost.size() != 0) {
+                postVos.addAll(labelPost);
+            }
             if (listmongodba.size() != 0) {
                 for (int j = 0; j < listmongodba.size(); j++) {
                     PostVo post = new PostVo();
                     post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
                     posts.add(post);//把mongodb转为post实体
                 }
-                //根据city查询帖子
-                List<PostVo> postVos = postService.findAllCityPost(citycode);
                 postVos.removeAll(posts);
+                Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(postVos);
+                postVos = new ArrayList<PostVo>(linkedHashSet);
+                ComparatorChain chain = new ComparatorChain();
+                chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
+                Collections.sort(postVos, chain);
                 list = retuenList(postVos, userid, 3, "", -1);
             } else {//登录但是刷新列表中没有帖子
                 list = postService.findAllCityPost(citycode);//根据热度值排序查询帖子
+                if (cityPost.size() != 0) {
+                    list.addAll(cityPost);
+                }
+                if (labelPost.size() != 0) {
+                    list.addAll(labelPost);
+                }
+                Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
+                list = new ArrayList<PostVo>(linkedHashSet);
+                ComparatorChain chain = new ComparatorChain();
+                chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
+                Collections.sort(list, chain);
                 list = retuenList(list, userid, 3, "", -1);
                 return list;
             }
@@ -1465,8 +1502,9 @@ public class FacadePost {
                     PostVo post = new PostVo();
                     post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
                     posts.add(post);//把mongodb转为post实体
-                    list.removeAll(posts);
+
                 }
+                list.removeAll(posts);
                 list = NotLoginretuenList(list, 4, device, -1);
             }
             list = NotLoginretuenList(list, 4, device, -1);
@@ -1573,8 +1611,8 @@ public class FacadePost {
                     PostVo post = new PostVo();
                     post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
                     posts.add(post);//把mongodb转为post实体
-                    list.removeAll(posts);
                 }
+                list.removeAll(posts);
                 list = NotLoginretuenList(list, 5, device, labelid);
             }
             list = NotLoginretuenList(list, 5, device, labelid);

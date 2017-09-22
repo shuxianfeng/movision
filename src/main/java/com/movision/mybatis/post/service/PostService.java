@@ -74,15 +74,6 @@ public class PostService {
         }
     }
 
-    public int queryCommentByUserid(int userid){
-        try {
-            log.info("通过用户id查询当前用户的评论总数");
-            return postMapper.queryCommentByUserid(userid);
-        }catch (Exception e){
-            log.error("通过用户id查询当前用户的评论总数失败", e);
-            throw e;
-        }
-    }
 
     public int queryCollectByUserid(int userid){
         try {
@@ -146,36 +137,6 @@ public class PostService {
             return postMapper.queryCompressUrl(coverimg);
         }catch (Exception e){
             log.error("根据帖子封面原图路径url查询帖子封面压缩图url失败", e);
-            throw e;
-        }
-    }
-
-    public Integer queryRewardSum(String postid) {
-        try {
-            log.info("查询帖子被打赏次数");
-            return postMapper.queryRewardSum(postid);
-        } catch (Exception e) {
-            log.error("查询帖子被打赏次数失败", e);
-            throw e;
-        }
-    }
-
-    public List<UserLike> queryRewardPersonNickname(String postid) {
-        try {
-            log.info("查询打赏帖子的昵称");
-            return postMapper.queryRewardPersonNickname(postid);
-        } catch (Exception e) {
-            log.error("查询打赏帖子的昵称失败");
-            throw e;
-        }
-    }
-
-    public Video queryVideoUrl(int postid) {
-        try {
-            log.info("查询原生帖子详情");
-            return postMapper.queryVideoUrl(postid);
-        } catch (Exception e) {
-            log.error("查询原生帖子详情失败");
             throw e;
         }
     }
@@ -266,15 +227,6 @@ public class PostService {
 
     }
 
-    public List<ActiveVo> queryFourHotActive() {
-        try {
-            log.info("查询活动详情最下方推荐的四个热门活动");
-            return postMapper.queryFourHotActive();
-        } catch (Exception e) {
-            log.error("查询活动详情最下方推荐的四个热门活动失败");
-            throw e;
-        }
-    }
 
     public List<Date> queryDateSelect(Paging<Date> pager) {
         try {
@@ -417,16 +369,6 @@ public class PostService {
         }
     }
 
-    public int queryPostByZanSum(int id) {
-        try {
-            log.info("查询帖子点赞次数 id=", id);
-            return postMapper.queryPostByZanSum(id);
-        } catch (Exception e) {
-            log.info("查看帖子点赞次数异常 id=" + id, e);
-            throw e;
-        }
-    }
-
     public void updatePostCollectCount(Map<String, Object> parammap) {
         try {
             log.info("取消帖子收藏后更新帖子被收藏总次数");
@@ -481,23 +423,6 @@ public class PostService {
             return postMapper.findAllqueryPostByList(pager.getRowBounds());
         } catch (Exception e) {
             log.error("查询帖子列表异常", e);
-            throw e;
-        }
-    }
-
-    /**
-     * 查询帖子列表
-     *
-     * @param userid
-     * @param pager
-     * @return list
-     */
-    public List<PostList> queryPostByList2(Integer userid, Paging<PostList> pager) {
-        try {
-            log.info("查询帖子列表 userid=" + userid);
-            return postMapper.findAllqueryPostByList2(userid, pager.getRowBounds());
-        } catch (Exception e) {
-            log.error("查询帖子列表异常 userid=" + userid);
             throw e;
         }
     }
@@ -775,22 +700,6 @@ public class PostService {
     }
 
     /**
-     * 查询帖子的总和和精贴数量
-     *
-     * @param circleid
-     * @return
-     */
-    public PostNum queryPostNumAndisessenceByCircleid(Integer circleid) {
-        try {
-            log.info("查询帖子的总数和精贴数量");
-            return postMapper.queryPostNumAndisessenceByCircleid(circleid);
-        } catch (Exception e) {
-            log.error("查询帖子的总数和精贴数量异常");
-            throw e;
-        }
-    }
-
-    /**
      * 根据id查询帖子是否加精
      * @param id
      * @return
@@ -883,20 +792,6 @@ public class PostService {
         }
     }
 
-    /**
-     * 查询今日加精
-     *
-     * @return
-     */
-    public List<Post> queryPostIsessence() {
-        try {
-            log.info("添加编辑时查询今日可加精排序");
-            return postMapper.queryPostIsessence();
-        } catch (Exception e) {
-            log.error("添加编辑时查询今日可加精排序异常");
-            throw e;
-        }
-    }
 
     /**
      * 查询帖子加精回显数据
@@ -977,23 +872,6 @@ public class PostService {
         }
     }
 
-  /*  *//**
-     * 特邀嘉宾查询帖子列表
-     *
-     * @param map
-     * @param pager
-     * @return
-     *//*
-    public List<PostList> queryPostByContributing(Map map,Paging<PostList> pager){
-        try {
-            log.info("特邀嘉宾查询帖子列表");
-            return postMapper.findAllqueryPostByContributing(map,pager.getRowBounds());
-        } catch (Exception e) {
-            log.error("特邀嘉宾查询帖子列表异常",e);
-            throw e;
-        }
-    }
-*/
     /**
      * 查询圈子下的帖子列表
      *
@@ -1127,37 +1005,6 @@ public class PostService {
         }
     }
 
-    /**
-     * 是热门
-     *
-     * @param id
-     * @return
-     */
-    public Integer updateIshot(Post id) {
-        try {
-            log.info("是否设为热门");
-            return postMapper.updateIshot(id);
-        } catch (Exception e) {
-            log.error("是否设为热门失败 id=" +id, e);
-            throw e;
-        }
-    }
-
-    /**
-     * 是否设为热门
-     *
-     * @param id
-     * @return
-     */
-    public Integer activeIsHot(Integer id) {
-        try {
-            log.info("是否设为热门");
-            return postMapper.activeIsHot(id);
-        } catch (Exception e) {
-            log.error("是否设为热门失败 id=" +id, e);
-            throw e;
-        }
-    }
 
     /**
      * 不是热门
@@ -1235,22 +1082,6 @@ public class PostService {
         }
     }
 
-    /**
-     * 查询被点赞的帖子发帖人
-     *
-     * @param postid
-     * @return
-     */
-    public Integer queryPosterActivity(Integer postid) {
-        try {
-            log.info("查询被点赞的帖子发帖人");
-            return postMapper.queryPosterActivity(postid);
-        } catch (Exception e) {
-            log.error("查询被点赞的帖子发帖人异常", e);
-            throw e;
-        }
-    }
-
 
     /**
      * 查询被点赞的帖子发帖人accid
@@ -1268,21 +1099,6 @@ public class PostService {
         }
     }
 
-    /**
-     * 查询所有的帖子
-     *
-     * @param
-     * @return
-     */
-    public List<Post> findAllPostListRefulsh() {
-        try {
-            log.info("查询所有的帖子");
-            return postMapper.findAllPostListRefulsh();
-        } catch (Exception e) {
-            log.error("查询所有的帖子失败");
-            throw e;
-        }
-    }
 
     /**
      * 查询所有的帖子
@@ -1310,24 +1126,6 @@ public class PostService {
         }
     }
 
-    /**
-     * 查询是否为精选
-     *
-     * @param postid
-     * @return
-     */
-    public int queryIsIsessence(int postid) {
-        try {
-            log.info("查询是否为精选");
-            return postMapper.queryIsIsessence(postid);
-        } catch (Exception e) {
-
-            log.error("查询是否为精选失败");
-            throw e;
-        }
-
-    }
-
     public List<Post> selectAllPost() {
         try {
             log.info("查询所有的post");
@@ -1351,75 +1149,6 @@ public class PostService {
         return postMapper.queryPostContentById(map);
     }
 
-    /**
-     * 查询精选贴
-     * @return
-     */
-    public List<Post> queryPostSessen(){
-        try {
-            log.info("查询精选贴");
-            return postMapper.queryPostSessen();
-        }catch (Exception e){
-            log.error("查询精选贴失败", e);
-            throw e;
-        }
-    }
-
-    /**
-     * 查询非精选贴
-     * @return
-     */
-    public List<Post> queryNOPostSessen(){
-        try {
-            log.info("查询非精选贴");
-            return postMapper.queryNOPostSessen();
-        }catch (Exception e){
-            log.error("查询非精选贴失败", e);
-            throw e;
-        }
-    }
-
-    /**
-     * 根据圈子id查询圈子的帖子
-     * @return
-     */
-    public List<Post> queryCrileidPost(int crileid){
-        try {
-            log.info("根据圈子id查询圈子的帖子");
-            return postMapper.queryCrileidPost(crileid);
-        }catch (Exception e){
-            log.error("根据圈子id查询圈子的帖子失败", e);
-            throw e;
-        }
-    }
-
-    /**
-     * 根据圈子id查询圈子的帖子
-     * @return
-     */
-    public List<Post> queryNoCrileidPost(int crileid){
-        try {
-            log.info("根据圈子id查询圈子的帖子");
-            return postMapper.queryNoCrileidPost(crileid);
-        }catch (Exception e){
-            log.error("根据圈子id查询圈子的帖子失败", e);
-            throw e;
-        }
-    }
-
-    /**
-     * 根据圈子id查询圈子的剩下帖子
-     * @return
-     */
-    public List<Post> queryoverCrileidPost(int crileid){
-        try {
-            log.info("根据圈子id查询圈子的剩下帖子");
-            return postMapper.queryoverCrileidPost(crileid);
-        }catch (Exception e){
-            log.error("根据圈子id查询圈子的剩下帖子失败", e);
-            throw e;
-        }
-    }
 
     public List<PostVo> findAllPostHeatValue() {
         try {
@@ -1519,17 +1248,6 @@ public class PostService {
         }
     }
 
-
-    public int selectUserLevel(int postid) {
-        try {
-            log.info("查询发帖人级别");
-            return postMapper.selectUserLevel(postid);
-        } catch (Exception e) {
-            log.error("查询发帖人级别失败", e);
-            throw e;
-        }
-    }
-
     public int selectPostHeatValue(int postid) {
         try {
             log.info("查询提子热度值");
@@ -1591,16 +1309,6 @@ public class PostService {
         }
     }
 
-    public List<PostVo> findAllCollectionListByIds(List ids, Paging<PostVo> paging) {
-        try {
-            log.info("查询收藏的帖子");
-            return postMapper.findAllCollectionListByIds(ids, paging.getRowBounds());
-        } catch (Exception e) {
-            log.error("查询收藏的帖子失败", e);
-            throw e;
-        }
-    }
-
     public List<PostVo> findAllPostCrile(int circleid) {
         try {
             log.info("根据圈子id查询帖子");
@@ -1641,6 +1349,27 @@ public class PostService {
         }
     }
 
+    public List<PostVo> queryCityPost(String area) {
+        try {
+            log.info("查询标题在本地的帖子");
+            return postMapper.queryCityPost(area);
+        } catch (Exception e) {
+            log.error("查询标题在本地的帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostVo> queryCityLabel(String area) {
+        try {
+            log.info("查询标签在本地的帖子");
+            return postMapper.queryCityLabel(area);
+        } catch (Exception e) {
+            log.error("查询标签在本地的帖子失败", e);
+            throw e;
+        }
+    }
+
+
     public String queryCityUserCode(int userid) {
         try {
             log.info("查询city的code");
@@ -1667,36 +1396,6 @@ public class PostService {
             return postMapper.queryPostLabel(postid);
         } catch (Exception e) {
             log.error("根据id查询标签失败", e);
-            throw e;
-        }
-    }
-
-    public List<Integer> queryPostComment(int postid) {
-        try {
-            log.info("查询帖子的所有评论");
-            return postMapper.queryPostComment(postid);
-        } catch (Exception e) {
-            log.error("查询帖子的所有评论失败", e);
-            throw e;
-        }
-    }
-
-    public List<Integer> queryPostUserHeatValue(int userid) {
-        try {
-            log.info("查询用户发的所有帖子的热度");
-            return postMapper.queryPostUserHeatValue(userid);
-        } catch (Exception e) {
-            log.error("查询用户发的所有帖子的热度失败", e);
-            throw e;
-        }
-    }
-
-    public List<Integer> queryLabelPost(int labelid) {
-        try {
-            log.info("根据标签查询帖子");
-            return postMapper.queryLabelPost(labelid);
-        } catch (Exception e) {
-            log.error("根据标签查询帖子失败", e);
             throw e;
         }
     }
@@ -1874,16 +1573,6 @@ public class PostService {
         }
     }
 
-    public Integer activeSum(int postid) {
-        try {
-            log.info("活动参与总人数");
-            return postMapper.activeSum(postid);
-        } catch (Exception e) {
-            log.error("活动参与总人数失败", e);
-            throw e;
-        }
-    }
-
 
     public List<PostVo> findAllActivePost(int postid, Paging<PostVo> paging) {
         try {
@@ -1973,26 +1662,6 @@ public class PostService {
         }
     }
 
-
-    public int isPostIsdel(int postid) {
-        try {
-            log.info("帖子是否被删除");
-            return postMapper.isPostIsdel(postid);
-        } catch (Exception e) {
-            log.error("帖子是否被删除异常", e);
-            throw e;
-        }
-    }
-
-    public int isUserContribe(Map map) {
-        try {
-            log.info("该用户有没有投过稿");
-            return postMapper.isUserContribe(map);
-        } catch (Exception e) {
-            log.error("该用户有没有投过稿失败", e);
-            throw e;
-        }
-    }
 
     /**
      * 查询原图url

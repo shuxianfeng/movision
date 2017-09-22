@@ -24,6 +24,8 @@ public interface ActiveH5Mapper {
 
     List<ActiveH5Vo> findAllActive(ActiveH5 activeH5, RowBounds rowBounds);
 
+    List<ActiveH5Vo> queryAllActive(String name);
+
     ActiveH5 queryActivityById(Integer id);
 
     int updatePageView(int activeid);

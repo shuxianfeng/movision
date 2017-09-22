@@ -28,11 +28,11 @@ public interface TakeMapper {
 
     List<TakeVo> findAllTakeCondition(RowBounds rowBounds, Map map);
 
-    Take queryTakeById(Integer id);
+    TakeVo queryTakeById(Integer id);
 
     void updateTakeByNumber(Take take);
 
     void updateTakeByAudit(Take take);
 
-    List<TakeVo> findAll();
+    List<TakeVo> findAll(int activeid);
 }

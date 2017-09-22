@@ -28,9 +28,7 @@ public interface PostLabelMapper {
 
     List<PostLabelVo> findAllMineFollowLabel(Map<String, Object> parammap, RowBounds rowBounds);
 
-    List<PostLabel> queryLableName();
 
-    int updateLabelHeatValue(Map map);
 
     List<PostLabel> queryLabelHeatValue();
 
@@ -54,7 +52,6 @@ public interface PostLabelMapper {
 
     List<User> queryCircleManager(int circleid);
 
-    Integer postInCircle(int circleid);
 
     List<PostLabel> queryLabelCircle(int circleid);
 
@@ -72,7 +69,6 @@ public interface PostLabelMapper {
 
     void updatePostLabelIsRecommend(PostLabel label);
 
-    Integer countSameNameLabel(String name);
 
     Integer countSameNormalNameLabel(String name);
 

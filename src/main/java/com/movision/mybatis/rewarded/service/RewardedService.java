@@ -55,63 +55,7 @@ public class RewardedService {
         }
     }
 
-    /**
-     * 根据用户查询打赏
-     *
-     * @param userid
-     * @return
-     */
-    public RewardedVo queryRewardByUserid(Integer userid) {
-        try {
-            log.info("根据用户查询打赏");
-            return rewardedMapper.queryRewardByUserid(userid);
-        } catch (Exception e) {
-            log.error("根据用户查询打赏失败", e);
-            throw e;
-        }
-    }
-
-    /**
-     * 根据用户查询打赏
-     *
-     * @param userid
-     * @return
-     */
-    public List<RewardedVo> findAllRewarded(Integer userid, Paging<RewardedVo> paging) {
-        try {
-            log.info("根据用户查询打赏");
-            return rewardedMapper.findAllRewarded(userid, paging.getRowBounds());
-        } catch (Exception e) {
-            log.error("根据用户查询打赏失败", e);
-            throw e;
-        }
-    }
 
 
-    /**
-     * 更新打赏已读状态
-     *
-     * @param userid
-     * @return
-     */
-    public Integer updateRewardRead(Integer userid) {
-        try {
-            log.info("更新打赏已读状态");
-            return rewardedMapper.updateRewardRead(userid);
-        } catch (Exception e) {
-            log.error("更新打赏已读状态异常", e);
-            throw e;
-        }
-    }
-
-    public Integer queryRewardIsRead(int userid) {
-        try {
-            log.info("查看打赏未读");
-            return rewardedMapper.queryRewardIsRead(userid);
-        } catch (Exception e) {
-            log.error("查看打赏未读异常", e);
-            throw e;
-        }
-    }
 
 }

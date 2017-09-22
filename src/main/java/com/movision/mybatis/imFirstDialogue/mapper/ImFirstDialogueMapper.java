@@ -27,15 +27,4 @@ public interface ImFirstDialogueMapper {
 
     List<ImFirstDialogue> selectFirstDialog(ImFirstDialogue imFirstDialogue);
 
-    ImFirstDialogueVo queryFirst(Integer userid);
-
-    Integer queryIsreadByUserid(Integer userid);
-
-    List<ImFirstDialogueVo> findAllDialogue(Integer userid, RowBounds rowBounds);
-
-    void queryIsread(Map map);
-
-    Integer updateCallRead(Integer userid);
-
-
 }

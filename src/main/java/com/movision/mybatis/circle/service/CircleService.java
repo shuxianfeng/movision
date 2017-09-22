@@ -214,16 +214,6 @@ public class CircleService {
         }
     }
 
-    public List<Circle> queryHotCircle() {
-        try {
-            log.info("查询帖子详情最下方推荐的4个热门圈子");
-            return circleMapper.queryHotCircle();
-        } catch (Exception e) {
-            log.error("查询帖子详情最下方推荐的4个热门圈子失败", e);
-            throw e;
-        }
-    }
-
     public int queryCircleScope(int circleid) {
         try {
             log.info("查询圈子的开放范围scope, circleid=" + circleid);
@@ -363,21 +353,6 @@ public class CircleService {
         }
     }
 
-
-    /**
-     * 首页查询所有圈子
-     *
-     * @return
-     */
-    public List<CircleVo> queryCircleList() {
-        try {
-            log.info("首页查询所有圈子");
-            return circleMapper.queryCircleList();
-        } catch (Exception e) {
-            log.error("首页查询所有圈子异常", e);
-            throw e;
-        }
-    }
 
     /**
      * 查询只有所有人可发帖或大V可发帖的圈子
@@ -634,21 +609,6 @@ public class CircleService {
         }
     }
 
-    /**
-     * 根据用户id查询圈子id
-     *
-     * @param userid
-     * @return
-     */
-    public List<Integer> queryCIrcleIdByUserId(Integer userid) {
-        try {
-            log.info("根据用户id查询圈子id userid=" + userid);
-            return circleMapper.queryCIrcleIdByUserId(userid);
-        } catch (Exception e) {
-            log.error("根据用户id查询圈子id异常", e);
-            throw e;
-        }
-    }
 
     public List<Circle> queryCircleByPhone(String phone) {
         try {

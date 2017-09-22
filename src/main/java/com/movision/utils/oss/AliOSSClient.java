@@ -7,11 +7,14 @@ import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.*;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.BusinessException;
+import com.movision.mybatis.userPhoto.entity.UserPhoto;
+import com.movision.mybatis.userPhoto.service.UserPhotoService;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.file.FileUtil;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +33,9 @@ import java.util.Map;
  */
 @Service
 public class AliOSSClient {
+    @Autowired
+    private UserPhotoService userPhotoService;
+
     private static final Logger log = LoggerFactory.getLogger(AliOSSClient.class);
 
     // endpoint是访问OSS的域名。如果您已经在OSS的控制台上 创建了Bucket，请在控制台上查看域名。
@@ -149,12 +155,7 @@ public class AliOSSClient {
             String fileName = file.getOriginalFilename();
             String fileKey;
             String fileName2 = FileUtil.renameFile(fileName);
-            if (chann != null) {
-                fileKey = "upload/" + chann + "/" + type + "/" + fileName2;
-
-            } else {
-                fileKey = "upload/" + fileName2;
-            }
+            fileKey = defineFileKey(type, chann, fileName2);
 
             String data = "";
             if (type.equals("img")) {
@@ -214,11 +215,7 @@ public class AliOSSClient {
             String fileKey;
             String domain;
             String fileName = FileUtil.renameFile(fil).getName();
-            if (chann != null) {
-                fileKey = "upload/" + chann + "/" + type + "/" + fileName;
-            } else {
-                fileKey = "upload/" + fileName;
-            }
+            fileKey = defineFileKey(type, chann, fileName);
 
             String data = "";
             if (type.equals("img")) {
@@ -284,18 +281,8 @@ public class AliOSSClient {
             String fileName = file.getOriginalFilename();
             String fileKey;
             String fileName2 = FileUtil.renameFile(fileName);
-            if (chann != null) {
-                fileKey = "upload/" + chann + "/" + type + "/" + fileName2;
-
-                if (type.equals("doc") && chann.equals("tech")) {
-                    String maxSize = PropertiesLoader.getValue("uploadTechMaxPostSize");
-                    if (size > Long.valueOf(maxSize)) {
-                        throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
-                    }
-                }
-            } else {
-                fileKey = "upload/" + fileName2;
-            }
+            //获取fileKey
+            fileKey = getFileKey(type, chann, size, fileName2);
 
             String data = "";
             if (type.equals("img")) {
@@ -319,9 +306,8 @@ public class AliOSSClient {
                 if (size > Long.valueOf(maxSize)) {
                     throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
                 }
-
             }
-
+            //oss api
             ossClient.putObject(bucketName, fileKey, in);
 
             log.debug("Object：" + fileKey + "存入OSS成功。");
@@ -346,6 +332,23 @@ public class AliOSSClient {
         return result;
     }
 
+    private String getFileKey(String type, String chann, long size, String fileName2) {
+        String fileKey;
+        if (chann != null) {
+            fileKey = "upload/" + chann + "/" + type + "/" + fileName2;
+
+            if (type.equals("doc") && chann.equals("tech")) {
+                String maxSize = PropertiesLoader.getValue("uploadTechMaxPostSize");
+                if (size > Long.valueOf(maxSize)) {
+                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
+                }
+            }
+        } else {
+            fileKey = "upload/" + fileName2;
+        }
+        return fileKey;
+    }
+
     /**
      * 上传本地文件
      *
@@ -366,11 +369,7 @@ public class AliOSSClient {
             String fileKey;
             String domain;
             String fileName = FileUtil.renameFile(file).getName();
-            if (chann != null) {
-                fileKey = "upload/" + chann + "/" + type + "/" + fileName;
-            } else {
-                fileKey = "upload/" + fileName;
-            }
+            fileKey = defineFileKey(type, chann, fileName);
 
             String data = "";
             if (type.equals("img")) {
@@ -390,10 +389,9 @@ public class AliOSSClient {
 
             ossClient.putObject(bucketName, fileKey, file);
             log.debug("Object：" + fileKey + "存入OSS成功。");
-            log.info("【上传Alioss的返回值】：" + result.toString());
             result.put("status", "success");
-
             result.put("url", data);
+            log.info("【上传Alioss的返回值】：" + result.toString());
 
         } catch (OSSException oe) {
             oe.printStackTrace();
@@ -413,6 +411,78 @@ public class AliOSSClient {
         return result;
     }
 
+
+    /**
+     * 上传本地文件
+     *
+     * @param file  本地文件名
+     * @param type  文件类型 IMG:图片 | FILE:其他文件
+     * @param chann 频道
+     * @return
+     */
+    public Map<String, Object> uploadLocalFileByPersonPhoto(File file, String type, String chann) {
+        Map<String, Object> result = new HashMap<>();
+
+        log.info("阿里云OSS上传Started");
+        OSSClient ossClient = init();
+
+        try {
+            // 文件存储入OSS，Object的名称为fileKey。详细请参看“SDK手册 > Java-SDK > 上传文件”。
+            // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/upload_object.html?spm=5176.docoss/user_guide/upload_object
+            String fileKey;
+            String domain;
+            String fileName = FileUtil.renameFile(file).getName();
+            fileKey = defineFileKey(type, chann, fileName);
+
+            String data = "";
+            if (type.equals("img")) {
+                bucketName = PropertiesLoader.getValue("img.bucket");
+                domain = PropertiesLoader.getValue("formal.img.domain");    //正式服 http://pic.mofo.shop
+                data = domain + "/" + fileKey;
+            } else if (type.equals("doc")) {
+                bucketName = PropertiesLoader.getValue("file.bucket");
+                data = fileName;
+            }
+            //核心api
+            ossClient.putObject(bucketName, fileKey, file);
+            log.debug("Object：" + fileKey + "存入OSS成功。");
+            result.put("status", "success");
+            result.put("url", data);
+            log.info("【上传Alioss的返回值】：" + result.toString());
+
+        } catch (OSSException oe) {
+            oe.printStackTrace();
+            log.error(oe.getErrorCode() + ":" + oe.getErrorMessage());
+            result.put("status", "fail");
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("status", "fail");
+            return result;
+        } finally {
+            ossClient.shutdown();
+        }
+        log.info("阿里云OSS上传Completed");
+        return result;
+    }
+
+    /**
+     * 定义fileKey的值，即oss上的存储路径
+     *
+     * @param type
+     * @param chann
+     * @param fileName
+     * @return
+     */
+    private String defineFileKey(String type, String chann, String fileName) {
+        String fileKey;
+        if (chann != null) {
+            fileKey = "upload/" + chann + "/" + type + "/" + fileName;
+        } else {
+            fileKey = "upload/" + fileName;
+        }
+        return fileKey;
+    }
 
 
     /**
@@ -436,11 +506,7 @@ public class AliOSSClient {
             }
 
             String objKey;
-            if (chann != null) {
-                objKey = "upload/" + chann + "/" + type + "/" + fileName;
-            } else {
-                objKey = "upload/" + fileName;
-            }
+            objKey = defineFileKey(type, chann, fileName);
 
 
             OSSObject ossObject = ossClient.getObject(bucketName, objKey);
@@ -474,6 +540,7 @@ public class AliOSSClient {
         File file = new File(fileName);
         Map<String, Object> result = client.uploadLocalFile(file, "doc", null);
         System.out.println(result);
+
 //        String name = file.getName();
 //        String a = FileUtil.renameFile(name);
 //        System.out.println(a);

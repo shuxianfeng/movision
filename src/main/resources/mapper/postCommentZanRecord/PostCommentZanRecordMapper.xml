@@ -92,31 +92,13 @@
         isread=#{isread,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <select id="queryByUserid" parameterType="java.lang.Integer"
-            resultType="com.movision.mybatis.postCommentZanRecord.entity.PostCommentZanRecordVo">
-        SELECT r.id,r.userid,r.commentid,null AS postid,r.intime,r.isread FROM yw_post_comment_zan_record r WHERE
-        r.commentid IN
-        (SELECT id FROM yw_post_comment WHERE userid=#{userid,jdbcType=INTEGER})
-        OR r.commentid in (SELECT id FROM yw_post_comment WHERE postid in (SELECT id FROM yw_post WHERE
-        userid=#{userid,jdbcType=INTEGER}))
-        UNION ALL
-        SELECT d.id,d.userid,null AS commentid,d.postid,d.intime,d.isread FROM yw_post_zan_record d WHERE d.postid in
-        (SELECT id
-        FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER} AND isdel=0) ORDER BY intime DESC
-    </select>
+
     <select id="queryComment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
         SELECT t.content FROM yw_post_comment t
         WHERE t.id=#{commentid,jdbcType=INTEGER}
     </select>
-    <select id="findAllZan" parameterType="java.lang.Integer"
-            resultType="com.movision.mybatis.PostZanRecord.entity.ZanRecordVo">
-        SELECT r.id,r.userid,r.commentid,null AS postid,r.intime FROM yw_post_comment_zan_record r WHERE r.commentid IN
-        (SELECT id FROM yw_post_comment WHERE userid=#{userid,jdbcType=INTEGER})
-UNION ALL
-        SELECT d.id,d.userid,null AS commentid,d.postid,d.intime FROM yw_post_zan_record d WHERE d.postid in (SELECT id
-        FROM yw_post WHERE userid=#{userid,jdbcType=INTEGER}) ORDER BY intime DESC
-    </select>
+
     <select id="queryusers" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.User">
         SELECT nickname,photo,id FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
     </select>

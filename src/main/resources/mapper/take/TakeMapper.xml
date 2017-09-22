@@ -9,14 +9,14 @@
         <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
         <result column="photo" property="photo" jdbcType="VARCHAR"/>
-        <result column="describe" property="describe" jdbcType="VARCHAR"/>
+        <result column="describes" property="describes" jdbcType="VARCHAR"/>
         <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
         <result column="mark" property="mark" jdbcType="INTEGER"/>
         <result column="audit" property="audit" jdbcType="INTEGER"/>
         <result column="banner" property="banner" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, activeid, name, isdel, intime, phone, photo, describe, nickname, mark, audit, banner
+        id, activeid, name, isdel, intime, phone, photo, describes, nickname, mark, audit, banner
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -60,8 +60,8 @@
             <if test="photo != null">
                 photo,
             </if>
-            <if test="describe != null">
-                describe,
+            <if test="describes != null">
+                describes,
             </if>
             <if test="nickname != null">
                 nickname,
@@ -98,8 +98,8 @@
             <if test="photo != null">
                 #{photo,jdbcType=VARCHAR},
             </if>
-            <if test="describe != null">
-                #{describe,jdbcType=VARCHAR},
+            <if test="describes != null">
+                #{describes,jdbcType=VARCHAR},
             </if>
             <if test="nickname != null">
                 #{nickname,jdbcType=VARCHAR},
@@ -129,6 +129,27 @@
             </if>
             <if test="intime != null">
                 intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="photo != null">
+                photo = #{photo,jdbcType=VARCHAR},
+            </if>
+            <if test="describes != null">
+                describes = #{describes,jdbcType=VARCHAR},
+            </if>
+            <if test="nickname != null">
+                nickname = #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="mark != null">
+                mark = #{mark,jdbcType=INTEGER},
+            </if>
+            <if test="audit != null">
+                audit = #{audit,jdbcType=INTEGER},
+            </if>
+            <if test="banner != null">
+                banner = #{banner,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -162,13 +183,14 @@
     <select id="findAll" resultType="com.movision.mybatis.take.entity.TakeVo">
         SELECT t.*,a.name AS acname,
         (SELECT COUNT(1) FROM tp_votingrecords WHERE takeid =t.id) AS votesum
-        FROM tp_take t LEFT JOIN tp_activeh5 a ON a.id = t.activeid WHERE t.isdel=0 AND t.audit=1
+        FROM tp_take t LEFT JOIN tp_activeh5 a ON a.id = t.activeid WHERE t.isdel=0 AND t.audit=1 AND
+        t.activeid=#{activeid,jdbcType=INTEGER}
     </select>
     <select id="findAllTakeCondition" parameterType="java.util.Map"
             resultType="com.movision.mybatis.take.entity.TakeVo">
         SELECT t.id,t.activeid,t.mark,t.`name`,t.nickname,t.banner,
         (SELECT COUNT(1) FROM tp_votingrecords WHERE takeid = t.id) AS votesum
-        FROM tp_take t WHERE t.isdel=0 AND t.audit=1
+        FROM tp_take t WHERE t.isdel=0 AND t.audit=1 AND t.activeid=#{activeid,jdbcType=INTEGER}
         <if test="mark!=null and mark!=''">
             AND t.mark=#{mark,jdbcType=INTEGER}
         </if>
@@ -202,7 +224,8 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="queryTakeById" parameterType="java.lang.Integer" resultType="com.movision.mybatis.take.entity.Take">
-        SELECT * FROM tp_take WHERE isdel = 0 AND id = #{id,jdbcType=INTEGER}
+    <select id="queryTakeById" parameterType="java.lang.Integer" resultType="com.movision.mybatis.take.entity.TakeVo">
+        SELECT te.*,ah.name AS acname FROM tp_take te LEFT JOIN tp_activeh5 ah ON ah.id = te.activeid WHERE te.isdel = 0
+        AND te.id = #{id,jdbcType=INTEGER}
     </select>
 </mapper>

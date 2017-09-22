@@ -59,12 +59,10 @@ public class VoteFacade {
      * @param photo
      * @param begintime
      * @param endtime
-     * @param
      * @param activitydescription
-     * @param
      * @return
      */
-    public int insertSelective(HttpServletRequest request, String name, String photo, String begintime, String endtime, String activitydescription) {
+    public int insertSelective(String name, String photo, String begintime, String endtime, String activitydescription, String isApply) {
         ActiveH5 activeH5 = new ActiveH5();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (StringUtil.isNotEmpty(name)) {
@@ -88,6 +86,9 @@ public class VoteFacade {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+        }
+        if (StringUtil.isNotEmpty(isApply)) {
+            activeH5.setIsApply(Integer.parseInt(isApply));
         }
         activeH5.setBegintime(begin);
         activeH5.setEndtime(end);
@@ -128,8 +129,8 @@ public class VoteFacade {
      * @param bigintime
      * @param endtime
      */
-    public void updateActivity(HttpServletRequest request, Integer id, String name, String photo,
-                               String explain, String bigintime, String endtime) {
+    public void updateActivity(Integer id, String name, String photo,
+                               String explain, String bigintime, String endtime, String isApply) {
         ActiveH5 activeH5 = new ActiveH5();
         activeH5.setId(id);
         if (StringUtil.isNotEmpty(name)) {
@@ -139,18 +140,10 @@ public class VoteFacade {
             activeH5.setPhoto(photo);
         }
         if (StringUtil.isNotEmpty(explain)) {
-            //内容转换
-            Map con = jsoupCompressImg.compressImg(request, explain);
-            System.out.println(con);
-            if ((int) con.get("code") == 200) {
-                String str = con.get("content").toString();
-                str = str.replace("\\", "");
-                activeH5.setActivitydescription(str);
-            } else {
-                logger.error("帖子内容转换异常");
-                activeH5.setActivitydescription(explain);
-            }
-            //activeH5.setActivitydescription(explain);
+            activeH5.setActivitydescription(explain);
+        }
+        if (StringUtil.isNotEmpty(isApply)) {
+            activeH5.setIsApply(Integer.parseInt(isApply));
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date big = null;
@@ -207,6 +200,10 @@ public class VoteFacade {
         return activeH5Service.findAllActive(activeH5, paging);
     }
 
+    public List<ActiveH5Vo> queryAllActive(String name) {
+        return activeH5Service.queryAllActive(name);
+    }
+
 
 
     /**
@@ -235,7 +232,7 @@ public class VoteFacade {
             take.setPhoto(photo);
         }
         if (StringUtil.isNotEmpty(describe)) {
-            take.setDescribe(describe);
+            take.setDescribes(describe);
         }
         if (StringUtil.isNotEmpty(nickname)) {
             take.setNickname(nickname);
@@ -271,15 +268,15 @@ public class VoteFacade {
         if (StringUtil.isNotEmpty(name)) {
             take.setName(name);
         }
-        if (StringUtil.isNotEmpty(photo)) {
-            take.setPhoto(photo);
+        if (StringUtil.isNotEmpty(phone)) {
+            take.setPhone(phone);
         }
         if (StringUtil.isNotEmpty(photo)) {
 
             take.setPhoto(photo);
         }
         if (StringUtil.isNotEmpty(describe)) {
-            take.setDescribe(describe);
+            take.setDescribes(describe);
         }
         if (StringUtil.isNotEmpty(nickname)) {
             take.setNickname(nickname);
@@ -300,19 +297,17 @@ public class VoteFacade {
     /**
      * 投稿审核
      *
-     * @param id
-     * @param number
      */
-    public void updateTakeByAudit(String activityid, String id, String number) {
+    public void updateTakeByAudit(String id, String type) {
         Take take = new Take();
         take.setId(Integer.parseInt(id));
-        take.setAudit(1);
-        take.setActiveid(Integer.parseInt(activityid));
-        if (StringUtil.isNotEmpty(number)) {
-            take.setMark(Integer.parseInt(number));
+        if (type.equals("1")) {
+            take.setAudit(1);
+        } else if (type.equals("2")) {
+            take.setAudit(2);
         }
         //把当前序号之后的投稿序号+1
-        takeService.updateTakeByNumber(take);
+        //takeService.updateTakeByNumber(take);
         takeService.updateTakeByAudit(take);
     }
 
@@ -322,7 +317,7 @@ public class VoteFacade {
      * @param id
      * @return
      */
-    public Take queryTakeById(Integer id) {
+    public TakeVo queryTakeById(Integer id) {
         return takeService.queryTakeById(id);
     }
 
@@ -357,8 +352,8 @@ public class VoteFacade {
         return takeService.findAllTake(paging, take);
     }
 
-    public List<TakeVo> findAll() {
-        List<TakeVo> list = takeService.findAll();
+    public List<TakeVo> findAll(int activeid) {
+        List<TakeVo> list = takeService.findAll(activeid);
         list = pageFacade.getPageList(list, 1, 10);
         return list;
     }
@@ -370,13 +365,16 @@ public class VoteFacade {
      * @param nickname
      * @return
      */
-    public List<TakeVo> findAllTakeCondition(Paging<TakeVo> paging, String mark, String nickname) {
+    public List<TakeVo> findAllTakeCondition(Paging<TakeVo> paging, String mark, String nickname, String activeid) {
         Map map = new HashMap();
         if (StringUtil.isNotEmpty(mark)) {
             map.put("mark", mark);
         }
         if (StringUtil.isNotEmpty(nickname)) {
             map.put("nickname", nickname);
+        }
+        if (StringUtil.isNotEmpty(activeid)) {
+            map.put("activeid", activeid);
         }
         return takeService.findAllTakeCondition(paging, map);
     }

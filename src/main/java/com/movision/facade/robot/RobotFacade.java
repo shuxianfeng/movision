@@ -269,6 +269,9 @@ public class RobotFacade {
         if (StringUtil.isNotEmpty(photo)) {
             user.setPhoto(photo);
         }
+        if (StringUtil.isNotEmpty(sex)) {
+            user.setSex(Integer.parseInt(sex));
+        }
     }
 
 

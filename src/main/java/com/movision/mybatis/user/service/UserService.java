@@ -971,15 +971,6 @@ public class UserService {
         }
     }
 
-    public int queryPostNumByAuthor(Map<String, Object> paramap){
-        try {
-            log.info("查询该作者已发帖子数");
-            return userMapper.queryPostNumByAuthor(paramap);
-        }catch (Exception e){
-            log.error("查询该作者已发帖子数失败", e);
-            throw e;
-        }
-    }
 
     /**
      * 查询当前作者有没有被当前登录的用户关注过
