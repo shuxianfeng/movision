@@ -359,8 +359,8 @@ public class VoteFacade {
         return takeService.findAllTake(paging, take);
     }
 
-    public List<TakeVo> findAll() {
-        List<TakeVo> list = takeService.findAll();
+    public List<TakeVo> findAll(int activeid) {
+        List<TakeVo> list = takeService.findAll(activeid);
         list = pageFacade.getPageList(list, 1, 10);
         return list;
     }

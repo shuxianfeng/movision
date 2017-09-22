@@ -162,7 +162,8 @@
     <select id="findAll" resultType="com.movision.mybatis.take.entity.TakeVo">
         SELECT t.*,a.name AS acname,
         (SELECT COUNT(1) FROM tp_votingrecords WHERE takeid =t.id) AS votesum
-        FROM tp_take t LEFT JOIN tp_activeh5 a ON a.id = t.activeid WHERE t.isdel=0 AND t.audit=1
+        FROM tp_take t LEFT JOIN tp_activeh5 a ON a.id = t.activeid WHERE t.isdel=0 AND t.audit=1 AND
+        t.activeid=#{activeid,jdbcType=INTEGER}
     </select>
     <select id="findAllTakeCondition" parameterType="java.util.Map"
             resultType="com.movision.mybatis.take.entity.TakeVo">

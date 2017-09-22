@@ -34,5 +34,5 @@ public interface TakeMapper {
 
     void updateTakeByAudit(Take take);
 
-    List<TakeVo> findAll();
+    List<TakeVo> findAll(int activeid);
 }

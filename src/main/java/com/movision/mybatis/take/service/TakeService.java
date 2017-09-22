@@ -137,10 +137,10 @@ public class TakeService {
         }
     }
 
-    public List<TakeVo> findAll() {
+    public List<TakeVo> findAll(int activeid) {
         try {
             log.info("查询全部参赛人员");
-            return takeMapper.findAll();
+            return takeMapper.findAll(activeid);
         } catch (Exception e) {
             log.error("查询全部参赛人员失败", e);
             throw e;
