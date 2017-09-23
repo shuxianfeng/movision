@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * @Author shuxf
  * @Date 2017/7/24 15:15
- * 美番2.0版本“我的”板块中所有二级页面接口（我的页面上半部分和下半部分接口在AppWaterfallController中）
+ * 美番2.0版本“我的”模块中所有二级页面接口（我的页面上半部分和下半部分接口在AppWaterfallController中）
  */
 @RestController
 @RequestMapping("/app/mine2/")
