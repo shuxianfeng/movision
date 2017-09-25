@@ -296,4 +296,6 @@ public interface PostMapper {
     int zanIsPost(Map map);
 
     String queryOriginalDrawingUrl(String compressimgurl);
+
+    Date queryPostIdByDate(Integer id);
 }

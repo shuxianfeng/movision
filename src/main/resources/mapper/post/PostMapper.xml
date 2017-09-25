@@ -2206,4 +2206,8 @@
     <select id="queryOriginalDrawingUrl" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT protoimgurl FROM yw_compress_img WHERE compressimgurl = #{compressimgurl,jdbcType=VARCHAR}
     </select>
+
+    <select id="queryPostIdByDate" parameterType="java.lang.Integer" resultType="java.util.Date">
+        SELECT p.intime FROM yw_post p WHERE p.isactive=0 AND id =#{id,jdbcType=INTEGER} AND isdel = 0
+    </select>
 </mapper>

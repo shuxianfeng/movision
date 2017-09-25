@@ -159,7 +159,6 @@ public class RobotController {
 
     /**
      * 新增机器人评论
-     *
      * @param comment
      * @return
      */
@@ -176,7 +175,6 @@ public class RobotController {
 
     /**
      * 删除机器人评论
-     *
      * @param id
      * @return
      */
@@ -192,7 +190,6 @@ public class RobotController {
 
     /**
      * 利用机器人为帖子制造评论接口
-     *
      * @param postid
      * @param coid
      * @param number

@@ -7,6 +7,9 @@ import com.movision.mybatis.post.mapper.PostMapper;
 import com.movision.mybatis.province.entity.ProvinceVo;
 import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.mapper.UserMapper;
+import com.movision.mybatis.userPhoto.entity.UserPhoto;
+import com.movision.mybatis.userPhoto.mapper.UserPhotoMapper;
+import com.movision.utils.L;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
@@ -35,6 +38,9 @@ public class UserService {
 
     @Autowired
     private PostMapper postMapper;
+
+    @Autowired
+    private UserPhotoMapper userPhotoMapper;
 
     public LoginUser queryLoginUserByPhone(String phone) {
         try {
@@ -1216,6 +1222,53 @@ public class UserService {
             return userMapper.queryRobotById(id);
         } catch (Exception e) {
             log.error("根据id查询机器人详情异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询随机用户
+     *
+     * @param number
+     * @return
+     */
+    public List<User> queryRandomUser(Integer number) {
+        try {
+            log.info("查询随机用户");
+            return userMapper.queryRandomUser(number);
+        } catch (Exception e) {
+            log.error("查询随机用户异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 随机查询头像
+     *
+     * @param number
+     * @return
+     */
+    public List<UserPhoto> queryUserPhonts(Integer number) {
+        try {
+            log.info("随机查询头像");
+            return userPhotoMapper.queryUserPhonts(number);
+        } catch (Exception e) {
+            log.error("随机查询用户头像异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 更新机器人信息
+     *
+     * @param user
+     */
+    public void updateUserByMessager(User user) {
+        try {
+            log.info("更新机器人信息");
+            userMapper.updateByPrimaryKeySelective(user);
+        } catch (Exception e) {
+            log.error("更新机器人信息异常", e);
             throw e;
         }
     }

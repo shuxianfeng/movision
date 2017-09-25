@@ -76,4 +76,8 @@
             type = #{type,jdbcType=INTEGER}
         </if>
     </select>
+
+    <select id="queryRoboltCommentById" resultType="java.lang.String" parameterType="java.lang.Integer">
+        SELECT content FROM yw_comment WHERE id = #{id,jdbcType=INTEGER}
+    </select>
 </mapper>

@@ -9,14 +9,20 @@ import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
+import com.movision.mybatis.comment.entity.Comment;
+import com.movision.mybatis.comment.entity.CommentVo;
+import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.robotComment.entity.RobotComment;
 import com.movision.mybatis.robotComment.service.RobotCommentService;
+import com.movision.mybatis.robotNickname.entity.RobotNickname;
+import com.movision.mybatis.robotNickname.service.RobotNicknameService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
+import com.movision.mybatis.userPhoto.entity.UserPhoto;
 import com.movision.utils.DateUtils;
 import com.movision.utils.ListUtil;
 import com.movision.utils.UUIDGenerator;
@@ -25,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -60,6 +67,12 @@ public class RobotFacade {
 
     @Autowired
     private RobotCommentService robotCommentService;
+
+    @Autowired
+    private RobotNicknameService nicknameService;
+
+    @Autowired
+    private CommentService commentService;
 
 
     /**
@@ -311,12 +324,45 @@ public class RobotFacade {
      *
      * @param id
      */
+    @Transactional
     public void deleteRoboltComment(String id) {
         robotCommentService.deleteRoboltComment(Integer.parseInt(id));
     }
 
     public void insertPostCommentByRobolt(String postid, String coid, String number) {
+        //查询随机用户
+        List<User> users = userService.queryRandomUser(Integer.parseInt(number));
+        //查询随机头像
+        List<UserPhoto> photos = userService.queryUserPhonts(Integer.parseInt(number));
+        //查询随机昵称
+        List<String> nicknames = nicknameService.queryRoboltNickname(Integer.parseInt(number));
+        //查询评论内容
+        String content = robotCommentService.queryRoboltCommentById(Integer.parseInt(coid));
+        //获取帖子发表时间
+        Date date = postService.queryPostIdByDate(Integer.parseInt(postid));
 
+        for (int i = 0; i < users.size(); i++) {
+            Integer userid = users.get(i).getId();
+            User user = new User();
+            user.setNickname(nicknames.get(i));
+            user.setPhoto(photos.get(i).getUrl());
+            user.setId(userid);
+            //更新用户信息
+            userService.updateUserByMessager(user);
+            //插入评论表
+            CommentVo comment = new CommentVo();
+            comment.setPostid(Integer.parseInt(postid));
+            comment.setContent(content);
+            comment.setUserid(userid);
+            //获取一个几万的随机数,变更评论时间
+            int max = 9900000;
+            int min = 1000000;
+            Random random = new Random();
+            int s = random.nextInt(max) % (max - min + 1) + min;
+            Long d = date.getTime() + s;
+            comment.setIntime(new Date(d));
+            commentService.insertComment(comment);
+        }
     }
 
 
