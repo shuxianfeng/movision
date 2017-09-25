@@ -352,10 +352,10 @@
         SELECT count(*) FROM yw_post WHERE id = #{userid,jdbcType=INTEGER} AND essencedate IS NOT NULL
     </select>
 
-    <!--根据作者用户id查询当前作者最新发的三篇帖子-->
+    <!--根据作者用户id查询当前作者最新发的三篇未删除的帖子-->
     <select id="querPostListByUser" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.Post" >
         SELECT id, title, subtitle, postcontent, coverimg
-        FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER} ORDER BY intime DESC limit 3
+        FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER} AND isdel = '0' ORDER BY intime DESC limit 3
     </select>
 
     <!--基础删除语句-->
