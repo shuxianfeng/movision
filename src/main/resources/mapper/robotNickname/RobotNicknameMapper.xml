@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.robotNickname.mapper.RobotNicknameMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.robotNickname.entity.RobotNickname">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, nickname
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_nickname
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from yw_nickname
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.robotNickname.entity.RobotNickname">
+        insert into yw_nickname (id, nickname)
+        values (#{id,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.robotNickname.entity.RobotNickname">
+        insert into yw_nickname
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="nickname != null">
+                nickname,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="nickname != null">
+                #{nickname,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.robotNickname.entity.RobotNickname">
+        update yw_nickname
+        <set>
+            <if test="nickname != null">
+                nickname = #{nickname,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.robotNickname.entity.RobotNickname">
+        update yw_nickname
+        set nickname = #{nickname,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="queryRoboltNickname" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT nickname FROM yw_nickname ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
+    </select>
+</mapper>
