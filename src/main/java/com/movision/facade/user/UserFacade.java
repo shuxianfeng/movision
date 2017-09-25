@@ -630,6 +630,19 @@ public class UserFacade {
     }
 
     /**
+     * 他人主页中举报用户
+     * @param userid
+     * @param beaccid
+     */
+    public void accusationUser(String userid, String beaccid){
+        Map<String, Object> map = new HashMap<>();
+        map.put("userid", Integer.parseInt(userid));
+        map.put("beaccid", Integer.parseInt(beaccid));
+        map.put("intime", new Date());
+        userService.accusationUser(map);
+    }
+
+    /**
      * 我的--关注--关注的作者，点击关注调用的关注的作者列表返回接口
      */
     public Paging<UserVo> getMineFollowAuthor(String userid, String pageNo, String pageSize){

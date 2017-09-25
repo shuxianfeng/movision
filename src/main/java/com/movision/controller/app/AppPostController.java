@@ -367,7 +367,7 @@ public class AppPostController {
         int type = facadePost.insertPostByAccusation(userid, postid);
 
         if (response.getCode() == 200 || type == 200) {
-            response.setMessage("操作成功");
+            response.setMessage("举报成功");
         }
         return response;
     }

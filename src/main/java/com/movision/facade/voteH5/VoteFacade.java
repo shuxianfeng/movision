@@ -477,15 +477,13 @@ public class VoteFacade {
         //如何投票
         int howvote = votingrecordsService.activeHowToVote(Integer.parseInt(activeid));
         //在投票记录里面有没有此用户
-        Map map = new HashMap();
+        // Map map = new HashMap();
         int result = 0;
-        if (howvote == 1) {
-            map.put("activeid", activeid);
+        /** map.put("activeid", activeid);
             map.put("name", name);
             map.put("takenumber", takenumber);
-            int count = votingrecordsService.queryHave(map);
-            if (count == 0) {
-                votingrecords.setIntime(new Date());
+         int count = votingrecordsService.queryHave(map);*/
+        votingrecords.setIntime(new Date());
                 if (StringUtil.isNotEmpty(name)) {
                     votingrecords.setName(name);
                 }
@@ -499,13 +497,6 @@ public class VoteFacade {
                     votingrecords.setTakenumber(Integer.parseInt(takenumber));
                 }
                 result = votingrecordsService.insertSelective(votingrecords);
-            } else {
-                result = -1;
-            }
-        } else if (howvote == 0) {
-            //1天投一次
-
-        }
         return result;
     }
 

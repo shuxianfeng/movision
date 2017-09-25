@@ -5,6 +5,8 @@ import com.movision.mybatis.comment.entity.CommentCount;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.entity.ReplyComment;
 import com.movision.mybatis.comment.mapper.CommentMapper;
+import com.movision.mybatis.postCommentAccusation.entity.PostCommentAccusation;
+import com.movision.mybatis.postCommentAccusation.mapper.PostCommentAccusationMapper;
 import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
@@ -28,6 +30,9 @@ public class CommentService {
 
     @Autowired
     public CommentMapper commentMapper;
+
+    @Autowired
+    public PostCommentAccusationMapper accusationMapper;
 
     /**
      * 查询某个帖子的评论列表
@@ -466,6 +471,22 @@ public class CommentService {
             return commentMapper.selectPostComment(id);
         } catch (Exception e) {
             log.error("查询当前用户所发的帖子评论失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 评论举报
+     *
+     * @param accusation
+     * @return
+     */
+    public int updateCommentByinform(PostCommentAccusation accusation) {
+        try {
+            log.info("评论举报接口");
+            return accusationMapper.insertSelective(accusation);
+        } catch (Exception e) {
+            log.error("评论举报接口异常", e);
             throw e;
         }
     }

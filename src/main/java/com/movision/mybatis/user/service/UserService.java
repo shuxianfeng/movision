@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sun.org.mozilla.javascript.internal.EcmaError;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -961,6 +962,16 @@ public class UserService {
         }
     }
 
+    public void accusationUser(Map<String, Object> map){
+        try {
+            log.info("举报用户用户成功");
+            userMapper.accusationUser(map);
+        }catch (Exception e){
+            log.error("举报用户用户失败", e);
+            throw e;
+        }
+    }
+
     public List<UserVo> findAllMineFollowAuthor(Map<String, Object> paramap, Paging<UserVo> pager){
         try {
             log.info("查询当前用户关注的所有作者列表");
@@ -1151,10 +1162,10 @@ public class UserService {
         }
     }
 
-    public Map selectIntervalBetweenLoginAndRegiste(Integer id) {
+    public Map selectIntervalBetweenLoginAndRegiste(Map map) {
         try {
             log.info("查询当前用户登录和注册之间的时间间隔秒数");
-            return userMapper.selectIntervalBetweenLoginAndRegiste(id);
+            return userMapper.selectIntervalBetweenLoginAndRegiste(map);
         } catch (Exception e) {
             log.error("查询当前用户登录和注册之间的时间间隔秒数失败", e);
             throw e;

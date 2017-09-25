@@ -54,6 +54,8 @@ public class AddressFacade {
      */
     private static final String BAIDU_MAP_API_AK = PropertiesLoader.getValue("baidu.ak");
 
+    private static final String BAIDU_GEOCODING_API_URL = PropertiesLoader.getValue("baidu.geocoding.api.url"); //http://api.map.baidu.com/geocoder/v2/
+
     @Autowired
     private AddressService addressService;
 
@@ -121,10 +123,8 @@ public class AddressFacade {
         String addressStr = address.getProvince() + address.getCity() + address.getDistrict() + street;
         //通过地址计算经纬度, 计算签名
         String sn = SnCal.getSn(wrapSignParam4GeoCoder(addressStr));
-        //通过http的get请求url
-        String baiduurl = PropertiesLoader.getValue("baidu.geocoding.api.url");
         //拼接百度接口的请求url
-        String url = baiduurl + "?address=" + addressStr + "&output=json&ak=" + BAIDU_MAP_API_AK + "&sn=" + sn;
+        String url = BAIDU_GEOCODING_API_URL + "?address=" + addressStr + "&output=json&ak=" + BAIDU_MAP_API_AK + "&sn=" + sn;
         String result = "";
         try {
             // 根据地址获取请求
@@ -246,12 +246,12 @@ public class AddressFacade {
     public Map<String, Object> getAddressByLatAndLng(String lat, String lng) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         int flag = 0;//设置标志位
         String location = lat + "," + lng;   //纬度坐标+经度坐标
-        //通过http的get请求url
-        String baiduurl = PropertiesLoader.getValue("baidu.geocoding.api.url"); //http://api.map.baidu.com/geocoder/v2/
         //获取签名
         String sn = SnCal.getSn(wrapSignParam4ReverseGeoCoder(location));
         //拼接百度接口的请求url
-        String url = baiduurl + "?callback=renderReverse" + "&location=" + location + "&output=json&ak=" + BAIDU_MAP_API_AK;
+        String url = BAIDU_GEOCODING_API_URL + "?callback=renderReverse" +
+                "&location=" + location + "&output=json&ak=" + BAIDU_MAP_API_AK;
+        log.debug("----请求的url----:" + url);
         String result = "";
         String citycode = null;
         Map map = new HashMap();

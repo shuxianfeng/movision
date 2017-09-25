@@ -708,7 +708,11 @@ public class AppRegisterFacade {
                 //用户id
                 int appuserid = ShiroUtil.getAppUserID();
                 //7 返回用户是否是第一次登录（根据登录时间和注册时间的间隔判断，若间隔小于10秒，则认为是第一次登录，否则不是）
-                Map intervalMap = userService.selectIntervalBetweenLoginAndRegiste(appuserid);
+                Date loginTime = new Date();
+                Map param = new HashMap();
+                param.put("userid", appuserid);
+                param.put("loginTime", loginTime);
+                Map intervalMap = userService.selectIntervalBetweenLoginAndRegiste(param);
                 if (MapUtil.isEmpty(intervalMap)) {
                     //不存在登录与注册间隔10秒的这个用户，则说明这个用户不是第一次登录
                     returnMap.put("isFirstLogin", 0);
@@ -717,7 +721,7 @@ public class AppRegisterFacade {
                     returnMap.put("isFirstLogin", 1);
                 }
                 //8 登录验证成功后，更新用户信息
-                updateLoginUserInfo(appuserid, longitude, latitude, ip);
+                updateLoginUserInfo(appuserid, longitude, latitude, ip, loginTime);
                 //9 返回登录人的信息
                 ShiroRealm.ShiroUser appuser = (ShiroRealm.ShiroUser) currentUser.getPrincipal();
                 if (null == appuser) {
@@ -759,10 +763,10 @@ public class AppRegisterFacade {
      * @param latitude
      * @param ip
      */
-    private void updateLoginUserInfo(int appuserid, String longitude, String latitude, String ip) {
+    private void updateLoginUserInfo(int appuserid, String longitude, String latitude, String ip, Date loginTime) {
         User u = new User();
         u.setId(appuserid);
-        u.setLoginTime(new Date());
+        u.setLoginTime(loginTime);
 
         u.setIp(ip);    //登录的ip
         u.setLongitude(longitude);  //登录的经度
