@@ -1550,4 +1550,10 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
     <select id="queryRobotById" parameterType="java.lang.Integer" resultType="com.movision.mybatis.user.entity.User">
         SELECT * FROM yw_user WHERE id = #{id,jdbcType=INTEGER} AND status = 0
     </select>
+
+    <select id="queryRandomUser" resultType="com.movision.mybatis.user.entity.User" parameterType="java.lang.Integer">
+        <![CDATA[
+        SELECT * FROM yw_user where id>=10000 AND id<=20000 ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
+        ]]>
+    </select>
 </mapper>

@@ -198,4 +198,6 @@ public interface UserMapper {
     List<User> findAllQueryRobotByList(String name, RowBounds rowBounds);
 
     User queryRobotById(Integer id);
+
+    List<User> queryRandomUser(Integer number);
 }

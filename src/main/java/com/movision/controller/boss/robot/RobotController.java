@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhuangyuhao
@@ -159,24 +160,27 @@ public class RobotController {
 
     /**
      * 新增机器人评论
-     *
      * @param comment
      * @return
      */
-    @ApiOperation(value = "新增机器人", notes = "新增机器人评论", response = Response.class)
+    @ApiOperation(value = "新增机器人评论", notes = "新增机器人评论", response = Response.class)
     @RequestMapping(value = "insertRoboltComment", method = RequestMethod.POST)
     public Response insertRoboltComment(@ApiParam(value = "评论") @RequestParam String comment,
                                         @ApiParam(value = "评论类型") @RequestParam String type) {
         Response response = new Response();
-        robotFacade.insertRoboltComment(comment, type);
-        response.setMessage("操作成功");
-        response.setData(1);
+        Map map = robotFacade.insertRoboltComment(comment, type);
+        if (map.get("code").equals(200)) {
+            response.setMessage("操作成功");
+            response.setData(1);
+        } else {
+            response.setMessage("评论重复");
+            response.setData(-1);
+        }
         return response;
     }
 
     /**
      * 删除机器人评论
-     *
      * @param id
      * @return
      */
@@ -191,8 +195,43 @@ public class RobotController {
     }
 
     /**
-     * 利用机器人为帖子制造评论接口
+     * 根据id查询机器人评论
      *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "根据id查询机器人评论", notes = "用于查才机器人评论", response = Response.class)
+    @RequestMapping(value = "queryRoboltCommentById", method = RequestMethod.POST)
+    public Response queryRoboltCommentById(@ApiParam(value = "id") @RequestParam String id) {
+        Response response = new Response();
+        RobotComment comment = robotFacade.queryRoboltCommentById(Integer.parseInt(id));
+        response.setMessage("查询成功");
+        response.setData(comment);
+        return response;
+    }
+
+    /**
+     * 更新机器人评论
+     *
+     * @param id
+     * @param content
+     * @param type
+     * @return
+     */
+    @ApiOperation(value = "更新机器人评论", response = Response.class)
+    @RequestMapping(value = "updateRoboltComent", method = RequestMethod.POST)
+    public Response updateRoboltComent(@ApiParam(value = "id") @RequestParam String id,
+                                       @ApiParam(value = "评论内容") @RequestParam String content,
+                                       @ApiParam(value = "评论类型") @RequestParam String type) {
+        Response response = new Response();
+        robotFacade.updateRoboltComent(id, content, type);
+        response.setMessage("操作成功");
+        response.setData(1);
+        return response;
+    }
+
+    /**
+     * 利用机器人为帖子制造评论接口
      * @param postid
      * @param coid
      * @param number
@@ -209,5 +248,7 @@ public class RobotController {
         response.setData(1);
         return response;
     }
+
+
 
 }

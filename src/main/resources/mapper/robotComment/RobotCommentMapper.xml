@@ -76,4 +76,28 @@
             type = #{type,jdbcType=INTEGER}
         </if>
     </select>
+
+    <select id="queryRoboltCommentById" resultType="java.lang.String" parameterType="java.lang.Integer">
+        SELECT content FROM yw_comment WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryCommentById" resultType="com.movision.mybatis.robotComment.entity.RobotComment"
+            parameterType="java.lang.Integer">
+        SELECT * FROM yw_comment WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <update id="updateByCommentById" parameterType="com.movision.mybatis.robotComment.entity.RobotComment">
+        update yw_comment
+        <set>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="queryComentMessage" parameterType="com.movision.mybatis.robotComment.entity.RobotComment"
+            resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM yw_comment WHERE content = #{content,jdbcType=INTEGER}
+    </select>
 </mapper>
