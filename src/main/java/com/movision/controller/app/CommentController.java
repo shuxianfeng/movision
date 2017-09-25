@@ -89,4 +89,24 @@ public class CommentController {
 
         return response;
     }
+
+    /**
+     * 评论举报
+     *
+     * @param userid
+     * @param commentid
+     * @param comment
+     * @return
+     */
+    @ApiOperation(value = "评论举报", notes = "用于评论举报", response = Response.class)
+    @RequestMapping(value = "updateCommentByinform", method = RequestMethod.POST)
+    public Response updateCommentByinform(@ApiParam(value = "举报人") @RequestParam String userid,
+                                          @ApiParam(value = "举报评论id") @RequestParam String commentid,
+                                          @ApiParam(value = "举报原因") @RequestParam String comment) {
+        Response response = new Response();
+        int resault = facadeComments.updateCommentByinform(userid, comment, commentid);
+        response.setMessage("操作成功");
+        response.setData(resault);
+        return response;
+    }
 }

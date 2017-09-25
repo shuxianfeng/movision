@@ -10,6 +10,7 @@ import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.postCommentAccusation.entity.PostCommentAccusation;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
@@ -325,6 +326,22 @@ public class FacadeComments {
         }
         return commentVoList;
 
+    }
+
+    public int updateCommentByinform(String userid, String comment, String commentid) {
+        PostCommentAccusation accusation = new PostCommentAccusation();
+        if (StringUtil.isNotEmpty(userid)) {
+            accusation.setUserid(Integer.parseInt(userid));
+        }
+        if (StringUtil.isNotEmpty(comment)) {
+            accusation.setComment(comment);
+        }
+        if (StringUtil.isNotEmpty(commentid)) {
+            accusation.setCommentid(Integer.parseInt(commentid));
+        }
+        accusation.setIntime(new Date());
+        accusation.setType(1);
+        return commentService.updateCommentByinform(accusation);
     }
 }
 
