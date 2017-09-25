@@ -599,6 +599,12 @@
         INSERT INTO yw_goods_share (userid, goodsid, intime, channel)
         VALUES (#{userid,jdbcType=INTEGER}, #{goodsid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}, #{channel,jdbcType=VARCHAR})
     </insert>
+    
+    <!--插入举报用户记录-->
+    <insert id="accusationUser" parameterType="java.util.Map" >
+        INSERT INTO yw_user_accusation (userid, beaccid, intime)
+        VALUES (#{userid,jdbcType=INTEGER}, #{beaccid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP})
+    </insert>
 
     <select id="queryUserByOpenid" parameterType="java.lang.Integer" resultType="java.lang.String">
         SELECT u.openid FROM yw_user u WHERE id=#{userid,jdbcType=INTEGER}

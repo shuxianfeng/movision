@@ -962,6 +962,16 @@ public class UserService {
         }
     }
 
+    public void accusationUser(Map<String, Object> map){
+        try {
+            log.info("举报用户用户成功");
+            userMapper.accusationUser(map);
+        }catch (Exception e){
+            log.error("举报用户用户失败", e);
+            throw e;
+        }
+    }
+
     public List<UserVo> findAllMineFollowAuthor(Map<String, Object> paramap, Paging<UserVo> pager){
         try {
             log.info("查询当前用户关注的所有作者列表");

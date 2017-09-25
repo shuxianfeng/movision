@@ -231,6 +231,28 @@ public class AppWaterfallController {
     }
 
     /**
+     * 他人主页中举报用户
+     * @param userid
+     * @param beaccid
+     * @return
+     */
+    @ApiOperation(value = "个人主页举报接口（举报他人）", notes = "个人主页举报接口（举报他人）", response = Response.class)
+    @RequestMapping(value = "accusationUser", method = RequestMethod.POST)
+    public Response accusationUser(@ApiParam(value = "用户id") @RequestParam String userid,
+                                   @ApiParam(value = "被举报人用户id") @RequestParam String beaccid){
+        Response response = new Response();
+
+        userFacade.accusationUser(userid, beaccid);
+        if (response.getCode() == 200) {
+            response.setMessage("举报成功");
+        }else {
+            response.setMessage("举报失败");
+        }
+
+        return response;
+    }
+
+    /**
      * @return
      */
     @ApiOperation(value = "关注标签", notes = "关注标签", response = Response.class)

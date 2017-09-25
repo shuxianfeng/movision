@@ -151,6 +151,8 @@ public interface UserMapper {
 
     UserVo queryUserInfoHompage(int userid);
 
+    void accusationUser(Map<String, Object> map);
+
     List<UserVo> findAllMineFollowAuthor(Map<String, Object> paramap, RowBounds rowBounds);
 
     int queryIsFollowAuthor(Map<String, Object> paramap);
