@@ -38,4 +38,24 @@ public class RobotCommentService {
             throw e;
         }
     }
+
+    public void insertRoboltComment(RobotComment comment) {
+        try {
+            logger.info("新增机器人评论");
+            robotCommentMapper.insertSelective(comment);
+        } catch (Exception e) {
+            logger.error("新增机器人评论异常", e);
+            throw e;
+        }
+    }
+
+    public void deleteRoboltComment(Integer id) {
+        try {
+            logger.info("删除机器人评论");
+            robotCommentMapper.deleteByPrimaryKey(id);
+        } catch (Exception e) {
+            logger.error("删除机器人评论异常", e);
+            throw e;
+        }
+    }
 }

@@ -289,5 +289,35 @@ public class RobotFacade {
         return robotCommentService.findAllQueryRoboltComment(Integer.parseInt(type), pag);
     }
 
+    /**
+     * 新增机器人评论
+     *
+     * @param content
+     * @param type
+     */
+    public void insertRoboltComment(String content, String type) {
+        RobotComment robotComment = new RobotComment();
+        if (StringUtil.isNotEmpty(content)) {
+            robotComment.setContent(content);
+        }
+        if (StringUtil.isNotEmpty(type)) {
+            robotComment.setType(Integer.parseInt(type));
+        }
+        robotCommentService.insertRoboltComment(robotComment);
+    }
+
+    /**
+     * 删除机器人评论
+     *
+     * @param id
+     */
+    public void deleteRoboltComment(String id) {
+        robotCommentService.deleteRoboltComment(Integer.parseInt(id));
+    }
+
+    public void insertPostCommentByRobolt(String postid, String coid, String number) {
+
+    }
+
 
 }

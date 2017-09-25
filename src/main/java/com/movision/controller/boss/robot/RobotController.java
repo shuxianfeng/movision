@@ -9,6 +9,7 @@ import com.movision.mybatis.user.entity.UserVo;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.apache.bcel.generic.SALOAD;
 import org.apache.poi.hssf.record.RecordFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -153,6 +154,59 @@ public class RobotController {
         List<RobotComment> list = robotFacade.findAllQueryRoboltComment(type, pag);
         response.setMessage("查询成功");
         response.setData(list);
+        return response;
+    }
+
+    /**
+     * 新增机器人评论
+     *
+     * @param comment
+     * @return
+     */
+    @ApiOperation(value = "新增机器人", notes = "新增机器人评论", response = Response.class)
+    @RequestMapping(value = "insertRoboltComment", method = RequestMethod.POST)
+    public Response insertRoboltComment(@ApiParam(value = "评论") @RequestParam String comment,
+                                        @ApiParam(value = "评论类型") @RequestParam String type) {
+        Response response = new Response();
+        robotFacade.insertRoboltComment(comment, type);
+        response.setMessage("操作成功");
+        response.setData(1);
+        return response;
+    }
+
+    /**
+     * 删除机器人评论
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "删除机器人评论", notes = "删除机器人评论", response = Response.class)
+    @RequestMapping(value = "deleteRoboltComment", method = RequestMethod.POST)
+    public Response deleteRoboltComment(@ApiParam(value = "评论id") @RequestParam String id) {
+        Response response = new Response();
+        robotFacade.deleteRoboltComment(id);
+        response.setMessage("操作成功");
+        response.setData(1);
+        return response;
+    }
+
+    /**
+     * 利用机器人为帖子制造评论接口
+     *
+     * @param postid
+     * @param coid
+     * @param number
+     * @return
+     */
+    @ApiOperation(value = "机器人为帖子评论接口", notes = "用于使用机器人给某个帖子制造评论", response = Response.class)
+    @RequestMapping(value = "insertPostCommentByRobolt", method = RequestMethod.POST)
+    public Response insertPostCommentByRobolt(@ApiParam(value = "帖子id") @RequestParam String postid,
+                                              @ApiParam(value = "评论id") @RequestParam String coid,
+                                              @ApiParam(value = "使用机器人数量") @RequestParam String number) {
+        Response response = new Response();
+        robotFacade.insertPostCommentByRobolt(postid, coid, number);
+        response.setMessage("操作成功");
+        response.setData(1);
         return response;
     }
 
