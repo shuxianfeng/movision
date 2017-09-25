@@ -39,6 +39,27 @@ public class RobotCommentService {
         }
     }
 
+    /**
+     * 查询评论是否重复
+     *
+     * @param robotComment
+     * @return
+     */
+    public Integer queryComentMessage(RobotComment robotComment) {
+        try {
+            logger.info("查询评论是否重复");
+            return robotCommentMapper.queryComentMessage(robotComment);
+        } catch (Exception e) {
+            logger.error("查询评论是否重复异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 新增评论
+     *
+     * @param comment
+     */
     public void insertRoboltComment(RobotComment comment) {
         try {
             logger.info("新增机器人评论");
@@ -49,12 +70,43 @@ public class RobotCommentService {
         }
     }
 
-    public void deleteRoboltComment(Integer id) {
+    public void deleteRoboltComment(RobotComment robotComment) {
         try {
             logger.info("删除机器人评论");
-            robotCommentMapper.deleteByPrimaryKey(id);
+            robotCommentMapper.updateByCommentById(robotComment);
         } catch (Exception e) {
             logger.error("删除机器人评论异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据id查询机器人评论
+     *
+     * @param id
+     * @return
+     */
+    public RobotComment queryCommentById(Integer id) {
+        try {
+            logger.info("根据id查询机器人评论");
+            return robotCommentMapper.queryCommentById(id);
+        } catch (Exception e) {
+            logger.error("根据id查询机器人评论异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 更新机器人评论
+     *
+     * @param comment
+     */
+    public void updateRoboltComent(RobotComment comment) {
+        try {
+            logger.info("更新机器人评论");
+            robotCommentMapper.updateByPrimaryKeySelective(comment);
+        } catch (Exception e) {
+            logger.error("更新机器人评论异常", e);
             throw e;
         }
     }

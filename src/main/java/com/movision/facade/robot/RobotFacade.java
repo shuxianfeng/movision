@@ -308,15 +308,24 @@ public class RobotFacade {
      * @param content
      * @param type
      */
-    public void insertRoboltComment(String content, String type) {
+    public Map insertRoboltComment(String content, String type) {
         RobotComment robotComment = new RobotComment();
+        Map map = new HashMap();
         if (StringUtil.isNotEmpty(content)) {
             robotComment.setContent(content);
         }
         if (StringUtil.isNotEmpty(type)) {
             robotComment.setType(Integer.parseInt(type));
         }
-        robotCommentService.insertRoboltComment(robotComment);
+        //查询是否重复
+        Integer resault = robotCommentService.queryComentMessage(robotComment);
+        if (resault == 0) {
+            robotCommentService.insertRoboltComment(robotComment);
+            map.put("code", 200);
+        } else {
+            map.put("code", 400);
+        }
+        return map;
     }
 
     /**
@@ -326,9 +335,50 @@ public class RobotFacade {
      */
     @Transactional
     public void deleteRoboltComment(String id) {
-        robotCommentService.deleteRoboltComment(Integer.parseInt(id));
+        RobotComment robotComment = new RobotComment();
+        robotComment.setId(Integer.parseInt(id));
+        robotComment.setContent("该评论已经被管理员删除");
+        robotCommentService.deleteRoboltComment(robotComment);
     }
 
+    /**
+     * 根据id查询机器人评论
+     *
+     * @param id
+     * @return
+     */
+    public RobotComment queryRoboltCommentById(Integer id) {
+        return robotCommentService.queryCommentById(id);
+    }
+
+    /**
+     * 更新机器人评论
+     *
+     * @param id
+     * @param content
+     * @param type
+     */
+    public void updateRoboltComent(String id, String content, String type) {
+        RobotComment robotComment = new RobotComment();
+        if (StringUtil.isNotBlank(id)) {
+            robotComment.setId(Integer.parseInt(id));
+        }
+        if (StringUtil.isNotEmpty(content)) {
+            robotComment.setContent(content);
+        }
+        if (StringUtil.isNotEmpty(type)) {
+            robotComment.setType(Integer.parseInt(type));
+        }
+        robotCommentService.updateRoboltComent(robotComment);
+    }
+
+    /**
+     * 机器人评论帖子
+     *
+     * @param postid
+     * @param coid
+     * @param number
+     */
     public void insertPostCommentByRobolt(String postid, String coid, String number) {
         //查询随机用户
         List<User> users = userService.queryRandomUser(Integer.parseInt(number));
