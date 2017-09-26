@@ -20,7 +20,7 @@ public interface RobotCommentMapper {
 
     List<RobotComment> findAllQueryRoboltComment(Integer type, RowBounds rowBounds);
 
-    String queryRoboltCommentById(Integer id);
+    List<RobotComment> queryRoboltComment(Integer number);
 
     RobotComment queryCommentById(Integer id);
 

@@ -11,14 +11,24 @@ public class ReplyComment implements Serializable {
 
     private Integer id; //评论id
     private Integer userid; //评论人id
-
     private String photo;   //评论人头像
     private String nickname;    //昵称
     private String replyContent;    //评论人回复的内容
     private Date intime;
 
     private String originContent;   //原始评论的内容
-    private Integer originCommentId;    //原始评论人id
+    private Integer originCommentId;    //原始评论id
+
+    private Integer postid; //原生评论对应的帖子id
+
+    public void setPostid(Integer postid) {
+        this.postid = postid;
+    }
+
+    public Integer getPostid() {
+
+        return postid;
+    }
 
     public void setId(Integer id) {
         this.id = id;
@@ -96,6 +106,7 @@ public class ReplyComment implements Serializable {
                 ", intime=" + intime +
                 ", originContent='" + originContent + '\'' +
                 ", originCommentId=" + originCommentId +
+                ", postid=" + postid +
                 '}';
     }
 }

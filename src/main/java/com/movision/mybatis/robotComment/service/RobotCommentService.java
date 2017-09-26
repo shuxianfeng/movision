@@ -114,13 +114,12 @@ public class RobotCommentService {
     /**
      * 根据id查询机器人评论内容
      *
-     * @param id
      * @return
      */
-    public String queryRoboltCommentById(Integer id) {
+    public List<RobotComment> queryRoboltComment(Integer number) {
         try {
             logger.info("根据id查询机器人评论内容");
-            return robotCommentMapper.queryRoboltCommentById(id);
+            return robotCommentMapper.queryRoboltComment(number);
         } catch (Exception e) {
             logger.error("根据id查询机器人内容异常", e);
             throw e;

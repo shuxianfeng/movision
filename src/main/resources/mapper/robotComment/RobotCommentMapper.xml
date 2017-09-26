@@ -77,8 +77,9 @@
         </if>
     </select>
 
-    <select id="queryRoboltCommentById" resultType="java.lang.String" parameterType="java.lang.Integer">
-        SELECT content FROM yw_comment WHERE id = #{id,jdbcType=INTEGER}
+    <select id="queryRoboltComment" resultType="com.movision.mybatis.robotComment.entity.RobotComment"
+            parameterType="java.lang.Integer">
+        SELECT content FROM yw_comment ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
     </select>
 
     <select id="queryCommentById" resultType="com.movision.mybatis.robotComment.entity.RobotComment"

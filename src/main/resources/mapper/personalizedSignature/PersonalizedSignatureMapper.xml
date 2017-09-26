@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.personalizedSignature.mapper.PersonalizedSignatureMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.personalizedSignature.entity.PersonalizedSignature">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="signature" property="signature" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, signature
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_personalized_signature
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_personalized_signature
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.personalizedSignature.entity.PersonalizedSignature">
+    insert into yw_personalized_signature (id, signature)
+    values (#{id,jdbcType=INTEGER}, #{signature,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective"
+            parameterType="com.movision.mybatis.personalizedSignature.entity.PersonalizedSignature">
+        insert into yw_personalized_signature
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="signature != null">
+                signature,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="signature != null">
+                #{signature,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.movision.mybatis.personalizedSignature.entity.PersonalizedSignature">
+        update yw_personalized_signature
+        <set>
+            <if test="signature != null">
+                signature = #{signature,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey"
+            parameterType="com.movision.mybatis.personalizedSignature.entity.PersonalizedSignature">
+    update yw_personalized_signature
+    set signature = #{signature,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="queryRoboltSignature"
+            resultType="com.movision.mybatis.personalizedSignature.entity.PersonalizedSignature"
+            parameterType="java.lang.Integer">
+    SELECT * FROM yw_personalized_signature ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
+  </select>
+</mapper>

@@ -108,20 +108,20 @@ SELECT u.nickname FROM yw_user u LEFT JOIN yw_post p ON p.userid=u.id WHERE p.id
     <select id="findZan" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.PostZanRecord.entity.ZanRecordVo">
         select t.* from (
-        SELECT r.id,r.userid,r.commentid,null AS postid,r.intime
-        FROM yw_post_comment_zan_record r
-        left JOIN yw_post_comment c on r.commentid = c.id
-        left join yw_post p on p.id = c.postid
-        where c.userid = #{userid}
-        and p.isdel = 0
-        <![CDATA[    and r.userid <> c.userid ]]>
-        UNION ALL
-        SELECT d.id,d.userid,null AS commentid,d.postid,d.intime
-        FROM yw_post_zan_record d
-        LEFT JOIN yw_post p2 on p2.id = d.postid
-        where p2.userid = #{userid}
-        and p2.isdel = 0
-        <![CDATA[   and d.userid <> p2.userid ]]>
+            SELECT r.id,r.userid,r.commentid,p.id AS postid,r.intime
+            FROM yw_post_comment_zan_record r
+            left JOIN yw_post_comment c on r.commentid = c.id
+            left join yw_post p on p.id = c.postid
+            where c.userid = #{userid}
+            and p.isdel = 0
+            <![CDATA[    and r.userid <> c.userid ]]>
+            UNION ALL
+            SELECT d.id,d.userid,null AS commentid,d.postid,d.intime
+            FROM yw_post_zan_record d
+            LEFT JOIN yw_post p2 on p2.id = d.postid
+            where p2.userid = #{userid}
+            and p2.isdel = 0
+            <![CDATA[   and d.userid <> p2.userid ]]>
         ) t ORDER BY t.intime DESC
     </select>
 </mapper>

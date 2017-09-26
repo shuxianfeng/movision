@@ -535,7 +535,7 @@ SELECT u.photo,u.nickname,u.id FROM yw_user u LEFT JOIN yw_post_comment c ON c.u
     <select id="selectReplyCommentList" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.ReplyComment">
         SELECT a.userid, a.`content` as replyContent, a.`intime`, a.pid as originCommentId,
-         b.`content` AS originContent, u.`photo`,u.`nickname`
+        b.`content` AS originContent, u.`photo`,u.`nickname`, p.id as postid
          FROM yw_post_comment a
           LEFT JOIN yw_post_comment b ON a.pid = b.`id`
           LEFT JOIN yw_user u ON u.id = a.userid
