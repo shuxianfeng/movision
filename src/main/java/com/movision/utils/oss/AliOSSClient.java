@@ -357,7 +357,7 @@ public class AliOSSClient {
      * @param chann 频道
      * @return
      */
-    public Map<String, Object> uploadLocalFile(File file, String type, String chann) {
+    public Map<String, Object> uploadLocalFile(File file, String type, String chann, String domain) {
         Map<String, Object> result = new HashMap<>();
 
         log.info("阿里云OSS上传Started");
@@ -367,14 +367,14 @@ public class AliOSSClient {
             // 文件存储入OSS，Object的名称为fileKey。详细请参看“SDK手册 > Java-SDK > 上传文件”。
             // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/upload_object.html?spm=5176.docoss/user_guide/upload_object
             String fileKey;
-            String domain;
+//            String domain;
             String fileName = FileUtil.renameFile(file).getName();
             fileKey = defineFileKey(type, chann, fileName);
 
             String data = "";
             if (type.equals("img")) {
                 bucketName = PropertiesLoader.getValue("img.bucket");
-                domain = PropertiesLoader.getValue("ali.domain");
+//                domain = PropertiesLoader.getValue("ali.domain");
                 data = domain + "/" + fileKey;
                 //返回图片的宽高
                 InputStream is = new FileInputStream(file);
@@ -538,7 +538,7 @@ public class AliOSSClient {
         AliOSSClient client = new AliOSSClient();
         String fileName = "/Users/zhuangyuhao/Downloads/1111.jpg";
         File file = new File(fileName);
-        Map<String, Object> result = client.uploadLocalFile(file, "doc", null);
+        Map<String, Object> result = client.uploadLocalFile(file, "doc", null, "movision");
         System.out.println(result);
 
 //        String name = file.getName();
