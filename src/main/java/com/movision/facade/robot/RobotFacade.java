@@ -9,7 +9,6 @@ import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
-import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.post.service.PostService;
@@ -18,7 +17,6 @@ import com.movision.mybatis.robotComment.service.RobotCommentService;
 import com.movision.mybatis.robotNickname.entity.RobotNickname;
 import com.movision.mybatis.robotNickname.service.RobotNicknameService;
 import com.movision.mybatis.user.entity.User;
-import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
@@ -28,6 +26,7 @@ import com.movision.utils.ListUtil;
 import com.movision.utils.UUIDGenerator;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,13 +87,20 @@ public class RobotFacade {
         if (null != maxId) {
             firstId = maxId + 1;    //如果存在最大id， 则第一个id是maxid+1
         }
+        //2 查询头像库 num个
+        List<UserPhoto> userPhotoList = userService.queryUserPhotos(num);
+        //3 查询昵称库 num个
+        List<String> robotNicknameList = nicknameService.queryRoboltNickname(num);
         /**
-         * 2 循环新增机器人个人信息
+         * 3 循环新增机器人个人信息
          */
         for (int i = 0; i < num; i++) {
             //机器人id
             int uid = firstId + i;
-            User robot = createRobot(uid);
+            String photo = userPhotoList.get(i).getUrl();   //头像
+            String nickname = robotNicknameList.get(i); //昵称
+
+            User robot = createRobot(uid, photo, nickname);
             //1)新增用户（暂时不需要处理yw_im_device, yw_im_user）
             userService.insertSelective(robot);
             //2)增加新用户注册积分流水
@@ -105,18 +111,55 @@ public class RobotFacade {
     }
 
     /**
+     * 从list中随机选出几个数，并按照原来的顺序排列（比如从list中随机选出n个数）
+     *
+     * @param list
+     * @param n
+     * @return
+     */
+    public List<T> selectRandomList(List<T> list, int n) {
+        //若list.size()大于n套，随机产生n个对象，并按照原来的顺序排列
+        //若list的对象为ListObject
+        if (list.size() > n) {
+            Random randomId = new Random();
+            //对随机的n个对象排成原来的默认顺序
+            List<Integer> indexes = new ArrayList<Integer>();
+            while (indexes.size() < n) {
+                //对象在list里的位置
+                int index = randomId.nextInt(list.size());
+                if (!indexes.contains(index)) {
+                    indexes.add(index);
+                }
+            }
+            //对indexes排序
+            Collections.sort(indexes);
+            //取出indexes对应的list放到newList
+            List<T> newList = new ArrayList<>();
+            for (int index : indexes) {
+                newList.add(list.get(index));
+            }
+            list.clear();
+            list.addAll(newList);
+        }
+        return list;
+    }
+
+
+    /**
      * 创建机器人信息
      *
      * @return
      */
-    private User createRobot(int uid) {
+    private User createRobot(int uid, String photo, String nickname) {
         User robot = new User();
         robot.setId(uid);   //id
         String phone = uid + "000000";  //手机号
         robot.setPhone(phone);
         robot.setInvitecode(UUIDGenerator.gen6Uuid());    //自己的邀请码
-        robot.setNickname("robot_" + uid);  //昵称
-        robot.setPhoto(UserConstants.DEFAULT_APPUSER_PHOTO);    //头像
+//        robot.setNickname("robot_" + uid);  //昵称
+        robot.setNickname(nickname);
+//        robot.setPhoto(UserConstants.DEFAULT_APPUSER_PHOTO);    //头像
+        robot.setPhoto(photo);
         robot.setSex(0);    //性别 默认是女
         robot.setBirthday(DateUtils.getDefaultBirthday());  //1990-08-19
         robot.setProvince("上海");
@@ -469,7 +512,7 @@ public class RobotFacade {
         //查询随机用户
         List<User> users = userService.queryRandomUser(Integer.parseInt(number));
         //查询随机头像
-        List<UserPhoto> photos = userService.queryUserPhonts(Integer.parseInt(number));
+        List<UserPhoto> photos = userService.queryUserPhotos(Integer.parseInt(number));
         //查询随机昵称
         List<String> nicknames = nicknameService.queryRoboltNickname(Integer.parseInt(number));
         //查询评论内容
@@ -498,6 +541,55 @@ public class RobotFacade {
             Long d = date.getTime() + s;
             comment.setIntime(new Date(d));
             commentService.insertComment(comment);
+        }
+    }
+
+    /**
+     * 批量修改机器人的头像
+     *
+     * @param userids
+     */
+    public void batchChangeRobotPhoto(String userids) {
+        if (StringUtils.isEmpty(userids)) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "请选择机器人");
+        }
+
+        String[] robotArr = userids.split(",");
+        int num = robotArr.length;
+        //头像列表
+        List<UserPhoto> userPhotoList = userService.queryUserPhotos(num);
+        for (int i = 0; i < num; i++) {
+            String photo = userPhotoList.get(i).getUrl();
+
+            User user = new User();
+            user.setId(Integer.valueOf(robotArr[i]));
+            user.setPhoto(photo);
+            userService.updateByPrimaryKeySelective(user);
+        }
+    }
+
+    /**
+     * 批量修改机器人的昵称
+     *
+     * @param userids
+     */
+    public void batchChangeRobotNickname(String userids) {
+        if (StringUtils.isEmpty(userids)) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "请选择机器人");
+        }
+
+        String[] robotArr = userids.split(",");
+        int num = robotArr.length;
+
+        List<String> robotNicknameList = nicknameService.queryRoboltNickname(num);
+
+        for (int i = 0; i < num; i++) {
+            String nickname = robotNicknameList.get(i);
+
+            User user = new User();
+            user.setId(Integer.valueOf(robotArr[i]));
+            user.setNickname(nickname);
+            userService.updateByPrimaryKeySelective(user);
         }
     }
 

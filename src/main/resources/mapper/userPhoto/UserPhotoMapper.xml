@@ -60,4 +60,6 @@
             parameterType="java.lang.Integer">
         SELECT * FROM yw_user_photo ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
     </select>
+
+    
 </mapper>

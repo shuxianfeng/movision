@@ -1,17 +1,22 @@
 package com.movision.facade.robot;
 
+import com.movision.mybatis.user.service.UserService;
 import com.movision.test.SpringTestCase;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Random;
-
-import static org.junit.Assert.*;
 
 /**
  * @Author zhuangyuhao
  * @Date 2017/9/18 17:12
  */
 public class RobotFacadeTest extends SpringTestCase {
+    @Autowired
+    private RobotFacade robotFacade;
+    @Autowired
+    private UserService userService;
+
     @Test
     public void doZanAction() throws Exception {
         Random random = new Random();
@@ -34,6 +39,16 @@ public class RobotFacadeTest extends SpringTestCase {
         }
     }
 
+    @Test
+    public void batchChangeRobotPhoto() throws Exception {
+//        List<User> userList = userService.selectRobotUser();
+        robotFacade.batchChangeRobotPhoto("10001,10002");
+    }
 
+    @Test
+    public void batchChangeRobotNickname() throws Exception {
+//        List<User> userList = userService.selectRobotUser();
+        robotFacade.batchChangeRobotNickname("10001,10002");
+    }
 
 }

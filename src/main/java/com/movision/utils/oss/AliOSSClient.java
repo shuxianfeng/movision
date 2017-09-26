@@ -170,7 +170,9 @@ public class AliOSSClient {
                 data = fileName2;
             }
 
-            ossClient.putObject(bucketName, fileKey, in);
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setCacheControl("no-cache");
+            ossClient.putObject(bucketName, fileKey, in, objectMetadata);
 
             log.debug("Object：" + fileKey + "存入OSS成功。");
             result.put("status", "success");
@@ -233,7 +235,9 @@ public class AliOSSClient {
                 data = fileName;
             }
 
-            ossClient.putObject(bucketName, fileKey, fil);
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setCacheControl("no-cache");
+            ossClient.putObject(bucketName, fileKey, fil, objectMetadata);
             log.debug("Object：" + fileKey + "存入OSS成功。");
             log.info("【上传Alioss的返回值】：" + result.toString());
             result.put("status", "success");
@@ -308,7 +312,9 @@ public class AliOSSClient {
                 }
             }
             //oss api
-            ossClient.putObject(bucketName, fileKey, in);
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setCacheControl("no-cache");
+            ossClient.putObject(bucketName, fileKey, in, objectMetadata);
 
             log.debug("Object：" + fileKey + "存入OSS成功。");
             log.info("【上传Alioss的返回值】：" + result.toString());
@@ -387,7 +393,9 @@ public class AliOSSClient {
                 data = fileName;
             }
 
-            ossClient.putObject(bucketName, fileKey, file);
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setCacheControl("no-cache");
+            ossClient.putObject(bucketName, fileKey, file, objectMetadata);
             log.debug("Object：" + fileKey + "存入OSS成功。");
             result.put("status", "success");
             result.put("url", data);
@@ -444,7 +452,9 @@ public class AliOSSClient {
                 data = fileName;
             }
             //核心api
-            ossClient.putObject(bucketName, fileKey, file);
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setCacheControl("no-cache");
+            ossClient.putObject(bucketName, fileKey, file, objectMetadata);
             log.debug("Object：" + fileKey + "存入OSS成功。");
             result.put("status", "success");
             result.put("url", data);
