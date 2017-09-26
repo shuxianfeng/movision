@@ -236,6 +236,17 @@ public class FileUtil {
 	}
 
 	/**
+	 * 根据图片链接获取该图片的所属域名
+	 * url 类似：http://www.mofo.shop/upload/brand/img/613.jpg
+	 * bb.substring(0, bb.indexOf(";", bb.indexOf(";", bb.indexOf(";", 0)+1)+1)+1)
+	 * 输出：http://www.mofo.shop
+	 */
+	public static String getDomain(String url) {
+
+		return url.substring(0, url.indexOf(";", url.indexOf(";", url.indexOf(";", 0)+1)+1)+1);
+	}
+
+	/**
 	 * 获取指定文件夹下的文件的名称的集合
 	 *
 	 * @param filepath

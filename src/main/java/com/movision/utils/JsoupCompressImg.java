@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.movision.facade.boss.PostFacade;
 import com.movision.facade.upload.UploadFacade;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.compressImg.entity.CompressImg;
 import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.AliOSSClient;
@@ -162,7 +163,8 @@ public class JsoupCompressImg {
                             for(int j = 0; j < 3; j++){
                                 compressurl = compressurl.substring(compressurl.indexOf("/")+1 );
                             }
-                            newimgurl = PropertiesLoader.getValue("formal.img.domain") + "/" + compressurl;//拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接，如："http://pic.mofo.shop" + "/upload/postCompressImg/img/yDi0T2nY1496812117357.png"
+//                            newimgurl = PropertiesLoader.getValue("formal.img.domain") + "/" + compressurl;//拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接，如："http://pic.mofo.shop" + "/upload/postCompressImg/img/yDi0T2nY1496812117357.png"
+                            newimgurl = FileUtil.getDomain(imgurl) + "/" + compressurl;//动态获取原图链接的前缀域名（确保保存到数据库中的测试数据和正式数据url的区别）
 
                             //如果压缩保存成功，这里替换文章中的第i个img标签中的src属性
                             titleElms.get(i).attr("src", newimgurl);
