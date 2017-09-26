@@ -292,6 +292,15 @@ public class RobotController {
         return response;
     }
 
+    @ApiOperation(value = "批量替换机器人的昵称", notes = "批量替换机器人的昵称", response = Response.class)
+    @RequestMapping(value = "batch_change_robot_nickname", method = RequestMethod.POST)
+    public Response batchChangeRobotNickname(@ApiParam(value = "机器人id，逗号分隔") @RequestParam String userids) {
+        Response response = new Response();
+        robotFacade.batchChangeRobotNickname(userids);
+        response.setMessage("操作成功");
+        return response;
+    }
+
 
 
 }
