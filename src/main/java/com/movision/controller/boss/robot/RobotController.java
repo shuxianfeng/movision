@@ -40,6 +40,7 @@ public class RobotController {
     public Response createRobot(@ApiParam(value = "需要创建的机器人数量") @RequestParam Integer num) throws IOException {
         Response response = new Response();
         robotFacade.batchAddRobotUser(num);
+        response.setMessage("操作成功");
         return response;
     }
 
@@ -49,6 +50,7 @@ public class RobotController {
                                  @ApiParam(value = "帖子id") @RequestParam Integer postid) throws IOException {
         Response response = new Response();
         robotFacade.robotZanPost(postid, num);
+        response.setMessage("操作成功");
         return response;
     }
 
@@ -58,6 +60,17 @@ public class RobotController {
                                       @ApiParam(value = "帖子id, 以逗号分隔") @RequestParam String postids) throws IOException {
         Response response = new Response();
         robotFacade.robotZanBatchPost(postids, num);
+        response.setMessage("操作成功");
+        return response;
+    }
+
+    @ApiOperation(value = "批量帖子机器人收藏操作", notes = "批量帖子机器人收藏操作", response = Response.class)
+    @RequestMapping(value = "/robot_collect_batch_post", method = RequestMethod.POST)
+    public Response robotCollectBatchPost(@ApiParam(value = "需要调用的机器人的最大数量, 每次对帖子操作的机器人数量是[0,num)的随机数") @RequestParam Integer num,
+                                          @ApiParam(value = "帖子id, 以逗号分隔") @RequestParam String postids) throws IOException {
+        Response response = new Response();
+        robotFacade.robotCollectBatchPost(postids, num);
+        response.setMessage("操作成功");
         return response;
     }
 
@@ -66,7 +79,9 @@ public class RobotController {
     public Response robotActionWithZanCollectComment(@ApiParam(value = "需要调用的机器人的最大数量, 每次对帖子操作的机器人数量是[0,num)的随机数") @RequestParam Integer num,
                                                      @ApiParam(value = "帖子id, 以逗号分隔") @RequestParam String postids) throws IOException {
         Response response = new Response();
-        // TODO: 2017/9/26
+        // TODO: 2017/9/26 还差一个评论操作
+        robotFacade.robotActionWithZanCollectComment(postids, num);
+        response.setMessage("操作成功");
         return response;
     }
 

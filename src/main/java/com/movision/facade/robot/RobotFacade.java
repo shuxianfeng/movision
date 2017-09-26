@@ -174,6 +174,31 @@ public class RobotFacade {
     }
 
     /**
+     * 批量帖子机器人点赞、收藏、评论操作
+     *
+     * @param postids
+     * @param num
+     */
+    public void robotActionWithZanCollectComment(String postids, int num) {
+
+        validatePostidsAndNum(postids, num);
+
+        String[] postidArr = postids.split(",");
+
+        Random random = new Random();
+        for (int i = 0; i < postidArr.length; i++) {
+            //1 调用【机器人帖子点赞操作】
+            robotZanPost(Integer.valueOf(postidArr[i]), random.nextInt(num + 1));
+            //2 调用【机器人帖子收藏操作】
+            robotCollectPost(Integer.valueOf(postidArr[i]), random.nextInt(num + 1));
+            //3 调用【机器人帖子评论操作】
+            // TODO: 2017/9/26  还差一个评论操作
+
+        }
+
+    }
+
+    /**
      * 批量收藏帖子
      *
      * @param postids
