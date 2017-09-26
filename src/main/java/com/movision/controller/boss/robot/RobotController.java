@@ -52,6 +52,25 @@ public class RobotController {
         return response;
     }
 
+    @ApiOperation(value = "批量帖子机器人点赞操作", notes = "批量帖子机器人点赞操作", response = Response.class)
+    @RequestMapping(value = "/robot_zan_batch_post", method = RequestMethod.POST)
+    public Response robotZanBatchPost(@ApiParam(value = "需要调用的机器人的最大数量, 每次对帖子操作的机器人数量是[0,num)的随机数") @RequestParam Integer num,
+                                      @ApiParam(value = "帖子id, 以逗号分隔") @RequestParam String postids) throws IOException {
+        Response response = new Response();
+        robotFacade.robotZanBatchPost(postids, num);
+        return response;
+    }
+
+    @ApiOperation(value = "批量帖子机器人点赞、收藏、评论操作", notes = "批量帖子机器人点赞、收藏、评论操作", response = Response.class)
+    @RequestMapping(value = "/robot_action_with_zan_collect_comment", method = RequestMethod.POST)
+    public Response robotActionWithZanCollectComment(@ApiParam(value = "需要调用的机器人的最大数量, 每次对帖子操作的机器人数量是[0,num)的随机数") @RequestParam Integer num,
+                                                     @ApiParam(value = "帖子id, 以逗号分隔") @RequestParam String postids) throws IOException {
+        Response response = new Response();
+        // TODO: 2017/9/26
+        return response;
+    }
+
+
     @ApiOperation(value = "机器人收藏帖子操作", notes = "机器人收藏帖子操作", response = Response.class)
     @RequestMapping(value = "/robot_collect_post", method = RequestMethod.POST)
     public Response robotCollectPost(@ApiParam(value = "需要调用的机器人数量") @RequestParam Integer num,

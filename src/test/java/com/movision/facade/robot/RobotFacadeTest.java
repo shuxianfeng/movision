@@ -15,9 +15,24 @@ public class RobotFacadeTest extends SpringTestCase {
     @Test
     public void doZanAction() throws Exception {
         //随机获取0-16之间的一个随机整数
-
-        System.out.println("====结果：" + new Random().nextInt(16));
-
+        for (int i = 0; i < 10; i++) {
+            /**
+             *
+             ====结果：59
+             ====结果：16
+             ====结果：2
+             ====结果：73
+             ====结果：9
+             ====结果：54
+             ====结果：78
+             ====结果：39
+             ====结果：1
+             ====结果：8
+             */
+            System.out.println("====结果：" + new Random().nextInt(100));
+        }
     }
+
+
 
 }

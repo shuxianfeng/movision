@@ -27,6 +27,7 @@ import com.movision.utils.DateUtils;
 import com.movision.utils.ListUtil;
 import com.movision.utils.UUIDGenerator;
 import com.movision.utils.pagination.model.Paging;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,6 +140,9 @@ public class RobotFacade {
      * @param num
      */
     public void robotZanPost(int postid, int num) {
+        if (num < 1) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人数量至少是1个");
+        }
         //1 集合机器人大军
         List<User> robotArmy = assembleRobotArmy(num);
 
@@ -149,9 +153,66 @@ public class RobotFacade {
         }
     }
 
+    /**
+     * 批量点赞帖子操作
+     *
+     * @param postids
+     * @param num
+     */
+    public void robotZanBatchPost(String postids, int num) {
+        validatePostidsAndNum(postids, num);
+
+        String[] postidArr = postids.split(",");
+        //循环对每个帖子操作点赞
+        Random random = new Random();
+        for (int i = 0; i < postidArr.length; i++) {
+            //随机取[0,num+1) 之间的整数，最小是0，最大是num
+            int n = random.nextInt(num + 1);
+            //调用【机器人帖子点赞操作】
+            robotZanPost(Integer.valueOf(postidArr[i]), n);
+        }
+    }
+
+    /**
+     * 批量收藏帖子
+     *
+     * @param postids
+     * @param num
+     */
+    public void robotCollectBatchPost(String postids, int num) {
+        validatePostidsAndNum(postids, num);
+
+        String[] postidArr = postids.split(",");
+        Random random = new Random();
+        for (int i = 0; i < postidArr.length; i++) {
+            //随机取[0,num+1) 之间的整数，最小是0，最大是num
+            int n = random.nextInt(num + 1);
+
+            robotCollectPost(Integer.valueOf(postidArr[i]), n);
+        }
+    }
+
+
+    /**
+     * 校验传参 postids 和 num
+     *
+     * @param postids
+     * @param num
+     */
+    private void validatePostidsAndNum(String postids, int num) {
+        if (StringUtils.isEmpty(postids)) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "帖子id不能为空");
+        }
+        if (num < 1) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人数量至少是1个");
+        }
+    }
+
 
     /**
      * 集合机器人大军
+     * 随机选取指定数量的机器人
+     * 如：随机选取500个机器人
      *
      * @param num
      * @return
@@ -163,7 +224,7 @@ public class RobotFacade {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人用户数量为0");
         }
         //2 随机选取n个机器人
-        List<User> randomRobots = (List<User>) ListUtil.randomList(robots);
+        List<User> randomRobots = (List<User>) ListUtil.randomList(robots); //打乱机器人列表
         List<User> robotArmy = new ArrayList<>();
         int size = robots.size();
         if (num <= size) {
