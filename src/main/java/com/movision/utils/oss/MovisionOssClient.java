@@ -160,6 +160,7 @@ public class MovisionOssClient {
 
         switch (uploadMode) {
             case "alioss":
+                log.debug("上传到正式域名OSS");
                 Map map = uploadMultipartFile(file, 1);
                 String status = String.valueOf(map.get("status"));
                 if (status.equals("success")) {
@@ -170,9 +171,16 @@ public class MovisionOssClient {
                 }
 
             case "movision":
-                // 上传到测试服务器，返回url--------------------------由于uploadFacade.upload()接口中目前只实现了文件流，并不支持本地文件流上传，临时屏蔽20170525 shuxf
-                log.debug("上传到测试服务器");
-
+                // 上传到测试域名OSS
+                log.debug("上传到测试域名OSS");
+                Map maptest = uploadMultipartFile(file, 1);
+                String statustest = String.valueOf(maptest.get("status"));
+                if (statustest.equals("success")) {
+                    return maptest;
+                } else {
+                    log.error("上传失败");
+                    throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传失败");
+                }
             default:
                 log.error("上传模式不正确");
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传模式不正确");
