@@ -517,7 +517,7 @@ public class RobotFacade {
         //查询随机用户
         List<User> users = userService.queryRandomUser(num);
         //查询随机头像
-        List<UserPhoto> photos = userService.queryUserPhonts(num);
+        List<UserPhoto> photos = userService.queryUserPhotos(num);
         //查询随机昵称
         List<String> nicknames = nicknameService.queryRoboltNickname(num);
         //查询评论内容
