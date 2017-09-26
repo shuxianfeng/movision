@@ -283,6 +283,15 @@ public class RobotController {
         return response;
     }
 
+    @ApiOperation(value = "批量替换机器人的头像", notes = "批量替换机器人的头像", response = Response.class)
+    @RequestMapping(value = "batch_change_robot_photo", method = RequestMethod.POST)
+    public Response batchChangeRobotPhoto(@ApiParam(value = "机器人id，逗号分隔") @RequestParam String userids) {
+        Response response = new Response();
+        robotFacade.batchChangeRobotPhoto(userids);
+        response.setMessage("操作成功");
+        return response;
+    }
+
 
 
 }

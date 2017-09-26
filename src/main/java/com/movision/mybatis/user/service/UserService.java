@@ -1248,7 +1248,7 @@ public class UserService {
      * @param number
      * @return
      */
-    public List<UserPhoto> queryUserPhonts(Integer number) {
+    public List<UserPhoto> queryUserPhotos(Integer number) {
         try {
             log.info("随机查询头像");
             return userPhotoMapper.queryUserPhonts(number);
