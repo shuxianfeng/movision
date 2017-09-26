@@ -11,6 +11,8 @@ import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
+import com.movision.mybatis.personalizedSignature.entity.PersonalizedSignature;
+import com.movision.mybatis.personalizedSignature.service.PersonalizedSignatureService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.robotComment.entity.RobotComment;
 import com.movision.mybatis.robotComment.service.RobotCommentService;
@@ -73,6 +75,9 @@ public class RobotFacade {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private PersonalizedSignatureService signatureService;
 
 
     /**
@@ -505,33 +510,36 @@ public class RobotFacade {
      * 机器人评论帖子
      *
      * @param postid
-     * @param coid
      * @param number
      */
-    public void insertPostCommentByRobolt(String postid, String coid, String number) {
+    public void insertPostCommentByRobolt(String postid, String number) {
+        Integer num = Integer.parseInt(number);
         //查询随机用户
-        List<User> users = userService.queryRandomUser(Integer.parseInt(number));
+        List<User> users = userService.queryRandomUser(num);
         //查询随机头像
-        List<UserPhoto> photos = userService.queryUserPhotos(Integer.parseInt(number));
+        List<UserPhoto> photos = userService.queryUserPhonts(num);
         //查询随机昵称
-        List<String> nicknames = nicknameService.queryRoboltNickname(Integer.parseInt(number));
+        List<String> nicknames = nicknameService.queryRoboltNickname(num);
         //查询评论内容
-        String content = robotCommentService.queryRoboltCommentById(Integer.parseInt(coid));
+        List<RobotComment> content = robotCommentService.queryRoboltComment(num);
+        //查询随机个性签名
+        List<PersonalizedSignature> signatures = signatureService.queryRoboltSignature(num);
         //获取帖子发表时间
         Date date = postService.queryPostIdByDate(Integer.parseInt(postid));
 
         for (int i = 0; i < users.size(); i++) {
             Integer userid = users.get(i).getId();
             User user = new User();
-            user.setNickname(nicknames.get(i));
-            user.setPhoto(photos.get(i).getUrl());
-            user.setId(userid);
+            user.setNickname(nicknames.get(i));//-----------------------------机器人昵称
+            user.setPhoto(photos.get(i).getUrl());//--------------------------机器人头像
+            user.setId(userid);//---------------------------------------------机器人id
+            user.setSign(signatures.get(i).getSignature());//-----------------个性签名
             //更新用户信息
             userService.updateUserByMessager(user);
             //插入评论表
             CommentVo comment = new CommentVo();
             comment.setPostid(Integer.parseInt(postid));
-            comment.setContent(content);
+            comment.setContent(content.get(i).getId().toString());
             comment.setUserid(userid);
             //获取一个几万的随机数,变更评论时间
             int max = 9900000;

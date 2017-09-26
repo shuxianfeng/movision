@@ -267,17 +267,15 @@ public class RobotController {
     /**
      * 利用机器人为帖子制造评论接口
      * @param postid
-     * @param coid
      * @param number
      * @return
      */
     @ApiOperation(value = "机器人为帖子评论接口", notes = "用于使用机器人给某个帖子制造评论", response = Response.class)
     @RequestMapping(value = "insertPostCommentByRobolt", method = RequestMethod.POST)
     public Response insertPostCommentByRobolt(@ApiParam(value = "帖子id") @RequestParam String postid,
-                                              @ApiParam(value = "评论id") @RequestParam String coid,
                                               @ApiParam(value = "使用机器人数量") @RequestParam String number) {
         Response response = new Response();
-        robotFacade.insertPostCommentByRobolt(postid, coid, number);
+        robotFacade.insertPostCommentByRobolt(postid, number);
         response.setMessage("操作成功");
         response.setData(1);
         return response;
