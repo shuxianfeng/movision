@@ -85,6 +85,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
@@ -1127,22 +1128,13 @@ public class FacadePost {
      * @return
      */
     private Post preparePostJavaBean(HttpServletRequest request, Integer userid, Integer circleid, String title,
-                                     String postcontent, String isactive, String coverimg, Map contentMap, String activeid) {
+                                     String postcontent, String isactive,
+                                     String coverimg, Map contentMap, String activeid) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         Post post = new Post();
         post.setCircleid(circleid);
         post.setTitle(title);
-        if (StringUtil.isNotEmpty(postcontent)) {
-            //内容转换
-            contentMap = jsoupCompressImg.newCompressImg(request, postcontent);
-            log.debug("转换后的帖子内容是：" + contentMap);
-            if ((int) contentMap.get("code") == 200) {
-                String str = contentMap.get("content").toString();
-                postcontent = str;
-            } else {
-                log.error("APP端帖子图片内容转换异常");
-            }
-        }
-        post.setPostcontent(postcontent);//帖子内容
+
+        contentMap = setPostContent(request, postcontent, contentMap, post);
         post.setZansum(0);//新发帖全部默认为0次
         post.setCommentsum(0);//被评论次数
         post.setForwardsum(0);//被转发次数
@@ -1161,11 +1153,67 @@ public class FacadePost {
         }
         post.setCoverimg(coverimg);//帖子封面
         post.setUserid(userid);
-        post.setCity(ShiroUtil.getIpCity());    //使用登录时的城市一样
+        //城市编码
+        String citycode = wrapCitycode();
+        post.setCity(citycode);    //使用登录时的城市一样
+
         if (StringUtils.isNotBlank(activeid)) {
             post.setActiveid(Integer.parseInt(activeid));
         }
         return post;
+    }
+
+    /**
+     * 内容转换
+     *
+     * @param request
+     * @param postcontent
+     * @param contentMap
+     * @param post
+     * @return
+     */
+    private Map setPostContent(HttpServletRequest request, String postcontent, Map contentMap, Post post) {
+        if (StringUtil.isNotEmpty(postcontent)) {
+            //内容转换
+            contentMap = jsoupCompressImg.newCompressImg(request, postcontent);
+            log.debug("转换后的帖子内容是：" + contentMap);
+            if ((int) contentMap.get("code") == 200) {
+                String str = contentMap.get("content").toString();
+                postcontent = str;
+            } else {
+                log.error("APP端帖子图片内容转换异常");
+            }
+        }
+        post.setPostcontent(postcontent);//帖子内容
+        return contentMap;
+    }
+
+    /**
+     * 封装citycode
+     * 来源：1 经纬度 2 ip
+     *
+     * @return
+     * @throws UnsupportedEncodingException
+     * @throws NoSuchAlgorithmException
+     */
+    private String wrapCitycode() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        String lat = ShiroUtil.getLatitude();
+        String lng = ShiroUtil.getLongitude();
+        log.debug("缓存中的lat=" + lat);
+        log.debug("缓存中的lng=" + lng);
+        Map<String, Object> map = addressFacade.getAddressByLatAndLng(lat, lng);
+        int flag = Integer.valueOf(String.valueOf(map.get("flag")));
+        String citycode = null;
+        if (flag == 1) {
+            //根据经纬度获取城市code
+            citycode = String.valueOf(map.get("citycode"));
+            log.info("根据经纬度获取城市code=" + citycode);
+        } else {
+            //根据ip获取城市code
+            citycode = ShiroUtil.getIpCity();
+            log.info("根据ip获取城市code=" + citycode);
+        }
+        return citycode;
     }
 
     /**

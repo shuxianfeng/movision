@@ -18,7 +18,6 @@ public class AddressFacadeTest extends SpringTestCase {
     @Test
     public void getAddressByLatAndLng() throws Exception {
         Map map = addressFacade.getAddressByLatAndLng("39.983424", "116.322987");
-//        Map map = addressFacade.getAddressByLatAndLng("39.983424", "116.322987");
         System.out.println("返回值：" + map.toString());
     }
 

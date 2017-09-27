@@ -451,7 +451,6 @@ public class AppPostController {
                                        @ApiParam(value = "标签实体集合，json字符串形式") @RequestParam(required = false) String labellist,
                                        @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids) {
 
-
         Response response = new Response();
 
         Map count = facadePost.postUnderZk(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist, activeid);
