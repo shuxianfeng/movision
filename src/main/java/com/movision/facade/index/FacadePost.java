@@ -1413,8 +1413,8 @@ public class FacadePost {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String flag = map.get("flag").toString();
-        if (flag.equals(1)) {
+        int flag = Integer.parseInt(map.get("flag").toString());
+        if (flag == 1) {
             citycode = map.get("citycode").toString();
         }
         List<PostVo> cityPost = null;
