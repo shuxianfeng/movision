@@ -1424,10 +1424,12 @@ public class FacadePost {
             //根据citycode查询城市
             if (citycode != null) {
                 String area = userService.areaname(citycode);
+                int end = area.lastIndexOf("市");
+                String str = area.substring(0, end);
                 //标题带南京
-                cityPost = postService.queryCityPost(area);
+                cityPost = postService.queryCityPost(str);
                 //标签有本地
-                labelPost = postService.queryCityLabel(area);
+                labelPost = postService.queryCityLabel(str);
             }
         }
         if (citycode != null) {
@@ -1454,6 +1456,11 @@ public class FacadePost {
                     Collections.sort(list, chain);
                     list = NotLoginretuenList(list, 3, device, -1);
                 }
+                Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
+                list = new ArrayList<PostVo>(linkedHashSet);
+                ComparatorChain chain = new ComparatorChain();
+                chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
+                Collections.sort(list, chain);
                 list = NotLoginretuenList(list, 3, device, -1);
                 return list;
             } else {//已登录
