@@ -1407,12 +1407,16 @@ public class FacadePost {
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
         Map map = null;
+        String citycode = null;
         try {
             map = addressFacade.getAddressByLatAndLng(lat, lng);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String citycode = map.get("citycode").toString();
+        String flag = map.get("flag").toString();
+        if (flag.equals(1)) {
+            citycode = map.get("citycode").toString();
+        }
         List<PostVo> cityPost = null;
         List<PostVo> labelPost = null;
         //根据传过来的地区去yw_city查代码
