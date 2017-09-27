@@ -180,9 +180,9 @@ public class AddressFacade {
 
     public Map wrapSignParam4ReverseGeoCoder(String location) {
         Map paramsMap = new LinkedHashMap<>();
-        paramsMap.put("callback", "renderReverse");
         paramsMap.put("location", location);
         paramsMap.put("output", "json");
+        paramsMap.put("pois", "0");
         paramsMap.put("ak", BAIDU_MAP_API_AK);
         return paramsMap;
     }
@@ -237,6 +237,8 @@ public class AddressFacade {
     }
 
     /**
+     * 根据经纬度获取城市编码
+     *
      * @param lat
      * @param lng
      * @return
@@ -249,8 +251,7 @@ public class AddressFacade {
         //获取签名
         String sn = SnCal.getSn(wrapSignParam4ReverseGeoCoder(location));
         //拼接百度接口的请求url
-        String url = BAIDU_GEOCODING_API_URL + "?callback=renderReverse" +
-                "&location=" + location + "&output=json&ak=" + BAIDU_MAP_API_AK;
+        String url = BAIDU_GEOCODING_API_URL + "?location=" + location + "&output=json&pois=0&ak=" + BAIDU_MAP_API_AK + "&sn=" + sn;
         log.debug("----请求的url----:" + url);
         String result = "";
         String citycode = null;
