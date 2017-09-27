@@ -239,8 +239,8 @@ public class AddressFacade {
     /**
      * 根据经纬度获取城市编码
      *
-     * @param lat
-     * @param lng
+     * @param lat 纬度
+     * @param lng 经度
      * @return
      * @throws UnsupportedEncodingException
      * @throws NoSuchAlgorithmException
