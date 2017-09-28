@@ -99,7 +99,7 @@ public class WordService extends JdbcRepository implements IWordService {
     /**
      * 每3小时更新字典
      */
-    @PostConstruct  //在spring容器初始化话WordService的时候，所做的操作
+    /*@PostConstruct  //在spring容器初始化话WordService的时候，所做的操作
     public void init() {
         jobService.scheduleRepeatJob(new JobService.RepeatJob() {
             @Override
@@ -115,7 +115,7 @@ public class WordService extends JdbcRepository implements IWordService {
                 }
             }
         }, "words.cache.minutes", true);
-    }
+    }*/
 
     /**
      * 拆分词
