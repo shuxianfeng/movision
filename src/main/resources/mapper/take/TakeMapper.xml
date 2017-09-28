@@ -179,6 +179,7 @@
         <if test="activeid != null">
             AND t.activeid = #{activeid,jdbcType=INTEGER}
         </if>
+        ORDER BY votesum DESC
     </select>
     <select id="findAll" resultType="com.movision.mybatis.take.entity.TakeVo">
         SELECT t.*,a.name AS acname,
