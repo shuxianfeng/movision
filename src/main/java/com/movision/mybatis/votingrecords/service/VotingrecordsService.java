@@ -59,4 +59,20 @@ public class VotingrecordsService {
         }
     }
 
+    /**
+     * 查询用户当天是否投票
+     *
+     * @param votingrecords
+     * @return
+     */
+    public int queryUserByDye(Votingrecords votingrecords) {
+        try {
+            log.info("查询当天用户是否投票");
+            return votingrecordsMapper.queryUserByDye(votingrecords);
+        } catch (Exception e) {
+            log.error("查询当天用户是否投票异常", e);
+            throw e;
+        }
+    }
+
 }

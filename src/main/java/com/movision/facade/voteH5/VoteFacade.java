@@ -481,16 +481,38 @@ public class VoteFacade {
      */
     public int insertSelectiveV(String activeid, String name, String takeid, String takenumber) {
         Votingrecords votingrecords = new Votingrecords();
+        //在投票记录里面有没有此用户
+        Map map = new HashMap();
+        int result = 0;
         //如何投票
         int howvote = votingrecordsService.activeHowToVote(Integer.parseInt(activeid));
-        //在投票记录里面有没有此用户
-        // Map map = new HashMap();
-        int result = 0;
-        /** map.put("activeid", activeid);
+        if (howvote == 0) {//每天一次
+            votingrecords.setIntime(new Date());
+            if (StringUtil.isNotEmpty(name)) {
+                votingrecords.setName(name);
+            }
+            if (StringUtil.isNotEmpty(activeid)) {
+                votingrecords.setActiveid(Integer.parseInt(activeid));
+            }
+            if (StringUtil.isNotEmpty(takeid)) {
+                votingrecords.setTakeid(Integer.parseInt(takeid));
+            }
+            if (StringUtil.isNotEmpty(takenumber)) {
+                votingrecords.setTakenumber(Integer.parseInt(takenumber));
+            }
+            //查询当天用户是否已经投票
+            int i = votingrecordsService.queryUserByDye(votingrecords);
+            if (i == 0) {
+                result = votingrecordsService.insertSelective(votingrecords);
+            }
+
+        } else if (howvote == 1) {//每人一次
+            map.put("activeid", activeid);
             map.put("name", name);
             map.put("takenumber", takenumber);
-         int count = votingrecordsService.queryHave(map);*/
-        votingrecords.setIntime(new Date());
+            int count = votingrecordsService.queryHave(map);
+            if (count == 1) {
+                votingrecords.setIntime(new Date());
                 if (StringUtil.isNotEmpty(name)) {
                     votingrecords.setName(name);
                 }
@@ -504,6 +526,9 @@ public class VoteFacade {
                     votingrecords.setTakenumber(Integer.parseInt(takenumber));
                 }
                 result = votingrecordsService.insertSelective(votingrecords);
+            }
+        }
+
         return result;
     }
 

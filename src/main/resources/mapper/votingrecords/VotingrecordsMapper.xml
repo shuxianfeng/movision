@@ -104,4 +104,13 @@
     <select id="activeHowToVote" resultType="java.lang.Integer" parameterType="java.lang.Integer">
         SELECT howvote FROM tp_activeh5 WHERE id = #{activeid,jdbcType=INTEGER}
     </select>
+
+    <select id="queryUserByDye" parameterType="com.movision.mybatis.votingrecords.entity.Votingrecords"
+            resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM tp_votingrecords
+        WHERE curdate() = date_format(intime,'%y-%m-%d')
+        AND name = #{name,jdbcType=VARCHAR}
+        AND activeid = #{activeid,jdbcType=INTEGER}
+    </select>
 </mapper>

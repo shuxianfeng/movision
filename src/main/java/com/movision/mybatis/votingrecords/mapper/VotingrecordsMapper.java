@@ -22,4 +22,7 @@ public interface VotingrecordsMapper {
     //查询活动是怎么投票的
     int activeHowToVote(int activeid);
 
+    //是否投票
+    int queryUserByDye(Votingrecords votingrecords);
+
 }
