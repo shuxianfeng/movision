@@ -186,4 +186,29 @@ public class ZanRecordVo implements Serializable {
     public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
+
+    @Override
+    public String toString() {
+        return "ZanRecordVo{" +
+                "user=" + user +
+                ", commentid=" + commentid +
+                ", title='" + title + '\'' +
+                ", postcontent='" + postcontent + '\'' +
+                ", activetype=" + activetype +
+                ", type=" + type +
+                ", coverimg='" + coverimg + '\'' +
+                ", id=" + id +
+                ", ctype=" + ctype +
+                ", userid=" + userid +
+                ", postid=" + postid +
+                ", photo='" + photo + '\'' +
+                ", intime=" + intime +
+                ", content='" + content + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", isactive=" + isactive +
+                ", posts=" + posts +
+                ", comment=" + comment +
+                ", isread=" + isread +
+                '}';
+    }
 }

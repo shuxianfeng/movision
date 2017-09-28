@@ -417,7 +417,8 @@
         <selectKey keyProperty="id" order="AFTER" resultType="Integer">
             select LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO yw_post (circleid, title,
+        INSERT INTO yw_post (
+        circleid, title,
         postcontent, zansum, commentsum, forwardsum,
         collectsum, isactive, ishot, isessence,
         isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime, activeid, city

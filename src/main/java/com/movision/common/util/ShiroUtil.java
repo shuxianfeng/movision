@@ -342,4 +342,40 @@ public class ShiroUtil {
         return level;
     }
 
+    public static String getLongitude() {
+        String longitude = null;
+        try {
+            Subject currentUser = SecurityUtils.getSubject();
+            Session session = currentUser.getSession(false);
+            if (session != null) {
+                ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
+                if (principal != null) {
+                    longitude = principal.getLongitude();
+                }
+            }
+        } catch (Exception e) {
+            log.error("get seesion user info error!", e);
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return longitude;
+    }
+
+    public static String getLatitude() {
+        String latitude = null;
+        try {
+            Subject currentUser = SecurityUtils.getSubject();
+            Session session = currentUser.getSession(false);
+            if (session != null) {
+                ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
+                if (principal != null) {
+                    latitude = principal.getLatitude();
+                }
+            }
+        } catch (Exception e) {
+            log.error("get seesion user info error!", e);
+            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.un_login)));
+        }
+        return latitude;
+    }
+
 }

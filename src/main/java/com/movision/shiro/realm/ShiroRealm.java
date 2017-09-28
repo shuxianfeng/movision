@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 /**
  * App用户安全数据源
  * @author zhuangyuhao
@@ -75,7 +74,8 @@ public class ShiroRealm extends AuthorizingRealm {
                 loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(), loginUser.getPhone(),
                 loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(), loginUser.getAccid(), loginUser.getImtoken(),
                 loginUser.getSign(), DateUtils.date2Str(loginUser.getBirthday()),
-                loginUser.getQq(), loginUser.getSina(), loginUser.getOpenid(), loginUser.getHeatValue(), loginUser.getIpCity()
+                loginUser.getQq(), loginUser.getSina(), loginUser.getOpenid(), loginUser.getHeatValue(), loginUser.getIpCity(),
+                loginUser.getLatitude(), loginUser.getLongitude()
         );
 
         // 3 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
@@ -169,6 +169,25 @@ public class ShiroRealm extends AuthorizingRealm {
         private String openid;  //微信
         private Integer heatValue;  //作者热度
         private String ipCity; //根据用户登录的ip获取的所在的城市代码,对应yw_city的code
+        private String latitude;    //纬度
+        private String longitude;   //经度
+
+        public void setLatitude(String latitude) {
+            this.latitude = latitude;
+        }
+
+        public void setLongitude(String longitude) {
+            this.longitude = longitude;
+        }
+
+        public String getLatitude() {
+
+            return latitude;
+        }
+
+        public String getLongitude() {
+            return longitude;
+        }
 
         public void setHeatValue(Integer heatValue) {
             this.heatValue = heatValue;
@@ -365,7 +384,7 @@ public class ShiroRealm extends AuthorizingRealm {
             return false;
         }
 
-        public ShiroUser(Integer id, String account, Integer status, String role, Date registerTime, String photo, String nickname, Integer level, String phone, String token, Integer points, Integer sex, String accid, String imToken, String sign, String birthday, String qq, String sina, String openid, Integer heatValue, String ipCity) {
+        public ShiroUser(Integer id, String account, Integer status, String role, Date registerTime, String photo, String nickname, Integer level, String phone, String token, Integer points, Integer sex, String accid, String imToken, String sign, String birthday, String qq, String sina, String openid, Integer heatValue, String ipCity, String latitude, String longitude) {
             this.id = id;
             this.account = account;
             this.status = status;
@@ -387,6 +406,8 @@ public class ShiroRealm extends AuthorizingRealm {
             this.openid = openid;
             this.heatValue = heatValue;
             this.ipCity = ipCity;
+            this.latitude = latitude;
+            this.longitude = longitude;
         }
 
         @Override
@@ -413,6 +434,8 @@ public class ShiroRealm extends AuthorizingRealm {
                     ", openid='" + openid + '\'' +
                     ", heatValue=" + heatValue +
                     ", ipCity='" + ipCity + '\'' +
+                    ", latitude='" + latitude + '\'' +
+                    ", longitude='" + longitude + '\'' +
                     '}';
         }
     }

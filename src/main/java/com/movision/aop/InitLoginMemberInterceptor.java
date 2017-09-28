@@ -10,11 +10,9 @@ import com.movision.facade.user.UserRoleRelationFacade;
 import com.movision.mybatis.bossMenu.entity.AuthMenu;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.imuser.entity.ImUser;
-import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.shiro.realm.BossRealm;
 import com.movision.shiro.realm.ShiroRealm;
 import com.movision.shiro.realm.ShiroRealm.ShiroUser;
-import com.movision.utils.DateUtils;
 import com.movision.utils.propertiesLoader.LoginPropertiesLoader;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -137,7 +135,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 } else if (bossUser == null && appuser != null) {
                     log.debug("拦截器，进入app登录分支");
                     //app端不做菜单控制, 所以该分支永远不会进入
-                    this.initAppUserInfo(currentUser, session);
+//                    this.initAppUserInfo(currentUser, session);
                     return true;
                 } else {
                     return reLogin(response);
@@ -204,7 +202,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
      * @param subject
      * @param session
      */
-    private void initAppUserInfo(Subject subject, Session session) {
+    /*private void initAppUserInfo(Subject subject, Session session) {
         // 获取当前会话登录人：app用户
         ShiroUser appuser = (ShiroUser) session.getAttribute(SessionConstant.APP_USER);
         if (null != appuser) {
@@ -228,7 +226,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 }
             }
         }
-    }
+    }*/
 
     /**
      * 判断appuser登录信息是否改变
@@ -237,7 +235,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
      * @param loginInfo
      * @return
      */
-    private boolean loginUserInfoIsChange(ShiroUser appuser, ShiroUser loginInfo) {
+    /*private boolean loginUserInfoIsChange(ShiroUser appuser, ShiroUser loginInfo) {
         boolean isChange = appuser == null || loginInfo == null || loginInfo.getLevel() != appuser.getLevel()
                 || loginInfo.getStatus() != appuser.getStatus() || !loginInfo.getRole().equals(appuser.getRole())
                 || loginInfo.getToken() != appuser.getToken() || loginInfo.getAccid() != appuser.getAccid()
@@ -250,7 +248,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 || loginInfo.getHeatValue() != appuser.getHeatValue()
                 || loginInfo.getIpCity() != appuser.getIpCity();
         return isChange;
-    }
+    }*/
 
     /**
      * 判断bossuser登录信息是否改变

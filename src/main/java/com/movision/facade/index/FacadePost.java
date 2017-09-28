@@ -8,6 +8,7 @@ import com.movision.common.constant.PointConstant;
 import com.movision.common.constant.PostLabelConstants;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
+import com.movision.facade.address.AddressFacade;
 import com.movision.facade.comment.FacadeComments;
 import com.movision.facade.im.ImFacade;
 import com.movision.facade.paging.PageFacade;
@@ -84,6 +85,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
@@ -154,6 +156,9 @@ public class FacadePost {
 
     @Autowired
     private AliOSSClient aliOSSClient;
+
+    @Autowired
+    private AddressFacade addressFacade;
 
     @Autowired
     private VideoCoverURL videoCoverURL;
@@ -1123,22 +1128,13 @@ public class FacadePost {
      * @return
      */
     private Post preparePostJavaBean(HttpServletRequest request, Integer userid, Integer circleid, String title,
-                                     String postcontent, String isactive, String coverimg, Map contentMap, String activeid) {
+                                     String postcontent, String isactive,
+                                     String coverimg, Map contentMap, String activeid) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         Post post = new Post();
         post.setCircleid(circleid);
         post.setTitle(title);
-        if (StringUtil.isNotEmpty(postcontent)) {
-            //内容转换
-            contentMap = jsoupCompressImg.newCompressImg(request, postcontent);
-            log.debug("转换后的帖子内容是：" + contentMap);
-            if ((int) contentMap.get("code") == 200) {
-                String str = contentMap.get("content").toString();
-                postcontent = str;
-            } else {
-                log.error("APP端帖子图片内容转换异常");
-            }
-        }
-        post.setPostcontent(postcontent);//帖子内容
+
+        contentMap = setPostContent(request, postcontent, contentMap, post);
         post.setZansum(0);//新发帖全部默认为0次
         post.setCommentsum(0);//被评论次数
         post.setForwardsum(0);//被转发次数
@@ -1157,11 +1153,67 @@ public class FacadePost {
         }
         post.setCoverimg(coverimg);//帖子封面
         post.setUserid(userid);
-        post.setCity(ShiroUtil.getIpCity());    //使用登录时的城市一样
+        //城市编码
+        String citycode = wrapCitycode();
+        post.setCity(citycode);    //使用登录时的城市一样
+
         if (StringUtils.isNotBlank(activeid)) {
             post.setActiveid(Integer.parseInt(activeid));
         }
         return post;
+    }
+
+    /**
+     * 内容转换
+     *
+     * @param request
+     * @param postcontent
+     * @param contentMap
+     * @param post
+     * @return
+     */
+    private Map setPostContent(HttpServletRequest request, String postcontent, Map contentMap, Post post) {
+        if (StringUtil.isNotEmpty(postcontent)) {
+            //内容转换
+            contentMap = jsoupCompressImg.newCompressImg(request, postcontent);
+            log.debug("转换后的帖子内容是：" + contentMap);
+            if ((int) contentMap.get("code") == 200) {
+                String str = contentMap.get("content").toString();
+                postcontent = str;
+            } else {
+                log.error("APP端帖子图片内容转换异常");
+            }
+        }
+        post.setPostcontent(postcontent);//帖子内容
+        return contentMap;
+    }
+
+    /**
+     * 封装citycode
+     * 来源：1 经纬度 2 ip
+     *
+     * @return
+     * @throws UnsupportedEncodingException
+     * @throws NoSuchAlgorithmException
+     */
+    private String wrapCitycode() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        String lat = ShiroUtil.getLatitude();
+        String lng = ShiroUtil.getLongitude();
+        log.debug("缓存中的lat=" + lat);
+        log.debug("缓存中的lng=" + lng);
+        Map<String, Object> map = addressFacade.getAddressByLatAndLng(lat, lng);
+        int flag = Integer.valueOf(String.valueOf(map.get("flag")));
+        String citycode = null;
+        if (flag == 1) {
+            //根据经纬度获取城市code
+            citycode = String.valueOf(map.get("citycode"));
+            log.info("根据经纬度获取城市code=" + citycode);
+        } else {
+            //根据ip获取城市code
+            citycode = ShiroUtil.getIpCity();
+            log.info("根据ip获取城市code=" + citycode);
+        }
+        return citycode;
     }
 
     /**
@@ -1398,85 +1450,107 @@ public class FacadePost {
      * @param
      * @return
      */
-    public List localhostPost(String userid, String area, String device) {
+    public List localhostPost(String userid, String lat, String device, String lng) {
         List<PostVo> list = null;
         List<DBObject> listmongodba = null;
         List<PostVo> posts = new ArrayList<>();
-        String citycode = "";
+        Map map = null;
+        String citycode = null;
+        try {
+            map = addressFacade.getAddressByLatAndLng(lat, lng);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int flag = Integer.parseInt(map.get("flag").toString());
+        if (flag == 1) {
+            citycode = map.get("citycode").toString();
+        }
         List<PostVo> cityPost = null;
         List<PostVo> labelPost = null;
         //根据传过来的地区去yw_city查代码
-        if (area != null) {
-            citycode = postService.queryCityCode(area);
-            //标题带南京
-            cityPost = postService.queryCityPost(area);
-            //标签有本地
-            labelPost = postService.queryCityLabel(area);
+        if (lat != null && lng != null) {
+            //根据citycode查询城市
+            if (citycode != null) {
+                String area = userService.areaname(citycode);
+                int end = area.lastIndexOf("市");
+                String str = area.substring(0, end);
+                //标题带南京
+                cityPost = postService.queryCityPost(str);
+                //标签有本地
+                labelPost = postService.queryCityLabel(str);
+            }
         }
-        if (userid == null) {//未登录
-            list = postService.findAllCityPost(citycode);//根据热度值排序查询帖子
-            listmongodba = userRefulshListMongodbToDevice(device, 3);//用户有没有看过
-            if (cityPost.size() != 0) {
-                list.addAll(cityPost);
-            }
-            if (labelPost.size() != 0) {
-                list.addAll(labelPost);
-            }
-            if (listmongodba.size() != 0) {
-                for (int j = 0; j < listmongodba.size(); j++) {
-                    PostVo post = new PostVo();
-                    post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
-                    posts.add(post);//把mongodb转为post实体
-                }
-                list.removeAll(posts);
-                Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
-                list = new ArrayList<PostVo>(linkedHashSet);
-                ComparatorChain chain = new ComparatorChain();
-                chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
-                Collections.sort(list, chain);
-                list = NotLoginretuenList(list, 3, device, -1);
-            }
-            list = NotLoginretuenList(list, 3, device, -1);
-            return list;
-        } else {//已登录
-            //根据地区查询帖子
-            listmongodba = userRefulshListMongodb(Integer.parseInt(userid), 3);//用户有没有看过
-            //根据city查询帖子
-            List<PostVo> postVos = postService.findAllCityPost(citycode);
-            if (cityPost.size() != 0) {
-                postVos.addAll(cityPost);
-            }
-            if (labelPost.size() != 0) {
-                postVos.addAll(labelPost);
-            }
-            if (listmongodba.size() != 0) {
-                for (int j = 0; j < listmongodba.size(); j++) {
-                    PostVo post = new PostVo();
-                    post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
-                    posts.add(post);//把mongodb转为post实体
-                }
-                postVos.removeAll(posts);
-                Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(postVos);
-                postVos = new ArrayList<PostVo>(linkedHashSet);
-                ComparatorChain chain = new ComparatorChain();
-                chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
-                Collections.sort(postVos, chain);
-                list = retuenList(postVos, userid, 3, "", -1);
-            } else {//登录但是刷新列表中没有帖子
+        if (citycode != null) {
+            if (userid == null) {//未登录
                 list = postService.findAllCityPost(citycode);//根据热度值排序查询帖子
+                listmongodba = userRefulshListMongodbToDevice(device, 3);//用户有没有看过
                 if (cityPost.size() != 0) {
                     list.addAll(cityPost);
                 }
                 if (labelPost.size() != 0) {
                     list.addAll(labelPost);
                 }
+                if (listmongodba.size() != 0) {
+                    for (int j = 0; j < listmongodba.size(); j++) {
+                        PostVo post = new PostVo();
+                        post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
+                        posts.add(post);//把mongodb转为post实体
+                    }
+                    list.removeAll(posts);
+                    Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
+                    list = new ArrayList<PostVo>(linkedHashSet);
+                    ComparatorChain chain = new ComparatorChain();
+                    chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
+                    Collections.sort(list, chain);
+                    list = NotLoginretuenList(list, 3, device, -1);
+                }
                 Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
                 list = new ArrayList<PostVo>(linkedHashSet);
                 ComparatorChain chain = new ComparatorChain();
                 chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
                 Collections.sort(list, chain);
-                list = retuenList(list, userid, 3, "", -1);
+                list = NotLoginretuenList(list, 3, device, -1);
                 return list;
+            } else {//已登录
+                //根据地区查询帖子
+                listmongodba = userRefulshListMongodb(Integer.parseInt(userid), 3);//用户有没有看过
+                //根据city查询帖子
+                List<PostVo> postVos = postService.findAllCityPost(citycode);
+                if (cityPost.size() != 0) {
+                    postVos.addAll(cityPost);
+                }
+                if (labelPost.size() != 0) {
+                    postVos.addAll(labelPost);
+                }
+                if (listmongodba.size() != 0) {
+                    for (int j = 0; j < listmongodba.size(); j++) {
+                        PostVo post = new PostVo();
+                        post.setId(Integer.parseInt(listmongodba.get(j).get("postid").toString()));
+                        posts.add(post);//把mongodb转为post实体
+                    }
+                    postVos.removeAll(posts);
+                    Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(postVos);
+                    postVos = new ArrayList<PostVo>(linkedHashSet);
+                    ComparatorChain chain = new ComparatorChain();
+                    chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
+                    Collections.sort(postVos, chain);
+                    list = retuenList(postVos, userid, 3, "", -1);
+                } else {//登录但是刷新列表中没有帖子
+                    list = postService.findAllCityPost(citycode);//根据热度值排序查询帖子
+                    if (cityPost.size() != 0) {
+                        list.addAll(cityPost);
+                    }
+                    if (labelPost.size() != 0) {
+                        list.addAll(labelPost);
+                    }
+                    Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
+                    list = new ArrayList<PostVo>(linkedHashSet);
+                    ComparatorChain chain = new ComparatorChain();
+                    chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
+                    Collections.sort(list, chain);
+                    list = retuenList(list, userid, 3, "", -1);
+                    return list;
+                }
             }
         }
         return list;
@@ -1921,17 +1995,17 @@ public class FacadePost {
      * @param userid
      * @param
      * @param type
-     * @param area
+     * @param
      * @return
      */
-    public List userRefreshListNew(String userid, String device, int type, String area, String circleid, String labelid) {
+    public List userRefreshListNew(String userid, String device, int type, String lat, String circleid, String labelid, String lng) {
         List<PostVo> list = null;
         if (type == 1) {//推荐
             list = recommendPost(userid, device);
         } else if (type == 2) {//关注
             list = followPost(userid);
         } else if (type == 3) {//本地
-            list = localhostPost(userid, area, device);
+            list = localhostPost(userid, lat, device, lng);
         } else if (type == 4) {//圈子c
             list = circleRefulsh(userid, Integer.parseInt(circleid), device);
         } else if (type == 5) {//标签

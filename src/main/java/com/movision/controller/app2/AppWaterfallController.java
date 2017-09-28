@@ -60,12 +60,13 @@ public class AppWaterfallController {
     @RequestMapping(value = "userRefreshListNew", method = RequestMethod.POST)
     public Response userRefreshList(@ApiParam(value = "用户id ") @RequestParam(required = false) String userid,
                                     @ApiParam(value = "类型 1：推荐2：关注3：本地 4：圈子 5：标签") @RequestParam(required = false) int type,
-                                    @ApiParam(value = "地区") @RequestParam(required = false) String area,
+                                    @ApiParam(value = "纬度") @RequestParam(required = false) String lat,
                                     @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
                                     @ApiParam(value = "标签id") @RequestParam(required = false) String labelid,
-                                    @ApiParam(value = "设备号") @RequestParam(required = false) String device) {
+                                    @ApiParam(value = "设备号") @RequestParam(required = false) String device,
+                                    @ApiParam(value = "经度") @RequestParam(required = false) String lng) {
         Response response = new Response();
-        List map = facadePost.userRefreshListNew(userid, device, type, area, circleid, labelid);
+        List map = facadePost.userRefreshListNew(userid, device, type, lat, circleid, labelid, lng);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -122,6 +123,7 @@ public class AppWaterfallController {
      * @param pageNo
      * @param pageSize
      * @return
+     *
      */
     @ApiOperation(value = "用户刷新的历史记录列表", notes = "用户刷新的历史记录列表", response = Response.class)
     @RequestMapping(value = "userReflushHishtoryRecord", method = RequestMethod.POST)

@@ -66,7 +66,6 @@ public class MsgCenterFacade {
     /**
      * 获取消息中心-动态消息, 动态消息全部置为已读
      *
-     *
      * @param paging
      * @return
      */
@@ -164,6 +163,7 @@ public class MsgCenterFacade {
 
     /**
      * 从评论列表中获取动态消息
+     *
      * @param list
      * @param commentVoList
      * @param i
@@ -199,7 +199,6 @@ public class MsgCenterFacade {
         instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.zan.getCode());
         list.add(instantInfo);
     }
-
 
 
     public void getFollowList(List<InstantInfo> infoList, int userid) {
@@ -259,7 +258,7 @@ public class MsgCenterFacade {
      * 把所有此人的系统通知置为已读
      * (实际上是把系统通知与该人的关系插入到mongo中的systemInformReadRecord)
      *
-     * @param systemInformList  系统通知
+     * @param systemInformList 系统通知
      * @param curId
      */
     private void setSystemInfoIsRead(List<ImSystemInformVo> systemInformList, int curId) {
@@ -302,6 +301,7 @@ public class MsgCenterFacade {
 
     /**
      * 正則表達式
+     *
      * @param inputString
      * @return
      */
@@ -364,23 +364,21 @@ public class MsgCenterFacade {
         if (zanRecordVos != null) {
             //对点赞信息进行过滤和封装
             for (int i = 0; i < zanRecordVos.size(); i++) {
+
                 Integer commentid = zanRecordVos.get(i).getCommentid(); //被赞的评论id
-                Integer postid = zanRecordVos.get(i).getPostid();       //被赞的帖子id
+                Integer postid = zanRecordVos.get(i).getPostid();       //被赞的帖子id + 被赞的评论所属的帖子
                 Integer doZanUserid = zanRecordVos.get(i).getUserid();  //点赞人id
-                //点赞人不能是自己（过滤掉了自己赞自己）
-//                if (!doZanUserid.equals(userid)) {
-                //获取点赞人的个人信息
+                //封装点赞人的个人信息
                 User user = postCommentZanRecordService.queryusers(doZanUserid);
                 zanRecordVos.get(i).setUser(user);
-                //封装被点赞的评论对象
-                wrapBeZanCommentInfo(zanRecordVos, i, commentid);
-                //封装被点赞的帖子对象
-                wrapBeZanPostInfo(zanRecordVos, i, postid);
-//                } else {
-//                    //（过滤掉了自己赞自己）
-//                    zanRecordVos.remove(zanRecordVos.get(i));
-//                    i--;
-//                }
+
+                if (commentid != null) {
+                    //封装被点赞的评论对象
+                    wrapBeZanCommentInfo(zanRecordVos, i, commentid);
+                } else {
+                    //封装被点赞的帖子对象
+                    wrapBeZanPostInfo(zanRecordVos, i, postid);
+                }
             }
         }
         return zanRecordVos;
@@ -394,12 +392,10 @@ public class MsgCenterFacade {
      * @param commentid
      */
     private void wrapBeZanCommentInfo(List<ZanRecordVo> zanRecordVos, int i, Integer commentid) {
-        if (commentid != null) {
-            List<CommentVo> commentVo = postCommentZanRecordService.queryComment(commentid);
-            zanRecordVos.get(i).setComment(commentVo);
-            zanRecordVos.get(i).setCtype(1);
-            zanRecordVos.get(i).setCommentid(commentid);
-        }
+        List<CommentVo> commentVo = postCommentZanRecordService.queryComment(commentid);
+        zanRecordVos.get(i).setComment(commentVo);
+        zanRecordVos.get(i).setCtype(1);    //点赞评论
+        zanRecordVos.get(i).setCommentid(commentid);
     }
 
     /**
@@ -410,27 +406,27 @@ public class MsgCenterFacade {
      * @param postid
      */
     private void wrapBeZanPostInfo(List<ZanRecordVo> zanRecordVos, int i, Integer postid) {
-        if (postid != null) {
-            List<Post> post = postZanRecordService.queryPost(postid);
-            zanRecordVos.get(i).setCtype(2);
 
-            for (int j = 0; j < post.size(); j++) {
-                String str = post.get(j).getPostcontent();
-                String a = MsgCenterFacade.removeHtmlTag(str);
-                String b = a.replaceAll("  ", "");
-                if (StringUtil.isBlank(b)) {
-                    String nickname = postCommentZanRecordService.queryPostNickname(postid);
-                    String text = nickname + "的帖子";
-                    zanRecordVos.get(i).setContent(text);
-                    post.get(j).setPostcontent("");
-                } else {
-                    post.get(j).setPostcontent(b);
-                }
+        zanRecordVos.get(i).setCtype(2);    //点赞帖子
+
+        List<Post> post = postZanRecordService.queryPost(postid);
+        for (int j = 0; j < post.size(); j++) {
+
+            String str = post.get(j).getPostcontent();
+            String a = MsgCenterFacade.removeHtmlTag(str);
+            String b = a.replaceAll("  ", "");
+            if (StringUtil.isBlank(b)) {
+                //发帖人的昵称
+                String nickname = postCommentZanRecordService.queryPostNickname(postid);
+                String text = nickname + "的帖子";
+                zanRecordVos.get(i).setContent(text);
+                post.get(j).setPostcontent("");
+            } else {
+                post.get(j).setPostcontent(b);
             }
-
-            zanRecordVos.get(i).setPosts(post);
-            zanRecordVos.get(i).setPostid(postid);
         }
+
+        zanRecordVos.get(i).setPosts(post);
     }
 
     /**
