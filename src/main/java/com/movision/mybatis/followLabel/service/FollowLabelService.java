@@ -82,6 +82,36 @@ public class FollowLabelService {
         }
     }
 
+    public int queryLabelLabel(int labelid) {
+        try {
+            log.info("查询标签热度");
+            return followLabelMapper.queryLabelLabel(labelid);
+        } catch (Exception e) {
+            log.error("查询标签热度失败", e);
+            throw e;
+        }
+    }
+
+    public int lessZeroLabel(int labelid) {
+        try {
+            log.info("修改标签热度");
+            return followLabelMapper.lessZeroLabel(labelid);
+        } catch (Exception e) {
+            log.error("修改标签热度失败", e);
+            throw e;
+        }
+    }
+
+    public int lessLabelHeatValue(Map map) {
+        try {
+            log.info("修改标签热度");
+            return followLabelMapper.lessLabelHeatValue(map);
+        } catch (Exception e) {
+            log.error("修改标签热度失败", e);
+            throw e;
+        }
+    }
+
     public int updateLabelHeatValueByPost(Map map) {
         try {
             log.info("发帖时修改标签热度");

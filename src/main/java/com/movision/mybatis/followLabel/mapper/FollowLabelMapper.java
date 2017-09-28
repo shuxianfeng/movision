@@ -28,5 +28,11 @@ public interface FollowLabelMapper {
     int updatePostLabelLess(int labelid);
     int updateLabelHeatValue(Map map);
 
+    int queryLabelLabel(int labelid);
+
+    int lessLabelHeatValue(Map map);
+
+    int lessZeroLabel(int labelid);
+
     int updateLabelHeatValueByPost(Map map);
 }

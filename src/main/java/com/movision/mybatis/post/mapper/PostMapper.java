@@ -213,10 +213,13 @@ public interface PostMapper {
 
     int updateZanPostHeatValue(Map map);//修改热度
 
+    int lessUserHeatValue(Map map);//用户热度
     int updateZeroHeatValue(int postid);
 
+    int updateZeroUserHeatValue(int userid);
     int selectPostHeatValue(int postid);
 
+    int selectUserHeatValue(int userid);
     //查询用户关注的圈子
     List<Integer> queryFollowCricle(int userid);
 

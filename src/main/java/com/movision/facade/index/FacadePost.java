@@ -625,7 +625,8 @@ public class FacadePost {
         parammap.put("postid", Integer.parseInt(postid));
 
         flag = postService.delPost(parammap);
-
+        //减少用户的热度
+        facadeHeatValue.lessUserHeatValue(2, Integer.parseInt(userid));
         return flag;
     }
 
@@ -2843,6 +2844,8 @@ public class FacadePost {
             followUserService.updateUserAttention(userid);
             //被关注人的粉丝-1
             followUserService.insertUserFansLess(interestedusers);
+            //减少用户热度
+            facadeHeatValue.lessUserHeatValue(1, interestedusers);
             mark = 1;
         } else {
             mark = -1;

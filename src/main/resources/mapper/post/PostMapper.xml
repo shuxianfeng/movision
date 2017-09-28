@@ -2211,4 +2211,10 @@
     <select id="queryPostIdByDate" parameterType="java.lang.Integer" resultType="java.util.Date">
         SELECT p.intime FROM yw_post p WHERE p.isactive=0 AND id =#{id,jdbcType=INTEGER} AND isdel = 0
     </select>
+    <update id="lessUserHeatValue" parameterType="java.util.Map">
+        UPDATE yw_user SET heat_value=heat_value-#{points,jdbcType=INTEGER} WHERE id=#{userid,jdbcType=INTEGER}
+    </update>
+    <update id="updateZeroUserHeatValue" parameterType="java.lang.Integer">
+        UPDATE yw_user SET heat_value=0 WHERE id=#{userid,jdbcType=INTEGER}
+    </update>
 </mapper>

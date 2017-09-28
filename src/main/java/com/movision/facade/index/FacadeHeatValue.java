@@ -107,6 +107,54 @@ public class FacadeHeatValue {
 
     }
 
+    /**
+     * 取消用户热度
+     */
+    public void lessUserHeatValue(int type, int userid) {
+        int points = 0;
+        Map map = new HashMap();
+        map.put("userid", userid);
+        int heatvalue = postService.selectUserHeatValue(userid);
+        if (type == 1) {//用户粉丝
+            if (heatvalue >= 2) {
+                int level = userLevels(userid);
+                points = level * HeatValueConstant.POINT.fan_count.getCode();
+                map.put("points", points);
+                postService.lessUserHeatValue(map);
+            } else {
+                postService.updateZeroUserHeatValue(userid);
+            }
+        } else if (type == 2) {//发帖数
+            if (heatvalue >= 8) {
+                int level = userLevels(userid);
+                points = level * HeatValueConstant.POINT.posts_count.getCode();
+                map.put("points", points);
+                postService.lessUserHeatValue(map);
+            } else {
+                postService.updateZeroUserHeatValue(userid);
+            }
+        }
+    }
+
+    /**
+     * 取消标签热度
+     */
+    public void lessLabelHeatValue(int labelid, String userid) {
+        int points = 0;
+        Map map = new HashMap();
+        map.put("labelid", labelid);
+        int heatvalue = followLabelService.queryLabelLabel(labelid);
+        if (heatvalue >= 2) {
+            int level = userLevels(Integer.parseInt(userid));
+            points = level * HeatValueConstant.POINT.attention_label.getCode();
+            map.put("points", points);
+            followLabelService.lessLabelHeatValue(map);
+        } else {
+            followLabelService.lessZeroLabel(labelid);
+        }
+
+    }
+
 
     /**
      * 用户热度
