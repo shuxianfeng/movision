@@ -80,8 +80,7 @@ public class UserFacade {
 
     @Autowired
     private UserBadgeUtil userBadgeUtil;
-    @Autowired
-    private UserFacade userFacade;
+
     /**
      * 判断是否存在该手机号的app用户
      *
@@ -372,7 +371,7 @@ public class UserFacade {
         //修改数据库中个人信息
         userService.updateByPrimaryKeySelective(user);
         //查出数据库中最新的登录用户信息
-        LoginUser loginUser = userFacade.getLoginuserByUserid(personInfo.getId());
+        LoginUser loginUser = getLoginuserByUserid(personInfo.getId());
         //修改session 中的个人信息
         ShiroUtil.updateAppuser(loginUser);
     }
