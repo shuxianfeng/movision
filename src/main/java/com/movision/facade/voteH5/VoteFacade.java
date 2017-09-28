@@ -330,10 +330,13 @@ public class VoteFacade {
      * @param id
      * @return
      */
-    public TakeVo queryTakeById(Integer id, String nickname) {
+    public TakeVo queryTakeById(Integer id, String nickname, Integer activeid) {
         Map map = new HashMap();
         map.put("id", id);
         map.put("nickname", nickname);
+        //查询当前 活动 投票类型
+        int howvote = votingrecordsService.activeHowToVote(activeid);
+        map.put("type", howvote);
         return takeService.queryTakeById(map);
     }
 

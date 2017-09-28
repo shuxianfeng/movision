@@ -193,7 +193,7 @@
         <if test="type == 1">
             (SELECT COUNT(1)
             FROM tp_votingrecords v INNER JOIN tp_take te ON te.mark=v.takenumber
-            WHERE te.activeid=1 AND v.name = #{username,jdbcType=VARCHAR}
+            WHERE te.activeid=#{activeid,jdbcType=INTEGER} AND v.name = #{username,jdbcType=VARCHAR}
             AND te.isdel=0 AND te.audit=1 AND te.mark = t.mark) AS contribute,
         </if>
         <if test="type == 0">
@@ -201,7 +201,7 @@
             FROM tp_votingrecords v
             LEFT JOIN tp_take te ON te.mark=v.takenumber
             LEFT JOIN tp_activeh5 ah ON ah.id = #{activeid,jdbcType=INTEGER}
-            WHERE te.activeid=1 AND v.name = #{username,jdbcType=VARCHAR}
+            WHERE te.activeid=#{activeid,jdbcType=INTEGER} AND v.name = #{username,jdbcType=VARCHAR}
             AND te.isdel=0 AND te.audit=1 AND te.mark = t.mark
             AND ah.howvote = 0 AND curdate() = date_format(v.intime,'%y-%m-%d')) AS contribute,
         </if>
@@ -243,10 +243,25 @@
     </update>
 
     <select id="queryTakeById" parameterType="java.util.Map" resultType="com.movision.mybatis.take.entity.TakeVo">
-        SELECT te.*,ah.name AS acname, (SELECT COUNT(1) FROM tp_votingrecords WHERE takeid=#{id,jdbcType=INTEGER}) AS
-        votesum,(SELECT COUNT(1) FROM tp_votingrecords WHERE takeid=#{id,jdbcType=INTEGER} AND
-        nickname=#{nickname,jdbcType=VARCHAR}) AS istpou FROM tp_take te LEFT JOIN tp_activeh5 ah ON ah.id = te.activeid
-        WHERE te.isdel = 0
-        AND te.id = #{id,jdbcType=INTEGER}
+        SELECT t.*,ah.name AS acname, (SELECT COUNT(1) FROM tp_votingrecords WHERE takeid=#{id,jdbcType=INTEGER}) AS
+        votesum,
+        <if test="type == 1">
+            (SELECT COUNT(1)
+            FROM tp_votingrecords v INNER JOIN tp_take te ON te.mark=v.takenumber
+            WHERE te.activeid=#{activeid,jdbcType=INTEGER} AND v.name = #{nickname,jdbcType=VARCHAR}
+            AND te.isdel=0 AND te.audit=1 AND te.mark = t.mark) AS contribute
+        </if>
+        <if test="type == 0">
+            (SELECT COUNT(1)
+            FROM tp_votingrecords v
+            LEFT JOIN tp_take te ON te.mark=v.takenumber
+            LEFT JOIN tp_activeh5 ah ON ah.id = #{activeid,jdbcType=INTEGER}
+            WHERE te.activeid=#{activeid,jdbcType=INTEGER} AND v.name = #{nickname,jdbcType=VARCHAR}
+            AND te.isdel=0 AND te.audit=1 AND te.mark = t.mark
+            AND ah.howvote = 0 AND curdate() = date_format(v.intime,'%y-%m-%d')) AS contribute
+        </if>
+        FROM tp_take t LEFT JOIN tp_activeh5 ah ON ah.id = t.activeid
+        WHERE t.isdel=0 AND t.audit=1
+        AND t.id = #{id,jdbcType=INTEGER}
     </select>
 </mapper>
