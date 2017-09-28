@@ -75,12 +75,11 @@ public class JsoupCompressImg {
 
             String compress_dir_local_path = PropertiesLoader.getValue("post.img.local.domain");//获取项目根目录/WWW/tomcat-8100/apache-tomcat-7.0.73/webapps/movision
 
-//            String savedDir = request.getSession().getServletContext().getRealPath(compress_dir_local_path);
             String savedDir = request.getSession().getServletContext().getRealPath("");
             String tempDir = savedDir.substring(0, savedDir.lastIndexOf("/")) + compress_dir_local_path;
             log.info("测试获取的压缩图片服务器路径>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + savedDir.substring(0, savedDir.lastIndexOf("/")));
 
-            List<String> existFileList = getExistFiles(compress_dir_path);
+            List<String> existFileList = getExistFiles(compress_dir_path);//定义一个已处理集合
 
             for (int i = 0; i < titleElms.size(); i++) {
                 //遍历帖子中的所有图片列表
@@ -115,10 +114,6 @@ public class JsoupCompressImg {
                 //通过帖子中的imgurl查询图片压缩关系表中是否存在该图的压缩记录
                 int sum = postFacade.queryIsHaveCompress(imgurl);
 
-                //原图的绝对路径
-//                String proto_img_dir = savedDir.substring(0, savedDir.lastIndexOf("/")) + PropertiesLoader.getValue("post.proto.img.domain") + filename;
-//                log.info("原图的绝对路径，proto_img_dir=" + proto_img_dir);
-
                 //获取原图绝对路径和图片大小
                 File file = new File(PATH);//获取原图大小
                 FileInputStream fis = new FileInputStream(file);
@@ -131,9 +126,6 @@ public class JsoupCompressImg {
                     //如果没压缩过且图片大小超过400kb就进行压缩，压缩过的或大小<=400kb不处理（防止修改帖子时对压缩过的图片进行重复压缩，同时也保证了低质量图片的品质）
 
                     boolean compressFlag = false;
-
-                    //根据图片url下载图片存在服务器/WWW/tomcat-8200/apache-tomcat-7.0.73/webapps/images/post/compressimg/目录下
-//                FileUtil.downloadObject(imgurl, tempDir, filename, "img");
 
                     if (StringUtils.isNotEmpty(imgurl)) {
 
@@ -185,7 +177,7 @@ public class JsoupCompressImg {
 
                         //压缩上传存储完成后，删除ECS下载的原图和压缩图的临时文件 compress_file_path 和 PATH
                         //实际原图的路径和文件名与压缩后的图片路径和文件名一模一样，所以会被覆盖，因此下面方法执行一个即可
-//                        compressfile.delete();//删除压缩图
+                        //compressfile.delete();//删除压缩图
                         file.delete();//删除原图
                     }
                 } else if (sum != 0) {
@@ -242,8 +234,6 @@ public class JsoupCompressImg {
         try {
             //定义是否是视频贴的标志位
             int flag = 0;//0 图文贴 >0 视频贴（视频的个数）
-//            JSONObject responseJson = JSONObject.parseObject(content);
-//            String moduleContent = (String)responseJson.get("postcontent");//正文模块字符串
             JSONArray moduleArray = JSONArray.fromObject(content);
 
             String compress_dir_path = uploadFacade.getConfigVar("post.tempimg.domain");//压缩图片路径url
@@ -254,7 +244,7 @@ public class JsoupCompressImg {
             String tempDir = savedDir.substring(0, savedDir.lastIndexOf("/")) + compress_dir_local_path;
             log.info("测试获取的压缩图片服务器路径>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + savedDir.substring(0, savedDir.lastIndexOf("/")));
 
-            List<String> existFileList = getExistFiles(compress_dir_path);
+            List<String> existFileList = getExistFiles(compress_dir_path);//定义一个已处理集合
 
             for (int i = 0; i < moduleArray.size(); i++) {
                 //遍历帖子中的所有图片列表
@@ -298,10 +288,6 @@ public class JsoupCompressImg {
                     //通过帖子中的imgurl查询图片压缩关系表中是否存在该图的压缩记录
                     int sum = postFacade.queryIsHaveCompress(imgurl);
 
-                    //原图的绝对路径
-//                String proto_img_dir = savedDir.substring(0, savedDir.lastIndexOf("/")) + PropertiesLoader.getValue("post.proto.img.domain") + filename;
-//                log.info("原图的绝对路径，proto_img_dir=" + proto_img_dir);
-
                     //获取原图绝对路径和图片大小
                     File file = new File(PATH);//获取原图大小
                     FileInputStream fis = new FileInputStream(file);
@@ -315,9 +301,6 @@ public class JsoupCompressImg {
                         //如果没压缩过且图片大小超过800kb就进行压缩，压缩过的或大小<=800kb不处理（防止修改帖子时对压缩过的图片进行重复压缩，同时也保证了低质量图片的品质）
 
                         boolean compressFlag = false;
-
-                        //根据图片url下载图片存在服务器/WWW/tomcat-8200/apache-tomcat-7.0.73/webapps/images/post/compressimg/目录下
-//                FileUtil.downloadObject(imgurl, tempDir, filename, "img");
 
                         if (StringUtils.isNotEmpty(imgurl)) {
 
@@ -349,8 +332,6 @@ public class JsoupCompressImg {
                                 }
                                 newimgurl = PropertiesLoader.getValue("formal.img.domain") + "/" + compressurl;//拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接，如："http://pic.mofo.shop" + "/upload/postCompressImg/img/yDi0T2nY1496812117357.png"
 
-                                //如果压缩保存成功，这里替换文章中的第i个模块,同时替换掉value中的img链接url属性
-//                                Object obj = JSONObject.parseObject(moduleArray.get(i).toString()).put("value", newimgurl);
                                 moduleArray.remove(i);
                                 Map<String, Object> res = new HashMap<>();
                                 res.put("orderid", orderid);
@@ -378,7 +359,7 @@ public class JsoupCompressImg {
 
                             //压缩上传存储完成后，删除ECS下载的原图和压缩图的临时文件 compress_file_path 和 PATH
                             //实际原图的路径和文件名与压缩后的图片路径和文件名一模一样，所以会被覆盖，因此下面方法执行一个即可
-//                            compressfile.delete();//删除压缩图
+                            //compressfile.delete();//删除压缩图
                             file.delete();//删除原图
                         }
                     } else if (sum != 0) {
@@ -429,11 +410,6 @@ public class JsoupCompressImg {
             compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
         }
         if (filename.toLowerCase().endsWith(".png")) {
-//            File srcFile = new File(filePath);
-//            log.info("压缩png图片,filepath=" + filePath);
-//            compressFlag = ImageUtil.fromFile(srcFile).size(w, h).quality(0.7f).fixedGivenSize(false).keepRatio(true) // 图片宽高比例
-//                    .bgcolor(null) // 透明背景
-//                    .toFile(new File(tempDir));
             log.info("压缩png图片，filepath=" + filePath);
             compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
         }
