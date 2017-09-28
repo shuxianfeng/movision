@@ -422,8 +422,12 @@ public class VoteFacade {
      * @return
      */
     public List<TakeVo> voteDesc(int activeid) {
-
-        return takeService.voteDesc(activeid);
+        List<TakeVo> takeVos = new ArrayList<>();
+        takeVos = takeService.voteDesc(activeid);
+        for (int i = 0; i < takeVos.size(); i++) {
+            takeVos.get(i).setRanking(i + 1);
+        }
+        return takeVos;
     }
 
     /**

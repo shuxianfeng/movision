@@ -1238,6 +1238,16 @@ public class PostService {
         }
     }
 
+    public int lessUserHeatValue(Map map) {
+        try {
+            log.info("修改热度");
+            return postMapper.lessUserHeatValue(map);
+        } catch (Exception e) {
+            log.error("修改热度失败", e);
+            throw e;
+        }
+    }
+
     public int updateZeroHeatValue(int postid) {
         try {
             log.info("修改热度");
@@ -1248,12 +1258,31 @@ public class PostService {
         }
     }
 
+    public int updateZeroUserHeatValue(int userid) {
+        try {
+            log.info("修改热度");
+            return postMapper.updateZeroUserHeatValue(userid);
+        } catch (Exception e) {
+            log.error("修改热度失败", e);
+            throw e;
+        }
+    }
     public int selectPostHeatValue(int postid) {
         try {
             log.info("查询提子热度值");
             return postMapper.selectPostHeatValue(postid);
         } catch (Exception e) {
             log.error("查询提子热度值失败", e);
+            throw e;
+        }
+    }
+
+    public int selectUserHeatValue(int userid) {
+        try {
+            log.info("查询用户热度值");
+            return postMapper.selectUserHeatValue(userid);
+        } catch (Exception e) {
+            log.error("查询用户热度值失败", e);
             throw e;
         }
     }

@@ -413,6 +413,8 @@ public class LabelFacade {
             followLabelService.updatePostLabelLess(Integer.parseInt(labelid));
             //用户关注数-1
             followUserService.updateUserAttention(Integer.parseInt(userid));
+            //减少标签热度
+            facadeHeatValue.lessLabelHeatValue(Integer.parseInt(labelid), userid);
             mark = 1;
         } else {
             mark = -1;

@@ -625,7 +625,8 @@ public class FacadePost {
         parammap.put("postid", Integer.parseInt(postid));
 
         flag = postService.delPost(parammap);
-
+        //减少用户的热度
+        facadeHeatValue.lessUserHeatValue(2, Integer.parseInt(userid));
         return flag;
     }
 
@@ -2717,17 +2718,19 @@ public class FacadePost {
         //1 查询所有人都可以发帖的圈子
         List<CirclePost> anyoneCanPostCircles = circleService.selectCircleScopeEquals2();
         //2 查询用户是该圈子的所有者的圈子
-        List<CirclePost> createCircles = circleService.selectCircleWhoCreate(ShiroUtil.getAppUserID());
+        int userid = ShiroUtil.getAppUserID();
+        List<CirclePost> createCircles = circleService.selectCircleWhoCreate(userid);
         //第一次排重合并
         anyoneCanPostCircles.removeAll(createCircles);
         anyoneCanPostCircles.addAll(createCircles);
         //3 查询用户是圈子管理员的圈子
-        List<CirclePost> manageCircles = circleService.selectCircleWhoManage(ShiroUtil.getAppUserID());
+        List<CirclePost> manageCircles = circleService.selectCircleWhoManage(userid);
         //第二次排重合并
         anyoneCanPostCircles.removeAll(manageCircles);
         anyoneCanPostCircles.addAll(manageCircles);
         //4 查询所有者可发+发帖用户为大v
-        if (ShiroUtil.getAppUser().getLevel() >= 1) {
+        User user = userService.selectByPrimaryKey(userid);
+        if (user.getLevel() >= 1) {
             List<CirclePost> ownerAndBigVCanPostCircles = circleService.selectCircleScopeEquals1();
             //第三次去重合并
             anyoneCanPostCircles.removeAll(ownerAndBigVCanPostCircles);
@@ -2841,6 +2844,8 @@ public class FacadePost {
             followUserService.updateUserAttention(userid);
             //被关注人的粉丝-1
             followUserService.insertUserFansLess(interestedusers);
+            //减少用户热度
+            facadeHeatValue.lessUserHeatValue(1, interestedusers);
             mark = 1;
         } else {
             mark = -1;
