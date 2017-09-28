@@ -28,7 +28,7 @@ public interface TakeMapper {
 
     List<TakeVo> findAllTakeCondition(RowBounds rowBounds, Map map);
 
-    TakeVo queryTakeById(Integer id);
+    TakeVo queryTakeById(Map map);
 
     void updateTakeByNumber(Take take);
 

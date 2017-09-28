@@ -243,7 +243,10 @@
     </update>
 
     <select id="queryTakeById" parameterType="java.lang.Integer" resultType="com.movision.mybatis.take.entity.TakeVo">
-        SELECT te.*,ah.name AS acname FROM tp_take te LEFT JOIN tp_activeh5 ah ON ah.id = te.activeid WHERE te.isdel = 0
+        SELECT te.*,ah.name AS acname, (SELECT COUNT(1) FROM tp_votingrecords WHERE takeid=#{id,jdbcType=INTEGER}) AS
+        votesum,(SELECT COUNT(1) FROM tp_votingrecords WHERE takeid=#{id,jdbcType=INTEGER} AND
+        nickname=#{nickname,jdbcType=VARCHAR}) AS istpou FROM tp_take te LEFT JOIN tp_activeh5 ah ON ah.id = te.activeid
+        WHERE te.isdel = 0
         AND te.id = #{id,jdbcType=INTEGER}
     </select>
 </mapper>

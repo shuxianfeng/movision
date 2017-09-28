@@ -37,6 +37,16 @@ public class TakeVo {
 
     private Integer contribute;//是否可投稿
 
+    private Integer istpou;//是否投票
+
+    public Integer getIstpou() {
+        return istpou;
+    }
+
+    public void setIstpou(Integer istpou) {
+        this.istpou = istpou;
+    }
+
     public Integer getContribute() {
         return contribute;
     }

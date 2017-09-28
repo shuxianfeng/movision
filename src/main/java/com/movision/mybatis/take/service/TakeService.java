@@ -90,13 +90,13 @@ public class TakeService {
     /**
      * 查询投稿详情
      *
-     * @param id
+     * @param
      * @return
      */
-    public TakeVo queryTakeById(Integer id) {
+    public TakeVo queryTakeById(Map map) {
         try {
             log.info("查询投稿详情");
-            return takeMapper.queryTakeById(id);
+            return takeMapper.queryTakeById(map);
         } catch (Exception e) {
             log.error("查询投稿详情异常", e);
             throw e;

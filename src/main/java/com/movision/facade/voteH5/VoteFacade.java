@@ -330,8 +330,11 @@ public class VoteFacade {
      * @param id
      * @return
      */
-    public TakeVo queryTakeById(Integer id) {
-        return takeService.queryTakeById(id);
+    public TakeVo queryTakeById(Integer id, String nickname) {
+        Map map = new HashMap();
+        map.put("id", id);
+        map.put("nickname", nickname);
+        return takeService.queryTakeById(map);
     }
 
 
