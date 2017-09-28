@@ -2360,7 +2360,7 @@ public class PostFacade {
             list.get(i).put("enddays", 0);//活动已结束
         } else if (begin.before(now) && now.before(end)) {
             try {
-                log.error("计算活动剩余结束天数");
+                log.info("计算活动剩余结束天数");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Date a = sdf.parse(sdf.format(now));
                 Date b = sdf.parse(sdf.format(end));
@@ -2816,11 +2816,10 @@ public class PostFacade {
 
     /**
      * 修改帖子标签
-     *
      * @param id
      * @param name
      * @param type
-     * @param userid
+     * @param isrecommend
      * @param photo
      */
     public void updatePostLabel(String id, String name, String type, String isrecommend, String photo) {
