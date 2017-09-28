@@ -334,6 +334,7 @@ public class VoteFacade {
         Map map = new HashMap();
         map.put("id", id);
         map.put("nickname", nickname);
+        map.put("activeid", activeid);
         //查询当前 活动 投票类型
         int howvote = votingrecordsService.activeHowToVote(activeid);
         map.put("type", howvote);
