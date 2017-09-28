@@ -112,5 +112,6 @@
         WHERE curdate() = date_format(intime,'%y-%m-%d')
         AND name = #{name,jdbcType=VARCHAR}
         AND activeid = #{activeid,jdbcType=INTEGER}
+        AND takeid = #{takeid,jdbcType=INTEGER}
     </select>
 </mapper>
