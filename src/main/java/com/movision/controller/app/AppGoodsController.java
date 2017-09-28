@@ -1,26 +1,21 @@
 package com.movision.controller.app;
 
 import com.movision.common.Response;
-import com.movision.common.util.ShiroUtil;
 import com.movision.facade.Goods.GoodsFacade;
 import com.movision.facade.coupon.CouponFacade;
-import com.movision.fsearch.pojo.spec.GoodsSearchSpec;
 import com.movision.fsearch.service.impl.GoodsSearchService;
 import com.movision.mybatis.goods.entity.GoodsDetail;
-import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
-import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

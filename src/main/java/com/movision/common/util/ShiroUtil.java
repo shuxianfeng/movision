@@ -3,6 +3,8 @@ package com.movision.common.util;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.SessionConstant;
 import com.movision.exception.AuthException;
+import com.movision.facade.user.UserFacade;
+import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.utils.DateUtils;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.movision.shiro.realm.BossRealm;
 import com.movision.shiro.realm.ShiroRealm;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * shiro工具类
@@ -24,6 +27,9 @@ import com.movision.shiro.realm.ShiroRealm;
  */
 public class ShiroUtil {
     private static Logger log = LoggerFactory.getLogger(ShiroUtil.class);
+
+    @Autowired
+    private UserFacade userFacade;
 
     /**
      * 获取APP当前登录人信息
@@ -171,7 +177,7 @@ public class ShiroUtil {
         if (session != null) {
             ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
             if (null != principal) {
-                //此处可以扩张需要的字段
+                //此处可以扩展需要的字段
                 principal.setPoints(point);
                 session.setAttribute(SessionConstant.APP_USER, principal);
             }
@@ -221,34 +227,31 @@ public class ShiroUtil {
     /**
      * 更新缓存在session中的app用户信息
      *
-     * @param user
+     * @param loginUser
      */
-    public static void updateAppuser(User user) {
+    public static void updateAppuser(LoginUser loginUser) {
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession(false);
         if (session != null) {
-            ShiroRealm.ShiroUser principal = (ShiroRealm.ShiroUser) session.getAttribute(SessionConstant.APP_USER);
-            if (null != principal) {
-                principal.setStatus(user.getStatus());
-                principal.setPhoto(user.getPhoto());
-                principal.setNickname(user.getNickname());
-                principal.setLevel(user.getLevel());
-                principal.setPhone(user.getPhone());
-                principal.setToken(user.getToken());
-                principal.setPoints(user.getPoints());
-                principal.setSex(user.getSex());
-                principal.setSign(user.getSign());
-                principal.setBirthday(DateUtils.date2Str(user.getBirthday()));
-                principal.setQq(user.getQq());
-                principal.setSina(user.getSina());
-                principal.setOpenid(user.getOpenid());
-
-                session.setAttribute(SessionConstant.APP_USER, principal);
-            }
+            session.setAttribute(SessionConstant.APP_USER, getShiroUserFromLoginUser(loginUser));
         }
     }
 
-
+    /**
+     * 从 LoginUser 转换为 ShiroUser
+     *
+     * @param loginUser
+     * @return
+     */
+    public static ShiroRealm.ShiroUser getShiroUserFromLoginUser(LoginUser loginUser) {
+        return new ShiroRealm.ShiroUser(loginUser.getId(), loginUser.getPhone(), loginUser.getStatus(), loginUser.getRole(),
+                loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(), loginUser.getPhone(),
+                loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(), loginUser.getAccid(), loginUser.getImtoken(),
+                loginUser.getSign(), DateUtils.date2Str(loginUser.getBirthday()),
+                loginUser.getQq(), loginUser.getSina(), loginUser.getOpenid(), loginUser.getHeatValue(), loginUser.getIpCity(),
+                loginUser.getLatitude(), loginUser.getLongitude()
+        );
+    }
 
 
     /**

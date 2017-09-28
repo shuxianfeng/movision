@@ -234,7 +234,6 @@ public class AppLoginController {
             User originUser = appRegisterFacade.queryExistThirdAccountAppUser(flag, account);
             if (null == originUser) {
                 log.warn("qq账号不存在,请先注册");
-
                 response.setCode(400);
                 response.setMessage("qq账号不存在,请先注册");
                 response.setMsgCode(MsgCodeConstant.app_account_by_qq_not_exist);

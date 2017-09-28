@@ -17,6 +17,7 @@ import com.movision.mybatis.couponTemp.entity.CouponTemp;
 import com.movision.mybatis.imDevice.entity.ImDevice;
 import com.movision.mybatis.imDevice.service.ImDeviceService;
 import com.movision.mybatis.imuser.entity.ImUser;
+import com.movision.mybatis.user.entity.LoginUser;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.Validateinfo;
@@ -692,7 +693,7 @@ public class AppRegisterFacade {
             UsernamePasswordToken token = gson.fromJson(appToken, UsernamePasswordToken.class);
 
             Map returnMap = new HashedMap();
-            //3 开始进入shiro的认证流程
+            //3 开始进入shiro的认证流程，对应ShiroRealm.doGetAuthenticationInfo
             shiroLogin(response, currentUser, token);
 
             /**
@@ -704,27 +705,20 @@ public class AppRegisterFacade {
                 Session session = currentUser.getSession();
                 //6 清除session中的boss用户信息
                 session.removeAttribute(SessionConstant.BOSS_USER);
-                session.setAttribute(SessionConstant.APP_USER, currentUser.getPrincipal());
+                ShiroRealm.ShiroUser appuser = (ShiroRealm.ShiroUser) currentUser.getPrincipal();
+                log.debug("当前登录的LoginUser信息=" + appuser.toString());
+                session.setAttribute(SessionConstant.APP_USER, appuser);
                 //用户id
-                int appuserid = ShiroUtil.getAppUserID();
+                int appuserid = appuser.getId();
                 //7 返回用户是否是第一次登录（根据登录时间和注册时间的间隔判断，若间隔小于10秒，则认为是第一次登录，否则不是）
-                Date loginTime = new Date();
-                Map param = new HashMap();
-                param.put("userid", appuserid);
-                param.put("loginTime", loginTime);
-                Map intervalMap = userService.selectIntervalBetweenLoginAndRegiste(param);
-                if (MapUtil.isEmpty(intervalMap)) {
-                    //不存在登录与注册间隔10秒的这个用户，则说明这个用户不是第一次登录
-                    returnMap.put("isFirstLogin", 0);
-                } else {
-                    //说明这个用户是第一次登录
-                    returnMap.put("isFirstLogin", 1);
-                }
+                Date loginTime = calculateIsFirstLoginApp(returnMap, appuserid);
                 //8 登录验证成功后，更新用户信息
                 updateLoginUserInfo(appuserid, longitude, latitude, ip, loginTime);
                 //9 返回登录人的信息
-                ShiroRealm.ShiroUser appuser = (ShiroRealm.ShiroUser) currentUser.getPrincipal();
-                if (null == appuser) {
+                LoginUser loginuser = userFacade.getLoginuserByUserid(appuserid);
+                ShiroRealm.ShiroUser shiroUser = ShiroUtil.getShiroUserFromLoginUser(loginuser);
+                session.setAttribute(SessionConstant.APP_USER, shiroUser);
+                if (null == shiroUser) {
                     response.setMsgCode(0);
                     response.setMessage("登录失败");
                     returnMap.put("authorized", false);
@@ -732,13 +726,13 @@ public class AppRegisterFacade {
                     response.setMsgCode(1);
                     response.setMessage("登录成功");
                     returnMap.put("authorized", true);
-                    returnMap.put("user", appuser);
+                    returnMap.put("user", shiroUser);
                 }
                 //10 返回登录的用户当天是否签到
                 if (pointRecordFacade.signToday()) {
                     returnMap.put("isSign", 1);
                 } else {
-                    pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode(), ShiroUtil.getAppUserID());
+                    pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.sign.getCode(), appuserid);
                     returnMap.put("isSign", 0);
                 }
 
@@ -752,6 +746,29 @@ public class AppRegisterFacade {
             response.setMessage("appToken和serverToken不相等");
             response.setMsgCode(MsgCodeConstant.app_token_not_equal_server_token);
         }
+    }
+
+    /**
+     * 判断用户是否属于第一次登录app
+     *
+     * @param returnMap
+     * @param appuserid
+     * @return
+     */
+    private Date calculateIsFirstLoginApp(Map returnMap, int appuserid) {
+        Date loginTime = new Date();
+        Map param = new HashMap();
+        param.put("userid", appuserid);
+        param.put("loginTime", loginTime);
+        Map intervalMap = userService.selectIntervalBetweenLoginAndRegiste(param);
+        if (MapUtil.isEmpty(intervalMap)) {
+            //不存在登录与注册间隔10秒的这个用户，则说明这个用户不是第一次登录
+            returnMap.put("isFirstLogin", 0);
+        } else {
+            //说明这个用户是第一次登录
+            returnMap.put("isFirstLogin", 1);
+        }
+        return loginTime;
     }
 
     /**

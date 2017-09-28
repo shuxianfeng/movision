@@ -6,6 +6,7 @@ import java.util.Date;
 import com.google.gson.Gson;
 import com.movision.common.constant.SessionConstant;
 import com.movision.common.constant.UserConstants;
+import com.movision.common.util.ShiroUtil;
 import com.movision.facade.user.BossUserFacade;
 import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.user.entity.LoginUser;
@@ -70,13 +71,7 @@ public class ShiroRealm extends AuthorizingRealm {
 
         // 2 根据登录用户信息生成ShiroUser用户，
         // PS:这个ShiroUser就是session中存储的app用户对象
-        ShiroUser shiroUser = new ShiroUser(loginUser.getId(), loginUser.getPhone(), loginUser.getStatus(), loginUser.getRole(),
-                loginUser.getIntime(), loginUser.getPhoto(), loginUser.getNickname(), loginUser.getLevel(), loginUser.getPhone(),
-                loginUser.getToken(), loginUser.getPoints(), loginUser.getSex(), loginUser.getAccid(), loginUser.getImtoken(),
-                loginUser.getSign(), DateUtils.date2Str(loginUser.getBirthday()),
-                loginUser.getQq(), loginUser.getSina(), loginUser.getOpenid(), loginUser.getHeatValue(), loginUser.getIpCity(),
-                loginUser.getLatitude(), loginUser.getLongitude()
-        );
+        ShiroUser shiroUser = ShiroUtil.getShiroUserFromLoginUser(loginUser);
 
         // 3 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         return new SimpleAuthenticationInfo(shiroUser, // 用户

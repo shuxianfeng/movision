@@ -22,6 +22,7 @@ import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
 import com.movision.utils.ListUtil;
 import com.movision.utils.UserBadgeUtil;
@@ -79,6 +80,8 @@ public class UserFacade {
 
     @Autowired
     private UserBadgeUtil userBadgeUtil;
+    @Autowired
+    private UserFacade userFacade;
     /**
      * 判断是否存在该手机号的app用户
      *
@@ -368,8 +371,10 @@ public class UserFacade {
         user.setSign(personInfo.getSign());
         //修改数据库中个人信息
         userService.updateByPrimaryKeySelective(user);
+        //查出数据库中最新的登录用户信息
+        LoginUser loginUser = userFacade.getLoginuserByUserid(personInfo.getId());
         //修改session 中的个人信息
-        ShiroUtil.updateAppuser(user);
+        ShiroUtil.updateAppuser(loginUser);
     }
 
 
@@ -1400,5 +1405,6 @@ public class UserFacade {
 
         return map;
     }
+
 
 }

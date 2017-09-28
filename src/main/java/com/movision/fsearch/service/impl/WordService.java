@@ -25,6 +25,9 @@ import java.util.Map;
 @Component
 public class WordService extends JdbcRepository implements IWordService {
 
+    @Autowired
+    private IJobService jobService;
+
     private static File DICT_FILE = null;
     private static Dictionary DICT = null;
     private static Seg COMPLEX_SEG = null;
@@ -50,9 +53,6 @@ public class WordService extends JdbcRepository implements IWordService {
         COMPLEX_SEG = new ComplexSeg(DICT);
     }
 
-    @Autowired
-    private IJobService jobService;
-
     /**
      * 更新字典
      *
@@ -60,7 +60,7 @@ public class WordService extends JdbcRepository implements IWordService {
      */
     private void updateWords() throws Exception {
         /**
-         * 更新品牌字典表
+         * 更新商品字典表
          */
         {
             FileUtil.write(DICT_FILE, StringUtil.EMPTY);
@@ -75,7 +75,7 @@ public class WordService extends JdbcRepository implements IWordService {
         }
 
         /**
-         * 更新相似字典表
+         * 更新商品相似字典表
          */
         {
             List<Map<String, Object>> items = getJdbcTemplate().findList(
@@ -99,12 +99,13 @@ public class WordService extends JdbcRepository implements IWordService {
     /**
      * 每3小时更新字典
      */
-    @PostConstruct
+    @PostConstruct  //在spring容器初始化话WordService的时候，所做的操作
     public void init() {
         jobService.scheduleRepeatJob(new JobService.RepeatJob() {
             @Override
             public void run(boolean firstTime) {
                 try {
+                    //更新词库
                     updateWords();
                 } catch (Exception e) {
                     L.error(e);
@@ -116,6 +117,12 @@ public class WordService extends JdbcRepository implements IWordService {
         }, "words.cache.minutes", true);
     }
 
+    /**
+     * 拆分词
+     *
+     * @param s
+     * @return
+     */
     @Override
     public List<String> segWords(String s) {
         //根据，、。,.空格 回车 ，分隔字符串

@@ -126,6 +126,7 @@ public class GoodsSearchService implements IGoodsSearchService {
         if (spec.getQ() != null) {
             String q = spec.getQ();
             result.put("q", q);
+            //分词
             List<String> words = wordService.segWords(q);
             if (!words.isEmpty()) {
                 //以空格为分隔符，形成新的list<String>
