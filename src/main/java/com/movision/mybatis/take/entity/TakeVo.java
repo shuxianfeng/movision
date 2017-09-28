@@ -37,6 +37,16 @@ public class TakeVo {
 
     private Integer contribute;//是否可投稿
 
+    private Integer ranking;//投稿的投票排名
+
+
+    public Integer getRanking() {
+        return ranking;
+    }
+
+    public void setRanking(Integer ranking) {
+        this.ranking = ranking;
+    }
 
     public Integer getContribute() {
         return contribute;

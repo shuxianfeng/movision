@@ -331,6 +331,7 @@ public class VoteFacade {
      * @return
      */
     public TakeVo queryTakeById(Integer id, String nickname, Integer activeid) {
+        TakeVo takeVo = new TakeVo();
         Map map = new HashMap();
         map.put("id", id);
         map.put("nickname", nickname);
@@ -338,7 +339,15 @@ public class VoteFacade {
         //查询当前 活动 投票类型
         int howvote = votingrecordsService.activeHowToVote(activeid);
         map.put("type", howvote);
-        return takeService.queryTakeById(map);
+        takeVo = takeService.queryTakeById(map);
+        List<TakeVo> list = takeService.voteDesc(activeid);
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId() == takeVo.getId()) {
+                takeVo.setRanking(i + 1);
+                break;
+            }
+        }
+        return takeVo;
     }
 
 
@@ -410,12 +419,11 @@ public class VoteFacade {
 
     /**
      * 投票排行
-     * @param paging
      * @return
      */
-    public List<TakeVo> voteDesc(Paging<TakeVo> paging, int activeid) {
+    public List<TakeVo> voteDesc(int activeid) {
 
-        return takeService.voteDesc(paging, activeid);
+        return takeService.voteDesc(activeid);
     }
 
     /**

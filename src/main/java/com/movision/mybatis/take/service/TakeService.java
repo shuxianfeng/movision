@@ -167,13 +167,12 @@ public class TakeService {
     /**
      * 投票排行
      *
-     * @param paging
      * @return
      */
-    public List<TakeVo> voteDesc(Paging<TakeVo> paging, int activeid) {
+    public List<TakeVo> voteDesc(int activeid) {
         try {
             log.info("投票排行");
-            return takeMapper.voteDesc(paging.getRowBounds(), activeid);
+            return takeMapper.voteDesc(activeid);
         } catch (Exception e) {
             log.error("投票排行失败", e);
             throw e;
