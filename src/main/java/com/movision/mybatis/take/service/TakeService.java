@@ -179,4 +179,20 @@ public class TakeService {
         }
     }
 
+    /**
+     * 查询投稿详情
+     *
+     * @param id
+     * @return
+     */
+    public TakeVo queryTakeByIdByBoss(Integer id) {
+        try {
+            log.info("查询投稿详情");
+            return takeMapper.queryTakeByIdByBoss(id);
+        } catch (Exception e) {
+            log.error("查询投稿详情异常", e);
+            throw e;
+        }
+    }
+
 }

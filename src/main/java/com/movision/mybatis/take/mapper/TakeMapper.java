@@ -35,4 +35,6 @@ public interface TakeMapper {
     void updateTakeByAudit(Take take);
 
     List<TakeVo> findAll(int activeid);
+
+    TakeVo queryTakeByIdByBoss(Integer id);
 }

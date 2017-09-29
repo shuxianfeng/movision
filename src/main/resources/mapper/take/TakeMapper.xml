@@ -264,4 +264,9 @@
         WHERE t.isdel=0 AND t.audit=1
         AND t.id = #{id,jdbcType=INTEGER}
     </select>
+
+    <select id="queryTakeByIdByBoss" resultType="com.movision.mybatis.take.entity.TakeVo"
+            parameterType="java.lang.Integer">
+        SELECT * FROM tp_take WHERE id = #{id,jdbcType=INTEGER}
+    </select>
 </mapper>

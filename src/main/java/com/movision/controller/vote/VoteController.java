@@ -254,11 +254,27 @@ public class VoteController {
     @ApiOperation(value = "根据id查询投稿详情", notes = "查询投稿详情", response = Response.class)
     public Response queryTakeById(@ApiParam(value = "投稿id") @RequestParam int id,
                                   @ApiParam(value = "投票人") @RequestParam(required = false) String nickname,
-                                  @ApiParam(value = "活动id") @RequestParam int activeid) {
+                                  @ApiParam(value = "活动id") @RequestParam(required = false) int activeid) {
         Response response = new Response();
         TakeVo take = voteFacade.queryTakeById(id, nickname, activeid);
         response.setMessage("查询成功");
         response.setData(take);
+        return response;
+    }
+
+    /**
+     * 后台查询作品详情
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "queryTakeByIdByBoss", method = RequestMethod.POST)
+    @ApiOperation(value = "根据id查询投稿详情(后台)", notes = "查询投稿详情", response = Response.class)
+    public Response queryTakeByIdByBoss(@ApiParam(value = "投稿id") @RequestParam String id) {
+        Response response = new Response();
+        TakeVo takeVo = voteFacade.queryTakeByIdByBoss(id);
+        response.setMessage("查询成功");
+        response.setData(takeVo);
         return response;
     }
 

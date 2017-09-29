@@ -355,6 +355,16 @@ public class VoteFacade {
         return takeVo;
     }
 
+    /**
+     * 后台查询作品详情
+     *
+     * @param id
+     * @return
+     */
+    public TakeVo queryTakeByIdByBoss(String id) {
+        return takeService.queryTakeByIdByBoss(Integer.parseInt(id));
+    }
+
 
     /**
      * 删除参赛人员
