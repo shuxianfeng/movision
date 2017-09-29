@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -555,9 +556,8 @@ public class VoteFacade {
         List<Map<String, Object>> list = new ArrayList<>();
         for (int i = 0; i < file.length; i++) {
             Map m = movisionOssClient.uploadMultipartFile(file[i], 2);
-            //String url = String.valueOf(m.get("url"));
-            //Map map = new HashMap();
-            //map.put("name", url);
+            Map t = movisionOssClient.uploadFileObject(new File(m.get("url").toString()), "img", "voteimg");
+            m.put("url", t.get("url"));
             list.add(m);
         }
         return list;
