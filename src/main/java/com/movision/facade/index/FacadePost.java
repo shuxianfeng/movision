@@ -1616,9 +1616,9 @@ public class FacadePost {
         if (userid != null) {
             List<DBObject> listmongodba = null;
             List<PostVo> posts = new ArrayList<>();
-            List<PostVo> crileidPost = null;
-            List<PostVo> userPost = null;
-            List<PostVo> labelPost = null;
+            List<PostVo> crileidPost = new ArrayList<>();
+            List<PostVo> userPost = new ArrayList<>();
+            List<PostVo> labelPost = new ArrayList<>();
             listmongodba = userRefulshListMongodb(Integer.parseInt(userid), 2);//用户有没有看过
             List<Integer> followCricle = postService.queryFollowCricle(Integer.parseInt(userid));//查询用户关注的圈子
             List<Integer> followUsers = postService.queryFollowUser(Integer.parseInt(userid));//用户关注的作者
@@ -1631,7 +1631,7 @@ public class FacadePost {
                 //根据作者查询所有帖子
                 if (followUsers.size() != 0) {
                     userPost = postService.queryUserListByIds(followUsers);
-                    if (userPost.size() != 0) {
+                    if (crileidPost != null) {
                         crileidPost.addAll(userPost);
                     }
                 }
