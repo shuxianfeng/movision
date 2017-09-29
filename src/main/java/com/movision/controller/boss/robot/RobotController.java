@@ -312,6 +312,15 @@ public class RobotController {
         return response;
     }
 
+    @ApiOperation(value = "替换全部机器人的昵称、头像、签名", notes = "批量替换机器人的昵称、头像、签名", response = Response.class)
+    @RequestMapping(value = "all_change_robot_info", method = RequestMethod.POST)
+    public Response allChangeRobotNickname() {
+        Response response = new Response();
+        robotFacade.allChangeRobotInfo();
+        response.setMessage("操作成功");
+        return response;
+    }
+
 
 
 }

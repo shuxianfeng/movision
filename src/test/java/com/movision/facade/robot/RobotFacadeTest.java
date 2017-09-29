@@ -1,10 +1,12 @@
 package com.movision.facade.robot;
 
+import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.test.SpringTestCase;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -49,6 +51,18 @@ public class RobotFacadeTest extends SpringTestCase {
     public void batchChangeRobotNickname() throws Exception {
 //        List<User> userList = userService.selectRobotUser();
         robotFacade.batchChangeRobotNickname("10001,10002");
+    }
+
+    @Test
+    public void batchChangeRobot() throws Exception {
+        List<User> userList = userService.selectRobotUser();
+        String ids = null;
+        for (User user : userList) {
+            ids += user.getId() + ",";
+        }
+        String userids = ids.substring(0, ids.length() - 1);
+
+
     }
 
 }
