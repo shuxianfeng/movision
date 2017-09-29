@@ -246,14 +246,9 @@ public class FacadeComments {
 
 
     /**
-     * 所有评论(现在最新)
-     *
-     * @param postid
-     * @param paging
-     * @return
+     * 帖子详情评论
      */
     List<CommentVo> lists = new ArrayList<>();
-
     public List queryPostsNewComment(Map<String, Object> parammap) {
         List<CommentVo> commentVos = commentService.queryThreeComment(parammap);//所有父评论
         if (commentVos != null) {
@@ -266,7 +261,9 @@ public class FacadeComments {
         return commentVos;
     }
 
-
+    /**
+     * 帖子详情评论
+     */
     public List postDetailComment(int postid, String userid) {
         Map map = new HashMap();
         map.put("postid", postid);
