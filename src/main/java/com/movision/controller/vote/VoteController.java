@@ -253,7 +253,7 @@ public class VoteController {
     @RequestMapping(value = "queryTakeById", method = RequestMethod.POST)
     @ApiOperation(value = "根据id查询投稿详情", notes = "查询投稿详情", response = Response.class)
     public Response queryTakeById(@ApiParam(value = "投稿id") @RequestParam int id,
-                                  @ApiParam(value = "投票人") @RequestParam String nickname,
+                                  @ApiParam(value = "投票人") @RequestParam(required = false) String nickname,
                                   @ApiParam(value = "活动id") @RequestParam int activeid) {
         Response response = new Response();
         TakeVo take = voteFacade.queryTakeById(id, nickname, activeid);
