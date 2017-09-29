@@ -10,6 +10,8 @@ import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
+import com.movision.mybatis.personalizedSignature.entity.PersonalizedSignature;
+import com.movision.mybatis.personalizedSignature.service.PersonalizedSignatureService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.robotComment.entity.RobotComment;
 import com.movision.mybatis.robotComment.service.RobotCommentService;
@@ -72,6 +74,9 @@ public class RobotFacade {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private PersonalizedSignatureService signatureService;
 
     /**
      * 创建n个robot用户
@@ -533,16 +538,24 @@ public class RobotFacade {
         if (num < 1) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人数量至少是1个");
         }
-        //1 集合num个机器人大军
+        //查询随机用户
         List<User> users = userService.queryRandomUser(num);
-        //2 随机查询num条评论内容
+        //查询随机头像
+        List<UserPhoto> photos = userService.queryUserPhotos(num);
+        //查询随机昵称
+        List<String> nicknames = nicknameService.queryRoboltNickname(num);
+        //查询评论内容
         List<RobotComment> content = robotCommentService.queryRoboltComment(num);
-        //3 获取帖子发表时间
+        //查询随机个性签名
+        List<PersonalizedSignature> signatures = signatureService.queryRoboltSignature(num);
+        //获取帖子发表时间
         Date date = postService.queryPostIdByDate(postid);
 
         for (int i = 0; i < users.size(); i++) {
             //机器人的id
             Integer userid = users.get(i).getId();
+            //更新机器人资料,以防随机获取的用户没有资料
+            robtUser(users, photos, nicknames, signatures);
             //1 插入评论表
             insertPostComment(postid, content, date, i, userid);
             //2 更新帖子表的评论次数字段
@@ -552,6 +565,18 @@ public class RobotFacade {
         }
     }
 
+    public void robtUser(List<User> users, List<UserPhoto> photos, List<String> nicknames, List<PersonalizedSignature> signatures) {
+        for (int i = 0; i < users.size(); i++) {
+            Integer userid = users.get(i).getId();
+            User user = new User();
+            user.setNickname(nicknames.get(i));//-----------------------------机器人昵称
+            user.setPhoto(photos.get(i).getUrl());//--------------------------机器人头像
+            user.setId(userid);//---------------------------------------------机器人id
+            user.setSign(signatures.get(i).getSignature());//-----------------个性签名
+            //更新用户信息
+            userService.updateUserByMessager(user);
+        }
+    }
 
     /**
      * 批量对帖子进行机器人评论操作
