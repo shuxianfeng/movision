@@ -1623,11 +1623,7 @@ public class FacadePost {
             List<Integer> followCricle = postService.queryFollowCricle(Integer.parseInt(userid));//查询用户关注的圈子
             List<Integer> followUsers = postService.queryFollowUser(Integer.parseInt(userid));//用户关注的作者
             List<Integer> followLabel = postLabelService.labelId(Integer.parseInt(userid));//用户关注标签
-            if (followCricle.size() == 0 && followUsers.size() == 0 && followLabel.size() == 0) {
-                list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
-                list = retuenList(list, userid, 2, "", -1);
-                return list;
-            } else {
+            if (followCricle.size() != 0 || followUsers.size() != 0 || followLabel.size() != 0) {
                 //根据圈子查询所有帖子
                 if (followCricle.size() != 0) {
                     crileidPost = postService.queryPostListByIds(followCricle);
@@ -1664,7 +1660,6 @@ public class FacadePost {
                     return list;
                 }
             }
-
         }
         return list;
     }
