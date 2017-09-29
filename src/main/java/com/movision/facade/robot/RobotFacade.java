@@ -705,7 +705,7 @@ public class RobotFacade {
     public void allChangeRobotInfo() {
 
         List<User> userList = userService.selectRobotUser();
-        String ids = null;
+        String ids = "";
         for (User user : userList) {
             ids += user.getId() + ",";
         }
