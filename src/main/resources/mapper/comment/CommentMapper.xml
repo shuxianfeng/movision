@@ -520,7 +520,7 @@
             0 AS isZan
         </if>
         FROM yw_post_comment c LEFT JOIN yw_user u ON u.id=c.userid WHERE
-        c.postid=#{postid,jdbcType=INTEGER} AND c.pid IS NULL AND c.isdel=0 ORDER BY
+        c.postid=#{postid,jdbcType=INTEGER} AND c.pid IS NULL ORDER BY
         c.zansum DESC LIMIT 3
     </select>
 
