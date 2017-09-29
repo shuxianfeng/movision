@@ -27,7 +27,12 @@
 
     <!--根据用户id查询当前用户已关注的圈子数-->
     <select id="queryFollowSumByUser" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
-        SELECT count(*) FROM yw_follow_circle WHERE userid = #{userid,jdbcType=INTEGER}
+        SELECT count(*) FROM (
+            SELECT t1.*, t2.id AS isdel FROM (SELECT * FROM yw_follow_circle
+                WHERE userid = #{userid,jdbcType=INTEGER}) t1
+                LEFT JOIN yw_circle t2 ON t1.circleid = t2.id
+        ) t
+        WHERE t.isdel IS NOT NULL
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
