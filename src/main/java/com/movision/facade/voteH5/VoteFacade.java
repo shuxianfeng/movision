@@ -555,10 +555,11 @@ public class VoteFacade {
         List<Map<String, Object>> list = new ArrayList<>();
         for (int i = 0; i < file.length; i++) {
             Map m = movisionOssClient.uploadMultipartFile(file[i], 2);
-            String url = String.valueOf(m.get("url"));
-            Map map = new HashMap();
-            map.put("name", FileUtil.getFileNameByUrl(url));
-            list.add(map);
+            //String url = String.valueOf(m.get("url"));
+            //Map map = new HashMap();
+            //map.put("name", url);
+            m.put("url", 1);
+            list.add(m);
         }
         return list;
     }
