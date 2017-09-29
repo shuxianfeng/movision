@@ -1466,8 +1466,8 @@ public class FacadePost {
         if (flag == 1) {
             citycode = map.get("citycode").toString();
         }
-        List<PostVo> cityPost = null;
-        List<PostVo> labelPost = null;
+        List<PostVo> cityPost = new ArrayList<>();
+        List<PostVo> labelPost = new ArrayList<>();
         //根据传过来的地区去yw_city查代码
         if (lat != null && lng != null) {
             //根据citycode查询城市
