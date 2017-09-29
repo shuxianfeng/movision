@@ -244,21 +244,104 @@ public class FacadeComments {
         return commentVoList;
     }
 
+
+    /**
+     * 所有评论(现在最新)
+     *
+     * @param postid
+     * @param paging
+     * @return
+     */
+    List<CommentVo> lists = new ArrayList<>();
+
+    public List queryPostsNewComment(Map<String, Object> parammap) {
+        List<CommentVo> commentVos = commentService.queryThreeComment(parammap);//所有父评论
+        if (commentVos != null) {
+            for (int i = 0; i < commentVos.size(); i++) {
+                commentVos.get(i).setCommentVos(postDetailC(commentVos.get(i).getId()));
+                commentVos.get(i).setCommentVos(lists);
+                lists = new ArrayList();
+            }
+        }
+        return commentVos;
+    }
+
+
+    public List postDetailComment(int postid, String userid) {
+        Map map = new HashMap();
+        map.put("postid", postid);
+        map.put("userid", userid);
+        List<CommentVo> commentVoList = queryPostsNewComment(map);
+        List<CommentVo> listWithoutDup = null;
+        for (int i = 0; i < commentVoList.size(); i++) {
+            //查询该用户有没有点赞该评论
+            /**if (!StringUtil.isEmpty(userid)) {
+             Map<String, Object> parammap = new HashMap<>();
+             parammap.put("userid", Integer.parseInt(userid));
+             parammap.put("commentid", commentVoList.get(i).getId());
+             int sum = commentService.queryIsZan(parammap);
+             commentVoList.get(i).setIsZan(sum);
+             } else {
+             commentVoList.get(i).setIsZan(0);
+             }*/
+            listWithoutDup = new ArrayList<CommentVo>(new HashSet<CommentVo>(commentVoList.get(i).getCommentVos()));
+            for (int j = 0; j < listWithoutDup.size(); j++) {
+                if (listWithoutDup.get(j).getPid().equals(commentVoList.get(i).getId())) {
+                    listWithoutDup.get(j).setIspid(0);//第一条
+                } else if (listWithoutDup.get(j).getPid() != commentVoList.get(i).getId()) {
+                    User puser = commentService.queryUserInfor(listWithoutDup.get(j).getPid());
+                    listWithoutDup.get(j).setPuser(puser);
+                    listWithoutDup.get(j).setIspid(1);//子评论子
+                }
+                /**   if (!StringUtil.isEmpty(userid)) {
+                 Map<String, Object> parammap = new HashMap<>();
+                 parammap.put("userid", Integer.parseInt(userid));
+                 parammap.put("commentid", listWithoutDup.get(j).getId());
+                 int sum = commentService.queryIsZan(parammap);
+                 listWithoutDup.get(j).setIsZan(sum);
+                 } else {
+                 listWithoutDup.get(j).setIsZan(0);
+                 }*/
+            }
+            commentVoList.get(i).setCommentVos(listWithoutDup);
+        }
+        return commentVoList;
+    }
+
+
+    /**
+     * 帖子详情
+     *
+     * @param pid
+     * @return
+     */
+    public List<CommentVo> postDetailC(int pid) {
+        List<CommentVo> commentVoList = commentService.queryTwoComment(pid);//父评论的子评论2
+        if (commentVoList.size() != 0) {
+            for (int i = 0; i < commentVoList.size(); i++) {
+                lists.addAll(commentVoList);
+                //查询子评论下面有多少子评论
+                postDetailC(commentVoList.get(i).getId());
+            }
+        }
+
+        return commentVoList;
+    }
+
+
+    /**
+     * 全部评论
+     *
+     * @param pid
+     * @return
+     */
     public List<CommentVo> NewCommentVoList(int pid) {
         List<CommentVo> commentVoList = commentService.queryTwoComment(pid);//父评论的子评论2
-        //查询子拼轮的父评论user
-        User puser = commentService.queryUserInfor(pid);
         if (commentVoList.size() != 0) {
             for (int i = 0; i < commentVoList.size(); i++) {
                 list.addAll(commentVoList);
                 //查询子评论下面有多少子评论
                 NewCommentVoList(commentVoList.get(i).getId());
-                //list=new ArrayList();
-                //list.add(CommentVozjh);
-                //commentVos.get(i).setCommentVos(list);
-                // commentVos.get(i).setPuser(puser);
-                //commentVoList.get(i).setCommentVos(CommentVozjh);
-                //commentVoList.get(i).setPuser(puser);
             }
         }
 
