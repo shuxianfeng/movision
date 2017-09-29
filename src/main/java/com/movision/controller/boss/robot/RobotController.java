@@ -112,7 +112,6 @@ public class RobotController {
         return response;
     }
 
-
     /**
      * 查询机器人列表
      *

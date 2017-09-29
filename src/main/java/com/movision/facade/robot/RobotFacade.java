@@ -586,7 +586,7 @@ public class RobotFacade {
         CommentVo vo = new CommentVo();
 
         vo.setPostid(postid);
-        vo.setContent(content.get(i).getId().toString());
+        vo.setContent(content.get(i).getContent());
         vo.setUserid(userid);
         vo.setZansum(0);
         vo.setIsdel("0");
