@@ -77,7 +77,7 @@ public class MsgCenterFacade {
             int curid = Integer.parseInt(userid);
             //一 评论： 1 评论帖子，
             handleCommentlist(list);
-            //2 评论回复
+            //          2 评论回复
             handleReplyCommentList(list);
             //二 赞 （评论+帖子）
             handleZanlist(list);
@@ -92,7 +92,6 @@ public class MsgCenterFacade {
 
             int size = resultList == null ? 0 : resultList.size();
             log.debug("【row中list的数量】：" + size);
-//            log.debug("【row中的list】：" + resultList.toString());
             //操作已读未读处理
             updateComment(curid);    //更新评论已读
             updateZan(curid);  //更新赞
@@ -120,14 +119,8 @@ public class MsgCenterFacade {
     private void handleReplyCommentList(List<InstantInfo> list) {
         List<ReplyComment> replyCommentList = commentService.selectReplyCommentList(ShiroUtil.getAppUserID());
         int len = replyCommentList.size();
-        if (len > 10) {
-            for (int i = 0; i < 10; i++) {
-                getInstantInfoFromReplyCommentlist(list, replyCommentList, i);
-            }
-        } else {
-            for (int i = 0; i < len; i++) {
-                getInstantInfoFromReplyCommentlist(list, replyCommentList, i);
-            }
+        for (int i = 0; i < len; i++) {
+            getInstantInfoFromReplyCommentlist(list, replyCommentList, i);
         }
     }
 
@@ -135,29 +128,16 @@ public class MsgCenterFacade {
 
         List<CommentVo> commentList = commentService.selectPostComment(ShiroUtil.getAppUserID());
         int len = commentList.size();
-        if (len > 10) {
-            for (int i = 0; i < 10; i++) {
-                getInstantInfoFromCommentlist(list, commentList, i);
-            }
-        } else {
-            for (int i = 0; i < len; i++) {
-                getInstantInfoFromCommentlist(list, commentList, i);
-            }
+        for (int i = 0; i < len; i++) {
+            getInstantInfoFromCommentlist(list, commentList, i);
         }
     }
 
     private void handleZanlist(List<InstantInfo> list) {
         List<ZanRecordVo> zanlist = findZan(ShiroUtil.getAppUserID());
-
         int zanLength = zanlist.size();
-        if (zanLength > 10) {
-            for (int i = 0; i < 10; i++) {
-                getInstantInfoFromZanlist(list, zanlist, i);
-            }
-        } else {
-            for (int i = 0; i < zanLength; i++) {
-                getInstantInfoFromZanlist(list, zanlist, i);
-            }
+        for (int i = 0; i < zanLength; i++) {
+            getInstantInfoFromZanlist(list, zanlist, i);
         }
     }
 
@@ -204,14 +184,8 @@ public class MsgCenterFacade {
     public void getFollowList(List<InstantInfo> infoList, int userid) {
         List<FollowUserVo> list = followUserService.selectFollowUserVoList(userid);
         int size = list.size();
-        if (size > 10) {
-            for (int i = 0; i < 10; i++) {
-                addInstantInfoWithFollow(infoList, list, i);
-            }
-        } else {
-            for (int i = 0; i < size; i++) {
-                addInstantInfoWithFollow(infoList, list, i);
-            }
+        for (int i = 0; i < size; i++) {
+            addInstantInfoWithFollow(infoList, list, i);
         }
     }
 
