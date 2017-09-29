@@ -558,7 +558,6 @@ public class VoteFacade {
             //String url = String.valueOf(m.get("url"));
             //Map map = new HashMap();
             //map.put("name", url);
-            m.put("url", 1);
             list.add(m);
         }
         return list;
