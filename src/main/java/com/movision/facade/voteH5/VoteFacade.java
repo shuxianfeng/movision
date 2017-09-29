@@ -1,6 +1,7 @@
 package com.movision.facade.voteH5;
 
 import com.movision.facade.paging.PageFacade;
+import com.movision.facade.upload.UploadFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.activeH5.entity.ActiveH5;
 import com.movision.mybatis.activeH5.entity.ActiveH5Vo;
@@ -47,6 +48,9 @@ public class VoteFacade {
 
     @Autowired
     private MovisionOssClient movisionOssClient;
+
+    @Autowired
+    private UploadFacade uploadFacade;
 
     @Autowired
     private PageFacade pageFacade;
@@ -556,7 +560,11 @@ public class VoteFacade {
         List<Map<String, Object>> list = new ArrayList<>();
         for (int i = 0; i < file.length; i++) {
             Map m = movisionOssClient.uploadMultipartFile(file[i], 2);
-            Map t = movisionOssClient.uploadFileObject(new File(m.get("url").toString()), "img", "voteimg");
+            String url = m.get("url").toString();
+            int idx = url.lastIndexOf("/");
+            String name = url.substring(idx + 1, url.length());
+            name = uploadFacade.getConfigVar("vote.incise.domain") + name;
+            Map t = movisionOssClient.uploadFileObject(new File(name), "img", "voteimg");
             m.put("url", t.get("url"));
             list.add(m);
         }
