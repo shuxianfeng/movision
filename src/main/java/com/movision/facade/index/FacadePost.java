@@ -2491,7 +2491,6 @@ public class FacadePost {
                         }
                     }
                     postVos.removeAll(dontlikes);
-                    log.info("***********************************************" + postVos.size());
                     //根据postid查询帖子
                     postVo = postService.findAllPostByid(postVos, paging);
                     if (postVo != null) {
@@ -2542,6 +2541,7 @@ public class FacadePost {
                      int postid = Integer.parseInt(list.get(i).get("postid").toString());
                      postVos.add(postid);
                  }
+                 log.info(postVos + "");
                  if (dontlike.size() != 0) {
                      for (int i = 0; i < dontlike.size(); i++) {
                          int p = Integer.parseInt(dontlike.get(i).get("postid").toString());
@@ -2549,7 +2549,7 @@ public class FacadePost {
                      }
                  }
                  postVos.removeAll(dontlikes);
-                 log.info("***********************************************" + postVos.size());
+                 log.info(postVos + "***/***///////////////////////////////////////");
                  //根据postid查询帖子
                  postVo = postService.findAllPostByid(postVos, paging);
                  if (postVo != null) {
