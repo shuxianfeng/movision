@@ -16,6 +16,8 @@ import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,8 @@ import java.util.*;
  */
 @Service
 public class FacadeComments {
+
+    private static Logger log = LoggerFactory.getLogger(FacadeComments.class);
 
     @Autowired
     public CommentService commentService;
@@ -102,62 +106,100 @@ public class FacadeComments {
         return sum;
     }
 
+    /**
+     * 评论帖子/评论父评论 业务流程
+     *
+     * @param userid
+     * @param content
+     * @param fuid
+     * @param postid
+     * @return
+     */
     public int insertComment(String userid, String content, String fuid, String postid) {
         if (content.length() > 500) {
             return 2;
         } else {
             int type = 0;
-            if (fuid == null) {//父id为空 表示此评论是父评论
-                CommentVo vo = new CommentVo();
-                vo.setContent(content);
-                vo.setPostid(Integer.parseInt(postid));
-                vo.setUserid(Integer.parseInt(userid));
-                vo.setIntime(new Date());
-                vo.setZansum(0);
-                vo.setIsdel("0");
-                vo.setStatus(1);
-                vo.setIscontribute(0);
+            if (fuid == null) {
+                //父id为空 表示此评论是父评论
+                CommentVo vo = wrapParentCommentVo(userid, content, postid);
                 type = commentService.insertComment(vo);//添加评论
                 //更新用户最后操作时间和帖子评论总次数
                 postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子表的评论次数字段
                 //增加帖子热度
                 facadeHeatValue.addHeatValue(Integer.parseInt(postid), 4, userid);
-                //增加用户热度
 
-            } else {//表示是其他评论的子评论，不算评论次数
-                CommentVo vo = new CommentVo();
-                vo.setContent(content);
-                vo.setPostid(Integer.parseInt(postid));
-                vo.setUserid(Integer.parseInt(userid));
-                vo.setIntime(new Date());
-                vo.setZansum(0);
-                vo.setIsdel("0");
-                vo.setStatus(1);
-                vo.setIscontribute(0);
-                vo.setPid(Integer.parseInt(fuid));
+            } else {
+                //表示是其他评论的子评论，不算评论次数
+                CommentVo vo = wrapChildCommentVo(userid, content, fuid, postid);
                 type = commentService.insertComment(vo);//添加评论
                 postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子表的评论次数字段
                 //增加评论热度
                 facadeHeatValue.addCommentHeatValue(1, Integer.parseInt(fuid));
-
             }
 
             pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
-            try {
-                String fromaccid = userOperationRecordService.selectAccid(userid);
-                String to = postService.selectToAccid(Integer.parseInt(postid));
-                String nickname = userOperationRecordService.selectNickname(userid);
-                String pinnickname = nickname + "评论了你";
-                Map map = new HashMap();
-                map.put("body", pinnickname);
-                Gson gson = new Gson();
-                String json = gson.toJson(map);
-                String pushcontent = nickname + "评论了你";
-                imFacade.sendMsgInform(json, fromaccid, to, pushcontent);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            sendCommentPush(userid, postid);
             return type;
+        }
+    }
+
+    /**
+     * 封装父评论对象
+     *
+     * @param userid
+     * @param content
+     * @param postid
+     * @return
+     */
+    private CommentVo wrapParentCommentVo(String userid, String content, String postid) {
+        CommentVo vo = new CommentVo();
+        vo.setContent(content);
+        vo.setPostid(Integer.parseInt(postid));
+        vo.setUserid(Integer.parseInt(userid));
+        vo.setIntime(new Date());
+        vo.setZansum(0);
+        vo.setIsdel("0");
+        vo.setStatus(1);
+        vo.setIscontribute(0);
+        return vo;
+    }
+
+    /**
+     * 封装子评论对象
+     *
+     * @param userid
+     * @param content
+     * @param fuid
+     * @param postid
+     * @return
+     */
+    private CommentVo wrapChildCommentVo(String userid, String content, String fuid, String postid) {
+        CommentVo vo = wrapParentCommentVo(userid, content, postid);
+        vo.setPid(Integer.parseInt(fuid));
+        return vo;
+    }
+
+    /**
+     * 推送评论通知
+     *
+     * @param userid
+     * @param postid
+     */
+    private void sendCommentPush(String userid, String postid) {
+        try {
+            String fromaccid = userOperationRecordService.selectAccid(userid);
+            String to = postService.selectToAccid(Integer.parseInt(postid));
+            String nickname = userOperationRecordService.selectNickname(userid);
+            String pinnickname = nickname + "评论了你";
+            Map map = new HashMap();
+            map.put("body", pinnickname);
+            Gson gson = new Gson();
+            String json = gson.toJson(map);
+            String pushcontent = nickname + "评论了你";
+            imFacade.sendMsgInform(json, fromaccid, to, pushcontent);
+        } catch (Exception e) {
+            log.error("推送评论通知失败", e);
         }
     }
 

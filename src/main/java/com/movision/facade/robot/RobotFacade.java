@@ -2,7 +2,6 @@ package com.movision.facade.robot;
 
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.PointConstant;
-import com.movision.common.constant.UserConstants;
 import com.movision.exception.BusinessException;
 import com.movision.facade.collection.CollectionFacade;
 import com.movision.facade.index.FacadeHeatValue;
@@ -11,12 +10,9 @@ import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
-import com.movision.mybatis.personalizedSignature.entity.PersonalizedSignature;
-import com.movision.mybatis.personalizedSignature.service.PersonalizedSignatureService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.robotComment.entity.RobotComment;
 import com.movision.mybatis.robotComment.service.RobotCommentService;
-import com.movision.mybatis.robotNickname.entity.RobotNickname;
 import com.movision.mybatis.robotNickname.service.RobotNicknameService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
@@ -44,6 +40,7 @@ import java.util.*;
  */
 @Service
 public class RobotFacade {
+
     private static Logger log = LoggerFactory.getLogger(RobotFacade.class);
 
     @Autowired
@@ -75,10 +72,6 @@ public class RobotFacade {
 
     @Autowired
     private CommentService commentService;
-
-    @Autowired
-    private PersonalizedSignatureService signatureService;
-
 
     /**
      * 创建n个robot用户
@@ -192,7 +185,7 @@ public class RobotFacade {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人数量至少是1个");
         }
         //1 集合机器人大军
-        List<User> robotArmy = assembleRobotArmy(num);
+        List<User> robotArmy = userService.queryRandomUser(num);
 
         //2 循环进行帖子点赞操作， 需要注意，点赞不能在同一个时刻
         for (int i = 0; i < robotArmy.size(); i++) {
@@ -240,10 +233,8 @@ public class RobotFacade {
             //2 调用【机器人帖子收藏操作】
             robotCollectPost(Integer.valueOf(postidArr[i]), random.nextInt(num + 1));
             //3 调用【机器人帖子评论操作】
-            // TODO: 2017/9/26  还差一个评论操作
-
+            insertPostCommentByRobolt(Integer.valueOf(postidArr[i]), random.nextInt(num + 1));
         }
-
     }
 
     /**
@@ -283,7 +274,7 @@ public class RobotFacade {
 
 
     /**
-     * 集合机器人大军
+     * 集合机器人大军（弃用，数据量是万级别的时候 性能差）
      * 随机选取指定数量的机器人
      * 如：随机选取500个机器人
      *
@@ -291,7 +282,7 @@ public class RobotFacade {
      * @return
      */
     private List<User> assembleRobotArmy(int num) {
-        //1 先查询机器人大军
+        //1 先查询机器人大军(性能差)
         List<User> robots = userService.selectRobotUser();
         if (ListUtil.isEmpty(robots)) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人用户数量为0");
@@ -346,7 +337,7 @@ public class RobotFacade {
      */
     public void robotCollectPost(int postid, int num) {
         //1 集合机器人大军
-        List<User> robotArmy = assembleRobotArmy(num);
+        List<User> robotArmy = userService.queryRandomUser(num);
 
         //2 循环进行收藏帖子操作
         for (int i = 0; i < robotArmy.size(); i++) {
@@ -363,12 +354,37 @@ public class RobotFacade {
      */
     public void robotFollowUser(int userid, int num) {
         //1 集合机器人大军
-        List<User> robotArmy = assembleRobotArmy(num);
+        List<User> robotArmy = userService.queryRandomUser(num);
 
         //2 循环进行关注作者操作
         for (int i = 0; i < robotArmy.size(); i++) {
             int robotid = robotArmy.get(i).getId();
             facadePost.concernedAuthorUser(robotid, userid);
+        }
+    }
+
+    /**
+     * 批量关注用户
+     *
+     * @param userids
+     * @param num
+     */
+    public void batchFollowUser(String userids, int num) {
+        if (StringUtils.isEmpty(userids)) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "被关注的用户不能为空");
+        }
+        if (num < 1) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人数量至少是1个");
+        }
+
+        String[] useridArr = userids.split(",");
+        //循环对每个帖子操作点赞
+        Random random = new Random();
+        for (int i = 0; i < useridArr.length; i++) {
+            //随机取[0,num+1) 之间的整数，最小是0，最大是num
+            int n = random.nextInt(num + 1);
+            //调用【机器人关注操作】
+            robotFollowUser(Integer.valueOf(useridArr[i]), n);
         }
     }
 
@@ -509,47 +525,94 @@ public class RobotFacade {
     /**
      * 机器人评论帖子
      *
-     * @param postid
-     * @param number
+     * @param postid 帖子id
+     * @param num 机器人的数量
      */
-    public void insertPostCommentByRobolt(String postid, String number) {
-        Integer num = Integer.parseInt(number);
-        //查询随机用户
+    public void insertPostCommentByRobolt(Integer postid, Integer num) {
+
+        if (num < 1) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人数量至少是1个");
+        }
+        //1 集合num个机器人大军
         List<User> users = userService.queryRandomUser(num);
-        //查询随机头像
-        List<UserPhoto> photos = userService.queryUserPhotos(num);
-        //查询随机昵称
-        List<String> nicknames = nicknameService.queryRoboltNickname(num);
-        //查询评论内容
+        //2 随机查询num条评论内容
         List<RobotComment> content = robotCommentService.queryRoboltComment(num);
-        //查询随机个性签名
-        List<PersonalizedSignature> signatures = signatureService.queryRoboltSignature(num);
-        //获取帖子发表时间
-        Date date = postService.queryPostIdByDate(Integer.parseInt(postid));
+        //3 获取帖子发表时间
+        Date date = postService.queryPostIdByDate(postid);
 
         for (int i = 0; i < users.size(); i++) {
+            //机器人的id
             Integer userid = users.get(i).getId();
-            User user = new User();
-            user.setNickname(nicknames.get(i));//-----------------------------机器人昵称
-            user.setPhoto(photos.get(i).getUrl());//--------------------------机器人头像
-            user.setId(userid);//---------------------------------------------机器人id
-            user.setSign(signatures.get(i).getSignature());//-----------------个性签名
-            //更新用户信息
-            userService.updateUserByMessager(user);
-            //插入评论表
-            CommentVo comment = new CommentVo();
-            comment.setPostid(Integer.parseInt(postid));
-            comment.setContent(content.get(i).getId().toString());
-            comment.setUserid(userid);
-            //获取一个几万的随机数,变更评论时间
-            int max = 9900000;
-            int min = 1000000;
-            Random random = new Random();
-            int s = random.nextInt(max) % (max - min + 1) + min;
-            Long d = date.getTime() + s;
-            comment.setIntime(new Date(d));
-            commentService.insertComment(comment);
+            //1 插入评论表
+            insertPostComment(postid, content, date, i, userid);
+            //2 更新帖子表的评论次数字段
+            postService.updatePostBycommentsum(postid);
+            //3 增加被评论的帖子热度
+            facadeHeatValue.addHeatValue(postid, 4, String.valueOf(userid));
         }
+    }
+
+
+    /**
+     * 批量对帖子进行机器人评论操作
+     *
+     * @param postids
+     * @param num     最大机器人数量
+     */
+    public void robotCommentBatchPost(String postids, int num) {
+        validatePostidsAndNum(postids, num);
+
+        String[] postidArr = postids.split(",");
+        //循环对每个帖子评论
+        Random random = new Random();
+        for (int i = 0; i < postidArr.length; i++) {
+            //随机取[0,num+1) 之间的整数，最小是0，最大是num
+            int n = random.nextInt(num + 1);
+            //调用【机器人帖子评论操作】
+            insertPostCommentByRobolt(Integer.valueOf(postidArr[i]), n);
+        }
+    }
+
+    /**
+     * 插入评论表
+     *
+     * @param postid
+     * @param content
+     * @param date
+     * @param i
+     * @param userid
+     */
+    private void insertPostComment(Integer postid, List<RobotComment> content, Date date, int i, Integer userid) {
+        CommentVo vo = new CommentVo();
+
+        vo.setPostid(postid);
+        vo.setContent(content.get(i).getId().toString());
+        vo.setUserid(userid);
+        vo.setZansum(0);
+        vo.setIsdel("0");
+        vo.setStatus(1);    //审核状态：0待审核 1审核通过 2审核不通过（iscontribute为1时不为空）
+        vo.setIscontribute(0);  //是否为特邀嘉宾的评论：0否 1是
+
+        //获取一个几万的随机数,变更评论时间
+        Long d = getRandomDate(date);
+        vo.setIntime(new Date(d));
+
+        commentService.insertComment(vo);
+
+    }
+
+    /**
+     * 获取一个随机的日期
+     *
+     * @param date
+     * @return
+     */
+    private Long getRandomDate(Date date) {
+        int max = 9900000;
+        int min = 1000000;
+        Random random = new Random();
+        int s = random.nextInt(max) % (max - min + 1) + min;
+        return date.getTime() + s;
     }
 
     /**

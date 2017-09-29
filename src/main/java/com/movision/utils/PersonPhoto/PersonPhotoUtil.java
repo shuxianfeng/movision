@@ -29,7 +29,7 @@ public class PersonPhotoUtil {
     private UserPhotoService userPhotoService;
 
     public void addPhotoToOssAndSaveInDB() throws IOException {
-        List<String> list = FileUtil.readFilePath("D:/BaiduNetdiskDownload/70000/（精选）娇娇网络头像/A3-王者之风男头", null);
+        List<String> list = FileUtil.readFilePath("D:/BaiduNetdiskDownload/70000/（精选）娇娇网络头像/部位", null);
         log.debug("本地图片集合：" + list.toString());
 
         if (ListUtil.isNotEmpty(list)) {
