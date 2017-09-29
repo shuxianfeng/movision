@@ -203,13 +203,24 @@ public class MsgCenterFacade {
 
     public void getFollowList(List<InstantInfo> infoList, int userid) {
         List<FollowUserVo> list = followUserService.selectFollowUserVoList(userid);
-        for (int i = 0; i < list.size(); i++) {
-            InstantInfo instantInfo = new InstantInfo();
-            instantInfo.setIntime(list.get(i).getIntime());
-            instantInfo.setObject(list.get(i));
-            instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.follow.getCode());
-            infoList.add(instantInfo);
+        int size = list.size();
+        if (size > 10) {
+            for (int i = 0; i < 10; i++) {
+                addInstantInfoWithFollow(infoList, list, i);
+            }
+        } else {
+            for (int i = 0; i < size; i++) {
+                addInstantInfoWithFollow(infoList, list, i);
+            }
         }
+    }
+
+    private void addInstantInfoWithFollow(List<InstantInfo> infoList, List<FollowUserVo> list, int i) {
+        InstantInfo instantInfo = new InstantInfo();
+        instantInfo.setIntime(list.get(i).getIntime());
+        instantInfo.setObject(list.get(i));
+        instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.follow.getCode());
+        infoList.add(instantInfo);
     }
 
     /**
