@@ -52,13 +52,8 @@ public class RobotSelfController {
         Response response = new Response();
         List<User> userVoList = new ArrayList<User>();
         Paging<User> pag = new Paging<User>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        if (pageNo != null && pageSize != null) {
-            //查询机器人列表,用于列表查询
-            userVoList = robotFacade.QueryRobotByList(name, pag);
-        } else {
-            //查询机器人，用于选择
-            userVoList = robotFacade.QueryRobotByList();
-        }
+        //查询机器人列表,用于列表查询
+        userVoList = robotFacade.QueryRobotByList(name, pag);
         pag.result(userVoList);
         response.setData(pag);
         response.setMessage("查询成功");
