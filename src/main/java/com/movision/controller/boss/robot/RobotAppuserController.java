@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping("boss/robot/appuser")
-public class RobotUserController {
+public class RobotAppuserController {
     @Autowired
     private RobotFacade robotFacade;
 
