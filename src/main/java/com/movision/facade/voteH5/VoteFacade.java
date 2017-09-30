@@ -362,7 +362,9 @@ public class VoteFacade {
      * @return
      */
     public TakeVo queryTakeByIdByBoss(String id) {
-        return takeService.queryTakeByIdByBoss(Integer.parseInt(id));
+        Map map = new HashMap();
+        map.put("id", id);
+        return takeService.queryTakeByIdByBoss(map);
     }
 
 

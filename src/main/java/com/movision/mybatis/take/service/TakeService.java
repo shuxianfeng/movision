@@ -182,13 +182,13 @@ public class TakeService {
     /**
      * 查询投稿详情
      *
-     * @param id
+     * @param map
      * @return
      */
-    public TakeVo queryTakeByIdByBoss(Integer id) {
+    public TakeVo queryTakeByIdByBoss(Map map) {
         try {
             log.info("查询投稿详情");
-            return takeMapper.queryTakeByIdByBoss(id);
+            return takeMapper.queryTakeByIdByBoss(map);
         } catch (Exception e) {
             log.error("查询投稿详情异常", e);
             throw e;

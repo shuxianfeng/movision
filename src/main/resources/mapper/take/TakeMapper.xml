@@ -266,10 +266,10 @@
     </select>
 
     <select id="queryTakeByIdByBoss" resultType="com.movision.mybatis.take.entity.TakeVo"
-            parameterType="java.lang.Integer">
+            parameterType="java.util.Map">
         SELECT t.*,a.name AS acname,
         (SELECT COUNT(1) FROM tp_votingrecords WHERE takeid=#{id,jdbcType=INTEGER}) AS votesum
         FROM tp_take t LEFT JOIN tp_activeh5 a ON a.id = t.activeid
-        WHERE id = #{id,jdbcType=INTEGER}
+        WHERE t.id = #{id,jdbcType=INTEGER}
     </select>
 </mapper>
