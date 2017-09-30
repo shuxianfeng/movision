@@ -560,7 +560,7 @@ public class RobotFacade {
         //1 集合num个机器人大军
         List<User> users = userService.queryRandomUser(num);
         //2 随机查询num条评论内容
-        List<RobotComment> content = randomRobotComment(type, num);
+        List<RobotComment> content = randomRobotComment(type, users.size());
         //3 获取帖子发表时间
         Date date = postService.queryPostIdByDate(postid);
 
