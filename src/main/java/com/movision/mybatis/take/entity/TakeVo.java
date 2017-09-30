@@ -29,7 +29,7 @@ public class TakeVo {
 
     private Integer audit;//审核
 
-    private Integer votesum;
+    private Integer votesum; //投票数
 
     private String banner;
 
