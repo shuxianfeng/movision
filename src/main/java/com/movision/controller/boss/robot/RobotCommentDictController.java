@@ -22,8 +22,8 @@ import java.util.Map;
  * @Date 2017/9/30 10:02
  */
 @RestController
-@RequestMapping("boss/robot/comment")
-public class RobotCommentController {
+@RequestMapping("boss/robot/comment_dict")
+public class RobotCommentDictController {
 
     @Autowired
     private RobotFacade robotFacade;
