@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -116,10 +117,10 @@ public class RobotCommentService {
      *
      * @return
      */
-    public List<RobotComment> queryRoboltComment(Integer number) {
+    public List<RobotComment> queryRoboltComment(Map map) {
         try {
             logger.info("根据id查询机器人评论内容");
-            return robotCommentMapper.queryRoboltComment(number);
+            return robotCommentMapper.queryRoboltComment(map);
         } catch (Exception e) {
             logger.error("根据id查询机器人内容异常", e);
             throw e;

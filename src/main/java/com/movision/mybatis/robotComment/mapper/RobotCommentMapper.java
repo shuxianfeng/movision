@@ -4,6 +4,7 @@ import com.movision.mybatis.robotComment.entity.RobotComment;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RobotCommentMapper {
     int deleteByPrimaryKey(Integer id);
@@ -20,7 +21,7 @@ public interface RobotCommentMapper {
 
     List<RobotComment> findAllQueryRoboltComment(Integer type, RowBounds rowBounds);
 
-    List<RobotComment> queryRoboltComment(Integer number);
+    List<RobotComment> queryRoboltComment(Map map);
 
     RobotComment queryCommentById(Integer id);
 

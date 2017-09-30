@@ -37,4 +37,6 @@ public interface TakeMapper {
     List<TakeVo> findAll(int activeid);
 
     TakeVo queryTakeByIdByBoss(Map map);
+
+    int queryMark(Take take);
 }

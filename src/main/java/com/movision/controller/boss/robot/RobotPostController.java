@@ -36,7 +36,7 @@ public class RobotPostController {
     public Response insertPostCommentByRobolt(@ApiParam(value = "帖子id") @RequestParam Integer postid,
                                               @ApiParam(value = "使用机器人数量") @RequestParam Integer number) {
         Response response = new Response();
-        robotFacade.insertPostCommentByRobolt(postid, number);
+        robotFacade.insertPostCommentByRobolt(postid, number, 1);
         response.setMessage("操作成功");
         response.setData(1);
         return response;

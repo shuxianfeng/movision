@@ -179,7 +179,7 @@
         <if test="activeid != null">
             AND t.activeid = #{activeid,jdbcType=INTEGER}
         </if>
-        ORDER BY votesum DESC
+        ORDER BY t.intime DESC
     </select>
     <select id="findAll" resultType="com.movision.mybatis.take.entity.TakeVo">
         SELECT t.*,a.name AS acname,
@@ -271,5 +271,8 @@
         (SELECT COUNT(1) FROM tp_votingrecords WHERE takeid=#{id,jdbcType=INTEGER}) AS votesum
         FROM tp_take t LEFT JOIN tp_activeh5 a ON a.id = t.activeid
         WHERE t.id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="queryMark" resultType="java.lang.Integer" parameterType="com.movision.mybatis.take.entity.Take">
+        SELECT count(1) FROM tp_take WHERE activeid = #{activeid,jdbcType=INTEGER} AND isdel = 0
     </select>
 </mapper>

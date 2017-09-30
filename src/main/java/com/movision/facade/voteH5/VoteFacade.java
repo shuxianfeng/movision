@@ -232,7 +232,7 @@ public class VoteFacade {
      * @param
      * @return
      */
-    public int insertSelectiveTP(HttpServletRequest request, String activeid, String name, String phone, String photo,
+    public int insertSelectiveTP(String activeid, String name, String phone, String photo,
                                  String describe, String nickname, String banner) {
         Take take = new Take();
         if (StringUtil.isNotEmpty(activeid)) {
@@ -258,6 +258,9 @@ public class VoteFacade {
         if (StringUtil.isNotEmpty(banner)) {
             take.setBanner(banner);
         }
+        //查询投稿号码
+        int mark = takeService.queryMark(take);
+        take.setMark(mark + 1);
         int result = takeService.insertSelectiveTP(take);
         return result;
     }

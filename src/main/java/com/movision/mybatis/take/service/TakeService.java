@@ -43,6 +43,21 @@ public class TakeService {
     }
 
     /**
+     * 查询投稿号码
+     * @param take
+     * @return
+     */
+    public int queryMark(Take take) {
+        try {
+            log.info("查询投稿号码");
+            return takeMapper.queryMark(take);
+        } catch (Exception e) {
+            log.error("查询投稿号码异常", e);
+            throw e;
+        }
+    }
+
+    /**
      * 编辑投稿
      *
      * @param take

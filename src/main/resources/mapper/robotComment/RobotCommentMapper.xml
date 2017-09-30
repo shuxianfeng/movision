@@ -78,8 +78,20 @@
     </select>
 
     <select id="queryRoboltComment" resultType="com.movision.mybatis.robotComment.entity.RobotComment"
-            parameterType="java.lang.Integer">
-        SELECT content FROM yw_comment ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
+            parameterType="java.util.Map">
+        SELECT content
+        FROM yw_comment
+        WHERE 1
+        <if test="type == 2">
+            AND type = 2
+        </if>
+        <if test="type == 4">
+            AND type = 4
+        </if>
+        <if test="type == 5">
+            AND type = 5
+        </if>
+        ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
     </select>
 
     <select id="queryCommentById" resultType="com.movision.mybatis.robotComment.entity.RobotComment"

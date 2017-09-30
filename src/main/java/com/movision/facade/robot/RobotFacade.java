@@ -243,7 +243,20 @@ public class RobotFacade {
             //2 调用【机器人帖子收藏操作】
             robotCollectPost(Integer.valueOf(postidArr[i]), random.nextInt(num + 1));
             //3 调用【机器人帖子评论操作】
-            insertPostCommentByRobolt(Integer.valueOf(postidArr[i]), random.nextInt(num + 1));
+            robotshuntComment(num, Integer.valueOf(postidArr[i]));
+        }
+    }
+
+    /**
+     * 分流操作帖子评论
+     */
+    public void robotshuntComment(Integer num, Integer post) {
+        if (num > 1 && num <= 200) {//2:40% 4:30% 5:30% 2
+            insertPostCommentByRobolt(post, num, 2);
+        } else if (num > 200) {//2:60% 4:30% 5:30% 3
+            insertPostCommentByRobolt(post, num, 3);
+        } else if (num == 1) {//随机100% 1
+            insertPostCommentByRobolt(post, num, 1);
         }
     }
 
@@ -538,7 +551,8 @@ public class RobotFacade {
      * @param postid 帖子id
      * @param num 机器人的数量
      */
-    public void insertPostCommentByRobolt(Integer postid, Integer num) {
+    @Transactional
+    public void insertPostCommentByRobolt(Integer postid, Integer num, Integer type) {
 
         if (num < 1) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人数量至少是1个");
@@ -546,7 +560,7 @@ public class RobotFacade {
         //1 集合num个机器人大军
         List<User> users = userService.queryRandomUser(num);
         //2 随机查询num条评论内容
-        List<RobotComment> content = robotCommentService.queryRoboltComment(num);
+        List<RobotComment> content = randomRobotComment(type, num);
         //3 获取帖子发表时间
         Date date = postService.queryPostIdByDate(postid);
 
@@ -554,6 +568,7 @@ public class RobotFacade {
             //机器人的id
             Integer userid = users.get(i).getId();
             //1 插入评论表
+            System.out.println(date.getTime());
             insertPostComment(postid, content, date, i, userid);
             //2 更新帖子表的评论次数字段
             postService.updatePostBycommentsum(postid);
@@ -562,6 +577,61 @@ public class RobotFacade {
         }
     }
 
+    /**
+     * 随机查询num条评论内容
+     *
+     * @param type
+     * @param num
+     * @return
+     */
+    public List<RobotComment> randomRobotComment(Integer type, Integer num) {
+        List<RobotComment> content = new ArrayList<>();
+        List<RobotComment> contens = new ArrayList();
+        if (type == 1) {
+            Map map = new HashMap();
+            map.put("number", num);
+            map.put("type", 0);
+            //随机查询num条评论内容
+            content = robotCommentService.queryRoboltComment(map);
+            contens.addAll(content);
+        } else if (type == 2) {//<=200 2:40% 4:30% 5:30%
+            //有小数向上进位
+            int mm = (int) (Math.ceil(num * 0.4));
+            Map map = new HashMap();
+            map.put("number", mm);
+            map.put("type", 2);
+            content = robotCommentService.queryRoboltComment(map);
+            contens.addAll(content);
+            mm = (int) (Math.ceil(num * 0.3));
+            map.put("number", mm);
+            map.put("type", 4);
+            content = robotCommentService.queryRoboltComment(map);
+            contens.addAll(content);
+            mm = (int) (Math.ceil(num * 0.3));
+            map.put("number", mm);
+            map.put("type", 5);
+            content = robotCommentService.queryRoboltComment(map);
+            contens.addAll(content);
+        } else if (type == 3) {//>200 2:60% 4:20% 5:20%
+            int mm = (int) (Math.ceil(num * 0.6));
+            Map map = new HashMap();
+            map.put("number", mm);
+            map.put("type", 2);
+            content = robotCommentService.queryRoboltComment(map);
+            contens.addAll(content);
+            mm = (int) (Math.ceil(num * 0.2));
+            map.put("number", mm);
+            map.put("type", 4);
+            content = robotCommentService.queryRoboltComment(map);
+            contens.addAll(content);
+            mm = (int) (Math.ceil(num * 0.2));
+            map.put("number", mm);
+            map.put("type", 5);
+            content = robotCommentService.queryRoboltComment(map);
+            contens.addAll(content);
+        }
+        return contens;
+    }
 
     /**
      * 批量对帖子进行机器人评论操作
@@ -574,12 +644,9 @@ public class RobotFacade {
 
         String[] postidArr = postids.split(",");
         //循环对每个帖子评论
-        Random random = new Random();
         for (int i = 0; i < postidArr.length; i++) {
-            //随机取[0,num+1) 之间的整数，最小是0，最大是num
-            int n = random.nextInt(num + 1);
             //调用【机器人帖子评论操作】
-            insertPostCommentByRobolt(Integer.valueOf(postidArr[i]), n);
+            robotshuntComment(num, Integer.valueOf(postidArr[i]));
         }
     }
 
@@ -594,7 +661,6 @@ public class RobotFacade {
      */
     private void insertPostComment(Integer postid, List<RobotComment> content, Date date, int i, Integer userid) {
         CommentVo vo = new CommentVo();
-
         vo.setPostid(postid);
         vo.setContent(content.get(i).getContent());
         vo.setUserid(userid);
@@ -602,7 +668,6 @@ public class RobotFacade {
         vo.setIsdel("0");
         vo.setStatus(1);    //审核状态：0待审核 1审核通过 2审核不通过（iscontribute为1时不为空）
         vo.setIscontribute(0);  //是否为特邀嘉宾的评论：0否 1是
-
         //获取一个几万的随机数,变更评论时间
         Long d = getRandomDate(date);
         vo.setIntime(new Date(d));
