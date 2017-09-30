@@ -164,7 +164,7 @@ public class AppVideoController {
      * @return
      */
     @ApiOperation(value = " 获取用户信息H5", notes = " 获取用户信息H5", response = Response.class)
-    @RequestMapping(value = "getUserInformationH5", method = RequestMethod.POST)
+    @RequestMapping(value = "getUserInformationH5", method = RequestMethod.GET)
     public Response getUserInformationH5(@ApiParam("openid") @RequestParam String openid) {
         Response response = new Response();
         Map result = videoUploadUtil.getUserInformationH5(openid);
