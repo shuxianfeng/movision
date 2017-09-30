@@ -251,11 +251,16 @@ public class RobotFacade {
      * 分流操作帖子评论
      */
     public void robotshuntComment(Integer num, Integer post) {
-        if (num > 1 && num <= 200) {//2:40% 4:30% 5:30% 2
+        if (num > 1 && num <= 200) {//2:40% 4:30% 5:30% --2
+
             insertPostCommentByRobolt(post, num, 2);
-        } else if (num > 200) {//2:60% 4:30% 5:30% 3
+
+        } else if (num > 200) {//2:60% 4:20% 5:20% --3
+
             insertPostCommentByRobolt(post, num, 3);
-        } else if (num == 1) {//随机100% 1
+
+        } else if (num == 1) {//随机100% --1
+
             insertPostCommentByRobolt(post, num, 1);
         }
     }
@@ -587,6 +592,7 @@ public class RobotFacade {
     public List<RobotComment> randomRobotComment(Integer type, Integer num) {
         List<RobotComment> content = new ArrayList<>();
         List<RobotComment> contens = new ArrayList();
+
         if (type == 1) {
             Map map = new HashMap();
             map.put("number", num);
@@ -595,7 +601,8 @@ public class RobotFacade {
             content = robotCommentService.queryRoboltComment(map);
             contens.addAll(content);
         } else if (type == 2) {//<=200 2:40% 4:30% 5:30%
-            //有小数向上进位
+
+            //有小数向上进位  Math.ceil 返回大于参数x的最小整数,即对浮点数向上取整.
             int mm = (int) (Math.ceil(num * 0.4));
             Map map = new HashMap();
             map.put("number", mm);
@@ -612,7 +619,9 @@ public class RobotFacade {
             map.put("type", 5);
             content = robotCommentService.queryRoboltComment(map);
             contens.addAll(content);
+
         } else if (type == 3) {//>200 2:60% 4:20% 5:20%
+
             int mm = (int) (Math.ceil(num * 0.6));
             Map map = new HashMap();
             map.put("number", mm);
@@ -648,6 +657,13 @@ public class RobotFacade {
             //调用【机器人帖子评论操作】
             robotshuntComment(num, Integer.valueOf(postidArr[i]));
         }
+    }
+
+    public void singlePostComment(int num, int postid) {
+
+        validatePostidsAndNum(String.valueOf(postid), num);
+
+        robotshuntComment(num, postid);
     }
 
     /**
