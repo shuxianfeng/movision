@@ -1,5 +1,6 @@
 package com.movision.utils;
 
+import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
@@ -27,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSONObject;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.*;
@@ -61,9 +63,6 @@ public class JsoupCompressImg {
      * @return  富文本标签带压缩后图片img
      */
     public Map<String, Object> compressImg(HttpServletRequest request, String content) {//content为带有img和html标签的富文本内容
-
-        int w = 750;//图片压缩后的宽度
-        int h = 850;//图片压缩后的高度425
 
         //通过jsoup解析html
         Map<String, Object> map = new LinkedHashMap<>();
@@ -115,7 +114,8 @@ public class JsoupCompressImg {
                 int sum = postFacade.queryIsHaveCompress(imgurl);
 
                 //获取原图绝对路径和图片大小
-                File file = new File(PATH);//获取原图大小
+                File file = new File(PATH);
+                //获取原图大小
                 FileInputStream fis = new FileInputStream(file);
                 int s = fis.available();
                 DecimalFormat df = new DecimalFormat("######0.00");
@@ -126,6 +126,11 @@ public class JsoupCompressImg {
                     //如果没压缩过且图片大小超过400kb就进行压缩，压缩过的或大小<=400kb不处理（防止修改帖子时对压缩过的图片进行重复压缩，同时也保证了低质量图片的品质）
 
                     boolean compressFlag = false;
+
+                    //根据原图尺寸计算压缩后的图片尺寸
+                    BufferedImage image = ImageIO.read(fis);
+                    int w = (int) (image.getWidth()*0.5);//对原图尺寸的宽高比压缩50%
+                    int h = (int) (image.getHeight()*0.5);
 
                     if (StringUtils.isNotEmpty(imgurl)) {
 
@@ -225,8 +230,8 @@ public class JsoupCompressImg {
      */
     public Map<String, Object> newCompressImg(HttpServletRequest request, String content) {//content为存储帖子正文的josn字符串
 
-        int w = 750;//图片压缩后的宽度
-        int h = 850;//图片压缩后的高度425
+//        int w = 750;//图片压缩后的宽度
+//        int h = 850;//图片压缩后的高度425
 
         log.info("帖子内图片压缩工具接收到的正文json内容>>>>>>>>" + content);
         //转json字符串为json对象
@@ -301,6 +306,11 @@ public class JsoupCompressImg {
                         //如果没压缩过且图片大小超过800kb就进行压缩，压缩过的或大小<=800kb不处理（防止修改帖子时对压缩过的图片进行重复压缩，同时也保证了低质量图片的品质）
 
                         boolean compressFlag = false;
+
+                        //根据原图尺寸计算压缩后的图片尺寸
+                        BufferedImage image = ImageIO.read(fis);
+                        int w = (int) (image.getWidth()*0.5);//对原图尺寸的宽高比压缩50%
+                        int h = (int) (image.getHeight()*0.5);
 
                         if (StringUtils.isNotEmpty(imgurl)) {
 
