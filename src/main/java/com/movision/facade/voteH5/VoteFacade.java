@@ -540,7 +540,7 @@ public class VoteFacade {
             map.put("name", name);
             map.put("takenumber", takenumber);
             int count = votingrecordsService.queryHave(map);
-            if (count == 1) {
+            if (count == 0) {
                 votingrecords.setIntime(new Date());
                 if (StringUtil.isNotEmpty(name)) {
                     votingrecords.setName(name);
