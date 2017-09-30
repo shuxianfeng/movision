@@ -373,11 +373,11 @@ public class JsoupCompressImg {
                             file.delete();//删除原图
                         }
                     } else if (sum != 0) {
-                        //虽然图片大于400kb，但是图片压缩过，存在映射关系
+                        //虽然图片大于800kb，但是图片压缩过，存在映射关系
                         log.info("帖子中包含的已处理过的图片（压缩图片表存在映射）>>>>>>>>>>>>>>>>>>>>>>>>>" + imgurl);
 
                     } else if (sum == 0 && s <= 800 * 1024) {
-                        //图片未压缩过，也不存在映射关系，但是图片大小低于400kb
+                        //图片未压缩过，也不存在映射关系，但是图片大小低于800kb
 
                         //不做图片的压缩，直接使用原图的url当做压缩后的url来存
                         CompressImg compressImg = new CompressImg();
