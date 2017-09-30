@@ -200,4 +200,6 @@ public interface UserMapper {
     User queryRobotById(Integer id);
 
     List<User> queryRandomUser(Integer number);
+
+    List<User> selectNotLoadPhotoUser();
 }

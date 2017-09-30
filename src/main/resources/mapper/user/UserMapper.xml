@@ -1556,4 +1556,9 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         SELECT * FROM yw_user where id>=10000 AND id<=20000 ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
         ]]>
     </select>
+
+    <select id="selectNotLoadPhotoUser" resultType="com.movision.mybatis.user.entity.User">
+        SELECT * FROM yw_user
+        where photo = 'http://pic.mofo.shop/upload/person/img/logo%403x.png'
+    </select>
 </mapper>

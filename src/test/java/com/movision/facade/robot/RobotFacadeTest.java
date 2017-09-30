@@ -55,14 +55,16 @@ public class RobotFacadeTest extends SpringTestCase {
 
     @Test
     public void batchChangeRobot() throws Exception {
-        List<User> userList = userService.selectRobotUser();
-        String ids = null;
+
+        List<User> userList = userService.selectNotLoadPhotoUser();
+        String ids = "";
         for (User user : userList) {
             ids += user.getId() + ",";
         }
         String userids = ids.substring(0, ids.length() - 1);
 
-
+        robotFacade.batchChangeRobotPhoto(userids);
     }
+
 
 }

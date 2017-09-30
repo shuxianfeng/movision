@@ -1272,4 +1272,14 @@ public class UserService {
             throw e;
         }
     }
+
+    public List<User> selectNotLoadPhotoUser() {
+        try {
+            log.info("查询未加载的图片的用户");
+            return userMapper.selectNotLoadPhotoUser();
+        } catch (Exception e) {
+            log.error("查询未加载的图片的用户失败", e);
+            throw e;
+        }
+    }
 }
