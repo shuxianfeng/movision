@@ -1,3 +1,4 @@
+
 package com.movision.fsearch.pojo.spec;
 
 import java.io.Serializable;
