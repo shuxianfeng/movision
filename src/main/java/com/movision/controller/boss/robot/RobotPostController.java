@@ -101,4 +101,12 @@ public class RobotPostController {
         response.setMessage("操作成功");
         return response;
     }
+
+    @ApiOperation(value = "机器人批量浏览帖子", notes = "机器人批量浏览帖子", response = Response.class)
+    @RequestMapping(value = "/batch_view_post", method = RequestMethod.POST)
+    public Response robotViewPost(@ApiParam(value = "需要调用的机器人数量") @RequestParam Integer num) throws IOException {
+        Response response = new Response();
+        robotFacade.insertMongoPostView(num);
+        return response;
+    }
 }
