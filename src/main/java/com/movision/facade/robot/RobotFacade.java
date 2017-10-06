@@ -12,6 +12,8 @@ import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.personalizedSignature.entity.PersonalizedSignature;
 import com.movision.mybatis.personalizedSignature.service.PersonalizedSignatureService;
+import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.robotComment.entity.RobotComment;
 import com.movision.mybatis.robotComment.service.RobotCommentService;
@@ -21,6 +23,8 @@ import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import com.movision.mybatis.userPhoto.entity.UserPhoto;
+import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
+import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.ListUtil;
 import com.movision.utils.UUIDGenerator;
@@ -77,6 +81,9 @@ public class RobotFacade {
 
     @Autowired
     private PersonalizedSignatureService personalizedSignatureService;
+
+    @Autowired
+    private UserRefreshRecordService userRefreshRecordService;
 
     /**
      * 创建n个robot用户
@@ -793,6 +800,38 @@ public class RobotFacade {
         String userids = ids.substring(0, ids.length() - 1);
 
         batchChangeRobot(userids);
+    }
+
+    public void insertMongoPostView(Integer num) {
+        //1 查询所有的帖子（包括帖子所属的圈子id）
+        List<PostVo> postList = postService.findAllPostListHeat();
+
+        //2 遍历所有的帖子
+        Random random = new Random();
+        for (int i = 0; i < postList.size(); i++) {
+            //1 随机取n个机器人
+            int n = random.nextInt(num + 1);
+
+            int postid = postList.get(i).getId();
+            int circleid = postList.get(i).getCircleid();
+            //2 查出n个机器人的信息
+            List<User> robotArmy = userService.queryRandomUser(n);
+            //3 循环插入帖子浏览记录
+            for (int j = 0; j < robotArmy.size(); j++) {
+                int userid = robotArmy.get(j).getId();
+
+                UserRefreshRecord userRefreshRecord = new UserRefreshRecord();
+                userRefreshRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
+                userRefreshRecord.setUserid(userid);
+                userRefreshRecord.setPostid(postid);
+                userRefreshRecord.setCrileid(String.valueOf(circleid));
+                userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                userRefreshRecord.setType(1);
+                userRefreshRecord.setLabelid(-1);
+                userRefreshRecordService.insert(userRefreshRecord);
+            }
+        }
+
     }
 
 
