@@ -813,7 +813,7 @@ public class RobotFacade {
             int n = random.nextInt(num + 1);
 
             int postid = postList.get(i).getId();
-            int circleid = postList.get(i).getCircleid();
+            int circleid = postList.get(i).getCircleid() == null ? 0 : postList.get(i).getCircleid();
             //2 查出n个机器人的信息
             List<User> robotArmy = userService.queryRandomUser(n);
             //3 循环插入帖子浏览记录
