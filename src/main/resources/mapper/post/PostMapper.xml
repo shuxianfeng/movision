@@ -1895,7 +1895,7 @@
     </select>
     <select id="findAllPostListHeat" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT p.*,c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid
-        WHERE p.isdel=0 and p.isactive = 0
+        WHERE p.isdel=0
         ORDER BY p.heat_value DESC
     </select>
     <select id="queryPostCricle" resultType="com.movision.mybatis.post.entity.PostVo" parameterType="java.lang.Integer">
