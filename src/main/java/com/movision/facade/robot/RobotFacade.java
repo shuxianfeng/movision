@@ -228,8 +228,8 @@ public class RobotFacade {
         //循环对每个帖子操作点赞
         Random random = new Random();
         for (int i = 0; i < postidArr.length; i++) {
-            //随机取[0,num+1) 之间的整数，最小是0，最大是num
-            int n = random.nextInt(num + 1);
+            //随机取[0,num+1) 之间的整数，最小是1，最大是num
+            int n = (int) ((Math.random() * num) + 1);
             //调用【机器人帖子点赞操作】
             robotZanPost(Integer.valueOf(postidArr[i]), n);
         }
@@ -250,11 +250,11 @@ public class RobotFacade {
         Random random = new Random();
         for (int i = 0; i < postidArr.length; i++) {
             //1 调用【机器人帖子点赞操作】
-            robotZanPost(Integer.valueOf(postidArr[i]), random.nextInt(num + 1));
+            robotZanPost(Integer.valueOf(postidArr[i]), (int) ((Math.random() * num) + 1));
             //2 调用【机器人帖子收藏操作】
-            robotCollectPost(Integer.valueOf(postidArr[i]), random.nextInt(num + 1));
+            robotCollectPost(Integer.valueOf(postidArr[i]), (int) ((Math.random() * num) + 1));
             //3 调用【机器人帖子评论操作】
-            robotshuntComment(num, Integer.valueOf(postidArr[i]));
+            robotshuntComment((int) ((Math.random() * num) + 1), Integer.valueOf(postidArr[i]));
         }
     }
 
@@ -290,8 +290,8 @@ public class RobotFacade {
         String[] postidArr = postids.split(",");
         Random random = new Random();
         for (int i = 0; i < postidArr.length; i++) {
-            //随机取[0,num+1) 之间的整数，最小是0，最大是num
-            int n = random.nextInt(num + 1);
+            //随机取[0,num+1) 之间的整数，最小是1，最大是num
+            int n = (int) ((Math.random() * num) + 1);
 
             robotCollectPost(Integer.valueOf(postidArr[i]), n);
         }
@@ -422,8 +422,8 @@ public class RobotFacade {
         //循环对每个帖子操作点赞
         Random random = new Random();
         for (int i = 0; i < useridArr.length; i++) {
-            //随机取[0,num+1) 之间的整数，最小是0，最大是num
-            int n = random.nextInt(num + 1);
+            //随机取[0,num+1) 之间的整数，最小是1，最大是num
+            int n = (int) ((Math.random() * num) + 1);
             //调用【机器人关注操作】
             robotFollowUser(Integer.valueOf(useridArr[i]), n);
         }
@@ -673,7 +673,7 @@ public class RobotFacade {
         //循环对每个帖子评论
         for (int i = 0; i < postidArr.length; i++) {
             //调用【机器人帖子评论操作】
-            robotshuntComment(num, Integer.valueOf(postidArr[i]));
+            robotshuntComment((int) ((Math.random() * num) + 1), Integer.valueOf(postidArr[i]));
         }
     }
 
