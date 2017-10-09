@@ -489,8 +489,8 @@ public class RobotFacade {
      * @param type
      * @return
      */
-    public List<RobotComment> findAllQueryRoboltComment(String type, Paging<RobotComment> pag) {
-        return robotCommentService.findAllQueryRoboltComment(Integer.parseInt(type), pag);
+    public List<RobotComment> findAllQueryRoboltComment(Integer type, Paging<RobotComment> pag) {
+        return robotCommentService.findAllQueryRoboltComment(type, pag);
     }
 
     /**

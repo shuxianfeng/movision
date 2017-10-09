@@ -6,6 +6,7 @@ import com.movision.mybatis.robotComment.entity.RobotComment;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,7 +38,11 @@ public class RobotCommentDictController {
                                        @ApiParam(value = "每页几条") @RequestParam(defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<RobotComment> pag = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<RobotComment> list = robotFacade.findAllQueryRoboltComment(type, pag);
+        Integer commentType = null;
+        if (StringUtils.isNotEmpty(type)) {
+            commentType = Integer.valueOf(type);
+        }
+        List<RobotComment> list = robotFacade.findAllQueryRoboltComment(commentType, pag);
         response.setMessage("查询成功");
         response.setData(list);
         return response;
