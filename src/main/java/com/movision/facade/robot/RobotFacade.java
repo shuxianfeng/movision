@@ -18,6 +18,7 @@ import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.robotComment.entity.RobotComment;
 import com.movision.mybatis.robotComment.service.RobotCommentService;
 import com.movision.mybatis.robotNickname.service.RobotNicknameService;
+import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
@@ -84,6 +85,9 @@ public class RobotFacade {
 
     @Autowired
     private UserRefreshRecordService userRefreshRecordService;
+
+    @Autowired
+    private SystemLayoutService systemLayoutService;
 
     /**
      * 创建n个robot用户
@@ -258,11 +262,13 @@ public class RobotFacade {
      * 分流操作帖子评论
      */
     public void robotshuntComment(Integer num, Integer post) {
-        if (num > 1 && num <= 200) {//2:40% 4:30% 5:30% --2
+        //查询机器人分隔
+        Integer number = systemLayoutService.queryRobotSeparate("robot_separate");
+        if (num > 1 && num <= number) {//2:40% 4:30% 5:30% --2
 
             insertPostCommentByRobolt(post, num, 2);
 
-        } else if (num > 200) {//2:60% 4:20% 5:20% --3
+        } else if (num > number) {//2:60% 4:20% 5:20% --3
 
             insertPostCommentByRobolt(post, num, 3);
 
@@ -611,37 +617,41 @@ public class RobotFacade {
         } else if (type == 2) {//<=200 2:40% 4:30% 5:30%
 
             //有小数向上进位  Math.ceil 返回大于参数x的最小整数,即对浮点数向上取整.
-            int mm = (int) (Math.ceil(num * 0.4));
+            //查询评论占比率
+            Double number = systemLayoutService.queryRobotPercentage("robot_separate_40");
+            int mm = (int) (Math.ceil(num * number));
             Map map = new HashMap();
             map.put("number", mm);
             map.put("type", 2);
             content = robotCommentService.queryRoboltComment(map);
             contens.addAll(content);
-            mm = (int) (Math.ceil(num * 0.3));
+            Double number2 = systemLayoutService.queryRobotPercentage("robot_separate_30");
+            mm = (int) (Math.ceil(num * number2));
             map.put("number", mm);
             map.put("type", 4);
             content = robotCommentService.queryRoboltComment(map);
             contens.addAll(content);
-            mm = (int) (Math.ceil(num * 0.3));
+            mm = (int) (Math.ceil(num * number2));
             map.put("number", mm);
             map.put("type", 5);
             content = robotCommentService.queryRoboltComment(map);
             contens.addAll(content);
 
         } else if (type == 3) {//>200 2:60% 4:20% 5:20%
-
-            int mm = (int) (Math.ceil(num * 0.6));
+            Double number = systemLayoutService.queryRobotPercentage("robot_separate_60");
+            int mm = (int) (Math.ceil(num * number));
             Map map = new HashMap();
             map.put("number", mm);
             map.put("type", 2);
             content = robotCommentService.queryRoboltComment(map);
             contens.addAll(content);
-            mm = (int) (Math.ceil(num * 0.2));
+            Double number2 = systemLayoutService.queryRobotPercentage("robot_separate_20");
+            mm = (int) (Math.ceil(num * number2));
             map.put("number", mm);
             map.put("type", 4);
             content = robotCommentService.queryRoboltComment(map);
             contens.addAll(content);
-            mm = (int) (Math.ceil(num * 0.2));
+            mm = (int) (Math.ceil(num * number2));
             map.put("number", mm);
             map.put("type", 5);
             content = robotCommentService.queryRoboltComment(map);
@@ -707,8 +717,9 @@ public class RobotFacade {
      * @return
      */
     private Long getRandomDate(Date date) {
-        int max = 9900000;
-        int min = 1000000;
+        //获取随机事件的最大数 和最小数
+        Integer max = systemLayoutService.queryRobotSeparate("robot_random_max_time");
+        Integer min = systemLayoutService.queryRobotSeparate("robot_random_min_time");
         Random random = new Random();
         int s = random.nextInt(max) % (max - min + 1) + min;
         return date.getTime() + s;
