@@ -524,9 +524,9 @@ public class ImFacade {
     public void addOperationInform(HttpServletRequest request, String body, String title, String coverimg) {
         try {
             //生成运营推送的body内容
-            String str = makePushBody(request, body);
+            //String str = makePushBody(request, body);
             //推送业务
-            sendSystemInform(str, title, title, ImConstant.PUSH_MESSAGE.operation_msg.getCode(), coverimg);
+            sendSystemInform(body, title, title, ImConstant.PUSH_MESSAGE.operation_msg.getCode(), coverimg);
 
         } catch (IOException e) {
             log.error("发送运营通知失败", e);
@@ -548,7 +548,7 @@ public class ImFacade {
         log.debug("压缩后的内容con:" + con);
         if ((int) con.get("code") == 200) {
             str = con.get("content").toString();
-            //str = str.replace("\\", "");
+            str = str.replace("\\", "");
             log.debug(str);
         } else {
             log.error("内容转换异常");
