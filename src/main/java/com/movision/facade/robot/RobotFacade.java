@@ -581,6 +581,7 @@ public class RobotFacade {
             Integer userid = users.get(i).getId();
             //1 插入评论表
             System.out.println(date.getTime());
+            //插入评论
             insertPostComment(postid, content, date, i, userid);
             //2 更新帖子表的评论次数字段
             postService.updatePostBycommentsum(postid);

@@ -548,7 +548,7 @@ public class ImFacade {
         log.debug("压缩后的内容con:" + con);
         if ((int) con.get("code") == 200) {
             str = con.get("content").toString();
-            str = str.replace("\\", "");
+            //str = str.replace("\\", "");
             log.debug(str);
         } else {
             log.error("内容转换异常");
