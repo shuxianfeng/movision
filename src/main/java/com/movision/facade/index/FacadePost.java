@@ -466,8 +466,23 @@ public class FacadePost {
         newalurl = PropertiesLoader.getValue("formal.img.domain") + "/" + alurl;//拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接，如："http://pic.mofo.shop" + "/upload/postCompressImg/img/yDi0T2nY1496812117357.png"
 
         Map map = new HashMap();
-        int wt = 750;//图片压缩后的宽度
-        int ht = 440;//图片压缩后的高度440
+        int wt = 0;//图片压缩后的宽度
+        int ht = 0;//图片压缩后的高度440
+        try {
+            /*wt = 750;
+            ht = 440;*/
+            //返回图片的宽高
+            //BufferedImage bi = ImageIO.read(file.getInputStream());
+            File file1 = new File(url);
+            InputStream is = new FileInputStream(file1);
+            BufferedImage bi = ImageIO.read(is);
+            //获取图片压缩比例
+            Double ratio = systemLayoutService.queryFileRatio("file_compress_ratio");
+            wt = (int) Math.ceil(bi.getWidth() * ratio);
+            ht = (int) Math.ceil(bi.getHeight() * ratio);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String compressUrl = coverImgCompressUtil.ImgCompress(url, wt, ht);
         System.out.println("压缩完的切割图片url==" + compressUrl);
         // 对压缩完的图片上传到阿里云
@@ -486,7 +501,7 @@ public class FacadePost {
         File fdel2 = new File(compressUrl);
         fdel2.delete();//删除压缩图
         //----(2)
-        File fdel = new File(String.valueOf(url));
+        File fdel = new File(url);
         long l = fdel.length();
         float size = (float) l / 1024 / 1024;
         DecimalFormat df = new DecimalFormat("0.00");//格式化小数，不足的补0
@@ -500,6 +515,7 @@ public class FacadePost {
         compressImg.setCompressimgurl(newimgurl);
         compressImg.setProtoimgsize(filesize);
         compressImg.setProtoimgurl(newalurl);
+        compressImg.setIntime(new Date());
         compressImgService.insert(compressImg);
         map.put("compressmap", newimgurl);
         return map;
