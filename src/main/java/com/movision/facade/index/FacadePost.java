@@ -1856,9 +1856,7 @@ public class FacadePost {
      * @return
      */
     public List findPostLabel(List<PostVo> list) {
-
         if (list != null) {
-
             for (int i = 0; i < list.size(); i++) {
                 List<PostLabel> postLabels = new ArrayList<>();
                 //帖子的id

@@ -2059,7 +2059,7 @@
 
 
     <select id="findAllHotCommentPostInCurrentMonth" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT p.id, p.title, COUNT(c.id) AS commentCount, p.coverimg,
+        SELECT p.id, p.title, COUNT(c.id) AS commentsum, p.coverimg,
         p.userid, p.intime, u.nickname, u.photo, p.circleid, p.activeid,
         ci.name AS circlename
         FROM yw_post p
@@ -2068,7 +2068,7 @@
         LEFT JOIN yw_circle ci ON p.circleid = ci.id
         WHERE DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
         AND p.isdel = 0 and p.isactive = 0
-        GROUP BY p.id ORDER BY commentCount DESC
+        GROUP BY p.id ORDER BY commentsum DESC
     </select>
 
     <select id="findAllMostZanPostInAll" resultType="com.movision.mybatis.post.entity.PostVo">

@@ -401,7 +401,6 @@ public class FacadeDiscover {
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
                 List<PostVo> list = searchMostViewPostInAll(pager);
                 pager.setRows(list);
-                log.debug("paging实体:" + pager.toString());
                 return pager;
 
             } else if (DiscoverConstant.HOT_RANGE_TITLE.post_zan_list.getCode() == title) {
@@ -460,7 +459,6 @@ public class FacadeDiscover {
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
                 List<PostVo> list = searchMostViewPostInCurrentMonth(pager);
                 pager.setRows(list);
-                log.debug("paging实体:" + pager.toString());
                 return pager;
 
             } else if (DiscoverConstant.HOT_RANGE_TITLE.post_zan_list.getCode() == title) {
