@@ -2896,7 +2896,7 @@ public class FacadePost {
                     intimePost = queryPosyByImtime(intime);
                 }
                 //List<DBObject> list = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
-             List<Integer> postVos = new ArrayList<>();
+                List<Integer> postVos = new ArrayList<>();
                 if (intimePost != null) {
                     for (int i = 0; i < intimePost.size(); i++) {
                         int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
