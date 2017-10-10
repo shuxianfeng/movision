@@ -2763,7 +2763,9 @@ public class PostFacade {
             int w = 0;//图片原始宽度
             try {
                 //返回图片的宽高
-                BufferedImage bi = ImageIO.read(file.getInputStream());
+                File fil = new File(url);
+                InputStream is = new FileInputStream(fil);
+                BufferedImage bi = ImageIO.read(is);
                 //获取图片压缩比例
                 Double ratio = systemLayoutService.queryFileRatio("file_compress_ratio");
                 h = bi.getHeight();
