@@ -325,7 +325,7 @@
 
     <!--根据用户id查询当前用户发帖总数-->
     <select id="queryPostNumByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
-        SELECT count(*) FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER}
+        SELECT count(*) FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER} AND isdel = '0'
     </select>
 
     <!--根据用户id查询当前用户被收藏总数-->
