@@ -18,4 +18,8 @@ public interface SystemLayoutMapper {
     Integer queryRobotSeparate(String separate);
 
     Double queryRobotpercentage(String percentage);
+
+    String queryServiceUrl(String fileurl);
+
+    Integer queryFileRatio(String ratio);
 }

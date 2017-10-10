@@ -4,6 +4,7 @@ import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.BusinessException;
 import com.movision.facade.upload.UploadFacade;
 import com.movision.fsearch.utils.StringUtil;
+import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.file.FileUtil;
 import org.slf4j.Logger;
@@ -39,6 +40,9 @@ public class MovisionOssClient {
     @Autowired
     private UploadFacade uploadFacade;
 
+    @Autowired
+    private SystemLayoutService systemLayoutService;
+
     /**
      * 图片文件上传(文件流)
      *
@@ -49,20 +53,21 @@ public class MovisionOssClient {
      */
     public Map<String, Object> uploadObject(MultipartFile file, String type, String chann) {
 
-        String uploadMode = uploadFacade.getConfigVar("upload.mode");
+        //String uploadMode = uploadFacade.getConfigVar("upload.mode");
         //判断是否为允许的上传文件后缀
         boolean allowed = FileUtil.isAllowed(file.getOriginalFilename(), type);
         if (!allowed) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "不允许的上传类型");
         }
 
-        switch (uploadMode) {
-            case "alioss":
-                String domain = PropertiesLoader.getValue("formal.img.domain");
+        //switch (uploadMode) {
+        //case "alioss":
+        //String domain = PropertiesLoader.getValue("formal.img.domain");
+        //获取url
+        String domain = systemLayoutService.queryServiceUrl("file_service_url");
+        return aliossUpload(file, type, chann, domain);
 
-                return aliossUpload(file, type, chann, domain);
-
-            case "movision":
+        //case "movision":
                 // 上传到测试服务器，返回url
 //                log.debug("上传到测试服务器");
 //                Map<String, Object> map2 = uploadFacade.upload(file, type, chann);
@@ -71,14 +76,14 @@ public class MovisionOssClient {
 //                return dataMap;
 
                 //还是上传到alioss，只是域名不同
-                String domain2 = PropertiesLoader.getValue("test.img.domain");
+        //String domain2 = PropertiesLoader.getValue("test.img.domain");
 
-                return aliossUpload(file, type, chann, domain2);
+        //return aliossUpload(file, type, chann, domain2);
 
-            default:
+           /* default:
                 log.error("上传模式不正确");
-                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传模式不正确");
-        }
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传模式不正确");*/
+        //}
     }
 
     private Map<String, Object> aliossUpload(MultipartFile file, String type, String chann, String domain) {
@@ -102,17 +107,19 @@ public class MovisionOssClient {
      */
     public Map<String, Object> uploadFileObject(File file, String type, String chann) {
 
-        String uploadMode = uploadFacade.getConfigVar("upload.mode");
+        //String uploadMode = uploadFacade.getConfigVar("upload.mode");
         //判断是否为允许的上传文件后缀
         boolean allowed = FileUtil.isAllowed(file.getName(), type);
         if (!allowed) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "不允许的上传类型");
         }
 
-        switch (uploadMode) {
-            case "alioss":
+       /* switch (uploadMode) {
+            case "alioss":*/
                 log.debug("上传到正式域名OSS");
-                String domain = PropertiesLoader.getValue("formal.img.domain");
+        //String domain = PropertiesLoader.getValue("formal.img.domain");
+        //获取url
+        String domain = systemLayoutService.queryServiceUrl("file_service_url");
                 Map<String, Object> map = aliOSSClient.uploadLocalFile(file, type, chann, domain);
                 String status = String.valueOf(map.get("status"));
                 if (status.equals("success")) {
@@ -122,7 +129,7 @@ public class MovisionOssClient {
                     throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传失败");
                 }
 
-            case "movision":
+          /*  case "movision":
                 // 上传到测试服务器，返回url
                 log.debug("上传到测试域名OSS");
                 String domaintest = PropertiesLoader.getValue("test.img.domain");
@@ -133,12 +140,12 @@ public class MovisionOssClient {
                 } else {
                     log.error("上传失败");
                     throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传失败");
-                }
+                }*/
 
-            default:
+          /*  default:
                 log.error("上传模式不正确");
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传模式不正确");
-        }
+        }*/
     }
 
 

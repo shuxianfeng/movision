@@ -7,6 +7,7 @@ import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.*;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.exception.BusinessException;
+import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.mybatis.userPhoto.entity.UserPhoto;
 import com.movision.mybatis.userPhoto.service.UserPhotoService;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
@@ -35,6 +36,9 @@ import java.util.Map;
 public class AliOSSClient {
     @Autowired
     private UserPhotoService userPhotoService;
+
+    @Autowired
+    private SystemLayoutService systemLayoutService;
 
     private static final Logger log = LoggerFactory.getLogger(AliOSSClient.class);
 
@@ -379,7 +383,9 @@ public class AliOSSClient {
 
             String data = "";
             if (type.equals("img")) {
-                bucketName = PropertiesLoader.getValue("img.bucket");
+                //获取文件名称头部
+                bucketName = systemLayoutService.queryServiceUrl("img_bucket");
+                //bucketName = PropertiesLoader.getValue("img.bucket");
 //                domain = PropertiesLoader.getValue("ali.domain");
                 data = domain + "/" + fileKey;
                 //返回图片的宽高
@@ -389,7 +395,9 @@ public class AliOSSClient {
                 result.put("height", src.getHeight());
 
             } else if (type.equals("doc")) {
-                bucketName = PropertiesLoader.getValue("file.bucket");
+                //bucketName = PropertiesLoader.getValue("file.bucket");
+                //获取文件名称头部
+                bucketName = systemLayoutService.queryServiceUrl("file_bucket");
                 data = fileName;
             }
 

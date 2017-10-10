@@ -49,4 +49,36 @@ public class SystemLayoutService {
             throw e;
         }
     }
+
+    /**
+     * 查询资源服务器url
+     *
+     * @param str
+     * @return
+     */
+    public String queryServiceUrl(String str) {
+        try {
+            log.info("查询资源服务器url");
+            return systemLayoutMapper.queryServiceUrl(str);
+        } catch (Exception e) {
+            log.error("查询资源服务器url异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询图片压缩比例
+     *
+     * @param ratio
+     * @return
+     */
+    public Integer queryFileRatio(String ratio) {
+        try {
+            log.info("查询图片压缩比例");
+            return systemLayoutMapper.queryFileRatio(ratio);
+        } catch (Exception e) {
+            log.error("查询图片压缩比例异常", e);
+            throw e;
+        }
+    }
 }

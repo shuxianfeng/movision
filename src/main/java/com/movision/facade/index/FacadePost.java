@@ -49,6 +49,7 @@ import com.movision.mybatis.postLabel.entity.PostLabelVo;
 import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.postLabelRelation.service.PostLabelRelationService;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
+import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.mybatis.testintime.entity.TestIntime;
 import com.movision.mybatis.testintime.service.TestIntimeService;
 import com.movision.mybatis.user.entity.User;
@@ -82,7 +83,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -2498,7 +2501,6 @@ public class FacadePost {
         }
         return list;
     }
-
 
     /**
      * 查询出一条记录(登录状态下标签的情况)

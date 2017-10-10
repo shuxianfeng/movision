@@ -89,13 +89,21 @@
       value = #{value,jdbcType=VARCHAR},
       describe = #{describe,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
-  </update>
+    </update>
 
     <select id="queryRobotSeparate" parameterType="java.lang.String" resultType="java.lang.Integer">
-    SELECT value FROM yw_system_layout WHERE type = #{separate,jdbcType=VARCHAR}
-  </select>
+        SELECT value FROM yw_system_layout WHERE type = #{separate,jdbcType=VARCHAR} AND module = 'robot'
+    </select>
 
     <select id="queryRobotpercentage" parameterType="java.lang.String" resultType="java.lang.Double">
-    SELECT value FROM yw_system_layout WHERE type = #{separate,jdbcType=VARCHAR}
-  </select>
+        SELECT value FROM yw_system_layout WHERE type = #{separate,jdbcType=VARCHAR} AND module = 'robot'
+    </select>
+
+    <select id="queryServiceUrl" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT value FROM yw_system_layout WHERE type = #{fileurl,jdbcType=VARCHAR} AND module = 'file'
+    </select>
+
+    <select id="queryFileRatio" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT value FROM yw_system_layout WHERE module = 'file' AND type = #{ratio,jdbcType=VARCHAR}
+    </select>
 </mapper>
