@@ -497,19 +497,13 @@ public class FacadePost {
         newimgurl = PropertiesLoader.getValue("formal.img.domain") + "/" + newurl;//拿实际url第三个斜杠后面的内容和formal.img.domain进行拼接，如："http://pic.mofo.shop" + "/upload/postCompressImg/img/yDi0T2nY1496812117357.png"
 
         //6删除本地服务器切割的图片文件
-        //----(1)
-        File fdel2 = new File(compressUrl);
-        fdel2.delete();//删除压缩图
+
         //----(2)
         File fdel = new File(url);
         long l = fdel.length();
         float size = (float) l / 1024 / 1024;
         DecimalFormat df = new DecimalFormat("0.00");//格式化小数，不足的补0
         String filesize = df.format(size);//返回的是String类型的
-        fdel.delete();//删除上传到本地的原图片文件
-        //----(3)
-        File fdel3 = new File(compressUrl);
-        fdel3.delete();//删除压缩完成的图片
         //把切割好的原图和压缩图分别存放数据库中
         CompressImg compressImg = new CompressImg();
         compressImg.setCompressimgurl(newimgurl);
@@ -518,6 +512,13 @@ public class FacadePost {
         compressImg.setIntime(new Date());
         compressImgService.insert(compressImg);
         map.put("compressmap", newimgurl);
+        //----(1)
+        File fdel2 = new File(compressUrl);
+        fdel2.delete();//删除压缩图
+        fdel.delete();//删除上传到本地的原图片文件
+        //----(3)
+        File fdel3 = new File(compressUrl);
+        fdel3.delete();//删除压缩完成的图片
         return map;
     }
 
