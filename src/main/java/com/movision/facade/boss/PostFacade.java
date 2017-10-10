@@ -73,7 +73,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -2744,82 +2743,17 @@ public class PostFacade {
      * @return
      */
     public Map<String, Object> updatePostImgTest(MultipartFile file) {
-        Map yuanm = new HashMap();
-        Map<String, Object> map = new HashMap<>();
+        Map m = new HashMap();
+        Map<String, Object> map = null;
         try {
-            //1上传到本地服务器
-            Map m = movisionOssClient.uploadMultipartFileObject(file, "img");
-            String url = String.valueOf(m.get("url"));//获取上传到服务器上的原图
-            //上传到静态资源服务器
-            //yuanm = movisionOssClient.uploadObject(file, "img", "post");
-            File file1 = new File(url);
-            yuanm = movisionOssClient.uploadFileObject(file1, "img", "post");
-            String yuanurl = String.valueOf(yuanm.get("url"));
-            System.out.println("上传封面的原图url==" + yuanurl);
-            //4对本地服务器中切割好的图片进行压缩处理
-            int wt = 0;//图片压缩后的宽度
-            int ht = 0;//图片压缩后的高度440
-            int h = 0;//图片原始高度
-            int w = 0;//图片原始宽度
-            try {
-                //返回图片的宽高
-                File fil = new File(url);
-                InputStream is = new FileInputStream(fil);
-                BufferedImage bi = ImageIO.read(is);
-                //获取图片压缩比例
-                Double ratio = systemLayoutService.queryFileRatio("file_compress_ratio");
-                h = bi.getHeight();
-                w = bi.getWidth();
-                wt = (int) Math.ceil(w * ratio);
-                ht = (int) Math.ceil(h * ratio);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Map compressmap = null;
-            //图片压缩部分
-            File fs = new File(url);
-            Long fsize = fs.length();//获取文件大小
-            String compressUrl = null;
-            if (fsize > 800 * 1024) {
-                //对图片压缩处理
-                compressUrl = coverImgCompressUtil.ImgCompress(url, wt, ht);
-                System.out.println("压缩完的切割图片url==" + compressUrl);
-            } else {
-                String ww = null;
-                String hh = null;
-                if (w != 0 && h != 0) {
-                    ww = w + "";
-                    hh = h + "";
-                    compressUrl = coverImgCompressUtil.ImgCompress(url, Integer.parseInt(ww), Integer.parseInt(hh));
-                    System.out.println("压缩完的图片url==" + compressUrl);
-                }
-            }
-            //5对压缩完的图片上传到阿里云
-            compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "post");
-            //记录图片上传
-            String newurl = String.valueOf(compressmap.get("url"));
-            File fdel = new File(url);
-            long l = fdel.length();
-            float size = (float) l / 1024 / 1024;
-            DecimalFormat df = new DecimalFormat("0.00");//格式化小数，不足的补0
-            String filesize = df.format(size);//返回的是String类型的
-            //把切好的原图和压缩图存放表中
-            CompressImg compressImg = new CompressImg();
-            compressImg.setCompressimgurl(newurl);
-            compressImg.setProtoimgsize(filesize);
-            compressImg.setProtoimgurl(yuanurl);
-            compressImg.setIntime(new Date());
-            compressImgService.insert(compressImg);
+            m = movisionOssClient.uploadObject(file, "img", "post");
+            String url = String.valueOf(m.get("url"));
+            map = new HashMap<>();
             map.put("url", url);
             map.put("name", FileUtil.getFileNameByUrl(url));
             map.put("width", m.get("width"));
             map.put("height", m.get("height"));
             map.put("status", "2000");
-            //6删除本地原图，切割图，压缩图
-            File f1 = new File(url);
-            f1.delete();
-            File f3 = new File(compressUrl);
-            f3.delete();
         } catch (Exception e) {
             map.put("status", "4000");
             e.printStackTrace();
