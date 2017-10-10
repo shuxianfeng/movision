@@ -1279,7 +1279,7 @@ public class FacadePost {
             ht = 440;*/
                 //返回图片的宽高
                 //BufferedImage bi = ImageIO.read(file.getInputStream());
-                File file1 = new File(url);
+                File file1 = new File(tmpurl);
                 InputStream is = new FileInputStream(file1);
                 BufferedImage bi = ImageIO.read(is);
                 //获取图片压缩比例
