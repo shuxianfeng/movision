@@ -2747,11 +2747,13 @@ public class PostFacade {
         Map yuanm = new HashMap();
         Map<String, Object> map = new HashMap<>();
         try {
-            //1上传到服务器
+            //1上传到本地服务器
             Map m = movisionOssClient.uploadMultipartFileObject(file, "img");
             String url = String.valueOf(m.get("url"));//获取上传到服务器上的原图
             //上传到静态资源服务器
-            yuanm = movisionOssClient.uploadObject(file, "img", "post");
+            //yuanm = movisionOssClient.uploadObject(file, "img", "post");
+            File file1 = new File(url);
+            yuanm = movisionOssClient.uploadFileObject(file1, "img", "post");
             String yuanurl = String.valueOf(yuanm.get("url"));
             System.out.println("上传封面的原图url==" + yuanurl);
             //4对本地服务器中切割好的图片进行压缩处理
@@ -2771,7 +2773,6 @@ public class PostFacade {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             Map compressmap = null;
             //图片压缩部分
             File fs = new File(url);
