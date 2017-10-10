@@ -86,9 +86,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
@@ -1280,7 +1278,10 @@ public class FacadePost {
             /*wt = 750;
             ht = 440;*/
                 //返回图片的宽高
-                BufferedImage bi = ImageIO.read(file.getInputStream());
+                //BufferedImage bi = ImageIO.read(file.getInputStream());
+                File file1 = new File(url);
+                InputStream is = new FileInputStream(file1);
+                BufferedImage bi = ImageIO.read(is);
                 //获取图片压缩比例
                 int ratio = systemLayoutService.queryFileRatio("file_compress_ratio");
                 wt = (int) Math.ceil(bi.getWidth() * ratio);
@@ -1297,6 +1298,7 @@ public class FacadePost {
         Long fsize = fs.length();//获取文件大小
         String compressUrl = null;
         if (fsize > 400 * 1024 * 1024) {
+            //对图片压缩处理
             compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, wt, ht);
             System.out.println("压缩完的切割图片url==" + compressUrl);
         } else {
