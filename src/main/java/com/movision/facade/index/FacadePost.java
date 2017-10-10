@@ -311,7 +311,9 @@ public class FacadePost {
             labpost = postService.findUserByLabelPost(labids);
             ps.addAll(labpost);
         }
+        List<PostVo> postVo = postService.queryPost(Integer.parseInt(postid));
         ps.addAll(userPost);
+        ps.removeAll(postVo);
         Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(ps);
         ps = new ArrayList<PostVo>(linkedHashSet);
         ComparatorChain chain = new ComparatorChain();

@@ -1459,6 +1459,15 @@ public class PostService {
         }
     }
 
+    public List<PostVo> queryPost(int postid) {
+        try {
+            log.info("根据id查询帖子");
+            return postMapper.queryPost(postid);
+        } catch (Exception e) {
+            log.error("根据id查询帖子失败", e);
+            throw e;
+        }
+    }
 
     public List<PostVo> findAllUserActive(int userid, Paging<PostVo> paging) {
         try {

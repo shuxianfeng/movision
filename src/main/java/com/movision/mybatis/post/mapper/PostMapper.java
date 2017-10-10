@@ -258,6 +258,7 @@ public interface PostMapper {
 
     List<PostVo> findAllPostByid(List postid, RowBounds rowBounds);
 
+    List<PostVo> queryPost(int postid);
 
     List<PostVo> findAllUserPostList(int userid, RowBounds rowBounds);
 
