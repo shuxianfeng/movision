@@ -2183,19 +2183,19 @@ public class FacadePost {
             userRefreshRecord.setUserid(Integer.parseInt(userid));
             userRefreshRecord.setPostid(postid);
             userRefreshRecord.setCrileid(String.valueOf(crileid));
-            userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+            userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss:SSS"));
             userRefreshRecord.setType(type);
             userRefreshRecord.setLabelid(labelid);
-            userRefreshRecord.setOrder(i);
+            userRefreshRecord.setOrder(i + 1);
         } else {
             userRefreshRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
             userRefreshRecord.setPostid(postid);
             userRefreshRecord.setCrileid(String.valueOf(crileid));
-            userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+            userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss:SSS"));
             userRefreshRecord.setType(type);
             userRefreshRecord.setDevice(device);
             userRefreshRecord.setLabelid(labelid);
-            userRefreshRecord.setOrder(i);
+            userRefreshRecord.setOrder(i + 1);
         }
         userRefreshRecordService.insert(userRefreshRecord);
     }
@@ -2462,25 +2462,308 @@ public class FacadePost {
         }
         return list;
     }
+
+    /**
+     * 查询出一条记录(登录状态下)
+     * @param userid
+     * @param type
+     * @param postids
+     * @return
+     */
+    public List queryOnlPost(int userid, int type, int postids) {
+        MongoClient mongoClient = null;
+        List<DBObject> list = null;
+        DB db = null;
+        DBCursor dbCursor = null;
+        try {
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject queryObject = new BasicDBObject("userid", userid).append("type", type).append("postid", postids);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            keys.put("intime", 1);
+            dbCursor = table.find(queryObject, keys);
+            list = dbCursor.toArray();
+            dbCursor.close();
+        } catch (Exception e) {
+            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+                dbCursor.close();
+                mongoClient.close();
+            }
+        }
+        return list;
+    }
+
+
+    /**
+     * 查询出一条记录(登录状态下标签的情况)
+     *
+     * @param userid
+     * @param type
+     * @param postids
+     * @return
+     */
+    public List queryOnlPostLabel(int userid, int type, int postids, int labelid) {
+        MongoClient mongoClient = null;
+        List<DBObject> list = null;
+        DB db = null;
+        DBCursor dbCursor = null;
+        try {
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject queryObject = new BasicDBObject("userid", userid).append("type", type).append("postid", postids).append("labelid", labelid);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            keys.put("intime", 1);
+            dbCursor = table.find(queryObject, keys);
+            list = dbCursor.toArray();
+            dbCursor.close();
+        } catch (Exception e) {
+            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+                dbCursor.close();
+                mongoClient.close();
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 查询出一条记录(登录状态下圈子的情况)
+     *
+     * @param userid
+     * @param type
+     * @param postids
+     * @return
+     */
+    public List queryOnlPostCircleid(int userid, int type, int postids, int circleid) {
+        MongoClient mongoClient = null;
+        List<DBObject> list = null;
+        DB db = null;
+        DBCursor dbCursor = null;
+        try {
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject queryObject = new BasicDBObject("userid", userid).append("type", type).append("postid", postids).append("crileid", circleid);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            keys.put("intime", 1);
+            dbCursor = table.find(queryObject, keys);
+            list = dbCursor.toArray();
+            dbCursor.close();
+        } catch (Exception e) {
+            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+                dbCursor.close();
+                mongoClient.close();
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 查询出一条记录(未登录状态下)
+     *
+     * @param device
+     * @param type
+     * @param postids
+     * @return
+     */
+    public List queryOnlPostNotLogin(String device, int type, int postids) {
+        MongoClient mongoClient = null;
+        List<DBObject> list = null;
+        DB db = null;
+        DBCursor dbCursor = null;
+        try {
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject queryObject = new BasicDBObject("device", device).append("type", type).append("postid", postids);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            keys.put("intime", 1);
+            dbCursor = table.find(queryObject, keys);
+            list = dbCursor.toArray();
+            dbCursor.close();
+        } catch (Exception e) {
+            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+                dbCursor.close();
+                mongoClient.close();
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 查询出一条记录(未登录状态下标签)
+     *
+     * @param device
+     * @param type
+     * @param postids
+     * @return
+     */
+    public List queryOnlPostNotLoginLabelid(String device, int type, int postids, int labelid) {
+        MongoClient mongoClient = null;
+        List<DBObject> list = null;
+        DB db = null;
+        DBCursor dbCursor = null;
+        try {
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject queryObject = new BasicDBObject("device", device).append("type", type).append("postid", postids).append("labelid", labelid);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            keys.put("intime", 1);
+            dbCursor = table.find(queryObject, keys);
+            list = dbCursor.toArray();
+            dbCursor.close();
+        } catch (Exception e) {
+            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+                dbCursor.close();
+                mongoClient.close();
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 查询出一条记录(未登录状态下圈子)
+     *
+     * @param device
+     * @param type
+     * @param postids
+     * @return
+     */
+    public List queryOnlPostNotLoginCircleid(String device, int type, int postids, int circleid) {
+        MongoClient mongoClient = null;
+        List<DBObject> list = null;
+        DB db = null;
+        DBCursor dbCursor = null;
+        try {
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject queryObject = new BasicDBObject("device", device).append("type", type).append("postid", postids).append("crileid", circleid);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            keys.put("intime", 1);
+            dbCursor = table.find(queryObject, keys);
+            list = dbCursor.toArray();
+            dbCursor.close();
+        } catch (Exception e) {
+            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+                dbCursor.close();
+                mongoClient.close();
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 根据时间查询list
+     *
+     * @param intime
+     * @return
+     */
+    public List queryPosyByImtime(String intime) {
+        MongoClient mongoClient = null;
+        List<DBObject> list = null;
+        DB db = null;
+        DBCursor dbCursor = null;
+        try {
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject gt = new BasicDBObject("$lt", intime);
+            BasicDBObject queryObject = new BasicDBObject("intime", gt);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
+            list = dbCursor.toArray();
+            dbCursor.close();
+        } catch (Exception e) {
+            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+                dbCursor.close();
+                mongoClient.close();
+            }
+        }
+        return list;
+    }
+
     /**
      * 用户刷新的历史记录列表
      *
      * @param userid
      * @return
      */
-    public List userReflushHishtoryRecord(String userid, Paging<PostVo> paging, int type, String device, String labelid, String circleid) {
+    public List userReflushHishtoryRecord(String userid, Paging<PostVo> paging, int type, String device, String labelid, String circleid,String postids) {
         List<PostVo> postVo = null;
+        List<DBObject> intimePost=null;
         if (userid != null) {
             if (StringUtil.isEmpty(circleid) && StringUtil.isEmpty(labelid)) {
-                List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid), type);
+                List<DBObject> onlyPost = queryOnlPost(Integer.parseInt(userid), type, Integer.parseInt(postids));
+                for (int i = 0; i < onlyPost.size(); i++) {
+                    String intime = onlyPost.get(i).get("intime").toString();
+                    intimePost = queryPosyByImtime(intime);
+                }
+                // List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid), type);
                 List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
                 List<Integer> postVos = new ArrayList<>();
                 List<Integer> dontlikes = new ArrayList<>();
-                if (list.size() != 0) {
-                    for (int i = 0; i < list.size(); i++) {
-                        int postid = Integer.parseInt(list.get(i).get("postid").toString());
+                if (intimePost != null) {
+                    for (int i = 0; i < intimePost.size(); i++) {
+                        int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
                         postVos.add(postid);
                     }
+                    /**if (list.size() != 0) {
+                    for (int i = 0; i < list.size(); i++) {
+                        int postid = Integer.parseInt(list.get(i).get("postid").toString());
+                     postVos.add(postid);
+                    }*/
                     if (dontlike.size() != 0) {
                         for (int i = 0; i < dontlike.size(); i++) {
                             int p = Integer.parseInt(dontlike.get(i).get("postid").toString());
@@ -2500,16 +2783,26 @@ public class FacadePost {
                 }
 
             }
-         if (StringUtil.isNotEmpty(labelid)) {
-             List<DBObject> list = userRefulshListMongodbHistory(Integer.parseInt(userid), type, Integer.parseInt(labelid));
+            if (StringUtil.isNotEmpty(labelid)) {
+                List<DBObject> onlyPost = queryOnlPostLabel(Integer.parseInt(userid), type, Integer.parseInt(postids), Integer.parseInt(labelid));
+                for (int i = 0; i < onlyPost.size(); i++) {
+                    String intime = onlyPost.get(i).get("intime").toString();
+                    intimePost = queryPosyByImtime(intime);
+                }
+                //List<DBObject> list = userRefulshListMongodbHistory(Integer.parseInt(userid), type, Integer.parseInt(labelid));
              List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
              List<Integer> postVos = new ArrayList<>();
              List<Integer> dontlikes = new ArrayList<>();
-             if (list.size() != 0) {
+                if (intimePost != null) {
+                    for (int i = 0; i < intimePost.size(); i++) {
+                        int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
+                        postVos.add(postid);
+                    }
+             /**if (list.size() != 0) {
                  for (int i = 0; i < list.size(); i++) {
                      int postid = Integer.parseInt(list.get(i).get("postid").toString());
-                     postVos.add(postid);
-                 }
+              postVos.add(postid);
+                 }*/
                  if (dontlike.size() != 0) {
                      for (int i = 0; i < dontlike.size(); i++) {
                          int p = Integer.parseInt(dontlike.get(i).get("postid").toString());
@@ -2529,15 +2822,26 @@ public class FacadePost {
                  }
              }
          } else if (StringUtil.isNotEmpty(circleid)) {
-             List<DBObject> list = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), type, circleid);
+                List<DBObject> onlyPost = queryOnlPostCircleid(Integer.parseInt(userid), type, Integer.parseInt(postids), Integer.parseInt(circleid));
+                for (int i = 0; i < onlyPost.size(); i++) {
+                    String intime = onlyPost.get(i).get("intime").toString();
+                    intimePost = queryPosyByImtime(intime);
+                }
+
+                // List<DBObject> list = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), type, circleid);
              List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
              List<Integer> postVos = new ArrayList<>();
              List<Integer> dontlikes = new ArrayList<>();
-             if (list.size() != 0) {
+                if (intimePost != null) {
+                    for (int i = 0; i < intimePost.size(); i++) {
+                        int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
+                        postVos.add(postid);
+                    }
+             /**if (list.size() != 0) {
                  for (int i = 0; i < list.size(); i++) {
                      int postid = Integer.parseInt(list.get(i).get("postid").toString());
-                     postVos.add(postid);
-                 }
+              postVos.add(postid);
+                 }*/
                  log.info(postVos + "");
                  if (dontlike.size() != 0) {
                      for (int i = 0; i < dontlike.size(); i++) {
@@ -2560,13 +2864,23 @@ public class FacadePost {
          }
      }else {
             if (StringUtil.isEmpty(labelid) && StringUtil.isEmpty(circleid)) {
-                List<DBObject> list = userRefulshListMongodbToDevice(device, type);
+                List<DBObject> onlyPost = queryOnlPostNotLogin(device, type, Integer.parseInt(postids));
+                for (int i = 0; i < onlyPost.size(); i++) {
+                    String intime = onlyPost.get(i).get("intime").toString();
+                    intimePost = queryPosyByImtime(intime);
+                }
+                //  List<DBObject> list = userRefulshListMongodbToDevice(device, type);
                 List<Integer> postVos = new ArrayList<>();
-                if (list.size() != 0) {
-                    for (int i = 0; i < list.size(); i++) {
-                        int postid = Integer.parseInt(list.get(i).get("postid").toString());
+                if (intimePost != null) {
+                    for (int i = 0; i < intimePost.size(); i++) {
+                        int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
                         postVos.add(postid);
                     }
+                    /**if (list.size() != 0) {
+                    for (int i = 0; i < list.size(); i++) {
+                        int postid = Integer.parseInt(list.get(i).get("postid").toString());
+                     postVos.add(postid);
+                    }*/
                     //根据postid查询帖子
                     postVo = postService.findAllPostByid(postVos, paging);
                     if (postVo != null) {
@@ -2577,15 +2891,19 @@ public class FacadePost {
                     }
                 }
             }
-         if (StringUtil.isNotEmpty(labelid)) {
-             List<DBObject> list = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
+            if (StringUtil.isNotEmpty(labelid)) {
+                List<DBObject> onlyPost = queryOnlPostNotLoginLabelid(device, type, Integer.parseInt(postids), Integer.parseInt(labelid));
+                for (int i = 0; i < onlyPost.size(); i++) {
+                    String intime = onlyPost.get(i).get("intime").toString();
+                    intimePost = queryPosyByImtime(intime);
+                }
+                //List<DBObject> list = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
              List<Integer> postVos = new ArrayList<>();
-             if (list.size() != 0) {
-                 for (int i = 0; i < list.size(); i++) {
-                     int postid = Integer.parseInt(list.get(i).get("postid").toString());
+                if (intimePost != null) {
+                    for (int i = 0; i < intimePost.size(); i++) {
+                        int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
                      postVos.add(postid);
                  }
-                 //根据postid查询帖子
                  postVo = postService.findAllPostByid(postVos, paging);
                  if (postVo != null) {
                      findUser(postVo);
@@ -2595,13 +2913,23 @@ public class FacadePost {
                  }
              }
          } else if (StringUtil.isNotEmpty(circleid)) {
+                List<DBObject> onlyPost = queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), Integer.parseInt(circleid));
+                for (int i = 0; i < onlyPost.size(); i++) {
+                    String intime = onlyPost.get(i).get("intime").toString();
+                    intimePost=queryPosyByImtime(intime);
+             }
              List<Integer> postVos = new ArrayList<>();
-             List<DBObject> list = userRefulshListMongodbToDeviceHistory(device, type, circleid);
-             if (list.size() != 0) {
+                //  List<DBObject> list = userRefulshListMongodbToDeviceHistory(device, type, circleid);
+                if (intimePost != null) {
+                    for (int i = 0; i < intimePost.size(); i++) {
+                        int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
+                        postVos.add(postid);
+                    }
+             /**if (list.size() != 0) {
                  for (int i = 0; i < list.size(); i++) {
                      int postid = Integer.parseInt(list.get(i).get("postid").toString());
-                     postVos.add(postid);
-                 }
+              postVos.add(postid);
+                 }*/
                  //根据postid查询帖子
                  postVo = postService.findAllPostByid(postVos, paging);
                  if (postVo != null) {
