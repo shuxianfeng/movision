@@ -837,7 +837,7 @@ public class RobotFacade {
                 userRefreshRecord.setUserid(userid);
                 userRefreshRecord.setPostid(postid);
                 userRefreshRecord.setCrileid(String.valueOf(circleid));
-                userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss:SSS"));
                 userRefreshRecord.setType(1);
                 userRefreshRecord.setLabelid(-1);
                 userRefreshRecordService.insert(userRefreshRecord);
