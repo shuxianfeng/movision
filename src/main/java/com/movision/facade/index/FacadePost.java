@@ -1297,7 +1297,7 @@ public class FacadePost {
         File fs = new File(tmpurl);
         Long fsize = fs.length();//获取文件大小
         String compressUrl = null;
-        if (fsize > 400 * 1024 * 1024) {
+        if (fsize > 800 * 1024) {
             //对图片压缩处理
             compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, wt, ht);
             System.out.println("压缩完的切割图片url==" + compressUrl);
