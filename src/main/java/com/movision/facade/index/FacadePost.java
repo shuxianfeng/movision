@@ -1284,8 +1284,8 @@ public class FacadePost {
                 BufferedImage bi = ImageIO.read(is);
                 //获取图片压缩比例
                 int ratio = systemLayoutService.queryFileRatio("file_compress_ratio");
-                wt = (int) Math.ceil(bi.getWidth() * ratio);
-                ht = (int) Math.ceil(bi.getHeight() * ratio);
+                wt = bi.getWidth() * ratio;
+                ht = bi.getHeight() * ratio;
             } catch (IOException e) {
                 e.printStackTrace();
             }
