@@ -1323,6 +1323,7 @@ public class FacadePost {
         compressImg.setCompressimgurl(newurl);
         compressImg.setProtoimgsize(filesize);
         compressImg.setProtoimgurl(rawimg);
+        compressImg.setIntime(new Date());
         compressImgService.insert(compressImg);
         log.info("帖子上传封面本地原图=========", url);
         log.info("帖子上传封面本地切割图=========", tmpurl);
