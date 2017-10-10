@@ -84,8 +84,8 @@ public class CoverImgCompressUtil {
         String compress_dir_path = uploadFacade.getConfigVar("post.incise.domain");//压缩图片路径url
         List<String> existFileList = getExistFiles(compress_dir_path);//获取文件夹下的所有文件名
 
-        File f = new File(file);
-        Long size = f.length();//获取文件大小
+        /*File f = new File(file);
+        Long size = f.length();//获取文件大小*/
 
         /*if (size > 200 * 1024) {*/
             String PATH = file;
