@@ -1286,6 +1286,7 @@ public class FacadePost {
                 int ratio = systemLayoutService.queryFileRatio("file_compress_ratio");
                 wt = bi.getWidth() * ratio;
                 ht = bi.getHeight() * ratio;
+                log.info(wt + "===================================================\n" + ht + "====================================================");
             } catch (IOException e) {
                 e.printStackTrace();
             }
