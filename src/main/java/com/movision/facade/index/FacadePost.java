@@ -190,6 +190,9 @@ public class FacadePost {
     @Autowired
     private CityService cityService;
 
+    @Autowired
+    private SystemLayoutService systemLayoutService;
+
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         //通过userid、postid查询该用户有没有关注该圈子的权限
@@ -1273,8 +1276,18 @@ public class FacadePost {
         int wt = 0;//图片压缩后的宽度
         int ht = 0;//图片压缩后的高度440
         if (type.equals(1) || type.equals("1")) {//用于区分上传帖子封面还是活动方形图
-            wt = 750;
-            ht = 440;
+            try {
+            /*wt = 750;
+            ht = 440;*/
+                //返回图片的宽高
+                BufferedImage bi = ImageIO.read(file.getInputStream());
+                //获取图片压缩比例
+                int ratio = systemLayoutService.queryFileRatio("file_compress_ratio");
+                wt = (int) Math.ceil(bi.getWidth() * ratio);
+                ht = (int) Math.ceil(bi.getHeight() * ratio);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
             wt = 440;
             ht = 440;
@@ -1283,7 +1296,7 @@ public class FacadePost {
         File fs = new File(tmpurl);
         Long fsize = fs.length();//获取文件大小
         String compressUrl = null;
-        if (fsize > 400 * 1024) {
+        if (fsize > 400 * 1024 * 1024) {
             compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, wt, ht);
             System.out.println("压缩完的切割图片url==" + compressUrl);
         } else {
