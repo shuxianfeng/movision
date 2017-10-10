@@ -43,6 +43,7 @@ public class RobotCommentDictController {
             commentType = Integer.valueOf(type);
         }
         List<RobotComment> list = robotFacade.findAllQueryRoboltComment(commentType, pag);
+        pag.result(list);
         response.setMessage("查询成功");
         response.setData(list);
         return response;
