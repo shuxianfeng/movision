@@ -21,16 +21,6 @@ public class UserRefreshRecord {
 
     private int labelid;
 
-    private int order;//排序
-
-    public int getOrder() {
-        return order;
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
-    }
-
     public int getLabelid() {
         return labelid;
     }

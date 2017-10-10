@@ -2026,7 +2026,7 @@ public class FacadePost {
                     e.printStackTrace();
                 }
                 //刷新记录插入mongodb
-                insertMongoDB(userid, id, crileid, type, device, labelid, i);
+                insertMongoDB(userid, id, crileid, type, device, labelid);
             }
         }
     }
@@ -2173,7 +2173,7 @@ public class FacadePost {
      * @param postid
      * @param crileid
      */
-    public void insertMongoDB(String userid, int postid, int crileid, int type, String device, int labelid, int i) {
+    public void insertMongoDB(String userid, int postid, int crileid, int type, String device, int labelid) {
         //把刷新记录插入mongodb
         UserRefreshRecord userRefreshRecord = new UserRefreshRecord();
         if (StringUtil.isNotEmpty(userid)) {
@@ -2184,7 +2184,6 @@ public class FacadePost {
             userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss:SSS"));
             userRefreshRecord.setType(type);
             userRefreshRecord.setLabelid(labelid);
-            userRefreshRecord.setOrder(i + 1);
         } else {
             userRefreshRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
             userRefreshRecord.setPostid(postid);
@@ -2193,7 +2192,6 @@ public class FacadePost {
             userRefreshRecord.setType(type);
             userRefreshRecord.setDevice(device);
             userRefreshRecord.setLabelid(labelid);
-            userRefreshRecord.setOrder(i + 1);
         }
         userRefreshRecordService.insert(userRefreshRecord);
     }
