@@ -119,11 +119,11 @@
 
     <!--美番2.0发现页查询热门作者-->
     <select id="queryHotUserList" resultType="com.movision.mybatis.user.entity.UserVo">
-        SELECT t1.id, t1.nickname, t1.photo, t1.fans FROM (
+        SELECT t1.id, t1.nickname, t1.photo, t1.phone, t1.fans FROM (
             (SELECT * FROM yw_user WHERE isrecommend = '1' AND id != '-1')
             UNION
             (SELECT * FROM yw_user WHERE id != '-1' ORDER BY heat_value DESC limit 10)
-        ) t1 limit 10
+        ) t1 WHERE right(t1.phone,6) NOT LIKE '%000000' limit 10
     </select>
 
     <!--美番2.0发现作者页查询推荐作者列表-->
@@ -134,7 +134,7 @@
         (SELECT * FROM yw_user WHERE id != '-1' AND heat_value > '0' ORDER BY heat_value DESC)
         ) t1
         <where>
-            right(phone,6) LIKE '%000000%'
+            right(t1.phone,6) NOT LIKE '%000000'
             <if test="userid != null and userid != ''">
                 AND t1.id NOT IN (
                 SELECT interestedusers FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER}
