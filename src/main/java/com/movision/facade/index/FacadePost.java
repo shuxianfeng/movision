@@ -1283,9 +1283,9 @@ public class FacadePost {
                 InputStream is = new FileInputStream(file1);
                 BufferedImage bi = ImageIO.read(is);
                 //获取图片压缩比例
-                int ratio = systemLayoutService.queryFileRatio("file_compress_ratio");
-                wt = bi.getWidth() * ratio;
-                ht = bi.getHeight() * ratio;
+                Double ratio = systemLayoutService.queryFileRatio("file_compress_ratio");
+                wt = (int) Math.ceil(bi.getWidth() * ratio);
+                ht = (int) Math.ceil(bi.getHeight() * ratio);
                 log.info(wt + "===================================================\n" + ht + "====================================================");
             } catch (IOException e) {
                 e.printStackTrace();

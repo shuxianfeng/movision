@@ -21,5 +21,5 @@ public interface SystemLayoutMapper {
 
     String queryServiceUrl(String fileurl);
 
-    Integer queryFileRatio(String ratio);
+    Double queryFileRatio(String ratio);
 }

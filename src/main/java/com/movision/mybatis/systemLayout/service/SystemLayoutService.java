@@ -72,7 +72,7 @@ public class SystemLayoutService {
      * @param ratio
      * @return
      */
-    public Integer queryFileRatio(String ratio) {
+    public Double queryFileRatio(String ratio) {
         try {
             log.info("查询图片压缩比例");
             return systemLayoutMapper.queryFileRatio(ratio);
