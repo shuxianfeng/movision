@@ -481,7 +481,7 @@ public class RobotFacade {
         if (StringUtil.isNotEmpty(sex)) {
             user.setSex(Integer.parseInt(sex));
         }
-        userService.insertSelective(user);
+        userService.updateByPrimaryKeySelective(user);
     }
 
     /**
