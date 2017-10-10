@@ -129,8 +129,8 @@ public class JsoupCompressImg {
 
                     //根据原图尺寸计算压缩后的图片尺寸
                     BufferedImage image = ImageIO.read(fis);
-                    int w = (int) (image.getWidth()*0.35);//对原图尺寸的宽高比压缩35%
-                    int h = (int) (image.getHeight()*0.35);
+                    int w = (int) (image.getWidth()*0.50);//对原图尺寸的宽高比压缩50%
+                    int h = (int) (image.getHeight()*0.50);
 
                     if (StringUtils.isNotEmpty(imgurl)) {
 
@@ -230,9 +230,6 @@ public class JsoupCompressImg {
      */
     public Map<String, Object> newCompressImg(HttpServletRequest request, String content) {//content为存储帖子正文的josn字符串
 
-//        int w = 750;//图片压缩后的宽度
-//        int h = 850;//图片压缩后的高度425
-
         log.info("帖子内图片压缩工具接收到的正文json内容>>>>>>>>" + content);
         //转json字符串为json对象
         Map<String, Object> map = new LinkedHashMap<>();
@@ -309,8 +306,8 @@ public class JsoupCompressImg {
 
                         //根据原图尺寸计算压缩后的图片尺寸
                         BufferedImage image = ImageIO.read(fis);
-                        int w = (int) (image.getWidth()*0.35);//对原图尺寸的宽高比压缩35%
-                        int h = (int) (image.getHeight()*0.35);
+                        int w = (int) (image.getWidth()*0.50);//对原图尺寸的宽高比压缩50%
+                        int h = (int) (image.getHeight()*0.50);
 
                         if (StringUtils.isNotEmpty(imgurl)) {
 
