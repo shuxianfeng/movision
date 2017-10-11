@@ -667,7 +667,7 @@
         zansum,u.fans,u.applydate
         FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id
-        WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 AND u.phone IS NOT NULL AND id<![CDATA[>=]]>20000 AND id
+        WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 AND u.phone IS NOT NULL AND u.id<![CDATA[>=]]>20000 AND u.id
         <![CDATA[<]]>10000 ORDER BY vd.apply_time DESC
     </select>
 
@@ -686,7 +686,7 @@
         zansum,u.fans,vd.apply_time AS applydate,au.authstatus
         FROM (yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id) LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id
-        WHERE level>0 AND status=0 AND u.id<![CDATA[>=]]>20000 AND u.id <![CDATA[<]]>10000 ORDER BY intime
+        WHERE level>0 AND status=0 AND u.id<![CDATA[>=]]>20000 OR u.id <![CDATA[<]]>10000 ORDER BY intime
     </select>
 
     <!-- 根据条件查询vip列表  -->
@@ -726,7 +726,7 @@
         <if test="authstatus==3">
             AND au.authstatus IS NULL
         </if>
-        AND u.id<![CDATA[>=]]>20000 AND u.id <![CDATA[<]]>10000
+        AND u.id<![CDATA[>=]]>20000 OR u.id <![CDATA[<]]>10000
         <if test="type==1">
             ORDER BY vd.apply_time DESC
         </if>
@@ -761,10 +761,10 @@
         zansum,u.fans,u.applydate
         <if test="time!=null">
             FROM yw_user u LEFT JOIN yw_audit_vip_detail vd ON vd.apply_userid=u.id WHERE u.level>0 AND u.status=0 AND
-            vd.status=0 AND u.id<![CDATA[>=]]>20000 AND u.id <![CDATA[<]]>10000 ORDER BY vd.audit_time DESC
+            vd.status=0 AND u.id<![CDATA[>=]]>20000 OR u.id <![CDATA[<]]>10000 ORDER BY vd.audit_time DESC
         </if>
         <if test="grade!=null">
-            FROM yw_user u WHERE u.level>0 AND u.status=0 AND u.id<![CDATA[>=]]>20000 AND u.id <![CDATA[<]]>10000 ORDER
+            FROM yw_user u WHERE u.level>0 AND u.status=0 AND u.id<![CDATA[>=]]>20000 OR u.id <![CDATA[<]]>10000 ORDER
             BY
             u.level DESC
         </if>
@@ -810,7 +810,7 @@
         <if test="begintime!=null and endtime!=null">
             AND vd.apply_time BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
         </if>
-        AND u.id<![CDATA[>=]]>20000 AND u.id <![CDATA[<]]>10000
+        AND u.id<![CDATA[>=]]>20000 OR u.id <![CDATA[<]]>10000
         <if test="type==1">
             ORDER BY vd.apply_time DESC
         </if>
@@ -838,7 +838,7 @@
         ON
         au.userid=u.id
         WHERE vd.apply_userid=u.id AND u.phone IS NOT NULL
-        AND u.id<![CDATA[>=]]>20000 AND u.id <![CDATA[<]]>10000
+        AND u.id<![CDATA[>=]]>20000 OR u.id <![CDATA[<]]>10000
         <if test="username!=null">
             AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
         </if>
@@ -877,7 +877,7 @@
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isactive=0) AS postsum,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1 AND isactive=0) AS isessencesum
         FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE
-        u.id<![CDATA[>=]]>20000 AND u.id <![CDATA[<]]>10000
+        u.id<![CDATA[>=]]>20000 OR u.id <![CDATA[<]]>10000
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>
