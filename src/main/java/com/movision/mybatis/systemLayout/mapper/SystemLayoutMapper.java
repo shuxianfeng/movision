@@ -1,6 +1,9 @@
 package com.movision.mybatis.systemLayout.mapper;
 
 import com.movision.mybatis.systemLayout.entity.SystemLayout;
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
 
 public interface SystemLayoutMapper {
     int deleteByPrimaryKey(Integer id);
@@ -24,4 +27,9 @@ public interface SystemLayoutMapper {
     Double queryFileRatio(String ratio);
 
     String queryImgBucket(String img);
+
+    List<SystemLayout> findAllQuerySystemLayotAll(String type, RowBounds rowBounds);
+
+    SystemLayout querySystemLayoutById(Integer id);
+
 }

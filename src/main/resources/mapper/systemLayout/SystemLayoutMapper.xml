@@ -110,4 +110,20 @@
     <select id="queryImgBucket" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT value FROM yw_system_layout WHERE module = 'file' AND type = #{img,jdbcType=VARCHAR}
     </select>
+
+    <!-- 查询所有系统配置  -->
+    <select id="findAllQuerySystemLayotAll" parameterType="java.lang.String"
+            resultType="com.movision.mybatis.systemLayout.entity.SystemLayout">
+        SELECT * FROM yw_system_layout
+        <where>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="querySystemLayoutById" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.systemLayout.entity.SystemLayout">
+        SELECT * FROM yw_system_layout WHERE id = #{id,jdbcType=INTEGER}
+    </select>
 </mapper>

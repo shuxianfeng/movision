@@ -1,10 +1,14 @@
 package com.movision.mybatis.systemLayout.service;
 
+import com.movision.mybatis.systemLayout.entity.SystemLayout;
 import com.movision.mybatis.systemLayout.mapper.SystemLayoutMapper;
+import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @Author zhurui
@@ -94,6 +98,84 @@ public class SystemLayoutService {
             return systemLayoutMapper.queryImgBucket(img);
         } catch (Exception e) {
             log.error("查询文件头部名称异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 新增系统配置
+     *
+     * @param systemLayout
+     */
+    public void insertSystemLayout(SystemLayout systemLayout) {
+        try {
+            log.info("新增系统配置");
+            systemLayoutMapper.insertSelective(systemLayout);
+        } catch (Exception e) {
+            log.error("新增系统配置异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询所有系统配置
+     *
+     * @param type
+     * @param pag
+     * @return
+     */
+    public List<SystemLayout> querySystemLayoutAll(String type, Paging<SystemLayout> pag) {
+        try {
+            log.info("查询所有系统配置");
+            return systemLayoutMapper.findAllQuerySystemLayotAll(type, pag.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询所有系统配置异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据id查询系统配置详情
+     *
+     * @param id
+     * @return
+     */
+    public SystemLayout querySystemLayoutById(Integer id) {
+        try {
+            log.info("根据id查询系统配置详情");
+            return systemLayoutMapper.querySystemLayoutById(id);
+        } catch (Exception e) {
+            log.error("根据id查询系统配置详情异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 修改系统配置
+     *
+     * @param systemLayout
+     */
+    public void updateSystemLayoutById(SystemLayout systemLayout) {
+        try {
+            log.info("修改系统配置");
+            systemLayoutMapper.updateByPrimaryKeySelective(systemLayout);
+        } catch (Exception e) {
+            log.error("修改系统配置异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据id删除系统配置
+     *
+     * @param id
+     */
+    public void deleteSystemLayoutById(Integer id) {
+        try {
+            log.info("根据id删除系统配置");
+            systemLayoutMapper.deleteByPrimaryKey(id);
+        } catch (NumberFormatException e) {
+            log.error("根据id删除系统配置异常", e);
             throw e;
         }
     }
