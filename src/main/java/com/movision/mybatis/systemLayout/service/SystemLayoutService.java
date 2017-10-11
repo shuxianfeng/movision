@@ -81,4 +81,20 @@ public class SystemLayoutService {
             throw e;
         }
     }
+
+    /**
+     * 查询文件头部名称
+     *
+     * @param img
+     * @return
+     */
+    public String queryImgBucket(String img) {
+        try {
+            log.info("查询文件头部名称");
+            return systemLayoutMapper.queryImgBucket(img);
+        } catch (Exception e) {
+            log.error("查询文件头部名称异常", e);
+            throw e;
+        }
+    }
 }

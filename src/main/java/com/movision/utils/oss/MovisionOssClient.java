@@ -158,15 +158,15 @@ public class MovisionOssClient {
      */
     public Map<String, Object> uploadMultipartFileObject(MultipartFile file, String type) {
 
-        String uploadMode = uploadFacade.getConfigVar("upload.mode");
+        /*String uploadMode = uploadFacade.getConfigVar("upload.mode");*/
         //判断是否为允许的上传文件后缀
         boolean allowed = FileUtil.isAllowed(file.getOriginalFilename(), type);
         if (!allowed) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "不允许的上传类型");
         }
 
-        switch (uploadMode) {
-            case "alioss":
+       /* switch (uploadMode) {
+            case "alioss":*/
                 log.debug("上传到正式域名OSS");
                 Map map = uploadMultipartFile(file, 1);
                 String status = String.valueOf(map.get("status"));
@@ -177,7 +177,7 @@ public class MovisionOssClient {
                     throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传失败");
                 }
 
-            case "movision":
+           /* case "movision":
                 // 上传到测试域名OSS
                 log.debug("上传到测试域名OSS");
                 Map maptest = uploadMultipartFile(file, 1);
@@ -191,7 +191,7 @@ public class MovisionOssClient {
             default:
                 log.error("上传模式不正确");
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "上传模式不正确");
-        }
+        }*/
     }
 
     /**
@@ -209,11 +209,18 @@ public class MovisionOssClient {
                 String path = null;
                 String url = null;
                 if (type == 1) {
-                    path = uploadFacade.getConfigVar("post.incise.domain") + filename;
+                    //查询帖子保存路径
+                    String domainurl = systemLayoutService.queryServiceUrl("post_incision_img_url");
+                    path = domainurl + filename;
                     url = path;
                 } else if (type == 2) {
-                    path = uploadFacade.getConfigVar("vote.incise.domain") + filename;
-                    url = uploadFacade.getConfigVar("test.51.mofo") + uploadFacade.getConfigVar("vote.img.domain") + filename;
+                    //查询帖子保存路径
+                    String domainurl = systemLayoutService.queryServiceUrl("vote_incision_img_url");
+                    path = domainurl + filename;
+                    //查询服务器域名及投票系统图片保存路径
+                    String domainname = systemLayoutService.queryServiceUrl("domain_name");
+                    String voteurl = systemLayoutService.queryServiceUrl("vote_url");
+                    url = domainname + voteurl + filename;
                 }
                 //SaveFileFromInputStream(file.getInputStream(), uploadFacade.getConfigVar("post.incise.domain"), filename);
                 map.put("status", "success");
@@ -330,7 +337,9 @@ public class MovisionOssClient {
              */
             BufferedImage bi = reader.read(0, param);
             UUID uuid = UUID.randomUUID();
-            String incise = uploadFacade.getConfigVar("post.incise.domain");
+            //查询帖子图片存放目录
+            String incise = systemLayoutService.queryServiceUrl("post_incision_img_url");
+            //String incise = uploadFacade.getConfigVar("post.incise.domain");
             incise += uuid + "." + suffix;
             System.out.println("切割图片的本体图片位置：" + incise);
             //保存新图片

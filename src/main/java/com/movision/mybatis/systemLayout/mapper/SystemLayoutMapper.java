@@ -22,4 +22,6 @@ public interface SystemLayoutMapper {
     String queryServiceUrl(String fileurl);
 
     Double queryFileRatio(String ratio);
+
+    String queryImgBucket(String img);
 }

@@ -106,4 +106,8 @@
     <select id="queryFileRatio" parameterType="java.lang.String" resultType="java.lang.Double">
         SELECT value FROM yw_system_layout WHERE module = 'file' AND type = #{ratio,jdbcType=VARCHAR}
     </select>
+
+    <select id="queryImgBucket" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT value FROM yw_system_layout WHERE module = 'file' AND type = #{img,jdbcType=VARCHAR}
+    </select>
 </mapper>

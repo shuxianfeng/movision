@@ -225,7 +225,9 @@ public class AliOSSClient {
 
             String data = "";
             if (type.equals("img")) {
-                bucketName = PropertiesLoader.getValue("img.bucket");
+                //获取文件名称头部
+                bucketName = systemLayoutService.queryImgBucket("img_bucket");
+                //bucketName = PropertiesLoader.getValue("img.bucket");
                 domain = PropertiesLoader.getValue("formal.img.domain");//http://pic.mofo.shop
                 data = domain + "/" + fileKey;
                 //返回图片的宽高
@@ -235,7 +237,9 @@ public class AliOSSClient {
                 result.put("height", src.getHeight());
 
             } else if (type.equals("doc")) {
-                bucketName = PropertiesLoader.getValue("file.bucket");
+                //获取文件名称头部
+                bucketName = systemLayoutService.queryImgBucket("file_bucket");
+                //bucketName = PropertiesLoader.getValue("file.bucket");
                 data = fileName;
             }
 
@@ -294,7 +298,8 @@ public class AliOSSClient {
 
             String data = "";
             if (type.equals("img")) {
-                bucketName = PropertiesLoader.getValue("img.bucket");
+                //bucketName = PropertiesLoader.getValue("img.bucket");
+                bucketName = systemLayoutService.queryImgBucket("img_bucket");
 //                domain = PropertiesLoader.getValue("ali.domain");
 //                domain = PropertiesLoader.getValue("formal.img.domain");
                 data = domain + "/" + fileKey;
@@ -308,7 +313,8 @@ public class AliOSSClient {
                 result.put("height", bi.getHeight());
 
             } else if (type.equals("doc")) {
-                bucketName = PropertiesLoader.getValue("file.bucket");
+                //bucketName = PropertiesLoader.getValue("file.bucket");
+                bucketName = systemLayoutService.queryImgBucket("file_bucket");
                 data = fileName2;
                 String maxSize = PropertiesLoader.getValue("uploadDocMaxPostSize");
                 if (size > Long.valueOf(maxSize)) {
