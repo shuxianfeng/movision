@@ -19,7 +19,7 @@ import java.util.List;
  * @Date 2017/10/11 11:41
  */
 @RestController
-@RequestMapping("/system/layout")
+@RequestMapping("/boss/system/layout")
 public class SystemLayotController {
 
     @Autowired
@@ -97,7 +97,7 @@ public class SystemLayotController {
      * @return
      */
     @ApiOperation(value = "编辑系统配置", notes = "根据id修改系统配置", response = Response.class)
-    @RequestMapping(value = "/updateSystemLayoutById")
+    @RequestMapping(value = "/updateSystemLayoutById", method = RequestMethod.POST)
     public Response updateSystemLayoutById(@ApiParam(value = "id") @RequestParam String id,
                                            @ApiParam(value = "值") @RequestParam(required = false) String value,
                                            @ApiParam(value = "模块") @RequestParam(required = false) String module,
