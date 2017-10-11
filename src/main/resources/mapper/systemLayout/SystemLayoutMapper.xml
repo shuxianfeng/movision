@@ -6,10 +6,10 @@
         <result column="module" property="module" jdbcType="VARCHAR"/>
         <result column="type" property="type" jdbcType="VARCHAR"/>
         <result column="value" property="value" jdbcType="VARCHAR"/>
-        <result column="describe" property="describe" jdbcType="VARCHAR"/>
+        <result column="details" property="details" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, module, type, value, describe
+        id, module, type, value, details
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -22,10 +22,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.systemLayout.entity.SystemLayout">
-    insert into yw_system_layout (id, module, type, 
-      value, describe)
-    values (#{id,jdbcType=INTEGER}, #{module,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
-      #{value,jdbcType=VARCHAR}, #{describe,jdbcType=VARCHAR})
+    insert into yw_system_layout (id, module, type,
+        value, details)
+    values (#{id,jdbcType=INTEGER}, #{module,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},
+        #{value,jdbcType=VARCHAR}, #{details,jdbcType=VARCHAR})
   </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.systemLayout.entity.SystemLayout">
         insert into yw_system_layout
@@ -42,8 +42,8 @@
             <if test="value != null">
                 value,
             </if>
-            <if test="describe != null">
-                describe,
+            <if test="details != null">
+                details,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -59,8 +59,8 @@
             <if test="value != null">
                 #{value,jdbcType=VARCHAR},
             </if>
-            <if test="describe != null">
-                #{describe,jdbcType=VARCHAR},
+            <if test="details != null">
+                #{details,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -76,8 +76,8 @@
             <if test="value != null">
                 value = #{value,jdbcType=VARCHAR},
             </if>
-            <if test="describe != null">
-                describe = #{describe,jdbcType=VARCHAR},
+            <if test="details != null">
+                details = #{details,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -87,7 +87,7 @@
     set module = #{module,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
       value = #{value,jdbcType=VARCHAR},
-      describe = #{describe,jdbcType=VARCHAR}
+        details = #{details,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
     </update>
 

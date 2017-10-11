@@ -9,7 +9,7 @@ public class SystemLayout {
 
     private String value;
 
-    private String describe;
+    private String details;
 
     public Integer getId() {
         return id;
@@ -43,11 +43,11 @@ public class SystemLayout {
         this.value = value == null ? null : value.trim();
     }
 
-    public String getDescribe() {
-        return describe;
+    public String getDetails() {
+        return details;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe == null ? null : describe.trim();
+    public void setDetails(String details) {
+        this.details = details;
     }
 }

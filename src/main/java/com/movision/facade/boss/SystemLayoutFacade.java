@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class SystemLayoutFacade {
 
-    public void insertSystemLayout(String module, String type, String value, String describe) {
+    public void insertSystemLayout(String module, String type, String value, String details) {
         SystemLayout systemLayout = new SystemLayout();
         if (StringUtil.isNotEmpty(module)) {
             systemLayout.setModule(module);
@@ -27,8 +27,8 @@ public class SystemLayoutFacade {
         if (StringUtil.isNotEmpty(value)) {
             systemLayout.setValue(value);
         }
-        if (StringUtil.isNotEmpty(describe)) {
-            systemLayout.setDescribe(describe);
+        if (StringUtil.isNotEmpty(details)) {
+            systemLayout.setDetails(details);
         }
         systemLayoutService.insertSystemLayout(systemLayout);
     }
@@ -61,9 +61,9 @@ public class SystemLayoutFacade {
      * @param module
      * @param type
      * @param value
-     * @param describe
+     * @param details
      */
-    public void updateSystemLayoutById(String id, String module, String type, String value, String describe) {
+    public void updateSystemLayoutById(String id, String module, String type, String value, String details) {
         SystemLayout layout = new SystemLayout();
         if (StringUtil.isNotEmpty(id)) {
             layout.setId(Integer.parseInt(id));
@@ -77,8 +77,8 @@ public class SystemLayoutFacade {
         if (StringUtil.isNotEmpty(value)) {
             layout.setValue(value);
         }
-        if (StringUtil.isNotEmpty(describe)) {
-            layout.setDescribe(describe);
+        if (StringUtil.isNotEmpty(details)) {
+            layout.setDetails(details);
         }
         systemLayoutService.updateSystemLayoutById(layout);
     }

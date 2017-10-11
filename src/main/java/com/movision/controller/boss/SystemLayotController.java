@@ -32,7 +32,7 @@ public class SystemLayotController {
      * @param module
      * @param type
      * @param value
-     * @param describe
+     * @param details
      * @return
      */
     @ApiOperation(value = "新增系统配置", notes = "新增系统配置", response = Response.class)
@@ -40,9 +40,9 @@ public class SystemLayotController {
     public Response insertSystemLayout(@ApiParam(value = "所属模块") @RequestParam String module,
                                        @ApiParam(value = "类型名称") @RequestParam String type,
                                        @ApiParam(value = "值") @RequestParam String value,
-                                       @ApiParam(value = "描述") @RequestParam String describe) {
+                                       @ApiParam(value = "描述") @RequestParam String details) {
         Response response = new Response();
-        systemLayoutFacade.insertSystemLayout(module, type, value, describe);
+        systemLayoutFacade.insertSystemLayout(module, type, value, details);
         response.setMessage("操作成功");
         response.setData(1);
         return response;
@@ -93,7 +93,7 @@ public class SystemLayotController {
      * @param value
      * @param module
      * @param type
-     * @param describe
+     * @param details
      * @return
      */
     @ApiOperation(value = "编辑系统配置", notes = "根据id修改系统配置", response = Response.class)
@@ -102,9 +102,9 @@ public class SystemLayotController {
                                            @ApiParam(value = "值") @RequestParam(required = false) String value,
                                            @ApiParam(value = "模块") @RequestParam(required = false) String module,
                                            @ApiParam(value = "类型名称") @RequestParam(required = false) String type,
-                                           @ApiParam(value = "描述") @RequestParam(required = false) String describe) {
+                                           @ApiParam(value = "描述") @RequestParam(required = false) String details) {
         Response response = new Response();
-        systemLayoutFacade.updateSystemLayoutById(id, module, type, value, describe);
+        systemLayoutFacade.updateSystemLayoutById(id, module, type, value, details);
         response.setMessage("操作成功");
         response.setData(1);
         return response;
