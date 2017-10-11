@@ -1,6 +1,7 @@
 package com.movision.mybatis.votingrecords.service;
 
 
+import com.movision.mybatis.take.entity.Take;
 import com.movision.mybatis.votingrecords.entity.Votingrecords;
 import com.movision.mybatis.votingrecords.mapper.VotingrecordsMapper;
 import org.slf4j.Logger;
@@ -71,6 +72,21 @@ public class VotingrecordsService {
             return votingrecordsMapper.queryUserByDye(votingrecords);
         } catch (Exception e) {
             log.error("查询当天用户是否投票异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 更新投稿号码
+     *
+     * @param take
+     */
+    public void updateIsVote(Take take) {
+        try {
+            log.info("更新投稿号码");
+            votingrecordsMapper.updateIsVote(take);
+        } catch (Exception e) {
+            log.error("更新投稿号码异常", e);
             throw e;
         }
     }
