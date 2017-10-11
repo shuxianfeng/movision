@@ -1024,7 +1024,8 @@
 
     <select id="queryAllTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT count(u.id)
-        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE 1
+        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE
+        u.id<![CDATA[>=]]>20000 OR u.id <![CDATA[<]]>10000
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>
