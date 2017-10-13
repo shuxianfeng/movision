@@ -586,6 +586,7 @@ public class VoteFacade {
             String name = url.substring(idx + 1, url.length());
             //获取图片绝对路径
             String voturl = systemLayoutService.queryServiceUrl("vote_incision_img_url");
+            //name = uploadFacade.getConfigVar("vote.incise.domain") + name;
             name = voturl + name;
             Map t = movisionOssClient.uploadFileObject(new File(name), "img", "voteimg");
             m.put("url", t.get("url"));

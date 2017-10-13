@@ -144,6 +144,7 @@ public class AliOSSClient {
 
         log.info("阿里云OSS上传Started");
         OSSClient ossClient = init();
+        InputStream in = null;
 
         try {
 
@@ -155,7 +156,7 @@ public class AliOSSClient {
 
             // 上传文件流
 //            String domain;
-            InputStream in = file.getInputStream();
+            in = file.getInputStream();
             String fileName = file.getOriginalFilename();
             String fileKey;
             String fileName2 = FileUtil.renameFile(fileName);
@@ -192,6 +193,13 @@ public class AliOSSClient {
             return result;
         } finally {
             ossClient.shutdown();
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         log.info("阿里云OSS上传Completed");
@@ -213,6 +221,7 @@ public class AliOSSClient {
 
         log.info("阿里云OSS上传Started");
         OSSClient ossClient = init();
+        InputStream is = null;
 
         File fil = new File(file);
         try {
@@ -231,7 +240,7 @@ public class AliOSSClient {
                 domain = PropertiesLoader.getValue("formal.img.domain");//http://pic.mofo.shop
                 data = domain + "/" + fileKey;
                 //返回图片的宽高
-                InputStream is = new FileInputStream(file);
+                is = new FileInputStream(file);
                 BufferedImage src = ImageIO.read(is);
                 result.put("width", src.getWidth());
                 result.put("height", src.getHeight());
@@ -263,6 +272,13 @@ public class AliOSSClient {
             return result;
         } finally {
             ossClient.shutdown();
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         log.info("阿里云OSS上传Completed");
@@ -285,11 +301,12 @@ public class AliOSSClient {
 
         log.info("阿里云OSS上传Started");
         OSSClient ossClient = init();
+        InputStream in = null;
         try {
             long size = file.getSize();
             // 上传文件流
 //            String domain;
-            InputStream in = file.getInputStream();
+            in = file.getInputStream();
             String fileName = file.getOriginalFilename();
             String fileKey;
             String fileName2 = FileUtil.renameFile(fileName);
@@ -341,6 +358,13 @@ public class AliOSSClient {
             return result;
         } finally {
             ossClient.shutdown();
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         log.info("阿里云OSS上传Completed");
@@ -378,6 +402,7 @@ public class AliOSSClient {
 
         log.info("阿里云OSS上传Started");
         OSSClient ossClient = init();
+        InputStream is = null;
 
         try {
             // 文件存储入OSS，Object的名称为fileKey。详细请参看“SDK手册 > Java-SDK > 上传文件”。
@@ -395,7 +420,7 @@ public class AliOSSClient {
 //                domain = PropertiesLoader.getValue("ali.domain");
                 data = domain + "/" + fileKey;
                 //返回图片的宽高
-                InputStream is = new FileInputStream(file);
+                is = new FileInputStream(file);
                 BufferedImage src = ImageIO.read(is);
                 result.put("width", src.getWidth());
                 result.put("height", src.getHeight());
@@ -426,6 +451,13 @@ public class AliOSSClient {
             return result;
         } finally {
             ossClient.shutdown();
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         log.info("阿里云OSS上传Completed");
@@ -521,6 +553,7 @@ public class AliOSSClient {
         Map<String, Object> result = new HashMap<>();
         log.info("阿里云OSS下载Started");
         OSSClient ossClient = init();
+        InputStream is = null;
         try {
             if (type.equals("img")) {
                 bucketName = PropertiesLoader.getValue("img.bucket");
@@ -534,7 +567,7 @@ public class AliOSSClient {
 
 
             OSSObject ossObject = ossClient.getObject(bucketName, objKey);
-            InputStream is = ossObject.getObjectContent();
+            is = ossObject.getObjectContent();
             byte[] bytes = IOUtils.toByteArray(is);
 
             result.put("status", "success");
@@ -551,6 +584,13 @@ public class AliOSSClient {
             return result;
         } finally {
             ossClient.shutdown();
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         log.info("阿里云OSS下载Completed");

@@ -1291,13 +1291,14 @@ public class FacadePost {
         int wt = 0;//图片压缩后的宽度
         int ht = 0;//图片压缩后的高度440
         if (type.equals(1) || type.equals("1")) {//用于区分上传帖子封面还是活动方形图
+            InputStream is = null;
             try {
             /*wt = 750;
             ht = 440;*/
                 //返回图片的宽高
                 //BufferedImage bi = ImageIO.read(file.getInputStream());
                 File file1 = new File(tmpurl);
-                InputStream is = new FileInputStream(file1);
+                is = new FileInputStream(file1);
                 BufferedImage bi = ImageIO.read(is);
                 //获取图片压缩比例
                 Double ratio = systemLayoutService.queryFileRatio("file_compress_ratio");
@@ -1305,6 +1306,14 @@ public class FacadePost {
                 ht = (int) Math.ceil(bi.getHeight() * ratio);
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         } else {
             wt = 440;

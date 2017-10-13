@@ -356,15 +356,15 @@ public class MovisionOssClient {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (is != null)
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             if (iis != null)
                 try {
                     iis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            if (is != null)
+                try {
+                    is.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
