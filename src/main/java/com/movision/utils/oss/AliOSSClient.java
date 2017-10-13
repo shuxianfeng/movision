@@ -34,8 +34,6 @@ import java.util.Map;
  */
 @Service
 public class AliOSSClient {
-    @Autowired
-    private UserPhotoService userPhotoService;
 
     @Autowired
     private SystemLayoutService systemLayoutService;
@@ -147,13 +145,11 @@ public class AliOSSClient {
         InputStream in = null;
 
         try {
-
             long size = file.getSize();
 
             if (size > maxSize) {
                 throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "文件大小超过最大限制");
             }
-
             // 上传文件流
 //            String domain;
             in = file.getInputStream();
