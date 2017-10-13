@@ -22,6 +22,8 @@ import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.mybatis.userRefreshRecord.entity.UserReflushCount;
+import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
 import com.movision.utils.ListUtil;
@@ -80,6 +82,9 @@ public class UserFacade {
 
     @Autowired
     private UserBadgeUtil userBadgeUtil;
+
+    @Autowired
+    private UserRefreshRecordService userRefreshRecordService;
 
     /**
      * 判断是否存在该手机号的app用户
@@ -593,11 +598,23 @@ public class UserFacade {
             if (type == 0) {//帖子
                 //查询用户发的帖子
                 list = postService.findAllUserPostList(Integer.parseInt(userid), paging);
-                for (int i = 0; i < list.size(); i++) {
-                    facadePost.countView(list);
+
+                List<PostVo> resultList = new ArrayList<>();
+                //查询mongo中的用户浏览帖子记录（已经按照浏览数从大到小排列）
+                List<UserReflushCount> userReflushCountList = userRefreshRecordService.groupByPostid();
+
+                for (int j = 0; j < userReflushCountList.size(); j++) {
+                    for (int i = 0; i < list.size(); i++) {
+                        if (userReflushCountList.get(j).getPostid().intValue() == list.get(i).getId().intValue()) {
+                            list.get(i).setCountview(userReflushCountList.get(j).getCount());
+                            resultList.add(list.get(i));
+                        }
+                    }
                 }
                 if (list.size() == 0) {
                     list = null;
+                }else{
+                    list = resultList;
                 }
             } else if (type == 1) {//活动
                 //活动帖子
