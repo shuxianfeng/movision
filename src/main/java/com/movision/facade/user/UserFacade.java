@@ -594,7 +594,7 @@ public class UserFacade {
                 //查询用户发的帖子
                 list = postService.findAllUserPostList(Integer.parseInt(userid), paging);
                 for (int i = 0; i < list.size(); i++) {
-                    facadePost.countView(list);
+//                    facadePost.countView(list);
                 }
                 if (list.size() == 0) {
                     list = null;
