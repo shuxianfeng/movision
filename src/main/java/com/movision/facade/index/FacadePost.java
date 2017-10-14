@@ -2817,6 +2817,7 @@ public class FacadePost {
                     postVos.removeAll(dontlikes);
                     //根据postid查询帖子
                     postVo = postService.findAllPostByid(postVos, paging);
+                    log.info(postVos.size() + ";;;;;;;;;;;;;;;;;;;;;;;;;;");
                     if (postVo != null) {
                         findUser(postVo);
                         findPostLabel(postVo);
