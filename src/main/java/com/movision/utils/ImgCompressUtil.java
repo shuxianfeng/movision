@@ -37,8 +37,8 @@ public class ImgCompressUtil {
      * @return 压缩是否成功
      */
     public static boolean ImgCompress(String url, String tempDir, int w, int h) {
-        // 压缩质量 百分比
-        float JPEGcompression = 0.7f;
+        // 压缩质量 百分比（无损压缩）
+        float JPEGcompression = 1f;
 
         String name = FileUtil.getPicName(url);
 
@@ -82,60 +82,6 @@ public class ImgCompressUtil {
 
                 BufferedImage bufferedImage = ImageIO.read(file);
 
-				/*//获取Img
-                Image src = Toolkit.getDefaultToolkit().createImage(url);
-
-				// 注释掉的部分是将压缩后的图像调整为方形
-				int old_w = bufferedImage.getWidth(null); // 得到源图宽
-				int old_h = bufferedImage.getHeight(null);// 得到源图高
-				int new_w = 0;
-				int new_h = 0;
-				double w2 = (old_w * 1.00) / (w * 1.00);
-				double h2 = (old_h * 1.00) / (h * 1.00);
-				// 图片跟据长宽留白，成一个正方形图。
-				BufferedImage oldpic;
-				if (old_w > old_h) {
-					oldpic = new BufferedImage(old_w, old_w,
-							BufferedImage.TYPE_INT_RGB);
-				} else {
-					if (old_w < old_h) {
-						oldpic = new BufferedImage(old_h, old_h,
-								BufferedImage.TYPE_INT_RGB);
-					} else {
-						oldpic = new BufferedImage(old_w, old_h,
-								BufferedImage.TYPE_INT_RGB);
-					}
-				}
-				Graphics2D g = oldpic.createGraphics();
-				g.setColor(Color.white);
-				if (old_w > old_h) {
-					g.fillRect(0, 0, old_w, old_w);
-
-					g.drawImage(src, 0, (old_w - old_h) / 2, old_w, old_h,
-							Color.white, null);
-				} else {
-					if (old_w < old_h) {
-						g.fillRect(0, 0, old_h, old_h);
-						g.drawImage(src, (old_h - old_w) / 2, 0, old_w, old_h,
-								Color.white, null);
-					} else {
-						// g.fillRect(0,0,old_h,old_h);
-						g.drawImage(src.getScaledInstance(old_w, old_h,
-								Image.SCALE_SMOOTH), 0, 0, null);
-					}
-				}
-				g.dispose();
-				src = oldpic;
-				// 图片调整为方形结束
-				if (old_w > w)
-					new_w = (int) Math.round(old_w / w2);
-				else
-					new_w = old_w;
-				if (old_h > h)
-					new_h = (int) Math.round(old_h / h2);// 计算新图长宽
-				else
-					new_h = old_h;*/
-
                 File imgFile = new File(url);// 读入文件
                 Image img = ImageIO.read(imgFile);      // 构造Image对象
                 int originWidth = img.getWidth(null);    // 得到源图宽
@@ -153,12 +99,6 @@ public class ImgCompressUtil {
                 int final_w = map.get("w");    //最终的宽度
                 int final_h = map.get("h");    //最终的高度
 
-                // System.out.println("final_w="+final_w);
-                // System.out.println("final_h="+final_h);
-
-//                BufferedImage image_to_save = new BufferedImage(final_w, final_h,
-//                        bufferedImage.getType());//-----------------------注释此处使用下面这段代码
-
                 BufferedImage image_to_save;//------------------------------解决压缩后图片变红的问题20170411 13:46 shuxf
                 if (bufferedImage.isAlphaPremultiplied()) {
                     image_to_save = new BufferedImage(final_w, final_h, BufferedImage.TRANSLUCENT);
@@ -172,14 +112,6 @@ public class ImgCompressUtil {
                 log.info("第二次测试压缩核心方法中压缩后的图片存储路径>>>>>>>>>>>>>>>>" + tempDir + name);
                 FileOutputStream fos = new FileOutputStream(tempDir + name); // 输出到文件流
 
-                // 旧的使用 jpeg classes进行处理的方法
-                // JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(fos);
-                // JPEGEncodeParam jep =
-                // JPEGCodec.getDefaultJPEGEncodeParam(image_to_save);
-				/* 压缩质量 */
-                // jep.setQuality(per, true);
-                // encoder.encode(image_to_save, jep);
-
                 // 新的方法
                 int dpi = 300;// 分辨率
                 saveAsJPEG(dpi, image_to_save, JPEGcompression, fos);
@@ -188,7 +120,6 @@ public class ImgCompressUtil {
                 compressFlag = true;
             } catch (IOException ex) {
                 log.error("压缩图片异常 原图路径" + url, ex);
-                // filePath = "/var/upload/404.jpg";
             }
         }
 
@@ -262,18 +193,6 @@ public class ImgCompressUtil {
     public static void saveAsJPEG(Integer dpi, BufferedImage image_to_save,
                                   float JPEGcompression, FileOutputStream fos) throws IOException {
 
-        // useful documentation at
-        // http://docs.oracle.com/javase/7/docs/api/javax/imageio/metadata/doc-files/jpeg_metadata.html
-        // useful example program at
-        // http://johnbokma.com/java/obtaining-image-metadata.html to output
-        // JPEG data
-
-        // old jpeg class
-        // com.sun.image.codec.jpeg.JPEGImageEncoder jpegEncoder =
-        // com.sun.image.codec.jpeg.JPEGCodec.createJPEGEncoder(fos);
-        // com.sun.image.codec.jpeg.JPEGEncodeParam jpegEncodeParam =
-        // jpegEncoder.getDefaultJPEGEncodeParam(image_to_save);
-
         // Image writer
         JPEGImageWriter imageWriter = (JPEGImageWriter) ImageIO
                 .getImageWritersBySuffix("jpg").next();
@@ -283,27 +202,7 @@ public class ImgCompressUtil {
         IIOMetadata imageMetaData = imageWriter.getDefaultImageMetadata(
                 new ImageTypeSpecifier(image_to_save), null);
 
-        // if(dpi != null && !dpi.equals("")){
-        //
-        // //old metadata
-        // //jpegEncodeParam.setDensityUnit(com.sun.image.codec.jpeg.JPEGEncodeParam.DENSITY_UNIT_DOTS_INCH);
-        // //jpegEncodeParam.setXDensity(dpi);
-        // //jpegEncodeParam.setYDensity(dpi);
-        //
-        // //new metadata
-        // Element tree = (Element)
-        // imageMetaData.getAsTree("javax_imageio_jpeg_image_1.0");
-        // Element jfif =
-        // (Element)tree.getElementsByTagName("app0JFIF").item(0);
-        // jfif.setAttribute("Xdensity", Integer.toString(dpi) );
-        // jfif.setAttribute("Ydensity", Integer.toString(dpi));
-        //
-        // }
-
         if (JPEGcompression >= 0 && JPEGcompression <= 1f) {
-
-            // old compression
-            // jpegEncodeParam.setQuality(JPEGcompression,false);
 
             // new Compression
             JPEGImageWriteParam jpegParams = (JPEGImageWriteParam) imageWriter
@@ -313,10 +212,6 @@ public class ImgCompressUtil {
 
         }
 
-        // old write and clean
-        // jpegEncoder.encode(image_to_save, jpegEncodeParam);
-
-        // new Write and clean up
         imageWriter.write(imageMetaData,
                 new IIOImage(image_to_save, null, null), null);
         ios.close();
