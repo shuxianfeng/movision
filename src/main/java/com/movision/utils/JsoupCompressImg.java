@@ -129,8 +129,8 @@ public class JsoupCompressImg {
 
                     //根据原图尺寸计算压缩后的图片尺寸
                     BufferedImage image = ImageIO.read(fis);
-                    int w = (int) (image.getWidth()*0.20);//对原图尺寸的宽高比压缩20%
-                    int h = (int) (image.getHeight()*0.20);
+                    int w = (int) (image.getWidth()*0.50);//对原图尺寸的宽高比压缩50%（待IOS原图传输问题解决后改为20%）
+                    int h = (int) (image.getHeight()*0.50);
 
                     if (StringUtils.isNotEmpty(imgurl)) {
 
@@ -306,8 +306,8 @@ public class JsoupCompressImg {
 
                         //根据原图尺寸计算压缩后的图片尺寸
                         BufferedImage image = ImageIO.read(fis);
-                        int w = (int) (image.getWidth()*0.20);//对原图尺寸的宽高比压缩20%
-                        int h = (int) (image.getHeight()*0.20);
+                        int w = (int) (image.getWidth()*0.50);//对原图尺寸的宽高比压缩50%（待IOS原图传输问题解决后改为20%）
+                        int h = (int) (image.getHeight()*0.50);
 
                         if (StringUtils.isNotEmpty(imgurl)) {
 
