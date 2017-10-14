@@ -2787,7 +2787,7 @@ public class FacadePost {
         List<DBObject> intimePost=null;
         if (userid != null) {
             if (StringUtil.isEmpty(circleid) && StringUtil.isEmpty(labelid)) {
-                if (postids != null) {
+                if (postids != "") {
                     List<DBObject> onlyPost = queryOnlPost(Integer.parseInt(userid), type, Integer.parseInt(postids));
                     for (int i = 0; i < onlyPost.size(); i++) {
                         String intime = onlyPost.get(i).get("intime").toString();
@@ -2829,7 +2829,7 @@ public class FacadePost {
             }
             }
             if (StringUtil.isNotEmpty(labelid)) {
-                if (postids != null) {
+                if (postids != "") {
                 List<DBObject> onlyPost = queryOnlPostLabel(Integer.parseInt(userid), type, Integer.parseInt(postids), Integer.parseInt(labelid));
                 for (int i = 0; i < onlyPost.size(); i++) {
                     String intime = onlyPost.get(i).get("intime").toString();
@@ -2869,7 +2869,7 @@ public class FacadePost {
              }
                 }
          } else if (StringUtil.isNotEmpty(circleid)) {
-                if (postids != null) {
+                if (postids != "") {
                 List<DBObject> onlyPost = queryOnlPostCircleid(Integer.parseInt(userid), type, Integer.parseInt(postids), Integer.parseInt(circleid));
                 for (int i = 0; i < onlyPost.size(); i++) {
                     String intime = onlyPost.get(i).get("intime").toString();
@@ -2913,7 +2913,7 @@ public class FacadePost {
             }
      }else {
             if (StringUtil.isEmpty(labelid) && StringUtil.isEmpty(circleid)) {
-                if (postids != null) {
+                if (postids != "") {
                 List<DBObject> onlyPost = queryOnlPostNotLogin(device, type, Integer.parseInt(postids));
                 for (int i = 0; i < onlyPost.size(); i++) {
                     String intime = onlyPost.get(i).get("intime").toString();
@@ -2943,7 +2943,7 @@ public class FacadePost {
             }
             }
             if (StringUtil.isNotEmpty(labelid)) {
-                if (postids != null) {
+                if (postids != "") {
                     List<DBObject> onlyPost = queryOnlPostNotLoginLabelid(device, type, Integer.parseInt(postids), Integer.parseInt(labelid));
                     for (int i = 0; i < onlyPost.size(); i++) {
                         String intime = onlyPost.get(i).get("intime").toString();
@@ -2966,7 +2966,7 @@ public class FacadePost {
                     }
                 }
          } else if (StringUtil.isNotEmpty(circleid)) {
-                if (postids != null) {
+                if (postids != "") {
                 List<DBObject> onlyPost = queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), Integer.parseInt(circleid));
                 for (int i = 0; i < onlyPost.size(); i++) {
                     String intime = onlyPost.get(i).get("intime").toString();
