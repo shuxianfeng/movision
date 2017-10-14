@@ -131,4 +131,13 @@ public class RobotPostController {
         robotFacade.insertMongoPostView(num);
         return response;
     }
+
+    @ApiOperation(value = "机器人批量浏览帖子", notes = "机器人批量浏览帖子", response = Response.class)
+    @RequestMapping(value = "/add_someone_post_view", method = RequestMethod.POST)
+    public Response addSomeonePostView(@ApiParam(value = "需要调用的机器人数量") @RequestParam Integer num,
+                                       @ApiParam(value = "被浏览的帖子的作者") @RequestParam Integer uid) throws IOException {
+        Response response = new Response();
+        robotFacade.insertSomeonePostView(num, uid);
+        return response;
+    }
 }

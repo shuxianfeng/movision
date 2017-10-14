@@ -2148,9 +2148,13 @@
         SELECT userid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
     <select id="findUserPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
-        select yw_post.*,yw_user.nickname,yw_user.photo,yw_circle.`name` AS circlename from yw_post LEFT JOIN yw_user ON
-        yw_user.id=yw_post.userid LEFT JOIN yw_circle ON yw_circle.id=yw_post.circleid
-        WHERE yw_post.userid=#{postuserid,jdbcType=INTEGER} AND yw_post.isdel=0 ORDER BY yw_post.heat_value DESC
+        select yw_post.*,yw_user.nickname,yw_user.photo,yw_circle.`name` AS circlename
+        from yw_post
+        LEFT JOIN yw_user ON yw_user.id=yw_post.userid
+        LEFT JOIN yw_circle ON yw_circle.id=yw_post.circleid
+        WHERE yw_post.userid=#{postuserid,jdbcType=INTEGER}
+        AND yw_post.isdel=0
+        ORDER BY yw_post.heat_value DESC
     </select>
     <select id="findPostByLabelId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT labelid FROM yw_post_label_relation WHERE postid=#{postid,jdbcType=INTEGER}

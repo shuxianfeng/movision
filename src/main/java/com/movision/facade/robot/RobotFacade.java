@@ -820,6 +820,26 @@ public class RobotFacade {
         List<PostVo> postList = postService.findAllPostListHeat();
 
         //2 遍历所有的帖子
+        batchInsertPostViewRecord(num, postList);
+
+    }
+
+    public void insertSomeonePostView(Integer num, Integer uid) {
+        //1 查询该用户所有帖子（包括帖子所属的圈子id）
+        List<PostVo> postList = postService.findUserPost(uid);
+
+        //2 遍历所有的帖子，封装成帖子浏览记录，并插入mongoDB
+        batchInsertPostViewRecord(num, postList);
+
+    }
+
+    /**
+     * 遍历所有的帖子，封装成帖子浏览记录，并插入mongoDB
+     *
+     * @param num
+     * @param postList
+     */
+    private void batchInsertPostViewRecord(Integer num, List<PostVo> postList) {
         Random random = new Random();
         for (int i = 0; i < postList.size(); i++) {
             //1 随机取n个机器人
@@ -844,7 +864,6 @@ public class RobotFacade {
                 userRefreshRecordService.insert(userRefreshRecord);
             }
         }
-
     }
 
 
