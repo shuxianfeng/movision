@@ -486,11 +486,14 @@ public class AliOSSClient {
 
             String data = "";
             if (type.equals("img")) {
-                bucketName = PropertiesLoader.getValue("img.bucket");
-                domain = PropertiesLoader.getValue("formal.img.domain");    //正式服 http://pic.mofo.shop
+                bucketName = systemLayoutService.queryImgBucket("img_bucket");
+                domain = systemLayoutService.queryServiceUrl("file_service_url");
+                //bucketName = PropertiesLoader.getValue("img.bucket");
+                //domain = PropertiesLoader.getValue("formal.img.domain");    //正式服 http://pic.mofo.shop
                 data = domain + "/" + fileKey;
             } else if (type.equals("doc")) {
-                bucketName = PropertiesLoader.getValue("file.bucket");
+                bucketName = systemLayoutService.queryImgBucket("file_bucket");
+                //bucketName = PropertiesLoader.getValue("file.bucket");
                 data = fileName;
             }
             //核心api
@@ -552,10 +555,12 @@ public class AliOSSClient {
         InputStream is = null;
         try {
             if (type.equals("img")) {
-                bucketName = PropertiesLoader.getValue("img.bucket");
+                //bucketName = PropertiesLoader.getValue("img.bucket");
+                bucketName = systemLayoutService.queryImgBucket("img_bucket");
 
             } else if (type.equals("doc")) {
-                bucketName = PropertiesLoader.getValue("file.bucket");
+                //bucketName = PropertiesLoader.getValue("file.bucket");
+                bucketName = systemLayoutService.queryImgBucket("file_bucket");
             }
 
             String objKey;
