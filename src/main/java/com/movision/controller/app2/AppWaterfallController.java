@@ -140,7 +140,7 @@ public class AppWaterfallController {
                                               @ApiParam(value = "帖子id") @RequestParam String postids) {
         Response response = new Response();
         Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List map = facadePost.userReflushHishtoryRecord(userid, pager, type, device, labelid, circleid, postids);
+        List<PostVo> map = facadePost.userReflushHishtoryRecord(userid, pager, type, device, labelid, circleid, postids);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

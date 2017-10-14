@@ -2782,7 +2782,7 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    public List userReflushHishtoryRecord(String userid, Paging<PostVo> paging, int type, String device, String labelid, String circleid,String postids) {
+    public List<PostVo> userReflushHishtoryRecord(String userid, Paging<PostVo> paging, int type, String device, String labelid, String circleid, String postids) {
         List<PostVo> postVo = null;
         List<DBObject> intimePost=null;
         if (userid != null) {
