@@ -88,16 +88,16 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
     /**
      * 统计当前userid对应的帖子浏览记录
      *
-     * @param userid
+     * @param postidList
      * @return
      */
-    public List<UserReflushCount> countPostViewCountByUserid(int userid) {
+    public List<UserReflushCount> countPostViewCountByUserid(List<Integer> postidList) {
 
         log.debug("统计当前userid对应的帖子浏览记录");
         TypedAggregation<UserRefreshRecord> agg = Aggregation.newAggregation(
                 UserRefreshRecord.class,
-                project("postid", "userid")
-                , match(Criteria.where("userid").is(userid))
+                project("postid")
+                , match(Criteria.where("postid").in(postidList))
                 , group("postid").count().as("count")
                 , sort(Sort.Direction.DESC, "count")
         );

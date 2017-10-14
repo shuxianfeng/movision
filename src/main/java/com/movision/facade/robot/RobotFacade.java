@@ -830,7 +830,6 @@ public class RobotFacade {
 
         //2 遍历所有的帖子，封装成帖子浏览记录，并插入mongoDB
         batchInsertPostViewRecord(num, postList);
-
     }
 
     /**
