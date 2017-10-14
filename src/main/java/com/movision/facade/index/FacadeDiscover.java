@@ -30,8 +30,6 @@ import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,8 +41,6 @@ import java.util.*;
  */
 @Service
 public class FacadeDiscover {
-
-    private static Logger log = LoggerFactory.getLogger(FacadeDiscover.class);
 
     @Autowired
     private PostLabelService postLabelService;
