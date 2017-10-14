@@ -174,18 +174,6 @@ public class FacadeDiscover {
     }
 
     /**
-     * 统计浏览数和标签
-     *
-     * @param postVoList
-     */
-    private void AddCountViewAndLabel(List<PostVo> postVoList) {
-        //2 统计浏览数（循环）
-        facadePost.countView(postVoList);
-        //3 统计标签（循环）
-        facadePost.findPostLabel(postVoList);
-    }
-
-    /**
      * 查询当月评论最多的帖子
      *
      * @param pager
