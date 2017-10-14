@@ -2787,11 +2787,13 @@ public class FacadePost {
         List<DBObject> intimePost=null;
         if (userid != null) {
             if (StringUtil.isEmpty(circleid) && StringUtil.isEmpty(labelid)) {
-                List<DBObject> onlyPost = queryOnlPost(Integer.parseInt(userid), type, Integer.parseInt(postids));
-                for (int i = 0; i < onlyPost.size(); i++) {
-                    String intime = onlyPost.get(i).get("intime").toString();
-                    intimePost = queryPosyByImtime(intime);
-                }
+                if (postids != null) {
+                    List<DBObject> onlyPost = queryOnlPost(Integer.parseInt(userid), type, Integer.parseInt(postids));
+                    for (int i = 0; i < onlyPost.size(); i++) {
+                        String intime = onlyPost.get(i).get("intime").toString();
+                        intimePost = queryPosyByImtime(intime);
+                    }
+
                 // List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid), type);
                 List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
                 List<Integer> postVos = new ArrayList<>();
@@ -2825,7 +2827,9 @@ public class FacadePost {
                 }
 
             }
+            }
             if (StringUtil.isNotEmpty(labelid)) {
+                if (postids != null) {
                 List<DBObject> onlyPost = queryOnlPostLabel(Integer.parseInt(userid), type, Integer.parseInt(postids), Integer.parseInt(labelid));
                 for (int i = 0; i < onlyPost.size(); i++) {
                     String intime = onlyPost.get(i).get("intime").toString();
@@ -2863,7 +2867,9 @@ public class FacadePost {
                      zanIsPost(Integer.parseInt(userid), postVo);
                  }
              }
+                }
          } else if (StringUtil.isNotEmpty(circleid)) {
+                if (postids != null) {
                 List<DBObject> onlyPost = queryOnlPostCircleid(Integer.parseInt(userid), type, Integer.parseInt(postids), Integer.parseInt(circleid));
                 for (int i = 0; i < onlyPost.size(); i++) {
                     String intime = onlyPost.get(i).get("intime").toString();
@@ -2904,8 +2910,10 @@ public class FacadePost {
                  }
              }
          }
+            }
      }else {
             if (StringUtil.isEmpty(labelid) && StringUtil.isEmpty(circleid)) {
+                if (postids != null) {
                 List<DBObject> onlyPost = queryOnlPostNotLogin(device, type, Integer.parseInt(postids));
                 for (int i = 0; i < onlyPost.size(); i++) {
                     String intime = onlyPost.get(i).get("intime").toString();
@@ -2933,28 +2941,32 @@ public class FacadePost {
                     }
                 }
             }
+            }
             if (StringUtil.isNotEmpty(labelid)) {
-                List<DBObject> onlyPost = queryOnlPostNotLoginLabelid(device, type, Integer.parseInt(postids), Integer.parseInt(labelid));
-                for (int i = 0; i < onlyPost.size(); i++) {
-                    String intime = onlyPost.get(i).get("intime").toString();
-                    intimePost = queryPosyByImtime(intime);
+                if (postids != null) {
+                    List<DBObject> onlyPost = queryOnlPostNotLoginLabelid(device, type, Integer.parseInt(postids), Integer.parseInt(labelid));
+                    for (int i = 0; i < onlyPost.size(); i++) {
+                        String intime = onlyPost.get(i).get("intime").toString();
+                        intimePost = queryPosyByImtime(intime);
+                    }
+                    //List<DBObject> list = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
+                    List<Integer> postVos = new ArrayList<>();
+                    if (intimePost != null) {
+                        for (int i = 0; i < intimePost.size(); i++) {
+                            int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
+                            postVos.add(postid);
+                        }
+                        postVo = postService.findAllPostByid(postVos, paging);
+                        if (postVo != null) {
+                            findUser(postVo);
+                            findPostLabel(postVo);
+                            findHotComment(postVo);
+                            countView(postVo);
+                        }
+                    }
                 }
-                //List<DBObject> list = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
-                List<Integer> postVos = new ArrayList<>();
-                if (intimePost != null) {
-                    for (int i = 0; i < intimePost.size(); i++) {
-                        int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
-                     postVos.add(postid);
-                 }
-                 postVo = postService.findAllPostByid(postVos, paging);
-                 if (postVo != null) {
-                     findUser(postVo);
-                     findPostLabel(postVo);
-                     findHotComment(postVo);
-                     countView(postVo);
-                 }
-             }
          } else if (StringUtil.isNotEmpty(circleid)) {
+                if (postids != null) {
                 List<DBObject> onlyPost = queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), Integer.parseInt(circleid));
                 for (int i = 0; i < onlyPost.size(); i++) {
                     String intime = onlyPost.get(i).get("intime").toString();
@@ -2982,6 +2994,7 @@ public class FacadePost {
                  }
              }
          }
+            }
      }
         return postVo;
     }
