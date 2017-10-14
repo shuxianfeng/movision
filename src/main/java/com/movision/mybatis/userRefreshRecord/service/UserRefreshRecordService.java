@@ -86,6 +86,29 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
     }
 
     /**
+     * 统计当前userid对应的帖子浏览记录
+     *
+     * @param userid
+     * @return
+     */
+    public List<UserReflushCount> countPostViewCountByUserid(int userid) {
+
+        log.debug("统计当前userid对应的帖子浏览记录");
+        TypedAggregation<UserRefreshRecord> agg = Aggregation.newAggregation(
+                UserRefreshRecord.class,
+                project("postid", "userid")
+                , match(Criteria.where("userid").is(userid))
+                , group("postid").count().as("count")
+                , sort(Sort.Direction.DESC, "count")
+        );
+        log.debug("执行语句=" + agg.toString());
+        AggregationResults<UserReflushCount> result = mongoTemplate.aggregate(agg, UserReflushCount.class);
+        log.debug("查询结果=" + result.getMappedResults());
+        return result.getMappedResults();
+    }
+
+
+    /**
      * 统计在一个月内，每个帖子的浏览次数
      *
      * @param begintime
@@ -94,7 +117,7 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
      */
     public List<UserReflushCount> getPostViewRecordMonthly(String begintime, String endtime) {
 
-        log.debug("从mongoDB中查询帖子浏览记录");
+        log.debug("统计在一个月内，每个帖子的浏览次数");
         TypedAggregation<UserRefreshRecord> agg = Aggregation.newAggregation(
                 UserRefreshRecord.class,
                 project("postid", "intime")

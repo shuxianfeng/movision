@@ -5,13 +5,11 @@ import com.movision.common.constant.SessionConstant;
 import com.movision.facade.boss.BossLoginFacade;
 import com.movision.facade.im.ImFacade;
 import com.movision.facade.user.BossUserFacade;
-import com.movision.facade.user.UserFacade;
 import com.movision.facade.user.UserRoleRelationFacade;
 import com.movision.mybatis.bossMenu.entity.AuthMenu;
 import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.shiro.realm.BossRealm;
-import com.movision.shiro.realm.ShiroRealm;
 import com.movision.shiro.realm.ShiroRealm.ShiroUser;
 import com.movision.utils.propertiesLoader.LoginPropertiesLoader;
 import org.apache.shiro.SecurityUtils;
@@ -40,12 +38,6 @@ import java.util.Map;
  */
 public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
     private Logger log = LoggerFactory.getLogger(InitLoginMemberInterceptor.class);
-
-    @Autowired
-    private UserFacade userFacade;
-
-    @Autowired
-    private ShiroRealm shiroRealm;
 
     @Autowired
     private BossRealm bossRealm;
