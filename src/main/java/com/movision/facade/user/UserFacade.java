@@ -601,7 +601,7 @@ public class UserFacade {
                     postidList.add(postVo.getId());
                 }
                 List<PostVo> resultList = new ArrayList<>();
-                //查询mongo中的用户浏览帖子记录（已经按照浏览数从大到小排列）
+                //查询mongo中的用户浏览帖子记录
                 List<UserReflushCount> userReflushCountList = userRefreshRecordService.countPostViewCountByUserid(postidList);
 
                 for (int j = 0; j < userReflushCountList.size(); j++) {
