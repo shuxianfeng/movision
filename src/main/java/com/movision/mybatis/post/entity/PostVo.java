@@ -625,7 +625,7 @@ public class PostVo implements Serializable {
             PostVo p1 = (PostVo) o1;
             PostVo p2 = (PostVo) o2;
 
-            return (p1.getIntime().compareTo(p2.getIntime()));
+            return (p2.getIntime().compareTo(p1.getIntime()));
         }
     };
 }
