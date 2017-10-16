@@ -1,14 +1,13 @@
 package com.movision.mybatis.post.entity;
 
 import com.movision.mybatis.circle.entity.Circle;
-import com.movision.mybatis.comment.entity.Comment;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.postLabel.entity.PostLabel;
-import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.user.entity.UserLike;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -617,5 +616,16 @@ public class PostVo implements Serializable {
         return this.getId().hashCode();
     }
 
+    /**
+     * 重写compare方法用于intime重排序
+     */
+    public static Comparator countComparator = new Comparator() {
+        @Override
+        public int compare(Object o1, Object o2) {
+            PostVo p1 = (PostVo) o1;
+            PostVo p2 = (PostVo) o2;
 
+            return (p1.getIntime().compareTo(p2.getIntime()));
+        }
+    };
 }

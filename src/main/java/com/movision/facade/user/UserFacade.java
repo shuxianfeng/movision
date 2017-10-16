@@ -24,9 +24,7 @@ import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userRefreshRecord.entity.UserReflushCount;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
-import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
-import com.movision.utils.ListUtil;
 import com.movision.utils.UserBadgeUtil;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
@@ -617,6 +615,8 @@ public class UserFacade {
                 if (list.size() == 0) {
                     list = null;
                 }else{
+                    //如果不为空，按照发帖时间排倒叙返回结果
+                    Collections.sort(resultList, PostVo.countComparator);
                     list = resultList;
                 }
             } else if (type == 1) {//活动
