@@ -2803,6 +2803,7 @@ public class FacadePost {
                         int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
                         postVos.add(postid);
                     }
+                }
                     /**if (list.size() != 0) {
                     for (int i = 0; i < list.size(); i++) {
                         int postid = Integer.parseInt(list.get(i).get("postid").toString());
@@ -2825,8 +2826,6 @@ public class FacadePost {
                         countView(postVo);
                         zanIsPost(Integer.parseInt(userid), postVo);
                     }
-                }
-
             }
             }
             if (StringUtil.isNotEmpty(labelid)) {
@@ -2845,6 +2844,7 @@ public class FacadePost {
                         int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
                         postVos.add(postid);
                     }
+                }
              /**if (list.size() != 0) {
                  for (int i = 0; i < list.size(); i++) {
                      int postid = Integer.parseInt(list.get(i).get("postid").toString());
@@ -2867,7 +2867,6 @@ public class FacadePost {
                      countView(postVo);
                      zanIsPost(Integer.parseInt(userid), postVo);
                  }
-             }
                 }
          } else if (StringUtil.isNotEmpty(circleid)) {
                 if (postids != "") {
@@ -2886,6 +2885,7 @@ public class FacadePost {
                         int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
                         postVos.add(postid);
                     }
+                }
              /**if (list.size() != 0) {
                  for (int i = 0; i < list.size(); i++) {
                      int postid = Integer.parseInt(list.get(i).get("postid").toString());
@@ -2909,8 +2909,7 @@ public class FacadePost {
                      countView(postVo);
                      zanIsPost(Integer.parseInt(userid), postVo);
                  }
-             }
-         }
+                }
             }
      }else {
             if (StringUtil.isEmpty(labelid) && StringUtil.isEmpty(circleid)) {
@@ -2927,6 +2926,7 @@ public class FacadePost {
                         int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
                         postVos.add(postid);
                     }
+                }
                     /**if (list.size() != 0) {
                     for (int i = 0; i < list.size(); i++) {
                         int postid = Integer.parseInt(list.get(i).get("postid").toString());
@@ -2942,7 +2942,6 @@ public class FacadePost {
                     }
                 }
             }
-            }
             if (StringUtil.isNotEmpty(labelid)) {
                 if (postids != "") {
                     List<DBObject> onlyPost = queryOnlPostNotLoginLabelid(device, type, Integer.parseInt(postids), Integer.parseInt(labelid));
@@ -2957,6 +2956,7 @@ public class FacadePost {
                             int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
                             postVos.add(postid);
                         }
+                    }
                         postVo = postService.findAllPostByid(postVos, paging);
                         if (postVo != null) {
                             findUser(postVo);
@@ -2964,7 +2964,6 @@ public class FacadePost {
                             findHotComment(postVo);
                             countView(postVo);
                         }
-                    }
                 }
          } else if (StringUtil.isNotEmpty(circleid)) {
                 if (postids != "") {
@@ -2980,6 +2979,7 @@ public class FacadePost {
                         int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
                         postVos.add(postid);
                     }
+                }
              /**if (list.size() != 0) {
                  for (int i = 0; i < list.size(); i++) {
                      int postid = Integer.parseInt(list.get(i).get("postid").toString());
@@ -2993,8 +2993,7 @@ public class FacadePost {
                      findHotComment(postVo);
                      countView(postVo);
                  }
-             }
-         }
+                }
             }
      }
         return postVo;
