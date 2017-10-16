@@ -120,6 +120,7 @@
                 type = #{type,jdbcType=VARCHAR}
             </if>
         </where>
+        ORDER BY module DESC
     </select>
 
     <select id="querySystemLayoutById" parameterType="java.lang.Integer"
