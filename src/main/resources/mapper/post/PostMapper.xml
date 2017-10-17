@@ -421,7 +421,7 @@
         circleid, title,
         postcontent, zansum, commentsum, forwardsum,
         collectsum, isactive, ishot, isessence,
-        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime, activeid, city
+        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime, activeid, city, heat_value
         )
         VALUES (
         #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=LONGVARCHAR},
@@ -430,7 +430,7 @@
         #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
         #{coverimg,jdbcType=VARCHAR},now(),#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},
         #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{oprtime,jdbcType=TIMESTAMP},
-        #{activeid}, #{city}
+        #{activeid}, #{city}, #{heat_value}
         )
     </insert>
     <!--插入一条用户参与活动的记录-->

@@ -52,8 +52,8 @@ public class HeatValueConstant {
      * 热度类型对应的积分
      */
     public enum POINT {
-        home_page_selection(300),//首页精选
-        post_selection(200),//帖子精选
+        home_page_selection(2000),//首页精选
+        post_selection(1200),//帖子精选
         zan_number(30),//点赞数
         comments_number(40),//评论数
         forwarding_number(80),//转发数
@@ -61,7 +61,7 @@ public class HeatValueConstant {
 
         //用户热度
         fan_count(20),//粉丝数
-        posts_count(100),//发帖数
+        posts_count(50),//发帖数
         //评论的热度
         comment_zan_count(3),//評論的點贊數
         reply_comment_number(7),//回复评论数

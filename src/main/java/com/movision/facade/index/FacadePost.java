@@ -1175,8 +1175,9 @@ public class FacadePost {
         } else if ((int) contentMap.get("flag") > 0) {
             post.setIsdel(2);
         }
-        post.setCoverimg(coverimg);//帖子封面
+        post.setCoverimg(coverimg); //帖子封面
         post.setUserid(userid);
+        post.setHeatvalue(500); //默认的帖子热度值
         //城市编码
         String citycode = wrapCitycode();
         post.setCity(citycode);    //使用登录时的城市一样
