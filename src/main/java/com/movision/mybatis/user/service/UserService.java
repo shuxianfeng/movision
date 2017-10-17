@@ -1242,7 +1242,30 @@ public class UserService {
         }
     }
 
-    public List<User> queryNotRepeatRandomRobots(Map map) {
+
+    public List<User> queryNotRepeatCollectRobots(Map map) {
+        try {
+            log.info("查询不重复收藏帖子的机器人用户");
+            return userMapper.queryNotRepeatCollectRobots(map);
+        } catch (Exception e) {
+            log.error("查询不重复收藏帖子的机器人用户", e);
+            throw e;
+        }
+    }
+
+
+    public List<User> queryNotRepeatZanRobots(Map map) {
+        try {
+            log.info("查询不重复点赞帖子的机器人用户");
+            return userMapper.queryNotRepeatZanRobots(map);
+        } catch (Exception e) {
+            log.error("查询不重复点赞帖子的机器人用户", e);
+            throw e;
+        }
+    }
+
+
+    public List<User> queryNotRepeatFollowRandomRobots(Map map) {
         try {
             log.info("查询不重复关注的用户机器人用户");
             return userMapper.queryNotRepeatRandomRobots(map);

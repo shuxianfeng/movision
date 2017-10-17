@@ -12,7 +12,6 @@ import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.personalizedSignature.entity.PersonalizedSignature;
 import com.movision.mybatis.personalizedSignature.service.PersonalizedSignatureService;
-import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.robotComment.entity.RobotComment;
@@ -205,8 +204,11 @@ public class RobotFacade {
         if (num < 1) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人数量至少是1个");
         }
-        //1 集合机器人大军
-        List<User> robotArmy = userService.queryRandomUser(num);
+        //1 集合机器人大军， 注：一个机器人只能点赞同一个帖子一次
+        Map map = new HashMap();
+        map.put("postid", postid);
+        map.put("number", num);
+        List<User> robotArmy = userService.queryNotRepeatZanRobots(map);
 
         //2 循环进行帖子点赞操作， 需要注意，点赞不能在同一个时刻
         for (int i = 0; i < robotArmy.size(); i++) {
@@ -377,8 +379,11 @@ public class RobotFacade {
      * @param num
      */
     public void robotCollectPost(int postid, int num) {
-        //1 集合机器人大军
-        List<User> robotArmy = userService.queryRandomUser(num);
+        //1 集合机器人大军, 注：一个机器人只能对同一个帖子收藏一次
+        Map map = new HashMap();
+        map.put("postid", postid);
+        map.put("number", num);
+        List<User> robotArmy = userService.queryNotRepeatCollectRobots(map);
 
         //2 循环进行收藏帖子操作
         for (int i = 0; i < robotArmy.size(); i++) {
@@ -398,7 +403,7 @@ public class RobotFacade {
         Map map = new HashMap();
         map.put("number", num);
         map.put("userid", userid);
-        List<User> robotArmy = userService.queryNotRepeatRandomRobots(map);
+        List<User> robotArmy = userService.queryNotRepeatFollowRandomRobots(map);
 
         //2 循环进行关注作者操作
         for (int i = 0; i < robotArmy.size(); i++) {
@@ -682,9 +687,9 @@ public class RobotFacade {
     }
 
     public void singlePostComment(int num, int postid) {
-
+        //校验入参
         validatePostidsAndNum(String.valueOf(postid), num);
-
+        //分流操作帖子评论
         robotshuntComment(num, postid);
     }
 

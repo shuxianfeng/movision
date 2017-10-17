@@ -201,6 +201,10 @@ public interface UserMapper {
 
     List<User> queryRandomUser(Integer number);
 
+
+    List<User> queryNotRepeatCollectRobots(Map map);
+
+    List<User> queryNotRepeatZanRobots(Map map);
     List<User> queryNotRepeatRandomRobots(Map map);
 
     List<User> selectNotLoadPhotoUser();

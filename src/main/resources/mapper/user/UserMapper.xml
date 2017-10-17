@@ -1733,6 +1733,27 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         ]]>
     </select>
 
+    <select id="queryNotRepeatCollectRobots" resultType="com.movision.mybatis.user.entity.User"
+            parameterType="java.util.Map">
+        SELECT u.* FROM yw_user u
+        where  <![CDATA[  u.id>=10000 AND u.id<=20000 ]]>
+        and not EXISTS
+        (SELECT 1 FROM yw_collection c
+        where c.userid = u.id and c.postid = #{postid})
+        ORDER BY RAND() LIMIT 0,#{number}
+    </select>
+
+
+    <select id="queryNotRepeatZanRobots" resultType="com.movision.mybatis.user.entity.User"
+            parameterType="java.util.Map">
+        SELECT u.* FROM yw_user u
+        where   <![CDATA[  u.id>=10000 AND u.id<=20000 ]]>
+        and not EXISTS
+        (SELECT 1 FROM yw_post_zan_record r
+        where r.userid = u.id and r.postid = #{postid})
+        ORDER BY RAND() LIMIT 0, #{number,jdbcType=INTEGER}
+    </select>
+
     <select id="queryNotRepeatRandomRobots" resultType="com.movision.mybatis.user.entity.User"
             parameterType="java.util.Map">
         SELECT u.* FROM yw_user u

@@ -124,7 +124,7 @@ public class RobotPostController {
      * @return
      * @throws IOException
      */
-    @ApiOperation(value = "机器人批量浏览帖子", notes = "机器人批量浏览帖子", response = Response.class)
+    @ApiOperation(value = "操作机器人浏览APP中全部帖子", notes = "操作机器人浏览APP中全部帖子", response = Response.class)
     @RequestMapping(value = "/batch_view_post", method = RequestMethod.POST)
     public Response robotViewPost(@ApiParam(value = "需要调用的机器人数量") @RequestParam Integer num) throws IOException {
         Response response = new Response();
@@ -132,7 +132,7 @@ public class RobotPostController {
         return response;
     }
 
-    @ApiOperation(value = "机器人批量浏览帖子", notes = "机器人批量浏览帖子", response = Response.class)
+    @ApiOperation(value = "操作机器人浏览某个用户的所有帖子", notes = "操作机器人浏览某个用户的所有帖子", response = Response.class)
     @RequestMapping(value = "/add_someone_post_view", method = RequestMethod.POST)
     public Response addSomeonePostView(@ApiParam(value = "需要调用的机器人数量") @RequestParam Integer num,
                                        @ApiParam(value = "被浏览的帖子的作者") @RequestParam Integer uid) throws IOException {
