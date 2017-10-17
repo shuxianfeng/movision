@@ -57,19 +57,19 @@ public class HeatValueConstant {
         zan_number(30),//点赞数
         comments_number(40),//评论数
         forwarding_number(80),//转发数
-        collection_number(150),//收藏数
+        collection_number(50),//收藏数
 
         //用户热度
         fan_count(20),//粉丝数
         posts_count(50),//发帖数
         //评论的热度
-        comment_zan_count(3),//評論的點贊數
-        reply_comment_number(7),//回复评论数
+        comment_zan_count(5),//評論的點贊數
+        reply_comment_number(10),//回复评论数
 
-        reward_post(4),//打赏帖子
-        read_post(1),//帖子浏览数
-        attention_label(2),//关注标签
-        using_label(3);//发帖使用标签
+        reward_post(40),//打赏帖子
+        read_post(5),//帖子浏览数
+        attention_label(50),//关注标签
+        using_label(30);//发帖使用标签
         public final int code;
 
         POINT(int code) {

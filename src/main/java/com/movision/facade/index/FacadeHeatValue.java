@@ -31,6 +31,7 @@ public class FacadeHeatValue {
 
     @Autowired
     private FollowLabelService followLabelService;
+
     /**
      * 增加帖子热度值
      */
