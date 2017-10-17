@@ -2235,4 +2235,6 @@
     <select id="queryPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT  * FROM  yw_post WHERE  id=#{postid,jdbcType=INTEGER}
     </select>
+
+
 </mapper>

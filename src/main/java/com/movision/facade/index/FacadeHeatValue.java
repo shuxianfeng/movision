@@ -97,7 +97,7 @@ public class FacadeHeatValue {
         Map map = new HashMap();
         map.put("postid", postid);
         int heatvalue = postService.selectPostHeatValue(postid);
-        if (heatvalue >= 15) {
+        if (heatvalue >= 50) {
             int level = userLevels(userid);
             points = level * HeatValueConstant.POINT.collection_number.getCode();
             map.put("points", points);
@@ -117,7 +117,7 @@ public class FacadeHeatValue {
         map.put("userid", userid);
         int heatvalue = postService.selectUserHeatValue(userid);
         if (type == 1) {//用户粉丝
-            if (heatvalue >= 2) {
+            if (heatvalue >= 20) {
                 int level = userLevels(userid);
                 points = level * HeatValueConstant.POINT.fan_count.getCode();
                 map.put("points", points);
@@ -126,7 +126,7 @@ public class FacadeHeatValue {
                 postService.updateZeroUserHeatValue(userid);
             }
         } else if (type == 2) {//发帖数
-            if (heatvalue >= 8) {
+            if (heatvalue >= 50) {
                 int level = userLevels(userid);
                 points = level * HeatValueConstant.POINT.posts_count.getCode();
                 map.put("points", points);
@@ -145,7 +145,7 @@ public class FacadeHeatValue {
         Map map = new HashMap();
         map.put("labelid", labelid);
         int heatvalue = followLabelService.queryLabelLabel(labelid);
-        if (heatvalue >= 2) {
+        if (heatvalue >= 50) {
             int level = userLevels(Integer.parseInt(userid));
             points = level * HeatValueConstant.POINT.attention_label.getCode();
             map.put("points", points);
