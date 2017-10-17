@@ -1143,8 +1143,7 @@
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
         WHERE p.isdel=0 AND p.isactive=0
-        (SELECT postid FROM yw_collection WHERE postid IN (SELECT id FROM yw_post WHERE
-        userid=#{userid,jdbcType=INTEGER} AND isdel=0) AND type=0)
+        AND p.id IN (SELECT postid FROM yw_collection WHERE userid = #{userid,jdbcType=INTEGER} AND type=0)
         ORDER BY p.intime DESC
     </select>
 

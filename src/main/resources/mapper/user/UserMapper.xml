@@ -705,6 +705,7 @@
         zansum,u.fans,vd.apply_time AS applydate,au.authstatus
         FROM (yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id) LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id WHERE u.level>0 AND u.status=0
+        AND u.id<![CDATA[>=]]>20000
         <if test="name!=null">
             AND u.nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
@@ -726,7 +727,28 @@
         <if test="authstatus==3">
             AND au.authstatus IS NULL
         </if>
-        AND u.id<![CDATA[>=]]>20000 OR u.id <![CDATA[<]]>10000
+        OR u.id <![CDATA[<]]>10000
+        <if test="name!=null">
+            AND u.nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="phone!=null">
+            AND u.phone=#{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="begintime!=null and endtime!=null">
+            AND vd.apply_time BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
+        <if test="authstatus==0">
+            AND au.authstatus=#{authstatus,jdbcType=INTEGER}
+        </if>
+        <if test="authstatus==1">
+            AND au.authstatus=#{authstatus,jdbcType=INTEGER}
+        </if>
+        <if test="authstatus==2">
+            AND au.authstatus=#{authstatus,jdbcType=INTEGER}
+        </if>
+        <if test="authstatus==3">
+            AND au.authstatus IS NULL
+        </if>
         <if test="type==1">
             ORDER BY vd.apply_time DESC
         </if>
@@ -789,6 +811,7 @@
         FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id
         WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 AND u.phone IS NOT NULL
+        AND u.id<![CDATA[>=]]>20000
         <if test="username!=null">
             AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
         </if>
@@ -810,7 +833,28 @@
         <if test="begintime!=null and endtime!=null">
             AND vd.apply_time BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
         </if>
-        AND u.id<![CDATA[>=]]>20000 OR u.id <![CDATA[<]]>10000
+        OR u.id <![CDATA[<]]>10000
+        <if test="username!=null">
+            AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="phone!=null">
+            AND u.phone=#{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="authstatus==0">
+            AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id)=#{authstatus,jdbcType=INTEGER}
+        </if>
+        <if test="authstatus==1">
+            AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id)=#{authstatus,jdbcType=INTEGER}
+        </if>
+        <if test="authstatus==2">
+            AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id)=#{authstatus,jdbcType=INTEGER}
+        </if>
+        <if test="authstatus==3">
+            AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) IS NULL
+        </if>
+        <if test="begintime!=null and endtime!=null">
+            AND vd.apply_time BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
         <if test="type==1">
             ORDER BY vd.apply_time DESC
         </if>
@@ -838,7 +882,29 @@
         ON
         au.userid=u.id
         WHERE vd.apply_userid=u.id AND u.phone IS NOT NULL
-        AND u.id<![CDATA[>=]]>20000 OR u.id <![CDATA[<]]>10000
+        AND u.id<![CDATA[>=]]>20000
+        <if test="username!=null">
+            AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="phone!=null">
+            AND u.phone=#{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="authstatus==0">
+            AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id)=#{authstatus,jdbcType=INTEGER}
+        </if>
+        <if test="authstatus==1">
+            AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id)=#{authstatus,jdbcType=INTEGER}
+        </if>
+        <if test="authstatus==2">
+            AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id)=#{authstatus,jdbcType=INTEGER}
+        </if>
+        <if test="authstatus==3">
+            AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) IS NULL
+        </if>
+        <if test="begintime!=null and endtime!=null">
+            AND vd.apply_time BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
+        OR u.id <![CDATA[<]]>10000
         <if test="username!=null">
             AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
         </if>
@@ -877,7 +943,106 @@
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isactive=0) AS postsum,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1 AND isactive=0) AS isessencesum
         FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE
-        u.id<![CDATA[>=]]>20000 OR u.id <![CDATA[<]]>10000
+        u.id<![CDATA[>=]]>20000
+        <if test="nickname!=null">
+            AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="phone!=null">
+            AND u.phone=#{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="authentication==0">
+            AND aut.authstatus=#{authentication,jdbcType=INTEGER}
+        </if>
+        <if test="authentication==1">
+            AND aut.authstatus=#{authentication,jdbcType=INTEGER}
+        </if>
+        <if test="authentication==2">
+            AND aut.authstatus=#{authentication,jdbcType=INTEGER}
+        </if>
+        <if test="authentication==3">
+            AND aut.authstatus IS NULL
+        </if>
+        <if test="level!=null">
+            AND level=#{level,jdbcType=INTEGER}
+        </if>
+        <if test="status!=null">
+            AND u.status=#{status,jdbcType=INTEGER}
+        </if>
+        <if test="begintime!=null and endtime!=null">
+            AND u.intime BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+        </if>
+        <if test="price!=null and conditionon!=null and conditiontwo!=null">
+            <if test="conditionon==1">
+                <if test="conditiontwo==3">
+                    AND u.points &gt; #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==2">
+                    AND u.points = #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==1">
+                    AND u.points &lt; #{price,jdbcType=INTEGER}
+                </if>
+            </if>
+            <if test="conditionon==2">
+                <if test="conditiontwo==3">
+                    AND coupon &gt; #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==2">
+                    AND coupon=#{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==1">
+                    AND coupon &lt; #{price,jdbcType=INTEGER}
+                </if>
+            </if>
+            <if test="conditionon==3">
+                <if test="conditiontwo==3">
+                    AND postsum &gt; #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==2">
+                    AND postsum=#{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==1">
+                    AND postsum &lt; #{price,jdbcType=INTEGER}
+                </if>
+            </if>
+            <if test="conditionon==4">
+                <if test="conditiontwo==3">
+                    AND isessencesum &gt; #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==2">
+                    AND isessencesum=#{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==1">
+                    AND isessencesum &lt; #{price,jdbcType=INTEGER}
+                </if>
+            </if>
+            <if test="conditionon==5">
+                <if test="conditiontwo==3">
+                    AND u.fans &gt; #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==2">
+                    AND u.fans = #{price,jdbcType=INTEGER}
+                </if>
+                <if test="conditiontwo==1">
+                    AND u.fans &lt; #{price,jdbcType=INTEGER}
+                </if>
+            </if>
+        </if>
+        <if test="login!=null">
+            <if test="login==1">
+                AND u.phone IS NOT NULL
+            </if>
+            <if test="login==2">
+                AND u.openid IS NOT NULL
+            </if>
+            <if test="login==3">
+                AND u.qq IS NOT NULL
+            </if>
+            <if test="login==4">
+                AND u.sina IS NOT NULL
+            </if>
+        </if>
+        OR u.id <![CDATA[<]]>10000
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>
