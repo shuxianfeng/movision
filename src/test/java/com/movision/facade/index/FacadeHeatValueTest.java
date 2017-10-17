@@ -1,12 +1,13 @@
 package com.movision.facade.index;
 
 import com.movision.common.constant.HeatValueConstant;
+import com.movision.mybatis.post.entity.PostTo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.test.SpringTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,11 +19,17 @@ public class FacadeHeatValueTest extends SpringTestCase {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private UserRefreshRecordService userRefreshRecordService;
+
+
+
     public void updateOnlinePostHeatvalue() throws Exception {
         List<PostVo> list = postService.queryPostListByHeatValue();
 
         for (PostVo postVo : list) {
             int count = 0;
+            int originHeatValue = postVo.getHeatvalue();
             int postid = postVo.getId();
             //判断是否是首页精选 isessence
             int isessence = postVo.getIsessence();
@@ -53,8 +60,16 @@ public class FacadeHeatValueTest extends SpringTestCase {
             int collectPoint = collectsum * HeatValueConstant.POINT.collection_number.getCode();
 
             //查出该帖子的浏览数量，进行热度操作
-            int countView = 0;
+            int countView = userRefreshRecordService.postcount(postid);
+            int viewPoint = countView * HeatValueConstant.POINT.read_post.getCode();
 
+            count = count + comPoint + zanPoint + forwardPoint + collectPoint + viewPoint;
+
+            PostTo postTo = new PostTo();
+            postTo.setId(postid);
+            postTo.setHeatValue(originHeatValue + count);
+
+            postService.updatePostById(postTo);
         }
     }
 }

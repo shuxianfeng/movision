@@ -1,6 +1,7 @@
 package com.movision.controller.boss.robot;
 
 import com.movision.common.Response;
+import com.movision.facade.index.FacadePost;
 import com.movision.facade.robot.RobotFacade;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -23,6 +24,9 @@ import java.io.IOException;
 public class RobotPostController {
     @Autowired
     private RobotFacade robotFacade;
+
+    @Autowired
+    private FacadePost facadePost;
 
     /**
      * 利用机器人为帖子制造评论接口
@@ -138,6 +142,14 @@ public class RobotPostController {
                                        @ApiParam(value = "被浏览的帖子的作者") @RequestParam Integer uid) throws IOException {
         Response response = new Response();
         robotFacade.insertSomeonePostView(num, uid);
+        return response;
+    }
+
+    @ApiOperation(value = "更新线上帖子的所有热度值", notes = "更新线上帖子的所有热度值", response = Response.class)
+    @RequestMapping(value = "/update_online_post_heatvalue", method = RequestMethod.POST)
+    public Response updateOnlinePostHeatvalue() throws IOException {
+        Response response = new Response();
+        facadePost.updateOnlinePostHeatvalue();
         return response;
     }
 }

@@ -943,6 +943,9 @@
             <if test="oprtime!=null">
                 oprtime=#{oprtime,jdbcType=TIMESTAMP}
             </if>
+            <if test="heatValue != null">
+                heat_value=#{heatValue}
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>

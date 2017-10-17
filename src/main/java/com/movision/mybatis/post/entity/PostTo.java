@@ -6,6 +6,8 @@ import java.util.Date;
 public class PostTo implements Serializable {
     private Integer id;
 
+    private Integer heatValue;
+
     private String circleid;
 
     private String title;
@@ -65,6 +67,14 @@ public class PostTo implements Serializable {
     private Date oprtime;//用户最后参与时间
 
     private Integer ishotorder;//热门排序
+
+    public Integer getHeatValue() {
+        return heatValue;
+    }
+
+    public void setHeatValue(Integer heatValue) {
+        this.heatValue = heatValue;
+    }
 
     public Integer getIshotorder() {
         return ishotorder;
