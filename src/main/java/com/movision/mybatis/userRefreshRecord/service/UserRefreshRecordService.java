@@ -86,7 +86,7 @@ public class UserRefreshRecordService implements UserRefreshRecordMapper {
     }
 
     /**
-     * 统计当前userid对应的帖子浏览记录
+     * 统计部分帖子的浏览记录
      *
      * @param postidList
      * @return

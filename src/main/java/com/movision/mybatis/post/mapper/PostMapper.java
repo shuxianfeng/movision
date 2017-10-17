@@ -302,4 +302,6 @@ public interface PostMapper {
     String queryOriginalDrawingUrl(String compressimgurl);
 
     Date queryPostIdByDate(Integer id);
+
+    List<PostVo> queryPostListByHeatValue();
 }

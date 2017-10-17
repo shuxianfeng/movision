@@ -1722,5 +1722,13 @@ public class PostService {
         return postMapper.queryPostIdByDate(id);
     }
 
-
+    public List<PostVo> queryPostListByHeatValue() {
+        try {
+            log.info("根据热度查询所有帖子");
+            return postMapper.queryPostListByHeatValue();
+        } catch (Exception e) {
+            log.error("根据热度查询所有帖子异常", e);
+            throw e;
+        }
+    }
 }

@@ -2236,5 +2236,9 @@
         SELECT  * FROM  yw_post WHERE  id=#{postid,jdbcType=INTEGER}
     </select>
 
+    <select id="queryPostListByHeatValue" resultType="com.movision.mybatis.post.entity.PostVo">
+        select * FROM yw_post where isdel = 0 order by heat_value DESC ;
+    </select>
+
 
 </mapper>
