@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.accessLog.mapper.AccessLogMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.accessLog.entity.AccessLog">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="memberId" property="memberid" jdbcType="INTEGER"/>
+        <result column="clientIP" property="clientip" jdbcType="VARCHAR"/>
+        <result column="httpMethod" property="httpmethod" jdbcType="VARCHAR"/>
+        <result column="requestURL" property="requesturl" jdbcType="VARCHAR"/>
+        <result column="queryString" property="querystring" jdbcType="VARCHAR"/>
+        <result column="userAgent" property="useragent" jdbcType="VARCHAR"/>
+        <result column="execTime" property="exectime" jdbcType="INTEGER"/>
+        <result column="busiType" property="busitype" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, memberId, clientIP, httpMethod, requestURL, queryString, userAgent, execTime, 
+    busiType
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_accesslog
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yw_accesslog
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.accessLog.entity.AccessLog">
+    insert into yw_accesslog (id, memberId, clientIP, 
+      httpMethod, requestURL, queryString, 
+      userAgent, execTime, busiType
+      )
+    values (#{id,jdbcType=INTEGER}, #{memberid,jdbcType=INTEGER}, #{clientip,jdbcType=VARCHAR}, 
+      #{httpmethod,jdbcType=VARCHAR}, #{requesturl,jdbcType=VARCHAR}, #{querystring,jdbcType=VARCHAR}, 
+      #{useragent,jdbcType=VARCHAR}, #{exectime,jdbcType=INTEGER}, #{busitype,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.accessLog.entity.AccessLog">
+        insert into yw_accesslog
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="memberid != null">
+                memberId,
+            </if>
+            <if test="clientip != null">
+                clientIP,
+            </if>
+            <if test="httpmethod != null">
+                httpMethod,
+            </if>
+            <if test="requesturl != null">
+                requestURL,
+            </if>
+            <if test="querystring != null">
+                queryString,
+            </if>
+            <if test="useragent != null">
+                userAgent,
+            </if>
+            <if test="exectime != null">
+                execTime,
+            </if>
+            <if test="busitype != null">
+                busiType,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="memberid != null">
+                #{memberid,jdbcType=INTEGER},
+            </if>
+            <if test="clientip != null">
+                #{clientip,jdbcType=VARCHAR},
+            </if>
+            <if test="httpmethod != null">
+                #{httpmethod,jdbcType=VARCHAR},
+            </if>
+            <if test="requesturl != null">
+                #{requesturl,jdbcType=VARCHAR},
+            </if>
+            <if test="querystring != null">
+                #{querystring,jdbcType=VARCHAR},
+            </if>
+            <if test="useragent != null">
+                #{useragent,jdbcType=VARCHAR},
+            </if>
+            <if test="exectime != null">
+                #{exectime,jdbcType=INTEGER},
+            </if>
+            <if test="busitype != null">
+                #{busitype,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.accessLog.entity.AccessLog">
+        update yw_accesslog
+        <set>
+            <if test="memberid != null">
+                memberId = #{memberid,jdbcType=INTEGER},
+            </if>
+            <if test="clientip != null">
+                clientIP = #{clientip,jdbcType=VARCHAR},
+            </if>
+            <if test="httpmethod != null">
+                httpMethod = #{httpmethod,jdbcType=VARCHAR},
+            </if>
+            <if test="requesturl != null">
+                requestURL = #{requesturl,jdbcType=VARCHAR},
+            </if>
+            <if test="querystring != null">
+                queryString = #{querystring,jdbcType=VARCHAR},
+            </if>
+            <if test="useragent != null">
+                userAgent = #{useragent,jdbcType=VARCHAR},
+            </if>
+            <if test="exectime != null">
+                execTime = #{exectime,jdbcType=INTEGER},
+            </if>
+            <if test="busitype != null">
+                busiType = #{busitype,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.accessLog.entity.AccessLog">
+    update yw_accesslog
+    set memberId = #{memberid,jdbcType=INTEGER},
+      clientIP = #{clientip,jdbcType=VARCHAR},
+      httpMethod = #{httpmethod,jdbcType=VARCHAR},
+      requestURL = #{requesturl,jdbcType=VARCHAR},
+      queryString = #{querystring,jdbcType=VARCHAR},
+      userAgent = #{useragent,jdbcType=VARCHAR},
+      execTime = #{exectime,jdbcType=INTEGER},
+      busiType = #{busitype,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
