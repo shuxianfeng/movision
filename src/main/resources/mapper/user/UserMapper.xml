@@ -1568,6 +1568,16 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         ]]>
     </select>
 
+    <select id="queryNotRepeatRandomRobots" resultType="com.movision.mybatis.user.entity.User"
+            parameterType="java.util.Map">
+        SELECT u.* FROM yw_user u
+        where   <![CDATA[    u.id>=10000 AND u.id<=20000  ]]>
+        and not EXISTS (SELECT 1 FROM yw_follow_user f
+        where f.userid = u.id
+        and f.interestedusers = #{userid})
+        ORDER BY RAND() LIMIT 0,#{number}
+    </select>
+
     <select id="selectNotLoadPhotoUser" resultType="com.movision.mybatis.user.entity.User">
         SELECT * FROM yw_user
         where photo = 'http://pic.mofo.shop/upload/person/img/logo%403x.png'

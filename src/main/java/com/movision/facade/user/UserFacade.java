@@ -69,8 +69,6 @@ public class UserFacade {
     private FacadeHeatValue facadeHeatValue;
 
     @Autowired
-    private FacadePost facadePost;
-    @Autowired
     private CollectionService collectionService;
     @Autowired
     private PostZanRecordService postZanRecordService;
@@ -92,17 +90,6 @@ public class UserFacade {
      */
     public Boolean isExistAccount(String phone) {
         return userService.isExistAccount(phone);
-    }
-
-
-    /**
-     * 注册新的app用户
-     *
-     * @param registerUser
-     * @return
-     */
-    public int registerAccount(RegisterUser registerUser) {
-        return userService.registerAccount(registerUser);
     }
 
     /**
@@ -211,15 +198,8 @@ public class UserFacade {
         if (null == loginUser) {
             throw new AuthException(MsgCodeConstant.app_user_not_exist, "该手机号的用户不存在");
         }
-        //若app用户同时是boss系统用户，则判断该用户是app管理员（可以管理自己的圈子）
-//        BossUser bossUser = bossUserService.queryAdminUserByPhone(phone);
-//        if (null == bossUser) {
-//            loginUser.setRole("200");   //App普通用户
-//        } else {
-//            loginUser.setRole("100");   //App管理员
-//        }
-
         return loginUser;
+
     }
 
     /**

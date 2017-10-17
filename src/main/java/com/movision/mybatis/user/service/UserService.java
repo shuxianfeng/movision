@@ -1242,6 +1242,17 @@ public class UserService {
         }
     }
 
+    public List<User> queryNotRepeatRandomRobots(Map map) {
+        try {
+            log.info("查询不重复关注的用户机器人用户");
+            return userMapper.queryNotRepeatRandomRobots(map);
+        } catch (Exception e) {
+            log.error("查询不重复关注的用户机器人用户", e);
+            throw e;
+        }
+    }
+
+
     /**
      * 随机查询头像
      *

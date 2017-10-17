@@ -395,7 +395,10 @@ public class RobotFacade {
      */
     public void robotFollowUser(int userid, int num) {
         //1 集合机器人大军
-        List<User> robotArmy = userService.queryRandomUser(num);
+        Map map = new HashMap();
+        map.put("number", num);
+        map.put("userid", userid);
+        List<User> robotArmy = userService.queryNotRepeatRandomRobots(map);
 
         //2 循环进行关注作者操作
         for (int i = 0; i < robotArmy.size(); i++) {
