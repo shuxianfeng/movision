@@ -1872,6 +1872,8 @@ public class FacadePost {
                 int userid = list.get(i).getUserid();
                 userLikes = userService.findUser(userid);
                 list.get(i).setUserlike(userLikes);
+                //增加帖子浏览记录
+                facadeHeatValue.addHeatValue(list.get(i).getId(), 8, null);
             }
         }
         return list;
