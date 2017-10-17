@@ -4,20 +4,13 @@ import com.movision.common.Response;
 import com.movision.facade.boss.OrderFacade;
 import com.movision.mybatis.address.entity.Address;
 import com.movision.mybatis.afterservice.entity.AfterServiceVo;
-import com.movision.mybatis.afterservice.entity.Afterservice;
 import com.movision.mybatis.afterservicestream.entity.AfterserviceStream;
-import com.movision.mybatis.bossOrders.entity.BossOrders;
 import com.movision.mybatis.bossOrders.entity.BossOrdersVo;
-import com.movision.mybatis.goods.entity.GoodsVo;
-import com.movision.mybatis.invoice.entity.Invoice;
 import com.movision.mybatis.invoice.entity.InvoiceVo;
 import com.movision.mybatis.logisticsCompany.entity.LogisticsCompany;
-import com.movision.mybatis.orderoperation.entity.Orderoperation;
-import com.movision.mybatis.post.entity.Post;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import org.apache.bcel.verifier.VerifierAppFrame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,7 +29,7 @@ import java.util.Map;
 @RequestMapping("/boss/order")
 public class OrdersListController {
     @Autowired
-    OrderFacade orderFacade = new OrderFacade();
+    private OrderFacade orderFacade;
 
     /**
      * 查询订单列表接口

@@ -630,7 +630,7 @@
         AS collect,s.onlinetime,s.protype,s.brandid from yw_goods s
         LEFT JOIN yw_brand d ON d.brandid=s.brandid LEFT JOIN yw_collection c ON c.goodsid=s.id LEFT JOIN yw_category a
         ON a.protype=s.protype
-        WHERE 1=1
+        <where>
         <if test="name!=null and name!=''">
             AND s.name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
@@ -646,19 +646,19 @@
         <if test="isdel!=null and isdel!=''">
             AND s.isdel=#{isdel,jdbcType=INTEGER}
         </if>
-        <if test="allstatue==2 and price!=null and price!=''">
+            <if test="allstatue==2">
             AND s.price BETWEEN #{minorigprice,jdbcType=DOUBLE} AND #{maxorigprice,jdbcType=DOUBLE}
         </if>
-        <if test="allstatue==1 and origprice!=null and origprice!=''">
+            <if test="allstatue==1">
             AND s.origprice BETWEEN #{minorigprice,jdbcType=DOUBLE} AND #{maxorigprice,jdbcType=DOUBLE}
         </if>
-        <if test="allstatue==3 and stock!=null and stock!=''">
+            <if test="allstatue==3">
             AND s.stock BETWEEN #{minorigprice,jdbcType=INTEGER} AND #{maxorigprice,jdbcType=INTEGER}
         </if>
-        <if test="allstatue==4 and sales!=null and sales!=''">
+            <if test="allstatue==4">
             AND s.sales BETWEEN #{minorigprice,jdbcType=INTEGER} AND #{maxorigprice,jdbcType=INTEGER}
         </if>
-        <if test="allstatue==5 and collect!=null and collect!=''">
+            <if test="allstatue==5">
             AND s.collect BETWEEN #{minorigprice,jdbcType=INTEGER} AND #{maxorigprice,jdbcType=INTEGER}
         </if>
         <if test="onlinetime!=null and onlinetime!=''">
@@ -677,7 +677,7 @@
         <if test="pai==3">
             ORDER BY s.collect DESC
         </if>
-
+        </where>
     </select>
     <update id="AddToGoods" parameterType="java.lang.Integer">
          UPDATE yw_goods SET isdel=0 WHERE id=#{id,jdbcType=INTEGER}
