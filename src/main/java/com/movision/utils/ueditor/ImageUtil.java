@@ -221,9 +221,12 @@ public class ImageUtil {
             g.fillRect(0, 0, newWidth, newHeight);
         }
         /*
-		 * TODO consider RenderingHints to use. The following are hints which
+         * consider RenderingHints to use. The following are hints which
 		 * have been chosen to give decent image quality. In the future, there
 		 * may be a need to have a way to change these settings.
+		 *
+		 * 考虑RenderingHints使用。以下是一些被选择来提供良好的图像质量的提示。在未来，可能需要有一种方法来改变这些设置。
+		 *
 		 */
         double w = newWidth / 2.0;
         double h = newHeight / 2.0;

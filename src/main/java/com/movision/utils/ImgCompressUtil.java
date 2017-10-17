@@ -94,7 +94,7 @@ public class ImgCompressUtil {
                 map.put("w", originWidth);
                 map.put("h", originHeight);
 
-                //压缩宽高比处理逻辑 TODO
+                //压缩宽高比处理逻辑
                 map = resizeImgSize(w, h, map);
                 int final_w = map.get("w");    //最终的宽度
                 int final_h = map.get("h");    //最终的高度
@@ -154,12 +154,12 @@ public class ImgCompressUtil {
 
         if (width / height > w / h) {
             //以宽度为基准，等比例放缩图片
-            map.put("h", (int) (height * w / width));
+            map.put("h", height * w / width);
             map.put("w", w);
         } else {
             //以高度为基准，等比例缩放图片
             map.put("h", h);
-            map.put("w", (int) (width * h / height));
+            map.put("w", width * h / height);
         }
 
         int new_w = map.get("w");
@@ -170,12 +170,12 @@ public class ImgCompressUtil {
         if (new_w > w && new_h == h) {
             //若第一次压缩后的宽度大于的设定的宽度，则以设定的宽度为基准，缩小高度
             map.put("w", w);
-            map.put("h", (int) w * new_h / new_w);
+            map.put("h", w * new_h / new_w);
         }
         if (new_h > h && new_w == w) {
             //若第一次压缩后的高度大于设定的高度，则已设定的高度为基准，缩小宽度
             map.put("h", h);
-            map.put("w", (int) h * new_w / new_h);
+            map.put("w", h * new_w / new_h);
         }
 
         return map;

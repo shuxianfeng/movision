@@ -52,16 +52,16 @@ public class HeatValueConstant {
      * 热度类型对应的积分
      */
     public enum POINT {
-        home_page_selection(30),//首页精选
-        post_selection(20),//帖子精选
-        zan_number(5),//点赞数
-        comments_number(5),//评论数
-        forwarding_number(5),//转发数
-        collection_number(15),//收藏数
+        home_page_selection(300),//首页精选
+        post_selection(200),//帖子精选
+        zan_number(30),//点赞数
+        comments_number(40),//评论数
+        forwarding_number(80),//转发数
+        collection_number(150),//收藏数
 
         //用户热度
-        fan_count(2),//粉丝数
-        posts_count(8),//发帖数
+        fan_count(20),//粉丝数
+        posts_count(100),//发帖数
         //评论的热度
         comment_zan_count(3),//評論的點贊數
         reply_comment_number(7),//回复评论数
