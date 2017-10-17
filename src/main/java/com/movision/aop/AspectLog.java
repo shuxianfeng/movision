@@ -57,19 +57,19 @@ public class AspectLog {
         switch (logMode) {
             case "db":
                 /*AccessLog accessLog = new AccessLog();
-                accessLog.setMemberId(memberId);
-                accessLog.setClientIP(clientIP);
-                accessLog.setHttpMethod(httpMethod);
-                accessLog.setRequestURL(requestURL);
-                accessLog.setQueryString(queryString);
-                accessLog.setUserAgent(userAgent);
-                accessLog.setExecTime(execTime);
+                accessLog.setMemberId(memberId);    //用户id
+                accessLog.setClientIP(clientIP);    //客户端ip
+                accessLog.setHttpMethod(httpMethod);    //http请求方法
+                accessLog.setRequestURL(requestURL);    //请求url
+                accessLog.setQueryString(queryString);  //请求参数
+                accessLog.setUserAgent(userAgent);  //用户代理
+                accessLog.setExecTime(execTime);    //执行日期
 
                 int isAdd = accessLogService.addAccessLog(accessLog);*/
                 // TODO: 2017/1/16
 
 
-//                log.debug("zhuangyuhao:AspectLog增加访问日志->isAdd=" + isAdd);
+//                log.debug("AspectLog增加访问日志->isAdd=" + isAdd);
                 break;
             case "file":
                 log.trace("memberId:[{}]&clientIP:[{}]&httpMethod:[{}]&requestURL:[{}]&queryString[{}]&userAgent[{}]&execTime[{}]",
