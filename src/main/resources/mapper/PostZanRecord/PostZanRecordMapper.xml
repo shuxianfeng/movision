@@ -152,6 +152,7 @@
             and p.isdel = 0
             and c.isdel = 0
         <![CDATA[   and r.userid <> c.userid ]]>
+        <![CDATA[   and r.userid <> p.userid ]]>
         and r.isread = 0
         UNION ALL
         SELECT d.id,d.userid,null AS commentid,d.postid,d.intime ,d.isread
