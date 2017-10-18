@@ -196,11 +196,11 @@ public class FacadePost {
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
         //通过userid、postid查询该用户有没有关注该圈子的权限
-            Map<String, Object> parammap = new HashMap<>();
-            parammap.put("postid", Integer.parseInt(postid));
-            if (!StringUtils.isEmpty(userid)) {
-                parammap.put("userid", Integer.parseInt(userid));
-            }
+        Map<String, Object> parammap = new HashMap<>();
+        parammap.put("postid", Integer.parseInt(postid));
+        if (!StringUtils.isEmpty(userid)) {
+            parammap.put("userid", Integer.parseInt(userid));
+        }
         PostVo vo = postService.queryPostDetail(parammap);
         if (vo != null) {
             Map map = new HashMap();
@@ -340,50 +340,50 @@ public class FacadePost {
         }
         ActiveVo active = postService.queryNoticeActive(parammap);
         if (active != null) {
-        /**List<PostLabel> postLabels = postService.queryPostLabel(Integer.parseInt(postid));
-         active.setPostLabels(postLabels);*/
-        //计算距离结束时间
-        Date begin = active.getBegintime();
-        Date end = active.getEndtime();
-        Date now = new Date();
-        int enddays = DateUtils.activeEndDays(now, begin, end);
-        active.setEnddays(enddays);
-        //List<PostVo> postVos=postService
-        //查询活动参与总人数
-        int partsum = postService.queryActivePartSum(Integer.parseInt(postid));
-        active.setPartsum(partsum);
-        //用户有没有投过稿
-        /**Map map = new HashMap();
-         map.put("id", Integer.parseInt(postid));
-         map.put("uid", ShiroUtil.getAppUserID());
-         int ispart = postService.isUserContribe(map);
-         active.setIsPart(ispart);*/
-        //如果为商城促销类活动，需要在此基础上增加促销类商品列表
-        if (activetype.equals("1")) {
+            /**List<PostLabel> postLabels = postService.queryPostLabel(Integer.parseInt(postid));
+             active.setPostLabels(postLabels);*/
+            //计算距离结束时间
+            Date begin = active.getBegintime();
+            Date end = active.getEndtime();
+            Date now = new Date();
+            int enddays = DateUtils.activeEndDays(now, begin, end);
+            active.setEnddays(enddays);
+            //List<PostVo> postVos=postService
+            //查询活动参与总人数
+            int partsum = postService.queryActivePartSum(Integer.parseInt(postid));
+            active.setPartsum(partsum);
+            //用户有没有投过稿
+            /**Map map = new HashMap();
+             map.put("id", Integer.parseInt(postid));
+             map.put("uid", ShiroUtil.getAppUserID());
+             int ispart = postService.isUserContribe(map);
+             active.setIsPart(ispart);*/
+            //如果为商城促销类活动，需要在此基础上增加促销类商品列表
+            if (activetype.equals("1")) {
 
-            List<GoodsVo> goodsList = goodsService.queryActiveGoods(postid);
-            active.setPromotionGoodsList(goodsList);
+                List<GoodsVo> goodsList = goodsService.queryActiveGoods(postid);
+                active.setPromotionGoodsList(goodsList);
 
-        }
+            }
 
-        //增加活动详情最下方推荐的四个热门活动
-        //  active.setHotActiveList(postService.queryFourHotActive());
+            //增加活动详情最下方推荐的四个热门活动
+            //  active.setHotActiveList(postService.queryFourHotActive());
 
-        //对活动内容进行脱敏处理
-        active.setTitle((String) desensitizationUtil.desensitization(active.getTitle()).get("str"));//活动主标题脱敏
-        active.setSubtitle((String) desensitizationUtil.desensitization(active.getSubtitle()).get("str"));//活动副标题脱敏
-        active.setPostcontent((String) desensitizationUtil.desensitization(active.getPostcontent()).get("str"));//活动正文文字脱敏
+            //对活动内容进行脱敏处理
+            active.setTitle((String) desensitizationUtil.desensitization(active.getTitle()).get("str"));//活动主标题脱敏
+            active.setSubtitle((String) desensitizationUtil.desensitization(active.getSubtitle()).get("str"));//活动副标题脱敏
+            active.setPostcontent((String) desensitizationUtil.desensitization(active.getPostcontent()).get("str"));//活动正文文字脱敏
 
-        //插入mongodb
-        if (StringUtil.isNotEmpty(userid)) {
-            PostAndUserRecord postAndUserRecord = new PostAndUserRecord();
-            postAndUserRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
-            postAndUserRecord.setUserid(Integer.parseInt(userid));
-            postAndUserRecord.setPostid(Integer.parseInt(postid));
-            postAndUserRecord.setCrileid(null);
-            postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
-            postAndUserRecordService.insert(postAndUserRecord);
-        }
+            //插入mongodb
+            if (StringUtil.isNotEmpty(userid)) {
+                PostAndUserRecord postAndUserRecord = new PostAndUserRecord();
+                postAndUserRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
+                postAndUserRecord.setUserid(Integer.parseInt(userid));
+                postAndUserRecord.setPostid(Integer.parseInt(postid));
+                postAndUserRecord.setCrileid(null);
+                postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                postAndUserRecordService.insert(postAndUserRecord);
+            }
         }
         return active;
     }
@@ -680,7 +680,7 @@ public class FacadePost {
     /**
      * 帖子点赞操作处理
      *
-     * @param id    帖子id
+     * @param id     帖子id
      * @param userid
      * @return
      */
@@ -1794,7 +1794,6 @@ public class FacadePost {
     }
 
 
-
     /**
      * 返回数据
      *
@@ -2511,6 +2510,7 @@ public class FacadePost {
 
     /**
      * 查询出一条记录(登录状态下)
+     *
      * @param userid
      * @param type
      * @param postids
@@ -2979,228 +2979,266 @@ public class FacadePost {
      */
     public List<PostVo> userReflushHishtoryRecord(String userid, Paging<PostVo> paging, int type, String device, String labelid, String circleid, String postids) {
         List<PostVo> postVo = null;
-        List<DBObject> intimePost=null;
-        List<DBObject> us=null;
+        List<DBObject> intimePost = null;
+        List<DBObject> us = null;
         if (userid != null) {
-            if (StringUtil.isEmpty(circleid) && StringUtil.isEmpty(labelid)) {
-                if (postids != "") {
-                    List<DBObject> onlyPost = queryOnlPost(Integer.parseInt(userid), type, Integer.parseInt(postids));
-                    String intime = onlyPost.get(0).get("intime").toString();
-                    intimePost = queryPosyByImtime(intime, Integer.parseInt(userid), type);
-                } else {
-                    us = userRefulshListMongodb(Integer.parseInt(userid),type);
-                }
-                // List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid), type);
-                List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
-                List<Integer> postVos = new ArrayList<>();
-                List<Integer> dontlikes = new ArrayList<>();
-                if (intimePost != null) {
-                    for (int i = 0; i < intimePost.size(); i++) {
-                        int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
-                        postVos.add(postid);
-                    }
-                }
-                if (us != null) {
-                    for (int i = 0; i < us.size(); i++) {
-                        int postid = Integer.parseInt(us.get(i).get("postid").toString());
-                        postVos.add(postid);
-                    }
-                   }
-                    if (dontlike.size() != 0) {
-                        for (int i = 0; i < dontlike.size(); i++) {
-                            int p = Integer.parseInt(dontlike.get(i).get("postid").toString());
-                            dontlikes.add(p);
-                        }
-                    }
-                    postVos.removeAll(dontlikes);
-                    //根据postid查询帖子
-                    postVo = postService.findAllPostByid(postVos, paging);
-                    log.info(postVos.size() + ";;;;;;;;;;;;;;;;;;;;;;;;;;");
-                    if (postVo != null) {
-                        findUser(postVo);
-                        findPostLabel(postVo);
-                        findHotComment(postVo);
-                        countView(postVo);
-                        zanIsPost(Integer.parseInt(userid), postVo);
-                    }
+            postVo = userLoginHistoryRecord(userid, paging, type, labelid, circleid, postids, postVo, intimePost, us);
+        } else {
+            postVo = userNotLoginHistoryRecord(paging, type, device, labelid, circleid, postids, postVo, intimePost, us);
+        }
+        return postVo;
+    }
+
+    /**
+     * 用户未登录下历史记录
+     *
+     * @param paging
+     * @param type
+     * @param device
+     * @param labelid
+     * @param circleid
+     * @param postids
+     * @param postVo
+     * @param intimePost
+     * @param us
+     * @return
+     */
+    private List<PostVo> userNotLoginHistoryRecord(Paging<PostVo> paging, int type, String device, String labelid, String circleid, String postids, List<PostVo> postVo, List<DBObject> intimePost, List<DBObject> us) {
+        if (StringUtil.isEmpty(labelid) && StringUtil.isEmpty(circleid)) {
+            if (postids != "") {
+                List<DBObject> onlyPost = queryOnlPostNotLogin(device, type, Integer.parseInt(postids));
+                String intime = onlyPost.get(0).get("intime").toString();
+                intimePost = queryPosyByImtimeDevice(intime, device, type);
+            } else {
+                us = userRefulshListMongodbToDevice(device, type);
             }
-            if (StringUtil.isNotEmpty(labelid)) {
-                if (postids != "") {
-                    List<DBObject> onlyPost = queryOnlPostLabel(Integer.parseInt(userid), type, Integer.parseInt(postids), Integer.parseInt(labelid));
-                    String intime = onlyPost.get(0).get("intime").toString();
-                    intimePost = queryPosyByImtimeLabel(intime, Integer.parseInt(userid), type, Integer.parseInt(labelid));
-                } else {
-                    us = userRefulshListMongodbHistory(Integer.parseInt(userid), type, Integer.parseInt(labelid));
+            //  List<DBObject> list = userRefulshListMongodbToDevice(device, type);
+            List<Integer> postVos = new ArrayList<>();
+            if (intimePost != null) {
+                for (int i = 0; i < intimePost.size(); i++) {
+                    int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
+                    postVos.add(postid);
                 }
-                //List<DBObject> list = userRefulshListMongodbHistory(Integer.parseInt(userid), type, Integer.parseInt(labelid));
-             List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
-             List<Integer> postVos = new ArrayList<>();
-             List<Integer> dontlikes = new ArrayList<>();
-                if (intimePost != null) {
-                    for (int i = 0; i < intimePost.size(); i++) {
-                        int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
-                        postVos.add(postid);
-                    }
+            }
+            if (us != null) {
+                for (int i = 0; i < us.size(); i++) {
+                    int postid = Integer.parseInt(us.get(i).get("postid").toString());
+                    postVos.add(postid);
                 }
-                if (us != null) {
-                    for (int i = 0; i < us.size(); i++) {
-                        int postid = Integer.parseInt(us.get(i).get("postid").toString());
-                        postVos.add(postid);
-                   }
-               }
-                 if (dontlike.size() != 0) {
-                     for (int i = 0; i < dontlike.size(); i++) {
-                         int p = Integer.parseInt(dontlike.get(i).get("postid").toString());
-                         dontlikes.add(p);
-                     }
-                 }
-                 postVos.removeAll(dontlikes);
-                 log.info("***********************************************" + postVos.size());
-                 //根据postid查询帖子
-                 postVo = postService.findAllPostByid(postVos, paging);
-                 if (postVo != null) {
-                     findUser(postVo);
-                     findPostLabel(postVo);
-                     findHotComment(postVo);
-                     countView(postVo);
-                     zanIsPost(Integer.parseInt(userid), postVo);
-                 }
-         } else if (StringUtil.isNotEmpty(circleid)) {
-                if (postids != "") {
-                    List<DBObject> onlyPost = queryOnlPostCircleid(Integer.parseInt(userid), type, Integer.parseInt(postids), Integer.parseInt(circleid));
-                    String intime = onlyPost.get(0).get("intime").toString();
-                    intimePost = queryPosyByImtimeCircleid(intime, Integer.parseInt(userid), type, Integer.parseInt(circleid));
-                } else {
-                    us = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), type, circleid);
+            }
+            //根据postid查询帖子
+            postVo = postService.findAllPostByid(postVos, paging);
+            if (postVo != null) {
+                findUser(postVo);
+                findPostLabel(postVo);
+                findHotComment(postVo);
+                countView(postVo);
+            }
+        }
+        if (StringUtil.isNotEmpty(labelid)) {
+            if (postids != "") {
+                List<DBObject> onlyPost = queryOnlPostNotLoginLabelid(device, type, Integer.parseInt(postids), Integer.parseInt(labelid));
+                String intime = onlyPost.get(0).get("intime").toString();
+                intimePost = queryPosyByImtimeDeviceLabel(intime, device, type, Integer.parseInt(labelid));
+            } else {
+                us = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
+            }
+            //List<DBObject> list = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
+            List<Integer> postVos = new ArrayList<>();
+            if (intimePost != null) {
+                for (int i = 0; i < intimePost.size(); i++) {
+                    int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
+                    postVos.add(postid);
                 }
-                // List<DBObject> list = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), type, circleid);
-             List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
-             List<Integer> postVos = new ArrayList<>();
-             List<Integer> dontlikes = new ArrayList<>();
-                if (intimePost != null) {
-                    for (int i = 0; i < intimePost.size(); i++) {
-                        int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
-                        postVos.add(postid);
-                    }
+            }
+            if (us != null) {
+                for (int i = 0; i < us.size(); i++) {
+                    int postid = Integer.parseInt(us.get(i).get("postid").toString());
+                    postVos.add(postid);
                 }
-                if (us != null) {
-                    for (int i = 0; i < us.size(); i++) {
-                        int postid = Integer.parseInt(us.get(i).get("postid").toString());
-                        postVos.add(postid);
-                 }
-             }
-                 log.info(postVos + "");
-                 if (dontlike.size() != 0) {
-                     for (int i = 0; i < dontlike.size(); i++) {
-                         int p = Integer.parseInt(dontlike.get(i).get("postid").toString());
-                         dontlikes.add(p);
-                     }
-                 }
-                 postVos.removeAll(dontlikes);
-                 log.info(postVos + "***/***///////////////////////////////////////");
-                 //根据postid查询帖子
-                 postVo = postService.findAllPostByid(postVos, paging);
-                 if (postVo != null) {
-                     findUser(postVo);
-                     findPostLabel(postVo);
-                     findHotComment(postVo);
-                     countView(postVo);
-                     zanIsPost(Integer.parseInt(userid), postVo);
-                 }
+            }
+            postVo = postService.findAllPostByid(postVos, paging);
+            if (postVo != null) {
+                findUser(postVo);
+                findPostLabel(postVo);
+                findHotComment(postVo);
+                countView(postVo);
+            }
+        } else if (StringUtil.isNotEmpty(circleid)) {
+            if (postids != "") {
+                List<DBObject> onlyPost = queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), Integer.parseInt(circleid));
+                String intime = onlyPost.get(0).get("intime").toString();
+                intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, Integer.parseInt(circleid));
+            } else {
+                us = userRefulshListMongodbToDeviceHistory(device, type, circleid);
+            }
+            List<Integer> postVos = new ArrayList<>();
+            //  List<DBObject> list = userRefulshListMongodbToDeviceHistory(device, type, circleid);
+            if (intimePost != null) {
+                for (int i = 0; i < intimePost.size(); i++) {
+                    int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
+                    postVos.add(postid);
                 }
-      }else {
-            if (StringUtil.isEmpty(labelid) && StringUtil.isEmpty(circleid)) {
-                if (postids != "") {
-                    List<DBObject> onlyPost = queryOnlPostNotLogin(device, type, Integer.parseInt(postids));
-                    String intime = onlyPost.get(0).get("intime").toString();
-                    intimePost = queryPosyByImtimeDevice(intime, device, type);
-                } else {
-                    us = userRefulshListMongodbToDevice(device, type);
+            }
+            if (us != null) {
+                for (int i = 0; i < us.size(); i++) {
+                    int postid = Integer.parseInt(us.get(i).get("postid").toString());
+                    postVos.add(postid);
                 }
-                //  List<DBObject> list = userRefulshListMongodbToDevice(device, type);
-                List<Integer> postVos = new ArrayList<>();
-                if (intimePost != null) {
-                    for (int i = 0; i < intimePost.size(); i++) {
-                        int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
-                        postVos.add(postid);
-                    }
+            }
+            //根据postid查询帖子
+            postVo = postService.findAllPostByid(postVos, paging);
+            if (postVo != null) {
+                findUser(postVo);
+                findPostLabel(postVo);
+                findHotComment(postVo);
+                countView(postVo);
+            }
+        }
+        return postVo;
+    }
+
+    /**
+     * 用户登录下的历史记录
+     *
+     * @param userid
+     * @param paging
+     * @param type
+     * @param labelid
+     * @param circleid
+     * @param postids
+     * @param postVo
+     * @param intimePost
+     * @param us
+     * @return
+     */
+    private List<PostVo> userLoginHistoryRecord(String userid, Paging<PostVo> paging, int type, String labelid, String circleid, String postids, List<PostVo> postVo, List<DBObject> intimePost, List<DBObject> us) {
+        if (StringUtil.isEmpty(circleid) && StringUtil.isEmpty(labelid)) {
+            if (postids != "") {
+                List<DBObject> onlyPost = queryOnlPost(Integer.parseInt(userid), type, Integer.parseInt(postids));
+                String intime = onlyPost.get(0).get("intime").toString();
+                intimePost = queryPosyByImtime(intime, Integer.parseInt(userid), type);
+            } else {
+                us = userRefulshListMongodb(Integer.parseInt(userid), type);
+            }
+            // List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid), type);
+            List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
+            List<Integer> postVos = new ArrayList<>();
+            List<Integer> dontlikes = new ArrayList<>();
+            if (intimePost != null) {
+                for (int i = 0; i < intimePost.size(); i++) {
+                    int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
+                    postVos.add(postid);
                 }
-                if (us != null) {
-                    for (int i = 0; i < us.size(); i++) {
-                        int postid = Integer.parseInt(us.get(i).get("postid").toString());
-                        postVos.add(postid);
-                    }
-                    }
-                    //根据postid查询帖子
-                    postVo = postService.findAllPostByid(postVos, paging);
-                    if (postVo != null) {
-                        findUser(postVo);
-                        findPostLabel(postVo);
-                        findHotComment(postVo);
-                        countView(postVo);
-                    }
-             }
-            if (StringUtil.isNotEmpty(labelid)) {
-                if (postids != "") {
-                    List<DBObject> onlyPost = queryOnlPostNotLoginLabelid(device, type, Integer.parseInt(postids), Integer.parseInt(labelid));
-                    String intime = onlyPost.get(0).get("intime").toString();
-                    intimePost = queryPosyByImtimeDeviceLabel(intime, device, type, Integer.parseInt(labelid));
-                } else {
-                    us = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
+            }
+            if (us != null) {
+                for (int i = 0; i < us.size(); i++) {
+                    int postid = Integer.parseInt(us.get(i).get("postid").toString());
+                    postVos.add(postid);
                 }
-                    //List<DBObject> list = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
-                    List<Integer> postVos = new ArrayList<>();
-                    if (intimePost != null) {
-                        for (int i = 0; i < intimePost.size(); i++) {
-                            int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
-                            postVos.add(postid);
-                        }
-                    }
-                if (us != null) {
-                    for (int i = 0; i < us.size(); i++) {
-                        int postid = Integer.parseInt(us.get(i).get("postid").toString());
-                        postVos.add(postid);
-                    }
+            }
+            if (dontlike.size() != 0) {
+                for (int i = 0; i < dontlike.size(); i++) {
+                    int p = Integer.parseInt(dontlike.get(i).get("postid").toString());
+                    dontlikes.add(p);
                 }
-                postVo = postService.findAllPostByid(postVos, paging);
-                        if (postVo != null) {
-                            findUser(postVo);
-                            findPostLabel(postVo);
-                            findHotComment(postVo);
-                            countView(postVo);
-                        }
-            } else if (StringUtil.isNotEmpty(circleid)) {
-                if (postids != "") {
-                    List<DBObject> onlyPost = queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), Integer.parseInt(circleid));
-                    String intime = onlyPost.get(0).get("intime").toString();
-                    intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, Integer.parseInt(circleid));
-                } else {
-                    us = userRefulshListMongodbToDeviceHistory(device, type, circleid);
+            }
+            postVos.removeAll(dontlikes);
+            //根据postid查询帖子
+            postVo = postService.findAllPostByid(postVos, paging);
+            log.info(postVos.size() + ";;;;;;;;;;;;;;;;;;;;;;;;;;");
+            if (postVo != null) {
+                findUser(postVo);
+                findPostLabel(postVo);
+                findHotComment(postVo);
+                countView(postVo);
+                zanIsPost(Integer.parseInt(userid), postVo);
+            }
+        }
+        if (StringUtil.isNotEmpty(labelid)) {
+            if (postids != "") {
+                List<DBObject> onlyPost = queryOnlPostLabel(Integer.parseInt(userid), type, Integer.parseInt(postids), Integer.parseInt(labelid));
+                String intime = onlyPost.get(0).get("intime").toString();
+                intimePost = queryPosyByImtimeLabel(intime, Integer.parseInt(userid), type, Integer.parseInt(labelid));
+            } else {
+                us = userRefulshListMongodbHistory(Integer.parseInt(userid), type, Integer.parseInt(labelid));
+            }
+            //List<DBObject> list = userRefulshListMongodbHistory(Integer.parseInt(userid), type, Integer.parseInt(labelid));
+            List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
+            List<Integer> postVos = new ArrayList<>();
+            List<Integer> dontlikes = new ArrayList<>();
+            if (intimePost != null) {
+                for (int i = 0; i < intimePost.size(); i++) {
+                    int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
+                    postVos.add(postid);
                 }
-                List<Integer> postVos = new ArrayList<>();
-                //  List<DBObject> list = userRefulshListMongodbToDeviceHistory(device, type, circleid);
-                if (intimePost != null) {
-                    for (int i = 0; i < intimePost.size(); i++) {
-                        int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
-                        postVos.add(postid);
-                    }
+            }
+            if (us != null) {
+                for (int i = 0; i < us.size(); i++) {
+                    int postid = Integer.parseInt(us.get(i).get("postid").toString());
+                    postVos.add(postid);
                 }
-                if (us != null) {
-                    for (int i = 0; i < us.size(); i++) {
-                        int postid = Integer.parseInt(us.get(i).get("postid").toString());
-                        postVos.add(postid);
-                  }
-              }
-                 //根据postid查询帖子
-                 postVo = postService.findAllPostByid(postVos, paging);
-                 if (postVo != null) {
-                     findUser(postVo);
-                     findPostLabel(postVo);
-                     findHotComment(postVo);
-                     countView(postVo);
-                 }
-             }
-          }
+            }
+            if (dontlike.size() != 0) {
+                for (int i = 0; i < dontlike.size(); i++) {
+                    int p = Integer.parseInt(dontlike.get(i).get("postid").toString());
+                    dontlikes.add(p);
+                }
+            }
+            postVos.removeAll(dontlikes);
+            log.info("***********************************************" + postVos.size());
+            //根据postid查询帖子
+            postVo = postService.findAllPostByid(postVos, paging);
+            if (postVo != null) {
+                findUser(postVo);
+                findPostLabel(postVo);
+                findHotComment(postVo);
+                countView(postVo);
+                zanIsPost(Integer.parseInt(userid), postVo);
+            }
+        } else if (StringUtil.isNotEmpty(circleid)) {
+            if (postids != "") {
+                List<DBObject> onlyPost = queryOnlPostCircleid(Integer.parseInt(userid), type, Integer.parseInt(postids), Integer.parseInt(circleid));
+                String intime = onlyPost.get(0).get("intime").toString();
+                intimePost = queryPosyByImtimeCircleid(intime, Integer.parseInt(userid), type, Integer.parseInt(circleid));
+            } else {
+                us = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), type, circleid);
+            }
+            // List<DBObject> list = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), type, circleid);
+            List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
+            List<Integer> postVos = new ArrayList<>();
+            List<Integer> dontlikes = new ArrayList<>();
+            if (intimePost != null) {
+                for (int i = 0; i < intimePost.size(); i++) {
+                    int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
+                    postVos.add(postid);
+                }
+            }
+            if (us != null) {
+                for (int i = 0; i < us.size(); i++) {
+                    int postid = Integer.parseInt(us.get(i).get("postid").toString());
+                    postVos.add(postid);
+                }
+            }
+            log.info(postVos + "");
+            if (dontlike.size() != 0) {
+                for (int i = 0; i < dontlike.size(); i++) {
+                    int p = Integer.parseInt(dontlike.get(i).get("postid").toString());
+                    dontlikes.add(p);
+                }
+            }
+            postVos.removeAll(dontlikes);
+            log.info(postVos + "***/***///////////////////////////////////////");
+            //根据postid查询帖子
+            postVo = postService.findAllPostByid(postVos, paging);
+            if (postVo != null) {
+                findUser(postVo);
+                findPostLabel(postVo);
+                findHotComment(postVo);
+                countView(postVo);
+                zanIsPost(Integer.parseInt(userid), postVo);
+            }
+        }
         return postVo;
     }
 
@@ -3375,8 +3413,8 @@ public class FacadePost {
     /**
      * 关注作者
      *
-     * @param userid    用户
-     * @param interestedusers   被关注的用户
+     * @param userid          用户
+     * @param interestedusers 被关注的用户
      * @return
      */
     public int concernedAuthorUser(int userid, int interestedusers) {
