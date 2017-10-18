@@ -2979,12 +2979,10 @@ public class FacadePost {
      */
     public List<PostVo> userReflushHishtoryRecord(String userid, Paging<PostVo> paging, int type, String device, String labelid, String circleid, String postids) {
         List<PostVo> postVo = null;
-        List<DBObject> intimePost = null;
-        List<DBObject> us = null;
         if (userid != null) {
-            postVo = userLoginHistoryRecord(userid, paging, type, labelid, circleid, postids, postVo, intimePost, us);
+            postVo = userLoginHistoryRecord(userid, paging, type, labelid, circleid, postids, postVo);
         } else {
-            postVo = userNotLoginHistoryRecord(paging, type, device, labelid, circleid, postids, postVo, intimePost, us);
+            postVo = userNotLoginHistoryRecord(paging, type, device, labelid, circleid, postids, postVo);
         }
         return postVo;
     }
@@ -2999,11 +2997,13 @@ public class FacadePost {
      * @param circleid
      * @param postids
      * @param postVo
-     * @param intimePost
-     * @param us
+     * @param
+     * @param
      * @return
      */
-    private List<PostVo> userNotLoginHistoryRecord(Paging<PostVo> paging, int type, String device, String labelid, String circleid, String postids, List<PostVo> postVo, List<DBObject> intimePost, List<DBObject> us) {
+    private List<PostVo> userNotLoginHistoryRecord(Paging<PostVo> paging, int type, String device, String labelid, String circleid, String postids, List<PostVo> postVo) {
+        List<DBObject> intimePost = null;
+        List<DBObject> us = null;
         if (StringUtil.isEmpty(labelid) && StringUtil.isEmpty(circleid)) {
             if (postids != "") {
                 List<DBObject> onlyPost = queryOnlPostNotLogin(device, type, Integer.parseInt(postids));
@@ -3108,11 +3108,13 @@ public class FacadePost {
      * @param circleid
      * @param postids
      * @param postVo
-     * @param intimePost
-     * @param us
+     * @param
+     * @param
      * @return
      */
-    private List<PostVo> userLoginHistoryRecord(String userid, Paging<PostVo> paging, int type, String labelid, String circleid, String postids, List<PostVo> postVo, List<DBObject> intimePost, List<DBObject> us) {
+    private List<PostVo> userLoginHistoryRecord(String userid, Paging<PostVo> paging, int type, String labelid, String circleid, String postids, List<PostVo> postVo) {
+        List<DBObject> intimePost = null;
+        List<DBObject> us = null;
         if (StringUtil.isEmpty(circleid) && StringUtil.isEmpty(labelid)) {
             if (postids != "") {
                 List<DBObject> onlyPost = queryOnlPost(Integer.parseInt(userid), type, Integer.parseInt(postids));
