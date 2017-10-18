@@ -1440,10 +1440,7 @@ public class FacadePost {
         listmongodb = userRefulshListMongodb(Integer.parseInt(userid), 1);//查询用户刷新列表
         if (listmongodb.size() != 0) {
             result = opularSearchTermsService.userFlush(Integer.parseInt(userid));
-            int crileid = 0;
-            for (int i = 0; i < result.size(); i++) {
-                crileid = result.get(i).getCrileid();
-            }
+            int crileid = result.get(0).getCrileid();
             List<PostVo> criclelist = postService.queryPostCricle(crileid);//这个圈子的帖子（根据热度值排序）
             List<PostVo> overPost = postService.queryoverPost(crileid);//查询剩下的所有帖子
             criclelist.addAll(overPost);//所有帖子
