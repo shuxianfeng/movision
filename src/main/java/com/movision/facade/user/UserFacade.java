@@ -364,6 +364,7 @@ public class UserFacade {
      * 记录申请vip的时间
      */
     public void applyVip() {
+
         User user = new User();
         user.setId(ShiroUtil.getAppUserID());
         user.setApplydate(new Date());

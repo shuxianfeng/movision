@@ -2400,9 +2400,9 @@ public class PostFacade {
      */
     public Map getMyVipApplyStatistics() {
         Map result = new HashedMap();
-
+        //查询审核条件是否达标
         queryPostDataAndCount(result);
-
+        //查询当前申请的状态
         queryVipApplyStatus(result);
 
         return result;
@@ -2460,16 +2460,23 @@ public class PostFacade {
      * @param result
      */
     private void queryVipApplyStatus(Map result) {
+        //1 查询本人申请的最新一条vip的记录
         ApplyVipDetail latestApplyVipDetail = applyVipDetailService.selectLatestVipApplyRecord(ShiroUtil.getAppUserID());
         if (null == latestApplyVipDetail) {
+            //无申请记录
             result.put("status_code", "3");
             result.put("status_msg", "未申请");
+
         } else {
+            //存在申请记录
+            //在审核表中查询申请记录
             AuditVipDetail auditVipDetail = auditVipDetailService.selectByApplyId(latestApplyVipDetail.getId());
             if (null == auditVipDetail) {
+                //如果无审核记录，则处在待审核状态
                 result.put("status_code", "2");
                 result.put("status_msg", "待审核");
             } else {
+                //如果存在审核记录，则根据该记录状态，来判断申请状态
                 Integer status = auditVipDetail.getStatus();
                 if (status == 0) {
                     result.put("status_code", "0");
