@@ -664,6 +664,7 @@
         <if test="onlinetime!=null and onlinetime!=''">
             AND s.onlinetime BETWEEN #{mintime,jdbcType=DATE} AND #{maxtime,jdbcType=DATE}
         </if>
+        </where>
         GROUP BY s.id
         <if test="pai==0">
             ORDER BY s.sales DESC
@@ -677,7 +678,6 @@
         <if test="pai==3">
             ORDER BY s.collect DESC
         </if>
-        </where>
     </select>
     <update id="AddToGoods" parameterType="java.lang.Integer">
          UPDATE yw_goods SET isdel=0 WHERE id=#{id,jdbcType=INTEGER}
