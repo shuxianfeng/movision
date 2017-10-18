@@ -2748,7 +2748,7 @@ public class FacadePost {
      * @param intime
      * @return
      */
-    public List queryPosyByImtime(String intime) {
+    public List queryPosyByImtime(String intime, int userid) {
         MongoClient mongoClient = null;
         List<DBObject> list = null;
         DB db = null;
@@ -2758,7 +2758,7 @@ public class FacadePost {
             db = mongoClient.getDB("searchRecord");
             DBCollection table = db.getCollection("userRefreshRecord");//表名
             BasicDBObject gt = new BasicDBObject("$lt", intime);
-            BasicDBObject queryObject = new BasicDBObject("intime", gt);
+            BasicDBObject queryObject = new BasicDBObject("intime", gt).append("userid", userid);
             //指定需要显示列
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
@@ -2794,7 +2794,7 @@ public class FacadePost {
                     List<DBObject> onlyPost = queryOnlPost(Integer.parseInt(userid), type, Integer.parseInt(postids));
                     for (int i = 0; i < onlyPost.size(); i++) {
                         String intime = onlyPost.get(i).get("intime").toString();
-                        intimePost = queryPosyByImtime(intime);
+                        intimePost = queryPosyByImtime(intime, Integer.parseInt(userid));
                     }
 
                 // List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid), type);
@@ -2836,7 +2836,7 @@ public class FacadePost {
                 List<DBObject> onlyPost = queryOnlPostLabel(Integer.parseInt(userid), type, Integer.parseInt(postids), Integer.parseInt(labelid));
                 for (int i = 0; i < onlyPost.size(); i++) {
                     String intime = onlyPost.get(i).get("intime").toString();
-                    intimePost = queryPosyByImtime(intime);
+                    intimePost = queryPosyByImtime(intime, Integer.parseInt(userid));
                 }
                 //List<DBObject> list = userRefulshListMongodbHistory(Integer.parseInt(userid), type, Integer.parseInt(labelid));
              List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
@@ -2876,7 +2876,7 @@ public class FacadePost {
                 List<DBObject> onlyPost = queryOnlPostCircleid(Integer.parseInt(userid), type, Integer.parseInt(postids), Integer.parseInt(circleid));
                 for (int i = 0; i < onlyPost.size(); i++) {
                     String intime = onlyPost.get(i).get("intime").toString();
-                    intimePost = queryPosyByImtime(intime);
+                    intimePost = queryPosyByImtime(intime, Integer.parseInt(userid));
                 }
 
                 // List<DBObject> list = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), type, circleid);
@@ -2920,7 +2920,7 @@ public class FacadePost {
                 List<DBObject> onlyPost = queryOnlPostNotLogin(device, type, Integer.parseInt(postids));
                 for (int i = 0; i < onlyPost.size(); i++) {
                     String intime = onlyPost.get(i).get("intime").toString();
-                    intimePost = queryPosyByImtime(intime);
+                    intimePost = queryPosyByImtime(intime, Integer.parseInt(userid));
                 }
                 //  List<DBObject> list = userRefulshListMongodbToDevice(device, type);
                 List<Integer> postVos = new ArrayList<>();
@@ -2950,7 +2950,7 @@ public class FacadePost {
                     List<DBObject> onlyPost = queryOnlPostNotLoginLabelid(device, type, Integer.parseInt(postids), Integer.parseInt(labelid));
                     for (int i = 0; i < onlyPost.size(); i++) {
                         String intime = onlyPost.get(i).get("intime").toString();
-                        intimePost = queryPosyByImtime(intime);
+                        intimePost = queryPosyByImtime(intime, Integer.parseInt(userid));
                     }
                     //List<DBObject> list = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
                     List<Integer> postVos = new ArrayList<>();
@@ -2973,7 +2973,7 @@ public class FacadePost {
                 List<DBObject> onlyPost = queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), Integer.parseInt(circleid));
                 for (int i = 0; i < onlyPost.size(); i++) {
                     String intime = onlyPost.get(i).get("intime").toString();
-                    intimePost=queryPosyByImtime(intime);
+                    intimePost = queryPosyByImtime(intime, Integer.parseInt(userid));
              }
              List<Integer> postVos = new ArrayList<>();
                 //  List<DBObject> list = userRefulshListMongodbToDeviceHistory(device, type, circleid);
