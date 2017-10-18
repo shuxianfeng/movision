@@ -2066,7 +2066,7 @@ public class FacadePost {
     public void insertmongo(List<PostVo> list, String userid, int type, String device, int labelid) {
         int crileid = 0;//圈子id
         if (list != null && userid != null) {
-            for (int i = 0; i < list.size(); i++) {
+            for (int i = list.size() - 1; i >= 0; i--) {
                 int id = list.get(i).getId();
                 //查询帖子是哪个圈子
                 try {
@@ -2938,7 +2938,7 @@ public class FacadePost {
             mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             db = mongoClient.getDB("searchRecord");
             DBCollection table = db.getCollection("userRefreshRecord");//表名
-            BasicDBObject gt = new BasicDBObject("$lt", intime);
+            BasicDBObject gt = new BasicDBObject("$lte", intime);
             BasicDBObject queryObject = new BasicDBObject("intime", gt).append("userid", userid).append("type", type);
             //指定需要显示列
             BasicDBObject keys = new BasicDBObject();
