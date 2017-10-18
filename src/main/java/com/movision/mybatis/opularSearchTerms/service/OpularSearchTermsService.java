@@ -56,7 +56,8 @@ import java.util.List;
     }
 
     /**
-     * 查询
+     * 统计用户浏览的帖子所属的每个圈子的数量
+     *
      * @return
      */
     public List  userFlush(int userid) {

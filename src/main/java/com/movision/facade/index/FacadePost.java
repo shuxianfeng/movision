@@ -1179,7 +1179,7 @@ public class FacadePost {
         }
         post.setCoverimg(coverimg); //帖子封面
         post.setUserid(userid);
-        post.setHeatvalue(500); //默认的帖子热度值
+        post.setHeatvalue(1500); //默认的帖子热度值
         //城市编码
         String citycode = wrapCitycode();
         post.setCity(citycode);    //使用登录时的城市一样
@@ -1439,6 +1439,7 @@ public class FacadePost {
         List<DBObject> listmongodb;
         listmongodb = userRefulshListMongodb(Integer.parseInt(userid), 1);//查询用户刷新列表
         if (listmongodb.size() != 0) {
+            //统计用户浏览的帖子所属的每个圈子的数量
             result = opularSearchTermsService.userFlush(Integer.parseInt(userid));
             int crileid = result.get(0).getCrileid();
             List<PostVo> criclelist = postService.queryPostCricle(crileid);//这个圈子的帖子（根据热度值排序）
