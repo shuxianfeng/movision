@@ -144,7 +144,7 @@ public class GoodsListFacade {
             map.put("producttags", producttags);
         }
         if (StringUtil.isNotEmpty(brand)) {
-            map.put("band", brand);
+            map.put("brandid", brand);
         }
         if (StringUtil.isNotEmpty(protype)) {
             map.put("protype", protype);

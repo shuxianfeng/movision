@@ -637,8 +637,8 @@
         <if test="attribute!=null and attribute!=''">
             AND s.attribute=#{producttags,jdbcType=VARCHAR}
         </if>
-        <if test="brand!=null and brand!=''">
-            AND s.brandid=#{brand,jdbcType=INTEGER}
+            <if test="brandid!=null and brandid!=''">
+                AND s.brandid=#{brandid,jdbcType=INTEGER}
         </if>
         <if test="protype!=null and protype!=''">
             AND s.protype=#{protype,jdbcType=INTEGER}
