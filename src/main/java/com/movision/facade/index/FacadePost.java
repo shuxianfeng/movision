@@ -2101,7 +2101,7 @@ public class FacadePost {
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("postid", 1);
-            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", 1));
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
@@ -2173,7 +2173,7 @@ public class FacadePost {
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("postid", 1);
-            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", 1));
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
@@ -2565,7 +2565,7 @@ public class FacadePost {
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("postid", 1);
-            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", 1));
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
@@ -2601,7 +2601,7 @@ public class FacadePost {
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("postid", 1);
-            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", 1));
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
@@ -2637,7 +2637,7 @@ public class FacadePost {
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("postid", 1);
-            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", 1));
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
@@ -2673,7 +2673,7 @@ public class FacadePost {
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("postid", 1);
-            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", 1));
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
@@ -2944,7 +2944,7 @@ public class FacadePost {
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("postid", 1);
-            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", 1));
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
@@ -2983,7 +2983,7 @@ public class FacadePost {
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("postid", 1);
-            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", 1));
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
@@ -3021,7 +3021,7 @@ public class FacadePost {
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("postid", 1);
-            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", 1));
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
@@ -3060,7 +3060,7 @@ public class FacadePost {
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("postid", 1);
-            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", 1));
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
@@ -3098,7 +3098,7 @@ public class FacadePost {
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("postid", 1);
-            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", 1));
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
@@ -3136,7 +3136,7 @@ public class FacadePost {
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
             keys.put("postid", 1);
-            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", 1));
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
