@@ -1179,7 +1179,7 @@ public class FacadePost {
         }
         post.setCoverimg(coverimg); //帖子封面
         post.setUserid(userid);
-        post.setHeatvalue(1500); //默认的帖子热度值
+        post.setHeatvalue(3000); //默认的帖子热度值
         //城市编码
         String citycode = wrapCitycode();
         post.setCity(citycode);    //使用登录时的城市一样
