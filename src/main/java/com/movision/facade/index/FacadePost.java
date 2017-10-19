@@ -3208,7 +3208,7 @@ public class FacadePost {
         List<PostVo> postVo;
         List<DBObject> intimePost = null;
         List<DBObject> us = null;
-        if (postids != "") {
+        if (postids != "0") {
             List<DBObject> onlyPost = queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), Integer.parseInt(circleid));
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, Integer.parseInt(circleid));
@@ -3260,7 +3260,7 @@ public class FacadePost {
         List<PostVo> postVo;
         List<DBObject> intimePost = null;
         List<DBObject> us = null;
-        if (postids != "") {
+        if (postids != "0") {
             List<DBObject> onlyPost = queryOnlPostNotLoginLabelid(device, type, Integer.parseInt(postids), Integer.parseInt(labelid));
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = queryPosyByImtimeDeviceLabel(intime, device, type, Integer.parseInt(labelid));
@@ -3310,7 +3310,7 @@ public class FacadePost {
         List<PostVo> postVo;
         List<DBObject> intimePost = null;
         List<DBObject> us = null;
-        if (postids != "") {
+        if (postids != "0") {
             List<DBObject> onlyPost = queryOnlPostNotLogin(device, type, Integer.parseInt(postids));
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = queryPosyByImtimeDevice(intime, device, type);
@@ -3388,7 +3388,7 @@ public class FacadePost {
         List<PostVo> postVo;
         List<DBObject> intimePost = null;
         List<DBObject> us = null;
-        if (postids != "") {
+        if (postids != "0") {
             List<DBObject> onlyPost = queryOnlPostCircleid(Integer.parseInt(userid), type, Integer.parseInt(postids), Integer.parseInt(circleid));
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = queryPosyByImtimeCircleid(intime, Integer.parseInt(userid), type, Integer.parseInt(circleid));
@@ -3453,7 +3453,7 @@ public class FacadePost {
         List<PostVo> postVo;
         List<DBObject> intimePost = null;
         List<DBObject> us = null;
-        if (postids != "") {
+        if (postids != "0") {
             List<DBObject> onlyPost = queryOnlPostLabel(Integer.parseInt(userid), type, Integer.parseInt(postids), Integer.parseInt(labelid));
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = queryPosyByImtimeLabel(intime, Integer.parseInt(userid), type, Integer.parseInt(labelid));
@@ -3515,7 +3515,7 @@ public class FacadePost {
         List<PostVo> postVo;
         List<DBObject> intimePost = null;
         List<DBObject> us = null;
-        if (postids != "") {
+        if (postids != "0") {
             List<DBObject> onlyPost = queryOnlPost(Integer.parseInt(userid), type, Integer.parseInt(postids));
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = queryPosyByImtime(intime, Integer.parseInt(userid), type);
