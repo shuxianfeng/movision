@@ -304,4 +304,6 @@ public interface PostMapper {
     Date queryPostIdByDate(Integer id);
 
     List<PostVo> queryPostListByHeatValue();
+
+    Post queryxiaojijiPostForTest();
 }

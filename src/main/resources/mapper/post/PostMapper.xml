@@ -2245,5 +2245,9 @@
         select * FROM yw_post where isdel = 0 order by heat_value DESC ;
     </select>
 
+    <select id="queryxiaojijiPostForTest" resultType="com.movision.mybatis.post.entity.Post">
+        SELECT * FROM yw_post where title = '小鸡鸡'
+    </select>
+
 
 </mapper>
