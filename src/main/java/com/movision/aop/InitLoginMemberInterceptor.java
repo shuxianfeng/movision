@@ -237,7 +237,7 @@ public class InitLoginMemberInterceptor extends HandlerInterceptorAdapter {
                 || loginInfo.getQq() != appuser.getQq()
                 || loginInfo.getSina() != appuser.getSina()
                 || loginInfo.getOpenid() != appuser.getOpenid()
-                || loginInfo.getHeatValue() != appuser.getHeatValue()
+                || loginInfo.getHeatvalue() != appuser.getHeatvalue()
                 || loginInfo.getIpCity() != appuser.getIpCity();
         return isChange;
     }*/

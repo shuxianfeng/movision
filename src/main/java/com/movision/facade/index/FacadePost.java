@@ -4352,7 +4352,7 @@ public class FacadePost {
 
             PostTo postTo = new PostTo();
             postTo.setId(postid);
-            postTo.setHeatValue(originHeatValue + count);
+            postTo.setHeatvalue(originHeatValue + count);
 
             postService.updatePostById(postTo);
         }

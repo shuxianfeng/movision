@@ -430,7 +430,7 @@
         #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
         #{coverimg,jdbcType=VARCHAR},now(),#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},
         #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{oprtime,jdbcType=TIMESTAMP},
-        #{activeid}, #{city}, #{heat_value}
+        #{activeid}, #{city}, #{heatvalue}
         )
     </insert>
     <!--插入一条用户参与活动的记录-->
@@ -943,8 +943,8 @@
             <if test="oprtime!=null">
                 oprtime=#{oprtime,jdbcType=TIMESTAMP}
             </if>
-            <if test="heatValue != null">
-                heat_value=#{heatValue}
+            <if test="heatvalue != null">
+                heat_value=#{heatvalue}
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
