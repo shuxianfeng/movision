@@ -64,6 +64,16 @@ public class Post implements Serializable {
 
     private Integer ishotorder;//活动设为热门的排序
 
+    private Integer isheatoperate;//用于帖子当天是否被定时任务操过热度值 0否1是
+
+    public Integer getIsheatoperate() {
+        return isheatoperate;
+    }
+
+    public void setIsheatoperate(Integer isheatoperate) {
+        this.isheatoperate = isheatoperate;
+    }
+
     public Integer getIshotorder() {
         return ishotorder;
     }

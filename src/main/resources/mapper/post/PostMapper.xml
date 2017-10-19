@@ -33,12 +33,13 @@
         <result column="city" jdbcType="VARCHAR" property="city"/>
         <result column="activeid" jdbcType="INTEGER" property="activeid"/>
         <result column="ishot_order" jdbcType="INTEGER" property="ishotorder"/>
+        <result column="isheatoperate" jdbcType="INTEGER" property="isheatoperate"/>
     </resultMap>
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
         isactive, partsum_enddays, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
-        hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,city,ishotorder
+        hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,city,ishotorder,isheatoperate
     </sql>
 
     <!--基础查询语句-->
