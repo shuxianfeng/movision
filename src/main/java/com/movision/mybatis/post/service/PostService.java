@@ -1729,4 +1729,8 @@ public class PostService {
             throw e;
         }
     }
+
+    public Post queryxiaojijiPostForTest() {
+        return postMapper.queryxiaojijiPostForTest();
+    }
 }

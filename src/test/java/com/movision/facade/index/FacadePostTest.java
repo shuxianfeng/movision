@@ -1,6 +1,8 @@
 package com.movision.facade.index;
 
 import com.google.gson.Gson;
+import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.test.SpringTestCase;
 import com.movision.utils.DateUtils;
@@ -23,10 +25,32 @@ public class FacadePostTest extends SpringTestCase {
     @Autowired
     private FacadePost facadePost;
 
+    @Autowired
+    private PostService postService;
+
+    @Test
+    public void copyPost50() throws Exception {
+        Post xiaojiji = postService.queryxiaojijiPostForTest();
+        for (int i = 0; i < 50; i++) {
+            Post post = new Post();
+            post.setTitle("小鸡鸡+");
+
+        }
+    }
+
+
+
+
+
+
+
+
+
     @Test
     public void getCircleInCatagory() throws Exception {
         facadePost.getCircleInCatagory();
     }
+
 
     @Test
     public void releaseModularPost() throws Exception {
@@ -44,7 +68,7 @@ public class FacadePostTest extends SpringTestCase {
         String labelList = gson.toJson(list);
         System.out.println("labelList=" + labelList);
 
-        facadePost.releaseModularPost(null, userid, circleid, null, null, null, null, null, labelList, null);
+//        facadePost.releaseModularPost(null, userid, circleid, null, null, null, null, null, labelList, null);
     }
 
     private PostLabel createPostLabel(String userid, String namePrefix) {
