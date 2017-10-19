@@ -873,14 +873,14 @@ public class FacadePost {
      */
     public Map postUnderZk(HttpServletRequest request, String userid, String circleid, String title,
                            String postcontent, String isactive, String coverimg, String proids, String labellist,
-                           String activeid) {
+                           String activeid, Integer mark) {
         DistributedLock lock = null;
         try {
             lock = new DistributedLock(LOCK_NAME);
             //加锁
             lock.lock();
             //发帖操作
-            return releaseModularPost(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist, activeid);
+            return releaseModularPost(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist, activeid, mark);
 
         } catch (Exception e) {
             log.error("执行异常>>>", e);
@@ -911,7 +911,7 @@ public class FacadePost {
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map releaseModularPost(HttpServletRequest request, String userid, String circleid, String title,
                                   String postcontent, String isactive, String coverimg, String proids, String labellist,
-                                  String activeid) {
+                                  String activeid, Integer markIOS) {
         Map map = new HashMap();
         validateNotNullUseridAndCircleid(userid, circleid);
 
@@ -941,7 +941,7 @@ public class FacadePost {
                 log.info("APP前端用户开始请求发帖");
                 Map contentMap = null;
                 //封装帖子实体
-                Post post = preparePostJavaBean(request, uid, cid, title, postcontent, isactive, coverimg, contentMap, activeid);
+                Post post = preparePostJavaBean(request, uid, cid, title, postcontent, isactive, coverimg, contentMap, activeid, markIOS);
                 //1 插入帖子
                 postService.releaseModularPost(post);
                 //返回的主键--帖子id
@@ -1155,7 +1155,7 @@ public class FacadePost {
      */
     private Post preparePostJavaBean(HttpServletRequest request, Integer userid, Integer circleid, String title,
                                      String postcontent, String isactive,
-                                     String coverimg, Map contentMap, String activeid) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+                                     String coverimg, Map contentMap, String activeid, Integer markIOS) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         Post post = new Post();
         post.setCircleid(circleid);
         post.setTitle(title);
@@ -1187,6 +1187,7 @@ public class FacadePost {
         if (StringUtils.isNotBlank(activeid)) {
             post.setActiveid(Integer.parseInt(activeid));
         }
+        post.setMark(markIOS);
         return post;
     }
 
