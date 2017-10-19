@@ -1441,7 +1441,7 @@ public class FacadePost {
         listmongodb = userRefulshListMongodbToDevice(device, 1);//用户有没有看过
         if (listmongodb.size() != 0) {
             //统计用户浏览的帖子所属的每个圈子的数量
-            result = opularSearchTermsService.userFlush(Integer.parseInt(userid));
+            result = opularSearchTermsService.userFlush(device);
             int crileid = result.get(0).getCrileid();
             List<PostVo> criclelist = postService.queryPostCricle(crileid);//这个圈子的帖子（根据热度值排序）
             List<PostVo> overPost = postService.queryoverPost(crileid);//查询剩下的所有帖子
