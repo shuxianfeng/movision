@@ -60,9 +60,9 @@ import java.util.List;
      *
      * @return
      */
-    public List  userFlush(int userid) {
+    public List userFlush(String device) {
               Aggregation aggregation = Aggregation.newAggregation(
-                    Aggregation.match(Criteria.where("userid").is(userid)),
+                      Aggregation.match(Criteria.where("device").is(device)),
                     Aggregation.group("crileid").count().as("count"),
                     Aggregation.sort(Sort.Direction.DESC, "count"),
                     Aggregation.limit(1)

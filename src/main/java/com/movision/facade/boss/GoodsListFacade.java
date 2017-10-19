@@ -880,16 +880,21 @@ public class GoodsListFacade {
             goodsComboVo.setImgurl(imgurl);
         }
         int res = goodsService.updateComDetail(goodsComboVo);
-        String productids[] = goodsid.split(",");
-        int re = goodsService.deleteComGoodsT(Integer.parseInt(comboid));
         int result = 0;
-        GoodsCombo good = new GoodsCombo();
-        good.setComboid(Integer.parseInt(comboid));
-        String goods;
-        for (int i = 0; i < productids.length; i++) {
-            goods = productids[i];
-            good.setGoodsid(Integer.parseInt(goods));
-            result = goodsService.addGoods(good);
+        int re = 0;
+        //更新套餐中的商品操作
+        if (StringUtil.isNotEmpty(goodsid)) {
+            //删除套餐中的商品操作
+            re = goodsService.deleteComGoodsT(Integer.parseInt(comboid));
+            String productids[] = goodsid.split(",");
+            GoodsCombo good = new GoodsCombo();
+            good.setComboid(Integer.parseInt(comboid));
+            String goods;
+            for (int i = 0; i < productids.length; i++) {
+                goods = productids[i];
+                good.setGoodsid(Integer.parseInt(goods));
+                result = goodsService.addGoods(good);
+            }
         }
         Map<String, Integer> map = new HashMap<>();
         map.put("res", res);

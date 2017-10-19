@@ -266,9 +266,7 @@ public class PostService {
     public int releaseModularPost(Post post) {
         try {
             log.info("模块式发帖发布成功");
-
             return postMapper.releaseModularPost(post);
-
         } catch (Exception e) {
             log.error("模块式发帖发布失败");
             throw e;

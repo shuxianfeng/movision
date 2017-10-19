@@ -449,11 +449,12 @@ public class AppPostController {
                                        @ApiParam(value = "是否为活动：0 帖子 1 活动") @RequestParam String isactive,
                                        @ApiParam(value = "帖子封面图片url字符串") @RequestParam String coverimg,
                                        @ApiParam(value = "标签实体集合，json字符串形式") @RequestParam(required = false) String labellist,
-                                       @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids) {
+                                       @ApiParam(value = "分享的产品id(多个商品用英文逗号,隔开)") @RequestParam(required = false) String proids,
+                                       @ApiParam(value = "IOS发帖传1，否则传0") @RequestParam(required = false) Integer mark) {
 
         Response response = new Response();
 
-        Map count = facadePost.postUnderZk(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist, activeid);
+        Map count = facadePost.postUnderZk(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist, activeid, mark);
 
         if (count.get("flag").equals(-2)) {
             response.setCode(300);

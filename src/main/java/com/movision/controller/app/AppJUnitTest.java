@@ -65,7 +65,7 @@ public class AppJUnitTest {
                                     @ApiParam(value = "帖子内容(json)") @RequestParam String content) {
         Response response = new Response();
 
-        Map<String, Object> resultmap = jsoupCompressImg.newCompressImg(request, content);
+        Map<String, Object> resultmap = jsoupCompressImg.newCompressImg(request, content, 0);   //非IOS发帖
 
         if (response.getCode() == 200) {
             response.setMessage("压缩成功");

@@ -607,7 +607,7 @@ public class FacadePost {
         Map con = null;
         if (StringUtil.isNotEmpty(postcontent)) {
             //内容转换
-            con = jsoupCompressImg.newCompressImg(request, postcontent);
+            con = jsoupCompressImg.newCompressImg(request, postcontent, 0);
             System.out.println(con);
             if ((int) con.get("code") == 200) {
                 String str = con.get("content").toString();
@@ -873,14 +873,14 @@ public class FacadePost {
      */
     public Map postUnderZk(HttpServletRequest request, String userid, String circleid, String title,
                            String postcontent, String isactive, String coverimg, String proids, String labellist,
-                           String activeid) {
+                           String activeid, Integer mark) {
         DistributedLock lock = null;
         try {
             lock = new DistributedLock(LOCK_NAME);
             //加锁
             lock.lock();
             //发帖操作
-            return releaseModularPost(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist, activeid);
+            return releaseModularPost(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist, activeid, mark);
 
         } catch (Exception e) {
             log.error("执行异常>>>", e);
@@ -911,7 +911,7 @@ public class FacadePost {
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map releaseModularPost(HttpServletRequest request, String userid, String circleid, String title,
                                   String postcontent, String isactive, String coverimg, String proids, String labellist,
-                                  String activeid) {
+                                  String activeid, Integer markIOS) {
         Map map = new HashMap();
         validateNotNullUseridAndCircleid(userid, circleid);
 
@@ -941,7 +941,7 @@ public class FacadePost {
                 log.info("APP前端用户开始请求发帖");
                 Map contentMap = null;
                 //封装帖子实体
-                Post post = preparePostJavaBean(request, uid, cid, title, postcontent, isactive, coverimg, contentMap, activeid);
+                Post post = preparePostJavaBean(request, uid, cid, title, postcontent, isactive, coverimg, contentMap, activeid, markIOS);
                 //1 插入帖子
                 postService.releaseModularPost(post);
                 //返回的主键--帖子id
@@ -1155,12 +1155,12 @@ public class FacadePost {
      */
     private Post preparePostJavaBean(HttpServletRequest request, Integer userid, Integer circleid, String title,
                                      String postcontent, String isactive,
-                                     String coverimg, Map contentMap, String activeid) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+                                     String coverimg, Map contentMap, String activeid, Integer markIOS) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         Post post = new Post();
         post.setCircleid(circleid);
         post.setTitle(title);
 
-        contentMap = setPostContent(request, postcontent, contentMap, post);
+        contentMap = setPostContent(request, postcontent, contentMap, post, markIOS);
         post.setZansum(0);//新发帖全部默认为0次
         post.setCommentsum(0);//被评论次数
         post.setForwardsum(0);//被转发次数
@@ -1179,7 +1179,7 @@ public class FacadePost {
         }
         post.setCoverimg(coverimg); //帖子封面
         post.setUserid(userid);
-        post.setHeatvalue(1500); //默认的帖子热度值
+        post.setHeatvalue(3000); //默认的帖子热度值
         //城市编码
         String citycode = wrapCitycode();
         post.setCity(citycode);    //使用登录时的城市一样
@@ -1187,6 +1187,7 @@ public class FacadePost {
         if (StringUtils.isNotBlank(activeid)) {
             post.setActiveid(Integer.parseInt(activeid));
         }
+        post.setMark(markIOS);
         return post;
     }
 
@@ -1199,10 +1200,10 @@ public class FacadePost {
      * @param post
      * @return
      */
-    private Map setPostContent(HttpServletRequest request, String postcontent, Map contentMap, Post post) {
+    private Map setPostContent(HttpServletRequest request, String postcontent, Map contentMap, Post post, Integer mark) {
         if (StringUtil.isNotEmpty(postcontent)) {
             //内容转换
-            contentMap = jsoupCompressImg.newCompressImg(request, postcontent);
+            contentMap = jsoupCompressImg.newCompressImg(request, postcontent, mark);
             log.debug("转换后的帖子内容是：" + contentMap);
             if ((int) contentMap.get("code") == 200) {
                 String str = contentMap.get("content").toString();
@@ -1416,11 +1417,11 @@ public class FacadePost {
             if (alllist != null) {
                 if (count < 1000) {
                     //mongodb的里面的刷新记录小于1000条记录的时候进行用户分析
-                    list = userAnalysisSmall(userid, alllist, posts);
+                    list = userAnalysisSmall(userid, alllist, posts, device);
                     if (list != null) return list;
                 } else if (count >= 1000) {
                     //mongodb的里面的刷新记录大于等于1000条记录的时候进行用户分析
-                    list = userAnalysisBig(userid, posts);
+                    list = userAnalysisBig(userid, posts, device);
                 }
             }
         }
@@ -1433,14 +1434,15 @@ public class FacadePost {
      * @param userid
      * @param posts
      */
-    private List userAnalysisBig(String userid, List<PostVo> posts) {
+    private List userAnalysisBig(String userid, List<PostVo> posts, String device) {
         List<PostVo> list = null;
         List<UserRefreshRecordVo> result;//查询用户最喜欢的圈子
         List<DBObject> listmongodb;
-        listmongodb = userRefulshListMongodb(Integer.parseInt(userid), 1);//查询用户刷新列表
+        //listmongodb = userRefulshListMongodb(Integer.parseInt(userid), 1);//查询用户刷新列表
+        listmongodb = userRefulshListMongodbToDevice(device, 1);//用户有没有看过
         if (listmongodb.size() != 0) {
             //统计用户浏览的帖子所属的每个圈子的数量
-            result = opularSearchTermsService.userFlush(Integer.parseInt(userid));
+            result = opularSearchTermsService.userFlush(device);
             int crileid = result.get(0).getCrileid();
             List<PostVo> criclelist = postService.queryPostCricle(crileid);//这个圈子的帖子（根据热度值排序）
             List<PostVo> overPost = postService.queryoverPost(crileid);//查询剩下的所有帖子
@@ -1452,11 +1454,11 @@ public class FacadePost {
                 posts.add(post);//把mongodb转为post实体
             }
             criclelist.removeAll(posts);//剩下的帖子
-            list = retuenList(criclelist, userid, 1, "", -1);
+            list = retuenList(criclelist, userid, 1, device, -1);
             return list;
         } else {
             list = postService.findAllPostHeatValue();
-            list = retuenList(list, userid, 1, "", -1);
+            list = retuenList(list, userid, 1, device, -1);
             return list;
         }
     }
@@ -1470,10 +1472,11 @@ public class FacadePost {
      * @param posts
      * @return
      */
-    private List userAnalysisSmall(String userid, List<PostVo> alllist, List<PostVo> posts) {
+    private List userAnalysisSmall(String userid, List<PostVo> alllist, List<PostVo> posts, String device) {
         List<DBObject> listmongodba;
         List<PostVo> list = null;
-        listmongodba = userRefulshListMongodb(Integer.parseInt(userid), 1);//查询用户刷新列表
+        //listmongodba = userRefulshListMongodb(Integer.parseInt(userid), 1);//查询用户刷新列表
+        listmongodba = userRefulshListMongodbToDevice(device, 1);//用户有没有看过
         if (listmongodba.size() != 0) {
             for (int j = 0; j < listmongodba.size(); j++) {
                 PostVo post = new PostVo();
@@ -1482,11 +1485,11 @@ public class FacadePost {
             }
             //把看过的帖子过滤掉
             alllist.removeAll(posts);//alllist是剩余的帖子
-            list = retuenList(alllist, userid, 1, "", -1);
+            list = retuenList(alllist, userid, 1, device, -1);
         } else {
             //登录情况下但是mongodb里面没有刷新记录
             list = postService.findAllPostHeatValue();
-            list = retuenList(list, userid, 1, "", -1);
+            list = retuenList(list, userid, 1, device, -1);
             return list;
         }
         return list;
@@ -1562,7 +1565,8 @@ public class FacadePost {
                 return list;
             } else {//已登录
                 //根据地区查询帖子
-                listmongodba = userRefulshListMongodb(Integer.parseInt(userid), 3);//用户有没有看过
+                //listmongodba = userRefulshListMongodb(Integer.parseInt(userid), 3);//用户有没有看过
+                listmongodba = userRefulshListMongodbToDevice(device, 3);//用户有没有看过
                 //根据city查询帖子
                 List<PostVo> postVos = postService.findAllCityPost(citycode);
                 if (cityPost.size() != 0) {
@@ -1583,7 +1587,7 @@ public class FacadePost {
                     ComparatorChain chain = new ComparatorChain();
                     chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
                     Collections.sort(postVos, chain);
-                    list = retuenList(postVos, userid, 3, "", -1);
+                    list = retuenList(postVos, userid, 3, device, -1);
                 } else {//登录但是刷新列表中没有帖子
                     list = postService.findAllCityPost(citycode);//根据热度值排序查询帖子
                     if (cityPost.size() != 0) {
@@ -1597,7 +1601,7 @@ public class FacadePost {
                     ComparatorChain chain = new ComparatorChain();
                     chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
                     Collections.sort(list, chain);
-                    list = retuenList(list, userid, 3, "", -1);
+                    list = retuenList(list, userid, 3, device, -1);
                     return list;
                 }
             }
@@ -1633,7 +1637,8 @@ public class FacadePost {
             list = NotLoginretuenList(list, 4, device, -1);
             return list;
         } else {
-            listmongodba = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), 4, String.valueOf(circleid));//用户有没有看过
+            // listmongodba = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), 4, String.valueOf(circleid));//用户有没有看过
+            listmongodba = userRefulshListMongodbToDeviceHistory(device, 4, String.valueOf(circleid));//用户有没有看过
             if (listmongodba.size() != 0) {
                 for (int j = 0; j < listmongodba.size(); j++) {
                     PostVo post = new PostVo();
@@ -1643,11 +1648,11 @@ public class FacadePost {
                 //根据圈子id查询帖子
                 List<PostVo> postVos = postService.findAllPostCrile(circleid);
                 postVos.removeAll(posts);
-                list = retuenList(postVos, userid, 4, "", -1);
+                list = retuenList(postVos, userid, 4, device, -1);
             } else {
                 //登录但是刷新列表中没有帖子
                 list = postService.findAllPostCrile(circleid);//根据热度值排序查询帖子
-                list = retuenList(list, userid, 4, "", -1);
+                list = retuenList(list, userid, 4, device, -1);
                 return list;
             }
         }
@@ -1659,7 +1664,7 @@ public class FacadePost {
      *
      * @return
      */
-    public List followPost(String userid) {
+    public List followPost(String userid, String device) {
         List<PostVo> list = null;
         if (userid != null) {
             List<DBObject> listmongodba = null;
@@ -1667,7 +1672,7 @@ public class FacadePost {
             List<PostVo> crileidPost = new ArrayList<>();
             List<PostVo> userPost = new ArrayList<>();
             List<PostVo> labelPost = new ArrayList<>();
-            listmongodba = userRefulshListMongodb(Integer.parseInt(userid), 2);//用户有没有看过
+            listmongodba = userRefulshListMongodbToDevice(device, 2);//用户有没有看过
             List<Integer> followCricle = postService.queryFollowCricle(Integer.parseInt(userid));//查询用户关注的圈子
             List<Integer> followUsers = postService.queryFollowUser(Integer.parseInt(userid));//用户关注的作者
             List<Integer> followLabel = postLabelService.labelId(Integer.parseInt(userid));//用户关注标签
@@ -1701,10 +1706,10 @@ public class FacadePost {
                         posts.add(post);//把mongodb转为post实体
                     }
                     crileidPost.removeAll(posts);//过滤掉看过的帖子crileidPost就是剩下的帖子
-                    list = retuenList(crileidPost, userid, 2, "", -1);
+                    list = retuenList(crileidPost, userid, 2, device, -1);
                 } else {
                     //list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
-                    list = retuenList(crileidPost, userid, 2, "", -1);
+                    list = retuenList(crileidPost, userid, 2, device, -1);
                     return list;
                 }
             }
@@ -1736,7 +1741,8 @@ public class FacadePost {
             list = NotLoginretuenList(list, 5, device, labelid);
             return list;
         } else {
-            listmongodba = userRefulshListMongodb(Integer.parseInt(userid), 5);//用户有没有看过
+            // listmongodba = userRefulshListMongodb(Integer.parseInt(userid), 5);//用户有没有看过
+            listmongodba = userRefulshListMongodbToDeviceHistoryLabelid(device, 5, labelid);//用户有没有看过
             if (listmongodba.size() != 0) {
                 for (int j = 0; j < listmongodba.size(); j++) {
                     PostVo post = new PostVo();
@@ -1746,11 +1752,11 @@ public class FacadePost {
                 //根据标签查询帖子
                 List<PostVo> postVos = postService.findAllLabelAllPost(labelid);
                 postVos.removeAll(posts);
-                list = retuenList(postVos, userid, 5, "", labelid);
+                list = retuenList(postVos, userid, 5, device, labelid);
             } else {
                 //登录但是刷新列表中没有帖子
                 list = postService.findAllLabelAllPost(labelid);//根据热度值排序查询帖子
-                list = retuenList(list, userid, 5, "", labelid);
+                list = retuenList(list, userid, 5, device, labelid);
                 return list;
             }
             return list;
@@ -2046,7 +2052,7 @@ public class FacadePost {
         if (type == 1) {//推荐
             list = recommendPost(userid, device);
         } else if (type == 2) {//关注
-            list = followPost(userid);
+            list = followPost(userid, device);
         } else if (type == 3) {//本地
             list = localhostPost(userid, lat, device, lng);
         } else if (type == 4) {//圈子c
@@ -2413,6 +2419,7 @@ public class FacadePost {
             userRefreshRecord.setCrileid(String.valueOf(crileid));
             userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss:SSS"));
             userRefreshRecord.setType(type);
+            userRefreshRecord.setDevice(device);
             userRefreshRecord.setLabelid(labelid);
         } else {
             userRefreshRecord.setId(UUID.randomUUID().toString().replaceAll("\\-", ""));
@@ -3161,7 +3168,7 @@ public class FacadePost {
     public List<PostVo> userReflushHishtoryRecord(String userid, Paging<PostVo> paging, int type, String device, String labelid, String circleid, String postids) {
         List<PostVo> postVo = null;
         if (userid != null) {
-            postVo = userLoginHistoryRecord(userid, paging, type, labelid, circleid, postids, postVo);
+            postVo = userLoginHistoryRecord(userid, paging, type, labelid, circleid, postids, postVo, device);
         } else {
             postVo = userNotLoginHistoryRecord(paging, type, device, labelid, circleid, postids, postVo);
         }
@@ -3208,7 +3215,7 @@ public class FacadePost {
         List<PostVo> postVo;
         List<DBObject> intimePost = null;
         List<DBObject> us = null;
-        if (postids != "") {
+        if (!postids.equals("0")) {
             List<DBObject> onlyPost = queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), Integer.parseInt(circleid));
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, Integer.parseInt(circleid));
@@ -3260,7 +3267,7 @@ public class FacadePost {
         List<PostVo> postVo;
         List<DBObject> intimePost = null;
         List<DBObject> us = null;
-        if (postids != "") {
+        if (!postids.equals("0")) {
             List<DBObject> onlyPost = queryOnlPostNotLoginLabelid(device, type, Integer.parseInt(postids), Integer.parseInt(labelid));
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = queryPosyByImtimeDeviceLabel(intime, device, type, Integer.parseInt(labelid));
@@ -3310,7 +3317,7 @@ public class FacadePost {
         List<PostVo> postVo;
         List<DBObject> intimePost = null;
         List<DBObject> us = null;
-        if (postids != "") {
+        if (!postids.equals("0")) {
             List<DBObject> onlyPost = queryOnlPostNotLogin(device, type, Integer.parseInt(postids));
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = queryPosyByImtimeDevice(intime, device, type);
@@ -3362,14 +3369,14 @@ public class FacadePost {
      * @param
      * @return
      */
-    private List<PostVo> userLoginHistoryRecord(String userid, Paging<PostVo> paging, int type, String labelid, String circleid, String postids, List<PostVo> postVo) {
+    private List<PostVo> userLoginHistoryRecord(String userid, Paging<PostVo> paging, int type, String labelid, String circleid, String postids, List<PostVo> postVo, String device) {
         if (StringUtil.isEmpty(circleid) && StringUtil.isEmpty(labelid)) {
-            postVo = userLoginHistoryRecordThird(userid, paging, type, postids);
+            postVo = userLoginHistoryRecordThird(userid, paging, type, postids, device);
         }
         if (StringUtil.isNotEmpty(labelid)) {
-            postVo = userLoginHistoryRecordLabel(userid, paging, type, labelid, postids);
+            postVo = userLoginHistoryRecordLabel(userid, paging, type, labelid, postids, device);
         } else if (StringUtil.isNotEmpty(circleid)) {
-            postVo = userLoginHistoryRecordCircle(userid, paging, type, circleid, postids);
+            postVo = userLoginHistoryRecordCircle(userid, paging, type, circleid, postids, device);
         }
         return postVo;
     }
@@ -3384,23 +3391,22 @@ public class FacadePost {
      * @param postids
      * @return
      */
-    private List<PostVo> userLoginHistoryRecordCircle(String userid, Paging<PostVo> paging, int type, String circleid, String postids) {
+    private List<PostVo> userLoginHistoryRecordCircle(String userid, Paging<PostVo> paging, int type, String circleid, String postids, String device) {
         List<PostVo> postVo;
         List<DBObject> intimePost = null;
         List<DBObject> us = null;
-        if (postids != "") {
-            List<DBObject> onlyPost = queryOnlPostCircleid(Integer.parseInt(userid), type, Integer.parseInt(postids), Integer.parseInt(circleid));
+        if (!postids.equals("0")) {
+            List<DBObject> onlyPost = queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), Integer.parseInt(circleid));
             String intime = onlyPost.get(0).get("intime").toString();
-            intimePost = queryPosyByImtimeCircleid(intime, Integer.parseInt(userid), type, Integer.parseInt(circleid));
+            intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, Integer.parseInt(circleid));
         } else {
             //查询用户有无历史
-            int count = userHistoryCircleCount(Integer.parseInt(userid), type, Integer.parseInt(circleid));
+            int count = userHistoryDeviceCircleCount(device, type, circleid);
             if (count > 10) {
-                us = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), type, circleid);
+                us = userRefulshListMongodbToDeviceHistory(device, type, circleid);
             } else {
                 us = null;
             }
-
         }
         // List<DBObject> list = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), type, circleid);
         List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
@@ -3449,19 +3455,19 @@ public class FacadePost {
      * @param postids
      * @return
      */
-    private List<PostVo> userLoginHistoryRecordLabel(String userid, Paging<PostVo> paging, int type, String labelid, String postids) {
+    private List<PostVo> userLoginHistoryRecordLabel(String userid, Paging<PostVo> paging, int type, String labelid, String postids, String device) {
         List<PostVo> postVo;
         List<DBObject> intimePost = null;
         List<DBObject> us = null;
-        if (postids != "") {
-            List<DBObject> onlyPost = queryOnlPostLabel(Integer.parseInt(userid), type, Integer.parseInt(postids), Integer.parseInt(labelid));
+        if (!postids.equals("0")) {
+            List<DBObject> onlyPost = queryOnlPostNotLoginLabelid(device, type, Integer.parseInt(postids), Integer.parseInt(labelid));
             String intime = onlyPost.get(0).get("intime").toString();
-            intimePost = queryPosyByImtimeLabel(intime, Integer.parseInt(userid), type, Integer.parseInt(labelid));
+            intimePost = queryPosyByImtimeDeviceLabel(intime, device, type, Integer.parseInt(labelid));
         } else {
             //查询用户有无历史
-            int count = userHistoryLabelCount(Integer.parseInt(userid), type, Integer.parseInt(labelid));
+            int count = userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
             if (count > 10) {
-                us = userRefulshListMongodbHistory(Integer.parseInt(userid), type, Integer.parseInt(labelid));
+                us = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
             } else {
                 us = null;
             }
@@ -3511,19 +3517,19 @@ public class FacadePost {
      * @param postids
      * @return
      */
-    private List<PostVo> userLoginHistoryRecordThird(String userid, Paging<PostVo> paging, int type, String postids) {
+    private List<PostVo> userLoginHistoryRecordThird(String userid, Paging<PostVo> paging, int type, String postids, String device) {
         List<PostVo> postVo;
         List<DBObject> intimePost = null;
         List<DBObject> us = null;
-        if (postids != "") {
-            List<DBObject> onlyPost = queryOnlPost(Integer.parseInt(userid), type, Integer.parseInt(postids));
+        if (!postids.equals("0")) {
+            List<DBObject> onlyPost = queryOnlPostNotLogin(device, type, Integer.parseInt(postids));
             String intime = onlyPost.get(0).get("intime").toString();
-            intimePost = queryPosyByImtime(intime, Integer.parseInt(userid), type);
+            intimePost = queryPosyByImtimeDevice(intime, device, type);
         } else {
             //查询用户有无历史
-            int count = userHistoryCount(Integer.parseInt(userid), type);
+            int count = userHistoryDeviceCount(device, type);
             if (count > 10) {
-                us = userRefulshListMongodb(Integer.parseInt(userid), type);
+                us = userRefulshListMongodbToDevice(device, type);
             } else {
                 us = null;
             }
@@ -4352,7 +4358,7 @@ public class FacadePost {
 
             PostTo postTo = new PostTo();
             postTo.setId(postid);
-            postTo.setHeatValue(originHeatValue + count);
+            postTo.setHeatvalue(originHeatValue + count);
 
             postService.updatePostById(postTo);
         }
