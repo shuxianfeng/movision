@@ -224,12 +224,11 @@ public class JsoupCompressImg {
      * 解析json字符串，压缩替换img
      * @param request 请求体
      * @param content 存储帖子正文的josn字符串
-     * @param mark    IOS标志位：1 IOS发帖 0 非IOS发帖 默认值0
      * @input [{"orderid": 0,"type": 0,"value": "测试发帖","wh": "","dir": ""},{"orderid": 1,"type": 1,"value": "http://pic.mofo.shop/upload/post/img/UUKD5Qws1497260964776.jpg","wh": "750x440","dir": "/var/temp/fime0/tewsdvsd/test.jpg"},{"orderid": 2,"type": 2,"value": "36e7fea5ddc347588fc19c0b75d7930c","wh": "","dir": "/var/temp/fime0/tewsdvsd/test.mov"}]
      * @output [{"orderid":0,"type":0,"value":"测试发帖","wh":"","dir":""},{"wh":"750x440","orderid":1,"type":1,"dir":"/var/temp/fime0/tewsdvsd/test.jpg","value":"http://pic.mofo.shop/upload/postCompressImg/img/nowuIRJV1497527940181.jpg"},{"orderid":2,"type":2,"value":"36e7fea5ddc347588fc19c0b75d7930c","wh":"","dir":"/var/temp/fime0/tewsdvsd/test.mov"}]
      * @return
      */
-    public Map<String, Object> newCompressImg(HttpServletRequest request, String content, Integer mark) {//content为存储帖子正文的josn字符串
+    public Map<String, Object> newCompressImg(HttpServletRequest request, String content) {//content为存储帖子正文的josn字符串
 
         log.info("帖子内图片压缩工具接收到的正文json内容>>>>>>>>" + content);
         //转json字符串为json对象
@@ -300,8 +299,8 @@ public class JsoupCompressImg {
                     log.info("第一次测试原图存储路径>>>>>>>>>>>>>>>>>>>>" + PATH);
                     log.info("测试原图的文件大小>>>>>>>>>>>>>>>>>>>>>>>>" + filesize + "M");
 
-                    if (sum == 0 && s > 800 * 1024 && mark == 0) {
-                        //1.如果没压缩过 && 2.图片大小超过800kb && 3.非IOS端发帖——就进行压缩，压缩过的或大小<=800kb不处理（防止修改帖子时对压缩过的图片进行重复压缩，同时也保证了低质量图片的品质）
+                    if (sum == 0 && s > 800 * 1024) {
+                        //1.如果没压缩过 && 2.图片大小超过800kb 就进行压缩，压缩过的或大小<=800kb不处理（防止修改帖子时对压缩过的图片进行重复压缩，同时也保证了低质量图片的品质）
 
                         boolean compressFlag = false;
 
@@ -374,8 +373,8 @@ public class JsoupCompressImg {
                         //虽然图片大于800kb，但是图片压缩过，存在映射关系
                         log.info("帖子中包含的已处理过的图片（压缩图片表存在映射）>>>>>>>>>>>>>>>>>>>>>>>>>" + imgurl);
 
-                    } else if ((sum == 0 && s <= 800 * 1024) || mark == 1) {
-                        //(图片未压缩过且图片大小<=800kb) 或 IOS端发帖
+                    } else if (sum == 0 && s <= 800 * 1024) {
+                        //图片未压缩过且图片大小<=800kb
 
                         //不做图片的压缩，直接使用原图的url当做压缩后的url来存
                         CompressImg compressImg = new CompressImg();

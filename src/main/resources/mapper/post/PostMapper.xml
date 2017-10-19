@@ -34,14 +34,13 @@
         <result column="activeid" jdbcType="INTEGER" property="activeid"/>
         <result column="ishot_order" jdbcType="INTEGER" property="ishotorder"/>
         <result column="isheatoperate" jdbcType="INTEGER" property="isheatoperate"/>
-        <result column="mark" jdbcType="INTEGER" property="mark"/>
     </resultMap>
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
         isactive, partsum_enddays, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
         hotimgurl,
-        intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,city,ishotorder,isheatoperate,mark
+        intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,city,ishotorder,isheatoperate
     </sql>
 
     <!--基础查询语句-->
@@ -424,8 +423,7 @@
         circleid, title,
         postcontent, zansum, commentsum, forwardsum,
         collectsum, isactive, ishot, isessence,
-        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime, activeid, city, heat_value,
-        mark
+        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime, activeid, city, heat_value
         )
         VALUES (
         #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=LONGVARCHAR},
@@ -434,7 +432,7 @@
         #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
         #{coverimg,jdbcType=VARCHAR},now(),#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},
         #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{oprtime,jdbcType=TIMESTAMP},
-        #{activeid}, #{city}, #{heatvalue},#{mark}
+        #{activeid}, #{city}, #{heatvalue}
         )
     </insert>
     <!--插入一条用户参与活动的记录-->

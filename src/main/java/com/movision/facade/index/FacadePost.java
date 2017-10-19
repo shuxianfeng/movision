@@ -607,7 +607,7 @@ public class FacadePost {
         Map con = null;
         if (StringUtil.isNotEmpty(postcontent)) {
             //内容转换
-            con = jsoupCompressImg.newCompressImg(request, postcontent, 0);
+            con = jsoupCompressImg.newCompressImg(request, postcontent);
             System.out.println(con);
             if ((int) con.get("code") == 200) {
                 String str = con.get("content").toString();
@@ -880,7 +880,7 @@ public class FacadePost {
             //加锁
             lock.lock();
             //发帖操作
-            return releaseModularPost(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist, activeid, mark);
+            return releaseModularPost(request, userid, circleid, title, postcontent, isactive, coverimg, proids, labellist, activeid);
 
         } catch (Exception e) {
             log.error("执行异常>>>", e);
@@ -911,7 +911,7 @@ public class FacadePost {
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map releaseModularPost(HttpServletRequest request, String userid, String circleid, String title,
                                   String postcontent, String isactive, String coverimg, String proids, String labellist,
-                                  String activeid, Integer markIOS) {
+                                  String activeid) {
         Map map = new HashMap();
         validateNotNullUseridAndCircleid(userid, circleid);
 
@@ -941,7 +941,7 @@ public class FacadePost {
                 log.info("APP前端用户开始请求发帖");
                 Map contentMap = null;
                 //封装帖子实体
-                Post post = preparePostJavaBean(request, uid, cid, title, postcontent, isactive, coverimg, contentMap, activeid, markIOS);
+                Post post = preparePostJavaBean(request, uid, cid, title, postcontent, isactive, coverimg, contentMap, activeid);
                 //1 插入帖子
                 postService.releaseModularPost(post);
                 //返回的主键--帖子id
@@ -1155,12 +1155,12 @@ public class FacadePost {
      */
     private Post preparePostJavaBean(HttpServletRequest request, Integer userid, Integer circleid, String title,
                                      String postcontent, String isactive,
-                                     String coverimg, Map contentMap, String activeid, Integer markIOS) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+                                     String coverimg, Map contentMap, String activeid) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         Post post = new Post();
         post.setCircleid(circleid);
         post.setTitle(title);
 
-        contentMap = setPostContent(request, postcontent, contentMap, post, markIOS);
+        contentMap = setPostContent(request, postcontent, contentMap, post);
         post.setZansum(0);//新发帖全部默认为0次
         post.setCommentsum(0);//被评论次数
         post.setForwardsum(0);//被转发次数
@@ -1187,7 +1187,6 @@ public class FacadePost {
         if (StringUtils.isNotBlank(activeid)) {
             post.setActiveid(Integer.parseInt(activeid));
         }
-        post.setMark(markIOS);
         return post;
     }
 
@@ -1200,10 +1199,10 @@ public class FacadePost {
      * @param post
      * @return
      */
-    private Map setPostContent(HttpServletRequest request, String postcontent, Map contentMap, Post post, Integer mark) {
+    private Map setPostContent(HttpServletRequest request, String postcontent, Map contentMap, Post post) {
         if (StringUtil.isNotEmpty(postcontent)) {
             //内容转换
-            contentMap = jsoupCompressImg.newCompressImg(request, postcontent, mark);
+            contentMap = jsoupCompressImg.newCompressImg(request, postcontent);
             log.debug("转换后的帖子内容是：" + contentMap);
             if ((int) contentMap.get("code") == 200) {
                 String str = contentMap.get("content").toString();

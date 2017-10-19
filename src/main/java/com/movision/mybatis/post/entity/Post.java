@@ -74,17 +74,6 @@ public class Post implements Serializable {
         this.isheatoperate = isheatoperate;
     }
 
-    private Integer mark;   //IOS发帖为1，否则为0
-
-    public void setMark(Integer mark) {
-        this.mark = mark;
-    }
-
-    public Integer getMark() {
-
-        return mark;
-    }
-
     public Integer getIshotorder() {
         return ishotorder;
     }
