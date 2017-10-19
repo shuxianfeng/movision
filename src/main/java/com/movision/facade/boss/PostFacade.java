@@ -991,7 +991,7 @@ public class PostFacade {
                 Map con = null;
                 if (StringUtil.isNotEmpty(postcontent)) {
                     //内容转换
-                    con = jsoupCompressImg.newCompressImg(request, postcontent);
+                    con = jsoupCompressImg.newCompressImg(request, postcontent, 0);
                     System.out.println(con);
                     if ((int) con.get("code") == 200) {
                         String str = con.get("content").toString();
@@ -1911,7 +1911,7 @@ public class PostFacade {
                     Map con = null;
                     if (StringUtil.isNotEmpty(postcontent)) {
                         //内容转换
-                        con = jsoupCompressImg.newCompressImg(request, postcontent);
+                        con = jsoupCompressImg.newCompressImg(request, postcontent, 0);
                         if ((int) con.get("code") == 200) {
                             System.out.println(con);
                             String str = con.get("content").toString();

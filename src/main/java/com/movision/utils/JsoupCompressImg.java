@@ -228,7 +228,7 @@ public class JsoupCompressImg {
      * @output [{"orderid":0,"type":0,"value":"测试发帖","wh":"","dir":""},{"wh":"750x440","orderid":1,"type":1,"dir":"/var/temp/fime0/tewsdvsd/test.jpg","value":"http://pic.mofo.shop/upload/postCompressImg/img/nowuIRJV1497527940181.jpg"},{"orderid":2,"type":2,"value":"36e7fea5ddc347588fc19c0b75d7930c","wh":"","dir":"/var/temp/fime0/tewsdvsd/test.mov"}]
      * @return
      */
-    public Map<String, Object> newCompressImg(HttpServletRequest request, String content) {//content为存储帖子正文的josn字符串
+    public Map<String, Object> newCompressImg(HttpServletRequest request, String content, Integer mark) {//content为存储帖子正文的josn字符串
 
         log.info("帖子内图片压缩工具接收到的正文json内容>>>>>>>>" + content);
         //转json字符串为json对象

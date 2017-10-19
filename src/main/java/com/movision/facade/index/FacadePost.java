@@ -607,7 +607,7 @@ public class FacadePost {
         Map con = null;
         if (StringUtil.isNotEmpty(postcontent)) {
             //内容转换
-            con = jsoupCompressImg.newCompressImg(request, postcontent);
+            con = jsoupCompressImg.newCompressImg(request, postcontent, 0);
             System.out.println(con);
             if ((int) con.get("code") == 200) {
                 String str = con.get("content").toString();
@@ -1160,7 +1160,7 @@ public class FacadePost {
         post.setCircleid(circleid);
         post.setTitle(title);
 
-        contentMap = setPostContent(request, postcontent, contentMap, post);
+        contentMap = setPostContent(request, postcontent, contentMap, post, markIOS);
         post.setZansum(0);//新发帖全部默认为0次
         post.setCommentsum(0);//被评论次数
         post.setForwardsum(0);//被转发次数
@@ -1200,10 +1200,10 @@ public class FacadePost {
      * @param post
      * @return
      */
-    private Map setPostContent(HttpServletRequest request, String postcontent, Map contentMap, Post post) {
+    private Map setPostContent(HttpServletRequest request, String postcontent, Map contentMap, Post post, Integer mark) {
         if (StringUtil.isNotEmpty(postcontent)) {
             //内容转换
-            contentMap = jsoupCompressImg.newCompressImg(request, postcontent);
+            contentMap = jsoupCompressImg.newCompressImg(request, postcontent, mark);
             log.debug("转换后的帖子内容是：" + contentMap);
             if ((int) contentMap.get("code") == 200) {
                 String str = contentMap.get("content").toString();
