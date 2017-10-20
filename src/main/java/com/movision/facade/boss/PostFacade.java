@@ -1220,7 +1220,7 @@ public class PostFacade {
             map.put("ishot", ish);
         }
         //查询帖子是否加精
-        PostProcessRecord record = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(postid));
+        PostProcessRecord record = postProcessRecordService.queryPostByIsessenceOrIshot(pid);
         postSelectedOperation(map, pid, ise, ish, record);
         resault.put("status", 1);
         return resault;

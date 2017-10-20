@@ -1790,8 +1790,11 @@
     <update id="updatePostChoiceness" parameterType="java.util.Map">
         UPDATE yw_post
         <set>
-            <if test="heatValue != null">
-                heat_value = heat_value + #{heatValue,jdbcType=INTEGER}
+            <if test="isessence != null">
+                isessence = #{isessence,jdbcType=INTEGER}
+            </if>
+            <if test="ishot != null">
+                ishot = #{ishot,jdbcType=INTEGER}
             </if>
         </set>
         WHERE id=#{id,jdbcType=INTEGER} AND isdel=0
@@ -1800,11 +1803,8 @@
     <update id="updatePostByHeatValue" parameterType="java.util.Map">
         UPDATE yw_post
         <set>
-            <if test="isessence != null">
-                isessence = #{isessence,jdbcType=INTEGER}
-            </if>
-            <if test="ishot != null">
-                ishot = #{ishot,jdbcType=INTEGER}
+            <if test="heatValue != null">
+                heat_value = heat_value + #{heatValue,jdbcType=INTEGER}
             </if>
         </set>
         WHERE id=#{id,jdbcType=INTEGER} AND isessence=1 AND isdel=0
