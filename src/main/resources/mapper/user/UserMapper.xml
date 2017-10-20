@@ -860,13 +860,13 @@
             AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) IS NULL
         </if>
         <if test="begintime!=null and endtime!=null">
-            AND vd.apply_time BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+            AND vd.audit_time BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
         </if>
         <if test="type==1">
-            ORDER BY vd.apply_time DESC
+            ORDER BY vd.audit_time DESC
         </if>
         <if test="type == null">
-            ORDER BY vd.apply_time DESC
+            ORDER BY vd.audit_time DESC
         </if>
         <if test="type==2">
             ORDER BY u.level DESC
