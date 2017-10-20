@@ -476,7 +476,7 @@ public class PostController {
     @RequestMapping(value = "/add_post_test", method = RequestMethod.POST)
     public Response addPostTest(HttpServletRequest request,
                                 @ApiParam(value = "帖子标题") @RequestParam String title,//帖子标题
-                                @ApiParam(value = "帖子副标题") @RequestParam String subtitle,//帖子副标题
+                                @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,//帖子副标题
                                 @ApiParam(value = "圈子id") @RequestParam String circleid,//圈子id
                                 @ApiParam(value = "发帖人") @RequestParam String userid,//发帖人
                                 @ApiParam(value = "帖子封面") @RequestParam String coverimg,//帖子封面

@@ -1819,12 +1819,6 @@ public class PostFacade {
         Integer lgid = Integer.parseInt(loginid);
         Integer pid = Integer.parseInt(id);
         Map res = commonalityFacade.verifyUserJurisdiction(lgid, JurisdictionConstants.JURISDICTION_TYPE.update.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), pid);
-        //-----------------添加开始
-        /*BossUser bu = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
-        if (bu.getIscircle() > 0 || bu.getCirclemanagement() > 0) {
-            Integer isc = userService.queryUserIsCricle(Integer.parseInt(loginid));//查询用户对应前台用户id
-            userid = isc.toString();
-        }*/
         //======================添加结束
         if (res.get("resault").equals(1)) {
                 try {
@@ -1853,11 +1847,9 @@ public class PostFacade {
                     }
 
                     if (!StringUtils.isEmpty(isessence)) {
-                        if (Integer.parseInt(isessence) == 0) {
-                            post.setIsessence(isessence);//是否为首页精选
-                            post.setEssencedate(null);
-                            post.setOrderid(null);
-                        }
+                        post.setIsessence(isessence);//是否为首页精选
+                        post.setEssencedate(null);
+                        post.setOrderid(null);
                     }
                     if (!StringUtils.isEmpty(ishot)) {
                         post.setIshot(ishot);//是否为圈子精选
