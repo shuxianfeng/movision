@@ -663,8 +663,8 @@
         (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid IN (SELECT p5.id FROM yw_post p5 WHERE p5.userid=vd.userid
         AND p5.isdel=0)) AS besharesum,
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
-        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
-        zansum,u.fans,u.applydate
+        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS zansum,u.fans,
+        (SELECT apply_time FROM yw_apply_vip_detail WHERE userid = u.id) AS applydate
         FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id
         WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 AND u.phone IS NOT NULL AND (u.id<![CDATA[>=]]>20000 OR u.id
@@ -784,8 +784,8 @@
         (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid IN (SELECT p5.id FROM yw_post p5 WHERE p5.userid=vd.userid
         AND p5.isdel=0)) AS besharesum,
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
-        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
-        zansum,u.fans,u.applydate
+        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS zansum,u.fans,
+        (SELECT apply_time FROM yw_apply_vip_detail WHERE userid = u.id)AS applydate
         FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id
         WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 AND u.phone IS NOT NULL
