@@ -865,6 +865,9 @@
         <if test="type==1">
             ORDER BY vd.apply_time DESC
         </if>
+        <if test="type == null">
+            ORDER BY vd.apply_time DESC
+        </if>
         <if test="type==2">
             ORDER BY u.level DESC
         </if>
