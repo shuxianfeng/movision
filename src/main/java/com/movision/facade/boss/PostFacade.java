@@ -1205,23 +1205,21 @@ public class PostFacade {
      */
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map<String, Integer> addPostChoiceness(String postid, String isessence, String ishot) {
-        Map map = new HashMap();
+
         Map resault = new HashMap();
         Integer pid = Integer.parseInt(postid);
-        map.put("id", pid);
+
         Integer ise = null;
         Integer ish = null;
         if (StringUtil.isNotEmpty(isessence)) {
             ise = Integer.parseInt(isessence);
-            map.put("isessence", ise);
         }
         if (StringUtil.isNotEmpty(ishot)) {
             ish = Integer.parseInt(ishot);
-            map.put("ishot", ish);
         }
         //查询帖子是否加精
         PostProcessRecord record = postProcessRecordService.queryPostByIsessenceOrIshot(pid);
-        postSelectedOperation(map, pid, ise, ish, record);
+        postSelectedOperation(pid, ise, ish, record);
         resault.put("status", 1);
         return resault;
     }
@@ -1257,15 +1255,17 @@ public class PostFacade {
     /**
      * 帖子加精操作
      *
-     * @param map
      * @param pid
      * @param ise
      * @param ish
      * @param record
      */
-    private void postSelectedOperation(Map map, Integer pid, Integer ise, Integer ish, PostProcessRecord record) {
+    private void postSelectedOperation(Integer pid, Integer ise, Integer ish, PostProcessRecord record) {
+        Map map = new HashMap();
+        map.put("id", pid);
         if (record != null) {//------------------有过加精操作
             if (record.getIsesence() != ise && ise != null) {
+                map.put("isessence", ise);
                 //更新帖子精选操作
                 postService.updatePostSelected(map);
                 PostProcessRecord re = new PostProcessRecord();
@@ -1275,6 +1275,7 @@ public class PostFacade {
                 postProcessRecordService.updateProcessRecord(re);
             }
             if (record.getIshot() != ish && ish != null) {
+                map.put("ishot", ish);
                 //更新帖子精选操作
                 postService.updatePostSelected(map);
                 PostProcessRecord re = new PostProcessRecord();
