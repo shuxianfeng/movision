@@ -755,7 +755,7 @@ public class PostFacade {
         return postList;
     }
 
-    /**
+  /*  *//**
      * 添加帖子
      *
      * @param title
@@ -767,7 +767,7 @@ public class PostFacade {
      * @param isessence
      * @param time
      * @return
-     */
+     *//*
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map addPost(HttpServletRequest request, String title, String subtitle, String type, String circleid,
@@ -816,7 +816,7 @@ public class PostFacade {
                         post.setPostcontent(postcontent);
                     }
 
-                    /*post.setPostcontent(postcontent);*/
+                    *//*post.setPostcontent(postcontent);*//*
                 }
                 post.setIntime(new Date());//插入时间
                 if (StringUtil.isNotEmpty(ishot)) {
@@ -936,7 +936,7 @@ public class PostFacade {
             map.put("massge", "权限不足");
             return map;
         }
-    }
+    }*/
 
     /**
      * 改版发帖
@@ -1619,7 +1619,7 @@ public class PostFacade {
             }
         return map;
     }
-    /**
+   /* *//**
      * 编辑帖子
      *
      * @param
@@ -1633,7 +1633,7 @@ public class PostFacade {
      * @param postcontent
      * @param isessence
      * @return
-     */
+     *//*
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map updatePostById(HttpServletRequest request, String id, String title, String subtitle, String type,
@@ -1832,7 +1832,7 @@ public class PostFacade {
             map.put("message", "权限不足");
             return map;
         }
-    }
+    }*/
 
 
     /**

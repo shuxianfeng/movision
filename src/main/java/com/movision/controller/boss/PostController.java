@@ -417,46 +417,7 @@ public class PostController {
         response.setData(list);
         return response;
     }
-    /**
-     * 后台管理-添加帖子
-     *
-     * @param title
-     * @param subtitle
-     * @param type
-     * @param circleid
-     * @param coverimg
-     * @param postcontent
-     * @param isessence
-     * @param time
-     * @return
-     */
-    @ApiOperation(value = "添加帖子", notes = "添加帖子", response = Response.class)
-    @RequestMapping(value = "/add_post", method = RequestMethod.POST)
-    public Response addPost(HttpServletRequest request,
-                            @ApiParam(value = "帖子标题") @RequestParam String title,//帖子标题
-                            @ApiParam(value = "帖子副标题") @RequestParam String subtitle,//帖子副标题
-                            @ApiParam(value = "帖子类型 0 普通帖 1 原生视频帖 2 分享视频贴") @RequestParam String type,//帖子类型
-                            @ApiParam(value = "圈子id") @RequestParam String circleid,//圈子id
-                            @ApiParam(value = "发帖人") @RequestParam String userid,//发帖人
-                            @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam String coverimg,//帖子封面
-                            @ApiParam(value = "视频地址") @RequestParam(required = false) String vid,//视频url
-                            @ApiParam(value = "视频文件") @RequestParam(required = false) String bannerimgurl,//视频图片
-                            @ApiParam(value = "帖子内容") @RequestParam String postcontent,//帖子内容
-                            @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
-                            @ApiParam(value = "圈子精选") @RequestParam(required = false) String ishot,//精选池中的帖子圈子精选贴
-                            @ApiParam(value = "精选排序(0-9数字)") @RequestParam(required = false) String orderid,//精选排序
-                            @ApiParam(value = "精选日期 毫秒值") @RequestParam(required = false) String time,//精选日期
-                            @ApiParam(value = "标签id 多个以逗号分隔") @RequestParam(required = false) String labelid,
-                            @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid, @ApiParam(value = "登录用户") @RequestParam String loginid) {
-        Response response = new Response();
-        Map resaut = postFacade.addPost(request, title, subtitle, type, circleid, userid, coverimg, vid, bannerimgurl, postcontent,
-                isessence, ishot, orderid, time, labelid, goodsid, loginid);
-        if (response.getCode() == 200) {
-            response.setMessage("操作成功");
-        }
-        response.setData(resaut);
-        return response;
-    }
+
 
     /**
      * 改版后的发帖
@@ -712,22 +673,6 @@ public class PostController {
         return response;
     }
 
-/*    *//**
-     * 选择圈子
-     *
-     * @return
-     *//*
-    @ApiOperation(value = "选择圈子", notes = "用于选择圈子接口", response = Response.class)
-    @RequestMapping(value = "/query_list_circle_type", method = RequestMethod.POST)
-    public Response queryListByCircleType() {
-        Response response = new Response();
-        Map<String, Object> list = postFacade.queryListByCircleType();
-        if (response.getCode() == 200) {
-            response.setMessage("操作成功");
-        }
-        response.setData(list);
-        return response;
-    }*/
 
 
     /**
@@ -745,47 +690,6 @@ public class PostController {
             response.setMessage("操作成功");
         }
         response.setData(postCompile);
-        return response;
-    }
-
-    /**
-     * 后台管理-帖子编辑
-     * @param title
-     * @param subtitle
-     * @param type
-     * @param userid
-     * @param circleid
-     * @param coverimg
-     * @param vid
-     * @param postcontent
-     * @param isessence
-     * @param ishot
-     * @return
-     */
-    @ApiOperation(value = "编辑帖子", notes = "用于帖子编辑接口", response = Response.class)
-    @RequestMapping(value = "update_post", method = RequestMethod.POST)
-    public Response updatePostById(HttpServletRequest request,
-                                   @ApiParam(value = "帖子id（必填）") @RequestParam String id,
-                                   @ApiParam(value = "帖子标题") @RequestParam(required = false) String title,//帖子标题
-                                   @ApiParam(value = "帖子副标题") @RequestParam(required = false) String subtitle,//帖子副标题
-                                   @ApiParam(value = "帖子类型 0 普通帖 1 原生视频帖 2 分享视频贴") @RequestParam(required = false) String type,//帖子类型
-                                   @ApiParam(value = "发帖人（必填且必须是管理员-1）") @RequestParam String userid,//发帖人
-                                   @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,//圈子id
-                                   @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam String coverimg,//帖子封面
-                                   @ApiParam(value = "视频地址") @RequestParam(required = false) String vid,//视频url
-                                   @ApiParam(value = "视频封面地址url") @RequestParam(required = false) String bannerimgurl,//视频封面url
-                                   @ApiParam(value = "帖子内容（必填）") @RequestParam(required = false) String postcontent,//帖子内容
-                                   @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
-                                   @ApiParam(value = "圈子精选") @RequestParam(required = false) String ishot,//本圈精华
-                                   @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
-                                   @ApiParam(value = "标签id 以逗号分隔") @RequestParam(required = false) String labelid,
-                                   @ApiParam(value = "登录用户") @RequestParam String loginid) {
-        Response response = new Response();
-        Map map = postFacade.updatePostById(request, id, title, subtitle, type, userid, circleid, vid, bannerimgurl, coverimg, postcontent, isessence, ishot, goodsid, labelid, loginid);
-        if (response.getCode() == 200) {
-            response.setMessage("操作成功");
-        }
-        response.setData(map);
         return response;
     }
 
