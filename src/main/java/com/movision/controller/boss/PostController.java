@@ -561,6 +561,30 @@ public class PostController {
         return response;
     }
 
+
+    /**
+     * 修改帖子热度值
+     *
+     * @param id
+     * @param heatValue
+     * @return
+     */
+    @ApiOperation(value = "修改帖子热度值", notes = "用于修改帖子热度值", response = Response.class)
+    @RequestMapping(value = "updateHeateValue", method = RequestMethod.POST)
+    public Response updateHeatValue(@ApiParam(value = "帖子id") @RequestParam String id,
+                                    @ApiParam(value = "热度值") @RequestParam String heatValue) {
+        Response response = new Response();
+        Map map = postFacade.updateHeatValue(id, heatValue);
+        if (map.get("resault").equals(1)) {
+            response.setMessage("操作成功");
+            response.setData(1);
+        } else {
+
+        }
+        return response;
+
+    }
+
     /**
      * 特邀嘉宾操作帖子，加入精选池
      *

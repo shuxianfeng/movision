@@ -729,6 +729,36 @@ public class PostService {
     }
 
     /**
+     * 查询帖子热度值
+     * @param id
+     * @return
+     */
+    public Integer queryPostHeate(Integer id) {
+        try {
+            log.info("查询帖子热度值");
+            return postMapper.queryPostHeate(id);
+        } catch (Exception e) {
+            log.error("查询帖子热度值异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 更新帖子热度值
+     *
+     * @param map
+     */
+    public void updatePostByHeatValue(Map map) {
+        try {
+            log.info("更新帖子热度值");
+            postMapper.updatePostByHeatValue(map);
+        } catch (Exception e) {
+            log.error("更新帖子热度值异常", e);
+            throw e;
+        }
+    }
+
+    /**
      * 帖子添加精选
      *
      * @param postid

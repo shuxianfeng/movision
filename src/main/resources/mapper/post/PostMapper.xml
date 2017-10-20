@@ -1787,18 +1787,32 @@
         SELECT isessence FROM yw_post WHERE id=#{id,jdbcType=INTEGER}
     </select>
 
-    <update id="updatePostChoiceness" parameterType="com.movision.mybatis.post.entity.PostTo">
+    <update id="updatePostChoiceness" parameterType="java.util.Map">
+        UPDATE yw_post
+        <set>
+            <if test="heatValue != null">
+                heat_value = heat_value + #{heatValue,jdbcType=INTEGER}
+            </if>
+        </set>
+        WHERE id=#{id,jdbcType=INTEGER} AND isdel=0
+    </update>
+
+    <update id="updatePostByHeatValue" parameterType="java.util.Map">
         UPDATE yw_post
         <set>
             <if test="isessence != null">
                 isessencepool = #{isessence,jdbcType=INTEGER}
             </if>
-            <if test="isessence != null">
-                isessencepool = #{isessence,jdbcType=INTEGER}
+            <if test="ishot != null">
+                ishot = #{ishot,jdbcType=INTEGER}
             </if>
         </set>
         WHERE id=#{id,jdbcType=INTEGER} AND isessence=1 AND isdel=0
     </update>
+
+    <select id="queryPostHeate" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT heat_value FROM yw_post WHERE isdel = 0 AND id = #{id,jdbcType=INTEGER}
+    </select>
 
     <select id="findAllQueryCollectPostList" parameterType="java.lang.String"
             resultType="com.movision.mybatis.post.entity.PostList">

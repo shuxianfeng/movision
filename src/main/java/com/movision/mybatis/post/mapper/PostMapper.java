@@ -145,6 +145,10 @@ public interface PostMapper {
 
     int updatePostChoiceness(Map map);
 
+    Integer queryPostHeate(Integer id);
+
+    void updatePostByHeatValue(Map map);
+
     List<PostTo> queryPostChoicenesslist(Map essencedate);
 
     PostChoiceness queryPostChoiceness(Integer postid);

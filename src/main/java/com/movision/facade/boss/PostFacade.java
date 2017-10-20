@@ -1205,43 +1205,62 @@ public class PostFacade {
      */
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map<String, Integer> addPostChoiceness(String postid, String isessence, String ishot) {
-        Map post = new HashMap();
         Map map = new HashMap();
         Map resault = new HashMap();
         Integer pid = Integer.parseInt(postid);
         map.put("id", pid);
         Integer ise = null;
+        Integer ish = null;
         if (StringUtil.isNotEmpty(isessence)) {
             ise = Integer.parseInt(isessence);
             map.put("isessence", ise);
         }
-        Integer ish = null;
         if (StringUtil.isNotEmpty(ishot)) {
             ish = Integer.parseInt(ishot);
             map.put("ishot", ish);
         }
         //查询帖子是否加精
         PostProcessRecord record = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(postid));
-        postSelectedOperation(post, map, pid, ise, ish, record);
+        postSelectedOperation(map, pid, ise, ish, record);
         resault.put("status", 1);
+        return resault;
+    }
+
+    public Map updateHeatValue(String id, String heatValue) {
+        Map map = new HashMap();
+        Map resault = new HashMap();
+        if (StringUtil.isNotEmpty(id)) {
+            map.put("id", Integer.parseInt(id));
+        }
+        if (StringUtil.isNotEmpty(heatValue)) {
+            map.put("heatValue", heatValue);
+        }
+        //查询帖子热度值
+        Integer hv = postService.queryPostHeate(Integer.parseInt(id));
+        if (hv + Integer.parseInt(heatValue) > 0) {
+            //当输入的热度值和原有热度相加大于零则可以设置热度
+            postService.updatePostByHeatValue(map);
+            resault.put("resault", -1);
+        } else {
+            resault.put("resault", -1);
+        }
         return resault;
     }
 
     /**
      * 帖子加精操作
      *
-     * @param post
      * @param map
      * @param pid
      * @param ise
      * @param ish
      * @param record
      */
-    private void postSelectedOperation(Map post, Map map, Integer pid, Integer ise, Integer ish, PostProcessRecord record) {
+    private void postSelectedOperation(Map map, Integer pid, Integer ise, Integer ish, PostProcessRecord record) {
         if (record != null) {//------------------有过加精操作
             if (record.getIsesence() != ise) {
                 //更新帖子精选操作
-                postService.updatePostSelected(post);
+                postService.updatePostSelected(map);
                 PostProcessRecord re = new PostProcessRecord();
                 re.setPostid(pid);
                 re.setIsesence(ise);
@@ -1250,7 +1269,7 @@ public class PostFacade {
             }
             if (record.getIshot() != ish) {
                 //更新帖子精选操作
-                postService.updatePostSelected(post);
+                postService.updatePostSelected(map);
                 PostProcessRecord re = new PostProcessRecord();
                 re.setPostid(pid);
                 re.setIshot(ish);
