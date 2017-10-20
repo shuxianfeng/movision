@@ -1226,6 +1226,13 @@ public class PostFacade {
         return resault;
     }
 
+    /**
+     * 更新帖子热度值
+     *
+     * @param id
+     * @param heatValue
+     * @return
+     */
     public Map updateHeatValue(String id, String heatValue) {
         Map map = new HashMap();
         Map resault = new HashMap();

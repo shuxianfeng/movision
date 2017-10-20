@@ -578,8 +578,11 @@ public class PostController {
         if (map.get("resault").equals(1)) {
             response.setMessage("操作成功");
             response.setData(1);
+            response.setCode(200);
         } else {
-
+            response.setMessage("热度值超出范围");
+            response.setData(-1);
+            response.setCode(400);
         }
         return response;
 
