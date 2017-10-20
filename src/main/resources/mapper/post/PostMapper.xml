@@ -231,7 +231,7 @@
         FROM yw_post t1
         LEFT JOIN yw_active_period t2
         ON t1.id = t2.postid
-        ) t WHERE t.isactive = '1' AND t.isdel = '0'
+        ) t WHERE t.isactive = '1' AND t.ishot = '1' AND t.isdel = '0'
         ORDER BY t.intime DESC
     </select>
 
