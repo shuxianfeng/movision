@@ -1265,7 +1265,7 @@ public class PostFacade {
      */
     private void postSelectedOperation(Map map, Integer pid, Integer ise, Integer ish, PostProcessRecord record) {
         if (record != null) {//------------------有过加精操作
-            if (record.getIsesence() != ise) {
+            if (record.getIsesence() != ise && ise != null) {
                 //更新帖子精选操作
                 postService.updatePostSelected(map);
                 PostProcessRecord re = new PostProcessRecord();
@@ -1274,7 +1274,7 @@ public class PostFacade {
                 //更新帖子精选操作记录
                 postProcessRecordService.updateProcessRecord(re);
             }
-            if (record.getIshot() != ish) {
+            if (record.getIshot() != ish && ish != null) {
                 //更新帖子精选操作
                 postService.updatePostSelected(map);
                 PostProcessRecord re = new PostProcessRecord();
