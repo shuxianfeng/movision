@@ -958,13 +958,8 @@ public class PostFacade {
                            String coverimg, String postcontent, String isessence, String ishot, String label, String goodsid, String loginid) {
         PostTo post = new PostTo();
         Map map = new HashedMap();
+        //权限
         Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.add.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(circleid));
-        //-----------------添加开始
-       /* BossUser bu = bossUserService.queryUserByAdministrator(Integer.parseInt(loginid));//根据登录用户id查询当前用户有哪些权限
-        if (bu.getIscircle() > 0 || bu.getCirclemanagement() > 0) {
-            Integer isc = userService.queryUserIsCricle(Integer.parseInt(loginid));//查询用户对应前台用户id
-            userid = isc.toString();
-        }*/
         //======================添加结束
         if (res.get("resault").equals(1)) {
                 if (StringUtil.isNotEmpty(title)) {
@@ -1025,12 +1020,6 @@ public class PostFacade {
                 Integer in = 0;
                 if (StringUtil.isNotEmpty(goodsid)) {//帖子添加商品
                     Integer pid = post.getId();//获取到刚刚添加的帖子id
-                    if (StringUtil.isNotEmpty(ishot)) {
-                        if (Integer.parseInt(ishot) == 1) {
-                            //增加热度
-                            facadeHeatValue.addHeatValue(pid, 2, null);
-                        }
-                    }
                     String[] lg = goodsid.split(",");//以逗号分隔
                     for (int i = 0; i < lg.length; i++) {
                         Map addgoods = new HashedMap();
@@ -1046,21 +1035,19 @@ public class PostFacade {
                     pprd.setIshot(Integer.parseInt(ishot));
                 }
                 pprd.setPostid(post.getId());
-                if (isessence != null) {
-                    Integer pid = post.getId();//获取到刚刚添加的帖子id
-                    pprd.setIsesence(Integer.parseInt(isessence));
-                    //增加热度
-                    facadeHeatValue.addHeatValue(pid, 1, null);
-                }
+            Integer pid = post.getId();//获取到刚刚添加的帖子id
                 postProcessRecordService.insertProcessRecord(pprd);//插入精选、热门记录
                 if (StringUtil.isNotEmpty(ishot)) {
                     if (ishot.equals("1")) {
                         pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                        facadeHeatValue.addHeatValue(pid, 2, null);
                     }
                 }
                 if (StringUtil.isNotEmpty(isessence)) {
                     if (isessence.equals("1")) {
                         pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                        //增加热度
+                        facadeHeatValue.addHeatValue(pid, 1, null);
                     }
                 }
                 if (Integer.parseInt(loginid) != -1) {
@@ -1864,12 +1851,6 @@ public class PostFacade {
                             post.setPostcontent(postcontent);
                         }
                     }
-//                    post.setIntime(new Date());//编辑帖子时不应该更新发帖时间，临时屏蔽---shuxf 2017/07/12
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                    Date estime = null;
-
-                    //查询帖子热度
-                    PostProcessRecord record = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));
 
                     if (!StringUtils.isEmpty(isessence)) {
                         if (Integer.parseInt(isessence) == 0) {
@@ -1886,24 +1867,6 @@ public class PostFacade {
                         post.setIsdel("2");
                     }
                     postService.updatePostById(post);//编辑帖子
-
-                    if (StringUtil.isNotEmpty(ishot)) {
-                        if (record != null) {
-                            if (record.getIshot() == 1) {
-                                //增加热度
-                                facadeHeatValue.addHeatValue(Integer.parseInt(id), 2, null);
-                            }
-                        }
-                    }
-                    if (StringUtil.isNotEmpty(isessence)) {
-                        if (record != null) {
-                            if (record.getIsesence() == 1) {
-                                //增加热度
-                                facadeHeatValue.addHeatValue(Integer.parseInt(id), 1, null);
-                            }
-                        }
-                    }
-
 
                     System.out.println("!!!!!!!!!!!!!!!!!!============================" + labelid);
                     //帖子使用的标签
@@ -1948,9 +1911,13 @@ public class PostFacade {
                         //积分操作
                         if (postProcessRecord.getIshot() == 0 && Integer.parseInt(ishot) == 1) {
                             pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                            //增加热度
+                            facadeHeatValue.addHeatValue(Integer.parseInt(id), 2, null);
                         }
                         if (postProcessRecord.getIsesence() == 0 && Integer.parseInt(isessence) == 1) {
                             pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                            //增加热度
+                            facadeHeatValue.addHeatValue(Integer.parseInt(id), 1, null);
                         }
                         //修改
                         PostProcessRecord pprd = new PostProcessRecord();
@@ -1978,9 +1945,13 @@ public class PostFacade {
                         //积分操作
                         if (postProcessRecord.getIshot() == 1) {
                             pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                            //增加热度
+                            facadeHeatValue.addHeatValue(Integer.parseInt(id), 2, null);
                         }
                         if (postProcessRecord.getIsesence() == 1) {
                             pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
+                            //增加热度
+                            facadeHeatValue.addHeatValue(Integer.parseInt(id), 1, null);
                         }
                     }
                 } catch (Exception e) {
