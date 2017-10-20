@@ -2898,7 +2898,7 @@ public class FacadePost {
      * @param postids
      * @return
      */
-    public List queryOnlPostNotLoginCircleid(String device, int type, int postids, int circleid) {
+    public List queryOnlPostNotLoginCircleid(String device, int type, int postids, String circleid) {
         MongoClient mongoClient = null;
         List<DBObject> list = null;
         DB db = null;
@@ -3127,7 +3127,7 @@ public class FacadePost {
      * @param intime
      * @return
      */
-    public List queryPosyByImtimeDeviceCircle(String intime, String device, int type, int circle) {
+    public List queryPosyByImtimeDeviceCircle(String intime, String device, int type, String circle) {
         MongoClient mongoClient = null;
         List<DBObject> list = null;
         DB db = null;
@@ -3215,9 +3215,9 @@ public class FacadePost {
         List<DBObject> intimePost = null;
         List<DBObject> us = null;
         if (!postids.equals("0")) {
-            List<DBObject> onlyPost = queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), Integer.parseInt(circleid));
+            List<DBObject> onlyPost = queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), circleid);
             String intime = onlyPost.get(0).get("intime").toString();
-            intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, Integer.parseInt(circleid));
+            intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, circleid);
         } else {
             //查询用户有无历史
             int count = userHistoryDeviceCircleCount(device, type, circleid);
@@ -3395,9 +3395,9 @@ public class FacadePost {
         List<DBObject> intimePost = null;
         List<DBObject> us = null;
         if (!postids.equals("0")) {
-            List<DBObject> onlyPost = queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), Integer.parseInt(circleid));
+            List<DBObject> onlyPost = queryOnlPostNotLoginCircleid(device, type, Integer.parseInt(postids), circleid);
             String intime = onlyPost.get(0).get("intime").toString();
-            intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, Integer.parseInt(circleid));
+            intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, circleid);
         } else {
             //查询用户有无历史
             int count = userHistoryDeviceCircleCount(device, type, circleid);
