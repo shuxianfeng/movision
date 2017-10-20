@@ -958,6 +958,16 @@ public class UserService {
         }
     }
 
+    public int queryUserPoints(int userid) {
+        try {
+            log.info("查询用户等级");
+            return userMapper.queryUserPoints(userid);
+        } catch (Exception e) {
+            log.error("查询用户等级失败", e);
+            throw e;
+        }
+    }
+
     public UserVo queryUserInfoHompage(int userid) {
         try {
             log.info("查询用户信息");

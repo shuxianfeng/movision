@@ -1503,7 +1503,10 @@
         UPDATE yw_user SET heat_value=heat_value+#{points,jdbcType=INTEGER} WHERE id=#{userid,jdbcType=INTEGER}
     </update>
     <select id="queryUserLevel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT level FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
+        SELECT points FROM yw_user WHERE id=#{userid,jdbcType=INTEGER} AND status=0
+    </select>
+    <select id="queryUserPoints" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT level FROM yw_user WHERE id=#{userid,jdbcType=INTEGER} AND status=0
     </select>
     <select id="queryUserInfoHompage" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.user.entity.UserVo">

@@ -453,8 +453,14 @@
       id=#{commentid,jdbcType=INTEGER}
     </update>
     <select id="queryCommentLevel" resultType="java.lang.Integer" parameterType="java.lang.Integer">
-        SELECT yw_user.`level` FROM yw_post_comment LEFT JOIN yw_user ON yw_user.id=yw_post_comment.userid WHERE isdel=0
-        AND yw_post_comment.id=#{commentid,jdbcType=INTEGER}
+        SELECT yw_user.points FROM yw_post_comment LEFT JOIN yw_user ON yw_user.id=yw_post_comment.userid WHERE
+        yw_post_comment.isdel=0
+        AND yw_post_comment.id=#{commentid,jdbcType=INTEGER} and yw_user.status=0
+    </select>
+    <select id="queryCommentPoints" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT yw_user.level FROM yw_post_comment LEFT JOIN yw_user ON yw_user.id=yw_post_comment.userid WHERE
+        yw_post_comment.isdel=0
+        AND yw_post_comment.id=#{commentid,jdbcType=INTEGER} and yw_user.status=0
     </select>
     <select id="queryCommentByPost" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
