@@ -718,7 +718,7 @@ public class PostService {
      * @param post
      * @return
      */
-    public int updatePostChoiceness(PostTo post) {
+    public int updatePostSelected(Map post) {
         try {
             log.info("修改帖子加精");
             return postMapper.updatePostChoiceness(post);

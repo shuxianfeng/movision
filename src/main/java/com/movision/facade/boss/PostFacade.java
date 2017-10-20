@@ -159,15 +159,6 @@ public class PostFacade {
     @Autowired
     private PostLabelRelationService postLabelRelationService;
 
-    @Autowired
-    private SystemLayoutService systemLayoutService;
-
-    @Autowired
-    private CoverImgCompressUtil coverImgCompressUtil;
-
-    @Autowired
-    private AliOSSClient aliOSSClient;
-
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
 
@@ -957,8 +948,6 @@ public class PostFacade {
      * @param postcontent
      * @param isessence
      * @param ishot
-     * @param orderid
-     * @param time
      * @param goodsid
      * @param loginid
      * @return
@@ -966,8 +955,7 @@ public class PostFacade {
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map addPostTest(HttpServletRequest request, String title, String subtitle, String circleid, String userid,
-                           String coverimg, String postcontent, String isessence, String ishot, String orderid,
-                           String time, String label, String goodsid, String loginid) {
+                           String coverimg, String postcontent, String isessence, String ishot, String label, String goodsid, String loginid) {
         PostTo post = new PostTo();
         Map map = new HashedMap();
         Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.add.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(circleid));
@@ -1005,23 +993,10 @@ public class PostFacade {
                 if (StringUtil.isNotEmpty(ishot)) {
                     post.setIshot(ishot);//是否为圈子精选
                 }
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                Date d = null;
+
                 if (StringUtil.isNotEmpty(isessence)) {
                     if (isessence != "0") {//判断是否为加精
                         post.setIsessence(isessence);//是否为首页精选
-                        if (StringUtil.isNotEmpty(orderid)) {
-                            post.setOrderid(Integer.parseInt(orderid));
-                        }
-                        if (StringUtil.isNotEmpty(time)) {
-                            try {
-                                d = format.parse(time);
-                                post.setEssencedate(d);
-                            } catch (ParseException e) {
-                                log.error("时间插入异常");
-                            }
-                        }
-
                     }
                 }
                 post.setUserid(userid);
@@ -1072,7 +1047,10 @@ public class PostFacade {
                 }
                 pprd.setPostid(post.getId());
                 if (isessence != null) {
+                    Integer pid = post.getId();//获取到刚刚添加的帖子id
                     pprd.setIsesence(Integer.parseInt(isessence));
+                    //增加热度
+                    facadeHeatValue.addHeatValue(pid, 1, null);
                 }
                 postProcessRecordService.insertProcessRecord(pprd);//插入精选、热门记录
                 if (StringUtil.isNotEmpty(ishot)) {
@@ -1239,85 +1217,72 @@ public class PostFacade {
      * @return
      */
     @CacheEvict(value = "indexData", key = "'index_data'")
-    public Map<String, Integer> addPostChoiceness(String postid, String subtitle, String essencedate, String orderid) {
-        Map<String, Integer> map = new HashedMap();
-        PostTo p = new PostTo();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date esdate = null;
-        if (Integer.parseInt(orderid) > 0) {//加精动作
-            p.setId(Integer.parseInt(postid));
-            if (StringUtil.isNotEmpty(essencedate)) {
-                try {
-                    esdate = format.parse(essencedate);
-                    p.setEssencedate(esdate);
-                } catch (ParseException e) {
-                    logger.error("时间转换异常", e);
-                }
+    public Map<String, Integer> addPostChoiceness(String postid, String isessence, String ishot) {
+        Map post = new HashMap();
+        Map map = new HashMap();
+        Map resault = new HashMap();
+        Integer pid = Integer.parseInt(postid);
+        map.put("id", pid);
+        Integer ise = null;
+        if (StringUtil.isNotEmpty(isessence)) {
+            ise = Integer.parseInt(isessence);
+            map.put("isessence", ise);
+        }
+        Integer ish = null;
+        if (StringUtil.isNotEmpty(ishot)) {
+            ish = Integer.parseInt(ishot);
+            map.put("ishot", ish);
+        }
+        //查询帖子是否加精
+        PostProcessRecord record = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(postid));
+        postSelectedOperation(post, map, pid, ise, ish, record);
+        resault.put("status", 1);
+        return resault;
+    }
+
+    /**
+     * 帖子加精操作
+     *
+     * @param post
+     * @param map
+     * @param pid
+     * @param ise
+     * @param ish
+     * @param record
+     */
+    private void postSelectedOperation(Map post, Map map, Integer pid, Integer ise, Integer ish, PostProcessRecord record) {
+        if (record != null) {//------------------有过加精操作
+            if (record.getIsesence() != ise) {
+                //更新帖子精选操作
+                postService.updatePostSelected(post);
+                PostProcessRecord re = new PostProcessRecord();
+                re.setPostid(pid);
+                re.setIsesence(ise);
+                //更新帖子精选操作记录
+                postProcessRecordService.updateProcessRecord(re);
             }
-            if (orderid != null) {
-                p.setOrderid(Integer.parseInt(orderid));
+            if (record.getIshot() != ish) {
+                //更新帖子精选操作
+                postService.updatePostSelected(post);
+                PostProcessRecord re = new PostProcessRecord();
+                re.setPostid(pid);
+                re.setIshot(ish);
+                //更新帖子精选操作记录
+                postProcessRecordService.updateProcessRecord(re);
             }
-            //增加热度
-            facadeHeatValue.addHeatValue(Integer.parseInt(postid), 1, null);
-            p.setSubtitle(subtitle);
-            Integer result = null;
-            int isessence = postService.queryPostByIsessence(postid);//判断是否加精
-            if (isessence == 1) {//已经加精,做修改操作
-                p.setId(Integer.parseInt(postid));
-                result = postService.updatePostChoiceness(p);
-            } else {
-                result = postService.addPostChoiceness(p);
+        } else {//------------------------------没有过加精操作
+            PostProcessRecord re = new PostProcessRecord();
+            re.setPostid(pid);
+            re.setIsesence(ise);
+            //新增帖子加精
+            postProcessRecordService.insertProcessRecord(re);
+            //为帖子增加热度值
+            if (ise == 1) {
+                facadeHeatValue.addHeatValue(pid, 1,null);
             }
-            Integer userid = postService.queryPostByUser(postid);
-            map.put("result", result);
-            if (!orderid.equals("0")) {//在加精时操作
-                //查询帖子是否被设为加精活精选
-                PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(postid));
-                if (postProcessRecord != null) {//已经加精过活精选
-                    if (postProcessRecord.getIsesence() == 0) {//判断是否首页精选
-                        postProcessRecord.setIsesence(1);
-                        //修改
-                        postProcessRecordService.updateProcessRecord(postProcessRecord);
-                        //增加积分
-                        pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), userid);//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                    }
-                } else {
-                    //积分操作
-                    if (userid != null) {
-                        pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), userid);//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                    }
-                    //新增
-                    PostProcessRecord pprd = new PostProcessRecord();
-                    pprd.setPostid(Integer.parseInt(postid));
-                    pprd.setIsesence(1);
-                    pprd.setIshot(0);
-                    postProcessRecordService.insertProcessRecord(pprd);
-                }
+            if (ish == 1) {
+                facadeHeatValue.addHeatValue(pid, 2,null);
             }
-            return map;
-        } else {//取消加精
-            int i = postService.deletePostChoiceness(Integer.parseInt(postid));
-            Integer userid = postService.queryPostByUser(postid);
-            PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(postid));
-            if (postProcessRecord != null) {//已经加精过活精选
-                if (postProcessRecord.getIsesence() == 0) {//判断是否首页精选
-                    postProcessRecord.setIsesence(0);
-                    //修改
-                    postProcessRecordService.updateProcessRecord(postProcessRecord);
-                }
-            } else {
-                //新增
-                PostProcessRecord pprd = new PostProcessRecord();
-                pprd.setPostid(Integer.parseInt(postid));
-                pprd.setIsesence(0);
-                pprd.setIshot(0);
-                postProcessRecordService.insertProcessRecord(pprd);
-            }
-            if (i == 1) {
-                Integer t = 2;
-                map.put("result", t);
-            }
-            return map;
         }
     }
 
@@ -1638,16 +1603,13 @@ public class PostFacade {
      * @param coverimg
      * @param postcontent
      * @param isessence
-     * @param orderid
-     * @param time
      * @return
      */
     @Transactional
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map updatePostById(HttpServletRequest request, String id, String title, String subtitle, String type,
                               String userid, String circleid, String vid, String bannerimgurl,
-                              String coverimg, String postcontent, String isessence, String ishot, String orderid,
-                              String time, String goodsid, String labelid, String loginid) {
+                              String coverimg, String postcontent, String isessence, String ishot, String goodsid, String labelid, String loginid) {
         PostTo post = new PostTo();
         Map map = new HashedMap();
         Integer lgid = Integer.parseInt(loginid);
@@ -1674,10 +1636,6 @@ public class PostFacade {
 
                     Video vide = new Video();
                     Integer in = null;
-                    //String fName = FileUtil.getPicName(vid);//获取视频文件名
-                    //查询圈子名称
-                    //String circlename = circleService.queryCircleName(Integer.parseInt(circleid));
-                    //String videoid = videoUploadUtil.videoUpload(vid, fName, "", bannerimgurl, circlename);
                     if (type.equals("1")) {//帖子类型为原生视频贴时修改
                         if (!StringUtils.isEmpty(id)) {
                             vide.setPostid(pid);
@@ -1743,19 +1701,6 @@ public class PostFacade {
                             post.setIsessence(isessence);//是否为首页精选
                             post.setEssencedate(null);
                             post.setOrderid(null);
-                        } else {
-                            if (StringUtil.isNotEmpty(time)) {
-                                try {
-                                    estime = format.parse(time);
-                                    post.setEssencedate(estime);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            if (StringUtil.isNotEmpty(orderid)) {
-                                post.setOrderid(Integer.parseInt(orderid));
-                            }
-                            post.setIsessence(isessence);//是否为首页精选
                         }
                     }
                     if (!StringUtils.isEmpty(ishot)) {
@@ -1873,8 +1818,6 @@ public class PostFacade {
      * @param postcontent
      * @param isessence
      * @param ishot
-     * @param orderid
-     * @param time
      * @param goodsid
      * @param loginid
      * @return
@@ -1883,7 +1826,7 @@ public class PostFacade {
     @CacheEvict(value = "indexData", key = "'index_data'")
     public Map updatePostByIdTest(HttpServletRequest request, String id, String title, String subtitle,
                                   String userid, String circleid, String coverimg, String postcontent,
-                                  String isessence, String ishot, String orderid, String time, String labelid, String goodsid, String loginid) {
+                                  String isessence, String ishot, String labelid, String goodsid, String loginid) {
         PostTo post = new PostTo();
         Map map = new HashedMap();
         Integer lgid = Integer.parseInt(loginid);
@@ -1925,24 +1868,14 @@ public class PostFacade {
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     Date estime = null;
 
+                    //查询帖子热度
+                    PostProcessRecord record = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));
+
                     if (!StringUtils.isEmpty(isessence)) {
                         if (Integer.parseInt(isessence) == 0) {
                             post.setIsessence(isessence);//是否为首页精选
                             post.setEssencedate(null);
                             post.setOrderid(null);
-                        } else {
-                            if (StringUtil.isNotEmpty(time)) {
-                                try {
-                                    estime = format.parse(time);
-                                    post.setEssencedate(estime);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            if (StringUtil.isNotEmpty(orderid)) {
-                                post.setOrderid(Integer.parseInt(orderid));
-                            }
-                            post.setIsessence(isessence);//是否为首页精选
                         }
                     }
                     if (!StringUtils.isEmpty(ishot)) {
@@ -1953,6 +1886,23 @@ public class PostFacade {
                         post.setIsdel("2");
                     }
                     postService.updatePostById(post);//编辑帖子
+
+                    if (StringUtil.isNotEmpty(ishot)) {
+                        if (record != null) {
+                            if (record.getIshot() == 1) {
+                                //增加热度
+                                facadeHeatValue.addHeatValue(Integer.parseInt(id), 2, null);
+                            }
+                        }
+                    }
+                    if (StringUtil.isNotEmpty(isessence)) {
+                        if (record != null) {
+                            if (record.getIsesence() == 1) {
+                                //增加热度
+                                facadeHeatValue.addHeatValue(Integer.parseInt(id), 1, null);
+                            }
+                        }
+                    }
 
 
                     System.out.println("!!!!!!!!!!!!!!!!!!============================" + labelid);

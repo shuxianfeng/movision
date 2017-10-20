@@ -9,16 +9,35 @@ import java.util.List;
  * @Date 2017/3/3 10:04
  */
 public class GoodsComboVo implements Serializable {
+
     private Integer id;
 
-
     private String comboname;
+
     private Double combodiscountprice;
+
     private Integer sales;
+
     private Date intime;
+
     private Integer comboid;
+
     private Double sum;
+
     private Integer stock;
+
+    private List<GoodsComboVo> list;
+
+    private String name;
+
+    private Double price;
+
+    private Double sumprice;
+
+    private Integer goodsid;
+
+    private String imgurl;
+
 
     public Integer getStock() {
         return stock;
@@ -35,11 +54,6 @@ public class GoodsComboVo implements Serializable {
     public void setSum(Double sum) {
         this.sum = sum;
     }
-
-    private List<GoodsComboVo> list;
-    private String name;
-
-    private Double price;
 
     public List<GoodsComboVo> getList() {
         return list;
@@ -75,7 +89,6 @@ public class GoodsComboVo implements Serializable {
         this.list = list;
     }
 
-    private Double sumprice;
     public String getComboname() {
         return comboname;
     }
@@ -108,8 +121,6 @@ public class GoodsComboVo implements Serializable {
         this.intime = intime;
     }
 
-    private Integer goodsid;
-
     public Integer getId() {
         return id;
     }
@@ -133,8 +144,6 @@ public class GoodsComboVo implements Serializable {
     public void setGoodsid(Integer goodsid) {
         this.goodsid = goodsid;
     }
-
-    private String imgurl;
 
     public String getImgurl() {
         return imgurl;

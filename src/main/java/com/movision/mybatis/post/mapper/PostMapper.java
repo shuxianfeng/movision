@@ -143,7 +143,7 @@ public interface PostMapper {
 
     int queryPostByIsessence(String id);
 
-    int updatePostChoiceness(PostTo postTo);
+    int updatePostChoiceness(Map map);
 
     List<PostTo> queryPostChoicenesslist(Map essencedate);
 
