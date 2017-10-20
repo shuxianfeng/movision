@@ -1247,7 +1247,7 @@ public class PostFacade {
         if (hv + Integer.parseInt(heatValue) > 0) {
             //当输入的热度值和原有热度相加大于零则可以设置热度
             postService.updatePostByHeatValue(map);
-            resault.put("resault", -1);
+            resault.put("resault", 1);
         } else {
             resault.put("resault", -1);
         }
