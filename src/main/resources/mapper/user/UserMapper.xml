@@ -687,7 +687,7 @@
         zansum,u.fans,vd.apply_time AS applydate,au.authstatus
         FROM (yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id) LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id
-        WHERE level>0 AND status=0 AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]> ORDER BY intime
+        WHERE isdv>0 AND status=0 AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]> ORDER BY intime
     </select>
 
     <!-- 根据条件查询vip列表  -->
@@ -705,7 +705,7 @@
         (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=u.id AND p4.isdel=0) AS
         zansum,u.fans,vd.apply_time AS applydate,au.authstatus
         FROM (yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id) LEFT JOIN yw_autonym_authentication au ON
-        au.userid=u.id WHERE u.level>0 AND u.status=0
+        au.userid=u.id WHERE u.isdv>0 AND u.status=0
         AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
         <if test="name!=null">
             AND u.nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
