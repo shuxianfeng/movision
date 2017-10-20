@@ -3060,7 +3060,7 @@ public class FacadePost {
             mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             db = mongoClient.getDB("searchRecord");
             DBCollection table = db.getCollection("userRefreshRecord");//表名
-            BasicDBObject gt = new BasicDBObject("$lte", intime);
+            BasicDBObject gt = new BasicDBObject("$gte", intime);
             BasicDBObject queryObject = new BasicDBObject("intime", gt).append("device", device).append("type", type);
             //指定需要显示列
             BasicDBObject keys = new BasicDBObject();
@@ -3098,7 +3098,7 @@ public class FacadePost {
             mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             db = mongoClient.getDB("searchRecord");
             DBCollection table = db.getCollection("userRefreshRecord");//表名
-            BasicDBObject gt = new BasicDBObject("$lte", intime);
+            BasicDBObject gt = new BasicDBObject("$gte", intime);
             BasicDBObject queryObject = new BasicDBObject("intime", gt).append("device", device).append("type", type).append("labelid", labelid);
             //指定需要显示列
             BasicDBObject keys = new BasicDBObject();
@@ -3136,7 +3136,7 @@ public class FacadePost {
             mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             db = mongoClient.getDB("searchRecord");
             DBCollection table = db.getCollection("userRefreshRecord");//表名
-            BasicDBObject gt = new BasicDBObject("$lte", intime);
+            BasicDBObject gt = new BasicDBObject("$gte", intime);
             BasicDBObject queryObject = new BasicDBObject("intime", gt).append("device", device).append("type", type).append("crileid", circle);
             //指定需要显示列
             BasicDBObject keys = new BasicDBObject();
