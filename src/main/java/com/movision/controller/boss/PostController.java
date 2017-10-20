@@ -466,8 +466,6 @@ public class PostController {
      * @param circleid
      * @param userid
      * @param postcontent
-     * @param isessence
-     * @param ishot
      * @param goodsid
      * @param loginid
      * @return
@@ -481,14 +479,11 @@ public class PostController {
                                 @ApiParam(value = "发帖人") @RequestParam String userid,//发帖人
                                 @ApiParam(value = "帖子封面") @RequestParam String coverimg,//帖子封面
                                 @ApiParam(value = "内容") @RequestParam String postcontent,//帖子内容
-                                @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
-                                @ApiParam(value = "圈子精选") @RequestParam(required = false) String ishot,//精选池中的帖子圈子精选贴
                                 @ApiParam(value = "标签id") @RequestParam(required = false) String labelid,
                                 @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
                                 @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map resaut = postFacade.addPostTest(request, title, subtitle, circleid, userid, coverimg, postcontent,
-                isessence, ishot, labelid, goodsid, loginid);
+        Map resaut = postFacade.addPostTest(request, title, subtitle, circleid, userid, coverimg, postcontent, labelid, goodsid, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
@@ -795,6 +790,22 @@ public class PostController {
     }
 
 
+    /**
+     * 编辑帖子
+     *
+     * @param request
+     * @param id
+     * @param title
+     * @param subtitle
+     * @param userid
+     * @param circleid
+     * @param coverimg
+     * @param postcontent
+     * @param labelid
+     * @param goodsid
+     * @param loginid
+     * @return
+     */
     @ApiOperation(value = "编辑帖子(改版)", notes = "用于帖子编辑接口(改版)", response = Response.class)
     @RequestMapping(value = "update_post_test", method = RequestMethod.POST)
     public Response updatePostByIdTest(HttpServletRequest request, @ApiParam(value = "帖子id（必填）") @RequestParam String id,
@@ -804,13 +815,11 @@ public class PostController {
                                        @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,//圈子id
                                        @ApiParam(value = "帖子封面(需要上传的文件)") @RequestParam String coverimg,//帖子封面
                                        @ApiParam(value = "帖子内容（必填）") @RequestParam String postcontent,//帖子内容
-                                       @ApiParam(value = "首页精选") @RequestParam(required = false) String isessence,//首页精选
-                                       @ApiParam(value = "圈子精选") @RequestParam(required = false) String ishot,//本圈精华
-                                       @ApiParam(value = "") @RequestParam(required = false) String labelid,
+                                       @ApiParam(value = "标签id") @RequestParam(required = false) String labelid,
                                        @ApiParam(value = "商品id") @RequestParam(required = false) String goodsid,
                                        @ApiParam(value = "登录用户") @RequestParam String loginid) {
         Response response = new Response();
-        Map map = postFacade.updatePostByIdTest(request, id, title, subtitle, userid, circleid, coverimg, postcontent, isessence, ishot, labelid, goodsid, loginid);
+        Map map = postFacade.updatePostByIdTest(request, id, title, subtitle, userid, circleid, coverimg, postcontent, labelid, goodsid, loginid);
         if (response.getCode() == 200) {
             response.setMessage("操作成功");
         }
