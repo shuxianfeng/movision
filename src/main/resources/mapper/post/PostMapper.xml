@@ -225,7 +225,7 @@
         SELECT t.* FROM (
         SELECT t1.id, t1.title, t1.subtitle, t1.postcontent, t1.zansum, t1.commentsum, t1.forwardsum, t1.collectsum,
         t1.isactive, t1.activetype, t1.activefee, t1.iscontribute, t1.ishot, t1.isessence, t1.isessencepool, t1.orderid,
-        t1.coverimg,
+        t1.hotimgurl AS coverimg,
         t1.intime,
         t1.totalpoint, t1.isdel, t2.begintime, t2.endtime
         FROM yw_post t1
