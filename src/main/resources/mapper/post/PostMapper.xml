@@ -1801,7 +1801,7 @@
         UPDATE yw_post
         <set>
             <if test="isessence != null">
-                isessencepool = #{isessence,jdbcType=INTEGER}
+                isessence = #{isessence,jdbcType=INTEGER}
             </if>
             <if test="ishot != null">
                 ishot = #{ishot,jdbcType=INTEGER}

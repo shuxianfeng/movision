@@ -73,6 +73,7 @@ public interface CommentMapper {
 
     int queryCommentLevel(int commentid);
 
+    int queryCommentPoints(int commentid);
 
     List<CommentVo> queryCommentByPost(int postid);
 
