@@ -684,9 +684,9 @@
         p5.isdel=0)) AS besharesum,
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=u.id AND p3.isdel=0) AS commentsum,
         (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=u.id AND p4.isdel=0) AS
-        zansum,u.fans,vd.apply_time AS applydate,au.authstatus
-        FROM (yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id) LEFT JOIN yw_autonym_authentication au ON
-        au.userid=u.id
+        zansum,u.fans,(SELECT apply_time FROM yw_apply_vip_detail WHERE userid = u.id ORDER BY userid,apply_time DESC
+        LIMIT 1) AS applydate,au.authstatus
+        FROM yw_user u LEFT JOIN yw_autonym_authentication au ON au.userid=u.id
         WHERE isdv>0 AND status=0 AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]> ORDER BY intime
     </select>
 
