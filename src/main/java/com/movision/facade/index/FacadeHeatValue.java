@@ -249,7 +249,8 @@ public class FacadeHeatValue {
         //查询level
         //int lev=commentService.queryCommentPoints(commentid);
         int le = resmap.get("lev");
-        return le;
+        int level = level(le);
+        return level;
     }
 
 
@@ -268,8 +269,8 @@ public class FacadeHeatValue {
         int le = resmap.get("lev");
         //查询level
         //  int lev=userService.queryUserPoints(userid);
-        // int level = level(le);
-        return le;
+        int level = level(le);
+        return level;
     }
 
 
@@ -279,7 +280,7 @@ public class FacadeHeatValue {
      * @param level
      * @return
      */
-    /***public int level(int level){
+    public int level(int level) {
         if (level == 0) {
             level = 1;
         } else if (level == 1) {
@@ -484,6 +485,6 @@ public class FacadeHeatValue {
      level = 101;
         }
         return level;
-     }*/
+    }
 
 }
