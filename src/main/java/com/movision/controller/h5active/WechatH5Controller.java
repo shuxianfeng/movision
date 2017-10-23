@@ -99,4 +99,18 @@ public class WechatH5Controller {
         }
         return response;
     }
+
+
+    @ApiOperation(value = "合成iphone", notes = "合成iphone", response = Response.class)
+    @RequestMapping(value = "imgIphonex", method = RequestMethod.POST)
+    public Response imgIphonex(@ApiParam(value = " 名字") @RequestParam String name) {
+        Response response = new Response();
+        Map access = wechatH5Facade.imgIphonex(name);
+        if (response.getCode() == 200) {
+            response.setMessage("成功");
+            response.setData(access);
+        }
+        return response;
+    }
+
 }
