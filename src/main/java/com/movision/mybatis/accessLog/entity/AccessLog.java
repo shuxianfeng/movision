@@ -1,7 +1,5 @@
 package com.movision.mybatis.accessLog.entity;
 
-import java.util.Date;
-
 public class AccessLog {
     private Integer id;
 
