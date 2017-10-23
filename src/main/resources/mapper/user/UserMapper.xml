@@ -1553,7 +1553,7 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
             parameterType="java.lang.String">
         SELECT *
         FROM yw_user u
-        WHERE <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        WHERE <![CDATA[ u.id<=20000 AND u.id >= 10000 ]]>
         <if test="name != null">
             AND nickname = #{name,jdbcType=VARCHAR}
         </if>
