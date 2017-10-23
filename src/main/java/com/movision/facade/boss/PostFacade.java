@@ -1314,6 +1314,7 @@ public class PostFacade {
         } else {//------------------------------没有过加精操作
             re.setPostid(pid);
             re.setIsesence(ise);
+            re.setIshot(ish);
             //新增帖子加精
             postProcessRecordService.insertProcessRecord(re);
             //更新帖子精选操作
