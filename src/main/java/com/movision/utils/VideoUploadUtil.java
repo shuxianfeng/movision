@@ -312,13 +312,14 @@ public class VideoUploadUtil {
      * @return
      */
     //正式
-    //static String APPID = "wxfe9eb21fdb46a1a6";
-    //static String APPSECRET = "c20dc2afd2d8e38a4c49abebf4d0f532";
+    static String APPID = "wxfe9eb21fdb46a1a6";
+    static String APPSECRET = "c20dc2afd2d8e38a4c49abebf4d0f532";
     //测试
     //static String APPID = "wx1a8d32888a41fcb2";
     //static String APPSECRET = "58f2162e7c0253e8486b4d8679e787dd";
-    static String APPID = "wxd5b48a6ca0c168fa";
-    static String APPSECRET = "f89ff5a40b7e440a87e9fff74327e52c";
+    //订阅号
+    //static String APPID = "wxd5b48a6ca0c168fa";
+    //static String APPSECRET = "f89ff5a40b7e440a87e9fff74327e52c";
 
 
     public Map<String, String> getUserInfoAccessToken(String code) {
