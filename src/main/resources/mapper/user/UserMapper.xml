@@ -1538,21 +1538,21 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
 
     <select id="selectMaxRobotId" resultType="java.lang.Integer">
         select max(id)
-        from yw_user
+        from yw_user u
         where
         <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
     </select>
 
     <select id="selectRobotUser" resultType="com.movision.mybatis.user.entity.User">
         SELECT *
-        FROM yw_user where
+        FROM yw_user u where
         <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
     </select>
 
     <select id="findAllQueryRobotByList" resultType="com.movision.mybatis.user.entity.User"
             parameterType="java.lang.String">
         SELECT *
-        FROM yw_user
+        FROM yw_user u
         WHERE <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
         <if test="name != null">
             AND nickname = #{name,jdbcType=VARCHAR}
@@ -1565,7 +1565,7 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
 
     <select id="queryRandomUser" resultType="com.movision.mybatis.user.entity.User" parameterType="java.lang.Integer">
         <![CDATA[
-        SELECT * FROM yw_user where (u.id>=20000 OR u.id< 10000) ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
+        SELECT * FROM yw_user u where (u.id>=20000 OR u.id< 10000) ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
         ]]>
     </select>
 
