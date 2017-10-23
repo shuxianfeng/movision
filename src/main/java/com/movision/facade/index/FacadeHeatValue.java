@@ -58,7 +58,7 @@ public class FacadeHeatValue {
                 postService.updatePostHeatValue(map);
             }
         } else if (type == 3) {//点赞(实时ok)
-            int level = userLevels(Integer.parseInt(userid));//
+            int level = userLevels(Integer.parseInt(userid));
             points = level * HeatValueConstant.POINT.zan_number.getCode();
             map.put("points", points);
             postService.updatePostHeatValue(map);
