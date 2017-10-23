@@ -61,7 +61,7 @@ public class AspectLog {
         String queryString = request.getQueryString();
         String userAgent = request.getHeader("User-Agent");
         String[] aa = requestURL.split("/");
-        String busitype = aa[3];
+        String busitype = aa[4];
         String logMode = PropertiesLoader.getValue("busi.log.mode");
         switch (logMode) {
             case "db":
