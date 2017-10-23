@@ -1208,8 +1208,6 @@ public class PostFacade {
         PostProcessRecord record = postProcessRecordService.queryPostByIsessenceOrIshot(pid);
         //帖子加精操作
         postSelectedOperation(pid, ise, ish, record);
-        //帖子精选积分操作
-        postSelectedIntegralOperation(isessence, ishot, pid);
         resault.put("status", 1);
         return resault;
     }
@@ -1277,40 +1275,59 @@ public class PostFacade {
      */
     private void postSelectedOperation(Integer pid, Integer ise, Integer ish, PostProcessRecord record) {
         Map map = new HashMap();
+        PostProcessRecord re = new PostProcessRecord();
+        re.setPostid(pid);
         map.put("id", pid);
+        map.put("isessence", ise);
+        map.put("ishot", ish);
         if (record != null) {//------------------有过加精操作
-            if (record.getIsesence() != ise && ise != null) {
-                map.put("isessence", ise);
-                //更新帖子精选操作
-                postService.updatePostSelected(map);
-                PostProcessRecord re = new PostProcessRecord();
-                re.setPostid(pid);
+            if (record.getIsesence() != ise && ise != null && record.getIsesence() == 0) {
                 re.setIsesence(ise);
-                //更新帖子精选操作记录
-                postProcessRecordService.updateProcessRecord(re);
+            } else {
+                re.setIsesence(record.getIsesence());
             }
-            if (record.getIshot() != ish && ish != null) {
-                map.put("ishot", ish);
-                //更新帖子精选操作
-                postService.updatePostSelected(map);
-                PostProcessRecord re = new PostProcessRecord();
-                re.setPostid(pid);
+            if (record.getIshot() != ish && ish != null && record.getIshot() == 0) {
                 re.setIshot(ish);
+            } else {
+                re.setIshot(record.getIshot());
+            }
+            //更新帖子精选操作
+            postService.updatePostSelected(map);
+
+            if ((record.getIsesence() != ise && ise == 1) || (record.getIshot() != ish && ish == 1)) {
                 //更新帖子精选操作记录
                 postProcessRecordService.updateProcessRecord(re);
+                if ((record.getIsesence() != ise && ise == 1)) {
+                    //为帖子增加热度值（当加精记录中首页精选第一次精选时
+                    facadeHeatValue.addHeatValue(pid, 1, null);
+                    //帖子精选积分操作
+                    postSelectedIntegralOperation(ise.toString(), ish.toString(), pid);
+                }
+                if (record.getIshot() != ish && ish == 1) {
+                    //为帖子增加热度值(当加精记录中圈子精选第一次精选时
+                    facadeHeatValue.addHeatValue(pid, 2, null);
+                    //帖子精选积分操作
+                    postSelectedIntegralOperation(ise.toString(), ish.toString(), pid);
+                }
+
             }
         } else {//------------------------------没有过加精操作
-            PostProcessRecord re = new PostProcessRecord();
             re.setPostid(pid);
             re.setIsesence(ise);
             //新增帖子加精
             postProcessRecordService.insertProcessRecord(re);
+            //更新帖子精选操作
+            postService.updatePostSelected(map);
             //为帖子增加热度值
-            if (ise == 1) {
+            if (ise != null && ise == 1) {
                 facadeHeatValue.addHeatValue(pid, 1,null);
+                //帖子精选积分操作
+                postSelectedIntegralOperation(ise.toString(), ish.toString(), pid);
             }
-            if (ish == 1) {
+            if (ish != null && ish == 1) {
                 facadeHeatValue.addHeatValue(pid, 2,null);
+                //帖子精选积分操作
+                postSelectedIntegralOperation(ise.toString(), ish.toString(), pid);
             }
         }
     }
