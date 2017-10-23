@@ -1225,14 +1225,14 @@ public class PostFacade {
         if (StringUtil.isNotEmpty(ishot)) {
             if (ishot.equals("1")) {
                 pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), userid);//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                facadeHeatValue.addHeatValue(pid, 2, null);
+                //facadeHeatValue.addHeatValue(pid, 2, null);
             }
         }
         if (StringUtil.isNotEmpty(isessence)) {
             if (isessence.equals("1")) {
                 pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), userid);//根据不同积分类型赠送积分的公共方法（包括总分和流水）
                 //增加热度
-                facadeHeatValue.addHeatValue(pid, 1, null);
+                //facadeHeatValue.addHeatValue(pid, 1, null);
             }
         }
     }
@@ -1314,6 +1314,7 @@ public class PostFacade {
         } else {//------------------------------没有过加精操作
             re.setPostid(pid);
             re.setIsesence(ise);
+            re.setIshot(ish);
             //新增帖子加精
             postProcessRecordService.insertProcessRecord(re);
             //更新帖子精选操作
