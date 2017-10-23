@@ -19,6 +19,16 @@ public class AccessLog {
 
     private String busitype;
 
+    private Date intime;
+
+    public Date getIntime() {
+        return intime;
+    }
+
+    public void setIntime(Date intime) {
+        this.intime = intime;
+    }
+
     public Integer getId() {
         return id;
     }

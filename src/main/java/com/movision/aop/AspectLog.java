@@ -61,7 +61,7 @@ public class AspectLog {
         String queryString = request.getQueryString();
         String userAgent = request.getHeader("User-Agent");
         String[] aa = requestURL.split("/");
-        String busitype = aa[3];
+        String busitype = aa[4];
         String logMode = PropertiesLoader.getValue("busi.log.mode");
         switch (logMode) {
             case "db":
@@ -74,6 +74,8 @@ public class AspectLog {
                 accessLog.setUseragent(userAgent);  //用户代理
                 accessLog.setExectime(Integer.parseInt(String.valueOf(execTime)));    //执行日期
                 accessLog.setBusitype(busitype);//业务类型
+                accessLog.setIntime(new Date());
+
                 int isAdd = accessLogService.insertSelective(accessLog);
                 // TODO: 2017/1/16
 

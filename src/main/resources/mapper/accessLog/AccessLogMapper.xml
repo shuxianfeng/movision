@@ -11,10 +11,11 @@
         <result column="userAgent" property="useragent" jdbcType="VARCHAR"/>
         <result column="execTime" property="exectime" jdbcType="INTEGER"/>
         <result column="busiType" property="busitype" jdbcType="VARCHAR"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, memberId, clientIP, httpMethod, requestURL, queryString, userAgent, execTime, 
-    busiType
+    id, memberId, clientIP, httpMethod, requestURL, queryString, userAgent, execTime,
+        busiType,intime
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -28,12 +29,13 @@
   </delete>
     <insert id="insert" parameterType="com.movision.mybatis.accessLog.entity.AccessLog">
     insert into yw_accesslog (id, memberId, clientIP, 
-      httpMethod, requestURL, queryString, 
-      userAgent, execTime, busiType
+      httpMethod, requestURL, queryString,
+        userAgent, execTime, busiType,intime
       )
     values (#{id,jdbcType=INTEGER}, #{memberid,jdbcType=INTEGER}, #{clientip,jdbcType=VARCHAR}, 
-      #{httpmethod,jdbcType=VARCHAR}, #{requesturl,jdbcType=VARCHAR}, #{querystring,jdbcType=VARCHAR}, 
-      #{useragent,jdbcType=VARCHAR}, #{exectime,jdbcType=INTEGER}, #{busitype,jdbcType=VARCHAR}
+      #{httpmethod,jdbcType=VARCHAR}, #{requesturl,jdbcType=VARCHAR}, #{querystring,jdbcType=VARCHAR},
+        #{useragent,jdbcType=VARCHAR}, #{exectime,jdbcType=INTEGER},
+        #{busitype,jdbcType=VARCHAR},#{intime,jdbcType=TIMESTAMP}
       )
   </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.accessLog.entity.AccessLog">
@@ -66,6 +68,10 @@
             <if test="busitype != null">
                 busiType,
             </if>
+            <if test="intime != null">
+                intime,
+            </if>
+
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -95,6 +101,10 @@
             <if test="busitype != null">
                 #{busitype,jdbcType=VARCHAR},
             </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.accessLog.entity.AccessLog">
@@ -124,6 +134,10 @@
             <if test="busitype != null">
                 busiType = #{busitype,jdbcType=VARCHAR},
             </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -136,7 +150,8 @@
       queryString = #{querystring,jdbcType=VARCHAR},
       userAgent = #{useragent,jdbcType=VARCHAR},
       execTime = #{exectime,jdbcType=INTEGER},
-      busiType = #{busitype,jdbcType=VARCHAR}
+        busiType = #{busitype,jdbcType=VARCHAR},
+        intime = #{intime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
