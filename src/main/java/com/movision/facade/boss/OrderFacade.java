@@ -95,36 +95,30 @@ public class OrderFacade {
         if (ordernumber != null) {
             map.put("ordernumber", ordernumber);
         }
-        if (name != null) {
+        if (StringUtil.isNotEmpty(name)) {
             map.put("name", name);
         }
-        if (status != null) {
+        if (StringUtil.isNotEmpty(status)) {
             map.put("status", status);
         }
-        if (position != null) {
+        if (StringUtil.isNotEmpty(position)) {
             map.put("position", position);
         }
-        if (logisticid != null) {
+        if (StringUtil.isNotEmpty(logisticid)) {
             map.put("logisticid", logisticid);
         }
         Date isessencetime = null;//开始时间
+        Date max = null;//最大时间
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        if (mintime != null) {
+        if (StringUtil.isNotEmpty(mintime) && StringUtil.isNotEmpty(maxtime)) {
             try {
                 isessencetime = format.parse(mintime);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        map.put("mintime", isessencetime);
-        Date max = null;//最大时间
-        if (maxtime != null) {
-            try {
                 max = format.parse(maxtime);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
+        map.put("mintime", isessencetime);
         map.put("maxtime", max);
         return bossOrderService.queryOrderByCondition(map, pager);
     }
@@ -151,39 +145,33 @@ public class OrderFacade {
         Map<String, Object> map = new HashMap<>();
         try {
             request.setCharacterEncoding("utf-8");
-            if (ordernumber != null) {
+            if (StringUtil.isNotEmpty(ordernumber)) {
                 map.put("ordernumber", ordernumber);
             }
-            if (province != null) {
+            if (StringUtil.isNotEmpty(province)) {
                 map.put("province", province);
             }
-            if (city != null) {
+            if (StringUtil.isNotEmpty(city)) {
                 map.put("city", city);
             }
-            if (district != null) {
+            if (StringUtil.isNotEmpty(district)) {
                 map.put("district", district);
             }
-            if (takeway != null) {
+            if (StringUtil.isNotEmpty(takeway)) {
                 map.put("takeway", takeway);
             }
             Date isessencetime = null;//开始时间
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            if (mintime != null) {
+            Date max = null;//最大时间
+            if (StringUtil.isNotEmpty(mintime) && StringUtil.isNotEmpty(mintime)) {
                 try {
                     isessencetime = format.parse(mintime);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            map.put("mintime", isessencetime);
-            Date max = null;//最大时间
-            if (maxtime != null) {
-                try {
                     max = format.parse(maxtime);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
+            map.put("mintime", isessencetime);
             map.put("maxtime", max);
             map.put("email", email);
             map.put("name", name);
@@ -553,36 +541,30 @@ public class OrderFacade {
      */
     public List<AfterServiceVo> queryOrderByConditionAfterService(String ordernumber, String name, String aftersalestatus, String afterstatue, String mintime, String maxtime, Paging<AfterServiceVo> pager) {
         Map<String, Object> map = new HashMap<>();
-        if (ordernumber != null) {
+        if (StringUtil.isNotEmpty(ordernumber)) {
             map.put("ordernumber", ordernumber);
         }
-        if (name != null) {
+        if (StringUtil.isNotEmpty(name)) {
             map.put("name", name);
         }
-        if (aftersalestatus != null) {
+        if (StringUtil.isNotEmpty(aftersalestatus)) {
             map.put("aftersalestatus", aftersalestatus);
         }
-        if (afterstatue != null) {
+        if (StringUtil.isNotEmpty(afterstatue)) {
             map.put("afterstatue", afterstatue);
         }
         Date isessencetime = null;//开始时间
+        Date max = null;//最大时间
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        if (mintime != null) {
+        if (StringUtil.isNotEmpty(mintime) && StringUtil.isNotEmpty(maxtime)) {
             try {
+                max = format.parse(maxtime);
                 isessencetime = format.parse(mintime);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
         map.put("mintime", isessencetime);
-        Date max = null;//最大时间
-        if (maxtime != null) {
-            try {
-                max = format.parse(maxtime);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
         map.put("maxtime", max);
         return bossOrderService.queryOrderByConditionAfterService(map, pager);
     }

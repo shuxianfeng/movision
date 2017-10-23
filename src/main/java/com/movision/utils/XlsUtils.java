@@ -327,7 +327,7 @@ public class XlsUtils {
 	        	  }
 	        	  content.put(j, value);
 	         }
-            // TODO: 2017/1/16
+            // 把content中的值存入ProductWithBLOBs实体，最后入库保存
             /*ProductWithBLOBs product = new ProductWithBLOBs();
         	for( Integer key : content.keySet())
         	{

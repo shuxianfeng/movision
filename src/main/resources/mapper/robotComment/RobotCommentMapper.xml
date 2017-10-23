@@ -71,10 +71,13 @@
 
     <select id="findAllQueryRoboltComment" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.robotComment.entity.RobotComment">
-        SELECT * FROM yw_comment WHERE 1
-        <if test="type != null">
-            type = #{type,jdbcType=INTEGER}
-        </if>
+        SELECT * FROM yw_comment
+        <where>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER}
+            </if>
+        </where>
+        order by type,id
     </select>
 
     <select id="queryRoboltComment" resultType="com.movision.mybatis.robotComment.entity.RobotComment"

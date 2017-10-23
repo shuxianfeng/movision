@@ -1,6 +1,7 @@
 package com.movision.controller.boss.robot;
 
 import com.movision.common.Response;
+import com.movision.facade.index.FacadePost;
 import com.movision.facade.robot.RobotFacade;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -24,8 +25,12 @@ public class RobotPostController {
     @Autowired
     private RobotFacade robotFacade;
 
+    @Autowired
+    private FacadePost facadePost;
+
     /**
      * 利用机器人为帖子制造评论接口
+     * 注：一个机器人可以对同一个帖子评论多次
      *
      * @param postid
      * @param number
@@ -53,6 +58,14 @@ public class RobotPostController {
         return response;
     }
 
+    /**
+     * 注：一个机器人只能点赞同一个帖子一次
+     *
+     * @param num
+     * @param postid
+     * @return
+     * @throws IOException
+     */
     @ApiOperation(value = "单个点赞帖子", notes = "单个点赞帖子", response = Response.class)
     @RequestMapping(value = "/single_post_zan", method = RequestMethod.POST)
     public Response robotZanPost(@ApiParam(value = "需要调用的机器人数量") @RequestParam Integer num,
@@ -83,6 +96,13 @@ public class RobotPostController {
         return response;
     }
 
+    /**
+     * 注：一个机器人只能对同一个帖子收藏一次
+     * @param num
+     * @param postid
+     * @return
+     * @throws IOException
+     */
     @ApiOperation(value = "单个帖子收藏", notes = "单个帖子收藏", response = Response.class)
     @RequestMapping(value = "/single_post_collect", method = RequestMethod.POST)
     public Response robotCollectPost(@ApiParam(value = "需要调用的机器人数量") @RequestParam Integer num,
@@ -102,11 +122,34 @@ public class RobotPostController {
         return response;
     }
 
-    @ApiOperation(value = "机器人批量浏览帖子", notes = "机器人批量浏览帖子", response = Response.class)
+    /**
+     * 注：一个机器人可以对同一个帖子浏览多次
+     * @param num
+     * @return
+     * @throws IOException
+     */
+    @ApiOperation(value = "操作机器人浏览APP中全部帖子", notes = "操作机器人浏览APP中全部帖子", response = Response.class)
     @RequestMapping(value = "/batch_view_post", method = RequestMethod.POST)
     public Response robotViewPost(@ApiParam(value = "需要调用的机器人数量") @RequestParam Integer num) throws IOException {
         Response response = new Response();
         robotFacade.insertMongoPostView(num);
+        return response;
+    }
+
+    @ApiOperation(value = "操作机器人浏览某个用户的所有帖子", notes = "操作机器人浏览某个用户的所有帖子", response = Response.class)
+    @RequestMapping(value = "/add_someone_post_view", method = RequestMethod.POST)
+    public Response addSomeonePostView(@ApiParam(value = "需要调用的机器人数量") @RequestParam Integer num,
+                                       @ApiParam(value = "被浏览的帖子的作者") @RequestParam Integer uid) throws IOException {
+        Response response = new Response();
+        robotFacade.insertSomeonePostView(num, uid);
+        return response;
+    }
+
+    @ApiOperation(value = "更新线上帖子的所有热度值", notes = "更新线上帖子的所有热度值", response = Response.class)
+    @RequestMapping(value = "/update_online_post_heatvalue", method = RequestMethod.POST)
+    public Response updateOnlinePostHeatvalue() throws IOException {
+        Response response = new Response();
+        facadePost.updateOnlinePostHeatvalue();
         return response;
     }
 }

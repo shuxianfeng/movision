@@ -56,12 +56,13 @@ import java.util.List;
     }
 
     /**
-     * 查询
+     * 统计用户浏览的帖子所属的每个圈子的数量
+     *
      * @return
      */
-    public List  userFlush(int userid) {
+    public List userFlush(String device) {
               Aggregation aggregation = Aggregation.newAggregation(
-                    Aggregation.match(Criteria.where("userid").is(userid)),
+                      Aggregation.match(Criteria.where("device").is(device)),
                     Aggregation.group("crileid").count().as("count"),
                     Aggregation.sort(Sort.Direction.DESC, "count"),
                     Aggregation.limit(1)

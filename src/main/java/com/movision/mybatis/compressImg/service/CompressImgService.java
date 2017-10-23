@@ -24,7 +24,7 @@ public class CompressImgService {
     public void insert(CompressImg compressImg) {
         try {
             logger.info("新增成功");
-            compressImgMapper.insert(compressImg);
+            compressImgMapper.insertSelective(compressImg);
         } catch (Exception e) {
             logger.error("新增异常", e);
             throw e;

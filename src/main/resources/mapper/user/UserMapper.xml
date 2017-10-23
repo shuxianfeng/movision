@@ -119,11 +119,11 @@
 
     <!--美番2.0发现页查询热门作者-->
     <select id="queryHotUserList" resultType="com.movision.mybatis.user.entity.UserVo">
-        SELECT t1.id, t1.nickname, t1.photo, t1.fans FROM (
+        SELECT t1.id, t1.nickname, t1.photo, t1.phone, t1.fans FROM (
             (SELECT * FROM yw_user WHERE isrecommend = '1' AND id != '-1')
             UNION
             (SELECT * FROM yw_user WHERE id != '-1' ORDER BY heat_value DESC limit 10)
-        ) t1 limit 10
+        ) t1 WHERE right(t1.phone,6) NOT LIKE '%000000' limit 10
     </select>
 
     <!--美番2.0发现作者页查询推荐作者列表-->
@@ -134,8 +134,9 @@
         (SELECT * FROM yw_user WHERE id != '-1' AND heat_value > '0' ORDER BY heat_value DESC)
         ) t1
         <where>
+            right(t1.phone,6) NOT LIKE '%000000'
             <if test="userid != null and userid != ''">
-                t1.id NOT IN (
+                AND t1.id NOT IN (
                 SELECT interestedusers FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER}
                 )
                 AND t1.id != #{userid,jdbcType=INTEGER}
@@ -652,7 +653,7 @@
     <!-- 查看VIP申请列表 -->
     <select id="findAllqueryUsers" resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT u.id,u.nickname,u.phone,u.level,u.status,u.attention,vd.id AS appyid,u.heat_value AS
-        heatValue,u.isrecommend,u.isdv,
+        heatvalue,u.isrecommend,u.isdv,
         (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) AS autonym,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
@@ -662,16 +663,18 @@
         (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid IN (SELECT p5.id FROM yw_post p5 WHERE p5.userid=vd.userid
         AND p5.isdel=0)) AS besharesum,
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
-        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
-        zansum,u.fans,u.applydate
+        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS zansum,u.fans,
+        (SELECT apply_time FROM yw_apply_vip_detail WHERE userid = u.id ORDER BY userid,apply_time DESC LIMIT 1) AS
+        applydate
         FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id
-        WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 AND u.phone IS NOT NULL ORDER BY vd.apply_time DESC
+        WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 AND u.phone IS NOT NULL AND (u.id<![CDATA[>=]]>20000 OR u.id
+        <![CDATA[<]]>10000) ORDER BY vd.apply_time DESC
     </select>
 
     <!-- 查看VIP列表-->
     <select id="findAllqueryUserVIPByList" resultType="com.movision.mybatis.user.entity.UserVo">
-        SELECT u.id,u.nickname,u.phone,u.level,u.status,u.heat_value AS heatValue,u.isrecommend,u.attention,u.isdv,
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,u.heat_value AS heatvalue,u.isrecommend,u.attention,u.isdv,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
         (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
@@ -681,16 +684,16 @@
         p5.isdel=0)) AS besharesum,
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=u.id AND p3.isdel=0) AS commentsum,
         (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=u.id AND p4.isdel=0) AS
-        zansum,u.fans,vd.apply_time AS applydate,au.authstatus
-        FROM (yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id) LEFT JOIN yw_autonym_authentication au ON
-        au.userid=u.id
-        WHERE level>0 AND status=0 ORDER BY intime
+        zansum,u.fans,(SELECT apply_time FROM yw_apply_vip_detail WHERE userid = u.id ORDER BY userid,apply_time DESC
+        LIMIT 1) AS applydate,au.authstatus
+        FROM yw_user u LEFT JOIN yw_autonym_authentication au ON au.userid=u.id
+        WHERE isdv>0 AND status=0 AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]> ORDER BY intime
     </select>
 
     <!-- 根据条件查询vip列表  -->
     <select id="findAllQueryByConditionvipList" parameterType="java.util.Map"
             resultType="com.movision.mybatis.user.entity.UserVo">
-        SELECT u.id,u.nickname,u.phone,u.level,u.status,u.heat_value AS heatValue,u.isrecommend,u.attention,u.isdv,
+        SELECT u.id,u.nickname,u.phone,u.level,u.status,u.heat_value AS heatvalue,u.isrecommend,u.attention,u.isdv,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
         (SELECT COALESCE(SUM(points),0) FROM yw_post_rewarded r WHERE r.postid IN (SELECT p1.id FROM yw_post p1 WHERE
@@ -702,7 +705,8 @@
         (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=u.id AND p4.isdel=0) AS
         zansum,u.fans,vd.apply_time AS applydate,au.authstatus
         FROM (yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id) LEFT JOIN yw_autonym_authentication au ON
-        au.userid=u.id WHERE u.level>0 AND u.status=0
+        au.userid=u.id WHERE u.isdv>0 AND u.status=0
+        AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
         <if test="name!=null">
             AND u.nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
@@ -758,10 +762,12 @@
         zansum,u.fans,u.applydate
         <if test="time!=null">
             FROM yw_user u LEFT JOIN yw_audit_vip_detail vd ON vd.apply_userid=u.id WHERE u.level>0 AND u.status=0 AND
-            vd.status=0 ORDER BY vd.audit_time DESC
+            vd.status=0 AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]> ORDER BY vd.audit_time DESC
         </if>
         <if test="grade!=null">
-            FROM yw_user u WHERE u.level>0 AND u.status=0 ORDER BY u.level DESC
+            FROM yw_user u WHERE u.level>0 AND u.status=0 AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]> ORDER
+            BY
+            u.level DESC
         </if>
     </select>
 
@@ -769,7 +775,7 @@
     <select id="findAllQueryUniteConditionByApply" parameterType="java.util.Map"
             resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT u.id,u.nickname,u.phone,u.level,u.status,vd.id AS appyid,u.heat_value AS
-        heatValue,u.isrecommend,u.attention,u.isdv,
+        heatvalue,u.isrecommend,u.attention,u.isdv,
         (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) AS authstatus,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
@@ -779,11 +785,13 @@
         (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid IN (SELECT p5.id FROM yw_post p5 WHERE p5.userid=vd.userid
         AND p5.isdel=0)) AS besharesum,
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
-        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
-        zansum,u.fans,u.applydate
+        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS zansum,u.fans,
+        (SELECT apply_time FROM yw_apply_vip_detail WHERE userid = u.id ORDER BY userid,apply_time DESC LIMIT 1)AS
+        applydate
         FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id
         WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 AND u.phone IS NOT NULL
+        AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
         <if test="username!=null">
             AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
         </if>
@@ -816,7 +824,7 @@
     <select id="findAllQueryUserExamineAndVerify" parameterType="java.util.Map"
             resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT u.id,u.nickname,u.phone,u.level,u.status,vd.id AS appyid,vd.audit_time AS audittime,vd.reason,vd.status
-        AS auditStatus,u.heat_value AS heatValue,u.isrecommend,u.attention,u.isdv,
+        AS auditStatus,u.heat_value AS heatvalue,u.isrecommend,u.attention,u.isdv,
         (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) AS autonym,
         (SELECT COUNT(1) FROM yw_post p WHERE p.userid=u.id) AS postsum,
         (SELECT COUNT(1) FROM yw_post po WHERE po.userid=u.id and po.isessence=1) AS isessencesum,
@@ -826,12 +834,14 @@
         (SELECT COUNT(1) FROM yw_post_share s WHERE s.postid IN (SELECT p5.id FROM yw_post p5 WHERE p5.userid=vd.userid
         AND p5.isdel=0)) AS besharesum,
         (SELECT COALESCE(SUM(commentsum),0) FROM yw_post p3 WHERE p3.userid=vd.userid AND p3.isdel=0) AS commentsum,
-        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS
-        zansum,u.fans,u.applydate
+        (SELECT COALESCE(SUM(zansum),0) FROM yw_post p4 WHERE p4.userid=vd.userid AND p4.isdel=0) AS zansum,u.fans,
+        (SELECT apply_time FROM yw_apply_vip_detail WHERE userid = u.id ORDER BY userid,apply_time DESC LIMIT 1)AS
+        applydate
         FROM yw_user u LEFT JOIN yw_audit_vip_detail vd ON vd.apply_userid=u.id LEFT JOIN yw_autonym_authentication au
         ON
         au.userid=u.id
         WHERE vd.apply_userid=u.id AND u.phone IS NOT NULL
+        AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
         <if test="username!=null">
             AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
         </if>
@@ -851,10 +861,13 @@
             AND (SELECT authstatus FROM yw_autonym_authentication WHERE userid=u.id) IS NULL
         </if>
         <if test="begintime!=null and endtime!=null">
-            AND vd.apply_time BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
+            AND vd.audit_time BETWEEN #{begintime,jdbcType=DATE} AND #{endtime,jdbcType=DATE}
         </if>
         <if test="type==1">
-            ORDER BY vd.apply_time DESC
+            ORDER BY vd.audit_time DESC
+        </if>
+        <if test="type == null">
+            ORDER BY vd.audit_time DESC
         </if>
         <if test="type==2">
             ORDER BY u.level DESC
@@ -869,7 +882,8 @@
         (SELECT COUNT(1) FROM yw_coupon WHERE isdel=0 AND userid=u.id) AS coupon,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isactive=0) AS postsum,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1 AND isactive=0) AS isessencesum
-        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE 1
+        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE
+        <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>
@@ -1016,7 +1030,8 @@
 
     <select id="queryAllTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT count(u.id)
-        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE 1
+        FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE
+        <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>
@@ -1329,7 +1344,10 @@
         UPDATE yw_user SET heat_value=heat_value+#{points,jdbcType=INTEGER} WHERE id=#{userid,jdbcType=INTEGER}
     </update>
     <select id="queryUserLevel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT level FROM yw_user WHERE id=#{userid,jdbcType=INTEGER}
+        SELECT points FROM yw_user WHERE id=#{userid,jdbcType=INTEGER} AND status=0
+    </select>
+    <select id="queryUserPoints" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT level FROM yw_user WHERE id=#{userid,jdbcType=INTEGER} AND status=0
     </select>
     <select id="queryUserInfoHompage" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.user.entity.UserVo">
@@ -1339,7 +1357,7 @@
     <!--2.0查询当前用户关注的所有作者列表-->
     <select id="findAllMineFollowAuthor" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.UserVo" >
         SELECT u.id, u.nickname, u.photo, u.fans,
-          (SELECT count(*) FROM yw_post WHERE userid = u.id) AS postsum,
+          (SELECT count(*) FROM yw_post WHERE userid = u.id AND isdel = '0') AS postsum,
           (SELECT count(*) FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER} AND interestedusers = u.id) AS isfollow
         FROM yw_user u
         JOIN yw_follow_user fu ON u.id = fu.interestedusers
@@ -1357,7 +1375,7 @@
     <!--2.0查询当前用户的所有粉丝列表-->
     <select id="findAllMineFans" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.UserVo" >
         SELECT u.id, u.nickname, u.photo, u.fans,
-          (SELECT count(*) FROM yw_post WHERE userid = u.id) AS postsum,
+          (SELECT count(*) FROM yw_post WHERE userid = u.id AND isdel = '0') AS postsum,
           (SELECT count(*) FROM yw_follow_user WHERE userid = #{userid,jdbcType=INTEGER} AND interestedusers = u.id) AS isfollow
         FROM yw_user u
         JOIN yw_follow_user fu ON u.id = fu.userid
@@ -1456,13 +1474,11 @@
 
     <!--查询我的模块邀请好友页面里的邀请好友排行榜数据-->
     <select id="findAllInviteRank" resultType="com.movision.mybatis.user.entity.InviteUserVo" >
-        SELECT T.* FROM(
-            SELECT t.*, (SELECT count(*) FROM yw_user WHERE t.invitecode = referrals) AS invitenum
-            FROM
-            (SELECT t1.id, t1.nickname, t1.photo, t1.invitecode, t1.referrals FROM yw_user t1) t
-        ) T
-        WHERE T.invitenum > 0 AND T.id !='-1'
-        ORDER BY T.invitenum DESC
+        SELECT t2.id, t2.nickname, t2.photo, t2.invitecode, t2.referrals, t1.invitenum
+        FROM yw_user_invite_rank t1
+        LEFT JOIN yw_user t2 ON t1.userid = t2.id
+        WHERE t2.id != '-1'
+        ORDER BY invitenum DESC
     </select>
 
     <update id="updateUserByIsrecommend" parameterType="com.movision.mybatis.user.entity.User">
@@ -1524,26 +1540,20 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         select max(id)
         from yw_user
         where
-        <![CDATA[
-          id >= 10000 and id <= 20000
-        ]]>
+        <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
     </select>
 
     <select id="selectRobotUser" resultType="com.movision.mybatis.user.entity.User">
         SELECT *
         FROM yw_user where
-        <![CDATA[
-          id >= 10000 and id <= 20000
-        ]]>
+        <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
     </select>
 
     <select id="findAllQueryRobotByList" resultType="com.movision.mybatis.user.entity.User"
             parameterType="java.lang.String">
         SELECT *
         FROM yw_user
-        WHERE  <![CDATA[
-          id >= 10000 and id <= 20000
-        ]]>
+        WHERE <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
         <if test="name != null">
             AND nickname = #{name,jdbcType=VARCHAR}
         </if>
@@ -1555,12 +1565,46 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
 
     <select id="queryRandomUser" resultType="com.movision.mybatis.user.entity.User" parameterType="java.lang.Integer">
         <![CDATA[
-        SELECT * FROM yw_user where id>=10000 AND id<=20000 ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
+        SELECT * FROM yw_user where (u.id>=20000 OR u.id< 10000) ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
         ]]>
+    </select>
+
+    <select id="queryNotRepeatCollectRobots" resultType="com.movision.mybatis.user.entity.User"
+            parameterType="java.util.Map">
+        SELECT u.* FROM yw_user u
+        where <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        and not EXISTS
+        (SELECT 1 FROM yw_collection c
+        where c.userid = u.id and c.postid = #{postid})
+        ORDER BY RAND() LIMIT 0,#{number}
+    </select>
+
+
+    <select id="queryNotRepeatZanRobots" resultType="com.movision.mybatis.user.entity.User"
+            parameterType="java.util.Map">
+        SELECT u.* FROM yw_user u
+        where <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        and not EXISTS
+        (SELECT 1 FROM yw_post_zan_record r
+        where r.userid = u.id and r.postid = #{postid})
+        ORDER BY RAND() LIMIT 0, #{number,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryNotRepeatRandomRobots" resultType="com.movision.mybatis.user.entity.User"
+            parameterType="java.util.Map">
+        SELECT u.* FROM yw_user u
+        where <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        and not EXISTS (SELECT 1 FROM yw_follow_user f
+        where f.userid = u.id
+        and f.interestedusers = #{userid})
+        ORDER BY RAND() LIMIT 0,#{number}
     </select>
 
     <select id="selectNotLoadPhotoUser" resultType="com.movision.mybatis.user.entity.User">
         SELECT * FROM yw_user
         where photo = 'http://pic.mofo.shop/upload/person/img/logo%403x.png'
     </select>
+    <update id="updateUserLevels" parameterType="java.util.Map">
+        UPDATE yw_user SET level=#{le,jdbcType=INTEGER} WHERE id=#{userid,jdbcType=INTEGER}
+    </update>
 </mapper>

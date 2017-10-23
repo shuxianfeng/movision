@@ -57,10 +57,10 @@ public class WordService extends JdbcRepository implements IWordService {
      *
      * @throws Exception
      */
-    private void updateWords() throws Exception {
-        /**
+    /*private void updateWords() throws Exception {
+        *//**
          * 更新商品字典表
-         */
+     *//*
         {
             FileUtil.write(DICT_FILE, StringUtil.EMPTY);
 
@@ -73,9 +73,9 @@ public class WordService extends JdbcRepository implements IWordService {
             DICT.reload();
         }
 
-        /**
+        *//**
          * 更新商品相似字典表
-         */
+     *//*
         {
             List<Map<String, Object>> items = getJdbcTemplate().findList(
                     "select w,s from t_goods_words_similar", null, 0, 0,
@@ -93,12 +93,12 @@ public class WordService extends JdbcRepository implements IWordService {
             }
             SIMILAR_WORD_MAP = similarMap;
         }
-    }
+    }*/
 
     /**
      * 每3小时更新字典
      */
-    /*@PostConstruct  //在spring容器初始化话WordService的时候，所做的操作
+    /*@PostConstruct  //在spring容器初始化WordService的时候，所做的操作
     public void init() {
         jobService.scheduleRepeatJob(new JobService.RepeatJob() {
             @Override

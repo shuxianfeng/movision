@@ -12,12 +12,12 @@ import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.personalizedSignature.entity.PersonalizedSignature;
 import com.movision.mybatis.personalizedSignature.service.PersonalizedSignatureService;
-import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.robotComment.entity.RobotComment;
 import com.movision.mybatis.robotComment.service.RobotCommentService;
 import com.movision.mybatis.robotNickname.service.RobotNicknameService;
+import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
@@ -84,6 +84,9 @@ public class RobotFacade {
 
     @Autowired
     private UserRefreshRecordService userRefreshRecordService;
+
+    @Autowired
+    private SystemLayoutService systemLayoutService;
 
     /**
      * 创建n个robot用户
@@ -201,8 +204,11 @@ public class RobotFacade {
         if (num < 1) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人数量至少是1个");
         }
-        //1 集合机器人大军
-        List<User> robotArmy = userService.queryRandomUser(num);
+        //1 集合机器人大军， 注：一个机器人只能点赞同一个帖子一次
+        Map map = new HashMap();
+        map.put("postid", postid);
+        map.put("number", num);
+        List<User> robotArmy = userService.queryNotRepeatZanRobots(map);
 
         //2 循环进行帖子点赞操作， 需要注意，点赞不能在同一个时刻
         for (int i = 0; i < robotArmy.size(); i++) {
@@ -224,8 +230,8 @@ public class RobotFacade {
         //循环对每个帖子操作点赞
         Random random = new Random();
         for (int i = 0; i < postidArr.length; i++) {
-            //随机取[0,num+1) 之间的整数，最小是0，最大是num
-            int n = random.nextInt(num + 1);
+            //随机取[0,num+1) 之间的整数，最小是1，最大是num
+            int n = (int) ((Math.random() * num) + 1);
             //调用【机器人帖子点赞操作】
             robotZanPost(Integer.valueOf(postidArr[i]), n);
         }
@@ -246,11 +252,11 @@ public class RobotFacade {
         Random random = new Random();
         for (int i = 0; i < postidArr.length; i++) {
             //1 调用【机器人帖子点赞操作】
-            robotZanPost(Integer.valueOf(postidArr[i]), random.nextInt(num + 1));
+            robotZanPost(Integer.valueOf(postidArr[i]), (int) ((Math.random() * num) + 1));
             //2 调用【机器人帖子收藏操作】
-            robotCollectPost(Integer.valueOf(postidArr[i]), random.nextInt(num + 1));
+            robotCollectPost(Integer.valueOf(postidArr[i]), (int) ((Math.random() * num) + 1));
             //3 调用【机器人帖子评论操作】
-            robotshuntComment(num, Integer.valueOf(postidArr[i]));
+            robotshuntComment((int) ((Math.random() * num) + 1), Integer.valueOf(postidArr[i]));
         }
     }
 
@@ -258,11 +264,13 @@ public class RobotFacade {
      * 分流操作帖子评论
      */
     public void robotshuntComment(Integer num, Integer post) {
-        if (num > 1 && num <= 200) {//2:40% 4:30% 5:30% --2
+        //查询机器人分隔
+        Integer number = systemLayoutService.queryRobotSeparate("robot_separate");
+        if (num > 1 && num <= number) {//2:40% 4:30% 5:30% --2
 
             insertPostCommentByRobolt(post, num, 2);
 
-        } else if (num > 200) {//2:60% 4:20% 5:20% --3
+        } else if (num > number) {//2:60% 4:20% 5:20% --3
 
             insertPostCommentByRobolt(post, num, 3);
 
@@ -284,8 +292,8 @@ public class RobotFacade {
         String[] postidArr = postids.split(",");
         Random random = new Random();
         for (int i = 0; i < postidArr.length; i++) {
-            //随机取[0,num+1) 之间的整数，最小是0，最大是num
-            int n = random.nextInt(num + 1);
+            //随机取[0,num+1) 之间的整数，最小是1，最大是num
+            int n = (int) ((Math.random() * num) + 1);
 
             robotCollectPost(Integer.valueOf(postidArr[i]), n);
         }
@@ -371,8 +379,11 @@ public class RobotFacade {
      * @param num
      */
     public void robotCollectPost(int postid, int num) {
-        //1 集合机器人大军
-        List<User> robotArmy = userService.queryRandomUser(num);
+        //1 集合机器人大军, 注：一个机器人只能对同一个帖子收藏一次
+        Map map = new HashMap();
+        map.put("postid", postid);
+        map.put("number", num);
+        List<User> robotArmy = userService.queryNotRepeatCollectRobots(map);
 
         //2 循环进行收藏帖子操作
         for (int i = 0; i < robotArmy.size(); i++) {
@@ -389,7 +400,10 @@ public class RobotFacade {
      */
     public void robotFollowUser(int userid, int num) {
         //1 集合机器人大军
-        List<User> robotArmy = userService.queryRandomUser(num);
+        Map map = new HashMap();
+        map.put("number", num);
+        map.put("userid", userid);
+        List<User> robotArmy = userService.queryNotRepeatFollowRandomRobots(map);
 
         //2 循环进行关注作者操作
         for (int i = 0; i < robotArmy.size(); i++) {
@@ -416,8 +430,8 @@ public class RobotFacade {
         //循环对每个帖子操作点赞
         Random random = new Random();
         for (int i = 0; i < useridArr.length; i++) {
-            //随机取[0,num+1) 之间的整数，最小是0，最大是num
-            int n = random.nextInt(num + 1);
+            //随机取[0,num+1) 之间的整数，最小是1，最大是num
+            int n = (int) ((Math.random() * num) + 1);
             //调用【机器人关注操作】
             robotFollowUser(Integer.valueOf(useridArr[i]), n);
         }
@@ -475,6 +489,7 @@ public class RobotFacade {
         if (StringUtil.isNotEmpty(sex)) {
             user.setSex(Integer.parseInt(sex));
         }
+        userService.updateByPrimaryKeySelective(user);
     }
 
     /**
@@ -483,8 +498,8 @@ public class RobotFacade {
      * @param type
      * @return
      */
-    public List<RobotComment> findAllQueryRoboltComment(String type, Paging<RobotComment> pag) {
-        return robotCommentService.findAllQueryRoboltComment(Integer.parseInt(type), pag);
+    public List<RobotComment> findAllQueryRoboltComment(Integer type, Paging<RobotComment> pag) {
+        return robotCommentService.findAllQueryRoboltComment(type, pag);
     }
 
     /**
@@ -581,6 +596,7 @@ public class RobotFacade {
             Integer userid = users.get(i).getId();
             //1 插入评论表
             System.out.println(date.getTime());
+            //插入评论
             insertPostComment(postid, content, date, i, userid);
             //2 更新帖子表的评论次数字段
             postService.updatePostBycommentsum(postid);
@@ -610,37 +626,41 @@ public class RobotFacade {
         } else if (type == 2) {//<=200 2:40% 4:30% 5:30%
 
             //有小数向上进位  Math.ceil 返回大于参数x的最小整数,即对浮点数向上取整.
-            int mm = (int) (Math.ceil(num * 0.4));
+            //查询评论占比率
+            Double number = systemLayoutService.queryRobotPercentage("robot_separate_40");
+            int mm = (int) (Math.ceil(num * number));
             Map map = new HashMap();
             map.put("number", mm);
             map.put("type", 2);
             content = robotCommentService.queryRoboltComment(map);
             contens.addAll(content);
-            mm = (int) (Math.ceil(num * 0.3));
+            Double number2 = systemLayoutService.queryRobotPercentage("robot_separate_30");
+            mm = (int) (Math.ceil(num * number2));
             map.put("number", mm);
             map.put("type", 4);
             content = robotCommentService.queryRoboltComment(map);
             contens.addAll(content);
-            mm = (int) (Math.ceil(num * 0.3));
+            mm = (int) (Math.ceil(num * number2));
             map.put("number", mm);
             map.put("type", 5);
             content = robotCommentService.queryRoboltComment(map);
             contens.addAll(content);
 
         } else if (type == 3) {//>200 2:60% 4:20% 5:20%
-
-            int mm = (int) (Math.ceil(num * 0.6));
+            Double number = systemLayoutService.queryRobotPercentage("robot_separate_60");
+            int mm = (int) (Math.ceil(num * number));
             Map map = new HashMap();
             map.put("number", mm);
             map.put("type", 2);
             content = robotCommentService.queryRoboltComment(map);
             contens.addAll(content);
-            mm = (int) (Math.ceil(num * 0.2));
+            Double number2 = systemLayoutService.queryRobotPercentage("robot_separate_20");
+            mm = (int) (Math.ceil(num * number2));
             map.put("number", mm);
             map.put("type", 4);
             content = robotCommentService.queryRoboltComment(map);
             contens.addAll(content);
-            mm = (int) (Math.ceil(num * 0.2));
+            mm = (int) (Math.ceil(num * number2));
             map.put("number", mm);
             map.put("type", 5);
             content = robotCommentService.queryRoboltComment(map);
@@ -662,14 +682,14 @@ public class RobotFacade {
         //循环对每个帖子评论
         for (int i = 0; i < postidArr.length; i++) {
             //调用【机器人帖子评论操作】
-            robotshuntComment(num, Integer.valueOf(postidArr[i]));
+            robotshuntComment((int) ((Math.random() * num) + 1), Integer.valueOf(postidArr[i]));
         }
     }
 
     public void singlePostComment(int num, int postid) {
-
+        //校验入参
         validatePostidsAndNum(String.valueOf(postid), num);
-
+        //分流操作帖子评论
         robotshuntComment(num, postid);
     }
 
@@ -706,8 +726,9 @@ public class RobotFacade {
      * @return
      */
     private Long getRandomDate(Date date) {
-        int max = 9900000;
-        int min = 1000000;
+        //获取随机事件的最大数 和最小数
+        Integer max = systemLayoutService.queryRobotSeparate("robot_random_max_time");
+        Integer min = systemLayoutService.queryRobotSeparate("robot_random_min_time");
         Random random = new Random();
         int s = random.nextInt(max) % (max - min + 1) + min;
         return date.getTime() + s;
@@ -807,6 +828,25 @@ public class RobotFacade {
         List<PostVo> postList = postService.findAllPostListHeat();
 
         //2 遍历所有的帖子
+        batchInsertPostViewRecord(num, postList);
+
+    }
+
+    public void insertSomeonePostView(Integer num, Integer uid) {
+        //1 查询该用户所有帖子（包括帖子所属的圈子id）
+        List<PostVo> postList = postService.findUserPost(uid);
+
+        //2 遍历所有的帖子，封装成帖子浏览记录，并插入mongoDB
+        batchInsertPostViewRecord(num, postList);
+    }
+
+    /**
+     * 遍历所有的帖子，封装成帖子浏览记录，并插入mongoDB
+     *
+     * @param num
+     * @param postList
+     */
+    private void batchInsertPostViewRecord(Integer num, List<PostVo> postList) {
         Random random = new Random();
         for (int i = 0; i < postList.size(); i++) {
             //1 随机取n个机器人
@@ -825,13 +865,12 @@ public class RobotFacade {
                 userRefreshRecord.setUserid(userid);
                 userRefreshRecord.setPostid(postid);
                 userRefreshRecord.setCrileid(String.valueOf(circleid));
-                userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                userRefreshRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss:SSS"));
                 userRefreshRecord.setType(1);
                 userRefreshRecord.setLabelid(-1);
                 userRefreshRecordService.insert(userRefreshRecord);
             }
         }
-
     }
 
 

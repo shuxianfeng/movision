@@ -266,9 +266,7 @@ public class PostService {
     public int releaseModularPost(Post post) {
         try {
             log.info("模块式发帖发布成功");
-
             return postMapper.releaseModularPost(post);
-
         } catch (Exception e) {
             log.error("模块式发帖发布失败");
             throw e;
@@ -720,12 +718,42 @@ public class PostService {
      * @param post
      * @return
      */
-    public int updatePostChoiceness(PostTo post) {
+    public int updatePostSelected(Map post) {
         try {
             log.info("修改帖子加精");
             return postMapper.updatePostChoiceness(post);
         } catch (Exception e) {
             log.error("修改帖子加精异常 post=" + post,e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询帖子热度值
+     * @param id
+     * @return
+     */
+    public Integer queryPostHeate(Integer id) {
+        try {
+            log.info("查询帖子热度值");
+            return postMapper.queryPostHeate(id);
+        } catch (Exception e) {
+            log.error("查询帖子热度值异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 更新帖子热度值
+     *
+     * @param map
+     */
+    public void updatePostByHeatValue(Map map) {
+        try {
+            log.info("更新帖子热度值");
+            postMapper.updatePostByHeatValue(map);
+        } catch (Exception e) {
+            log.error("更新帖子热度值异常", e);
             throw e;
         }
     }
@@ -1459,6 +1487,15 @@ public class PostService {
         }
     }
 
+    public List<PostVo> queryPost(int postid) {
+        try {
+            log.info("根据id查询帖子");
+            return postMapper.queryPost(postid);
+        } catch (Exception e) {
+            log.error("根据id查询帖子失败", e);
+            throw e;
+        }
+    }
 
     public List<PostVo> findAllUserActive(int userid, Paging<PostVo> paging) {
         try {
@@ -1711,5 +1748,29 @@ public class PostService {
 
     public Date queryPostIdByDate(Integer id) {
         return postMapper.queryPostIdByDate(id);
+    }
+
+    public List<PostVo> queryPostListByHeatValue() {
+        try {
+            log.info("根据热度查询所有帖子");
+            return postMapper.queryPostListByHeatValue();
+        } catch (Exception e) {
+            log.error("根据热度查询所有帖子异常", e);
+            throw e;
+        }
+    }
+
+    public Post queryxiaojijiPostForTest(String title) {
+        return postMapper.queryxiaojijiPostForTest(title);
+    }
+
+    public void insertPost(Post post) {
+        try {
+            log.info("插入Post");
+            postMapper.insert(post);
+        } catch (Exception e) {
+            log.error("插入Post失败", e);
+            throw e;
+        }
     }
 }

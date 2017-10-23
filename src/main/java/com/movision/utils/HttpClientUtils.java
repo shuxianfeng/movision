@@ -36,21 +36,7 @@ public class HttpClientUtils {
     public static Map<String, String> sendRequest(String url,
                                                   Map<String, String> params) throws Exception {
         CloseableHttpClient httpclient = HttpClients.createDefault();
-        // TODO: 2017/1/16  
-/*
-        RequestConfig requestConfig = RequestConfig
-                .custom()
-                .setSocketTimeout(
-                        Integer.valueOf(PayVerify
-                                .getPropertyValue("socketTimeout")))
-                .setConnectTimeout(
-                        Integer.valueOf(PayVerify
-                                .getPropertyValue("connectTimeout")))
-                .setConnectionRequestTimeout(
-                        Integer.valueOf(PayVerify
-                                .getPropertyValue("connectionRequestTimeout")))
-                .build();
-*/
+
         RequestConfig requestConfig = RequestConfig.DEFAULT;
         
         try {
@@ -92,10 +78,18 @@ public class HttpClientUtils {
         return null;
     }
 
+    /**
+     * 涉及到自定义请求参数
+     *
+     * @param url
+     * @param params
+     * @return
+     * @throws Exception
+     */
     public static Map<String, String> sendRequest1(String url,
                                                    Map<String, String> params) throws Exception {
         CloseableHttpClient httpclient = HttpClients.createDefault();
-        // TODO: 2017/1/16
+        // 自定义请求参数
 /*
         RequestConfig requestConfig = RequestConfig
                 .custom()

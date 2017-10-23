@@ -29,7 +29,6 @@ public class TaskEngine {
 
 	private Object lock = new Object();
 
-	// TODO thread pool
 	// corePoolSize, maximumPoolSize, keepAliveTime
 	public TaskEngine(int workerNum) {
 		taskTimer = new Timer(true);
@@ -114,8 +113,8 @@ public class TaskEngine {
 				} catch (InterruptedException ie) {
 				}
 			}
-			return (Runnable) taskList.removeLast();
-		}
+            return taskList.removeLast();
+        }
 	}
 
 	/**

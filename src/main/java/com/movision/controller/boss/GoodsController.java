@@ -789,14 +789,14 @@ public class GoodsController {
     }
 
     /**
-     * 根据id查询
+     * 根据id查询套餐
      *
      * @param comboid
      * @return
      */
-    @ApiOperation(value = "根据id查询", notes = "根据id查询", response = Response.class)
+    @ApiOperation(value = "根据id查询套餐", notes = "根据id查询套餐", response = Response.class)
     @RequestMapping(value = "query_byid_com", method = RequestMethod.POST)
-    public Response findByIdCom(@ApiParam(value = "套餐id") @RequestParam(required = false) Integer comboid) {
+    public Response findByIdCom(@ApiParam(value = "套餐id") @RequestParam Integer comboid) {
         Response response = new Response();
         List<GoodsComboVo> map = goodsFacade.findByIdCom(comboid);
         if (response.getCode() == 200) {

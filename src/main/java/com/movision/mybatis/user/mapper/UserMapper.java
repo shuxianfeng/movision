@@ -149,6 +149,10 @@ public interface UserMapper {
 
     int queryUserLevel(int userid);
 
+    int queryUserPoints(int userid);
+
+    int updateUserLevels(Map map);
+
     UserVo queryUserInfoHompage(int userid);
 
     void accusationUser(Map<String, Object> map);
@@ -200,6 +204,12 @@ public interface UserMapper {
     User queryRobotById(Integer id);
 
     List<User> queryRandomUser(Integer number);
+
+
+    List<User> queryNotRepeatCollectRobots(Map map);
+
+    List<User> queryNotRepeatZanRobots(Map map);
+    List<User> queryNotRepeatRandomRobots(Map map);
 
     List<User> selectNotLoadPhotoUser();
 }

@@ -1,18 +1,16 @@
 package com.movision.facade.index;
 
 import com.google.gson.Gson;
+import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.test.SpringTestCase;
 import com.movision.utils.DateUtils;
 import org.junit.Test;
-import org.springframework.asm.Label;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * @Author zhuangyuhao
@@ -23,10 +21,59 @@ public class FacadePostTest extends SpringTestCase {
     @Autowired
     private FacadePost facadePost;
 
+    @Autowired
+    private PostService postService;
+
+    @Test
+    public void copyPost50() throws Exception {
+        //获取原始的帖子
+        Post originPost = postService.queryxiaojijiPostForTest("这是阿牛的帖子");
+        for (int i = 0; i < 50; i++) {
+            Post post = new Post();
+            //这三个字段是变化的
+            post.setTitle("这是阿牛的帖子_copy_" + i); //帖子标题
+            post.setHeatvalue(originPost.getHeatvalue() + (i + 1) * 1000);    //热度
+            //下面是不变化的
+            setXiaojijiAttribute(originPost, post);
+
+            postService.insertPost(post);
+        }
+    }
+
+    private void setXiaojijiAttribute(Post originPost, Post newPost) {
+
+        newPost.setUserid(originPost.getUserid());
+        newPost.setCircleid(originPost.getCircleid());
+        newPost.setSubtitle(originPost.getSubtitle());
+        newPost.setPostcontent(originPost.getPostcontent());
+        newPost.setZansum(originPost.getZansum());
+        newPost.setCommentsum(originPost.getCommentsum());
+        newPost.setForwardsum(originPost.getForwardsum());
+        newPost.setCollectsum(originPost.getCollectsum());
+        newPost.setIsactive(originPost.getIsactive());
+        newPost.setType(originPost.getType());
+        newPost.setIshot(originPost.getIshot());
+        newPost.setIsessence(originPost.getIsessence());
+        newPost.setOrderid(originPost.getOrderid());
+        newPost.setCoverimg(originPost.getCoverimg());
+        newPost.setHotimgurl(originPost.getHotimgurl());
+        newPost.setIntime(originPost.getIntime());
+        newPost.setTotalpoint(originPost.getTotalpoint());
+        newPost.setIsdel(originPost.getIsdel());
+        newPost.setIsessencepool(originPost.getIsessencepool());
+        newPost.setEssencedate(originPost.getEssencedate());
+        newPost.setOprtime(originPost.getOprtime());
+        newPost.setIsheatoperate(originPost.getIsheatoperate());
+        newPost.setActiveid(originPost.getActiveid());
+        newPost.setCity(originPost.getCity());
+    }
+
+
     @Test
     public void getCircleInCatagory() throws Exception {
         facadePost.getCircleInCatagory();
     }
+
 
     @Test
     public void releaseModularPost() throws Exception {
@@ -44,7 +91,7 @@ public class FacadePostTest extends SpringTestCase {
         String labelList = gson.toJson(list);
         System.out.println("labelList=" + labelList);
 
-        facadePost.releaseModularPost(null, userid, circleid, null, null, null, null, null, labelList, null);
+//        facadePost.releaseModularPost(null, userid, circleid, null, null, null, null, null, labelList, null);
     }
 
     private PostLabel createPostLabel(String userid, String namePrefix) {

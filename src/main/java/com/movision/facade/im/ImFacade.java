@@ -524,9 +524,9 @@ public class ImFacade {
     public void addOperationInform(HttpServletRequest request, String body, String title, String coverimg) {
         try {
             //生成运营推送的body内容
-            String str = makePushBody(request, body);
+            //String str = makePushBody(request, body);
             //推送业务
-            sendSystemInform(str, title, title, ImConstant.PUSH_MESSAGE.operation_msg.getCode(), coverimg);
+            sendSystemInform(body, title, title, ImConstant.PUSH_MESSAGE.operation_msg.getCode(), coverimg);
 
         } catch (IOException e) {
             log.error("发送运营通知失败", e);

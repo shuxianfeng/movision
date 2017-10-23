@@ -114,4 +114,9 @@
         AND activeid = #{activeid,jdbcType=INTEGER}
         AND takeid = #{takeid,jdbcType=INTEGER}
     </select>
+
+    <update id="updateIsVote" parameterType="com.movision.mybatis.take.entity.Take">
+        UPDATE tp_votingrecords SET takenumber = #{mark,jdbcType=INTEGER}
+        WHERE takeid = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

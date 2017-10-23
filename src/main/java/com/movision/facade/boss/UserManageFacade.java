@@ -85,7 +85,7 @@ public class UserManageFacade {
      */
     public List<UserVo> queryApplyVipList(Paging<UserVo> pager) {
         List<UserVo> users = userService.findAllqueryUsers(pager);//查询所有申请加v用户
-        for (int i = 0; i < users.size(); i++) {
+        /*for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getAuthstatus() == null) {
                 users.get(i).setAuthstatus(3);
             }
@@ -95,7 +95,7 @@ public class UserManageFacade {
                 substr = "用户名" + substr;
                 users.get(i).setNickname(substr);
             }
-        }
+        }*/
         return users;
     }
 
@@ -106,19 +106,7 @@ public class UserManageFacade {
      * @return
      */
     public List<UserVo> queryVipList(Paging<UserVo> pager) {
-        List<UserVo> users = userService.findAllqueryUserVIPByList(pager);//查询所有VIP用户
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getAuthstatus() == null) {
-                users.get(i).setAuthstatus(3);
-            }
-            if (users.get(i).getNickname() == null) {//如果查询出的用户昵称为空，拼接默认的昵称显示
-                String p = users.get(i).getPhone();
-                String substr = p.substring(p.length() - 4, p.length());
-                substr = "用户名" + substr;
-                users.get(i).setNickname(substr);
-            }
-        }
-        return users;
+        return userService.findAllqueryUserVIPByList(pager);//查询所有VIP用户
     }
 
     /**
@@ -161,7 +149,7 @@ public class UserManageFacade {
             map.put("type", type);
         }
         List<UserVo> users = userService.queryByConditionvipList(map, pager);
-        for (int i = 0; i < users.size(); i++) {
+        /*for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getAuthstatus() == null) {
                 users.get(i).setAuthstatus(3);
             }
@@ -171,7 +159,7 @@ public class UserManageFacade {
                 substr = "用户名" + substr;
                 users.get(i).setNickname(substr);
             }
-        }
+        }*/
         return users;
     }
 

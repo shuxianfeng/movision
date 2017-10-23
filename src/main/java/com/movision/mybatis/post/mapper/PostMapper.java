@@ -143,7 +143,11 @@ public interface PostMapper {
 
     int queryPostByIsessence(String id);
 
-    int updatePostChoiceness(PostTo postTo);
+    int updatePostChoiceness(Map map);
+
+    Integer queryPostHeate(Integer id);
+
+    void updatePostByHeatValue(Map map);
 
     List<PostTo> queryPostChoicenesslist(Map essencedate);
 
@@ -258,6 +262,7 @@ public interface PostMapper {
 
     List<PostVo> findAllPostByid(List postid, RowBounds rowBounds);
 
+    List<PostVo> queryPost(int postid);
 
     List<PostVo> findAllUserPostList(int userid, RowBounds rowBounds);
 
@@ -301,4 +306,8 @@ public interface PostMapper {
     String queryOriginalDrawingUrl(String compressimgurl);
 
     Date queryPostIdByDate(Integer id);
+
+    List<PostVo> queryPostListByHeatValue();
+
+    Post queryxiaojijiPostForTest(String title);
 }

@@ -329,6 +329,17 @@ public class CommentService {
         }
     }
 
+
+    public Integer queryCommentPoints(int commentid) {
+        try {
+            log.info("根據評論id查詢用戶等級");
+            return commentMapper.queryCommentPoints(commentid);
+        } catch (Exception e) {
+            log.error("根據評論id查詢用戶等級失敗", e);
+            throw e;
+        }
+    }
+
     public List<CommentVo> queryCommentByPost(int postid) {
         try {
             log.info("根據帖子id查詢所有評論");

@@ -21,7 +21,7 @@ public class RobotNicknameService {
     private RobotNicknameMapper robotNicknameMapper;
 
     /**
-     * 随机查询机器人昵称
+     * 随机查询机器人昵称（注：该昵称不与已存在的机器人昵称重复）
      *
      * @param number
      * @return

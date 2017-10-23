@@ -33,12 +33,14 @@
         <result column="city" jdbcType="VARCHAR" property="city"/>
         <result column="activeid" jdbcType="INTEGER" property="activeid"/>
         <result column="ishot_order" jdbcType="INTEGER" property="ishotorder"/>
+        <result column="isheatoperate" jdbcType="INTEGER" property="isheatoperate"/>
     </resultMap>
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
         isactive, partsum_enddays, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
-        hotimgurl, intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,city,ishotorder
+        hotimgurl,
+        intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,city,ishotorder,isheatoperate
     </sql>
 
     <!--基础查询语句-->
@@ -113,7 +115,7 @@
         SELECT t.* FROM (
             SELECT
             t1.id,t1.title,t1.subtitle,t1.postcontent,t1.isactive,t1.partsum_enddays,t1.activetype,t1.activefee,
-            t1.iscontribute,t1.ishot,t1.coverimg,t1.hotimgurl,t1.intime,t1.isdel,t2.begintime,t2.endtime
+            t1.iscontribute,t1.ishot,t1.hotimgurl AS coverimg,t1.intime,t1.isdel,t2.begintime,t2.endtime
             FROM yw_post t1
             LEFT JOIN yw_active_period t2
             ON t1.id = t2.postid
@@ -223,13 +225,13 @@
         SELECT t.* FROM (
         SELECT t1.id, t1.title, t1.subtitle, t1.postcontent, t1.zansum, t1.commentsum, t1.forwardsum, t1.collectsum,
         t1.isactive, t1.activetype, t1.activefee, t1.iscontribute, t1.ishot, t1.isessence, t1.isessencepool, t1.orderid,
-        t1.coverimg,
+        t1.hotimgurl AS coverimg,
         t1.intime,
         t1.totalpoint, t1.isdel, t2.begintime, t2.endtime
         FROM yw_post t1
         LEFT JOIN yw_active_period t2
         ON t1.id = t2.postid
-        ) t WHERE t.isactive = '1' AND t.isdel = '0'
+        ) t WHERE t.isactive = '1' AND t.ishot = '1' AND t.isdel = '0'
         ORDER BY t.intime DESC
     </select>
 
@@ -325,7 +327,7 @@
 
     <!--根据用户id查询当前用户发帖总数-->
     <select id="queryPostNumByUserid" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
-        SELECT count(*) FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER}
+        SELECT count(*) FROM yw_post WHERE userid = #{userid,jdbcType=INTEGER} AND isdel = '0'
     </select>
 
     <!--根据用户id查询当前用户被收藏总数-->
@@ -378,7 +380,8 @@
         commentsum, forwardsum, collectsum,
         isactive, activetype, activefee, iscontribute, type, ishot, orderid,
         isessence, isessencepool, coverimg, hotimgurl,
-        intime, totalpoint, isdel, essencedate,userid,oprtime
+        intime, totalpoint, isdel, essencedate,userid,oprtime,
+        heat_value, isheatoperate, activeid, ishot_order, city
       )
         values (#{id,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
         #{subtitle,jdbcType=VARCHAR}, #{postcontent,jdbcType=LONGVARCHAR}, #{zansum,jdbcType=INTEGER},
@@ -388,7 +391,8 @@
         #{ishot,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},
         #{isessencepool,jdbcType=INTEGER}, #{coverimg,jdbcType=VARCHAR},#{hotimgurl,jdbcType=VARCHAR},
         #{intime,jdbcType=TIMESTAMP}, #{totalpoint,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER},
-        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{oprtime,jdbcType=TIMESTAMP}
+        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{oprtime,jdbcType=TIMESTAMP},
+        #{heatvalue}, #{isheatoperate}, #{activeid}, #{ishotorder}, #{city}
       )
   </insert>
 
@@ -421,7 +425,7 @@
         circleid, title,
         postcontent, zansum, commentsum, forwardsum,
         collectsum, isactive, ishot, isessence,
-        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime, activeid, city
+        isessencepool, coverimg, intime, totalpoint, isdel, essencedate, userid,oprtime, activeid, city, heat_value
         )
         VALUES (
         #{circleid,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{postcontent,jdbcType=LONGVARCHAR},
@@ -430,7 +434,7 @@
         #{ishot,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},#{isessencepool,jdbcType=INTEGER},
         #{coverimg,jdbcType=VARCHAR},now(),#{totalpoint,jdbcType=INTEGER},#{isdel,jdbcType=INTEGER},
         #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{oprtime,jdbcType=TIMESTAMP},
-        #{activeid}, #{city}
+        #{activeid}, #{city}, #{heatvalue}
         )
     </insert>
     <!--插入一条用户参与活动的记录-->
@@ -943,6 +947,9 @@
             <if test="oprtime!=null">
                 oprtime=#{oprtime,jdbcType=TIMESTAMP}
             </if>
+            <if test="heatvalue != null">
+                heat_value=#{heatvalue}
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -1143,8 +1150,7 @@
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
         WHERE p.isdel=0 AND p.isactive=0
-        (SELECT postid FROM yw_collection WHERE postid IN (SELECT id FROM yw_post WHERE
-        userid=#{userid,jdbcType=INTEGER} AND isdel=0) AND type=0)
+        AND p.id IN (SELECT postid FROM yw_collection WHERE userid = #{userid,jdbcType=INTEGER} AND type=0)
         ORDER BY p.intime DESC
     </select>
 
@@ -1783,20 +1789,32 @@
         SELECT isessence FROM yw_post WHERE id=#{id,jdbcType=INTEGER}
     </select>
 
-    <update id="updatePostChoiceness" parameterType="com.movision.mybatis.post.entity.PostTo">
-        UPDATE yw_post SET
-        <if test="essencedate != null">
-            essencedate = #{essencedate,jdbcType=DATE},
-        </if>
-        <if test="subtitle!=null">
-            subtitle=#{subtitle,jdbcType=VARCHAR},
-        </if>
-        <if test="orderid!=null">
-            orderid=#{orderid,jdbcType=INTEGER},
-        </if>
-        isessencepool=0
+    <update id="updatePostChoiceness" parameterType="java.util.Map">
+        UPDATE yw_post
+        <set>
+            <if test="isessence != null">
+                isessence = #{isessence,jdbcType=INTEGER},
+            </if>
+            <if test="ishot != null">
+                ishot = #{ishot,jdbcType=INTEGER}
+            </if>
+        </set>
+        WHERE id=#{id,jdbcType=INTEGER} AND isdel=0
+    </update>
+
+    <update id="updatePostByHeatValue" parameterType="java.util.Map">
+        UPDATE yw_post
+        <set>
+            <if test="heatValue != null">
+                heat_value = heat_value + #{heatValue,jdbcType=INTEGER}
+            </if>
+        </set>
         WHERE id=#{id,jdbcType=INTEGER} AND isessence=1 AND isdel=0
     </update>
+
+    <select id="queryPostHeate" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT heat_value FROM yw_post WHERE isdel = 0 AND id = #{id,jdbcType=INTEGER}
+    </select>
 
     <select id="findAllQueryCollectPostList" parameterType="java.lang.String"
             resultType="com.movision.mybatis.post.entity.PostList">
@@ -1994,7 +2012,9 @@
         DESC
     </select>
     <select id="findAllPostByid" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT p.*,c.name AS circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.id IN
+        SELECT p.*,c.name AS circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE 1=1
+        <if test="list != null and list.size>0">
+            AND p.id IN
         <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
@@ -2003,6 +2023,8 @@
             #{item}
         </foreach>
         )
+        </if>
+        <if test="list==null or list.size==0">and 1=0</if>
     </select>
     <select id="findAllUserPostList" resultType="com.movision.mybatis.post.entity.PostVo"
             parameterType="java.lang.Integer">
@@ -2059,7 +2081,7 @@
 
 
     <select id="findAllHotCommentPostInCurrentMonth" resultType="com.movision.mybatis.post.entity.PostVo">
-        SELECT p.id, p.title, COUNT(c.id) AS commentCount, p.coverimg,
+        SELECT p.id, p.title, COUNT(c.id) AS commentsum, p.coverimg,
         p.userid, p.intime, u.nickname, u.photo, p.circleid, p.activeid,
         ci.name AS circlename
         FROM yw_post p
@@ -2068,7 +2090,7 @@
         LEFT JOIN yw_circle ci ON p.circleid = ci.id
         WHERE DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
         AND p.isdel = 0 and p.isactive = 0
-        GROUP BY p.id ORDER BY commentCount DESC
+        GROUP BY p.id ORDER BY commentsum DESC
     </select>
 
     <select id="findAllMostZanPostInAll" resultType="com.movision.mybatis.post.entity.PostVo">
@@ -2148,9 +2170,13 @@
         SELECT userid FROM yw_post WHERE id=#{postid,jdbcType=INTEGER}
     </select>
     <select id="findUserPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
-        select yw_post.*,yw_user.nickname,yw_user.photo,yw_circle.`name` AS circlename from yw_post LEFT JOIN yw_user ON
-        yw_user.id=yw_post.userid LEFT JOIN yw_circle ON yw_circle.id=yw_post.circleid
-        WHERE yw_post.userid=#{postuserid,jdbcType=INTEGER} AND yw_post.isdel=0 ORDER BY yw_post.heat_value DESC
+        select yw_post.*,yw_user.nickname,yw_user.photo,yw_circle.`name` AS circlename
+        from yw_post
+        LEFT JOIN yw_user ON yw_user.id=yw_post.userid
+        LEFT JOIN yw_circle ON yw_circle.id=yw_post.circleid
+        WHERE yw_post.userid=#{postuserid,jdbcType=INTEGER}
+        AND yw_post.isdel=0
+        ORDER BY yw_post.heat_value DESC
     </select>
     <select id="findPostByLabelId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT labelid FROM yw_post_label_relation WHERE postid=#{postid,jdbcType=INTEGER}
@@ -2225,4 +2251,18 @@
     <select id="selectUserHeatValue" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT heat_value FROM  yw_user WHERE id=#{userid,jdbcType=INTEGER}
     </select>
+    <select id="queryPost" parameterType="java.lang.Integer" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT  * FROM  yw_post WHERE  id=#{postid,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryPostListByHeatValue" resultType="com.movision.mybatis.post.entity.PostVo">
+        select * FROM yw_post where isdel = 0 order by heat_value DESC ;
+    </select>
+
+    <select id="queryxiaojijiPostForTest" resultType="com.movision.mybatis.post.entity.Post"
+            parameterType="java.lang.String">
+        SELECT * FROM yw_post where title LIKE concat('%',#{title},'%')
+    </select>
+
+
 </mapper>

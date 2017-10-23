@@ -1,6 +1,7 @@
 package com.movision.facade.boss;
 
 import com.ibm.icu.text.SimpleDateFormat;
+import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.combo.entity.Combo;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
 import com.movision.mybatis.goods.entity.Goods;
@@ -136,34 +137,34 @@ public class GoodsListFacade {
                                              String pai, String mintime, String maxtime, Paging<GoodsVo> pager) {
 
         Map<String, Object> map = new HashMap<>();
-        if (name != null) {
+        if (StringUtil.isNotEmpty(name)) {
             map.put("name", name);
         }
-        if (producttags != null) {
+        if (StringUtil.isNotEmpty(producttags)) {
             map.put("producttags", producttags);
         }
-        if (brand != null) {
-            map.put("band", brand);
+        if (StringUtil.isNotEmpty(brand)) {
+            map.put("brandid", brand);
         }
-        if (protype != null) {
+        if (StringUtil.isNotEmpty(protype)) {
             map.put("protype", protype);
         }
-        if (isdel != null) {
+        if (StringUtil.isNotEmpty(isdel)) {
             map.put("isdel", isdel);
         }
-        if (allstatue != null) {
+        if (StringUtil.isNotEmpty(allstatue)) {
             map.put("allstatue", allstatue);
         }
-        if (minorigprice != null) {
+        if (StringUtil.isNotEmpty(minorigprice)) {
             map.put("minorigprice", minorigprice);
         }
-        if (maxorigprice != null) {
+        if (StringUtil.isNotEmpty(maxorigprice)) {
             map.put("maxorigprice", maxorigprice);
         }
 
         Date isessencetime = null;//开始时间
         java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
-        if (mintime != null) {
+        if (StringUtil.isNotEmpty(mintime)) {
             try {
                 isessencetime = format.parse(mintime);
             } catch (ParseException e) {
@@ -172,7 +173,7 @@ public class GoodsListFacade {
         }
         map.put("mintime", isessencetime);
         Date max = null;//最大时间
-        if (maxtime != null) {
+        if (StringUtil.isNotEmpty(maxtime)) {
             try {
                 max = format.parse(maxtime);
             } catch (ParseException e) {
@@ -879,16 +880,21 @@ public class GoodsListFacade {
             goodsComboVo.setImgurl(imgurl);
         }
         int res = goodsService.updateComDetail(goodsComboVo);
-        String productids[] = goodsid.split(",");
-        int re = goodsService.deleteComGoodsT(Integer.parseInt(comboid));
         int result = 0;
-        GoodsCombo good = new GoodsCombo();
-        good.setComboid(Integer.parseInt(comboid));
-        String goods;
-        for (int i = 0; i < productids.length; i++) {
-            goods = productids[i];
-            good.setGoodsid(Integer.parseInt(goods));
-            result = goodsService.addGoods(good);
+        int re = 0;
+        //更新套餐中的商品操作
+        if (StringUtil.isNotEmpty(goodsid)) {
+            //删除套餐中的商品操作
+            re = goodsService.deleteComGoodsT(Integer.parseInt(comboid));
+            String productids[] = goodsid.split(",");
+            GoodsCombo good = new GoodsCombo();
+            good.setComboid(Integer.parseInt(comboid));
+            String goods;
+            for (int i = 0; i < productids.length; i++) {
+                goods = productids[i];
+                good.setGoodsid(Integer.parseInt(goods));
+                result = goodsService.addGoods(good);
+            }
         }
         Map<String, Integer> map = new HashMap<>();
         map.put("res", res);

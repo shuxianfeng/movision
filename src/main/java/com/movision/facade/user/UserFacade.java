@@ -22,9 +22,9 @@ import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.entity.*;
 import com.movision.mybatis.user.service.UserService;
-import com.movision.shiro.realm.ShiroRealm;
+import com.movision.mybatis.userRefreshRecord.entity.UserReflushCount;
+import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.DateUtils;
-import com.movision.utils.ListUtil;
 import com.movision.utils.UserBadgeUtil;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
@@ -69,8 +69,6 @@ public class UserFacade {
     private FacadeHeatValue facadeHeatValue;
 
     @Autowired
-    private FacadePost facadePost;
-    @Autowired
     private CollectionService collectionService;
     @Autowired
     private PostZanRecordService postZanRecordService;
@@ -81,6 +79,9 @@ public class UserFacade {
     @Autowired
     private UserBadgeUtil userBadgeUtil;
 
+    @Autowired
+    private UserRefreshRecordService userRefreshRecordService;
+
     /**
      * 判断是否存在该手机号的app用户
      *
@@ -89,17 +90,6 @@ public class UserFacade {
      */
     public Boolean isExistAccount(String phone) {
         return userService.isExistAccount(phone);
-    }
-
-
-    /**
-     * 注册新的app用户
-     *
-     * @param registerUser
-     * @return
-     */
-    public int registerAccount(RegisterUser registerUser) {
-        return userService.registerAccount(registerUser);
     }
 
     /**
@@ -208,15 +198,8 @@ public class UserFacade {
         if (null == loginUser) {
             throw new AuthException(MsgCodeConstant.app_user_not_exist, "该手机号的用户不存在");
         }
-        //若app用户同时是boss系统用户，则判断该用户是app管理员（可以管理自己的圈子）
-//        BossUser bossUser = bossUserService.queryAdminUserByPhone(phone);
-//        if (null == bossUser) {
-//            loginUser.setRole("200");   //App普通用户
-//        } else {
-//            loginUser.setRole("100");   //App管理员
-//        }
-
         return loginUser;
+
     }
 
     /**
@@ -381,6 +364,7 @@ public class UserFacade {
      * 记录申请vip的时间
      */
     public void applyVip() {
+
         User user = new User();
         user.setId(ShiroUtil.getAppUserID());
         user.setApplydate(new Date());
@@ -593,11 +577,28 @@ public class UserFacade {
             if (type == 0) {//帖子
                 //查询用户发的帖子
                 list = postService.findAllUserPostList(Integer.parseInt(userid), paging);
-                for (int i = 0; i < list.size(); i++) {
-                    facadePost.countView(list);
+                List<Integer> postidList = new ArrayList<>();
+                for (PostVo postVo : list) {
+                    postidList.add(postVo.getId());
+                }
+                List<PostVo> resultList = new ArrayList<>();
+                //查询mongo中的用户浏览帖子记录
+                List<UserReflushCount> userReflushCountList = userRefreshRecordService.countPostViewCountByUserid(postidList);
+
+                for (int j = 0; j < userReflushCountList.size(); j++) {
+                    for (int i = 0; i < list.size(); i++) {
+                        if (userReflushCountList.get(j).getPostid().intValue() == list.get(i).getId().intValue()) {
+                            list.get(i).setCountview(userReflushCountList.get(j).getCount());
+                            resultList.add(list.get(i));
+                        }
+                    }
                 }
                 if (list.size() == 0) {
                     list = null;
+                }else{
+                    //如果不为空，按照发帖时间排倒叙返回结果
+                    Collections.sort(resultList, PostVo.countComparator);
+                    list = resultList;
                 }
             } else if (type == 1) {//活动
                 //活动帖子

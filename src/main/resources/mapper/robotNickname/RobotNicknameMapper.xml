@@ -57,6 +57,8 @@
     </update>
 
     <select id="queryRoboltNickname" parameterType="java.lang.Integer" resultType="java.lang.String">
-        SELECT nickname FROM yw_nickname ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
+        SELECT nickname FROM yw_nickname
+        where nickname not in (select nickname from yw_user where  <![CDATA[ id>=10001 and id<=20000 ]]> )
+        ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
     </select>
 </mapper>

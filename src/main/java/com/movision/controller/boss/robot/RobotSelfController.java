@@ -2,15 +2,10 @@ package com.movision.controller.boss.robot;
 
 import com.movision.common.Response;
 import com.movision.facade.robot.RobotFacade;
-import com.movision.mybatis.record.entity.Record;
-import com.movision.mybatis.robotComment.entity.RobotComment;
 import com.movision.mybatis.user.entity.User;
-import com.movision.mybatis.user.entity.UserVo;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import org.apache.bcel.generic.SALOAD;
-import org.apache.poi.hssf.record.RecordFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 机器人自身的管理

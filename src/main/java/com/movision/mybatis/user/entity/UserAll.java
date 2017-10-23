@@ -48,6 +48,16 @@ public class UserAll implements Serializable {
 
     private Integer attention;//关注数（用户关注外界的数量）
 
+    private Integer isdv;//是否是大V
+
+    public Integer getIsdv() {
+        return isdv;
+    }
+
+    public void setIsdv(Integer isdv) {
+        this.isdv = isdv;
+    }
+
     public Integer getAttention() {
         return attention;
     }

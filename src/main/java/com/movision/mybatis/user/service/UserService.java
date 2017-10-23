@@ -958,6 +958,28 @@ public class UserService {
         }
     }
 
+    public int queryUserPoints(int userid) {
+        try {
+            log.info("查询用户等级");
+            return userMapper.queryUserPoints(userid);
+        } catch (Exception e) {
+            log.error("查询用户等级失败", e);
+            throw e;
+        }
+    }
+
+
+    public int updateUserLevels(Map map) {
+        try {
+            log.info("修改用户等级");
+            return userMapper.updateUserLevels(map);
+        } catch (Exception e) {
+            log.error("修改用户等级失败", e);
+            throw e;
+        }
+    }
+
+
     public UserVo queryUserInfoHompage(int userid) {
         try {
             log.info("查询用户信息");
@@ -1241,6 +1263,40 @@ public class UserService {
             throw e;
         }
     }
+
+
+    public List<User> queryNotRepeatCollectRobots(Map map) {
+        try {
+            log.info("查询不重复收藏帖子的机器人用户");
+            return userMapper.queryNotRepeatCollectRobots(map);
+        } catch (Exception e) {
+            log.error("查询不重复收藏帖子的机器人用户", e);
+            throw e;
+        }
+    }
+
+
+    public List<User> queryNotRepeatZanRobots(Map map) {
+        try {
+            log.info("查询不重复点赞帖子的机器人用户");
+            return userMapper.queryNotRepeatZanRobots(map);
+        } catch (Exception e) {
+            log.error("查询不重复点赞帖子的机器人用户", e);
+            throw e;
+        }
+    }
+
+
+    public List<User> queryNotRepeatFollowRandomRobots(Map map) {
+        try {
+            log.info("查询不重复关注的用户机器人用户");
+            return userMapper.queryNotRepeatRandomRobots(map);
+        } catch (Exception e) {
+            log.error("查询不重复关注的用户机器人用户", e);
+            throw e;
+        }
+    }
+
 
     /**
      * 随机查询头像

@@ -18,6 +18,66 @@ public class IndexTodayDetails implements Serializable {
 
     private String applyForNotAudit;//申请加V未审核
 
+    private Integer yesterdayPost;//昨日帖子
+
+    private Integer yesterdayOrders;//昨日订单
+
+    private Integer yesterdayActivityApply;//昨日活动报名数
+
+    private Integer yesterdayVip;//昨日新注册会员
+
+    private String yesterdayForNotAudit;//申请加V未审核
+
+    private Integer totalUser;//总用户
+
+    public String getYesterdayForNotAudit() {
+        return yesterdayForNotAudit;
+    }
+
+    public void setYesterdayForNotAudit(String yesterdayForNotAudit) {
+        this.yesterdayForNotAudit = yesterdayForNotAudit;
+    }
+
+    public Integer getTotalUser() {
+        return totalUser;
+    }
+
+    public void setTotalUser(Integer totalUser) {
+        this.totalUser = totalUser;
+    }
+
+    public Integer getYesterdayPost() {
+        return yesterdayPost;
+    }
+
+    public void setYesterdayPost(Integer yesterdayPost) {
+        this.yesterdayPost = yesterdayPost;
+    }
+
+    public Integer getYesterdayOrders() {
+        return yesterdayOrders;
+    }
+
+    public void setYesterdayOrders(Integer yesterdayOrders) {
+        this.yesterdayOrders = yesterdayOrders;
+    }
+
+    public Integer getYesterdayActivityApply() {
+        return yesterdayActivityApply;
+    }
+
+    public void setYesterdayActivityApply(Integer yesterdayActivityApply) {
+        this.yesterdayActivityApply = yesterdayActivityApply;
+    }
+
+    public Integer getYesterdayVip() {
+        return yesterdayVip;
+    }
+
+    public void setYesterdayVip(Integer yesterdayVip) {
+        this.yesterdayVip = yesterdayVip;
+    }
+
     public String getNewPost() {
         return newPost;
     }

@@ -30,8 +30,6 @@ import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.utils.DateUtils;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,8 +41,6 @@ import java.util.*;
  */
 @Service
 public class FacadeDiscover {
-
-    private static Logger log = LoggerFactory.getLogger(FacadeDiscover.class);
 
     @Autowired
     private PostLabelService postLabelService;
@@ -168,21 +164,9 @@ public class FacadeDiscover {
         //1 查找最热帖子集合
         List<PostVo> postVoList = postService.findAllHotCommentPostInAll(pager);
 
-        AddCountViewAndLabel(postVoList);
+        facadePost.findPostLabel(postVoList);
 
         return postVoList;
-    }
-
-    /**
-     * 统计浏览数和标签
-     *
-     * @param postVoList
-     */
-    private void AddCountViewAndLabel(List<PostVo> postVoList) {
-        //2 统计浏览数（循环）
-        facadePost.countView(postVoList);
-        //3 统计标签（循环）
-        facadePost.findPostLabel(postVoList);
     }
 
     /**
@@ -194,7 +178,7 @@ public class FacadeDiscover {
     public List<PostVo> searchHotCommentPostInCurrentMonth(Paging<PostVo> pager) {
         List<PostVo> postVoList = postService.findAllHotCommentPostInCurrentMonth(pager);
 
-        AddCountViewAndLabel(postVoList);
+        facadePost.findPostLabel(postVoList);
 
         return postVoList;
     }
@@ -202,7 +186,7 @@ public class FacadeDiscover {
     public List<PostVo> searchMostZanPostListInAll(Paging<PostVo> paging) {
         List<PostVo> postVoList = postService.findAllMostZanPostInAll(paging);
 
-        AddCountViewAndLabel(postVoList);
+        facadePost.findPostLabel(postVoList);
 
         return postVoList;
     }
@@ -210,7 +194,7 @@ public class FacadeDiscover {
     public List<PostVo> searchMostZanPostListInCurrentMonth(Paging<PostVo> paging) {
         List<PostVo> postVoList = postService.findAllMostZanPostInCurrentMonth(paging);
 
-        AddCountViewAndLabel(postVoList);
+        facadePost.findPostLabel(postVoList);
 
         return postVoList;
     }
@@ -218,7 +202,7 @@ public class FacadeDiscover {
     public List<PostVo> searchMostCollectPostListInAll(Paging<PostVo> paging) {
         List<PostVo> postVoList = postService.findAllMostCollectInAll(paging);
 
-        AddCountViewAndLabel(postVoList);
+        facadePost.findPostLabel(postVoList);
 
         return postVoList;
     }
@@ -226,7 +210,7 @@ public class FacadeDiscover {
     public List<PostVo> searchMostCollectPostListInCurrentMonth(Paging<PostVo> paging) {
         List<PostVo> postVoList = postService.findAllMostCollectInCurrentMonth(paging);
 
-        AddCountViewAndLabel(postVoList);
+        facadePost.findPostLabel(postVoList);
 
         return postVoList;
     }
@@ -388,6 +372,7 @@ public class FacadeDiscover {
     public Paging<?> searchHotRange(String pageNo, String pageSize, int title, int type) {
         //总排行
         if (DiscoverConstant.HOT_RANGE_TYPE.total_range.getCode() == type) {
+
             if (DiscoverConstant.HOT_RANGE_TITLE.post_comment_list.getCode() == title) {
 
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
@@ -400,7 +385,6 @@ public class FacadeDiscover {
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
                 List<PostVo> list = searchMostViewPostInAll(pager);
                 pager.setRows(list);
-                log.debug("paging实体:" + pager.toString());
                 return pager;
 
             } else if (DiscoverConstant.HOT_RANGE_TITLE.post_zan_list.getCode() == title) {
@@ -446,6 +430,7 @@ public class FacadeDiscover {
 
         //月排行
         if (DiscoverConstant.HOT_RANGE_TYPE.month_range.getCode() == type) {
+
             if (DiscoverConstant.HOT_RANGE_TITLE.post_comment_list.getCode() == title) {
 
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
@@ -458,7 +443,6 @@ public class FacadeDiscover {
                 Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
                 List<PostVo> list = searchMostViewPostInCurrentMonth(pager);
                 pager.setRows(list);
-                log.debug("paging实体:" + pager.toString());
                 return pager;
 
             } else if (DiscoverConstant.HOT_RANGE_TITLE.post_zan_list.getCode() == title) {

@@ -6,6 +6,7 @@ import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.activeH5.entity.ActiveH5;
 import com.movision.mybatis.activeH5.entity.ActiveH5Vo;
 import com.movision.mybatis.activeH5.service.ActiveH5Service;
+import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.mybatis.take.entity.Take;
 import com.movision.mybatis.take.entity.TakeVo;
 import com.movision.mybatis.take.service.TakeService;
@@ -51,6 +52,9 @@ public class VoteFacade {
 
     @Autowired
     private UploadFacade uploadFacade;
+
+    @Autowired
+    private SystemLayoutService systemLayoutService;
 
     @Autowired
     private PageFacade pageFacade;
@@ -311,6 +315,8 @@ public class VoteFacade {
         if (StringUtil.isNotEmpty(mark)) {
             take.setMark(Integer.parseInt(mark));
         }
+        //查询该活动的该号码是否已经有投票，有把序号修改为变更序号
+        votingrecordsService.updateIsVote(take);
         takeService.updateTakeById(take);
     }
 
@@ -578,7 +584,10 @@ public class VoteFacade {
             String url = m.get("url").toString();
             int idx = url.lastIndexOf("/");
             String name = url.substring(idx + 1, url.length());
-            name = uploadFacade.getConfigVar("vote.incise.domain") + name;
+            //获取图片绝对路径
+            String voturl = systemLayoutService.queryServiceUrl("vote_incision_img_url");
+            //name = uploadFacade.getConfigVar("vote.incise.domain") + name;
+            name = voturl + name;
             Map t = movisionOssClient.uploadFileObject(new File(name), "img", "voteimg");
             m.put("url", t.get("url"));
             list.add(m);
