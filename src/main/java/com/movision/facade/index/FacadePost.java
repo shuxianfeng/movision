@@ -1407,7 +1407,7 @@ public class FacadePost {
                     posts.add(post);//把mongodb转为post实体
                 }
                 list.removeAll(posts);
-                list = NotLoginretuenList(list, 1, device, -1);
+                //list = NotLoginretuenList(list, 1, device, -1);
             }
             list = NotLoginretuenList(list, 1, device, -1);
             return list;
@@ -1548,12 +1548,12 @@ public class FacadePost {
                         posts.add(post);//把mongodb转为post实体
                     }
                     list.removeAll(posts);
-                    Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
+                    /**Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
                     list = new ArrayList<PostVo>(linkedHashSet);
                     ComparatorChain chain = new ComparatorChain();
                     chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
                     Collections.sort(list, chain);
-                    list = NotLoginretuenList(list, 3, device, -1);
+                     list = NotLoginretuenList(list, 3, device, -1);*/
                 }
                 Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
                 list = new ArrayList<PostVo>(linkedHashSet);
@@ -1631,7 +1631,7 @@ public class FacadePost {
 
                 }
                 list.removeAll(posts);
-                list = NotLoginretuenList(list, 4, device, -1);
+                //  list = NotLoginretuenList(list, 4, device, -1);
             }
             list = NotLoginretuenList(list, 4, device, -1);
             return list;
@@ -1735,7 +1735,7 @@ public class FacadePost {
                     posts.add(post);//把mongodb转为post实体
                 }
                 list.removeAll(posts);
-                list = NotLoginretuenList(list, 5, device, labelid);
+                //list = NotLoginretuenList(list, 5, device, labelid);
             }
             list = NotLoginretuenList(list, 5, device, labelid);
             return list;
