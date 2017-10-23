@@ -41,7 +41,7 @@ public class MyVipController {
     @RequestMapping(value = "apply_vip", method = RequestMethod.POST)
     public Response applyVip() {
         Response response = new Response();
-        //1 记录第一次申请时间
+        //1 记录最新一次申请时间
         userFacade.applyVip();
         //2 记录此次申请记录
         vipFacade.addVipApplyRecord();

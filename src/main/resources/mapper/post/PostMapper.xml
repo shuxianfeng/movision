@@ -380,7 +380,8 @@
         commentsum, forwardsum, collectsum,
         isactive, activetype, activefee, iscontribute, type, ishot, orderid,
         isessence, isessencepool, coverimg, hotimgurl,
-        intime, totalpoint, isdel, essencedate,userid,oprtime
+        intime, totalpoint, isdel, essencedate,userid,oprtime,
+        heat_value, isheatoperate, activeid, ishot_order, city
       )
         values (#{id,jdbcType=INTEGER}, #{circleid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
         #{subtitle,jdbcType=VARCHAR}, #{postcontent,jdbcType=LONGVARCHAR}, #{zansum,jdbcType=INTEGER},
@@ -390,7 +391,8 @@
         #{ishot,jdbcType=INTEGER}, #{orderid,jdbcType=INTEGER},#{isessence,jdbcType=INTEGER},
         #{isessencepool,jdbcType=INTEGER}, #{coverimg,jdbcType=VARCHAR},#{hotimgurl,jdbcType=VARCHAR},
         #{intime,jdbcType=TIMESTAMP}, #{totalpoint,jdbcType=INTEGER}, #{isdel,jdbcType=INTEGER},
-        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{oprtime,jdbcType=TIMESTAMP}
+        #{essencedate,jdbcType=DATE},#{userid,jdbcType=INTEGER},#{oprtime,jdbcType=TIMESTAMP},
+        #{heatvalue}, #{isheatoperate}, #{activeid}, #{ishotorder}, #{city}
       )
   </insert>
 
@@ -2257,8 +2259,9 @@
         select * FROM yw_post where isdel = 0 order by heat_value DESC ;
     </select>
 
-    <select id="queryxiaojijiPostForTest" resultType="com.movision.mybatis.post.entity.Post">
-        SELECT * FROM yw_post where title = '小鸡鸡'
+    <select id="queryxiaojijiPostForTest" resultType="com.movision.mybatis.post.entity.Post"
+            parameterType="java.lang.String">
+        SELECT * FROM yw_post where title LIKE concat('%',#{title},'%')
     </select>
 
 

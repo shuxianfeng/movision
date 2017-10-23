@@ -1760,7 +1760,17 @@ public class PostService {
         }
     }
 
-    public Post queryxiaojijiPostForTest() {
-        return postMapper.queryxiaojijiPostForTest();
+    public Post queryxiaojijiPostForTest(String title) {
+        return postMapper.queryxiaojijiPostForTest(title);
+    }
+
+    public void insertPost(Post post) {
+        try {
+            log.info("插入Post");
+            postMapper.insert(post);
+        } catch (Exception e) {
+            log.error("插入Post失败", e);
+            throw e;
+        }
     }
 }

@@ -309,5 +309,5 @@ public interface PostMapper {
 
     List<PostVo> queryPostListByHeatValue();
 
-    Post queryxiaojijiPostForTest();
+    Post queryxiaojijiPostForTest(String title);
 }
