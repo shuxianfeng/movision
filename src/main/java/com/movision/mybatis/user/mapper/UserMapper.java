@@ -151,6 +151,8 @@ public interface UserMapper {
 
     int queryUserPoints(int userid);
 
+    int updateUserLevels(Map map);
+
     UserVo queryUserInfoHompage(int userid);
 
     void accusationUser(Map<String, Object> map);

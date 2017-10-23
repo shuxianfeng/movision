@@ -1604,4 +1604,7 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         SELECT * FROM yw_user
         where photo = 'http://pic.mofo.shop/upload/person/img/logo%403x.png'
     </select>
+    <update id="updateUserLevels" parameterType="java.util.Map">
+        UPDATE yw_user SET level=#{le,jdbcType=INTEGER} WHERE id=#{userid,jdbcType=INTEGER}
+    </update>
 </mapper>

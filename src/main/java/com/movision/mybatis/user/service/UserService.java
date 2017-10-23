@@ -968,6 +968,18 @@ public class UserService {
         }
     }
 
+
+    public int updateUserLevels(Map map) {
+        try {
+            log.info("修改用户等级");
+            return userMapper.updateUserLevels(map);
+        } catch (Exception e) {
+            log.error("修改用户等级失败", e);
+            throw e;
+        }
+    }
+
+
     public UserVo queryUserInfoHompage(int userid) {
         try {
             log.info("查询用户信息");

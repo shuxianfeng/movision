@@ -4,6 +4,7 @@ import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
+import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.orders.entity.Orders;
 import com.movision.mybatis.orders.service.OrderService;
 import com.movision.mybatis.pointRecord.entity.DailyTask;
@@ -44,6 +45,8 @@ public class PointRecordFacade {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserFacade userFacade;
 
 
 
@@ -119,6 +122,16 @@ public class PointRecordFacade {
             //新增个人积分
             addPersonPointInDbAndSession(new_point, userid);
         }
+
+        //判断用户等级
+        Map map = new HashMap();
+        int point = userService.queryUserLevel(userid);
+        Map<String, Integer> resmap = userFacade.getLev(point);
+        int le = resmap.get("lev");
+        map.put("le", le);
+        map.put("userid", userid);
+        userService.updateUserLevels(map);
+
     }
 
     /**
@@ -151,6 +164,15 @@ public class PointRecordFacade {
                     doSelectedPointProcess(type, userid, PointConstant.POINT.index_selected.getCode());
                 }
             }
+            //判断用户等级
+            Map umap = new HashMap();
+            int point = userService.queryUserLevel(userid);
+            Map<String, Integer> resmap = userFacade.getLev(point);
+            int le = resmap.get("lev");
+            umap.put("le", le);
+            umap.put("userid", userid);
+            userService.updateUserLevels(umap);
+
         }
     }
 
