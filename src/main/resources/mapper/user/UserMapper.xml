@@ -628,11 +628,12 @@
     <select id="findAlllikeQueryPostByNickname" resultType="com.movision.mybatis.user.entity.UserLike"
             parameterType="java.util.Map">
         SELECT u.nickname,u.id FROM yw_user u WHERE
+        <![CDATA[ (u.id > 20000 OR u.id < 10000)]]>
         <if test="name!=null">
-            nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+            AND u.nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
         <if test="name == null">
-            nickname LIKE concat('%','','%')
+            AND u.nickname LIKE concat('%','','%')
         </if>
         AND u.status=0 AND phone IS NOT NULL
         <if test="loginid != null">
@@ -668,8 +669,8 @@
         applydate
         FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id
-        WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 AND u.phone IS NOT NULL AND (u.id<![CDATA[>=]]>20000 OR u.id
-        <![CDATA[<]]>10000) ORDER BY vd.apply_time DESC
+        WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 AND u.phone IS NOT NULL AND (u.id <![CDATA[>]]> 20000 OR u.id
+        <![CDATA[<]]> 10000) ORDER BY vd.apply_time DESC
     </select>
 
     <!-- 查看VIP列表-->
@@ -687,7 +688,7 @@
         zansum,u.fans,(SELECT apply_time FROM yw_apply_vip_detail WHERE userid = u.id ORDER BY userid,apply_time DESC
         LIMIT 1) AS applydate,au.authstatus
         FROM yw_user u LEFT JOIN yw_autonym_authentication au ON au.userid=u.id
-        WHERE isdv>0 AND status=0 AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]> ORDER BY intime
+        WHERE isdv>0 AND status=0 AND <![CDATA[ (u.id > 20000 OR u.id < 10000)]]> ORDER BY intime
     </select>
 
     <!-- 根据条件查询vip列表  -->
@@ -706,7 +707,7 @@
         zansum,u.fans,vd.apply_time AS applydate,au.authstatus
         FROM (yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id) LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id WHERE u.isdv>0 AND u.status=0
-        AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        AND <![CDATA[ (u.id > 20000 OR u.id < 10000)]]>
         <if test="name!=null">
             AND u.nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
@@ -744,7 +745,8 @@
     </select>
 
     <select id="findAllQueryCircleManList" resultType="com.movision.mybatis.user.entity.User">
-        SELECT id,nickname FROM yw_user WHERE status=0 AND  nickname IS NOT NULL AND phone IS NOT NULL
+        SELECT id,nickname FROM yw_user WHERE <![CDATA[ (id > 20000 OR id < 10000)]]> AND status=0 AND nickname IS NOT
+        NULL AND phone IS NOT NULL
     </select>
 
     <select id="findAllqueryAddVSortUser" resultType="com.movision.mybatis.user.entity.UserVo"
@@ -762,7 +764,7 @@
         zansum,u.fans,u.applydate
         <if test="time!=null">
             FROM yw_user u LEFT JOIN yw_audit_vip_detail vd ON vd.apply_userid=u.id WHERE u.level>0 AND u.status=0 AND
-            vd.status=0 AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]> ORDER BY vd.audit_time DESC
+            vd.status=0 AND <![CDATA[ (u.id > 20000 OR u.id < 10000)]]> ORDER BY vd.audit_time DESC
         </if>
         <if test="grade!=null">
             FROM yw_user u WHERE u.level>0 AND u.status=0 AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]> ORDER
@@ -791,7 +793,7 @@
         FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id
         WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 AND u.phone IS NOT NULL
-        AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        AND <![CDATA[ (u.id > 20000 OR u.id < 10000)]]>
         <if test="username!=null">
             AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
         </if>
@@ -841,7 +843,7 @@
         ON
         au.userid=u.id
         WHERE vd.apply_userid=u.id AND u.phone IS NOT NULL
-        AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        AND <![CDATA[ (u.id > 20000 OR u.id< 10000)]]>
         <if test="username!=null">
             AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
         </if>
@@ -883,7 +885,7 @@
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isactive=0) AS postsum,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1 AND isactive=0) AS isessencesum
         FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE
-        <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        <![CDATA[ (u.id > 20000 OR u.id < 10000)]]>
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>
@@ -1031,7 +1033,7 @@
     <select id="queryAllTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT count(u.id)
         FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE
-        <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        <![CDATA[ (u.id > 20000 OR u.id < 10000)]]>
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>
@@ -1240,7 +1242,7 @@
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1) AS isessencesum
         FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE u.id IN
         (SELECT userid FROM yw_follow_circle fc WHERE fc.circleid=#{circleid,jdbcType=INTEGER} AND u.status=0 AND
-        u.phone IS NOT NULL
+        u.phone IS NOT NULL AND <![CDATA[ (fc.userid > 20000 OR fc.userid < 10000) ]]>
         <if test="type!=null">
             AND date(fc.intime) = curdate()
         </if>
@@ -1387,7 +1389,7 @@
     <select id="findAllMostFansAuthorInAll" resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT id, nickname, photo, fans
         FROM yw_user
-        WHERE STATUS = 0
+        WHERE STATUS = 0 AND <![CDATA[ (id > 20000 OR id < 10000)]]>
         ORDER BY fans DESC
     </select>
 
@@ -1395,7 +1397,7 @@
         SELECT u.id, u.nickname, u.photo, u.fans
         FROM yw_user u
         JOIN yw_follow_user fu ON u.id = fu.interestedusers
-        WHERE u.status = 0
+        WHERE u.status = 0 AND <![CDATA[ (u.id > 20000 OR u.id < 10000) ]]>
         AND DATE_FORMAT( fu.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
         GROUP BY u.id
         ORDER BY u.fans DESC
@@ -1406,6 +1408,7 @@
         FROM yw_user u
         LEFT JOIN yw_post_comment c ON u.id = c.userid
         WHERE u.status = 0
+        AND <![CDATA[ (u.id > 20000 OR u.id < 10000) ]]>
         AND c.isdel = 0
         AND c.status = 1
         GROUP BY u.id
@@ -1417,6 +1420,7 @@
         FROM yw_user u
         LEFT JOIN yw_post_comment c ON u.id = c.userid
         WHERE u.status = 0
+        AND <![CDATA[ (u.id > 20000 OR u.id < 10000) ]]>
         AND c.isdel = 0
         AND c.status = 1
         AND DATE_FORMAT( c.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
@@ -1429,6 +1433,7 @@
         FROM yw_user u
         LEFT JOIN yw_post p ON u.id = p.userid
         WHERE u.status = 0
+        AND <![CDATA[ (u.id > 20000 OR u.id < 10000) ]]>
         AND p.isdel = 0 AND p.isactive = 0
         GROUP BY u.id
         ORDER BY postsum DESC
@@ -1439,6 +1444,7 @@
         FROM yw_user u
         LEFT JOIN yw_post p ON u.id = p.userid
         WHERE u.status = 0
+        AND <![CDATA[ (u.id > 20000 OR u.id < 10000) ]]>
         AND p.isdel = 0 AND p.isactive = 0
         AND DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
         GROUP BY u.id
@@ -1490,6 +1496,7 @@
     <select id="queryUserByName" parameterType="java.lang.String" resultType="com.movision.mybatis.user.entity.User">
         select id, nickname, photo from yw_user
         where status = 0
+        AND <![CDATA[ (id > 20000 OR id < 10000) ]]>
         and nickname like concat('%',#{nickname,jdbcType=VARCHAR},'%')
         limit 4
     </select>
@@ -1497,6 +1504,7 @@
     <select id="findAllUserByName" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.User">
         select * from yw_user
         where status = 0
+        AND <![CDATA[ (id > 20000 OR id < 10000) ]]>
         and nickname like concat('%',#{name,jdbcType=VARCHAR},'%')
     </select>
 
@@ -1536,19 +1544,22 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         AND t.id = #{userid};
     </select>
 
+    <!-- 查找最大的机器人id -->
     <select id="selectMaxRobotId" resultType="java.lang.Integer">
         select max(id)
         from yw_user u
         where
-        <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        <![CDATA[ u.id <=20000 AND u.id >= 10000 ]]>
     </select>
 
+    <!-- 查询所有机器人用户 -->
     <select id="selectRobotUser" resultType="com.movision.mybatis.user.entity.User">
         SELECT *
         FROM yw_user u where
-        <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        <![CDATA[ u.id <= 20000 AND u.id >= 10000 ]]>
     </select>
 
+    <!-- 查询机器人列表 -->
     <select id="findAllQueryRobotByList" resultType="com.movision.mybatis.user.entity.User"
             parameterType="java.lang.String">
         SELECT *
@@ -1563,37 +1574,40 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         SELECT * FROM yw_user WHERE id = #{id,jdbcType=INTEGER} AND status = 0
     </select>
 
+    <!-- 随机查询机器人 -->
     <select id="queryRandomUser" resultType="com.movision.mybatis.user.entity.User" parameterType="java.lang.Integer">
         <![CDATA[
-        SELECT * FROM yw_user u where (u.id>=20000 OR u.id< 10000) ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
+        SELECT * FROM yw_user u where u.id<=20000 AND u.id >= 10000 ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
         ]]>
     </select>
 
+    <!-- 查询不重复收藏帖子的机器人用户 -->
     <select id="queryNotRepeatCollectRobots" resultType="com.movision.mybatis.user.entity.User"
             parameterType="java.util.Map">
         SELECT u.* FROM yw_user u
-        where <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        where <![CDATA[ u.id <=20000 AND u.id >= 10000 ]]>
         and not EXISTS
         (SELECT 1 FROM yw_collection c
         where c.userid = u.id and c.postid = #{postid})
         ORDER BY RAND() LIMIT 0,#{number}
     </select>
 
-
+    <!-- 查询不重复点赞帖子的机器人用户 -->
     <select id="queryNotRepeatZanRobots" resultType="com.movision.mybatis.user.entity.User"
             parameterType="java.util.Map">
         SELECT u.* FROM yw_user u
-        where <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        where <![CDATA[ u.id <= 20000 AND u.id >= 10000 ]]>
         and not EXISTS
         (SELECT 1 FROM yw_post_zan_record r
         where r.userid = u.id and r.postid = #{postid})
         ORDER BY RAND() LIMIT 0, #{number,jdbcType=INTEGER}
     </select>
 
+    <!-- 查询不重复关注的用户机器人用户 -->
     <select id="queryNotRepeatRandomRobots" resultType="com.movision.mybatis.user.entity.User"
             parameterType="java.util.Map">
         SELECT u.* FROM yw_user u
-        where <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        where <![CDATA[ u.id <= 20000 AND u.id >= 10000 ]]>
         and not EXISTS (SELECT 1 FROM yw_follow_user f
         where f.userid = u.id
         and f.interestedusers = #{userid})
