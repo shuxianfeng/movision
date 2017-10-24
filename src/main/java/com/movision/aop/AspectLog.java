@@ -61,16 +61,13 @@ public class AspectLog {
         String queryString = request.getQueryString();
         String userAgent = request.getHeader("User-Agent");
         String[] aa = requestURL.split("/");
-//        for (int i=0; i<aa.length; i++){
-//            log.debug("请求地址数组：" + aa[i]);
-//        }
         /**
          *  正式环境 http://www.mofo.shop/movision/boss/menu/query_sidebar
          *  测试环境 http://www.51mofo.com/movision/boss/menu/query_sidebar
          *  本地环境 http://localhost:8080/app/waterfall/labelPage
          *          http://localhost:8080/api-docs
          */
-        String busitype;
+        String busitype;    //获取其中的boss, app。用于鉴别请求的端。
         if (clientIP.equals("127.0.0.1")) {
             //本地环境
             busitype = aa[3];
