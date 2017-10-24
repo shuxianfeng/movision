@@ -628,11 +628,12 @@
     <select id="findAlllikeQueryPostByNickname" resultType="com.movision.mybatis.user.entity.UserLike"
             parameterType="java.util.Map">
         SELECT u.nickname,u.id FROM yw_user u WHERE
+        <![CDATA[ (id > 20000 OR id < 10000)]]>
         <if test="name!=null">
-            nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+            AND nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
         <if test="name == null">
-            nickname LIKE concat('%','','%')
+            AND nickname LIKE concat('%','','%')
         </if>
         AND u.status=0 AND phone IS NOT NULL
         <if test="loginid != null">
@@ -668,8 +669,8 @@
         applydate
         FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id
-        WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 AND u.phone IS NOT NULL AND (u.id<![CDATA[>=]]>20000 OR u.id
-        <![CDATA[<]]>10000) ORDER BY vd.apply_time DESC
+        WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 AND u.phone IS NOT NULL AND (u.id <![CDATA[>]]> 20000 OR u.id
+        <![CDATA[<]]> 10000) ORDER BY vd.apply_time DESC
     </select>
 
     <!-- 查看VIP列表-->
@@ -687,7 +688,7 @@
         zansum,u.fans,(SELECT apply_time FROM yw_apply_vip_detail WHERE userid = u.id ORDER BY userid,apply_time DESC
         LIMIT 1) AS applydate,au.authstatus
         FROM yw_user u LEFT JOIN yw_autonym_authentication au ON au.userid=u.id
-        WHERE isdv>0 AND status=0 AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]> ORDER BY intime
+        WHERE isdv>0 AND status=0 AND <![CDATA[ (u.id > 20000 OR u.id < 10000)]]> ORDER BY intime
     </select>
 
     <!-- 根据条件查询vip列表  -->
@@ -706,7 +707,7 @@
         zansum,u.fans,vd.apply_time AS applydate,au.authstatus
         FROM (yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id) LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id WHERE u.isdv>0 AND u.status=0
-        AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        AND <![CDATA[ (u.id > 20000 OR u.id < 10000)]]>
         <if test="name!=null">
             AND u.nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
@@ -762,7 +763,7 @@
         zansum,u.fans,u.applydate
         <if test="time!=null">
             FROM yw_user u LEFT JOIN yw_audit_vip_detail vd ON vd.apply_userid=u.id WHERE u.level>0 AND u.status=0 AND
-            vd.status=0 AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]> ORDER BY vd.audit_time DESC
+            vd.status=0 AND <![CDATA[ (u.id > 20000 OR u.id < 10000)]]> ORDER BY vd.audit_time DESC
         </if>
         <if test="grade!=null">
             FROM yw_user u WHERE u.level>0 AND u.status=0 AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]> ORDER
@@ -791,7 +792,7 @@
         FROM yw_user u LEFT JOIN yw_apply_vip_detail vd ON vd.userid=u.id LEFT JOIN yw_autonym_authentication au ON
         au.userid=u.id
         WHERE vd.userid=u.id AND vd.isdel=0 AND u.status=0 AND u.phone IS NOT NULL
-        AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        AND <![CDATA[ (u.id > 20000 OR u.id < 10000)]]>
         <if test="username!=null">
             AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
         </if>
@@ -841,7 +842,7 @@
         ON
         au.userid=u.id
         WHERE vd.apply_userid=u.id AND u.phone IS NOT NULL
-        AND <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        AND <![CDATA[ (u.id > 20000 OR u.id< 10000)]]>
         <if test="username!=null">
             AND u.nickname LIKE concat('%',#{username,jdbcType=VARCHAR},'%')
         </if>
@@ -883,7 +884,7 @@
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isactive=0) AS postsum,
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1 AND isactive=0) AS isessencesum
         FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE
-        <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        <![CDATA[ (u.id > 20000 OR u.id < 10000)]]>
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>
@@ -1031,7 +1032,7 @@
     <select id="queryAllTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT count(u.id)
         FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE
-        <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        <![CDATA[ (u.id > 20000 OR u.id < 10000)]]>
         <if test="nickname!=null">
             AND u.nickname LIKE concat('%',#{nickname,jdbcType=VARCHAR},'%')
         </if>

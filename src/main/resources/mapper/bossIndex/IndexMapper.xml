@@ -13,21 +13,23 @@
   </sql>
 
     <select id="queryTheHomepageDetailsToday" resultType="com.movision.mybatis.bossIndex.entity.IndexTodayDetails">
+        <![CDATA[
         SELECT COUNT(1) AS newPost ,
-        (SELECT COUNT(1) FROM yw_user WHERE DATE(intime)=CURDATE() AND status=0) AS newMember,
+        (SELECT COUNT(1) FROM yw_user WHERE DATE(intime)=CURDATE() AND status=0 AND (id > 20000 OR id < 10000)) AS newMember,
         (SELECT COUNT(1) FROM yw_active_part WHERE DATE(intime)=CURDATE()) AS newActivityApply,
         (SELECT COUNT(1) FROM yw_orders WHERE DATE(paytime)=CURDATE() AND isdel=0) AS newOrderForm,
         (SELECT COUNT(1) FROM yw_audit_vip_detail WHERE userid IN (SELECT id FROM yw_user WHERE
         DATE(applydate)=CURDATE())) AS applyForNotAudit,
-        <![CDATA[(SELECT COUNT(1) FROM yw_user u WHERE u.status=0 AND date (u.intime) = date_sub(curdate(),interval 1 day)) AS yesterdayVip,]]>
+        (SELECT COUNT(1) FROM yw_user u WHERE u.status=0 AND date (u.intime) = date_sub(curdate(),interval 1 day) AND (id > 20000 OR id < 10000)) AS yesterdayVip,
         (SELECT COUNT(1) FROM yw_post WHERE isdel = 0 AND DATE(intime) = date_sub(curdate(),interval 1 day)) AS
         yesterdayPost,
         (SELECT COUNT(1) FROM yw_active_part WHERE DATE(intime) = date_sub(curdate(),interval 1 day)) AS
         yesterdayActivityApply,
         (SELECT COUNT(1) FROM yw_audit_vip_detail WHERE userid IN (SELECT id FROM yw_user WHERE
         DATE(applydate)=DATE_SUB(curdate(),interval 1 day))) AS yesterdayForNotAudit,
-        <![CDATA[(SELECT COUNT(1)-1 FROM yw_user WHERE status = 0 AND id>=20000 OR status = 0 AND id < 10000) AS totalUser]]>
+        (SELECT COUNT(1)-1 FROM yw_user WHERE status = 0 AND (id > 20000 OR id < 10000)) AS totalUser
         FROM yw_post WHERE date(intime)=curdate() AND isdel=0 AND isactive=0
+        ]]>
   </select>
 
     <select id="queryProcessedGoodsOrders" resultType="com.movision.mybatis.bossIndex.entity.ProcessedGoodsOrders">
