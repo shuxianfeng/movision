@@ -1577,7 +1577,7 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
     <select id="queryNotRepeatCollectRobots" resultType="com.movision.mybatis.user.entity.User"
             parameterType="java.util.Map">
         SELECT u.* FROM yw_user u
-        where <![CDATA[ u.id>=20000 AND u.id <= 10000 ]]>
+        where <![CDATA[ u.id <=20000 AND u.id >= 10000 ]]>
         and not EXISTS
         (SELECT 1 FROM yw_collection c
         where c.userid = u.id and c.postid = #{postid})
