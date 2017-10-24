@@ -1565,7 +1565,7 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
 
     <select id="queryRandomUser" resultType="com.movision.mybatis.user.entity.User" parameterType="java.lang.Integer">
         <![CDATA[
-        SELECT * FROM yw_user u where (u.id>=20000 OR u.id< 10000) ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
+        SELECT * FROM yw_user u where (u.id<=20000 OR u.id >= 10000) ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
         ]]>
     </select>
 
