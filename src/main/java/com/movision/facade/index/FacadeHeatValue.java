@@ -55,7 +55,7 @@ public class FacadeHeatValue {
                 map.put("points", points);
                 postService.updatePostHeatValue(map);
 
-                addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.home_page_selection.getCode());
+                addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.home_page_selection.getCode(), postid);
             }
         } else if (type == 2) {//帖子精选(实时ok)
             int hot = postService.queryPostHotHeat(postid);
@@ -64,7 +64,7 @@ public class FacadeHeatValue {
                 map.put("points", points);
                 postService.updatePostHeatValue(map);
 
-                addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.circle_selection.getCode());
+                addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.circle_selection.getCode(), postid);
             }
         } else if (type == 3) {//点赞(实时ok)
             int level = userLevels(userid);
@@ -72,7 +72,7 @@ public class FacadeHeatValue {
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
-            addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.zan_number.getCode());
+            addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.zan_number.getCode(), postid);
 
         } else if (type == 4) {//评论ok
             //查询这个帖子的所有评论的热度值
@@ -81,7 +81,7 @@ public class FacadeHeatValue {
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
-            addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.comments_number.getCode());
+            addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.comments_number.getCode(), postid);
 
         } else if (type == 5) {//转发(实时ok)
             int level = userLevels(userid);
@@ -89,7 +89,7 @@ public class FacadeHeatValue {
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
-            addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.forwarding_number.getCode());
+            addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.forwarding_number.getCode(), postid);
 
         } else if (type == 6) {//收藏(实时ok)
             int level = userLevels(userid);
@@ -97,7 +97,7 @@ public class FacadeHeatValue {
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
-            addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.collection_number.getCode());
+            addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.collection_number.getCode(), postid);
 
         } else if (type == 7) {//打赏(实时ok)
             int level = userLevels(userid);
@@ -105,25 +105,26 @@ public class FacadeHeatValue {
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
-            addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.reward_post.getCode());
+            addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.reward_post.getCode(), postid);
 
         } else if (type == 8) {//帖子浏览数
             points = HeatValueConstant.POINT.view_post.getCode();
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
-            addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.view_post.getCode());
+            addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.view_post.getCode(), postid);
         }
 
     }
 
-    private void addPostHeatvalueRecord(int userid, int points, int type) {
+    private void addPostHeatvalueRecord(int userid, int points, int type, int postid) {
         PostHeatvalueRecord postHeatvalueRecord = new PostHeatvalueRecord();
         postHeatvalueRecord.setIntime(new Date());  //时间戳
         postHeatvalueRecord.setHeatValue(points);   //变动的热度
         postHeatvalueRecord.setIsadd(0);    //0表示增加
         postHeatvalueRecord.setIsdel(0);    //0表示未删除
         postHeatvalueRecord.setUserid(userid);    //操作的用户id
+        postHeatvalueRecord.setPostid(postid);
         postHeatvalueRecord.setType(type);    //操作的类型
 
         postHeatvalueRecordService.add(postHeatvalueRecord);
