@@ -659,15 +659,15 @@ public class CircleFacade {
         return userService.queryCircleManList();
     }
 
-    /**
+   /* *//**
      * 查询发帖人
      *
      * @param
      * @return
-     */
+     *//*
     public List<BossUser> queryIssuePostManList() {
         return userService.queryIssuePostManList();
-    }
+    }*/
 
 
     /**

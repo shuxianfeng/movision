@@ -655,12 +655,12 @@ public class PostController {
         response.setData(list);
         return response;
     }
-
-    /**
+/*
+    *//**
      * 查询发帖人
      *
      * @return
-     */
+     *//*
     @ApiOperation(value = "查询发帖人", notes = "用于查询发帖人列表接口", response = Response.class)
     @RequestMapping(value = "query_issue_post", method = RequestMethod.POST)
     public Response queryIssuePostManList() {
@@ -671,7 +671,7 @@ public class PostController {
         }
         response.setData(list);
         return response;
-    }
+    }*/
 
 
 

@@ -628,12 +628,12 @@
     <select id="findAlllikeQueryPostByNickname" resultType="com.movision.mybatis.user.entity.UserLike"
             parameterType="java.util.Map">
         SELECT u.nickname,u.id FROM yw_user u WHERE
-        <![CDATA[ (id > 20000 OR id < 10000)]]>
+        <![CDATA[ (u.id > 20000 OR u.id < 10000)]]>
         <if test="name!=null">
-            AND nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+            AND u.nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         </if>
         <if test="name == null">
-            AND nickname LIKE concat('%','','%')
+            AND u.nickname LIKE concat('%','','%')
         </if>
         AND u.status=0 AND phone IS NOT NULL
         <if test="loginid != null">
@@ -745,7 +745,8 @@
     </select>
 
     <select id="findAllQueryCircleManList" resultType="com.movision.mybatis.user.entity.User">
-        SELECT id,nickname FROM yw_user WHERE status=0 AND  nickname IS NOT NULL AND phone IS NOT NULL
+        SELECT id,nickname FROM yw_user WHERE <![CDATA[ (id > 20000 OR id < 10000)]]> AND status=0 AND nickname IS NOT
+        NULL AND phone IS NOT NULL
     </select>
 
     <select id="findAllqueryAddVSortUser" resultType="com.movision.mybatis.user.entity.UserVo"
@@ -1241,7 +1242,7 @@
         (SELECT COUNT(1) FROM yw_post WHERE isdel=0 AND userid=u.id AND isessence=1) AS isessencesum
         FROM yw_user u LEFT JOIN yw_autonym_authentication aut ON aut.userid=u.id WHERE u.id IN
         (SELECT userid FROM yw_follow_circle fc WHERE fc.circleid=#{circleid,jdbcType=INTEGER} AND u.status=0 AND
-        u.phone IS NOT NULL
+        u.phone IS NOT NULL AND <![CDATA[ (fc.userid > 20000 OR fc.userid < 10000) ]]>
         <if test="type!=null">
             AND date(fc.intime) = curdate()
         </if>
@@ -1388,7 +1389,7 @@
     <select id="findAllMostFansAuthorInAll" resultType="com.movision.mybatis.user.entity.UserVo">
         SELECT id, nickname, photo, fans
         FROM yw_user
-        WHERE STATUS = 0
+        WHERE STATUS = 0 AND <![CDATA[ (id > 20000 OR id < 10000)]]>
         ORDER BY fans DESC
     </select>
 
@@ -1396,7 +1397,7 @@
         SELECT u.id, u.nickname, u.photo, u.fans
         FROM yw_user u
         JOIN yw_follow_user fu ON u.id = fu.interestedusers
-        WHERE u.status = 0
+        WHERE u.status = 0 AND <![CDATA[ (u.id > 20000 OR u.id < 10000) ]]>
         AND DATE_FORMAT( fu.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
         GROUP BY u.id
         ORDER BY u.fans DESC
@@ -1407,6 +1408,7 @@
         FROM yw_user u
         LEFT JOIN yw_post_comment c ON u.id = c.userid
         WHERE u.status = 0
+        AND <![CDATA[ (u.id > 20000 OR u.id < 10000) ]]>
         AND c.isdel = 0
         AND c.status = 1
         GROUP BY u.id
@@ -1418,6 +1420,7 @@
         FROM yw_user u
         LEFT JOIN yw_post_comment c ON u.id = c.userid
         WHERE u.status = 0
+        AND <![CDATA[ (u.id > 20000 OR u.id < 10000) ]]>
         AND c.isdel = 0
         AND c.status = 1
         AND DATE_FORMAT( c.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
@@ -1430,6 +1433,7 @@
         FROM yw_user u
         LEFT JOIN yw_post p ON u.id = p.userid
         WHERE u.status = 0
+        AND <![CDATA[ (u.id > 20000 OR u.id < 10000) ]]>
         AND p.isdel = 0 AND p.isactive = 0
         GROUP BY u.id
         ORDER BY postsum DESC
@@ -1440,6 +1444,7 @@
         FROM yw_user u
         LEFT JOIN yw_post p ON u.id = p.userid
         WHERE u.status = 0
+        AND <![CDATA[ (u.id > 20000 OR u.id < 10000) ]]>
         AND p.isdel = 0 AND p.isactive = 0
         AND DATE_FORMAT( p.intime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
         GROUP BY u.id
@@ -1491,6 +1496,7 @@
     <select id="queryUserByName" parameterType="java.lang.String" resultType="com.movision.mybatis.user.entity.User">
         select id, nickname, photo from yw_user
         where status = 0
+        AND <![CDATA[ (id > 20000 OR id < 10000) ]]>
         and nickname like concat('%',#{nickname,jdbcType=VARCHAR},'%')
         limit 4
     </select>
@@ -1498,6 +1504,7 @@
     <select id="findAllUserByName" parameterType="java.util.Map" resultType="com.movision.mybatis.user.entity.User">
         select * from yw_user
         where status = 0
+        AND <![CDATA[ (id > 20000 OR id < 10000) ]]>
         and nickname like concat('%',#{name,jdbcType=VARCHAR},'%')
     </select>
 

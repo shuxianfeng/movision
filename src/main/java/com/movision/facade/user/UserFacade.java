@@ -398,9 +398,6 @@ public class UserFacade {
         return userService.updateUserPoint(map);
     }
 
-    public User selectUserByThirdAccount(Map map) {
-        return userService.selectUserByThirdAccount(map);
-    }
 
     /**
      * 绑定第三方账号

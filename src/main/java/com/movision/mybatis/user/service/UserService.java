@@ -402,12 +402,12 @@ public class UserService {
         }
     }
 
-    /**
+/*    *//**
      * 查询发帖人列表
      *
      * @param
      * @return
-     */
+     *//*
     public List<BossUser> queryIssuePostManList() {
         try {
             log.info("查询发帖人列表");
@@ -416,7 +416,7 @@ public class UserService {
             log.error("查询发帖人列表异常", e);
             throw e;
         }
-    }
+    }*/
 
     /**
      * 查询圈主和管理员
