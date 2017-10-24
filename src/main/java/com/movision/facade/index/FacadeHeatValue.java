@@ -6,9 +6,7 @@ import com.movision.mybatis.comment.service.CommentService;
 import com.movision.mybatis.followLabel.service.FollowLabelService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.user.entity.TalentUserVo;
-import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
-import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +34,7 @@ public class FacadeHeatValue {
     private FollowLabelService followLabelService;
     @Autowired
     private UserFacade userFacade;
+
     /**
      * 增加帖子热度值
      */
