@@ -1541,7 +1541,7 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         select max(id)
         from yw_user u
         where
-        <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        <![CDATA[ (u.id <=20000 OR u.id >= 10000)]]>
     </select>
 
     <!-- 查询所有机器人用户 -->
