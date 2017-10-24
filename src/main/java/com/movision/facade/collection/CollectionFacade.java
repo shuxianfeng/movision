@@ -63,7 +63,7 @@ public class CollectionFacade {
             //该帖子的被收藏次数+1
             collectionService.addCollectionSum(Integer.parseInt(postid));
             //增加熱度
-            facadeHeatValue.addHeatValue(Integer.parseInt(postid), 6, userid);
+            facadeHeatValue.addHeatValue(Integer.parseInt(postid), 6, Integer.parseInt(userid));
 
             return collectionService.collectionPost(collection);
         } else {

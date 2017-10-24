@@ -694,7 +694,7 @@ public class FacadePost {
         int count = postService.queryIsZanPost(parammap);
         if (count != 0) return -1;
         //增加帖子热度
-        facadeHeatValue.addHeatValue(Integer.parseInt(id), 3, userid);
+        facadeHeatValue.addHeatValue(Integer.parseInt(id), 3, Integer.valueOf(userid));
 
         //查看用户点赞操作行为，并记录积分流水
         UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(Integer.parseInt(userid));
@@ -1877,7 +1877,7 @@ public class FacadePost {
                 userLikes = userService.findUser(userid);
                 list.get(i).setUserlike(userLikes);
                 //增加帖子浏览记录
-                facadeHeatValue.addHeatValue(list.get(i).getId(), 8, null);
+                facadeHeatValue.addHeatValue(list.get(i).getId(), 8, 666666);
             }
         }
         return list;
@@ -3861,8 +3861,9 @@ public class FacadePost {
 
     /**
      * 更新线上所有帖子的热度值
+     * (后续会用到，不能删除)
      */
-    public void updateOnlinePostHeatvalue() {
+    /*public void updateOnlinePostHeatvalue() {
         List<PostVo> list = postService.queryPostListByHeatValue();
 
         for (PostVo postVo : list) {
@@ -3878,7 +3879,7 @@ public class FacadePost {
             //判断是否是帖子精选 ishot
             int ishot = postVo.getIshot();
             if (ishot == 1) {
-                count += HeatValueConstant.POINT.post_selection.getCode();
+                count += HeatValueConstant.POINT.circle_selection.getCode();
             }
 
             //查出该帖子的评论数量，进行热度操作
@@ -3899,7 +3900,7 @@ public class FacadePost {
 
             //查出该帖子的浏览数量，进行热度操作
             int countView = userRefreshRecordService.postcount(postid);
-            int viewPoint = countView * HeatValueConstant.POINT.read_post.getCode();
+            int viewPoint = countView * HeatValueConstant.POINT.view_post.getCode();
 
             count = count + comPoint + zanPoint + forwardPoint + collectPoint + viewPoint;
 
@@ -3909,7 +3910,7 @@ public class FacadePost {
 
             postService.updatePostById(postTo);
         }
-    }
+    }*/
 
 }
 

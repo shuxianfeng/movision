@@ -169,7 +169,7 @@ public class UserFacade {
             }
             postService.updatePostShareNum(parammap);//增加帖子分享次数
             //增加热度
-            facadeHeatValue.addHeatValue(Integer.parseInt(postid), 5, userid);
+            facadeHeatValue.addHeatValue(Integer.parseInt(postid), 5, Integer.valueOf(userid));
         } else if (type.equals("1")) {
             //分享商品
             parammap.put("goodsid", Integer.parseInt(goodsid));

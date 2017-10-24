@@ -132,7 +132,7 @@ public class FacadeRewarded {
                 map.put("code", 200);
                 map.put("resault", in);
                 //增加帖子打赏热度
-                facadeHeatValue.addHeatValue(Integer.parseInt(postid), 7, userid);
+                facadeHeatValue.addHeatValue(Integer.parseInt(postid), 7, u);
 
                 try {
                     String fromaccid = userOperationRecordService.selectAccid(userid);

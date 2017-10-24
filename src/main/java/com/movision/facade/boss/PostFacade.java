@@ -1299,13 +1299,13 @@ public class PostFacade {
                 postProcessRecordService.updateProcessRecord(re);
                 if ((record.getIsesence() != ise && ise == 1)) {
                     //为帖子增加热度值（当加精记录中首页精选第一次精选时
-                    facadeHeatValue.addHeatValue(pid, 1, null);
+                    facadeHeatValue.addHeatValue(pid, 1, 0);
                     //帖子精选积分操作
                     postSelectedIntegralOperation(ise.toString(), ish.toString(), pid);
                 }
                 if (record.getIshot() != ish && ish == 1) {
                     //为帖子增加热度值(当加精记录中圈子精选第一次精选时
-                    facadeHeatValue.addHeatValue(pid, 2, null);
+                    facadeHeatValue.addHeatValue(pid, 2, 0);
                     //帖子精选积分操作
                     postSelectedIntegralOperation(ise.toString(), ish.toString(), pid);
                 }
@@ -1321,12 +1321,12 @@ public class PostFacade {
             postService.updatePostSelected(map);
             //为帖子增加热度值
             if (ise != null && ise == 1) {
-                facadeHeatValue.addHeatValue(pid, 1,null);
+                facadeHeatValue.addHeatValue(pid, 1, 0);
                 //帖子精选积分操作
                 postSelectedIntegralOperation(ise.toString(), ish.toString(), pid);
             }
             if (ish != null && ish == 1) {
-                facadeHeatValue.addHeatValue(pid, 2,null);
+                facadeHeatValue.addHeatValue(pid, 2, 0);
                 //帖子精选积分操作
                 postSelectedIntegralOperation(ise.toString(), ish.toString(), pid);
             }

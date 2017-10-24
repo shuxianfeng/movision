@@ -25,7 +25,7 @@ public class FacadeHeatValueTest extends SpringTestCase {
 
 
     public void updateOnlinePostHeatvalue() throws Exception {
-        List<PostVo> list = postService.queryPostListByHeatValue();
+        /*List<PostVo> list = postService.queryPostListByHeatValue();
 
         for (PostVo postVo : list) {
             int count = 0;
@@ -40,7 +40,7 @@ public class FacadeHeatValueTest extends SpringTestCase {
             //判断是否是帖子精选 ishot
             int ishot = postVo.getIshot();
             if (ishot == 1) {
-                count += HeatValueConstant.POINT.post_selection.getCode();
+                count += HeatValueConstant.POINT.circle_selection.getCode();
             }
 
             //查出该帖子的评论数量，进行热度操作
@@ -61,7 +61,7 @@ public class FacadeHeatValueTest extends SpringTestCase {
 
             //查出该帖子的浏览数量，进行热度操作
             int countView = userRefreshRecordService.postcount(postid);
-            int viewPoint = countView * HeatValueConstant.POINT.read_post.getCode();
+            int viewPoint = countView * HeatValueConstant.POINT.view_post.getCode();
 
             count = count + comPoint + zanPoint + forwardPoint + collectPoint + viewPoint;
 
@@ -70,6 +70,6 @@ public class FacadeHeatValueTest extends SpringTestCase {
             postTo.setHeatvalue(originHeatValue + count);
 
             postService.updatePostById(postTo);
-        }
+        }*/
     }
 }
