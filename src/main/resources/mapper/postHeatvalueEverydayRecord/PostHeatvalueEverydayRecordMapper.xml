@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.postHeatvalueEverydayRecord.mapper.PostHeatvalueEverydayRecordMapper">
+    <resultMap id="BaseResultMap"
+               type="com.movision.mybatis.postHeatvalueEverydayRecord.entity.PostHeatvalueEverydayRecord">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="authorid" property="authorid" jdbcType="INTEGER"/>
+        <result column="author_name" property="authorName" jdbcType="VARCHAR"/>
+        <result column="postid" property="postid" jdbcType="INTEGER"/>
+        <result column="post_title" property="postTitle" jdbcType="VARCHAR"/>
+        <result column="heat_value" property="heatValue" jdbcType="INTEGER"/>
+        <result column="intime" property="intime" jdbcType="DATE"/>
+        <result column="isdel" property="isdel" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, authorid, author_name, postid, post_title, heat_value, intime, isdel
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_post_heatvalue_everyday_record
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from yw_post_heatvalue_everyday_record
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert"
+            parameterType="com.movision.mybatis.postHeatvalueEverydayRecord.entity.PostHeatvalueEverydayRecord">
+        insert into yw_post_heatvalue_everyday_record (id, authorid, author_name,
+        postid, post_title, heat_value,
+        intime, isdel)
+        values (#{id,jdbcType=INTEGER}, #{authorid,jdbcType=INTEGER}, #{authorName,jdbcType=VARCHAR},
+        #{postid,jdbcType=INTEGER}, #{postTitle,jdbcType=VARCHAR}, #{heatValue,jdbcType=INTEGER},
+        #{intime,jdbcType=DATE}, #{isdel,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective"
+            parameterType="com.movision.mybatis.postHeatvalueEverydayRecord.entity.PostHeatvalueEverydayRecord">
+        insert into yw_post_heatvalue_everyday_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="authorid != null">
+                authorid,
+            </if>
+            <if test="authorName != null">
+                author_name,
+            </if>
+            <if test="postid != null">
+                postid,
+            </if>
+            <if test="postTitle != null">
+                post_title,
+            </if>
+            <if test="heatValue != null">
+                heat_value,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="isdel != null">
+                isdel,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="authorid != null">
+                #{authorid,jdbcType=INTEGER},
+            </if>
+            <if test="authorName != null">
+                #{authorName,jdbcType=VARCHAR},
+            </if>
+            <if test="postid != null">
+                #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="postTitle != null">
+                #{postTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="heatValue != null">
+                #{heatValue,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=DATE},
+            </if>
+            <if test="isdel != null">
+                #{isdel,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.movision.mybatis.postHeatvalueEverydayRecord.entity.PostHeatvalueEverydayRecord">
+        update yw_post_heatvalue_everyday_record
+        <set>
+            <if test="authorid != null">
+                authorid = #{authorid,jdbcType=INTEGER},
+            </if>
+            <if test="authorName != null">
+                author_name = #{authorName,jdbcType=VARCHAR},
+            </if>
+            <if test="postid != null">
+                postid = #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="postTitle != null">
+                post_title = #{postTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="heatValue != null">
+                heat_value = #{heatValue,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=DATE},
+            </if>
+            <if test="isdel != null">
+                isdel = #{isdel,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey"
+            parameterType="com.movision.mybatis.postHeatvalueEverydayRecord.entity.PostHeatvalueEverydayRecord">
+        update yw_post_heatvalue_everyday_record
+        set authorid = #{authorid,jdbcType=INTEGER},
+        author_name = #{authorName,jdbcType=VARCHAR},
+        postid = #{postid,jdbcType=INTEGER},
+        post_title = #{postTitle,jdbcType=VARCHAR},
+        heat_value = #{heatValue,jdbcType=INTEGER},
+        intime = #{intime,jdbcType=DATE},
+        isdel = #{isdel,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

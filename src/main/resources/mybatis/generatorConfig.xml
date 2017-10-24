@@ -35,7 +35,7 @@
 
         <!-- 生成实体类地址 -->
 
-        <javaModelGenerator targetPackage="com.movision.mybatis.userPhoto.entity"
+        <javaModelGenerator targetPackage="com.movision.mybatis.postHeatvalueEverydayRecord.entity"
                             targetProject="E:/maven/movision-1.0.0\src\main\java">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
@@ -44,22 +44,22 @@
         </javaModelGenerator>
 
         <!-- 生成mapxml文件 -->
-        <sqlMapGenerator targetPackage="mapper/userPhoto"
+        <sqlMapGenerator targetPackage="mapper/postHeatvalueEverydayRecord"
                          targetProject="E:/maven/movision-1.0.0\src\main\resources">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
         <!-- 生成mapxml对应client，也就是接口dao -->
-        <javaClientGenerator targetPackage="com.movision.mybatis.userPhoto.mapper"
+        <javaClientGenerator targetPackage="com.movision.mybatis.postHeatvalueEverydayRecord.mapper"
                              targetProject="E:/maven/movision-1.0.0\src\main\java" type="XMLMAPPER">
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-        <table tableName="yw_user_photo"
-               domainObjectName="UserPhoto"
+        <table tableName="yw_post_heatvalue_everyday_record"
+               domainObjectName="PostHeatvalueEverydayRecord"
                enableCountByExample="false"
                enableSelectByExample="false"
                enableUpdateByExample="false"
