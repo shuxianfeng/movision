@@ -1536,6 +1536,7 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         AND t.id = #{userid};
     </select>
 
+    <!-- 查找最大的机器人id -->
     <select id="selectMaxRobotId" resultType="java.lang.Integer">
         select max(id)
         from yw_user u
@@ -1543,12 +1544,14 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
     </select>
 
+    <!-- 查询所有机器人用户 -->
     <select id="selectRobotUser" resultType="com.movision.mybatis.user.entity.User">
         SELECT *
         FROM yw_user u where
-        <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        <![CDATA[ u.id <= 20000 AND u.id >= 10000]]>
     </select>
 
+    <!-- 查询机器人列表 -->
     <select id="findAllQueryRobotByList" resultType="com.movision.mybatis.user.entity.User"
             parameterType="java.lang.String">
         SELECT *
@@ -1563,37 +1566,40 @@ SELECT provincecode FROM yw_city WHERE code=#{ip_city,jdbcType=VARCHAR})
         SELECT * FROM yw_user WHERE id = #{id,jdbcType=INTEGER} AND status = 0
     </select>
 
+    <!-- 随机查询机器人 -->
     <select id="queryRandomUser" resultType="com.movision.mybatis.user.entity.User" parameterType="java.lang.Integer">
         <![CDATA[
-        SELECT * FROM yw_user u where (u.id<=20000 OR u.id >= 10000) ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
+        SELECT * FROM yw_user u where u.id<=20000 AND u.id >= 10000 ORDER BY RAND() LIMIT 0,#{number,jdbcType=INTEGER}
         ]]>
     </select>
 
+    <!-- 查询不重复收藏帖子的机器人用户 -->
     <select id="queryNotRepeatCollectRobots" resultType="com.movision.mybatis.user.entity.User"
             parameterType="java.util.Map">
         SELECT u.* FROM yw_user u
-        where <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        where <![CDATA[ u.id>=20000 AND u.id <= 10000 ]]>
         and not EXISTS
         (SELECT 1 FROM yw_collection c
         where c.userid = u.id and c.postid = #{postid})
         ORDER BY RAND() LIMIT 0,#{number}
     </select>
 
-
+    <!-- 查询不重复点赞帖子的机器人用户 -->
     <select id="queryNotRepeatZanRobots" resultType="com.movision.mybatis.user.entity.User"
             parameterType="java.util.Map">
         SELECT u.* FROM yw_user u
-        where <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        where <![CDATA[ u.id <= 20000 AND u.id >= 10000 ]]>
         and not EXISTS
         (SELECT 1 FROM yw_post_zan_record r
         where r.userid = u.id and r.postid = #{postid})
         ORDER BY RAND() LIMIT 0, #{number,jdbcType=INTEGER}
     </select>
 
+    <!-- 查询不重复关注的用户机器人用户 -->
     <select id="queryNotRepeatRandomRobots" resultType="com.movision.mybatis.user.entity.User"
             parameterType="java.util.Map">
         SELECT u.* FROM yw_user u
-        where <![CDATA[ (u.id>=20000 OR u.id< 10000)]]>
+        where <![CDATA[ u.id <= 20000 AND u.id >= 10000 ]]>
         and not EXISTS (SELECT 1 FROM yw_follow_user f
         where f.userid = u.id
         and f.interestedusers = #{userid})

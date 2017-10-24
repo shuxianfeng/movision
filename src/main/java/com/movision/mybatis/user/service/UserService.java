@@ -1256,10 +1256,10 @@ public class UserService {
      */
     public List<User> queryRandomUser(Integer number) {
         try {
-            log.info("查询随机用户");
+            log.info("随机查询机器人");
             return userMapper.queryRandomUser(number);
         } catch (Exception e) {
-            log.error("查询随机用户异常", e);
+            log.error("随机查询机器人异常", e);
             throw e;
         }
     }
