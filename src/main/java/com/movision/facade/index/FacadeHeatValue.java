@@ -32,7 +32,6 @@ public class FacadeHeatValue {
     private UserService userService;
     @Autowired
     private CommentService commentService;
-
     @Autowired
     private FollowLabelService followLabelService;
     @Autowired

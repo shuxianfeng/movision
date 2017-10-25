@@ -29,6 +29,8 @@ import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.period.service.PeriodService;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.postHeatvalueRecord.entity.PostHeatvalueRecord;
+import com.movision.mybatis.postHeatvalueRecord.service.PostHeatvalueRecordService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabel.entity.PostLabelDetails;
 import com.movision.mybatis.postLabel.entity.PostLabelVo;
@@ -158,6 +160,8 @@ public class PostFacade {
 
     @Autowired
     private PostLabelRelationService postLabelRelationService;
+    @Autowired
+    private PostHeatvalueRecordService postHeatvalueRecordService;
 
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
@@ -2895,6 +2899,21 @@ public class PostFacade {
      */
     public String queryOriginalDrawingUrl(String compressimgurl) {
         return postService.queryOriginalDrawingUrl(compressimgurl);
+    }
+
+    /**
+     * 查询24小时内指定帖子的热度变化EChart 数据
+     *
+     * @return
+     */
+    public List<Map<String, Object>> querySpecifyDatePostHeatvalue(Integer postid, String date) {
+        Map<String, Object> paramMap = new HashMap();
+        paramMap.put("postid", postid);
+        paramMap.put("date", date);
+        List<PostHeatvalueRecord> postHeatvalueRecords = postHeatvalueRecordService.querySpecifyDatePostHeatvalueRecord(paramMap);
+
+        log.debug("这是我查出的指定日期的帖子的每天流水：" + postHeatvalueRecords.toString());
+        return null;
     }
 
 }

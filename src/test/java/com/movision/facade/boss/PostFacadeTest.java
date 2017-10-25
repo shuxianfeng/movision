@@ -24,4 +24,9 @@ public class PostFacadeTest extends SpringTestCase {
         System.out.println(postPaging);
     }
 
+    @Test
+    public void querySpecifyDatePostHeatvalue() throws Exception {
+        postFacade.querySpecifyDatePostHeatvalue(2214, "2017-10-24");
+    }
+
 }

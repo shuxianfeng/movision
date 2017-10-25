@@ -82,4 +82,18 @@ public class PostHeatvalueRecord {
     public void setIsdel(Integer isdel) {
         this.isdel = isdel;
     }
+
+    @Override
+    public String toString() {
+        return "PostHeatvalueRecord{" +
+                "id=" + id +
+                ", userid=" + userid +
+                ", postid=" + postid +
+                ", heatValue=" + heatValue +
+                ", isadd=" + isadd +
+                ", type=" + type +
+                ", intime=" + intime +
+                ", isdel=" + isdel +
+                '}';
+    }
 }
