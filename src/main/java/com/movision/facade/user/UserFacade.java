@@ -605,10 +605,11 @@ public class UserFacade {
                 }
                 for (int i=0; i<list.size(); i++){
                     resultList.add(list.get(i));
+                    list.remove(list.get(i));
                 }
 
                 //最终进行发帖时间排倒叙
-                if (list.size() == 0) {
+                if (newResultList.size() == 0) {
                     list = null;
                 }else{
                     //如果不为空，按照发帖时间排倒叙返回结果
