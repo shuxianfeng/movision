@@ -550,8 +550,8 @@ public class WechatH5Facade extends JPanel {
             map.put("newurl", newurl2 + "/upload/wechat/" + shareFileName);
             is.close();
             //修改参与次数
-            //int ta = updateTake(1077);
-            //map.put("ta", ta);
+            int ta = updateTake(1077);
+            map.put("ta", ta);
             //  os.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
