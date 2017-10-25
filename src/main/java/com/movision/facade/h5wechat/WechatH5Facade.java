@@ -510,15 +510,15 @@ public class WechatH5Facade extends JPanel {
 
             g.fillRect(0, 0, getWidth(), getHeight());
             g.rotate(0, 900, 15);
-            g.drawImage(img, 470, 820, this);
+            g.drawImage(img, 540, 540, this);
             //g.rotate(30);
             //设置颜色。
             g.setColor(Color.BLACK);
 
             //最后一个参数用来设置字体的大小
-            Font f = new Font("宋体", Font.PLAIN, 20);
+            Font f = new Font("宋体", Font.PLAIN, 15);
             Color color = new Color(112, 104, 115);
-            Color[] mycolor = {color, Color.LIGHT_GRAY};
+            Color[] mycolor = {color, Color.BLACK};
             // g.setColor(mycolor);
             g.setFont(f);
             //   平移原点到图形环境的中心
@@ -530,7 +530,7 @@ public class WechatH5Facade extends JPanel {
             for (int i = 0; i < 1; i++) {
                 g.rotate(0 * Math.PI / 180, 0, 0);
                 g.setPaint(mycolor[i % 2]);
-                g.drawString(name, 130, 625);
+                g.drawString(name, 138, 130);
             }
             g.dispose();
 
@@ -550,8 +550,8 @@ public class WechatH5Facade extends JPanel {
             map.put("newurl", newurl2 + "/upload/wechat/" + shareFileName);
             is.close();
             //修改参与次数
-            int ta = updateTake(1077);
-            map.put("ta", ta);
+            //int ta = updateTake(1077);
+            //map.put("ta", ta);
             //  os.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();

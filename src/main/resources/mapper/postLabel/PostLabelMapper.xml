@@ -312,7 +312,12 @@
 
     <select id="queryPostLabelByName" parameterType="com.movision.mybatis.postLabel.entity.PostLabel"
             resultType="com.movision.mybatis.postLabel.entity.PostLabel">
-        SELECT id,name,type FROM yw_post_label WHERE type <![CDATA[<>]]> 0 AND isdel = 0
+        SELECT id,name,type
+        FROM yw_post_label
+        WHERE type <![CDATA[<>]]> 0 AND isdel = 0
+        <if test="name != null">
+            AND name LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>
     </select>
     <update id="updatePostHeatValue" parameterType="java.lang.Integer">
         UPDATE yw_post SET  heat_value=heat_value-10 WHERE id=#{postid,jdbcType=INTEGER} AND  isdel=0
