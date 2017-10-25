@@ -127,7 +127,7 @@ public class FacadeComments {
                 //更新用户最后操作时间和帖子评论总次数
                 postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子表的评论次数字段
                 //增加帖子热度
-                facadeHeatValue.addHeatValue(Integer.parseInt(postid), 4, userid);
+                facadeHeatValue.addHeatValue(Integer.parseInt(postid), 4, Integer.valueOf(userid));
 
             } else {
                 //表示是其他评论的子评论，不算评论次数

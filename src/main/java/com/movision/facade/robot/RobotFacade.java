@@ -358,7 +358,7 @@ public class RobotFacade {
         int count = postService.queryIsZanPost(parammap);
         if (count == 0) {
             //增加帖子热度
-            facadeHeatValue.addHeatValue(postid, 3, String.valueOf(userid));
+            facadeHeatValue.addHeatValue(postid, 3, userid);
 
             //查看用户点赞操作行为，并记录积分流水
             UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(userid);
@@ -601,7 +601,7 @@ public class RobotFacade {
             //2 更新帖子表的评论次数字段
             postService.updatePostBycommentsum(postid);
             //3 增加被评论的帖子热度
-            facadeHeatValue.addHeatValue(postid, 4, String.valueOf(userid));
+            facadeHeatValue.addHeatValue(postid, 4, userid);
         }
     }
 

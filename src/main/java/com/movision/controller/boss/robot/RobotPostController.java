@@ -145,11 +145,11 @@ public class RobotPostController {
         return response;
     }
 
-    @ApiOperation(value = "更新线上帖子的所有热度值", notes = "更新线上帖子的所有热度值", response = Response.class)
-    @RequestMapping(value = "/update_online_post_heatvalue", method = RequestMethod.POST)
-    public Response updateOnlinePostHeatvalue() throws IOException {
-        Response response = new Response();
-        facadePost.updateOnlinePostHeatvalue();
-        return response;
-    }
+//    @ApiOperation(value = "更新线上帖子的所有热度值", notes = "更新线上帖子的所有热度值", response = Response.class)
+//    @RequestMapping(value = "/update_online_post_heatvalue", method = RequestMethod.POST)
+//    public Response updateOnlinePostHeatvalue() throws IOException {
+//        Response response = new Response();
+//        facadePost.updateOnlinePostHeatvalue();
+//        return response;
+//    }
 }

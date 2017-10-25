@@ -61,7 +61,20 @@ public class AspectLog {
         String queryString = request.getQueryString();
         String userAgent = request.getHeader("User-Agent");
         String[] aa = requestURL.split("/");
-        String busitype = aa[4];
+        /**
+         *  正式环境 http://www.mofo.shop/movision/boss/menu/query_sidebar
+         *  测试环境 http://www.51mofo.com/movision/boss/menu/query_sidebar
+         *  本地环境 http://localhost:8080/app/waterfall/labelPage
+         *          http://localhost:8080/api-docs
+         */
+        String busitype;    //获取其中的boss, app。用于鉴别请求的端。
+        if (clientIP.equals("127.0.0.1")) {
+            //本地环境
+            busitype = aa[3];
+        } else {
+            busitype = aa[4];    //第五个
+        }
+
         String logMode = PropertiesLoader.getValue("busi.log.mode");
         switch (logMode) {
             case "db":
@@ -75,11 +88,7 @@ public class AspectLog {
                 accessLog.setExectime(Integer.parseInt(String.valueOf(execTime)));    //执行日期
                 accessLog.setBusitype(busitype);//业务类型
                 accessLog.setIntime(new Date());
-
                 int isAdd = accessLogService.insertSelective(accessLog);
-                // TODO: 2017/1/16
-
-
                 log.debug("AspectLog增加访问日志->isAdd=" + isAdd);
                 break;
             case "file":
