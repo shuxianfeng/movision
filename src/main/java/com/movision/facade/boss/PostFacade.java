@@ -1,5 +1,6 @@
 package com.movision.facade.boss;
 
+import com.movision.common.constant.HeatValueConstant;
 import com.movision.common.constant.JurisdictionConstants;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
@@ -2911,9 +2912,129 @@ public class PostFacade {
         paramMap.put("postid", postid);
         paramMap.put("date", date);
         List<PostHeatvalueRecord> postHeatvalueRecords = postHeatvalueRecordService.querySpecifyDatePostHeatvalueRecord(paramMap);
-
         log.debug("这是我查出的指定日期的帖子的每天流水：" + postHeatvalueRecords.toString());
+        //校验非空
+        if (ListUtil.isEmpty(postHeatvalueRecords)) {
+            return null;
+        }
+        //循环处理，共8中纬度。把流水分入不同纬度的时间段中，每个纬度共24个时间段。
+        int[] viewArr = new int[24];
+        int[] rewardArr = new int[24];
+        int[] collectArr = new int[24];
+        int[] forwardArr = new int[24];
+        int[] commentArr = new int[24];
+        int[] zanArr = new int[24];
+        int[] circleSelectedArr = new int[24];
+        int[] homePageArr = new int[24];
+
+        int size = postHeatvalueRecords.size();
+        for (int i = 0; i < size; i++) {
+            PostHeatvalueRecord record = postHeatvalueRecords.get(i);
+            //流水的id
+            int recordId = record.getId();
+            //这条流水的生成时间
+            Date intime = record.getIntime();
+            //流水的类型
+            int type = record.getType();
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(intime);
+            //获取每个流水的时刻 [0-23]
+            int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+
+            if (HeatValueConstant.HEATVALUE_TYPE.view_post.getCode() == type) {
+                handler24HourRecord(hourOfDay, viewArr);
+
+            } else if (HeatValueConstant.HEATVALUE_TYPE.reward_post.getCode() == type) {
+                handler24HourRecord(hourOfDay, rewardArr);
+
+            } else if (HeatValueConstant.HEATVALUE_TYPE.collection_number.getCode() == type) {
+                handler24HourRecord(hourOfDay, collectArr);
+
+            } else if (HeatValueConstant.HEATVALUE_TYPE.forwarding_number.getCode() == type) {
+                handler24HourRecord(hourOfDay, forwardArr);
+
+            } else if (HeatValueConstant.HEATVALUE_TYPE.comments_number.getCode() == type) {
+                handler24HourRecord(hourOfDay, commentArr);
+
+            } else if (HeatValueConstant.HEATVALUE_TYPE.zan_number.getCode() == type) {
+                handler24HourRecord(hourOfDay, zanArr);
+
+            } else if (HeatValueConstant.HEATVALUE_TYPE.circle_selection.getCode() == type) {
+                handler24HourRecord(hourOfDay, circleSelectedArr);
+
+            } else if (HeatValueConstant.HEATVALUE_TYPE.home_page_selection.getCode() == type) {
+                handler24HourRecord(hourOfDay, homePageArr);
+
+            } else {
+                log.error("热度流水类型不正确。当前的流水id=" + recordId + ", 流水类型：" + type);
+            }
+
+        }
+        // TODO: 2017/10/25  
+
+
         return null;
+    }
+
+    private void handler24HourRecord(int hourOfDay, int[] arr) {
+        for (int i = 0; i < 24; i++) {
+            if (i == hourOfDay) {
+                arr[i]++;
+            }
+        }
+
+        /*if(0 == hourOfDay){
+            arr[0]++;
+        }else if(1 == hourOfDay){
+            arr[1]++;
+        }else if(2 == hourOfDay){
+
+        }else if(3 == hourOfDay){
+
+        }else if(4 == hourOfDay){
+
+        }else if(5 == hourOfDay){
+
+        }else if(6 == hourOfDay){
+
+        }else if(7 == hourOfDay){
+
+        }else if(8 == hourOfDay){
+
+        }else if(9 == hourOfDay){
+
+        }else if(10 == hourOfDay){
+
+        }else if(11 == hourOfDay){
+
+        }else if(12 == hourOfDay){
+
+        }else if(13 == hourOfDay){
+
+        }else if(14 == hourOfDay){
+
+        }else if(15 == hourOfDay){
+
+        }else if(16 == hourOfDay){
+
+        }else if(17 == hourOfDay){
+
+        }else if(18 == hourOfDay){
+
+        }else if(19 == hourOfDay){
+
+        }else if(20 == hourOfDay){
+
+        }else if(21 == hourOfDay){
+
+        }else if(22 == hourOfDay){
+
+        }else if(23 == hourOfDay){
+
+        }else {
+            log.error("当前流水的时间错误，当前流水的id:" + recordId+", 流水时间：" + intime);
+        }*/
     }
 
 }

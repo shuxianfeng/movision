@@ -1,5 +1,6 @@
 package com.movision.utils;
 
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -282,11 +283,16 @@ public class DateUtils {
         return ca.getTime();
     }
 
+
     public static void main(String[] args) throws ParseException {
 
 //        getCurrentMonthFirstDay();
 //        getCurrentMonthLastDay();
-        getDefaultBirthday();
+//        getDefaultBirthday();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);  //Calendar.HOUR_OF_DAY的值 0-23
+        log.debug("当前的时间Calendar.HOUR_OF_DAY：" + calendar.get(Calendar.HOUR_OF_DAY));
 
     }
 }
