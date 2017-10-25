@@ -592,20 +592,22 @@ public class UserFacade {
                 }
 
                 //最后再把mongodb中没有查询到的帖子添加上
-                List<PostVo> newResultList = new ArrayList<>();
+                List<PostVo> newResultList = new ArrayList<>();//----------------1.把 userReflushCountList 转化为 List<PostVo> 类型
                 for (int i=0; i<userReflushCountList.size(); i++){
                     PostVo vo = new PostVo();
                     vo.setId(userReflushCountList.get(i).getPostid());
                     vo.setCountview(userReflushCountList.get(i).getCount());
                     newResultList.add(vo);
                 }
-                for (int i=0; i<newResultList.size(); i++){
+                for (int i=0; i<newResultList.size(); i++){//----------------2.过滤list中已经从mongodb中查出来的帖子（剩余的就是没查到的记录）
                     PostVo vo = newResultList.get(i);
                     list.remove(vo);
                 }
-                for (int i=0; i<list.size(); i++){
-                    resultList.add(list.get(i));
-                    list.remove(list.get(i));
+                for (int i=0; i<list.size(); i++){//-----------------3.然后把剩余没查到浏览数的帖子记录也添加到结果集resultList中
+                    PostVo vo = list.get(i);
+                    vo.setCountview(0);//没查到的设为0
+                    resultList.add(vo);
+                    list.remove(vo);//添加一个清空一个，最后保证list为空
                 }
 
                 //最终进行发帖时间排倒叙
