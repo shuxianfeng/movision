@@ -590,6 +590,24 @@ public class UserFacade {
                         }
                     }
                 }
+
+                //最后再把mongodb中没有查询到的帖子添加上
+                List<PostVo> newResultList = new ArrayList<>();
+                for (int i=0; i<userReflushCountList.size(); i++){
+                    PostVo vo = new PostVo();
+                    vo.setId(userReflushCountList.get(i).getPostid());
+                    vo.setCountview(userReflushCountList.get(i).getCount());
+                    newResultList.add(vo);
+                }
+                for (int i=0; i<newResultList.size(); i++){
+                    PostVo vo = newResultList.get(i);
+                    list.remove(vo);
+                }
+                for (int i=0; i<list.size(); i++){
+                    resultList.add(list.get(i));
+                }
+
+                //最终进行发帖时间排倒叙
                 if (list.size() == 0) {
                     list = null;
                 }else{
