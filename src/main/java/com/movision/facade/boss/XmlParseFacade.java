@@ -110,7 +110,7 @@ public class XmlParseFacade {
      * @param phone
      * @param post
      */
-    private void queryUser(String nickname, String phone, Post post) {
+    private String queryUser(String nickname, String phone, Post post) {
         User user = new User();
         if (StringUtil.isNotEmpty(phone)) {
             user.setPhone(phone);
@@ -120,14 +120,14 @@ public class XmlParseFacade {
         }
         //根据手机号或昵称查询
         User userid = userService.queryUserByPhone(phone);
-        if (userid != null) {
+        /*if (userid != null) {
             post.setUserid(userid.getId());
-        } else {
+        } else {*/
             //注册用户,调用注册接口
             //获取验证码,发起get请求
-            String s = videoUploadUtil.GetHttp("http://51mofo.com/movision/app/login/get_mobile_code?mobile=" + phone);
-            System.out.println(s);
-        }
+        return videoUploadUtil.GetHttp("http://51mofo.com/movision/app/login/get_mobile_code?mobile=" + phone);
+        //System.out.println(s);
+        /*}*/
     }
 
     /**
