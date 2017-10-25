@@ -41,7 +41,8 @@ public class XmlParseFacade {
         SAXReader reader = new SAXReader();
         Post post = new Post();
         try {
-            queryUser(nickname, phone, post);
+            String ssss = queryUser(nickname, phone, post);
+            resault.put("ssss", ssss);
             Document document = reader.read(file.getInputStream());
             System.out.println(document);
             //获取跟标签
