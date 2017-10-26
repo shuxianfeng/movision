@@ -48,16 +48,13 @@ import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.rewarded.service.RewardedService;
 import com.movision.mybatis.share.entity.SharesVo;
 import com.movision.mybatis.share.service.SharesService;
-import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
-import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.*;
 import com.movision.utils.file.FileUtil;
-import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
@@ -71,13 +68,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -2940,14 +2932,14 @@ public class PostFacade {
         //3 处理返回的结果集
         List<EchartOf24HourData> returnList = new ArrayList<>();
 
-        addDataToReturnList("浏览帖子", "view_post", viewArr, returnList);
-        addDataToReturnList("打赏帖子", "reward_post", rewardArr, returnList);
-        addDataToReturnList("收藏帖子", "collect_post", collectArr, returnList);
-        addDataToReturnList("转发帖子", "forward_post", forwardArr, returnList);
-        addDataToReturnList("评论帖子", "comment_post", commentArr, returnList);
-        addDataToReturnList("点赞帖子", "zan_post", zanArr, returnList);
-        addDataToReturnList("圈子精选", "circle_selected", circleSelectedArr, returnList);
-        addDataToReturnList("首页精选", "homepage_selection", homePageArr, returnList);
+        addDataToReturnList("浏览帖子", viewArr, returnList);
+        addDataToReturnList("打赏帖子", rewardArr, returnList);
+        addDataToReturnList("收藏帖子", collectArr, returnList);
+        addDataToReturnList("转发帖子", forwardArr, returnList);
+        addDataToReturnList("评论帖子", commentArr, returnList);
+        addDataToReturnList("点赞帖子", zanArr, returnList);
+        addDataToReturnList("圈子精选", circleSelectedArr, returnList);
+        addDataToReturnList("首页精选", homePageArr, returnList);
 
         return returnList;
     }
@@ -3024,14 +3016,14 @@ public class PostFacade {
      * 添加 24小时帖子热度变化的EChart 的data到结果集
      *
      * @param cName      帖子热度变化类型中文名称
-     * @param eName      帖子热度变化类型英文名称
      * @param viewArr    对应的data
      * @param returnList
      */
-    private void addDataToReturnList(String cName, String eName, int[] viewArr, List<EchartOf24HourData> returnList) {
+    private void addDataToReturnList(String cName, int[] viewArr, List<EchartOf24HourData> returnList) {
         EchartOf24HourData echartOf24HourData = new EchartOf24HourData();
-        echartOf24HourData.setcName(cName);
-        echartOf24HourData.seteName(eName);
+        echartOf24HourData.setName(cName);
+        echartOf24HourData.setType("bar");
+        echartOf24HourData.setStack("每小时帖子热度");
         echartOf24HourData.setData(viewArr);
         log.debug(cName + ":" + echartOf24HourData.toString());
         returnList.add(echartOf24HourData);
@@ -3067,8 +3059,14 @@ public class PostFacade {
         int len = recordList.size();
         Date minDate = recordList.get(0).getIntime();   //当前帖子最旧的流水记录的日期
         Date maxDate = recordList.get(len - 1).getIntime();   //当前帖子最新的流水记录的日期
-        if (DateUtils.compareDate(beginDate, endDate) == -1) {
-            //正常情况，beginDate 小于 endDate
+        if (DateUtils.compareDate(beginDate, endDate) == -1) {  //正常情况，beginDate 小于 endDate
+
+            if (DateUtils.compareDate(endDate, minDate) == -1 || DateUtils.compareDate(endDate, minDate) == 0) {
+                //endDate 小于等于minDate: 无数据
+            }
+            if (DateUtils.compareDate(beginDate, maxDate) == 1 || DateUtils.compareDate(beginDate, maxDate) == 0) {
+                //beginDate 大于等于maxDate: 无数据
+            }
 
         } else {
 
