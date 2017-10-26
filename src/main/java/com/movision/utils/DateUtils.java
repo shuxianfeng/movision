@@ -1,8 +1,5 @@
 package com.movision.utils;
 
-import com.movision.common.constant.MsgCodeConstant;
-import com.movision.exception.BusinessException;
-import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -289,7 +286,9 @@ public class DateUtils {
      * 比较日期大小
      *
      * @param date yyyy-MM-dd
-     * @return
+     * @return 传入的日期大于最大日期 返回1；
+     *          传入的日期小于最大日期 返回-1；
+     *          传入的日期等于最大日期 返回0；
      * @throws ParseException
      */
     public static Integer compareDateWithCurrentDate(String date) throws ParseException {
@@ -313,10 +312,37 @@ public class DateUtils {
         }
     }
 
+    /**
+     * 比较两个日期
+     *
+     * @param firstDate  第一个日期 yyyy-MM-dd
+     * @param secondDate 第二个日期
+     * @return 第一个日期大于第二个日期 返回1；
+     * 第一个日期小于第二个日期 返回-1；
+     * 第一个日期等于第二个日期 返回0；
+     * @throws ParseException
+     */
+    public static Integer compareDate(String firstDate, String secondDate) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date firstD = sdf.parse(firstDate);
+        Date secondD = sdf.parse(secondDate);
+
+        if (firstD.after(secondD)) {
+            log.debug("第一个日期大于第二个日期");
+            return 1;
+        } else if (firstD.before(secondD)) {
+            log.debug("第一个日期小于第二个日期");
+            return -1;
+        } else {
+            log.debug("第一个日期等于第二个日期");
+            return 0;
+        }
+    }
+
 
     public static void main(String[] args) throws ParseException {
-
-        compareDateWithCurrentDate("2017-10-27");
+        compareDate("2017-10-29", "2017-10-28");
+//        compareDateWithCurrentDate("2017-10-27");
 
 //        getCurrentMonthFirstDay();
 //        getCurrentMonthLastDay();

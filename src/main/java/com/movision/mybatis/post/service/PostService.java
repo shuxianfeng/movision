@@ -7,6 +7,7 @@ import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.mapper.PostMapper;
+import com.movision.mybatis.postHeatvalueEverydayRecord.entity.PostHeatvalueEverydayRecord;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
 import com.movision.mybatis.user.entity.UserLike;
@@ -1774,5 +1775,14 @@ public class PostService {
         }
     }
 
+    public List<PostHeatvalueEverydayRecord> queryPostHeatEverydayRecord(Integer postid) {
+        try {
+            log.info("查找指定帖子每天的热度流水");
+            return postMapper.queryPostHeatvalueEveryday(postid);
+        } catch (Exception e) {
+            log.error("查找指定帖子每天的热度流水失败", e);
+            throw e;
+        }
+    }
 
 }

@@ -32,6 +32,7 @@ import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.period.service.PeriodService;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.postHeatvalueEverydayRecord.entity.PostHeatvalueEverydayRecord;
 import com.movision.mybatis.postHeatvalueRecord.entity.EchartOf24HourData;
 import com.movision.mybatis.postHeatvalueRecord.entity.PostHeatvalueRecord;
 import com.movision.mybatis.postHeatvalueRecord.service.PostHeatvalueRecordService;
@@ -2953,13 +2954,7 @@ public class PostFacade {
 
     private void preValidationParam(Integer postid, String date) throws ParseException {
         //校验帖子id是否存在
-        if (null == postid) {
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "帖子id不能为null");
-        }
-        List<PostVo> post = postService.queryPost(postid);
-        if (ListUtil.isEmpty(post)) {
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "该id对应的帖子不存在！");
-        }
+        validationPostidParam(postid);
         //校验date不能大于当天日期。 当天日期设置成2017-10-26 23:59:59 ; 传入的date设置为2017-10-26 00:00:00
         if (DateUtils.compareDateWithCurrentDate(date) == 1) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "选择的日期超过了当前日期！");
@@ -2996,28 +2991,28 @@ public class PostFacade {
             int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
 
             if (HeatValueConstant.HEATVALUE_TYPE.view_post.getCode() == type) {
-                handler24HourRecord(hourOfDay, viewArr);
+                handler24HourRecord(hourOfDay, viewArr, HeatValueConstant.POINT.view_post.getCode());
 
             } else if (HeatValueConstant.HEATVALUE_TYPE.reward_post.getCode() == type) {
-                handler24HourRecord(hourOfDay, rewardArr);
+                handler24HourRecord(hourOfDay, rewardArr, HeatValueConstant.POINT.reward_post.getCode());
 
             } else if (HeatValueConstant.HEATVALUE_TYPE.collection_number.getCode() == type) {
-                handler24HourRecord(hourOfDay, collectArr);
+                handler24HourRecord(hourOfDay, collectArr, HeatValueConstant.POINT.collection_number.getCode());
 
             } else if (HeatValueConstant.HEATVALUE_TYPE.forwarding_number.getCode() == type) {
-                handler24HourRecord(hourOfDay, forwardArr);
+                handler24HourRecord(hourOfDay, forwardArr, HeatValueConstant.POINT.forwarding_number.getCode());
 
             } else if (HeatValueConstant.HEATVALUE_TYPE.comments_number.getCode() == type) {
-                handler24HourRecord(hourOfDay, commentArr);
+                handler24HourRecord(hourOfDay, commentArr, HeatValueConstant.POINT.comments_number.getCode());
 
             } else if (HeatValueConstant.HEATVALUE_TYPE.zan_number.getCode() == type) {
-                handler24HourRecord(hourOfDay, zanArr);
+                handler24HourRecord(hourOfDay, zanArr, HeatValueConstant.POINT.zan_number.getCode());
 
             } else if (HeatValueConstant.HEATVALUE_TYPE.circle_selection.getCode() == type) {
-                handler24HourRecord(hourOfDay, circleSelectedArr);
+                handler24HourRecord(hourOfDay, circleSelectedArr, HeatValueConstant.POINT.circle_selection.getCode());
 
             } else if (HeatValueConstant.HEATVALUE_TYPE.home_page_selection.getCode() == type) {
-                handler24HourRecord(hourOfDay, homePageArr);
+                handler24HourRecord(hourOfDay, homePageArr, HeatValueConstant.POINT.home_page_selection.getCode());
 
             } else {
                 log.error("热度流水类型不正确。当前的流水id=" + recordId + ", 流水类型：" + type);
@@ -3042,11 +3037,55 @@ public class PostFacade {
         returnList.add(echartOf24HourData);
     }
 
-    private void handler24HourRecord(int hourOfDay, int[] arr) {
+    private void handler24HourRecord(int hourOfDay, int[] arr, int heat_value) {
         for (int i = 0; i < 24; i++) {
             if (i == hourOfDay) {
-                arr[i]++;
+                arr[i] += heat_value;
             }
+        }
+    }
+
+    /**
+     * 获取 统计指定帖子每天的热度流水的EChart 数据
+     *
+     * @param postid
+     * @param beginDate 横坐标开始日期 yyyy-MM-dd
+     * @param endDate   横坐标结束日期
+     * @return
+     */
+    public List<Map<String, Object>> queryPostHeatvalueEveryday(Integer postid, String beginDate, String endDate) throws ParseException {
+
+        validationPostidParam(postid);
+        if (DateUtils.compareDate(beginDate, endDate) == 1) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "开始时间不能大于结束时间");
+        }
+
+        List<PostHeatvalueEverydayRecord> recordList = postService.queryPostHeatEverydayRecord(postid);
+        if (ListUtil.isEmpty(recordList)) {
+            return null;
+        }
+        int len = recordList.size();
+        Date minDate = recordList.get(0).getIntime();   //当前帖子最旧的流水记录的日期
+        Date maxDate = recordList.get(len - 1).getIntime();   //当前帖子最新的流水记录的日期
+        if (DateUtils.compareDate(beginDate, endDate) == -1) {
+            //正常情况，beginDate 小于 endDate
+
+        } else {
+
+        }
+
+
+        return null;
+    }
+
+    private void validationPostidParam(Integer postid) {
+        //校验帖子id是否存在
+        if (null == postid) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "帖子id不能为null");
+        }
+        List<PostVo> post = postService.queryPost(postid);
+        if (ListUtil.isEmpty(post)) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "该id对应的帖子不存在！");
         }
     }
 
