@@ -14,6 +14,7 @@ import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.post.entity.*;
+import com.movision.mybatis.postHeatvalueRecord.entity.EChartOfEverydayData;
 import com.movision.mybatis.postHeatvalueRecord.entity.EchartOf24HourData;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabel.entity.PostLabelDetails;
@@ -1402,6 +1403,19 @@ public class PostController {
         List<EchartOf24HourData> list = postFacade.querySpecifyDatePostHeatvalue(postid, date);
         response.setMessage("查询成功");
         response.setData(list);
+        return response;
+    }
+
+    @ApiOperation(value = "查询指定帖子在一定日期内的热度变化 EChart 数据", notes = "查询指定帖子在一定日期内的热度变化 EChart 数据", response = Response.class)
+    @RequestMapping(value = "query_period_post_heatvalue_echart_data", method = RequestMethod.POST)
+    public Response queryPeriodPostHeatvalueEchartData(@ApiParam(value = "指定的帖子id") @RequestParam Integer postid,
+                                                       @ApiParam(value = "指定的开始日期,yyyy-MM-dd格式") @RequestParam String beginDate,
+                                                       @ApiParam(value = "指定的结束日期,yyyy-MM-dd格式") @RequestParam String endDate)
+            throws ParseException {
+        Response response = new Response();
+        EChartOfEverydayData data = postFacade.queryPostHeatvalueEveryday(postid, beginDate, endDate);
+        response.setMessage("查询成功");
+        response.setData(data);
         return response;
     }
 
