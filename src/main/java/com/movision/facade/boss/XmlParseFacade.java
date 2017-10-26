@@ -69,6 +69,7 @@ public class XmlParseFacade {
     private SystemLayoutService systemLayoutService;
 
 
+    @Transactional
     public Map analysisXml(HttpServletRequest request, MultipartFile file, String nickname, String phone) {
         Map resault = new HashMap();
         SAXReader reader = new SAXReader();
@@ -132,8 +133,14 @@ public class XmlParseFacade {
                         //查询标签表中是否有此标签
                         Integer lbid = postLabelService.queryPostLabelByNameCompletely(tags[i]);
                         if (lbid == null) {
-                            insertPostLabel(post, tags[i]);
-                            lbs += lbid + ",";
+                            //insertPostLabel(post, tags[i]);
+                            PostLabel postLabel = new PostLabel();
+                            postLabel.setName(tag);
+                            postLabel.setUserid(post.getUserid());
+                            postLabel.setIntime(new Date());
+                            postLabel.setIsdel(0);
+                            postLabelService.insertPostLabel(postLabel);
+                            lbs += postLabel.getId() + ",";
                         } else {
                             lbs += lbid + ",";
                         }
@@ -150,10 +157,10 @@ public class XmlParseFacade {
             }
 
             //释放空间,删除本地图片
-            /*for (int k = 0;k<list.size();k++){
+            for (int k = 0; k < list.size(); k++) {
                 File fi = new File(list.get(k).toString());
                 fi.delete();
-            }*/
+            }
             resault.put("code", 200);
         } catch (Exception e) {
             e.printStackTrace();
@@ -163,12 +170,7 @@ public class XmlParseFacade {
     }
 
     private void insertPostLabel(Post post, String tag) {
-        PostLabel postLabel = new PostLabel();
-        postLabel.setName(tag);
-        postLabel.setUserid(post.getUserid());
-        postLabel.setIntime(new Date());
-        postLabel.setIsdel(0);
-        postLabelService.insertPostLabel(postLabel);
+
     }
 
     /**
