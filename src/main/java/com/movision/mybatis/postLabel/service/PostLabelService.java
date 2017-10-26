@@ -571,4 +571,20 @@ public class PostLabelService {
             throw e;
         }
     }
+
+    /**
+     * 根据标签名称完全匹配
+     *
+     * @param name
+     * @return
+     */
+    public Integer queryPostLabelByNameCompletely(String name) {
+        try {
+            log.info("根据标签名称完全匹配");
+            return postLabelMapper.queryPostLabelByNameCompletely(name);
+        } catch (Exception e) {
+            log.error("根据标签名称完全匹配异常", e);
+            throw e;
+        }
+    }
 }

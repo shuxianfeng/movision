@@ -7,6 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * @Author zhuangyuhao
@@ -26,6 +29,16 @@ public class PostHeatvalueRecordService {
             postHeatvalueRecordMapper.insertSelective(postHeatvalueRecord);
         } catch (Exception e) {
             log.error("新增帖子热度流水失败", e);
+            throw e;
+        }
+    }
+
+    public List<PostHeatvalueRecord> querySpecifyDatePostHeatvalueRecord(Map map) {
+        try {
+            log.info("查询指定日期的帖子的热度流水");
+            return postHeatvalueRecordMapper.querySpecifyDatePostHeatvalueRecord(map);
+        } catch (Exception e) {
+            log.error("查询指定日期的帖子的热度流水失败", e);
             throw e;
         }
     }

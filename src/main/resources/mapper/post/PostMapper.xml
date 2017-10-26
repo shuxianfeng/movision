@@ -2264,5 +2264,12 @@
         SELECT * FROM yw_post where title LIKE concat('%',#{title},'%')
     </select>
 
+    <select id="queryPostHeatvalueEveryday"
+            resultType="com.movision.mybatis.postHeatvalueEverydayRecord.entity.PostHeatvalueEverydayRecord"
+            parameterType="java.lang.Integer">
 
+        SELECT * FROM yw_post_heatvalue_everyday_record
+        where postid = #{postid}
+        order BY intime
+    </select>
 </mapper>

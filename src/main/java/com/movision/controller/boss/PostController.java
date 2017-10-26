@@ -14,6 +14,7 @@ import com.movision.mybatis.circleCategory.entity.CircleCategory;
 import com.movision.mybatis.comment.entity.CommentVo;
 import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.post.entity.*;
+import com.movision.mybatis.postHeatvalueRecord.entity.EchartOf24HourData;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabel.entity.PostLabelDetails;
 import com.movision.mybatis.postLabel.entity.PostLabelVo;
@@ -37,6 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1390,5 +1392,19 @@ public class PostController {
         response.setData(url);
         return response;
     }
+
+    @ApiOperation(value = "查询24小时内指定帖子的热度变化 EChart 数据", notes = "查询24小时内指定帖子的热度变化 EChart 数据", response = Response.class)
+    @RequestMapping(value = "query_24hour_post_heatvalue_echart_data", method = RequestMethod.POST)
+    public Response query24HourPostHeatvalueEchartData(@ApiParam(value = "指定的帖子id") @RequestParam Integer postid,
+                                                       @ApiParam(value = "指定的日期,yyyy-MM-dd格式") @RequestParam String date)
+            throws ParseException {
+        Response response = new Response();
+        List<EchartOf24HourData> list = postFacade.querySpecifyDatePostHeatvalue(postid, date);
+        response.setMessage("查询成功");
+        response.setData(list);
+        return response;
+    }
+
+
 
 }

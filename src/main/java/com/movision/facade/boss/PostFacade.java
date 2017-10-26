@@ -1,8 +1,11 @@
 package com.movision.facade.boss;
 
+import com.movision.common.constant.HeatValueConstant;
 import com.movision.common.constant.JurisdictionConstants;
+import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
+import com.movision.exception.BusinessException;
 import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
@@ -29,6 +32,10 @@ import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.period.service.PeriodService;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.postHeatvalueEverydayRecord.entity.PostHeatvalueEverydayRecord;
+import com.movision.mybatis.postHeatvalueRecord.entity.EchartOf24HourData;
+import com.movision.mybatis.postHeatvalueRecord.entity.PostHeatvalueRecord;
+import com.movision.mybatis.postHeatvalueRecord.service.PostHeatvalueRecordService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabel.entity.PostLabelDetails;
 import com.movision.mybatis.postLabel.entity.PostLabelVo;
@@ -158,6 +165,8 @@ public class PostFacade {
 
     @Autowired
     private PostLabelRelationService postLabelRelationService;
+    @Autowired
+    private PostHeatvalueRecordService postHeatvalueRecordService;
 
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
@@ -2895,6 +2904,189 @@ public class PostFacade {
      */
     public String queryOriginalDrawingUrl(String compressimgurl) {
         return postService.queryOriginalDrawingUrl(compressimgurl);
+    }
+
+    /**
+     * 查询24小时内指定帖子的热度变化 EChart 数据
+     * @param postid
+     * @param date yyyy-MM-dd
+     * @return
+     */
+    public List<EchartOf24HourData> querySpecifyDatePostHeatvalue(Integer postid, String date) throws ParseException {
+        //前置校验参数
+        preValidationParam(postid, date);
+
+        //1 查出指定日期的指定帖子的每日流水
+        Map<String, Object> paramMap = new HashMap();
+        paramMap.put("postid", postid);
+        paramMap.put("date", date);
+        List<PostHeatvalueRecord> postHeatvalueRecords = postHeatvalueRecordService.querySpecifyDatePostHeatvalueRecord(paramMap);
+        log.debug("这是我查出的指定日期的帖子的每天流水：" + postHeatvalueRecords.toString());
+        //校验非空
+        if (ListUtil.isEmpty(postHeatvalueRecords)) {
+            return null;
+        }
+        //2 循环处理，共8中纬度。把流水分入不同纬度的时间段中，每个纬度共24个时间段。
+        int[] viewArr = new int[24];
+        int[] rewardArr = new int[24];
+        int[] collectArr = new int[24];
+        int[] forwardArr = new int[24];
+        int[] commentArr = new int[24];
+        int[] zanArr = new int[24];
+        int[] circleSelectedArr = new int[24];
+        int[] homePageArr = new int[24];
+        //核心算法
+        wrapData(postHeatvalueRecords, viewArr, rewardArr, collectArr, forwardArr, commentArr, zanArr, circleSelectedArr, homePageArr);
+        //3 处理返回的结果集
+        List<EchartOf24HourData> returnList = new ArrayList<>();
+
+        addDataToReturnList("浏览帖子", "view_post", viewArr, returnList);
+        addDataToReturnList("打赏帖子", "reward_post", rewardArr, returnList);
+        addDataToReturnList("收藏帖子", "collect_post", collectArr, returnList);
+        addDataToReturnList("转发帖子", "forward_post", forwardArr, returnList);
+        addDataToReturnList("评论帖子", "comment_post", commentArr, returnList);
+        addDataToReturnList("点赞帖子", "zan_post", zanArr, returnList);
+        addDataToReturnList("圈子精选", "circle_selected", circleSelectedArr, returnList);
+        addDataToReturnList("首页精选", "homepage_selection", homePageArr, returnList);
+
+        return returnList;
+    }
+
+    private void preValidationParam(Integer postid, String date) throws ParseException {
+        //校验帖子id是否存在
+        validationPostidParam(postid);
+        //校验date不能大于当天日期。 当天日期设置成2017-10-26 23:59:59 ; 传入的date设置为2017-10-26 00:00:00
+        if (DateUtils.compareDateWithCurrentDate(date) == 1) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "选择的日期超过了当前日期！");
+        }
+    }
+
+    /**
+     * 封装各个类型的 EchartOf24HourData
+     *
+     * @param postHeatvalueRecords
+     * @param viewArr
+     * @param rewardArr
+     * @param collectArr
+     * @param forwardArr
+     * @param commentArr
+     * @param zanArr
+     * @param circleSelectedArr
+     * @param homePageArr
+     */
+    private void wrapData(List<PostHeatvalueRecord> postHeatvalueRecords, int[] viewArr, int[] rewardArr, int[] collectArr, int[] forwardArr, int[] commentArr, int[] zanArr, int[] circleSelectedArr, int[] homePageArr) {
+        int size = postHeatvalueRecords.size();
+        for (int i = 0; i < size; i++) {
+            PostHeatvalueRecord record = postHeatvalueRecords.get(i);
+            //流水的id
+            int recordId = record.getId();
+            //这条流水的生成时间
+            Date intime = record.getIntime();
+            //流水的类型
+            int type = record.getType();
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(intime);
+            //获取每个流水的时刻 [0-23]
+            int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+
+            if (HeatValueConstant.HEATVALUE_TYPE.view_post.getCode() == type) {
+                handler24HourRecord(hourOfDay, viewArr, HeatValueConstant.POINT.view_post.getCode());
+
+            } else if (HeatValueConstant.HEATVALUE_TYPE.reward_post.getCode() == type) {
+                handler24HourRecord(hourOfDay, rewardArr, HeatValueConstant.POINT.reward_post.getCode());
+
+            } else if (HeatValueConstant.HEATVALUE_TYPE.collection_number.getCode() == type) {
+                handler24HourRecord(hourOfDay, collectArr, HeatValueConstant.POINT.collection_number.getCode());
+
+            } else if (HeatValueConstant.HEATVALUE_TYPE.forwarding_number.getCode() == type) {
+                handler24HourRecord(hourOfDay, forwardArr, HeatValueConstant.POINT.forwarding_number.getCode());
+
+            } else if (HeatValueConstant.HEATVALUE_TYPE.comments_number.getCode() == type) {
+                handler24HourRecord(hourOfDay, commentArr, HeatValueConstant.POINT.comments_number.getCode());
+
+            } else if (HeatValueConstant.HEATVALUE_TYPE.zan_number.getCode() == type) {
+                handler24HourRecord(hourOfDay, zanArr, HeatValueConstant.POINT.zan_number.getCode());
+
+            } else if (HeatValueConstant.HEATVALUE_TYPE.circle_selection.getCode() == type) {
+                handler24HourRecord(hourOfDay, circleSelectedArr, HeatValueConstant.POINT.circle_selection.getCode());
+
+            } else if (HeatValueConstant.HEATVALUE_TYPE.home_page_selection.getCode() == type) {
+                handler24HourRecord(hourOfDay, homePageArr, HeatValueConstant.POINT.home_page_selection.getCode());
+
+            } else {
+                log.error("热度流水类型不正确。当前的流水id=" + recordId + ", 流水类型：" + type);
+            }
+        }
+    }
+
+    /**
+     * 添加 24小时帖子热度变化的EChart 的data到结果集
+     *
+     * @param cName      帖子热度变化类型中文名称
+     * @param eName      帖子热度变化类型英文名称
+     * @param viewArr    对应的data
+     * @param returnList
+     */
+    private void addDataToReturnList(String cName, String eName, int[] viewArr, List<EchartOf24HourData> returnList) {
+        EchartOf24HourData echartOf24HourData = new EchartOf24HourData();
+        echartOf24HourData.setcName(cName);
+        echartOf24HourData.seteName(eName);
+        echartOf24HourData.setData(viewArr);
+        log.debug(cName + ":" + echartOf24HourData.toString());
+        returnList.add(echartOf24HourData);
+    }
+
+    private void handler24HourRecord(int hourOfDay, int[] arr, int heat_value) {
+        for (int i = 0; i < 24; i++) {
+            if (i == hourOfDay) {
+                arr[i] += heat_value;
+            }
+        }
+    }
+
+    /**
+     * 获取 统计指定帖子每天的热度流水的EChart 数据
+     *
+     * @param postid
+     * @param beginDate 横坐标开始日期 yyyy-MM-dd
+     * @param endDate   横坐标结束日期
+     * @return
+     */
+    public List<Map<String, Object>> queryPostHeatvalueEveryday(Integer postid, String beginDate, String endDate) throws ParseException {
+
+        validationPostidParam(postid);
+        if (DateUtils.compareDate(beginDate, endDate) == 1) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "开始时间不能大于结束时间");
+        }
+
+        List<PostHeatvalueEverydayRecord> recordList = postService.queryPostHeatEverydayRecord(postid);
+        if (ListUtil.isEmpty(recordList)) {
+            return null;
+        }
+        int len = recordList.size();
+        Date minDate = recordList.get(0).getIntime();   //当前帖子最旧的流水记录的日期
+        Date maxDate = recordList.get(len - 1).getIntime();   //当前帖子最新的流水记录的日期
+        if (DateUtils.compareDate(beginDate, endDate) == -1) {
+            //正常情况，beginDate 小于 endDate
+
+        } else {
+
+        }
+
+
+        return null;
+    }
+
+    private void validationPostidParam(Integer postid) {
+        //校验帖子id是否存在
+        if (null == postid) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "帖子id不能为null");
+        }
+        List<PostVo> post = postService.queryPost(postid);
+        if (ListUtil.isEmpty(post)) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "该id对应的帖子不存在！");
+        }
     }
 
 }

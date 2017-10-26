@@ -18,10 +18,19 @@ public class PostFacadeTest extends SpringTestCase {
 
     @Test
     public void findAllMyCollectPostList() throws Exception {
+
         Paging<Map> postPaging = new Paging<Map>(1, 10);
         List<Map> postList = postFacade.findAllMyCollectPostList(postPaging, 1);
         postPaging.result(postList);
         System.out.println(postPaging);
+
+    }
+
+    @Test
+    public void querySpecifyDatePostHeatvalue() throws Exception {
+
+        postFacade.querySpecifyDatePostHeatvalue(2214, "2017-10-25");
+
     }
 
 }

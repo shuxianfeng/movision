@@ -127,4 +127,9 @@
             resultType="com.movision.mybatis.systemLayout.entity.SystemLayout">
         SELECT * FROM yw_system_layout WHERE id = #{id,jdbcType=INTEGER}
     </select>
+
+    <select id="queryIphonexUrl" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT value FROM yw_system_layout WHERE type = #{fileurl,jdbcType=VARCHAR} AND module = 'iphonex'
+    </select>
+
 </mapper>

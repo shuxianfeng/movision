@@ -4,6 +4,7 @@ import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.goods.entity.Goods;
 import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
+import com.movision.mybatis.postHeatvalueEverydayRecord.entity.PostHeatvalueEverydayRecord;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
@@ -310,4 +311,6 @@ public interface PostMapper {
     List<PostVo> queryPostListByHeatValue();
 
     Post queryxiaojijiPostForTest(String title);
+
+    List<PostHeatvalueEverydayRecord> queryPostHeatvalueEveryday(Integer postid);
 }

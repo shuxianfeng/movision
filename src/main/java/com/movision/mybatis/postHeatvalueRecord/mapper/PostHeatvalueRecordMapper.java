@@ -2,6 +2,9 @@ package com.movision.mybatis.postHeatvalueRecord.mapper;
 
 import com.movision.mybatis.postHeatvalueRecord.entity.PostHeatvalueRecord;
 
+import java.util.List;
+import java.util.Map;
+
 public interface PostHeatvalueRecordMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +17,6 @@ public interface PostHeatvalueRecordMapper {
     int updateByPrimaryKeySelective(PostHeatvalueRecord record);
 
     int updateByPrimaryKey(PostHeatvalueRecord record);
+
+    List<PostHeatvalueRecord> querySpecifyDatePostHeatvalueRecord(Map map);
 }

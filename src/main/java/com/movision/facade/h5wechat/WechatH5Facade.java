@@ -3,6 +3,7 @@ package com.movision.facade.h5wechat;
 import com.movision.mybatis.count.entity.Count;
 import com.movision.mybatis.count.service.CountService;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.sun.image.codec.jpeg.ImageFormatException;
@@ -31,10 +32,13 @@ import java.util.Map;
 @Service
 public class WechatH5Facade extends JPanel {
     private static Logger log = LoggerFactory.getLogger(WechatH5Facade.class);
+
+    @Autowired
+    private SystemLayoutService systemLayoutService;
     //下面是模板图片的路径
     String timgurl = PropertiesLoader.getValue("wechat.h5.domain");
-    String newurl = PropertiesLoader.getValue("wechat.newh5.domain");//新图片路径
-    String newurl2 = PropertiesLoader.getValue("wechat.h5.mofo");//新图片路径
+    // String newurl = PropertiesLoader.getValue("wechat.newh5.domain");//新图片路径
+    //String newurl2 = PropertiesLoader.getValue("wechat.h5.mofo");//新图片路径
     String headImg = PropertiesLoader.getValue("wechat.erweima.domain");//二维码路径
     String lihunurl = PropertiesLoader.getValue("wechat.lihun.domain");
     String lihunxieyiurl = PropertiesLoader.getValue("wechat.lihunxieyi.domain");
@@ -42,8 +46,8 @@ public class WechatH5Facade extends JPanel {
     String su = PropertiesLoader.getValue("wechat.xin.domain");
 
 
-    String iphone = PropertiesLoader.getValue("wechat.iphone.domain");//小图二维码
-    String iphoneUrl = PropertiesLoader.getValue("wechat.iphoneUrl.domain");//主图
+    // String iphone = PropertiesLoader.getValue("wechat.iphone.domain");//小图二维码
+    //String iphoneUrl = PropertiesLoader.getValue("wechat.iphoneUrl.domain");//主图
 
     @Autowired
     private CountService countService;
@@ -109,6 +113,8 @@ public class WechatH5Facade extends JPanel {
 
 
     public Map He(InputStream is, String manname, String womanname, String msex, String wsex) {
+        String newurl = systemLayoutService.queryIphonexUrl("iphonex_wechat_newh5_domain");//新图片地址
+        String newurl2 = systemLayoutService.queryServiceUrl("domain_name");//测试前缀
         Map map = new HashMap();
         try {
 
@@ -249,6 +255,9 @@ public class WechatH5Facade extends JPanel {
      * @return
      */
     public Map LiHun(InputStream is, String manname, String womanname, String content) {
+        String newurl = systemLayoutService.queryIphonexUrl("iphonex_wechat_newh5_domain");//新图片地址
+        String newurl2 = systemLayoutService.queryServiceUrl("domain_name");//测试前缀
+
         Map map = new HashMap();
         try {
             Calendar calendar = Calendar.getInstance();
@@ -388,6 +397,9 @@ public class WechatH5Facade extends JPanel {
      * @return
      */
     public Map LiHunxiex(InputStream is, String manname, String womanname, String content) {
+
+        String newurl = systemLayoutService.queryIphonexUrl("iphonex_wechat_newh5_domain");//新图片地址
+        String newurl2 = systemLayoutService.queryServiceUrl("domain_name");//测试前缀
         Map map = new HashMap();
         try {
             Calendar calendar = Calendar.getInstance();
@@ -492,6 +504,9 @@ public class WechatH5Facade extends JPanel {
         Map map = new HashMap();
         try {
 
+            String newurl = systemLayoutService.queryIphonexUrl("iphonex_wechat_newh5_domain");//新图片地址
+            String newurl2 = systemLayoutService.queryServiceUrl("domain_name");//测试前缀
+            String iphone = systemLayoutService.queryIphonexUrl("iphonex_wechat_iphone_domain");//iphone二维码
             //通过JPEG图象流创建JPEG数据流解码器
             JPEGImageDecoder jpegDecoder = JPEGCodec.createJPEGDecoder(is);
             //解码当前JPEG数据流，返回BufferedImage对象
@@ -516,8 +531,8 @@ public class WechatH5Facade extends JPanel {
             g.setColor(Color.BLACK);
 
             //最后一个参数用来设置字体的大小
-            Font f = new Font("宋体", Font.PLAIN, 14);
-            Color color = new Color(112, 104, 115);
+            Font f = new Font("苹方 细体", Font.PLAIN, 14);
+            Color color = new Color(127, 127, 127);
             Color[] mycolor = {color, Color.BLACK};
             // g.setColor(mycolor);
             g.setFont(f);
@@ -567,6 +582,8 @@ public class WechatH5Facade extends JPanel {
 
     public Map<String, Object> imgIphonex(String name) {
         Map<String, Object> map = new HashMap<>();
+        String iphoneUrl = systemLayoutService.queryIphonexUrl("iphonex_wechat_iphoneUrl_domain");//iphone模板
+
         try {
             InputStream is = new FileInputStream(iphoneUrl);
             map = IphoneX(is, name);

@@ -282,11 +282,75 @@ public class DateUtils {
         return ca.getTime();
     }
 
+    /**
+     * 比较日期大小
+     *
+     * @param date yyyy-MM-dd
+     * @return 传入的日期大于最大日期 返回1；
+     *          传入的日期小于最大日期 返回-1；
+     *          传入的日期等于最大日期 返回0；
+     * @throws ParseException
+     */
+    public static Integer compareDateWithCurrentDate(String date) throws ParseException {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        Date maxDate = calendar.getTime();  //最大日期
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date paramDate = sdf.parse(date + " 00:00:00");
+
+        if (paramDate.after(maxDate)) {
+            log.debug("传入的日期大于最大日期");
+            return 1;
+        } else if (paramDate.before(maxDate)) {
+            log.debug("传入的日期小于最大日期");
+            return -1;
+        } else {
+            log.debug("传入的日期等于最大日期");
+            return 0;
+        }
+    }
+
+    /**
+     * 比较两个日期
+     *
+     * @param firstDate  第一个日期 yyyy-MM-dd
+     * @param secondDate 第二个日期
+     * @return 第一个日期大于第二个日期 返回1；
+     * 第一个日期小于第二个日期 返回-1；
+     * 第一个日期等于第二个日期 返回0；
+     * @throws ParseException
+     */
+    public static Integer compareDate(String firstDate, String secondDate) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date firstD = sdf.parse(firstDate);
+        Date secondD = sdf.parse(secondDate);
+
+        if (firstD.after(secondD)) {
+            log.debug("第一个日期大于第二个日期");
+            return 1;
+        } else if (firstD.before(secondD)) {
+            log.debug("第一个日期小于第二个日期");
+            return -1;
+        } else {
+            log.debug("第一个日期等于第二个日期");
+            return 0;
+        }
+    }
+
+
     public static void main(String[] args) throws ParseException {
+        compareDate("2017-10-29", "2017-10-28");
+//        compareDateWithCurrentDate("2017-10-27");
 
 //        getCurrentMonthFirstDay();
 //        getCurrentMonthLastDay();
-        getDefaultBirthday();
+//        getDefaultBirthday();
+
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.HOUR_OF_DAY, 0);  //Calendar.HOUR_OF_DAY的值 0-23
+//        log.debug("当前的时间Calendar.HOUR_OF_DAY：" + calendar.get(Calendar.HOUR_OF_DAY));
 
     }
 }

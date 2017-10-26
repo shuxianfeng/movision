@@ -126,4 +126,11 @@
         isdel = #{isdel,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="querySpecifyDatePostHeatvalueRecord" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.postHeatvalueRecord.entity.PostHeatvalueRecord">
+        SELECT * FROM yw_post_heatvalue_record
+        where postid = #{postid}
+        and DATE_FORMAT(intime,'%Y-%m-%d') = DATE_FORMAT(#{date},'%Y-%m-%d')
+    </select>
 </mapper>
