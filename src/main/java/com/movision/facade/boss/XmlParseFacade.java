@@ -420,7 +420,7 @@ public class XmlParseFacade {
         InputStream is = null;
         OutputStream os = null;
         Map map = new HashMap();
-        String path = systemLayoutService.queryServiceUrl("file_service_url");
+        String path = systemLayoutService.queryServiceUrl("file_xml_dwonload_img");
         if (type.equals("img")) {
             path += "img/";
         } else if (type.equals("video")) {
