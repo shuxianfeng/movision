@@ -2,8 +2,10 @@ package com.movision.facade.boss;
 
 import com.movision.common.constant.HeatValueConstant;
 import com.movision.common.constant.JurisdictionConstants;
+import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
+import com.movision.exception.BusinessException;
 import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.fsearch.utils.StringUtil;
@@ -30,6 +32,7 @@ import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.period.service.PeriodService;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.postHeatvalueRecord.entity.EchartOf24HourData;
 import com.movision.mybatis.postHeatvalueRecord.entity.PostHeatvalueRecord;
 import com.movision.mybatis.postHeatvalueRecord.service.PostHeatvalueRecordService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
@@ -2903,11 +2906,16 @@ public class PostFacade {
     }
 
     /**
-     * 查询24小时内指定帖子的热度变化EChart 数据
-     *
+     * 查询24小时内指定帖子的热度变化 EChart 数据
+     * @param postid
+     * @param date yyyy-MM-dd
      * @return
      */
-    public List<Map<String, Object>> querySpecifyDatePostHeatvalue(Integer postid, String date) {
+    public List<EchartOf24HourData> querySpecifyDatePostHeatvalue(Integer postid, String date) throws ParseException {
+        //前置校验参数
+        preValidationParam(postid, date);
+
+        //1 查出指定日期的指定帖子的每日流水
         Map<String, Object> paramMap = new HashMap();
         paramMap.put("postid", postid);
         paramMap.put("date", date);
@@ -2917,7 +2925,7 @@ public class PostFacade {
         if (ListUtil.isEmpty(postHeatvalueRecords)) {
             return null;
         }
-        //循环处理，共8中纬度。把流水分入不同纬度的时间段中，每个纬度共24个时间段。
+        //2 循环处理，共8中纬度。把流水分入不同纬度的时间段中，每个纬度共24个时间段。
         int[] viewArr = new int[24];
         int[] rewardArr = new int[24];
         int[] collectArr = new int[24];
@@ -2926,7 +2934,52 @@ public class PostFacade {
         int[] zanArr = new int[24];
         int[] circleSelectedArr = new int[24];
         int[] homePageArr = new int[24];
+        //核心算法
+        wrapData(postHeatvalueRecords, viewArr, rewardArr, collectArr, forwardArr, commentArr, zanArr, circleSelectedArr, homePageArr);
+        //3 处理返回的结果集
+        List<EchartOf24HourData> returnList = new ArrayList<>();
 
+        addDataToReturnList("浏览帖子", "view_post", viewArr, returnList);
+        addDataToReturnList("打赏帖子", "reward_post", rewardArr, returnList);
+        addDataToReturnList("收藏帖子", "collect_post", collectArr, returnList);
+        addDataToReturnList("转发帖子", "forward_post", forwardArr, returnList);
+        addDataToReturnList("评论帖子", "comment_post", commentArr, returnList);
+        addDataToReturnList("点赞帖子", "zan_post", zanArr, returnList);
+        addDataToReturnList("圈子精选", "circle_selected", circleSelectedArr, returnList);
+        addDataToReturnList("首页精选", "homepage_selection", homePageArr, returnList);
+
+        return returnList;
+    }
+
+    private void preValidationParam(Integer postid, String date) throws ParseException {
+        //校验帖子id是否存在
+        if (null == postid) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "帖子id不能为null");
+        }
+        List<PostVo> post = postService.queryPost(postid);
+        if (ListUtil.isEmpty(post)) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "该id对应的帖子不存在！");
+        }
+        //校验date不能大于当天日期。 当天日期设置成2017-10-26 23:59:59 ; 传入的date设置为2017-10-26 00:00:00
+        if (DateUtils.compareDateWithCurrentDate(date) == 1) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "选择的日期超过了当前日期！");
+        }
+    }
+
+    /**
+     * 封装各个类型的 EchartOf24HourData
+     *
+     * @param postHeatvalueRecords
+     * @param viewArr
+     * @param rewardArr
+     * @param collectArr
+     * @param forwardArr
+     * @param commentArr
+     * @param zanArr
+     * @param circleSelectedArr
+     * @param homePageArr
+     */
+    private void wrapData(List<PostHeatvalueRecord> postHeatvalueRecords, int[] viewArr, int[] rewardArr, int[] collectArr, int[] forwardArr, int[] commentArr, int[] zanArr, int[] circleSelectedArr, int[] homePageArr) {
         int size = postHeatvalueRecords.size();
         for (int i = 0; i < size; i++) {
             PostHeatvalueRecord record = postHeatvalueRecords.get(i);
@@ -2969,12 +3022,24 @@ public class PostFacade {
             } else {
                 log.error("热度流水类型不正确。当前的流水id=" + recordId + ", 流水类型：" + type);
             }
-
         }
-        // TODO: 2017/10/25  
+    }
 
-
-        return null;
+    /**
+     * 添加 24小时帖子热度变化的EChart 的data到结果集
+     *
+     * @param cName      帖子热度变化类型中文名称
+     * @param eName      帖子热度变化类型英文名称
+     * @param viewArr    对应的data
+     * @param returnList
+     */
+    private void addDataToReturnList(String cName, String eName, int[] viewArr, List<EchartOf24HourData> returnList) {
+        EchartOf24HourData echartOf24HourData = new EchartOf24HourData();
+        echartOf24HourData.setcName(cName);
+        echartOf24HourData.seteName(eName);
+        echartOf24HourData.setData(viewArr);
+        log.debug(cName + ":" + echartOf24HourData.toString());
+        returnList.add(echartOf24HourData);
     }
 
     private void handler24HourRecord(int hourOfDay, int[] arr) {
@@ -2983,58 +3048,6 @@ public class PostFacade {
                 arr[i]++;
             }
         }
-
-        /*if(0 == hourOfDay){
-            arr[0]++;
-        }else if(1 == hourOfDay){
-            arr[1]++;
-        }else if(2 == hourOfDay){
-
-        }else if(3 == hourOfDay){
-
-        }else if(4 == hourOfDay){
-
-        }else if(5 == hourOfDay){
-
-        }else if(6 == hourOfDay){
-
-        }else if(7 == hourOfDay){
-
-        }else if(8 == hourOfDay){
-
-        }else if(9 == hourOfDay){
-
-        }else if(10 == hourOfDay){
-
-        }else if(11 == hourOfDay){
-
-        }else if(12 == hourOfDay){
-
-        }else if(13 == hourOfDay){
-
-        }else if(14 == hourOfDay){
-
-        }else if(15 == hourOfDay){
-
-        }else if(16 == hourOfDay){
-
-        }else if(17 == hourOfDay){
-
-        }else if(18 == hourOfDay){
-
-        }else if(19 == hourOfDay){
-
-        }else if(20 == hourOfDay){
-
-        }else if(21 == hourOfDay){
-
-        }else if(22 == hourOfDay){
-
-        }else if(23 == hourOfDay){
-
-        }else {
-            log.error("当前流水的时间错误，当前流水的id:" + recordId+", 流水时间：" + intime);
-        }*/
     }
 
 }

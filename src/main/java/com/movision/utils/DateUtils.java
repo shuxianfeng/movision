@@ -1,5 +1,7 @@
 package com.movision.utils;
 
+import com.movision.common.constant.MsgCodeConstant;
+import com.movision.exception.BusinessException;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -283,16 +285,46 @@ public class DateUtils {
         return ca.getTime();
     }
 
+    /**
+     * 比较日期大小
+     *
+     * @param date yyyy-MM-dd
+     * @return
+     * @throws ParseException
+     */
+    public static Integer compareDateWithCurrentDate(String date) throws ParseException {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        Date maxDate = calendar.getTime();  //最大日期
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date paramDate = sdf.parse(date + " 00:00:00");
+
+        if (paramDate.after(maxDate)) {
+            log.debug("传入的日期大于最大日期");
+            return 1;
+        } else if (paramDate.before(maxDate)) {
+            log.debug("传入的日期小于最大日期");
+            return -1;
+        } else {
+            log.debug("传入的日期等于最大日期");
+            return 0;
+        }
+    }
+
 
     public static void main(String[] args) throws ParseException {
+
+        compareDateWithCurrentDate("2017-10-27");
 
 //        getCurrentMonthFirstDay();
 //        getCurrentMonthLastDay();
 //        getDefaultBirthday();
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);  //Calendar.HOUR_OF_DAY的值 0-23
-        log.debug("当前的时间Calendar.HOUR_OF_DAY：" + calendar.get(Calendar.HOUR_OF_DAY));
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.HOUR_OF_DAY, 0);  //Calendar.HOUR_OF_DAY的值 0-23
+//        log.debug("当前的时间Calendar.HOUR_OF_DAY：" + calendar.get(Calendar.HOUR_OF_DAY));
 
     }
 }
