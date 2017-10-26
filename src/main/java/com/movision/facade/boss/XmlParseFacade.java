@@ -422,9 +422,9 @@ public class XmlParseFacade {
         Map map = new HashMap();
         String path = systemLayoutService.queryServiceUrl("file_service_url");
         if (type.equals("img")) {
-            path = "img/";
+            path += "img/";
         } else if (type.equals("video")) {
-            path = "video/";
+            path += "video/";
         }
         try {
             String url = str;
