@@ -41,8 +41,7 @@ public class XmlParseFacade {
         SAXReader reader = new SAXReader();
         Post post = new Post();
         try {
-            String ssss = queryUser(nickname, phone, post);
-            resault.put("ssss", ssss);
+            queryUser(nickname, phone, post);
             Document document = reader.read(file.getInputStream());
             System.out.println(document);
             //获取跟标签
@@ -111,7 +110,7 @@ public class XmlParseFacade {
      * @param phone
      * @param post
      */
-    private String queryUser(String nickname, String phone, Post post) {
+    private void queryUser(String nickname, String phone, Post post) {
         User user = new User();
         if (StringUtil.isNotEmpty(phone)) {
             user.setPhone(phone);
@@ -121,14 +120,17 @@ public class XmlParseFacade {
         }
         //根据手机号或昵称查询
         User userid = userService.queryUserByPhone(phone);
-        /*if (userid != null) {
+        if (userid != null) {
             post.setUserid(userid.getId());
-        } else {*/
+        } else {
             //注册用户,调用注册接口
             //获取验证码,发起get请求
-        return videoUploadUtil.GetHttp("http://51mofo.com/movision/app/login/get_mobile_code?mobile=" + phone);
-        //System.out.println(s);
-        /*}*/
+            String s = videoUploadUtil.GetHttp("http://51mofo.com/movision/app/login/get_mobile_code?mobile=" + phone);
+            s = s.replace("/", "");
+            String[] sub = s.split(",");
+            String yanzhengma = sub[2].substring(sub[2].indexOf(":"), sub.length - 1);
+            System.out.println("************************************" + yanzhengma);
+        }
     }
 
     /**
