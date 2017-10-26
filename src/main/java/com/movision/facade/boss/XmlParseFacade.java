@@ -383,6 +383,7 @@ public class XmlParseFacade {
         pho = pho.replace("\"", "");
         String[] substring = pho.split(",");
         int num = 0;
+        boolean bln = true;
         //循环子节点拼接帖子内容
         for (int i = 0; i < substring.length; i++) {
 
@@ -391,10 +392,11 @@ public class XmlParseFacade {
                 content += "\"type\":1,";
                 Map m = download(substring[i].substring(substring[i].indexOf(":") + 1, substring[i].indexOf("?")), "img");
                 list.add(m.get("oldurl"));
-                if (i == 0) {
+                if (bln) {
                     post.setCoverimg(m.get("newurl").toString());
                 }
                 content += "\"value\":\"" + m.get("newurl") + "\",\"dir\": \"\"},";
+                bln = false;
             }
             if (substring[i].substring(0, substring[i].indexOf(":")).equals("ow")) {
                 content += "{\"orderid\":" + num + ",";
