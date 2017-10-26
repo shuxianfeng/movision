@@ -86,9 +86,9 @@ public class XmlParseFacade {
                 List<Element> elements = element.elements();
                 //存储本地图片路径，以便做空间释放操作
                 List list = new ArrayList();
-                boolean flg = false;
                 //循环所有父节点
                 for (Element e : elements) {
+                    boolean flg = false;
                     //用于拼接帖子内容
                     String content = "[";
                     //获取发帖时间并转换为long类型
