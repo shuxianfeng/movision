@@ -218,6 +218,7 @@ public class XmlParseFacade {
             UsernamePasswordToken newToken = new UsernamePasswordToken(phone, verifyCode.toCharArray());
             RegisterUser member = new RegisterUser();
             member.setPhone(phone);
+            member.setDeviceno("19dajieshule");
             member.setMobileCheckCode(verifyCode);
             //2 注册用户/修改用户信息
             Gson gson = new Gson();
