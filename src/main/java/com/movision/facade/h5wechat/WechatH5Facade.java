@@ -49,11 +49,6 @@ public class WechatH5Facade extends JPanel {
     // String iphone = PropertiesLoader.getValue("wechat.iphone.domain");//小图二维码
     //String iphoneUrl = PropertiesLoader.getValue("wechat.iphoneUrl.domain");//主图
 
-    String newurl = systemLayoutService.queryIphonexUrl("iphonex_wechat_newh5_domain");//新图片地址
-    String newurl2 = systemLayoutService.queryServiceUrl("domain_name");//测试前缀
-    String iphone = systemLayoutService.queryIphonexUrl("iphonex_wechat_iphone_domain");//iphone二维码
-    String iphoneUrl = systemLayoutService.queryIphonexUrl("iphonex_wechat_iphoneUrl_domain");//iphone模板
-
     @Autowired
     private CountService countService;
 
@@ -118,6 +113,8 @@ public class WechatH5Facade extends JPanel {
 
 
     public Map He(InputStream is, String manname, String womanname, String msex, String wsex) {
+        String newurl = systemLayoutService.queryIphonexUrl("iphonex_wechat_newh5_domain");//新图片地址
+        String newurl2 = systemLayoutService.queryServiceUrl("domain_name");//测试前缀
         Map map = new HashMap();
         try {
 
@@ -258,6 +255,9 @@ public class WechatH5Facade extends JPanel {
      * @return
      */
     public Map LiHun(InputStream is, String manname, String womanname, String content) {
+        String newurl = systemLayoutService.queryIphonexUrl("iphonex_wechat_newh5_domain");//新图片地址
+        String newurl2 = systemLayoutService.queryServiceUrl("domain_name");//测试前缀
+
         Map map = new HashMap();
         try {
             Calendar calendar = Calendar.getInstance();
@@ -397,6 +397,9 @@ public class WechatH5Facade extends JPanel {
      * @return
      */
     public Map LiHunxiex(InputStream is, String manname, String womanname, String content) {
+
+        String newurl = systemLayoutService.queryIphonexUrl("iphonex_wechat_newh5_domain");//新图片地址
+        String newurl2 = systemLayoutService.queryServiceUrl("domain_name");//测试前缀
         Map map = new HashMap();
         try {
             Calendar calendar = Calendar.getInstance();
@@ -501,6 +504,9 @@ public class WechatH5Facade extends JPanel {
         Map map = new HashMap();
         try {
 
+            String newurl = systemLayoutService.queryIphonexUrl("iphonex_wechat_newh5_domain");//新图片地址
+            String newurl2 = systemLayoutService.queryServiceUrl("domain_name");//测试前缀
+            String iphone = systemLayoutService.queryIphonexUrl("iphonex_wechat_iphone_domain");//iphone二维码
             //通过JPEG图象流创建JPEG数据流解码器
             JPEGImageDecoder jpegDecoder = JPEGCodec.createJPEGDecoder(is);
             //解码当前JPEG数据流，返回BufferedImage对象
@@ -576,6 +582,8 @@ public class WechatH5Facade extends JPanel {
 
     public Map<String, Object> imgIphonex(String name) {
         Map<String, Object> map = new HashMap<>();
+        String iphoneUrl = systemLayoutService.queryIphonexUrl("iphonex_wechat_iphoneUrl_domain");//iphone模板
+
         try {
             InputStream is = new FileInputStream(iphoneUrl);
             map = IphoneX(is, name);
