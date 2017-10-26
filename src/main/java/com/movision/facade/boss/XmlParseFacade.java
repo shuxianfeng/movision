@@ -77,92 +77,96 @@ public class XmlParseFacade {
         try {
             //查询用户是否存在，不存在新增操作
             Integer usid = queryUser(nickname, phone, post);
-            post.setUserid(usid);
-            Document document = reader.read(file.getInputStream());
-            System.out.println(document);
-            //获取跟标签
-            Element element = document.getRootElement();
-            List<Element> elements = element.elements();
-            //存储本地图片路径，以便做空间释放操作
-            List list = new ArrayList();
-            boolean flg = false;
-            //循环所有父节点
-            for (Element e : elements) {
-                //用于拼接帖子内容
-                String content = "[";
-                //获取发帖时间并转换为long类型
-                Long publishTime = Long.parseLong(e.element("publishTime").getText());
-                Date intime = new Date(publishTime);
-                post.setIntime(intime);
-                //类型
-                String type = e.element("type").getText();
-                //标签
-                String tag = e.element("tag").getText();
+            if (usid != null) {
+                post.setUserid(usid);
+                Document document = reader.read(file.getInputStream());
+                System.out.println(document);
+                //获取跟标签
+                Element element = document.getRootElement();
+                List<Element> elements = element.elements();
+                //存储本地图片路径，以便做空间释放操作
+                List list = new ArrayList();
+                boolean flg = false;
+                //循环所有父节点
+                for (Element e : elements) {
+                    //用于拼接帖子内容
+                    String content = "[";
+                    //获取发帖时间并转换为long类型
+                    Long publishTime = Long.parseLong(e.element("publishTime").getText());
+                    Date intime = new Date(publishTime);
+                    post.setIntime(intime);
+                    //类型
+                    String type = e.element("type").getText();
+                    //标签
+                    String tag = e.element("tag").getText();
 
-                //图片内容解析
-                if (type.equals("Photo")) {
-                    content = getImgContentAnalysis(post, list, e, content);
-                    flg = true;
-                }
-                //视频内容解析
-                if (type.equals("Video")) {
-                    //视频内容
-                    content = getVideoContentAnalysis(post, e, content);
-                    flg = true;
-                }
-                //纯文本解析
+                    //图片内容解析
+                    if (type.equals("Photo")) {
+                        content = getImgContentAnalysis(post, list, e, content);
+                        flg = true;
+                    }
+                    //视频内容解析
+                    if (type.equals("Video")) {
+                        //视频内容
+                        content = getVideoContentAnalysis(post, e, content);
+                        flg = true;
+                    }
+                    //纯文本解析
                 /*if (type.equals("Text")){
                     //文本
                     s = getTextContentAnalysis(post, e, s);
                     flg = true;
                 }*/
 
-                if (!flg) {
-                    content = "";
-                }
-                post.setIntime(new Date());
-                post.setCircleid(125);
-                post.setPostcontent(content);
-                System.out.println("---------" + content);
+                    if (!flg) {
+                        content = "";
+                    }
+                    post.setIntime(new Date());
+                    post.setCircleid(125);
+                    post.setPostcontent(content);
+                    System.out.println("---------" + content);
 
-                if (content != "") {
-                    //标签操作 //
-                    String[] tags = tag.split(",");
-                    String lbs = "";
-                    for (int i = 0; i < tags.length; i++) {
-                        //查询标签表中是否有此标签
-                        Integer lbid = postLabelService.queryPostLabelByNameCompletely(tags[i]);
-                        if (lbid == null) {
-                            //insertPostLabel(post, tags[i]);
-                            PostLabel postLabel = new PostLabel();
-                            postLabel.setName(tag);
-                            postLabel.setType(1);
-                            postLabel.setUserid(post.getUserid());
-                            postLabel.setIntime(new Date());
-                            postLabel.setIsdel(0);
-                            postLabelService.insertPostLabel(postLabel);
-                            lbs += postLabel.getId() + ",";
-                        } else {
-                            lbs += lbid + ",";
+                    if (content != "") {
+                        //标签操作 //
+                        String[] tags = tag.split(",");
+                        String lbs = "";
+                        for (int i = 0; i < tags.length; i++) {
+                            //查询标签表中是否有此标签
+                            Integer lbid = postLabelService.queryPostLabelByNameCompletely(tags[i]);
+                            if (lbid == null) {
+                                //insertPostLabel(post, tags[i]);
+                                PostLabel postLabel = new PostLabel();
+                                postLabel.setName(tag);
+                                postLabel.setType(1);
+                                postLabel.setUserid(post.getUserid());
+                                postLabel.setIntime(new Date());
+                                postLabel.setIsdel(0);
+                                postLabelService.insertPostLabel(postLabel);
+                                lbs += postLabel.getId() + ",";
+                            } else {
+                                lbs += lbid + ",";
+                            }
+                            if (i == tags.length - 1) {
+                                lbs.substring(0, lbs.lastIndexOf(","));
+                            }
                         }
-                        if (i == tags.length - 1) {
-                            lbs.substring(0, lbs.lastIndexOf(","));
-                        }
+
+                        //新增帖子操作
+                        postFacade.addPostTest(request, "", "", post.getCircleid().toString(), post.getUserid().toString(),
+                                post.getCoverimg(), post.getPostcontent(), lbs, "", "1");
                     }
 
-                    //新增帖子操作
-                    postFacade.addPostTest(request, "", "", post.getCircleid().toString(), post.getUserid().toString(),
-                            post.getCoverimg(), post.getPostcontent(), lbs, "", "1");
                 }
 
+                //释放空间,删除本地图片
+                for (int k = 0; k < list.size(); k++) {
+                    File fi = new File(list.get(k).toString());
+                    fi.delete();
+                }
+                resault.put("code", 200);
+            } else {
+                resault.put("code", 300);
             }
-
-            //释放空间,删除本地图片
-            for (int k = 0; k < list.size(); k++) {
-                File fi = new File(list.get(k).toString());
-                fi.delete();
-            }
-            resault.put("code", 200);
         } catch (Exception e) {
             e.printStackTrace();
             resault.put("code", 400);
@@ -424,6 +428,7 @@ public class XmlParseFacade {
         OutputStream os = null;
         Map map = new HashMap();
         String path = systemLayoutService.queryServiceUrl("file_xml_dwonload_img");
+        //String path = "c://";
         if (type.equals("img")) {
             path += "img/";
         } else if (type.equals("video")) {

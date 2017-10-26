@@ -51,8 +51,15 @@ public class XmlParseController {
                              @ApiParam(value = "手机号") @RequestParam String phone) {
         Response response = new Response();
         Map map = xmlParseFacade.analysisXml(request, file, nickname, phone);
-        response.setMessage("操作成功");
-        response.setData(map);
+        if (map.get("code").equals(200)) {
+            response.setMessage("操作成功");
+            response.setData(map);
+        } else if (map.get("code").equals(300)) {
+            response.setMessage("新增用户失败");
+            response.setData(map);
+        } else {
+            response.setData(map);
+        }
         return response;
     }
 
