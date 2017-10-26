@@ -117,4 +117,6 @@ public interface PostLabelMapper {
     List<PostLabel> findAllLabelByName(Map<String, Object> map, RowBounds rowBounds);
 
     PostLabel selectGeogLabelByCitycode(String citycode);
+
+    Integer queryPostLabelByNameCompletely(String name);
 }

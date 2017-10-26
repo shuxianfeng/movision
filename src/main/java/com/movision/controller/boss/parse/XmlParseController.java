@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
@@ -44,11 +45,12 @@ public class XmlParseController {
      */
     @ApiOperation(value = "解析xml文件", notes = "用于解析xml文件", response = Response.class)
     @RequestMapping(value = "/analysis_xml", method = RequestMethod.POST)
-    public Response xmlParse(@ApiParam(value = "文件") @RequestParam MultipartFile file,
+    public Response xmlParse(HttpServletRequest request,
+                             @ApiParam(value = "文件") @RequestParam MultipartFile file,
                              @ApiParam(value = "用户昵称") @RequestParam String nickname,
                              @ApiParam(value = "手机号") @RequestParam String phone) {
         Response response = new Response();
-        Map map = xmlParseFacade.analysisXml(file, nickname, phone);
+        Map map = xmlParseFacade.analysisXml(request, file, nickname, phone);
         response.setMessage("操作成功");
         response.setData(map);
         return response;

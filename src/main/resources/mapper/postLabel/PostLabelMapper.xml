@@ -37,6 +37,9 @@
       #{userid,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.movision.mybatis.postLabel.entity.PostLabel">
+      <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+          select LAST_INSERT_ID()
+      </selectKey>
     insert into yw_post_label
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -421,5 +424,9 @@
         SELECT * from yw_post_label
         where isdel = 0
         and citycode = #{citycode}
+    </select>
+
+    <select id="queryPostLabelByNameCompletely" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT id FROM yw_post_label WHERE name = #{name,jdbcType=VARCHAR} AND isdel = 0 AND type = 1 GROUP BY name
     </select>
 </mapper>
