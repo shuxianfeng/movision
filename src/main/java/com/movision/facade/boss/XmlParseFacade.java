@@ -136,6 +136,7 @@ public class XmlParseFacade {
                             //insertPostLabel(post, tags[i]);
                             PostLabel postLabel = new PostLabel();
                             postLabel.setName(tag);
+                            postLabel.setType(1);
                             postLabel.setUserid(post.getUserid());
                             postLabel.setIntime(new Date());
                             postLabel.setIsdel(0);
