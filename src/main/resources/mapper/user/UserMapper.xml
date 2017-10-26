@@ -554,6 +554,10 @@
         where <![CDATA[ (id > 20000 OR id < 10000)]]> AND phone = #{phone}
     </select>
 
+    <update id="updateUserByNickname" parameterType="com.movision.mybatis.user.entity.User">
+        UPDATE yw_user SET nickname = #{nickname,jdbcType=VARCHAR} WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
     <select id="selectLoginUserByPhone" parameterType="com.movision.mybatis.user.entity.User"
             resultType="com.movision.mybatis.user.entity.LoginUser">
         select

@@ -76,7 +76,7 @@ public class XmlParseFacade {
         Post post = new Post();
         try {
             //查询用户是否存在，不存在新增操作
-            Integer usid = queryUser(nickname, phone, post);
+            Integer usid = queryUser(nickname, phone);
             if (usid != null) {
                 post.setUserid(usid);
                 Document document = reader.read(file.getInputStream());
@@ -183,9 +183,9 @@ public class XmlParseFacade {
      *
      * @param nickname
      * @param phone
-     * @param post
+     * @param
      */
-    private Integer queryUser(String nickname, String phone, Post post) {
+    private Integer queryUser(String nickname, String phone) {
         User user = new User();
         if (StringUtil.isNotEmpty(phone)) {
             user.setPhone(phone);
@@ -196,12 +196,13 @@ public class XmlParseFacade {
         //根据手机号或昵称查询
         User userid = userService.queryUserByPhone(phone);
         if (userid != null) {
-            post.setUserid(userid.getId());
             return userid.getId();
         } else {
             //注册用户
             int uid = newUserRegistration(phone);
-            post.setUserid(uid);
+            user.setId(uid);
+            //修改用户昵称
+            userService.updateUserByNickname(user);
             return uid;
         }
     }
