@@ -32,4 +32,7 @@ public interface SystemLayoutMapper {
 
     SystemLayout querySystemLayoutById(Integer id);
 
+    String queryIphonexUrl(String fileurl);
+
+
 }

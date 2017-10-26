@@ -70,6 +70,23 @@ public class SystemLayoutService {
         }
     }
 
+
+    /**
+     * 查询资源服务器iphonex
+     *
+     * @param str
+     * @return
+     */
+    public String queryIphonexUrl(String str) {
+        try {
+            log.info("查询资源服务器iphonex");
+            return systemLayoutMapper.queryServiceUrl(str);
+        } catch (Exception e) {
+            log.error("查询资源服务器iphonex异常", e);
+            throw e;
+        }
+    }
+
     /**
      * 查询图片压缩比例
      *

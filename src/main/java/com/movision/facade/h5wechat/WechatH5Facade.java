@@ -37,8 +37,8 @@ public class WechatH5Facade extends JPanel {
     private SystemLayoutService systemLayoutService;
     //下面是模板图片的路径
     String timgurl = PropertiesLoader.getValue("wechat.h5.domain");
-    String newurl = PropertiesLoader.getValue("wechat.newh5.domain");//新图片路径
-    String newurl2 = PropertiesLoader.getValue("wechat.h5.mofo");//新图片路径
+    // String newurl = PropertiesLoader.getValue("wechat.newh5.domain");//新图片路径
+    //String newurl2 = PropertiesLoader.getValue("wechat.h5.mofo");//新图片路径
     String headImg = PropertiesLoader.getValue("wechat.erweima.domain");//二维码路径
     String lihunurl = PropertiesLoader.getValue("wechat.lihun.domain");
     String lihunxieyiurl = PropertiesLoader.getValue("wechat.lihunxieyi.domain");
@@ -46,13 +46,13 @@ public class WechatH5Facade extends JPanel {
     String su = PropertiesLoader.getValue("wechat.xin.domain");
 
 
-    String iphone = PropertiesLoader.getValue("wechat.iphone.domain");//小图二维码
-    String iphoneUrl = PropertiesLoader.getValue("wechat.iphoneUrl.domain");//主图
+    // String iphone = PropertiesLoader.getValue("wechat.iphone.domain");//小图二维码
+    //String iphoneUrl = PropertiesLoader.getValue("wechat.iphoneUrl.domain");//主图
 
-    /**String newurl = systemLayoutService.queryServiceUrl("iphonex_wechat_newh5_domain");//新图片地址
-    String newurl2 = systemLayoutService.queryServiceUrl("iphonex_wechat_h5_mofo");//测试前缀
-    String iphone = systemLayoutService.queryServiceUrl("iphonex_wechat_iphone_domain");//iphone二维码
-     String iphoneUrl = systemLayoutService.queryServiceUrl("iphonex_wechat_iphoneUrl_domain");//iphone模板*/
+    String newurl = systemLayoutService.queryIphonexUrl("iphonex_wechat_newh5_domain");//新图片地址
+    String newurl2 = systemLayoutService.queryServiceUrl("domain_name");//测试前缀
+    String iphone = systemLayoutService.queryIphonexUrl("iphonex_wechat_iphone_domain");//iphone二维码
+    String iphoneUrl = systemLayoutService.queryIphonexUrl("iphonex_wechat_iphoneUrl_domain");//iphone模板
 
     @Autowired
     private CountService countService;
