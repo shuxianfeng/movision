@@ -64,4 +64,15 @@ public class XmlParseController {
     }
 
 
+    @ApiOperation(value = "xml解析的帖子导出Excel", notes = "用于帖子导出", response = Response.class)
+    @RequestMapping(value = "export_excel", method = RequestMethod.POST)
+    public Response excelExport() {
+        Response response = new Response();
+        Map map = xmlParseFacade.exportExcel();
+        response.setMessage("操作成功");
+        response.setData(map);
+        return response;
+    }
+
+
 }

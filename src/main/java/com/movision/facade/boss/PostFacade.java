@@ -991,6 +991,8 @@ public class PostFacade {
                 } else {
                     post.setIsdel("2");
                 }
+            post.setType("0");
+            post.setIsactive("0");
                 postService.addPost(post);//添加帖子
 
             //帖子使用的标签

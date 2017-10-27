@@ -11,6 +11,8 @@ import com.movision.mybatis.coupon.service.CouponService;
 import com.movision.mybatis.couponTemp.entity.CouponTemp;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostXml;
+import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.systemLayout.service.SystemLayoutService;
@@ -18,8 +20,13 @@ import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.StrUtil;
+import com.movision.utils.VideoUploadUtil;
 import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.oss.MovisionOssClient;
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -31,6 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.*;
 
@@ -67,6 +75,12 @@ public class XmlParseFacade {
 
     @Autowired
     private SystemLayoutService systemLayoutService;
+
+    @Autowired
+    private VideoUploadUtil videoUploadUtil;
+
+    @Autowired
+    private PostService postService;
 
 
     @Transactional
@@ -106,11 +120,11 @@ public class XmlParseFacade {
                         flg = true;
                     }
                     //视频内容解析
-                    if (type.equals("Video")) {
+                    /*if (type.equals("Video")) {
                         //视频内容
                         content = getVideoContentAnalysis(post, e, content);
                         flg = true;
-                    }
+                    }*/
                     //纯文本解析
                 /*if (type.equals("Text")){
                     //文本
@@ -128,28 +142,7 @@ public class XmlParseFacade {
 
                     if (content != "") {
                         //标签操作 //
-                        String[] tags = tag.split(",");
-                        String lbs = "";
-                        for (int i = 0; i < tags.length; i++) {
-                            //查询标签表中是否有此标签
-                            Integer lbid = postLabelService.queryPostLabelByNameCompletely(tags[i]);
-                            if (lbid == null) {
-                                //insertPostLabel(post, tags[i]);
-                                PostLabel postLabel = new PostLabel();
-                                postLabel.setName(tag);
-                                postLabel.setType(1);
-                                postLabel.setUserid(post.getUserid());
-                                postLabel.setIntime(new Date());
-                                postLabel.setIsdel(0);
-                                postLabelService.insertPostLabel(postLabel);
-                                lbs += postLabel.getId() + ",";
-                            } else {
-                                lbs += lbid + ",";
-                            }
-                            if (i == tags.length - 1) {
-                                lbs.substring(0, lbs.lastIndexOf(","));
-                            }
-                        }
+                        String lbs = postLabel(post, tag);
 
                         //新增帖子操作
                         postFacade.addPostTest(request, "", "", post.getCircleid().toString(), post.getUserid().toString(),
@@ -174,8 +167,110 @@ public class XmlParseFacade {
         return resault;
     }
 
-    private void insertPostLabel(Post post, String tag) {
+    /**
+     * 导出excel
+     *
+     * @return
+     */
+    public Map exportExcel() {
+        Map resault = new HashMap();
+        try {
+            //t.xls为要新建的文件名
+            WritableWorkbook book = Workbook.createWorkbook(new File("d:\\1/newT.xls"));
+            //生成名为“第一页”的工作表，参数0表示这是第一页
+            WritableSheet sheet = book.createSheet("第一页", 0);
+            //查询出所有xml导入的帖子
+            List<PostXml> posts = postService.queryPostByXmlExport();
+            /*PostXml postXml = new PostXml();
+            Field[] fields = postXml.getClass().getDeclaredFields();*/
+            String title[] = {"id", "用户id", "圈子id", "标题", "帖子内容", "帖子封面"};
+            //设计表头
+            for (int i = 0; i < title.length; i++) {
+                sheet.addCell(new Label(i, 0, title[i]));
+            }
+           /* Post post = new Post();
+            //获取对象长度
+            Field[] p = post.getClass().getDeclaredFields();*/
+            //遍历循环出集合中每一个元素，写到表中
+            for (int i = 0; i < posts.size(); i++) {
+                PostXml post = posts.get(i);
+                //获取对象长度
+                Field[] p = post.getClass().getDeclaredFields();
+                //System.out.println(p.length+"(((((((((((((((((((((((((((");
+                int k = 0;
+                for (Field f : p) {
+                    //System.out.println(f.getName()+"==========================="+f.get(post));
+                    String str = "";
+                    if (f.get(post) != null) {
+                        str = f.get(post).toString();
+                    }
+                    sheet.addCell(new Label(k, i + 1, str));
+                    k++;
+                }
 
+            }
+            //
+            //写入数据
+            book.write();
+            if (book != null) {
+                //关闭流
+                book.close();
+            }
+            resault.put("code", 200);
+            resault.put("massger", "成功");
+            return resault;
+        } catch (Exception e) {
+            e.printStackTrace();
+            resault.put("code", 400);
+            resault.put("massger", "失败");
+            return resault;
+        }
+    }
+
+
+    /**
+     * 标签操作
+     *
+     * @param post
+     * @param tag
+     * @return
+     */
+    private String postLabel(Post post, String tag) {
+        String[] tags = tag.split(",");
+        String lbs = "";
+        for (int i = 0; i < tags.length; i++) {
+            //查询标签表中是否有此标签
+            Integer lbid = postLabelService.queryPostLabelByNameCompletely(tags[i]);
+            if (lbid == null) {
+                //新增标签
+                PostLabel postLabel = setPostLabel(post, tag);
+                lbs += postLabel.getId() + ",";
+            } else {
+                lbs += lbid + ",";
+            }
+            if (i == tags.length - 1) {
+                lbs.substring(0, lbs.lastIndexOf(","));
+            }
+        }
+        return lbs;
+    }
+
+    /**
+     * 新增标签
+     *
+     * @param post
+     * @param tag
+     * @return
+     */
+    private PostLabel setPostLabel(Post post, String tag) {
+        PostLabel postLabel = new PostLabel();
+        postLabel.setName(tag);
+        postLabel.setType(1);
+        postLabel.setUserid(post.getUserid());
+        postLabel.setIntime(new Date());
+        postLabel.setIsdel(0);
+        postLabelService.insertPostLabel(postLabel);
+        return postLabel;
     }
 
     /**
@@ -455,11 +550,12 @@ public class XmlParseFacade {
                 //图片上传
                 Map t = movisionOssClient.uploadFileObject(new File(path + s), "img", "post");
                 map.put("newurl", t.get("url"));
-            } else if (type.equals("video")) {
+            } /*else if (type.equals("video")) {
                 //视频上传
-                Map m = movisionOssClient.uploadFileObject(new File(path + s), "video", "post");
-                map.put("newurl", m.get("url"));
-            }
+                //Map m = movisionOssClient.uploadFileObject(new File(path + s), "video", "post");
+                videoUploadUtil.videoUpload(path,)
+                map.put("newurl", );
+            }*/
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

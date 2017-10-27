@@ -313,4 +313,6 @@ public interface PostMapper {
     Post queryxiaojijiPostForTest(String title);
 
     List<PostHeatvalueEverydayRecord> queryPostHeatvalueEveryday(Integer postid);
+
+    List<PostXml> queryPostByXmlExport();
 }

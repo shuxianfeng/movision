@@ -1785,4 +1785,19 @@ public class PostService {
         }
     }
 
+    /**
+     * 查询所有xml解析下来的帖子
+     *
+     * @return
+     */
+    public List<PostXml> queryPostByXmlExport() {
+        try {
+            log.info("查询所有xml解析下来的帖子");
+            return postMapper.queryPostByXmlExport();
+        } catch (Exception e) {
+            log.error("查询所有xml解析下来的帖子异常", e);
+            throw e;
+        }
+    }
+
 }

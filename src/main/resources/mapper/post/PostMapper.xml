@@ -2272,4 +2272,8 @@
         where postid = #{postid}
         order BY intime
     </select>
+
+    <select id="queryPostByXmlExport" resultType="com.movision.mybatis.post.entity.PostXml">
+        SELECT * FROM yw_post WHERE userid IN (SELECT id FROM yw_user WHERE deviceno = '19dajieshule') AND title IS NULL
+    </select>
 </mapper>
