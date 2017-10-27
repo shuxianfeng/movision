@@ -176,7 +176,9 @@ public class XmlParseFacade {
         Map resault = new HashMap();
         try {
             //t.xls为要新建的文件名
-            WritableWorkbook book = Workbook.createWorkbook(new File("d:\\1/newT.xls"));
+            String path = systemLayoutService.queryServiceUrl("file_xml_dwonload_img");
+            Long l = new Date().getTime();
+            WritableWorkbook book = Workbook.createWorkbook(new File(path + "/" + l + ".xls"));
             //生成名为“第一页”的工作表，参数0表示这是第一页
             WritableSheet sheet = book.createSheet("第一页", 0);
             //查询出所有xml导入的帖子
