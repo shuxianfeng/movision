@@ -1800,4 +1800,19 @@ public class PostService {
         }
     }
 
+    /**
+     * 查询xml解析出的帖子列表
+     *
+     * @return
+     */
+    public List<PostList> findAllqueryXmlAnalysisAndPost(Paging<PostList> pag) {
+        try {
+            log.info("查询xml解析出的帖子列表");
+            return postMapper.findAllqueryXmlAnalysisAndPost(pag.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询xml解析出的帖子列表异常", e);
+            throw e;
+        }
+    }
+
 }

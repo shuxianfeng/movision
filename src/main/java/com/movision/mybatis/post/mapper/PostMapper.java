@@ -315,4 +315,6 @@ public interface PostMapper {
     List<PostHeatvalueEverydayRecord> queryPostHeatvalueEveryday(Integer postid);
 
     List<PostXml> queryPostByXmlExport();
+
+    List<PostList> findAllqueryXmlAnalysisAndPost(RowBounds rowBounds);
 }

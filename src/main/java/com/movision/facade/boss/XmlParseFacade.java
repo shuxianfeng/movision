@@ -11,6 +11,8 @@ import com.movision.mybatis.coupon.service.CouponService;
 import com.movision.mybatis.couponTemp.entity.CouponTemp;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostList;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.entity.PostXml;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
@@ -23,10 +25,12 @@ import com.movision.utils.StrUtil;
 import com.movision.utils.VideoUploadUtil;
 import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.oss.MovisionOssClient;
+import com.movision.utils.pagination.model.Paging;
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -136,7 +140,7 @@ public class XmlParseFacade {
                         content = "";
                     }
                     post.setIntime(new Date());
-                    post.setCircleid(125);
+                    //post.setCircleid(125);
                     post.setPostcontent(content);
                     System.out.println("---------" + content);
 
@@ -194,23 +198,7 @@ public class XmlParseFacade {
             //获取对象长度
             Field[] p = post.getClass().getDeclaredFields();*/
             //遍历循环出集合中每一个元素，写到表中
-            for (int i = 0; i < posts.size(); i++) {
-                PostXml post = posts.get(i);
-                //获取对象长度
-                Field[] p = post.getClass().getDeclaredFields();
-                //System.out.println(p.length+"(((((((((((((((((((((((((((");
-                int k = 0;
-                for (Field f : p) {
-                    //System.out.println(f.getName()+"==========================="+f.get(post));
-                    String str = "";
-                    if (f.get(post) != null) {
-                        str = f.get(post).toString();
-                    }
-                    sheet.addCell(new Label(k, i + 1, str));
-                    k++;
-                }
-
-            }
+            addExcelFileElement(sheet, posts);
             //
             //写入数据
             book.write();
@@ -226,6 +214,36 @@ public class XmlParseFacade {
             resault.put("code", 400);
             resault.put("massger", "失败");
             return resault;
+        }
+    }
+
+    public List<PostList> queryXmlAnalysisAndPost(Paging<PostList> pag) {
+        return postService.findAllqueryXmlAnalysisAndPost(pag);
+    }
+
+    /**
+     * 为excel文件添加元素
+     *
+     * @param sheet
+     * @param posts
+     * @throws IllegalAccessException
+     * @throws WriteException
+     */
+    private void addExcelFileElement(WritableSheet sheet, List<PostXml> posts) throws IllegalAccessException, WriteException {
+        for (int i = 0; i < posts.size(); i++) {
+            PostXml post = posts.get(i);
+            //获取对象长度
+            Field[] p = post.getClass().getDeclaredFields();
+            int k = 0;
+            for (Field f : p) {
+                //System.out.println(f.getName()+"==========================="+f.get(post));
+                String str = "";
+                if (f.get(post) != null) {
+                    str = f.get(post).toString();
+                }
+                sheet.addCell(new Label(k, i + 1, str));
+                k++;
+            }
         }
     }
 
