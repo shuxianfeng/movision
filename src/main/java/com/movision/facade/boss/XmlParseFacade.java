@@ -208,7 +208,7 @@ public class XmlParseFacade {
                 book.close();
             }
             String reurl = systemLayoutService.queryServiceUrl("domain_name");
-            reurl += "/download/" + urlname;
+            reurl += "/download/post" + urlname;
             resault.put("code", 200);
             resault.put("date", reurl);
             resault.put("massger", "成功");
