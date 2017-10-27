@@ -806,7 +806,7 @@ public class PostController {
                                @ApiParam(value = "帖子内容") @RequestParam(required = false) String postcontent,
                                @ApiParam(value = "结束时间(yyyy-MM-dd)") @RequestParam(required = false) String endtime,
                                @ApiParam(value = "开始时间(yyyy-MM-dd)") @RequestParam(required = false) String begintime,
-                               @ApiParam(value = "精选排序方式 0：按时间排序，1：按人气排序(默认不做排序)") @RequestParam(required = false) String pai,
+                               @ApiParam(value = "精选排序方式 0：按时间排序，1：按热度排序(默认不做排序)") @RequestParam(required = false) String pai,
                                @ApiParam(value = "用户id") @RequestParam(required = false) String uid,
                                @ApiParam(value = "用户列表跳转传值：5 帖子 6 精贴") @RequestParam(required = false) String price,
                                @ApiParam(value = "精选日期（yyyy-MM-dd）") @RequestParam(required = false) String essencedate,
