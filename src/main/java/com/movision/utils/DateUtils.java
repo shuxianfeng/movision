@@ -364,9 +364,22 @@ public class DateUtils {
         }
     }
 
+    public static String[] convertDateArrToStringArr(Date[] dateArr) {
+        int len = dateArr.length;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String[] strArr = new String[len];
+        for (int i = 0; i < len; i++) {
+            strArr[i] = sdf.format(dateArr[i]);
+        }
+        log.debug("转换后的strArr:" + strArr.toString());
+        return strArr;
+    }
+
 
     public static void main(String[] args) throws ParseException {
-        compareDate("2017-10-29", "2017-10-28");
+
+
+//        compareDate("2017-10-29", "2017-10-28");
 //        compareDateWithCurrentDate("2017-10-27");
 
 //        getCurrentMonthFirstDay();

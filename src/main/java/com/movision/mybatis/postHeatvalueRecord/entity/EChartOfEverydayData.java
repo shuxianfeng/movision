@@ -2,7 +2,6 @@ package com.movision.mybatis.postHeatvalueRecord.entity;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Date;
 
 /**
  * @Author zhuangyuhao
@@ -12,7 +11,7 @@ public class EChartOfEverydayData implements Serializable {
     /**
      * 横坐标的值
      */
-    private Date[] date;
+    private String[] date;
 
     /**
      * 纵坐标的值
@@ -27,18 +26,19 @@ public class EChartOfEverydayData implements Serializable {
                 '}';
     }
 
-    public void setDate(Date[] date) {
+    public void setDate(String[] date) {
         this.date = date;
+    }
+
+    public String[] getDate() {
+
+        return date;
     }
 
     public void setData(int[] data) {
         this.data = data;
     }
 
-    public Date[] getDate() {
-
-        return date;
-    }
 
     public int[] getData() {
         return data;

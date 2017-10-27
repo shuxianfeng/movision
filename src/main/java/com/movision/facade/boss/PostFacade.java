@@ -3189,7 +3189,7 @@ public class PostFacade {
                 break;
             }
         }
-        everydayData.setDate(dateArr);
+        everydayData.setDate(DateUtils.convertDateArrToStringArr(dateArr));
         everydayData.setData(arr);
     }
 
@@ -3230,7 +3230,7 @@ public class PostFacade {
             }
         }
 
-        everydayData.setDate(dateArr);
+        everydayData.setDate(DateUtils.convertDateArrToStringArr(dateArr));
         everydayData.setData(arr);
     }
 
