@@ -182,6 +182,7 @@ public class XmlParseFacade {
             //t.xls为要新建的文件名
             String path = systemLayoutService.queryServiceUrl("file_xml_dwonload_img");
             Long l = new Date().getTime();
+            //拼接文件名称
             String urlname = "/" + l + ".xls";
             WritableWorkbook book = Workbook.createWorkbook(new File(path + urlname));
             //生成名为“第一页”的工作表，参数0表示这是第一页
@@ -207,6 +208,7 @@ public class XmlParseFacade {
                 //关闭流
                 book.close();
             }
+            //用于返回文件路径
             String reurl = systemLayoutService.queryServiceUrl("domain_name");
             reurl += "/download/post" + urlname;
             resault.put("code", 200);
@@ -216,6 +218,7 @@ public class XmlParseFacade {
         } catch (Exception e) {
             e.printStackTrace();
             resault.put("code", 400);
+            resault.put("date", -1);
             resault.put("massger", "失败");
             return resault;
         }
