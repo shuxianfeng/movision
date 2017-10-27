@@ -6,11 +6,7 @@ import com.movision.mybatis.period.entity.Period;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.postHeatvalueEverydayRecord.entity.PostHeatvalueEverydayRecord;
 import com.movision.mybatis.postLabel.entity.PostLabel;
-import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
-import com.movision.mybatis.user.entity.UserLike;
-import com.movision.mybatis.video.entity.Video;
-import com.movision.utils.pagination.model.Paging;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
@@ -313,4 +309,8 @@ public interface PostMapper {
     Post queryxiaojijiPostForTest(String title);
 
     List<PostHeatvalueEverydayRecord> queryPostHeatvalueEveryday(Integer postid);
+
+    List<PostXml> queryPostByXmlExport();
+
+    List<PostList> findAllqueryXmlAnalysisAndPost(RowBounds rowBounds);
 }

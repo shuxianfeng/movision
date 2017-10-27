@@ -4,7 +4,10 @@ import com.movision.common.Response;
 import com.movision.facade.boss.PostFacade;
 import com.movision.facade.boss.XmlParseFacade;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostList;
+import com.movision.mybatis.post.entity.PostVo;
 import com.movision.utils.oss.MovisionOssClient;
+import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.dom4j.Document;
@@ -51,8 +54,49 @@ public class XmlParseController {
                              @ApiParam(value = "手机号") @RequestParam String phone) {
         Response response = new Response();
         Map map = xmlParseFacade.analysisXml(request, file, nickname, phone);
+        if (map.get("code").equals(200)) {
+            response.setMessage("操作成功");
+            response.setData(map);
+        } else if (map.get("code").equals(300)) {
+            response.setMessage("新增用户失败");
+            response.setData(map);
+        } else {
+            response.setData(map);
+        }
+        return response;
+    }
+
+
+    /**
+     * 帖子导出
+     *
+     * @return
+     */
+    @ApiOperation(value = "xml解析的帖子导出Excel", notes = "用于帖子导出", response = Response.class)
+    @RequestMapping(value = "export_excel", method = RequestMethod.POST)
+    public Response excelExport() {
+        Response response = new Response();
+        Map map = xmlParseFacade.exportExcel();
         response.setMessage("操作成功");
         response.setData(map);
+        return response;
+    }
+
+    /**
+     * 查询帖子列表
+     *
+     * @return
+     */
+    @ApiOperation(value = "查询xml解析出的帖子列表", notes = "用于查询xml解析出的帖子列表", response = Response.class)
+    @RequestMapping(value = "query_xml_analysis_post_list", method = RequestMethod.POST)
+    public Response queryXmlAnalysisAndPost(@ApiParam(value = "当前页") @RequestParam(defaultValue = "1") String pageNo,
+                                            @ApiParam(value = "每页几条") @RequestParam(defaultValue = "10") String pageSize) {
+        Response response = new Response();
+        Paging<PostList> pag = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+        List<PostList> postVos = xmlParseFacade.queryXmlAnalysisAndPost(pag);
+        response.setMessage("查询成功");
+        pag.result(postVos);
+        response.setData(pag);
         return response;
     }
 

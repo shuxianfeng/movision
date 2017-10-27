@@ -339,9 +339,47 @@ public class DateUtils {
         }
     }
 
+    /**
+     * 比较两个日期
+     *
+     * @param firstDate
+     * @param secondDate
+     * @return
+     * @throws ParseException
+     */
+    public static Integer compareDate(String firstDate, Date secondDate) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date firstD = sdf.parse(firstDate);
+
+
+        if (firstD.after(secondDate)) {
+            log.debug("第一个日期大于第二个日期");
+            return 1;
+        } else if (firstD.before(secondDate)) {
+            log.debug("第一个日期小于第二个日期");
+            return -1;
+        } else {
+            log.debug("第一个日期等于第二个日期");
+            return 0;
+        }
+    }
+
+    public static String[] convertDateArrToStringArr(Date[] dateArr) {
+        int len = dateArr.length;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String[] strArr = new String[len];
+        for (int i = 0; i < len; i++) {
+            strArr[i] = sdf.format(dateArr[i]);
+        }
+        log.debug("转换后的strArr:" + strArr.toString());
+        return strArr;
+    }
+
 
     public static void main(String[] args) throws ParseException {
-        compareDate("2017-10-29", "2017-10-28");
+
+
+//        compareDate("2017-10-29", "2017-10-28");
 //        compareDateWithCurrentDate("2017-10-27");
 
 //        getCurrentMonthFirstDay();

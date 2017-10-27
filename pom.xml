@@ -556,6 +556,13 @@
             <artifactId>jce</artifactId>
             <version>1.7</version>
         </dependency>
+
+        <dependency>
+            <groupId>jxl</groupId>
+            <artifactId>jxl_2.6</artifactId>
+            <version>2.6</version>
+        </dependency>
+
     </dependencies>
 
     <!--<build>-->

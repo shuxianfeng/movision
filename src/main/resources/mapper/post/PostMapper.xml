@@ -2272,4 +2272,20 @@
         where postid = #{postid}
         order BY intime
     </select>
+
+    <select id="queryPostByXmlExport" resultType="com.movision.mybatis.post.entity.PostXml">
+        SELECT * FROM yw_post WHERE userid IN (SELECT id FROM yw_user WHERE deviceno = '19dajieshule')
+    </select>
+
+    <select id="findAllqueryXmlAnalysisAndPost" resultType="com.movision.mybatis.post.entity.PostList">
+        SELECT p.*,(SELECT u.nickname FROM yw_user u WHERE u.id=p.userid) as nickname,
+        (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
+        (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
+        (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
+        (SELECT name FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS circlename,
+        (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
+        FROM yw_post AS p
+        WHERE p.isdel <![CDATA[<>]]> 1 AND p.isactive=0
+         AND p.userid IN (SELECT id FROM yw_user WHERE deviceno = '19dajieshule') ORDER BY p.intime DESC
+    </select>
 </mapper>

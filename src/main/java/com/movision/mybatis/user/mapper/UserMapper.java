@@ -38,6 +38,8 @@ public interface UserMapper {
 
     User selectByPhone(User user);
 
+    void updateUserByNickname(User user);
+
     LoginUser selectLoginUserByPhone(User user);
 
     void insertPostShare(Map<String, Object> parammap);

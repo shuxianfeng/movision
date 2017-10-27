@@ -11,44 +11,62 @@ public class EchartOf24HourData implements Serializable {
     /**
      * 帖子热度变化类型中文名称
      */
-    private String cName;
+    private String name;
+
     /**
-     * 帖子热度变化类型英文名称
+     * EChart 类型
      */
-    private String eName;
+    private String type;
+
+    /**
+     *
+     */
+    private String stack;
+
     /**
      * Echart 中 series 中的每个对象的data
      */
     private int[] data;
 
+
     @Override
     public String toString() {
         return "EchartOf24HourData{" +
-                "cName='" + cName + '\'' +
-                ", eName='" + eName + '\'' +
+                "name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", stack='" + stack + '\'' +
                 ", data=" + Arrays.toString(data) +
                 '}';
     }
 
-    public void setcName(String cName) {
-        this.cName = cName;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public void seteName(String eName) {
-        this.eName = eName;
+    public void setStack(String stack) {
+        this.stack = stack;
+    }
+
+    public String getType() {
+
+        return type;
+    }
+
+    public String getStack() {
+        return stack;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setData(int[] data) {
         this.data = data;
     }
 
-    public String getcName() {
+    public String getName() {
 
-        return cName;
-    }
-
-    public String geteName() {
-        return eName;
+        return name;
     }
 
     public int[] getData() {

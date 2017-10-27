@@ -33,6 +33,7 @@ import com.movision.mybatis.period.service.PeriodService;
 import com.movision.mybatis.post.entity.*;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postHeatvalueEverydayRecord.entity.PostHeatvalueEverydayRecord;
+import com.movision.mybatis.postHeatvalueRecord.entity.EChartOfEverydayData;
 import com.movision.mybatis.postHeatvalueRecord.entity.EchartOf24HourData;
 import com.movision.mybatis.postHeatvalueRecord.entity.PostHeatvalueRecord;
 import com.movision.mybatis.postHeatvalueRecord.service.PostHeatvalueRecordService;
@@ -48,16 +49,13 @@ import com.movision.mybatis.rewarded.entity.RewardedVo;
 import com.movision.mybatis.rewarded.service.RewardedService;
 import com.movision.mybatis.share.entity.SharesVo;
 import com.movision.mybatis.share.service.SharesService;
-import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
-import com.movision.mybatis.video.entity.Video;
 import com.movision.mybatis.video.service.VideoService;
 import com.movision.utils.*;
 import com.movision.utils.file.FileUtil;
-import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
@@ -71,13 +69,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -998,6 +991,8 @@ public class PostFacade {
                 } else {
                     post.setIsdel("2");
                 }
+            post.setType("0");
+            post.setIsactive("0");
                 postService.addPost(post);//添加帖子
 
             //帖子使用的标签
@@ -2940,14 +2935,14 @@ public class PostFacade {
         //3 处理返回的结果集
         List<EchartOf24HourData> returnList = new ArrayList<>();
 
-        addDataToReturnList("浏览帖子", "view_post", viewArr, returnList);
-        addDataToReturnList("打赏帖子", "reward_post", rewardArr, returnList);
-        addDataToReturnList("收藏帖子", "collect_post", collectArr, returnList);
-        addDataToReturnList("转发帖子", "forward_post", forwardArr, returnList);
-        addDataToReturnList("评论帖子", "comment_post", commentArr, returnList);
-        addDataToReturnList("点赞帖子", "zan_post", zanArr, returnList);
-        addDataToReturnList("圈子精选", "circle_selected", circleSelectedArr, returnList);
-        addDataToReturnList("首页精选", "homepage_selection", homePageArr, returnList);
+        addDataToReturnList("浏览帖子", viewArr, returnList);
+        addDataToReturnList("打赏帖子", rewardArr, returnList);
+        addDataToReturnList("收藏帖子", collectArr, returnList);
+        addDataToReturnList("转发帖子", forwardArr, returnList);
+        addDataToReturnList("评论帖子", commentArr, returnList);
+        addDataToReturnList("点赞帖子", zanArr, returnList);
+        addDataToReturnList("圈子精选", circleSelectedArr, returnList);
+        addDataToReturnList("首页精选", homePageArr, returnList);
 
         return returnList;
     }
@@ -3024,14 +3019,14 @@ public class PostFacade {
      * 添加 24小时帖子热度变化的EChart 的data到结果集
      *
      * @param cName      帖子热度变化类型中文名称
-     * @param eName      帖子热度变化类型英文名称
      * @param viewArr    对应的data
      * @param returnList
      */
-    private void addDataToReturnList(String cName, String eName, int[] viewArr, List<EchartOf24HourData> returnList) {
+    private void addDataToReturnList(String cName, int[] viewArr, List<EchartOf24HourData> returnList) {
         EchartOf24HourData echartOf24HourData = new EchartOf24HourData();
-        echartOf24HourData.setcName(cName);
-        echartOf24HourData.seteName(eName);
+        echartOf24HourData.setName(cName);
+        echartOf24HourData.setType("bar");
+        echartOf24HourData.setStack("每小时帖子热度");
         echartOf24HourData.setData(viewArr);
         log.debug(cName + ":" + echartOf24HourData.toString());
         returnList.add(echartOf24HourData);
@@ -3053,29 +3048,190 @@ public class PostFacade {
      * @param endDate   横坐标结束日期
      * @return
      */
-    public List<Map<String, Object>> queryPostHeatvalueEveryday(Integer postid, String beginDate, String endDate) throws ParseException {
-
+    public EChartOfEverydayData queryPostHeatvalueEveryday(Integer postid, String beginDate, String endDate) throws ParseException {
+        EChartOfEverydayData everydayData = new EChartOfEverydayData();
         validationPostidParam(postid);
-        if (DateUtils.compareDate(beginDate, endDate) == 1) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date beginD = sdf.parse(beginDate);
+        Date endD = sdf.parse(endDate);
+        if (beginD.after(endD)) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "开始时间不能大于结束时间");
         }
 
         List<PostHeatvalueEverydayRecord> recordList = postService.queryPostHeatEverydayRecord(postid);
         if (ListUtil.isEmpty(recordList)) {
-            return null;
+            return everydayData;    //返回空
         }
         int len = recordList.size();
-        Date minDate = recordList.get(0).getIntime();   //当前帖子最旧的流水记录的日期
+        Date minDate = recordList.get(0).getIntime();   //当前帖子最旧的流水记录的日期 yyyy-MM-dd
         Date maxDate = recordList.get(len - 1).getIntime();   //当前帖子最新的流水记录的日期
-        if (DateUtils.compareDate(beginDate, endDate) == -1) {
-            //正常情况，beginDate 小于 endDate
+        if (beginD.before(endD)) {  //正常情况，beginDate 小于 endDate
+
+            //第一种情况 （1）
+            if (endD.before(minDate)) {
+                //endDate 小于等于minDate: 无数据
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "选中的时间段无数据");
+            }
+            //第二种情况 （2）
+            if (endD.equals(minDate)) {
+                List<PostHeatvalueEverydayRecord> records = recordList.subList(0, 1);
+                getEchartData(endD, endD, everydayData, records);
+                return everydayData;
+            }
+            //第三种情况 （3）
+            if (beginD.after(maxDate)) {
+                //beginDate 大于等于maxDate: 无数据
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "选中的时间段无数据");
+            }
+            //第四种情况 （4）
+            if (beginD.equals(maxDate)) {
+                List<PostHeatvalueEverydayRecord> records = recordList.subList(len - 1, len);
+                getEchartData(beginD, beginD, everydayData, records);
+                return everydayData;
+            }
+            //第五种情况 （5）
+            if (minDate.before(beginD) && endD.before(maxDate)) {
+                int beginIndex = 0, endIndex = 0;
+                for (int i = 0; i < len; i++) {
+                    if (beginD.equals(recordList.get(i).getIntime())) {
+                        beginIndex = i;
+                        continue;
+                    }
+                    if (endD.equals(recordList.get(i).getIntime())) {
+                        endIndex = i;
+                        continue;
+                    }
+                }
+                List<PostHeatvalueEverydayRecord> records = recordList.subList(beginIndex, endIndex + 1);
+                getEchartData(beginD, endD, everydayData, records);
+                return everydayData;
+            }
+            //第六种情况 （6）（7）
+            if (minDate.equals(beginD)) {
+                if (endD.before(maxDate)) {
+                    getIndex0ToEndindex(everydayData, beginD, endD, recordList, len);
+                    return everydayData;
+                } else {
+                    getEchartData(beginD, endD, everydayData, recordList);
+                    return everydayData;
+                }
+            }
+            //第七种情况 （8）（9）
+            if (maxDate.equals(endD)) {
+                if (beginD.after(minDate)) {
+                    getBegindateToMaxDate(everydayData, beginD, recordList, len, endD);
+                    return everydayData;
+                } else {
+                    getEchartData(beginD, endD, everydayData, recordList);
+                    return everydayData;
+                }
+            }
+            //第八种情况
+            if (beginD.before(minDate) && endD.after(minDate)) {
+                getIndex0ToEndindex(everydayData, beginD, endD, recordList, len);
+                return everydayData;
+            }
+            //第九种情况
+            if (beginD.before(maxDate) && endD.after(maxDate)) {
+                getBegindateToMaxDate(everydayData, beginD, recordList, len, maxDate);
+                return everydayData;
+            }
 
         } else {
-
+            //beginD == endD 三种情况
+            if (beginD.before(minDate)) {
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "选中的时间段无数据");
+            } else if (beginD.after(maxDate)) {
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "选中的时间段无数据");
+            } else {
+                getOneDateData(everydayData, beginD, recordList, len);
+                return everydayData;
+            }
         }
 
+        return everydayData;
+    }
 
-        return null;
+    private void getBegindateToMaxDate(EChartOfEverydayData everydayData, Date beginD, List<PostHeatvalueEverydayRecord> recordList, int len, Date maxDate) {
+        int beginIndex = 0;
+        for (int i = 0; i < len; i++) {
+            if (beginD.equals(recordList.get(i).getIntime())) {
+                beginIndex = i;
+            }
+        }
+        List<PostHeatvalueEverydayRecord> records = recordList.subList(beginIndex, len);
+        getEchartData(beginD, maxDate, everydayData, records);
+    }
+
+    private void getIndex0ToEndindex(EChartOfEverydayData everydayData, Date beginD, Date endD, List<PostHeatvalueEverydayRecord> recordList, int len) {
+        int endIndex = 0;
+        for (int i = 0; i < len; i++) {
+            if (endD.equals(recordList.get(i).getIntime())) {
+                endIndex = i;
+            }
+        }
+        List<PostHeatvalueEverydayRecord> records = recordList.subList(0, endIndex + 1);
+        getEchartData(beginD, endD, everydayData, records);
+    }
+
+    private void getOneDateData(EChartOfEverydayData everydayData, Date beginD, List<PostHeatvalueEverydayRecord> recordList, int len) {
+        Date[] dateArr = new Date[1];
+        int[] arr = new int[1];
+
+        for (int i = 0; i < len; i++) {
+            //date 和 beginDate、endDate 做比较
+            Date date = recordList.get(i).getIntime();
+
+            if (beginD.equals(date)) {
+                dateArr[0] = beginD;
+                arr[0] = recordList.get(i).getHeatValue();
+                break;
+            }
+        }
+        everydayData.setDate(DateUtils.convertDateArrToStringArr(dateArr));
+        everydayData.setData(arr);
+    }
+
+    /**
+     * 核心处理EChart 数据
+     *
+     * @param beginD       第一个日期
+     * @param endD         最后一个日期
+     * @param everydayData 返回的结果
+     * @param recordList   操作的list
+     */
+    private void getEchartData(Date beginD, Date endD, EChartOfEverydayData everydayData,
+                               List<PostHeatvalueEverydayRecord> recordList) {
+        int len = recordList.size();
+        Date[] dateArr = new Date[len];
+        int[] arr = new int[len];
+
+        for (int i = 0; i < recordList.size(); i++) {
+            //date 和 beginDate、endDate 做比较
+            Date date = recordList.get(i).getIntime();
+
+            if (beginD.equals(date)) {
+                dateArr[0] = beginD;
+                arr[0] = recordList.get(i).getHeatValue();
+                continue;
+            }
+
+            if (beginD.before(date) && endD.after(date)) {
+                dateArr[i] = date;
+                arr[i] = recordList.get(i).getHeatValue();
+                continue;
+            }
+
+            if (endD.equals(date)) {
+                dateArr[len - 1] = endD;
+                arr[len - 1] = recordList.get(i).getHeatValue();
+                continue;
+            }
+        }
+
+        everydayData.setDate(DateUtils.convertDateArrToStringArr(dateArr));
+        everydayData.setData(arr);
     }
 
     private void validationPostidParam(Integer postid) {

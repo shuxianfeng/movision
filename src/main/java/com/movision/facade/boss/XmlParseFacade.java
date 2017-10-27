@@ -11,6 +11,10 @@ import com.movision.mybatis.coupon.service.CouponService;
 import com.movision.mybatis.couponTemp.entity.CouponTemp;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.post.entity.Post;
+import com.movision.mybatis.post.entity.PostList;
+import com.movision.mybatis.post.entity.PostVo;
+import com.movision.mybatis.post.entity.PostXml;
+import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postLabel.service.PostLabelService;
 import com.movision.mybatis.systemLayout.service.SystemLayoutService;
@@ -18,8 +22,15 @@ import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.StrUtil;
+import com.movision.utils.VideoUploadUtil;
 import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.oss.MovisionOssClient;
+import com.movision.utils.pagination.model.Paging;
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -31,6 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.*;
 
@@ -68,93 +80,90 @@ public class XmlParseFacade {
     @Autowired
     private SystemLayoutService systemLayoutService;
 
+    @Autowired
+    private VideoUploadUtil videoUploadUtil;
 
+    @Autowired
+    private PostService postService;
+
+
+    @Transactional
     public Map analysisXml(HttpServletRequest request, MultipartFile file, String nickname, String phone) {
         Map resault = new HashMap();
         SAXReader reader = new SAXReader();
         Post post = new Post();
         try {
             //查询用户是否存在，不存在新增操作
-            Integer usid = queryUser(nickname, phone, post);
-            post.setUserid(usid);
-            Document document = reader.read(file.getInputStream());
-            System.out.println(document);
-            //获取跟标签
-            Element element = document.getRootElement();
-            List<Element> elements = element.elements();
-            //存储本地图片路径，以便做空间释放操作
-            List list = new ArrayList();
-            boolean flg = false;
-            //循环所有父节点
-            for (Element e : elements) {
-                //用于拼接帖子内容
-                String content = "[";
-                //获取发帖时间并转换为long类型
-                Long publishTime = Long.parseLong(e.element("publishTime").getText());
-                Date intime = new Date(publishTime);
-                post.setIntime(intime);
-                //类型
-                String type = e.element("type").getText();
-                //标签
-                String tag = e.element("tag").getText();
+            Integer usid = queryUser(nickname, phone);
+            if (usid != null) {
+                post.setUserid(usid);
+                Document document = reader.read(file.getInputStream());
+                System.out.println(document);
+                //获取跟标签
+                Element element = document.getRootElement();
+                List<Element> elements = element.elements();
+                //存储本地图片路径，以便做空间释放操作
+                List list = new ArrayList();
+                //循环所有父节点
+                for (Element e : elements) {
+                    boolean flg = false;
+                    //用于拼接帖子内容
+                    String content = "[";
+                    //获取发帖时间并转换为long类型
+                    Long publishTime = Long.parseLong(e.element("publishTime").getText());
+                    Date intime = new Date(publishTime);
+                    post.setIntime(intime);
+                    //类型
+                    String type = e.element("type").getText();
+                    //标签
+                    String tag = e.element("tag").getText();
 
-                //图片内容解析
-                if (type.equals("Photo")) {
-                    content = getImgContentAnalysis(post, list, e, content);
-                    flg = true;
-                }
-                //视频内容解析
-                if (type.equals("Video")) {
-                    //视频内容
-                    content = getVideoContentAnalysis(post, e, content);
-                    flg = true;
-                }
-                //纯文本解析
+                    //图片内容解析
+                    if (type.equals("Photo")) {
+                        content = getImgContentAnalysis(post, list, e, content);
+                        flg = true;
+                    }
+                    //视频内容解析
+                    /*if (type.equals("Video")) {
+                        //视频内容
+                        content = getVideoContentAnalysis(post, e, content);
+                        flg = true;
+                    }*/
+                    //纯文本解析
                 /*if (type.equals("Text")){
                     //文本
                     s = getTextContentAnalysis(post, e, s);
                     flg = true;
                 }*/
 
-                if (!flg) {
-                    content = "";
-                }
-                post.setIntime(new Date());
-                post.setCircleid(125);
-                post.setPostcontent(content);
-                System.out.println("---------" + content);
+                    if (!flg) {
+                        content = "";
+                    }
+                    post.setIntime(new Date());
+                    //post.setCircleid(125);
+                    post.setPostcontent(content);
+                    System.out.println("---------" + content);
 
-                if (content != "") {
-                    //标签操作 //
-                    String[] tags = tag.split(",");
-                    String lbs = "";
-                    for (int i = 0; i < tags.length; i++) {
-                        //查询标签表中是否有此标签
-                        Integer lbid = postLabelService.queryPostLabelByNameCompletely(tags[i]);
-                        if (lbid == null) {
-                            insertPostLabel(post, tags[i]);
-                            lbs += lbid + ",";
-                        } else {
-                            lbs += lbid + ",";
-                        }
-                        if (i == tags.length - 1) {
-                            lbs.substring(0, lbs.lastIndexOf(","));
-                        }
+                    if (content != "") {
+                        //标签操作 //
+                        String lbs = postLabel(post, tag);
+
+                        //新增帖子操作
+                        postFacade.addPostTest(request, "", "", post.getCircleid().toString(), post.getUserid().toString(),
+                                post.getCoverimg(), post.getPostcontent(), lbs, "", "1");
                     }
 
-                    //新增帖子操作
-                    postFacade.addPostTest(request, "", "", post.getCircleid().toString(), post.getUserid().toString(),
-                            post.getCoverimg(), post.getPostcontent(), lbs, "", "1");
                 }
 
+                //释放空间,删除本地图片
+                for (int k = 0; k < list.size(); k++) {
+                    File fi = new File(list.get(k).toString());
+                    fi.delete();
+                }
+                resault.put("code", 200);
+            } else {
+                resault.put("code", 300);
             }
-
-            //释放空间,删除本地图片
-            /*for (int k = 0;k<list.size();k++){
-                File fi = new File(list.get(k).toString());
-                fi.delete();
-            }*/
-            resault.put("code", 200);
         } catch (Exception e) {
             e.printStackTrace();
             resault.put("code", 400);
@@ -162,13 +171,133 @@ public class XmlParseFacade {
         return resault;
     }
 
-    private void insertPostLabel(Post post, String tag) {
+    /**
+     * 导出excel
+     *
+     * @return
+     */
+    public Map exportExcel() {
+        Map resault = new HashMap();
+        try {
+            //t.xls为要新建的文件名
+            String path = systemLayoutService.queryServiceUrl("file_xml_dwonload_img");
+            Long l = new Date().getTime();
+            //拼接文件名称
+            String urlname = "/" + l + ".xls";
+            WritableWorkbook book = Workbook.createWorkbook(new File(path + urlname));
+            //生成名为“第一页”的工作表，参数0表示这是第一页
+            WritableSheet sheet = book.createSheet("第一页", 0);
+            //查询出所有xml导入的帖子
+            List<PostXml> posts = postService.queryPostByXmlExport();
+            /*PostXml postXml = new PostXml();
+            Field[] fields = postXml.getClass().getDeclaredFields();*/
+            String title[] = {"id", "用户id", "圈子id", "标题", "帖子内容", "帖子封面"};
+            //设计表头
+            for (int i = 0; i < title.length; i++) {
+                sheet.addCell(new Label(i, 0, title[i]));
+            }
+           /* Post post = new Post();
+            //获取对象长度
+            Field[] p = post.getClass().getDeclaredFields();*/
+            //遍历循环出集合中每一个元素，写到表中
+            addExcelFileElement(sheet, posts);
+            //
+            //写入数据
+            book.write();
+            if (book != null) {
+                //关闭流
+                book.close();
+            }
+            //用于返回文件路径
+            String reurl = systemLayoutService.queryServiceUrl("domain_name");
+            reurl += "/download/post" + urlname;
+            resault.put("code", 200);
+            resault.put("date", reurl);
+            resault.put("massger", "成功");
+            return resault;
+        } catch (Exception e) {
+            e.printStackTrace();
+            resault.put("code", 400);
+            resault.put("date", -1);
+            resault.put("massger", "失败");
+            return resault;
+        }
+    }
+
+    public List<PostList> queryXmlAnalysisAndPost(Paging<PostList> pag) {
+        return postService.findAllqueryXmlAnalysisAndPost(pag);
+    }
+
+    /**
+     * 为excel文件添加元素
+     *
+     * @param sheet
+     * @param posts
+     * @throws IllegalAccessException
+     * @throws WriteException
+     */
+    private void addExcelFileElement(WritableSheet sheet, List<PostXml> posts) throws IllegalAccessException, WriteException {
+        for (int i = 0; i < posts.size(); i++) {
+            PostXml post = posts.get(i);
+            //获取对象长度
+            Field[] p = post.getClass().getDeclaredFields();
+            int k = 0;
+            for (Field f : p) {
+                //System.out.println(f.getName()+"==========================="+f.get(post));
+                String str = "";
+                if (f.get(post) != null) {
+                    str = f.get(post).toString();
+                }
+                sheet.addCell(new Label(k, i + 1, str));
+                k++;
+            }
+        }
+    }
+
+
+    /**
+     * 标签操作
+     *
+     * @param post
+     * @param tag
+     * @return
+     */
+    private String postLabel(Post post, String tag) {
+        String[] tags = tag.split(",");
+        String lbs = "";
+        for (int i = 0; i < tags.length; i++) {
+            //查询标签表中是否有此标签
+            Integer lbid = postLabelService.queryPostLabelByNameCompletely(tags[i]);
+            if (lbid == null) {
+                //新增标签
+                PostLabel postLabel = setPostLabel(post, tag);
+                lbs += postLabel.getId() + ",";
+            } else {
+                lbs += lbid + ",";
+            }
+            if (i == tags.length - 1) {
+                lbs.substring(0, lbs.lastIndexOf(","));
+            }
+        }
+        return lbs;
+    }
+
+    /**
+     * 新增标签
+     *
+     * @param post
+     * @param tag
+     * @return
+     */
+    private PostLabel setPostLabel(Post post, String tag) {
         PostLabel postLabel = new PostLabel();
         postLabel.setName(tag);
+        postLabel.setType(1);
         postLabel.setUserid(post.getUserid());
         postLabel.setIntime(new Date());
         postLabel.setIsdel(0);
         postLabelService.insertPostLabel(postLabel);
+        return postLabel;
     }
 
     /**
@@ -176,9 +305,9 @@ public class XmlParseFacade {
      *
      * @param nickname
      * @param phone
-     * @param post
+     * @param
      */
-    private Integer queryUser(String nickname, String phone, Post post) {
+    private Integer queryUser(String nickname, String phone) {
         User user = new User();
         if (StringUtil.isNotEmpty(phone)) {
             user.setPhone(phone);
@@ -189,12 +318,13 @@ public class XmlParseFacade {
         //根据手机号或昵称查询
         User userid = userService.queryUserByPhone(phone);
         if (userid != null) {
-            post.setUserid(userid.getId());
             return userid.getId();
         } else {
             //注册用户
             int uid = newUserRegistration(phone);
-            post.setUserid(uid);
+            user.setId(uid);
+            //修改用户昵称
+            userService.updateUserByNickname(user);
             return uid;
         }
     }
@@ -211,6 +341,7 @@ public class XmlParseFacade {
             UsernamePasswordToken newToken = new UsernamePasswordToken(phone, verifyCode.toCharArray());
             RegisterUser member = new RegisterUser();
             member.setPhone(phone);
+            member.setDeviceno("19dajieshule");
             member.setMobileCheckCode(verifyCode);
             //2 注册用户/修改用户信息
             Gson gson = new Gson();
@@ -374,6 +505,7 @@ public class XmlParseFacade {
         pho = pho.replace("\"", "");
         String[] substring = pho.split(",");
         int num = 0;
+        boolean bln = true;
         //循环子节点拼接帖子内容
         for (int i = 0; i < substring.length; i++) {
 
@@ -382,10 +514,11 @@ public class XmlParseFacade {
                 content += "\"type\":1,";
                 Map m = download(substring[i].substring(substring[i].indexOf(":") + 1, substring[i].indexOf("?")), "img");
                 list.add(m.get("oldurl"));
-                if (i == 0) {
+                if (bln) {
                     post.setCoverimg(m.get("newurl").toString());
                 }
                 content += "\"value\":\"" + m.get("newurl") + "\",\"dir\": \"\"},";
+                bln = false;
             }
             if (substring[i].substring(0, substring[i].indexOf(":")).equals("ow")) {
                 content += "{\"orderid\":" + num + ",";
@@ -420,7 +553,8 @@ public class XmlParseFacade {
         InputStream is = null;
         OutputStream os = null;
         Map map = new HashMap();
-        String path = systemLayoutService.queryServiceUrl("file_service_url");
+        String path = systemLayoutService.queryServiceUrl("file_xml_dwonload_img");
+        //String path = "c://";
         if (type.equals("img")) {
             path += "img/";
         } else if (type.equals("video")) {
@@ -443,11 +577,12 @@ public class XmlParseFacade {
                 //图片上传
                 Map t = movisionOssClient.uploadFileObject(new File(path + s), "img", "post");
                 map.put("newurl", t.get("url"));
-            } else if (type.equals("video")) {
+            } /*else if (type.equals("video")) {
                 //视频上传
-                Map m = movisionOssClient.uploadFileObject(new File(path + s), "video", "post");
-                map.put("newurl", m.get("url"));
-            }
+                //Map m = movisionOssClient.uploadFileObject(new File(path + s), "video", "post");
+                videoUploadUtil.videoUpload(path,)
+                map.put("newurl", );
+            }*/
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

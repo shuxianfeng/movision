@@ -86,6 +86,21 @@ public class UserService {
         }
     }
 
+    /**
+     * 修改用户昵称
+     *
+     * @param user
+     */
+    public void updateUserByNickname(User user) {
+        try {
+            log.info("根据id修改用户昵称");
+            userMapper.updateUserByNickname(user);
+        } catch (Exception e) {
+            log.error("根据用户id修改昵称异常", e);
+            throw e;
+        }
+    }
+
     public int queryUserByPoints(String userid) {
         try {
             log.info("查询用户积分是否充足");
