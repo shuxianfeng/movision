@@ -2907,7 +2907,7 @@ public class PostFacade {
      * @param date yyyy-MM-dd
      * @return
      */
-    public List<EchartOf24HourData> querySpecifyDatePostHeatvalue(Integer postid, String date) throws ParseException {
+    public Map querySpecifyDatePostHeatvalue(Integer postid, String date) throws ParseException {
         //前置校验参数
         preValidationParam(postid, date);
 
@@ -2930,8 +2930,10 @@ public class PostFacade {
         int[] zanArr = new int[24];
         int[] circleSelectedArr = new int[24];
         int[] homePageArr = new int[24];
+        int[] decayArr = new int[24];
         //核心算法
-        wrapData(postHeatvalueRecords, viewArr, rewardArr, collectArr, forwardArr, commentArr, zanArr, circleSelectedArr, homePageArr);
+        wrapData(postHeatvalueRecords, viewArr, rewardArr, collectArr, forwardArr, commentArr, zanArr,
+                circleSelectedArr, homePageArr, decayArr);
         //3 处理返回的结果集
         List<EchartOf24HourData> returnList = new ArrayList<>();
 
@@ -2943,8 +2945,16 @@ public class PostFacade {
         addDataToReturnList("点赞帖子", zanArr, returnList);
         addDataToReturnList("圈子精选", circleSelectedArr, returnList);
         addDataToReturnList("首页精选", homePageArr, returnList);
+        addDataToReturnList("每日衰减", decayArr, returnList);
 
-        return returnList;
+
+        Post post = postService.selectByPrimaryKey(postid);
+        Map map = new HashMap();
+        map.put("post_id", post.getId());
+        map.put("post_title", post.getTitle());
+        map.put("echart_data", returnList);
+
+        return map;
     }
 
     private void preValidationParam(Integer postid, String date) throws ParseException {
@@ -2969,7 +2979,9 @@ public class PostFacade {
      * @param circleSelectedArr
      * @param homePageArr
      */
-    private void wrapData(List<PostHeatvalueRecord> postHeatvalueRecords, int[] viewArr, int[] rewardArr, int[] collectArr, int[] forwardArr, int[] commentArr, int[] zanArr, int[] circleSelectedArr, int[] homePageArr) {
+    private void wrapData(List<PostHeatvalueRecord> postHeatvalueRecords, int[] viewArr, int[] rewardArr, int[] collectArr,
+                          int[] forwardArr, int[] commentArr, int[] zanArr, int[] circleSelectedArr, int[] homePageArr,
+                          int[] decayArr) {
         int size = postHeatvalueRecords.size();
         for (int i = 0; i < size; i++) {
             PostHeatvalueRecord record = postHeatvalueRecords.get(i);
@@ -2979,6 +2991,8 @@ public class PostFacade {
             Date intime = record.getIntime();
             //流水的类型
             int type = record.getType();
+            //变化的热度
+            int heatvalue = record.getHeatValue();
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(intime);
@@ -3008,6 +3022,9 @@ public class PostFacade {
 
             } else if (HeatValueConstant.HEATVALUE_TYPE.home_page_selection.getCode() == type) {
                 handler24HourRecord(hourOfDay, homePageArr, HeatValueConstant.POINT.home_page_selection.getCode());
+
+            } else if (HeatValueConstant.HEATVALUE_TYPE.decay.getCode() == type) {
+                handler24HourRecord(hourOfDay, homePageArr, heatvalue);
 
             } else {
                 log.error("热度流水类型不正确。当前的流水id=" + recordId + ", 流水类型：" + type);
@@ -3039,6 +3056,17 @@ public class PostFacade {
             }
         }
     }
+
+    public Map wrapEchartEverydayHeatvalueData(Integer postid, String beginDate, String endDate) throws ParseException {
+        EChartOfEverydayData data = this.queryPostHeatvalueEveryday(postid, beginDate, endDate);
+        Post post = postService.selectByPrimaryKey(postid);
+        Map map = new HashMap();
+        map.put("post_id", post.getId());
+        map.put("post_title", post.getTitle());
+        map.put("echart_data", data);
+        return map;
+    }
+
 
     /**
      * 获取 统计指定帖子每天的热度流水的EChart 数据

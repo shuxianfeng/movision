@@ -2288,4 +2288,5 @@
         WHERE p.isdel <![CDATA[<>]]> 1 AND p.isactive=0
          AND p.userid IN (SELECT id FROM yw_user WHERE deviceno = '19dajieshule') ORDER BY p.intime DESC
     </select>
+
 </mapper>
