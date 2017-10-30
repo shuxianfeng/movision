@@ -38,9 +38,9 @@
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
-        isactive, partsum_enddays, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
-        hotimgurl,
-        intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,city,ishotorder,isheatoperate
+        isactive, partsum_enddays, activetype, activefee, iscontribute, type, ishot, orderid,
+        isessence, isessencepool, coverimg, hotimgurl,
+        intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,city,ishot_order,isheatoperate
     </sql>
 
     <!--基础查询语句-->
