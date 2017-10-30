@@ -3024,7 +3024,7 @@ public class PostFacade {
                 handler24HourRecord(hourOfDay, homePageArr, HeatValueConstant.POINT.home_page_selection.getCode());
 
             } else if (HeatValueConstant.HEATVALUE_TYPE.decay.getCode() == type) {
-                handler24HourRecord(hourOfDay, decayArr, heatvalue);
+                handler24HourRecordForDecay(hourOfDay, decayArr, heatvalue);
 
             } else {
                 log.error("热度流水类型不正确。当前的流水id=" + recordId + ", 流水类型：" + type);
@@ -3053,6 +3053,14 @@ public class PostFacade {
         for (int i = 0; i < 24; i++) {
             if (i == hourOfDay) {
                 arr[i] += heat_value;
+            }
+        }
+    }
+
+    private void handler24HourRecordForDecay(int hourOfDay, int[] arr, int heat_value) {
+        for (int i = 0; i < 24; i++) {
+            if (i == hourOfDay) {
+                arr[i] = -heat_value;
             }
         }
     }
