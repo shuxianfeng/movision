@@ -30,6 +30,86 @@ public class IndexTodayDetails implements Serializable {
 
     private Integer totalUser;//总用户
 
+    private String theDayBeforeVip;//前天新注册会员
+
+    private String theDayBeforePost;//前天帖子
+
+    private String theDayBeforeActivityApply;//前天活动报名
+
+    private String theDayBeforeForNotAudit;//前天申请vip未审核
+
+    private String twoDaysEarlierVip;//两天前注册会员
+
+    private String twoDaysEarlierPost;//两天前帖子
+
+    private String twoDaysEarlierActivityApply;//两天前活动报名
+
+    private String twoDaysEarlierForNotAudit;//两天前申请vip未审核
+
+    public String getTheDayBeforeVip() {
+        return theDayBeforeVip;
+    }
+
+    public void setTheDayBeforeVip(String theDayBeforeVip) {
+        this.theDayBeforeVip = theDayBeforeVip;
+    }
+
+    public String getTheDayBeforePost() {
+        return theDayBeforePost;
+    }
+
+    public void setTheDayBeforePost(String theDayBeforePost) {
+        this.theDayBeforePost = theDayBeforePost;
+    }
+
+    public String getTheDayBeforeActivityApply() {
+        return theDayBeforeActivityApply;
+    }
+
+    public void setTheDayBeforeActivityApply(String theDayBeforeActivityApply) {
+        this.theDayBeforeActivityApply = theDayBeforeActivityApply;
+    }
+
+    public String getTheDayBeforeForNotAudit() {
+        return theDayBeforeForNotAudit;
+    }
+
+    public void setTheDayBeforeForNotAudit(String theDayBeforeForNotAudit) {
+        this.theDayBeforeForNotAudit = theDayBeforeForNotAudit;
+    }
+
+    public String getTwoDaysEarlierVip() {
+        return twoDaysEarlierVip;
+    }
+
+    public void setTwoDaysEarlierVip(String twoDaysEarlierVip) {
+        this.twoDaysEarlierVip = twoDaysEarlierVip;
+    }
+
+    public String getTwoDaysEarlierPost() {
+        return twoDaysEarlierPost;
+    }
+
+    public void setTwoDaysEarlierPost(String twoDaysEarlierPost) {
+        this.twoDaysEarlierPost = twoDaysEarlierPost;
+    }
+
+    public String getTwoDaysEarlierActivityApply() {
+        return twoDaysEarlierActivityApply;
+    }
+
+    public void setTwoDaysEarlierActivityApply(String twoDaysEarlierActivityApply) {
+        this.twoDaysEarlierActivityApply = twoDaysEarlierActivityApply;
+    }
+
+    public String getTwoDaysEarlierForNotAudit() {
+        return twoDaysEarlierForNotAudit;
+    }
+
+    public void setTwoDaysEarlierForNotAudit(String twoDaysEarlierForNotAudit) {
+        this.twoDaysEarlierForNotAudit = twoDaysEarlierForNotAudit;
+    }
+
     public String getYesterdayForNotAudit() {
         return yesterdayForNotAudit;
     }
