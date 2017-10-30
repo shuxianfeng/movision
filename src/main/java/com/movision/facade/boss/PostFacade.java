@@ -3024,7 +3024,7 @@ public class PostFacade {
                 handler24HourRecord(hourOfDay, homePageArr, HeatValueConstant.POINT.home_page_selection.getCode());
 
             } else if (HeatValueConstant.HEATVALUE_TYPE.decay.getCode() == type) {
-                handler24HourRecord(hourOfDay, homePageArr, heatvalue);
+                handler24HourRecord(hourOfDay, decayArr, heatvalue);
 
             } else {
                 log.error("热度流水类型不正确。当前的流水id=" + recordId + ", 流水类型：" + type);
@@ -3036,15 +3036,15 @@ public class PostFacade {
      * 添加 24小时帖子热度变化的EChart 的data到结果集
      *
      * @param cName      帖子热度变化类型中文名称
-     * @param viewArr    对应的data
+     * @param arr    对应的data
      * @param returnList
      */
-    private void addDataToReturnList(String cName, int[] viewArr, List<EchartOf24HourData> returnList) {
+    private void addDataToReturnList(String cName, int[] arr, List<EchartOf24HourData> returnList) {
         EchartOf24HourData echartOf24HourData = new EchartOf24HourData();
         echartOf24HourData.setName(cName);
         echartOf24HourData.setType("bar");
         echartOf24HourData.setStack("每小时帖子热度");
-        echartOf24HourData.setData(viewArr);
+        echartOf24HourData.setData(arr);
         log.debug(cName + ":" + echartOf24HourData.toString());
         returnList.add(echartOf24HourData);
     }
