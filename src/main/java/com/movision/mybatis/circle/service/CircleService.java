@@ -774,6 +774,22 @@ public class CircleService {
     }
 
 
+    /**
+     * 根据圈子名称完全匹配查找圈子id
+     *
+     * @param name
+     * @return
+     */
+    public Integer queryCircleByNameAndEntirely(String name) {
+        try {
+            log.info("根据圈子名称查询圈子id");
+            return circleMapper.queryCircleByNameAndEntirely(name);
+        } catch (Exception e) {
+            log.error("根据圈子名称查询圈子id异常", e);
+            throw e;
+        }
+    }
+
 
 
 }
