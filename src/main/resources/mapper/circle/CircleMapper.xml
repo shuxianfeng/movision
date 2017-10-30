@@ -1129,4 +1129,8 @@
     <select id="queryCircleid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM yw_follow_circle WHERE circleid=#{circleid,jdbcType=INTEGER} AND userid=#{userid,jdbcType=INTEGER}
     </select>
+
+    <select id="queryCircleByNameAndEntirely" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT id FROM yw_circle WHERE name = #{name,jdbcType=VARCHAR}
+    </select>
 </mapper>

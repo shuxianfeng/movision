@@ -101,4 +101,26 @@ public class XmlParseController {
     }
 
 
+    /**
+     * 导入Excel
+     *
+     * @param file
+     * @return
+     */
+    @ApiOperation(value = "导入Excel文件", notes = "用于解析EXCEL文件，修改帖子")
+    @RequestMapping(value = "input_excel_post", method = RequestMethod.POST)
+    public Response inputExcelToPost(@ApiParam(value = "Excel文件") @RequestParam MultipartFile file) {
+        Response response = new Response();
+        Map map = xmlParseFacade.inputExcelToPost(file);
+        if (map.get("code").equals("200")) {
+            response.setMessage("操作成功");
+            response.setData(map);
+        } else {
+            response.setMessage("操作失败");
+            response.setData(map);
+        }
+        return response;
+    }
+
+
 }
