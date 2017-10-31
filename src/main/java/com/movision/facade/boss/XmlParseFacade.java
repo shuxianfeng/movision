@@ -91,7 +91,7 @@ public class XmlParseFacade {
     private ExcelIntoEnquiryUtil excelIntoEnquiryUtil;
 
     @Autowired
-    private ImgCompressUtil imgCompressUtil;
+    private static ImgCompressUtil imgCompressUtil;
 
 
     @Transactional
@@ -583,7 +583,7 @@ public class XmlParseFacade {
             map.put("des_h", 440);    //目标高
             map.put("w", wth);
             map.put("h", hht);
-            map = imgCompressUtil.resizeImgSize(750, 440, map);
+            //map = ImgCompressUtil.resizeImgSize(750, 440, map);
             int final_w = (int) map.get("w");    //最终的宽度
             int final_h = (int) map.get("h");    //最终的高度
             System.out.println("切割后的图片宽度：======================" + final_w);
