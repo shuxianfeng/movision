@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.robotOperationJob.mapper.RobotOperationJobMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.robotOperationJob.entity.RobotOperationJob">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="postid" property="postid" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="count" property="count" jdbcType="INTEGER"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+        <result column="endtime" property="endtime" jdbcType="TIMESTAMP"/>
+        <result column="batch" property="batch" jdbcType="INTEGER"/>
+        <result column="number" property="number" jdbcType="INTEGER"/>
+        <result column="theme" property="theme" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, userid, postid, type, status, count, intime, endtime, batch, number, theme
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_robot_operation_job
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from yw_robot_operation_job
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.robotOperationJob.entity.RobotOperationJob">
+        insert into yw_robot_operation_job (id, userid, postid,
+        type, status, count,
+        intime, endtime, batch,
+        number, theme)
+        values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER},
+        #{type,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{count,jdbcType=INTEGER},
+        #{intime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, #{batch,jdbcType=INTEGER},
+        #{number,jdbcType=INTEGER}, #{theme,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.robotOperationJob.entity.RobotOperationJob">
+        insert into yw_robot_operation_job
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="postid != null">
+                postid,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="count != null">
+                count,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+            <if test="endtime != null">
+                endtime,
+            </if>
+            <if test="batch != null">
+                batch,
+            </if>
+            <if test="number != null">
+                number,
+            </if>
+            <if test="theme != null">
+                theme,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="postid != null">
+                #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="count != null">
+                #{count,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endtime != null">
+                #{endtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="batch != null">
+                #{batch,jdbcType=INTEGER},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=INTEGER},
+            </if>
+            <if test="theme != null">
+                #{theme,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.movision.mybatis.robotOperationJob.entity.RobotOperationJob">
+        update yw_robot_operation_job
+        <set>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="postid != null">
+                postid = #{postid,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="count != null">
+                count = #{count,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endtime != null">
+                endtime = #{endtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="batch != null">
+                batch = #{batch,jdbcType=INTEGER},
+            </if>
+            <if test="number != null">
+                number = #{number,jdbcType=INTEGER},
+            </if>
+            <if test="theme != null">
+                theme = #{theme,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.robotOperationJob.entity.RobotOperationJob">
+        update yw_robot_operation_job
+        set userid = #{userid,jdbcType=INTEGER},
+        postid = #{postid,jdbcType=INTEGER},
+        type = #{type,jdbcType=INTEGER},
+        status = #{status,jdbcType=INTEGER},
+        count = #{count,jdbcType=INTEGER},
+        intime = #{intime,jdbcType=TIMESTAMP},
+        endtime = #{endtime,jdbcType=TIMESTAMP},
+        batch = #{batch,jdbcType=INTEGER},
+        number = #{number,jdbcType=INTEGER},
+        theme = #{theme,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectCurrentPostidBatch" parameterType="java.lang.Integer"
+            resultType="com.movision.mybatis.robotOperationJob.entity.RobotOperationJob">
+        SELECT * FROM yw_robot_operation_job where postid = #{postid} ORDER by batch DESC limit 1
+    </select>
+</mapper>

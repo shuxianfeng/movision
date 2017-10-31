@@ -36,13 +36,13 @@ public class RobotPostController {
      * @param number
      * @return
      */
-    @ApiOperation(value = "单个帖子评论", notes = "单个帖子评论", response = Response.class)
+    @ApiOperation(value = "新增帖子评论任务", notes = "新增帖子评论任务", response = Response.class)
     @RequestMapping(value = "single_post_comment", method = RequestMethod.POST)
     public Response insertPostCommentByRobolt(@ApiParam(value = "帖子id") @RequestParam Integer postid,
                                               @ApiParam(value = "使用机器人数量") @RequestParam Integer number,
                                               @ApiParam(value = "帖子主题，1：人像， 2：风光") @RequestParam Integer theme) {
         Response response = new Response();
-        robotFacade.singlePostComment(number, postid, theme);
+        robotFacade.singlePostCommentJob(number, postid, theme);
         response.setMessage("操作成功");
         response.setData(1);
         return response;

@@ -17,6 +17,8 @@ import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.robotComment.entity.RobotComment;
 import com.movision.mybatis.robotComment.service.RobotCommentService;
 import com.movision.mybatis.robotNickname.service.RobotNicknameService;
+import com.movision.mybatis.robotOperationJob.entity.RobotOperationJob;
+import com.movision.mybatis.robotOperationJob.service.RobotOperationJobService;
 import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
@@ -48,6 +50,9 @@ import java.util.*;
 public class RobotFacade {
 
     private static Logger log = LoggerFactory.getLogger(RobotFacade.class);
+
+    @Autowired
+    private RobotOperationJobService robotOperationJobService;
 
     @Autowired
     private UserService userService;
@@ -701,17 +706,28 @@ public class RobotFacade {
         for (int i = 0; i < postidArr.length; i++) {
             //调用【机器人帖子评论操作】
             robotshuntComment((int) ((Math.random() * num) + 1), Integer.valueOf(postidArr[i]), theme);
+
         }
     }
 
-    public void singlePostComment(int num, int postid, int theme) {
-        //校验入参
-        validatePostidsAndNum(String.valueOf(postid), num);
-        if (theme != 1 || theme != 2) {
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "选择的帖子主体不正确！");
+    public void singlePostCommentJob(int num, int postid, int theme) {
+        //获取最大批次
+        RobotOperationJob currentJob = robotOperationJobService.selectCurrentPostidBatch(postid);
+        int batch = 1;
+        if (currentJob != null) {
+            batch = currentJob.getBatch() + 1;
         }
-        //分流操作帖子评论
-        robotshuntComment(num, postid, theme);
+
+        RobotOperationJob job = new RobotOperationJob();
+        job.setIntime(new Date());
+        job.setCount(num);
+        job.setNumber(num);
+        job.setPostid(postid);
+        job.setTheme(theme);
+        job.setStatus(0);
+        job.setBatch(batch);
+
+        robotOperationJobService.add(job);
     }
 
     /**
