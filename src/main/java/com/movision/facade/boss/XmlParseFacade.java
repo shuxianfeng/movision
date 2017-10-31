@@ -21,6 +21,7 @@ import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.ExcelIntoEnquiryUtil;
+import com.movision.utils.ImgCompressUtil;
 import com.movision.utils.StrUtil;
 import com.movision.utils.VideoUploadUtil;
 import com.movision.utils.im.CheckSumBuilder;
@@ -40,11 +41,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.*;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 /**
  * @Author zhurui
@@ -85,6 +89,9 @@ public class XmlParseFacade {
 
     @Autowired
     private ExcelIntoEnquiryUtil excelIntoEnquiryUtil;
+
+    @Autowired
+    private ImgCompressUtil imgCompressUtil;
 
 
     @Transactional
@@ -528,9 +535,13 @@ public class XmlParseFacade {
             String wh = "\"wh\":";
             if (substring[i].substring(0, substring[i].indexOf(":")).equals("orign")) {
                 content += "\"type\":1,";
+                //图片处理
                 Map m = download(substring[i].substring(substring[i].indexOf(":") + 1, substring[i].indexOf("?")), "img");
                 list.add(m.get("oldurl"));
                 if (bln) {
+                    //帖子封面处理
+                    String covimg = m.get("oldurl").toString();
+                    imgIncision(covimg);
                     post.setCoverimg(m.get("newurl").toString());
                 }
                 content += "\"value\":\"" + m.get("newurl") + "\",\"dir\": \"\"},";
@@ -558,6 +569,30 @@ public class XmlParseFacade {
         //System.out.println("---------"+s);
         post.setPostcontent(neirong);
         return content;
+    }
+
+    private Map imgIncision(String url) {
+        File file1 = new File(url);
+        Map resault = new HashMap();
+        try {
+            Image image = ImageIO.read(file1);
+            int wth = image.getWidth(null);
+            int hht = image.getHeight(null);
+            Map map = new HashMap();
+            map.put("des_w", 750);    //目标宽
+            map.put("des_h", 440);    //目标高
+            map.put("w", wth);
+            map.put("h", hht);
+            map = imgCompressUtil.resizeImgSize(750, 440, map);
+            int final_w = (int) map.get("w");    //最终的宽度
+            int final_h = (int) map.get("h");    //最终的高度
+            System.out.println("切割后的图片宽度：======================" + final_w);
+            System.out.println("切割后的图片高度：======================" + final_h);
+            return resault;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -591,8 +626,8 @@ public class XmlParseFacade {
             map.put("oldurl", path + s);
             if (type.equals("img")) {
                 //图片上传
-                Map t = movisionOssClient.uploadFileObject(new File(path + s), "img", "post");
-                map.put("newurl", t.get("url"));
+                //Map t = movisionOssClient.uploadFileObject(new File(path + s), "img", "post");
+                //map.put("newurl", t.get("url"));
             } /*else if (type.equals("video")) {
                 //视频上传
                 //Map m = movisionOssClient.uploadFileObject(new File(path + s), "video", "post");
