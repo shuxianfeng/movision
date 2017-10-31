@@ -1086,7 +1086,7 @@
             ORDER BY p.intime DESC
         </if>
         <if test="pai==1">
-            ORDER BY p.totalpoint DESC
+            ORDER BY p.heat_value DESC
         </if>
     </select>
 
