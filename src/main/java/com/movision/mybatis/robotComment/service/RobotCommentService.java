@@ -26,14 +26,14 @@ public class RobotCommentService {
     /**
      * 查询机器人评论列表
      *
-     * @param type
+     * @param robotComment
      * @param pag
      * @return
      */
-    public List<RobotComment> findAllQueryRoboltComment(Integer type, Paging<RobotComment> pag) {
+    public List<RobotComment> findAllQueryRoboltComment(RobotComment robotComment, Paging<RobotComment> pag) {
         try {
             logger.info("查询机器人评论列表");
-            return robotCommentMapper.findAllQueryRoboltComment(type, pag.getRowBounds());
+            return robotCommentMapper.findAllQueryRoboltComment(robotComment, pag.getRowBounds());
         } catch (Exception e) {
             logger.error("查询机器人评论列表", e);
             throw e;

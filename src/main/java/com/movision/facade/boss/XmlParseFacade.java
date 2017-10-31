@@ -81,9 +81,6 @@ public class XmlParseFacade {
     private SystemLayoutService systemLayoutService;
 
     @Autowired
-    private VideoUploadUtil videoUploadUtil;
-
-    @Autowired
     private PostService postService;
 
     @Autowired

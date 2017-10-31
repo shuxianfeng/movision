@@ -69,7 +69,7 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="findAllQueryRoboltComment" parameterType="java.lang.Integer"
+    <select id="findAllQueryRoboltComment" parameterType="com.movision.mybatis.robotComment.entity.RobotComment"
             resultType="com.movision.mybatis.robotComment.entity.RobotComment">
         SELECT * FROM yw_comment
         <where>
