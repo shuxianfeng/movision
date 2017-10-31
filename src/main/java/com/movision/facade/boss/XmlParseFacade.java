@@ -161,17 +161,17 @@ public class XmlParseFacade {
                         String lbs = postLabel(post, tag);
 
                         //新增帖子操作
-                        /*postFacade.addPostTest(request, "", "", post.getCircleid().toString(), post.getUserid().toString(),
-                                post.getCoverimg(), post.getPostcontent(), lbs, "", "1");*/
+                        postFacade.addPostTest(request, "", "", post.getCircleid().toString(), post.getUserid().toString(),
+                                post.getCoverimg(), post.getPostcontent(), lbs, "", "1");
                     }
 
                 }
 
                 //释放空间,删除本地图片
-                for (int k = 0; k < list.size(); k++) {
+                /*for (int k = 0; k < list.size(); k++) {
                     File fi = new File(list.get(k).toString());
                     fi.delete();
-                }
+                }*/
                 resault.put("code", 200);
             } else {
                 resault.put("code", 300);
@@ -553,6 +553,7 @@ public class XmlParseFacade {
                     Map map = movisionOssClient.uploadImgerAndIncision(covimg, "0", "0", whs.get("w").toString(), whs.get("h").toString());
                     //3获取本地服务器中切割完成后的图片
                     String tmpurl = String.valueOf(map.get("file"));
+                    list.add(tmpurl);
                     //4对本地服务器中切割好的图片进行压缩处理
                     newurl = imgCompress(newurl, whs, tmpurl);
                     post.setCoverimg(newurl);
