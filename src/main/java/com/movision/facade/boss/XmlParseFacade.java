@@ -656,18 +656,18 @@ public class XmlParseFacade {
         if (h > 440 && w > 750) {
             if (w / h > 750 / 440) {
                 resatlt.put("h", h);
-                resatlt.put("w", h * (int) ((750.0 / 440.0)));
+                resatlt.put("w", (int) (h * (750.0 / 440.0)));
             } else if (h / w > 750 / 440) {
                 resatlt.put("w", w);
-                resatlt.put("h", w * (int) ((750.0 / 440.0)));
+                resatlt.put("h", (int) (w * (750.0 / 440.0)));
             } else {
                 resatlt.put("w", w);
-                resatlt.put("h", w * (int) ((440.0 / 750.0)));
+                resatlt.put("h", (int) (w * (440.0 / 750.0)));
             }
         } else {
             if (w / h > h / w) {
                 resatlt.put("h", h);
-                resatlt.put("w", h * (int) ((750.0 / 440.0)));
+                resatlt.put("w", (int) (h * (750.0 / 440.0)));
             } else if (h / w > w / h) {
                 resatlt.put("w", w);
                 resatlt.put("h", (int) (w * (440.0 / 750.0)));
