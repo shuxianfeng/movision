@@ -1400,9 +1400,9 @@ public class PostController {
                                                        @ApiParam(value = "指定的日期,yyyy-MM-dd格式") @RequestParam String date)
             throws ParseException {
         Response response = new Response();
-        List<EchartOf24HourData> list = postFacade.querySpecifyDatePostHeatvalue(postid, date);
+        Map map = postFacade.querySpecifyDatePostHeatvalue(postid, date);
         response.setMessage("查询成功");
-        response.setData(list);
+        response.setData(map);
         return response;
     }
 
@@ -1413,9 +1413,9 @@ public class PostController {
                                                        @ApiParam(value = "指定的结束日期,yyyy-MM-dd格式") @RequestParam String endDate)
             throws ParseException {
         Response response = new Response();
-        EChartOfEverydayData data = postFacade.queryPostHeatvalueEveryday(postid, beginDate, endDate);
+        Map map = postFacade.wrapEchartEverydayHeatvalueData(postid, beginDate, endDate);
         response.setMessage("查询成功");
-        response.setData(data);
+        response.setData(map);
         return response;
     }
 

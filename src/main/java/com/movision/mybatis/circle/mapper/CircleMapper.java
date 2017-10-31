@@ -132,4 +132,6 @@ public interface CircleMapper {
     List<Circle> findAllCircleByNameInSearch(Map<String, Object> map, RowBounds rowBounds);
 
     int queryCircleid(Map map);
+
+    Integer queryCircleByNameAndEntirely(String name);
 }

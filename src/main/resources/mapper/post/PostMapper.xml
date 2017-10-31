@@ -12,7 +12,7 @@
         <result column="forwardsum" jdbcType="INTEGER" property="forwardsum"/>
         <result column="collectsum" jdbcType="INTEGER" property="collectsum"/>
         <result column="isactive" jdbcType="INTEGER" property="isactive"/>
-        <result column="partsum_enddays" jdbcType="INTEGER" property="partsumEnddays"/>
+        <result column="partsum_enddays" jdbcType="INTEGER" property="partsum_enddays"/>
         <result column="activetype" jdbcType="INTEGER" property="activetype"/>
         <result column="activefee" jdbcType="DOUBLE" property="activefee"/>
         <result column="iscontribute" jdbcType="INTEGER" property="iscontribute"/>
@@ -38,9 +38,9 @@
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
-        isactive, partsum_enddays, activetype, activefee, iscontribute, type, ishot, orderid, isessence, isessencepool, coverimg,
-        hotimgurl,
-        intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,city,ishotorder,isheatoperate
+        isactive, partsum_enddays, activetype, activefee, iscontribute, type, ishot, orderid,
+        isessence, isessencepool, coverimg, hotimgurl,
+        intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,city,ishot_order,isheatoperate
     </sql>
 
     <!--基础查询语句-->
@@ -1086,7 +1086,7 @@
             ORDER BY p.intime DESC
         </if>
         <if test="pai==1">
-            ORDER BY p.totalpoint DESC
+            ORDER BY p.heat_value DESC
         </if>
     </select>
 
@@ -2288,4 +2288,5 @@
         WHERE p.isdel <![CDATA[<>]]> 1 AND p.isactive=0
          AND p.userid IN (SELECT id FROM yw_user WHERE deviceno = '19dajieshule') ORDER BY p.intime DESC
     </select>
+
 </mapper>

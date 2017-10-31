@@ -12,7 +12,6 @@ import com.movision.mybatis.couponTemp.entity.CouponTemp;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostList;
-import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.entity.PostXml;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
@@ -21,6 +20,7 @@ import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.utils.ExcelIntoEnquiryUtil;
 import com.movision.utils.StrUtil;
 import com.movision.utils.VideoUploadUtil;
 import com.movision.utils.im.CheckSumBuilder;
@@ -81,10 +81,10 @@ public class XmlParseFacade {
     private SystemLayoutService systemLayoutService;
 
     @Autowired
-    private VideoUploadUtil videoUploadUtil;
+    private PostService postService;
 
     @Autowired
-    private PostService postService;
+    private ExcelIntoEnquiryUtil excelIntoEnquiryUtil;
 
 
     @Transactional
@@ -224,8 +224,24 @@ public class XmlParseFacade {
         }
     }
 
+    /**
+     * 查询xml解析的帖子列表
+     *
+     * @param pag
+     * @return
+     */
     public List<PostList> queryXmlAnalysisAndPost(Paging<PostList> pag) {
         return postService.findAllqueryXmlAnalysisAndPost(pag);
+    }
+
+    /**
+     * 解析Excel文件
+     *
+     * @param file
+     * @return
+     */
+    public Map inputExcelToPost(MultipartFile file) {
+        return excelIntoEnquiryUtil.queryExcelIntoEnquiry(file);
     }
 
     /**
