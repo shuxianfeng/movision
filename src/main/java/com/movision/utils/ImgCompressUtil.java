@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class ImgCompressUtil {
 
-    private final Logger log = LoggerFactory.getLogger(ImgCompressUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(ImgCompressUtil.class);
 
     /**
      * 压缩图片：外部调用方法
@@ -36,7 +36,7 @@ public class ImgCompressUtil {
      * @param h        高
      * @return 压缩是否成功
      */
-    public boolean ImgCompress(String url, String tempDir, int w, int h) {
+    public static boolean ImgCompress(String url, String tempDir, int w, int h) {
         // 压缩质量 百分比（无损压缩）
         float JPEGcompression = 1f;
 
@@ -62,8 +62,8 @@ public class ImgCompressUtil {
      * @param JPEGcompression 压缩质量/百分比
      * @return
      */
-    public boolean ImgCompress(String tempDir, String url, String name,
-                               int w, int h, float JPEGcompression) {
+    public static boolean ImgCompress(String tempDir, String url, String name,
+                                      int w, int h, float JPEGcompression) {
         boolean compressFlag = false;
         File file = new File(url);
         if (!(file.exists() && file.canRead())) {
@@ -143,7 +143,7 @@ public class ImgCompressUtil {
      * @param h   设定好的高
      * @param map 当前的尺寸map
      */
-    public Map<String, Integer> resizeImgSize(int w, int h, Map<String, Integer> map) {
+    public static Map<String, Integer> resizeImgSize(int w, int h, Map<String, Integer> map) {
         int width = map.get("w");
         int height = map.get("h");
 
@@ -190,8 +190,8 @@ public class ImgCompressUtil {
      * @param fos             文件输出流
      * @throws IOException
      */
-    public void saveAsJPEG(Integer dpi, BufferedImage image_to_save,
-                           float JPEGcompression, FileOutputStream fos) throws IOException {
+    public static void saveAsJPEG(Integer dpi, BufferedImage image_to_save,
+                                  float JPEGcompression, FileOutputStream fos) throws IOException {
 
         // Image writer
         JPEGImageWriter imageWriter = (JPEGImageWriter) ImageIO
