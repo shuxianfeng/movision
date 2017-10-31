@@ -243,7 +243,7 @@ public class RobotFacade {
      * @param postids
      * @param num
      */
-    public void robotActionWithZanCollectComment(String postids, int num) {
+    /*public void robotActionWithZanCollectComment(String postids, int num) {
 
         validatePostidsAndNum(postids, num);
 
@@ -258,25 +258,25 @@ public class RobotFacade {
             //3 调用【机器人帖子评论操作】
             robotshuntComment((int) ((Math.random() * num) + 1), Integer.valueOf(postidArr[i]));
         }
-    }
+    }*/
 
     /**
      * 分流操作帖子评论
      */
-    public void robotshuntComment(Integer num, Integer post) {
+    public void robotshuntComment(Integer num, Integer post, Integer theme) {
         //查询机器人分隔
-        Integer number = systemLayoutService.queryRobotSeparate("robot_separate");
-        if (num > 1 && num <= number) {//2:40% 4:30% 5:30% --2
+//        Integer number = systemLayoutService.queryRobotSeparate("robot_separate");  //200条
+        if (num > 1) {//2:40% 4:30% 5:30% --2
 
-            insertPostCommentByRobolt(post, num, 2);
+            insertPostCommentByRobolt(post, num, 2, theme);
 
-        } else if (num > number) {//2:60% 4:20% 5:20% --3
-
-            insertPostCommentByRobolt(post, num, 3);
+//        } else if (num > number) {//2:60% 4:20% 5:20% --3
+//
+//            insertPostCommentByRobolt(post, num, 3);
 
         } else if (num == 1) {//随机100% --1
 
-            insertPostCommentByRobolt(post, num, 1);
+            insertPostCommentByRobolt(post, num, 1, theme);
         }
     }
 
@@ -313,6 +313,7 @@ public class RobotFacade {
         if (num < 1) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人数量至少是1个");
         }
+
     }
 
 
@@ -359,11 +360,6 @@ public class RobotFacade {
         if (count == 0) {
             //增加帖子热度
             facadeHeatValue.addHeatValue(postid, 3, userid);
-
-            //查看用户点赞操作行为，并记录积分流水
-            UserOperationRecord entiy = userOperationRecordService.queryUserOperationRecordByUser(userid);
-            facadePost.handleZanStatusAndZanPoint(String.valueOf(userid), entiy);
-
             //插入点赞历史记录
             postService.insertZanRecord(parammap);
             //更新帖子点赞数量字段
@@ -583,7 +579,7 @@ public class RobotFacade {
      * @param num 机器人的数量
      */
     @Transactional
-    public void insertPostCommentByRobolt(Integer postid, Integer num, Integer type) {
+    public void insertPostCommentByRobolt(Integer postid, Integer num, Integer type, Integer theme) {
 
         if (num < 1) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人数量至少是1个");
@@ -591,7 +587,7 @@ public class RobotFacade {
         //1 集合num个机器人大军
         List<User> users = userService.queryRandomUser(num);
         //2 随机查询num条评论内容
-        List<RobotComment> content = randomRobotComment(type, users.size());
+        List<RobotComment> content = randomRobotComment(type, users.size(), theme);
         //3 获取帖子发表时间
         Date date = postService.queryPostIdByDate(postid);
 
@@ -612,11 +608,12 @@ public class RobotFacade {
     /**
      * 随机查询num条评论内容
      *
-     * @param type
+     * @param type  处理类型 1 随机查询num条评论内容; 2 根据指定的权重来查询不同类型评论
      * @param num
+     * @param theme 帖子主题，1：人像， 2：风光
      * @return
      */
-    public List<RobotComment> randomRobotComment(Integer type, Integer num) {
+    public List<RobotComment> randomRobotComment(Integer type, Integer num, Integer theme) {
         List<RobotComment> content = new ArrayList<>();
         List<RobotComment> contens = new ArrayList();
 
@@ -628,29 +625,27 @@ public class RobotFacade {
             content = robotCommentService.queryRoboltComment(map);
             contens.addAll(content);
         } else if (type == 2) {//<=200 2:40% 4:30% 5:30%
-
             //有小数向上进位  Math.ceil 返回大于参数x的最小整数,即对浮点数向上取整.
             //查询评论占比率
-            Double number = systemLayoutService.queryRobotPercentage("robot_separate_40");
-            int mm = (int) (Math.ceil(num * number));
+            Double number = 0.0d;
+            int commentType = 0;
+            if (theme == 1) {
+                //人像 90%占比
+                number = systemLayoutService.queryRobotPercentage("robot_comment_portrait_ratio");
+                commentType = 3;
+            } else {
+                //风光 90%占比
+                number = systemLayoutService.queryRobotPercentage("robot_comment_scenery_ratio");
+                commentType = 2;
+            }
             Map map = new HashMap();
-            map.put("number", mm);
-            map.put("type", 2);
-            content = robotCommentService.queryRoboltComment(map);
-            contens.addAll(content);
-            Double number2 = systemLayoutService.queryRobotPercentage("robot_separate_30");
-            mm = (int) (Math.ceil(num * number2));
-            map.put("number", mm);
-            map.put("type", 4);
-            content = robotCommentService.queryRoboltComment(map);
-            contens.addAll(content);
-            mm = (int) (Math.ceil(num * number2));
-            map.put("number", mm);
-            map.put("type", 5);
-            content = robotCommentService.queryRoboltComment(map);
-            contens.addAll(content);
+            querySelectedComment(num, contens, map, number, commentType);
 
-        } else if (type == 3) {//>200 2:60% 4:20% 5:20%
+            Double number2 = systemLayoutService.queryRobotPercentage("robot_comment_5_ratio"); //5%占比
+            querySelectedComment(num, contens, map, number2, 4);
+            querySelectedComment(num, contens, map, number2, 5);
+
+        } /*else if (type == 3) {//>200 2:60% 4:20% 5:20%
             Double number = systemLayoutService.queryRobotPercentage("robot_separate_60");
             int mm = (int) (Math.ceil(num * number));
             Map map = new HashMap();
@@ -669,8 +664,27 @@ public class RobotFacade {
             map.put("type", 5);
             content = robotCommentService.queryRoboltComment(map);
             contens.addAll(content);
-        }
+        }*/
         return contens;
+    }
+
+    /**
+     * 查询指定类型的评论字典
+     *
+     * @param num
+     * @param contens
+     * @param map
+     * @param number2
+     * @param commentType 评论类型 ：0：普通 1：专业摄影 2：风光 3：人像 4：诗词 5：段子
+     */
+    private void querySelectedComment(Integer num, List<RobotComment> contens, Map map, Double number2, int commentType) {
+        int mm;
+        List<RobotComment> content;
+        mm = (int) (Math.ceil(num * number2));
+        map.put("number", mm);
+        map.put("type", commentType);
+        content = robotCommentService.queryRoboltComment(map);
+        contens.addAll(content);
     }
 
     /**
@@ -679,22 +693,25 @@ public class RobotFacade {
      * @param postids
      * @param num     最大机器人数量
      */
-    public void robotCommentBatchPost(String postids, int num) {
+    public void robotCommentBatchPost(String postids, int num, int theme) {
         validatePostidsAndNum(postids, num);
 
         String[] postidArr = postids.split(",");
         //循环对每个帖子评论
         for (int i = 0; i < postidArr.length; i++) {
             //调用【机器人帖子评论操作】
-            robotshuntComment((int) ((Math.random() * num) + 1), Integer.valueOf(postidArr[i]));
+            robotshuntComment((int) ((Math.random() * num) + 1), Integer.valueOf(postidArr[i]), theme);
         }
     }
 
-    public void singlePostComment(int num, int postid) {
+    public void singlePostComment(int num, int postid, int theme) {
         //校验入参
         validatePostidsAndNum(String.valueOf(postid), num);
+        if (theme != 1 || theme != 2) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "选择的帖子主体不正确！");
+        }
         //分流操作帖子评论
-        robotshuntComment(num, postid);
+        robotshuntComment(num, postid, theme);
     }
 
     /**
