@@ -12,14 +12,16 @@
     newPost, newMember, newActivityApply, newOrderForm,applyForNotAudit
   </sql>
 
+    <!--  首页展示今天、昨天、前天、大前天的数据 -->
     <select id="queryTheHomepageDetailsToday" resultType="com.movision.mybatis.bossIndex.entity.IndexTodayDetails">
         <![CDATA[
         SELECT COUNT(1) AS newPost ,
         (SELECT COUNT(1) FROM yw_user WHERE DATE(intime)=CURDATE() AND status=0 AND (id > 20000 OR id < 10000)) AS newMember,
         (SELECT COUNT(1) FROM yw_active_part WHERE DATE(intime)=CURDATE()) AS newActivityApply,
-        (SELECT COUNT(1) FROM yw_orders WHERE DATE(paytime)=CURDATE() AND isdel=0) AS newOrderForm,
         (SELECT COUNT(1) FROM yw_audit_vip_detail WHERE userid IN (SELECT id FROM yw_user WHERE
         DATE(applydate)=CURDATE())) AS applyForNotAudit,
+
+
         (SELECT COUNT(1) FROM yw_user u WHERE u.status=0 AND date (u.intime) = date_sub(curdate(),interval 1 day) AND (id > 20000 OR id < 10000)) AS yesterdayVip,
         (SELECT COUNT(1) FROM yw_post WHERE isdel = 0 AND DATE(intime) = date_sub(curdate(),interval 1 day)) AS
         yesterdayPost,
@@ -27,6 +29,26 @@
         yesterdayActivityApply,
         (SELECT COUNT(1) FROM yw_audit_vip_detail WHERE userid IN (SELECT id FROM yw_user WHERE
         DATE(applydate)=DATE_SUB(curdate(),interval 1 day))) AS yesterdayForNotAudit,
+
+
+(SELECT COUNT(1) FROM yw_user u WHERE u.status=0 AND date (u.intime) = date_sub(curdate(),interval 2 day) AND (id > 20000 OR id < 10000)) AS theDayBeforeVip,
+        (SELECT COUNT(1) FROM yw_post WHERE isdel = 0 AND DATE(intime) = date_sub(curdate(),interval 2 day)) AS
+        theDayBeforePost,
+        (SELECT COUNT(1) FROM yw_active_part WHERE DATE(intime) = date_sub(curdate(),interval 2 day)) AS
+        theDayBeforeActivityApply,
+        (SELECT COUNT(1) FROM yw_audit_vip_detail WHERE userid IN (SELECT id FROM yw_user WHERE
+        DATE(applydate)=DATE_SUB(curdate(),interval 2 day))) AS theDayBeforeForNotAudit,
+
+
+(SELECT COUNT(1) FROM yw_user u WHERE u.status=0 AND date (u.intime) = date_sub(curdate(),interval 3 day) AND (id > 20000 OR id < 10000)) AS twoDaysEarlierVip,
+        (SELECT COUNT(1) FROM yw_post WHERE isdel = 0 AND DATE(intime) = date_sub(curdate(),interval 3 day)) AS
+        twoDaysEarlierPost,
+        (SELECT COUNT(1) FROM yw_active_part WHERE DATE(intime) = date_sub(curdate(),interval 3 day)) AS
+        twoDaysEarlierActivityApply,
+        (SELECT COUNT(1) FROM yw_audit_vip_detail WHERE userid IN (SELECT id FROM yw_user WHERE
+        DATE(applydate)=DATE_SUB(curdate(),interval 3 day))) AS twoDaysEarlierForNotAudit,
+
+
         (SELECT COUNT(1)-1 FROM yw_user WHERE status = 0 AND (id > 20000 OR id < 10000)) AS totalUser
         FROM yw_post WHERE date(intime)=curdate() AND isdel=0 AND isactive=0
         ]]>

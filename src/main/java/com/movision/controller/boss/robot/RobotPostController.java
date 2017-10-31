@@ -39,9 +39,10 @@ public class RobotPostController {
     @ApiOperation(value = "单个帖子评论", notes = "单个帖子评论", response = Response.class)
     @RequestMapping(value = "single_post_comment", method = RequestMethod.POST)
     public Response insertPostCommentByRobolt(@ApiParam(value = "帖子id") @RequestParam Integer postid,
-                                              @ApiParam(value = "使用机器人数量") @RequestParam Integer number) {
+                                              @ApiParam(value = "使用机器人数量") @RequestParam Integer number,
+                                              @ApiParam(value = "帖子主题，1：人像， 2：风光") @RequestParam Integer theme) {
         Response response = new Response();
-        robotFacade.singlePostComment(number, postid);
+        robotFacade.singlePostComment(number, postid, theme);
         response.setMessage("操作成功");
         response.setData(1);
         return response;
@@ -50,9 +51,10 @@ public class RobotPostController {
     @ApiOperation(value = "批量评论帖子", notes = "批量评论帖子", response = Response.class)
     @RequestMapping(value = "batch_post_comment", method = RequestMethod.POST)
     public Response batchPostComment(@ApiParam(value = "需要调用的机器人的最大数量, 每次对帖子操作的机器人数量是[0,num)的随机数") @RequestParam Integer num,
-                                     @ApiParam(value = "帖子id, 以逗号分隔") @RequestParam String postids) {
+                                     @ApiParam(value = "帖子id, 以逗号分隔") @RequestParam String postids,
+                                     @ApiParam(value = "这些帖子的主题，1：人像， 2：风光") @RequestParam Integer theme) {
         Response response = new Response();
-        robotFacade.robotCommentBatchPost(postids, num);
+        robotFacade.robotCommentBatchPost(postids, num, theme);
         response.setMessage("操作成功");
         response.setData(1);
         return response;
@@ -112,7 +114,7 @@ public class RobotPostController {
         return response;
     }
 
-    @ApiOperation(value = "批量帖子机器人点赞、收藏、评论操作", notes = "批量帖子机器人点赞、收藏、评论操作", response = Response.class)
+    /*@ApiOperation(value = "批量帖子机器人点赞、收藏、评论操作", notes = "批量帖子机器人点赞、收藏、评论操作", response = Response.class)
     @RequestMapping(value = "/batch_robot_action_with_zan_collect_comment", method = RequestMethod.POST)
     public Response robotActionWithZanCollectComment(@ApiParam(value = "需要调用的机器人的最大数量, 每次对帖子操作的机器人数量是[0,num)的随机数") @RequestParam Integer num,
                                                      @ApiParam(value = "帖子id, 以逗号分隔") @RequestParam String postids) throws IOException {
@@ -120,7 +122,7 @@ public class RobotPostController {
         robotFacade.robotActionWithZanCollectComment(postids, num);
         response.setMessage("操作成功");
         return response;
-    }
+    }*/
 
     /**
      * 注：一个机器人可以对同一个帖子浏览多次

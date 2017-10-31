@@ -19,7 +19,7 @@ public interface RobotCommentMapper {
 
     int updateByPrimaryKey(RobotComment record);
 
-    List<RobotComment> findAllQueryRoboltComment(Integer type, RowBounds rowBounds);
+    List<RobotComment> findAllQueryRoboltComment(RobotComment robotComment, RowBounds rowBounds);
 
     List<RobotComment> queryRoboltComment(Map map);
 

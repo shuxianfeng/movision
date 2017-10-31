@@ -12,7 +12,6 @@ import com.movision.mybatis.couponTemp.entity.CouponTemp;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostList;
-import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.entity.PostXml;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postLabel.entity.PostLabel;
@@ -21,9 +20,9 @@ import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
-import com.movision.utils.StrUtil;
-import com.movision.utils.VideoUploadUtil;
+import com.movision.utils.*;
 import com.movision.utils.im.CheckSumBuilder;
+import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import jxl.Workbook;
@@ -40,11 +39,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 /**
  * @Author zhurui
@@ -81,10 +84,19 @@ public class XmlParseFacade {
     private SystemLayoutService systemLayoutService;
 
     @Autowired
-    private VideoUploadUtil videoUploadUtil;
+    private PostService postService;
 
     @Autowired
-    private PostService postService;
+    private ExcelIntoEnquiryUtil excelIntoEnquiryUtil;
+
+    @Autowired
+    private static ImgCompressUtil imgCompressUtil;
+
+    @Autowired
+    private CoverImgCompressUtil coverImgCompressUtil;
+
+    @Autowired
+    private AliOSSClient aliOSSClient;
 
 
     @Transactional
@@ -149,8 +161,8 @@ public class XmlParseFacade {
                         String lbs = postLabel(post, tag);
 
                         //新增帖子操作
-                        postFacade.addPostTest(request, "", "", post.getCircleid().toString(), post.getUserid().toString(),
-                                post.getCoverimg(), post.getPostcontent(), lbs, "", "1");
+                        /*postFacade.addPostTest(request, "", "", post.getCircleid().toString(), post.getUserid().toString(),
+                                post.getCoverimg(), post.getPostcontent(), lbs, "", "1");*/
                     }
 
                 }
@@ -224,8 +236,24 @@ public class XmlParseFacade {
         }
     }
 
+    /**
+     * 查询xml解析的帖子列表
+     *
+     * @param pag
+     * @return
+     */
     public List<PostList> queryXmlAnalysisAndPost(Paging<PostList> pag) {
         return postService.findAllqueryXmlAnalysisAndPost(pag);
+    }
+
+    /**
+     * 解析Excel文件
+     *
+     * @param file
+     * @return
+     */
+    public Map inputExcelToPost(MultipartFile file) {
+        return excelIntoEnquiryUtil.queryExcelIntoEnquiry(file);
     }
 
     /**
@@ -512,10 +540,22 @@ public class XmlParseFacade {
             String wh = "\"wh\":";
             if (substring[i].substring(0, substring[i].indexOf(":")).equals("orign")) {
                 content += "\"type\":1,";
+                //图片处理
                 Map m = download(substring[i].substring(substring[i].indexOf(":") + 1, substring[i].indexOf("?")), "img");
+                //获取本地文件
                 list.add(m.get("oldurl"));
+                String newurl = "";
                 if (bln) {
-                    post.setCoverimg(m.get("newurl").toString());
+                    //帖子封面处理
+                    String covimg = m.get("oldurl").toString();
+                    Map whs = imgIncision(covimg);
+                    //2从服务器获取文件并剪切,上传剪切后图片上传阿里云
+                    Map map = movisionOssClient.uploadImgerAndIncision(covimg, "0", "0", whs.get("w").toString(), whs.get("h").toString());
+                    //3获取本地服务器中切割完成后的图片
+                    String tmpurl = String.valueOf(map.get("file"));
+                    //4对本地服务器中切割好的图片进行压缩处理
+                    newurl = imgCompress(newurl, whs, tmpurl);
+                    post.setCoverimg(newurl);
                 }
                 content += "\"value\":\"" + m.get("newurl") + "\",\"dir\": \"\"},";
                 bln = false;
@@ -544,6 +584,97 @@ public class XmlParseFacade {
         return content;
     }
 
+    private String imgCompress(String newurl, Map whs, String tmpurl) {
+        int wt = 0;//图片压缩后的宽度
+        int ht = 0;//图片压缩后的高度440
+        InputStream is = null;
+        Map compressmap = new HashMap();
+        try {
+            //返回图片的宽高
+            //BufferedImage bi = ImageIO.read(file.getInputStream());
+            File file1 = new File(tmpurl);
+            is = new FileInputStream(file1);
+            BufferedImage bi = ImageIO.read(is);
+            //获取图片压缩比例
+            Double ratio = systemLayoutService.queryFileRatio("file_compress_ratio");
+            wt = (int) Math.ceil(bi.getWidth() * ratio);
+            ht = (int) Math.ceil(bi.getHeight() * ratio);
+            //新增压缩部分
+            File fs = new File(tmpurl);
+            Long fsize = fs.length();//获取文件大小
+            String compressUrl = null;
+            if (fsize > 800 * 1024) {
+                //对图片压缩处理
+                compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, wt, ht);
+                System.out.println("压缩完的切割图片url==" + compressUrl);
+            } else {
+                //对宽高值去除小数点
+                String ww = whs.get("w").toString();
+                String hh = whs.get("w").toString();
+                compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, Integer.parseInt(ww), Integer.parseInt(hh));
+                System.out.println("压缩完的切割图片url==" + compressUrl);
+            }
+            //5对压缩完的图片上传到阿里云
+            compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");
+            newurl = String.valueOf(compressmap.get("url"));
+        } catch (IOException es) {
+            es.printStackTrace();
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException ee) {
+                    ee.printStackTrace();
+                }
+            }
+        }
+        return newurl;
+    }
+
+    private Map imgIncision(String url) {
+        File file1 = new File(url);
+        Map resault = new HashMap();
+        try {
+            Image image = ImageIO.read(file1);
+            int wth = image.getWidth(null);
+            int hht = image.getHeight(null);
+            Map map = new HashMap();
+            map = imgWhidthAndHeight(wth, hht);
+            System.out.println("切割后的图片宽度：======================" + map.get("w"));
+            System.out.println("切割后的图片高度：======================" + map.get("h"));
+            resault.put("w", map.get("w"));
+            resault.put("h", map.get("h"));
+            return resault;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Map imgWhidthAndHeight(int w, int h) {
+        Map resatlt = new HashMap();
+        if (h > 440 && w > 750) {
+            if (w / h > 750 / 440) {
+                resatlt.put("h", h);
+                resatlt.put("w", h * (int) ((750.0 / 440.0)));
+            } else if (h / w > 750 / 440) {
+                resatlt.put("w", w);
+                resatlt.put("h", w * (int) ((750.0 / 440.0)));
+            } else {
+                resatlt.put("w", w);
+                resatlt.put("h", w * (int) ((440.0 / 750.0)));
+            }
+        } else {
+            if (w / h > h / w) {
+                resatlt.put("h", h);
+                resatlt.put("w", h * (int) ((750.0 / 440.0)));
+            } else if (h / w > w / h) {
+                resatlt.put("w", w);
+                resatlt.put("h", (int) (w * (440.0 / 750.0)));
+            }
+        }
+        return resatlt;
+    }
     /**
      * 下载文件
      *

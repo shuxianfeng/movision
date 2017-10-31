@@ -38,11 +38,7 @@ public class RobotCommentDictController {
                                        @ApiParam(value = "每页几条") @RequestParam(defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<RobotComment> pag = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        Integer commentType = null;
-        if (StringUtils.isNotEmpty(type)) {
-            commentType = Integer.valueOf(type);
-        }
-        List<RobotComment> list = robotFacade.findAllQueryRoboltComment(commentType, pag);
+        List<RobotComment> list = robotFacade.findAllQueryRoboltComment(type, pag);
         pag.result(list);
         response.setMessage("查询成功");
         response.setData(pag);

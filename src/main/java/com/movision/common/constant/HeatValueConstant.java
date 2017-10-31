@@ -19,6 +19,7 @@ public class HeatValueConstant {
         collection_number(6),//收藏数
         reward_post(11),//打赏帖子
         view_post(12),//帖子浏览数
+        decay(15),  //帖子热度的每日衰减
 
         //用户热度
         fan_count(7),//粉丝数

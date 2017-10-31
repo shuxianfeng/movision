@@ -109,7 +109,7 @@ public class FacadeComments {
     /**
      * 评论帖子/评论父评论 业务流程
      *
-     * @param userid
+     * @param userid    评论人
      * @param content
      * @param fuid
      * @param postid
@@ -134,7 +134,7 @@ public class FacadeComments {
                 CommentVo vo = wrapChildCommentVo(userid, content, fuid, postid);
                 type = commentService.insertComment(vo);//添加评论
                 postService.updatePostBycommentsum(Integer.parseInt(postid));//更新帖子表的评论次数字段
-                //增加评论热度
+                //修改评论热度
                 facadeHeatValue.addCommentHeatValue(1, Integer.parseInt(fuid));
             }
 

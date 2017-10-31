@@ -485,7 +485,14 @@ public class FacadePost {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String compressUrl = coverImgCompressUtil.ImgCompress(url, wt, ht);
+        File file1 = new File(url);
+        Long fsize = file1.length();//获取文件大小
+        String compressUrl = "";
+        if (fsize > 800 * 1024) {
+            compressUrl = coverImgCompressUtil.ImgCompress(url, wt, ht);
+        } else {
+            compressUrl = url;
+        }
         System.out.println("压缩完的切割图片url==" + compressUrl);
         // 对压缩完的图片上传到阿里云
         Map compressmap = aliOSSClient.uploadInciseStream(compressUrl, "img", "coverIncise");

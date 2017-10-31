@@ -39,6 +39,17 @@ public class PostService {
     @Autowired
     private CompressImgMapper compressImgMapper;
 
+    public Post selectByPrimaryKey(int id) {
+        try {
+            log.info("根据id查询帖子实体");
+            return postMapper.selectByPrimaryKey(id);
+        } catch (Exception e) {
+            log.error("根据id查询帖子实体失败", e);
+            throw e;
+        }
+    }
+
+
     public List<PostVo> queryTodayEssence() {
         return postMapper.queryTodayEssence();
     }

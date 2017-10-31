@@ -67,7 +67,7 @@ public class ImConstant {
 
     public enum PUSH_MESSAGE {
         instantinfo_msg(1), //动态通知
-        system_msg(2),  //系统通知
+        system_msg(2),    //系统通知
         operation_msg(3); //运营通知
 
         public final int code;

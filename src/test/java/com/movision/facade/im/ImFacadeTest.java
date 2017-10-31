@@ -2,8 +2,10 @@ package com.movision.facade.im;
 
 import com.google.gson.Gson;
 import com.movision.common.constant.ImConstant;
+import com.movision.mybatis.imFirstDialogue.entity.ImMsg;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.test.SpringTestCase;
+import com.movision.utils.DateUtils;
 import com.movision.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -20,6 +22,31 @@ public class ImFacadeTest extends SpringTestCase {
     @Autowired
     private ImFacade imFacade;
 
+    @Test
+    public void testsendMsg() throws Exception {
+        ImMsg imMsg = new ImMsg();
+        imMsg.setFrom("88ca46a578cd0dfd2b3bca70ec2ce52c");  //326
+        imMsg.setOpe(0);
+        imMsg.setTo("0cd48d260580fd8ff3ce5b4fed193ae0");    //314
+        imMsg.setType(0);
+
+        Gson gson1 = new Gson();
+        Map body = new HashMap();
+        body.put("msg", "测试普通消息的推送能否成功,时间戳：" + DateUtils.getCurrentDate());
+        String bodyJsonStr = gson1.toJson(body);
+
+        imMsg.setBody(bodyJsonStr);
+
+        Gson gson = new Gson();
+        Map optionMap = new HashMap();
+        optionMap.put("push", true);
+        String option = gson.toJson(optionMap);
+
+        imMsg.setOption(option);
+        imMsg.setPushcontent("测试普通消息的推送能否成功,时间戳：" + DateUtils.getCurrentDate());
+
+        imFacade.sendMsg(imMsg);
+    }
 
 /*
     @Test
