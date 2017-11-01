@@ -185,7 +185,7 @@
         LEFT JOIN yw_post p on j.postid = p.id
         LEFT JOIN yw_user u2 on u2.id = p.userid
         <where>
-            <if test="type!=null">
+            <if test="type!=0">
                 and j.type = #{type}
             </if>
         </where>

@@ -945,8 +945,11 @@ public class RobotFacade {
 
     public List<RobotOperationJobPage> findAllRobotJobPage(Integer type, Paging<RobotOperationJobPage> pagePaging) {
         Map map = new HashMap();
-        map.put("type", type);
-
+        if (type == null) {
+            map.put("type", 0);
+        } else {
+            map.put("type", type);
+        }
         List<RobotOperationJobPage> pageList = robotOperationJobService.findAllRobotJobPage(map, pagePaging);
         return pageList;
     }
