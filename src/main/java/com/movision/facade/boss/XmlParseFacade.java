@@ -164,7 +164,7 @@ public class XmlParseFacade {
                         post.getCoverimg();
                         post.getPostcontent();
                         //新增帖子操作
-                        postFacade.addPostTest(request, "", "", post.getCircleid().toString(), post.getUserid().toString(),
+                        postFacade.addPostTest(request, "", "", "", post.getUserid().toString(),
                                 post.getCoverimg(), post.getPostcontent(), lbs, "", "1");
                     }
 
