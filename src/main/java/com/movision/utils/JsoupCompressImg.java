@@ -144,16 +144,9 @@ public class JsoupCompressImg {
                         File compressfile = new File(compress_file_path);
                         log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
 
-                        // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
-                        if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
-                            // 压缩核心算法
-                            compressFlag = compressJpgOrPng(w, h, compressFlag, filename, PATH, tempDir);
-                            // 处理过的图片加入到已处理集合，防止重复压缩图片
-                            existFileList.add(filename);
-                        } else {
-                            compressFlag = true;
-                            log.info("该图片已存在，不需要压缩，filename=" + filename);
-                        }
+                        // 2 图片压缩方法（含核心算法+文件是否存在判断）
+                        compressFlag = isHaveSameFile(w, h, compressFlag, existFileList, filename, PATH, tempDir);
+
                         if (compressFlag) {
                             //上传压缩图到阿里云OSS
                             Map m = movisionOssClient.uploadFileObject(file, "img", "postCompressImg");//----file----->compressfile------shuxf 20170619
@@ -325,16 +318,9 @@ public class JsoupCompressImg {
                             File compressfile = new File(compress_file_path);
                             log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
 
-                            // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
-                            if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
-                                // 压缩核心算法
-                                compressFlag = compressJpgOrPng(w, h, compressFlag, filename, PATH, tempDir);
-                                // 处理过的图片加入到已处理集合，防止重复压缩图片
-                                existFileList.add(filename);
-                            } else {
-                                compressFlag = true;
-                                log.info("该图片已存在，不需要压缩，filename=" + filename);
-                            }
+                            // 2 图片压缩方法（含核心算法+文件是否存在判断）
+                            compressFlag = isHaveSameFile(w, h, compressFlag, existFileList, filename, PATH, tempDir);
+
                             if (compressFlag) {
                                 //上传压缩图到阿里云OSS
                                 Map m = movisionOssClient.uploadFileObject(file, "img", "postCompressImg");
@@ -423,17 +409,14 @@ public class JsoupCompressImg {
 
             log.info("压缩jpg图片，filepath=" + filePath);
             compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
-        }
-        if (filename.toLowerCase().endsWith(".png")) {
+        } else if (filename.toLowerCase().endsWith(".png")) {
             log.info("压缩png图片，filepath=" + filePath);
             compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
-        }
-        if (filename.toLowerCase().endsWith(".jpeg")) {
+        } else if (filename.toLowerCase().endsWith(".jpeg")) {
 
             log.info("压缩jpeg图片，filepath=" + filePath);
             compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
-        }
-        if (filename.toLowerCase().endsWith(".bmp")) {
+        } else if (filename.toLowerCase().endsWith(".bmp")) {
 
             log.info("压缩bmp图片，filepath=" + filePath);
             compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
@@ -481,5 +464,21 @@ public class JsoupCompressImg {
             rate = 0.20;
         }
         return rate;
+    }
+
+    /**
+     * 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
+     */
+    public Boolean isHaveSameFile(int w, int h, boolean compressFlag, List<String> existFileList, String filename, String PATH, String tempDir){
+        if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
+            // 压缩核心算法
+            compressFlag = compressJpgOrPng(w, h, compressFlag, filename, PATH, tempDir);
+            // 处理过的图片加入到已处理集合，防止重复压缩图片
+            existFileList.add(filename);
+        } else {
+            compressFlag = true;
+            log.info("该图片已存在，不需要压缩，filename=" + filename);
+        }
+        return compressFlag;
     }
 }
