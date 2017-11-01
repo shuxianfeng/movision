@@ -186,7 +186,7 @@
         LEFT JOIN yw_user u2 on u2.id = p.userid
         <where>
             <if test="type!=null">
-                and type = #{type}
+                and j.type = #{type}
             </if>
         </where>
 
