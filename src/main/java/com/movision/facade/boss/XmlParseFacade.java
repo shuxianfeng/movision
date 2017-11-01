@@ -612,11 +612,11 @@ public class XmlParseFacade {
         }
         String x = "0";
         if (x.indexOf(".") != -1) {
-            x = w.substring(0, x.lastIndexOf("."));
+            x = x.substring(0, x.lastIndexOf("."));
         }
         String y = whs.get("h").toString();
         if (y.indexOf(".") != -1) {
-            h = h.substring(0, y.lastIndexOf("."));
+            y = y.substring(0, y.lastIndexOf("."));
         }
         //2从服务器获取文件并剪切,
         Map map = movisionOssClient.resizePng(fromFile, toFile, Integer.parseInt(w), Integer.parseInt(h), Integer.parseInt(x), Integer.parseInt(y), false);
