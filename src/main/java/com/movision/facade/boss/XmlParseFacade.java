@@ -599,6 +599,15 @@ public class XmlParseFacade {
         File toFile = new File(incise);
         resault.put("form", covimg);
         resault.put("to", incise);
+        //对宽高取整
+        String w = whs.get("w").toString();
+        if (w.indexOf(".") != -1) {
+            whs.put("w", w.substring(0, w.lastIndexOf(".")));
+        }
+        String h = whs.get("h").toString();
+        if (h.indexOf(".") != -1) {
+            whs.put("h", h.substring(0, h.lastIndexOf(".")));
+        }
         //2从服务器获取文件并剪切,
         Map map = movisionOssClient.resizePng(fromFile, toFile, Integer.parseInt(whs.get("w").toString()), Integer.parseInt(whs.get("h").toString()), false);
         String tmpurl = null;
