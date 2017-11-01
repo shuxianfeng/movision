@@ -180,15 +180,16 @@
             resultType="com.movision.mybatis.robotOperationJob.entity.RobotOperationJobPage">
 
         SELECT u.nickname as followedUser,
-        p.title, u2.nickname as author, c.name as typeName, j.* FROM yw_robot_operation_job j
+        p.title, u2.nickname as author, j.* FROM yw_robot_operation_job j
         LEFT JOIN yw_user u on j.userid = u.id
         LEFT JOIN yw_post p on j.postid = p.id
         LEFT JOIN yw_user u2 on u2.id = p.userid
-        LEFT JOIN yw_type_constant c on c.code = j.type
-        where c.type = 2
-        <if test="type!=null">
-            and type = #{type}
-        </if>
+        <where>
+            <if test="type!=null">
+                and type = #{type}
+            </if>
+        </where>
+
 
     </select>
 

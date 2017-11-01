@@ -47,10 +47,6 @@ public class RobotOperationJobPage {
      */
     private String author;
 
-    /**
-     * 任务类型名称
-     */
-    private String typeName;
 
     public void setId(Integer id) {
         this.id = id;
@@ -108,9 +104,6 @@ public class RobotOperationJobPage {
         this.author = author;
     }
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
 
     public Integer getId() {
 
@@ -169,9 +162,6 @@ public class RobotOperationJobPage {
         return author;
     }
 
-    public String getTypeName() {
-        return typeName;
-    }
 
     @Override
     public String toString() {
@@ -190,7 +180,6 @@ public class RobotOperationJobPage {
                 ", followedUser='" + followedUser + '\'' +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
-                ", typeName='" + typeName + '\'' +
                 '}';
     }
 }
