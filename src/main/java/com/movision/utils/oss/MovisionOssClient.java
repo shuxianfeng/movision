@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
+import javax.imageio.stream.FileImageInputStream;
 import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -269,7 +270,8 @@ public class MovisionOssClient {
              */
             String suffix = file.substring(file.lastIndexOf(".") + 1);
 
-            Iterator<ImageReader> it = ImageIO.getImageReadersByFormatName(suffix);
+            //Iterator<ImageReader> it = ImageIO.getImageReadersByFormatName(suffix);
+            Iterator<ImageReader> it = ImageIO.getImageReaders(new FileImageInputStream(new File(suffix)));
             ImageReader reader = it.next();
             //获取图片流
             iis = ImageIO.createImageInputStream(is);
@@ -343,7 +345,7 @@ public class MovisionOssClient {
             incise += uuid + "." + suffix;
             System.out.println("切割图片的本体图片位置：" + incise);
             //保存新图片
-            ImageIO.write(bi, "jpg", new File(incise));
+            ImageIO.write(bi, "png", new File(incise));
             //String domain = PropertiesLoader.getValue("formal.img.domain");
             //上传本地服务器切割完成的图片到阿里云
             map = aliOSSClient.uploadInciseStream(incise, "img", "coverIncise");
@@ -370,5 +372,55 @@ public class MovisionOssClient {
                 }
         }
         return map;
+    }
+
+
+    /**
+     * 裁剪PNG图片工具类
+     *
+     * @param fromFile     源文件
+     * @param toFile       裁剪后的文件
+     * @param outputWidth  裁剪宽度
+     * @param outputHeight 裁剪高度
+     * @param proportion   是否是等比缩放
+     */
+    public Map resizePng(File fromFile, File toFile, int outputWidth, int outputHeight, int outputx, int outputy,
+                         boolean proportion) {
+        Map resault = new HashMap();
+        try {
+            BufferedImage bi2 = ImageIO.read(fromFile);
+            int newWidth;
+            int newHeight;
+            // 判断是否是等比缩放
+            if (proportion) {
+                // 为等比缩放计算输出的图片宽度及高度
+                double rate1 = ((double) bi2.getWidth(null)) / (double) outputWidth + 0.1;
+                double rate2 = ((double) bi2.getHeight(null)) / (double) outputHeight + 0.1;
+                // 根据缩放比率大的进行缩放控制
+                double rate = rate1 < rate2 ? rate1 : rate2;
+                newWidth = (int) (((double) bi2.getWidth(null)) / rate);
+                newHeight = (int) (((double) bi2.getHeight(null)) / rate);
+            } else {
+                newWidth = outputWidth; // 输出的图片宽度
+                newHeight = outputHeight; // 输出的图片高度
+            }
+            BufferedImage to = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2d = to.createGraphics();
+            to = g2d.getDeviceConfiguration().createCompatibleImage(newWidth, newHeight,
+                    Transparency.TRANSLUCENT);
+            g2d.dispose();
+            g2d = to.createGraphics();
+            @SuppressWarnings("static-access")
+            //Image from = bi2.getScaledInstance(newWidth, newHeight, bi2.SCALE_AREA_AVERAGING);
+                    Image from = bi2.getSubimage(outputx, outputy, newWidth, newHeight);
+            g2d.drawImage(from, 0, 0, null);
+            g2d.dispose();
+            ImageIO.write(to, "png", toFile);
+            resault.put("code", 200);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resault.put("code", 300);
+        }
+        return resault;
     }
 }

@@ -129,8 +129,12 @@ public class JsoupCompressImg {
 
                     //根据原图尺寸计算压缩后的图片尺寸
                     BufferedImage image = ImageIO.read(fis);
-                    int w = (int) (image.getWidth()*0.20);//对原图尺寸的宽高比压缩20%
-                    int h = (int) (image.getHeight()*0.20);
+                    //根据不同图片的宽高程度进行不同程度的压缩
+                    int prow = image.getWidth();//原图宽
+                    int proh = image.getHeight();//原图高
+                    Double rate = getWH(prow, proh);//计算压缩比例
+                    int w = (int) (prow * rate);//压缩后宽
+                    int h = (int) (proh * rate);//压缩后高
 
                     if (StringUtils.isNotEmpty(imgurl)) {
 
@@ -140,16 +144,9 @@ public class JsoupCompressImg {
                         File compressfile = new File(compress_file_path);
                         log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
 
-                        // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
-                        if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
-                            // 压缩核心算法
-                            compressFlag = compressJpgOrPng(w, h, compressFlag, filename, PATH, tempDir);
-                            // 处理过的图片加入到已处理集合，防止重复压缩图片
-                            existFileList.add(filename);
-                        } else {
-                            compressFlag = true;
-                            log.info("该图片已存在，不需要压缩，filename=" + filename);
-                        }
+                        // 2 图片压缩方法（含核心算法+文件是否存在判断）
+                        compressFlag = isHaveSameFile(w, h, compressFlag, existFileList, filename, PATH, tempDir);
+
                         if (compressFlag) {
                             //上传压缩图到阿里云OSS
                             Map m = movisionOssClient.uploadFileObject(file, "img", "postCompressImg");//----file----->compressfile------shuxf 20170619
@@ -309,24 +306,9 @@ public class JsoupCompressImg {
                         //根据不同图片的宽高程度进行不同程度的压缩
                         int prow = image.getWidth();//原图宽
                         int proh = image.getHeight();//原图高
-                        int w = 0;//压缩后宽
-                        int h = 0;//压缩后高
-                        if (prow < 1000 && proh < 1000){//宽高都在1000px一下，尺寸不压缩
-                            w = prow;
-                            h = proh;
-                        }else if ((prow < 2000 && prow >= 1000) || (proh < 2000 && proh >= 1000)){//宽高有在1000~2000px的压缩到原尺寸的80%
-                            w = (int) (prow * 0.80);
-                            h = (int) (proh * 0.80);
-                        }else if ((prow < 3000 && prow >= 2000) || (proh < 3000 && proh >= 2000)){//宽高有在2000~3000px的压缩到原尺寸的60%
-                            w = (int) (prow * 0.60);
-                            h = (int) (proh * 0.60);
-                        }else if ((prow < 4000 && prow >= 3000) || (proh < 4000 && proh >= 3000)){//宽高有在3000~4000px的压缩到原尺寸的40%
-                            w = (int) (prow * 0.40);
-                            h = (int) (proh * 0.40);
-                        }else if (prow > 5000 || proh > 5000) {//宽高有在5000px以上的压缩到原尺寸的20%
-                            w = (int) (image.getWidth() * 0.20);
-                            h = (int) (image.getHeight() * 0.20);
-                        }
+                        Double rate = getWH(prow, proh);//计算压缩比例
+                        int w = (int) (prow * rate);//压缩后宽
+                        int h = (int) (proh * rate);//压缩后高
 
                         if (StringUtils.isNotEmpty(imgurl)) {
 
@@ -336,16 +318,9 @@ public class JsoupCompressImg {
                             File compressfile = new File(compress_file_path);
                             log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
 
-                            // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
-                            if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
-                                // 压缩核心算法
-                                compressFlag = compressJpgOrPng(w, h, compressFlag, filename, PATH, tempDir);
-                                // 处理过的图片加入到已处理集合，防止重复压缩图片
-                                existFileList.add(filename);
-                            } else {
-                                compressFlag = true;
-                                log.info("该图片已存在，不需要压缩，filename=" + filename);
-                            }
+                            // 2 图片压缩方法（含核心算法+文件是否存在判断）
+                            compressFlag = isHaveSameFile(w, h, compressFlag, existFileList, filename, PATH, tempDir);
+
                             if (compressFlag) {
                                 //上传压缩图到阿里云OSS
                                 Map m = movisionOssClient.uploadFileObject(file, "img", "postCompressImg");
@@ -434,17 +409,14 @@ public class JsoupCompressImg {
 
             log.info("压缩jpg图片，filepath=" + filePath);
             compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
-        }
-        if (filename.toLowerCase().endsWith(".png")) {
+        } else if (filename.toLowerCase().endsWith(".png")) {
             log.info("压缩png图片，filepath=" + filePath);
             compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
-        }
-        if (filename.toLowerCase().endsWith(".jpeg")) {
+        } else if (filename.toLowerCase().endsWith(".jpeg")) {
 
             log.info("压缩jpeg图片，filepath=" + filePath);
             compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
-        }
-        if (filename.toLowerCase().endsWith(".bmp")) {
+        } else if (filename.toLowerCase().endsWith(".bmp")) {
 
             log.info("压缩bmp图片，filepath=" + filePath);
             compressFlag = ImgCompressUtil.ImgCompress(filePath, tempDir, w, h);
@@ -469,5 +441,44 @@ public class JsoupCompressImg {
             e.printStackTrace();
         }
         return existFileList;
+    }
+
+    /**
+     * 抽象图片分层压缩的逻辑方法代码
+     * 根据原图宽高判断不同压缩比例
+     * @param prow
+     * @param proh
+     * @return
+     */
+    public Double getWH(int prow, int proh){
+        Double rate = 0.00;
+        if (prow < 1000 && proh < 1000){//宽高都在1000px一下，尺寸不压缩
+            rate = 1.00;
+        }else if ((prow < 2000 && prow >= 1000) || (proh < 2000 && proh >= 1000)){//宽高有在1000~2000px的压缩到原尺寸的80%
+            rate = 0.80;
+        }else if ((prow < 3000 && prow >= 2000) || (proh < 3000 && proh >= 2000)){//宽高有在2000~3000px的压缩到原尺寸的60%
+            rate = 0.60;
+        }else if ((prow < 4000 && prow >= 3000) || (proh < 4000 && proh >= 3000)){//宽高有在3000~4000px的压缩到原尺寸的40%
+            rate = 0.40;
+        }else if (prow > 5000 || proh > 5000) {//宽高有在5000px以上的压缩到原尺寸的20%
+            rate = 0.20;
+        }
+        return rate;
+    }
+
+    /**
+     * 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
+     */
+    public Boolean isHaveSameFile(int w, int h, boolean compressFlag, List<String> existFileList, String filename, String PATH, String tempDir){
+        if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(filename)) {
+            // 压缩核心算法
+            compressFlag = compressJpgOrPng(w, h, compressFlag, filename, PATH, tempDir);
+            // 处理过的图片加入到已处理集合，防止重复压缩图片
+            existFileList.add(filename);
+        } else {
+            compressFlag = true;
+            log.info("该图片已存在，不需要压缩，filename=" + filename);
+        }
+        return compressFlag;
     }
 }

@@ -159,19 +159,21 @@ public class XmlParseFacade {
                     if (content != "") {
                         //标签操作 //
                         String lbs = postLabel(post, tag);
-
+                        post.getUserid().toString();
+                        post.getCoverimg();
+                        post.getPostcontent();
                         //新增帖子操作
-                        /*postFacade.addPostTest(request, "", "", post.getCircleid().toString(), post.getUserid().toString(),
-                                post.getCoverimg(), post.getPostcontent(), lbs, "", "1");*/
+                        postFacade.addPostTest(request, "", "", "125", post.getUserid().toString(),
+                                post.getCoverimg(), post.getPostcontent(), lbs, "", "1");
                     }
 
                 }
 
                 //释放空间,删除本地图片
-                for (int k = 0; k < list.size(); k++) {
+                /*for (int k = 0; k < list.size(); k++) {
                     File fi = new File(list.get(k).toString());
                     fi.delete();
-                }
+                }*/
                 resault.put("code", 200);
             } else {
                 resault.put("code", 300);
@@ -298,7 +300,7 @@ public class XmlParseFacade {
             Integer lbid = postLabelService.queryPostLabelByNameCompletely(tags[i]);
             if (lbid == null) {
                 //新增标签
-                PostLabel postLabel = setPostLabel(post, tag);
+                PostLabel postLabel = setPostLabel(post, tags[i]);
                 lbs += postLabel.getId() + ",";
             } else {
                 lbs += lbid + ",";
@@ -548,13 +550,17 @@ public class XmlParseFacade {
                 if (bln) {
                     //帖子封面处理
                     String covimg = m.get("oldurl").toString();
+                    //计算宽高比工具
                     Map whs = imgIncision(covimg);
-                    //2从服务器获取文件并剪切,上传剪切后图片上传阿里云
-                    Map map = movisionOssClient.uploadImgerAndIncision(covimg, "0", "0", whs.get("w").toString(), whs.get("h").toString());
-                    //3获取本地服务器中切割完成后的图片
-                    String tmpurl = String.valueOf(map.get("file"));
+                    whs.put("x", 0);
+                    whs.put("y", 0);
+                    //切割图片上传到阿里云
+                    Map tmpurl = imgCuttingUpload(covimg, whs);
+                    list.add(tmpurl.get("to"));
+                    list.add(tmpurl.get("form"));
                     //4对本地服务器中切割好的图片进行压缩处理
-                    newurl = imgCompress(newurl, whs, tmpurl);
+                    newurl = imgCompress(newurl, whs, tmpurl.get("to").toString());
+                    //帖子封面
                     post.setCoverimg(newurl);
                 }
                 content += "\"value\":\"" + m.get("newurl") + "\",\"dir\": \"\"},";
@@ -582,6 +588,55 @@ public class XmlParseFacade {
         //System.out.println("---------"+s);
         post.setPostcontent(neirong);
         return content;
+    }
+
+    /**
+     * 图片切割工具
+     *
+     * @param covimg 原图
+     * @param whs    Map集合，其中 w,h为宽高,xy为开始坐标
+     * @return
+     */
+    public Map imgCuttingUpload(String covimg, Map whs) {
+        Map resault = new HashMap();
+        //查询帖子图片存放目录
+        UUID uuid = UUID.randomUUID();
+        String incise = systemLayoutService.queryServiceUrl("post_incision_img_url");
+        //String incise = uploadFacade.getConfigVar("post.incise.domain");
+        String suffix = covimg.substring(covimg.lastIndexOf(".") + 1);
+        incise += uuid + "." + suffix;
+        File fromFile = new File(covimg);
+        File toFile = new File(incise);
+        resault.put("form", covimg);
+        resault.put("to", incise);
+        //对宽高取整
+        String w = whs.get("w").toString();
+        if (w.indexOf(".") != -1) {
+            w = w.substring(0, w.lastIndexOf("."));
+        }
+        String h = whs.get("h").toString();
+        if (h.indexOf(".") != -1) {
+            h = h.substring(0, h.lastIndexOf("."));
+        }
+        String x = whs.get("x").toString();
+        if (x.indexOf(".") != -1) {
+            x = x.substring(0, x.lastIndexOf("."));
+        }
+        String y = whs.get("y").toString();
+        if (y.indexOf(".") != -1) {
+            y = y.substring(0, y.lastIndexOf("."));
+        }
+        //2从服务器获取文件并剪切,
+        Map map = movisionOssClient.resizePng(fromFile, toFile, Integer.parseInt(w), Integer.parseInt(h), Integer.parseInt(x), Integer.parseInt(y), false);
+        String tmpurl = null;
+        if (map.get("code").equals(200)) {
+            //上传本地服务器切割完成的图片到阿里云
+            Map almap = aliOSSClient.uploadInciseStream(incise, "img", "coverIncise");
+            //3获取本地服务器中切割完成后的图片
+            tmpurl = String.valueOf(almap.get("url"));
+            resault.put("new", tmpurl);
+        }
+        return resault;
     }
 
     private String imgCompress(String newurl, Map whs, String tmpurl) {
@@ -631,6 +686,11 @@ public class XmlParseFacade {
         return newurl;
     }
 
+    /**
+     * 返回截图宽高
+     * @param url
+     * @return
+     */
     private Map imgIncision(String url) {
         File file1 = new File(url);
         Map resault = new HashMap();
@@ -639,7 +699,10 @@ public class XmlParseFacade {
             int wth = image.getWidth(null);
             int hht = image.getHeight(null);
             Map map = new HashMap();
-            map = imgWhidthAndHeight(wth, hht);
+            Double thanw = 750.0;
+            Double thanh = 440.0;
+            //计算宽高比例
+            map = imgWhidthAndHeight(wth, hht, thanw, thanh);
             System.out.println("切割后的图片宽度：======================" + map.get("w"));
             System.out.println("切割后的图片高度：======================" + map.get("h"));
             resault.put("w", map.get("w"));
@@ -651,26 +714,35 @@ public class XmlParseFacade {
         }
     }
 
-    public Map imgWhidthAndHeight(int w, int h) {
+    /**
+     * 计算宽高比例
+     *
+     * @param w     原宽
+     * @param h     原高
+     * @param thanh 比例宽
+     * @param thanw 比例高
+     * @return
+     */
+    public Map imgWhidthAndHeight(int w, int h, Double thanw, Double thanh) {
         Map resatlt = new HashMap();
-        if (h > 440 && w > 750) {
-            if (w / h > 750 / 440) {
+        if (h > thanh && w > thanw) {
+            if (w / h > thanw / thanh) {
                 resatlt.put("h", h);
-                resatlt.put("w", h * (int) ((750.0 / 440.0)));
-            } else if (h / w > 750 / 440) {
+                resatlt.put("w", (int) (h * (thanw / thanh)));
+            } else if (h / w > thanw / thanh) {
                 resatlt.put("w", w);
-                resatlt.put("h", w * (int) ((750.0 / 440.0)));
+                resatlt.put("h", (int) (w * (thanw / thanh)));
             } else {
                 resatlt.put("w", w);
-                resatlt.put("h", w * (int) ((440.0 / 750.0)));
+                resatlt.put("h", (int) (w * (thanh / thanw)));
             }
         } else {
             if (w / h > h / w) {
                 resatlt.put("h", h);
-                resatlt.put("w", h * (int) ((750.0 / 440.0)));
+                resatlt.put("w", (int) (h * (thanw / thanh)));
             } else if (h / w > w / h) {
                 resatlt.put("w", w);
-                resatlt.put("h", (int) (w * (440.0 / 750.0)));
+                resatlt.put("h", (int) (w * (thanh / thanw)));
             }
         }
         return resatlt;

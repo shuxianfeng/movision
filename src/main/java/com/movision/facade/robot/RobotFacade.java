@@ -2,6 +2,7 @@ package com.movision.facade.robot;
 
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.PointConstant;
+import com.movision.common.constant.RobotConstant;
 import com.movision.exception.BusinessException;
 import com.movision.facade.collection.CollectionFacade;
 import com.movision.facade.index.FacadeHeatValue;
@@ -17,11 +18,12 @@ import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.robotComment.entity.RobotComment;
 import com.movision.mybatis.robotComment.service.RobotCommentService;
 import com.movision.mybatis.robotNickname.service.RobotNicknameService;
+import com.movision.mybatis.robotOperationJob.entity.RobotOperationJob;
+import com.movision.mybatis.robotOperationJob.entity.RobotOperationJobPage;
+import com.movision.mybatis.robotOperationJob.service.RobotOperationJobService;
 import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
-import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
-import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import com.movision.mybatis.userPhoto.entity.UserPhoto;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
@@ -50,6 +52,9 @@ public class RobotFacade {
     private static Logger log = LoggerFactory.getLogger(RobotFacade.class);
 
     @Autowired
+    private RobotOperationJobService robotOperationJobService;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -63,9 +68,6 @@ public class RobotFacade {
 
     @Autowired
     private FacadePost facadePost;
-
-    @Autowired
-    private UserOperationRecordService userOperationRecordService;
 
     @Autowired
     private CollectionFacade collectionFacade;
@@ -201,9 +203,7 @@ public class RobotFacade {
      * @param num
      */
     public void robotZanPost(int postid, int num) {
-        if (num < 1) {
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人数量至少是1个");
-        }
+
         //1 集合机器人大军， 注：一个机器人只能点赞同一个帖子一次
         Map map = new HashMap();
         map.put("postid", postid);
@@ -213,7 +213,8 @@ public class RobotFacade {
         //2 循环进行帖子点赞操作， 需要注意，点赞不能在同一个时刻
         for (int i = 0; i < robotArmy.size(); i++) {
             int userid = robotArmy.get(i).getId();
-            processRobotZanPost(postid, userid);
+
+
         }
     }
 
@@ -221,19 +222,18 @@ public class RobotFacade {
      * 批量点赞帖子操作
      *
      * @param postids
-     * @param num
      */
-    public void robotZanBatchPost(String postids, int num) {
-        validatePostidsAndNum(postids, num);
+    public void robotZanBatchPost(String postids, int number) {
+
+        validatePostidsAndNum(postids, number);
 
         String[] postidArr = postids.split(",");
         //循环对每个帖子操作点赞
         Random random = new Random();
         for (int i = 0; i < postidArr.length; i++) {
-            //随机取[0,num+1) 之间的整数，最小是1，最大是num
-            int n = (int) ((Math.random() * num) + 1);
-            //调用【机器人帖子点赞操作】
-            robotZanPost(Integer.valueOf(postidArr[i]), n);
+
+            addSingleRobotJobProcess(number, Integer.valueOf(postidArr[i]), null,
+                    RobotConstant.ROBOT_JOB_TYPE.zan_post.getCode(), 0);
         }
     }
 
@@ -284,18 +284,17 @@ public class RobotFacade {
      * 批量收藏帖子
      *
      * @param postids
-     * @param num
      */
-    public void robotCollectBatchPost(String postids, int num) {
-        validatePostidsAndNum(postids, num);
+    public void robotCollectBatchPost(String postids, int number) {
+
+        validatePostidsAndNum(postids, number);
 
         String[] postidArr = postids.split(",");
-        Random random = new Random();
-        for (int i = 0; i < postidArr.length; i++) {
-            //随机取[0,num+1) 之间的整数，最小是1，最大是num
-            int n = (int) ((Math.random() * num) + 1);
 
-            robotCollectPost(Integer.valueOf(postidArr[i]), n);
+        for (int i = 0; i < postidArr.length; i++) {
+
+            addSingleRobotJobProcess(number, Integer.valueOf(postidArr[i]), null,
+                    RobotConstant.ROBOT_JOB_TYPE.collect_post.getCode(), 0);
         }
     }
 
@@ -427,9 +426,9 @@ public class RobotFacade {
         Random random = new Random();
         for (int i = 0; i < useridArr.length; i++) {
             //随机取[0,num+1) 之间的整数，最小是1，最大是num
-            int n = (int) ((Math.random() * num) + 1);
-            //调用【机器人关注操作】
-            robotFollowUser(Integer.valueOf(useridArr[i]), n);
+//            int n = (int) ((Math.random() * num) + 1);
+
+            addSingleRobotJobProcess(num, 0, null, RobotConstant.ROBOT_JOB_TYPE.follow_user.getCode(), Integer.valueOf(useridArr[i]));
         }
     }
 
@@ -694,24 +693,74 @@ public class RobotFacade {
      * @param num     最大机器人数量
      */
     public void robotCommentBatchPost(String postids, int num, int theme) {
+        //校验传参
         validatePostidsAndNum(postids, num);
 
         String[] postidArr = postids.split(",");
-        //循环对每个帖子评论
+        //循环建立机器人评论任务
         for (int i = 0; i < postidArr.length; i++) {
-            //调用【机器人帖子评论操作】
-            robotshuntComment((int) ((Math.random() * num) + 1), Integer.valueOf(postidArr[i]), theme);
+
+            addSingleRobotJobProcess(num, Integer.valueOf(postidArr[i]), theme,
+                    RobotConstant.ROBOT_JOB_TYPE.comment_post.getCode(), 0);
         }
     }
 
-    public void singlePostComment(int num, int postid, int theme) {
-        //校验入参
-        validatePostidsAndNum(String.valueOf(postid), num);
-        if (theme != 1 || theme != 2) {
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "选择的帖子主体不正确！");
+    /**
+     * 新增机器人任务（帖子操作共用）
+     *
+     * @param num
+     * @param postid
+     * @param theme  需要评论的帖子的主题。1：人像， 2：风光
+     * @param type   任务类型。1：点赞，2：收藏，3：评论，4：关注
+     * @param userid
+     */
+    public void addSingleRobotJobProcess(int num, int postid, Integer theme, int type, int userid) {
+        //1 校验参数
+        if (num < 1) {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人数量至少是1个");
         }
-        //分流操作帖子评论
-        robotshuntComment(num, postid, theme);
+        //2 获取最大批次
+        RobotOperationJob currentJob;
+        Map map = new HashMap();
+        map.put("type", type);
+        if (postid == 0) {
+            map.put("userid", userid);
+            currentJob = robotOperationJobService.selectCurrentUseridBatch(map);
+        } else {
+            map.put("postid", postid);
+            currentJob = robotOperationJobService.selectCurrentPostidBatch(map);
+        }
+        int batch = 1;
+        if (currentJob != null) {
+            batch = currentJob.getBatch() + 1;
+        }
+        //3 新增机器人任务
+        addRobotJob(num, postid, theme, type, userid, batch);
+    }
+
+    /**
+     * 新增机器人任务
+     *
+     * @param num
+     * @param postid
+     * @param theme
+     * @param type
+     * @param userid
+     * @param batch
+     */
+    private void addRobotJob(int num, int postid, Integer theme, int type, int userid, int batch) {
+        RobotOperationJob job = new RobotOperationJob();
+        job.setIntime(new Date());
+        job.setCount(num);
+        job.setNumber(num);
+        job.setPostid(postid);
+        job.setTheme(theme);    //评论的时候才用到
+        job.setStatus(0);   //待处理
+        job.setBatch(batch);
+        job.setType(type);
+        job.setUserid(userid);
+
+        robotOperationJobService.add(job);
     }
 
     /**
@@ -894,5 +943,15 @@ public class RobotFacade {
         }
     }
 
+    public List<RobotOperationJobPage> findAllRobotJobPage(Integer type, Paging<RobotOperationJobPage> pagePaging) {
+        Map map = new HashMap();
+        if (type == null) {
+            map.put("type", 0);
+        } else {
+            map.put("type", type);
+        }
+        List<RobotOperationJobPage> pageList = robotOperationJobService.findAllRobotJobPage(map, pagePaging);
+        return pageList;
+    }
 
 }
