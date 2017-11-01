@@ -26,7 +26,7 @@ public class RobotJobController {
     private RobotFacade robotFacade;
 
     @ApiOperation(value = "查询机器人任务列表（分页）", notes = "查询机器人任务列表（分页）", response = Response.class)
-    @RequestMapping(value = "query_menu_list", method = RequestMethod.GET)
+    @RequestMapping(value = "query_robot_job_page", method = RequestMethod.GET)
     public Response queryMenuList(@RequestParam(required = false, defaultValue = "1") String pageNo,
                                   @RequestParam(required = false, defaultValue = "10") String pageSize,
                                   @ApiParam(value = "任务类型 。1：点赞，2：收藏，3：评论，4：关注") @RequestParam(required = false) Integer type) {
