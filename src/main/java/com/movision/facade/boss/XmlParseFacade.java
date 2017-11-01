@@ -159,7 +159,6 @@ public class XmlParseFacade {
                     if (content != "") {
                         //标签操作 //
                         String lbs = postLabel(post, tag);
-                        post.getCircleid().toString();
                         post.getUserid().toString();
                         post.getCoverimg();
                         post.getPostcontent();
