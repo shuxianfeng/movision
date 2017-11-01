@@ -610,11 +610,11 @@ public class XmlParseFacade {
         if (h.indexOf(".") != -1) {
             h = h.substring(0, h.lastIndexOf("."));
         }
-        String x = "0";
+        String x = whs.get("x").toString();
         if (x.indexOf(".") != -1) {
             x = x.substring(0, x.lastIndexOf("."));
         }
-        String y = whs.get("h").toString();
+        String y = whs.get("y").toString();
         if (y.indexOf(".") != -1) {
             y = y.substring(0, y.lastIndexOf("."));
         }
