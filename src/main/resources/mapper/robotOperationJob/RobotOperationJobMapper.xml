@@ -162,8 +162,17 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="selectCurrentPostidBatch" parameterType="java.lang.Integer"
+    <select id="selectCurrentPostidBatch" parameterType="java.util.Map"
             resultType="com.movision.mybatis.robotOperationJob.entity.RobotOperationJob">
-        SELECT * FROM yw_robot_operation_job where postid = #{postid} ORDER by batch DESC limit 1
+        SELECT * FROM yw_robot_operation_job
+        where postid = #{postid} AND type = #{type}
+        ORDER by batch DESC limit 1
+    </select>
+
+    <select id="selectCurrentUseridBatch" parameterType="java.util.Map"
+            resultType="com.movision.mybatis.robotOperationJob.entity.RobotOperationJob">
+        SELECT * FROM yw_robot_operation_job
+        where userid = #{userid} AND type = #{type}
+        ORDER by batch DESC limit 1
     </select>
 </mapper>

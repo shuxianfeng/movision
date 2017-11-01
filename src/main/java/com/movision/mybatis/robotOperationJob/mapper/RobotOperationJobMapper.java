@@ -2,6 +2,8 @@ package com.movision.mybatis.robotOperationJob.mapper;
 
 import com.movision.mybatis.robotOperationJob.entity.RobotOperationJob;
 
+import java.util.Map;
+
 public interface RobotOperationJobMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -15,5 +17,7 @@ public interface RobotOperationJobMapper {
 
     int updateByPrimaryKey(RobotOperationJob record);
 
-    RobotOperationJob selectCurrentPostidBatch(int postid);
+    RobotOperationJob selectCurrentPostidBatch(Map map);
+
+    RobotOperationJob selectCurrentUseridBatch(Map map);
 }

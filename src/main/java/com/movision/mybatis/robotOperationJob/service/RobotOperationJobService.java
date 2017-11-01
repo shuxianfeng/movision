@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 /**
  * @Author zhuangyuhao
  * @Date 2017/10/31 17:30
@@ -28,15 +30,24 @@ public class RobotOperationJobService {
         }
     }
 
-    public RobotOperationJob selectCurrentPostidBatch(int postid) {
+    public RobotOperationJob selectCurrentPostidBatch(Map map) {
         try {
-            log.info("查询最大的批次的指定帖子");
-            return robotOperationJobMapper.selectCurrentPostidBatch(postid);
+            log.info("根据帖子id查询最大的批次的指定帖子");
+            return robotOperationJobMapper.selectCurrentPostidBatch(map);
         } catch (Exception e) {
-            log.error("查询最大的批次的指定帖子失败", e);
+            log.error("根据帖子id查询最大的批次的指定帖子失败", e);
             throw e;
         }
     }
 
+    public RobotOperationJob selectCurrentUseridBatch(Map map) {
+        try {
+            log.info("根据用户id查询最大的批次的指定帖子");
+            return robotOperationJobMapper.selectCurrentUseridBatch(map);
+        } catch (Exception e) {
+            log.error("根据用户id查询最大的批次的指定帖子失败", e);
+            throw e;
+        }
+    }
 
 }
