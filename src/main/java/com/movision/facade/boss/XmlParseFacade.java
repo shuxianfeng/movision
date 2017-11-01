@@ -551,6 +551,8 @@ public class XmlParseFacade {
                     //帖子封面处理
                     String covimg = m.get("oldurl").toString();
                     Map whs = imgIncision(covimg);
+                    whs.put("x", 0);
+                    whs.put("y", 0);
                     //切割图片上传到阿里云
                     Map tmpurl = imgCuttingUpload(covimg, whs);
                     list.add(tmpurl.get("to"));
@@ -602,14 +604,22 @@ public class XmlParseFacade {
         //对宽高取整
         String w = whs.get("w").toString();
         if (w.indexOf(".") != -1) {
-            whs.put("w", w.substring(0, w.lastIndexOf(".")));
+            w = w.substring(0, w.lastIndexOf("."));
         }
         String h = whs.get("h").toString();
         if (h.indexOf(".") != -1) {
-            whs.put("h", h.substring(0, h.lastIndexOf(".")));
+            h = h.substring(0, h.lastIndexOf("."));
+        }
+        String x = "0";
+        if (x.indexOf(".") != -1) {
+            x = x.substring(0, x.lastIndexOf("."));
+        }
+        String y = whs.get("h").toString();
+        if (y.indexOf(".") != -1) {
+            y = y.substring(0, y.lastIndexOf("."));
         }
         //2从服务器获取文件并剪切,
-        Map map = movisionOssClient.resizePng(fromFile, toFile, Integer.parseInt(whs.get("w").toString()), Integer.parseInt(whs.get("h").toString()), false);
+        Map map = movisionOssClient.resizePng(fromFile, toFile, Integer.parseInt(w), Integer.parseInt(h), Integer.parseInt(x), Integer.parseInt(y), false);
         String tmpurl = null;
         if (map.get("code").equals(200)) {
             //上传本地服务器切割完成的图片到阿里云

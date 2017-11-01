@@ -1299,6 +1299,8 @@ public class FacadePost {
         Map whs = new HashMap();
         whs.put("w", w);
         whs.put("h", h);
+        whs.put("x", x);
+        whs.put("y", y);
         Map tmpurl = xmlParseFacade.imgCuttingUpload(url, whs);
 
         //3获取本地服务器中切割完成后的图片
