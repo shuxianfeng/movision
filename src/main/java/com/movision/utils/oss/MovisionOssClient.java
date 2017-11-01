@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
+import javax.imageio.stream.FileImageInputStream;
 import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -269,7 +270,8 @@ public class MovisionOssClient {
              */
             String suffix = file.substring(file.lastIndexOf(".") + 1);
 
-            Iterator<ImageReader> it = ImageIO.getImageReadersByFormatName(suffix);
+            //Iterator<ImageReader> it = ImageIO.getImageReadersByFormatName(suffix);
+            Iterator<ImageReader> it = ImageIO.getImageReaders(new FileImageInputStream(new File(suffix)));
             ImageReader reader = it.next();
             //获取图片流
             iis = ImageIO.createImageInputStream(is);
