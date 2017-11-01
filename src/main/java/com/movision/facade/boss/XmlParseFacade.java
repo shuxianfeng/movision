@@ -600,7 +600,7 @@ public class XmlParseFacade {
         resault.put("form", covimg);
         resault.put("to", incise);
         //2从服务器获取文件并剪切,
-        Map map = movisionOssClient.resizePng(fromFile, toFile, Integer.valueOf(whs.get("w").toString()), Integer.valueOf(whs.get("h").toString()), false);
+        Map map = movisionOssClient.resizePng(fromFile, toFile, Integer.parseInt(whs.get("w").toString()), Integer.parseInt(whs.get("h").toString()), false);
         String tmpurl = null;
         if (map.get("code").equals(200)) {
             //上传本地服务器切割完成的图片到阿里云
