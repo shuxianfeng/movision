@@ -2,7 +2,6 @@ package com.movision.controller.boss.robot;
 
 import com.movision.common.Response;
 import com.movision.common.constant.RobotConstant;
-import com.movision.facade.index.FacadePost;
 import com.movision.facade.robot.RobotFacade;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -23,11 +22,9 @@ import java.io.IOException;
 @RestController
 @RequestMapping("boss/robot/post")
 public class RobotPostController {
-    @Autowired
-    private RobotFacade robotFacade;
 
     @Autowired
-    private FacadePost facadePost;
+    private RobotFacade robotFacade;
 
     /**
      * 利用机器人为帖子制造评论接口

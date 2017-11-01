@@ -1,12 +1,15 @@
 package com.movision.mybatis.robotOperationJob.service;
 
 import com.movision.mybatis.robotOperationJob.entity.RobotOperationJob;
+import com.movision.mybatis.robotOperationJob.entity.RobotOperationJobPage;
 import com.movision.mybatis.robotOperationJob.mapper.RobotOperationJobMapper;
+import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,6 +49,16 @@ public class RobotOperationJobService {
             return robotOperationJobMapper.selectCurrentUseridBatch(map);
         } catch (Exception e) {
             log.error("根据用户id查询最大的批次的指定帖子失败", e);
+            throw e;
+        }
+    }
+
+    public List<RobotOperationJobPage> findAllRobotJobPage(Map map, Paging<RobotOperationJobPage> pagePaging) {
+        try {
+            log.info("查询机器人任务分页");
+            return robotOperationJobMapper.findAllRobotJobPage(map, pagePaging.getRowBounds());
+        } catch (Exception e) {
+            log.error("查询机器人任务分页失败", e);
             throw e;
         }
     }

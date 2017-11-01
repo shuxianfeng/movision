@@ -19,11 +19,11 @@ import com.movision.mybatis.robotComment.entity.RobotComment;
 import com.movision.mybatis.robotComment.service.RobotCommentService;
 import com.movision.mybatis.robotNickname.service.RobotNicknameService;
 import com.movision.mybatis.robotOperationJob.entity.RobotOperationJob;
+import com.movision.mybatis.robotOperationJob.entity.RobotOperationJobPage;
 import com.movision.mybatis.robotOperationJob.service.RobotOperationJobService;
 import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
-import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import com.movision.mybatis.userPhoto.entity.UserPhoto;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
@@ -68,9 +68,6 @@ public class RobotFacade {
 
     @Autowired
     private FacadePost facadePost;
-
-    @Autowired
-    private UserOperationRecordService userOperationRecordService;
 
     @Autowired
     private CollectionFacade collectionFacade;
@@ -946,5 +943,12 @@ public class RobotFacade {
         }
     }
 
+    public List<RobotOperationJobPage> findAllRobotJobPage(Integer type, Paging<RobotOperationJobPage> pagePaging) {
+        Map map = new HashMap();
+        map.put("type", type);
+
+        List<RobotOperationJobPage> pageList = robotOperationJobService.findAllRobotJobPage(map, pagePaging);
+        return pageList;
+    }
 
 }
