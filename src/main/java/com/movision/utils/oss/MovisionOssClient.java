@@ -384,8 +384,9 @@ public class MovisionOssClient {
      * @param outputHeight 裁剪高度
      * @param proportion   是否是等比缩放
      */
-    public static void resizePng(File fromFile, File toFile, int outputWidth, int outputHeight,
-                                 boolean proportion) {
+    public Map resizePng(File fromFile, File toFile, int outputWidth, int outputHeight,
+                         boolean proportion) {
+        Map resault = new HashMap();
         try {
             BufferedImage bi2 = ImageIO.read(fromFile);
             int newWidth;
@@ -414,8 +415,11 @@ public class MovisionOssClient {
             g2d.drawImage(from, 0, 0, null);
             g2d.dispose();
             ImageIO.write(to, "png", toFile);
+            resault.put("code", 200);
         } catch (Exception e) {
             e.printStackTrace();
+            resault.put("code", 300);
         }
+        return resault;
     }
 }

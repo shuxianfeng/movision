@@ -551,10 +551,10 @@ public class XmlParseFacade {
                     //帖子封面处理
                     String covimg = m.get("oldurl").toString();
                     Map whs = imgIncision(covimg);
-                    //2从服务器获取文件并剪切,上传剪切后图片上传阿里云
-                    Map map = movisionOssClient.uploadImgerAndIncision(covimg, "0", "0", whs.get("w").toString(), whs.get("h").toString());
-                    //3获取本地服务器中切割完成后的图片
-                    String tmpurl = String.valueOf(map.get("file"));
+                    //切割图片上传到阿里云
+                    String tmpurl = imgCuttingUpload(m, covimg, whs);
+
+
                     list.add(tmpurl);
                     //4对本地服务器中切割好的图片进行压缩处理
                     newurl = imgCompress(newurl, whs, tmpurl);
@@ -585,6 +585,30 @@ public class XmlParseFacade {
         //System.out.println("---------"+s);
         post.setPostcontent(neirong);
         return content;
+    }
+
+    private String imgCuttingUpload(Map m, String covimg, Map whs) {
+        //查询帖子图片存放目录
+        UUID uuid = UUID.randomUUID();
+        String incise = systemLayoutService.queryServiceUrl("post_incision_img_url");
+        //String incise = uploadFacade.getConfigVar("post.incise.domain");
+        String suffix = covimg.substring(covimg.lastIndexOf(".") + 1);
+        incise += uuid + "." + suffix;
+        File fromFile = new File(covimg);
+        File toFile = new File(incise);
+        //2从服务器获取文件并剪切,
+        Map map = movisionOssClient.resizePng(fromFile, toFile, (int) whs.get("w"), (int) whs.get("h"), false);
+        String tmpurl = null;
+        if (map.get("code").equals(200)) {
+            //上传本地服务器切割完成的图片到阿里云
+            Map almap = aliOSSClient.uploadInciseStream(incise, "img", "coverIncise");
+            //切割后上传到阿里云的图片
+            m.put("newurl", almap.get("url"));
+
+            //3获取本地服务器中切割完成后的图片
+            tmpurl = String.valueOf(almap.get("file"));
+        }
+        return tmpurl;
     }
 
     private String imgCompress(String newurl, Map whs, String tmpurl) {
