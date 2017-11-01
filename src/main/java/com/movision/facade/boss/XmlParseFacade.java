@@ -159,7 +159,10 @@ public class XmlParseFacade {
                     if (content != "") {
                         //标签操作 //
                         String lbs = postLabel(post, tag);
-
+                        post.getCircleid().toString();
+                        post.getUserid().toString();
+                        post.getCoverimg();
+                        post.getPostcontent();
                         //新增帖子操作
                         postFacade.addPostTest(request, "", "", post.getCircleid().toString(), post.getUserid().toString(),
                                 post.getCoverimg(), post.getPostcontent(), lbs, "", "1");
@@ -298,7 +301,7 @@ public class XmlParseFacade {
             Integer lbid = postLabelService.queryPostLabelByNameCompletely(tags[i]);
             if (lbid == null) {
                 //新增标签
-                PostLabel postLabel = setPostLabel(post, tag);
+                PostLabel postLabel = setPostLabel(post, tags[i]);
                 lbs += postLabel.getId() + ",";
             } else {
                 lbs += lbid + ",";
