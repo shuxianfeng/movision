@@ -10,6 +10,7 @@ import com.movision.common.constant.PostLabelConstants;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
 import com.movision.facade.address.AddressFacade;
+import com.movision.facade.boss.XmlParseFacade;
 import com.movision.facade.comment.FacadeComments;
 import com.movision.facade.im.ImFacade;
 import com.movision.facade.paging.PageFacade;
@@ -192,6 +193,9 @@ public class FacadePost {
 
     @Autowired
     private SystemLayoutService systemLayoutService;
+
+    @Autowired
+    private XmlParseFacade xmlParseFacade;
 
 
     public PostVo queryPostDetail(String postid, String userid) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
@@ -1290,12 +1294,17 @@ public class FacadePost {
 
         Map compressmap = null;
         //2从服务器获取文件并剪切,上传剪切后图片上传阿里云
-        Map map = movisionOssClient.uploadImgerAndIncision(url, x, y, w, h);
+        //Map map = movisionOssClient.uploadImgerAndIncision(url, x, y, w, h);
+        //切割图片上传到阿里云
+        Map whs = new HashMap();
+        whs.put("w", w);
+        whs.put("h", h);
+        Map tmpurl = xmlParseFacade.imgCuttingUpload(url, whs);
 
         //3获取本地服务器中切割完成后的图片
-        String tmpurl = String.valueOf(map.get("file"));
-        System.out.println("切割完成后的本地图片绝对路径===" + tmpurl);
-        String rawimg = String.valueOf(map.get("incise"));
+        String tmpurls = String.valueOf(tmpurl.get("to"));
+        System.out.println("切割完成后的本地图片绝对路径===" + tmpurls);
+        String rawimg = String.valueOf(tmpurl.get("new"));
 
         //4对本地服务器中切割好的图片进行压缩处理
         int wt = 0;//图片压缩后的宽度
@@ -1307,7 +1316,7 @@ public class FacadePost {
             ht = 440;*/
                 //返回图片的宽高
                 //BufferedImage bi = ImageIO.read(file.getInputStream());
-                File file1 = new File(tmpurl);
+                File file1 = new File(tmpurls);
                 is = new FileInputStream(file1);
                 BufferedImage bi = ImageIO.read(is);
                 //获取图片压缩比例
@@ -1330,12 +1339,12 @@ public class FacadePost {
             ht = 440;
         }
         //新增压缩部分
-        File fs = new File(tmpurl);
+        File fs = new File(tmpurls);
         Long fsize = fs.length();//获取文件大小
         String compressUrl = null;
         if (fsize > 800 * 1024) {
             //对图片压缩处理
-            compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, wt, ht);
+            compressUrl = coverImgCompressUtil.ImgCompress(tmpurls, wt, ht);
             System.out.println("压缩完的切割图片url==" + compressUrl);
         } else {
             //对宽高值去除小数点
@@ -1353,7 +1362,7 @@ public class FacadePost {
                 } else {
                     hh = h;
                 }
-                compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, Integer.parseInt(ww), Integer.parseInt(hh));
+                compressUrl = coverImgCompressUtil.ImgCompress(tmpurls, Integer.parseInt(ww), Integer.parseInt(hh));
                 System.out.println("压缩完的切割图片url==" + compressUrl);
             }
         }
@@ -1377,13 +1386,13 @@ public class FacadePost {
         compressImg.setIntime(new Date());
         compressImgService.insert(compressImg);
         log.info("帖子上传封面本地原图=========", url);
-        log.info("帖子上传封面本地切割图=========", tmpurl);
+        log.info("帖子上传封面本地切割图=========", tmpurls);
         log.info("帖子上传封面本地压缩图=========", compressUrl);
 
         //6删除本地原图，切割图，压缩图
         File f1 = new File(url);
         f1.delete();
-        File f2 = new File(tmpurl);
+        File f2 = new File(tmpurls);
         f2.delete();
         File f3 = new File(compressUrl);
         f3.delete();
