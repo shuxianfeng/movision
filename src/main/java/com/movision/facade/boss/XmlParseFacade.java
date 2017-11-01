@@ -550,6 +550,7 @@ public class XmlParseFacade {
                 if (bln) {
                     //帖子封面处理
                     String covimg = m.get("oldurl").toString();
+                    //计算宽高比工具
                     Map whs = imgIncision(covimg);
                     whs.put("x", 0);
                     whs.put("y", 0);
@@ -589,6 +590,13 @@ public class XmlParseFacade {
         return content;
     }
 
+    /**
+     * 图片切割工具
+     *
+     * @param covimg 原图
+     * @param whs    Map集合，其中 w,h为宽高,xy为开始坐标
+     * @return
+     */
     public Map imgCuttingUpload(String covimg, Map whs) {
         Map resault = new HashMap();
         //查询帖子图片存放目录
@@ -678,6 +686,11 @@ public class XmlParseFacade {
         return newurl;
     }
 
+    /**
+     * 返回截图宽高
+     * @param url
+     * @return
+     */
     private Map imgIncision(String url) {
         File file1 = new File(url);
         Map resault = new HashMap();
@@ -686,7 +699,10 @@ public class XmlParseFacade {
             int wth = image.getWidth(null);
             int hht = image.getHeight(null);
             Map map = new HashMap();
-            map = imgWhidthAndHeight(wth, hht);
+            Double thanw = 750.0;
+            Double thanh = 440.0;
+            //计算宽高比例
+            map = imgWhidthAndHeight(wth, hht, thanw, thanh);
             System.out.println("切割后的图片宽度：======================" + map.get("w"));
             System.out.println("切割后的图片高度：======================" + map.get("h"));
             resault.put("w", map.get("w"));
@@ -698,26 +714,35 @@ public class XmlParseFacade {
         }
     }
 
-    public Map imgWhidthAndHeight(int w, int h) {
+    /**
+     * 计算宽高比例
+     *
+     * @param w     原宽
+     * @param h     原高
+     * @param thanh 比例宽
+     * @param thanw 比例高
+     * @return
+     */
+    public Map imgWhidthAndHeight(int w, int h, Double thanw, Double thanh) {
         Map resatlt = new HashMap();
-        if (h > 440 && w > 750) {
-            if (w / h > 750 / 440) {
+        if (h > thanh && w > thanw) {
+            if (w / h > thanw / thanh) {
                 resatlt.put("h", h);
-                resatlt.put("w", (int) (h * (750.0 / 440.0)));
-            } else if (h / w > 750 / 440) {
+                resatlt.put("w", (int) (h * (thanw / thanh)));
+            } else if (h / w > thanw / thanh) {
                 resatlt.put("w", w);
-                resatlt.put("h", (int) (w * (750.0 / 440.0)));
+                resatlt.put("h", (int) (w * (thanw / thanh)));
             } else {
                 resatlt.put("w", w);
-                resatlt.put("h", (int) (w * (440.0 / 750.0)));
+                resatlt.put("h", (int) (w * (thanh / thanw)));
             }
         } else {
             if (w / h > h / w) {
                 resatlt.put("h", h);
-                resatlt.put("w", (int) (h * (750.0 / 440.0)));
+                resatlt.put("w", (int) (h * (thanw / thanh)));
             } else if (h / w > w / h) {
                 resatlt.put("w", w);
-                resatlt.put("h", (int) (w * (440.0 / 750.0)));
+                resatlt.put("h", (int) (w * (thanh / thanw)));
             }
         }
         return resatlt;
