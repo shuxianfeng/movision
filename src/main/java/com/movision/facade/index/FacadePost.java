@@ -886,6 +886,7 @@ public class FacadePost {
                            String postcontent, String isactive, String coverimg, String proids, String labellist,
                            String activeid, Integer mark) {
         DistributedLock lock = null;
+        System.out.println("测试标签json》》》》》》》》》》》》》》labellist");
         try {
             lock = new DistributedLock(LOCK_NAME);
             //加锁
