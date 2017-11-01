@@ -31,16 +31,16 @@ public class RobotPostController {
      * 注：一个机器人可以对同一个帖子评论多次
      *
      * @param postid
-     * @param number
+     * @param num
      * @return
      */
     @ApiOperation(value = "新增机器人评论帖子任务", notes = "新增机器人评论帖子任务", response = Response.class)
     @RequestMapping(value = "single_post_comment", method = RequestMethod.POST)
     public Response insertPostCommentByRobolt(@ApiParam(value = "帖子id") @RequestParam Integer postid,
-                                              @ApiParam(value = "使用机器人数量") @RequestParam Integer number,
+                                              @ApiParam(value = "使用机器人数量") @RequestParam Integer num,
                                               @ApiParam(value = "帖子主题，1：人像， 2：风光") @RequestParam Integer theme) {
         Response response = new Response();
-        robotFacade.addSingleRobotJobProcess(number, postid, theme, RobotConstant.ROBOT_JOB_TYPE.comment_post.getCode(), 0);
+        robotFacade.addSingleRobotJobProcess(num, postid, theme, RobotConstant.ROBOT_JOB_TYPE.comment_post.getCode(), 0);
         response.setMessage("操作成功");
         response.setData(1);
         return response;
@@ -60,10 +60,10 @@ public class RobotPostController {
 
     @ApiOperation(value = "新增机器人点赞帖子任务", notes = "新增机器人点赞帖子任务", response = Response.class)
     @RequestMapping(value = "/single_post_zan", method = RequestMethod.POST)
-    public Response robotZanPost(@ApiParam(value = "需要调用的机器人数量") @RequestParam Integer number,
+    public Response robotZanPost(@ApiParam(value = "需要调用的机器人数量") @RequestParam Integer num,
                                  @ApiParam(value = "帖子id") @RequestParam Integer postid) throws IOException {
         Response response = new Response();
-        robotFacade.addSingleRobotJobProcess(number, postid, null, RobotConstant.ROBOT_JOB_TYPE.zan_post.getCode(), 0);
+        robotFacade.addSingleRobotJobProcess(num, postid, null, RobotConstant.ROBOT_JOB_TYPE.zan_post.getCode(), 0);
         response.setMessage("操作成功");
         return response;
     }
@@ -90,10 +90,10 @@ public class RobotPostController {
 
     @ApiOperation(value = "新增机器人收藏帖子任务", notes = "新增机器人收藏帖子任务", response = Response.class)
     @RequestMapping(value = "/single_post_collect", method = RequestMethod.POST)
-    public Response robotCollectPost(@ApiParam(value = "需要调用的机器人数量") @RequestParam Integer number,
+    public Response robotCollectPost(@ApiParam(value = "需要调用的机器人数量") @RequestParam Integer num,
                                      @ApiParam(value = "帖子id") @RequestParam Integer postid) throws IOException {
         Response response = new Response();
-        robotFacade.addSingleRobotJobProcess(number, postid, null, RobotConstant.ROBOT_JOB_TYPE.collect_post.getCode(), 0);
+        robotFacade.addSingleRobotJobProcess(num, postid, null, RobotConstant.ROBOT_JOB_TYPE.collect_post.getCode(), 0);
         return response;
     }
 
