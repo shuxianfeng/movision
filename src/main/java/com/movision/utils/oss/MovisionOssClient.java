@@ -411,7 +411,8 @@ public class MovisionOssClient {
             g2d.dispose();
             g2d = to.createGraphics();
             @SuppressWarnings("static-access")
-            Image from = bi2.getScaledInstance(newWidth, newHeight, bi2.SCALE_AREA_AVERAGING);
+            //Image from = bi2.getScaledInstance(newWidth, newHeight, bi2.SCALE_AREA_AVERAGING);
+                    Image from = bi2.getSubimage(0, 0, newWidth, newHeight);
             g2d.drawImage(from, 0, 0, null);
             g2d.dispose();
             ImageIO.write(to, "png", toFile);
