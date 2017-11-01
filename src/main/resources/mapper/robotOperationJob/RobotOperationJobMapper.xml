@@ -189,7 +189,7 @@
                 and j.type = #{type}
             </if>
         </where>
-
+        ORDER BY j.intime DESC
 
     </select>
 
