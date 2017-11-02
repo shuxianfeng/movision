@@ -20,11 +20,27 @@ public class MathUtil {
         return new BigDecimal(number / 100).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
     }
 
+    /**
+     * 取整
+     *
+     * @param num   基数
+     * @param ratio 百分百 0.9
+     * @return
+     */
+    public static int mathCeil(int num, double ratio) {
+        return (int) (Math.ceil(num * ratio));
+    }
+
     public static void main(String[] args) {
         /*System.out.println(division100ToInteger(343.58));
         System.out.println(division100ToInteger(353.58));
         System.out.println(division100ToInteger(0.0));*/
 
-        System.out.println(499 / 500);
+//        System.out.println(499 / 500);
+
+        System.out.println(mathCeil(10, 0.05));
+        System.out.println(mathCeil(10, 0.9));
+        System.out.println(mathCeil(3, 0.05));
+        System.out.println(mathCeil(1, 0.9));
     }
 }

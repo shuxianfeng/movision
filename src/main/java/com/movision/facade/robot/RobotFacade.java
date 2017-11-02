@@ -719,7 +719,47 @@ public class RobotFacade {
         if (num < 1) {
             throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "机器人数量至少是1个");
         }
-        //2 获取最大批次
+        //2 获取最大批次--根据postid/userid 和 type 来判断
+        int batch = getBatch(postid, type, userid);
+        //3 新增机器人任务
+        if (type == 3) {
+            if (num > 3) {
+                //如果是评论任务，且要求的评论数量大于3条的时候，则需要进行特殊处理，根据机器人数量进行拆分任务
+                Double ratio = 0.0d;
+                int commentType = 0;
+                if (theme == 1) {
+                    //人像 90%占比
+                    ratio = systemLayoutService.queryRobotPercentage("robot_comment_portrait_ratio");
+                    commentType = 3;
+                } else {
+                    //风光 90%占比
+                    ratio = systemLayoutService.queryRobotPercentage("robot_comment_scenery_ratio");
+                    commentType = 2;
+                }
+                int robotJobNum = (int) (Math.ceil(num * ratio));
+                //拆分后的第一个job
+                addRobotJob(robotJobNum, postid, theme, type, userid, batch, commentType);  //风光 或者 人像
+                //拆分后的第二个job
+                Double ratio2 = systemLayoutService.queryRobotPercentage("robot_comment_5_ratio"); //5%占比
+                int job2Num = (int) (Math.ceil(num * ratio2));
+                addRobotJob(job2Num, postid, theme, type, userid, batch, 4);    //诗词
+                //拆分后的第三个job
+                addRobotJob(job2Num, postid, theme, type, userid, batch, 5);    //段子
+            } else {
+                int commentType = 2;
+                if (theme == 1) {
+                    commentType = 3;
+                }
+                addRobotJob(num, postid, theme, type, userid, batch, commentType);
+            }
+
+        } else {
+            addRobotJob(num, postid, theme, type, userid, batch, null);
+        }
+
+    }
+
+    private int getBatch(int postid, int type, int userid) {
         RobotOperationJob currentJob;
         Map map = new HashMap();
         map.put("type", type);
@@ -734,9 +774,9 @@ public class RobotFacade {
         if (currentJob != null) {
             batch = currentJob.getBatch() + 1;
         }
-        //3 新增机器人任务
-        addRobotJob(num, postid, theme, type, userid, batch);
+        return batch;
     }
+
 
     /**
      * 新增机器人任务
@@ -747,8 +787,9 @@ public class RobotFacade {
      * @param type
      * @param userid
      * @param batch
+     * @param commentType
      */
-    private void addRobotJob(int num, int postid, Integer theme, int type, int userid, int batch) {
+    private void addRobotJob(int num, int postid, Integer theme, int type, int userid, int batch, Integer commentType) {
         RobotOperationJob job = new RobotOperationJob();
         job.setIntime(new Date());
         job.setCount(num);
@@ -759,6 +800,7 @@ public class RobotFacade {
         job.setBatch(batch);
         job.setType(type);
         job.setUserid(userid);
+        job.setCommentType(commentType);
 
         robotOperationJobService.add(job);
     }

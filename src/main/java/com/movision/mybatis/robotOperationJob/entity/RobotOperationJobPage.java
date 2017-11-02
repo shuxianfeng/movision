@@ -33,6 +33,11 @@ public class RobotOperationJobPage {
     private Integer theme;
 
     /**
+     * 评论类型 ：0：普通 1：专业摄影 2：风光 3：人像 4：诗词 5：段子
+     */
+    private Integer commentType;
+
+    /**
      * 被关注的用户名称
      */
     private String followedUser;
@@ -47,6 +52,14 @@ public class RobotOperationJobPage {
      */
     private String author;
 
+    public void setCommentType(Integer commentType) {
+        this.commentType = commentType;
+    }
+
+    public Integer getCommentType() {
+
+        return commentType;
+    }
 
     public void setId(Integer id) {
         this.id = id;
@@ -162,7 +175,6 @@ public class RobotOperationJobPage {
         return author;
     }
 
-
     @Override
     public String toString() {
         return "RobotOperationJobPage{" +
@@ -177,6 +189,7 @@ public class RobotOperationJobPage {
                 ", batch=" + batch +
                 ", number=" + number +
                 ", theme=" + theme +
+                ", commentType=" + commentType +
                 ", followedUser='" + followedUser + '\'' +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +

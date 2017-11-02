@@ -25,6 +25,17 @@ public class RobotOperationJob {
 
     private Integer theme;
 
+    private Integer commentType;
+
+    public void setCommentType(Integer commentType) {
+        this.commentType = commentType;
+    }
+
+    public Integer getCommentType() {
+
+        return commentType;
+    }
+
     public Integer getId() {
         return id;
     }
