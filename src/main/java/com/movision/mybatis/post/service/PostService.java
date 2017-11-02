@@ -10,8 +10,6 @@ import com.movision.mybatis.post.mapper.PostMapper;
 import com.movision.mybatis.postHeatvalueEverydayRecord.entity.PostHeatvalueEverydayRecord;
 import com.movision.mybatis.postLabel.entity.PostLabel;
 import com.movision.mybatis.postShareGoods.entity.PostShareGoods;
-import com.movision.mybatis.user.entity.UserLike;
-import com.movision.mybatis.video.entity.Video;
 import com.movision.utils.pagination.model.Paging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1126,13 +1124,13 @@ public class PostService {
     /**
      * 查询被点赞的帖子发帖人accid
      *
-     * @param postid
+     * @param map
      * @return
      */
-    public String selectToAccid(Integer postid) {
+    public String selectAccid(Map map) {
         try {
             log.info("查询被点赞的帖子发帖人accid");
-            return postMapper.selectToAccid(postid);
+            return postMapper.selectAccid(map);
         } catch (Exception e) {
             log.error("查询被点赞的帖子发帖人accid异常", e);
             throw e;

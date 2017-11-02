@@ -455,7 +455,7 @@ public class AppWaterfallController {
     @ApiOperation(value = "关注用户", notes = "关注用户", response = Response.class)
     @RequestMapping(value = "concernedAuthorUser", method = RequestMethod.POST)
     public Response concernedAuthorUser(@ApiParam(value = "用户id") @RequestParam int userid,
-                                        @ApiParam(value = "被关注的id") @RequestParam int interestedusers) {
+                                        @ApiParam(value = "被关注的用户id") @RequestParam int interestedusers) {
         Response response = new Response();
         int result = facadePost.concernedAuthorUser(userid, interestedusers);
         if (result == 0) {

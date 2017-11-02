@@ -4,6 +4,7 @@ import com.movision.mybatis.imuser.entity.ImUser;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ImUserMapper {
     int insert(ImUser record);
@@ -13,6 +14,8 @@ public interface ImUserMapper {
     ImUser selectByUserid(@Param("userid") Integer id, @Param("type") Integer type);
 
     List<ImUser> selectAllAPPImuser();
+
+    Map<String, Object> queryAccidAndNicknameByUserid(Map map);
 
 
 }

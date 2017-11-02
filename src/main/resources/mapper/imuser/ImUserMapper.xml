@@ -82,5 +82,11 @@
         SELECT accid FROM yw_im_device
     </select>
 
+    <select id="queryAccidAndNicknameByUserid" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT i.accid, u.nickname FROM yw_im_user i
+        LEFT JOIN yw_user u on u.id = i.userid
+        where i.type = #{type} and i.userid = #{userid}
+    </select>
+
 
 </mapper>

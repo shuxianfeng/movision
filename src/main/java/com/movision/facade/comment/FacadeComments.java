@@ -1,6 +1,5 @@
 package com.movision.facade.comment;
 
-import com.google.gson.Gson;
 import com.movision.common.constant.PointConstant;
 import com.movision.facade.im.ImFacade;
 import com.movision.facade.index.FacadeHeatValue;
@@ -137,9 +136,11 @@ public class FacadeComments {
                 //修改评论热度
                 facadeHeatValue.addCommentHeatValue(1, Integer.parseInt(fuid));
             }
-
+            //积分业务
             pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.comment.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
-            sendCommentPush(userid, postid);
+            //推送业务
+            imFacade.sendPushByCommonWay(userid, postid, "评论", null);
+
             return type;
         }
     }
@@ -178,29 +179,6 @@ public class FacadeComments {
         CommentVo vo = wrapParentCommentVo(userid, content, postid);
         vo.setPid(Integer.parseInt(fuid));
         return vo;
-    }
-
-    /**
-     * 推送评论通知
-     *
-     * @param userid
-     * @param postid
-     */
-    private void sendCommentPush(String userid, String postid) {
-        try {
-            String fromaccid = userOperationRecordService.selectAccid(userid);
-            String to = postService.selectToAccid(Integer.parseInt(postid));
-            String nickname = userOperationRecordService.selectNickname(userid);
-            String pinnickname = nickname + "评论了你";
-            Map map = new HashMap();
-            map.put("body", pinnickname);
-            Gson gson = new Gson();
-            String json = gson.toJson(map);
-            String pushcontent = nickname + "评论了你";
-            imFacade.sendMsgInform(json, fromaccid, to, pushcontent);
-        } catch (Exception e) {
-            log.error("推送评论通知失败", e);
-        }
     }
 
     /**

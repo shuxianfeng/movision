@@ -1889,8 +1889,11 @@
        UPDATE yw_post SET isdel=0 WHERE id=(SELECT postid FROM yw_video   WHERE  videourl= #{vid,jdbcType=VARCHAR})
     </update>
 
-    <select id="selectToAccid" parameterType="java.lang.Integer" resultType="java.lang.String">
-        select  yw_im_user.accid from yw_post LEFT JOIN yw_im_user ON yw_im_user.userid=yw_post.userid WHERE id=#{postid,jdbcType=INTEGER}
+    <select id="selectAccid" parameterType="java.util.Map" resultType="java.lang.String">
+        select i.accid
+        from yw_post p
+        LEFT JOIN yw_im_user i ON i.userid=p.userid
+        WHERE i.type = #{type} and p.id=#{postid}
     </select>
 
     <select id="queryCrileid" parameterType="java.lang.Integer" resultType="java.lang.Integer">

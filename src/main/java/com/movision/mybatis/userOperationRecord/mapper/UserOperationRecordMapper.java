@@ -21,7 +21,5 @@ public interface UserOperationRecordMapper {
 
     int updateByPrimaryKey(UserOperationRecord record);
 
-    String selectAccid(String userid);
-
     String selectNickname(String userid);
 }

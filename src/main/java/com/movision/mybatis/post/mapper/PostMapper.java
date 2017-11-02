@@ -188,7 +188,7 @@ public interface PostMapper {
 
     void updatePostShareNum(Map<String, Object> parammap);
 
-    String selectToAccid(Integer postid);
+    String selectAccid(Map map);
 
     Integer queryCrileid(int postid);
 

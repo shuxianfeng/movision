@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhuangyuhao
@@ -49,6 +50,16 @@ public class ImUserService {
             return imUserMapper.selectAllAPPImuser();
         } catch (Exception e) {
             log.error("查询所有的app用户对应的im账号", e);
+            throw e;
+        }
+    }
+
+    public Map<String, Object> queryAccidAndNickname(Map map) {
+        try {
+            log.info("查询指定用户的accid和昵称");
+            return imUserMapper.queryAccidAndNicknameByUserid(map);
+        } catch (Exception e) {
+            log.error("查询指定用户的accid和昵称失败", e);
             throw e;
         }
     }

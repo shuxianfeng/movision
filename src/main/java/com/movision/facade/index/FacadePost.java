@@ -3,7 +3,6 @@ package com.movision.facade.index;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mongodb.*;
-import com.movision.common.constant.HeatValueConstant;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.PointConstant;
 import com.movision.common.constant.PostLabelConstants;
@@ -42,7 +41,6 @@ import com.movision.mybatis.labelSearchTerms.service.LabelSearchTermsService;
 import com.movision.mybatis.opularSearchTerms.service.OpularSearchTermsService;
 import com.movision.mybatis.post.entity.ActiveVo;
 import com.movision.mybatis.post.entity.Post;
-import com.movision.mybatis.post.entity.PostTo;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postAndUserRecord.entity.PostAndUserRecord;
@@ -724,27 +722,14 @@ public class FacadePost {
     /**
      * 推送赞消息
      *
-     * @param id
+     * @param postid
      * @param userid
      * @param type
      * @return
      */
-    private boolean sendPushInfoByZan(String id, String userid, int type) {
+    private boolean sendPushInfoByZan(String postid, String userid, int type) {
         if (type == 1) {
-            try {
-                String fromaccid = userOperationRecordService.selectAccid(userid);
-                String to = postService.selectToAccid(Integer.parseInt(id));
-                String nickname = userOperationRecordService.selectNickname(userid);
-                String pinnickname = nickname + "赞了你";
-                Map map = new HashMap();
-                map.put("body", pinnickname);
-                Gson gson = new Gson();
-                String json = gson.toJson(map);
-                String pushcontent = nickname + "赞了你";
-                imFacade.sendMsgInform(json, fromaccid, to, pushcontent);
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            }
+            imFacade.sendPushByCommonWay(userid, postid, "点赞", null);
             return true;
         }
         return false;
@@ -3772,25 +3757,37 @@ public class FacadePost {
             int result = followUserService.yesOrNo(map);
 
             if (result == 0) {
-
-                FollowUser followUser = new FollowUser();
-                followUser.setIntime(new Date());
-                followUser.setInterestedusers(interestedusers);
-                followUser.setUserid(userid);
                 //1 插入关注用户流水
-                followUserService.insertSelective(followUser);
+                insertUserFollowRecord(userid, interestedusers);
                 //2 被关注人的粉丝数加1
                 followUserService.insertUserFans(interestedusers);//被关注人
                 //3 增加用户总关注数 attention
                 userService.updateUserAttention(userid);//关注人
                 //4 被关注人增加热度
                 facadeHeatValue.addUserHeatValue(1, interestedusers);
+                //5 给被关注人推送消息
+                imFacade.sendPushByCommonWay(String.valueOf(userid), null, "关注", String.valueOf(interestedusers));
+
                 return 0;
             } else {
                 return 1;
             }
         }
         return 2;
+    }
+
+    /**
+     * 插入关注用户流水
+     *
+     * @param userid          用户
+     * @param interestedusers 被关注的用户
+     */
+    private void insertUserFollowRecord(int userid, int interestedusers) {
+        FollowUser followUser = new FollowUser();
+        followUser.setIntime(new Date());
+        followUser.setInterestedusers(interestedusers);
+        followUser.setUserid(userid);
+        followUserService.insertSelective(followUser);
     }
 
 

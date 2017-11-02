@@ -124,9 +124,6 @@ public class FacadeRewarded {
                 //帖子打赏记录流水
                 rewardedService.insertRewarded(rewarded);
 
-                //重复了，不需要
-//                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.reward.getCode());//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
-
                 //2 更新session中的缓存
                 ShiroUtil.updateAppuserPoint(in);
                 map.put("code", 200);
@@ -134,20 +131,9 @@ public class FacadeRewarded {
                 //增加帖子打赏热度
                 facadeHeatValue.addHeatValue(Integer.parseInt(postid), 7, u);
 
-                try {
-                    String fromaccid = userOperationRecordService.selectAccid(userid);
-                    String to = postService.selectToAccid(Integer.parseInt(postid));
-                    String nickname = userOperationRecordService.selectNickname(userid);
-                    String pinnickname = nickname + "打赏了你";
-                    Map mapa = new HashMap();
-                    mapa.put("body", pinnickname);
-                    Gson gson = new Gson();
-                    String json = gson.toJson(map);
-                    String pushcontent = nickname + "打赏了你";
-                    imFacade.sendMsgInform(json, fromaccid, to, pushcontent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                //推送业务
+                imFacade.sendPushByCommonWay(userid, postid, "打赏", null);
+
                 return map;
             } else {
                 map.put("code", 300);

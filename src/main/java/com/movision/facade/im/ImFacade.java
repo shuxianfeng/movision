@@ -18,6 +18,7 @@ import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.imSystemInform.service.ImSystemInformService;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.imuser.service.ImUserService;
+import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.systemPush.entity.SystemPush;
 import com.movision.mybatis.systemPush.service.SystemPushService;
 import com.movision.mybatis.systemToPush.entity.SystemToPush;
@@ -62,6 +63,9 @@ import java.util.*;
 public class ImFacade {
 
     private static Logger log = LoggerFactory.getLogger(ImFacade.class);
+
+    @Autowired
+    private PostService postService;
 
     @Autowired
     private ImUserService imUserService;
@@ -1189,6 +1193,52 @@ public class ImFacade {
     public String queryActiveBody(int id) {
         String imsys = imSystemInformService.queryActiveBody(id);
         return imsys;
+    }
+
+    /**
+     * 推送通公共方法
+     *
+     * @param userid       操作者
+     * @param postid       被操作的帖子id
+     * @param pushType     推送的类型：评论，点赞，打赏，关注
+     * @param followedUser 被关注的用户id
+     */
+    public void sendPushByCommonWay(String userid, String postid, String pushType, String followedUser) {
+        try {
+            Map map = new HashMap();
+            map.put("userid", userid);
+            map.put("type", ImConstant.TYPE_APP);
+            Map reMap = imUserService.queryAccidAndNickname(map);
+            //获取推送人的accid
+            String fromaccid = String.valueOf(reMap.get("accid"));
+            //获取推送人的昵称
+            String nickname = String.valueOf(reMap.get("nickname"));
+
+            //获取被推送者的accid
+            Map map2 = new HashMap();
+            map2.put("type", ImConstant.TYPE_APP);
+            String toAccid = null;
+            if (StringUtils.isEmpty(postid)) {
+                map2.put("userid", followedUser);
+                Map reMap2 = imUserService.queryAccidAndNickname(map2);
+                toAccid = String.valueOf(reMap2.get("accid"));
+            } else {
+                map2.put("postid", postid);
+                toAccid = postService.selectAccid(map2);
+            }
+
+            //组合推送信息--显示在手机上
+            String body = nickname + pushType + "了你";
+
+            Map map3 = new HashMap();
+            map3.put("body", body);
+            Gson gson = new Gson();
+            String json = gson.toJson(map3);
+
+            sendMsgInform(json, fromaccid, toAccid, body);
+        } catch (Exception e) {
+            log.error("推送评论通知失败", e);
+        }
     }
 
 
