@@ -132,4 +132,8 @@
         SELECT value FROM yw_system_layout WHERE type = #{fileurl,jdbcType=VARCHAR} AND module = 'iphonex'
     </select>
 
+    <select id="queryHaetValue" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT value FROM yw_system_layout WHERE type = #{fileurl,jdbcType=VARCHAR} AND module = 'heat'
+    </select>
+
 </mapper>

@@ -196,4 +196,20 @@ public class SystemLayoutService {
             throw e;
         }
     }
+
+    /**
+     * 查询热度值
+     *
+     * @param value
+     * @return
+     */
+    public int queryHaetValue(String value) {
+        try {
+            log.info("查询热度值");
+            return systemLayoutMapper.queryHaetValue(value);
+        } catch (Exception e) {
+            log.error("查询热度值异常", e);
+            throw e;
+        }
+    }
 }

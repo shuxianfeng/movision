@@ -34,5 +34,7 @@ public interface SystemLayoutMapper {
 
     String queryIphonexUrl(String fileurl);
 
+    int queryHaetValue(String value);
+
 
 }

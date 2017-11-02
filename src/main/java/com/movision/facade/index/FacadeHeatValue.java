@@ -7,6 +7,7 @@ import com.movision.mybatis.followLabel.service.FollowLabelService;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.postHeatvalueRecord.entity.PostHeatvalueRecord;
 import com.movision.mybatis.postHeatvalueRecord.service.PostHeatvalueRecordService;
+import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.mybatis.user.entity.TalentUserVo;
 import com.movision.mybatis.user.service.UserService;
 import org.slf4j.Logger;
@@ -38,6 +39,8 @@ public class FacadeHeatValue {
     private UserFacade userFacade;
     @Autowired
     private PostHeatvalueRecordService postHeatvalueRecordService;
+    @Autowired
+    private SystemLayoutService systemLayoutService;
 
     /**
      * 增加帖子热度值 + 记录帖子热度变化流水（公共方法）
@@ -50,7 +53,8 @@ public class FacadeHeatValue {
             int isessence = postService.queryPostIsessenceHeat(postid);
             if (isessence == 1) {//首页精选(实时)
                 //首页精选的热度值
-                points = HeatValueConstant.POINT.home_page_selection.getCode();
+                //points = HeatValueConstant.POINT.home_page_selection.getCode();
+                points = systemLayoutService.queryHaetValue("heat_home_page_selection");
                 map.put("points", points);
                 postService.updatePostHeatValue(map);
 
@@ -59,7 +63,8 @@ public class FacadeHeatValue {
         } else if (type == 2) {//帖子精选(实时ok)
             int hot = postService.queryPostHotHeat(postid);
             if (hot == 1) {
-                points = HeatValueConstant.POINT.circle_selection.getCode();
+                //points = HeatValueConstant.POINT.circle_selection.getCode();
+                points = systemLayoutService.queryHaetValue("heat_circle_selection");
                 map.put("points", points);
                 postService.updatePostHeatValue(map);
 
@@ -67,7 +72,8 @@ public class FacadeHeatValue {
             }
         } else if (type == 3) {//点赞(实时ok)
             int level = userLevels(userid);
-            points = level * HeatValueConstant.POINT.zan_number.getCode();
+            //points = level * HeatValueConstant.POINT.zan_number.getCode();
+            points = systemLayoutService.queryHaetValue("heat_zan_number");
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
@@ -76,7 +82,8 @@ public class FacadeHeatValue {
         } else if (type == 4) {//评论ok
             //查询这个帖子的所有评论的热度值
             int level = userLevels(userid);
-            points = level * HeatValueConstant.POINT.comments_number.getCode();
+            //points = level * HeatValueConstant.POINT.comments_number.getCode();
+            points = systemLayoutService.queryHaetValue("heat_comments_number");
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
@@ -84,7 +91,8 @@ public class FacadeHeatValue {
 
         } else if (type == 5) {//转发(实时ok)
             int level = userLevels(userid);
-            points = level * HeatValueConstant.POINT.forwarding_number.getCode();
+            //points = level * HeatValueConstant.POINT.forwarding_number.getCode();
+            points = systemLayoutService.queryHaetValue("heat_forwarding_number");
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
@@ -92,7 +100,8 @@ public class FacadeHeatValue {
 
         } else if (type == 6) {//收藏(实时ok)
             int level = userLevels(userid);
-            points = level * HeatValueConstant.POINT.collection_number.getCode();
+            //points = level * HeatValueConstant.POINT.collection_number.getCode();
+            points = systemLayoutService.queryHaetValue("heat_collection_number");
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
@@ -100,14 +109,16 @@ public class FacadeHeatValue {
 
         } else if (type == 7) {//打赏(实时ok)
             int level = userLevels(userid);
-            points = level * HeatValueConstant.POINT.reward_post.getCode();
+            //points = level * HeatValueConstant.POINT.reward_post.getCode();
+            points = systemLayoutService.queryHaetValue("heat_reward_post");
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
             addPostHeatvalueRecord(userid, points, HeatValueConstant.HEATVALUE_TYPE.reward_post.getCode(), postid);
 
         } else if (type == 8) {//帖子浏览数
-            points = HeatValueConstant.POINT.view_post.getCode();
+            //points = HeatValueConstant.POINT.view_post.getCode();
+            points = systemLayoutService.queryHaetValue("heat_view_post");
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
@@ -161,7 +172,8 @@ public class FacadeHeatValue {
         if (type == 1) {//用户粉丝
             if (heatvalue >= 20) {
                 int level = userLevels(userid);
-                points = level * HeatValueConstant.POINT.fan_count.getCode();
+                //points = level * HeatValueConstant.POINT.fan_count.getCode();
+                points = level * systemLayoutService.queryHaetValue("heat_fan_count");
                 map.put("points", points);
                 postService.lessUserHeatValue(map);
             } else {
@@ -170,7 +182,8 @@ public class FacadeHeatValue {
         } else if (type == 2) {//发帖数
             if (heatvalue >= 50) {
                 int level = userLevels(userid);
-                points = level * HeatValueConstant.POINT.posts_count.getCode();
+                //points = level * HeatValueConstant.POINT.posts_count.getCode();
+                points = level * systemLayoutService.queryHaetValue("heat_posts_count");
                 map.put("points", points);
                 postService.lessUserHeatValue(map);
             } else {
@@ -189,7 +202,8 @@ public class FacadeHeatValue {
         int heatvalue = followLabelService.queryLabelLabel(labelid);
         if (heatvalue >= 50) {
             int level = userLevels(Integer.parseInt(userid));
-            points = level * HeatValueConstant.POINT.attention_label.getCode();
+            //points = level * HeatValueConstant.POINT.attention_label.getCode();
+            points = level * systemLayoutService.queryHaetValue("heat_attention_label");
             map.put("points", points);
             followLabelService.lessLabelHeatValue(map);
         } else {
@@ -210,12 +224,14 @@ public class FacadeHeatValue {
         map.put("userid", userid);
         if (type == 1) {//用户粉丝数ok
             int level = userLevels(userid);
-            points = level * HeatValueConstant.POINT.fan_count.getCode();
+            //points = level * HeatValueConstant.POINT.fan_count.getCode();
+            points = level * systemLayoutService.queryHaetValue("heat_fan_count");
             map.put("points", points);
             userService.updateUserHeatValue(map);
         } else if (type == 2) {//发帖数
             int level = userLevels(userid);
-            points = level * HeatValueConstant.POINT.posts_count.getCode();
+            //points = level * HeatValueConstant.POINT.posts_count.getCode();
+            points = level * systemLayoutService.queryHaetValue("heat_posts_count");
             map.put("points", points);
             userService.updateUserHeatValue(map);
         }
@@ -237,12 +253,14 @@ public class FacadeHeatValue {
         if (type == 1) {
             //关注标签ok
             int level = userLevels(Integer.parseInt(userid));
-            points = level * HeatValueConstant.POINT.attention_label.getCode();
+            //points = level * HeatValueConstant.POINT.attention_label.getCode();
+            points = level * systemLayoutService.queryHaetValue("heat_attention_label");
             map.put("points", points);
             followLabelService.updateLabelHeatValue(map);
         } else if (type == 2) {
             //发帖用到标签ok
-            points = HeatValueConstant.POINT.using_label.getCode();
+            //points = HeatValueConstant.POINT.using_label.getCode();
+            points = systemLayoutService.queryHaetValue("heat_using_label");
             map.put("points", points);
             followLabelService.updateLabelHeatValueByPost(map);
         }
@@ -260,12 +278,14 @@ public class FacadeHeatValue {
         map.put("commentid", commentid);
         if (type == 1) {//回覆的評論數
             int level = commentUserLevels(commentid);
-            points = level * HeatValueConstant.POINT.reply_comment_number.getCode();
+            //points = level * HeatValueConstant.POINT.reply_comment_number.getCode();
+            points = level * systemLayoutService.queryHaetValue("heat_reply_comment_number");
             map.put("points", points);
             commentService.updateCommentHeatValue(map);
         } else if (type == 2) {//評論的點贊數
             int level = commentUserLevels(commentid);
-            points = level * HeatValueConstant.POINT.comment_zan_count.getCode();
+            //points = level * HeatValueConstant.POINT.comment_zan_count.getCode();
+            points = level * systemLayoutService.queryHaetValue("heat_comment_zan_count");
             map.put("points", points);
             commentService.updateCommentHeatValue(map);
         }
