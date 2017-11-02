@@ -21,6 +21,8 @@ import com.movision.mybatis.user.entity.RegisterUser;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.utils.*;
+import com.movision.utils.excel.ExcelIntoEnquiryUtil;
+import com.movision.utils.excel.InsertExcelToPost;
 import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
@@ -90,6 +92,9 @@ public class XmlParseFacade {
     private ExcelIntoEnquiryUtil excelIntoEnquiryUtil;
 
     @Autowired
+    private InsertExcelToPost insertExcelToPost;
+
+    @Autowired
     private static ImgCompressUtil imgCompressUtil;
 
     @Autowired
@@ -99,6 +104,15 @@ public class XmlParseFacade {
     private AliOSSClient aliOSSClient;
 
 
+    /**
+     * 解析xml
+     *
+     * @param request
+     * @param file
+     * @param nickname
+     * @param phone
+     * @return
+     */
     @Transactional
     public Map analysisXml(HttpServletRequest request, MultipartFile file, String nickname, String phone) {
         Map resault = new HashMap();
@@ -254,8 +268,12 @@ public class XmlParseFacade {
      * @param file
      * @return
      */
-    public Map inputExcelToPost(MultipartFile file) {
-        return excelIntoEnquiryUtil.queryExcelIntoEnquiry(file);
+    public Map inputExcelToPost(HttpServletRequest request, MultipartFile file, String type) {
+        if (type.equals("xml")) {
+            return excelIntoEnquiryUtil.queryExcelIntoEnquiry(file);
+        } else {
+            return insertExcelToPost.queryExcelIntoEnquiry(request, file);
+        }
     }
 
     /**
@@ -292,7 +310,7 @@ public class XmlParseFacade {
      * @param tag
      * @return
      */
-    private String postLabel(Post post, String tag) {
+    public String postLabel(Post post, String tag) {
         String[] tags = tag.split(",");
         String lbs = "";
         for (int i = 0; i < tags.length; i++) {
@@ -337,7 +355,7 @@ public class XmlParseFacade {
      * @param phone
      * @param
      */
-    private Integer queryUser(String nickname, String phone) {
+    public Integer queryUser(String nickname, String phone) {
         User user = new User();
         if (StringUtil.isNotEmpty(phone)) {
             user.setPhone(phone);
@@ -547,21 +565,11 @@ public class XmlParseFacade {
                 //获取本地文件
                 list.add(m.get("oldurl"));
                 String newurl = "";
+                //帖子封面处理
+                String covimg = m.get("oldurl").toString();
                 if (bln) {
-                    //帖子封面处理
-                    String covimg = m.get("oldurl").toString();
-                    //计算宽高比工具
-                    Map whs = imgIncision(covimg);
-                    whs.put("x", 0);
-                    whs.put("y", 0);
-                    //切割图片上传到阿里云
-                    Map tmpurl = imgCuttingUpload(covimg, whs);
-                    list.add(tmpurl.get("to"));
-                    list.add(tmpurl.get("form"));
-                    //4对本地服务器中切割好的图片进行压缩处理
-                    newurl = imgCompress(newurl, whs, tmpurl.get("to").toString());
-                    //帖子封面
-                    post.setCoverimg(newurl);
+                    getPostCovimg(post, list, covimg, newurl);
+
                 }
                 content += "\"value\":\"" + m.get("newurl") + "\",\"dir\": \"\"},";
                 bln = false;
@@ -588,6 +596,29 @@ public class XmlParseFacade {
         //System.out.println("---------"+s);
         post.setPostcontent(neirong);
         return content;
+    }
+
+    /**
+     * 操作图片为帖子封面，计算宽高，切割，压缩，上传等操作
+     *
+     * @param post
+     * @param list   返回服务器相对路径中 操作后 和操作前的图片路径
+     * @param covimg 需要处理的图片
+     * @param newurl 返回处理后的图片 不用传值
+     */
+    public void getPostCovimg(Post post, List list, String covimg, String newurl) {
+        //计算宽高比工具
+        Map whs = imgIncision(covimg);
+        whs.put("x", 0);
+        whs.put("y", 0);
+        //切割图片上传到阿里云
+        Map tmpurl = imgCuttingUpload(covimg, whs);
+        list.add(tmpurl.get("to"));
+        list.add(tmpurl.get("form"));
+        //4对本地服务器中切割好的图片进行压缩处理
+        newurl = imgCompress(newurl, whs, tmpurl.get("to").toString());
+        //帖子封面
+        post.setCoverimg(newurl);
     }
 
     /**

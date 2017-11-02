@@ -109,9 +109,11 @@ public class XmlParseController {
      */
     @ApiOperation(value = "导入Excel文件", notes = "用于解析EXCEL文件，修改帖子")
     @RequestMapping(value = "input_excel_post", method = RequestMethod.POST)
-    public Response inputExcelToPost(@ApiParam(value = "Excel文件") @RequestParam MultipartFile file) {
+    public Response inputExcelToPost(HttpServletRequest request,
+                                     @ApiParam(value = "Excel文件") @RequestParam MultipartFile file,
+                                     @ApiParam(value = "导入Excel文件处理方式，xml：xml解析后，运营修改的Excel文件，Excel：Excel直接导入") @RequestParam String type) {
         Response response = new Response();
-        Map map = xmlParseFacade.inputExcelToPost(file);
+        Map map = xmlParseFacade.inputExcelToPost(request, file, type);
         if (map.get("code").equals("200")) {
             response.setMessage("操作成功");
             response.setData(map);
