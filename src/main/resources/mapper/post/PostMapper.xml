@@ -1809,7 +1809,7 @@
                 heat_value = heat_value + #{heatValue,jdbcType=INTEGER}
             </if>
         </set>
-        WHERE id=#{id,jdbcType=INTEGER} AND isessence=1 AND isdel=0
+        WHERE id=#{id,jdbcType=INTEGER} AND isdel=0
     </update>
 
     <select id="queryPostHeate" parameterType="java.lang.Integer" resultType="java.lang.Integer">
