@@ -275,13 +275,13 @@ public class PostFacade {
         return rewardeds;
     }
 
-    /**
+   /* *//**
      * 后台管理-查询活动列表
      *
      * @param loginid
      * @param pager
      * @return
-     */
+     *//*
     public List<PostActiveList> queryPostActiveToByList(String loginid, Paging<PostActiveList> pager) {
 
         Integer userid = Integer.parseInt(loginid);
@@ -365,7 +365,7 @@ public class PostFacade {
             rewardeds.add(postList);
         }
         return rewardeds;
-    }
+    }*/
 
     /**
      * 后台管理-查询报名列表记录
@@ -2173,48 +2173,6 @@ public class PostFacade {
         long str = new Date().getTime();
         //获取活动状态
         getActiveStatus(begintime, endtime, list, str);
-
-        //-----------------------------------
-/*
-
-        List<PostActiveList> rewardeds = new ArrayList<>();
-        Date date = new Date();
-
-        for (int i = 0; i < list.size(); i++) {
-            PostActiveList postList = new PostActiveList();
-            Integer postid = list.get(i).getId();//获取到帖子id
-            Integer persum = postService.queryPostPerson(postid);//报名
-            String nickname = userService.queryUserByNicknameBy(postid);//用户昵称
-            Period periods = periodService.queryPostPeriod(postid);//查询活动周期
-            Double activefee = list.get(i).getActivefee();
-            Double sumfree = 0.0;
-            if (activefee != null) {
-                sumfree = persum * activefee;
-            }
-            Date begintimes = periods.getBegintime();
-            Date endtimes = periods.getEndtime();
-            postList.setId(list.get(i).getId());
-            postList.setTitle(list.get(i).getTitle());//主题
-            postList.setNickname(nickname);//昵称
-            postList.setActivetype(list.get(i).getActivetype());//活动类型
-            postList.setActivefee(activefee);//活动费用
-            postList.setEssencedate(list.get(i).getEssencedate());//精选日期
-            postList.setOrderid(list.get(i).getOrderid());//精选排序
-            postList.setBegintime(begintimes);//开始时间
-            postList.setEndtime(endtimes);//结束时间
-            postList.setPersum(persum);//报名人数
-            postList.setSumfree(sumfree);//总费用
-
-            postList.setZansum(list.get(i).getZansum());
-            postList.setCollectsum(list.get(i).getCollectsum());
-            postList.setCommentsum(list.get(i).getCommentsum());
-            postList.setForwardsum(list.get(i).getForwardsum());
-            postList.setIntime(list.get(i).getIntime());
-            rewardeds.add(postList);
-        }
-*/
-
-
         return list;
     }
 

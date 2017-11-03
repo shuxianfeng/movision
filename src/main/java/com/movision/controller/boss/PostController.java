@@ -124,13 +124,16 @@ public class PostController {
         return response;
     }
 
-    /**
+/*
+    */
+/**
      * 后台管理-查询活动列表
      *
      * @param pageNo
      * @param pageSize
      * @return
-     */
+ *//*
+
     @ApiOperation(value = "查询活动列表", notes = "查询活动列表", response = Response.class)
     @RequestMapping(value = "/list_active_list", method = RequestMethod.POST)
     public Response queryPostActiveToByList(@ApiParam(value = "登录用户") @RequestParam String loginid,
@@ -146,6 +149,7 @@ public class PostController {
         response.setData(pager);
         return response;
     }
+*/
 
     /**
      * 后台管理-查询报名列表
