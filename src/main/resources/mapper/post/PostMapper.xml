@@ -2264,7 +2264,7 @@
 
     <select id="queryxiaojijiPostForTest" resultType="com.movision.mybatis.post.entity.Post"
             parameterType="java.lang.String">
-        SELECT * FROM yw_post where title LIKE concat('%',#{title},'%')
+        SELECT * FROM yw_post where title = #{title}
     </select>
 
     <select id="queryPostHeatvalueEveryday"

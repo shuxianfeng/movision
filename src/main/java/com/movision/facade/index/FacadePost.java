@@ -3171,8 +3171,10 @@ public class FacadePost {
     public List<PostVo> userReflushHishtoryRecord(String userid, Paging<PostVo> paging, int type, String device, String labelid, String circleid, String postids) {
         List<PostVo> postVo = null;
         if (userid != null) {
+            //用户登录下
             postVo = userLoginHistoryRecord(userid, paging, type, labelid, circleid, postids, postVo, device);
         } else {
+            //未登录下
             postVo = userNotLoginHistoryRecord(paging, type, device, labelid, circleid, postids, postVo);
         }
         return postVo;
@@ -3373,12 +3375,16 @@ public class FacadePost {
      * @return
      */
     private List<PostVo> userLoginHistoryRecord(String userid, Paging<PostVo> paging, int type, String labelid, String circleid, String postids, List<PostVo> postVo, String device) {
+        //推荐、关注、本地
         if (StringUtil.isEmpty(circleid) && StringUtil.isEmpty(labelid)) {
             postVo = userLoginHistoryRecordThird(userid, paging, type, postids, device);
         }
+
         if (StringUtil.isNotEmpty(labelid)) {
+            //首页标签
             postVo = userLoginHistoryRecordLabel(userid, paging, type, labelid, postids, device);
         } else if (StringUtil.isNotEmpty(circleid)) {
+            //首页圈子
             postVo = userLoginHistoryRecordCircle(userid, paging, type, circleid, postids, device);
         }
         return postVo;
@@ -3517,7 +3523,8 @@ public class FacadePost {
      * @param userid
      * @param paging
      * @param type
-     * @param postids
+     * @param postids 刚刚刷新过后的最后一条postid
+     * @param device
      * @return
      */
     private List<PostVo> userLoginHistoryRecordThird(String userid, Paging<PostVo> paging, int type, String postids, String device) {
@@ -3525,15 +3532,23 @@ public class FacadePost {
         List<DBObject> intimePost = null;
         List<DBObject> us = null;
         if (!postids.equals("0")) {
+
+            //postid传值的情况下
             List<DBObject> onlyPost = queryOnlPostNotLogin(device, type, Integer.parseInt(postids));
             String intime = onlyPost.get(0).get("intime").toString();
+            //查出在这个时间之前的用户浏览历史
             intimePost = queryPosyByImtimeDevice(intime, device, type);
         } else {
-            //查询用户有无历史
+            //。这种情况下，用户手机无缓存，所以传0
+            //先查询用户有无历史
             int count = userHistoryDeviceCount(device, type);
             if (count > 10) {
+                //情况一：用户刷新之后再卸载APP,再重装APP，本地缓存被清除. 这时候查询出刚刚刷新的帖子。
+                //【有问题，查刚刚刷新的数据中热度最大的那个postid】
+                // 解决方法：从第11条开始查询。
                 us = userRefulshListMongodbToDevice(device, type);
             } else {
+                //情况二：新用户，只是展示第一批刷新的数据，无历史记录。用户浏览小于等于10条。
                 us = null;
             }
         }
@@ -3541,24 +3556,28 @@ public class FacadePost {
         List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
         List<Integer> postVos = new ArrayList<>();
         List<Integer> dontlikes = new ArrayList<>();
+        //处理的是postid != 0的情况
         if (intimePost != null) {
             for (int i = 0; i < intimePost.size(); i++) {
                 int postid = Integer.parseInt(intimePost.get(i).get("postid").toString());
                 postVos.add(postid);
             }
         }
+        //处理的是postid == 0的情况
         if (us != null) {
             for (int i = 0; i < us.size(); i++) {
-                int postid = Integer.parseInt(us.get(i).get("postid").toString());
+                int postid = Integer.parseInt(us.get(i).get("postid").toString());  //2618
                 postVos.add(postid);
             }
         }
+        //封装了不喜欢帖子id集合
         if (dontlike.size() != 0) {
             for (int i = 0; i < dontlike.size(); i++) {
                 int p = Integer.parseInt(dontlike.get(i).get("postid").toString());
                 dontlikes.add(p);
             }
         }
+        //从浏览历史中过滤掉用户不喜欢的帖子id
         postVos.removeAll(dontlikes);
         //根据postid查询帖子
         postVo = postService.findAllPostByid(postVos, paging);
