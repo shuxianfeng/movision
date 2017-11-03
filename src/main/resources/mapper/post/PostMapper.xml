@@ -2282,7 +2282,10 @@
 
     <select id="queryPostByXmlExport" resultType="com.movision.mybatis.post.entity.PostXml"
             parameterType="com.movision.mybatis.post.entity.Post">
-        SELECT * FROM yw_post WHERE circleid = #{circleid,jdbcType=INTEGER}
+        SELECT * FROM yw_post WHERE isdel <![CDATA[<>]]> 1 AND isactive = 0
+        <if test="circleid != null">
+            AND circleid = #{circleid,jdbcType=INTEGER}
+        </if>
     </select>
 
     <select id="findAllqueryXmlAnalysisAndPost" resultType="com.movision.mybatis.post.entity.PostList"
