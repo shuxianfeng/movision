@@ -3700,6 +3700,7 @@ public class FacadePost {
      * @return
      */
     public List<PostVo> userReflushHishtoryRecord(String userid, Paging<PostVo> paging, int type, String device, String labelid, String circleid, String postids, String flag) {
+        log.warn("首页历史接口的传参postid=" + postids);
         List<PostVo> postVo = null;
         if (userid != null) {
             //用户登录下
