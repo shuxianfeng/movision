@@ -173,9 +173,10 @@
   </update>
   <select id="findAllCllActive" resultType="com.movision.mybatis.activePart.entity.ActivePartList"
           parameterType="java.lang.Integer">
-    SELECT ap.*,u.nickname
+    SELECT ap.*,u.nickname,p.title AS activename
     FROM yw_active_part ap
     LEFT JOIN yw_user u ON u.id = ap.userid
+    LEFT JOIN yw_post p ON p.id = ap.postid
     WHERE ap.postid = #{postid,jdbcType=INTEGER}
     ORDER BY ap.intime DESC
   </select>
