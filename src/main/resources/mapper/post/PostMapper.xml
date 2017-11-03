@@ -1655,7 +1655,7 @@
         p.activetype,p.isdel,p.intime,p.iscontribute,
         (SELECT SUM(paymoney) FROM yw_active_part WHERE postid = p.id) AS sumfree,
         p.activefee,p.heat_value AS heatvalue,p.partsum_enddays,
-        (SELECT COUNT(1) persum FROM yw_active_part WHERE postid=p.id) AS apply,
+        (SELECT COUNT(1) persum FROM yw_active_part WHERE postid=p.id) AS persum,
         (SELECT COUNT(1) FROM yw_activity_contribute WHERE postid = p.id) AS contribute
         FROM yw_post p
         LEFT JOIN yw_active_period a ON a.postid=p.id
