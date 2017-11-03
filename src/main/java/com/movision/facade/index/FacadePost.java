@@ -57,8 +57,6 @@ import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserAll;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
-import com.movision.mybatis.userBehavior.entity.UserBehavior;
-import com.movision.mybatis.userBehavior.service.UserBehaviorService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
 import com.movision.mybatis.userRefreshRecord.entity.UserReflushCount;
@@ -194,8 +192,6 @@ public class FacadePost {
 
     @Autowired
     private SystemLayoutService systemLayoutService;
-    @Autowired
-    private UserBehaviorService userBehaviorService;
 
     @Autowired
     private XmlParseFacade xmlParseFacade;
@@ -3903,11 +3899,12 @@ public class FacadePost {
      * @param circleid
      * @param postids
      * @param postVo
-     * @param
-     * @param
+     * @param device
      * @return
      */
-    private List<PostVo> userLoginHistoryRecord(String userid, Paging<PostVo> paging, int type, String labelid, String circleid, String postids, List<PostVo> postVo, String device) {
+    private List<PostVo> userLoginHistoryRecord(String userid, Paging<PostVo> paging, int type,
+                                                String labelid, String circleid, String postids,
+                                                List<PostVo> postVo, String device) {
         //推荐、关注、本地
         if (StringUtil.isEmpty(circleid) && StringUtil.isEmpty(labelid)) {
             postVo = userLoginHistoryRecordThird(userid, paging, type, postids, device);
