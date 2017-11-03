@@ -48,6 +48,22 @@ public class CompressImgService {
     }
 
     /**
+     * 根据压缩图查询是否存在原图
+     *
+     * @param compressimgurl
+     * @return
+     */
+    public String queryUrlIsProtoimg(String compressimgurl) {
+        try {
+            logger.info("根据压缩图查询是否存在原图");
+            return compressImgMapper.queryUrlIsProtoimg(compressimgurl);
+        } catch (Exception e) {
+            logger.error("根据压缩图查询是否存在原图异常", e);
+            throw e;
+        }
+    }
+
+    /**
      * 根据缩略图查询图片信息
      *
      * @param com

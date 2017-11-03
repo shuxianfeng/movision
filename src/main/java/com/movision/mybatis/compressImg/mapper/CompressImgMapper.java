@@ -19,5 +19,7 @@ public interface CompressImgMapper {
 
     String queryUrlIsCompress(Map map);
 
+    String queryUrlIsProtoimg(String compressimgurl);
+
     CompressImg queryProtoBycompress(CompressImg com);
 }

@@ -280,7 +280,7 @@ public class XmlParseFacade {
      */
     public Map inputExcelToPost(HttpServletRequest request, MultipartFile file, String type) {
         if (type.equals("xml")) {
-            return excelIntoEnquiryUtil.queryExcelIntoEnquiry(file);
+            return excelIntoEnquiryUtil.queryExcelIntoEnquiry(request, file);
         } else {
             return insertExcelToPost.queryExcelIntoEnquiry(request, file);
         }
@@ -814,7 +814,7 @@ public class XmlParseFacade {
      *
      * @param str
      */
-    private Map download(String str, String type) {
+    public Map download(String str, String type) {
         InputStream is = null;
         OutputStream os = null;
         Map map = new HashMap();

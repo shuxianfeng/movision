@@ -1,11 +1,14 @@
 package com.movision.utils.excel;
 
 
+import com.movision.facade.boss.XmlParseFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.circle.service.CircleService;
+import com.movision.mybatis.compressImg.service.CompressImgService;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostTo;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.utils.JsoupCompressImg;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -13,10 +16,13 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -29,11 +35,22 @@ import java.util.Map;
 @Service
 public class ExcelIntoEnquiryUtil {
 
+    private static Logger logger = LoggerFactory.getLogger(ExcelIntoEnquiryUtil.class);
+
     @Autowired
     private CircleService circleService;
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private JsoupCompressImg jsoupCompressImg;
+
+    @Autowired
+    private XmlParseFacade xmlParseFacade;
+
+    @Autowired
+    private CompressImgService compressImgService;
 
 
     //总行数
@@ -60,7 +77,7 @@ public class ExcelIntoEnquiryUtil {
         return errorMsg;
     }*/
 
-    public Map queryExcelIntoEnquiry(MultipartFile file) {
+    public Map queryExcelIntoEnquiry(HttpServletRequest request, MultipartFile file) {
         String fileName = file.getOriginalFilename();//获取文件名
         Map map = null;
         try {
@@ -71,7 +88,7 @@ public class ExcelIntoEnquiryUtil {
             if (isExcel2007(fileName)) {
                 isExcel2003 = false;
             }
-            map = createExcel(file.getInputStream(), isExcel2003);
+            map = createExcel(request, file.getInputStream(), isExcel2003);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,7 +128,7 @@ public class ExcelIntoEnquiryUtil {
      * @return
      * @throws IOException
      */
-    public Map createExcel(InputStream is, boolean isExcel2003) {
+    public Map createExcel(HttpServletRequest request, InputStream is, boolean isExcel2003) {
         Map userList = null;
         try {
             Workbook wb = null;
@@ -120,7 +137,7 @@ public class ExcelIntoEnquiryUtil {
             } else {// 当excel是2007时,创建excel2007
                 wb = new XSSFWorkbook(is);
             }
-            userList = readExcelValue(wb);// 读取Excel里面的信息
+            userList = readExcelValue(request, wb);// 读取Excel里面的信息
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -134,7 +151,7 @@ public class ExcelIntoEnquiryUtil {
      * @param wb
      * @return
      */
-    private Map readExcelValue(Workbook wb) {
+    private Map readExcelValue(HttpServletRequest request, Workbook wb) {
         // 得到第一个shell
         Sheet sheet = wb.getSheetAt(0);
         // 得到Excel的行数
@@ -161,6 +178,10 @@ public class ExcelIntoEnquiryUtil {
                 Post post = new Post();
                 //用于存放圈子名称
                 String circle = "";
+                //帖子内容
+                String content = "";
+                //贴子封面
+                String covimg = "";
 
                 // 循环Excel的列
                 for (int c = 0; c < this.totalCells; c++) {
@@ -237,7 +258,7 @@ public class ExcelIntoEnquiryUtil {
                                 try {
                                     //帖子内容
                                     if (StringUtil.isNotBlank(cell.getStringCellValue())) {
-                                        post.setPostcontent(cell.getStringCellValue());
+                                        content = cell.getStringCellValue();
                                     }
                                     continue;
                                 } catch (Exception e) {
@@ -251,7 +272,7 @@ public class ExcelIntoEnquiryUtil {
                                 try {
                                     //帖子封面
                                     if (StringUtil.isNotBlank(cell.getStringCellValue())) {
-                                        post.setCoverimg(cell.getStringCellValue());
+                                        covimg = cell.getStringCellValue();
                                     }
                                     continue;
                                 } catch (Exception e) {
@@ -269,6 +290,39 @@ public class ExcelIntoEnquiryUtil {
                 //根据圈子名称查询圈子，
                 Integer circleid = circleService.queryCircleByNameAndEntirely(circle);
                 post.setCircleid(circleid);
+
+                //帖子封面操作
+                if (StringUtil.isNotEmpty(covimg)) {
+                    //查询封面是否是有变动
+                    String isproto = compressImgService.queryUrlIsProtoimg(covimg);
+                    //没有查到，封面处理操作
+                    if (StringUtil.isEmpty(isproto)) {
+                        //存放新图片url
+                        String newurl = "";
+                        //下载图片 第一个参数原文件路径，第二个文件操作 1 ：img 2：video
+                        Map t = xmlParseFacade.download(covimg, "img");
+                        //操作封面
+                        xmlParseFacade.postCompressImg(post, null, t, newurl, covimg);
+                    } else {
+                        post.setCoverimg(covimg);
+                    }
+                }
+
+                //内容转换
+                Map con = null;
+                if (StringUtil.isNotEmpty(content)) {
+                    String postcontent = post.getPostcontent();
+                    //内容转换
+                    con = jsoupCompressImg.newCompressImg(request, postcontent);
+                    System.out.println(con);
+                    if ((int) con.get("code") == 200) {
+                        String str = con.get("content").toString();
+                        post.setPostcontent(str);//帖子内容
+                    } else {
+                        logger.error("帖子内容转换异常");
+                        post.setPostcontent(postcontent);
+                    }
+                }
                 //执行帖子编辑操作
                 postService.updateActivePostById(post);
 
