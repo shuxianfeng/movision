@@ -74,7 +74,7 @@ public class XmlParseController {
      * @return
      */
     @ApiOperation(value = "xml解析的帖子导出Excel", notes = "用于帖子导出", response = Response.class)
-    @RequestMapping(value = "export_excel", method = RequestMethod.POST)
+    @RequestMapping(value = "/export_excel", method = RequestMethod.POST)
     public Response excelExport(@ApiParam(value = "圈子id") @RequestParam String circleid) {
         Response response = new Response();
         Map map = xmlParseFacade.exportExcel(circleid);
@@ -89,7 +89,7 @@ public class XmlParseController {
      * @return
      */
     @ApiOperation(value = "查询xml解析出的帖子列表", notes = "用于查询xml解析出的帖子列表", response = Response.class)
-    @RequestMapping(value = "query_xml_analysis_post_list", method = RequestMethod.POST)
+    @RequestMapping(value = "/query_xml_analysis_post_list", method = RequestMethod.POST)
     public Response queryXmlAnalysisAndPost(@ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
                                             @ApiParam(value = "当前页") @RequestParam(defaultValue = "1") String pageNo,
                                             @ApiParam(value = "每页几条") @RequestParam(defaultValue = "10") String pageSize) {
@@ -110,7 +110,7 @@ public class XmlParseController {
      * @return
      */
     @ApiOperation(value = "导入Excel文件", notes = "用于解析EXCEL文件，修改帖子")
-    @RequestMapping(value = "input_excel_post", method = RequestMethod.POST)
+    @RequestMapping(value = "/input_excel_post", method = RequestMethod.POST)
     public Response inputExcelToPost(HttpServletRequest request,
                                      @ApiParam(value = "Excel文件") @RequestParam MultipartFile file,
                                      @ApiParam(value = "导入Excel文件处理方式，xml：xml解析后，运营修改的Excel文件，Excel：Excel直接导入") @RequestParam String type) {
