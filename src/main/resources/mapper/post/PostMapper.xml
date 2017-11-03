@@ -1652,7 +1652,7 @@
             parameterType="com.movision.mybatis.post.entity.PostActiveList">
         SELECT
         a.begintime,a.endtime,u.nickname,p.essencedate,p.orderid,p.ishot_order AS ishotorder,p.title,p.id,
-        p.activetype,p.isdel,p.intime,p.iscontribute,
+        p.activetype,p.isdel,p.intime,p.iscontribute,p.ishot,
         (SELECT SUM(paymoney) FROM yw_active_part WHERE postid = p.id) AS sumfree,
         p.activefee,p.heat_value AS heatvalue,p.partsum_enddays,
         (SELECT COUNT(1) persum FROM yw_active_part WHERE postid=p.id) AS persum,
