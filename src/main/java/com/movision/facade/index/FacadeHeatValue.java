@@ -73,7 +73,7 @@ public class FacadeHeatValue {
         } else if (type == 3) {//点赞(实时ok)
             int level = userLevels(userid);
             //points = level * HeatValueConstant.POINT.zan_number.getCode();
-            points = systemLayoutService.queryHaetValue("heat_zan_number");
+            points = level * systemLayoutService.queryHaetValue("heat_zan_number");
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
@@ -83,7 +83,7 @@ public class FacadeHeatValue {
             //查询这个帖子的所有评论的热度值
             int level = userLevels(userid);
             //points = level * HeatValueConstant.POINT.comments_number.getCode();
-            points = systemLayoutService.queryHaetValue("heat_comments_number");
+            points = level * systemLayoutService.queryHaetValue("heat_comments_number");
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
@@ -92,7 +92,7 @@ public class FacadeHeatValue {
         } else if (type == 5) {//转发(实时ok)
             int level = userLevels(userid);
             //points = level * HeatValueConstant.POINT.forwarding_number.getCode();
-            points = systemLayoutService.queryHaetValue("heat_forwarding_number");
+            points = level * systemLayoutService.queryHaetValue("heat_forwarding_number");
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
@@ -101,7 +101,7 @@ public class FacadeHeatValue {
         } else if (type == 6) {//收藏(实时ok)
             int level = userLevels(userid);
             //points = level * HeatValueConstant.POINT.collection_number.getCode();
-            points = systemLayoutService.queryHaetValue("heat_collection_number");
+            points = level * systemLayoutService.queryHaetValue("heat_collection_number");
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
@@ -110,7 +110,7 @@ public class FacadeHeatValue {
         } else if (type == 7) {//打赏(实时ok)
             int level = userLevels(userid);
             //points = level * HeatValueConstant.POINT.reward_post.getCode();
-            points = systemLayoutService.queryHaetValue("heat_reward_post");
+            points = level * systemLayoutService.queryHaetValue("heat_reward_post");
             map.put("points", points);
             postService.updatePostHeatValue(map);
 
