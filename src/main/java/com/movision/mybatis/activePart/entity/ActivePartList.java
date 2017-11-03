@@ -17,8 +17,16 @@ public class ActivePartList implements Serializable {
     private Date begintime;
     private Date endtime;
     private Integer postid;//帖子id
+    private String name;//姓名
 
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Integer getPostid() {
         return postid;

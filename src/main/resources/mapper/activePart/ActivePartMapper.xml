@@ -176,7 +176,7 @@
     SELECT ap.*,u.nickname
     FROM yw_active_part ap
     LEFT JOIN yw_user u ON u.id = ap.userid
-    WHERE ap.postid = 1932
+    WHERE ap.postid = #{postid,jdbcType=INTEGER}
     ORDER BY ap.intime DESC
   </select>
 </mapper>
