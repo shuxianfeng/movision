@@ -3532,7 +3532,7 @@ public class FacadePost {
         List<DBObject> intimePost = null;
         List<DBObject> us = null;
         if (!postids.equals("0")) {
-
+            //【该分支正确】
             //postid传值的情况下
             List<DBObject> onlyPost = queryOnlPostNotLogin(device, type, Integer.parseInt(postids));
             String intime = onlyPost.get(0).get("intime").toString();
