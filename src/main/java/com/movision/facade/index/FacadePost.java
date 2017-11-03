@@ -3523,7 +3523,7 @@ public class FacadePost {
      * @param userid
      * @param paging
      * @param type
-     * @param postids 刚刚刷新过后的最后一条postid
+     * @param postids 刚刚刷新过后的最后一条postid，即10条中热度值最小的一条，也是10条中插入mongoDB时间最晚的一条
      * @param device
      * @return
      */
