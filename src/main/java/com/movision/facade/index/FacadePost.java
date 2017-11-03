@@ -57,8 +57,11 @@ import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.entity.UserAll;
 import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.mybatis.userBehavior.entity.UserBehavior;
+import com.movision.mybatis.userBehavior.service.UserBehaviorService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
+import com.movision.mybatis.userRefreshRecord.entity.UserReflushCount;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
@@ -191,6 +194,8 @@ public class FacadePost {
 
     @Autowired
     private SystemLayoutService systemLayoutService;
+    @Autowired
+    private UserBehaviorService userBehaviorService;
 
     @Autowired
     private XmlParseFacade xmlParseFacade;
@@ -1431,6 +1436,406 @@ public class FacadePost {
         return list;
     }
 
+    /*public List recommendPost(String userid, String device) {
+        List<PostVo> list = null;
+        List<PostVo> alllist = postService.findAllPostListHeat();//查询所有帖子
+        List<PostVo> posts = new ArrayList<>();
+        List<DBObject> listmongodb = null;
+        List<PostVo> c1=null;
+        List<PostVo> c2=null;
+        List<PostVo> c3=null;
+        List<PostVo> other=null;
+        if (userid == null) {
+            //未登录
+            list = postService.findAllPostHeatValue();//根据热度值排序查询帖子
+            listmongodb = userRefulshListMongodbToDevice(device, 1);//用户有没有看过
+            if (listmongodb.size() != 0) {
+                for (int j = 0; j < listmongodb.size(); j++) {
+                    PostVo post = new PostVo();
+                    post.setId(Integer.parseInt(listmongodb.get(j).get("postid").toString()));
+                    posts.add(post);//把mongodb转为post实体
+                }
+                list.removeAll(posts);
+            }
+            list = NotLoginretuenList(list, 1, device, -1);
+            return list;
+        } else {
+            int circle1=0;
+            int circle2=0;
+            int circle3=0;
+            //已登录
+            //如果登录人是分析表中的用户
+            //查询用户行为记录表存在的就按分析后的推荐不存在的就按热度从高到底没读过的推给他
+            //查询用户记录表中的数据
+            List<UserBehavior> userBehaviors=userBehaviorService.findAllUserBehavior(Integer.parseInt(userid));
+           // listmongodb = userRefulshListMongodbToDevice(device, 1);//用户有没有看过
+            List<PostVo> groupPost=new ArrayList<>();
+            List<Integer> clist= new ArrayList<>();
+            if(userBehaviors.size()!=0){
+                for (int i=0;i<userBehaviors.size();i++){
+                   circle1=userBehaviors.get(i).getCircle1();
+                   circle2=userBehaviors.get(i).getCircle2();
+                   circle3=userBehaviors.get(i).getCircle3();
+                   if(circle1!=0) {
+                       clist.add(circle1);
+                   }
+                   if(circle2!=0) {
+                       clist.add(circle2);
+                   }
+                   if(circle3!=0) {
+                       clist.add(circle3);
+                   }
+                }
+                if(clist.size()==3){
+                    c1=postService.findAllPostCrile(circle1);
+                    c2=postService.findAllPostCrile(circle2);
+                    c3=postService.findAllPostCrile(circle3);
+                    //其他圈子
+                    other=postService.findAllNotCircle(clist);
+                    listmongodb=userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid),1);
+                    if (listmongodb.size() != 0) {
+                        for (int j = 0; j < listmongodb.size(); j++) {
+                            PostVo post = new PostVo();
+                            post.setId(Integer.parseInt(listmongodb.get(j).get("postid").toString()));
+                            posts.add(post);//把mongodb转为post实体
+                        }
+                        c1.removeAll(posts);
+                        c2.removeAll(posts);
+                        c3.removeAll(posts);
+                        other.removeAll(posts);
+                    }
+                    if(c1.size()>=4&&c2.size()>=2&&c3.size()>=1&&other.size()>=3) {
+                        list = pageFacade.getPageList(c1, 1, 4);
+                        groupPost.addAll(list);
+                        list = pageFacade.getPageList(c2, 1, 2);
+                        groupPost.addAll(list);
+                        list = pageFacade.getPageList(c3, 1, 1);
+                        groupPost.addAll(list);
+                        list = pageFacade.getPageList(other, 1, 3);
+                        groupPost.addAll(list);
+                        list = retuenList(groupPost, userid, 1, device, -1);
+                        return list;
+                    }else if(c1.size()<4||c2.size()<2||c3.size()<1||other.size()<3){
+                        if(c1.size()<4){
+                            list=pageFacade.getPageList(c1,1,c1.size());
+                            if(list!=null) {
+                                groupPost.addAll(list);
+                            }
+                            int c1Size=c1.size();
+                            int cha=4-c1Size;
+                            if(c2.size()>=2+cha){
+                                list=pageFacade.getPageList(c2,1,2+cha);
+                                groupPost.addAll(list);
+                                list=pageFacade.getPageList(c3,1,1);
+                                if(list!=null) {
+                                    groupPost.addAll(list);
+                                    list=pageFacade.getPageList(other,1,3);
+                                    groupPost.addAll(list);
+                                    list = retuenList(groupPost, userid, 1, device, -1);
+                                    return list;
+                                }else {
+                                    list=pageFacade.getPageList(other,1,4);
+                                    groupPost.addAll(list);
+                                    list = retuenList(groupPost, userid, 1, device, -1);
+                                    return list;
+                                }
+                            }else if(c2.size()<2+cha){
+                                list=pageFacade.getPageList(c2,1,c2.size());
+                                if(list!=null) {
+                                    groupPost.addAll(list);
+                                    int c2Size=c2.size();
+                                    int c2cha=2+cha-c2Size;
+                                    if(c3.size()>=1+c2cha){
+                                        list=pageFacade.getPageList(c3,1,1+c2cha);
+                                        groupPost.addAll(list);
+                                        list=pageFacade.getPageList(other,1,3);
+                                        if(list!=null) {
+                                            groupPost.addAll(list);
+                                        }else {
+                                            list=pageFacade.getPageList(other,1,other.size());
+                                            groupPost.addAll(list);
+                                        }
+                                    }else if(c3.size()<1+c2cha){
+                                        int c3Size=c3.size();
+                                        int c3cha=1+c2cha-c3Size;
+                                        if(other.size()>=3+c3cha){
+                                            list=pageFacade.getPageList(other,1,3+c3cha);
+                                            groupPost.addAll(list);
+                                        }else {
+                                            list=pageFacade.getPageList(other,1,other.size());
+                                            if(list!=null) {
+                                                groupPost.addAll(list);
+                                            }
+                                        }
+                                    }
+                                }else {
+                                    int c2Size=c2.size();
+                                    int c2cha=2+cha-c2Size;
+                                    if(c3.size()>=1+c2cha){
+                                        list=pageFacade.getPageList(c3,1,1+c2cha);
+                                        groupPost.addAll(list);
+                                        list=pageFacade.getPageList(other,1,3);
+                                        if(list!=null) {
+                                            groupPost.addAll(list);
+                                        }else {
+                                            list=pageFacade.getPageList(other,1,other.size());
+                                            groupPost.addAll(list);
+                                        }
+                                    }else if(c3.size()<1+c2cha){
+                                        list=pageFacade.getPageList(c3,1,c3.size());
+                                        if(list!=null) {
+                                            groupPost.addAll(list);
+                                        }
+                                        int c3Size=c3.size();
+                                        int c3cha=1+c2cha-c3Size;
+                                        if(other.size()>=3+c3cha){
+                                            list=pageFacade.getPageList(other,1,3+c3cha);
+                                            groupPost.addAll(list);
+                                        }else {
+                                            list=pageFacade.getPageList(other,1,other.size());
+                                            if(list!=null) {
+                                                groupPost.addAll(list);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            list = retuenList(groupPost, userid, 1, device, -1);
+                            return list;
+                        }else  if(c2.size()<2){
+                            list=pageFacade.getPageList(c1,1,4);
+                            groupPost.addAll(list);
+                            list=pageFacade.getPageList(c2,1,c2.size());
+                            if(list!=null) {
+                                groupPost.addAll(list);
+                            }
+                            int c2Size=c2.size();
+                            int c2cha=2-c2Size;
+                            if(c3.size()>=1+c2cha){
+                                list=pageFacade.getPageList(c3,1,1+c2cha);
+                                groupPost.addAll(list);
+                                list=pageFacade.getPageList(other,1,3);
+                                groupPost.addAll(list);
+                            }else if(c3.size()<1+c2cha){
+                                list=pageFacade.getPageList(c3,1,c3.size());
+                                if(list!=null) {
+                                    groupPost.addAll(list);
+                                }
+                                int c3size=c3.size();
+                                int  c3cha=1+c2cha-c3size;
+                                if(other.size()>=3+c3cha){
+                                    list=pageFacade.getPageList(other,1,3+c3cha);
+                                    groupPost.addAll(list);
+                                }else {
+                                    list=pageFacade.getPageList(other,1,other.size());
+                                    if(list!=null) {
+                                        groupPost.addAll(list);
+                                    }
+                                }
+                            }
+                            list = retuenList(groupPost, userid, 1, device, -1);
+                            return list;
+                        }else if(c3.size()<1){
+                            list=pageFacade.getPageList(c1,1,4);
+                            groupPost.addAll(list);
+                            list=pageFacade.getPageList(c2,1,2);
+                            groupPost.addAll(list);
+                            if(other.size()>=4) {
+                                list = pageFacade.getPageList(other, 1, 4);
+                                groupPost.addAll(list);
+                            }else {
+                                list=pageFacade.getPageList(other,1,other.size());
+                                if(list!=null) {
+                                    groupPost.addAll(list);
+                                }
+                            }
+                            list = retuenList(groupPost, userid, 1, device, -1);
+                            return list;
+                        }else if(other.size()<3){
+                            list=pageFacade.getPageList(c1,1,4);
+                            groupPost.addAll(list);
+                            list=pageFacade.getPageList(c2,1,2);
+                            groupPost.addAll(list);
+                            list=pageFacade.getPageList(c3,1,1);
+                            groupPost.addAll(list);
+                            list=pageFacade.getPageList(other,1,other.size());
+                            if(list!=null) {
+                                groupPost.addAll(list);
+                            }
+                            list = retuenList(groupPost, userid, 1, device, -1);
+                            return list;
+                        }
+                    }
+                 }
+                if(clist.size()==2){
+                    c1=postService.findAllPostCrile(circle1);
+                    c2=postService.findAllPostCrile(circle2);
+                     //其他圈子
+                    other=postService.findAllNotCircle(clist);
+                    listmongodb=userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid),1);
+                    if (listmongodb.size() != 0) {
+                        for (int j = 0; j < listmongodb.size(); j++) {
+                            PostVo post = new PostVo();
+                            post.setId(Integer.parseInt(listmongodb.get(j).get("postid").toString()));
+                            posts.add(post);//把mongodb转为post实体
+                        }
+                        c1.removeAll(posts);
+                        c2.removeAll(posts);
+                        other.removeAll(posts);
+                    }
+                    if(c1.size()>=4&&c2.size()>=2&&other.size()>=4) {
+                        list = pageFacade.getPageList(c1, 1, 4);
+                        groupPost.addAll(list);
+                        list = pageFacade.getPageList(c2, 1, 2);
+                        groupPost.addAll(list);
+                        list = pageFacade.getPageList(other, 1, 4);
+                        groupPost.addAll(list);
+                        list = retuenList(groupPost, userid, 1, device, -1);
+                        return list;
+                    }else if(c1.size()<4){
+                        list=pageFacade.getPageList(c1,1,c1.size());
+                        if(list!=null) {
+                            groupPost.addAll(list);
+                        }
+                        int c1Size=c1.size();
+                        int cha=4-c1Size;
+                        if(c2.size()>=2+cha){
+                            list=pageFacade.getPageList(c2,1,2+cha);
+                            groupPost.addAll(list);
+                            list=pageFacade.getPageList(other,1,4);
+                            if(list!=null) {
+                                groupPost.addAll(list);
+                            }
+                        }else if(c2.size()<2+cha){
+                            list=pageFacade.getPageList(c2,1,c2.size());
+                            if(list!=null) {
+                                groupPost.addAll(list);
+                            }
+                            int c2Size=c2.size();
+                            int c2cha=2+cha-c2Size;
+                            if(other.size()>=4+c2cha){
+                                    list=pageFacade.getPageList(other,1,4+c2cha);
+                                    groupPost.addAll(list);
+                              }else {
+                                    list=pageFacade.getPageList(other,1,other.size());
+                                    if(list!=null) {
+                                        groupPost.addAll(list);
+                              }
+                            }
+                         }
+                        list = retuenList(groupPost, userid, 1, device, -1);
+                        return list;
+                    }else if(c2.size()<2){
+                        list=pageFacade.getPageList(c1,1,4);
+                        groupPost.addAll(list);
+                        if(c2.size()<2){
+                            list=pageFacade.getPageList(c2,1,c2.size());
+                            if(list!=null) {
+                                groupPost.addAll(list);
+                            }
+                            int c2size=c2.size();
+                            int c2cha=2-c2size;
+                            if(other.size()>=4+c2cha){
+                                list=pageFacade.getPageList(other,1,4+c2cha);
+                                groupPost.addAll(list);
+                            }else {
+                                list=pageFacade.getPageList(other,1,other.size());
+                                if(list!=null) {
+                                    groupPost.addAll(list);
+                                }
+                            }
+                        }
+                        list = retuenList(groupPost, userid, 1, device, -1);
+                        return list;
+                    }else if(other.size()<4){
+                        list=pageFacade.getPageList(c1,1,4);
+                        groupPost.addAll(list);
+                        list=pageFacade.getPageList(c2,1,2);
+                        groupPost.addAll(list);
+                        list=pageFacade.getPageList(other,1,other.size());
+                        if (list!=null) {
+                            groupPost.addAll(list);
+                        }
+                        list = retuenList(groupPost, userid, 1, device, -1);
+                        return list;
+                    }
+                }
+                if(clist.size()==1){
+                    c1=postService.findAllPostCrile(circle1);
+                     //其他圈子
+                    other=postService.findAllNotCircle(clist);
+                    listmongodb=userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid),1);
+                    if (listmongodb.size() != 0) {
+                        for (int j = 0; j < listmongodb.size(); j++) {
+                            PostVo post = new PostVo();
+                            post.setId(Integer.parseInt(listmongodb.get(j).get("postid").toString()));
+                            posts.add(post);//把mongodb转为post实体
+                        }
+                        c1.removeAll(posts);
+                        other.removeAll(posts);
+                    }
+                    if(c1.size()>=4&&other.size()>=6) {
+                        list = pageFacade.getPageList(c1, 1, 4);
+                        groupPost.addAll(list);
+                        list = pageFacade.getPageList(other, 1, 6);
+                        groupPost.addAll(list);
+                        list = retuenList(groupPost, userid, 1, device, -1);
+                        return list;
+                    }else  if(c1.size()<4||other.size()<6){
+                          if(c1.size()<4){
+                            list=pageFacade.getPageList(c1,1,c1.size());
+                            if(list!=null) {
+                                groupPost.addAll(list);
+                            }
+                            int c1size=c1.size();
+                            int cha=4-c1size;
+                            if(other.size()>=6+cha) {
+                                list = pageFacade.getPageList(other, 1, 6 + cha);
+                                groupPost.addAll(list);
+                            }else {
+                                list=pageFacade.getPageList(other,1,other.size());
+                                if(list!=null) {
+                                    groupPost.addAll(list);
+                                }
+                            }
+                            list = retuenList(groupPost, userid, 1, device, -1);
+                            return list;
+                        }else  if(other.size()<6){
+                              list=pageFacade.getPageList(c1,1,4);
+                              groupPost.addAll(list);
+                              list=pageFacade.getPageList(other,1,other.size());
+                              if(list!=null) {
+                                  groupPost.addAll(list);
+                              }
+                              list = retuenList(groupPost, userid, 1, device, -1);
+                              return list;
+                        }
+                    }
+                }
+             }else {
+                if (alllist != null) {
+                    listmongodb = userRefulshListMongodbToDevice(device, 1);//用户有没有看过
+                    if (listmongodb.size() != 0) {
+                        for (int j = 0; j < listmongodb.size(); j++) {
+                            PostVo post = new PostVo();
+                            post.setId(Integer.parseInt(listmongodb.get(j).get("postid").toString()));
+                            posts.add(post);//把mongodb转为post实体
+                        }
+                        list.removeAll(posts);
+                        list = retuenList(list, userid,1, device, -1);
+                    }else {
+                        //登录情况下但是mongodb里面没有刷新记录
+                        list = postService.findAllPostHeatValue();
+                        list = retuenList(list, userid, 1, device, -1);
+                        return list;
+                    }
+                    return list;
+                }
+            }
+        }
+        return list;
+    }*/
+
     /**
      * mongodb的里面的刷新记录  大于等于   1000条记录的时候进行用户分析
      *
@@ -1896,13 +2301,29 @@ public class FacadePost {
      */
     public List countView(List<PostVo> list) {
         if (list != null) {
+            List<Integer> iList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
                 int postid = list.get(i).getId();
-                int uesrreflushCounts = userRefreshRecordService.postcount(postid);
-                int poscount = postAndUserRecordService.postcount(postid);
-                int count = uesrreflushCounts + poscount;
-                list.get(i).setCountview(count);
+                iList.add(postid);
             }
+            List<PostVo> resultList = new ArrayList<>();
+            List<UserReflushCount> userReflushCountList = userRefreshRecordService.countPostViewCountByUserid(iList);
+            for (int j = 0; j < userReflushCountList.size(); j++) {
+                for (int i = 0; i < list.size(); i++) {
+                    int poscount = postAndUserRecordService.postcount(list.get(i).getId());
+                    if (userReflushCountList.get(j).getPostid().intValue() == list.get(i).getId().intValue()) {
+                        list.get(i).setCountview(userReflushCountList.get(j).getCount() + poscount);
+                        resultList.add(list.get(i));
+                    }
+                }
+            }
+            /**for (int i = 0; i < list.size(); i++) {
+             int postid = list.get(i).getId();
+             int uesrreflushCounts = userRefreshRecordService.postcount(postid);
+             int poscount = postAndUserRecordService.postcount(postid);
+             int count = uesrreflushCounts + poscount;
+             list.get(i).setCountview(count);
+             }*/
         }
         return list;
     }
@@ -2197,6 +2618,44 @@ public class FacadePost {
         }
         return list;
     }
+
+
+    /**
+     * 在mongodb中查询用户刷新浏览过的列表(历史记录用)
+     *
+     * @param
+     * @return
+     */
+    public List userRefulshListMongodbToDeviceSkip(String device, int type) {
+        MongoClient mongoClient = null;
+        List<DBObject> list = null;
+        DB db = null;
+        DBCursor dbCursor = null;
+        try {
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject queryObject = new BasicDBObject("device", device).append("type", type);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            dbCursor = table.find(queryObject, keys).skip(10).sort(new BasicDBObject("intime", -1));
+            list = dbCursor.toArray();
+            dbCursor.close();
+        } catch (Exception e) {
+            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+                dbCursor.close();
+                mongoClient.close();
+            }
+        }
+        return list;
+    }
+
 
     /**
      * 根据userid的浏览量(未登录圈子)
@@ -2597,7 +3056,7 @@ public class FacadePost {
      * @param userid
      * @return
      */
-    public List userRefulshListMongodbHistoryCircleid(int userid, int type, String crileid) {
+    public List userRefulshListMongodbHistoryCircleid(int userid, int type) {
         MongoClient mongoClient = null;
         List<DBObject> list = null;
         DB db = null;
@@ -2606,7 +3065,7 @@ public class FacadePost {
             mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             db = mongoClient.getDB("searchRecord");
             DBCollection table = db.getCollection("userRefreshRecord");//表名
-            BasicDBObject queryObject = new BasicDBObject("userid", userid).append("type", type).append("crileid", crileid);
+            BasicDBObject queryObject = new BasicDBObject("userid", userid).append("type", type);
             //指定需要显示列
             BasicDBObject keys = new BasicDBObject();
             keys.put("_id", 0);
@@ -2664,6 +3123,43 @@ public class FacadePost {
     }
 
     /**
+     * 在mongodb中查询用户刷新浏览过的列表(圈子)
+     * 用户历史记录
+     *
+     * @param
+     * @return
+     */
+    public List userRefulshListMongodbToDeviceHistorySkip(String device, int type, String circleid) {
+        MongoClient mongoClient = null;
+        List<DBObject> list = null;
+        DB db = null;
+        DBCursor dbCursor = null;
+        try {
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject queryObject = new BasicDBObject("device", device).append("type", type).append("crileid", circleid);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
+            list = dbCursor.toArray();
+            dbCursor.close();
+        } catch (Exception e) {
+            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+                dbCursor.close();
+                mongoClient.close();
+            }
+        }
+        return list;
+    }
+
+    /**
      * 在mongodb中查询用户刷新浏览过的列表(标签)
      *
      * @param
@@ -2684,6 +3180,43 @@ public class FacadePost {
             keys.put("_id", 0);
             keys.put("postid", 1);
             dbCursor = table.find(queryObject, keys).sort(new BasicDBObject("intime", -1));
+            list = dbCursor.toArray();
+            dbCursor.close();
+        } catch (Exception e) {
+            log.error("在mongodb中查询用户刷新浏览过的列表失败", e);
+        } finally {
+            if (null != db) {
+                db.requestDone();
+                db = null;
+                dbCursor.close();
+                mongoClient.close();
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 在mongodb中查询用户刷新浏览过的列表(标签)
+     * 历史专用
+     *
+     * @param
+     * @return
+     */
+    public List userRefulshListMongodbToDeviceHistoryLabelidSkip(String device, int type, int labelid) {
+        MongoClient mongoClient = null;
+        List<DBObject> list = null;
+        DB db = null;
+        DBCursor dbCursor = null;
+        try {
+            mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
+            db = mongoClient.getDB("searchRecord");
+            DBCollection table = db.getCollection("userRefreshRecord");//表名
+            BasicDBObject queryObject = new BasicDBObject("device", device).append("type", type).append("labelid", labelid);
+            //指定需要显示列
+            BasicDBObject keys = new BasicDBObject();
+            keys.put("_id", 0);
+            keys.put("postid", 1);
+            dbCursor = table.find(queryObject, keys).skip(10).sort(new BasicDBObject("intime", -1));
             list = dbCursor.toArray();
             dbCursor.close();
         } catch (Exception e) {
@@ -3228,7 +3761,7 @@ public class FacadePost {
             //查询用户有无历史
             int count = userHistoryDeviceCircleCount(device, type, circleid);
             if (count > 10) {
-                us = userRefulshListMongodbToDeviceHistory(device, type, circleid);
+                us = userRefulshListMongodbToDeviceHistorySkip(device, type, circleid);
             } else {
                 us = null;
             }
@@ -3280,7 +3813,7 @@ public class FacadePost {
             //查询用户有无历史
             int count = userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
             if (count > 10) {
-                us = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
+                us = userRefulshListMongodbToDeviceHistoryLabelidSkip(device, type, Integer.parseInt(labelid));
             } else {
                 us = null;
             }
@@ -3330,7 +3863,7 @@ public class FacadePost {
             //查询用户有无历史
             int count = userHistoryDeviceCount(device, type);
             if (count > 10) {
-                us = userRefulshListMongodbToDevice(device, type);
+                us = userRefulshListMongodbToDeviceSkip(device, type);
             } else {
                 us = null;
             }
@@ -3412,7 +3945,7 @@ public class FacadePost {
             //查询用户有无历史
             int count = userHistoryDeviceCircleCount(device, type, circleid);
             if (count > 10) {
-                us = userRefulshListMongodbToDeviceHistory(device, type, circleid);
+                us = userRefulshListMongodbToDeviceHistorySkip(device, type, circleid);
             } else {
                 us = null;
             }
@@ -3476,7 +4009,7 @@ public class FacadePost {
             //查询用户有无历史
             int count = userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
             if (count > 10) {
-                us = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
+                us = userRefulshListMongodbToDeviceHistoryLabelidSkip(device, type, Integer.parseInt(labelid));
             } else {
                 us = null;
             }
@@ -3546,7 +4079,7 @@ public class FacadePost {
                 //情况一：用户刷新之后再卸载APP,再重装APP，本地缓存被清除. 这时候查询出刚刚刷新的帖子。
                 //【有问题，查刚刚刷新的数据中热度最大的那个postid】
                 // 解决方法：从第11条开始查询。
-                us = userRefulshListMongodbToDevice(device, type);
+                us = userRefulshListMongodbToDeviceSkip(device, type);
             } else {
                 //情况二：新用户，只是展示第一批刷新的数据，无历史记录。用户浏览小于等于10条。
                 us = null;
