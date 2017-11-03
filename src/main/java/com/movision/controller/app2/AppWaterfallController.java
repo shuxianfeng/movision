@@ -134,10 +134,11 @@ public class AppWaterfallController {
                                               @ApiParam(value = "每页多少条") @RequestParam(required = false, defaultValue = "10") String pageSize,
                                               @ApiParam(value = "标签id") @RequestParam(required = false) String labelid,
                                               @ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
-                                              @ApiParam(value = "帖子id") @RequestParam String postids) {
+                                              @ApiParam(value = "帖子id") @RequestParam String postids,
+                                              @ApiParam(value = "帖子刷完") @RequestParam(required = false) int flag) {
         Response response = new Response();
         Paging<PostVo> pager = new Paging<PostVo>(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
-        List<PostVo> map = facadePost.userReflushHishtoryRecord(userid, pager, type, device, labelid, circleid, postids);
+        List<PostVo> map = facadePost.userReflushHishtoryRecord(userid, pager, type, device, labelid, circleid, postids, flag);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
