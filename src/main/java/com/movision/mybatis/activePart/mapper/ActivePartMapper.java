@@ -19,5 +19,5 @@ public interface ActivePartMapper {
 
     int updateByPrimaryKey(ActivePart record);
 
-    List<ActivePartList> findAllCllActive(RowBounds rowBounds);//查询报名列表
+    List<ActivePartList> findAllCllActive(RowBounds rowBounds, Integer postid);//查询报名列表
 }

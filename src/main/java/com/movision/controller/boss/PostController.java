@@ -152,19 +152,20 @@ public class PostController {
 */
 
     /**
-     * 后台管理-查询报名列表
+     * 后台管理-查询活动报名列表
      *
      * @param pageNo
      * @param pageSize
      * @return
      */
-    @ApiOperation(value = "查询报名列表", notes = "查询报名列表", response = Response.class)
+    @ApiOperation(value = "查询活动报名列表", notes = "查询活动报名列表", response = Response.class)
     @RequestMapping(value = "/list_call_list", method = RequestMethod.POST)
     public Response queyPostCallActive(@RequestParam(required = false, defaultValue = "1") String pageNo,
-                                       @RequestParam(required = false, defaultValue = "10") String pageSize) {
+                                       @RequestParam(required = false, defaultValue = "10") String pageSize,
+                                       @ApiParam(value = "活动id") @RequestParam String postid) {
         Response response = new Response();
         Paging<ActivePartList> pager = new Paging<ActivePartList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<ActivePartList> list = postFacade.queyPostCallActive(pager);
+        List<ActivePartList> list = postFacade.queyPostCallActive(pager, postid);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

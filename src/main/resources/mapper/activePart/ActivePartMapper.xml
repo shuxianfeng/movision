@@ -171,7 +171,12 @@
       paystatue = #{paystatue,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="findAllCllActive" resultType="com.movision.mybatis.activePart.entity.ActivePartList">
-      SELECT * FROM yw_active_part  ORDER  BY intime DESC
+  <select id="findAllCllActive" resultType="com.movision.mybatis.activePart.entity.ActivePartList"
+          parameterType="java.lang.Integer">
+    SELECT ap.*,u.nickname
+    FROM yw_active_part ap
+    LEFT JOIN yw_user u ON u.id = ap.userid
+    WHERE ap.postid = 1932
+    ORDER BY ap.intime DESC
   </select>
 </mapper>

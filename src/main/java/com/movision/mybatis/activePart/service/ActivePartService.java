@@ -30,11 +30,11 @@ public class ActivePartService {
      * @param pager
      * @return
      */
-    public List<ActivePartList> queryPostCallActive(Paging<ActivePartList> pager){
+    public List<ActivePartList> queryPostCallActive(Paging<ActivePartList> pager, Integer postid) {
 
         try{
             log.info("查询报名列表成功");
-            return activePartMapper.findAllCllActive(pager.getRowBounds());
+            return activePartMapper.findAllCllActive(pager.getRowBounds(), postid);
         }catch (Exception e){
             log.error("查询报名列表失败", e);
             throw  e;

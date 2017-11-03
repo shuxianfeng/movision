@@ -175,9 +175,9 @@ public class PostFacade {
         Map res = commonalityFacade.verifyUserByQueryMethod(userid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), null);
         List<PostList> list = new ArrayList<>();
         if (res.get("resault").equals(1)) {//查询当前登录用户的帖子列表
-                Map map = new HashMap();
+            Map map = new HashMap();
             map.put("loginid", loginid);
-                list = postService.queryPostByManageByList(map, pager);
+            list = postService.queryPostByManageByList(map, pager);
             for (int i = 0; i < list.size(); i++) {
                 Integer click = userRefreshRecordService.postcount(list.get(i).getId());
                 list.get(i).setClick(click);
@@ -373,9 +373,9 @@ public class PostFacade {
      * @param pager
      * @return
      */
-    public List<ActivePartList> queyPostCallActive(Paging<ActivePartList> pager) {
-        List<ActivePartList> list = activePartService.queryPostCallActive(pager);
-        List<ActivePartList> rewardeds = new ArrayList<>();
+    public List<ActivePartList> queyPostCallActive(Paging<ActivePartList> pager, String postid) {
+        List<ActivePartList> list = activePartService.queryPostCallActive(pager, Integer.parseInt(postid));
+        /*List<ActivePartList> rewardeds = new ArrayList<>();
         Date date = new Date();
         long str = date.getTime();
         for (int i = 0; i < list.size(); i++) {
@@ -412,8 +412,8 @@ public class PostFacade {
             postActiveList.setMoneypay(list.get(i).getMoneypay());//实付金额
             postActiveList.setMoneyying(list.get(i).getMoneyying());//应付金额
             rewardeds.add(postActiveList);
-        }
-        return rewardeds;
+        }*/
+        return list;
     }
 
     /**
@@ -505,9 +505,9 @@ public class PostFacade {
         comm.setPostid(Integer.parseInt(postid));
         comm.setIntime(new Date());
         comm.setContent(content);
-            Integer u = bossUserService.queryUserById(uid);//根据用户id查询前台对应用户id
-            comm.setUserid(u);
-            comm.setIntime(new Date());
+        Integer u = bossUserService.queryUserById(uid);//根据用户id查询前台对应用户id
+        comm.setUserid(u);
+        comm.setIntime(new Date());
         if (res.get("resault").equals(2)) {//特邀嘉宾发帖子评论
             comm.setIscontribute(1);//特邀嘉宾
             comm.setStatus(0);
@@ -644,7 +644,6 @@ public class PostFacade {
             return map;
         }
     }
-
 
 
     /**
@@ -962,38 +961,38 @@ public class PostFacade {
         Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.add.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(circleid));
         //======================添加结束
         if (res.get("resault").equals(1)) {
-                if (StringUtil.isNotEmpty(title)) {
-                    post.setTitle(title);//帖子标题
-                }
-                if (StringUtil.isNotEmpty(subtitle)) {
-                    post.setSubtitle(subtitle);//帖子副标题
-                }
-                post.setCircleid(circleid);//圈子id
-                post.setCoverimg(coverimg);//帖子封面
-                post.setIsactive("0");//设置状态为帖子
-                Map con = null;
-                if (StringUtil.isNotEmpty(postcontent)) {
-                    //内容转换
-                    con = jsoupCompressImg.newCompressImg(request, postcontent);
-                    System.out.println(con);
-                    if ((int) con.get("code") == 200) {
-                        String str = con.get("content").toString();
-                        post.setPostcontent(str);//帖子内容
-                    } else {
-                        logger.error("帖子内容转换异常");
-                        post.setPostcontent(postcontent);
-                    }
-                }
-                post.setIntime(new Date());//插入时间
-                post.setUserid(userid);
-                if ((int) con.get("flag") == 0) {
-                    post.setIsdel("0");
+            if (StringUtil.isNotEmpty(title)) {
+                post.setTitle(title);//帖子标题
+            }
+            if (StringUtil.isNotEmpty(subtitle)) {
+                post.setSubtitle(subtitle);//帖子副标题
+            }
+            post.setCircleid(circleid);//圈子id
+            post.setCoverimg(coverimg);//帖子封面
+            post.setIsactive("0");//设置状态为帖子
+            Map con = null;
+            if (StringUtil.isNotEmpty(postcontent)) {
+                //内容转换
+                con = jsoupCompressImg.newCompressImg(request, postcontent);
+                System.out.println(con);
+                if ((int) con.get("code") == 200) {
+                    String str = con.get("content").toString();
+                    post.setPostcontent(str);//帖子内容
                 } else {
-                    post.setIsdel("2");
+                    logger.error("帖子内容转换异常");
+                    post.setPostcontent(postcontent);
                 }
+            }
+            post.setIntime(new Date());//插入时间
+            post.setUserid(userid);
+            if ((int) con.get("flag") == 0) {
+                post.setIsdel("0");
+            } else {
+                post.setIsdel("2");
+            }
             post.setType("0");
             post.setIsactive("0");
-                postService.addPost(post);//添加帖子
+            postService.addPost(post);//添加帖子
 
             //帖子使用的标签
             if (StringUtil.isNotEmpty(label)) {
@@ -1009,25 +1008,25 @@ public class PostFacade {
                 postLabelRelationService.batchAdd(postlabelrelationMap);
             }
 
-                //查询圈子名称
-                Integer in = 0;
-                if (StringUtil.isNotEmpty(goodsid)) {//帖子添加商品
-                    Integer pid = post.getId();//获取到刚刚添加的帖子id
-                    String[] lg = goodsid.split(",");//以逗号分隔
-                    for (int i = 0; i < lg.length; i++) {
-                        Map addgoods = new HashedMap();
-                        addgoods.put("postid", pid);
-                        addgoods.put("goodsid", lg[i]);
-                        int goods = postService.insertGoods(addgoods);//添加帖子分享的商品
-                        map.put("result", goods);
-                    }
+            //查询圈子名称
+            Integer in = 0;
+            if (StringUtil.isNotEmpty(goodsid)) {//帖子添加商品
+                Integer pid = post.getId();//获取到刚刚添加的帖子id
+                String[] lg = goodsid.split(",");//以逗号分隔
+                for (int i = 0; i < lg.length; i++) {
+                    Map addgoods = new HashedMap();
+                    addgoods.put("postid", pid);
+                    addgoods.put("goodsid", lg[i]);
+                    int goods = postService.insertGoods(addgoods);//添加帖子分享的商品
+                    map.put("result", goods);
                 }
+            }
 
-                PostProcessRecord pprd = new PostProcessRecord();
+            PostProcessRecord pprd = new PostProcessRecord();
 
-                pprd.setPostid(post.getId());
+            pprd.setPostid(post.getId());
             Integer pid = post.getId();//获取到刚刚添加的帖子id
-                postProcessRecordService.insertProcessRecord(pprd);//插入精选、热门记录
+            postProcessRecordService.insertProcessRecord(pprd);//插入精选、热门记录
                 /*if (StringUtil.isNotEmpty(ishot)) {
                     if (ishot.equals("1")) {
                         pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
@@ -1041,13 +1040,13 @@ public class PostFacade {
                         facadeHeatValue.addHeatValue(pid, 1, null);
                     }
                 }*/
-                if (Integer.parseInt(loginid) != -1) {
-                    pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                }
+            if (Integer.parseInt(loginid) != -1) {
+                pointRecordFacade.addPointRecord(PointConstant.POINT_TYPE.post.getCode(), Integer.parseInt(userid));//完成积分任务根据不同积分类型赠送积分的公共方法（包括总分和流水）
+            }
 
-                map.put("resault", 1);
-                // map.put("vedioid", vedioid);
-                return map;
+            map.put("resault", 1);
+            // map.put("vedioid", vedioid);
+            return map;
         } else {
             map.put("resault", -1);
             map.put("massge", "权限不足");
@@ -1058,16 +1057,16 @@ public class PostFacade {
     /**
      * 后台管理--增加活动
      *
-     * @param title 活动标题
-     * @param subtitle 活动副标题
-     * @param activetype 活动类型：0 告知类活动 1 商城促销类活动 2 组织类活动
+     * @param title        活动标题
+     * @param subtitle     活动副标题
+     * @param activetype   活动类型：0 告知类活动 1 商城促销类活动 2 组织类活动
      * @param iscontribute 是否需要投稿 0,投,1不投
-     * @param activefee 单价
-     * @param coverimg 活动封面
-     * @param postcontent 内容
-     * @param isessence 首页精选
-     * @param orderid 精选排序
-     * @param essencedate 精选日期
+     * @param activefee    单价
+     * @param coverimg     活动封面
+     * @param postcontent  内容
+     * @param isessence    首页精选
+     * @param orderid      精选排序
+     * @param essencedate  精选日期
      * @param begintime
      * @param endtime
      * @param userid
@@ -1079,15 +1078,15 @@ public class PostFacade {
                                               String coverimg, String postcontent, String isessence, String orderid, String essencedate,
                                               String begintime, String endtime, String userid, String hotimgurl, String ishot, String ishotorder, String goodsid) {
         PostTo post = new PostTo();
-            Map<String, Integer> map = new HashedMap();
-            post.setTitle(title);//帖子标题
-            post.setSubtitle(subtitle);//帖子副标题
+        Map<String, Integer> map = new HashedMap();
+        post.setTitle(title);//帖子标题
+        post.setSubtitle(subtitle);//帖子副标题
         if (StringUtil.isNotEmpty(activetype)) {
             Integer typee = Integer.parseInt(activetype);
             post.setActivetype(activetype); //活动类型
             if (typee == 0) {//告知类活动
                 post.setIscontribute(iscontribute);//是否投稿，必填
-                    post.setActivefee(0.0);
+                post.setActivefee(0.0);
             } else if (typee == 2) {//组织类活动
                 if (!StringUtils.isEmpty(activefee)) {
                     post.setActivefee(Double.parseDouble(activefee));//金额
@@ -1096,96 +1095,96 @@ public class PostFacade {
                     post.setActivefee(0.0);
                     post.setIscontribute("0");
                 }
-                }
             }
+        }
 
         if (StringUtil.isNotEmpty(partsumEnddays)) {
             post.setPartsum_enddays(Integer.parseInt(partsumEnddays));
         }
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            post.setCoverimg(coverimg);
-            if (StringUtil.isNotEmpty(postcontent)) {
-                post.setPostcontent(postcontent);
-            }
-            if (!StringUtils.isEmpty(isessence)) {
-                if (Integer.parseInt(isessence) != 0) {//判断是否为加精
-                    post.setIsessence(isessence);//是否为首页精选
-                    if (StringUtil.isNotEmpty(orderid)) {
-                            post.setOrderid(Integer.parseInt(orderid));
-                        } else {
-                            post.setOrderid(0);
-                        }
-                    Date d = null;
-                    if (StringUtil.isNotEmpty(essencedate)) {
-                            try {
-                                d = format.parse(essencedate);
-                                post.setEssencedate(d);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        post.setCoverimg(coverimg);
+        if (StringUtil.isNotEmpty(postcontent)) {
+            post.setPostcontent(postcontent);
+        }
+        if (!StringUtils.isEmpty(isessence)) {
+            if (Integer.parseInt(isessence) != 0) {//判断是否为加精
+                post.setIsessence(isessence);//是否为首页精选
+                if (StringUtil.isNotEmpty(orderid)) {
+                    post.setOrderid(Integer.parseInt(orderid));
+                } else {
+                    post.setOrderid(0);
                 }
-            }
-
-            post.setIntime(new Date());
-            if (StringUtil.isNotEmpty(orderid)) {
-                post.setOrderid(Integer.parseInt(orderid));//排序精选
-            }
-            post.setUserid(userid);//发帖人
-            if (!StringUtils.isEmpty(hotimgurl)) {
-                post.setHotimgurl(hotimgurl);//活动首页方形图
-            }
-            if (!StringUtil.isEmail(ishot)) {
-                post.setIshot(ishot);//是否设为热门
-                if (StringUtil.isNotEmpty(ishotorder) && ishot.equals("1")) {
-                    post.setIshotorder(Integer.parseInt(ishotorder));
-                }
-            }
-            post.setIsactive("1");
-            int result = postService.addPostActiveList(post);//新建活动
-            Period period = new Period();
-            Date begin = null;//开始时间
-            if (StringUtil.isNotEmpty(begintime)) {
-                try {
-                    begin = format.parse(begintime);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            Date end = null;
-            if (StringUtil.isNotEmpty(endtime)) {
-                try {
-                    end = format.parse(endtime);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-            period.setBegintime(begin);
-            period.setEndtime(end);
-            Integer id = post.getId();
-            period.setPostid(id);
-            int r = postService.addPostPeriod(period);
-            if (!StringUtils.isEmpty(goodsid)) {//添加商城促销商品
-                String[] lg = goodsid.split(",");//以逗号分隔
-                for (int i = 0; i < lg.length; i++) {
-                    Map addgoods = new HashedMap();
-                    addgoods.put("postid", post.getId());
-                    addgoods.put("goodsid", lg[i]);
-                    int goods = postService.insertPromotionGoods(addgoods);//添加活动商城促销类商品
-                    if (goods == 1) {//添加视频和添加帖子同时成功
-                        map.put("result", goods);
+                Date d = null;
+                if (StringUtil.isNotEmpty(essencedate)) {
+                    try {
+                        d = format.parse(essencedate);
+                        post.setEssencedate(d);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
+
                 }
             }
-            PostProcessRecord pprd = new PostProcessRecord();
-            pprd.setIshot(Integer.parseInt(ishot));
-            pprd.setPostid(post.getId());
-            pprd.setIsesence(Integer.parseInt(isessence));
-            postProcessRecordService.insertProcessRecord(pprd);//插入精选、热门记录
-            map.put("result", r);
-            map.put("result", result);
-            return map;
+        }
+
+        post.setIntime(new Date());
+        if (StringUtil.isNotEmpty(orderid)) {
+            post.setOrderid(Integer.parseInt(orderid));//排序精选
+        }
+        post.setUserid(userid);//发帖人
+        if (!StringUtils.isEmpty(hotimgurl)) {
+            post.setHotimgurl(hotimgurl);//活动首页方形图
+        }
+        if (!StringUtil.isEmail(ishot)) {
+            post.setIshot(ishot);//是否设为热门
+            if (StringUtil.isNotEmpty(ishotorder) && ishot.equals("1")) {
+                post.setIshotorder(Integer.parseInt(ishotorder));
+            }
+        }
+        post.setIsactive("1");
+        int result = postService.addPostActiveList(post);//新建活动
+        Period period = new Period();
+        Date begin = null;//开始时间
+        if (StringUtil.isNotEmpty(begintime)) {
+            try {
+                begin = format.parse(begintime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        Date end = null;
+        if (StringUtil.isNotEmpty(endtime)) {
+            try {
+                end = format.parse(endtime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        period.setBegintime(begin);
+        period.setEndtime(end);
+        Integer id = post.getId();
+        period.setPostid(id);
+        int r = postService.addPostPeriod(period);
+        if (!StringUtils.isEmpty(goodsid)) {//添加商城促销商品
+            String[] lg = goodsid.split(",");//以逗号分隔
+            for (int i = 0; i < lg.length; i++) {
+                Map addgoods = new HashedMap();
+                addgoods.put("postid", post.getId());
+                addgoods.put("goodsid", lg[i]);
+                int goods = postService.insertPromotionGoods(addgoods);//添加活动商城促销类商品
+                if (goods == 1) {//添加视频和添加帖子同时成功
+                    map.put("result", goods);
+                }
+            }
+        }
+        PostProcessRecord pprd = new PostProcessRecord();
+        pprd.setIshot(Integer.parseInt(ishot));
+        pprd.setPostid(post.getId());
+        pprd.setIsesence(Integer.parseInt(isessence));
+        postProcessRecordService.insertProcessRecord(pprd);//插入精选、热门记录
+        map.put("result", r);
+        map.put("result", result);
+        return map;
     }
 
     /**
@@ -1374,11 +1373,11 @@ public class PostFacade {
                             lou.remove(j);
                         }
                     } else {
-                            lou.remove(j);
-                        }
+                        lou.remove(j);
                     }
                 }
             }
+        }
 
         map.put("result", lou);
         if (postChoiceness != null) {
@@ -1499,138 +1498,138 @@ public class PostFacade {
                                                      String hotimgurl, String ishot, String ishotorder, String essencedate, String partsumEnddays, String goodsid) {
         Post postActiveList = new Post();
         Map<String, Integer> map = new HashedMap();
-            try {
-                postActiveList.setId(Integer.parseInt(id));//帖子id
-                postActiveList.setTitle(title);//帖子标题
-                postActiveList.setSubtitle(subtitle);//帖子副标题
-                if (StringUtil.isNotEmpty(activetype)) {//活动类型是否为空
-                    postActiveList.setActivetype(Integer.parseInt(activetype));
-                    if (activetype.equals("2")) {//组织类活动
-                        if (StringUtil.isNotBlank(activefee)) {
-                            postActiveList.setActivefee(Double.parseDouble(activefee));//费用
-                            postActiveList.setIscontribute(0);
-                        } else {
-                            postActiveList.setActivefee(0.0);
-                            postActiveList.setIscontribute(0);
-                        }
-                    } else if (activetype.equals("0")) {//告知类活动
-                        if (StringUtil.isNotBlank(iscontribute)) {//是否投稿
-                            postActiveList.setIscontribute(Integer.parseInt(iscontribute));
-                            postActiveList.setActivefee(0.0);
-                        }
-                    }
-                }
-                postActiveList.setCoverimg(coverimg);//帖子封面
-                if (!StringUtil.isEmpty(userid)) {
-                    postActiveList.setUserid(Integer.parseInt(userid));
-                }
-                if (StringUtil.isNotEmpty(postcontent)) {
-                    postActiveList.setPostcontent(postcontent);//内容
-                }
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                Date estime = null;
-                if (!StringUtil.isEmpty(isessence)) {
-                    if (Integer.parseInt(isessence) == 0) {
-                        postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
-                        postActiveList.setEssencedate(null);
-                        postActiveList.setOrderid(null);
+        try {
+            postActiveList.setId(Integer.parseInt(id));//帖子id
+            postActiveList.setTitle(title);//帖子标题
+            postActiveList.setSubtitle(subtitle);//帖子副标题
+            if (StringUtil.isNotEmpty(activetype)) {//活动类型是否为空
+                postActiveList.setActivetype(Integer.parseInt(activetype));
+                if (activetype.equals("2")) {//组织类活动
+                    if (StringUtil.isNotBlank(activefee)) {
+                        postActiveList.setActivefee(Double.parseDouble(activefee));//费用
+                        postActiveList.setIscontribute(0);
                     } else {
-                        if (StringUtil.isNotEmpty(essencedate)) {
-                            try {
-                                estime = format.parse(essencedate);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            postActiveList.setEssencedate(estime);
-                        }
-                        if (StringUtil.isNotEmpty(orderid)) {
-                            postActiveList.setOrderid(Integer.parseInt(orderid));
-                        }
-                        postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+                        postActiveList.setActivefee(0.0);
+                        postActiveList.setIscontribute(0);
+                    }
+                } else if (activetype.equals("0")) {//告知类活动
+                    if (StringUtil.isNotBlank(iscontribute)) {//是否投稿
+                        postActiveList.setIscontribute(Integer.parseInt(iscontribute));
+                        postActiveList.setActivefee(0.0);
                     }
                 }
-                System.out.println("活动id=================" + id);
-                System.out.println("是否热门===========" + ishot);
-                if (StringUtil.isNotEmpty(ishot)) {
-                    postActiveList.setIshot(Integer.parseInt(ishot));//设为热门
-                    System.out.println("热门排序=============" + ishotorder);
-                    if (StringUtil.isNotEmpty(ishotorder) && ishot.equals("1") || ishot.equals(1)) {
-                        if (!StringUtils.isEmpty(hotimgurl)) {
-                            postActiveList.setHotimgurl(hotimgurl);//首页方形图
-                        }
-                        postActiveList.setIshotorder(Integer.parseInt(ishotorder));//热门排序
-                        System.out.println("热门排序=============" + ishotorder);
-                    } else if (ishot.equals("0") || ishot.equals(0)) {
-                        postActiveList.setIshotorder(0);//热门排序
-                    }
-                }
-                if (StringUtil.isNotEmpty(partsumEnddays)) {
-                    postActiveList.setPartsum_enddays(Integer.parseInt(partsumEnddays));
-                }
-                int result = postService.updateActivePostById(postActiveList);//编辑活动帖子
-                Period period = new Period();
-                period.setPostid(Integer.parseInt(id));
-                Date bstime = null;
-                if (!StringUtil.isEmpty(begintime)) {
-                    try {
-                        bstime = format.parse(begintime);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-                period.setBegintime(bstime);
-                Date enstime = null;
-                if (!StringUtil.isEmpty(endtime)) {
-                    try {
-                        enstime = format.parse(endtime);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-                period.setEndtime(enstime);
-                if (enstime != null && bstime != null) {
-                    //删除活动周期
-                    periodService.deleteActiveePostPer(period);
-                    //更改活动周期
-                    periodService.insertActivePostPer(period);
-                }
-                if (!StringUtils.isEmpty(goodsid)) {
-                    String[] lg = goodsid.split(",");//以逗号分隔
-                    int de = goodsService.deleteActivityByGoods(Integer.parseInt(id));//删除活动发表的商品
-
-                    for (int i = 0; i < lg.length; i++) {
-                        Map addgoods = new HashedMap();
-                        addgoods.put("postid", id);
-                        addgoods.put("goodsid", lg[i]);
-                        int goods = postService.insertPromotionGoods(addgoods);//添加活动商城促销类商品
-                        if (goods == 1) {//修改活动
-                            map.put("result", goods);
-                        }
-                    }
-                } else {
-                    goodsService.deleteActivityByGoods(Integer.parseInt(id));//删除活动发表的商品
-                }
-
-                PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));
-                if (postProcessRecord != null) {//已经加精过活精选
-                    //修改
-                    PostProcessRecord pprd = new PostProcessRecord();
-                    pprd.setIshot(Integer.parseInt(ishot));
-                    pprd.setPostid(Integer.parseInt(id));
-                    pprd.setIsesence(Integer.parseInt(isessence));
-                    postProcessRecordService.updateProcessRecord(pprd);
-                } else {
-                    //新增
-                    PostProcessRecord pprd = new PostProcessRecord();
-                    pprd.setPostid(Integer.parseInt(id));
-                    pprd.setIsesence(Integer.parseInt(isessence));
-                    pprd.setIshot(Integer.parseInt(ishot));
-                    postProcessRecordService.insertProcessRecord(pprd);
-                }
-                map.put("result", result);
-            } catch (Exception e) {
-                log.error("帖子编辑异常", e);
             }
+            postActiveList.setCoverimg(coverimg);//帖子封面
+            if (!StringUtil.isEmpty(userid)) {
+                postActiveList.setUserid(Integer.parseInt(userid));
+            }
+            if (StringUtil.isNotEmpty(postcontent)) {
+                postActiveList.setPostcontent(postcontent);//内容
+            }
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date estime = null;
+            if (!StringUtil.isEmpty(isessence)) {
+                if (Integer.parseInt(isessence) == 0) {
+                    postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+                    postActiveList.setEssencedate(null);
+                    postActiveList.setOrderid(null);
+                } else {
+                    if (StringUtil.isNotEmpty(essencedate)) {
+                        try {
+                            estime = format.parse(essencedate);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        postActiveList.setEssencedate(estime);
+                    }
+                    if (StringUtil.isNotEmpty(orderid)) {
+                        postActiveList.setOrderid(Integer.parseInt(orderid));
+                    }
+                    postActiveList.setIsessence(Integer.parseInt(isessence));//是否为首页精选
+                }
+            }
+            System.out.println("活动id=================" + id);
+            System.out.println("是否热门===========" + ishot);
+            if (StringUtil.isNotEmpty(ishot)) {
+                postActiveList.setIshot(Integer.parseInt(ishot));//设为热门
+                System.out.println("热门排序=============" + ishotorder);
+                if (StringUtil.isNotEmpty(ishotorder) && ishot.equals("1") || ishot.equals(1)) {
+                    if (!StringUtils.isEmpty(hotimgurl)) {
+                        postActiveList.setHotimgurl(hotimgurl);//首页方形图
+                    }
+                    postActiveList.setIshotorder(Integer.parseInt(ishotorder));//热门排序
+                    System.out.println("热门排序=============" + ishotorder);
+                } else if (ishot.equals("0") || ishot.equals(0)) {
+                    postActiveList.setIshotorder(0);//热门排序
+                }
+            }
+            if (StringUtil.isNotEmpty(partsumEnddays)) {
+                postActiveList.setPartsum_enddays(Integer.parseInt(partsumEnddays));
+            }
+            int result = postService.updateActivePostById(postActiveList);//编辑活动帖子
+            Period period = new Period();
+            period.setPostid(Integer.parseInt(id));
+            Date bstime = null;
+            if (!StringUtil.isEmpty(begintime)) {
+                try {
+                    bstime = format.parse(begintime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            period.setBegintime(bstime);
+            Date enstime = null;
+            if (!StringUtil.isEmpty(endtime)) {
+                try {
+                    enstime = format.parse(endtime);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            period.setEndtime(enstime);
+            if (enstime != null && bstime != null) {
+                //删除活动周期
+                periodService.deleteActiveePostPer(period);
+                //更改活动周期
+                periodService.insertActivePostPer(period);
+            }
+            if (!StringUtils.isEmpty(goodsid)) {
+                String[] lg = goodsid.split(",");//以逗号分隔
+                int de = goodsService.deleteActivityByGoods(Integer.parseInt(id));//删除活动发表的商品
+
+                for (int i = 0; i < lg.length; i++) {
+                    Map addgoods = new HashedMap();
+                    addgoods.put("postid", id);
+                    addgoods.put("goodsid", lg[i]);
+                    int goods = postService.insertPromotionGoods(addgoods);//添加活动商城促销类商品
+                    if (goods == 1) {//修改活动
+                        map.put("result", goods);
+                    }
+                }
+            } else {
+                goodsService.deleteActivityByGoods(Integer.parseInt(id));//删除活动发表的商品
+            }
+
+            PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));
+            if (postProcessRecord != null) {//已经加精过活精选
+                //修改
+                PostProcessRecord pprd = new PostProcessRecord();
+                pprd.setIshot(Integer.parseInt(ishot));
+                pprd.setPostid(Integer.parseInt(id));
+                pprd.setIsesence(Integer.parseInt(isessence));
+                postProcessRecordService.updateProcessRecord(pprd);
+            } else {
+                //新增
+                PostProcessRecord pprd = new PostProcessRecord();
+                pprd.setPostid(Integer.parseInt(id));
+                pprd.setIsesence(Integer.parseInt(isessence));
+                pprd.setIshot(Integer.parseInt(ishot));
+                postProcessRecordService.insertProcessRecord(pprd);
+            }
+            map.put("result", result);
+        } catch (Exception e) {
+            log.error("帖子编辑异常", e);
+        }
         return map;
     }
    /* *//**
@@ -1875,76 +1874,76 @@ public class PostFacade {
         Map res = commonalityFacade.verifyUserJurisdiction(lgid, JurisdictionConstants.JURISDICTION_TYPE.update.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), pid);
         //======================添加结束
         if (res.get("resault").equals(1)) {
-                try {
-                    post.setId(pid);//帖子id
-                    post.setTitle(title);//帖子标题
-                    post.setSubtitle(subtitle);//帖子副标题
-                    if (!StringUtils.isEmpty(circleid)) {
-                        post.setCircleid(circleid);//圈子id
-                    }
-                    if (StringUtil.isNotEmpty(coverimg)) {
-                        post.setCoverimg(coverimg);
-                    }
-                    post.setIsactive("0");//设置状态为帖子
-                    Map con = null;
-                    if (StringUtil.isNotEmpty(postcontent)) {
-                        //内容转换
-                        con = jsoupCompressImg.newCompressImg(request, postcontent);
-                        if ((int) con.get("code") == 200) {
-                            System.out.println(con);
-                            String str = con.get("content").toString();
-                            post.setPostcontent(str);//帖子内容
-                        } else {
-                            logger.error("帖子内容转换异常");
-                            post.setPostcontent(postcontent);
-                        }
-                    }
-
-                    post.setUserid(userid);
-                    if ((int) con.get("flag") != 0) {
-                        post.setIsdel("2");
-                    }
-                    postService.updatePostById(post);//编辑帖子
-
-                    System.out.println("!!!!!!!!!!!!!!!!!!============================" + labelid);
-                    //帖子使用的标签
-                    if (StringUtil.isNotEmpty(labelid)) {
-                        String[] str = labelid.split(",");
-                        Map postlabelrelationMap = new HashMap();
-                        List<Integer> newLabelIdList = new ArrayList<>();
-                        for (int i = 0; i < str.length; i++) {
-                            newLabelIdList.add(Integer.parseInt(str[i]));
-                        }
-                        //删除帖子和标签关系
-                        postLabelRelationService.deletePostLabelRelaton(Integer.parseInt(id));
-                        postlabelrelationMap.put("postid", id);
-                        postlabelrelationMap.put("labelids", newLabelIdList);
-                        //批量新增帖子、标签关系
-                        postLabelRelationService.batchAdd(postlabelrelationMap);
-                    }
-
-                    if (goodsid != null && goodsid != "") {//添加商品
-                        String[] lg = goodsid.split(",");//以逗号分隔
-                        Map postid = new HashMap();
-                        postid.put("pid", pid);
-                        if (pid != null) {
-                            goodsService.deletePostyByGoods(postid);//删除帖子分享的商品
-                        }
-                        for (int i = 0; i < lg.length; i++) {
-                            Map addgoods = new HashedMap();
-                            addgoods.put("postid", pid);
-                            addgoods.put("goodsid", lg[i]);
-                            postService.insertGoods(addgoods);//添加帖子分享的商品
-                            map.put("resault", 1);
-                        }
+            try {
+                post.setId(pid);//帖子id
+                post.setTitle(title);//帖子标题
+                post.setSubtitle(subtitle);//帖子副标题
+                if (!StringUtils.isEmpty(circleid)) {
+                    post.setCircleid(circleid);//圈子id
+                }
+                if (StringUtil.isNotEmpty(coverimg)) {
+                    post.setCoverimg(coverimg);
+                }
+                post.setIsactive("0");//设置状态为帖子
+                Map con = null;
+                if (StringUtil.isNotEmpty(postcontent)) {
+                    //内容转换
+                    con = jsoupCompressImg.newCompressImg(request, postcontent);
+                    if ((int) con.get("code") == 200) {
+                        System.out.println(con);
+                        String str = con.get("content").toString();
+                        post.setPostcontent(str);//帖子内容
                     } else {
-                        Map postid = new HashMap();
-                        postid.put("pid", pid);
-                        if (pid != null) {
-                            goodsService.deletePostyByGoods(postid);//删除帖子分享的商品
-                        }
+                        logger.error("帖子内容转换异常");
+                        post.setPostcontent(postcontent);
                     }
-                    //PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));
+                }
+
+                post.setUserid(userid);
+                if ((int) con.get("flag") != 0) {
+                    post.setIsdel("2");
+                }
+                postService.updatePostById(post);//编辑帖子
+
+                System.out.println("!!!!!!!!!!!!!!!!!!============================" + labelid);
+                //帖子使用的标签
+                if (StringUtil.isNotEmpty(labelid)) {
+                    String[] str = labelid.split(",");
+                    Map postlabelrelationMap = new HashMap();
+                    List<Integer> newLabelIdList = new ArrayList<>();
+                    for (int i = 0; i < str.length; i++) {
+                        newLabelIdList.add(Integer.parseInt(str[i]));
+                    }
+                    //删除帖子和标签关系
+                    postLabelRelationService.deletePostLabelRelaton(Integer.parseInt(id));
+                    postlabelrelationMap.put("postid", id);
+                    postlabelrelationMap.put("labelids", newLabelIdList);
+                    //批量新增帖子、标签关系
+                    postLabelRelationService.batchAdd(postlabelrelationMap);
+                }
+
+                if (goodsid != null && goodsid != "") {//添加商品
+                    String[] lg = goodsid.split(",");//以逗号分隔
+                    Map postid = new HashMap();
+                    postid.put("pid", pid);
+                    if (pid != null) {
+                        goodsService.deletePostyByGoods(postid);//删除帖子分享的商品
+                    }
+                    for (int i = 0; i < lg.length; i++) {
+                        Map addgoods = new HashedMap();
+                        addgoods.put("postid", pid);
+                        addgoods.put("goodsid", lg[i]);
+                        postService.insertGoods(addgoods);//添加帖子分享的商品
+                        map.put("resault", 1);
+                    }
+                } else {
+                    Map postid = new HashMap();
+                    postid.put("pid", pid);
+                    if (pid != null) {
+                        goodsService.deletePostyByGoods(postid);//删除帖子分享的商品
+                    }
+                }
+                //PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));
                     /*if (postProcessRecord != null) {//已经加精过活精选
                         //积分操作
                         if (postProcessRecord.getIshot() == 0 && Integer.parseInt(ishot) == 1) {
@@ -1992,9 +1991,9 @@ public class PostFacade {
                             facadeHeatValue.addHeatValue(Integer.parseInt(id), 1, null);
                         }
                     }*/
-                } catch (Exception e) {
-                    log.error("帖子编辑异常", e);
-                }
+            } catch (Exception e) {
+                log.error("帖子编辑异常", e);
+            }
             return map;
         } else {
             map.put("resault", -1);
@@ -2076,7 +2075,7 @@ public class PostFacade {
             return list;
         } else if (res.get("resault").equals(1)) {
             map.put("loginid", loginid);
-                list = postService.queryPostByManageByList(map, pager);
+            list = postService.queryPostByManageByList(map, pager);
             return list;
         }
         return list;
@@ -2187,18 +2186,16 @@ public class PostFacade {
     private void getActiveStatus(String begintime, String endtime, List<PostActiveList> list, long str) {
         for (int i = 0; i < list.size(); i++) {
             String activeStatue = "";
-            if (begintime != null && endtime != null) {
-                long begin = list.get(i).getBegintime().getTime();
-                long en = list.get(i).getEndtime().getTime();
-                if (str > begin && str < en) {
-                    activeStatue = "报名中";
-                } else if (str < begin) {
-                    activeStatue = "未开始";
-                } else if (str > en) {
-                    activeStatue = "已结束";
-                }
-                list.get(i).setActivestatue(activeStatue); //活动状态
+            long begin = list.get(i).getBegintime().getTime();
+            long en = list.get(i).getEndtime().getTime();
+            if (str > begin && str < en) {
+                activeStatue = "报名中";
+            } else if (str < begin) {
+                activeStatue = "未开始";
+            } else if (str > en) {
+                activeStatue = "已结束";
             }
+            list.get(i).setActivestatue(activeStatue); //活动状态
         }
     }
 
@@ -2761,6 +2758,7 @@ public class PostFacade {
 
     /**
      * 修改帖子标签
+     *
      * @param id
      * @param name
      * @param type
@@ -2858,8 +2856,9 @@ public class PostFacade {
 
     /**
      * 查询24小时内指定帖子的热度变化 EChart 数据
+     *
      * @param postid
-     * @param date yyyy-MM-dd
+     * @param date   yyyy-MM-dd
      * @return
      */
     public Map querySpecifyDatePostHeatvalue(Integer postid, String date) throws ParseException {
@@ -2991,7 +2990,7 @@ public class PostFacade {
      * 添加 24小时帖子热度变化的EChart 的data到结果集
      *
      * @param cName      帖子热度变化类型中文名称
-     * @param arr    对应的data
+     * @param arr        对应的data
      * @param returnList
      */
     private void addDataToReturnList(String cName, int[] arr, List<EchartOf24HourData> returnList) {
