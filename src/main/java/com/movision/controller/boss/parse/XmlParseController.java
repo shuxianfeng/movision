@@ -51,9 +51,10 @@ public class XmlParseController {
     public Response xmlParse(HttpServletRequest request,
                              @ApiParam(value = "文件") @RequestParam MultipartFile file,
                              @ApiParam(value = "用户昵称") @RequestParam String nickname,
-                             @ApiParam(value = "手机号") @RequestParam String phone) {
+                             @ApiParam(value = "手机号") @RequestParam String phone,
+                             @ApiParam(value = "圈子id") @RequestParam String circleid) {
         Response response = new Response();
-        Map map = xmlParseFacade.analysisXml(request, file, nickname, phone);
+        Map map = xmlParseFacade.analysisXml(request, file, nickname, phone, circleid);
         if (map.get("code").equals(200)) {
             response.setMessage("操作成功");
             response.setData(map);
@@ -74,9 +75,9 @@ public class XmlParseController {
      */
     @ApiOperation(value = "xml解析的帖子导出Excel", notes = "用于帖子导出", response = Response.class)
     @RequestMapping(value = "export_excel", method = RequestMethod.POST)
-    public Response excelExport() {
+    public Response excelExport(@ApiParam(value = "圈子id") @RequestParam String circleid) {
         Response response = new Response();
-        Map map = xmlParseFacade.exportExcel();
+        Map map = xmlParseFacade.exportExcel(circleid);
         response.setMessage("操作成功");
         response.setData(map);
         return response;
@@ -89,11 +90,12 @@ public class XmlParseController {
      */
     @ApiOperation(value = "查询xml解析出的帖子列表", notes = "用于查询xml解析出的帖子列表", response = Response.class)
     @RequestMapping(value = "query_xml_analysis_post_list", method = RequestMethod.POST)
-    public Response queryXmlAnalysisAndPost(@ApiParam(value = "当前页") @RequestParam(defaultValue = "1") String pageNo,
+    public Response queryXmlAnalysisAndPost(@ApiParam(value = "圈子id") @RequestParam(required = false) String circleid,
+                                            @ApiParam(value = "当前页") @RequestParam(defaultValue = "1") String pageNo,
                                             @ApiParam(value = "每页几条") @RequestParam(defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<PostList> pag = new Paging<PostList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostList> postVos = xmlParseFacade.queryXmlAnalysisAndPost(pag);
+        List<PostList> postVos = xmlParseFacade.queryXmlAnalysisAndPost(pag, circleid);
         response.setMessage("查询成功");
         pag.result(postVos);
         response.setData(pag);

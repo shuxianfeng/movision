@@ -2280,8 +2280,9 @@
         order BY intime
     </select>
 
-    <select id="queryPostByXmlExport" resultType="com.movision.mybatis.post.entity.PostXml">
-        SELECT * FROM yw_post WHERE userid IN (SELECT id FROM yw_user WHERE deviceno = '19dajieshule')
+    <select id="queryPostByXmlExport" resultType="com.movision.mybatis.post.entity.PostXml"
+            parameterType="java.lang.Integer">
+        SELECT * FROM yw_post WHERE circleid = #{circleid,jdbcType=INTEGER}
     </select>
 
     <select id="findAllqueryXmlAnalysisAndPost" resultType="com.movision.mybatis.post.entity.PostList">
@@ -2293,7 +2294,7 @@
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
         WHERE p.isdel <![CDATA[<>]]> 1 AND p.isactive=0
-         AND p.userid IN (SELECT id FROM yw_user WHERE deviceno = '19dajieshule') ORDER BY p.intime DESC
+        AND circleid = #{circleid,jdbcType=INTEGER} ORDER BY p.intime DESC
     </select>
 
 </mapper>

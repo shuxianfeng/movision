@@ -120,7 +120,7 @@ public class XmlParseFacade {
      * @return
      */
     @Transactional
-    public Map analysisXml(HttpServletRequest request, MultipartFile file, String nickname, String phone) {
+    public Map analysisXml(HttpServletRequest request, MultipartFile file, String nickname, String phone, String circleid) {
         Map resault = new HashMap();
         SAXReader reader = new SAXReader();
         Post post = new Post();
@@ -183,7 +183,7 @@ public class XmlParseFacade {
                         post.getCoverimg();
                         post.getPostcontent();
                         //新增帖子操作
-                        postFacade.addPostTest(request, "", "", "125", post.getUserid().toString(),
+                        postFacade.addPostTest(request, "", "", circleid, post.getUserid().toString(),
                                 post.getCoverimg(), post.getPostcontent(), lbs, "", "1");
                     }
 
@@ -210,7 +210,7 @@ public class XmlParseFacade {
      *
      * @return
      */
-    public Map exportExcel() {
+    public Map exportExcel(String circleid) {
         Map resault = new HashMap();
         try {
             //t.xls为要新建的文件名
@@ -222,7 +222,7 @@ public class XmlParseFacade {
             //生成名为“第一页”的工作表，参数0表示这是第一页
             WritableSheet sheet = book.createSheet("第一页", 0);
             //查询出所有xml导入的帖子
-            List<PostXml> posts = postService.queryPostByXmlExport();
+            List<PostXml> posts = postService.queryPostByXmlExport(Integer.parseInt(circleid));
             /*PostXml postXml = new PostXml();
             Field[] fields = postXml.getClass().getDeclaredFields();*/
             String title[] = {"id", "用户id", "圈子id", "标题", "帖子内容", "帖子封面"};
@@ -264,8 +264,8 @@ public class XmlParseFacade {
      * @param pag
      * @return
      */
-    public List<PostList> queryXmlAnalysisAndPost(Paging<PostList> pag) {
-        return postService.findAllqueryXmlAnalysisAndPost(pag);
+    public List<PostList> queryXmlAnalysisAndPost(Paging<PostList> pag, String circleid) {
+        return postService.findAllqueryXmlAnalysisAndPost(pag, Integer.parseInt(circleid));
     }
 
     /**

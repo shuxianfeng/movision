@@ -1799,10 +1799,10 @@ public class PostService {
      *
      * @return
      */
-    public List<PostXml> queryPostByXmlExport() {
+    public List<PostXml> queryPostByXmlExport(Integer circleid) {
         try {
             log.info("查询所有xml解析下来的帖子");
-            return postMapper.queryPostByXmlExport();
+            return postMapper.queryPostByXmlExport(circleid);
         } catch (Exception e) {
             log.error("查询所有xml解析下来的帖子异常", e);
             throw e;
@@ -1814,10 +1814,10 @@ public class PostService {
      *
      * @return
      */
-    public List<PostList> findAllqueryXmlAnalysisAndPost(Paging<PostList> pag) {
+    public List<PostList> findAllqueryXmlAnalysisAndPost(Paging<PostList> pag, Integer circleid) {
         try {
             log.info("查询xml解析出的帖子列表");
-            return postMapper.findAllqueryXmlAnalysisAndPost(pag.getRowBounds());
+            return postMapper.findAllqueryXmlAnalysisAndPost(pag.getRowBounds(), circleid);
         } catch (Exception e) {
             log.error("查询xml解析出的帖子列表异常", e);
             throw e;

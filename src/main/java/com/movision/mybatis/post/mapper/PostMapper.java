@@ -310,7 +310,7 @@ public interface PostMapper {
 
     List<PostHeatvalueEverydayRecord> queryPostHeatvalueEveryday(Integer postid);
 
-    List<PostXml> queryPostByXmlExport();
+    List<PostXml> queryPostByXmlExport(Integer circleid);
 
-    List<PostList> findAllqueryXmlAnalysisAndPost(RowBounds rowBounds);
+    List<PostList> findAllqueryXmlAnalysisAndPost(RowBounds rowBounds, Integer circleid);
 }
