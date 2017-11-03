@@ -27,12 +27,12 @@ public class FacadePostTest extends SpringTestCase {
     @Test
     public void copyPost50() throws Exception {
         //获取原始的帖子
-        Post originPost = postService.queryxiaojijiPostForTest("这是阿牛的帖子");
+        Post originPost = postService.queryxiaojijiPostForTest("小鸡鸡");
         for (int i = 0; i < 50; i++) {
             Post post = new Post();
             //这三个字段是变化的
-            post.setTitle("这是阿牛的帖子_copy_" + i); //帖子标题
-            post.setHeatvalue(originPost.getHeatvalue() + (i + 1) * 1000);    //热度
+            post.setTitle("帖子重复测试_" + i); //帖子标题
+            post.setHeatvalue(originPost.getHeatvalue() + (i + 1) * 10000);    //热度
             //下面是不变化的
             setXiaojijiAttribute(originPost, post);
 
