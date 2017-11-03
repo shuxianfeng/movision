@@ -265,7 +265,11 @@ public class XmlParseFacade {
      * @return
      */
     public List<PostList> queryXmlAnalysisAndPost(Paging<PostList> pag, String circleid) {
-        return postService.findAllqueryXmlAnalysisAndPost(pag, Integer.parseInt(circleid));
+        Post post = new Post();
+        if (StringUtil.isNotEmpty(circleid)) {
+            post.setCircleid(Integer.parseInt(circleid));
+        }
+        return postService.findAllqueryXmlAnalysisAndPost(pag, post);
     }
 
     /**

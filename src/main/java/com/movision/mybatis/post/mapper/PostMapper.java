@@ -312,5 +312,5 @@ public interface PostMapper {
 
     List<PostXml> queryPostByXmlExport(Integer circleid);
 
-    List<PostList> findAllqueryXmlAnalysisAndPost(RowBounds rowBounds, Integer circleid);
+    List<PostList> findAllqueryXmlAnalysisAndPost(RowBounds rowBounds, Post post);
 }
