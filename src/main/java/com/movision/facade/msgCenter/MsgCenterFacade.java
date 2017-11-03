@@ -2,8 +2,10 @@ package com.movision.facade.msgCenter;
 
 import com.mongodb.DBObject;
 import com.movision.common.constant.MsgCenterConstant;
+import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.pojo.InstantInfo;
 import com.movision.common.util.ShiroUtil;
+import com.movision.exception.BusinessException;
 import com.movision.facade.paging.PageFacade;
 import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.PostZanRecord.entity.ZanRecordVo;
@@ -74,31 +76,49 @@ public class MsgCenterFacade {
         //代码层分页操作
         List<InstantInfo> resultList = null;
         if (StringUtil.isNotEmpty(userid)) {
+            //当前用户id
             int curid = Integer.parseInt(userid);
-            //一 评论： 1 评论帖子，
-            handleCommentlist(list);
-            //          2 评论回复
-            handleReplyCommentList(list);
-            //二 赞 （评论+帖子）
-            handleZanlist(list);
-            //三 关注 （ 关注人）
-            getFollowList(list, curid);
-            //按照时间倒序排序
-            Collections.sort(list, InstantInfo.intimeComparator);
-            //计算Paging中的分页参数
-            paging.setTotal(list.size());
-            //代码层分页操作，每次取10条
-            resultList = pageFacade.getPageList(list, paging.getCurPage(), paging.getPageSize());
-
-            int size = resultList == null ? 0 : resultList.size();
-            log.debug("【row中list的数量】：" + size);
-            //操作已读未读处理
+            //1 获取当前用户的动态消息：帖子点赞，帖子评论，评论回复，关注
+            resultList = getCurrentUserInstantInfos(paging, list, curid);
+            //2 把当前用户的所有未读处理成已读
             updateComment(curid);    //更新评论已读
             updateZan(curid);  //更新赞
             updateAttention(curid);    //更新关注
+        } else {
+            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "用户id未传");
         }
         return resultList;
 
+    }
+
+    /**
+     * 获取当前用户的动态消息：帖子点赞，帖子评论，评论回复，关注
+     *
+     * @param paging
+     * @param list
+     * @param curid
+     * @return
+     */
+    private List<InstantInfo> getCurrentUserInstantInfos(ServicePaging<InstantInfo> paging, List<InstantInfo> list, int curid) {
+        List<InstantInfo> resultList;
+        //一 评论： 1 评论帖子，
+        handleCommentlist(list);
+        //          2 评论回复
+        handleReplyCommentList(list);
+        //二 赞 （评论+帖子）
+        handleZanlist(list);
+        //三 关注 （ 关注人）
+        getFollowList(list, curid);
+        //按照时间倒序排序
+        Collections.sort(list, InstantInfo.intimeComparator);
+        //计算Paging中的分页参数
+        paging.setTotal(list.size());
+        //代码层分页操作，每次取10条
+        resultList = pageFacade.getPageList(list, paging.getCurPage(), paging.getPageSize());
+
+        int size = resultList == null ? 0 : resultList.size();
+        log.debug("【row中list的数量】：" + size);
+        return resultList;
     }
 
     public void updateComment(Integer id) {

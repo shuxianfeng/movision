@@ -97,7 +97,6 @@
         LEFT JOIN yw_follow_user u2 ON u.userid = u2.interestedusers AND u2.userid = #{userid}
         WHERE u.interestedusers = #{userid}
         ORDER BY intime DESC
-        limit 10
     </select>
     <update id="insertUserFans" parameterType="java.lang.Integer">
         UPDATE  yw_user SET fans=fans+1 WHERE id=#{interestedusers,jdbcType=INTEGER}
