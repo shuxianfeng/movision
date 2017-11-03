@@ -648,10 +648,9 @@ public class PostController {
      */
     @ApiOperation(value = "模糊查询发帖人", notes = "用于模糊查询发帖人接口", response = Response.class)
     @RequestMapping(value = "/like_query_post_nickname", method = RequestMethod.POST)
-    public Response likeQueryPostByNickname(@ApiParam(value = "关键字") @RequestParam(required = false) String name,
-                                            @ApiParam(value = "登录用户id") @RequestParam String loginid) {
+    public Response likeQueryPostByNickname(@ApiParam(value = "关键字") @RequestParam(required = false) String name) {
         Response response = new Response();
-        List<UserLike> list = postFacade.likeQueryPostByNickname(name, loginid);
+        List<UserLike> list = postFacade.likeQueryPostByNickname(name);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }
@@ -878,7 +877,7 @@ public class PostController {
      * 活动条件搜索
      *
      * @param title
-     * @param name
+     * @param userid
      * @param content
      * @param begintime
      * @param endtime
@@ -888,20 +887,19 @@ public class PostController {
      * @return
      */
     @ApiOperation(value = "活动条件搜索", notes = "活动条件搜索", response = Response.class)
-    @RequestMapping(value = "query_activepost_condition", method = RequestMethod.POST)
-    public Response queryAllActivePostCondition(@ApiParam(value = "标题") @RequestParam(required = false) String title,
-                                                @ApiParam(value = "发帖人") @RequestParam(required = false) String name,
+    @RequestMapping(value = "query_active_list", method = RequestMethod.POST)
+    public Response queryAllActivePostCondition(@ApiParam(value = "活动名称") @RequestParam(required = false) String title,
+                                                @ApiParam(value = "发帖人id") @RequestParam(required = false) String userid,
                                                 @ApiParam(value = "内容") @RequestParam(required = false) String content,
                                                 @ApiParam(value = "活动开始日期") @RequestParam(required = false) String begintime,
                                                 @ApiParam(value = "活动结束日期") @RequestParam(required = false) String endtime,
                                                 @ApiParam(value = "活动状态") @RequestParam(required = false) String statue,
                                                 @ApiParam(value = "排序") @RequestParam(required = false) String pai,
-                                                @ApiParam(value = "登录用户") @RequestParam String loginid,
                                                 @ApiParam(value = "当前页") @RequestParam(required = false, defaultValue = "1") String pageNo,
                                                 @ApiParam(value = "每页几条") @RequestParam(required = false, defaultValue = "10") String pageSize) {
         Response response = new Response();
         Paging<PostActiveList> pager = new Paging<PostActiveList>(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
-        List<PostActiveList> list = postFacade.queryAllActivePostCondition(title, name, content, begintime, endtime, statue, pai, loginid, pager);
+        List<PostActiveList> list = postFacade.queryAllActivePostCondition(title, userid, content, begintime, endtime, statue, pai, pager);
         if (response.getCode() == 200) {
             response.setMessage("查询成功");
         }

@@ -52,6 +52,24 @@ public class PostActiveList implements Serializable {
     private Integer ishotorder;//活动热门排序
     private Integer heatvalue;//热度值
     private Integer click;//点击量
+    private Integer isdel;
+    private Integer pai;//排序
+
+    public Integer getPai() {
+        return pai;
+    }
+
+    public void setPai(Integer pai) {
+        this.pai = pai;
+    }
+
+    public Integer getIsdel() {
+        return isdel;
+    }
+
+    public void setIsdel(Integer isdel) {
+        this.isdel = isdel;
+    }
 
     public Integer getPartsumEnddays() {
         return partsumEnddays;

@@ -6,11 +6,11 @@ import java.util.Date;
 public class Period implements Serializable {
     private Integer id;
 
-    private Integer postid;
+    private Integer postid; //活动id
 
-    private Date begintime;
+    private Date begintime;//开始时间
 
-    private Date endtime;
+    private Date endtime;//结束时间
 
     public Integer getId() {
         return id;

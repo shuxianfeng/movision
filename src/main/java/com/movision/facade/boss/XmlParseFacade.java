@@ -6,6 +6,8 @@ import com.movision.facade.im.ImFacade;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.facade.user.AppRegisterFacade;
 import com.movision.fsearch.utils.StringUtil;
+import com.movision.mybatis.compressImg.entity.CompressImg;
+import com.movision.mybatis.compressImg.service.CompressImgService;
 import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.coupon.service.CouponService;
 import com.movision.mybatis.couponTemp.entity.CouponTemp;
@@ -48,6 +50,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
 
@@ -102,6 +105,9 @@ public class XmlParseFacade {
 
     @Autowired
     private AliOSSClient aliOSSClient;
+
+    @Autowired
+    private CompressImgService compressImgService;
 
 
     /**
@@ -568,10 +574,10 @@ public class XmlParseFacade {
                 //帖子封面处理
                 String covimg = m.get("oldurl").toString();
                 if (bln) {
-                    getPostCovimg(post, list, covimg, newurl);
-
+                    //帖子封面处理，包括存储原图和压缩图
+                    postCompressImg(post, list, m, newurl, covimg);
                 }
-                content += "\"value\":\"" + m.get("newurl") + "\",\"dir\": \"\"},";
+                content += "\"value\":\"" + newurl + "\",\"dir\": \"\"},";
                 bln = false;
             }
             if (substring[i].substring(0, substring[i].indexOf(":")).equals("ow")) {
@@ -596,6 +602,27 @@ public class XmlParseFacade {
         //System.out.println("---------"+s);
         post.setPostcontent(neirong);
         return content;
+    }
+
+    /**
+     * 操作帖子封面，包括原图和压缩图的映射存储
+     * @param post
+     * @param list
+     * @param m
+     * @param newurl
+     * @param covimg
+     */
+    public void postCompressImg(Post post, List list, Map m, String newurl, String covimg) {
+        //把切好的原图和压缩图存放表中
+        CompressImg compressImg = new CompressImg();
+        compressImg.setProtoimgsize(m.get("size").toString());
+        compressImg.setProtoimgurl(m.get("newurl").toString());
+        compressImg.setIntime(new Date());
+        //封面图片操作
+        getPostCovimg(post, list, covimg, newurl);
+
+        compressImg.setCompressimgurl(newurl);
+        compressImgService.insert(compressImg);
     }
 
     /**
@@ -811,6 +838,9 @@ public class XmlParseFacade {
                 //图片上传
                 Map t = movisionOssClient.uploadFileObject(new File(path + s), "img", "post");
                 map.put("newurl", t.get("url"));
+                //获取图片大小
+                String filesize = getImgSize(url);
+                map.put("size", filesize);
             } /*else if (type.equals("video")) {
                 //视频上传
                 //Map m = movisionOssClient.uploadFileObject(new File(path + s), "video", "post");
@@ -836,5 +866,15 @@ public class XmlParseFacade {
             }
         }
         return map;
+    }
+
+    public String getImgSize(String url) {
+        File f = new File(url);
+        f.length();
+        File fdel = new File(url);
+        long l = fdel.length();
+        float size = (float) l / 1024 / 1024;
+        DecimalFormat df = new DecimalFormat("0.00");//格式化小数，不足的补0
+        return df.format(size);
     }
 }

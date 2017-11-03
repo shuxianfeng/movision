@@ -930,14 +930,14 @@ public class PostService {
     /**
      * 条件查询
      *
-     * @param map
+     * @param postActiveList
      * @param pager
      * @return
      */
-    public List<PostActiveList> queryAllActivePostCondition(Map map, Paging<PostActiveList> pager) {
+    public List<PostActiveList> queryAllActivePostCondition(PostActiveList postActiveList, Paging<PostActiveList> pager) {
         try {
             log.info("条件查询成功");
-            return postMapper.findAllActivePostCondition(map, pager.getRowBounds());
+            return postMapper.findAllActivePostCondition(postActiveList, pager.getRowBounds());
         } catch (Exception e) {
             log.error("条件查询失败",e);
             throw e;

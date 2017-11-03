@@ -310,9 +310,9 @@ public class PostFacade {
         for (int i = 0; i < list.size(); i++) {
             PostActiveList postList = new PostActiveList();
             Integer postid = list.get(i).getId();//获取到帖子id
-            Integer persum = postService.queryPostPerson(postid);
-            String nickname = userService.queryUserByNicknameBy(postid);
-            Period periods = periodService.queryPostPeriod(postid);
+            Integer persum = postService.queryPostPerson(postid);//查询报名人数
+            String nickname = userService.queryUserByNicknameBy(postid);//查询用户昵称
+            Period periods = periodService.queryPostPeriod(postid);//查询活动周期
             Double activefee = list.get(i).getActivefee();
             Double sumfree = 0.0;
             if (activefee != null) {
@@ -1411,16 +1411,8 @@ public class PostFacade {
      * @param name
      * @return
      */
-    public List<UserLike> likeQueryPostByNickname(String name, String loginid) {
-        Map map = new HashMap();
-        map.put("name", name);
-        Map resault = commonalityFacade.verifyUserByQueryMethod(Integer.parseInt(loginid), null, JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), null);
-        if (resault.get("resault").equals(2)) {
-            return userService.likeQueryPostByNickname(map);
-        } else {
-            map.put("loginid", Integer.parseInt(loginid));
-            return userService.likeQueryPostByNickname(map);
-        }
+    public List<UserLike> likeQueryPostByNickname(String name) {
+        return userService.likeQueryPostByNickname(name);
     }
 
 
@@ -2133,78 +2125,67 @@ public class PostFacade {
      * 活动条件查询
      *
      * @param title
-     * @param name
+     * @param userid
      * @param content
      * @param begintime
      * @param endtime
      * @param statue
-     * @param loginid
      * @param pager
      * @return
      */
-    public List<PostActiveList> queryAllActivePostCondition(String title, String name, String content, String begintime, String endtime, String statue, String pai, String loginid, Paging<PostActiveList> pager) {
-        Map<String, Object> map = new HashedMap();
+    public List<PostActiveList> queryAllActivePostCondition(String title, String userid, String content, String begintime, String endtime, String statue, String pai, Paging<PostActiveList> pager) {
+        //活动对象
+        PostActiveList post = new PostActiveList();
+        //活动周期对象
+        Period period = new Period();
         if (StringUtil.isNotEmpty(title)) {
-            map.put("title", title);
+            post.setTitle(title);
         }
-        if (StringUtil.isNotEmpty(name)) {
-            map.put("userid", name);
+        if (StringUtil.isNotEmpty(userid)) {
+            post.setUserid(Integer.parseInt(userid));
         }
         if (StringUtil.isNotEmpty(content)) {
-            map.put("content", content);
+            post.setPostcontent(content);
         }
 
-
-        Date isessencetime = null;//开始时间
+        Date beg = null;//开始时间
+        Date end = null;//结束时间
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        if (StringUtil.isNotEmpty(begintime)) {
+        if (StringUtil.isNotEmpty(begintime) && StringUtil.isNotEmpty(endtime)) {
             try {
-                isessencetime = format.parse(begintime);
+                beg = format.parse(begintime);
+                end = format.parse(endtime);
+                period.setEndtime(end);
+                period.setBegintime(beg);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-        map.put("begintime", isessencetime);
-        Date max = null;//最大时间
-        if (StringUtil.isNotEmpty(endtime)) {
-            try {
-                max = format.parse(endtime);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        map.put("endtime", max);
         if (!StringUtils.isEmpty(statue)) {
-            map.put("statue", statue);
+            post.setIsdel(Integer.parseInt(statue));
         }
         if (!StringUtils.isEmpty(pai)) {
-            map.put("pai", pai);
+            post.setPai(Integer.parseInt(pai));
         }
-        Integer userid = Integer.parseInt(loginid);
-        Map res = commonalityFacade.verifyUserByQueryMethod(userid, JurisdictionConstants.JURISDICTION_TYPE.select.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), null);
         List<PostActiveList> list = new ArrayList<>();
-        BossUser logintype = bossUserService.queryUserByAdministrator(userid);//根据登录用户id查询当前用户有哪些权限
-        if (res.get("resault").equals(1)) {//查询当前登录用户的帖子列表
-            //查询用户管理的圈子id
-            if (logintype.getCirclemanagement() == 1) {//圈子管理员
-                map.put("loginid", userid);
-                list = postService.queryAllActivePostCondition(map, pager);
-            } else if (logintype.getIscircle() == 1) {//圈主
-                map.put("loginid", userid);
-                list = postService.queryAllActivePostCondition(map, pager);
-            }
-        } else if (res.get("resault").equals(2) || res.get("resault").equals(0)) {//权限最大查询所有帖子列表
-            list = postService.queryAllActivePostCondition(map, pager);
-        }
+        //条件查询
+        list = postService.queryAllActivePostCondition(post, pager);
+        long str = new Date().getTime();
+        //获取活动状态
+        getActiveStatus(begintime, endtime, list, str);
+
+        //-----------------------------------
+/*
+
         List<PostActiveList> rewardeds = new ArrayList<>();
         Date date = new Date();
-        long str = date.getTime();
+
         for (int i = 0; i < list.size(); i++) {
             PostActiveList postList = new PostActiveList();
             Integer postid = list.get(i).getId();//获取到帖子id
-            Integer persum = postService.queryPostPerson(postid);
-            String nickname = userService.queryUserByNicknameBy(postid);
-            Period periods = periodService.queryPostPeriod(postid);
+            Integer persum = postService.queryPostPerson(postid);//报名
+            String nickname = userService.queryUserByNicknameBy(postid);//用户昵称
+            Period periods = periodService.queryPostPeriod(postid);//查询活动周期
             Double activefee = list.get(i).getActivefee();
             Double sumfree = 0.0;
             if (activefee != null) {
@@ -2223,19 +2204,7 @@ public class PostFacade {
             postList.setEndtime(endtimes);//结束时间
             postList.setPersum(persum);//报名人数
             postList.setSumfree(sumfree);//总费用
-            String activeStatue = "";
-            if (begintime != null && endtime != null) {
-                long begin = begintimes.getTime();
-                long end = endtimes.getTime();
-                if (str > begin && str < end) {
-                    activeStatue = "报名中";
-                } else if (str < begin) {
-                    activeStatue = "未开始";
-                } else if (str > end) {
-                    activeStatue = "已结束";
-                }
-            }
-            postList.setActivestatue(activeStatue);//活动状态
+
             postList.setZansum(list.get(i).getZansum());
             postList.setCollectsum(list.get(i).getCollectsum());
             postList.setCommentsum(list.get(i).getCommentsum());
@@ -2243,8 +2212,36 @@ public class PostFacade {
             postList.setIntime(list.get(i).getIntime());
             rewardeds.add(postList);
         }
+*/
 
-        return rewardeds;
+
+        return list;
+    }
+
+    /**
+     * 获取活动状态
+     *
+     * @param begintime
+     * @param endtime
+     * @param list
+     * @param str
+     */
+    private void getActiveStatus(String begintime, String endtime, List<PostActiveList> list, long str) {
+        for (int i = 0; i < list.size(); i++) {
+            String activeStatue = "";
+            if (begintime != null && endtime != null) {
+                long begin = list.get(i).getBegintime().getTime();
+                long en = list.get(i).getEndtime().getTime();
+                if (str > begin && str < en) {
+                    activeStatue = "报名中";
+                } else if (str < begin) {
+                    activeStatue = "未开始";
+                } else if (str > en) {
+                    activeStatue = "已结束";
+                }
+                list.get(i).setActivestatue(activeStatue); //活动状态
+            }
+        }
     }
 
 

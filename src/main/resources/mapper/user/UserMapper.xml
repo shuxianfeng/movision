@@ -630,19 +630,11 @@
         SELECT u.id,u.nickname,u.phone,u.photo FROM yw_user u WHERE u.id=#{id,jdbcType=INTEGER}
     </select>
     <select id="findAlllikeQueryPostByNickname" resultType="com.movision.mybatis.user.entity.UserLike"
-            parameterType="java.util.Map">
+            parameterType="java.lang.String">
         SELECT u.nickname,u.id FROM yw_user u WHERE
         <![CDATA[ (u.id > 20000 OR u.id < 10000)]]>
-        <if test="name!=null">
-            AND u.nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
-        </if>
-        <if test="name == null">
-            AND u.nickname LIKE concat('%','','%')
-        </if>
+        AND u.nickname LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
         AND u.status=0 AND phone IS NOT NULL
-        <if test="loginid != null">
-            AND u.phone =(SELECT phone FROM yw_admin_user WHERE id = #{loginid})
-        </if>
     </select>
 
     <update id="updateRegisterUser" parameterType="com.movision.mybatis.user.entity.RegisterUser">
