@@ -1650,7 +1650,11 @@
     </select>
     <select id="findAllActivePostCondition" resultType="com.movision.mybatis.post.entity.PostActiveList"
             parameterType="com.movision.mybatis.post.entity.PostActiveList">
-        SELECT p.*,a.begintime,a.endtime FROM yw_post p LEFT JOIN yw_active_period a ON a.postid=p.id WHERE p.isdel=0
+        SELECT
+        p.*,a.begintime,a.endtime
+        FROM yw_post p
+        LEFT JOIN yw_active_period a ON a.postid=p.id
+        WHERE p.isdel=0
         AND p.isactive=1
         <if test="title!=null">
             AND p.title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')

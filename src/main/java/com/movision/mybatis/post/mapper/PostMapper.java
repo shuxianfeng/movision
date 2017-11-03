@@ -168,7 +168,7 @@ public interface PostMapper {
 
     List<PostList> findAllQueryCircleByPostList(Map map, RowBounds rowBounds);
 
-    List<PostActiveList> findAllActivePostCondition(Map map, RowBounds rowBounds);
+    List<PostActiveList> findAllActivePostCondition(PostActiveList postActiveList, RowBounds rowBounds);
 
     List<Map> findAllMyCollectPost(RowBounds rowBounds, Map map);
 

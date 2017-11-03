@@ -339,6 +339,7 @@ public class InsertExcelToPost {
             String sysimgurl = getImgToSystemUrl(imgPath, imgName);
             int h = 0;
             int w = 0;
+            String size = "";
             //获取图片宽高
             FileInputStream iss = null;
             BufferedImage src = null;
@@ -346,7 +347,6 @@ public class InsertExcelToPost {
                 iss = new FileInputStream(sysimgurl);
                 src = ImageIO.read(iss);
                 w = src.getWidth(null);
-                h = src.getHeight(null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -354,9 +354,12 @@ public class InsertExcelToPost {
             //图片上传
             Map t = movisionOssClient.uploadFileObject(new File(sysimgurl), "img", "post");
             postContent += t.get("url").toString() + "\",\"wh\": \"" + w + "×" + h + "\"},";
+            size = xmlParseFacade.getImgSize(sysimgurl);
+            t.put("size", size);
+            t.put("newurl", postContent);
             //获取第一张图片作为封面
             if (i == 0) {
-                xmlParseFacade.getPostCovimg(post, list, sysimgurl, covimg);
+                xmlParseFacade.postCompressImg(post, list, t, sysimgurl, covimg);
                 post.setCoverimg(covimg);
             }
             if (i == is.length - 1) {

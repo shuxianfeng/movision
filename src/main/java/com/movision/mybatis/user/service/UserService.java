@@ -292,7 +292,7 @@ public class UserService {
      * @param name
      * @return
      */
-    public List<UserLike> likeQueryPostByNickname(Map name) {
+    public List<UserLike> likeQueryPostByNickname(String name) {
         try {
             log.info("模糊查询发帖人");
             return userMapper.findAlllikeQueryPostByNickname(name);
