@@ -788,21 +788,21 @@ public class XmlParseFacade {
         if (h > thanh && w > thanw) {
             if (w / h > thanw / thanh) {
                 resatlt.put("h", h);
-                resatlt.put("w", (int) (h * (thanw / thanh)));
-            } else if (h / w > thanw / thanh) {
-                resatlt.put("w", w);
-                resatlt.put("h", (int) (w * (thanw / thanh)));
-            } else {
+                resatlt.put("w", (int) (h * (thanh / thanw)));
+            } else if (h / w > thanh / thanw) {
                 resatlt.put("w", w);
                 resatlt.put("h", (int) (w * (thanh / thanw)));
+            } else if (w < (thanw / thanh) * h) {
+                resatlt.put("w", h);
+                resatlt.put("h", (int) (h * (thanh / thanw)));
             }
         } else {
-            if (w / h > thanh / thanw) {
-                resatlt.put("h", h);
-                resatlt.put("w", (int) (h * (thanw / thanh)));
-            } else if (h / w > thanw / thanh) {
+            if ((w / h > thanw / thanh) && (h / w > thanh / thanw)) {
                 resatlt.put("w", w);
                 resatlt.put("h", (int) (w * (thanh / thanw)));
+            } else if ((h / w < thanh / thanw) && (w / h > thanw / thanh)) {
+                resatlt.put("h", h);
+                resatlt.put("w", (int) (h * (thanw / thanh)));
             }
         }
         return resatlt;
