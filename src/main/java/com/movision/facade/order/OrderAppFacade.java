@@ -7,7 +7,6 @@ import com.movision.mybatis.cart.service.CartService;
 import com.movision.mybatis.combo.service.ComboService;
 import com.movision.mybatis.coupon.entity.Coupon;
 import com.movision.mybatis.coupon.service.CouponService;
-import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.goodsDiscount.service.DiscountService;
@@ -34,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * @Author shuxf
@@ -91,7 +91,6 @@ public class OrderAppFacade {
                                            String head, String content, String invoiceaddressid, String companyname, String rigaddress,
                                            String rigphone, String bank, String banknum, String code, String couponid, String points,
                                            String message, String logisticsfee, String totalprice, String payprice) {
-        Map<String, Object> map = new HashMap<>();
 
         //首先根据cartids取出用户需要结算的所有商品
         String[] cartidarr = cartids.split(",");
@@ -124,12 +123,10 @@ public class OrderAppFacade {
         double selfamount = 0;//订单中自营商品的总金额
         Map<Integer, Double> shopamountmap = new HashMap<>();//订单中第三方商品的金额分类map
 
-        Iterator<Integer> it = shopamountmap.keySet().iterator();//取出map中所有的key，即shopid
-
         //由于购物车中可能会出现选择不同配置或套餐或者立即购买时临时生成的购物车记录，会导致购物车中出现同一个goodsid的商品出现多条的情况，
         //因此不能在遍历购物车时再轮流进行商品和套餐的库存判断（会出现多个套餐多条记录导致总购买件数大于商品库存的超卖情况）
         //所以这里需要对购物车中的记录按照商品的goodsid分组判断总购买件数，轮训判断所有商品的库存
-        map = checkStock.checkGoodsStock(cartVoList, map);
+        Map<String, Object> map = checkStock.checkGoodsStock(cartVoList);
         if ((int) map.get("stockcode") == -2) {
             flag = 1;
         }
@@ -229,6 +226,7 @@ public class OrderAppFacade {
                                 selfamount = selfamount + amount;
                             } else {//三方
 
+                                Iterator it = shopamountmap.entrySet().iterator();//每次计算店铺总金额时提前取出map的迭代对象it
                                 //将三方店铺的商品金额归类累加，分别放入map中
                                 shopamountmap = countShopAmount(it, cartVoList, i, shopamountmap, amount);
                             }
@@ -242,6 +240,7 @@ public class OrderAppFacade {
                                 selfamount = selfamount + amount;
                             } else {//三方
 
+                                Iterator it = shopamountmap.entrySet().iterator();//每次计算店铺总金额时提前取出map的迭代对象it
                                 //将三方店铺的商品金额归类累加，分别放入map中
                                 shopamountmap = countShopAmount(it, cartVoList, i, shopamountmap, amount);
                             }
@@ -257,6 +256,7 @@ public class OrderAppFacade {
                                 selfamount = selfamount + amount;
                             } else {//三方
 
+                                Iterator it = shopamountmap.entrySet().iterator();//每次计算店铺总金额时提前取出map的迭代对象it
                                 //将三方店铺的商品金额归类累加，分别放入map中
                                 shopamountmap = countShopAmount(it, cartVoList, i, shopamountmap, amount);
                             }
@@ -269,14 +269,15 @@ public class OrderAppFacade {
                                 selfamount = selfamount + amount;
                             } else {//三方
 
+                                Iterator it = shopamountmap.entrySet().iterator();//每次计算店铺总金额时提前取出map的迭代对象it
                                 //将三方店铺的商品金额归类累加，分别放入map中
                                 shopamountmap = countShopAmount(it, cartVoList, i, shopamountmap, amount);
                             }
                         }
                     }
 
-                } else if (cartVoList.get(i).getType() == 1) {
-                    //购买
+                } else if (cartVoList.get(i).getType() == 1 || cartVoList.get(i).getType() == 2) {
+                    //出售或二手（出售可以多个；二手的商品库存只有1个）
                     if (cartVoList.get(i).getCombotype() != null) {//包含套餐
                         //查询套餐的折后价
                         double comboprice = comboService.queryComboPrice(cartVoList.get(i).getCombotype());
@@ -289,6 +290,7 @@ public class OrderAppFacade {
                                 selfamount = selfamount + amount;
                             } else {//三方
 
+                                Iterator it = shopamountmap.entrySet().iterator();//每次计算店铺总金额时提前取出map的迭代对象it
                                 //将三方店铺的商品金额归类累加，分别放入map中
                                 shopamountmap = countShopAmount(it, cartVoList, i, shopamountmap, amount);
                             }
@@ -301,6 +303,7 @@ public class OrderAppFacade {
                                 selfamount = selfamount + amount;
                             } else {//三方
 
+                                Iterator it = shopamountmap.entrySet().iterator();//每次计算店铺总金额时提前取出map的迭代对象it
                                 //将三方店铺的商品金额归类累加，分别放入map中
                                 shopamountmap = countShopAmount(it, cartVoList, i, shopamountmap, amount);
                             }
@@ -315,6 +318,7 @@ public class OrderAppFacade {
                                 selfamount = selfamount + amount;
                             } else {//三方
 
+                                Iterator it = shopamountmap.entrySet().iterator();//每次计算店铺总金额时提前取出map的迭代对象it
                                 //将三方店铺的商品金额归类累加，分别放入map中
                                 shopamountmap = countShopAmount(it, cartVoList, i, shopamountmap, amount);
                             }
@@ -327,6 +331,7 @@ public class OrderAppFacade {
                                 selfamount = selfamount + amount;
                             } else {//三方
 
+                                Iterator it = shopamountmap.entrySet().iterator();//每次计算店铺总金额时提前取出map的迭代对象it
                                 //将三方店铺的商品金额归类累加，分别放入map中
                                 shopamountmap = countShopAmount(it, cartVoList, i, shopamountmap, amount);
                             }
@@ -340,6 +345,7 @@ public class OrderAppFacade {
             //此处需要对订单总额进行核对
             if (Double.parseDouble(totalprice) != totalamount) {
                 log.info("服务器计算的订单总额>>>>>>>>>>>>>>>>" + totalamount);
+                log.info("服务器计算的自营订单总额>>>>>>>>>>>>>>>>" + selfamount);
                 map.put("totalcode", -1);
                 map.put("totalmsg", "提交的订单总额和服务器订单总额不一致");
                 flag4 = 1;
@@ -379,9 +385,9 @@ public class OrderAppFacade {
             }
 
             //------------------------------debug各店铺商品的总金额-----------------------
-            java.util.Iterator its = shopamountmap.entrySet().iterator();
+            Iterator its = shopamountmap.entrySet().iterator();
             while (its.hasNext()) {
-                java.util.Map.Entry entry = (java.util.Map.Entry) its.next();
+                Entry entry = (Entry) its.next();
                 log.info("测试打印的key>>>>>>>>>>>>>>>>>>>" + entry.getKey());     //返回对应的键
                 log.info("测试打印的value>>>>>>>>>>>>>>>>>>>" + entry.getValue());   //返回对应的值
             }
@@ -480,7 +486,6 @@ public class OrderAppFacade {
                     orderidlsit.add(orderid);
 
                     //提交子订单(由于一个订单中会出现多个商品，所以封装子订单list)
-                    List<SubOrder> subOrderList = new ArrayList<>();
                     for (int j = 0; j < shopCartList.size(); j++) {
                         SubOrder subOrder = new SubOrder();
                         subOrder.setPorderid(orderid);
@@ -498,13 +503,20 @@ public class OrderAppFacade {
                         subOrder.setIsdel(0);
                         subOrder.setType(shopCartList.get(j).getType());
 
-                        subOrderList.add(subOrder);
-                    }
-                    //-------------------------------------------------------------------拼装子订单列表对象完成
-                    orderService.batchInsertOrders(subOrderList);//批量插入子订单表中的各个子订单
+                        //orderService.batchInsertOrders(subOrderList);//批量插入子订单表中的各个子订单----------(这里不能使用批量插入，否则会出现不好返回子订单主键，无法同步更新租赁日期中的购物车id为子订单id--shuxf2017.11.03)
+                        orderService.insertSubOrders(subOrder);
+                        int suborderid = subOrder.getId();
 
-                    //提交子订单的同时去除库存
-                    goodsService.deductStock(subOrderList);
+                        //提交子订单的同时去除库存
+                        goodsService.deductStock(subOrder);
+
+                        //循环中逐条将yw_rate_date租赁日期记录的购物车id更新为子订单id
+                        Map<String, Object> parammap = new HashMap<>();
+                        parammap.put("cartid", shopCartList.get(j).getId());
+                        parammap.put("suborderid", suborderid);
+                        orderService.updateRentDate(parammap);
+
+                    }
 
                     //增加发票信息
                     Invoice invoice = new Invoice();
@@ -646,13 +658,14 @@ public class OrderAppFacade {
      * @param amount
      * @return
      */
-    public Map<Integer, Double> countShopAmount(Iterator<Integer> it, List<CartVo> cartVoList, int i, Map<Integer, Double> shopamountmap, double amount) {
+    public Map<Integer, Double> countShopAmount(Iterator it, List<CartVo> cartVoList, int i, Map<Integer, Double> shopamountmap, double amount) {
 
         //将三方店铺的商品金额归类累加，分别放入map中
         int mark = 0;//标记
         //检查是否包含该shopid的订单总金额
         while (it.hasNext()) {
-            if (cartVoList.get(i).getShopid() == it.next()) {
+            Entry entry = (Entry) it.next();
+            if (cartVoList.get(i).getShopid() == (int) entry.getKey()) {
                 mark = 1;
             }
         }

@@ -57,32 +57,21 @@
         WHERE id = #{goodsid,jdbcType=INTEGER}
     </select>
 
-    <!--批量插入子订单-->
-    <insert id="batchInsertOrders" parameterType="java.util.List">
-        INSERT INTO yw_sub_order (
-        porderid, goodsid, combotype, discountid, rom,
-        sum, isdebug, debugid, isdel, type
-        )
-        VALUES
-        <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.porderid,jdbcType=INTEGER}, #{item.goodsid,jdbcType=INTEGER},
-            #{item.combotype,jdbcType=INTEGER}, #{item.discountid,jdbcType=INTEGER}, #{item.rom,jdbcType=INTEGER},
-            #{item.sum,jdbcType=INTEGER}, #{item.isdebug,jdbcType=INTEGER}, #{item.debugid,jdbcType=INTEGER},
-            #{item.isdel,jdbcType=INTEGER}, #{item.type,jdbcType=INTEGER})
-        </foreach>
-    </insert>
-
     <!--基础插入语句-->
     <insert id="insert" parameterType="com.movision.mybatis.subOrder.entity.SubOrder">
-    insert into yw_sub_order (id, porderid, goodsid, 
-      combotype, discountid, rom, 
-      sum, isdebug, debugid, 
-      isdel, type)
-    values (#{id,jdbcType=INTEGER}, #{porderid,jdbcType=INTEGER}, #{goodsid,jdbcType=INTEGER}, 
-      #{combotype,jdbcType=INTEGER}, #{discountid,jdbcType=INTEGER}, #{rom,jdbcType=INTEGER}, 
-      #{sum,jdbcType=INTEGER}, #{isdebug,jdbcType=INTEGER}, #{debugid,jdbcType=INTEGER}, 
-      #{isdel,jdbcType=INTEGER}, #{type,jdbcType=INTEGER})
-  </insert>
+        <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into yw_sub_order (id, porderid, goodsid,
+          combotype, discountid, rom,
+          sum, isdebug, debugid,
+          isdel, type)
+        values (#{id,jdbcType=INTEGER}, #{porderid,jdbcType=INTEGER}, #{goodsid,jdbcType=INTEGER},
+          #{combotype,jdbcType=INTEGER}, #{discountid,jdbcType=INTEGER}, #{rom,jdbcType=INTEGER},
+          #{sum,jdbcType=INTEGER}, #{isdebug,jdbcType=INTEGER}, #{debugid,jdbcType=INTEGER},
+          #{isdel,jdbcType=INTEGER}, #{type,jdbcType=INTEGER})
+    </insert>
+
     <insert id="insertSelective" parameterType="com.movision.mybatis.subOrder.entity.SubOrder">
         insert into yw_sub_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -206,4 +195,11 @@
       type = #{type,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <!--循环更新租赁日期表中的购物车id为子订单id（提交订单时）-->
+    <update id="updateRentDate" parameterType="java.util.Map" >
+        UPDATE yw_rentdate
+        SET suborderid = #{suborderid,jdbcType=INTEGER}
+        WHERE cartid = #{cartid,jdbcType=INTEGER}
+    </update>
 </mapper>

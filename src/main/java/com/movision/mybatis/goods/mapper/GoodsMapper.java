@@ -1,18 +1,14 @@
 package com.movision.mybatis.goods.mapper;
 
 import com.movision.mybatis.combo.entity.Combo;
-import com.movision.mybatis.combo.entity.ComboVo;
 import com.movision.mybatis.couponDistributeManage.entity.CouponDistributeManageVo;
 import com.movision.mybatis.goods.entity.*;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessment;
 import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.mybatis.goodscombo.entity.GoodsCombo;
-import com.movision.mybatis.goodscombo.entity.GoodsComboDetail;
 import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
 import com.movision.mybatis.subOrder.entity.SubOrder;
-import org.apache.http.conn.util.InetAddressUtils;
 import org.apache.ibatis.session.RowBounds;
-import org.apache.taglibs.standard.lang.jstl.Literal;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -47,6 +43,10 @@ public interface GoodsMapper {
     List<GoodsVo> queryEssenceGoods();
 
     List<GoodsVo> queryHotGoods();
+
+    List<GoodsVo> getFlashSale();
+
+    List<GoodsVo> findAllFlashSale(RowBounds rowBounds);
 
     GoodsDetail queryGoodDetail(int goodsid);
 
@@ -178,7 +178,7 @@ public interface GoodsMapper {
 
     List<GoodsImg> queryBannerImg(String goodsid);//查询banner图
 
-    void deductStock(List<SubOrder> subOrderList);
+    void deductStock(SubOrder subOrder);
 
     Integer delectAllComboGoods(String goodsid);//批量删除商品
 

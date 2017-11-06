@@ -21,7 +21,9 @@ public class CheckStock {
     @Autowired
     private GoodsService goodsService;
 
-    public Map<String, Object> checkGoodsStock(List<CartVo> cartVoList, Map<String, Object> map) {
+    public Map<String, Object> checkGoodsStock(List<CartVo> cartVoList) {
+
+        Map<String, Object> map = new HashMap<>();//定义返回的map体
 
         List<Integer> goodsidList = new ArrayList<>();//定义整数list存储所有商品的商品id
 

@@ -164,6 +164,10 @@ public interface PostMapper {
 
     Integer updateByPrimaryKeySelectiveById(PostTo post);
 
+    List<Post> getCostRecommendPost();
+
+    List<Post> findAllCostRecommendPostList(RowBounds rowBounds);
+
     List<PostList> findAllpostSearch(Map spread, RowBounds rowBounds);
 
     List<PostList> findAllQueryCircleByPostList(Map map, RowBounds rowBounds);

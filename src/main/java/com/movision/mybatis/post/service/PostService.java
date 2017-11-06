@@ -879,6 +879,34 @@ public class PostService {
     }
 
     /**
+     * 商城首页——性价比推荐的两篇商品推荐贴
+     * @return
+     */
+    public List<Post> getCostRecommendPost(){
+        try {
+            log.info("查询商城首页——性价比推荐的两篇商品推荐贴");
+            return postMapper.getCostRecommendPost();
+        }catch (Exception e){
+            log.error("查询商城首页——性价比推荐的两篇商品推荐贴失败", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 点击商城性价比推荐进入性价比推荐帖子列表
+     * @return
+     */
+    public List<Post> findAllCostRecommendPostList(Paging<Post> pager){
+        try {
+            log.info("点击进入性价比推荐列表查询数据");
+            return postMapper.findAllCostRecommendPostList(pager.getRowBounds());
+        } catch (Exception e){
+            log.error("点击进入性价比推荐列表查询数据失败", e);
+            throw e;
+        }
+    }
+
+    /**
      * 编辑活动帖子
      *
      * @param postActiveList

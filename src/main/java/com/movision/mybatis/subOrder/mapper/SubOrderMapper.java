@@ -13,9 +13,9 @@ public interface SubOrderMapper {
 
     int insert(SubOrder record);
 
-    int insertSelective(SubOrder record);
+    void updateRentDate(Map<String, Object> parammap);
 
-    void batchInsertOrders(List<SubOrder> subOrderList);
+    int insertSelective(SubOrder record);
 
     SubOrder selectByPrimaryKey(Integer id);
 

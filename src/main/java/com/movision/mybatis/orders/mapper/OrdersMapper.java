@@ -25,7 +25,7 @@ public interface OrdersMapper {
 
     Orders selectByPrimaryKey(Integer id);
 
-    String queryMaxOrderNumber(String paramstr);
+    int queryDuplicateOrdNum(String paramstr);
 
     int updateByPrimaryKeySelective(Orders record);
 

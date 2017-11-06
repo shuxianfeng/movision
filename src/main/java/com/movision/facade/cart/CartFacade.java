@@ -6,6 +6,7 @@ import com.movision.mybatis.cart.entity.Cart;
 import com.movision.mybatis.cart.entity.CartVo;
 import com.movision.mybatis.cart.service.CartService;
 import com.movision.mybatis.combo.service.ComboService;
+import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.goodsDiscount.entity.GoodsDiscount;
 import com.movision.mybatis.goodsDiscount.service.DiscountService;
 import com.movision.mybatis.rentdate.entity.Rentdate;
@@ -31,6 +32,9 @@ public class CartFacade {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private GoodsService goodsService;
 
     @Autowired
     private DiscountService discountService;
@@ -79,63 +83,87 @@ public class CartFacade {
         parammap.put("isdel", 0);
         parammap.put("type", Integer.parseInt(type));
 
-        if (type.equals("0")) {
-            //0 租赁
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String[] rentdates = rentdate.split(",");
+        //查询当前加入的商品库存是否充足
+        int store = goodsService.queryStore(Integer.parseInt(goodsid));
 
-            int mark = 0;//定义一个标志位，用于记录两组日期的比较结果
+        if (store >= Integer.parseInt(sum)){//库存充足
 
-            //首先检查购物车中有无该商品
-            int count = cartService.queryIsHaveRent(parammap);
+            if (type.equals("0")) {
+                //0 租赁
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String[] rentdates = rentdate.split(",");
 
-            int id = 0;//定义一个购物车id
+                int mark = 0;//定义一个标志位，用于记录两组日期的比较结果
 
-            if (count > 0) {
-                //如果有多个只是租赁日期不同的商品，取出所有购物车id
-                List<Cart> cartList = cartService.queryCartid(parammap);
-                for (int h = 0; h < cartList.size(); h++) {
-                    mark = 0;
-                    id = 0;
-                    //遍历出所有的购物车id
-                    int cartid = cartList.get(h).getId();
-                    //根据购物车id查询，该购物车商品对应的所有租赁日期
-                    List<Rentdate> rentdateList = cartService.queryDateList(cartid);
+                //首先检查购物车中有无该商品
+                int count = cartService.queryIsHaveRent(parammap);
 
-                    //有相同商品时验证租赁日期是否相同
-//                    List<Rentdate> rentdateList = cartService.queryRentDate(parammap);
-                    if (rentdateList.size() == rentdates.length) {
+                int id = 0;//定义一个购物车id
 
-                        for (int i = 0; i < rentdateList.size(); i++) {
-                            for (int j = 0; j < rentdates.length; j++) {
-                                if (rentdateList.get(i).getRentdate().equals(sdf.parse(rentdates[j]))) {
-                                    mark = mark + 1;
-                                    System.out.println("打印mark>>>>>>>" + mark);
-                                    if (mark == rentdates.length) {
-                                        id = cartid;
-                                        System.out.println("打印id>>>>>>>" + id);
+                if (count > 0) {
+                    //如果有多个只是租赁日期不同的商品，取出所有购物车id
+                    List<Cart> cartList = cartService.queryCartid(parammap);
+                    for (int h = 0; h < cartList.size(); h++) {
+                        mark = 0;
+                        id = 0;
+                        //遍历出所有的购物车id
+                        int cartid = cartList.get(h).getId();
+                        //根据购物车id查询，该购物车商品对应的所有租赁日期
+                        List<Rentdate> rentdateList = cartService.queryDateList(cartid);
+
+                        //有相同商品时验证租赁日期是否相同
+    //                    List<Rentdate> rentdateList = cartService.queryRentDate(parammap);
+                        if (rentdateList.size() == rentdates.length) {
+
+                            for (int i = 0; i < rentdateList.size(); i++) {
+                                for (int j = 0; j < rentdates.length; j++) {
+                                    if (rentdateList.get(i).getRentdate().equals(sdf.parse(rentdates[j]))) {
+                                        mark = mark + 1;
+                                        System.out.println("打印mark>>>>>>>" + mark);
+                                        if (mark == rentdates.length) {
+                                            id = cartid;
+                                            System.out.println("打印id>>>>>>>" + id);
+                                        }
                                     }
                                 }
                             }
+
                         }
 
+                        //如果有该商品且租赁日期一致，只累加商品数量
+                        if (id != 0) {//mark == rentdates.length
+
+                            //如果日期完全相同就累加商品数量
+                            parammap.put("id", id);
+                            cartService.addRentSum(parammap);//累加数量
+                            tag = 1;
+                            flag = 1;
+
+                        }
                     }
 
-                    //如果有该商品且租赁日期一致，只累加商品数量
-                    if (id != 0) {//mark == rentdates.length
+                    if (id == 0 && tag == 0) {//因为多次循环中有不满足该条件的：“rentdateList.size() == rentdates.length”,所以mark为0或小于rentdates.length   mark <= rentdates.length
 
-                        //如果日期完全相同就累加商品数量
-                        parammap.put("id", id);
-                        cartService.addRentSum(parammap);//累加数量
-                        tag = 1;
-                        flag = 1;
+                        //如果选择的和购物车中已经存在的日期天数不同，直接新增商品
+                        cartService.addGoodsCart(parammap);//商品加入购物车，返回主键-购物车id
+                        int cartid2 = (int) parammap.get("id");
 
+                        List<Rentdate> prentDateList = new ArrayList<>();
+                        for (int i = 0; i < rentdates.length; i++) {
+                            Rentdate redate = new Rentdate();
+                            redate.setCartid(cartid2);
+                            redate.setRentdate(sdf.parse(rentdates[i]));
+                            redate.setIntime(new Date());
+                            prentDateList.add(redate);
+                        }
+                        cartService.addRentDate(prentDateList);//批量插入租赁日期
+
+                        if (cartid2 > 0)
+                            flag = 1;
                     }
-                }
 
-                if (id == 0 && tag == 0) {//因为多次循环中有不满足该条件的：“rentdateList.size() == rentdates.length”,所以mark为0或小于rentdates.length   mark <= rentdates.length
-
-                    //如果选择的和购物车中已经存在的日期天数不同，直接新增商品
+                } else {
+                    //购物车中没有该商品，直接添加
                     cartService.addGoodsCart(parammap);//商品加入购物车，返回主键-购物车id
                     int cartid2 = (int) parammap.get("id");
 
@@ -153,38 +181,23 @@ public class CartFacade {
                         flag = 1;
                 }
 
-            } else {
-                //购物车中没有该商品，直接添加
-                cartService.addGoodsCart(parammap);//商品加入购物车，返回主键-购物车id
-                int cartid2 = (int) parammap.get("id");
+            } else if (type.equals("1") || type.equals("2")) {
 
-                List<Rentdate> prentDateList = new ArrayList<>();
-                for (int i = 0; i < rentdates.length; i++) {
-                    Rentdate redate = new Rentdate();
-                    redate.setCartid(cartid2);
-                    redate.setRentdate(sdf.parse(rentdates[i]));
-                    redate.setIntime(new Date());
-                    prentDateList.add(redate);
+                //1 出售或二手
+                //首先检查购物车中有无该商品，如果有该商品合并，只累加商品数量
+                int count = cartService.queryIsHave(parammap);
+
+                if (count == 0) {
+                    cartService.addGoodsCart(parammap);//新增一条
+                } else if (count > 0) {
+                    cartService.addSum(parammap);//累加数量
                 }
-                cartService.addRentDate(prentDateList);//批量插入租赁日期
 
-                if (cartid2 > 0)
-                    flag = 1;
+                flag = 1;
             }
 
-        } else if (type.equals("1")) {
-
-            //1 出售
-            //首先检查购物车中有无该商品，如果有该商品合并，只累加商品数量
-            int count = cartService.queryIsHave(parammap);
-
-            if (count == 0) {
-                cartService.addGoodsCart(parammap);//新增一条
-            } else if (count >= 1) {
-                cartService.addSum(parammap);//累加数量
-            }
-
-            flag = 1;
+        } else {//库存不足
+            flag = 0;
         }
         return flag;
     }
@@ -331,7 +344,7 @@ public class CartFacade {
         //由于购物车中可能会出现选择不同配置或套餐或者立即购买时临时生成的购物车记录，会导致购物车中出现同一个goodsid的商品出现多条的情况，
         //因此不能在遍历购物车时再轮流进行商品和套餐的库存判断（会出现多个套餐多条记录导致总购买件数大于商品库存的超卖情况）
         //所以这里需要对购物车中的记录按照商品的goodsid分组判断总购买件数，轮训判断所有商品的库存
-        map = checkStock.checkGoodsStock(cartVoList, map);
+        map = checkStock.checkGoodsStock(cartVoList);
         if ((int) map.get("stockcode") == -2) {
             flag = 1;
         }

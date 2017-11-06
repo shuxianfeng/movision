@@ -39,9 +39,9 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
-    <!--根据订单号前缀模糊查询最大订单号-->
-    <select id="queryMaxOrderNumber" parameterType="java.lang.String" resultType="java.lang.String">
-        SELECT MAX(ordernumber) FROM yw_orders WHERE ordernumber LIKE #{paramstr, jdbcType=VARCHAR}
+    <!--根据订单号查询库中是否存在重复的订单号-->
+    <select id="queryDuplicateOrdNum" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(*) FROM yw_orders WHERE ordernumber = #{paramstr, jdbcType=INTEGER}
     </select>
 
     <!--根据主订单id数组查询所有主订单id列表-->

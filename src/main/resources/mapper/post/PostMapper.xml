@@ -1583,6 +1583,25 @@
         p.isactive=0 AND p.isdel <![CDATA[<>]]> 1
     </select>
 
+    <!--查询商城首页——性价比推荐的两篇商品推荐贴-->
+    <select id="getCostRecommendPost" resultType="com.movision.mybatis.post.entity.Post" >
+        SELECT t.id, t.coverimg, t.title, t.subtitle, t.postcontent, t.type, t.heat_value FROM (
+            SELECT id, coverimg, title, subtitle, postcontent, type, heat_value FROM yw_post WHERE type = '1'
+            UNION
+            SELECT id, coverimg, title, subtitle, postcontent, type, heat_value FROM yw_post WHERE postcontent LIKE '%"type":3%'
+        ) t
+        ORDER BY t.type DESC, t.heat_value DESC LIMIT 2
+    </select>
+
+    <!--点击商城性价比推荐进入性价比推荐帖子列表-->
+    <select id="findAllCostRecommendPostList" resultType="com.movision.mybatis.post.entity.Post" >
+        SELECT t.id, t.coverimg, t.title, t.subtitle, t.postcontent, t.type, t.heat_value FROM (
+            SELECT id, coverimg, title, subtitle, postcontent, type, heat_value FROM yw_post WHERE type = '1'
+            UNION
+            SELECT id, coverimg, title, subtitle, postcontent, type, heat_value FROM yw_post WHERE postcontent LIKE '%"type":2%'
+        ) t
+        ORDER BY t.type DESC, t.heat_value DESC
+    </select>
 
     <select id="findAllpostSearch" parameterType="com.movision.mybatis.post.entity.PostSpread"
             resultType="com.movision.mybatis.post.entity.PostList">

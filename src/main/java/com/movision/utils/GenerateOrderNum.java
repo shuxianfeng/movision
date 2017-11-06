@@ -9,10 +9,11 @@ import org.springframework.stereotype.Service;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * @Author shuxf
- * @Date 2017/3/9 13:53
+ * @Date 2017/11/2 14:08
  * 主要用于根据不同店铺生成订单编号（次订单号用于展示给客户和方便运营查询订单时使用）
  */
 @Service
@@ -31,30 +32,28 @@ public class GenerateOrderNum {
         } else {
             paramstr.append(shopid);
         }
-        Format format = new SimpleDateFormat("yyyyMMdd");
+        Format format = new SimpleDateFormat("yyMMdd");
         paramstr.append(format.format(new Date()));
 
-        //------------------------>这里需要修改,高并发时订单号回重复，建议使用 店铺id+年月日时分秒+8位数字字母随机数
-        String maxordernumber = orderService.queryMaxOrderNumber(paramstr.toString() + "%");//根据店铺id+年月日字符串模糊查询最大的订单编号
-
-        if ("".equals(maxordernumber) || "null".equals(maxordernumber) || maxordernumber == null) {
-            paramstr.append("00001");
-            log.info("生成的最新的订单编号为>>>>>>>>>>>>>>>>" + paramstr.toString());
-            return paramstr.toString();
-        } else {
-            String suf = maxordernumber.substring(maxordernumber.length() - 5);//截取后5位
-            String newsuf = Integer.toString(Integer.parseInt(suf) + 1);//新的后缀（缺0）
-            if (newsuf.length() == 1) {
-                newsuf = "0000" + newsuf;
-            } else if (newsuf.length() == 2) {
-                newsuf = "000" + newsuf;
-            } else if (newsuf.length() == 3) {
-                newsuf = "00" + newsuf;
-            } else if (newsuf.length() == 4) {
-                newsuf = "0" + newsuf;
+        //使用 店铺id+年月日+8位随机数字
+        //拼接之后再去数据库校验，是否重复，如果重复循环生成
+        boolean mark = false;//定义标志位：true为无重复；false为有重复
+        while (!mark) {
+            StringBuffer str = new StringBuffer();
+            Random random = new Random();
+            for (int i = 0; i < 8; i++) {
+                str.append(random.nextInt(10));
             }
-            log.info("生成的最新的订单编号为>>>>>>>>>>>>>>>>" + paramstr.append(newsuf).toString());
-            return paramstr.append(newsuf).toString();
+            paramstr.append(str.toString());
+            //根据订单号查询订单库中是否存在订单重复的问题
+            int num = orderService.queryDuplicateOrdNum(paramstr.toString());
+            if (num > 0) {
+                mark = false;//有重复
+            } else {
+                mark = true;//无重复
+            }
         }
+
+        return paramstr.toString();
     }
 }

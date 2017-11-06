@@ -54,7 +54,11 @@ public class GoodsVo implements Serializable {
 
     private Integer iscombo;
 
-    private Integer isspecial;
+    private Integer isspecial;//是否为特卖商品：0 否 1 是
+
+    private Date specialendtime;//特卖截止时间
+
+    private Integer isend;//特卖是否结束：0 未结束 1 已结束
 
     private Integer isseckill;
 
@@ -290,6 +294,22 @@ public class GoodsVo implements Serializable {
 
     public Integer getIsspecial() {
         return isspecial;
+    }
+
+    public Date getSpecialendtime() {
+        return specialendtime;
+    }
+
+    public void setSpecialendtime(Date specialendtime) {
+        this.specialendtime = specialendtime;
+    }
+
+    public Integer getIsend() {
+        return isend;
+    }
+
+    public void setIsend(Integer isend) {
+        this.isend = isend;
     }
 
     public void setIsspecial(Integer isspecial) {

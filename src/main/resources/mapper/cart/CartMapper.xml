@@ -48,7 +48,12 @@
         <if test="discountid == null or discountid == ''">
             AND discountid IS NULL
         </if>
-        AND isdebug = #{isdebug,jdbcType=INTEGER}
+        <if test="isdebug != null and isdebug != ''">
+            AND isdebug = #{isdebug,jdbcType=INTEGER}
+        </if>
+        <if test="isdebug == null or isdebug == ''">
+            AND isdebug IS NULL
+        </if>
         AND type = #{type,jdbcType=INTEGER}
     </select>
 
@@ -60,10 +65,21 @@
         <if test="comboid != null and comboid != ''">
             AND combotype = #{comboid,jdbcType=INTEGER}
         </if>
+        <if test="comboid == null or comboid == ''">
+            AND combotype IS NULL
+        </if>
         <if test="discountid != null and discountid != ''">
             AND discountid = #{discountid,jdbcType=INTEGER}
         </if>
-        AND isdebug = #{isdebug,jdbcType=INTEGER}
+        <if test="discountid == null or discountid == ''">
+            AND discountid IS NULL
+        </if>
+        <if test="isdebug != null and isdebug != ''">
+            AND isdebug = #{isdebug,jdbcType=INTEGER}
+        </if>
+        <if test="isdebug == null or isdebug == ''">
+            AND isdebug IS NULL
+        </if>
         AND type = #{type,jdbcType=INTEGER}
     </select>
 
@@ -130,12 +146,14 @@
     <!--查询用户购物车中的欲结算的商品-->
     <select id="queryCartVoList" parameterType="int" resultType="com.movision.mybatis.cart.entity.CartVo">
         SELECT DISTINCT * FROM (
-        SELECT t1.*,t2.img_url AS imgurl,t3.price AS goodsprice, t3.isself, t3.shopid, t3.isdel AS online, t3.stock
+        SELECT t1.*,t2.img_url AS imgurl,t3.price AS goodsprice, t3.isself, t3.shopid, t3.isdel AS online, t3.stock, t4.discount
         FROM yw_cart t1
         LEFT JOIN (SELECT * FROM yw_goods_img WHERE type='2') t2
         ON t1.goodsid = t2.goodsid
         LEFT JOIN yw_goods t3
         ON t1.goodsid = t3.id
+        LEFT JOIN yw_goods_discount t4
+        ON t1.discountid = t4.id
         ) t
         WHERE t.isdel = '0'
         AND t.id IN
@@ -433,10 +451,21 @@
         <if test="comboid != null and comboid != ''">
             AND combotype = #{comboid,jdbcType=INTEGER}
         </if>
+        <if test="comboid == null and comboid == ''">
+            AND combotype IS NULL
+        </if>
         <if test="discountid != null and discountid != ''">
             AND discountid = #{discountid,jdbcType=INTEGER}
         </if>
-        AND isdebug = #{isdebug,jdbcType=INTEGER}
+        <if test="discountid == null and discountid == ''">
+            AND discountid IS NULL
+        </if>
+        <if test="isdebug != null and isdebug != ''">
+            AND isdebug = #{isdebug,jdbcType=INTEGER}
+        </if>
+        <if test="isdebug == null or isdebug == ''">
+            AND isdebug IS NULL
+        </if>
         AND type = #{type,jdbcType=INTEGER}
   </update>
 

@@ -16,13 +16,9 @@ import com.movision.mybatis.goodsAssessment.entity.GoodsAssessmentVo;
 import com.movision.mybatis.goodsAssessment.mapper.GoodsAssessmentMapper;
 import com.movision.mybatis.goodsAssessmentImg.entity.GoodsAssessmentImg;
 import com.movision.mybatis.goodscombo.entity.GoodsCombo;
-import com.movision.mybatis.goodscombo.entity.GoodsComboDetail;
 import com.movision.mybatis.goodscombo.entity.GoodsComboVo;
-import com.movision.mybatis.role.entity.Role;
 import com.movision.mybatis.subOrder.entity.SubOrder;
 import com.movision.utils.pagination.model.Paging;
-import org.apache.ibatis.executor.ExecutorException;
-import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,6 +160,26 @@ public class GoodsService {
             return categoryMapper.queryGoodsCategory();
         } catch (Exception e) {
             log.error("查询商城首页商品分类列表失败");
+            throw e;
+        }
+    }
+
+    public List<GoodsVo> getFlashSale(){
+        try {
+            log.info("查询商城首页特卖商城列表");
+            return goodsMapper.getFlashSale();
+        }catch (Exception e){
+            log.error("查询商城首页特卖商城列表失败");
+            throw e;
+        }
+    }
+
+    public List<GoodsVo> findAllFlashSale(Paging<GoodsVo> pager){
+        try {
+            log.info("商城首页中点击特卖商品查看更多页面里所有特卖商品列表");
+            return goodsMapper.findAllFlashSale(pager.getRowBounds());
+        }catch (Exception e){
+            log.error("商城首页中点击特卖商品查看更多页面里所有特卖商品列表失败");
             throw e;
         }
     }
@@ -1306,10 +1322,10 @@ public class GoodsService {
     /**
      * 减库存
      */
-    public void deductStock(List<SubOrder> subOrderList) {
+    public void deductStock(SubOrder subOrder) {
         try {
             log.info("提交订单后减库存");
-            goodsMapper.deductStock(subOrderList);
+            goodsMapper.deductStock(subOrder);
         } catch (Exception e) {
             log.error("提交订单后减库存失败");
             throw e;

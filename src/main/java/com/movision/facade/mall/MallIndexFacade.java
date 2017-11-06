@@ -5,13 +5,11 @@ import com.movision.mybatis.goods.entity.GoodsVo;
 import com.movision.mybatis.goods.service.GoodsService;
 import com.movision.mybatis.homepageManage.entity.HomepageManage;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
-import com.movision.mybatis.post.entity.PostVo;
 import com.movision.utils.pagination.model.Paging;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -141,5 +139,44 @@ public class MallIndexFacade {
      */
     public List<Category> queryGoodsCategory() {
         return goodsService.queryGoodsCategory();
+    }
+
+    /**
+     * 3.0商城首页中特卖商品列表
+     */
+    public List<GoodsVo> getFlashSale(){
+
+        List<GoodsVo> flashSaleGoodsList = goodsService.getFlashSale();
+
+        return processFlashSaleDate(flashSaleGoodsList);
+    }
+
+    /**
+     * 3.0商城首页——特卖商品——点击进入特卖商品列表页
+     */
+    public List<GoodsVo> findAllFlashSale(Paging<GoodsVo> pager){
+        List<GoodsVo> allFlashSaleList = goodsService.findAllFlashSale(pager);
+
+        return processFlashSaleDate(allFlashSaleList);
+    }
+
+    /**
+     * 公共方法
+     * 循环判断当前商品特卖是否结束
+     */
+    public List<GoodsVo> processFlashSaleDate(List<GoodsVo> list){
+        //遍历循环判断当前特卖是否结束
+        for (int i=0; i < list.size(); i++){
+            GoodsVo vo = list.get(i);
+            Date flashEndDate = vo.getSpecialendtime();
+            Date curTime = new Date();
+            if (flashEndDate.getTime() >= curTime.getTime()) {
+                vo.setIsend(0);//未结束
+            }else {
+                vo.setIsend(1);//已结束
+            }
+            list.set(i, vo);
+        }
+        return list;
     }
 }

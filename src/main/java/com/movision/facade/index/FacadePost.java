@@ -4482,6 +4482,25 @@ public class FacadePost {
         }
     }*/
 
+    /**
+     * 商城首页——性价比推荐的两篇商品推荐贴
+     * @return
+     */
+    public List<Post> getCostRecommendPost(){
+        List<Post> costRecommendPostList = postService.getCostRecommendPost();
+
+        return costRecommendPostList;
+    }
+
+    /**
+     * 点击商城性价比推荐进入性价比推荐帖子列表接口
+     * @return
+     */
+    public List<Post> findAllCostRecommendPostList(Paging<Post> pager){
+        List<Post> allCostRecommendPostList = postService.findAllCostRecommendPostList(pager);
+
+        return allCostRecommendPostList;
+    }
 }
 
 

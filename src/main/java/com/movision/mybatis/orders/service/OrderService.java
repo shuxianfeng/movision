@@ -61,12 +61,12 @@ public class OrderService {
         }
     }
 
-    public String queryMaxOrderNumber(String paramstr) {
+    public int queryDuplicateOrdNum(String paramstr) {
         try {
-            log.info("根据订单号前缀查询最大的订单号");
-            return ordersMapper.queryMaxOrderNumber(paramstr);
+            log.info("根据订单号查询订单中是否有重复订单号");
+            return ordersMapper.queryDuplicateOrdNum(paramstr);
         } catch (Exception e) {
-            log.error("根据订单号前缀查询最大的订单号失败");
+            log.error("根据订单号查询订单中是否有重复订单号失败");
             throw e;
         }
     }
@@ -81,12 +81,22 @@ public class OrderService {
         }
     }
 
-    public void batchInsertOrders(List<SubOrder> subOrderList) {
+    public int insertSubOrders(SubOrder subOrder) {
         try {
             log.info("批量提交子订单");
-            subOrderMapper.batchInsertOrders(subOrderList);
+            return subOrderMapper.insert(subOrder);
         } catch (Exception e) {
             log.error("批量提交子订单失败");
+            throw e;
+        }
+    }
+
+    public void updateRentDate(Map<String, Object> parammap){
+        try {
+            log.info("循环更新租赁日期表中记录的购物车ID为子订单ID");
+            subOrderMapper.updateRentDate(parammap);
+        }catch (Exception e){
+            log.error("循环更新租赁日期表中记录的购物车ID为子订单ID失败", e);
             throw e;
         }
     }

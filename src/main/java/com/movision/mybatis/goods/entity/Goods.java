@@ -58,6 +58,8 @@ public class Goods implements Serializable {
 
     private Integer isspecial;
 
+    private Date specialendtime;//特卖截止时间
+
     private Integer isseckill;
 
     private Integer ishomepage;//是否为推荐：0 否 1 是
@@ -232,6 +234,14 @@ public class Goods implements Serializable {
 
     public void setIsspecial(Integer isspecial) {
         this.isspecial = isspecial;
+    }
+
+    public Date getSpecialendtime() {
+        return specialendtime;
+    }
+
+    public void setSpecialendtime(Date specialendtime) {
+        this.specialendtime = specialendtime;
     }
 
     public Integer getIsseckill() {
