@@ -550,8 +550,17 @@ public class PostFacade {
     public Map deletePostAppraise(String id, String loginid) {
         Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.delete.getCode(), JurisdictionConstants.JURISDICTION_TYPE.comment.getCode(), Integer.parseInt(id));
         Map map = new HashMap();
+        Integer cid = Integer.parseInt(id);
         if (res.get("resault").equals(1)) {
-            commentService.deletePostAppraise(Integer.parseInt(id));
+            //查询评论是否有子评论,是否是机器人评论
+            Integer cont = commentService.queryCommentContById(cid);
+            if (cont > 0) {
+                //符合上面条件：物理删除
+                commentService.deletePostCommentById(cid);
+            } else {
+                //不符合条件：逻辑删除
+                commentService.deletePostAppraise(cid);
+            }
             map.put("resault", 1);
             return map;
         } else {

@@ -46,6 +46,10 @@ public interface CommentMapper {
 
     int deletePostAppraise(int id);
 
+    Integer queryCommentContById(Integer id);
+
+    void deletePostCommentById(Integer id);
+
     int updatePostComment(Map map);
 
     int replyPostComment(Map map);
