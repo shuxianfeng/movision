@@ -616,8 +616,9 @@ public class XmlParseFacade {
             compressImg.setProtoimgurl(m.get("newurl").toString());
             compressImg.setIntime(new Date());
             //封面图片切割压缩操作
-            getPostCovimg(post, list, covimg, newurl);
-            Thread.sleep(800);
+            newurl = getPostCovimg(post, list, covimg, newurl);
+            Thread.sleep(4800);
+            System.out.println(m.get("size").toString() + "========================================================================================" + m.get("newurl"));
             compressImg.setCompressimgurl(newurl);
             compressImgService.insert(compressImg);
         } catch (InterruptedException e) {
@@ -633,7 +634,7 @@ public class XmlParseFacade {
      * @param covimg 需要处理的图片
      * @param newurl 返回处理后的图片 不用传值
      */
-    public void getPostCovimg(Post post, List list, String covimg, String newurl) {
+    public String getPostCovimg(Post post, List list, String covimg, String newurl) {
         //计算宽高比工具
         Map whs = imgIncision(covimg);
         whs.put("x", 0);
@@ -646,6 +647,7 @@ public class XmlParseFacade {
         newurl = imgCompress(newurl, whs, tmpurl.get("to").toString());
         //帖子封面
         post.setCoverimg(newurl);
+        return newurl;
     }
 
     /**
