@@ -133,7 +133,8 @@ public class XmlParseFacade {
                 System.out.println(document);
                 //获取跟标签
                 Element element = document.getRootElement();
-                List<Element> elements = element.elements();
+                //获取指定根标签
+                List<Element> elements = element.elements("PostItem");
                 //存储本地图片路径，以便做空间释放操作
                 List list = new ArrayList();
                 //循环所有父节点
