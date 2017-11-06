@@ -60,7 +60,7 @@ public class AppLoginController {
     @RequestMapping(value = {"/get_mobile_code"}, method = RequestMethod.GET)
     public Response getMobileCode(@ApiParam(value = "验证的手机号") @RequestParam String mobile,
                                   HttpServletRequest request) throws IOException, ApiException {
-        log.debug("获得手机验证码  mobile==" + mobile);
+        log.info("获得手机验证码,  手机号mobile==" + mobile);
         log.info("获取到的request method>>>>"+request.getMethod());
         Response response = new Response();
         if (ValidateUtils.isMobile(mobile)) {
@@ -86,7 +86,7 @@ public class AppLoginController {
     @ApiOperation(value = "H5邀请注册页面-发送手机验证码", notes = "H5邀请注册页面-发送手机验证码", response = Response.class)
     @RequestMapping(value = {"/H5_get_mobile_code"}, method = RequestMethod.GET)
     public Response getMobileCodeForH5(@ApiParam(value = "验证的手机号") @RequestParam String mobile) throws IOException, ApiException {
-        log.debug("获得手机验证码  mobile==" + mobile);
+        log.info("获得手机验证码  mobile==" + mobile);
         Response response = new Response();
         if (ValidateUtils.isMobile(mobile)) {
             //校验该手机号是否注册过
@@ -131,7 +131,7 @@ public class AppLoginController {
     @RequestMapping(value = {"/registe_by_phone_sms_code"}, method = RequestMethod.POST)
     public Response registeByPhoneSMS(@ApiParam(value = "会员信息") @ModelAttribute RegisterUser user) throws Exception {
 
-        log.debug("登录信息  mobile==" + user.getPhone() + "mobileCheckCode = " + user.getMobileCheckCode());
+        log.info("登录信息  mobile==" + user.getPhone() + "mobileCheckCode = " + user.getMobileCheckCode());
         Response response = new Response();
         try {
             Subject currentUser = SecurityUtils.getSubject();
@@ -208,7 +208,7 @@ public class AppLoginController {
         } else {
             log.debug("【微博注册】");
         }
-        log.debug("注册qq账号信息：  account==" + account + ", deviceno = " + deviceno + ", openid = " + openid);
+        log.info("注册qq账号信息：  account==" + account + ", deviceno = " + deviceno + ", openid = " + openid);
         Response response = new Response();
         try {
             Map result = appRegisterFacade.registerQQAccount(flag, account, openid, deviceno, url, nickname, sex);
