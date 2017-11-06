@@ -180,9 +180,6 @@ public class XmlParseFacade {
                     if (content != "") {
                         //标签操作 //
                         String lbs = postLabel(post, tag);
-                        post.getUserid().toString();
-                        post.getCoverimg();
-                        post.getPostcontent();
                         //新增帖子操作
                         postFacade.addPostTest(request, "", "", circleid, post.getUserid().toString(),
                                 post.getCoverimg(), post.getPostcontent(), lbs, "", "1");
@@ -582,7 +579,7 @@ public class XmlParseFacade {
                     //帖子封面处理，包括存储原图和压缩图
                     postCompressImg(post, list, m, newurl, covimg);
                 }
-                content += "\"value\":\"" + newurl + "\",\"dir\": \"\"},";
+                content += "\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
                 bln = false;
             }
             if (substring[i].substring(0, substring[i].indexOf(":")).equals("ow")) {
