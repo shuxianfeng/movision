@@ -609,16 +609,20 @@ public class XmlParseFacade {
      * @param covimg
      */
     public void postCompressImg(Post post, List list, Map m, String newurl, String covimg) {
-        //把切好的原图和压缩图存放表中
-        CompressImg compressImg = new CompressImg();
-        compressImg.setProtoimgsize(m.get("size").toString());
-        compressImg.setProtoimgurl(m.get("newurl").toString());
-        compressImg.setIntime(new Date());
-        //封面图片切割压缩操作
-        getPostCovimg(post, list, covimg, newurl);
-
-        compressImg.setCompressimgurl(newurl);
-        compressImgService.insert(compressImg);
+        try {
+            //把切好的原图和压缩图存放表中
+            CompressImg compressImg = new CompressImg();
+            compressImg.setProtoimgsize(m.get("size").toString());
+            compressImg.setProtoimgurl(m.get("newurl").toString());
+            compressImg.setIntime(new Date());
+            //封面图片切割压缩操作
+            getPostCovimg(post, list, covimg, newurl);
+            Thread.sleep(800);
+            compressImg.setCompressimgurl(newurl);
+            compressImgService.insert(compressImg);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
