@@ -797,10 +797,10 @@ public class XmlParseFacade {
                 resatlt.put("h", (int) (w * (thanh / thanw)));
             }
         } else {
-            if (w / h > h / w) {
+            if (w / h > thanh / thanw) {
                 resatlt.put("h", h);
                 resatlt.put("w", (int) (h * (thanw / thanh)));
-            } else if (h / w > w / h) {
+            } else if (h / w > thanw / thanh) {
                 resatlt.put("w", w);
                 resatlt.put("h", (int) (w * (thanh / thanw)));
             }
