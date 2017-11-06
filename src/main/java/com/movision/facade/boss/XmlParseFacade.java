@@ -596,13 +596,7 @@ public class XmlParseFacade {
         Element caption = e.element("caption");
         String caps = caption.getText().replace("<p>", "");
         caps = caps.replace("</p>", "");
-        content += "{\"type\": 0,\"orderid\":" + num + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}";
-
-        //用于内容拼接闭合
-        String neirong = post.getPostcontent();
-        content += "]";
-        //System.out.println("---------"+s);
-        post.setPostcontent(neirong);
+        content += "{\"type\": 0,\"orderid\":" + num + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
         return content;
     }
 
@@ -620,7 +614,7 @@ public class XmlParseFacade {
         compressImg.setProtoimgsize(m.get("size").toString());
         compressImg.setProtoimgurl(m.get("newurl").toString());
         compressImg.setIntime(new Date());
-        //封面图片操作
+        //封面图片切割压缩操作
         getPostCovimg(post, list, covimg, newurl);
 
         compressImg.setCompressimgurl(newurl);
@@ -725,7 +719,7 @@ public class XmlParseFacade {
             } else {
                 //对宽高值去除小数点
                 String ww = whs.get("w").toString();
-                String hh = whs.get("w").toString();
+                String hh = whs.get("h").toString();
                 compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, Integer.parseInt(ww), Integer.parseInt(hh));
                 System.out.println("压缩完的切割图片url==" + compressUrl);
             }
@@ -838,6 +832,7 @@ public class XmlParseFacade {
             map.put("oldurl", path + s);
             if (type.equals("img")) {
                 //图片上传
+                Thread.sleep(800);
                 Map t = movisionOssClient.uploadFileObject(new File(path + s), "img", "post");
                 map.put("newurl", t.get("url"));
                 //获取图片大小
@@ -849,7 +844,7 @@ public class XmlParseFacade {
                 videoUploadUtil.videoUpload(path,)
                 map.put("newurl", );
             }*/
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (os != null) {

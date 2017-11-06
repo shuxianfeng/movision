@@ -23,10 +23,10 @@ public class CompressImgService {
 
     public void insert(CompressImg compressImg) {
         try {
-            logger.info("新增成功");
+            logger.info("------------新增压缩图和原图映射关系成功");
             compressImgMapper.insertSelective(compressImg);
         } catch (Exception e) {
-            logger.error("新增异常", e);
+            logger.error("------------新增压缩图和原图映射关系成功异常", e);
             throw e;
         }
     }
