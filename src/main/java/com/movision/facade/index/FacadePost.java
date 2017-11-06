@@ -3595,7 +3595,7 @@ public class FacadePost {
             mongoClient = new MongoClient(MongoDbPropertiesLoader.getValue("mongo.hostport"));
             db = mongoClient.getDB("searchRecord");
             DBCollection table = db.getCollection("userRefreshRecord");//表名
-            BasicDBObject gt = new BasicDBObject("$lte", intime);
+            BasicDBObject gt = new BasicDBObject("$lte", intime); //小于等于intime
             BasicDBObject queryObject = new BasicDBObject("intime", gt).append("device", device).append("type", type);
             //指定需要显示列
             BasicDBObject keys = new BasicDBObject();
@@ -3701,6 +3701,7 @@ public class FacadePost {
      */
     public List<PostVo> userReflushHishtoryRecord(String userid, Paging<PostVo> paging, int type, String device, String labelid, String circleid, String postids) {
         log.warn("首页历史接口的传参postid=" + postids);
+        log.warn("首页历史接口的传参pageNo=" + paging.getCurPage());
         List<PostVo> postVo = null;
         if (userid != null) {
             //用户登录下
