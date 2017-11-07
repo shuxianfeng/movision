@@ -647,8 +647,10 @@ public class XmlParseFacade {
         whs.put("y", 0);
         //切割图片上传到阿里云
         Map tmpurl = imgCuttingUpload(covimg, whs);
-        list.add(tmpurl.get("to"));
-        list.add(tmpurl.get("form"));
+        if (list != null) {
+            list.add(tmpurl.get("to"));
+            list.add(tmpurl.get("form"));
+        }
         //4对本地服务器中切割好的图片进行压缩处理
         newurl = imgCompress(newurl, whs, tmpurl.get("to").toString());
         //帖子封面,也用于返回压缩后的图片
