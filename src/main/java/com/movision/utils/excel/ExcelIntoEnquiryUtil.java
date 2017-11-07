@@ -195,6 +195,8 @@ public class ExcelIntoEnquiryUtil {
                                         String id = String.valueOf(cell.getNumericCellValue());
                                         if (StringUtil.isNotBlank(id)) {
                                             post.setId(Integer.parseInt(id));
+                                        } else {
+                                            post.setId(Integer.parseInt(cell.getStringCellValue()));
                                         }
                                 } catch (Exception e) {
                                     if (resault.length() > 0) {
@@ -209,6 +211,8 @@ public class ExcelIntoEnquiryUtil {
                                         String userid = String.valueOf(cell.getNumericCellValue());
                                         if (StringUtil.isNotBlank(userid)) {
                                             post.setUserid(Integer.parseInt(userid));
+                                        } else {
+                                            post.setUserid(Integer.parseInt(cell.getStringCellValue()));
                                         }
                                     continue;
                                 } catch (Exception e) {
@@ -319,7 +323,7 @@ public class ExcelIntoEnquiryUtil {
             }
             //返回值
             map.put("code", "200");
-
+            map.put("messager", "成功");
         } catch (NumberFormatException e) {
             map.put("code", "400");
             map.put("messager", "错误行：" + ir + 1 + "");
