@@ -624,8 +624,8 @@ public class XmlParseFacade {
             newurl = getPostCovimg(post, list, covimg, newurl);
             Thread.sleep(4800);
             System.out.println(m.get("size").toString() + "========================================================================================" + m.get("newurl"));
-            compressImg.setCompressimgurl(newurl);
-            compressImg.setProtoimgurl(post.getCoverimg());
+            compressImg.setCompressimgurl(post.getCoverimg());//压缩后的图片
+            compressImg.setProtoimgurl(newurl);//切割后的原图
             compressImgService.insert(compressImg);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -645,7 +645,7 @@ public class XmlParseFacade {
         Map whs = imgIncision(covimg);
         whs.put("x", 0);
         whs.put("y", 0);
-        //切割图片上传到阿里云
+        //切割图片上传到阿里云,并返回url作为原图
         Map tmpurl = imgCuttingUpload(covimg, whs);
         if (list != null) {
             list.add(tmpurl.get("to"));
@@ -655,7 +655,7 @@ public class XmlParseFacade {
         newurl = imgCompress(newurl, whs, tmpurl.get("to").toString());
         //帖子封面,也用于返回压缩后的图片
         post.setCoverimg(newurl);
-        return newurl;
+        return tmpurl.get("new").toString();
     }
 
     /**
