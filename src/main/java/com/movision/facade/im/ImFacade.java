@@ -615,7 +615,7 @@ public class ImFacade {
 
 
     /**
-     * 准备toAccids参数,发送系统通知，并且记录
+     * 准备toAccids参数,发送系统通知，并且记录 （推送/通知 公共方法）
      *
      * @param body
      * @param imUser
