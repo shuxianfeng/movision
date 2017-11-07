@@ -613,14 +613,14 @@ public class XmlParseFacade {
             //把切好的原图和压缩图存放表中
             CompressImg compressImg = new CompressImg();
             compressImg.setProtoimgsize(m.get("size").toString());
-            //
             compressImg.setIntime(new Date());
+
             //封面图片切割压缩操作,newurl返回的是切割后的原图
             newurl = getPostCovimg(post, list, covimg, newurl);
             Thread.sleep(4800);
             System.out.println(m.get("size").toString() + "========================================================================================" + m.get("newurl"));
             compressImg.setCompressimgurl(newurl);
-            compressImg.setProtoimgurl(newurl);
+            compressImg.setProtoimgurl(post.getCoverimg());
             compressImgService.insert(compressImg);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -786,7 +786,7 @@ public class XmlParseFacade {
      */
     public Map imgWhidthAndHeight(int w, int h, Double thanw, Double thanh) {
         Map resatlt = new HashMap();
-        if (h > thanh && w > thanw) {
+       /* if (h > thanh && w > thanw) {
             if (w / h > thanw / thanh) {
                 resatlt.put("h", h);
                 resatlt.put("w", (int) (h * (thanh / thanw)));
@@ -805,6 +805,13 @@ public class XmlParseFacade {
                 resatlt.put("h", h);
                 resatlt.put("w", (int) (h * (thanw / thanh)));
             }
+        }*/
+        if (w / h > thanw / thanh) { //切宽
+            resatlt.put("h", h);
+            resatlt.put("w", h * (thanw / thanh));
+        } else if (w / h < thanw / thanh) {//切高
+            resatlt.put("w", w);
+            resatlt.put("h", w * (thanh / thanw));
         }
         return resatlt;
     }
