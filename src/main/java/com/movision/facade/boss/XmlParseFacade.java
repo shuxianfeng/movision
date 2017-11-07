@@ -124,6 +124,7 @@ public class XmlParseFacade {
         Map resault = new HashMap();
         SAXReader reader = new SAXReader();
         Post post = new Post();
+        int kk = 0;
         try {
             //查询用户是否存在，不存在新增操作
             Integer usid = queryUser(nickname, phone);
@@ -184,7 +185,7 @@ public class XmlParseFacade {
                         postFacade.addPostTest(request, "", "", circleid, post.getUserid().toString(),
                                 post.getCoverimg(), post.getPostcontent(), lbs, "", "1");
                     }
-
+                    kk++;
                 }
 
                 //释放空间,删除本地图片
@@ -199,6 +200,7 @@ public class XmlParseFacade {
         } catch (Exception e) {
             e.printStackTrace();
             resault.put("code", 400);
+            resault.put("messager", "报错位置第" + kk + "个PostItem");
         }
         return resault;
     }

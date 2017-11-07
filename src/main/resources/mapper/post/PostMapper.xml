@@ -2319,7 +2319,7 @@
         FROM yw_post AS p
         WHERE p.isdel <![CDATA[<>]]> 1 AND p.isactive=0
         <if test="circleid != null">
-            AND circleid = #{circleid,jdbcType=INTEGER} ORDER BY p.intime DESC
+            AND p.circleid = #{circleid,jdbcType=INTEGER}
         </if>
         ORDER BY p.intime DESC
     </select>
