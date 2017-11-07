@@ -648,7 +648,7 @@ public class XmlParseFacade {
         newurl = imgCompress(newurl, whs, tmpurl.get("to").toString());
         //帖子封面,也用于返回压缩后的图片
         post.setCoverimg(newurl);
-        return tmpurl.get("to").toString();
+        return newurl;
     }
 
     /**
