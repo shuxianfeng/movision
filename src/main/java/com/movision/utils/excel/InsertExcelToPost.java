@@ -333,42 +333,48 @@ public class InsertExcelToPost {
     private void encapsulationPostContent(Post post, String imgs, String imgPath, List list, String covimg, String postContent, String text) {
         String[] is = imgs.split(",");
         postContent += "[";
-        for (int i = 0; i < is.length; i++) {
-            String imgName = is[i];
-            //查看并获取指定图片的路径
-            String sysimgurl = getImgToSystemUrl(imgPath, imgName);
-            int h = 0;
-            int w = 0;
-            String size = "";
-            //获取图片宽高
-            FileInputStream iss = null;
-            BufferedImage src = null;
-            try {
-                iss = new FileInputStream(sysimgurl);
-                src = ImageIO.read(iss);
-                w = src.getWidth(null);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            postContent += "{\"dir\": \"\",\"orderid\": " + i + ",\"type\": 1,\"value\": \"";
-            //图片上传
-            Map t = movisionOssClient.uploadFileObject(new File(sysimgurl), "img", "post");
-            postContent += t.get("url").toString() + "\",\"wh\": \"" + w + "×" + h + "\"},";
-            size = xmlParseFacade.getImgSize(sysimgurl);
-            t.put("size", size);
-            t.put("newurl", postContent);
-            //获取第一张图片作为封面
-            if (i == 0) {
-                xmlParseFacade.postCompressImg(post, list, t, covimg);
-                post.setCoverimg(covimg);
-            }
-            if (i == is.length - 1) {
-                if (StringUtil.isNotEmpty(text)) {
-                    postContent += "";
-                } else {
-                    postContent = postContent.substring(0, postContent.lastIndexOf(","));
+        try {
+            for (int i = 0; i < is.length; i++) {
+                String imgName = is[i];
+                //查看并获取指定图片的路径
+                String sysimgurl = getImgToSystemUrl(imgPath, imgName);
+                int h = 0;
+                int w = 0;
+                String size = "";
+                //获取图片宽高
+                FileInputStream iss = null;
+                BufferedImage src = null;
+                try {
+                    iss = new FileInputStream(sysimgurl);
+                    src = ImageIO.read(iss);
+                    w = src.getWidth(null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                postContent += "{\"dir\": \"\",\"orderid\": " + i + ",\"type\": 1,\"value\": \"";
+                //图片上传
+                Map t = movisionOssClient.uploadFileObject(new File(sysimgurl), "img", "post");
+                Thread.sleep(500);
+                postContent += t.get("url").toString() + "\",\"wh\": \"" + w + "×" + h + "\"},";
+                size = xmlParseFacade.getImgSize(sysimgurl);
+                t.put("size", size);
+                t.put("newurl", postContent);
+                //获取第一张图片作为封面
+                if (i == 0) {
+                    xmlParseFacade.postCompressImg(post, list, t, covimg);
+                    post.setCoverimg(covimg);
+                }
+                //拼接帖子文字
+                if (i == is.length - 1) {
+                    if (StringUtil.isNotEmpty(text)) {
+                        postContent += "";
+                    } else {
+                        postContent = postContent.substring(0, postContent.lastIndexOf(","));
+                    }
                 }
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         post.setPostcontent(postContent);
     }
