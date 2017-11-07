@@ -222,6 +222,24 @@
     WHERE id=#{id,jdbcType=INTEGER}
   </update>
 
+    <delete id="deletePostCommentById" parameterType="java.lang.Integer">
+        delete from yw_post_comment
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <select id="queryCommentContById" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        <![CDATA[
+
+        SELECT COUNT(1)
+        FROM yw_post_comment
+        WHERE userid > 10000 AND userid < 20000
+        AND id = #{id,jdbcType=INTEGER} AND status = 1
+        AND ((SELECT COUNT(1) FROM yw_post_comment WHERE status = 1 AND pid = #{id,jdbcType=INTEGER}) = 0)
+        AND pid IS NULL
+
+        ]]>
+    </select>
+
     <select id="findAllQueryPostByCommentParticulars" parameterType="java.util.Map"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
     SELECT c.*,u.phone,u.photo,u.nickname

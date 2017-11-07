@@ -272,7 +272,7 @@ public class BossImController {
         return response;
     }
 
-    @ApiOperation(value = "发送消息", notes = "发送消息", response = Response.class)
+    @ApiOperation(value = "发送消息没有链接的", notes = "发送消息", response = Response.class)
     @RequestMapping(value = "find_allpush", method = RequestMethod.POST)
     public Response AddPushMovement(@ApiParam(value = "短信内容") @RequestParam String body
     ) {
@@ -283,6 +283,20 @@ public class BossImController {
         }
         return response;
     }
+
+
+    @ApiOperation(value = "发送消息有链接的", notes = "发送消息", response = Response.class)
+    @RequestMapping(value = "find_allpush_link", method = RequestMethod.POST)
+    public Response AddPushMovementAndLink(@ApiParam(value = "短信内容") @RequestParam String body,
+                                           @ApiParam(value = "链接") @RequestParam String code) {
+        Response response = new Response();
+        imFacade.AddPushMovementAndLink(body, code);
+        if (response.getCode() == 200) {
+            response.setMessage("发送成功");
+        }
+        return response;
+    }
+
 
     /**
      * 查询系统推送

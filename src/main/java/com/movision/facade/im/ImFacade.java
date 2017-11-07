@@ -967,7 +967,7 @@ public class ImFacade {
     }
 
     /**
-     * 消息推送
+     * 消息推送(不带链接的消息推送)
      *
      * @param
      * @param
@@ -1011,6 +1011,59 @@ public class ImFacade {
                 Gson gson = new Gson();
                 String json = gson.toJson(map);
                 SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("propelling_movement_infomation"));
+            }
+
+        }
+    }
+
+
+    /**
+     * 消息推送(带链接的消息推送)
+     *
+     * @param
+     * @param
+     * @param
+     * @param body
+     * @return
+     */
+    public void AddPushMovementAndLink(String body, String code) {
+        Map<String, String> map = new LinkedHashMap<>();
+        SystemPush systemPush = new SystemPush();
+        systemPush.setUserid(ShiroUtil.getBossUserID());
+        systemPush.setBody(body);
+        systemPush.setInformTime(new Date());
+        int result = systemPushService.addPush(systemPush);
+        List<String> list = systemPushService.findAllPhone();
+        int pageNo = 1;
+        int pageSize = 200;
+        if (list.size() <= 200) {
+            for (int i = 0; i < list.size(); i++) {
+                String mobile = "";
+                mobile += list.get(i) + ",";
+                mobile = mobile.substring(0, mobile.length() - 1);
+                map.put("body", body);
+                map.put("code", code);
+                Gson gson = new Gson();
+                String json = gson.toJson(map);
+                SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("propelling_movement_infomation_link"));
+            }
+        }
+        int totalPageNum = (list.size() + pageSize - 1) / pageSize;
+        if (list.size() > 200) {
+            for (int j = 0; j <= totalPageNum; j++) {
+                Paging pa = new Paging(Integer.valueOf(pageNo), Integer.valueOf(pageSize));
+                List<String> phone = systemPushService.findPhone(pa);
+                String mobile = "";
+                for (int i = 0; i < phone.size(); i++) {
+                    mobile += phone.get(i) + ",";
+                }
+                mobile = mobile.substring(0, mobile.length() - 1);
+                pageNo += 1;
+                map.put("body", body);
+                map.put("code", code);
+                Gson gson = new Gson();
+                String json = gson.toJson(map);
+                SDKSendSms.sendSMS(mobile, json, PropertiesLoader.getValue("propelling_movement_infomation_link"));
             }
 
         }

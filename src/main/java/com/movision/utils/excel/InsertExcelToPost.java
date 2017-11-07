@@ -359,7 +359,7 @@ public class InsertExcelToPost {
             t.put("newurl", postContent);
             //获取第一张图片作为封面
             if (i == 0) {
-                xmlParseFacade.postCompressImg(post, list, t, sysimgurl, covimg);
+                xmlParseFacade.postCompressImg(post, list, t, covimg);
                 post.setCoverimg(covimg);
             }
             if (i == is.length - 1) {

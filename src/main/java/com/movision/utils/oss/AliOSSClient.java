@@ -233,7 +233,8 @@ public class AliOSSClient {
                 //获取文件名称头部
                 bucketName = systemLayoutService.queryImgBucket("img_bucket");
                 //bucketName = PropertiesLoader.getValue("img.bucket");
-                domain = PropertiesLoader.getValue("formal.img.domain");//http://pic.mofo.shop
+                domain = systemLayoutService.queryServiceUrl("file_service_url");
+                //domain = PropertiesLoader.getValue("formal.img.domain");//http://pic.mofo.shop
                 data = domain + "/" + fileKey;
                 //返回图片的宽高
                 is = new FileInputStream(file);

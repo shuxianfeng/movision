@@ -572,12 +572,11 @@ public class XmlParseFacade {
                 Map m = download(substring[i].substring(substring[i].indexOf(":") + 1, substring[i].indexOf("?")), "img");
                 //获取本地文件
                 list.add(m.get("oldurl"));
-                String newurl = "";
                 //帖子封面处理
                 String covimg = m.get("oldurl").toString();
                 if (bln) {
                     //帖子封面处理，包括存储原图和压缩图
-                    postCompressImg(post, list, m, newurl, covimg);
+                    postCompressImg(post, list, m, covimg);
                 }
                 content += "\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
                 bln = false;
@@ -596,13 +595,7 @@ public class XmlParseFacade {
         Element caption = e.element("caption");
         String caps = caption.getText().replace("<p>", "");
         caps = caps.replace("</p>", "");
-        content += "{\"type\": 0,\"orderid\":" + num + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}";
-
-        //用于内容拼接闭合
-        String neirong = post.getPostcontent();
-        content += "]";
-        //System.out.println("---------"+s);
-        post.setPostcontent(neirong);
+        content += "{\"type\": 0,\"orderid\":" + num + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
         return content;
     }
 
@@ -611,20 +604,27 @@ public class XmlParseFacade {
      * @param post
      * @param list
      * @param m
-     * @param newurl
+     * @param
      * @param covimg
      */
-    public void postCompressImg(Post post, List list, Map m, String newurl, String covimg) {
-        //把切好的原图和压缩图存放表中
-        CompressImg compressImg = new CompressImg();
-        compressImg.setProtoimgsize(m.get("size").toString());
-        compressImg.setProtoimgurl(m.get("newurl").toString());
-        compressImg.setIntime(new Date());
-        //封面图片操作
-        getPostCovimg(post, list, covimg, newurl);
-
-        compressImg.setCompressimgurl(newurl);
-        compressImgService.insert(compressImg);
+    public void postCompressImg(Post post, List list, Map m, String covimg) {
+        try {
+            String newurl = "";
+            //把切好的原图和压缩图存放表中
+            CompressImg compressImg = new CompressImg();
+            compressImg.setProtoimgsize(m.get("size").toString());
+            //
+            compressImg.setIntime(new Date());
+            //封面图片切割压缩操作,newurl返回的是切割后的原图
+            newurl = getPostCovimg(post, list, covimg, newurl);
+            Thread.sleep(4800);
+            System.out.println(m.get("size").toString() + "========================================================================================" + m.get("newurl"));
+            compressImg.setCompressimgurl(newurl);
+            compressImg.setProtoimgurl(newurl);
+            compressImgService.insert(compressImg);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -635,7 +635,7 @@ public class XmlParseFacade {
      * @param covimg 需要处理的图片
      * @param newurl 返回处理后的图片 不用传值
      */
-    public void getPostCovimg(Post post, List list, String covimg, String newurl) {
+    public String getPostCovimg(Post post, List list, String covimg, String newurl) {
         //计算宽高比工具
         Map whs = imgIncision(covimg);
         whs.put("x", 0);
@@ -646,8 +646,9 @@ public class XmlParseFacade {
         list.add(tmpurl.get("form"));
         //4对本地服务器中切割好的图片进行压缩处理
         newurl = imgCompress(newurl, whs, tmpurl.get("to").toString());
-        //帖子封面
+        //帖子封面,也用于返回压缩后的图片
         post.setCoverimg(newurl);
+        return tmpurl.get("to").toString();
     }
 
     /**
@@ -725,7 +726,7 @@ public class XmlParseFacade {
             } else {
                 //对宽高值去除小数点
                 String ww = whs.get("w").toString();
-                String hh = whs.get("w").toString();
+                String hh = whs.get("h").toString();
                 compressUrl = coverImgCompressUtil.ImgCompress(tmpurl, Integer.parseInt(ww), Integer.parseInt(hh));
                 System.out.println("压缩完的切割图片url==" + compressUrl);
             }
@@ -788,21 +789,21 @@ public class XmlParseFacade {
         if (h > thanh && w > thanw) {
             if (w / h > thanw / thanh) {
                 resatlt.put("h", h);
-                resatlt.put("w", (int) (h * (thanw / thanh)));
-            } else if (h / w > thanw / thanh) {
-                resatlt.put("w", w);
-                resatlt.put("h", (int) (w * (thanw / thanh)));
-            } else {
+                resatlt.put("w", (int) (h * (thanh / thanw)));
+            } else if (h / w > thanh / thanw) {
                 resatlt.put("w", w);
                 resatlt.put("h", (int) (w * (thanh / thanw)));
+            } else if (w < (thanw / thanh) * h) {
+                resatlt.put("w", h);
+                resatlt.put("h", (int) (h * (thanh / thanw)));
             }
         } else {
-            if (w / h > h / w) {
-                resatlt.put("h", h);
-                resatlt.put("w", (int) (h * (thanw / thanh)));
-            } else if (h / w > w / h) {
+            if ((w / h > thanw / thanh) && (h / w > thanh / thanw)) {
                 resatlt.put("w", w);
                 resatlt.put("h", (int) (w * (thanh / thanw)));
+            } else if ((h / w < thanh / thanw) && (w / h > thanw / thanh)) {
+                resatlt.put("h", h);
+                resatlt.put("w", (int) (h * (thanw / thanh)));
             }
         }
         return resatlt;
@@ -838,10 +839,11 @@ public class XmlParseFacade {
             map.put("oldurl", path + s);
             if (type.equals("img")) {
                 //图片上传
+                Thread.sleep(800);
                 Map t = movisionOssClient.uploadFileObject(new File(path + s), "img", "post");
                 map.put("newurl", t.get("url"));
-                //获取图片大小
-                String filesize = getImgSize(url);
+                //获取原图大小
+                String filesize = getImgSize(path + s);
                 map.put("size", filesize);
             } /*else if (type.equals("video")) {
                 //视频上传
@@ -849,7 +851,7 @@ public class XmlParseFacade {
                 videoUploadUtil.videoUpload(path,)
                 map.put("newurl", );
             }*/
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (os != null) {
@@ -871,8 +873,6 @@ public class XmlParseFacade {
     }
 
     public String getImgSize(String url) {
-        File f = new File(url);
-        f.length();
         File fdel = new File(url);
         long l = fdel.length();
         float size = (float) l / 1024 / 1024;

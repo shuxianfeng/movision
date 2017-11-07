@@ -177,6 +177,37 @@ public class CommentService {
     }
 
     /**
+     * 查询评论是否是机器人评论，并且是否有子评论
+     *
+     * @param id
+     * @return
+     */
+    public Integer queryCommentContById(Integer id) {
+        try {
+            log.info("查询评论是否是机器人评论，并且是否有子评论");
+            return commentMapper.queryCommentContById(id);
+        } catch (Exception e) {
+            log.error("查询评论是否是机器人评论，并且是否有子评论异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 物理删除帖子评论
+     *
+     * @param id
+     */
+    public void deletePostCommentById(Integer id) {
+        try {
+            log.info("物理删除帖子评论");
+            commentMapper.deletePostCommentById(id);
+        } catch (Exception e) {
+            log.error("物理删除帖子评论异常", e);
+            throw e;
+        }
+    }
+
+    /**
      * 编辑帖子评论
      *
      * @param map
