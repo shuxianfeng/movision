@@ -2301,7 +2301,7 @@
     </select>
 
     <select id="queryPostByXmlExport" resultType="com.movision.mybatis.post.entity.PostXml"
-            parameterType="java.lang.Integer">
+            parameterType="com.movision.mybatis.post.entity.Post">
         SELECT * FROM yw_post WHERE isdel <![CDATA[<>]]> 1 AND isactive = 0
         <if test="circleid != null">
             AND circleid = #{circleid,jdbcType=INTEGER}

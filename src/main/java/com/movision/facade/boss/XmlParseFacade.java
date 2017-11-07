@@ -29,6 +29,7 @@ import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.oss.AliOSSClient;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
+import javafx.geometry.Pos;
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
@@ -221,8 +222,10 @@ public class XmlParseFacade {
             WritableWorkbook book = Workbook.createWorkbook(new File(path + urlname));
             //生成名为“第一页”的工作表，参数0表示这是第一页
             WritableSheet sheet = book.createSheet("第一页", 0);
+            Post post = new Post();
+            post.setCircleid(Integer.parseInt(circleid));
             //查询出所有xml导入的帖子
-            List<PostXml> posts = postService.queryPostByXmlExport(Integer.parseInt(circleid));
+            List<PostXml> posts = postService.queryPostByXmlExport(post);
             /*PostXml postXml = new PostXml();
             Field[] fields = postXml.getClass().getDeclaredFields();*/
             String title[] = {"id", "用户id", "圈子id", "标题", "帖子内容", "帖子封面"};

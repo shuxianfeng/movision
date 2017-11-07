@@ -1827,10 +1827,10 @@ public class PostService {
      *
      * @return
      */
-    public List<PostXml> queryPostByXmlExport(Integer circleid) {
+    public List<PostXml> queryPostByXmlExport(Post post) {
         try {
             log.info("查询所有xml解析下来的帖子");
-            return postMapper.queryPostByXmlExport(circleid);
+            return postMapper.queryPostByXmlExport(post);
         } catch (Exception e) {
             log.error("查询所有xml解析下来的帖子异常", e);
             throw e;
