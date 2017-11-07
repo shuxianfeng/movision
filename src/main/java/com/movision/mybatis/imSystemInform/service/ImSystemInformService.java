@@ -46,10 +46,10 @@ public class ImSystemInformService {
         }
     }
 
-    public List<ImSystemInformVo> findAllIm(Date date, Paging<ImSystemInformVo> paging) {
+    public List<ImSystemInformVo> findAllIm(Map map, Paging<ImSystemInformVo> paging) {
         try {
             log.info("查询用户收到的系统通知");
-            return imSystemInformMapper.findAllIm(date, paging.getRowBounds());
+            return imSystemInformMapper.findAllIm(map, paging.getRowBounds());
         } catch (Exception e) {
             log.error("查询用户收到的系统通知失败", e);
             throw e;
@@ -244,4 +244,13 @@ public class ImSystemInformService {
         }
     }
 
+    public String queryUserAccid(int userid) {
+        try {
+            log.info("查询用户的accid");
+            return imSystemInformMapper.queryUserAccid(userid);
+        } catch (Exception e) {
+            log.error("查询用户的accid失败");
+            throw e;
+        }
+    }
 }

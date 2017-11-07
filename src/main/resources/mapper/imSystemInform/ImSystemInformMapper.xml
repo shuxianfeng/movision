@@ -169,16 +169,19 @@
         </if>
     </select>
 
-    <select id="findAllIm" parameterType="java.util.Date"
+    <select id="findAllIm" parameterType="java.util.Map"
             resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo">
         SELECT *
         FROM yw_im_system_informs
         WHERE inform_time >= #{informTime,jdbcType=TIMESTAMP}
         and to_accids is not NULL
         <![CDATA[    and to_accids <> '[null]'   ]]>
+        AND to_accids LIKE concat('%',#{accid,jdbcType=VARCHAR},'%')
         GROUP BY inform_identity ORDER BY inform_time DESC
     </select>
-
+    <select id="queryUserAccid" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT accid FROM yw_im_user u WHERE u.userid=#{userid,jdbcType=INTEGER}
+    </select>
     <select id="queryMyMsgInforDetails" resultType="com.movision.mybatis.imSystemInform.entity.ImSystemInformVo"
             parameterType="com.movision.mybatis.imSystemInform.entity.ImSystemInform">
         SELECT * FROM yw_im_system_informs WHERE id = #{id,jdbcType=INTEGER}
