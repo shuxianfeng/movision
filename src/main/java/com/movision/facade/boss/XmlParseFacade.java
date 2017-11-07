@@ -572,12 +572,11 @@ public class XmlParseFacade {
                 Map m = download(substring[i].substring(substring[i].indexOf(":") + 1, substring[i].indexOf("?")), "img");
                 //获取本地文件
                 list.add(m.get("oldurl"));
-                String newurl = "";
                 //帖子封面处理
                 String covimg = m.get("oldurl").toString();
                 if (bln) {
                     //帖子封面处理，包括存储原图和压缩图
-                    postCompressImg(post, list, m, newurl, covimg);
+                    postCompressImg(post, list, m, covimg);
                 }
                 content += "\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
                 bln = false;
@@ -605,21 +604,23 @@ public class XmlParseFacade {
      * @param post
      * @param list
      * @param m
-     * @param newurl
+     * @param
      * @param covimg
      */
-    public void postCompressImg(Post post, List list, Map m, String newurl, String covimg) {
+    public void postCompressImg(Post post, List list, Map m, String covimg) {
         try {
+            String newurl = "";
             //把切好的原图和压缩图存放表中
             CompressImg compressImg = new CompressImg();
             compressImg.setProtoimgsize(m.get("size").toString());
-            compressImg.setProtoimgurl(m.get("newurl").toString());
+            //
             compressImg.setIntime(new Date());
-            //封面图片切割压缩操作
+            //封面图片切割压缩操作,newurl返回的是切割后的原图
             newurl = getPostCovimg(post, list, covimg, newurl);
             Thread.sleep(4800);
             System.out.println(m.get("size").toString() + "========================================================================================" + m.get("newurl"));
             compressImg.setCompressimgurl(newurl);
+            compressImg.setProtoimgurl(newurl);
             compressImgService.insert(compressImg);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -645,9 +646,9 @@ public class XmlParseFacade {
         list.add(tmpurl.get("form"));
         //4对本地服务器中切割好的图片进行压缩处理
         newurl = imgCompress(newurl, whs, tmpurl.get("to").toString());
-        //帖子封面
+        //帖子封面,也用于返回压缩后的图片
         post.setCoverimg(newurl);
-        return newurl;
+        return tmpurl.get("to").toString();
     }
 
     /**
@@ -841,8 +842,8 @@ public class XmlParseFacade {
                 Thread.sleep(800);
                 Map t = movisionOssClient.uploadFileObject(new File(path + s), "img", "post");
                 map.put("newurl", t.get("url"));
-                //获取图片大小
-                String filesize = getImgSize(url);
+                //获取原图大小
+                String filesize = getImgSize(path + s);
                 map.put("size", filesize);
             } /*else if (type.equals("video")) {
                 //视频上传
@@ -872,8 +873,6 @@ public class XmlParseFacade {
     }
 
     public String getImgSize(String url) {
-        File f = new File(url);
-        f.length();
         File fdel = new File(url);
         long l = fdel.length();
         float size = (float) l / 1024 / 1024;
