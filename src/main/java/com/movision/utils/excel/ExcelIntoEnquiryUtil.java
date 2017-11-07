@@ -301,16 +301,15 @@ public class ExcelIntoEnquiryUtil {
                 //内容转换
                 Map con = null;
                 if (StringUtil.isNotEmpty(content)) {
-                    String postcontent = post.getPostcontent();
                     //内容转换
-                    con = jsoupCompressImg.newCompressImg(request, postcontent);
+                    con = jsoupCompressImg.newCompressImg(request, content);
                     System.out.println(con);
                     if ((int) con.get("code") == 200) {
                         String str = con.get("content").toString();
                         post.setPostcontent(str);//帖子内容
                     } else {
                         logger.error("帖子内容转换异常");
-                        post.setPostcontent(postcontent);
+                        post.setPostcontent(content);
                     }
                 }
                 //执行帖子编辑操作
