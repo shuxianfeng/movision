@@ -1015,7 +1015,9 @@
     <!-- 圈子管理员/圈主 -->
     <select id="findAllqueryPostByManageByList" parameterType="java.util.List"
             resultType="com.movision.mybatis.post.entity.PostList">
-        SELECT p.*,(SELECT u.nickname FROM yw_user u WHERE u.id=p.userid) as nickname,
+        SELECT p.*,
+        (SELECT title FROM yw_post WHERE id = p.activeid) AS activeName,
+        (SELECT u.nickname FROM yw_user u WHERE u.id=p.userid) as nickname,
         (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
         (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
         (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,
@@ -1606,6 +1608,7 @@
     <select id="findAllpostSearch" parameterType="com.movision.mybatis.post.entity.PostSpread"
             resultType="com.movision.mybatis.post.entity.PostList">
         SELECT p.*,u.nickname,
+        (SELECT title FROM yw_post WHERE id = p.activeid) AS activeName,
         (SELECT COUNT(1) FROM yw_post_share sh WHERE sh.postid=p.id) as share,
         (SELECT COALESCE(SUM(r.points),0) FROM yw_post_rewarded r WHERE r.postid=p.id) AS rewarded,
         (SELECT COALESCE(SUM(ac.num),0) FROM yw_post_accusation ac WHERE ac.postid =p.id) AS accusation,

@@ -106,6 +106,8 @@ public class PostList implements Serializable {
 
     private Integer activeid;//活动id
 
+    private String activeName;//活动名称
+
     private Integer heatvalue;//热度值
 
     private Integer click;//点击量
@@ -117,6 +119,14 @@ public class PostList implements Serializable {
     private Integer ishotorder;//活动热门排序
 
     private List<PostLabel> postLabels;//帖子标签
+
+    public String getActiveName() {
+        return activeName;
+    }
+
+    public void setActiveName(String activeName) {
+        this.activeName = activeName;
+    }
 
     public List<PostLabel> getPostLabels() {
         return postLabels;
