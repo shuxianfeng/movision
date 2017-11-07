@@ -576,7 +576,7 @@ public class XmlParseFacade {
                 //图片处理
                 String s = "";
                 if (substring[i].length() - 1 == substring[i].lastIndexOf("?")) {
-                    s = substring[i].substring(substring[i].indexOf(":") + 1, substring[i].indexOf("?"));
+                    s = substring[i].substring(substring[i].indexOf(":") + 1, substring[i].lastIndexOf("?"));
                 } else {
                     s = substring[i].substring(substring[i].indexOf(":") + 1, substring[i].length());
                 }
