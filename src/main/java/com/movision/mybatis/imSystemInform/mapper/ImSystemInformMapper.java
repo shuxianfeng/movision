@@ -27,7 +27,7 @@ public interface ImSystemInformMapper {
 
     ImSystemInform queryBodyAll(Integer id);//查询全部内容
 
-    List<ImSystemInformVo> findAllIm(Date informTime, RowBounds rowBounds);
+    List<ImSystemInformVo> findAllIm(Map map, RowBounds rowBounds);
 
     ImSystemInformVo queryMyMsgInforDetails(ImSystemInform imSystemInform);
 
@@ -44,4 +44,6 @@ public interface ImSystemInformMapper {
     String queryActiveBody(int id);
 
     Date queryDate(int userid);
+
+    String queryUserAccid(int userid);
 }

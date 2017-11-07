@@ -230,10 +230,15 @@ public class MsgCenterFacade {
     public List<ImSystemInformVo> getMsgInformationListNew(String userid, Paging<ImSystemInformVo> paging) {
         List<ImSystemInformVo> list = null;
         if (StringUtil.isNotEmpty(userid)) {
+            Map map = new HashMap();
             //获取该用户的注册时间
             Date informTime = imSystemInformService.queryDate(Integer.parseInt(userid));
+            //查询该用户的accid
+            String accid = imSystemInformService.queryUserAccid(Integer.parseInt(userid));
+            map.put("informTime", informTime);
+            map.put("accid", accid);
             //分页获取系统通知和运营通知
-            list = imSystemInformService.findAllIm(informTime, paging);
+            list = imSystemInformService.findAllIm(map, paging);
             for (int i = 0; i < list.size(); i++) {
                 if (list.get(i).getCoverimg() != null) {
                     //代表是运营通知
@@ -244,7 +249,7 @@ public class MsgCenterFacade {
                 }
             }
             //获取所有的系统消息
-            List<ImSystemInformVo> systemInformList = getImSystemInformVos(informTime);
+            List<ImSystemInformVo> systemInformList = getImSystemInformVos(informTime, accid);
             int curId = Integer.parseInt(userid);
             //把所有此人的系统通知置为已读
             setSystemInfoIsRead(systemInformList, curId);
@@ -258,9 +263,12 @@ public class MsgCenterFacade {
      * @param informTime
      * @return
      */
-    private List<ImSystemInformVo> getImSystemInformVos(Date informTime) {
+    private List<ImSystemInformVo> getImSystemInformVos(Date informTime, String accid) {
+        Map map = new HashMap();
         Paging<ImSystemInformVo> allPaging = new Paging<ImSystemInformVo>(1, 1000);
-        List<ImSystemInformVo> alllist = imSystemInformService.findAllIm(informTime, allPaging);
+        map.put("informTime", informTime);
+        map.put("accid", accid);
+        List<ImSystemInformVo> alllist = imSystemInformService.findAllIm(map, allPaging);
         return alllist;
     }
 
@@ -495,10 +503,15 @@ public class MsgCenterFacade {
     private int getImsysIsReadCount(String userid, int imsysIsReadCount) {
         Paging<ImSystemInformVo> paging = new Paging<ImSystemInformVo>(1, 1000);    //所以取第一页的1000条，目的是获取所有的系统通知
         if (StringUtil.isNotEmpty(userid)) {
+            Map map = new HashMap();
             //获取该用户的注册时间
             Date informTime = imSystemInformService.queryDate(Integer.parseInt(userid));
+            //查询该用户的accid
+            String accid = imSystemInformService.queryUserAccid(Integer.parseInt(userid));
+            map.put("informTime", informTime);
+            map.put("accid", accid);
             //获取系统通知和运营通知
-            List<ImSystemInformVo> list = imSystemInformService.findAllIm(informTime, paging);
+            List<ImSystemInformVo> list = imSystemInformService.findAllIm(map, paging);
             int curId = Integer.parseInt(userid);
             //从mongoDB中查询个人已读系统消息记
             List<DBObject> mongoList = systemInformReadRecordService.selectPersonSystemInfoRecord(curId);
