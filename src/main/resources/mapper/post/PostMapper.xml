@@ -2066,6 +2066,7 @@
           SELECT postid FROM yw_active_part WHERE userid = #{userid,jdbcType=INTEGER}
         )
         AND t.isdel=0
+        ORDER BY t.intime DESC
     </select>
 
     <!--美番2.0我的模块根据userid查询用户收藏的所有帖子-->
