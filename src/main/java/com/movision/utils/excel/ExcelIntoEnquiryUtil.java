@@ -182,6 +182,10 @@ public class ExcelIntoEnquiryUtil {
                 String content = "";
                 //贴子封面
                 String covimg = "";
+                //id
+                String postid = "";
+                //用户id
+                String uid = "";
 
                 // 循环Excel的列
                 for (int c = 0; c < this.totalCells; c++) {
@@ -192,11 +196,8 @@ public class ExcelIntoEnquiryUtil {
                             case 0:
                                 try {
                                     //帖子id
-                                        String id = String.valueOf(cell.getNumericCellValue());
-                                        if (StringUtil.isNotBlank(id)) {
-                                            post.setId(Integer.parseInt(id));
-                                        } else {
-                                            post.setId(Integer.parseInt(cell.getStringCellValue()));
+                                    if (StringUtil.isNotBlank(cell.getStringCellValue())) {
+                                        postid = cell.getStringCellValue();
                                         }
                                 } catch (Exception e) {
                                     if (resault.length() > 0) {
@@ -208,11 +209,8 @@ public class ExcelIntoEnquiryUtil {
                             case 1:
                                 try {
                                     //用户id
-                                        String userid = String.valueOf(cell.getNumericCellValue());
-                                        if (StringUtil.isNotBlank(userid)) {
-                                            post.setUserid(Integer.parseInt(userid));
-                                        } else {
-                                            post.setUserid(Integer.parseInt(cell.getStringCellValue()));
+                                    if (StringUtil.isNotBlank(cell.getStringCellValue())) {
+                                        uid = cell.getStringCellValue();
                                         }
                                     continue;
                                 } catch (Exception e) {
@@ -286,6 +284,10 @@ public class ExcelIntoEnquiryUtil {
                 //根据圈子名称查询圈子，
                 Integer circleid = circleService.queryCircleByNameAndEntirely(circle);
                 post.setCircleid(circleid);
+                post.setId(Integer.parseInt(postid));
+                post.setUserid(Integer.parseInt(uid));
+                System.out.println("++++++++++++++++++++++++++" + postid);
+                System.out.println("++++++++++++++++++++++++++" + uid);
 
                 //帖子封面操作
                 if (StringUtil.isNotEmpty(covimg)) {
