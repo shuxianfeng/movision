@@ -288,7 +288,7 @@ public class ExcelIntoEnquiryUtil {
                     //查询封面是否是有变动
                     String isproto = compressImgService.queryUrlIsProtoimg(covimg);
                     //没有查到，封面处理操作
-                    if (StringUtil.isEmpty(isproto)) {
+                    if (isproto == null || isproto.isEmpty()) {
                         //下载图片 第一个参数原文件路径，第二个文件操作 1 ：img 2：video
                         Map t = xmlParseFacade.download(covimg, "img");
                         //操作封面
