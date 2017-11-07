@@ -192,14 +192,10 @@ public class ExcelIntoEnquiryUtil {
                             case 0:
                                 try {
                                     //帖子id
-                                    if (cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
                                         String id = String.valueOf(cell.getNumericCellValue());
                                         if (StringUtil.isNotBlank(id)) {
-                                            post.setId((int) cell.getNumericCellValue());
-                                        } else {
-                                            post.setId((int) cell.getNumericCellValue());
+                                            post.setId(Integer.parseInt(id));
                                         }
-                                    }
                                 } catch (Exception e) {
                                     if (resault.length() > 0) {
                                         resault += "," + ir + 1;
@@ -210,14 +206,10 @@ public class ExcelIntoEnquiryUtil {
                             case 1:
                                 try {
                                     //用户id
-                                    if (cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {//判断单元格内的类型
                                         String userid = String.valueOf(cell.getNumericCellValue());
                                         if (StringUtil.isNotBlank(userid)) {
-                                            post.setUserid((int) cell.getNumericCellValue());
-                                        } else {
-                                            post.setUserid((int) cell.getNumericCellValue());
+                                            post.setUserid(Integer.parseInt(userid));
                                         }
-                                    }
                                     continue;
                                 } catch (Exception e) {
                                     if (resault.length() > 0) {
@@ -300,7 +292,7 @@ public class ExcelIntoEnquiryUtil {
                         //下载图片 第一个参数原文件路径，第二个文件操作 1 ：img 2：video
                         Map t = xmlParseFacade.download(covimg, "img");
                         //操作封面
-                        xmlParseFacade.postCompressImg(post, null, t, covimg);
+                        xmlParseFacade.postCompressImg(post, null, t, t.get("oldurl").toString());
                     } else {
                         post.setCoverimg(covimg);
                     }
