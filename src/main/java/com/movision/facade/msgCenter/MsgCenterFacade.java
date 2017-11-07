@@ -144,9 +144,8 @@ public class MsgCenterFacade {
     private void handleReplyCommentList(List<InstantInfo> list) {
         List<ReplyComment> replyCommentList = commentService.selectReplyCommentList(ShiroUtil.getAppUserID());
         int len = replyCommentList.size();
-        InstantInfo instantInfo = new InstantInfo();
         for (int i = 0; i < len; i++) {
-            getInstantInfoFromReplyCommentlist(list, replyCommentList, i, instantInfo);
+            getInstantInfoFromReplyCommentlist(list, replyCommentList, i);
         }
     }
 
@@ -154,18 +153,16 @@ public class MsgCenterFacade {
 
         List<CommentVo> commentList = commentService.selectPostComment(ShiroUtil.getAppUserID());
         int len = commentList.size();
-        InstantInfo instantInfo = new InstantInfo();
         for (int i = 0; i < len; i++) {
-            getInstantInfoFromCommentlist(list, commentList, i, instantInfo);
+            getInstantInfoFromCommentlist(list, commentList, i);
         }
     }
 
     private void handleZanlist(List<InstantInfo> list) {
         List<ZanRecordVo> zanlist = findZan(ShiroUtil.getAppUserID());
         int zanLength = zanlist.size();
-        InstantInfo instantInfo = new InstantInfo();
         for (int i = 0; i < zanLength; i++) {
-            getInstantInfoFromZanlist(list, zanlist, i, instantInfo);
+            getInstantInfoFromZanlist(list, zanlist, i);
         }
     }
 
@@ -176,15 +173,16 @@ public class MsgCenterFacade {
      * @param commentVoList
      * @param i
      */
-    private void getInstantInfoFromCommentlist(List<InstantInfo> list, List<CommentVo> commentVoList, int i, InstantInfo instantInfo) {
-
+    private void getInstantInfoFromCommentlist(List<InstantInfo> list, List<CommentVo> commentVoList, int i) {
+        InstantInfo instantInfo = new InstantInfo();
         instantInfo.setObject(commentVoList.get(i));
         instantInfo.setIntime(commentVoList.get(i).getIntime());
         instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.comment.getCode());
         list.add(instantInfo);
     }
 
-    private void getInstantInfoFromReplyCommentlist(List<InstantInfo> list, List<ReplyComment> replyCommentList, int i, InstantInfo instantInfo) {
+    private void getInstantInfoFromReplyCommentlist(List<InstantInfo> list, List<ReplyComment> replyCommentList, int i) {
+        InstantInfo instantInfo = new InstantInfo();
         instantInfo.setObject(replyCommentList.get(i));
         instantInfo.setIntime(replyCommentList.get(i).getIntime());
         instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.replyComment.getCode());
@@ -199,8 +197,8 @@ public class MsgCenterFacade {
      * @param zanlist
      * @param i
      */
-    private void getInstantInfoFromZanlist(List<InstantInfo> list, List<ZanRecordVo> zanlist, int i, InstantInfo instantInfo) {
-
+    private void getInstantInfoFromZanlist(List<InstantInfo> list, List<ZanRecordVo> zanlist, int i) {
+        InstantInfo instantInfo = new InstantInfo();
         instantInfo.setObject(zanlist.get(i));
         instantInfo.setIntime(zanlist.get(i).getIntime());
         instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.zan.getCode());
@@ -211,14 +209,13 @@ public class MsgCenterFacade {
     public void getFollowList(List<InstantInfo> infoList, int userid) {
         List<FollowUserVo> list = followUserService.selectFollowUserVoList(userid);
         int size = list.size();
-        InstantInfo instantInfo = new InstantInfo();
         for (int i = 0; i < size; i++) {
-            addInstantInfoWithFollow(infoList, list, i, instantInfo);
+            addInstantInfoWithFollow(infoList, list, i);
         }
     }
 
-    private void addInstantInfoWithFollow(List<InstantInfo> infoList, List<FollowUserVo> list, int i, InstantInfo instantInfo) {
-
+    private void addInstantInfoWithFollow(List<InstantInfo> infoList, List<FollowUserVo> list, int i) {
+        InstantInfo instantInfo = new InstantInfo();
         instantInfo.setIntime(list.get(i).getIntime());
         instantInfo.setObject(list.get(i));
         instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.follow.getCode());
