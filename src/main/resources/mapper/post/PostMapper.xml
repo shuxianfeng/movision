@@ -2318,7 +2318,10 @@
         (SELECT category FROM yw_circle cir WHERE cir.id=p.circleid AND cir.isdel=0 AND cir.status=1) AS category
         FROM yw_post AS p
         WHERE p.isdel <![CDATA[<>]]> 1 AND p.isactive=0
-        AND circleid = #{circleid,jdbcType=INTEGER} ORDER BY p.intime DESC
+        <if test="circleid != null">
+            AND circleid = #{circleid,jdbcType=INTEGER} ORDER BY p.intime DESC
+        </if>
+        ORDER BY p.intime DESC
     </select>
 
 </mapper>
