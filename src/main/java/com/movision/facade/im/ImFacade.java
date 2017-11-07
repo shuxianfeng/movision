@@ -525,10 +525,8 @@ public class ImFacade {
         }
     }
 
-    public void addOperationInform(HttpServletRequest request, String body, String title, String coverimg) {
+    public void addOperationInform(String body, String title, String coverimg) {
         try {
-            //生成运营推送的body内容
-            //String str = makePushBody(request, body);
             //推送业务
             sendSystemInform(body, title, title, ImConstant.PUSH_MESSAGE.operation_msg.getCode(), coverimg);
 

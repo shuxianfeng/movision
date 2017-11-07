@@ -59,12 +59,11 @@ public class BossImController {
      */
     @ApiOperation(value = "运营发送通知", notes = "运营发送通知", response = Response.class)
     @RequestMapping(value = {"/addOperationInform"}, method = RequestMethod.POST)
-    public Response addOperationInform(HttpServletRequest request,
-                                       @ApiParam(value = "标题") @RequestParam String title,
+    public Response addOperationInform(@ApiParam(value = "标题") @RequestParam String title,
                                        @ApiParam(value = "内容") @RequestParam String body,
                                        @ApiParam(value = "封面图") @RequestParam String coverimg) {
         Response response = new Response();
-        imFacade.addOperationInform(request, body, title, coverimg);
+        imFacade.addOperationInform(body, title, coverimg);
         response.setMessage("推送成功");
         return response;
     }
