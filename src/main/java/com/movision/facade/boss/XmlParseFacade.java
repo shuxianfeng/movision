@@ -808,10 +808,10 @@ public class XmlParseFacade {
         }*/
         if (w / h > thanw / thanh) { //切宽
             resatlt.put("h", h);
-            resatlt.put("w", h * (thanw / thanh));
+            resatlt.put("w", (int) (h * (thanw / thanh)));
         } else if (w / h < thanw / thanh) {//切高
             resatlt.put("w", w);
-            resatlt.put("h", w * (thanh / thanw));
+            resatlt.put("h", (int) (w * (thanh / thanw)));
         }
         return resatlt;
     }
