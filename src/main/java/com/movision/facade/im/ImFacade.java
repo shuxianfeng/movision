@@ -726,7 +726,10 @@ public class ImFacade {
         ImBatchAttachMsg imBatchAttachMsg = new ImBatchAttachMsg();
         imBatchAttachMsg.setFromAccid(fromaccid);
         imBatchAttachMsg.setAttach(body);
-        imBatchAttachMsg.setPushcontent(pushcontent);
+        //推送则封装pushcontent
+        if (!StringUtils.isEmpty(pushcontent)) {
+            imBatchAttachMsg.setPushcontent(pushcontent);
+        }
         imBatchAttachMsg.setPayload(payload);
         imBatchAttachMsg.setToAccids(toAccids);
         imBatchAttachMsg.setOption(option);
