@@ -102,14 +102,20 @@ public class MsgCenterFacade {
     private List<InstantInfo> getCurrentUserInstantInfos(ServicePaging<InstantInfo> paging, List<InstantInfo> list, int curid) {
         List<InstantInfo> resultList;
         /**
-         * 一 评论： 1 评论帖子，
-         * 问题分析：目前是获取当前作者的全部帖子评论，按照时间倒序。
+         * 一 评论：
+         *
+         * 问题分析：接口返回数据太慢，长达12秒。
+         *          目前是获取当前作者的全部帖子评论，按照时间倒序。
          *          里面涉及到循环全部评论，封装成InstantInfo实体的操作，这一步消耗性能。
-         * 解决方法：不做封装操作
+         *          可有可能是因为返回的结果集中的对象数量太多，达到1700+， 分页消耗性能，可是这个分页是优化过后的。
+         *
+         * 解决方法：1 不做封装操作 -- 失败
+         *          2 控制查询出来的数量，比如最多30条，但是这个会存在一个问题，就是用户无法查看他所有的动态消息 -- 备用
+         *          因为很久之前的动态消息似乎也没有什么意义，那么干脆就不展示。
          */
-        handleCommentlist(list);
-        //          2 评论回复
-        handleReplyCommentList(list);
+        handleCommentlist(list);    //1 评论帖子
+
+        handleReplyCommentList(list);   //2 评论回复
         //二 赞 （评论+帖子）
         handleZanlist(list);
         //三 关注 （ 关注人）
@@ -141,28 +147,64 @@ public class MsgCenterFacade {
         followUserService.updateAttentionIsRead(userid);
     }
 
+    /**
+     * 只展示前20条评论的回复
+     *
+     * @param list
+     */
     private void handleReplyCommentList(List<InstantInfo> list) {
+        //查询回复评论列表，时间倒序
         List<ReplyComment> replyCommentList = commentService.selectReplyCommentList(ShiroUtil.getAppUserID());
         int len = replyCommentList.size();
-        for (int i = 0; i < len; i++) {
+        int displayLen = len >= 20 ? 20 : len;
+        for (int i = 0; i < displayLen; i++) {
             getInstantInfoFromReplyCommentlist(list, replyCommentList, i);
         }
     }
 
+    /**
+     * 只展示前20条评论
+     *
+     * @param list
+     */
     private void handleCommentlist(List<InstantInfo> list) {
-
+        //查询当前用户所发的帖子评论，时间倒序
         List<CommentVo> commentList = commentService.selectPostComment(ShiroUtil.getAppUserID());
         int len = commentList.size();
-        for (int i = 0; i < len; i++) {
+        int displayLen = len >= 20 ? 20 : len;
+        for (int i = 0; i < displayLen; i++) {
             getInstantInfoFromCommentlist(list, commentList, i);
         }
     }
 
+    /**
+     * 只展示前20条赞
+     *
+     * @param list
+     */
     private void handleZanlist(List<InstantInfo> list) {
+        //获取被点赞的消息，时间倒序
         List<ZanRecordVo> zanlist = findZan(ShiroUtil.getAppUserID());
         int zanLength = zanlist.size();
-        for (int i = 0; i < zanLength; i++) {
+        int displayLen = zanLength >= 20 ? 20 : zanLength;
+        for (int i = 0; i < displayLen; i++) {
             getInstantInfoFromZanlist(list, zanlist, i);
+        }
+    }
+
+    /**
+     * 只展示前20条关注的信息
+     *
+     * @param infoList
+     * @param userid
+     */
+    public void getFollowList(List<InstantInfo> infoList, int userid) {
+        //查询关注我的人的列表
+        List<FollowUserVo> list = followUserService.selectFollowUserVoList(userid);
+        int size = list.size();
+        int displayLen = size >= 20 ? 20 : size;
+        for (int i = 0; i < displayLen; i++) {
+            addInstantInfoWithFollow(infoList, list, i);
         }
     }
 
@@ -205,14 +247,6 @@ public class MsgCenterFacade {
         list.add(instantInfo);
     }
 
-
-    public void getFollowList(List<InstantInfo> infoList, int userid) {
-        List<FollowUserVo> list = followUserService.selectFollowUserVoList(userid);
-        int size = list.size();
-        for (int i = 0; i < size; i++) {
-            addInstantInfoWithFollow(infoList, list, i);
-        }
-    }
 
     private void addInstantInfoWithFollow(List<InstantInfo> infoList, List<FollowUserVo> list, int i) {
         InstantInfo instantInfo = new InstantInfo();

@@ -1,6 +1,5 @@
 package com.movision.facade.paging;
 
-import com.movision.common.pojo.InstantInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
