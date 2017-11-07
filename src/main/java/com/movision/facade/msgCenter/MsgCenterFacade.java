@@ -101,7 +101,12 @@ public class MsgCenterFacade {
      */
     private List<InstantInfo> getCurrentUserInstantInfos(ServicePaging<InstantInfo> paging, List<InstantInfo> list, int curid) {
         List<InstantInfo> resultList;
-        //一 评论： 1 评论帖子，
+        /**
+         * 一 评论： 1 评论帖子，
+         * 问题分析：目前是获取当前作者的全部帖子评论，按照时间倒序。
+         *          里面涉及到循环全部评论，封装成InstantInfo实体的操作，这一步消耗性能。
+         * 解决方法：不做封装操作
+         */
         handleCommentlist(list);
         //          2 评论回复
         handleReplyCommentList(list);
@@ -139,8 +144,9 @@ public class MsgCenterFacade {
     private void handleReplyCommentList(List<InstantInfo> list) {
         List<ReplyComment> replyCommentList = commentService.selectReplyCommentList(ShiroUtil.getAppUserID());
         int len = replyCommentList.size();
+        InstantInfo instantInfo = new InstantInfo();
         for (int i = 0; i < len; i++) {
-            getInstantInfoFromReplyCommentlist(list, replyCommentList, i);
+            getInstantInfoFromReplyCommentlist(list, replyCommentList, i, instantInfo);
         }
     }
 
@@ -148,16 +154,18 @@ public class MsgCenterFacade {
 
         List<CommentVo> commentList = commentService.selectPostComment(ShiroUtil.getAppUserID());
         int len = commentList.size();
+        InstantInfo instantInfo = new InstantInfo();
         for (int i = 0; i < len; i++) {
-            getInstantInfoFromCommentlist(list, commentList, i);
+            getInstantInfoFromCommentlist(list, commentList, i, instantInfo);
         }
     }
 
     private void handleZanlist(List<InstantInfo> list) {
         List<ZanRecordVo> zanlist = findZan(ShiroUtil.getAppUserID());
         int zanLength = zanlist.size();
+        InstantInfo instantInfo = new InstantInfo();
         for (int i = 0; i < zanLength; i++) {
-            getInstantInfoFromZanlist(list, zanlist, i);
+            getInstantInfoFromZanlist(list, zanlist, i, instantInfo);
         }
     }
 
@@ -168,16 +176,15 @@ public class MsgCenterFacade {
      * @param commentVoList
      * @param i
      */
-    private void getInstantInfoFromCommentlist(List<InstantInfo> list, List<CommentVo> commentVoList, int i) {
-        InstantInfo instantInfo = new InstantInfo();
+    private void getInstantInfoFromCommentlist(List<InstantInfo> list, List<CommentVo> commentVoList, int i, InstantInfo instantInfo) {
+
         instantInfo.setObject(commentVoList.get(i));
         instantInfo.setIntime(commentVoList.get(i).getIntime());
         instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.comment.getCode());
         list.add(instantInfo);
     }
 
-    private void getInstantInfoFromReplyCommentlist(List<InstantInfo> list, List<ReplyComment> replyCommentList, int i) {
-        InstantInfo instantInfo = new InstantInfo();
+    private void getInstantInfoFromReplyCommentlist(List<InstantInfo> list, List<ReplyComment> replyCommentList, int i, InstantInfo instantInfo) {
         instantInfo.setObject(replyCommentList.get(i));
         instantInfo.setIntime(replyCommentList.get(i).getIntime());
         instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.replyComment.getCode());
@@ -192,8 +199,8 @@ public class MsgCenterFacade {
      * @param zanlist
      * @param i
      */
-    private void getInstantInfoFromZanlist(List<InstantInfo> list, List<ZanRecordVo> zanlist, int i) {
-        InstantInfo instantInfo = new InstantInfo();
+    private void getInstantInfoFromZanlist(List<InstantInfo> list, List<ZanRecordVo> zanlist, int i, InstantInfo instantInfo) {
+
         instantInfo.setObject(zanlist.get(i));
         instantInfo.setIntime(zanlist.get(i).getIntime());
         instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.zan.getCode());
@@ -204,13 +211,14 @@ public class MsgCenterFacade {
     public void getFollowList(List<InstantInfo> infoList, int userid) {
         List<FollowUserVo> list = followUserService.selectFollowUserVoList(userid);
         int size = list.size();
+        InstantInfo instantInfo = new InstantInfo();
         for (int i = 0; i < size; i++) {
-            addInstantInfoWithFollow(infoList, list, i);
+            addInstantInfoWithFollow(infoList, list, i, instantInfo);
         }
     }
 
-    private void addInstantInfoWithFollow(List<InstantInfo> infoList, List<FollowUserVo> list, int i) {
-        InstantInfo instantInfo = new InstantInfo();
+    private void addInstantInfoWithFollow(List<InstantInfo> infoList, List<FollowUserVo> list, int i, InstantInfo instantInfo) {
+
         instantInfo.setIntime(list.get(i).getIntime());
         instantInfo.setObject(list.get(i));
         instantInfo.setType(MsgCenterConstant.INSTANT_INFO_TYPE.follow.getCode());
