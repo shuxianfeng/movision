@@ -84,34 +84,27 @@ public class CoverImgCompressUtil {
         String compress_dir_path = uploadFacade.getConfigVar("post.incise.domain");//压缩图片路径url
         List<String> existFileList = getExistFiles(compress_dir_path);//获取文件夹下的所有文件名
 
-        /*File f = new File(file);
-        Long size = f.length();//获取文件大小*/
+        String PATH = file;
+        //String filename = FileUtil.getPicName(file);//获取图片文件名
+        // 1 生成压缩后的图片的url
+        String tempfilename = file.substring(file.lastIndexOf("/") + 1);//获取文件名称+后缀
+        String compress_file_path = compress_dir_path + tempfilename;
+        log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
 
-        /*if (size > 200 * 1024) {*/
-            String PATH = file;
-            //String filename = FileUtil.getPicName(file);//获取图片文件名
-            // 1 生成压缩后的图片的url
-            String tempfilename = file.substring(file.lastIndexOf("/") + 1);//获取文件名称+后缀
-            String compress_file_path = compress_dir_path + tempfilename;
-            log.info("压缩后的图片url，compress_file_path=" + compress_file_path);
-
-            // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
-            if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(tempfilename)) {
-                // 压缩核心算法
-                compressFlag = compressJpgOrPng(w, h, compressFlag, tempfilename, PATH, compress_dir_path);
-                // 处理过的图片加入到已处理集合，防止重复压缩图片
-                existFileList.add(tempfilename);
-            } else {
-                compressFlag = true;
-                log.info("该图片已存在，不需要压缩，filename=" + tempfilename);
-            }
-            if (compressFlag) {
-                //压缩成功后返回图片压缩后的url
-                return compress_file_path;
-            }
-       /* } else {
-            return file;
-        }*/
+        // 2 判断该文件夹下是否有同名的图片，若有则不处理，若没有则进行处理
+        if (CollectionUtils.isEmpty(existFileList) || !existFileList.contains(tempfilename)) {
+            // 压缩核心算法
+            compressFlag = compressJpgOrPng(w, h, compressFlag, tempfilename, PATH, compress_dir_path);
+            // 处理过的图片加入到已处理集合，防止重复压缩图片
+            existFileList.add(tempfilename);
+        } else {
+            compressFlag = true;
+            log.info("该图片已存在，不需要压缩，filename=" + tempfilename);
+        }
+        if (compressFlag) {
+            //压缩成功后返回图片压缩后的url
+            return compress_file_path;
+        }
 
         return null;
     }

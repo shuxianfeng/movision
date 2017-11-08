@@ -476,17 +476,14 @@ public class FacadePost {
         int wt = 0;//图片压缩后的宽度
         int ht = 0;//图片压缩后的高度440
         try {
-            /*wt = 750;
-            ht = 440;*/
-            //返回图片的宽高
-            //BufferedImage bi = ImageIO.read(file.getInputStream());
             File file1 = new File(url);
             InputStream is = new FileInputStream(file1);
             BufferedImage bi = ImageIO.read(is);
             //获取图片压缩比例
-            Double ratio = systemLayoutService.queryFileRatio("file_compress_ratio");
-            wt = (int) Math.ceil(bi.getWidth() * ratio);
-            ht = (int) Math.ceil(bi.getHeight() * ratio);
+//            Double ratio = systemLayoutService.queryFileRatio("file_compress_ratio");
+            Double rate = jsoupCompressImg.getWH(bi.getWidth(), bi.getHeight());//计算压缩比例
+            wt = (int) Math.ceil(bi.getWidth() * rate);
+            ht = (int) Math.ceil(bi.getHeight() * rate);
         } catch (IOException e) {
             e.printStackTrace();
         }

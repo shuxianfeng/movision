@@ -452,15 +452,23 @@ public class JsoupCompressImg {
      */
     public Double getWH(int prow, int proh){
         Double rate = 0.00;
-        if (prow < 1000 && proh < 1000){//宽高都在1000px一下，尺寸不压缩
+        //宽高哪个小以哪个为计算标准
+        int pro;
+        if (prow > proh){
+            pro = proh;
+        }else{
+            pro = prow;
+        }
+        //阶梯式区分压缩程度
+        if (pro < 1000){//宽或高有1000px以下的，尺寸不压缩
             rate = 1.00;
-        }else if ((prow < 2000 && prow >= 1000) || (proh < 2000 && proh >= 1000)){//宽高有在1000~2000px的压缩到原尺寸的80%
+        }else if (pro < 2000 && pro >= 1000){//宽高有在1000~2000px的压缩到原尺寸的80%
             rate = 0.80;
-        }else if ((prow < 3000 && prow >= 2000) || (proh < 3000 && proh >= 2000)){//宽高有在2000~3000px的压缩到原尺寸的60%
+        }else if (pro < 3000 && pro >= 2000){//宽高有在2000~3000px的压缩到原尺寸的60%
             rate = 0.60;
-        }else if ((prow < 4000 && prow >= 3000) || (proh < 4000 && proh >= 3000)){//宽高有在3000~4000px的压缩到原尺寸的40%
+        }else if (pro < 4000 && pro >= 3000){//宽高有在3000~4000px的压缩到原尺寸的40%
             rate = 0.40;
-        }else if (prow > 5000 || proh > 5000) {//宽高有在5000px以上的压缩到原尺寸的20%
+        }else if (pro > 5000) {//宽高有在5000px以上的压缩到原尺寸的20%
             rate = 0.20;
         }
         return rate;
