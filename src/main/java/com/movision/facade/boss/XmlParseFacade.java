@@ -120,7 +120,6 @@ public class XmlParseFacade {
      * @param phone
      * @return
      */
-    @Transactional
     public Map analysisXml(HttpServletRequest request, MultipartFile file, String nickname, String phone, String circleid) {
         Map resault = new HashMap();
         SAXReader reader = new SAXReader();
