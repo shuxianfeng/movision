@@ -173,8 +173,10 @@ public class XmlParseFacade {
                         String caption = "";
                         if (e.element("caption") != null) {
                             caption = e.element("caption").getText();
-                            log.info("帖子文字：", caption);
-                            content = textTransform(content, caption);
+                            log.info("帖子文字：" + caption);
+                            if (content != "") {
+                                content = textTransform(content, caption);
+                            }
                         }
                         //视频内容解析
                     /*if (type.equals("Video")) {
@@ -610,7 +612,7 @@ public class XmlParseFacade {
                     }
                     content += "{\"orderid\":" + k + ",\"wh\":\"" + ow + "×" + oh + "\",\"type\":1,\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
                 } else {
-                    content = "";
+                    content += "";
                 }
                 if (k == jsonArray.size() - 1) {
                     if (content.indexOf(",") != -1) {
