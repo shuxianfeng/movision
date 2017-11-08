@@ -615,8 +615,17 @@ public class XmlParseFacade {
                 caps = caption.getText().replace("<p>", "");
                 caps = caps.replace("</p>", "");
                 caps = caps.replace("<br />", "");
+                caps = caps.replace("<", "");
+                caps = caps.replace(">", "");
+                caps = caps.replace("/", "");
+                caps = caps.replace("br", "");
             } else {
                 caps = caption.getText();
+                caps = caps.replace("<", "");
+                caps = caps.replace(">", "");
+                caps = caps.replace("/", "");
+                caps = caps.replace("br", "");
+
             }
             content += "{\"type\": 0,\"orderid\":" + num + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
         } catch (Exception e1) {
