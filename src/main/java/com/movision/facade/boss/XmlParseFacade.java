@@ -573,7 +573,7 @@ public class XmlParseFacade {
      */
     private String getImgContentAnalysis(Post post, List list, Element e, String content) {
         Element photoLinks = e.element("photoLinks");
-        try {
+        /*try {*/
             /*String pho = photoLinks.getText();
             //pho = pho.substring(2, pho.lastIndexOf("]")-1);
             pho = pho.replace("[", "");
@@ -701,10 +701,10 @@ public class XmlParseFacade {
                 }
             }
             content += "{\"type\": 0,\"orderid\":" + num + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";*/
-        } catch (Exception e1) {
+        /*} catch (Exception e1) {
             e1.printStackTrace();
             return "";
-        }
+        }*/
         System.out.print("============================" + content);
         return content;
     }
