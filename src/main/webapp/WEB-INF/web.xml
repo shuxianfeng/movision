@@ -108,7 +108,7 @@
 
     <!--设置session失效时间：3小时，单位：分钟-->
     <session-config>
-        <session-timeout>180</session-timeout>
+        <session-timeout>720</session-timeout>
     </session-config>
 
     <welcome-file-list>
