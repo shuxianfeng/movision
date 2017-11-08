@@ -611,8 +611,10 @@ public class XmlParseFacade {
                         postCompressImg(post, list, m, covimg);
                     }
                     content += "{\"orderid\":" + k + ",\"wh\":\"" + ow + "×" + oh + "\",\"type\":1,\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
-                } else {
+                } else if (k > 0) {
                     content += "";
+                } else {
+                    content = "";
                 }
                 if (k == jsonArray.size() - 1) {
                     if (content.indexOf(",") != -1) {
