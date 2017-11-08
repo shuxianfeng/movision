@@ -620,7 +620,7 @@ public class XmlParseFacade {
     }
 
     private String textTransform(String content, String caption) {
-        JSONArray jsonArray = JSONArray.fromObject(caption);
+        JSONArray jsonArray = JSONArray.fromObject(content);
         String caps = "";
         //当文本中包含p标签执行截取,否则直接获取
         if (StringUtil.isNotEmpty(caption)) {
@@ -643,7 +643,11 @@ public class XmlParseFacade {
                     caps = caps.replace("\"", "");
                 }
             }
-            content += "{\"type\": 0,\"orderid\":" + jsonArray.size() + 1 + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
+            if (jsonArray.size() == 0) {
+                content += "{\"type\": 0,\"orderid\":0,\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
+            } else {
+                content += "{\"type\": 0,\"orderid\":" + jsonArray.size() + 1 + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
+            }
         } else {
             content += "{\"type\": 0,\"orderid\":" + jsonArray.size() + 1 + ",\"value\":\"\",\"wh\": \"\",\"dir\": \"\"}]";
         }
