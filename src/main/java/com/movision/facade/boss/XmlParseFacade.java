@@ -140,52 +140,56 @@ public class XmlParseFacade {
                 List list = new ArrayList();
                 //循环所有父节点
                 for (Element e : elements) {
-                    boolean flg = false;
-                    //用于拼接帖子内容
-                    String content = "[";
-                    //获取发帖时间并转换为long类型
-                    Long publishTime = Long.parseLong(e.element("publishTime").getText());
-                    Date intime = new Date(publishTime);
-                    post.setIntime(intime);
-                    //类型
-                    String type = e.element("type").getText();
-                    //标签
-                    String tag = e.element("tag").getText();
+                    try {
+                        boolean flg = false;
+                        //用于拼接帖子内容
+                        String content = "[";
+                        //获取发帖时间并转换为long类型
+                        Long publishTime = Long.parseLong(e.element("publishTime").getText());
+                        Date intime = new Date(publishTime);
+                        post.setIntime(intime);
+                        //类型
+                        String type = e.element("type").getText();
+                        //标签
+                        String tag = e.element("tag").getText();
 
-                    //图片内容解析
-                    if (type.equals("Photo")) {
-                        content = getImgContentAnalysis(post, list, e, content);
-                        flg = true;
-                    }
-                    //视频内容解析
+                        //图片内容解析
+                        if (type.equals("Photo")) {
+                            content = getImgContentAnalysis(post, list, e, content);
+                            flg = true;
+                        }
+                        //视频内容解析
                     /*if (type.equals("Video")) {
                         //视频内容
                         content = getVideoContentAnalysis(post, e, content);
                         flg = true;
                     }*/
-                    //纯文本解析
+                        //纯文本解析
                 /*if (type.equals("Text")){
                     //文本
                     s = getTextContentAnalysis(post, e, s);
                     flg = true;
                 }*/
 
-                    if (!flg) {
-                        content = "";
-                    }
-                    post.setIntime(new Date());
-                    //post.setCircleid(125);
-                    post.setPostcontent(content);
-                    System.out.println("---------" + content);
+                        if (!flg) {
+                            content = "";
+                        }
+                        post.setIntime(new Date());
+                        //post.setCircleid(125);
+                        post.setPostcontent(content);
+                        System.out.println("---------" + content);
 
-                    if (content != "") {
-                        //标签操作 //
-                        String lbs = postLabel(post, tag);
-                        //新增帖子操作
-                        postFacade.addPostTest(request, "", "", circleid, post.getUserid().toString(),
-                                post.getCoverimg(), post.getPostcontent(), lbs, "", "1");
+                        if (content != "") {
+                            //标签操作 //
+                            String lbs = postLabel(post, tag);
+                            //新增帖子操作
+                            postFacade.addPostTest(request, "", "", circleid, post.getUserid().toString(),
+                                    post.getCoverimg(), post.getPostcontent(), lbs, "", "1");
+                        }
+                        kk++;
+                    } catch (NumberFormatException e1) {
+                        continue;
                     }
-                    kk++;
                 }
 
                 //释放空间,删除本地图片
@@ -604,8 +608,15 @@ public class XmlParseFacade {
 
         //文本
         Element caption = e.element("caption");
-        String caps = caption.getText().replace("<p>", "");
-        caps = caps.replace("</p>", "");
+        String caps = "";
+        //当文本中包含p标签执行截取,否则直接获取
+        if (caption.getText().indexOf("<p>") == 1) {
+            caps = caption.getText().replace("<p>", "");
+            caps = caps.replace("</p>", "");
+            caps = caps.replace("<br />", "");
+        } else {
+            caps = caption.getText();
+        }
         content += "{\"type\": 0,\"orderid\":" + num + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
         return content;
     }
