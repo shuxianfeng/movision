@@ -173,6 +173,7 @@ public class XmlParseFacade {
                         String caption = "";
                         if (e.element("caption") != null) {
                             caption = e.element("caption").getText();
+                            log.info("帖子文字：", caption);
                             content = textTransform(content, caption);
                         }
                         //视频内容解析
@@ -612,8 +613,10 @@ public class XmlParseFacade {
                     content = "";
                 }
                 if (k == jsonArray.size() - 1) {
-                    content = content.substring(0, content.lastIndexOf(","));
-                    content += "]";
+                    if (content.indexOf(",") != -1) {
+                        content = content.substring(0, content.lastIndexOf(","));
+                        content += "]";
+                    }
                 }
             }
         } catch (Exception e1) {
@@ -657,7 +660,9 @@ public class XmlParseFacade {
                 }
             }
             if (jsonArray.size() != 0) {
-                content += "{\"type\": 0,\"orderid\":" + jsonArray.size() + 1 + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
+                StringBuilder sb = new StringBuilder(content);//构造一个StringBuilder对象
+                sb.insert(content.length() - 1, ",{\"type\": 0,\"orderid\":" + jsonArray.size() + 1 + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}");//在指定的位置1，插入指定的字符串
+                content = sb.toString();
             }
         }
         return content;
