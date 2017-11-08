@@ -586,7 +586,7 @@ public class XmlParseFacade {
             //boolean bln = true;
             //循环子节点拼接帖子内容
 
-            JSONArray jsonArray = JSONArray.fromObject(photoLinks);
+            JSONArray jsonArray = JSONArray.fromObject(photoLinks.getText().toString());
             for (int k = 0; k < jsonArray.size(); k++) {
                 //从img中获取type属性
                 JSONObject moduleobj = JSONObject.parseObject(jsonArray.get(k).toString());
