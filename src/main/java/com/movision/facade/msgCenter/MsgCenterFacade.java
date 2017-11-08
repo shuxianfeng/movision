@@ -84,8 +84,6 @@ public class MsgCenterFacade {
             updateComment(curid);    //更新评论已读
             updateZan(curid);  //更新赞
             updateAttention(curid);    //更新关注
-        } else {
-            throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "用户id未传");
         }
         return resultList;
 
@@ -110,7 +108,7 @@ public class MsgCenterFacade {
          *          可有可能是因为返回的结果集中的对象数量太多，达到1700+， 分页消耗性能，可是这个分页是优化过后的。
          *
          * 解决方法：1 不做封装操作 -- 失败
-         *          2 控制查询出来的数量，比如最多30条，但是这个会存在一个问题，就是用户无法查看他所有的动态消息 -- 备用
+         *          2 控制查询出来的数量，比如每种类型最多20条，但是这个会存在一个问题，就是用户无法查看他所有的动态消息
          *          因为很久之前的动态消息似乎也没有什么意义，那么干脆就不展示。
          */
         handleCommentlist(list);    //1 评论帖子
