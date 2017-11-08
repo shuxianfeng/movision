@@ -149,9 +149,15 @@ public class XmlParseFacade {
                         Date intime = new Date(publishTime);
                         post.setIntime(intime);
                         //类型
-                        String type = e.element("type").getText();
+                        String type = "";
+                        if (e.element("type") != null) {
+                            type = e.element("type").getText();
+                        }
                         //标签
-                        String tag = e.element("tag").getText();
+                        String tag = "";
+                        if (e.element("tag") != null) {
+                            tag = e.element("tag").getText();
+                        }
 
                         //图片内容解析
                         if (type.equals("Photo")) {
@@ -395,6 +401,7 @@ public class XmlParseFacade {
 
     /**
      * 新用户注册
+     *
      * @param phone
      */
     private Integer newUserRegistration(String phone) {
@@ -637,6 +644,7 @@ public class XmlParseFacade {
 
     /**
      * 操作帖子封面，包括原图和压缩图的映射存储
+     *
      * @param post
      * @param list
      * @param m
@@ -787,6 +795,7 @@ public class XmlParseFacade {
 
     /**
      * 返回截图宽高
+     *
      * @param url
      * @return
      */
@@ -853,6 +862,7 @@ public class XmlParseFacade {
         }
         return resatlt;
     }
+
     /**
      * 下载文件
      *
