@@ -704,6 +704,7 @@ public class XmlParseFacade {
         } catch (Exception e1) {
             return "";
         }
+        System.out.print("============================" + content);
         return content;
     }
 
