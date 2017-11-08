@@ -1,5 +1,6 @@
 package com.movision.facade.boss;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.movision.common.constant.PointConstant;
 import com.movision.facade.im.ImFacade;
@@ -35,6 +36,7 @@ import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
+import net.sf.json.JSONArray;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -572,7 +574,7 @@ public class XmlParseFacade {
     private String getImgContentAnalysis(Post post, List list, Element e, String content) {
         Element photoLinks = e.element("photoLinks");
         try {
-            String pho = photoLinks.getText();
+            /*String pho = photoLinks.getText();
             //pho = pho.substring(2, pho.lastIndexOf("]")-1);
             pho = pho.replace("[", "");
             pho = pho.replace("{", "");
@@ -580,10 +582,61 @@ public class XmlParseFacade {
             pho = pho.replace("]", "");
             pho = pho.replace("\"", "");
             String[] substring = pho.split(",");
-            int num = 0;
-            boolean bln = true;
+            int num = 0;*/
+            //boolean bln = true;
             //循环子节点拼接帖子内容
-            for (int i = 0; i < substring.length; i++) {
+
+            JSONArray jsonArray = JSONArray.fromObject(content);
+            for (int k = 0; k < jsonArray.size(); k++) {
+                //从img中获取type属性
+                JSONObject moduleobj = JSONObject.parseObject(jsonArray.get(k).toString());
+                String value = (String) moduleobj.get("orign");
+                String ow = (String) moduleobj.get("ow");
+                String oh = (String) moduleobj.get("oh");
+                String caption = (String) moduleobj.get("caption");
+                if (value.indexOf("?") != -1) {
+                    value = value.substring(0, value.indexOf("?"));
+                }
+                //文件下载并上传原图
+                Map m = download(value, "img");
+                if (m != null) {
+                    //获取本地文件
+                    list.add(m.get("oldurl"));
+                    //帖子封面处理
+                    String covimg = m.get("oldurl").toString();
+                    if (k == 0) {
+                        //帖子封面处理，包括存储原图和压缩图
+                        postCompressImg(post, list, m, covimg);
+                    }
+                    content += "{\"orderid\":" + k + ",\"wh\":\"" + ow + "×" + oh + "\",\"type\":1,\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
+                } else {
+                    content += "{\"orderid\":" + k + ",\"wh\":\"" + ow + "×" + oh + "\",\"type\":1,\"value\":\"\"value\":\"\",\"dir\": \"\"},";
+                }
+                String caps = "";
+                //当文本中包含p标签执行截取,否则直接获取
+                if (caption.indexOf("<p>") != -1) {
+                    caps = caption.replace("<p>", "");
+                    caps = caps.replace("</p>", "");
+                    caps = caps.replace("<br />", "");
+                    caps = caps.replace("<", "");
+                    caps = caps.replace(">", "");
+                    caps = caps.replace("/", "");
+                    caps = caps.replace("br", "");
+                    caps = caps.replace("\"", "");
+                } else {
+                    caps = caption;
+                    if (caps.indexOf("<") != -1) {
+                        caps = caps.replace("<", "");
+                        caps = caps.replace(">", "");
+                        caps = caps.replace("/", "");
+                        caps = caps.replace("br", "");
+                        caps = caps.replace("\"", "");
+                    }
+                }
+                content += "{\"type\": 0,\"orderid\":" + k + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
+
+            }
+            /*for (int i = 0; i < substring.length; i++) {
                 String contentimg = "";
                 String wh = "\"wh\":";
                 if (substring[i].substring(0, substring[i].indexOf(":")).equals("orign")) {
@@ -608,7 +661,7 @@ public class XmlParseFacade {
                         }
                         contentimg += "\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
                     } else {
-                        contentimg = "\"value\":\"\",\"dir\": \"\"},";
+                        contentimg += "\"value\":\"\",\"dir\": \"\"},";
                     }
                     bln = false;
                 }
@@ -621,10 +674,10 @@ public class XmlParseFacade {
                     content += substring[i].substring(substring[i].indexOf(":"), substring[i].length()) + "\",";
                     content += contentimg;
                 }
-            }
+            }*/
 
             //文本
-            Element caption = e.element("caption");
+           /* Element caption = e.element("caption");
             String caps = "";
             //当文本中包含p标签执行截取,否则直接获取
             if (caption.getText().toString().indexOf("<p>") != -1) {
@@ -646,7 +699,7 @@ public class XmlParseFacade {
                     caps = caps.replace("\"", "");
                 }
             }
-            content += "{\"type\": 0,\"orderid\":" + num + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
+            content += "{\"type\": 0,\"orderid\":" + num + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";*/
         } catch (Exception e1) {
             return "";
         }
