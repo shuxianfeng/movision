@@ -620,7 +620,7 @@ public class XmlParseFacade {
             }
             content += "{\"type\": 0,\"orderid\":" + num + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
         } catch (Exception e1) {
-            return null;
+            e1.printStackTrace();
         }
         return content;
     }
