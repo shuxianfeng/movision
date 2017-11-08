@@ -618,27 +618,30 @@ public class XmlParseFacade {
                 }
                 String caps = "";
                 //当文本中包含p标签执行截取,否则直接获取
-                if (caption.indexOf("<p>") != -1) {
-                    caps = caption.replace("<p>", "");
-                    caps = caps.replace("</p>", "");
-                    caps = caps.replace("<br />", "");
-                    caps = caps.replace("<", "");
-                    caps = caps.replace(">", "");
-                    caps = caps.replace("/", "");
-                    caps = caps.replace("br", "");
-                    caps = caps.replace("\"", "");
-                } else {
-                    caps = caption;
-                    if (caps.indexOf("<") != -1) {
+                if (StringUtil.isNotEmpty(caption)) {
+                    if (caption.indexOf("<p>") != -1) {
+                        caps = caption.replace("<p>", "");
+                        caps = caps.replace("</p>", "");
+                        caps = caps.replace("<br />", "");
                         caps = caps.replace("<", "");
                         caps = caps.replace(">", "");
                         caps = caps.replace("/", "");
                         caps = caps.replace("br", "");
                         caps = caps.replace("\"", "");
+                    } else {
+                        caps = caption;
+                        if (caps.indexOf("<") != -1) {
+                            caps = caps.replace("<", "");
+                            caps = caps.replace(">", "");
+                            caps = caps.replace("/", "");
+                            caps = caps.replace("br", "");
+                            caps = caps.replace("\"", "");
+                        }
                     }
+                    content += "{\"type\": 0,\"orderid\":" + k + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
+                } else {
+                    content += "{\"type\": 0,\"orderid\":" + k + ",\"value\":\"\",\"wh\": \"\",\"dir\": \"\"}]";
                 }
-                content += "{\"type\": 0,\"orderid\":" + k + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
-
             }
             /*for (int i = 0; i < substring.length; i++) {
                 String contentimg = "";
