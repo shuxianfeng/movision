@@ -560,64 +560,68 @@ public class XmlParseFacade {
      */
     private String getImgContentAnalysis(Post post, List list, Element e, String content) {
         Element photoLinks = e.element("photoLinks");
-        String pho = photoLinks.getText();
-        //pho = pho.substring(2, pho.lastIndexOf("]")-1);
-        pho = pho.replace("[", "");
-        pho = pho.replace("{", "");
-        pho = pho.replace("}", "");
-        pho = pho.replace("]", "");
-        pho = pho.replace("\"", "");
-        String[] substring = pho.split(",");
-        int num = 0;
-        boolean bln = true;
-        //循环子节点拼接帖子内容
-        for (int i = 0; i < substring.length; i++) {
+        try {
+            String pho = photoLinks.getText();
+            //pho = pho.substring(2, pho.lastIndexOf("]")-1);
+            pho = pho.replace("[", "");
+            pho = pho.replace("{", "");
+            pho = pho.replace("}", "");
+            pho = pho.replace("]", "");
+            pho = pho.replace("\"", "");
+            String[] substring = pho.split(",");
+            int num = 0;
+            boolean bln = true;
+            //循环子节点拼接帖子内容
+            for (int i = 0; i < substring.length; i++) {
 
-            String wh = "\"wh\":";
-            if (substring[i].substring(0, substring[i].indexOf(":")).equals("raw")) {
-                content += "\"type\":1,";
-                //图片处理
-                String s = "";
-                if (substring[i].length() - 1 == substring[i].lastIndexOf("?")) {
-                    s = substring[i].substring(substring[i].indexOf(":") + 1, substring[i].lastIndexOf("?"));
-                } else {
-                    s = substring[i].substring(substring[i].indexOf(":") + 1, substring[i].length());
+                String wh = "\"wh\":";
+                if (substring[i].substring(0, substring[i].indexOf(":")).equals("raw")) {
+                    content += "\"type\":1,";
+                    //图片处理
+                    String s = "";
+                    if (substring[i].length() - 1 == substring[i].lastIndexOf("?")) {
+                        s = substring[i].substring(substring[i].indexOf(":") + 1, substring[i].lastIndexOf("?"));
+                    } else {
+                        s = substring[i].substring(substring[i].indexOf(":") + 1, substring[i].length());
+                    }
+                    //s = substring[i].substring(substring[i].indexOf(":") + 1, substring[i].length());
+                    Map m = download(s, "img");
+                    //获取本地文件
+                    list.add(m.get("oldurl"));
+                    //帖子封面处理
+                    String covimg = m.get("oldurl").toString();
+                    if (bln) {
+                        //帖子封面处理，包括存储原图和压缩图
+                        postCompressImg(post, list, m, covimg);
+                    }
+                    content += "\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
+                    bln = false;
                 }
-                //s = substring[i].substring(substring[i].indexOf(":") + 1, substring[i].length());
-                Map m = download(s, "img");
-                //获取本地文件
-                list.add(m.get("oldurl"));
-                //帖子封面处理
-                String covimg = m.get("oldurl").toString();
-                if (bln) {
-                    //帖子封面处理，包括存储原图和压缩图
-                    postCompressImg(post, list, m, covimg);
+                if (substring[i].substring(0, substring[i].indexOf(":")).equals("ow")) {
+                    content += "{\"orderid\":" + num + ",";
+                    num++;
+                    content += wh + "\"" + substring[i].substring(substring[i].indexOf(":") + 1, substring[i].length()) + "×";
                 }
-                content += "\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
-                bln = false;
+                if (substring[i].substring(0, substring[i].indexOf(":")).equals("oh")) {
+                    content += substring[i].substring(substring[i].indexOf(":"), substring[i].length()) + "\",";
+                }
             }
-            if (substring[i].substring(0, substring[i].indexOf(":")).equals("ow")) {
-                content += "{\"orderid\":" + num + ",";
-                num++;
-                content += wh + "\"" + substring[i].substring(substring[i].indexOf(":") + 1, substring[i].length()) + "×";
-            }
-            if (substring[i].substring(0, substring[i].indexOf(":")).equals("oh")) {
-                content += substring[i].substring(substring[i].indexOf(":"), substring[i].length()) + "\",";
-            }
-        }
 
-        //文本
-        Element caption = e.element("caption");
-        String caps = "";
-        //当文本中包含p标签执行截取,否则直接获取
-        if (caption.getText().indexOf("<p>") != -1) {
-            caps = caption.getText().replace("<p>", "");
-            caps = caps.replace("</p>", "");
-            caps = caps.replace("<br />", "");
-        } else {
-            caps = caption.getText();
+            //文本
+            Element caption = e.element("caption");
+            String caps = "";
+            //当文本中包含p标签执行截取,否则直接获取
+            if (caption.getText().indexOf("<p>") != -1) {
+                caps = caption.getText().replace("<p>", "");
+                caps = caps.replace("</p>", "");
+                caps = caps.replace("<br />", "");
+            } else {
+                caps = caption.getText();
+            }
+            content += "{\"type\": 0,\"orderid\":" + num + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
+        } catch (Exception e1) {
+            return null;
         }
-        content += "{\"type\": 0,\"orderid\":" + num + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
         return content;
     }
 
