@@ -626,6 +626,7 @@ public class XmlParseFacade {
                 caps = caps.replace(">", "");
                 caps = caps.replace("/", "");
                 caps = caps.replace("br", "");
+                caps = caps.replace("\"", "");
             } else {
                 caps = caption.getText();
                 if (caps.indexOf("<") != -1) {
@@ -633,6 +634,7 @@ public class XmlParseFacade {
                     caps = caps.replace(">", "");
                     caps = caps.replace("/", "");
                     caps = caps.replace("br", "");
+                    caps = caps.replace("\"", "");
                 }
             }
             content += "{\"type\": 0,\"orderid\":" + num + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
