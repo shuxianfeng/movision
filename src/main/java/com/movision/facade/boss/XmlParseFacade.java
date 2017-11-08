@@ -575,7 +575,7 @@ public class XmlParseFacade {
             for (int i = 0; i < substring.length; i++) {
 
                 String wh = "\"wh\":";
-                if (substring[i].substring(0, substring[i].indexOf(":")).equals("raw")) {
+                if (substring[i].substring(0, substring[i].indexOf(":")).equals("orign")) {
                     content += "\"type\":1,";
                     //图片处理
                     String s = "";
