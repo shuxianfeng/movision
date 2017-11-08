@@ -610,7 +610,7 @@ public class XmlParseFacade {
         Element caption = e.element("caption");
         String caps = "";
         //当文本中包含p标签执行截取,否则直接获取
-        if (caption.getText().indexOf("<p>") == 1) {
+        if (caption.getText().indexOf("<p>") != -1) {
             caps = caption.getText().replace("<p>", "");
             caps = caps.replace("</p>", "");
             caps = caps.replace("<br />", "");
