@@ -611,18 +611,17 @@ public class XmlParseFacade {
                 } else {
                     content = "";
                 }
-                if (k == jsonArray.size()) {
+                if (k == jsonArray.size() - 1) {
                     content = content.substring(0, content.lastIndexOf(","));
                     content += "]";
                 }
             }
         } catch (Exception e1) {
             e1.printStackTrace();
-            System.out.println("错误：：：：：：：：：：：" + e1.toString());
             log.info("错误信息：", e1);
             return "";
         }
-        System.out.print("============================" + content);
+        System.out.println("============================" + content);
         return content;
     }
 
