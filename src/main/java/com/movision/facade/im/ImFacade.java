@@ -33,6 +33,7 @@ import com.movision.utils.im.CheckSumBuilder;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.propertiesLoader.PropertiesLoader;
 import com.movision.utils.sms.SDKSendSms;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -459,35 +460,79 @@ public class ImFacade {
     }
 
     /**
+     * 查询是否有权限发送消息
+     *
+     * @param fromAccid
+     * @param toAccid
+     * @return
+     */
+    public Map<String, Object> getCommunicationSituation(String fromAccid, String toAccid) {
+
+
+        //默认是双方未互打招呼
+        Boolean is_say_hi = false;
+        Boolean is_reply = false;
+        Map map = new HashedMap();
+
+        List<ImFirstDialogue> list = selectFirstDialog(toAccid);
+        if (ListUtil.isNotEmpty(list)) {
+            if (list.size() > 1) {
+                //说明用户已经打过招呼了，并且对方已经回复
+                is_say_hi = true;
+                is_reply = true;
+            } else {
+                if (list.get(0).getFromid().equals(fromAccid)) {
+                    //说明用户已经打过招呼，但对方还未回复
+                    is_say_hi = true;
+                } else {
+                    //说明是对方先打招呼，用户还未回复
+                    is_reply = true;
+                }
+            }
+        }
+        map.put("is_say_hi", is_say_hi);
+        map.put("is_reply", is_reply);
+        return map;
+    }
+
+    /**
+     * IM-发消息
      * @param imMsg
-     * @param addFriendType 2:请求加好友   3：接受加好友
-     * @param responseMsg
      * @return
      * @throws IOException
      */
-    public Response doFirstCommunicate(ImMsg imMsg, int addFriendType, String responseMsg) throws IOException {
-        Response response = new Response();
-        //1 发消息
-        Map sendMsgResult = this.sendMsg(imMsg);
-        Object code_1 = sendMsgResult.get("code");
-        /**
-         *  addFriendType=2 请求加好友
-         *  addFriendType=3 接受加好友
-         */
-        Map map = this.addFriend(ShiroUtil.getAccid(), imMsg.getTo(), addFriendType, imMsg.getBody());
-        Object code_2 = map.get("code");
+    public void sendImMsg(ImMsg imMsg) throws IOException {
 
-        if (code_2.equals(200) && code_1.equals(200)) {
-            response.setCode(200);
-            response.setMessage(responseMsg + "成功");
-            //3 记录发送的消息
-            this.addFirstDialogue(imMsg.getTo(), imMsg.getBody());
+        String accid = ShiroUtil.getAccid();    //当前用户的accid
+        Map situation = getCommunicationSituation(accid, imMsg.getTo());
+        Boolean isSayHi = (Boolean) situation.get("is_say_hi");
+        Boolean isReply = (Boolean) situation.get("is_reply");
+
+        if (isSayHi) {
+            if (isReply) {
+                //is_say_hi=true, is_reply=true, 表示两人已经是好友，并且可以对话 (对话调IM接口)
+                this.sendMsg(imMsg);
+            } else {
+                //isSayHi=true, isReply=false , 表示对方还未回复，此时我不能再私信给对方 （提示）
+                throw new BusinessException(MsgCodeConstant.SYSTEM_ERROR, "对方回复你的私信之前你不能再发消息");
+            }
         } else {
-            response.setCode(400);
-            response.setMessage(responseMsg + "失败");
+            if (isReply) {
+                // isSayHi=false, isReply=true , 表示对方向我打招呼，但，我还没有回复 （可以回复打招呼）
+                this.sendMsg(imMsg);
+                // 接受对方的加好友请求
+                this.addFriend(ShiroUtil.getAccid(), imMsg.getTo(), 3, imMsg.getBody());
+                // 只有是第一次对话，才会记录发送的消息
+                this.addFirstDialogue(imMsg.getTo(), imMsg.getBody());
+            } else {
+                //is_say_hi=false, is_reply=false, 表示两人都没有打招呼 （可以打招呼）
+                this.sendMsg(imMsg);
+                // 向对方请求加好友
+                this.addFriend(ShiroUtil.getAccid(), imMsg.getTo(), 2, imMsg.getBody());
+                // 只有是第一次对话，才会记录发送的消息
+                this.addFirstDialogue(imMsg.getTo(), imMsg.getBody());
+            }
         }
-
-        return response;
     }
 
     /**
