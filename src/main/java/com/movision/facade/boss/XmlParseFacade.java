@@ -571,15 +571,16 @@ public class XmlParseFacade {
         for (int i = 0; i < substring.length; i++) {
 
             String wh = "\"wh\":";
-            if (substring[i].substring(0, substring[i].indexOf(":")).equals("orign")) {
+            if (substring[i].substring(0, substring[i].indexOf(":")).equals("raw")) {
                 content += "\"type\":1,";
                 //图片处理
                 String s = "";
-                if (substring[i].length() - 1 == substring[i].lastIndexOf("?")) {
+                /*if (substring[i].length() - 1 == substring[i].lastIndexOf("?")) {
                     s = substring[i].substring(substring[i].indexOf(":") + 1, substring[i].lastIndexOf("?"));
                 } else {
                     s = substring[i].substring(substring[i].indexOf(":") + 1, substring[i].length());
-                }
+                }*/
+                s = substring[i].substring(substring[i].indexOf(":") + 1, substring[i].length());
                 Map m = download(s, "img");
                 //获取本地文件
                 list.add(m.get("oldurl"));
