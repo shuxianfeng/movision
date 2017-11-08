@@ -169,6 +169,12 @@ public class XmlParseFacade {
                             content = getImgContentAnalysis(post, list, e, content);
                             flg = true;
                         }
+                        //标签
+                        String caption = "";
+                        if (e.element("caption") != null) {
+                            caption = e.element("caption").getText();
+                            content = textTransform(content, caption);
+                        }
                         //视频内容解析
                     /*if (type.equals("Video")) {
                         //视频内容
@@ -577,18 +583,6 @@ public class XmlParseFacade {
     private String getImgContentAnalysis(Post post, List list, Element e, String content) {
         Element photoLinks = e.element("photoLinks");
         try {
-            /*String pho = photoLinks.getText();
-            //pho = pho.substring(2, pho.lastIndexOf("]")-1);
-            pho = pho.replace("[", "");
-            pho = pho.replace("{", "");
-            pho = pho.replace("}", "");
-            pho = pho.replace("]", "");
-            pho = pho.replace("\"", "");
-            String[] substring = pho.split(",");
-            int num = 0;*/
-            //boolean bln = true;
-            //循环子节点拼接帖子内容
-
             JSONArray jsonArray = JSONArray.fromObject(photoLinks.getText());
             System.out.println(":::::::::::::::::::::::::::::::::::::::" + photoLinks.getText());
             for (int k = 0; k < jsonArray.size(); k++) {
@@ -613,82 +607,25 @@ public class XmlParseFacade {
                         postCompressImg(post, list, m, covimg);
                     }
                     content += "{\"orderid\":" + k + ",\"wh\":\"" + ow + "×" + oh + "\",\"type\":1,\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
-                } else {
-                    content += "{\"orderid\":" + k + ",\"wh\":\"" + ow + "×" + oh + "\",\"type\":1,\"value\":\"\",\"dir\": \"\"},";
-                }
-                String caps = "";
-                //当文本中包含p标签执行截取,否则直接获取
-                if (StringUtil.isNotEmpty(caption)) {
-                    if (caption.indexOf("<p>") != -1) {
-                        caps = caption.replace("<p>", "");
-                        caps = caps.replace("</p>", "");
-                        caps = caps.replace("<br />", "");
-                        caps = caps.replace("<", "");
-                        caps = caps.replace(">", "");
-                        caps = caps.replace("/", "");
-                        caps = caps.replace("br", "");
-                        caps = caps.replace("\"", "");
-                    } else {
-                        caps = caption;
-                        if (caps.indexOf("<") != -1) {
-                            caps = caps.replace("<", "");
-                            caps = caps.replace(">", "");
-                            caps = caps.replace("/", "");
-                            caps = caps.replace("br", "");
-                            caps = caps.replace("\"", "");
-                        }
-                    }
-                    content += "{\"type\": 0,\"orderid\":" + k + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
-                } else {
-                    content += "{\"type\": 0,\"orderid\":" + k + ",\"value\":\"\",\"wh\": \"\",\"dir\": \"\"}]";
                 }
             }
-            /*for (int i = 0; i < substring.length; i++) {
-                String contentimg = "";
-                String wh = "\"wh\":";
-                if (substring[i].substring(0, substring[i].indexOf(":")).equals("orign")) {
-                    contentimg += "\"type\":1,";
-                    //图片处理
-                    String s = "";
-                    if (substring[i].length() - 1 == substring[i].lastIndexOf("?")) {
-                        s = substring[i].substring(substring[i].indexOf(":") + 1, substring[i].lastIndexOf("?"));
-                    } else {
-                        s = substring[i].substring(substring[i].indexOf(":") + 1, substring[i].length());
-                    }
-                    //s = substring[i].substring(substring[i].indexOf(":") + 1, substring[i].length());
-                    Map m = download(s, "img");
-                    if (m != null) {
-                        //获取本地文件
-                        list.add(m.get("oldurl"));
-                        //帖子封面处理
-                        String covimg = m.get("oldurl").toString();
-                        if (bln) {
-                            //帖子封面处理，包括存储原图和压缩图
-                            postCompressImg(post, list, m, covimg);
-                        }
-                        contentimg += "\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
-                    } else {
-                        contentimg += "\"value\":\"\",\"dir\": \"\"},";
-                    }
-                    bln = false;
-                }
-                if (substring[i].substring(0, substring[i].indexOf(":")).equals("ow")) {
-                    content += "{\"orderid\":" + num + ",";
-                    num++;
-                    content += wh + "\"" + substring[i].substring(substring[i].indexOf(":") + 1, substring[i].length()) + "×";
-                }
-                if (substring[i].substring(0, substring[i].indexOf(":")).equals("oh")) {
-                    content += substring[i].substring(substring[i].indexOf(":"), substring[i].length()) + "\",";
-                    content += contentimg;
-                }
-            }*/
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            System.out.println("错误：：：：：：：：：：：" + e1.toString());
+            log.info("错误信息：", e1);
+            return "";
+        }
+        System.out.print("============================" + content);
+        return content;
+    }
 
-            //文本
-           /* Element caption = e.element("caption");
-            String caps = "";
-            //当文本中包含p标签执行截取,否则直接获取
-            if (caption.getText().toString().indexOf("<p>") != -1) {
-                caps = caption.getText().replace("<p>", "");
+    private String textTransform(String content, String caption) {
+        JSONArray jsonArray = JSONArray.fromObject(caption);
+        String caps = "";
+        //当文本中包含p标签执行截取,否则直接获取
+        if (StringUtil.isNotEmpty(caption)) {
+            if (caption.indexOf("<p>") != -1) {
+                caps = caption.replace("<p>", "");
                 caps = caps.replace("</p>", "");
                 caps = caps.replace("<br />", "");
                 caps = caps.replace("<", "");
@@ -697,7 +634,7 @@ public class XmlParseFacade {
                 caps = caps.replace("br", "");
                 caps = caps.replace("\"", "");
             } else {
-                caps = caption.getText();
+                caps = caption;
                 if (caps.indexOf("<") != -1) {
                     caps = caps.replace("<", "");
                     caps = caps.replace(">", "");
@@ -706,14 +643,10 @@ public class XmlParseFacade {
                     caps = caps.replace("\"", "");
                 }
             }
-            content += "{\"type\": 0,\"orderid\":" + num + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";*/
-        } catch (Exception e1) {
-            e1.printStackTrace();
-            System.out.println("错误：：：：：：：：：：：" + e1.toString());
-            log.info("错误信息：", e1);
-            return "";
+            content += "{\"type\": 0,\"orderid\":" + jsonArray.size() + 1 + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
+        } else {
+            content += "{\"type\": 0,\"orderid\":" + jsonArray.size() + 1 + ",\"value\":\"\",\"wh\": \"\",\"dir\": \"\"}]";
         }
-        System.out.print("============================" + content);
         return content;
     }
 
