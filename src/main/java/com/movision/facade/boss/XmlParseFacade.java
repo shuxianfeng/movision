@@ -41,6 +41,8 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,6 +114,7 @@ public class XmlParseFacade {
     @Autowired
     private CompressImgService compressImgService;
 
+    private static Logger log = LoggerFactory.getLogger(XmlParseFacade.class);
 
     /**
      * 解析xml
@@ -704,6 +707,7 @@ public class XmlParseFacade {
         } catch (Exception e1) {
             e1.printStackTrace();
             System.out.println("错误：：：：：：：：：：：" + e1.toString());
+            log.info("错误信息：", e1);
             return "";
         }
         System.out.print("============================" + content);
