@@ -295,8 +295,10 @@ public class ExcelIntoEnquiryUtil {
                     if (isproto == null || isproto == "") {
                         //下载图片 第一个参数原文件路径，第二个文件操作 1 ：img 2：video
                         Map t = xmlParseFacade.download(covimg, "img");
-                        //操作封面
-                        xmlParseFacade.postCompressImg(post, null, t, t.get("oldurl").toString());
+                        if (t != null) {
+                            //操作封面
+                            xmlParseFacade.postCompressImg(post, null, t, t.get("oldurl").toString());
+                        }
                     } else {
                         post.setCoverimg(covimg);
                     }

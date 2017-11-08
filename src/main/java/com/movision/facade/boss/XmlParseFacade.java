@@ -536,7 +536,11 @@ public class XmlParseFacade {
             if (embeds[i].substring(0, embeds[i].indexOf(":")).equals("originUrl")) {
                 content += "{\"type\": 2,\"orderid\":" + num + ",";
                 Map m = download(embeds[i].substring(embeds[i].indexOf(":") + 1, embeds[i].length()), "video");
-                content += "\"value\":\"" + m.get("newurl") + "\",\"wh\": \"\",\"dir\": \"\"},";
+                if (m != null) {
+                    content += "\"value\":\"" + m.get("newurl") + "\",\"wh\": \"\",\"dir\": \"\"},";
+                } else {
+                    content += "\"value\":\"\",\"wh\": \"\",\"dir\": \"\"},";
+                }
                 //System.out.println(originUrl);
                 num++;
             }
@@ -593,15 +597,19 @@ public class XmlParseFacade {
                     }
                     //s = substring[i].substring(substring[i].indexOf(":") + 1, substring[i].length());
                     Map m = download(s, "img");
-                    //获取本地文件
-                    list.add(m.get("oldurl"));
-                    //帖子封面处理
-                    String covimg = m.get("oldurl").toString();
-                    if (bln) {
-                        //帖子封面处理，包括存储原图和压缩图
-                        postCompressImg(post, list, m, covimg);
+                    if (m != null) {
+                        //获取本地文件
+                        list.add(m.get("oldurl"));
+                        //帖子封面处理
+                        String covimg = m.get("oldurl").toString();
+                        if (bln) {
+                            //帖子封面处理，包括存储原图和压缩图
+                            postCompressImg(post, list, m, covimg);
+                        }
+                        contentimg += "\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
+                    } else {
+                        contentimg = "\"value\":\"\",\"dir\": \"\"},";
                     }
-                    contentimg += "\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
                     bln = false;
                 }
                 if (substring[i].substring(0, substring[i].indexOf(":")).equals("ow")) {
@@ -874,7 +882,7 @@ public class XmlParseFacade {
     public Map download(String str, String type) {
         InputStream is = null;
         OutputStream os = null;
-        Map map = new HashMap();
+        Map map = null;
         String path = systemLayoutService.queryServiceUrl("file_xml_dwonload_img");
         //String path = "c://";
         if (type.equals("img")) {
@@ -882,32 +890,45 @@ public class XmlParseFacade {
         } else if (type.equals("video")) {
             path += "video/";
         }
+        boolean flg = true;
         try {
-            String url = str;
-            URL u = new URL(url);
-            //获取文件名
-            String[] filename = url.split("/");
-            String s = filename[filename.length - 1];
-            is = u.openStream();
-            os = new FileOutputStream(path + s);
-            int buff = 0;
-            while ((buff = is.read()) != -1) {
-                os.write(buff);
+            String s = null;
+            try {
+                String url = str;
+                URL u = new URL(url);
+                //获取文件名
+                String[] filename = url.split("/");
+                s = filename[filename.length - 1];
+                is = u.openStream();
+            } catch (IOException e) {
+                flg = false;
             }
-            map.put("oldurl", path + s);
-            if (type.equals("img")) {
-                //图片上传
-                Thread.sleep(800);
-                Map t = movisionOssClient.uploadFileObject(new File(path + s), "img", "post");
-                map.put("newurl", t.get("url"));
-                //获取原图大小
-                String filesize = getImgSize(path + s);
-                map.put("size", filesize);
-            } /*else if (type.equals("video")) {
-                //视频上传
-                //Map m = movisionOssClient.uploadFileObject(new File(path + s), "video", "post");
-                videoUploadUtil.videoUpload(path,)
-                map.put("newurl", );
+            if (flg) {
+                map = new HashMap();
+                os = new FileOutputStream(path + s);
+                int buff = 0;
+                while ((buff = is.read()) != -1) {
+                    os.write(buff);
+                }
+                map.put("oldurl", path + s);
+                if (type.equals("img")) {
+                    //图片上传
+                    Thread.sleep(800);
+                    Map t = movisionOssClient.uploadFileObject(new File(path + s), "img", "post");
+                    map.put("newurl", t.get("url"));
+                    //获取原图大小
+                    String filesize = getImgSize(path + s);
+                    map.put("size", filesize);
+                } /*else if (type.equals("video")) {
+                    //视频上传
+                    //Map m = movisionOssClient.uploadFileObject(new File(path + s), "video", "post");
+                    videoUploadUtil.videoUpload(path,)
+                    map.put("newurl", );
+                }*/
+            }/* else {
+                map.put("oldurl", "");
+                map.put("newurl", "");
+                map.put("size", "");
             }*/
         } catch (Exception e) {
             e.printStackTrace();
