@@ -607,6 +607,8 @@ public class XmlParseFacade {
                         postCompressImg(post, list, m, covimg);
                     }
                     content += "{\"orderid\":" + k + ",\"wh\":\"" + ow + "×" + oh + "\",\"type\":1,\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
+                } else {
+                    content = "";
                 }
             }
         } catch (Exception e1) {
@@ -619,6 +621,13 @@ public class XmlParseFacade {
         return content;
     }
 
+    /**
+     * 帖子内容拼接文本
+     *
+     * @param content
+     * @param caption
+     * @return
+     */
     private String textTransform(String content, String caption) {
         JSONArray jsonArray = JSONArray.fromObject(content);
         String caps = "";
@@ -644,12 +653,10 @@ public class XmlParseFacade {
                 }
             }
             if (jsonArray.size() == 0) {
-                content += "{\"type\": 0,\"orderid\":0,\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
+                content += "[{\"type\": 0,\"orderid\":0,\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
             } else {
                 content += "{\"type\": 0,\"orderid\":" + jsonArray.size() + 1 + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
             }
-        } else {
-            content += "{\"type\": 0,\"orderid\":" + jsonArray.size() + 1 + ",\"value\":\"\",\"wh\": \"\",\"dir\": \"\"}]";
         }
         return content;
     }
