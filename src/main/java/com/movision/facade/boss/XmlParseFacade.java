@@ -621,15 +621,16 @@ public class XmlParseFacade {
                 caps = caps.replace("br", "");
             } else {
                 caps = caption.getText();
-                caps = caps.replace("<", "");
-                caps = caps.replace(">", "");
-                caps = caps.replace("/", "");
-                caps = caps.replace("br", "");
-
+                if (caps.indexOf("<") != -1) {
+                    caps = caps.replace("<", "");
+                    caps = caps.replace(">", "");
+                    caps = caps.replace("/", "");
+                    caps = caps.replace("br", "");
+                }
             }
             content += "{\"type\": 0,\"orderid\":" + num + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
         } catch (Exception e1) {
-            e1.printStackTrace();
+            return "";
         }
         return content;
     }
