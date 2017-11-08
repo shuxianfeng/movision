@@ -586,13 +586,14 @@ public class XmlParseFacade {
             //boolean bln = true;
             //循环子节点拼接帖子内容
 
-            JSONArray jsonArray = JSONArray.fromObject(photoLinks.getText().toString());
+            JSONArray jsonArray = JSONArray.fromObject(photoLinks.getText());
+            System.out.println(":::::::::::::::::::::::::::::::::::::::" + photoLinks.getText());
             for (int k = 0; k < jsonArray.size(); k++) {
                 //从img中获取type属性
                 JSONObject moduleobj = JSONObject.parseObject(jsonArray.get(k).toString());
                 String value = (String) moduleobj.get("orign");
-                String ow = (String) moduleobj.get("ow");
-                String oh = (String) moduleobj.get("oh");
+                String ow = moduleobj.get("ow") + "";
+                String oh = moduleobj.get("oh") + "";
                 String caption = (String) moduleobj.get("caption");
                 if (value.indexOf("?") != -1) {
                     value = value.substring(0, value.indexOf("?"));
@@ -701,7 +702,7 @@ public class XmlParseFacade {
             }
             content += "{\"type\": 0,\"orderid\":" + num + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";*/
         } catch (Exception e1) {
-            return "";
+            e1.printStackTrace();
         }
         return content;
     }
