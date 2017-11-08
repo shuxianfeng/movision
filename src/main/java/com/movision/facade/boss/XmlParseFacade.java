@@ -580,10 +580,10 @@ public class XmlParseFacade {
             boolean bln = true;
             //循环子节点拼接帖子内容
             for (int i = 0; i < substring.length; i++) {
-
+                String contentimg = "";
                 String wh = "\"wh\":";
                 if (substring[i].substring(0, substring[i].indexOf(":")).equals("orign")) {
-                    content += "\"type\":1,";
+                    contentimg += "\"type\":1,";
                     //图片处理
                     String s = "";
                     if (substring[i].length() - 1 == substring[i].lastIndexOf("?")) {
@@ -601,7 +601,7 @@ public class XmlParseFacade {
                         //帖子封面处理，包括存储原图和压缩图
                         postCompressImg(post, list, m, covimg);
                     }
-                    content += "\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
+                    contentimg += "\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
                     bln = false;
                 }
                 if (substring[i].substring(0, substring[i].indexOf(":")).equals("ow")) {
@@ -611,6 +611,7 @@ public class XmlParseFacade {
                 }
                 if (substring[i].substring(0, substring[i].indexOf(":")).equals("oh")) {
                     content += substring[i].substring(substring[i].indexOf(":"), substring[i].length()) + "\",";
+                    content += contentimg;
                 }
             }
 
