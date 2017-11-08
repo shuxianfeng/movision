@@ -610,7 +610,7 @@ public class XmlParseFacade {
                     }
                     content += "{\"orderid\":" + k + ",\"wh\":\"" + ow + "×" + oh + "\",\"type\":1,\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
                 } else {
-                    content += "{\"orderid\":" + k + ",\"wh\":\"" + ow + "×" + oh + "\",\"type\":1,\"value\":\"\"value\":\"\",\"dir\": \"\"},";
+                    content += "{\"orderid\":" + k + ",\"wh\":\"" + ow + "×" + oh + "\",\"type\":1,\"value\":\"\",\"dir\": \"\"},";
                 }
                 String caps = "";
                 //当文本中包含p标签执行截取,否则直接获取
