@@ -148,7 +148,7 @@ public class XmlParseFacade {
                     try {
                         boolean flg = false;
                         //用于拼接帖子内容
-                        String content = "[";
+                        String content = "";
                         //获取发帖时间并转换为long类型
                         Long publishTime = Long.parseLong(e.element("publishTime").getText());
                         Date intime = new Date(publishTime);
@@ -169,7 +169,7 @@ public class XmlParseFacade {
                             content = getImgContentAnalysis(post, list, e, content);
                             flg = true;
                         }
-                        //标签
+                        //文字
                         String caption = "";
                         if (e.element("caption") != null) {
                             caption = e.element("caption").getText();
@@ -582,6 +582,7 @@ public class XmlParseFacade {
      */
     private String getImgContentAnalysis(Post post, List list, Element e, String content) {
         Element photoLinks = e.element("photoLinks");
+        content = "[";
         try {
             JSONArray jsonArray = JSONArray.fromObject(photoLinks.getText());
             System.out.println(":::::::::::::::::::::::::::::::::::::::" + photoLinks.getText());
@@ -610,6 +611,10 @@ public class XmlParseFacade {
                 } else {
                     content = "";
                 }
+                if (k == jsonArray.size()) {
+                    content = content.substring(0, content.lastIndexOf(","));
+                    content += "]";
+                }
             }
         } catch (Exception e1) {
             e1.printStackTrace();
@@ -629,10 +634,7 @@ public class XmlParseFacade {
      * @return
      */
     private String textTransform(String content, String caption) {
-        JSONArray jsonArray = null;
-        if (content.length() > 5) {
-            jsonArray = JSONArray.fromObject(content);
-        }
+        JSONArray jsonArray = JSONArray.fromObject(content);
         String caps = "";
         //当文本中包含p标签执行截取,否则直接获取
         if (StringUtil.isNotEmpty(caption)) {
@@ -655,9 +657,7 @@ public class XmlParseFacade {
                     caps = caps.replace("\"", "");
                 }
             }
-            if (jsonArray == null) {
-                content += "[{\"type\": 0,\"orderid\":0,\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
-            } else {
+            if (jsonArray.size() != 0) {
                 content += "{\"type\": 0,\"orderid\":" + jsonArray.size() + 1 + ",\"value\":\"" + caps + "\",\"wh\": \"\",\"dir\": \"\"}]";
             }
         }
