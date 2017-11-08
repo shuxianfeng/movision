@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author zhurui
@@ -209,6 +210,19 @@ public class SystemLayoutService {
             return systemLayoutMapper.queryHaetValue(value);
         } catch (Exception e) {
             log.error("查询热度值异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 对单个用户发送系统通知时查询通知模板
+     */
+    public String querySysNoticeTemp(Map<String, Object> parammap) {
+        try {
+            log.info("对单个用户发送系统通知时查询通知模板");
+            return systemLayoutMapper.querySysNoticeTemp(parammap);
+        }catch (Exception e){
+            log.error("对单个用户发送系统通知时查询通知模板失败", e);
             throw e;
         }
     }

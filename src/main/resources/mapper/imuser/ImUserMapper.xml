@@ -81,6 +81,10 @@
         UNION ALL
         SELECT accid FROM yw_im_device
     </select>
+    
+    <select id="selectAPPImuser" parameterType="java.lang.Integer" resultType="com.movision.mybatis.imuser.entity.ImUser" >
+        SELECT u.* FROM yw_im_user u WHERE u.userid = #{userid,jdbcType=INTEGER}
+    </select>
 
     <select id="queryAccidAndNicknameByUserid" resultType="java.util.Map" parameterType="java.util.Map">
         SELECT i.accid, u.nickname FROM yw_im_user i

@@ -4,6 +4,7 @@ import com.movision.mybatis.systemLayout.entity.SystemLayout;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SystemLayoutMapper {
     int deleteByPrimaryKey(Integer id);
@@ -36,5 +37,5 @@ public interface SystemLayoutMapper {
 
     int queryHaetValue(String value);
 
-
+    String querySysNoticeTemp(Map<String, Object> parammap);
 }

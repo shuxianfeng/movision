@@ -15,6 +15,8 @@ public interface ImUserMapper {
 
     List<ImUser> selectAllAPPImuser();
 
+    ImUser selectAPPImuser(int userid);
+
     Map<String, Object> queryAccidAndNicknameByUserid(Map map);
 
 

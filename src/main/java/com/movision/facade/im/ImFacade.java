@@ -19,6 +19,7 @@ import com.movision.mybatis.imSystemInform.service.ImSystemInformService;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.mybatis.imuser.service.ImUserService;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.systemLayout.service.SystemLayoutService;
 import com.movision.mybatis.systemPush.entity.SystemPush;
 import com.movision.mybatis.systemPush.service.SystemPushService;
 import com.movision.mybatis.systemToPush.entity.SystemToPush;
@@ -86,6 +87,9 @@ public class ImFacade {
 
     @Autowired
     private JsoupCompressImg jsoupCompressImg;
+
+    @Autowired
+    private SystemLayoutService systemLayoutService;
 
     /**
      * 发起IM请求，获得响应
@@ -522,6 +526,31 @@ public class ImFacade {
                 //不超过500人
                 sendAndRecord(body, imUser, imAppUserList, size, 0, title, pushcontent, informidentity, type, coverimg);
             }
+        }
+    }
+
+    /**
+     * 发送系统通知（单用户定向发送）
+     * @param body
+     * @param title
+     * @param pushcontent
+     * @param type
+     * @param coverimg
+     * @throws IOException
+     */
+    public void sendSystemInformForUser(String body, String title, String pushcontent, Integer type, String coverimg, int userid) throws IOException {
+        Date date = new Date();
+        long informidentity = date.getTime();
+        //获取当前boss用户的IM用户信息
+        ImUser imUser = this.getImuserByCurrentBossuser();
+        //找到当前的im用户
+        ImUser imAppUser = imUserService.selectAPPImuser(userid);
+
+        if (null != imAppUser) {
+            List<ImUser> imAppUserList = new ArrayList<>();
+            imAppUserList.add(imAppUser);
+            log.info("app中的IM用户共" + 1 + "人！");
+            sendAndRecord(body, imUser, imAppUserList, 1, 0, title, pushcontent, informidentity, type, coverimg);
         }
     }
 
@@ -1295,5 +1324,10 @@ public class ImFacade {
         }
     }
 
-
+    /**
+     * 根据发送的系统通知type查询通知模板
+     */
+    public String querySysNoticeTemp(Map<String, Object> parammap){
+        return systemLayoutService.querySysNoticeTemp(parammap);
+    }
 }

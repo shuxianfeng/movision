@@ -135,5 +135,27 @@
     <select id="queryHaetValue" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT value FROM yw_system_layout WHERE type = #{fileurl,jdbcType=VARCHAR} AND module = 'heat'
     </select>
+    
+    <select id="querySysNoticeTemp" parameterType="java.util.Map" resultType="java.lang.String" >
+        SELECT value FROM yw_system_layout
+        <if test="type == 0">
+            WHERE type = 'sysInformTemplate0'
+        </if>
+        <if test="type == 1">
+            WHERE type = 'sysInformTemplate1'
+        </if>
+        <if test="type == 2">
+            WHERE type = 'sysInformTemplate2'
+        </if>
+        <if test="type == 3">
+            WHERE type = 'sysInformTemplate3'
+        </if>
+        <if test="type == 4">
+            WHERE type = 'sysInformTemplate4'
+        </if>
+        <if test="type == 5">
+            WHERE type = 'sysInformTemplate5'
+        </if>
+    </select>
 
 </mapper>

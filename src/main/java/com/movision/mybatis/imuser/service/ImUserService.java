@@ -54,6 +54,16 @@ public class ImUserService {
         }
     }
 
+    public ImUser selectAPPImuser(int userid){
+        try {
+            log.info("根据userid查询当前的IM用户");
+            return imUserMapper.selectAPPImuser(userid);
+        }catch (Exception e){
+            log.error("根据userid查询当前的IM用户失败", e);
+            throw e;
+        }
+    }
+
     public Map<String, Object> queryAccidAndNickname(Map map) {
         try {
             log.info("查询指定用户的accid和昵称");
