@@ -466,9 +466,9 @@ public class JsoupCompressImg {
             rate = 0.80;
         }else if (pro < 3000 && pro >= 2000){//宽高有在2000~3000px的压缩到原尺寸的60%
             rate = 0.60;
-        }else if (pro < 4000 && pro >= 3000){//宽高有在3000~4000px的压缩到原尺寸的40%
+        } else if (pro < 5000 && pro >= 3000) {//宽高有在3000~4000px的压缩到原尺寸的40%
             rate = 0.40;
-        }else if (pro > 5000) {//宽高有在5000px以上的压缩到原尺寸的20%
+        } else if (pro >= 5000) {//宽高有在5000px以上的压缩到原尺寸的20%
             rate = 0.20;
         }
         return rate;
