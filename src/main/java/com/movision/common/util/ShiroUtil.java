@@ -3,9 +3,9 @@ package com.movision.common.util;
 import com.movision.common.constant.MsgCodeConstant;
 import com.movision.common.constant.SessionConstant;
 import com.movision.exception.AuthException;
-import com.movision.facade.user.UserFacade;
 import com.movision.mybatis.user.entity.LoginUser;
-import com.movision.mybatis.user.entity.User;
+import com.movision.shiro.realm.BossRealm;
+import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.DateUtils;
 import com.movision.utils.propertiesLoader.MsgPropertiesLoader;
 import org.apache.shiro.SecurityUtils;
@@ -13,10 +13,6 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.movision.shiro.realm.BossRealm;
-import com.movision.shiro.realm.ShiroRealm;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * shiro工具类
@@ -27,9 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class ShiroUtil {
     private static Logger log = LoggerFactory.getLogger(ShiroUtil.class);
-
-    @Autowired
-    private UserFacade userFacade;
 
     /**
      * 获取APP当前登录人信息
@@ -124,29 +117,6 @@ public class ShiroUtil {
         }
         return createID;
     }
-
-    /**
-     * 获取boss用户对应的角色id
-     * @return
-     */
-    public static Integer getBossUserRoleId() {
-        Integer roleid = null;
-        try {
-            Subject currentUser = SecurityUtils.getSubject();
-            Session session = currentUser.getSession(false);
-            if (session != null) {
-                BossRealm.ShiroBossUser principal = (BossRealm.ShiroBossUser) session.getAttribute(SessionConstant.BOSS_USER);
-                if (principal != null) {
-                    roleid = principal.getRole();
-                }
-            }
-        } catch (Exception e) {
-            log.error("从session中获取boss用户对应的角色id失败!", e);
-            throw new AuthException(MsgCodeConstant.un_login, MsgPropertiesLoader.getValue(String.valueOf(MsgCodeConstant.un_login)));
-        }
-        return roleid;
-    }
-
 
     /**
      * 修改session中的bossuser的pwd

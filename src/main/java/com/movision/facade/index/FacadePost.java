@@ -4255,8 +4255,8 @@ public class FacadePost {
      * @return
      */
     public List<PostLabel> queryHotValueLabelList() {
-
-        String ipcity = ShiroUtil.getAppUser().getIpCity();
+        //从缓存中获取当前用户的城市编码
+        String ipcity = ShiroUtil.getIpCity();
         log.debug("当前登录人的登录城市代码是：" + ipcity);
         City city = cityService.selectCityByCode(ipcity);
         String cityname = city.getName();

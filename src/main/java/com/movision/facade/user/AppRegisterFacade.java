@@ -5,6 +5,7 @@ import com.movision.common.Response;
 import com.movision.common.constant.*;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
+import com.movision.facade.address.AddressFacade;
 import com.movision.facade.im.ImFacade;
 import com.movision.facade.pointRecord.PointRecordFacade;
 import com.movision.mybatis.bossUser.entity.BossUser;
@@ -45,6 +46,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 /**
@@ -82,6 +85,9 @@ public class AppRegisterFacade {
 
     @Autowired
     private ImDeviceService imDeviceService;
+
+    @Autowired
+    private AddressFacade addressFacade;
 
     /**
      * 1 校验登录用户信息：手机号+短信验证码
@@ -681,7 +687,8 @@ public class AppRegisterFacade {
      * @param longitude
      * @param latitude
      */
-    public void handleLoginProcess(String appToken, Response response, User user, String ip, String longitude, String latitude) {
+    public void handleLoginProcess(String appToken, Response response, User user, String ip, String longitude, String latitude)
+            throws UnsupportedEncodingException, NoSuchAlgorithmException {
         //1 校验appToken和serverToken非空
         String serverToken = this.validateAppTokenAndServerToken(appToken, response, user);
 
@@ -693,7 +700,7 @@ public class AppRegisterFacade {
             UsernamePasswordToken token = gson.fromJson(appToken, UsernamePasswordToken.class);
 
             Map returnMap = new HashedMap();
-            //3 开始进入shiro的认证流程，对应ShiroRealm.doGetAuthenticationInfo
+            //3 开始进入shiro的认证流程，对应 ShiroRealm.doGetAuthenticationInfo
             shiroLogin(response, currentUser, token);
 
             /**
@@ -780,7 +787,9 @@ public class AppRegisterFacade {
      * @param latitude
      * @param ip
      */
-    private void updateLoginUserInfo(int appuserid, String longitude, String latitude, String ip, Date loginTime) {
+    private void updateLoginUserInfo(int appuserid, String longitude, String latitude, String ip, Date loginTime)
+            throws UnsupportedEncodingException, NoSuchAlgorithmException {
+
         User u = new User();
         u.setId(appuserid);
         u.setLoginTime(loginTime);
@@ -788,15 +797,47 @@ public class AppRegisterFacade {
         u.setIp(ip);    //登录的ip
         u.setLongitude(longitude);  //登录的经度
         u.setLatitude(latitude);    //登录的纬度
+        //登录时获取当前用户所在城市的编码
+        String ip_city = getIpcityWhenLogin(longitude, latitude, ip);
 
-        String ip_city = IpUtil.getCitycode("ip=" + ip, "utf-8");
         u.setIp_city(ip_city);  //登录的ip城市code
         String area = userService.areaname(ip_city);//市
         u.setCity(area);
         //查询省的name
         String provice = userService.provicename(ip_city);
         u.setProvince(provice);
-        updateLoginappuserInfo(u);
+        userService.updateLoginappuserInfo(u);
+    }
+
+    /**
+     * 登录时获取当前用户所在城市的编码
+     *
+     * @param longitude
+     * @param latitude
+     * @param ip
+     * @return
+     * @throws UnsupportedEncodingException
+     * @throws NoSuchAlgorithmException
+     */
+    private String getIpcityWhenLogin(String longitude, String latitude, String ip) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        Map<String, Object> map = addressFacade.getAddressByLatAndLng(latitude, longitude);
+        int flag = Integer.valueOf(String.valueOf(map.get("flag")));
+        String ip_city = null;
+        if (flag == 1) {
+            //根据经纬度获取城市code
+            ip_city = String.valueOf(map.get("citycode"));
+            log.info("根据经纬度获取城市code=" + ip_city);
+        } else {
+            //根据ip获取城市code
+            ip_city = IpUtil.getCitycode("ip=" + ip, "utf-8");
+            log.info("根据ip获取城市code=" + ip_city);
+        }
+        //防止获取不到ipcity的情况
+        if (StringUtils.isEmpty(ip_city)) {
+            ip_city = "320100";    //默认南京市
+            log.warn("根据经纬度和ip都获取不到ip_city, 只能赋予默认值 320100 南京市");
+        }
+        return ip_city;
     }
 
 
@@ -824,10 +865,6 @@ public class AppRegisterFacade {
             response.setMsgCode(MsgCodeConstant.server_token_missing);
         }
         return serverToken;
-    }
-
-    public Boolean updateLoginappuserInfo(User user) {
-        return userService.updateLoginappuserInfo(user);
     }
 
     /**
