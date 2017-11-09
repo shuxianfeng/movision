@@ -653,6 +653,7 @@ public class XmlParseFacade {
                 caps = caps.replace("/", "");
                 caps = caps.replace("br", "");
                 caps = caps.replace("\"", "");
+                caps = caps.replace("a", "");
             } else {
                 caps = caption;
                 if (caps.indexOf("<") != -1) {
@@ -661,6 +662,7 @@ public class XmlParseFacade {
                     caps = caps.replace("/", "");
                     caps = caps.replace("br", "");
                     caps = caps.replace("\"", "");
+                    caps = caps.replace("a", "");
                 }
             }
             if (jsonArray.size() != 0) {
