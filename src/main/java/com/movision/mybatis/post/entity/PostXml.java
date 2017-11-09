@@ -7,20 +7,20 @@ public class PostXml implements Serializable {
 
     public Integer userid;//用户id
 
-    public Integer circleid;//圈子id
+    public String circlename;//圈子名称
 
     public String title;//标题
 
     public String postcontent;//帖子内容
 
-    public String coverimg;//帖子封面
+    public String coverimg;//帖子封面\
 
-    public Integer getCircleid() {
-        return circleid;
+    public String getCirclename() {
+        return circlename;
     }
 
-    public void setCircleid(Integer circleid) {
-        this.circleid = circleid;
+    public void setCirclename(String circlename) {
+        this.circlename = circlename;
     }
 
     public Integer getId() {

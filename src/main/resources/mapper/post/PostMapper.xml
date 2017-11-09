@@ -2306,9 +2306,13 @@
 
     <select id="queryPostByXmlExport" resultType="com.movision.mybatis.post.entity.PostXml"
             parameterType="com.movision.mybatis.post.entity.Post">
-        SELECT * FROM yw_post WHERE isdel <![CDATA[<>]]> 1 AND isactive = 0
+        SELECT p.*,c.name
+        FROM yw_post p
+        LEFT JOIN yw_circle c ON p.circleid = c.id
+        WHERE p.isdel <![CDATA[<>]]> 1
+        AND p.isactive = 0
         <if test="circleid != null">
-            AND circleid = #{circleid,jdbcType=INTEGER}
+            AND p.circleid = #{circleid,jdbcType=INTEGER}
         </if>
     </select>
 

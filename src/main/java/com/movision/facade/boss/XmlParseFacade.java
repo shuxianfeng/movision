@@ -251,7 +251,7 @@ public class XmlParseFacade {
             List<PostXml> posts = postService.queryPostByXmlExport(post);
             /*PostXml postXml = new PostXml();
             Field[] fields = postXml.getClass().getDeclaredFields();*/
-            String title[] = {"id", "用户id", "圈子id", "标题", "帖子内容", "帖子封面"};
+            String title[] = {"id", "用户id", "圈子名称", "标题", "帖子内容", "帖子封面"};
             //设计表头
             for (int i = 0; i < title.length; i++) {
                 sheet.addCell(new Label(i, 0, title[i]));
@@ -610,7 +610,11 @@ public class XmlParseFacade {
                         //帖子封面处理，包括存储原图和压缩图
                         postCompressImg(post, list, m, covimg);
                     }
-                    content += "{\"orderid\":" + k + ",\"wh\":\"" + ow + "×" + oh + "\",\"type\":1,\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
+                    if (StringUtil.isNotEmpty(content)) {
+                        content += "[{\"orderid\":" + k + ",\"wh\":\"" + ow + "×" + oh + "\",\"type\":1,\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
+                    } else {
+                        content += "{\"orderid\":" + k + ",\"wh\":\"" + ow + "×" + oh + "\",\"type\":1,\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
+                    }
                 } else if (k > 0) {
                     content += "";
                 } else {
