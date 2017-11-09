@@ -723,8 +723,8 @@ public class RobotFacade {
         int batch = getBatch(postid, type, userid);
         //3 新增机器人任务
         if (type == 3) {
-            if (num > 3) {
-                //如果是评论任务，且要求的评论数量大于3条的时候，则需要进行特殊处理，根据机器人数量进行拆分任务
+            if (num > 20) {
+                //如果是评论任务，且要求的评论数量大于20条的时候，则需要进行特殊处理，根据机器人数量进行拆分任务
                 Double ratio = 0.0d;
                 int commentType = 0;
                 if (theme == 1) {

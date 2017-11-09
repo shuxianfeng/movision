@@ -67,7 +67,7 @@ public class CommentController {
      * @param postid
      * @return
      */
-    @ApiOperation(value = "发表评论接口", notes = "返回评论是否成功", response = Response.class)
+    @ApiOperation(value = "发表评论接口", notes = "发表评论接口", response = Response.class)
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
     public Response insertComment(@ApiParam(value = "用户id") @RequestParam String userid,
                                   @ApiParam(value = "评论内容") @RequestParam String content,
