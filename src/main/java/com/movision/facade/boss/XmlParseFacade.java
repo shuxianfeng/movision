@@ -610,7 +610,7 @@ public class XmlParseFacade {
                         //帖子封面处理，包括存储原图和压缩图
                         postCompressImg(post, list, m, covimg);
                     }
-                    if (StringUtil.isNotEmpty(content)) {
+                    if (StringUtil.isEmpty(content)) {
                         content += "[{\"orderid\":" + k + ",\"wh\":\"" + ow + "×" + oh + "\",\"type\":1,\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
                     } else {
                         content += "{\"orderid\":" + k + ",\"wh\":\"" + ow + "×" + oh + "\",\"type\":1,\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
