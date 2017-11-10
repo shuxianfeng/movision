@@ -37,7 +37,7 @@ public class RouteFacade {
      */
     public Boolean isExistRecord(ImLoginRecord imLoginRecord) {
         ImLoginRecord record = imLoginRecordService.queryRecordByaccidAndTimestamp(imLoginRecord);
-        return null == record;
+        return null != record;
     }
 
     public int addRecord(ImLoginRecord imLoginRecord) {
