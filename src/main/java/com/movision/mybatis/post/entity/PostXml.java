@@ -4,21 +4,14 @@ import java.io.Serializable;
 
 public class PostXml implements Serializable {
     public Integer id;//帖子id
-
-    public Integer userid;//用户id
-
-    public String circlename;//圈子名称
-
     public String title;//标题
-
     public String subtitle;//副标题
-
-    public String postcontent;//帖子内容
-
     public String coverimg;//帖子封面
-
+    public String postcontent;//帖子内容
+    public Integer circleid;//圈子id
+    public String circlename;//圈子名称
+    public Integer userid;//用户id
     public String nickname;//用户昵称
-
     public String phone;//手机号
 
     public String getSubtitle() {
