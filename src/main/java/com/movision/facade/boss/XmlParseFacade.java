@@ -251,7 +251,7 @@ public class XmlParseFacade {
             List<PostXml> posts = postService.queryPostByXmlExport(post);
             /*PostXml postXml = new PostXml();
             Field[] fields = postXml.getClass().getDeclaredFields();*/
-            String title[] = {"id", "用户id", "圈子名称", "标题", "帖子内容", "帖子封面"};
+            String title[] = {"id", "标题", "副标题", "帖子封面", "帖子内容", "圈子id", "圈子名称", "用户id", "用户昵称", "手机号"};
             //设计表头
             for (int i = 0; i < title.length; i++) {
                 sheet.addCell(new Label(i, 0, title[i]));
@@ -402,6 +402,10 @@ public class XmlParseFacade {
         //根据手机号或昵称查询
         User userid = userService.queryUserByPhone(phone);
         if (userid != null) {
+            if (!userid.getNickname().equals(nickname)) {
+                //修改用户昵称
+                userService.updateUserByNickname(user);
+            }
             return userid.getId();
         } else {
             //注册用户

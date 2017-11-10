@@ -2306,9 +2306,11 @@
 
     <select id="queryPostByXmlExport" resultType="com.movision.mybatis.post.entity.PostXml"
             parameterType="com.movision.mybatis.post.entity.Post">
-        SELECT p.*,c.name
+        SELECT p.id,p.title,p.subtitle,p.postcontent,p.coverimg,p.circleid,c.name AS
+        circlename,p.userid,u.nickname,u.phone
         FROM yw_post p
         LEFT JOIN yw_circle c ON p.circleid = c.id
+        LEFT JOIN yw_user u ON u.id = p.userid
         WHERE p.isdel <![CDATA[<>]]> 1
         AND p.isactive = 0
         <if test="circleid != null">
