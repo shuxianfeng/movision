@@ -2297,7 +2297,7 @@ public class FacadePost {
      * @return
      */
     public List countView(List<PostVo> list) {
-      /*  if (list != null) {
+        if (list != null) {
             for (int i = 0; i < list.size(); i++) {
                 int id = list.get(i).getId();
                 int count = postService.queryPostCountView(id);
@@ -2305,9 +2305,9 @@ public class FacadePost {
             }
         }
         return list;
-    }*/
+    }
 
-
+/*
         if (list != null) {
             List<Integer> iList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
@@ -2325,17 +2325,17 @@ public class FacadePost {
                     }
                 }
             }
-          /*  for (int i = 0; i < list.size(); i++) {
+          *//*  for (int i = 0; i < list.size(); i++) {
                 int postid = list.get(i).getId();
                 int uesrreflushCounts = userRefreshRecordService.postcount(postid);
                 int poscount = postAndUserRecordService.postcount(postid);
                 int count = uesrreflushCounts + poscount;
                 list.get(i).setCountview(count);
-            }*/
+            }*//*
 
         }
         return list;
-    }
+    }*/
 
 
     /**
