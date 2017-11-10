@@ -40,4 +40,8 @@ public class RouteFacade {
         return null == record;
     }
 
+    public int addRecord(ImLoginRecord imLoginRecord) {
+        return imLoginRecordService.addRecord(imLoginRecord);
+    }
+
 }

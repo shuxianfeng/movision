@@ -60,24 +60,21 @@ public class RouteController {
             String verifyChecksum = CheckSumBuilder.getCheckSum(appSecret, verifyMD5, CurTime);
             log.debug("verifyMD5 = {}, verifyChecksum = {}", verifyMD5, verifyChecksum);
 
-            // TODO: 比较md5、checkSum是否一致，以及后续业务处理
+            // 比较md5、checkSum是否一致，以及后续业务处理
             if (MD5.equals(verifyMD5) && CheckSum.equals(verifyChecksum)) {
 
                 log.debug("md5、checkSum 验证通过");
                 //业务处理
                 Gson gson = new Gson();
                 ImLoginRecord imLoginRecord = gson.fromJson(requestBody, ImLoginRecord.class);
-                String loginTimestamp = imLoginRecord.getTimestamp();   //登录事件发生时的时间戳
-                String accid = imLoginRecord.getAccid();    //登录的accid
 
                 //查看DB中是否存在相同的accid和时间戳
                 if (routeFacade.isExistRecord(imLoginRecord)) {
                     log.info("已经存在相同的登录事件记录");
                 } else {
                     //入库
-
+                    routeFacade.addRecord(imLoginRecord);
                 }
-
                 result.setCode(200);
             } else {
                 log.warn("md5、checkSum 验证不通过");
