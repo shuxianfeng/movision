@@ -239,16 +239,17 @@ public class XmlParseFacade {
         try {
             //t.xls为要新建的文件名
             String path = systemLayoutService.queryServiceUrl("file_xml_dwonload_img");
-            Long l = new Date().getTime();
-            //拼接文件名称
-            String urlname = "/" + l + ".xls";
-            WritableWorkbook book = Workbook.createWorkbook(new File(path + urlname));
-            //生成名为“第一页”的工作表，参数0表示这是第一页
-            WritableSheet sheet = book.createSheet("第一页", 0);
             Post post = new Post();
             post.setCircleid(Integer.parseInt(circleid));
             //查询出所有xml导入的帖子
             List<PostXml> posts = postService.queryPostByXmlExport(post);
+            Long l = new Date().getTime();
+            //拼接文件名称
+            String urlname = "/" + posts.get(1).getCirclename() + l + ".xls";
+            WritableWorkbook book = Workbook.createWorkbook(new File(path + urlname));
+            //生成名为“第一页”的工作表，参数0表示这是第一页
+            WritableSheet sheet = book.createSheet("第一页", 0);
+
             /*PostXml postXml = new PostXml();
             Field[] fields = postXml.getClass().getDeclaredFields();*/
             String title[] = {"id", "标题", "副标题", "帖子封面", "帖子内容", "圈子id", "圈子名称", "用户id", "用户昵称", "手机号"};
