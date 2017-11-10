@@ -599,6 +599,7 @@ public class XmlParseFacade {
         try {
             JSONArray jsonArray = JSONArray.fromObject(photoLinks.getText());
             System.out.println(":::::::::::::::::::::::::::::::::::::::" + photoLinks.getText());
+            boolean flg = true;
             for (int k = 0; k < jsonArray.size(); k++) {
                 //从img中获取type属性
                 JSONObject moduleobj = JSONObject.parseObject(jsonArray.get(k).toString());
@@ -616,9 +617,10 @@ public class XmlParseFacade {
                     list.add(m.get("oldurl"));
                     //帖子封面处理
                     String covimg = m.get("oldurl").toString();
-                    if (k == 0) {
+                    if (flg) {
                         //帖子封面处理，包括存储原图和压缩图
                         postCompressImg(post, list, m, covimg);
+                        flg = false;
                     }
                     if (StringUtil.isEmpty(content)) {
                         content += "[{\"orderid\":" + k + ",\"wh\":\"" + ow + "×" + oh + "\",\"type\":1,\"value\":\"" + m.get("newurl").toString() + "\",\"dir\": \"\"},";
