@@ -240,6 +240,8 @@ public interface PostMapper {
     //根据圈子id查询帖子
     List<PostVo> findAllPostCrile(int circleid);
 
+    List<PostVo> findAllNotCircle(List circleid);
+
     //根据用户查帖子
     List<PostVo> findUserPost(int postuserid);
 
@@ -317,4 +319,6 @@ public interface PostMapper {
     List<PostXml> queryPostByXmlExport(Post post);
 
     List<PostList> findAllqueryXmlAnalysisAndPost(RowBounds rowBounds, Post post);
+
+    int queryPostCountView(int id);
 }

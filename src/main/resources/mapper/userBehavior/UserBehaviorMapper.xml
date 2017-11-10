@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.movision.mybatis.userBehavior.mapper.UserBehaviorMapper">
+    <resultMap id="BaseResultMap" type="com.movision.mybatis.userBehavior.entity.UserBehavior">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="circle1" property="circle1" jdbcType="INTEGER"/>
+        <result column="circle2" property="circle2" jdbcType="INTEGER"/>
+        <result column="circle3" property="circle3" jdbcType="INTEGER"/>
+        <result column="intime" property="intime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, userid, circle1, circle2, circle3, intime
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from yw_user_behavior
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from yw_user_behavior
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.movision.mybatis.userBehavior.entity.UserBehavior">
+        insert into yw_user_behavior (id, userid, circle1,
+        circle2, circle3, intime
+        )
+        values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{circle1,jdbcType=INTEGER},
+        #{circle2,jdbcType=INTEGER}, #{circle3,jdbcType=INTEGER}, #{intime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.movision.mybatis.userBehavior.entity.UserBehavior">
+        insert into yw_user_behavior
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userid != null">
+                userid,
+            </if>
+            <if test="circle1 != null">
+                circle1,
+            </if>
+            <if test="circle2 != null">
+                circle2,
+            </if>
+            <if test="circle3 != null">
+                circle3,
+            </if>
+            <if test="intime != null">
+                intime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="circle1 != null">
+                #{circle1,jdbcType=INTEGER},
+            </if>
+            <if test="circle2 != null">
+                #{circle2,jdbcType=INTEGER},
+            </if>
+            <if test="circle3 != null">
+                #{circle3,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.userBehavior.entity.UserBehavior">
+        update yw_user_behavior
+        <set>
+            <if test="userid != null">
+                userid = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="circle1 != null">
+                circle1 = #{circle1,jdbcType=INTEGER},
+            </if>
+            <if test="circle2 != null">
+                circle2 = #{circle2,jdbcType=INTEGER},
+            </if>
+            <if test="circle3 != null">
+                circle3 = #{circle3,jdbcType=INTEGER},
+            </if>
+            <if test="intime != null">
+                intime = #{intime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.userBehavior.entity.UserBehavior">
+        update yw_user_behavior
+        set userid = #{userid,jdbcType=INTEGER},
+        circle1 = #{circle1,jdbcType=INTEGER},
+        circle2 = #{circle2,jdbcType=INTEGER},
+        circle3 = #{circle3,jdbcType=INTEGER},
+        intime = #{intime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="findAllUserBehavior" resultType="com.movision.mybatis.userBehavior.entity.UserBehavior">
+        SELECT * FROM yw_user_behavior WHERE userid=#{userid,jdbcType=INTEGER}
+    </select>
+</mapper>
