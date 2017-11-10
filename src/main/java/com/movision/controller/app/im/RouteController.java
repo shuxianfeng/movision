@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
  * @Date 2017/11/10 13:58
  */
 @RestController
-@RequestMapping(value = {"/route"})
+@RequestMapping("/app/im/route")
 public class RouteController {
 
     public static final Logger log = LoggerFactory.getLogger(RouteController.class);
