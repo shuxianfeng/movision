@@ -3,11 +3,13 @@ package com.movision.utils.excel;
 
 import com.movision.facade.boss.XmlParseFacade;
 import com.movision.fsearch.utils.StringUtil;
+import com.movision.mybatis.circle.entity.Circle;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.compressImg.service.CompressImgService;
 import com.movision.mybatis.post.entity.Post;
 import com.movision.mybatis.post.entity.PostTo;
 import com.movision.mybatis.post.service.PostService;
+import com.movision.mybatis.user.entity.User;
 import com.movision.utils.JsoupCompressImg;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -177,7 +179,7 @@ public class ExcelIntoEnquiryUtil {
 
                 Post post = new Post();
                 //用于存放圈子名称
-                String circle = "";
+                String circlename = "";
                 //帖子内容
                 String content = "";
                 //贴子封面
@@ -186,6 +188,8 @@ public class ExcelIntoEnquiryUtil {
                 String postid = "";
                 //用户id
                 String uid = "";
+                Circle circle = new Circle();
+                User user = new User();
 
                 // 循环Excel的列
                 for (int c = 0; c < this.totalCells; c++) {
@@ -197,7 +201,8 @@ public class ExcelIntoEnquiryUtil {
                                 try {
                                     //帖子id
                                     if (StringUtil.isNotBlank(cell.getStringCellValue())) {
-                                        postid = cell.getStringCellValue();
+                                        //postid = cell.getStringCellValue();
+                                        post.setId(Integer.parseInt(String.valueOf(cell.getStringCellValue())));
                                         }
                                 } catch (Exception e) {
                                     if (resault.length() > 0) {
@@ -208,9 +213,10 @@ public class ExcelIntoEnquiryUtil {
                                 }
                             case 1:
                                 try {
-                                    //用户id
+                                    //标题
                                     if (StringUtil.isNotBlank(cell.getStringCellValue())) {
-                                        uid = cell.getStringCellValue();
+                                        //uid = cell.getStringCellValue();
+                                        post.setTitle(String.valueOf(cell.getStringCellValue()));
                                         }
                                     continue;
                                 } catch (Exception e) {
@@ -222,9 +228,10 @@ public class ExcelIntoEnquiryUtil {
                                 }
                             case 2:
                                 try {
-                                    //圈子
+                                    //副标题
                                     if (StringUtil.isNotBlank(cell.getStringCellValue())) {
-                                        circle = cell.getStringCellValue();
+                                        //circle = cell.getStringCellValue();
+                                        post.setSubtitle(String.valueOf(cell.getStringCellValue()));
                                     }
                                     continue;
                                 } catch (Exception e) {
@@ -236,9 +243,10 @@ public class ExcelIntoEnquiryUtil {
                                 }
                             case 3:
                                 try {
-                                    //帖子标题
+                                    //帖子封面
                                     if (StringUtil.isNotBlank(cell.getStringCellValue())) {
-                                        post.setTitle(cell.getStringCellValue());
+                                        //post.setTitle(cell.getStringCellValue());
+                                        post.setCoverimg(String.valueOf(cell.getStringCellValue()));
                                     }
                                     continue;
                                 } catch (Exception e) {
@@ -252,7 +260,8 @@ public class ExcelIntoEnquiryUtil {
                                 try {
                                     //帖子内容
                                     if (StringUtil.isNotBlank(cell.getStringCellValue())) {
-                                        content = cell.getStringCellValue();
+                                        //content = cell.getStringCellValue();
+                                        post.setPostcontent(String.valueOf(cell.getStringCellValue()));
                                     }
                                     continue;
                                 } catch (Exception e) {
@@ -264,9 +273,71 @@ public class ExcelIntoEnquiryUtil {
                                 }
                             case 5:
                                 try {
-                                    //帖子封面
+                                    //圈子id
                                     if (StringUtil.isNotBlank(cell.getStringCellValue())) {
-                                        covimg = cell.getStringCellValue();
+                                        //covimg = cell.getStringCellValue();
+                                        post.setCircleid(Integer.parseInt(String.valueOf(cell.getStringCellValue())));
+                                    }
+                                    continue;
+                                } catch (Exception e) {
+                                    if (resault.length() > 0) {
+                                        resault += "," + ir + 1;
+                                    }
+                                    map.put("messager", "错误行：" + resault);
+                                    continue;
+                                }
+                            case 6:
+                                try {
+                                    //圈子名称
+                                    if (StringUtil.isNotBlank(cell.getStringCellValue())) {
+                                        circlename = cell.getStringCellValue();
+                                        circle.setName(String.valueOf(cell.getStringCellValue()));
+                                    }
+                                    continue;
+                                } catch (Exception e) {
+                                    if (resault.length() > 0) {
+                                        resault += "," + ir + 1;
+                                    }
+                                    map.put("messager", "错误行：" + resault);
+                                    continue;
+                                }
+                            case 7:
+                                try {
+                                    //用户id
+                                    if (StringUtil.isNotBlank(cell.getStringCellValue())) {
+                                        //covimg = cell.getStringCellValue();
+                                        user.setId(Integer.parseInt(String.valueOf(cell.getStringCellValue())));
+                                        post.setUserid(Integer.parseInt(String.valueOf(cell.getSheet())));
+                                    }
+                                    continue;
+                                } catch (Exception e) {
+                                    if (resault.length() > 0) {
+                                        resault += "," + ir + 1;
+                                    }
+                                    map.put("messager", "错误行：" + resault);
+                                    continue;
+                                }
+                            case 8:
+                                try {
+                                    //用户昵称
+                                    if (StringUtil.isNotBlank(cell.getStringCellValue())) {
+                                        //covimg = cell.getStringCellValue();
+                                        user.setNickname(String.valueOf(cell.getStringCellValue()));
+                                    }
+                                    continue;
+                                } catch (Exception e) {
+                                    if (resault.length() > 0) {
+                                        resault += "," + ir + 1;
+                                    }
+                                    map.put("messager", "错误行：" + resault);
+                                    continue;
+                                }
+                            case 9:
+                                try {
+                                    //手机号
+                                    if (StringUtil.isNotBlank(cell.getStringCellValue())) {
+                                        //covimg = cell.getStringCellValue();
+                                        user.setPhone(String.valueOf(cell.getStringCellValue()));
                                     }
                                     continue;
                                 } catch (Exception e) {
@@ -282,10 +353,10 @@ public class ExcelIntoEnquiryUtil {
 
                 //业务代码
                 //根据圈子名称查询圈子，
-                Integer circleid = circleService.queryCircleByNameAndEntirely(circle);
-                post.setCircleid(circleid);
-                post.setId(Integer.parseInt(postid));
-                post.setUserid(Integer.parseInt(uid));
+                Integer circleid = circleService.queryCircleByNameAndEntirely(circlename);
+                if (circleid != null) {
+                    post.setCircleid(circleid);
+                }
 
                 //帖子封面操作
                 if (StringUtil.isNotEmpty(covimg)) {
@@ -299,8 +370,6 @@ public class ExcelIntoEnquiryUtil {
                             //操作封面
                             xmlParseFacade.postCompressImg(post, null, t, t.get("oldurl").toString());
                         }
-                    } else {
-                        post.setCoverimg(covimg);
                     }
                 }
 
