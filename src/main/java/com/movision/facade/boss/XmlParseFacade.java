@@ -244,8 +244,13 @@ public class XmlParseFacade {
             //查询出所有xml导入的帖子
             List<PostXml> posts = postService.queryPostByXmlExport(post);
             Long l = new Date().getTime();
-            //拼接文件名称
-            String urlname = "/" + posts.get(1).getCirclename() + l + ".xls";
+            String urlname = "";
+            if (posts != null) {
+                //拼接文件名称
+                urlname = "/" + posts.get(0).getCirclename() + l + ".xls";
+            } else {
+                urlname = "/" + l + ".xls";
+            }
             WritableWorkbook book = Workbook.createWorkbook(new File(path + urlname));
             //生成名为“第一页”的工作表，参数0表示这是第一页
             WritableSheet sheet = book.createSheet("第一页", 0);
