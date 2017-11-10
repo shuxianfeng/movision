@@ -2,6 +2,7 @@ package com.movision.controller.app.im;
 
 import com.google.gson.Gson;
 import com.movision.common.Response;
+import com.movision.common.constant.ImConstant;
 import com.movision.facade.route.RouteFacade;
 import com.movision.mybatis.imLoginRecord.entity.ImLoginRecord;
 import com.movision.utils.im.CheckSumBuilder;
@@ -28,11 +29,8 @@ public class RouteController {
     @Autowired
     private RouteFacade routeFacade;
 
-    // 需要改成自身应用的appSecret
-    private final String appSecret = "7bb79g40f44j";
-
-    @ApiOperation(value = "发消息", notes = "发消息", response = Response.class)
-    @RequestMapping(value = "/mockClient", method = RequestMethod.POST)
+    @ApiOperation(value = "记录im登录事件消息抄送", notes = "记录im登录事件消息抄送", response = Response.class)
+    @RequestMapping(value = "/add_im_login_record", method = RequestMethod.POST)
     public Response mockClient(HttpServletRequest request)
             throws Exception {
         Response result = new Response();
@@ -57,7 +55,7 @@ public class RouteController {
             log.info("request body = {}", requestBody);
             // 获取计算过的md5及checkSum
             String verifyMD5 = CheckSumBuilder.getMD5(requestBody);
-            String verifyChecksum = CheckSumBuilder.getCheckSum(appSecret, verifyMD5, CurTime);
+            String verifyChecksum = CheckSumBuilder.getCheckSum(ImConstant.APP_SECRET, verifyMD5, CurTime);
             log.debug("verifyMD5 = {}, verifyChecksum = {}", verifyMD5, verifyChecksum);
 
             // 比较md5、checkSum是否一致，以及后续业务处理
