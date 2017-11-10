@@ -3,12 +3,12 @@
 <mapper namespace="com.movision.mybatis.imLoginRecord.mapper.ImLoginRecordMapper">
     <resultMap id="BaseResultMap" type="com.movision.mybatis.imLoginRecord.entity.ImLoginRecord">
         <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="eventType" property="eventtype" jdbcType="VARCHAR"/>
+        <result column="eventType" property="eventType" jdbcType="VARCHAR"/>
         <result column="accid" property="accid" jdbcType="VARCHAR"/>
-        <result column="clientIp" property="clientip" jdbcType="VARCHAR"/>
-        <result column="clientType" property="clienttype" jdbcType="VARCHAR"/>
+        <result column="clientIp" property="clientIp" jdbcType="VARCHAR"/>
+        <result column="clientType" property="clientType" jdbcType="VARCHAR"/>
         <result column="code" property="code" jdbcType="VARCHAR"/>
-        <result column="sdkVersion" property="sdkversion" jdbcType="VARCHAR"/>
+        <result column="sdkVersion" property="sdkVersion" jdbcType="VARCHAR"/>
         <result column="timestamp" property="timestamp" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -28,9 +28,9 @@
         insert into yw_im_login (id, eventType, accid,
         clientIp, clientType, code,
         sdkVersion, timestamp)
-        values (#{id,jdbcType=INTEGER}, #{eventtype,jdbcType=VARCHAR}, #{accid,jdbcType=VARCHAR},
-        #{clientip,jdbcType=VARCHAR}, #{clienttype,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR},
-        #{sdkversion,jdbcType=VARCHAR}, #{timestamp,jdbcType=VARCHAR})
+        values (#{id,jdbcType=INTEGER}, #{eventType,jdbcType=VARCHAR}, #{accid,jdbcType=VARCHAR},
+        #{clientIp,jdbcType=VARCHAR}, #{clientType,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR},
+        #{sdkVersion,jdbcType=VARCHAR}, #{timestamp,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.imLoginRecord.entity.ImLoginRecord">
         insert into yw_im_login
@@ -38,22 +38,22 @@
             <if test="id != null">
                 id,
             </if>
-            <if test="eventtype != null">
+            <if test="eventType != null">
                 eventType,
             </if>
             <if test="accid != null">
                 accid,
             </if>
-            <if test="clientip != null">
+            <if test="clientIp != null">
                 clientIp,
             </if>
-            <if test="clienttype != null">
+            <if test="clientType != null">
                 clientType,
             </if>
             <if test="code != null">
                 code,
             </if>
-            <if test="sdkversion != null">
+            <if test="sdkVersion != null">
                 sdkVersion,
             </if>
             <if test="timestamp != null">
@@ -64,23 +64,23 @@
             <if test="id != null">
                 #{id,jdbcType=INTEGER},
             </if>
-            <if test="eventtype != null">
-                #{eventtype,jdbcType=VARCHAR},
+            <if test="eventType != null">
+                #{eventType,jdbcType=VARCHAR},
             </if>
             <if test="accid != null">
                 #{accid,jdbcType=VARCHAR},
             </if>
-            <if test="clientip != null">
-                #{clientip,jdbcType=VARCHAR},
+            <if test="clientIp != null">
+                #{clientIp,jdbcType=VARCHAR},
             </if>
-            <if test="clienttype != null">
-                #{clienttype,jdbcType=VARCHAR},
+            <if test="clientType != null">
+                #{clientType,jdbcType=VARCHAR},
             </if>
             <if test="code != null">
                 #{code,jdbcType=VARCHAR},
             </if>
-            <if test="sdkversion != null">
-                #{sdkversion,jdbcType=VARCHAR},
+            <if test="sdkVersion != null">
+                #{sdkVersion,jdbcType=VARCHAR},
             </if>
             <if test="timestamp != null">
                 #{timestamp,jdbcType=VARCHAR},
@@ -90,23 +90,23 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.movision.mybatis.imLoginRecord.entity.ImLoginRecord">
         update yw_im_login
         <set>
-            <if test="eventtype != null">
-                eventType = #{eventtype,jdbcType=VARCHAR},
+            <if test="eventType != null">
+                eventType = #{eventType,jdbcType=VARCHAR},
             </if>
             <if test="accid != null">
                 accid = #{accid,jdbcType=VARCHAR},
             </if>
-            <if test="clientip != null">
-                clientIp = #{clientip,jdbcType=VARCHAR},
+            <if test="clientIp != null">
+                clientIp = #{clientIp,jdbcType=VARCHAR},
             </if>
-            <if test="clienttype != null">
-                clientType = #{clienttype,jdbcType=VARCHAR},
+            <if test="clientType != null">
+                clientType = #{clientType,jdbcType=VARCHAR},
             </if>
             <if test="code != null">
                 code = #{code,jdbcType=VARCHAR},
             </if>
-            <if test="sdkversion != null">
-                sdkVersion = #{sdkversion,jdbcType=VARCHAR},
+            <if test="sdkVersion != null">
+                sdkVersion = #{sdkVersion,jdbcType=VARCHAR},
             </if>
             <if test="timestamp != null">
                 timestamp = #{timestamp,jdbcType=VARCHAR},
@@ -116,12 +116,12 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.movision.mybatis.imLoginRecord.entity.ImLoginRecord">
         update yw_im_login
-        set eventType = #{eventtype,jdbcType=VARCHAR},
+        set eventType = #{eventType,jdbcType=VARCHAR},
         accid = #{accid,jdbcType=VARCHAR},
-        clientIp = #{clientip,jdbcType=VARCHAR},
-        clientType = #{clienttype,jdbcType=VARCHAR},
+        clientIp = #{clientIp,jdbcType=VARCHAR},
+        clientType = #{clientType,jdbcType=VARCHAR},
         code = #{code,jdbcType=VARCHAR},
-        sdkVersion = #{sdkversion,jdbcType=VARCHAR},
+        sdkVersion = #{sdkVersion,jdbcType=VARCHAR},
         timestamp = #{timestamp,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>

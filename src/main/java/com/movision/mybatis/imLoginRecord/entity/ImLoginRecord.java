@@ -3,17 +3,17 @@ package com.movision.mybatis.imLoginRecord.entity;
 public class ImLoginRecord {
     private Integer id;
 
-    private String eventtype;
+    private String eventType;
 
     private String accid;
 
-    private String clientip;
+    private String clientIp;
 
-    private String clienttype;
+    private String clientType;
 
     private String code;
 
-    private String sdkversion;
+    private String sdkVersion;
 
     private String timestamp;
 
@@ -25,14 +25,6 @@ public class ImLoginRecord {
         this.id = id;
     }
 
-    public String getEventtype() {
-        return eventtype;
-    }
-
-    public void setEventtype(String eventtype) {
-        this.eventtype = eventtype == null ? null : eventtype.trim();
-    }
-
     public String getAccid() {
         return accid;
     }
@@ -41,20 +33,37 @@ public class ImLoginRecord {
         this.accid = accid == null ? null : accid.trim();
     }
 
-    public String getClientip() {
-        return clientip;
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
     }
 
-    public void setClientip(String clientip) {
-        this.clientip = clientip == null ? null : clientip.trim();
+    public void setClientIp(String clientIp) {
+        this.clientIp = clientIp;
     }
 
-    public String getClienttype() {
-        return clienttype;
+    public void setClientType(String clientType) {
+        this.clientType = clientType;
     }
 
-    public void setClienttype(String clienttype) {
-        this.clienttype = clienttype == null ? null : clienttype.trim();
+    public void setSdkVersion(String sdkVersion) {
+        this.sdkVersion = sdkVersion;
+    }
+
+    public String getEventType() {
+
+        return eventType;
+    }
+
+    public String getClientIp() {
+        return clientIp;
+    }
+
+    public String getClientType() {
+        return clientType;
+    }
+
+    public String getSdkVersion() {
+        return sdkVersion;
     }
 
     public String getCode() {
@@ -65,13 +74,7 @@ public class ImLoginRecord {
         this.code = code == null ? null : code.trim();
     }
 
-    public String getSdkversion() {
-        return sdkversion;
-    }
 
-    public void setSdkversion(String sdkversion) {
-        this.sdkversion = sdkversion == null ? null : sdkversion.trim();
-    }
 
     public String getTimestamp() {
         return timestamp;
