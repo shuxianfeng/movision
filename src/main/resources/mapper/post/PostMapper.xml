@@ -34,13 +34,14 @@
         <result column="activeid" jdbcType="INTEGER" property="activeid"/>
         <result column="ishot_order" jdbcType="INTEGER" property="ishotorder"/>
         <result column="isheatoperate" jdbcType="INTEGER" property="isheatoperate"/>
+        <result column="countview" jdbcType="INTEGER" property="countview"/>
     </resultMap>
     <!--BaseColumn-->
     <sql id="Base_Column_List">
         id, circleid, title, subtitle, postcontent, zansum, commentsum, forwardsum, collectsum,
         isactive, partsum_enddays, activetype, activefee, iscontribute, type, ishot, orderid,
         isessence, isessencepool, coverimg, hotimgurl,
-        intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,city,ishot_order,isheatoperate
+        intime,totalpoint,isdel,essencedate,userid,oprtime,heat_value,activeid,city,ishot_order,isheatoperate,countview
     </sql>
 
     <!--基础查询语句-->
@@ -2011,7 +2012,6 @@
     <select id="queryCityPost" parameterType="java.lang.String" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT p.*,c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.isdel=0 AND
         p.title LIKE concat('%',#{area,jdbcType=VARCHAR},'%')
-        ORDER BY p.heat_value DESC
     </select>
     <select id="queryCityLabel" parameterType="java.lang.String" resultType="com.movision.mybatis.post.entity.PostVo">
         SELECT p.*,c.name as circlename FROM yw_post p LEFT JOIN yw_post_label_relation r ON r.postid=p.id LEFT JOIN
@@ -2333,5 +2333,15 @@
         </if>
         ORDER BY p.intime DESC
     </select>
-
+    <select id="findAllNotCircle" parameterType="java.util.List" resultType="com.movision.mybatis.post.entity.PostVo">
+        SELECT p.*,c.name as circlename FROM yw_post p LEFT JOIN yw_circle c ON c.id=p.circleid WHERE p.circleid NOT IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND p.isdel=0
+        ORDER BY p.heat_value DESC
+    </select>
+    <select id="queryPostCountView" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT countview FROM  yw_post WHERE id=#{id,jdbcType=INTEGER}
+    </select>
 </mapper>

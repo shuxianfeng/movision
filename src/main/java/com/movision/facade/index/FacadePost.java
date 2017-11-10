@@ -189,8 +189,10 @@ public class FacadePost {
     private TestIntimeService testIntimeService;
     @Autowired
     private CityService cityService;
-    /*@Autowired
-    private UserBehaviorService userBehaviorService;*/
+/*
+    @Autowired
+    private UserBehaviorService userBehaviorService;
+*/
 
     @Autowired
     private SystemLayoutService systemLayoutService;
@@ -1431,7 +1433,7 @@ public class FacadePost {
         return list;
     }
 
-    /*public List recommendPost(String userid, String device) {
+    /* public List recommendPost(String userid, String device) {
         List<PostVo> list = null;
         List<PostVo> alllist = postService.findAllPostListHeat();//查询所有帖子
         List<PostVo> posts = new ArrayList<>();
@@ -2296,6 +2298,18 @@ public class FacadePost {
      */
     public List countView(List<PostVo> list) {
         if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                int id = list.get(i).getId();
+                int count = postService.queryPostCountView(id);
+                list.get(i).setCountview(count);
+            }
+        }
+        return list;
+    }
+
+/*
+
+        if (list != null) {
             List<Integer> iList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
                 int postid = list.get(i).getId();
@@ -2312,16 +2326,16 @@ public class FacadePost {
                     }
                 }
             }
-            /**for (int i = 0; i < list.size(); i++) {
+           for (int i = 0; i < list.size(); i++) {
              int postid = list.get(i).getId();
              int uesrreflushCounts = userRefreshRecordService.postcount(postid);
              int poscount = postAndUserRecordService.postcount(postid);
              int count = uesrreflushCounts + poscount;
              list.get(i).setCountview(count);
-             }*/
+             }
         }
-        return list;
-    }
+*/
+
 
     /**
      * 查询帖子标签

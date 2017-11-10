@@ -1414,6 +1414,18 @@ public class PostService {
         }
     }
 
+
+    public List<PostVo> findAllNotCircle(List circles) {
+        try {
+            log.info("查询其他圈子帖子");
+            return postMapper.findAllNotCircle(circles);
+        } catch (Exception e) {
+            log.error("查询其他圈子帖子失败", e);
+            throw e;
+        }
+    }
+
+
     public List<PostVo> findUserPost(int postuserid) {
         try {
             log.info("根据用户id查询帖子");
@@ -1848,6 +1860,22 @@ public class PostService {
             return postMapper.findAllqueryXmlAnalysisAndPost(pag.getRowBounds(), post);
         } catch (Exception e) {
             log.error("查询xml解析出的帖子列表异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * 查询帖子浏览量
+     *
+     * @param id
+     * @return
+     */
+    public int queryPostCountView(int id) {
+        try {
+            log.info("查询帖子浏览量");
+            return postMapper.queryPostCountView(id);
+        } catch (Exception e) {
+            log.error("查询帖子浏览量失败", e);
             throw e;
         }
     }
