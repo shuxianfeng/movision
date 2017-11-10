@@ -3,23 +3,23 @@ package com.movision.mybatis.post.entity;
 import java.io.Serializable;
 
 public class PostXml implements Serializable {
-    private Integer id;//帖子id
+    public Integer id;//帖子id
 
-    private Integer userid;//用户id
+    public Integer userid;//用户id
 
-    private String circlename;//圈子名称
+    public String circlename;//圈子名称
 
-    private String title;//标题
+    public String title;//标题
 
-    private String subtitle;//副标题
+    public String subtitle;//副标题
 
-    private String postcontent;//帖子内容
+    public String postcontent;//帖子内容
 
-    private String coverimg;//帖子封面
+    public String coverimg;//帖子封面
 
-    private String nickname;//用户昵称
+    public String nickname;//用户昵称
 
-    private String phone;//手机号
+    public String phone;//手机号
 
     public String getSubtitle() {
         return subtitle;
