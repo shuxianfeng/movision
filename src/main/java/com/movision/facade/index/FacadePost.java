@@ -1265,6 +1265,36 @@ public class FacadePost {
     }
 
     /**
+     *
+     * @param file
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @return
+     */
+    public Map updateAppUpimg(MultipartFile file, String x, String y, String w, String h) {
+
+        //1上传到服务器
+        Map m = movisionOssClient.uploadMultipartFileObject(file, "img");
+        String url = String.valueOf(m.get("url"));//获取上传到服务器上的原图
+        System.out.println("上传封面的原图url==" + url);
+
+        Map compressmap = null;
+        //2从服务器获取文件并剪切,上传剪切后图片上传阿里云
+        //Map map = movisionOssClient.uploadImgerAndIncision(url, x, y, w, h);
+        //切割图片上传到阿里云
+        Map whs = new HashMap();
+        whs.put("w", w);
+        whs.put("h", h);
+        whs.put("x", x);
+        whs.put("y", y);
+        Map tmpurl = xmlParseFacade.imgCuttingUpload(url, whs);
+        compressmap.put("url", tmpurl.get("new"));
+        return compressmap;
+    }
+
+    /**
      * 上传帖子封面图片
      *
      * @param file 上传文件

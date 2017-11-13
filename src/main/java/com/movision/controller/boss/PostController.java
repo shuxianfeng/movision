@@ -1044,6 +1044,17 @@ public class PostController {
     }
 
 
+    @ApiOperation(value = "上传帖子封面图片（改版）", notes = "PC官网上传帖子封面图片（改版）", response = Response.class)
+    @RequestMapping(value = {"/updateAppUpimg"}, method = RequestMethod.POST)
+    public Response updateAppUpimg(@RequestParam(value = "file", required = false) MultipartFile file,
+                                   @ApiParam(value = "X坐标") @RequestParam(required = false) String x,
+                                   @ApiParam(value = "Y坐标") @RequestParam(required = false) String y,
+                                   @ApiParam(value = "宽") @RequestParam String w,
+                                   @ApiParam(value = "高") @RequestParam String h) {
+        Map map = facadePost.updateAppUpimg(file, x, y, w, h);
+        return new Response(map);
+    }
+
     /**
      * 上传帖子相关图片
      *
