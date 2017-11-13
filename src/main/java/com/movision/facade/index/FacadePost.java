@@ -1280,7 +1280,7 @@ public class FacadePost {
         String url = String.valueOf(m.get("url"));//获取上传到服务器上的原图
         System.out.println("上传封面的原图url==" + url);
 
-        Map compressmap = null;
+        Map compressmap = new HashMap();
         //2从服务器获取文件并剪切,上传剪切后图片上传阿里云
         //Map map = movisionOssClient.uploadImgerAndIncision(url, x, y, w, h);
         //切割图片上传到阿里云
