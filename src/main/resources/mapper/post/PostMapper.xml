@@ -2342,6 +2342,6 @@
         ORDER BY p.heat_value DESC
     </select>
     <select id="queryPostCountView" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT countview FROM  yw_post WHERE id=#{id,jdbcType=INTEGER}
+        SELECT countview FROM yw_post WHERE id=#{id,jdbcType=INTEGER} AND isdel=0
     </select>
 </mapper>

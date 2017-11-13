@@ -66,6 +66,16 @@ public class Post implements Serializable {
 
     private Integer isheatoperate;//用于帖子当天是否被定时任务操过热度值 0否1是
 
+    private Integer countview;//帖子浏览量
+
+    public Integer getCountview() {
+        return countview;
+    }
+
+    public void setCountview(Integer countview) {
+        this.countview = countview;
+    }
+
     public Integer getIsheatoperate() {
         return isheatoperate;
     }
