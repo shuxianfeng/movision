@@ -369,7 +369,7 @@ public class XmlParseFacade {
         JSONArray jsonArray = JSONArray.fromObject(contents);
         for (int j = 0; j < jsonArray.size(); j++) {
             JSONObject moduleobj = JSONObject.parseObject(jsonArray.get(j).toString());
-            if (moduleobj.get("type") == 0) {
+            if ((int) moduleobj.get("type") == 0) {
                 String value = (String) moduleobj.get("value");
                 /*P：标点字符
                 L：字母(包括中文)；
