@@ -321,4 +321,6 @@ public interface PostMapper {
     List<PostList> findAllqueryXmlAnalysisAndPost(RowBounds rowBounds, Post post);
 
     int queryPostCountView(int id);
+
+    List queryPostToLabelById(int id);
 }

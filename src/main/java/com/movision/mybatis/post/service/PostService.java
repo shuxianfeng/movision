@@ -1880,4 +1880,20 @@ public class PostService {
         }
     }
 
+    /**
+     * 根据帖子id查询标签列表
+     *
+     * @param id
+     * @return
+     */
+    public List queryPostToLabelById(int id) {
+        try {
+            log.info("根据帖子id查询标签列表");
+            return postMapper.queryPostToLabelById(id);
+        } catch (Exception e) {
+            log.error("根据帖子id查询标签列表异常", e);
+            throw e;
+        }
+    }
+
 }

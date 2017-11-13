@@ -2344,4 +2344,10 @@
     <select id="queryPostCountView" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT countview FROM yw_post WHERE id=#{id,jdbcType=INTEGER} AND isdel=0
     </select>
+
+    <select id="queryPostToLabelById" resultType="java.lang.String" parameterType="java.lang.Integer">
+        SELECT pl.name FROM yw_post_label_relation plr
+        LEFT JOIN yw_post_label pl ON pl.id = plr.labelid
+        WHERE postid = #{id,jdbcType=INTEGER}
+    </select>
 </mapper>

@@ -238,7 +238,8 @@ public class XmlParseFacade {
         Map resault = new HashMap();
         try {
             //t.xls为要新建的文件名
-            String path = systemLayoutService.queryServiceUrl("file_xml_dwonload_img");
+            //String path = systemLayoutService.queryServiceUrl("file_xml_dwonload_img");
+            String path = "d:/1/";
             Post post = new Post();
             post.setCircleid(Integer.parseInt(circleid));
             //查询出所有xml导入的帖子
@@ -257,7 +258,7 @@ public class XmlParseFacade {
 
             /*PostXml postXml = new PostXml();
             Field[] fields = postXml.getClass().getDeclaredFields();*/
-            String title[] = {"id", "标题", "副标题", "帖子封面", "帖子内容", "圈子id", "圈子名称", "用户id", "用户昵称", "手机号"};
+            String title[] = {"id", "标题", "副标题", "帖子封面", "帖子内容", "圈子id", "圈子名称", "标签", "用户id", "用户昵称", "手机号"};
             //设计表头
             for (int i = 0; i < title.length; i++) {
                 sheet.addCell(new Label(i, 0, title[i]));
@@ -275,7 +276,8 @@ public class XmlParseFacade {
                 book.close();
             }
             //用于返回文件路径
-            String reurl = systemLayoutService.queryServiceUrl("domain_name");
+            //String reurl = systemLayoutService.queryServiceUrl("domain_name");
+            String reurl = "d:/1/";
             reurl += "/download/post" + urlname;
             resault.put("code", 200);
             resault.put("date", reurl);
@@ -329,18 +331,132 @@ public class XmlParseFacade {
     private void addExcelFileElement(WritableSheet sheet, List<PostXml> posts) throws IllegalAccessException, WriteException {
         for (int i = 0; i < posts.size(); i++) {
             PostXml post = posts.get(i);
-            //获取对象长度
-            Field[] p = post.getClass().getDeclaredFields();
-            int k = 0;
-            for (Field f : p) {
-                //System.out.println(f.getName()+"==========================="+f.get(post));
-                String str = "";
-                if (f.get(post) != null) {
-                    str = f.get(post).toString();
+            Integer pid = posts.get(i).getId();
+            String labels = "";
+            String contents = "";
+            String title = posts.get(i).getTitle();
+            String subtitle = posts.get(i).getSubtitle();
+            String covimg = posts.get(i).getCoverimg();
+            String circleid = posts.get(i).getCircleid().toString();
+            String circlename = posts.get(i).getCirclename();
+            String userid = posts.get(i).getUserid().toString();
+            String nickname = posts.get(i).getNickname();
+            String phone = posts.get(i).getPhone();
+            //查询帖子的标签列表
+            List<String> list = postService.queryPostToLabelById(pid);
+            for (int o = 0; o < list.size(); o++) {
+                if (o == 0) {
+                    labels += list.get(o);
+                } else {
+                    labels += "," + list.get(o);
                 }
-                sheet.addCell(new Label(k, i + 1, str));
+            }
+            contents = post.getPostcontent();
+            //去除字符
+            contents = jsonDeleteChar(contents);
+            //写到表格中
+            setExcelCell(sheet, i, post, pid, labels, contents, title, subtitle, covimg, circleid, circlename, userid, nickname, phone);
+        }
+    }
+
+    /**
+     * 去除字母和个别字符
+     *
+     * @param contents
+     * @return
+     */
+    private String jsonDeleteChar(String contents) {
+        JSONArray jsonArray = JSONArray.fromObject(contents);
+        for (int j = 0; j < jsonArray.size(); j++) {
+            JSONObject moduleobj = JSONObject.parseObject(jsonArray.get(j).toString());
+            if (moduleobj.get("type") == 0) {
+                String value = (String) moduleobj.get("value");
+                /*P：标点字符
+                L：字母(包括中文)；
+                M：标记符号（一般不会单独出现）；
+                Z：分隔符（比如空格、换行等）；
+                S：符号（比如数学符号、货币符号等）；
+                N：数字（比如阿拉伯数字、罗马数字等）；
+                C：其他字符*/
+                value = value.replaceAll("[\\pP\\pS\\pZ\\pN]", "");
+                value = value.replaceAll("[a-zA-Z0-9]", " ");
+                if (StringUtil.isNotEmpty(value)) {
+                    contents += value;
+                }
+            }
+        }
+        return contents;
+    }
+
+    /**
+     * 向表格中写入数据
+     *
+     * @param sheet
+     * @param i
+     * @param post
+     * @param pid
+     * @param labels
+     * @param contents
+     * @param title
+     * @param subtitle
+     * @param covimg
+     * @param circleid
+     * @param circlename
+     * @param userid
+     * @param nickname
+     * @param phone
+     * @throws WriteException
+     */
+    private void setExcelCell(WritableSheet sheet, int i, PostXml post, Integer pid, String labels, String contents, String title, String subtitle, String covimg, String circleid, String circlename, String userid, String nickname, String phone) throws WriteException {
+        //获取对象长度
+        Field[] p = post.getClass().getDeclaredFields();
+        int k = 0;
+        while (k < p.length) {
+            if (k == 0) {
+                sheet.addCell(new Label(k, i + 1, pid.toString()));
                 k++;
             }
+            if (k == 1) {
+                sheet.addCell(new Label(k, i + 1, title));
+                k++;
+            }
+            if (k == 2) {
+                sheet.addCell(new Label(k, i + 1, subtitle));
+                k++;
+            }
+            if (k == 3) {
+                sheet.addCell(new Label(k, i + 1, covimg));
+                k++;
+            }
+            if (k == 4) {
+                sheet.addCell(new Label(k, i + 1, contents));
+                k++;
+            }
+            if (k == 5) {
+                sheet.addCell(new Label(k, i + 1, circleid));
+                k++;
+            }
+            if (k == 6) {
+                sheet.addCell(new Label(k, i + 1, circlename));
+                k++;
+            }
+            if (k == 7) {
+                sheet.addCell(new Label(k, i + 1, labels));
+                k++;
+            }
+            if (k == 8) {
+                sheet.addCell(new Label(k, i + 1, userid));
+                k++;
+            }
+            if (k == 9) {
+                sheet.addCell(new Label(k, i + 1, nickname));
+                k++;
+            }
+            if (k == 10) {
+                sheet.addCell(new Label(k, i + 1, phone));
+                k++;
+            }
+
         }
     }
 
