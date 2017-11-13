@@ -1909,7 +1909,12 @@
 
 
     <select id="queryPostByUser" parameterType="java.lang.String" resultType="java.lang.Integer">
-        select userid from yw_post WHERE id=#{postid,jdbcType=INTEGER} AND circleid IS NOT NULL
+        select userid from yw_post WHERE id=#{postid,jdbcType=INTEGER} AND isactive = 0 AND isdel = 0
+    </select>
+
+    <select id="queryCircleByIDIsUpdate" parameterType="com.movision.mybatis.post.entity.PostTo"
+            resultType="java.lang.Integer">
+        SELECT circleid FROM yw_post WHERE circleid = #{circleid,jdbcType=INTEGER} AND id = #{id,jdbcType=INTEGER} AND isdel = 0
     </select>
 
     <update id="updatePostIsdel" parameterType="java.lang.String">

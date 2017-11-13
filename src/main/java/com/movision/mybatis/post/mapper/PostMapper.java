@@ -138,6 +138,8 @@ public interface PostMapper {
 
     Integer queryPostByUser(String postid);
 
+    Integer queryCircleByIDIsUpdate(PostTo post);
+
     int queryPostByIsessence(String id);
 
     int updatePostChoiceness(Map map);

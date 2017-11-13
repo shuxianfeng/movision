@@ -800,6 +800,22 @@ public class PostService {
     }
 
     /**
+     * 根据圈子id和帖子id查询帖子的所属圈子是否有改动
+     *
+     * @param post
+     * @return
+     */
+    public Integer queryCircleByIDIsUpdate(PostTo post) {
+        try {
+            log.info("根据圈子id和帖子id查询帖子的所属圈子是否有改动");
+            return postMapper.queryCircleByIDIsUpdate(post);
+        } catch (Exception e) {
+            log.error("根据圈子id和帖子id查询帖子的所属圈子是否有改动异常", e);
+            throw e;
+        }
+    }
+
+    /**
      * 帖子取消加精
      *
      * @param postid

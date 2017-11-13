@@ -18,7 +18,6 @@ import com.movision.mybatis.applyVipDetail.entity.ApplyVipDetail;
 import com.movision.mybatis.applyVipDetail.service.ApplyVipDetailService;
 import com.movision.mybatis.auditVipDetail.entity.AuditVipDetail;
 import com.movision.mybatis.auditVipDetail.service.AuditVipDetailService;
-import com.movision.mybatis.bossUser.entity.BossUser;
 import com.movision.mybatis.bossUser.service.BossUserService;
 import com.movision.mybatis.circle.service.CircleService;
 import com.movision.mybatis.comment.entity.Comment;
@@ -59,6 +58,7 @@ import com.movision.utils.file.FileUtil;
 import com.movision.utils.oss.MovisionOssClient;
 import com.movision.utils.pagination.model.Paging;
 import com.movision.utils.pagination.util.StringUtils;
+import com.wordnik.swagger.annotations.ApiParam;
 import net.sf.json.JSONArray;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
@@ -161,6 +161,8 @@ public class PostFacade {
     @Autowired
     private PostHeatvalueRecordService postHeatvalueRecordService;
 
+    @ApiParam
+    private SysNoticeUtil sysNoticeUtil;
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
 
@@ -1908,6 +1910,10 @@ public class PostFacade {
                     }
                 }
 
+                //发送通知操作
+                sendSystemInfromByUpdatePost(circleid, post);
+
+
                 post.setUserid(userid);
                 if ((int) con.get("flag") != 0) {
                     post.setIsdel("2");
@@ -1952,54 +1958,7 @@ public class PostFacade {
                         goodsService.deletePostyByGoods(postid);//删除帖子分享的商品
                     }
                 }
-                //PostProcessRecord postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));
-                    /*if (postProcessRecord != null) {//已经加精过活精选
-                        //积分操作
-                        if (postProcessRecord.getIshot() == 0 && Integer.parseInt(ishot) == 1) {
-                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                            //增加热度
-                            facadeHeatValue.addHeatValue(Integer.parseInt(id), 2, null);
-                        }
-                        if (postProcessRecord.getIsesence() == 0 && Integer.parseInt(isessence) == 1) {
-                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                            //增加热度
-                            facadeHeatValue.addHeatValue(Integer.parseInt(id), 1, null);
-                        }
-                        //修改
-                        PostProcessRecord pprd = new PostProcessRecord();
-                        if (StringUtil.isNotEmpty(ishot)) {
-                            pprd.setIshot(Integer.parseInt(ishot));
-                        }
-                        pprd.setPostid(post.getId());
-                        if (StringUtil.isNotEmpty(isessence)) {
-                            pprd.setIsesence(Integer.parseInt(isessence));
-                        }
-                        postProcessRecordService.updateProcessRecord(pprd);
-                    } else {
-                        //新增帖子精选操作记录表
-                        PostProcessRecord pprd = new PostProcessRecord();
-                        pprd.setPostid(Integer.parseInt(id));
-                        if (StringUtil.isNotEmpty(isessence)) {
-                            pprd.setIsesence(Integer.parseInt(isessence));
-                        }
-                        if (StringUtil.isNotEmpty(ishot)) {
-                            pprd.setIshot(Integer.parseInt(ishot));
-                        }
-                        postProcessRecordService.insertProcessRecord(pprd);
 
-                        postProcessRecord = postProcessRecordService.queryPostByIsessenceOrIshot(Integer.parseInt(id));//查询出帖子是否被设为精选
-                        //积分操作
-                        if (postProcessRecord.getIshot() == 1) {
-                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.circle_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                            //增加热度
-                            facadeHeatValue.addHeatValue(Integer.parseInt(id), 2, null);
-                        }
-                        if (postProcessRecord.getIsesence() == 1) {
-                            pointRecordFacade.addPointForCircleAndIndexSelected(PointConstant.POINT_TYPE.index_selected.getCode(), Integer.parseInt(userid));//根据不同积分类型赠送积分的公共方法（包括总分和流水）
-                            //增加热度
-                            facadeHeatValue.addHeatValue(Integer.parseInt(id), 1, null);
-                        }
-                    }*/
             } catch (Exception e) {
                 log.error("帖子编辑异常", e);
             }
@@ -2008,6 +1967,22 @@ public class PostFacade {
             map.put("resault", -1);
             map.put("message", "权限不足");
             return map;
+        }
+    }
+
+    /**
+     * 当编辑帖子时,所属圈子变更时，发送通知
+     *
+     * @param circleid
+     * @param post
+     */
+    private void sendSystemInfromByUpdatePost(String circleid, PostTo post) {
+        //查询用户id
+        Integer uid = postService.queryPostByUser(post.getId().toString());
+        //查询所属圈子是否有改动
+        Integer cid = postService.queryCircleByIDIsUpdate(post);
+        if (cid != null) {
+            sysNoticeUtil.sendSysNotice(0, circleid, uid, null);
         }
     }
 
