@@ -419,6 +419,7 @@ public class MovisionOssClient {
             resault.put("code", 200);
         } catch (Exception e) {
             e.printStackTrace();
+            log.info("错误信息", e);
             resault.put("code", 300);
         }
         return resault;

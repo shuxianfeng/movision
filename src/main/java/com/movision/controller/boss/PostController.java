@@ -1044,7 +1044,17 @@ public class PostController {
     }
 
 
-    @ApiOperation(value = "上传帖子封面图片（改版）", notes = "PC官网上传帖子封面图片（改版）", response = Response.class)
+    /**
+     * 上传app开屏图
+     *
+     * @param file
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @return
+     */
+    @ApiOperation(value = "上传app开屏图", notes = "上传app开屏图", response = Response.class)
     @RequestMapping(value = {"/updateAppUpimg"}, method = RequestMethod.POST)
     public Response updateAppUpimg(@RequestParam(value = "file", required = false) MultipartFile file,
                                    @ApiParam(value = "X坐标") @RequestParam(required = false) String x,
