@@ -1,17 +1,10 @@
 package com.movision.facade.im;
 
-import com.google.gson.Gson;
-import com.movision.common.constant.ImConstant;
-import com.movision.mybatis.imFirstDialogue.entity.ImMsg;
 import com.movision.mybatis.imuser.entity.ImUser;
 import com.movision.test.SpringTestCase;
-import com.movision.utils.DateUtils;
-import com.movision.utils.JsonUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -23,6 +16,15 @@ public class ImFacadeTest extends SpringTestCase {
     private ImFacade imFacade;
 
     @Test
+    public void testQueryImuserInfo() throws Exception {
+        String[] arr = {"80aed026fefba277b74b49068f1acee0"};
+        Map map = imFacade.queryImuserInfo(arr);
+        System.out.println(map.toString());
+    }
+
+
+
+    /*@Test
     public void testsendMsg() throws Exception {
         ImMsg imMsg = new ImMsg();
         imMsg.setFrom("88ca46a578cd0dfd2b3bca70ec2ce52c");  //326
@@ -46,7 +48,7 @@ public class ImFacadeTest extends SpringTestCase {
         imMsg.setPushcontent("测试普通消息的推送能否成功,时间戳：" + DateUtils.getCurrentDate());
 
         imFacade.sendMsg(imMsg);
-    }
+    }*/
 
 /*
     @Test

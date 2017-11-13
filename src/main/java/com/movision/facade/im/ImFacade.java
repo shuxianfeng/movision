@@ -1375,4 +1375,5 @@ public class ImFacade {
     public String querySysNoticeTemp(Map<String, Object> parammap){
         return systemLayoutService.querySysNoticeTemp(parammap);
     }
+
 }

@@ -333,10 +333,14 @@ public class AppRegisterFacade {
         Boolean isExistImUser = imFacade.isExistAPPImuser(userid);
         if (!isExistImUser) {
             //若不存在，则注册im用户
+            User user = userService.selectByPrimaryKey(userid);
+
             ImUser imUser = new ImUser();
             imUser.setUserid(userid);
             imUser.setAccid(CheckSumBuilder.getAccid(String.valueOf(userid)));  //根据userid生成accid
-            imUser.setName(StrUtil.genDefaultNickNameByTime());
+            imUser.setName(user.getNickname()); //同步app用户的昵称
+            imUser.setIcon(user.getPhoto());    //同步app用户的头像
+
             ImUser newImUser = imFacade.AddImUser(imUser);
             result.put("imuser", newImUser);
         } else {
@@ -361,9 +365,10 @@ public class AppRegisterFacade {
         if (!isExistDevice) {
             //若不存在，则根据设备号注册云信账号
             ImDevice imDevice = new ImDevice();
-            imDevice.setDeviceid(deviceid);
+            imDevice.setDeviceid(deviceid); //设备号
             imDevice.setAccid(CheckSumBuilder.getAccid(String.valueOf(deviceid)));
-            imDevice.setName(StrUtil.genNickNameByDevice());
+            imDevice.setName(StrUtil.genNickNameByDevice());    //im用户默认名称：mofo_时间戳
+            imDevice.setIcon(UserConstants.DEFAULT_APPUSER_PHOTO); //设置im用户默认头像
             //注册
             imFacade.registerImDeviceAndSave(imDevice);
             response.setMessage("绑定设备号成功");
@@ -509,8 +514,8 @@ public class AppRegisterFacade {
             //3.1 根据第三方账号注册APP账号
             int userid = registerThirdAccountAndReturnUserid(flag, account, deviceno, tokenJson, url, nickname, sex);
 
-            //3.2 根据该新的userid注册im用户，即在yw_im_user中新增一条记录
-            ImUser newImUser = registerNewImuser(account, userid, nickname);
+            //3.2 根据该新的userid注册im用户
+            ImUser newImUser = registerNewImuser(userid, nickname, url);
             result.put("imuser", newImUser);
 
             //3.3 新用户注册需要添加积分记录
@@ -520,9 +525,9 @@ public class AppRegisterFacade {
             /**
              * 存在场景：用户之前在设备A上用QQ注册了APP账户，现在用户换了一个设备B，下载APP，进行QQ登录
              */
-            //3 更新原来的token
+            //3.1 更新原来的token
             updateUserInfo(deviceno, tokenJson, originUser);
-
+            //3.2 返回已存在的im账户信息
             result.put("imuser", imFacade.getImuserByCurrentAppuser(originUser.getId()));
         }
 
@@ -538,16 +543,20 @@ public class AppRegisterFacade {
     /**
      * 注册新的im用户
      *
-     * @param account
      * @param userid
+     * @param nickname
+     * @param url
      * @return
      * @throws IOException
      */
-    private ImUser registerNewImuser(String account, int userid, String nickname) throws IOException {
+    private ImUser registerNewImuser(int userid, String nickname, String url) throws IOException {
+
         ImUser imUser = new ImUser();
         imUser.setUserid(userid);
         imUser.setAccid(CheckSumBuilder.getAccid(String.valueOf(userid)));
-        imUser.setName(nickname);
+        imUser.setName(nickname);   //同步第三方账号的名称
+        imUser.setIcon(url);    //同步第三方账号的头像
+
         return imFacade.AddImUser(imUser);
     }
 
