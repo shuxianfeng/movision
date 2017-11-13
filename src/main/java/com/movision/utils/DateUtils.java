@@ -375,9 +375,52 @@ public class DateUtils {
         return strArr;
     }
 
+    /**
+     * 将时间转换为时间戳
+     *
+     * @param s
+     * @return String 类型
+     * @throws ParseException
+     */
+    public static String dateToStamp(String s) throws ParseException {
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = simpleDateFormat.parse(s);
+        long ts = date.getTime();
+        res = String.valueOf(ts);
+        return res;
+    }
+
+    /**
+     * 将时间戳转换为时间
+     *
+     * @param s
+     * @return String 类型
+     */
+    public static String stampToDateStr(String s) {
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long lt = new Long(s);
+        Date date = new Date(lt);
+        res = simpleDateFormat.format(date);
+        return res;
+    }
+
+    /**
+     * 将时间戳转换为时间
+     *
+     * @param s String 类型
+     * @return Date 类型
+     */
+    public static Date stampToDate(String s) {
+        return new Date(new Long(s));
+    }
+
 
     public static void main(String[] args) throws ParseException {
 
+        System.out.println(stampToDate("1510537860000"));
+//        System.out.println(dateToStamp("2017-11-13 9:51:00"));
 
 //        compareDate("2017-10-29", "2017-10-28");
 //        compareDateWithCurrentDate("2017-10-27");

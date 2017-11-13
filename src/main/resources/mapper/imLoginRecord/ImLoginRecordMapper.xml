@@ -9,7 +9,7 @@
         <result column="clientType" property="clientType" jdbcType="VARCHAR"/>
         <result column="code" property="code" jdbcType="VARCHAR"/>
         <result column="sdkVersion" property="sdkVersion" jdbcType="VARCHAR"/>
-        <result column="timestamp" property="timestamp" jdbcType="VARCHAR"/>
+        <result column="timestamp" property="timestamp" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, eventType, accid, clientIp, clientType, code, sdkVersion, timestamp
@@ -30,7 +30,7 @@
         sdkVersion, timestamp)
         values (#{id,jdbcType=INTEGER}, #{eventType,jdbcType=VARCHAR}, #{accid,jdbcType=VARCHAR},
         #{clientIp,jdbcType=VARCHAR}, #{clientType,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR},
-        #{sdkVersion,jdbcType=VARCHAR}, #{timestamp,jdbcType=VARCHAR})
+        #{sdkVersion,jdbcType=VARCHAR}, #{timestamp})
     </insert>
     <insert id="insertSelective" parameterType="com.movision.mybatis.imLoginRecord.entity.ImLoginRecord">
         insert into yw_im_login
@@ -83,7 +83,7 @@
                 #{sdkVersion,jdbcType=VARCHAR},
             </if>
             <if test="timestamp != null">
-                #{timestamp,jdbcType=VARCHAR},
+                #{timestamp},
             </if>
         </trim>
     </insert>
@@ -109,7 +109,7 @@
                 sdkVersion = #{sdkVersion,jdbcType=VARCHAR},
             </if>
             <if test="timestamp != null">
-                timestamp = #{timestamp,jdbcType=VARCHAR},
+                timestamp = #{timestamp},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -122,7 +122,7 @@
         clientType = #{clientType,jdbcType=VARCHAR},
         code = #{code,jdbcType=VARCHAR},
         sdkVersion = #{sdkVersion,jdbcType=VARCHAR},
-        timestamp = #{timestamp,jdbcType=VARCHAR}
+        timestamp = #{timestamp}
         where id = #{id,jdbcType=INTEGER}
     </update>
 

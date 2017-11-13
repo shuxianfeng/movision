@@ -1,5 +1,7 @@
 package com.movision.mybatis.imLoginRecord.entity;
 
+import java.util.Date;
+
 public class ImLoginRecord {
     private Integer id;
 
@@ -15,7 +17,7 @@ public class ImLoginRecord {
 
     private String sdkVersion;
 
-    private String timestamp;
+    private Date timestamp;
 
     public Integer getId() {
         return id;
@@ -74,13 +76,12 @@ public class ImLoginRecord {
         this.code = code == null ? null : code.trim();
     }
 
-
-
-    public String getTimestamp() {
-        return timestamp;
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp == null ? null : timestamp.trim();
+    public Date getTimestamp() {
+
+        return timestamp;
     }
 }
