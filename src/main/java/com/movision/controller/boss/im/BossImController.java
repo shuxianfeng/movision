@@ -7,6 +7,7 @@ import com.movision.mybatis.imSystemInform.entity.ImSystemInform;
 import com.movision.mybatis.imSystemInform.entity.ImSystemInformVo;
 import com.movision.mybatis.systemPush.entity.SystemPush;
 import com.movision.mybatis.systemToPush.entity.SystemToPush;
+import com.movision.utils.SysNoticeUtil;
 import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -30,6 +31,9 @@ public class BossImController {
 
     @Autowired
     private ImFacade imFacade;
+
+    @Autowired
+    private SysNoticeUtil sysNoticeUtil;
     /**
      * 该接口给系统管理员调用
      *
@@ -51,7 +55,7 @@ public class BossImController {
     /**
      * 运营发送通知/推送
      *
-     * @param request
+     * @param
      * @param title
      * @param body
      * @param coverimg
@@ -484,6 +488,24 @@ public class BossImController {
         response.setData(re);
         return response;
 
+    }
+
+    /**
+     * 投稿类中奖通知
+     *
+     * @param userid
+     * @param template
+     * @return
+     */
+    @ApiOperation(value = "投稿类中奖通知", notes = "投稿类中奖通知", response = Response.class)
+    @RequestMapping(value = "submitTheWinningInform", method = RequestMethod.POST)
+    public Response submitTheWinningInform(@ApiParam(value = "用户id") @RequestParam String userid,
+                                           @ApiParam(value = "模板") @RequestParam String template) {
+        Response response = new Response();
+        sysNoticeUtil.sendSysNotice(6, null, Integer.parseInt(userid), template);
+        response.setMessage("操作成功");
+        response.setData(1);
+        return response;
     }
 
 
