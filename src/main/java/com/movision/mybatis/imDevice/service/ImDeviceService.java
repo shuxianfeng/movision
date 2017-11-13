@@ -64,4 +64,15 @@ public class ImDeviceService {
         }
     }
 
+    public int updateImDevice(ImDevice imDevice) {
+        try {
+            log.info("更新im和设备号的关系");
+            return imDeviceMapper.updateImDevice(imDevice);
+        } catch (Exception e) {
+            log.error("更新im和设备号的关系失败", e);
+            throw e;
+        }
+    }
+
+
 }

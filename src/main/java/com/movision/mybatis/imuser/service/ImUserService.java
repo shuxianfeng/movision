@@ -74,5 +74,15 @@ public class ImUserService {
         }
     }
 
+    public int updateImUser(ImUser imUser) {
+        try {
+            log.info("更新DBim用户信息");
+            return imUserMapper.updateImUser(imUser);
+        } catch (Exception e) {
+            log.error("更新DBim用户信息失败", e);
+            throw e;
+        }
+    }
+
 
 }

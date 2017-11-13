@@ -74,6 +74,17 @@ public class LoginUser implements Serializable {
     private String latitude;    //纬度
     private String longitude;   //经度
 
+    private String deviceno;
+
+    public void setDeviceno(String deviceno) {
+        this.deviceno = deviceno;
+    }
+
+    public String getDeviceno() {
+
+        return deviceno;
+    }
+
     public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
@@ -363,6 +374,7 @@ public class LoginUser implements Serializable {
                 ", ipCity='" + ipCity + '\'' +
                 ", latitude='" + latitude + '\'' +
                 ", longitude='" + longitude + '\'' +
+                ", deviceno='" + deviceno + '\'' +
                 '}';
     }
 }

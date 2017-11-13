@@ -134,4 +134,13 @@
         FROM yw_im_device
         WHERE deviceid = #{deviceid}
     </select>
+
+    <update id="updateImDevice" parameterType="com.movision.mybatis.imDevice.entity.ImDevice">
+        UPDATE yw_im_device
+        SET
+        name = #{name},
+        icon = #{icon},
+        sign = #{sign}
+        where deviceid = #{deviceid}
+    </update>
 </mapper>

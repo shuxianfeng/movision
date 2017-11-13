@@ -19,4 +19,6 @@ public interface ImDeviceMapper {
     Integer isExistDevice(@Param("deviceid") String deviceid);
 
     ImDevice selectByDevice(@Param("deviceid") String deviceid);
+
+    int updateImDevice(ImDevice imDevice);
 }

@@ -92,5 +92,14 @@
         where i.type = #{type} and i.userid = #{userid}
     </select>
 
+    <update id="updateImUser" parameterType="com.movision.mybatis.imuser.entity.ImUser">
+        UPDATE yw_im_user
+        SET name = #{name},
+        icon = #{icon},
+        sign = #{sign},
+        accid = #{accid}
+        where userid = #{userid}
+    </update>
+
 
 </mapper>

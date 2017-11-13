@@ -19,5 +19,7 @@ public interface ImUserMapper {
 
     Map<String, Object> queryAccidAndNicknameByUserid(Map map);
 
+    int updateImUser(ImUser imUser);
+
 
 }

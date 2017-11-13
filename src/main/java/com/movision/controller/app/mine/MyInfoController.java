@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,7 +151,7 @@ public class MyInfoController {
 
     @ApiOperation(value = "修改个人资料", notes = "修改个人资料", response = Response.class)
     @RequestMapping(value = "/update_my_info", method = RequestMethod.POST)
-    public Response updateMyInfo(@ApiParam @ModelAttribute PersonInfo personInfo) {
+    public Response updateMyInfo(@ApiParam @ModelAttribute PersonInfo personInfo) throws IOException {
 
         Response response = new Response();
         personInfo.setId(ShiroUtil.getAppUserID());

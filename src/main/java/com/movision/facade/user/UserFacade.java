@@ -6,6 +6,7 @@ import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.AuthException;
 import com.movision.exception.BusinessException;
+import com.movision.facade.im.ImFacade;
 import com.movision.facade.index.FacadeHeatValue;
 import com.movision.facade.index.FacadePost;
 import com.movision.facade.pointRecord.PointRecordFacade;
@@ -13,6 +14,10 @@ import com.movision.fsearch.utils.StringUtil;
 import com.movision.mybatis.PostZanRecord.service.PostZanRecordService;
 import com.movision.mybatis.collection.service.CollectionService;
 import com.movision.mybatis.homepageManage.service.HomepageManageService;
+import com.movision.mybatis.imDevice.entity.ImDevice;
+import com.movision.mybatis.imDevice.service.ImDeviceService;
+import com.movision.mybatis.imuser.entity.ImUser;
+import com.movision.mybatis.imuser.service.ImUserService;
 import com.movision.mybatis.pointRecord.entity.DailyTask;
 import com.movision.mybatis.pointRecord.entity.PointRecord;
 import com.movision.mybatis.pointRecord.service.PointRecordService;
@@ -37,6 +42,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -81,6 +87,15 @@ public class UserFacade {
 
     @Autowired
     private UserRefreshRecordService userRefreshRecordService;
+
+    @Autowired
+    private ImUserService imUserService;
+
+    @Autowired
+    private ImFacade imFacade;
+
+    @Autowired
+    private ImDeviceService imDeviceService;
 
     /**
      * 判断是否存在该手机号的app用户
@@ -284,7 +299,7 @@ public class UserFacade {
      *
      * @param personInfo
      */
-    public void finishPersonDataProcess(PersonInfo personInfo) {
+    public void finishPersonDataProcess(PersonInfo personInfo) throws IOException {
 
         validateNicknameIsExist(personInfo);
 
@@ -335,13 +350,71 @@ public class UserFacade {
 
     /**
      * 更新个人资料
+     * 1 修改yw_use信息
+     * 2 修改yw_im_user信息
+     * 3 修改yw_im_device信息
+     * 4 修改session信息
      *
      * @param personInfo
      */
-    private void updatePersonInfo(PersonInfo personInfo) {
+    private void updatePersonInfo(PersonInfo personInfo) throws IOException {
+        //1 修改数据库中个人信息
+        updateAppUserInfo(personInfo);
+        //2 查出数据库中最新的登录用户信息
+        LoginUser loginUser = getLoginuserByUserid(personInfo.getId());
+        //3 修改session 中的个人信息
+        ShiroUtil.updateAppuser(loginUser);
+        //4 修改yw_im_user表信息
+        updateImUserWhenUpdateAppUser(loginUser);
+
+        //5 修改云信服务端的userid对应的im信息
+        updateUinfoByLoginUser(loginUser);
+
+        //6 修改yw_im_device信息
+        String deviceno = loginUser.getDeviceno();
+        log.debug("当前设备号是：" + deviceno);
+        ImDevice imDevice = imDeviceService.selectByDevice(deviceno);
+        imDevice.setDeviceid(deviceno);
+        imDevice.setIcon(loginUser.getPhoto());
+        imDevice.setName(loginUser.getNickname());
+        imDevice.setSign(loginUser.getSign());
+        imDeviceService.updateImDevice(imDevice);
+
+        //7 修改云信服务端的设备号对应的im信息
+        updateUinfo(loginUser, imDevice);
+    }
+
+    private void updateUinfo(LoginUser loginUser, ImDevice imDevice) throws IOException {
+        Map map = new HashMap();
+        map.put("accid", imDevice.getAccid());
+        map.put("name", loginUser.getNickname());
+        map.put("icon", loginUser.getPhoto());
+        map.put("sign", loginUser.getSign());
+        imFacade.updateImUserInfo(map);
+    }
+
+    private void updateUinfoByLoginUser(LoginUser loginUser) throws IOException {
+        Map map = new HashMap();
+        map.put("accid", loginUser.getAccid());
+        map.put("name", loginUser.getNickname());
+        map.put("icon", loginUser.getPhoto());
+        map.put("sign", loginUser.getSign());
+        imFacade.updateImUserInfo(map);
+    }
+
+    private void updateImUserWhenUpdateAppUser(LoginUser loginUser) {
+        ImUser imUser = new ImUser();
+        imUser.setUserid(loginUser.getId());
+        imUser.setAccid(loginUser.getAccid());
+        imUser.setName(loginUser.getNickname());
+        imUser.setIcon(loginUser.getPhoto());
+        imUser.setSign(loginUser.getSign());
+        imUserService.updateImUser(imUser);
+    }
+
+    private void updateAppUserInfo(PersonInfo personInfo) {
         User user = new User();
         user.setId(personInfo.getId());
-
         if (StringUtils.isNotBlank(personInfo.getNickname())) {
             user.setNickname(personInfo.getNickname().trim());  //去除首尾空格
         }
@@ -351,12 +424,8 @@ public class UserFacade {
         user.setPhoto(personInfo.getPhoto());
         user.setSex(personInfo.getSex());
         user.setSign(personInfo.getSign());
-        //修改数据库中个人信息
+
         userService.updateByPrimaryKeySelective(user);
-        //查出数据库中最新的登录用户信息
-        LoginUser loginUser = getLoginuserByUserid(personInfo.getId());
-        //修改session 中的个人信息
-        ShiroUtil.updateAppuser(loginUser);
     }
 
 
