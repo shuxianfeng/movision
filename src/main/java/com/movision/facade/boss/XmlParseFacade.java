@@ -238,8 +238,8 @@ public class XmlParseFacade {
         Map resault = new HashMap();
         try {
             //t.xls为要新建的文件名
-            //String path = systemLayoutService.queryServiceUrl("file_xml_dwonload_img");
-            String path = "d:/1/";
+            String path = systemLayoutService.queryServiceUrl("file_xml_dwonload_img");
+            //String path = "d:/1/";
             Post post = new Post();
             post.setCircleid(Integer.parseInt(circleid));
             //查询出所有xml导入的帖子
@@ -276,8 +276,8 @@ public class XmlParseFacade {
                 book.close();
             }
             //用于返回文件路径
-            //String reurl = systemLayoutService.queryServiceUrl("domain_name");
-            String reurl = "d:/1/";
+            String reurl = systemLayoutService.queryServiceUrl("domain_name");
+            //String reurl = "d:/1/";
             reurl += "/download/post" + urlname;
             resault.put("code", 200);
             resault.put("date", reurl);
