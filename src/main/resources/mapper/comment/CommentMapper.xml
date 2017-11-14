@@ -173,7 +173,7 @@
 
     <select id="findAllqueryCommentsByLsit" parameterType="java.lang.Integer"
             resultType="com.movision.mybatis.comment.entity.CommentVo">
-        SELECT c.*,u.phone,u.photo,u.nickname,u.level
+        SELECT c.*,u.phone,u.photo,u.nickname,u.level,u.isdv
         FROM yw_post_comment c
         LEFT JOIN yw_user u
         ON c.userid=u.id
