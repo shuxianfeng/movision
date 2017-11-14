@@ -86,6 +86,14 @@
         SELECT * FROM yw_post_process_record WHERE postid=#{postid,jdbcType=INTEGER}
     </select>
 
+    <select id="queryPostByIsessence" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT id FROM yw_post_process_record WHERE postid=#{postid,jdbcType=INTEGER} AND isesence = 0
+    </select>
+
+    <select id="queryPostByIshot" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT id FROM yw_post_process_record WHERE postid=#{postid,jdbcType=INTEGER} AND ishot = 0
+    </select>
+
     <update id="updateProcessRecord" parameterType="com.movision.mybatis.postProcessRecord.entity.PostProcessRecord">
         UPDATE yw_post_process_record
         <set>

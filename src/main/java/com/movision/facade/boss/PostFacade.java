@@ -443,6 +443,12 @@ public class PostFacade {
         Map res = commonalityFacade.verifyUserJurisdiction(Integer.parseInt(loginid), JurisdictionConstants.JURISDICTION_TYPE.delete.getCode(), JurisdictionConstants.JURISDICTION_TYPE.post.getCode(), Integer.parseInt(postid));
         if (res.get("resault").equals(1)) {
             int resault = postService.deletePost(Integer.parseInt(postid));
+            //查询发帖人
+            Integer userid = postService.queryPostByUser(postid);
+            //满足条件后执行发送通知
+            if (userid != null && userid != -1) {
+                sysNoticeUtil.sendSysNotice(3, null, userid, null);
+            }
             map.put("resault", resault);
             return map;
         } else {
@@ -1212,11 +1218,25 @@ public class PostFacade {
 
         Integer ise = null;
         Integer ish = null;
+        //查询用户id
+        Integer uid = postService.queryPostByUser(postid);
         if (StringUtil.isNotEmpty(isessence)) {
             ise = Integer.parseInt(isessence);
+            //帖子首次被设为首页精选时触，发送通知
+            //查询帖子是否被设为首页精选
+            Integer isesenceid = postProcessRecordService.queryPostByIsessence(pid);
+            if (isesenceid != null && isessence == "1") {
+                sysNoticeUtil.sendSysNotice(1, null, uid, null);
+            }
         }
         if (StringUtil.isNotEmpty(ishot)) {
             ish = Integer.parseInt(ishot);
+            //帖子首次被设为首页精选时触，发送通知
+            //查询帖子是否被设为首页精选
+            Integer isesenceid = postProcessRecordService.queryPostByIshot(pid);
+            if (isesenceid != null && ishot == "1") {
+                sysNoticeUtil.sendSysNotice(2, null, uid, null);
+            }
         }
         //查询帖子是否加精
         PostProcessRecord record = postProcessRecordService.queryPostByIsessenceOrIshot(pid);
@@ -1909,10 +1929,10 @@ public class PostFacade {
                         post.setPostcontent(postcontent);
                     }
                 }
-
-                //发送通知操作
-                sendSystemInfromByUpdatePost(circleid, post);
-
+                //查询用户id
+                Integer uid = postService.queryPostByUser(post.getId().toString());
+                //当编辑帖子时,所属圈子变更时，发送通知
+                sendSystemInfromByUpdatePost(circleid, uid, post);
 
                 post.setUserid(userid);
                 if ((int) con.get("flag") != 0) {
@@ -1976,9 +1996,7 @@ public class PostFacade {
      * @param circleid
      * @param post
      */
-    private void sendSystemInfromByUpdatePost(String circleid, PostTo post) {
-        //查询用户id
-        Integer uid = postService.queryPostByUser(post.getId().toString());
+    private void sendSystemInfromByUpdatePost(String circleid, Integer uid, PostTo post) {
         //查询所属圈子是否有改动
         Integer cid = postService.queryCircleByIDIsUpdate(post);
         if (cid != null) {

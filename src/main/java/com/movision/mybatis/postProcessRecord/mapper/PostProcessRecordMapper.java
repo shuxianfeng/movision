@@ -17,6 +17,10 @@ public interface PostProcessRecordMapper {
 
     PostProcessRecord queryPostByIsessenceOrIshot(Integer postid);
 
+    Integer queryPostByIsessence(Integer postid);
+
+    Integer queryPostByIshot(Integer postid);
+
     void updateProcessRecord(PostProcessRecord postProcessRecord);
 
     void insertProcessRecord(PostProcessRecord postProcessRecord);
