@@ -1932,7 +1932,7 @@ public class PostFacade {
                 //查询用户id
                 Integer uid = postService.queryPostByUser(post.getId().toString());
                 //当编辑帖子时,所属圈子变更时，发送通知
-                sendSystemInfromByUpdatePost(circleid, uid, post);
+                sendSystemInfromByUpdatePost(uid, post);
 
                 post.setUserid(userid);
                 if ((int) con.get("flag") != 0) {
@@ -1993,14 +1993,15 @@ public class PostFacade {
     /**
      * 当编辑帖子时,所属圈子变更时，发送通知
      *
-     * @param circleid
      * @param post
      */
-    private void sendSystemInfromByUpdatePost(String circleid, Integer uid, PostTo post) {
+    private void sendSystemInfromByUpdatePost(Integer uid, PostTo post) {
         //查询所属圈子是否有改动
         Integer cid = postService.queryCircleByIDIsUpdate(post);
-        if (cid != null) {
-            sysNoticeUtil.sendSysNotice(0, circleid, uid, null);
+        if (cid == null) {
+            //查询出圈子名称
+            String circlename = circleService.queryCircleName(cid);
+            sysNoticeUtil.sendSysNotice(0, circlename, uid, null);
         }
     }
 

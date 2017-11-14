@@ -502,7 +502,12 @@ public class BossImController {
     public Response submitTheWinningInform(@ApiParam(value = "用户id") @RequestParam String userid,
                                            @ApiParam(value = "模板") @RequestParam String template) {
         Response response = new Response();
-        sysNoticeUtil.sendSysNotice(6, null, Integer.parseInt(userid), template);
+        String[] users = userid.split(",");
+        for (int i = 0; i < users.length; i++) {
+            if (users[i] != "-1") {
+                sysNoticeUtil.sendSysNotice(6, null, Integer.parseInt(users[i]), template);
+            }
+        }
         response.setMessage("操作成功");
         response.setData(1);
         return response;
