@@ -581,6 +581,8 @@ public class UserManageFacade {
                 user.setIsrecommend(1);
                 Integer i = userService.updateUserByIsrecommend(user);
                 map.put("resault", i);
+                //当用户被设为推荐发送通知
+                sysNoticeUtil.sendSysNotice(5, null, Integer.parseInt(id), null);
             }
         } else {
             user.setIsrecommend(1);
