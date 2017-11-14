@@ -5,8 +5,6 @@ import com.movision.common.constant.PointConstant;
 import com.movision.common.util.ShiroUtil;
 import com.movision.exception.BusinessException;
 import com.movision.facade.user.UserFacade;
-import com.movision.mybatis.orders.entity.Orders;
-import com.movision.mybatis.orders.service.OrderService;
 import com.movision.mybatis.pointRecord.entity.DailyTask;
 import com.movision.mybatis.pointRecord.entity.NewTask;
 import com.movision.mybatis.pointRecord.entity.PersonPointStatistics;
@@ -14,9 +12,7 @@ import com.movision.mybatis.pointRecord.entity.PointRecord;
 import com.movision.mybatis.pointRecord.service.PointRecordService;
 import com.movision.mybatis.user.entity.User;
 import com.movision.mybatis.user.service.UserService;
-import com.movision.shiro.realm.ShiroRealm;
 import com.movision.utils.ListUtil;
-import com.movision.utils.MathUtil;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
@@ -41,14 +37,9 @@ public class PointRecordFacade {
     private PointRecordService pointRecordService;
 
     @Autowired
-    private OrderService orderService;
-
-    @Autowired
     private UserService userService;
     @Autowired
     private UserFacade userFacade;
-
-
 
     /**
      * 获取个人积分统计
