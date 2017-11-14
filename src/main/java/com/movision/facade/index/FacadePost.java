@@ -297,6 +297,8 @@ public class FacadePost {
                     postAndUserRecord.setUserid(Integer.parseInt(userid));
                     postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
                     postAndUserRecordService.insert(postAndUserRecord);
+                    //同步mysql的浏览量
+                    postService.updateCountView(Integer.parseInt(postid));
                 }
             }
         }
@@ -2933,6 +2935,10 @@ public class FacadePost {
             userRefreshRecord.setLabelid(labelid);
         }
         userRefreshRecordService.insert(userRefreshRecord);
+        //同步到mysql中帖子浏览量加1
+        postService.updateCountView(postid);
+
+
     }
 
     public List<Map> queryPostImgById(String postid) {

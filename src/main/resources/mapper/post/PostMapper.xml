@@ -2355,4 +2355,7 @@
         LEFT JOIN yw_post_label pl ON pl.id = plr.labelid
         WHERE postid = #{id,jdbcType=INTEGER}
     </select>
+    <update id="updateCountView" parameterType="java.lang.Integer">
+        UPDATE  yw_post SET  countview=countview+1 WHERE id=#{postid,jdbcType=INTEGER} AND isdel=0
+    </update>
 </mapper>

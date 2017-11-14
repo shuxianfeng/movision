@@ -1912,4 +1912,14 @@ public class PostService {
         }
     }
 
+    public int updateCountView(int postid) {
+        try {
+            log.info("修改帖子浏览");
+            return postMapper.updateCountView(postid);
+        } catch (Exception e) {
+            log.error("修改帖子浏览失败", e);
+            throw e;
+        }
+    }
+
 }
