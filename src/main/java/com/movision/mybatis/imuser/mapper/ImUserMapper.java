@@ -1,6 +1,9 @@
 package com.movision.mybatis.imuser.mapper;
 
 import com.movision.mybatis.imuser.entity.ImUser;
+import com.movision.mybatis.imuser.entity.ImdeviceAppuser;
+import com.movision.mybatis.imuser.entity.ImuserAppuser;
+import com.movision.utils.ListUtil;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,6 +23,8 @@ public interface ImUserMapper {
     Map<String, Object> queryAccidAndNicknameByUserid(Map map);
 
     int updateImUser(ImUser imUser);
+
+    List<ImuserAppuser> selectRelatedAppuserAndImuser();
 
 
 }

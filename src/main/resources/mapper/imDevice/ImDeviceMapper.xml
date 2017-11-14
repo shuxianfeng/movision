@@ -137,10 +137,26 @@
 
     <update id="updateImDevice" parameterType="com.movision.mybatis.imDevice.entity.ImDevice">
         UPDATE yw_im_device
-        SET
-        name = #{name},
-        icon = #{icon},
-        sign = #{sign}
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="icon != null">
+                icon = #{icon},
+            </if>
+            <if test="sign != null">
+                sign = #{sign}
+            </if>
+        </set>
         where deviceid = #{deviceid}
     </update>
+
+    <select id="selectRelatedAppuserAndImdevice" resultType="com.movision.mybatis.imuser.entity.ImdeviceAppuser">
+        SELECT u.nickname, u.photo,u.sign, u.deviceno,
+        d.name as imName, d.icon, d.sign as imSign, d.accid
+        FROM yw_im_device d
+        join yw_user u on d.deviceid = u.deviceno
+    </select>
+
+
 </mapper>

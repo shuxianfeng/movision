@@ -94,12 +94,30 @@
 
     <update id="updateImUser" parameterType="com.movision.mybatis.imuser.entity.ImUser">
         UPDATE yw_im_user
-        SET name = #{name},
-        icon = #{icon},
-        sign = #{sign},
-        accid = #{accid}
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="icon != null">
+                icon = #{icon},
+            </if>
+            <if test="sign != null">
+                sign = #{sign},
+            </if>
+            <if test="accid != null">
+                accid = #{accid},
+            </if>
+        </set>
         where userid = #{userid}
     </update>
+
+    <select id="selectRelatedAppuserAndImuser" resultType="com.movision.mybatis.imuser.entity.ImuserAppuser">
+        SELECT u.nickname, u.photo,u.sign,
+        i.name as imName, i.icon, i.sign as imSign,
+        i.accid, i.userid
+        FROM yw_im_user i
+        JOIN yw_user u on i.userid = u.id
+    </select>
 
 
 </mapper>

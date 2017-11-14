@@ -1,7 +1,10 @@
 package com.movision.mybatis.imDevice.mapper;
 
 import com.movision.mybatis.imDevice.entity.ImDevice;
+import com.movision.mybatis.imuser.entity.ImdeviceAppuser;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface ImDeviceMapper {
     int deleteByPrimaryKey(Integer id);
@@ -21,4 +24,6 @@ public interface ImDeviceMapper {
     ImDevice selectByDevice(@Param("deviceid") String deviceid);
 
     int updateImDevice(ImDevice imDevice);
+
+    List<ImdeviceAppuser> selectRelatedAppuserAndImdevice();
 }
