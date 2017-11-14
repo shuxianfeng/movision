@@ -16,6 +16,7 @@ import com.movision.mybatis.user.entity.UserAll;
 import com.movision.mybatis.user.entity.UserParticulars;
 import com.movision.mybatis.user.entity.UserVo;
 import com.movision.mybatis.user.service.UserService;
+import com.movision.utils.SysNoticeUtil;
 import com.movision.utils.pagination.model.Paging;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,9 @@ public class UserManageFacade {
 
     @Autowired
     private commonalityFacade commonalityFacade;
+
+    @Autowired
+    private SysNoticeUtil sysNoticeUtil;
 
 
     //用于返回用户登录状态
@@ -528,7 +532,11 @@ public class UserManageFacade {
             userService.deleteUserLevl(map);//更新用户加V状态
             map.put("isdel", 1);
             userService.updateAuditByUser(map);//更新VIP申请
-            return auditVipDetailService.insertVIPDetail(map);//加V申请审核
+            //加V申请审核
+            Integer is = auditVipDetailService.insertVIPDetail(map);
+            //申请成功发送通知
+            sysNoticeUtil.sendSysNotice(4, null, Integer.parseInt(userid), null);
+            return is;
         } else if (status.equals("1")) {//未通过
             Map map = new HashMap();
             map.put("userid", userid);
