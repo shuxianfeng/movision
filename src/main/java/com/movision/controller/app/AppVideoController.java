@@ -6,21 +6,16 @@ import com.google.gson.Gson;
 import com.movision.common.Response;
 import com.movision.common.constant.AliVideoConstant;
 import com.movision.facade.apsaraVideo.AliVideoFacade;
-
-import com.movision.mybatis.weixinlist.entity.WeixinList;
 import com.movision.utils.VideoUploadUtil;
-import com.movision.utils.pagination.model.Paging;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.apache.commons.collections.map.HashedMap;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,8 +31,6 @@ public class AppVideoController {
 
     @Autowired
     private VideoUploadUtil videoUploadUtil;
-
-
 
     @ApiOperation(value = "获取视频播放凭证", notes = "获取视频播放凭证", response = Response.class)
     @RequestMapping(value = "get_video_play_auth", method = RequestMethod.POST)

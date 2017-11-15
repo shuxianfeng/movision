@@ -1203,7 +1203,7 @@ public class PostService {
             log.info("查询帖子属于哪个圈子");
             return postMapper.queryCrileid(postid);
         } catch (Exception e) {
-            log.error("查询帖子属于哪个圈子失败");
+            log.error("查询帖子属于哪个圈子失败", e);
             throw e;
         }
     }

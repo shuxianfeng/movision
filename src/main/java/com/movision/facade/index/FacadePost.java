@@ -1270,7 +1270,6 @@ public class FacadePost {
     }
 
     /**
-     *
      * @param file
      * @param x
      * @param y
@@ -1990,10 +1989,10 @@ public class FacadePost {
                     }
                     list.removeAll(posts);
                     /**Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
-                    list = new ArrayList<PostVo>(linkedHashSet);
-                    ComparatorChain chain = new ComparatorChain();
-                    chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
-                    Collections.sort(list, chain);
+                     list = new ArrayList<PostVo>(linkedHashSet);
+                     ComparatorChain chain = new ComparatorChain();
+                     chain.addComparator(new BeanComparator("heatvalue"), true);//true,fase正序反序
+                     Collections.sort(list, chain);
                      list = NotLoginretuenList(list, 3, device, -1);*/
                 }
                 Set<PostVo> linkedHashSet = new LinkedHashSet<PostVo>(list);
@@ -2265,7 +2264,7 @@ public class FacadePost {
     /**
      * 返回数据
      *
-     * @param lists
+     * @param lists 最多10条
      * @param
      * @return
      */
@@ -2273,10 +2272,10 @@ public class FacadePost {
         List<PostVo> list = null;
         if (lists != null) {
             list = pageFacade.getPageList(lists, 1, 10);
-            findUser(list);
-            findPostLabel(list);
-            findHotComment(list);
-            countView(list);
+            findUser(list); //根据userid查询作者信息
+            findPostLabel(list);    //根据postid查询标签信息
+            findHotComment(list);   //根据postid查询所有评论
+            countView(list);    //根据postid查询帖子的浏览量
             findAllCircleName(list);
             insertmongo(list, "", type, device, labelid);
         }
@@ -2544,11 +2543,7 @@ public class FacadePost {
             for (int i = 0; i < list.size(); i++) {
                 int id = list.get(i).getId();
                 //查询帖子是哪个圈子
-                try {
-                    crileid = postService.queryCrileid(id);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                crileid = postService.queryCrileid(id);
                 //刷新记录插入mongodb
                 insertMongoDB(userid, id, crileid, type, device, labelid);
             }
@@ -3810,12 +3805,12 @@ public class FacadePost {
             intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, circleid);
         } else {
             //查询用户有无历史
-                int count = userHistoryDeviceCircleCount(device, type, circleid);
-                if (count > 10) {
-                    us = userRefulshListMongodbToDeviceHistory(device, type, circleid);
-                } else {
-                    us = null;
-                }
+            int count = userHistoryDeviceCircleCount(device, type, circleid);
+            if (count > 10) {
+                us = userRefulshListMongodbToDeviceHistory(device, type, circleid);
+            } else {
+                us = null;
+            }
         }
         List<Integer> postVos = new ArrayList<>();
         //  List<DBObject> list = userRefulshListMongodbToDeviceHistory(device, type, circleid);
@@ -3861,13 +3856,13 @@ public class FacadePost {
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = queryPosyByImtimeDeviceLabel(intime, device, type, Integer.parseInt(labelid));
         } else {
-                //查询用户有无历史
-                int count = userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
-                if (count > 10) {
-                    us = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
-                } else {
-                    us = null;
-                }
+            //查询用户有无历史
+            int count = userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
+            if (count > 10) {
+                us = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
+            } else {
+                us = null;
+            }
         }
         //List<DBObject> list = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
         List<Integer> postVos = new ArrayList<>();
@@ -3911,13 +3906,13 @@ public class FacadePost {
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = queryPosyByImtimeDevice(intime, device, type);
         } else {
-                //查询用户有无历史
-                int count = userHistoryDeviceCount(device, type);
-                if (count > 10) {
-                    us = userRefulshListMongodbToDevice(device, type);
-                } else {
-                    us = null;
-                }
+            //查询用户有无历史
+            int count = userHistoryDeviceCount(device, type);
+            if (count > 10) {
+                us = userRefulshListMongodbToDevice(device, type);
+            } else {
+                us = null;
+            }
         }
         //  List<DBObject> list = userRefulshListMongodbToDevice(device, type);
         List<Integer> postVos = new ArrayList<>();
@@ -3995,12 +3990,12 @@ public class FacadePost {
             intimePost = queryPosyByImtimeDeviceCircle(intime, device, type, circleid);
         } else {
             //查询用户有无历史
-                int count = userHistoryDeviceCircleCount(device, type, circleid);
-                if (count > 10) {
-                    us = userRefulshListMongodbToDeviceHistory(device, type, circleid);
-                } else {
-                    us = null;
-                }
+            int count = userHistoryDeviceCircleCount(device, type, circleid);
+            if (count > 10) {
+                us = userRefulshListMongodbToDeviceHistory(device, type, circleid);
+            } else {
+                us = null;
+            }
         }
         // List<DBObject> list = userRefulshListMongodbHistoryCircleid(Integer.parseInt(userid), type, circleid);
         List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
@@ -4058,13 +4053,13 @@ public class FacadePost {
             String intime = onlyPost.get(0).get("intime").toString();
             intimePost = queryPosyByImtimeDeviceLabel(intime, device, type, Integer.parseInt(labelid));
         } else {
-                //查询用户有无历史
-                int count = userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
-                if (count > 10) {
-                    us = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
-                } else {
-                    us = null;
-                }
+            //查询用户有无历史
+            int count = userHistoryDeviceLabelCount(device, type, Integer.parseInt(labelid));
+            if (count > 10) {
+                us = userRefulshListMongodbToDeviceHistoryLabelid(device, type, Integer.parseInt(labelid));
+            } else {
+                us = null;
+            }
         }
         //List<DBObject> list = userRefulshListMongodbHistory(Integer.parseInt(userid), type, Integer.parseInt(labelid));
         List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
@@ -4125,18 +4120,18 @@ public class FacadePost {
             intimePost = queryPosyByImtimeDevice(intime, device, type);
         } else {
             //如果用户刷完了帖子，退出再进来 调用历史记录
-                //。这种情况下，用户手机无缓存，所以传0
-                //先查询用户有无历史
-                int count = userHistoryDeviceCount(device, type);
-                if (count > 10) {
-                    //情况一：用户刷新之后再卸载APP,再重装APP，本地缓存被清除. 这时候查询出刚刚刷新的帖子。
-                    //【有问题，查刚刚刷新的数据中热度最大的那个postid】
-                    // 解决方法：从第11条开始查询。
-                    us = userRefulshListMongodbToDevice(device, type);
-                } else {
-                    //情况二：新用户，只是展示第一批刷新的数据，无历史记录。用户浏览小于等于10条。
-                    us = null;
-                }
+            //。这种情况下，用户手机无缓存，所以传0
+            //先查询用户有无历史
+            int count = userHistoryDeviceCount(device, type);
+            if (count > 10) {
+                //情况一：用户刷新之后再卸载APP,再重装APP，本地缓存被清除. 这时候查询出刚刚刷新的帖子。
+                //【有问题，查刚刚刷新的数据中热度最大的那个postid】
+                // 解决方法：从第11条开始查询。
+                us = userRefulshListMongodbToDevice(device, type);
+            } else {
+                //情况二：新用户，只是展示第一批刷新的数据，无历史记录。用户浏览小于等于10条。
+                us = null;
+            }
         }
         // List<DBObject> list = userRefulshListMongodb(Integer.parseInt(userid), type);
         List<DBObject> dontlike = queryUserDontLikePost(Integer.parseInt(userid));
@@ -4535,9 +4530,10 @@ public class FacadePost {
 
     /**
      * 商城首页——性价比推荐的两篇商品推荐贴
+     *
      * @return
      */
-    public List<Post> getCostRecommendPost(){
+    public List<Post> getCostRecommendPost() {
         List<Post> costRecommendPostList = postService.getCostRecommendPost();
 
         return costRecommendPostList;
@@ -4545,9 +4541,10 @@ public class FacadePost {
 
     /**
      * 点击商城性价比推荐进入性价比推荐帖子列表接口
+     *
      * @return
      */
-    public List<Post> findAllCostRecommendPostList(Paging<Post> pager){
+    public List<Post> findAllCostRecommendPostList(Paging<Post> pager) {
         List<Post> allCostRecommendPostList = postService.findAllCostRecommendPostList(pager);
 
         return allCostRecommendPostList;
