@@ -4,8 +4,6 @@ import com.movision.test.SpringTestCase;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.*;
-
 /**
  * @Author zhuangyuhao
  * @Date 2017/6/17 10:38

@@ -1,14 +1,9 @@
 package com.movision.facade.index;
 
-import com.movision.common.constant.HeatValueConstant;
-import com.movision.mybatis.post.entity.PostTo;
-import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.post.service.PostService;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;
 import com.movision.test.SpringTestCase;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 /**
  * @Author zhuangyuhao

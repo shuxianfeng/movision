@@ -83,8 +83,7 @@ import java.util.*;
  */
 @Service
 public class PostFacade {
-    @Autowired
-    private VideoUploadUtil videoUploadUtil;
+
     @Autowired
     private PostService postService;
 
@@ -111,9 +110,6 @@ public class PostFacade {
 
     @Autowired
     private PeriodService periodService;
-
-    @Autowired
-    private VideoService videoService;
 
     @Autowired
     private GoodsService goodsService;
@@ -161,8 +157,10 @@ public class PostFacade {
     @Autowired
     private PostHeatvalueRecordService postHeatvalueRecordService;
 
-    @ApiParam
+    @Autowired
     private SysNoticeUtil sysNoticeUtil;
+
+
     private static Logger log = LoggerFactory.getLogger(PostFacade.class);
 
 

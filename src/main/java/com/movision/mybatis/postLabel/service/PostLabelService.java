@@ -7,16 +7,13 @@ import com.movision.mybatis.footRank.mapper.FootRankMapper;
 import com.movision.mybatis.post.entity.PostVo;
 import com.movision.mybatis.postLabel.entity.*;
 import com.movision.mybatis.postLabel.mapper.PostLabelMapper;
-import com.movision.mybatis.postLabelRelation.entity.PostLabelRelation;
 import com.movision.mybatis.user.entity.User;
 import com.movision.utils.pagination.model.Paging;
-import javafx.geometry.Pos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.peer.LabelPeer;
 import java.util.List;
 import java.util.Map;
 

@@ -59,7 +59,6 @@ import com.movision.mybatis.user.entity.UserLike;
 import com.movision.mybatis.user.service.UserService;
 import com.movision.mybatis.userOperationRecord.entity.UserOperationRecord;
 import com.movision.mybatis.userOperationRecord.service.UserOperationRecordService;
-import com.movision.mybatis.userRefreshRecord.entity.UserReflushCount;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecord;
 import com.movision.mybatis.userRefreshRecord.entity.UserRefreshRecordVo;
 import com.movision.mybatis.userRefreshRecord.service.UserRefreshRecordService;

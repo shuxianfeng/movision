@@ -1,6 +1,5 @@
 package com.movision.facade.Goods;
 
-import com.movision.mybatis.goods.entity.Goods;
 import com.movision.test.SpringTestCase;
 import com.movision.utils.pagination.model.Paging;
 import org.junit.Test;
@@ -8,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.Assert.*;
 
 /**
  * @Author zhuangyuhao
