@@ -392,6 +392,9 @@ public class FacadePost {
                 postAndUserRecord.setCrileid(null);
                 postAndUserRecord.setIntime(DateUtils.date2Str(new Date(), "yyyy-MM-dd HH:mm:ss"));
                 postAndUserRecordService.insert(postAndUserRecord);
+                //同步mysql的浏览量
+                postService.updateCountView(Integer.parseInt(postid));
+
             }
         }
         return active;
